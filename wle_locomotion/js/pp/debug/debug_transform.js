@@ -16,14 +16,11 @@ PP.DebugTransform = class DebugTransform {
         this._myParams = params;
 
         this._myDebugRight = new PP.DebugArrow();
-        this._myDebugRight.setColor([1, 0, 0, 1]);
-        this._myDebugRight.setThickness(this._myParams.myThickness);
         this._myDebugUp = new PP.DebugArrow();
-        this._myDebugUp.setColor([0, 1, 0, 1]);
-        this._myDebugUp.setThickness(this._myParams.myThickness);
         this._myDebugForward = new PP.DebugArrow();
+        this._myDebugRight.setColor([1, 0, 0, 1]);
+        this._myDebugUp.setColor([0, 1, 0, 1]);
         this._myDebugForward.setColor([0, 0, 1, 1]);
-        this._myDebugForward.setThickness(this._myParams.myThickness);
 
         this._myVisible = true;
         this._myDirty = false;
@@ -80,10 +77,6 @@ PP.DebugTransform = class DebugTransform {
     setThickness(thickness) {
         this._myParams.myThickness = thickness;
 
-        this._myDebugRight.setThickness(this._myParams.myThickness);
-        this._myDebugUp.setThickness(this._myParams.myThickness);
-        this._myDebugForward.setThickness(this._myParams.myThickness);
-
         this._markDirty();
     }
 
@@ -127,6 +120,10 @@ PP.DebugTransform = class DebugTransform {
         this._myDebugRight.setStartDirectionLength(position, axes[0].vec3_negate(), Math.max(this._myParams.myLength * scale[0], 0.001));
         this._myDebugUp.setStartDirectionLength(position, axes[1], Math.max(this._myParams.myLength * scale[1], 0.001));
         this._myDebugForward.setStartDirectionLength(position, axes[2], Math.max(this._myParams.myLength * scale[2], 0.001));
+
+        this._myDebugRight.setThickness(this._myParams.myThickness);
+        this._myDebugUp.setThickness(this._myParams.myThickness);
+        this._myDebugForward.setThickness(this._myParams.myThickness);
     }
 
     _markDirty() {

@@ -30,9 +30,7 @@ PP.DebugLine = class DebugLine {
         this._myLineRootObject = null;
 
         this._myVisible = true;
-
         this._myDirty = false;
-
         this._myAutoRefresh = true;
 
         this._build();

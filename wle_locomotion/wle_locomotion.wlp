@@ -10,7 +10,8 @@
                     "type": "pp-debug-manager",
                     "pp-debug-manager": {
                         "_myCubeMesh": "p1",
-                        "_myFlatMaterial": "31"
+                        "_myFlatMaterial": "31",
+                        "_myConeMesh": "p3"
                     }
                 },
                 {
@@ -716,6 +717,265 @@
         "70": {
             "name": "Mesh",
             "parent": "24"
+        },
+        "71": {
+            "name": "Test",
+            "parent": null,
+            "components": [
+                {
+                    "type": "pp-set-hierarchy-active",
+                    "pp-set-hierarchy-active": {
+                        "_myHierarchyActive": false
+                    },
+                    "active": false
+                }
+            ]
+        },
+        "72": {
+            "name": "Debug Transform Test",
+            "parent": "71",
+            "deleted": true
+        },
+        "73": {
+            "name": "Empty.000",
+            "parent": "23",
+            "components": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                {
+                    "type": "pp-debug-transform",
+                    "pp-debug-transform": {
+                        "_myAxesLength": 0.2,
+                        "_myThickness": 0.0099999,
+                        "_myLength": 0.2
+                    }
+                },
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "35"
+                    },
+                    "active": false
+                }
+            ],
+            "transformation": [
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.2,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "deleted": true
+        },
+        "74": {
+            "name": "Raycast Test",
+            "parent": "71"
+        },
+        "75": {
+            "name": "Wall",
+            "parent": "74",
+            "components": [
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "gravity": false,
+                        "kinematic": true,
+                        "box": {
+                            "extents": [
+                                1.0,
+                                1.0,
+                                0.25
+                            ]
+                        }
+                    }
+                }
+            ],
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                -1.8832943,
+                1.0
+            ]
+        },
+        "76": {
+            "name": "Hand Raycast",
+            "parent": "74",
+            "components": [
+                {
+                    "type": "pp-set-hand-transform",
+                    "pp-set-hand-transform": {
+                        "_myHandedness": "right"
+                    }
+                },
+                {
+                    "type": "raycast-test"
+                },
+                {
+                    "type": "pp-debug-transform",
+                    "pp-debug-transform": {
+                        "_myLength": 0.2,
+                        "_myThickness": 0.0099999
+                    }
+                }
+            ]
+        },
+        "77": {
+            "name": "Wall",
+            "parent": "74",
+            "components": [
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "gravity": false,
+                        "kinematic": true,
+                        "box": {
+                            "extents": [
+                                1.0,
+                                1.0,
+                                0.25
+                            ]
+                        }
+                    }
+                }
+            ],
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                -2.1201362,
+                1.0
+            ]
+        },
+        "": {
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                -0.029265,
+                1.0
+            ],
+            "deleted": true
+        },
+        "78": {
+            "name": "Hand PhysX",
+            "parent": "74",
+            "components": [
+                {
+                    "type": "physx",
+                    "physx": {
+                        "sphere": {
+                            "radius": 0.1
+                        },
+                        "gravity": false,
+                        "kinematic": true
+                    }
+                },
+                {
+                    "type": "pp-set-hand-transform"
+                }
+            ]
         }
     },
     "meshes": {
@@ -1025,7 +1285,8 @@
                     "hand-tracking": false,
                     "hit-test": false
                 }
-            }
+            },
+            "visualizePhysX": true
         },
         "scripting": {
             "sourcePaths": [
@@ -1055,7 +1316,8 @@
                 "js/pp/tool/easy_tune",
                 "js/pp/tool/easy_tune/easy_object_tuners",
                 "js/pp/tool/easy_tune/easy_tune_widgets",
-                "js/pp/tool/widget_frame"
+                "js/pp/tool/widget_frame",
+                "js/test"
             ],
             "useInternalBundler": false
         },
@@ -1068,6 +1330,9 @@
                 "near": 0.0099999,
                 "far": 10000.0
             }
+        },
+        "physx": {
+            "enable": true
         }
     },
     "files": [
