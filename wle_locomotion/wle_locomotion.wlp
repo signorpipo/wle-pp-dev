@@ -7,8 +7,8 @@
                     "type": "pp-gamepad-manager"
                 },
                 {
-                    "type": "pp-debug-data",
-                    "pp-debug-data": {
+                    "type": "pp-debug-manager",
+                    "pp-debug-manager": {
                         "_myCubeMesh": "p1",
                         "_myFlatMaterial": "31"
                     }
