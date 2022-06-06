@@ -63,6 +63,7 @@ require('./pp/cauldron/utils/xr_utils.js');
 require('./pp/debug/debug_manager.js');
 require('./pp/debug/debug_transform.js');
 require('./pp/debug/debug_line.js');
+require('./pp/debug/debug_arrow.js');
 require('./pp/debug/components/debug_transform_component.js');
 require('./pp/debug/components/debug_manager_component.js');
 

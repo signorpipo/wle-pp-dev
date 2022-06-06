@@ -15,13 +15,13 @@ PP.DebugTransform = class DebugTransform {
     constructor(params = new PP.DebugTransformParams()) {
         this._myParams = params;
 
-        this._myDebugRight = new PP.DebugLine();
+        this._myDebugRight = new PP.DebugArrow();
         this._myDebugRight.setColor([1, 0, 0, 1]);
         this._myDebugRight.setThickness(this._myParams.myThickness);
-        this._myDebugUp = new PP.DebugLine();
+        this._myDebugUp = new PP.DebugArrow();
         this._myDebugUp.setColor([0, 1, 0, 1]);
         this._myDebugUp.setThickness(this._myParams.myThickness);
-        this._myDebugForward = new PP.DebugLine();
+        this._myDebugForward = new PP.DebugArrow();
         this._myDebugForward.setColor([0, 0, 1, 1]);
         this._myDebugForward.setThickness(this._myParams.myThickness);
 
@@ -34,6 +34,7 @@ PP.DebugTransform = class DebugTransform {
         this._myDebugForward.setAutoRefresh(false);
 
         this._refresh();
+
         this.setVisible(false);
     }
 
@@ -95,13 +96,12 @@ PP.DebugTransform = class DebugTransform {
     update(dt) {
         if (this._myDirty) {
             this._refresh();
-
-            this._myDebugForward.update(dt);
-            this._myDebugUp.update(dt);
-            this._myDebugRight.update(dt);
-
             this._myDirty = false;
         }
+
+        this._myDebugForward.update(dt);
+        this._myDebugUp.update(dt);
+        this._myDebugRight.update(dt);
     }
 
     _refresh() {
@@ -133,10 +133,22 @@ PP.DebugTransform = class DebugTransform {
         this._myDirty = true;
 
         if (this._myAutoRefresh) {
-            this._refresh(0);
-            this._myDebugForward._refresh(0);
-            this._myDebugUp._refresh(0);
-            this._myDebugRight._refresh(0);
+            this.update(0);
         }
+    }
+
+    clone() {
+        let clonedParams = new PP.DebugTransformParams();
+        clonedParams.myTransform.pp_copy(this._myParams.myTransform);
+        clonedParams.myPositionOffset.pp_copy(this._myParams.myPositionOffset);
+        clonedParams.myLength = this._myParams.myLength;
+        clonedParams.myThickness = this._myParams.myThickness;
+
+        let clone = new PP.DebugTransform(clonedParams);
+        clone.setAutoRefresh(this._myAutoRefresh);
+        clone.setVisible(this._myVisible);
+        clone._myDirty = this._myDirty;
+
+        return clone;
     }
 };

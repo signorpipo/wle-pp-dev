@@ -28,7 +28,6 @@ PP.DebugLine = class DebugLine {
         this._myParams = params;
 
         this._myLineRootObject = null;
-        this._myLineObject = null;
 
         this._myVisible = true;
 
@@ -122,7 +121,7 @@ PP.DebugLine = class DebugLine {
         this._myDirty = true;
 
         if (this._myAutoRefresh) {
-            this._refresh(0);
+            this.update(0);
         }
     }
 

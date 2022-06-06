@@ -1,6 +1,7 @@
 PP.DebugDrawObjectType = {
     LINE: 0,
     TRANSFORM: 1,
+    ARROW: 2,
 };
 
 PP.DebugManager = class DebugManager {
@@ -120,6 +121,7 @@ PP.DebugManager = class DebugManager {
             let objectPoolParams = new PP.ObjectPoolParams();
             objectPoolParams.myInitialPoolSize = 10;
             objectPoolParams.myPercentageToAddWhenEmpty = 1;
+            objectPoolParams.myEnableDebugLog = false;
             objectPoolParams.mySetActiveCallback = function (object, active) {
                 object.setVisible(active);
             };
@@ -128,6 +130,12 @@ PP.DebugManager = class DebugManager {
             switch (params.myType) {
                 case PP.DebugDrawObjectType.LINE:
                     debugDrawObject = new PP.DebugLine();
+                    break;
+                case PP.DebugDrawObjectType.TRANSFORM:
+                    debugDrawObject = new PP.DebugTransform();
+                    break;
+                case PP.DebugDrawObjectType.ARROW:
+                    debugDrawObject = new PP.DebugArrow();
                     break;
             }
 
