@@ -976,6 +976,55 @@
                     "type": "pp-set-hand-transform"
                 }
             ]
+        },
+        "79": {
+            "name": "Suzanne",
+            "parent": "74",
+            "components": [
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "triangleMesh",
+                        "triangleMesh": {
+                            "mesh": "81",
+                            "scaling": [
+                                0.002,
+                                0.002,
+                                0.002
+                            ]
+                        },
+                        "gravity": false,
+                        "kinematic": false,
+                        "static": false
+                    }
+                }
+            ],
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                -0.2,
+                -0.6499999,
+                1.0
+            ]
+        },
+        "82": {
+            "link": {
+                "name": "Suzanne",
+                "file": "assets\\models\\suzanne.fbx"
+            },
+            "parent": "79",
+            "deleted": true
         }
     },
     "meshes": {
@@ -1098,6 +1147,12 @@
                 "name": "Mesh.008",
                 "file": "assets\\models\\quest_controllers_credits_Jezza3D.glb"
             }
+        },
+        "81": {
+            "link": {
+                "name": "Suzanne",
+                "file": "assets\\models\\suzanne.fbx"
+            }
         }
     },
     "textures": {
@@ -1151,6 +1206,12 @@
                 "file": "assets\\models\\quest_controllers_credits_Jezza3D.glb"
             },
             "name": "Quest Controller Button"
+        },
+        "80": {
+            "link": {
+                "name": "DefaultMaterial",
+                "file": "assets\\models\\suzanne.fbx"
+            }
         }
     },
     "shaders": {
@@ -1336,6 +1397,7 @@
         }
     },
     "files": [
-        "assets/models/quest_controllers_credits_Jezza3D.glb"
+        "assets/models/quest_controllers_credits_Jezza3D.glb",
+        "assets/models/suzanne.fbx"
     ]
 }
