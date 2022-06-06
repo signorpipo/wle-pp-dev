@@ -61,9 +61,9 @@ require('./pp/cauldron/utils/xr_utils.js');
 
 //	DEBUG
 require('./pp/debug/debug_manager.js');
-require('./pp/debug/debug_axes.js');
+require('./pp/debug/debug_transform.js');
 require('./pp/debug/debug_line.js');
-require('./pp/debug/components/debug_axes_component.js');
+require('./pp/debug/components/debug_transform_component.js');
 require('./pp/debug/components/debug_manager_component.js');
 
 //	GAMEPLAY

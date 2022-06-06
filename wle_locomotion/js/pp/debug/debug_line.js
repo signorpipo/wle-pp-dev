@@ -36,8 +36,8 @@ PP.DebugLine = class DebugLine {
 
         this._myAutoRefresh = true;
 
-        this._buildLine();
-        this._refreshLine();
+        this._build();
+        this._refresh();
         this.setVisible(false);
     }
 
@@ -88,16 +88,17 @@ PP.DebugLine = class DebugLine {
 
     update(dt) {
         if (this._myDirty) {
-            this._refreshLine();
+            this._refresh();
 
             this._myDirty = false;
         }
     }
 
-    _refreshLine() {
+    _refresh() {
         this._myLineRootObject.pp_setPosition(this._myParams.myStart);
 
-        this._myLineObject.pp_resetTransformLocal();
+        this._myLineObject.pp_resetPositionLocal();
+        this._myLineObject.pp_resetScaleLocal();
 
         this._myLineObject.pp_scaleObject([this._myParams.myThickness / 2, this._myParams.myThickness / 2, this._myParams.myLength / 2]);
 
@@ -107,7 +108,7 @@ PP.DebugLine = class DebugLine {
         this._myLineMesh.material.color = this._myParams.myColor;
     }
 
-    _buildLine() {
+    _build() {
         this._myLineRootObject = WL.scene.addObject(PP.myDebugData.myRootObject);
         this._myLineObject = WL.scene.addObject(this._myLineRootObject);
         this._myLineObject.scale([0.01, 0.01, 0.01]);
@@ -121,7 +122,7 @@ PP.DebugLine = class DebugLine {
         this._myDirty = true;
 
         if (this._myAutoRefresh) {
-            this._refreshLine(0);
+            this._refresh(0);
         }
     }
 

@@ -1,5 +1,6 @@
 PP.DebugDrawObjectType = {
     LINE: 0,
+    TRANSFORM: 1,
 };
 
 PP.DebugManager = class DebugManager {
