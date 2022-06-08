@@ -1,5 +1,6 @@
 //TEST
 require('./test/raycast_test.js');
+require('./test/moving_physx_test.js');
 
 //WLE
 
@@ -38,6 +39,9 @@ require('./pp/audio/audio_setup.js');
 require('./pp/audio/mute_all.js');
 
 //	CAULDRON
+require('./pp/cauldron/benchmarks/max_physx.js');
+require('./pp/cauldron/benchmarks/max_visible_triangles.js');
+
 require('./pp/cauldron/cauldron/number_over_value.js');
 require('./pp/cauldron/cauldron/object_pool_manager.js');
 require('./pp/cauldron/cauldron/physx_collision_collector.js');

@@ -729,6 +729,24 @@
                     },
                     "active": false
                 }
+            ],
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0
             ]
         },
         "72": {
@@ -835,7 +853,15 @@
         },
         "74": {
             "name": "Raycast Test",
-            "parent": "71"
+            "parent": "71",
+            "components": [
+                {
+                    "type": "pp-set-hierarchy-active",
+                    "pp-set-hierarchy-active": {
+                        "_myHierarchyActive": false
+                    }
+                }
+            ]
         },
         "75": {
             "name": "Wall",
@@ -982,9 +1008,9 @@
                         "convexMesh": {
                             "mesh": "84",
                             "scaling": [
-                                0.15,
-                                0.15,
-                                0.15
+                                0.1,
+                                0.1,
+                                0.1
                             ]
                         }
                     }
@@ -1039,7 +1065,7 @@
                 0.0,
                 0.0,
                 -0.2,
-                -0.6499999,
+                -0.6999999,
                 1.0
             ]
         },
@@ -1058,6 +1084,117 @@
             },
             "parent": "78",
             "deleted": true
+        },
+        "86": {
+            "name": "Moving PhysX Test",
+            "parent": "71",
+            "components": [
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "convexMesh": {
+                            "mesh": "81",
+                            "scaling": [
+                                0.002,
+                                0.002,
+                                0.002
+                            ]
+                        },
+                        "kinematic": false,
+                        "gravity": true,
+                        "static": false,
+                        "linearDamping": 0.0,
+                        "mass": 1.0
+                    }
+                },
+                {
+                    "type": "pp-set-hierarchy-active",
+                    "pp-set-hierarchy-active": {
+                        "_myHierarchyActive": false
+                    },
+                    "active": true
+                },
+                {
+                    "type": "moving-physx-test",
+                    "moving-physx-test": {
+                        "_myFrameType": "multiple_frames",
+                        "_myPhysXType": "kinematic",
+                        "_myForceType": "linearVelocity"
+                    }
+                }
+            ],
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                -4.0,
+                1.0
+            ]
+        },
+        "87": {
+            "name": "Max PhysX",
+            "parent": "71",
+            "components": [
+                {
+                    "type": "pp-benchmark-max-physx",
+                    "pp-benchmark-max-physx": {
+                        "_myStaticPhysXCount": 2000,
+                        "_myDynamicPhysXCount": 250,
+                        "_myKinematic": false
+                    },
+                    "active": false
+                }
+            ]
+        },
+        "88": {
+            "name": "Max Visible Triangles",
+            "parent": "71",
+            "components": [
+                {
+                    "type": "pp-benchmark-max-visible-triangles",
+                    "pp-benchmark-max-visible-triangles": {
+                        "_myPlaneMaterial": "32",
+                        "_myBackgroundMaterial": "35",
+                        "_myTextMaterial": "DefaultFontMaterial",
+                        "_myEnableLog": false
+                    },
+                    "active": false
+                }
+            ],
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                -10.0,
+                1.0
+            ]
+        },
+        "89": {
+            "name": "Playground",
+            "parent": "18"
         }
     },
     "meshes": {
