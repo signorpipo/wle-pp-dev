@@ -1195,6 +1195,22 @@
         "89": {
             "name": "Playground",
             "parent": "18"
+        },
+        "90": {
+            "name": "Bullet Through Wall",
+            "parent": "71",
+            "components": [
+                {
+                    "type": "pp-set-hierarchy-active",
+                    "pp-set-hierarchy-active": {
+                        "_myHierarchyActive": false
+                    },
+                    "active": false
+                },
+                {
+                    "type": "bullet-through-wall-test"
+                }
+            ]
         }
     },
     "meshes": {

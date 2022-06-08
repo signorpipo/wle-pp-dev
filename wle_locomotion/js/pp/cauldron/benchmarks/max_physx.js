@@ -20,6 +20,8 @@ WL.registerComponent('pp-benchmark-max-physx', {
     _myEnableLog: { type: WL.Type.Bool, default: true },
 }, {
     start: function () {
+        this._myRootObject = WL.scene.addObject(this.object);
+
         this._myStaticPhysXObjects = [];
         this._myStaticPhysXComponents = [];
         this._myDynamicPhysXObjects = [];
@@ -206,7 +208,7 @@ WL.registerComponent('pp-benchmark-max-physx', {
             scale *= this._myShapeScaleMultiplier;
         }
 
-        let physX = WL.scene.addObject(this._myRoot);
+        let physX = WL.scene.addObject(this._myRootObject);
         physX.pp_setPosition(position);
 
         let physXComponent = physX.pp_addComponent("physx", {
