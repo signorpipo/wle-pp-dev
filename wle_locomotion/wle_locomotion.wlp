@@ -969,7 +969,24 @@
                             "radius": 0.1
                         },
                         "gravity": false,
-                        "kinematic": true
+                        "kinematic": true,
+                        "shape": "convexMesh",
+                        "triangleMesh": {
+                            "mesh": "84",
+                            "scaling": [
+                                0.15,
+                                0.15,
+                                0.15
+                            ]
+                        },
+                        "convexMesh": {
+                            "mesh": "84",
+                            "scaling": [
+                                0.15,
+                                0.15,
+                                0.15
+                            ]
+                        }
                     }
                 },
                 {
@@ -995,7 +1012,15 @@
                         },
                         "gravity": false,
                         "kinematic": false,
-                        "static": false
+                        "static": false,
+                        "convexMesh": {
+                            "mesh": "81",
+                            "scaling": [
+                                0.002,
+                                0.002,
+                                0.002
+                            ]
+                        }
                     }
                 }
             ],
@@ -1024,6 +1049,14 @@
                 "file": "assets\\models\\suzanne.fbx"
             },
             "parent": "79",
+            "deleted": true
+        },
+        "85": {
+            "link": {
+                "name": "Cube",
+                "file": "assets\\models\\cube.fbx"
+            },
+            "parent": "78",
             "deleted": true
         }
     },
@@ -1153,6 +1186,12 @@
                 "name": "Suzanne",
                 "file": "assets\\models\\suzanne.fbx"
             }
+        },
+        "84": {
+            "link": {
+                "name": "Cube",
+                "file": "assets\\models\\cube.fbx"
+            }
         }
     },
     "textures": {
@@ -1211,6 +1250,12 @@
             "link": {
                 "name": "DefaultMaterial",
                 "file": "assets\\models\\suzanne.fbx"
+            }
+        },
+        "83": {
+            "link": {
+                "name": "Material",
+                "file": "assets\\models\\cube.fbx"
             }
         }
     },
@@ -1398,6 +1443,7 @@
     },
     "files": [
         "assets/models/quest_controllers_credits_Jezza3D.glb",
-        "assets/models/suzanne.fbx"
+        "assets/models/suzanne.fbx",
+        "assets/models/cube.fbx"
     ]
 }

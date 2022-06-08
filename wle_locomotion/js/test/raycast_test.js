@@ -11,12 +11,13 @@ WL.registerComponent('raycast-test', {
         if (this._myTimer.isDone()) {
             this._myTimer.start();
 
-            let rayHit = WL.physics.rayCast(this.object.pp_getPosition(), this.object.pp_getForward(), 255, 10000);
+            let distance = 1000;
+            let rayHit = WL.physics.rayCast(this.object.pp_getPosition(), this.object.pp_getForward(), 255, distance);
 
             let raycastParams = new PP.DebugRaycastParams();
             raycastParams.myOrigin = this.object.pp_getPosition();
             raycastParams.myDirection = this.object.pp_getForward();
-            raycastParams.myDistance = 10000;
+            raycastParams.myDistance = distance;
             raycastParams.myRaycastResult = rayHit;
             PP.myDebugManager.draw(raycastParams);
         }
