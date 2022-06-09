@@ -1,3 +1,6 @@
+//LOCOMOTION
+require('./locomotion/locomotion_floating_error.js');
+
 //TEST
 require('./test/raycast_test.js');
 require('./test/moving_physx_test.js');
