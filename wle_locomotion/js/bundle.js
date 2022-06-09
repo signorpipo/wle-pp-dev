@@ -2,6 +2,7 @@
 require('./test/raycast_test.js');
 require('./test/moving_physx_test.js');
 require('./test/bullet_through_wall_test.js');
+require('./test/reset_transform.js');
 
 //WLE
 

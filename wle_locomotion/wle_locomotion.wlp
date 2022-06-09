@@ -33,7 +33,7 @@
             "components": [
                 {
                     "type": "pp-player-height",
-                    "active": false
+                    "active": true
                 }
             ]
         },
@@ -225,7 +225,12 @@
                 {
                     "type": "light",
                     "light": {
-                        "attenuation": 0.075
+                        "attenuation": 0.075,
+                        "color": [
+                            0.8705882,
+                            0.6486735,
+                            0.6486735
+                        ]
                     }
                 }
             ]
@@ -237,7 +242,12 @@
                 {
                     "type": "light",
                     "light": {
-                        "attenuation": 0.075
+                        "attenuation": 0.075,
+                        "color": [
+                            0.5502889,
+                            0.5447443,
+                            0.7803921
+                        ]
                     }
                 }
             ],
@@ -727,7 +737,10 @@
                     "pp-set-hierarchy-active": {
                         "_myHierarchyActive": false
                     },
-                    "active": false
+                    "active": true
+                },
+                {
+                    "type": "reset-transform"
                 }
             ],
             "transformation": [
@@ -744,7 +757,7 @@
                 1.0,
                 0.0,
                 0.0,
-                0.0,
+                10000.0,
                 0.0,
                 1.0
             ]
@@ -859,7 +872,8 @@
                     "type": "pp-set-hierarchy-active",
                     "pp-set-hierarchy-active": {
                         "_myHierarchyActive": false
-                    }
+                    },
+                    "active": false
                 }
             ]
         },
@@ -878,6 +892,14 @@
                                 1.0,
                                 1.0,
                                 0.25
+                            ]
+                        },
+                        "convexMesh": {
+                            "mesh": "p0",
+                            "scaling": [
+                                1.0,
+                                1.0,
+                                0.5
                             ]
                         }
                     }
@@ -959,7 +981,7 @@
                 0.0,
                 0.0,
                 0.0,
-                -2.1201362,
+                -2.8982832,
                 1.0
             ]
         },
@@ -1205,11 +1227,597 @@
                     "pp-set-hierarchy-active": {
                         "_myHierarchyActive": false
                     },
-                    "active": false
+                    "active": true
                 },
                 {
                     "type": "bullet-through-wall-test"
                 }
+            ]
+        },
+        "91": {
+            "name": "Floor",
+            "parent": "89",
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                -1.1920906928253317e-7,
+                -0.999998,
+                0.0,
+                0.0,
+                0.999998,
+                -1.1920906928253317e-7,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ]
+        },
+        "94": {
+            "name": "Mesh",
+            "parent": "91",
+            "components": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p0",
+                        "material": "92"
+                    }
+                }
+            ],
+            "transformation": [
+                4.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                4.0000076,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0000019,
+                0.0,
+                0.0,
+                1.6858771800798423e-7,
+                0.0,
+                1.0
+            ]
+        },
+        "95": {
+            "name": "Walls",
+            "parent": "89"
+        },
+        "96": {
+            "name": "PhysX",
+            "parent": "98",
+            "components": [
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                4.0,
+                                4.0,
+                                1.0
+                            ]
+                        },
+                        "gravity": false,
+                        "kinematic": true,
+                        "static": true,
+                        "groups": 4,
+                        "block": 1
+                    }
+                }
+            ],
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                4.0,
+                -5.0,
+                1.0
+            ]
+        },
+        "97": {
+            "name": "Mesh",
+            "parent": "98",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p0",
+                        "material": "93"
+                    }
+                }
+            ],
+            "transformation": [
+                4.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                4.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                4.0,
+                -4.0,
+                1.0
+            ]
+        },
+        "98": {
+            "name": "Wall 1",
+            "parent": "95"
+        },
+        "99": {
+            "name": "PhysX",
+            "parent": "91",
+            "components": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                {
+                    "type": "physx",
+                    "physx": {
+                        "gravity": false,
+                        "kinematic": true,
+                        "static": true,
+                        "shape": "convexMesh",
+                        "convexMesh": {
+                            "mesh": "p1",
+                            "scaling": [
+                                4.0,
+                                4.0,
+                                1.0
+                            ]
+                        },
+                        "groups": 2,
+                        "block": 1
+                    }
+                }
+            ],
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                -0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                1.192095311353114e-7,
+                -1.000002,
+                1.0
+            ]
+        },
+        "100": {
+            "name": "Wall 2",
+            "parent": "95",
+            "transformation": [
+                -1.192099858826623e-7,
+                0.0,
+                -1.0000059,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                1.0000059,
+                0.0,
+                -1.192099858826623e-7,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ]
+        },
+        "101": {
+            "name": "Mesh",
+            "parent": "100",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p0",
+                        "material": "93"
+                    }
+                }
+            ],
+            "transformation": [
+                4.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                4.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                4.0,
+                -4.0,
+                1.0
+            ]
+        },
+        "102": {
+            "name": "PhysX",
+            "parent": "100",
+            "components": [
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                4.0,
+                                4.0,
+                                1.0
+                            ]
+                        },
+                        "gravity": false,
+                        "kinematic": true,
+                        "static": true,
+                        "groups": 4,
+                        "block": 1
+                    }
+                }
+            ],
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                4.0,
+                -5.0,
+                1.0
+            ]
+        },
+        "103": {
+            "name": "Wall 3",
+            "parent": "95",
+            "transformation": [
+                -1.1921015641291889e-7,
+                0.0,
+                1.0000073,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                -1.0000073,
+                0.0,
+                -1.1921015641291889e-7,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ]
+        },
+        "104": {
+            "name": "PhysX",
+            "parent": "103",
+            "components": [
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                4.0,
+                                4.0,
+                                1.0
+                            ]
+                        },
+                        "gravity": false,
+                        "kinematic": true,
+                        "static": true,
+                        "groups": 4,
+                        "block": 1
+                    }
+                }
+            ],
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                4.0,
+                -5.0,
+                1.0
+            ]
+        },
+        "105": {
+            "name": "Mesh",
+            "parent": "103",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p0",
+                        "material": "93"
+                    }
+                }
+            ],
+            "transformation": [
+                4.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                4.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                4.0,
+                -4.0,
+                1.0
+            ]
+        },
+        "106": {
+            "name": "Wall 4",
+            "parent": "95",
+            "transformation": [
+                -1.0000069,
+                1.5099695360731858e-7,
+                -4.76837158203125e-7,
+                0.0,
+                1.5099600148005266e-7,
+                1.0,
+                -1.5099602990176209e-7,
+                0.0,
+                4.76837158203125e-7,
+                -1.5099715255928459e-7,
+                -1.0000069,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ]
+        },
+        "107": {
+            "name": "Mesh",
+            "parent": "106",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p0",
+                        "material": "93"
+                    }
+                }
+            ],
+            "transformation": [
+                4.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                4.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                4.0,
+                -4.0,
+                1.0
+            ]
+        },
+        "108": {
+            "name": "PhysX",
+            "parent": "106",
+            "components": [
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                4.0,
+                                4.0,
+                                1.0
+                            ]
+                        },
+                        "gravity": false,
+                        "kinematic": true,
+                        "static": true,
+                        "groups": 4,
+                        "block": 1
+                    }
+                }
+            ],
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                4.0,
+                -5.0,
+                1.0
             ]
         }
     },
@@ -1410,6 +2018,54 @@
                 "name": "Material",
                 "file": "assets\\models\\cube.fbx"
             }
+        },
+        "92": {
+            "name": "Floor",
+            "Phong": {
+                "ambientColor": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "diffuseColor": [
+                    0.1711341,
+                    0.4196078,
+                    0.1769805,
+                    1.0
+                ],
+                "ambientFactor": 0.5,
+                "specularColor": [
+                    1.0,
+                    1.0,
+                    1.0,
+                    0.2509804
+                ]
+            }
+        },
+        "93": {
+            "name": "Wall",
+            "Phong": {
+                "ambientColor": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "ambientFactor": 0.5,
+                "specularColor": [
+                    1.0,
+                    1.0,
+                    1.0,
+                    0.2509804
+                ],
+                "diffuseColor": [
+                    0.3070818,
+                    0.7498667,
+                    0.8156862,
+                    1.0
+                ]
+            }
         }
     },
     "shaders": {
@@ -1542,7 +2198,11 @@
             "webxr": {
                 "optionalFeatures": {
                     "hand-tracking": false,
-                    "hit-test": false
+                    "hit-test": false,
+                    "local-floor": true
+                },
+                "requiredFeatures": {
+                    "local-floor": true
                 }
             },
             "visualizePhysX": true
@@ -1591,7 +2251,17 @@
             }
         },
         "physx": {
-            "enable": true
+            "enable": true,
+            "groupNames": {
+                "0": "player",
+                "1": "floor",
+                "2": "wall",
+                "3": "3",
+                "4": "4",
+                "5": "5",
+                "6": "6",
+                "7": "7"
+            }
         }
     },
     "files": [
