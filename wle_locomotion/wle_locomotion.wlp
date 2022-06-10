@@ -19,7 +19,8 @@
                     "active": false
                 },
                 {
-                    "type": "pp-clear-console-on-session"
+                    "type": "pp-clear-console-on-session",
+                    "active": true
                 }
             ]
         },
@@ -27,29 +28,30 @@
             "name": "Player",
             "parent": "18",
             "transformation": [
-                0.8068584,
-                -0.5905336,
-                0.0157073,
+                0.9999986,
                 0.0,
-                0.5129872,
-                0.7135952,
-                0.4771001,
                 0.0,
-                -0.2929522,
-                -0.3768945,
-                0.8787063,
                 0.0,
-                1.2000045,
-                0.5000026,
-                0.3000011,
+                0.0,
+                0.9999998,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.9999974,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
                 1.0
             ],
             "components": [
                 {
-                    "type": "locomotion-floating-error",
-                    "locomotion-floating-error": {
+                    "type": "locomotion-draft",
+                    "locomotion-draft": {
                         "_myPlayerObject": "19",
-                        "_myHeadObject": "25"
+                        "_myHeadObject": "25",
+                        "_myMaxRotationSpeed": 100.0
                     }
                 }
             ]
@@ -1371,7 +1373,7 @@
                 1.0000019,
                 0.0,
                 0.0,
-                1.6858771800798426e-7,
+                1.685877180079843e-7,
                 0.0,
                 1.0
             ]
@@ -1846,6 +1848,165 @@
                 -5.0,
                 1.0
             ]
+        },
+        "109": {
+            "name": "References",
+            "parent": "89"
+        },
+        "110": {
+            "name": "Reference",
+            "parent": "98",
+            "transformation": [
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                0.0,
+                1.0,
+                -4.0,
+                1.0
+            ],
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "material": "92",
+                        "mesh": "p1"
+                    }
+                }
+            ]
+        },
+        "111": {
+            "name": "Reference",
+            "parent": "100",
+            "transformation": [
+                0.0999994,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0999994,
+                0.0,
+                0.0,
+                1.0,
+                -4.0,
+                1.0
+            ],
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "material": "92",
+                        "mesh": "p1"
+                    }
+                }
+            ]
+        },
+        "112": {
+            "name": "Reference",
+            "parent": "103",
+            "transformation": [
+                0.0999987,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0999987,
+                0.0,
+                0.0,
+                1.0,
+                -4.0,
+                1.0
+            ],
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "material": "92",
+                        "mesh": "p1"
+                    }
+                }
+            ]
+        },
+        "113": {
+            "name": "Reference",
+            "parent": "106",
+            "transformation": [
+                0.0999994,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0999994,
+                0.0,
+                0.0,
+                1.0,
+                -4.0,
+                1.0
+            ],
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "material": "92",
+                        "mesh": "p1"
+                    }
+                }
+            ]
+        },
+        "114": {
+            "name": "Reference",
+            "parent": "91",
+            "transformation": [
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "material": "93",
+                        "mesh": "p1"
+                    }
+                }
+            ]
         }
     },
     "meshes": {
@@ -2025,14 +2186,44 @@
                 "name": "Lambert_Body",
                 "file": "assets\\models\\quest_controllers_credits_Jezza3D.glb"
             },
-            "name": "Quest Controller Body"
+            "name": "Quest Controller Body",
+            "Phong": {
+                "diffuseColor": [
+                    0.599384,
+                    0.4133794,
+                    0.8784313,
+                    1.0
+                ],
+                "specularColor": [
+                    1.0,
+                    1.0,
+                    1.0,
+                    0.2509804
+                ],
+                "ambientFactor": 0.5
+            }
         },
         "36": {
             "link": {
                 "name": "Lambert_Button",
                 "file": "assets\\models\\quest_controllers_credits_Jezza3D.glb"
             },
-            "name": "Quest Controller Button"
+            "name": "Quest Controller Button",
+            "Phong": {
+                "diffuseColor": [
+                    1.0,
+                    0.6466426,
+                    0.1882352,
+                    1.0
+                ],
+                "specularColor": [
+                    1.0,
+                    1.0,
+                    1.0,
+                    0.5019608
+                ],
+                "ambientFactor": 0.5
+            }
         },
         "80": {
             "link": {
@@ -2056,9 +2247,9 @@
                     1.0
                 ],
                 "diffuseColor": [
-                    0.1711341,
-                    0.4196078,
-                    0.1769805,
+                    0.9411764,
+                    0.6262778,
+                    0.2177623,
                     1.0
                 ],
                 "ambientFactor": 0.5,
@@ -2087,9 +2278,9 @@
                     0.2509804
                 ],
                 "diffuseColor": [
-                    0.3070818,
-                    0.7498667,
-                    0.8156862,
+                    0.599384,
+                    0.4133794,
+                    0.8784313,
                     1.0
                 ]
             }

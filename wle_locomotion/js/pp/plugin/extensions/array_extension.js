@@ -1125,7 +1125,7 @@ Array.prototype.quat2_identity = function () {
 
 Array.prototype.quat2_getPosition = function (out = glMatrix.vec3.create()) {
     glMatrix.quat2.getTranslation(out, this);
-    return this;
+    return out;
 };
 
 Array.prototype.quat2_getRotation = function (out) {
@@ -1149,7 +1149,7 @@ Array.prototype.quat2_getRotationRadians = function () {
 
 Array.prototype.quat2_getRotationQuat = function (out = glMatrix.quat.create()) {
     glMatrix.quat.copy(out, this);
-    return this;
+    return out;
 };
 
 Array.prototype.quat2_setPositionRotation = function (position, rotation) {

@@ -1,4 +1,5 @@
 //LOCOMOTION
+require('./locomotion/locomotion_draft.js');
 require('./locomotion/locomotion_floating_error.js');
 
 //TEST
