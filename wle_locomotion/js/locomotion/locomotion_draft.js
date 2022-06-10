@@ -137,7 +137,12 @@ WL.registerComponent('locomotion-draft', {
                 let recoverHeadPosition = this._myBlurRecoverHeadTransform.quat2_getPosition();
                 let newHeadPosition = recoverHeadPosition.vec3_add(playerUp.vec3_scale(headHeight - recoverHeadHeight));
 
+                let recoverHeadForward = this._myBlurRecoverHeadTransform.quat2_getAxes()[2];
+                let currentHeadForward = this._myHeadObject.pp_getForward();
+                let rotationToPerform = currentHeadForward.vec3_lookToPivotedQuat(recoverHeadForward, playerUp);
+
                 this._teleportHeadPosition(newHeadPosition);
+                this._rotateHead(rotationToPerform);
             }
 
             this._myBlurRecoverHeadTransform = null;

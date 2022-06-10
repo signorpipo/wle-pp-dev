@@ -81,6 +81,7 @@
             - vec3_angle
             - vec3_toRadians        / vec3_toDegrees            / vec3_toQuat       / vec3_toMatrix
             - vec3_rotate           / vec3_rotateAxis           / vec3_rotateAround / vec3_rotateAroundAxis
+            - vec3_lookTo           / vec3_lookToPivoted
             - vec3_addRotation
             - vec3_log       / vec3_error         / vec3_warn     
             
@@ -827,6 +828,77 @@ Float32Array.prototype.vec3_radiansToMatrix = function () {
     return function (out = glMatrix.mat3.create()) {
         this.vec3_radiansToQuat(quat);
         return quat.quat_toMatrix(out);
+    };
+}();
+
+Float32Array.prototype.vec3_lookTo = function (direction, out) {
+    return this.vec3_lookToDegrees(direction, out);
+};
+
+Float32Array.prototype.vec3_lookToDegrees = function () {
+    let rotationQuat = glMatrix.quat.create();
+    return function (direction, out = glMatrix.vec3.create()) {
+        this.vec3_lookToQuat(direction, rotationQuat);
+        rotationQuat.quat_toDegrees(out);
+        return out;
+    };
+}();
+
+Float32Array.prototype.vec3_lookToRadians = function () {
+    let rotationQuat = glMatrix.quat.create();
+    return function (direction, out = glMatrix.vec3.create()) {
+        this.vec3_lookToQuat(direction, rotationQuat);
+        rotationQuat.quat_toRadians(out);
+        return out;
+    };
+}();
+
+Float32Array.prototype.vec3_lookToQuat = function () {
+    let rotationAxis = glMatrix.vec3.create();
+    return function (direction, out = glMatrix.quat.create()) {
+        this.vec3_cross(direction, rotationAxis);
+        rotationAxis.vec3_normalize(rotationAxis);
+        let signedAngle = this.vec3_angleSigned(direction, rotationAxis);
+        out.quat_fromAxis(signedAngle, rotationAxis);
+        return out;
+    };
+}();
+
+Float32Array.prototype.vec3_lookToPivoted = function (direction, pivotAxis, out) {
+    return this.vec3_lookToPivotedDegrees(direction, pivotAxis, out);
+};
+
+Float32Array.prototype.vec3_lookToPivotedDegrees = function () {
+    let rotationQuat = glMatrix.quat.create();
+    return function (direction, pivotAxis, out = glMatrix.vec3.create()) {
+        this.vec3_lookToPivotedQuat(direction, pivotAxis, rotationQuat);
+        rotationQuat.quat_toDegrees(out);
+        return out;
+    };
+}();
+
+Float32Array.prototype.vec3_lookToPivotedRadians = function () {
+    let rotationQuat = glMatrix.quat.create();
+    return function (direction, pivotAxis, out = glMatrix.vec3.create()) {
+        this.vec3_lookToPivotedQuat(direction, pivotAxis, rotationQuat);
+        rotationQuat.quat_toRadians(out);
+        return out;
+    };
+}();
+
+Float32Array.prototype.vec3_lookToPivotedQuat = function () {
+    let thisFlat = glMatrix.vec3.create();
+    let directionFlat = glMatrix.vec3.create();
+    let rotationAxis = glMatrix.vec3.create();
+    return function (direction, pivotAxis, out = glMatrix.quat.create()) {
+        this.vec3_removeComponentAlongAxis(pivotAxis, thisFlat);
+        direction.vec3_removeComponentAlongAxis(pivotAxis, directionFlat);
+
+        thisFlat.vec3_cross(directionFlat, rotationAxis);
+        rotationAxis.vec3_normalize(rotationAxis);
+        let signedAngle = thisFlat.vec3_angleSigned(directionFlat, rotationAxis);
+        out.quat_fromAxis(signedAngle, rotationAxis);
+        return out;
     };
 }();
 
