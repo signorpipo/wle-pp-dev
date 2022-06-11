@@ -20,7 +20,7 @@
                 },
                 {
                     "type": "pp-clear-console-on-session",
-                    "active": true
+                    "active": false
                 }
             ]
         },
@@ -28,17 +28,17 @@
             "name": "Player",
             "parent": "18",
             "transformation": [
-                0.9999986,
+                0.9999993,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                0.9999998,
+                0.9999991,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                0.9999974,
+                0.9999985,
                 0.0,
                 0.0,
                 0.0,
@@ -51,8 +51,11 @@
                     "locomotion-draft": {
                         "_myPlayerObject": "19",
                         "_myHeadObject": "25",
-                        "_myMaxRotationSpeed": 100.0
-                    }
+                        "_myMaxRotationSpeed": 100.0,
+                        "_myRightHandObject": "24",
+                        "_myMaxSpeed": 0.1
+                    },
+                    "active": true
                 }
             ]
         },
@@ -161,6 +164,9 @@
                         "_myBottomButton": "61",
                         "_myTopButton": "66"
                     }
+                },
+                {
+                    "type": "pp-debug-transform"
                 }
             ],
             "transformation": [

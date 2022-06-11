@@ -1,6 +1,7 @@
 WL.registerComponent('locomotion-draft', {
     _myPlayerObject: { type: WL.Type.Object },
     _myHeadObject: { type: WL.Type.Object },
+    _myRightHandObject: { type: WL.Type.Object },
     _myMaxSpeed: { type: WL.Type.Float, default: 2 },
     _myMaxRotationSpeed: { type: WL.Type.Float, default: 100 },
 }, {
@@ -21,6 +22,14 @@ WL.registerComponent('locomotion-draft', {
         this._myDelayBlurEndResyncTimer = new PP.Timer(5, false);
         this._myVisibilityWentHidden = false;
         this._mySessionActive = false;
+
+        this._myStartForward = null;
+        this._myStartUp = null;
+        this._myStartRight = null;
+        this._myStickIdleCount = 0;
+
+        this._myLastForward = null;
+        this._myLastRight = null;
     },
     update(dt) {
         if (this._myDelaySessionStartResyncCounter > 0) {
@@ -56,10 +65,11 @@ WL.registerComponent('locomotion-draft', {
             let headMovement = [0, 0, 0];
 
             {
-                let axes = PP.myLeftGamepad.getAxesInfo().getAxes();
+                let axes = PP.myRightGamepad.getAxesInfo().getAxes();
                 let minIntensityThreshold = 0.1;
                 if (axes.vec2_length() > minIntensityThreshold) {
-                    let direction = this._convertStickToWorldDirection(axes, this._myHeadObject, true);
+                    this._myStickIdleCount = 2;
+                    let direction = this._convertStickToWorldDirection(axes, this._myRightHandObject, true);
                     if (direction.vec3_length() > 0.001) {
                         direction.vec3_normalize(direction);
 
@@ -70,6 +80,18 @@ WL.registerComponent('locomotion-draft', {
 
                         positionChanged = true;
                     }
+                } else {
+                    if (this._myStickIdleCount > 0) {
+                        this._myStickIdleCount--;
+                        if (this._myStickIdleCount == 0) {
+                            this._myStartForward = null;
+                            this._myStartUp = null;
+                            this._myStartRight = null;
+
+                            this._myLastForward = null;
+                            this._myLastRight = null;
+                        }
+                    }
                 }
             }
 
@@ -79,7 +101,7 @@ WL.registerComponent('locomotion-draft', {
 
             let headRotation = PP.quat_create();
             {
-                let axes = PP.myRightGamepad.getAxesInfo().getAxes();
+                let axes = PP.myLeftGamepad.getAxesInfo().getAxes();
                 let minIntensityThreshold = 0.1;
                 if (Math.abs(axes[0]) > minIntensityThreshold) {
                     let axis = this._myHeadObject.pp_getUp();
@@ -124,11 +146,130 @@ WL.registerComponent('locomotion-draft', {
         let teleportMovementToPerform = teleportPosition.vec3_sub(currentHeadPosition);
         this._moveHead(teleportMovementToPerform);
     },
-    _convertStickToWorldDirection(stickAxes, conversionObject, removeY) {
-        let direction = conversionObject.pp_getRight().vec3_scale(stickAxes[0]).vec3_add(conversionObject.pp_getForward().vec3_scale(stickAxes[1]));
+    _convertStickToWorldDirection(stickAxes, conversionObject, removeUp) {
+        let playerUp = this._myPlayerObject.pp_getUp();
 
-        if (removeY) {
-            direction[1] = 0;
+        let up = conversionObject.pp_getUp();
+        let forward = conversionObject.pp_getForward();
+        let right = conversionObject.pp_getRight();
+
+        if (removeUp) {
+            /* if (forward.vec3_angle(playerUp) < 30) {
+                let fixedForward = up.vec3_negate();
+                if (!fixedForward.vec3_removeComponentAlongAxis(playerUp).vec3_isConcordant(forward)) {
+                    fixedForward.vec3_negate(forward);
+                } else {
+                    forward.pp_copy(fixedForward);
+                }
+            } else if (forward.vec3_angle(playerUp.vec3_negate()) < 30) {
+                
+                let fixedForward = up.pp_clone();
+                if (!fixedForward.vec3_removeComponentAlongAxis(playerUp).vec3_isConcordant(forward)) {
+                    fixedForward.vec3_negate(forward);
+                } else {
+                    forward.pp_copy(fixedForward);
+                }
+            } */
+
+            /* 
+            if (right.vec3_angle(playerUp) < 30) {
+                let fixedRight = up.vec3_negate();
+                if (!fixedRight.vec3_removeComponentAlongAxis(playerUp).vec3_isConcordant(right)) {
+                    fixedRight.vec3_negate(right);
+                } else {
+                    right.pp_copy(fixedRight);
+                }
+            } else if (right.vec3_angle(playerUp.vec3_negate()) < 30) {
+                let fixedRight = up.pp_clone();
+                if (!fixedRight.vec3_removeComponentAlongAxis(playerUp).vec3_isConcordant(right)) {
+                    fixedRight.vec3_negate(right);
+                } else {
+                    right.pp_copy(fixedRight);
+                }
+            } */
+
+            let minAngle = 10;
+            if (this._myLastForward && (forward.vec3_angle(playerUp) < minAngle || forward.vec3_angle(playerUp.vec3_negate()) < minAngle)) {
+                if (forward.vec3_isConcordant(this._myLastForward)) {
+                    forward.pp_copy(this._myLastForward);
+                } else {
+                    this._myLastForward.vec3_negate(forward);
+                }
+            }
+
+            if (this._myLastRight && (right.vec3_angle(playerUp) < minAngle || right.vec3_angle(playerUp.vec3_negate()) < minAngle)) {
+                if (right.vec3_isConcordant(this._myLastRight)) {
+                    right.pp_copy(this._myLastRight);
+                } else {
+                    this._myLastRight.vec3_negate(right);
+                }
+            }
+
+            forward.vec3_removeComponentAlongAxis(playerUp, forward);
+            right.vec3_removeComponentAlongAxis(playerUp, right);
+
+            right.vec3_cross(forward, up);
+            forward.vec3_cross(up, right);
+
+            if (this._myStartForward != null) {
+                if (this._myStartUp.vec3_isConcordant(playerUp) != up.vec3_isConcordant(playerUp)) {
+                    if (!this._myStartForward.vec3_isConcordant(forward)) {
+                        forward.vec3_negate(forward);
+                    } else {
+                        right.vec3_negate(right);
+                    }
+
+                    up.vec3_negate(up);
+                }
+            }
+        }
+
+        forward.vec3_normalize(forward);
+        right.vec3_normalize(right);
+        up.vec3_normalize(up);
+
+        this._myLastForward = forward.pp_clone();
+        this._myLastRight = right.pp_clone();
+
+        if (this._myStartForward == null) {
+            this._myStartForward = forward.pp_clone();
+            this._myStartUp = up.pp_clone();
+            this._myStartRight = right.pp_clone();
+        }
+
+        let debugArrowParamsForward = new PP.DebugArrowParams();
+        debugArrowParamsForward.myStart = this._myRightHandObject.pp_getPosition();
+        debugArrowParamsForward.myDirection = forward;
+        debugArrowParamsForward.myLength = 0.2;
+        debugArrowParamsForward.myColor = [0, 0, 1, 1];
+        PP.myDebugManager.draw(debugArrowParamsForward);
+
+        let debugArrowParamsStartForward = new PP.DebugArrowParams();
+        debugArrowParamsStartForward.myStart = this._myRightHandObject.pp_getPosition();
+        //debugArrowParamsStartForward.myDirection = conversionObject.pp_getForward().vec3_removeComponentAlongAxis(playerUp).vec3_normalize();
+        debugArrowParamsStartForward.myDirection = this._myStartForward;
+        debugArrowParamsStartForward.myLength = 0.2;
+        debugArrowParamsStartForward.myColor = [0, 0, 0.5, 1];
+        PP.myDebugManager.draw(debugArrowParamsStartForward);
+
+        let debugArrowParamsRight = new PP.DebugArrowParams();
+        debugArrowParamsRight.myStart = this._myRightHandObject.pp_getPosition();
+        debugArrowParamsRight.myDirection = right;
+        debugArrowParamsRight.myLength = 0.2;
+        debugArrowParamsRight.myColor = [1, 0, 0, 1];
+        PP.myDebugManager.draw(debugArrowParamsRight);
+
+        let debugArrowParamsUp = new PP.DebugArrowParams();
+        debugArrowParamsUp.myStart = this._myRightHandObject.pp_getPosition();
+        debugArrowParamsUp.myDirection = up;
+        debugArrowParamsUp.myLength = 0.2;
+        debugArrowParamsUp.myColor = [0, 1, 0, 1];
+        PP.myDebugManager.draw(debugArrowParamsUp);
+
+        let direction = right.vec3_scale(stickAxes[0]).vec3_add(forward.vec3_negate().vec3_scale(-stickAxes[1]));
+
+        if (removeUp) {
+            direction.vec3_removeComponentAlongAxis(playerUp, direction);
         }
 
         return direction;
@@ -224,6 +365,8 @@ WL.registerComponent('locomotion-draft', {
                 this._myBlurRecoverPlayerUp = null;
             }
         } else {
+            this._myDelaySessionStartResyncCounter = 2;
+
             this._myBlurRecoverHeadTransform = null;
             this._myBlurRecoverPlayerUp = null;
         }
