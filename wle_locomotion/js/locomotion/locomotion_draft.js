@@ -163,20 +163,18 @@ WL.registerComponent('locomotion-draft', {
         //console.error("session start");
     },
     _onXRSessionEnd(session) {
-        if (this._myDelaySessionStartResyncCounter > 0) {
-            this._sessionStartResync();
-        }
+        if (this._myDelaySessionStartResyncCounter == 0) {
+            let headTransform = this._myHeadObject.pp_getTransformQuat();
 
-        let headTransform = this._myHeadObject.pp_getTransformQuat();
-
-        if (this._myBlurRecoverHeadTransform != null) {
-            let playerUp = this._myPlayerObject.pp_getUp();
-            if (playerUp.vec3_angle(this._myBlurRecoverPlayerUp) == 0) {
-                headTransform = this._myBlurRecoverHeadTransform;
+            if (this._myBlurRecoverHeadTransform != null) {
+                let playerUp = this._myPlayerObject.pp_getUp();
+                if (playerUp.vec3_angle(this._myBlurRecoverPlayerUp) == 0) {
+                    headTransform = this._myBlurRecoverHeadTransform;
+                }
             }
-        }
 
-        this._teleportPlayerTransform(headTransform);
+            this._teleportPlayerTransform(headTransform);
+        }
 
         this._myBlurRecoverHeadTransform = null;
         this._myBlurRecoverPlayerUp = null;
@@ -192,8 +190,13 @@ WL.registerComponent('locomotion-draft', {
     },
     _onXRSessionBlurStart(session) {
         if (this._myBlurRecoverHeadTransform == null && this._mySessionActive) {
-            this._myBlurRecoverHeadTransform = this._myHeadObject.pp_getTransformQuat();
-            this._myBlurRecoverPlayerUp = this._myPlayerObject.pp_getUp();
+            if (this._myDelaySessionStartResyncCounter > 0) {
+                this._myBlurRecoverHeadTransform = this._getHeadOnPlayerTransform();
+                this._myBlurRecoverPlayerUp = this._myPlayerObject.pp_getUp();
+            } else {
+                this._myBlurRecoverHeadTransform = this._myHeadObject.pp_getTransformQuat();
+                this._myBlurRecoverPlayerUp = this._myPlayerObject.pp_getUp();
+            }
         } else if (!this._mySessionActive) {
             this._myBlurRecoverHeadTransform = null;
             this._myBlurRecoverPlayerUp = null;
@@ -204,12 +207,17 @@ WL.registerComponent('locomotion-draft', {
         //console.error("blur start", session.visibilityState);
     },
     _onXRSessionBlurEnd(session) {
-        if (this._myBlurRecoverHeadTransform != null && this._mySessionActive) {
-            let playerUp = this._myPlayerObject.pp_getUp();
-            if (playerUp.vec3_angle(this._myBlurRecoverPlayerUp) == 0) {
-                this._myDelayBlurEndResyncCounter = 2;
-                if (this._myVisibilityWentHidden) {
-                    //this._myDelayBlurEndResyncTimer.start();
+        if (this._myDelaySessionStartResyncCounter == 0) {
+            if (this._myBlurRecoverHeadTransform != null && this._mySessionActive) {
+                let playerUp = this._myPlayerObject.pp_getUp();
+                if (playerUp.vec3_angle(this._myBlurRecoverPlayerUp) == 0) {
+                    this._myDelayBlurEndResyncCounter = 2;
+                    if (this._myVisibilityWentHidden) {
+                        //this._myDelayBlurEndResyncTimer.start();
+                    }
+                } else {
+                    this._myBlurRecoverHeadTransform = null;
+                    this._myBlurRecoverPlayerUp = null;
                 }
             } else {
                 this._myBlurRecoverHeadTransform = null;
@@ -297,6 +305,23 @@ WL.registerComponent('locomotion-draft', {
         this._myBlurRecoverPlayerUp = null;
     },
     _sessionStartResync() {
-        this._headToPlayer();
+        if (this._myBlurRecoverHeadTransform == null) {
+            this._headToPlayer();
+        }
+    },
+    _getHeadOnPlayerTransform() {
+        let headPosition = this._myHeadObject.pp_getPosition();
+        let headHeight = this._getHeadHeight(headPosition);
+
+        let playerPosition = this._myPlayerObject.pp_getPosition();
+        let playerUp = this._myPlayerObject.pp_getUp();
+        let headOnPlayerPosition = playerPosition.vec3_add(playerUp.vec3_scale(headHeight));
+
+        let playerRotation = this._myPlayerObject.pp_getRotationQuat();
+
+        let transform = PP.quat2_create();
+        transform.quat2_setPositionRotationQuat(headOnPlayerPosition, playerRotation);
+
+        return transform;
     }
 });
