@@ -10,6 +10,7 @@ require('./test/raycast_test.js');
 require('./test/moving_physx_test.js');
 require('./test/bullet_through_wall_test.js');
 require('./test/reset_transform.js');
+require('./test/touch_start_test.js');
 
 //WLE
 
@@ -106,6 +107,7 @@ require('./pp/input/gamepad/gamepad.js');
 require('./pp/plugin/component_mods/clone_mod.js');
 require('./pp/plugin/component_mods/cursor_mod.js');
 require('./pp/plugin/component_mods/cursor_target_mod.js');
+require('./pp/plugin/component_mods/mouse_look_mod.js');
 
 require('./pp/plugin/extensions/object_extension.js');
 require('./pp/plugin/extensions/array_extension.js');
