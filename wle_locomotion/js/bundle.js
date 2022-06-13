@@ -104,6 +104,9 @@ require('./pp/input/pose/components/set_hand_local_transform.js');
 require('./pp/input/pose/components/set_head_local_transform.js');
 require('./pp/input/pose/components/set_non_vr_head_local_transform.js');
 require('./pp/input/pose/components/get_player_objects.js');
+require('./pp/input/pose/components/copy_hand_transform.js');
+require('./pp/input/pose/components/copy_head_transform.js');
+require('./pp/input/pose/components/copy_non_vr_head_transform.js');
 
 //	PLUGIN
 require('./pp/plugin/component_mods/clone_mod.js');
