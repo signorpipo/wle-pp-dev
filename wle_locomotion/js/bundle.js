@@ -1,3 +1,6 @@
+//CAULDRON
+require('./cauldron/toggle_require_mouse_down.js');
+
 //LOCOMOTION
 require('./locomotion/locomotion_draft.js');
 require('./locomotion/locomotion_floating_error.js');
@@ -58,6 +61,7 @@ require('./pp/cauldron/components/clear_console_on_session.js');
 require('./pp/cauldron/components/player_height.js');
 require('./pp/cauldron/components/set_hand_transform.js');
 require('./pp/cauldron/components/set_head_transform.js');
+require('./pp/cauldron/components/set_non_vr_head_transform.js');
 require('./pp/cauldron/components/set_hierarchy_active.js');
 
 require('./pp/cauldron/fsm/fsm.js');

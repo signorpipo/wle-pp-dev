@@ -28,17 +28,17 @@
             "name": "Player",
             "parent": "18",
             "transformation": [
-                0.9999993,
+                0.9999986,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                0.9999991,
+                0.999999,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                0.9999985,
+                0.999998,
                 0.0,
                 0.0,
                 0.0,
@@ -51,9 +51,12 @@
                     "locomotion-draft": {
                         "_myPlayerObject": "19",
                         "_myHeadObject": "25",
-                        "_myMaxRotationSpeed": 100.0,
+                        "_myMaxRotationSpeed": 50.0,
                         "_myRightHandObject": "24",
-                        "_myMaxSpeed": 0.1
+                        "_myMaxSpeed": 1.0,
+                        "_myNonVRCameraObject": "21",
+                        "_myVRHeadObject": "25",
+                        "_myNonVRHeadObject": "115"
                     },
                     "active": true
                 }
@@ -75,6 +78,17 @@
             "components": [
                 {
                     "type": "view"
+                },
+                {
+                    "type": "mouse-look",
+                    "mouse-look": {
+                        "requireMouseDown": true
+                    },
+                    "active": true
+                },
+                {
+                    "type": "toggle-require-mouse-down",
+                    "active": false
                 }
             ]
         },
@@ -166,7 +180,8 @@
                     }
                 },
                 {
-                    "type": "pp-debug-transform"
+                    "type": "pp-debug-transform",
+                    "active": false
                 }
             ],
             "transformation": [
@@ -233,7 +248,25 @@
         },
         "28": {
             "name": "Lights",
-            "parent": "18"
+            "parent": "18",
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ]
         },
         "29": {
             "name": "Light 1",
@@ -2013,6 +2046,18 @@
                     }
                 }
             ]
+        },
+        "115": {
+            "name": "Non VR Head",
+            "parent": "20",
+            "components": [
+                {
+                    "type": "pp-set-non-vr-head-transform",
+                    "pp-set-non-vr-head-transform": {
+                        "_myNonVRCamera": "21"
+                    }
+                }
+            ]
         }
     },
     "meshes": {
@@ -2461,7 +2506,8 @@
                 "js/pp/tool/easy_tune/easy_tune_widgets",
                 "js/pp/tool/widget_frame",
                 "js/test",
-                "js/locomotion"
+                "js/locomotion",
+                "js/cauldron"
             ],
             "useInternalBundler": false
         },
