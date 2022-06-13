@@ -99,10 +99,11 @@ require('./pp/input/gamepad/gamepad.js');
 
 require('./pp/input/pose/hand_pose.js');
 require('./pp/input/pose/head_pose.js');
-require('./pp/input/pose/player_height.js');
-require('./pp/input/pose/set_hand_local_transform.js');
-require('./pp/input/pose/set_head_local_transform.js');
-require('./pp/input/pose/set_non_vr_head_local_transform.js');
+require('./pp/input/pose/components/set_player_height.js');
+require('./pp/input/pose/components/set_hand_local_transform.js');
+require('./pp/input/pose/components/set_head_local_transform.js');
+require('./pp/input/pose/components/set_non_vr_head_local_transform.js');
+require('./pp/input/pose/components/get_player_objects.js');
 
 //	PLUGIN
 require('./pp/plugin/component_mods/clone_mod.js');

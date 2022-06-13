@@ -21,6 +21,20 @@
                 {
                     "type": "pp-clear-console-on-session",
                     "active": false
+                },
+                {
+                    "type": "pp-get-player-objects",
+                    "pp-get-player-objects": {
+                        "_myPlayer": "19",
+                        "_myPlayerPivot": "20",
+                        "_myNonVRCamera": "21",
+                        "_myHead": "25",
+                        "_myEyeLeft": "26",
+                        "_myEyeRight": "27",
+                        "_myHandLeft": "23",
+                        "_myHandRight": "24",
+                        "_myNonVRHead": "115"
+                    }
                 }
             ]
         },
@@ -67,7 +81,7 @@
             "parent": "19",
             "components": [
                 {
-                    "type": "pp-player-height",
+                    "type": "pp-set-player-height",
                     "active": true
                 }
             ]
