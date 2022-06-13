@@ -59,10 +59,6 @@ require('./pp/cauldron/cauldron/save_manager.js');
 require('./pp/cauldron/cauldron/timer.js');
 
 require('./pp/cauldron/components/clear_console_on_session.js');
-require('./pp/cauldron/components/player_height.js');
-require('./pp/cauldron/components/set_hand_transform.js');
-require('./pp/cauldron/components/set_head_transform.js');
-require('./pp/cauldron/components/set_non_vr_head_transform.js');
 require('./pp/cauldron/components/set_hierarchy_active.js');
 
 require('./pp/cauldron/fsm/fsm.js');
@@ -92,8 +88,6 @@ require('./pp/gameplay/grab_throw/grabber_hand.js');
 
 //	INPUT
 require('./pp/input/cauldron/finger_cursor.js');
-require('./pp/input/cauldron/hand_pose.js');
-require('./pp/input/cauldron/head_pose.js');
 require('./pp/input/cauldron/input_types.js');
 require('./pp/input/cauldron/input_utils.js');
 
@@ -102,6 +96,13 @@ require('./pp/input/gamepad/gamepad_manager_component.js');
 require('./pp/input/gamepad/gamepad_manager.js');
 require('./pp/input/gamepad/gamepad_utils.js');
 require('./pp/input/gamepad/gamepad.js');
+
+require('./pp/input/pose/hand_pose.js');
+require('./pp/input/pose/head_pose.js');
+require('./pp/input/pose/player_height.js');
+require('./pp/input/pose/set_hand_local_transform.js');
+require('./pp/input/pose/set_head_local_transform.js');
+require('./pp/input/pose/set_non_vr_head_local_transform.js');
 
 //	PLUGIN
 require('./pp/plugin/component_mods/clone_mod.js');

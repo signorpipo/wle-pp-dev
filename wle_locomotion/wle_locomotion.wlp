@@ -119,7 +119,7 @@
             ],
             "components": [
                 {
-                    "type": "pp-set-hand-transform"
+                    "type": "pp-set-hand-local-transform"
                 },
                 {
                     "type": "pp-console-vr",
@@ -154,8 +154,8 @@
             "parent": "20",
             "components": [
                 {
-                    "type": "pp-set-hand-transform",
-                    "pp-set-hand-transform": {
+                    "type": "pp-set-hand-local-transform",
+                    "pp-set-hand-local-transform": {
                         "_myHandedness": "right"
                     }
                 },
@@ -208,7 +208,7 @@
             "parent": "20",
             "components": [
                 {
-                    "type": "pp-set-head-transform"
+                    "type": "pp-set-head-local-transform"
                 },
                 {
                     "type": "pp-audio-listener",
@@ -997,8 +997,8 @@
             "parent": "74",
             "components": [
                 {
-                    "type": "pp-set-hand-transform",
-                    "pp-set-hand-transform": {
+                    "type": "pp-set-hand-local-transform",
+                    "pp-set-hand-local-transform": {
                         "_myHandedness": "right"
                     }
                 },
@@ -1106,7 +1106,7 @@
                     }
                 },
                 {
-                    "type": "pp-set-hand-transform"
+                    "type": "pp-set-hand-local-transform"
                 }
             ]
         },
@@ -2052,8 +2052,8 @@
             "parent": "20",
             "components": [
                 {
-                    "type": "pp-set-non-vr-head-transform",
-                    "pp-set-non-vr-head-transform": {
+                    "type": "pp-set-non-vr-head-local-transform",
+                    "pp-set-non-vr-head-local-transform": {
                         "_myNonVRCamera": "21"
                     }
                 }

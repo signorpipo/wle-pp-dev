@@ -1,4 +1,4 @@
-WL.registerComponent('pp-set-non-vr-head-transform', {
+WL.registerComponent('pp-set-non-vr-head-local-transform', {
     _myNonVRCamera: { type: WL.Type.Object },
     _myFixForward: { type: WL.Type.Bool, default: true }
 }, {
