@@ -757,13 +757,13 @@ if (WL && WL.Object) {
 
     //Translate Axis
 
-    WL.Object.prototype.pp_translateAxis = function (direction, amount) {
-        this.pp_translateAxisWorld(direction, amount);
+    WL.Object.prototype.pp_translateAxis = function (amount, direction) {
+        this.pp_translateAxisWorld(amount, direction);
     };
 
     WL.Object.prototype.pp_translateAxisWorld = function () {
         let translation = glMatrix.vec3.create();
-        return function (direction, amount) {
+        return function (amount, direction) {
             glMatrix.vec3.scale(translation, direction, amount);
             this.pp_translateWorld(translation);
         };
@@ -771,7 +771,7 @@ if (WL && WL.Object) {
 
     WL.Object.prototype.pp_translateAxisLocal = function () {
         let translation = glMatrix.vec3.create();
-        return function (direction, amount) {
+        return function (amount, direction) {
             glMatrix.vec3.scale(translation, direction, amount);
             this.pp_translateLocal(translation);
         };
@@ -779,7 +779,7 @@ if (WL && WL.Object) {
 
     WL.Object.prototype.pp_translateAxisObject = function () {
         let translation = glMatrix.vec3.create();
-        return function (direction, amount) {
+        return function (amount, direction) {
             glMatrix.vec3.scale(translation, direction, amount);
             this.pp_translateObject(translation);
         };

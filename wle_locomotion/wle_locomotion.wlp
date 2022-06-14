@@ -20,7 +20,7 @@
                 },
                 {
                     "type": "pp-clear-console-on-session",
-                    "active": false
+                    "active": true
                 },
                 {
                     "type": "pp-get-player-objects",
@@ -70,9 +70,25 @@
                         "_myMaxSpeed": 1.0,
                         "_myNonVRCameraObject": "21",
                         "_myVRHeadObject": "25",
-                        "_myNonVRHeadObject": "115"
+                        "_myNonVRHeadObject": "115",
+                        "_myDirectionReferenceObject": "24"
                     },
-                    "active": true
+                    "active": false
+                },
+                {
+                    "type": "locomotion-fly-draft",
+                    "locomotion-fly-draft": {
+                        "_myPlayerObject": "19",
+                        "_myNonVRCameraObject": "21",
+                        "_myNonVRHeadObject": "115",
+                        "_myVRHeadObject": "25",
+                        "_myRightHandObject": "24",
+                        "_myMaxSpeed": 1.0,
+                        "_myMaxRotationSpeed": 50.0,
+                        "_myHeadObject": "25",
+                        "_myDirectionReferenceObject": "24",
+                        "_myMinHeight": 0.0
+                    }
                 }
             ]
         },

@@ -3,6 +3,7 @@ require('./cauldron/toggle_require_mouse_down.js');
 
 //LOCOMOTION
 require('./locomotion/locomotion_draft.js');
+require('./locomotion/locomotion_fly_draft.js');
 require('./locomotion/locomotion_floating_error.js');
 
 //TEST

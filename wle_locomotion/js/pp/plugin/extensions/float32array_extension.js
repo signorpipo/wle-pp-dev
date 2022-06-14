@@ -74,7 +74,7 @@
             - vec3_distance
             - vec3_add      / vec3_sub          / vec3_mul      / vec3_div      / vec3_scale
             - vec3_transformQuat
-            - vec3_componentAlongAxis           / vec3_removeComponentAlongAxis
+            - vec3_componentAlongAxis           / vec3_removeComponentAlongAxis / vec3_valueAlongAxis  
             - vec3_isConcordant
             - vec3_convertPositionToWorld       / vec3_convertPositionToLocal 
             - vec3_convertDirectionToWorld      / vec3_convertDirectionToLocal   
@@ -532,6 +532,18 @@ Float32Array.prototype.vec3_componentAlongAxis = function (axis, out = glMatrix.
     glMatrix.vec3.scale(out, out, length);
     return out;
 };
+
+Float32Array.prototype.vec3_valueAlongAxis = function () {
+    let componentAlong = glMatrix.vec3.create();
+    return function (axis) {
+        this.vec3_componentAlongAxis(axis, componentAlong);
+        let value = componentAlong.vec3_length();
+        if (!componentAlong.vec3_isConcordant(axis)) {
+            value = -value;
+        }
+        return value;
+    };
+}();
 
 Float32Array.prototype.vec3_removeComponentAlongAxis = function () {
     let componentAlong = glMatrix.vec3.create();

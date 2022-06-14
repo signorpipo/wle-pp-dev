@@ -1,6 +1,10 @@
-WL.registerComponent('locomotion-draft', {
+WL.registerComponent('locomotion-fly-draft', {
     _myMaxSpeed: { type: WL.Type.Float, default: 2 },
+    _myMinHeight: { type: WL.Type.Float, default: 0 },
+    _myMinAngleToFly: { type: WL.Type.Float, default: 30 },
     _myMaxRotationSpeed: { type: WL.Type.Float, default: 100 },
+    _myIsSnapTurn: { type: WL.Type.Bool, default: true },
+    _mySnapTurnAngle: { type: WL.Type.Float, default: 45 },
     _myPlayerObject: { type: WL.Type.Object },
     _myNonVRCameraObject: { type: WL.Type.Object },
     _myNonVRHeadObject: { type: WL.Type.Object },
@@ -44,6 +48,11 @@ WL.registerComponent('locomotion-draft', {
 
         this._myPreTiltMatrix = PP.mat4_create();
         this._myTiltMatrix = PP.mat4_create();
+
+        this._myWorldUp = [0, 1, 0];
+
+        this._mySnapDone = false;
+        this._myIsOnGround = false;
     },
     update(dt) {
         /* this._myTiltMatrix.mat4_setPosition(this._myDirectionReferenceObject.pp_getPosition());
@@ -93,7 +102,7 @@ WL.registerComponent('locomotion-draft', {
                 let minIntensityThreshold = 0.1;
                 if (axes.vec2_length() > minIntensityThreshold) {
                     this._myStickIdleCount = 2;
-                    let direction = this._convertStickToWorldDirection(axes, this._myDirectionReferenceObject, this._myRemoveUp);
+                    let direction = this._convertStickToWorldFlyDirection(axes, this._myDirectionReferenceObject, this._myRemoveUp);
                     if (direction.vec3_length() > 0.001) {
                         direction.vec3_normalize(direction);
 
@@ -126,22 +135,53 @@ WL.registerComponent('locomotion-draft', {
             let headRotation = PP.quat_create();
             {
                 let axes = PP.myRightGamepad.getAxesInfo().getAxes();
-                let minIntensityThreshold = 0.1;
-                if (Math.abs(axes[0]) > minIntensityThreshold) {
-                    let axis = this._myPlayerObject.pp_getUp();
+                if (!this._myIsSnapTurn) {
+                    let minIntensityThreshold = 0.1;
+                    if (Math.abs(axes[0]) > minIntensityThreshold) {
+                        let axis = this._myPlayerObject.pp_getUp();
 
-                    let rotationIntensity = -axes[0];
-                    let speed = Math.pp_lerp(0, this._myMaxRotationSpeed, rotationIntensity);
+                        let rotationIntensity = -axes[0];
+                        let speed = Math.pp_lerp(0, this._myMaxRotationSpeed, rotationIntensity);
 
-                    headRotation.quat_fromAxis(speed * dt, axis);
+                        headRotation.quat_fromAxis(speed * dt, axis);
 
-                    rotationChanged = true;
+                        rotationChanged = true;
+                    }
+                } else {
+                    if (this._mySnapDone) {
+                        let stickThreshold = 0.4;
+                        if (Math.abs(axes[0]) < stickThreshold) {
+                            this._mySnapDone = false;
+                        }
+                    } else {
+                        let stickThreshold = 0.5;
+                        if (Math.abs(axes[0]) > stickThreshold) {
+                            let axis = this._myPlayerObject.pp_getUp();
+
+                            let rotation = -Math.pp_sign(axes[0]) * this._mySnapTurnAngle;
+                            headRotation.quat_fromAxis(rotation, axis);
+
+                            rotationChanged = true;
+                            this._mySnapDone = true;
+                        }
+                    }
                 }
             }
 
             if (rotationChanged) {
                 this._rotateHead(headRotation);
             }
+
+            let playerPosition = this._myPlayerObject.pp_getPosition();
+            let heightFromFloor = playerPosition.vec3_valueAlongAxis(this._myWorldUp);
+            if (heightFromFloor <= this._myMinHeight + 0.01) {
+                let heightDisplacement = this._myMinHeight - heightFromFloor;
+                this._myPlayerObject.pp_translateAxis(heightDisplacement, this._myWorldUp);
+                this._myIsOnGround = true;
+            } else {
+                this._myIsOnGround = false;
+            }
+
         }
     },
     _moveHead(movement) {
@@ -170,6 +210,136 @@ WL.registerComponent('locomotion-draft', {
         this._moveHead(teleportMovementToPerform);
     },
     _convertStickToWorldDirection(stickAxes, conversionObject, removeUp) {
+        let playerUp = this._myPlayerObject.pp_getUp();
+
+        let up = conversionObject.pp_getUp();
+        let forward = conversionObject.pp_getForward();
+        let right = conversionObject.pp_getRight();
+
+        this._myIsOnGround = true;
+
+        if (removeUp) {
+            /* if (forward.vec3_angle(playerUp) < 30) {
+                let fixedForward = up.vec3_negate();
+                if (!fixedForward.vec3_removeComponentAlongAxis(playerUp).vec3_isConcordant(forward)) {
+                    fixedForward.vec3_negate(forward);
+                } else {
+                    forward.pp_copy(fixedForward);
+                }
+            } else if (forward.vec3_angle(playerUp.vec3_negate()) < 30) {
+                
+                let fixedForward = up.pp_clone();
+                if (!fixedForward.vec3_removeComponentAlongAxis(playerUp).vec3_isConcordant(forward)) {
+                    fixedForward.vec3_negate(forward);
+                } else {
+                    forward.pp_copy(fixedForward);
+                }
+            } */
+
+            /* 
+            if (right.vec3_angle(playerUp) < 30) {
+                let fixedRight = up.vec3_negate();
+                if (!fixedRight.vec3_removeComponentAlongAxis(playerUp).vec3_isConcordant(right)) {
+                    fixedRight.vec3_negate(right);
+                } else {
+                    right.pp_copy(fixedRight);
+                }
+            } else if (right.vec3_angle(playerUp.vec3_negate()) < 30) {
+                let fixedRight = up.pp_clone();
+                if (!fixedRight.vec3_removeComponentAlongAxis(playerUp).vec3_isConcordant(right)) {
+                    fixedRight.vec3_negate(right);
+                } else {
+                    right.pp_copy(fixedRight);
+                }
+            } */
+
+            let minAngle = 10;
+            if (this._myLastForward && (forward.vec3_angle(playerUp) < minAngle || forward.vec3_angle(playerUp.vec3_negate()) < minAngle)) {
+                if (forward.vec3_isConcordant(this._myLastForward)) {
+                    forward.pp_copy(this._myLastForward);
+                } else {
+                    this._myLastForward.vec3_negate(forward);
+                }
+            }
+
+            if (this._myLastRight && (right.vec3_angle(playerUp) < minAngle || right.vec3_angle(playerUp.vec3_negate()) < minAngle)) {
+                if (right.vec3_isConcordant(this._myLastRight)) {
+                    right.pp_copy(this._myLastRight);
+                } else {
+                    this._myLastRight.vec3_negate(right);
+                }
+            }
+
+            forward.vec3_removeComponentAlongAxis(playerUp, forward);
+            right.vec3_removeComponentAlongAxis(playerUp, right);
+
+            right.vec3_cross(forward, up);
+            forward.vec3_cross(up, right);
+
+            if (this._myStartForward != null) {
+                if (this._myStartUp.vec3_isConcordant(playerUp) != up.vec3_isConcordant(playerUp)) {
+                    if (!this._myStartForward.vec3_isConcordant(forward)) {
+                        forward.vec3_negate(forward);
+                    } else {
+                        right.vec3_negate(right);
+                    }
+
+                    up.vec3_negate(up);
+                }
+            }
+        }
+
+        forward.vec3_normalize(forward);
+        right.vec3_normalize(right);
+        up.vec3_normalize(up);
+
+        this._myLastForward = forward.pp_clone();
+        this._myLastRight = right.pp_clone();
+
+        if (this._myStartForward == null) {
+            this._myStartForward = forward.pp_clone();
+            this._myStartUp = up.pp_clone();
+            this._myStartRight = right.pp_clone();
+        }
+
+        /* let debugArrowParamsForward = new PP.DebugArrowParams();
+        debugArrowParamsForward.myStart = this._myDirectionReferenceObject.pp_getPosition();
+        debugArrowParamsForward.myDirection = forward;
+        debugArrowParamsForward.myLength = 0.2;
+        debugArrowParamsForward.myColor = [0, 0, 1, 1];
+        PP.myDebugManager.draw(debugArrowParamsForward);
+
+        let debugArrowParamsStartForward = new PP.DebugArrowParams();
+        debugArrowParamsStartForward.myStart = this._myDirectionReferenceObject.pp_getPosition();
+        //debugArrowParamsStartForward.myDirection = conversionObject.pp_getForward().vec3_removeComponentAlongAxis(playerUp).vec3_normalize();
+        debugArrowParamsStartForward.myDirection = this._myStartForward;
+        debugArrowParamsStartForward.myLength = 0.2;
+        debugArrowParamsStartForward.myColor = [0, 0, 0.5, 1];
+        PP.myDebugManager.draw(debugArrowParamsStartForward);
+
+        let debugArrowParamsRight = new PP.DebugArrowParams();
+        debugArrowParamsRight.myStart = this._myDirectionReferenceObject.pp_getPosition();
+        debugArrowParamsRight.myDirection = right;
+        debugArrowParamsRight.myLength = 0.2;
+        debugArrowParamsRight.myColor = [1, 0, 0, 1];
+        PP.myDebugManager.draw(debugArrowParamsRight);
+
+        let debugArrowParamsUp = new PP.DebugArrowParams();
+        debugArrowParamsUp.myStart = this._myDirectionReferenceObject.pp_getPosition();
+        debugArrowParamsUp.myDirection = up;
+        debugArrowParamsUp.myLength = 0.2;
+        debugArrowParamsUp.myColor = [0, 1, 0, 1];
+        PP.myDebugManager.draw(debugArrowParamsUp); */
+
+        let direction = right.vec3_scale(stickAxes[0]).vec3_add(forward.vec3_scale(stickAxes[1]));
+
+        if (removeUp) {
+            direction.vec3_removeComponentAlongAxis(playerUp, direction);
+        }
+
+        return direction;
+    },
+    _convertStickToWorldFlyDirection(stickAxes, conversionObject) {
         let playerUp = this._myPlayerObject.pp_getUp();
 
         let up = conversionObject.pp_getUp();
