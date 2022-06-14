@@ -39,8 +39,8 @@ WL.registerComponent('locomotion-fly-draft', {
         this._myStartRight = null;
         this._myStickIdleCount = 0;
 
-        this._myLastForward = null;
-        this._myLastRight = null;
+        this._myLastValidFlatForward = null;
+        this._myLastValidFlatRight = null;
 
         this._myRemoveUp = true;
         this._myRemoveXTilt = true;
@@ -53,6 +53,8 @@ WL.registerComponent('locomotion-fly-draft', {
 
         this._mySnapDone = false;
         this._myIsOnGround = false;
+        this._myIsFlyingForward = false;
+        this._myIsFlyingRight = false;
     },
     update(dt) {
         /* this._myTiltMatrix.mat4_setPosition(this._myDirectionReferenceObject.pp_getPosition());
@@ -106,6 +108,8 @@ WL.registerComponent('locomotion-fly-draft', {
                     if (direction.vec3_length() > 0.001) {
                         direction.vec3_normalize(direction);
 
+                        this._myIsFlying = direction.vec3_componentAlongAxis(this._myWorldUp).vec3_length() > 0.0001;
+
                         let movementIntensity = axes.vec2_length();
                         let speed = Math.pp_lerp(0, this._myMaxSpeed, movementIntensity);
 
@@ -121,8 +125,12 @@ WL.registerComponent('locomotion-fly-draft', {
                             this._myStartUp = null;
                             this._myStartRight = null;
 
-                            this._myLastForward = null;
-                            this._myLastRight = null;
+                            this._myLastValidFlatForward = null;
+                            this._myLastValidFlatRight = null;
+
+                            this._myIsFlying = false;
+                            this._myIsFlyingForward = false;
+                            this._myIsFlyingRight = false;
                         }
                     }
                 }
@@ -178,6 +186,9 @@ WL.registerComponent('locomotion-fly-draft', {
                 let heightDisplacement = this._myMinHeight - heightFromFloor;
                 this._myPlayerObject.pp_translateAxis(heightDisplacement, this._myWorldUp);
                 this._myIsOnGround = true;
+                this._myIsFlying = false;
+                this._myIsFlyingForward = false;
+                this._myIsFlyingRight = false;
             } else {
                 this._myIsOnGround = false;
             }
@@ -216,8 +227,6 @@ WL.registerComponent('locomotion-fly-draft', {
         let forward = conversionObject.pp_getForward();
         let right = conversionObject.pp_getRight();
 
-        this._myIsOnGround = true;
-
         if (removeUp) {
             /* if (forward.vec3_angle(playerUp) < 30) {
                 let fixedForward = up.vec3_negate();
@@ -254,19 +263,19 @@ WL.registerComponent('locomotion-fly-draft', {
             } */
 
             let minAngle = 10;
-            if (this._myLastForward && (forward.vec3_angle(playerUp) < minAngle || forward.vec3_angle(playerUp.vec3_negate()) < minAngle)) {
-                if (forward.vec3_isConcordant(this._myLastForward)) {
-                    forward.pp_copy(this._myLastForward);
+            if (this._myLastValidFlatForward && (forward.vec3_angle(playerUp) < minAngle || forward.vec3_angle(playerUp.vec3_negate()) < minAngle)) {
+                if (forward.vec3_isConcordant(this._myLastValidFlatForward)) {
+                    forward.pp_copy(this._myLastValidFlatForward);
                 } else {
-                    this._myLastForward.vec3_negate(forward);
+                    this._myLastValidFlatForward.vec3_negate(forward);
                 }
             }
 
-            if (this._myLastRight && (right.vec3_angle(playerUp) < minAngle || right.vec3_angle(playerUp.vec3_negate()) < minAngle)) {
-                if (right.vec3_isConcordant(this._myLastRight)) {
-                    right.pp_copy(this._myLastRight);
+            if (this._myLastValidFlatRight && (right.vec3_angle(playerUp) < minAngle || right.vec3_angle(playerUp.vec3_negate()) < minAngle)) {
+                if (right.vec3_isConcordant(this._myLastValidFlatRight)) {
+                    right.pp_copy(this._myLastValidFlatRight);
                 } else {
-                    this._myLastRight.vec3_negate(right);
+                    this._myLastValidFlatRight.vec3_negate(right);
                 }
             }
 
@@ -293,8 +302,8 @@ WL.registerComponent('locomotion-fly-draft', {
         right.vec3_normalize(right);
         up.vec3_normalize(up);
 
-        this._myLastForward = forward.pp_clone();
-        this._myLastRight = right.pp_clone();
+        this._myLastValidFlatForward = forward.pp_clone();
+        this._myLastValidFlatRight = right.pp_clone();
 
         if (this._myStartForward == null) {
             this._myStartForward = forward.pp_clone();
@@ -346,70 +355,55 @@ WL.registerComponent('locomotion-fly-draft', {
         let forward = conversionObject.pp_getForward();
         let right = conversionObject.pp_getRight();
 
-        if (removeUp) {
-            /* if (forward.vec3_angle(playerUp) < 30) {
-                let fixedForward = up.vec3_negate();
-                if (!fixedForward.vec3_removeComponentAlongAxis(playerUp).vec3_isConcordant(forward)) {
-                    fixedForward.vec3_negate(forward);
-                } else {
-                    forward.pp_copy(fixedForward);
-                }
-            } else if (forward.vec3_angle(playerUp.vec3_negate()) < 30) {
-                
-                let fixedForward = up.pp_clone();
-                if (!fixedForward.vec3_removeComponentAlongAxis(playerUp).vec3_isConcordant(forward)) {
-                    fixedForward.vec3_negate(forward);
-                } else {
-                    forward.pp_copy(fixedForward);
-                }
-            } */
+        let angleForwardWithWorldUp = forward.vec3_angle(this._myWorldUp);
+        removeForwardUp = !this._myIsFlyingForward && (angleForwardWithWorldUp >= 90 - this._myMinAngleToFly && angleForwardWithWorldUp <= 90 + this._myMinAngleToFly);
 
-            /* 
-            if (right.vec3_angle(playerUp) < 30) {
-                let fixedRight = up.vec3_negate();
-                if (!fixedRight.vec3_removeComponentAlongAxis(playerUp).vec3_isConcordant(right)) {
-                    fixedRight.vec3_negate(right);
-                } else {
-                    right.pp_copy(fixedRight);
-                }
-            } else if (right.vec3_angle(playerUp.vec3_negate()) < 30) {
-                let fixedRight = up.pp_clone();
-                if (!fixedRight.vec3_removeComponentAlongAxis(playerUp).vec3_isConcordant(right)) {
-                    fixedRight.vec3_negate(right);
-                } else {
-                    right.pp_copy(fixedRight);
-                }
-            } */
+        this._myIsFlyingForward = !removeForwardUp;
 
-            let minAngle = 10;
-            if (this._myLastForward && (forward.vec3_angle(playerUp) < minAngle || forward.vec3_angle(playerUp.vec3_negate()) < minAngle)) {
-                if (forward.vec3_isConcordant(this._myLastForward)) {
-                    forward.pp_copy(this._myLastForward);
-                } else {
-                    this._myLastForward.vec3_negate(forward);
+        let angleRightWithWorldUp = right.vec3_angle(this._myWorldUp);
+        removeRightUp = !this._myIsFlyingRight && (angleRightWithWorldUp >= 90 - this._myMinAngleToFly && angleRightWithWorldUp <= 90 + this._myMinAngleToFly);
+
+        this._myIsFlyingRight = !removeRightUp;
+
+        if (removeForwardUp || removeRightUp) {
+            if (removeForwardUp) {
+                let minAngle = 10;
+                if (this._myLastValidFlatForward && (forward.vec3_angle(playerUp) < minAngle || forward.vec3_angle(playerUp.vec3_negate()) < minAngle)) {
+                    if (forward.vec3_isConcordant(this._myLastValidFlatForward)) {
+                        forward.pp_copy(this._myLastValidFlatForward);
+                    } else {
+                        this._myLastValidFlatForward.vec3_negate(forward);
+                    }
                 }
             }
 
-            if (this._myLastRight && (right.vec3_angle(playerUp) < minAngle || right.vec3_angle(playerUp.vec3_negate()) < minAngle)) {
-                if (right.vec3_isConcordant(this._myLastRight)) {
-                    right.pp_copy(this._myLastRight);
-                } else {
-                    this._myLastRight.vec3_negate(right);
+            if (removeRightUp) {
+                let minAngle = 10;
+                if (this._myLastValidFlatRight && (right.vec3_angle(playerUp) < minAngle || right.vec3_angle(playerUp.vec3_negate()) < minAngle)) {
+                    if (right.vec3_isConcordant(this._myLastValidFlatRight)) {
+                        right.pp_copy(this._myLastValidFlatRight);
+                    } else {
+                        this._myLastValidFlatRight.vec3_negate(right);
+                    }
                 }
             }
 
-            forward.vec3_removeComponentAlongAxis(playerUp, forward);
-            right.vec3_removeComponentAlongAxis(playerUp, right);
+            if (removeForwardUp) {
+                forward.vec3_removeComponentAlongAxis(playerUp, forward);
+            }
 
-            right.vec3_cross(forward, up);
-            forward.vec3_cross(up, right);
+            if (removeRightUp) {
+                right.vec3_removeComponentAlongAxis(playerUp, right);
+            }
 
             if (this._myStartForward != null) {
                 if (this._myStartUp.vec3_isConcordant(playerUp) != up.vec3_isConcordant(playerUp)) {
-                    if (!this._myStartForward.vec3_isConcordant(forward)) {
-                        forward.vec3_negate(forward);
-                    } else {
-                        right.vec3_negate(right);
+                    if (!this._myStartForward.vec3_isConcordant(forward) && removeForwardUp) {
+                        forward.vec3_negate(forward); // non negare ma ruotare sul player up
+                    }
+
+                    if (!this._myStartRight.vec3_isConcordant(right) && removeRightUp) {
+                        right.vec3_negate(right); // non negare ma ruotare sul player up
                     }
 
                     up.vec3_negate(up);
@@ -421,8 +415,16 @@ WL.registerComponent('locomotion-fly-draft', {
         right.vec3_normalize(right);
         up.vec3_normalize(up);
 
-        this._myLastForward = forward.pp_clone();
-        this._myLastRight = right.pp_clone();
+        {
+            let minAngle = 10;
+            if (forward.vec3_angle(playerUp) > minAngle && forward.vec3_angle(playerUp.vec3_negate()) > minAngle) {
+                this._myLastValidFlatForward = forward;
+            }
+
+            if (right.vec3_angle(playerUp) > minAngle && right.vec3_angle(playerUp.vec3_negate()) > minAngle) {
+                this._myLastValidFlatRight = right;
+            }
+        }
 
         if (this._myStartForward == null) {
             this._myStartForward = forward.pp_clone();
@@ -436,7 +438,7 @@ WL.registerComponent('locomotion-fly-draft', {
         debugArrowParamsForward.myLength = 0.2;
         debugArrowParamsForward.myColor = [0, 0, 1, 1];
         PP.myDebugManager.draw(debugArrowParamsForward);
-
+        
         let debugArrowParamsStartForward = new PP.DebugArrowParams();
         debugArrowParamsStartForward.myStart = this._myDirectionReferenceObject.pp_getPosition();
         //debugArrowParamsStartForward.myDirection = conversionObject.pp_getForward().vec3_removeComponentAlongAxis(playerUp).vec3_normalize();
@@ -444,14 +446,14 @@ WL.registerComponent('locomotion-fly-draft', {
         debugArrowParamsStartForward.myLength = 0.2;
         debugArrowParamsStartForward.myColor = [0, 0, 0.5, 1];
         PP.myDebugManager.draw(debugArrowParamsStartForward);
-
+        
         let debugArrowParamsRight = new PP.DebugArrowParams();
         debugArrowParamsRight.myStart = this._myDirectionReferenceObject.pp_getPosition();
         debugArrowParamsRight.myDirection = right;
         debugArrowParamsRight.myLength = 0.2;
         debugArrowParamsRight.myColor = [1, 0, 0, 1];
         PP.myDebugManager.draw(debugArrowParamsRight);
-
+        
         let debugArrowParamsUp = new PP.DebugArrowParams();
         debugArrowParamsUp.myStart = this._myDirectionReferenceObject.pp_getPosition();
         debugArrowParamsUp.myDirection = up;
@@ -461,7 +463,7 @@ WL.registerComponent('locomotion-fly-draft', {
 
         let direction = right.vec3_scale(stickAxes[0]).vec3_add(forward.vec3_scale(stickAxes[1]));
 
-        if (removeUp) {
+        if (removeForwardUp && removeRightUp) {
             direction.vec3_removeComponentAlongAxis(playerUp, direction);
         }
 

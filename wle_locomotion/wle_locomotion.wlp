@@ -86,8 +86,9 @@
                         "_myMaxSpeed": 1.0,
                         "_myMaxRotationSpeed": 50.0,
                         "_myHeadObject": "25",
-                        "_myDirectionReferenceObject": "24",
-                        "_myMinHeight": 0.0
+                        "_myDirectionReferenceObject": "23",
+                        "_myMinHeight": 0.0,
+                        "_myMinAngleToFly": 45.0
                     }
                 }
             ]
