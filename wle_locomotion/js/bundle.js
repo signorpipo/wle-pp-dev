@@ -42,7 +42,7 @@ require('@wonderlandengine/components/wonderleap-ad');
 require('./pp/pp.js');
 
 //	AUDIO
-require('./pp/audio/audio_listener.js');
+require('./pp/audio/spatial_audio_listener.js');
 require('./pp/audio/audio_manager_component.js');
 require('./pp/audio/audio_manager.js');
 require('./pp/audio/audio_player.js');
@@ -79,6 +79,7 @@ require('./pp/debug/debug_manager.js');
 require('./pp/debug/debug_transform.js');
 require('./pp/debug/debug_line.js');
 require('./pp/debug/debug_arrow.js');
+require('./pp/debug/debug_point.js');
 require('./pp/debug/debug_raycast.js');
 require('./pp/debug/components/debug_transform_component.js');
 require('./pp/debug/components/debug_manager_component.js');
@@ -97,27 +98,27 @@ require('./pp/input/gamepad/gamepad_manager_component.js');
 require('./pp/input/gamepad/gamepad_manager.js');
 require('./pp/input/gamepad/gamepad_utils.js');
 require('./pp/input/gamepad/gamepad.js');
+require('./pp/input/gamepad/gamepad_control_scheme.js');
 
 require('./pp/input/pose/hand_pose.js');
 require('./pp/input/pose/head_pose.js');
 require('./pp/input/pose/components/set_player_height.js');
 require('./pp/input/pose/components/set_hand_local_transform.js');
 require('./pp/input/pose/components/set_head_local_transform.js');
+require('./pp/input/pose/components/set_vr_head_local_transform.js');
 require('./pp/input/pose/components/set_non_vr_head_local_transform.js');
 require('./pp/input/pose/components/get_player_objects.js');
 require('./pp/input/pose/components/copy_hand_transform.js');
 require('./pp/input/pose/components/copy_head_transform.js');
-require('./pp/input/pose/components/copy_non_vr_head_transform.js');
 
 //	PLUGIN
-require('./pp/plugin/component_mods/clone_mod.js');
-require('./pp/plugin/component_mods/cursor_mod.js');
-require('./pp/plugin/component_mods/cursor_target_mod.js');
-require('./pp/plugin/component_mods/mouse_look_mod.js');
+require('./pp/plugin/component_mods/clone_component_mod.js');
+require('./pp/plugin/component_mods/cursor_component_mod.js');
+require('./pp/plugin/component_mods/cursor_target_component_mod.js');
+require('./pp/plugin/component_mods/mouse_look_component_mod.js');
 
 require('./pp/plugin/extensions/object_extension.js');
 require('./pp/plugin/extensions/array_extension.js');
-require('./pp/plugin/extensions/float32array_extension.js');
 require('./pp/plugin/extensions/math_extension.js');
 
 //	TOOL

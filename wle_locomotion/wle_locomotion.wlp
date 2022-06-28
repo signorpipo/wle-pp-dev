@@ -33,7 +33,8 @@
                         "_myEyeRight": "27",
                         "_myHandLeft": "23",
                         "_myHandRight": "24",
-                        "_myNonVRHead": "115"
+                        "_myNonVRHead": "115",
+                        "_myVRHead": "120"
                     }
                 }
             ]
@@ -85,7 +86,7 @@
                         "_myRightHandObject": "24",
                         "_myMaxSpeed": 1.0,
                         "_myMaxRotationSpeed": 50.0,
-                        "_myHeadObject": "25",
+                        "_myHeadObject": "120",
                         "_myDirectionReferenceObject": "23",
                         "_myMinHeight": 0.0,
                         "_myMinAngleToFly": 45.0
@@ -105,7 +106,7 @@
         },
         "21": {
             "name": "Non VR Camera",
-            "parent": "20",
+            "parent": "118",
             "components": [
                 {
                     "type": "view"
@@ -116,20 +117,52 @@
                         "requireMouseDown": true
                     },
                     "active": true
-                },
-                {
-                    "type": "toggle-require-mouse-down",
-                    "active": false
                 }
+            ],
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0
             ]
         },
         "22": {
             "name": "Eyes",
-            "parent": "20"
+            "parent": "118",
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ]
         },
         "23": {
             "name": "Hand Left",
-            "parent": "20",
+            "parent": "121",
             "transformation": [
                 1.0,
                 0.0,
@@ -182,7 +215,7 @@
         },
         "24": {
             "name": "Hand Right",
-            "parent": "20",
+            "parent": "121",
             "components": [
                 {
                     "type": "pp-set-hand-local-transform",
@@ -236,15 +269,38 @@
         },
         "25": {
             "name": "Head",
-            "parent": "20",
+            "parent": "119",
             "components": [
                 {
-                    "type": "pp-set-head-local-transform"
+                    "type": "pp-set-head-local-transform",
+                    "pp-set-head-local-transform": {
+                        "_myNonVRCamera": "21"
+                    }
                 },
                 {
-                    "type": "pp-audio-listener",
-                    "active": false
+                    "type": "pp-spatial-audio-listener",
+                    "pp-spatial-audio-listener": {
+                        "_myEnabled": "always"
+                    }
                 }
+            ],
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0
             ]
         },
         "26": {
@@ -2080,7 +2136,7 @@
         },
         "115": {
             "name": "Non VR Head",
-            "parent": "20",
+            "parent": "119",
             "components": [
                 {
                     "type": "pp-set-non-vr-head-local-transform",
@@ -2088,6 +2144,24 @@
                         "_myNonVRCamera": "21"
                     }
                 }
+            ],
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0
             ]
         },
         "116": {
@@ -2147,6 +2221,27 @@
                 0.0,
                 1.0
             ]
+        },
+        "118": {
+            "name": "Cameras",
+            "parent": "20"
+        },
+        "119": {
+            "name": "Heads",
+            "parent": "20"
+        },
+        "120": {
+            "name": "VR Head",
+            "parent": "119",
+            "components": [
+                {
+                    "type": "pp-set-vr-head-local-transform"
+                }
+            ]
+        },
+        "121": {
+            "name": "Hands",
+            "parent": "20"
         }
     },
     "meshes": {
