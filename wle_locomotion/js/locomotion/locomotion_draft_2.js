@@ -39,9 +39,6 @@ WL.registerComponent('locomotion-draft-2', {
         this._myVisibilityWentHidden = false;
         this._mySessionActive = false;
 
-        this._myStartForward = null;
-        this._myStartUp = null;
-        this._myStartRight = null;
         this._myStickIdleCount = 0;
 
         this._myLastValidFlatForward = null;
@@ -112,10 +109,6 @@ WL.registerComponent('locomotion-draft-2', {
                     if (this._myStickIdleCount > 0) {
                         this._myStickIdleCount--;
                         if (this._myStickIdleCount == 0) {
-                            this._myStartForward = null;
-                            this._myStartUp = null;
-                            this._myStartRight = null;
-
                             this._myLastValidFlatForward = null;
                             this._myLastValidFlatRight = null;
 
@@ -229,9 +222,11 @@ WL.registerComponent('locomotion-draft-2', {
 
         this._myIsFlyingRight = !removeRightUp;
 
+        let minAngle = 5;
+
         if (removeForwardUp || removeRightUp) {
             if (removeForwardUp) {
-                let minAngle = 10;
+                //if the forward is too similar to the up (or down) take the last valid forward
                 if (this._myLastValidFlatForward && (forward.vec3_angle(playerUp) < minAngle || forward.vec3_angle(playerUp.vec3_negate()) < minAngle)) {
                     if (forward.vec3_isConcordant(this._myLastValidFlatForward)) {
                         forward.pp_copy(this._myLastValidFlatForward);
@@ -242,7 +237,7 @@ WL.registerComponent('locomotion-draft-2', {
             }
 
             if (removeRightUp) {
-                let minAngle = 10;
+                //if the right is too similar to the up (or down) take the last valid right
                 if (this._myLastValidFlatRight && (right.vec3_angle(playerUp) < minAngle || right.vec3_angle(playerUp.vec3_negate()) < minAngle)) {
                     if (right.vec3_isConcordant(this._myLastValidFlatRight)) {
                         right.pp_copy(this._myLastValidFlatRight);
@@ -259,41 +254,18 @@ WL.registerComponent('locomotion-draft-2', {
             if (removeRightUp) {
                 right.vec3_removeComponentAlongAxis(playerUp, right);
             }
-
-            if (this._myStartForward != null) {
-                if (this._myStartUp.vec3_isConcordant(playerUp) != up.vec3_isConcordant(playerUp)) {
-                    if (!this._myStartForward.vec3_isConcordant(forward) && removeForwardUp) {
-                        forward.vec3_negate(forward); // non negare ma ruotare sul player up
-                    }
-
-                    if (!this._myStartRight.vec3_isConcordant(right) && removeRightUp) {
-                        right.vec3_negate(right); // non negare ma ruotare sul player up
-                    }
-
-                    up.vec3_negate(up);
-                }
-            }
         }
 
         forward.vec3_normalize(forward);
         right.vec3_normalize(right);
         up.vec3_normalize(up);
 
-        {
-            let minAngle = 10;
-            if (forward.vec3_angle(playerUp) > minAngle && forward.vec3_angle(playerUp.vec3_negate()) > minAngle) {
-                this._myLastValidFlatForward = forward;
-            }
-
-            if (right.vec3_angle(playerUp) > minAngle && right.vec3_angle(playerUp.vec3_negate()) > minAngle) {
-                this._myLastValidFlatRight = right;
-            }
+        if (forward.vec3_angle(playerUp) > minAngle && forward.vec3_angle(playerUp.vec3_negate()) > minAngle) {
+            this._myLastValidFlatForward = forward.vec3_removeComponentAlongAxis(playerUp);
         }
 
-        if (this._myStartForward == null) {
-            this._myStartForward = forward.pp_clone();
-            this._myStartUp = up.pp_clone();
-            this._myStartRight = right.pp_clone();
+        if (right.vec3_angle(playerUp) > minAngle && right.vec3_angle(playerUp.vec3_negate()) > minAngle) {
+            this._myLastValidFlatRight = right.vec3_removeComponentAlongAxis(playerUp);
         }
 
         let direction = right.vec3_scale(stickAxes[0]).vec3_add(forward.vec3_scale(stickAxes[1]));
