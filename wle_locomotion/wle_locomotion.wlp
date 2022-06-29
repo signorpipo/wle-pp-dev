@@ -90,7 +90,8 @@
                         "_myDirectionReferenceObject": "23",
                         "_myMinHeight": 0.0,
                         "_myMinAngleToFly": 45.0
-                    }
+                    },
+                    "active": true
                 }
             ]
         },
