@@ -91,7 +91,10 @@
                         "_myMinHeight": 0.0,
                         "_myMinAngleToFly": 45.0
                     },
-                    "active": true
+                    "active": false
+                },
+                {
+                    "type": "locomotion-draft-2"
                 }
             ]
         },
