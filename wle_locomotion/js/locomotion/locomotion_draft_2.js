@@ -53,6 +53,8 @@ WL.registerComponent('locomotion-draft-2', {
         this._mySnapDone = false;
         this._myIsFlyingForward = false;
         this._myIsFlyingRight = false;
+
+        this._myCollisionCheck = new CollisionCheck();
     },
     update(dt) {
         if (this._myDelaySessionChangeResyncCounter > 0) {
@@ -120,8 +122,13 @@ WL.registerComponent('locomotion-draft-2', {
                 }
             }
 
-            if (positionChanged) {
-                this._moveHead(headMovement);
+            let movementToApply = headMovement;
+            if (!PP.myLeftGamepad.getButtonInfo(PP.ButtonType.SQUEEZE).isPressed()) {
+                movementToApply = this._myCollisionCheck.fixMovement(headMovement);
+            }
+
+            if (movementToApply.vec3_length() != 0) {
+                this._moveHead(movementToApply);
             }
 
             let headRotation = PP.quat_create();
@@ -175,7 +182,6 @@ WL.registerComponent('locomotion-draft-2', {
                     this._myIsFlyingRight = false;
                 }
             }
-
         }
     },
     _moveHead(movement) {

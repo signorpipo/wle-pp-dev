@@ -4,7 +4,7 @@ PP.DebugPointParams = class DebugPointParams {
         this.myPosition = [0, 0, 0];
         this.myRadius = 0;
 
-        this.myColor = [0.7, 0.7, 0.7, 1];
+        this.myColor = [1, 0, 1, 1];
 
         this.myType = PP.DebugDrawObjectType.POINT;
     }

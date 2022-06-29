@@ -7,7 +7,7 @@ PP.DebugLineParams = class DebugLineParams {
 
         this.myThickness = 0.005;
 
-        this.myColor = [0.7, 0.7, 0.7, 1];
+        this.myColor = [1, 0, 1, 1];
 
         this.myType = PP.DebugDrawObjectType.LINE;
     }

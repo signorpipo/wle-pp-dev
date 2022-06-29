@@ -11,7 +11,8 @@
                     "pp-debug-manager": {
                         "_myCubeMesh": "p1",
                         "_myFlatMaterial": "31",
-                        "_myConeMesh": "p3"
+                        "_myConeMesh": "p3",
+                        "_mySphereMesh": "p2"
                     }
                 },
                 {
@@ -94,7 +95,10 @@
                     "active": false
                 },
                 {
-                    "type": "locomotion-draft-2"
+                    "type": "locomotion-draft-2",
+                    "locomotion-draft-2": {
+                        "_myMaxSpeed": 0.5
+                    }
                 }
             ]
         },
