@@ -76,6 +76,7 @@
             - vec3_transformQuat
             - vec3_componentAlongAxis           / vec3_removeComponentAlongAxis / vec3_valueAlongAxis  
             - vec3_isConcordant
+            - vec3_isFurtherAlongAxis
             - vec3_convertPositionToWorld       / vec3_convertPositionToLocal 
             - vec3_convertDirectionToWorld      / vec3_convertDirectionToLocal   
             - vec3_angle
@@ -577,6 +578,16 @@ Array.prototype.vec3_removeComponentAlongAxis = function () {
 
 Array.prototype.vec3_isConcordant = function (vector) {
     return glMatrix.vec3.angle(this, vector) <= Math.PI / 2;
+};
+
+Array.prototype.vec3_isFurtherAlongAxis = function (vector, axis) {
+    let thisLength = this.vec3_length();
+    let thisLengthSigned = this.vec3_isConcordant(axis) ? thisLength : -thisLength;
+
+    let vectorLength = vector.vec3_length();
+    let vectorLengthSigned = vector.vec3_isConcordant(axis) ? vectorLength : -vectorLength;
+
+    return thisLengthSigned > vectorLengthSigned;
 };
 
 Array.prototype.vec3_rotate = function (rotation, out) {
