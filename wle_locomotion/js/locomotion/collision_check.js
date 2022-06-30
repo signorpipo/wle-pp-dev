@@ -3,7 +3,7 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myRadius = 0.4;
         this.myDistanceFromGroundToIgnore = 0.01;
 
-        this.myConeAngle = 90;
+        this.myConeAngle = 120;
         this.myConeSliceAmount = 4;
     }
 };
@@ -41,22 +41,32 @@ CollisionCheck = class CollisionCheck {
 
         let feetPosition = this._getFeetPosition(player, head);
 
-        if (this._myDebugActive && false) {
-            let debugParams = new PP.DebugPointParams();
-            debugParams.myPosition = feetPosition;
-            debugParams.myRadius = 0.05;
-            PP.myDebugManager.draw(debugParams);
+        let fixedMovement = [0, 0, 0];
+
+        if (this._movementCheck(feetPosition, movement)) {
+            // cone check to see if u can fit the new position
+            let newFeetPosition = feetPosition.vec3_add(movement);
+            if (!this._positionCheck(newFeetPosition, movement.vec3_normalize(), player)) {
+                fixedMovement.vec3_scale(0, fixedMovement);
+            } else {
+                fixedMovement = movement;
+            }
         }
 
-        let movementDirection = movement.vec3_normalize();
+        return fixedMovement;
+    }
+
+    _movementCheck(feetPosition, movement) {
+        let isMovementOk = true;
 
         let origin = feetPosition;
-        let direction = movementDirection;
+        let direction = movement.vec3_normalize();
         direction.vec3_normalize(direction);
-        let distance = this._myCollisionCheckParams.myRadius + movement.vec3_length();
+        let distance = /*this._myCollisionCheckParams.myRadius + */movement.vec3_length();
         let raycastResult = WL.physics.rayCast(origin, direction, 255, distance);
 
-        let fixedMovement = movement.pp_clone();
+        //let fixedMovement = movement.pp_clone();
+
         if (raycastResult.hitCount > 0) {
             if (this._isRaycastResultInsideWall(origin, direction, raycastResult)) {
                 // for now ignore what happens when u ended up inside a wall
@@ -67,6 +77,7 @@ CollisionCheck = class CollisionCheck {
 
             }
 
+            /*
             let hitPoint = raycastResult.locations[0];
             let movementToHit = hitPoint.vec3_sub(feetPosition);
 
@@ -75,10 +86,11 @@ CollisionCheck = class CollisionCheck {
             if (distanceBeforeCollision > 0) {
                 fixedMovement.vec3_normalize(fixedMovement);
                 fixedMovement.vec3_scale(distanceBeforeCollision, fixedMovement);
-                console.error(fixedMovement.vec3_length().toFixed(4));
             } else {
                 fixedMovement.vec3_scale(0, fixedMovement);
-            }
+            }*/
+
+            isMovementOk = false;
         }
 
         if (this._myDebugActive) {
@@ -92,23 +104,71 @@ CollisionCheck = class CollisionCheck {
             PP.myDebugManager.draw(debugParams, 0);
         }
 
-        /* if (this._myDebugActive) {
-            let debugParams = new PP.DebugLineParams();
-            debugParams.myStart = feetPosition.vec3_add([0, 0.01, 0]);
-            debugParams.myDirection = fixedMovement.vec3_normalize();
-            debugParams.myLength = fixedMovement.vec3_length();
-            PP.myDebugManager.draw(debugParams, 0);
-        } */
-
-        // cone check to see if u can fit the new position
-        let newFeetPosition = feetPosition.vec3_add(fixedMovement);
-        this._positionCheck(newFeetPosition, fixedMovement);
-
-        return fixedMovement;
+        return isMovementOk;
     }
 
-    _positionCheck(positionToCheck, movementDirection) {
+    _positionCheck(positionToCheck, movementDirection, player) {
+        let positionIsOk = true;
 
+        let sliceAngle = this._myCollisionCheckParams.myConeAngle / this._myCollisionCheckParams.myConeSliceAmount;
+
+        //radial check
+        let playerUp = player.pp_getUp();
+        let startAngle = -this._myCollisionCheckParams.myConeAngle / 2;
+        let previousEnd = null;
+        for (let i = 0; i < this._myCollisionCheckParams.myConeSliceAmount + 1; i++) {
+            let currentAngle = startAngle + i * sliceAngle;
+
+            let origin = positionToCheck;
+            let direction = movementDirection.vec3_rotateAxis(-currentAngle, playerUp);
+            let distance = this._myCollisionCheckParams.myRadius;
+            let radialRaycastResult = WL.physics.rayCast(origin, direction, 255, distance);
+
+            if (this._myDebugActive) {
+                let debugParams = new PP.DebugRaycastParams();
+                debugParams.myOrigin = origin;
+                debugParams.myDirection = direction;
+                debugParams.myDistance = distance;
+                debugParams.myNormalLength = 0.2;
+                debugParams.myThickness = 0.005;
+                debugParams.myRaycastResult = radialRaycastResult;
+                PP.myDebugManager.draw(debugParams, 0);
+            }
+
+            if (radialRaycastResult.hitCount > 0) {
+                positionIsOk = false;
+                break;
+            }
+
+            let currentEnd = origin.vec3_add(direction.vec3_scale(distance));
+            if (previousEnd != null) {
+                let origin = previousEnd;
+                let direction = currentEnd.vec3_sub(previousEnd);
+                let distance = direction.vec3_length();
+                direction.vec3_normalize(direction);
+                let edgeRaycastResult = WL.physics.rayCast(origin, direction, 255, distance);
+
+                if (this._myDebugActive) {
+                    let debugParams = new PP.DebugRaycastParams();
+                    debugParams.myOrigin = origin;
+                    debugParams.myDirection = direction;
+                    debugParams.myDistance = distance;
+                    debugParams.myNormalLength = 0.2;
+                    debugParams.myThickness = 0.005;
+                    debugParams.myRaycastResult = edgeRaycastResult;
+                    PP.myDebugManager.draw(debugParams, 0);
+                }
+
+                if (edgeRaycastResult.hitCount > 0) {
+                    positionIsOk = false;
+                    break;
+                }
+            }
+
+            previousEnd = currentEnd;
+        }
+
+        return positionIsOk;
     }
 
     _getFeetPosition(player, head) {
