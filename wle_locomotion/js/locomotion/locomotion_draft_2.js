@@ -14,13 +14,7 @@ WL.registerComponent('locomotion-draft-2', {
         this._myCurrentHeadObject = PP.myPlayerObjects.myNonVRHead;
         PP.myPlayerObjects.myNonVRCamera = PP.myPlayerObjects.myNonVRCamera;
 
-        if (this._myDirectionReference == 0) {
-            this._myDirectionReferenceObject = PP.myPlayerObjects.myHead;
-        } else if (this._myDirectionReference == 1) {
-            this._myDirectionReferenceObject = PP.myPlayerObjects.myHandLeft;
-        } else {
-            this._myDirectionReferenceObject = PP.myPlayerObjects.myHandRight;
-        }
+        this._myDirectionReferenceObject = PP.myPlayerObjects.myHead;
 
         if (WL.xrSession) {
             this._onXRSessionStart(WL.xrSession);
@@ -55,8 +49,13 @@ WL.registerComponent('locomotion-draft-2', {
         this._myIsFlyingRight = false;
 
         this._myCollisionCheck = new CollisionCheck();
+
+        this._myKeyboardGamepad = new KeyboardGamepad();
+        this._myKeyboardGamepad.start();
     },
     update(dt) {
+        this._myKeyboardGamepad.update(dt);
+
         if (this._myDelaySessionChangeResyncCounter > 0) {
             this._myDelaySessionChangeResyncCounter--;
             if (this._myDelaySessionChangeResyncCounter == 0) {
@@ -84,13 +83,17 @@ WL.registerComponent('locomotion-draft-2', {
 
         let skipLocomotion = this._myDelaySessionChangeResyncCounter > 0 || this._myDelayBlurEndResyncCounter > 0 || this._myDelayBlurEndResyncTimer.isRunning();
         if (!skipLocomotion) {
-            let positionChanged = false;
             let rotationChanged = false;
 
             let headMovement = [0, 0, 0];
 
             {
-                let axes = PP.myLeftGamepad.getAxesInfo().getAxes();
+                let axes = [0, 0];
+                if (this._mySessionActive) {
+                    axes = PP.myLeftGamepad.getAxesInfo().getAxes();
+                } else {
+                    axes = this._myKeyboardGamepad.getLeftAxes();
+                }
                 let minIntensityThreshold = 0.1;
                 if (axes.vec2_length() > minIntensityThreshold) {
                     this._myStickIdleCount = 2;
@@ -104,8 +107,6 @@ WL.registerComponent('locomotion-draft-2', {
                         let speed = Math.pp_lerp(0, this._myMaxSpeed, movementIntensity);
 
                         direction.vec3_scale(speed * dt, headMovement);
-
-                        positionChanged = true;
                     }
                 } else {
                     if (this._myStickIdleCount > 0) {
@@ -133,7 +134,12 @@ WL.registerComponent('locomotion-draft-2', {
 
             let headRotation = PP.quat_create();
             {
-                let axes = PP.myRightGamepad.getAxesInfo().getAxes();
+                let axes = [0, 0];
+                if (this._mySessionActive) {
+                    axes = PP.myRightGamepad.getAxesInfo().getAxes();
+                } else {
+                    axes = this._myKeyboardGamepad.getRightAxes();
+                }
                 if (!this._myIsSnapTurn) {
                     let minIntensityThreshold = 0.1;
                     if (Math.abs(axes[0]) > minIntensityThreshold) {
@@ -316,6 +322,14 @@ WL.registerComponent('locomotion-draft-2', {
 
         this._myCurrentHeadObject = PP.myPlayerObjects.myVRHead;
 
+        if (this._myDirectionReference == 0) {
+            this._myDirectionReferenceObject = PP.myPlayerObjects.myHead;
+        } else if (this._myDirectionReference == 1) {
+            this._myDirectionReferenceObject = PP.myPlayerObjects.myHandLeft;
+        } else {
+            this._myDirectionReferenceObject = PP.myPlayerObjects.myHandRight;
+        }
+
         //console.error("session start");
     },
     _onXRSessionEnd(session) {
@@ -344,6 +358,8 @@ WL.registerComponent('locomotion-draft-2', {
         this._mySessionActive = false;
 
         this._myCurrentHeadObject = PP.myPlayerObjects.myNonVRHead;
+
+        this._myDirectionReferenceObject = PP.myPlayerObjects.myHead;
 
         //console.error("session end");
     },

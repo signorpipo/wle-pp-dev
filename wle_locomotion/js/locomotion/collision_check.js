@@ -102,7 +102,7 @@ CollisionCheck = class CollisionCheck {
 
         // cone check to see if u can fit the new position
         let newFeetPosition = feetPosition.vec3_add(fixedMovement);
-        this.positionCheck(newFeetPosition, fixedMovement);
+        this._positionCheck(newFeetPosition, fixedMovement);
 
         return fixedMovement;
     }
