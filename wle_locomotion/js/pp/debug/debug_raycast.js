@@ -9,9 +9,29 @@ PP.DebugRaycastParams = class DebugRaycastParams {
 
         this.myThickness = 0.005;
 
-        this.myRaycastResult = null;
+        this._myRaycastResult = {};
 
         this.myType = PP.DebugDrawObjectType.RAYCAST;
+    }
+
+    get myRaycastResult() {
+        return this._myRaycastResult;
+    }
+
+    set myRaycastResult(result) {
+        if (result.hitCount != null && result.hitCount > 0) {
+            this._myRaycastResult.hitCount = result.hitCount;
+            this._myRaycastResult.locations = [result.locations[0].pp_clone()];
+            this._myRaycastResult.normals = [result.normals[0].pp_clone()];
+            this._myRaycastResult.distances = result.distances.pp_clone();
+            this._myRaycastResult.objects = result.objects.pp_clone();
+        } else {
+            this._myRaycastResult.hitCount = 0;
+            this._myRaycastResult.locations = null;
+            this._myRaycastResult.normals = null;
+            this._myRaycastResult.distances = null;
+            this._myRaycastResult.objects = null;
+        }
     }
 };
 
@@ -24,6 +44,8 @@ PP.DebugRaycast = class DebugRaycast {
         this._myDebugRaycastHit = new PP.DebugArrow();
         this._myDebugRaycast.setColor([0, 1, 0, 1]);
         this._myDebugRaycastHit.setColor([1, 0, 0, 1]);
+        this._myDebugRaycast.setAutoRefresh(false);
+        this._myDebugRaycastHit.setAutoRefresh(false);
 
         this._myVisible = true;
         this._myDirty = false;

@@ -22,7 +22,7 @@ PP.DebugArrow = class DebugArrow {
         this._myAutoRefresh = true;
 
         //SUPPORT VARIABLES
-        this._myEnd = PP.vec3_create();
+        this._myEnd = [0, 0, 0];
 
         this._build();
         this._refresh();
