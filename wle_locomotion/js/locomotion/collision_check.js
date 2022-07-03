@@ -54,45 +54,56 @@ CollisionCheck = class CollisionCheck {
         // up movement can be checked and just reduced if it hits before, so that it performs just what is able to
         // in the end this could be done for the whole movement anyway
 
-        let isMovementOk = true;
-
+        let movementDirection = movement.vec3_normalize();
         let playerUp = player.pp_getUp();
+        let movementRight = movement.vec3_cross(playerUp).vec3_normalize();
+        let movementUp = movementRight.vec3_cross(movementDirection).vec3_normalize();
 
-        let origin = feetPosition.vec3_add(playerUp.vec3_scale(this._myCollisionCheckParams.myDistanceFromGroundToIgnore));
-        let direction = movement.vec3_normalize();
-        direction.vec3_normalize(direction);
-        let distance = /*this._myCollisionCheckParams.myRadius + */movement.vec3_length();
-        let raycastResult = WL.physics.rayCast(origin, direction, 255, distance);
+        let offsetPositionToCheck = feetPosition.vec3_add(playerUp.vec3_scale(this._myCollisionCheckParams.myDistanceFromGroundToIgnore));
 
-        let fixedMovement = [0, 0, 0];
-        if (raycastResult.hitCount > 0 && !this._isRaycastResultInsideWall(origin, direction, raycastResult)) {
-            // if result is inside wall, it's ignored, so that at least you can exit it before seeing if the new position works now
+        let minMovementLength = movement.vec3_length();
+        let sliceAngle = this._myCollisionCheckParams.myConeAngle / this._myCollisionCheckParams.myConeSliceAmount;
+        let startAngle = -this._myCollisionCheckParams.myConeAngle / 2;
+        for (let i = 0; i < this._myCollisionCheckParams.myConeSliceAmount + 1; i++) {
+            let currentAngle = startAngle + i * sliceAngle;
 
-            let hitPoint = raycastResult.locations[0];
-            let movementToHit = hitPoint.vec3_sub(origin);
+            let coneRelativePosition = movementDirection.
+                vec3_rotateAxis(-currentAngle, movementUp).vec3_scale(this._myCollisionCheckParams.myRadius * 1.25);
 
-            if (movementToHit.vec3_length() > 0.0001) {
-                fixedMovement.pp_copy(movementToHit);
-                isMovementOk = true;
-            } else {
-                fixedMovement.vec3_scale(0);
+            let origin = offsetPositionToCheck.vec3_add(coneRelativePosition.vec3_componentAlongAxis(movementRight));
+            let direction = movementDirection;
+            let distance = movement.vec3_length();
+            let raycastResult = WL.physics.rayCast(origin, direction, 255, distance);
+
+            if (raycastResult.hitCount > 0 && !this._isRaycastResultInsideWall(origin, direction, raycastResult)) {
+                // if result is inside wall, it's ignored, so that at least you can exit it before seeing if the new position works now
+
+                let hitPoint = raycastResult.locations[0];
+                let movementToHit = hitPoint.vec3_sub(origin);
+
+                if (movementToHit.vec3_length() > 0.0001) {
+                    if (movementToHit.vec3_length() < minMovementLength) {
+                        minMovementLength = movementToHit.vec3_length();
+                    }
+                } else {
+                    minMovementLength = 0;
+                    break;
+                }
             }
-        } else {
-            fixedMovement.pp_copy(movement);
+
+            if (this._myDebugActive) {
+                let debugParams = new PP.DebugRaycastParams();
+                debugParams.myOrigin = origin;
+                debugParams.myDirection = direction;
+                debugParams.myDistance = distance;
+                debugParams.myNormalLength = 0.2;
+                debugParams.myThickness = 0.005;
+                debugParams.myRaycastResult = raycastResult;
+                PP.myDebugManager.draw(debugParams, 0);
+            }
         }
 
-        if (this._myDebugActive) {
-            let debugParams = new PP.DebugRaycastParams();
-            debugParams.myOrigin = origin;
-            debugParams.myDirection = direction;
-            debugParams.myDistance = distance;
-            debugParams.myNormalLength = 0.2;
-            debugParams.myThickness = 0.005;
-            debugParams.myRaycastResult = raycastResult;
-            PP.myDebugManager.draw(debugParams, 0);
-        }
-
-        return fixedMovement;
+        return movement.vec3_normalize().vec3_scale(minMovementLength);
     }
 
     _groundFix(feetPosition, movementDirection, player) {
@@ -140,6 +151,8 @@ CollisionCheck = class CollisionCheck {
         }
 
         if (maxHeight != null) {
+            // always snap up, but snap down only if is already on ground and the movement is not upward
+            // if the movement is down ward and it was not on the ground already, just let it fall
             fixedFeedPosition.vec3_removeComponentAlongAxis(playerUp, fixedFeedPosition);
             fixedFeedPosition.vec3_add(maxHeight, fixedFeedPosition);
         }
@@ -151,7 +164,7 @@ CollisionCheck = class CollisionCheck {
         let positionIsOk = true;
 
         let playerUp = player.pp_getUp();
-
+        let flatMovementDirection = movementDirection.vec3_removeComponentAlongAxis(playerUp);
         let offsetPositionToCheck = positionToCheck.vec3_add(playerUp.vec3_scale(this._myCollisionCheckParams.myDistanceFromGroundToIgnore));
 
         //radial check
@@ -162,7 +175,7 @@ CollisionCheck = class CollisionCheck {
             let currentAngle = startAngle + i * sliceAngle;
 
             let origin = offsetPositionToCheck;
-            let direction = movementDirection.vec3_rotateAxis(-currentAngle, playerUp);
+            let direction = flatMovementDirection.vec3_rotateAxis(-currentAngle, playerUp);
             let distance = this._myCollisionCheckParams.myRadius;
             let radialRaycastResult = WL.physics.rayCast(origin, direction, 255, distance);
 

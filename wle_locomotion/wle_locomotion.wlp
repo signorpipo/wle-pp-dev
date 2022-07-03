@@ -1238,7 +1238,8 @@
                     "mesh": {
                         "mesh": "p0",
                         "material": "92"
-                    }
+                    },
+                    "active": true
                 }
             ],
             "transformation": [
@@ -2509,7 +2510,7 @@
                     "local-floor": true
                 }
             },
-            "visualizePhysX": true
+            "visualizePhysX": false
         },
         "scripting": {
             "sourcePaths": [
