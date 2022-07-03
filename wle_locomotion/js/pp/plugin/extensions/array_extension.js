@@ -2101,5 +2101,8 @@ for (let key in Array.prototype) {
 
         Float32Array.prototype[key] = Array.prototype[key];
         Object.defineProperty(Float32Array.prototype, key, { enumerable: false });
+
+        Float64Array.prototype[key] = Array.prototype[key];
+        Object.defineProperty(Float64Array.prototype, key, { enumerable: false });
     }
 }

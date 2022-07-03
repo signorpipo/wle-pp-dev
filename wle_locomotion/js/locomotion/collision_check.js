@@ -3,6 +3,8 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myRadius = 0.4;
         this.myDistanceFromGroundToIgnore = 0.2;
 
+        this.myHorizontalMovementRadialSliceAmount = 1;
+
         this.myFeetRadius = 0.1;
         this.myGroundCheckUpOffset = 0.3;
         this.myGroundCheckDistance = 0.3;
@@ -10,6 +12,9 @@ CollisionCheckParams = class CollisionCheckParams {
 
         this.myConeAngle = 120;
         this.myConeSliceAmount = 4;
+
+        this.myCheckHeight = true;
+        this.myHeightCheckStepAmount = 1;
     }
 };
 
@@ -28,11 +33,19 @@ CollisionCheck = class CollisionCheck {
             return movement;
         }
 
-        let player = PP.myPlayerObjects.myPlayer;
-        let head = PP.myPlayerObjects.myHead;
+        let up = PP.myPlayerObjects.myPlayer.pp_getUp();
+        let feetPosition = this._getPlayerFeetPosition();
+        let height = this._getPlayerHeight();
 
-        let feetPosition = this._getFeetPosition(player, head);
+        feetPosition = feetPosition.vec3_add(movement.vec3_normalize().vec3_scale(0.5));
+        height = height / 2;
 
+        let horizontalMovement = movement.vec3_removeComponentAlongAxis(up);
+        let verticalMovement = movement.vec3_componentAlongAxis(up);
+        horizontalMovement.vec3_scale(1, horizontalMovement);
+        let fixedHorizontalMovement = this._horizontalCheck(horizontalMovement, feetPosition, height, up);
+
+        /*
         let fixedMovement = this._movementFix(feetPosition.pp_clone(), movement, player);
 
         if (fixedMovement.vec3_length() > 0) {
@@ -45,8 +58,164 @@ CollisionCheck = class CollisionCheck {
                 fixedFeetPosition.vec3_sub(feetPosition, fixedMovement);
             }
         }
+        */
 
-        return fixedMovement;
+        return fixedHorizontalMovement;
+    }
+
+    _horizontalCheck(movement, feetPosition, height, up) {
+        let fixedFeetPosition = feetPosition.vec3_add(up.vec3_scale(this._myCollisionCheckParams.myDistanceFromGroundToIgnore));
+        let fixedHeight = Math.max(0, height - this._myCollisionCheckParams.myDistanceFromGroundToIgnore);
+        let canMove = this._horizontalMovementCheck(movement, fixedFeetPosition, fixedHeight, up);
+
+        if (canMove) {
+            return movement;
+        }
+
+        return [0, 0, 0];
+    }
+
+    _horizontalMovementCheck(movement, feetPosition, height, up) {
+        let coneAngle = Math.min(this._myCollisionCheckParams.myConeAngle, 180);
+        let movementDirection = movement.vec3_normalize();
+
+        let checkPositions = [];
+
+        let steplength = this._myCollisionCheckParams.myRadius / this._myCollisionCheckParams.myHorizontalMovementRadialSliceAmount;
+
+        // left
+        {
+            let radialDirection = movementDirection.vec3_rotateAxis(coneAngle / 2, up);
+            for (let i = 0; i < this._myCollisionCheckParams.myHorizontalMovementRadialSliceAmount; i++) {
+                let currentStep = this._myCollisionCheckParams.myRadius - i * steplength;
+                let currentRadialPosition = radialDirection.vec3_scale(currentStep);
+                let currentCheckPosition = currentRadialPosition.vec3_add(feetPosition);
+                checkPositions.push(currentCheckPosition);
+            }
+        }
+
+        checkPositions.push(feetPosition);
+
+        // right
+        {
+            let radialDirection = movementDirection.vec3_rotateAxis(-coneAngle / 2, up);
+            for (let i = 1; i <= this._myCollisionCheckParams.myHorizontalMovementRadialSliceAmount; i++) {
+                let currentStep = i * steplength;
+                let currentRadialPosition = radialDirection.vec3_scale(currentStep);
+                let currentCheckPosition = currentRadialPosition.vec3_add(feetPosition);
+                checkPositions.push(currentCheckPosition);
+            }
+        }
+
+
+        let isHorizontalCheckOk = true;
+
+        let heightStepAmount = 0;
+        if (this._myCollisionCheckParams.myCheckHeight) {
+            heightStepAmount = this._myCollisionCheckParams.myHeightCheckStepAmount;
+        }
+
+        let heightStep = up.vec3_scale(height / this._myCollisionCheckParams.myHeightCheckStepAmount);
+        for (let i = 0; i <= heightStepAmount; i++) {
+            let currentHeightOffset = heightStep.vec3_scale(i);
+            for (let j = 0; j < checkPositions.length - 1; j++) {
+                let firstPosition = checkPositions[j].vec3_add(currentHeightOffset);
+                let secondPosition = checkPositions[j + 1].vec3_add(currentHeightOffset);
+
+                if (j >= (checkPositions.length - 1) / 2) {
+                    let temp = firstPosition;
+                    firstPosition = secondPosition;
+                    secondPosition = temp;
+                }
+
+                {
+                    let firstMovementPosition = firstPosition.vec3_add(movement);
+
+                    let origin = secondPosition;
+                    let direction = firstMovementPosition.vec3_sub(secondPosition);
+                    let distance = direction.vec3_length();
+                    direction.vec3_normalize(direction);
+                    let raycastResult = this._raycastAndDebug(origin, direction, 255, distance);
+
+                    if (raycastResult.hitCount > 0 && !this._isRaycastResultInsideWall(origin, direction, raycastResult)) {
+                        // if result is inside wall, it's ignored, so that at least you can exit it before seeing if the new position works now
+                        isHorizontalCheckOk = false;
+                        break;
+                    }
+                }
+
+                {
+                    let secondMovementPosition = secondPosition.vec3_add(movement);
+
+                    let origin = firstPosition;
+                    let direction = secondMovementPosition.vec3_sub(firstPosition);
+
+                    if (!direction.vec3_isConcordant(movementDirection)) {
+                        direction.vec3_negate(direction);
+                        origin = secondMovementPosition;
+                    }
+
+                    let distance = direction.vec3_length();
+                    direction.vec3_normalize(direction);
+                    let raycastResult = this._raycastAndDebug(origin, direction, 255, distance);
+
+                    if (raycastResult.hitCount > 0 && !this._isRaycastResultInsideWall(origin, direction, raycastResult)) {
+                        // if result is inside wall, it's ignored, so that at least you can exit it before seeing if the new position works now
+                        isHorizontalCheckOk = false;
+                        break;
+                    }
+                }
+
+                // check height
+                if (i > 0) {
+                    {
+                        let firstMovementPosition = firstPosition.vec3_add(movement);
+                        let secondHeightPosition = secondPosition.vec3_sub(heightStep);
+
+                        let origin = secondHeightPosition;
+                        let direction = firstMovementPosition.vec3_sub(secondHeightPosition);
+                        let distance = direction.vec3_length();
+                        direction.vec3_normalize(direction);
+                        let raycastResult = this._raycastAndDebug(origin, direction, 255, distance);
+
+                        if (raycastResult.hitCount > 0 && !this._isRaycastResultInsideWall(origin, direction, raycastResult)) {
+                            // if result is inside wall, it's ignored, so that at least you can exit it before seeing if the new position works now
+                            isHorizontalCheckOk = false;
+                            break;
+                        }
+                    }
+
+                    {
+                        let secondMovementPosition = secondPosition.vec3_add(movement);
+                        let firstHeightPosition = firstPosition.vec3_sub(heightStep);
+
+                        let origin = firstHeightPosition;
+                        let direction = secondMovementPosition.vec3_sub(firstHeightPosition);
+
+                        if (!direction.vec3_isConcordant(movementDirection)) {
+                            direction.vec3_negate(direction);
+                            origin = secondMovementPosition;
+                        }
+
+                        let distance = direction.vec3_length();
+                        direction.vec3_normalize(direction);
+                        let raycastResult = this._raycastAndDebug(origin, direction, 255, distance);
+
+                        if (raycastResult.hitCount > 0 && !this._isRaycastResultInsideWall(origin, direction, raycastResult)) {
+                            // if result is inside wall, it's ignored, so that at least you can exit it before seeing if the new position works now
+                            isHorizontalCheckOk = false;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if (!isHorizontalCheckOk) {
+                break;
+            }
+        }
+
+        return isHorizontalCheckOk;
     }
 
     _movementFix(feetPosition, movement, player) {
@@ -226,7 +395,10 @@ CollisionCheck = class CollisionCheck {
         return positionIsOk;
     }
 
-    _getFeetPosition(player, head) {
+    _getPlayerFeetPosition() {
+        let player = PP.myPlayerObjects.myPlayer;
+        let head = PP.myPlayerObjects.myHead;
+
         let playerUp = player.pp_getUp();
         let headPosition = head.pp_getPosition();
         let flatHeadPosition = headPosition.vec3_removeComponentAlongAxis(playerUp);
@@ -237,10 +409,47 @@ CollisionCheck = class CollisionCheck {
         return feetPosition;
     }
 
+    _getPlayerHeight() {
+        let player = PP.myPlayerObjects.myPlayer;
+        let head = PP.myPlayerObjects.myHead;
+
+        let playerUp = player.pp_getUp();
+        let headPosition = head.pp_getPosition();
+        let flatHeadPosition = headPosition.vec3_removeComponentAlongAxis(playerUp);
+
+        let playerPosition = player.pp_getPosition();
+        let feetPosition = flatHeadPosition.vec3_add(playerPosition.vec3_componentAlongAxis(playerUp));
+
+        let height = headPosition.vec3_sub(feetPosition).vec3_componentAlongAxis(playerUp).vec3_length();
+
+        return height;
+    }
+
+    _isRaycastResultValid(raycastResult, raycastOrigin, raycastDirection) {
+        return raycastResult.hitCount > 0 && !this._isRaycastResultInsideWall(raycastOrigin, raycastDirection, raycastResult);
+    }
+
     _isRaycastResultInsideWall(raycastOrigin, raycastDirection, raycastResult) {
         let hitOnOrigin = raycastOrigin.pp_equals(raycastResult.locations[0]);
         let normalOppositeDirection = raycastDirection.vec3_negate().vec3_normalize().pp_equals(raycastResult.normals[0]);
 
         return hitOnOrigin && normalOppositeDirection;
+    }
+
+    _raycastAndDebug(origin, direction, group, distance) {
+        let raycastResult = WL.physics.rayCast(origin, direction, group, distance);
+
+        if (this._myDebugActive) {
+            let debugParams = new PP.DebugRaycastParams();
+            debugParams.myOrigin = origin;
+            debugParams.myDirection = direction;
+            debugParams.myDistance = distance;
+            debugParams.myNormalLength = 0.2;
+            debugParams.myThickness = 0.005;
+            debugParams.myRaycastResult = raycastResult;
+            PP.myDebugManager.draw(debugParams, 0);
+        }
+
+        return raycastResult;
     }
 };
