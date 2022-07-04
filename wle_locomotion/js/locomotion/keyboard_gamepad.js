@@ -20,6 +20,18 @@ KeyboardGamepad = class KeyboardGamepad {
     }
 
     update(dt) {
+        if (!document.hasFocus()) {
+            this._myUp = false;
+            this._myDown = false;
+            this._myRight = false;
+            this._myLeft = false;
+
+            this._myW = false;
+            this._myA = false;
+            this._myS = false;
+            this._myD = false;
+        }
+
         this.updateLeftAxes();
         this.updateRightAxes();
     }
