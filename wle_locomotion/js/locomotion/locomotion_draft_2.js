@@ -555,8 +555,11 @@ WL.registerComponent('locomotion-draft-2', {
         let playerPosition = PP.myPlayerObjects.myPlayer.pp_getPosition();
         let playerUp = PP.myPlayerObjects.myPlayer.pp_getUp();
 
-        let headDisplacement = headPosition.vec3_sub(playerPosition);
-        let height = headDisplacement.vec3_componentAlongAxis(playerUp).vec3_length();
+        let headDisplacement = headPosition.vec3_sub(playerPosition).vec3_componentAlongAxis(playerUp);
+        let height = headDisplacement.vec3_length();
+        if (!playerUp.vec3_isConcordant(heightDisplacement)) {
+            height = -height;
+        }
 
         return height;
     },
