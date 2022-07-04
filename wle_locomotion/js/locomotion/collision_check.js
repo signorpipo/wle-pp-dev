@@ -39,15 +39,18 @@ CollisionCheck = class CollisionCheck {
         let up = PP.myPlayerObjects.myPlayer.pp_getUp();
         let feetPosition = this._getPlayerFeetPosition();
         let height = this._getPlayerHeight();
+        height = height - 0.00001;
+
+        // if height is negative swap feet with head position
 
         let horizontalMovement = movement.vec3_removeComponentAlongAxis(up);
         let verticalMovement = movement.vec3_componentAlongAxis(up);
 
         //feetPosition = feetPosition.vec3_add(movement.vec3_normalize().vec3_scale(0.5));
         //height = height / 2;
-        //horizontalMovement.vec3_scale(1, horizontalMovement);
+        //horizontalMovement.vec3_scale(5, horizontalMovement);
 
-        this._myDebugActive = true;
+        this._myDebugActive = false;
 
         let fixedHorizontalMovement = this._horizontalCheck(horizontalMovement, feetPosition, height, up);
 
@@ -71,22 +74,18 @@ CollisionCheck = class CollisionCheck {
     }
 
     _verticalCheck(verticalMovement, feetPosition, height, up, forward) {
-        let fixedMovement = this._verticalMovementCheck(verticalMovement, feetPosition, height, up, forward);
-        if (fixedMovement != null) {
-            if (fixedMovement.vec3_length() < 0.00001) {
-                fixedMovement.vec3_scale(0, fixedMovement);
-            }
+        let fixedMovement = this._verticalMovementFix(verticalMovement, feetPosition, height, up, forward);
 
-            let canStay = this._verticalPositionCheck(fixedMovement, feetPosition, height, up);
-            if (!canStay) {
-                fixedMovement = null;
-            }
+        let newFeetPosition = feetPosition.vec3_add(fixedMovement);
+        let canStay = this._verticalPositionCheck(newFeetPosition, height, up, forward);
+        if (!canStay) {
+            fixedMovement = null;
         }
 
         return fixedMovement;
     }
 
-    _verticalMovementCheck(verticalMovement, feetPosition, height, up, forward) {
+    _verticalMovementFix(verticalMovement, feetPosition, height, up, forward) {
         let fixedMovement = null;
 
         let isMovementDownward = !verticalMovement.vec3_isConcordant(up) || Math.abs(verticalMovement.vec3_length() < 0.000001);
@@ -99,7 +98,6 @@ CollisionCheck = class CollisionCheck {
         } else {
             startOffset = up.vec3_scale(height).vec3_add(up.vec3_scale(-this._myCollisionCheckParams.myDistanceFromHeadToIgnore));
             endOffset = up.vec3_scale(height).vec3_add(verticalMovement);
-            console.error(verticalMovement.vec3_length());
         }
 
         if (isMovementDownward) {
@@ -142,11 +140,40 @@ CollisionCheck = class CollisionCheck {
             fixedMovement = verticalMovement;
         }
 
+        if (fixedMovement.vec3_length() < 0.00001) {
+            fixedMovement.vec3_scale(0, fixedMovement);
+        }
+
         return fixedMovement;
     }
 
-    _verticalPositionCheck(movement, feetPosition, height, up) {
-        return true;
+    _verticalPositionCheck(feetPosition, height, up, forward) {
+        let checkPositions = this._getVerticalCheckPositions(feetPosition, up, forward);
+
+        let isVerticalPositionOk = true;
+
+        let smallHeightFixOffset = up.vec3_scale(0.00001);
+        let heightOffset = up.vec3_scale(height);
+        for (let i = 0; i < checkPositions.length; i++) {
+            let currentPosition = checkPositions[i];
+
+            let startPosition = currentPosition.vec3_add(smallHeightFixOffset);
+            let endPosition = startPosition.vec3_add(heightOffset);
+
+            let origin = startPosition;
+            let direction = endPosition.vec3_sub(origin);
+            let distance = direction.vec3_length();
+            direction.vec3_normalize(direction);
+
+            let raycastResult = this._raycastAndDebug(origin, direction, 255, distance);
+
+            if (raycastResult.hitCount > 0) {
+                isVerticalPositionOk = false;
+                break;
+            }
+        }
+
+        return isVerticalPositionOk;
     }
 
     _getVerticalCheckPositions(feetPosition, up, forward) {
@@ -183,7 +210,8 @@ CollisionCheck = class CollisionCheck {
 
         let fixedMovement = [0, 0, 0];
         if (canMove) {
-            let canStay = this._horizontalPositionCheck(movement, fixedFeetPosition, fixedHeight, up);
+            let newFixedFeetPosition = fixedFeetPosition.vec3_add(movement);
+            let canStay = this._horizontalPositionCheck(newFixedFeetPosition, fixedHeight, up, movement.vec3_normalize());
             if (canStay) {
                 fixedMovement = movement;
             }
@@ -232,7 +260,7 @@ CollisionCheck = class CollisionCheck {
         let isHorizontalCheckOk = true;
 
         let heightStepAmount = 0;
-        if (this._myCollisionCheckParams.myCheckHeight) {
+        if (this._myCollisionCheckParams.myCheckHeight && height > 0) {
             heightStepAmount = this._myCollisionCheckParams.myHeightCheckStepAmount;
         }
 
@@ -339,8 +367,7 @@ CollisionCheck = class CollisionCheck {
         return isHorizontalCheckOk;
     }
 
-    _horizontalPositionCheck(movement, feetPosition, height, up) {
-        let movementDirection = movement.vec3_normalize();
+    _horizontalPositionCheck(feetPosition, height, up, forward) {
 
         let radialPositions = [];
         let sliceAngle = this._myCollisionCheckParams.myConeAngle / this._myCollisionCheckParams.myConeSliceAmount;
@@ -348,14 +375,14 @@ CollisionCheck = class CollisionCheck {
         for (let i = 0; i < this._myCollisionCheckParams.myConeSliceAmount + 1; i++) {
             let currentAngle = startAngle + i * sliceAngle;
 
-            let radialDirection = movementDirection.vec3_rotateAxis(-currentAngle, up);
+            let radialDirection = forward.vec3_rotateAxis(-currentAngle, up);
             radialPositions.push(feetPosition.vec3_add(radialDirection.vec3_scale(this._myCollisionCheckParams.myRadius)));
         }
 
         let isHorizontalCheckOk = true;
 
         let heightStepAmount = 0;
-        if (this._myCollisionCheckParams.myCheckHeight) {
+        if (this._myCollisionCheckParams.myCheckHeight && height > 0) {
             heightStepAmount = this._myCollisionCheckParams.myHeightCheckStepAmount;
         }
 
