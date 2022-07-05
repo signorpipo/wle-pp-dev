@@ -580,15 +580,18 @@ Array.prototype.vec3_isConcordant = function (vector) {
     return glMatrix.vec3.angle(this, vector) <= Math.PI / 2;
 };
 
-Array.prototype.vec3_isFurtherAlongAxis = function (vector, axis) {
-    let thisLength = this.vec3_length();
-    let thisLengthSigned = this.vec3_isConcordant(axis) ? thisLength : -thisLength;
+Array.prototype.vec3_isFurtherAlongAxis = function () {
+    let componentAlong = glMatrix.vec3.create();
+    return function (vector, axis) {
+        let thisAxisLength = this.vec3_componentAlongAxis(axis, componentAlong).vec3_length();
+        let thisAxisLengthSigned = this.vec3_isConcordant(axis) ? thisAxisLength : -thisAxisLength;
 
-    let vectorLength = vector.vec3_length();
-    let vectorLengthSigned = vector.vec3_isConcordant(axis) ? vectorLength : -vectorLength;
+        let vectorAxisLength = vector.vec3_componentAlongAxis(axis, componentAlong).vec3_length();
+        let vectorAxisLengthSigned = vector.vec3_isConcordant(axis) ? vectorAxisLength : -vectorAxisLength;
 
-    return thisLengthSigned > vectorLengthSigned;
-};
+        return thisAxisLengthSigned > vectorAxisLengthSigned;
+    };
+}();
 
 Array.prototype.vec3_rotate = function (rotation, out) {
     return this.vec3_rotateDegrees(rotation, out);
