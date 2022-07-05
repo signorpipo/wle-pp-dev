@@ -4,6 +4,7 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myDistanceFromFeetToIgnore = 0.2;
         this.myDistanceFromHeadToIgnore = 0.2;
 
+        this.myHorizontalMovementStepAmount = 1;
         this.myHorizontalMovementRadialStepAmount = 1;
         this.myHorizontalMovementCheckDiagonal = true;
         this.myHorizontalMovementCheckStraight = false;
@@ -62,7 +63,7 @@ CollisionCheck = class CollisionCheck {
         //height = height / 2;
         //horizontalMovement.vec3_scale(5, horizontalMovement);
 
-        this._myDebugActive = true;
+        //this._myDebugActive = true;
 
         let fixedHorizontalMovement = this._horizontalCheck(horizontalMovement, feetPosition, height, up);
 
@@ -73,7 +74,7 @@ CollisionCheck = class CollisionCheck {
             forward = PP.myPlayerObjects.myPlayer.pp_getForward();
         }
 
-        this._myDebugActive = false;
+        //this._myDebugActive = false;
 
         let fixedVerticalMovement = this._verticalCheck(verticalMovement, newFeetPosition, height, up, forward);
 
@@ -278,113 +279,23 @@ CollisionCheck = class CollisionCheck {
             heightStep = up.vec3_scale(height / this._myCollisionCheckParams.myHeightCheckStepAmount);
         }
 
-        for (let i = 0; i <= heightStepAmount; i++) {
-            let currentHeightOffset = heightStep.vec3_scale(i);
-            for (let j = 0; j < checkPositions.length; j++) {
-                let firstPosition = checkPositions[j].vec3_add(currentHeightOffset);
+        let movementStep = movement.vec3_scale(1 / this._myCollisionCheckParams.myHorizontalMovementStepAmount);
 
-                if (j < checkPositions.length - 1) {
-                    let secondPosition = checkPositions[j + 1].vec3_add(currentHeightOffset);
+        for (let m = 0; m < this._myCollisionCheckParams.myHorizontalMovementStepAmount; m++) {
+            for (let i = 0; i <= heightStepAmount; i++) {
+                let currentHeightOffset = heightStep.vec3_scale(i);
+                for (let j = 0; j < checkPositions.length; j++) {
+                    let firstPosition = checkPositions[j].vec3_add(movementStep.vec3_scale(m)).vec3_add(currentHeightOffset);
 
-                    if (this._myCollisionCheckParams.myHorizontalMovementCheckDiagonal) {
-                        {
-                            let firstMovementPosition = firstPosition.vec3_add(movement);
+                    if (j < checkPositions.length - 1) {
+                        let secondPosition = checkPositions[j + 1].vec3_add(movementStep.vec3_scale(m)).vec3_add(currentHeightOffset);
 
-                            let origin = secondPosition;
-                            let direction = firstMovementPosition.vec3_sub(secondPosition);
-
-                            if (!direction.vec3_isConcordant(movementDirection)) {
-                                direction.vec3_negate(direction);
-                                origin = firstMovementPosition;
-                            }
-
-                            let distance = direction.vec3_length();
-                            direction.vec3_normalize(direction);
-                            let raycastResult = this._raycastAndDebug(origin, direction, 255, distance);
-
-                            if (raycastResult.hitCount > 0 && !this._isRaycastResultInsideWall(origin, direction, raycastResult)) {
-                                // if result is inside wall, it's ignored, so that at least you can exit it before seeing if the new position works now
-                                isHorizontalCheckOk = false;
-                                break;
-                            }
-                        }
-
-                        {
-                            let secondMovementPosition = secondPosition.vec3_add(movement);
-
-                            let origin = firstPosition;
-                            let direction = secondMovementPosition.vec3_sub(firstPosition);
-
-                            if (!direction.vec3_isConcordant(movementDirection)) {
-                                direction.vec3_negate(direction);
-                                origin = secondMovementPosition;
-                            }
-
-                            let distance = direction.vec3_length();
-                            direction.vec3_normalize(direction);
-                            let raycastResult = this._raycastAndDebug(origin, direction, 255, distance);
-
-                            if (raycastResult.hitCount > 0 && !this._isRaycastResultInsideWall(origin, direction, raycastResult)) {
-                                // if result is inside wall, it's ignored, so that at least you can exit it before seeing if the new position works now
-                                isHorizontalCheckOk = false;
-                                break;
-                            }
-                        }
-                    }
-
-                    if (this._myCollisionCheckParams.myHorizontalMovementCheckHorizontalBorder) {
-                        {
-                            let origin = secondPosition;
-                            let direction = firstPosition.vec3_sub(origin);
-
-                            if (!direction.vec3_isConcordant(movementDirection)) {
-                                direction.vec3_negate(direction);
-                                origin = firstPosition;
-                            }
-
-                            let distance = direction.vec3_length();
-                            direction.vec3_normalize(direction);
-                            let raycastResult = this._raycastAndDebug(origin, direction, 255, distance);
-
-                            if (raycastResult.hitCount > 0 && !this._isRaycastResultInsideWall(origin, direction, raycastResult)) {
-                                // if result is inside wall, it's ignored, so that at least you can exit it before seeing if the new position works now
-                                isHorizontalCheckOk = false;
-                                break;
-                            }
-                        }
-
-                        {
-                            let firstMovementPosition = firstPosition.vec3_add(movement);
-
-                            let origin = secondPosition.vec3_add(movement);
-                            let direction = firstMovementPosition.vec3_sub(origin);
-
-                            if (!direction.vec3_isConcordant(movementDirection)) {
-                                direction.vec3_negate(direction);
-                                origin = firstMovementPosition;
-                            }
-
-                            let distance = direction.vec3_length();
-                            direction.vec3_normalize(direction);
-                            let raycastResult = this._raycastAndDebug(origin, direction, 255, distance);
-
-                            if (raycastResult.hitCount > 0 && !this._isRaycastResultInsideWall(origin, direction, raycastResult)) {
-                                // if result is inside wall, it's ignored, so that at least you can exit it before seeing if the new position works now
-                                isHorizontalCheckOk = false;
-                                break;
-                            }
-                        }
-                    }
-
-                    // check height
-                    if (i > 0) {
-                        if (this._myCollisionCheckParams.myHorizontalMovementCheckVerticalDiagonal) {
+                        if (this._myCollisionCheckParams.myHorizontalMovementCheckDiagonal) {
                             {
-                                let firstMovementPosition = firstPosition.vec3_add(movement);
-                                let secondHeightPosition = secondPosition.vec3_sub(heightStep);
+                                let firstMovementPosition = firstPosition.vec3_add(movementStep);
 
-                                let origin = secondHeightPosition;
-                                let direction = firstMovementPosition.vec3_sub(secondHeightPosition);
+                                let origin = secondPosition;
+                                let direction = firstMovementPosition.vec3_sub(secondPosition);
 
                                 if (!direction.vec3_isConcordant(movementDirection)) {
                                     direction.vec3_negate(direction);
@@ -403,11 +314,10 @@ CollisionCheck = class CollisionCheck {
                             }
 
                             {
-                                let secondMovementPosition = secondPosition.vec3_add(movement);
-                                let firstHeightPosition = firstPosition.vec3_sub(heightStep);
+                                let secondMovementPosition = secondPosition.vec3_add(movementStep);
 
-                                let origin = firstHeightPosition;
-                                let direction = secondMovementPosition.vec3_sub(firstHeightPosition);
+                                let origin = firstPosition;
+                                let direction = secondMovementPosition.vec3_sub(firstPosition);
 
                                 if (!direction.vec3_isConcordant(movementDirection)) {
                                     direction.vec3_negate(direction);
@@ -426,11 +336,9 @@ CollisionCheck = class CollisionCheck {
                             }
                         }
 
-                        if (this._myCollisionCheckParams.myHorizontalMovementCheckVerticalHorizontalBorderDiagonal) {
+                        if (this._myCollisionCheckParams.myHorizontalMovementCheckHorizontalBorder) {
                             {
-                                let secondHeightPosition = secondPosition.vec3_sub(heightStep);
-
-                                let origin = secondHeightPosition;
+                                let origin = secondPosition;
                                 let direction = firstPosition.vec3_sub(origin);
 
                                 if (!direction.vec3_isConcordant(movementDirection)) {
@@ -450,32 +358,9 @@ CollisionCheck = class CollisionCheck {
                             }
 
                             {
-                                let firstHeightPosition = firstPosition.vec3_sub(heightStep);
+                                let firstMovementPosition = firstPosition.vec3_add(movementStep);
 
-                                let origin = firstHeightPosition;
-                                let direction = secondPosition.vec3_sub(origin);
-
-                                if (!direction.vec3_isConcordant(movementDirection)) {
-                                    direction.vec3_negate(direction);
-                                    origin = secondPosition;
-                                }
-
-                                let distance = direction.vec3_length();
-                                direction.vec3_normalize(direction);
-                                let raycastResult = this._raycastAndDebug(origin, direction, 255, distance);
-
-                                if (raycastResult.hitCount > 0 && !this._isRaycastResultInsideWall(origin, direction, raycastResult)) {
-                                    // if result is inside wall, it's ignored, so that at least you can exit it before seeing if the new position works now
-                                    isHorizontalCheckOk = false;
-                                    break;
-                                }
-                            }
-
-                            {
-                                let firstMovementPosition = firstPosition.vec3_add(movement);
-                                let secondHeightMovementPosition = secondPosition.vec3_sub(heightStep).vec3_add(movement);
-
-                                let origin = secondHeightMovementPosition;
+                                let origin = secondPosition.vec3_add(movementStep);
                                 let direction = firstMovementPosition.vec3_sub(origin);
 
                                 if (!direction.vec3_isConcordant(movementDirection)) {
@@ -493,18 +378,233 @@ CollisionCheck = class CollisionCheck {
                                     break;
                                 }
                             }
+                        }
+
+                        // check height
+                        if (i > 0) {
+                            if (this._myCollisionCheckParams.myHorizontalMovementCheckVerticalDiagonal) {
+                                {
+                                    let firstMovementPosition = firstPosition.vec3_add(movementStep);
+                                    let secondHeightPosition = secondPosition.vec3_sub(heightStep);
+
+                                    let origin = secondHeightPosition;
+                                    let direction = firstMovementPosition.vec3_sub(secondHeightPosition);
+
+                                    if (!direction.vec3_isConcordant(movementDirection)) {
+                                        direction.vec3_negate(direction);
+                                        origin = firstMovementPosition;
+                                    }
+
+                                    let distance = direction.vec3_length();
+                                    direction.vec3_normalize(direction);
+                                    let raycastResult = this._raycastAndDebug(origin, direction, 255, distance);
+
+                                    if (raycastResult.hitCount > 0 && !this._isRaycastResultInsideWall(origin, direction, raycastResult)) {
+                                        // if result is inside wall, it's ignored, so that at least you can exit it before seeing if the new position works now
+                                        isHorizontalCheckOk = false;
+                                        break;
+                                    }
+                                }
+
+                                {
+                                    let secondMovementPosition = secondPosition.vec3_add(movementStep);
+                                    let firstHeightPosition = firstPosition.vec3_sub(heightStep);
+
+                                    let origin = firstHeightPosition;
+                                    let direction = secondMovementPosition.vec3_sub(firstHeightPosition);
+
+                                    if (!direction.vec3_isConcordant(movementDirection)) {
+                                        direction.vec3_negate(direction);
+                                        origin = secondMovementPosition;
+                                    }
+
+                                    let distance = direction.vec3_length();
+                                    direction.vec3_normalize(direction);
+                                    let raycastResult = this._raycastAndDebug(origin, direction, 255, distance);
+
+                                    if (raycastResult.hitCount > 0 && !this._isRaycastResultInsideWall(origin, direction, raycastResult)) {
+                                        // if result is inside wall, it's ignored, so that at least you can exit it before seeing if the new position works now
+                                        isHorizontalCheckOk = false;
+                                        break;
+                                    }
+                                }
+                            }
+
+                            if (this._myCollisionCheckParams.myHorizontalMovementCheckVerticalHorizontalBorderDiagonal) {
+                                {
+                                    let secondHeightPosition = secondPosition.vec3_sub(heightStep);
+
+                                    let origin = secondHeightPosition;
+                                    let direction = firstPosition.vec3_sub(origin);
+
+                                    if (!direction.vec3_isConcordant(movementDirection)) {
+                                        direction.vec3_negate(direction);
+                                        origin = firstPosition;
+                                    }
+
+                                    let distance = direction.vec3_length();
+                                    direction.vec3_normalize(direction);
+                                    let raycastResult = this._raycastAndDebug(origin, direction, 255, distance);
+
+                                    if (raycastResult.hitCount > 0 && !this._isRaycastResultInsideWall(origin, direction, raycastResult)) {
+                                        // if result is inside wall, it's ignored, so that at least you can exit it before seeing if the new position works now
+                                        isHorizontalCheckOk = false;
+                                        break;
+                                    }
+                                }
+
+                                {
+                                    let firstHeightPosition = firstPosition.vec3_sub(heightStep);
+
+                                    let origin = firstHeightPosition;
+                                    let direction = secondPosition.vec3_sub(origin);
+
+                                    if (!direction.vec3_isConcordant(movementDirection)) {
+                                        direction.vec3_negate(direction);
+                                        origin = secondPosition;
+                                    }
+
+                                    let distance = direction.vec3_length();
+                                    direction.vec3_normalize(direction);
+                                    let raycastResult = this._raycastAndDebug(origin, direction, 255, distance);
+
+                                    if (raycastResult.hitCount > 0 && !this._isRaycastResultInsideWall(origin, direction, raycastResult)) {
+                                        // if result is inside wall, it's ignored, so that at least you can exit it before seeing if the new position works now
+                                        isHorizontalCheckOk = false;
+                                        break;
+                                    }
+                                }
+
+                                {
+                                    let firstMovementPosition = firstPosition.vec3_add(movementStep);
+                                    let secondHeightMovementPosition = secondPosition.vec3_sub(heightStep).vec3_add(movementStep);
+
+                                    let origin = secondHeightMovementPosition;
+                                    let direction = firstMovementPosition.vec3_sub(origin);
+
+                                    if (!direction.vec3_isConcordant(movementDirection)) {
+                                        direction.vec3_negate(direction);
+                                        origin = firstMovementPosition;
+                                    }
+
+                                    let distance = direction.vec3_length();
+                                    direction.vec3_normalize(direction);
+                                    let raycastResult = this._raycastAndDebug(origin, direction, 255, distance);
+
+                                    if (raycastResult.hitCount > 0 && !this._isRaycastResultInsideWall(origin, direction, raycastResult)) {
+                                        // if result is inside wall, it's ignored, so that at least you can exit it before seeing if the new position works now
+                                        isHorizontalCheckOk = false;
+                                        break;
+                                    }
+                                }
+
+                                {
+                                    let secondMovementPosition = secondPosition.vec3_add(movementStep);
+                                    let firstHeightMovementPosition = firstPosition.vec3_sub(heightStep).vec3_add(movementStep);
+
+                                    let origin = firstHeightMovementPosition;
+                                    let direction = secondMovementPosition.vec3_sub(origin);
+
+                                    if (!direction.vec3_isConcordant(movementDirection)) {
+                                        direction.vec3_negate(direction);
+                                        origin = secondMovementPosition;
+                                    }
+
+                                    let distance = direction.vec3_length();
+                                    direction.vec3_normalize(direction);
+                                    let raycastResult = this._raycastAndDebug(origin, direction, 255, distance);
+
+                                    if (raycastResult.hitCount > 0 && !this._isRaycastResultInsideWall(origin, direction, raycastResult)) {
+                                        // if result is inside wall, it's ignored, so that at least you can exit it before seeing if the new position works now
+                                        isHorizontalCheckOk = false;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if (this._myCollisionCheckParams.myHorizontalMovementCheckStraight) {
+                        {
+                            let firstMovementPosition = firstPosition.vec3_add(movementStep);
+
+                            let origin = firstPosition;
+                            let direction = firstMovementPosition.vec3_sub(origin);
+                            let distance = direction.vec3_length();
+                            direction.vec3_normalize(direction);
+                            let raycastResult = this._raycastAndDebug(origin, direction, 255, distance);
+
+                            if (raycastResult.hitCount > 0 && !this._isRaycastResultInsideWall(origin, direction, raycastResult)) {
+                                // if result is inside wall, it's ignored, so that at least you can exit it before seeing if the new position works now
+                                isHorizontalCheckOk = false;
+                                break;
+                            }
+                        }
+                    }
+
+                    // check height
+                    if (i > 0) {
+                        if (this._myCollisionCheckParams.myHorizontalMovementCheckVerticalStraight) {
+                            {
+                                let firstHeightPosition = firstPosition.vec3_sub(heightStep);
+
+                                let origin = firstHeightPosition;
+                                let direction = firstPosition.vec3_sub(origin);
+
+                                let distance = direction.vec3_length();
+                                direction.vec3_normalize(direction);
+                                let raycastResult = this._raycastAndDebug(origin, direction, 255, distance);
+
+                                if (raycastResult.hitCount > 0 && !this._isRaycastResultInsideWall(origin, direction, raycastResult)) {
+                                    // if result is inside wall, it's ignored, so that at least you can exit it before seeing if the new position works now
+                                    isHorizontalCheckOk = false;
+                                    break;
+                                }
+                            }
 
                             {
-                                let secondMovementPosition = secondPosition.vec3_add(movement);
-                                let firstHeightMovementPosition = firstPosition.vec3_sub(heightStep).vec3_add(movement);
+                                let firstMovementPosition = firstPosition.vec3_add(movementStep);
+                                let firstHeightMovementPosition = firstMovementPosition.vec3_sub(heightStep);
 
                                 let origin = firstHeightMovementPosition;
-                                let direction = secondMovementPosition.vec3_sub(origin);
+                                let direction = firstMovementPosition.vec3_sub(origin);
 
-                                if (!direction.vec3_isConcordant(movementDirection)) {
-                                    direction.vec3_negate(direction);
-                                    origin = secondMovementPosition;
+                                let distance = direction.vec3_length();
+                                direction.vec3_normalize(direction);
+                                let raycastResult = this._raycastAndDebug(origin, direction, 255, distance);
+
+                                if (raycastResult.hitCount > 0 && !this._isRaycastResultInsideWall(origin, direction, raycastResult)) {
+                                    // if result is inside wall, it's ignored, so that at least you can exit it before seeing if the new position works now
+                                    isHorizontalCheckOk = false;
+                                    break;
                                 }
+                            }
+                        }
+
+                        if (this._myCollisionCheckParams.myHorizontalMovementCheckVerticalStraightDiagonal) {
+                            {
+                                let firstMovementPosition = firstPosition.vec3_add(movementStep);
+                                let firstHeightPosition = firstPosition.vec3_sub(heightStep);
+
+                                let origin = firstHeightPosition;
+                                let direction = firstMovementPosition.vec3_sub(origin);
+
+                                let distance = direction.vec3_length();
+                                direction.vec3_normalize(direction);
+                                let raycastResult = this._raycastAndDebug(origin, direction, 255, distance);
+
+                                if (raycastResult.hitCount > 0 && !this._isRaycastResultInsideWall(origin, direction, raycastResult)) {
+                                    // if result is inside wall, it's ignored, so that at least you can exit it before seeing if the new position works now
+                                    isHorizontalCheckOk = false;
+                                    break;
+                                }
+                            }
+
+                            {
+                                let firstHeightMovementPosition = firstPosition.vec3_sub(heightStep).vec3_add(movementStep);
+
+                                let origin = firstPosition;
+                                let direction = firstHeightMovementPosition.vec3_sub(origin);
 
                                 let distance = direction.vec3_length();
                                 direction.vec3_normalize(direction);
@@ -520,104 +620,9 @@ CollisionCheck = class CollisionCheck {
                     }
                 }
 
-                if (this._myCollisionCheckParams.myHorizontalMovementCheckStraight) {
-                    {
-                        let firstMovementPosition = firstPosition.vec3_add(movement);
-
-                        let origin = firstPosition;
-                        let direction = firstMovementPosition.vec3_sub(origin);
-                        let distance = direction.vec3_length();
-                        direction.vec3_normalize(direction);
-                        let raycastResult = this._raycastAndDebug(origin, direction, 255, distance);
-
-                        if (raycastResult.hitCount > 0 && !this._isRaycastResultInsideWall(origin, direction, raycastResult)) {
-                            // if result is inside wall, it's ignored, so that at least you can exit it before seeing if the new position works now
-                            isHorizontalCheckOk = false;
-                            break;
-                        }
-                    }
+                if (!isHorizontalCheckOk) {
+                    break;
                 }
-
-                // check height
-                if (i > 0) {
-                    if (this._myCollisionCheckParams.myHorizontalMovementCheckVerticalStraight) {
-                        {
-                            let firstHeightPosition = firstPosition.vec3_sub(heightStep);
-
-                            let origin = firstHeightPosition;
-                            let direction = firstPosition.vec3_sub(origin);
-
-                            let distance = direction.vec3_length();
-                            direction.vec3_normalize(direction);
-                            let raycastResult = this._raycastAndDebug(origin, direction, 255, distance);
-
-                            if (raycastResult.hitCount > 0 && !this._isRaycastResultInsideWall(origin, direction, raycastResult)) {
-                                // if result is inside wall, it's ignored, so that at least you can exit it before seeing if the new position works now
-                                isHorizontalCheckOk = false;
-                                break;
-                            }
-                        }
-
-                        {
-                            let firstMovementPosition = firstPosition.vec3_add(movement);
-                            let firstHeightMovementPosition = firstMovementPosition.vec3_sub(heightStep);
-
-                            let origin = firstHeightMovementPosition;
-                            let direction = firstMovementPosition.vec3_sub(origin);
-
-                            let distance = direction.vec3_length();
-                            direction.vec3_normalize(direction);
-                            let raycastResult = this._raycastAndDebug(origin, direction, 255, distance);
-
-                            if (raycastResult.hitCount > 0 && !this._isRaycastResultInsideWall(origin, direction, raycastResult)) {
-                                // if result is inside wall, it's ignored, so that at least you can exit it before seeing if the new position works now
-                                isHorizontalCheckOk = false;
-                                break;
-                            }
-                        }
-                    }
-
-                    if (this._myCollisionCheckParams.myHorizontalMovementCheckVerticalStraightDiagonal) {
-                        {
-                            let firstMovementPosition = firstPosition.vec3_add(movement);
-                            let firstHeightPosition = firstPosition.vec3_sub(heightStep);
-
-                            let origin = firstHeightPosition;
-                            let direction = firstMovementPosition.vec3_sub(origin);
-
-                            let distance = direction.vec3_length();
-                            direction.vec3_normalize(direction);
-                            let raycastResult = this._raycastAndDebug(origin, direction, 255, distance);
-
-                            if (raycastResult.hitCount > 0 && !this._isRaycastResultInsideWall(origin, direction, raycastResult)) {
-                                // if result is inside wall, it's ignored, so that at least you can exit it before seeing if the new position works now
-                                isHorizontalCheckOk = false;
-                                break;
-                            }
-                        }
-
-                        {
-                            let firstHeightMovementPosition = firstPosition.vec3_sub(heightStep).vec3_add(movement);
-
-                            let origin = firstPosition;
-                            let direction = firstHeightMovementPosition.vec3_sub(origin);
-
-                            let distance = direction.vec3_length();
-                            direction.vec3_normalize(direction);
-                            let raycastResult = this._raycastAndDebug(origin, direction, 255, distance);
-
-                            if (raycastResult.hitCount > 0 && !this._isRaycastResultInsideWall(origin, direction, raycastResult)) {
-                                // if result is inside wall, it's ignored, so that at least you can exit it before seeing if the new position works now
-                                isHorizontalCheckOk = false;
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (!isHorizontalCheckOk) {
-                break;
             }
         }
 
@@ -625,7 +630,6 @@ CollisionCheck = class CollisionCheck {
     }
 
     _horizontalPositionCheck(feetPosition, height, up, forward) {
-
         let radialPositions = [];
         let sliceAngle = this._myCollisionCheckParams.myConeAngle / this._myCollisionCheckParams.myConeSliceAmount;
         let startAngle = -this._myCollisionCheckParams.myConeAngle / 2;
