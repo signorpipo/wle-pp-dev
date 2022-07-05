@@ -10,6 +10,8 @@ KeyboardGamepad = class KeyboardGamepad {
         this._myS = false;
         this._myD = false;
 
+        this._mySpace = false;
+
         this._myLeftAxes = [0, 0];
         this._myRightAxes = [0, 0];
     }
@@ -30,6 +32,8 @@ KeyboardGamepad = class KeyboardGamepad {
             this._myA = false;
             this._myS = false;
             this._myD = false;
+
+            this._mySpace = false;
         }
 
         this.updateLeftAxes();
@@ -42,6 +46,10 @@ KeyboardGamepad = class KeyboardGamepad {
 
     getRightAxes() {
         return this._myRightAxes;
+    }
+
+    isSpacePressed() {
+        return this._mySpace;
     }
 
     updateLeftAxes() {
@@ -95,6 +103,9 @@ KeyboardGamepad = class KeyboardGamepad {
                 break;
             case 87:
                 this._myW = isDown;
+                break;
+            case 32:
+                this._mySpace = isDown;
                 break;
         }
     }

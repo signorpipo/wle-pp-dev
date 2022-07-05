@@ -94,10 +94,14 @@ WL.registerComponent('locomotion-draft-2', {
                 if (axes.vec2_length() > minIntensityThreshold) {
                     this._myStickIdleCount = 2;
                     let direction = this._myDirectionConverter.convert(axes, this._myDirectionReferenceObject.pp_getTransform(), playerUp);
+                    if (this._myKeyboardGamepad.isSpacePressed()) {
+                        direction.vec3_add([0, 1, 0], direction);
+                    }
+
                     if (direction.vec3_length() > 0.0001) {
                         direction.vec3_normalize(direction);
 
-                        this._myIsFlying = direction.vec3_componentAlongAxis(playerUp).vec3_length() > 0.0001;
+                        this._myIsFlying = this._myIsFlying || direction.vec3_componentAlongAxis(playerUp).vec3_length() > 0.0001;
 
                         let movementIntensity = axes.vec2_length();
                         let speed = Math.pp_lerp(0, this._myMaxSpeed, movementIntensity);
