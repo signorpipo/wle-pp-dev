@@ -49,14 +49,14 @@
                 0.0,
                 0.0,
                 0.0,
-                0.999999,
+                0.9999989,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                0.999998,
+                0.9999979,
                 0.0,
-                0.0,
+                60.0,
                 0.0,
                 0.0,
                 1.0
@@ -110,7 +110,7 @@
                     "type": "pp-set-player-height",
                     "active": true,
                     "pp-set-player-height": {
-                        "_myEyesHeight": 1.0
+                        "_myEyesHeight": 1.6499999
                     }
                 }
             ]
@@ -370,33 +370,34 @@
             "name": "Light 1",
             "parent": "28",
             "transformation": [
-                1.0,
+                0.9999989,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                1.0,
+                0.999999,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                1.0,
+                0.9999997,
                 0.0,
-                1.0,
-                3.0,
-                1.0,
+                30.0,
+                30.0000343,
+                9.5367431640625e-7,
                 1.0
             ],
             "components": [
                 {
                     "type": "light",
                     "light": {
-                        "attenuation": 0.075,
+                        "attenuation": 0.0,
                         "color": [
-                            0.8705882,
-                            0.6486735,
-                            0.6486735
-                        ]
+                            0.6627451,
+                            0.5146021,
+                            0.5146021
+                        ],
+                        "type": "point"
                     }
                 }
             ]
@@ -434,7 +435,8 @@
                 3.0,
                 -1.0,
                 1.0
-            ]
+            ],
+            "deleted": true
         },
         "34": {
             "name": "Empty",
@@ -1129,7 +1131,7 @@
             ]
         },
         "89": {
-            "name": "Playground",
+            "name": "Start Playground",
             "parent": "18"
         },
         "90": {
@@ -2185,6 +2187,5153 @@
                 -2.4082407,
                 0.5948895,
                 -1.4110481,
+                1.0
+            ]
+        },
+        "127": {
+            "name": "Obstacle 2",
+            "parent": "122",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                1.0,
+                                0.1,
+                                1.0
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                -2.1056032,
+                1.8999999,
+                3.4063556,
+                1.0
+            ]
+        },
+        "128": {
+            "name": "Playground",
+            "parent": "18",
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                27.6599864,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "deleted": true
+        },
+        "129": {
+            "name": "Floor",
+            "parent": "128",
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                -1.1920906928253316e-7,
+                -0.999998,
+                0.0,
+                0.0,
+                0.999998,
+                -1.1920906928253316e-7,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "deleted": true
+        },
+        "130": {
+            "name": "Mesh",
+            "parent": "129",
+            "components": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p0",
+                        "material": "92"
+                    },
+                    "active": true
+                }
+            ],
+            "transformation": [
+                4.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                4.0000076,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0000019,
+                0.0,
+                0.0,
+                1.685877180079843e-7,
+                0.0,
+                1.0
+            ],
+            "deleted": true
+        },
+        "131": {
+            "name": "PhysX",
+            "parent": "129",
+            "components": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                {
+                    "type": "physx",
+                    "physx": {
+                        "gravity": false,
+                        "kinematic": true,
+                        "static": true,
+                        "shape": "convexMesh",
+                        "convexMesh": {
+                            "mesh": "p1",
+                            "scaling": [
+                                4.0,
+                                4.0,
+                                1.0
+                            ]
+                        },
+                        "groups": 2,
+                        "block": 1
+                    }
+                }
+            ],
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                -0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                1.192095311353114e-7,
+                -1.000002,
+                1.0
+            ],
+            "deleted": true
+        },
+        "132": {
+            "name": "Reference",
+            "parent": "129",
+            "transformation": [
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                -0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                -0.0,
+                -0.0,
+                0.0,
+                1.0
+            ],
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "material": "92",
+                        "mesh": "p2"
+                    }
+                }
+            ],
+            "deleted": true
+        },
+        "133": {
+            "name": "Walls",
+            "parent": "128",
+            "deleted": true
+        },
+        "134": {
+            "name": "Wall 1",
+            "parent": "133",
+            "deleted": true
+        },
+        "135": {
+            "name": "PhysX",
+            "parent": "134",
+            "components": [
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                4.0,
+                                4.0,
+                                1.0
+                            ]
+                        },
+                        "gravity": false,
+                        "kinematic": true,
+                        "static": true,
+                        "groups": 4,
+                        "block": 1
+                    }
+                }
+            ],
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                4.0,
+                -5.0,
+                1.0
+            ],
+            "deleted": true
+        },
+        "136": {
+            "name": "Mesh",
+            "parent": "134",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p0",
+                        "material": "93"
+                    }
+                }
+            ],
+            "transformation": [
+                4.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                4.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                4.0,
+                -4.0,
+                1.0
+            ],
+            "deleted": true
+        },
+        "137": {
+            "name": "Reference",
+            "parent": "134",
+            "transformation": [
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                0.0,
+                1.0,
+                -4.0,
+                1.0
+            ],
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "material": "92",
+                        "mesh": "p1"
+                    }
+                }
+            ],
+            "deleted": true
+        },
+        "138": {
+            "name": "Wall 2",
+            "parent": "133",
+            "transformation": [
+                -1.192099858826623e-7,
+                0.0,
+                -1.0000059,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                1.0000059,
+                0.0,
+                -1.192099858826623e-7,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "deleted": true
+        },
+        "139": {
+            "name": "Mesh",
+            "parent": "138",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p0",
+                        "material": "93"
+                    }
+                }
+            ],
+            "transformation": [
+                4.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                4.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                4.0,
+                -4.0,
+                1.0
+            ],
+            "deleted": true
+        },
+        "140": {
+            "name": "PhysX",
+            "parent": "138",
+            "components": [
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                4.0,
+                                4.0,
+                                1.0
+                            ]
+                        },
+                        "gravity": false,
+                        "kinematic": true,
+                        "static": true,
+                        "groups": 4,
+                        "block": 1
+                    }
+                }
+            ],
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                4.0,
+                -5.0,
+                1.0
+            ],
+            "deleted": true
+        },
+        "141": {
+            "name": "Reference",
+            "parent": "138",
+            "transformation": [
+                0.3,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.3,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.3,
+                0.0,
+                0.0,
+                1.0,
+                -4.0,
+                1.0
+            ],
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "material": "92",
+                        "mesh": "p1"
+                    }
+                }
+            ],
+            "deleted": true
+        },
+        "142": {
+            "name": "Wall 3",
+            "parent": "133",
+            "transformation": [
+                -1.1921015641291888e-7,
+                0.0,
+                1.0000073,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                -1.0000073,
+                0.0,
+                -1.1921015641291888e-7,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "deleted": true
+        },
+        "143": {
+            "name": "PhysX",
+            "parent": "142",
+            "components": [
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                4.0,
+                                4.0,
+                                1.0
+                            ]
+                        },
+                        "gravity": false,
+                        "kinematic": true,
+                        "static": true,
+                        "groups": 4,
+                        "block": 1
+                    }
+                }
+            ],
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                4.0,
+                -5.0,
+                1.0
+            ],
+            "deleted": true
+        },
+        "144": {
+            "name": "Mesh",
+            "parent": "142",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p0",
+                        "material": "93"
+                    }
+                }
+            ],
+            "transformation": [
+                4.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                4.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                4.0,
+                -4.0,
+                1.0
+            ],
+            "deleted": true
+        },
+        "145": {
+            "name": "Reference",
+            "parent": "142",
+            "transformation": [
+                0.2,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.2,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.2,
+                0.0,
+                0.0,
+                1.0,
+                -4.0,
+                1.0
+            ],
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "material": "92",
+                        "mesh": "p1"
+                    }
+                }
+            ],
+            "deleted": true
+        },
+        "146": {
+            "name": "Wall 4",
+            "parent": "133",
+            "transformation": [
+                -1.0000069,
+                1.509969536073186e-7,
+                -4.76837158203125e-7,
+                0.0,
+                1.5099600148005268e-7,
+                1.0,
+                -1.5099602990176209e-7,
+                0.0,
+                4.76837158203125e-7,
+                -1.509971525592846e-7,
+                -1.0000069,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "deleted": true
+        },
+        "147": {
+            "name": "Mesh",
+            "parent": "146",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p0",
+                        "material": "93"
+                    }
+                }
+            ],
+            "transformation": [
+                4.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                4.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                4.0,
+                -4.0,
+                1.0
+            ],
+            "deleted": true
+        },
+        "148": {
+            "name": "PhysX",
+            "parent": "146",
+            "components": [
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                4.0,
+                                4.0,
+                                1.0
+                            ]
+                        },
+                        "gravity": false,
+                        "kinematic": true,
+                        "static": true,
+                        "groups": 4,
+                        "block": 1
+                    }
+                }
+            ],
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                4.0,
+                -5.0,
+                1.0
+            ],
+            "deleted": true
+        },
+        "149": {
+            "name": "Reference",
+            "parent": "146",
+            "transformation": [
+                0.05,
+                0.0,
+                -0.0,
+                0.0,
+                -0.0,
+                0.05,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.05,
+                0.0,
+                -0.0,
+                1.0,
+                -4.0,
+                1.0
+            ],
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "material": "92",
+                        "mesh": "p1"
+                    }
+                }
+            ],
+            "deleted": true
+        },
+        "150": {
+            "name": "Obstacles",
+            "parent": "128",
+            "deleted": true
+        },
+        "151": {
+            "name": "Obstacle 1",
+            "parent": "150",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.1,
+                                0.1,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                1.2104184,
+                0.0,
+                -1.5524852,
+                1.0
+            ],
+            "deleted": true
+        },
+        "152": {
+            "name": "Obstacle 2",
+            "parent": "150",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.1,
+                                0.3,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.3,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                -0.2498856,
+                0.0,
+                -1.5524852,
+                1.0
+            ],
+            "deleted": true
+        },
+        "153": {
+            "name": "Obstacle 2",
+            "parent": "150",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.4,
+                                0.3,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.4,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.3,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                -2.1056032,
+                0.8110135,
+                -1.5524852,
+                1.0
+            ],
+            "deleted": true
+        },
+        "154": {
+            "name": "Obstacle 2",
+            "parent": "150",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.4,
+                                0.3,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.3040947,
+                0.0,
+                -0.2598586,
+                0.0,
+                0.0,
+                0.3,
+                0.0,
+                0.0,
+                0.0649646,
+                0.0,
+                0.0760236,
+                0.0,
+                -2.4082407,
+                0.5948895,
+                -1.4110481,
+                1.0
+            ],
+            "deleted": true
+        },
+        "155": {
+            "name": "Obstacle 2",
+            "parent": "150",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                1.0,
+                                0.1,
+                                1.0
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                -2.1056032,
+                1.8999999,
+                3.4063556,
+                1.0
+            ],
+            "deleted": true
+        },
+        "156": {
+            "name": "Advanced Playground",
+            "parent": "18",
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                60.0,
+                0.0,
+                0.0,
+                1.0
+            ]
+        },
+        "157": {
+            "name": "Floor",
+            "parent": "156",
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                -1.1920906928253316e-7,
+                -0.999998,
+                0.0,
+                0.0,
+                0.999998,
+                -1.1920906928253316e-7,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ]
+        },
+        "158": {
+            "name": "Mesh",
+            "parent": "157",
+            "components": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p0",
+                        "material": "92"
+                    },
+                    "active": true
+                }
+            ],
+            "transformation": [
+                12.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                12.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0000019,
+                0.0,
+                0.0,
+                1.6858771800798422e-7,
+                0.0,
+                1.0
+            ]
+        },
+        "159": {
+            "name": "PhysX",
+            "parent": "157",
+            "components": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                {
+                    "type": "physx",
+                    "physx": {
+                        "gravity": false,
+                        "kinematic": true,
+                        "static": true,
+                        "shape": "convexMesh",
+                        "convexMesh": {
+                            "mesh": "p1",
+                            "scaling": [
+                                12.0,
+                                12.0,
+                                1.0
+                            ]
+                        },
+                        "groups": 2,
+                        "block": 1
+                    }
+                }
+            ],
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                -0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                1.192095311353114e-7,
+                -1.000002,
+                1.0
+            ]
+        },
+        "160": {
+            "name": "Reference",
+            "parent": "157",
+            "transformation": [
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                -0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                -0.0000038,
+                -0.0,
+                -0.0,
+                1.0
+            ],
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "material": "92",
+                        "mesh": "p2"
+                    }
+                }
+            ]
+        },
+        "161": {
+            "name": "Walls",
+            "parent": "156"
+        },
+        "162": {
+            "name": "Wall 1",
+            "parent": "161"
+        },
+        "163": {
+            "name": "PhysX",
+            "parent": "162",
+            "components": [
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                12.0,
+                                4.0,
+                                1.0
+                            ]
+                        },
+                        "gravity": false,
+                        "kinematic": true,
+                        "static": true,
+                        "groups": 4,
+                        "block": 1
+                    }
+                }
+            ],
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                4.0,
+                -13.0,
+                1.0
+            ]
+        },
+        "164": {
+            "name": "Mesh",
+            "parent": "162",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p0",
+                        "material": "93"
+                    }
+                }
+            ],
+            "transformation": [
+                12.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                4.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                4.0,
+                -12.0,
+                1.0
+            ]
+        },
+        "165": {
+            "name": "Reference",
+            "parent": "162",
+            "transformation": [
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                0.0,
+                1.0,
+                -20.0,
+                1.0
+            ],
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "material": "92",
+                        "mesh": "p1"
+                    }
+                }
+            ]
+        },
+        "166": {
+            "name": "Wall 2",
+            "parent": "161",
+            "transformation": [
+                -1.192099858826623e-7,
+                0.0,
+                -1.0000059,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                1.0000059,
+                0.0,
+                -1.192099858826623e-7,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ]
+        },
+        "167": {
+            "name": "Mesh",
+            "parent": "166",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p0",
+                        "material": "93"
+                    }
+                }
+            ],
+            "transformation": [
+                12.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                4.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.9999997,
+                0.0,
+                -0.0000014,
+                4.0,
+                -12.0,
+                1.0
+            ]
+        },
+        "168": {
+            "name": "PhysX",
+            "parent": "166",
+            "components": [
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                12.0,
+                                4.0,
+                                1.0
+                            ]
+                        },
+                        "gravity": false,
+                        "kinematic": true,
+                        "static": true,
+                        "groups": 4,
+                        "block": 1
+                    }
+                }
+            ],
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                4.0,
+                -13.0,
+                1.0
+            ]
+        },
+        "169": {
+            "name": "Reference",
+            "parent": "166",
+            "transformation": [
+                0.3,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.3,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.3,
+                0.0,
+                0.0,
+                1.0,
+                -20.0,
+                1.0
+            ],
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "material": "92",
+                        "mesh": "p1"
+                    }
+                }
+            ]
+        },
+        "170": {
+            "name": "Wall 3",
+            "parent": "161",
+            "transformation": [
+                -1.1921015641291888e-7,
+                0.0,
+                1.0000073,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                -1.0000073,
+                0.0,
+                -1.1921015641291888e-7,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ]
+        },
+        "171": {
+            "name": "PhysX",
+            "parent": "170",
+            "components": [
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                12.0,
+                                4.0,
+                                1.0
+                            ]
+                        },
+                        "gravity": false,
+                        "kinematic": true,
+                        "static": true,
+                        "groups": 4,
+                        "block": 1
+                    }
+                }
+            ],
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                4.0,
+                -13.0,
+                1.0
+            ]
+        },
+        "172": {
+            "name": "Mesh",
+            "parent": "170",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p0",
+                        "material": "93"
+                    }
+                }
+            ],
+            "transformation": [
+                12.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                4.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                4.0,
+                -12.0,
+                1.0
+            ]
+        },
+        "173": {
+            "name": "Reference",
+            "parent": "170",
+            "transformation": [
+                0.2,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.2,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.2,
+                0.0,
+                0.0,
+                1.0,
+                -20.0,
+                1.0
+            ],
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "material": "92",
+                        "mesh": "p1"
+                    }
+                }
+            ]
+        },
+        "174": {
+            "name": "Wall 4",
+            "parent": "161",
+            "transformation": [
+                -1.0000069,
+                1.509969536073186e-7,
+                -4.76837158203125e-7,
+                0.0,
+                1.5099600148005268e-7,
+                1.0,
+                -1.5099602990176209e-7,
+                0.0,
+                4.76837158203125e-7,
+                -1.509971525592846e-7,
+                -1.0000069,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ]
+        },
+        "175": {
+            "name": "Mesh",
+            "parent": "174",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p0",
+                        "material": "93"
+                    }
+                }
+            ],
+            "transformation": [
+                12.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                4.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                4.0,
+                -12.0,
+                1.0
+            ]
+        },
+        "176": {
+            "name": "PhysX",
+            "parent": "174",
+            "components": [
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                12.0,
+                                4.0,
+                                1.0
+                            ]
+                        },
+                        "gravity": false,
+                        "kinematic": true,
+                        "static": true,
+                        "groups": 4,
+                        "block": 1
+                    }
+                }
+            ],
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                4.0,
+                -13.0,
+                1.0
+            ]
+        },
+        "177": {
+            "name": "Reference",
+            "parent": "174",
+            "transformation": [
+                0.05,
+                -0.0,
+                -0.0,
+                0.0,
+                0.0,
+                0.05,
+                -0.0,
+                0.0,
+                0.0,
+                -0.0,
+                0.05,
+                0.0,
+                -0.0010108,
+                1.000041,
+                -20.0,
+                1.0
+            ],
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "material": "92",
+                        "mesh": "p1"
+                    }
+                }
+            ]
+        },
+        "178": {
+            "name": "Obstacles",
+            "parent": "156"
+        },
+        "179": {
+            "name": "Obstacle 1",
+            "parent": "178",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.1,
+                                0.1,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                1.2104187,
+                -0.0,
+                -1.5524852,
+                1.0
+            ],
+            "deleted": true
+        },
+        "180": {
+            "name": "Obstacle 2",
+            "parent": "178",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.1,
+                                0.3,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.3,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                -0.2498855,
+                0.0,
+                -1.5524852,
+                1.0
+            ],
+            "deleted": true
+        },
+        "181": {
+            "name": "Obstacle 2",
+            "parent": "178",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.4,
+                                0.3,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.4,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.3,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                -2.1056032,
+                0.8110135,
+                -1.5524852,
+                1.0
+            ],
+            "deleted": true
+        },
+        "182": {
+            "name": "Obstacle 2",
+            "parent": "178",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.4,
+                                0.3,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.3040947,
+                0.0,
+                -0.2598586,
+                0.0,
+                0.0,
+                0.3,
+                0.0,
+                0.0,
+                0.0649646,
+                0.0,
+                0.0760236,
+                0.0,
+                -2.4082407,
+                0.5948895,
+                -1.4110481,
+                1.0
+            ],
+            "deleted": true
+        },
+        "183": {
+            "name": "Obstacle 2",
+            "parent": "203",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    },
+                    "active": true
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                3.0,
+                                0.1,
+                                3.0
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                3.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                3.0,
+                0.0,
+                -0.2226982,
+                1.5,
+                0.175063,
+                1.0
+            ]
+        },
+        "184": {
+            "name": "Lights",
+            "parent": "156",
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "deleted": true
+        },
+        "185": {
+            "name": "Light 1",
+            "parent": "184",
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                1.0,
+                3.0,
+                1.0,
+                1.0
+            ],
+            "components": [
+                {
+                    "type": "light",
+                    "light": {
+                        "attenuation": 0.075,
+                        "color": [
+                            0.8705882,
+                            0.6486735,
+                            0.6486735
+                        ]
+                    }
+                }
+            ],
+            "deleted": true
+        },
+        "186": {
+            "name": "Light 2",
+            "parent": "184",
+            "components": [
+                {
+                    "type": "light",
+                    "light": {
+                        "attenuation": 0.075,
+                        "color": [
+                            0.5502889,
+                            0.5447443,
+                            0.7803921
+                        ]
+                    }
+                }
+            ],
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                -1.0,
+                3.0,
+                -1.0,
+                1.0
+            ],
+            "deleted": true
+        },
+        "187": {
+            "name": "Stairs",
+            "parent": "178",
+            "transformation": [
+                -0.0004872,
+                0.0,
+                -0.9999917,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.9999917,
+                0.0,
+                -0.0004872,
+                0.0,
+                4.7993392,
+                0.0,
+                4.5757389,
+                1.0
+            ]
+        },
+        "188": {
+            "name": "Obstacle 1",
+            "parent": "189",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.6,
+                                0.05,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.6,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.05,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                0.0,
+                0.05,
+                0.0,
+                1.0
+            ]
+        },
+        "189": {
+            "name": "Step",
+            "parent": "187"
+        },
+        "190": {
+            "name": "Step",
+            "parent": "187",
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.2,
+                -0.4,
+                1.0
+            ]
+        },
+        "191": {
+            "name": "Obstacle 1",
+            "parent": "190",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.6,
+                                0.05,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.6,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.05,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                0.0,
+                0.05,
+                0.0,
+                1.0
+            ]
+        },
+        "192": {
+            "name": "Step",
+            "parent": "187",
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.1,
+                -0.2,
+                1.0
+            ]
+        },
+        "193": {
+            "name": "Obstacle 1",
+            "parent": "192",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.6,
+                                0.05,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.6,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.05,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                0.0,
+                0.05,
+                0.0,
+                1.0
+            ]
+        },
+        "196": {
+            "name": "Step",
+            "parent": "187",
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.3,
+                -0.6,
+                1.0
+            ]
+        },
+        "197": {
+            "name": "Obstacle 1",
+            "parent": "196",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.6,
+                                0.05,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.6,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.05,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                0.0,
+                0.05,
+                0.0,
+                1.0
+            ]
+        },
+        "198": {
+            "name": "Step",
+            "parent": "187",
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.4,
+                -0.8,
+                1.0
+            ]
+        },
+        "199": {
+            "name": "Obstacle 1",
+            "parent": "198",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.6,
+                                0.05,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.6,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.05,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                0.0,
+                0.05,
+                0.0,
+                1.0
+            ]
+        },
+        "200": {
+            "name": "Step",
+            "parent": "187",
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.5,
+                -1.0,
+                1.0
+            ]
+        },
+        "201": {
+            "name": "Obstacle 1",
+            "parent": "200",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.6,
+                                0.05,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.6,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.05,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                0.0,
+                0.05,
+                0.0,
+                1.0
+            ]
+        },
+        "202": {
+            "name": "Sphere",
+            "parent": "178",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p2",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "sphere": {
+                            "radius": 2.0
+                        },
+                        "kinematic": true,
+                        "gravity": false
+                    }
+                }
+            ],
+            "transformation": [
+                2.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                2.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                2.0,
+                0.0,
+                -7.5920867,
+                0.0,
+                2.6068439,
+                1.0
+            ]
+        },
+        "203": {
+            "name": "Roof Zone",
+            "parent": "178",
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                -0.9540176,
+                0.0,
+                6.8818545,
+                1.0
+            ]
+        },
+        "204": {
+            "name": "Obstacle 2",
+            "parent": "203",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.1,
+                                1.0,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                -1.3237419,
+                -0.2597762,
+                4.7864241,
+                1.0
+            ],
+            "deleted": true
+        },
+        "205": {
+            "name": "Obstacle 2",
+            "parent": "203",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.1,
+                                1.0,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                -3.732727,
+                -0.2597762,
+                5.3805108,
+                1.0
+            ],
+            "deleted": true
+        },
+        "206": {
+            "name": "Obstacle 2",
+            "parent": "203",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.1,
+                                1.0,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                -2.9362487,
+                1.6856677,
+                4.1464929,
+                1.0
+            ],
+            "deleted": true
+        },
+        "207": {
+            "name": "Obstacle 2",
+            "parent": "203",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.1,
+                                1.0,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                -1.5207061,
+                1.6856677,
+                5.6738734,
+                1.0
+            ],
+            "deleted": true
+        },
+        "208": {
+            "name": "Poles",
+            "parent": "178",
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                -5.6463603,
+                1.0
+            ]
+        },
+        "209": {
+            "name": "Obstacle 2",
+            "parent": "208",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.1,
+                                1.0,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                1.4460678,
+                -0.2597762,
+                0.0646465,
+                1.0
+            ]
+        },
+        "210": {
+            "name": "Obstacle 2",
+            "parent": "208",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.1,
+                                1.0,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                -0.9629173,
+                -0.2597762,
+                0.6587334,
+                1.0
+            ]
+        },
+        "211": {
+            "name": "Obstacle 2",
+            "parent": "208",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.1,
+                                1.0,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                -0.166439,
+                1.6856677,
+                -0.5752846,
+                1.0
+            ]
+        },
+        "212": {
+            "name": "Obstacle 2",
+            "parent": "208",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.1,
+                                1.0,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                1.2491035,
+                1.6856677,
+                0.9520962,
+                1.0
+            ]
+        },
+        "213": {
+            "name": "Obstacle 2",
+            "parent": "208",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.1,
+                                1.0,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                0.8949394,
+                -0.2597762,
+                -1.1640062,
+                1.0
+            ]
+        },
+        "214": {
+            "name": "Obstacle 2",
+            "parent": "208",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.1,
+                                1.0,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                -1.9747543,
+                -0.2597762,
+                -1.1640062,
+                1.0
+            ]
+        },
+        "215": {
+            "name": "Obstacle 2",
+            "parent": "208",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.1,
+                                1.0,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                -1.1616516,
+                -0.2597762,
+                -2.3208541,
+                1.0
+            ]
+        },
+        "216": {
+            "name": "Obstacle 2",
+            "parent": "208",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.1,
+                                1.0,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                -0.2385826,
+                -0.2597762,
+                -2.9829883,
+                1.0
+            ]
+        },
+        "217": {
+            "name": "Obstacle 2",
+            "parent": "208",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.1,
+                                1.0,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                -1.9983062,
+                -0.2597762,
+                -2.9829883,
+                1.0
+            ]
+        },
+        "218": {
+            "name": "Obstacle 2",
+            "parent": "208",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.1,
+                                1.0,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                -1.925167,
+                1.6856677,
+                -1.8842887,
+                1.0
+            ]
+        },
+        "219": {
+            "name": "Obstacle 2",
+            "parent": "208",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.1,
+                                1.0,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                1.5237846,
+                1.6856677,
+                -1.8842887,
+                1.0
+            ]
+        },
+        "220": {
+            "name": "Obstacle 2",
+            "parent": "208",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.1,
+                                1.0,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                1.5237846,
+                1.6856677,
+                -2.6769685,
+                1.0
+            ]
+        },
+        "221": {
+            "name": "Obstacle 2",
+            "parent": "208",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.1,
+                                1.0,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                0.0845108,
+                1.6856677,
+                -2.1447381,
+                1.0
+            ]
+        },
+        "222": {
+            "name": "Poles",
+            "parent": "203",
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                -0.0864067,
+                0.0,
+                1.2061828,
+                1.0
+            ]
+        },
+        "223": {
+            "name": "Obstacle 2",
+            "parent": "222",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.1,
+                                1.0,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                1.4460678,
+                -0.2597762,
+                0.0646465,
+                1.0
+            ]
+        },
+        "224": {
+            "name": "Obstacle 2",
+            "parent": "222",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.1,
+                                1.0,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                -0.9629173,
+                -0.2597762,
+                0.6587334,
+                1.0
+            ]
+        },
+        "225": {
+            "name": "Obstacle 2",
+            "parent": "222",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.1,
+                                1.0,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                -0.166439,
+                1.6856677,
+                -0.5752846,
+                1.0
+            ]
+        },
+        "226": {
+            "name": "Obstacle 2",
+            "parent": "222",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.1,
+                                1.0,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                1.2491035,
+                1.6856677,
+                0.9520962,
+                1.0
+            ]
+        },
+        "227": {
+            "name": "Obstacle 2",
+            "parent": "222",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.1,
+                                1.0,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                0.8949394,
+                -0.2597762,
+                -1.1640062,
+                1.0
+            ]
+        },
+        "228": {
+            "name": "Obstacle 2",
+            "parent": "222",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.1,
+                                1.0,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                -1.9747543,
+                -0.2597762,
+                -1.1640062,
+                1.0
+            ]
+        },
+        "229": {
+            "name": "Obstacle 2",
+            "parent": "222",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.1,
+                                1.0,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                -1.1616516,
+                -0.2597762,
+                -2.3208541,
+                1.0
+            ]
+        },
+        "230": {
+            "name": "Obstacle 2",
+            "parent": "222",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.1,
+                                1.0,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                -0.2385826,
+                -0.2597762,
+                -2.9829883,
+                1.0
+            ]
+        },
+        "231": {
+            "name": "Obstacle 2",
+            "parent": "222",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.1,
+                                1.0,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                -1.9983062,
+                -0.2597762,
+                -2.9829883,
+                1.0
+            ]
+        },
+        "232": {
+            "name": "Obstacle 2",
+            "parent": "222",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.1,
+                                1.0,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                -1.925167,
+                1.6856677,
+                -1.8842887,
+                1.0
+            ]
+        },
+        "233": {
+            "name": "Obstacle 2",
+            "parent": "222",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.1,
+                                1.0,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                1.5237846,
+                1.6856677,
+                -1.8842887,
+                1.0
+            ]
+        },
+        "234": {
+            "name": "Obstacle 2",
+            "parent": "222",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.1,
+                                1.0,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                1.5237846,
+                1.6856677,
+                -2.6769685,
+                1.0
+            ]
+        },
+        "235": {
+            "name": "Obstacle 2",
+            "parent": "222",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.1,
+                                1.0,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                0.0845108,
+                1.6856677,
+                -2.1447381,
+                1.0
+            ]
+        },
+        "250": {
+            "name": "Curved Wall",
+            "parent": "178",
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                -6.326435,
+                0.0,
+                -3.392076,
+                1.0
+            ]
+        },
+        "251": {
+            "name": "Obstacle 2",
+            "parent": "250",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.1,
+                                1.0,
+                                0.5
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.0917068,
+                0.0,
+                0.0398731,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                -0.1993657,
+                0.0,
+                0.4585336,
+                0.0,
+                0.1235656,
+                5.960464477539063e-8,
+                -0.4714159,
+                1.0
+            ],
+            "deleted": true
+        },
+        "252": {
+            "name": "Obstacle 2",
+            "parent": "250",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.1,
+                                1.0,
+                                0.5
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.5,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ]
+        },
+        "253": {
+            "name": "Obstacle 2",
+            "parent": "250",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.1,
+                                1.0,
+                                0.5
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.0917068,
+                0.0,
+                0.0398731,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                -0.1993656,
+                0.0,
+                0.4585336,
+                0.0,
+                0.3614845,
+                5.960464477539063e-8,
+                -1.018557,
+                1.0
+            ],
+            "deleted": true
+        },
+        "254": {
+            "name": "Obstacle 2",
+            "parent": "250",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.1,
+                                1.0,
+                                0.5
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.0939692,
+                0.0,
+                0.034202,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                -0.1710101,
+                0.0,
+                0.4698462,
+                0.0,
+                0.0511398,
+                0.0,
+                -0.3858571,
+                1.0
+            ]
+        },
+        "255": {
+            "name": "Obstacle 2",
+            "parent": "250",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.1,
+                                1.0,
+                                0.5
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.0766044,
+                0.0,
+                0.0642787,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                -0.3213938,
+                0.0,
+                0.383022,
+                0.0,
+                0.2726936,
+                0.0,
+                -0.9051251,
+                1.0
+            ]
+        },
+        "256": {
+            "name": "Obstacle 2",
+            "parent": "250",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.1,
+                                1.0,
+                                0.5
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.0500298,
+                0.0,
+                0.0865853,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                -0.4329265,
+                0.0,
+                0.2501492,
+                0.0,
+                0.7069854,
+                0.0,
+                -1.3253979,
+                1.0
+            ]
+        },
+        "257": {
+            "name": "Obstacle 2",
+            "parent": "250",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.1,
+                                1.0,
+                                0.5
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.0173987,
+                0.0,
+                0.0984748,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                -0.4923729,
+                0.0,
+                0.0869935,
+                0.0,
+                1.2592658,
+                0.0,
+                -1.5438504,
+                1.0
+            ]
+        },
+        "258": {
+            "name": "Step",
+            "parent": "187",
+            "transformation": [
+                1.0,
+                0.0,
+                -0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0005674,
+                0.5999997,
+                -1.200035,
+                1.0
+            ]
+        },
+        "259": {
+            "name": "Obstacle 1",
+            "parent": "258",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.6,
+                                0.05,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.6,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.05,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                0.0,
+                0.05,
+                0.0,
+                1.0
+            ]
+        },
+        "260": {
+            "name": "Step",
+            "parent": "187",
+            "transformation": [
+                1.0,
+                0.0,
+                -0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0005965,
+                0.8,
+                -1.6000404,
+                1.0
+            ]
+        },
+        "261": {
+            "name": "Obstacle 1",
+            "parent": "260",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.6,
+                                0.05,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.6,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.05,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                0.0,
+                0.05,
+                0.0,
+                1.0
+            ]
+        },
+        "262": {
+            "name": "Step",
+            "parent": "187",
+            "transformation": [
+                1.0,
+                0.0,
+                -0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0005636,
+                0.6999999,
+                -1.4000129,
+                1.0
+            ]
+        },
+        "263": {
+            "name": "Obstacle 1",
+            "parent": "262",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.6,
+                                0.05,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.6,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.05,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                0.0,
+                0.05,
+                0.0,
+                1.0
+            ]
+        },
+        "264": {
+            "name": "Step",
+            "parent": "187",
+            "transformation": [
+                1.0,
+                0.0,
+                -0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0005812,
+                0.8999999,
+                -1.7998771,
+                1.0
+            ]
+        },
+        "265": {
+            "name": "Obstacle 1",
+            "parent": "264",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.6,
+                                0.05,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.6,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.05,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                0.0,
+                0.05,
+                0.0,
+                1.0
+            ]
+        },
+        "266": {
+            "name": "Step",
+            "parent": "187",
+            "transformation": [
+                1.0,
+                0.0,
+                -0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.000606,
+                1.0,
+                -1.9999771,
+                1.0
+            ]
+        },
+        "267": {
+            "name": "Obstacle 1",
+            "parent": "266",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.6,
+                                0.05,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.6,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.05,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                0.0,
+                0.05,
+                0.0,
+                1.0
+            ]
+        },
+        "268": {
+            "name": "Step",
+            "parent": "187",
+            "transformation": [
+                1.0,
+                0.0,
+                -0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0005855,
+                1.1000001,
+                -2.1999664,
+                1.0
+            ]
+        },
+        "278": {
+            "name": "Step",
+            "parent": "187",
+            "transformation": [
+                1.0,
+                0.0,
+                -0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.000988,
+                1.1999998,
+                -2.4000244,
+                1.0
+            ]
+        },
+        "279": {
+            "name": "Obstacle 1",
+            "parent": "278",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.6,
+                                0.05,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.6,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.05,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                0.0,
+                0.05,
+                0.0,
+                1.0
+            ]
+        },
+        "280": {
+            "name": "Step",
+            "parent": "187",
+            "transformation": [
+                1.0,
+                0.0,
+                -0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.000946,
+                1.0999996,
+                -2.2000389,
+                1.0
+            ]
+        },
+        "281": {
+            "name": "Obstacle 1",
+            "parent": "280",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.6,
+                                0.05,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.6,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.05,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                0.0,
+                0.05,
+                0.0,
+                1.0
+            ]
+        },
+        "282": {
+            "name": "Step",
+            "parent": "187",
+            "transformation": [
+                1.0,
+                0.0,
+                -0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0009922,
+                1.2999999,
+                -2.599884,
+                1.0
+            ]
+        },
+        "283": {
+            "name": "Obstacle 1",
+            "parent": "282",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.6,
+                                0.05,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.6,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.05,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                0.0,
+                0.05,
+                0.0,
+                1.0
+            ]
+        },
+        "284": {
+            "name": "Step",
+            "parent": "187",
+            "transformation": [
+                1.0,
+                0.0,
+                -0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0009961,
+                1.4,
+                -2.7999382,
+                1.0
+            ]
+        },
+        "285": {
+            "name": "Obstacle 1",
+            "parent": "284",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.6,
+                                0.05,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.6,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.05,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                0.0,
+                0.05,
+                0.0,
+                1.0
+            ]
+        },
+        "286": {
+            "name": "Step",
+            "parent": "187",
+            "transformation": [
+                1.0,
+                0.0,
+                -0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0009617,
+                1.5000002,
+                -2.9999275,
+                1.0
+            ]
+        },
+        "287": {
+            "name": "Obstacle 2",
+            "parent": "208",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.1,
+                                0.3,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.3,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                2.5949401,
+                0.6999999,
+                -1.1640062,
+                1.0
+            ]
+        },
+        "288": {
+            "name": "Obstacle 2",
+            "parent": "208",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.1,
+                                0.3,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.3,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                3.5949401,
+                0.5,
+                -1.9640064,
+                1.0
+            ]
+        },
+        "289": {
+            "name": "Obstacle 2",
+            "parent": "208",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.1,
+                                0.3,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.3,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                2.7949409,
+                1.0,
+                -2.6640062,
                 1.0
             ]
         }
