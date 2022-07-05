@@ -209,6 +209,7 @@ CollisionCheck = class CollisionCheck {
         let checkPositions = this._getVerticalCheckPositions(feetPosition, up, forward);
 
         let isVerticalPositionOk = true;
+        let atLeastOneIsOk = false;
 
         let adjustmentEpsilon = 0.00001;
         let smallHeightFixOffset = up.vec3_scale(adjustmentEpsilon);
@@ -238,13 +239,15 @@ CollisionCheck = class CollisionCheck {
 
             let raycastResult = this._raycastAndDebug(origin, direction, 255, distance);
 
-            if (raycastResult.hitCount > 0) {
+            if (this._isRaycastResultValid(raycastResult, origin, direction)) {
                 isVerticalPositionOk = false;
                 break;
+            } else if (raycastResult.hitCount == 0) {
+                atLeastOneIsOk = true;
             }
         }
 
-        return isVerticalPositionOk;
+        return isVerticalPositionOk && atLeastOneIsOk;
     }
 
     _getVerticalCheckPositions(feetPosition, up, forward) {
