@@ -1,7 +1,7 @@
 CollisionCheckParams = class CollisionCheckParams {
     constructor() {
         this.myRadius = 0.3;
-        this.myDistanceFromFeetToIgnore = 0.3;
+        this.myDistanceFromFeetToIgnore = 0.3; // could be percentage of the height
         this.myDistanceFromHeadToIgnore = 0.1;
 
         this.myHorizontalMovementStepAmount = 1;
@@ -25,7 +25,7 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myGroundCircumferenceStepAmount = 2;
         this.myGroundCircumferenceRotationPerStep = 22.5;
         this.myGroundFixDistanceFromFeet = 0.3;
-        this.myGroundFixDistanceFromHead = 0.3;
+        this.myGroundFixDistanceFromHead = 0.1;
 
         this.myCheckHeight = true;
         this.myHeightCheckStepAmount = 1;
@@ -57,7 +57,13 @@ CollisionCheck = class CollisionCheck {
         // if height is negative swap feet with head position
 
         let horizontalMovement = movement.vec3_removeComponentAlongAxis(up);
+        if (horizontalMovement.vec3_length() < 0.000001) {
+            horizontalMovement.vec3_zero();
+        }
         let verticalMovement = movement.vec3_componentAlongAxis(up);
+        if (verticalMovement.vec3_length() < 0.000001) {
+            verticalMovement.vec3_zero();
+        }
 
         //feetPosition = feetPosition.vec3_add(horizontalMovement.vec3_normalize().vec3_scale(0.5));
         //height = height / 2;
@@ -122,7 +128,20 @@ CollisionCheck = class CollisionCheck {
     }
 
     _verticalCheck(verticalMovement, feetPosition, height, up, forward) {
-        let fixedMovement = this._verticalMovementFix(verticalMovement, feetPosition, height, up, forward);
+        let verticalDirection = verticalMovement.vec3_normalize();
+        if (verticalMovement.vec3_length() < 0.00001) {
+            verticalDirection = up.vec3_negate();
+        }
+
+        let fixedMovement = this._verticalMovementFix(verticalMovement, verticalDirection, feetPosition, height, up, forward);
+        if (fixedMovement.pp_equals(verticalMovement)) {
+            let oppositeDirection = verticalDirection.vec3_negate();
+            let newFeetPosition = feetPosition.vec3_add(fixedMovement);
+            let additionalMovement = this._verticalMovementFix([0, 0, 0], oppositeDirection, newFeetPosition, height, up, forward);
+            if (additionalMovement.vec3_isConcordant(verticalDirection)) {
+                fixedMovement.vec3_add(additionalMovement, fixedMovement);
+            }
+        }
 
         let newFeetPosition = feetPosition.vec3_add(fixedMovement);
 
@@ -135,10 +154,10 @@ CollisionCheck = class CollisionCheck {
         return fixedMovement;
     }
 
-    _verticalMovementFix(verticalMovement, feetPosition, height, up, forward) {
+    _verticalMovementFix(verticalMovement, verticalDirection, feetPosition, height, up, forward) {
         let fixedMovement = null;
 
-        let isMovementDownward = !verticalMovement.vec3_isConcordant(up) || Math.abs(verticalMovement.vec3_length() < 0.000001);
+        let isMovementDownward = !verticalDirection.vec3_isConcordant(up);
 
         let startOffset = null;
         let endOffset = null;
@@ -156,12 +175,12 @@ CollisionCheck = class CollisionCheck {
 
         let checkPositions = this._getVerticalCheckPositions(feetPosition, up, forward);
 
-        let verticalDirection = up;
+        let furtherDirection = up;
         if (!isMovementDownward) {
-            verticalDirection = verticalDirection.vec3_negate();
+            furtherDirection = furtherDirection.vec3_negate();
         }
 
-        let furtherOnVerticalDirectionPosition = null;
+        let furtherDirectionPosition = null;
 
         for (let i = 0; i < checkPositions.length; i++) {
             let currentPosition = checkPositions[i];
@@ -174,24 +193,24 @@ CollisionCheck = class CollisionCheck {
             let raycastResult = this._raycastAndDebug(origin, direction, 255, distance);
 
             if (this._isRaycastResultValid(raycastResult, origin, direction)) {
-                if (furtherOnVerticalDirectionPosition != null) {
-                    if (raycastResult.locations[0].vec3_isFurtherAlongAxis(furtherOnVerticalDirectionPosition, verticalDirection)) {
-                        furtherOnVerticalDirectionPosition.vec3_copy(raycastResult.locations[0]);
+                if (furtherDirectionPosition != null) {
+                    if (raycastResult.locations[0].vec3_isFurtherAlongAxis(furtherDirectionPosition, furtherDirection)) {
+                        furtherDirectionPosition.vec3_copy(raycastResult.locations[0]);
                     }
                 } else {
-                    furtherOnVerticalDirectionPosition = raycastResult.locations[0].pp_clone();
+                    furtherDirectionPosition = raycastResult.locations[0].pp_clone();
                 }
             }
         }
 
-        if (furtherOnVerticalDirectionPosition != null) {
+        if (furtherDirectionPosition != null) {
             if (isMovementDownward) {
-                fixedMovement = furtherOnVerticalDirectionPosition.vec3_sub(feetPosition).vec3_componentAlongAxis(up);
+                fixedMovement = furtherDirectionPosition.vec3_sub(feetPosition).vec3_componentAlongAxis(up);
             } else {
-                fixedMovement = furtherOnVerticalDirectionPosition.vec3_sub(feetPosition.vec3_add(up.vec3_scale(height))).vec3_componentAlongAxis(up);
+                fixedMovement = furtherDirectionPosition.vec3_sub(feetPosition.vec3_add(up.vec3_scale(height))).vec3_componentAlongAxis(up);
             }
         } else {
-            fixedMovement = verticalMovement;
+            fixedMovement = verticalMovement.pp_clone();
         }
 
         if (fixedMovement.vec3_length() < 0.00001) {

@@ -69,7 +69,7 @@
             ○ vec3_set      / vec3_copy     / vec3_zero
             - vec3_clone 
             - vec3_normalize    / vec3_negate
-            - vec3_isNormalized
+            - vec3_isNormalized / vec3_isZero
             - vec3_length
             - vec3_distance
             - vec3_add      / vec3_sub          / vec3_mul      / vec3_div      / vec3_scale
@@ -544,6 +544,10 @@ Array.prototype.vec3_degreesToQuat = function (out = glMatrix.quat.create()) {
 
 Array.prototype.vec3_isNormalized = function () {
     return Math.abs(glMatrix.vec3.length(this) - 1) < this._pp_epsilon;
+};
+
+Array.prototype.vec3_isZero = function () {
+    return this.vec3_length() < this._pp_epsilon;
 };
 
 Array.prototype.vec3_componentAlongAxis = function (axis, out = glMatrix.vec3.create()) {

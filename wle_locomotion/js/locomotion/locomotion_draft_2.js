@@ -470,7 +470,7 @@ WL.registerComponent('locomotion-draft-2', {
 
         let headDisplacement = headPosition.vec3_sub(playerPosition).vec3_componentAlongAxis(playerUp);
         let height = headDisplacement.vec3_length();
-        if (!playerUp.vec3_isConcordant(heightDisplacement)) {
+        if (!playerUp.vec3_isConcordant(headDisplacement)) {
             height = -height;
         }
 

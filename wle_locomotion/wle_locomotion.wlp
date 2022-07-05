@@ -97,7 +97,9 @@
                 {
                     "type": "locomotion-draft-2",
                     "locomotion-draft-2": {
-                        "_myMaxSpeed": 1.0
+                        "_myMaxSpeed": 2.0,
+                        "_myFlyEnabled": true,
+                        "_myMinAngleToFly": 60.0
                     }
                 }
             ]
@@ -4228,7 +4230,7 @@
                             "extents": [
                                 3.0,
                                 0.1,
-                                3.0
+                                4.5
                             ]
                         },
                         "kinematic": true
@@ -4246,11 +4248,11 @@
                 0.0,
                 0.0,
                 0.0,
-                3.0,
+                4.5,
                 0.0,
                 -0.2226982,
                 1.5,
-                0.175063,
+                1.275063,
                 1.0
             ]
         },
