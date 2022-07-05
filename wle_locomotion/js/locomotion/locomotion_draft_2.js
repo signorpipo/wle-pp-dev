@@ -124,9 +124,10 @@ WL.registerComponent('locomotion-draft-2', {
             }
 
             let movementToApply = headMovement;
-            if (!PP.myLeftGamepad.getButtonInfo(PP.ButtonType.SQUEEZE).isPressed()) {
-                movementToApply = this._myCollisionCheck.fixMovement(headMovement);
+            if (!this._myIsFlying) {
+                movementToApply.vec3_add(this._myWorldUp.vec3_scale(-2 * dt), movementToApply);
             }
+            movementToApply = this._myCollisionCheck.fixMovement(headMovement);
 
             if (movementToApply.vec3_length() != 0) {
                 this._moveHead(movementToApply);
