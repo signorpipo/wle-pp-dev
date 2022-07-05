@@ -4,7 +4,6 @@ WL.registerComponent('locomotion-draft-2', {
     _myIsSnapTurn: { type: WL.Type.Bool, default: true },
     _mySnapTurnAngle: { type: WL.Type.Float, default: 30 },
     _myFlyEnabled: { type: WL.Type.Bool, default: false },
-    _myMinHeight: { type: WL.Type.Float, default: 0 },
     _myMinAngleToFly: { type: WL.Type.Float, default: 45 },
     _myDirectionReference: { type: WL.Type.Enum, values: ['head', 'hand left', 'hand right'], default: 'hand left' }
 }, {
@@ -35,23 +34,18 @@ WL.registerComponent('locomotion-draft-2', {
 
         this._myStickIdleCount = 0;
 
-        this._myLastValidFlatForward = null;
-        this._myLastValidFlatRight = null;
-
         this._myRemoveUp = true;
         this._myRemoveXTilt = true;
         this._myPreventHeadUpsideDown = true;
 
-        this._myWorldUp = [0, 1, 0];
-
         this._mySnapDone = false;
-        this._myIsFlyingForward = false;
-        this._myIsFlyingRight = false;
 
         this._myCollisionCheck = new CollisionCheck();
 
         this._myKeyboardGamepad = new KeyboardGamepad();
         this._myKeyboardGamepad.start();
+
+        this._myDirectionConverter = new Direction2DTo3DConverter(this._myFlyEnabled, this._myMinAngleToFly);
     },
     update(dt) {
         this._myKeyboardGamepad.update(dt);
@@ -83,25 +77,27 @@ WL.registerComponent('locomotion-draft-2', {
 
         let skipLocomotion = this._myDelaySessionChangeResyncCounter > 0 || this._myDelayBlurEndResyncCounter > 0 || this._myDelayBlurEndResyncTimer.isRunning();
         if (!skipLocomotion) {
-            let rotationChanged = false;
+            let playerUp = PP.myPlayerObjects.myPlayer.pp_getUp();
 
             let headMovement = [0, 0, 0];
 
             {
                 let axes = [0, 0];
+
                 if (this._mySessionActive) {
                     axes = PP.myLeftGamepad.getAxesInfo().getAxes();
                 } else {
                     axes = this._myKeyboardGamepad.getLeftAxes();
                 }
+
                 let minIntensityThreshold = 0.1;
                 if (axes.vec2_length() > minIntensityThreshold) {
                     this._myStickIdleCount = 2;
-                    let direction = this._convertStickToWorldFlyDirection(axes, this._myDirectionReferenceObject, this._myRemoveUp);
-                    if (direction.vec3_length() > 0.001) {
+                    let direction = this._myDirectionConverter.convert(axes, this._myDirectionReferenceObject.pp_getTransform(), playerUp);
+                    if (direction.vec3_length() > 0.0001) {
                         direction.vec3_normalize(direction);
 
-                        this._myIsFlying = direction.vec3_componentAlongAxis(this._myWorldUp).vec3_length() > 0.0001;
+                        this._myIsFlying = direction.vec3_componentAlongAxis(playerUp).vec3_length() > 0.0001;
 
                         let movementIntensity = axes.vec2_length();
                         let speed = Math.pp_lerp(0, this._myMaxSpeed, movementIntensity);
@@ -112,12 +108,7 @@ WL.registerComponent('locomotion-draft-2', {
                     if (this._myStickIdleCount > 0) {
                         this._myStickIdleCount--;
                         if (this._myStickIdleCount == 0) {
-                            this._myLastValidFlatForward = null;
-                            this._myLastValidFlatRight = null;
-
-                            this._myIsFlying = false;
-                            this._myIsFlyingForward = false;
-                            this._myIsFlyingRight = false;
+                            this._myDirectionConverter.reset();
                         }
                     }
                 }
@@ -125,11 +116,11 @@ WL.registerComponent('locomotion-draft-2', {
 
             let movementToApply = headMovement;
             if (!this._myIsFlying) {
-                movementToApply.vec3_add(this._myWorldUp.vec3_scale(-2 * dt), movementToApply);
+                movementToApply.vec3_add(playerUp.vec3_scale(-2 * dt), movementToApply);
             }
             movementToApply = this._myCollisionCheck.fixMovement(headMovement);
 
-            if (movementToApply.vec3_length() != 0) {
+            if (movementToApply.vec3_length() > 0.00001) {
                 this._moveHead(movementToApply);
             }
 
@@ -150,8 +141,6 @@ WL.registerComponent('locomotion-draft-2', {
                         let speed = Math.pp_lerp(0, this._myMaxRotationSpeed, rotationIntensity);
 
                         headRotation.quat_fromAxis(speed * dt, axis);
-
-                        rotationChanged = true;
                     }
                 } else {
                     if (this._mySnapDone) {
@@ -167,27 +156,19 @@ WL.registerComponent('locomotion-draft-2', {
                             let rotation = -Math.pp_sign(axes[0]) * this._mySnapTurnAngle;
                             headRotation.quat_fromAxis(rotation, axis);
 
-                            rotationChanged = true;
                             this._mySnapDone = true;
                         }
                     }
                 }
             }
 
-            if (rotationChanged) {
+            if (headRotation.quat_getAngle() > 0.00001) {
                 this._rotateHead(headRotation);
             }
 
-            if (this._myFlyEnabled) {
-                let playerPosition = PP.myPlayerObjects.myPlayer.pp_getPosition();
-                let heightFromFloor = playerPosition.vec3_valueAlongAxis(this._myWorldUp);
-                if (heightFromFloor <= this._myMinHeight + 0.01) {
-                    let heightDisplacement = this._myMinHeight - heightFromFloor;
-                    PP.myPlayerObjects.myPlayer.pp_translateAxis(heightDisplacement, this._myWorldUp);
-                    this._myIsFlying = false;
-                    this._myIsFlyingForward = false;
-                    this._myIsFlyingRight = false;
-                }
+            if (this._myCollisionCheck.isOnGround()) {
+                this._myIsFlying = false;
+                this._myDirectionConverter.stopFlying();
             }
         }
     },
@@ -215,79 +196,6 @@ WL.registerComponent('locomotion-draft-2', {
         let currentHeadPosition = this._myCurrentHeadObject.pp_getPosition();
         let teleportMovementToPerform = teleportPosition.vec3_sub(currentHeadPosition);
         this._moveHead(teleportMovementToPerform);
-    },
-    _convertStickToWorldFlyDirection(stickAxes, conversionObject) {
-        let playerUp = PP.myPlayerObjects.myPlayer.pp_getUp();
-
-        let up = conversionObject.pp_getUp();
-        let forward = conversionObject.pp_getForward();
-        let right = conversionObject.pp_getRight();
-
-        let angleForwardWithWorldUp = forward.vec3_angle(this._myWorldUp);
-        removeForwardUp = !this._myFlyEnabled ||
-            (!this._myIsFlyingForward && (angleForwardWithWorldUp >= 90 - this._myMinAngleToFly && angleForwardWithWorldUp <= 90 + this._myMinAngleToFly));
-
-        this._myIsFlyingForward = !removeForwardUp;
-
-        let angleRightWithWorldUp = right.vec3_angle(this._myWorldUp);
-        removeRightUp = !this._myFlyEnabled ||
-            (!this._myIsFlyingRight && (angleRightWithWorldUp >= 90 - this._myMinAngleToFly && angleRightWithWorldUp <= 90 + this._myMinAngleToFly));
-
-        this._myIsFlyingRight = !removeRightUp;
-
-        let minAngle = 5;
-
-        if (removeForwardUp || removeRightUp) {
-            if (removeForwardUp) {
-                //if the forward is too similar to the up (or down) take the last valid forward
-                if (this._myLastValidFlatForward && (forward.vec3_angle(playerUp) < minAngle || forward.vec3_angle(playerUp.vec3_negate()) < minAngle)) {
-                    if (forward.vec3_isConcordant(this._myLastValidFlatForward)) {
-                        forward.pp_copy(this._myLastValidFlatForward);
-                    } else {
-                        this._myLastValidFlatForward.vec3_negate(forward);
-                    }
-                }
-            }
-
-            if (removeRightUp) {
-                //if the right is too similar to the up (or down) take the last valid right
-                if (this._myLastValidFlatRight && (right.vec3_angle(playerUp) < minAngle || right.vec3_angle(playerUp.vec3_negate()) < minAngle)) {
-                    if (right.vec3_isConcordant(this._myLastValidFlatRight)) {
-                        right.pp_copy(this._myLastValidFlatRight);
-                    } else {
-                        this._myLastValidFlatRight.vec3_negate(right);
-                    }
-                }
-            }
-
-            if (removeForwardUp) {
-                forward.vec3_removeComponentAlongAxis(playerUp, forward);
-            }
-
-            if (removeRightUp) {
-                right.vec3_removeComponentAlongAxis(playerUp, right);
-            }
-        }
-
-        forward.vec3_normalize(forward);
-        right.vec3_normalize(right);
-        up.vec3_normalize(up);
-
-        if (forward.vec3_angle(playerUp) > minAngle && forward.vec3_angle(playerUp.vec3_negate()) > minAngle) {
-            this._myLastValidFlatForward = forward.vec3_removeComponentAlongAxis(playerUp);
-        }
-
-        if (right.vec3_angle(playerUp) > minAngle && right.vec3_angle(playerUp.vec3_negate()) > minAngle) {
-            this._myLastValidFlatRight = right.vec3_removeComponentAlongAxis(playerUp);
-        }
-
-        let direction = right.vec3_scale(stickAxes[0]).vec3_add(forward.vec3_scale(stickAxes[1]));
-
-        if (removeForwardUp && removeRightUp) {
-            direction.vec3_removeComponentAlongAxis(playerUp, direction);
-        }
-
-        return direction;
     },
     _onXRSessionStart(session) {
         this._myBlurRecoverHeadTransform = null;

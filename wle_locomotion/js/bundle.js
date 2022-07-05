@@ -1,5 +1,6 @@
 //CAULDRON
 require('./cauldron/toggle_require_mouse_down.js');
+require('./cauldron/direction_2D_to_3D_converter.js');
 
 //LOCOMOTION
 require('./locomotion/collision_check.js');

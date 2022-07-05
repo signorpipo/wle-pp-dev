@@ -1019,6 +1019,16 @@ Array.prototype.quat_getAxis = function (out = glMatrix.vec3.create()) {
 };
 
 Array.prototype.quat_getAngle = function () {
+    return this.quat_getAngleDegrees();
+};
+
+
+Array.prototype.quat_getAngleDegrees = function () {
+    let angle = this.quat_getAngleRadians();
+    return angle * (180 / Math.PI);
+};
+
+Array.prototype.quat_getAngleRadians = function () {
     let vector = glMatrix.vec3.create();
     return function () {
         let angle = glMatrix.quat.getAxisAngle(vector, this);

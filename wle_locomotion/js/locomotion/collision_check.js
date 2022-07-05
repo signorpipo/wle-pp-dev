@@ -41,7 +41,7 @@ CollisionCheck = class CollisionCheck {
 
         this._myCollisionCheckParams = new CollisionCheckParams();
 
-        this._myIsOnGround = true;
+        this._myIsOnGround = false;
 
         this._myDebugActive = false;
     }
@@ -90,6 +90,10 @@ CollisionCheck = class CollisionCheck {
         this._groundCheck(newFeetPosition, up, forward);
 
         return fixedMovement;
+    }
+
+    isOnGround() {
+        return this._myIsOnGround;
     }
 
     _groundCheck(feetPosition, up, forward) {
