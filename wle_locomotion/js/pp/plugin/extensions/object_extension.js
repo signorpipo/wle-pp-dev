@@ -61,10 +61,10 @@
 
         - pp_hasUniformScale
 
-        - pp_addComponent  /  pp_getComponent  / pp_getComponentHierarchy / pp_getComponentDescendants / pp_getComponentChildren
+        - pp_addComponent   / pp_getComponent  / pp_getComponentHierarchy / pp_getComponentDescendants / pp_getComponentChildren
         - pp_getComponents  / pp_getComponentsHierarchy / pp_getComponentsDescendants / pp_getComponentsChildren
 
-        - pp_setActive  / pp_setActiveHierarchy / pp_setActiveDescendants / pp_setActiveChildren
+        - pp_setActive  / pp_setActiveSelf  / pp_setActiveHierarchy / pp_setActiveDescendants / pp_setActiveChildren
 
         - pp_clone      / pp_isCloneable
 
@@ -1875,6 +1875,10 @@ if (WL && WL.Object) {
         } else {
             this.active = active;
         }
+    };
+
+    WL.Object.prototype.pp_setActiveSelf = function (active) {
+        this.pp_setActive(active, false);
     };
 
     WL.Object.prototype.pp_setActiveHierarchy = function (active) {

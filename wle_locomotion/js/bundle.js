@@ -64,7 +64,8 @@ require('./pp/cauldron/cauldron/save_manager.js');
 require('./pp/cauldron/cauldron/timer.js');
 
 require('./pp/cauldron/components/clear_console_on_session.js');
-require('./pp/cauldron/components/set_hierarchy_active.js');
+require('./pp/cauldron/components/set_active.js');
+require('./pp/cauldron/components/adjust_physx_scale.js');
 
 require('./pp/cauldron/fsm/fsm.js');
 require('./pp/cauldron/fsm/state.js');
