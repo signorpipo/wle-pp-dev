@@ -46,6 +46,11 @@ WL.registerComponent('locomotion-draft-2', {
         this._myKeyboardGamepad.start();
 
         this._myDirectionConverter = new Direction2DTo3DConverter(this._myFlyEnabled, this._myMinAngleToFly);
+
+        this._myCollisionCheckParams = new CollisionCheckParams();
+        this._setupCollisionCheckParams();
+
+        this._myCollisionRuntimeParams = new CollisionRuntimeParams();
     },
     update(dt) {
         this._myKeyboardGamepad.update(dt);
@@ -77,6 +82,13 @@ WL.registerComponent('locomotion-draft-2', {
 
         let skipLocomotion = this._myDelaySessionChangeResyncCounter > 0 || this._myDelayBlurEndResyncCounter > 0 || this._myDelayBlurEndResyncTimer.isRunning();
         if (!skipLocomotion) {
+            this._myCollisionCheckParams.myHeight = this._getHeadHeight(this._myCurrentHeadObject.pp_getPosition());
+            if (this._myCollisionCheckParams.myHeight < 0) {
+                this._myCollisionCheckParams.myHeight = 0;
+            } else {
+                this._myCollisionCheckParams.myHeight += 0.15; //forehead + extra 
+            }
+
             let playerUp = PP.myPlayerObjects.myPlayer.pp_getUp();
 
             let headMovement = [0, 0, 0];
@@ -118,7 +130,8 @@ WL.registerComponent('locomotion-draft-2', {
             if (!this._myIsFlying) {
                 movementToApply.vec3_add(playerUp.vec3_scale(-2 * dt), movementToApply);
             }
-            movementToApply = this._myCollisionCheck.fixMovement(headMovement);
+            let feetTransform = this._getFeetTransform();
+            movementToApply = this._myCollisionCheck.fixMovement(headMovement, feetTransform, this._myCollisionCheckParams, this._myCollisionRuntimeParams);
 
             if (movementToApply.vec3_length() > 0.00001) {
                 this._moveHead(movementToApply);
@@ -162,7 +175,7 @@ WL.registerComponent('locomotion-draft-2', {
                 this._rotateHead(headRotation);
             }
 
-            if (this._myCollisionCheck.isOnGround()) {
+            if (this._myCollisionRuntimeParams.myIsOnGround) {
                 this._myIsFlying = false;
                 this._myDirectionConverter.stopFlying();
             }
@@ -484,5 +497,67 @@ WL.registerComponent('locomotion-draft-2', {
         let rotationToPerform = playerForward.vec3_rotationToPivotedQuat(headForwardNegated, playerUp);
 
         PP.myPlayerObjects.myPlayer.pp_rotateQuat(rotationToPerform);
+    },
+    _getFeetTransform() {
+        let headPosition = this._myCurrentHeadObject.pp_getPosition();
+        let headHeight = this._getHeadHeight(headPosition);
+
+        let playerUp = PP.myPlayerObjects.myPlayer.pp_getUp();
+        let feetPosition = headPosition.vec3_sub(playerUp.vec3_scale(headHeight));
+
+        let forward = this._myCurrentHeadObject.pp_getForward();
+        let angleWithUp = forward.vec3_angle(playerUp);
+        let mingAngle = 10;
+        if (angleWithUp < mingAngle) {
+            this._myCurrentHeadObject.pp_getDown(forward);
+        } else if (angleWithUp > 180 - mingAngle) {
+            this._myCurrentHeadObject.pp_getUp(forward);
+        }
+
+        forward.vec3_removeComponentAlongAxis(playerUp, forward);
+
+        let feetRotation = PP.quat_create();
+        feetRotation.quat_setForward(forward.vec3_normalize(), playerUp);
+
+        let feetTransform = PP.quat2_create();
+        feetTransform.quat2_setPositionRotationQuat(feetPosition, feetRotation);
+        return feetTransform;
+    },
+    _setupCollisionCheckParams() {
+        this._myCollisionCheckParams.myRadius = 0.3;
+        this._myCollisionCheckParams.myDistanceFromFeetToIgnore = 0.3; // could be percentage of the height
+        this._myCollisionCheckParams.myDistanceFromHeadToIgnore = 0.1;
+
+        this._myCollisionCheckParams.myHorizontalMovementStepAmount = 1;
+        this._myCollisionCheckParams.myHorizontalMovementRadialStepAmount = 1;
+        this._myCollisionCheckParams.myHorizontalMovementCheckDiagonal = true;
+        this._myCollisionCheckParams.myHorizontalMovementCheckStraight = false;
+        this._myCollisionCheckParams.myHorizontalMovementCheckHorizontalBorder = false;
+        this._myCollisionCheckParams.myHorizontalMovementCheckVerticalStraight = false;
+        this._myCollisionCheckParams.myHorizontalMovementCheckVerticalDiagonal = true;
+        this._myCollisionCheckParams.myHorizontalMovementCheckVerticalStraightDiagonal = false;
+        this._myCollisionCheckParams.myHorizontalMovementCheckVerticalHorizontalBorderDiagonal = false;
+
+        this._myCollisionCheckParams.myConeAngle = 120;
+        this._myCollisionCheckParams.myConeSliceAmount = 4;
+        this._myCollisionCheckParams.myCheckConeBorder = true;
+        this._myCollisionCheckParams.myCheckConeRay = true;
+
+        this._myCollisionCheckParams.myFeetRadius = 0.1;
+        this._myCollisionCheckParams.mySnapOnGroundExtraDistance = 0.3;
+        this._myCollisionCheckParams.myGroundCircumferenceSliceAmount = 8;
+        this._myCollisionCheckParams.myGroundCircumferenceStepAmount = 2;
+        this._myCollisionCheckParams.myGroundCircumferenceRotationPerStep = 22.5;
+        this._myCollisionCheckParams.myGroundFixDistanceFromFeet = 0.3;
+        this._myCollisionCheckParams.myGroundFixDistanceFromHead = 0.1;
+
+        this._myCollisionCheckParams.myCheckHeight = true;
+        this._myCollisionCheckParams.myHeightCheckStepAmount = 1;
+        this._myCollisionCheckParams.myCheckVerticalStraight = true;
+        this._myCollisionCheckParams.myCheckVerticalDiagonalRay = false;
+        this._myCollisionCheckParams.myCheckVerticalDiagonalBorder = false;
+        this._myCollisionCheckParams.myCheckVerticalDiagonalBorderRay = false;
+
+        this._myCollisionCheckParams.myHeight = 1;
     }
 });
