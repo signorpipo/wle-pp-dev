@@ -97,11 +97,15 @@ require('./pp/input/cauldron/finger_cursor.js');
 require('./pp/input/cauldron/input_types.js');
 require('./pp/input/cauldron/input_utils.js');
 
+require('./pp/input/gamepad/gamepad_buttons.js');
+require('./pp/input/gamepad/gamepad_core.js');
+require('./pp/input/gamepad/xr_gamepad_core.js');
+require('./pp/input/gamepad/base_gamepad.js');
+require('./pp/input/gamepad/universal_gamepad.js');
 require('./pp/input/gamepad/gamepad_animator.js');
 require('./pp/input/gamepad/gamepad_manager_component.js');
 require('./pp/input/gamepad/gamepad_manager.js');
 require('./pp/input/gamepad/gamepad_utils.js');
-require('./pp/input/gamepad/gamepad.js');
 require('./pp/input/gamepad/gamepad_control_scheme.js');
 
 require('./pp/input/pose/hand_pose.js');

@@ -6,25 +6,33 @@
 WL.registerComponent('pp-gamepad-manager', {
     _myFixForward: { type: WL.Type.Bool, default: true }
 }, {
-    init: function () {
+    init() {
         this._myGamepadManager = new PP.GamepadManager();
 
         PP.myLeftGamepad = this._myGamepadManager.getLeftGamepad();
         PP.myRightGamepad = this._myGamepadManager.getRightGamepad();
         PP.myGamepads = this._myGamepadManager.getGamepads();
     },
-    start: function () {
+    start() {
+        this._addGamepadCores();
+
+        this._myGamepadManager.start();
+    },
+    update(dt) {
+        this._myGamepadManager.update(dt);
+    },
+    _addGamepadCores() {
         let handPoseParams = new PP.HandPoseParams();
         handPoseParams.myReferenceObject = PP.myPlayerObjects.myPlayerPivot;
         handPoseParams.myFixForward = this._myFixForward;
         handPoseParams.myForceEmulatedVelocities = false;
 
-        this._myGamepadManager.setHandPoseParams(handPoseParams);
-        this._myGamepadManager.start();
-    },
-    update: function (dt) {
-        this._myGamepadManager.update(dt);
-    },
+        let leftXRGamepadCore = new PP.XRGamepadCore(PP.Handedness.LEFT, handPoseParams);
+        let rightXRGamepadCore = new PP.XRGamepadCore(PP.Handedness.RIGHT, handPoseParams);
+
+        PP.myLeftGamepad.addGamepadCore("left_xr_gamepad", leftXRGamepadCore);
+        PP.myRightGamepad.addGamepadCore("right_xr_gamepad", rightXRGamepadCore);
+    }
 });
 
 PP.myLeftGamepad = null;
