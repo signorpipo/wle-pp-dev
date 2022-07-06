@@ -35,6 +35,8 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myCheckVerticalDiagonalBorderRay = false;
 
         this.myHeight = 1;
+
+        this.myDebugActive = false;
     }
 };
 
@@ -46,7 +48,6 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
 
 CollisionCheck = class CollisionCheck {
     constructor() {
-        this._myDebugActive = false;
     }
 
     fixMovement(movement, transformQuat, collisionCheckParams, collisionRuntimeParams) {
@@ -70,7 +71,7 @@ CollisionCheck = class CollisionCheck {
         //height = height / 2;
         //horizontalMovement.vec3_scale(5, horizontalMovement);
 
-        //this._myDebugActive = true;
+        //collisionCheckParams.myDebugActive = true;
 
         let fixedHorizontalMovement = this._horizontalCheck(horizontalMovement, feetPosition, height, up, collisionCheckParams, collisionRuntimeParams);
 
@@ -81,7 +82,7 @@ CollisionCheck = class CollisionCheck {
             forward = PP.myPlayerObjects.myPlayer.pp_getForward();
         }
 
-        //this._myDebugActive = false;
+        //collisionCheckParams.myDebugActive = false;
 
         let fixedVerticalMovement = this._verticalCheck(verticalMovement, newFeetPosition, height, up, forward, collisionCheckParams, collisionRuntimeParams);
 
@@ -115,7 +116,7 @@ CollisionCheck = class CollisionCheck {
             let distance = direction.vec3_length();
             direction.vec3_normalize(direction);
 
-            let raycastResult = this._raycastAndDebug(origin, direction, 255, distance);
+            let raycastResult = this._raycastAndDebug(origin, direction, 255, distance, collisionCheckParams, collisionRuntimeParams);
 
             if (raycastResult.hitCount > 0) {
                 collisionRuntimeParams.myIsOnGround = true;
@@ -187,7 +188,7 @@ CollisionCheck = class CollisionCheck {
             let distance = direction.vec3_length();
             direction.vec3_normalize(direction);
 
-            let raycastResult = this._raycastAndDebug(origin, direction, 255, distance);
+            let raycastResult = this._raycastAndDebug(origin, direction, 255, distance, collisionCheckParams, collisionRuntimeParams);
 
             if (this._isRaycastResultValid(raycastResult, origin, direction)) {
                 if (furtherDirectionPosition != null) {
@@ -253,7 +254,7 @@ CollisionCheck = class CollisionCheck {
             let distance = direction.vec3_length();
             direction.vec3_normalize(direction);
 
-            let raycastResult = this._raycastAndDebug(origin, direction, 255, distance);
+            let raycastResult = this._raycastAndDebug(origin, direction, 255, distance, collisionCheckParams, collisionRuntimeParams);
 
             if (this._isRaycastResultValid(raycastResult, origin, direction)) {
                 isVerticalPositionOk = false;
@@ -381,7 +382,7 @@ CollisionCheck = class CollisionCheck {
 
                                 let distance = direction.vec3_length();
                                 direction.vec3_normalize(direction);
-                                let raycastResult = this._raycastAndDebug(origin, direction, 255, distance);
+                                let raycastResult = this._raycastAndDebug(origin, direction, 255, distance, collisionCheckParams, collisionRuntimeParams);
 
                                 if (this._isRaycastResultValid(raycastResult, origin, direction)) {
                                     // if result is inside wall, it's ignored, so that at least you can exit it before seeing if the new position works now
@@ -403,7 +404,7 @@ CollisionCheck = class CollisionCheck {
 
                                 let distance = direction.vec3_length();
                                 direction.vec3_normalize(direction);
-                                let raycastResult = this._raycastAndDebug(origin, direction, 255, distance);
+                                let raycastResult = this._raycastAndDebug(origin, direction, 255, distance, collisionCheckParams, collisionRuntimeParams);
 
                                 if (this._isRaycastResultValid(raycastResult, origin, direction)) {
                                     // if result is inside wall, it's ignored, so that at least you can exit it before seeing if the new position works now
@@ -425,7 +426,7 @@ CollisionCheck = class CollisionCheck {
 
                                 let distance = direction.vec3_length();
                                 direction.vec3_normalize(direction);
-                                let raycastResult = this._raycastAndDebug(origin, direction, 255, distance);
+                                let raycastResult = this._raycastAndDebug(origin, direction, 255, distance, collisionCheckParams, collisionRuntimeParams);
 
                                 if (this._isRaycastResultValid(raycastResult, origin, direction)) {
                                     // if result is inside wall, it's ignored, so that at least you can exit it before seeing if the new position works now
@@ -447,7 +448,7 @@ CollisionCheck = class CollisionCheck {
 
                                 let distance = direction.vec3_length();
                                 direction.vec3_normalize(direction);
-                                let raycastResult = this._raycastAndDebug(origin, direction, 255, distance);
+                                let raycastResult = this._raycastAndDebug(origin, direction, 255, distance, collisionCheckParams, collisionRuntimeParams);
 
                                 if (this._isRaycastResultValid(raycastResult, origin, direction)) {
                                     // if result is inside wall, it's ignored, so that at least you can exit it before seeing if the new position works now
@@ -474,7 +475,7 @@ CollisionCheck = class CollisionCheck {
 
                                     let distance = direction.vec3_length();
                                     direction.vec3_normalize(direction);
-                                    let raycastResult = this._raycastAndDebug(origin, direction, 255, distance);
+                                    let raycastResult = this._raycastAndDebug(origin, direction, 255, distance, collisionCheckParams, collisionRuntimeParams);
 
                                     if (this._isRaycastResultValid(raycastResult, origin, direction)) {
                                         // if result is inside wall, it's ignored, so that at least you can exit it before seeing if the new position works now
@@ -497,7 +498,7 @@ CollisionCheck = class CollisionCheck {
 
                                     let distance = direction.vec3_length();
                                     direction.vec3_normalize(direction);
-                                    let raycastResult = this._raycastAndDebug(origin, direction, 255, distance);
+                                    let raycastResult = this._raycastAndDebug(origin, direction, 255, distance, collisionCheckParams, collisionRuntimeParams);
 
                                     if (this._isRaycastResultValid(raycastResult, origin, direction)) {
                                         // if result is inside wall, it's ignored, so that at least you can exit it before seeing if the new position works now
@@ -521,7 +522,7 @@ CollisionCheck = class CollisionCheck {
 
                                     let distance = direction.vec3_length();
                                     direction.vec3_normalize(direction);
-                                    let raycastResult = this._raycastAndDebug(origin, direction, 255, distance);
+                                    let raycastResult = this._raycastAndDebug(origin, direction, 255, distance, collisionCheckParams, collisionRuntimeParams);
 
                                     if (this._isRaycastResultValid(raycastResult, origin, direction)) {
                                         // if result is inside wall, it's ignored, so that at least you can exit it before seeing if the new position works now
@@ -543,7 +544,7 @@ CollisionCheck = class CollisionCheck {
 
                                     let distance = direction.vec3_length();
                                     direction.vec3_normalize(direction);
-                                    let raycastResult = this._raycastAndDebug(origin, direction, 255, distance);
+                                    let raycastResult = this._raycastAndDebug(origin, direction, 255, distance, collisionCheckParams, collisionRuntimeParams);
 
                                     if (this._isRaycastResultValid(raycastResult, origin, direction)) {
                                         // if result is inside wall, it's ignored, so that at least you can exit it before seeing if the new position works now
@@ -566,7 +567,7 @@ CollisionCheck = class CollisionCheck {
 
                                     let distance = direction.vec3_length();
                                     direction.vec3_normalize(direction);
-                                    let raycastResult = this._raycastAndDebug(origin, direction, 255, distance);
+                                    let raycastResult = this._raycastAndDebug(origin, direction, 255, distance, collisionCheckParams, collisionRuntimeParams);
 
                                     if (this._isRaycastResultValid(raycastResult, origin, direction)) {
                                         // if result is inside wall, it's ignored, so that at least you can exit it before seeing if the new position works now
@@ -589,7 +590,7 @@ CollisionCheck = class CollisionCheck {
 
                                     let distance = direction.vec3_length();
                                     direction.vec3_normalize(direction);
-                                    let raycastResult = this._raycastAndDebug(origin, direction, 255, distance);
+                                    let raycastResult = this._raycastAndDebug(origin, direction, 255, distance, collisionCheckParams, collisionRuntimeParams);
 
                                     if (this._isRaycastResultValid(raycastResult, origin, direction)) {
                                         // if result is inside wall, it's ignored, so that at least you can exit it before seeing if the new position works now
@@ -609,7 +610,7 @@ CollisionCheck = class CollisionCheck {
                             let direction = firstMovementPosition.vec3_sub(origin);
                             let distance = direction.vec3_length();
                             direction.vec3_normalize(direction);
-                            let raycastResult = this._raycastAndDebug(origin, direction, 255, distance);
+                            let raycastResult = this._raycastAndDebug(origin, direction, 255, distance, collisionCheckParams, collisionRuntimeParams);
 
                             if (this._isRaycastResultValid(raycastResult, origin, direction)) {
                                 // if result is inside wall, it's ignored, so that at least you can exit it before seeing if the new position works now
@@ -630,7 +631,7 @@ CollisionCheck = class CollisionCheck {
 
                                 let distance = direction.vec3_length();
                                 direction.vec3_normalize(direction);
-                                let raycastResult = this._raycastAndDebug(origin, direction, 255, distance);
+                                let raycastResult = this._raycastAndDebug(origin, direction, 255, distance, collisionCheckParams, collisionRuntimeParams);
 
                                 if (this._isRaycastResultValid(raycastResult, origin, direction)) {
                                     // if result is inside wall, it's ignored, so that at least you can exit it before seeing if the new position works now
@@ -648,7 +649,7 @@ CollisionCheck = class CollisionCheck {
 
                                 let distance = direction.vec3_length();
                                 direction.vec3_normalize(direction);
-                                let raycastResult = this._raycastAndDebug(origin, direction, 255, distance);
+                                let raycastResult = this._raycastAndDebug(origin, direction, 255, distance, collisionCheckParams, collisionRuntimeParams);
 
                                 if (this._isRaycastResultValid(raycastResult, origin, direction)) {
                                     // if result is inside wall, it's ignored, so that at least you can exit it before seeing if the new position works now
@@ -668,7 +669,7 @@ CollisionCheck = class CollisionCheck {
 
                                 let distance = direction.vec3_length();
                                 direction.vec3_normalize(direction);
-                                let raycastResult = this._raycastAndDebug(origin, direction, 255, distance);
+                                let raycastResult = this._raycastAndDebug(origin, direction, 255, distance, collisionCheckParams, collisionRuntimeParams);
 
                                 if (this._isRaycastResultValid(raycastResult, origin, direction)) {
                                     // if result is inside wall, it's ignored, so that at least you can exit it before seeing if the new position works now
@@ -685,7 +686,7 @@ CollisionCheck = class CollisionCheck {
 
                                 let distance = direction.vec3_length();
                                 direction.vec3_normalize(direction);
-                                let raycastResult = this._raycastAndDebug(origin, direction, 255, distance);
+                                let raycastResult = this._raycastAndDebug(origin, direction, 255, distance, collisionCheckParams, collisionRuntimeParams);
 
                                 if (this._isRaycastResultValid(raycastResult, origin, direction)) {
                                     // if result is inside wall, it's ignored, so that at least you can exit it before seeing if the new position works now
@@ -752,7 +753,7 @@ CollisionCheck = class CollisionCheck {
                         let distance = direction.vec3_length();
                         direction.vec3_normalize(direction);
 
-                        let raycastResult = this._raycastAndDebug(origin, direction, 255, distance);
+                        let raycastResult = this._raycastAndDebug(origin, direction, 255, distance, collisionCheckParams, collisionRuntimeParams);
 
                         if (this._isRaycastResultValid(raycastResult, origin, direction)) {
                             if (furtherOnUpPosition != null) {
@@ -779,7 +780,7 @@ CollisionCheck = class CollisionCheck {
                                 let distance = direction.vec3_length();
                                 direction.vec3_normalize(direction);
 
-                                let raycastResult = this._raycastAndDebug(origin, direction, 255, distance);
+                                let raycastResult = this._raycastAndDebug(origin, direction, 255, distance, collisionCheckParams, collisionRuntimeParams);
 
                                 if (this._isRaycastResultValid(raycastResult, origin, direction)) {
                                     isHorizontalCheckOk = false;
@@ -793,7 +794,7 @@ CollisionCheck = class CollisionCheck {
                                 let distance = direction.vec3_length();
                                 direction.vec3_normalize(direction);
 
-                                let raycastResult = this._raycastAndDebug(origin, direction, 255, distance);
+                                let raycastResult = this._raycastAndDebug(origin, direction, 255, distance, collisionCheckParams, collisionRuntimeParams);
 
                                 if (this._isRaycastResultValid(raycastResult, origin, direction)) {
                                     isHorizontalCheckOk = false;
@@ -813,7 +814,7 @@ CollisionCheck = class CollisionCheck {
                                     let distance = direction.vec3_length();
                                     direction.vec3_normalize(direction);
 
-                                    let raycastResult = this._raycastAndDebug(origin, direction, 255, distance);
+                                    let raycastResult = this._raycastAndDebug(origin, direction, 255, distance, collisionCheckParams, collisionRuntimeParams);
 
                                     if (this._isRaycastResultValid(raycastResult, origin, direction)) {
                                         isHorizontalCheckOk = false;
@@ -827,7 +828,7 @@ CollisionCheck = class CollisionCheck {
                                     let distance = direction.vec3_length();
                                     direction.vec3_normalize(direction);
 
-                                    let raycastResult = this._raycastAndDebug(origin, direction, 255, distance);
+                                    let raycastResult = this._raycastAndDebug(origin, direction, 255, distance, collisionCheckParams, collisionRuntimeParams);
 
                                     if (this._isRaycastResultValid(raycastResult, origin, direction)) {
                                         isHorizontalCheckOk = false;
@@ -855,7 +856,7 @@ CollisionCheck = class CollisionCheck {
                         let distance = direction.vec3_length();
                         direction.vec3_normalize(direction);
 
-                        let raycastResult = this._raycastAndDebug(origin, direction, 255, distance);
+                        let raycastResult = this._raycastAndDebug(origin, direction, 255, distance, collisionCheckParams, collisionRuntimeParams);
 
                         if (raycastResult.hitCount > 0) {
                             isHorizontalCheckOk = false;
@@ -875,7 +876,7 @@ CollisionCheck = class CollisionCheck {
                             let distance = direction.vec3_length();
                             direction.vec3_normalize(direction);
 
-                            let raycastResult = this._raycastAndDebug(origin, direction, 255, distance);
+                            let raycastResult = this._raycastAndDebug(origin, direction, 255, distance, collisionCheckParams, collisionRuntimeParams);
 
                             if (this._isRaycastResultValid(raycastResult, origin, direction)) {
                                 isHorizontalCheckOk = false;
@@ -905,10 +906,10 @@ CollisionCheck = class CollisionCheck {
         return hitOnOrigin && normalOppositeDirection;
     }
 
-    _raycastAndDebug(origin, direction, group, distance) {
+    _raycastAndDebug(origin, direction, group, distance, collisionCheckParams, collisionRuntimeParams) {
         let raycastResult = WL.physics.rayCast(origin, direction, group, distance);
 
-        if (this._myDebugActive) {
+        if (collisionCheckParams.myDebugActive) {
             let debugParams = new PP.DebugRaycastParams();
             debugParams.myOrigin = origin;
             debugParams.myDirection = direction;

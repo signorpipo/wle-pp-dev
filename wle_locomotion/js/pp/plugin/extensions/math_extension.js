@@ -13,12 +13,12 @@
 
         - pp_clamp
         - pp_sign
-        - pp_toDegrees  /   pp_toRadians
+        - pp_toDegrees      / pp_toRadians
         - pp_roundDecimal
         - pp_mapToRange
-        - pp_random     /   pp_randomInt    /   pp_randomSign   /   pp_randomPick
-        - pp_lerp       /   pp_interpolate  / PP.EasingFunction
-        - pp_angleDistance  /   pp_angleDistanceSigned
+        - pp_random         / pp_randomInt    / pp_randomInt        / pp_randomSign / pp_randomPick
+        - pp_lerp           / pp_interpolate  / PP.EasingFunction
+        - pp_angleDistance  / pp_angleDistanceSigned
         - pp_angleClamp
         - pp_isInsideAngleRange
 */
@@ -84,6 +84,10 @@ Math.pp_randomInt = function (start, end) {
     let min = Math.min(start, end);
     let max = Math.max(start, end);
     return Math.floor(Math.random() * (max - min + 1) + min);
+};
+
+Math.pp_randomBool = function () {
+    return Math.pp_randomInt(0, 1) == 0;
 };
 
 //Return 1 or -1

@@ -42,9 +42,6 @@ WL.registerComponent('locomotion-draft-2', {
 
         this._myCollisionCheck = new CollisionCheck();
 
-        this._myKeyboardGamepad = new KeyboardGamepad();
-        this._myKeyboardGamepad.start();
-
         this._myDirectionConverter = new Direction2DTo3DConverter(this._myFlyEnabled, this._myMinAngleToFly);
 
         this._myCollisionCheckParams = new CollisionCheckParams();
@@ -53,7 +50,6 @@ WL.registerComponent('locomotion-draft-2', {
         this._myCollisionRuntimeParams = new CollisionRuntimeParams();
     },
     update(dt) {
-        this._myKeyboardGamepad.update(dt);
 
         if (this._myDelaySessionChangeResyncCounter > 0) {
             this._myDelaySessionChangeResyncCounter--;
@@ -102,9 +98,6 @@ WL.registerComponent('locomotion-draft-2', {
                 if (axes.vec2_length() > minIntensityThreshold) {
                     this._myStickIdleCount = 2;
                     let direction = this._myDirectionConverter.convert(axes, this._myDirectionReferenceObject.pp_getTransform(), playerUp);
-                    if (this._myKeyboardGamepad.isSpacePressed()) {
-                        direction.vec3_add([0, 1, 0], direction);
-                    }
 
                     if (direction.vec3_length() > 0.0001) {
                         direction.vec3_normalize(direction);
@@ -124,14 +117,26 @@ WL.registerComponent('locomotion-draft-2', {
                         }
                     }
                 }
+
+                if (PP.myLeftGamepad.getButtonInfo(PP.ButtonType.TOP_BUTTON).isPressed()) {
+                    headMovement.vec3_add([0, this._myMaxSpeed * dt, 0], headMovement);
+                    this._myIsFlying = true;
+                } else if (PP.myLeftGamepad.getButtonInfo(PP.ButtonType.BOTTOM_BUTTON).isPressed()) {
+                    headMovement.vec3_add([0, -this._myMaxSpeed * dt, 0], headMovement);
+                    this._myIsFlying = true;
+                }
             }
 
             let movementToApply = headMovement;
-            if (!this._myIsFlying) {
-                movementToApply.vec3_add(playerUp.vec3_scale(-2 * dt), movementToApply);
+
+            if (!PP.myLeftGamepad.getButtonInfo(PP.ButtonType.THUMBSTICK).isPressed()) {
+                if (!this._myIsFlying) {
+                    movementToApply.vec3_add(playerUp.vec3_scale(-2 * dt), movementToApply);
+                }
+
+                let feetTransform = this._getFeetTransform();
+                movementToApply = this._myCollisionCheck.fixMovement(headMovement, feetTransform, this._myCollisionCheckParams, this._myCollisionRuntimeParams);
             }
-            let feetTransform = this._getFeetTransform();
-            movementToApply = this._myCollisionCheck.fixMovement(headMovement, feetTransform, this._myCollisionCheckParams, this._myCollisionRuntimeParams);
 
             if (movementToApply.vec3_length() > 0.00001) {
                 this._moveHead(movementToApply);
@@ -525,7 +530,7 @@ WL.registerComponent('locomotion-draft-2', {
     },
     _setupCollisionCheckParams() {
         this._myCollisionCheckParams.myRadius = 0.3;
-        this._myCollisionCheckParams.myDistanceFromFeetToIgnore = 0.3; // could be percentage of the height
+        this._myCollisionCheckParams.myDistanceFromFeetToIgnore = 0.3;
         this._myCollisionCheckParams.myDistanceFromHeadToIgnore = 0.1;
 
         this._myCollisionCheckParams.myHorizontalMovementStepAmount = 1;
