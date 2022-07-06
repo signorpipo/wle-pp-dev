@@ -34,10 +34,6 @@ PP.BaseGamepad = class BaseGamepad {
         return this._myHandedness;
     }
 
-    setHandPoseParams(handPoseParams) {
-        this._myHandPose.setHandPoseParams(handPoseParams);
-    }
-
     getButtonInfo(buttonType) {
         return this._myButtonInfos[buttonType];
     }
@@ -119,7 +115,7 @@ PP.BaseGamepad = class BaseGamepad {
     }
 
     _getButtonData(buttonType) {
-        let buttonData = { pressed: false, touched: false, value: 0 };
+        let buttonData = { myIsPressed: false, myIsTouched: false, myValue: 0 };
         return buttonData;
     }
 
@@ -173,11 +169,11 @@ PP.BaseGamepad = class BaseGamepad {
 
     _updateSingleButtonInfo(buttonType) {
         let button = this._myButtonInfos[buttonType];
-        let internalButton = this._getButtonData(buttonType);
+        let buttonData = this._getButtonData(buttonType);
 
-        button.myIsPressed = internalButton.pressed;
-        button.myIsTouched = internalButton.touched;
-        button.myValue = internalButton.value;
+        button.myIsPressed = buttonData.myIsPressed;
+        button.myIsTouched = buttonData.myIsTouched;
+        button.myValue = buttonData.myValue;
     }
 
     _postUpdateButtonInfos(dt) {

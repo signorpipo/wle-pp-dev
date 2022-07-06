@@ -4,10 +4,6 @@ PP.GamepadCore = class GamepadCore {
         this._myHandedness = handedness;
     }
 
-    destroy() {
-
-    }
-
     getHandedness() {
         return this._myHandedness;
     }

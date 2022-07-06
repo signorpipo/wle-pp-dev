@@ -6280,7 +6280,7 @@
                 0.4585336,
                 0.0,
                 0.1235656,
-                5.960464477539063e-8,
+                5.960464477539065e-8,
                 -0.4714159,
                 1.0
             ],
@@ -6371,7 +6371,7 @@
                 0.4585336,
                 0.0,
                 0.3614845,
-                5.960464477539063e-8,
+                5.960464477539065e-8,
                 -1.018557,
                 1.0
             ],
@@ -7787,7 +7787,9 @@
                 "js/pp/tool/widget_frame",
                 "js/test",
                 "js/locomotion",
-                "js/cauldron"
+                "js/cauldron",
+                "js/pp/input/gamepad/cauldron",
+                "js/pp/input/gamepad/gamepad_cores"
             ],
             "useInternalBundler": false
         },

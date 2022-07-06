@@ -84,11 +84,7 @@ WL.registerComponent('locomotion-draft-2', {
             {
                 let axes = [0, 0];
 
-                if (this._mySessionActive) {
-                    axes = PP.myLeftGamepad.getAxesInfo().getAxes();
-                } else {
-                    axes = this._myKeyboardGamepad.getLeftAxes();
-                }
+                axes = PP.myLeftGamepad.getAxesInfo().getAxes();
 
                 let minIntensityThreshold = 0.1;
                 if (axes.vec2_length() > minIntensityThreshold) {
@@ -130,12 +126,8 @@ WL.registerComponent('locomotion-draft-2', {
 
             let headRotation = PP.quat_create();
             {
-                let axes = [0, 0];
-                if (this._mySessionActive) {
-                    axes = PP.myRightGamepad.getAxesInfo().getAxes();
-                } else {
-                    axes = this._myKeyboardGamepad.getRightAxes();
-                }
+                axes = PP.myRightGamepad.getAxesInfo().getAxes();
+
                 if (!this._myIsSnapTurn) {
                     let minIntensityThreshold = 0.1;
                     if (Math.abs(axes[0]) > minIntensityThreshold) {

@@ -16,10 +16,6 @@ PP.XRGamepadCore = class XRGamepadCore extends PP.GamepadCore {
         this._myGamepad = null;
     }
 
-    destroy() {
-        // not implemented for now
-    }
-
     getHandedness() {
         return this._myHandedness;
     }
@@ -55,26 +51,26 @@ PP.XRGamepadCore = class XRGamepadCore extends PP.GamepadCore {
     }
 
     getButtonData(buttonType) {
-        let buttonData = { pressed: false, touched: false, value: 0 };
+        let buttonData = { myIsPressed: false, myIsTouched: false, myValue: 0 };
 
         if (this.isGamepadCoreActive()) {
             if (buttonType < this._myGamepad.buttons.length) {
                 let gamepadButton = this._myGamepad.buttons[buttonType];
 
                 if (buttonType != PP.ButtonType.SELECT && buttonType != PP.ButtonType.SQUEEZE) {
-                    buttonData.pressed = gamepadButton.pressed;
+                    buttonData.myIsPressed = gamepadButton.pressed;
                 } else {
-                    buttonData.pressed = this._getSpecialButtonPressed(buttonType);
+                    buttonData.myIsPressed = this._getSpecialButtonPressed(buttonType);
                 }
 
-                buttonData.touched = gamepadButton.touched;
-                buttonData.value = gamepadButton.value;
+                buttonData.myIsTouched = gamepadButton.touched;
+                buttonData.myValue = gamepadButton.value;
             } else if (buttonType == PP.ButtonType.BOTTOM_BUTTON && this._myGamepad.buttons.length >= 3) {
                 //This way if you are using a basic touch controller bottom button will work anyway
                 let touchButton = this._myGamepad.buttons[2];
-                buttonData.pressed = touchButton.pressed;
-                buttonData.touched = touchButton.touched;
-                buttonData.value = touchButton.value;
+                buttonData.myIsPressed = touchButton.pressed;
+                buttonData.myIsTouched = touchButton.touched;
+                buttonData.myValue = touchButton.value;
             }
         }
 

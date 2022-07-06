@@ -70,7 +70,7 @@ KeyboardGamepad = class KeyboardGamepad {
         if (this._myRight) this._myRightAxes[0] += 1.0;
     }
 
-    _keyDown() {
+    _keyDown(event) {
         this._keyChanged(event.keyCode, true);
     }
 

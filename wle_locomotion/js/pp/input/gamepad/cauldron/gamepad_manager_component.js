@@ -32,6 +32,12 @@ WL.registerComponent('pp-gamepad-manager', {
 
         PP.myLeftGamepad.addGamepadCore("left_xr_gamepad", leftXRGamepadCore);
         PP.myRightGamepad.addGamepadCore("right_xr_gamepad", rightXRGamepadCore);
+
+        let leftKeyboardGamepadCore = new PP.KeyboardGamepadCore(PP.Handedness.LEFT, leftXRGamepadCore.getHandPose());
+        let rightKeyboardGamepadCore = new PP.KeyboardGamepadCore(PP.Handedness.RIGHT, rightXRGamepadCore.getHandPose());
+
+        PP.myLeftGamepad.addGamepadCore("left_keyboard_gamepad", leftKeyboardGamepadCore);
+        PP.myRightGamepad.addGamepadCore("right_keyboard_gamepad", rightKeyboardGamepadCore);
     }
 });
 
