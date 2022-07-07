@@ -1,8 +1,12 @@
 Direction2DTo3DConverter = class Direction2DTo3DConverter {
 
-    constructor(isFlyEnabled = false, minAngleToFly = 0) {
+    constructor(isFlyEnabled = false, minAngleToFlyUp = 0, minAngleToFlyDown = null) {
         this._myIsFlyEnabled = isFlyEnabled;
-        this._myMinAngleToFly = minAngleToFly;
+        this._myMinAngleToFlyUp = minAngleToFlyUp;
+        this._myMinAngleToFlyDown = minAngleToFlyDown;
+        if (this._myMinAngleToFlyDown == null) {
+            this._myMinAngleToFlyDown = this._myMinAngleToFlyUp;
+        }
 
         this._myIsFlyingForward = false;
         this._myIsFlyingRight = false;
@@ -37,13 +41,13 @@ Direction2DTo3DConverter = class Direction2DTo3DConverter {
         // check if it is flying based on the convert transform orientation 
         let angleForwardWithDirectionUp = forward.vec3_angle(directionUp);
         let removeForwardUp = !this._myIsFlyEnabled ||
-            (!this._myIsFlyingForward && (angleForwardWithDirectionUp > 90 - this._myMinAngleToFly && angleForwardWithDirectionUp < 90 + this._myMinAngleToFly));
+            (!this._myIsFlyingForward && (angleForwardWithDirectionUp > 90 - this._myMinAngleToFlyUp && angleForwardWithDirectionUp < 90 + this._myMinAngleToFlyDown));
 
         this._myIsFlyingForward = !removeForwardUp;
 
         let angleRightWithDirectionUp = right.vec3_angle(directionUp);
         let removeRightUp = !this._myIsFlyEnabled ||
-            (!this._myIsFlyingRight && (angleRightWithDirectionUp > 90 - this._myMinAngleToFly && angleRightWithDirectionUp < 90 + this._myMinAngleToFly));
+            (!this._myIsFlyingRight && (angleRightWithDirectionUp > 90 - this._myMinAngleToFlyUp && angleRightWithDirectionUp < 90 + this._myMinAngleToFlyDown));
 
         this._myIsFlyingRight = !removeRightUp;
 

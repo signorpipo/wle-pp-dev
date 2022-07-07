@@ -4,7 +4,8 @@ WL.registerComponent('locomotion-draft-2', {
     _myIsSnapTurn: { type: WL.Type.Bool, default: true },
     _mySnapTurnAngle: { type: WL.Type.Float, default: 30 },
     _myFlyEnabled: { type: WL.Type.Bool, default: false },
-    _myMinAngleToFly: { type: WL.Type.Float, default: 45 },
+    _myMinAngleToFlyUp: { type: WL.Type.Float, default: 60 },
+    _myMinAngleToFlyDown: { type: WL.Type.Float, default: 1 },
     _myDirectionReference: { type: WL.Type.Enum, values: ['head', 'hand left', 'hand right'], default: 'hand left' }
 }, {
     init() {
@@ -42,7 +43,7 @@ WL.registerComponent('locomotion-draft-2', {
 
         this._myCollisionCheck = new CollisionCheck();
 
-        this._myDirectionConverter = new Direction2DTo3DConverter(this._myFlyEnabled, this._myMinAngleToFly);
+        this._myDirectionConverter = new Direction2DTo3DConverter(this._myFlyEnabled, this._myMinAngleToFlyUp, this._myMinAngleToFlyDown);
 
         this._myCollisionCheckParams = new CollisionCheckParams();
         this._setupCollisionCheckParams();
