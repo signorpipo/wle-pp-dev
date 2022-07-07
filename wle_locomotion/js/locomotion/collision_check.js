@@ -922,6 +922,4 @@ CollisionCheck = class CollisionCheck {
 
         return raycastResult;
     }
-
-
 };

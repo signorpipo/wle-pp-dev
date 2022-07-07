@@ -26,8 +26,8 @@ Direction2DTo3DConverter = class Direction2DTo3DConverter {
 
     reset() {
         this.stopFlying();
-        this._myLastValidFlatForward = null;
-        this._myLastValidFlatForward = null;
+        this._myLastValidFlatForward.vec3_zero();
+        this._myLastValidFlatRight.vec3_zero();
     }
 
     convert(direction2D, convertTransform, directionUp) {
@@ -51,45 +51,41 @@ Direction2DTo3DConverter = class Direction2DTo3DConverter {
         if (removeForwardUp || removeRightUp) {
             if (removeForwardUp) {
                 //if the forward is too similar to the up (or down) take the last valid forward
-                if (this._myLastValidFlatForward && (forward.vec3_angle(directionUp) < this._myMinAngleToBeValid || forward.vec3_angle(directionUp.vec3_negate()) < this._myMinAngleToBeValid)) {
+                if (this._myLastValidFlatForward.vec3_length() > 0 && (forward.vec3_angle(directionUp) < this._myMinAngleToBeValid || forward.vec3_angle(directionUp.vec3_negate()) < this._myMinAngleToBeValid)) {
                     if (forward.vec3_isConcordant(this._myLastValidFlatForward)) {
                         forward.pp_copy(this._myLastValidFlatForward);
                     } else {
                         this._myLastValidFlatForward.vec3_negate(forward);
                     }
                 }
+
+                forward.vec3_removeComponentAlongAxis(directionUp, forward);
+                forward.vec3_normalize(forward);
             }
 
             if (removeRightUp) {
                 //if the right is too similar to the up (or down) take the last valid right
-                if (this._myLastValidFlatRight && (right.vec3_angle(directionUp) < this._myMinAngleToBeValid || right.vec3_angle(directionUp.vec3_negate()) < this._myMinAngleToBeValid)) {
+                if (this._myLastValidFlatRight.vec3_length() > 0 && (right.vec3_angle(directionUp) < this._myMinAngleToBeValid || right.vec3_angle(directionUp.vec3_negate()) < this._myMinAngleToBeValid)) {
                     if (right.vec3_isConcordant(this._myLastValidFlatRight)) {
                         right.pp_copy(this._myLastValidFlatRight);
                     } else {
                         this._myLastValidFlatRight.vec3_negate(right);
                     }
                 }
-            }
 
-            if (removeForwardUp) {
-                forward.vec3_removeComponentAlongAxis(directionUp, forward);
-            }
-
-            if (removeRightUp) {
                 right.vec3_removeComponentAlongAxis(directionUp, right);
+                right.vec3_normalize(right);
             }
         }
 
-        forward.vec3_normalize(forward);
-        right.vec3_normalize(right);
 
         // update last valid
         if (forward.vec3_angle(directionUp) > this._myMinAngleToBeValid && forward.vec3_angle(directionUp.vec3_negate()) > this._myMinAngleToBeValid) {
-            this._myLastValidFlatForward = forward.vec3_removeComponentAlongAxis(directionUp);
+            forward.vec3_removeComponentAlongAxis(directionUp, this._myLastValidFlatForward);
         }
 
         if (right.vec3_angle(directionUp) > this._myMinAngleToBeValid && right.vec3_angle(directionUp.vec3_negate()) > this._myMinAngleToBeValid) {
-            this._myLastValidFlatRight = right.vec3_removeComponentAlongAxis(directionUp);
+            right.vec3_removeComponentAlongAxis(directionUp, this._myLastValidFlatRight);
         }
 
         // compute direction 3D

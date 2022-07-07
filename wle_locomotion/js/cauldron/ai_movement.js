@@ -32,8 +32,8 @@ WL.registerComponent('ai-movement', {
             this._setupCollisionCheckParams();
         }
 
-        if (dt > 0.25) {
-            dt = 0.25;
+        if (dt > 1 / 45) {
+            dt = 1 / 45;
         }
 
         this._myChangeDirectionTimer.update(dt);
