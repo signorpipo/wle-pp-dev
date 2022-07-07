@@ -6,6 +6,8 @@ Direction2DTo3DConverterParams = class Direction2DTo3DConverterParams {
         this.myMinAngleToFlyForwardDown = 90;
         this.myMinAngleToFlyRightUp = 90;
         this.myMinAngleToFlyRightDown = 90;
+
+        this.myStopFlyingWhenZero = true;
     }
 };
 
@@ -71,22 +73,17 @@ Direction2DTo3DConverter = class Direction2DTo3DConverter {
     }
 
     convert(direction2D, convertTransform, directionUp) {
-        if (direction2D.vec3_isZero()) {
-            this.reset(this._myParams.myAutoUpdateFly);
+        if (direction2D.vec2_isZero()) {
+            let stopFlying = this._myParams.myAutoUpdateFly && this._myParams.myStopFlyingWhenZero;
+            this.reset(stopFlying);
             return [0, 0, 0];
         } else {
             if (direction2D[0] == 0) {
                 this._myLastValidFlatRight.vec3_zero();
-                if (this._myParams.myAutoUpdateFly) {
-                    this._myIsFlyingRight = false;
-                }
             }
 
             if (direction2D[1] == 0) {
                 this._myLastValidFlatForward.vec3_zero();
-                if (this._myParams.myAutoUpdateFly) {
-                    this._myIsFlyingForward = false;
-                }
             }
         }
 
@@ -153,6 +150,8 @@ Direction2DTo3DConverter = class Direction2DTo3DConverter {
         if (!this._myIsFlyingForward && !this._myIsFlyingRight) {
             direction3D.vec3_removeComponentAlongAxis(directionUp, direction3D);
         }
+
+        direction3D.vec3_normalize(direction3D);
 
         return direction3D;
     }

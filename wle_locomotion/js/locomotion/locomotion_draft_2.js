@@ -36,7 +36,7 @@ WL.registerComponent('locomotion-draft-2', {
         this._myVisibilityWentHidden = false;
         this._mySessionActive = false;
 
-        this._myStickIdleCount = 0;
+        this._myStickIdleTimer = new PP.Timer(0.25, false);
 
         this._myRemoveUp = true;
         this._myRemoveXTilt = true;
@@ -52,6 +52,7 @@ WL.registerComponent('locomotion-draft-2', {
         directionConverterHeadParams.myMinAngleToFlyForwardDown = this._myMinAngleToFlyDownHead;
         directionConverterHeadParams.myMinAngleToFlyRightUp = this._myMinAngleToFlyRight;
         directionConverterHeadParams.myMinAngleToFlyRightDown = this._myMinAngleToFlyRight;
+        directionConverterHeadParams.myStopFlyingWhenZero = false;
 
         let directionConverterHandParams = new Direction2DTo3DConverterParams();
         directionConverterHandParams.myAutoUpdateFly = this._myFlyEnabled;
@@ -59,6 +60,7 @@ WL.registerComponent('locomotion-draft-2', {
         directionConverterHandParams.myMinAngleToFlyForwardDown = this._myMinAngleToFlyDownHand;
         directionConverterHandParams.myMinAngleToFlyRightUp = this._myMinAngleToFlyRight;
         directionConverterHandParams.myMinAngleToFlyRightDown = this._myMinAngleToFlyRight;
+        directionConverterHandParams.myStopFlyingWhenZero = false;
 
         this._myDirectionConverterHead = new Direction2DTo3DConverter(directionConverterHeadParams);
         this._myDirectionConverterHand = new Direction2DTo3DConverter(directionConverterHandParams);
@@ -114,8 +116,13 @@ WL.registerComponent('locomotion-draft-2', {
                 axes[0] = Math.abs(axes[0]) > minIntensityThreshold ? axes[0] : 0;
                 axes[1] = Math.abs(axes[1]) > minIntensityThreshold ? axes[1] : 0;
 
-                if (!axes.vec3_isZero()) {
-                    this._myStickIdleCount = 2;
+                if (PP.myLeftGamepad.getButtonInfo(PP.ButtonType.SQUEEZE).isPressed()) {
+                    axes = [0, 0];
+                }
+
+                if (!axes.vec2_isZero()) {
+                    this._myStickIdleTimer.start();
+
                     let direction = null;
                     if (this._mySessionActive && this._myDirectionReference != 0) {
                         direction = this._myDirectionConverterHand.convert(axes, this._myDirectionReferenceObject.pp_getTransform(), playerUp);
@@ -123,9 +130,7 @@ WL.registerComponent('locomotion-draft-2', {
                         direction = this._myDirectionConverterHead.convert(axes, this._myDirectionReferenceObject.pp_getTransform(), playerUp);
                     }
 
-                    if (direction.vec3_length() > 0.0001) {
-                        direction.vec3_normalize(direction);
-
+                    if (!direction.vec3_isZero()) {
                         this._myIsFlying = this._myIsFlying || direction.vec3_componentAlongAxis(playerUp).vec3_length() > 0.0001;
 
                         let movementIntensity = axes.vec2_length();
@@ -134,9 +139,9 @@ WL.registerComponent('locomotion-draft-2', {
                         direction.vec3_scale(speed * dt, headMovement);
                     }
                 } else {
-                    if (this._myStickIdleCount > 0) {
-                        this._myStickIdleCount--;
-                        if (this._myStickIdleCount == 0) {
+                    if (this._myStickIdleTimer.isRunning()) {
+                        this._myStickIdleTimer.update(dt);
+                        if (this._myStickIdleTimer.isDone()) {
                             this._myDirectionConverterHead.reset();
                             this._myDirectionConverterHand.reset();
                         }

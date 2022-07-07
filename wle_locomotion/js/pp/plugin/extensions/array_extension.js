@@ -63,7 +63,8 @@
             - vec_log       / vec_error         / vec_warn      
 
         VECTOR 2:
-            - vec3_length
+            - vec2_length
+            - vec2_isZero
 
         VECTOR 3:
             ○ vec3_set      / vec3_copy     / vec3_zero
@@ -398,17 +399,23 @@ Array.prototype.vec_equals = function (vector) {
 
 // glMatrix Bridge
 
-Array.prototype.vec3_normalize = function (out = glMatrix.vec3.create()) {
-    glMatrix.vec3.normalize(out, this);
-    return out;
+Array.prototype.vec2_length = function () {
+    return glMatrix.vec2.length(this);
+};
+
+// New Functions
+
+Array.prototype.vec2_isZero = function () {
+    return this.vec2_length() == 0;
 };
 
 // VECTOR 3
 
 // glMatrix Bridge
 
-Array.prototype.vec2_length = function () {
-    return glMatrix.vec2.length(this);
+Array.prototype.vec3_normalize = function (out = glMatrix.vec3.create()) {
+    glMatrix.vec3.normalize(out, this);
+    return out;
 };
 
 Array.prototype.vec3_copy = function (vector) {
