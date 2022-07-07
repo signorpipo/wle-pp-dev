@@ -47,6 +47,8 @@ WL.registerComponent('stick-movement', {
         this._myIsFlying = false;
 
         this._myFirstTime = true;
+
+        this._myInitialHeight = 0;
     },
     update(dt) {
         if (this._myFirstTime) {
@@ -57,6 +59,32 @@ WL.registerComponent('stick-movement', {
 
         if (dt > 1 / 45) {
             dt = 1 / 45;
+        }
+
+        if (PP.myLeftGamepad.getButtonInfo(PP.ButtonType.SELECT).isPressed()) {
+            let mesh = this.object.pp_getComponentHierarchy("mesh");
+
+            let scale = mesh.object.pp_getScale();
+            scale[1] = this._myInitialHeight / 4;
+            mesh.object.pp_setScale(scale);
+
+            let position = mesh.object.pp_getPositionLocal();
+            position[1] = this._myInitialHeight / (4 * this._myScale);
+            mesh.object.pp_setPositionLocal(position);
+
+            this._myCollisionCheckParams.myHeight = this._myInitialHeight / 2;
+        } else {
+            let mesh = this.object.pp_getComponentHierarchy("mesh");
+
+            let scale = mesh.object.pp_getScale();
+            scale[1] = this._myInitialHeight / 2;
+            mesh.object.pp_setScale(scale);
+
+            let position = mesh.object.pp_getPositionLocal();
+            position[1] = this._myInitialHeight / (2 * this._myScale);
+            mesh.object.pp_setPositionLocal(position);
+
+            this._myCollisionCheckParams.myHeight = this._myInitialHeight;
         }
 
         let up = this.object.pp_getUp();
@@ -159,6 +187,7 @@ WL.registerComponent('stick-movement', {
 
         let mesh = this.object.pp_getComponentHierarchy("mesh");
         this._myCollisionCheckParams.myHeight = mesh.object.pp_getScale()[1] * 2;
+        this._myInitialHeight = this._myCollisionCheckParams.myHeight;
 
         this._myCollisionCheckParams.myDebugActive = false;
     },
