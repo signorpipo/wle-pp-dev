@@ -547,7 +547,7 @@ Array.prototype.vec3_isNormalized = function () {
 };
 
 Array.prototype.vec3_isZero = function () {
-    return this.vec3_length() < this._pp_epsilon;
+    return this.vec3_length() == 0;
 };
 
 Array.prototype.vec3_componentAlongAxis = function (axis, out = glMatrix.vec3.create()) {

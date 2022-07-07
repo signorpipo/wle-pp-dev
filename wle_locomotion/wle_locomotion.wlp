@@ -100,8 +100,11 @@
                         "_myMaxSpeed": 2.0,
                         "_myFlyEnabled": true,
                         "_myMinAngleToFly": 60.0,
-                        "_myMinAngleToFlyDown": 1.0,
-                        "_myMinAngleToFlyUp": 60.0
+                        "_myMinAngleToFlyDown": 30.0,
+                        "_myMinAngleToFlyUp": 30.0,
+                        "_myMinAngleToFlyDownHead": 50.0,
+                        "_myMinAngleToFlyDownHand": 1.0,
+                        "_myIsSnapTurn": true
                     }
                 }
             ]

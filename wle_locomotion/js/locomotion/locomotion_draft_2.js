@@ -4,8 +4,11 @@ WL.registerComponent('locomotion-draft-2', {
     _myIsSnapTurn: { type: WL.Type.Bool, default: true },
     _mySnapTurnAngle: { type: WL.Type.Float, default: 30 },
     _myFlyEnabled: { type: WL.Type.Bool, default: false },
-    _myMinAngleToFlyUp: { type: WL.Type.Float, default: 60 },
-    _myMinAngleToFlyDown: { type: WL.Type.Float, default: 1 },
+    _myMinAngleToFlyUpHead: { type: WL.Type.Float, default: 30 },
+    _myMinAngleToFlyDownHead: { type: WL.Type.Float, default: 50 },
+    _myMinAngleToFlyUpHand: { type: WL.Type.Float, default: 60 },
+    _myMinAngleToFlyDownHand: { type: WL.Type.Float, default: 1 },
+    _myMinAngleToFlyRight: { type: WL.Type.Float, default: 30 },
     _myDirectionReference: { type: WL.Type.Enum, values: ['head', 'hand left', 'hand right'], default: 'hand left' }
 }, {
     init() {
@@ -43,7 +46,22 @@ WL.registerComponent('locomotion-draft-2', {
 
         this._myCollisionCheck = new CollisionCheck();
 
-        this._myDirectionConverter = new Direction2DTo3DConverter(this._myFlyEnabled, this._myMinAngleToFlyUp, this._myMinAngleToFlyDown);
+        let directionConverterHeadParams = new Direction2DTo3DConverterParams();
+        directionConverterHeadParams.myAutoUpdateFly = this._myFlyEnabled;
+        directionConverterHeadParams.myMinAngleToFlyForwardUp = this._myMinAngleToFlyUpHead;
+        directionConverterHeadParams.myMinAngleToFlyForwardDown = this._myMinAngleToFlyDownHead;
+        directionConverterHeadParams.myMinAngleToFlyRightUp = this._myMinAngleToFlyRight;
+        directionConverterHeadParams.myMinAngleToFlyRightDown = this._myMinAngleToFlyRight;
+
+        let directionConverterHandParams = new Direction2DTo3DConverterParams();
+        directionConverterHandParams.myAutoUpdateFly = this._myFlyEnabled;
+        directionConverterHandParams.myMinAngleToFlyForwardUp = this._myMinAngleToFlyUpHand;
+        directionConverterHandParams.myMinAngleToFlyForwardDown = this._myMinAngleToFlyDownHand;
+        directionConverterHandParams.myMinAngleToFlyRightUp = this._myMinAngleToFlyRight;
+        directionConverterHandParams.myMinAngleToFlyRightDown = this._myMinAngleToFlyRight;
+
+        this._myDirectionConverterHead = new Direction2DTo3DConverter(directionConverterHeadParams);
+        this._myDirectionConverterHand = new Direction2DTo3DConverter(directionConverterHandParams);
 
         this._myCollisionCheckParams = new CollisionCheckParams();
         this._setupCollisionCheckParams();
@@ -91,14 +109,19 @@ WL.registerComponent('locomotion-draft-2', {
             let headMovement = [0, 0, 0];
 
             {
-                let axes = [0, 0];
-
-                axes = PP.myLeftGamepad.getAxesInfo().getAxes();
-
                 let minIntensityThreshold = 0.1;
-                if (axes.vec2_length() > minIntensityThreshold) {
+                let axes = PP.myLeftGamepad.getAxesInfo().getAxes();
+                axes[0] = Math.abs(axes[0]) > minIntensityThreshold ? axes[0] : 0;
+                axes[1] = Math.abs(axes[1]) > minIntensityThreshold ? axes[1] : 0;
+
+                if (!axes.vec3_isZero()) {
                     this._myStickIdleCount = 2;
-                    let direction = this._myDirectionConverter.convert(axes, this._myDirectionReferenceObject.pp_getTransform(), playerUp);
+                    let direction = null;
+                    if (this._mySessionActive && this._myDirectionReference != 0) {
+                        direction = this._myDirectionConverterHand.convert(axes, this._myDirectionReferenceObject.pp_getTransform(), playerUp);
+                    } else {
+                        direction = this._myDirectionConverterHead.convert(axes, this._myDirectionReferenceObject.pp_getTransform(), playerUp);
+                    }
 
                     if (direction.vec3_length() > 0.0001) {
                         direction.vec3_normalize(direction);
@@ -114,7 +137,8 @@ WL.registerComponent('locomotion-draft-2', {
                     if (this._myStickIdleCount > 0) {
                         this._myStickIdleCount--;
                         if (this._myStickIdleCount == 0) {
-                            this._myDirectionConverter.reset();
+                            this._myDirectionConverterHead.reset();
+                            this._myDirectionConverterHand.reset();
                         }
                     }
                 }
@@ -145,7 +169,7 @@ WL.registerComponent('locomotion-draft-2', {
 
             let headRotation = PP.quat_create();
             {
-                axes = PP.myRightGamepad.getAxesInfo().getAxes();
+                let axes = PP.myRightGamepad.getAxesInfo().getAxes();
 
                 if (!this._myIsSnapTurn) {
                     let minIntensityThreshold = 0.1;
@@ -183,7 +207,8 @@ WL.registerComponent('locomotion-draft-2', {
 
             if (this._myCollisionRuntimeParams.myIsOnGround) {
                 this._myIsFlying = false;
-                this._myDirectionConverter.stopFlying();
+                this._myDirectionConverterHead.stopFlying();
+                this._myDirectionConverterHand.stopFlying();
             }
         }
     },
