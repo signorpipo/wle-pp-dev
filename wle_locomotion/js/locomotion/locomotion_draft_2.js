@@ -148,13 +148,20 @@ WL.registerComponent('locomotion-draft-2', {
                     }
                 }
 
-                if (PP.myLeftGamepad.getButtonInfo(PP.ButtonType.TOP_BUTTON).isPressed()) {
-                    headMovement.vec3_add([0, this._myMaxSpeed * dt, 0], headMovement);
-                    this._myIsFlying = true;
-                } else if (PP.myLeftGamepad.getButtonInfo(PP.ButtonType.BOTTOM_BUTTON).isPressed()) {
-                    headMovement.vec3_add([0, -this._myMaxSpeed * dt, 0], headMovement);
-                    this._myIsFlying = true;
+                if (!PP.myLeftGamepad.getButtonInfo(PP.ButtonType.SQUEEZE).isPressed()) {
+                    if (PP.myLeftGamepad.getButtonInfo(PP.ButtonType.TOP_BUTTON).isPressed()) {
+                        headMovement.vec3_add([0, this._myMaxSpeed * dt, 0], headMovement);
+                        this._myIsFlying = true;
+                    } else if (PP.myLeftGamepad.getButtonInfo(PP.ButtonType.BOTTOM_BUTTON).isPressed()) {
+                        headMovement.vec3_add([0, -this._myMaxSpeed * dt, 0], headMovement);
+                        this._myIsFlying = true;
+                    }
                 }
+            }
+
+
+            if (PP.myLeftGamepad.getButtonInfo(PP.ButtonType.BOTTOM_BUTTON).isPressEnd(2)) {
+                this._myIsFlying = false;
             }
 
             let movementToApply = headMovement;

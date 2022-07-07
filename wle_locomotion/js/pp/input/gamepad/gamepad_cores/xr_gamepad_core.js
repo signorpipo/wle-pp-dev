@@ -6,10 +6,8 @@ PP.XRGamepadCore = class XRGamepadCore extends PP.GamepadCore {
 
         this._myHandPose = new PP.HandPose(this._myHandedness, handPoseParams);
 
-        this._mySelectStart = false;
-        this._mySelectEnd = false;
-        this._mySqueezeStart = false;
-        this._mySqueezeEnd = false;
+        this._mySelectPressed = false;
+        this._mySqueezePressed = false;
 
         this._myIsXRSessionActive = false;
         this._myInputSource = null;
@@ -41,13 +39,6 @@ PP.XRGamepadCore = class XRGamepadCore extends PP.GamepadCore {
 
     preUpdate(dt) {
         this._updateHandPose(dt);
-    }
-
-    postUpdate(dt) {
-        this._mySelectStart = false;
-        this._mySelectEnd = false;
-        this._mySqueezeStart = false;
-        this._mySqueezeEnd = false;
     }
 
     getButtonData(buttonType) {
@@ -143,20 +134,9 @@ PP.XRGamepadCore = class XRGamepadCore extends PP.GamepadCore {
 
         if (this.isGamepadCoreActive()) {
             if (buttonType == PP.ButtonType.SELECT) {
-                if (this._mySelectStart) {
-                    isPressed = true;
-                }
-                if (this._mySelectEnd) {
-                    isPressed = false;
-                }
+                isPressed = this._mySelectPressed;
             } else if (buttonType == PP.ButtonType.SQUEEZE) {
-                if (this._mySqueezeStart) {
-                    isPressed = true;
-                }
-
-                if (this._mySqueezeEnd) {
-                    isPressed = false;
-                }
+                isPressed = this._mySqueezePressed;
             }
         }
 
@@ -180,25 +160,25 @@ PP.XRGamepadCore = class XRGamepadCore extends PP.GamepadCore {
     //Select and Squeeze are managed this way to be more compatible
     _selectStart(event) {
         if (this._myInputSource != null && this._myInputSource == event.inputSource) {
-            this._mySelectStart = true;
+            this._mySelectPressed = true;
         }
     }
 
     _selectEnd(event) {
         if (this._myInputSource != null && this._myInputSource == event.inputSource) {
-            this._mySelectEnd = true;
+            this._mySelectPressed = false;
         }
     }
 
     _squeezeStart(event) {
         if (this._myInputSource != null && this._myInputSource == event.inputSource) {
-            this._mySqueezeStart = true;
+            this._mySqueezePressed = true;
         }
     }
 
     _squeezeEnd(event) {
         if (this._myInputSource != null && this._myInputSource == event.inputSource) {
-            this._mySqueezeEnd = true;
+            this._mySqueezePressed = false;
         }
     }
 };

@@ -10983,7 +10983,7 @@
                 0.1,
                 0.0,
                 6.0,
-                1.0,
+                0.6,
                 0.0,
                 1.0
             ],
@@ -15084,6 +15084,143 @@
                 }
             ],
             "deleted": true
+        },
+        "496": {
+            "name": "Stick Prototype",
+            "parent": "386",
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                6.0,
+                0.0,
+                1.0
+            ],
+            "components": [
+                {
+                    "type": "stick-movement",
+                    "stick-movement": {
+                        "_myFlyEnabled": true,
+                        "_myScale": 0.1
+                    }
+                }
+            ]
+        },
+        "497": {
+            "name": "Mesh",
+            "parent": "496",
+            "components": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "498"
+                    }
+                }
+            ],
+            "transformation": [
+                0.25,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.8999999,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.25,
+                0.0,
+                0.0,
+                0.8999999,
+                0.0,
+                1.0
+            ]
         }
     },
     "meshes": {
@@ -15356,6 +15493,30 @@
                 ],
                 "diffuseColor": [
                     0.599384,
+                    0.4133794,
+                    0.8784313,
+                    1.0
+                ]
+            }
+        },
+        "498": {
+            "name": "Special",
+            "Phong": {
+                "ambientColor": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "ambientFactor": 0.5,
+                "specularColor": [
+                    1.0,
+                    1.0,
+                    1.0,
+                    0.2509804
+                ],
+                "diffuseColor": [
+                    0.8620177,
                     0.4133794,
                     0.8784313,
                     1.0

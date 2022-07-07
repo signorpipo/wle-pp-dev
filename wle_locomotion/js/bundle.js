@@ -1,10 +1,13 @@
 //CAULDRON
+
 require('./cauldron/toggle_require_mouse_down.js');
 require('./cauldron/direction_2D_to_3D_converter.js');
 require('./cauldron/character_spawner.js');
 require('./cauldron/ai_movement.js');
+require('./cauldron/stick_movement.js');
 
 //LOCOMOTION
+
 require('./locomotion/collision_check.js');
 require('./locomotion/keyboard_gamepad');
 require('./locomotion/locomotion_draft.js');
@@ -13,6 +16,7 @@ require('./locomotion/locomotion_fly_draft.js');
 require('./locomotion/locomotion_floating_error.js');
 
 //TEST
+
 require('./test/raycast_test.js');
 require('./test/moving_physx_test.js');
 require('./test/bullet_through_wall_test.js');
