@@ -57,8 +57,8 @@ PP.DebugArrow = class DebugArrow {
     }
 
     setStartDirectionLength(start, direction, length) {
-        this._myParams.myStart = start;
-        this._myParams.myDirection = direction;
+        this._myParams.myStart.vec3_copy(start);
+        this._myParams.myDirection.vec3_copy(direction);
         this._myParams.myDirection.vec3_normalize(this._myParams.myDirection);
         this._myParams.myLength = length;
 
@@ -99,7 +99,8 @@ PP.DebugArrow = class DebugArrow {
 
         this._myArrowMesh.material.color = this._myParams.myColor;
 
-        this._myDebugLine.setStartEnd(this._myParams.myStart, this._myEnd);
+        let direction = this._myEnd.vec3_sub(this._myParams.myStart);
+        this._myDebugLine.setStartDirectionLength(this._myParams.myStart, direction.vec3_normalize(), direction.vec3_length());
         this._myDebugLine.setColor(this._myParams.myColor);
         this._myDebugLine.setThickness(this._myParams.myThickness);
     }

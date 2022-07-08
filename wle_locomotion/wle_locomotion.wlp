@@ -10991,6 +10991,13 @@
                 {
                     "type": "pp-adjust-physx-scale",
                     "active": true
+                },
+                {
+                    "type": "pp-set-active",
+                    "pp-set-active": {
+                        "_myActive": false
+                    },
+                    "active": false
                 }
             ]
         },

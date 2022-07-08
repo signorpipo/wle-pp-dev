@@ -16,7 +16,7 @@ PP.DebugLineParams = class DebugLineParams {
         end.vec3_sub(start, this.myDirection);
         this.myLength = this.myDirection.vec3_length();
         this.myDirection.vec3_normalize(this.myDirection);
-        this.myStart = start;
+        this.myStart.vec3_copy(start);
 
         return this;
     }
@@ -66,8 +66,8 @@ PP.DebugLine = class DebugLine {
     }
 
     setStartDirectionLength(start, direction, length) {
-        this._myParams.myStart = start;
-        this._myParams.myDirection = direction;
+        this._myParams.myStart.vec3_copy(start);
+        this._myParams.myDirection.vec3_copy(direction);
         this._myParams.myDirection.vec3_normalize(this._myParams.myDirection);
         this._myParams.myLength = length;
 

@@ -1,15 +1,12 @@
 PP.DebugRaycastParams = class DebugRaycastParams {
 
     constructor() {
-        this.myOrigin = [0, 0, 0];
-        this.myDirection = [0, 0, 1];
-        this.myDistance = 0;
+        this._myRaycastResult = new PP.RaycastResult();
+        this._myRaycastResult.myRaycastSetup = new PP.RaycastSetup();
+        this._myRaycastResult._myUnusedHits.push(new PP.RaycastResultHit());
 
         this.myNormalLength = 0.1;
-
         this.myThickness = 0.005;
-
-        this._myRaycastResult = {};
 
         this.myType = PP.DebugDrawObjectType.RAYCAST;
     }
@@ -19,18 +16,27 @@ PP.DebugRaycastParams = class DebugRaycastParams {
     }
 
     set myRaycastResult(result) {
-        if (result.hitCount != null && result.hitCount > 0) {
-            this._myRaycastResult.hitCount = result.hitCount;
-            this._myRaycastResult.locations = [result.locations[0].pp_clone()];
-            this._myRaycastResult.normals = [result.normals[0].pp_clone()];
-            this._myRaycastResult.distances = result.distances.pp_clone();
-            this._myRaycastResult.objects = result.objects.pp_clone();
+        this._myRaycastResult.myRaycastSetup.myOrigin.vec3_copy(result.myRaycastSetup.myOrigin);
+        this._myRaycastResult.myRaycastSetup.myDirection.vec3_copy(result.myRaycastSetup.myDirection);
+        this._myRaycastResult.myRaycastSetup.myDistance = result.myRaycastSetup.myDistance;
+
+        if (result.myHits.length > 0) {
+            let hit = null;
+
+            if (this._myRaycastResult.myHits.length > 0) {
+                hit = this._myRaycastResult.myHits[0];
+            } else {
+                hit = this._myRaycastResult._myUnusedHits.pop();
+                this._myRaycastResult.myHits.push(hit);
+            }
+
+            hit.myPosition.vec3_copy(result.myHits[0].myPosition);
+            hit.myNormal.vec3_copy(result.myHits[0].myNormal);
+            hit.myDistance = result.myHits[0].myDistance;
         } else {
-            this._myRaycastResult.hitCount = 0;
-            this._myRaycastResult.locations = null;
-            this._myRaycastResult.normals = null;
-            this._myRaycastResult.distances = null;
-            this._myRaycastResult.objects = null;
+            if (this._myRaycastResult.myHits.length > 0) {
+                this._myRaycastResult._myUnusedHits.push(this._myRaycastResult.myHits.pop());
+            }
         }
     }
 };
@@ -59,7 +65,7 @@ PP.DebugRaycast = class DebugRaycast {
         if (this._myVisible != visible) {
             this._myVisible = visible;
             this._myDebugRaycast.setVisible(visible);
-            if (this._myParams.myRaycastResult != null && this._myParams.myRaycastResult.hitCount > 0) {
+            if (this._myParams.myRaycastResult.myHits.length > 0) {
                 this._myDebugRaycastHit.setVisible(visible);
             } else {
                 this._myDebugRaycastHit.setVisible(false);
@@ -77,13 +83,6 @@ PP.DebugRaycast = class DebugRaycast {
 
     setParams(params) {
         this._myParams = params;
-        this._markDirty();
-    }
-
-    setRaycastParams(origin, direction, distance) {
-        this._myParams.myOrigin = origin;
-        this._myParams.myDirection = direction;
-        this._myParams.myDistance = distance;
         this._markDirty();
     }
 
@@ -111,15 +110,24 @@ PP.DebugRaycast = class DebugRaycast {
     }
 
     _refresh() {
-        this._myDebugRaycast.setStartDirectionLength(this._myParams.myOrigin, this._myParams.myDirection, this._myParams.myDistance);
+        if (this._myParams.myRaycastResult.myHits.length > 0) {
+            this._myDebugRaycast.setStartDirectionLength(
+                this._myParams.myRaycastResult.myRaycastSetup.myOrigin,
+                this._myParams.myRaycastResult.myRaycastSetup.myDirection,
+                this._myParams.myRaycastResult.myHits[0].myDistance);
 
-        if (this._myParams.myRaycastResult != null && this._myParams.myRaycastResult.hitCount > 0) {
-            this._myDebugRaycastHit.setStartDirectionLength(this._myParams.myRaycastResult.locations[0], this._myParams.myRaycastResult.normals[0], this._myParams.myNormalLength);
+            this._myDebugRaycastHit.setStartDirectionLength(
+                this._myParams.myRaycastResult.myRaycastSetup.myOrigin,
+                this._myParams.myRaycastResult.myRaycastSetup.myDirection.vec3_negate(),
+                this._myParams.myNormalLength);
+
             this._myDebugRaycastHit.setVisible(this._myVisible);
-
-            this._myDebugRaycast.setStartDirectionLength(this._myParams.myOrigin, this._myParams.myDirection, this._myParams.myRaycastResult.distances[0]);
         } else {
-            this._myDebugRaycast.setStartDirectionLength(this._myParams.myOrigin, this._myParams.myDirection, this._myParams.myDistance);
+            this._myDebugRaycast.setStartDirectionLength(
+                this._myParams.myRaycastResult.myRaycastSetup.myOrigin,
+                this._myParams.myRaycastResult.myRaycastSetup.myDirection,
+                this._myParams.myRaycastResult.myRaycastSetup.myDistance);
+
             this._myDebugRaycastHit.setVisible(false);
         }
 
@@ -137,12 +145,9 @@ PP.DebugRaycast = class DebugRaycast {
 
     clone() {
         let clonedParams = new PP.DebugRaycastParams();
-        clonedParams.myOrigin.pp_copy(this._myParams.myOrigin);
-        clonedParams.myDirection.pp_copy(this._myParams.myDirection);
-        clonedParams.myDistance = this._myParams.myDistance;
+        clonedParams.myRaycastResult = this._myParams.myRaycastResult;
         clonedParams.myNormalLength = this._myParams.myNormalLength;
         clonedParams.myThickness = this._myParams.myThickness;
-        clonedParams.myRaycastResult = this._myParams.myRaycastResult;
 
         let clone = new PP.DebugRaycast(clonedParams);
         clone.setAutoRefresh(this._myAutoRefresh);

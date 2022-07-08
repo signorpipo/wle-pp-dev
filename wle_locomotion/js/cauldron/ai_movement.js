@@ -111,6 +111,10 @@ WL.registerComponent('ai-movement', {
         let mesh = this.object.pp_getComponentHierarchy("mesh");
         this._myCollisionCheckParams.myHeight = mesh.object.pp_getScale()[1] * 2;
 
+        this._myCollisionCheckParams.myBlockLayerFlags = new PP.PhysicsLayerFlags();
+        this._myCollisionCheckParams.myBlockLayerFlags.setMask(255);
+        this._myCollisionCheckParams.myPhysXsToIgnore = [];
+
         this._myCollisionCheckParams.myDebugActive = false;
     },
     pp_clone(clonedObject, deepCloneParams, extraData) {

@@ -121,6 +121,8 @@ Math.pp_lerp = function (from, to, interpolationValue) {
         return to;
     }
 
+    interpolationValue = Math.pp_clamp(interpolationValue, 0, 1);
+
     return interpolationValue * (to - from) + from;
 };
 
