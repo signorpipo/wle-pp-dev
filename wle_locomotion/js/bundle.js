@@ -84,7 +84,10 @@ require('./pp/cauldron/utils/mesh_utils.js');
 require('./pp/cauldron/utils/save_utils.js');
 require('./pp/cauldron/utils/text_utils.js');
 require('./pp/cauldron/utils/xr_utils.js');
-require('./pp/cauldron/utils/physics_utils.js');
+
+require('./pp/cauldron/physics/physics_utils.js');
+require('./pp/cauldron/physics/physics_raycast_data.js');
+require('./pp/cauldron/physics/physics_layer_flags.js');
 
 //	DEBUG
 require('./pp/debug/debug_manager.js');

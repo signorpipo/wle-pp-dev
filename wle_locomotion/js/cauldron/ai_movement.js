@@ -112,8 +112,8 @@ WL.registerComponent('ai-movement', {
         this._myCollisionCheckParams.myHeight = mesh.object.pp_getScale()[1] * 2;
 
         this._myCollisionCheckParams.myBlockLayerFlags = new PP.PhysicsLayerFlags();
-        this._myCollisionCheckParams.myBlockLayerFlags.setMask(255);
-        this._myCollisionCheckParams.myPhysXsToIgnore = [];
+        this._myCollisionCheckParams.myBlockLayerFlags.setAllFlagsActive(true);
+        this._myCollisionCheckParams.myPhysXComponentsToIgnore = [];
 
         this._myCollisionCheckParams.myDebugActive = false;
     },
