@@ -260,13 +260,12 @@ CollisionCheck = class CollisionCheck {
             let distance = direction.vec3_length();
             direction.vec3_normalize(direction);
 
-            let raycastResult = this._raycastAndDebug(origin, direction, distance, true, collisionCheckParams, collisionRuntimeParams);
+            let raycastResult = this._raycastAndDebug(origin, direction, distance, false, collisionCheckParams, collisionRuntimeParams);
 
-            if (raycastResult.myHits.length > 0) {
+            if (raycastResult.getHitsOutsideCollision().length > 0) {
                 isVerticalPositionOk = false;
                 break;
-            } else {
-                //#TODO  AGGIUNGERE CHECK DENTRO MURO
+            } else if (raycastResult.myHits.length == 0) {
                 atLeastOneIsOk = true;
             }
         }

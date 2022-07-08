@@ -1,5 +1,3 @@
-//#TODO creare raycast data
-
 PP.PhysicsUtils = {
     _myLayerFlagAmount: 8,
     _myLayerFlagNames: ["0", "1", "2", "3", "4", "5", "6", "7"],
@@ -20,12 +18,8 @@ PP.PhysicsUtils = {
 
         raycastResult.myRaycastSetup = raycastSetup;
 
-        if (raycastResult.myHits.length > 0) {
-            raycastResult._myUnusedHits.push(...raycastResult.myHits);
-            raycastResult.myHits = [];
-
-            //#TODO RIUSARE HIT SENZA SPOSTARLO SE POSSIBILE
-        }
+        let currentFreeHitIndex = 0;
+        let validHitCount = 0;
 
         for (let i = 0; i < internalRaycastResult.hitCount; i++) {
             let isHitValid = true;
@@ -41,8 +35,13 @@ PP.PhysicsUtils = {
 
             if (isHitValid) {
                 let hit = null;
+                let reusedFromHits = false;
 
-                if (raycastResult._myUnusedHits.length > 0) {
+                if (currentFreeHitIndex < raycastResult.myHits.length) {
+                    hit = raycastResult.myHits[currentFreeHitIndex];
+                    reusedFromHits = true;
+                    currentFreeHitIndex++;
+                } else if (raycastResult._myUnusedHits != null && raycastResult._myUnusedHits.length > 0) {
                     hit = raycastResult._myUnusedHits.pop();
                 } else {
                     hit = new PP.RaycastResultHit();
@@ -53,7 +52,21 @@ PP.PhysicsUtils = {
                 hit.myDistance = internalRaycastResult.distances[i];
                 hit.myObject = internalRaycastResult.objects[i];
 
-                raycastResult.myHits.push(hit);
+                if (!reusedFromHits) {
+                    raycastResult.myHits.push(hit);
+                }
+
+                validHitCount++;
+            }
+        }
+
+        if (raycastResult.myHits.length > validHitCount) {
+            if (raycastResult._myUnusedHits == null) {
+                raycastResult._myUnusedHits = [];
+            }
+
+            for (let i = 0; i < raycastResult.myHits.length - validHitCount; i++) {
+                raycastResult._myUnusedHits.push(raycastResult.myHits.pop());
             }
         }
 

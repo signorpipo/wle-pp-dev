@@ -32,10 +32,6 @@ WL.registerComponent('ai-movement', {
             this._setupCollisionCheckParams();
         }
 
-        if (dt > 1 / 45) {
-            dt = 1 / 45;
-        }
-
         this._myChangeDirectionTimer.update(dt);
         this._myCollisionTimer.update(dt);
 
@@ -113,7 +109,7 @@ WL.registerComponent('ai-movement', {
 
         this._myCollisionCheckParams.myBlockLayerFlags = new PP.PhysicsLayerFlags();
         this._myCollisionCheckParams.myBlockLayerFlags.setAllFlagsActive(true);
-        this._myCollisionCheckParams.myPhysXComponentsToIgnore = [];
+        this._myCollisionCheckParams.myPhysXComponentsToIgnore = this.object.pp_getComponentsHierarchy("physx");
 
         this._myCollisionCheckParams.myDebugActive = false;
     },

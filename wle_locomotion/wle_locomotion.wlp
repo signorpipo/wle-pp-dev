@@ -14523,7 +14523,7 @@
                         "_myShortPrototype": "486",
                         "_myRoomSize": 10.0,
                         "_myRoomHeight": 5.0,
-                        "_myAmount": 100
+                        "_myAmount": 25
                     }
                 }
             ]
@@ -14659,9 +14659,16 @@
                         "triangleMesh": {
                             "mesh": "p1",
                             "scaling": [
-                                0.3249999,
-                                0.9499999,
-                                0.3249999
+                                0.25,
+                                0.8999999,
+                                0.25
+                            ]
+                        },
+                        "box": {
+                            "extents": [
+                                0.25,
+                                0.8999999,
+                                0.25
                             ]
                         }
                     }
@@ -14810,13 +14817,20 @@
                         "triangleMesh": {
                             "mesh": "p1",
                             "scaling": [
-                                0.3249998,
-                                0.5,
-                                0.3249998
+                                0.25,
+                                0.4499999,
+                                0.25
                             ]
                         },
                         "kinematic": true,
-                        "gravity": false
+                        "gravity": false,
+                        "box": {
+                            "extents": [
+                                0.25,
+                                0.4499999,
+                                0.25
+                            ]
+                        }
                     }
                 }
             ],
@@ -15207,6 +15221,22 @@
                     "mesh": {
                         "mesh": "p1",
                         "material": "498"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "triangleMesh",
+                        "triangleMesh": {
+                            "mesh": "p1",
+                            "scaling": [
+                                0.25,
+                                0.8999999,
+                                0.25
+                            ]
+                        },
+                        "kinematic": true,
+                        "gravity": false
                     }
                 }
             ],

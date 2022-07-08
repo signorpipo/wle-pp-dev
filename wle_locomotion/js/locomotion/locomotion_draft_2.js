@@ -605,7 +605,7 @@ WL.registerComponent('locomotion-draft-2', {
 
         this._myCollisionCheckParams.myBlockLayerFlags = new PP.PhysicsLayerFlags();
         this._myCollisionCheckParams.myBlockLayerFlags.setAllFlagsActive(true);
-        this._myCollisionCheckParams.myPhysXComponentsToIgnore = [];
+        this._myCollisionCheckParams.myPhysXComponentsToIgnore = this.object.pp_getComponentsHierarchy("physx");
 
         this._myCollisionCheckParams.myDebugActive = false;
     }

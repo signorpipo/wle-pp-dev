@@ -16,20 +16,31 @@ PP.RaycastResult = class RaycastResult {
         this.myRaycastSetup = null;
         this.myHits = [];
 
-        this._myUnusedHits = [];
+        this._myUnusedHits = null;
     }
 
-    areHitsInsideCollision() {
-        let areHitsInsideCollision = this.myHits.length > 0;
+    getHitsInsideCollision() {
+        let hits = [];
 
         for (let hit of this.myHits) {
-            if (!hit.isHitInsideCollision(this.myRaycastSetup)) {
-                areHitsInsideCollision = false;
-                break;
+            if (hit.isHitInsideCollision(this.myRaycastSetup)) {
+                hits.push(hit);
             }
         }
 
-        return areHitsInsideCollision;
+        return hits;
+    }
+
+    getHitsOutsideCollision() {
+        let hits = [];
+
+        for (let hit of this.myHits) {
+            if (!hit.isHitInsideCollision(this.myRaycastSetup)) {
+                hits.push(hit);
+            }
+        }
+
+        return hits;
     }
 };
 

@@ -3,6 +3,7 @@ PP.DebugRaycastParams = class DebugRaycastParams {
     constructor() {
         this._myRaycastResult = new PP.RaycastResult();
         this._myRaycastResult.myRaycastSetup = new PP.RaycastSetup();
+        this._myRaycastResult._myUnusedHits = [];
         this._myRaycastResult._myUnusedHits.push(new PP.RaycastResultHit());
 
         this.myNormalLength = 0.1;

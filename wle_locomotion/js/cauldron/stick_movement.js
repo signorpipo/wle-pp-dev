@@ -57,16 +57,16 @@ WL.registerComponent('stick-movement', {
             this._setupCollisionCheckParams();
         }
 
-        if (dt > 1 / 45) {
-            dt = 1 / 45;
-        }
-
         if (PP.myLeftGamepad.getButtonInfo(PP.ButtonType.SELECT).isPressed()) {
             let mesh = this.object.pp_getComponentHierarchy("mesh");
+            let physX = this.object.pp_getComponentHierarchy("physx");
 
             let scale = mesh.object.pp_getScale();
             scale[1] = this._myInitialHeight / 4;
             mesh.object.pp_setScale(scale);
+            physX.extents = scale;
+            physX.active = false;
+            physX.active = true;
 
             let position = mesh.object.pp_getPositionLocal();
             position[1] = this._myInitialHeight / (4 * this._myScale);
@@ -75,10 +75,14 @@ WL.registerComponent('stick-movement', {
             this._myCollisionCheckParams.myHeight = this._myInitialHeight / 2;
         } else {
             let mesh = this.object.pp_getComponentHierarchy("mesh");
+            let physX = this.object.pp_getComponentHierarchy("physx");
 
             let scale = mesh.object.pp_getScale();
             scale[1] = this._myInitialHeight / 2;
             mesh.object.pp_setScale(scale);
+            physX.extents = scale;
+            physX.active = false;
+            physX.active = true;
 
             let position = mesh.object.pp_getPositionLocal();
             position[1] = this._myInitialHeight / (2 * this._myScale);
@@ -191,7 +195,7 @@ WL.registerComponent('stick-movement', {
 
         this._myCollisionCheckParams.myBlockLayerFlags = new PP.PhysicsLayerFlags();
         this._myCollisionCheckParams.myBlockLayerFlags.setAllFlagsActive(true);
-        this._myCollisionCheckParams.myPhysXComponentsToIgnore = [];
+        this._myCollisionCheckParams.myPhysXComponentsToIgnore = this.object.pp_getComponentsHierarchy("physx");
 
         this._myCollisionCheckParams.myDebugActive = false;
     },
