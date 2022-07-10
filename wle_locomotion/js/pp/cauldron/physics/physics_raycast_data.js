@@ -27,7 +27,7 @@ PP.RaycastResult = class RaycastResult {
         let hits = [];
 
         for (let hit of this.myHits) {
-            if (hit.isHitInsideCollision(this.myRaycastSetup)) {
+            if (hit.myIsInsideCollision) {
                 hits.push(hit);
             }
         }
@@ -39,7 +39,7 @@ PP.RaycastResult = class RaycastResult {
         let hits = [];
 
         for (let hit of this.myHits) {
-            if (!hit.isHitInsideCollision(this.myRaycastSetup)) {
+            if (!hit.myIsInsideCollision) {
                 hits.push(hit);
             }
         }
@@ -54,15 +54,12 @@ PP.RaycastResultHit = class RaycastResultHit {
         this.myNormal = [0, 0, 0];
         this.myDistance = 0;
         this.myObject = null;
+
+        this.myIsInsideCollision = false;
     }
 
     isValid() {
         return this.myObject != null;
-    }
-
-    isHitInsideCollision(raycastSetup) {
-        let isHitInsideCollision = raycastSetup.myOrigin.pp_equals(this.myPosition) && raycastSetup.myDirection.vec3_angle(this.myNormal) == 180;
-        return isHitInsideCollision;
     }
 
     copy(hit) {
@@ -70,6 +67,7 @@ PP.RaycastResultHit = class RaycastResultHit {
         this.myNormal.vec3_copy(hit.myNormal);
         this.myDistance = hit.myDistance;
         this.myObject = hit.myObject;
+        this.myIsInsideCollision = hit.myIsInsideCollision;
     }
 
     reset() {
@@ -77,5 +75,6 @@ PP.RaycastResultHit = class RaycastResultHit {
         this.myNormal.vec3_zero();
         this.myDistance = 0;
         this.myObject = null;
+        this.myIsInsideCollision = false;
     }
 };

@@ -624,15 +624,15 @@ Array.prototype.vec3_isFurtherAlongAxis = function () {
 }();
 
 Array.prototype.vec3_isToTheRight = function (vector, upAxis) {
-    return this.vec3_signTo(vector, upAxis) < 0;
+    return this.vec3_signTo(vector, upAxis) >= 0;
 };
 
 Array.prototype.vec3_signTo = function () {
     let componentAlongThis = glMatrix.vec3.create();
     let componentAlongVector = glMatrix.vec3.create();
     return function (vector, upAxis, zeroSign = 1) {
-        this.vec3_componentAlongAxis(upAxis, componentAlongThis);
-        vector.vec3_componentAlongAxis(upAxis, componentAlongVector);
+        this.vec3_removeComponentAlongAxis(upAxis, componentAlongThis);
+        vector.vec3_removeComponentAlongAxis(upAxis, componentAlongVector);
 
         let angleSigned = this.vec3_angleSigned(vector, upAxis);
         return angleSigned > 0 ? 1 : (angleSigned == 0 ? zeroSign : -1);
@@ -679,6 +679,8 @@ Array.prototype.vec3_projectTowardDirection = function () {
             out.vec3_copy(this);
         } else {
             projectDirectionAxis.vec3_cross(axis, up);
+            up.vec3_normalize(up);
+
             localThis.vec3_removeComponentAlongAxis(up, localThis);
             if (localThis.vec3_isOnSameAxis(axis)) {
                 localThis.vec3_add(origin, out);
@@ -699,8 +701,9 @@ Array.prototype.vec3_projectTowardDirection = function () {
                 fixedProjectDirectionAxis.vec3_normalize(fixedProjectDirectionAxis);
                 fixedProjectDirectionAxis.vec3_scale(lengthToRemove, fixedProjectDirectionAxis);
                 localThis.vec3_add(fixedProjectDirectionAxis, out);
-
                 out.vec3_add(origin, out);
+
+                out.vec3_project(axis, origin, out); // snap on the axis, due to float precision error
             }
         }
 

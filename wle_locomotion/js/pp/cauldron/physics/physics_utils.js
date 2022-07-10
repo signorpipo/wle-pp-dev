@@ -28,10 +28,11 @@ PP.PhysicsUtils = {
                 (raycastSetup.myPhysXComponentsToIgnore.length == 0 ||
                     !raycastSetup.myPhysXComponentsToIgnore.pp_has(physX => internalRaycastResult.objects[i].pp_equals(physX.object)));
 
-            isHitValid = isHitValid &&
-                (!raycastSetup.myIgnoreHitsInsideCollision ||
-                    (!raycastSetup.myOrigin.pp_equals(internalRaycastResult.locations[i]) || raycastSetup.myDirection.vec3_angle(internalRaycastResult.normals[i]) != 180));
+            let isHitInsideCollision = isHitValid &&
+                (raycastSetup.myOrigin.pp_equals(internalRaycastResult.locations[i]) &&
+                    raycastSetup.myDirection.vec3_angle(internalRaycastResult.normals[i]) == 180);
 
+            isHitValid = isHitValid && (!raycastSetup.myIgnoreHitsInsideCollision || !isHitInsideCollision);
 
             if (isHitValid) {
                 let hit = null;
@@ -51,6 +52,7 @@ PP.PhysicsUtils = {
                 hit.myNormal.vec3_copy(internalRaycastResult.normals[i]);
                 hit.myDistance = internalRaycastResult.distances[i];
                 hit.myObject = internalRaycastResult.objects[i];
+                hit.myIsInsideCollision = isHitInsideCollision;
 
                 if (!reusedFromHits) {
                     raycastResult.myHits.push(hit);

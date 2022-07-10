@@ -619,6 +619,6 @@ WL.registerComponent('locomotion-draft-2', {
         this._myCollisionCheckParams.myDebugSlidingActive = true;
         this._myCollisionCheckParams.myDebugGroundInfoActive = false;
         this._myCollisionCheckParams.myDebugRuntimeParamsActive = false;
-        this._myCollisionCheckParams.myDebugFixedMovementActive = false;
+        this._myCollisionCheckParams.myDebugMovementActive = false;
     }
 });

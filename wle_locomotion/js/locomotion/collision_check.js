@@ -102,6 +102,8 @@ CollisionCheck = class CollisionCheck {
         this._myRaycastResult = new PP.RaycastResult();
         this._myFixRaycastResult = new PP.RaycastResult();
 
+        this._myBackupRaycastHit = new PP.RaycastResultHit();
+
         this._myPrevCollisionRuntimeParams = new CollisionRuntimeParams();
 
         this._mySlidingCollisionRuntimeParams = new CollisionRuntimeParams();
@@ -192,7 +194,7 @@ CollisionCheck = class CollisionCheck {
         this._groundCheck(newFeetPosition, transformUp, forward, collisionCheckParams, collisionRuntimeParams);
 
         if (collisionCheckParams.myDebugActive && collisionCheckParams.myDebugMovementActive) {
-            this._debugMovement(movement, fixedMovement, newFeetPosition, transformUp);
+            this._debugMovement(movement, fixedMovement, newFeetPosition, transformUp, collisionCheckParams);
         }
 
         if (collisionCheckParams.myDebugActive && collisionCheckParams.myDebugRuntimeParamsActive) {
@@ -232,7 +234,7 @@ CollisionCheck = class CollisionCheck {
                 this._mySlidingCollisionRuntimeParams.copy(collisionRuntimeParams);
 
                 slidingMovement.vec3_rotateAxis(currentAngle, up, currentMovement);
-                this._horizontalCheck(currentMovement, feetPosition, height, up, collisionCheckParams, this._mySlidingCollisionRuntimeParams);
+                this._horizontalCheck(currentMovement, feetPosition, height, up, collisionCheckParams, this._mySlidingCollisionRuntimeParams, true);
                 if (!this._mySlidingCollisionRuntimeParams.myIsCollidingHorizontally) {
                     lastValidMovement.vec3_copy(currentMovement);
                     collisionRuntimeParams.copy(this._mySlidingCollisionRuntimeParams);
@@ -468,7 +470,7 @@ CollisionCheck = class CollisionCheck {
         return checkPositions;
     }
 
-    _horizontalCheck(movement, feetPosition, height, up, collisionCheckParams, collisionRuntimeParams) {
+    _horizontalCheck(movement, feetPosition, height, up, collisionCheckParams, collisionRuntimeParams, avoidExtraSlidingCheck = false) {
         collisionRuntimeParams.myIsCollidingHorizontally = false;
         collisionRuntimeParams.myHorizontalCollisionHit.reset();
 
@@ -476,17 +478,63 @@ CollisionCheck = class CollisionCheck {
             return movement.vec3_scale(0);
         }
 
+        let movementDirection = movement.vec3_normalize();
+
         let fixedFeetPosition = feetPosition.vec3_add(up.vec3_scale(collisionCheckParams.myDistanceFromFeetToIgnore + 0.00001));
         let fixedHeight = Math.max(0, height - collisionCheckParams.myDistanceFromFeetToIgnore - collisionCheckParams.myDistanceFromHeadToIgnore);
 
         let canMove = this._horizontalMovementCheck(movement, fixedFeetPosition, fixedHeight, up, collisionCheckParams, collisionRuntimeParams);
 
         let fixedMovement = [0, 0, 0];
+        let newFixedFeetPosition = fixedFeetPosition.vec3_add(movement);
         if (canMove) {
-            let newFixedFeetPosition = fixedFeetPosition.vec3_add(movement);
-            let canStay = this._horizontalPositionCheck(newFixedFeetPosition, fixedHeight, up, movement.vec3_normalize(), collisionCheckParams, collisionRuntimeParams);
+            let canStay = this._horizontalPositionCheck(newFixedFeetPosition, fixedHeight, up, movementDirection, collisionCheckParams, collisionRuntimeParams);
             if (canStay) {
                 fixedMovement = movement;
+            }
+        } else if (!avoidExtraSlidingCheck && collisionCheckParams.mySlidingEnabled) {
+            //gather better slide hit position and normal
+
+            let projectDirectionAxis = null;
+            let hitPosition = collisionRuntimeParams.myHorizontalCollisionHit.myPosition;
+            let coneAngle = Math.min(collisionCheckParams.myConeAngle, 180);
+            let hitDirection = hitPosition.vec3_sub(feetPosition);
+            if (hitDirection.vec3_isToTheRight(movementDirection, up)) {
+                projectDirectionAxis = movementDirection.vec3_rotateAxis(-coneAngle / 2, up);
+            } else {
+                projectDirectionAxis = movementDirection.vec3_rotateAxis(coneAngle / 2, up);
+            }
+
+            let fixedMovement = hitDirection.vec3_projectTowardDirection(movementDirection, projectDirectionAxis);
+            if (fixedMovement.vec3_angle(movementDirection) < 0.00001 && fixedMovement.vec3_length() <= movement.vec3_length()) {
+                fixedMovement = movementDirection.vec3_scale(fixedMovement.vec3_length());
+
+                if (collisionCheckParams.myDebugActive && collisionCheckParams.myDebugHorizontalMovementActive) {
+                    {
+                        let debugParams = new PP.DebugArrowParams();
+                        debugParams.myStart = feetPosition.vec3_add(up.vec3_scale(collisionCheckParams.myDistanceFromFeetToIgnore + 0.005));
+                        debugParams.myDirection = movementDirection;
+                        debugParams.myLength = fixedMovement.vec3_length();
+                        debugParams.myColor = [1, 0, 1, 1];
+                        PP.myDebugManager.draw(debugParams);
+                    }
+                }
+
+                this._myBackupRaycastHit.copy(collisionRuntimeParams.myHorizontalCollisionHit);
+                collisionRuntimeParams.myIsCollidingHorizontally = false;
+                collisionRuntimeParams.myHorizontalCollisionHit.reset();
+
+                let newFixedFeetPosition = fixedFeetPosition.vec3_add(fixedMovement);
+                this._horizontalPositionCheck(newFixedFeetPosition, fixedHeight, up, movementDirection, collisionCheckParams, collisionRuntimeParams);
+
+                if (!collisionRuntimeParams.myIsCollidingHorizontally || collisionRuntimeParams.myHorizontalCollisionHit.myIsInsideCollision) {
+                    // just restore the movement check hit, the extra check wasn't helpful
+                    collisionRuntimeParams.myHorizontalCollisionHit.copy(this._myBackupRaycastHit);
+                }
+
+                collisionRuntimeParams.myIsCollidingHorizontally = true;
+            } else {
+                console.error("ERROR");
             }
         }
 
@@ -1098,7 +1146,6 @@ CollisionCheck = class CollisionCheck {
 
             if (!isHorizontalCheckOk) {
                 collisionRuntimeParams.myIsCollidingHorizontally = true;
-
                 collisionRuntimeParams.myHorizontalCollisionHit.copy(this._myRaycastResult.myHits[0]);
 
                 break;
@@ -1131,7 +1178,7 @@ CollisionCheck = class CollisionCheck {
         return raycastResult;
     }
 
-    _debugMovement(movement, fixedMovement, feetPosition, up) {
+    _debugMovement(movement, fixedMovement, feetPosition, up, collisionCheckParams) {
         let originalHorizontalMovement = movement.vec3_removeComponentAlongAxis(up);
 
         let horizontalMovement = fixedMovement.vec3_removeComponentAlongAxis(up);
@@ -1141,7 +1188,7 @@ CollisionCheck = class CollisionCheck {
             originalHorizontalMovement.vec3_normalize(originalHorizontalMovement);
 
             let debugParams = new PP.DebugArrowParams();
-            debugParams.myStart = feetPosition;
+            debugParams.myStart = feetPosition.vec3_add(up.vec3_scale(collisionCheckParams.myDistanceFromFeetToIgnore + 0.001));
             debugParams.myDirection = originalHorizontalMovement;
             debugParams.myLength = 0.2;
             debugParams.myColor = [0.5, 0.5, 1, 1];
@@ -1152,7 +1199,7 @@ CollisionCheck = class CollisionCheck {
             horizontalMovement.vec3_normalize(horizontalMovement);
 
             let debugParams = new PP.DebugArrowParams();
-            debugParams.myStart = feetPosition;
+            debugParams.myStart = feetPosition.vec3_add(up.vec3_scale(collisionCheckParams.myDistanceFromFeetToIgnore + 0.001));
             debugParams.myDirection = horizontalMovement;
             debugParams.myLength = 0.2;
             debugParams.myColor = [0, 0, 1, 1];
