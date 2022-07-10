@@ -79,7 +79,9 @@
             - vec3_isConcordant
             - vec3_isFurtherAlongAxis
             - vec3_isToTheRight
+            - vec3_isOnSameAxis
             - vec3_signTo
+            - vec3_project  / vec3_projectTowardDirection
             - vec3_convertPositionToWorld       / vec3_convertPositionToLocal 
             - vec3_convertDirectionToWorld      / vec3_convertDirectionToLocal   
             - vec3_angle
@@ -636,6 +638,80 @@ Array.prototype.vec3_signTo = function () {
         return angleSigned > 0 ? 1 : (angleSigned == 0 ? zeroSign : -1);
     };
 }();
+
+Array.prototype.vec3_project = function () {
+    let zero = glMatrix.vec3.create();
+    glMatrix.vec3.zero(zero);
+
+    let localThis = glMatrix.vec3.create();
+    return function (axis, origin = null, out = glMatrix.vec3.create()) {
+        if (origin == null) {
+            origin = zero;
+        }
+
+        this.vec3_sub(origin, localThis);
+        localThis.vec3_componentAlongAxis(axis, out);
+        out.vec3_add(origin, out);
+
+        return out;
+    };
+}();
+
+Array.prototype.vec3_projectTowardDirection = function () {
+    let zero = glMatrix.vec3.create();
+    glMatrix.vec3.zero(zero);
+
+    let up = glMatrix.vec3.create();
+
+    let localThis = glMatrix.vec3.create();
+    let localUp = glMatrix.vec3.create();
+    let projectDirectionThis = glMatrix.vec3.create();
+
+    let fixedProjectDirectionAxis = glMatrix.vec3.create();
+    return function (axis, projectDirectionAxis, origin = null, out = glMatrix.vec3.create()) {
+        if (origin == null) {
+            origin = zero;
+        }
+
+        this.vec3_sub(origin, localThis);
+
+        if (localThis.vec3_isOnSameAxis(axis) || projectDirectionAxis.vec3_isOnSameAxis(axis)) {
+            out.vec3_copy(this);
+        } else {
+            projectDirectionAxis.vec3_cross(axis, up);
+            localThis.vec3_removeComponentAlongAxis(up, localThis);
+            if (localThis.vec3_isOnSameAxis(axis)) {
+                localThis.vec3_add(origin, out);
+            } else {
+                localThis.vec3_cross(axis, localUp);
+                if (localUp.vec3_isConcordant(up)) {
+                    projectDirectionAxis.vec3_negate(fixedProjectDirectionAxis);
+                } else {
+                    fixedProjectDirectionAxis.vec3_copy(projectDirectionAxis);
+                }
+
+                localThis.vec3_project(axis, null, projectDirectionThis);
+                projectDirectionThis.vec3_sub(localThis, projectDirectionThis);
+
+                let angleWithDirectionAxis = fixedProjectDirectionAxis.vec3_angle(projectDirectionThis);
+                let lengthToRemove = projectDirectionThis.vec3_length() / Math.cos(Math.pp_toRadians(angleWithDirectionAxis));
+
+                fixedProjectDirectionAxis.vec3_normalize(fixedProjectDirectionAxis);
+                fixedProjectDirectionAxis.vec3_scale(lengthToRemove, fixedProjectDirectionAxis);
+                localThis.vec3_add(fixedProjectDirectionAxis, out);
+
+                out.vec3_add(origin, out);
+            }
+        }
+
+        return out;
+    };
+}();
+
+Array.prototype.vec3_isOnSameAxis = function (vector) {
+    let angle = this.vec3_angle(vector);
+    return angle == 0 || angle == 180;
+};
 
 Array.prototype.vec3_rotate = function (rotation, out) {
     return this.vec3_rotateDegrees(rotation, out);
