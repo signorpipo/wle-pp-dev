@@ -56,9 +56,9 @@
                 0.0,
                 0.9999979,
                 0.0,
-                60.0,
+                56.5702934,
                 0.0,
-                0.0,
+                -3.0428099,
                 1.0
             ],
             "components": [
@@ -98,7 +98,7 @@
                     "type": "locomotion-draft-2",
                     "locomotion-draft-2": {
                         "_myMaxSpeed": 2.0,
-                        "_myFlyEnabled": true,
+                        "_myFlyEnabled": false,
                         "_myMinAngleToFly": 60.0,
                         "_myMinAngleToFlyDown": 30.0,
                         "_myMinAngleToFlyUp": 30.0,
@@ -3596,7 +3596,8 @@
                     "mesh": {
                         "mesh": "p0",
                         "material": "93"
-                    }
+                    },
+                    "active": false
                 }
             ],
             "transformation": [
@@ -3680,7 +3681,8 @@
                     "mesh": {
                         "mesh": "p0",
                         "material": "93"
-                    }
+                    },
+                    "active": false
                 }
             ],
             "transformation": [
@@ -3848,7 +3850,8 @@
                     "mesh": {
                         "mesh": "p0",
                         "material": "93"
-                    }
+                    },
+                    "active": false
                 }
             ],
             "transformation": [
@@ -3932,7 +3935,8 @@
                     "mesh": {
                         "mesh": "p0",
                         "material": "93"
-                    }
+                    },
+                    "active": false
                 }
             ],
             "transformation": [
@@ -10997,7 +11001,7 @@
                     "pp-set-active": {
                         "_myActive": false
                     },
-                    "active": false
+                    "active": true
                 }
             ]
         },

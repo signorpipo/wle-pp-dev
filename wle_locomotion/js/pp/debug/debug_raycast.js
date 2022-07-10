@@ -118,8 +118,8 @@ PP.DebugRaycast = class DebugRaycast {
                 this._myParams.myRaycastResult.myHits[0].myDistance);
 
             this._myDebugRaycastHit.setStartDirectionLength(
-                this._myParams.myRaycastResult.myRaycastSetup.myOrigin,
-                this._myParams.myRaycastResult.myRaycastSetup.myDirection.vec3_negate(),
+                this._myParams.myRaycastResult.myHits[0].myPosition,
+                this._myParams.myRaycastResult.myHits[0].myNormal,
                 this._myParams.myNormalLength);
 
             this._myDebugRaycastHit.setVisible(this._myVisible);

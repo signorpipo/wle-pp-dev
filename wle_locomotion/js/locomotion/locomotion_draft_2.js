@@ -603,10 +603,22 @@ WL.registerComponent('locomotion-draft-2', {
 
         this._myCollisionCheckParams.myHeight = 1;
 
+        this._myCollisionCheckParams.mySlidingEnabled = true;
+        this._myCollisionCheckParams.mySlidingMaxAttempts = 4;
+
         this._myCollisionCheckParams.myBlockLayerFlags = new PP.PhysicsLayerFlags();
         this._myCollisionCheckParams.myBlockLayerFlags.setAllFlagsActive(true);
         this._myCollisionCheckParams.myPhysXComponentsToIgnore = this.object.pp_getComponentsHierarchy("physx");
 
-        this._myCollisionCheckParams.myDebugActive = false;
+        this._myCollisionCheckParams.myDebugActive = true;
+
+        this._myCollisionCheckParams.myDebugHorizontalMovementActive = true;
+        this._myCollisionCheckParams.myDebugHorizontalPositionActive = true;
+        this._myCollisionCheckParams.myDebugVerticalMovementActive = false;
+        this._myCollisionCheckParams.myDebugVerticalPositionActive = false;
+        this._myCollisionCheckParams.myDebugSlidingActive = true;
+        this._myCollisionCheckParams.myDebugGroundInfoActive = false;
+        this._myCollisionCheckParams.myDebugRuntimeParamsActive = false;
+        this._myCollisionCheckParams.myDebugFixedMovementActive = false;
     }
 });

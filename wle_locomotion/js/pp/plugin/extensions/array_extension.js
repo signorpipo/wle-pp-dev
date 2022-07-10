@@ -78,6 +78,8 @@
             - vec3_componentAlongAxis           / vec3_removeComponentAlongAxis / vec3_valueAlongAxis  
             - vec3_isConcordant
             - vec3_isFurtherAlongAxis
+            - vec3_isToTheRight
+            - vec3_signTo
             - vec3_convertPositionToWorld       / vec3_convertPositionToLocal 
             - vec3_convertDirectionToWorld      / vec3_convertDirectionToLocal   
             - vec3_angle
@@ -455,7 +457,7 @@ Array.prototype.vec3_angleDegrees = function (vector) {
 };
 
 Array.prototype.vec3_angleRadians = function (vector) {
-    return glMatrix.vec3.angle(this, vector);
+    return (this.vec3_isZero() || vector.vec3_isZero()) ? 0 : glMatrix.vec3.angle(this, vector);
 };
 
 Array.prototype.vec3_length = function () {
@@ -508,20 +510,20 @@ Array.prototype.vec3_transformQuat = function (quat, out = glMatrix.vec3.create(
 
 // New Functions
 
-Array.prototype.vec3_angleSigned = function (vector, axis) {
-    return this.vec3_angleSignedDegrees(vector, axis);
+Array.prototype.vec3_angleSigned = function (vector, upAxis) {
+    return this.vec3_angleSignedDegrees(vector, upAxis);
 };
 
-Array.prototype.vec3_angleSignedDegrees = function (vector, axis) {
-    return this.vec3_angleSignedRadians(vector, axis) * (180 / Math.PI);
+Array.prototype.vec3_angleSignedDegrees = function (vector, upAxis) {
+    return this.vec3_angleSignedRadians(vector, upAxis) * (180 / Math.PI);
 };
 
 Array.prototype.vec3_angleSignedRadians = function () {
     let crossAxis = glMatrix.vec3.create();
-    return function (vector, axis) {
+    return function (vector, upAxis) {
         this.vec3_cross(vector, crossAxis);
         let angle = this.vec3_angleRadians(vector);
-        if (!crossAxis.vec3_isConcordant(axis)) {
+        if (!crossAxis.vec3_isConcordant(upAxis)) {
             angle = -angle;
         }
 
@@ -605,6 +607,22 @@ Array.prototype.vec3_isFurtherAlongAxis = function () {
         let vectorAxisLengthSigned = vector.vec3_isConcordant(axis) ? vectorAxisLength : -vectorAxisLength;
 
         return thisAxisLengthSigned > vectorAxisLengthSigned;
+    };
+}();
+
+Array.prototype.vec3_isToTheRight = function (vector, upAxis) {
+    return this.vec3_signTo(vector, upAxis) < 0;
+};
+
+Array.prototype.vec3_signTo = function () {
+    let componentAlongThis = glMatrix.vec3.create();
+    let componentAlongVector = glMatrix.vec3.create();
+    return function (vector, upAxis, zeroSign = 1) {
+        this.vec3_componentAlongAxis(upAxis, componentAlongThis);
+        vector.vec3_componentAlongAxis(upAxis, componentAlongVector);
+
+        let angleSigned = this.vec3_angleSigned(vector, upAxis);
+        return angleSigned > 0 ? 1 : (angleSigned == 0 ? zeroSign : -1);
     };
 }();
 
