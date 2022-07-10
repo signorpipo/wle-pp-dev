@@ -75,7 +75,7 @@
             - vec3_distance
             - vec3_add      / vec3_sub          / vec3_mul      / vec3_div      / vec3_scale
             - vec3_transformQuat
-            - vec3_componentAlongAxis           / vec3_removeComponentAlongAxis / vec3_valueAlongAxis  
+            - vec3_componentAlongAxis           / vec3_removeComponentAlongAxis / vec3_copyComponentAlongAxis   / vec3_valueAlongAxis  
             - vec3_isConcordant
             - vec3_isFurtherAlongAxis
             - vec3_isToTheRight
@@ -589,6 +589,17 @@ Array.prototype.vec3_removeComponentAlongAxis = function () {
     return function (axis, out = glMatrix.vec3.create()) {
         this.vec3_componentAlongAxis(axis, componentAlong);
         glMatrix.vec3.sub(out, this, componentAlong);
+        return out;
+    };
+}();
+
+Array.prototype.vec3_copyComponentAlongAxis = function () {
+    let componentAlong = glMatrix.vec3.create();
+    return function (vector, axis, out = glMatrix.vec3.create()) {
+        this.vec3_removeComponentAlongAxis(axis, out);
+        vector.vec3_componentAlongAxis(axis, componentAlong);
+        out.vec3_add(componentAlong, out);
+
         return out;
     };
 }();
