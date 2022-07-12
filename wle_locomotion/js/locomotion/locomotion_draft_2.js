@@ -601,12 +601,14 @@ WL.registerComponent('locomotion-draft-2', {
 
         this._myCollisionCheckParams.mySlidingEnabled = true;
         this._myCollisionCheckParams.mySlidingMaxAttempts = 4;
+        this._myCollisionCheckParams.mySlidingHorizontalMovementCheckBetterNormal = true;
+        this._myCollisionCheckParams.mySlidingPreventFlickering = true; // expensive, 2 times the check for the whole horizontal movement!
 
         this._myCollisionCheckParams.myBlockLayerFlags = new PP.PhysicsLayerFlags();
         this._myCollisionCheckParams.myBlockLayerFlags.setAllFlagsActive(true);
         this._myCollisionCheckParams.myPhysXComponentsToIgnore = this.object.pp_getComponentsHierarchy("physx");
 
-        this._myCollisionCheckParams.myDebugActive = true;
+        this._myCollisionCheckParams.myDebugActive = false;
 
         this._myCollisionCheckParams.myDebugHorizontalMovementActive = true;
         this._myCollisionCheckParams.myDebugHorizontalPositionActive = true;

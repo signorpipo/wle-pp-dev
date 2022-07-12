@@ -37,8 +37,9 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myHeight = 1;
 
         this.mySlidingEnabled = true;
-        this.mySlidingHorizontalMovementExtraCheck = true;
+        this.mySlidingHorizontalMovementCheckBetterNormal = true;
         this.mySlidingMaxAttempts = 4;
+        this.mySlidingPreventFlickering = false; // expensive, 2 times the check for the whole horizontal movement!
 
         this.myBlockLayerFlags = new PP.PhysicsLayerFlags();
         this.myPhysXComponentsToIgnore = [];
@@ -114,6 +115,7 @@ CollisionCheck = class CollisionCheck {
         this._myPrevCollisionRuntimeParams = new CollisionRuntimeParams();
 
         this._mySlidingCollisionRuntimeParams = new CollisionRuntimeParams();
+        this._mySlidingFlickeringFixCollisionRuntimeParams = new CollisionRuntimeParams();
         this._mySlidingOnVerticalCheckCollisionRuntimeParams = new CollisionRuntimeParams();
 
         this._myDebugActive = false;
@@ -214,6 +216,36 @@ CollisionCheck = class CollisionCheck {
     }
 
     _horizontalSlide(movement, feetPosition, height, up, collisionCheckParams, collisionRuntimeParams) {
+        if (movement.vec3_length() < 0.000001) {
+            return movement.vec3_scale(0);
+        }
+
+        let slideMovement = this._internalHorizontalSlide(movement, feetPosition, height, up, collisionCheckParams, collisionRuntimeParams);
+        if (collisionCheckParams.mySlidingPreventFlickering && collisionRuntimeParams.myIsSliding &&
+            Math.abs(collisionRuntimeParams.mySlidingCollisionAngle) > 90 + 0.00001) {
+            this._mySlidingFlickeringFixCollisionRuntimeParams.reset();
+
+            let newFeetPosition = feetPosition.vec3_add(slideMovement);
+
+            this._horizontalCheck(movement, newFeetPosition, height, up, collisionCheckParams, this._mySlidingFlickeringFixCollisionRuntimeParams);
+            if (this._mySlidingFlickeringFixCollisionRuntimeParams.myIsCollidingHorizontally) {
+                let flickerFixSlideMovement = this._internalHorizontalSlide(movement, newFeetPosition, height, up, collisionCheckParams, this._mySlidingFlickeringFixCollisionRuntimeParams);
+                if (this._mySlidingFlickeringFixCollisionRuntimeParams.myIsSliding) {
+                    if (slideMovement.vec3_signTo(movement, up, 0) != flickerFixSlideMovement.vec3_signTo(movement, up, 0)) {
+                        slideMovement.vec3_zero();
+                        collisionRuntimeParams.myIsSliding = false;
+                        collisionRuntimeParams.mySlidingMovementAngle = 0;
+                        collisionRuntimeParams.mySlidingCollisionAngle = 0;
+                        collisionRuntimeParams.mySlidingCollisionHit.reset();
+                    }
+                }
+            }
+        }
+
+        return slideMovement;
+    }
+
+    _internalHorizontalSlide(movement, feetPosition, height, up, collisionCheckParams, collisionRuntimeParams) {
         if (movement.vec3_length() < 0.000001) {
             return movement.vec3_scale(0);
         }
@@ -505,7 +537,7 @@ CollisionCheck = class CollisionCheck {
             if (canStay) {
                 fixedMovement = movement;
             }
-        } else if (!avoidSlidingExtraCheck && collisionCheckParams.mySlidingEnabled && collisionCheckParams.mySlidingHorizontalMovementExtraCheck) {
+        } else if (!avoidSlidingExtraCheck && collisionCheckParams.mySlidingEnabled && collisionCheckParams.mySlidingHorizontalMovementCheckBetterNormal) {
             //check for a better slide hit position and normal
 
             let projectDirectionAxis = null;
