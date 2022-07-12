@@ -67,7 +67,9 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.myVerticalCollisionHit = new PP.RaycastResultHit();
 
         this.myIsSliding = false;
-        this.mySlidingAngle = 0;
+        this.mySlidingMovementAngle = 0;
+        this.mySlidingCollisionAngle = 0;
+        this.mySlidingCollisionHit = new PP.RaycastResultHit();
     }
 
     reset() {
@@ -80,7 +82,9 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.myVerticalCollisionHit.reset();
 
         this.myIsSliding = false;
-        this.mySlideAngle = 0;
+        this.mySlidingMovementAngle = 0;
+        this.mySlidingCollisionAngle = 0;
+        this.mySlidingCollisionHit.reset();
     }
 
     copy(other) {
@@ -93,7 +97,9 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.myVerticalCollisionHit.copy(other.myVerticalCollisionHit);
 
         this.myIsSliding = other.myIsSliding;
-        this.mySlideAngle = other.mySlideAngle;
+        this.mySlidingMovementAngle = other.mySlidingMovementAngle;
+        this.mySlidingCollisionAngle = other.mySlidingCollisionAngle;
+        this.mySlidingCollisionHit.copy(other.mySlidingCollisionHit);
     }
 };
 
@@ -218,6 +224,8 @@ CollisionCheck = class CollisionCheck {
         slidingMovement.vec3_removeComponentAlongAxis(up, slidingMovement);
         slidingMovement.vec3_normalize(slidingMovement);
 
+        collisionRuntimeParams.mySlidingCollisionHit.copy(collisionRuntimeParams.myHorizontalCollisionHit);
+
         let lastValidMovement = [0, 0, 0];
 
         if (!slidingMovement.vec3_isZero()) {
@@ -241,7 +249,8 @@ CollisionCheck = class CollisionCheck {
                     lastValidMovement.vec3_copy(currentMovement);
                     collisionRuntimeParams.copy(this._mySlidingCollisionRuntimeParams);
                     collisionRuntimeParams.myIsSliding = true;
-                    collisionRuntimeParams.mySlidingAngle = movement.vec3_angleSigned(currentMovement, up);
+                    collisionRuntimeParams.mySlidingMovementAngle = movement.vec3_angleSigned(currentMovement, up);
+                    collisionRuntimeParams.mySlidingCollisionAngle = slidingMovement.vec3_angleSigned(currentMovement, up);
 
                     maxAngle = currentAngle;
                     currentAngle = (maxAngle + minAngle) / 2;
@@ -259,6 +268,10 @@ CollisionCheck = class CollisionCheck {
             }
 
             collisionCheckParams.myDebugActive = backupDebugActive;
+        }
+
+        if (!collisionRuntimeParams.myIsSliding) {
+            collisionRuntimeParams.mySlidingCollisionHit.reset();
         }
 
         return lastValidMovement;
