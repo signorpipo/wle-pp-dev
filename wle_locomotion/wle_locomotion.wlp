@@ -56,9 +56,9 @@
                 0.0,
                 0.9999979,
                 0.0,
-                56.5702934,
+                60.0,
                 0.0,
-                -3.0428099,
+                0.0,
                 1.0
             ],
             "components": [
@@ -98,7 +98,7 @@
                     "type": "locomotion-draft-2",
                     "locomotion-draft-2": {
                         "_myMaxSpeed": 2.0,
-                        "_myFlyEnabled": false,
+                        "_myFlyEnabled": true,
                         "_myMinAngleToFly": 60.0,
                         "_myMinAngleToFlyDown": 30.0,
                         "_myMinAngleToFlyUp": 30.0,
@@ -11001,7 +11001,7 @@
                     "pp-set-active": {
                         "_myActive": false
                     },
-                    "active": true
+                    "active": false
                 }
             ]
         },
@@ -14527,7 +14527,7 @@
                         "_myShortPrototype": "486",
                         "_myRoomSize": 10.0,
                         "_myRoomHeight": 5.0,
-                        "_myAmount": 25
+                        "_myAmount": 15
                     }
                 }
             ]

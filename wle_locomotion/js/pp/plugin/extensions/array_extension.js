@@ -657,6 +657,7 @@ Array.prototype.vec3_project = function () {
     };
 }();
 
+// the result can easily be not 100% exact due to precision errors
 Array.prototype.vec3_projectTowardDirection = function () {
     let zero = glMatrix.vec3.create();
     glMatrix.vec3.zero(zero);
