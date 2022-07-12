@@ -15,8 +15,6 @@ WL.registerComponent('locomotion-draft-2', {
     },
     start() {
         this._myCurrentHeadObject = PP.myPlayerObjects.myNonVRHead;
-        PP.myPlayerObjects.myNonVRCamera = PP.myPlayerObjects.myNonVRCamera;
-
         this._myDirectionReferenceObject = PP.myPlayerObjects.myHead;
 
         if (WL.xrSession) {
@@ -43,6 +41,7 @@ WL.registerComponent('locomotion-draft-2', {
         this._myPreventHeadUpsideDown = true;
 
         this._mySnapDone = false;
+        this._mySnapVerticalDone = false;
 
         this._myCollisionCheck = new CollisionCheck();
 
@@ -213,10 +212,84 @@ WL.registerComponent('locomotion-draft-2', {
                 this._rotateHead(headRotation);
             }
 
+            if (!this._mySessionActive) {
+                this._rotateNonVRHeadVertically(dt);
+            }
+
             if (this._myCollisionRuntimeParams.myIsOnGround) {
                 this._myIsFlying = false;
                 this._myDirectionConverterHead.stopFlying();
                 this._myDirectionConverterHand.stopFlying();
+            }
+        }
+    },
+    _rotateNonVRHeadVertically(dt) {
+        let headForward = PP.myPlayerObjects.myNonVRCamera.pp_getForward();
+        let headUp = PP.myPlayerObjects.myNonVRCamera.pp_getUp();
+
+        let referenceUp = PP.myPlayerObjects.myPlayer.pp_getUp();
+        let referenceRight = headForward.vec3_cross(referenceUp);
+        referenceRight.vec3_negate(referenceRight);
+
+        let minAngle = 1;
+        if (headForward.vec3_angle(referenceUp) < minAngle) {
+            referenceRight = headUp.vec3_cross(referenceUp);
+        } else if (headForward.vec3_angle(referenceUp.vec3_negate()) < minAngle) {
+            referenceRight = headUp.vec3_negate().vec3_cross(referenceUp);
+        } else if (!headUp.vec3_isConcordant(referenceUp)) {
+            referenceRight.vec3_negate(referenceRight);
+        }
+
+        referenceRight.vec3_normalize(referenceRight);
+
+        let axes = PP.myRightGamepad.getAxesInfo().getAxes();
+        let angleToRotate = 0;
+
+        if (!this._myIsSnapTurn) {
+            let minIntensityThreshold = 0.1;
+            if (Math.abs(axes[1]) > minIntensityThreshold) {
+                let rotationIntensity = axes[1];
+                angleToRotate = Math.pp_lerp(0, this._myMaxRotationSpeed, Math.abs(rotationIntensity)) * Math.pp_sign(rotationIntensity) * dt;
+            }
+        } else {
+            if (this._mySnapVerticalDone) {
+                let stickThreshold = 0.4;
+                if (Math.abs(axes[1]) < stickThreshold) {
+                    this._mySnapVerticalDone = false;
+                }
+            } else {
+                let stickThreshold = 0.5;
+                if (Math.abs(axes[1]) > stickThreshold) {
+                    angleToRotate = Math.pp_sign(axes[1]) * this._mySnapTurnAngle;
+                    this._mySnapVerticalDone = true;
+                }
+            }
+        }
+
+        if (angleToRotate != 0) {
+            PP.myPlayerObjects.myNonVRCamera.pp_rotateAxis(angleToRotate, referenceRight);
+
+            let maxVerticalAngle = 90 - 0.001;
+            let newUp = PP.myPlayerObjects.myNonVRCamera.pp_getUp();
+            let angleWithUp = Math.pp_angleClamp(newUp.vec3_angleSigned(referenceUp, referenceRight));
+            if (Math.abs(angleWithUp) > maxVerticalAngle) {
+                let fixAngle = (Math.abs(angleWithUp) - maxVerticalAngle) * Math.pp_sign(angleWithUp);
+                PP.myPlayerObjects.myNonVRCamera.pp_rotateAxis(fixAngle, referenceRight);
+            } else if (this._myIsSnapTurn) {
+                // adjust snap to closes snap step
+                let snapStep = Math.round(angleWithUp / this._mySnapTurnAngle);
+
+                let previousAngleWithUp = Math.pp_angleClamp(headUp.vec3_angleSigned(referenceUp, referenceRight));
+                if (Math.abs(Math.abs(previousAngleWithUp) - maxVerticalAngle) < 0.00001) {
+                    // if it was maxed go to the snap step right before the snap
+                    snapStep = Math.floor(Math.abs(previousAngleWithUp / this._mySnapTurnAngle)) * Math.pp_sign(previousAngleWithUp);
+                }
+
+                let snapAngle = snapStep * this._mySnapTurnAngle;
+                let fixAngle = angleWithUp - snapAngle;
+                if (Math.abs(fixAngle) > 0.00001) {
+                    PP.myPlayerObjects.myNonVRCamera.pp_rotateAxis(fixAngle, referenceRight);
+                }
             }
         }
     },
