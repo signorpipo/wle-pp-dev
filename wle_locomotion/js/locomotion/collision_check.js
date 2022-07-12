@@ -14,8 +14,8 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myHorizontalMovementCheckVerticalStraightDiagonal = false;
         this.myHorizontalMovementCheckVerticalHorizontalBorderDiagonal = false;
 
-        this.myConeAngle = 120;
-        this.myConeSliceAmount = 4;
+        this.myHalfConeAngle = 60;
+        this.myHalfConeSliceAmount = 2;
         this.myCheckConeBorder = true;
         this.myCheckConeRay = true;
 
@@ -37,6 +37,7 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myHeight = 1;
 
         this.mySlidingEnabled = true;
+        this.mySlidingHorizontalMovementExtraCheck = true;
         this.mySlidingMaxAttempts = 4;
 
         this.myBlockLayerFlags = new PP.PhysicsLayerFlags();
@@ -470,7 +471,7 @@ CollisionCheck = class CollisionCheck {
         return checkPositions;
     }
 
-    _horizontalCheck(movement, feetPosition, height, up, collisionCheckParams, collisionRuntimeParams, avoidExtraSlidingCheck = false) {
+    _horizontalCheck(movement, feetPosition, height, up, collisionCheckParams, collisionRuntimeParams, avoidSlidingExtraCheck = false) {
         collisionRuntimeParams.myIsCollidingHorizontally = false;
         collisionRuntimeParams.myHorizontalCollisionHit.reset();
 
@@ -492,17 +493,17 @@ CollisionCheck = class CollisionCheck {
             if (canStay) {
                 fixedMovement = movement;
             }
-        } else if (!avoidExtraSlidingCheck && collisionCheckParams.mySlidingEnabled) {
-            //gather better slide hit position and normal
+        } else if (!avoidSlidingExtraCheck && collisionCheckParams.mySlidingEnabled && collisionCheckParams.mySlidingHorizontalMovementExtraCheck) {
+            //check for a better slide hit position and normal
 
             let projectDirectionAxis = null;
             let hitPosition = collisionRuntimeParams.myHorizontalCollisionHit.myPosition;
-            let coneAngle = Math.min(collisionCheckParams.myConeAngle, 180);
+            let halfConeAngle = Math.min(collisionCheckParams.myHalfConeAngle, 90);
             let hitDirection = hitPosition.vec3_sub(feetPosition);
             if (hitDirection.vec3_isToTheRight(movementDirection, up)) {
-                projectDirectionAxis = movementDirection.vec3_rotateAxis(-coneAngle / 2, up);
+                projectDirectionAxis = movementDirection.vec3_rotateAxis(-halfConeAngle, up);
             } else {
-                projectDirectionAxis = movementDirection.vec3_rotateAxis(coneAngle / 2, up);
+                projectDirectionAxis = movementDirection.vec3_rotateAxis(halfConeAngle, up);
             }
 
             let fixedMovement = hitDirection.vec3_projectTowardDirection(movementDirection, projectDirectionAxis);
@@ -534,7 +535,7 @@ CollisionCheck = class CollisionCheck {
 
                 collisionRuntimeParams.myIsCollidingHorizontally = true;
             } else {
-                console.error("ERROR");
+                console.error("ERROR, project function should return a smaller movement in the same direction");
             }
         }
 
@@ -548,7 +549,7 @@ CollisionCheck = class CollisionCheck {
     _horizontalMovementCheck(movement, feetPosition, height, up, collisionCheckParams, collisionRuntimeParams) {
         this._myDebugActive = collisionCheckParams.myDebugActive && collisionCheckParams.myDebugHorizontalMovementActive;
 
-        let coneAngle = Math.min(collisionCheckParams.myConeAngle, 180);
+        let halfConeAngle = Math.min(collisionCheckParams.myHalfConeAngle, 90);
         let movementDirection = movement.vec3_normalize();
 
         let checkPositions = [];
@@ -558,8 +559,8 @@ CollisionCheck = class CollisionCheck {
         checkPositions.push(feetPosition);
 
         {
-            let leftRadialDirection = movementDirection.vec3_rotateAxis(coneAngle / 2, up);
-            let rightRadialDirection = movementDirection.vec3_rotateAxis(-coneAngle / 2, up);
+            let leftRadialDirection = movementDirection.vec3_rotateAxis(halfConeAngle, up);
+            let rightRadialDirection = movementDirection.vec3_rotateAxis(-halfConeAngle, up);
             for (let i = 1; i <= collisionCheckParams.myHorizontalMovementRadialStepAmount; i++) {
                 // left
                 {
@@ -966,13 +967,19 @@ CollisionCheck = class CollisionCheck {
         this._myDebugActive = collisionCheckParams.myDebugActive && collisionCheckParams.myDebugHorizontalPositionActive;
 
         let radialPositions = [];
-        let sliceAngle = collisionCheckParams.myConeAngle / collisionCheckParams.myConeSliceAmount;
-        let startAngle = -collisionCheckParams.myConeAngle / 2;
-        for (let i = 0; i < collisionCheckParams.myConeSliceAmount + 1; i++) {
-            let currentAngle = startAngle + i * sliceAngle;
+        let halfConeAngle = Math.min(collisionCheckParams.myHalfConeAngle, 180);
+        let sliceAngle = halfConeAngle / collisionCheckParams.myHalfConeSliceAmount;
+        radialPositions.push(feetPosition.vec3_add(forward.vec3_scale(collisionCheckParams.myRadius)));
+        for (let i = 1; i <= collisionCheckParams.myHalfConeSliceAmount; i++) {
+            let currentAngle = i * sliceAngle;
 
             let radialDirection = forward.vec3_rotateAxis(-currentAngle, up);
             radialPositions.push(feetPosition.vec3_add(radialDirection.vec3_scale(collisionCheckParams.myRadius)));
+
+            if (currentAngle != 180) {
+                radialDirection = forward.vec3_rotateAxis(currentAngle, up);
+                radialPositions.push(feetPosition.vec3_add(radialDirection.vec3_scale(collisionCheckParams.myRadius)));
+            }
         }
 
         let isHorizontalCheckOk = true;
@@ -984,15 +991,12 @@ CollisionCheck = class CollisionCheck {
             heightStep = up.vec3_scale(height / collisionCheckParams.myHeightCheckStepAmount);
         }
 
-        let flatFeetPosition = feetPosition.vec3_removeComponentAlongAxis(up);
         for (let i = 0; i <= heightStepAmount; i++) {
             let currentHeightOffset = heightStep.vec3_scale(i);
             let basePosition = feetPosition.vec3_add(currentHeightOffset);
             let previousBasePosition = basePosition.vec3_sub(heightStep);
 
             if (i != 0) {
-                let furtherOnUpPosition = null;
-
                 for (let j = 0; j <= radialPositions.length; j++) {
                     let currentRadialPosition = null;
                     let previousRadialPosition = null;
@@ -1013,16 +1017,6 @@ CollisionCheck = class CollisionCheck {
                         let raycastResult = this._raycastAndDebug(origin, direction, distance, true, collisionCheckParams, collisionRuntimeParams);
 
                         if (raycastResult.myHits.length > 0) {
-                            if (furtherOnUpPosition != null) {
-                                let hitUpComponent = raycastResult.myHits[0].myPosition.vec3_componentAlongAxis(up);
-                                let closestUpComponent = furtherOnUpPosition.vec3_componentAlongAxis(up);
-                                if (hitUpComponent.vec3_isFurtherAlongAxis(closestUpComponent, up)) {
-                                    furtherOnUpPosition = flatFeetPosition.vec3_add(hitUpComponent);
-                                }
-                            } else {
-                                furtherOnUpPosition = flatFeetPosition.vec3_add(raycastResult.myHits[0].myPosition.vec3_componentAlongAxis(up));
-                            }
-
                             isHorizontalCheckOk = false;
                             break;
                         }
@@ -1062,7 +1056,8 @@ CollisionCheck = class CollisionCheck {
 
                         if (j > 0) {
                             if (collisionCheckParams.myCheckVerticalDiagonalBorder) {
-                                let previousCurrentRadialPosition = radialPositions[j - 1].vec3_add(currentHeightOffset);
+                                let previousIndex = Math.max(0, j - 2);
+                                let previousCurrentRadialPosition = radialPositions[previousIndex].vec3_add(currentHeightOffset);
                                 let previousPreviousRadialPosition = previousCurrentRadialPosition.vec3_sub(heightStep);
 
                                 {
@@ -1096,11 +1091,6 @@ CollisionCheck = class CollisionCheck {
                         }
                     }
                 }
-
-                if (furtherOnUpPosition != null) {
-                    basePosition = furtherOnUpPosition;
-                    currentHeightOffset = basePosition.vec3_sub(feetPosition).vec3_componentAlongAxis(up);
-                }
             }
 
             if (isHorizontalCheckOk) {
@@ -1123,7 +1113,8 @@ CollisionCheck = class CollisionCheck {
 
                     if (j > 0) {
                         if (collisionCheckParams.myCheckConeBorder) {
-                            let previousRadialPosition = radialPositions[j - 1].vec3_add(currentHeightOffset);
+                            let previousIndex = Math.max(0, j - 2);
+                            let previousRadialPosition = radialPositions[previousIndex].vec3_add(currentHeightOffset);
                             let origin = previousRadialPosition;
                             let direction = currentRadialPosition.vec3_sub(previousRadialPosition);
                             if (!direction.vec3_isConcordant(forward)) {

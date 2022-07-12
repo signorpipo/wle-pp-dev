@@ -169,8 +169,8 @@ WL.registerComponent('stick-movement', {
         this._myCollisionCheckParams.myHorizontalMovementCheckVerticalStraightDiagonal = false;
         this._myCollisionCheckParams.myHorizontalMovementCheckVerticalHorizontalBorderDiagonal = false;
 
-        this._myCollisionCheckParams.myConeAngle = 120;
-        this._myCollisionCheckParams.myConeSliceAmount = 2;
+        this._myCollisionCheckParams.myHalfConeAngle = 60;
+        this._myCollisionCheckParams.myHalfConeSliceAmount = 1;
         this._myCollisionCheckParams.myCheckConeBorder = true;
         this._myCollisionCheckParams.myCheckConeRay = true;
 

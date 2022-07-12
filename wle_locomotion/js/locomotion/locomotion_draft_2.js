@@ -581,8 +581,8 @@ WL.registerComponent('locomotion-draft-2', {
         this._myCollisionCheckParams.myHorizontalMovementCheckVerticalStraightDiagonal = false;
         this._myCollisionCheckParams.myHorizontalMovementCheckVerticalHorizontalBorderDiagonal = false;
 
-        this._myCollisionCheckParams.myConeAngle = 120;
-        this._myCollisionCheckParams.myConeSliceAmount = 4;
+        this._myCollisionCheckParams.myHalfConeAngle = 60;
+        this._myCollisionCheckParams.myHalfConeSliceAmount = 2;
         this._myCollisionCheckParams.myCheckConeBorder = true;
         this._myCollisionCheckParams.myCheckConeRay = true;
 
@@ -612,7 +612,7 @@ WL.registerComponent('locomotion-draft-2', {
 
         this._myCollisionCheckParams.myDebugActive = true;
 
-        this._myCollisionCheckParams.myDebugHorizontalMovementActive = true;
+        this._myCollisionCheckParams.myDebugHorizontalMovementActive = false;
         this._myCollisionCheckParams.myDebugHorizontalPositionActive = true;
         this._myCollisionCheckParams.myDebugVerticalMovementActive = false;
         this._myCollisionCheckParams.myDebugVerticalPositionActive = false;
