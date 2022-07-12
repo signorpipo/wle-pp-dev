@@ -624,13 +624,13 @@ Array.prototype.vec3_isFurtherAlongAxis = function () {
 }();
 
 Array.prototype.vec3_isToTheRight = function (vector, upAxis) {
-    return this.vec3_signTo(vector, upAxis) >= 0;
+    return this.vec3_signTo(vector, upAxis) <= 0;
 };
 
 Array.prototype.vec3_signTo = function () {
     let componentAlongThis = glMatrix.vec3.create();
     let componentAlongVector = glMatrix.vec3.create();
-    return function (vector, upAxis, zeroSign = 1) {
+    return function (vector, upAxis, zeroSign = -1) {
         this.vec3_removeComponentAlongAxis(upAxis, componentAlongThis);
         vector.vec3_removeComponentAlongAxis(upAxis, componentAlongVector);
 
@@ -695,8 +695,8 @@ Array.prototype.vec3_projectTowardDirection = function () {
                 localThis.vec3_project(axis, null, projectDirectionThis);
                 projectDirectionThis.vec3_sub(localThis, projectDirectionThis);
 
-                let angleWithDirectionAxis = fixedProjectDirectionAxis.vec3_angle(projectDirectionThis);
-                let lengthToRemove = projectDirectionThis.vec3_length() / Math.cos(Math.pp_toRadians(angleWithDirectionAxis));
+                let angleWithDirectionAxis = fixedProjectDirectionAxis.vec3_angleRadians(projectDirectionThis);
+                let lengthToRemove = projectDirectionThis.vec3_length() / Math.cos(angleWithDirectionAxis);
 
                 fixedProjectDirectionAxis.vec3_normalize(fixedProjectDirectionAxis);
                 fixedProjectDirectionAxis.vec3_scale(lengthToRemove, fixedProjectDirectionAxis);

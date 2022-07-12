@@ -186,12 +186,10 @@ WL.registerComponent('locomotion-draft-2', {
                 if (!this._myIsSnapTurn) {
                     let minIntensityThreshold = 0.1;
                     if (Math.abs(axes[0]) > minIntensityThreshold) {
-                        let axis = PP.myPlayerObjects.myPlayer.pp_getUp();
-
                         let rotationIntensity = -axes[0];
-                        let speed = Math.pp_lerp(0, this._myMaxRotationSpeed, rotationIntensity);
+                        let speed = Math.pp_lerp(0, this._myMaxRotationSpeed, Math.abs(rotationIntensity)) * Math.pp_sign(rotationIntensity);
 
-                        headRotation.quat_fromAxis(speed * dt, axis);
+                        headRotation.quat_fromAxis(speed * dt, playerUp);
                     }
                 } else {
                     if (this._mySnapDone) {
@@ -202,10 +200,8 @@ WL.registerComponent('locomotion-draft-2', {
                     } else {
                         let stickThreshold = 0.5;
                         if (Math.abs(axes[0]) > stickThreshold) {
-                            let axis = PP.myPlayerObjects.myPlayer.pp_getUp();
-
                             let rotation = -Math.pp_sign(axes[0]) * this._mySnapTurnAngle;
-                            headRotation.quat_fromAxis(rotation, axis);
+                            headRotation.quat_fromAxis(rotation, playerUp);
 
                             this._mySnapDone = true;
                         }
@@ -612,7 +608,7 @@ WL.registerComponent('locomotion-draft-2', {
 
         this._myCollisionCheckParams.myDebugActive = true;
 
-        this._myCollisionCheckParams.myDebugHorizontalMovementActive = false;
+        this._myCollisionCheckParams.myDebugHorizontalMovementActive = true;
         this._myCollisionCheckParams.myDebugHorizontalPositionActive = true;
         this._myCollisionCheckParams.myDebugVerticalMovementActive = false;
         this._myCollisionCheckParams.myDebugVerticalPositionActive = false;
