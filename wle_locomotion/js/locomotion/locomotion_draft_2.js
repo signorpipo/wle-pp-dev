@@ -135,6 +135,10 @@ WL.registerComponent('locomotion-draft-2', {
                         let movementIntensity = axes.vec2_length();
                         let speed = Math.pp_lerp(0, this._myMaxSpeed, movementIntensity);
 
+                        if (this._myCollisionRuntimeParams.myIsSliding) {
+                            speed = speed / 2;
+                        }
+
                         direction.vec3_scale(speed * dt, headMovement);
                     }
                 } else {
@@ -224,18 +228,17 @@ WL.registerComponent('locomotion-draft-2', {
         }
     },
     _rotateNonVRHeadVertically(dt) {
-        let headForward = PP.myPlayerObjects.myNonVRCamera.pp_getForward();
+        let headForward = PP.myPlayerObjects.myNonVRCamera.pp_getBackward(); // the camera "real" forward is actually the backward
         let headUp = PP.myPlayerObjects.myNonVRCamera.pp_getUp();
 
         let referenceUp = PP.myPlayerObjects.myPlayer.pp_getUp();
         let referenceRight = headForward.vec3_cross(referenceUp);
-        referenceRight.vec3_negate(referenceRight);
 
         let minAngle = 1;
         if (headForward.vec3_angle(referenceUp) < minAngle) {
-            referenceRight = headUp.vec3_cross(referenceUp);
-        } else if (headForward.vec3_angle(referenceUp.vec3_negate()) < minAngle) {
             referenceRight = headUp.vec3_negate().vec3_cross(referenceUp);
+        } else if (headForward.vec3_angle(referenceUp.vec3_negate()) < minAngle) {
+            referenceRight = headUp.vec3_cross(referenceUp);
         } else if (!headUp.vec3_isConcordant(referenceUp)) {
             referenceRight.vec3_negate(referenceRight);
         }
@@ -531,12 +534,22 @@ WL.registerComponent('locomotion-draft-2', {
 
                 if (this._myRemoveXTilt) {
                     let resyncHeadForward = resyncHeadRotation.quat_getForward();
+                    let resyncHeadUp = resyncHeadRotation.quat_getUp();
 
                     let fixedHeadRight = resyncHeadForward.vec3_cross(playerUp);
-                    if (!resyncHeadRotation.quat_getUp().vec3_isConcordant(playerUp)) {
-                        fixedHeadRight.vec3_negate(fixedHeadRight);
-                    }
                     fixedHeadRight.vec3_normalize(fixedHeadRight);
+
+                    if (!resyncHeadUp.vec3_isConcordant(playerUp)) {
+                        let angleForwardUp = resyncHeadForward.vec3_angle(playerUp);
+                        let negateAngle = 45;
+                        if (angleForwardUp > (180 - negateAngle) || angleForwardUp < negateAngle) {
+                            // this way I get a good fixed result for both head upside down and head rotated on forward
+                            // when the head is looking down and a bit backward (more than 135 degrees), I want the forward to actually
+                            // be the opposite because it's like u rotate back the head up and look forward again
+                            fixedHeadRight.vec3_negate(fixedHeadRight);
+                        }
+                    }
+
                     if (fixedHeadRight.vec3_length() == 0) {
                         fixedHeadRight = resyncHeadRotation.quat_getRight();
                     }
@@ -547,6 +560,7 @@ WL.registerComponent('locomotion-draft-2', {
                     fixedHeadForward.vec3_normalize(fixedHeadForward);
 
                     let fixedHeadRotation = PP.quat_create();
+
                     fixedHeadRotation.quat_fromAxes(fixedHeadRight.vec3_negate(), fixedHeadUp, fixedHeadForward);
                     resyncHeadRotation = fixedHeadRotation;
                 }
@@ -555,28 +569,16 @@ WL.registerComponent('locomotion-draft-2', {
                     let resyncHeadUp = resyncHeadRotation.quat_getUp();
                     let resyncHeadRight = resyncHeadRotation.quat_getRight();
 
-                    if (!resyncHeadUp.vec3_isConcordant(playerUp)) {
-                        let signedAngle = resyncHeadUp.vec3_angleSigned(playerUp, resyncHeadRight);
-                        if (signedAngle > 0) {
-                            signedAngle -= 89.995;
-                        } else {
-                            signedAngle += 89.995;
-                        }
-
-                        let fixedHeadUp = resyncHeadUp.vec3_rotateAxis(signedAngle, resyncHeadRight);
-                        fixedHeadUp.vec3_normalize(fixedHeadUp);
-                        let fixedHeadForward = fixedHeadUp.vec3_cross(resyncHeadRight);
-                        fixedHeadForward.vec3_normalize(fixedHeadForward);
-                        let fixedHeadRight = fixedHeadForward.vec3_cross(fixedHeadUp);
-                        fixedHeadRight.vec3_normalize(fixedHeadRight);
-
-                        let fixedHeadRotation = PP.quat_create();
-                        fixedHeadRotation.quat_fromAxes(fixedHeadRight.vec3_negate(), fixedHeadUp, fixedHeadForward);
-                        resyncHeadRotation = fixedHeadRotation;
+                    let maxVerticalAngle = 90 - 0.001;
+                    let angleWithUp = Math.pp_angleClamp(resyncHeadUp.vec3_angleSigned(playerUp, resyncHeadRight));
+                    if (Math.abs(angleWithUp) > maxVerticalAngle) {
+                        let fixAngle = (Math.abs(angleWithUp) - maxVerticalAngle) * Math.pp_sign(angleWithUp);
+                        resyncHeadRotation.quat_rotateAxis(fixAngle, resyncHeadRight, resyncHeadRotation);
                     }
                 }
 
                 resyncHeadRotation.quat_rotateAxisRadians(Math.PI, resyncHeadRotation.quat_getUp(), resyncHeadRotation);
+
                 PP.myPlayerObjects.myNonVRCamera.pp_setRotationQuat(resyncHeadRotation);
             }
         }

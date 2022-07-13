@@ -6,7 +6,7 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
         document.addEventListener('mousemove', function (e) {
             if (this.active && (this.mouseDown || !this.requireMouseDown)) {
 
-                let viewForward = this.object.pp_getForward();
+                let viewForward = this.object.pp_getBackward(); // the view "real" forward is actually the backward
                 let viewUp = this.object.pp_getUp();
 
                 let referenceUp = [0, 1, 0];
@@ -15,13 +15,12 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
                 }
 
                 let referenceRight = viewForward.vec3_cross(referenceUp);
-                referenceRight.vec3_negate(referenceRight);
 
                 let minAngle = 1;
                 if (viewForward.vec3_angle(referenceUp) < minAngle) {
-                    referenceRight = viewUp.vec3_cross(referenceUp);
-                } else if (viewForward.vec3_angle(referenceUp.vec3_negate()) < minAngle) {
                     referenceRight = viewUp.vec3_negate().vec3_cross(referenceUp);
+                } else if (viewForward.vec3_angle(referenceUp.vec3_negate()) < minAngle) {
+                    referenceRight = viewUp.vec3_cross(referenceUp);
                 } else if (!viewUp.vec3_isConcordant(referenceUp)) {
                     referenceRight.vec3_negate(referenceRight);
                 }
