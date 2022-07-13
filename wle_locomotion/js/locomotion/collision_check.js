@@ -165,12 +165,13 @@ CollisionCheck = class CollisionCheck {
             fixedHorizontalMovement.vec3_normalize(forward);
         }
 
-        //collisionCheckParams.myDebugActive = false;
+        // collisionCheckParams.myDebugActive = false;
 
         let fixedVerticalMovement = this._verticalCheck(verticalMovement, newFeetPosition, height, transformUp, forward, collisionCheckParams, collisionRuntimeParams);
         if (collisionCheckParams.mySlidingEnabled && collisionRuntimeParams.myIsCollidingVertically) {
             if (!slidingDone && collisionRuntimeParams.myHorizontalCollisionHit.isValid()) {
                 this._mySlidingOnVerticalCheckCollisionRuntimeParams.copy(collisionRuntimeParams);
+                // #TODO horizontal check again with were slopes are blocking
                 let slidingOnVerticalCheckFixedHorizontalMovement = this._horizontalSlide(horizontalMovement, feetPosition, height, transformUp, collisionCheckParams, this._mySlidingOnVerticalCheckCollisionRuntimeParams);
 
                 if (!this._mySlidingOnVerticalCheckCollisionRuntimeParams.myIsCollidingHorizontally) {
@@ -227,7 +228,11 @@ CollisionCheck = class CollisionCheck {
 
             let newFeetPosition = feetPosition.vec3_add(slideMovement);
 
+            let backupDebugActive = collisionCheckParams.myDebugActive;
+            collisionCheckParams.myDebugActive = collisionCheckParams.myDebugActive && collisionCheckParams.myDebugSlidingActive;
             this._horizontalCheck(movement, newFeetPosition, height, up, collisionCheckParams, this._mySlidingFlickeringFixCollisionRuntimeParams);
+            collisionCheckParams.myDebugActive = backupDebugActive;
+
             if (this._mySlidingFlickeringFixCollisionRuntimeParams.myIsCollidingHorizontally) {
                 let flickerFixSlideMovement = this._internalHorizontalSlide(movement, newFeetPosition, height, up, collisionCheckParams, this._mySlidingFlickeringFixCollisionRuntimeParams);
                 if (this._mySlidingFlickeringFixCollisionRuntimeParams.myIsSliding) {
@@ -256,20 +261,25 @@ CollisionCheck = class CollisionCheck {
 
         let slidingSign = movement.vec3_signTo(collisionRuntimeParams.myHorizontalCollisionHit.myNormal, up);
 
-        let slidingMovement = collisionRuntimeParams.myHorizontalCollisionHit.myNormal.vec3_negate();
-        slidingMovement.vec3_removeComponentAlongAxis(up, slidingMovement);
-        slidingMovement.vec3_normalize(slidingMovement);
+        let invertedNormal = collisionRuntimeParams.myHorizontalCollisionHit.myNormal.vec3_negate();
+        invertedNormal.vec3_removeComponentAlongAxis(up, invertedNormal);
+        invertedNormal.vec3_normalize(invertedNormal);
 
         collisionRuntimeParams.mySlidingCollisionHit.copy(collisionRuntimeParams.myHorizontalCollisionHit);
 
         let lastValidMovement = [0, 0, 0];
 
+        let slidingMovement = invertedNormal.pp_clone();
         if (!slidingMovement.vec3_isZero()) {
             slidingMovement.vec3_scale(movement.vec3_length(), slidingMovement);
 
             let currentAngle = 90 * slidingSign;
             let maxAngle = Math.pp_angleClamp(slidingMovement.vec3_angleSigned(movement.vec3_rotateAxis(90 * slidingSign, up), up) * slidingSign, true) * slidingSign;
-            //maxAngle = currentAngle;
+
+            if (Math.abs(maxAngle) < Math.abs(currentAngle)) {
+                maxAngle = currentAngle;
+            }
+
             let minAngle = 0;
             let currentMovement = [0, 0, 0];
 
@@ -286,7 +296,7 @@ CollisionCheck = class CollisionCheck {
                     collisionRuntimeParams.copy(this._mySlidingCollisionRuntimeParams);
                     collisionRuntimeParams.myIsSliding = true;
                     collisionRuntimeParams.mySlidingMovementAngle = movement.vec3_angleSigned(currentMovement, up);
-                    collisionRuntimeParams.mySlidingCollisionAngle = slidingMovement.vec3_angleSigned(currentMovement, up);
+                    collisionRuntimeParams.mySlidingCollisionAngle = invertedNormal.vec3_angleSigned(currentMovement, up);
 
                     maxAngle = currentAngle;
                     currentAngle = (maxAngle + minAngle) / 2;
@@ -295,7 +305,7 @@ CollisionCheck = class CollisionCheck {
                         minAngle = currentAngle;
                     }
 
-                    if (i == 0) {
+                    if (i == 0 && currentAngle != maxAngle) {
                         currentAngle = maxAngle;
                     } else {
                         currentAngle = (minAngle + maxAngle) / 2;
@@ -583,7 +593,13 @@ CollisionCheck = class CollisionCheck {
             collisionRuntimeParams.myHorizontalCollisionHit.reset();
 
             let newFixedFeetPosition = fixedFeetPosition.vec3_add(fixedMovement);
+
+            let backupDebugActive = collisionCheckParams.myDebugActive;
+            collisionCheckParams.myDebugActive = collisionCheckParams.myDebugActive && collisionCheckParams.myDebugSlidingActive;
+
             this._horizontalPositionCheck(newFixedFeetPosition, fixedHeight, up, movementDirection, collisionCheckParams, collisionRuntimeParams);
+
+            collisionCheckParams.myDebugActive = backupDebugActive;
 
             if (!collisionRuntimeParams.myIsCollidingHorizontally || collisionRuntimeParams.myHorizontalCollisionHit.myIsInsideCollision) {
                 // just restore the movement check hit, the extra check wasn't helpful
@@ -1072,8 +1088,6 @@ CollisionCheck = class CollisionCheck {
                         let raycastResult = this._raycastAndDebug(origin, direction, distance, true, collisionCheckParams, collisionRuntimeParams);
 
                         if (raycastResult.myHits.length > 0) {
-                            this._fixRaycastHitPositionFromFeet(raycastResult.myHits[0].myPosition, feetPosition, up, collisionCheckParams, collisionRuntimeParams);
-
                             isHorizontalCheckOk = false;
                             break;
                         }
@@ -1091,8 +1105,6 @@ CollisionCheck = class CollisionCheck {
                                 let raycastResult = this._raycastAndDebug(origin, direction, distance, true, collisionCheckParams, collisionRuntimeParams);
 
                                 if (raycastResult.myHits.length > 0) {
-                                    this._fixRaycastHitPositionFromFeet(raycastResult.myHits[0].myPosition, feetPosition, up, collisionCheckParams, collisionRuntimeParams);
-
                                     isHorizontalCheckOk = false;
                                     break;
                                 }
@@ -1107,8 +1119,6 @@ CollisionCheck = class CollisionCheck {
                                 let raycastResult = this._raycastAndDebug(origin, direction, distance, true, collisionCheckParams, collisionRuntimeParams);
 
                                 if (raycastResult.myHits.length > 0) {
-                                    this._fixRaycastHitPositionFromFeet(raycastResult.myHits[0].myPosition, feetPosition, up, collisionCheckParams, collisionRuntimeParams);
-
                                     isHorizontalCheckOk = false;
                                     break;
                                 }
@@ -1130,8 +1140,6 @@ CollisionCheck = class CollisionCheck {
                                     let raycastResult = this._raycastAndDebug(origin, direction, distance, true, collisionCheckParams, collisionRuntimeParams);
 
                                     if (raycastResult.myHits.length > 0) {
-                                        this._fixRaycastHitPositionFromFeet(raycastResult.myHits[0].myPosition, feetPosition, up, collisionCheckParams, collisionRuntimeParams);
-
                                         isHorizontalCheckOk = false;
                                         break;
                                     }
@@ -1146,8 +1154,6 @@ CollisionCheck = class CollisionCheck {
                                     let raycastResult = this._raycastAndDebug(origin, direction, distance, true, collisionCheckParams, collisionRuntimeParams);
 
                                     if (raycastResult.myHits.length > 0) {
-                                        this._fixRaycastHitPositionFromFeet(raycastResult.myHits[0].myPosition, feetPosition, up, collisionCheckParams, collisionRuntimeParams);
-
                                         isHorizontalCheckOk = false;
                                         break;
                                     }
@@ -1155,6 +1161,16 @@ CollisionCheck = class CollisionCheck {
                             }
                         }
                     }
+                }
+
+                if (!isHorizontalCheckOk) {
+                    collisionRuntimeParams.myIsCollidingHorizontally = true;
+                    collisionRuntimeParams.myHorizontalCollisionHit.copy(this._myRaycastResult.myHits[0]);
+
+                    // try a full radial horizontal check at this height
+                    isHorizontalCheckOk = true;
+                    basePosition = feetPosition.vec3_copyComponentAlongAxis(this._myRaycastResult.myHits[0].myPosition, up);
+                    currentHeightOffset = basePosition.vec3_sub(feetPosition).vec3_componentAlongAxis(up);
                 }
             }
 
@@ -1240,7 +1256,8 @@ CollisionCheck = class CollisionCheck {
             if (!isHorizontalCheckOk) {
                 collisionRuntimeParams.myIsCollidingHorizontally = true;
                 collisionRuntimeParams.myHorizontalCollisionHit.copy(this._myRaycastResult.myHits[0]);
-
+                break;
+            } else if (collisionRuntimeParams.myIsCollidingHorizontally) {
                 break;
             }
         }
