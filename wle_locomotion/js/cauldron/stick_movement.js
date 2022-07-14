@@ -185,7 +185,7 @@ WL.registerComponent('stick-movement', {
         this._myCollisionCheckParams.mySlidingEnabled = true;
         this._myCollisionCheckParams.mySlidingHorizontalMovementCheckBetterNormal = true;
         this._myCollisionCheckParams.mySlidingMaxAttempts = 4;
-        this._myCollisionCheckParams.mySlidingPreventFlickering = false; // expensive, 2 times the check for the whole horizontal movement!
+        this._myCollisionCheckParams.mySlidingFlickeringPreventionLevel = 0; // expensive, 2 times the check for the whole horizontal movement!
 
         this._myCollisionCheckParams.myCheckHeight = true;
         this._myCollisionCheckParams.myHeightCheckStepAmount = 1;

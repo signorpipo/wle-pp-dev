@@ -39,7 +39,9 @@ CollisionCheckParams = class CollisionCheckParams {
         this.mySlidingEnabled = true;
         this.mySlidingHorizontalMovementCheckBetterNormal = true;
         this.mySlidingMaxAttempts = 4;
-        this.mySlidingPreventFlickering = false; // expensive, 2 times the check for the whole horizontal movement!
+        this.mySlidingFlickeringPreventionLevel = 0;    // expensive, 2 times the check for the whole horizontal movement!
+        // 0: no prevention, 1: base prevention, 2: advanced prevention, 3: check every time
+
         this.mySlidingCheckBothDirections = false; // expensive, 2 times the check for the whole horizontal movement!
 
         this.myBlockLayerFlags = new PP.PhysicsLayerFlags();
@@ -71,6 +73,7 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.myVerticalCollisionHit = new PP.RaycastResultHit();
 
         this.myIsSliding = false;
+        this.myIsSlidingIntoOppositeDirection = false;
         this.mySlidingMovementAngle = 0;
         this.mySlidingCollisionAngle = 0;
         this.mySlidingCollisionHit = new PP.RaycastResultHit();
@@ -88,6 +91,7 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.myVerticalCollisionHit.reset();
 
         this.myIsSliding = false;
+        this.myIsSlidingIntoOppositeDirection = true;
         this.mySlidingMovementAngle = 0;
         this.mySlidingCollisionAngle = 0;
         this.mySlidingCollisionHit.reset();
@@ -105,6 +109,7 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.myVerticalCollisionHit.copy(other.myVerticalCollisionHit);
 
         this.myIsSliding = other.myIsSliding;
+        this.myIsSlidingIntoOppositeDirection = other.myIsSlidingIntoOppositeDirection;
         this.mySlidingMovementAngle = other.mySlidingMovementAngle;
         this.mySlidingCollisionAngle = other.mySlidingCollisionAngle;
         this.mySlidingCollisionHit.copy(other.mySlidingCollisionHit);
@@ -240,8 +245,8 @@ CollisionCheck = class CollisionCheck {
             let oppositeSlideMovement = this._internalHorizontalSlide(movement, feetPosition, height, up, collisionCheckParams, this._mySlidingOppositeDirectionCollisionRuntimeParams, true);
 
             if (this._mySlidingOppositeDirectionCollisionRuntimeParams.myIsSliding) {
-                let isOppositeBetter = false;
 
+                let isOppositeBetter = false;
                 if (collisionRuntimeParams.myIsSliding) {
                     if (Math.abs(movement.vec3_angle(oppositeSlideMovement) - movement.vec3_angle(slideMovement)) < 0.00001) {
                         if (this._myPrevCollisionRuntimeParams.myMovement.vec3_angle(oppositeSlideMovement) < this._myPrevCollisionRuntimeParams.myMovement.vec3_angle(slideMovement)) {
@@ -261,9 +266,15 @@ CollisionCheck = class CollisionCheck {
             }
         }
 
-        let flickerAngle = 90;
-        if (collisionCheckParams.mySlidingPreventFlickering && collisionRuntimeParams.myIsSliding &&
-            (collisionCheckParams.mySlidingCheckBothDirections || Math.abs(collisionRuntimeParams.mySlidingCollisionAngle) > flickerAngle + 0.00001)) {
+        let flickerCollisionAngle = 90;
+        let flickerMovementAngle = 85;
+        if (collisionRuntimeParams.myIsSliding && collisionCheckParams.mySlidingFlickeringPreventionLevel > 0 && (
+            (collisionCheckParams.mySlidingCheckBothDirections && collisionRuntimeParams.myIsSlidingIntoOppositeDirection) ||
+            (collisionCheckParams.mySlidingFlickeringPreventionLevel == 3) ||
+            (collisionCheckParams.mySlidingFlickeringPreventionLevel > 0 && Math.abs(collisionRuntimeParams.mySlidingCollisionAngle) > flickerCollisionAngle + 0.00001) ||
+            (collisionCheckParams.mySlidingFlickeringPreventionLevel > 1 &&
+                (Math.abs(Math.abs(collisionRuntimeParams.mySlidingCollisionAngle) - flickerCollisionAngle) < 0.00001 && Math.abs(collisionRuntimeParams.mySlidingMovementAngle) > flickerMovementAngle + 0.00001)))) {
+
             this._mySlidingFlickeringFixCollisionRuntimeParams.reset();
 
             let newFeetPosition = feetPosition.vec3_add(slideMovement);
@@ -374,6 +385,7 @@ CollisionCheck = class CollisionCheck {
                     lastValidMovement.vec3_copy(currentMovement);
                     collisionRuntimeParams.copy(this._mySlidingCollisionRuntimeParams);
                     collisionRuntimeParams.myIsSliding = true;
+                    collisionRuntimeParams.myIsSlidingIntoOppositeDirection = checkOppositeDirection;
                     collisionRuntimeParams.mySlidingMovementAngle = movement.vec3_angleSigned(currentMovement, up);
                     collisionRuntimeParams.mySlidingCollisionAngle = invertedNormal.vec3_angleSigned(currentMovement, up);
 
