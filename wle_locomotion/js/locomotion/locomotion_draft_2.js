@@ -691,7 +691,7 @@ WL.registerComponent('locomotion-draft-2', {
         this._myCollisionCheckParams.myDebugVerticalMovementActive = false;
         this._myCollisionCheckParams.myDebugVerticalPositionActive = false;
         this._myCollisionCheckParams.myDebugSlidingActive = true;
-        this._myCollisionCheckParams.myDebugGroundInfoActive = false;
+        this._myCollisionCheckParams.myDebugSurfaceInfoActive = false;
         this._myCollisionCheckParams.myDebugRuntimeParamsActive = false;
         this._myCollisionCheckParams.myDebugMovementActive = false;
     }
