@@ -330,11 +330,6 @@ CollisionCheck = class CollisionCheck {
             return movement.vec3_scale(0);
         }
 
-        let slidingSign = movement.vec3_signTo(collisionRuntimeParams.myHorizontalCollisionHit.myNormal, up);
-        if (checkOppositeDirection) {
-            slidingSign *= -1;
-        }
-
         let invertedNormal = collisionRuntimeParams.myHorizontalCollisionHit.myNormal.vec3_negate();
         invertedNormal.vec3_removeComponentAlongAxis(up, invertedNormal);
         invertedNormal.vec3_normalize(invertedNormal);
@@ -351,6 +346,11 @@ CollisionCheck = class CollisionCheck {
 
         if (!slidingMovement.vec3_isZero()) {
             slidingMovement.vec3_scale(movement.vec3_length(), slidingMovement);
+
+            let slidingSign = invertedNormal.vec3_signTo(movement, up);
+            if (checkOppositeDirection) {
+                slidingSign *= -1;
+            }
 
             let currentAngle = 90 * slidingSign;
             let maxAngle = Math.pp_angleClamp(slidingMovement.vec3_angleSigned(movement.vec3_rotateAxis(90 * slidingSign, up), up) * slidingSign, true) * slidingSign;
@@ -638,9 +638,9 @@ CollisionCheck = class CollisionCheck {
             let halfConeAngle = Math.min(collisionCheckParams.myHalfConeAngle, 90);
             let hitDirection = hitPosition.vec3_sub(feetPosition);
             if (hitDirection.vec3_isToTheRight(movementDirection, up)) {
-                projectDirectionAxis = movementDirection.vec3_rotateAxis(halfConeAngle, up);
-            } else {
                 projectDirectionAxis = movementDirection.vec3_rotateAxis(-halfConeAngle, up);
+            } else {
+                projectDirectionAxis = movementDirection.vec3_rotateAxis(halfConeAngle, up);
             }
 
             let fixedMovement = hitDirection.vec3_projectTowardDirection(movementDirection, projectDirectionAxis);

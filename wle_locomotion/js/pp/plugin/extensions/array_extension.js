@@ -624,13 +624,13 @@ Array.prototype.vec3_isFurtherAlongAxis = function () {
 }();
 
 Array.prototype.vec3_isToTheRight = function (vector, upAxis) {
-    return this.vec3_signTo(vector, upAxis) <= 0;
+    return this.vec3_signTo(vector, upAxis) >= 0;
 };
 
 Array.prototype.vec3_signTo = function () {
     let componentAlongThis = glMatrix.vec3.create();
     let componentAlongVector = glMatrix.vec3.create();
-    return function (vector, upAxis, zeroSign = -1) {
+    return function (vector, upAxis, zeroSign = 1) {
         this.vec3_removeComponentAlongAxis(upAxis, componentAlongThis);
         vector.vec3_removeComponentAlongAxis(upAxis, componentAlongVector);
 
