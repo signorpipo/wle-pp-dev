@@ -2,12 +2,11 @@ PP.DebugRaycastParams = class DebugRaycastParams {
 
     constructor() {
         this._myRaycastResult = new PP.RaycastResult();
-        this._myRaycastResult.myRaycastSetup = new PP.RaycastSetup();
-        this._myRaycastResult._myUnusedHits = [];
-        this._myRaycastResult._myUnusedHits.push(new PP.RaycastResultHit());
 
         this.myNormalLength = 0.1;
         this.myThickness = 0.005;
+
+        this.myShowOnlyFirstHit = true;
 
         this.myType = PP.DebugDrawObjectType.RAYCAST;
     }
@@ -17,28 +16,7 @@ PP.DebugRaycastParams = class DebugRaycastParams {
     }
 
     set myRaycastResult(result) {
-        this._myRaycastResult.myRaycastSetup.myOrigin.vec3_copy(result.myRaycastSetup.myOrigin);
-        this._myRaycastResult.myRaycastSetup.myDirection.vec3_copy(result.myRaycastSetup.myDirection);
-        this._myRaycastResult.myRaycastSetup.myDistance = result.myRaycastSetup.myDistance;
-
-        if (result.myHits.length > 0) {
-            let hit = null;
-
-            if (this._myRaycastResult.myHits.length > 0) {
-                hit = this._myRaycastResult.myHits[0];
-            } else {
-                hit = this._myRaycastResult._myUnusedHits.pop();
-                this._myRaycastResult.myHits.push(hit);
-            }
-
-            hit.myPosition.vec3_copy(result.myHits[0].myPosition);
-            hit.myNormal.vec3_copy(result.myHits[0].myNormal);
-            hit.myDistance = result.myHits[0].myDistance;
-        } else {
-            if (this._myRaycastResult.myHits.length > 0) {
-                this._myRaycastResult._myUnusedHits.push(this._myRaycastResult.myHits.pop());
-            }
-        }
+        this._myRaycastResult.copy(result);
     }
 };
 
@@ -65,7 +43,12 @@ PP.DebugRaycast = class DebugRaycast {
     setVisible(visible) {
         if (this._myVisible != visible) {
             this._myVisible = visible;
-            this._myDebugRaycast.setVisible(visible);
+            if (this._myParams.myRaycastResult.myRaycastSetup != null) {
+                this._myDebugRaycast.setVisible(visible);
+            } else {
+                this._myDebugRaycast.setVisible(false);
+            }
+
             if (this._myParams.myRaycastResult.myHits.length > 0) {
                 this._myDebugRaycastHit.setVisible(visible);
             } else {
@@ -112,23 +95,36 @@ PP.DebugRaycast = class DebugRaycast {
 
     _refresh() {
         if (this._myParams.myRaycastResult.myHits.length > 0) {
+
+            let raycastDistance = this._myParams.myShowOnlyFirstHit ?
+                this._myParams.myRaycastResult.myHits.pp_first().myDistance :
+                this._myParams.myRaycastResult.myHits.pp_last().myDistance;
+
             this._myDebugRaycast.setStartDirectionLength(
                 this._myParams.myRaycastResult.myRaycastSetup.myOrigin,
                 this._myParams.myRaycastResult.myRaycastSetup.myDirection,
-                this._myParams.myRaycastResult.myHits[0].myDistance);
+                raycastDistance);
 
-            this._myDebugRaycastHit.setStartDirectionLength(
-                this._myParams.myRaycastResult.myHits[0].myPosition,
-                this._myParams.myRaycastResult.myHits[0].myNormal,
-                this._myParams.myNormalLength);
+            let hitsToShow = this._myParams.myShowOnlyFirstHit ? 1 : this._myParams.myRaycastResult.myHits.length;
+
+            for (let i = 0; i < hitsToShow; i++) {
+                this._myDebugRaycastHit.setStartDirectionLength(
+                    this._myParams.myRaycastResult.myHits[i].myPosition,
+                    this._myParams.myRaycastResult.myHits[i].myNormal,
+                    this._myParams.myNormalLength);
+            }
 
             this._myDebugRaycastHit.setVisible(this._myVisible);
-        } else {
+        } else if (this._myParams.myRaycastResult.myRaycastSetup != null) {
             this._myDebugRaycast.setStartDirectionLength(
                 this._myParams.myRaycastResult.myRaycastSetup.myOrigin,
                 this._myParams.myRaycastResult.myRaycastSetup.myDirection,
                 this._myParams.myRaycastResult.myRaycastSetup.myDistance);
 
+
+            this._myDebugRaycastHit.setVisible(false);
+        } else {
+            this._myDebugRaycast.setVisible(false);
             this._myDebugRaycastHit.setVisible(false);
         }
 

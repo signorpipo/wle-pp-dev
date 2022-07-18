@@ -49,6 +49,7 @@
             - PP.mat4_fromPositionRotation     / PP.mat4_fromPositionRotationScale
 
         ARRAY:
+            - pp_first      / pp_last
             - pp_has        / pp_hasEqual
             - pp_find       / pp_findIndex      / pp_findAll        / pp_findAllIndexes / pp_findEqual      / pp_findAllEqual   / pp_findIndexEqual / pp_findAllIndexesEqual
             ○ pp_remove     / pp_removeIndex    / pp_removeAll      / pp_removeEqual    / pp_removeAllEqual
@@ -143,6 +144,14 @@ import * as glMatrix from 'gl-matrix';
 //ARRAY
 
 //New Functions
+
+Array.prototype.pp_first = function () {
+    return this.length > 0 ? this[0] : undefined;
+};
+
+Array.prototype.pp_last = function () {
+    return this.length > 0 ? this[this.length - 1] : undefined;
+};
 
 Array.prototype.pp_has = function (callback) {
     return this.pp_find(callback) != undefined;
@@ -280,20 +289,34 @@ Array.prototype.pp_unshiftUnique = function (element, hasElementCallback = null)
     return length;
 };
 
-Array.prototype.pp_copy = function (array) {
+Array.prototype.pp_copy = function (array, copyCallback = null) {
     while (this.length > array.length) {
         this.pop();
     }
 
     for (let i = 0; i < array.length; i++) {
-        this[i] = array[i];
+        if (copyCallback == null) {
+            this[i] = array[i];
+        } else {
+            this[i] = copyCallback(this[i], array[i]);
+        }
     }
 
     return this;
 };
 
-Array.prototype.pp_clone = function () {
-    return this.slice(0);
+Array.prototype.pp_clone = function (cloneCallback = null) {
+    if (cloneCallback == null) {
+        return this.slice(0);
+    }
+
+    let clone = [];
+
+    for (let i = 0; i < this.length; i++) {
+        clone[i] = cloneCallback(this[i]);
+    }
+
+    return clone;
 };
 
 Array.prototype.pp_equals = function (array, elementEqualsCallback = null) {

@@ -51,4 +51,8 @@ PP.PhysicsLayerFlags = class PhysicsLayerFlags {
     setMask(layerMask) {
         this._myLayerMask = layerMask;
     }
+
+    copy(layerFlags) {
+        this._myLayerMask = layerFlags._myLayerMask;
+    }
 };

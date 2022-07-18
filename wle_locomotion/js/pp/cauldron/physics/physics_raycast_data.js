@@ -9,6 +9,17 @@ PP.RaycastSetup = class RaycastSetup {
         this.myPhysXComponentsToIgnore = [];
         this.myIgnoreHitsInsideCollision = false;
     }
+
+    copy(setup) {
+        this.myOrigin.vec3_copy(setup.myOrigin);
+        this.myDirection.vec3_copy(setup.myDirection);
+        this.myDistance = setup.myDistance;
+
+        this.myBlockLayerFlags.copy(setup.myBlockLayerFlags);
+
+        this.myPhysXComponentsToIgnore.pp_copy(setup.myPhysXComponentsToIgnore);
+        this.myIgnoreHitsInsideCollision = setup.myIgnoreHitsInsideCollision;
+    }
 };
 
 PP.RaycastResult = class RaycastResult {
@@ -45,6 +56,46 @@ PP.RaycastResult = class RaycastResult {
         }
 
         return hits;
+    }
+
+    copy(result) {
+        if (result.myRaycastSetup == null) {
+            this.myRaycastSetup = null;
+        } else {
+            if (this.myRaycastSetup == null) {
+                this.myRaycastSetup = new PP.RaycastSetup();
+            }
+
+            this.myRaycastSetup.copy(result.myRaycastSetup);
+        }
+
+        if (this.myHits.length > result.myHits.length) {
+            if (this._myUnusedHits == null) {
+                this._myUnusedHits = [];
+            }
+
+            for (let i = 0; i < this.myHits.length - result.myHits.length; i++) {
+                this._myUnusedHits.push(this.myHits.pop());
+            }
+        } else if (this.myHits.length < result.myHits.length) {
+            if (this._myUnusedHits != null) {
+                let length = Math.min(this._myUnusedHits.length, result.myHits.length - this.myHits.length);
+
+                for (let i = 0; i < length; i++) {
+                    this.myHits.push(this._myUnusedHits.pop());
+                }
+            }
+        }
+
+        this.myHits.pp_copy(result.myHits, function (currentElement, elementToCopy) {
+            if (currentElement == null) {
+                currentElement = new PP.RaycastResultHit();
+            }
+
+            currentElement.copy(elementToCopy);
+
+            return currentElement;
+        });
     }
 };
 
