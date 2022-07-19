@@ -34,6 +34,9 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myCheckVerticalDiagonalBorder = false;
         this.myCheckVerticalDiagonalBorderRay = false;
 
+        this.myGroundAngleToIgnore = 30;
+        this.myCeilingAngleToIgnore = 30;
+
         this.myHeight = 1;
 
         this.myDistanceToBeOnSurface = 0.001;
@@ -69,6 +72,7 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
 
         this.myIsOnGround = false;
         this.myGroundAngle = 0;
+        //perceived angle? signed angle?
         this.myGroundNormal = [0, 0, 0];
 
         this.myIsOnCeiling = false;
@@ -175,19 +179,16 @@ CollisionCheck = class CollisionCheck {
 
         //feetPosition = feetPosition.vec3_add(horizontalMovement.vec3_normalize().vec3_scale(0.5));
         //height = height / 2;
-        //horizontalMovement.vec3_scale(5, horizontalMovement);
+        //horizontalMovement.vec3_normalize(horizontalMovement).vec3_scale(0.3, horizontalMovement);
 
         //collisionCheckParams.myDebugActive = true;
 
         this._myPrevCollisionRuntimeParams.copy(collisionRuntimeParams);
         collisionRuntimeParams.reset();
 
-        let slidingDone = true;
-
         let fixedHorizontalMovement = this._horizontalCheck(horizontalMovement, feetPosition, height, transformUp, collisionCheckParams, collisionRuntimeParams);
         if (collisionCheckParams.mySlidingEnabled && collisionRuntimeParams.myIsCollidingHorizontally) {
             fixedHorizontalMovement = this._horizontalSlide(horizontalMovement, feetPosition, height, transformUp, collisionCheckParams, collisionRuntimeParams);
-            slidingDone = true;
         }
 
         let newFeetPosition = feetPosition.vec3_add(fixedHorizontalMovement);
@@ -202,31 +203,6 @@ CollisionCheck = class CollisionCheck {
         // collisionCheckParams.myDebugActive = false;
 
         let fixedVerticalMovement = this._verticalCheck(verticalMovement, newFeetPosition, height, transformUp, forward, collisionCheckParams, collisionRuntimeParams);
-        if (collisionCheckParams.mySlidingEnabled && collisionRuntimeParams.myIsCollidingVertically) {
-            if (!slidingDone && collisionRuntimeParams.myHorizontalCollisionHit.isValid()) {
-                this._mySlidingOnVerticalCheckCollisionRuntimeParams.copy(collisionRuntimeParams);
-                // #TODO horizontal check again with were slopes are blocking
-                let slidingOnVerticalCheckFixedHorizontalMovement = this._horizontalSlide(horizontalMovement, feetPosition, height, transformUp, collisionCheckParams, this._mySlidingOnVerticalCheckCollisionRuntimeParams);
-
-                if (!this._mySlidingOnVerticalCheckCollisionRuntimeParams.myIsCollidingHorizontally) {
-
-                    feetPosition.vec3_add(slidingOnVerticalCheckFixedHorizontalMovement, newFeetPosition);
-
-                    if (slidingOnVerticalCheckFixedHorizontalMovement.vec3_length() < 0.000001) {
-                        forward.vec3_copy(transformForward);
-                    } else {
-                        slidingOnVerticalCheckFixedHorizontalMovement.vec3_normalize(forward);
-                    }
-
-                    let slidingOnVerticalCheckFixedVerticalMovement = this._verticalCheck(verticalMovement, newFeetPosition, height, transformUp, forward, collisionCheckParams, this._mySlidingOnVerticalCheckCollisionRuntimeParams);
-                    if (!this._mySlidingOnVerticalCheckCollisionRuntimeParams.myIsCollidingVertically) {
-                        fixedHorizontalMovement = slidingOnVerticalCheckFixedHorizontalMovement;
-                        fixedVerticalMovement = slidingOnVerticalCheckFixedVerticalMovement;
-                        collisionRuntimeParams.copy(this._mySlidingOnVerticalCheckCollisionRuntimeParams);
-                    }
-                }
-            }
-        }
 
         let fixedMovement = [0, 0, 0];
         if (!collisionRuntimeParams.myIsCollidingVertically) {
@@ -694,8 +670,8 @@ CollisionCheck = class CollisionCheck {
 
         let movementDirection = movement.vec3_normalize();
 
-        let fixedFeetPosition = feetPosition.vec3_add(up.vec3_scale(collisionCheckParams.myDistanceFromFeetToIgnore + 0.00001));
-        let fixedHeight = Math.max(0, height - collisionCheckParams.myDistanceFromFeetToIgnore - collisionCheckParams.myDistanceFromHeadToIgnore);
+        let fixedFeetPosition = feetPosition.vec3_add(up.vec3_scale(collisionCheckParams.myDistanceFromFeetToIgnore + 0.0001));
+        let fixedHeight = Math.max(0, height - collisionCheckParams.myDistanceFromFeetToIgnore - collisionCheckParams.myDistanceFromHeadToIgnore - 0.0001 * 2);
 
         let canMove = this._horizontalMovementCheck(movement, fixedFeetPosition, fixedHeight, up, collisionCheckParams, collisionRuntimeParams);
 
@@ -806,382 +782,223 @@ CollisionCheck = class CollisionCheck {
             }
         }
 
-        let isHorizontalCheckOk = true;
+        // if result is inside a collision it's ignored, so that at least you can exit it before seeing if the new position works now
 
-        let heightStepAmount = 0;
-        let heightStep = [0, 0, 0];
-        if (collisionCheckParams.myCheckHeight && collisionCheckParams.myHeightCheckStepAmount > 0 && height > 0) {
-            heightStepAmount = collisionCheckParams.myHeightCheckStepAmount;
-            heightStep = up.vec3_scale(height / collisionCheckParams.myHeightCheckStepAmount);
+        // gather ground objects to ignore
+        let groundObjectsToIgnore = [];
+        let groundCeilingObjectsToIgnore = [];
+        {
+            let ignoreGroundAngleCallback = this._ignoreSurfaceAngle.bind(this, null, groundObjectsToIgnore, true, up, collisionCheckParams);
+            let ignoreCeilingAngleCallback = this._ignoreSurfaceAngle.bind(this, null, groundCeilingObjectsToIgnore, false, up, collisionCheckParams);
+
+            let heightOffset = [0, 0, 0];
+            this._horizontalMovementHorizontalCheck(movement, feetPosition, checkPositions, heightOffset, up, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams);
         }
 
-        let movementStep = movement.vec3_scale(1 / collisionCheckParams.myHorizontalMovementStepAmount);
+        // gather ceiling objects to ignore
+        if (!collisionRuntimeParams.myIsCollidingHorizontally && collisionCheckParams.myCheckHeight) {
+            let ceilingObjectsToIgnore = [];
+            {
+                let ignoreGroundAngleCallback = this._ignoreSurfaceAngle.bind(this, groundObjectsToIgnore, null, true, up, collisionCheckParams);
+                let ignoreCeilingAngleCallback = this._ignoreSurfaceAngle.bind(this, null, ceilingObjectsToIgnore, false, up, collisionCheckParams);
 
-        // if result is inside a collision it's ignored, so that at least you can exit it before seeing if the new position works now
-        for (let m = 0; m < collisionCheckParams.myHorizontalMovementStepAmount; m++) {
-            for (let i = 0; i <= heightStepAmount; i++) {
-                let currentHeightOffset = heightStep.vec3_scale(i);
-                for (let j = 0; j < checkPositions.length; j++) {
-                    let firstPosition = checkPositions[j].vec3_add(movementStep.vec3_scale(m)).vec3_add(currentHeightOffset);
+                let heightOffset = up.vec3_scale(height);
+                this._horizontalMovementHorizontalCheck(movement, feetPosition, checkPositions, heightOffset, up, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams);
+            }
 
-                    if (j > 0) {
-                        let secondIndex = Math.max(0, j - 2);
-                        let secondPosition = checkPositions[secondIndex].vec3_add(movementStep.vec3_scale(m)).vec3_add(currentHeightOffset);
+            if (!collisionRuntimeParams.myIsCollidingHorizontally) {
+                // check that the ceiling objects ignored by the ground are the correct ones, that is the one ignored by the upper check
 
-                        if (collisionCheckParams.myHorizontalMovementCheckDiagonal) {
-                            {
-                                let firstMovementPosition = firstPosition.vec3_add(movementStep);
+                let groundCeilingCheckIsFine = true;
+                for (let object of groundCeilingObjectsToIgnore) {
+                    if (!ceilingObjectsToIgnore.pp_has(element => object.pp_equals(element))) {
+                        groundCeilingCheckIsFine = false;
+                        break;
+                    }
+                }
 
-                                let origin = secondPosition;
-                                let direction = firstMovementPosition.vec3_sub(secondPosition);
+                let ignoreGroundAngleCallback = this._ignoreSurfaceAngle.bind(this, groundObjectsToIgnore, null, true, up, collisionCheckParams);
+                let ignoreCeilingAngleCallback = this._ignoreSurfaceAngle.bind(this, ceilingObjectsToIgnore, null, false, up, collisionCheckParams);
 
-                                if (!direction.vec3_isConcordant(movementDirection)) {
-                                    direction.vec3_negate(direction);
-                                    origin = firstMovementPosition;
-                                }
+                let heightStepAmount = 0;
+                let heightStep = [0, 0, 0];
+                if (collisionCheckParams.myCheckHeight && collisionCheckParams.myHeightCheckStepAmount > 0 && height > 0) {
+                    heightStepAmount = collisionCheckParams.myHeightCheckStepAmount;
+                    heightStep = up.vec3_scale(height / heightStepAmount);
+                }
 
-                                let distance = direction.vec3_length();
-                                direction.vec3_normalize(direction);
-                                let raycastResult = this._raycastAndDebug(origin, direction, distance, true, collisionCheckParams, collisionRuntimeParams);
+                for (let i = 0; i <= heightStepAmount; i++) {
+                    let currentHeightOffset = heightStep.vec3_scale(i);
 
-                                if (raycastResult.isColliding()) {
-                                    this._fixRaycastHitPositionFromFeet(raycastResult.myHits[0].myPosition, feetPosition, up, collisionCheckParams, collisionRuntimeParams);
+                    // we can skip the ground check since we have already done that, but if there was an error do it again with the proper set of objects to ignore
+                    // the ceiling check can always be ignored, it used the proper ground objects already
+                    if ((i != 0 && i != heightStepAmount) || (i == 0 && !groundCeilingCheckIsFine)) {
+                        this._horizontalMovementHorizontalCheck(movement, feetPosition, checkPositions, currentHeightOffset, up, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams);
 
-                                    isHorizontalCheckOk = false;
-                                    break;
-                                }
-
-                            }
-
-                            {
-                                let secondMovementPosition = secondPosition.vec3_add(movementStep);
-
-                                let origin = firstPosition;
-                                let direction = secondMovementPosition.vec3_sub(firstPosition);
-
-                                if (!direction.vec3_isConcordant(movementDirection)) {
-                                    direction.vec3_negate(direction);
-                                    origin = secondMovementPosition;
-                                }
-
-                                let distance = direction.vec3_length();
-                                direction.vec3_normalize(direction);
-                                let raycastResult = this._raycastAndDebug(origin, direction, distance, true, collisionCheckParams, collisionRuntimeParams);
-
-                                if (raycastResult.isColliding()) {
-                                    this._fixRaycastHitPositionFromFeet(raycastResult.myHits[0].myPosition, feetPosition, up, collisionCheckParams, collisionRuntimeParams);
-
-                                    isHorizontalCheckOk = false;
-                                    break;
-                                }
-                            }
-                        }
-
-                        if (collisionCheckParams.myHorizontalMovementCheckHorizontalBorder) {
-                            if (m == 0) {
-                                let origin = secondPosition;
-                                let direction = firstPosition.vec3_sub(origin);
-
-                                if (!direction.vec3_isConcordant(movementDirection)) {
-                                    direction.vec3_negate(direction);
-                                    origin = firstPosition;
-                                }
-
-                                let distance = direction.vec3_length();
-                                direction.vec3_normalize(direction);
-                                let raycastResult = this._raycastAndDebug(origin, direction, distance, true, collisionCheckParams, collisionRuntimeParams);
-
-                                if (raycastResult.isColliding()) {
-                                    this._fixRaycastHitPositionFromFeet(raycastResult.myHits[0].myPosition, feetPosition, up, collisionCheckParams, collisionRuntimeParams);
-
-                                    isHorizontalCheckOk = false;
-                                    break;
-                                }
-                            }
-
-                            {
-                                let firstMovementPosition = firstPosition.vec3_add(movementStep);
-
-                                let origin = secondPosition.vec3_add(movementStep);
-                                let direction = firstMovementPosition.vec3_sub(origin);
-
-                                if (!direction.vec3_isConcordant(movementDirection)) {
-                                    direction.vec3_negate(direction);
-                                    origin = firstMovementPosition;
-                                }
-
-                                let distance = direction.vec3_length();
-                                direction.vec3_normalize(direction);
-                                let raycastResult = this._raycastAndDebug(origin, direction, distance, true, collisionCheckParams, collisionRuntimeParams);
-
-                                if (raycastResult.isColliding()) {
-                                    this._fixRaycastHitPositionFromFeet(raycastResult.myHits[0].myPosition, feetPosition, up, collisionCheckParams, collisionRuntimeParams);
-
-                                    isHorizontalCheckOk = false;
-                                    break;
-                                }
-                            }
-                        }
-
-                        // check height
-                        if (i > 0) {
-                            if (collisionCheckParams.myHorizontalMovementCheckVerticalDiagonal) {
-                                {
-                                    let firstMovementPosition = firstPosition.vec3_add(movementStep);
-                                    let secondHeightPosition = secondPosition.vec3_sub(heightStep);
-
-                                    let origin = secondHeightPosition;
-                                    let direction = firstMovementPosition.vec3_sub(secondHeightPosition);
-
-                                    if (!direction.vec3_isConcordant(movementDirection)) {
-                                        direction.vec3_negate(direction);
-                                        origin = firstMovementPosition;
-                                    }
-
-                                    let distance = direction.vec3_length();
-                                    direction.vec3_normalize(direction);
-                                    let raycastResult = this._raycastAndDebug(origin, direction, distance, true, collisionCheckParams, collisionRuntimeParams);
-
-                                    if (raycastResult.isColliding()) {
-                                        this._fixRaycastHitPositionFromFeet(raycastResult.myHits[0].myPosition, feetPosition, up, collisionCheckParams, collisionRuntimeParams);
-
-                                        isHorizontalCheckOk = false;
-                                        break;
-                                    }
-                                }
-
-                                {
-                                    let secondMovementPosition = secondPosition.vec3_add(movementStep);
-                                    let firstHeightPosition = firstPosition.vec3_sub(heightStep);
-
-                                    let origin = firstHeightPosition;
-                                    let direction = secondMovementPosition.vec3_sub(firstHeightPosition);
-
-                                    if (!direction.vec3_isConcordant(movementDirection)) {
-                                        direction.vec3_negate(direction);
-                                        origin = secondMovementPosition;
-                                    }
-
-                                    let distance = direction.vec3_length();
-                                    direction.vec3_normalize(direction);
-                                    let raycastResult = this._raycastAndDebug(origin, direction, distance, true, collisionCheckParams, collisionRuntimeParams);
-
-                                    if (raycastResult.isColliding()) {
-                                        this._fixRaycastHitPositionFromFeet(raycastResult.myHits[0].myPosition, feetPosition, up, collisionCheckParams, collisionRuntimeParams);
-
-                                        isHorizontalCheckOk = false;
-                                        break;
-                                    }
-                                }
-                            }
-
-                            if (collisionCheckParams.myHorizontalMovementCheckVerticalHorizontalBorderDiagonal) {
-                                if (m == 0) {
-                                    {
-                                        let secondHeightPosition = secondPosition.vec3_sub(heightStep);
-
-                                        let origin = secondHeightPosition;
-                                        let direction = firstPosition.vec3_sub(origin);
-
-                                        if (!direction.vec3_isConcordant(movementDirection)) {
-                                            direction.vec3_negate(direction);
-                                            origin = firstPosition;
-                                        }
-
-                                        let distance = direction.vec3_length();
-                                        direction.vec3_normalize(direction);
-                                        let raycastResult = this._raycastAndDebug(origin, direction, distance, true, collisionCheckParams, collisionRuntimeParams);
-
-                                        if (raycastResult.isColliding()) {
-                                            this._fixRaycastHitPositionFromFeet(raycastResult.myHits[0].myPosition, feetPosition, up, collisionCheckParams, collisionRuntimeParams);
-
-                                            isHorizontalCheckOk = false;
-                                            break;
-                                        }
-                                    }
-
-                                    {
-                                        let firstHeightPosition = firstPosition.vec3_sub(heightStep);
-
-                                        let origin = firstHeightPosition;
-                                        let direction = secondPosition.vec3_sub(origin);
-
-                                        if (!direction.vec3_isConcordant(movementDirection)) {
-                                            direction.vec3_negate(direction);
-                                            origin = secondPosition;
-                                        }
-
-                                        let distance = direction.vec3_length();
-                                        direction.vec3_normalize(direction);
-                                        let raycastResult = this._raycastAndDebug(origin, direction, distance, true, collisionCheckParams, collisionRuntimeParams);
-
-                                        if (raycastResult.isColliding()) {
-                                            this._fixRaycastHitPositionFromFeet(raycastResult.myHits[0].myPosition, feetPosition, up, collisionCheckParams, collisionRuntimeParams);
-
-                                            isHorizontalCheckOk = false;
-                                            break;
-                                        }
-                                    }
-                                }
-
-                                {
-                                    let firstMovementPosition = firstPosition.vec3_add(movementStep);
-                                    let secondHeightMovementPosition = secondPosition.vec3_sub(heightStep).vec3_add(movementStep);
-
-                                    let origin = secondHeightMovementPosition;
-                                    let direction = firstMovementPosition.vec3_sub(origin);
-
-                                    if (!direction.vec3_isConcordant(movementDirection)) {
-                                        direction.vec3_negate(direction);
-                                        origin = firstMovementPosition;
-                                    }
-
-                                    let distance = direction.vec3_length();
-                                    direction.vec3_normalize(direction);
-                                    let raycastResult = this._raycastAndDebug(origin, direction, distance, true, collisionCheckParams, collisionRuntimeParams);
-
-                                    if (raycastResult.isColliding()) {
-                                        this._fixRaycastHitPositionFromFeet(raycastResult.myHits[0].myPosition, feetPosition, up, collisionCheckParams, collisionRuntimeParams);
-
-                                        isHorizontalCheckOk = false;
-                                        break;
-                                    }
-                                }
-
-                                {
-                                    let secondMovementPosition = secondPosition.vec3_add(movementStep);
-                                    let firstHeightMovementPosition = firstPosition.vec3_sub(heightStep).vec3_add(movementStep);
-
-                                    let origin = firstHeightMovementPosition;
-                                    let direction = secondMovementPosition.vec3_sub(origin);
-
-                                    if (!direction.vec3_isConcordant(movementDirection)) {
-                                        direction.vec3_negate(direction);
-                                        origin = secondMovementPosition;
-                                    }
-
-                                    let distance = direction.vec3_length();
-                                    direction.vec3_normalize(direction);
-                                    let raycastResult = this._raycastAndDebug(origin, direction, distance, true, collisionCheckParams, collisionRuntimeParams);
-
-                                    if (raycastResult.isColliding()) {
-                                        this._fixRaycastHitPositionFromFeet(raycastResult.myHits[0].myPosition, feetPosition, up, collisionCheckParams, collisionRuntimeParams);
-
-                                        isHorizontalCheckOk = false;
-                                        break;
-                                    }
-                                }
-                            }
+                        if (collisionRuntimeParams.myIsCollidingHorizontally) {
+                            break;
                         }
                     }
 
-                    if (collisionCheckParams.myHorizontalMovementCheckStraight || j == 0) {
+                    if (i > 0) {
+                        this._horizontalMovementVerticalCheck(movement, feetPosition, checkPositions, currentHeightOffset, heightStep, up, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams);
+
+                        if (collisionRuntimeParams.myIsCollidingHorizontally) {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        return !collisionRuntimeParams.myIsCollidingHorizontally;
+    }
+
+    _horizontalMovementVerticalCheck(movement, feetPosition, checkPositions, heightOffset, heightStep, up, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams) {
+        let isHorizontalCheckOk = true;
+
+        let movementStep = movement.vec3_scale(1 / collisionCheckParams.myHorizontalMovementStepAmount);
+        let movementDirection = movement.vec3_normalize();
+
+        for (let m = 0; m < collisionCheckParams.myHorizontalMovementStepAmount; m++) {
+            for (let j = 0; j < checkPositions.length; j++) {
+                let firstPosition = checkPositions[j].vec3_add(movementStep.vec3_scale(m)).vec3_add(heightOffset);
+
+                if (j > 0) {
+                    let secondIndex = Math.max(0, j - 2);
+                    let secondPosition = checkPositions[secondIndex].vec3_add(movementStep.vec3_scale(m)).vec3_add(heightOffset);
+
+                    if (collisionCheckParams.myHorizontalMovementCheckVerticalDiagonal) {
                         {
                             let firstMovementPosition = firstPosition.vec3_add(movementStep);
+                            let secondHeightPosition = secondPosition.vec3_sub(heightStep);
 
-                            let origin = firstPosition;
-                            let direction = firstMovementPosition.vec3_sub(origin);
-                            let distance = direction.vec3_length();
-                            direction.vec3_normalize(direction);
-                            let raycastResult = this._raycastAndDebug(origin, direction, distance, true, collisionCheckParams, collisionRuntimeParams);
+                            isHorizontalCheckOk = this._horizontalCheckRaycast(secondHeightPosition, firstMovementPosition, movementDirection, up,
+                                true, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
+                                feetPosition, true,
+                                collisionCheckParams, collisionRuntimeParams);
 
-                            if (raycastResult.isColliding()) {
-                                this._fixRaycastHitPositionFromFeet(raycastResult.myHits[0].myPosition, feetPosition, up, collisionCheckParams, collisionRuntimeParams);
+                            if (!isHorizontalCheckOk) break;
+                        }
 
-                                isHorizontalCheckOk = false;
-                                break;
-                            }
+                        {
+                            let secondMovementPosition = secondPosition.vec3_add(movementStep);
+                            let firstHeightPosition = firstPosition.vec3_sub(heightStep);
+
+                            isHorizontalCheckOk = this._horizontalCheckRaycast(firstHeightPosition, secondMovementPosition, movementDirection, up,
+                                true, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
+                                feetPosition, true,
+                                collisionCheckParams, collisionRuntimeParams);
+
+                            if (!isHorizontalCheckOk) break;
                         }
                     }
 
-                    // check height
-                    if (i > 0) {
-                        if (collisionCheckParams.myHorizontalMovementCheckVerticalStraight) {
-                            if (m == 0) {
-                                let firstHeightPosition = firstPosition.vec3_sub(heightStep);
+                    if (collisionCheckParams.myHorizontalMovementCheckVerticalHorizontalBorderDiagonal) {
+                        if (m == 0) {
+                            {
+                                let secondHeightPosition = secondPosition.vec3_sub(heightStep);
 
-                                let origin = firstHeightPosition;
-                                let direction = firstPosition.vec3_sub(origin);
+                                isHorizontalCheckOk = this._horizontalCheckRaycast(secondHeightPosition, firstPosition, movementDirection, up,
+                                    true, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
+                                    feetPosition, true,
+                                    collisionCheckParams, collisionRuntimeParams);
 
-                                let distance = direction.vec3_length();
-                                direction.vec3_normalize(direction);
-                                let raycastResult = this._raycastAndDebug(origin, direction, distance, true, collisionCheckParams, collisionRuntimeParams);
-
-                                if (raycastResult.isColliding()) {
-                                    this._fixRaycastHitPositionFromFeet(raycastResult.myHits[0].myPosition, feetPosition, up, collisionCheckParams, collisionRuntimeParams);
-
-                                    isHorizontalCheckOk = false;
-                                    break;
-                                }
+                                if (!isHorizontalCheckOk) break;
                             }
 
                             {
-                                let firstMovementPosition = firstPosition.vec3_add(movementStep);
-                                let firstHeightMovementPosition = firstMovementPosition.vec3_sub(heightStep);
+                                let firstHeightPosition = firstPosition.vec3_sub(heightStep);
 
-                                let origin = firstHeightMovementPosition;
-                                let direction = firstMovementPosition.vec3_sub(origin);
+                                isHorizontalCheckOk = this._horizontalCheckRaycast(firstHeightPosition, secondPosition, movementDirection, up,
+                                    true, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
+                                    feetPosition, true,
+                                    collisionCheckParams, collisionRuntimeParams);
 
-                                let distance = direction.vec3_length();
-                                direction.vec3_normalize(direction);
-                                let raycastResult = this._raycastAndDebug(origin, direction, distance, true, collisionCheckParams, collisionRuntimeParams);
-
-                                if (raycastResult.isColliding()) {
-                                    this._fixRaycastHitPositionFromFeet(raycastResult.myHits[0].myPosition, feetPosition, up, collisionCheckParams, collisionRuntimeParams);
-
-                                    isHorizontalCheckOk = false;
-                                    break;
-                                }
+                                if (!isHorizontalCheckOk) break;
                             }
                         }
 
-                        if (collisionCheckParams.myHorizontalMovementCheckVerticalStraightDiagonal) {
-                            {
-                                let firstMovementPosition = firstPosition.vec3_add(movementStep);
-                                let firstHeightPosition = firstPosition.vec3_sub(heightStep);
+                        {
+                            let firstMovementPosition = firstPosition.vec3_add(movementStep);
+                            let secondHeightMovementPosition = secondPosition.vec3_sub(heightStep).vec3_add(movementStep);
 
-                                let origin = firstHeightPosition;
-                                let direction = firstMovementPosition.vec3_sub(origin);
+                            isHorizontalCheckOk = this._horizontalCheckRaycast(secondHeightMovementPosition, firstMovementPosition, movementDirection, up,
+                                true, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
+                                feetPosition, true,
+                                collisionCheckParams, collisionRuntimeParams);
 
-                                let distance = direction.vec3_length();
-                                direction.vec3_normalize(direction);
-                                let raycastResult = this._raycastAndDebug(origin, direction, distance, true, collisionCheckParams, collisionRuntimeParams);
-
-                                if (raycastResult.isColliding()) {
-                                    this._fixRaycastHitPositionFromFeet(raycastResult.myHits[0].myPosition, feetPosition, up, collisionCheckParams, collisionRuntimeParams);
-
-                                    isHorizontalCheckOk = false;
-                                    break;
-                                }
-                            }
-
-                            {
-                                let firstHeightMovementPosition = firstPosition.vec3_sub(heightStep).vec3_add(movementStep);
-
-                                let origin = firstPosition;
-                                let direction = firstHeightMovementPosition.vec3_sub(origin);
-
-                                let distance = direction.vec3_length();
-                                direction.vec3_normalize(direction);
-                                let raycastResult = this._raycastAndDebug(origin, direction, distance, true, collisionCheckParams, collisionRuntimeParams);
-
-                                if (raycastResult.isColliding()) {
-                                    this._fixRaycastHitPositionFromFeet(raycastResult.myHits[0].myPosition, feetPosition, up, collisionCheckParams, collisionRuntimeParams);
-
-                                    isHorizontalCheckOk = false;
-                                    break;
-                                }
-                            }
+                            if (!isHorizontalCheckOk) break;
                         }
+
+                        {
+                            let secondMovementPosition = secondPosition.vec3_add(movementStep);
+                            let firstHeightMovementPosition = firstPosition.vec3_sub(heightStep).vec3_add(movementStep);
+
+                            isHorizontalCheckOk = this._horizontalCheckRaycast(firstHeightMovementPosition, secondMovementPosition, movementDirection, up,
+                                true, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
+                                feetPosition, true,
+                                collisionCheckParams, collisionRuntimeParams);
+
+                            if (!isHorizontalCheckOk) break;
+                        }
+                    }
+                }
+
+                if (collisionCheckParams.myHorizontalMovementCheckVerticalStraight) {
+                    if (m == 0) {
+                        let firstHeightPosition = firstPosition.vec3_sub(heightStep);
+
+                        isHorizontalCheckOk = this._horizontalCheckRaycast(firstHeightPosition, firstPosition, movementDirection, up,
+                            true, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
+                            feetPosition, true,
+                            collisionCheckParams, collisionRuntimeParams);
+
+                        if (!isHorizontalCheckOk) break;
+                    }
+
+                    {
+                        let firstMovementPosition = firstPosition.vec3_add(movementStep);
+                        let firstHeightMovementPosition = firstMovementPosition.vec3_sub(heightStep);
+
+                        isHorizontalCheckOk = this._horizontalCheckRaycast(firstHeightMovementPosition, firstMovementPosition, movementDirection, up,
+                            true, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
+                            feetPosition, true,
+                            collisionCheckParams, collisionRuntimeParams);
+
+                        if (!isHorizontalCheckOk) break;
+                    }
+                }
+
+                if (collisionCheckParams.myHorizontalMovementCheckVerticalStraightDiagonal) {
+                    {
+                        let firstMovementPosition = firstPosition.vec3_add(movementStep);
+                        let firstHeightPosition = firstPosition.vec3_sub(heightStep);
+
+                        isHorizontalCheckOk = this._horizontalCheckRaycast(firstHeightPosition, firstMovementPosition, movementDirection, up,
+                            true, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
+                            feetPosition, true,
+                            collisionCheckParams, collisionRuntimeParams);
+
+                        if (!isHorizontalCheckOk) break;
+                    }
+
+                    {
+                        let firstHeightMovementPosition = firstPosition.vec3_sub(heightStep).vec3_add(movementStep);
+
+                        isHorizontalCheckOk = this._horizontalCheckRaycast(firstPosition, firstHeightMovementPosition, movementDirection, up,
+                            true, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
+                            feetPosition, true,
+                            collisionCheckParams, collisionRuntimeParams);
+
+                        if (!isHorizontalCheckOk) break;
                     }
                 }
 
                 if (!isHorizontalCheckOk) {
                     collisionRuntimeParams.myIsCollidingHorizontally = true;
-                    collisionRuntimeParams.myHorizontalCollisionHit.copy(this._myRaycastResult.myHits[0]);
+                    collisionRuntimeParams.myHorizontalCollisionHit.copy(raycastResult.myHits[0]);
                     break;
-                } else if (!collisionRuntimeParams.myHorizontalCollisionHit.isValid() && this._myRaycastResult.isColliding()) {
-                    collisionRuntimeParams.myHorizontalCollisionHit.copy(this._myRaycastResult.myHits[0]);
                 }
             }
         }
@@ -1189,222 +1006,77 @@ CollisionCheck = class CollisionCheck {
         return isHorizontalCheckOk;
     }
 
-    _horizontalPositionCheck(feetPosition, height, up, forward, collisionCheckParams, collisionRuntimeParams) {
-        this._myDebugActive = collisionCheckParams.myDebugActive && collisionCheckParams.myDebugHorizontalPositionActive;
-
-        let radialPositions = [];
-        let halfConeAngle = Math.min(collisionCheckParams.myHalfConeAngle, 180);
-        let sliceAngle = halfConeAngle / collisionCheckParams.myHalfConeSliceAmount;
-        radialPositions.push(feetPosition.vec3_add(forward.vec3_scale(collisionCheckParams.myRadius)));
-        for (let i = 1; i <= collisionCheckParams.myHalfConeSliceAmount; i++) {
-            let currentAngle = i * sliceAngle;
-
-            let radialDirection = forward.vec3_rotateAxis(-currentAngle, up);
-            radialPositions.push(feetPosition.vec3_add(radialDirection.vec3_scale(collisionCheckParams.myRadius)));
-
-            if (currentAngle != 180) {
-                radialDirection = forward.vec3_rotateAxis(currentAngle, up);
-                radialPositions.push(feetPosition.vec3_add(radialDirection.vec3_scale(collisionCheckParams.myRadius)));
-            }
-        }
-
+    _horizontalMovementHorizontalCheck(movement, feetPosition, checkPositions, heightOffset, up, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams) {
         let isHorizontalCheckOk = true;
 
-        let heightStepAmount = 0;
-        let heightStep = [0, 0, 0];
-        if (collisionCheckParams.myCheckHeight && collisionCheckParams.myHeightCheckStepAmount > 0 && height > 0) {
-            heightStepAmount = collisionCheckParams.myHeightCheckStepAmount;
-            heightStep = up.vec3_scale(height / collisionCheckParams.myHeightCheckStepAmount);
-        }
+        let movementStep = movement.vec3_scale(1 / collisionCheckParams.myHorizontalMovementStepAmount);
+        let movementDirection = movement.vec3_normalize();
 
-        for (let i = 0; i <= heightStepAmount; i++) {
-            let currentHeightOffset = heightStep.vec3_scale(i);
-            let basePosition = feetPosition.vec3_add(currentHeightOffset);
-            let previousBasePosition = basePosition.vec3_sub(heightStep);
+        for (let m = 0; m < collisionCheckParams.myHorizontalMovementStepAmount; m++) {
+            for (let j = 0; j < checkPositions.length; j++) {
+                let firstPosition = checkPositions[j].vec3_add(movementStep.vec3_scale(m)).vec3_add(heightOffset);
 
-            if (i != 0) {
-                for (let j = 0; j <= radialPositions.length; j++) {
-                    let currentRadialPosition = null;
-                    let previousRadialPosition = null;
-                    if (j == radialPositions.length) {
-                        currentRadialPosition = basePosition;
-                        previousRadialPosition = previousBasePosition;
-                    } else {
-                        currentRadialPosition = radialPositions[j].vec3_add(currentHeightOffset);
-                        previousRadialPosition = currentRadialPosition.vec3_sub(heightStep);
-                    }
+                if (j > 0) {
+                    let secondIndex = Math.max(0, j - 2);
+                    let secondPosition = checkPositions[secondIndex].vec3_add(movementStep.vec3_scale(m)).vec3_add(heightOffset);
 
-                    if (collisionCheckParams.myCheckVerticalStraight) {
-                        let origin = previousRadialPosition;
-                        let direction = currentRadialPosition.vec3_sub(previousRadialPosition);
-                        let distance = direction.vec3_length();
-                        direction.vec3_normalize(direction);
+                    if (collisionCheckParams.myHorizontalMovementCheckDiagonal) {
+                        {
+                            let firstMovementPosition = firstPosition.vec3_add(movementStep);
 
-                        let raycastResult = this._raycastAndDebug(origin, direction, distance, true, collisionCheckParams, collisionRuntimeParams);
+                            isHorizontalCheckOk = this._horizontalCheckRaycast(secondPosition, firstMovementPosition, movementDirection, up,
+                                true, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
+                                feetPosition, true,
+                                collisionCheckParams, collisionRuntimeParams);
 
-                        if (raycastResult.myHits.length > 0) {
-                            isHorizontalCheckOk = false;
-                            break;
+                            if (!isHorizontalCheckOk) break;
+                        }
+
+                        {
+                            let secondMovementPosition = secondPosition.vec3_add(movementStep);
+
+                            isHorizontalCheckOk = this._horizontalCheckRaycast(firstPosition, secondMovementPosition, movementDirection, up,
+                                true, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
+                                feetPosition, true,
+                                collisionCheckParams, collisionRuntimeParams);
+
+                            if (!isHorizontalCheckOk) break;
                         }
                     }
 
-                    if (j < radialPositions.length) {
-                        if (collisionCheckParams.myCheckVerticalDiagonalRay ||
-                            (collisionCheckParams.myCheckVerticalDiagonalBorderRay && (j == 0 || j == radialPositions.length - 1))) {
-                            {
-                                let origin = previousBasePosition;
-                                let direction = currentRadialPosition.vec3_sub(origin);
-                                let distance = direction.vec3_length();
-                                direction.vec3_normalize(direction);
+                    if (collisionCheckParams.myHorizontalMovementCheckHorizontalBorder) {
+                        if (m == 0) {
+                            isHorizontalCheckOk = this._horizontalCheckRaycast(secondPosition, firstPosition, movementDirection, up,
+                                true, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
+                                feetPosition, true,
+                                collisionCheckParams, collisionRuntimeParams);
 
-                                let raycastResult = this._raycastAndDebug(origin, direction, distance, true, collisionCheckParams, collisionRuntimeParams);
-
-                                if (raycastResult.myHits.length > 0) {
-                                    isHorizontalCheckOk = false;
-                                    break;
-                                }
-                            }
-
-                            {
-                                let origin = previousRadialPosition;
-                                let direction = basePosition.vec3_sub(origin);
-                                let distance = direction.vec3_length();
-                                direction.vec3_normalize(direction);
-
-                                let raycastResult = this._raycastAndDebug(origin, direction, distance, true, collisionCheckParams, collisionRuntimeParams);
-
-                                if (raycastResult.myHits.length > 0) {
-                                    isHorizontalCheckOk = false;
-                                    break;
-                                }
-                            }
+                            if (!isHorizontalCheckOk) break;
                         }
 
-                        if (j > 0) {
-                            if (collisionCheckParams.myCheckVerticalDiagonalBorder) {
-                                let previousIndex = Math.max(0, j - 2);
-                                let previousCurrentRadialPosition = radialPositions[previousIndex].vec3_add(currentHeightOffset);
-                                let previousPreviousRadialPosition = previousCurrentRadialPosition.vec3_sub(heightStep);
+                        {
+                            let firstMovementPosition = firstPosition.vec3_add(movementStep);
+                            let secondMovementPosition = secondPosition.vec3_add(movementStep);
 
-                                {
-                                    let origin = previousPreviousRadialPosition;
-                                    let direction = currentRadialPosition.vec3_sub(origin);
-                                    let distance = direction.vec3_length();
-                                    direction.vec3_normalize(direction);
+                            isHorizontalCheckOk = this._horizontalCheckRaycast(secondMovementPosition, firstMovementPosition, movementDirection, up,
+                                true, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
+                                feetPosition, true,
+                                collisionCheckParams, collisionRuntimeParams);
 
-                                    let raycastResult = this._raycastAndDebug(origin, direction, distance, true, collisionCheckParams, collisionRuntimeParams);
-
-                                    if (raycastResult.myHits.length > 0) {
-                                        isHorizontalCheckOk = false;
-                                        break;
-                                    }
-                                }
-
-                                {
-                                    let origin = previousRadialPosition;
-                                    let direction = previousCurrentRadialPosition.vec3_sub(origin);
-                                    let distance = direction.vec3_length();
-                                    direction.vec3_normalize(direction);
-
-                                    let raycastResult = this._raycastAndDebug(origin, direction, distance, true, collisionCheckParams, collisionRuntimeParams);
-
-                                    if (raycastResult.myHits.length > 0) {
-                                        isHorizontalCheckOk = false;
-                                        break;
-                                    }
-                                }
-                            }
+                            if (!isHorizontalCheckOk) break;
                         }
                     }
                 }
 
-                if (!isHorizontalCheckOk) {
-                    collisionRuntimeParams.myIsCollidingHorizontally = true;
-                    collisionRuntimeParams.myHorizontalCollisionHit.copy(this._myRaycastResult.myHits[0]);
+                if (collisionCheckParams.myHorizontalMovementCheckStraight || j == 0) {
+                    let firstMovementPosition = firstPosition.vec3_add(movementStep);
 
-                    // try a full radial horizontal check at this height
-                    isHorizontalCheckOk = true;
-                    basePosition = feetPosition.vec3_copyComponentAlongAxis(this._myRaycastResult.myHits[0].myPosition, up);
-                    currentHeightOffset = basePosition.vec3_sub(feetPosition).vec3_componentAlongAxis(up);
-                }
-            }
+                    isHorizontalCheckOk = this._horizontalCheckRaycast(firstPosition, firstMovementPosition, null, up,
+                        true, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
+                        feetPosition, true,
+                        collisionCheckParams, collisionRuntimeParams);
 
-            if (isHorizontalCheckOk) {
-                let halfRadialPositions = Math.floor(radialPositions.length / 2) + 1;
-                for (let j = 0; j < halfRadialPositions; j++) {
-
-                    if (j > 0) {
-                        let leftIndex = Math.max(0, j * 2);
-                        let rightIndex = Math.max(0, (j * 2 - 1));
-
-                        if (collisionCheckParams.myCheckConeBorder) {
-                            for (let r = 0; r < 2; r++) {
-                                let currentIndex = r == 0 ? leftIndex : rightIndex;
-                                let currentRadialPosition = null;
-
-                                currentRadialPosition = radialPositions[currentIndex].vec3_add(currentHeightOffset);
-
-                                let previousIndex = Math.max(0, currentIndex - 2);
-                                let previousRadialPosition = radialPositions[previousIndex].vec3_add(currentHeightOffset);
-                                let origin = previousRadialPosition;
-                                let direction = currentRadialPosition.vec3_sub(previousRadialPosition);
-                                if (direction.vec3_isConcordant(forward)) {
-                                    direction.vec3_negate(direction);
-                                    origin = currentRadialPosition;
-                                }
-                                let distance = direction.vec3_length();
-                                direction.vec3_normalize(direction);
-
-                                let raycastResult = this._raycastAndDebug(origin, direction, distance, true, collisionCheckParams, collisionRuntimeParams);
-
-                                if (raycastResult.myHits.length > 0) {
-                                    this._fixRaycastHitPositionFromFeet(raycastResult.myHits[0].myPosition, feetPosition, up, collisionCheckParams, collisionRuntimeParams);
-
-                                    isHorizontalCheckOk = false;
-                                    break;
-                                }
-                            }
-                        }
-
-                        if (collisionCheckParams.myCheckConeRay && isHorizontalCheckOk) {
-                            for (let r = 0; r < 2; r++) {
-                                let currentIndex = r == 0 ? leftIndex : rightIndex;
-
-                                let currentRadialPosition = radialPositions[currentIndex].vec3_add(currentHeightOffset);
-
-                                let origin = basePosition;
-                                let direction = currentRadialPosition.vec3_sub(basePosition);
-                                let distance = direction.vec3_length();
-                                direction.vec3_normalize(direction);
-
-                                let raycastResult = this._raycastAndDebug(origin, direction, distance, false, collisionCheckParams, collisionRuntimeParams);
-
-                                if (raycastResult.myHits.length > 0) {
-                                    isHorizontalCheckOk = false;
-                                    break;
-                                }
-                            }
-                        }
-                    } else {
-                        let currentRadialPosition = radialPositions[j].vec3_add(currentHeightOffset);
-                        if (collisionCheckParams.myCheckConeRay) {
-                            let origin = basePosition;
-                            let direction = currentRadialPosition.vec3_sub(basePosition);
-                            let distance = direction.vec3_length();
-                            direction.vec3_normalize(direction);
-
-                            let raycastResult = this._raycastAndDebug(origin, direction, distance, false, collisionCheckParams, collisionRuntimeParams);
-
-                            if (raycastResult.myHits.length > 0) {
-                                isHorizontalCheckOk = false;
-                                break;
-                            }
-                        }
-                    }
-
-                    if (!isHorizontalCheckOk) {
-                        break;
-                    }
+                    if (!isHorizontalCheckOk) break;
                 }
             }
 
@@ -1412,9 +1084,309 @@ CollisionCheck = class CollisionCheck {
                 collisionRuntimeParams.myIsCollidingHorizontally = true;
                 collisionRuntimeParams.myHorizontalCollisionHit.copy(this._myRaycastResult.myHits[0]);
                 break;
-            } else if (collisionRuntimeParams.myIsCollidingHorizontally) {
+            }
+        }
+
+        return isHorizontalCheckOk;
+    }
+
+    _horizontalCheckRaycast(startPosition, endPosition, movementDirection, up,
+        ignoreHitsInsideCollision, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
+        feetPosition, fixHitOnCollision,
+        collisionCheckParams, collisionRuntimeParams) {
+
+        let origin = startPosition;
+        let direction = endPosition.vec3_sub(origin);
+
+        if (movementDirection != null && !direction.vec3_isConcordant(movementDirection)) {
+            direction.vec3_negate(direction);
+            origin = endPosition;
+        }
+
+        let distance = direction.vec3_length();
+        direction.vec3_normalize(direction);
+        let raycastResult = this._raycastAndDebug(origin, direction, distance, ignoreHitsInsideCollision, collisionCheckParams, collisionRuntimeParams);
+
+        let isOk = true;
+
+        if (raycastResult.isColliding()) {
+            for (let hit of raycastResult.myHits) {
+                if ((ignoreGroundAngleCallback == null || !ignoreGroundAngleCallback(hit, up)) &&
+                    (ignoreCeilingAngleCallback == null || !ignoreCeilingAngleCallback(hit, up))) {
+                    isOk = false;
+                    break;
+                }
+            }
+        }
+
+        if (!isOk && fixHitOnCollision) {
+            let hitPosition = raycastResult.myHits[0].myPosition;
+
+            let fixedFeedPosition = feetPosition.vec3_copyComponentAlongAxis(hitPosition, up);
+            let direction = hitPosition.vec3_sub(fixedFeedPosition);
+            direction.vec3_normalize(direction);
+            let fixedHitPosition = hitPosition.vec3_add(direction.vec3_scale(0.0001));
+
+            let swapRaycastResult = this._myRaycastResult;
+            this._myRaycastResult = this._myFixRaycastResult;
+
+            isOk = this._horizontalCheckRaycast(fixedFeedPosition, fixedHitPosition, null, up,
+                false, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
+                feetPosition, false,
+                collisionCheckParams, collisionRuntimeParams);
+
+            if (this._myRaycastResult.isColliding()) {
+                this._myFixRaycastResult = swapRaycastResult;
+            } else {
+                isOk = false;
+                this._myRaycastResult = swapRaycastResult;
+            }
+
+        }
+
+        return isOk;
+    }
+
+    _horizontalPositionCheck(feetPosition, height, up, forward, collisionCheckParams, collisionRuntimeParams) {
+        this._myDebugActive = collisionCheckParams.myDebugActive && collisionCheckParams.myDebugHorizontalPositionActive;
+
+        let checkPositions = [];
+        let halfConeAngle = Math.min(collisionCheckParams.myHalfConeAngle, 180);
+        let sliceAngle = halfConeAngle / collisionCheckParams.myHalfConeSliceAmount;
+        checkPositions.push(feetPosition.vec3_add(forward.vec3_scale(collisionCheckParams.myRadius)));
+        for (let i = 1; i <= collisionCheckParams.myHalfConeSliceAmount; i++) {
+            let currentAngle = i * sliceAngle;
+
+            let radialDirection = forward.vec3_rotateAxis(-currentAngle, up);
+            checkPositions.push(feetPosition.vec3_add(radialDirection.vec3_scale(collisionCheckParams.myRadius)));
+
+            if (currentAngle != 180) {
+                radialDirection = forward.vec3_rotateAxis(currentAngle, up);
+                checkPositions.push(feetPosition.vec3_add(radialDirection.vec3_scale(collisionCheckParams.myRadius)));
+            }
+        }
+
+        // gather ground objects to ignore
+        let groundObjectsToIgnore = [];
+        let groundCeilingObjectsToIgnore = [];
+        {
+            let ignoreGroundAngleCallback = this._ignoreSurfaceAngle.bind(this, null, groundObjectsToIgnore, true, up, collisionCheckParams);
+            let ignoreCeilingAngleCallback = this._ignoreSurfaceAngle.bind(this, null, groundCeilingObjectsToIgnore, false, up, collisionCheckParams);
+
+            let heightOffset = [0, 0, 0];
+            this._horizontalPositionHorizontalCheck(feetPosition, checkPositions, heightOffset, up, forward, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams);
+        }
+
+        // gather ceiling objects to ignore
+        if (!collisionRuntimeParams.myIsCollidingHorizontally && collisionCheckParams.myCheckHeight) {
+            let ceilingObjectsToIgnore = [];
+            {
+                let ignoreGroundAngleCallback = this._ignoreSurfaceAngle.bind(this, groundObjectsToIgnore, null, true, up, collisionCheckParams);
+                let ignoreCeilingAngleCallback = this._ignoreSurfaceAngle.bind(this, null, ceilingObjectsToIgnore, false, up, collisionCheckParams);
+
+                let heightOffset = up.vec3_scale(height);
+                this._horizontalPositionHorizontalCheck(feetPosition, checkPositions, heightOffset, up, forward, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams);
+            }
+
+            if (!collisionRuntimeParams.myIsCollidingHorizontally) {
+                // check that the ceiling objects ignored by the ground are the correct ones, that is the one ignored by the upper check
+
+                let groundCeilingCheckIsFine = true;
+                for (let object of groundCeilingObjectsToIgnore) {
+                    if (!ceilingObjectsToIgnore.pp_has(element => object.pp_equals(element))) {
+                        groundCeilingCheckIsFine = false;
+                        break;
+                    }
+                }
+
+                let ignoreGroundAngleCallback = this._ignoreSurfaceAngle.bind(this, groundObjectsToIgnore, null, true, up, collisionCheckParams);
+                let ignoreCeilingAngleCallback = this._ignoreSurfaceAngle.bind(this, ceilingObjectsToIgnore, null, false, up, collisionCheckParams);
+
+                let heightStepAmount = 0;
+                let heightStep = [0, 0, 0];
+                if (collisionCheckParams.myCheckHeight && collisionCheckParams.myHeightCheckStepAmount > 0 && height > 0) {
+                    heightStepAmount = collisionCheckParams.myHeightCheckStepAmount;
+                    heightStep = up.vec3_scale(height / heightStepAmount);
+                }
+
+                for (let i = 0; i <= heightStepAmount; i++) {
+                    let currentHeightOffset = heightStep.vec3_scale(i);
+
+                    // we can skip the ground check since we have already done that, but if there was an error do it again with the proper set of objects to ignore
+                    // the ceiling check can always be ignored, it used the proper ground objects already
+                    if ((i != 0 && i != heightStepAmount) || (i == 0 && !groundCeilingCheckIsFine)) {
+                        this._horizontalPositionHorizontalCheck(feetPosition, checkPositions, currentHeightOffset, up, forward, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams);
+
+                        if (collisionRuntimeParams.myIsCollidingHorizontally) {
+                            break;
+                        }
+                    }
+
+                    if (i > 0) {
+                        this._horizontalPositionVerticalCheck(feetPosition, checkPositions, currentHeightOffset, heightStep, up, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams);
+
+                        if (collisionRuntimeParams.myIsCollidingHorizontally) {
+                            let hitHeightOffset = collisionRuntimeParams.myHorizontalCollisionHit.myPosition.vec3_sub(feetPosition).vec3_componentAlongAxis(up);
+                            this._horizontalPositionHorizontalCheck(feetPosition, checkPositions, hitHeightOffset, up, forward, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        return !collisionRuntimeParams.myIsCollidingHorizontally;
+    }
+
+    _horizontalPositionHorizontalCheck(feetPosition, checkPositions, heightOffset, up, forward, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams) {
+        let isHorizontalCheckOk = true;
+
+        let basePosition = feetPosition.vec3_add(heightOffset);
+
+        let halfRadialPositions = Math.floor(checkPositions.length / 2) + 1;
+        for (let j = 0; j < halfRadialPositions; j++) {
+            if (j > 0) {
+                let leftIndex = Math.max(0, j * 2);
+                let rightIndex = Math.max(0, (j * 2 - 1));
+
+                if (collisionCheckParams.myCheckConeBorder) {
+                    for (let r = 0; r < 2; r++) {
+                        let currentIndex = r == 0 ? leftIndex : rightIndex;
+                        let currentRadialPosition = null;
+
+                        currentRadialPosition = checkPositions[currentIndex].vec3_add(heightOffset);
+
+                        let previousIndex = Math.max(0, currentIndex - 2);
+                        let previousRadialPosition = checkPositions[previousIndex].vec3_add(heightOffset);
+
+                        isHorizontalCheckOk = this._horizontalCheckRaycast(previousRadialPosition, currentRadialPosition, forward.vec3_negate(), up,
+                            true, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
+                            feetPosition, true,
+                            collisionCheckParams, collisionRuntimeParams);
+
+                        if (!isHorizontalCheckOk) break;
+                    }
+                }
+
+                if (collisionCheckParams.myCheckConeRay && isHorizontalCheckOk) {
+                    for (let r = 0; r < 2; r++) {
+                        let currentIndex = r == 0 ? leftIndex : rightIndex;
+
+                        let currentRadialPosition = checkPositions[currentIndex].vec3_add(heightOffset);
+
+                        isHorizontalCheckOk = this._horizontalCheckRaycast(basePosition, currentRadialPosition, null, up,
+                            false, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
+                            feetPosition, false,
+                            collisionCheckParams, collisionRuntimeParams);
+
+                        if (!isHorizontalCheckOk) break;
+                    }
+                }
+            } else {
+                if (collisionCheckParams.myCheckConeRay) {
+                    let currentRadialPosition = checkPositions[j].vec3_add(heightOffset);
+
+                    isHorizontalCheckOk = this._horizontalCheckRaycast(basePosition, currentRadialPosition, null, up,
+                        false, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
+                        feetPosition, false,
+                        collisionCheckParams, collisionRuntimeParams);
+
+                    if (!isHorizontalCheckOk) break;
+                }
+            }
+
+            if (!isHorizontalCheckOk) {
                 break;
             }
+        }
+
+        if (!isHorizontalCheckOk) {
+            collisionRuntimeParams.myIsCollidingHorizontally = true;
+            collisionRuntimeParams.myHorizontalCollisionHit.copy(this._myRaycastResult.myHits[0]);
+        }
+
+        return isHorizontalCheckOk;
+    }
+
+    _horizontalPositionVerticalCheck(feetPosition, checkPositions, heightOffset, heightStep, up, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams) {
+        let isHorizontalCheckOk = true;
+
+        let basePosition = feetPosition.vec3_add(heightOffset);
+        let previousBasePosition = basePosition.vec3_sub(heightStep);
+
+        for (let j = 0; j <= checkPositions.length; j++) {
+            let currentRadialPosition = null;
+            let previousRadialPosition = null;
+            if (j == checkPositions.length) {
+                currentRadialPosition = basePosition;
+                previousRadialPosition = previousBasePosition;
+            } else {
+                currentRadialPosition = checkPositions[j].vec3_add(heightOffset);
+                previousRadialPosition = currentRadialPosition.vec3_sub(heightStep);
+            }
+
+            if (collisionCheckParams.myCheckVerticalStraight) {
+                isHorizontalCheckOk = this._horizontalCheckRaycast(previousRadialPosition, currentRadialPosition, null, up,
+                    true, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
+                    feetPosition, false,
+                    collisionCheckParams, collisionRuntimeParams);
+
+                if (!isHorizontalCheckOk) break;
+            }
+
+            if (j < checkPositions.length) {
+                if (collisionCheckParams.myCheckVerticalDiagonalRay ||
+                    (collisionCheckParams.myCheckVerticalDiagonalBorderRay && (j == 0 || j == checkPositions.length - 1))) {
+                    {
+                        isHorizontalCheckOk = this._horizontalCheckRaycast(previousBasePosition, currentRadialPosition, null, up,
+                            true, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
+                            feetPosition, false,
+                            collisionCheckParams, collisionRuntimeParams);
+
+                        if (!isHorizontalCheckOk) break;
+                    }
+
+                    {
+                        isHorizontalCheckOk = this._horizontalCheckRaycast(previousRadialPosition, basePosition, null, up,
+                            falstruee, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
+                            feetPosition, false,
+                            collisionCheckParams, collisionRuntimeParams);
+
+                        if (!isHorizontalCheckOk) break;
+                    }
+                }
+
+                if (j > 0) {
+                    if (collisionCheckParams.myCheckVerticalDiagonalBorder) {
+                        let previousIndex = Math.max(0, j - 2);
+                        let previousCurrentRadialPosition = checkPositions[previousIndex].vec3_add(heightOffset);
+                        let previousPreviousRadialPosition = previousCurrentRadialPosition.vec3_sub(heightStep);
+
+                        {
+                            isHorizontalCheckOk = this._horizontalCheckRaycast(previousPreviousRadialPosition, currentRadialPosition, null, up,
+                                falstruee, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
+                                feetPosition, false,
+                                collisionCheckParams, collisionRuntimeParams);
+
+                            if (!isHorizontalCheckOk) break;
+                        }
+
+                        {
+                            isHorizontalCheckOk = this._horizontalCheckRaycast(previousRadialPosition, previousCurrentRadialPosition, null, up,
+                                falstruee, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
+                                feetPosition, false,
+                                collisionCheckParams, collisionRuntimeParams);
+
+                            if (!isHorizontalCheckOk) break;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (!isHorizontalCheckOk) {
+            collisionRuntimeParams.myIsCollidingHorizontally = true;
+            collisionRuntimeParams.myHorizontalCollisionHit.copy(this._myRaycastResult.myHits[0]);
         }
 
         return isHorizontalCheckOk;
@@ -1515,11 +1487,33 @@ CollisionCheck = class CollisionCheck {
         this._myRaycastResult = this._myFixRaycastResult;
         let raycastResult = this._raycastAndDebug(origin, direction, distance, true, collisionCheckParams, collisionRuntimeParams);
 
-        // check from feet to get the best hit position and normal
         if (raycastResult.isColliding(true)) {
             this._myFixRaycastResult = swapRaycastResult;
         } else {
             this._myRaycastResult = swapRaycastResult;
         }
+
+        return this._myRaycastResult;
+    }
+
+    _ignoreSurfaceAngle(objectsToIgnore, outIgnoredObjects, isGround, up, collisionCheckParams, hit) {
+        let isIgnorable = false;
+
+        if (!hit.myIsInsideCollision) {
+            let surfaceAngle = hit.myNormal.vec3_angle(up);
+
+            if ((isGround && (collisionCheckParams.myGroundAngleToIgnore > 0 && surfaceAngle <= collisionCheckParams.myGroundAngleToIgnore + 0.0001)) ||
+                (!isGround && (collisionCheckParams.myCeilingAngleToIgnore > 0 && (180 - surfaceAngle) <= collisionCheckParams.myCeilingAngleToIgnore + 0.0001))) {
+                if (objectsToIgnore == null || objectsToIgnore.pp_has(object => hit.myObject.pp_equals(object))) {
+                    isIgnorable = true;
+
+                    if (outIgnoredObjects != null) {
+                        outIgnoredObjects.push(hit.myObject);
+                    }
+                }
+            }
+        }
+
+        return isIgnorable;
     }
 };

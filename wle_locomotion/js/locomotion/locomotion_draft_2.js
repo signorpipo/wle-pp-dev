@@ -639,8 +639,11 @@ WL.registerComponent('locomotion-draft-2', {
     },
     _setupCollisionCheckParams() {
         this._myCollisionCheckParams.myRadius = 0.3;
-        this._myCollisionCheckParams.myDistanceFromFeetToIgnore = 0.3;
+        this._myCollisionCheckParams.myDistanceFromFeetToIgnore = 0.1;
         this._myCollisionCheckParams.myDistanceFromHeadToIgnore = 0.1;
+
+        this._myCollisionCheckParams.myGroundAngleToIgnore = 30;
+        this._myCollisionCheckParams.myCeilingAngleToIgnore = 30;
 
         this._myCollisionCheckParams.myHorizontalMovementStepAmount = 1;
         this._myCollisionCheckParams.myHorizontalMovementRadialStepAmount = 1;
