@@ -738,7 +738,6 @@ CollisionCheck = class CollisionCheck {
             }
 
             collisionRuntimeParams.myIsCollidingHorizontally = true;
-
         }
 
         if (fixedMovement.vec3_length() < 0.00001) {
@@ -784,68 +783,96 @@ CollisionCheck = class CollisionCheck {
 
         // if result is inside a collision it's ignored, so that at least you can exit it before seeing if the new position works now
 
-        // gather ground objects to ignore
-        let groundObjectsToIgnore = [];
-        let groundCeilingObjectsToIgnore = [];
-        {
+        let groundObjectsToIgnore = null;
+        let ceilingObjectsToIgnore = null;
+        let groundCeilingObjectsToIgnore = null;
+
+        if (collisionCheckParams.myGroundAngleToIgnore > 0) {
+            // gather ground objects to ignore
+            groundObjectsToIgnore = [];
+            groundCeilingObjectsToIgnore = [];
+
             let ignoreGroundAngleCallback = this._ignoreSurfaceAngle.bind(this, null, groundObjectsToIgnore, true, up, collisionCheckParams);
-            let ignoreCeilingAngleCallback = this._ignoreSurfaceAngle.bind(this, null, groundCeilingObjectsToIgnore, false, up, collisionCheckParams);
+
+            let ignoreCeilingAngleCallback = null;
+            if (collisionCheckParams.myCeilingAngleToIgnore > 0) {
+                ignoreCeilingAngleCallback = this._ignoreSurfaceAngle.bind(this, null, groundCeilingObjectsToIgnore, false, up, collisionCheckParams);
+            }
 
             let heightOffset = [0, 0, 0];
             this._horizontalMovementHorizontalCheck(movement, feetPosition, checkPositions, heightOffset, up, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams);
         }
 
-        // gather ceiling objects to ignore
-        if (!collisionRuntimeParams.myIsCollidingHorizontally && collisionCheckParams.myCheckHeight) {
-            let ceilingObjectsToIgnore = [];
-            {
-                let ignoreGroundAngleCallback = this._ignoreSurfaceAngle.bind(this, groundObjectsToIgnore, null, true, up, collisionCheckParams);
+        if (collisionCheckParams.myCeilingAngleToIgnore > 0) {
+            // gather ceiling objects to ignore
+            if (!collisionRuntimeParams.myIsCollidingHorizontally && collisionCheckParams.myCheckHeight) {
+                ceilingObjectsToIgnore = [];
+
+                let ignoreGroundAngleCallback = null;
+                if (collisionCheckParams.myGroundAngleToIgnore > 0) {
+                    ignoreGroundAngleCallback = this._ignoreSurfaceAngle.bind(this, groundObjectsToIgnore, null, true, up, collisionCheckParams);
+                }
+
                 let ignoreCeilingAngleCallback = this._ignoreSurfaceAngle.bind(this, null, ceilingObjectsToIgnore, false, up, collisionCheckParams);
 
                 let heightOffset = up.vec3_scale(height);
                 this._horizontalMovementHorizontalCheck(movement, feetPosition, checkPositions, heightOffset, up, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams);
             }
+        }
 
-            if (!collisionRuntimeParams.myIsCollidingHorizontally) {
+        if (!collisionRuntimeParams.myIsCollidingHorizontally) {
+
+            let groundCeilingCheckIsFine = true;
+
+            if (groundCeilingObjectsToIgnore != null) {
                 // check that the ceiling objects ignored by the ground are the correct ones, that is the one ignored by the upper check
-
-                let groundCeilingCheckIsFine = true;
                 for (let object of groundCeilingObjectsToIgnore) {
                     if (!ceilingObjectsToIgnore.pp_has(element => object.pp_equals(element))) {
                         groundCeilingCheckIsFine = false;
                         break;
                     }
                 }
+            }
 
-                let ignoreGroundAngleCallback = this._ignoreSurfaceAngle.bind(this, groundObjectsToIgnore, null, true, up, collisionCheckParams);
-                let ignoreCeilingAngleCallback = this._ignoreSurfaceAngle.bind(this, ceilingObjectsToIgnore, null, false, up, collisionCheckParams);
+            let ignoreGroundAngleCallback = null;
+            let ignoreCeilingAngleCallback = null;
 
-                let heightStepAmount = 0;
-                let heightStep = [0, 0, 0];
-                if (collisionCheckParams.myCheckHeight && collisionCheckParams.myHeightCheckStepAmount > 0 && height > 0) {
-                    heightStepAmount = collisionCheckParams.myHeightCheckStepAmount;
-                    heightStep = up.vec3_scale(height / heightStepAmount);
+            if (collisionCheckParams.myGroundAngleToIgnore > 0) {
+                ignoreGroundAngleCallback = this._ignoreSurfaceAngle.bind(this, ceilingObjectsToIgnore, null, false, up, collisionCheckParams);
+            }
+
+            if (collisionCheckParams.myCeilingAngleToIgnore > 0) {
+                ignoreCeilingAngleCallback = this._ignoreSurfaceAngle.bind(this, ceilingObjectsToIgnore, null, false, up, collisionCheckParams);
+            }
+
+            let heightStepAmount = 0;
+            let heightStep = [0, 0, 0];
+            if (collisionCheckParams.myCheckHeight && collisionCheckParams.myHeightCheckStepAmount > 0 && height > 0) {
+                heightStepAmount = collisionCheckParams.myHeightCheckStepAmount;
+                heightStep = up.vec3_scale(height / heightStepAmount);
+            }
+
+            for (let i = 0; i <= heightStepAmount; i++) {
+                let currentHeightOffset = heightStep.vec3_scale(i);
+
+                // we can skip the ground check since we have already done that, but if there was an error do it again with the proper set of objects to ignore
+                // the ceiling check can always be ignored, it used the proper ground objects already
+                if ((i != 0 && i != heightStepAmount) ||
+                    (i == 0 && !groundCeilingCheckIsFine) ||
+                    (i == 0 && collisionCheckParams.myGroundAngleToIgnore == 0) ||
+                    (i == heightStepAmount && collisionCheckParams.myCeilingAngleToIgnore == 0)) {
+                    this._horizontalMovementHorizontalCheck(movement, feetPosition, checkPositions, currentHeightOffset, up, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams);
+
+                    if (collisionRuntimeParams.myIsCollidingHorizontally) {
+                        break;
+                    }
                 }
 
-                for (let i = 0; i <= heightStepAmount; i++) {
-                    let currentHeightOffset = heightStep.vec3_scale(i);
+                if (i > 0) {
+                    this._horizontalMovementVerticalCheck(movement, feetPosition, checkPositions, currentHeightOffset, heightStep, up, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams);
 
-                    // we can skip the ground check since we have already done that, but if there was an error do it again with the proper set of objects to ignore
-                    // the ceiling check can always be ignored, it used the proper ground objects already
-                    if ((i != 0 && i != heightStepAmount) || (i == 0 && !groundCeilingCheckIsFine)) {
-                        this._horizontalMovementHorizontalCheck(movement, feetPosition, checkPositions, currentHeightOffset, up, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams);
-
-                        if (collisionRuntimeParams.myIsCollidingHorizontally) {
-                            break;
-                        }
-                    }
-
-                    if (i > 0) {
-                        this._horizontalMovementVerticalCheck(movement, feetPosition, checkPositions, currentHeightOffset, heightStep, up, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams);
-
-                        if (collisionRuntimeParams.myIsCollidingHorizontally) {
-                            break;
-                        }
+                    if (collisionRuntimeParams.myIsCollidingHorizontally) {
+                        break;
                     }
                 }
             }
@@ -1090,63 +1117,6 @@ CollisionCheck = class CollisionCheck {
         return isHorizontalCheckOk;
     }
 
-    _horizontalCheckRaycast(startPosition, endPosition, movementDirection, up,
-        ignoreHitsInsideCollision, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
-        feetPosition, fixHitOnCollision,
-        collisionCheckParams, collisionRuntimeParams) {
-
-        let origin = startPosition;
-        let direction = endPosition.vec3_sub(origin);
-
-        if (movementDirection != null && !direction.vec3_isConcordant(movementDirection)) {
-            direction.vec3_negate(direction);
-            origin = endPosition;
-        }
-
-        let distance = direction.vec3_length();
-        direction.vec3_normalize(direction);
-        let raycastResult = this._raycastAndDebug(origin, direction, distance, ignoreHitsInsideCollision, collisionCheckParams, collisionRuntimeParams);
-
-        let isOk = true;
-
-        if (raycastResult.isColliding()) {
-            for (let hit of raycastResult.myHits) {
-                if ((ignoreGroundAngleCallback == null || !ignoreGroundAngleCallback(hit, up)) &&
-                    (ignoreCeilingAngleCallback == null || !ignoreCeilingAngleCallback(hit, up))) {
-                    isOk = false;
-                    break;
-                }
-            }
-        }
-
-        if (!isOk && fixHitOnCollision) {
-            let hitPosition = raycastResult.myHits[0].myPosition;
-
-            let fixedFeedPosition = feetPosition.vec3_copyComponentAlongAxis(hitPosition, up);
-            let direction = hitPosition.vec3_sub(fixedFeedPosition);
-            direction.vec3_normalize(direction);
-            let fixedHitPosition = hitPosition.vec3_add(direction.vec3_scale(0.0001));
-
-            let swapRaycastResult = this._myRaycastResult;
-            this._myRaycastResult = this._myFixRaycastResult;
-
-            isOk = this._horizontalCheckRaycast(fixedFeedPosition, fixedHitPosition, null, up,
-                false, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
-                feetPosition, false,
-                collisionCheckParams, collisionRuntimeParams);
-
-            if (this._myRaycastResult.isColliding()) {
-                this._myFixRaycastResult = swapRaycastResult;
-            } else {
-                isOk = false;
-                this._myRaycastResult = swapRaycastResult;
-            }
-
-        }
-
-        return isOk;
-    }
-
     _horizontalPositionCheck(feetPosition, height, up, forward, collisionCheckParams, collisionRuntimeParams) {
         this._myDebugActive = collisionCheckParams.myDebugActive && collisionCheckParams.myDebugHorizontalPositionActive;
 
@@ -1166,70 +1136,98 @@ CollisionCheck = class CollisionCheck {
             }
         }
 
-        // gather ground objects to ignore
-        let groundObjectsToIgnore = [];
-        let groundCeilingObjectsToIgnore = [];
-        {
+        let groundObjectsToIgnore = null;
+        let ceilingObjectsToIgnore = null;
+        let groundCeilingObjectsToIgnore = null;
+
+        if (collisionCheckParams.myGroundAngleToIgnore > 0) {
+            // gather ground objects to ignore
+            groundObjectsToIgnore = [];
+            groundCeilingObjectsToIgnore = [];
+
             let ignoreGroundAngleCallback = this._ignoreSurfaceAngle.bind(this, null, groundObjectsToIgnore, true, up, collisionCheckParams);
-            let ignoreCeilingAngleCallback = this._ignoreSurfaceAngle.bind(this, null, groundCeilingObjectsToIgnore, false, up, collisionCheckParams);
+
+            let ignoreCeilingAngleCallback = null;
+            if (collisionCheckParams.myCeilingAngleToIgnore > 0) {
+                ignoreCeilingAngleCallback = this._ignoreSurfaceAngle.bind(this, null, groundCeilingObjectsToIgnore, false, up, collisionCheckParams);
+            }
 
             let heightOffset = [0, 0, 0];
             this._horizontalPositionHorizontalCheck(feetPosition, checkPositions, heightOffset, up, forward, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams);
         }
 
-        // gather ceiling objects to ignore
-        if (!collisionRuntimeParams.myIsCollidingHorizontally && collisionCheckParams.myCheckHeight) {
-            let ceilingObjectsToIgnore = [];
-            {
-                let ignoreGroundAngleCallback = this._ignoreSurfaceAngle.bind(this, groundObjectsToIgnore, null, true, up, collisionCheckParams);
+        if (collisionCheckParams.myCeilingAngleToIgnore > 0) {
+            // gather ceiling objects to ignore
+            if (!collisionRuntimeParams.myIsCollidingHorizontally && collisionCheckParams.myCheckHeight) {
+                ceilingObjectsToIgnore = [];
+
+                let ignoreGroundAngleCallback = null;
+                if (collisionCheckParams.myGroundAngleToIgnore > 0) {
+                    ignoreGroundAngleCallback = this._ignoreSurfaceAngle.bind(this, groundObjectsToIgnore, null, true, up, collisionCheckParams);
+                }
+
                 let ignoreCeilingAngleCallback = this._ignoreSurfaceAngle.bind(this, null, ceilingObjectsToIgnore, false, up, collisionCheckParams);
 
                 let heightOffset = up.vec3_scale(height);
                 this._horizontalPositionHorizontalCheck(feetPosition, checkPositions, heightOffset, up, forward, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams);
             }
+        }
 
-            if (!collisionRuntimeParams.myIsCollidingHorizontally) {
+        if (!collisionRuntimeParams.myIsCollidingHorizontally) {
+
+            let groundCeilingCheckIsFine = true;
+
+            if (groundCeilingObjectsToIgnore != null) {
                 // check that the ceiling objects ignored by the ground are the correct ones, that is the one ignored by the upper check
-
-                let groundCeilingCheckIsFine = true;
                 for (let object of groundCeilingObjectsToIgnore) {
                     if (!ceilingObjectsToIgnore.pp_has(element => object.pp_equals(element))) {
                         groundCeilingCheckIsFine = false;
                         break;
                     }
                 }
+            }
 
-                let ignoreGroundAngleCallback = this._ignoreSurfaceAngle.bind(this, groundObjectsToIgnore, null, true, up, collisionCheckParams);
-                let ignoreCeilingAngleCallback = this._ignoreSurfaceAngle.bind(this, ceilingObjectsToIgnore, null, false, up, collisionCheckParams);
+            let ignoreGroundAngleCallback = null;
+            let ignoreCeilingAngleCallback = null;
 
-                let heightStepAmount = 0;
-                let heightStep = [0, 0, 0];
-                if (collisionCheckParams.myCheckHeight && collisionCheckParams.myHeightCheckStepAmount > 0 && height > 0) {
-                    heightStepAmount = collisionCheckParams.myHeightCheckStepAmount;
-                    heightStep = up.vec3_scale(height / heightStepAmount);
+            if (collisionCheckParams.myGroundAngleToIgnore > 0) {
+                ignoreGroundAngleCallback = this._ignoreSurfaceAngle.bind(this, ceilingObjectsToIgnore, null, false, up, collisionCheckParams);
+            }
+
+            if (collisionCheckParams.myCeilingAngleToIgnore > 0) {
+                ignoreCeilingAngleCallback = this._ignoreSurfaceAngle.bind(this, ceilingObjectsToIgnore, null, false, up, collisionCheckParams);
+            }
+
+            let heightStepAmount = 0;
+            let heightStep = [0, 0, 0];
+            if (collisionCheckParams.myCheckHeight && collisionCheckParams.myHeightCheckStepAmount > 0 && height > 0) {
+                heightStepAmount = collisionCheckParams.myHeightCheckStepAmount;
+                heightStep = up.vec3_scale(height / heightStepAmount);
+            }
+
+            for (let i = 0; i <= heightStepAmount; i++) {
+                let currentHeightOffset = heightStep.vec3_scale(i);
+
+                // we can skip the ground check since we have already done that, but if there was an error do it again with the proper set of objects to ignore
+                // the ceiling check can always be ignored, it used the proper ground objects already
+                if ((i != 0 && i != heightStepAmount) ||
+                    (i == 0 && !groundCeilingCheckIsFine) ||
+                    (i == 0 && collisionCheckParams.myGroundAngleToIgnore == 0) ||
+                    (i == heightStepAmount && collisionCheckParams.myCeilingAngleToIgnore == 0)) {
+                    this._horizontalPositionHorizontalCheck(feetPosition, checkPositions, currentHeightOffset, up, forward, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams);
+
+                    if (collisionRuntimeParams.myIsCollidingHorizontally) {
+                        break;
+                    }
                 }
 
-                for (let i = 0; i <= heightStepAmount; i++) {
-                    let currentHeightOffset = heightStep.vec3_scale(i);
+                if (i > 0) {
+                    this._horizontalPositionVerticalCheck(feetPosition, checkPositions, currentHeightOffset, heightStep, up, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams);
 
-                    // we can skip the ground check since we have already done that, but if there was an error do it again with the proper set of objects to ignore
-                    // the ceiling check can always be ignored, it used the proper ground objects already
-                    if ((i != 0 && i != heightStepAmount) || (i == 0 && !groundCeilingCheckIsFine)) {
-                        this._horizontalPositionHorizontalCheck(feetPosition, checkPositions, currentHeightOffset, up, forward, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams);
-
-                        if (collisionRuntimeParams.myIsCollidingHorizontally) {
-                            break;
-                        }
-                    }
-
-                    if (i > 0) {
-                        this._horizontalPositionVerticalCheck(feetPosition, checkPositions, currentHeightOffset, heightStep, up, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams);
-
-                        if (collisionRuntimeParams.myIsCollidingHorizontally) {
-                            let hitHeightOffset = collisionRuntimeParams.myHorizontalCollisionHit.myPosition.vec3_sub(feetPosition).vec3_componentAlongAxis(up);
-                            this._horizontalPositionHorizontalCheck(feetPosition, checkPositions, hitHeightOffset, up, forward, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams);
-                            break;
-                        }
+                    if (collisionRuntimeParams.myIsCollidingHorizontally) {
+                        let hitHeightOffset = collisionRuntimeParams.myHorizontalCollisionHit.myPosition.vec3_sub(feetPosition).vec3_componentAlongAxis(up);
+                        this._horizontalPositionHorizontalCheck(feetPosition, checkPositions, hitHeightOffset, up, forward, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams);
+                        break;
                     }
                 }
             }
@@ -1392,6 +1390,63 @@ CollisionCheck = class CollisionCheck {
         return isHorizontalCheckOk;
     }
 
+    _horizontalCheckRaycast(startPosition, endPosition, movementDirection, up,
+        ignoreHitsInsideCollision, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
+        feetPosition, fixHitOnCollision,
+        collisionCheckParams, collisionRuntimeParams) {
+
+        let origin = startPosition;
+        let direction = endPosition.vec3_sub(origin);
+
+        if (movementDirection != null && !direction.vec3_isConcordant(movementDirection)) {
+            direction.vec3_negate(direction);
+            origin = endPosition;
+        }
+
+        let distance = direction.vec3_length();
+        direction.vec3_normalize(direction);
+        let raycastResult = this._raycastAndDebug(origin, direction, distance, ignoreHitsInsideCollision, collisionCheckParams, collisionRuntimeParams);
+
+        let isOk = true;
+
+        if (raycastResult.isColliding()) {
+            for (let hit of raycastResult.myHits) {
+                if ((ignoreGroundAngleCallback == null || !ignoreGroundAngleCallback(hit, up)) &&
+                    (ignoreCeilingAngleCallback == null || !ignoreCeilingAngleCallback(hit, up))) {
+                    isOk = false;
+                    break;
+                }
+            }
+        }
+
+        if (!isOk && fixHitOnCollision) {
+            let hitPosition = raycastResult.myHits[0].myPosition;
+
+            let fixedFeedPosition = feetPosition.vec3_copyComponentAlongAxis(hitPosition, up);
+            let direction = hitPosition.vec3_sub(fixedFeedPosition);
+            direction.vec3_normalize(direction);
+            let fixedHitPosition = hitPosition.vec3_add(direction.vec3_scale(0.0001));
+
+            let swapRaycastResult = this._myRaycastResult;
+            this._myRaycastResult = this._myFixRaycastResult;
+
+            isOk = this._horizontalCheckRaycast(fixedFeedPosition, fixedHitPosition, null, up,
+                false, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
+                feetPosition, false,
+                collisionCheckParams, collisionRuntimeParams);
+
+            if (this._myRaycastResult.isColliding()) {
+                this._myFixRaycastResult = swapRaycastResult;
+            } else {
+                isOk = false;
+                this._myRaycastResult = swapRaycastResult;
+            }
+
+        }
+
+        return isOk;
+    }
+
     _raycastAndDebug(origin, direction, distance, ignoreHitsInsideCollision, collisionCheckParams, collisionRuntimeParams) {
         this._myRaycastSetup.myOrigin.vec3_copy(origin);
         this._myRaycastSetup.myDirection.vec3_copy(direction);
@@ -1413,6 +1468,27 @@ CollisionCheck = class CollisionCheck {
         }
 
         return raycastResult;
+    }
+
+    _ignoreSurfaceAngle(objectsToIgnore, outIgnoredObjects, isGround, up, collisionCheckParams, hit) {
+        let isIgnorable = false;
+
+        if (!hit.myIsInsideCollision) {
+            let surfaceAngle = hit.myNormal.vec3_angle(up);
+
+            if ((isGround && (collisionCheckParams.myGroundAngleToIgnore > 0 && surfaceAngle <= collisionCheckParams.myGroundAngleToIgnore + 0.0001)) ||
+                (!isGround && (collisionCheckParams.myCeilingAngleToIgnore > 0 && (180 - surfaceAngle) <= collisionCheckParams.myCeilingAngleToIgnore + 0.0001))) {
+                if (objectsToIgnore == null || objectsToIgnore.pp_has(object => hit.myObject.pp_equals(object))) {
+                    isIgnorable = true;
+
+                    if (outIgnoredObjects != null) {
+                        outIgnoredObjects.push(hit.myObject);
+                    }
+                }
+            }
+        }
+
+        return isIgnorable;
     }
 
     _debugMovement(movement, fixedMovement, feetPosition, up, collisionCheckParams) {
@@ -1473,47 +1549,5 @@ CollisionCheck = class CollisionCheck {
             debugParams.myColor = [1, 0, 0, 1];
             PP.myDebugManager.draw(debugParams);
         }
-    }
-
-    _fixRaycastHitPositionFromFeet(hitPosition, feetPosition, up, collisionCheckParams, collisionRuntimeParams) {
-        // check from feet to get the best hit position and normal
-
-        let origin = feetPosition.vec3_copyComponentAlongAxis(hitPosition, up);
-        let direction = hitPosition.vec3_sub(origin);
-        let distance = direction.vec3_length() + 0.00001;
-        direction.vec3_normalize(direction);
-
-        let swapRaycastResult = this._myRaycastResult;
-        this._myRaycastResult = this._myFixRaycastResult;
-        let raycastResult = this._raycastAndDebug(origin, direction, distance, true, collisionCheckParams, collisionRuntimeParams);
-
-        if (raycastResult.isColliding(true)) {
-            this._myFixRaycastResult = swapRaycastResult;
-        } else {
-            this._myRaycastResult = swapRaycastResult;
-        }
-
-        return this._myRaycastResult;
-    }
-
-    _ignoreSurfaceAngle(objectsToIgnore, outIgnoredObjects, isGround, up, collisionCheckParams, hit) {
-        let isIgnorable = false;
-
-        if (!hit.myIsInsideCollision) {
-            let surfaceAngle = hit.myNormal.vec3_angle(up);
-
-            if ((isGround && (collisionCheckParams.myGroundAngleToIgnore > 0 && surfaceAngle <= collisionCheckParams.myGroundAngleToIgnore + 0.0001)) ||
-                (!isGround && (collisionCheckParams.myCeilingAngleToIgnore > 0 && (180 - surfaceAngle) <= collisionCheckParams.myCeilingAngleToIgnore + 0.0001))) {
-                if (objectsToIgnore == null || objectsToIgnore.pp_has(object => hit.myObject.pp_equals(object))) {
-                    isIgnorable = true;
-
-                    if (outIgnoredObjects != null) {
-                        outIgnoredObjects.push(hit.myObject);
-                    }
-                }
-            }
-        }
-
-        return isIgnorable;
     }
 };
