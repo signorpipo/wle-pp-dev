@@ -584,8 +584,8 @@ Array.prototype.vec3_isNormalized = function () {
     return Math.abs(glMatrix.vec3.length(this) - 1) < this._pp_epsilon;
 };
 
-Array.prototype.vec3_isZero = function () {
-    return this.vec3_length() == 0;
+Array.prototype.vec3_isZero = function (epsilon = 0) {
+    return this.vec3_length() <= epsilon;
 };
 
 Array.prototype.vec3_componentAlongAxis = function (axis, out = glMatrix.vec3.create()) {
