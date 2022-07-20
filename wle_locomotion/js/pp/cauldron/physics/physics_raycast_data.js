@@ -6,7 +6,7 @@ PP.RaycastSetup = class RaycastSetup {
 
         this.myBlockLayerFlags = new PP.PhysicsLayerFlags();
 
-        this.myPhysXComponentsToIgnore = [];
+        this.myObjectsToIgnore = [];
         this.myIgnoreHitsInsideCollision = false;
     }
 
@@ -17,7 +17,7 @@ PP.RaycastSetup = class RaycastSetup {
 
         this.myBlockLayerFlags.copy(setup.myBlockLayerFlags);
 
-        this.myPhysXComponentsToIgnore.pp_copy(setup.myPhysXComponentsToIgnore);
+        this.myObjectsToIgnore.pp_copy(setup.myObjectsToIgnore);
         this.myIgnoreHitsInsideCollision = setup.myIgnoreHitsInsideCollision;
     }
 };

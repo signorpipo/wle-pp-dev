@@ -61,7 +61,7 @@ CollisionCheckParams = class CollisionCheckParams {
         // 2 is just a less expensive version of 3 (check less times) but also less precise, allowing more flickering
 
         this.myBlockLayerFlags = new PP.PhysicsLayerFlags();
-        this.myPhysXComponentsToIgnore = [];
+        this.myObjectsToIgnore = [];
 
         this.myDebugActive = false;
 
@@ -1559,7 +1559,7 @@ CollisionCheck = class CollisionCheck {
 
         this._myRaycastSetup.myBlockLayerFlags = collisionCheckParams.myBlockLayerFlags;
 
-        this._myRaycastSetup.myPhysXComponentsToIgnore = collisionCheckParams.myPhysXComponentsToIgnore;
+        this._myRaycastSetup.myObjectsToIgnore = collisionCheckParams.myObjectsToIgnore;
         this._myRaycastSetup.myIgnoreHitsInsideCollision = ignoreHitsInsideCollision;
 
         let raycastResult = PP.PhysicsUtils.raycast(this._myRaycastSetup, this._myRaycastResult);

@@ -21,7 +21,7 @@ WL.registerComponent('raycast-test', {
 
             raycastSetup.myBlockLayerFlags.setAllFlagsActive(true);
 
-            raycastSetup.myPhysXComponentsToIgnore = [];
+            raycastSetup.myObjectsToIgnore = [];
             raycastSetup.myIgnoreHitsInsideCollision = false;
 
             let raycastResult = PP.PhysicsUtils.raycast(raycastSetup);

@@ -25,8 +25,8 @@ PP.PhysicsUtils = {
             let isHitValid = true;
 
             isHitValid = isHitValid &&
-                (raycastSetup.myPhysXComponentsToIgnore.length == 0 ||
-                    !raycastSetup.myPhysXComponentsToIgnore.pp_has(physX => internalRaycastResult.objects[i].pp_equals(physX.object)));
+                (raycastSetup.myObjectsToIgnore.length == 0 ||
+                    !raycastSetup.myObjectsToIgnore.pp_has(object => internalRaycastResult.objects[i].pp_equals(object)));
 
             let isHitInsideCollision = isHitValid &&
                 internalRaycastResult.distances[i] == 0 &&

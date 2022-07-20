@@ -117,7 +117,10 @@ WL.registerComponent('ai-movement', {
 
         this._myCollisionCheckParams.myBlockLayerFlags = new PP.PhysicsLayerFlags();
         this._myCollisionCheckParams.myBlockLayerFlags.setAllFlagsActive(true);
-        this._myCollisionCheckParams.myPhysXComponentsToIgnore = this.object.pp_getComponentsHierarchy("physx");
+        let physXComponents = this.object.pp_getComponentsHierarchy("physx");
+        for (let physXComponent of physXComponents) {
+            this._myCollisionCheckParams.myObjectsToIgnore.pp_pushUnique(physXComponent.object, element => element.pp_equals(physXComponent.object));
+        }
 
         this._myCollisionCheckParams.myDebugActive = false;
     },
