@@ -82,11 +82,12 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
 
         this.myIsOnGround = false;
         this.myGroundAngle = 0;
-        //perceived angle? signed angle?
+        this.myGroundPerceivedAngle = 0;
         this.myGroundNormal = [0, 0, 0];
 
         this.myIsOnCeiling = false;
         this.myCeilingAngle = 0;
+        this.myCeilingPerceivedAngle = 0;
         this.myCeilingNormal = [0, 0, 0];
 
         this.myIsCollidingHorizontally = false;
@@ -108,10 +109,12 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
 
         this.myIsOnGround = false;
         this.myGroundAngle = 0;
+        this.myGroundPerceivedAngle = 0;
         this.myGroundNormal.vec3_zero();
 
         this.myIsOnCeiling = false;
         this.myCeilingAngle = 0;
+        this.myCeilingPerceivedAngle = 0;
         this.myCeilingNormal.vec3_zero();
 
         this.myIsCollidingHorizontally = false;
@@ -133,10 +136,12 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
 
         this.myIsOnGround = other.myIsOnGround;
         this.myGroundAngle = other.myGroundAngle;
+        this.myGroundPerceivedAngle = other.myGroundPerceivedAngle;
         this.myGroundNormal.pp_copy(other.myGroundNormal);
 
         this.myIsOnCeiling = other.myIsOnCeiling;
         this.myCeilingAngle = other.myCeilingAngle;
+        this.myCeilingPerceivedAngle = other.myCeilingPerceivedAngle;
         this.myCeilingNormal.pp_copy(other.myCeilingNormal);
 
         this.myIsCollidingHorizontally = other.myIsCollidingHorizontally;
@@ -261,6 +266,7 @@ CollisionCheck = class CollisionCheck {
 
         let isOnSurface = false;
         let surfaceAngle = 0;
+        let surfacePerceivedAngle = 0;
         let surfaceNormal = [0, 0, 0];
 
         for (let i = 0; i < checkPositions.length; i++) {
@@ -292,9 +298,28 @@ CollisionCheck = class CollisionCheck {
         if (!surfaceNormal.vec3_isZero()) {
             surfaceNormal.vec3_normalize(surfaceNormal);
             surfaceAngle = surfaceNormal.vec3_angle(verticalDirection);
+            surfacePerceivedAngle = surfaceAngle;
+
             if (surfaceAngle < 0.00001) {
                 surfaceAngle = 0;
+                surfacePerceivedAngle = 0;
                 surfaceNormal.vec3_copy(verticalDirection);
+            } else if (surfaceAngle > 180 - 0.00001) {
+                surfaceAngle = 180;
+                surfacePerceivedAngle = 180;
+                surfaceNormal.vec3_copy(verticalDirection.vec3_negate());
+            } else {
+                let flatSurfaceNormal = surfaceNormal.vec3_removeComponentAlongAxis(up);
+                flatSurfaceNormal.vec3_normalize(flatSurfaceNormal);
+
+                if (!flatSurfaceNormal.vec3_isZero(0.00001)) {
+                    let surfaceForwardAngle = forward.vec3_angle(flatSurfaceNormal);
+                    let perceivedAngleFactor = Math.pp_mapToRange(surfaceForwardAngle, 0.00001, 180 - 0.00001, -1, 1);
+                    surfacePerceivedAngle = surfaceAngle * perceivedAngleFactor;
+                    if (Math.abs(surfacePerceivedAngle) < 0.00001) {
+                        surfacePerceivedAngle = 0;
+                    }
+                }
             }
         }
 
@@ -302,12 +327,14 @@ CollisionCheck = class CollisionCheck {
             collisionRuntimeParams.myIsOnGround = isOnSurface;
             if (isOnSurface) {
                 collisionRuntimeParams.myGroundAngle = surfaceAngle;
+                collisionRuntimeParams.myGroundPerceivedAngle = surfacePerceivedAngle;
                 collisionRuntimeParams.myGroundNormal.vec3_copy(surfaceNormal);
             }
         } else {
             collisionRuntimeParams.myIsOnCeiling = isOnSurface;
             if (isOnSurface) {
                 collisionRuntimeParams.myCeilingAngle = surfaceAngle;
+                collisionRuntimeParams.myCeilingPerceivedAngle = surfacePerceivedAngle;
                 collisionRuntimeParams.myCeilingNormal.vec3_copy(surfaceNormal);
             }
         }
