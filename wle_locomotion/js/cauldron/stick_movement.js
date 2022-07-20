@@ -205,7 +205,7 @@ WL.registerComponent('stick-movement', {
         this._myCollisionCheckParams.myBlockLayerFlags.setAllFlagsActive(true);
         let physXComponents = this.object.pp_getComponentsHierarchy("physx");
         for (let physXComponent of physXComponents) {
-            this._myCollisionCheckParams.myObjectsToIgnore.pp_pushUnique(physXComponent.object, element => element.pp_equals(physXComponent.object));
+            this._myCollisionCheckParams.myObjectsToIgnore.pp_pushUnique(physXComponent.object, (first, second) => first.pp_equals(second));
         }
 
         this._myCollisionCheckParams.myDebugActive = false;

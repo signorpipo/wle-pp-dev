@@ -157,8 +157,8 @@ Array.prototype.pp_has = function (callback) {
     return this.pp_find(callback) != undefined;
 };
 
-Array.prototype.pp_hasEqual = function (elementToFind) {
-    return this.pp_findEqual(elementToFind) != undefined;
+Array.prototype.pp_hasEqual = function (elementToFind, elementEqualsCallback = null) {
+    return this.pp_findEqual(elementToFind, elementEqualsCallback) != undefined;
 };
 
 Array.prototype.pp_find = function (callback) {
@@ -193,20 +193,32 @@ Array.prototype.pp_findAllIndexes = function (callback) {
     return indexes;
 };
 
-Array.prototype.pp_findEqual = function (elementToFind) {
-    return this.pp_find(element => element === elementToFind);
+Array.prototype.pp_findEqual = function (elementToFind, elementEqualsCallback = null) {
+    if (elementEqualsCallback == null) {
+        return this.pp_find(element => element === elementToFind);
+    }
+    return this.pp_find(element => elementEqualsCallback(element, elementToFind));
 };
 
-Array.prototype.pp_findAllEqual = function (elementToFind) {
-    return this.pp_findAll(element => element === elementToFind);
+Array.prototype.pp_findAllEqual = function (elementToFind, elementEqualsCallback = null) {
+    if (elementEqualsCallback == null) {
+        return this.pp_findAll(element => element === elementToFind);
+    }
+    return this.pp_findAll(element => elementEqualsCallback(element, elementToFind));
 };
 
-Array.prototype.pp_findIndexEqual = function (elementToFind) {
-    return this.findIndex(element => element === elementToFind);
+Array.prototype.pp_findIndexEqual = function (elementToFind, elementEqualsCallback = null) {
+    if (elementEqualsCallback == null) {
+        return this.findIndex(element => element === elementToFind);
+    }
+    return this.findIndex(element => elementEqualsCallback(element, elementToFind));
 };
 
-Array.prototype.pp_findAllIndexesEqual = function (elementToFind) {
-    return this.pp_findAllIndexes(element => element === elementToFind);
+Array.prototype.pp_findAllIndexesEqual = function (elementToFind, elementEqualsCallback = null) {
+    if (elementEqualsCallback == null) {
+        return this.pp_findAllIndexes(element => element === elementToFind);
+    }
+    return this.pp_findAllIndexes(element => elementEqualsCallback(element, elementToFind));
 };
 
 Array.prototype.pp_removeIndex = function (index) {
@@ -247,23 +259,24 @@ Array.prototype.pp_removeAll = function (callback) {
     return elementsRemoved;
 };
 
-Array.prototype.pp_removeEqual = function (elementToRemove) {
-    return this.pp_remove(element => element === elementToRemove);
+Array.prototype.pp_removeEqual = function (elementToRemove, elementEqualsCallback = null) {
+    if (elementEqualsCallback == null) {
+        return this.pp_remove(element => element === elementToFind);
+    }
+    return this.pp_remove(element => elementEqualsCallback(element, elementToFind));
 };
 
-Array.prototype.pp_removeAllEqual = function (elementToRemove) {
-    return this.pp_removeAll(element => element === elementToRemove);
+Array.prototype.pp_removeAllEqual = function (elementToRemove, elementEqualsCallback = null) {
+    if (elementEqualsCallback == null) {
+        return this.pp_removeAll(element => element === elementToFind);
+    }
+    return this.pp_removeAll(element => elementEqualsCallback(element, elementToFind));
 };
 
-Array.prototype.pp_pushUnique = function (element, hasElementCallback = null) {
+Array.prototype.pp_pushUnique = function (element, elementEqualsCallback = null) {
     let length = this.length;
 
-    let hasElement = false;
-    if (hasElementCallback != null) {
-        hasElement = this.pp_has(hasElementCallback);
-    } else {
-        hasElement = this.pp_hasEqual(element);
-    }
+    let hasElement = this.pp_hasEqual(element, elementEqualsCallback);
 
     if (!hasElement) {
         length = this.push(element);
@@ -272,15 +285,10 @@ Array.prototype.pp_pushUnique = function (element, hasElementCallback = null) {
     return length;
 };
 
-Array.prototype.pp_unshiftUnique = function (element, hasElementCallback = null) {
+Array.prototype.pp_unshiftUnique = function (element, elementEqualsCallback = null) {
     let length = this.length;
 
-    let hasElement = false;
-    if (hasElementCallback != null) {
-        hasElement = this.pp_has(hasElementCallback);
-    } else {
-        hasElement = this.pp_hasEqual(element);
-    }
+    let hasElement = this.pp_hasEqual(element, elementEqualsCallback);
 
     if (!hasElement) {
         length = this.unshift(element);
