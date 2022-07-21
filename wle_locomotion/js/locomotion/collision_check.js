@@ -92,9 +92,11 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.myCeilingPerceivedAngle = 0;
         this.myCeilingNormal = [0, 0, 0];
 
+        this.myHorizontalMovementCancelled = false; // could add HorizontalMovementCancelledReason
         this.myIsCollidingHorizontally = false;
         this.myHorizontalCollisionHit = new PP.RaycastResultHit();
 
+        this.myVerticalMovementCancelled = false;
         this.myIsCollidingVertically = false;
         this.myVerticalCollisionHit = new PP.RaycastResultHit();
 
@@ -119,9 +121,11 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.myCeilingPerceivedAngle = 0;
         this.myCeilingNormal.vec3_zero();
 
+        this.myHorizontalMovementCancelled = false;
         this.myIsCollidingHorizontally = false;
         this.myHorizontalCollisionHit.reset();
 
+        this.myVerticalMovementCancelled = false;
         this.myIsCollidingVertically = false;
         this.myVerticalCollisionHit.reset();
 
@@ -146,9 +150,11 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.myCeilingPerceivedAngle = other.myCeilingPerceivedAngle;
         this.myCeilingNormal.pp_copy(other.myCeilingNormal);
 
+        this.myHorizontalMovementCancelled = other.myHorizontalMovementCancelled;
         this.myIsCollidingHorizontally = other.myIsCollidingHorizontally;
         this.myHorizontalCollisionHit.copy(other.myHorizontalCollisionHit);
 
+        this.myVerticalMovementCancelled = other.myVerticalMovementCancelled;
         this.myIsCollidingVertically = other.myIsCollidingVertically;
         this.myVerticalCollisionHit.copy(other.myVerticalCollisionHit);
 
@@ -221,10 +227,18 @@ CollisionCheck = class CollisionCheck {
 
         let forward = [0, 0, 0];
         if (fixedHorizontalMovement.vec3_length() < 0.000001) {
-            forward.vec3_copy(transformForward);
+            if (!horizontalMovement.vec3_isZero()) {
+                horizontalMovement.vec3_normalize(forward);
+            } else {
+                forward.vec3_copy(transformForward);
+            }
             fixedHorizontalMovement.vec3_zero();
         } else {
             fixedHorizontalMovement.vec3_normalize(forward);
+        }
+
+        if (!horizontalMovement.vec3_isZero() && fixedHorizontalMovement.vec3_isZero()) {
+            collisionRuntimeParams.myHorizontalMovementCancelled = true;
         }
 
         let newFeetPosition = feetPosition.vec3_add(fixedHorizontalMovement);
@@ -238,6 +252,9 @@ CollisionCheck = class CollisionCheck {
         let fixedMovement = [0, 0, 0];
         if (!collisionRuntimeParams.myIsCollidingVertically) {
             fixedHorizontalMovement.vec3_add(fixedVerticalMovement, fixedMovement);
+        } else {
+            collisionRuntimeParams.myHorizontalMovementCancelled = true;
+            collisionRuntimeParams.myVerticalMovementCancelled = true;
         }
 
         feetPosition.vec3_add(fixedMovement, newFeetPosition);
