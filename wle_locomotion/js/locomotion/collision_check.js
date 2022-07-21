@@ -39,8 +39,10 @@ CollisionCheckParams = class CollisionCheckParams {
 
         this.myHeight = 1;
 
-        this.myDistanceToBeOnSurface = 0.001;
-        this.myDistanceToComputeSurfaceInfo = 0.1;
+        this.myDistanceToBeOnGround = 0.001;
+        this.myDistanceToComputeGroundInfo = 0.1;
+        this.myDistanceToBeOnCeiling = 0.001;
+        this.myDistanceToComputeCeilingInfo = 0.1;
 
         this.mySlidingEnabled = true;
         this.mySlidingHorizontalMovementCheckBetterNormal = true;
@@ -253,12 +255,16 @@ CollisionCheck = class CollisionCheck {
         let checkPositions = this._getVerticalCheckPositions(feetPosition, up, forward, collisionCheckParams, collisionRuntimeParams);
 
         let verticalDirection = up.pp_clone();
+        let distanceToBeOnSurface = collisionCheckParams.myDistanceToBeOnGround;
+        let distanceToComputeSurfaceInfo = collisionCheckParams.myDistanceToComputeGroundInfo;
         if (!isGround) {
             verticalDirection.vec3_negate(verticalDirection);
+            distanceToBeOnSurface = collisionCheckParams.myDistanceToBeOnCeiling;
+            distanceToComputeSurfaceInfo = collisionCheckParams.myDistanceToComputeCeilingInfo;
         }
 
         let startOffset = verticalDirection.vec3_scale(0.0001);
-        let endOffset = verticalDirection.vec3_negate().vec3_scale(Math.max(collisionCheckParams.myDistanceToBeOnSurface, collisionCheckParams.myDistanceToComputeSurfaceInfo));
+        let endOffset = verticalDirection.vec3_negate().vec3_scale(Math.max(distanceToBeOnSurface, distanceToComputeSurfaceInfo));
         let heightOffset = [0, 0, 0];
         if (!isGround) {
             heightOffset = up.vec3_scale(height);
@@ -284,11 +290,11 @@ CollisionCheck = class CollisionCheck {
             let raycastResult = this._raycastAndDebug(origin, direction, distance, true, collisionCheckParams, collisionRuntimeParams);
 
             if (raycastResult.myHits.length > 0) {
-                if (raycastResult.myHits[0].myDistance <= collisionCheckParams.myDistanceToBeOnSurface + 0.00001) {
+                if (raycastResult.myHits[0].myDistance <= distanceToBeOnSurface + 0.00001) {
                     isOnSurface = true;
                 }
 
-                if (raycastResult.myHits[0].myDistance <= collisionCheckParams.myDistanceToComputeSurfaceInfo + 0.00001) {
+                if (raycastResult.myHits[0].myDistance <= distanceToComputeSurfaceInfo + 0.00001) {
                     let currentSurfaceNormal = raycastResult.myHits[0].myNormal;
                     surfaceNormal.vec3_add(currentSurfaceNormal, surfaceNormal);
                 }

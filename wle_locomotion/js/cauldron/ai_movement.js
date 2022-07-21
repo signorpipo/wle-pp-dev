@@ -109,8 +109,10 @@ WL.registerComponent('ai-movement', {
         this._myCollisionCheckParams.myCheckVerticalDiagonalBorder = false;
         this._myCollisionCheckParams.myCheckVerticalDiagonalBorderRay = false;
 
-        this._myCollisionCheckParams.myDistanceToBeOnSurface = 0.001 * this._myScale;
-        this._myCollisionCheckParams.myDistanceToComputeSurfaceInfo = 0.1 * this._myScale;
+        this.myDistanceToBeOnGround = 0.001 * this._myScale;
+        this.myDistanceToComputeGroundInfo = 0.1 * this._myScale;
+        this.myDistanceToBeOnCeiling = 0.001 * this._myScale;
+        this.myDistanceToComputeCeilingInfo = 0.1 * this._myScale;
 
         let mesh = this.object.pp_getComponentHierarchy("mesh");
         this._myCollisionCheckParams.myHeight = mesh.object.pp_getScale()[1] * 2;
