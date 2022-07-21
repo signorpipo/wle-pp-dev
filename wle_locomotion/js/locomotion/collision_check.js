@@ -216,13 +216,16 @@ CollisionCheck = class CollisionCheck {
         let forward = [0, 0, 0];
         if (fixedHorizontalMovement.vec3_length() < 0.000001) {
             forward.vec3_copy(transformForward);
+            fixedHorizontalMovement.vec3_zero();
         } else {
             fixedHorizontalMovement.vec3_normalize(forward);
         }
 
         // collisionCheckParams.myDebugActive = false;
 
-        let fixedVerticalMovement = this._verticalCheck(verticalMovement, newFeetPosition, height, transformUp, forward, collisionCheckParams, collisionRuntimeParams);
+        let extraSurfaceVerticalMovement = this._computeExtraSurfaceVerticalMovement(fixedHorizontalMovement, transformUp, this._myPrevCollisionRuntimeParams);
+        let surfaceAdjustedVerticalMovement = verticalMovement.vec3_add(extraSurfaceVerticalMovement);
+        let fixedVerticalMovement = this._verticalCheck(surfaceAdjustedVerticalMovement, newFeetPosition, height, transformUp, forward, collisionCheckParams, collisionRuntimeParams);
 
         let fixedMovement = [0, 0, 0];
         if (!collisionRuntimeParams.myIsCollidingVertically) {
@@ -247,6 +250,27 @@ CollisionCheck = class CollisionCheck {
         collisionRuntimeParams.myMovement.vec3_copy(fixedMovement);
 
         return fixedMovement;
+    }
+
+    _computeExtraSurfaceVerticalMovement(horizontalMovement, up, collisionRuntimeParams) {
+        let extraSurfaceVerticalMovement = [0, 0, 0];
+
+        if (collisionRuntimeParams.myIsOnGround && collisionRuntimeParams.myGroundAngle != 0 && !horizontalMovement.vec3_isZero()) {
+            let direction = horizontalMovement.vec3_normalize();
+            let groundPerceivedAngle = this._computeSurfacePerceivedAngle(
+                collisionRuntimeParams.myGroundAngle,
+                collisionRuntimeParams.myGroundNormal,
+                up, direction);
+
+            let extraVerticalLength = horizontalMovement.vec3_length() * Math.tan(Math.pp_toRadians(Math.abs(groundPerceivedAngle)));
+            extraVerticalLength *= Math.pp_sign(groundPerceivedAngle);
+
+            if (Math.abs(extraVerticalLength) > 0.00001) {
+                up.vec3_scale(extraVerticalLength, extraSurfaceVerticalMovement);
+            }
+        }
+
+        return extraSurfaceVerticalMovement;
     }
 
     _gatherSurfaceInfo(feetPosition, height, up, forward, isGround, collisionCheckParams, collisionRuntimeParams) {
