@@ -304,29 +304,16 @@ CollisionCheck = class CollisionCheck {
         if (!surfaceNormal.vec3_isZero()) {
             surfaceNormal.vec3_normalize(surfaceNormal);
             surfaceAngle = surfaceNormal.vec3_angle(verticalDirection);
-            surfacePerceivedAngle = surfaceAngle;
 
             if (surfaceAngle < 0.00001) {
                 surfaceAngle = 0;
-                surfacePerceivedAngle = 0;
                 surfaceNormal.vec3_copy(verticalDirection);
             } else if (surfaceAngle > 180 - 0.00001) {
                 surfaceAngle = 180;
-                surfacePerceivedAngle = 180;
                 surfaceNormal.vec3_copy(verticalDirection.vec3_negate());
-            } else {
-                let flatSurfaceNormal = surfaceNormal.vec3_removeComponentAlongAxis(up);
-                flatSurfaceNormal.vec3_normalize(flatSurfaceNormal);
-
-                if (!flatSurfaceNormal.vec3_isZero(0.00001)) {
-                    let surfaceForwardAngle = forward.vec3_angle(flatSurfaceNormal);
-                    let perceivedAngleFactor = Math.pp_mapToRange(surfaceForwardAngle, 0.00001, 180 - 0.00001, -1, 1);
-                    surfacePerceivedAngle = surfaceAngle * perceivedAngleFactor;
-                    if (Math.abs(surfacePerceivedAngle) < 0.00001) {
-                        surfacePerceivedAngle = 0;
-                    }
-                }
             }
+
+            surfacePerceivedAngle = this._computeSurfacePerceivedAngle(surfaceAngle, surfaceNormal, up, forward);
         }
 
         if (isGround) {
@@ -344,6 +331,26 @@ CollisionCheck = class CollisionCheck {
                 collisionRuntimeParams.myCeilingNormal.vec3_copy(surfaceNormal);
             }
         }
+    }
+
+    _computeSurfacePerceivedAngle(surfaceAngle, surfaceNormal, up, forward) {
+        let surfacePerceivedAngle = surfaceAngle;
+
+        if (surfaceAngle > 0.00001 && surfaceAngle < 180 - 0.00001) {
+            let flatSurfaceNormal = surfaceNormal.vec3_removeComponentAlongAxis(up);
+            flatSurfaceNormal.vec3_normalize(flatSurfaceNormal);
+
+            if (!flatSurfaceNormal.vec3_isZero(0.00001)) {
+                let surfaceForwardAngle = forward.vec3_angle(flatSurfaceNormal);
+                let perceivedAngleFactor = Math.pp_mapToRange(surfaceForwardAngle, 0.00001, 180 - 0.00001, -1, 1);
+                surfacePerceivedAngle = surfaceAngle * perceivedAngleFactor;
+                if (Math.abs(surfacePerceivedAngle) < 0.00001) {
+                    surfacePerceivedAngle = 0;
+                }
+            }
+        }
+
+        return surfacePerceivedAngle;
     }
 
     _horizontalSlide(movement, feetPosition, height, up, collisionCheckParams, collisionRuntimeParams) {
