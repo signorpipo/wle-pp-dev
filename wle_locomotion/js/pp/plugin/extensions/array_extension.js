@@ -61,7 +61,8 @@
         GENERIC VECTOR (array with only numbers):
             - vec_scale
             - vec_round     / vec_floor         / vec_ceil      / vec_clamp
-            - vec_log       / vec_error         / vec_warn      
+            - vec_log       / vec_error         / vec_warn   
+            - vec_equals   
 
         VECTOR 2:
             - vec2_length
@@ -80,9 +81,11 @@
             - vec3_isConcordant
             - vec3_isFurtherAlongAxis
             - vec3_isToTheRight
-            - vec3_isOnSameAxis
+            - vec3_isOnAxis
+            - vec3_isOnPlane
             - vec3_signTo
-            - vec3_project  / vec3_projectTowardDirection
+            - vec3_projectOnAxis                / vec3_projectOnAxisAlongAxis
+            - vec3_projectOnPlane               / vec3_projectOnPlaneAlongAxis
             - vec3_convertPositionToWorld       / vec3_convertPositionToLocal 
             - vec3_convertDirectionToWorld      / vec3_convertDirectionToLocal   
             - vec3_angle
@@ -424,11 +427,11 @@ Array.prototype.vec_clamp = function (start, end, out = null) {
     return out;
 };
 
-Array.prototype.vec_equals = function (vector) {
+Array.prototype.vec_equals = function (vector, epsilon = 0) {
     let equals = this.length == vector.length;
 
     for (let i = 0; i < this.length && equals; i++) {
-        equals &= Math.abs(this[i] - vector[i]) < this._pp_epsilon;
+        equals = equals && (Math.abs(this[i] - vector[i]) <= epsilon);
     }
 
     return equals;
@@ -670,72 +673,45 @@ Array.prototype.vec3_signTo = function () {
     };
 }();
 
-Array.prototype.vec3_project = function () {
-    let zero = glMatrix.vec3.create();
-    glMatrix.vec3.zero(zero);
-
-    let localThis = glMatrix.vec3.create();
-    return function (axis, origin = null, out = glMatrix.vec3.create()) {
-        if (origin == null) {
-            origin = zero;
-        }
-
-        this.vec3_sub(origin, localThis);
-        localThis.vec3_componentAlongAxis(axis, out);
-        out.vec3_add(origin, out);
-
-        return out;
-    };
-}();
+Array.prototype.vec3_projectOnAxis = function (axis, out = glMatrix.vec3.create()) {
+    this.vec3_componentAlongAxis(axis, out);
+    return out;
+};
 
 // the result can easily be not 100% exact due to precision errors
-Array.prototype.vec3_projectTowardDirection = function () {
-    let zero = glMatrix.vec3.create();
-    glMatrix.vec3.zero(zero);
-
+Array.prototype.vec3_projectOnAxisAlongAxis = function () {
     let up = glMatrix.vec3.create();
 
-    let localThis = glMatrix.vec3.create();
-    let localUp = glMatrix.vec3.create();
-    let projectDirectionThis = glMatrix.vec3.create();
+    let thisToAxis = glMatrix.vec3.create();
 
-    let fixedProjectDirectionAxis = glMatrix.vec3.create();
-    return function (axis, projectDirectionAxis, origin = null, out = glMatrix.vec3.create()) {
-        if (origin == null) {
-            origin = zero;
-        }
+    let fixedProjectAlongAxis = glMatrix.vec3.create();
+    return function (axis, projectAlongAxis, out = glMatrix.vec3.create()) {
 
-        this.vec3_sub(origin, localThis);
-
-        if (localThis.vec3_isOnSameAxis(axis) || projectDirectionAxis.vec3_isOnSameAxis(axis)) {
+        if (this.vec3_isOnAxis(axis) || projectAlongAxis.vec3_isOnAxis(axis)) {
             out.vec3_copy(this);
         } else {
-            projectDirectionAxis.vec3_cross(axis, up);
+            projectAlongAxis.vec3_cross(axis, up);
             up.vec3_normalize(up);
 
-            localThis.vec3_removeComponentAlongAxis(up, localThis);
-            if (localThis.vec3_isOnSameAxis(axis)) {
-                localThis.vec3_add(origin, out);
-            } else {
-                localThis.vec3_cross(axis, localUp);
-                if (localUp.vec3_isConcordant(up)) {
-                    projectDirectionAxis.vec3_negate(fixedProjectDirectionAxis);
+            this.vec3_removeComponentAlongAxis(up, out);
+            if (!out.vec3_isOnAxis(axis)) {
+                out.vec3_projectOnAxis(axis, thisToAxis);
+                thisToAxis.vec3_sub(out, thisToAxis);
+
+                if (thisToAxis.vec3_isConcordant(projectAlongAxis)) {
+                    fixedProjectAlongAxis.vec3_copy(projectAlongAxis);
                 } else {
-                    fixedProjectDirectionAxis.vec3_copy(projectDirectionAxis);
+                    projectAlongAxis.vec3_negate(fixedProjectAlongAxis);
                 }
 
-                localThis.vec3_project(axis, null, projectDirectionThis);
-                projectDirectionThis.vec3_sub(localThis, projectDirectionThis);
+                let angleWithAlongAxis = fixedProjectAlongAxis.vec3_angleRadians(thisToAxis);
+                let lengthToRemove = thisToAxis.vec3_length() / Math.cos(angleWithAlongAxis);
 
-                let angleWithDirectionAxis = fixedProjectDirectionAxis.vec3_angleRadians(projectDirectionThis);
-                let lengthToRemove = projectDirectionThis.vec3_length() / Math.cos(angleWithDirectionAxis);
+                fixedProjectAlongAxis.vec3_normalize(fixedProjectAlongAxis);
+                fixedProjectAlongAxis.vec3_scale(lengthToRemove, fixedProjectAlongAxis);
+                out.vec3_add(fixedProjectAlongAxis, out);
 
-                fixedProjectDirectionAxis.vec3_normalize(fixedProjectDirectionAxis);
-                fixedProjectDirectionAxis.vec3_scale(lengthToRemove, fixedProjectDirectionAxis);
-                localThis.vec3_add(fixedProjectDirectionAxis, out);
-                out.vec3_add(origin, out);
-
-                out.vec3_project(axis, origin, out); // snap on the axis, due to float precision error
+                out.vec3_projectOnAxis(axis, out); // snap on the axis, due to float precision error
             }
         }
 
@@ -743,9 +719,53 @@ Array.prototype.vec3_projectTowardDirection = function () {
     };
 }();
 
-Array.prototype.vec3_isOnSameAxis = function (vector) {
-    let angle = this.vec3_angle(vector);
-    return angle == 0 || angle == 180;
+Array.prototype.vec3_projectOnPlane = function (planeNormal, out = glMatrix.vec3.create()) {
+    this.vec3_removeComponentAlongAxis(planeNormal, out);
+    return out;
+};
+
+// the result can easily be not 100% exact due to precision errors
+Array.prototype.vec3_projectOnPlaneAlongAxis = function () {
+    let thisToPlane = glMatrix.vec3.create();
+
+    let fixedProjectAlongAxis = glMatrix.vec3.create();
+    return function (planeNormal, projectAlongAxis, out = glMatrix.vec3.create()) {
+        if (this.vec3_isOnPlane(planeNormal) || projectAlongAxis.vec3_isOnPlane(planeNormal)) {
+            out.vec3_copy(this);
+        } else {
+            out.vec3_copy(this);
+
+            out.vec3_projectOnPlane(planeNormal, thisToPlane);
+            thisToPlane.vec3_sub(out, thisToPlane);
+
+            if (thisToPlane.vec3_isConcordant(projectAlongAxis)) {
+                fixedProjectAlongAxis.vec3_copy(projectAlongAxis);
+            } else {
+                projectAlongAxis.vec3_negate(fixedProjectAlongAxis);
+            }
+
+            let angleWithAlongAxis = fixedProjectAlongAxis.vec3_angleRadians(thisToPlane);
+            let lengthToRemove = thisToPlane.vec3_length() / Math.cos(angleWithAlongAxis);
+
+            fixedProjectAlongAxis.vec3_normalize(fixedProjectAlongAxis);
+            fixedProjectAlongAxis.vec3_scale(lengthToRemove, fixedProjectAlongAxis);
+            out.vec3_add(fixedProjectAlongAxis, out);
+
+            out.vec3_projectOnPlane(planeNormal, out); // snap on the axis, due to float precision error
+        }
+
+        return out;
+    };
+}();
+
+Array.prototype.vec3_isOnAxis = function (axis) {
+    let angle = this.vec3_angle(axis);
+    return Math.abs(angle) < this._pp_degreesEpsilon || Math.abs(angle - 180) < this._pp_degreesEpsilon;
+};
+
+Array.prototype.vec3_isOnPlane = function (planeNormal) {
+    let angle = this.vec3_angle(planeNormal);
+    return Math.abs(angle - 90) < this._pp_degreesEpsilon;
 };
 
 Array.prototype.vec3_rotate = function (rotation, out) {
@@ -2112,6 +2132,7 @@ PP.mat4_fromPositionRotationQuatScale = function (position, rotation, scale) {
 //UTILS
 
 Array.prototype._pp_epsilon = 0.000001;
+Array.prototype._pp_degreesEpsilon = 0.00001;
 
 Array.prototype._pp_clamp = function (value, min, max) {
     return Math.min(Math.max(value, min), max);

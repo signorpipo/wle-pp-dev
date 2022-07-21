@@ -285,7 +285,7 @@ CollisionCheck = class CollisionCheck {
             let groundPerceivedAngle = this._computeSurfacePerceivedAngle(
                 collisionRuntimeParams.myGroundAngle,
                 collisionRuntimeParams.myGroundNormal,
-                up, direction);
+                up, direction, true);
 
             groundTooSteep = groundPerceivedAngle >= 0;
         }
@@ -295,7 +295,7 @@ CollisionCheck = class CollisionCheck {
                 let ceilingPerceivedAngle = this._computeSurfacePerceivedAngle(
                     collisionRuntimeParams.myCeilingAngle,
                     collisionRuntimeParams.myCeilingNormal,
-                    up, direction);
+                    up, direction, false);
 
                 ceilingTooSteep = ceilingPerceivedAngle >= 0;
             }
@@ -312,7 +312,7 @@ CollisionCheck = class CollisionCheck {
             let groundPerceivedAngle = this._computeSurfacePerceivedAngle(
                 collisionRuntimeParams.myGroundAngle,
                 collisionRuntimeParams.myGroundNormal,
-                up, direction);
+                up, direction, true);
 
             let extraVerticalLength = horizontalMovement.vec3_length() * Math.tan(Math.pp_toRadians(Math.abs(groundPerceivedAngle)));
             extraVerticalLength *= Math.pp_sign(groundPerceivedAngle);
@@ -321,6 +321,8 @@ CollisionCheck = class CollisionCheck {
                 up.vec3_scale(extraVerticalLength, extraSurfaceVerticalMovement);
             }
         }
+
+        // #TODO add quando è on ceiling e aggiungerlo a extra
 
         return extraSurfaceVerticalMovement;
     }
@@ -381,15 +383,15 @@ CollisionCheck = class CollisionCheck {
             surfaceNormal.vec3_normalize(surfaceNormal);
             surfaceAngle = surfaceNormal.vec3_angle(verticalDirection);
 
-            if (surfaceAngle < 0.00001) {
+            if (surfaceAngle < 0.0001) {
                 surfaceAngle = 0;
                 surfaceNormal.vec3_copy(verticalDirection);
-            } else if (surfaceAngle > 180 - 0.00001) {
+            } else if (surfaceAngle > 180 - 0.0001) {
                 surfaceAngle = 180;
                 surfaceNormal.vec3_copy(verticalDirection.vec3_negate());
             }
 
-            surfacePerceivedAngle = this._computeSurfacePerceivedAngle(surfaceAngle, surfaceNormal, up, forward);
+            surfacePerceivedAngle = this._computeSurfacePerceivedAngle(surfaceAngle, surfaceNormal, up, forward, isGround);
         }
 
         if (isGround) {
@@ -409,20 +411,20 @@ CollisionCheck = class CollisionCheck {
         }
     }
 
-    _computeSurfacePerceivedAngle(surfaceAngle, surfaceNormal, up, forward) {
+    _computeSurfacePerceivedAngle(surfaceAngle, surfaceNormal, up, forward, isGround) {
         let surfacePerceivedAngle = surfaceAngle;
 
-        if (surfaceAngle > 0.00001 && surfaceAngle < 180 - 0.00001) {
-            let flatSurfaceNormal = surfaceNormal.vec3_removeComponentAlongAxis(up);
-            flatSurfaceNormal.vec3_normalize(flatSurfaceNormal);
-
-            if (!flatSurfaceNormal.vec3_isZero(0.00001)) {
-                let surfaceForwardAngle = forward.vec3_angle(flatSurfaceNormal);
-                let perceivedAngleFactor = Math.pp_mapToRange(surfaceForwardAngle, 0.00001, 180 - 0.00001, -1, 1);
-                surfacePerceivedAngle = surfaceAngle * perceivedAngleFactor;
-                if (Math.abs(surfacePerceivedAngle) < 0.0001) {
-                    surfacePerceivedAngle = 0;
+        if (surfaceAngle > 0.0001 && surfaceAngle < 180 - 0.0001) {
+            let forwardOnSurface = forward.vec3_projectOnPlaneAlongAxis(surfaceNormal, up);
+            surfacePerceivedAngle = forwardOnSurface.vec3_angle(forward);
+            if (Math.abs(surfacePerceivedAngle) < 0.0001) {
+                surfacePerceivedAngle = 0;
+            } else {
+                let isFurtherOnUp = forwardOnSurface.vec3_isFurtherAlongAxis(forward, up);
+                if ((!isFurtherOnUp && isGround) || (isFurtherOnUp && !isGround)) {
+                    surfacePerceivedAngle *= -1;
                 }
+
             }
         }
 
@@ -499,31 +501,31 @@ CollisionCheck = class CollisionCheck {
         if (collisionRuntimeParams.myIsSliding && collisionCheckParams.mySlidingFlickeringPreventionType > 0) {
             let shouldCheckFlicker = false;
 
-            shouldCheckFlicker |= this._myPrevCollisionRuntimeParams.myIsSlidingFlickerPrevented;
+            shouldCheckFlicker = shouldCheckFlicker || this._myPrevCollisionRuntimeParams.myIsSlidingFlickerPrevented;
 
             let flickerCollisionAngle = 90;
             let flickerMovementAngle = 85;
             switch (collisionCheckParams.mySlidingFlickeringPreventionType) {
                 case 1:
-                    shouldCheckFlicker |= previousHorizontalMovement.vec3_isZero(0.00001);
-                    shouldCheckFlicker |=
+                    shouldCheckFlicker = shouldCheckFlicker || previousHorizontalMovement.vec3_isZero(0.00001);
+                    shouldCheckFlicker = shouldCheckFlicker ||
                         this._myPrevCollisionRuntimeParams.myIsSliding &&
                         previousHorizontalMovement.vec3_signTo(movement, up, 0) != slideMovement.vec3_signTo(movement, up, 0);
                     break;
                 case 2:
-                    shouldCheckFlicker |= collisionCheckParams.mySlidingCheckBothDirections && collisionRuntimeParams.myIsSlidingIntoOppositeDirection;
-                    shouldCheckFlicker |= Math.abs(collisionRuntimeParams.mySlidingCollisionAngle) > flickerCollisionAngle + 0.00001;
+                    shouldCheckFlicker = shouldCheckFlicker || collisionCheckParams.mySlidingCheckBothDirections && collisionRuntimeParams.myIsSlidingIntoOppositeDirection;
+                    shouldCheckFlicker = shouldCheckFlicker || Math.abs(collisionRuntimeParams.mySlidingCollisionAngle) > flickerCollisionAngle + 0.00001;
                     break;
                 case 3:
-                    shouldCheckFlicker |= collisionCheckParams.mySlidingCheckBothDirections && collisionRuntimeParams.myIsSlidingIntoOppositeDirection;
-                    shouldCheckFlicker |= Math.abs(collisionRuntimeParams.mySlidingCollisionAngle) > flickerCollisionAngle + 0.00001;
+                    shouldCheckFlicker = shouldCheckFlicker || collisionCheckParams.mySlidingCheckBothDirections && collisionRuntimeParams.myIsSlidingIntoOppositeDirection;
+                    shouldCheckFlicker = shouldCheckFlicker || Math.abs(collisionRuntimeParams.mySlidingCollisionAngle) > flickerCollisionAngle + 0.00001;
 
-                    shouldCheckFlicker |=
+                    shouldCheckFlicker = shouldCheckFlicker ||
                         Math.abs(Math.abs(collisionRuntimeParams.mySlidingCollisionAngle) - flickerCollisionAngle) < 0.00001 &&
                         Math.abs(collisionRuntimeParams.mySlidingMovementAngle) > flickerMovementAngle + 0.00001;
                     break;
                 case 4:
-                    shouldCheckFlicker |= true;
+                    shouldCheckFlicker = shouldCheckFlicker || true;
                     break;
             }
 
@@ -901,17 +903,17 @@ CollisionCheck = class CollisionCheck {
         } else if (!avoidSlidingExtraCheck && collisionCheckParams.mySlidingEnabled && collisionCheckParams.mySlidingHorizontalMovementCheckBetterNormal) {
             //check for a better slide hit position and normal
 
-            let projectDirectionAxis = null;
+            let projectAlongAxis = null;
             let hitPosition = collisionRuntimeParams.myHorizontalCollisionHit.myPosition;
             let halfConeAngle = Math.min(collisionCheckParams.myHalfConeAngle, 90);
             let hitDirection = hitPosition.vec3_sub(feetPosition);
             if (hitDirection.vec3_isToTheRight(movementDirection, up)) {
-                projectDirectionAxis = movementDirection.vec3_rotateAxis(-halfConeAngle, up);
+                projectAlongAxis = movementDirection.vec3_rotateAxis(-halfConeAngle, up);
             } else {
-                projectDirectionAxis = movementDirection.vec3_rotateAxis(halfConeAngle, up);
+                projectAlongAxis = movementDirection.vec3_rotateAxis(halfConeAngle, up);
             }
 
-            let fixedMovement = hitDirection.vec3_projectTowardDirection(movementDirection, projectDirectionAxis);
+            let fixedMovement = hitDirection.vec3_projectOnAxisAlongAxis(movementDirection, projectAlongAxis);
             if (fixedMovement.vec3_angle(movementDirection) >= 0.00001 || fixedMovement.vec3_length() > movement.vec3_length() + 0.00001) {
                 console.error("ERROR, project function should return a smaller movement in the same direction",
                     fixedMovement.vec3_angle(movementDirection), fixedMovement.vec3_length(), movement.vec3_length());
