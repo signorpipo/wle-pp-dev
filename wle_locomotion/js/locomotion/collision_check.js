@@ -206,12 +206,18 @@ CollisionCheck = class CollisionCheck {
         this._myPrevCollisionRuntimeParams.copy(collisionRuntimeParams);
         collisionRuntimeParams.reset();
 
-        let fixedHorizontalMovement = this._horizontalCheck(horizontalMovement, feetPosition, height, transformUp, collisionCheckParams, collisionRuntimeParams);
-        if (collisionCheckParams.mySlidingEnabled && collisionRuntimeParams.myIsCollidingHorizontally) {
-            fixedHorizontalMovement = this._horizontalSlide(horizontalMovement, feetPosition, height, transformUp, collisionCheckParams, collisionRuntimeParams);
-        }
+        let fixedHorizontalMovement = [0, 0, 0];
 
-        let newFeetPosition = feetPosition.vec3_add(fixedHorizontalMovement);
+        if (!horizontalMovement.vec3_isZero()) {
+            let surfaceTooSteep = this._surfaceTooSteep(transformUp, horizontalMovement.vec3_normalize(), collisionCheckParams, this._myPrevCollisionRuntimeParams);
+
+            if (!surfaceTooSteep) {
+                fixedHorizontalMovement = this._horizontalCheck(horizontalMovement, feetPosition, height, transformUp, collisionCheckParams, collisionRuntimeParams);
+                if (collisionCheckParams.mySlidingEnabled && collisionRuntimeParams.myIsCollidingHorizontally) {
+                    fixedHorizontalMovement = this._horizontalSlide(horizontalMovement, feetPosition, height, transformUp, collisionCheckParams, collisionRuntimeParams);
+                }
+            }
+        }
 
         let forward = [0, 0, 0];
         if (fixedHorizontalMovement.vec3_length() < 0.000001) {
@@ -220,6 +226,8 @@ CollisionCheck = class CollisionCheck {
         } else {
             fixedHorizontalMovement.vec3_normalize(forward);
         }
+
+        let newFeetPosition = feetPosition.vec3_add(fixedHorizontalMovement);
 
         // collisionCheckParams.myDebugActive = false;
 
@@ -250,6 +258,33 @@ CollisionCheck = class CollisionCheck {
         collisionRuntimeParams.myMovement.vec3_copy(fixedMovement);
 
         return fixedMovement;
+    }
+
+    _surfaceTooSteep(up, direction, collisionCheckParams, collisionRuntimeParams) {
+        let groundTooSteep = false;
+        let ceilingTooSteep = false;
+
+        if (collisionRuntimeParams.myIsOnGround && collisionRuntimeParams.myGroundAngle > collisionCheckParams.myGroundAngleToIgnore + 0.0001) {
+            let groundPerceivedAngle = this._computeSurfacePerceivedAngle(
+                collisionRuntimeParams.myGroundAngle,
+                collisionRuntimeParams.myGroundNormal,
+                up, direction);
+
+            groundTooSteep = groundPerceivedAngle >= 0;
+        }
+
+        if (!groundTooSteep) {
+            if (collisionRuntimeParams.myIsOnCeiling && collisionRuntimeParams.myCeilingAngle > collisionCheckParams.myCeilingAngleToIgnore + 0.0001) {
+                let ceilingPerceivedAngle = this._computeSurfacePerceivedAngle(
+                    collisionRuntimeParams.myCeilingAngle,
+                    collisionRuntimeParams.myCeilingNormal,
+                    up, direction);
+
+                ceilingTooSteep = ceilingPerceivedAngle >= 0;
+            }
+        }
+
+        return groundTooSteep || ceilingTooSteep;
     }
 
     _computeExtraSurfaceVerticalMovement(horizontalMovement, up, collisionRuntimeParams) {
@@ -368,7 +403,7 @@ CollisionCheck = class CollisionCheck {
                 let surfaceForwardAngle = forward.vec3_angle(flatSurfaceNormal);
                 let perceivedAngleFactor = Math.pp_mapToRange(surfaceForwardAngle, 0.00001, 180 - 0.00001, -1, 1);
                 surfacePerceivedAngle = surfaceAngle * perceivedAngleFactor;
-                if (Math.abs(surfacePerceivedAngle) < 0.00001) {
+                if (Math.abs(surfacePerceivedAngle) < 0.0001) {
                     surfacePerceivedAngle = 0;
                 }
             }
