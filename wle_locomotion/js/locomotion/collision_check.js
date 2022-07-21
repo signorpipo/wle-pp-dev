@@ -20,6 +20,7 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myCheckConeRay = true;
 
         this.myFeetRadius = 0.1;
+        this.mySnapOnGroundEnabled = true;
         this.mySnapOnGroundExtraDistance = 0.3;
         this.myGroundCircumferenceSliceAmount = 8;
         this.myGroundCircumferenceStepAmount = 2;
@@ -245,7 +246,7 @@ CollisionCheck = class CollisionCheck {
 
         // collisionCheckParams.myDebugActive = false;
 
-        let extraSurfaceVerticalMovement = this._computeExtraSurfaceVerticalMovement(fixedHorizontalMovement, transformUp, this._myPrevCollisionRuntimeParams);
+        let extraSurfaceVerticalMovement = this._computeExtraSurfaceVerticalMovement(fixedHorizontalMovement, transformUp, collisionCheckParams, this._myPrevCollisionRuntimeParams);
         let surfaceAdjustedVerticalMovement = verticalMovement.vec3_add(extraSurfaceVerticalMovement);
         let fixedVerticalMovement = this._verticalCheck(surfaceAdjustedVerticalMovement, newFeetPosition, height, transformUp, forward, collisionCheckParams, collisionRuntimeParams);
 
@@ -304,25 +305,41 @@ CollisionCheck = class CollisionCheck {
         return groundTooSteep || ceilingTooSteep;
     }
 
-    _computeExtraSurfaceVerticalMovement(horizontalMovement, up, collisionRuntimeParams) {
+    _computeExtraSurfaceVerticalMovement(horizontalMovement, up, collisionCheckParams, collisionRuntimeParams) {
         let extraSurfaceVerticalMovement = [0, 0, 0];
 
-        if (collisionRuntimeParams.myIsOnGround && collisionRuntimeParams.myGroundAngle != 0 && !horizontalMovement.vec3_isZero()) {
-            let direction = horizontalMovement.vec3_normalize();
-            let groundPerceivedAngle = this._computeSurfacePerceivedAngle(
-                collisionRuntimeParams.myGroundAngle,
-                collisionRuntimeParams.myGroundNormal,
-                up, direction, true);
+        if (!horizontalMovement.vec3_isZero()) {
+            if (collisionRuntimeParams.myIsOnGround && collisionRuntimeParams.myGroundAngle != 0) {
+                let direction = horizontalMovement.vec3_normalize();
+                let groundPerceivedAngle = this._computeSurfacePerceivedAngle(
+                    collisionRuntimeParams.myGroundAngle,
+                    collisionRuntimeParams.myGroundNormal,
+                    up, direction, true);
 
-            let extraVerticalLength = horizontalMovement.vec3_length() * Math.tan(Math.pp_toRadians(Math.abs(groundPerceivedAngle)));
-            extraVerticalLength *= Math.pp_sign(groundPerceivedAngle);
+                let extraVerticalLength = horizontalMovement.vec3_length() * Math.tan(Math.pp_toRadians(Math.abs(groundPerceivedAngle)));
+                extraVerticalLength *= Math.pp_sign(groundPerceivedAngle);
 
-            if (Math.abs(extraVerticalLength) > 0.00001) {
-                up.vec3_scale(extraVerticalLength, extraSurfaceVerticalMovement);
+                if (Math.abs(extraVerticalLength) > 0.00001 && (collisionCheckParams.mySnapOnGroundEnabled || extraVerticalLength > 0)) {
+                    extraSurfaceVerticalMovement.vec3_add(up.vec3_scale(extraVerticalLength), extraSurfaceVerticalMovement);
+                }
+            }
+
+            if (collisionRuntimeParams.myIsOnCeiling && collisionRuntimeParams.myCeilingAngle != 0) {
+                let direction = horizontalMovement.vec3_normalize();
+                let ceilingPerceivedAngle = this._computeSurfacePerceivedAngle(
+                    collisionRuntimeParams.myCeilingAngle,
+                    collisionRuntimeParams.myCeilingNormal,
+                    up, direction, false);
+
+                let extraVerticalLength = horizontalMovement.vec3_length() * Math.tan(Math.pp_toRadians(Math.abs(ceilingPerceivedAngle)));
+                extraVerticalLength *= Math.pp_sign(ceilingPerceivedAngle);
+                extraVerticalLength *= -1;
+
+                if (extraVerticalLength < 0) {
+                    extraSurfaceVerticalMovement.vec3_add(up.vec3_scale(extraVerticalLength), extraSurfaceVerticalMovement);
+                }
             }
         }
-
-        // #TODO add quando è on ceiling e aggiungerlo a extra
 
         return extraSurfaceVerticalMovement;
     }
@@ -424,7 +441,6 @@ CollisionCheck = class CollisionCheck {
                 if ((!isFurtherOnUp && isGround) || (isFurtherOnUp && !isGround)) {
                     surfacePerceivedAngle *= -1;
                 }
-
             }
         }
 
@@ -748,7 +764,7 @@ CollisionCheck = class CollisionCheck {
             endOffset = up.vec3_scale(height).vec3_add(verticalMovement);
         }
 
-        if (isMovementDownward && this._myPrevCollisionRuntimeParams.myIsOnGround) {
+        if (isMovementDownward && this._myPrevCollisionRuntimeParams.myIsOnGround && collisionCheckParams.mySnapOnGroundEnabled) {
             endOffset.vec3_add(up.vec3_scale(-collisionCheckParams.mySnapOnGroundExtraDistance), endOffset);
         }
 

@@ -661,11 +661,12 @@ WL.registerComponent('locomotion-draft-2', {
         this._myCollisionCheckParams.myCheckConeRay = true;
 
         this._myCollisionCheckParams.myFeetRadius = 0.1;
+        this._myCollisionCheckParams.mySnapOnGroundEnabled = true;
         this._myCollisionCheckParams.mySnapOnGroundExtraDistance = 0.1;
         this._myCollisionCheckParams.myGroundCircumferenceSliceAmount = 8;
         this._myCollisionCheckParams.myGroundCircumferenceStepAmount = 2;
         this._myCollisionCheckParams.myGroundCircumferenceRotationPerStep = 22.5;
-        this._myCollisionCheckParams.myGroundFixDistanceFromFeet = 0.3;
+        this._myCollisionCheckParams.myGroundFixDistanceFromFeet = 0.1;
         this._myCollisionCheckParams.myGroundFixDistanceFromHead = 0.1;
 
         this._myCollisionCheckParams.myCheckHeight = true;
