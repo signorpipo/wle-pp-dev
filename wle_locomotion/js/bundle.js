@@ -5,6 +5,7 @@ require('./cauldron/direction_2D_to_3D_converter.js');
 require('./cauldron/character_spawner.js');
 require('./cauldron/ai_movement.js');
 require('./cauldron/stick_movement.js');
+require('./cauldron/display_fps.js');
 
 //LOCOMOTION
 
@@ -96,6 +97,7 @@ require('./pp/debug/debug_line.js');
 require('./pp/debug/debug_arrow.js');
 require('./pp/debug/debug_point.js');
 require('./pp/debug/debug_raycast.js');
+require('./pp/debug/debug_text.js');
 require('./pp/debug/components/debug_transform_component.js');
 require('./pp/debug/components/debug_manager_component.js');
 

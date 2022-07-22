@@ -12,7 +12,8 @@
                         "_myCubeMesh": "p1",
                         "_myFlatMaterial": "31",
                         "_myConeMesh": "p3",
-                        "_mySphereMesh": "p2"
+                        "_mySphereMesh": "p2",
+                        "_myTextMaterial": "596"
                     }
                 },
                 {
@@ -11056,7 +11057,7 @@
                 {
                     "type": "pp-set-active",
                     "pp-set-active": {
-                        "_myActive": false
+                        "_myActive": true
                     },
                     "active": true
                 }
@@ -18257,6 +18258,33 @@
                 -2.4796442,
                 1.0
             ]
+        },
+        "597": {
+            "name": "HUD",
+            "parent": "18",
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "components": [
+                {
+                    "type": "display-fps"
+                }
+            ]
         }
     },
     "meshes": {
@@ -18556,6 +18584,19 @@
                     0.4133794,
                     0.8784313,
                     1.0
+                ]
+            }
+        },
+        "596": {
+            "link": {
+                "name": "DefaultFontMaterial",
+                "file": "default"
+            },
+            "name": "Debug Font",
+            "DistanceFieldVector": {
+                "outlineRange": [
+                    0.4,
+                    0.4
                 ]
             }
         }

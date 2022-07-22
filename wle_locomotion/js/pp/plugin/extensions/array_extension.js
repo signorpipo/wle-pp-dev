@@ -415,7 +415,7 @@ Array.prototype.vec_ceil = function (out = null) {
 Array.prototype.vec_clamp = function (start, end, out = null) {
     out = this._vec_prepareOut(out);
 
-    let fixedStart = (start != null) ? start : Number.MIN_VALUE;
+    let fixedStart = (start != null) ? start : -Number.MAX_VALUE;
     let fixedEnd = (end != null) ? end : Number.MAX_VALUE;
     let min = Math.min(fixedStart, fixedEnd);
     let max = Math.max(fixedStart, fixedEnd);

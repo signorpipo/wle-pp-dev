@@ -82,6 +82,9 @@ PP.DebugRaycast = class DebugRaycast {
         this._markDirty();
     }
 
+    refresh() {
+        this.update(0);
+    }
 
     update(dt) {
         if (this._myDirty) {

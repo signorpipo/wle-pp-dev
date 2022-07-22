@@ -66,7 +66,7 @@ PP.DebugArrow = class DebugArrow {
     }
 
     setColor(color) {
-        this._myParams.myColor = color;
+        this._myParams.myColor.vec4_copy(color);
 
         this._markDirty();
     }
@@ -75,6 +75,10 @@ PP.DebugArrow = class DebugArrow {
         this._myParams.myThickness = thickness;
 
         this._markDirty();
+    }
+
+    refresh() {
+        this.update(0);
     }
 
     update(dt) {

@@ -7,7 +7,7 @@ PP.DebugLineParams = class DebugLineParams {
 
         this.myThickness = 0.005;
 
-        this.myColor = [1, 0, 1, 1];
+        this.myColor = [0, 1, 0, 1];
 
         this.myType = PP.DebugDrawObjectType.LINE;
     }
@@ -84,6 +84,10 @@ PP.DebugLine = class DebugLine {
         this._myParams.myThickness = thickness;
 
         this._markDirty();
+    }
+
+    refresh() {
+        this.update(0);
     }
 
     update(dt) {
