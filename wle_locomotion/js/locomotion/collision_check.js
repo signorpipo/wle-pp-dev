@@ -4,7 +4,8 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myDistanceFromFeetToIgnore = 0.3; // could be percentage of the height
         this.myDistanceFromHeadToIgnore = 0.1;
 
-        this.myHorizontalMovementStepAmount = 1;
+        this.myHorizontalMovementStepEnabled = false;
+        this.myHorizontalMovementStepMaxLength = 0;
         this.myHorizontalMovementRadialStepAmount = 1;
         this.myHorizontalMovementCheckDiagonal = true;
         this.myHorizontalMovementCheckStraight = false;
@@ -1128,10 +1129,17 @@ CollisionCheck = class CollisionCheck {
     _horizontalMovementVerticalCheck(movement, feetPosition, checkPositions, heightOffset, heightStep, up, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams) {
         let isHorizontalCheckOk = true;
 
-        let movementStep = movement.vec3_scale(1 / collisionCheckParams.myHorizontalMovementStepAmount);
+        let movementStepAmount = 1;
+        let movementStep = movement.pp_clone();
+
+        if (collisionCheckParams.myHorizontalMovementStepEnabled) {
+            movementStepAmount = Math.max(1, Math.ceil(movement.vec3_length() / collisionCheckParams.myHorizontalMovementStepMaxLength));
+            movement.vec3_scale(1 / movementStepAmount, movementStep);
+        }
+
         let movementDirection = movement.vec3_normalize();
 
-        for (let m = 0; m < collisionCheckParams.myHorizontalMovementStepAmount; m++) {
+        for (let m = 0; m < movementStepAmount; m++) {
             for (let j = 0; j < checkPositions.length; j++) {
                 let firstPosition = checkPositions[j].vec3_add(movementStep.vec3_scale(m)).vec3_add(heightOffset);
 
@@ -1280,10 +1288,18 @@ CollisionCheck = class CollisionCheck {
     _horizontalMovementHorizontalCheck(movement, feetPosition, checkPositions, heightOffset, up, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams) {
         let isHorizontalCheckOk = true;
 
-        let movementStep = movement.vec3_scale(1 / collisionCheckParams.myHorizontalMovementStepAmount);
+        let movementStepAmount = 1;
+        let movementStep = movement.pp_clone();
+
+        if (collisionCheckParams.myHorizontalMovementStepEnabled) {
+            movementStepAmount = Math.max(1, Math.ceil(movement.vec3_length() / collisionCheckParams.myHorizontalMovementStepMaxLength));
+            movement.vec3_scale(1 / movementStepAmount, movementStep);
+            console.error(movementStepAmount);
+        }
+
         let movementDirection = movement.vec3_normalize();
 
-        for (let m = 0; m < collisionCheckParams.myHorizontalMovementStepAmount; m++) {
+        for (let m = 0; m < movementStepAmount; m++) {
             for (let j = 0; j < checkPositions.length; j++) {
                 let firstPosition = checkPositions[j].vec3_add(movementStep.vec3_scale(m)).vec3_add(heightOffset);
 
