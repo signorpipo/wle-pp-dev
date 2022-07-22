@@ -20,6 +20,7 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myCheckConeRay = true;
 
         this.myFeetRadius = 0.1;
+        this.myAdjustVerticalMovementWithSurfaceAngle = true;
         this.mySnapOnGroundEnabled = true;
         this.mySnapOnGroundExtraDistance = 0.3;
         this.myGroundCircumferenceSliceAmount = 8;
@@ -245,10 +246,14 @@ CollisionCheck = class CollisionCheck {
         let newFeetPosition = feetPosition.vec3_add(fixedHorizontalMovement);
 
         // collisionCheckParams.myDebugActive = false;
+        let surfaceAdjustedVerticalMovement = verticalMovement.pp_clone();
+        if (collisionCheckParams.myAdjustVerticalMovementWithSurfaceAngle) {
+            let extraSurfaceVerticalMovement = this._computeExtraSurfaceVerticalMovement(fixedHorizontalMovement, transformUp, collisionCheckParams, this._myPrevCollisionRuntimeParams);
+            surfaceAdjustedVerticalMovement.vec3_add(extraSurfaceVerticalMovement, surfaceAdjustedVerticalMovement);
+        }
 
-        let extraSurfaceVerticalMovement = this._computeExtraSurfaceVerticalMovement(fixedHorizontalMovement, transformUp, collisionCheckParams, this._myPrevCollisionRuntimeParams);
-        let surfaceAdjustedVerticalMovement = verticalMovement.vec3_add(extraSurfaceVerticalMovement);
-        let fixedVerticalMovement = this._verticalCheck(surfaceAdjustedVerticalMovement, newFeetPosition, height, transformUp, forward, collisionCheckParams, collisionRuntimeParams);
+        let isOriginalMovementDownward = !verticalMovement.vec3_isConcordant(transformUp) || verticalMovement.vec3_length() < 0.000001;
+        let fixedVerticalMovement = this._verticalCheck(surfaceAdjustedVerticalMovement, isOriginalMovementDownward, newFeetPosition, height, transformUp, forward, collisionCheckParams, collisionRuntimeParams);
 
         let fixedMovement = [0, 0, 0];
         if (!collisionRuntimeParams.myIsCollidingVertically) {
@@ -358,7 +363,8 @@ CollisionCheck = class CollisionCheck {
             distanceToComputeSurfaceInfo = collisionCheckParams.myDistanceToComputeCeilingInfo;
         }
 
-        let startOffset = verticalDirection.vec3_scale(0.0001);
+        let surfaceStartOffsetFix = 0.0001;
+        let startOffset = verticalDirection.vec3_scale(surfaceStartOffsetFix);
         let endOffset = verticalDirection.vec3_negate().vec3_scale(Math.max(distanceToBeOnSurface, distanceToComputeSurfaceInfo));
         let heightOffset = [0, 0, 0];
         if (!isGround) {
@@ -385,11 +391,11 @@ CollisionCheck = class CollisionCheck {
             let raycastResult = this._raycastAndDebug(origin, direction, distance, true, collisionCheckParams, collisionRuntimeParams);
 
             if (raycastResult.myHits.length > 0) {
-                if (raycastResult.myHits[0].myDistance <= distanceToBeOnSurface + 0.00001) {
+                if (raycastResult.myHits[0].myDistance <= distanceToBeOnSurface + surfaceStartOffsetFix + 0.00001) {
                     isOnSurface = true;
                 }
 
-                if (raycastResult.myHits[0].myDistance <= distanceToComputeSurfaceInfo + 0.00001) {
+                if (raycastResult.myHits[0].myDistance <= distanceToComputeSurfaceInfo + surfaceStartOffsetFix + 0.00001) {
                     let currentSurfaceNormal = raycastResult.myHits[0].myNormal;
                     surfaceNormal.vec3_add(currentSurfaceNormal, surfaceNormal);
                 }
@@ -717,28 +723,32 @@ CollisionCheck = class CollisionCheck {
         return lastValidMovement;
     }
 
-    _verticalCheck(verticalMovement, feetPosition, height, up, forward, collisionCheckParams, collisionRuntimeParams) {
+    _verticalCheck(verticalMovement, isOriginalMovementDownward, feetPosition, height, up, forward, collisionCheckParams, collisionRuntimeParams) {
         collisionRuntimeParams.myIsCollidingVertically = false;
         collisionRuntimeParams.myVerticalCollisionHit.reset();
 
-        let verticalDirection = verticalMovement.vec3_normalize();
-        if (verticalMovement.vec3_length() < 0.00001) {
-            verticalDirection = up.vec3_negate();
-        }
+        let isMovementDownward = !verticalMovement.vec3_isConcordant(up) || verticalMovement.vec3_length() < 0.000001;
+        let fixedMovement = this._verticalMovementFix(verticalMovement, isMovementDownward, feetPosition, height, up, forward, collisionCheckParams, collisionRuntimeParams);
 
-        let fixedMovement = this._verticalMovementFix(verticalMovement, verticalDirection, feetPosition, height, up, forward, collisionCheckParams, collisionRuntimeParams);
         if (fixedMovement.pp_equals(verticalMovement)) {
-            let oppositeDirection = verticalDirection.vec3_negate();
             let newFeetPosition = feetPosition.vec3_add(fixedMovement);
-            let additionalMovement = this._verticalMovementFix([0, 0, 0], oppositeDirection, newFeetPosition, height, up, forward, collisionCheckParams, collisionRuntimeParams);
-            if (additionalMovement.vec3_isConcordant(verticalDirection)) {
+            let isOppositeMovementDownward = !isMovementDownward;
+            let additionalMovement = this._verticalMovementFix([0, 0, 0], isOppositeMovementDownward, newFeetPosition, height, up, forward, collisionCheckParams, collisionRuntimeParams);
+
+            let verticalDirection = verticalMovement.vec3_normalize();
+            if (verticalMovement.vec3_length() < 0.00001) {
+                verticalDirection = up.vec3_negate();
+            }
+
+            if (additionalMovement.vec3_isConcordant(verticalDirection) || (isOppositeMovementDownward == isOriginalMovementDownward)) {
                 fixedMovement.vec3_add(additionalMovement, fixedMovement);
+                isMovementDownward = !isMovementDownward;
+
             }
         }
 
         let newFeetPosition = feetPosition.vec3_add(fixedMovement);
-
-        let isMovementDownward = !verticalMovement.vec3_isConcordant(up) || Math.abs(verticalMovement.vec3_length() < 0.000001);
+        // check collision?
         let canStay = this._verticalPositionCheck(newFeetPosition, isMovementDownward, height, up, forward, collisionCheckParams, collisionRuntimeParams);
         if (!canStay) {
             fixedMovement = null;
@@ -747,12 +757,10 @@ CollisionCheck = class CollisionCheck {
         return fixedMovement;
     }
 
-    _verticalMovementFix(verticalMovement, verticalDirection, feetPosition, height, up, forward, collisionCheckParams, collisionRuntimeParams) {
+    _verticalMovementFix(verticalMovement, isMovementDownward, feetPosition, height, up, forward, collisionCheckParams, collisionRuntimeParams) {
         this._myDebugActive = collisionCheckParams.myDebugActive && collisionCheckParams.myDebugVerticalMovementActive;
 
         let fixedMovement = null;
-
-        let isMovementDownward = !verticalDirection.vec3_isConcordant(up);
 
         let startOffset = null;
         let endOffset = null;
