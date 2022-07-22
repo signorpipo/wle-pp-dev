@@ -4,7 +4,7 @@ CollisionCheckParams = class CollisionCheckParams {
         this.mySplitMovementMaxLength = 0;
 
         this.myRadius = 0.3;
-        this.myDistanceFromFeetToIgnore = 0.3; // could be percentage of the height
+        this.myDistanceFromFeetToIgnore = 0.1;
         this.myDistanceFromHeadToIgnore = 0.1;
 
         this.myHorizontalMovementStepEnabled = false;
@@ -25,16 +25,16 @@ CollisionCheckParams = class CollisionCheckParams {
 
         this.myFeetRadius = 0.1;
         this.myAdjustVerticalMovementWithSurfaceAngle = true;
-        this.mySnapOnGroundEnabled = true;
-        this.mySnapOnGroundExtraDistance = 0.3;
 
-        this.mySnapOnCeilingEnabled = true;
-        this.mySnapOnCeilingExtraDistance = 0.3;
+        this.mySnapOnGroundEnabled = true;
+        this.mySnapOnGroundExtraDistance = 0.1;
+        this.mySnapOnCeilingEnabled = false;
+        this.mySnapOnCeilingExtraDistance = 0.1;
 
         this.myGroundCircumferenceSliceAmount = 8;
         this.myGroundCircumferenceStepAmount = 2;
         this.myGroundCircumferenceRotationPerStep = 22.5;
-        this.myGroundFixDistanceFromFeet = 0.3;
+        this.myGroundFixDistanceFromFeet = 0.1;
         this.myGroundFixDistanceFromHead = 0.1;
 
         this.myCheckHeight = true;

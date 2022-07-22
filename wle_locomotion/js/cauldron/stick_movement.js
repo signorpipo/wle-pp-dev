@@ -155,11 +155,15 @@ WL.registerComponent('stick-movement', {
     _setupCollisionCheckParams() {
         this._myCollisionCheckParams = new CollisionCheckParams();
 
+        this._myCollisionCheckParams.mySplitMovementEnabled = false;
+        this._myCollisionCheckParams.mySplitMovementMaxLength = 0;
+
         this._myCollisionCheckParams.myRadius = 0.3 * this._myScale;
-        this._myCollisionCheckParams.myDistanceFromFeetToIgnore = 0.3 * this._myScale;
+        this._myCollisionCheckParams.myDistanceFromFeetToIgnore = 0.1 * this._myScale;
         this._myCollisionCheckParams.myDistanceFromHeadToIgnore = 0.1 * this._myScale;
 
-        this._myCollisionCheckParams.myHorizontalMovementStepAmount = 1;
+        this._myCollisionCheckParams.myHorizontalMovementStepEnabled = false;
+        this._myCollisionCheckParams.myHorizontalMovementStepMaxLength = 0;
         this._myCollisionCheckParams.myHorizontalMovementRadialStepAmount = 1;
         this._myCollisionCheckParams.myHorizontalMovementCheckDiagonal = true;
         this._myCollisionCheckParams.myHorizontalMovementCheckStraight = false;
@@ -175,22 +179,18 @@ WL.registerComponent('stick-movement', {
         this._myCollisionCheckParams.myCheckConeRay = true;
 
         this._myCollisionCheckParams.myFeetRadius = 0.1 * this._myScale;
-        this._myCollisionCheckParams.mySnapOnGroundExtraDistance = 0.3 * this._myScale;
+        this._myCollisionCheckParams.myAdjustVerticalMovementWithSurfaceAngle = true;
+
+        this._myCollisionCheckParams.mySnapOnGroundEnabled = true;
+        this._myCollisionCheckParams.mySnapOnGroundExtraDistance = 0.1 * this._myScale;
+        this._myCollisionCheckParams.mySnapOnCeilingEnabled = false;
+        this._myCollisionCheckParams.mySnapOnCeilingExtraDistance = 0.1 * this._myScale;
+
         this._myCollisionCheckParams.myGroundCircumferenceSliceAmount = 4;
         this._myCollisionCheckParams.myGroundCircumferenceStepAmount = 1;
         this._myCollisionCheckParams.myGroundCircumferenceRotationPerStep = 22.5;
-        this._myCollisionCheckParams.myGroundFixDistanceFromFeet = 0.3 * this._myScale;
+        this._myCollisionCheckParams.myGroundFixDistanceFromFeet = 0.1 * this._myScale;
         this._myCollisionCheckParams.myGroundFixDistanceFromHead = 0.1 * this._myScale;
-
-        this._myCollisionCheckParams.mySlidingEnabled = true;
-        this._myCollisionCheckParams.mySlidingHorizontalMovementCheckBetterNormal = true;
-        this._myCollisionCheckParams.mySlidingMaxAttempts = 4;
-        this._myCollisionCheckParams.mySlidingFlickeringPreventionType = 0; // expensive, 2 times the check for the whole horizontal movement!
-
-        this.myDistanceToBeOnGround = 0.001 * this._myScale;
-        this.myDistanceToComputeGroundInfo = 0.1 * this._myScale;
-        this.myDistanceToBeOnCeiling = 0.001 * this._myScale;
-        this.myDistanceToComputeCeilingInfo = 0.1 * this._myScale;
 
         this._myCollisionCheckParams.myCheckHeight = true;
         this._myCollisionCheckParams.myHeightCheckStepAmount = 1;
@@ -199,9 +199,23 @@ WL.registerComponent('stick-movement', {
         this._myCollisionCheckParams.myCheckVerticalDiagonalBorder = false;
         this._myCollisionCheckParams.myCheckVerticalDiagonalBorderRay = false;
 
+        this._myCollisionCheckParams.myGroundAngleToIgnore = 30;
+        this._myCollisionCheckParams.myCeilingAngleToIgnore = 30;
+
         let mesh = this.object.pp_getComponentHierarchy("mesh");
         this._myCollisionCheckParams.myHeight = mesh.object.pp_getScale()[1] * 2;
         this._myInitialHeight = this._myCollisionCheckParams.myHeight;
+
+        this._myCollisionCheckParams.myDistanceToBeOnGround = 0.001 * this._myScale;
+        this._myCollisionCheckParams.myDistanceToComputeGroundInfo = 0.1 * this._myScale;
+        this._myCollisionCheckParams.myDistanceToBeOnCeiling = 0.001 * this._myScale;
+        this._myCollisionCheckParams.myDistanceToComputeCeilingInfo = 0.1 * this._myScale;
+
+        this._myCollisionCheckParams.mySlidingEnabled = true;
+        this._myCollisionCheckParams.mySlidingHorizontalMovementCheckBetterNormal = true;
+        this._myCollisionCheckParams.mySlidingMaxAttempts = 4;
+        this._myCollisionCheckParams.mySlidingCheckBothDirections = false;       // expensive, 2 times the check for the whole horizontal movement!
+        this._myCollisionCheckParams.mySlidingFlickeringPreventionType = 1;      // expensive, 2 times the check for the whole horizontal movement!
 
         this._myCollisionCheckParams.myBlockLayerFlags = new PP.PhysicsLayerFlags();
         this._myCollisionCheckParams.myBlockLayerFlags.setAllFlagsActive(true);

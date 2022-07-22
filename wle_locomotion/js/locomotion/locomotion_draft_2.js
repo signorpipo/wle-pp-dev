@@ -646,9 +646,6 @@ WL.registerComponent('locomotion-draft-2', {
         this._myCollisionCheckParams.myDistanceFromFeetToIgnore = 0.1;
         this._myCollisionCheckParams.myDistanceFromHeadToIgnore = 0.1;
 
-        this._myCollisionCheckParams.myGroundAngleToIgnore = 30;
-        this._myCollisionCheckParams.myCeilingAngleToIgnore = 30;
-
         this._myCollisionCheckParams.myHorizontalMovementStepEnabled = false;
         this._myCollisionCheckParams.myHorizontalMovementStepMaxLength = 0;
         this._myCollisionCheckParams.myHorizontalMovementRadialStepAmount = 1;
@@ -667,10 +664,10 @@ WL.registerComponent('locomotion-draft-2', {
 
         this._myCollisionCheckParams.myFeetRadius = 0.1;
         this._myCollisionCheckParams.myAdjustVerticalMovementWithSurfaceAngle = true;
+
         this._myCollisionCheckParams.mySnapOnGroundEnabled = true;
         this._myCollisionCheckParams.mySnapOnGroundExtraDistance = 0.1;
-
-        this._myCollisionCheckParams.mySnapOnCeilingEnabled = true;
+        this._myCollisionCheckParams.mySnapOnCeilingEnabled = false;
         this._myCollisionCheckParams.mySnapOnCeilingExtraDistance = 0.1;
 
         this._myCollisionCheckParams.myGroundCircumferenceSliceAmount = 8;
@@ -686,6 +683,9 @@ WL.registerComponent('locomotion-draft-2', {
         this._myCollisionCheckParams.myCheckVerticalDiagonalBorder = false;
         this._myCollisionCheckParams.myCheckVerticalDiagonalBorderRay = false;
 
+        this._myCollisionCheckParams.myGroundAngleToIgnore = 30;
+        this._myCollisionCheckParams.myCeilingAngleToIgnore = 30;
+
         this._myCollisionCheckParams.myHeight = 1;
 
         this._myCollisionCheckParams.myDistanceToBeOnGround = 0.001;
@@ -694,10 +694,10 @@ WL.registerComponent('locomotion-draft-2', {
         this._myCollisionCheckParams.myDistanceToComputeCeilingInfo = 0.1;
 
         this._myCollisionCheckParams.mySlidingEnabled = true;
-        this._myCollisionCheckParams.mySlidingMaxAttempts = 4;
         this._myCollisionCheckParams.mySlidingHorizontalMovementCheckBetterNormal = true;
-        this._myCollisionCheckParams.mySlidingFlickeringPreventionType = 1;     // expensive, 2 times the check for the whole horizontal movement!
+        this._myCollisionCheckParams.mySlidingMaxAttempts = 4;
         this._myCollisionCheckParams.mySlidingCheckBothDirections = true;       // expensive, 2 times the check for the whole horizontal movement!
+        this._myCollisionCheckParams.mySlidingFlickeringPreventionType = 1;     // expensive, 2 times the check for the whole horizontal movement!
 
         this._myCollisionCheckParams.myBlockLayerFlags = new PP.PhysicsLayerFlags();
         this._myCollisionCheckParams.myBlockLayerFlags.setAllFlagsActive(true);
