@@ -23,6 +23,10 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myAdjustVerticalMovementWithSurfaceAngle = true;
         this.mySnapOnGroundEnabled = true;
         this.mySnapOnGroundExtraDistance = 0.3;
+
+        this.mySnapOnCeilingEnabled = true;
+        this.mySnapOnCeilingExtraDistance = 0.3;
+
         this.myGroundCircumferenceSliceAmount = 8;
         this.myGroundCircumferenceStepAmount = 2;
         this.myGroundCircumferenceRotationPerStep = 22.5;
@@ -252,8 +256,8 @@ CollisionCheck = class CollisionCheck {
             surfaceAdjustedVerticalMovement.vec3_add(extraSurfaceVerticalMovement, surfaceAdjustedVerticalMovement);
         }
 
-        let isOriginalMovementDownward = !verticalMovement.vec3_isConcordant(transformUp) || verticalMovement.vec3_length() < 0.000001;
-        let fixedVerticalMovement = this._verticalCheck(surfaceAdjustedVerticalMovement, isOriginalMovementDownward, newFeetPosition, height, transformUp, forward, collisionCheckParams, collisionRuntimeParams);
+        let originalMovementSign = Math.pp_sign(verticalMovement.vec3_lengthSigned(transformUp), 0);
+        let fixedVerticalMovement = this._verticalCheck(surfaceAdjustedVerticalMovement, originalMovementSign, newFeetPosition, height, transformUp, forward, collisionCheckParams, collisionRuntimeParams);
 
         let fixedMovement = [0, 0, 0];
         if (!collisionRuntimeParams.myIsCollidingVertically) {
@@ -327,9 +331,7 @@ CollisionCheck = class CollisionCheck {
                 if (Math.abs(extraVerticalLength) > 0.00001 && (collisionCheckParams.mySnapOnGroundEnabled || extraVerticalLength > 0)) {
                     extraSurfaceVerticalMovement.vec3_add(up.vec3_scale(extraVerticalLength), extraSurfaceVerticalMovement);
                 }
-            }
-
-            if (collisionRuntimeParams.myIsOnCeiling && collisionRuntimeParams.myCeilingAngle != 0) {
+            } else if (collisionRuntimeParams.myIsOnCeiling && collisionRuntimeParams.myCeilingAngle != 0) {
                 let direction = horizontalMovement.vec3_normalize();
                 let ceilingPerceivedAngle = this._computeSurfacePerceivedAngle(
                     collisionRuntimeParams.myCeilingAngle,
@@ -340,7 +342,7 @@ CollisionCheck = class CollisionCheck {
                 extraVerticalLength *= Math.pp_sign(ceilingPerceivedAngle);
                 extraVerticalLength *= -1;
 
-                if (extraVerticalLength < 0) {
+                if (Math.abs(extraVerticalLength) > 0.00001 && (collisionCheckParams.mySnapOnCeilingEnabled || extraVerticalLength < 0)) {
                     extraSurfaceVerticalMovement.vec3_add(up.vec3_scale(extraVerticalLength), extraSurfaceVerticalMovement);
                 }
             }
@@ -443,7 +445,7 @@ CollisionCheck = class CollisionCheck {
             if (Math.abs(surfacePerceivedAngle) < 0.0001) {
                 surfacePerceivedAngle = 0;
             } else {
-                let isFurtherOnUp = forwardOnSurface.vec3_isFurtherAlongAxis(forward, up);
+                let isFurtherOnUp = forwardOnSurface.vec3_isFurtherAlongDirection(forward, up);
                 if ((!isFurtherOnUp && isGround) || (isFurtherOnUp && !isGround)) {
                     surfacePerceivedAngle *= -1;
                 }
@@ -723,32 +725,29 @@ CollisionCheck = class CollisionCheck {
         return lastValidMovement;
     }
 
-    _verticalCheck(verticalMovement, isOriginalMovementDownward, feetPosition, height, up, forward, collisionCheckParams, collisionRuntimeParams) {
+    _verticalCheck(verticalMovement, originalMovementSign, feetPosition, height, up, forward, collisionCheckParams, collisionRuntimeParams) {
         collisionRuntimeParams.myIsCollidingVertically = false;
         collisionRuntimeParams.myVerticalCollisionHit.reset();
 
-        let isMovementDownward = !verticalMovement.vec3_isConcordant(up) || verticalMovement.vec3_length() < 0.000001;
-        let fixedMovement = this._verticalMovementFix(verticalMovement, isMovementDownward, feetPosition, height, up, forward, collisionCheckParams, collisionRuntimeParams);
+        let movementSign = Math.pp_sign(verticalMovement.vec3_lengthSigned(up), -1);
+        let isMovementDownward = movementSign < 0;
+        let fixedMovement = this._verticalMovementFix(verticalMovement, isMovementDownward, originalMovementSign, feetPosition, height, up, forward, collisionCheckParams, collisionRuntimeParams);
 
-        if (fixedMovement.pp_equals(verticalMovement)) {
+        if (fixedMovement.vec_equals(verticalMovement, 0.00001) || originalMovementSign == 0 || (movementSign != originalMovementSign)) {
             let newFeetPosition = feetPosition.vec3_add(fixedMovement);
             let isOppositeMovementDownward = !isMovementDownward;
-            let additionalMovement = this._verticalMovementFix([0, 0, 0], isOppositeMovementDownward, newFeetPosition, height, up, forward, collisionCheckParams, collisionRuntimeParams);
+            let additionalMovement = this._verticalMovementFix([0, 0, 0], isOppositeMovementDownward, originalMovementSign, newFeetPosition, height, up, forward, collisionCheckParams, collisionRuntimeParams);
 
             let verticalDirection = verticalMovement.vec3_normalize();
             if (verticalMovement.vec3_length() < 0.00001) {
                 verticalDirection = up.vec3_negate();
             }
 
-            if (additionalMovement.vec3_isConcordant(verticalDirection) || (isOppositeMovementDownward == isOriginalMovementDownward)) {
-                fixedMovement.vec3_add(additionalMovement, fixedMovement);
-                isMovementDownward = !isMovementDownward;
-
-            }
+            fixedMovement.vec3_add(additionalMovement, fixedMovement);
+            isMovementDownward = !isMovementDownward;
         }
 
         let newFeetPosition = feetPosition.vec3_add(fixedMovement);
-        // check collision?
         let canStay = this._verticalPositionCheck(newFeetPosition, isMovementDownward, height, up, forward, collisionCheckParams, collisionRuntimeParams);
         if (!canStay) {
             fixedMovement = null;
@@ -757,7 +756,7 @@ CollisionCheck = class CollisionCheck {
         return fixedMovement;
     }
 
-    _verticalMovementFix(verticalMovement, isMovementDownward, feetPosition, height, up, forward, collisionCheckParams, collisionRuntimeParams) {
+    _verticalMovementFix(verticalMovement, isMovementDownward, originalMovementSign, feetPosition, height, up, forward, collisionCheckParams, collisionRuntimeParams) {
         this._myDebugActive = collisionCheckParams.myDebugActive && collisionCheckParams.myDebugVerticalMovementActive;
 
         let fixedMovement = null;
@@ -772,8 +771,11 @@ CollisionCheck = class CollisionCheck {
             endOffset = up.vec3_scale(height).vec3_add(verticalMovement);
         }
 
-        if (isMovementDownward && this._myPrevCollisionRuntimeParams.myIsOnGround && collisionCheckParams.mySnapOnGroundEnabled) {
-            endOffset.vec3_add(up.vec3_scale(-collisionCheckParams.mySnapOnGroundExtraDistance), endOffset);
+        if (isMovementDownward && originalMovementSign <= 0 && this._myPrevCollisionRuntimeParams.myIsOnGround && collisionCheckParams.mySnapOnGroundEnabled) {
+            endOffset.vec3_add(up.vec3_scale(-collisionCheckParams.mySnapOnGroundExtraDistance - 0.00001), endOffset);
+        } else if (!isMovementDownward && this._myPrevCollisionRuntimeParams.myIsOnCeiling && collisionCheckParams.mySnapOnCeilingEnabled &&
+            (originalMovementSign > 0 || (originalMovementSign == 0 && (!this._myPrevCollisionRuntimeParams.myIsOnGround || !collisionCheckParams.mySnapOnGroundEnabled)))) {
+            endOffset.vec3_add(up.vec3_scale(collisionCheckParams.mySnapOnCeilingEnabled + 0.00001), endOffset);
         }
 
         let checkPositions = this._getVerticalCheckPositions(feetPosition, up, forward, collisionCheckParams, collisionRuntimeParams);
@@ -797,7 +799,7 @@ CollisionCheck = class CollisionCheck {
 
             if (raycastResult.myHits.length > 0) {
                 if (furtherDirectionPosition != null) {
-                    if (raycastResult.myHits[0].myPosition.vec3_isFurtherAlongAxis(furtherDirectionPosition, furtherDirection)) {
+                    if (raycastResult.myHits[0].myPosition.vec3_isFurtherAlongDirection(furtherDirectionPosition, furtherDirection)) {
                         furtherDirectionPosition.vec3_copy(raycastResult.myHits[0].myPosition);
                     }
                 } else {

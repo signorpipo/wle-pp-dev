@@ -73,13 +73,13 @@
             - vec3_clone 
             - vec3_normalize    / vec3_negate
             - vec3_isNormalized / vec3_isZero
-            - vec3_length
+            - vec3_length       / vec3_lengthSigned
             - vec3_distance
             - vec3_add      / vec3_sub          / vec3_mul      / vec3_div      / vec3_scale
             - vec3_transformQuat
             - vec3_componentAlongAxis           / vec3_removeComponentAlongAxis / vec3_copyComponentAlongAxis   / vec3_valueAlongAxis  
             - vec3_isConcordant
-            - vec3_isFurtherAlongAxis
+            - vec3_isFurtherAlongDirection
             - vec3_isToTheRight
             - vec3_isOnAxis
             - vec3_isOnPlane
@@ -546,6 +546,15 @@ Array.prototype.vec3_transformQuat = function (quat, out = glMatrix.vec3.create(
 
 // New Functions
 
+Array.prototype.vec3_lengthSigned = function (positiveDirection) {
+    let signedLength = glMatrix.vec3.length(this);
+    if (!this.vec3_isConcordant(positiveDirection)) {
+        signedLength *= -1;
+    }
+
+    return signedLength;
+};
+
 Array.prototype.vec3_angleSigned = function (vector, upAxis) {
     return this.vec3_angleSignedDegrees(vector, upAxis);
 };
@@ -644,7 +653,7 @@ Array.prototype.vec3_isConcordant = function (vector) {
     return glMatrix.vec3.angle(this, vector) <= Math.PI / 2;
 };
 
-Array.prototype.vec3_isFurtherAlongAxis = function () {
+Array.prototype.vec3_isFurtherAlongDirection = function () {
     let componentAlong = glMatrix.vec3.create();
     return function (vector, axis) {
         let thisAxisLength = this.vec3_componentAlongAxis(axis, componentAlong).vec3_length();

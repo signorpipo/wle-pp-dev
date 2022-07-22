@@ -171,7 +171,8 @@ WL.registerComponent('locomotion-draft-2', {
 
             if (!PP.myLeftGamepad.getButtonInfo(PP.ButtonType.THUMBSTICK).isPressed()) {
                 if (!this._myIsFlying) {
-                    movementToApply.vec3_add(playerUp.vec3_scale(-2 * dt), movementToApply);
+                    let gravity = -2;
+                    movementToApply.vec3_add(playerUp.vec3_scale(gravity * dt), movementToApply);
                 }
 
                 let feetTransform = this._getFeetTransform();
@@ -661,8 +662,13 @@ WL.registerComponent('locomotion-draft-2', {
         this._myCollisionCheckParams.myCheckConeRay = true;
 
         this._myCollisionCheckParams.myFeetRadius = 0.1;
+        this._myCollisionCheckParams.myAdjustVerticalMovementWithSurfaceAngle = true;
         this._myCollisionCheckParams.mySnapOnGroundEnabled = true;
         this._myCollisionCheckParams.mySnapOnGroundExtraDistance = 0.1;
+
+        this._myCollisionCheckParams.mySnapOnCeilingEnabled = true;
+        this._myCollisionCheckParams.mySnapOnCeilingExtraDistance = 0.1;
+
         this._myCollisionCheckParams.myGroundCircumferenceSliceAmount = 8;
         this._myCollisionCheckParams.myGroundCircumferenceStepAmount = 2;
         this._myCollisionCheckParams.myGroundCircumferenceRotationPerStep = 22.5;
@@ -677,6 +683,11 @@ WL.registerComponent('locomotion-draft-2', {
         this._myCollisionCheckParams.myCheckVerticalDiagonalBorderRay = false;
 
         this._myCollisionCheckParams.myHeight = 1;
+
+        this._myCollisionCheckParams.myDistanceToBeOnGround = 0.001;
+        this._myCollisionCheckParams.myDistanceToComputeGroundInfo = 0.1;
+        this._myCollisionCheckParams.myDistanceToBeOnCeiling = 0.001;
+        this._myCollisionCheckParams.myDistanceToComputeCeilingInfo = 0.1;
 
         this._myCollisionCheckParams.mySlidingEnabled = true;
         this._myCollisionCheckParams.mySlidingMaxAttempts = 4;
