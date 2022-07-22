@@ -1,5 +1,8 @@
 CollisionCheckParams = class CollisionCheckParams {
     constructor() {
+        this.mySplitMovementEnabled = false;
+        this.mySplitMovementMaxLength = 0;
+
         this.myRadius = 0.3;
         this.myDistanceFromFeetToIgnore = 0.3; // could be percentage of the height
         this.myDistanceFromHeadToIgnore = 0.1;
@@ -199,6 +202,36 @@ CollisionCheck = class CollisionCheck {
         let height = collisionCheckParams.myHeight;
         height = height - 0.00001; // this makes it easier to setup things at the same exact height of a character so that it can go under it
 
+        let horizontalMovement = movement.vec3_removeComponentAlongAxis(transformUp);
+        let verticalMovement = movement.vec3_componentAlongAxis(transformUp);
+        //feetPosition = feetPosition.vec3_add(horizontalMovement.vec3_normalize().vec3_scale(0.5));
+        //height = height / 2;
+        //horizontalMovement.vec3_normalize(horizontalMovement).vec3_scale(0.3, horizontalMovement); movement = horizontalMovement.vec3_add(verticalMovement);
+
+        let movementStepAmount = 1;
+        let movementStep = movement.pp_clone();
+
+        if (collisionCheckParams.mySplitMovementEnabled) {
+            movementStepAmount = Math.max(1, Math.ceil(movement.vec3_length() / collisionCheckParams.mySplitMovementMaxLength));
+            movement.vec3_scale(1 / movementStepAmount, movementStep);
+        }
+
+        let fixedMovement = [0, 0, 0];
+
+        for (let i = 0; i < movementStepAmount; i++) {
+            let newFeetPosition = feetPosition.vec3_add(fixedMovement);
+            let fixedMovementStep = this._fixMovement(movementStep, newFeetPosition, transformUp, transformForward, height, collisionCheckParams, collisionRuntimeParams);
+            fixedMovement.vec3_add(fixedMovementStep, fixedMovement);
+        }
+
+        //fixedMovement.vec3_zero();
+
+        collisionRuntimeParams.myMovement.vec3_copy(fixedMovement);
+
+        return fixedMovement;
+    }
+    _fixMovement(movement, feetPosition, transformUp, transformForward, height, collisionCheckParams, collisionRuntimeParams) {
+
         // if height is negative swap feet with head position
 
         let horizontalMovement = movement.vec3_removeComponentAlongAxis(transformUp);
@@ -209,10 +242,6 @@ CollisionCheck = class CollisionCheck {
         if (verticalMovement.vec3_length() < 0.000001) {
             verticalMovement.vec3_zero();
         }
-
-        //feetPosition = feetPosition.vec3_add(horizontalMovement.vec3_normalize().vec3_scale(0.5));
-        //height = height / 2;
-        //horizontalMovement.vec3_normalize(horizontalMovement).vec3_scale(0.3, horizontalMovement);
 
         //collisionCheckParams.myDebugActive = true;
 
@@ -280,10 +309,6 @@ CollisionCheck = class CollisionCheck {
         if (collisionCheckParams.myDebugActive && collisionCheckParams.myDebugRuntimeParamsActive) {
             this._debugRuntimeParams(collisionRuntimeParams);
         }
-
-        //fixedMovement.vec3_zero();
-
-        collisionRuntimeParams.myMovement.vec3_copy(fixedMovement);
 
         return fixedMovement;
     }
@@ -1294,7 +1319,6 @@ CollisionCheck = class CollisionCheck {
         if (collisionCheckParams.myHorizontalMovementStepEnabled) {
             movementStepAmount = Math.max(1, Math.ceil(movement.vec3_length() / collisionCheckParams.myHorizontalMovementStepMaxLength));
             movement.vec3_scale(1 / movementStepAmount, movementStep);
-            console.error(movementStepAmount);
         }
 
         let movementDirection = movement.vec3_normalize();
