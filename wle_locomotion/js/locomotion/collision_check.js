@@ -787,58 +787,71 @@ CollisionCheck = class CollisionCheck {
 
         let fixedMovement = null;
 
-        let startOffset = null;
-        let endOffset = null;
+        let startOffset = [0, 0, 0];
+        let endOffset = [0, 0, 0];
+
         if (isMovementDownward) {
-            startOffset = up.vec3_scale(collisionCheckParams.myGroundFixDistanceFromFeet + 0.00001);
+            startOffset = [0, 0, 0];
             endOffset = verticalMovement.pp_clone();
+
+            if (collisionCheckParams.myGroundFixDistanceFromFeet > 0) {
+                startOffset.vec3_add(up.vec3_scale(collisionCheckParams.myGroundFixDistanceFromFeet + 0.00001), startOffset);
+            }
         } else {
-            startOffset = up.vec3_scale(height).vec3_add(up.vec3_scale(-collisionCheckParams.myGroundFixDistanceFromHead - 0.00001));
+            startOffset = up.vec3_scale(height);
             endOffset = up.vec3_scale(height).vec3_add(verticalMovement);
-        }
 
-        if (isMovementDownward && originalMovementSign <= 0 && this._myPrevCollisionRuntimeParams.myIsOnGround && collisionCheckParams.mySnapOnGroundEnabled) {
-            endOffset.vec3_add(up.vec3_scale(-collisionCheckParams.mySnapOnGroundExtraDistance - 0.00001), endOffset);
-        } else if (!isMovementDownward && this._myPrevCollisionRuntimeParams.myIsOnCeiling && collisionCheckParams.mySnapOnCeilingEnabled &&
-            (originalMovementSign > 0 || (originalMovementSign == 0 && (!this._myPrevCollisionRuntimeParams.myIsOnGround || !collisionCheckParams.mySnapOnGroundEnabled)))) {
-            endOffset.vec3_add(up.vec3_scale(collisionCheckParams.mySnapOnCeilingEnabled + 0.00001), endOffset);
-        }
-
-        let checkPositions = this._getVerticalCheckPositions(feetPosition, up, forward, collisionCheckParams, collisionRuntimeParams);
-
-        let furtherDirection = up;
-        if (!isMovementDownward) {
-            furtherDirection = furtherDirection.vec3_negate();
-        }
-
-        let furtherDirectionPosition = null;
-
-        for (let i = 0; i < checkPositions.length; i++) {
-            let currentPosition = checkPositions[i];
-
-            let origin = currentPosition.vec3_add(startOffset);
-            let direction = currentPosition.vec3_add(endOffset).vec3_sub(origin);
-            let distance = direction.vec3_length();
-            direction.vec3_normalize(direction);
-
-            let raycastResult = this._raycastAndDebug(origin, direction, distance, true, collisionCheckParams, collisionRuntimeParams);
-
-            if (raycastResult.myHits.length > 0) {
-                if (furtherDirectionPosition != null) {
-                    if (raycastResult.myHits[0].myPosition.vec3_isFurtherAlongDirection(furtherDirectionPosition, furtherDirection)) {
-                        furtherDirectionPosition.vec3_copy(raycastResult.myHits[0].myPosition);
-                    }
-                } else {
-                    furtherDirectionPosition = raycastResult.myHits[0].myPosition.pp_clone();
-                }
+            if (collisionCheckParams.myGroundFixDistanceFromHead > 0) {
+                startOffset.vec3_add(up.vec3_scale(-collisionCheckParams.myGroundFixDistanceFromHead - 0.00001), startOffset);
             }
         }
 
-        if (furtherDirectionPosition != null) {
-            if (isMovementDownward) {
-                fixedMovement = furtherDirectionPosition.vec3_sub(feetPosition).vec3_componentAlongAxis(up);
+        if (isMovementDownward && originalMovementSign <= 0 && this._myPrevCollisionRuntimeParams.myIsOnGround && collisionCheckParams.mySnapOnGroundEnabled && collisionCheckParams.mySnapOnGroundExtraDistance > 0) {
+            endOffset.vec3_add(up.vec3_scale(-collisionCheckParams.mySnapOnGroundExtraDistance - 0.00001), endOffset);
+        } else if (!isMovementDownward && this._myPrevCollisionRuntimeParams.myIsOnCeiling && collisionCheckParams.mySnapOnCeilingEnabled && collisionCheckParams.mySnapOnCeilingExtraDistance > 0 &&
+            (originalMovementSign > 0 || (originalMovementSign == 0 && (!this._myPrevCollisionRuntimeParams.myIsOnGround || !collisionCheckParams.mySnapOnGroundEnabled)))) {
+            endOffset.vec3_add(up.vec3_scale(collisionCheckParams.mySnapOnCeilingExtraDistance + 0.00001), endOffset);
+        }
+
+        if (startOffset.vec3_distance(endOffset) > 0.00001) {
+            let checkPositions = this._getVerticalCheckPositions(feetPosition, up, forward, collisionCheckParams, collisionRuntimeParams);
+
+            let furtherDirection = up;
+            if (!isMovementDownward) {
+                furtherDirection = furtherDirection.vec3_negate();
+            }
+
+            let furtherDirectionPosition = null;
+
+            for (let i = 0; i < checkPositions.length; i++) {
+                let currentPosition = checkPositions[i];
+
+                let origin = currentPosition.vec3_add(startOffset);
+                let direction = currentPosition.vec3_add(endOffset).vec3_sub(origin);
+                let distance = direction.vec3_length();
+                direction.vec3_normalize(direction);
+
+                let raycastResult = this._raycastAndDebug(origin, direction, distance, true, collisionCheckParams, collisionRuntimeParams);
+
+                if (raycastResult.myHits.length > 0) {
+                    if (furtherDirectionPosition != null) {
+                        if (raycastResult.myHits[0].myPosition.vec3_isFurtherAlongDirection(furtherDirectionPosition, furtherDirection)) {
+                            furtherDirectionPosition.vec3_copy(raycastResult.myHits[0].myPosition);
+                        }
+                    } else {
+                        furtherDirectionPosition = raycastResult.myHits[0].myPosition.pp_clone();
+                    }
+                }
+            }
+
+            if (furtherDirectionPosition != null) {
+                if (isMovementDownward) {
+                    fixedMovement = furtherDirectionPosition.vec3_sub(feetPosition).vec3_componentAlongAxis(up);
+                } else {
+                    fixedMovement = furtherDirectionPosition.vec3_sub(feetPosition.vec3_add(up.vec3_scale(height))).vec3_componentAlongAxis(up);
+                }
             } else {
-                fixedMovement = furtherDirectionPosition.vec3_sub(feetPosition.vec3_add(up.vec3_scale(height))).vec3_componentAlongAxis(up);
+                fixedMovement = verticalMovement.pp_clone();
             }
         } else {
             fixedMovement = verticalMovement.pp_clone();
