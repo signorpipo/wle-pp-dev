@@ -53,6 +53,10 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myDistanceToComputeGroundInfo = 0.1;
         this.myDistanceToBeOnCeiling = 0.001;
         this.myDistanceToComputeCeilingInfo = 0.1;
+        this.myVerticalFixToBeOnGround = 0;
+        this.myVerticalFixToComputeGroundInfo = 0;
+        this.myVerticalFixToBeOnCeiling = 0;
+        this.myVerticalFixToComputeCeilingInfo = 0;
 
         this.mySlidingEnabled = true;
         this.mySlidingHorizontalMovementCheckBetterNormal = true;
@@ -385,15 +389,19 @@ CollisionCheck = class CollisionCheck {
         let verticalDirection = up.pp_clone();
         let distanceToBeOnSurface = collisionCheckParams.myDistanceToBeOnGround;
         let distanceToComputeSurfaceInfo = collisionCheckParams.myDistanceToComputeGroundInfo;
+        let verticalFixToBeOnSurface = collisionCheckParams.myVerticalFixToBeOnGround;
+        let verticalFixToComputeSurfaceInfo = collisionCheckParams.myVerticalFixToComputeGroundInfo;
         if (!isGround) {
             verticalDirection.vec3_negate(verticalDirection);
             distanceToBeOnSurface = collisionCheckParams.myDistanceToBeOnCeiling;
             distanceToComputeSurfaceInfo = collisionCheckParams.myDistanceToComputeCeilingInfo;
+            verticalFixToBeOnSurface = collisionCheckParams.myVerticalFixToBeOnCeiling;
+            verticalFixToComputeSurfaceInfo = collisionCheckParams.myVerticalFixToComputeCeilingInfo;
         }
 
-        let surfaceStartOffsetFix = 0.0001;
-        let startOffset = verticalDirection.vec3_scale(surfaceStartOffsetFix);
-        let endOffset = verticalDirection.vec3_negate().vec3_scale(Math.max(distanceToBeOnSurface, distanceToComputeSurfaceInfo));
+        let startOffset = verticalDirection.vec3_scale(Math.max(verticalFixToBeOnSurface, verticalFixToComputeSurfaceInfo, 0.00001));
+        let endOffset = verticalDirection.vec3_negate().vec3_scale(Math.max(distanceToBeOnSurface, distanceToComputeSurfaceInfo, 0.00001));
+
         let heightOffset = [0, 0, 0];
         if (!isGround) {
             heightOffset = up.vec3_scale(height);
@@ -419,11 +427,16 @@ CollisionCheck = class CollisionCheck {
             let raycastResult = this._raycastAndDebug(origin, direction, distance, true, collisionCheckParams, collisionRuntimeParams);
 
             if (raycastResult.myHits.length > 0) {
-                if (raycastResult.myHits[0].myDistance <= distanceToBeOnSurface + surfaceStartOffsetFix + 0.00001) {
+                let hitFromCurrentPosition = raycastResult.myHits[0].myPosition.vec3_sub(currentPosition);
+                let hitFromCurrentPositionLength = hitFromCurrentPosition.vec3_lengthSigned(verticalDirection);
+
+                if ((hitFromCurrentPositionLength >= 0 && hitFromCurrentPositionLength <= verticalFixToBeOnSurface + 0.00001) ||
+                    (hitFromCurrentPositionLength < 0 && Math.abs(hitFromCurrentPositionLength) <= distanceToBeOnSurface + 0.00001)) {
                     isOnSurface = true;
                 }
 
-                if (raycastResult.myHits[0].myDistance <= distanceToComputeSurfaceInfo + surfaceStartOffsetFix + 0.00001) {
+                if ((hitFromCurrentPositionLength >= 0 && hitFromCurrentPositionLength <= verticalFixToComputeSurfaceInfo + 0.00001) ||
+                    (hitFromCurrentPositionLength < 0 && Math.abs(hitFromCurrentPositionLength) <= distanceToComputeSurfaceInfo + 0.00001)) {
                     let currentSurfaceNormal = raycastResult.myHits[0].myNormal;
                     surfaceNormal.vec3_add(currentSurfaceNormal, surfaceNormal);
                 }
