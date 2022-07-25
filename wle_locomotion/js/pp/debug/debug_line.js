@@ -118,7 +118,7 @@ PP.DebugLine = class DebugLine {
 
         this._myLineMesh = this._myLineObject.addComponent('mesh');
         this._myLineMesh.mesh = PP.myDebugData.myCubeMesh;
-        this._myLineMesh.material = PP.myDebugData.myFlatMaterial.clone();
+        this._myLineMesh.material = PP.myDebugData.myDebugMaterial.clone();
     }
 
     _markDirty() {

@@ -88,7 +88,7 @@ PP.DebugPoint = class DebugPoint {
 
         this._myPointMesh = this._myPointObject.addComponent('mesh');
         this._myPointMesh.mesh = PP.myDebugData.mySphereMesh;
-        this._myPointMesh.material = PP.myDebugData.myFlatMaterial.clone();
+        this._myPointMesh.material = PP.myDebugData.myDebugMaterial.clone();
     }
 
     _markDirty() {

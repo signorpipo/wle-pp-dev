@@ -120,7 +120,7 @@ PP.DebugArrow = class DebugArrow {
 
         this._myArrowMesh = this._myArrowObject.addComponent('mesh');
         this._myArrowMesh.mesh = PP.myDebugData.myConeMesh;
-        this._myArrowMesh.material = PP.myDebugData.myFlatMaterial.clone();
+        this._myArrowMesh.material = PP.myDebugData.myDebugMaterial.clone();
     }
 
     _markDirty() {
