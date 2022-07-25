@@ -115,10 +115,6 @@ WL.registerComponent('locomotion-draft-2', {
                 axes[0] = Math.abs(axes[0]) > minIntensityThreshold ? axes[0] : 0;
                 axes[1] = Math.abs(axes[1]) > minIntensityThreshold ? axes[1] : 0;
 
-                if (PP.myLeftGamepad.getButtonInfo(PP.ButtonType.SQUEEZE).isPressed()) {
-                    axes = [0, 0];
-                }
-
                 if (!axes.vec2_isZero()) {
                     this._myStickIdleTimer.start();
 
@@ -133,6 +129,9 @@ WL.registerComponent('locomotion-draft-2', {
                         this._myIsFlying = this._myIsFlying || direction.vec3_componentAlongAxis(playerUp).vec3_length() > 0.0001;
 
                         let movementIntensity = axes.vec2_length();
+                        if (PP.myLeftGamepad.getButtonInfo(PP.ButtonType.SELECT).isPressed()) {
+                            movementIntensity = 0.1;
+                        }
                         let speed = Math.pp_lerp(0, this._myMaxSpeed, movementIntensity);
 
                         if (this._myCollisionRuntimeParams.myIsSliding) {
@@ -177,6 +176,10 @@ WL.registerComponent('locomotion-draft-2', {
 
                 let feetTransform = this._getFeetTransform();
                 movementToApply = this._myCollisionCheck.fixMovement(headMovement, feetTransform, this._myCollisionCheckParams, this._myCollisionRuntimeParams);
+
+                if (PP.myLeftGamepad.getButtonInfo(PP.ButtonType.SQUEEZE).isPressed()) {
+                    movementToApply = [0, 0, 0];
+                }
             }
 
             if (movementToApply.vec3_length() > 0.00001) {
@@ -662,6 +665,8 @@ WL.registerComponent('locomotion-draft-2', {
         this._myCollisionCheckParams.myHalfConeSliceAmount = 2;
         this._myCollisionCheckParams.myCheckConeBorder = true;
         this._myCollisionCheckParams.myCheckConeRay = true;
+        this._myCollisionCheckParams.myHorizontalPositionCheckVerticalIgnoreHitsInsideCollision = false;
+        this._myCollisionCheckParams.myHorizontalPositionCheckVerticalDirectionType = 2; // somewhat expensive, 2 times the check for the vertical check of the horizontal movement!
 
         this._myCollisionCheckParams.myFeetRadius = 0.1;
         this._myCollisionCheckParams.myAdjustVerticalMovementWithSurfaceAngle = true;

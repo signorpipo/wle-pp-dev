@@ -27,6 +27,18 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myHalfConeSliceAmount = 2;
         this.myCheckConeBorder = true;
         this.myCheckConeRay = true;
+        this.myHorizontalPositionCheckVerticalIgnoreHitsInsideCollision = true; // true gives less issues(tm), but may also collide a bit more, resulting in less sliding
+        this.myHorizontalPositionCheckVerticalDirectionType = 0; // somewhat expensive, 2 times the check for the vertical check of the horizontal movement!
+        // 0: check upward, gives less issues(tm) (hitting a very small step at the end of a slope) with a grounded movement (not fly or snapped to ceiling), but may also collide a bit more, resulting in less sliding
+        // 1: check downard, gives less issues(tm) with a ceiling-ed movement (not fly or snapped to ground), but may also collide a bit more, resulting in less sliding and more stuck in front of a wall
+        // 2: check both directions, more expensive and better prevent collision, sliding more, but is more expensive and gives more issues            
+        //                                                                                                                                                      ___
+        // the issues(tm) means that a small step at the end of a slope, maybe due to 2 rectangles, one for the floor and the other for the slope like this -> /   
+        // can create a small step if the floor rectangle is a bit above the end of the slope, this will make the character get stuck thinking it's a wall
+        // 0 avoid this issue for a grounded movement, 2 instead do a more "aggressive" vertical check that makes the character get less stuck in other situations, but can get stuck in this one
+        // the better solution is to properly create the level, and if possible combine the 2 rectangles by having the floor a little below the end of the slope
+        // the step that is created "on the other side" in fact can easily be ignored thanks to the myDistanceFromFeetToIgnore field
+        // if the level is properly created the ebst solution should be myHorizontalPositionCheckVerticalIgnoreHitsInsideCollision = true and myHorizontalPositionCheckVerticalDirectionType = 0
 
         this.myFeetRadius = 0.1;
         this.myAdjustVerticalMovementWithSurfaceAngle = true;
@@ -211,6 +223,9 @@ CollisionCheck = class CollisionCheck {
         let feetPosition = transformQuat.quat2_getPosition();
         let height = collisionCheckParams.myHeight;
         height = height - 0.00001; // this makes it easier to setup things at the same exact height of a character so that it can go under it
+        if (height < 0.00001) {
+            height = 0;
+        }
 
         let horizontalMovement = movement.vec3_removeComponentAlongAxis(transformUp);
         let verticalMovement = movement.vec3_componentAlongAxis(transformUp);
@@ -241,8 +256,8 @@ CollisionCheck = class CollisionCheck {
         return fixedMovement;
     }
     _fixMovement(movement, feetPosition, transformUp, transformForward, height, collisionCheckParams, collisionRuntimeParams) {
-
-        // if height is negative swap feet with head position
+        // #TODO refactor and split horizontal check and vertical check into: hMovement + vMovement + hPosition + vPosition?
+        // Will make the sliding heavier, if I slide repeating all the 4 steps instead of 2 as now, but would be more correct
 
         let horizontalMovement = movement.vec3_removeComponentAlongAxis(transformUp);
         if (horizontalMovement.vec3_length() < 0.000001) {
@@ -785,11 +800,6 @@ CollisionCheck = class CollisionCheck {
             let newFeetPosition = feetPosition.vec3_add(fixedMovement);
             let isOppositeMovementDownward = !isMovementDownward;
             let additionalMovement = this._verticalMovementFix([0, 0, 0], isOppositeMovementDownward, originalMovementSign, newFeetPosition, height, up, forward, collisionCheckParams, collisionRuntimeParams);
-
-            let verticalDirection = verticalMovement.vec3_normalize();
-            if (verticalMovement.vec3_length() < 0.00001) {
-                verticalDirection = up.vec3_negate();
-            }
 
             fixedMovement.vec3_add(additionalMovement, fixedMovement);
             isMovementDownward = !isMovementDownward;
@@ -1544,17 +1554,39 @@ CollisionCheck = class CollisionCheck {
                 }
 
                 if (i > 0) {
-                    this._horizontalPositionVerticalCheck(feetPosition, checkPositions, currentHeightOffset, heightStep, up, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams);
-
-                    if (collisionRuntimeParams.myIsCollidingHorizontally) {
-                        let hitHeightOffset = collisionRuntimeParams.myHorizontalCollisionHit.myPosition.vec3_sub(feetPosition).vec3_componentAlongAxis(up);
-
-                        collisionRuntimeParams.myIsCollidingHorizontally = false;
-                        collisionRuntimeParams.myHorizontalCollisionHit.reset();
-                        this._horizontalPositionHorizontalCheck(feetPosition, checkPositions, hitHeightOffset, up, forward, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams);
+                    if (collisionCheckParams.myHorizontalPositionCheckVerticalDirectionType == 0 || collisionCheckParams.myHorizontalPositionCheckVerticalDirectionType == 2) {
+                        this._horizontalPositionVerticalCheck(feetPosition, checkPositions, currentHeightOffset, heightStep, up, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams);
 
                         if (collisionRuntimeParams.myIsCollidingHorizontally) {
-                            break;
+                            let hitHeightOffset = collisionRuntimeParams.myHorizontalCollisionHit.myPosition.vec3_sub(feetPosition).vec3_componentAlongAxis(up);
+
+                            collisionRuntimeParams.myIsCollidingHorizontally = false;
+                            collisionRuntimeParams.myHorizontalCollisionHit.reset();
+                            this._horizontalPositionHorizontalCheck(feetPosition, checkPositions, hitHeightOffset, up, forward, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams);
+
+                            if (collisionRuntimeParams.myIsCollidingHorizontally) {
+                                break;
+                            }
+                        }
+                    }
+
+                    if (!collisionRuntimeParams.myIsCollidingHorizontally) {
+                        if (collisionCheckParams.myHorizontalPositionCheckVerticalDirectionType == 1 || collisionCheckParams.myHorizontalPositionCheckVerticalDirectionType == 2) {
+                            let downardHeightOffset = currentHeightOffset.vec3_sub(heightStep);
+                            let downardHeightStep = heightStep.vec3_negate();
+                            this._horizontalPositionVerticalCheck(feetPosition, checkPositions, downardHeightOffset, downardHeightStep, up, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams);
+                        }
+
+                        if (collisionRuntimeParams.myIsCollidingHorizontally) {
+                            let hitHeightOffset = collisionRuntimeParams.myHorizontalCollisionHit.myPosition.vec3_sub(feetPosition).vec3_componentAlongAxis(up);
+
+                            collisionRuntimeParams.myIsCollidingHorizontally = false;
+                            collisionRuntimeParams.myHorizontalCollisionHit.reset();
+                            this._horizontalPositionHorizontalCheck(feetPosition, checkPositions, hitHeightOffset, up, forward, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams);
+
+                            if (collisionRuntimeParams.myIsCollidingHorizontally) {
+                                break;
+                            }
                         }
                     }
                 }
@@ -1653,7 +1685,7 @@ CollisionCheck = class CollisionCheck {
 
             if (collisionCheckParams.myCheckVerticalStraight) {
                 isHorizontalCheckOk = this._horizontalCheckRaycast(previousRadialPosition, currentRadialPosition, null, up,
-                    false, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
+                    collisionCheckParams.myHorizontalPositionCheckVerticalIgnoreHitsInsideCollision, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
                     feetPosition, false,
                     collisionCheckParams, collisionRuntimeParams, true, true);
 
@@ -1665,7 +1697,7 @@ CollisionCheck = class CollisionCheck {
                     (collisionCheckParams.myCheckVerticalDiagonalBorderRay && (j == 0 || j == checkPositions.length - 1))) {
                     {
                         isHorizontalCheckOk = this._horizontalCheckRaycast(previousBasePosition, currentRadialPosition, null, up,
-                            false, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
+                            collisionCheckParams.myHorizontalPositionCheckVerticalIgnoreHitsInsideCollision, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
                             feetPosition, false,
                             collisionCheckParams, collisionRuntimeParams, true, true);
 
@@ -1674,7 +1706,7 @@ CollisionCheck = class CollisionCheck {
 
                     {
                         isHorizontalCheckOk = this._horizontalCheckRaycast(previousRadialPosition, basePosition, null, up,
-                            false, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
+                            collisionCheckParams.myHorizontalPositionCheckVerticalIgnoreHitsInsideCollision, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
                             feetPosition, false,
                             collisionCheckParams, collisionRuntimeParams, true, true);
 
@@ -1690,7 +1722,7 @@ CollisionCheck = class CollisionCheck {
 
                         {
                             isHorizontalCheckOk = this._horizontalCheckRaycast(previousPreviousRadialPosition, currentRadialPosition, null, up,
-                                false, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
+                                collisionCheckParams.myHorizontalPositionCheckVerticalIgnoreHitsInsideCollision, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
                                 feetPosition, false,
                                 collisionCheckParams, collisionRuntimeParams, true, true);
 
@@ -1699,7 +1731,7 @@ CollisionCheck = class CollisionCheck {
 
                         {
                             isHorizontalCheckOk = this._horizontalCheckRaycast(previousRadialPosition, previousCurrentRadialPosition, null, up,
-                                false, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
+                                collisionCheckParams.myHorizontalPositionCheckVerticalIgnoreHitsInsideCollision, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
                                 feetPosition, false,
                                 collisionCheckParams, collisionRuntimeParams, true, true);
 
@@ -1816,6 +1848,7 @@ CollisionCheck = class CollisionCheck {
                 }
             }
         } else if (ignoreHitsInsideCollisionIfObjectToIgnore) {
+            // #TODO when raycast pierce will work, if it gives the normal even when inside check if the angle is ok and only ignore if that's the case
             if (objectsToIgnore == null || objectsToIgnore.pp_has(object => hit.myObject.pp_equals(object))) {
                 isIgnorable = true;
             }
