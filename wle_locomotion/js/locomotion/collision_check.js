@@ -1134,7 +1134,7 @@ CollisionCheck = class CollisionCheck {
             let ignoreCeilingAngleCallback = null;
 
             if (collisionCheckParams.myGroundAngleToIgnore > 0) {
-                ignoreGroundAngleCallback = this._ignoreSurfaceAngle.bind(this, ceilingObjectsToIgnore, null, false, up, collisionCheckParams);
+                ignoreGroundAngleCallback = this._ignoreSurfaceAngle.bind(this, groundObjectsToIgnore, null, true, up, collisionCheckParams);
             }
 
             if (collisionCheckParams.myCeilingAngleToIgnore > 0) {
@@ -1501,7 +1501,7 @@ CollisionCheck = class CollisionCheck {
             let ignoreCeilingAngleCallback = null;
 
             if (collisionCheckParams.myGroundAngleToIgnore > 0) {
-                ignoreGroundAngleCallback = this._ignoreSurfaceAngle.bind(this, ceilingObjectsToIgnore, null, false, up, collisionCheckParams);
+                ignoreGroundAngleCallback = this._ignoreSurfaceAngle.bind(this, groundObjectsToIgnore, null, true, up, collisionCheckParams);
             }
 
             if (collisionCheckParams.myCeilingAngleToIgnore > 0) {
@@ -1641,9 +1641,9 @@ CollisionCheck = class CollisionCheck {
 
             if (collisionCheckParams.myCheckVerticalStraight) {
                 isHorizontalCheckOk = this._horizontalCheckRaycast(previousRadialPosition, currentRadialPosition, null, up,
-                    true, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
+                    false, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
                     feetPosition, false,
-                    collisionCheckParams, collisionRuntimeParams);
+                    collisionCheckParams, collisionRuntimeParams, true, true);
 
                 if (!isHorizontalCheckOk) break;
             }
@@ -1653,18 +1653,18 @@ CollisionCheck = class CollisionCheck {
                     (collisionCheckParams.myCheckVerticalDiagonalBorderRay && (j == 0 || j == checkPositions.length - 1))) {
                     {
                         isHorizontalCheckOk = this._horizontalCheckRaycast(previousBasePosition, currentRadialPosition, null, up,
-                            true, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
+                            false, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
                             feetPosition, false,
-                            collisionCheckParams, collisionRuntimeParams);
+                            collisionCheckParams, collisionRuntimeParams, true, true);
 
                         if (!isHorizontalCheckOk) break;
                     }
 
                     {
                         isHorizontalCheckOk = this._horizontalCheckRaycast(previousRadialPosition, basePosition, null, up,
-                            falstruee, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
+                            false, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
                             feetPosition, false,
-                            collisionCheckParams, collisionRuntimeParams);
+                            collisionCheckParams, collisionRuntimeParams, true, true);
 
                         if (!isHorizontalCheckOk) break;
                     }
@@ -1678,18 +1678,18 @@ CollisionCheck = class CollisionCheck {
 
                         {
                             isHorizontalCheckOk = this._horizontalCheckRaycast(previousPreviousRadialPosition, currentRadialPosition, null, up,
-                                falstruee, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
+                                false, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
                                 feetPosition, false,
-                                collisionCheckParams, collisionRuntimeParams);
+                                collisionCheckParams, collisionRuntimeParams, true, true);
 
                             if (!isHorizontalCheckOk) break;
                         }
 
                         {
                             isHorizontalCheckOk = this._horizontalCheckRaycast(previousRadialPosition, previousCurrentRadialPosition, null, up,
-                                falstruee, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
+                                false, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
                                 feetPosition, false,
-                                collisionCheckParams, collisionRuntimeParams);
+                                collisionCheckParams, collisionRuntimeParams, true, true);
 
                             if (!isHorizontalCheckOk) break;
                         }
@@ -1709,7 +1709,7 @@ CollisionCheck = class CollisionCheck {
     _horizontalCheckRaycast(startPosition, endPosition, movementDirection, up,
         ignoreHitsInsideCollision, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
         feetPosition, fixHitOnCollision,
-        collisionCheckParams, collisionRuntimeParams) {
+        collisionCheckParams, collisionRuntimeParams, checkAllHits = false, ignoreHitsInsideCollisionIfObjectToIgnore = false) {
 
         let origin = startPosition;
         let direction = endPosition.vec3_sub(origin);
@@ -1726,9 +1726,11 @@ CollisionCheck = class CollisionCheck {
         let isOk = true;
 
         if (raycastResult.isColliding()) {
-            for (let hit of raycastResult.myHits) {
-                if ((ignoreGroundAngleCallback == null || !ignoreGroundAngleCallback(hit, up)) &&
-                    (ignoreCeilingAngleCallback == null || !ignoreCeilingAngleCallback(hit, up))) {
+            let hitsToControl = checkAllHits ? raycastResult.myHits.length : 1;
+            for (let i = 0; i < hitsToControl; i++) {
+                let hit = raycastResult.myHits[i];
+                if ((ignoreGroundAngleCallback == null || !ignoreGroundAngleCallback(hit, ignoreHitsInsideCollisionIfObjectToIgnore)) &&
+                    (ignoreCeilingAngleCallback == null || !ignoreCeilingAngleCallback(hit, ignoreHitsInsideCollisionIfObjectToIgnore))) {
                     isOk = false;
                     break;
                 }
@@ -1785,7 +1787,7 @@ CollisionCheck = class CollisionCheck {
         return raycastResult;
     }
 
-    _ignoreSurfaceAngle(objectsToIgnore, outIgnoredObjects, isGround, up, collisionCheckParams, hit) {
+    _ignoreSurfaceAngle(objectsToIgnore, outIgnoredObjects, isGround, up, collisionCheckParams, hit, ignoreHitsInsideCollisionIfObjectToIgnore) {
         let isIgnorable = false;
 
         if (!hit.myIsInsideCollision) {
@@ -1800,6 +1802,10 @@ CollisionCheck = class CollisionCheck {
                         outIgnoredObjects.push(hit.myObject);
                     }
                 }
+            }
+        } else if (ignoreHitsInsideCollisionIfObjectToIgnore) {
+            if (objectsToIgnore == null || objectsToIgnore.pp_has(object => hit.myObject.pp_equals(object))) {
+                isIgnorable = true;
             }
         }
 

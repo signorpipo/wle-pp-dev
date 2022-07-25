@@ -692,6 +692,10 @@ WL.registerComponent('locomotion-draft-2', {
         this._myCollisionCheckParams.myDistanceToComputeGroundInfo = 0.1;
         this._myCollisionCheckParams.myDistanceToBeOnCeiling = 0.001;
         this._myCollisionCheckParams.myDistanceToComputeCeilingInfo = 0.1;
+        this._myCollisionCheckParams.myVerticalFixToBeOnGround = 0;
+        this._myCollisionCheckParams.myVerticalFixToComputeGroundInfo = 0;
+        this._myCollisionCheckParams.myVerticalFixToBeOnCeiling = 0;
+        this._myCollisionCheckParams.myVerticalFixToComputeCeilingInfo = 0;
 
         this._myCollisionCheckParams.mySlidingEnabled = true;
         this._myCollisionCheckParams.mySlidingHorizontalMovementCheckBetterNormal = true;
