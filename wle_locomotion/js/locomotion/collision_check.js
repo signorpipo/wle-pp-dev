@@ -7,6 +7,11 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myDistanceFromFeetToIgnore = 0.1;
         this.myDistanceFromHeadToIgnore = 0.1;
 
+        this.myHorizontalMovementCheckEnabled = false;
+        // usually the horizontal movement is very small and it could be simply skipped has a check, the horizontal position check will be enough
+        // with small I mean that it's very unlikely that in 10 cm of movement in a frame u are going to hit something in between but not in the final position
+        // if u feel like the movement is bigger or want to be sure u can always enabled this
+        // if the movement is really that big it's probably better to use the mySplitMovementEnabled flag and split the movement check into smaller movements
         this.myHorizontalMovementStepEnabled = false;
         this.myHorizontalMovementStepMaxLength = 0;
         this.myHorizontalMovementRadialStepAmount = 1;
@@ -973,7 +978,10 @@ CollisionCheck = class CollisionCheck {
         let fixedFeetPosition = feetPosition.vec3_add(up.vec3_scale(collisionCheckParams.myDistanceFromFeetToIgnore + 0.0001));
         let fixedHeight = Math.max(0, height - collisionCheckParams.myDistanceFromFeetToIgnore - collisionCheckParams.myDistanceFromHeadToIgnore - 0.0001 * 2);
 
-        let canMove = this._horizontalMovementCheck(movement, fixedFeetPosition, fixedHeight, up, collisionCheckParams, collisionRuntimeParams);
+        let canMove = true;
+        if (collisionCheckParams.myHorizontalMovementCheckEnabled) {
+            canMove = this._horizontalMovementCheck(movement, fixedFeetPosition, fixedHeight, up, collisionCheckParams, collisionRuntimeParams);
+        }
 
         let fixedMovement = [0, 0, 0];
         let newFixedFeetPosition = fixedFeetPosition.vec3_add(movement);

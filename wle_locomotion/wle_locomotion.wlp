@@ -13,7 +13,8 @@
                         "_myFlatMaterial": "31",
                         "_myConeMesh": "p3",
                         "_mySphereMesh": "p2",
-                        "_myTextMaterial": "596"
+                        "_myTextMaterial": "596",
+                        "_myDebugMaterial": "31"
                     }
                 },
                 {
@@ -105,7 +106,8 @@
                         "_myMinAngleToFlyUp": 30.0,
                         "_myMinAngleToFlyDownHead": 50.0,
                         "_myMinAngleToFlyDownHand": 1.0,
-                        "_myIsSnapTurn": true
+                        "_myIsSnapTurn": true,
+                        "_mySnapTurnAngle": 30.0
                     },
                     "active": true
                 }
@@ -11059,7 +11061,7 @@
                     "pp-set-active": {
                         "_myActive": false
                     },
-                    "active": false
+                    "active": true
                 }
             ]
         },
@@ -23918,6 +23920,144 @@
                 1.0
             ],
             "deleted": true
+        },
+        "737": {
+            "name": "Obstacle",
+            "parent": "592",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    },
+                    "active": true
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                2.0,
+                                0.1,
+                                1.0
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                1.7320498,
+                -0.9999997,
+                0.0,
+                0.0,
+                0.0499999,
+                0.0866024,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                -2.6838912,
+                0.7192335,
+                -2.4796476,
+                1.0
+            ]
+        },
+        "738": {
+            "name": "Obstacle",
+            "parent": "592",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    },
+                    "active": true
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                2.0,
+                                0.1,
+                                1.0
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                1.9696145,
+                -0.3472962,
+                0.0,
+                0.0,
+                0.0173648,
+                0.0984807,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                -2.9605331,
+                0.2104468,
+                2.1233968,
+                1.0
+            ]
+        },
+        "739": {
+            "name": "Obstacle",
+            "parent": "592",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    },
+                    "active": true
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                2.0,
+                                0.1,
+                                1.0
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                1.7320498,
+                -0.9999997,
+                0.0,
+                0.0,
+                0.0499999,
+                0.0866024,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                -2.6838798,
+                6.0503597,
+                -2.4796476,
+                1.0
+            ]
         }
     },
     "meshes": {
@@ -24079,7 +24219,7 @@
         },
         "31": {
             "name": "Debug Flat",
-            "pipeline": "7"
+            "pipeline": "579"
         },
         "32": {
             "name": "Tool Flat",
