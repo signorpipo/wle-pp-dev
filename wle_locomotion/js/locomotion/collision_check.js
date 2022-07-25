@@ -39,6 +39,7 @@ CollisionCheckParams = class CollisionCheckParams {
 
         this.myCheckHeight = true;
         this.myHeightCheckStepAmount = 1;
+        this.myCheckVerticalForwardFixed = true;
         this.myCheckVerticalStraight = true;
         this.myCheckVerticalDiagonalRay = false;
         this.myCheckVerticalDiagonalBorder = false;
@@ -265,16 +266,19 @@ CollisionCheck = class CollisionCheck {
             }
         }
 
-        let forward = [0, 0, 0];
-        if (fixedHorizontalMovement.vec3_length() < 0.000001) {
-            if (!horizontalMovement.vec3_isZero()) {
-                horizontalMovement.vec3_normalize(forward);
+        let forwardForVertical = [0, 0, 1];
+
+        if (!collisionCheckParams.myCheckVerticalForwardFixed) {
+            if (fixedHorizontalMovement.vec3_length() < 0.000001) {
+                if (!horizontalMovement.vec3_isZero()) {
+                    horizontalMovement.vec3_normalize(forwardForVertical);
+                } else {
+                    forwardForVertical.vec3_copy(transformForward);
+                }
+                fixedHorizontalMovement.vec3_zero();
             } else {
-                forward.vec3_copy(transformForward);
+                fixedHorizontalMovement.vec3_normalize(forwardForVertical);
             }
-            fixedHorizontalMovement.vec3_zero();
-        } else {
-            fixedHorizontalMovement.vec3_normalize(forward);
         }
 
         if (!horizontalMovement.vec3_isZero() && fixedHorizontalMovement.vec3_isZero()) {
@@ -291,7 +295,7 @@ CollisionCheck = class CollisionCheck {
         }
 
         let originalMovementSign = Math.pp_sign(verticalMovement.vec3_lengthSigned(transformUp), 0);
-        let fixedVerticalMovement = this._verticalCheck(surfaceAdjustedVerticalMovement, originalMovementSign, newFeetPosition, height, transformUp, forward, collisionCheckParams, collisionRuntimeParams);
+        let fixedVerticalMovement = this._verticalCheck(surfaceAdjustedVerticalMovement, originalMovementSign, newFeetPosition, height, transformUp, forwardForVertical, collisionCheckParams, collisionRuntimeParams);
 
         let fixedMovement = [0, 0, 0];
         if (!collisionRuntimeParams.myIsCollidingVertically) {
@@ -303,8 +307,8 @@ CollisionCheck = class CollisionCheck {
 
         feetPosition.vec3_add(fixedMovement, newFeetPosition);
 
-        this._gatherSurfaceInfo(newFeetPosition, height, transformUp, forward, true, collisionCheckParams, collisionRuntimeParams);
-        this._gatherSurfaceInfo(newFeetPosition, height, transformUp, forward, false, collisionCheckParams, collisionRuntimeParams);
+        this._gatherSurfaceInfo(newFeetPosition, height, transformUp, forwardForVertical, true, collisionCheckParams, collisionRuntimeParams);
+        this._gatherSurfaceInfo(newFeetPosition, height, transformUp, forwardForVertical, false, collisionCheckParams, collisionRuntimeParams);
 
         if (collisionCheckParams.myDebugActive && collisionCheckParams.myDebugMovementActive) {
             this._debugMovement(movement, fixedMovement, newFeetPosition, transformUp, collisionCheckParams);
