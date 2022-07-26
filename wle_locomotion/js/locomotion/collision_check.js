@@ -1,3 +1,8 @@
+
+
+_myTotalRaycasts = 0;
+_myTotalRaycastsMax = 0;
+
 CollisionCheckParams = class CollisionCheckParams {
     constructor() {
         this.mySplitMovementEnabled = false;
@@ -252,9 +257,13 @@ CollisionCheck = class CollisionCheck {
         this._mySlidingOnVerticalCheckCollisionRuntimeParams = new CollisionRuntimeParams();
 
         this._myDebugActive = false;
+
+        _myTotalRaycasts = 0;
+        _myTotalRaycastsMax = 0;
     }
 
     fixMovement(movement, transformQuat, collisionCheckParams, collisionRuntimeParams) {
+        //return [0, 0, 0];
         let transformUp = transformQuat.quat2_getUp();
         let transformForward = transformQuat.quat2_getForward();
         let feetPosition = transformQuat.quat2_getPosition();
@@ -299,9 +308,12 @@ CollisionCheck = class CollisionCheck {
 
         return fixedMovement;
     }
+
     _fixMovement(movement, feetPosition, transformUp, transformForward, height, collisionCheckParams, collisionRuntimeParams) {
         // #TODO refactor and split horizontal check and vertical check into: hMovement + vMovement + hPosition + vPosition?
         // Will make the sliding heavier, if I slide repeating all the 4 steps instead of 2 as now, but would be more correct
+
+        //_myTotalRaycasts = 0;
 
         let horizontalMovement = movement.vec3_removeComponentAlongAxis(transformUp);
         if (horizontalMovement.vec3_length() < 0.000001) {
@@ -310,6 +322,10 @@ CollisionCheck = class CollisionCheck {
         let verticalMovement = movement.vec3_componentAlongAxis(transformUp);
         if (verticalMovement.vec3_length() < 0.000001) {
             verticalMovement.vec3_zero();
+        }
+
+        if (horizontalMovement.vec3_isZero()) {
+            //return [0, 0, 0];
         }
 
         //collisionCheckParams.myDebugActive = true;
@@ -324,6 +340,9 @@ CollisionCheck = class CollisionCheck {
 
             if (!surfaceTooSteep) {
                 fixedHorizontalMovement = this._horizontalCheck(horizontalMovement, feetPosition, height, transformUp, collisionCheckParams, collisionRuntimeParams);
+                //console.error(_myTotalRaycasts );
+                //collisionRuntimeParams.myIsCollidingHorizontally = true;
+                //collisionRuntimeParams.myHorizontalCollisionHit.myNormal = [0, 0, 1];
                 if (collisionCheckParams.mySlidingEnabled && collisionRuntimeParams.myIsCollidingHorizontally) {
                     fixedHorizontalMovement = this._horizontalSlide(horizontalMovement, feetPosition, height, transformUp, collisionCheckParams, collisionRuntimeParams);
                 }
@@ -358,9 +377,11 @@ CollisionCheck = class CollisionCheck {
             surfaceAdjustedVerticalMovement.vec3_add(extraSurfaceVerticalMovement, surfaceAdjustedVerticalMovement);
         }
 
+        //console.error(_myTotalRaycasts );
         let originalMovementSign = Math.pp_sign(verticalMovement.vec3_lengthSigned(transformUp), 0);
         let fixedVerticalMovement = this._verticalCheck(surfaceAdjustedVerticalMovement, originalMovementSign, newFeetPosition, height, transformUp, forwardForVertical, collisionCheckParams, collisionRuntimeParams);
 
+        //console.error(_myTotalRaycasts );
         let fixedMovement = [0, 0, 0];
         if (!collisionRuntimeParams.myIsCollidingVertically) {
             fixedHorizontalMovement.vec3_add(fixedVerticalMovement, fixedMovement);
@@ -389,6 +410,12 @@ CollisionCheck = class CollisionCheck {
             this._debugRuntimeParams(collisionRuntimeParams);
         }
 
+        //console.error(_myTotalRaycasts );
+
+        _myTotalRaycastsMax = Math.max(_myTotalRaycasts, _myTotalRaycastsMax);
+        //console.error(_myTotalRaycastsMax);
+
+        //return fixedMovement.vec3_zero();
         return fixedMovement;
     }
 
@@ -1895,6 +1922,8 @@ CollisionCheck = class CollisionCheck {
         this._myRaycastSetup.myIgnoreHitsInsideCollision = ignoreHitsInsideCollision;
 
         let raycastResult = PP.PhysicsUtils.raycast(this._myRaycastSetup, this._myRaycastResult);
+        _myTotalRaycasts++;
+        //raycastResult.myHits = [];
 
         if (this._myDebugActive) {
             let debugParams = new PP.DebugRaycastParams();

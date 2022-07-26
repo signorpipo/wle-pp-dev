@@ -1,29 +1,3 @@
-//CAULDRON
-
-require('./cauldron/toggle_require_mouse_down.js');
-require('./cauldron/direction_2D_to_3D_converter.js');
-require('./cauldron/character_spawner.js');
-require('./cauldron/ai_movement.js');
-require('./cauldron/stick_movement.js');
-require('./cauldron/display_fps.js');
-
-//LOCOMOTION
-
-require('./locomotion/collision_check.js');
-require('./locomotion/keyboard_gamepad');
-require('./locomotion/locomotion_draft.js');
-require('./locomotion/locomotion_draft_2.js');
-require('./locomotion/locomotion_fly_draft.js');
-require('./locomotion/locomotion_floating_error.js');
-
-//TEST
-
-require('./test/raycast_test.js');
-require('./test/moving_physx_test.js');
-require('./test/bullet_through_wall_test.js');
-require('./test/reset_transform.js');
-require('./test/touch_start_test.js');
-
 //WLE
 
 require('@wonderlandengine/components/8thwall-camera');
@@ -140,8 +114,8 @@ require('./pp/plugin/component_mods/cursor_component_mod.js');
 require('./pp/plugin/component_mods/cursor_target_component_mod.js');
 require('./pp/plugin/component_mods/mouse_look_component_mod.js');
 
-require('./pp/plugin/extensions/object_extension.js');
 require('./pp/plugin/extensions/array_extension.js');
+require('./pp/plugin/extensions/object_extension.js');
 require('./pp/plugin/extensions/math_extension.js');
 
 //	TOOL
@@ -185,3 +159,30 @@ require('./pp/tool/easy_tune/easy_tune.js');
 require('./pp/tool/widget_frame/widget_frame_setup.js');
 require('./pp/tool/widget_frame/widget_frame_ui.js');
 require('./pp/tool/widget_frame/widget_frame.js');
+
+//CAULDRON
+
+require('./cauldron/toggle_require_mouse_down.js');
+require('./cauldron/direction_2D_to_3D_converter.js');
+require('./cauldron/character_spawner.js');
+require('./cauldron/ai_movement.js');
+require('./cauldron/stick_movement.js');
+require('./cauldron/display_fps.js');
+
+//LOCOMOTION
+
+require('./locomotion/collision_check.js');
+require('./locomotion/keyboard_gamepad');
+require('./locomotion/locomotion_draft.js');
+require('./locomotion/locomotion_draft_2.js');
+require('./locomotion/locomotion_fly_draft.js');
+require('./locomotion/locomotion_floating_error.js');
+
+//TEST
+
+require('./test/raycast_test.js');
+require('./test/moving_physx_test.js');
+require('./test/bullet_through_wall_test.js');
+require('./test/reset_transform.js');
+require('./test/touch_start_test.js');
+require('./test/vec_create_count.js');

@@ -175,6 +175,7 @@ WL.registerComponent('locomotion-draft-2', {
                 }
 
                 let feetTransform = this._getFeetTransform();
+                _myTotalRaycasts = 0;
                 movementToApply = this._myCollisionCheck.fixMovement(headMovement, feetTransform, this._myCollisionCheckParams, this._myCollisionRuntimeParams);
 
                 if (PP.myLeftGamepad.getButtonInfo(PP.ButtonType.SQUEEZE).isPressed()) {

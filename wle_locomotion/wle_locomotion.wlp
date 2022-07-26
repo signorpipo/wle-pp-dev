@@ -14682,9 +14682,9 @@
                         "_myShortPrototype": "486",
                         "_myRoomSize": 10.0,
                         "_myRoomHeight": 5.0,
-                        "_myAmount": 10
+                        "_myAmount": 50
                     },
-                    "active": false
+                    "active": true
                 }
             ]
         },
@@ -24102,6 +24102,33 @@
                 4.9951972,
                 0.5175247,
                 -2.4795603,
+                1.0
+            ]
+        },
+        "741": {
+            "name": "vec create count",
+            "components": [
+                {
+                    "type": "vec-create-count"
+                }
+            ],
+            "parent": "71",
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                -10000.0,
+                0.0,
                 1.0
             ]
         }

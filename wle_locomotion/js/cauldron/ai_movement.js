@@ -24,49 +24,59 @@ WL.registerComponent('ai-movement', {
         this._myFirstTime = true;
 
         this._changeDirection(false);
+
     },
-    update(dt) {
-        if (this._myFirstTime) {
-            this._myFirstTime = false;
+    update: function () {
+        let tempUp = PP.vec3_create();
+        let tempMovement = PP.vec3_create();
+        let tempGravity = PP.vec3_create();
+        let tempTransformQuat = PP.quat2_create();
+        return function (dt) {
+            if (this._myFirstTime) {
+                this._myFirstTime = false;
 
-            this._setupCollisionCheckParams();
-        }
-
-        this._myChangeDirectionTimer.update(dt);
-        this._myCollisionTimer.update(dt);
-
-        if (this._myChangeDirectionTimer.isDone()) {
-            this._changeDirection(false);
-        }
-
-        let up = this.object.pp_getUp();
-        let movement = this._myCurrentDirection.vec3_scale(this._mySpeed * this._myScale * dt);
-        movement.vec3_add(up.vec3_scale(-3 * this._myScale * dt), movement);
-
-        let fixedMovement = this._myCollisionCheck.fixMovement(movement, this.object.pp_getTransformQuat(), this._myCollisionCheckParams, this._myCollisionRuntimeParams);
-
-        if (fixedMovement.vec3_removeComponentAlongAxis(up).vec3_length() < 0.00001) {
-            if (this._myCollisionTimer.isDone()) {
-                this._myCollisionTimer.start();
-
-                this._changeDirection(true);
+                this._setupCollisionCheckParams();
             }
-        }
 
-        this.object.pp_translate(fixedMovement);
-    },
-    _changeDirection(goOpposite) {
-        let up = this.object.pp_getUp();
+            this._myChangeDirectionTimer.update(dt);
+            this._myCollisionTimer.update(dt);
 
-        if (!goOpposite) {
-            this._myCurrentDirection.vec3_rotateAxis(Math.pp_random(-180, 180), up, this._myCurrentDirection);
-        } else {
-            this._myCurrentDirection.vec3_rotateAxis(180, up, this._myCurrentDirection);
-            this._myCurrentDirection.vec3_rotateAxis(Math.pp_random(-90, 90), up, this._myCurrentDirection);
-        }
+            if (this._myChangeDirectionTimer.isDone()) {
+                this._changeDirection(false);
+            }
 
-        this._myChangeDirectionTimer.start(Math.pp_random(this._myMinDirectionTime, this._myMaxDirectionTime));
-    },
+            let up = this.object.pp_getUp(tempUp);
+            let movement = this._myCurrentDirection.vec3_scale(this._mySpeed * this._myScale * dt, tempMovement);
+            movement.vec3_add(up.vec3_scale(-3 * this._myScale * dt, tempGravity), movement);
+
+            this._myCollisionCheck.fixMovement(movement, this.object.pp_getTransformQuat(tempTransformQuat), this._myCollisionCheckParams, this._myCollisionRuntimeParams);
+
+            if (this._myCollisionRuntimeParams.myHorizontalMovementCancelled) {
+                if (this._myCollisionTimer.isDone()) {
+                    this._myCollisionTimer.start();
+
+                    this._changeDirection(true);
+                }
+            }
+
+            this.object.pp_translate(this._myCollisionRuntimeParams.myFixedMovement);
+        };
+    }(),
+    _changeDirection: function () {
+        let tempUp = PP.vec3_create();
+        return function (goOpposite) {
+            let up = this.object.pp_getUp(tempUp);
+
+            if (!goOpposite) {
+                this._myCurrentDirection.vec3_rotateAxis(Math.pp_random(-180, 180), up, this._myCurrentDirection);
+            } else {
+                this._myCurrentDirection.vec3_rotateAxis(180, up, this._myCurrentDirection);
+                this._myCurrentDirection.vec3_rotateAxis(Math.pp_random(-90, 90), up, this._myCurrentDirection);
+            }
+
+            this._myChangeDirectionTimer.start(Math.pp_random(this._myMinDirectionTime, this._myMaxDirectionTime));
+        };
+    }(),
     _setupCollisionCheckParams() {
         this._myCollisionCheckParams = new CollisionCheckParams();
 
