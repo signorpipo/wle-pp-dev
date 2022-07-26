@@ -38,7 +38,7 @@ CollisionCheckParams = class CollisionCheckParams {
         // 0 avoid this issue for a grounded movement, 2 instead do a more "aggressive" vertical check that makes the character get less stuck in other situations, but can get stuck in this one
         // the better solution is to properly create the level, and if possible combine the 2 rectangles by having the floor a little below the end of the slope
         // the step that is created "on the other side" in fact can easily be ignored thanks to the myDistanceFromFeetToIgnore field
-        // if the level is properly created the ebst solution should be myHorizontalPositionCheckVerticalIgnoreHitsInsideCollision = true and myHorizontalPositionCheckVerticalDirectionType = 0
+        // if the level is properly created the best solution should be myHorizontalPositionCheckVerticalIgnoreHitsInsideCollision = false and myHorizontalPositionCheckVerticalDirectionType = 0
 
         this.myFeetRadius = 0.1;
         this.myAdjustVerticalMovementWithSurfaceAngle = true;
@@ -112,7 +112,14 @@ CollisionCheckParams = class CollisionCheckParams {
 
 CollisionRuntimeParams = class CollisionRuntimeParams {
     constructor() {
-        this.myMovement = PP.vec3_create();
+        this.myOriginalPosition = PP.vec3_create();
+        this.myOriginalHeight = 0;
+
+        this.myOriginalForward = PP.vec3_create();
+        this.myOriginalUp = PP.vec3_create();
+
+        this.myOriginalMovement = PP.vec3_create();
+        this.myFixedMovement = PP.vec3_create();
 
         this.myIsOnGround = false;
         this.myGroundAngle = 0;
@@ -132,6 +139,11 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.myIsCollidingVertically = false;
         this.myVerticalCollisionHit = new PP.RaycastResultHit();
 
+        this.myHasSnappedOnGround = false;
+        this.myHasSnappedOnCeiling = false;
+        this.myHasFixedPositionGround = false;
+        this.myHasFixedPositionCeiling = false;
+
         this.myIsSliding = false;
         this.myIsSlidingIntoOppositeDirection = false;
         this.myIsSlidingFlickerPrevented = false;
@@ -141,7 +153,14 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
     }
 
     reset() {
-        this.myMovement.vec3_zero();
+        this.myOriginalPosition.vec3_zero();
+        this.myOriginalHeight = 0;
+
+        this.myOriginalForward.vec3_zero();
+        this.myFixedMovement.vec3_zero();
+
+        this.myOriginalMovement.vec3_zero();
+        this.myFixedMovement.vec3_zero();
 
         this.myIsOnGround = false;
         this.myGroundAngle = 0;
@@ -161,6 +180,11 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.myIsCollidingVertically = false;
         this.myVerticalCollisionHit.reset();
 
+        this.myHasSnappedOnGround = false;
+        this.myHasSnappedOnCeiling = false;
+        this.myHasFixedPositionGround = false;
+        this.myHasFixedPositionCeiling = false;
+
         this.myIsSliding = false;
         this.myIsSlidingIntoOppositeDirection = false;
         this.myIsSlidingFlickerPrevented = false;
@@ -170,7 +194,14 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
     }
 
     copy(other) {
-        this.myMovement.pp_copy(other.myMovement);
+        this.myOriginalPosition.pp_copy(other.myOriginalPosition);
+        this.myOriginalHeight = other.myOriginalHeight;
+
+        this.myOriginalForward.pp_copy(other.myOriginalForward);
+        this.myOriginalUp.pp_copy(other.myOriginalUp);
+
+        this.myOriginalMovement.pp_copy(other.myOriginalMovement);
+        this.myFixedMovement.pp_copy(other.myFixedMovement);
 
         this.myIsOnGround = other.myIsOnGround;
         this.myGroundAngle = other.myGroundAngle;
@@ -189,6 +220,11 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.myVerticalMovementCancelled = other.myVerticalMovementCancelled;
         this.myIsCollidingVertically = other.myIsCollidingVertically;
         this.myVerticalCollisionHit.copy(other.myVerticalCollisionHit);
+
+        this.myHasSnappedOnGround = other.myHasSnappedOnGround;
+        this.myHasSnappedOnCeiling = other.myHasSnappedOnCeiling;
+        this.myHasFixedPositionGround = other.myHasFixedPositionGround;
+        this.myHasFixedPositionCeiling = other.myHasFixedPositionCeiling;
 
         this.myIsSliding = other.myIsSliding;
         this.myIsSlidingIntoOppositeDirection = other.myIsSlidingIntoOppositeDirection;
@@ -210,6 +246,7 @@ CollisionCheck = class CollisionCheck {
         this._myPrevCollisionRuntimeParams = new CollisionRuntimeParams();
 
         this._mySlidingCollisionRuntimeParams = new CollisionRuntimeParams();
+        this._myInternalSlidingCollisionRuntimeParams = new CollisionRuntimeParams();
         this._mySlidingFlickeringFixCollisionRuntimeParams = new CollisionRuntimeParams();
         this._mySlidingOppositeDirectionCollisionRuntimeParams = new CollisionRuntimeParams();
         this._mySlidingOnVerticalCheckCollisionRuntimeParams = new CollisionRuntimeParams();
@@ -251,7 +288,14 @@ CollisionCheck = class CollisionCheck {
 
         //fixedMovement.vec3_zero();
 
-        collisionRuntimeParams.myMovement.vec3_copy(fixedMovement);
+        collisionRuntimeParams.myOriginalPosition.vec3_copy(feetPosition);
+        collisionRuntimeParams.myOriginalHeight = height;
+
+        collisionRuntimeParams.myOriginalForward.vec3_copy(transformForward);
+        collisionRuntimeParams.myOriginalUp.vec3_copy(transformUp);
+
+        collisionRuntimeParams.myOriginalMovement.vec3_copy(movement);
+        collisionRuntimeParams.myFixedMovement.vec3_copy(fixedMovement);
 
         return fixedMovement;
     }
@@ -323,6 +367,13 @@ CollisionCheck = class CollisionCheck {
         } else {
             collisionRuntimeParams.myHorizontalMovementCancelled = true;
             collisionRuntimeParams.myVerticalMovementCancelled = true;
+
+            collisionRuntimeParams.myIsSliding = false;
+
+            collisionRuntimeParams.myHasSnappedOnGround = false;
+            collisionRuntimeParams.myHasSnappedOnCeiling = false;
+            collisionRuntimeParams.myHasFixedPositionGround = false;
+            collisionRuntimeParams.myHasFixedPositionCeiling = false;
         }
 
         feetPosition.vec3_add(fixedMovement, newFeetPosition);
@@ -523,15 +574,16 @@ CollisionCheck = class CollisionCheck {
             return movement.vec3_scale(0);
         }
 
+        this._mySlidingCollisionRuntimeParams.copy(collisionRuntimeParams);
         if (collisionCheckParams.mySlidingCheckBothDirections) {
             this._mySlidingOppositeDirectionCollisionRuntimeParams.copy(collisionRuntimeParams);
         }
 
-        let previousHorizontalMovement = this._myPrevCollisionRuntimeParams.myMovement.vec3_removeComponentAlongAxis(up);
+        let previousHorizontalMovement = this._myPrevCollisionRuntimeParams.myFixedMovement.vec3_removeComponentAlongAxis(up);
 
-        let hitNormal = collisionRuntimeParams.myHorizontalCollisionHit.myNormal.pp_clone();
+        let hitNormal = this._mySlidingCollisionRuntimeParams.myHorizontalCollisionHit.myNormal.pp_clone();
 
-        let slideMovement = this._internalHorizontalSlide(movement, feetPosition, height, up, collisionCheckParams, collisionRuntimeParams);
+        let slideMovement = this._internalHorizontalSlide(movement, feetPosition, height, up, collisionCheckParams, this._mySlidingCollisionRuntimeParams);
 
         if (collisionCheckParams.mySlidingCheckBothDirections) {
             let oppositeSlideMovement = this._internalHorizontalSlide(movement, feetPosition, height, up, collisionCheckParams, this._mySlidingOppositeDirectionCollisionRuntimeParams, true);
@@ -539,7 +591,7 @@ CollisionCheck = class CollisionCheck {
             if (this._mySlidingOppositeDirectionCollisionRuntimeParams.myIsSliding) {
 
                 let isOppositeBetter = false;
-                if (collisionRuntimeParams.myIsSliding) {
+                if (this._mySlidingCollisionRuntimeParams.myIsSliding) {
                     if (Math.abs(movement.vec3_angle(oppositeSlideMovement) - movement.vec3_angle(slideMovement)) < 0.00001) {
                         if (previousHorizontalMovement.vec3_angle(oppositeSlideMovement) < previousHorizontalMovement.vec3_angle(slideMovement) - 0.00001) {
                             isOppositeBetter = true;
@@ -580,12 +632,12 @@ CollisionCheck = class CollisionCheck {
                     } */
 
                     slideMovement.vec3_copy(oppositeSlideMovement);
-                    collisionRuntimeParams.copy(this._mySlidingOppositeDirectionCollisionRuntimeParams);
+                    this._mySlidingCollisionRuntimeParams.copy(this._mySlidingOppositeDirectionCollisionRuntimeParams);
                 }
             }
         }
 
-        if (collisionRuntimeParams.myIsSliding && collisionCheckParams.mySlidingFlickeringPreventionType > 0) {
+        if (this._mySlidingCollisionRuntimeParams.myIsSliding && collisionCheckParams.mySlidingFlickeringPreventionType > 0) {
             let shouldCheckFlicker = false;
 
             shouldCheckFlicker = shouldCheckFlicker || this._myPrevCollisionRuntimeParams.myIsSlidingFlickerPrevented;
@@ -600,16 +652,16 @@ CollisionCheck = class CollisionCheck {
                         previousHorizontalMovement.vec3_signTo(movement, up, 0) != slideMovement.vec3_signTo(movement, up, 0);
                     break;
                 case 2:
-                    shouldCheckFlicker = shouldCheckFlicker || collisionCheckParams.mySlidingCheckBothDirections && collisionRuntimeParams.myIsSlidingIntoOppositeDirection;
-                    shouldCheckFlicker = shouldCheckFlicker || Math.abs(collisionRuntimeParams.mySlidingCollisionAngle) > flickerCollisionAngle + 0.00001;
+                    shouldCheckFlicker = shouldCheckFlicker || collisionCheckParams.mySlidingCheckBothDirections && this._mySlidingCollisionRuntimeParams.myIsSlidingIntoOppositeDirection;
+                    shouldCheckFlicker = shouldCheckFlicker || Math.abs(this._mySlidingCollisionRuntimeParams.mySlidingCollisionAngle) > flickerCollisionAngle + 0.00001;
                     break;
                 case 3:
-                    shouldCheckFlicker = shouldCheckFlicker || collisionCheckParams.mySlidingCheckBothDirections && collisionRuntimeParams.myIsSlidingIntoOppositeDirection;
-                    shouldCheckFlicker = shouldCheckFlicker || Math.abs(collisionRuntimeParams.mySlidingCollisionAngle) > flickerCollisionAngle + 0.00001;
+                    shouldCheckFlicker = shouldCheckFlicker || collisionCheckParams.mySlidingCheckBothDirections && this._mySlidingCollisionRuntimeParams.myIsSlidingIntoOppositeDirection;
+                    shouldCheckFlicker = shouldCheckFlicker || Math.abs(this._mySlidingCollisionRuntimeParams.mySlidingCollisionAngle) > flickerCollisionAngle + 0.00001;
 
                     shouldCheckFlicker = shouldCheckFlicker ||
-                        Math.abs(Math.abs(collisionRuntimeParams.mySlidingCollisionAngle) - flickerCollisionAngle) < 0.00001 &&
-                        Math.abs(collisionRuntimeParams.mySlidingMovementAngle) > flickerMovementAngle + 0.00001;
+                        Math.abs(Math.abs(this._mySlidingCollisionRuntimeParams.mySlidingCollisionAngle) - flickerCollisionAngle) < 0.00001 &&
+                        Math.abs(this._mySlidingCollisionRuntimeParams.mySlidingMovementAngle) > flickerMovementAngle + 0.00001;
                     break;
                 case 4:
                     shouldCheckFlicker = shouldCheckFlicker || true;
@@ -690,21 +742,21 @@ CollisionCheck = class CollisionCheck {
 
                             slideMovement.vec3_zero();
 
-                            collisionRuntimeParams.myIsSliding = false;
-                            collisionRuntimeParams.myIsSlidingIntoOppositeDirection = false;
-                            collisionRuntimeParams.mySlidingMovementAngle = 0;
-                            collisionRuntimeParams.mySlidingCollisionAngle = 0;
-                            collisionRuntimeParams.mySlidingCollisionHit.reset();
+                            this._mySlidingCollisionRuntimeParams.myIsSliding = false;
+                            this._mySlidingCollisionRuntimeParams.myIsSlidingIntoOppositeDirection = false;
+                            this._mySlidingCollisionRuntimeParams.mySlidingMovementAngle = 0;
+                            this._mySlidingCollisionRuntimeParams.mySlidingCollisionAngle = 0;
+                            this._mySlidingCollisionRuntimeParams.mySlidingCollisionHit.reset();
 
-                            collisionRuntimeParams.myIsSlidingFlickerPrevented = true;
+                            this._mySlidingCollisionRuntimeParams.myIsSlidingFlickerPrevented = true;
                         }
                     }
                 }
             }
         }
 
-        if (collisionRuntimeParams.myIsSliding) {
-            collisionRuntimeParams.myIsCollidingHorizontally = false;
+        if (this._mySlidingCollisionRuntimeParams.myIsSliding) {
+            collisionRuntimeParams.copy(this._mySlidingCollisionRuntimeParams);
         }
 
         return slideMovement;
@@ -751,13 +803,13 @@ CollisionCheck = class CollisionCheck {
             collisionCheckParams.myDebugActive = collisionCheckParams.myDebugActive && collisionCheckParams.myDebugSlidingActive;
 
             for (let i = 0; i < collisionCheckParams.mySlidingMaxAttempts; i++) {
-                this._mySlidingCollisionRuntimeParams.copy(collisionRuntimeParams);
+                this._myInternalSlidingCollisionRuntimeParams.copy(collisionRuntimeParams);
 
                 slidingMovement.vec3_rotateAxis(currentAngle, up, currentMovement);
-                this._horizontalCheck(currentMovement, feetPosition, height, up, collisionCheckParams, this._mySlidingCollisionRuntimeParams, true);
-                if (!this._mySlidingCollisionRuntimeParams.myIsCollidingHorizontally) {
+                this._horizontalCheck(currentMovement, feetPosition, height, up, collisionCheckParams, this._myInternalSlidingCollisionRuntimeParams, true);
+                if (!this._myInternalSlidingCollisionRuntimeParams.myIsCollidingHorizontally) {
                     lastValidMovement.vec3_copy(currentMovement);
-                    collisionRuntimeParams.copy(this._mySlidingCollisionRuntimeParams);
+                    collisionRuntimeParams.copy(this._myInternalSlidingCollisionRuntimeParams);
                     collisionRuntimeParams.myIsSliding = true;
                     collisionRuntimeParams.myIsSlidingIntoOppositeDirection = checkOppositeDirection;
                     collisionRuntimeParams.mySlidingMovementAngle = movement.vec3_angleSigned(currentMovement, up);
@@ -809,6 +861,11 @@ CollisionCheck = class CollisionCheck {
         let canStay = this._verticalPositionCheck(newFeetPosition, isMovementDownward, height, up, forward, collisionCheckParams, collisionRuntimeParams);
         if (!canStay) {
             fixedMovement = null;
+
+            collisionRuntimeParams.myHasSnappedOnGround = false;
+            collisionRuntimeParams.myHasSnappedOnCeiling = false;
+            collisionRuntimeParams.myHasFixedPositionGround = false;
+            collisionRuntimeParams.myHasFixedPositionCeiling = false;
         }
 
         return fixedMovement;
@@ -822,12 +879,16 @@ CollisionCheck = class CollisionCheck {
         let startOffset = [0, 0, 0];
         let endOffset = [0, 0, 0];
 
+        let fixPositionEnabled = false;
+        let snapEnabled = false;
+
         if (isMovementDownward) {
             startOffset = [0, 0, 0];
             endOffset = verticalMovement.pp_clone();
 
             if (collisionCheckParams.myGroundFixDistanceFromFeet > 0) {
                 startOffset.vec3_add(up.vec3_scale(collisionCheckParams.myGroundFixDistanceFromFeet + 0.00001), startOffset);
+                fixPositionEnabled = true;
             }
         } else {
             startOffset = up.vec3_scale(height);
@@ -835,14 +896,17 @@ CollisionCheck = class CollisionCheck {
 
             if (collisionCheckParams.myGroundFixDistanceFromHead > 0) {
                 startOffset.vec3_add(up.vec3_scale(-collisionCheckParams.myGroundFixDistanceFromHead - 0.00001), startOffset);
+                fixPositionEnabled = true;
             }
         }
 
         if (isMovementDownward && originalMovementSign <= 0 && this._myPrevCollisionRuntimeParams.myIsOnGround && collisionCheckParams.mySnapOnGroundEnabled && collisionCheckParams.mySnapOnGroundExtraDistance > 0) {
             endOffset.vec3_add(up.vec3_scale(-collisionCheckParams.mySnapOnGroundExtraDistance - 0.00001), endOffset);
+            snapEnabled = true;
         } else if (!isMovementDownward && this._myPrevCollisionRuntimeParams.myIsOnCeiling && collisionCheckParams.mySnapOnCeilingEnabled && collisionCheckParams.mySnapOnCeilingExtraDistance > 0 &&
             (originalMovementSign > 0 || (originalMovementSign == 0 && (!this._myPrevCollisionRuntimeParams.myIsOnGround || !collisionCheckParams.mySnapOnGroundEnabled)))) {
             endOffset.vec3_add(up.vec3_scale(collisionCheckParams.mySnapOnCeilingExtraDistance + 0.00001), endOffset);
+            snapEnabled = true;
         }
 
         if (startOffset.vec3_distance(endOffset) > 0.00001) {
@@ -879,8 +943,20 @@ CollisionCheck = class CollisionCheck {
             if (furtherDirectionPosition != null) {
                 if (isMovementDownward) {
                     fixedMovement = furtherDirectionPosition.vec3_sub(feetPosition).vec3_componentAlongAxis(up);
+
+                    if (snapEnabled && fixedMovement.vec3_isFurtherAlongDirection(verticalMovement, up.vec3_negate())) {
+                        collisionRuntimeParams.myHasSnappedOnGround = true;
+                    } else if (fixPositionEnabled && fixedMovement.vec3_isFurtherAlongDirection(verticalMovement, up)) {
+                        collisionRuntimeParams.myHasFixedPositionGround = true;
+                    }
                 } else {
                     fixedMovement = furtherDirectionPosition.vec3_sub(feetPosition.vec3_add(up.vec3_scale(height))).vec3_componentAlongAxis(up);
+
+                    if (snapEnabled && fixedMovement.vec3_isFurtherAlongDirection(verticalMovement, up)) {
+                        collisionRuntimeParams.myHasSnappedOnCeiling = true;
+                    } else if (fixPositionEnabled && fixedMovement.vec3_isFurtherAlongDirection(verticalMovement, up.vec3_negate())) {
+                        collisionRuntimeParams.myHasFixedPositionCeiling = true;
+                    }
                 }
             } else {
                 fixedMovement = verticalMovement.pp_clone();

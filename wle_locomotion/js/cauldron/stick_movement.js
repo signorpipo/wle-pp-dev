@@ -162,6 +162,7 @@ WL.registerComponent('stick-movement', {
         this._myCollisionCheckParams.myDistanceFromFeetToIgnore = 0.1 * this._myScale;
         this._myCollisionCheckParams.myDistanceFromHeadToIgnore = 0.1 * this._myScale;
 
+        this._myCollisionCheckParams.myHorizontalMovementCheckEnabled = true;
         this._myCollisionCheckParams.myHorizontalMovementStepEnabled = false;
         this._myCollisionCheckParams.myHorizontalMovementStepMaxLength = 0;
         this._myCollisionCheckParams.myHorizontalMovementRadialStepAmount = 1;
@@ -177,6 +178,9 @@ WL.registerComponent('stick-movement', {
         this._myCollisionCheckParams.myHalfConeSliceAmount = 1;
         this._myCollisionCheckParams.myCheckConeBorder = true;
         this._myCollisionCheckParams.myCheckConeRay = true;
+        this._myCollisionCheckParams.myHorizontalPositionCheckVerticalIgnoreHitsInsideCollision = true;
+        this._myCollisionCheckParams.myHorizontalPositionCheckVerticalDirectionType = 0; // somewhat expensive, 2 times the check for the vertical check of the horizontal movement!
+
 
         this._myCollisionCheckParams.myFeetRadius = 0.1 * this._myScale;
         this._myCollisionCheckParams.myAdjustVerticalMovementWithSurfaceAngle = true;
@@ -194,6 +198,7 @@ WL.registerComponent('stick-movement', {
 
         this._myCollisionCheckParams.myCheckHeight = true;
         this._myCollisionCheckParams.myHeightCheckStepAmount = 1;
+        this._myCollisionCheckParams.myCheckVerticalForwardFixed = true;
         this._myCollisionCheckParams.myCheckVerticalStraight = true;
         this._myCollisionCheckParams.myCheckVerticalDiagonalRay = false;
         this._myCollisionCheckParams.myCheckVerticalDiagonalBorder = false;
