@@ -115,13 +115,11 @@ Math.pp_randomPick = function (...args) {
 };
 
 Math.pp_lerp = function (from, to, interpolationValue) {
-    if (interpolationValue == 0) {
+    if (interpolationValue <= 0) {
         return from;
-    } else if (interpolationValue == 1) {
+    } else if (interpolationValue >= 1) {
         return to;
     }
-
-    interpolationValue = Math.pp_clamp(interpolationValue, 0, 1);
 
     return interpolationValue * (to - from) + from;
 };

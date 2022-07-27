@@ -135,7 +135,8 @@ WL.registerComponent('locomotion-draft-2', {
                         let speed = Math.pp_lerp(0, this._myMaxSpeed, movementIntensity);
 
                         if (this._myCollisionRuntimeParams.myIsSliding) {
-                            speed = speed / 2;
+
+                            speed = Math.pp_lerp(speed * 0.1, speed, 1 - Math.abs(this._myCollisionRuntimeParams.mySlidingMovementAngle) / 90);
                         }
 
                         direction.vec3_scale(speed * dt, headMovement);
@@ -176,6 +177,7 @@ WL.registerComponent('locomotion-draft-2', {
 
                 let feetTransform = this._getFeetTransform();
                 _myTotalRaycasts = 0;
+
                 movementToApply = this._myCollisionCheck.fixMovement(headMovement, feetTransform, this._myCollisionCheckParams, this._myCollisionRuntimeParams);
 
                 if (PP.myLeftGamepad.getButtonInfo(PP.ButtonType.SQUEEZE).isPressed()) {

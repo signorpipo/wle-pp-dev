@@ -18383,7 +18383,8 @@
                     "type": "display-fps",
                     "display-fps": {
                         "_myRefreshTime": 0.05
-                    }
+                    },
+                    "active": true
                 }
             ]
         },
@@ -24127,7 +24128,7 @@
                 1.0,
                 0.0,
                 0.0,
-                -10000.0,
+                -20000.0,
                 0.0,
                 1.0
             ]
@@ -24558,47 +24559,143 @@
         },
         "532": {
             "link": {
-                "name": "Depth",
+                "name": "Depth.frag",
                 "file": "default"
             }
         },
         "533": {
             "link": {
-                "name": "DistanceFieldVector",
+                "name": "DistanceFieldVector.frag",
                 "file": "default"
             }
         },
         "534": {
             "link": {
-                "name": "Dynamic",
+                "name": "Dynamic.vert",
                 "file": "default"
             }
         },
         "535": {
             "link": {
-                "name": "Flat",
+                "name": "Flat.frag",
                 "file": "default"
             }
         },
         "536": {
             "link": {
-                "name": "MeshVisualizer",
+                "name": "MeshVisualizer.frag",
                 "file": "default"
             }
         },
         "537": {
             "link": {
-                "name": "Skinning",
+                "name": "Skinning.vert",
                 "file": "default"
             }
         },
         "538": {
             "link": {
-                "name": "Phong",
+                "name": "Phong.frag",
                 "file": "default"
             }
         },
         "539": {
+            "link": {
+                "name": "Particle.frag",
+                "file": "default"
+            }
+        },
+        "742": {
+            "link": {
+                "name": "Depth.frag",
+                "file": "default"
+            }
+        },
+        "743": {
+            "link": {
+                "name": "DistanceFieldVector.frag",
+                "file": "default"
+            }
+        },
+        "744": {
+            "link": {
+                "name": "Dynamic.vert",
+                "file": "default"
+            }
+        },
+        "745": {
+            "link": {
+                "name": "Flat.frag",
+                "file": "default"
+            }
+        },
+        "746": {
+            "link": {
+                "name": "MeshVisualizer.frag",
+                "file": "default"
+            }
+        },
+        "747": {
+            "link": {
+                "name": "Skinning.vert",
+                "file": "default"
+            }
+        },
+        "748": {
+            "link": {
+                "name": "Phong.frag",
+                "file": "default"
+            }
+        },
+        "749": {
+            "link": {
+                "name": "Particle.frag",
+                "file": "default"
+            }
+        },
+        "750": {
+            "link": {
+                "name": "Depth",
+                "file": "default"
+            }
+        },
+        "751": {
+            "link": {
+                "name": "DistanceFieldVector",
+                "file": "default"
+            }
+        },
+        "752": {
+            "link": {
+                "name": "Dynamic",
+                "file": "default"
+            }
+        },
+        "753": {
+            "link": {
+                "name": "Flat",
+                "file": "default"
+            }
+        },
+        "754": {
+            "link": {
+                "name": "MeshVisualizer",
+                "file": "default"
+            }
+        },
+        "755": {
+            "link": {
+                "name": "Skinning",
+                "file": "default"
+            }
+        },
+        "756": {
+            "link": {
+                "name": "Phong",
+                "file": "default"
+            }
+        },
+        "757": {
             "link": {
                 "name": "Particle",
                 "file": "default"
@@ -24748,7 +24845,8 @@
                 "js/locomotion",
                 "js/cauldron",
                 "js/pp/input/gamepad/cauldron",
-                "js/pp/input/gamepad/gamepad_cores"
+                "js/pp/input/gamepad/gamepad_cores",
+                "js/locomotion/collision"
             ],
             "useInternalBundler": false
         },
