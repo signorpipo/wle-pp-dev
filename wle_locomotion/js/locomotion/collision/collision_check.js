@@ -23,6 +23,8 @@ CollisionCheck = class CollisionCheck {
 
         _myTotalRaycasts = 0;
         _myTotalRaycastsMax = 0;
+
+        //console.error = function () { };
     }
 
     fixMovement(movement, transformQuat, collisionCheckParams, collisionRuntimeParams) {
@@ -108,6 +110,8 @@ CollisionCheck = class CollisionCheck {
                 //collisionRuntimeParams.myHorizontalCollisionHit.myNormal = [0, 0, 1];
                 if (collisionCheckParams.mySlidingEnabled && collisionRuntimeParams.myIsCollidingHorizontally) {
                     fixedHorizontalMovement = this._horizontalSlide(horizontalMovement, feetPosition, height, transformUp, collisionCheckParams, collisionRuntimeParams, fixedHorizontalMovement);
+                } else {
+                    //console.error("no slide");
                 }
             }
         }
@@ -172,6 +176,7 @@ CollisionCheck = class CollisionCheck {
         //console.error(_myTotalRaycastsMax);
 
         //return fixedMovement.vec3_zero();
+
         return fixedMovement;
     }
 

@@ -7,11 +7,11 @@ CollisionCheck.prototype._horizontalSlide = function () {
 
         this._mySlidingCollisionRuntimeParams.copy(collisionRuntimeParams);
 
-        outSlideMovement = this._internalHorizontalSlide(movement, feetPosition, height, up, collisionCheckParams, this._mySlidingCollisionRuntimeParams, false, outSlideMovement);
+        previousHorizontalMovement = this._myPrevCollisionRuntimeParams.myFixedMovement.vec3_removeComponentAlongAxis(up, previousHorizontalMovement);
+        outSlideMovement = this._internalHorizontalSlide(movement, feetPosition, height, up, previousHorizontalMovement, collisionCheckParams, this._mySlidingCollisionRuntimeParams, false, outSlideMovement);
 
         if (collisionCheckParams.mySlidingCheckBothDirections) {
-            previousHorizontalMovement = this._myPrevCollisionRuntimeParams.myFixedMovement.vec3_removeComponentAlongAxis(up, previousHorizontalMovement);
-            this._horizontalSlideCheckOpposite(movement, feetPosition, height, up, previousHorizontalMovement, collisionCheckParams, collisionRuntimeParams, this._mySlidingCollisionRuntimeParams, outSlideMovement);
+            this._horizontalSlideCheckOpposite(movement, feetPosition, height, up, previousHorizontalMovement, this._myPrevCollisionRuntimeParams.myIsSliding, collisionCheckParams, collisionRuntimeParams, this._mySlidingCollisionRuntimeParams, outSlideMovement);
         }
 
         if (this._mySlidingCollisionRuntimeParams.myIsSliding && collisionCheckParams.mySlidingFlickeringPreventionType > 0) {
@@ -22,6 +22,7 @@ CollisionCheck.prototype._horizontalSlide = function () {
         if (this._mySlidingCollisionRuntimeParams.myIsSliding) {
             collisionRuntimeParams.copy(this._mySlidingCollisionRuntimeParams);
         } else {
+            //console.error("slide cancel");
             outSlideMovement.vec3_zero();
         }
 
@@ -33,30 +34,45 @@ Object.defineProperty(CollisionCheck.prototype, "_horizontalSlide", { enumerable
 CollisionCheck.prototype._horizontalSlideCheckOpposite = function () {
     let oppositeSlideMovement = PP.vec3_create();
     let hitNormal = PP.vec3_create();
-    return function (movement, feetPosition, height, up, previousHorizontalMovement, collisionCheckParams, preSlideCollisionRuntimeParams, postSlideCollisionRuntimeParams, outSlideMovement) {
+    return function (movement, feetPosition, height, up, previousHorizontalMovement, previousIsSliding, collisionCheckParams, preSlideCollisionRuntimeParams, postSlideCollisionRuntimeParams, outSlideMovement) {
+        if (previousIsSliding && postSlideCollisionRuntimeParams.myIsSliding && outSlideMovement.vec3_isConcordant(previousHorizontalMovement)) {
+            //console.error(postSlideCollisionRuntimeParams.myIsSliding, outSlideMovement.vec3_isConcordant(previousHorizontalMovement), outSlideMovement.vec_toString(), previousHorizontalMovement.vec_toString());
+            return;
+        }
+
         this._mySlidingOppositeDirectionCollisionRuntimeParams.copy(preSlideCollisionRuntimeParams);
 
-        oppositeSlideMovement = this._internalHorizontalSlide(movement, feetPosition, height, up, collisionCheckParams, this._mySlidingOppositeDirectionCollisionRuntimeParams, true, oppositeSlideMovement);
+        oppositeSlideMovement = this._internalHorizontalSlide(movement, feetPosition, height, up, previousHorizontalMovement, collisionCheckParams, this._mySlidingOppositeDirectionCollisionRuntimeParams, true, oppositeSlideMovement);
 
         if (this._mySlidingOppositeDirectionCollisionRuntimeParams.myIsSliding) {
 
             let isOppositeBetter = false;
             if (postSlideCollisionRuntimeParams.myIsSliding) {
-                if (Math.abs(movement.vec3_angle(oppositeSlideMovement) - movement.vec3_angle(outSlideMovement)) < 0.00001) {
-                    if (previousHorizontalMovement.vec3_angle(oppositeSlideMovement) < previousHorizontalMovement.vec3_angle(outSlideMovement) - 0.00001) {
+                /* 
+                the equal part causes more trouble than the one it fixed (you have to move toward the edge cases at 90 perfectly)
+                it could be added again but it should also check that the angle between the wall normal and the movement is close to 90 to be sure it's an edge case
+                if (Math.abs(movement.vec3_angle(oppositeSlideMovement) - movement.vec3_angle(outSlideMovement)) < 0.0001) {
+                    if (previousHorizontalMovement.vec3_angle(oppositeSlideMovement) < previousHorizontalMovement.vec3_angle(outSlideMovement) - 0.0001) {
                         isOppositeBetter = true;
                     }
-                } else if (movement.vec3_angle(oppositeSlideMovement) < movement.vec3_angle(outSlideMovement)) {
+                } else 
+                */
+
+                if (movement.vec3_angle(oppositeSlideMovement) < movement.vec3_angle(outSlideMovement) - 0.0001) {
+                    //console.error("oppo minor");
                     isOppositeBetter = true;
                 }
+                //console.error(movement.vec3_angle(outSlideMovement), movement.vec3_angle(oppositeSlideMovement));
+
             } else {
+                //console.error("oppo not");
                 isOppositeBetter = true;
             }
 
             if (isOppositeBetter) {
                 /* {
                     hitNormal.vec3_copy(preSlideCollisionRuntimeParams.myHorizontalCollisionHit.myNormal);
-
+ 
                     let debugParams = new PP.DebugArrowParams();
                     debugParams.myStart = feetPosition;
                     debugParams.myDirection = slideMovement.vec3_normalize();
@@ -64,7 +80,7 @@ CollisionCheck.prototype._horizontalSlideCheckOpposite = function () {
                     debugParams.myColor = [0, 0, 1, 1];
                     PP.myDebugManager.draw(debugParams, 1);
                 }
-
+ 
                 {
                     let debugParams = new PP.DebugArrowParams();
                     debugParams.myStart = feetPosition;
@@ -73,7 +89,7 @@ CollisionCheck.prototype._horizontalSlideCheckOpposite = function () {
                     debugParams.myColor = [1, 0, 1, 1];
                     PP.myDebugManager.draw(debugParams, 1);
                 }
-
+ 
                 {
                     let debugParams = new PP.DebugArrowParams();
                     debugParams.myStart = feetPosition;
@@ -85,7 +101,11 @@ CollisionCheck.prototype._horizontalSlideCheckOpposite = function () {
 
                 outSlideMovement.vec3_copy(oppositeSlideMovement);
                 postSlideCollisionRuntimeParams.copy(this._mySlidingOppositeDirectionCollisionRuntimeParams);
+            } else {
+                //console.error("normal", previousHorizontalMovement.vec_toString(), outSlideMovement.vec_toString(), oppositeSlideMovement.vec_toString());
             }
+        } else {
+            //console.error("oppo not sliding");
         }
     };
 }();
@@ -155,10 +175,10 @@ CollisionCheck.prototype._horizontalSlideFlickerCheck = function () {
                 if (this._mySlidingFlickeringFixCollisionRuntimeParams.myIsCollidingHorizontally) {
                     this._mySlidingFlickeringFixSlidingCollisionRuntimeParams.copy(this._mySlidingFlickeringFixCollisionRuntimeParams);
 
-                    flickerFixSlideMovement = this._internalHorizontalSlide(movement, newFeetPosition, height, up, collisionCheckParams, this._mySlidingFlickeringFixSlidingCollisionRuntimeParams, false, flickerFixSlideMovement);
+                    flickerFixSlideMovement = this._internalHorizontalSlide(movement, newFeetPosition, height, up, slideMovement, collisionCheckParams, this._mySlidingFlickeringFixSlidingCollisionRuntimeParams, false, flickerFixSlideMovement);
 
                     if (collisionCheckParams.mySlidingCheckBothDirections) {
-                        this._horizontalSlideCheckOpposite(movement, newFeetPosition, height, up, slideMovement, collisionCheckParams, this._mySlidingFlickeringFixCollisionRuntimeParams, this._mySlidingFlickeringFixSlidingCollisionRuntimeParams, flickerFixSlideMovement);
+                        this._horizontalSlideCheckOpposite(movement, newFeetPosition, height, up, slideMovement, true, collisionCheckParams, this._mySlidingFlickeringFixCollisionRuntimeParams, this._mySlidingFlickeringFixSlidingCollisionRuntimeParams, flickerFixSlideMovement);
                     }
 
                     if (this._mySlidingFlickeringFixSlidingCollisionRuntimeParams.myIsSliding) {
@@ -200,6 +220,12 @@ CollisionCheck.prototype._horizontalSlideFlickerCheck = function () {
             }
         }
 
+        if (isFlickering) {
+            //console.error("flicker", shouldCheckFlicker);
+        } else {
+            //console.error("no flicker", shouldCheckFlicker);
+        }
+
         return isFlickering;
     };
 }();
@@ -209,13 +235,16 @@ CollisionCheck.prototype._internalHorizontalSlide = function () {
     let invertedNormal = PP.vec3_create();
     let slidingMovement = PP.vec3_create();
     let currentMovement = PP.vec3_create();
-    return function (movement, feetPosition, height, up, collisionCheckParams, collisionRuntimeParams, checkOppositeDirection, outSlideMovement) {
+    return function (movement, feetPosition, height, up, previousHorizontalMovement, collisionCheckParams, collisionRuntimeParams, checkOppositeDirection, outSlideMovement) {
         if (movement.vec3_isZero(0.000001)) {
             return outSlideMovement.vec3_zero();
         }
 
+        //let copiedNormal = collisionRuntimeParams.myHorizontalCollisionHit.myNormal.pp_clone();
         invertedNormal = collisionRuntimeParams.myHorizontalCollisionHit.myNormal.vec3_negate(invertedNormal);
         invertedNormal.vec3_removeComponentAlongAxis(up, invertedNormal);
+        //invertedNormal[0] = Math.abs(invertedNormal[0]) < 0.01 ? 0 : invertedNormal[0];
+        //invertedNormal[2] = Math.abs(invertedNormal[2]) < 0.01 ? 0 : invertedNormal[2];
         invertedNormal.vec3_normalize(invertedNormal);
 
         collisionRuntimeParams.mySlidingCollisionHit.copy(collisionRuntimeParams.myHorizontalCollisionHit);
@@ -241,6 +270,14 @@ CollisionCheck.prototype._internalHorizontalSlide = function () {
 
             if (Math.abs(maxAngle) < Math.abs(currentAngle) || checkOppositeDirection) {
                 maxAngle = currentAngle;
+            }
+
+            if (checkOppositeDirection && !previousHorizontalMovement.vec3_isZero(0.000001)) {
+                let angleWithPrevious = movement.vec3_angleSigned(previousHorizontalMovement, up);
+                if (Math.pp_sign(angleWithPrevious) == Math.pp_sign(maxAngle) && Math.abs(maxAngle) > Math.abs(angleWithPrevious)) {
+                    currentAngle = angleWithPrevious;
+                    //console.error("better angle", currentAngle, previousHorizontalMovement.vec_toString(10), movement.vec_toString(10));
+                }
             }
 
             let minAngle = 0;
@@ -283,6 +320,8 @@ CollisionCheck.prototype._internalHorizontalSlide = function () {
 
         if (!collisionRuntimeParams.myIsSliding) {
             collisionRuntimeParams.mySlidingCollisionHit.reset();
+        } else {
+            //console.error("slide angle", movement.vec3_angleSigned(invertedNormal, up), invertedNormal.vec_toString(), copiedNormal.vec_toString());
         }
 
         return outSlideMovement;

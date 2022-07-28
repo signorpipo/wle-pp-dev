@@ -81,7 +81,8 @@ CollisionCheckParams = class CollisionCheckParams {
         this.mySlidingHorizontalMovementCheckBetterNormal = true;
         this.mySlidingMaxAttempts = 4;
         this.mySlidingCheckBothDirections = false;       // expensive, 2 times the check for the whole horizontal movement!
-        // checking both directions let you find the better direction to slide to and can also make you slide when otherwise you would have got stuck
+        // this can fix some edge cases in which u can get stuck instead of sliding
+        // it basically require that u also add flicker prevention
 
         this.mySlidingFlickeringPreventionType = 0;      // expensive, 2 times the check for the whole horizontal movement!
         // 0: no prevention
