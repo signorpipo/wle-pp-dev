@@ -131,7 +131,13 @@ CollisionCheck.prototype._horizontalSlideFlickerCheck = function () {
             }
         }
 
-        if (shouldCheckFlicker) {
+        if (shouldCheckFlicker || this._myPrevCollisionRuntimeParams.mySlidingFlickerPreventionCheckAnywayCounter > 0) {
+            if (shouldCheckFlicker) {
+                collisionRuntimeParams.mySlidingFlickerPreventionCheckAnywayCounter = collisionCheckParams.mySlidingFlickerPreventionCheckAnywayCounter;
+            } else {
+                collisionRuntimeParams.mySlidingFlickerPreventionCheckAnywayCounter = Math.max(0, this._myPrevCollisionRuntimeParams.mySlidingFlickerPreventionCheckAnywayCounter - 1);
+            }
+
             if (collisionCheckParams.mySlidingFlickeringPreventionType != 1 &&
                 this._myPrevCollisionRuntimeParams.myIsSliding && previousHorizontalMovement.vec3_signTo(movement, up, 0) != slideMovement.vec3_signTo(movement, up, 0)) {
                 isFlickering = true;

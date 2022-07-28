@@ -99,6 +99,11 @@ CollisionCheckParams = class CollisionCheckParams {
         // this flag make it so the prevention is done only if it was already sliding, this can lead to a few frames of flicker if u go towards a corner directly
         // but allow the movement to be more fluid, avoiding getting stuck
 
+        this.mySlidingFlickerPreventionCheckAnywayCounter = 0;
+        // if the collision think it needs to check for flicker, it will keep checking for the next X frames based on this value even if the condition are not met anymore
+        // this help in catching the flicker when the direction is not changing every frame but every 2-3 for example
+        // it's especially useful if combo-ed with mySlidingFlickeringPreventionType #1, making it a bit less fluid but also less flickering
+
         this.myBlockLayerFlags = new PP.PhysicsLayerFlags();
         this.myObjectsToIgnore = [];
 
@@ -152,6 +157,7 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.myIsSliding = false;
         this.myIsSlidingIntoOppositeDirection = false;
         this.myIsSlidingFlickerPrevented = false;
+        this.mySlidingFlickerPreventionCheckAnywayCounter = 0;
         this.mySlidingMovementAngle = 0;
         this.mySlidingCollisionAngle = 0;
         this.mySlidingCollisionHit = new PP.RaycastResultHit();
@@ -193,6 +199,7 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.myIsSliding = false;
         this.myIsSlidingIntoOppositeDirection = false;
         this.myIsSlidingFlickerPrevented = false;
+        this.mySlidingFlickerPreventionCheckAnywayCounter = 0;
         this.mySlidingMovementAngle = 0;
         this.mySlidingCollisionAngle = 0;
         this.mySlidingCollisionHit.reset();
@@ -234,6 +241,7 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.myIsSliding = other.myIsSliding;
         this.myIsSlidingIntoOppositeDirection = other.myIsSlidingIntoOppositeDirection;
         this.myIsSlidingFlickerPrevented = other.myIsSlidingFlickerPrevented;
+        this.mySlidingFlickerPreventionCheckAnywayCounter = other.mySlidingFlickerPreventionCheckAnywayCounter;
         this.mySlidingMovementAngle = other.mySlidingMovementAngle;
         this.mySlidingCollisionAngle = other.mySlidingCollisionAngle;
         this.mySlidingCollisionHit.copy(other.mySlidingCollisionHit);

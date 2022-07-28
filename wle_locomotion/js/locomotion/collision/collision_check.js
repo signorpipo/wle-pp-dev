@@ -151,13 +151,6 @@ CollisionCheck = class CollisionCheck {
         } else {
             collisionRuntimeParams.myHorizontalMovementCancelled = true;
             collisionRuntimeParams.myVerticalMovementCancelled = true;
-
-            collisionRuntimeParams.myIsSliding = false;
-
-            collisionRuntimeParams.myHasSnappedOnGround = false;
-            collisionRuntimeParams.myHasSnappedOnCeiling = false;
-            collisionRuntimeParams.myHasFixedPositionGround = false;
-            collisionRuntimeParams.myHasFixedPositionCeiling = false;
         }
 
         feetPosition.vec3_add(fixedMovement, newFeetPosition);

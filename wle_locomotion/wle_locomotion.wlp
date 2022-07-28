@@ -24132,6 +24132,51 @@
                 0.0,
                 1.0
             ]
+        },
+        "758": {
+            "name": "Obstacle 2",
+            "parent": "208",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.1,
+                                1.0,
+                                0.1
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "transformation": [
+                0.1,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.1,
+                0.0,
+                -0.0419,
+                1.6856677,
+                0.9520962,
+                1.0
+            ]
         }
     },
     "meshes": {
