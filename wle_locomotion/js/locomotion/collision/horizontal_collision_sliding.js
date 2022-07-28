@@ -99,35 +99,36 @@ CollisionCheck.prototype._horizontalSlideFlickerCheck = function () {
     return function (movement, slideMovement, feetPosition, height, up, collisionCheckParams, collisionRuntimeParams) {
         let isFlickering = false;
 
-        let shouldCheckFlicker = false;
-
-        shouldCheckFlicker = shouldCheckFlicker || this._myPrevCollisionRuntimeParams.myIsSlidingFlickerPrevented;
-
-        let flickerCollisionAngle = 90;
-        let flickerMovementAngle = 85;
         previousHorizontalMovement = this._myPrevCollisionRuntimeParams.myFixedMovement.vec3_removeComponentAlongAxis(up, previousHorizontalMovement);
-        switch (collisionCheckParams.mySlidingFlickeringPreventionType) {
-            case 1:
-                shouldCheckFlicker = shouldCheckFlicker || previousHorizontalMovement.vec3_isZero(0.00001);
-                shouldCheckFlicker = shouldCheckFlicker ||
-                    this._myPrevCollisionRuntimeParams.myIsSliding &&
-                    previousHorizontalMovement.vec3_signTo(movement, up, 0) != slideMovement.vec3_signTo(movement, up, 0);
-                break;
-            case 2:
-                shouldCheckFlicker = shouldCheckFlicker || collisionCheckParams.mySlidingCheckBothDirections && collisionRuntimeParams.myIsSlidingIntoOppositeDirection;
-                shouldCheckFlicker = shouldCheckFlicker || Math.abs(collisionRuntimeParams.mySlidingCollisionAngle) > flickerCollisionAngle + 0.00001;
-                break;
-            case 3:
-                shouldCheckFlicker = shouldCheckFlicker || collisionCheckParams.mySlidingCheckBothDirections && collisionRuntimeParams.myIsSlidingIntoOppositeDirection;
-                shouldCheckFlicker = shouldCheckFlicker || Math.abs(collisionRuntimeParams.mySlidingCollisionAngle) > flickerCollisionAngle + 0.00001;
+        let shouldCheckFlicker =
+            this._myPrevCollisionRuntimeParams.myIsSlidingFlickerPrevented ||
+            previousHorizontalMovement.vec3_isZero(0.00001);
 
-                shouldCheckFlicker = shouldCheckFlicker ||
-                    Math.abs(Math.abs(collisionRuntimeParams.mySlidingCollisionAngle) - flickerCollisionAngle) < 0.00001 &&
-                    Math.abs(collisionRuntimeParams.mySlidingMovementAngle) > flickerMovementAngle + 0.00001;
-                break;
-            case 4:
-                shouldCheckFlicker = shouldCheckFlicker || true;
-                break;
+        if (!shouldCheckFlicker) {
+            if (this._myPrevCollisionRuntimeParams.myIsSliding || !collisionCheckParams.mySlidingFlickeringPreventionCheckOnlyIfAlreadySliding) {
+                let flickerCollisionAngle = 90;
+                let flickerMovementAngle = 85;
+                switch (collisionCheckParams.mySlidingFlickeringPreventionType) {
+                    case 1:
+                        shouldCheckFlicker = previousHorizontalMovement.vec3_signTo(movement, up, 0) != slideMovement.vec3_signTo(movement, up, 0);
+                        break;
+                    case 2:
+                        shouldCheckFlicker = collisionCheckParams.mySlidingCheckBothDirections && collisionRuntimeParams.myIsSlidingIntoOppositeDirection;
+                        shouldCheckFlicker = shouldCheckFlicker || Math.abs(collisionRuntimeParams.mySlidingCollisionAngle) > flickerCollisionAngle + 0.00001;
+                        break;
+                    case 3:
+                        shouldCheckFlicker = collisionCheckParams.mySlidingCheckBothDirections && collisionRuntimeParams.myIsSlidingIntoOppositeDirection;
+                        shouldCheckFlicker = shouldCheckFlicker || Math.abs(collisionRuntimeParams.mySlidingCollisionAngle) > flickerCollisionAngle + 0.00001;
+
+                        shouldCheckFlicker = shouldCheckFlicker || (
+                            Math.abs(Math.abs(collisionRuntimeParams.mySlidingCollisionAngle) - flickerCollisionAngle) < 0.00001 &&
+                            Math.abs(collisionRuntimeParams.mySlidingMovementAngle) > flickerMovementAngle + 0.00001);
+                        break;
+                    case 4:
+                        shouldCheckFlicker = true;
+                        break;
+                }
+            }
         }
 
         if (shouldCheckFlicker) {

@@ -95,6 +95,10 @@ CollisionCheckParams = class CollisionCheckParams {
         // in case a fluid movement is more important than a bit of flicker from time to time, 1 is a better choice (which is also less expensive than 3 and above)
         // 2 is just a less expensive version of 3 (check less times) but also less precise, allowing more flickering
 
+        this.mySlidingFlickeringPreventionCheckOnlyIfAlreadySliding = false;
+        // this flag make it so the prevention is done only if it was already sliding, this can lead to a few frames of flicker if u go towards a corner directly
+        // but allow the movement to be more fluid, avoiding getting stuck
+
         this.myBlockLayerFlags = new PP.PhysicsLayerFlags();
         this.myObjectsToIgnore = [];
 
