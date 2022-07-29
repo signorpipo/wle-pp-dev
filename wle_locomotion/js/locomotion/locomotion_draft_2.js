@@ -688,11 +688,12 @@ WL.registerComponent('locomotion-draft-2', {
 
         this._myCollisionCheckParams.myCheckHeight = true;
         this._myCollisionCheckParams.myHeightCheckStepAmount = 1;
-        this._myCollisionCheckParams.myCheckVerticalForwardFixed = true;
+        this._myCollisionCheckParams.myCheckVerticalFixedForwardEnabled = true;
         this._myCollisionCheckParams.myCheckVerticalStraight = true;
         this._myCollisionCheckParams.myCheckVerticalDiagonalRay = false;
         this._myCollisionCheckParams.myCheckVerticalDiagonalBorder = false;
         this._myCollisionCheckParams.myCheckVerticalDiagonalBorderRay = false;
+        this._myCollisionCheckParams.myCheckVerticalSearchFurtherVerticalHit = true;
 
         this._myCollisionCheckParams.myGroundAngleToIgnore = 30;
         this._myCollisionCheckParams.myCeilingAngleToIgnore = 30;

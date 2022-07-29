@@ -43,6 +43,8 @@ CollisionCheckParams = class CollisionCheckParams {
 
         this.myFeetRadius = 0.1;
         this.myAdjustVerticalMovementWithSurfaceAngle = true;
+        this.myCheckVerticalFixedForwardEnabled = true;
+        this.myCheckVerticalFixedForward = [0, 0, 1];
 
         this.mySnapOnGroundEnabled = true;
         this.mySnapOnGroundExtraDistance = 0.1;
@@ -57,12 +59,11 @@ CollisionCheckParams = class CollisionCheckParams {
 
         this.myCheckHeight = true;
         this.myHeightCheckStepAmount = 1;
-        this.myCheckVerticalFixedForwardEnabled = true;
-        this.myCheckVerticalFixedForward = [0, 0, 1];
         this.myCheckVerticalStraight = true;
         this.myCheckVerticalDiagonalRay = false;
         this.myCheckVerticalDiagonalBorder = false;
         this.myCheckVerticalDiagonalBorderRay = false;
+        this.myCheckVerticalSearchFurtherVerticalHit = false;
 
         this.myGroundAngleToIgnore = 30;
         this.myCeilingAngleToIgnore = 30;
