@@ -32,13 +32,25 @@ CollisionCheck.prototype._horizontalSlide = function () {
 Object.defineProperty(CollisionCheck.prototype, "_horizontalSlide", { enumerable: false });
 
 CollisionCheck.prototype._horizontalSlideCheckOpposite = function () {
+    let horizontalCollisionNormal = PP.vec3_create();
     let oppositeSlideMovement = PP.vec3_create();
     let hitNormal = PP.vec3_create();
     return function (movement, feetPosition, height, up, previousHorizontalMovement, previousIsSliding, collisionCheckParams, preSlideCollisionRuntimeParams, postSlideCollisionRuntimeParams, outSlideMovement) {
-        if (previousIsSliding && postSlideCollisionRuntimeParams.myIsSliding && outSlideMovement.vec3_isConcordant(previousHorizontalMovement)) {
+        horizontalCollisionNormal = preSlideCollisionRuntimeParams.myHorizontalCollisionHit.myNormal.vec3_removeComponentAlongAxis(up, horizontalCollisionNormal);
+        horizontalCollisionNormal.vec3_normalize(horizontalCollisionNormal);
+
+        let angleNormalWithMovementThreshold = 20;
+        if (horizontalCollisionNormal.vec3_angle(movement) > 180 - angleNormalWithMovementThreshold) {
+            //console.error("opposite normal ok");
+            return;
+        } else if (previousIsSliding && postSlideCollisionRuntimeParams.myIsSliding && outSlideMovement.vec3_isConcordant(previousHorizontalMovement)) {
             //console.error(postSlideCollisionRuntimeParams.myIsSliding, outSlideMovement.vec3_isConcordant(previousHorizontalMovement), outSlideMovement.vec_toString(), previousHorizontalMovement.vec_toString());
             return;
+        } else {
+            //console.error("no fast exit");
         }
+
+        //console.error(horizontalCollisionNormal.vec3_angle(movement));
 
         this._mySlidingOppositeDirectionCollisionRuntimeParams.copy(preSlideCollisionRuntimeParams);
 
@@ -48,22 +60,19 @@ CollisionCheck.prototype._horizontalSlideCheckOpposite = function () {
 
             let isOppositeBetter = false;
             if (postSlideCollisionRuntimeParams.myIsSliding) {
-                /* 
-                the equal part causes more trouble than the one it fixed (you have to move toward the edge cases at 90 perfectly)
-                it could be added again but it should also check that the angle between the wall normal and the movement is close to 90 to be sure it's an edge case
-                but could case issues on corners (on which u can encounter 90 degrees normal)
-                probably not worth the trouble
-                edge cases are like stairs where the steps are floating and not touching the ground
-                if (Math.abs(movement.vec3_angle(oppositeSlideMovement) - movement.vec3_angle(outSlideMovement)) < 0.0001) {
-                    if (previousHorizontalMovement.vec3_angle(oppositeSlideMovement) < previousHorizontalMovement.vec3_angle(outSlideMovement) - 0.0001) {
-                        isOppositeBetter = true;
-                    }
-                } else 
-                */
-
                 if (movement.vec3_angle(oppositeSlideMovement) < movement.vec3_angle(outSlideMovement) - 0.0001) {
                     //console.error("oppo minor");
                     isOppositeBetter = true;
+                } else {
+                    if (Math.abs(movement.vec3_angle(oppositeSlideMovement) - movement.vec3_angle(outSlideMovement)) <= 0.0001) {
+                        if (previousHorizontalMovement.vec3_angle(oppositeSlideMovement) < previousHorizontalMovement.vec3_angle(outSlideMovement) - 0.0001) {
+                            let angleNormalWithMovementThreshold = 5;
+                            if (horizontalCollisionNormal.vec3_angle(movement) < 90 + angleNormalWithMovementThreshold) {
+                                //console.error("oppo equal");
+                                isOppositeBetter = true;
+                            }
+                        }
+                    }
                 }
                 //console.error(movement.vec3_angle(outSlideMovement), movement.vec3_angle(oppositeSlideMovement));
 
