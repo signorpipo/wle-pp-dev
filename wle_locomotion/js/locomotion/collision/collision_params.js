@@ -57,7 +57,8 @@ CollisionCheckParams = class CollisionCheckParams {
 
         this.myCheckHeight = true;
         this.myHeightCheckStepAmount = 1;
-        this.myCheckVerticalForwardFixed = true;
+        this.myCheckVerticalFixedForwardEnabled = true;
+        this.myCheckVerticalFixedForward = [0, 0, 1];
         this.myCheckVerticalStraight = true;
         this.myCheckVerticalDiagonalRay = false;
         this.myCheckVerticalDiagonalBorder = false;

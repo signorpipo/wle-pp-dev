@@ -107,7 +107,8 @@
                         "_myMinAngleToFlyDownHead": 50.0,
                         "_myMinAngleToFlyDownHand": 1.0,
                         "_myIsSnapTurn": true,
-                        "_mySnapTurnAngle": 30.0
+                        "_mySnapTurnAngle": 30.0,
+                        "_myMaxRotationSpeed": 100.0
                     },
                     "active": true
                 }

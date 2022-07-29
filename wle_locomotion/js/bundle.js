@@ -171,6 +171,7 @@ require('./cauldron/display_fps.js');
 
 //LOCOMOTION
 
+require('./locomotion/locomotion_utils.js');
 require('./locomotion/collision/collision_params.js');
 require('./locomotion/collision/collision_check.js');
 require('./locomotion/collision/horizontal_collision_check.js');
@@ -178,6 +179,7 @@ require('./locomotion/collision/horizontal_collision_sliding.js');
 require('./locomotion/collision/horizontal_collision_movement_check.js');
 require('./locomotion/collision/horizontal_collision_position_check.js');
 require('./locomotion/collision/vertical_collision_check.js');
+require('./locomotion/collision/collision_surface_check.js');
 require('./locomotion/keyboard_gamepad');
 require('./locomotion/locomotion_draft.js');
 require('./locomotion/locomotion_draft_2.js');
