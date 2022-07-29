@@ -51,6 +51,9 @@ CollisionCheck.prototype._horizontalSlideCheckOpposite = function () {
                 /* 
                 the equal part causes more trouble than the one it fixed (you have to move toward the edge cases at 90 perfectly)
                 it could be added again but it should also check that the angle between the wall normal and the movement is close to 90 to be sure it's an edge case
+                but could case issues on corners (on which u can encounter 90 degrees normal)
+                probably not worth the trouble
+                edge cases are like stairs where the steps are floating and not touching the ground
                 if (Math.abs(movement.vec3_angle(oppositeSlideMovement) - movement.vec3_angle(outSlideMovement)) < 0.0001) {
                     if (previousHorizontalMovement.vec3_angle(oppositeSlideMovement) < previousHorizontalMovement.vec3_angle(outSlideMovement) - 0.0001) {
                         isOppositeBetter = true;

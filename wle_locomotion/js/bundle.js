@@ -177,6 +177,7 @@ require('./locomotion/collision/horizontal_collision_check.js');
 require('./locomotion/collision/horizontal_collision_sliding.js');
 require('./locomotion/collision/horizontal_collision_movement_check.js');
 require('./locomotion/collision/horizontal_collision_position_check.js');
+require('./locomotion/collision/vertical_collision_check.js');
 require('./locomotion/keyboard_gamepad');
 require('./locomotion/locomotion_draft.js');
 require('./locomotion/locomotion_draft_2.js');

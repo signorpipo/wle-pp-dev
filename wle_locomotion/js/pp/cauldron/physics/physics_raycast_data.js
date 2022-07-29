@@ -31,7 +31,33 @@ PP.RaycastResult = class RaycastResult {
     }
 
     isColliding(ignoreHitsInsideCollision = false) {
-        return ignoreHitsInsideCollision ? this.getHitsOutsideCollision().length > 0 : this.myHits.length > 0;
+        return ignoreHitsInsideCollision ? this.getFirstHitOutsideCollision() != null : this.myHits.length > 0;
+    }
+
+    getFirstHitInsideCollision() {
+        let firstHit = null;
+
+        for (let hit of this.myHits) {
+            if (hit.myIsInsideCollision) {
+                firstHit = hit;
+                break;
+            }
+        }
+
+        return firstHit;
+    }
+
+    getFirstHitOutsideCollision() {
+        let firstHit = null;
+
+        for (let hit of this.myHits) {
+            if (!hit.myIsInsideCollision) {
+                firstHit = hit;
+                break;
+            }
+        }
+
+        return firstHit;
     }
 
     getHitsInsideCollision() {
@@ -57,8 +83,20 @@ PP.RaycastResult = class RaycastResult {
 
         return hits;
     }
+};
 
-    copy(result) {
+PP.RaycastResult.prototype.copy = function () {
+    let copyHitCallback = function (currentElement, elementToCopy) {
+        if (currentElement == null) {
+            currentElement = new PP.RaycastResultHit();
+        }
+
+        currentElement.copy(elementToCopy);
+
+        return currentElement;
+    };
+
+    return function (result) {
         if (result.myRaycastSetup == null) {
             this.myRaycastSetup = null;
         } else {
@@ -87,17 +125,10 @@ PP.RaycastResult = class RaycastResult {
             }
         }
 
-        this.myHits.pp_copy(result.myHits, function (currentElement, elementToCopy) {
-            if (currentElement == null) {
-                currentElement = new PP.RaycastResultHit();
-            }
-
-            currentElement.copy(elementToCopy);
-
-            return currentElement;
-        });
-    }
-};
+        this.myHits.pp_copy(result.myHits, copyHitCallback);
+    };
+}();
+Object.defineProperty(PP.RaycastResult.prototype, "copy", { enumerable: false });
 
 PP.RaycastResultHit = class RaycastResultHit {
     constructor() {
