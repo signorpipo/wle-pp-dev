@@ -1,10 +1,3 @@
-CollisionCheck.prototype.test = function () {
-    let basePosition = PP.vec3_create();
-    return function (objectsToIgnore, outIgnoredObjects, isGround, up, collisionCheckParams, hit, ignoreHitsInsideCollisionIfObjectToIgnore) {
-    };
-}();
-Object.defineProperty(CollisionCheck.prototype, "test", { enumerable: false });
-
 CollisionCheck.prototype._horizontalPositionCheck = function () {
     let checkPositions = [];
     let cachedCheckPositions = [];
