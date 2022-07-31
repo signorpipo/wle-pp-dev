@@ -10,7 +10,7 @@ WL.registerComponent('pp-set-vr-head-local-transform', {
     },
     update: function () {
         let headPoseTransform = PP.quat2_create();
-        return function (dt) {
+        return function update(dt) {
             this._myHeadPose.update(dt);
             this.object.pp_setTransformLocalQuat(this._myHeadPose.getTransformQuat(headPoseTransform));
         };

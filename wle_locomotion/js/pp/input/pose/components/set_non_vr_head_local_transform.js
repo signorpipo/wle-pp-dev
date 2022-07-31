@@ -10,7 +10,7 @@ WL.registerComponent('pp-set-non-vr-head-local-transform', {
         let nonVRCameraRotation = PP.quat_create();
         let nonVRCameraUp = PP.vec3_create();
         let nonVRCameraPosition = PP.vec3_create();
-        return function (dt) {
+        return function update(dt) {
             nonVRCameraRotation = this._myNonVRCamera.pp_getRotationLocalQuat(nonVRCameraRotation);
             if (this._myFixForward) {
                 nonVRCameraRotation.quat_rotateAxisRadians(Math.PI, nonVRCameraRotation.quat_getUp(nonVRCameraUp), nonVRCameraRotation);

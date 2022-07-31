@@ -130,7 +130,7 @@ CollisionCheck.prototype._horizontalMovementCheck = function () {
             }
 
             let heightStepAmount = 0;
-            if (collisionCheckParams.myCheckHeight && collisionCheckParams.myHeightCheckStepAmount > 0 && height > 0) {
+            if (collisionCheckParams.myCheckHeight && collisionCheckParams.myHeightCheckStepAmount > 0 && height > 0.000001) {
                 heightStepAmount = collisionCheckParams.myHeightCheckStepAmount;
                 heightStep = up.vec3_scale(height / heightStepAmount, heightStep);
             }

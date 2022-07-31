@@ -14,6 +14,9 @@ WL.registerComponent('locomotion-draft-2', {
     init() {
     },
     start() {
+        // #TODO get rotation on y and adjust if it's slightly tilted 
+        //PP.myPlayerObjects.myPlayer.pp_setUp([0, 1, 0]);
+
         this._myCurrentHeadObject = PP.myPlayerObjects.myNonVRHead;
         this._myDirectionReferenceObject = PP.myPlayerObjects.myHead;
 
@@ -136,7 +139,9 @@ WL.registerComponent('locomotion-draft-2', {
 
                         if (this._myCollisionRuntimeParams.myIsSliding) {
 
-                            speed = Math.pp_lerp(speed * 0.1, speed, 1 - Math.abs(this._myCollisionRuntimeParams.mySlidingMovementAngle) / 90);
+                            //speed = Math.pp_lerp(speed * 0.05, speed, 1 - Math.abs(this._myCollisionRuntimeParams.mySlidingMovementAngle) / 90);
+                            //speed = speed * 0.1;
+                            speed = speed / 2;
                         }
 
                         direction.vec3_scale(speed * dt, headMovement);
@@ -726,13 +731,13 @@ WL.registerComponent('locomotion-draft-2', {
 
         this._myCollisionCheckParams.myDebugActive = false;
 
-        this._myCollisionCheckParams.myDebugHorizontalMovementActive = true;
-        this._myCollisionCheckParams.myDebugHorizontalPositionActive = true;
+        this._myCollisionCheckParams.myDebugHorizontalMovementActive = false;
+        this._myCollisionCheckParams.myDebugHorizontalPositionActive = false;
         this._myCollisionCheckParams.myDebugVerticalMovementActive = false;
         this._myCollisionCheckParams.myDebugVerticalPositionActive = false;
         this._myCollisionCheckParams.myDebugSlidingActive = false;
         this._myCollisionCheckParams.myDebugSurfaceInfoActive = false;
-        this._myCollisionCheckParams.myDebugRuntimeParamsActive = false;
+        this._myCollisionCheckParams.myDebugRuntimeParamsActive = true;
         this._myCollisionCheckParams.myDebugMovementActive = false;
     }
 });

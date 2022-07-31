@@ -14,7 +14,7 @@ WL.registerComponent('pp-set-head-local-transform', {
         let nonVRCameraRotation = PP.quat_create();
         let nonVRCameraUp = PP.vec3_create();
         let nonVRCameraPosition = PP.vec3_create();
-        return function (dt) {
+        return function update(dt) {
             this._myHeadPose.update(dt);
 
             if (PP.XRUtils.isXRSessionActive()) {

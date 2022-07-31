@@ -115,6 +115,7 @@ CollisionCheck.prototype._fixMovement = function () {
     let fixedMovementStep = PP.vec3_create();
     return function _fixMovement(movement, transformQuat, collisionCheckParams, collisionRuntimeParams) {
         //return [0, 0, 0];
+        //movement = [0, 0, -1];
 
         transformUp = transformQuat.quat2_getUp(transformUp);
         transformForward = transformQuat.quat2_getForward(transformForward);
@@ -159,7 +160,6 @@ CollisionCheck.prototype._fixMovement = function () {
 
         collisionRuntimeParams.myOriginalMovement.vec3_copy(movement);
         collisionRuntimeParams.myFixedMovement.vec3_copy(fixedMovement);
-
     };
 }();
 Object.defineProperty(CollisionCheck.prototype, "_fixMovement", { enumerable: false });

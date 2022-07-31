@@ -15,7 +15,7 @@ PP.PhysicsUtils = {
     },
     raycast: function () {
         let objectEqualsCallback = (first, second) => first.pp_equals(second);
-        return function (raycastSetup, raycastResult = new PP.RaycastResult()) {
+        return function raycast(raycastSetup, raycastResult = new PP.RaycastResult()) {
             let internalRaycastResult = WL.physics.rayCast(raycastSetup.myOrigin, raycastSetup.myDirection, raycastSetup.myBlockLayerFlags.getMask(), raycastSetup.myDistance);
 
             raycastResult.myRaycastSetup = raycastSetup;

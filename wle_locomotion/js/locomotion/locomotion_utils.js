@@ -1,7 +1,7 @@
 LocomotionUtils = {
     computeSurfacePerceivedAngle: function () {
         let forwardOnSurface = PP.vec3_create();
-        return function (surfaceAngle, surfaceNormal, up, forward, isGround) {
+        return function computeSurfacePerceivedAngle(surfaceAngle, surfaceNormal, up, forward, isGround) {
             let surfacePerceivedAngle = surfaceAngle;
 
             if (surfaceAngle > 0.0001 && surfaceAngle < 180 - 0.0001) {

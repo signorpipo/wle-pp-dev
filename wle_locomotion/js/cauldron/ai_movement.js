@@ -31,7 +31,7 @@ WL.registerComponent('ai-movement', {
         let tempMovement = PP.vec3_create();
         let tempGravity = PP.vec3_create();
         let tempTransformQuat = PP.quat2_create();
-        return function (dt) {
+        return function update(dt) {
             if (this._myFirstTime) {
                 this._myFirstTime = false;
 
@@ -64,7 +64,7 @@ WL.registerComponent('ai-movement', {
     }(),
     _changeDirection: function () {
         let tempUp = PP.vec3_create();
-        return function (goOpposite) {
+        return function _changeDirection(goOpposite) {
             let up = this.object.pp_getUp(tempUp);
 
             if (!goOpposite) {
