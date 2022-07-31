@@ -1,5 +1,5 @@
 CollisionCheck.prototype._surfaceTooSteep = function () {
-    return function (up, direction, collisionCheckParams, collisionRuntimeParams) {
+    return function _surfaceTooSteep(up, direction, collisionCheckParams, collisionRuntimeParams) {
         let groundTooSteep = false;
         let ceilingTooSteep = false;
 
@@ -31,7 +31,7 @@ Object.defineProperty(CollisionCheck.prototype, "_surfaceTooSteep", { enumerable
 CollisionCheck.prototype._computeExtraSurfaceVerticalMovement = function () {
     let direction = PP.vec3_create();
     let tempVector = PP.vec3_create();
-    return function (horizontalMovement, up, collisionCheckParams, collisionRuntimeParams, outExtraSurfaceVerticalMovement) {
+    return function _computeExtraSurfaceVerticalMovement(horizontalMovement, up, collisionCheckParams, collisionRuntimeParams, outExtraSurfaceVerticalMovement) {
         outExtraSurfaceVerticalMovement.vec3_zero();
 
         if (!horizontalMovement.vec3_isZero()) {
@@ -80,7 +80,7 @@ CollisionCheck.prototype._gatherSurfaceInfo = function () {
     let startPosition = PP.vec3_create();
     let endPosition = PP.vec3_create();
     let direction = PP.vec3_create();
-    return function (feetPosition, height, up, forward, isGround, collisionCheckParams, collisionRuntimeParams) {
+    return function _gatherSurfaceInfo(feetPosition, height, up, forward, isGround, collisionCheckParams, collisionRuntimeParams) {
         this._myDebugActive = collisionCheckParams.myDebugActive && collisionCheckParams.myDebugSurfaceInfoActive;
 
         let checkPositions = this._getVerticalCheckPositions(feetPosition, up, forward, collisionCheckParams, collisionRuntimeParams);

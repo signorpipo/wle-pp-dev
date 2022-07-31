@@ -2,7 +2,7 @@ CollisionCheck.prototype._horizontalCheck = function () {
     let movementDirection = PP.vec3_create();
     let fixedFeetPosition = PP.vec3_create();
     let newFixedFeetPosition = PP.vec3_create();
-    return function (movement, feetPosition, height, up, collisionCheckParams, collisionRuntimeParams, avoidSlidingExtraCheck, outFixedMovement) {
+    return function _horizontalCheck(movement, feetPosition, height, up, collisionCheckParams, collisionRuntimeParams, avoidSlidingExtraCheck, outFixedMovement) {
         collisionRuntimeParams.myIsCollidingHorizontally = false;
         collisionRuntimeParams.myHorizontalCollisionHit.reset();
 
@@ -44,7 +44,7 @@ CollisionCheck.prototype._horizontalCheckRaycast = function () {
     let direction = PP.vec3_create();
     let fixedFeedPosition = PP.vec3_create();
     let fixedHitPosition = PP.vec3_create();
-    return function (startPosition, endPosition, movementDirection, up,
+    return function _horizontalCheckRaycast(startPosition, endPosition, movementDirection, up,
         ignoreHitsInsideCollision, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
         feetPosition, fixHitOnCollision,
         collisionCheckParams, collisionRuntimeParams, checkAllHits = false, ignoreHitsInsideCollisionIfObjectToIgnore = false) {
@@ -106,7 +106,7 @@ Object.defineProperty(CollisionCheck.prototype, "_horizontalCheckRaycast", { enu
 
 CollisionCheck.prototype._ignoreSurfaceAngle = function () {
     let objectEqualsCallback = (first, second) => first.pp_equals(second);
-    return function (objectsToIgnore, outIgnoredObjects, isGround, up, collisionCheckParams, hit, ignoreHitsInsideCollisionIfObjectToIgnore) {
+    return function _ignoreSurfaceAngle(objectsToIgnore, outIgnoredObjects, isGround, up, collisionCheckParams, hit, ignoreHitsInsideCollisionIfObjectToIgnore) {
         let isIgnorable = false;
 
         if (!hit.myIsInsideCollision) {

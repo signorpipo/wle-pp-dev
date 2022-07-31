@@ -1,6 +1,6 @@
 CollisionCheck.prototype._horizontalSlide = function () {
     let previousHorizontalMovement = PP.vec3_create();
-    return function (movement, feetPosition, height, up, collisionCheckParams, collisionRuntimeParams, outSlideMovement) {
+    return function _horizontalSlide(movement, feetPosition, height, up, collisionCheckParams, collisionRuntimeParams, outSlideMovement) {
         if (movement.vec3_isZero(0.000001)) {
             return outSlideMovement.vec3_zero();
         }
@@ -35,7 +35,7 @@ CollisionCheck.prototype._horizontalSlideCheckOpposite = function () {
     let horizontalCollisionNormal = PP.vec3_create();
     let oppositeSlideMovement = PP.vec3_create();
     let hitNormal = PP.vec3_create();
-    return function (movement, feetPosition, height, up, previousHorizontalMovement, previousIsSliding, collisionCheckParams, preSlideCollisionRuntimeParams, postSlideCollisionRuntimeParams, outSlideMovement) {
+    return function _horizontalSlideCheckOpposite(movement, feetPosition, height, up, previousHorizontalMovement, previousIsSliding, collisionCheckParams, preSlideCollisionRuntimeParams, postSlideCollisionRuntimeParams, outSlideMovement) {
         horizontalCollisionNormal = preSlideCollisionRuntimeParams.myHorizontalCollisionHit.myNormal.vec3_removeComponentAlongAxis(up, horizontalCollisionNormal);
         horizontalCollisionNormal.vec3_normalize(horizontalCollisionNormal);
 
@@ -128,7 +128,7 @@ CollisionCheck.prototype._horizontalSlideFlickerCheck = function () {
     let newFeetPosition = PP.vec3_create();
     let fixedMovement = PP.vec3_create();
     let flickerFixSlideMovement = PP.vec3_create();
-    return function (movement, slideMovement, feetPosition, height, up, collisionCheckParams, collisionRuntimeParams) {
+    return function _horizontalSlideFlickerCheck(movement, slideMovement, feetPosition, height, up, collisionCheckParams, collisionRuntimeParams) {
         let isFlickering = false;
 
         previousHorizontalMovement = this._myPrevCollisionRuntimeParams.myFixedMovement.vec3_removeComponentAlongAxis(up, previousHorizontalMovement);
@@ -248,7 +248,7 @@ CollisionCheck.prototype._internalHorizontalSlide = function () {
     let slidingMovement = PP.vec3_create();
     let movement90 = PP.vec3_create();
     let currentMovement = PP.vec3_create();
-    return function (movement, feetPosition, height, up, previousHorizontalMovement, collisionCheckParams, collisionRuntimeParams, checkOppositeDirection, outSlideMovement) {
+    return function _internalHorizontalSlide(movement, feetPosition, height, up, previousHorizontalMovement, collisionCheckParams, collisionRuntimeParams, checkOppositeDirection, outSlideMovement) {
         if (movement.vec3_isZero(0.000001)) {
             return outSlideMovement.vec3_zero();
         }
@@ -349,7 +349,7 @@ CollisionCheck.prototype._horizontalCheckBetterSlideNormal = function () {
     let projectAlongAxis = PP.vec3_create();
     let fixedMovement = PP.vec3_create();
     let newFixedFeetPosition = PP.vec3_create();
-    return function (movement, feetPosition, height, up, collisionCheckParams, collisionRuntimeParams) {
+    return function _horizontalCheckBetterSlideNormal(movement, feetPosition, height, up, collisionCheckParams, collisionRuntimeParams) {
         //check for a better slide hit position and normal
 
         movementDirection = movement.vec3_normalize(movementDirection);

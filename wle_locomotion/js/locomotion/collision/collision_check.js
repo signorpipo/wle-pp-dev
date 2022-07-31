@@ -113,7 +113,7 @@ CollisionCheck.prototype._fixMovement = function () {
     let fixedMovement = PP.vec3_create();
     let newFeetPosition = PP.vec3_create();
     let fixedMovementStep = PP.vec3_create();
-    return function (movement, transformQuat, collisionCheckParams, collisionRuntimeParams) {
+    return function _fixMovement(movement, transformQuat, collisionCheckParams, collisionRuntimeParams) {
         //return [0, 0, 0];
 
         transformUp = transformQuat.quat2_getUp(transformUp);
@@ -174,7 +174,7 @@ CollisionCheck.prototype._fixMovementStep = function () {
     let newFeetPosition = PP.vec3_create();
     let surfaceAdjustedVerticalMovement = PP.vec3_create();
     let extraSurfaceVerticalMovement = PP.vec3_create();
-    return function (movement, feetPosition, transformUp, transformForward, height, collisionCheckParams, collisionRuntimeParams, outFixedMovement) {
+    return function _fixMovementStep(movement, feetPosition, transformUp, transformForward, height, collisionCheckParams, collisionRuntimeParams, outFixedMovement) {
         // #TODO refactor and split horizontal check and vertical check into: hMovement + vMovement + hPosition + vPosition?
         // Will make the sliding heavier, if I slide repeating all the 4 steps instead of 2 as now, but would be more correct
 

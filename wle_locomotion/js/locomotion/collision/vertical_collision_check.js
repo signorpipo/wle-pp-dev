@@ -3,7 +3,7 @@ CollisionCheck.prototype._verticalCheck = function () {
     let additionalFixedMovement = PP.vec3_create();
     let zero = PP.vec3_create();
     zero.vec3_zero();
-    return function (verticalMovement, originalMovementSign, feetPosition, height, up, forward, collisionCheckParams, collisionRuntimeParams, outFixedMovement) {
+    return function _verticalCheck(verticalMovement, originalMovementSign, feetPosition, height, up, forward, collisionCheckParams, collisionRuntimeParams, outFixedMovement) {
         collisionRuntimeParams.myIsCollidingVertically = false;
         collisionRuntimeParams.myVerticalCollisionHit.reset();
 
@@ -45,7 +45,7 @@ CollisionCheck.prototype._verticalMovementFix = function () {
     let upNegate = PP.vec3_create();
     let origin = PP.vec3_create();
     let direction = PP.vec3_create();
-    return function (verticalMovement, isMovementDownward, originalMovementSign, feetPosition, height, up, forward, collisionCheckParams, collisionRuntimeParams, outFixedMovement) {
+    return function _verticalMovementFix(verticalMovement, isMovementDownward, originalMovementSign, feetPosition, height, up, forward, collisionCheckParams, collisionRuntimeParams, outFixedMovement) {
         this._myDebugActive = collisionCheckParams.myDebugActive && collisionCheckParams.myDebugVerticalMovementActive;
 
         startOffset.vec3_zero();
@@ -156,7 +156,7 @@ CollisionCheck.prototype._verticalPositionCheck = function () {
     let startPosition = PP.vec3_create();
     let endPosition = PP.vec3_create();
     let direction = PP.vec3_create();
-    return function (feetPosition, checkUpward, height, up, forward, collisionCheckParams, collisionRuntimeParams) {
+    return function _verticalPositionCheck(feetPosition, checkUpward, height, up, forward, collisionCheckParams, collisionRuntimeParams) {
         this._myDebugActive = collisionCheckParams.myDebugActive && collisionCheckParams.myDebugVerticalPositionActive;
 
         if (height < 0.00001) {
@@ -243,7 +243,7 @@ CollisionCheck.prototype._getVerticalCheckPositions = function () {
     };
 
     let currentDirection = PP.vec3_create();
-    return function (feetPosition, up, forward, collisionCheckParams, collisionRuntimeParams) {
+    return function _getVerticalCheckPositions(feetPosition, up, forward, collisionCheckParams, collisionRuntimeParams) {
         checkPositions.length = 0;
         currentCachedCheckPositionIndex = 0;
 

@@ -25,7 +25,7 @@ CollisionCheck.prototype._horizontalMovementCheck = function () {
     let currentHeightOffset = PP.vec3_create();
     let leftRadialDirection = PP.vec3_create();
     let rightRadialDirection = PP.vec3_create();
-    return function (movement, feetPosition, height, up, collisionCheckParams, collisionRuntimeParams) {
+    return function _horizontalMovementCheck(movement, feetPosition, height, up, collisionCheckParams, collisionRuntimeParams) {
         this._myDebugActive = collisionCheckParams.myDebugActive && collisionCheckParams.myDebugHorizontalMovementActive;
 
         let halfConeAngle = Math.min(collisionCheckParams.myHalfConeAngle, 90);
@@ -177,7 +177,7 @@ CollisionCheck.prototype._horizontalMovementVerticalCheck = function () {
     let secondHeightPosition = PP.vec3_create();
     let firstHeightMovementPosition = PP.vec3_create();
     let secondHeightMovementPosition = PP.vec3_create();
-    return function (movement, feetPosition, checkPositions, heightOffset, heightStep, up, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams) {
+    return function _horizontalMovementVerticalCheck(movement, feetPosition, checkPositions, heightOffset, heightStep, up, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams) {
         let isHorizontalCheckOk = true;
 
         let movementStepAmount = 1;
@@ -345,7 +345,7 @@ CollisionCheck.prototype._horizontalMovementHorizontalCheck = function () {
     let secondPosition = PP.vec3_create();
     let firstMovementPosition = PP.vec3_create();
     let secondMovementPosition = PP.vec3_create();
-    return function (movement, feetPosition, checkPositions, heightOffset, up, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams) {
+    return function _horizontalMovementHorizontalCheck(movement, feetPosition, checkPositions, heightOffset, up, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams) {
         let isHorizontalCheckOk = true;
 
         let movementStepAmount = 1;

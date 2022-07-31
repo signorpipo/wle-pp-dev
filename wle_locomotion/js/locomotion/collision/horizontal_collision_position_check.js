@@ -28,7 +28,7 @@ CollisionCheck.prototype._horizontalPositionCheck = function () {
 
     let verticalDirection = PP.vec3_create();
 
-    return function (feetPosition, height, up, forward, collisionCheckParams, collisionRuntimeParams) {
+    return function _horizontalPositionCheck(feetPosition, height, up, forward, collisionCheckParams, collisionRuntimeParams) {
         this._myDebugActive = collisionCheckParams.myDebugActive && collisionCheckParams.myDebugHorizontalPositionActive;
 
         checkPositions.length = 0;
@@ -191,7 +191,7 @@ CollisionCheck.prototype._horizontalPositionHorizontalCheck = function () {
     let forwardNegate = PP.vec3_create();
     let currentRadialPosition = PP.vec3_create();
     let previousRadialPosition = PP.vec3_create();
-    return function (feetPosition, checkPositions, heightOffset, up, forward, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams) {
+    return function _horizontalPositionHorizontalCheck(feetPosition, checkPositions, heightOffset, up, forward, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams) {
         let isHorizontalCheckOk = true;
 
         basePosition = feetPosition.vec3_add(heightOffset, basePosition);
@@ -269,7 +269,7 @@ CollisionCheck.prototype._horizontalPositionVerticalCheck = function () {
     let previousRadialPosition = PP.vec3_create();
     let previousCurrentRadialPosition = PP.vec3_create();
     let previousPreviousRadialPosition = PP.vec3_create();
-    return function (feetPosition, checkPositions, heightOffset, heightStep, verticalDirection, up, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams) {
+    return function _horizontalPositionVerticalCheck(feetPosition, checkPositions, heightOffset, heightStep, verticalDirection, up, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams) {
         let isHorizontalCheckOk = true;
 
         basePosition = feetPosition.vec3_add(heightOffset, basePosition);

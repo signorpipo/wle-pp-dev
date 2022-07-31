@@ -96,7 +96,7 @@ PP.RaycastResult.prototype.copy = function () {
         return currentElement;
     };
 
-    return function (result) {
+    return function copy(result) {
         if (result.myRaycastSetup == null) {
             this.myRaycastSetup = null;
         } else {
