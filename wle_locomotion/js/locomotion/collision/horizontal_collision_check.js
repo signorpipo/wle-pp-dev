@@ -105,7 +105,7 @@ CollisionCheck.prototype._horizontalCheckRaycast = function () {
 Object.defineProperty(CollisionCheck.prototype, "_horizontalCheckRaycast", { enumerable: false });
 
 CollisionCheck.prototype._ignoreSurfaceAngle = function () {
-    let objectEqualsCallback = (first, second) => first.pp_equals(second);
+    let objectsEqualCallback = (first, second) => first.pp_equals(second);
     return function _ignoreSurfaceAngle(objectsToIgnore, outIgnoredObjects, isGround, up, collisionCheckParams, hit, ignoreHitsInsideCollisionIfObjectToIgnore) {
         let isIgnorable = false;
 
@@ -114,7 +114,7 @@ CollisionCheck.prototype._ignoreSurfaceAngle = function () {
 
             if ((isGround && (collisionCheckParams.myGroundAngleToIgnore > 0 && surfaceAngle <= collisionCheckParams.myGroundAngleToIgnore + 0.0001)) ||
                 (!isGround && (collisionCheckParams.myCeilingAngleToIgnore > 0 && (180 - surfaceAngle) <= collisionCheckParams.myCeilingAngleToIgnore + 0.0001))) {
-                if (objectsToIgnore == null || objectsToIgnore.pp_hasEqual(hit.myObject, objectEqualsCallback)) {
+                if (objectsToIgnore == null || objectsToIgnore.pp_hasEqual(hit.myObject, objectsEqualCallback)) {
                     isIgnorable = true;
 
                     if (outIgnoredObjects != null) {
@@ -124,7 +124,7 @@ CollisionCheck.prototype._ignoreSurfaceAngle = function () {
             }
         } else if (ignoreHitsInsideCollisionIfObjectToIgnore) {
             // #TODO when raycast pierce will work, if it gives the normal even when inside check if the angle is ok and only ignore if that's the case
-            if (objectsToIgnore == null || objectsToIgnore.pp_hasEqual(hit.myObject, objectEqualsCallback)) {
+            if (objectsToIgnore == null || objectsToIgnore.pp_hasEqual(hit.myObject, objectsEqualCallback)) {
                 isIgnorable = true;
             }
         }

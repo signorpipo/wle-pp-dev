@@ -160,8 +160,8 @@ Array.prototype.pp_has = function (callback) {
     return this.pp_find(callback) != undefined;
 };
 
-Array.prototype.pp_hasEqual = function (elementToFind, elementEqualsCallback = null) {
-    return this.pp_findEqual(elementToFind, elementEqualsCallback) != undefined;
+Array.prototype.pp_hasEqual = function (elementToFind, elementsEqualCallback = null) {
+    return this.pp_findEqual(elementToFind, elementsEqualCallback) != undefined;
 };
 
 Array.prototype.pp_find = function (callback) {
@@ -196,32 +196,32 @@ Array.prototype.pp_findAllIndexes = function (callback) {
     return indexes;
 };
 
-Array.prototype.pp_findEqual = function (elementToFind, elementEqualsCallback = null) {
-    if (elementEqualsCallback == null) {
+Array.prototype.pp_findEqual = function (elementToFind, elementsEqualCallback = null) {
+    if (elementsEqualCallback == null) {
         return this.pp_find(element => element === elementToFind);
     }
-    return this.pp_find(element => elementEqualsCallback(element, elementToFind));
+    return this.pp_find(element => elementsEqualCallback(element, elementToFind));
 };
 
-Array.prototype.pp_findAllEqual = function (elementToFind, elementEqualsCallback = null) {
-    if (elementEqualsCallback == null) {
+Array.prototype.pp_findAllEqual = function (elementToFind, elementsEqualCallback = null) {
+    if (elementsEqualCallback == null) {
         return this.pp_findAll(element => element === elementToFind);
     }
-    return this.pp_findAll(element => elementEqualsCallback(element, elementToFind));
+    return this.pp_findAll(element => elementsEqualCallback(element, elementToFind));
 };
 
-Array.prototype.pp_findIndexEqual = function (elementToFind, elementEqualsCallback = null) {
-    if (elementEqualsCallback == null) {
+Array.prototype.pp_findIndexEqual = function (elementToFind, elementsEqualCallback = null) {
+    if (elementsEqualCallback == null) {
         return this.findIndex(element => element === elementToFind);
     }
-    return this.findIndex(element => elementEqualsCallback(element, elementToFind));
+    return this.findIndex(element => elementsEqualCallback(element, elementToFind));
 };
 
-Array.prototype.pp_findAllIndexesEqual = function (elementToFind, elementEqualsCallback = null) {
-    if (elementEqualsCallback == null) {
+Array.prototype.pp_findAllIndexesEqual = function (elementToFind, elementsEqualCallback = null) {
+    if (elementsEqualCallback == null) {
         return this.pp_findAllIndexes(element => element === elementToFind);
     }
-    return this.pp_findAllIndexes(element => elementEqualsCallback(element, elementToFind));
+    return this.pp_findAllIndexes(element => elementsEqualCallback(element, elementToFind));
 };
 
 Array.prototype.pp_removeIndex = function (index) {
@@ -262,24 +262,24 @@ Array.prototype.pp_removeAll = function (callback) {
     return elementsRemoved;
 };
 
-Array.prototype.pp_removeEqual = function (elementToRemove, elementEqualsCallback = null) {
-    if (elementEqualsCallback == null) {
+Array.prototype.pp_removeEqual = function (elementToRemove, elementsEqualCallback = null) {
+    if (elementsEqualCallback == null) {
         return this.pp_remove(element => element === elementToFind);
     }
-    return this.pp_remove(element => elementEqualsCallback(element, elementToFind));
+    return this.pp_remove(element => elementsEqualCallback(element, elementToFind));
 };
 
-Array.prototype.pp_removeAllEqual = function (elementToRemove, elementEqualsCallback = null) {
-    if (elementEqualsCallback == null) {
+Array.prototype.pp_removeAllEqual = function (elementToRemove, elementsEqualCallback = null) {
+    if (elementsEqualCallback == null) {
         return this.pp_removeAll(element => element === elementToFind);
     }
-    return this.pp_removeAll(element => elementEqualsCallback(element, elementToFind));
+    return this.pp_removeAll(element => elementsEqualCallback(element, elementToFind));
 };
 
-Array.prototype.pp_pushUnique = function (element, elementEqualsCallback = null) {
+Array.prototype.pp_pushUnique = function (element, elementsEqualCallback = null) {
     let length = this.length;
 
-    let hasElement = this.pp_hasEqual(element, elementEqualsCallback);
+    let hasElement = this.pp_hasEqual(element, elementsEqualCallback);
 
     if (!hasElement) {
         length = this.push(element);
@@ -288,10 +288,10 @@ Array.prototype.pp_pushUnique = function (element, elementEqualsCallback = null)
     return length;
 };
 
-Array.prototype.pp_unshiftUnique = function (element, elementEqualsCallback = null) {
+Array.prototype.pp_unshiftUnique = function (element, elementsEqualCallback = null) {
     let length = this.length;
 
-    let hasElement = this.pp_hasEqual(element, elementEqualsCallback);
+    let hasElement = this.pp_hasEqual(element, elementsEqualCallback);
 
     if (!hasElement) {
         length = this.unshift(element);
@@ -330,13 +330,13 @@ Array.prototype.pp_clone = function (cloneCallback = null) {
     return clone;
 };
 
-Array.prototype.pp_equals = function (array, elementEqualsCallback = null) {
+Array.prototype.pp_equals = function (array, elementsEqualCallback = null) {
     let equals = true;
 
     if (array != null && this.length == array.length) {
         for (let i = 0; i < this.length; i++) {
-            if ((elementEqualsCallback != null && !elementEqualsCallback(this[i], array[i])) ||
-                (elementEqualsCallback == null && this[i] != array[i])) {
+            if ((elementsEqualCallback != null && !elementsEqualCallback(this[i], array[i])) ||
+                (elementsEqualCallback == null && this[i] != array[i])) {
                 equals = false;
                 break;
             }

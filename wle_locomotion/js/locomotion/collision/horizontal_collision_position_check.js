@@ -17,7 +17,7 @@ CollisionCheck.prototype._horizontalPositionCheck = function () {
     let _localCeilingObjectsToIgnore = [];
     let _localGroundCeilingObjectsToIgnore = [];
 
-    let objectEqualsCallback = (first, second) => first.pp_equals(second);
+    let objectsEqualCallback = (first, second) => first.pp_equals(second);
 
     let heightOffset = PP.vec3_create();
     let heightStep = PP.vec3_create();
@@ -99,7 +99,7 @@ CollisionCheck.prototype._horizontalPositionCheck = function () {
             if (groundCeilingObjectsToIgnore != null) {
                 // check that the ceiling objects ignored by the ground are the correct ones, that is the one ignored by the upper check
                 for (let object of groundCeilingObjectsToIgnore) {
-                    if (!ceilingObjectsToIgnore.pp_hasEqual(object, objectEqualsCallback)) {
+                    if (!ceilingObjectsToIgnore.pp_hasEqual(object, objectsEqualCallback)) {
                         groundCeilingCheckIsFine = false;
                         break;
                     }

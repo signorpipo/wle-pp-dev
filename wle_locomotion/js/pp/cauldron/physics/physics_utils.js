@@ -14,7 +14,7 @@ PP.PhysicsUtils = {
         return PP.PhysicsUtils._myLayerFlagNames;
     },
     raycast: function () {
-        let objectEqualsCallback = (first, second) => first.pp_equals(second);
+        let objectsEqualCallback = (first, second) => first.pp_equals(second);
         return function raycast(raycastSetup, raycastResult = new PP.RaycastResult()) {
             let internalRaycastResult = WL.physics.rayCast(raycastSetup.myOrigin, raycastSetup.myDirection, raycastSetup.myBlockLayerFlags.getMask(), raycastSetup.myDistance);
 
@@ -28,7 +28,7 @@ PP.PhysicsUtils = {
 
                 isHitValid = isHitValid &&
                     (raycastSetup.myObjectsToIgnore.length == 0 ||
-                        !raycastSetup.myObjectsToIgnore.pp_hasEqual(internalRaycastResult.objects[i], objectEqualsCallback));
+                        !raycastSetup.myObjectsToIgnore.pp_hasEqual(internalRaycastResult.objects[i], objectsEqualCallback));
 
                 let isHitInsideCollision = isHitValid &&
                     internalRaycastResult.distances[i] == 0 &&
