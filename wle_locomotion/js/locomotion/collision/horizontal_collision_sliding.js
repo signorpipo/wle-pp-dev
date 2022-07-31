@@ -246,6 +246,7 @@ Object.defineProperty(CollisionCheck.prototype, "_horizontalSlideFlickerCheck", 
 CollisionCheck.prototype._internalHorizontalSlide = function () {
     let invertedNormal = PP.vec3_create();
     let slidingMovement = PP.vec3_create();
+    let movement90 = PP.vec3_create();
     let currentMovement = PP.vec3_create();
     return function (movement, feetPosition, height, up, previousHorizontalMovement, collisionCheckParams, collisionRuntimeParams, checkOppositeDirection, outSlideMovement) {
         if (movement.vec3_isZero(0.000001)) {
@@ -255,8 +256,8 @@ CollisionCheck.prototype._internalHorizontalSlide = function () {
         //let copiedNormal = collisionRuntimeParams.myHorizontalCollisionHit.myNormal.pp_clone();
         invertedNormal = collisionRuntimeParams.myHorizontalCollisionHit.myNormal.vec3_negate(invertedNormal);
         invertedNormal.vec3_removeComponentAlongAxis(up, invertedNormal);
-        //invertedNormal[0] = Math.abs(invertedNormal[0]) < 0.01 ? 0 : invertedNormal[0];
-        //invertedNormal[2] = Math.abs(invertedNormal[2]) < 0.01 ? 0 : invertedNormal[2];
+        invertedNormal[0] = Math.abs(invertedNormal[0]) < 0.01 ? 0 : invertedNormal[0];
+        invertedNormal[2] = Math.abs(invertedNormal[2]) < 0.01 ? 0 : invertedNormal[2];
         invertedNormal.vec3_normalize(invertedNormal);
 
         collisionRuntimeParams.mySlidingCollisionHit.copy(collisionRuntimeParams.myHorizontalCollisionHit);
@@ -278,7 +279,7 @@ CollisionCheck.prototype._internalHorizontalSlide = function () {
             }
 
             let currentAngle = 90 * slidingSign;
-            let maxAngle = Math.pp_angleClamp(slidingMovement.vec3_angleSigned(movement.vec3_rotateAxis(90 * slidingSign, up), up) * slidingSign, true) * slidingSign;
+            let maxAngle = Math.pp_angleClamp(slidingMovement.vec3_angleSigned(movement.vec3_rotateAxis(90 * slidingSign, up, movement90), up) * slidingSign, true) * slidingSign;
 
             if (Math.abs(maxAngle) < Math.abs(currentAngle) || checkOppositeDirection) {
                 maxAngle = currentAngle;

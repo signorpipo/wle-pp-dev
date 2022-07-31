@@ -26,6 +26,16 @@ require('@wonderlandengine/components/wonderleap-ad');
 
 require('./pp/pp.js');
 
+//	PLUGIN
+require('./pp/plugin/component_mods/clone_component_mod.js');
+require('./pp/plugin/component_mods/cursor_component_mod.js');
+require('./pp/plugin/component_mods/cursor_target_component_mod.js');
+require('./pp/plugin/component_mods/mouse_look_component_mod.js');
+
+require('./pp/plugin/extensions/array_extension.js');
+require('./pp/plugin/extensions/object_extension.js');
+require('./pp/plugin/extensions/math_extension.js');
+
 //	AUDIO
 require('./pp/audio/spatial_audio_listener.js');
 require('./pp/audio/audio_manager_component.js');
@@ -107,16 +117,6 @@ require('./pp/input/pose/components/set_non_vr_head_local_transform.js');
 require('./pp/input/pose/components/get_player_objects.js');
 require('./pp/input/pose/components/copy_hand_transform.js');
 require('./pp/input/pose/components/copy_head_transform.js');
-
-//	PLUGIN
-require('./pp/plugin/component_mods/clone_component_mod.js');
-require('./pp/plugin/component_mods/cursor_component_mod.js');
-require('./pp/plugin/component_mods/cursor_target_component_mod.js');
-require('./pp/plugin/component_mods/mouse_look_component_mod.js');
-
-require('./pp/plugin/extensions/array_extension.js');
-require('./pp/plugin/extensions/object_extension.js');
-require('./pp/plugin/extensions/math_extension.js');
 
 //	TOOL
 require('./pp/tool/cauldron/cauldron/tool_types.js');

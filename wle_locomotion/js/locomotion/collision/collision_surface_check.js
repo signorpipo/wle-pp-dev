@@ -77,6 +77,9 @@ CollisionCheck.prototype._gatherSurfaceInfo = function () {
     let heightOffset = PP.vec3_create();
     let surfaceNormal = PP.vec3_create();
     let hitFromCurrentPosition = PP.vec3_create();
+    let startPosition = PP.vec3_create();
+    let endPosition = PP.vec3_create();
+    let direction = PP.vec3_create();
     return function (feetPosition, height, up, forward, isGround, collisionCheckParams, collisionRuntimeParams) {
         this._myDebugActive = collisionCheckParams.myDebugActive && collisionCheckParams.myDebugSurfaceInfoActive;
 
@@ -112,11 +115,11 @@ CollisionCheck.prototype._gatherSurfaceInfo = function () {
             let currentPosition = checkPositions[i];
 
             currentPosition.vec3_add(heightOffset, currentPosition);
-            let startPosition = currentPosition.vec3_add(startOffset);
-            let endPosition = currentPosition.vec3_add(endOffset);
+            startPosition = currentPosition.vec3_add(startOffset, startPosition);
+            endPosition = currentPosition.vec3_add(endOffset, endPosition);
 
             let origin = startPosition;
-            let direction = endPosition.vec3_sub(origin);
+            direction = endPosition.vec3_sub(origin, direction);
             let distance = direction.vec3_length();
             direction.vec3_normalize(direction);
 

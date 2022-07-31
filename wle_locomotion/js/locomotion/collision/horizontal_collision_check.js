@@ -81,7 +81,7 @@ CollisionCheck.prototype._horizontalCheckRaycast = function () {
             fixedFeedPosition = feetPosition.vec3_copyComponentAlongAxis(hitPosition, up, fixedFeedPosition);
             direction = hitPosition.vec3_sub(fixedFeedPosition, direction);
             direction.vec3_normalize(direction);
-            fixedHitPosition = hitPosition.vec3_add(direction.vec3_scale(0.0001), fixedHitPosition);
+            fixedHitPosition = hitPosition.vec3_add(direction.vec3_scale(0.0001, fixedHitPosition), fixedHitPosition);
 
             let swapRaycastResult = this._myRaycastResult;
             this._myRaycastResult = this._myFixRaycastResult;

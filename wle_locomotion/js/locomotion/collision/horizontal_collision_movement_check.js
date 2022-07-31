@@ -10,6 +10,7 @@ CollisionCheck.prototype._horizontalMovementCheck = function () {
 
         item = cachedCheckPositions[currentCachedCheckPositionIndex];
         currentCachedCheckPositionIndex++;
+        return item;
     };
 
     let _localGroundObjectsToIgnore = [];
@@ -22,6 +23,8 @@ CollisionCheck.prototype._horizontalMovementCheck = function () {
     let heightOffset = PP.vec3_create();
     let heightStep = PP.vec3_create();
     let currentHeightOffset = PP.vec3_create();
+    let leftRadialDirection = PP.vec3_create();
+    let rightRadialDirection = PP.vec3_create();
     return function (movement, feetPosition, height, up, collisionCheckParams, collisionRuntimeParams) {
         this._myDebugActive = collisionCheckParams.myDebugActive && collisionCheckParams.myDebugHorizontalMovementActive;
 
@@ -36,8 +39,8 @@ CollisionCheck.prototype._horizontalMovementCheck = function () {
         checkPositions.push(feetPosition);
 
         {
-            let leftRadialDirection = movementDirection.vec3_rotateAxis(halfConeAngle, up);
-            let rightRadialDirection = movementDirection.vec3_rotateAxis(-halfConeAngle, up);
+            leftRadialDirection = movementDirection.vec3_rotateAxis(halfConeAngle, up, leftRadialDirection);
+            rightRadialDirection = movementDirection.vec3_rotateAxis(-halfConeAngle, up, rightRadialDirection);
             for (let i = 1; i <= collisionCheckParams.myHorizontalMovementRadialStepAmount; i++) {
                 // left
                 {
@@ -337,6 +340,7 @@ Object.defineProperty(CollisionCheck.prototype, "_horizontalMovementVerticalChec
 
 CollisionCheck.prototype._horizontalMovementHorizontalCheck = function () {
     let movementStep = PP.vec3_create();
+    let movementDirection = PP.vec3_create();
     let firstPosition = PP.vec3_create();
     let secondPosition = PP.vec3_create();
     let firstMovementPosition = PP.vec3_create();
@@ -352,7 +356,7 @@ CollisionCheck.prototype._horizontalMovementHorizontalCheck = function () {
             movement.vec3_scale(1 / movementStepAmount, movementStep);
         }
 
-        let movementDirection = movement.vec3_normalize();
+        movementDirection = movement.vec3_normalize(movementDirection);
 
         for (let m = 0; m < movementStepAmount; m++) {
             for (let j = 0; j < checkPositions.length; j++) {

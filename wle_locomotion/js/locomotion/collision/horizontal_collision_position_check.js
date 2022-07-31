@@ -10,6 +10,7 @@ CollisionCheck.prototype._horizontalPositionCheck = function () {
 
         item = cachedCheckPositions[currentCachedCheckPositionIndex];
         currentCachedCheckPositionIndex++;
+        return item;
     };
 
     let _localGroundObjectsToIgnore = [];
@@ -187,6 +188,7 @@ Object.defineProperty(CollisionCheck.prototype, "_horizontalPositionCheck", { en
 
 CollisionCheck.prototype._horizontalPositionHorizontalCheck = function () {
     let basePosition = PP.vec3_create();
+    let forwardNegate = PP.vec3_create();
     let currentRadialPosition = PP.vec3_create();
     let previousRadialPosition = PP.vec3_create();
     return function (feetPosition, checkPositions, heightOffset, up, forward, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams) {
@@ -209,7 +211,7 @@ CollisionCheck.prototype._horizontalPositionHorizontalCheck = function () {
                         let previousIndex = Math.max(0, currentIndex - 2);
                         previousRadialPosition = checkPositions[previousIndex].vec3_add(heightOffset, previousRadialPosition);
 
-                        isHorizontalCheckOk = this._horizontalCheckRaycast(previousRadialPosition, currentRadialPosition, forward.vec3_negate(), up,
+                        isHorizontalCheckOk = this._horizontalCheckRaycast(previousRadialPosition, currentRadialPosition, forward.vec3_negate(forwardNegate), up,
                             true, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
                             feetPosition, true,
                             collisionCheckParams, collisionRuntimeParams);

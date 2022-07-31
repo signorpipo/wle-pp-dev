@@ -43,6 +43,8 @@ CollisionCheck.prototype._verticalMovementFix = function () {
     let furtherDirection = PP.vec3_create();
     let furtherDirectionPosition = PP.vec3_create();
     let upNegate = PP.vec3_create();
+    let origin = PP.vec3_create();
+    let direction = PP.vec3_create();
     return function (verticalMovement, isMovementDownward, originalMovementSign, feetPosition, height, up, forward, collisionCheckParams, collisionRuntimeParams, outFixedMovement) {
         this._myDebugActive = collisionCheckParams.myDebugActive && collisionCheckParams.myDebugVerticalMovementActive;
 
@@ -93,8 +95,8 @@ CollisionCheck.prototype._verticalMovementFix = function () {
             for (let i = 0; i < checkPositions.length; i++) {
                 let currentPosition = checkPositions[i];
 
-                let origin = currentPosition.vec3_add(startOffset);
-                let direction = currentPosition.vec3_add(endOffset).vec3_sub(origin);
+                origin = currentPosition.vec3_add(startOffset, origin);
+                direction = currentPosition.vec3_add(endOffset, direction).vec3_sub(origin, direction);
                 let distance = direction.vec3_length();
                 direction.vec3_normalize(direction);
 
@@ -237,6 +239,7 @@ CollisionCheck.prototype._getVerticalCheckPositions = function () {
 
         item = cachedCheckPositions[currentCachedCheckPositionIndex];
         currentCachedCheckPositionIndex++;
+        return item;
     };
 
     let currentDirection = PP.vec3_create();

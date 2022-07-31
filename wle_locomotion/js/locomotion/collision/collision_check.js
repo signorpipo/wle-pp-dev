@@ -292,7 +292,7 @@ CollisionCheck.prototype._fixMovementStep = function () {
 Object.defineProperty(CollisionCheck.prototype, "_fixMovementStep", { enumerable: false });
 
 CollisionCheck.prototype._raycastAndDebug = function () {
-    return function (origin, direction, distance, ignoreHitsInsideCollision, collisionCheckParams, collisionRuntimeParams) {
+    return function _raycastAndDebug(origin, direction, distance, ignoreHitsInsideCollision, collisionCheckParams, collisionRuntimeParams) {
         this._myRaycastSetup.myOrigin.vec3_copy(origin);
         this._myRaycastSetup.myDirection.vec3_copy(direction);
         this._myRaycastSetup.myDistance = distance;
