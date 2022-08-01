@@ -273,12 +273,10 @@ CollisionCheck.prototype._internalHorizontalSlide = function () {
         }
 
         if (!slidingMovement.vec3_isZero(0.00001)) {
+
             slidingMovement.vec3_scale(movement.vec3_length(), slidingMovement);
 
             let slidingSign = invertedNormal.vec3_signTo(movement, up);
-            if (checkOppositeDirection) {
-                slidingSign *= -1;
-            }
 
             if (collisionCheckParams.mySlidingAdjustSign90Degrees) {
                 let angleThreshold = 0.1;
@@ -293,6 +291,10 @@ CollisionCheck.prototype._internalHorizontalSlide = function () {
                 }
 
                 collisionRuntimeParams.mySlidingRecompute90DegreesSign = false;
+            }
+
+            if (checkOppositeDirection) {
+                slidingSign *= -1;
             }
 
             let currentAngle = 90 * slidingSign;
