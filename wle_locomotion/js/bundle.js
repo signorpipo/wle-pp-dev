@@ -194,3 +194,4 @@ require('./test/bullet_through_wall_test.js');
 require('./test/reset_transform.js');
 require('./test/touch_start_test.js');
 require('./test/vec_create_count.js');
+require('./test/vec3_function_count.js');

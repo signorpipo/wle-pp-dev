@@ -565,7 +565,7 @@ Array.prototype.vec3_angleSignedDegrees = function (vector, upAxis) {
 
 Array.prototype.vec3_angleSignedRadians = function () {
     let crossAxis = glMatrix.vec3.create();
-    return function vec3_angleSignedRadiansfunction(vector, upAxis) {
+    return function vec3_angleSignedRadians(vector, upAxis) {
         this.vec3_cross(vector, crossAxis);
         let angle = this.vec3_angleRadians(vector);
         if (!crossAxis.vec3_isConcordant(upAxis)) {
@@ -631,7 +631,7 @@ Array.prototype.vec3_valueAlongAxis = function () {
 
 Array.prototype.vec3_removeComponentAlongAxis = function () {
     let componentAlong = glMatrix.vec3.create();
-    return function vec3_removeComponentAlongAxisfunction(axis, out = glMatrix.vec3.create()) {
+    return function vec3_removeComponentAlongAxis(axis, out = glMatrix.vec3.create()) {
         this.vec3_componentAlongAxis(axis, componentAlong);
         glMatrix.vec3.sub(out, this, componentAlong);
         return out;
