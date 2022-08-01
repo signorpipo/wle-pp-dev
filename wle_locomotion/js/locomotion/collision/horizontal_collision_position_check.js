@@ -128,14 +128,16 @@ CollisionCheck.prototype._horizontalPositionCheck = function () {
 
                 // we can skip the ground check since we have already done that, but if there was an error do it again with the proper set of objects to ignore
                 // the ceiling check can always be ignored, it used the proper ground objects already
-                if ((i != 0 && i != heightStepAmount) ||
-                    (i == 0 && !groundCeilingCheckIsFine) ||
-                    (i == 0 && collisionCheckParams.myGroundAngleToIgnore == 0) ||
-                    (i == heightStepAmount && collisionCheckParams.myCeilingAngleToIgnore == 0)) {
-                    this._horizontalPositionHorizontalCheck(feetPosition, checkPositions, currentHeightOffset, up, forward, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams);
+                if (collisionCheckParams.myCheckHeightTop || i == 0) {
+                    if ((i != 0 && i != heightStepAmount) ||
+                        (i == 0 && !groundCeilingCheckIsFine) ||
+                        (i == 0 && collisionCheckParams.myGroundAngleToIgnore == 0) ||
+                        (i == heightStepAmount && collisionCheckParams.myCeilingAngleToIgnore == 0)) {
+                        this._horizontalPositionHorizontalCheck(feetPosition, checkPositions, currentHeightOffset, up, forward, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams);
 
-                    if (collisionRuntimeParams.myIsCollidingHorizontally) {
-                        break;
+                        if (collisionRuntimeParams.myIsCollidingHorizontally) {
+                            break;
+                        }
                     }
                 }
 
@@ -144,7 +146,7 @@ CollisionCheck.prototype._horizontalPositionCheck = function () {
                         verticalDirection.vec3_copy(up);
                         this._horizontalPositionVerticalCheck(feetPosition, checkPositions, currentHeightOffset, heightStep, verticalDirection, up, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams);
 
-                        if (collisionRuntimeParams.myIsCollidingHorizontally) {
+                        if (collisionRuntimeParams.myIsCollidingHorizontally && collisionCheckParams.myCheckHeightConeOnCollision) {
                             hitHeightOffset = collisionRuntimeParams.myHorizontalCollisionHit.myPosition.vec3_sub(feetPosition, hitHeightOffset).vec3_componentAlongAxis(up, hitHeightOffset);
 
                             collisionRuntimeParams.myIsCollidingHorizontally = false;
@@ -165,7 +167,7 @@ CollisionCheck.prototype._horizontalPositionCheck = function () {
                             this._horizontalPositionVerticalCheck(feetPosition, checkPositions, downwardHeightOffset, downwardHeightStep, verticalDirection, up, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams);
                         }
 
-                        if (collisionRuntimeParams.myIsCollidingHorizontally) {
+                        if (collisionRuntimeParams.myIsCollidingHorizontally && collisionCheckParams.myCheckHeightConeOnCollision) {
                             hitHeightOffset = collisionRuntimeParams.myHorizontalCollisionHit.myPosition.vec3_sub(feetPosition, hitHeightOffset).vec3_componentAlongAxis(up, hitHeightOffset);
 
                             collisionRuntimeParams.myIsCollidingHorizontally = false;
@@ -287,7 +289,7 @@ CollisionCheck.prototype._horizontalPositionVerticalCheck = function () {
             if (collisionCheckParams.myCheckVerticalStraight) {
                 isHorizontalCheckOk = this._horizontalCheckRaycast(previousRadialPosition, currentRadialPosition, null, up,
                     collisionCheckParams.myHorizontalPositionCheckVerticalIgnoreHitsInsideCollision, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
-                    feetPosition, false,
+                    feetPosition, !collisionCheckParams.myCheckHeightConeOnCollision,
                     collisionCheckParams, collisionRuntimeParams, true, true);
 
                 if (!isHorizontalCheckOk) {
@@ -298,7 +300,7 @@ CollisionCheck.prototype._horizontalPositionVerticalCheck = function () {
                         collisionRuntimeParams.myHorizontalCollisionHit.copy(this._myRaycastResult.myHits[0]);
                     }
 
-                    if (!collisionCheckParams.myCheckVerticalSearchFurtherVerticalHit) {
+                    if (!collisionCheckParams.myCheckVerticalSearchFurtherVerticalHit || !collisionCheckParams.myCheckHeightConeOnCollision) {
                         break;
                     }
                 }
@@ -310,7 +312,7 @@ CollisionCheck.prototype._horizontalPositionVerticalCheck = function () {
                     {
                         isHorizontalCheckOk = this._horizontalCheckRaycast(previousBasePosition, currentRadialPosition, null, up,
                             collisionCheckParams.myHorizontalPositionCheckVerticalIgnoreHitsInsideCollision, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
-                            feetPosition, false,
+                            feetPosition, !collisionCheckParams.myCheckHeightConeOnCollision,
                             collisionCheckParams, collisionRuntimeParams, true, true);
 
                         if (!isHorizontalCheckOk) {
@@ -321,7 +323,7 @@ CollisionCheck.prototype._horizontalPositionVerticalCheck = function () {
                                 collisionRuntimeParams.myHorizontalCollisionHit.copy(this._myRaycastResult.myHits[0]);
                             }
 
-                            if (!collisionCheckParams.myCheckVerticalSearchFurtherVerticalHit) {
+                            if (!collisionCheckParams.myCheckVerticalSearchFurtherVerticalHit || !collisionCheckParams.myCheckHeightConeOnCollision) {
                                 break;
                             }
                         }
@@ -330,7 +332,7 @@ CollisionCheck.prototype._horizontalPositionVerticalCheck = function () {
                     {
                         isHorizontalCheckOk = this._horizontalCheckRaycast(previousRadialPosition, basePosition, null, up,
                             collisionCheckParams.myHorizontalPositionCheckVerticalIgnoreHitsInsideCollision, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
-                            feetPosition, false,
+                            feetPosition, !collisionCheckParams.myCheckHeightConeOnCollision,
                             collisionCheckParams, collisionRuntimeParams, true, true);
 
                         if (!isHorizontalCheckOk) {
@@ -341,7 +343,7 @@ CollisionCheck.prototype._horizontalPositionVerticalCheck = function () {
                                 collisionRuntimeParams.myHorizontalCollisionHit.copy(this._myRaycastResult.myHits[0]);
                             }
 
-                            if (!collisionCheckParams.myCheckVerticalSearchFurtherVerticalHit) {
+                            if (!collisionCheckParams.myCheckVerticalSearchFurtherVerticalHit || !collisionCheckParams.myCheckHeightConeOnCollision) {
                                 break;
                             }
                         }
@@ -357,7 +359,7 @@ CollisionCheck.prototype._horizontalPositionVerticalCheck = function () {
                         {
                             isHorizontalCheckOk = this._horizontalCheckRaycast(previousPreviousRadialPosition, currentRadialPosition, null, up,
                                 collisionCheckParams.myHorizontalPositionCheckVerticalIgnoreHitsInsideCollision, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
-                                feetPosition, false,
+                                feetPosition, !collisionCheckParams.myCheckHeightConeOnCollision,
                                 collisionCheckParams, collisionRuntimeParams, true, true);
 
                             if (!isHorizontalCheckOk) {
@@ -368,7 +370,7 @@ CollisionCheck.prototype._horizontalPositionVerticalCheck = function () {
                                     collisionRuntimeParams.myHorizontalCollisionHit.copy(this._myRaycastResult.myHits[0]);
                                 }
 
-                                if (!collisionCheckParams.myCheckVerticalSearchFurtherVerticalHit) {
+                                if (!collisionCheckParams.myCheckVerticalSearchFurtherVerticalHit || !collisionCheckParams.myCheckHeightConeOnCollision) {
                                     break;
                                 }
                             }
@@ -377,7 +379,7 @@ CollisionCheck.prototype._horizontalPositionVerticalCheck = function () {
                         {
                             isHorizontalCheckOk = this._horizontalCheckRaycast(previousRadialPosition, previousCurrentRadialPosition, null, up,
                                 collisionCheckParams.myHorizontalPositionCheckVerticalIgnoreHitsInsideCollision, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
-                                feetPosition, false,
+                                feetPosition, !collisionCheckParams.myCheckHeightConeOnCollision,
                                 collisionCheckParams, collisionRuntimeParams, true, true);
 
                             if (!isHorizontalCheckOk) {
@@ -388,7 +390,7 @@ CollisionCheck.prototype._horizontalPositionVerticalCheck = function () {
                                     collisionRuntimeParams.myHorizontalCollisionHit.copy(this._myRaycastResult.myHits[0]);
                                 }
 
-                                if (!collisionCheckParams.myCheckVerticalSearchFurtherVerticalHit) {
+                                if (!collisionCheckParams.myCheckVerticalSearchFurtherVerticalHit || !collisionCheckParams.myCheckHeightConeOnCollision) {
                                     break;
                                 }
                             }

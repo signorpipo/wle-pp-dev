@@ -140,14 +140,16 @@ CollisionCheck.prototype._horizontalMovementCheck = function () {
 
                 // we can skip the ground check since we have already done that, but if there was an error do it again with the proper set of objects to ignore
                 // the ceiling check can always be ignored, it used the proper ground objects already
-                if ((i != 0 && i != heightStepAmount) ||
-                    (i == 0 && !groundCeilingCheckIsFine) ||
-                    (i == 0 && collisionCheckParams.myGroundAngleToIgnore == 0) ||
-                    (i == heightStepAmount && collisionCheckParams.myCeilingAngleToIgnore == 0)) {
-                    this._horizontalMovementHorizontalCheck(movement, feetPosition, checkPositions, currentHeightOffset, up, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams);
+                if (collisionCheckParams.myCheckHeightTop || i == 0) {
+                    if ((i != 0 && i != heightStepAmount) ||
+                        (i == 0 && !groundCeilingCheckIsFine) ||
+                        (i == 0 && collisionCheckParams.myGroundAngleToIgnore == 0) ||
+                        (i == heightStepAmount && collisionCheckParams.myCeilingAngleToIgnore == 0)) {
+                        this._horizontalMovementHorizontalCheck(movement, feetPosition, checkPositions, currentHeightOffset, up, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams);
 
-                    if (collisionRuntimeParams.myIsCollidingHorizontally) {
-                        break;
+                        if (collisionRuntimeParams.myIsCollidingHorizontally) {
+                            break;
+                        }
                     }
                 }
 

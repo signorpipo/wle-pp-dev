@@ -58,6 +58,8 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myGroundFixDistanceFromHead = 0.1;
 
         this.myCheckHeight = true;
+        this.myCheckHeightTop = true;
+        this.myCheckHeightConeOnCollision = true;
         this.myHeightCheckStepAmount = 1;
         this.myCheckVerticalStraight = true;
         this.myCheckVerticalDiagonalRay = false;
