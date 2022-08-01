@@ -287,12 +287,12 @@ CollisionCheck.prototype._internalHorizontalSlide = function () {
                     //console.error(slidingSign, collisionRuntimeParams.mySliding90DegreesSign);
                     slidingSign = collisionRuntimeParams.mySliding90DegreesSign;
                 } else if (collisionRuntimeParams.mySliding90DegreesSign == 0 || collisionRuntimeParams.mySlidingRecompute90DegreesSign) {
-                    collisionRuntimeParams.mySlidingRecompute90DegreesSign = false;
                     collisionRuntimeParams.mySliding90DegreesSign = slidingSign;
-                    //console.error("new sign");
                 } else {
                     //console.error("no fix");
                 }
+
+                collisionRuntimeParams.mySlidingRecompute90DegreesSign = false;
             }
 
             let currentAngle = 90 * slidingSign;

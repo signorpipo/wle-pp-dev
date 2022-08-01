@@ -136,6 +136,9 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.myOriginalMovement = PP.vec3_create();
         this.myFixedMovement = PP.vec3_create();
 
+        this.myLastValidOriginalHorizontalMovement = PP.vec3_create();
+        this.myLastValidOriginalVerticalMovement = PP.vec3_create();
+
         this.myIsOnGround = false;
         this.myGroundAngle = 0;
         this.myGroundPerceivedAngle = 0;
@@ -168,6 +171,7 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.mySlidingCollisionHit = new PP.RaycastResultHit();
         this.mySliding90DegreesSign = 0;
         this.mySlidingRecompute90DegreesSign = true;
+        this.myLastValidIsSliding = false;
     }
 
     reset() {
@@ -179,6 +183,9 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
 
         this.myOriginalMovement.vec3_zero();
         this.myFixedMovement.vec3_zero();
+
+        this.myLastValidOriginalHorizontalMovement.vec3_zero();
+        this.myLastValidOriginalVerticalMovement.vec3_zero();
 
         this.myIsOnGround = false;
         this.myGroundAngle = 0;
@@ -212,6 +219,7 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.mySlidingCollisionHit.reset();
         this.mySliding90DegreesSign = 0;
         this.mySlidingRecompute90DegreesSign = true;
+        this.myLastValidIsSliding = false;
     }
 
     copy(other) {
@@ -223,6 +231,9 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
 
         this.myOriginalMovement.vec3_copy(other.myOriginalMovement);
         this.myFixedMovement.vec3_copy(other.myFixedMovement);
+
+        this.myLastValidOriginalHorizontalMovement.vec3_copy(other.myLastValidOriginalHorizontalMovement);
+        this.myLastValidOriginalVerticalMovement.vec3_copy(other.myLastValidOriginalVerticalMovement);
 
         this.myIsOnGround = other.myIsOnGround;
         this.myGroundAngle = other.myGroundAngle;
@@ -256,5 +267,6 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.mySlidingCollisionHit.copy(other.mySlidingCollisionHit);
         this.mySliding90DegreesSign = other.mySliding90DegreesSign;
         this.mySlidingRecompute90DegreesSign = other.mySlidingRecompute90DegreesSign;
+        this.myLastValidIsSliding = other.myLastValidIsSliding;
     }
 };

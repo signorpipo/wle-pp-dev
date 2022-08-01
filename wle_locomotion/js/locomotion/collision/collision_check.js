@@ -166,7 +166,6 @@ Object.defineProperty(CollisionCheck.prototype, "_fixMovement", { enumerable: fa
 
 CollisionCheck.prototype._fixMovementStep = function () {
     let horizontalMovement = PP.vec3_create();
-    let previousHorizontalMovement = PP.vec3_create();
     let previousFixedHorizontalMovement = PP.vec3_create();
     let verticalMovement = PP.vec3_create();
     let fixedHorizontalMovement = PP.vec3_create();
@@ -203,21 +202,33 @@ CollisionCheck.prototype._fixMovementStep = function () {
 
         this._myPrevCollisionRuntimeParams.copy(collisionRuntimeParams);
         collisionRuntimeParams.reset();
+        collisionRuntimeParams.myLastValidOriginalHorizontalMovement.vec3_copy(this._myPrevCollisionRuntimeParams.myLastValidOriginalHorizontalMovement);
+        collisionRuntimeParams.myLastValidOriginalVerticalMovement.vec3_copy(this._myPrevCollisionRuntimeParams.myLastValidOriginalVerticalMovement);
+        collisionRuntimeParams.myLastValidIsSliding = this._myPrevCollisionRuntimeParams.myLastValidIsSliding;
+
+        if (!verticalMovement.vec3_isZero()) {
+            collisionRuntimeParams.myLastValidOriginalVerticalMovement.vec3_copy(verticalMovement);
+        } else {
+            collisionRuntimeParams.myLastValidOriginalVerticalMovement.vec3_copy(this._myPrevCollisionRuntimeParams.myLastValidOriginalVerticalMovement);
+        }
 
         collisionRuntimeParams.mySliding90DegreesSign = this._myPrevCollisionRuntimeParams.mySliding90DegreesSign;
         collisionRuntimeParams.mySlidingRecompute90DegreesSign = this._myPrevCollisionRuntimeParams.mySlidingRecompute90DegreesSign;
         if (collisionCheckParams.mySlidingAdjustSign90Degrees) {
             let angleWithPreviousThreshold = 0.5;
-            previousHorizontalMovement = this._myPrevCollisionRuntimeParams.myOriginalMovement.vec3_removeComponentAlongAxis(transformUp, previousHorizontalMovement);
-            if (!previousHorizontalMovement.vec3_isZero(0.000001) && !horizontalMovement.vec3_isZero(0.000001) &&
-                horizontalMovement.vec3_angle(previousHorizontalMovement) > angleWithPreviousThreshold) {
-                previousFixedHorizontalMovement = this._myPrevCollisionRuntimeParams.myFixedMovement.vec3_removeComponentAlongAxis(transformUp, previousFixedHorizontalMovement);
-                if (!this._myPrevCollisionRuntimeParams.myHorizontalMovementCancelled && !this._myPrevCollisionRuntimeParams.myIsSliding &&
-                    previousFixedHorizontalMovement.vec3_length() > 0) {
-                    collisionRuntimeParams.mySliding90DegreesSign = horizontalMovement.vec3_signTo(previousHorizontalMovement, transformUp);
+            if (!this._myPrevCollisionRuntimeParams.myLastValidOriginalHorizontalMovement.vec3_isZero() && !horizontalMovement.vec3_isZero() &&
+                horizontalMovement.vec3_angle(this._myPrevCollisionRuntimeParams.myLastValidOriginalHorizontalMovement) > angleWithPreviousThreshold) {
+                //previousFixedHorizontalMovement = this._myPrevCollisionRuntimeParams.myFixedMovement.vec3_removeComponentAlongAxis(transformUp, previousFixedHorizontalMovement);
+                if (!this._myPrevCollisionRuntimeParams.myLastValidIsSliding) {
+                    let angleSigned = horizontalMovement.vec3_angleSigned(this._myPrevCollisionRuntimeParams.myLastValidOriginalHorizontalMovement, transformUp);
+                    let angleSignedThreshold = 10;
+                    if (Math.abs(angleSigned) < 180 - angleSignedThreshold) {
+                        collisionRuntimeParams.mySliding90DegreesSign = Math.pp_sign(angleSigned);
+                        //console.error("special sign");
+                    }
                 }
                 collisionRuntimeParams.mySlidingRecompute90DegreesSign = true;
-                //console.error("direction renew");
+                //console.error("direction new");
             }
         }
 
@@ -262,7 +273,6 @@ CollisionCheck.prototype._fixMovementStep = function () {
             collisionRuntimeParams.myHorizontalMovementCancelled = true;
         }
 
-
         //console.error(_myTotalRaycasts );
         // collisionCheckParams.myDebugActive = false;
 
@@ -279,6 +289,10 @@ CollisionCheck.prototype._fixMovementStep = function () {
         fixedVerticalMovement.vec3_zero();
         fixedVerticalMovement = this._verticalCheck(surfaceAdjustedVerticalMovement, originalMovementSign, newFeetPosition, height, transformUp, forwardForVertical, collisionCheckParams, collisionRuntimeParams, fixedVerticalMovement);
 
+        if (fixedVerticalMovement.vec3_isZero(0.000001)) {
+            fixedVerticalMovement.vec3_zero();
+        }
+
         //console.error(_myTotalRaycasts );
         outFixedMovement.vec3_zero();
         if (!collisionRuntimeParams.myIsCollidingVertically) {
@@ -286,6 +300,8 @@ CollisionCheck.prototype._fixMovementStep = function () {
         } else {
             collisionRuntimeParams.myHorizontalMovementCancelled = true;
             collisionRuntimeParams.myVerticalMovementCancelled = true;
+            fixedHorizontalMovement.vec3_zero();
+            fixedVerticalMovement.vec3_zero();
         }
 
         newFeetPosition = feetPosition.vec3_add(outFixedMovement, newFeetPosition);
@@ -309,10 +325,28 @@ CollisionCheck.prototype._fixMovementStep = function () {
         //return outFixedMovement.vec3_zero();
 
         if (collisionCheckParams.mySlidingAdjustSign90Degrees) {
-            if (!collisionRuntimeParams.myHorizontalMovementCancelled && !collisionRuntimeParams.myIsSliding && fixedHorizontalMovement.vec3_length() > 0) {
+            if (!collisionRuntimeParams.myHorizontalMovementCancelled && !collisionRuntimeParams.myIsSliding && !fixedHorizontalMovement.vec3_isZero()) {
+                /* let angleWithPreviousThreshold = 0.5;
+                if (!this._myPrevCollisionRuntimeParams.myLastValidOriginalHorizontalMovement.vec3_isZero() && !horizontalMovement.vec3_isZero() &&
+                    horizontalMovement.vec3_angle(this._myPrevCollisionRuntimeParams.myLastValidOriginalHorizontalMovement) > angleWithPreviousThreshold) {
+                    collisionRuntimeParams.mySliding90DegreesSign = horizontalMovement.vec3_signTo(this._myPrevCollisionRuntimeParams.myLastValidOriginalHorizontalMovement, transformUp);
+                    console.error("sp", collisionRuntimeParams.mySliding90DegreesSign, collisionRuntimeParams.myIsSliding);
+                } */
                 collisionRuntimeParams.mySlidingRecompute90DegreesSign = true;
                 //console.error("empty renew");
             }
+        }
+
+        if (!horizontalMovement.vec3_isZero()) {
+            collisionRuntimeParams.myLastValidOriginalHorizontalMovement.vec3_copy(horizontalMovement);
+        }
+
+        if (!verticalMovement.vec3_isZero()) {
+            collisionRuntimeParams.myLastValidOriginalVerticalMovement.vec3_copy(verticalMovement);
+        }
+
+        if (!fixedHorizontalMovement.vec3_isZero()) {
+            collisionRuntimeParams.myLastValidIsSliding = collisionRuntimeParams.myIsSliding;
         }
 
         return outFixedMovement;
