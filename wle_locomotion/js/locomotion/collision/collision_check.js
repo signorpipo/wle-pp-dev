@@ -178,7 +178,9 @@ CollisionCheck.prototype._fixMovementStep = function () {
         // #TODO refactor and split horizontal check and vertical check into: hMovement + vMovement + hPosition + vPosition?
         // Will make the sliding heavier, if I slide repeating all the 4 steps instead of 2 as now, but would be more correct
 
-        //_myTotalRaycasts = 0;
+        // #TODO when on high slopes where u are not allowed to move the check does not manage to slide
+
+        // #TODO when moving upward on the edge of a slope, the edge can be detected as a wall and prevent movement, while it should just keep moving
 
         horizontalMovement = movement.vec3_removeComponentAlongAxis(transformUp, horizontalMovement);
         if (horizontalMovement.vec3_isZero(0.000001)) {
@@ -194,6 +196,7 @@ CollisionCheck.prototype._fixMovementStep = function () {
             //return [0, 0, 0];
         }
 
+        //_myTotalRaycasts = 0;
         //collisionCheckParams.myDebugActive = true;
 
         this._myPrevCollisionRuntimeParams.copy(collisionRuntimeParams);
