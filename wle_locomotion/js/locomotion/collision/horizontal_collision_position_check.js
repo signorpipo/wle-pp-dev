@@ -23,6 +23,7 @@ CollisionCheck.prototype._horizontalPositionCheck = function () {
     let heightStep = PP.vec3_create();
     let currentHeightOffset = PP.vec3_create();
     let hitHeightOffset = PP.vec3_create();
+    let hitHeightOffsetEpsilon = PP.vec3_create();
     let downwardHeightOffset = PP.vec3_create();
     let downwardHeightStep = PP.vec3_create();
 
@@ -142,12 +143,15 @@ CollisionCheck.prototype._horizontalPositionCheck = function () {
                 }
 
                 if (i > 0) {
+                    let hitHeightOffsetEpsilonValue = 0.0001;
+
                     if (collisionCheckParams.myHorizontalPositionCheckVerticalDirectionType == 0 || collisionCheckParams.myHorizontalPositionCheckVerticalDirectionType == 2) {
                         verticalDirection.vec3_copy(up);
                         this._horizontalPositionVerticalCheck(feetPosition, checkPositions, currentHeightOffset, heightStep, verticalDirection, up, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams);
 
                         if (collisionRuntimeParams.myIsCollidingHorizontally && collisionCheckParams.myCheckHeightConeOnCollision) {
                             hitHeightOffset = collisionRuntimeParams.myHorizontalCollisionHit.myPosition.vec3_sub(feetPosition, hitHeightOffset).vec3_componentAlongAxis(up, hitHeightOffset);
+                            hitHeightOffset.vec3_add(verticalDirection.vec3_scale(hitHeightOffsetEpsilonValue, hitHeightOffsetEpsilon), hitHeightOffset);
 
                             collisionRuntimeParams.myIsCollidingHorizontally = false;
                             collisionRuntimeParams.myHorizontalCollisionHit.reset();
@@ -169,6 +173,7 @@ CollisionCheck.prototype._horizontalPositionCheck = function () {
 
                         if (collisionRuntimeParams.myIsCollidingHorizontally && collisionCheckParams.myCheckHeightConeOnCollision) {
                             hitHeightOffset = collisionRuntimeParams.myHorizontalCollisionHit.myPosition.vec3_sub(feetPosition, hitHeightOffset).vec3_componentAlongAxis(up, hitHeightOffset);
+                            hitHeightOffset.vec3_add(verticalDirection.vec3_scale(hitHeightOffsetEpsilonValue, hitHeightOffsetEpsilon), hitHeightOffset);
 
                             collisionRuntimeParams.myIsCollidingHorizontally = false;
                             collisionRuntimeParams.myHorizontalCollisionHit.reset();
