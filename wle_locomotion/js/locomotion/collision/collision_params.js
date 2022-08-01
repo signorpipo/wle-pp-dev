@@ -107,6 +107,8 @@ CollisionCheckParams = class CollisionCheckParams {
         // this help in catching the flicker when the direction is not changing every frame but every 2-3 for example
         // it's especially useful if combo-ed with mySlidingFlickeringPreventionType #1, making it a bit less fluid but also less flickering
 
+        this.mySlidingAdjustSign90Degrees = false;
+
         this.myBlockLayerFlags = new PP.PhysicsLayerFlags();
         this.myObjectsToIgnore = [];
 
@@ -164,6 +166,8 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.mySlidingMovementAngle = 0;
         this.mySlidingCollisionAngle = 0;
         this.mySlidingCollisionHit = new PP.RaycastResultHit();
+        this.mySliding90DegreesSign = 0;
+        this.mySlidingRecompute90DegreesSign = true;
     }
 
     reset() {
@@ -206,6 +210,8 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.mySlidingMovementAngle = 0;
         this.mySlidingCollisionAngle = 0;
         this.mySlidingCollisionHit.reset();
+        this.mySliding90DegreesSign = 0;
+        this.mySlidingRecompute90DegreesSign = true;
     }
 
     copy(other) {
@@ -248,5 +254,7 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.mySlidingMovementAngle = other.mySlidingMovementAngle;
         this.mySlidingCollisionAngle = other.mySlidingCollisionAngle;
         this.mySlidingCollisionHit.copy(other.mySlidingCollisionHit);
+        this.mySliding90DegreesSign = other.mySliding90DegreesSign;
+        this.mySlidingRecompute90DegreesSign = other.mySlidingRecompute90DegreesSign;
     }
 };

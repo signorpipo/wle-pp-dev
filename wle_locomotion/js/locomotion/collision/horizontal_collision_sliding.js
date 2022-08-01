@@ -175,6 +175,8 @@ CollisionCheck.prototype._horizontalSlideFlickerCheck = function () {
                 isFlickering = true;
             } else {
                 this._mySlidingFlickeringFixCollisionRuntimeParams.reset();
+                this._mySlidingFlickeringFixCollisionRuntimeParams.mySliding90DegreesSign = collisionRuntimeParams.mySliding90DegreesSign;
+                this._mySlidingFlickeringFixCollisionRuntimeParams.mySlidingRecompute90DegreesSign = false;
 
                 newFeetPosition = feetPosition.vec3_add(slideMovement, newFeetPosition);
 
@@ -276,6 +278,21 @@ CollisionCheck.prototype._internalHorizontalSlide = function () {
             let slidingSign = invertedNormal.vec3_signTo(movement, up);
             if (checkOppositeDirection) {
                 slidingSign *= -1;
+            }
+
+            if (collisionCheckParams.mySlidingAdjustSign90Degrees) {
+                let angleThreshold = 0.1;
+                let angleSigned = invertedNormal.vec3_angleSigned(movement, up);
+                if (Math.abs(angleSigned) < angleThreshold && collisionRuntimeParams.mySliding90DegreesSign != 0) {
+                    //console.error(slidingSign, collisionRuntimeParams.mySliding90DegreesSign);
+                    slidingSign = collisionRuntimeParams.mySliding90DegreesSign;
+                } else if (collisionRuntimeParams.mySliding90DegreesSign == 0 || collisionRuntimeParams.mySlidingRecompute90DegreesSign) {
+                    collisionRuntimeParams.mySlidingRecompute90DegreesSign = false;
+                    collisionRuntimeParams.mySliding90DegreesSign = slidingSign;
+                    //console.error("new sign");
+                } else {
+                    //console.error("no fix");
+                }
             }
 
             let currentAngle = 90 * slidingSign;

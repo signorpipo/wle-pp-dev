@@ -166,6 +166,8 @@ Object.defineProperty(CollisionCheck.prototype, "_fixMovement", { enumerable: fa
 
 CollisionCheck.prototype._fixMovementStep = function () {
     let horizontalMovement = PP.vec3_create();
+    let previousHorizontalMovement = PP.vec3_create();
+    let previousFixedHorizontalMovement = PP.vec3_create();
     let verticalMovement = PP.vec3_create();
     let fixedHorizontalMovement = PP.vec3_create();
     let fixedVerticalMovement = PP.vec3_create();
@@ -201,6 +203,23 @@ CollisionCheck.prototype._fixMovementStep = function () {
 
         this._myPrevCollisionRuntimeParams.copy(collisionRuntimeParams);
         collisionRuntimeParams.reset();
+
+        collisionRuntimeParams.mySliding90DegreesSign = this._myPrevCollisionRuntimeParams.mySliding90DegreesSign;
+        collisionRuntimeParams.mySlidingRecompute90DegreesSign = this._myPrevCollisionRuntimeParams.mySlidingRecompute90DegreesSign;
+        if (collisionCheckParams.mySlidingAdjustSign90Degrees) {
+            let angleWithPreviousThreshold = 0.5;
+            previousHorizontalMovement = this._myPrevCollisionRuntimeParams.myOriginalMovement.vec3_removeComponentAlongAxis(transformUp, previousHorizontalMovement);
+            if (!previousHorizontalMovement.vec3_isZero(0.000001) && !horizontalMovement.vec3_isZero(0.000001) &&
+                horizontalMovement.vec3_angle(previousHorizontalMovement) > angleWithPreviousThreshold) {
+                previousFixedHorizontalMovement = this._myPrevCollisionRuntimeParams.myFixedMovement.vec3_removeComponentAlongAxis(transformUp, previousFixedHorizontalMovement);
+                if (!this._myPrevCollisionRuntimeParams.myHorizontalMovementCancelled && !this._myPrevCollisionRuntimeParams.myIsSliding &&
+                    previousFixedHorizontalMovement.vec3_length() > 0) {
+                    collisionRuntimeParams.mySliding90DegreesSign = horizontalMovement.vec3_signTo(previousHorizontalMovement, transformUp);
+                }
+                collisionRuntimeParams.mySlidingRecompute90DegreesSign = true;
+                //console.error("direction renew");
+            }
+        }
 
         fixedHorizontalMovement.vec3_zero();
 
@@ -288,6 +307,13 @@ CollisionCheck.prototype._fixMovementStep = function () {
         //console.error(_myTotalRaycastsMax);
 
         //return outFixedMovement.vec3_zero();
+
+        if (collisionCheckParams.mySlidingAdjustSign90Degrees) {
+            if (!collisionRuntimeParams.myHorizontalMovementCancelled && !collisionRuntimeParams.myIsSliding && fixedHorizontalMovement.vec3_length() > 0) {
+                collisionRuntimeParams.mySlidingRecompute90DegreesSign = true;
+                //console.error("empty renew");
+            }
+        }
 
         return outFixedMovement;
     };

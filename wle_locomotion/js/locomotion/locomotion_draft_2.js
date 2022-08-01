@@ -723,6 +723,7 @@ WL.registerComponent('locomotion-draft-2', {
         this._myCollisionCheckParams.mySlidingFlickeringPreventionType = 1;      // expensive, 2 times the check for the whole horizontal movement!
         this._myCollisionCheckParams.mySlidingFlickeringPreventionCheckOnlyIfAlreadySliding = true;
         this._myCollisionCheckParams.mySlidingFlickerPreventionCheckAnywayCounter = 1;
+        this._myCollisionCheckParams.mySlidingAdjustSign90Degrees = true;
 
         this._myCollisionCheckParams.myBlockLayerFlags = new PP.PhysicsLayerFlags();
         this._myCollisionCheckParams.myBlockLayerFlags.setAllFlagsActive(true);
