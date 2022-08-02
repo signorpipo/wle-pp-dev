@@ -203,6 +203,9 @@ CollisionCheck.prototype._fixMovementStep = function () {
 
         this._myPrevCollisionRuntimeParams.copy(collisionRuntimeParams);
         collisionRuntimeParams.reset();
+        collisionRuntimeParams.myIsSlidingFlickerPrevented = this._myPrevCollisionRuntimeParams.myIsSlidingFlickerPrevented;
+        //console.error("prevented", collisionRuntimeParams.myIsSlidingFlickerPrevented);
+
         collisionRuntimeParams.myLastValidOriginalHorizontalMovement.vec3_copy(this._myPrevCollisionRuntimeParams.myLastValidOriginalHorizontalMovement);
         collisionRuntimeParams.myLastValidOriginalVerticalMovement.vec3_copy(this._myPrevCollisionRuntimeParams.myLastValidOriginalVerticalMovement);
         collisionRuntimeParams.myLastValidIsSliding = this._myPrevCollisionRuntimeParams.myLastValidIsSliding;
@@ -348,6 +351,8 @@ CollisionCheck.prototype._fixMovementStep = function () {
 
         if (!fixedHorizontalMovement.vec3_isZero()) {
             collisionRuntimeParams.myLastValidIsSliding = collisionRuntimeParams.myIsSliding;
+            collisionRuntimeParams.myIsSlidingFlickerPrevented = false;
+            //fixedHorizontalMovement.vec3_error();
         }
 
         return outFixedMovement;

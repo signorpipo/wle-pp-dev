@@ -20,8 +20,11 @@ CollisionCheck.prototype._horizontalSlide = function () {
         }
 
         if (this._mySlidingCollisionRuntimeParams.myIsSliding) {
+            let backupFlickerPrevented = collisionRuntimeParams.myIsSlidingFlickerPrevented;
             collisionRuntimeParams.copy(this._mySlidingCollisionRuntimeParams);
+            collisionRuntimeParams.myIsSlidingFlickerPrevented = backupFlickerPrevented || this._mySlidingCollisionRuntimeParams.myIsSlidingFlickerPrevented;
         } else {
+            collisionRuntimeParams.myIsSlidingFlickerPrevented = collisionRuntimeParams.myIsSlidingFlickerPrevented || this._mySlidingCollisionRuntimeParams.myIsSlidingFlickerPrevented;
             //console.error("slide cancel");
             outSlideMovement.vec3_zero();
         }
@@ -44,6 +47,7 @@ CollisionCheck.prototype._horizontalSlideCheckOpposite = function () {
             //console.error("opposite normal ok");
             return;
         } else if (previousIsSliding && postSlideCollisionRuntimeParams.myIsSliding && outSlideMovement.vec3_isConcordant(previousHorizontalMovement)) {
+            //console.error("previous direction ok");
             //console.error(postSlideCollisionRuntimeParams.myIsSliding, outSlideMovement.vec3_isConcordant(previousHorizontalMovement), outSlideMovement.vec_toString(), previousHorizontalMovement.vec_toString());
             return;
         } else {
@@ -56,6 +60,7 @@ CollisionCheck.prototype._horizontalSlideCheckOpposite = function () {
 
         oppositeSlideMovement = this._internalHorizontalSlide(movement, feetPosition, height, up, previousHorizontalMovement, collisionCheckParams, this._mySlidingOppositeDirectionCollisionRuntimeParams, true, oppositeSlideMovement);
 
+        //console.error(previousHorizontalMovement.vec_toString(), outSlideMovement.vec_toString(), oppositeSlideMovement.vec_toString());
         if (this._mySlidingOppositeDirectionCollisionRuntimeParams.myIsSliding) {
 
             let isOppositeBetter = false;
@@ -77,8 +82,13 @@ CollisionCheck.prototype._horizontalSlideCheckOpposite = function () {
                 //console.error(movement.vec3_angle(outSlideMovement), movement.vec3_angle(oppositeSlideMovement));
 
             } else {
-                //console.error("oppo not");
-                isOppositeBetter = true;
+                let angleEpsilon = 0.001;
+                if (movement.vec3_isConcordant(oppositeSlideMovement) && movement.vec3_angle(oppositeSlideMovement) < 90 - angleEpsilon) {
+                    //console.error("oppo not");
+                    isOppositeBetter = true;
+                } else {
+                    //console.error("oppo not prevention");
+                }
             }
 
             if (isOppositeBetter) {
@@ -168,11 +178,13 @@ CollisionCheck.prototype._horizontalSlideFlickerCheck = function () {
                 collisionRuntimeParams.mySlidingFlickerPreventionCheckAnywayCounter = collisionCheckParams.mySlidingFlickerPreventionCheckAnywayCounter;
             } else {
                 collisionRuntimeParams.mySlidingFlickerPreventionCheckAnywayCounter = Math.max(0, this._myPrevCollisionRuntimeParams.mySlidingFlickerPreventionCheckAnywayCounter - 1);
+                //console.error(collisionRuntimeParams.mySlidingFlickerPreventionCheckAnywayCounter);
             }
 
             if (collisionCheckParams.mySlidingFlickeringPreventionType != 1 &&
                 this._myPrevCollisionRuntimeParams.myIsSliding && previousHorizontalMovement.vec3_signTo(movement, up, 0) != slideMovement.vec3_signTo(movement, up, 0)) {
                 isFlickering = true;
+                collisionRuntimeParams.myIsSlidingFlickerPrevented = true;
             } else {
                 this._mySlidingFlickeringFixCollisionRuntimeParams.reset();
                 this._mySlidingFlickeringFixCollisionRuntimeParams.mySliding90DegreesSign = collisionRuntimeParams.mySliding90DegreesSign;
@@ -228,6 +240,7 @@ CollisionCheck.prototype._horizontalSlideFlickerCheck = function () {
                             } */
 
                             isFlickering = true;
+                            collisionRuntimeParams.myIsSlidingFlickerPrevented = true;
                         }
                     }
                 }
