@@ -42,7 +42,7 @@ Object.defineProperty(CollisionCheck.prototype, "_horizontalCheck", { enumerable
 
 CollisionCheck.prototype._horizontalCheckRaycast = function () {
     let direction = PP.vec3_create();
-    let fixedFeedPosition = PP.vec3_create();
+    let fixedFeetPosition = PP.vec3_create();
     let fixedHitPosition = PP.vec3_create();
     return function _horizontalCheckRaycast(startPosition, endPosition, movementDirection, up,
         ignoreHitsInsideCollision, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
@@ -78,15 +78,32 @@ CollisionCheck.prototype._horizontalCheckRaycast = function () {
         if (!isOk && fixHitOnCollision) {
             let hitPosition = raycastResult.myHits[0].myPosition;
 
-            fixedFeedPosition = feetPosition.vec3_copyComponentAlongAxis(hitPosition, up, fixedFeedPosition);
-            direction = hitPosition.vec3_sub(fixedFeedPosition, direction);
+            fixedFeetPosition = feetPosition.vec3_copyComponentAlongAxis(hitPosition, up, fixedFeetPosition);
+            fixedHitPosition.vec3_copy(hitPosition);
+
+            let directionOffsetEpsilonValue = 0.0001;
+            direction = direction.vec3_componentAlongAxis(up, direction);
+            if (!direction.vec3_isZero(0.000001)) {
+                // if the check has an up part move the hit a bit on the that direction
+                direction.vec3_normalize(direction);
+                direction.vec3_scale(directionOffsetEpsilonValue, direction);
+
+                // this offset is a workaround for objects that in the editor are aligned but due to clamp get a bit tilted when in the game
+                // and therefore trying an horizontal cast on the vertical hit position could result in hitting the bottom which in theory should be parallel and therefore not possible
+                fixedFeetPosition.vec3_add(direction, fixedFeetPosition);
+                fixedHitPosition.vec3_add(direction, fixedHitPosition);
+            }
+
+            // move the hit a bit further to prevent miss
+            direction = fixedHitPosition.vec3_sub(fixedFeetPosition, direction);
             direction.vec3_normalize(direction);
-            fixedHitPosition = hitPosition.vec3_add(direction.vec3_scale(0.0001, fixedHitPosition), fixedHitPosition);
+            direction.vec3_scale(directionOffsetEpsilonValue, direction);
+            fixedHitPosition = fixedHitPosition.vec3_add(direction, fixedHitPosition);
 
             let swapRaycastResult = this._myRaycastResult;
             this._myRaycastResult = this._myFixRaycastResult;
 
-            isOk = this._horizontalCheckRaycast(fixedFeedPosition, fixedHitPosition, null, up,
+            isOk = this._horizontalCheckRaycast(fixedFeetPosition, fixedHitPosition, null, up,
                 false, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
                 feetPosition, false,
                 collisionCheckParams, collisionRuntimeParams);

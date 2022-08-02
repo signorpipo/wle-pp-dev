@@ -145,6 +145,8 @@ CollisionCheck.prototype._horizontalPositionCheck = function () {
                 }
 
                 if (i > 0) {
+                    // this offset is a workaround for objects that in the editor are aligned but due to clamp get a bit tilted when in the game
+                    // and therefore trying an horizontal cast on the vertical hit position could result in hitting the bottom which in theory should be parallel and therefore not possible
                     let hitHeightOffsetEpsilonValue = 0.0001;
 
                     if (collisionCheckParams.myHorizontalPositionCheckVerticalDirectionType == 0 || collisionCheckParams.myHorizontalPositionCheckVerticalDirectionType == 2) {

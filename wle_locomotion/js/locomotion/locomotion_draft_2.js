@@ -696,6 +696,7 @@ WL.registerComponent('locomotion-draft-2', {
         this._myCollisionCheckParams.myCheckHeight = true;
         this._myCollisionCheckParams.myCheckHeightTop = true;
         this._myCollisionCheckParams.myCheckHeightConeOnCollision = true;
+        this._myCollisionCheckParams.myCheckHeightConeOnCollisionKeepHit = false;
         this._myCollisionCheckParams.myHeightCheckStepAmount = 1;
         this._myCollisionCheckParams.myCheckVerticalFixedForwardEnabled = true;
         this._myCollisionCheckParams.myCheckVerticalStraight = true;
