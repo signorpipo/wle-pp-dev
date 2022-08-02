@@ -236,6 +236,13 @@ CollisionCheck.prototype._fixMovementStep = function () {
             }
         }
 
+        if (this._myPrevCollisionRuntimeParams.myIsSlidingFlickerPrevented) {
+            collisionRuntimeParams.mySlidingPreviousHorizontalMovement.vec3_copy(this._myPrevCollisionRuntimeParams.mySlidingPreviousHorizontalMovement);
+        } else {
+            collisionRuntimeParams.mySlidingPreviousHorizontalMovement = this._myPrevCollisionRuntimeParams.myFixedMovement.vec3_removeComponentAlongAxis(transformUp, collisionRuntimeParams.mySlidingPreviousHorizontalMovement);
+        }
+
+
         fixedHorizontalMovement.vec3_zero();
 
         if (!horizontalMovement.vec3_isZero()) {

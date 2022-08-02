@@ -146,12 +146,12 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.myIsOnGround = false;
         this.myGroundAngle = 0;
         this.myGroundPerceivedAngle = 0;
-        this.myGroundNormal = [0, 0, 0];
+        this.myGroundNormal = PP.vec3_create();
 
         this.myIsOnCeiling = false;
         this.myCeilingAngle = 0;
         this.myCeilingPerceivedAngle = 0;
-        this.myCeilingNormal = [0, 0, 0];
+        this.myCeilingNormal = PP.vec3_create();
 
         this.myHorizontalMovementCancelled = false; // could add HorizontalMovementCancelledReason
         this.myIsCollidingHorizontally = false;
@@ -176,6 +176,7 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.mySliding90DegreesSign = 0;
         this.mySlidingRecompute90DegreesSign = true;
         this.myLastValidIsSliding = false;
+        this.mySlidingPreviousHorizontalMovement = PP.vec3_create();
     }
 
     reset() {
@@ -224,6 +225,7 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.mySliding90DegreesSign = 0;
         this.mySlidingRecompute90DegreesSign = true;
         this.myLastValidIsSliding = false;
+        this.mySlidingPreviousHorizontalMovement = PP.vec3_create();
     }
 
     copy(other) {
@@ -272,5 +274,6 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.mySliding90DegreesSign = other.mySliding90DegreesSign;
         this.mySlidingRecompute90DegreesSign = other.mySlidingRecompute90DegreesSign;
         this.myLastValidIsSliding = other.myLastValidIsSliding;
+        this.mySlidingPreviousHorizontalMovement.vec3_copy(other.mySlidingPreviousHorizontalMovement);
     }
 };

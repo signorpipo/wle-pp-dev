@@ -7,11 +7,13 @@ CollisionCheck.prototype._horizontalSlide = function () {
 
         this._mySlidingCollisionRuntimeParams.copy(collisionRuntimeParams);
 
-        previousHorizontalMovement = this._myPrevCollisionRuntimeParams.myFixedMovement.vec3_removeComponentAlongAxis(up, previousHorizontalMovement);
+        previousHorizontalMovement.vec3_copy(collisionRuntimeParams.mySlidingPreviousHorizontalMovement);
         outSlideMovement = this._internalHorizontalSlide(movement, feetPosition, height, up, previousHorizontalMovement, collisionCheckParams, this._mySlidingCollisionRuntimeParams, false, outSlideMovement);
 
         if (collisionCheckParams.mySlidingCheckBothDirections) {
             this._horizontalSlideCheckOpposite(movement, feetPosition, height, up, previousHorizontalMovement, this._myPrevCollisionRuntimeParams.myIsSliding, collisionCheckParams, collisionRuntimeParams, this._mySlidingCollisionRuntimeParams, outSlideMovement);
+
+            //console.error("post oppo:", outSlideMovement.vec_toString());
         }
 
         if (this._mySlidingCollisionRuntimeParams.myIsSliding && collisionCheckParams.mySlidingFlickeringPreventionType > 0) {
@@ -42,6 +44,7 @@ CollisionCheck.prototype._horizontalSlideCheckOpposite = function () {
         horizontalCollisionNormal = preSlideCollisionRuntimeParams.myHorizontalCollisionHit.myNormal.vec3_removeComponentAlongAxis(up, horizontalCollisionNormal);
         horizontalCollisionNormal.vec3_normalize(horizontalCollisionNormal);
 
+        //console.error("oppo", outSlideMovement.vec_toString(), movement.vec_toString(15));
         let angleNormalWithMovementThreshold = 20;
         if (horizontalCollisionNormal.vec3_angle(movement) > 180 - angleNormalWithMovementThreshold) {
             //console.error("opposite normal ok");
@@ -141,7 +144,7 @@ CollisionCheck.prototype._horizontalSlideFlickerCheck = function () {
     return function _horizontalSlideFlickerCheck(movement, slideMovement, feetPosition, height, up, collisionCheckParams, collisionRuntimeParams) {
         let isFlickering = false;
 
-        previousHorizontalMovement = this._myPrevCollisionRuntimeParams.myFixedMovement.vec3_removeComponentAlongAxis(up, previousHorizontalMovement);
+        previousHorizontalMovement.vec3_copy(collisionRuntimeParams.mySlidingPreviousHorizontalMovement);
         let shouldCheckFlicker =
             this._myPrevCollisionRuntimeParams.myIsSlidingFlickerPrevented ||
             previousHorizontalMovement.vec3_isZero(0.00001);
