@@ -176,6 +176,7 @@ CollisionCheck.prototype._horizontalSlideFlickerCheck = function () {
             }
         }
 
+        //console.error(this._myPrevCollisionRuntimeParams.myIsSlidingFlickerPrevented);
         if (shouldCheckFlicker || this._myPrevCollisionRuntimeParams.mySlidingFlickerPreventionCheckAnywayCounter > 0) {
             if (shouldCheckFlicker) {
                 collisionRuntimeParams.mySlidingFlickerPreventionCheckAnywayCounter = collisionCheckParams.mySlidingFlickerPreventionCheckAnywayCounter;
@@ -184,15 +185,18 @@ CollisionCheck.prototype._horizontalSlideFlickerCheck = function () {
                 //console.error(collisionRuntimeParams.mySlidingFlickerPreventionCheckAnywayCounter);
             }
 
+            //console.error(previousHorizontalMovement.vec3_signTo(movement, up, 0), slideMovement.vec3_signTo(movement, up, 0));
             if ((collisionCheckParams.mySlidingFlickeringPreventionType != 1 || collisionRuntimeParams.myIsSlidingFlickerPrevented || this._myPrevCollisionRuntimeParams.mySlidingFlickerPreventionCheckAnywayCounter > 0) &&
-                this._myPrevCollisionRuntimeParams.myIsSliding && previousHorizontalMovement.vec3_signTo(movement, up, 0) != slideMovement.vec3_signTo(movement, up, 0)) {
+                (this._myPrevCollisionRuntimeParams.myIsSliding && previousHorizontalMovement.vec3_signTo(movement, up, 0) != slideMovement.vec3_signTo(movement, up, 0))) {
                 isFlickering = true;
                 collisionRuntimeParams.myIsSlidingFlickerPrevented = true;
+                //console.error("quick flicker fix");
             } else {
                 this._mySlidingFlickeringFixCollisionRuntimeParams.reset();
                 this._mySlidingFlickeringFixCollisionRuntimeParams.mySliding90DegreesSign = collisionRuntimeParams.mySliding90DegreesSign;
                 this._mySlidingFlickeringFixCollisionRuntimeParams.mySlidingRecompute90DegreesSign = false;
 
+                //console.error("slide movement", slideMovement.vec_toString(), feetPosition.vec_toString());
                 newFeetPosition = feetPosition.vec3_add(slideMovement, newFeetPosition);
 
                 let backupDebugActive = collisionCheckParams.myDebugActive;
@@ -244,6 +248,7 @@ CollisionCheck.prototype._horizontalSlideFlickerCheck = function () {
 
                             isFlickering = true;
                             collisionRuntimeParams.myIsSlidingFlickerPrevented = true;
+                            //console.error("expensive flicker fix");
                         }
                     }
                 }
@@ -253,9 +258,9 @@ CollisionCheck.prototype._horizontalSlideFlickerCheck = function () {
         }
 
         if (isFlickering) {
-            //console.error("flicker", shouldCheckFlicker, slideMovement.vec_toString());
+            //console.error("flicker", shouldCheckFlicker, slideMovement.vec_toString(), "\n");
         } else {
-            //console.error("no flicker", shouldCheckFlicker);
+            //console.error("no flicker", shouldCheckFlicker, slideMovement.vec_toString(), "\n");
         }
 
         return isFlickering;

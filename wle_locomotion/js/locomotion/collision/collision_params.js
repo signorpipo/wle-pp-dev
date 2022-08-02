@@ -111,7 +111,7 @@ CollisionCheckParams = class CollisionCheckParams {
         // this help in catching the flicker when the direction is not changing every frame but every 2-3 for example
         // it's especially useful if combo-ed with mySlidingFlickeringPreventionType #1, making it a bit less fluid but also less flickering
 
-        this.mySlidingAdjustSign90Degrees = false;
+        this.mySlidingAdjustSign90Degrees = true;
 
         this.myBlockLayerFlags = new PP.PhysicsLayerFlags();
         this.myObjectsToIgnore = [];
