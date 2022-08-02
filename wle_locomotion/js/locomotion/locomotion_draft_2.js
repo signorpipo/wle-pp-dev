@@ -75,6 +75,7 @@ WL.registerComponent('locomotion-draft-2', {
         this._myCollisionRuntimeParams = new CollisionRuntimeParams();
     },
     update(dt) {
+        _myTotalRaycasts = 0;
 
         if (this._myDelaySessionChangeResyncCounter > 0) {
             this._myDelaySessionChangeResyncCounter--;
@@ -183,7 +184,6 @@ WL.registerComponent('locomotion-draft-2', {
                 }
 
                 let feetTransform = this._getFeetTransform();
-                _myTotalRaycasts = 0;
 
                 this._myCollisionCheck.fixMovement(headMovement, feetTransform, this._myCollisionCheckParams, this._myCollisionRuntimeParams);
                 movementToApply.vec3_copy(this._myCollisionRuntimeParams.myFixedMovement);

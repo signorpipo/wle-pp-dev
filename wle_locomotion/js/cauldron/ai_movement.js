@@ -32,6 +32,10 @@ WL.registerComponent('ai-movement', {
         let tempGravity = PP.vec3_create();
         let tempTransformQuat = PP.quat2_create();
         return function update(dt) {
+            if (dt > 0.25) {
+                dt = 0.25;
+            }
+
             if (this._myFirstTime) {
                 this._myFirstTime = false;
 
@@ -87,7 +91,7 @@ WL.registerComponent('ai-movement', {
         this._myCollisionCheckParams.myDistanceFromFeetToIgnore = 0.1 * this._myScale;
         this._myCollisionCheckParams.myDistanceFromHeadToIgnore = 0.1 * this._myScale;
 
-        this._myCollisionCheckParams.myHorizontalMovementCheckEnabled = true;
+        this._myCollisionCheckParams.myHorizontalMovementCheckEnabled = false;
         this._myCollisionCheckParams.myHorizontalMovementStepEnabled = false;
         this._myCollisionCheckParams.myHorizontalMovementStepMaxLength = 0;
         this._myCollisionCheckParams.myHorizontalMovementRadialStepAmount = 1;
@@ -101,7 +105,7 @@ WL.registerComponent('ai-movement', {
 
         this._myCollisionCheckParams.myHalfConeAngle = 60;
         this._myCollisionCheckParams.myHalfConeSliceAmount = 1;
-        this._myCollisionCheckParams.myCheckConeBorder = true;
+        this._myCollisionCheckParams.myCheckConeBorder = false;
         this._myCollisionCheckParams.myCheckConeRay = true;
         this._myCollisionCheckParams.myHorizontalPositionCheckVerticalIgnoreHitsInsideCollision = true;
         this._myCollisionCheckParams.myHorizontalPositionCheckVerticalDirectionType = 0; // somewhat expensive, 2 times the check for the vertical check of the horizontal movement!
@@ -122,14 +126,17 @@ WL.registerComponent('ai-movement', {
 
         this._myCollisionCheckParams.myCheckHeight = true;
         this._myCollisionCheckParams.myHeightCheckStepAmount = 1;
+        this._myCollisionCheckParams.myCheckHeightTop = false;
+        this._myCollisionCheckParams.myCheckHeightConeOnCollision = false;
         this._myCollisionCheckParams.myCheckVerticalForwardFixed = true;
         this._myCollisionCheckParams.myCheckVerticalStraight = true;
         this._myCollisionCheckParams.myCheckVerticalDiagonalRay = false;
         this._myCollisionCheckParams.myCheckVerticalDiagonalBorder = false;
         this._myCollisionCheckParams.myCheckVerticalDiagonalBorderRay = false;
+        this._myCollisionCheckParams.myCheckVerticalSearchFurtherVerticalHit = false;
 
         this._myCollisionCheckParams.myGroundAngleToIgnore = 30;
-        this._myCollisionCheckParams.myCeilingAngleToIgnore = 30;
+        this._myCollisionCheckParams.myCeilingAngleToIgnore = 0;
 
         let mesh = this.object.pp_getComponentHierarchy("mesh");
         this._myCollisionCheckParams.myHeight = mesh.object.pp_getScale()[1] * 2;
@@ -144,8 +151,8 @@ WL.registerComponent('ai-movement', {
         this._myCollisionCheckParams.myVerticalFixToComputeCeilingInfo = 0;
 
         this._myCollisionCheckParams.mySlidingEnabled = true;
-        this._myCollisionCheckParams.mySlidingHorizontalMovementCheckBetterNormal = true;
-        this._myCollisionCheckParams.mySlidingMaxAttempts = 3;
+        this._myCollisionCheckParams.mySlidingHorizontalMovementCheckBetterNormal = false;
+        this._myCollisionCheckParams.mySlidingMaxAttempts = 2;
         this._myCollisionCheckParams.mySlidingCheckBothDirections = false;       // expensive, 2 times the check for the whole horizontal movement!
         this._myCollisionCheckParams.mySlidingFlickeringPreventionType = 0;      // expensive, 2 times the check for the whole horizontal movement!
 

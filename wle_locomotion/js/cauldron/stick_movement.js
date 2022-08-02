@@ -51,6 +51,10 @@ WL.registerComponent('stick-movement', {
         this._myInitialHeight = 0;
     },
     update(dt) {
+        if (dt > 0.25) {
+            dt = 0.25;
+        }
+
         if (this._myFirstTime) {
             this._myFirstTime = false;
 
@@ -162,7 +166,7 @@ WL.registerComponent('stick-movement', {
         this._myCollisionCheckParams.myDistanceFromFeetToIgnore = 0.1 * this._myScale;
         this._myCollisionCheckParams.myDistanceFromHeadToIgnore = 0.1 * this._myScale;
 
-        this._myCollisionCheckParams.myHorizontalMovementCheckEnabled = true;
+        this._myCollisionCheckParams.myHorizontalMovementCheckEnabled = false;
         this._myCollisionCheckParams.myHorizontalMovementStepEnabled = false;
         this._myCollisionCheckParams.myHorizontalMovementStepMaxLength = 0;
         this._myCollisionCheckParams.myHorizontalMovementRadialStepAmount = 1;
@@ -198,6 +202,8 @@ WL.registerComponent('stick-movement', {
 
         this._myCollisionCheckParams.myCheckHeight = true;
         this._myCollisionCheckParams.myHeightCheckStepAmount = 1;
+        this._myCollisionCheckParams.myCheckHeightTop = true;
+        this._myCollisionCheckParams.myCheckHeightConeOnCollision = true;
         this._myCollisionCheckParams.myCheckVerticalForwardFixed = true;
         this._myCollisionCheckParams.myCheckVerticalStraight = true;
         this._myCollisionCheckParams.myCheckVerticalDiagonalRay = false;
@@ -218,7 +224,7 @@ WL.registerComponent('stick-movement', {
 
         this._myCollisionCheckParams.mySlidingEnabled = true;
         this._myCollisionCheckParams.mySlidingHorizontalMovementCheckBetterNormal = true;
-        this._myCollisionCheckParams.mySlidingMaxAttempts = 4;
+        this._myCollisionCheckParams.mySlidingMaxAttempts = 2;
         this._myCollisionCheckParams.mySlidingCheckBothDirections = false;       // expensive, 2 times the check for the whole horizontal movement!
         this._myCollisionCheckParams.mySlidingFlickeringPreventionType = 1;      // expensive, 2 times the check for the whole horizontal movement!
 
