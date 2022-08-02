@@ -60,6 +60,8 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myCheckHeight = true;
         this.myCheckHeightTop = true;
         this.myCheckHeightConeOnCollision = true;
+        this.myCheckHeightConeOnCollisionKeepHit = false; // if true and myCheckHeightConeOnCollision is true, if the cone does not hit the height hit will be restored
+        // the fact that the cone does not hit could be due to the fact that it thinks that the collision can be ignored though, sop restoring can be a bit safer but also collide more
         this.myHeightCheckStepAmount = 1;
         this.myCheckVerticalStraight = true;
         this.myCheckVerticalDiagonalRay = false;

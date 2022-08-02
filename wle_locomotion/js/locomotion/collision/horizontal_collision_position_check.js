@@ -29,6 +29,8 @@ CollisionCheck.prototype._horizontalPositionCheck = function () {
 
     let verticalDirection = PP.vec3_create();
 
+    let vertilCheckHit = new PP.RaycastResultHit();
+
     return function _horizontalPositionCheck(feetPosition, height, up, forward, collisionCheckParams, collisionRuntimeParams) {
         this._myDebugActive = collisionCheckParams.myDebugActive && collisionCheckParams.myDebugHorizontalPositionActive;
 
@@ -154,10 +156,17 @@ CollisionCheck.prototype._horizontalPositionCheck = function () {
                             hitHeightOffset.vec3_add(verticalDirection.vec3_scale(hitHeightOffsetEpsilonValue, hitHeightOffsetEpsilon), hitHeightOffset);
 
                             collisionRuntimeParams.myIsCollidingHorizontally = false;
+                            if (collisionCheckParams.myCheckHeightConeOnCollisionKeepHit) {
+                                vertilCheckHit.copy(collisionRuntimeParams.myHorizontalCollisionHit);
+                            }
                             collisionRuntimeParams.myHorizontalCollisionHit.reset();
                             this._horizontalPositionHorizontalCheck(feetPosition, checkPositions, hitHeightOffset, up, forward, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams);
 
                             if (collisionRuntimeParams.myIsCollidingHorizontally) {
+                                break;
+                            } else if (collisionCheckParams.myCheckHeightConeOnCollisionKeepHit) {
+                                collisionRuntimeParams.myIsCollidingHorizontally = true;
+                                collisionRuntimeParams.myHorizontalCollisionHit.copy(vertilCheckHit);
                                 break;
                             }
                         }
@@ -176,10 +185,17 @@ CollisionCheck.prototype._horizontalPositionCheck = function () {
                             hitHeightOffset.vec3_add(verticalDirection.vec3_scale(hitHeightOffsetEpsilonValue, hitHeightOffsetEpsilon), hitHeightOffset);
 
                             collisionRuntimeParams.myIsCollidingHorizontally = false;
+                            if (collisionCheckParams.myCheckHeightConeOnCollisionKeepHit) {
+                                vertilCheckHit.copy(collisionRuntimeParams.myHorizontalCollisionHit);
+                            }
                             collisionRuntimeParams.myHorizontalCollisionHit.reset();
                             this._horizontalPositionHorizontalCheck(feetPosition, checkPositions, hitHeightOffset, up, forward, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams);
 
                             if (collisionRuntimeParams.myIsCollidingHorizontally) {
+                                break;
+                            } else if (collisionCheckParams.myCheckHeightConeOnCollisionKeepHit) {
+                                collisionRuntimeParams.myIsCollidingHorizontally = true;
+                                collisionRuntimeParams.myHorizontalCollisionHit.copy(vertilCheckHit);
                                 break;
                             }
                         }
