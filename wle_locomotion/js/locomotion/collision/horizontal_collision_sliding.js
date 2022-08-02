@@ -184,7 +184,7 @@ CollisionCheck.prototype._horizontalSlideFlickerCheck = function () {
                 //console.error(collisionRuntimeParams.mySlidingFlickerPreventionCheckAnywayCounter);
             }
 
-            if (collisionCheckParams.mySlidingFlickeringPreventionType != 1 &&
+            if ((collisionCheckParams.mySlidingFlickeringPreventionType != 1 || collisionRuntimeParams.myIsSlidingFlickerPrevented || this._myPrevCollisionRuntimeParams.mySlidingFlickerPreventionCheckAnywayCounter > 0) &&
                 this._myPrevCollisionRuntimeParams.myIsSliding && previousHorizontalMovement.vec3_signTo(movement, up, 0) != slideMovement.vec3_signTo(movement, up, 0)) {
                 isFlickering = true;
                 collisionRuntimeParams.myIsSlidingFlickerPrevented = true;
@@ -248,10 +248,12 @@ CollisionCheck.prototype._horizontalSlideFlickerCheck = function () {
                     }
                 }
             }
+        } else {
+            //console.error("no flicker check");
         }
 
         if (isFlickering) {
-            //console.error("flicker", shouldCheckFlicker);
+            //console.error("flicker", shouldCheckFlicker, slideMovement.vec_toString());
         } else {
             //console.error("no flicker", shouldCheckFlicker);
         }

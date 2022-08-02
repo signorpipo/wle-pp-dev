@@ -236,10 +236,11 @@ CollisionCheck.prototype._fixMovementStep = function () {
             }
         }
 
-        if (this._myPrevCollisionRuntimeParams.myIsSlidingFlickerPrevented) {
+        previousFixedHorizontalMovement = this._myPrevCollisionRuntimeParams.myFixedMovement.vec3_removeComponentAlongAxis(transformUp, previousFixedHorizontalMovement);
+        if (previousFixedHorizontalMovement.vec3_isZero(0.000001)) {
             collisionRuntimeParams.mySlidingPreviousHorizontalMovement.vec3_copy(this._myPrevCollisionRuntimeParams.mySlidingPreviousHorizontalMovement);
         } else {
-            collisionRuntimeParams.mySlidingPreviousHorizontalMovement = this._myPrevCollisionRuntimeParams.myFixedMovement.vec3_removeComponentAlongAxis(transformUp, collisionRuntimeParams.mySlidingPreviousHorizontalMovement);
+            collisionRuntimeParams.mySlidingPreviousHorizontalMovement.vec3_copy(previousFixedHorizontalMovement);
         }
 
 
@@ -360,6 +361,14 @@ CollisionCheck.prototype._fixMovementStep = function () {
             collisionRuntimeParams.myLastValidIsSliding = collisionRuntimeParams.myIsSliding;
             collisionRuntimeParams.myIsSlidingFlickerPrevented = false;
             //fixedHorizontalMovement.vec3_error();
+
+            if (!collisionRuntimeParams.myIsSliding) {
+                //console.error("not sliding");
+            } else {
+                //console.error("sliding", collisionRuntimeParams.myIsSlidingFlickerPrevented, collisionRuntimeParams.mySlidingFlickerPreventionCheckAnywayCounter);
+            }
+        } else {
+            //console.error("still", collisionRuntimeParams.myIsSlidingFlickerPrevented, collisionRuntimeParams.mySlidingFlickerPreventionCheckAnywayCounter);
         }
 
         return outFixedMovement;
