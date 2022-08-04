@@ -36,6 +36,8 @@
             - The suffixes (like Matrix or Radians) or prefixes (like degrees) are omitted 
 
         CREATION (u can call these functions without any object):
+            - PP.vec2_create
+
             - PP.vec3_create
 
             - PP.vec4_create
@@ -65,6 +67,7 @@
             - vec_equals   
 
         VECTOR 2:
+            ○ vec2_set
             - vec2_length
             - vec2_isZero
 
@@ -75,8 +78,8 @@
             - vec3_isNormalized / vec3_isZero
             - vec3_length       / vec3_lengthSigned
             - vec3_distance
-            - vec3_add      / vec3_sub          / vec3_mul      / vec3_div      / vec3_scale
-            - vec3_transformQuat
+            - vec3_add              / vec3_sub              / vec3_mul      / vec3_div      / vec3_scale
+            - vec3_transformQuat    / vec3_transformMat4
             - vec3_componentAlongAxis           / vec3_removeComponentAlongAxis / vec3_copyComponentAlongAxis   / vec3_valueAlongAxis  
             - vec3_isConcordant
             - vec3_isFurtherAlongDirection
@@ -441,6 +444,15 @@ Array.prototype.vec_equals = function (vector, epsilon = 0) {
 
 // glMatrix Bridge
 
+Array.prototype.vec2_set = function (x, y = null) {
+    if (y == null) {
+        glMatrix.vec2.set(this, x, x);
+    } else {
+        glMatrix.vec2.set(this, x, y);
+    }
+    return this;
+};
+
 Array.prototype.vec2_length = function () {
     return glMatrix.vec2.length(this);
 };
@@ -541,6 +553,11 @@ Array.prototype.vec3_cross = function (vector, out = glMatrix.vec3.create()) {
 
 Array.prototype.vec3_transformQuat = function (quat, out = glMatrix.vec3.create()) {
     glMatrix.vec3.transformQuat(out, this, quat);
+    return out;
+};
+
+Array.prototype.vec3_transformMat4 = function (mat4, out = glMatrix.vec3.create()) {
+    glMatrix.vec3.transformMat4(out, this, mat4);
     return out;
 };
 
@@ -2037,6 +2054,14 @@ Array.prototype.mat4_fromQuat = function (transformQuat) {
 };
 
 //CREATION
+
+PP.vec2_create = function (x = null, y = null) {
+    let out = glMatrix.vec2.create();
+    if (x != null) {
+        out.vec2_set(x, y);
+    }
+    return out;
+};
 
 PP.vec3_create = function (x = null, y = null, z = null) {
     let out = glMatrix.vec3.create();

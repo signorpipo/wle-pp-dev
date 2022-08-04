@@ -94,6 +94,7 @@ require('./pp/input/cauldron/finger_cursor.js');
 require('./pp/input/cauldron/input_types.js');
 require('./pp/input/cauldron/input_utils.js');
 require('./pp/input/cauldron/keyboard.js');
+require('./pp/input/cauldron/mouse.js');
 
 require('./pp/input/gamepad/gamepad_buttons.js');
 require('./pp/input/gamepad/base_gamepad.js');

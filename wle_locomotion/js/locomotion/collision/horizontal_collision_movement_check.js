@@ -26,6 +26,10 @@ CollisionCheck.prototype._horizontalMovementCheck = function () {
     let leftRadialDirection = PP.vec3_create();
     let rightRadialDirection = PP.vec3_create();
     return function _horizontalMovementCheck(movement, feetPosition, height, up, collisionCheckParams, collisionRuntimeParams) {
+        // #TODO add a flag in the params to specify if u want to allow movement inside collision (to hope that it will end up in a non collision position)
+        // also vertical check should check all hits like the position check
+        // for now is ok as it is, the movement check is not as important and could also be disabled it the movement per frame is very small
+
         this._myDebugActive = collisionCheckParams.myDebugActive && collisionCheckParams.myDebugHorizontalMovementActive;
 
         let halfConeAngle = Math.min(collisionCheckParams.myHalfConeAngle, 90);
