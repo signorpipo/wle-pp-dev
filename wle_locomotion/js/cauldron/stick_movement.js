@@ -12,20 +12,20 @@ WL.registerComponent('stick-movement', {
 }, {
     start() {
         let directionConverterHeadParams = new Direction2DTo3DConverterParams();
-        directionConverterHeadParams.myAutoUpdateFly = this._myFlyEnabled;
+        directionConverterHeadParams.myAutoUpdateFlyForward = this._myFlyEnabled;
+        directionConverterHeadParams.myAutoUpdateFlyRight = this._myFlyEnabled;
         directionConverterHeadParams.myMinAngleToFlyForwardUp = this._myMinAngleToFlyUpHead;
         directionConverterHeadParams.myMinAngleToFlyForwardDown = this._myMinAngleToFlyDownHead;
         directionConverterHeadParams.myMinAngleToFlyRightUp = this._myMinAngleToFlyRight;
         directionConverterHeadParams.myMinAngleToFlyRightDown = this._myMinAngleToFlyRight;
-        directionConverterHeadParams.myStopFlyingWhenZero = false;
 
         let directionConverterHandParams = new Direction2DTo3DConverterParams();
-        directionConverterHandParams.myAutoUpdateFly = this._myFlyEnabled;
+        directionConverterHandParams.myAutoUpdateFlyForward = this._myFlyEnabled;
+        directionConverterHandParams.myAutoUpdateFlyRight = this._myFlyEnabled;
         directionConverterHandParams.myMinAngleToFlyForwardUp = this._myMinAngleToFlyUpHand;
         directionConverterHandParams.myMinAngleToFlyForwardDown = this._myMinAngleToFlyDownHand;
         directionConverterHandParams.myMinAngleToFlyRightUp = this._myMinAngleToFlyRight;
         directionConverterHandParams.myMinAngleToFlyRightDown = this._myMinAngleToFlyRight;
-        directionConverterHandParams.myStopFlyingWhenZero = false;
 
         this._myDirectionConverterHead = new Direction2DTo3DConverter(directionConverterHeadParams);
         this._myDirectionConverterHand = new Direction2DTo3DConverter(directionConverterHandParams);
@@ -124,8 +124,8 @@ WL.registerComponent('stick-movement', {
             if (this._myStickIdleTimer.isRunning()) {
                 this._myStickIdleTimer.update(dt);
                 if (this._myStickIdleTimer.isDone()) {
-                    this._myDirectionConverterHead.reset();
-                    this._myDirectionConverterHand.reset();
+                    this._myDirectionConverterHead.resetFly();
+                    this._myDirectionConverterHand.resetFly();
                 }
             }
         }

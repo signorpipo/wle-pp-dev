@@ -27,6 +27,7 @@ CollisionCheck = class CollisionCheck {
         //console.error = function () { };
     }
 
+    // #TODO change quat to normal transform mat
     fixMovement(movement, transformQuat, collisionCheckParams, collisionRuntimeParams) {
         this._fixMovement(movement, transformQuat, collisionCheckParams, collisionRuntimeParams);
     }
