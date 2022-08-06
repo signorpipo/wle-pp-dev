@@ -45,12 +45,11 @@ PP.Mouse = class Mouse {
         this._myIsMoving = this._myIsMovingToProcess;
         this._myIsMovingToProcess = false;
 
-        for (let typeKey in PP.MouseButtonType) {
-            let mouseButton = this._myButtonInfos.get(PP.MouseButtonType[typeKey]);
-            mouseButton.myIsPressStart = mouseButton.myIsPressStartToProcess;
-            mouseButton.myIsPressEnd = mouseButton.myIsPressEndToProcess;
-            mouseButton.myIsPressStartToProcess = false;
-            mouseButton.myIsPressEndToProcess = false;
+        for (let buttonInfo of this._myButtonInfos.values()) {
+            buttonInfo.myIsPressStart = buttonInfo.myIsPressStartToProcess;
+            buttonInfo.myIsPressEnd = buttonInfo.myIsPressEndToProcess;
+            buttonInfo.myIsPressStartToProcess = false;
+            buttonInfo.myIsPressEndToProcess = false;
         }
     }
 
@@ -62,52 +61,34 @@ PP.Mouse = class Mouse {
         WL.canvas.removeEventListener("contextmenu", this._myPreventContextMenuCallback);
     }
 
-    isButtonPressed(mouseButtonType = null) {
-        if (mouseButtonType != null) {
-            return this._myButtonInfos.get(mouseButtonType).myIsPressed;
+    isButtonPressed(buttonInfoType) {
+        let isPressed = false;
+
+        if (this._myButtonInfos.has(buttonInfoType)) {
+            isPressed = this._myButtonInfos.get(buttonInfoType).myIsPressed;
         }
 
-        let isAnyPressed = false;
-        for (let buttonInfo of this._myButtonInfos.values()) {
-            if (buttonInfo.myIsPressed) {
-                isAnyPressed = true;
-                break;
-            }
-        }
-
-        return isAnyPressed;
+        return isPressed;
     }
 
-    isButtonPressStart(mouseButtonType = null) {
-        if (mouseButtonType != null) {
-            return this._myButtonInfos.get(mouseButtonType).myIsPressStart;
+    isButtonPressStart(buttonInfoType) {
+        let isPressStart = false;
+
+        if (this._myButtonInfos.has(buttonInfoType)) {
+            isPressStart = this._myButtonInfos.get(buttonInfoType).myIsPressStart;
         }
 
-        let isAnyPressStart = false;
-        for (let buttonInfo of this._myButtonInfos.values()) {
-            if (buttonInfo.myIsPressStart) {
-                isAnyPressStart = true;
-                break;
-            }
-        }
-
-        return isAnyPressStart;
+        return isPressStart;
     }
 
-    isButtonPressEnd(mouseButtonType = null) {
-        if (mouseButtonType != null) {
-            return this._myButtonInfos.get(mouseButtonType).myIsPressEnd;
+    isButtonPressEnd(buttonInfoType = null) {
+        let isPressEnd = false;
+
+        if (this._myButtonInfos.has(buttonInfoType)) {
+            isPressEnd = this._myButtonInfos.get(buttonInfoType).myIsPressEnd;
         }
 
-        let isAnyPressEnd = false;
-        for (let buttonInfo of this._myButtonInfos.values()) {
-            if (buttonInfo.myIsPressEnd) {
-                isAnyPressEnd = true;
-                break;
-            }
-        }
-
-        return isAnyPressEnd;
+        return isPressEnd;
     }
 
     isMoving() {
@@ -206,31 +187,30 @@ PP.Mouse = class Mouse {
     }
 
     _onMouseDown(event) {
-        let mouseButton = this._myButtonInfos.get(event.button);
-        if (!mouseButton.myIsPressed) {
-            mouseButton.myIsPressed = true;
-            mouseButton.myIsPressStartToProcess = true;
+        let buttonInfo = this._myButtonInfos.get(event.button);
+        if (!buttonInfo.myIsPressed) {
+            buttonInfo.myIsPressed = true;
+            buttonInfo.myIsPressStartToProcess = true;
         }
 
         this._updatePositionAndView(event);
     }
 
     _onMouseUp(event) {
-        let mouseButton = this._myButtonInfos.get(event.button);
-        if (mouseButton.myIsPressed) {
-            mouseButton.myIsPressed = false;
-            mouseButton.myIsPressEndToProcess = true;
+        let buttonInfo = this._myButtonInfos.get(event.button);
+        if (buttonInfo.myIsPressed) {
+            buttonInfo.myIsPressed = false;
+            buttonInfo.myIsPressEndToProcess = true;
         }
 
         this._updatePositionAndView(event);
     }
 
     _onMouseLeave(event) {
-        for (let typeKey in PP.MouseButtonType) {
-            let mouseButton = this._myButtonInfos.get(PP.MouseButtonType[typeKey]);
-            if (mouseButton.myIsPressed) {
-                mouseButton.myIsPressed = false;
-                mouseButton.myIsPressEndToProcess = true;
+        for (let buttonInfo of this._myButtonInfos.values()) {
+            if (buttonInfo.myIsPressed) {
+                buttonInfo.myIsPressed = false;
+                buttonInfo.myIsPressEndToProcess = true;
             }
         }
     }
