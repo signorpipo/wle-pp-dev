@@ -11,7 +11,7 @@ WL.registerComponent('stick-movement', {
 
 }, {
     start() {
-        let directionConverterHeadParams = new Direction2DTo3DConverterParams();
+        let directionConverterHeadParams = new PP.Direction2DTo3DConverterParams();
         directionConverterHeadParams.myAutoUpdateFlyForward = this._myFlyEnabled;
         directionConverterHeadParams.myAutoUpdateFlyRight = this._myFlyEnabled;
         directionConverterHeadParams.myMinAngleToFlyForwardUp = this._myMinAngleToFlyUpHead;
@@ -19,7 +19,7 @@ WL.registerComponent('stick-movement', {
         directionConverterHeadParams.myMinAngleToFlyRightUp = this._myMinAngleToFlyRight;
         directionConverterHeadParams.myMinAngleToFlyRightDown = this._myMinAngleToFlyRight;
 
-        let directionConverterHandParams = new Direction2DTo3DConverterParams();
+        let directionConverterHandParams = new PP.Direction2DTo3DConverterParams();
         directionConverterHandParams.myAutoUpdateFlyForward = this._myFlyEnabled;
         directionConverterHandParams.myAutoUpdateFlyRight = this._myFlyEnabled;
         directionConverterHandParams.myMinAngleToFlyForwardUp = this._myMinAngleToFlyUpHand;
@@ -27,8 +27,8 @@ WL.registerComponent('stick-movement', {
         directionConverterHandParams.myMinAngleToFlyRightUp = this._myMinAngleToFlyRight;
         directionConverterHandParams.myMinAngleToFlyRightDown = this._myMinAngleToFlyRight;
 
-        this._myDirectionConverterHead = new Direction2DTo3DConverter(directionConverterHeadParams);
-        this._myDirectionConverterHand = new Direction2DTo3DConverter(directionConverterHandParams);
+        this._myDirectionConverterHead = new PP.Direction2DTo3DConverter(directionConverterHeadParams);
+        this._myDirectionConverterHand = new PP.Direction2DTo3DConverter(directionConverterHandParams);
 
         this._myCollisionCheck = new CollisionCheck();
         this._myCollisionCheckParams = null;

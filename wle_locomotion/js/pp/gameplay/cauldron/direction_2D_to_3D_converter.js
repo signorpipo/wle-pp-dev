@@ -1,4 +1,4 @@
-Direction2DTo3DConverterParams = class Direction2DTo3DConverterParams {
+PP.Direction2DTo3DConverterParams = class Direction2DTo3DConverterParams {
     constructor() {
         this.myStartFlyingForward = false;
         this.myStartFlyingRight = false;
@@ -16,9 +16,9 @@ Direction2DTo3DConverterParams = class Direction2DTo3DConverterParams {
     }
 };
 
-Direction2DTo3DConverter = class Direction2DTo3DConverter {
+PP.Direction2DTo3DConverter = class Direction2DTo3DConverter {
 
-    constructor(params = new Direction2DTo3DConverterParams()) {
+    constructor(params = new PP.Direction2DTo3DConverterParams()) {
         this._myParams = params;
 
         this._myIsFlyingForward = this._myParams.myStartFlyingForward;
@@ -101,7 +101,7 @@ Direction2DTo3DConverter = class Direction2DTo3DConverter {
     }
 };
 
-Direction2DTo3DConverter.prototype.convert = function () {
+PP.Direction2DTo3DConverter.prototype.convert = function () {
     let forward = PP.vec3_create();
     let right = PP.vec3_create();
     let directionUpNegate = PP.vec3_create();

@@ -86,6 +86,8 @@ require('./pp/debug/components/debug_transform_component.js');
 require('./pp/debug/components/debug_manager_component.js');
 
 //	GAMEPLAY
+require('./pp/gameplay/cauldron/direction_2D_to_3D_converter.js');
+
 require('./pp/gameplay/grab_throw/grabbable.js');
 require('./pp/gameplay/grab_throw/grabber_hand.js');
 
@@ -164,7 +166,6 @@ require('./pp/tool/widget_frame/widget_frame.js');
 //CAULDRON
 
 require('./cauldron/toggle_require_mouse_down.js');
-require('./cauldron/direction_2D_to_3D_converter.js');
 require('./cauldron/character_spawner.js');
 require('./cauldron/ai_movement.js');
 require('./cauldron/stick_movement.js');
