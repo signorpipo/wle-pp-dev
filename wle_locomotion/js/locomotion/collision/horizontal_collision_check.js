@@ -65,12 +65,20 @@ CollisionCheck.prototype._horizontalCheckRaycast = function () {
 
         if (raycastResult.isColliding()) {
             let hitsToControl = checkAllHits ? raycastResult.myHits.length : 1;
+            let validHitIndex = 0;
             for (let i = 0; i < hitsToControl; i++) {
                 let hit = raycastResult.myHits[i];
                 if ((ignoreGroundAngleCallback == null || !ignoreGroundAngleCallback(hit, ignoreHitsInsideCollisionIfObjectToIgnore)) &&
                     (ignoreCeilingAngleCallback == null || !ignoreCeilingAngleCallback(hit, ignoreHitsInsideCollisionIfObjectToIgnore))) {
                     isOk = false;
+                    validHitIndex = i;
                     break;
+                }
+            }
+
+            if (!isOk && validHitIndex > 0) {
+                for (let i = 0; i < validHitIndex; i++) {
+                    raycastResult.removeHit(0);
                 }
             }
         }

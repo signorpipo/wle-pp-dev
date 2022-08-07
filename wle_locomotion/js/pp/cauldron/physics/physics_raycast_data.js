@@ -83,6 +83,24 @@ PP.RaycastResult = class RaycastResult {
 
         return hits;
     }
+
+    removeHit(hitIndex) {
+        let removedHit = this.myHits.pp_removeIndex(hitIndex);
+
+        if (removedHit != null) {
+            if (this._myUnusedHits == null) {
+                this._myUnusedHits = [];
+            }
+
+            this._myUnusedHits.push(removedHit);
+        }
+
+        return removedHit;
+    }
+
+    copy(result) {
+        // implemented outside class definition
+    }
 };
 
 PP.RaycastResult.prototype.copy = function () {

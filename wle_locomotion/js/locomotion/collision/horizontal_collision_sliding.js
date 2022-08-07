@@ -16,6 +16,8 @@ CollisionCheck.prototype._horizontalSlide = function () {
             //console.error("post oppo:", outSlideMovement.vec_toString());
         }
 
+        //console.error(" ");
+
         if (this._mySlidingCollisionRuntimeParams.myIsSliding && collisionCheckParams.mySlidingFlickeringPreventionType > 0) {
             let isFlickering = this._horizontalSlideFlickerCheck(movement, outSlideMovement, feetPosition, height, up, collisionCheckParams, this._mySlidingCollisionRuntimeParams);
             this._mySlidingCollisionRuntimeParams.myIsSliding = !isFlickering;
@@ -303,8 +305,7 @@ CollisionCheck.prototype._internalHorizontalSlide = function () {
 
             if (collisionCheckParams.mySlidingAdjustSign90Degrees) {
                 let angleThreshold = 0.1;
-                let angleSigned = invertedNormal.vec3_angleSigned(movement, up);
-                if (Math.abs(angleSigned) < angleThreshold && collisionRuntimeParams.mySliding90DegreesSign != 0) {
+                if (invertedNormal.vec3_angle(movement) < angleThreshold && collisionRuntimeParams.mySliding90DegreesSign != 0) {
                     //console.error(slidingSign, collisionRuntimeParams.mySliding90DegreesSign);
                     slidingSign = collisionRuntimeParams.mySliding90DegreesSign;
                 } else if (collisionRuntimeParams.mySliding90DegreesSign == 0 || collisionRuntimeParams.mySlidingRecompute90DegreesSign) {
@@ -322,9 +323,33 @@ CollisionCheck.prototype._internalHorizontalSlide = function () {
 
             let currentAngle = 90 * slidingSign;
             let maxAngle = Math.pp_angleClamp(slidingMovement.vec3_angleSigned(movement.vec3_rotateAxis(90 * slidingSign, up, movement90), up) * slidingSign, true) * slidingSign;
+            let minAngle = Math.pp_angleClamp(slidingMovement.vec3_angleSigned(movement, up) * slidingSign, true) * slidingSign;
 
-            if (Math.abs(maxAngle) < Math.abs(currentAngle) || checkOppositeDirection) {
+            if (checkOppositeDirection) {
                 maxAngle = currentAngle;
+                minAngle = 0;
+            } else {
+                if (Math.abs(maxAngle) < Math.abs(minAngle)) {
+                    // this should only happens because of the 90 degrees adjustment
+                    //console.error("90 adjust");
+                    minAngle = 0;
+                }
+
+                if (Math.abs(Math.abs(maxAngle) - Math.abs(minAngle)) < 0.0001) {
+                    minAngle = maxAngle;
+                }
+
+                if (Math.abs(maxAngle) < Math.abs(currentAngle) || Math.abs(Math.abs(maxAngle) - Math.abs(currentAngle)) < 0.0001) {
+                    //console.error("max", currentAngle.toFixed(15), maxAngle.toFixed(15));
+                    currentAngle = maxAngle;
+                }
+
+                if (Math.abs(currentAngle) < Math.abs(minAngle) || Math.abs(Math.abs(minAngle) - Math.abs(currentAngle)) < 0.0001) {
+                    //console.error("min", currentAngle.toFixed(3), minAngle.toFixed(3));
+                    currentAngle = minAngle;
+                }
+
+                //console.error(maxAngle.toFixed(3), minAngle.toFixed(3));
             }
 
             if (checkOppositeDirection && !previousHorizontalMovement.vec3_isZero(0.000001)) {
@@ -335,12 +360,12 @@ CollisionCheck.prototype._internalHorizontalSlide = function () {
                 }
             }
 
-            let minAngle = 0;
             currentMovement.vec3_zero();
 
             let backupDebugActive = collisionCheckParams.myDebugActive;
             collisionCheckParams.myDebugActive = collisionCheckParams.myDebugActive && collisionCheckParams.myDebugSlidingActive;
 
+            let originalCurrentAngle = currentAngle;
             for (let i = 0; i < collisionCheckParams.mySlidingMaxAttempts; i++) {
                 this._myInternalSlidingCollisionRuntimeParams.copy(collisionRuntimeParams);
 
@@ -368,6 +393,11 @@ CollisionCheck.prototype._internalHorizontalSlide = function () {
                         currentAngle = (minAngle + maxAngle) / 2;
                     }
                 }
+
+                if (Math.abs(Math.abs(maxAngle) - Math.abs(minAngle)) < 0.0001) {
+                    //console.error("fast slide exit", maxAngle, minAngle, originalCurrentAngle, collisionRuntimeParams.myIsSliding, checkOppositeDirection);
+                    break;
+                }
             }
 
             collisionCheckParams.myDebugActive = backupDebugActive;
@@ -383,7 +413,6 @@ CollisionCheck.prototype._internalHorizontalSlide = function () {
     };
 }();
 Object.defineProperty(CollisionCheck.prototype, "_internalHorizontalSlide", { enumerable: false });
-
 
 CollisionCheck.prototype._horizontalCheckBetterSlideNormal = function () {
     let movementDirection = PP.vec3_create();
@@ -447,3 +476,25 @@ CollisionCheck.prototype._horizontalCheckBetterSlideNormal = function () {
     };
 }();
 Object.defineProperty(CollisionCheck.prototype, "_horizontalCheckBetterSlideNormal", { enumerable: false });
+
+
+CollisionCheck.prototype._isSlidingNormalValid = function () {
+    let flatNormal = PP.vec3_create();
+    return function _isSlidingNormalValid(movement, up, collisionRuntimeParams) {
+        let isValid = false;
+
+        flatNormal = collisionRuntimeParams.myHorizontalCollisionHit.myNormal.vec3_removeComponentAlongAxis(up, flatNormal);
+        flatNormal.vec3_normalize(flatNormal);
+
+        if (!flatNormal.vec3_isZero(0.000001)) {
+            isValid = true;
+        }
+
+        // I wanted to check if the normal angle was not concordant and thought that in that case it shouldn't slide but it turns out it makes sense
+        // even for back hits which either can't resolve or at least makes me slide out of collision
+        // at least a check for the normal to be not up is ok
+
+        return isValid;
+    };
+}();
+Object.defineProperty(CollisionCheck.prototype, "_isSlidingNormalValid", { enumerable: false });

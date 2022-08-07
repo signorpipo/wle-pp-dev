@@ -74,12 +74,12 @@ PP.KeyType = {
     BACKSPACE: "Backspace",
     ESC: "Escape",
 
-    LEFT_SHIFT: "ShiftLeft",
-    RIGHT_SHIFT: "ShiftRight",
-    LEFT_CONTROL: "ControlLeft",
-    RIGHT_CONTROL: "ControlRight",
-    LEFT_ALT: "AltLeft",
-    RIGHT_ALT: "AltRight",
+    SHIFT_LEFT: "ShiftLeft",
+    SHIFT_RIGHT: "ShiftRight",
+    CONTROL_LEFT: "ControlLeft",
+    CONTROL_RIGHT: "ControlRight",
+    ALT_LEFT: "AltLeft",
+    ALT_RIGHT: "AltRight",
 };
 
 PP.Keyboard = class Keyboard {

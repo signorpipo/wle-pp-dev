@@ -27,7 +27,6 @@ CollisionCheck = class CollisionCheck {
         //console.error = function () { };
     }
 
-    // #TODO change quat to normal transform mat
     fixMovement(movement, transformQuat, collisionCheckParams, collisionRuntimeParams) {
         this._fixMovement(movement, transformQuat, collisionCheckParams, collisionRuntimeParams);
     }
@@ -256,7 +255,7 @@ CollisionCheck.prototype._fixMovementStep = function () {
                 //console.error(_myTotalRaycasts );
                 //collisionRuntimeParams.myIsCollidingHorizontally = true;
                 //collisionRuntimeParams.myHorizontalCollisionHit.myNormal = [0, 0, 1];
-                if (collisionCheckParams.mySlidingEnabled && collisionRuntimeParams.myIsCollidingHorizontally) {
+                if (collisionCheckParams.mySlidingEnabled && collisionRuntimeParams.myIsCollidingHorizontally && this._isSlidingNormalValid(horizontalMovement, transformUp, collisionRuntimeParams)) {
                     fixedHorizontalMovement = this._horizontalSlide(horizontalMovement, feetPosition, height, transformUp, collisionCheckParams, collisionRuntimeParams, fixedHorizontalMovement);
                 } else {
                     //console.error("no slide");

@@ -12,7 +12,7 @@ WL.registerComponent('locomotion-draft-2', {
     _myDirectionReference: { type: WL.Type.Enum, values: ['head', 'hand left', 'hand right'], default: 'hand left' }
 }, {
     init() {
-        // # TODO add lerped snap on vertical over like half a second to avoid the "snap effect"
+        // #TODO add lerped snap on vertical over like half a second to avoid the "snap effect"
         // this could be done by detatching the actual vertical position of the player from the collision real one when a snap is detected above a certain threshold
         // with a timer, after which the vertical position is just copied, while during the detatching is lerped toward the collision vertical one
     },
@@ -117,125 +117,125 @@ WL.registerComponent('locomotion-draft-2', {
 
             let movementEnabled = true;
             if (movementEnabled) {
-            {
-                let minIntensityThreshold = 0.1;
-                let axes = PP.myLeftGamepad.getAxesInfo().getAxes();
-                axes[0] = Math.abs(axes[0]) > minIntensityThreshold ? axes[0] : 0;
-                axes[1] = Math.abs(axes[1]) > minIntensityThreshold ? axes[1] : 0;
-
-                if (!axes.vec2_isZero()) {
-                    this._myStickIdleTimer.start();
-
-                    let direction = null;
-                    if (this._mySessionActive && this._myDirectionReference != 0) {
-                        direction = this._myDirectionConverterHand.convert(axes, this._myDirectionReferenceObject.pp_getTransform(), playerUp);
-                    } else {
-                        direction = this._myDirectionConverterHead.convert(axes, this._myDirectionReferenceObject.pp_getTransform(), playerUp);
-                    }
-
-                    if (!direction.vec3_isZero()) {
-                        this._myIsFlying = this._myIsFlying || direction.vec3_componentAlongAxis(playerUp).vec3_length() > 0.0001;
-
-                        let movementIntensity = axes.vec2_length();
-                        if (PP.myLeftGamepad.getButtonInfo(PP.ButtonType.SELECT).isPressed()) {
-                            movementIntensity = 0.1;
-                        }
-                        let speed = Math.pp_lerp(0, this._myMaxSpeed, movementIntensity);
-
-                        if (this._myCollisionRuntimeParams.myIsSliding) {
-
-                            //speed = Math.pp_lerp(speed * 0.05, speed, 1 - Math.abs(this._myCollisionRuntimeParams.mySlidingMovementAngle) / 90);
-                            //speed = speed * 0.1;
-                            speed = speed / 2;
-                        }
-
-                        direction.vec3_scale(speed * dt, headMovement);
-                    }
-                } else {
-                    if (this._myStickIdleTimer.isRunning()) {
-                        this._myStickIdleTimer.update(dt);
-                        if (this._myStickIdleTimer.isDone()) {
-                            this._myDirectionConverterHead.reset();
-                            this._myDirectionConverterHand.reset();
-                        }
-                    }
-                }
-
-                if (!PP.myLeftGamepad.getButtonInfo(PP.ButtonType.SQUEEZE).isPressed()) {
-                    if (PP.myLeftGamepad.getButtonInfo(PP.ButtonType.TOP_BUTTON).isPressed()) {
-                        headMovement.vec3_add([0, this._myMaxSpeed * dt, 0], headMovement);
-                        this._myIsFlying = true;
-                    } else if (PP.myLeftGamepad.getButtonInfo(PP.ButtonType.BOTTOM_BUTTON).isPressed()) {
-                        headMovement.vec3_add([0, -this._myMaxSpeed * dt, 0], headMovement);
-                        this._myIsFlying = true;
-                    }
-                }
-            }
-
-
-            if (PP.myLeftGamepad.getButtonInfo(PP.ButtonType.BOTTOM_BUTTON).isPressEnd(2)) {
-                this._myIsFlying = false;
-            }
-
-            let movementToApply = headMovement;
-
-            if (!PP.myLeftGamepad.getButtonInfo(PP.ButtonType.THUMBSTICK).isPressed()) {
-                if (!this._myIsFlying) {
-                    let gravity = -2;
-                    movementToApply.vec3_add(playerUp.vec3_scale(gravity * dt), movementToApply);
-                }
-
-                let feetTransform = this._getFeetTransform();
-
-                this._myCollisionCheck.fixMovement(headMovement, feetTransform, this._myCollisionCheckParams, this._myCollisionRuntimeParams);
-                movementToApply.vec3_copy(this._myCollisionRuntimeParams.myFixedMovement);
-
-                if (PP.myLeftGamepad.getButtonInfo(PP.ButtonType.SQUEEZE).isPressed()) {
-                    movementToApply.vec3_zero();
-                }
-            }
-
-            if (movementToApply.vec3_length() > 0.00001) {
-                this._moveHead(movementToApply);
-            }
-
-            let headRotation = PP.quat_create();
-            {
-                let axes = PP.myRightGamepad.getAxesInfo().getAxes();
-
-                if (!this._myIsSnapTurn) {
+                {
                     let minIntensityThreshold = 0.1;
-                    if (Math.abs(axes[0]) > minIntensityThreshold) {
-                        let rotationIntensity = -axes[0];
-                        let speed = Math.pp_lerp(0, this._myMaxRotationSpeed, Math.abs(rotationIntensity)) * Math.pp_sign(rotationIntensity);
+                    let axes = PP.myLeftGamepad.getAxesInfo().getAxes();
+                    axes[0] = Math.abs(axes[0]) > minIntensityThreshold ? axes[0] : 0;
+                    axes[1] = Math.abs(axes[1]) > minIntensityThreshold ? axes[1] : 0;
 
-                        headRotation.quat_fromAxis(speed * dt, playerUp);
-                    }
-                } else {
-                    if (this._mySnapDone) {
-                        let stickThreshold = 0.4;
-                        if (Math.abs(axes[0]) < stickThreshold) {
-                            this._mySnapDone = false;
+                    if (!axes.vec2_isZero()) {
+                        this._myStickIdleTimer.start();
+
+                        let direction = null;
+                        if (this._mySessionActive && this._myDirectionReference != 0) {
+                            direction = this._myDirectionConverterHand.convert(axes, this._myDirectionReferenceObject.pp_getTransformQuat(), playerUp);
+                        } else {
+                            direction = this._myDirectionConverterHead.convert(axes, this._myDirectionReferenceObject.pp_getTransformQuat(), playerUp);
+                        }
+
+                        if (!direction.vec3_isZero()) {
+                            this._myIsFlying = this._myIsFlying || direction.vec3_componentAlongAxis(playerUp).vec3_length() > 0.0001;
+
+                            let movementIntensity = axes.vec2_length();
+                            if (PP.myLeftGamepad.getButtonInfo(PP.ButtonType.SELECT).isPressed()) {
+                                movementIntensity = 0.1;
+                            }
+                            let speed = Math.pp_lerp(0, this._myMaxSpeed, movementIntensity);
+
+                            if (this._myCollisionRuntimeParams.myIsSliding) {
+
+                                //speed = Math.pp_lerp(speed * 0.05, speed, 1 - Math.abs(this._myCollisionRuntimeParams.mySlidingMovementAngle) / 90);
+                                //speed = speed * 0.1;
+                                speed = speed / 2;
+                            }
+
+                            direction.vec3_scale(speed * dt, headMovement);
                         }
                     } else {
-                        let stickThreshold = 0.5;
-                        if (Math.abs(axes[0]) > stickThreshold) {
-                            let rotation = -Math.pp_sign(axes[0]) * this._mySnapTurnAngle;
-                            headRotation.quat_fromAxis(rotation, playerUp);
+                        if (this._myStickIdleTimer.isRunning()) {
+                            this._myStickIdleTimer.update(dt);
+                            if (this._myStickIdleTimer.isDone()) {
+                                this._myDirectionConverterHead.resetFly();
+                                this._myDirectionConverterHand.resetFly();
+                            }
+                        }
+                    }
 
-                            this._mySnapDone = true;
+                    if (!PP.myLeftGamepad.getButtonInfo(PP.ButtonType.SQUEEZE).isPressed()) {
+                        if (PP.myLeftGamepad.getButtonInfo(PP.ButtonType.TOP_BUTTON).isPressed()) {
+                            headMovement.vec3_add([0, this._myMaxSpeed * dt, 0], headMovement);
+                            this._myIsFlying = true;
+                        } else if (PP.myLeftGamepad.getButtonInfo(PP.ButtonType.BOTTOM_BUTTON).isPressed()) {
+                            headMovement.vec3_add([0, -this._myMaxSpeed * dt, 0], headMovement);
+                            this._myIsFlying = true;
                         }
                     }
                 }
-            }
 
-            if (headRotation.quat_getAngle() > 0.00001) {
-                this._rotateHead(headRotation);
-            }
 
-            if (!this._mySessionActive) {
-                this._rotateNonVRHeadVertically(dt);
-            }
+                if (PP.myLeftGamepad.getButtonInfo(PP.ButtonType.BOTTOM_BUTTON).isPressEnd(2)) {
+                    this._myIsFlying = false;
+                }
+
+                let movementToApply = headMovement;
+
+                if (!PP.myLeftGamepad.getButtonInfo(PP.ButtonType.THUMBSTICK).isPressed()) {
+                    if (!this._myIsFlying) {
+                        let gravity = -2;
+                        movementToApply.vec3_add(playerUp.vec3_scale(gravity * dt), movementToApply);
+                    }
+
+                    let feetTransform = this._getFeetTransform();
+
+                    this._myCollisionCheck.fixMovement(headMovement, feetTransform, this._myCollisionCheckParams, this._myCollisionRuntimeParams);
+                    movementToApply.vec3_copy(this._myCollisionRuntimeParams.myFixedMovement);
+
+                    if (PP.myLeftGamepad.getButtonInfo(PP.ButtonType.SQUEEZE).isPressed()) {
+                        movementToApply.vec3_zero();
+                    }
+                }
+
+                if (movementToApply.vec3_length() > 0.00001) {
+                    this._moveHead(movementToApply);
+                }
+
+                let headRotation = PP.quat_create();
+                {
+                    let axes = PP.myRightGamepad.getAxesInfo().getAxes();
+
+                    if (!this._myIsSnapTurn) {
+                        let minIntensityThreshold = 0.1;
+                        if (Math.abs(axes[0]) > minIntensityThreshold) {
+                            let rotationIntensity = -axes[0];
+                            let speed = Math.pp_lerp(0, this._myMaxRotationSpeed, Math.abs(rotationIntensity)) * Math.pp_sign(rotationIntensity);
+
+                            headRotation.quat_fromAxis(speed * dt, playerUp);
+                        }
+                    } else {
+                        if (this._mySnapDone) {
+                            let stickThreshold = 0.4;
+                            if (Math.abs(axes[0]) < stickThreshold) {
+                                this._mySnapDone = false;
+                            }
+                        } else {
+                            let stickThreshold = 0.5;
+                            if (Math.abs(axes[0]) > stickThreshold) {
+                                let rotation = -Math.pp_sign(axes[0]) * this._mySnapTurnAngle;
+                                headRotation.quat_fromAxis(rotation, playerUp);
+
+                                this._mySnapDone = true;
+                            }
+                        }
+                    }
+                }
+
+                if (headRotation.quat_getAngle() > 0.00001) {
+                    this._rotateHead(headRotation);
+                }
+
+                if (!this._mySessionActive) {
+                    this._rotateNonVRHeadVertically(dt);
+                }
 
                 if (this._myCollisionRuntimeParams.myIsOnGround) {
                     this._myIsFlying = false;
