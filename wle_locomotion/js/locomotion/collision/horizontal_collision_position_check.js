@@ -48,11 +48,9 @@ CollisionCheck.prototype._horizontalPositionCheck = function () {
             let radialDirection = forward.vec3_rotateAxis(-currentAngle, up, tempCheckPosition);
             checkPositions.push(feetPosition.vec3_add(radialDirection.vec3_scale(collisionCheckParams.myRadius, radialDirection), radialDirection));
 
-            if (currentAngle != 180) {
-                tempCheckPosition = _localGetCachedCheckPosition();
-                radialDirection = forward.vec3_rotateAxis(currentAngle, up, tempCheckPosition);
-                checkPositions.push(feetPosition.vec3_add(radialDirection.vec3_scale(collisionCheckParams.myRadius, radialDirection), radialDirection));
-            }
+            tempCheckPosition = _localGetCachedCheckPosition();
+            radialDirection = forward.vec3_rotateAxis(currentAngle, up, tempCheckPosition);
+            checkPositions.push(feetPosition.vec3_add(radialDirection.vec3_scale(collisionCheckParams.myRadius, radialDirection), radialDirection));
         }
 
         let groundObjectsToIgnore = null;
@@ -226,6 +224,7 @@ CollisionCheck.prototype._horizontalPositionHorizontalCheck = function () {
             if (j > 0) {
                 let leftIndex = Math.max(0, j * 2);
                 let rightIndex = Math.max(0, (j * 2 - 1));
+                let leftAndRightEqual = checkPositions[leftIndex].vec_equals(checkPositions[rightIndex], 0.000001);
 
                 if (collisionCheckParams.myCheckConeBorder) {
                     for (let r = 0; r < 2; r++) {
@@ -247,6 +246,10 @@ CollisionCheck.prototype._horizontalPositionHorizontalCheck = function () {
 
                 if (collisionCheckParams.myCheckConeRay && isHorizontalCheckOk) {
                     for (let r = 0; r < 2; r++) {
+                        if (r == 1 && leftAndRightEqual) {
+                            break;
+                        }
+
                         let currentIndex = r == 0 ? leftIndex : rightIndex;
 
                         currentRadialPosition = checkPositions[currentIndex].vec3_add(heightOffset, currentRadialPosition);
@@ -301,15 +304,21 @@ CollisionCheck.prototype._horizontalPositionVerticalCheck = function () {
         previousBasePosition = basePosition.vec3_sub(heightStep, previousBasePosition);
 
         for (let j = 0; j <= checkPositions.length; j++) {
+            let previousCheckPositionIsEqual = false;
+
             if (j == checkPositions.length) {
                 currentRadialPosition.vec3_copy(basePosition);
                 previousRadialPosition.vec3_copy(previousBasePosition);
             } else {
                 currentRadialPosition = checkPositions[j].vec3_add(heightOffset, currentRadialPosition);
                 previousRadialPosition = currentRadialPosition.vec3_sub(heightStep, previousRadialPosition);
+
+                if (j > 0) {
+                    previousCheckPositionIsEqual = checkPositions[j].vec_equals(checkPositions[j - 1], 0.000001);
+                }
             }
 
-            if (collisionCheckParams.myCheckVerticalStraight) {
+            if (collisionCheckParams.myCheckVerticalStraight && !previousCheckPositionIsEqual) {
                 isHorizontalCheckOk = this._horizontalCheckRaycast(previousRadialPosition, currentRadialPosition, null, up,
                     collisionCheckParams.myHorizontalPositionCheckVerticalIgnoreHitsInsideCollision, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
                     feetPosition, !collisionCheckParams.myCheckHeightConeOnCollision,
@@ -330,8 +339,9 @@ CollisionCheck.prototype._horizontalPositionVerticalCheck = function () {
             }
 
             if (j < checkPositions.length) {
-                if (collisionCheckParams.myCheckVerticalDiagonalRay ||
-                    (collisionCheckParams.myCheckVerticalDiagonalBorderRay && (j == 0 || j == checkPositions.length - 1))) {
+                if ((collisionCheckParams.myCheckVerticalDiagonalRay ||
+                    (collisionCheckParams.myCheckVerticalDiagonalBorderRay && (j == checkPositions.length - 2 || j == checkPositions.length - 1))) &&
+                    !previousCheckPositionIsEqual) {
                     {
                         isHorizontalCheckOk = this._horizontalCheckRaycast(previousBasePosition, currentRadialPosition, null, up,
                             collisionCheckParams.myHorizontalPositionCheckVerticalIgnoreHitsInsideCollision, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
