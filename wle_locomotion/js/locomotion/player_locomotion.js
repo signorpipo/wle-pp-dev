@@ -14,6 +14,8 @@ PlayerLocomotionParams = class PlayerLocomotionParams {
         this.myMinAngleToFlyRight = 0;
 
         this.myDirectionReferenceType = PlayerLocomotionDirectionReferenceType.HEAD;
+
+        this.myForeheadExtraHeight = 0;
     }
 };
 
@@ -100,7 +102,7 @@ PlayerLocomotion = class PlayerLocomotion {
         if (this._myCollisionCheckParamsSmooth.myHeight <= 0.000001) {
             this._myCollisionCheckParamsSmooth.myHeight = 0;
         } else {
-            this._myCollisionCheckParamsSmooth.myHeight += 0.15; //forehead + extra 
+            this._myCollisionCheckParamsSmooth.myHeight += this._myParams.myForeheadExtraHeight;
         }
     }
 

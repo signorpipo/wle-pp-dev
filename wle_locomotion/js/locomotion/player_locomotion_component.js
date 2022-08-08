@@ -31,6 +31,8 @@ WL.registerComponent('player-locomotion', {
 
         params.myDirectionReferenceType = this._myDirectionReferenceType;
 
+        params.myForeheadExtraHeight = 0.15;
+
         this._myPlayerLocomotion = new PlayerLocomotion(params);
         this._myPlayerLocomotion.start();
     },

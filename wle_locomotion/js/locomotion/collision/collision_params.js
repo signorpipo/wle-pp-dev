@@ -127,6 +127,98 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myDebugRuntimeParamsActive = true;
         this.myDebugMovementActive = true;
     }
+
+    copy(params) {
+        this.mySplitMovementEnabled = params.mySplitMovementEnabled;
+        this.mySplitMovementMaxLength = params.mySplitMovementMaxLength;
+
+        this.myRadius = params.myRadius;
+        this.myDistanceFromFeetToIgnore = params.myDistanceFromFeetToIgnore;
+        this.myDistanceFromHeadToIgnore = params.myDistanceFromHeadToIgnore;
+
+        this.myHorizontalMovementCheckEnabled = params.myHorizontalMovementCheckEnabled;
+        this.myHorizontalMovementStepEnabled = params.myHorizontalMovementStepEnabled;
+        this.myHorizontalMovementStepMaxLength = params.myHorizontalMovementStepMaxLength;
+        this.myHorizontalMovementRadialStepAmount = params.myHorizontalMovementRadialStepAmount;
+        this.myHorizontalMovementCheckDiagonal = params.myHorizontalMovementCheckDiagonal;
+        this.myHorizontalMovementCheckStraight = params.myHorizontalMovementCheckStraight;
+        this.myHorizontalMovementCheckHorizontalBorder = params.myHorizontalMovementCheckHorizontalBorder;
+        this.myHorizontalMovementCheckVerticalStraight = params.myHorizontalMovementCheckVerticalStraight;
+        this.myHorizontalMovementCheckVerticalDiagonal = params.myHorizontalMovementCheckVerticalDiagonal;
+        this.myHorizontalMovementCheckVerticalStraightDiagonal = params.myHorizontalMovementCheckVerticalStraightDiagonal;
+        this.myHorizontalMovementCheckVerticalHorizontalBorderDiagonal = params.myHorizontalMovementCheckVerticalHorizontalBorderDiagonal;
+
+        this.myHalfConeAngle = params.myHalfConeAngle;
+        this.myHalfConeSliceAmount = params.myHalfConeSliceAmount;
+        this.myCheckConeBorder = params.myCheckConeBorder;
+        this.myCheckConeRay = params.myCheckConeRay;
+        this.myHorizontalPositionCheckVerticalIgnoreHitsInsideCollision = params.myHorizontalPositionCheckVerticalIgnoreHitsInsideCollision;
+        this.myHorizontalPositionCheckVerticalDirectionType = params.myHorizontalPositionCheckVerticalDirectionType;
+        this.myFeetRadius = params.myFeetRadius;
+        this.myAdjustVerticalMovementWithSurfaceAngle = params.myAdjustVerticalMovementWithSurfaceAngle;
+        this.myCheckVerticalFixedForwardEnabled = params.myCheckVerticalFixedForwardEnabled;
+        this.myCheckVerticalFixedForward.vec3_copy(params.myCheckVerticalFixedForward);
+
+        this.mySnapOnGroundEnabled = params.mySnapOnGroundEnabled;
+        this.mySnapOnGroundExtraDistance = params.mySnapOnGroundExtraDistance;
+        this.mySnapOnCeilingEnabled = params.mySnapOnCeilingEnabled;
+        this.mySnapOnCeilingExtraDistance = params.mySnapOnCeilingExtraDistance;
+
+        this.myGroundCircumferenceSliceAmount = params.myGroundCircumferenceSliceAmount;
+        this.myGroundCircumferenceStepAmount = params.myGroundCircumferenceStepAmount;
+        this.myGroundCircumferenceRotationPerStep = params.myGroundCircumferenceRotationPerStep;
+        this.myGroundFixDistanceFromFeet = params.myGroundFixDistanceFromFeet;
+        this.myGroundFixDistanceFromHead = params.myGroundFixDistanceFromHead;
+
+        this.myCheckHeight = params.myCheckHeight;
+        this.myCheckHeightTop = params.myCheckHeightTop;
+        this.myCheckHeightConeOnCollision = params.myCheckHeightConeOnCollision;
+        this.myCheckHeightConeOnCollisionKeepHit = params.myCheckHeightConeOnCollisionKeepHit;
+        this.myHeightCheckStepAmount = params.myHeightCheckStepAmount;
+        this.myCheckVerticalStraight = params.myCheckVerticalStraight;
+        this.myCheckVerticalDiagonalRay = params.myCheckVerticalDiagonalRay;
+        this.myCheckVerticalDiagonalBorder = params.myCheckVerticalDiagonalBorder;
+        this.myCheckVerticalDiagonalBorderRay = params.myCheckVerticalDiagonalBorderRay;
+        this.myCheckVerticalSearchFurtherVerticalHit = params.myCheckVerticalSearchFurtherVerticalHit;
+
+        this.myGroundAngleToIgnore = params.myGroundAngleToIgnore;
+        this.myCeilingAngleToIgnore = params.myCeilingAngleToIgnore;
+
+        this.myHeight = params.myHeight;
+
+        this.myDistanceToBeOnGround = params.myDistanceToBeOnGround;
+        this.myDistanceToComputeGroundInfo = params.myDistanceToComputeGroundInfo;
+        this.myDistanceToBeOnCeiling = params.myDistanceToBeOnCeiling;
+        this.myDistanceToComputeCeilingInfo = params.myDistanceToComputeCeilingInfo;
+        this.myVerticalFixToBeOnGround = params.myVerticalFixToBeOnGround;
+        this.myVerticalFixToComputeGroundInfo = params.myVerticalFixToComputeGroundInfo;
+        this.myVerticalFixToBeOnCeiling = params.myVerticalFixToBeOnCeiling;
+        this.myVerticalFixToComputeCeilingInfo = params.myVerticalFixToComputeCeilingInfo;
+
+        this.mySlidingEnabled = params.mySlidingEnabled;
+        this.mySlidingHorizontalMovementCheckBetterNormal = params.mySlidingHorizontalMovementCheckBetterNormal;
+        this.mySlidingMaxAttempts = params.mySlidingMaxAttempts;
+        this.mySlidingCheckBothDirections = params.mySlidingCheckBothDirections;
+        this.mySlidingFlickeringPreventionType = params.mySlidingFlickeringPreventionType;
+        this.mySlidingFlickeringPreventionCheckOnlyIfAlreadySliding = params.mySlidingFlickeringPreventionCheckOnlyIfAlreadySliding;
+        this.mySlidingFlickerPreventionCheckAnywayCounter = params.mySlidingFlickerPreventionCheckAnywayCounter;
+
+        this.mySlidingAdjustSign90Degrees = params.mySlidingAdjustSign90Degrees;
+
+        this.myBlockLayerFlags.setMask(params.myBlockLayerFlags.getMask());
+        this.myObjectsToIgnore.pp_copy(params.myObjectsToIgnore);
+
+        this.myDebugActive = params.myDebugActive;
+
+        this.myDebugHorizontalMovementActive = params.myDebugHorizontalMovementActive;
+        this.myDebugHorizontalPositionActive = params.myDebugHorizontalPositionActive;
+        this.myDebugVerticalMovementActive = params.myDebugVerticalMovementActive;
+        this.myDebugVerticalPositionActive = params.myDebugVerticalPositionActive;
+        this.myDebugSlidingActive = params.myDebugSlidingActive;
+        this.myDebugSurfaceInfoActive = params.myDebugSurfaceInfoActive;
+        this.myDebugRuntimeParamsActive = params.myDebugRuntimeParamsActive;
+        this.myDebugMovementActive = params.myDebugMovementActive;
+    }
 };
 
 CollisionRuntimeParams = class CollisionRuntimeParams {
