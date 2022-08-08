@@ -6,6 +6,9 @@
     For rotations u can add a suffix like Degrees/Radians to use a specific version, example:
         - pp_angleDistanceSignedDegrees
         - pp_isInsideAngleRangeRadians
+        
+    List of variables:
+        - pp_myEpsilonNumber / pp_myEpsilonAngle
 
     List of functions:
         Notes:
@@ -22,6 +25,9 @@
         - pp_angleClamp
         - pp_isInsideAngleRange
 */
+
+Math.pp_myEpsilonNumber = 0.000001;
+Math.pp_myEpsilonAngle = 0.0001;
 
 Math.pp_clamp = function (value, start, end) {
     let fixedStart = (start != null) ? start : -Number.MAX_VALUE;
