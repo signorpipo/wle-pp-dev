@@ -290,7 +290,7 @@ WL.registerComponent('locomotion-draft-2', {
         if (angleToRotate != 0) {
             PP.myPlayerObjects.myNonVRCamera.pp_rotateAxis(angleToRotate, referenceRight);
 
-            let maxVerticalAngle = 90 - 0.001;
+            let maxVerticalAngle = 90 - 0.0001;
             let newUp = PP.myPlayerObjects.myNonVRCamera.pp_getUp();
             let angleWithUp = Math.pp_angleClamp(newUp.vec3_angleSigned(referenceUp, referenceRight));
             if (Math.abs(angleWithUp) > maxVerticalAngle) {

@@ -103,20 +103,12 @@ PlayerHeadManager = class PlayerHeadManager {
 };
 
 PlayerHeadManager.prototype.getHeadHeight = function () {
-    let playerPosition = PP.vec3_create();
-    let playerUp = PP.vec3_create();
-    let headDisplacement = PP.vec3_create();
-    return function getHeadHeight(headPosition) {
-        playerPosition = PP.myPlayerObjects.myPlayer.pp_getPosition(playerPosition);
-        playerUp = PP.myPlayerObjects.myPlayer.pp_getUp(playerUp);
+    let headPosition = PP.vec3_create();
+    return function getHeadHeight() {
+        headPosition = this._myCurrentHead.pp_getPosition(headPosition);
+        let headHeight = this._getPositionHeight(headPosition);
 
-        headDisplacement = headPosition.vec3_sub(playerPosition, headDisplacement).vec3_componentAlongAxis(playerUp, headDisplacement);
-        let height = headDisplacement.vec3_length();
-        if (!playerUp.vec3_isConcordant(headDisplacement)) {
-            height = -height;
-        }
-
-        return height;
+        return headHeight;
     };
 }();
 Object.defineProperty(PlayerHeadManager.prototype, "getHeadHeight", { enumerable: false });
@@ -129,7 +121,7 @@ PlayerHeadManager.prototype.getFeetTransformQuat = function () {
     let headForward = PP.vec3_create();
     return function getFeetTransformQuat(outFeetTransformQuat = PP.quat2_create()) {
         headPosition = this._myCurrentHead.pp_getPosition(headPosition);
-        let headHeight = this.getHeadHeight(headPosition);
+        let headHeight = this._getPositionHeight(headPosition);
 
         playerUp = PP.myPlayerObjects.myPlayer.pp_getUp(playerUp);
         feetPosition = headPosition.vec3_sub(playerUp.vec3_scale(headHeight, feetPosition), feetPosition);
@@ -148,7 +140,7 @@ PlayerHeadManager.prototype.getFeetTransformQuat = function () {
         headForward = headForward.vec3_removeComponentAlongAxis(playerUp, headForward);
         headForward.vec3_normalize(headForward);
 
-        feetRotationQuat = feetRotation.quat_setUp(playerUp, headForward);
+        feetRotationQuat.quat_setUp(playerUp, headForward);
 
         outFeetTransformQuat.quat2_setPositionRotationQuat(feetPosition, feetRotationQuat);
         return outFeetTransformQuat;
@@ -214,7 +206,7 @@ PlayerHeadManager.prototype.teleportPlayerToHeadTransformQuat = function () {
     let rotationToPerform = PP.quat_create();
     return function teleportPlayerToHeadTransformQuat(headTransformQuat) {
         headPosition = headTransformQuat.quat2_getPosition(headPosition);
-        let headHeight = this._getHeadHeight(headPosition);
+        let headHeight = this._getPositionHeight(headPosition);
 
         playerUp = PP.myPlayerObjects.myPlayer.pp_getUp(playerUp);
         newPlayerPosition = headPosition.vec3_sub(playerUp.vec3_scale(headHeight, newPlayerPosition), newPlayerPosition);
@@ -231,6 +223,25 @@ PlayerHeadManager.prototype.teleportPlayerToHeadTransformQuat = function () {
     };
 }();
 Object.defineProperty(PlayerHeadManager.prototype, "teleportPlayerToHeadTransformQuat", { enumerable: false });
+
+PlayerHeadManager.prototype._getPositionHeight = function () {
+    let playerPosition = PP.vec3_create();
+    let playerUp = PP.vec3_create();
+    let headDisplacement = PP.vec3_create();
+    return function _getPositionHeight(headPosition) {
+        playerPosition = PP.myPlayerObjects.myPlayer.pp_getPosition(playerPosition);
+        playerUp = PP.myPlayerObjects.myPlayer.pp_getUp(playerUp);
+
+        headDisplacement = headPosition.vec3_sub(playerPosition, headDisplacement).vec3_componentAlongAxis(playerUp, headDisplacement);
+        let height = headDisplacement.vec3_length();
+        if (!playerUp.vec3_isConcordant(headDisplacement)) {
+            height = -height;
+        }
+
+        return height;
+    };
+}();
+Object.defineProperty(PlayerHeadManager.prototype, "_getPositionHeight", { enumerable: false });
 
 // #TODO what happens if the player go in the blurred state before wle has loaded?
 PlayerHeadManager.prototype._onXRSessionStart = function () {
@@ -386,8 +397,8 @@ PlayerHeadManager.prototype._blurEndResync = function () {
             if (playerUp.vec_equals(this._myBlurRecoverPlayerUp, 0.000001)) {
                 recoverHeadPosition = this._myBlurRecoverHeadTransform.quat2_getPosition(recoverHeadPosition);
 
-                let headHeight = this._getHeadHeight(this._myCurrentHead.pp_getPosition(currentHeadPosition));
-                let recoverHeadHeight = this._getHeadHeight(recoverHeadPosition);
+                let headHeight = this._getPositionHeight(this._myCurrentHead.pp_getPosition(currentHeadPosition));
+                let recoverHeadHeight = this._getPositionHeight(recoverHeadPosition);
 
                 newHeadPosition = recoverHeadPosition.vec3_add(playerUp.vec3_scale(headHeight - recoverHeadHeight, newHeadPosition), newHeadPosition);
 
@@ -484,7 +495,7 @@ PlayerHeadManager.prototype._sessionChangeResync = function () {
                 PP.myPlayerObjects.myPlayer.pp_setPosition(newPlayerPosition);
                 PP.myPlayerObjects.myNonVRCamera.pp_resetPositionLocal();
 
-                let resyncHeadHeight = this._getHeadHeight(resyncHeadPosition);
+                let resyncHeadHeight = this._getPositionHeight(resyncHeadPosition);
                 PP.myPlayerObjects.myNonVRCamera.pp_setPosition(playerUp.vec3_scale(resyncHeadHeight, newNonVRCameraPosition).vec3_add(newPlayerPosition, newNonVRCameraPosition));
 
                 resyncHeadRotation = this._mySessionChangeResyncHeadTransform.quat2_getRotationQuat(resyncHeadRotation);

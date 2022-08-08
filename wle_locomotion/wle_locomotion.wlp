@@ -106,11 +106,18 @@
                         "_myMinAngleToFlyUp": 30.0,
                         "_myMinAngleToFlyDownHead": 50.0,
                         "_myMinAngleToFlyDownHand": 1.0,
-                        "_myIsSnapTurn": true,
+                        "_myIsSnapTurn": false,
                         "_mySnapTurnAngle": 30.0,
                         "_myMaxRotationSpeed": 100.0
                     },
-                    "active": true
+                    "active": false
+                },
+                {
+                    "type": "player-locomotion",
+                    "player-locomotion": {
+                        "_myIsSnapTurn": true,
+                        "_myFlyEnabled": true
+                    }
                 }
             ]
         },
@@ -3553,9 +3560,9 @@
                 0.0,
                 0.1,
                 0.0,
-                -0.0000038,
-                -0.0,
-                -0.0,
+                -0.0000037,
+                0.0,
+                0.0,
                 1.0
             ],
             "components": [
@@ -5180,7 +5187,7 @@
                 0.0,
                 -0.9629173,
                 -0.2597762,
-                0.6587334,
+                0.6587333,
                 1.0
             ]
         },
@@ -5448,7 +5455,7 @@
                 0.0,
                 0.1,
                 0.0,
-                -0.2385826,
+                -0.2385825,
                 -0.2597762,
                 -2.9829883,
                 1.0
@@ -25045,7 +25052,8 @@
                 "js/cauldron",
                 "js/pp/input/gamepad/cauldron",
                 "js/pp/input/gamepad/gamepad_cores",
-                "js/locomotion/collision"
+                "js/locomotion/collision",
+                "js/pp/gameplay/cauldron"
             ],
             "useInternalBundler": false
         },

@@ -1301,47 +1301,47 @@ Array.prototype.quat_getDown = function (out) {
 
 Array.prototype.quat_setAxes = function (left, up, forward) {
     if (forward != null) {
-        this.quat_setForward(forward, up, left);
+        return this.quat_setForward(forward, up, left);
     } else if (up != null) {
-        this.quat_setUp(up, forward, left);
+        return this.quat_setUp(up, forward, left);
     } else {
-        this.quat_setLeft(left, up, forward);
+        return this.quat_setLeft(left, up, forward);
     }
 };
 
 Array.prototype.quat_setForward = function (forward, up = null, left = null) {
-    this._quat_setAxes([left, up, forward], [2, 1, 0]);
+    return this._quat_setAxes([left, up, forward], [2, 1, 0]);
 };
 
 Array.prototype.quat_setBackward = function () {
     let forward = glMatrix.vec3.create();
     return function quat_setBackward(backward, up = null, left = null) {
         backward.vec3_negate(forward);
-        this._quat_setAxes([left, up, forward], [2, 1, 0]);
+        return this._quat_setAxes([left, up, forward], [2, 1, 0]);
     };
 }();
 
 Array.prototype.quat_setUp = function (up, forward = null, left = null) {
-    this._quat_setAxes([left, up, forward], [1, 2, 0]);
+    return this._quat_setAxes([left, up, forward], [1, 2, 0]);
 };
 
 Array.prototype.quat_setDown = function () {
     let up = glMatrix.vec3.create();
     return function quat_setDown(down, forward = null, left = null) {
         down.vec3_negate(up);
-        this._quat_setAxes([left, up, forward], [1, 2, 0]);
+        return this._quat_setAxes([left, up, forward], [1, 2, 0]);
     };
 }();
 
 Array.prototype.quat_setLeft = function (left, up = null, forward = null) {
-    this._quat_setAxes([left, up, forward], [0, 1, 2]);
+    return this._quat_setAxes([left, up, forward], [0, 1, 2]);
 };
 
 Array.prototype.quat_setRight = function () {
     let left = glMatrix.vec3.create();
     return function quat_setRight(right, up = null, forward = null) {
         right.vec3_negate(left);
-        this._quat_setAxes([left, up, forward], [0, 1, 2]);
+        return this._quat_setAxes([left, up, forward], [0, 1, 2]);
     };
 }();
 
@@ -2222,7 +2222,7 @@ Array.prototype._quat_setAxes = function () {
         let thirdAxis = axes[priority[2]];
 
         if (firstAxis == null) {
-            return;
+            return this;
         }
 
         let secondAxisValid = false;
@@ -2299,6 +2299,8 @@ Array.prototype._quat_setAxes = function () {
                 this.quat_rotateQuat(rotationQuat, this);
             }
         }
+
+        return this;
     };
 }();
 
