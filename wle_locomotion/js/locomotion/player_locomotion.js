@@ -32,7 +32,15 @@ PlayerLocomotion = class PlayerLocomotion {
 
         this._setupCollisionCheckParamsSmooth();
 
-        this._myPlayerHeadManager = new PlayerHeadManager();
+        {
+            let params = new PlayerHeadManagerParams();
+
+            params.myExitSessionRemoveRightTilt = true;
+            params.myExitSessionAdjustMaxVerticalAngle = true;
+            params.myExitSessionMaxVerticalAngle = 90;
+
+            this._myPlayerHeadManager = new PlayerHeadManager(params);
+        }
 
         {
             let params = new PlayerLocomotionRotateParams();

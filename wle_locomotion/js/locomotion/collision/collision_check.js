@@ -1,5 +1,5 @@
-_myTotalRaycasts = 0;
-_myTotalRaycastsMax = 0;
+_myTotalRaycasts = 0; // #TODO debug stuff, remove later
+_myTotalRaycastsMax = 0; // #TODO debug stuff, remove later
 
 CollisionCheck = class CollisionCheck {
     constructor() {

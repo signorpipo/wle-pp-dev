@@ -37,7 +37,7 @@ WL.registerComponent('player-locomotion', {
         this._myPlayerLocomotion.start();
     },
     update(dt) {
-        _myTotalRaycasts = 0; // debug stuff, remove later
+        _myTotalRaycasts = 0; // #TODO debug stuff, remove later
 
         this._myPlayerLocomotion.update(dt);
     }
