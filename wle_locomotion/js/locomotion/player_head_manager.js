@@ -13,8 +13,7 @@ PlayerHeadManager = class PlayerHeadManager {
         this._myDelayBlurEndResyncTimer = new PP.Timer(5, false);
         this._myVisibilityWentHidden = false;
 
-        this._myRemoveUp = true; // params?
-        this._myRemoveXTilt = true;
+        this._myRemoveXTilt = true; // params?
         this._myPreventHeadUpsideDown = true;
 
         this._mySessionActive = false;
@@ -432,6 +431,7 @@ PlayerHeadManager.prototype._sessionChangeResync = function () {
     let resyncHeadRight = PP.vec3_create();
     let fixedResyncForward = PP.vec3_create();
     let rotationToPerform = PP.quat_create();
+    let playerPosition = PP.vec3_create();
     let newPlayerPosition = PP.vec3_create();
     let newNonVRCameraPosition = PP.vec3_create();
     let fixedHeadRight = PP.vec3_create();
@@ -528,7 +528,7 @@ PlayerHeadManager.prototype._sessionChangeResync = function () {
                     fixedHeadForward.vec3_normalize(fixedHeadForward);
 
                     fixedHeadRotation.quat_fromAxes(fixedHeadRight.vec3_negate(fixedHeadRightNegate), fixedHeadUp, fixedHeadForward);
-                    resyncHeadRotation.vec3_copy(fixedHeadRotation);
+                    resyncHeadRotation.quat_copy(fixedHeadRotation);
                 }
 
                 if (this._myPreventHeadUpsideDown) {
