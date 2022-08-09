@@ -20,8 +20,8 @@ PP.PhysicsUtils = {
 
             raycastResult.myRaycastSetup = raycastSetup;
 
-            let currentFreeHitIndex = 0;
-            let validHitCount = 0;
+            let currentValidHitIndex = 0;
+            let validHitsCount = 0;
 
             for (let i = 0; i < internalRaycastResult.hitCount; i++) {
                 let isHitValid = true;
@@ -41,14 +41,15 @@ PP.PhysicsUtils = {
                     let hit = null;
                     let reusedFromHits = false;
 
-                    if (currentFreeHitIndex < raycastResult.myHits.length) {
-                        hit = raycastResult.myHits[currentFreeHitIndex];
+                    if (currentValidHitIndex < raycastResult.myHits.length) {
+                        hit = raycastResult.myHits[currentValidHitIndex];
                         reusedFromHits = true;
-                        currentFreeHitIndex++;
                     } else if (raycastResult._myUnusedHits != null && raycastResult._myUnusedHits.length > 0) {
                         hit = raycastResult._myUnusedHits.pop();
+                        raycastResult.myHits.push(hit);
                     } else {
                         hit = new PP.RaycastResultHit();
+                        raycastResult.myHits.push(hit);
                     }
 
                     hit.myPosition.vec3_copy(internalRaycastResult.locations[i]);
@@ -57,20 +58,17 @@ PP.PhysicsUtils = {
                     hit.myObject = internalRaycastResult.objects[i];
                     hit.myIsInsideCollision = isHitInsideCollision;
 
-                    if (!reusedFromHits) {
-                        raycastResult.myHits.push(hit);
-                    }
-
-                    validHitCount++;
+                    validHitsCount++;
+                    currentValidHitIndex++;
                 }
             }
 
-            if (raycastResult.myHits.length > validHitCount) {
+            if (raycastResult.myHits.length > validHitsCount) {
                 if (raycastResult._myUnusedHits == null) {
                     raycastResult._myUnusedHits = [];
                 }
 
-                for (let i = 0; i < raycastResult.myHits.length - validHitCount; i++) {
+                for (let i = 0; i < raycastResult.myHits.length - validHitsCount; i++) {
                     raycastResult._myUnusedHits.push(raycastResult.myHits.pop());
                 }
             }

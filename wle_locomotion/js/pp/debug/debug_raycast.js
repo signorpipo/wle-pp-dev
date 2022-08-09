@@ -26,11 +26,11 @@ PP.DebugRaycast = class DebugRaycast {
         this._myParams = params;
 
         this._myDebugRaycast = new PP.DebugArrow();
-        this._myDebugRaycastHit = new PP.DebugArrow();
         this._myDebugRaycast.setColor([0, 1, 0, 1]);
-        this._myDebugRaycastHit.setColor([1, 0, 0, 1]);
         this._myDebugRaycast.setAutoRefresh(false);
-        this._myDebugRaycastHit.setAutoRefresh(false);
+
+        this._myDebugRaycastHitList = [];
+        this._addDebugRaycastHit();
 
         this._myVisible = true;
         this._myDirty = false;
@@ -50,9 +50,13 @@ PP.DebugRaycast = class DebugRaycast {
             }
 
             if (this._myParams.myRaycastResult.myHits.length > 0) {
-                this._myDebugRaycastHit.setVisible(visible);
+                for (let debugRaycastHit of this._myDebugRaycastHitList) {
+                    debugRaycastHit.setVisible(visible);
+                }
             } else {
-                this._myDebugRaycastHit.setVisible(false);
+                for (let debugRaycastHit of this._myDebugRaycastHitList) {
+                    debugRaycastHit.setVisible(false);
+                }
             }
         }
     }
@@ -93,12 +97,17 @@ PP.DebugRaycast = class DebugRaycast {
         }
 
         this._myDebugRaycast.update(dt);
-        this._myDebugRaycastHit.update(dt);
+        for (let debugRaycastHit of this._myDebugRaycastHitList) {
+            debugRaycastHit.update(dt);
+        }
     }
 
     _refresh() {
-        if (this._myParams.myRaycastResult.myHits.length > 0) {
+        for (let debugRaycastHit of this._myDebugRaycastHitList) {
+            debugRaycastHit.setVisible(false);
+        }
 
+        if (this._myParams.myRaycastResult.myHits.length > 0) {
             let raycastDistance = this._myParams.myShowOnlyFirstHit ?
                 this._myParams.myRaycastResult.myHits.pp_first().myDistance :
                 this._myParams.myRaycastResult.myHits.pp_last().myDistance;
@@ -109,30 +118,30 @@ PP.DebugRaycast = class DebugRaycast {
                 raycastDistance);
 
             let hitsToShow = this._myParams.myShowOnlyFirstHit ? 1 : this._myParams.myRaycastResult.myHits.length;
+            while (hitsToShow > this._myDebugRaycastHitList.length) {
+                this._addDebugRaycastHit();
+            }
 
             for (let i = 0; i < hitsToShow; i++) {
-                this._myDebugRaycastHit.setStartDirectionLength(
+                let debugRaycastHit = this._myDebugRaycastHitList[i];
+                debugRaycastHit.setStartDirectionLength(
                     this._myParams.myRaycastResult.myHits[i].myPosition,
                     this._myParams.myRaycastResult.myHits[i].myNormal,
                     this._myParams.myNormalLength);
+                debugRaycastHit.setThickness(this._myParams.myThickness);
+                debugRaycastHit.setVisible(this._myVisible);
             }
 
-            this._myDebugRaycastHit.setVisible(this._myVisible);
         } else if (this._myParams.myRaycastResult.myRaycastSetup != null) {
             this._myDebugRaycast.setStartDirectionLength(
                 this._myParams.myRaycastResult.myRaycastSetup.myOrigin,
                 this._myParams.myRaycastResult.myRaycastSetup.myDirection,
                 this._myParams.myRaycastResult.myRaycastSetup.myDistance);
-
-
-            this._myDebugRaycastHit.setVisible(false);
         } else {
             this._myDebugRaycast.setVisible(false);
-            this._myDebugRaycastHit.setVisible(false);
         }
 
         this._myDebugRaycast.setThickness(this._myParams.myThickness);
-        this._myDebugRaycastHit.setThickness(this._myParams.myThickness);
     }
 
     _markDirty() {
@@ -155,5 +164,13 @@ PP.DebugRaycast = class DebugRaycast {
         clone._myDirty = this._myDirty;
 
         return clone;
+    }
+
+    _addDebugRaycastHit() {
+        let debugRaycastHit = new PP.DebugArrow();
+        debugRaycastHit.setColor([1, 0, 0, 1]);
+        debugRaycastHit.setAutoRefresh(false);
+
+        this._myDebugRaycastHitList.push(debugRaycastHit);
     }
 };
