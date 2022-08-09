@@ -84,6 +84,52 @@ PlayerLocomotion = class PlayerLocomotion {
 
             this._myPlayerLocomotionSmooth = new PlayerLocomotionSmooth(params);
         }
+
+        {
+            let params = new PlayerLocomotionSmoothParams();
+
+            params.myPlayerHeadManager = this._myPlayerHeadManager;
+
+            params.myCollisionCheckParams = this._myCollisionCheckParamsSmooth;
+            params.myCollisionRuntimeParams = this._myCollisionRuntimeParams;
+
+            params.myMaxSpeed = this._myParams.myMaxSpeed;
+
+            params.myMovementMinStickIntensityThreshold = 0.1;
+
+            params.myFlyEnabled = this._myParams.myFlyEnabled;
+            params.myMinAngleToFlyUpHead = this._myParams.myMinAngleToFlyUpHead;
+            params.myMinAngleToFlyDownHead = this._myParams.myMinAngleToFlyDownHead;
+            params.myMinAngleToFlyUpHand = this._myParams.myMinAngleToFlyUpHand;
+            params.myMinAngleToFlyDownHand = this._myParams.myMinAngleToFlyDownHand;
+            params.myMinAngleToFlyRight = this._myParams.myMinAngleToFlyRight;
+
+            params.myDirectionReferenceType = this._myParams.myDirectionReferenceType;
+
+            this._myPlayerLocomotionTeleport = new PlayerLocomotionSmooth(params);
+        }
+
+        this._myLocomotionMovementFSM = new PP.FSM();
+        this._myLocomotionMovementFSM.setDebugLogActive(true, "Locomotion Movement");
+
+        this._myLocomotionMovementFSM.addState("init");
+        this._myLocomotionMovementFSM.addState("smooth", (dt) => this._myPlayerLocomotionSmooth.update(dt));
+        this._myLocomotionMovementFSM.addState("teleport", (dt) => this._myPlayerLocomotionTeleport.update(dt));
+
+        this._myLocomotionMovementFSM.addTransition("init", "smooth", "start", function () {
+            this._myPlayerLocomotionSmooth.start();
+        }.bind(this));
+
+        this._myLocomotionMovementFSM.addTransition("smooth", "teleport", "next", function () {
+            this._myPlayerLocomotionSmooth.stop();
+            this._myPlayerLocomotionTeleport.start();
+        }.bind(this));
+        this._myLocomotionMovementFSM.addTransition("teleport", "smooth", "next", function () {
+            this._myPlayerLocomotionTeleport.stop();
+            this._myPlayerLocomotionSmooth.start();
+        }.bind(this));
+
+        this._myLocomotionMovementFSM.init("init");
     }
 
     start() {
@@ -91,7 +137,11 @@ PlayerLocomotion = class PlayerLocomotion {
 
         this._myPlayerHeadManager.start();
         this._myPlayerLocomotionRotate.start();
-        this._myPlayerLocomotionSmooth.start();
+
+        this._myPlayerLocomotionSmooth.init();
+        this._myPlayerLocomotionTeleport.init();
+
+        this._myLocomotionMovementFSM.perform("start");
     }
 
     update(dt) {
@@ -101,7 +151,11 @@ PlayerLocomotion = class PlayerLocomotion {
             this._updateCollisionHeight();
 
             this._myPlayerLocomotionRotate.update(dt);
-            this._myPlayerLocomotionSmooth.update(dt);
+            this._myLocomotionMovementFSM.update(dt);
+        }
+
+        if (PP.myLeftGamepad.getButtonInfo(PP.ButtonType.THUMBSTICK).isPressEnd()) {
+            this._myLocomotionMovementFSM.perform("next");
         }
     }
 

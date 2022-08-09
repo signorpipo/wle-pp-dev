@@ -57,12 +57,20 @@ PlayerLocomotionSmooth = class PlayerLocomotionSmooth {
         this._myIsFlying = false;
     }
 
-    start() {
+    init() {
         if (WL.xrSession) {
             this._onXRSessionStart(WL.xrSession);
         }
         WL.onXRSessionStart.push(this._onXRSessionStart.bind(this));
         WL.onXRSessionEnd.push(this._onXRSessionEnd.bind(this));
+    }
+
+    start() {
+
+    }
+
+    stop() {
+
     }
 
     update(dt) {
