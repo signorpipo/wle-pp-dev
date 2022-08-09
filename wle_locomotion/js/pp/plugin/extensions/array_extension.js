@@ -324,7 +324,28 @@ Array.prototype.pp_clone = function (cloneCallback = null) {
         return this.slice(0);
     }
 
-    let clone = [];
+    let clone = null;
+    switch (this.constructor.name) {
+        case "Array":
+            clone = new Array(this.length);
+            break;
+        case "Uint32Array":
+            clone = new Uint32Array(this.length);
+            break;
+        case "Int32Array":
+            clone = new Int32Array(this.length);
+            break;
+        case "Float32Array":
+            clone = new Float32Array(this.length);
+            break;
+        case "Float64Array":
+            clone = new Float64Array(this.length);
+            break;
+        default:
+            clone = new Array(this.length);
+            console.error("Cloned array type not supported!");
+            break;
+    }
 
     for (let i = 0; i < this.length; i++) {
         clone[i] = cloneCallback(this[i]);
