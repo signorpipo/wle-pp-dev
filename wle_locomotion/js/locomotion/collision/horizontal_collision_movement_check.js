@@ -40,7 +40,11 @@ CollisionCheck.prototype._horizontalMovementCheck = function () {
 
         let steplength = collisionCheckParams.myRadius / collisionCheckParams.myHorizontalMovementRadialStepAmount;
 
-        checkPositions.push(feetPosition);
+        {
+            let tempCheckPosition = _localGetCachedCheckPosition();
+            tempCheckPosition.vec3_copy(feetPosition);
+            checkPositions.push(tempCheckPosition);
+        }
 
         {
             leftRadialDirection = movementDirection.vec3_rotateAxis(halfConeAngle, up, leftRadialDirection);

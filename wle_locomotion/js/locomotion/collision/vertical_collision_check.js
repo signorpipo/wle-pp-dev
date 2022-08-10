@@ -247,7 +247,11 @@ CollisionCheck.prototype._getVerticalCheckPositions = function () {
         checkPositions.length = 0;
         currentCachedCheckPositionIndex = 0;
 
-        checkPositions.push(feetPosition);
+        {
+            let tempCheckPosition = _localGetCachedCheckPosition();
+            tempCheckPosition.vec3_copy(feetPosition);
+            checkPositions.push(tempCheckPosition);
+        }
 
         let radiusStep = collisionCheckParams.myFeetRadius / collisionCheckParams.myGroundCircumferenceStepAmount;
         let sliceAngle = 360 / collisionCheckParams.myGroundCircumferenceSliceAmount;

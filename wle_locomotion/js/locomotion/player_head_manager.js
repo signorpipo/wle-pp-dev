@@ -51,6 +51,10 @@ PlayerHeadManager = class PlayerHeadManager {
         // implemented outside class definition
     }
 
+    getFeetPosition(outFeetPosition = PP.vec3_create()) {
+        // implemented outside class definition
+    }
+
     isSynced() {
         return this._myDelaySessionChangeResyncCounter == 0 && this._myDelayBlurEndResyncCounter == 0 && !this._myDelayBlurEndResyncTimer.isRunning() && !this._mySessionBlurred;
     }
@@ -72,6 +76,10 @@ PlayerHeadManager = class PlayerHeadManager {
     }
 
     teleportHeadPosition(teleportPosition) {
+        // implemented outside class definition
+    }
+
+    teleportFeetPosition(teleportPosition) {
         // implemented outside class definition
     }
 
@@ -154,6 +162,21 @@ PlayerHeadManager.prototype.getFeetTransformQuat = function () {
 }();
 Object.defineProperty(PlayerHeadManager.prototype, "getFeetTransformQuat", { enumerable: false });
 
+PlayerHeadManager.prototype.getFeetPosition = function () {
+    let headPosition = PP.vec3_create();
+    let playerUp = PP.vec3_create();
+    return function getFeetPosition(outFeetPosition = PP.vec3_create()) {
+        headPosition = this._myCurrentHead.pp_getPosition(headPosition);
+        let headHeight = this._getPositionHeight(headPosition);
+
+        playerUp = PP.myPlayerObjects.myPlayer.pp_getUp(playerUp);
+        outFeetPosition = headPosition.vec3_sub(playerUp.vec3_scale(headHeight, outFeetPosition), outFeetPosition);
+
+        return outFeetPosition;
+    };
+}();
+Object.defineProperty(PlayerHeadManager.prototype, "getFeetPosition", { enumerable: false });
+
 PlayerHeadManager.prototype.moveHead = function (movement) {
     PP.myPlayerObjects.myPlayer.pp_translate(movement);
 };
@@ -201,6 +224,18 @@ PlayerHeadManager.prototype.teleportHeadPosition = function () {
     };
 }();
 Object.defineProperty(PlayerHeadManager.prototype, "teleportHeadPosition", { enumerable: false });
+
+
+PlayerHeadManager.prototype.teleportFeetPosition = function () {
+    let currentFeetPosition = PP.vec3_create();
+    let teleportMovementToPerform = PP.vec3_create();
+    return function teleportFeetPosition(teleportPosition) {
+        currentFeetPosition = this.getFeetPosition(currentFeetPosition);
+        teleportMovementToPerform = teleportPosition.vec3_sub(currentFeetPosition, teleportMovementToPerform);
+        this.moveHead(teleportMovementToPerform);
+    };
+}();
+Object.defineProperty(PlayerHeadManager.prototype, "teleportFeetPosition", { enumerable: false });
 
 PlayerHeadManager.prototype.teleportPlayerToHeadTransformQuat = function () {
     let headPosition = PP.vec3_create();

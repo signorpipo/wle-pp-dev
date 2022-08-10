@@ -6,7 +6,7 @@ PlayerLocomotionTeleportParams = class PlayerLocomotionTeleportParams {
         this.myCollisionRuntimeParams = null;
 
         this.myMaxDistance = 0;
-        this.myTeleportPositionMustBeVisible = false;
+        this.myTeleportPositionMustBeVisible = false; // implement
 
         this.myBlockLayerFlags = new PP.PhysicsLayerFlags();
 
@@ -23,27 +23,30 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport {
 
         this._mySessionActive = false;
 
-        this._myDetectValid = false;
-        this._myDetectHit = new PP.RaycastResultHit();
-        this._myDetectPosition = PP.vec3_create();
-        this._myDetectRotationOnUp = 0;
+        this._myTeleportPositionValid = false;
+        this._myTeleportPosition = PP.vec3_create();
+        this._myTeleportRotationOnUp = 0;
 
         this._myFSM = new PP.FSM();
         this._myFSM.setDebugLogActive(true, "Locomotion Teleport");
 
         this._myFSM.addState("init");
-        this._myFSM.addState("detect", this._detect.bind(this));
-        this._myFSM.addState("teleport", this._teleport.bind(this));
+        this._myFSM.addState("idle", this._idleUpdate.bind(this));
+        this._myFSM.addState("detect", this._detectUpdate.bind(this));
+        this._myFSM.addState("teleport", this._teleportUpdate.bind(this));
 
-        this._myFSM.addTransition("init", "detect", "start");
+        this._myFSM.addTransition("init", "idle", "start");
 
+        this._myFSM.addTransition("idle", "detect", "detect");
         this._myFSM.addTransition("detect", "teleport", "teleport");
-        this._myFSM.addTransition("teleport", "detect", "end");
+        this._myFSM.addTransition("detect", "idle", "cancel");
+        this._myFSM.addTransition("teleport", "idle", "done");
 
-        this._myFSM.addTransition("detect", "init", "stop");
-        this._myFSM.addTransition("teleport", "init", "stop");
+        this._myFSM.addTransition("detect", "idle", "stop");
+        this._myFSM.addTransition("teleport", "idle", "stop");
 
         this._myFSM.init("init");
+        this._myFSM.perform("start");
     }
 
     init() {
@@ -55,7 +58,6 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport {
     }
 
     start() {
-        this._myFSM.perform("start");
     }
 
     stop() {
@@ -64,96 +66,157 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport {
     }
 
     update(dt) {
+        this._myMouse.update(dt);
+
         this._myFSM.update(dt);
+
+        // collision check for gravity/keep snapping
     }
 
-    _detect(dt) {
-        this._myDetectHit.reset();
+    _idleUpdate(dt) {
+        if (this._startDetecting()) {
+            this._myFSM.perform("detect");
+        }
+    }
 
-        if (this._mySessionActive) {
-            this._detectVR(dt);
+    _detectUpdate(dt) {
+        this._detectTeleportPosition();
+
+        this._showTeleportPosition(dt);
+
+        if (this._confirmTeleport()) {
+            if (this._myTeleportPositionValid) {
+                this._myFSM.perform("teleport");
+            } else {
+                this._myFSM.perform("cancel");
+            }
+        } else if (this._cancelTeleport()) {
+            this._myFSM.perform("cancel");
+        }
+    }
+
+    _teleportUpdate(dt) {
+        this._teleportToPosition(this._myTeleportPosition, this._myTeleportRotationOnUp, this._myParams.myCollisionRuntimeParams);
+        this._myFSM.perform("done");
+    }
+
+    _startDetecting() {
+        let startDetecting = false;
+
+        if (!this._mySessionActive) {
+            startDetecting = this._myMouse.isButtonPressStart(PP.MouseButtonType.MIDDLE);
         } else {
-            this._detectNonVR(dt);
+
         }
 
-        this._myDetectValid = this._isTeleportHitValid();
-        if (this._myDetectValid) {
-            console.error("valid");
+        return startDetecting;
+    }
+
+    _confirmTeleport() {
+        let confirmTeleport = false;
+
+        if (!this._mySessionActive) {
+            confirmTeleport = this._myMouse.isButtonPressEnd(PP.MouseButtonType.MIDDLE);
+        } else {
+
         }
 
-        this._showTeleport(dt);
+        return confirmTeleport;
+    }
+
+    _cancelTeleport() {
+        let cancelTeleport = false;
+
+        if (!this._mySessionActive) {
+            cancelTeleport = this._myMouse.isButtonPressEnd(PP.MouseButtonType.RIGHT);
+        } else {
+
+        }
+
+        return cancelTeleport;
+    }
+
+    _detectTeleportPosition() {
+        if (this._mySessionActive) {
+            this._detectTeleportPositionVR();
+        } else {
+            this._detectTeleportPositionNonVR();
+        }
+    }
+
+    _showTeleportPosition() {
+
+    }
+
+    _onXRSessionStart(session) {
+        this._mySessionActive = true;
+    }
+
+    _onXRSessionEnd(session) {
+        this._mySessionActive = false;
     }
 };
 
-PlayerLocomotionTeleport.prototype._detectNonVR = function () {
+PlayerLocomotionTeleport.prototype._detectTeleportPositionNonVR = function () {
     let raycastSetup = new PP.RaycastSetup();
     let raycastResult = new PP.RaycastResult();
 
-    return function _detectNonVR(dt) {
-        this._myDetectRotationOnUp = 0;
+    return function _detectTeleportPositionNonVR(dt) {
+        this._myTeleportRotationOnUp = 0;
+        this._myTeleportPosition.vec3_zero();
+        this._myTeleportPositionValid = false;
 
-        this._myMouse.update(dt);
+        raycastSetup.myDistance = this._myParams.myMaxDistance;
 
-        if (this._myMouse.isButtonPressed(PP.MouseButtonType.MIDDLE)) {
-            raycastSetup.myDistance = this._myParams.myMaxDistance;
+        raycastSetup.myBlockLayerFlags.setMask(this._myParams.myBlockLayerFlags.getMask());
 
-            raycastSetup.myBlockLayerFlags.setMask(this._myParams.myBlockLayerFlags.getMask());
+        raycastSetup.myObjectsToIgnore.pp_clear();
+        raycastSetup.myIgnoreHitsInsideCollision = false;
 
-            raycastSetup.myObjectsToIgnore.pp_clear();
-            raycastSetup.myIgnoreHitsInsideCollision = false;
+        raycastResult = this._myMouse.raycastWorld(raycastSetup, raycastResult);
 
-            raycastResult = this._myMouse.raycastWorld(raycastSetup, raycastResult);
+        if (raycastResult.isColliding()) {
+            let hit = raycastResult.myHits.pp_first();
 
-            if (raycastResult.isColliding()) {
-                let hit = raycastResult.myHits.pp_first();
-                this._myDetectHit.copy(hit);
-            }
+            this._myTeleportPosition.vec3_copy(hit.myPosition);
+            this._myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRotationOnUp);
+        }
+
+        if (this._myParams.myDebugActive) {
+            let debugParams = new PP.DebugRaycastParams();
+            debugParams.myRaycastResult = raycastResult;
+            debugParams.myNormalLength = 0.2;
+            debugParams.myThickness = 0.005;
+            PP.myDebugManager.draw(debugParams, 0);
         }
     };
 }();
-Object.defineProperty(PlayerLocomotionTeleport.prototype, "_detectNonVR", { enumerable: false });
+Object.defineProperty(PlayerLocomotionTeleport.prototype, "_detectTeleportPositionNonVR", { enumerable: false });
 
 
 
-PlayerLocomotionTeleport.prototype._detectVR = function () {
-    return function _detectVR(dt) {
+PlayerLocomotionTeleport.prototype._detectTeleportPositionVR = function () {
+    return function _detectTeleportPositionVR(dt) {
 
     };
 }();
-Object.defineProperty(PlayerLocomotionTeleport.prototype, "_detectVR", { enumerable: false });
+Object.defineProperty(PlayerLocomotionTeleport.prototype, "_detectTeleportPositionVR", { enumerable: false });
 
 
 
 PlayerLocomotionTeleport.prototype._isTeleportHitValid = function () {
     let playerUp = PP.vec3_create();
     let teleportCheckCollisionRuntimeParams = new CollisionRuntimeParams();
-    let feetTransformQuat = PP.quat2_create();
-    let feetRotationQuat = PP.quat_create();
-    return function _isTeleportHitValid() {
+    return function _isTeleportHitValid(hit, rotationOnUp) {
         let isValid = false;
 
-        if (this._myDetectHit.isValid() && !this._myDetectHit.myIsInsideCollision) {
+        if (hit.isValid() && !hit.myIsInsideCollision) {
             playerUp = this._myParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
 
-            if (this._myDetectHit.myNormal.vec3_isConcordant(playerUp)) {
+            if (hit.myNormal.vec3_isConcordant(playerUp)) {
                 teleportCheckCollisionRuntimeParams.copy(this._myParams.myCollisionRuntimeParams);
 
-                //controllare posizione visibile dalla testa
-
-                feetTransformQuat = this._myParams.myPlayerHeadManager.getFeetTransformQuat(feetTransformQuat);
-                if (this._myDetectRotationOnUp != 0) {
-                    feetRotationQuat = feetTransformQuat.quat2_getRotationQuat(feetRotationQuat);
-                    feetRotationQuat = feetRotationQuat.quat_rotateAxis(this._myDetectRotationOnUp, playerUp, feetRotationQuat);
-                    feetTransformQuat.setRotationQuat(feetRotationQuat);
-                }
-
-                CollisionCheckGlobal.teleport(this._myDetectHit.myPosition, feetTransformQuat, this._myParams.myCollisionCheckParams, teleportCheckCollisionRuntimeParams);
-
-                if (!teleportCheckCollisionRuntimeParams.myTeleportCancelled && teleportCheckCollisionRuntimeParams.myIsOnGround) {
-                    //controllare altezza non sia troppo diversa
-
-                    isValid = true;
-                }
+                isValid = this._isTeleportPositionValid(hit.myPosition, rotationOnUp, teleportCheckCollisionRuntimeParams);
             }
         }
 
@@ -162,46 +225,64 @@ PlayerLocomotionTeleport.prototype._isTeleportHitValid = function () {
 }();
 Object.defineProperty(PlayerLocomotionTeleport.prototype, "_isTeleportHitValid", { enumerable: false });
 
+PlayerLocomotionTeleport.prototype._isTeleportPositionValid = function () {
+    let playerUp = PP.vec3_create();
+    let feetTransformQuat = PP.quat2_create();
+    let feetRotationQuat = PP.quat_create();
+    return function _isTeleportPositionValid(position, rotationOnUp, collisionRuntimeParams) {
+        let isValid = false;
 
+        playerUp = this._myParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
 
-PlayerLocomotionTeleport.prototype._showTeleport = function () {
-    return function _showTeleport(dt) {
+        //controllare posizione visibile dalla testa
 
-        if (this._myParams.myDebugActive && this._myDetectHit.isValid()) {
-            let debugParams = new PP.DebugArrowParams();
-            debugParams.myStart.vec3_copy(this._myDetectHit.myPosition);
-            debugParams.myDirection.vec3_copy(this._myDetectHit.myNormal);
-            debugParams.myLength = 0.2;
-            debugParams.myColor = [1, 0, 0, 1];
-            PP.myDebugManager.draw(debugParams);
+        feetTransformQuat = this._myParams.myPlayerHeadManager.getFeetTransformQuat(feetTransformQuat);
+        if (rotationOnUp != 0) {
+            feetRotationQuat = feetTransformQuat.quat2_getRotationQuat(feetRotationQuat);
+            feetRotationQuat = feetRotationQuat.quat_rotateAxis(rotationOnUp, playerUp, feetRotationQuat);
+            feetTransformQuat.setRotationQuat(feetRotationQuat);
+        }
+
+        CollisionCheckGlobal.teleport(position, feetTransformQuat, this._myParams.myCollisionCheckParams, collisionRuntimeParams);
+
+        if (!collisionRuntimeParams.myTeleportCancelled && collisionRuntimeParams.myIsOnGround) {
+            //controllare altezza non sia troppo diversa
+
+            isValid = true;
+        }
+
+        return isValid;
+    };
+}();
+Object.defineProperty(PlayerLocomotionTeleport.prototype, "_isTeleportPositionValid", { enumerable: false });
+
+PlayerLocomotionTeleport.prototype._teleportToPosition = function () {
+    let playerUp = PP.vec3_create();
+    let feetTransformQuat = PP.quat2_create();
+    let feetRotationQuat = PP.quat_create();
+    let teleportRotation = PP.quat_create();
+    return function _teleportToPosition(position, rotationOnUp, collisionRuntimeParams) {
+        playerUp = this._myParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
+
+        //controllare posizione visibile dalla testa
+
+        feetTransformQuat = this._myParams.myPlayerHeadManager.getFeetTransformQuat(feetTransformQuat);
+        if (rotationOnUp != 0) {
+            feetRotationQuat = feetTransformQuat.quat2_getRotationQuat(feetRotationQuat);
+            feetRotationQuat = feetRotationQuat.quat_rotateAxis(rotationOnUp, playerUp, feetRotationQuat);
+            feetTransformQuat.setRotationQuat(feetRotationQuat);
+        }
+
+        CollisionCheckGlobal.teleport(position, feetTransformQuat, this._myParams.myCollisionCheckParams, collisionRuntimeParams);
+
+        if (!collisionRuntimeParams.myTeleportCancelled) {
+
+            this._myParams.myPlayerHeadManager.teleportFeetPosition(collisionRuntimeParams.myFixedTeleportPosition);
+            if (rotationOnUp != 0) {
+                teleportRotation.quat_fromAxis(rotationOnUp, playerUp);
+                this._myParams.myPlayerHeadManager.rotateHeadHorizontallyQuat(teleportRotation);
+            }
         }
     };
 }();
-Object.defineProperty(PlayerLocomotionTeleport.prototype, "_showTeleport", { enumerable: false });
-
-
-
-PlayerLocomotionTeleport.prototype._teleport = function () {
-    return function _teleport(dt) {
-
-    };
-}();
-Object.defineProperty(PlayerLocomotionTeleport.prototype, "_teleport", { enumerable: false });
-
-
-
-PlayerLocomotionTeleport.prototype._onXRSessionStart = function () {
-    return function _onXRSessionStart(session) {
-        this._mySessionActive = true;
-    };
-}();
-Object.defineProperty(PlayerLocomotionTeleport.prototype, "_onXRSessionStart", { enumerable: false });
-
-
-
-PlayerLocomotionTeleport.prototype._onXRSessionEnd = function () {
-    return function _onXRSessionEnd(session) {
-        this._mySessionActive = false;
-    };
-}();
-Object.defineProperty(PlayerLocomotionTeleport.prototype, "_onXRSessionEnd", { enumerable: false });
+Object.defineProperty(PlayerLocomotionTeleport.prototype, "_teleportToPosition", { enumerable: false });
