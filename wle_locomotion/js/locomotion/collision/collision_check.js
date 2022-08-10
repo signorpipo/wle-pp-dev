@@ -31,6 +31,10 @@ CollisionCheck = class CollisionCheck {
         this._fixMovement(movement, transformQuat, collisionCheckParams, collisionRuntimeParams);
     }
 
+    teleport(position, transformQuat, collisionCheckParams, collisionRuntimeParams) {
+        this._teleport(position, transformQuat, collisionCheckParams, collisionRuntimeParams);
+    }
+
     _debugMovement(movement, fixedMovement, feetPosition, up, collisionCheckParams) {
         let originalHorizontalMovement = movement.vec3_removeComponentAlongAxis(up);
 
@@ -174,6 +178,7 @@ CollisionCheck.prototype._fixMovementStep = function () {
     let fixedHorizontalMovement = PP.vec3_create();
     let fixedVerticalMovement = PP.vec3_create();
     let horizontalDirection = PP.vec3_create();
+    let forwardForHorizontal = PP.vec3_create();
     let forwardForVertical = PP.vec3_create();
     let newFeetPosition = PP.vec3_create();
     let surfaceAdjustedVerticalMovement = PP.vec3_create();
@@ -248,17 +253,23 @@ CollisionCheck.prototype._fixMovementStep = function () {
 
         fixedHorizontalMovement.vec3_zero();
 
+
+        forwardForHorizontal.vec3_copy(collisionCheckParams.myCheckHorizontalFixedForward);
+        if (!collisionCheckParams.myCheckHorizontalFixedForwardEnabled) {
+            forwardForHorizontal.vec3_copy(transformForward);
+        }
+
         if (!horizontalMovement.vec3_isZero()) {
             horizontalDirection = horizontalMovement.vec3_normalize(horizontalDirection);
             let surfaceTooSteep = this._surfaceTooSteep(transformUp, horizontalDirection, collisionCheckParams, this._myPrevCollisionRuntimeParams);
 
             if (!surfaceTooSteep) {
-                fixedHorizontalMovement = this._horizontalCheck(horizontalMovement, feetPosition, height, transformUp, transformForward, collisionCheckParams, collisionRuntimeParams, false, fixedHorizontalMovement);
+                fixedHorizontalMovement = this._horizontalCheck(horizontalMovement, feetPosition, height, transformUp, forwardForHorizontal, collisionCheckParams, collisionRuntimeParams, false, fixedHorizontalMovement);
                 //console.error(_myTotalRaycasts );
                 //collisionRuntimeParams.myIsCollidingHorizontally = true;
                 //collisionRuntimeParams.myHorizontalCollisionHit.myNormal = [0, 0, 1];
                 if (collisionCheckParams.mySlidingEnabled && collisionRuntimeParams.myIsCollidingHorizontally && this._isSlidingNormalValid(horizontalMovement, transformUp, collisionRuntimeParams)) {
-                    fixedHorizontalMovement = this._horizontalSlide(horizontalMovement, feetPosition, height, transformUp, transformForward, collisionCheckParams, collisionRuntimeParams, fixedHorizontalMovement);
+                    fixedHorizontalMovement = this._horizontalSlide(horizontalMovement, feetPosition, height, transformUp, forwardForHorizontal, collisionCheckParams, collisionRuntimeParams, fixedHorizontalMovement);
                 } else {
                     //console.error("no slide");
                 }
@@ -377,6 +388,78 @@ CollisionCheck.prototype._fixMovementStep = function () {
     };
 }();
 Object.defineProperty(CollisionCheck.prototype, "_fixMovementStep", { enumerable: false });
+
+
+
+CollisionCheck.prototype._teleport = function () {
+    let transformUp = PP.vec3_create();
+    let transformForward = PP.vec3_create();
+    let feetPosition = PP.vec3_create();
+    let zero = PP.vec3_create();
+    let forwardForHorizontal = PP.vec3_create();
+    let forwardForVertical = PP.vec3_create();
+    let fixedHorizontalMovement = PP.vec3_create();
+    let fixedVerticalMovement = PP.vec3_create();
+    let newFeetPosition = PP.vec3_create();
+    return function _teleport(position, transformQuat, collisionCheckParams, collisionRuntimeParams) {
+        transformUp = transformQuat.quat2_getUp(transformUp);
+        transformForward = transformQuat.quat2_getForward(transformForward);
+        feetPosition = transformQuat.quat2_getPosition(feetPosition);
+
+        let height = collisionCheckParams.myHeight;
+        height = height - 0.00001; // this makes it easier to setup things at the same exact height of a character so that it can go under it
+        if (height < 0.00001) {
+            height = 0;
+        }
+        //height = 1.75;
+
+        //fixed forward ?
+
+        this._myPrevCollisionRuntimeParams.copy(collisionRuntimeParams);
+        collisionRuntimeParams.reset();
+
+        forwardForHorizontal.vec3_copy(collisionCheckParams.myCheckHorizontalFixedForward);
+        if (!collisionCheckParams.myCheckHorizontalFixedForwardEnabled) {
+            forwardForHorizontal.vec3_copy(transformForward);
+        }
+
+        fixedHorizontalMovement = this._horizontalCheck(zero, position, height, transformUp, forwardForHorizontal, collisionCheckParams, collisionRuntimeParams, false, fixedHorizontalMovement);
+        if (!collisionRuntimeParams.myIsCollidingHorizontally) {
+            newFeetPosition = position.vec3_add(fixedHorizontalMovement, newFeetPosition);
+
+            forwardForVertical.vec3_copy(collisionCheckParams.myCheckVerticalFixedForward);
+            if (!collisionCheckParams.myCheckVerticalFixedForwardEnabled) {
+                forwardForVertical.vec3_copy(transformForward);
+            }
+
+            let downward = -1;
+            fixedVerticalMovement = this._verticalCheck(zero, downward, newFeetPosition, height, transformUp, forwardForVertical, collisionCheckParams, collisionRuntimeParams, fixedVerticalMovement);
+            if (!collisionRuntimeParams.myIsCollidingVertically) {
+                newFeetPosition = newFeetPosition.vec3_add(fixedVerticalMovement, newFeetPosition);
+
+                this._gatherSurfaceInfo(newFeetPosition, height, transformUp, forwardForVertical, true, collisionCheckParams, collisionRuntimeParams);
+                this._gatherSurfaceInfo(newFeetPosition, height, transformUp, forwardForVertical, false, collisionCheckParams, collisionRuntimeParams);
+
+                //check if angle is ok
+
+                collisionRuntimeParams.myFixedTeleportPosition.vec3_copy(newFeetPosition);
+            } else {
+                collisionRuntimeParams.myTeleportCanceled = true;
+            }
+        } else {
+            collisionRuntimeParams.myTeleportCanceled = true;
+        }
+
+        collisionRuntimeParams.myOriginalTeleportPosition.vec3_copy(position);
+
+        if (collisionCheckParams.myDebugActive && collisionCheckParams.myDebugRuntimeParamsActive) {
+            this._debugRuntimeParams(collisionRuntimeParams);
+        }
+    };
+}();
+Object.defineProperty(CollisionCheck.prototype, "_teleport", { enumerable: false });
+
+
 
 CollisionCheck.prototype._raycastAndDebug = function () {
     return function _raycastAndDebug(origin, direction, distance, ignoreHitsInsideCollision, collisionCheckParams, collisionRuntimeParams) {

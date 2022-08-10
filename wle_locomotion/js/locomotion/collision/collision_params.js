@@ -41,6 +41,9 @@ CollisionCheckParams = class CollisionCheckParams {
         // the step that is created "on the other side" in fact can easily be ignored thanks to the myDistanceFromFeetToIgnore field
         // if the level is properly created the best solution should be myHorizontalPositionCheckVerticalIgnoreHitsInsideCollision = false and myHorizontalPositionCheckVerticalDirectionType = 0
 
+        this.myCheckHorizontalFixedForwardEnabled = false;
+        this.myCheckHorizontalFixedForward = [0, 0, 1];
+
         this.myFeetRadius = 0.1;
         this.myAdjustVerticalMovementWithSurfaceAngle = true;
         this.myCheckVerticalFixedForwardEnabled = true;
@@ -269,6 +272,11 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.mySlidingRecompute90DegreesSign = true;
         this.myLastValidIsSliding = false;
         this.mySlidingPreviousHorizontalMovement = PP.vec3_create();
+
+        this.myOriginalTeleportPosition = PP.vec3_create();
+        this.myFixedTeleportPosition = PP.vec3_create();
+
+        this.myTeleportCancelled = false;
     }
 
     reset() {
@@ -318,6 +326,11 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.mySlidingRecompute90DegreesSign = true;
         this.myLastValidIsSliding = false;
         this.mySlidingPreviousHorizontalMovement = PP.vec3_create();
+
+        this.myOriginalTeleportPosition.vec3_zero();
+        this.myFixedTeleportPosition.vec3_zero();
+
+        this.myTeleportCancelled = false;
     }
 
     copy(other) {
@@ -367,5 +380,9 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.mySlidingRecompute90DegreesSign = other.mySlidingRecompute90DegreesSign;
         this.myLastValidIsSliding = other.myLastValidIsSliding;
         this.mySlidingPreviousHorizontalMovement.vec3_copy(other.mySlidingPreviousHorizontalMovement);
+
+        this.myOriginalTeleportPosition.vec3_copy(other.myOriginalTeleportPosition);
+        this.myFixedTeleportPosition.vec3_copy(other.myFixedTeleportPosition);
+        this.myTeleportCancelled = other.myTeleportCancelled;
     }
 };

@@ -185,6 +185,7 @@ require('./locomotion/collision/collision_surface_check.js');
 require('./locomotion/player_head_manager.js');
 require('./locomotion/player_locomotion_rotate');
 require('./locomotion/player_locomotion_smooth.js');
+require('./locomotion/player_locomotion_teleport.js');
 require('./locomotion/player_locomotion.js');
 require('./locomotion/player_locomotion_component.js');
 require('./locomotion/draft/locomotion_draft.js');

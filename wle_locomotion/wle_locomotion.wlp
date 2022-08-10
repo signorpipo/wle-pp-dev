@@ -25053,7 +25053,8 @@
                 "js/pp/input/gamepad/cauldron",
                 "js/pp/input/gamepad/gamepad_cores",
                 "js/locomotion/collision",
-                "js/pp/gameplay/cauldron"
+                "js/pp/gameplay/cauldron",
+                "js/locomotion/draft"
             ],
             "useInternalBundler": false
         },

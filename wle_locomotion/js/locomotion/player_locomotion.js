@@ -27,10 +27,12 @@ PlayerLocomotion = class PlayerLocomotion {
         this._myParams = params;
 
         this._myCollisionCheckParamsSmooth = new CollisionCheckParams();
+        this._myCollisionCheckParamsTeleport = new CollisionCheckParams();
 
         this._myCollisionRuntimeParams = new CollisionRuntimeParams();
 
         this._setupCollisionCheckParamsSmooth();
+        this._setupCollisionCheckParamsTeleport();
 
         {
             let params = new PlayerHeadManagerParams();
@@ -86,27 +88,19 @@ PlayerLocomotion = class PlayerLocomotion {
         }
 
         {
-            let params = new PlayerLocomotionSmoothParams();
+            let params = new PlayerLocomotionTeleportParams();
 
             params.myPlayerHeadManager = this._myPlayerHeadManager;
 
-            params.myCollisionCheckParams = this._myCollisionCheckParamsSmooth;
+            params.myCollisionCheckParams = this._myCollisionCheckParamsTeleport;
             params.myCollisionRuntimeParams = this._myCollisionRuntimeParams;
 
-            params.myMaxSpeed = this._myParams.myMaxSpeed;
+            params.myMaxDistance = 7;
+            params.myBlockLayerFlags.setAllFlagsActive(true);
 
-            params.myMovementMinStickIntensityThreshold = 0.1;
+            params.myDebugActive = true;
 
-            params.myFlyEnabled = this._myParams.myFlyEnabled;
-            params.myMinAngleToFlyUpHead = this._myParams.myMinAngleToFlyUpHead;
-            params.myMinAngleToFlyDownHead = this._myParams.myMinAngleToFlyDownHead;
-            params.myMinAngleToFlyUpHand = this._myParams.myMinAngleToFlyUpHand;
-            params.myMinAngleToFlyDownHand = this._myParams.myMinAngleToFlyDownHand;
-            params.myMinAngleToFlyRight = this._myParams.myMinAngleToFlyRight;
-
-            params.myDirectionReferenceType = this._myParams.myDirectionReferenceType;
-
-            this._myPlayerLocomotionTeleport = new PlayerLocomotionSmooth(params);
+            this._myPlayerLocomotionTeleport = new PlayerLocomotionTeleport(params);
         }
 
         this._myLocomotionMovementFSM = new PP.FSM();
@@ -166,6 +160,8 @@ PlayerLocomotion = class PlayerLocomotion {
         } else {
             this._myCollisionCheckParamsSmooth.myHeight += this._myParams.myForeheadExtraHeight;
         }
+
+        this._myCollisionCheckParamsTeleport.myHeight = this._myCollisionCheckParamsSmooth.myHeight;
     }
 
     _setupCollisionCheckParamsSmooth() {
@@ -251,7 +247,7 @@ PlayerLocomotion = class PlayerLocomotion {
             this._myCollisionCheckParamsSmooth.myObjectsToIgnore.pp_pushUnique(physXComponent.object, (first, second) => first.pp_equals(second));
         }
 
-        this._myCollisionCheckParamsSmooth.myDebugActive = false;
+        this._myCollisionCheckParamsSmooth.myDebugActive = true;
 
         this._myCollisionCheckParamsSmooth.myDebugHorizontalMovementActive = false;
         this._myCollisionCheckParamsSmooth.myDebugHorizontalPositionActive = true;
@@ -261,6 +257,19 @@ PlayerLocomotion = class PlayerLocomotion {
         this._myCollisionCheckParamsSmooth.myDebugSurfaceInfoActive = false;
         this._myCollisionCheckParamsSmooth.myDebugRuntimeParamsActive = true;
         this._myCollisionCheckParamsSmooth.myDebugMovementActive = false;
+    }
+
+    _setupCollisionCheckParamsTeleport() {
+        this._myCollisionCheckParamsTeleport.copy(this._myCollisionCheckParamsSmooth);
+
+        this._myCollisionCheckParamsTeleport.myHalfConeAngle = 180;
+        this._myCollisionCheckParamsTeleport.myHalfConeSliceAmount = 6;
+
+        this._myCollisionCheckParamsTeleport.myCheckVerticalFixedForwardEnabled = true;
+        this._myCollisionCheckParamsTeleport.myCheckVerticalFixedForward = [0, 0, 1];
+
+        this._myCollisionCheckParamsTeleport.myCheckHorizontalFixedForwardEnabled = true;
+        this._myCollisionCheckParamsTeleport.myCheckHorizontalFixedForward = [0, 0, 1];
     }
 
     _fixAlmostUp() {
