@@ -1,6 +1,6 @@
 CollisionCheck.prototype._horizontalSlide = function () {
     let previousHorizontalMovement = PP.vec3_create();
-    return function _horizontalSlide(movement, feetPosition, height, up, collisionCheckParams, collisionRuntimeParams, outSlideMovement) {
+    return function _horizontalSlide(movement, feetPosition, height, up, forward, collisionCheckParams, collisionRuntimeParams, outSlideMovement) {
         if (movement.vec3_isZero(0.000001)) {
             return outSlideMovement.vec3_zero();
         }
@@ -8,10 +8,10 @@ CollisionCheck.prototype._horizontalSlide = function () {
         this._mySlidingCollisionRuntimeParams.copy(collisionRuntimeParams);
 
         previousHorizontalMovement.vec3_copy(collisionRuntimeParams.mySlidingPreviousHorizontalMovement);
-        outSlideMovement = this._internalHorizontalSlide(movement, feetPosition, height, up, previousHorizontalMovement, collisionCheckParams, this._mySlidingCollisionRuntimeParams, false, outSlideMovement);
+        outSlideMovement = this._internalHorizontalSlide(movement, feetPosition, height, up, forward, previousHorizontalMovement, collisionCheckParams, this._mySlidingCollisionRuntimeParams, false, outSlideMovement);
 
         if (collisionCheckParams.mySlidingCheckBothDirections) {
-            this._horizontalSlideCheckOpposite(movement, feetPosition, height, up, previousHorizontalMovement, this._myPrevCollisionRuntimeParams.myIsSliding, collisionCheckParams, collisionRuntimeParams, this._mySlidingCollisionRuntimeParams, outSlideMovement);
+            this._horizontalSlideCheckOpposite(movement, feetPosition, height, up, forward, previousHorizontalMovement, this._myPrevCollisionRuntimeParams.myIsSliding, collisionCheckParams, collisionRuntimeParams, this._mySlidingCollisionRuntimeParams, outSlideMovement);
 
             //console.error("post oppo:", outSlideMovement.vec_toString());
         }
@@ -19,7 +19,7 @@ CollisionCheck.prototype._horizontalSlide = function () {
         //console.error(" ");
 
         if (this._mySlidingCollisionRuntimeParams.myIsSliding && collisionCheckParams.mySlidingFlickeringPreventionType > 0) {
-            let isFlickering = this._horizontalSlideFlickerCheck(movement, outSlideMovement, feetPosition, height, up, collisionCheckParams, this._mySlidingCollisionRuntimeParams);
+            let isFlickering = this._horizontalSlideFlickerCheck(movement, outSlideMovement, feetPosition, height, up, forward, collisionCheckParams, this._mySlidingCollisionRuntimeParams);
             this._mySlidingCollisionRuntimeParams.myIsSliding = !isFlickering;
         }
 
@@ -42,7 +42,7 @@ CollisionCheck.prototype._horizontalSlideCheckOpposite = function () {
     let horizontalCollisionNormal = PP.vec3_create();
     let oppositeSlideMovement = PP.vec3_create();
     let hitNormal = PP.vec3_create();
-    return function _horizontalSlideCheckOpposite(movement, feetPosition, height, up, previousHorizontalMovement, previousIsSliding, collisionCheckParams, preSlideCollisionRuntimeParams, postSlideCollisionRuntimeParams, outSlideMovement) {
+    return function _horizontalSlideCheckOpposite(movement, feetPosition, height, up, forward, previousHorizontalMovement, previousIsSliding, collisionCheckParams, preSlideCollisionRuntimeParams, postSlideCollisionRuntimeParams, outSlideMovement) {
         horizontalCollisionNormal = preSlideCollisionRuntimeParams.myHorizontalCollisionHit.myNormal.vec3_removeComponentAlongAxis(up, horizontalCollisionNormal);
         horizontalCollisionNormal.vec3_normalize(horizontalCollisionNormal);
 
@@ -63,7 +63,7 @@ CollisionCheck.prototype._horizontalSlideCheckOpposite = function () {
 
         this._mySlidingOppositeDirectionCollisionRuntimeParams.copy(preSlideCollisionRuntimeParams);
 
-        oppositeSlideMovement = this._internalHorizontalSlide(movement, feetPosition, height, up, previousHorizontalMovement, collisionCheckParams, this._mySlidingOppositeDirectionCollisionRuntimeParams, true, oppositeSlideMovement);
+        oppositeSlideMovement = this._internalHorizontalSlide(movement, feetPosition, height, up, forward, previousHorizontalMovement, collisionCheckParams, this._mySlidingOppositeDirectionCollisionRuntimeParams, true, oppositeSlideMovement);
 
         //console.error(previousHorizontalMovement.vec_toString(), outSlideMovement.vec_toString(), oppositeSlideMovement.vec_toString());
         if (this._mySlidingOppositeDirectionCollisionRuntimeParams.myIsSliding) {
@@ -143,7 +143,7 @@ CollisionCheck.prototype._horizontalSlideFlickerCheck = function () {
     let newFeetPosition = PP.vec3_create();
     let fixedMovement = PP.vec3_create();
     let flickerFixSlideMovement = PP.vec3_create();
-    return function _horizontalSlideFlickerCheck(movement, slideMovement, feetPosition, height, up, collisionCheckParams, collisionRuntimeParams) {
+    return function _horizontalSlideFlickerCheck(movement, slideMovement, feetPosition, height, up, forward, collisionCheckParams, collisionRuntimeParams) {
         let isFlickering = false;
 
         previousHorizontalMovement.vec3_copy(collisionRuntimeParams.mySlidingPreviousHorizontalMovement);
@@ -204,16 +204,16 @@ CollisionCheck.prototype._horizontalSlideFlickerCheck = function () {
                 let backupDebugActive = collisionCheckParams.myDebugActive;
                 collisionCheckParams.myDebugActive = collisionCheckParams.myDebugActive && collisionCheckParams.myDebugSlidingActive;
                 fixedMovement.vec3_zero();
-                this._horizontalCheck(movement, newFeetPosition, height, up, collisionCheckParams, this._mySlidingFlickeringFixCollisionRuntimeParams, false, fixedMovement);
+                this._horizontalCheck(movement, newFeetPosition, height, up, forward, collisionCheckParams, this._mySlidingFlickeringFixCollisionRuntimeParams, false, fixedMovement);
                 collisionCheckParams.myDebugActive = backupDebugActive;
 
                 if (this._mySlidingFlickeringFixCollisionRuntimeParams.myIsCollidingHorizontally) {
                     this._mySlidingFlickeringFixSlidingCollisionRuntimeParams.copy(this._mySlidingFlickeringFixCollisionRuntimeParams);
 
-                    flickerFixSlideMovement = this._internalHorizontalSlide(movement, newFeetPosition, height, up, slideMovement, collisionCheckParams, this._mySlidingFlickeringFixSlidingCollisionRuntimeParams, false, flickerFixSlideMovement);
+                    flickerFixSlideMovement = this._internalHorizontalSlide(movement, newFeetPosition, height, up, forward, slideMovement, collisionCheckParams, this._mySlidingFlickeringFixSlidingCollisionRuntimeParams, false, flickerFixSlideMovement);
 
                     if (collisionCheckParams.mySlidingCheckBothDirections) {
-                        this._horizontalSlideCheckOpposite(movement, newFeetPosition, height, up, slideMovement, true, collisionCheckParams, this._mySlidingFlickeringFixCollisionRuntimeParams, this._mySlidingFlickeringFixSlidingCollisionRuntimeParams, flickerFixSlideMovement);
+                        this._horizontalSlideCheckOpposite(movement, newFeetPosition, height, up, forward, slideMovement, true, collisionCheckParams, this._mySlidingFlickeringFixCollisionRuntimeParams, this._mySlidingFlickeringFixSlidingCollisionRuntimeParams, flickerFixSlideMovement);
                     }
 
                     if (this._mySlidingFlickeringFixSlidingCollisionRuntimeParams.myIsSliding) {
@@ -275,7 +275,7 @@ CollisionCheck.prototype._internalHorizontalSlide = function () {
     let slidingMovement = PP.vec3_create();
     let movement90 = PP.vec3_create();
     let currentMovement = PP.vec3_create();
-    return function _internalHorizontalSlide(movement, feetPosition, height, up, previousHorizontalMovement, collisionCheckParams, collisionRuntimeParams, checkOppositeDirection, outSlideMovement) {
+    return function _internalHorizontalSlide(movement, feetPosition, height, up, forward, previousHorizontalMovement, collisionCheckParams, collisionRuntimeParams, checkOppositeDirection, outSlideMovement) {
         if (movement.vec3_isZero(0.000001)) {
             return outSlideMovement.vec3_zero();
         }
@@ -371,7 +371,7 @@ CollisionCheck.prototype._internalHorizontalSlide = function () {
 
                 slidingMovement.vec3_rotateAxis(currentAngle, up, currentMovement);
                 let fixedMovement = [0, 0, 0];
-                this._horizontalCheck(currentMovement, feetPosition, height, up, collisionCheckParams, this._myInternalSlidingCollisionRuntimeParams, true, fixedMovement);
+                this._horizontalCheck(currentMovement, feetPosition, height, up, forward, collisionCheckParams, this._myInternalSlidingCollisionRuntimeParams, true, fixedMovement);
                 if (!this._myInternalSlidingCollisionRuntimeParams.myIsCollidingHorizontally) {
                     outSlideMovement.vec3_copy(currentMovement);
                     collisionRuntimeParams.copy(this._myInternalSlidingCollisionRuntimeParams);

@@ -165,6 +165,8 @@ CollisionCheck.prototype._fixMovement = function () {
 }();
 Object.defineProperty(CollisionCheck.prototype, "_fixMovement", { enumerable: false });
 
+
+
 CollisionCheck.prototype._fixMovementStep = function () {
     let horizontalMovement = PP.vec3_create();
     let previousFixedHorizontalMovement = PP.vec3_create();
@@ -251,12 +253,12 @@ CollisionCheck.prototype._fixMovementStep = function () {
             let surfaceTooSteep = this._surfaceTooSteep(transformUp, horizontalDirection, collisionCheckParams, this._myPrevCollisionRuntimeParams);
 
             if (!surfaceTooSteep) {
-                fixedHorizontalMovement = this._horizontalCheck(horizontalMovement, feetPosition, height, transformUp, collisionCheckParams, collisionRuntimeParams, false, fixedHorizontalMovement);
+                fixedHorizontalMovement = this._horizontalCheck(horizontalMovement, feetPosition, height, transformUp, transformForward, collisionCheckParams, collisionRuntimeParams, false, fixedHorizontalMovement);
                 //console.error(_myTotalRaycasts );
                 //collisionRuntimeParams.myIsCollidingHorizontally = true;
                 //collisionRuntimeParams.myHorizontalCollisionHit.myNormal = [0, 0, 1];
                 if (collisionCheckParams.mySlidingEnabled && collisionRuntimeParams.myIsCollidingHorizontally && this._isSlidingNormalValid(horizontalMovement, transformUp, collisionRuntimeParams)) {
-                    fixedHorizontalMovement = this._horizontalSlide(horizontalMovement, feetPosition, height, transformUp, collisionCheckParams, collisionRuntimeParams, fixedHorizontalMovement);
+                    fixedHorizontalMovement = this._horizontalSlide(horizontalMovement, feetPosition, height, transformUp, transformForward, collisionCheckParams, collisionRuntimeParams, fixedHorizontalMovement);
                 } else {
                     //console.error("no slide");
                 }

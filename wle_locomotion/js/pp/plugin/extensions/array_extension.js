@@ -59,6 +59,7 @@
             ○ pp_copy    
             - pp_clone      
             - pp_equals      
+            ○ pp_clear      
 
         GENERIC VECTOR (array with only numbers):
             - vec_scale
@@ -370,6 +371,12 @@ Array.prototype.pp_equals = function (array, elementsEqualCallback = null) {
     }
 
     return equals;
+};
+
+Array.prototype.pp_clear = function () {
+    this.length = 0;
+
+    return this;
 };
 
 // GENERIC VECTOR

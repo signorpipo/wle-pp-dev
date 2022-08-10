@@ -26,7 +26,7 @@
         - pp_isInsideAngleRange
 */
 
-Math.pp_myEpsilonNumber = 0.000001;
+Math.pp_myEpsilonNumber = 0.00001;
 Math.pp_myEpsilonAngle = 0.0001;
 
 Math.pp_clamp = function (value, start, end) {

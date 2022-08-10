@@ -2,21 +2,23 @@ CollisionCheck.prototype._horizontalCheck = function () {
     let movementDirection = PP.vec3_create();
     let fixedFeetPosition = PP.vec3_create();
     let newFixedFeetPosition = PP.vec3_create();
-    return function _horizontalCheck(movement, feetPosition, height, up, collisionCheckParams, collisionRuntimeParams, avoidSlidingExtraCheck, outFixedMovement) {
+    return function _horizontalCheck(movement, feetPosition, height, up, forward, collisionCheckParams, collisionRuntimeParams, avoidSlidingExtraCheck, outFixedMovement) {
         collisionRuntimeParams.myIsCollidingHorizontally = false;
         collisionRuntimeParams.myHorizontalCollisionHit.reset();
 
-        if (movement.vec3_isZero(0.000001)) {
-            return outFixedMovement.vec3_zero();
+        if (movement.vec3_isZero()) {
+            movementDirection.vec3_copy(forward);
+        } else {
+
+            movementDirection = movement.vec3_normalize(movementDirection);
         }
 
-        movementDirection = movement.vec3_normalize(movementDirection);
 
         fixedFeetPosition = feetPosition.vec3_add(up.vec3_scale(collisionCheckParams.myDistanceFromFeetToIgnore + 0.0001, fixedFeetPosition), fixedFeetPosition);
         let fixedHeight = Math.max(0, height - collisionCheckParams.myDistanceFromFeetToIgnore - collisionCheckParams.myDistanceFromHeadToIgnore - 0.0001 * 2);
 
         let canMove = true;
-        if (collisionCheckParams.myHorizontalMovementCheckEnabled) {
+        if (collisionCheckParams.myHorizontalMovementCheckEnabled && !movement.vec3_isZero(0.000001)) {
             canMove = this._horizontalMovementCheck(movement, fixedFeetPosition, fixedHeight, up, collisionCheckParams, collisionRuntimeParams);
         }
 
