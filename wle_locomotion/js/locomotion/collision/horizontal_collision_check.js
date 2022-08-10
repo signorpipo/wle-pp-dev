@@ -1,18 +1,9 @@
 CollisionCheck.prototype._horizontalCheck = function () {
-    let movementDirection = PP.vec3_create();
     let fixedFeetPosition = PP.vec3_create();
     let newFixedFeetPosition = PP.vec3_create();
     return function _horizontalCheck(movement, feetPosition, height, up, forward, collisionCheckParams, collisionRuntimeParams, avoidSlidingExtraCheck, outFixedMovement) {
         collisionRuntimeParams.myIsCollidingHorizontally = false;
         collisionRuntimeParams.myHorizontalCollisionHit.reset();
-
-        if (movement.vec3_isZero()) {
-            movementDirection.vec3_copy(forward);
-        } else {
-
-            movementDirection = movement.vec3_normalize(movementDirection);
-        }
-
 
         fixedFeetPosition = feetPosition.vec3_add(up.vec3_scale(collisionCheckParams.myDistanceFromFeetToIgnore + 0.0001, fixedFeetPosition), fixedFeetPosition);
         let fixedHeight = Math.max(0, height - collisionCheckParams.myDistanceFromFeetToIgnore - collisionCheckParams.myDistanceFromHeadToIgnore - 0.0001 * 2);
@@ -25,7 +16,7 @@ CollisionCheck.prototype._horizontalCheck = function () {
         outFixedMovement.vec3_zero();
         if (canMove) {
             newFixedFeetPosition = fixedFeetPosition.vec3_add(movement, newFixedFeetPosition);
-            let canStay = this._horizontalPositionCheck(newFixedFeetPosition, fixedHeight, up, movementDirection, collisionCheckParams, collisionRuntimeParams);
+            let canStay = this._horizontalPositionCheck(newFixedFeetPosition, fixedHeight, up, forward, collisionCheckParams, collisionRuntimeParams);
             if (canStay) {
                 outFixedMovement.vec3_copy(movement);
             }
@@ -34,7 +25,7 @@ CollisionCheck.prototype._horizontalCheck = function () {
                 outFixedMovement.vec3_zero();
             }
         } else if (!avoidSlidingExtraCheck && collisionCheckParams.mySlidingEnabled && collisionCheckParams.mySlidingHorizontalMovementCheckBetterNormal) {
-            this._horizontalCheckBetterSlideNormal(movement, fixedFeetPosition, fixedHeight, up, collisionCheckParams, collisionRuntimeParams);
+            this._horizontalCheckBetterSlideNormal(movement, fixedFeetPosition, fixedHeight, up, forward, collisionCheckParams, collisionRuntimeParams);
         }
 
         return outFixedMovement;

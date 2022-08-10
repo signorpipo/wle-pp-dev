@@ -41,7 +41,7 @@ CollisionCheckParams = class CollisionCheckParams {
         // the step that is created "on the other side" in fact can easily be ignored thanks to the myDistanceFromFeetToIgnore field
         // if the level is properly created the best solution should be myHorizontalPositionCheckVerticalIgnoreHitsInsideCollision = false and myHorizontalPositionCheckVerticalDirectionType = 0
 
-        this.myCheckHorizontalFixedForwardEnabled = false;
+        this.myCheckHorizontalFixedForwardEnabled = false; // this is basically only useful if the cone angle is 180 degrees
         this.myCheckHorizontalFixedForward = [0, 0, 1];
 
         this.myFeetRadius = 0.1;
