@@ -187,10 +187,11 @@ require('./locomotion/player_locomotion_rotate');
 require('./locomotion/player_locomotion_smooth.js');
 require('./locomotion/player_locomotion.js');
 require('./locomotion/player_locomotion_component.js');
-require('./locomotion/locomotion_draft.js');
-require('./locomotion/locomotion_draft_2.js');
-require('./locomotion/locomotion_fly_draft.js');
-require('./locomotion/locomotion_floating_error.js');
+require('./locomotion/draft/locomotion_draft.js');
+require('./locomotion/draft/locomotion_draft_2.js');
+require('./locomotion/draft/locomotion_fly_draft.js');
+require('./locomotion/draft/locomotion_floating_error.js');
+require('./locomotion/draft/teleport_detector_test.js');
 
 //TEST
 
