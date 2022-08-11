@@ -69,6 +69,7 @@ CollisionCheck.prototype._moveStep = function () {
     let horizontalDirection = PP.vec3_create();
     let forwardForHorizontal = PP.vec3_create();
     let forwardForVertical = PP.vec3_create();
+    let forwardForPerceivedAngle = PP.vec3_create();
     let newFeetPosition = PP.vec3_create();
     let surfaceAdjustedVerticalMovement = PP.vec3_create();
     let extraSurfaceVerticalMovement = PP.vec3_create();
@@ -190,8 +191,16 @@ CollisionCheck.prototype._moveStep = function () {
 
         newFeetPosition = feetPosition.vec3_add(outFixedMovement, newFeetPosition);
 
-        this._gatherSurfaceInfo(newFeetPosition, height, transformUp, forwardForVertical, true, collisionCheckParams, collisionRuntimeParams);
-        this._gatherSurfaceInfo(newFeetPosition, height, transformUp, forwardForVertical, false, collisionCheckParams, collisionRuntimeParams);
+        forwardForPerceivedAngle.vec3_copy(transformForward);
+
+        if (!fixedHorizontalMovement.vec3_isZero()) {
+            forwardForPerceivedAngle = fixedHorizontalMovement.vec3_normalize(forwardForPerceivedAngle);
+        } else if (!horizontalMovement.vec3_isZero()) {
+            forwardForPerceivedAngle = horizontalMovement.vec3_normalize(forwardForPerceivedAngle);
+        }
+
+        this._gatherSurfaceInfo(newFeetPosition, height, transformUp, forwardForPerceivedAngle, forwardForVertical, true, collisionCheckParams, collisionRuntimeParams);
+        this._gatherSurfaceInfo(newFeetPosition, height, transformUp, forwardForPerceivedAngle, forwardForVertical, false, collisionCheckParams, collisionRuntimeParams);
 
         //console.error(_myTotalRaycasts );
 

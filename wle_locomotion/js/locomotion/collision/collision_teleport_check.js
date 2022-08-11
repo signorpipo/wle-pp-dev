@@ -5,6 +5,7 @@ CollisionCheck.prototype._teleport = function () {
     let zero = PP.vec3_create();
     let forwardForHorizontal = PP.vec3_create();
     let forwardForVertical = PP.vec3_create();
+    let forwardForPerceivedAngle = PP.vec3_create();
     let fixedHorizontalMovement = PP.vec3_create();
     let fixedVerticalMovement = PP.vec3_create();
     let newFeetPosition = PP.vec3_create();
@@ -44,8 +45,10 @@ CollisionCheck.prototype._teleport = function () {
             if (!collisionRuntimeParams.myIsCollidingVertically) {
                 newFeetPosition = newFeetPosition.vec3_add(fixedVerticalMovement, newFeetPosition);
 
-                this._gatherSurfaceInfo(newFeetPosition, height, transformUp, forwardForVertical, true, collisionCheckParams, collisionRuntimeParams);
-                this._gatherSurfaceInfo(newFeetPosition, height, transformUp, forwardForVertical, false, collisionCheckParams, collisionRuntimeParams);
+                forwardForPerceivedAngle.vec3_copy(transformForward);
+
+                this._gatherSurfaceInfo(newFeetPosition, height, transformUp, forwardForPerceivedAngle, forwardForVertical, true, collisionCheckParams, collisionRuntimeParams);
+                this._gatherSurfaceInfo(newFeetPosition, height, transformUp, forwardForPerceivedAngle, forwardForVertical, false, collisionCheckParams, collisionRuntimeParams);
 
                 //check if angle is ok
 

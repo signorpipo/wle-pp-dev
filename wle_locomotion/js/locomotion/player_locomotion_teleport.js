@@ -7,6 +7,7 @@ PlayerLocomotionTeleportParams = class PlayerLocomotionTeleportParams {
 
         this.myMaxDistance = 0;
         this.myMaxHeightDifference = 0;
+        this.myGroundAngleToIgnoreUpward = 0;
         this.myTeleportPositionMustBeVisible = false; // implement
 
         this.myBlockLayerFlags = new PP.PhysicsLayerFlags();
@@ -247,8 +248,17 @@ PlayerLocomotionTeleport.prototype._isTeleportPositionValid = function () {
             CollisionCheckGlobal.teleport(position, feetTransformQuat, this._myParams.myCollisionCheckParams, collisionRuntimeParams);
 
             if (!collisionRuntimeParams.myTeleportCancelled && collisionRuntimeParams.myIsOnGround) {
+                differenceOnUpVector = collisionRuntimeParams.myFixedTeleportPosition.vec3_sub(feetPosition, differenceOnUpVector).vec3_componentAlongAxis(playerUp, differenceOnUpVector);
 
-                isValid = true;
+                let groundAngleValid = true;
+                let isMovingUpward = differenceOnUpVector.vec3_isConcordant(playerUp);
+                if (isMovingUpward) {
+                    groundAngleValid = collisionRuntimeParams.myGroundAngle < this._myParams.myGroundAngleToIgnoreUpward + 0.00001;
+                }
+
+                if (groundAngleValid) {
+                    isValid = true;
+                }
             }
         }
 

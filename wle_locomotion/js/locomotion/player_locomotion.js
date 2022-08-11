@@ -95,8 +95,9 @@ PlayerLocomotion = class PlayerLocomotion {
             params.myCollisionCheckParams = this._myCollisionCheckParamsTeleport;
             params.myCollisionRuntimeParams = this._myCollisionRuntimeParams;
 
-            params.myMaxDistance = 7;
+            params.myMaxDistance = 70;
             params.myMaxHeightDifference = 20;
+            params.myGroundAngleToIgnoreUpward = this._myCollisionCheckParamsSmooth.myGroundAngleToIgnore;
             params.myBlockLayerFlags.setAllFlagsActive(true);
 
             params.myDebugActive = true;
@@ -271,6 +272,9 @@ PlayerLocomotion = class PlayerLocomotion {
 
         this._myCollisionCheckParamsTeleport.myCheckHorizontalFixedForwardEnabled = true;
         this._myCollisionCheckParamsTeleport.myCheckHorizontalFixedForward = [0, 0, 1];
+
+        this._myCollisionCheckParamsTeleport.myGroundAngleToIgnore = 60;
+        this._myCollisionCheckParamsTeleport.myCeilingAngleToIgnore = 0;
     }
 
     _fixAlmostUp() {

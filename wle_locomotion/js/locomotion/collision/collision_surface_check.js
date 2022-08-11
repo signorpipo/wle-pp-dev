@@ -78,10 +78,10 @@ CollisionCheck.prototype._gatherSurfaceInfo = function () {
     let startPosition = PP.vec3_create();
     let endPosition = PP.vec3_create();
     let direction = PP.vec3_create();
-    return function _gatherSurfaceInfo(feetPosition, height, up, forward, isGround, collisionCheckParams, collisionRuntimeParams) {
+    return function _gatherSurfaceInfo(feetPosition, height, up, forwardForPerceivedAngle, forwardForVertical, isGround, collisionCheckParams, collisionRuntimeParams) {
         this._myDebugActive = collisionCheckParams.myDebugActive && collisionCheckParams.myDebugSurfaceInfoActive;
 
-        let checkPositions = this._getVerticalCheckPositions(feetPosition, up, forward, collisionCheckParams, collisionRuntimeParams);
+        let checkPositions = this._getVerticalCheckPositions(feetPosition, up, forwardForVertical, collisionCheckParams, collisionRuntimeParams);
 
         verticalDirection.vec3_copy(up);
         let distanceToBeOnSurface = collisionCheckParams.myDistanceToBeOnGround;
@@ -152,7 +152,7 @@ CollisionCheck.prototype._gatherSurfaceInfo = function () {
                 surfaceNormal = verticalDirection.vec3_negate(surfaceNormal);
             }
 
-            surfacePerceivedAngle = LocomotionUtils.computeSurfacePerceivedAngle(surfaceAngle, surfaceNormal, up, forward, isGround);
+            surfacePerceivedAngle = LocomotionUtils.computeSurfacePerceivedAngle(surfaceAngle, surfaceNormal, up, forwardForPerceivedAngle, isGround);
         }
 
         if (isGround) {
