@@ -146,7 +146,7 @@ WL.registerComponent('stick-movement', {
             movement.vec3_add(up.vec3_scale(-3 * this._myScale * dt), movement);
         }
 
-        this._myCollisionCheck.fixMovement(movement, this.object.pp_getTransformQuat(), this._myCollisionCheckParams, this._myCollisionRuntimeParams);
+        this._myCollisionCheck.move(movement, this.object.pp_getTransformQuat(), this._myCollisionCheckParams, this._myCollisionRuntimeParams);
 
         this.object.pp_translate(this._myCollisionRuntimeParams.myFixedMovement);
 

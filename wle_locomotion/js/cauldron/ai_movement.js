@@ -53,7 +53,7 @@ WL.registerComponent('ai-movement', {
             let movement = this._myCurrentDirection.vec3_scale(this._mySpeed * this._myScale * dt, tempMovement);
             movement.vec3_add(up.vec3_scale(-3 * this._myScale * dt, tempGravity), movement);
 
-            this._myCollisionCheck.fixMovement(movement, this.object.pp_getTransformQuat(tempTransformQuat), this._myCollisionCheckParams, this._myCollisionRuntimeParams);
+            this._myCollisionCheck.move(movement, this.object.pp_getTransformQuat(tempTransformQuat), this._myCollisionCheckParams, this._myCollisionRuntimeParams);
 
             if (this._myCollisionRuntimeParams.myHorizontalMovementCancelled) {
                 if (this._myCollisionTimer.isDone()) {

@@ -154,7 +154,7 @@ PlayerLocomotionSmooth.prototype.update = function () {
 
             feetTransformQuat = this._myParams.myPlayerHeadManager.getFeetTransformQuat(feetTransformQuat);
 
-            CollisionCheckGlobal.fixMovement(headMovement, feetTransformQuat, this._myParams.myCollisionCheckParams, this._myParams.myCollisionRuntimeParams);
+            CollisionCheckGlobal.move(headMovement, feetTransformQuat, this._myParams.myCollisionCheckParams, this._myParams.myCollisionRuntimeParams);
             headMovement.vec3_copy(this._myParams.myCollisionRuntimeParams.myFixedMovement);
 
             if (PP.myLeftGamepad.getButtonInfo(PP.ButtonType.SQUEEZE).isPressed()) {

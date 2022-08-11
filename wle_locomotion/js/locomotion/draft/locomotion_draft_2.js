@@ -187,7 +187,7 @@ WL.registerComponent('locomotion-draft-2', {
 
                     let feetTransform = this._getFeetTransform();
 
-                    this._myCollisionCheck.fixMovement(headMovement, feetTransform, this._myCollisionCheckParams, this._myCollisionRuntimeParams);
+                    this._myCollisionCheck.move(headMovement, feetTransform, this._myCollisionCheckParams, this._myCollisionRuntimeParams);
                     movementToApply.vec3_copy(this._myCollisionRuntimeParams.myFixedMovement);
 
                     if (PP.myLeftGamepad.getButtonInfo(PP.ButtonType.SQUEEZE).isPressed()) {
