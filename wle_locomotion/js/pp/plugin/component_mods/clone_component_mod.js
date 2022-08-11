@@ -92,6 +92,8 @@ if (WL && WL.Object) {
         return clonedComponent;
     };
 
+
+
     Object.defineProperty(WL.MeshComponent.prototype, "pp_clone", { enumerable: false });
     Object.defineProperty(WL.CollisionComponent.prototype, "pp_clone", { enumerable: false });
     Object.defineProperty(WL.TextComponent.prototype, "pp_clone", { enumerable: false });

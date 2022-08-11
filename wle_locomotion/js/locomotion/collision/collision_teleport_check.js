@@ -64,4 +64,7 @@ CollisionCheck.prototype._teleport = function () {
         }
     };
 }();
+
+
+
 Object.defineProperty(CollisionCheck.prototype, "_teleport", { enumerable: false });

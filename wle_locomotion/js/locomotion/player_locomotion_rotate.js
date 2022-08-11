@@ -73,8 +73,6 @@ PlayerLocomotionRotate.prototype._rotateHeadHorizontally = function () {
         }
     };
 }();
-Object.defineProperty(PlayerLocomotionRotate.prototype, "_rotateHeadHorizontally", { enumerable: false });
-
 
 PlayerLocomotionRotate.prototype._rotateHeadVertically = function () {
     let headForward = PP.vec3_create();
@@ -159,4 +157,8 @@ PlayerLocomotionRotate.prototype._rotateHeadVertically = function () {
         }
     };
 }();
+
+
+
+Object.defineProperty(PlayerLocomotionRotate.prototype, "_rotateHeadHorizontally", { enumerable: false });
 Object.defineProperty(PlayerLocomotionRotate.prototype, "_rotateHeadVertically", { enumerable: false });

@@ -26,7 +26,6 @@ CollisionCheck.prototype._surfaceTooSteep = function () {
         return groundTooSteep || ceilingTooSteep;
     };
 }();
-Object.defineProperty(CollisionCheck.prototype, "_surfaceTooSteep", { enumerable: false });
 
 CollisionCheck.prototype._computeExtraSurfaceVerticalMovement = function () {
     let direction = PP.vec3_create();
@@ -68,7 +67,6 @@ CollisionCheck.prototype._computeExtraSurfaceVerticalMovement = function () {
         return outExtraSurfaceVerticalMovement;
     };
 }();
-Object.defineProperty(CollisionCheck.prototype, "_computeExtraSurfaceVerticalMovement", { enumerable: false });
 
 CollisionCheck.prototype._gatherSurfaceInfo = function () {
     let verticalDirection = PP.vec3_create();
@@ -174,4 +172,9 @@ CollisionCheck.prototype._gatherSurfaceInfo = function () {
         }
     };
 }();
+
+
+
+Object.defineProperty(CollisionCheck.prototype, "_surfaceTooSteep", { enumerable: false });
+Object.defineProperty(CollisionCheck.prototype, "_computeExtraSurfaceVerticalMovement", { enumerable: false });
 Object.defineProperty(CollisionCheck.prototype, "_gatherSurfaceInfo", { enumerable: false });

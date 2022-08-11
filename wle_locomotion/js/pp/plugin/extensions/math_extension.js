@@ -240,6 +240,9 @@ Math.pp_isInsideAngleRangeRadians = function (angle, start, end, useShortestAngl
     return Math.pp_isInsideAngleRangeDegrees(Math.pp_toDegrees(angle), Math.pp_toDegrees(start), Math.pp_toDegrees(end), useShortestAngle);
 };
 
+
+
+
 for (let key in Math) {
     let prefixes = ["pp_", "_pp_"];
 

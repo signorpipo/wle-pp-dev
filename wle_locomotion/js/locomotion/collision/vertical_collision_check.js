@@ -34,7 +34,6 @@ CollisionCheck.prototype._verticalCheck = function () {
         return outFixedMovement;
     };
 }();
-Object.defineProperty(CollisionCheck.prototype, "_verticalCheck", { enumerable: false });
 
 CollisionCheck.prototype._verticalMovementFix = function () {
     let startOffset = PP.vec3_create();
@@ -148,7 +147,6 @@ CollisionCheck.prototype._verticalMovementFix = function () {
         return outFixedMovement;
     };
 }();
-Object.defineProperty(CollisionCheck.prototype, "_verticalMovementFix", { enumerable: false });
 
 CollisionCheck.prototype._verticalPositionCheck = function () {
     let smallHeightFixOffset = PP.vec3_create();
@@ -225,7 +223,6 @@ CollisionCheck.prototype._verticalPositionCheck = function () {
         return !collisionRuntimeParams.myIsCollidingVertically;
     };
 }();
-Object.defineProperty(CollisionCheck.prototype, "_verticalPositionCheck", { enumerable: false });
 
 CollisionCheck.prototype._getVerticalCheckPositions = function () {
     let checkPositions = [];
@@ -272,4 +269,10 @@ CollisionCheck.prototype._getVerticalCheckPositions = function () {
         return checkPositions;
     };
 }();
+
+
+
+Object.defineProperty(CollisionCheck.prototype, "_verticalCheck", { enumerable: false });
+Object.defineProperty(CollisionCheck.prototype, "_verticalMovementFix", { enumerable: false });
+Object.defineProperty(CollisionCheck.prototype, "_verticalPositionCheck", { enumerable: false });
 Object.defineProperty(CollisionCheck.prototype, "_getVerticalCheckPositions", { enumerable: false });

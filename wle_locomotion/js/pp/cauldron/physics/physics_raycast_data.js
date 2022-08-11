@@ -146,7 +146,6 @@ PP.RaycastResult.prototype.copy = function () {
         this.myHits.pp_copy(result.myHits, copyHitCallback);
     };
 }();
-Object.defineProperty(PP.RaycastResult.prototype, "copy", { enumerable: false });
 
 PP.RaycastResultHit = class RaycastResultHit {
     constructor() {
@@ -178,3 +177,7 @@ PP.RaycastResultHit = class RaycastResultHit {
         this.myIsInsideCollision = false;
     }
 };
+
+
+
+Object.defineProperty(PP.RaycastResult.prototype, "copy", { enumerable: false });

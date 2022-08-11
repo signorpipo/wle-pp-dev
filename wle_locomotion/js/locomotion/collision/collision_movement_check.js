@@ -60,9 +60,6 @@ CollisionCheck.prototype._move = function () {
         collisionRuntimeParams.myFixedMovement.vec3_copy(fixedMovement);
     };
 }();
-Object.defineProperty(CollisionCheck.prototype, "_move", { enumerable: false });
-
-
 
 CollisionCheck.prototype._moveStep = function () {
     let horizontalMovement = PP.vec3_create();
@@ -251,9 +248,6 @@ CollisionCheck.prototype._moveStep = function () {
         return outFixedMovement;
     };
 }();
-Object.defineProperty(CollisionCheck.prototype, "_moveStep", { enumerable: false });
-
-
 
 CollisionCheck.prototype._syncCollisionRuntimeParamsWithPrevious = function () {
     let previousFixedHorizontalMovement = PP.vec3_create();
@@ -299,4 +293,9 @@ CollisionCheck.prototype._syncCollisionRuntimeParamsWithPrevious = function () {
         }
     };
 }();
+
+
+
+Object.defineProperty(CollisionCheck.prototype, "_move", { enumerable: false });
+Object.defineProperty(CollisionCheck.prototype, "_moveStep", { enumerable: false });
 Object.defineProperty(CollisionCheck.prototype, "_syncCollisionRuntimeParamsWithPrevious", { enumerable: false });

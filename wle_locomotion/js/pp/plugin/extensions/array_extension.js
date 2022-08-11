@@ -2332,6 +2332,9 @@ Array.prototype._quat_setAxes = function () {
     };
 }();
 
+
+
+
 for (let key in Array.prototype) {
     let prefixes = ["pp_", "vec_", "vec3_", "vec4_", "quat_", "quat2_", "mat3_", "mat4_", "_pp_", "_vec_", "_quat_",];
 

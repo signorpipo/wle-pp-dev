@@ -36,7 +36,6 @@ CollisionCheck.prototype._horizontalSlide = function () {
         return outSlideMovement;
     };
 }();
-Object.defineProperty(CollisionCheck.prototype, "_horizontalSlide", { enumerable: false });
 
 CollisionCheck.prototype._horizontalSlideCheckOpposite = function () {
     let horizontalCollisionNormal = PP.vec3_create();
@@ -136,7 +135,6 @@ CollisionCheck.prototype._horizontalSlideCheckOpposite = function () {
         }
     };
 }();
-Object.defineProperty(CollisionCheck.prototype, "_horizontalSlideCheckOpposite", { enumerable: false });
 
 CollisionCheck.prototype._horizontalSlideFlickerCheck = function () {
     let previousHorizontalMovement = PP.vec3_create();
@@ -269,7 +267,6 @@ CollisionCheck.prototype._horizontalSlideFlickerCheck = function () {
         return isFlickering;
     };
 }();
-Object.defineProperty(CollisionCheck.prototype, "_horizontalSlideFlickerCheck", { enumerable: false });
 
 CollisionCheck.prototype._internalHorizontalSlide = function () {
     let invertedNormal = PP.vec3_create();
@@ -425,7 +422,6 @@ CollisionCheck.prototype._internalHorizontalSlide = function () {
         return outSlideMovement;
     };
 }();
-Object.defineProperty(CollisionCheck.prototype, "_internalHorizontalSlide", { enumerable: false });
 
 CollisionCheck.prototype._horizontalCheckBetterSlideNormal = function () {
     let movementDirection = PP.vec3_create();
@@ -488,8 +484,6 @@ CollisionCheck.prototype._horizontalCheckBetterSlideNormal = function () {
         }
     };
 }();
-Object.defineProperty(CollisionCheck.prototype, "_horizontalCheckBetterSlideNormal", { enumerable: false });
-
 
 CollisionCheck.prototype._isSlidingNormalValid = function () {
     let flatNormal = PP.vec3_create();
@@ -510,4 +504,12 @@ CollisionCheck.prototype._isSlidingNormalValid = function () {
         return isValid;
     };
 }();
+
+
+
+Object.defineProperty(CollisionCheck.prototype, "_horizontalSlide", { enumerable: false });
+Object.defineProperty(CollisionCheck.prototype, "_horizontalSlideCheckOpposite", { enumerable: false });
+Object.defineProperty(CollisionCheck.prototype, "_horizontalSlideFlickerCheck", { enumerable: false });
+Object.defineProperty(CollisionCheck.prototype, "_internalHorizontalSlide", { enumerable: false });
+Object.defineProperty(CollisionCheck.prototype, "_horizontalCheckBetterSlideNormal", { enumerable: false });
 Object.defineProperty(CollisionCheck.prototype, "_isSlidingNormalValid", { enumerable: false });

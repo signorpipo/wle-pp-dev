@@ -131,5 +131,8 @@ CollisionCheck.prototype._raycastAndDebug = function () {
         return raycastResult;
     };
 }();
+
+
+
 Object.defineProperty(CollisionCheck.prototype, "_raycastAndDebug", { enumerable: false });
 

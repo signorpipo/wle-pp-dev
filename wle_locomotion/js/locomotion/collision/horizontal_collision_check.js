@@ -31,7 +31,6 @@ CollisionCheck.prototype._horizontalCheck = function () {
         return outFixedMovement;
     };
 }();
-Object.defineProperty(CollisionCheck.prototype, "_horizontalCheck", { enumerable: false });
 
 CollisionCheck.prototype._horizontalCheckRaycast = function () {
     let direction = PP.vec3_create();
@@ -120,7 +119,6 @@ CollisionCheck.prototype._horizontalCheckRaycast = function () {
         return isOk;
     };
 }();
-Object.defineProperty(CollisionCheck.prototype, "_horizontalCheckRaycast", { enumerable: false });
 
 CollisionCheck.prototype._ignoreSurfaceAngle = function () {
     let objectsEqualCallback = (first, second) => first.pp_equals(second);
@@ -150,5 +148,10 @@ CollisionCheck.prototype._ignoreSurfaceAngle = function () {
         return isIgnorable;
     };
 }();
+
+
+
+Object.defineProperty(CollisionCheck.prototype, "_horizontalCheck", { enumerable: false });
+Object.defineProperty(CollisionCheck.prototype, "_horizontalCheckRaycast", { enumerable: false });
 Object.defineProperty(CollisionCheck.prototype, "_ignoreSurfaceAngle", { enumerable: false });
 

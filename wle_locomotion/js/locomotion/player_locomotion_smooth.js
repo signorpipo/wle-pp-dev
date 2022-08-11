@@ -172,7 +172,6 @@ PlayerLocomotionSmooth.prototype.update = function () {
         }
     };
 }();
-Object.defineProperty(PlayerLocomotionSmooth.prototype, "update", { enumerable: false });
 
 PlayerLocomotionSmooth.prototype._onXRSessionStart = function () {
     return function _onXRSessionStart(session) {
@@ -190,7 +189,6 @@ PlayerLocomotionSmooth.prototype._onXRSessionStart = function () {
         this._myCurrentDirectionConverter.resetFly();
     };
 }();
-Object.defineProperty(PlayerLocomotionSmooth.prototype, "_onXRSessionStart", { enumerable: false });
 
 PlayerLocomotionSmooth.prototype._onXRSessionEnd = function () {
     let playerUp = PP.vec3_create();
@@ -201,4 +199,9 @@ PlayerLocomotionSmooth.prototype._onXRSessionEnd = function () {
         this._myCurrentDirectionConverter.resetFly();
     };
 }();
+
+
+
+Object.defineProperty(PlayerLocomotionSmooth.prototype, "update", { enumerable: false });
+Object.defineProperty(PlayerLocomotionSmooth.prototype, "_onXRSessionStart", { enumerable: false });
 Object.defineProperty(PlayerLocomotionSmooth.prototype, "_onXRSessionEnd", { enumerable: false });

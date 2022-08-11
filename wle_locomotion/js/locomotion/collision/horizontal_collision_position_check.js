@@ -207,7 +207,6 @@ CollisionCheck.prototype._horizontalPositionCheck = function () {
         return !collisionRuntimeParams.myIsCollidingHorizontally;
     };
 }();
-Object.defineProperty(CollisionCheck.prototype, "_horizontalPositionCheck", { enumerable: false });
 
 CollisionCheck.prototype._horizontalPositionHorizontalCheck = function () {
     let basePosition = PP.vec3_create();
@@ -288,7 +287,6 @@ CollisionCheck.prototype._horizontalPositionHorizontalCheck = function () {
         return isHorizontalCheckOk;
     };
 }();
-Object.defineProperty(CollisionCheck.prototype, "_horizontalPositionHorizontalCheck", { enumerable: false });
 
 CollisionCheck.prototype._horizontalPositionVerticalCheck = function () {
     let basePosition = PP.vec3_create();
@@ -436,4 +434,9 @@ CollisionCheck.prototype._horizontalPositionVerticalCheck = function () {
         return !collisionRuntimeParams.myIsCollidingHorizontally;
     };
 }();
+
+
+
+Object.defineProperty(CollisionCheck.prototype, "_horizontalPositionCheck", { enumerable: false });
+Object.defineProperty(CollisionCheck.prototype, "_horizontalPositionHorizontalCheck", { enumerable: false });
 Object.defineProperty(CollisionCheck.prototype, "_horizontalPositionVerticalCheck", { enumerable: false });

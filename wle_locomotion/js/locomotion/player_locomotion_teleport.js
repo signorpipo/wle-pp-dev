@@ -191,18 +191,12 @@ PlayerLocomotionTeleport.prototype._detectTeleportPositionNonVR = function () {
         }
     };
 }();
-Object.defineProperty(PlayerLocomotionTeleport.prototype, "_detectTeleportPositionNonVR", { enumerable: false });
-
-
 
 PlayerLocomotionTeleport.prototype._detectTeleportPositionVR = function () {
     return function _detectTeleportPositionVR(dt) {
 
     };
 }();
-Object.defineProperty(PlayerLocomotionTeleport.prototype, "_detectTeleportPositionVR", { enumerable: false });
-
-
 
 PlayerLocomotionTeleport.prototype._isTeleportHitValid = function () {
     let playerUp = PP.vec3_create();
@@ -223,7 +217,6 @@ PlayerLocomotionTeleport.prototype._isTeleportHitValid = function () {
         return isValid;
     };
 }();
-Object.defineProperty(PlayerLocomotionTeleport.prototype, "_isTeleportHitValid", { enumerable: false });
 
 PlayerLocomotionTeleport.prototype._isTeleportPositionValid = function () {
     let playerUp = PP.vec3_create();
@@ -254,7 +247,6 @@ PlayerLocomotionTeleport.prototype._isTeleportPositionValid = function () {
         return isValid;
     };
 }();
-Object.defineProperty(PlayerLocomotionTeleport.prototype, "_isTeleportPositionValid", { enumerable: false });
 
 PlayerLocomotionTeleport.prototype._teleportToPosition = function () {
     let playerUp = PP.vec3_create();
@@ -285,4 +277,11 @@ PlayerLocomotionTeleport.prototype._teleportToPosition = function () {
         }
     };
 }();
+
+
+
+Object.defineProperty(PlayerLocomotionTeleport.prototype, "_detectTeleportPositionNonVR", { enumerable: false });
+Object.defineProperty(PlayerLocomotionTeleport.prototype, "_detectTeleportPositionVR", { enumerable: false });
+Object.defineProperty(PlayerLocomotionTeleport.prototype, "_isTeleportHitValid", { enumerable: false });
+Object.defineProperty(PlayerLocomotionTeleport.prototype, "_isTeleportPositionValid", { enumerable: false });
 Object.defineProperty(PlayerLocomotionTeleport.prototype, "_teleportToPosition", { enumerable: false });
