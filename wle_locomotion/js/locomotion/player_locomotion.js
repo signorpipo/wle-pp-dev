@@ -96,6 +96,7 @@ PlayerLocomotion = class PlayerLocomotion {
             params.myCollisionRuntimeParams = this._myCollisionRuntimeParams;
 
             params.myMaxDistance = 7;
+            params.myMaxHeightDifference = 20;
             params.myBlockLayerFlags.setAllFlagsActive(true);
 
             params.myDebugActive = true;

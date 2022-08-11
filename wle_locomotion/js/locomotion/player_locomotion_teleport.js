@@ -6,6 +6,7 @@ PlayerLocomotionTeleportParams = class PlayerLocomotionTeleportParams {
         this.myCollisionRuntimeParams = null;
 
         this.myMaxDistance = 0;
+        this.myMaxHeightDifference = 0;
         this.myTeleportPositionMustBeVisible = false; // implement
 
         this.myBlockLayerFlags = new PP.PhysicsLayerFlags();
@@ -222,12 +223,15 @@ PlayerLocomotionTeleport.prototype._isTeleportPositionValid = function () {
     let playerUp = PP.vec3_create();
     let feetTransformQuat = PP.quat2_create();
     let feetRotationQuat = PP.quat_create();
+    let feetPosition = PP.vec3_create();
+    let differenceOnUpVector = PP.vec3_create();
     return function _isTeleportPositionValid(position, rotationOnUp, collisionRuntimeParams) {
         let isValid = false;
 
         playerUp = this._myParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
 
         //controllare posizione visibile dalla testa
+        //controllare altezza non sia troppo diversa
 
         feetTransformQuat = this._myParams.myPlayerHeadManager.getFeetTransformQuat(feetTransformQuat);
         if (rotationOnUp != 0) {
@@ -236,12 +240,16 @@ PlayerLocomotionTeleport.prototype._isTeleportPositionValid = function () {
             feetTransformQuat.setRotationQuat(feetRotationQuat);
         }
 
-        CollisionCheckGlobal.teleport(position, feetTransformQuat, this._myParams.myCollisionCheckParams, collisionRuntimeParams);
+        feetPosition = feetTransformQuat.quat2_getPosition(feetPosition);
+        let differenceOnUp = position.vec3_sub(feetPosition, differenceOnUpVector).vec3_componentAlongAxis(playerUp, differenceOnUpVector).vec3_length();
 
-        if (!collisionRuntimeParams.myTeleportCancelled && collisionRuntimeParams.myIsOnGround) {
-            //controllare altezza non sia troppo diversa
+        if (differenceOnUp < this._myParams.myMaxHeightDifference + 0.00001) {
+            CollisionCheckGlobal.teleport(position, feetTransformQuat, this._myParams.myCollisionCheckParams, collisionRuntimeParams);
 
-            isValid = true;
+            if (!collisionRuntimeParams.myTeleportCancelled && collisionRuntimeParams.myIsOnGround) {
+
+                isValid = true;
+            }
         }
 
         return isValid;
@@ -256,8 +264,6 @@ PlayerLocomotionTeleport.prototype._teleportToPosition = function () {
     return function _teleportToPosition(position, rotationOnUp, collisionRuntimeParams) {
         playerUp = this._myParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
 
-        //controllare posizione visibile dalla testa
-
         feetTransformQuat = this._myParams.myPlayerHeadManager.getFeetTransformQuat(feetTransformQuat);
         if (rotationOnUp != 0) {
             feetRotationQuat = feetTransformQuat.quat2_getRotationQuat(feetRotationQuat);
@@ -268,7 +274,6 @@ PlayerLocomotionTeleport.prototype._teleportToPosition = function () {
         CollisionCheckGlobal.teleport(position, feetTransformQuat, this._myParams.myCollisionCheckParams, collisionRuntimeParams);
 
         if (!collisionRuntimeParams.myTeleportCancelled) {
-
             this._myParams.myPlayerHeadManager.teleportFeetPosition(collisionRuntimeParams.myFixedTeleportPosition);
             if (rotationOnUp != 0) {
                 teleportRotation.quat_fromAxis(rotationOnUp, playerUp);
