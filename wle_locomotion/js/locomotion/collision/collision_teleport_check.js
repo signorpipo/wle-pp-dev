@@ -21,8 +21,6 @@ CollisionCheck.prototype._teleport = function () {
         }
         //height = 1.75;
 
-        //fixed forward ?
-
         this._myPrevCollisionRuntimeParams.copy(collisionRuntimeParams);
         collisionRuntimeParams.reset();
 
@@ -50,9 +48,12 @@ CollisionCheck.prototype._teleport = function () {
                 this._gatherSurfaceInfo(newFeetPosition, height, transformUp, forwardForPerceivedAngle, forwardForVertical, true, collisionCheckParams, collisionRuntimeParams);
                 this._gatherSurfaceInfo(newFeetPosition, height, transformUp, forwardForPerceivedAngle, forwardForVertical, false, collisionCheckParams, collisionRuntimeParams);
 
-                //check if angle is ok
-
-                collisionRuntimeParams.myFixedTeleportPosition.vec3_copy(newFeetPosition);
+                if (collisionRuntimeParams.myGroundAngle < collisionCheckParams.myGroundAngleToIgnore + 0.0001 &&
+                    collisionRuntimeParams.myCeilingAngle < collisionCheckParams.myCeilingAngleToIgnore + 0.0001) {
+                    collisionRuntimeParams.myFixedTeleportPosition.vec3_copy(newFeetPosition);
+                } else {
+                    collisionRuntimeParams.myTeleportCanceled = true;
+                }
             } else {
                 collisionRuntimeParams.myTeleportCanceled = true;
             }

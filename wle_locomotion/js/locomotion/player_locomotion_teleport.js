@@ -362,33 +362,6 @@ PlayerLocomotionTeleport.prototype._isPositionVisible = function () {
     };
 }();
 
-PlayerLocomotionTeleport.prototype._teleportToPosition = function () {
-    let playerUp = PP.vec3_create();
-    let feetTransformQuat = PP.quat2_create();
-    let feetRotationQuat = PP.quat_create();
-    let teleportRotation = PP.quat_create();
-    return function _teleportToPosition(position, rotationOnUp, collisionRuntimeParams) {
-        playerUp = this._myParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
-
-        feetTransformQuat = this._myParams.myPlayerHeadManager.getFeetTransformQuat(feetTransformQuat);
-        if (rotationOnUp != 0) {
-            feetRotationQuat = feetTransformQuat.quat2_getRotationQuat(feetRotationQuat);
-            feetRotationQuat = feetRotationQuat.quat_rotateAxis(rotationOnUp, playerUp, feetRotationQuat);
-            feetTransformQuat.setRotationQuat(feetRotationQuat);
-        }
-
-        CollisionCheckGlobal.teleport(position, feetTransformQuat, this._myParams.myCollisionCheckParams, collisionRuntimeParams);
-
-        if (!collisionRuntimeParams.myTeleportCanceled) {
-            this._myParams.myPlayerHeadManager.teleportFeetPosition(collisionRuntimeParams.myFixedTeleportPosition);
-            if (rotationOnUp != 0) {
-                teleportRotation.quat_fromAxis(rotationOnUp, playerUp);
-                this._myParams.myPlayerHeadManager.rotateHeadHorizontallyQuat(teleportRotation);
-            }
-        }
-    };
-}();
-
 PlayerLocomotionTeleport.prototype._getVisibilityCheckPositions = function () {
     let checkPositions = [];
     let cachedCheckPositions = [];
@@ -432,6 +405,36 @@ PlayerLocomotionTeleport.prototype._getVisibilityCheckPositions = function () {
         }
 
         return checkPositions;
+    };
+}();
+
+PlayerLocomotionTeleport.prototype._teleportToPosition = function () {
+    let playerUp = PP.vec3_create();
+    let feetTransformQuat = PP.quat2_create();
+    let feetRotationQuat = PP.quat_create();
+    let teleportRotation = PP.quat_create();
+    let tempTeleportCollisionRuntimeParams = new CollisionRuntimeParams();
+    return function _teleportToPosition(position, rotationOnUp, collisionRuntimeParams) {
+        playerUp = this._myParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
+
+        feetTransformQuat = this._myParams.myPlayerHeadManager.getFeetTransformQuat(feetTransformQuat);
+        if (rotationOnUp != 0) {
+            feetRotationQuat = feetTransformQuat.quat2_getRotationQuat(feetRotationQuat);
+            feetRotationQuat = feetRotationQuat.quat_rotateAxis(rotationOnUp, playerUp, feetRotationQuat);
+            feetTransformQuat.setRotationQuat(feetRotationQuat);
+        }
+
+        tempTeleportCollisionRuntimeParams.copy(collisionRuntimeParams);
+        CollisionCheckGlobal.teleport(position, feetTransformQuat, this._myParams.myCollisionCheckParams, tempTeleportCollisionRuntimeParams);
+
+        if (!tempTeleportCollisionRuntimeParams.myTeleportCanceled) {
+            collisionRuntimeParams.copy(tempTeleportCollisionRuntimeParams);
+            this._myParams.myPlayerHeadManager.teleportFeetPosition(collisionRuntimeParams.myFixedTeleportPosition);
+            if (rotationOnUp != 0) {
+                teleportRotation.quat_fromAxis(rotationOnUp, playerUp);
+                this._myParams.myPlayerHeadManager.rotateHeadHorizontallyQuat(teleportRotation);
+            }
+        }
     };
 }();
 

@@ -278,7 +278,7 @@ PlayerLocomotion = class PlayerLocomotion {
         this._myCollisionCheckParamsTeleport.myCheckHorizontalFixedForward = [0, 0, 1];
 
         this._myCollisionCheckParamsTeleport.myGroundAngleToIgnore = 60;
-        this._myCollisionCheckParamsTeleport.myCeilingAngleToIgnore = 0;
+        this._myCollisionCheckParamsTeleport.myCeilingAngleToIgnore = 30;
     }
 
     _fixAlmostUp() {
