@@ -57,6 +57,8 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport {
         }
         WL.onXRSessionStart.push(this._onXRSessionStart.bind(this));
         WL.onXRSessionEnd.push(this._onXRSessionEnd.bind(this));
+
+        this._myMouse.setContextMenuActive(false);
     }
 
     start() {

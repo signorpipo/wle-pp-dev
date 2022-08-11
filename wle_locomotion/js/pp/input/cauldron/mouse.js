@@ -32,7 +32,7 @@ PP.Mouse = class Mouse {
         this._myIsMovingToProcess = false;
         this._myIsMoving = false;
 
-        this._myContextMenuActive = false;
+        this._myContextMenuActive = true;
 
         // Support Variables
         this._myProjectionMatrixInverse = PP.mat4_create();
