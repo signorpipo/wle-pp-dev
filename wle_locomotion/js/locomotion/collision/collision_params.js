@@ -276,7 +276,7 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.myOriginalTeleportPosition = PP.vec3_create();
         this.myFixedTeleportPosition = PP.vec3_create();
 
-        this.myTeleportCancelled = false;
+        this.myTeleportCanceled = false;
     }
 
     reset() {
@@ -330,7 +330,7 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.myOriginalTeleportPosition.vec3_zero();
         this.myFixedTeleportPosition.vec3_zero();
 
-        this.myTeleportCancelled = false;
+        this.myTeleportCanceled = false;
     }
 
     copy(other) {
@@ -383,6 +383,6 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
 
         this.myOriginalTeleportPosition.vec3_copy(other.myOriginalTeleportPosition);
         this.myFixedTeleportPosition.vec3_copy(other.myFixedTeleportPosition);
-        this.myTeleportCancelled = other.myTeleportCancelled;
+        this.myTeleportCanceled = other.myTeleportCanceled;
     }
 };

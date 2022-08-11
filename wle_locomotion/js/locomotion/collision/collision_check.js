@@ -111,7 +111,7 @@ CollisionCheck.prototype._raycastAndDebug = function () {
         this._myRaycastSetup.myDirection.vec3_copy(direction);
         this._myRaycastSetup.myDistance = distance;
 
-        this._myRaycastSetup.myBlockLayerFlags = collisionCheckParams.myBlockLayerFlags;
+        this._myRaycastSetup.myBlockLayerFlags.setMask(collisionCheckParams.myBlockLayerFlags.getMask());
 
         this._myRaycastSetup.myObjectsToIgnore = collisionCheckParams.myObjectsToIgnore;
         this._myRaycastSetup.myIgnoreHitsInsideCollision = ignoreHitsInsideCollision;
@@ -125,7 +125,7 @@ CollisionCheck.prototype._raycastAndDebug = function () {
             debugParams.myRaycastResult = raycastResult;
             debugParams.myNormalLength = 0.2;
             debugParams.myThickness = 0.005;
-            PP.myDebugManager.draw(debugParams, 0);
+            PP.myDebugManager.draw(debugParams);
         }
 
         return raycastResult;

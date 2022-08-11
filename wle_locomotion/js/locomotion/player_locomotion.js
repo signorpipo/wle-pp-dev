@@ -98,7 +98,11 @@ PlayerLocomotion = class PlayerLocomotion {
             params.myMaxDistance = 70;
             params.myMaxHeightDifference = 20;
             params.myGroundAngleToIgnoreUpward = this._myCollisionCheckParamsSmooth.myGroundAngleToIgnore;
-            params.myBlockLayerFlags.setAllFlagsActive(true);
+            params.myTeleportBlockLayerFlags.setAllFlagsActive(true);
+
+            params.myTeleportFeetPositionMustBeVisible = true;
+            params.myTeleportHeadPositionMustBeVisible = true;
+            params.myVisibilityBlockLayerFlags.setAllFlagsActive(true);
 
             params.myDebugActive = true;
 
