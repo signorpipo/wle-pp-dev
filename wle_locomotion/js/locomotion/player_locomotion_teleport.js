@@ -66,7 +66,7 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport {
         this._myFSM.addTransition("teleport", "idle", "done");
 
         this._myFSM.addTransition("detect", "idle", "stop");
-        this._myFSM.addTransition("teleport", "idle", "stop");
+        this._myFSM.addTransition("teleport", "idle", "stop", this._completeTeleport.bind(this));
 
         this._myFSM.init("init");
         this._myFSM.perform("start");
@@ -90,7 +90,6 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport {
     }
 
     stop() {
-        // if is teleporting complete the teleport
         this._myFSM.perform("stop");
     }
 
@@ -177,6 +176,10 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport {
 
     _showTeleportPosition() {
 
+    }
+
+    _completeTeleport() {
+        this._teleportToPosition(this._myTeleportPosition, this._myTeleportRotationOnUp, this._myParams.myCollisionRuntimeParams);
     }
 
     _onXRSessionStart(session) {
