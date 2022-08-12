@@ -28,6 +28,7 @@ PlayerLocomotionTeleportParams = class PlayerLocomotionTeleportParams {
         this.myTeleportAsMovementMaxDistanceFromTeleportPosition = 0.001;
         this.myTeleportAsMovementMaxSteps = 2;
 
+        this.myAdjustPositionEveryFrame = true;
         this.myGravityAcceleration = 0;
 
         this.myDebugActive = false;
@@ -69,6 +70,9 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport {
 
         this._myFSM.init("init");
         this._myFSM.perform("start");
+
+        // check is flying, if it is flying do not apply gravity
+        // a way to get if it is flying and set it in the other locomotion, like smooth
     }
 
     init() {
@@ -95,7 +99,9 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport {
 
         this._myFSM.update(dt);
 
-        this._applyGravity(dt);
+        if (this._myParams.myAdjustPositionEveryFrame || this._myParams.myGravityAcceleration != 0) {
+            this._applyGravity(dt);
+        }
     }
 
     _idleUpdate(dt) {

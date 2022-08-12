@@ -108,7 +108,7 @@ PlayerLocomotion = class PlayerLocomotion {
 
             params.myPerformTeleportAsMovement = false;
 
-            params.myGravityAcceleration = 0;
+            params.myGravityAcceleration = -9.81;
 
             params.myDebugActive = true;
 
