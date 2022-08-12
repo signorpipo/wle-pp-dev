@@ -108,6 +108,8 @@ PlayerLocomotion = class PlayerLocomotion {
 
             params.myPerformTeleportAsMovement = false;
 
+            params.myGravityAcceleration = 0;
+
             params.myDebugActive = true;
 
             this._myPlayerLocomotionTeleport = new PlayerLocomotionTeleport(params);

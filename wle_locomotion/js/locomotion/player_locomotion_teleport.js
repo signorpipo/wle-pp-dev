@@ -28,6 +28,8 @@ PlayerLocomotionTeleportParams = class PlayerLocomotionTeleportParams {
         this.myTeleportAsMovementMaxDistanceFromTeleportPosition = 0.001;
         this.myTeleportAsMovementMaxSteps = 2;
 
+        this.myGravityAcceleration = 0;
+
         this.myDebugActive = false;
     }
 };
@@ -44,6 +46,8 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport {
         this._myTeleportPositionValid = false;
         this._myTeleportPosition = PP.vec3_create();
         this._myTeleportRotationOnUp = 0;
+
+        this._myGravitySpeed = 0;
 
         this._myFSM = new PP.FSM();
         this._myFSM.setDebugLogActive(true, "Locomotion Teleport");
@@ -78,6 +82,7 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport {
     }
 
     start() {
+        this._myGravitySpeed = 0;
     }
 
     stop() {
@@ -90,7 +95,7 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport {
 
         this._myFSM.update(dt);
 
-        // collision check for gravity/keep snapping
+        this._applyGravity(dt);
     }
 
     _idleUpdate(dt) {
@@ -513,7 +518,6 @@ PlayerLocomotionTeleport.prototype._checkTeleportAsMovement = function () {
 
         // if teleport is ok then we can check movement knowing we have to move toward the teleported position (which has also snapped/fixed the position)
         if (!checkTeleportCollisionRuntimeParams.myTeleportCanceled) {
-
             let teleportMovementValid = false;
 
             fixedTeleportPosition.vec3_copy(checkTeleportCollisionRuntimeParams.myNewPosition);
@@ -542,10 +546,37 @@ PlayerLocomotionTeleport.prototype._checkTeleportAsMovement = function () {
                 collisionRuntimeParams.myHorizontalMovementCanceled = true;
                 collisionRuntimeParams.myVerticalMovementCanceled = true;
             }
+        } else {
+            collisionRuntimeParams.myHorizontalMovementCanceled = true;
+            collisionRuntimeParams.myVerticalMovementCanceled = true;
         }
     };
 }();
 
+PlayerLocomotionTeleport.prototype._applyGravity = function () {
+    let playerUp = PP.vec3_create();
+    let gravityMovement = PP.vec3_create();
+    let feetTransformQuat = PP.quat2_create();
+    return function _applyGravity(dt) {
+        // if gravity is zero it's still important to move to remain snapped and gather proper surface data even when not teleporting
+
+        playerUp = this._myParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
+
+        this._myGravitySpeed += this._myParams.myGravityAcceleration * dt;
+        gravityMovement = playerUp.vec3_scale(this._myGravitySpeed * dt, gravityMovement);
+
+        feetTransformQuat = this._myParams.myPlayerHeadManager.getFeetTransformQuat(feetTransformQuat);
+        CollisionCheckGlobal.move(gravityMovement, feetTransformQuat, this._myParams.myCollisionCheckParams, this._myParams.myCollisionRuntimeParams);
+        if (!this._myParams.myCollisionRuntimeParams.myVerticalMovementCanceled) {
+            this._myParams.myPlayerHeadManager.teleportFeetPosition(this._myParams.myCollisionRuntimeParams.myNewPosition);
+        }
+
+        if (this._myGravitySpeed > 0 && this._myParams.myCollisionRuntimeParams.myIsOnCeiling ||
+            this._myGravitySpeed < 0 && this._myParams.myCollisionRuntimeParams.myIsOnGround) {
+            this._myGravitySpeed = 0;
+        }
+    };
+}();
 
 
 Object.defineProperty(PlayerLocomotionTeleport.prototype, "_detectTeleportPositionNonVR", { enumerable: false });
@@ -557,3 +588,4 @@ Object.defineProperty(PlayerLocomotionTeleport.prototype, "_teleportToPosition",
 Object.defineProperty(PlayerLocomotionTeleport.prototype, "_getVisibilityCheckPositions", { enumerable: false });
 Object.defineProperty(PlayerLocomotionTeleport.prototype, "_checkTeleport", { enumerable: false });
 Object.defineProperty(PlayerLocomotionTeleport.prototype, "_checkTeleportAsMovement", { enumerable: false });
+Object.defineProperty(PlayerLocomotionTeleport.prototype, "_applyGravity", { enumerable: false });
