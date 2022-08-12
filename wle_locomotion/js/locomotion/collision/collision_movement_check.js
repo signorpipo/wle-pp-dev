@@ -65,6 +65,8 @@ CollisionCheck.prototype._move = function () {
         collisionRuntimeParams.myFixedMovement.vec3_copy(fixedMovement);
 
         collisionRuntimeParams.myNewPosition = collisionRuntimeParams.myOriginalPosition.vec3_add(collisionRuntimeParams.myFixedMovement, collisionRuntimeParams.myNewPosition);
+
+        collisionRuntimeParams.myIsMove = true;
     };
 }();
 

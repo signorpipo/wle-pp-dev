@@ -76,6 +76,8 @@ CollisionCheck.prototype._teleport = function () {
             collisionRuntimeParams.myNewPosition.vec3_copy(collisionRuntimeParams.myOriginalPosition);
         }
 
+        collisionRuntimeParams.myIsTeleport = true;
+
         if (collisionCheckParams.myDebugActive && collisionCheckParams.myDebugRuntimeParamsActive) {
             this._debugRuntimeParams(collisionRuntimeParams);
         }
