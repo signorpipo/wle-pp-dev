@@ -98,11 +98,15 @@ PlayerLocomotion = class PlayerLocomotion {
             params.myMaxDistance = 70;
             params.myMaxHeightDifference = 20;
             params.myGroundAngleToIgnoreUpward = this._myCollisionCheckParamsSmooth.myGroundAngleToIgnore;
+            params.myMustBeOnGround = true;
+
             params.myTeleportBlockLayerFlags.setAllFlagsActive(true);
 
             params.myTeleportFeetPositionMustBeVisible = true;
             params.myTeleportHeadPositionMustBeVisible = true;
             params.myVisibilityBlockLayerFlags.setAllFlagsActive(true);
+
+            params.myPerformTeleportAsMovement = false;
 
             params.myDebugActive = true;
 
@@ -253,7 +257,7 @@ PlayerLocomotion = class PlayerLocomotion {
             this._myCollisionCheckParamsSmooth.myObjectsToIgnore.pp_pushUnique(physXComponent.object, (first, second) => first.pp_equals(second));
         }
 
-        this._myCollisionCheckParamsSmooth.myDebugActive = true;
+        this._myCollisionCheckParamsSmooth.myDebugActive = false;
 
         this._myCollisionCheckParamsSmooth.myDebugHorizontalMovementActive = false;
         this._myCollisionCheckParamsSmooth.myDebugHorizontalPositionActive = true;
@@ -261,7 +265,7 @@ PlayerLocomotion = class PlayerLocomotion {
         this._myCollisionCheckParamsSmooth.myDebugVerticalPositionActive = false;
         this._myCollisionCheckParamsSmooth.myDebugSlidingActive = false;
         this._myCollisionCheckParamsSmooth.myDebugSurfaceInfoActive = false;
-        this._myCollisionCheckParamsSmooth.myDebugRuntimeParamsActive = true;
+        this._myCollisionCheckParamsSmooth.myDebugRuntimeParamsActive = false;
         this._myCollisionCheckParamsSmooth.myDebugMovementActive = false;
     }
 
@@ -279,6 +283,16 @@ PlayerLocomotion = class PlayerLocomotion {
 
         this._myCollisionCheckParamsTeleport.myGroundAngleToIgnore = 60;
         this._myCollisionCheckParamsTeleport.myCeilingAngleToIgnore = 30;
+
+        this._myCollisionCheckParamsTeleport.myDistanceToBeOnGround = 0.001;
+
+        this._myCollisionCheckParamsTeleport.mySlidingEnabled = false;
+
+        this._myCollisionCheckParamsTeleport.mySplitMovementEnabled = true;
+        this._myCollisionCheckParamsTeleport.mySplitMovementMaxLength = 0.2;
+        //this._myCollisionCheckParamsTeleport.myHalfConeAngle = 90;
+        //this._myCollisionCheckParamsTeleport.myHalfConeSliceAmount = 3;
+        //this._myCollisionCheckParamsTeleport.myCheckHorizontalFixedForwardEnabled = false;
     }
 
     _fixAlmostUp() {

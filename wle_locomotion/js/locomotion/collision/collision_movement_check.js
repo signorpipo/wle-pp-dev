@@ -46,11 +46,16 @@ CollisionCheck.prototype._move = function () {
             fixedMovementStep.vec3_zero();
             fixedMovementStep = this._moveStep(movementStep, newFeetPosition, transformUp, transformForward, height, collisionCheckParams, collisionRuntimeParams, fixedMovementStep);
             fixedMovement.vec3_add(fixedMovementStep, fixedMovement);
+
+            if (collisionRuntimeParams.myHorizontalMovementCancelled && collisionRuntimeParams.myVerticalMovementCancelled) {
+                break;
+            }
         }
 
         //fixedMovement.vec3_zero();
 
         collisionRuntimeParams.myOriginalPosition.vec3_copy(feetPosition);
+
         collisionRuntimeParams.myOriginalHeight = height;
 
         collisionRuntimeParams.myOriginalForward.vec3_copy(transformForward);
@@ -58,6 +63,8 @@ CollisionCheck.prototype._move = function () {
 
         collisionRuntimeParams.myOriginalMovement.vec3_copy(movement);
         collisionRuntimeParams.myFixedMovement.vec3_copy(fixedMovement);
+
+        collisionRuntimeParams.myNewPosition = collisionRuntimeParams.myOriginalPosition.vec3_add(collisionRuntimeParams.myFixedMovement, collisionRuntimeParams.myNewPosition);
     };
 }();
 

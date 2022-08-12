@@ -8,11 +8,13 @@ PlayerLocomotionTeleportParams = class PlayerLocomotionTeleportParams {
         this.myMaxDistance = 0;
         this.myMaxHeightDifference = 0;
         this.myGroundAngleToIgnoreUpward = 0;
+        this.myMustBeOnGround = false;
 
         this.myTeleportBlockLayerFlags = new PP.PhysicsLayerFlags();
 
         this.myTeleportFeetPositionMustBeVisible = false;
         this.myTeleportHeadPositionMustBeVisible = false;
+        this.myTeleportHeadOrFeetPositionMustBeVisible = false; // wins over previous parameters
 
         this.myVisibilityCheckRadius = 0.05;
         this.myVisibilityCheckFeetPositionVerticalOffset = 0.1;
@@ -22,7 +24,9 @@ PlayerLocomotionTeleportParams = class PlayerLocomotionTeleportParams {
         this.myVisibilityCheckCircumferenceRotationPerStep = 30;
         this.myVisibilityBlockLayerFlags = new PP.PhysicsLayerFlags();
 
-        //flag to perform it has a movement (so the same check)
+        this.myPerformTeleportAsMovement = false;
+        this.myTeleportAsMovementMaxDistanceFromTeleportPosition = 0.001;
+        this.myTeleportAsMovementMaxSteps = 2;
 
         this.myDebugActive = false;
     }
@@ -216,7 +220,6 @@ PlayerLocomotionTeleport.prototype._detectTeleportPositionVR = function () {
 
 PlayerLocomotionTeleport.prototype._isTeleportHitValid = function () {
     let playerUp = PP.vec3_create();
-    let teleportCheckCollisionRuntimeParams = new CollisionRuntimeParams();
     return function _isTeleportHitValid(hit, rotationOnUp) {
         let isValid = false;
 
@@ -224,9 +227,8 @@ PlayerLocomotionTeleport.prototype._isTeleportHitValid = function () {
             playerUp = this._myParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
 
             if (hit.myNormal.vec3_isConcordant(playerUp)) {
-                teleportCheckCollisionRuntimeParams.copy(this._myParams.myCollisionRuntimeParams);
 
-                isValid = this._isTeleportPositionValid(hit.myPosition, rotationOnUp, teleportCheckCollisionRuntimeParams);
+                isValid = this._isTeleportPositionValid(hit.myPosition, rotationOnUp);
             }
         }
 
@@ -240,10 +242,11 @@ PlayerLocomotionTeleport.prototype._isTeleportPositionValid = function () {
     let feetRotationQuat = PP.quat_create();
     let feetPosition = PP.vec3_create();
     let differenceOnUpVector = PP.vec3_create();
-    return function _isTeleportPositionValid(position, rotationOnUp, collisionRuntimeParams) {
+    let teleportCheckCollisionRuntimeParams = new CollisionRuntimeParams();
+    return function _isTeleportPositionValid(teleportPosition, rotationOnUp) {
         let isValid = false;
 
-        let positionVisible = this._isPositionVisible(position);
+        let positionVisible = this._isPositionVisible(teleportPosition);
 
         if (positionVisible) {
             playerUp = this._myParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
@@ -256,16 +259,33 @@ PlayerLocomotionTeleport.prototype._isTeleportPositionValid = function () {
             }
 
             feetPosition = feetTransformQuat.quat2_getPosition(feetPosition);
-            let differenceOnUp = position.vec3_sub(feetPosition, differenceOnUpVector).vec3_componentAlongAxis(playerUp, differenceOnUpVector).vec3_length();
+            let differenceOnUp = teleportPosition.vec3_sub(feetPosition, differenceOnUpVector).vec3_componentAlongAxis(playerUp, differenceOnUpVector).vec3_length();
 
             if (differenceOnUp < this._myParams.myMaxHeightDifference + 0.00001) {
-                CollisionCheckGlobal.teleport(position, feetTransformQuat, this._myParams.myCollisionCheckParams, collisionRuntimeParams);
 
-                if (!collisionRuntimeParams.myTeleportCanceled && collisionRuntimeParams.myIsOnGround) {
+                let teleportCheckValid = false;
+                teleportCheckCollisionRuntimeParams.copy(this._myParams.myCollisionRuntimeParams);
+
+                if (!this._myParams.myPerformTeleportAsMovement) {
+                    this._checkTeleport(teleportPosition, feetTransformQuat, teleportCheckCollisionRuntimeParams);
+
+                    if (!teleportCheckCollisionRuntimeParams.myTeleportCanceled) {
+                        teleportCheckValid = true;
+                    }
+                } else {
+                    this._checkTeleportAsMovement(teleportPosition, feetTransformQuat, teleportCheckCollisionRuntimeParams);
+
+                    if (!teleportCheckCollisionRuntimeParams.myHorizontalMovementCancelled && !teleportCheckCollisionRuntimeParams.myVerticalMovementCancelled) {
+                        teleportCheckValid = true;
+                    }
+                }
+
+                if (teleportCheckValid && (!this._myParams.myMustBeOnGround || teleportCheckCollisionRuntimeParams.myIsOnGround)) {
+
                     let groundAngleValid = true;
-                    let isTeleportingUpward = collisionRuntimeParams.myFixedTeleportPosition.vec3_isFurtherAlongDirection(feetPosition, playerUp);
+                    let isTeleportingUpward = teleportCheckCollisionRuntimeParams.myNewPosition.vec3_isFurtherAlongDirection(feetPosition, playerUp);
                     if (isTeleportingUpward) {
-                        groundAngleValid = collisionRuntimeParams.myGroundAngle < this._myParams.myGroundAngleToIgnoreUpward + 0.0001;
+                        groundAngleValid = teleportCheckCollisionRuntimeParams.myGroundAngle < this._myParams.myGroundAngleToIgnoreUpward + 0.0001;
                     }
 
                     if (groundAngleValid) {
@@ -414,7 +434,7 @@ PlayerLocomotionTeleport.prototype._teleportToPosition = function () {
     let feetRotationQuat = PP.quat_create();
     let teleportRotation = PP.quat_create();
     let tempTeleportCollisionRuntimeParams = new CollisionRuntimeParams();
-    return function _teleportToPosition(position, rotationOnUp, collisionRuntimeParams) {
+    return function _teleportToPosition(teleportPosition, rotationOnUp, collisionRuntimeParams) {
         playerUp = this._myParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
 
         feetTransformQuat = this._myParams.myPlayerHeadManager.getFeetTransformQuat(feetTransformQuat);
@@ -425,14 +445,102 @@ PlayerLocomotionTeleport.prototype._teleportToPosition = function () {
         }
 
         tempTeleportCollisionRuntimeParams.copy(collisionRuntimeParams);
-        CollisionCheckGlobal.teleport(position, feetTransformQuat, this._myParams.myCollisionCheckParams, tempTeleportCollisionRuntimeParams);
+        if (!this._myParams.myPerformTeleportAsMovement) {
+            this._checkTeleport(teleportPosition, feetTransformQuat, tempTeleportCollisionRuntimeParams);
 
-        if (!tempTeleportCollisionRuntimeParams.myTeleportCanceled) {
-            collisionRuntimeParams.copy(tempTeleportCollisionRuntimeParams);
-            this._myParams.myPlayerHeadManager.teleportFeetPosition(collisionRuntimeParams.myFixedTeleportPosition);
-            if (rotationOnUp != 0) {
-                teleportRotation.quat_fromAxis(rotationOnUp, playerUp);
-                this._myParams.myPlayerHeadManager.rotateHeadHorizontallyQuat(teleportRotation);
+            if (!tempTeleportCollisionRuntimeParams.myTeleportCanceled) {
+                collisionRuntimeParams.copy(tempTeleportCollisionRuntimeParams);
+                this._myParams.myPlayerHeadManager.teleportFeetPosition(collisionRuntimeParams.myFixedTeleportPosition);
+                if (rotationOnUp != 0) {
+                    teleportRotation.quat_fromAxis(rotationOnUp, playerUp);
+                    this._myParams.myPlayerHeadManager.rotateHeadHorizontallyQuat(teleportRotation);
+                }
+            }
+        } else {
+            this._checkTeleportAsMovement(teleportPosition, feetTransformQuat, tempTeleportCollisionRuntimeParams);
+
+            if (!tempTeleportCollisionRuntimeParams.myHorizontalMovementCancelled && !tempTeleportCollisionRuntimeParams.myVerticalMovementCancelled) {
+                collisionRuntimeParams.copy(tempTeleportCollisionRuntimeParams);
+                this._myParams.myPlayerHeadManager.teleportFeetPosition(collisionRuntimeParams.myNewPosition);
+                if (rotationOnUp != 0) {
+                    teleportRotation.quat_fromAxis(rotationOnUp, playerUp);
+                    this._myParams.myPlayerHeadManager.rotateHeadHorizontallyQuat(teleportRotation);
+                }
+            }
+        }
+    };
+}();
+
+PlayerLocomotionTeleport.prototype._checkTeleport = function () {
+    return function _checkTeleport(teleportPosition, feetTransformQuat, collisionRuntimeParams) {
+        CollisionCheckGlobal.teleport(teleportPosition, feetTransformQuat, this._myParams.myCollisionCheckParams, collisionRuntimeParams);
+        teleportOk = !collisionRuntimeParams.myTeleportCanceled;
+    };
+}();
+
+PlayerLocomotionTeleport.prototype._checkTeleportAsMovement = function () {
+    let checkTeleportCollisionRuntimeParams = new CollisionRuntimeParams();
+    let feetRotationQuat = PP.quat_create();
+    let feetPosition = PP.vec3_create();
+    let feetUp = PP.vec3_create();
+    let teleportFeetForward = PP.vec3_create();
+    let teleportFeetRotationQuat = PP.quat_create();
+    let teleportFeetTransformQuat = PP.quat2_create();
+
+    let currentFeetPosition = PP.vec3_create();
+    let fixedTeleportPosition = PP.vec3_create();
+
+    let teleportMovement = PP.vec3_create();
+    let movementToTeleportPosition = PP.vec3_create();
+    let movementFeetTransformQuat = PP.quat2_create();
+    return function _checkTeleportAsMovement(teleportPosition, feetTransformQuat, collisionRuntimeParams) {
+        feetPosition = feetTransformQuat.quat2_getPosition(feetPosition);
+        feetRotationQuat = feetTransformQuat.quat2_getRotationQuat(feetRotationQuat);
+
+        // first try a normal teleport
+        feetUp = feetRotationQuat.quat_getUp(feetUp);
+        teleportFeetForward = teleportPosition.vec3_sub(feetPosition, teleportFeetForward).vec3_removeComponentAlongAxis(feetUp, teleportFeetForward);
+        teleportFeetForward.vec3_normalize(teleportFeetForward);
+        if (teleportFeetForward.vec3_isZero(0.00001)) {
+            teleportFeetForward = feetRotationQuat.quat_getForward(teleportFeetForward);
+        }
+
+        teleportFeetRotationQuat.quat_setUp(feetUp, teleportFeetForward);
+        teleportFeetTransformQuat.quat2_setPositionRotationQuat(feetPosition, teleportFeetRotationQuat);
+
+        checkTeleportCollisionRuntimeParams.copy(collisionRuntimeParams);
+        this._checkTeleport(teleportPosition, teleportFeetTransformQuat, checkTeleportCollisionRuntimeParams);
+
+        // if teleport is ok then we can check movement knowing we have to move toward the teleported position (which has also snapped/fixed the position)
+        if (!checkTeleportCollisionRuntimeParams.myTeleportCanceled) {
+
+            let teleportMovementValid = false;
+
+            fixedTeleportPosition.vec3_copy(checkTeleportCollisionRuntimeParams.myNewPosition);
+            currentFeetPosition.vec3_copy(feetPosition);
+            for (let i = 0; i < this._myParams.myTeleportAsMovementMaxSteps; i++) {
+                teleportMovement = fixedTeleportPosition.vec3_sub(currentFeetPosition, teleportMovement);
+                movementFeetTransformQuat.quat2_setPositionRotationQuat(currentFeetPosition, feetRotationQuat);
+                CollisionCheckGlobal.move(teleportMovement, movementFeetTransformQuat, this._myParams.myCollisionCheckParams, collisionRuntimeParams);
+
+                if (!collisionRuntimeParams.myHorizontalMovementCancelled && !collisionRuntimeParams.myVerticalMovementCancelled) {
+                    movementToTeleportPosition = fixedTeleportPosition.vec3_sub(collisionRuntimeParams.myNewPosition, movementToTeleportPosition);
+                    //console.error(movementToTeleportPosition.vec3_length());
+                    if (movementToTeleportPosition.vec3_length() < this._myParams.myTeleportAsMovementMaxDistanceFromTeleportPosition + 0.00001) {
+                        teleportMovementValid = true;
+                        break;
+                    } else {
+                        teleportMovement.vec3_copy(movementToTeleportPosition);
+                        currentFeetPosition.vec3_copy(collisionRuntimeParams.myNewPosition);
+                    }
+                } else {
+                    break;
+                }
+            }
+
+            if (!teleportMovementValid) {
+                collisionRuntimeParams.myHorizontalMovementCancelled = true;
+                collisionRuntimeParams.myVerticalMovementCancelled = true;
             }
         }
     };
@@ -447,3 +555,5 @@ Object.defineProperty(PlayerLocomotionTeleport.prototype, "_isTeleportPositionVa
 Object.defineProperty(PlayerLocomotionTeleport.prototype, "_isPositionVisible", { enumerable: false });
 Object.defineProperty(PlayerLocomotionTeleport.prototype, "_teleportToPosition", { enumerable: false });
 Object.defineProperty(PlayerLocomotionTeleport.prototype, "_getVisibilityCheckPositions", { enumerable: false });
+Object.defineProperty(PlayerLocomotionTeleport.prototype, "_checkTeleport", { enumerable: false });
+Object.defineProperty(PlayerLocomotionTeleport.prototype, "_checkTeleportAsMovement", { enumerable: false });

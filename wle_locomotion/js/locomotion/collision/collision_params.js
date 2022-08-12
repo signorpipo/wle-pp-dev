@@ -227,6 +227,8 @@ CollisionCheckParams = class CollisionCheckParams {
 CollisionRuntimeParams = class CollisionRuntimeParams {
     constructor() {
         this.myOriginalPosition = PP.vec3_create();
+        this.myNewPosition = PP.vec3_create();
+
         this.myOriginalHeight = 0;
 
         this.myOriginalForward = PP.vec3_create();
@@ -281,10 +283,12 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
 
     reset() {
         this.myOriginalPosition.vec3_zero();
+        this.myNewPosition.vec3_zero();
+
         this.myOriginalHeight = 0;
 
         this.myOriginalForward.vec3_zero();
-        this.myFixedMovement.vec3_zero();
+        this.myOriginalUp.vec3_zero();
 
         this.myOriginalMovement.vec3_zero();
         this.myFixedMovement.vec3_zero();
@@ -335,6 +339,8 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
 
     copy(other) {
         this.myOriginalPosition.vec3_copy(other.myOriginalPosition);
+        this.myNewPosition.vec3_copy(other.myNewPosition);
+
         this.myOriginalHeight = other.myOriginalHeight;
 
         this.myOriginalForward.vec3_copy(other.myOriginalForward);

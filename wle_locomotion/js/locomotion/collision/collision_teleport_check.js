@@ -9,7 +9,7 @@ CollisionCheck.prototype._teleport = function () {
     let fixedHorizontalMovement = PP.vec3_create();
     let fixedVerticalMovement = PP.vec3_create();
     let newFeetPosition = PP.vec3_create();
-    return function _teleport(position, transformQuat, collisionCheckParams, collisionRuntimeParams) {
+    return function _teleport(teleportPosition, transformQuat, collisionCheckParams, collisionRuntimeParams) {
         transformUp = transformQuat.quat2_getUp(transformUp);
         transformForward = transformQuat.quat2_getForward(transformForward);
         feetPosition = transformQuat.quat2_getPosition(feetPosition);
@@ -29,9 +29,9 @@ CollisionCheck.prototype._teleport = function () {
             forwardForHorizontal.vec3_copy(transformForward);
         }
 
-        fixedHorizontalMovement = this._horizontalCheck(zero, position, height, transformUp, forwardForHorizontal, collisionCheckParams, collisionRuntimeParams, false, fixedHorizontalMovement);
+        fixedHorizontalMovement = this._horizontalCheck(zero, teleportPosition, height, transformUp, forwardForHorizontal, collisionCheckParams, collisionRuntimeParams, false, fixedHorizontalMovement);
         if (!collisionRuntimeParams.myIsCollidingHorizontally) {
-            newFeetPosition = position.vec3_add(fixedHorizontalMovement, newFeetPosition);
+            newFeetPosition = teleportPosition.vec3_add(fixedHorizontalMovement, newFeetPosition);
 
             forwardForVertical.vec3_copy(collisionCheckParams.myCheckVerticalFixedForward);
             if (!collisionCheckParams.myCheckVerticalFixedForwardEnabled) {
@@ -61,7 +61,20 @@ CollisionCheck.prototype._teleport = function () {
             collisionRuntimeParams.myTeleportCanceled = true;
         }
 
-        collisionRuntimeParams.myOriginalTeleportPosition.vec3_copy(position);
+        collisionRuntimeParams.myOriginalPosition.vec3_copy(feetPosition);
+
+        collisionRuntimeParams.myOriginalHeight = height;
+
+        collisionRuntimeParams.myOriginalForward.vec3_copy(transformForward);
+        collisionRuntimeParams.myOriginalUp.vec3_copy(transformUp);
+
+        collisionRuntimeParams.myOriginalTeleportPosition.vec3_copy(teleportPosition);
+
+        if (!collisionRuntimeParams.myTeleportCanceled) {
+            collisionRuntimeParams.myNewPosition.vec3_copy(collisionRuntimeParams.myFixedTeleportPosition);
+        } else {
+            collisionRuntimeParams.myNewPosition.vec3_copy(collisionRuntimeParams.myOriginalPosition);
+        }
 
         if (collisionCheckParams.myDebugActive && collisionCheckParams.myDebugRuntimeParamsActive) {
             this._debugRuntimeParams(collisionRuntimeParams);
