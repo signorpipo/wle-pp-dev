@@ -282,16 +282,12 @@ PlayerLocomotionTeleport.prototype._isTeleportPositionValid = function () {
 
                 if (!this._myParams.myPerformTeleportAsMovement) {
                     this._checkTeleport(teleportPosition, feetTransformQuat, teleportCheckCollisionRuntimeParams);
-
-                    if (!teleportCheckCollisionRuntimeParams.myTeleportCanceled) {
-                        teleportCheckValid = true;
-                    }
                 } else {
                     this._checkTeleportAsMovement(teleportPosition, feetTransformQuat, teleportCheckCollisionRuntimeParams);
+                }
 
-                    if (!teleportCheckCollisionRuntimeParams.myHorizontalMovementCanceled && !teleportCheckCollisionRuntimeParams.myVerticalMovementCanceled) {
-                        teleportCheckValid = true;
-                    }
+                if (!teleportCheckCollisionRuntimeParams.myTeleportCanceled) {
+                    teleportCheckValid = true;
                 }
 
                 if (teleportCheckValid && (!this._myParams.myMustBeOnGround || teleportCheckCollisionRuntimeParams.myIsOnGround)) {
@@ -447,7 +443,7 @@ PlayerLocomotionTeleport.prototype._teleportToPosition = function () {
     let feetTransformQuat = PP.quat2_create();
     let feetRotationQuat = PP.quat_create();
     let teleportRotation = PP.quat_create();
-    let tempTeleportCollisionRuntimeParams = new CollisionRuntimeParams();
+    let teleportCollisionRuntimeParams = new CollisionRuntimeParams();
     return function _teleportToPosition(teleportPosition, rotationOnUp, collisionRuntimeParams) {
         playerUp = this._myParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
 
@@ -458,28 +454,19 @@ PlayerLocomotionTeleport.prototype._teleportToPosition = function () {
             feetTransformQuat.setRotationQuat(feetRotationQuat);
         }
 
-        tempTeleportCollisionRuntimeParams.copy(collisionRuntimeParams);
+        teleportCollisionRuntimeParams.copy(collisionRuntimeParams);
         if (!this._myParams.myPerformTeleportAsMovement) {
-            this._checkTeleport(teleportPosition, feetTransformQuat, tempTeleportCollisionRuntimeParams);
-
-            if (!tempTeleportCollisionRuntimeParams.myTeleportCanceled) {
-                collisionRuntimeParams.copy(tempTeleportCollisionRuntimeParams);
-                this._myParams.myPlayerHeadManager.teleportFeetPosition(collisionRuntimeParams.myFixedTeleportPosition);
-                if (rotationOnUp != 0) {
-                    teleportRotation.quat_fromAxis(rotationOnUp, playerUp);
-                    this._myParams.myPlayerHeadManager.rotateHeadHorizontallyQuat(teleportRotation);
-                }
-            }
+            this._checkTeleport(teleportPosition, feetTransformQuat, teleportCollisionRuntimeParams);
         } else {
-            this._checkTeleportAsMovement(teleportPosition, feetTransformQuat, tempTeleportCollisionRuntimeParams);
+            this._checkTeleportAsMovement(teleportPosition, feetTransformQuat, teleportCollisionRuntimeParams);
+        }
 
-            if (!tempTeleportCollisionRuntimeParams.myHorizontalMovementCanceled && !tempTeleportCollisionRuntimeParams.myVerticalMovementCanceled) {
-                collisionRuntimeParams.copy(tempTeleportCollisionRuntimeParams);
-                this._myParams.myPlayerHeadManager.teleportFeetPosition(collisionRuntimeParams.myNewPosition);
-                if (rotationOnUp != 0) {
-                    teleportRotation.quat_fromAxis(rotationOnUp, playerUp);
-                    this._myParams.myPlayerHeadManager.rotateHeadHorizontallyQuat(teleportRotation);
-                }
+        if (!teleportCollisionRuntimeParams.myTeleportCanceled) {
+            collisionRuntimeParams.copy(teleportCollisionRuntimeParams);
+            this._myParams.myPlayerHeadManager.teleportFeetPosition(collisionRuntimeParams.myNewPosition);
+            if (rotationOnUp != 0) {
+                teleportRotation.quat_fromAxis(rotationOnUp, playerUp);
+                this._myParams.myPlayerHeadManager.rotateHeadHorizontallyQuat(teleportRotation);
             }
         }
     };
@@ -493,7 +480,7 @@ PlayerLocomotionTeleport.prototype._checkTeleport = function () {
 }();
 
 PlayerLocomotionTeleport.prototype._checkTeleportAsMovement = function () {
-    let checkTeleportCollisionRuntimeParams = new CollisionRuntimeParams();
+    let checkTeleportMovementCollisionRuntimeParams = new CollisionRuntimeParams();
     let feetRotationQuat = PP.quat_create();
     let feetPosition = PP.vec3_create();
     let feetUp = PP.vec3_create();
@@ -522,29 +509,29 @@ PlayerLocomotionTeleport.prototype._checkTeleportAsMovement = function () {
         teleportFeetRotationQuat.quat_setUp(feetUp, teleportFeetForward);
         teleportFeetTransformQuat.quat2_setPositionRotationQuat(feetPosition, teleportFeetRotationQuat);
 
-        checkTeleportCollisionRuntimeParams.copy(collisionRuntimeParams);
-        this._checkTeleport(teleportPosition, teleportFeetTransformQuat, checkTeleportCollisionRuntimeParams);
+        this._checkTeleport(teleportPosition, teleportFeetTransformQuat, collisionRuntimeParams);
 
         // if teleport is ok then we can check movement knowing we have to move toward the teleported position (which has also snapped/fixed the position)
-        if (!checkTeleportCollisionRuntimeParams.myTeleportCanceled) {
+        if (!collisionRuntimeParams.myTeleportCanceled) {
             let teleportMovementValid = false;
 
-            fixedTeleportPosition.vec3_copy(checkTeleportCollisionRuntimeParams.myNewPosition);
+            checkTeleportMovementCollisionRuntimeParams.copy(collisionRuntimeParams);
+            fixedTeleportPosition.vec3_copy(collisionRuntimeParams.myNewPosition);
             currentFeetPosition.vec3_copy(feetPosition);
             for (let i = 0; i < this._myParams.myTeleportAsMovementMaxSteps; i++) {
                 teleportMovement = fixedTeleportPosition.vec3_sub(currentFeetPosition, teleportMovement);
                 movementFeetTransformQuat.quat2_setPositionRotationQuat(currentFeetPosition, feetRotationQuat);
-                CollisionCheckGlobal.move(teleportMovement, movementFeetTransformQuat, this._myParams.myCollisionCheckParams, collisionRuntimeParams);
+                CollisionCheckGlobal.move(teleportMovement, movementFeetTransformQuat, this._myParams.myCollisionCheckParams, checkTeleportMovementCollisionRuntimeParams);
 
-                if (!collisionRuntimeParams.myHorizontalMovementCanceled && !collisionRuntimeParams.myVerticalMovementCanceled) {
-                    movementToTeleportPosition = fixedTeleportPosition.vec3_sub(collisionRuntimeParams.myNewPosition, movementToTeleportPosition);
+                if (!checkTeleportMovementCollisionRuntimeParams.myHorizontalMovementCanceled && !checkTeleportMovementCollisionRuntimeParams.myVerticalMovementCanceled) {
+                    movementToTeleportPosition = fixedTeleportPosition.vec3_sub(checkTeleportMovementCollisionRuntimeParams.myNewPosition, movementToTeleportPosition);
                     //console.error(movementToTeleportPosition.vec3_length());
                     if (movementToTeleportPosition.vec3_length() < this._myParams.myTeleportAsMovementMaxDistanceFromTeleportPosition + 0.00001) {
                         teleportMovementValid = true;
                         break;
                     } else {
                         teleportMovement.vec3_copy(movementToTeleportPosition);
-                        currentFeetPosition.vec3_copy(collisionRuntimeParams.myNewPosition);
+                        currentFeetPosition.vec3_copy(checkTeleportMovementCollisionRuntimeParams.myNewPosition);
                     }
                 } else {
                     break;
@@ -552,12 +539,8 @@ PlayerLocomotionTeleport.prototype._checkTeleportAsMovement = function () {
             }
 
             if (!teleportMovementValid) {
-                collisionRuntimeParams.myHorizontalMovementCanceled = true;
-                collisionRuntimeParams.myVerticalMovementCanceled = true;
+                collisionRuntimeParams.myTeleportCanceled = true;
             }
-        } else {
-            collisionRuntimeParams.myHorizontalMovementCanceled = true;
-            collisionRuntimeParams.myVerticalMovementCanceled = true;
         }
     };
 }();
