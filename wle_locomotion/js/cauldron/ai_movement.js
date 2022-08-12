@@ -55,7 +55,7 @@ WL.registerComponent('ai-movement', {
 
             this._myCollisionCheck.move(movement, this.object.pp_getTransformQuat(tempTransformQuat), this._myCollisionCheckParams, this._myCollisionRuntimeParams);
 
-            if (this._myCollisionRuntimeParams.myHorizontalMovementCancelled) {
+            if (this._myCollisionRuntimeParams.myHorizontalMovementCanceled) {
                 if (this._myCollisionTimer.isDone()) {
                     this._myCollisionTimer.start();
 

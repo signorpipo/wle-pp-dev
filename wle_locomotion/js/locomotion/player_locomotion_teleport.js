@@ -275,7 +275,7 @@ PlayerLocomotionTeleport.prototype._isTeleportPositionValid = function () {
                 } else {
                     this._checkTeleportAsMovement(teleportPosition, feetTransformQuat, teleportCheckCollisionRuntimeParams);
 
-                    if (!teleportCheckCollisionRuntimeParams.myHorizontalMovementCancelled && !teleportCheckCollisionRuntimeParams.myVerticalMovementCancelled) {
+                    if (!teleportCheckCollisionRuntimeParams.myHorizontalMovementCanceled && !teleportCheckCollisionRuntimeParams.myVerticalMovementCanceled) {
                         teleportCheckValid = true;
                     }
                 }
@@ -459,7 +459,7 @@ PlayerLocomotionTeleport.prototype._teleportToPosition = function () {
         } else {
             this._checkTeleportAsMovement(teleportPosition, feetTransformQuat, tempTeleportCollisionRuntimeParams);
 
-            if (!tempTeleportCollisionRuntimeParams.myHorizontalMovementCancelled && !tempTeleportCollisionRuntimeParams.myVerticalMovementCancelled) {
+            if (!tempTeleportCollisionRuntimeParams.myHorizontalMovementCanceled && !tempTeleportCollisionRuntimeParams.myVerticalMovementCanceled) {
                 collisionRuntimeParams.copy(tempTeleportCollisionRuntimeParams);
                 this._myParams.myPlayerHeadManager.teleportFeetPosition(collisionRuntimeParams.myNewPosition);
                 if (rotationOnUp != 0) {
@@ -523,7 +523,7 @@ PlayerLocomotionTeleport.prototype._checkTeleportAsMovement = function () {
                 movementFeetTransformQuat.quat2_setPositionRotationQuat(currentFeetPosition, feetRotationQuat);
                 CollisionCheckGlobal.move(teleportMovement, movementFeetTransformQuat, this._myParams.myCollisionCheckParams, collisionRuntimeParams);
 
-                if (!collisionRuntimeParams.myHorizontalMovementCancelled && !collisionRuntimeParams.myVerticalMovementCancelled) {
+                if (!collisionRuntimeParams.myHorizontalMovementCanceled && !collisionRuntimeParams.myVerticalMovementCanceled) {
                     movementToTeleportPosition = fixedTeleportPosition.vec3_sub(collisionRuntimeParams.myNewPosition, movementToTeleportPosition);
                     //console.error(movementToTeleportPosition.vec3_length());
                     if (movementToTeleportPosition.vec3_length() < this._myParams.myTeleportAsMovementMaxDistanceFromTeleportPosition + 0.00001) {
@@ -539,8 +539,8 @@ PlayerLocomotionTeleport.prototype._checkTeleportAsMovement = function () {
             }
 
             if (!teleportMovementValid) {
-                collisionRuntimeParams.myHorizontalMovementCancelled = true;
-                collisionRuntimeParams.myVerticalMovementCancelled = true;
+                collisionRuntimeParams.myHorizontalMovementCanceled = true;
+                collisionRuntimeParams.myVerticalMovementCanceled = true;
             }
         }
     };

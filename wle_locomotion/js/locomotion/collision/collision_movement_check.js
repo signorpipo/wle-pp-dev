@@ -47,7 +47,7 @@ CollisionCheck.prototype._move = function () {
             fixedMovementStep = this._moveStep(movementStep, newFeetPosition, transformUp, transformForward, height, collisionCheckParams, collisionRuntimeParams, fixedMovementStep);
             fixedMovement.vec3_add(fixedMovementStep, fixedMovement);
 
-            if (collisionRuntimeParams.myHorizontalMovementCancelled && collisionRuntimeParams.myVerticalMovementCancelled) {
+            if (collisionRuntimeParams.myHorizontalMovementCanceled && collisionRuntimeParams.myVerticalMovementCanceled) {
                 break;
             }
         }
@@ -161,7 +161,7 @@ CollisionCheck.prototype._moveStep = function () {
             }
 
             if (!horizontalMovement.vec3_isZero() && fixedHorizontalMovement.vec3_isZero()) {
-                collisionRuntimeParams.myHorizontalMovementCancelled = true;
+                collisionRuntimeParams.myHorizontalMovementCanceled = true;
             }
 
             //console.error(_myTotalRaycasts );
@@ -190,8 +190,8 @@ CollisionCheck.prototype._moveStep = function () {
         if (!collisionRuntimeParams.myIsCollidingVertically) {
             outFixedMovement = fixedHorizontalMovement.vec3_add(fixedVerticalMovement, outFixedMovement);
         } else {
-            collisionRuntimeParams.myHorizontalMovementCancelled = true;
-            collisionRuntimeParams.myVerticalMovementCancelled = true;
+            collisionRuntimeParams.myHorizontalMovementCanceled = true;
+            collisionRuntimeParams.myVerticalMovementCanceled = true;
             fixedHorizontalMovement.vec3_zero();
             fixedVerticalMovement.vec3_zero();
         }
@@ -218,7 +218,7 @@ CollisionCheck.prototype._moveStep = function () {
 
         {
             if (collisionCheckParams.mySlidingAdjustSign90Degrees) {
-                if (!collisionRuntimeParams.myHorizontalMovementCancelled && !collisionRuntimeParams.myIsSliding && !fixedHorizontalMovement.vec3_isZero()) {
+                if (!collisionRuntimeParams.myHorizontalMovementCanceled && !collisionRuntimeParams.myIsSliding && !fixedHorizontalMovement.vec3_isZero()) {
                     /* let angleWithPreviousThreshold = 0.5;
                     if (!this._myPrevCollisionRuntimeParams.myLastValidOriginalHorizontalMovement.vec3_isZero() && !horizontalMovement.vec3_isZero() &&
                         horizontalMovement.vec3_angle(this._myPrevCollisionRuntimeParams.myLastValidOriginalHorizontalMovement) > angleWithPreviousThreshold) {

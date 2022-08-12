@@ -250,11 +250,11 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.myCeilingPerceivedAngle = 0;
         this.myCeilingNormal = PP.vec3_create();
 
-        this.myHorizontalMovementCancelled = false; // could add HorizontalMovementCancelledReason
+        this.myHorizontalMovementCanceled = false; // could add HorizontalMovementCanceledReason
         this.myIsCollidingHorizontally = false;
         this.myHorizontalCollisionHit = new PP.RaycastResultHit();
 
-        this.myVerticalMovementCancelled = false;
+        this.myVerticalMovementCanceled = false;
         this.myIsCollidingVertically = false;
         this.myVerticalCollisionHit = new PP.RaycastResultHit();
 
@@ -306,11 +306,11 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.myCeilingPerceivedAngle = 0;
         this.myCeilingNormal.vec3_zero();
 
-        this.myHorizontalMovementCancelled = false;
+        this.myHorizontalMovementCanceled = false;
         this.myIsCollidingHorizontally = false;
         this.myHorizontalCollisionHit.reset();
 
-        this.myVerticalMovementCancelled = false;
+        this.myVerticalMovementCanceled = false;
         this.myIsCollidingVertically = false;
         this.myVerticalCollisionHit.reset();
 
@@ -362,11 +362,11 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.myCeilingPerceivedAngle = other.myCeilingPerceivedAngle;
         this.myCeilingNormal.vec3_copy(other.myCeilingNormal);
 
-        this.myHorizontalMovementCancelled = other.myHorizontalMovementCancelled;
+        this.myHorizontalMovementCanceled = other.myHorizontalMovementCanceled;
         this.myIsCollidingHorizontally = other.myIsCollidingHorizontally;
         this.myHorizontalCollisionHit.copy(other.myHorizontalCollisionHit);
 
-        this.myVerticalMovementCancelled = other.myVerticalMovementCancelled;
+        this.myVerticalMovementCanceled = other.myVerticalMovementCanceled;
         this.myIsCollidingVertically = other.myIsCollidingVertically;
         this.myVerticalCollisionHit.copy(other.myVerticalCollisionHit);
 
