@@ -1,4 +1,4 @@
-WL.registerComponent('pp-adjust-physx-scale', {
+WL.registerComponent('pp-adjust-hierarchy-physx-scale', {
 }, {
     start() {
         let scale = this.object.pp_getScale();

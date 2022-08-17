@@ -7,8 +7,8 @@
         - pp_angleDistanceSignedDegrees
         - pp_isInsideAngleRangeRadians
         
-    List of variables:
-        - pp_myEpsilonNumber / pp_myEpsilonAngle
+    List of constants:
+        - PP_EPSILON_NUMBER / PP_EPSILON_ANGLE
 
     List of functions:
         Notes:
@@ -26,8 +26,8 @@
         - pp_isInsideAngleRange
 */
 
-Math.pp_myEpsilonNumber = 0.00001;
-Math.pp_myEpsilonAngle = 0.0001;
+Math.PP_EPSILON_NUMBER = 0.00001;
+Math.PP_EPSILON_ANGLE = 0.0001;
 
 Math.pp_clamp = function (value, start, end) {
     let fixedStart = (start != null) ? start : -Number.MAX_VALUE;
