@@ -65,6 +65,7 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport {
         this._myFSM.addTransition("detect", "idle", "cancel");
         this._myFSM.addTransition("teleport", "idle", "done");
 
+        this._myFSM.addTransition("idle", "idle", "stop");
         this._myFSM.addTransition("detect", "idle", "stop");
         this._myFSM.addTransition("teleport", "idle", "stop", this._completeTeleport.bind(this));
 

@@ -3,6 +3,8 @@ PlayerHeadManagerParams = class PlayerHeadManagerParams {
         this.myExitSessionRemoveRightTilt = true;
         this.myExitSessionAdjustMaxVerticalAngle = true;
         this.myExitSessionMaxVerticalAngle = 90;
+
+        // #TODO exit session resync height and resync vertical angle
     }
 };
 
@@ -16,15 +18,18 @@ PlayerHeadManager = class PlayerHeadManager {
         this._mySessionChangeResyncHeadTransform = null;
 
         this._myBlurRecoverHeadTransform = null;
-        this._myBlurRecoverPlayerUp = null;
 
-        this._myDelaySessionChangeResyncCounter = 0;
+        this._myDelaySessionChangeResyncCounter = 0; // needed because VR head takes some frames to get the tracked position
         this._myDelayBlurEndResyncCounter = 0;
         this._myDelayBlurEndResyncTimer = new PP.Timer(5, false);
         this._myVisibilityWentHidden = false;
 
         this._mySessionActive = false;
         this._mySessionBlurred = false;
+
+        // Setup
+
+        this._myResyncCounterFrames = 3;
     }
 
     start() {
@@ -277,7 +282,6 @@ PlayerHeadManager.prototype._getPositionHeight = function () {
 PlayerHeadManager.prototype._onXRSessionStart = function () {
     return function _onXRSessionStart(session) {
         this._myBlurRecoverHeadTransform = null;
-        this._myBlurRecoverPlayerUp = null;
         this._myVisibilityWentHidden = false;
 
         this._myDelaySessionChangeResyncCounter = 0;
@@ -303,7 +307,7 @@ PlayerHeadManager.prototype._onXRSessionStart = function () {
             this._mySessionChangeResyncHeadTransform = previousHeadObject.pp_getTransformQuat();
         }
 
-        this._myDelaySessionChangeResyncCounter = 2;
+        this._myDelaySessionChangeResyncCounter = this._myResyncCounterFrames;
 
         this._myCurrentHead = PP.myPlayerObjects.myVRHead;
 
@@ -313,25 +317,20 @@ PlayerHeadManager.prototype._onXRSessionStart = function () {
 }();
 
 PlayerHeadManager.prototype._onXRSessionEnd = function () {
-    let playerUp = PP.vec3_create();
     return function _onXRSessionEnd(session) {
         if (this._myDelaySessionChangeResyncCounter == 0) {
             let previousHeadTransform = this._myCurrentHead.pp_getTransformQuat();
 
             if (this._myBlurRecoverHeadTransform != null) {
-                playerUp = PP.myPlayerObjects.myPlayer.pp_getUp(playerUp);
-                if (playerUp.vec_equals(this._myBlurRecoverPlayerUp, 0.000001)) {
-                    previousHeadTransform = this._myBlurRecoverHeadTransform;
-                }
+                previousHeadTransform = this._myBlurRecoverHeadTransform;
             }
 
             this._mySessionChangeResyncHeadTransform = previousHeadTransform;
         }
 
-        this._myDelaySessionChangeResyncCounter = 2;
+        this._myDelaySessionChangeResyncCounter = this._myResyncCounterFrames;
 
         this._myBlurRecoverHeadTransform = null;
-        this._myBlurRecoverPlayerUp = null;
         this._myVisibilityWentHidden = false;
 
         this._myDelayBlurEndResyncCounter = 0;
@@ -349,14 +348,11 @@ PlayerHeadManager.prototype._onXRSessionBlurStart = function () {
         if (this._myBlurRecoverHeadTransform == null && this._mySessionActive) {
             if (this._myDelaySessionChangeResyncCounter > 0) {
                 this._myBlurRecoverHeadTransform = this._mySessionChangeResyncHeadTransform;
-                this._myBlurRecoverPlayerUp = PP.myPlayerObjects.myPlayer.pp_getUp();
             } else {
                 this._myBlurRecoverHeadTransform = this._myCurrentHead.pp_getTransformQuat();
-                this._myBlurRecoverPlayerUp = PP.myPlayerObjects.myPlayer.pp_getUp();
             }
         } else if (!this._mySessionActive) {
             this._myBlurRecoverHeadTransform = null;
-            this._myBlurRecoverPlayerUp = null;
         }
 
         this._myVisibilityWentHidden = this._myVisibilityWentHidden || session.visibilityState == "hidden";
@@ -366,33 +362,24 @@ PlayerHeadManager.prototype._onXRSessionBlurStart = function () {
 }();
 
 PlayerHeadManager.prototype._onXRSessionBlurEnd = function () {
-    let playerUp = PP.vec3_create();
     return function _onXRSessionBlurEnd(session) {
         if (this._myDelaySessionChangeResyncCounter == 0) {
             if (this._myBlurRecoverHeadTransform != null && this._mySessionActive) {
-                playerUp = PP.myPlayerObjects.myPlayer.pp_getUp(playerUp);
-                if (playerUp.vec_equals(this._myBlurRecoverPlayerUp, 0.000001)) {
-                    this._myDelayBlurEndResyncCounter = 2;
-                    if (this._myVisibilityWentHidden) {
-                        // this._myDelayBlurEndResyncTimer.start();
+                this._myDelayBlurEndResyncCounter = this._myResyncCounterFrames;
+                if (this._myVisibilityWentHidden) {
+                    // this._myDelayBlurEndResyncTimer.start();
 
-                        // this was added because on the end of hidden u can have the resync delay cause of the guardian resync
-                        // but I just decided to skip this since it's not reliable and the guardian resync can happen in other cases
-                        // with no notification anyway
-                    }
-                } else {
-                    this._myBlurRecoverHeadTransform = null;
-                    this._myBlurRecoverPlayerUp = null;
+                    // this was added because on the end of hidden u can have the resync delay cause of the guardian resync
+                    // but I just decided to skip this since it's not reliable and the guardian resync can happen in other cases
+                    // with no notification anyway
                 }
             } else {
                 this._myBlurRecoverHeadTransform = null;
-                this._myBlurRecoverPlayerUp = null;
             }
         } else {
             this._myDelaySessionChangeResyncCounter = 2;
 
             this._myBlurRecoverHeadTransform = null;
-            this._myBlurRecoverPlayerUp = null;
         }
 
         this._mySessionBlurred = false;
@@ -419,25 +406,23 @@ PlayerHeadManager.prototype._blurEndResync = function () {
     return function _blurEndResync() {
         if (this._myBlurRecoverHeadTransform != null) {
             playerUp = PP.myPlayerObjects.myPlayer.pp_getUp(playerUp);
-            if (playerUp.vec_equals(this._myBlurRecoverPlayerUp, 0.000001)) {
-                recoverHeadPosition = this._myBlurRecoverHeadTransform.quat2_getPosition(recoverHeadPosition);
 
-                let headHeight = this._getPositionHeight(this._myCurrentHead.pp_getPosition(currentHeadPosition));
-                let recoverHeadHeight = this._getPositionHeight(recoverHeadPosition);
+            recoverHeadPosition = this._myBlurRecoverHeadTransform.quat2_getPosition(recoverHeadPosition);
 
-                newHeadPosition = recoverHeadPosition.vec3_add(playerUp.vec3_scale(headHeight - recoverHeadHeight, newHeadPosition), newHeadPosition);
+            let headHeight = this._getPositionHeight(this._myCurrentHead.pp_getPosition(currentHeadPosition));
+            let recoverHeadHeight = this._getPositionHeight(recoverHeadPosition);
 
-                recoverHeadForward = this._myBlurRecoverHeadTransform.quat2_getForward(recoverHeadForward);
-                currentHeadForward = this._myCurrentHead.pp_getForward(currentHeadForward);
-                rotationToPerform = currentHeadForward.vec3_rotationToPivotedQuat(recoverHeadForward, playerUp, rotationToPerform);
+            newHeadPosition = recoverHeadPosition.vec3_add(playerUp.vec3_scale(headHeight - recoverHeadHeight, newHeadPosition), newHeadPosition);
 
-                this.teleportHeadPosition(newHeadPosition);
-                this.rotateHeadHorizontallyQuat(rotationToPerform);
-            }
+            recoverHeadForward = this._myBlurRecoverHeadTransform.quat2_getForward(recoverHeadForward);
+            currentHeadForward = this._myCurrentHead.pp_getForward(currentHeadForward);
+            rotationToPerform = currentHeadForward.vec3_rotationToPivotedQuat(recoverHeadForward, playerUp, rotationToPerform);
+
+            this.teleportHeadPosition(newHeadPosition);
+            this.rotateHeadHorizontallyQuat(rotationToPerform);
         }
 
         this._myBlurRecoverHeadTransform = null;
-        this._myBlurRecoverPlayerUp = null;
     };
 }();
 
