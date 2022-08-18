@@ -252,11 +252,11 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
 
         this.myHorizontalMovementCanceled = false; // could add HorizontalMovementCanceledReason
         this.myIsCollidingHorizontally = false;
-        this.myHorizontalCollisionHit = new PP.RaycastResultHit();
+        this.myHorizontalCollisionHit = new PP.RaycastHit();
 
         this.myVerticalMovementCanceled = false;
         this.myIsCollidingVertically = false;
-        this.myVerticalCollisionHit = new PP.RaycastResultHit();
+        this.myVerticalCollisionHit = new PP.RaycastHit();
 
         this.myHasSnappedOnGround = false;
         this.myHasSnappedOnCeiling = false;
@@ -269,7 +269,7 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.mySlidingFlickerPreventionCheckAnywayCounter = 0;
         this.mySlidingMovementAngle = 0;
         this.mySlidingCollisionAngle = 0;
-        this.mySlidingCollisionHit = new PP.RaycastResultHit();
+        this.mySlidingCollisionHit = new PP.RaycastHit();
         this.mySliding90DegreesSign = 0;
         this.mySlidingRecompute90DegreesSign = true;
         this.myLastValidIsSliding = false;

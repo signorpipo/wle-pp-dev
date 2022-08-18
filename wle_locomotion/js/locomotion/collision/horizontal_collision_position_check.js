@@ -29,7 +29,7 @@ CollisionCheck.prototype._horizontalPositionCheck = function () {
 
     let verticalDirection = PP.vec3_create();
 
-    let vertilCheckHit = new PP.RaycastResultHit();
+    let vertilCheckHit = new PP.RaycastHit();
 
     return function _horizontalPositionCheck(feetPosition, height, up, forward, collisionCheckParams, collisionRuntimeParams) {
         this._myDebugActive = collisionCheckParams.myDebugActive && collisionCheckParams.myDebugHorizontalPositionActive;

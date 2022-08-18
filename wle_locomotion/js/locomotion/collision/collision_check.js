@@ -7,7 +7,7 @@ CollisionCheck = class CollisionCheck {
         this._myRaycastResult = new PP.RaycastResult();
         this._myFixRaycastResult = new PP.RaycastResult();
 
-        this._myBackupRaycastHit = new PP.RaycastResultHit();
+        this._myBackupRaycastHit = new PP.RaycastHit();
 
         this._myPrevCollisionRuntimeParams = new CollisionRuntimeParams();
 
