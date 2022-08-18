@@ -25,7 +25,7 @@ PlayerHeadManager = class PlayerHeadManager {
         this._myDelaySessionChangeResyncCounter = 0; // needed because VR head takes some frames to get the tracked position
         this._myDelayBlurEndResyncCounter = 0;
         this._myDelayBlurEndResyncTimer = new PP.Timer(5, false);
-        this._myVisibilityWentHidden = false;
+        this._myVisibilityHidden = false;
 
         this._mySessionActive = false;
         this._mySessionBlurred = false;
@@ -285,7 +285,7 @@ PlayerHeadManager.prototype._getPositionHeight = function () {
 PlayerHeadManager.prototype._onXRSessionStart = function () {
     return function _onXRSessionStart(session) {
         this._myBlurRecoverHeadTransform = null;
-        this._myVisibilityWentHidden = false;
+        this._myVisibilityHidden = false;
 
         this._myDelaySessionChangeResyncCounter = 0;
         this._myDelayBlurEndResyncCounter = 0;
@@ -299,9 +299,17 @@ PlayerHeadManager.prototype._onXRSessionStart = function () {
 
         session.addEventListener('visibilitychange', function (event) {
             if (event.session.visibilityState != "visible") {
-                this._onXRSessionBlurStart(event.session);
+                if (!this._mySessionBlurred) {
+                    this._onXRSessionBlurStart(event.session);
+                }
+
+                this._myVisibilityHidden = session.visibilityState == "hidden";
             } else {
-                this._onXRSessionBlurEnd(event.session);
+                if (this._mySessionBlurred) {
+                    this._onXRSessionBlurEnd(event.session);
+                }
+
+                this._myVisibilityHidden = false;
             }
         }.bind(this));
 
@@ -344,7 +352,7 @@ PlayerHeadManager.prototype._onXRSessionEnd = function () {
         }
 
         this._myBlurRecoverHeadTransform = null;
-        this._myVisibilityWentHidden = false;
+        this._myVisibilityHidden = false;
 
         this._myDelayBlurEndResyncCounter = 0;
         this._myDelayBlurEndResyncTimer.reset();
@@ -364,12 +372,11 @@ PlayerHeadManager.prototype._onXRSessionBlurStart = function () {
             } else {
                 this._myBlurRecoverHeadTransform = this._myCurrentHead.pp_getTransformQuat();
             }
-        } else if (!this._mySessionActive) {
+        } else if (!this._mySessionActive || !this._myParams.myBlurEndResyncEnabled) {
             this._myBlurRecoverHeadTransform = null;
-            this._myDelayBlurEndResyncCounter = 0;
         }
 
-        this._myVisibilityWentHidden = this._myVisibilityWentHidden || session.visibilityState == "hidden";
+        this._myDelayBlurEndResyncCounter = 0;
 
         this._mySessionBlurred = true;
     };
@@ -380,7 +387,7 @@ PlayerHeadManager.prototype._onXRSessionBlurEnd = function () {
         if (this._myDelaySessionChangeResyncCounter == 0) {
             if (this._myParams.myBlurEndResyncEnabled && this._myBlurRecoverHeadTransform != null && this._mySessionActive) {
                 this._myDelayBlurEndResyncCounter = this._myResyncCounterFrames;
-                if (this._myVisibilityWentHidden) {
+                if (this._myVisibilityHidden) {
                     // this._myDelayBlurEndResyncTimer.start();
 
                     // this was added because on the end of hidden u can have the resync delay cause of the guardian resync
@@ -464,7 +471,7 @@ PlayerHeadManager.prototype._sessionChangeResync = function () {
     let fixedHeadForward = PP.vec3_create();
     let fixedHeadRotation = PP.quat_create();
     return function _sessionChangeResync() {
-        if (this._myBlurRecoverHeadTransform == null) {
+        if (this._myBlurRecoverHeadTransform == null && this._mySessionChangeResyncHeadTransform != null) {
             if (this._mySessionActive) {
                 currentHeadPosition = this._myCurrentHead.pp_getPosition(currentHeadPosition);
                 resyncHeadPosition = this._mySessionChangeResyncHeadTransform.quat2_getPosition(resyncHeadPosition);
@@ -572,6 +579,8 @@ PlayerHeadManager.prototype._sessionChangeResync = function () {
                 PP.myPlayerObjects.myNonVRCamera.pp_setRotationQuat(resyncHeadRotation);
             }
         }
+
+        this._mySessionChangeResyncHeadTransform = null;
     };
 }();
 
