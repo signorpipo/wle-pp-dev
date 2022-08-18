@@ -128,6 +128,85 @@ PP.MeshUtils = {
 
         return mesh;
     },
+    cloneMesh: function () {
+        let position = PP.vec3_create();
+        let textureCoordinates = PP.vec2_create();
+        let normal = PP.vec3_create();
+        let color = PP.vec4_create();
+
+        return function cloneMesh(mesh) {
+            let clonedIndexData = new Uint32Array(mesh.indexData.length);
+            for (let i = 0; i < mesh.indexData.length; i++) {
+                clonedIndexData[i] = mesh.indexData[i];
+            }
+
+            let clonedMesh = new WL.Mesh({
+                vertexCount: mesh.vertexCount,
+                indexData: clonedIndexData,
+                indexType: WL.MeshIndexType.UnsignedInt,
+            });
+
+            let positionAttribute = null;
+            let textureCoordinatesAttribute = null;
+            let normalAttribute = null;
+            let colorAttribute = null;
+
+            let clonedPositionAttribute = null;
+            let clonedTextureCoordinatesAttribute = null;
+            let clonedNormalAttribute = null;
+            let clonedColorAttribute = null;
+
+
+            try {
+                positionAttribute = mesh.attribute(WL.MeshAttribute.Position);
+                clonedPositionAttribute = clonedMesh.attribute(WL.MeshAttribute.Position);
+            } catch (error) {
+                positionAttribute = null;
+                clonedPositionAttribute = null;
+            }
+
+            try {
+                textureCoordinatesAttribute = mesh.attribute(WL.MeshAttribute.TextureCoordinate);
+                clonedTextureCoordinatesAttribute = clonedMesh.attribute(WL.MeshAttribute.TextureCoordinate);
+            } catch (error) {
+                textureCoordinatesAttribute = null;
+                clonedTextureCoordinatesAttribute = null;
+            }
+
+            try {
+                normalAttribute = mesh.attribute(WL.MeshAttribute.Normal);
+                clonedNormalAttribute = clonedMesh.attribute(WL.MeshAttribute.Normal);
+            } catch (error) {
+                normalAttribute = null;
+                clonedNormalAttribute = null;
+            }
+
+            try {
+                colorAttribute = mesh.attribute(WL.MeshAttribute.Color);
+                clonedColorAttribute = clonedMesh.attribute(WL.MeshAttribute.Color);
+            } catch (error) {
+                colorAttribute = null;
+                clonedColorAttribute = null;
+            }
+
+            for (let i = 0; i < mesh.vertexCount; i++) {
+                if (positionAttribute != null && clonedPositionAttribute != null) {
+                    clonedPositionAttribute.set(i, positionAttribute.get(i, position));
+                }
+                if (textureCoordinatesAttribute != null && clonedTextureCoordinatesAttribute != null) {
+                    clonedTextureCoordinatesAttribute.set(i, textureCoordinatesAttribute.get(i, textureCoordinates));
+                }
+                if (normalAttribute != null && clonedNormalAttribute != null) {
+                    clonedNormalAttribute.set(i, normalAttribute.get(i, normal));
+                }
+                if (colorAttribute != null && clonedColorAttribute != null) {
+                    clonedColorAttribute.set(i, colorAttribute.get(i, color));
+                }
+            }
+
+            return clonedMesh;
+        };
+    }(),
     setAlpha: function (object, alpha) {
         let meshComponents = object.pp_getComponentsHierarchy("mesh");
 

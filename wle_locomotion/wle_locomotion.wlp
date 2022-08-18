@@ -117,7 +117,8 @@
                     "player-locomotion": {
                         "_myIsSnapTurn": true,
                         "_myFlyEnabled": true
-                    }
+                    },
+                    "active": true
                 }
             ]
         },
@@ -127,10 +128,10 @@
             "components": [
                 {
                     "type": "pp-set-player-height",
-                    "active": true,
                     "pp-set-player-height": {
-                        "_myEyesHeight": 1.6499999
-                    }
+                        "_mySetOnlyOnStart": true
+                    },
+                    "active": true
                 }
             ]
         },
@@ -4598,15 +4599,14 @@
             ],
             "components": [
                 {
-                    "type": "pp-adjust-physx-scale",
-                    "active": true
-                },
-                {
                     "type": "pp-set-active",
                     "pp-set-active": {
                         "_myActive": false
                     },
                     "active": true
+                },
+                {
+                    "type": "pp-adjust-hierarchy-physx-scale"
                 }
             ]
         },
@@ -14281,7 +14281,8 @@
                 "material": "35"
             },
             "useMultiDraw": false,
-            "usePreZ": false
+            "usePreZ": false,
+            "useFrustumCulling": false
         },
         "runtime": {
             "xrButtonColor": "black",

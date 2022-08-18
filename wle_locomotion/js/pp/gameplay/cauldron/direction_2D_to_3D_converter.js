@@ -33,7 +33,7 @@ PP.Direction2DTo3DConverter = class Direction2DTo3DConverter {
 
     // directionUp is needed when u want to understand when the direction is going to fly or not
     // if you don't want the direction to be flat (so like it's always flying) you can avoid specifying it
-    convert(direction2D, convertTransformQuat, directionUp = null, outDirection3D = PP.vec3_create()) {
+    convert(direction2D, referenceTransformQuat, directionUp = null, outDirection3D = PP.vec3_create()) {
         // implemented outside class definition
     }
 
@@ -107,7 +107,7 @@ PP.Direction2DTo3DConverter.prototype.convert = function () {
     let directionUpNegate = PP.vec3_create();
     let forwardScaled = PP.vec3_create();
     let rightScaled = PP.vec3_create();
-    return function convert(direction2D, convertTransformQuat, directionUp = null, outDirection3D = PP.vec3_create()) {
+    return function convert(direction2D, referenceTransformQuat, directionUp = null, outDirection3D = PP.vec3_create()) {
         if (direction2D.vec2_isZero()) {
             let resetFlyForward = this._myParams.myAutoUpdateFlyForward && this._myParams.myResetFlyForwardWhenZero;
             if (resetFlyForward) {
@@ -130,8 +130,8 @@ PP.Direction2DTo3DConverter.prototype.convert = function () {
             }
         }
 
-        forward = convertTransformQuat.quat2_getForward(forward);
-        right = convertTransformQuat.quat2_getRight(right);
+        forward = referenceTransformQuat.quat2_getForward(forward);
+        right = referenceTransformQuat.quat2_getRight(right);
 
         if (directionUp != null) {
             directionUpNegate = directionUp.vec3_negate(directionUpNegate);

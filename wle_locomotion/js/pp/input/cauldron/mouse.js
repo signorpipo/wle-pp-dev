@@ -127,7 +127,7 @@ PP.Mouse = class Mouse {
 
     getOriginWorld(out = PP.vec3_create()) {
         if (PP.XRUtils.isXRSessionActive()) {
-            PP.myPlayerObjects.myEyeLeft.pp_getPosition(out);
+            PP.myPlayerObjects.myEyeLeft.pp_getPosition(out); // in theory mouse should not be used inside the session, but may make sense for AR which uses eye left
         } else {
             PP.myPlayerObjects.myNonVRCamera.pp_getPosition(out);
         }
