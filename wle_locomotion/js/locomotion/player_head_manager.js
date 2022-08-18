@@ -3,6 +3,9 @@ PlayerHeadManagerParams = class PlayerHeadManagerParams {
         this.mySessionChangeResyncEnabled = true;
         this.myBlurEndResyncEnabled = true;
 
+        this.myExitSessionResyncHeight = true;
+        this.myExitSessionResyncVerticalAngle = true;
+
         this.myExitSessionRemoveRightTilt = true;
         this.myExitSessionAdjustMaxVerticalAngle = true;
         this.myExitSessionMaxVerticalAngle = 90;
@@ -526,8 +529,10 @@ PlayerHeadManager.prototype._sessionChangeResync = function () {
                 PP.myPlayerObjects.myPlayer.pp_setPosition(newPlayerPosition);
                 PP.myPlayerObjects.myNonVRCamera.pp_resetPositionLocal();
 
-                let resyncHeadHeight = this._getPositionHeight(resyncHeadPosition);
-                PP.myPlayerObjects.myNonVRCamera.pp_setPosition(playerUp.vec3_scale(resyncHeadHeight, newNonVRCameraPosition).vec3_add(newPlayerPosition, newNonVRCameraPosition));
+                if (this._myParams.myExitSessionResyncHeight) {
+                    let resyncHeadHeight = this._getPositionHeight(resyncHeadPosition);
+                    PP.myPlayerObjects.myNonVRCamera.pp_setPosition(playerUp.vec3_scale(resyncHeadHeight, newNonVRCameraPosition).vec3_add(newPlayerPosition, newNonVRCameraPosition));
+                }
 
                 resyncHeadRotation = this._mySessionChangeResyncHeadTransform.quat2_getRotationQuat(resyncHeadRotation);
 

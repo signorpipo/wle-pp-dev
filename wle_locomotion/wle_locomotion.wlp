@@ -129,7 +129,8 @@
                 {
                     "type": "pp-set-player-height",
                     "pp-set-player-height": {
-                        "_mySetOnlyOnStart": true
+                        "_mySetOnlyOnStart": true,
+                        "_myEyesHeight": 1.6499999
                     },
                     "active": true
                 }
