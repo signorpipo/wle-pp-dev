@@ -6,7 +6,7 @@ PlayerHeadManagerParams = class PlayerHeadManagerParams {
         this.myExitSessionResyncHeight = true;
         this.myExitSessionResyncVerticalAngle = true;
 
-        this.myExitSessionRemoveRightTilt = true;
+        this.myExitSessionRemoveRightTilt = true; // for now right tilt is removed even if this setting is false, if the vertical angle has to be adjusted
         this.myExitSessionAdjustMaxVerticalAngle = true;
         this.myExitSessionMaxVerticalAngle = 90;
 
@@ -473,6 +473,8 @@ PlayerHeadManager.prototype._sessionChangeResync = function () {
     let fixedHeadUp = PP.vec3_create();
     let fixedHeadForward = PP.vec3_create();
     let fixedHeadRotation = PP.quat_create();
+    let rotationAxis = PP.vec3_create();
+    let rotationVector = PP.vec3_create();
     return function _sessionChangeResync() {
         if (this._myBlurRecoverHeadTransform == null && this._mySessionChangeResyncHeadTransform != null) {
             if (this._mySessionActive) {
@@ -536,7 +538,8 @@ PlayerHeadManager.prototype._sessionChangeResync = function () {
 
                 resyncHeadRotation = this._mySessionChangeResyncHeadTransform.quat2_getRotationQuat(resyncHeadRotation);
 
-                if (this._myParams.myExitSessionRemoveRightTilt) {
+                if (this._myParams.myExitSessionRemoveRightTilt ||
+                    this._myParams.myExitSessionAdjustMaxVerticalAngle || !this.myExitSessionResyncVerticalAngle) {
                     resyncHeadForward = resyncHeadRotation.quat_getForward(resyncHeadForward);
                     resyncHeadUp = resyncHeadRotation.quat_getUp(resyncHeadUp);
 
@@ -567,11 +570,15 @@ PlayerHeadManager.prototype._sessionChangeResync = function () {
                     resyncHeadRotation.quat_copy(fixedHeadRotation);
                 }
 
-                if (this._myParams.myExitSessionAdjustMaxVerticalAngle) {
+                if (this._myParams.myExitSessionAdjustMaxVerticalAngle || !this.myExitSessionResyncVerticalAngle) {
                     resyncHeadUp = resyncHeadRotation.quat_getUp(resyncHeadUp);
                     resyncHeadRight = resyncHeadRotation.quat_getRight(resyncHeadRight);
 
-                    let maxVerticalAngle = this._myParams.myExitSessionMaxVerticalAngle - 0.0001;
+                    let maxVerticalAngle = Math.max(0, this._myParams.myExitSessionMaxVerticalAngle - 0.0001);
+                    if (!this._myParams.myExitSessionResyncVerticalAngle) {
+                        maxVerticalAngle = 0;
+                    }
+
                     let angleWithUp = Math.pp_angleClamp(resyncHeadUp.vec3_angleSigned(playerUp, resyncHeadRight));
                     if (Math.abs(angleWithUp) > maxVerticalAngle) {
                         let fixAngle = (Math.abs(angleWithUp) - maxVerticalAngle) * Math.pp_sign(angleWithUp);
