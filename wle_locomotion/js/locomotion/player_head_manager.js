@@ -1,5 +1,8 @@
 PlayerHeadManagerParams = class PlayerHeadManagerParams {
     constructor() {
+        this.mySessionChangeResyncEnabled = true;
+        this.myBlurEndResyncEnabled = true;
+
         this.myExitSessionRemoveRightTilt = true;
         this.myExitSessionAdjustMaxVerticalAngle = true;
         this.myExitSessionMaxVerticalAngle = 90;
@@ -302,12 +305,17 @@ PlayerHeadManager.prototype._onXRSessionStart = function () {
             }
         }.bind(this));
 
-        if (this._myDelaySessionChangeResyncCounter == 0) {
-            let previousHeadObject = this._myCurrentHead;
-            this._mySessionChangeResyncHeadTransform = previousHeadObject.pp_getTransformQuat();
-        }
+        if (this._myParams.mySessionChangeResyncEnabled) {
+            if (this._myDelaySessionChangeResyncCounter == 0) {
+                let previousHeadObject = this._myCurrentHead;
+                this._mySessionChangeResyncHeadTransform = previousHeadObject.pp_getTransformQuat();
+            }
 
-        this._myDelaySessionChangeResyncCounter = this._myResyncCounterFrames;
+            this._myDelaySessionChangeResyncCounter = this._myResyncCounterFrames;
+        } else {
+            this._myDelaySessionChangeResyncCounter = 0;
+            this._mySessionChangeResyncHeadTransform = null;
+        }
 
         this._myCurrentHead = PP.myPlayerObjects.myVRHead;
 
@@ -318,17 +326,22 @@ PlayerHeadManager.prototype._onXRSessionStart = function () {
 
 PlayerHeadManager.prototype._onXRSessionEnd = function () {
     return function _onXRSessionEnd(session) {
-        if (this._myDelaySessionChangeResyncCounter == 0) {
-            let previousHeadTransform = this._myCurrentHead.pp_getTransformQuat();
+        if (this._myParams.mySessionChangeResyncEnabled) {
+            if (this._myDelaySessionChangeResyncCounter == 0) {
+                let previousHeadTransform = this._myCurrentHead.pp_getTransformQuat();
 
-            if (this._myBlurRecoverHeadTransform != null) {
-                previousHeadTransform = this._myBlurRecoverHeadTransform;
+                if (this._myBlurRecoverHeadTransform != null) {
+                    previousHeadTransform = this._myBlurRecoverHeadTransform;
+                }
+
+                this._mySessionChangeResyncHeadTransform = previousHeadTransform;
             }
 
-            this._mySessionChangeResyncHeadTransform = previousHeadTransform;
+            this._myDelaySessionChangeResyncCounter = this._myResyncCounterFrames;
+        } else {
+            this._myDelaySessionChangeResyncCounter = 0;
+            this._mySessionChangeResyncHeadTransform = null;
         }
-
-        this._myDelaySessionChangeResyncCounter = this._myResyncCounterFrames;
 
         this._myBlurRecoverHeadTransform = null;
         this._myVisibilityWentHidden = false;
@@ -345,7 +358,7 @@ PlayerHeadManager.prototype._onXRSessionEnd = function () {
 
 PlayerHeadManager.prototype._onXRSessionBlurStart = function () {
     return function _onXRSessionBlurStart(session) {
-        if (this._myBlurRecoverHeadTransform == null && this._mySessionActive) {
+        if (this._myParams.myBlurEndResyncEnabled && this._myBlurRecoverHeadTransform == null && this._mySessionActive) {
             if (this._myDelaySessionChangeResyncCounter > 0) {
                 this._myBlurRecoverHeadTransform = this._mySessionChangeResyncHeadTransform;
             } else {
@@ -353,6 +366,7 @@ PlayerHeadManager.prototype._onXRSessionBlurStart = function () {
             }
         } else if (!this._mySessionActive) {
             this._myBlurRecoverHeadTransform = null;
+            this._myDelayBlurEndResyncCounter = 0;
         }
 
         this._myVisibilityWentHidden = this._myVisibilityWentHidden || session.visibilityState == "hidden";
@@ -364,7 +378,7 @@ PlayerHeadManager.prototype._onXRSessionBlurStart = function () {
 PlayerHeadManager.prototype._onXRSessionBlurEnd = function () {
     return function _onXRSessionBlurEnd(session) {
         if (this._myDelaySessionChangeResyncCounter == 0) {
-            if (this._myBlurRecoverHeadTransform != null && this._mySessionActive) {
+            if (this._myParams.myBlurEndResyncEnabled && this._myBlurRecoverHeadTransform != null && this._mySessionActive) {
                 this._myDelayBlurEndResyncCounter = this._myResyncCounterFrames;
                 if (this._myVisibilityWentHidden) {
                     // this._myDelayBlurEndResyncTimer.start();
@@ -375,10 +389,10 @@ PlayerHeadManager.prototype._onXRSessionBlurEnd = function () {
                 }
             } else {
                 this._myBlurRecoverHeadTransform = null;
+                this._myDelayBlurEndResyncCounter = 0;
             }
         } else {
-            this._myDelaySessionChangeResyncCounter = 2;
-
+            this._myDelaySessionChangeResyncCounter = this._myResyncCounterFrames;
             this._myBlurRecoverHeadTransform = null;
         }
 
