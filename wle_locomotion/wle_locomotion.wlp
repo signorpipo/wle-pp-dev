@@ -116,7 +116,7 @@
                     "type": "player-locomotion",
                     "player-locomotion": {
                         "_myIsSnapTurn": true,
-                        "_myFlyEnabled": true
+                        "_myFlyEnabled": false
                     },
                     "active": true
                 }

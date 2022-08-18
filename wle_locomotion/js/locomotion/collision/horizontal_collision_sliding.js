@@ -274,6 +274,7 @@ CollisionCheck.prototype._internalHorizontalSlide = function () {
     let movement90 = PP.vec3_create();
     let currentMovement = PP.vec3_create();
     let slideMovementForward = PP.vec3_create();
+    let fixedMovement = PP.vec3_create();
     return function _internalHorizontalSlide(movement, feetPosition, height, up, forward, previousHorizontalMovement, collisionCheckParams, collisionRuntimeParams, checkOppositeDirection, outSlideMovement) {
         if (movement.vec3_isZero(0.000001)) {
             return outSlideMovement.vec3_zero();
@@ -380,7 +381,7 @@ CollisionCheck.prototype._internalHorizontalSlide = function () {
                     }
                 }
 
-                let fixedMovement = [0, 0, 0];
+                fixedMovement.vec3_zero();
                 this._horizontalCheck(currentMovement, feetPosition, height, up, slideMovementForward, collisionCheckParams, this._myInternalSlidingCollisionRuntimeParams, true, fixedMovement);
                 if (!this._myInternalSlidingCollisionRuntimeParams.myIsCollidingHorizontally) {
                     outSlideMovement.vec3_copy(currentMovement);
