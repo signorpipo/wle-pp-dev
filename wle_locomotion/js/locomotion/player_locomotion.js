@@ -159,16 +159,21 @@ PlayerLocomotion = class PlayerLocomotion {
 
     update(dt) {
         this._myPlayerHeadManager.update(dt);
+
+        if (PP.myLeftGamepad.getButtonInfo(PP.ButtonType.THUMBSTICK).isPressEnd()) {
+            if (this._myLocomotionMovementFSM.isInState("smooth") && this._myPlayerLocomotionSmooth.canStop()) {
+                this._myLocomotionMovementFSM.perform("next");
+            } else if (this._myLocomotionMovementFSM.isInState("teleport") && this._myPlayerLocomotionTeleport.canStop()) {
+                this._myLocomotionMovementFSM.perform("next");
+            }
+        }
+
         if (this._myPlayerHeadManager.isSynced()) {
 
             this._updateCollisionHeight();
 
             this._myPlayerLocomotionRotate.update(dt);
             this._myLocomotionMovementFSM.update(dt);
-        }
-
-        if (PP.myLeftGamepad.getButtonInfo(PP.ButtonType.THUMBSTICK).isPressEnd()) {
-            this._myLocomotionMovementFSM.perform("next");
         }
     }
 

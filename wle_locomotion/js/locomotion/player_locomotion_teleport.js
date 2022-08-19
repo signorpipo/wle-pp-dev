@@ -94,6 +94,10 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport {
         this._myFSM.perform("stop");
     }
 
+    canStop() {
+        return this._myFSM.isInState("idle");
+    }
+
     update(dt) {
         this._myMouse.update(dt);
 

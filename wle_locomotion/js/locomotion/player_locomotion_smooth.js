@@ -73,6 +73,10 @@ PlayerLocomotionSmooth = class PlayerLocomotionSmooth {
 
     }
 
+    canStop() {
+        return true;
+    }
+
     update(dt) {
         // implemented outside class definition
     }
