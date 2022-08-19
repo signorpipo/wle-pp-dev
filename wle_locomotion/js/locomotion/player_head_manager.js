@@ -1,16 +1,15 @@
 PlayerHeadManagerParams = class PlayerHeadManagerParams {
     constructor() {
         this.mySessionChangeResyncEnabled = true;
+
         this.myBlurEndResyncEnabled = true;
+        this.myBlurEndResyncRotation = true;
 
         this.myExitSessionResyncHeight = true;
         this.myExitSessionResyncVerticalAngle = true;
-
         this.myExitSessionRemoveRightTilt = true; // for now right tilt is removed even if this setting is false, if the vertical angle has to be adjusted
         this.myExitSessionAdjustMaxVerticalAngle = true;
         this.myExitSessionMaxVerticalAngle = 90;
-
-        // #TODO exit session resync height and resync vertical angle
     }
 };
 
@@ -443,7 +442,10 @@ PlayerHeadManager.prototype._blurEndResync = function () {
             rotationToPerform = currentHeadForward.vec3_rotationToPivotedQuat(recoverHeadForward, playerUp, rotationToPerform);
 
             this.teleportHeadPosition(newHeadPosition);
-            this.rotateHeadHorizontallyQuat(rotationToPerform);
+
+            if (this._myParams.myBlurEndResyncRotation) {
+                this.rotateHeadHorizontallyQuat(rotationToPerform);
+            }
         }
 
         this._myBlurRecoverHeadTransform = null;
@@ -473,8 +475,6 @@ PlayerHeadManager.prototype._sessionChangeResync = function () {
     let fixedHeadUp = PP.vec3_create();
     let fixedHeadForward = PP.vec3_create();
     let fixedHeadRotation = PP.quat_create();
-    let rotationAxis = PP.vec3_create();
-    let rotationVector = PP.vec3_create();
     return function _sessionChangeResync() {
         if (this._myBlurRecoverHeadTransform == null && this._mySessionChangeResyncHeadTransform != null) {
             if (this._mySessionActive) {

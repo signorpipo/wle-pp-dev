@@ -38,11 +38,12 @@ PlayerLocomotion = class PlayerLocomotion {
             let params = new PlayerHeadManagerParams();
 
             params.mySessionChangeResyncEnabled = true;
+
             params.myBlurEndResyncEnabled = true;
+            params.myBlurEndResyncRotation = true;
 
             params.myExitSessionResyncHeight = true;
             params.myExitSessionResyncVerticalAngle = true;
-
             params.myExitSessionRemoveRightTilt = true;
             params.myExitSessionAdjustMaxVerticalAngle = true;
             params.myExitSessionMaxVerticalAngle = 90;
