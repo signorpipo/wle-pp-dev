@@ -53,7 +53,7 @@ PlayerHeadManager = class PlayerHeadManager {
         return this._myCurrentHead;
     }
 
-    getHeadHeight(headPosition) {
+    getHeadHeight() {
         // implemented outside class definition
     }
 

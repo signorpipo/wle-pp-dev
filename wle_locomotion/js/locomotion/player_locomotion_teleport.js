@@ -151,7 +151,9 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport {
         let confirmTeleport = false;
 
         if (!this._mySessionActive) {
-            confirmTeleport = this._myMouse.isButtonPressEnd(PP.MouseButtonType.MIDDLE);
+            if (this._myMouse.isInsideView()) {
+                confirmTeleport = this._myMouse.isButtonPressEnd(PP.MouseButtonType.MIDDLE);
+            }
         } else {
 
         }
@@ -163,7 +165,7 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport {
         let cancelTeleport = false;
 
         if (!this._mySessionActive) {
-            cancelTeleport = this._myMouse.isButtonPressEnd(PP.MouseButtonType.RIGHT);
+            cancelTeleport = this._myMouse.isButtonPressEnd(PP.MouseButtonType.RIGHT) || !this._myMouse.isInsideView();
         } else {
 
         }
