@@ -32,6 +32,8 @@ PlayerLocomotionTeleportParams = class PlayerLocomotionTeleportParams {
         this.myGravityAcceleration = 0;
 
         this.myDebugActive = false;
+        this.myDebugDetectActive = false;
+        this.myDebugVisibilityActive = false;
     }
 };
 
@@ -223,7 +225,7 @@ PlayerLocomotionTeleport.prototype._detectTeleportPositionNonVR = function () {
             this._myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRotationOnUp);
         }
 
-        if (this._myParams.myDebugActive) {
+        if (this._myParams.myDebugActive && this._myParams.myDebugDetectActive) {
             let debugParams = new PP.DebugRaycastParams();
             debugParams.myRaycastResult = raycastResult;
             debugParams.myNormalLength = 0.2;
@@ -267,7 +269,7 @@ PlayerLocomotionTeleport.prototype._isTeleportPositionValid = function () {
     return function _isTeleportPositionValid(teleportPosition, rotationOnUp) {
         let isValid = false;
 
-        let positionVisible = this._isPositionVisible(teleportPosition);
+        let positionVisible = this._isTeleportPositionVisible(teleportPosition);
 
         if (positionVisible) {
             playerUp = this._myParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
@@ -316,6 +318,50 @@ PlayerLocomotionTeleport.prototype._isTeleportPositionValid = function () {
     };
 }();
 
+PlayerLocomotionTeleport.prototype._isTeleportPositionVisible = function () {
+    let playerUp = PP.vec3_create();
+
+    let offsetFeetTeleportPosition = PP.vec3_create();
+    let headTeleportPosition = PP.vec3_create();
+    return function _isTeleportPositionVisible(teleportPosition) {
+        let isVisible = true;
+
+        if (this._myParams.myTeleportFeetPositionMustBeVisible ||
+            this._myParams.myTeleportHeadPositionMustBeVisible ||
+            this._myParams.myTeleportHeadOrFeetPositionMustBeVisible) {
+
+            playerUp = this._myParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
+            let isHeadVisible = false;
+            let isFeetVisible = false;
+
+            if (this._myParams.myTeleportHeadOrFeetPositionMustBeVisible ||
+                this._myParams.myTeleportHeadPositionMustBeVisible) {
+                let headheight = this._myParams.myPlayerHeadManager.getHeadHeight();
+                headTeleportPosition = teleportPosition.vec3_add(playerUp.vec3_scale(headheight, headTeleportPosition), headTeleportPosition);
+                isHeadVisible = this._isPositionVisible(headTeleportPosition);
+            } else {
+                isHeadVisible = true;
+            }
+
+            if (this._myParams.myTeleportHeadOrFeetPositionMustBeVisible && isHeadVisible) {
+                isFeetVisible = true;
+            } else {
+                if (this._myParams.myTeleportHeadOrFeetPositionMustBeVisible ||
+                    (this._myParams.myTeleportFeetPositionMustBeVisible && isHeadVisible)) {
+                    offsetFeetTeleportPosition = teleportPosition.vec3_add(playerUp.vec3_scale(this._myParams.myVisibilityCheckFeetPositionVerticalOffset, offsetFeetTeleportPosition), offsetFeetTeleportPosition);
+                    isFeetVisible = this._isPositionVisible(offsetFeetTeleportPosition);
+                } else {
+                    isFeetVisible = true;
+                }
+            }
+
+            isVisible = isHeadVisible && isFeetVisible;
+        }
+
+        return isVisible;
+    };
+}();
+
 PlayerLocomotionTeleport.prototype._isPositionVisible = function () {
     let playerUp = PP.vec3_create();
     let standardUp = PP.vec3_create(0, 1, 0);
@@ -327,70 +373,61 @@ PlayerLocomotionTeleport.prototype._isPositionVisible = function () {
     let fixedForward = PP.vec3_create();
     let fixedUp = PP.vec3_create();
     let raycastEndPosition = PP.vec3_create();
-    let offsetTeleportPosition = PP.vec3_create();
 
     let raycastSetup = new PP.RaycastSetup();
     let raycastResult = new PP.RaycastResult();
-    return function _isPositionVisible(teleportPosition) {
+    return function _isPositionVisible(position) {
         let isVisible = true;
 
-        if (this._myParams.myTeleportFeetPositionMustBeVisible || this._myParams.myTeleportHeadPositionMustBeVisible) {
-            playerUp = this._myParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
-            offsetTeleportPosition = teleportPosition.vec3_add(playerUp.vec3_scale(this._myParams.myVisibilityCheckFeetPositionVerticalOffset, offsetTeleportPosition), offsetTeleportPosition);
-            if (this._myParams.myTeleportFeetPositionMustBeVisible) {
+        playerUp = this._myParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
 
+        let currentHead = this._myParams.myPlayerHeadManager.getCurrentHead();
+        headPosition = currentHead.pp_getPosition(headPosition);
+        direction = position.vec3_sub(headPosition, direction).vec3_normalize(direction);
+
+        referenceUp.vec3_copy(standardUp);
+        if (direction.vec3_angle(standardUp) < 0.0001) {
+            referenceUp.vec3_copy(standardForward);
+        }
+
+        fixedRight = direction.vec3_cross(referenceUp, fixedRight);
+        fixedUp = fixedRight.vec3_cross(direction, fixedUp);
+        fixedForward.vec3_copy(direction);
+
+        fixedUp.vec3_normalize(fixedUp);
+        fixedForward.vec3_normalize(fixedForward);
+
+        let checkPositions = this._getVisibilityCheckPositions(headPosition, fixedUp, fixedForward);
+
+        let distance = headPosition.vec3_distance(position);
+
+        for (let checkPosition of checkPositions) {
+            raycastSetup.myOrigin.vec3_copy(checkPosition);
+            raycastSetup.myDirection.vec3_copy(fixedForward);
+            raycastSetup.myDistance = distance;
+
+            raycastSetup.myBlockLayerFlags.setMask(this._myParams.myVisibilityBlockLayerFlags.getMask());
+
+            raycastSetup.myObjectsToIgnore = this._myParams.myCollisionCheckParams.myObjectsToIgnore;
+            raycastSetup.myIgnoreHitsInsideCollision = true;
+
+            raycastResult = PP.PhysicsUtils.raycast(raycastSetup, raycastResult);
+
+            if (this._myParams.myDebugActive && this._myParams.myDebugVisibilityActive) {
+                let debugParams = new PP.DebugRaycastParams();
+                debugParams.myRaycastResult = raycastResult;
+                debugParams.myNormalLength = 0.2;
+                debugParams.myThickness = 0.005;
+                PP.myDebugManager.draw(debugParams);
             }
 
-            if (isVisible && this._myParams.myTeleportHeadPositionMustBeVisible) {
-                let currentHead = this._myParams.myPlayerHeadManager.getCurrentHead();
-                headPosition = currentHead.pp_getPosition(headPosition);
-                direction = offsetTeleportPosition.vec3_sub(headPosition, direction).vec3_normalize(direction);
+            if (raycastResult.isColliding()) {
+                raycastEndPosition = checkPosition.vec3_add(fixedForward.vec3_scale(distance, raycastEndPosition), raycastEndPosition);
+                let hit = raycastResult.myHits.pp_first();
 
-                referenceUp.vec3_copy(standardUp);
-                if (direction.vec3_angle(standardUp) < 0.0001) {
-                    referenceUp.vec3_copy(standardForward);
-                }
-
-                fixedRight = direction.vec3_cross(referenceUp, fixedRight);
-                fixedUp = fixedRight.vec3_cross(direction, fixedUp);
-                fixedForward.vec3_copy(direction);
-
-                fixedUp.vec3_normalize(fixedUp);
-                fixedForward.vec3_normalize(fixedForward);
-
-                let checkPositions = this._getVisibilityCheckPositions(headPosition, fixedUp, fixedForward);
-
-                let distance = headPosition.vec3_distance(offsetTeleportPosition);
-
-                for (let position of checkPositions) {
-                    raycastSetup.myOrigin.vec3_copy(position);
-                    raycastSetup.myDirection.vec3_copy(direction);
-                    raycastSetup.myDistance = distance;
-
-                    raycastSetup.myBlockLayerFlags.setMask(this._myParams.myVisibilityBlockLayerFlags.getMask());
-
-                    raycastSetup.myObjectsToIgnore = this._myParams.myCollisionCheckParams.myObjectsToIgnore;
-                    raycastSetup.myIgnoreHitsInsideCollision = true;
-
-                    raycastResult = PP.PhysicsUtils.raycast(raycastSetup, raycastResult);
-
-                    if (this._myParams.myDebugActive) {
-                        let debugParams = new PP.DebugRaycastParams();
-                        debugParams.myRaycastResult = raycastResult;
-                        debugParams.myNormalLength = 0.2;
-                        debugParams.myThickness = 0.005;
-                        PP.myDebugManager.draw(debugParams);
-                    }
-
-                    if (raycastResult.isColliding()) {
-                        raycastEndPosition = position.vec3_add(direction.vec3_scale(distance, raycastEndPosition), raycastEndPosition);
-                        let hit = raycastResult.myHits.pp_first();
-
-                        if (this._myParams.myVisibilityCheckDistanceFromHitThreshold == 0 || hit.myPosition.vec3_distance(raycastEndPosition) > this._myParams.myVisibilityCheckDistanceFromHitThreshold + 0.00001) {
-                            isVisible = false;
-                            break;
-                        }
-                    }
+                if (this._myParams.myVisibilityCheckDistanceFromHitThreshold == 0 || hit.myPosition.vec3_distance(raycastEndPosition) > this._myParams.myVisibilityCheckDistanceFromHitThreshold + 0.00001) {
+                    isVisible = false;
+                    break;
                 }
             }
         }
@@ -582,6 +619,7 @@ Object.defineProperty(PlayerLocomotionTeleport.prototype, "_detectTeleportPositi
 Object.defineProperty(PlayerLocomotionTeleport.prototype, "_detectTeleportPositionVR", { enumerable: false });
 Object.defineProperty(PlayerLocomotionTeleport.prototype, "_isTeleportHitValid", { enumerable: false });
 Object.defineProperty(PlayerLocomotionTeleport.prototype, "_isTeleportPositionValid", { enumerable: false });
+Object.defineProperty(PlayerLocomotionTeleport.prototype, "_isTeleportPositionVisible", { enumerable: false });
 Object.defineProperty(PlayerLocomotionTeleport.prototype, "_isPositionVisible", { enumerable: false });
 Object.defineProperty(PlayerLocomotionTeleport.prototype, "_teleportToPosition", { enumerable: false });
 Object.defineProperty(PlayerLocomotionTeleport.prototype, "_getVisibilityCheckPositions", { enumerable: false });

@@ -109,8 +109,10 @@ PlayerLocomotion = class PlayerLocomotion {
 
             params.myTeleportBlockLayerFlags.setAllFlagsActive(true);
 
-            params.myTeleportFeetPositionMustBeVisible = true;
-            params.myTeleportHeadPositionMustBeVisible = true;
+            params.myTeleportFeetPositionMustBeVisible = false;
+            params.myTeleportHeadPositionMustBeVisible = false;
+            params.myTeleportHeadOrFeetPositionMustBeVisible = true;
+
             params.myVisibilityBlockLayerFlags.setAllFlagsActive(true);
 
             params.myPerformTeleportAsMovement = false;
@@ -118,6 +120,8 @@ PlayerLocomotion = class PlayerLocomotion {
             params.myGravityAcceleration = -9.81;
 
             params.myDebugActive = true;
+            params.myDebugDetectActive = true;
+            params.myDebugVisibilityActive = false;
 
             this._myPlayerLocomotionTeleport = new PlayerLocomotionTeleport(params);
         }
