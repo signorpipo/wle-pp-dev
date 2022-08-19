@@ -27,6 +27,8 @@ PlayerLocomotionTeleportParams = class PlayerLocomotionTeleportParams {
         this.myPerformTeleportAsMovement = false;
         this.myTeleportAsMovementMaxDistanceFromTeleportPosition = 0.001;
         this.myTeleportAsMovementMaxSteps = 2;
+        this.myTeleportAsMovementRemoveVerticalMovement = true;
+        this.myTeleportAsMovementExtraVerticalMovementPerMeter = 1; // this simulate the gravity for the teleport movement
 
         this.myAdjustPositionEveryFrame = true;
         this.myGravityAcceleration = 0;
@@ -536,6 +538,7 @@ PlayerLocomotionTeleport.prototype._checkTeleportAsMovement = function () {
     let fixedTeleportPosition = PP.vec3_create();
 
     let teleportMovement = PP.vec3_create();
+    let extraVerticalMovement = PP.vec3_create();
     let movementToTeleportPosition = PP.vec3_create();
     let movementFeetTransformQuat = PP.quat2_create();
     return function _checkTeleportAsMovement(teleportPosition, feetTransformQuat, collisionRuntimeParams) {
@@ -564,6 +567,18 @@ PlayerLocomotionTeleport.prototype._checkTeleportAsMovement = function () {
             currentFeetPosition.vec3_copy(feetPosition);
             for (let i = 0; i < this._myParams.myTeleportAsMovementMaxSteps; i++) {
                 teleportMovement = fixedTeleportPosition.vec3_sub(currentFeetPosition, teleportMovement);
+
+                if (this._myParams.myTeleportAsMovementRemoveVerticalMovement) {
+                    teleportMovement = teleportMovement.vec3_removeComponentAlongAxis(feetUp, teleportMovement);
+                }
+
+                if (this._myParams.myTeleportAsMovementExtraVerticalMovementPerMeter != 0) {
+                    let meters = teleportMovement.vec3_length();
+                    let extraVerticalMovementValue = meters * this._myParams.myTeleportAsMovementExtraVerticalMovementPerMeter;
+                    extraVerticalMovement = feetUp.vec3_scale(extraVerticalMovementValue, extraVerticalMovement);
+                    teleportMovement = teleportMovement.vec3_add(extraVerticalMovement, teleportMovement);
+                }
+
                 movementFeetTransformQuat.quat2_setPositionRotationQuat(currentFeetPosition, feetRotationQuat);
                 CollisionCheckGlobal.move(teleportMovement, movementFeetTransformQuat, this._myParams.myCollisionCheckParams, checkTeleportMovementCollisionRuntimeParams);
 

@@ -116,6 +116,8 @@ PlayerLocomotion = class PlayerLocomotion {
             params.myVisibilityBlockLayerFlags.setAllFlagsActive(true);
 
             params.myPerformTeleportAsMovement = false;
+            params.myTeleportAsMovementRemoveVerticalMovement = true;
+            params.myTeleportAsMovementExtraVerticalMovementPerMeter = -2;
 
             params.myGravityAcceleration = -9.81;
 
@@ -308,9 +310,12 @@ PlayerLocomotion = class PlayerLocomotion {
 
         this._myCollisionCheckParamsTeleport.mySplitMovementEnabled = true;
         this._myCollisionCheckParamsTeleport.mySplitMovementMaxLength = 0.2;
+
         //this._myCollisionCheckParamsTeleport.myHalfConeAngle = 90;
         //this._myCollisionCheckParamsTeleport.myHalfConeSliceAmount = 3;
         //this._myCollisionCheckParamsTeleport.myCheckHorizontalFixedForwardEnabled = false;
+
+        this._myCollisionCheckParamsTeleport.myDebugActive = false;
     }
 
     _fixAlmostUp() {

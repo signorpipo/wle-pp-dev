@@ -1,5 +1,5 @@
 WL.registerComponent('pp-gamepad-control-scheme', {
-    _myVisible: { type: WL.Type.Bool, default: true },
+    _myStartVisible: { type: WL.Type.Bool, default: true },
 
     _myHandedness: { type: WL.Type.Enum, values: ['left', 'right'], default: 'left' },
 
@@ -30,8 +30,10 @@ WL.registerComponent('pp-gamepad-control-scheme', {
         this._myHandednessType = PP.InputUtils.getHandednessByIndex(this._myHandedness);
         this._myControlSchemeDirection = (this._myHandednessType == PP.Handedness.LEFT) ? 1 : -1;
 
+        this._myVisible = false;
+
         this._createControlScheme();
-        this.setVisible(this._myVisible);
+        this.setVisible(this._myStartVisible);
     },
     update: function (dt) {
     },
