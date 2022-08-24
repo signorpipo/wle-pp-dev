@@ -4,12 +4,13 @@ WL.registerComponent('player-locomotion', {
     _myIsSnapTurn: { type: WL.Type.Bool, default: true },
     _mySnapTurnAngle: { type: WL.Type.Float, default: 30 },
     _myFlyEnabled: { type: WL.Type.Bool, default: false },
-    _myMinAngleToFlyUpHead: { type: WL.Type.Float, default: 30 },
-    _myMinAngleToFlyDownHead: { type: WL.Type.Float, default: 50 },
-    _myMinAngleToFlyUpHand: { type: WL.Type.Float, default: 60 },
-    _myMinAngleToFlyDownHand: { type: WL.Type.Float, default: 1 },
+    _myMinAngleToFlyUpNonVR: { type: WL.Type.Float, default: 30 },
+    _myMinAngleToFlyDownNonVR: { type: WL.Type.Float, default: 50 },
+    _myMinAngleToFlyUpVR: { type: WL.Type.Float, default: 60 },
+    _myMinAngleToFlyDownVR: { type: WL.Type.Float, default: 1 },
     _myMinAngleToFlyRight: { type: WL.Type.Float, default: 30 },
-    _myDirectionReferenceType: { type: WL.Type.Enum, values: ['head', 'hand left', 'hand right'], default: 'hand left' }
+    _myVRDirectionReferenceType: { type: WL.Type.Enum, values: ['head', 'hand left', 'hand right', 'custom object'], default: 'hand left' },
+    _myVRDirectionReferenceObject: { type: WL.Type.Object }
 }, {
     init() {
     },
@@ -23,13 +24,14 @@ WL.registerComponent('player-locomotion', {
         params.mySnapTurnAngle = this._mySnapTurnAngle;
 
         params.myFlyEnabled = this._myFlyEnabled;
-        params.myMinAngleToFlyUpHead = this._myMinAngleToFlyUpHead;
-        params.myMinAngleToFlyDownHead = this._myMinAngleToFlyDownHead;
-        params.myMinAngleToFlyUpHand = this._myMinAngleToFlyUpHand;
-        params.myMinAngleToFlyDownHand = this._myMinAngleToFlyDownHand;
+        params.myMinAngleToFlyUpNonVR = this._myMinAngleToFlyUpNonVR;
+        params.myMinAngleToFlyDownNonVR = this._myMinAngleToFlyDownNonVR;
+        params.myMinAngleToFlyUpVR = this._myMinAngleToFlyUpVR;
+        params.myMinAngleToFlyDownVR = this._myMinAngleToFlyDownVR;
         params.myMinAngleToFlyRight = this._myMinAngleToFlyRight;
 
-        params.myDirectionReferenceType = this._myDirectionReferenceType;
+        params.myVRDirectionReferenceType = this._myVRDirectionReferenceType;
+        params.myVRDirectionReferenceObject = this._myVRDirectionReferenceObject;
 
         params.myForeheadExtraHeight = 0.15;
 

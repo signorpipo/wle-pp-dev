@@ -7,13 +7,14 @@ PlayerLocomotionParams = class PlayerLocomotionParams {
         this.mySnapTurnAngle = 0;
 
         this.myFlyEnabled = false;
-        this.myMinAngleToFlyUpHead = 0;
-        this.myMinAngleToFlyDownHead = 0;
-        this.myMinAngleToFlyUpHand = 0;
-        this.myMinAngleToFlyDownHand = 0;
+        this.myMinAngleToFlyUpNonVR = 0;
+        this.myMinAngleToFlyDownNonVR = 0;
+        this.myMinAngleToFlyUpVR = 0;
+        this.myMinAngleToFlyDownVR = 0;
         this.myMinAngleToFlyRight = 0;
 
-        this.myDirectionReferenceType = PlayerLocomotionDirectionReferenceType.HEAD;
+        this.myVRDirectionReferenceType = PlayerLocomotionDirectionReferenceType.HEAD;
+        this.myVRDirectionReferenceObject = null;
 
         this.myForeheadExtraHeight = 0;
     }
@@ -83,13 +84,14 @@ PlayerLocomotion = class PlayerLocomotion {
             params.myMovementMinStickIntensityThreshold = 0.1;
 
             params.myFlyEnabled = this._myParams.myFlyEnabled;
-            params.myMinAngleToFlyUpHead = this._myParams.myMinAngleToFlyUpHead;
-            params.myMinAngleToFlyDownHead = this._myParams.myMinAngleToFlyDownHead;
-            params.myMinAngleToFlyUpHand = this._myParams.myMinAngleToFlyUpHand;
-            params.myMinAngleToFlyDownHand = this._myParams.myMinAngleToFlyDownHand;
+            params.myMinAngleToFlyUpNonVR = this._myParams.myMinAngleToFlyUpNonVR;
+            params.myMinAngleToFlyDownNonVR = this._myParams.myMinAngleToFlyDownNonVR;
+            params.myMinAngleToFlyUpVR = this._myParams.myMinAngleToFlyUpVR;
+            params.myMinAngleToFlyDownVR = this._myParams.myMinAngleToFlyDownVR;
             params.myMinAngleToFlyRight = this._myParams.myMinAngleToFlyRight;
 
-            params.myDirectionReferenceType = this._myParams.myDirectionReferenceType;
+            params.myVRDirectionReferenceType = this._myParams.myVRDirectionReferenceType;
+            params.myVRDirectionReferenceObject = this._myParams.myVRDirectionReferenceObject;
 
             this._myPlayerLocomotionSmooth = new PlayerLocomotionSmooth(params);
         }

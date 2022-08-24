@@ -2,6 +2,7 @@ PlayerLocomotionDirectionReferenceType = {
     HEAD: 0,
     HAND_LEFT: 1,
     HAND_RIGHT: 2,
+    CUSTOM_OBJECT: 3,
 };
 
 PlayerLocomotionSmoothParams = class PlayerLocomotionSmoothParams {
@@ -16,13 +17,14 @@ PlayerLocomotionSmoothParams = class PlayerLocomotionSmoothParams {
         this.myMovementMinStickIntensityThreshold = 0;
 
         this.myFlyEnabled = false;
-        this.myMinAngleToFlyUpHead = 0;
-        this.myMinAngleToFlyDownHead = 0;
-        this.myMinAngleToFlyUpHand = 0;
-        this.myMinAngleToFlyDownHand = 0;
+        this.myMinAngleToFlyUpNonVR = 0;
+        this.myMinAngleToFlyDownNonVR = 0;
+        this.myMinAngleToFlyUpVR = 0;
+        this.myMinAngleToFlyDownVR = 0;
         this.myMinAngleToFlyRight = 0;
 
-        this.myDirectionReferenceType = PlayerLocomotionDirectionReferenceType.HEAD;
+        this.myVRDirectionReferenceType = PlayerLocomotionDirectionReferenceType.HEAD;
+        this.myVRDirectionReferenceObject = null;
     }
 };
 
@@ -34,25 +36,25 @@ PlayerLocomotionSmooth = class PlayerLocomotionSmooth {
 
         this._myStickIdleTimer = new PP.Timer(0.25, false);
 
-        let directionConverterHeadParams = new PP.Direction2DTo3DConverterParams();
-        directionConverterHeadParams.myAutoUpdateFlyForward = this._myParams.myFlyEnabled;
-        directionConverterHeadParams.myAutoUpdateFlyRight = this._myParams.myFlyEnabled;
-        directionConverterHeadParams.myMinAngleToFlyForwardUp = this._myParams.myMinAngleToFlyUpHead;
-        directionConverterHeadParams.myMinAngleToFlyForwardDown = this._myParams.myMinAngleToFlyDownHead;
-        directionConverterHeadParams.myMinAngleToFlyRightUp = this._myParams.myMinAngleToFlyRight;
-        directionConverterHeadParams.myMinAngleToFlyRightDown = this._myParams.myMinAngleToFlyRight;
+        let directionConverterNonVRParams = new PP.Direction2DTo3DConverterParams();
+        directionConverterNonVRParams.myAutoUpdateFlyForward = this._myParams.myFlyEnabled;
+        directionConverterNonVRParams.myAutoUpdateFlyRight = this._myParams.myFlyEnabled;
+        directionConverterNonVRParams.myMinAngleToFlyForwardUp = this._myParams.myMinAngleToFlyUpNonVR;
+        directionConverterNonVRParams.myMinAngleToFlyForwardDown = this._myParams.myMinAngleToFlyDownNonVR;
+        directionConverterNonVRParams.myMinAngleToFlyRightUp = this._myParams.myMinAngleToFlyRight;
+        directionConverterNonVRParams.myMinAngleToFlyRightDown = this._myParams.myMinAngleToFlyRight;
 
-        let directionConverterHandParams = new PP.Direction2DTo3DConverterParams();
-        directionConverterHandParams.myAutoUpdateFlyForward = this._myParams.myFlyEnabled;
-        directionConverterHandParams.myAutoUpdateFlyRight = this._myParams.myFlyEnabled;
-        directionConverterHandParams.myMinAngleToFlyForwardUp = this._myParams.myMinAngleToFlyUpHand;
-        directionConverterHandParams.myMinAngleToFlyForwardDown = this._myParams.myMinAngleToFlyDownHand;
-        directionConverterHandParams.myMinAngleToFlyRightUp = this._myParams.myMinAngleToFlyRight;
-        directionConverterHandParams.myMinAngleToFlyRightDown = this._myParams.myMinAngleToFlyRight;
+        let directionConverterVRParams = new PP.Direction2DTo3DConverterParams();
+        directionConverterVRParams.myAutoUpdateFlyForward = this._myParams.myFlyEnabled;
+        directionConverterVRParams.myAutoUpdateFlyRight = this._myParams.myFlyEnabled;
+        directionConverterVRParams.myMinAngleToFlyForwardUp = this._myParams.myMinAngleToFlyUpVR;
+        directionConverterVRParams.myMinAngleToFlyForwardDown = this._myParams.myMinAngleToFlyDownVR;
+        directionConverterVRParams.myMinAngleToFlyRightUp = this._myParams.myMinAngleToFlyRight;
+        directionConverterVRParams.myMinAngleToFlyRightDown = this._myParams.myMinAngleToFlyRight;
 
-        this._myDirectionConverterHead = new PP.Direction2DTo3DConverter(directionConverterHeadParams);
-        this._myDirectionConverterHand = new PP.Direction2DTo3DConverter(directionConverterHandParams);
-        this._myCurrentDirectionConverter = this._myDirectionConverterHead;
+        this._myDirectionConverterNonVR = new PP.Direction2DTo3DConverter(directionConverterNonVRParams);
+        this._myDirectionConverterVR = new PP.Direction2DTo3DConverter(directionConverterVRParams);
+        this._myCurrentDirectionConverter = this._myDirectionConverterNonVR;
 
         this._myIsFlying = false;
     }
@@ -179,17 +181,22 @@ PlayerLocomotionSmooth.prototype.update = function () {
 
 PlayerLocomotionSmooth.prototype._onXRSessionStart = function () {
     return function _onXRSessionStart(session) {
-        if (this._myParams.myDirectionReferenceType == 0) {
-            this._myDirectionReference = PP.myPlayerHeadManager.myHead;
-            this._myCurrentDirectionConverter = this._myDirectionConverterHead;
-        } else if (this._myParams.myDirectionReferenceType == 1) {
-            this._myDirectionReference = PP.myPlayerObjects.myHandLeft;
-            this._myCurrentDirectionConverter = this._myDirectionConverterHand;
-        } else {
-            this._myDirectionReference = PP.myPlayerObjects.myHandRight;
-            this._myCurrentDirectionConverter = this._myDirectionConverterHand;
+        switch (this._myParams.myVRDirectionReferenceType) {
+            case 0:
+                this._myDirectionReference = PP.myPlayerHeadManager.myHead;
+                break;
+            case 1:
+                this._myDirectionReference = PP.myPlayerObjects.myHandLeft;
+                break;
+            case 2:
+                this._myDirectionReference = PP.myPlayerObjects.myHandRight;
+                break;
+            case 3:
+                this._myDirectionReference = this._myParams.myVRDirectionReferenceObject;
+                break;
         }
 
+        this._myCurrentDirectionConverter = this._myDirectionConverterVR;
         this._myCurrentDirectionConverter.resetFly();
     };
 }();
@@ -198,7 +205,7 @@ PlayerLocomotionSmooth.prototype._onXRSessionEnd = function () {
     let playerUp = PP.vec3_create();
     return function _onXRSessionEnd(session) {
         this._myDirectionReference = PP.myPlayerObjects.myHead;
-        this._myCurrentDirectionConverter = this._myDirectionConverterHead;
+        this._myCurrentDirectionConverter = this._myDirectionConverterNonVR;
 
         this._myCurrentDirectionConverter.resetFly();
     };
