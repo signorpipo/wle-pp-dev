@@ -42,6 +42,12 @@ WL.registerComponent('player-locomotion', {
         _myTotalRaycasts = 0; // #TODO debug stuff, remove later
 
         this._myPlayerLocomotion.update(dt);
+    },
+    onActivate() {
+        this._myPlayerLocomotion.setIdle(false);
+    },
+    onDeactivate() {
+        this._myPlayerLocomotion.setIdle(true);
     }
 });
 
