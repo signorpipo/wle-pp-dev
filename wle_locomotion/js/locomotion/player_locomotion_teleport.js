@@ -3,7 +3,6 @@ PlayerLocomotionTeleportParams = class PlayerLocomotionTeleportParams {
         this.myPlayerHeadManager = null;
 
         this.myCollisionCheckParams = null;
-        this.myCollisionRuntimeParams = null;
 
         this.myMaxDistance = 0;
         this.myMaxHeightDifference = 0;
@@ -39,8 +38,10 @@ PlayerLocomotionTeleportParams = class PlayerLocomotionTeleportParams {
     }
 };
 
-PlayerLocomotionTeleport = class PlayerLocomotionTeleport {
-    constructor(params) {
+PlayerLocomotionTeleport = class PlayerLocomotionTeleport extends PlayerLocomotionMovement {
+    constructor(params, runtimeParams) {
+        super(runtimeParams);
+
         this._myParams = params;
 
         this._myMouse = new PP.Mouse();
@@ -75,9 +76,6 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport {
 
         this._myFSM.init("init");
         this._myFSM.perform("start");
-
-        // check is flying, if it is flying do not apply gravity
-        // a way to get if it is flying and set it in the other locomotion, like smooth
     }
 
     init() {
@@ -110,6 +108,10 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport {
         if (this._myParams.myAdjustPositionEveryFrame || this._myParams.myGravityAcceleration != 0) {
             this._applyGravity(dt);
         }
+
+        if (this._myRuntimeParams.myCollisionRuntimeParams.myIsOnGround) {
+            this._myRuntimeParams.myIsFlying = false;
+        }
     }
 
     _idleUpdate(dt) {
@@ -135,7 +137,7 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport {
     }
 
     _teleportUpdate(dt) {
-        this._teleportToPosition(this._myTeleportPosition, this._myTeleportRotationOnUp, this._myParams.myCollisionRuntimeParams);
+        this._teleportToPosition(this._myTeleportPosition, this._myTeleportRotationOnUp, this._myRuntimeParams.myCollisionRuntimeParams);
         this._myFSM.perform("done");
     }
 
@@ -190,7 +192,7 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport {
     }
 
     _completeTeleport() {
-        this._teleportToPosition(this._myTeleportPosition, this._myTeleportRotationOnUp, this._myParams.myCollisionRuntimeParams);
+        this._teleportToPosition(this._myTeleportPosition, this._myTeleportRotationOnUp, this._myRuntimeParams.myCollisionRuntimeParams);
     }
 
     _onXRSessionStart(session) {
@@ -289,7 +291,7 @@ PlayerLocomotionTeleport.prototype._isTeleportPositionValid = function () {
             if (differenceOnUp < this._myParams.myMaxHeightDifference + 0.00001) {
 
                 let teleportCheckValid = false;
-                teleportCheckCollisionRuntimeParams.copy(this._myParams.myCollisionRuntimeParams);
+                teleportCheckCollisionRuntimeParams.copy(this._myRuntimeParams.myCollisionRuntimeParams);
 
                 if (!this._myParams.myPerformTeleportAsMovement) {
                     this._checkTeleport(teleportPosition, feetTransformQuat, teleportCheckCollisionRuntimeParams);
@@ -616,14 +618,18 @@ PlayerLocomotionTeleport.prototype._applyGravity = function () {
         this._myGravitySpeed += this._myParams.myGravityAcceleration * dt;
         gravityMovement = playerUp.vec3_scale(this._myGravitySpeed * dt, gravityMovement);
 
-        feetTransformQuat = this._myParams.myPlayerHeadManager.getFeetTransformQuat(feetTransformQuat);
-        CollisionCheckGlobal.move(gravityMovement, feetTransformQuat, this._myParams.myCollisionCheckParams, this._myParams.myCollisionRuntimeParams);
-        if (!this._myParams.myCollisionRuntimeParams.myVerticalMovementCanceled) {
-            this._myParams.myPlayerHeadManager.teleportFeetPosition(this._myParams.myCollisionRuntimeParams.myNewPosition);
+        if (this._myRuntimeParams.myIsFlying) {
+            gravityMovement.vec3_zero();
         }
 
-        if (this._myGravitySpeed > 0 && this._myParams.myCollisionRuntimeParams.myIsOnCeiling ||
-            this._myGravitySpeed < 0 && this._myParams.myCollisionRuntimeParams.myIsOnGround) {
+        feetTransformQuat = this._myParams.myPlayerHeadManager.getFeetTransformQuat(feetTransformQuat);
+        CollisionCheckGlobal.move(gravityMovement, feetTransformQuat, this._myParams.myCollisionCheckParams, this._myRuntimeParams.myCollisionRuntimeParams);
+        if (!this._myRuntimeParams.myCollisionRuntimeParams.myVerticalMovementCanceled) {
+            this._myParams.myPlayerHeadManager.teleportFeetPosition(this._myRuntimeParams.myCollisionRuntimeParams.myNewPosition);
+        }
+
+        if (this._myGravitySpeed > 0 && this._myRuntimeParams.myCollisionRuntimeParams.myIsOnCeiling ||
+            this._myGravitySpeed < 0 && this._myRuntimeParams.myCollisionRuntimeParams.myIsOnGround) {
             this._myGravitySpeed = 0;
         }
     };

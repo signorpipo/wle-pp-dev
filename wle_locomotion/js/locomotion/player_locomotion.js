@@ -1,3 +1,10 @@
+PlayerLocomotionDirectionReferenceType = {
+    HEAD: 0,
+    HAND_LEFT: 1,
+    HAND_RIGHT: 2,
+    CUSTOM_OBJECT: 3,
+};
+
 PlayerLocomotionParams = class PlayerLocomotionParams {
     constructor() {
         this.myMaxSpeed = 0;
@@ -31,6 +38,8 @@ PlayerLocomotion = class PlayerLocomotion {
         this._myCollisionCheckParamsTeleport = new CollisionCheckParams();
 
         this._myCollisionRuntimeParams = new CollisionRuntimeParams();
+        this._myMovementRuntimeParams = new PlayerLocomotionMovementRuntimeParams();
+        this._myMovementRuntimeParams.myCollisionRuntimeParams = this._myCollisionRuntimeParams;
 
         this._setupCollisionCheckParamsSmooth();
         this._setupCollisionCheckParamsTeleport();
@@ -72,62 +81,62 @@ PlayerLocomotion = class PlayerLocomotion {
         }
 
         {
-            let params = new PlayerLocomotionSmoothParams();
+            {
+                let params = new PlayerLocomotionSmoothParams();
 
-            params.myPlayerHeadManager = this._myPlayerHeadManager;
+                params.myPlayerHeadManager = this._myPlayerHeadManager;
 
-            params.myCollisionCheckParams = this._myCollisionCheckParamsSmooth;
-            params.myCollisionRuntimeParams = this._myCollisionRuntimeParams;
+                params.myCollisionCheckParams = this._myCollisionCheckParamsSmooth;
 
-            params.myMaxSpeed = this._myParams.myMaxSpeed;
+                params.myMaxSpeed = this._myParams.myMaxSpeed;
 
-            params.myMovementMinStickIntensityThreshold = 0.1;
+                params.myMovementMinStickIntensityThreshold = 0.1;
 
-            params.myFlyEnabled = this._myParams.myFlyEnabled;
-            params.myMinAngleToFlyUpNonVR = this._myParams.myMinAngleToFlyUpNonVR;
-            params.myMinAngleToFlyDownNonVR = this._myParams.myMinAngleToFlyDownNonVR;
-            params.myMinAngleToFlyUpVR = this._myParams.myMinAngleToFlyUpVR;
-            params.myMinAngleToFlyDownVR = this._myParams.myMinAngleToFlyDownVR;
-            params.myMinAngleToFlyRight = this._myParams.myMinAngleToFlyRight;
+                params.myFlyEnabled = this._myParams.myFlyEnabled;
+                params.myMinAngleToFlyUpNonVR = this._myParams.myMinAngleToFlyUpNonVR;
+                params.myMinAngleToFlyDownNonVR = this._myParams.myMinAngleToFlyDownNonVR;
+                params.myMinAngleToFlyUpVR = this._myParams.myMinAngleToFlyUpVR;
+                params.myMinAngleToFlyDownVR = this._myParams.myMinAngleToFlyDownVR;
+                params.myMinAngleToFlyRight = this._myParams.myMinAngleToFlyRight;
 
-            params.myVRDirectionReferenceType = this._myParams.myVRDirectionReferenceType;
-            params.myVRDirectionReferenceObject = this._myParams.myVRDirectionReferenceObject;
+                params.myVRDirectionReferenceType = this._myParams.myVRDirectionReferenceType;
+                params.myVRDirectionReferenceObject = this._myParams.myVRDirectionReferenceObject;
 
-            this._myPlayerLocomotionSmooth = new PlayerLocomotionSmooth(params);
-        }
+                this._myPlayerLocomotionSmooth = new PlayerLocomotionSmooth(params, this._myMovementRuntimeParams);
+            }
 
-        {
-            let params = new PlayerLocomotionTeleportParams();
+            {
+                let params = new PlayerLocomotionTeleportParams();
 
-            params.myPlayerHeadManager = this._myPlayerHeadManager;
+                params.myPlayerHeadManager = this._myPlayerHeadManager;
 
-            params.myCollisionCheckParams = this._myCollisionCheckParamsTeleport;
-            params.myCollisionRuntimeParams = this._myCollisionRuntimeParams;
+                params.myCollisionCheckParams = this._myCollisionCheckParamsTeleport;
 
-            params.myMaxDistance = 70;
-            params.myMaxHeightDifference = 20;
-            params.myGroundAngleToIgnoreUpward = this._myCollisionCheckParamsSmooth.myGroundAngleToIgnore;
-            params.myMustBeOnGround = true;
+                params.myMaxDistance = 70;
+                params.myMaxHeightDifference = 20;
+                params.myGroundAngleToIgnoreUpward = this._myCollisionCheckParamsSmooth.myGroundAngleToIgnore;
+                params.myMustBeOnGround = true;
 
-            params.myTeleportBlockLayerFlags.setAllFlagsActive(true);
+                params.myTeleportBlockLayerFlags.setAllFlagsActive(true);
 
-            params.myTeleportFeetPositionMustBeVisible = false;
-            params.myTeleportHeadPositionMustBeVisible = false;
-            params.myTeleportHeadOrFeetPositionMustBeVisible = true;
+                params.myTeleportFeetPositionMustBeVisible = false;
+                params.myTeleportHeadPositionMustBeVisible = false;
+                params.myTeleportHeadOrFeetPositionMustBeVisible = true;
 
-            params.myVisibilityBlockLayerFlags.setAllFlagsActive(true);
+                params.myVisibilityBlockLayerFlags.setAllFlagsActive(true);
 
-            params.myPerformTeleportAsMovement = false;
-            params.myTeleportAsMovementRemoveVerticalMovement = true;
-            params.myTeleportAsMovementExtraVerticalMovementPerMeter = -2;
+                params.myPerformTeleportAsMovement = false;
+                params.myTeleportAsMovementRemoveVerticalMovement = true;
+                params.myTeleportAsMovementExtraVerticalMovementPerMeter = -2;
 
-            params.myGravityAcceleration = -9.81;
+                params.myGravityAcceleration = -9.81;
 
-            params.myDebugActive = true;
-            params.myDebugDetectActive = true;
-            params.myDebugVisibilityActive = false;
+                params.myDebugActive = true;
+                params.myDebugDetectActive = true;
+                params.myDebugVisibilityActive = false;
 
-            this._myPlayerLocomotionTeleport = new PlayerLocomotionTeleport(params);
+                this._myPlayerLocomotionTeleport = new PlayerLocomotionTeleport(params, this._myMovementRuntimeParams);
+            }
         }
 
         this._setupLocomotionMovementFSM();
