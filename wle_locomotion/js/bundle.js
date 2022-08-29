@@ -209,3 +209,4 @@ require('./test/reset_transform');
 require('./test/touch_start_test');
 require('./test/vec_create_count');
 require('./test/vec3_function_count');
+require('./test/show_line_test');

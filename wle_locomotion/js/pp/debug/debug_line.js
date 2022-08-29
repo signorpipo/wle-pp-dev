@@ -104,10 +104,10 @@ PP.DebugLine = class DebugLine {
         this._myLineObject.pp_resetPositionLocal();
         this._myLineObject.pp_resetScaleLocal();
 
-        this._myLineObject.pp_scaleObject([this._myParams.myThickness / 2, this._myParams.myThickness / 2, this._myParams.myLength / 2]);
+        this._myLineObject.pp_scaleObject([this._myParams.myThickness / 2, this._myParams.myLength / 2, this._myParams.myThickness / 2]);
 
-        this._myLineObject.pp_lookTo(this._myParams.myDirection);
-        this._myLineObject.pp_translateObject([0, 0, this._myParams.myLength / 2]);
+        this._myLineObject.pp_setUp(this._myParams.myDirection);
+        this._myLineObject.pp_translateObject([0, this._myParams.myLength / 2, 0]);
 
         this._myLineMesh.material.color = this._myParams.myColor;
     }
@@ -117,7 +117,7 @@ PP.DebugLine = class DebugLine {
         this._myLineObject = WL.scene.addObject(this._myLineRootObject);
 
         this._myLineMesh = this._myLineObject.addComponent('mesh');
-        this._myLineMesh.mesh = PP.myResources.myMeshes.myCube;
+        this._myLineMesh.mesh = PP.myResources.myMeshes.myCylinder;
         this._myLineMesh.material = PP.myResources.myMaterials.myFlatOpaque.clone();
     }
 
