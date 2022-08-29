@@ -97,6 +97,8 @@ require('./pp/input/cauldron/input_types');
 require('./pp/input/cauldron/input_utils');
 require('./pp/input/cauldron/keyboard');
 require('./pp/input/cauldron/mouse');
+require('./pp/input/cauldron/input_manager');
+require('./pp/input/cauldron/input_manager_component');
 
 require('./pp/input/gamepad/gamepad_buttons');
 require('./pp/input/gamepad/base_gamepad');

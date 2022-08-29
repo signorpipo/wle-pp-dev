@@ -44,7 +44,6 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport extends PlayerLocomoti
 
         this._myParams = params;
 
-        this._myMouse = new PP.Mouse();
         this._myStickIdleTimer = new PP.Timer(0.25, false);
 
         this._mySessionActive = false;
@@ -84,8 +83,6 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport extends PlayerLocomoti
         }
         WL.onXRSessionStart.push(this._onXRSessionStart.bind(this));
         WL.onXRSessionEnd.push(this._onXRSessionEnd.bind(this));
-
-        this._myMouse.setContextMenuActive(false);
     }
 
     start() {
@@ -101,8 +98,6 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport extends PlayerLocomoti
     }
 
     update(dt) {
-        this._myMouse.update(dt);
-
         this._myFSM.update(dt);
 
         if (this._myParams.myAdjustPositionEveryFrame || this._myParams.myGravityAcceleration != 0) {
@@ -145,7 +140,7 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport extends PlayerLocomoti
         let startDetecting = false;
 
         if (!this._mySessionActive) {
-            startDetecting = this._myMouse.isButtonPressStart(PP.MouseButtonType.MIDDLE);
+            startDetecting = PP.myMouse.isButtonPressStart(PP.MouseButtonType.MIDDLE);
         } else {
 
         }
@@ -157,8 +152,8 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport extends PlayerLocomoti
         let confirmTeleport = false;
 
         if (!this._mySessionActive) {
-            if (this._myMouse.isInsideView()) {
-                confirmTeleport = this._myMouse.isButtonPressEnd(PP.MouseButtonType.MIDDLE);
+            if (PP.myMouse.isInsideView()) {
+                confirmTeleport = PP.myMouse.isButtonPressEnd(PP.MouseButtonType.MIDDLE);
             }
         } else {
 
@@ -171,7 +166,7 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport extends PlayerLocomoti
         let cancelTeleport = false;
 
         if (!this._mySessionActive) {
-            cancelTeleport = this._myMouse.isButtonPressEnd(PP.MouseButtonType.RIGHT) || !this._myMouse.isInsideView();
+            cancelTeleport = PP.myMouse.isButtonPressEnd(PP.MouseButtonType.RIGHT) || !PP.myMouse.isInsideView();
         } else {
 
         }
@@ -220,7 +215,7 @@ PlayerLocomotionTeleport.prototype._detectTeleportPositionNonVR = function () {
         raycastSetup.myObjectsToIgnore.pp_clear();
         raycastSetup.myIgnoreHitsInsideCollision = false;
 
-        raycastResult = this._myMouse.raycastWorld(raycastSetup, raycastResult);
+        raycastResult = PP.myMouse.raycastWorld(raycastSetup, raycastResult);
 
         if (raycastResult.isColliding()) {
             let hit = raycastResult.myHits.pp_first();
