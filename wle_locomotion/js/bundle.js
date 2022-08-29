@@ -57,6 +57,8 @@ require('./pp/cauldron/cauldron/timer');
 require('./pp/cauldron/components/clear_console_on_session');
 require('./pp/cauldron/components/set_active');
 require('./pp/cauldron/components/adjust_hierarchy_physx_scale');
+require('./pp/cauldron/components/get_player_objects');
+require('./pp/cauldron/components/get_resources');
 
 require('./pp/cauldron/fsm/fsm');
 require('./pp/cauldron/fsm/state');
@@ -119,7 +121,6 @@ require('./pp/input/pose/components/set_hand_local_transform');
 require('./pp/input/pose/components/set_head_local_transform');
 require('./pp/input/pose/components/set_vr_head_local_transform');
 require('./pp/input/pose/components/set_non_vr_head_local_transform');
-require('./pp/input/pose/components/get_player_objects');
 require('./pp/input/pose/components/copy_hand_transform');
 require('./pp/input/pose/components/copy_head_transform');
 

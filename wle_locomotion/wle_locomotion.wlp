@@ -39,6 +39,20 @@
                 },
                 {
                     "type": "pp-input-manager"
+                },
+                {
+                    "type": "pp-get-resources",
+                    "pp-get-resources": {
+                        "_myPlane": "p0",
+                        "_myCube": "p1",
+                        "_mySphere": "p2",
+                        "_myCone": "p3",
+                        "_myCylinder": "p4",
+                        "_myCircle": "p5",
+                        "_myPhongOpaque": "780",
+                        "_myFlatOpaque": "779",
+                        "_myText": "781"
+                    }
                 }
             ]
         },
@@ -13837,6 +13851,46 @@
                 "outlineRange": [
                     0.4,
                     0.4
+                ]
+            }
+        },
+        "779": {
+            "name": "Flat Opaque",
+            "pipeline": "7"
+        },
+        "780": {
+            "name": "Phong Opaque",
+            "pipeline": "13",
+            "Phong": {
+                "ambientColor": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "diffuseColor": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ]
+            }
+        },
+        "781": {
+            "name": "Text",
+            "pipeline": "765",
+            "Phong": {
+                "ambientColor": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "diffuseColor": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
                 ]
             }
         }
