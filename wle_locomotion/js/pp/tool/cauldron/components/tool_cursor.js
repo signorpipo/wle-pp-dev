@@ -28,7 +28,7 @@ WL.registerComponent('pp-tool-cursor', {
         this._myCursorObject.rotateObject(this._myCursorRotation);
 
         this._myCursorMeshObject = WL.scene.addObject(this._myCursorObject);
-        this._myCursorMeshObject.scale(this._myCursorMeshScale);
+        this._myCursorMeshObject.pp_setScale(this._myCursorMeshScale);
 
         this._myCursorMeshComponent = this._myCursorMeshObject.addComponent("mesh");
         this._myCursorMeshComponent.mesh = PP.myResources.myMeshes.mySphere;
@@ -41,12 +41,25 @@ WL.registerComponent('pp-tool-cursor', {
             this._myCursorComponent.globalTarget.addHoverFunction(this._pulseOnHover.bind(this));
         }
 
+        let fingerCursorObject = null;
+        let fingerCollisionSize = 0.0125;
+
+        if (this._myShowFingerCursor) {
+            fingerCursorObject = this.object.pp_addObject();
+
+            let meshComponent = fingerCursorObject.addComponent("mesh");
+            meshComponent.mesh = PP.myResources.myMeshes.mySphere;
+            meshComponent.material = this._myCursorMeshComponent.material.clone();
+
+            fingerCursorObject.pp_setScale(fingerCollisionSize);
+        }
+
         this._myFingerCursorComponent = this.object.addComponent("pp-finger-cursor", {
             "_myHandedness": this._myHandedness,
             "_myEnableMultipleClicks": true,
             "_myCollisionGroup": this._myCursorTargetCollisionGroup,
-            "_myCursorMesh": (this._myShowFingerCursor ? PP.myResources.myMeshes.mySphere : null),
-            "_myCursorMaterial": this._myCursorMeshComponent.material
+            "_myCollisionSize": fingerCollisionSize,
+            "_myCursorObject": fingerCursorObject
         });
         this._myFingerCursorComponent.setActive(false);
     },
