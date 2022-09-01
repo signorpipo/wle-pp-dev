@@ -51,8 +51,8 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport extends PlayerLocomoti
         this._myTeleportDetectionValid = false;
         this._myStickIdleCharge = false;
         this._myStickIdleThreshold = 0.1;
-
         this._myForwardMinAngleToBeValid = 15;
+        this._myRotationOnUpMinStickIntensity = 0.5;
 
         this._myTeleportPositionValid = false;
         this._myTeleportPosition = PP.vec3_create();
@@ -197,6 +197,7 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport extends PlayerLocomoti
     _detectTeleportPosition() {
         if (this._mySessionActive) {
             this._detectTeleportPositionVR();
+            this._detectTeleportRotationVR();
         } else {
             this._detectTeleportPositionNonVR();
         }
@@ -322,6 +323,20 @@ PlayerLocomotionTeleport.prototype._detectTeleportPositionVR = function () {
     };
 }();
 
+PlayerLocomotionTeleport.prototype._detectTeleportRotationVR = function () {
+    let axesVec3 = PP.vec3_create();
+    let axesForward = PP.vec3_create(0, 0, 1);
+    let axesUp = PP.vec3_create(0, 1, 0);
+    return function _detectTeleportRotationVR(dt) {
+        let axes = PP.myLeftGamepad.getAxesInfo().getAxes();
+
+        if (axes.vec2_length() > this._myRotationOnUpMinStickIntensity) {
+            axesVec3.vec3_set(axes[0], 0, axes[1]);
+            this._myTeleportRotationOnUp = axesVec3.vec3_angleSigned(axesForward, axesUp);
+        }
+    };
+}();
+
 PlayerLocomotionTeleport.prototype._isTeleportHitValid = function () {
     let playerUp = PP.vec3_create();
     return function _isTeleportHitValid(hit, rotationOnUp) {
@@ -356,13 +371,13 @@ PlayerLocomotionTeleport.prototype._isTeleportPositionValid = function () {
             playerUp = this._myParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
 
             feetTransformQuat = this._myParams.myPlayerHeadManager.getFeetTransformQuat(feetTransformQuat);
+            feetPosition = feetTransformQuat.quat2_getPosition(feetPosition);
             if (rotationOnUp != 0) {
                 feetRotationQuat = feetTransformQuat.quat2_getRotationQuat(feetRotationQuat);
                 feetRotationQuat = feetRotationQuat.quat_rotateAxis(rotationOnUp, playerUp, feetRotationQuat);
-                feetTransformQuat.setRotationQuat(feetRotationQuat);
+                feetTransformQuat.quat2_setPositionRotationQuat(feetPosition, feetRotationQuat);
             }
 
-            feetPosition = feetTransformQuat.quat2_getPosition(feetPosition);
             let differenceOnUp = teleportPosition.vec3_sub(feetPosition, differenceOnUpVector).vec3_componentAlongAxis(playerUp, differenceOnUpVector).vec3_length();
 
             if (differenceOnUp < this._myParams.myMaxHeightDifference + 0.00001) {
@@ -565,6 +580,7 @@ PlayerLocomotionTeleport.prototype._getVisibilityCheckPositions = function () {
 
 PlayerLocomotionTeleport.prototype._teleportToPosition = function () {
     let playerUp = PP.vec3_create();
+    let feetPosition = PP.vec3_create();
     let feetTransformQuat = PP.quat2_create();
     let feetRotationQuat = PP.quat_create();
     let teleportRotation = PP.quat_create();
@@ -573,10 +589,11 @@ PlayerLocomotionTeleport.prototype._teleportToPosition = function () {
         playerUp = this._myParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
 
         feetTransformQuat = this._myParams.myPlayerHeadManager.getFeetTransformQuat(feetTransformQuat);
+        feetPosition = feetTransformQuat.quat2_getPosition(feetPosition);
         if (rotationOnUp != 0) {
             feetRotationQuat = feetTransformQuat.quat2_getRotationQuat(feetRotationQuat);
             feetRotationQuat = feetRotationQuat.quat_rotateAxis(rotationOnUp, playerUp, feetRotationQuat);
-            feetTransformQuat.setRotationQuat(feetRotationQuat);
+            feetTransformQuat.quat2_setPositionRotationQuat(feetPosition, feetRotationQuat);
         }
 
         teleportCollisionRuntimeParams.copy(collisionRuntimeParams);
@@ -715,6 +732,7 @@ PlayerLocomotionTeleport.prototype._applyGravity = function () {
 
 Object.defineProperty(PlayerLocomotionTeleport.prototype, "_detectTeleportPositionNonVR", { enumerable: false });
 Object.defineProperty(PlayerLocomotionTeleport.prototype, "_detectTeleportPositionVR", { enumerable: false });
+Object.defineProperty(PlayerLocomotionTeleport.prototype, "_detectTeleportRotationVR", { enumerable: false });
 Object.defineProperty(PlayerLocomotionTeleport.prototype, "_isTeleportHitValid", { enumerable: false });
 Object.defineProperty(PlayerLocomotionTeleport.prototype, "_isTeleportPositionValid", { enumerable: false });
 Object.defineProperty(PlayerLocomotionTeleport.prototype, "_isTeleportPositionVisible", { enumerable: false });
