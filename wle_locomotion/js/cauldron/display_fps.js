@@ -10,9 +10,9 @@ WL.registerComponent('display-fps', {
 
         this._myFPS = 0;
 
-        PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Z", 0.35, 0.1, 3));
-        PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Y", -0.115, 0.1, 3));
-        PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("X", 0.115, 0.1, 3));
+        //PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Z", 0.35, 0.1, 3));
+        //PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Y", -0.115, 0.1, 3));
+        //PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("X", 0.115, 0.1, 3));
     },
     update(dt) {
         this._myTotalDT += dt;
@@ -30,8 +30,8 @@ WL.registerComponent('display-fps', {
 
         let head = PP.myPlayerObjects.myHead;
         let headPosition = head.pp_getPosition();
-        let textPosition = headPosition.vec3_add(head.pp_getForward().vec3_scale(PP.myEasyTuneVariables.get("Z")))
-            .vec3_add(head.pp_getUp().vec3_scale(PP.myEasyTuneVariables.get("Y"))).vec3_add(head.pp_getRight().vec3_scale(PP.myEasyTuneVariables.get("X")));
+        let textPosition = headPosition.vec3_add(head.pp_getForward().vec3_scale(0.35))
+            .vec3_add(head.pp_getUp().vec3_scale(-0.115)).vec3_add(head.pp_getRight().vec3_scale(0.115));
 
         let debugParams = new PP.DebugTextParams();
         debugParams.myText = this._myFPS.toFixed(0);

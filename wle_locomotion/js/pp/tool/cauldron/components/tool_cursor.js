@@ -1,9 +1,7 @@
 WL.registerComponent('pp-tool-cursor', {
     _myHandedness: { type: WL.Type.Enum, values: ['left', 'right'], default: 'left' },
     _myPulseOnHover: { type: WL.Type.Bool, default: false },
-    _myShowFingerCursor: { type: WL.Type.Bool, default: false },
-    _myCursorMesh: { type: WL.Type.Mesh, default: null },
-    _myCursorMaterial: { type: WL.Type.Material, default: null }
+    _myShowFingerCursor: { type: WL.Type.Bool, default: false }
 }, {
     init: function () {
         this._myHandednessString = ['left', 'right'][this._myHandedness];
@@ -33,8 +31,8 @@ WL.registerComponent('pp-tool-cursor', {
         this._myCursorMeshObject.scale(this._myCursorMeshScale);
 
         this._myCursorMeshComponent = this._myCursorMeshObject.addComponent("mesh");
-        this._myCursorMeshComponent.mesh = this._myCursorMesh;
-        this._myCursorMeshComponent.material = this._myCursorMaterial.clone();
+        this._myCursorMeshComponent.mesh = PP.myResources.myMeshes.mySphere;
+        this._myCursorMeshComponent.material = PP.myResources.myMaterials.myFlatOpaque.clone();
         this._myCursorMeshComponent.material.color = this._myCursorColor;
 
         this._myCursorComponent = this._myCursorObject.addComponent("cursor", { "collisionGroup": this._myCursorTargetCollisionGroup, "handedness": this._myHandedness + 1, "cursorObject": this._myCursorMeshObject });
@@ -47,7 +45,7 @@ WL.registerComponent('pp-tool-cursor', {
             "_myHandedness": this._myHandedness,
             "_myEnableMultipleClicks": true,
             "_myCollisionGroup": this._myCursorTargetCollisionGroup,
-            "_myCursorMesh": (this._myShowFingerCursor ? this._myCursorMesh : null),
+            "_myCursorMesh": (this._myShowFingerCursor ? PP.myResources.myMeshes.mySphere : null),
             "_myCursorMaterial": this._myCursorMeshComponent.material
         });
         this._myFingerCursorComponent.setActive(false);

@@ -277,7 +277,8 @@
                         "_myHandedness": "right",
                         "_myPulseOnHover": false,
                         "_myCursorMesh": "p2",
-                        "_myCursorMaterial": "32"
+                        "_myCursorMaterial": "32",
+                        "_myShowFingerCursor": true
                     }
                 },
                 {
@@ -290,10 +291,6 @@
                         "_myBottomButton": "61",
                         "_myTopButton": "66"
                     }
-                },
-                {
-                    "type": "pp-debug-transform",
-                    "active": false
                 }
             ],
             "transformation": [
@@ -383,7 +380,7 @@
         },
         "28": {
             "name": "Lights",
-            "parent": "18",
+            "parent": "156",
             "transformation": [
                 1.0,
                 0.0,
@@ -907,28 +904,6 @@
                 1.0
             ]
         },
-        "89": {
-            "name": "Start Playground",
-            "parent": "18",
-            "transformation": [
-                1.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                1.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                1.0,
-                0.0,
-                60.0,
-                0.0,
-                0.0,
-                1.0
-            ]
-        },
         "90": {
             "name": "Bullet Through Wall",
             "parent": "71",
@@ -942,748 +917,6 @@
                 },
                 {
                     "type": "bullet-through-wall-test"
-                }
-            ]
-        },
-        "91": {
-            "name": "Floor",
-            "parent": "89",
-            "transformation": [
-                1.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                -1.1920906928253316e-7,
-                -0.999998,
-                0.0,
-                0.0,
-                0.999998,
-                -1.1920906928253316e-7,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ]
-        },
-        "94": {
-            "name": "Mesh",
-            "parent": "91",
-            "components": [
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                {
-                    "type": "mesh",
-                    "mesh": {
-                        "mesh": "p0",
-                        "material": "92"
-                    },
-                    "active": true
-                }
-            ],
-            "transformation": [
-                4.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                4.0000076,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                1.0000019,
-                0.0,
-                0.0,
-                1.685877180079843e-7,
-                0.0,
-                1.0
-            ]
-        },
-        "95": {
-            "name": "Walls",
-            "parent": "89"
-        },
-        "96": {
-            "name": "PhysX",
-            "parent": "98",
-            "components": [
-                {
-                    "type": "physx",
-                    "physx": {
-                        "shape": "box",
-                        "box": {
-                            "extents": [
-                                4.0,
-                                4.0,
-                                1.0
-                            ]
-                        },
-                        "gravity": false,
-                        "kinematic": true,
-                        "static": true,
-                        "groups": 4,
-                        "block": 1
-                    }
-                }
-            ],
-            "transformation": [
-                1.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                1.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                1.0,
-                0.0,
-                0.0,
-                4.0,
-                -5.0,
-                1.0
-            ]
-        },
-        "97": {
-            "name": "Mesh",
-            "parent": "98",
-            "components": [
-                {
-                    "type": "mesh",
-                    "mesh": {
-                        "mesh": "p0",
-                        "material": "93"
-                    }
-                }
-            ],
-            "transformation": [
-                4.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                4.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                1.0,
-                0.0,
-                0.0,
-                4.0,
-                -4.0,
-                1.0
-            ]
-        },
-        "98": {
-            "name": "Wall 1",
-            "parent": "95"
-        },
-        "99": {
-            "name": "PhysX",
-            "parent": "91",
-            "components": [
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                {
-                    "type": "physx",
-                    "physx": {
-                        "gravity": false,
-                        "kinematic": true,
-                        "static": true,
-                        "shape": "convexMesh",
-                        "convexMesh": {
-                            "mesh": "p1",
-                            "scaling": [
-                                4.0,
-                                4.0,
-                                1.0
-                            ]
-                        },
-                        "groups": 2,
-                        "block": 1
-                    }
-                }
-            ],
-            "transformation": [
-                1.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                1.0,
-                -0.0,
-                0.0,
-                0.0,
-                0.0,
-                1.0,
-                0.0,
-                0.0,
-                1.192095311353114e-7,
-                -1.000002,
-                1.0
-            ]
-        },
-        "100": {
-            "name": "Wall 2",
-            "parent": "95",
-            "transformation": [
-                -1.192099858826623e-7,
-                0.0,
-                -1.0000059,
-                0.0,
-                0.0,
-                1.0,
-                0.0,
-                0.0,
-                1.0000059,
-                0.0,
-                -1.192099858826623e-7,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ]
-        },
-        "101": {
-            "name": "Mesh",
-            "parent": "100",
-            "components": [
-                {
-                    "type": "mesh",
-                    "mesh": {
-                        "mesh": "p0",
-                        "material": "93"
-                    }
-                }
-            ],
-            "transformation": [
-                4.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                4.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                1.0,
-                0.0,
-                0.0,
-                4.0,
-                -4.0,
-                1.0
-            ]
-        },
-        "102": {
-            "name": "PhysX",
-            "parent": "100",
-            "components": [
-                {
-                    "type": "physx",
-                    "physx": {
-                        "shape": "box",
-                        "box": {
-                            "extents": [
-                                4.0,
-                                4.0,
-                                1.0
-                            ]
-                        },
-                        "gravity": false,
-                        "kinematic": true,
-                        "static": true,
-                        "groups": 4,
-                        "block": 1
-                    }
-                }
-            ],
-            "transformation": [
-                1.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                1.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                1.0,
-                0.0,
-                0.0,
-                4.0,
-                -5.0,
-                1.0
-            ]
-        },
-        "103": {
-            "name": "Wall 3",
-            "parent": "95",
-            "transformation": [
-                -1.1921015641291888e-7,
-                0.0,
-                1.0000073,
-                0.0,
-                0.0,
-                1.0,
-                0.0,
-                0.0,
-                -1.0000073,
-                0.0,
-                -1.1921015641291888e-7,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ]
-        },
-        "104": {
-            "name": "PhysX",
-            "parent": "103",
-            "components": [
-                {
-                    "type": "physx",
-                    "physx": {
-                        "shape": "box",
-                        "box": {
-                            "extents": [
-                                4.0,
-                                4.0,
-                                1.0
-                            ]
-                        },
-                        "gravity": false,
-                        "kinematic": true,
-                        "static": true,
-                        "groups": 4,
-                        "block": 1
-                    }
-                }
-            ],
-            "transformation": [
-                1.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                1.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                1.0,
-                0.0,
-                0.0,
-                4.0,
-                -5.0,
-                1.0
-            ]
-        },
-        "105": {
-            "name": "Mesh",
-            "parent": "103",
-            "components": [
-                {
-                    "type": "mesh",
-                    "mesh": {
-                        "mesh": "p0",
-                        "material": "93"
-                    }
-                }
-            ],
-            "transformation": [
-                4.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                4.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                1.0,
-                0.0,
-                0.0,
-                4.0,
-                -4.0,
-                1.0
-            ]
-        },
-        "106": {
-            "name": "Wall 4",
-            "parent": "95",
-            "transformation": [
-                -1.0000069,
-                1.509969536073186e-7,
-                -4.76837158203125e-7,
-                0.0,
-                1.5099600148005268e-7,
-                1.0,
-                -1.5099602990176209e-7,
-                0.0,
-                4.76837158203125e-7,
-                -1.509971525592846e-7,
-                -1.0000069,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ]
-        },
-        "107": {
-            "name": "Mesh",
-            "parent": "106",
-            "components": [
-                {
-                    "type": "mesh",
-                    "mesh": {
-                        "mesh": "p0",
-                        "material": "93"
-                    }
-                }
-            ],
-            "transformation": [
-                4.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                4.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                1.0,
-                0.0,
-                0.0,
-                4.0,
-                -4.0,
-                1.0
-            ]
-        },
-        "108": {
-            "name": "PhysX",
-            "parent": "106",
-            "components": [
-                {
-                    "type": "physx",
-                    "physx": {
-                        "shape": "box",
-                        "box": {
-                            "extents": [
-                                4.0,
-                                4.0,
-                                1.0
-                            ]
-                        },
-                        "gravity": false,
-                        "kinematic": true,
-                        "static": true,
-                        "groups": 4,
-                        "block": 1
-                    }
-                }
-            ],
-            "transformation": [
-                1.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                1.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                1.0,
-                0.0,
-                0.0,
-                4.0,
-                -5.0,
-                1.0
-            ]
-        },
-        "110": {
-            "name": "Reference",
-            "parent": "98",
-            "transformation": [
-                0.1,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.1,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.1,
-                0.0,
-                0.0,
-                1.0,
-                -4.0,
-                1.0
-            ],
-            "components": [
-                {
-                    "type": "mesh",
-                    "mesh": {
-                        "material": "92",
-                        "mesh": "p1"
-                    }
-                }
-            ]
-        },
-        "111": {
-            "name": "Reference",
-            "parent": "100",
-            "transformation": [
-                0.3,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.3,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.3,
-                0.0,
-                0.0,
-                1.0,
-                -4.0,
-                1.0
-            ],
-            "components": [
-                {
-                    "type": "mesh",
-                    "mesh": {
-                        "material": "92",
-                        "mesh": "p1"
-                    }
-                }
-            ]
-        },
-        "112": {
-            "name": "Reference",
-            "parent": "103",
-            "transformation": [
-                0.2,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.2,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.2,
-                0.0,
-                0.0,
-                1.0,
-                -4.0,
-                1.0
-            ],
-            "components": [
-                {
-                    "type": "mesh",
-                    "mesh": {
-                        "material": "92",
-                        "mesh": "p1"
-                    }
-                }
-            ]
-        },
-        "113": {
-            "name": "Reference",
-            "parent": "106",
-            "transformation": [
-                0.05,
-                0.0,
-                -0.0,
-                0.0,
-                -0.0,
-                0.05,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.05,
-                0.0,
-                -0.0,
-                1.0,
-                -4.0,
-                1.0
-            ],
-            "components": [
-                {
-                    "type": "mesh",
-                    "mesh": {
-                        "material": "92",
-                        "mesh": "p1"
-                    }
-                }
-            ]
-        },
-        "114": {
-            "name": "Reference",
-            "parent": "91",
-            "transformation": [
-                0.1,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.1,
-                -0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.1,
-                0.0,
-                -0.0,
-                -0.0,
-                0.0,
-                1.0
-            ],
-            "components": [
-                {
-                    "type": "mesh",
-                    "mesh": {
-                        "material": "92",
-                        "mesh": "p2"
-                    }
                 }
             ]
         },
@@ -1796,237 +1029,8 @@
             "name": "Hands",
             "parent": "20"
         },
-        "122": {
-            "name": "Obstacles",
-            "parent": "89"
-        },
-        "123": {
-            "name": "Obstacle 1",
-            "parent": "122",
-            "components": [
-                {
-                    "type": "mesh",
-                    "mesh": {
-                        "mesh": "p1",
-                        "material": "93"
-                    }
-                },
-                {
-                    "type": "physx",
-                    "physx": {
-                        "shape": "box",
-                        "box": {
-                            "extents": [
-                                0.1,
-                                0.1,
-                                0.1
-                            ]
-                        },
-                        "kinematic": true
-                    }
-                }
-            ],
-            "transformation": [
-                0.1,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.1,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.1,
-                0.0,
-                1.2104184,
-                0.0,
-                -1.5524852,
-                1.0
-            ]
-        },
-        "124": {
-            "name": "Obstacle 2",
-            "parent": "122",
-            "components": [
-                {
-                    "type": "mesh",
-                    "mesh": {
-                        "mesh": "p1",
-                        "material": "93"
-                    }
-                },
-                {
-                    "type": "physx",
-                    "physx": {
-                        "shape": "box",
-                        "box": {
-                            "extents": [
-                                0.1,
-                                0.3,
-                                0.1
-                            ]
-                        },
-                        "kinematic": true
-                    }
-                }
-            ],
-            "transformation": [
-                0.1,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.3,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.1,
-                0.0,
-                -0.2498856,
-                0.0,
-                -1.5524852,
-                1.0
-            ]
-        },
-        "125": {
-            "name": "Obstacle 2",
-            "parent": "122",
-            "components": [
-                {
-                    "type": "mesh",
-                    "mesh": {
-                        "mesh": "p1",
-                        "material": "93"
-                    }
-                },
-                {
-                    "type": "physx",
-                    "physx": {
-                        "shape": "box",
-                        "box": {
-                            "extents": [
-                                0.4,
-                                0.3,
-                                0.1
-                            ]
-                        },
-                        "kinematic": true
-                    }
-                }
-            ],
-            "transformation": [
-                0.4,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.3,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.1,
-                0.0,
-                -2.1056032,
-                0.8110135,
-                -1.5524852,
-                1.0
-            ]
-        },
-        "126": {
-            "name": "Obstacle 2",
-            "parent": "122",
-            "components": [
-                {
-                    "type": "mesh",
-                    "mesh": {
-                        "mesh": "p1",
-                        "material": "93"
-                    }
-                },
-                {
-                    "type": "physx",
-                    "physx": {
-                        "shape": "box",
-                        "box": {
-                            "extents": [
-                                0.4,
-                                0.3,
-                                0.1
-                            ]
-                        },
-                        "kinematic": true
-                    }
-                }
-            ],
-            "transformation": [
-                0.3040947,
-                0.0,
-                -0.2598586,
-                0.0,
-                0.0,
-                0.3,
-                0.0,
-                0.0,
-                0.0649646,
-                0.0,
-                0.0760236,
-                0.0,
-                -2.4082407,
-                0.5948895,
-                -1.4110481,
-                1.0
-            ]
-        },
-        "127": {
-            "name": "Obstacle 2",
-            "parent": "122",
-            "components": [
-                {
-                    "type": "mesh",
-                    "mesh": {
-                        "mesh": "p1",
-                        "material": "93"
-                    }
-                },
-                {
-                    "type": "physx",
-                    "physx": {
-                        "shape": "box",
-                        "box": {
-                            "extents": [
-                                1.0,
-                                0.1,
-                                1.0
-                            ]
-                        },
-                        "kinematic": true
-                    }
-                }
-            ],
-            "transformation": [
-                1.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.1,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                1.0,
-                0.0,
-                -2.1056032,
-                1.8999999,
-                3.4063556,
-                1.0
-            ]
-        },
         "156": {
-            "name": "Advanced Playground",
+            "name": "Playground",
             "parent": "18",
             "transformation": [
                 1.0,
@@ -13481,60 +12485,29 @@
                             0.5146021,
                             0.5146021
                         ],
-                        "type": "point"
+                        "type": "spot",
+                        "shadows": false,
+                        "range": 100.0,
+                        "outerAngle": 180.0,
+                        "innerAngle": 100.0
                     }
                 }
             ],
             "transformation": [
-                1.0,
+                0.8191521,
+                0.5735765,
+                0.0,
+                0.0,
+                -0.5735765,
+                0.8191521,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
                 1.0,
                 0.0,
-                0.0,
-                0.0,
-                0.0,
-                1.0,
-                0.0,
-                0.0,
-                30.0,
-                0.0,
-                1.0
-            ]
-        },
-        "778": {
-            "name": "Fix Light",
-            "parent": "28",
-            "components": [
-                {
-                    "type": "light",
-                    "light": {
-                        "attenuation": 1000.0,
-                        "color": [
-                            0.0,
-                            0.0,
-                            0.0
-                        ]
-                    }
-                }
-            ],
-            "transformation": [
-                1.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                1.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                1.0,
-                0.0,
-                0.0,
-                1000.0,
+                -5.0,
+                23.0,
                 0.0,
                 1.0
             ]
@@ -14156,7 +13129,7 @@
         },
         "763": {
             "link": {
-                "name": "Sky.vert",
+                "name": "FullScreenTriangle.vert",
                 "file": "default"
             }
         },
@@ -14217,6 +13190,18 @@
         "775": {
             "link": {
                 "name": "Particle.frag",
+                "file": "default"
+            }
+        },
+        "782": {
+            "link": {
+                "name": "Background.frag",
+                "file": "default"
+            }
+        },
+        "783": {
+            "link": {
+                "name": "FullScreenTriangle.vert",
                 "file": "default"
             }
         }
@@ -14320,8 +13305,8 @@
             "name": "wle_locomotion",
             "version": [
                 0,
-                8,
-                10
+                9,
+                0
             ]
         },
         "rendering": {
@@ -14343,12 +13328,13 @@
             "xrButtonColor": "black",
             "webxr": {
                 "optionalFeatures": {
-                    "hand-tracking": false,
+                    "hand-tracking": true,
                     "hit-test": false,
                     "local-floor": true
                 },
                 "requiredFeatures": {
-                    "local-floor": true
+                    "local-floor": true,
+                    "hand-tracking": true
                 }
             },
             "visualizePhysX": false
