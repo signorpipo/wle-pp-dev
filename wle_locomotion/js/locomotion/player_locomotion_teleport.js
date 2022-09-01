@@ -52,6 +52,8 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport extends PlayerLocomoti
         this._myStickIdleCharge = false;
         this._myStickIdleThreshold = 0.1;
 
+        this._myForwardMinAngleToBeValid = 15;
+
         this._myTeleportPositionValid = false;
         this._myTeleportPosition = PP.vec3_create();
         this._myTeleportRotationOnUp = 0;
@@ -59,7 +61,7 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport extends PlayerLocomoti
         this._myGravitySpeed = 0;
 
         this._myFSM = new PP.FSM();
-        this._myFSM.setDebugLogActive(true, "Locomotion Teleport");
+        //this._myFSM.setDebugLogActive(true, "Locomotion Teleport");
 
         this._myFSM.addState("init");
         this._myFSM.addState("idle", this._idleUpdate.bind(this));
@@ -260,6 +262,7 @@ PlayerLocomotionTeleport.prototype._detectTeleportPositionVR = function () {
     let handForward = PP.vec3_create();
     let handRight = PP.vec3_create();
     let playerUp = PP.vec3_create();
+    let playerUpNegate = PP.vec3_create();
     let extraRotationAxis = PP.vec3_create();
     let teleportDirection = PP.vec3_create();
 
@@ -275,15 +278,19 @@ PlayerLocomotionTeleport.prototype._detectTeleportPositionVR = function () {
         handRight = referenceObject.pp_getRight(handRight);
 
         playerUp = this._myParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
+        playerUpNegate = playerUp.vec3_negate(playerUpNegate);
 
         extraRotationAxis = handForward.vec3_cross(playerUp, extraRotationAxis).vec3_normalize(extraRotationAxis);
         if (!extraRotationAxis.vec3_isConcordant(handRight)) {
             extraRotationAxis.vec3_negate(extraRotationAxis);
         }
 
-        teleportDirection = handForward.vec3_rotateAxis(-60, extraRotationAxis);
+        teleportDirection = handForward.vec3_rotateAxis(-45, extraRotationAxis);
 
-        if (!teleportDirection.vec3_isConcordant(playerUp)) {
+        if (!teleportDirection.vec3_isConcordant(playerUp) && (
+            handForward.vec3_angle(playerUp) > this._myForwardMinAngleToBeValid &&
+            handForward.vec3_angle(playerUpNegate) > this._myForwardMinAngleToBeValid
+        )) {
             this._myTeleportDetectionValid = true;
         }
 
