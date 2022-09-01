@@ -1,3 +1,12 @@
+/*
+let debugParams = new PP.DebugLineParams();
+debugParams.myStart = start;
+debugParams.myDirection = direction;
+debugParams.myLength = 0.1;
+debugParams.myColor = [0, 1, 0, 1];
+PP.myDebugManager.draw(debugParams);
+*/
+
 PP.DebugLineParams = class DebugLineParams {
 
     constructor() {

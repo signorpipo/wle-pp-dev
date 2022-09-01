@@ -48,6 +48,10 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport extends PlayerLocomoti
 
         this._mySessionActive = false;
 
+        this._myTeleportDetectionValid = false;
+        this._myStickIdleCharge = false;
+        this._myStickIdleThreshold = 0.1;
+
         this._myTeleportPositionValid = false;
         this._myTeleportPosition = PP.vec3_create();
         this._myTeleportRotationOnUp = 0;
@@ -118,7 +122,9 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport extends PlayerLocomoti
     _detectUpdate(dt) {
         this._detectTeleportPosition();
 
-        this._showTeleportPosition(dt);
+        if (this._myTeleportDetectionValid) {
+            this._showTeleportPosition(dt);
+        }
 
         if (this._confirmTeleport()) {
             if (this._myTeleportPositionValid) {
@@ -142,7 +148,16 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport extends PlayerLocomoti
         if (!this._mySessionActive) {
             startDetecting = PP.myMouse.isButtonPressStart(PP.MouseButtonType.MIDDLE);
         } else {
+            let axes = PP.myLeftGamepad.getAxesInfo().getAxes();
 
+            if (axes.vec2_length() <= this._myStickIdleThreshold) {
+                this._myStickIdleCharge = true;
+            }
+
+            if (this._myStickIdleCharge && axes[1] >= 0.75) {
+                this._myStickIdleCharge = false;
+                startDetecting = true;
+            }
         }
 
         return startDetecting;
@@ -156,7 +171,10 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport extends PlayerLocomoti
                 confirmTeleport = PP.myMouse.isButtonPressEnd(PP.MouseButtonType.MIDDLE);
             }
         } else {
-
+            let axes = PP.myLeftGamepad.getAxesInfo().getAxes();
+            if (axes.vec2_length() <= this._myStickIdleThreshold) {
+                confirmTeleport = true;
+            }
         }
 
         return confirmTeleport;
@@ -168,7 +186,7 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport extends PlayerLocomoti
         if (!this._mySessionActive) {
             cancelTeleport = PP.myMouse.isButtonPressEnd(PP.MouseButtonType.RIGHT) || !PP.myMouse.isInsideView();
         } else {
-
+            cancelTeleport = PP.myLeftGamepad.getButtonInfo(PP.ButtonType.THUMBSTICK).isPressed();
         }
 
         return cancelTeleport;
@@ -207,6 +225,7 @@ PlayerLocomotionTeleport.prototype._detectTeleportPositionNonVR = function () {
         this._myTeleportRotationOnUp = 0;
         this._myTeleportPosition.vec3_zero();
         this._myTeleportPositionValid = false;
+        this._myTeleportDetectionValid = false;
 
         raycastSetup.myDistance = this._myParams.myMaxDistance;
 
@@ -218,6 +237,8 @@ PlayerLocomotionTeleport.prototype._detectTeleportPositionNonVR = function () {
         raycastResult = PP.myMouse.raycastWorld(raycastSetup, raycastResult);
 
         if (raycastResult.isColliding()) {
+            this._myTeleportDetectionValid = true;
+
             let hit = raycastResult.myHits.pp_first();
 
             this._myTeleportPosition.vec3_copy(hit.myPosition);
@@ -235,8 +256,62 @@ PlayerLocomotionTeleport.prototype._detectTeleportPositionNonVR = function () {
 }();
 
 PlayerLocomotionTeleport.prototype._detectTeleportPositionVR = function () {
-    return function _detectTeleportPositionVR(dt) {
+    let handPosition = PP.vec3_create();
+    let handForward = PP.vec3_create();
+    let handRight = PP.vec3_create();
+    let playerUp = PP.vec3_create();
+    let extraRotationAxis = PP.vec3_create();
+    let teleportDirection = PP.vec3_create();
 
+    let raycastSetup = new PP.RaycastSetup();
+    let raycastResult = new PP.RaycastResult();
+    return function _detectTeleportPositionVR(dt) {
+        this._myTeleportDetectionValid = false;
+
+        let referenceObject = PP.myPlayerObjects.myHandLeft;
+
+        handPosition = referenceObject.pp_getPosition(handPosition);
+        handForward = referenceObject.pp_getForward(handForward);
+        handRight = referenceObject.pp_getRight(handRight);
+
+        playerUp = this._myParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
+
+        extraRotationAxis = handForward.vec3_cross(playerUp, extraRotationAxis).vec3_normalize(extraRotationAxis);
+        if (!extraRotationAxis.vec3_isConcordant(handRight)) {
+            extraRotationAxis.vec3_negate(extraRotationAxis);
+        }
+
+        teleportDirection = handForward.vec3_rotateAxis(-60, extraRotationAxis);
+
+        if (!teleportDirection.vec3_isConcordant(playerUp)) {
+            this._myTeleportDetectionValid = true;
+        }
+
+        if (this._myTeleportDetectionValid) {
+            raycastSetup.myOrigin.vec3_copy(handPosition);
+            raycastSetup.myDirection.vec3_copy(teleportDirection);
+            raycastSetup.myDistance = this._myParams.myMaxDistance;
+            raycastSetup.myBlockLayerFlags.setMask(this._myParams.myTeleportBlockLayerFlags.getMask());
+            raycastSetup.myObjectsToIgnore.pp_clear();
+            raycastSetup.myIgnoreHitsInsideCollision = false;
+
+            raycastResult = PP.PhysicsUtils.raycast(raycastSetup, raycastResult);
+
+            if (raycastResult.isColliding()) {
+                this._myTeleportDetectionValid = true;
+
+                let hit = raycastResult.myHits.pp_first();
+
+                this._myTeleportPosition.vec3_copy(hit.myPosition);
+                this._myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRotationOnUp);
+            }
+
+            let debugParams = new PP.DebugRaycastParams();
+            debugParams.myRaycastResult = raycastResult;
+            debugParams.myNormalLength = 0.2;
+            debugParams.myThickness = 0.005;
+            PP.myDebugManager.draw(debugParams);
+        }
     };
 }();
 
