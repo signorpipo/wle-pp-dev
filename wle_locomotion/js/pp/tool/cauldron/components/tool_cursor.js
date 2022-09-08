@@ -31,8 +31,8 @@ WL.registerComponent('pp-tool-cursor', {
         this._myCursorMeshObject.pp_setScale(this._myCursorMeshScale);
 
         this._myCursorMeshComponent = this._myCursorMeshObject.addComponent("mesh");
-        this._myCursorMeshComponent.mesh = PP.myResources.myMeshes.mySphere;
-        this._myCursorMeshComponent.material = PP.myResources.myMaterials.myFlatOpaque.clone();
+        this._myCursorMeshComponent.mesh = PP.myDefaultResources.myMeshes.mySphere;
+        this._myCursorMeshComponent.material = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
         this._myCursorMeshComponent.material.color = this._myCursorColor;
 
         this._myCursorComponent = this._myCursorObject.addComponent("cursor", { "collisionGroup": this._myCursorTargetCollisionGroup, "handedness": this._myHandedness + 1, "cursorObject": this._myCursorMeshObject });
@@ -48,7 +48,7 @@ WL.registerComponent('pp-tool-cursor', {
             fingerCursorObject = this.object.pp_addObject();
 
             let meshComponent = fingerCursorObject.addComponent("mesh");
-            meshComponent.mesh = PP.myResources.myMeshes.mySphere;
+            meshComponent.mesh = PP.myDefaultResources.myMeshes.mySphere;
             meshComponent.material = this._myCursorMeshComponent.material.clone();
 
             fingerCursorObject.pp_setScale(fingerCollisionSize);

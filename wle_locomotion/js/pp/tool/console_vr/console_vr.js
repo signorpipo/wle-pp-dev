@@ -15,8 +15,8 @@ WL.registerComponent('pp-console-vr', {
         additionalSetup.myShowOnStart = this._myShowOnStart;
         additionalSetup.myShowVisibilityButton = this._myShowVisibilityButton;
         additionalSetup.myPulseOnNewMessage = this._myPulseOnNewMessage;
-        additionalSetup.myPlaneMaterial = PP.myResources.myMaterials.myFlatOpaque;
-        additionalSetup.myTextMaterial = PP.myResources.myMaterials.myText;
+        additionalSetup.myPlaneMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque;
+        additionalSetup.myTextMaterial = PP.myDefaultResources.myMaterials.myText;
 
         this._myWidget.start(this.object, additionalSetup);
     },

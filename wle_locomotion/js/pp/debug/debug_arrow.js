@@ -128,8 +128,8 @@ PP.DebugArrow = class DebugArrow {
         this._myArrowObject.scale([0.01, 0.01, 0.01]);
 
         this._myArrowMesh = this._myArrowObject.addComponent('mesh');
-        this._myArrowMesh.mesh = PP.myResources.myMeshes.myCone;
-        this._myArrowMesh.material = PP.myResources.myMaterials.myFlatOpaque.clone();
+        this._myArrowMesh.mesh = PP.myDefaultResources.myMeshes.myCone;
+        this._myArrowMesh.material = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
     }
 
     _markDirty() {

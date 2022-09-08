@@ -22,8 +22,8 @@ WL.registerComponent('pp-gamepad-control-scheme', {
     init: function () {
     },
     start: function () {
-        this._myTextMaterial = PP.myResources.myMaterials.myText.clone();
-        this._myFlatMaterial = PP.myResources.myMaterials.myFlatOpaque.clone();
+        this._myTextMaterial = PP.myDefaultResources.myMaterials.myText.clone();
+        this._myFlatMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
 
         this._myHandednessType = PP.InputUtils.getHandednessByIndex(this._myHandedness);
         this._myControlSchemeDirection = (this._myHandednessType == PP.Handedness.LEFT) ? 1 : -1;
@@ -149,7 +149,7 @@ WL.registerComponent('pp-gamepad-control-scheme', {
         lineObject = lineRootObject.pp_addObject();
 
         let lineMesh = lineObject.addComponent('mesh');
-        lineMesh.mesh = PP.myResources.myMeshes.myCube;
+        lineMesh.mesh = PP.myDefaultResources.myMeshes.myCube;
         lineMesh.material = this._myFlatMaterial;
 
         lineRootObject.pp_setPosition(start);

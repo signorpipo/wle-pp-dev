@@ -126,8 +126,8 @@ PP.DebugLine = class DebugLine {
         this._myLineObject = WL.scene.addObject(this._myLineRootObject);
 
         this._myLineMesh = this._myLineObject.addComponent('mesh');
-        this._myLineMesh.mesh = PP.myResources.myMeshes.myCylinder;
-        this._myLineMesh.material = PP.myResources.myMaterials.myFlatOpaque.clone();
+        this._myLineMesh.mesh = PP.myDefaultResources.myMeshes.myCylinder;
+        this._myLineMesh.material = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
     }
 
     _markDirty() {

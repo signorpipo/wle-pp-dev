@@ -87,8 +87,8 @@ PP.DebugPoint = class DebugPoint {
         this._myPointObject = WL.scene.addObject(this._myRootObject);
 
         this._myPointMesh = this._myPointObject.addComponent('mesh');
-        this._myPointMesh.mesh = PP.myResources.myMeshes.mySphere;
-        this._myPointMesh.material = PP.myResources.myMaterials.myFlatOpaque.clone();
+        this._myPointMesh.mesh = PP.myDefaultResources.myMeshes.mySphere;
+        this._myPointMesh.material = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
     }
 
     _markDirty() {

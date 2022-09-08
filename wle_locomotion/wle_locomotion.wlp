@@ -41,8 +41,8 @@
                     "type": "pp-input-manager"
                 },
                 {
-                    "type": "pp-get-resources",
-                    "pp-get-resources": {
+                    "type": "pp-get-default-resources",
+                    "pp-get-default-resources": {
                         "_myPlane": "p0",
                         "_myCube": "p1",
                         "_mySphere": "p2",
