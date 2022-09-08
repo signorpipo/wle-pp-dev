@@ -268,14 +268,14 @@ PlayerHeadManager.prototype.teleportPlayerToHeadTransformQuat = function () {
 PlayerHeadManager.prototype._getPositionHeight = function () {
     let playerPosition = PP.vec3_create();
     let playerUp = PP.vec3_create();
-    let headDisplacement = PP.vec3_create();
-    return function _getPositionHeight(headPosition) {
+    let heightVector = PP.vec3_create();
+    return function _getPositionHeight(position) {
         playerPosition = PP.myPlayerObjects.myPlayer.pp_getPosition(playerPosition);
         playerUp = PP.myPlayerObjects.myPlayer.pp_getUp(playerUp);
 
-        headDisplacement = headPosition.vec3_sub(playerPosition, headDisplacement).vec3_componentAlongAxis(playerUp, headDisplacement);
-        let height = headDisplacement.vec3_length();
-        if (!playerUp.vec3_isConcordant(headDisplacement)) {
+        heightVector = position.vec3_sub(playerPosition, heightVector).vec3_componentAlongAxis(playerUp, heightVector);
+        let height = heightVector.vec3_length();
+        if (!playerUp.vec3_isConcordant(heightVector)) {
             height = -height;
         }
 
