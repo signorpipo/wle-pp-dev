@@ -42,6 +42,8 @@ PP.VisualLine = class VisualLine {
         this._myParams = params;
 
         this._myLineRootObject = null;
+        this._myLineObject = null;
+        this._myLineMeshComponent = null;
 
         this._myVisible = true;
         this._myAutoRefresh = true;
@@ -109,16 +111,25 @@ PP.VisualLine = class VisualLine {
         this._myLineObject.pp_setUp(this._myParams.myDirection);
         this._myLineObject.pp_translateObject([0, this._myParams.myLength / 2, 0]);
 
-        this._myLineMesh.material = this._myParams.myMaterial;
+        if (this._myParams.myMaterial == null) {
+            this._myLineMeshComponent.material = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
+        } else {
+            this._myLineMeshComponent.material = this._myParams.myMaterial;
+        }
     }
 
     _build() {
         this._myLineRootObject = WL.scene.addObject(PP.myVisualData.myRootObject);
         this._myLineObject = WL.scene.addObject(this._myLineRootObject);
 
-        this._myLineMesh = this._myLineObject.addComponent('mesh');
-        this._myLineMesh.mesh = PP.myDefaultResources.myMeshes.myCylinder;
-        this._myLineMesh.material = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
+        this._myLineMeshComponent = this._myLineObject.addComponent('mesh');
+        this._myLineMeshComponent.mesh = PP.myDefaultResources.myMeshes.myCylinder;
+
+        if (this._myParams.myMaterial == null) {
+            this._myLineMeshComponent.material = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
+        } else {
+            this._myLineMeshComponent.material = this._myParams.myMaterial;
+        }
     }
 
     clone() {
@@ -127,6 +138,7 @@ PP.VisualLine = class VisualLine {
         clonedParams.myDirection.pp_copy(this._myParams.myDirection);
         clonedParams.myLength = this._myParams.myLength;
         clonedParams.myThickness = this._myParams.myThickness;
+
         if (this._myParams.myMaterial != null) {
             clonedParams.myMaterial = this._myParams.myMaterial.clone();
         }

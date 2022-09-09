@@ -151,6 +151,9 @@ PP.VisualManager = class VisualManager {
             case PP.VisualElementType.LINE:
                 visualElement = new PP.VisualLine();
                 break;
+            case PP.VisualElementType.MESH:
+                visualElement = new PP.VisualMesh();
+                break;
         }
 
         visualElement.setVisible(false);
