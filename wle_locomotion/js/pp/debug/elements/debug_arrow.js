@@ -30,9 +30,6 @@ PP.DebugArrow = class DebugArrow {
         this._myDirty = false;
         this._myAutoRefresh = true;
 
-        //SUPPORT VARIABLES
-        this._myEnd = [0, 0, 0];
-
         this._build();
         this._refresh();
 
@@ -100,33 +97,9 @@ PP.DebugArrow = class DebugArrow {
         this._myDebugLine.update(dt);
     }
 
-    _refresh() {
-        this._myParams.myDirection.vec3_scale(Math.max(0.001, this._myParams.myLength - this._myParams.myThickness * 4), this._myEnd);
-        this._myEnd.vec3_add(this._myParams.myStart, this._myEnd);
-
-        this._myArrowRootObject.pp_setPosition(this._myEnd);
-        this._myArrowRootObject.pp_lookTo(this._myParams.myDirection);
-        this._myArrowRootObject.pp_translateObject([0, 0, this._myParams.myThickness * 2 - 0.00001]);
-
-        this._myArrowObject.pp_resetScaleLocal();
-        this._myArrowObject.pp_scaleObject([this._myParams.myThickness * 1.25, this._myParams.myThickness * 2, this._myParams.myThickness * 1.25]);
-
-        this._myArrowMesh.material.color = this._myParams.myColor;
-
-        let direction = this._myEnd.vec3_sub(this._myParams.myStart);
-        this._myDebugLine.setStartDirectionLength(this._myParams.myStart, direction.vec3_normalize(), direction.vec3_length());
-        this._myDebugLine.setColor(this._myParams.myColor);
-        this._myDebugLine.setThickness(this._myParams.myThickness);
-    }
-
     _build() {
         this._myArrowRootObject = WL.scene.addObject(PP.myDebugData.myRootObject);
-
-        this._myArrowPivotObject = WL.scene.addObject(this._myArrowRootObject);
-        this._myArrowPivotObject.pp_rotate([90, 0, 0]);
-
-        this._myArrowObject = WL.scene.addObject(this._myArrowPivotObject);
-        this._myArrowObject.scale([0.01, 0.01, 0.01]);
+        this._myArrowObject = WL.scene.addObject(this._myArrowRootObject);
 
         this._myArrowMesh = this._myArrowObject.addComponent('mesh');
         this._myArrowMesh.mesh = PP.myDefaultResources.myMeshes.myCone;
@@ -157,3 +130,29 @@ PP.DebugArrow = class DebugArrow {
         return clone;
     }
 };
+
+PP.DebugArrow.prototype._refresh = function () {
+    let end = PP.vec3_create();
+    return function _refresh() {
+        this._myParams.myDirection.vec3_scale(Math.max(0.001, this._myParams.myLength - this._myParams.myThickness * 4), end);
+        end.vec3_add(this._myParams.myStart, end);
+
+        this._myArrowRootObject.pp_setPosition(end);
+        this._myArrowRootObject.pp_setUp(this._myParams.myDirection);
+        this._myArrowRootObject.pp_translateObject([0, this._myParams.myThickness * 2 - 0.00001, 0]);
+
+        this._myArrowObject.pp_resetScaleLocal();
+        this._myArrowObject.pp_scaleObject([this._myParams.myThickness * 1.25, this._myParams.myThickness * 2, this._myParams.myThickness * 1.25]);
+
+        this._myArrowMesh.material.color = this._myParams.myColor;
+
+        let direction = end.vec3_sub(this._myParams.myStart);
+        this._myDebugLine.setStartDirectionLength(this._myParams.myStart, direction.vec3_normalize(), direction.vec3_length());
+        this._myDebugLine.setColor(this._myParams.myColor);
+        this._myDebugLine.setThickness(this._myParams.myThickness);
+    };
+}();
+
+
+
+Object.defineProperty(PP.DebugArrow.prototype, "_refresh", { enumerable: false });
