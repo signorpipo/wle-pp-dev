@@ -1,7 +1,8 @@
 PP.VisualElementType = {
     MESH: 0,
     LINE: 1,
-    ARROW: 2,
-    POINT: 3,
-    TEXT: 5
+    POINT: 2,
+    TEXT: 3,
+    ARROW: 4,
+    TRANSFORM: 5,
 };

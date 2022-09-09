@@ -28,13 +28,13 @@ PP.VisualPoint = class VisualPoint {
     constructor(params = new PP.VisualPointParams()) {
         this._myParams = params;
 
-        this._myPointObject = null;
-        this._myPointMeshComponent = null;
-
-        this._myVisible = true;
+        this._myVisible = false;
         this._myAutoRefresh = true;
 
         this._myDirty = false;
+
+        this._myPointObject = null;
+        this._myPointMeshComponent = null;
 
         this._build();
         this._refresh();

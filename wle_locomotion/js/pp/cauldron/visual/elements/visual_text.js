@@ -31,13 +31,13 @@ PP.VisualText = class VisualText {
     constructor(params = new PP.VisualTextParams()) {
         this._myParams = params;
 
-        this._myTextObject = null;
-        this._myTextComponent = null;
-
-        this._myVisible = true;
+        this._myVisible = false;
         this._myAutoRefresh = true;
 
         this._myDirty = false;
+
+        this._myTextObject = null;
+        this._myTextComponent = null;
 
         this._build();
         this._refresh();

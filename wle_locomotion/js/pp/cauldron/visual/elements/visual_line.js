@@ -41,14 +41,14 @@ PP.VisualLine = class VisualLine {
     constructor(params = new PP.VisualLineParams()) {
         this._myParams = params;
 
-        this._myLineRootObject = null;
-        this._myLineObject = null;
-        this._myLineMeshComponent = null;
-
-        this._myVisible = true;
+        this._myVisible = false;
         this._myAutoRefresh = true;
 
         this._myDirty = false;
+
+        this._myLineRootObject = null;
+        this._myLineObject = null;
+        this._myLineMeshComponent = null;
 
         this._build();
         this._refresh();

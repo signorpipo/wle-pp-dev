@@ -25,17 +25,17 @@ PP.VisualArrow = class VisualArrow {
     constructor(params = new PP.VisualArrowParams()) {
         this._myParams = params;
 
+        this._myVisible = false;
+        this._myAutoRefresh = true;
+
+        this._myDirty = false;
+
         this._myVisualLine = new PP.VisualLine();
         this._myVisualLine.setAutoRefresh(false);
 
         this._myArrowRootObject = null;
         this._myArrowObject = null;
         this._myArrowMeshComponent = null;
-
-        this._myVisible = true;
-        this._myAutoRefresh = true;
-
-        this._myDirty = false;
 
         this._build();
         this._refresh();

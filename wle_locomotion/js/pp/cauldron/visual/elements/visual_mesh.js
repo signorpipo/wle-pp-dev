@@ -28,13 +28,13 @@ PP.VisualMesh = class VisualMesh {
     constructor(params = new PP.VisualMeshParams()) {
         this._myParams = params;
 
-        this._myMeshObject = null;
-        this._myMeshComponent = null;
-
-        this._myVisible = true;
+        this._myVisible = false;
         this._myAutoRefresh = true;
 
         this._myDirty = false;
+
+        this._myMeshObject = null;
+        this._myMeshComponent = null;
 
         this._build();
         this._refresh();

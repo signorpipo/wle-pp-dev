@@ -163,6 +163,9 @@ PP.VisualManager = class VisualManager {
             case PP.VisualElementType.TEXT:
                 visualElement = new PP.VisualText();
                 break;
+            case PP.VisualElementType.TRANSFORM:
+                visualElement = new PP.VisualTransform();
+                break;
         }
 
         visualElement.setVisible(false);
