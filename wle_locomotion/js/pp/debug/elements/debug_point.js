@@ -1,3 +1,11 @@
+/*
+let debugParams = new PP.DebugPointParams();
+debugParams.myPosition = position;
+debugParams.myRadius = 0.01;
+debugParams.myColor = [0, 1, 0, 1];
+PP.myDebugManager.draw(debugParams);
+*/
+
 PP.DebugPointParams = class DebugPointParams {
 
     constructor() {

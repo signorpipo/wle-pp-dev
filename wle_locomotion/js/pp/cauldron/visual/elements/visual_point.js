@@ -1,35 +1,35 @@
 /*
-let visualParams = new PP.VisualMeshParams();
-visualParams.myTransform = transform;
-visualParams.myMesh = PP.myDefaultResources.myMeshes.mySphere;
+let visualParams = new PP.VisualPointParams();
+visualParams.myPosition = position;
+visualParams.myRadius = 0.01;
 visualParams.myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
 visualParams.myMaterial.color = [1, 1, 1, 1];
 PP.myVisualManager.draw(visualParams);
 
 or
 
-let visuaMesh = new PP.VisualMesh(visualParams);
+let visuaLine = new PP.VisualLine(visualParams);
 */
 
-PP.VisualMeshParams = class VisualMeshParams {
+PP.VisualPointParams = class VisualPointParams {
 
     constructor() {
-        this.myTransform = PP.mat4_create();
+        this.myPosition = [0, 0, 0];
+        this.myRadius = 0;
 
-        this.myMesh = null;
         this.myMaterial = null;
 
-        this.myType = PP.VisualElementType.MESH;
+        this.myType = PP.VisualElementType.POINT;
     }
 };
 
-PP.VisualMesh = class VisualMesh {
+PP.VisualPoint = class VisualPoint {
 
-    constructor(params = new PP.VisualMeshParams()) {
+    constructor(params = new PP.VisualPointParams()) {
         this._myParams = params;
 
-        this._myMeshObject = null;
-        this._myMeshComponent = null;
+        this._myPointObject = null;
+        this._myPointMeshComponent = null;
 
         this._myVisible = true;
         this._myAutoRefresh = true;
@@ -45,7 +45,7 @@ PP.VisualMesh = class VisualMesh {
     setVisible(visible) {
         if (this._myVisible != visible) {
             this._myVisible = visible;
-            this._myMeshObject.pp_setActive(visible);
+            this._myPointObject.pp_setActive(visible);
         }
     }
 
@@ -79,32 +79,24 @@ PP.VisualMesh = class VisualMesh {
     }
 
     _refresh() {
-        this._myMeshObject.pp_setTransform(this._myParams.myTransform);
-
-        if (this._myParams.myMesh != null) {
-            this._myMeshComponent.mesh = this._myParams.myMesh;
-        }
+        this._myPointObject.pp_setPosition(this._myParams.myPosition);
+        this._myPointObject.pp_setScale(this._myParams.myRadius);
 
         if (this._myParams.myMaterial != null) {
-            this._myMeshComponent.material = this._myParams.myMaterial;
+            this._myPointMeshComponent.material = this._myParams.myMaterial;
         }
     }
 
     _build() {
-        this._myMeshObject = WL.scene.addObject(PP.myVisualData.myRootObject);
+        this._myPointObject = WL.scene.addObject(PP.myVisualData.myRootObject);
 
-        this._myMeshComponent = this._myMeshObject.addComponent('mesh');
-
-        if (this._myParams.myMesh == null) {
-            this._myMeshComponent.mesh = PP.myDefaultResources.myMeshes.mySphere;
-        } else {
-            this._myMeshComponent.mesh = this._myParams.myMesh;
-        }
+        this._myPointMeshComponent = this._myPointObject.addComponent('mesh');
+        this._myPointMeshComponent.mesh = PP.myDefaultResources.myMeshes.mySphere;
 
         if (this._myParams.myMaterial == null) {
-            this._myMeshComponent.material = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
+            this._myPointMeshComponent.material = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
         } else {
-            this._myMeshComponent.material = this._myParams.myMaterial;
+            this._myPointMeshComponent.material = this._myParams.myMaterial;
         }
     }
 
@@ -117,18 +109,15 @@ PP.VisualMesh = class VisualMesh {
     }
 
     clone() {
-        let clonedParams = new PP.VisualMeshParams();
-        clonedParams.myTransform.pp_copy(this._myParams.myTransform);
-
-        if (this._myParams.myMesh != null) {
-            clonedParams.myMesh = this._myParams.myMesh;
-        }
+        let clonedParams = new PP.VisualPointParams();
+        clonedParams.myPosition.pp_copy(this._myParams.myPosition);
+        clonedParams.myRadius = this._myParams.myRadius;
 
         if (this._myParams.myMaterial != null) {
             clonedParams.myMaterial = this._myParams.myMaterial.clone();
         }
 
-        let clone = new PP.VisualMesh(clonedParams);
+        let clone = new PP.VisualPoint(clonedParams);
         clone.setAutoRefresh(this._myAutoRefresh);
         clone.setVisible(this._myVisible);
         clone._myDirty = this._myDirty;

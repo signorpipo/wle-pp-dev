@@ -154,6 +154,9 @@ PP.VisualManager = class VisualManager {
             case PP.VisualElementType.MESH:
                 visualElement = new PP.VisualMesh();
                 break;
+            case PP.VisualElementType.POINT:
+                visualElement = new PP.VisualPoint();
+                break;
         }
 
         visualElement.setVisible(false);

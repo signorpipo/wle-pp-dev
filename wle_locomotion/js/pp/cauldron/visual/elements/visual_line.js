@@ -80,14 +80,6 @@ PP.VisualLine = class VisualLine {
         this._markDirty();
     }
 
-    _markDirty() {
-        this._myDirty = true;
-
-        if (this._myAutoRefresh) {
-            this.update(0);
-        }
-    }
-
     refresh() {
         this.update(0);
     }
@@ -129,6 +121,14 @@ PP.VisualLine = class VisualLine {
             this._myLineMeshComponent.material = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
         } else {
             this._myLineMeshComponent.material = this._myParams.myMaterial;
+        }
+    }
+
+    _markDirty() {
+        this._myDirty = true;
+
+        if (this._myAutoRefresh) {
+            this.update(0);
         }
     }
 

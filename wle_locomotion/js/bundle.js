@@ -80,6 +80,8 @@ require('./pp/cauldron/visual/visual_manager');
 
 require('./pp/cauldron/visual/elements/visual_element_types');
 require('./pp/cauldron/visual/elements/visual_line');
+require('./pp/cauldron/visual/elements/visual_mesh');
+require('./pp/cauldron/visual/elements/visual_point');
 
 require('./pp/cauldron/visual/components/visual_manager_component');
 
