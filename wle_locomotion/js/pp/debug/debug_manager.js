@@ -2,7 +2,7 @@ PP.DebugManager = class DebugManager {
     constructor() {
         this._myDebugVisualElementTypeMap = new Map();
         this._myDebugVisualElementLastID = 0;
-        this._myDebugDrawPool = new PP.ObjectPoolManager();
+        this._myDebugVisualElementsPool = new PP.ObjectPoolManager();
         this._myDebugVisualElementsToShow = [];
     }
 
@@ -10,7 +10,7 @@ PP.DebugManager = class DebugManager {
         this._updateDraw(dt);
     }
 
-    //lifetimeSeconds can be null, in that case the debug object will be drawn until cleared
+    //lifetimeSeconds can be null, in that case the debug element will be drawn until cleared
     draw(debugVisualElementParams, lifetimeSeconds = 0, idToReuse = null) {
         let debugVisualElement = null;
         let idReused = false;
@@ -65,7 +65,7 @@ PP.DebugManager = class DebugManager {
         if (elementID == null) {
             for (let debugVisualElementMap of this._myDebugVisualElementTypeMap.values()) {
                 for (let debugVisualElement of debugVisualElementMap.values()) {
-                    this._myDebugDrawPool.releaseObject(debugVisualElement[0].getParams().myType, debugVisualElement[0]);
+                    this._myDebugVisualElementsPool.releaseObject(debugVisualElement[0].getParams().myType, debugVisualElement[0]);
                 }
             }
 
@@ -76,7 +76,7 @@ PP.DebugManager = class DebugManager {
             for (let debugVisualElementMap of this._myDebugVisualElementTypeMap.values()) {
                 if (debugVisualElementMap.has(elementID)) {
                     debugVisualElement = debugVisualElementMap.get(elementID);
-                    this._myDebugDrawPool.releaseObject(debugVisualElement[0].getParams().myType, debugVisualElement[0]);
+                    this._myDebugVisualElementsPool.releaseObject(debugVisualElement[0].getParams().myType, debugVisualElement[0]);
                     debugVisualElementMap.delete(elementID);
                     break;
                 }
@@ -85,11 +85,11 @@ PP.DebugManager = class DebugManager {
     }
 
     allocateDraw(debugVisualElementType, amount) {
-        if (!this._myDebugDrawPool.hasPool(debugVisualElementType)) {
+        if (!this._myDebugVisualElementsPool.hasPool(debugVisualElementType)) {
             this._addDebugVisualElementTypeToPool(debugVisualElementType);
         }
 
-        let pool = this._myDebugDrawPool.getPool(debugVisualElementType);
+        let pool = this._myDebugVisualElementsPool.getPool(debugVisualElementType);
 
         let difference = pool.getAvailableSize() - amount;
         if (difference < 0) {
@@ -108,7 +108,7 @@ PP.DebugManager = class DebugManager {
             for (let debugVisualElementMapEntry of debugVisualElementMap.entries()) {
                 let debugVisualElement = debugVisualElementMapEntry[1];
                 if (debugVisualElement[1].isDone()) {
-                    this._myDebugDrawPool.releaseObject(debugVisualElement[0].getParams().myType, debugVisualElement[0]);
+                    this._myDebugVisualElementsPool.releaseObject(debugVisualElement[0].getParams().myType, debugVisualElement[0]);
                     idsToRemove.push(debugVisualElementMapEntry[0]);
                 }
 
@@ -122,19 +122,19 @@ PP.DebugManager = class DebugManager {
     }
 
     _createDebugVisualElement(params) {
-        let object = null;
+        let element = null;
 
-        if (!this._myDebugDrawPool.hasPool(params.myType)) {
+        if (!this._myDebugVisualElementsPool.hasPool(params.myType)) {
             this._addDebugVisualElementTypeToPool(params.myType);
         }
 
-        object = this._myDebugDrawPool.getObject(params.myType);
+        element = this._myDebugVisualElementsPool.getObject(params.myType);
 
-        if (object != null) {
-            object.setParams(params);
+        if (element != null) {
+            element.setParams(params);
         }
 
-        return object;
+        return element;
     }
 
     _addDebugVisualElementTypeToPool(type) {
@@ -172,7 +172,7 @@ PP.DebugManager = class DebugManager {
         debugVisualElement.setAutoRefresh(true);
 
         if (debugVisualElement != null) {
-            this._myDebugDrawPool.addPool(type, debugVisualElement, objectPoolParams);
+            this._myDebugVisualElementsPool.addPool(type, debugVisualElement, objectPoolParams);
         } else {
             console.error("Debug visual element type not supported");
         }

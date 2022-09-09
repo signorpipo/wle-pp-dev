@@ -23,7 +23,7 @@ PP.VisualLineParams = class VisualLineParams {
 
         this.myMaterial = null;
 
-        this.myType = PP.DebugVisualElementType.LINE;
+        this.myType = PP.VisualElementType.LINE;
     }
 
     setStartEnd(start, end) {
@@ -113,7 +113,7 @@ PP.VisualLine = class VisualLine {
     }
 
     _build() {
-        this._myLineRootObject = WL.scene.addObject(PP.myDebugData.myRootObject);
+        this._myLineRootObject = WL.scene.addObject(PP.myVisualData.myRootObject);
         this._myLineObject = WL.scene.addObject(this._myLineRootObject);
 
         this._myLineMesh = this._myLineObject.addComponent('mesh');

@@ -53,6 +53,9 @@
                         "_myFlatOpaque": "779",
                         "_myText": "781"
                     }
+                },
+                {
+                    "type": "pp-visual-manager"
                 }
             ]
         },
@@ -13376,7 +13379,10 @@
                 "js/locomotion/collision",
                 "js/pp/gameplay/cauldron",
                 "js/locomotion/draft",
-                "js/pp/debug/elements"
+                "js/pp/debug/elements",
+                "js/pp/cauldron/visual/elements",
+                "js/pp/cauldron/visual/components",
+                "js/pp/cauldron/visual"
             ],
             "useInternalBundler": false
         },

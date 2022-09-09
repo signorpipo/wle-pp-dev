@@ -76,8 +76,12 @@ require('./pp/cauldron/physics/physics_utils');
 require('./pp/cauldron/physics/physics_raycast_data');
 require('./pp/cauldron/physics/physics_layer_flags');
 
+require('./pp/cauldron/visual/visual_manager');
+
 require('./pp/cauldron/visual/elements/visual_element_types');
 require('./pp/cauldron/visual/elements/visual_line');
+
+require('./pp/cauldron/visual/components/visual_manager_component');
 
 //	DEBUG
 require('./pp/debug/debug_manager');
