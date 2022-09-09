@@ -18,7 +18,7 @@ PP.DebugLineParams = class DebugLineParams {
 
         this.myColor = [0, 1, 0, 1];
 
-        this.myType = PP.DebugDrawObjectType.LINE;
+        this.myType = PP.DebugVisualElementType.LINE;
     }
 
     setStartEnd(start, end) {
@@ -45,7 +45,8 @@ PP.DebugLine = class DebugLine {
 
         this._build();
         this._refresh();
-        this.setVisible(false);
+
+        this.setVisible(true);
     }
 
     setVisible(visible) {

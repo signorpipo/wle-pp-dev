@@ -6,7 +6,7 @@ PP.DebugPointParams = class DebugPointParams {
 
         this.myColor = [0, 1, 0, 1];
 
-        this.myType = PP.DebugDrawObjectType.POINT;
+        this.myType = PP.DebugVisualElementType.POINT;
     }
 };
 
@@ -23,7 +23,8 @@ PP.DebugPoint = class DebugPoint {
 
         this._build();
         this._refresh();
-        this.setVisible(false);
+
+        this.setVisible(true);
     }
 
     setVisible(visible) {

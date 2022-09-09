@@ -11,7 +11,7 @@ PP.DebugArrowParams = class DebugArrowParams extends PP.DebugLineParams {
     constructor() {
         super();
 
-        this.myType = PP.DebugDrawObjectType.ARROW;
+        this.myType = PP.DebugVisualElementType.ARROW;
     }
 };
 
@@ -35,7 +35,8 @@ PP.DebugArrow = class DebugArrow {
 
         this._build();
         this._refresh();
-        this.setVisible(false);
+
+        this.setVisible(true);
     }
 
     setVisible(visible) {

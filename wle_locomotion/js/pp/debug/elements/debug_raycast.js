@@ -16,7 +16,7 @@ PP.DebugRaycastParams = class DebugRaycastParams {
 
         this.myShowOnlyFirstHit = true;
 
-        this.myType = PP.DebugDrawObjectType.RAYCAST;
+        this.myType = PP.DebugVisualElementType.RAYCAST;
     }
 
     get myRaycastResult() {
@@ -45,7 +45,8 @@ PP.DebugRaycast = class DebugRaycast {
         this._myAutoRefresh = true;
 
         this._refresh();
-        this.setVisible(false);
+
+        this.setVisible(true);
     }
 
     setVisible(visible) {

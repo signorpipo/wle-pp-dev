@@ -6,7 +6,7 @@ PP.DebugTransformParams = class DebugTransformParams {
         this.myThickness = 0.005;
         this.myPositionOffset = PP.vec3_create();
 
-        this.myType = PP.DebugDrawObjectType.TRANSFORM;
+        this.myType = PP.DebugVisualElementType.TRANSFORM;
     }
 };
 
@@ -32,7 +32,7 @@ PP.DebugTransform = class DebugTransform {
 
         this._refresh();
 
-        this.setVisible(false);
+        this.setVisible(true);
     }
 
     setVisible(visible) {

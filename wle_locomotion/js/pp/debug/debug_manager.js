@@ -1,18 +1,9 @@
-PP.DebugDrawObjectType = {
-    LINE: 0,
-    TRANSFORM: 1,
-    ARROW: 2,
-    POINT: 3,
-    RAYCAST: 4,
-    TEXT: 5
-};
-
 PP.DebugManager = class DebugManager {
     constructor() {
-        this._myDebugDrawObjectTypeMap = new Map();
-        this._myDebugDrawLastID = 0;
+        this._myDebugVisualElementTypeMap = new Map();
+        this._myDebugVisualElementLastID = 0;
         this._myDebugDrawPool = new PP.ObjectPoolManager();
-        this._myDebugDrawObjectToShow = [];
+        this._myDebugVisualElementsToShow = [];
     }
 
     update(dt) {
@@ -20,85 +11,85 @@ PP.DebugManager = class DebugManager {
     }
 
     //lifetimeSeconds can be null, in that case the debug object will be drawn until cleared
-    draw(debugDrawObjectParams, lifetimeSeconds = 0, idToReuse = null) {
-        let debugDrawObject = null;
+    draw(debugVisualElementParams, lifetimeSeconds = 0, idToReuse = null) {
+        let debugVisualElement = null;
         let idReused = false;
         if (idToReuse != null) {
-            if (this._myDebugDrawObjectTypeMap.has(debugDrawObjectParams.myType)) {
-                let debugDrawObjectMap = this._myDebugDrawObjectTypeMap.get(debugDrawObjectParams.myType);
-                if (debugDrawObjectMap.has(idToReuse)) {
-                    debugDrawObject = debugDrawObjectMap.get(idToReuse)[0];
-                    debugDrawObject.setParams(debugDrawObjectParams);
-                    debugDrawObject.setVisible(false);
+            if (this._myDebugVisualElementTypeMap.has(debugVisualElementParams.myType)) {
+                let debugVisualElementMap = this._myDebugVisualElementTypeMap.get(debugVisualElementParams.myType);
+                if (debugVisualElementMap.has(idToReuse)) {
+                    debugVisualElement = debugVisualElementMap.get(idToReuse)[0];
+                    debugVisualElement.setParams(debugVisualElementParams);
+                    debugVisualElement.setVisible(false);
                     idReused = true;
                 }
             }
         }
 
-        if (debugDrawObject == null) {
-            debugDrawObject = this._createDebugDrawObject(debugDrawObjectParams);
+        if (debugVisualElement == null) {
+            debugVisualElement = this._createDebugVisualElement(debugVisualElementParams);
         }
 
-        if (debugDrawObject == null) {
-            console.error("Couldn't create the requested debug draw object");
+        if (debugVisualElement == null) {
+            console.error("Couldn't create the requested debug visual element");
             return null;
         }
 
-        if (!this._myDebugDrawObjectTypeMap.has(debugDrawObjectParams.myType)) {
-            this._myDebugDrawObjectTypeMap.set(debugDrawObjectParams.myType, new Map());
+        if (!this._myDebugVisualElementTypeMap.has(debugVisualElementParams.myType)) {
+            this._myDebugVisualElementTypeMap.set(debugVisualElementParams.myType, new Map());
         }
-        let debugDrawObjectMap = this._myDebugDrawObjectTypeMap.get(debugDrawObjectParams.myType);
+        let debugVisualElementMap = this._myDebugVisualElementTypeMap.get(debugVisualElementParams.myType);
 
-        let objectID = null;
+        let elementID = null;
         if (!idReused) {
-            objectID = this._myDebugDrawLastID + 1;
-            this._myDebugDrawLastID = objectID;
+            elementID = this._myDebugVisualElementLastID + 1;
+            this._myDebugVisualElementLastID = elementID;
 
-            debugDrawObjectMap.set(objectID, [debugDrawObject, new PP.Timer(lifetimeSeconds, lifetimeSeconds != null)]);
+            debugVisualElementMap.set(elementID, [debugVisualElement, new PP.Timer(lifetimeSeconds, lifetimeSeconds != null)]);
         } else {
-            objectID = idToReuse;
-            let debugDrawObjectPair = debugDrawObjectMap.get(objectID);
-            debugDrawObjectPair[0] = debugDrawObject;
-            debugDrawObjectPair[1].reset(lifetimeSeconds);
+            elementID = idToReuse;
+            let debugVisualElementPair = debugVisualElementMap.get(elementID);
+            debugVisualElementPair[0] = debugVisualElement;
+            debugVisualElementPair[1].reset(lifetimeSeconds);
             if (lifetimeSeconds != null) {
-                debugDrawObjectPair[1].start();
+                debugVisualElementPair[1].start();
             }
         }
 
-        this._myDebugDrawObjectToShow.push(debugDrawObject);
+        this._myDebugVisualElementsToShow.push(debugVisualElement);
 
-        return objectID;
+        return elementID;
     }
 
-    clearDraw(drawID = null) {
-        if (drawID == null) {
-            for (let debugDrawObjectMap of this._myDebugDrawObjectTypeMap.values()) {
-                for (let debugDrawObject of debugDrawObjectMap.values()) {
-                    this._myDebugDrawPool.releaseObject(debugDrawObject[0].getParams().myType, debugDrawObject[0]);
+    clearDraw(elementID = null) {
+        if (elementID == null) {
+            for (let debugVisualElementMap of this._myDebugVisualElementTypeMap.values()) {
+                for (let debugVisualElement of debugVisualElementMap.values()) {
+                    this._myDebugDrawPool.releaseObject(debugVisualElement[0].getParams().myType, debugVisualElement[0]);
                 }
             }
 
-            this._myDebugDrawObjectTypeMap = new Map();
-            this._myDebugDrawLastID = 0;
+            this._myDebugVisualElementTypeMap = new Map();
+            this._myDebugVisualElementLastID = 0;
         } else {
-            let debugDrawObject = null;
-            for (let debugDrawObjectMap of this._myDebugDrawObjectTypeMap.values()) {
-                if (debugDrawObjectMap.has(drawID)) {
-                    debugDrawObject = debugDrawObjectMap.get(drawID);
-                    this._myDebugDrawPool.releaseObject(debugDrawObject[0].getParams().myType, debugDrawObject[0]);
-                    debugDrawObjectMap.delete(drawID);
+            let debugVisualElement = null;
+            for (let debugVisualElementMap of this._myDebugVisualElementTypeMap.values()) {
+                if (debugVisualElementMap.has(elementID)) {
+                    debugVisualElement = debugVisualElementMap.get(elementID);
+                    this._myDebugDrawPool.releaseObject(debugVisualElement[0].getParams().myType, debugVisualElement[0]);
+                    debugVisualElementMap.delete(elementID);
                     break;
                 }
             }
         }
     }
 
-    allocateDraw(debugDrawObjectType, amount) {
-        if (!this._myDebugDrawPool.hasPool(debugDrawObjectType)) {
-            this._addDebugDrawObjectTypeToPool(debugDrawObjectType);
+    allocateDraw(debugVisualElementType, amount) {
+        if (!this._myDebugDrawPool.hasPool(debugVisualElementType)) {
+            this._addDebugVisualElementTypeToPool(debugVisualElementType);
         }
 
-        let pool = this._myDebugDrawPool.getPool(debugDrawObjectType);
+        let pool = this._myDebugDrawPool.getPool(debugVisualElementType);
 
         let difference = pool.getAvailableSize() - amount;
         if (difference < 0) {
@@ -107,34 +98,34 @@ PP.DebugManager = class DebugManager {
     }
 
     _updateDraw(dt) {
-        for (let debugDrawObject of this._myDebugDrawObjectToShow) {
-            debugDrawObject.setVisible(true);
+        for (let debugVisualElement of this._myDebugVisualElementsToShow) {
+            debugVisualElement.setVisible(true);
         }
-        this._myDebugDrawObjectToShow = [];
+        this._myDebugVisualElementsToShow = [];
 
-        for (let debugDrawObjectMap of this._myDebugDrawObjectTypeMap.values()) {
+        for (let debugVisualElementMap of this._myDebugVisualElementTypeMap.values()) {
             let idsToRemove = [];
-            for (let debugDrawObjectMapEntry of debugDrawObjectMap.entries()) {
-                let debugDrawObject = debugDrawObjectMapEntry[1];
-                if (debugDrawObject[1].isDone()) {
-                    this._myDebugDrawPool.releaseObject(debugDrawObject[0].getParams().myType, debugDrawObject[0]);
-                    idsToRemove.push(debugDrawObjectMapEntry[0]);
+            for (let debugVisualElementMapEntry of debugVisualElementMap.entries()) {
+                let debugVisualElement = debugVisualElementMapEntry[1];
+                if (debugVisualElement[1].isDone()) {
+                    this._myDebugDrawPool.releaseObject(debugVisualElement[0].getParams().myType, debugVisualElement[0]);
+                    idsToRemove.push(debugVisualElementMapEntry[0]);
                 }
 
-                debugDrawObject[1].update(dt);
+                debugVisualElement[1].update(dt);
             }
 
             for (let id of idsToRemove) {
-                debugDrawObjectMap.delete(id);
+                debugVisualElementMap.delete(id);
             }
         }
     }
 
-    _createDebugDrawObject(params) {
+    _createDebugVisualElement(params) {
         let object = null;
 
         if (!this._myDebugDrawPool.hasPool(params.myType)) {
-            this._addDebugDrawObjectTypeToPool(params.myType);
+            this._addDebugVisualElementTypeToPool(params.myType);
         }
 
         object = this._myDebugDrawPool.getObject(params.myType);
@@ -146,7 +137,7 @@ PP.DebugManager = class DebugManager {
         return object;
     }
 
-    _addDebugDrawObjectTypeToPool(type) {
+    _addDebugVisualElementTypeToPool(type) {
         let objectPoolParams = new PP.ObjectPoolParams();
         objectPoolParams.myInitialPoolSize = 10;
         objectPoolParams.myPercentageToAddWhenEmpty = 1;
@@ -155,32 +146,35 @@ PP.DebugManager = class DebugManager {
             object.setVisible(active);
         };
 
-        let debugDrawObject = null;
+        let debugVisualElement = null;
         switch (type) {
-            case PP.DebugDrawObjectType.LINE:
-                debugDrawObject = new PP.DebugLine();
+            case PP.DebugVisualElementType.LINE:
+                debugVisualElement = new PP.DebugLine();
                 break;
-            case PP.DebugDrawObjectType.TRANSFORM:
-                debugDrawObject = new PP.DebugTransform();
+            case PP.DebugVisualElementType.TRANSFORM:
+                debugVisualElement = new PP.DebugTransform();
                 break;
-            case PP.DebugDrawObjectType.ARROW:
-                debugDrawObject = new PP.DebugArrow();
+            case PP.DebugVisualElementType.ARROW:
+                debugVisualElement = new PP.DebugArrow();
                 break;
-            case PP.DebugDrawObjectType.POINT:
-                debugDrawObject = new PP.DebugPoint();
+            case PP.DebugVisualElementType.POINT:
+                debugVisualElement = new PP.DebugPoint();
                 break;
-            case PP.DebugDrawObjectType.RAYCAST:
-                debugDrawObject = new PP.DebugRaycast();
+            case PP.DebugVisualElementType.RAYCAST:
+                debugVisualElement = new PP.DebugRaycast();
                 break;
-            case PP.DebugDrawObjectType.TEXT:
-                debugDrawObject = new PP.DebugText();
+            case PP.DebugVisualElementType.TEXT:
+                debugVisualElement = new PP.DebugText();
                 break;
         }
 
-        if (debugDrawObject != null) {
-            this._myDebugDrawPool.addPool(type, debugDrawObject, objectPoolParams);
+        debugVisualElement.setVisible(false);
+        debugVisualElement.setAutoRefresh(true);
+
+        if (debugVisualElement != null) {
+            this._myDebugDrawPool.addPool(type, debugVisualElement, objectPoolParams);
         } else {
-            console.error("Debug draw object type not supported");
+            console.error("Debug visual element type not supported");
         }
     }
 };

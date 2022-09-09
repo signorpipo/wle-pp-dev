@@ -13375,7 +13375,8 @@
                 "js/pp/input/gamepad/gamepad_cores",
                 "js/locomotion/collision",
                 "js/pp/gameplay/cauldron",
-                "js/locomotion/draft"
+                "js/locomotion/draft",
+                "js/pp/debug/elements"
             ],
             "useInternalBundler": false
         },

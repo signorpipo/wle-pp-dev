@@ -11,7 +11,7 @@ PP.DebugTextParams = class DebugTextParams {
         this.myUp = [0, 1, 0];
         this.myScale = [1, 1, 1];
 
-        this.myType = PP.DebugDrawObjectType.TEXT;
+        this.myType = PP.DebugVisualElementType.TEXT;
     }
 };
 
@@ -28,7 +28,8 @@ PP.DebugText = class DebugText {
 
         this._build();
         this._refresh();
-        this.setVisible(false);
+
+        this.setVisible(true);
     }
 
     setVisible(visible) {
