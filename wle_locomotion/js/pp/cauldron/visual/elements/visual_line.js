@@ -103,9 +103,7 @@ PP.VisualLine = class VisualLine {
         this._myLineObject.pp_setUp(this._myParams.myDirection);
         this._myLineObject.pp_translateObject([0, this._myParams.myLength / 2, 0]);
 
-        if (this._myParams.myMaterial == null) {
-            this._myLineMeshComponent.material = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
-        } else {
+        if (this._myParams.myMaterial != null) {
             this._myLineMeshComponent.material = this._myParams.myMaterial;
         }
     }

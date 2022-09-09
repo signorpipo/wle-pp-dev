@@ -157,6 +157,9 @@ PP.VisualManager = class VisualManager {
             case PP.VisualElementType.POINT:
                 visualElement = new PP.VisualPoint();
                 break;
+            case PP.VisualElementType.ARROW:
+                visualElement = new PP.VisualArrow();
+                break;
         }
 
         visualElement.setVisible(false);
