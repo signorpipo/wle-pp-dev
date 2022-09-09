@@ -9,7 +9,7 @@ PP.myVisualManager.draw(visualParams);
 
 or
 
-let visuaLine = new PP.VisualArrow(visualParams);
+let visualArrow = new PP.VisualArrow(visualParams);
 */
 
 PP.VisualArrowParams = class VisualArrowParams extends PP.VisualLineParams {

@@ -8,7 +8,7 @@ PP.myVisualManager.draw(visualParams);
 
 or
 
-let visuaMesh = new PP.VisualMesh(visualParams);
+let visualMesh = new PP.VisualMesh(visualParams);
 */
 
 PP.VisualMeshParams = class VisualMeshParams {

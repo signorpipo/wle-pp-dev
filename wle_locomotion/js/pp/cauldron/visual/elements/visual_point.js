@@ -8,7 +8,7 @@ PP.myVisualManager.draw(visualParams);
 
 or
 
-let visuaLine = new PP.VisualLine(visualParams);
+let visualPoint = new PP.VisualPoint(visualParams);
 */
 
 PP.VisualPointParams = class VisualPointParams {

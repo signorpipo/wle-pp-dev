@@ -160,6 +160,9 @@ PP.VisualManager = class VisualManager {
             case PP.VisualElementType.ARROW:
                 visualElement = new PP.VisualArrow();
                 break;
+            case PP.VisualElementType.TEXT:
+                visualElement = new PP.VisualText();
+                break;
         }
 
         visualElement.setVisible(false);
