@@ -93,15 +93,17 @@ PP.VisualManager = class VisualManager {
                 }
             }
 
+            this._myVisualElementsToShow = [];
             this._myVisualElementTypeMap = new Map();
             this._myVisualElementLastID = 0;
         } else {
-            let visualElement = null;
             for (let visualElementMap of this._myVisualElementTypeMap.values()) {
                 if (visualElementMap.has(elementID)) {
-                    visualElement = visualElementMap.get(elementID);
-                    this._myVisualElementsPool.releaseObject(visualElement[0].getParams().myType, visualElement[0]);
+                    let visualElementPair = visualElementMap.get(elementID);
+                    this._myVisualElementsPool.releaseObject(visualElementPair[0].getParams().myType, visualElementPair[0]);
                     visualElementMap.delete(elementID);
+
+                    this._myVisualElementsToShow.pp_removeEqual(visualElementPair[0]);
                     break;
                 }
             }
