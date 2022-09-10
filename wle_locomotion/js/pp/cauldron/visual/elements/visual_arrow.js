@@ -37,6 +37,8 @@ PP.VisualArrow = class VisualArrow {
         this._myArrowObject = null;
         this._myArrowMeshComponent = null;
 
+        this._myDefaultMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
+
         this._build();
         this._refresh();
 
@@ -89,7 +91,7 @@ PP.VisualArrow = class VisualArrow {
         this._myArrowMeshComponent.mesh = PP.myDefaultResources.myMeshes.myCone;
 
         if (this._myParams.myMaterial == null) {
-            this._myArrowMeshComponent.material = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
+            this._myArrowMeshComponent.material = this._myDefaultMaterial;
         } else {
             this._myArrowMeshComponent.material = this._myParams.myMaterial;
         }
@@ -112,6 +114,8 @@ PP.VisualArrow = class VisualArrow {
 
         if (this._myParams.myMaterial != null) {
             clonedParams.myMaterial = this._myParams.myMaterial.clone();
+        } else {
+            clonedParams.myMaterial = null;
         }
 
         let clone = new PP.VisualArrow(clonedParams);
@@ -136,7 +140,9 @@ PP.VisualArrow.prototype._refresh = function () {
         this._myArrowObject.pp_resetScaleLocal();
         this._myArrowObject.pp_scaleObject([this._myParams.myThickness * 1.25, this._myParams.myThickness * 2, this._myParams.myThickness * 1.25]);
 
-        if (this._myParams.myMaterial != null) {
+        if (this._myParams.myMaterial == null) {
+            this._myArrowMeshComponent.material = this._myDefaultMaterial;
+        } else {
             this._myArrowMeshComponent.material = this._myParams.myMaterial;
         }
 
@@ -147,7 +153,9 @@ PP.VisualArrow.prototype._refresh = function () {
         visualLineParams.myLength = direction.vec3_length();
         visualLineParams.myThickness = this._myParams.myThickness;
 
-        if (this._myParams.myMaterial != null) {
+        if (this._myParams.myMaterial == null) {
+            visualLineParams.myMaterial = this._myDefaultMaterial;
+        } else {
             visualLineParams.myMaterial = this._myParams.myMaterial;
         }
 

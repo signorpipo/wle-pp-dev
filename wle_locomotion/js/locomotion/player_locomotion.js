@@ -282,7 +282,7 @@ PlayerLocomotion = class PlayerLocomotion {
             this._myCollisionCheckParamsSmooth.myObjectsToIgnore.pp_pushUnique(physXComponent.object, (first, second) => first.pp_equals(second));
         }
 
-        this._myCollisionCheckParamsSmooth.myDebugActive = false;
+        this._myCollisionCheckParamsSmooth.myDebugActive = true;
 
         this._myCollisionCheckParamsSmooth.myDebugHorizontalMovementActive = false;
         this._myCollisionCheckParamsSmooth.myDebugHorizontalPositionActive = true;

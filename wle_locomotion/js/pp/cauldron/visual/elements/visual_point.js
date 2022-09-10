@@ -36,6 +36,8 @@ PP.VisualPoint = class VisualPoint {
         this._myPointObject = null;
         this._myPointMeshComponent = null;
 
+        this._myDefaultMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
+
         this._build();
         this._refresh();
 
@@ -82,7 +84,9 @@ PP.VisualPoint = class VisualPoint {
         this._myPointObject.pp_setPosition(this._myParams.myPosition);
         this._myPointObject.pp_setScale(this._myParams.myRadius);
 
-        if (this._myParams.myMaterial != null) {
+        if (this._myParams.myMaterial == null) {
+            this._myPointMeshComponent.material = this._myDefaultMaterial;
+        } else {
             this._myPointMeshComponent.material = this._myParams.myMaterial;
         }
     }
@@ -94,7 +98,7 @@ PP.VisualPoint = class VisualPoint {
         this._myPointMeshComponent.mesh = PP.myDefaultResources.myMeshes.mySphere;
 
         if (this._myParams.myMaterial == null) {
-            this._myPointMeshComponent.material = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
+            this._myPointMeshComponent.material = this._myDefaultMaterial;
         } else {
             this._myPointMeshComponent.material = this._myParams.myMaterial;
         }
@@ -115,6 +119,8 @@ PP.VisualPoint = class VisualPoint {
 
         if (this._myParams.myMaterial != null) {
             clonedParams.myMaterial = this._myParams.myMaterial.clone();
+        } else {
+            clonedParams.myMaterial = null;
         }
 
         let clone = new PP.VisualPoint(clonedParams);

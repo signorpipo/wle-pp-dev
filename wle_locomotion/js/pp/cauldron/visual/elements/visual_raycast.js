@@ -43,11 +43,15 @@ PP.VisualRaycast = class VisualRaycast {
 
         this._myDirty = false;
 
+        this._myDefaultRayMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
+        this._myDefaultRayMaterial.color = [0, 1, 0, 1];
+        this._myDefaultHitNormalMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
+        this._myDefaultHitNormalMaterial.color = [1, 0, 0, 1];
+
         this._myVisualRaycast = new PP.VisualArrow();
 
         if (this._myParams.myRayMaterial == null) {
-            this._myVisualRaycast.getParams().myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
-            this._myVisualRaycast.getParams().myMaterial.color = [0, 1, 0, 1];
+            this._myVisualRaycast.getParams().myMaterial = this._myDefaultRayMaterial;
         } else {
             this._myVisualRaycast.getParams().myMaterial = this._myParams.myRayMaterial;
         }
@@ -133,7 +137,9 @@ PP.VisualRaycast = class VisualRaycast {
                 visualRaycastParams.myLength = raycastDistance;
                 visualRaycastParams.myThickness = this._myParams.myThickness;
 
-                if (this._myParams.myRayMaterial != null) {
+                if (this._myParams.myRayMaterial == null) {
+                    visualRaycastParams.myRayMaterial = this._myDefaultRayMaterial;
+                } else {
                     visualRaycastParams.myRayMaterial = this._myParams.myRayMaterial;
                 }
 
@@ -157,7 +163,9 @@ PP.VisualRaycast = class VisualRaycast {
                     visualRaycastHitParams.myLength = this._myParams.myHitNormalLength;
                     visualRaycastHitParams.myThickness = this._myParams.myThickness;
 
-                    if (this._myParams.myHitNormalMaterial != null) {
+                    if (this._myParams.myHitNormalMaterial == null) {
+                        visualRaycastHitParams.myHitNormalMaterial = this._myDefaultHitNormalMaterial;
+                    } else {
                         visualRaycastHitParams.myHitNormalMaterial = this._myParams.myHitNormalMaterial;
                     }
 
@@ -175,7 +183,9 @@ PP.VisualRaycast = class VisualRaycast {
                 visualRaycastParams.myLength = this._myParams.myRaycastResult.myRaycastSetup.myDistance;
                 visualRaycastParams.myThickness = this._myParams.myThickness;
 
-                if (this._myParams.myRayMaterial != null) {
+                if (this._myParams.myRayMaterial == null) {
+                    visualRaycastParams.myRayMaterial = this._myDefaultRayMaterial;
+                } else {
                     visualRaycastParams.myRayMaterial = this._myParams.myRayMaterial;
                 }
 
@@ -205,10 +215,14 @@ PP.VisualRaycast = class VisualRaycast {
 
         if (this._myParams.myRayMaterial != null) {
             clonedParams.myRayMaterial = this._myParams.myRayMaterial.clone();
+        } else {
+            clonedParams.myRayMaterial = null;
         }
 
         if (this._myParams.myHitNormalMaterial != null) {
             clonedParams.myHitNormalMaterial = this._myParams.myHitNormalMaterial.clone();
+        } else {
+            clonedParams.myHitNormalMaterial = null;
         }
 
         let clone = new PP.VisualRaycast(clonedParams);
@@ -223,8 +237,7 @@ PP.VisualRaycast = class VisualRaycast {
         let visualRaycastHit = new PP.VisualArrow();
 
         if (this._myParams.myHitNormalMaterial == null) {
-            visualRaycastHit.getParams().myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
-            visualRaycastHit.getParams().myMaterial.color = [1, 0, 0, 1];
+            visualRaycastHit.getParams().myMaterial = this._myDefaultHitNormalMaterial;
         } else {
             visualRaycastHit.getParams().myMaterial = this._myParams.myHitNormalMaterial;
         }

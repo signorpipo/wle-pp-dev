@@ -36,6 +36,8 @@ PP.VisualMesh = class VisualMesh {
         this._myMeshObject = null;
         this._myMeshComponent = null;
 
+        this._myDefaultMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
+
         this._build();
         this._refresh();
 
@@ -81,11 +83,15 @@ PP.VisualMesh = class VisualMesh {
     _refresh() {
         this._myMeshObject.pp_setTransform(this._myParams.myTransform);
 
-        if (this._myParams.myMesh != null) {
+        if (this._myParams.myMesh == null) {
+            this._myMeshComponent.mesh = PP.myDefaultResources.myMeshes.mySphere;
+        } else {
             this._myMeshComponent.mesh = this._myParams.myMesh;
         }
 
-        if (this._myParams.myMaterial != null) {
+        if (this._myParams.myMaterial == null) {
+            this._myMeshComponent.material = this._myDefaultMaterial;
+        } else {
             this._myMeshComponent.material = this._myParams.myMaterial;
         }
     }
@@ -102,7 +108,7 @@ PP.VisualMesh = class VisualMesh {
         }
 
         if (this._myParams.myMaterial == null) {
-            this._myMeshComponent.material = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
+            this._myMeshComponent.material = this._myDefaultMaterial;
         } else {
             this._myMeshComponent.material = this._myParams.myMaterial;
         }
@@ -122,10 +128,14 @@ PP.VisualMesh = class VisualMesh {
 
         if (this._myParams.myMesh != null) {
             clonedParams.myMesh = this._myParams.myMesh;
+        } else {
+            clonedParams.myMesh = null;
         }
 
         if (this._myParams.myMaterial != null) {
             clonedParams.myMaterial = this._myParams.myMaterial.clone();
+        } else {
+            clonedParams.myMaterial = null;
         }
 
         let clone = new PP.VisualMesh(clonedParams);

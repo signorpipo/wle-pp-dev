@@ -34,27 +34,31 @@ PP.VisualTransform = class VisualTransform {
 
         this._myDirty = false;
 
+        this._myDefaultRightMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
+        this._myDefaultRightMaterial.color = [1, 0, 0, 1];
+        this._myDefaultUpMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
+        this._myDefaultUpMaterial.color = [0, 1, 0, 1];
+        this._myDefaultForwardMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
+        this._myDefaultForwardMaterial.color = [0, 0, 1, 1];
+
         this._myVisualRight = new PP.VisualArrow();
         this._myVisualUp = new PP.VisualArrow();
         this._myVisualForward = new PP.VisualArrow();
 
         if (this._myParams.myRightMaterial == null) {
-            this._myVisualRight.getParams().myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
-            this._myVisualRight.getParams().myMaterial.color = [1, 0, 0, 1];
+            this._myVisualRight.getParams().myMaterial = this._myDefaultRightMaterial;
         } else {
             this._myVisualRight.getParams().myMaterial = this._myParams.myRightMaterial;
         }
 
         if (this._myParams.myUpMaterial == null) {
-            this._myVisualUp.getParams().myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
-            this._myVisualUp.getParams().myMaterial.color = [0, 1, 0, 1];
+            this._myVisualUp.getParams().myMaterial = this._myDefaultUpMaterial;
         } else {
             this._myVisualUp.getParams().myMaterial = this._myParams.myUpMaterial;
         }
 
         if (this._myParams.myForwardMaterial == null) {
-            this._myVisualForward.getParams().myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
-            this._myVisualForward.getParams().myMaterial.color = [0, 0, 1, 1];
+            this._myVisualForward.getParams().myMaterial = this._myDefaultForwardMaterial;
         } else {
             this._myVisualForward.getParams().myMaterial = this._myParams.myForwardMaterial;
         }
@@ -137,7 +141,9 @@ PP.VisualTransform = class VisualTransform {
             visualLineParams.myLength = Math.max(this._myParams.myLength * scale[0], 0.001);
             visualLineParams.myThickness = this._myParams.myThickness;
 
-            if (this._myParams.myRightMaterial != null) {
+            if (this._myParams.myRightMaterial == null) {
+                visualLineParams.myRightMaterial = this._myDefaultRightMaterial;
+            } else {
                 visualLineParams.myRightMaterial = this._myParams.myRightMaterial;
             }
 
@@ -151,7 +157,9 @@ PP.VisualTransform = class VisualTransform {
             visualLineParams.myLength = Math.max(this._myParams.myLength * scale[1], 0.001);
             visualLineParams.myThickness = this._myParams.myThickness;
 
-            if (this._myParams.myUpMaterial != null) {
+            if (this._myParams.myUpMaterial == null) {
+                visualLineParams.myUpMaterial = this._myDefaultUpMaterial;
+            } else {
                 visualLineParams.myUpMaterial = this._myParams.myUpMaterial;
             }
 
@@ -165,7 +173,9 @@ PP.VisualTransform = class VisualTransform {
             visualLineParams.myLength = Math.max(this._myParams.myLength * scale[2], 0.001);
             visualLineParams.myThickness = this._myParams.myThickness;
 
-            if (this._myParams.myForwardMaterial != null) {
+            if (this._myParams.myForwardMaterial == null) {
+                visualLineParams.myForwardMaterial = this._myDefaultForwardMaterial;
+            } else {
                 visualLineParams.myForwardMaterial = this._myParams.myForwardMaterial;
             }
 
@@ -190,14 +200,20 @@ PP.VisualTransform = class VisualTransform {
 
         if (this._myParams.myRightMaterial != null) {
             clonedParams.myRightMaterial = this._myParams.myRightMaterial.clone();
+        } else {
+            clonedParams.myRightMaterial = null;
         }
 
         if (this._myParams.myUpMaterial != null) {
             clonedParams.myUpMaterial = this._myParams.myUpMaterial.clone();
+        } else {
+            clonedParams.myUpMaterial = null;
         }
 
         if (this._myParams.myForwardMaterial != null) {
             clonedParams.myForwardMaterial = this._myParams.myForwardMaterial.clone();
+        } else {
+            clonedParams.myForwardMaterial = null;
         }
 
         let clone = new PP.VisualTransform(clonedParams);

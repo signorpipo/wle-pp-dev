@@ -39,6 +39,8 @@ PP.VisualText = class VisualText {
         this._myTextObject = null;
         this._myTextComponent = null;
 
+        this._myDefaultMaterial = PP.myDefaultResources.myMaterials.myText.clone();
+
         this._build();
         this._refresh();
 
@@ -84,7 +86,9 @@ PP.VisualText = class VisualText {
     _refresh() {
         this._myTextObject.pp_setTransform(this._myParams.myTransform);
 
-        if (this._myParams.myMaterial != null) {
+        if (this._myParams.myMaterial == null) {
+            this._myTextComponent.material = this._myDefaultMaterial;
+        } else {
             this._myTextComponent.material = this._myParams.myMaterial;
         }
 
@@ -100,7 +104,7 @@ PP.VisualText = class VisualText {
         this._myTextComponent = this._myTextObject.addComponent('text');
 
         if (this._myParams.myMaterial == null) {
-            this._myTextComponent.material = PP.myDefaultResources.myMaterials.myText.clone();
+            this._myTextComponent.material = this._myDefaultMaterial;
         } else {
             this._myTextComponent.material = this._myParams.myMaterial;
         }
@@ -125,6 +129,8 @@ PP.VisualText = class VisualText {
 
         if (this._myParams.myMaterial != null) {
             clonedParams.myMaterial = this._myParams.myMaterial.clone();
+        } else {
+            clonedParams.myMaterial = null;
         }
 
         let clone = new PP.VisualText(clonedParams);

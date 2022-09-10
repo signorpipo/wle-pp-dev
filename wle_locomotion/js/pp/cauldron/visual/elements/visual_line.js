@@ -50,6 +50,8 @@ PP.VisualLine = class VisualLine {
         this._myLineObject = null;
         this._myLineMeshComponent = null;
 
+        this._myDefaultMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
+
         this._build();
         this._refresh();
 
@@ -103,7 +105,9 @@ PP.VisualLine = class VisualLine {
         this._myLineObject.pp_setUp(this._myParams.myDirection);
         this._myLineObject.pp_translateObject([0, this._myParams.myLength / 2, 0]);
 
-        if (this._myParams.myMaterial != null) {
+        if (this._myParams.myMaterial == null) {
+            this._myLineMeshComponent.material = this._myDefaultMaterial;
+        } else {
             this._myLineMeshComponent.material = this._myParams.myMaterial;
         }
     }
@@ -116,7 +120,7 @@ PP.VisualLine = class VisualLine {
         this._myLineMeshComponent.mesh = PP.myDefaultResources.myMeshes.myCylinder;
 
         if (this._myParams.myMaterial == null) {
-            this._myLineMeshComponent.material = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
+            this._myLineMeshComponent.material = this._myDefaultMaterial;
         } else {
             this._myLineMeshComponent.material = this._myParams.myMaterial;
         }
@@ -139,6 +143,8 @@ PP.VisualLine = class VisualLine {
 
         if (this._myParams.myMaterial != null) {
             clonedParams.myMaterial = this._myParams.myMaterial.clone();
+        } else {
+            clonedParams.myMaterial = null;
         }
 
         let clone = new PP.VisualLine(clonedParams);
