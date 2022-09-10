@@ -13,7 +13,7 @@ PP.VisualTransformParams = class VisualTransformParams {
 
     constructor() {
         this.myTransform = PP.mat4_create();
-        this.myLength = 0.1;
+        this.myLength = 0.2;
         this.myThickness = 0.005;
 
         this.myForwardMaterial = null;

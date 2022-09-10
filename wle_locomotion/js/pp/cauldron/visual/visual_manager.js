@@ -166,6 +166,9 @@ PP.VisualManager = class VisualManager {
             case PP.VisualElementType.TRANSFORM:
                 visualElement = new PP.VisualTransform();
                 break;
+            case PP.VisualElementType.RAYCAST:
+                visualElement = new PP.VisualRaycast();
+                break;
         }
 
         visualElement.setVisible(false);

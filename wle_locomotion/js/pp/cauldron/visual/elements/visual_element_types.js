@@ -5,4 +5,5 @@ PP.VisualElementType = {
     TEXT: 3,
     ARROW: 4,
     TRANSFORM: 5,
+    RAYCAST: 6,
 };
