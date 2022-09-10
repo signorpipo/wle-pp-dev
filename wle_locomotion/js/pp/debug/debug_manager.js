@@ -1,6 +1,6 @@
 PP.DebugManager = class DebugManager {
     constructor() {
-        this._myDebugVisualManager = new PP.VisualManager();
+        this._myDebugVisualManager = new PP.DebugVisualManager();
     }
 
     getDebugVisualManager() {

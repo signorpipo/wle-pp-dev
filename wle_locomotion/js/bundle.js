@@ -91,6 +91,7 @@ require('./pp/cauldron/visual/components/visual_manager_component');
 
 //	DEBUG
 require('./pp/debug/debug_manager');
+require('./pp/debug/debug_visual_manager');
 
 require('./pp/debug/components/debug_transform_component');
 require('./pp/debug/components/debug_manager_component');
