@@ -253,7 +253,7 @@ PlayerLocomotionTeleport.prototype._detectTeleportPositionNonVR = function () {
             visualParams.myRaycastResult = raycastResult;
             visualParams.myNormalLength = 0.2;
             visualParams.myThickness = 0.005;
-            PP.myVisualManager.draw(visualParams, 0);
+            PP.myDebugVisualManager.draw(visualParams, 0);
         }
     };
 }();
@@ -318,7 +318,7 @@ PlayerLocomotionTeleport.prototype._detectTeleportPositionVR = function () {
             visualParams.myRaycastResult = raycastResult;
             visualParams.myNormalLength = 0.2;
             visualParams.myThickness = 0.005;
-            PP.myVisualManager.draw(visualParams);
+            PP.myDebugVisualManager.draw(visualParams);
         }
     };
 }();
@@ -514,7 +514,7 @@ PlayerLocomotionTeleport.prototype._isPositionVisible = function () {
                 visualParams.myRaycastResult = raycastResult;
                 visualParams.myNormalLength = 0.2;
                 visualParams.myThickness = 0.005;
-                PP.myVisualManager.draw(visualParams);
+                PP.myDebugVisualManager.draw(visualParams);
             }
 
             if (raycastResult.isColliding()) {

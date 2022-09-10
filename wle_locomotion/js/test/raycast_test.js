@@ -31,7 +31,7 @@ WL.registerComponent('raycast-test', {
             visualParams.myNormalLength = 0.2;
             visualParams.myThickness = 0.005;
             visualParams.myShowOnlyFirstHit = false;
-            PP.myVisualManager.draw(visualParams, 0);
+            PP.myDebugVisualManager.draw(visualParams, 0);
         }
     }
 });

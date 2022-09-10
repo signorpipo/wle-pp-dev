@@ -11,6 +11,6 @@ WL.registerComponent('show-line-test', {
         visualParams.myLength = 0.4;
         visualParams.myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
         visualParams.myMaterial.color = [0, 0, 1, 1];
-        PP.myVisualManager.draw(visualParams);
+        PP.myDebugVisualManager.draw(visualParams);
     }
 });

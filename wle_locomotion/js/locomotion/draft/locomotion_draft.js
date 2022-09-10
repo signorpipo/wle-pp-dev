@@ -49,12 +49,12 @@ WL.registerComponent('locomotion-draft', {
         /* this._myTiltMatrix.mat4_setPosition(this._myDirectionReferenceObject.pp_getPosition());
         let debugTransformParams = new PP.VisualTransformParams();
         debugTransformParams.myTransform = this._myTiltMatrix;
-        PP.myVisualManager.draw(debugTransformParams);
+        PP.myDebugVisualManager.draw(debugTransformParams);
 
         this._myPreTiltMatrix.mat4_setPosition(this._myDirectionReferenceObject.pp_getPosition().vec3_add([0, 0.15, 0]));
         debugTransformParams = new PP.VisualTransformParams();
         debugTransformParams.myTransform = this._myPreTiltMatrix;
-        PP.myVisualManager.draw(debugTransformParams); */
+        PP.myDebugVisualManager.draw(debugTransformParams); */
 
         if (this._myDelaySessionChangeResyncCounter > 0) {
             this._myDelaySessionChangeResyncCounter--;
@@ -266,7 +266,7 @@ WL.registerComponent('locomotion-draft', {
         debugArrowParamsForward.myLength = 0.2;
         debugArrowParamsForward.myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
         debugArrowParamsForward.myMaterial.color = [0, 0, 1, 1];
-        PP.myVisualManager.draw(debugArrowParamsForward);
+        PP.myDebugVisualManager.draw(debugArrowParamsForward);
 
         let debugArrowParamsStartForward = new PP.VisualArrowParams();
         debugArrowParamsStartForward.myStart = this._myDirectionReferenceObject.pp_getPosition();
@@ -275,7 +275,7 @@ WL.registerComponent('locomotion-draft', {
         debugArrowParamsStartForward.myLength = 0.2;
         debugArrowParamsStartForward.myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
         debugArrowParamsStartForward.myMaterial.color = [0, 0, 0.5, 1];
-        PP.myVisualManager.draw(debugArrowParamsStartForward);
+        PP.myDebugVisualManager.draw(debugArrowParamsStartForward);
 
         let debugArrowParamsRight = new PP.VisualArrowParams();
         debugArrowParamsRight.myStart = this._myDirectionReferenceObject.pp_getPosition();
@@ -283,7 +283,7 @@ WL.registerComponent('locomotion-draft', {
         debugArrowParamsRight.myLength = 0.2;
         debugArrowParamsRight.myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
         debugArrowParamsRight.myMaterial.color = [1, 0, 0, 1];
-        PP.myVisualManager.draw(debugArrowParamsRight);
+        PP.myDebugVisualManager.draw(debugArrowParamsRight);
 
         let debugArrowParamsUp = new PP.VisualArrowParams();
         debugArrowParamsUp.myStart = this._myDirectionReferenceObject.pp_getPosition();
@@ -291,7 +291,7 @@ WL.registerComponent('locomotion-draft', {
         debugArrowParamsUp.myLength = 0.2;
         debugArrowParamsUp.myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
         debugArrowParamsUp.myMaterial.color = [0, 1, 0, 1];
-        PP.myVisualManager.draw(debugArrowParamsUp); */
+        PP.myDebugVisualManager.draw(debugArrowParamsUp); */
 
         let direction = right.vec3_scale(stickAxes[0]).vec3_add(forward.vec3_scale(stickAxes[1]));
 

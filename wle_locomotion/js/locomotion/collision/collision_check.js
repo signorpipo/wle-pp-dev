@@ -50,7 +50,7 @@ CollisionCheck = class CollisionCheck {
             visualParams.myLength = 0.2;
             visualParams.myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
             visualParams.myMaterial.color = [0.5, 0.5, 1, 1];
-            PP.myVisualManager.draw(visualParams);
+            PP.myDebugVisualManager.draw(visualParams);
         }
 
         if (!horizontalMovement.vec3_isZero()) {
@@ -62,7 +62,7 @@ CollisionCheck = class CollisionCheck {
             visualParams.myLength = 0.2;
             visualParams.myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
             visualParams.myMaterial.color = [0, 0, 1, 1];
-            PP.myVisualManager.draw(visualParams);
+            PP.myDebugVisualManager.draw(visualParams);
         }
 
         if (!verticalMovement.vec3_isZero()) {
@@ -74,7 +74,7 @@ CollisionCheck = class CollisionCheck {
             visualParams.myLength = 0.2;
             visualParams.myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
             visualParams.myMaterial.color = [0, 0, 1, 1];
-            PP.myVisualManager.draw(visualParams);
+            PP.myDebugVisualManager.draw(visualParams);
         }
     }
 
@@ -86,7 +86,7 @@ CollisionCheck = class CollisionCheck {
             visualParams.myLength = 0.2;
             visualParams.myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
             visualParams.myMaterial.color = [1, 0, 0, 1];
-            PP.myVisualManager.draw(visualParams);
+            PP.myDebugVisualManager.draw(visualParams);
         }
 
         if (collisionRuntimeParams.mySlidingCollisionHit.isValid()) {
@@ -96,7 +96,7 @@ CollisionCheck = class CollisionCheck {
             visualParams.myLength = 0.2;
             visualParams.myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
             visualParams.myMaterial.color = [1, 0, 0, 1];
-            PP.myVisualManager.draw(visualParams);
+            PP.myDebugVisualManager.draw(visualParams);
         }
 
         if (collisionRuntimeParams.myVerticalCollisionHit.isValid()) {
@@ -106,7 +106,7 @@ CollisionCheck = class CollisionCheck {
             visualParams.myLength = 0.2;
             visualParams.myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
             visualParams.myMaterial.color = [1, 0, 0, 1];
-            PP.myVisualManager.draw(visualParams);
+            PP.myDebugVisualManager.draw(visualParams);
         }
     }
 };
@@ -129,7 +129,7 @@ CollisionCheck.prototype._raycastAndDebug = function () {
         if (this._myDebugActive) {
             let visualParams = new PP.VisualRaycastParams();
             visualParams.myRaycastResult = raycastResult;
-            PP.myVisualManager.draw(visualParams);
+            PP.myDebugVisualManager.draw(visualParams);
         }
 
         return raycastResult;

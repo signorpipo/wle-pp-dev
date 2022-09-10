@@ -92,14 +92,6 @@ require('./pp/cauldron/visual/components/visual_manager_component');
 //	DEBUG
 require('./pp/debug/debug_manager');
 
-require('./pp/debug/elements/debug_visual_element_types');
-require('./pp/debug/elements/debug_transform');
-require('./pp/debug/elements/debug_line');
-require('./pp/debug/elements/debug_arrow');
-require('./pp/debug/elements/debug_point');
-require('./pp/debug/elements/debug_raycast');
-require('./pp/debug/elements/debug_text');
-
 require('./pp/debug/components/debug_transform_component');
 require('./pp/debug/components/debug_manager_component');
 

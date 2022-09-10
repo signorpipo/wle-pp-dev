@@ -22,6 +22,10 @@ PP.VisualManager = class VisualManager {
         return this._myActive;
     }
 
+    start() {
+
+    }
+
     update(dt) {
         this._updateDraw(dt);
     }

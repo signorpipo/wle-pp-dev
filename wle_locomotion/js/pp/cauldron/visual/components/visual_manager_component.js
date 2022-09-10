@@ -24,6 +24,7 @@ WL.registerComponent('pp-visual-manager', {
         PP.myVisualData.myDefaultMaterials.myDefaultHitNormalMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
         PP.myVisualData.myDefaultMaterials.myDefaultHitNormalMaterial.color = [1, 0, 0, 1];
 
+        PP.myVisualManager.start();
     },
     update(dt) {
         PP.myVisualManager.update(dt);

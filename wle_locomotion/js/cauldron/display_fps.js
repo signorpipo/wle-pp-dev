@@ -43,6 +43,6 @@ WL.registerComponent('display-fps', {
         visualParams.myMaterial = PP.myDefaultResources.myMaterials.myText.clone();
         visualParams.myMaterial.color = [0, 1, 0, 1];
 
-        PP.myVisualManager.draw(visualParams);
+        PP.myDebugVisualManager.draw(visualParams);
     }
 });

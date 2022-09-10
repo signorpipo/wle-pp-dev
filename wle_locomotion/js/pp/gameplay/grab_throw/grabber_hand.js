@@ -303,7 +303,7 @@ WL.registerComponent('pp-grabber-hand', {
             visualParams.myLength = 0.2;
             visualParams.myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
             visualParams.myMaterial.color = [color, color, color, 1];
-            PP.myVisualManager.draw(visualParams, 5);
+            PP.myDebugVisualManager.draw(visualParams, 5);
         }
     },
     _isAlreadyGrabbed(grabbable) {

@@ -11,6 +11,6 @@ WL.registerComponent("pp-debug-transform", {
     },
     update: function (dt) {
         this.object.pp_getTransform(this._myDebugTransformParams.myTransform);
-        PP.myVisualManager.draw(this._myDebugTransformParams);
+        PP.myDebugVisualManager.draw(this._myDebugTransformParams);
     }
 });
