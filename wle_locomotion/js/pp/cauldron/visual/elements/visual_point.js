@@ -112,7 +112,7 @@ PP.VisualPoint = class VisualPoint {
 
     clone() {
         let clonedParams = new PP.VisualPointParams();
-        clonedParams.myPosition.pp_copy(this._myParams.myPosition);
+        clonedParams.myPosition.vec3_copy(this._myParams.myPosition);
         clonedParams.myRadius = this._myParams.myRadius;
 
         if (this._myParams.myMaterial != null) {

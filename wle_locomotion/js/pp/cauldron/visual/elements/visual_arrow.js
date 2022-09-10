@@ -105,8 +105,8 @@ PP.VisualArrow = class VisualArrow {
 
     clone() {
         let clonedParams = new PP.VisualArrowParams();
-        clonedParams.myStart.pp_copy(this._myParams.myStart);
-        clonedParams.myDirection.pp_copy(this._myParams.myDirection);
+        clonedParams.myStart.vec3_copy(this._myParams.myStart);
+        clonedParams.myDirection.vec3_copy(this._myParams.myDirection);
         clonedParams.myLength = this._myParams.myLength;
         clonedParams.myThickness = this._myParams.myThickness;
 
@@ -127,16 +127,22 @@ PP.VisualArrow = class VisualArrow {
 
 PP.VisualArrow.prototype._refresh = function () {
     let end = PP.vec3_create();
+    let translateRoot = PP.vec3_create();
+    let scaleArrow = PP.vec3_create();
+    let direction = PP.vec3_create();
     return function _refresh() {
         this._myParams.myDirection.vec3_scale(Math.max(0.001, this._myParams.myLength - this._myParams.myThickness * 4), end);
         end.vec3_add(this._myParams.myStart, end);
 
         this._myArrowRootObject.pp_setPosition(end);
         this._myArrowRootObject.pp_setUp(this._myParams.myDirection);
-        this._myArrowRootObject.pp_translateObject([0, this._myParams.myThickness * 2 - 0.00001, 0]);
+
+        translateRoot.vec3_set(0, this._myParams.myThickness * 2 - 0.00001, 0);
+        this._myArrowRootObject.pp_translateObject(translateRoot);
 
         this._myArrowObject.pp_resetScaleLocal();
-        this._myArrowObject.pp_scaleObject([this._myParams.myThickness * 1.25, this._myParams.myThickness * 2, this._myParams.myThickness * 1.25]);
+        scaleArrow.vec3_set(this._myParams.myThickness * 1.25, this._myParams.myThickness * 2, this._myParams.myThickness * 1.25);
+        this._myArrowObject.pp_scaleObject(scaleArrow);
 
         if (this._myParams.myMaterial == null) {
             this._myArrowMeshComponent.material = PP.myVisualData.myDefaultMaterials.myDefaultMeshMaterial;
@@ -144,7 +150,7 @@ PP.VisualArrow.prototype._refresh = function () {
             this._myArrowMeshComponent.material = this._myParams.myMaterial;
         }
 
-        let direction = end.vec3_sub(this._myParams.myStart);
+        direction = end.vec3_sub(this._myParams.myStart, direction);
         let visualLineParams = this._myVisualLine.getParams();
         visualLineParams.myStart.vec3_copy(this._myParams.myStart);
         visualLineParams.myDirection = direction.vec3_normalize(visualLineParams.myDirection);

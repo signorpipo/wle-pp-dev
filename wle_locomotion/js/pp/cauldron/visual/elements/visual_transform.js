@@ -174,7 +174,6 @@ PP.VisualTransform = class VisualTransform {
 
             this._myVisualForward.paramsUpdated();
         }
-
     }
 
     _markDirty() {
@@ -217,3 +216,81 @@ PP.VisualTransform = class VisualTransform {
         return clone;
     }
 };
+
+PP.VisualTransform.prototype._refresh = function () {
+    let axes = [PP.vec3_create(), PP.vec3_create(), PP.vec3_create()];
+    let scale = PP.vec3_create();
+    let position = PP.vec3_create();
+    return function _refresh() {
+        axes = this._myParams.myTransform.mat4_getAxes(axes);
+        scale = this._myParams.myTransform.mat4_getScale(scale);
+        let maxValue = 0;
+        for (let value of scale) {
+            maxValue = Math.max(value, maxValue);
+        }
+
+        if (maxValue == 0) {
+            scale[0] = 1;
+            scale[1] = 1;
+            scale[2] = 1;
+        } else {
+            scale[0] = scale[0] / maxValue;
+            scale[1] = scale[1] / maxValue;
+            scale[2] = scale[2] / maxValue;
+        }
+
+        position = this._myParams.myTransform.mat4_getPosition(position);
+
+        {
+            let visualLineParams = this._myVisualRight.getParams();
+            visualLineParams.myStart.vec3_copy(position);
+            visualLineParams.myDirection = axes[0].vec3_negate(visualLineParams.myDirection).vec3_normalize(visualLineParams.myDirection);
+            visualLineParams.myLength = Math.max(this._myParams.myLength * scale[0], 0.001);
+            visualLineParams.myThickness = this._myParams.myThickness;
+
+            if (this._myParams.myRightMaterial == null) {
+                visualLineParams.myRightMaterial = PP.myVisualData.myDefaultMaterials.myDefaultRightMaterial;
+            } else {
+                visualLineParams.myRightMaterial = this._myParams.myRightMaterial;
+            }
+
+            this._myVisualRight.paramsUpdated();
+        }
+
+        {
+            let visualLineParams = this._myVisualUp.getParams();
+            visualLineParams.myStart.vec3_copy(position);
+            visualLineParams.myDirection = axes[1].vec3_normalize(visualLineParams.myDirection);
+            visualLineParams.myLength = Math.max(this._myParams.myLength * scale[1], 0.001);
+            visualLineParams.myThickness = this._myParams.myThickness;
+
+            if (this._myParams.myUpMaterial == null) {
+                visualLineParams.myUpMaterial = PP.myVisualData.myDefaultMaterials.myDefaultUpMaterial;
+            } else {
+                visualLineParams.myUpMaterial = this._myParams.myUpMaterial;
+            }
+
+            this._myVisualUp.paramsUpdated();
+        }
+
+        {
+            let visualLineParams = this._myVisualForward.getParams();
+            visualLineParams.myStart.vec3_copy(position);
+            visualLineParams.myDirection = axes[2].vec3_normalize(visualLineParams.myDirection);
+            visualLineParams.myLength = Math.max(this._myParams.myLength * scale[2], 0.001);
+            visualLineParams.myThickness = this._myParams.myThickness;
+
+            if (this._myParams.myForwardMaterial == null) {
+                visualLineParams.myForwardMaterial = PP.myVisualData.myDefaultMaterials.myDefaultForwardMaterial;
+            } else {
+                visualLineParams.myForwardMaterial = this._myParams.myForwardMaterial;
+            }
+
+            this._myVisualForward.paramsUpdated();
+        }
+    };
+}();
+
+
+
+Object.defineProperty(PP.VisualTransform.prototype, "_refresh", { enumerable: false });

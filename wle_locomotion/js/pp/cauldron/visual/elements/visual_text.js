@@ -119,7 +119,7 @@ PP.VisualText = class VisualText {
     clone() {
         let clonedParams = new PP.VisualTextParams();
 
-        clonedParams.myText = this._myParams.myText.slice(0);
+        clonedParams.myText = this._myParams.myText;
         clonedParams.myAlignment = this._myParams.myAlignment;
         clonedParams.myJustification = this._myParams.myJustification;
 

@@ -92,24 +92,6 @@ PP.VisualLine = class VisualLine {
         }
     }
 
-    _refresh() {
-        this._myLineRootObject.pp_setPosition(this._myParams.myStart);
-
-        this._myLineObject.pp_resetPositionLocal();
-        this._myLineObject.pp_resetScaleLocal();
-
-        this._myLineObject.pp_scaleObject([this._myParams.myThickness / 2, this._myParams.myLength / 2, this._myParams.myThickness / 2]);
-
-        this._myLineObject.pp_setUp(this._myParams.myDirection);
-        this._myLineObject.pp_translateObject([0, this._myParams.myLength / 2, 0]);
-
-        if (this._myParams.myMaterial == null) {
-            this._myLineMeshComponent.material = PP.myVisualData.myDefaultMaterials.myDefaultMeshMaterial;
-        } else {
-            this._myLineMeshComponent.material = this._myParams.myMaterial;
-        }
-    }
-
     _build() {
         this._myLineRootObject = WL.scene.addObject(PP.myVisualData.myRootObject);
         this._myLineObject = WL.scene.addObject(this._myLineRootObject);
@@ -134,8 +116,8 @@ PP.VisualLine = class VisualLine {
 
     clone() {
         let clonedParams = new PP.VisualLineParams();
-        clonedParams.myStart.pp_copy(this._myParams.myStart);
-        clonedParams.myDirection.pp_copy(this._myParams.myDirection);
+        clonedParams.myStart.vec3_copy(this._myParams.myStart);
+        clonedParams.myDirection.vec3_copy(this._myParams.myDirection);
         clonedParams.myLength = this._myParams.myLength;
         clonedParams.myThickness = this._myParams.myThickness;
 
@@ -153,3 +135,31 @@ PP.VisualLine = class VisualLine {
         return clone;
     }
 };
+
+PP.VisualLine.prototype._refresh = function () {
+    let scaleLine = PP.vec3_create();
+    let translateLine = PP.vec3_create();
+    return function _refresh() {
+        this._myLineRootObject.pp_setPosition(this._myParams.myStart);
+
+        this._myLineObject.pp_resetPositionLocal();
+        this._myLineObject.pp_resetScaleLocal();
+
+        scaleLine.vec3_set(this._myParams.myThickness / 2, this._myParams.myLength / 2, this._myParams.myThickness / 2);
+        this._myLineObject.pp_scaleObject(scaleLine);
+
+        this._myLineObject.pp_setUp(this._myParams.myDirection);
+        translateLine.vec3_set(0, this._myParams.myLength / 2, 0);
+        this._myLineObject.pp_translateObject(translateLine);
+
+        if (this._myParams.myMaterial == null) {
+            this._myLineMeshComponent.material = PP.myVisualData.myDefaultMaterials.myDefaultMeshMaterial;
+        } else {
+            this._myLineMeshComponent.material = this._myParams.myMaterial;
+        }
+    };
+}();
+
+
+
+Object.defineProperty(PP.VisualLine.prototype, "_refresh", { enumerable: false });
