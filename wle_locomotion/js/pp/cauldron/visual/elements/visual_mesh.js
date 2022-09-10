@@ -36,8 +36,6 @@ PP.VisualMesh = class VisualMesh {
         this._myMeshObject = null;
         this._myMeshComponent = null;
 
-        this._myDefaultMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
-
         this._build();
         this._refresh();
 
@@ -90,7 +88,7 @@ PP.VisualMesh = class VisualMesh {
         }
 
         if (this._myParams.myMaterial == null) {
-            this._myMeshComponent.material = this._myDefaultMaterial;
+            this._myMeshComponent.material = PP.myVisualData.myDefaultMaterials.myDefaultMeshMaterial;
         } else {
             this._myMeshComponent.material = this._myParams.myMaterial;
         }
@@ -108,7 +106,7 @@ PP.VisualMesh = class VisualMesh {
         }
 
         if (this._myParams.myMaterial == null) {
-            this._myMeshComponent.material = this._myDefaultMaterial;
+            this._myMeshComponent.material = PP.myVisualData.myDefaultMaterials.myDefaultMeshMaterial;
         } else {
             this._myMeshComponent.material = this._myParams.myMaterial;
         }

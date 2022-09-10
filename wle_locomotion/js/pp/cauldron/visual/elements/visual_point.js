@@ -36,8 +36,6 @@ PP.VisualPoint = class VisualPoint {
         this._myPointObject = null;
         this._myPointMeshComponent = null;
 
-        this._myDefaultMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
-
         this._build();
         this._refresh();
 
@@ -85,7 +83,7 @@ PP.VisualPoint = class VisualPoint {
         this._myPointObject.pp_setScale(this._myParams.myRadius);
 
         if (this._myParams.myMaterial == null) {
-            this._myPointMeshComponent.material = this._myDefaultMaterial;
+            this._myPointMeshComponent.material = PP.myVisualData.myDefaultMaterials.myDefaultMeshMaterial;
         } else {
             this._myPointMeshComponent.material = this._myParams.myMaterial;
         }
@@ -98,7 +96,7 @@ PP.VisualPoint = class VisualPoint {
         this._myPointMeshComponent.mesh = PP.myDefaultResources.myMeshes.mySphere;
 
         if (this._myParams.myMaterial == null) {
-            this._myPointMeshComponent.material = this._myDefaultMaterial;
+            this._myPointMeshComponent.material = PP.myVisualData.myDefaultMaterials.myDefaultMeshMaterial;
         } else {
             this._myPointMeshComponent.material = this._myParams.myMaterial;
         }

@@ -8,6 +8,22 @@ WL.registerComponent('pp-visual-manager', {
         }
     },
     start() {
+        PP.myVisualData.myDefaultMaterials.myDefaultMeshMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
+
+        PP.myVisualData.myDefaultMaterials.myDefaultTextMaterial = PP.myDefaultResources.myMaterials.myText.clone();
+
+        PP.myVisualData.myDefaultMaterials.myDefaultRightMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
+        PP.myVisualData.myDefaultMaterials.myDefaultRightMaterial.color = [1, 0, 0, 1];
+        PP.myVisualData.myDefaultMaterials.myDefaultUpMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
+        PP.myVisualData.myDefaultMaterials.myDefaultUpMaterial.color = [0, 1, 0, 1];
+        PP.myVisualData.myDefaultMaterials.myDefaultForwardMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
+        PP.myVisualData.myDefaultMaterials.myDefaultForwardMaterial.color = [0, 0, 1, 1];
+
+        PP.myVisualData.myDefaultMaterials.myDefaultRayMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
+        PP.myVisualData.myDefaultMaterials.myDefaultRayMaterial.color = [0, 1, 0, 1];
+        PP.myVisualData.myDefaultMaterials.myDefaultHitNormalMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
+        PP.myVisualData.myDefaultMaterials.myDefaultHitNormalMaterial.color = [1, 0, 0, 1];
+
     },
     update(dt) {
         PP.myVisualManager.update(dt);
@@ -17,5 +33,14 @@ WL.registerComponent('pp-visual-manager', {
 PP.myVisualManager = null;
 
 PP.myVisualData = {
-    myRootObject: null
+    myRootObject: null,
+    myDefaultMaterials: {
+        myDefaultMeshMaterial: null,
+        myDefaultTextMaterial: null,
+        myDefaultRightMaterial: null,
+        myDefaultUpMaterial: null,
+        myDefaultForwardMaterial: null,
+        myDefaultRayMaterial: null,
+        myDefaultHitNormalMaterial: null
+    }
 };

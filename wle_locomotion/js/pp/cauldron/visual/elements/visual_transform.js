@@ -34,31 +34,24 @@ PP.VisualTransform = class VisualTransform {
 
         this._myDirty = false;
 
-        this._myDefaultRightMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
-        this._myDefaultRightMaterial.color = [1, 0, 0, 1];
-        this._myDefaultUpMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
-        this._myDefaultUpMaterial.color = [0, 1, 0, 1];
-        this._myDefaultForwardMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
-        this._myDefaultForwardMaterial.color = [0, 0, 1, 1];
-
         this._myVisualRight = new PP.VisualArrow();
         this._myVisualUp = new PP.VisualArrow();
         this._myVisualForward = new PP.VisualArrow();
 
         if (this._myParams.myRightMaterial == null) {
-            this._myVisualRight.getParams().myMaterial = this._myDefaultRightMaterial;
+            this._myVisualRight.getParams().myMaterial = PP.myVisualData.myDefaultMaterials.myDefaultRightMaterial;
         } else {
             this._myVisualRight.getParams().myMaterial = this._myParams.myRightMaterial;
         }
 
         if (this._myParams.myUpMaterial == null) {
-            this._myVisualUp.getParams().myMaterial = this._myDefaultUpMaterial;
+            this._myVisualUp.getParams().myMaterial = PP.myVisualData.myDefaultMaterials.myDefaultUpMaterial;
         } else {
             this._myVisualUp.getParams().myMaterial = this._myParams.myUpMaterial;
         }
 
         if (this._myParams.myForwardMaterial == null) {
-            this._myVisualForward.getParams().myMaterial = this._myDefaultForwardMaterial;
+            this._myVisualForward.getParams().myMaterial = PP.myVisualData.myDefaultMaterials.myDefaultForwardMaterial;
         } else {
             this._myVisualForward.getParams().myMaterial = this._myParams.myForwardMaterial;
         }
@@ -142,7 +135,7 @@ PP.VisualTransform = class VisualTransform {
             visualLineParams.myThickness = this._myParams.myThickness;
 
             if (this._myParams.myRightMaterial == null) {
-                visualLineParams.myRightMaterial = this._myDefaultRightMaterial;
+                visualLineParams.myRightMaterial = PP.myVisualData.myDefaultMaterials.myDefaultRightMaterial;
             } else {
                 visualLineParams.myRightMaterial = this._myParams.myRightMaterial;
             }
@@ -158,7 +151,7 @@ PP.VisualTransform = class VisualTransform {
             visualLineParams.myThickness = this._myParams.myThickness;
 
             if (this._myParams.myUpMaterial == null) {
-                visualLineParams.myUpMaterial = this._myDefaultUpMaterial;
+                visualLineParams.myUpMaterial = PP.myVisualData.myDefaultMaterials.myDefaultUpMaterial;
             } else {
                 visualLineParams.myUpMaterial = this._myParams.myUpMaterial;
             }
@@ -174,7 +167,7 @@ PP.VisualTransform = class VisualTransform {
             visualLineParams.myThickness = this._myParams.myThickness;
 
             if (this._myParams.myForwardMaterial == null) {
-                visualLineParams.myForwardMaterial = this._myDefaultForwardMaterial;
+                visualLineParams.myForwardMaterial = PP.myVisualData.myDefaultMaterials.myDefaultForwardMaterial;
             } else {
                 visualLineParams.myForwardMaterial = this._myParams.myForwardMaterial;
             }
