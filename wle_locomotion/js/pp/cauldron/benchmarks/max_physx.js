@@ -126,11 +126,11 @@ WL.registerComponent('pp-benchmark-max-physx', {
             let raycastResult = PP.PhysicsUtils.raycast(this._myRaycastSetup, this._myRaycastResult);
 
             if (debugActive) {
-                let raycastParams = new PP.DebugRaycastParams();
+                let raycastParams = new PP.VisualRaycastParams();
                 raycastParams.myRaycastResult = raycastResult;
                 raycastParams.myNormalLength = 5;
                 raycastParams.myThickness = 0.015;
-                PP.myDebugManager.draw(raycastParams, this._myDebugTimer.getDuration());
+                PP.myVisualManager.draw(raycastParams, this._myDebugTimer.getDuration());
             }
         }
     },

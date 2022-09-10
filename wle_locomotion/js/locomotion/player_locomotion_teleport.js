@@ -249,11 +249,11 @@ PlayerLocomotionTeleport.prototype._detectTeleportPositionNonVR = function () {
         }
 
         if (this._myParams.myDebugActive && this._myParams.myDebugDetectActive) {
-            let debugParams = new PP.DebugRaycastParams();
-            debugParams.myRaycastResult = raycastResult;
-            debugParams.myNormalLength = 0.2;
-            debugParams.myThickness = 0.005;
-            PP.myDebugManager.draw(debugParams, 0);
+            let visualParams = new PP.VisualRaycastParams();
+            visualParams.myRaycastResult = raycastResult;
+            visualParams.myNormalLength = 0.2;
+            visualParams.myThickness = 0.005;
+            PP.myVisualManager.draw(visualParams, 0);
         }
     };
 }();
@@ -314,11 +314,11 @@ PlayerLocomotionTeleport.prototype._detectTeleportPositionVR = function () {
                 this._myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRotationOnUp);
             }
 
-            let debugParams = new PP.DebugRaycastParams();
-            debugParams.myRaycastResult = raycastResult;
-            debugParams.myNormalLength = 0.2;
-            debugParams.myThickness = 0.005;
-            PP.myDebugManager.draw(debugParams);
+            let visualParams = new PP.VisualRaycastParams();
+            visualParams.myRaycastResult = raycastResult;
+            visualParams.myNormalLength = 0.2;
+            visualParams.myThickness = 0.005;
+            PP.myVisualManager.draw(visualParams);
         }
     };
 }();
@@ -510,11 +510,11 @@ PlayerLocomotionTeleport.prototype._isPositionVisible = function () {
             raycastResult = PP.PhysicsUtils.raycast(raycastSetup, raycastResult);
 
             if (this._myParams.myDebugActive && this._myParams.myDebugVisibilityActive) {
-                let debugParams = new PP.DebugRaycastParams();
-                debugParams.myRaycastResult = raycastResult;
-                debugParams.myNormalLength = 0.2;
-                debugParams.myThickness = 0.005;
-                PP.myDebugManager.draw(debugParams);
+                let visualParams = new PP.VisualRaycastParams();
+                visualParams.myRaycastResult = raycastResult;
+                visualParams.myNormalLength = 0.2;
+                visualParams.myThickness = 0.005;
+                PP.myVisualManager.draw(visualParams);
             }
 
             if (raycastResult.isColliding()) {

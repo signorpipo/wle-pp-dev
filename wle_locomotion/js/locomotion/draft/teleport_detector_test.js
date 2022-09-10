@@ -18,12 +18,12 @@ TeleportDetectorTest = class TeleportDetectorTest {
 
             let raycastResult = this._myMouse.raycastWorld(raycastSetup);
 
-            let debugParams = new PP.DebugRaycastParams();
-            debugParams.myRaycastResult = raycastResult;
-            debugParams.myNormalLength = 0.2;
-            debugParams.myThickness = 0.005;
-            debugParams.myShowOnlyFirstHit = false;
-            PP.myDebugManager.draw(debugParams, 0);
+            let visualParams = new PP.VisualRaycastParams();
+            visualParams.myRaycastResult = raycastResult;
+            visualParams.myNormalLength = 0.2;
+            visualParams.myThickness = 0.005;
+            visualParams.myShowOnlyFirstHit = false;
+            PP.myVisualManager.draw(visualParams, 0);
         }
     }
 };

@@ -99,30 +99,33 @@ CollisionCheck.prototype._horizontalSlideCheckOpposite = function () {
                 /* {
                     hitNormal.vec3_copy(preSlideCollisionRuntimeParams.myHorizontalCollisionHit.myNormal);
  
-                    let debugParams = new PP.DebugArrowParams();
-                    debugParams.myStart = feetPosition;
-                    debugParams.myDirection = slideMovement.vec3_normalize();
-                    debugParams.myLength = 0.2;
-                    debugParams.myColor = [0, 0, 1, 1];
-                    PP.myDebugManager.draw(debugParams, 1);
+                    let visualParams = new PP.VisualArrowParams();
+                    visualParams.myStart = feetPosition;
+                    visualParams.myDirection = slideMovement.vec3_normalize();
+                    visualParams.myLength = 0.2;
+                    visualParams.myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
+                    visualParams.myMaterial.color =  [0, 0, 1, 1];
+                    PP.myVisualManager.draw(visualParams, 1);
                 }
  
                 {
-                    let debugParams = new PP.DebugArrowParams();
-                    debugParams.myStart = feetPosition;
-                    debugParams.myDirection = oppositeSlideMovement.vec3_normalize();
-                    debugParams.myLength = 0.2;
-                    debugParams.myColor = [1, 0, 1, 1];
-                    PP.myDebugManager.draw(debugParams, 1);
+                    let visualParams = new PP.VisualArrowParams();
+                    visualParams.myStart = feetPosition;
+                    visualParams.myDirection = oppositeSlideMovement.vec3_normalize();
+                    visualParams.myLength = 0.2;
+                    visualParams.myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
+                    visualParams.myMaterial.color =  [1, 0, 1, 1];
+                    PP.myVisualManager.draw(visualParams, 1);
                 }
  
                 {
-                    let debugParams = new PP.DebugArrowParams();
-                    debugParams.myStart = feetPosition;
-                    debugParams.myDirection = hitNormal.vec3_normalize();
-                    debugParams.myLength = 0.2;
-                    debugParams.myColor = [1, 1, 1, 1];
-                    PP.myDebugManager.draw(debugParams, 1);
+                    let visualParams = new PP.VisualArrowParams();
+                    visualParams.myStart = feetPosition;
+                    visualParams.myDirection = hitNormal.vec3_normalize();
+                    visualParams.myLength = 0.2;
+                    visualParams.myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
+                    visualParams.myMaterial.color =  [1, 1, 1, 1];
+                    PP.myVisualManager.draw(visualParams, 1);
                 } */
 
                 outSlideMovement.vec3_copy(oppositeSlideMovement);
@@ -221,30 +224,33 @@ CollisionCheck.prototype._horizontalSlideFlickerCheck = function () {
                             /* {
                                 hitNormal.vec3_copy(collisionRuntimeParams.mySlidingCollisionHit.myNormal);
     
-                                let debugParams = new PP.DebugArrowParams();
-                                debugParams.myStart = feetPosition;
-                                debugParams.myDirection = slideMovement.vec3_normalize();
-                                debugParams.myLength = 0.2;
-                                debugParams.myColor = [0.5, 0.5, 0.5, 1];
-                                PP.myDebugManager.draw(debugParams, 2);
+                                let visualParams = new PP.VisualArrowParams();
+                                visualParams.myStart = feetPosition;
+                                visualParams.myDirection = slideMovement.vec3_normalize();
+                                visualParams.myLength = 0.2;
+                                visualParams.myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
+                                visualParams.myMaterial.color = [0.5, 0.5, 0.5, 1];
+                                PP.myVisualManager.draw(visualParams, 2);
                             }
     
                             {
-                                let debugParams = new PP.DebugArrowParams();
-                                debugParams.myStart = feetPosition;
-                                debugParams.myDirection = flickerFixSlideMovement.vec3_normalize();
-                                debugParams.myLength = 0.2;
-                                debugParams.myColor = [1, 1, 1, 1];
-                                PP.myDebugManager.draw(debugParams, 2);
+                                let visualParams = new PP.VisualArrowParams();
+                                visualParams.myStart = feetPosition;
+                                visualParams.myDirection = flickerFixSlideMovement.vec3_normalize();
+                                visualParams.myLength = 0.2;
+                                visualParams.myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
+                                visualParams.myMaterial.color = [1, 1, 1, 1];
+                                PP.myVisualManager.draw(visualParams, 2);
                             }
     
                             {
-                                let debugParams = new PP.DebugArrowParams();
-                                debugParams.myStart = feetPosition;
-                                debugParams.myDirection = hitNormal.vec3_normalize();
-                                debugParams.myLength = 0.2;
-                                debugParams.myColor = [1, 0, 0.5, 1];
-                                PP.myDebugManager.draw(debugParams, 2);
+                                let visualParams = new PP.VisualArrowParams();
+                                visualParams.myStart = feetPosition;
+                                visualParams.myDirection = hitNormal.vec3_normalize();
+                                visualParams.myLength = 0.2;
+                                visualParams.myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
+                                visualParams.myMaterial.color = [1, 0, 0.5, 1];
+                                PP.myVisualManager.draw(visualParams, 2);
                             } */
 
                             isFlickering = true;
@@ -458,12 +464,13 @@ CollisionCheck.prototype._horizontalCheckBetterSlideNormal = function () {
         }
 
         if (collisionCheckParams.myDebugActive && collisionCheckParams.myDebugHorizontalMovementActive) {
-            let debugParams = new PP.DebugArrowParams();
-            debugParams.myStart = feetPosition.vec3_add(up.vec3_scale(0.005));
-            debugParams.myDirection = movementDirection;
-            debugParams.myLength = fixedMovement.vec3_length();
-            debugParams.myColor = [1, 0, 1, 1];
-            PP.myDebugManager.draw(debugParams);
+            let visualParams = new PP.VisualArrowParams();
+            visualParams.myStart = feetPosition.vec3_add(up.vec3_scale(0.005));
+            visualParams.myDirection = movementDirection;
+            visualParams.myLength = fixedMovement.vec3_length();
+            visualParams.myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
+            visualParams.myMaterial.color = [1, 0, 1, 1];
+            PP.myVisualManager.draw(visualParams);
         }
 
         this._myCheckBetterSlidingNormalCollisionRuntimeParams.copy(collisionRuntimeParams);

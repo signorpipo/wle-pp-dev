@@ -58,14 +58,14 @@ WL.registerComponent('locomotion-fly-draft', {
     },
     update(dt) {
         /* this._myTiltMatrix.mat4_setPosition(this._myDirectionReferenceObject.pp_getPosition());
-        let debugTransformParams = new PP.DebugTransformParams();
+        let debugTransformParams = new PP.VisualTransformParams();
         debugTransformParams.myTransform = this._myTiltMatrix;
-        PP.myDebugManager.draw(debugTransformParams);
+        PP.myVisualManager.draw(debugTransformParams);
 
         this._myPreTiltMatrix.mat4_setPosition(this._myDirectionReferenceObject.pp_getPosition().vec3_add([0, 0.15, 0]));
-        debugTransformParams = new PP.DebugTransformParams();
+        debugTransformParams = new PP.VisualTransformParams();
         debugTransformParams.myTransform = this._myPreTiltMatrix;
-        PP.myDebugManager.draw(debugTransformParams); */
+        PP.myVisualManager.draw(debugTransformParams); */
 
         if (this._myDelaySessionChangeResyncCounter > 0) {
             this._myDelaySessionChangeResyncCounter--;
@@ -311,34 +311,38 @@ WL.registerComponent('locomotion-fly-draft', {
             this._myStartRight = right.pp_clone();
         }
 
-        /* let debugArrowParamsForward = new PP.DebugArrowParams();
+        /* let debugArrowParamsForward = new PP.VisualArrowParams();
         debugArrowParamsForward.myStart = this._myDirectionReferenceObject.pp_getPosition();
         debugArrowParamsForward.myDirection = forward;
         debugArrowParamsForward.myLength = 0.2;
-        debugArrowParamsForward.myColor = [0, 0, 1, 1];
-        PP.myDebugManager.draw(debugArrowParamsForward);
+        debugArrowParamsForward.myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
+        debugArrowParamsForward.myMaterial.color = [0, 0, 1, 1];
+        PP.myVisualManager.draw(debugArrowParamsForward);
 
-        let debugArrowParamsStartForward = new PP.DebugArrowParams();
+        let debugArrowParamsStartForward = new PP.VisualArrowParams();
         debugArrowParamsStartForward.myStart = this._myDirectionReferenceObject.pp_getPosition();
         //debugArrowParamsStartForward.myDirection = conversionObject.pp_getForward().vec3_removeComponentAlongAxis(playerUp).vec3_normalize();
         debugArrowParamsStartForward.myDirection = this._myStartForward;
         debugArrowParamsStartForward.myLength = 0.2;
-        debugArrowParamsStartForward.myColor = [0, 0, 0.5, 1];
-        PP.myDebugManager.draw(debugArrowParamsStartForward);
+        debugArrowParamsStartForward.myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
+        debugArrowParamsStartForward.myMaterial.color = [0, 0, 0.5, 1];
+        PP.myVisualManager.draw(debugArrowParamsStartForward);
 
-        let debugArrowParamsRight = new PP.DebugArrowParams();
+        let debugArrowParamsRight = new PP.VisualArrowParams();
         debugArrowParamsRight.myStart = this._myDirectionReferenceObject.pp_getPosition();
         debugArrowParamsRight.myDirection = right;
         debugArrowParamsRight.myLength = 0.2;
-        debugArrowParamsRight.myColor = [1, 0, 0, 1];
-        PP.myDebugManager.draw(debugArrowParamsRight);
+        debugArrowParamsRight.myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
+        debugArrowParamsRight.myMaterial.color = [1, 0, 0, 1];
+        PP.myVisualManager.draw(debugArrowParamsRight);
 
-        let debugArrowParamsUp = new PP.DebugArrowParams();
+        let debugArrowParamsUp = new PP.VisualArrowParams();
         debugArrowParamsUp.myStart = this._myDirectionReferenceObject.pp_getPosition();
         debugArrowParamsUp.myDirection = up;
         debugArrowParamsUp.myLength = 0.2;
-        debugArrowParamsUp.myColor = [0, 1, 0, 1];
-        PP.myDebugManager.draw(debugArrowParamsUp); */
+        debugArrowParamsUp.myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
+        debugArrowParamsUp.myMaterial.color = [0, 1, 0, 1];
+        PP.myVisualManager.draw(debugArrowParamsUp); */
 
         let direction = right.vec3_scale(stickAxes[0]).vec3_add(forward.vec3_scale(stickAxes[1]));
 
@@ -432,34 +436,34 @@ WL.registerComponent('locomotion-fly-draft', {
             this._myStartRight = right.pp_clone();
         }
 
-        /* let debugArrowParamsForward = new PP.DebugArrowParams();
+        /* let debugArrowParamsForward = new PP.VisualArrowParams();
         debugArrowParamsForward.myStart = this._myDirectionReferenceObject.pp_getPosition();
         debugArrowParamsForward.myDirection = forward;
         debugArrowParamsForward.myLength = 0.2;
         debugArrowParamsForward.myColor = [0, 0, 1, 1];
-        PP.myDebugManager.draw(debugArrowParamsForward);
+        PP.myVisualManager.draw(debugArrowParamsForward);
         
-        let debugArrowParamsStartForward = new PP.DebugArrowParams();
+        let debugArrowParamsStartForward = new PP.VisualArrowParams();
         debugArrowParamsStartForward.myStart = this._myDirectionReferenceObject.pp_getPosition();
         //debugArrowParamsStartForward.myDirection = conversionObject.pp_getForward().vec3_removeComponentAlongAxis(playerUp).vec3_normalize();
         debugArrowParamsStartForward.myDirection = this._myStartForward;
         debugArrowParamsStartForward.myLength = 0.2;
         debugArrowParamsStartForward.myColor = [0, 0, 0.5, 1];
-        PP.myDebugManager.draw(debugArrowParamsStartForward);
+        PP.myVisualManager.draw(debugArrowParamsStartForward);
         
-        let debugArrowParamsRight = new PP.DebugArrowParams();
+        let debugArrowParamsRight = new PP.VisualArrowParams();
         debugArrowParamsRight.myStart = this._myDirectionReferenceObject.pp_getPosition();
         debugArrowParamsRight.myDirection = right;
         debugArrowParamsRight.myLength = 0.2;
         debugArrowParamsRight.myColor = [1, 0, 0, 1];
-        PP.myDebugManager.draw(debugArrowParamsRight);
+        PP.myVisualManager.draw(debugArrowParamsRight);
         
-        let debugArrowParamsUp = new PP.DebugArrowParams();
+        let debugArrowParamsUp = new PP.VisualArrowParams();
         debugArrowParamsUp.myStart = this._myDirectionReferenceObject.pp_getPosition();
         debugArrowParamsUp.myDirection = up;
         debugArrowParamsUp.myLength = 0.2;
         debugArrowParamsUp.myColor = [0, 1, 0, 1];
-        PP.myDebugManager.draw(debugArrowParamsUp); */
+        PP.myVisualManager.draw(debugArrowParamsUp); */
 
         let direction = right.vec3_scale(stickAxes[0]).vec3_add(forward.vec3_scale(stickAxes[1]));
 

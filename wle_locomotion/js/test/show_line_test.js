@@ -5,11 +5,12 @@ WL.registerComponent('show-line-test', {
     start() {
     },
     update(dt) {
-        let debugParams = new PP.DebugLineParams();
-        debugParams.myStart = this.object.pp_getPosition();
-        debugParams.myDirection = this.object.pp_getForward();
-        debugParams.myLength = 0.4;
-        debugParams.myColor = [0, 0, 1, 1];
-        PP.myDebugManager.draw(debugParams);
+        let visualParams = new PP.VisualLineParams();
+        visualParams.myStart = this.object.pp_getPosition();
+        visualParams.myDirection = this.object.pp_getForward();
+        visualParams.myLength = 0.4;
+        visualParams.myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
+        visualParams.myMaterial.color = [0, 0, 1, 1];
+        PP.myVisualManager.draw(visualParams);
     }
 });

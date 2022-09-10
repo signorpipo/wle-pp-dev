@@ -33,15 +33,16 @@ WL.registerComponent('display-fps', {
         let textPosition = headPosition.vec3_add(head.pp_getForward().vec3_scale(0.35))
             .vec3_add(head.pp_getUp().vec3_scale(-0.115)).vec3_add(head.pp_getRight().vec3_scale(0.115));
 
-        let debugParams = new PP.DebugTextParams();
-        debugParams.myText = this._myFPS.toFixed(0);
+        let visualParams = new PP.VisualTextParams();
+        visualParams.myText = this._myFPS.toFixed(0);
 
-        debugParams.myPosition = textPosition;
-        debugParams.myForward = head.pp_getForward().vec3_negate();
-        debugParams.myUp = head.pp_getUp();
-        debugParams.myScale = [0.3, 0.3, 0.3];
-        debugParams.myColor = [0, 1, 0, 1];
+        let rotation = PP.quat_create();
+        rotation.quat_setForward(head.pp_getForward().vec3_negate(), head.pp_getUp());
+        visualParams.myTransform.mat4_setPositionRotationQuatScale(textPosition, rotation, [0.3, 0.3, 0.3]);
 
-        PP.myDebugManager.draw(debugParams, 0);
+        visualParams.myMaterial = PP.myDefaultResources.myMaterials.myText.clone();
+        visualParams.myMaterial.color = [0, 1, 0, 1];
+
+        PP.myVisualManager.draw(visualParams);
     }
 });
