@@ -4,6 +4,22 @@ PP.VisualManager = class VisualManager {
         this._myVisualElementLastID = 0;
         this._myVisualElementsPool = new PP.ObjectPoolManager();
         this._myVisualElementsToShow = [];
+
+        this._myActive = true;
+    }
+
+    setActive(active) {
+        if (this._myActive != active) {
+            this._myActive = active;
+
+            if (!this._myActive) {
+                this.clearDraw();
+            }
+        }
+    }
+
+    isActive() {
+        return this._myActive;
     }
 
     update(dt) {
@@ -12,6 +28,10 @@ PP.VisualManager = class VisualManager {
 
     //lifetimeSeconds can be null, in that case the element will be drawn until cleared
     draw(visualElementParams, lifetimeSeconds = 0, idToReuse = null) {
+        if (!this._myActive) {
+            return 0;
+        }
+
         let visualElement = null;
         let idReused = false;
         if (idToReuse != null) {
