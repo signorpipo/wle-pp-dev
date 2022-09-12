@@ -26,12 +26,7 @@ WL.registerComponent('raycast-test', {
 
             let raycastResult = PP.PhysicsUtils.raycast(raycastSetup);
 
-            let visualParams = new PP.VisualRaycastParams();
-            visualParams.myRaycastResult = raycastResult;
-            visualParams.myNormalLength = 0.2;
-            visualParams.myThickness = 0.005;
-            visualParams.myShowOnlyFirstHit = false;
-            PP.myDebugVisualManager.draw(visualParams, 0);
+            PP.myDebugVisualManager.drawRaycast(0, raycastResult, false);
         }
     }
 });

@@ -207,7 +207,6 @@ require('./locomotion/draft/locomotion_draft');
 require('./locomotion/draft/locomotion_draft_2');
 require('./locomotion/draft/locomotion_fly_draft');
 require('./locomotion/draft/locomotion_floating_error');
-require('./locomotion/draft/teleport_detector_test');
 
 //TEST
 

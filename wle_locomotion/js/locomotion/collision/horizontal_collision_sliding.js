@@ -464,13 +464,7 @@ CollisionCheck.prototype._horizontalCheckBetterSlideNormal = function () {
         }
 
         if (collisionCheckParams.myDebugActive && collisionCheckParams.myDebugHorizontalMovementActive) {
-            let visualParams = new PP.VisualArrowParams();
-            visualParams.myStart = feetPosition.vec3_add(up.vec3_scale(0.005));
-            visualParams.myDirection = movementDirection;
-            visualParams.myLength = fixedMovement.vec3_length();
-            visualParams.myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
-            visualParams.myMaterial.color = [1, 0, 1, 1];
-            PP.myDebugVisualManager.draw(visualParams);
+            PP.myDebugVisualManager.drawArrow(0, feetPosition, movementDirection, fixedMovement.vec3_length(), [1, 0, 1, 1]);
         }
 
         this._myCheckBetterSlidingNormalCollisionRuntimeParams.copy(collisionRuntimeParams);

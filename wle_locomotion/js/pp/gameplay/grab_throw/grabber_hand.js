@@ -297,13 +297,7 @@ WL.registerComponent('pp-grabber-hand', {
 
             let color = 1 / j;
 
-            let visualParams = new PP.VisualLineParams();
-            visualParams.myStart = this.object.pp_getPosition(visualParams.myStart);
-            visualParams.myDirection.vec3_copy(direction);
-            visualParams.myLength = 0.2;
-            visualParams.myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
-            visualParams.myMaterial.color = [color, color, color, 1];
-            PP.myDebugVisualManager.draw(visualParams, 5);
+            PP.myDebugVisualManager.drawLine(5, this.object.pp_getPosition(), direction, 0.2, [olor, color, color, 1]);
         }
     },
     _isAlreadyGrabbed(grabbable) {

@@ -41,72 +41,44 @@ CollisionCheck = class CollisionCheck {
         let horizontalMovement = fixedMovement.vec3_removeComponentAlongAxis(up);
         let verticalMovement = fixedMovement.vec3_componentAlongAxis(up);
 
+        let feetPositionPlusOffset = feetPosition.vec3_add(up.vec3_scale(collisionCheckParams.myDistanceFromFeetToIgnore + 0.001));
+
         if (!originalHorizontalMovement.vec3_isZero()) {
             originalHorizontalMovement.vec3_normalize(originalHorizontalMovement);
 
-            let visualParams = new PP.VisualArrowParams();
-            visualParams.myStart = feetPosition.vec3_add(up.vec3_scale(collisionCheckParams.myDistanceFromFeetToIgnore + 0.001));
-            visualParams.myDirection = originalHorizontalMovement;
-            visualParams.myLength = 0.2;
-            visualParams.myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
-            visualParams.myMaterial.color = [0.5, 0.5, 1, 1];
-            PP.myDebugVisualManager.draw(visualParams);
+            PP.myDebugVisualManager.drawArrow(0, feetPositionPlusOffset, originalHorizontalMovement, 0.2, [0.5, 0.5, 1, 1]);
         }
 
         if (!horizontalMovement.vec3_isZero()) {
             horizontalMovement.vec3_normalize(horizontalMovement);
 
-            let visualParams = new PP.VisualArrowParams();
-            visualParams.myStart = feetPosition.vec3_add(up.vec3_scale(collisionCheckParams.myDistanceFromFeetToIgnore + 0.001));
-            visualParams.myDirection = horizontalMovement;
-            visualParams.myLength = 0.2;
-            visualParams.myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
-            visualParams.myMaterial.color = [0, 0, 1, 1];
-            PP.myDebugVisualManager.draw(visualParams);
+            PP.myDebugVisualManager.drawArrow(0, feetPositionPlusOffset, horizontalMovement, 0.2, [0, 0, 1, 1]);
         }
 
         if (!verticalMovement.vec3_isZero()) {
             verticalMovement.vec3_normalize(verticalMovement);
 
-            let visualParams = new PP.VisualArrowParams();
-            visualParams.myStart = feetPosition;
-            visualParams.myDirection = verticalMovement;
-            visualParams.myLength = 0.2;
-            visualParams.myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
-            visualParams.myMaterial.color = [0, 0, 1, 1];
-            PP.myDebugVisualManager.draw(visualParams);
+            PP.myDebugVisualManager.drawArrow(0, feetPosition, verticalMovement, 0.2, [0, 0, 1, 1]);
         }
     }
 
     _debugRuntimeParams(collisionRuntimeParams) {
         if (collisionRuntimeParams.myHorizontalCollisionHit.isValid()) {
-            let visualParams = new PP.VisualArrowParams();
-            visualParams.myStart = collisionRuntimeParams.myHorizontalCollisionHit.myPosition;
-            visualParams.myDirection = collisionRuntimeParams.myHorizontalCollisionHit.myNormal;
-            visualParams.myLength = 0.2;
-            visualParams.myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
-            visualParams.myMaterial.color = [1, 0, 0, 1];
-            PP.myDebugVisualManager.draw(visualParams);
+            PP.myDebugVisualManager.drawArrow(0,
+                collisionRuntimeParams.myHorizontalCollisionHit.myPosition,
+                collisionRuntimeParams.myHorizontalCollisionHit.myNormal, 0.2, [1, 0, 0, 1]);
         }
 
         if (collisionRuntimeParams.mySlidingCollisionHit.isValid()) {
-            let visualParams = new PP.VisualArrowParams();
-            visualParams.myStart = collisionRuntimeParams.mySlidingCollisionHit.myPosition;
-            visualParams.myDirection = collisionRuntimeParams.mySlidingCollisionHit.myNormal;
-            visualParams.myLength = 0.2;
-            visualParams.myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
-            visualParams.myMaterial.color = [1, 0, 0, 1];
-            PP.myDebugVisualManager.draw(visualParams);
+            PP.myDebugVisualManager.drawArrow(0,
+                collisionRuntimeParams.mySlidingCollisionHit.myPosition,
+                collisionRuntimeParams.mySlidingCollisionHit.myNormal, 0.2, [1, 0, 0, 1]);
         }
 
         if (collisionRuntimeParams.myVerticalCollisionHit.isValid()) {
-            let visualParams = new PP.VisualArrowParams();
-            visualParams.myStart = collisionRuntimeParams.myVerticalCollisionHit.myPosition;
-            visualParams.myDirection = collisionRuntimeParams.myVerticalCollisionHit.myNormal;
-            visualParams.myLength = 0.2;
-            visualParams.myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
-            visualParams.myMaterial.color = [1, 0, 0, 1];
-            PP.myDebugVisualManager.draw(visualParams);
+            PP.myDebugVisualManager.drawArrow(0,
+                collisionRuntimeParams.myVerticalCollisionHit.myPosition,
+                collisionRuntimeParams.myVerticalCollisionHit.myNormal, 0.2, [1, 0, 0, 1]);
         }
     }
 };
@@ -127,9 +99,7 @@ CollisionCheck.prototype._raycastAndDebug = function () {
         //raycastResult.myHits = [];
 
         if (this._myDebugActive) {
-            let visualParams = new PP.VisualRaycastParams();
-            visualParams.myRaycastResult = raycastResult;
-            PP.myDebugVisualManager.draw(visualParams);
+            PP.myDebugVisualManager.drawRaycast(0, raycastResult);
         }
 
         return raycastResult;

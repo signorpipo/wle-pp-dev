@@ -249,11 +249,7 @@ PlayerLocomotionTeleport.prototype._detectTeleportPositionNonVR = function () {
         }
 
         if (this._myParams.myDebugActive && this._myParams.myDebugDetectActive) {
-            let visualParams = new PP.VisualRaycastParams();
-            visualParams.myRaycastResult = raycastResult;
-            visualParams.myNormalLength = 0.2;
-            visualParams.myThickness = 0.005;
-            PP.myDebugVisualManager.draw(visualParams, 0);
+            PP.myDebugVisualManager.drawRaycast(0, raycastResult);
         }
     };
 }();
@@ -314,11 +310,7 @@ PlayerLocomotionTeleport.prototype._detectTeleportPositionVR = function () {
                 this._myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRotationOnUp);
             }
 
-            let visualParams = new PP.VisualRaycastParams();
-            visualParams.myRaycastResult = raycastResult;
-            visualParams.myNormalLength = 0.2;
-            visualParams.myThickness = 0.005;
-            PP.myDebugVisualManager.draw(visualParams);
+            PP.myDebugVisualManager.drawRaycast(0, raycastResult);
         }
     };
 }();
@@ -510,11 +502,7 @@ PlayerLocomotionTeleport.prototype._isPositionVisible = function () {
             raycastResult = PP.PhysicsUtils.raycast(raycastSetup, raycastResult);
 
             if (this._myParams.myDebugActive && this._myParams.myDebugVisibilityActive) {
-                let visualParams = new PP.VisualRaycastParams();
-                visualParams.myRaycastResult = raycastResult;
-                visualParams.myNormalLength = 0.2;
-                visualParams.myThickness = 0.005;
-                PP.myDebugVisualManager.draw(visualParams);
+                PP.myDebugVisualManager.drawRaycast(0, raycastResult);
             }
 
             if (raycastResult.isColliding()) {
