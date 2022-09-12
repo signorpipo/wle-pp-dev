@@ -254,8 +254,17 @@ PlayerLocomotionTeleport.prototype._detectTeleportPositionNonVR = function () {
     };
 }();
 
-PlayerLocomotionTeleport.prototype._detectTeleportPositionVR = function () {
+PlayerLocomotionTeleport.prototype._detectTeleportPositionVR = function (dt) {
+    this._detectTeleportPositionVRLine(dt);
+};
+
+PlayerLocomotionTeleport.prototype._detectTeleportPositionVRLine = function () {
     let handPosition = PP.vec3_create();
+
+    let leftHandOffsetPosition = [0.01, -0.04, 0.08];
+    let rightHandOffsetPosition = [-0.01, -0.04, 0.08];
+    let teleportStartPosition = PP.vec3_create();
+
     let handForward = PP.vec3_create();
     let handRight = PP.vec3_create();
     let playerUp = PP.vec3_create();
@@ -265,12 +274,12 @@ PlayerLocomotionTeleport.prototype._detectTeleportPositionVR = function () {
 
     let raycastSetup = new PP.RaycastSetup();
     let raycastResult = new PP.RaycastResult();
-    return function _detectTeleportPositionVR(dt) {
+    return function _detectTeleportPositionVRLine(dt) {
         this._myTeleportDetectionValid = false;
 
         let referenceObject = PP.myPlayerObjects.myHandLeft;
+        teleportStartPosition = referenceObject.pp_convertPositionObjectToWorld(leftHandOffsetPosition, teleportStartPosition);
 
-        handPosition = referenceObject.pp_getPosition(handPosition);
         handForward = referenceObject.pp_getForward(handForward);
         handRight = referenceObject.pp_getRight(handRight);
 
@@ -282,7 +291,8 @@ PlayerLocomotionTeleport.prototype._detectTeleportPositionVR = function () {
             extraRotationAxis.vec3_negate(extraRotationAxis);
         }
 
-        teleportDirection = handForward.vec3_rotateAxis(-45, extraRotationAxis);
+        let teleportExtraRotationAngle = 0;
+        teleportDirection = handForward.vec3_rotateAxis(teleportExtraRotationAngle, extraRotationAxis);
 
         if (!teleportDirection.vec3_isConcordant(playerUp) && (
             handForward.vec3_angle(playerUp) > this._myForwardMinAngleToBeValid &&
@@ -290,9 +300,10 @@ PlayerLocomotionTeleport.prototype._detectTeleportPositionVR = function () {
         )) {
             this._myTeleportDetectionValid = true;
         }
+        this._myTeleportDetectionValid = true;
 
         if (this._myTeleportDetectionValid) {
-            raycastSetup.myOrigin.vec3_copy(handPosition);
+            raycastSetup.myOrigin.vec3_copy(teleportStartPosition);
             raycastSetup.myDirection.vec3_copy(teleportDirection);
             raycastSetup.myDistance = this._myParams.myMaxDistance;
             raycastSetup.myBlockLayerFlags.setMask(this._myParams.myTeleportBlockLayerFlags.getMask());
@@ -720,6 +731,8 @@ PlayerLocomotionTeleport.prototype._applyGravity = function () {
 
 Object.defineProperty(PlayerLocomotionTeleport.prototype, "_detectTeleportPositionNonVR", { enumerable: false });
 Object.defineProperty(PlayerLocomotionTeleport.prototype, "_detectTeleportPositionVR", { enumerable: false });
+Object.defineProperty(PlayerLocomotionTeleport.prototype, "_detectTeleportPositionVRLine", { enumerable: false });
+Object.defineProperty(PlayerLocomotionTeleport.prototype, "_detectTeleportPositionVRParable", { enumerable: false });
 Object.defineProperty(PlayerLocomotionTeleport.prototype, "_detectTeleportRotationVR", { enumerable: false });
 Object.defineProperty(PlayerLocomotionTeleport.prototype, "_isTeleportHitValid", { enumerable: false });
 Object.defineProperty(PlayerLocomotionTeleport.prototype, "_isTeleportPositionValid", { enumerable: false });
