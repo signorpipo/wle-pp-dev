@@ -1,7 +1,7 @@
 /*
 let visualParams = new PP.VisualTransformParams();
-visualParams.myTransform = transform;
-visualParams.myLength = 0.1;
+visualParams.myTransform.mat4_copy(transform);
+visualParams.myLength = 0.2;
 PP.myVisualManager.draw(visualParams);
 
 or
@@ -186,7 +186,7 @@ PP.VisualTransform = class VisualTransform {
 
     clone() {
         let clonedParams = new PP.VisualTransformParams();
-        clonedParams.myTransform.pp_copy(this._myParams.myTransform);
+        clonedParams.myTransform.mat4_copy(this._myParams.myTransform);
         clonedParams.myLength = this._myParams.myLength;
         clonedParams.myThickness = this._myParams.myThickness;
 

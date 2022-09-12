@@ -1,8 +1,8 @@
 /*
 let visualParams = new PP.VisualArrowParams();
-visualParams.myStart = start;
-visualParams.myDirection = direction;
-visualParams.myLength = 0.1;
+visualParams.myStart.vec3_copy(start);
+visualParams.myDirection.vec3_copy(direction);
+visualParams.myLength = 0.2;
 visualParams.myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
 visualParams.myMaterial.color = [1, 1, 1, 1];
 PP.myVisualManager.draw(visualParams);

@@ -1,7 +1,7 @@
 /*
 let visualParams = new PP.VisualTextParams();
 visualParams.myText = text;
-visualParams.myTransform = transform;
+visualParams.myTransform.mat4_copy(transform);
 visualParams.myMaterial = PP.myDefaultResources.myMaterials.myText.clone();
 visualParams.myMaterial.color = [1, 1, 1, 1];
 PP.myVisualManager.draw(visualParams);
@@ -123,7 +123,7 @@ PP.VisualText = class VisualText {
         clonedParams.myAlignment = this._myParams.myAlignment;
         clonedParams.myJustification = this._myParams.myJustification;
 
-        clonedParams.myTransform.pp_copy(this._myParams.myTransform);
+        clonedParams.myTransform.mat4_copy(this._myParams.myTransform);
 
         if (this._myParams.myMaterial != null) {
             clonedParams.myMaterial = this._myParams.myMaterial.clone();

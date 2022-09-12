@@ -1,7 +1,7 @@
 /*
 let visualParams = new PP.VisualPointParams();
-visualParams.myPosition = position;
-visualParams.myRadius = 0.01;
+visualParams.myPosition.vec3_copy(position);
+visualParams.myRadius = 0.005;
 visualParams.myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
 visualParams.myMaterial.color = [1, 1, 1, 1];
 PP.myVisualManager.draw(visualParams);
@@ -15,7 +15,7 @@ PP.VisualPointParams = class VisualPointParams {
 
     constructor() {
         this.myPosition = [0, 0, 0];
-        this.myRadius = 0;
+        this.myRadius = 0.005;
 
         this.myMaterial = null;
 
