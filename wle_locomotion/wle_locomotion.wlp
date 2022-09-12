@@ -12514,6 +12514,40 @@
                 0.0,
                 1.0
             ]
+        },
+        "784": {
+            "name": "Inverted Sphere",
+            "parent": "71",
+            "components": [
+                {
+                    "type": "pp-copy-hand-transform",
+                    "pp-copy-hand-transform": {
+                        "_myHandedness": "right"
+                    }
+                },
+                {
+                    "type": "inverted-sphere",
+                    "active": true
+                }
+            ],
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ]
         }
     },
     "meshes": {
@@ -13337,7 +13371,7 @@
                 },
                 "requiredFeatures": {
                     "local-floor": true,
-                    "hand-tracking": true
+                    "hand-tracking": false
                 }
             },
             "visualizePhysX": false

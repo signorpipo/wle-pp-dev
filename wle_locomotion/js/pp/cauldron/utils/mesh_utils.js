@@ -207,6 +207,89 @@ PP.MeshUtils = {
             return clonedMesh;
         };
     }(),
+    invertMesh: function () {
+        let position = PP.vec3_create();
+        let textureCoordinates = PP.vec2_create();
+        let normal = PP.vec3_create();
+        let color = PP.vec4_create();
+
+        return function invertMesh(mesh) {
+            let invertedIndexData = new Uint32Array(mesh.indexData.length);
+            for (let i = 0; i < mesh.indexData.length / 3; i++) {
+                invertedIndexData[i * 3 + 0] = mesh.indexData[i * 3 + 2];
+                invertedIndexData[i * 3 + 1] = mesh.indexData[i * 3 + 1];
+                invertedIndexData[i * 3 + 2] = mesh.indexData[i * 3 + 0];
+            }
+
+            let invertedMesh = new WL.Mesh({
+                vertexCount: mesh.vertexCount,
+                indexData: invertedIndexData,
+                indexType: WL.MeshIndexType.UnsignedInt,
+            });
+
+            let positionAttribute = null;
+            let textureCoordinatesAttribute = null;
+            let normalAttribute = null;
+            let colorAttribute = null;
+
+            let invertedPositionAttribute = null;
+            let invertedTextureCoordinatesAttribute = null;
+            let invertedNormalAttribute = null;
+            let invertedColorAttribute = null;
+
+
+            try {
+                positionAttribute = mesh.attribute(WL.MeshAttribute.Position);
+                invertedPositionAttribute = invertedMesh.attribute(WL.MeshAttribute.Position);
+            } catch (error) {
+                positionAttribute = null;
+                invertedPositionAttribute = null;
+            }
+
+            try {
+                textureCoordinatesAttribute = mesh.attribute(WL.MeshAttribute.TextureCoordinate);
+                invertedTextureCoordinatesAttribute = invertedMesh.attribute(WL.MeshAttribute.TextureCoordinate);
+            } catch (error) {
+                textureCoordinatesAttribute = null;
+                invertedTextureCoordinatesAttribute = null;
+            }
+
+            try {
+                normalAttribute = mesh.attribute(WL.MeshAttribute.Normal);
+                invertedNormalAttribute = invertedMesh.attribute(WL.MeshAttribute.Normal);
+            } catch (error) {
+                normalAttribute = null;
+                invertedNormalAttribute = null;
+            }
+
+            try {
+                colorAttribute = mesh.attribute(WL.MeshAttribute.Color);
+                invertedColorAttribute = invertedMesh.attribute(WL.MeshAttribute.Color);
+            } catch (error) {
+                colorAttribute = null;
+                invertedColorAttribute = null;
+            }
+
+            for (let i = 0; i < mesh.vertexCount; i++) {
+                if (positionAttribute != null && invertedPositionAttribute != null) {
+                    invertedPositionAttribute.set(i, positionAttribute.get(i, position));
+                }
+                if (textureCoordinatesAttribute != null && invertedTextureCoordinatesAttribute != null) {
+                    invertedTextureCoordinatesAttribute.set(i, textureCoordinatesAttribute.get(i, textureCoordinates));
+                }
+                if (normalAttribute != null && invertedNormalAttribute != null) {
+                    normalAttribute.get(i, normal)
+                    normal.vec3_negate(normal);
+                    invertedNormalAttribute.set(i, normal);
+                }
+                if (colorAttribute != null && invertedColorAttribute != null) {
+                    invertedColorAttribute.set(i, colorAttribute.get(i, color));
+                }
+            }
+
+            return invertedMesh;
+        };
+    }(),
     setAlpha: function (object, alpha) {
         let meshComponents = object.pp_getComponentsHierarchy("mesh");
 
