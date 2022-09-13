@@ -1504,6 +1504,7 @@ Array.prototype.quat_subRotationQuat = function () {
     return function quat_subRotationQuat(rotation, out = glMatrix.quat.create()) {
         rotation.quat_invert(inverse);
         this.quat_mul(inverse, out);
+        out.quat_normalize(out);
         return out;
     };
 }();

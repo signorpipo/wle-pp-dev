@@ -89,6 +89,10 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport extends PlayerLocomoti
         }
         WL.onXRSessionStart.push(this._onXRSessionStart.bind(this));
         WL.onXRSessionEnd.push(this._onXRSessionEnd.bind(this));
+
+        PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Parable Steps", 1, 0.1, 3));
+        PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Parable Gravity", 30, 0.1, 3));
+        PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Parable Speed", 15, 0.1, 3));
     }
 
     start() {
@@ -255,12 +259,10 @@ PlayerLocomotionTeleport.prototype._detectTeleportPositionNonVR = function () {
 }();
 
 PlayerLocomotionTeleport.prototype._detectTeleportPositionVR = function (dt) {
-    this._detectTeleportPositionVRLine(dt);
+    this._detectTeleportPositionVRParable(dt);
 };
 
 PlayerLocomotionTeleport.prototype._detectTeleportPositionVRLine = function () {
-    let handPosition = PP.vec3_create();
-
     let leftHandOffsetPosition = [0.01, -0.04, 0.08];
     let rightHandOffsetPosition = [-0.01, -0.04, 0.08];
     let teleportStartPosition = PP.vec3_create();
@@ -275,7 +277,7 @@ PlayerLocomotionTeleport.prototype._detectTeleportPositionVRLine = function () {
     let raycastSetup = new PP.RaycastSetup();
     let raycastResult = new PP.RaycastResult();
     return function _detectTeleportPositionVRLine(dt) {
-        this._myTeleportDetectionValid = false;
+        this._myTeleportDetectionValid = true;
 
         let referenceObject = PP.myPlayerObjects.myHandLeft;
         teleportStartPosition = referenceObject.pp_convertPositionObjectToWorld(leftHandOffsetPosition, teleportStartPosition);
@@ -294,13 +296,15 @@ PlayerLocomotionTeleport.prototype._detectTeleportPositionVRLine = function () {
         let teleportExtraRotationAngle = 0;
         teleportDirection = handForward.vec3_rotateAxis(teleportExtraRotationAngle, extraRotationAxis);
 
+        /*
+        let forwardMinAngleToBeValid = 15;
         if (!teleportDirection.vec3_isConcordant(playerUp) && (
-            handForward.vec3_angle(playerUp) > this._myForwardMinAngleToBeValid &&
-            handForward.vec3_angle(playerUpNegate) > this._myForwardMinAngleToBeValid
+            handForward.vec3_angle(playerUp) >= forwardMinAngleToBeValid &&
+            handForward.vec3_angle(playerUpNegate) >= forwardMinAngleToBeValid
         )) {
             this._myTeleportDetectionValid = true;
         }
-        this._myTeleportDetectionValid = true;
+        */
 
         if (this._myTeleportDetectionValid) {
             raycastSetup.myOrigin.vec3_copy(teleportStartPosition);
@@ -321,8 +325,120 @@ PlayerLocomotionTeleport.prototype._detectTeleportPositionVRLine = function () {
                 this._myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRotationOnUp);
             }
 
-            PP.myDebugVisualManager.drawRaycast(0, raycastResult);
+            if (this._myParams.myDebugActive) {
+                PP.myDebugVisualManager.drawRaycast(0, raycastResult);
+            }
         }
+    };
+}();
+
+PlayerLocomotionTeleport.prototype._detectTeleportPositionVRParable = function () {
+    let leftHandOffsetPosition = [0.01, -0.04, 0.08];
+    let rightHandOffsetPosition = [-0.01, -0.04, 0.08];
+    let teleportStartPosition = PP.vec3_create();
+
+    let handForward = PP.vec3_create();
+    let handRight = PP.vec3_create();
+    let handUp = PP.vec3_create();
+
+    let playerUp = PP.vec3_create();
+    let playerUpNegate = PP.vec3_create();
+    let extraRotationAxis = PP.vec3_create();
+    let teleportDirection = PP.vec3_create();
+
+    let raycastSetup = new PP.RaycastSetup();
+    let raycastResult = new PP.RaycastResult();
+    return function _detectTeleportPositionVRParable(dt) {
+        this._myTeleportDetectionValid = true;
+
+        let referenceObject = PP.myPlayerObjects.myHandLeft;
+        teleportStartPosition = referenceObject.pp_convertPositionObjectToWorld(leftHandOffsetPosition, teleportStartPosition);
+
+        handForward = referenceObject.pp_getForward(handForward);
+        handRight = referenceObject.pp_getRight(handRight);
+        handUp = referenceObject.pp_getUp(handUp);
+
+        playerUp = this._myParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
+        playerUpNegate = playerUp.vec3_negate(playerUpNegate);
+
+        extraRotationAxis = handForward.vec3_cross(playerUp, extraRotationAxis).vec3_normalize(extraRotationAxis);
+
+        if (!extraRotationAxis.vec3_isConcordant(handRight)) {
+            extraRotationAxis.vec3_negate(extraRotationAxis);
+
+            if (this._myParams.myDebugActive) {
+                PP.myDebugVisualManager.drawArrow(0, referenceObject.pp_getPosition(), extraRotationAxis, 0.2, [0, 0.5, 0, 1]);
+            }
+        } else {
+            if (this._myParams.myDebugActive) {
+                PP.myDebugVisualManager.drawArrow(0, referenceObject.pp_getPosition(), extraRotationAxis, 0.2, [0, 1, 0, 1]);
+            }
+        }
+
+        let teleportExtraRotationAngle = -45;
+        teleportDirection = handForward.vec3_rotateAxis(teleportExtraRotationAngle, extraRotationAxis);
+
+        if (this._myTeleportDetectionValid) {
+            this._computeParablePositions(teleportStartPosition, teleportDirection, playerUp);
+
+            raycastSetup.myOrigin.vec3_copy(teleportStartPosition);
+            raycastSetup.myDirection.vec3_copy(teleportDirection);
+            raycastSetup.myDistance = this._myParams.myMaxDistance;
+            raycastSetup.myBlockLayerFlags.setMask(this._myParams.myTeleportBlockLayerFlags.getMask());
+            raycastSetup.myObjectsToIgnore.pp_clear();
+            raycastSetup.myIgnoreHitsInsideCollision = false;
+
+            raycastResult = PP.PhysicsUtils.raycast(raycastSetup, raycastResult);
+
+            if (raycastResult.isColliding()) {
+                this._myTeleportDetectionValid = true;
+
+                let hit = raycastResult.myHits.pp_first();
+
+                this._myTeleportPosition.vec3_copy(hit.myPosition);
+                this._myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRotationOnUp);
+            }
+
+            if (this._myParams.myDebugActive) {
+                PP.myDebugVisualManager.drawRaycast(0, raycastResult);
+            }
+        }
+    };
+}();
+
+PlayerLocomotionTeleport.prototype._computeParablePositions = function () {
+    let forwardPosition = PP.vec3_create();
+    let upPosition = PP.vec3_create();
+    return function _computeParablePositions(startPosition, forward, up) {
+        let parableStep = PP.myEasyTuneVariables.get("Parable Steps");
+        let parableStepsAmount = Math.ceil(this._myParams.myMaxDistance / parableStep);
+        //console.error(this._myParams.myMaxDistance, parableStepsAmount);
+
+        let forwardSpeed = PP.myEasyTuneVariables.get("Parable Speed");
+
+        let parablePositions = [];
+        parablePositions.push(startPosition);
+
+        let deltaTimePerStep = parableStep / forwardSpeed;
+        let curveGravity = -PP.myEasyTuneVariables.get("Parable Gravity");
+
+        for (let i = 1; i <= parableStepsAmount; i++) {
+            let elapsedTime = deltaTimePerStep * i;
+
+            forwardPosition = forward.vec3_scale(forwardSpeed * elapsedTime, forwardPosition);
+            forwardPosition = forwardPosition.vec3_add(startPosition, forwardPosition);
+
+            upPosition = up.vec3_scale(curveGravity * elapsedTime * elapsedTime / 2);
+
+            let currentPosition = forwardPosition.vec3_add(upPosition);
+            parablePositions.push(currentPosition);
+
+            if (this._myParams.myDebugActive) {
+                PP.myDebugVisualManager.drawPoint(0, currentPosition, [1, 0, 0, 1], 0.0075);
+            }
+        }
+
+        return parablePositions;
     };
 }();
 

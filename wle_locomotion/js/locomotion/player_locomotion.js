@@ -112,7 +112,7 @@ PlayerLocomotion = class PlayerLocomotion {
 
                 params.myCollisionCheckParams = this._myCollisionCheckParamsTeleport;
 
-                params.myMaxDistance = 70;
+                params.myMaxDistance = 10;
                 params.myMaxHeightDifference = 20;
                 params.myGroundAngleToIgnoreUpward = this._myCollisionCheckParamsSmooth.myGroundAngleToIgnore;
                 params.myMustBeOnGround = true;
