@@ -39,6 +39,8 @@ PlayerLocomotionTeleportParams = class PlayerLocomotionTeleportParams {
         this.myTeleportParableGravity = -30;
         this.myTeleportParableStepLength = 0.25;
 
+        this.myTeleportMeshMaterial = null;
+
         this.myDebugActive = false;
         this.myDebugDetectActive = false;
         this.myDebugVisibilityActive = false;
@@ -68,12 +70,14 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport extends PlayerLocomoti
 
         this._myParable = new PlayerLocomotionTeleportParable();
 
+        this._setupVisuals();
+
         this._myFSM = new PP.FSM();
         //this._myFSM.setDebugLogActive(true, "Locomotion Teleport");
 
         this._myFSM.addState("init");
         this._myFSM.addState("idle", this._idleUpdate.bind(this));
-        this._myFSM.addState("detect", { update: this._detectUpdate.bind(this), start: this._detectStart.bind(this) });
+        this._myFSM.addState("detect", { update: this._detectUpdate.bind(this), start: this._detectStart.bind(this), end: this._detectEnd.bind(this) });
         this._myFSM.addState("teleport", this._teleportUpdate.bind(this));
 
         this._myFSM.addTransition("init", "idle", "start");
@@ -164,6 +168,10 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport extends PlayerLocomoti
         }
     }
 
+    _detectEnd(dt) {
+        this._hideTeleportPosition(dt);
+    }
+
     _teleportUpdate(dt) {
         this._teleportToPosition(this._myTeleportPosition, this._myTeleportRotationOnUp, this._myRuntimeParams.myCollisionRuntimeParams);
         this._myFSM.perform("done");
@@ -230,11 +238,77 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport extends PlayerLocomoti
     }
 
     _showTeleportPosition() {
+        this._hideTeleportPosition();
 
+        let maxParableIndex = Math.max(0, this._myPositionParableIndex - 1);
+
+        if (maxParableIndex > this._myVisualLines.length) {
+            this._addVisualLines(maxParableIndex, this._myVisualLines.length);
+        }
+
+        for (let i = 0; i < maxParableIndex; i++) {
+            let currentVisualLineParams = this._myVisualLines[i].getParams();
+
+            currentVisualLineParams.setStartEnd(this._myParable.getPosition(i), this._myParable.getPosition(i + 1));
+            currentVisualLineParams.myThickness = 0.005;
+
+            this._myVisualLines[i].paramsUpdated();
+            this._myVisualLines[i].setVisible(true);
+        }
+
+        let visualPointParams = this._myVisualPoint.getParams();
+        visualPointParams.myPosition = this._myParable.getPosition(maxParableIndex, visualPointParams.myPosition);
+        visualPointParams.myRadius = 0.01;
+        this._myVisualPoint.paramsUpdated();
+        this._myVisualPoint.setVisible(true);
+
+    }
+
+    _hideTeleportPosition() {
+        for (let visualLine of this._myVisualLines) {
+            visualLine.setVisible(false);
+        }
+
+        this._myVisualPoint.setVisible(false);
     }
 
     _completeTeleport() {
         this._teleportToPosition(this._myTeleportPosition, this._myTeleportRotationOnUp, this._myRuntimeParams.myCollisionRuntimeParams);
+    }
+
+    _addVisualLines(amount) {
+        for (let i = 0; i < amount; i++) {
+            let visualParams = new PP.VisualLineParams();
+
+            if (this._myParams.myTeleportMeshMaterial != null) {
+                visualParams.myMaterial = this._myParams.myTeleportMeshMaterial.clone();
+            } else {
+                visualParams.myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
+                visualParams.myMaterial.color = [1, 0.5, 0, 1];
+            }
+
+            this._myVisualLines.push(new PP.VisualLine(visualParams));
+        }
+    }
+
+    _setupVisuals() {
+        this._myVisualLines = [];
+        this._addVisualLines(30);
+
+        {
+            let visualParams = new PP.VisualPointParams();
+
+            if (this._myParams.myTeleportMeshMaterial != null) {
+                visualParams.myMaterial = this._myParams.myTeleportMeshMaterial.clone();
+            } else {
+                visualParams.myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
+                visualParams.myMaterial.color = [1, 0.5, 0, 1];
+            }
+
+            this._myVisualPoint = new PP.VisualPoint(visualParams);
+        }
+
+        this._hideTeleportPosition();
     }
 
     _onXRSessionStart(session) {
