@@ -203,6 +203,7 @@ require('./locomotion/player_locomotion_smooth');
 require('./locomotion/player_locomotion_teleport');
 require('./locomotion/player_locomotion');
 require('./locomotion/player_locomotion_component');
+require('./locomotion/player_locomotion_teleport_parable');
 require('./locomotion/draft/locomotion_draft');
 require('./locomotion/draft/locomotion_draft_2');
 require('./locomotion/draft/locomotion_fly_draft');

@@ -10,6 +10,8 @@ WL.registerComponent('display-fps', {
 
         this._myFPS = 0;
 
+        this._myTextMaterial = PP.myDefaultResources.myMaterials.myText.clone();
+
         //PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Z", 0.35, 0.1, 3));
         //PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Y", -0.115, 0.1, 3));
         //PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("X", 0.115, 0.1, 3));
@@ -40,7 +42,7 @@ WL.registerComponent('display-fps', {
         rotation.quat_setForward(head.pp_getForward().vec3_negate(), head.pp_getUp());
         visualParams.myTransform.mat4_setPositionRotationQuatScale(textPosition, rotation, [0.3, 0.3, 0.3]);
 
-        visualParams.myMaterial = PP.myDefaultResources.myMaterials.myText.clone();
+        visualParams.myMaterial = this._myTextMaterial;
         visualParams.myMaterial.color = [0, 1, 0, 1];
 
         PP.myVisualManager.draw(visualParams);

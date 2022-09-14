@@ -62,12 +62,14 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport extends PlayerLocomoti
 
         this._myGravitySpeed = 0;
 
+        this._myParable = new PlayerLocomotionTeleportParable();
+
         this._myFSM = new PP.FSM();
         //this._myFSM.setDebugLogActive(true, "Locomotion Teleport");
 
         this._myFSM.addState("init");
         this._myFSM.addState("idle", this._idleUpdate.bind(this));
-        this._myFSM.addState("detect", this._detectUpdate.bind(this));
+        this._myFSM.addState("detect", { update: this._detectUpdate.bind(this), start: this._detectStart.bind(this) });
         this._myFSM.addState("teleport", this._teleportUpdate.bind(this));
 
         this._myFSM.addTransition("init", "idle", "start");
@@ -92,9 +94,10 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport extends PlayerLocomoti
         WL.onXRSessionStart.push(this._onXRSessionStart.bind(this));
         WL.onXRSessionEnd.push(this._onXRSessionEnd.bind(this));
 
-        PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Parable Steps", 1, 0.1, 3));
-        PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Parable Gravity", 30, 0.1, 3));
-        PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Parable Speed", 15, 0.1, 3));
+        PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Parable Steps", 0.25, 1, 3, 0.01));
+        PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Parable Gravity", -30, 10, 3));
+        PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Parable Speed", 15, 10, 3, 0));
+        PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Teleport Max Distance", 10, 10, 3, 0));
     }
 
     start() {
@@ -142,6 +145,18 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport extends PlayerLocomoti
             }
         } else if (this._cancelTeleport()) {
             this._myFSM.perform("cancel");
+        }
+    }
+
+    _detectStart(dt) {
+        if (!this._mySessionActive) {
+            this._myParable.setSpeed(1);
+            this._myParable.setGravity(0);
+            this._myParable.setStepLength(1);
+        } else {
+            this._myParable.setSpeed(PP.myEasyTuneVariables.get("Parable Speed"));
+            this._myParable.setGravity(PP.myEasyTuneVariables.get("Parable Gravity"));
+            this._myParable.setStepLength(PP.myEasyTuneVariables.get("Parable Steps"));
         }
     }
 
@@ -278,9 +293,17 @@ PlayerLocomotionTeleport.prototype._detectTeleportPositionVRParable = function (
     let extraRotationAxis = PP.vec3_create();
     let teleportDirection = PP.vec3_create();
 
+    let parablePosition = PP.vec3_create();
+    let prevParablePosition = PP.vec3_create();
+
     let raycastSetup = new PP.RaycastSetup();
     let raycastResult = new PP.RaycastResult();
     return function _detectTeleportPositionVRParable(dt) {
+        this._myParable.setSpeed(PP.myEasyTuneVariables.get("Parable Speed"));
+        this._myParable.setGravity(PP.myEasyTuneVariables.get("Parable Gravity"));
+        this._myParable.setStepLength(PP.myEasyTuneVariables.get("Parable Steps"));
+        this._myParams.myMaxDistance = PP.myEasyTuneVariables.get("Teleport Max Distance");
+
         this._myTeleportDetectionValid = false;
 
         let referenceObject = PP.myPlayerObjects.myHandLeft;
@@ -309,16 +332,44 @@ PlayerLocomotionTeleport.prototype._detectTeleportPositionVRParable = function (
         }
 
         if (this._myTeleportDetectionValid) {
-            this._computeParablePositions(teleportStartPosition, teleportDirection, playerUp);
+            this._myParable.setStartPosition(teleportStartPosition);
+            this._myParable.setForward(teleportDirection);
+            this._myParable.setUp(playerUp);
 
-            raycastSetup.myOrigin.vec3_copy(teleportStartPosition);
-            raycastSetup.myDirection.vec3_copy(teleportDirection);
-            raycastSetup.myDistance = this._myParams.myMaxDistance;
-            raycastSetup.myBlockLayerFlags.setMask(this._myParams.myTeleportBlockLayerFlags.getMask());
+            let currentPositionIndex = 1;
+            let positionFlatDistance = 0;
+            let positionParableDistance = 0;
+            prevParablePosition = this._myParable.getPosition(currentPositionIndex - 1, prevParablePosition);
+
             raycastSetup.myObjectsToIgnore.pp_clear();
-            raycastSetup.myIgnoreHitsInsideCollision = false;
+            raycastSetup.myIgnoreHitsInsideCollision = true;
+            raycastSetup.myBlockLayerFlags.setMask(this._myParams.myTeleportBlockLayerFlags.getMask());
 
-            raycastResult = PP.PhysicsUtils.raycast(raycastSetup, raycastResult);
+            do {
+                parablePosition = this._myParable.getPosition(currentPositionIndex, parablePosition);
+
+                raycastSetup.myOrigin.vec3_copy(prevParablePosition);
+                raycastSetup.myDirection = parablePosition.vec3_sub(prevParablePosition, raycastSetup.myDirection);
+                raycastSetup.myDistance = raycastSetup.myDirection.vec3_length();
+                raycastSetup.myDirection.vec3_normalize(raycastSetup.myDirection);
+
+                raycastResult = PP.PhysicsUtils.raycast(raycastSetup, raycastResult);
+
+                if (this._myParams.myDebugActive) {
+                    PP.myDebugVisualManager.drawRaycast(0, raycastResult);
+                }
+
+                currentPositionIndex++;
+
+                prevParablePosition.vec3_copy(parablePosition);
+                positionFlatDistance = parablePosition.vec3_sub(teleportStartPosition, parablePosition).vec3_removeComponentAlongAxis(playerUp, parablePosition).vec3_length();
+                positionParableDistance = this._myParable.getDistance(currentPositionIndex);
+            } while (
+                positionFlatDistance <= this._myParams.myMaxDistance &&
+                positionParableDistance <= this._myParams.myMaxDistance * 2 &&
+                !raycastResult.isColliding());
+
+            console.error(positionFlatDistance, positionParableDistance);
 
             if (raycastResult.isColliding()) {
                 this._myTeleportDetectionValid = true;
@@ -327,10 +378,6 @@ PlayerLocomotionTeleport.prototype._detectTeleportPositionVRParable = function (
 
                 this._myTeleportPosition.vec3_copy(hit.myPosition);
                 this._myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRotationOnUp);
-            }
-
-            if (this._myParams.myDebugActive) {
-                PP.myDebugVisualManager.drawRaycast(0, raycastResult);
             }
         }
     };
