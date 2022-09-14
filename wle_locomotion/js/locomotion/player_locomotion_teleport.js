@@ -35,6 +35,10 @@ PlayerLocomotionTeleportParams = class PlayerLocomotionTeleportParams {
         this.myForwardMinAngleToBeValid = 15;
         this.myTeleportReferenceExtraVerticalRotation = -45;
 
+        this.myTeleportParableSpeed = 15;
+        this.myTeleportParableGravity = -30;
+        this.myTeleportParableStepLength = 0.25;
+
         this.myDebugActive = false;
         this.myDebugDetectActive = false;
         this.myDebugVisibilityActive = false;
@@ -94,10 +98,10 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport extends PlayerLocomoti
         WL.onXRSessionStart.push(this._onXRSessionStart.bind(this));
         WL.onXRSessionEnd.push(this._onXRSessionEnd.bind(this));
 
-        PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Parable Steps", 0.25, 1, 3, 0.01));
-        PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Parable Gravity", -30, 10, 3));
-        PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Parable Speed", 15, 10, 3, 0));
-        PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Teleport Max Distance", 10, 10, 3, 0));
+        PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Parable Steps", this._myParams.myTeleportParableStepLength, 1, 3, 0.01));
+        PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Parable Gravity", this._myParams.myTeleportParableGravity, 10, 3));
+        PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Parable Speed", this._myParams.myTeleportParableSpeed, 10, 3, 0));
+        PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Teleport Max Distance", this._myParams.myMaxDistance, 10, 3, 0));
     }
 
     start() {
@@ -150,13 +154,13 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport extends PlayerLocomoti
 
     _detectStart(dt) {
         if (!this._mySessionActive) {
-            this._myParable.setSpeed(1);
-            this._myParable.setGravity(0);
-            this._myParable.setStepLength(1);
+            this._myParable.setSpeed(this._myParams.myTeleportParableSpeed);
+            this._myParable.setGravity(this._myParams.myTeleportParableGravity);
+            this._myParable.setStepLength(this._myParams.myTeleportParableStepLength);
         } else {
-            this._myParable.setSpeed(PP.myEasyTuneVariables.get("Parable Speed"));
-            this._myParable.setGravity(PP.myEasyTuneVariables.get("Parable Gravity"));
-            this._myParable.setStepLength(PP.myEasyTuneVariables.get("Parable Steps"));
+            this._myParable.setSpeed(this._myParams.myTeleportParableSpeed);
+            this._myParable.setGravity(this._myParams.myTeleportParableGravity);
+            this._myParable.setStepLength(this._myParams.myTeleportParableStepLength);
         }
     }
 
@@ -217,9 +221,10 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport extends PlayerLocomoti
 
     _detectTeleportPosition() {
         if (this._mySessionActive) {
-            this._detectTeleportPositionVR();
             this._detectTeleportRotationVR();
+            this._detectTeleportPositionVR();
         } else {
+            this._myTeleportRotationOnUp = 0;
             this._detectTeleportPositionNonVR();
         }
     }
@@ -242,44 +247,24 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport extends PlayerLocomoti
 };
 
 PlayerLocomotionTeleport.prototype._detectTeleportPositionNonVR = function () {
-    let raycastSetup = new PP.RaycastSetup();
-    let raycastResult = new PP.RaycastResult();
+    let mousePosition = PP.vec3_create();
+    let mouseDirection = PP.vec3_create();
 
+    let playerUp = PP.vec3_create();
     return function _detectTeleportPositionNonVR(dt) {
-        this._myTeleportRotationOnUp = 0;
-        this._myTeleportPosition.vec3_zero();
         this._myTeleportPositionValid = false;
-        this._myTeleportDetectionValid = false;
+        this._myTeleportDetectionValid = true;
 
-        raycastSetup.myDistance = this._myParams.myMaxDistance;
+        playerUp = this._myParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
 
-        raycastSetup.myBlockLayerFlags.setMask(this._myParams.myTeleportBlockLayerFlags.getMask());
+        PP.myMouse.getOriginWorld(mousePosition);
+        PP.myMouse.getDirectionWorld(mouseDirection);
 
-        raycastSetup.myObjectsToIgnore.pp_clear();
-        raycastSetup.myIgnoreHitsInsideCollision = false;
-
-        raycastResult = PP.myMouse.raycastWorld(raycastSetup, raycastResult);
-
-        if (raycastResult.isColliding()) {
-            this._myTeleportDetectionValid = true;
-
-            let hit = raycastResult.myHits.pp_first();
-
-            this._myTeleportPosition.vec3_copy(hit.myPosition);
-            this._myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRotationOnUp);
-        }
-
-        if (this._myParams.myDebugActive && this._myParams.myDebugDetectActive) {
-            PP.myDebugVisualManager.drawRaycast(0, raycastResult);
-        }
+        this._detectTeleportPositionParable(mousePosition, mouseDirection, playerUp);
     };
 }();
 
-PlayerLocomotionTeleport.prototype._detectTeleportPositionVR = function (dt) {
-    this._detectTeleportPositionVRParable(dt);
-};
-
-PlayerLocomotionTeleport.prototype._detectTeleportPositionVRParable = function () {
+PlayerLocomotionTeleport.prototype._detectTeleportPositionVR = function () {
     let leftHandOffsetPosition = [0.01, -0.04, 0.08];
     let rightHandOffsetPosition = [-0.01, -0.04, 0.08];
     let teleportStartPosition = PP.vec3_create();
@@ -292,18 +277,13 @@ PlayerLocomotionTeleport.prototype._detectTeleportPositionVRParable = function (
     let playerUpNegate = PP.vec3_create();
     let extraRotationAxis = PP.vec3_create();
     let teleportDirection = PP.vec3_create();
-
-    let parablePosition = PP.vec3_create();
-    let prevParablePosition = PP.vec3_create();
-
-    let raycastSetup = new PP.RaycastSetup();
-    let raycastResult = new PP.RaycastResult();
-    return function _detectTeleportPositionVRParable(dt) {
+    return function _detectTeleportPositionVR(dt) {
         this._myParable.setSpeed(PP.myEasyTuneVariables.get("Parable Speed"));
         this._myParable.setGravity(PP.myEasyTuneVariables.get("Parable Gravity"));
         this._myParable.setStepLength(PP.myEasyTuneVariables.get("Parable Steps"));
         this._myParams.myMaxDistance = PP.myEasyTuneVariables.get("Teleport Max Distance");
 
+        this._myTeleportPositionValid = false;
         this._myTeleportDetectionValid = false;
 
         let referenceObject = PP.myPlayerObjects.myHandLeft;
@@ -332,90 +312,66 @@ PlayerLocomotionTeleport.prototype._detectTeleportPositionVRParable = function (
         }
 
         if (this._myTeleportDetectionValid) {
-            this._myParable.setStartPosition(teleportStartPosition);
-            this._myParable.setForward(teleportDirection);
-            this._myParable.setUp(playerUp);
-
-            let currentPositionIndex = 1;
-            let positionFlatDistance = 0;
-            let positionParableDistance = 0;
-            prevParablePosition = this._myParable.getPosition(currentPositionIndex - 1, prevParablePosition);
-
-            raycastSetup.myObjectsToIgnore.pp_clear();
-            raycastSetup.myIgnoreHitsInsideCollision = true;
-            raycastSetup.myBlockLayerFlags.setMask(this._myParams.myTeleportBlockLayerFlags.getMask());
-
-            do {
-                parablePosition = this._myParable.getPosition(currentPositionIndex, parablePosition);
-
-                raycastSetup.myOrigin.vec3_copy(prevParablePosition);
-                raycastSetup.myDirection = parablePosition.vec3_sub(prevParablePosition, raycastSetup.myDirection);
-                raycastSetup.myDistance = raycastSetup.myDirection.vec3_length();
-                raycastSetup.myDirection.vec3_normalize(raycastSetup.myDirection);
-
-                raycastResult = PP.PhysicsUtils.raycast(raycastSetup, raycastResult);
-
-                if (this._myParams.myDebugActive) {
-                    PP.myDebugVisualManager.drawRaycast(0, raycastResult);
-                }
-
-                currentPositionIndex++;
-
-                prevParablePosition.vec3_copy(parablePosition);
-                positionFlatDistance = parablePosition.vec3_sub(teleportStartPosition, parablePosition).vec3_removeComponentAlongAxis(playerUp, parablePosition).vec3_length();
-                positionParableDistance = this._myParable.getDistance(currentPositionIndex);
-            } while (
-                positionFlatDistance <= this._myParams.myMaxDistance &&
-                positionParableDistance <= this._myParams.myMaxDistance * 2 &&
-                !raycastResult.isColliding());
-
-            console.error(positionFlatDistance, positionParableDistance);
-
-            if (raycastResult.isColliding()) {
-                this._myTeleportDetectionValid = true;
-
-                let hit = raycastResult.myHits.pp_first();
-
-                this._myTeleportPosition.vec3_copy(hit.myPosition);
-                this._myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRotationOnUp);
-            }
+            this._detectTeleportPositionParable(teleportStartPosition, teleportDirection, playerUp);
         }
     };
 }();
 
-PlayerLocomotionTeleport.prototype._computeParablePositions = function () {
-    let forwardPosition = PP.vec3_create();
-    let upPosition = PP.vec3_create();
-    return function _computeParablePositions(startPosition, forward, up) {
-        let parableStep = PP.myEasyTuneVariables.get("Parable Steps");
-        let parableStepsAmount = Math.ceil(this._myParams.myMaxDistance / parableStep);
-        //console.error(this._myParams.myMaxDistance, parableStepsAmount);
+PlayerLocomotionTeleport.prototype._detectTeleportPositionParable = function () {
+    let parablePosition = PP.vec3_create();
+    let prevParablePosition = PP.vec3_create();
 
-        let forwardSpeed = PP.myEasyTuneVariables.get("Parable Speed");
+    let raycastSetup = new PP.RaycastSetup();
+    let raycastResult = new PP.RaycastResult();
+    return function _detectTeleportPositionParable(startPosition, direction, up) {
+        this._myParable.setStartPosition(startPosition);
+        this._myParable.setForward(direction);
+        this._myParable.setUp(up);
 
-        let parablePositions = [];
-        parablePositions.push(startPosition);
+        let currentPositionIndex = 1;
+        let positionFlatDistance = 0;
+        let positionParableDistance = 0;
+        prevParablePosition = this._myParable.getPosition(currentPositionIndex - 1, prevParablePosition);
 
-        let deltaTimePerStep = parableStep / forwardSpeed;
-        let curveGravity = -PP.myEasyTuneVariables.get("Parable Gravity");
+        raycastSetup.myObjectsToIgnore.pp_clear();
+        raycastSetup.myIgnoreHitsInsideCollision = true;
+        raycastSetup.myBlockLayerFlags.setMask(this._myParams.myTeleportBlockLayerFlags.getMask());
 
-        for (let i = 1; i <= parableStepsAmount; i++) {
-            let elapsedTime = deltaTimePerStep * i;
+        do {
+            parablePosition = this._myParable.getPosition(currentPositionIndex, parablePosition);
 
-            forwardPosition = forward.vec3_scale(forwardSpeed * elapsedTime, forwardPosition);
-            forwardPosition = forwardPosition.vec3_add(startPosition, forwardPosition);
+            raycastSetup.myOrigin.vec3_copy(prevParablePosition);
+            raycastSetup.myDirection = parablePosition.vec3_sub(prevParablePosition, raycastSetup.myDirection);
+            raycastSetup.myDistance = raycastSetup.myDirection.vec3_length();
+            raycastSetup.myDirection.vec3_normalize(raycastSetup.myDirection);
 
-            upPosition = up.vec3_scale(curveGravity * elapsedTime * elapsedTime / 2);
-
-            let currentPosition = forwardPosition.vec3_add(upPosition);
-            parablePositions.push(currentPosition);
+            raycastResult = PP.PhysicsUtils.raycast(raycastSetup, raycastResult);
 
             if (this._myParams.myDebugActive) {
-                PP.myDebugVisualManager.drawPoint(0, currentPosition, [1, 0, 0, 1], 0.0075);
+                PP.myDebugVisualManager.drawRaycast(0, raycastResult);
             }
-        }
 
-        return parablePositions;
+            prevParablePosition.vec3_copy(parablePosition);
+            positionFlatDistance = parablePosition.vec3_sub(startPosition, parablePosition).vec3_removeComponentAlongAxis(up, parablePosition).vec3_length();
+            positionParableDistance = this._myParable.getDistance(currentPositionIndex);
+
+            currentPositionIndex++;
+        } while (
+            positionFlatDistance <= this._myParams.myMaxDistance &&
+            positionParableDistance <= this._myParams.myMaxDistance * 2 &&
+            !raycastResult.isColliding());
+
+        this._myPositionParableIndex = Math.max(0, currentPositionIndex - 1);
+
+        if (raycastResult.isColliding()) {
+            //se la normale non è buona controllare in terra un po' prima
+            let hit = raycastResult.myHits.pp_first();
+
+            this._myTeleportPosition.vec3_copy(hit.myPosition);
+            this._myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRotationOnUp);
+        } else {
+            //check ray to bottom
+        }
     };
 }();
 
@@ -824,8 +780,8 @@ PlayerLocomotionTeleport.prototype._applyGravity = function () {
 
 Object.defineProperty(PlayerLocomotionTeleport.prototype, "_detectTeleportPositionNonVR", { enumerable: false });
 Object.defineProperty(PlayerLocomotionTeleport.prototype, "_detectTeleportPositionVR", { enumerable: false });
-Object.defineProperty(PlayerLocomotionTeleport.prototype, "_detectTeleportPositionVRParable", { enumerable: false });
 Object.defineProperty(PlayerLocomotionTeleport.prototype, "_detectTeleportRotationVR", { enumerable: false });
+Object.defineProperty(PlayerLocomotionTeleport.prototype, "_detectTeleportPositionParable", { enumerable: false });
 Object.defineProperty(PlayerLocomotionTeleport.prototype, "_isTeleportHitValid", { enumerable: false });
 Object.defineProperty(PlayerLocomotionTeleport.prototype, "_isTeleportPositionValid", { enumerable: false });
 Object.defineProperty(PlayerLocomotionTeleport.prototype, "_isTeleportPositionVisible", { enumerable: false });

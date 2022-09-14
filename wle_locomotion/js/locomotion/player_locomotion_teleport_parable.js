@@ -1,16 +1,3 @@
-PlayerLocomotionTeleportParablePointInfo = class PlayerLocomotionTeleportParable {
-    constructor() {
-        this.myIndex = 0;
-
-        this.myPosition = PP.vec3_create();
-
-        this.myPrevPosition = PP.vec3_create();
-        this.myNextPosition = PP.vec3_create();
-
-        this.myDistance = 0;
-    }
-};
-
 PlayerLocomotionTeleportParable = class PlayerLocomotionTeleportParable {
     constructor() {
         this._myStartPosition = PP.vec3_create();
