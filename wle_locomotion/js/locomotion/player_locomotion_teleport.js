@@ -430,6 +430,8 @@ PlayerLocomotionTeleport.prototype._detectTeleportPositionParable = function () 
         raycastSetup.myIgnoreHitsInsideCollision = true;
         raycastSetup.myBlockLayerFlags.setMask(this._myParams.myTeleportBlockLayerFlags.getMask());
 
+        let maxParableDistance = this._myParams.myMaxDistance * 2;
+
         do {
             parablePosition = this._myParable.getPosition(currentPositionIndex, parablePosition);
 
@@ -451,22 +453,42 @@ PlayerLocomotionTeleport.prototype._detectTeleportPositionParable = function () 
             currentPositionIndex++;
         } while (
             positionFlatDistance <= this._myParams.myMaxDistance &&
-            positionParableDistance <= this._myParams.myMaxDistance * 2 &&
+            positionParableDistance <= maxParableDistance &&
             !raycastResult.isColliding());
 
-        this._myParableDistance = positionParableDistance;
+        let maxParableDistanceOverFlatDistance = this._myParable.getDistanceOverFlatDistance(this._myParams.myMaxDistance, maxParableDistance);
+
+        let fixedPositionParableDistance = positionParableDistance;
+        if (positionParableDistance > maxParableDistanceOverFlatDistance || positionParableDistance > maxParableDistance) {
+            fixedPositionParableDistance = Math.min(maxParableDistanceOverFlatDistance, maxParableDistance);
+        }
+
+        this._myParableDistance = fixedPositionParableDistance;
+
+        let hitCollisionValid = false;
 
         if (raycastResult.isColliding()) {
             //se la normale non è buona controllare in terra un po' prima
             let hit = raycastResult.myHits.pp_first();
 
-            this._myParableDistance -= (raycastSetup.myDistance - hit.myDistance);
+            let hitParableDistance = positionParableDistance - (raycastSetup.myDistance - hit.myDistance);
 
-            this._myTeleportPosition.vec3_copy(hit.myPosition);
-            this._myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRotationOnUp);
-        } else {
-            //check ray to bottom
+            if (hitParableDistance <= fixedPositionParableDistance) {
+                hitCollisionValid = true;
+
+                // se la normale è gia sbagliata (muro) prova prima in terra diretto, se no indietro del raggio
+
+                this._myParableDistance = hitParableDistance;
+                this._myTeleportPosition.vec3_copy(hit.myPosition);
+                this._myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRotationOnUp);
+            }
         }
+
+        if (!hitCollisionValid) {
+            //check bottom
+        }
+
+
     };
 }();
 

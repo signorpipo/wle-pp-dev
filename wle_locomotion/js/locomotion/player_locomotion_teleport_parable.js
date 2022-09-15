@@ -45,6 +45,14 @@ PlayerLocomotionTeleportParable = class PlayerLocomotionTeleportParable {
     getPositionIndexByDistance(distance) {
         // implemented outside class definition
     }
+
+    getPositionByDistance(distance) {
+        // implemented outside class definition
+    }
+
+    getDistanceOverFlatDistance(flatDistance, maxParableDistance) {
+        // implemented outside class definition
+    }
 };
 
 PlayerLocomotionTeleportParable.prototype.getPosition = function () {
@@ -67,26 +75,14 @@ PlayerLocomotionTeleportParable.prototype.getPosition = function () {
 }();
 
 PlayerLocomotionTeleportParable.prototype.getDistance = function () {
-    let forwardPosition = PP.vec3_create();
-    let upPosition = PP.vec3_create();
     let currentPosition = PP.vec3_create();
     let prevPosition = PP.vec3_create();
     return function getDistance(positionIndex) {
-        let deltaTimePerStep = this._myStepLength / this._mySpeed;
-
         let distance = 0;
         prevPosition.vec3_copy(this._myStartPosition);
 
         for (let i = 1; i <= positionIndex; i++) {
-            let elapsedTime = deltaTimePerStep * positionIndex;
-
-            forwardPosition = this._myForward.vec3_scale(this._mySpeed * elapsedTime, forwardPosition);
-            forwardPosition = forwardPosition.vec3_add(this._myStartPosition, forwardPosition);
-
-            upPosition = this._myUp.vec3_scale(this._myGravity * elapsedTime * elapsedTime / 2);
-
-            currentPosition = forwardPosition.vec3_add(upPosition, currentPosition);
-
+            currentPosition = this.getPosition(i, currentPosition);
             distance += currentPosition.vec3_distance(prevPosition);
 
             prevPosition.vec3_copy(currentPosition);
@@ -113,5 +109,87 @@ PlayerLocomotionTeleportParable.prototype.getPositionIndexByDistance = function 
         }
 
         return Math.max(0, currentIndex - 1);
+    };
+}();
+
+PlayerLocomotionTeleportParable.prototype.getPositionByDistance = function () {
+    let currentPosition = PP.vec3_create();
+    let prevPosition = PP.vec3_create();
+    let prevToCurrent = PP.vec3_create();
+    return function getPositionIndexByDistance(distance, outPosition = PP.vec3_create()) {
+        let currentDistance = 0;
+        let currentIndex = 0;
+        let found = false;
+
+        prevPosition = this.getPosition(currentIndex, prevPosition);
+        while (!found) {
+            currentPosition = this.getPosition(currentIndex + 1, currentPosition);
+            currentDistance += currentPosition.vec3_distance(prevPosition);
+            currentIndex++;
+
+            if (currentDistance > distance) {
+                let lengthToRemove = currentDistance - distance;
+                prevToCurrent = currentPosition.vec3_sub(prevPosition, prevToCurrent);
+                let lengthToAdd = prevToCurrent.vec3_length() - lengthToRemove;
+                prevToCurrent.vec3_normalize(prevToCurrent);
+
+                outPosition = prevPosition.vec3_add(prevToCurrent.vec3_scale(lengthToAdd, outPosition), outPosition);
+                found = true;
+            }
+            prevPosition.vec3_copy(currentPosition);
+        }
+
+        return outPosition;
+    };
+}();
+
+PlayerLocomotionTeleportParable.prototype.getDistanceOverFlatDistance = function () {
+    let currentPosition = PP.vec3_create();
+    let flatCurrentPosition = PP.vec3_create();
+    let flatStartPosition = PP.vec3_create();
+    let prevPosition = PP.vec3_create();
+    let prevToCurrent = PP.vec3_create();
+    let startToCurrentFlat = PP.vec3_create();
+    return function getDistanceOverFlatDistance(flatDistance, maxParableDistance) {
+        if (flatDistance < 0.00001) {
+            return 0;
+        }
+
+        let currentDistance = 0;
+        let currentIndex = 0;
+        flatStartPosition = this._myStartPosition.vec3_removeComponentAlongAxis(this._myUp, flatStartPosition);
+        prevPosition = this.getPosition(currentIndex, prevPosition);
+
+        let distanceOverFlatDistance = 0;
+
+        while (currentDistance <= maxParableDistance) {
+            currentPosition = this.getPosition(currentIndex + 1, currentPosition);
+            currentDistance += currentPosition.vec3_distance(prevPosition);
+            currentIndex++;
+
+            flatCurrentPosition = currentPosition.vec3_removeComponentAlongAxis(this._myUp, flatCurrentPosition);
+            startToCurrentFlat = flatCurrentPosition.vec3_sub(flatStartPosition, startToCurrentFlat);
+            let currentFlatDistance = startToCurrentFlat.vec3_length();
+            if (currentFlatDistance >= flatDistance) {
+                let flatDifference = currentFlatDistance - flatDistance;
+                prevToCurrent = currentPosition.vec3_sub(prevPosition, prevToCurrent);
+                let angleWithFlat = prevToCurrent.vec3_angleRadians(startToCurrentFlat);
+                let cos = Math.cos(angleWithFlat);
+                let lengthToRemove = prevToCurrent.vec3_length();
+                if (cos != 0) {
+                    lengthToRemove = flatDifference / Math.cos(angleWithFlat);
+                }
+
+                distanceOverFlatDistance = currentDistance - lengthToRemove;
+                break;
+
+            } else {
+                distanceOverFlatDistance = currentDistance;
+            }
+
+            prevPosition.vec3_copy(currentPosition);
+        }
+
+        return Math.min(maxParableDistance, distanceOverFlatDistance);
     };
 }();
