@@ -32,14 +32,15 @@ PlayerLocomotionTeleportParams = class PlayerLocomotionTeleportParams {
         this.myAdjustPositionEveryFrame = true;
         this.myGravityAcceleration = 0;
 
-        this.myForwardMinAngleToBeValid = 15;
-        this.myTeleportReferenceExtraVerticalRotation = -45;
+        this.myForwardMinAngleToBeValid = 7.5;
+        this.myTeleportReferenceExtraVerticalRotation = -30;
 
         this.myTeleportParableSpeed = 15;
         this.myTeleportParableGravity = -30;
         this.myTeleportParableStepLength = 0.25;
 
-        this.myTeleportMeshMaterial = null;
+        this.myTeleportParableValidMaterial = null;
+        this.myTeleportParableInvalidMaterial = null;
 
         this.myTeleportParableLineEndOffset = 0.05;
 
@@ -145,6 +146,8 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport extends PlayerLocomoti
 
         if (this._myTeleportDetectionValid) {
             this._showTeleportPosition(dt);
+        } else {
+            this._hideTeleportPosition(dt);
         }
 
         if (this._confirmTeleport()) {
@@ -246,11 +249,16 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport extends PlayerLocomoti
     }
 
     _hideTeleportPosition() {
-        for (let visualLine of this._myVisualLines) {
+        for (let visualLine of this._myValidVisualLines) {
             visualLine.setVisible(false);
         }
 
-        this._myVisualPoint.setVisible(false);
+        for (let visualLine of this._myInvalidVisualLines) {
+            visualLine.setVisible(false);
+        }
+
+        this._myValidVisualPoint.setVisible(false);
+        this._myInvalidVisualPoint.setVisible(false);
     }
 
     _completeTeleport() {
@@ -259,34 +267,64 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport extends PlayerLocomoti
 
     _addVisualLines(amount) {
         for (let i = 0; i < amount; i++) {
-            let visualParams = new PP.VisualLineParams();
+            {
+                let visualParams = new PP.VisualLineParams();
 
-            if (this._myParams.myTeleportMeshMaterial != null) {
-                visualParams.myMaterial = this._myParams.myTeleportMeshMaterial.clone();
-            } else {
-                visualParams.myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
-                visualParams.myMaterial.color = [1, 0.5, 0, 1];
+                if (this._myParams.myTeleportParableValidMaterial != null) {
+                    visualParams.myMaterial = this._myParams.myTeleportParableValidMaterial;
+                } else {
+                    visualParams.myMaterial = this._myTeleportParableValidMaterial;
+                }
+
+                this._myValidVisualLines.push(new PP.VisualLine(visualParams));
             }
 
-            this._myVisualLines.push(new PP.VisualLine(visualParams));
+            {
+                let visualParams = new PP.VisualLineParams();
+
+                if (this._myParams.myTeleportParableValidMaterial != null) {
+                    visualParams.myMaterial = this._myParams.myTeleportParableInvalidMaterial;
+                } else {
+                    visualParams.myMaterial = this._myTeleportParableInvalidMaterial;
+                }
+
+                this._myInvalidVisualLines.push(new PP.VisualLine(visualParams));
+            }
         }
     }
 
     _setupVisuals() {
-        this._myVisualLines = [];
+        this._myTeleportParableValidMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
+        this._myTeleportParableValidMaterial.color = [1, 0.5, 0, 1];
+        this._myTeleportParableInvalidMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
+        this._myTeleportParableInvalidMaterial.color = [0.75, 0.05, 0, 1];
+
+        this._myValidVisualLines = [];
+        this._myInvalidVisualLines = [];
         this._addVisualLines(30);
 
         {
             let visualParams = new PP.VisualPointParams();
 
-            if (this._myParams.myTeleportMeshMaterial != null) {
-                visualParams.myMaterial = this._myParams.myTeleportMeshMaterial.clone();
+            if (this._myParams.myTeleportParableValidMaterial != null) {
+                visualParams.myMaterial = this._myParams.myTeleportParableValidMaterial;
             } else {
-                visualParams.myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
-                visualParams.myMaterial.color = [1, 0.5, 0, 1];
+                visualParams.myMaterial = this._myTeleportParableValidMaterial;
             }
 
-            this._myVisualPoint = new PP.VisualPoint(visualParams);
+            this._myValidVisualPoint = new PP.VisualPoint(visualParams);
+        }
+
+        {
+            let visualParams = new PP.VisualPointParams();
+
+            if (this._myParams.myTeleportParableInvalidMaterial != null) {
+                visualParams.myMaterial = this._myParams.myTeleportParableInvalidMaterial;
+            } else {
+                visualParams.myMaterial = this._myTeleportParableInvalidMaterial;
+            }
+
+            this._myInvalidVisualPoint = new PP.VisualPoint(visualParams);
         }
 
         this._hideTeleportPosition();
@@ -455,15 +493,17 @@ PlayerLocomotionTeleport.prototype._showTeleportParable = function () {
         let lastParableIndex = this._myParable.getPositionIndexByDistance(showParableDistance);
         let lastParableIndexDistance = this._myParable.getDistance(lastParableIndex);
 
-        if (lastParableIndex + 1 > this._myVisualLines.length) {
-            this._addVisualLines(lastParableIndex + 1, this._myVisualLines.length);
+        if (lastParableIndex + 1 > this._myValidVisualLines.length) {
+            this._addVisualLines(lastParableIndex + 1, this._myValidVisualLines.length);
         }
 
         for (let i = 0; i <= lastParableIndex; i++) {
             currentPosition = this._myParable.getPosition(i, currentPosition);
             nextPosition = this._myParable.getPosition(i + 1, nextPosition);
 
-            let currentVisualLineParams = this._myVisualLines[i].getParams();
+            let visuaLine = (this._myTeleportPositionValid) ? this._myValidVisualLines[i] : this._myInvalidVisualLines[i];
+
+            let currentVisualLineParams = visuaLine.getParams();
 
             if (i == lastParableIndex) {
                 let stepLength = Math.max(0, showParableDistance - lastParableIndexDistance);
@@ -474,17 +514,18 @@ PlayerLocomotionTeleport.prototype._showTeleportParable = function () {
             currentVisualLineParams.setStartEnd(currentPosition, nextPosition);
             currentVisualLineParams.myThickness = 0.005;
 
-            this._myVisualLines[i].paramsUpdated();
-            this._myVisualLines[i].setVisible(true);
+            visuaLine.paramsUpdated();
+            visuaLine.setVisible(true);
 
             //PP.myDebugVisualManager.drawPoint(0, currentPosition, [1, 0, 0, 1], 0.01);
         }
 
-        let visualPointParams = this._myVisualPoint.getParams();
+        let visualPoint = (this._myTeleportPositionValid) ? this._myValidVisualPoint : this._myInvalidVisualPoint;
+        let visualPointParams = visualPoint.getParams();
         visualPointParams.myPosition.vec3_copy(nextPosition);
         visualPointParams.myRadius = 0.01;
-        this._myVisualPoint.paramsUpdated();
-        this._myVisualPoint.setVisible(true);
+        visualPoint.paramsUpdated();
+        visualPoint.setVisible(true);
     };
 }();
 
