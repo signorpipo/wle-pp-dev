@@ -432,6 +432,9 @@ PlayerLocomotionTeleport.prototype._detectTeleportPositionParable = function () 
 
     let raycastSetup = new PP.RaycastSetup();
     let raycastResult = new PP.RaycastResult();
+
+    let parableHitPosition = PP.vec3_create();
+    let parableHitNormal = PP.vec3_create();
     return function _detectTeleportPositionParable(startPosition, direction, up) {
         this._myParable.setStartPosition(startPosition);
         this._myParable.setForward(direction);
@@ -486,7 +489,6 @@ PlayerLocomotionTeleport.prototype._detectTeleportPositionParable = function () 
         let bottomCheckMaxLength = 100;
 
         if (raycastResult.isColliding()) {
-            //se la normale non è buona controllare in terra un po' prima
             let hit = raycastResult.myHits.pp_first();
 
             let hitParableDistance = positionParableDistance - (raycastSetup.myDistance - hit.myDistance);
@@ -494,11 +496,12 @@ PlayerLocomotionTeleport.prototype._detectTeleportPositionParable = function () 
             if (hitParableDistance <= fixedPositionParableDistance) {
                 hitCollisionValid = true;
 
-                // o semplicemente se il check non funziona provare in terra diretto e poi in terra piu indietro del raggio
-
                 this._myParableDistance = hitParableDistance;
                 this._myTeleportPosition.vec3_copy(hit.myPosition);
                 this._myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRotationOnUp);
+
+                parableHitPosition.vec3_copy(hit.myPosition);
+                parableHitNormal.vec3_copy(hit.myNormal);
 
                 if (!this._myTeleportPositionValid) {
                     raycastSetup.myOrigin = hit.myPosition.vec3_add(hit.myNormal.vec3_scale(0.01, raycastSetup.myOrigin), raycastSetup.myOrigin);
@@ -519,11 +522,7 @@ PlayerLocomotionTeleport.prototype._detectTeleportPositionParable = function () 
 
                         if (!this._myTeleportPositionValid) {
                             let backwardStep = this._myParams.myCollisionCheckParams.myRadius * 1.1;
-                            let currentFlatDistance = this._myParable.getFlatDistanceOverDistance(this._myParableDistance);
-
-                            let flatDistanceToCheck = Math.max(0, currentFlatDistance - backwardStep);
-                            let distanceToCheck = this._myParable.getDistanceOverFlatDistance(flatDistanceToCheck, this._myParableDistance);
-                            raycastSetup.myOrigin = this._myParable.getPositionByDistance(distanceToCheck, raycastSetup.myOrigin);
+                            raycastSetup.myOrigin = parableHitPosition.vec3_add(parableHitNormal.vec3_scale(backwardStep), raycastSetup.myOrigin);
                             raycastSetup.myDirection = up.vec3_negate(raycastSetup.myDirection);
                             raycastSetup.myDistance = bottomCheckMaxLength;
 
