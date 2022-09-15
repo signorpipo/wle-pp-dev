@@ -46,11 +46,15 @@ PlayerLocomotionTeleportParable = class PlayerLocomotionTeleportParable {
         // implemented outside class definition
     }
 
-    getPositionByDistance(distance) {
+    getPositionByDistance(distance, outPosition = PP.vec3_create()) {
         // implemented outside class definition
     }
 
     getDistanceOverFlatDistance(flatDistance, maxParableDistance) {
+        // implemented outside class definition
+    }
+
+    getFlatDistanceOverDistance(distance) {
         // implemented outside class definition
     }
 };
@@ -191,5 +195,19 @@ PlayerLocomotionTeleportParable.prototype.getDistanceOverFlatDistance = function
         }
 
         return Math.min(maxParableDistance, distanceOverFlatDistance);
+    };
+}();
+
+PlayerLocomotionTeleportParable.prototype.getFlatDistanceOverDistance = function () {
+    let positionByDistance = PP.vec3_create();
+    let flatPositionByDistance = PP.vec3_create();
+    let flatStartPosition = PP.vec3_create();
+    return function getFlatDistanceOverDistance(distance) {
+        positionByDistance = this.getPositionByDistance(distance, positionByDistance);
+
+        flatPositionByDistance = positionByDistance.vec3_removeComponentAlongAxis(this._myUp, flatPositionByDistance);
+        flatStartPosition = this._myStartPosition.vec3_removeComponentAlongAxis(this._myUp, flatStartPosition);
+
+        return flatStartPosition.vec3_distance(flatPositionByDistance);
     };
 }();
