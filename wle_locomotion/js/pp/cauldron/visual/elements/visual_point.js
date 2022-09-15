@@ -19,6 +19,8 @@ PP.VisualPointParams = class VisualPointParams {
 
         this.myMaterial = null;
 
+        this.myColor = null; // if this is set and material is null, it will use the default flat opaque material with this color
+
         this.myType = PP.VisualElementType.POINT;
     }
 };
@@ -35,6 +37,8 @@ PP.VisualPoint = class VisualPoint {
 
         this._myPointObject = null;
         this._myPointMeshComponent = null;
+
+        this._myFlatOpaqueMaterial = null;
 
         this._build();
         this._refresh();
@@ -83,7 +87,15 @@ PP.VisualPoint = class VisualPoint {
         this._myPointObject.pp_setScale(this._myParams.myRadius);
 
         if (this._myParams.myMaterial == null) {
-            this._myPointMeshComponent.material = PP.myVisualData.myDefaultMaterials.myDefaultMeshMaterial;
+            if (this._myParams.myColor == null) {
+                this._myPointMeshComponent.material = PP.myVisualData.myDefaultMaterials.myDefaultMeshMaterial;
+            } else {
+                if (this._myFlatOpaqueMaterial == null) {
+                    this._myFlatOpaqueMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
+                }
+                this._myPointMeshComponent.material = this._myFlatOpaqueMaterial;
+                this._myFlatOpaqueMaterial.color = this._myParams.myColor;
+            }
         } else {
             this._myPointMeshComponent.material = this._myParams.myMaterial;
         }
@@ -96,7 +108,15 @@ PP.VisualPoint = class VisualPoint {
         this._myPointMeshComponent.mesh = PP.myDefaultResources.myMeshes.mySphere;
 
         if (this._myParams.myMaterial == null) {
-            this._myPointMeshComponent.material = PP.myVisualData.myDefaultMaterials.myDefaultMeshMaterial;
+            if (this._myParams.myColor == null) {
+                this._myPointMeshComponent.material = PP.myVisualData.myDefaultMaterials.myDefaultMeshMaterial;
+            } else {
+                if (this._myFlatOpaqueMaterial == null) {
+                    this._myFlatOpaqueMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
+                }
+                this._myPointMeshComponent.material = this._myFlatOpaqueMaterial;
+                this._myFlatOpaqueMaterial.color = this._myParams.myColor;
+            }
         } else {
             this._myPointMeshComponent.material = this._myParams.myMaterial;
         }
@@ -119,6 +139,12 @@ PP.VisualPoint = class VisualPoint {
             clonedParams.myMaterial = this._myParams.myMaterial.clone();
         } else {
             clonedParams.myMaterial = null;
+        }
+
+        if (this._myParams.myColor != null) {
+            clonedParams.myColor.vec4_copy(this._myParams.myColor);
+        } else {
+            clonedParams.myColor = null;
         }
 
         let clone = new PP.VisualPoint(clonedParams);

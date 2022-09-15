@@ -37,6 +37,8 @@ PP.VisualArrow = class VisualArrow {
         this._myArrowObject = null;
         this._myArrowMeshComponent = null;
 
+        this._myFlatOpaqueMaterial = null;
+
         this._build();
         this._refresh();
 
@@ -89,7 +91,15 @@ PP.VisualArrow = class VisualArrow {
         this._myArrowMeshComponent.mesh = PP.myDefaultResources.myMeshes.myCone;
 
         if (this._myParams.myMaterial == null) {
-            this._myArrowMeshComponent.material = PP.myVisualData.myDefaultMaterials.myDefaultMeshMaterial;
+            if (this._myParams.myColor == null) {
+                this._myArrowMeshComponent.material = PP.myVisualData.myDefaultMaterials.myDefaultMeshMaterial;
+            } else {
+                if (this._myFlatOpaqueMaterial == null) {
+                    this._myFlatOpaqueMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
+                }
+                this._myArrowMeshComponent.material = this._myFlatOpaqueMaterial;
+                this._myFlatOpaqueMaterial.color = this._myParams.myColor;
+            }
         } else {
             this._myArrowMeshComponent.material = this._myParams.myMaterial;
         }
@@ -114,6 +124,12 @@ PP.VisualArrow = class VisualArrow {
             clonedParams.myMaterial = this._myParams.myMaterial.clone();
         } else {
             clonedParams.myMaterial = null;
+        }
+
+        if (this._myParams.myColor != null) {
+            clonedParams.myColor.vec4_copy(this._myParams.myColor);
+        } else {
+            clonedParams.myColor = null;
         }
 
         let clone = new PP.VisualArrow(clonedParams);
@@ -145,7 +161,15 @@ PP.VisualArrow.prototype._refresh = function () {
         this._myArrowObject.pp_scaleObject(scaleArrow);
 
         if (this._myParams.myMaterial == null) {
-            this._myArrowMeshComponent.material = PP.myVisualData.myDefaultMaterials.myDefaultMeshMaterial;
+            if (this._myParams.myColor == null) {
+                this._myArrowMeshComponent.material = PP.myVisualData.myDefaultMaterials.myDefaultMeshMaterial;
+            } else {
+                if (this._myFlatOpaqueMaterial == null) {
+                    this._myFlatOpaqueMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
+                }
+                this._myArrowMeshComponent.material = this._myFlatOpaqueMaterial;
+                this._myFlatOpaqueMaterial.color = this._myParams.myColor;
+            }
         } else {
             this._myArrowMeshComponent.material = this._myParams.myMaterial;
         }
@@ -157,11 +181,7 @@ PP.VisualArrow.prototype._refresh = function () {
         visualLineParams.myLength = direction.vec3_length();
         visualLineParams.myThickness = this._myParams.myThickness;
 
-        if (this._myParams.myMaterial == null) {
-            visualLineParams.myMaterial = PP.myVisualData.myDefaultMaterials.myDefaultMeshMaterial;
-        } else {
-            visualLineParams.myMaterial = this._myParams.myMaterial;
-        }
+        visualLineParams.myMaterial = this._myArrowMeshComponent.material;
 
         this._myVisualLine.paramsUpdated();
     };

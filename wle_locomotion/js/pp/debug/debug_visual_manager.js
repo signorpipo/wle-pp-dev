@@ -5,8 +5,8 @@ PP.DebugVisualManager = class DebugVisualManager extends PP.VisualManager {
         visualParams.myDirection.vec3_copy(direction);
         visualParams.myLength = length;
         visualParams.myThickness = thickness;
-        visualParams.myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
-        visualParams.myMaterial.color = color;
+        visualParams.myColor = PP.vec4_create();
+        visualParams.myColor.vec4_copy(color);
         this.draw(visualParams, lifetimeSeconds);
     }
 
@@ -20,13 +20,33 @@ PP.DebugVisualManager = class DebugVisualManager extends PP.VisualManager {
         visualParams.myDirection.vec3_copy(direction);
         visualParams.myLength = length;
         visualParams.myThickness = thickness;
-        visualParams.myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
-        visualParams.myMaterial.color = color;
+        visualParams.myColor = PP.vec4_create();
+        visualParams.myColor.vec4_copy(color);
         this.draw(visualParams, lifetimeSeconds);
     }
 
     drawArrowEnd(lifetimeSeconds, start, end, color = [0, 1, 0, 1], thickness = 0.005) {
         // implemented outside class definition
+    }
+
+    drawPoint(lifetimeSeconds, position, color = [0, 1, 0, 1], radius = 0.005) {
+        let visualParams = new PP.VisualPointParams();
+        visualParams.myPosition.vec3_copy(position);
+        visualParams.myRadius = radius;
+        visualParams.myColor = PP.vec4_create();
+        visualParams.myColor.vec4_copy(color);
+        this.draw(visualParams, lifetimeSeconds);
+    }
+
+    drawText(lifetimeSeconds, text, transform, color = [0, 1, 0, 1], alignment = WL.Alignment.Center, justification = WL.Justification.Middle) {
+        let visualParams = new PP.VisualTextParams();
+        visualParams.myText = text;
+        visualParams.myAlignment = alignment;
+        visualParams.myJustification = justification;
+        visualParams.myTransform.mat4_copy(transform);
+        visualParams.myColor = PP.vec4_create();
+        visualParams.myColor.vec4_copy(color);
+        this.draw(visualParams, lifetimeSeconds);
     }
 
     drawRaycast(lifetimeSeconds, raycastResult, showOnlyFirstHit = true, hitNormalLength = 0.2, thickness = 0.005) {
@@ -43,26 +63,6 @@ PP.DebugVisualManager = class DebugVisualManager extends PP.VisualManager {
         visualParams.myTransform.mat4_copy(transform);
         visualParams.myLength = length;
         visualParams.myThickness = thickness;
-        this.draw(visualParams, lifetimeSeconds);
-    }
-
-    drawPoint(lifetimeSeconds, position, color = [0, 1, 0, 1], radius = 0.005) {
-        let visualParams = new PP.VisualPointParams();
-        visualParams.myPosition.vec3_copy(position);
-        visualParams.myRadius = radius;
-        visualParams.myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
-        visualParams.myMaterial.color = color;
-        this.draw(visualParams, lifetimeSeconds);
-    }
-
-    drawText(lifetimeSeconds, text, transform, color = [0, 1, 0, 1], alignment = WL.Alignment.Center, justification = WL.Justification.Middle) {
-        let visualParams = new PP.VisualTextParams();
-        visualParams.myText = text;
-        visualParams.myAlignment = alignment;
-        visualParams.myJustification = justification;
-        visualParams.myTransform.mat4_copy(transform);
-        visualParams.myMaterial = PP.myDefaultResources.myMaterials.myText.clone();
-        visualParams.myMaterial.color = color;
         this.draw(visualParams, lifetimeSeconds);
     }
 };

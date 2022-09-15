@@ -22,6 +22,8 @@ PP.VisualTextParams = class VisualTextParams {
 
         this.myMaterial = null;
 
+        this.myColor = null; // if this is set and material is null, it will use the default text material with this color
+
         this.myType = PP.VisualElementType.TEXT;
     }
 };
@@ -38,6 +40,8 @@ PP.VisualText = class VisualText {
 
         this._myTextObject = null;
         this._myTextComponent = null;
+
+        this._myTextMaterial = null;
 
         this._build();
         this._refresh();
@@ -85,7 +89,15 @@ PP.VisualText = class VisualText {
         this._myTextObject.pp_setTransform(this._myParams.myTransform);
 
         if (this._myParams.myMaterial == null) {
-            this._myTextComponent.material = PP.myVisualData.myDefaultMaterials.myDefaultTextMaterial;
+            if (this._myParams.myColor == null) {
+                this._myTextComponent.material = PP.myVisualData.myDefaultMaterials.myDefaultTextMaterial;
+            } else {
+                if (this._myTextMaterial == null) {
+                    this._myTextMaterial = PP.myDefaultResources.myMaterials.myText.clone();
+                }
+                this._myTextComponent.material = this._myTextMaterial;
+                this._myTextMaterial.color = this._myParams.myColor;
+            }
         } else {
             this._myTextComponent.material = this._myParams.myMaterial;
         }
@@ -102,7 +114,15 @@ PP.VisualText = class VisualText {
         this._myTextComponent = this._myTextObject.addComponent('text');
 
         if (this._myParams.myMaterial == null) {
-            this._myTextComponent.material = PP.myVisualData.myDefaultMaterials.myDefaultTextMaterial;
+            if (this._myParams.myColor == null) {
+                this._myTextComponent.material = PP.myVisualData.myDefaultMaterials.myDefaultTextMaterial;
+            } else {
+                if (this._myTextMaterial == null) {
+                    this._myTextMaterial = PP.myDefaultResources.myMaterials.myText.clone();
+                }
+                this._myTextComponent.material = this._myTextMaterial;
+                this._myTextMaterial.color = this._myParams.myColor;
+            }
         } else {
             this._myTextComponent.material = this._myParams.myMaterial;
         }
@@ -129,6 +149,12 @@ PP.VisualText = class VisualText {
             clonedParams.myMaterial = this._myParams.myMaterial.clone();
         } else {
             clonedParams.myMaterial = null;
+        }
+
+        if (this._myParams.myColor != null) {
+            clonedParams.myColor.vec4_copy(this._myParams.myColor);
+        } else {
+            clonedParams.myColor = null;
         }
 
         let clone = new PP.VisualText(clonedParams);

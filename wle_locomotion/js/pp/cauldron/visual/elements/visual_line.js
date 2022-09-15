@@ -23,6 +23,8 @@ PP.VisualLineParams = class VisualLineParams {
 
         this.myMaterial = null;
 
+        this.myColor = null; // if this is set and material is null, it will use the default flat opaque material with this color
+
         this.myType = PP.VisualElementType.LINE;
     }
 
@@ -49,6 +51,8 @@ PP.VisualLine = class VisualLine {
         this._myLineRootObject = null;
         this._myLineObject = null;
         this._myLineMeshComponent = null;
+
+        this._myFlatOpaqueMaterial = null;
 
         this._build();
         this._refresh();
@@ -100,7 +104,15 @@ PP.VisualLine = class VisualLine {
         this._myLineMeshComponent.mesh = PP.myDefaultResources.myMeshes.myCylinder;
 
         if (this._myParams.myMaterial == null) {
-            this._myLineMeshComponent.material = PP.myVisualData.myDefaultMaterials.myDefaultMeshMaterial;
+            if (this._myParams.myColor == null) {
+                this._myLineMeshComponent.material = PP.myVisualData.myDefaultMaterials.myDefaultMeshMaterial;
+            } else {
+                if (this._myFlatOpaqueMaterial == null) {
+                    this._myFlatOpaqueMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
+                }
+                this._myLineMeshComponent.material = this._myFlatOpaqueMaterial;
+                this._myFlatOpaqueMaterial.color = this._myParams.myColor;
+            }
         } else {
             this._myLineMeshComponent.material = this._myParams.myMaterial;
         }
@@ -125,6 +137,12 @@ PP.VisualLine = class VisualLine {
             clonedParams.myMaterial = this._myParams.myMaterial.clone();
         } else {
             clonedParams.myMaterial = null;
+        }
+
+        if (this._myParams.myColor != null) {
+            clonedParams.myColor.vec4_copy(this._myParams.myColor);
+        } else {
+            clonedParams.myColor = null;
         }
 
         let clone = new PP.VisualLine(clonedParams);
@@ -153,7 +171,15 @@ PP.VisualLine.prototype._refresh = function () {
         this._myLineObject.pp_translateObject(translateLine);
 
         if (this._myParams.myMaterial == null) {
-            this._myLineMeshComponent.material = PP.myVisualData.myDefaultMaterials.myDefaultMeshMaterial;
+            if (this._myParams.myColor == null) {
+                this._myLineMeshComponent.material = PP.myVisualData.myDefaultMaterials.myDefaultMeshMaterial;
+            } else {
+                if (this._myFlatOpaqueMaterial == null) {
+                    this._myFlatOpaqueMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
+                }
+                this._myLineMeshComponent.material = this._myFlatOpaqueMaterial;
+                this._myFlatOpaqueMaterial.color = this._myParams.myColor;
+            }
         } else {
             this._myLineMeshComponent.material = this._myParams.myMaterial;
         }
