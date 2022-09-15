@@ -41,6 +41,8 @@ PlayerLocomotionTeleportParams = class PlayerLocomotionTeleportParams {
 
         this.myTeleportMeshMaterial = null;
 
+        this.myTeleportParableLineEndOffset = 0.05;
+
         this.myDebugActive = false;
         this.myDebugDetectActive = false;
         this.myDebugVisibilityActive = false;
@@ -240,28 +242,7 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport extends PlayerLocomoti
     _showTeleportPosition() {
         this._hideTeleportPosition();
 
-        let maxParableIndex = Math.max(0, this._myPositionParableIndex - 1);
-
-        if (maxParableIndex > this._myVisualLines.length) {
-            this._addVisualLines(maxParableIndex, this._myVisualLines.length);
-        }
-
-        for (let i = 0; i < maxParableIndex; i++) {
-            let currentVisualLineParams = this._myVisualLines[i].getParams();
-
-            currentVisualLineParams.setStartEnd(this._myParable.getPosition(i), this._myParable.getPosition(i + 1));
-            currentVisualLineParams.myThickness = 0.005;
-
-            this._myVisualLines[i].paramsUpdated();
-            this._myVisualLines[i].setVisible(true);
-        }
-
-        let visualPointParams = this._myVisualPoint.getParams();
-        visualPointParams.myPosition = this._myParable.getPosition(maxParableIndex, visualPointParams.myPosition);
-        visualPointParams.myRadius = 0.01;
-        this._myVisualPoint.paramsUpdated();
-        this._myVisualPoint.setVisible(true);
-
+        this._showTeleportParable();
     }
 
     _hideTeleportPosition() {
@@ -435,11 +416,13 @@ PlayerLocomotionTeleport.prototype._detectTeleportPositionParable = function () 
             positionParableDistance <= this._myParams.myMaxDistance * 2 &&
             !raycastResult.isColliding());
 
-        this._myPositionParableIndex = Math.max(0, currentPositionIndex - 1);
+        this._myParableDistance = positionParableDistance;
 
         if (raycastResult.isColliding()) {
             //se la normale non è buona controllare in terra un po' prima
             let hit = raycastResult.myHits.pp_first();
+
+            this._myParableDistance -= (raycastSetup.myDistance - hit.myDistance);
 
             this._myTeleportPosition.vec3_copy(hit.myPosition);
             this._myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRotationOnUp);
@@ -460,6 +443,48 @@ PlayerLocomotionTeleport.prototype._detectTeleportRotationVR = function () {
             axesVec3.vec3_set(axes[0], 0, axes[1]);
             this._myTeleportRotationOnUp = axesVec3.vec3_angleSigned(axesForward, axesUp);
         }
+    };
+}();
+
+
+PlayerLocomotionTeleport.prototype._showTeleportParable = function () {
+    let currentPosition = PP.vec3_create();
+    let nextPosition = PP.vec3_create();
+    return function _showTeleportParable(dt) {
+        let showParableDistance = Math.max(this._myParableDistance - this._myParams.myTeleportParableLineEndOffset);
+        let lastParableIndex = this._myParable.getPositionIndexByDistance(showParableDistance);
+        let lastParableIndexDistance = this._myParable.getDistance(lastParableIndex);
+
+        if (lastParableIndex + 1 > this._myVisualLines.length) {
+            this._addVisualLines(lastParableIndex + 1, this._myVisualLines.length);
+        }
+
+        for (let i = 0; i <= lastParableIndex; i++) {
+            currentPosition = this._myParable.getPosition(i, currentPosition);
+            nextPosition = this._myParable.getPosition(i + 1, nextPosition);
+
+            let currentVisualLineParams = this._myVisualLines[i].getParams();
+
+            if (i == lastParableIndex) {
+                let stepLength = Math.max(0, showParableDistance - lastParableIndexDistance);
+                nextPosition = nextPosition.vec3_sub(currentPosition, nextPosition).vec3_normalize(nextPosition);
+                nextPosition = currentPosition.vec3_add(nextPosition.vec3_scale(stepLength, nextPosition), nextPosition);
+            }
+
+            currentVisualLineParams.setStartEnd(currentPosition, nextPosition);
+            currentVisualLineParams.myThickness = 0.005;
+
+            this._myVisualLines[i].paramsUpdated();
+            this._myVisualLines[i].setVisible(true);
+
+            //PP.myDebugVisualManager.drawPoint(0, currentPosition, [1, 0, 0, 1], 0.01);
+        }
+
+        let visualPointParams = this._myVisualPoint.getParams();
+        visualPointParams.myPosition.vec3_copy(nextPosition);
+        visualPointParams.myRadius = 0.01;
+        this._myVisualPoint.paramsUpdated();
+        this._myVisualPoint.setVisible(true);
     };
 }();
 

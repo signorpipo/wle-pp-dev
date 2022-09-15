@@ -42,7 +42,7 @@ PlayerLocomotionTeleportParable = class PlayerLocomotionTeleportParable {
         // implemented outside class definition
     }
 
-    getPositionByDistance(distance, outPosition = PP.vec3_create()) {
+    getPositionIndexByDistance(distance) {
         // implemented outside class definition
     }
 };
@@ -93,5 +93,25 @@ PlayerLocomotionTeleportParable.prototype.getDistance = function () {
         }
 
         return distance;
+    };
+}();
+
+PlayerLocomotionTeleportParable.prototype.getPositionIndexByDistance = function () {
+    let currentPosition = PP.vec3_create();
+    let prevPosition = PP.vec3_create();
+    return function getPositionIndexByDistance(distance) {
+        let currentDistance = 0;
+        let currentIndex = 0;
+        prevPosition = this.getPosition(currentIndex, prevPosition);
+
+        while (currentDistance < distance) {
+            currentPosition = this.getPosition(currentIndex + 1, currentPosition);
+            currentDistance += currentPosition.vec3_distance(prevPosition);
+            currentIndex++;
+
+            prevPosition.vec3_copy(currentPosition);
+        }
+
+        return Math.max(0, currentIndex - 1);
     };
 }();
