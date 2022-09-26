@@ -112,8 +112,8 @@ PlayerLocomotion = class PlayerLocomotion {
 
                 params.myCollisionCheckParams = this._myCollisionCheckParamsTeleport;
 
-                params.myMaxDistance = 10;
-                params.myMaxHeightDifference = 20;
+                params.myMaxDistance = 3;
+                params.myMaxHeightDifference = 4;
                 params.myGroundAngleToIgnoreUpward = this._myCollisionCheckParamsSmooth.myGroundAngleToIgnore;
                 params.myMustBeOnGround = true;
 
@@ -131,8 +131,9 @@ PlayerLocomotion = class PlayerLocomotion {
 
                 params.myGravityAcceleration = -9.81;
 
-                params.myDebugActive = true;
+                params.myDebugActive = false;
                 params.myDebugDetectActive = true;
+                params.myDebugShowActive = true;
                 params.myDebugVisibilityActive = false;
 
                 this._myPlayerLocomotionTeleport = new PlayerLocomotionTeleport(params, this._myMovementRuntimeParams);
@@ -154,6 +155,7 @@ PlayerLocomotion = class PlayerLocomotion {
         this._myPlayerLocomotionTeleport.init();
 
         this._myLocomotionMovementFSM.perform("start");
+        this._myLocomotionMovementFSM.perform("next");
     }
 
     update(dt) {
