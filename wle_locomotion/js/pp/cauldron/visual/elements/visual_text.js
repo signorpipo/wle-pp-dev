@@ -24,6 +24,8 @@ PP.VisualTextParams = class VisualTextParams {
 
         this.myColor = null; // if this is set and material is null, it will use the default text material with this color
 
+        this.myParent = null; // if this is set the parent will not be the visual root anymore, the positions will be local to this object
+
         this.myType = PP.VisualElementType.TEXT;
     }
 };
@@ -86,7 +88,9 @@ PP.VisualText = class VisualText {
     }
 
     _refresh() {
-        this._myTextObject.pp_setTransform(this._myParams.myTransform);
+        this._myTextObject.pp_setParent(this._myParams.myParent == null ? PP.myVisualData.myRootObject : this._myParams.myParent, false);
+
+        this._myTextObject.pp_setTransformLocal(this._myParams.myTransform);
 
         if (this._myParams.myMaterial == null) {
             if (this._myParams.myColor == null) {
@@ -110,22 +114,8 @@ PP.VisualText = class VisualText {
     }
 
     _build() {
-        this._myTextObject = WL.scene.addObject(PP.myVisualData.myRootObject);
+        this._myTextObject = WL.scene.addObject(null);
         this._myTextComponent = this._myTextObject.addComponent('text');
-
-        if (this._myParams.myMaterial == null) {
-            if (this._myParams.myColor == null) {
-                this._myTextComponent.material = PP.myVisualData.myDefaultMaterials.myDefaultTextMaterial;
-            } else {
-                if (this._myTextMaterial == null) {
-                    this._myTextMaterial = PP.myDefaultResources.myMaterials.myText.clone();
-                }
-                this._myTextComponent.material = this._myTextMaterial;
-                this._myTextMaterial.color = this._myParams.myColor;
-            }
-        } else {
-            this._myTextComponent.material = this._myParams.myMaterial;
-        }
     }
 
     _markDirty() {
@@ -156,6 +146,8 @@ PP.VisualText = class VisualText {
         } else {
             clonedParams.myColor = null;
         }
+
+        clonedParams.myParent = this._myParams.myParent;
 
         let clone = new PP.VisualText(clonedParams);
         clone.setAutoRefresh(this._myAutoRefresh);

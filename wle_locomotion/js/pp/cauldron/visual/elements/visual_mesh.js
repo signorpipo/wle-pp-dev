@@ -19,6 +19,8 @@ PP.VisualMeshParams = class VisualMeshParams {
         this.myMesh = null;
         this.myMaterial = null;
 
+        this.myParent = null; // if this is set the parent will not be the visual root anymore, the positions will be local to this object
+
         this.myType = PP.VisualElementType.MESH;
     }
 };
@@ -79,7 +81,8 @@ PP.VisualMesh = class VisualMesh {
     }
 
     _refresh() {
-        this._myMeshObject.pp_setTransform(this._myParams.myTransform);
+        this._myMeshObject.pp_setParent(this._myParams.myParent == null ? PP.myVisualData.myRootObject : this._myParams.myParent, false);
+        this._myMeshObject.pp_setTransformLocal(this._myParams.myTransform);
 
         if (this._myParams.myMesh == null) {
             this._myMeshComponent.mesh = PP.myDefaultResources.myMeshes.mySphere;
@@ -95,21 +98,9 @@ PP.VisualMesh = class VisualMesh {
     }
 
     _build() {
-        this._myMeshObject = WL.scene.addObject(PP.myVisualData.myRootObject);
+        this._myMeshObject = WL.scene.addObject(null);
 
         this._myMeshComponent = this._myMeshObject.addComponent('mesh');
-
-        if (this._myParams.myMesh == null) {
-            this._myMeshComponent.mesh = PP.myDefaultResources.myMeshes.mySphere;
-        } else {
-            this._myMeshComponent.mesh = this._myParams.myMesh;
-        }
-
-        if (this._myParams.myMaterial == null) {
-            this._myMeshComponent.material = PP.myVisualData.myDefaultMaterials.myDefaultMeshMaterial;
-        } else {
-            this._myMeshComponent.material = this._myParams.myMaterial;
-        }
     }
 
     _markDirty() {
@@ -135,6 +126,8 @@ PP.VisualMesh = class VisualMesh {
         } else {
             clonedParams.myMaterial = null;
         }
+
+        clonedParams.myParent = this._myParams.myParent;
 
         let clone = new PP.VisualMesh(clonedParams);
         clone.setAutoRefresh(this._myAutoRefresh);

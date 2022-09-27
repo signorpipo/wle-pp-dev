@@ -21,6 +21,8 @@ PP.VisualRaycastParams = class VisualRaycastParams {
         this.myRayMaterial = null;
         this.myHitNormalMaterial = null;
 
+        this.myParent = null; // if this is set the parent will not be the visual root anymore, the positions will be local to this object
+
         this.myType = PP.VisualElementType.RAYCAST;
     }
 
@@ -44,12 +46,6 @@ PP.VisualRaycast = class VisualRaycast {
         this._myDirty = false;
 
         this._myVisualRaycast = new PP.VisualArrow();
-
-        if (this._myParams.myRayMaterial == null) {
-            this._myVisualRaycast.getParams().myMaterial = PP.myVisualData.myDefaultMaterials.myDefaultRayMaterial;
-        } else {
-            this._myVisualRaycast.getParams().myMaterial = this._myParams.myRayMaterial;
-        }
 
         this._myVisualRaycast.setAutoRefresh(false);
 
@@ -133,10 +129,12 @@ PP.VisualRaycast = class VisualRaycast {
                 visualRaycastParams.myThickness = this._myParams.myThickness;
 
                 if (this._myParams.myRayMaterial == null) {
-                    visualRaycastParams.myRayMaterial = PP.myVisualData.myDefaultMaterials.myDefaultRayMaterial;
+                    visualRaycastParams.myMaterial = PP.myVisualData.myDefaultMaterials.myDefaultRayMaterial;
                 } else {
-                    visualRaycastParams.myRayMaterial = this._myParams.myRayMaterial;
+                    visualRaycastParams.myMaterial = this._myParams.myRayMaterial;
                 }
+
+                visualRaycastParams.myParent = this._myParams.myParent;
 
                 this._myVisualRaycast.paramsUpdated();
 
@@ -159,10 +157,12 @@ PP.VisualRaycast = class VisualRaycast {
                     visualRaycastHitParams.myThickness = this._myParams.myThickness;
 
                     if (this._myParams.myHitNormalMaterial == null) {
-                        visualRaycastHitParams.myHitNormalMaterial = PP.myVisualData.myDefaultMaterials.myDefaultHitNormalMaterial;
+                        visualRaycastHitParams.myMaterial = PP.myVisualData.myDefaultMaterials.myDefaultHitNormalMaterial;
                     } else {
-                        visualRaycastHitParams.myHitNormalMaterial = this._myParams.myHitNormalMaterial;
+                        visualRaycastHitParams.myMaterial = this._myParams.myHitNormalMaterial;
                     }
+
+                    visualRaycastHitParams.myParent = this._myParams.myParent;
 
                     visualRaycastHit.paramsUpdated();
 
@@ -179,10 +179,12 @@ PP.VisualRaycast = class VisualRaycast {
                 visualRaycastParams.myThickness = this._myParams.myThickness;
 
                 if (this._myParams.myRayMaterial == null) {
-                    visualRaycastParams.myRayMaterial = PP.myVisualData.myDefaultMaterials.myDefaultRayMaterial;
+                    visualRaycastParams.myMaterial = PP.myVisualData.myDefaultMaterials.myDefaultRayMaterial;
                 } else {
-                    visualRaycastParams.myRayMaterial = this._myParams.myRayMaterial;
+                    visualRaycastParams.myMaterial = this._myParams.myRayMaterial;
                 }
+
+                visualRaycastParams.myParent = this._myParams.myParent;
 
                 this._myVisualRaycast.paramsUpdated();
 
@@ -219,6 +221,8 @@ PP.VisualRaycast = class VisualRaycast {
         } else {
             clonedParams.myHitNormalMaterial = null;
         }
+
+        clonedParams.myParent = this._myParams.myParent;
 
         let clone = new PP.VisualRaycast(clonedParams);
         clone.setAutoRefresh(this._myAutoRefresh);

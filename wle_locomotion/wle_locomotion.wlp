@@ -82,54 +82,6 @@
             ],
             "components": [
                 {
-                    "type": "locomotion-draft",
-                    "locomotion-draft": {
-                        "_myPlayerObject": "19",
-                        "_myHeadObject": "25",
-                        "_myMaxRotationSpeed": 50.0,
-                        "_myRightHandObject": "24",
-                        "_myMaxSpeed": 1.0,
-                        "_myNonVRCameraObject": "21",
-                        "_myVRHeadObject": "25",
-                        "_myNonVRHeadObject": "115",
-                        "_myDirectionReferenceObject": "24"
-                    },
-                    "active": false
-                },
-                {
-                    "type": "locomotion-fly-draft",
-                    "locomotion-fly-draft": {
-                        "_myPlayerObject": "19",
-                        "_myNonVRCameraObject": "21",
-                        "_myNonVRHeadObject": "115",
-                        "_myVRHeadObject": "25",
-                        "_myRightHandObject": "24",
-                        "_myMaxSpeed": 1.0,
-                        "_myMaxRotationSpeed": 50.0,
-                        "_myHeadObject": "120",
-                        "_myDirectionReferenceObject": "23",
-                        "_myMinHeight": 0.0,
-                        "_myMinAngleToFly": 45.0
-                    },
-                    "active": false
-                },
-                {
-                    "type": "locomotion-draft-2",
-                    "locomotion-draft-2": {
-                        "_myMaxSpeed": 2.0,
-                        "_myFlyEnabled": false,
-                        "_myMinAngleToFly": 60.0,
-                        "_myMinAngleToFlyDown": 30.0,
-                        "_myMinAngleToFlyUp": 30.0,
-                        "_myMinAngleToFlyDownHead": 50.0,
-                        "_myMinAngleToFlyDownHand": 1.0,
-                        "_myIsSnapTurn": false,
-                        "_mySnapTurnAngle": 30.0,
-                        "_myMaxRotationSpeed": 100.0
-                    },
-                    "active": false
-                },
-                {
                     "type": "player-locomotion",
                     "player-locomotion": {
                         "_myIsSnapTurn": true,

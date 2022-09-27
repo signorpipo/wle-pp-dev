@@ -18,8 +18,9 @@ PP.VisualPointParams = class VisualPointParams {
         this.myRadius = 0.005;
 
         this.myMaterial = null;
-
         this.myColor = null; // if this is set and material is null, it will use the default flat opaque material with this color
+
+        this.myParent = null; // if this is set the parent will not be the visual root anymore, the positions will be local to this object
 
         this.myType = PP.VisualElementType.POINT;
     }
@@ -83,8 +84,10 @@ PP.VisualPoint = class VisualPoint {
     }
 
     _refresh() {
-        this._myPointObject.pp_setPosition(this._myParams.myPosition);
-        this._myPointObject.pp_setScale(this._myParams.myRadius);
+        this._myPointObject.pp_setParent(this._myParams.myParent == null ? PP.myVisualData.myRootObject : this._myParams.myParent, false);
+
+        this._myPointObject.pp_setPositionLocal(this._myParams.myPosition);
+        this._myPointObject.pp_setScaleLocal(this._myParams.myRadius);
 
         if (this._myParams.myMaterial == null) {
             if (this._myParams.myColor == null) {
@@ -102,24 +105,10 @@ PP.VisualPoint = class VisualPoint {
     }
 
     _build() {
-        this._myPointObject = WL.scene.addObject(PP.myVisualData.myRootObject);
+        this._myPointObject = WL.scene.addObject(null);
 
         this._myPointMeshComponent = this._myPointObject.addComponent('mesh');
         this._myPointMeshComponent.mesh = PP.myDefaultResources.myMeshes.mySphere;
-
-        if (this._myParams.myMaterial == null) {
-            if (this._myParams.myColor == null) {
-                this._myPointMeshComponent.material = PP.myVisualData.myDefaultMaterials.myDefaultMeshMaterial;
-            } else {
-                if (this._myFlatOpaqueMaterial == null) {
-                    this._myFlatOpaqueMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
-                }
-                this._myPointMeshComponent.material = this._myFlatOpaqueMaterial;
-                this._myFlatOpaqueMaterial.color = this._myParams.myColor;
-            }
-        } else {
-            this._myPointMeshComponent.material = this._myParams.myMaterial;
-        }
     }
 
     _markDirty() {
@@ -146,6 +135,8 @@ PP.VisualPoint = class VisualPoint {
         } else {
             clonedParams.myColor = null;
         }
+
+        clonedParams.myParent = this._myParams.myParent;
 
         let clone = new PP.VisualPoint(clonedParams);
         clone.setAutoRefresh(this._myAutoRefresh);

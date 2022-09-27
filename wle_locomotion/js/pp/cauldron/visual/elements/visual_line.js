@@ -22,8 +22,9 @@ PP.VisualLineParams = class VisualLineParams {
         this.myThickness = 0.005;
 
         this.myMaterial = null;
-
         this.myColor = null; // if this is set and material is null, it will use the default flat opaque material with this color
+
+        this.myParent = null; // if this is set the parent will not be the visual root anymore, the positions will be local to this object
 
         this.myType = PP.VisualElementType.LINE;
     }
@@ -97,25 +98,11 @@ PP.VisualLine = class VisualLine {
     }
 
     _build() {
-        this._myLineRootObject = WL.scene.addObject(PP.myVisualData.myRootObject);
+        this._myLineRootObject = WL.scene.addObject(null);
         this._myLineObject = WL.scene.addObject(this._myLineRootObject);
 
         this._myLineMeshComponent = this._myLineObject.addComponent('mesh');
         this._myLineMeshComponent.mesh = PP.myDefaultResources.myMeshes.myCylinder;
-
-        if (this._myParams.myMaterial == null) {
-            if (this._myParams.myColor == null) {
-                this._myLineMeshComponent.material = PP.myVisualData.myDefaultMaterials.myDefaultMeshMaterial;
-            } else {
-                if (this._myFlatOpaqueMaterial == null) {
-                    this._myFlatOpaqueMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
-                }
-                this._myLineMeshComponent.material = this._myFlatOpaqueMaterial;
-                this._myFlatOpaqueMaterial.color = this._myParams.myColor;
-            }
-        } else {
-            this._myLineMeshComponent.material = this._myParams.myMaterial;
-        }
     }
 
     _markDirty() {
@@ -145,6 +132,8 @@ PP.VisualLine = class VisualLine {
             clonedParams.myColor = null;
         }
 
+        clonedParams.myParent = this._myParams.myParent;
+
         let clone = new PP.VisualLine(clonedParams);
         clone.setAutoRefresh(this._myAutoRefresh);
         clone.setVisible(this._myVisible);
@@ -158,7 +147,9 @@ PP.VisualLine.prototype._refresh = function () {
     let scaleLine = PP.vec3_create();
     let translateLine = PP.vec3_create();
     return function _refresh() {
-        this._myLineRootObject.pp_setPosition(this._myParams.myStart);
+        this._myLineRootObject.pp_setParent(this._myParams.myParent == null ? PP.myVisualData.myRootObject : this._myParams.myParent, false);
+
+        this._myLineRootObject.pp_setPositionLocal(this._myParams.myStart);
 
         this._myLineObject.pp_resetPositionLocal();
         this._myLineObject.pp_resetScaleLocal();
