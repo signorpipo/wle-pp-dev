@@ -60,14 +60,10 @@ PP.VisualLine = class VisualLine {
         this.setVisible(true);
     }
 
-    setVisible(visible, avoidRefresh = false) {
+    setVisible(visible) {
         if (this._myVisible != visible) {
             this._myVisible = visible;
             this._myLineRootObject.pp_setActive(visible);
-
-            if (this._myVisible && !avoidRefresh) {
-                this.forceRefresh();
-            }
         }
     }
 

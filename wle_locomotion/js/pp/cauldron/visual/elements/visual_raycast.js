@@ -55,12 +55,23 @@ PP.VisualRaycast = class VisualRaycast {
         this.setVisible(true);
     }
 
-    setVisible(visible, avoidRefresh = false) {
+    setVisible(visible) {
         if (this._myVisible != visible) {
             this._myVisible = visible;
 
-            if (this._myVisible && !avoidRefresh) {
-                this.forceRefresh();
+            if (this._myVisible) {
+                if (this._myParams.myRaycastResult.myRaycastSetup != null) {
+                    this._myVisualRaycast.setVisible(true);
+                }
+
+                if (this._myParams.myRaycastResult.myHits.length > 0) {
+                    let hitsToShow = Math.min(this._myParams.myRaycastResult.myHits.length, this._myVisualRaycastHitList.length);
+
+                    for (let i = 0; i < hitsToShow; i++) {
+                        let visualRaycastHit = this._myVisualRaycastHitList[i];
+                        visualRaycastHit.setVisible(true);
+                    }
+                }
             } else {
                 this._myVisualRaycast.setVisible(false);
 

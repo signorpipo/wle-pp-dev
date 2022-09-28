@@ -50,14 +50,10 @@ PP.VisualText = class VisualText {
         this.setVisible(true);
     }
 
-    setVisible(visible, avoidRefresh = false) {
+    setVisible(visible) {
         if (this._myVisible != visible) {
             this._myVisible = visible;
             this._myTextObject.pp_setActive(visible);
-
-            if (this._myVisible && !avoidRefresh) {
-                this.forceRefresh();
-            }
         }
     }
 
