@@ -82,8 +82,11 @@ PP.VisualTransform = class VisualTransform {
     }
 
     forceRefresh() {
-        this._myDirty = true;
-        this.update(0);
+        this._refresh();
+
+        this._myVisualRight.forceRefresh();
+        this._myVisualUp.forceRefresh();
+        this._myVisualForward.forceRefresh();
     }
 
     update(dt) {

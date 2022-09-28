@@ -78,8 +78,9 @@ PP.VisualArrow = class VisualArrow {
     }
 
     forceRefresh() {
-        this._myDirty = true;
-        this.update(0);
+        this._refresh();
+
+        this._myVisualLine.forceRefresh();
     }
 
     update(dt) {

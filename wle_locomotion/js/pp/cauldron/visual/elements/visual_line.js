@@ -93,8 +93,7 @@ PP.VisualLine = class VisualLine {
     }
 
     forceRefresh() {
-        this._myDirty = true;
-        this.update(0);
+        this._refresh();
     }
 
     update(dt) {

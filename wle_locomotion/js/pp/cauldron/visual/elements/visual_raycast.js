@@ -93,8 +93,12 @@ PP.VisualRaycast = class VisualRaycast {
     }
 
     forceRefresh() {
-        this._myDirty = true;
-        this.update(0);
+        this._refresh();
+
+        this._myVisualRaycast.forceRefresh();
+        for (let visualRaycastHit of this._myVisualRaycastHitList) {
+            visualRaycastHit.forceRefresh();
+        }
     }
 
     update(dt) {

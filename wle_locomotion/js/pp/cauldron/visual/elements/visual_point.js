@@ -79,8 +79,7 @@ PP.VisualPoint = class VisualPoint {
     }
 
     forceRefresh() {
-        this._myDirty = true;
-        this.update(0);
+        this._refresh();
     }
 
     update(dt) {

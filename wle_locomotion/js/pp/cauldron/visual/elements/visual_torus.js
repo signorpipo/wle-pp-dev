@@ -89,8 +89,11 @@ PP.VisualTorus = class VisualTorus {
     }
 
     forceRefresh() {
-        this._myDirty = true;
-        this.update(0);
+        this._refresh();
+
+        for (let visualSegment of this._myVisualSegmentList) {
+            visualSegment.forceRefresh();
+        }
     }
 
     update(dt) {
