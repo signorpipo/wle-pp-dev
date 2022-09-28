@@ -46,6 +46,8 @@ PlayerLocomotionTeleportParams = class PlayerLocomotionTeleportParams {
         this.myTeleportParableLineEndOffset = 0.05;
         this.myTeleportParableMinVerticalDistanceToShowVerticalLine = 0.25;
 
+        this.myTeleportParablePositionUpOffset = 0.05;
+
         this.myDebugActive = false;
         this.myDebugDetectActive = false;
         this.myDebugShowActive = false;
@@ -264,6 +266,9 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport extends PlayerLocomoti
         this._myInvalidVisualPoint.setVisible(false);
 
         this._myValidVisualVerticalLine.setVisible(false);
+
+        this._myValidVisualTeleportPositionTorus.setVisible(false);
+        this._myValidVisualTeleportPositionTorusInner.setVisible(false);
     }
 
     _completeTeleport() {
@@ -298,7 +303,18 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport extends PlayerLocomoti
         }
     }
 
-    _setupVisuals() {
+    _onXRSessionStart(session) {
+        this._mySessionActive = true;
+    }
+
+    _onXRSessionEnd(session) {
+        this._mySessionActive = false;
+    }
+};
+
+PlayerLocomotionTeleport.prototype._setupVisuals = function () {
+    let innerTorusPosition = PP.vec3_create();
+    return function _setupVisuals() {
         this._myTeleportParableValidMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
         this._myTeleportParableValidMaterial.color = [0, 0.5, 1, 1];
         this._myTeleportParableInvalidMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
@@ -344,17 +360,58 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport extends PlayerLocomoti
             this._myValidVisualVerticalLine = new PP.VisualLine(visualParams);
         }
 
+        this._myVisualTeleportPositionObject = PP.myVisualData.myRootObject.pp_addObject();
+
+        PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Teleport Torus Radius", 0.25, 0.1, 3));
+        PP.myEasyTuneVariables.add(new PP.EasyTuneInt("Teleport Torus Segments", 24, 1));
+        PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Teleport Torus Thickness", 0.025, 0.1, 3));
+
+        PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Teleport Torus Inner Radius", 0.06, 0.1, 3));
+
+        {
+            let visualParams = new PP.VisualTorusParams();
+            visualParams.myRadius = PP.myEasyTuneVariables.get("Teleport Torus Radius");
+            visualParams.mySegmentAmount = PP.myEasyTuneVariables.get("Teleport Torus Segments");
+            visualParams.mySegmentThickness = PP.myEasyTuneVariables.get("Teleport Torus Thickness");
+
+            if (this._myParams.myTeleportParableValidMaterial != null) {
+                visualParams.myMaterial = this._myParams.myTeleportParableValidMaterial;
+            } else {
+                visualParams.myMaterial = this._myTeleportParableValidMaterial;
+            }
+
+            visualParams.myParent = this._myVisualTeleportPositionObject;
+
+            this._myValidVisualTeleportPositionTorus = new PP.VisualTorus(visualParams);
+        }
+
+        {
+            let visualParams = new PP.VisualTorusParams();
+            visualParams.myRadius = PP.myEasyTuneVariables.get("Teleport Torus Inner Radius");
+            visualParams.mySegmentAmount = PP.myEasyTuneVariables.get("Teleport Torus Segments");
+            visualParams.mySegmentThickness = PP.myEasyTuneVariables.get("Teleport Torus Thickness");
+
+            if (this._myParams.myTeleportParableValidMaterial != null) {
+                visualParams.myMaterial = this._myParams.myTeleportParableValidMaterial;
+            } else {
+                visualParams.myMaterial = this._myTeleportParableValidMaterial;
+            }
+
+            visualParams.myParent = this._myVisualTeleportPositionObject;
+
+            let visualTorusParams = this._myValidVisualTeleportPositionTorus.getParams();
+
+            let innerTorusCenter = (visualTorusParams.myRadius - (visualTorusParams.mySegmentThickness / 2)) / 2;
+            innerTorusPosition.vec3_set(0, 0, innerTorusCenter);
+
+            visualParams.myTransform.mat4_setPosition(innerTorusPosition);
+
+            this._myValidVisualTeleportPositionTorusInner = new PP.VisualTorus(visualParams);
+        }
+
         this._hideTeleportPosition();
-    }
-
-    _onXRSessionStart(session) {
-        this._mySessionActive = true;
-    }
-
-    _onXRSessionEnd(session) {
-        this._mySessionActive = false;
-    }
-};
+    };
+}();
 
 PlayerLocomotionTeleport.prototype._detectTeleportPositionNonVR = function () {
     let mousePosition = PP.vec3_create();
@@ -713,7 +770,6 @@ PlayerLocomotionTeleport.prototype._detectTeleportRotationVR = function () {
     };
 }();
 
-
 PlayerLocomotionTeleport.prototype._showTeleportParable = function () {
     let currentPosition = PP.vec3_create();
     let nextPosition = PP.vec3_create();
@@ -781,9 +837,54 @@ PlayerLocomotionTeleport.prototype._showTeleportParable = function () {
 
             }
 
-            if (this._myParams.myDebugActive && this._myParams.myDebugShowActive) {
-                PP.myDebugVisualManager.drawPoint(0, this._myTeleportPosition, [0, 0, 1, 1], 0.02);
-            }
+            this._showTeleportParablePosition();
+        }
+    };
+}();
+
+PlayerLocomotionTeleport.prototype._showTeleportParablePosition = function () {
+    let playerUp = PP.vec3_create();
+    let feetTransformQuat = PP.quat2_create();
+    let feetRotationQuat = PP.quat_create();
+
+    let visualPosition = PP.vec3_create();
+    let visualForward = PP.vec3_create();
+
+    return function _showTeleportParablePosition() {
+        playerUp = this._myParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
+        feetTransformQuat = this._myParams.myPlayerHeadManager.getFeetTransformQuat(feetTransformQuat);
+        feetRotationQuat = feetTransformQuat.quat2_getRotationQuat(feetRotationQuat);
+        feetRotationQuat = feetRotationQuat.quat_rotateAxis(this._myTeleportRotationOnUp, playerUp, feetRotationQuat);
+        visualForward = feetRotationQuat.quat_getForward(visualForward);
+
+        visualPosition = this._myTeleportPosition.vec3_add(playerUp.vec3_scale(this._myParams.myTeleportParablePositionUpOffset, visualPosition), visualPosition);
+
+        this._myVisualTeleportPositionObject.pp_setPosition(visualPosition);
+        this._myVisualTeleportPositionObject.pp_setUp(playerUp, visualForward);
+
+        {
+            let visualParams = this._myValidVisualTeleportPositionTorus.getParams();
+            visualParams.myRadius = PP.myEasyTuneVariables.get("Teleport Torus Radius");
+            visualParams.mySegmentAmount = PP.myEasyTuneVariables.get("Teleport Torus Segments");
+            visualParams.mySegmentThickness = PP.myEasyTuneVariables.get("Teleport Torus Thickness");
+
+            this._myValidVisualTeleportPositionTorus.paramsUpdated();
+        }
+
+        {
+            let visualParams = this._myValidVisualTeleportPositionTorusInner.getParams();
+            visualParams.myRadius = PP.myEasyTuneVariables.get("Teleport Torus Inner Radius");
+            visualParams.mySegmentAmount = PP.myEasyTuneVariables.get("Teleport Torus Segments");
+            visualParams.mySegmentThickness = PP.myEasyTuneVariables.get("Teleport Torus Thickness");
+
+            this._myValidVisualTeleportPositionTorusInner.paramsUpdated();
+        }
+
+        this._myValidVisualTeleportPositionTorus.setVisible(true);
+        this._myValidVisualTeleportPositionTorusInner.setVisible(true);
+
+        if (this._myParams.myDebugActive && this._myParams.myDebugShowActive) {
+            PP.myDebugVisualManager.drawPoint(0, this._myTeleportPosition, [0, 0, 1, 1], 0.02);
         }
     };
 }();
