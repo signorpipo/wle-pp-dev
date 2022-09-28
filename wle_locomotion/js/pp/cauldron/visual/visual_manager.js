@@ -51,7 +51,7 @@ PP.VisualManager = class VisualManager {
         }
 
         if (visualElement == null) {
-            visualElement = this._createVisualElement(visualElementParams);
+            visualElement = this._getVisualElement(visualElementParams);
         }
 
         if (visualElement == null) {
@@ -83,6 +83,20 @@ PP.VisualManager = class VisualManager {
         this._myVisualElementsToShow.push(visualElement);
 
         return elementID;
+    }
+
+    getDraw(elementID) {
+        let visualElement = null;
+
+        for (let visualElementMap of this._myVisualElementTypeMap.values()) {
+            if (visualElementMap.has(elementID)) {
+                let visualElementPair = visualElementMap.get(elementID);
+                visualElement = visualElementPair[0];
+                break;
+            }
+        }
+
+        return visualElement;
     }
 
     clearDraw(elementID = null) {
@@ -147,7 +161,7 @@ PP.VisualManager = class VisualManager {
         }
     }
 
-    _createVisualElement(params) {
+    _getVisualElement(params) {
         let element = null;
 
         if (!this._myVisualElementsPool.hasPool(params.myType)) {
@@ -194,6 +208,9 @@ PP.VisualManager = class VisualManager {
                 break;
             case PP.VisualElementType.RAYCAST:
                 visualElement = new PP.VisualRaycast();
+                break;
+            case PP.VisualElementType.TORUS:
+                visualElement = new PP.VisualTorus();
                 break;
         }
 

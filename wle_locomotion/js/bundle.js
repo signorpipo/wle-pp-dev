@@ -86,6 +86,7 @@ require('./pp/cauldron/visual/elements/visual_arrow');
 require('./pp/cauldron/visual/elements/visual_text');
 require('./pp/cauldron/visual/elements/visual_transform');
 require('./pp/cauldron/visual/elements/visual_raycast');
+require('./pp/cauldron/visual/elements/visual_torus');
 
 require('./pp/cauldron/visual/components/visual_manager_component');
 
