@@ -12500,6 +12500,36 @@
                 0.0,
                 1.0
             ]
+        },
+        "785": {
+            "name": "Show Torus",
+            "components": [
+                {
+                    "type": "pp-copy-hand-transform"
+                },
+                {
+                    "type": "show-torus"
+                }
+            ],
+            "parent": "71",
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                -20000.0,
+                0.0,
+                1.0
+            ]
         }
     },
     "meshes": {

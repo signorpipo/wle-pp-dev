@@ -143,6 +143,8 @@ PP.VisualArrow.prototype._refresh = function () {
     let translateRoot = PP.vec3_create();
     let scaleArrow = PP.vec3_create();
     let direction = PP.vec3_create();
+
+    let forward = PP.vec3_create(0, 0, 1);
     return function _refresh() {
         this._myArrowRootObject.pp_setParent(this._myParams.myParent == null ? PP.myVisualData.myRootObject : this._myParams.myParent, false);
 
@@ -150,7 +152,7 @@ PP.VisualArrow.prototype._refresh = function () {
         end.vec3_add(this._myParams.myStart, end);
 
         this._myArrowRootObject.pp_setPositionLocal(end);
-        this._myArrowRootObject.pp_setUpLocal(this._myParams.myDirection);
+        this._myArrowRootObject.pp_setUpLocal(this._myParams.myDirection, forward);
 
         translateRoot.vec3_set(0, this._myParams.myThickness * 2 - 0.00001, 0);
         this._myArrowRootObject.pp_translateObject(translateRoot);

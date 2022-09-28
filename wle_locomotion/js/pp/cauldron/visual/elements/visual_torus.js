@@ -170,6 +170,11 @@ PP.VisualTorus.prototype._refresh = function () {
     let segmentStart = PP.vec3_create();
     let segmentEnd = PP.vec3_create();
 
+    let segmentDirection = PP.vec3_create();
+
+    let fixedSegmentStart = PP.vec3_create();
+    let fixedSegmentEnd = PP.vec3_create();
+
     let up = PP.vec3_create(0, 1, 0);
     return function _refresh() {
         this._fillSegmentList();
@@ -186,10 +191,17 @@ PP.VisualTorus.prototype._refresh = function () {
         for (let i = 0; i < this._myParams.mySegmentAmount; i++) {
             segmentEnd = segmentStart.vec3_rotateAxisRadians(sliceAngle, up, segmentEnd);
 
+            segmentDirection = segmentEnd.vec3_sub(segmentStart, segmentDirection).vec3_normalize(segmentDirection);
+
+            let extraLength = Math.tan(sliceAngle / 2) * this._myParams.mySegmentThickness / 2;
+
+            fixedSegmentStart = segmentStart.vec3_sub(segmentDirection.vec3_scale(extraLength, fixedSegmentStart), fixedSegmentStart);
+            fixedSegmentEnd = segmentEnd.vec3_add(segmentDirection.vec3_scale(extraLength, fixedSegmentEnd), fixedSegmentEnd);
+
             let visualSegment = this._myVisualSegmentList[i];
 
             let visualSegmentParams = visualSegment.getParams();
-            visualSegmentParams.setStartEnd(segmentStart, segmentEnd);
+            visualSegmentParams.setStartEnd(fixedSegmentStart, fixedSegmentEnd);
             visualSegmentParams.myThickness = this._myParams.mySegmentThickness;
 
             if (this._myParams.myMaterial == null) {

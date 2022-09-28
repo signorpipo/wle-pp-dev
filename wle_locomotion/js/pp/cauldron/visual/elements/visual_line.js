@@ -153,6 +153,8 @@ PP.VisualLine = class VisualLine {
 PP.VisualLine.prototype._refresh = function () {
     let scaleLine = PP.vec3_create();
     let translateLine = PP.vec3_create();
+
+    let forward = PP.vec3_create(0, 0, 1);
     return function _refresh() {
         this._myLineRootObject.pp_setParent(this._myParams.myParent == null ? PP.myVisualData.myRootObject : this._myParams.myParent, false);
 
@@ -164,7 +166,7 @@ PP.VisualLine.prototype._refresh = function () {
         scaleLine.vec3_set(this._myParams.myThickness / 2, this._myParams.myLength / 2, this._myParams.myThickness / 2);
         this._myLineObject.pp_scaleObject(scaleLine);
 
-        this._myLineObject.pp_setUp(this._myParams.myDirection);
+        this._myLineObject.pp_setUpLocal(this._myParams.myDirection, forward);
         translateLine.vec3_set(0, this._myParams.myLength / 2, 0);
         this._myLineObject.pp_translateObject(translateLine);
 
