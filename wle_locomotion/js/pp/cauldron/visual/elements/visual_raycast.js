@@ -52,25 +52,18 @@ PP.VisualRaycast = class VisualRaycast {
         this._myVisualRaycastHitList = [];
         this._addVisualRaycastHit();
 
-        this._refresh();
-
         this.setVisible(true);
     }
 
-    setVisible(visible) {
+    setVisible(visible, avoidRefresh = false) {
         if (this._myVisible != visible) {
             this._myVisible = visible;
-            if (this._myParams.myRaycastResult.myRaycastSetup != null) {
-                this._myVisualRaycast.setVisible(visible);
+
+            if (this._myVisible && !avoidRefresh) {
+                this.forceRefresh();
             } else {
                 this._myVisualRaycast.setVisible(false);
-            }
 
-            if (this._myParams.myRaycastResult.myHits.length > 0) {
-                for (let visualRaycastHit of this._myVisualRaycastHitList) {
-                    visualRaycastHit.setVisible(visible);
-                }
-            } else {
                 for (let visualRaycastHit of this._myVisualRaycastHitList) {
                     visualRaycastHit.setVisible(false);
                 }
@@ -96,6 +89,11 @@ PP.VisualRaycast = class VisualRaycast {
     }
 
     refresh() {
+        this.update(0);
+    }
+
+    forceRefresh() {
+        this._myDirty = true;
         this.update(0);
     }
 
@@ -235,13 +233,8 @@ PP.VisualRaycast = class VisualRaycast {
     _addVisualRaycastHit() {
         let visualRaycastHit = new PP.VisualArrow();
 
-        if (this._myParams.myHitNormalMaterial == null) {
-            visualRaycastHit.getParams().myMaterial = PP.myVisualData.myDefaultMaterials.myDefaultHitNormalMaterial;
-        } else {
-            visualRaycastHit.getParams().myMaterial = this._myParams.myHitNormalMaterial;
-        }
-
         visualRaycastHit.setAutoRefresh(false);
+        visualRaycastHit.setVisible(false);
 
         this._myVisualRaycastHitList.push(visualRaycastHit);
     }

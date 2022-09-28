@@ -46,15 +46,18 @@ PP.VisualText = class VisualText {
         this._myTextMaterial = null;
 
         this._build();
-        this._refresh();
 
         this.setVisible(true);
     }
 
-    setVisible(visible) {
+    setVisible(visible, avoidRefresh = false) {
         if (this._myVisible != visible) {
             this._myVisible = visible;
             this._myTextObject.pp_setActive(visible);
+
+            if (this._myVisible && !avoidRefresh) {
+                this.forceRefresh();
+            }
         }
     }
 
@@ -76,6 +79,11 @@ PP.VisualText = class VisualText {
     }
 
     refresh() {
+        this.update(0);
+    }
+
+    forceRefresh() {
+        this._myDirty = true;
         this.update(0);
     }
 

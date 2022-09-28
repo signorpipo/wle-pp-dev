@@ -40,16 +40,19 @@ PP.VisualArrow = class VisualArrow {
         this._myFlatOpaqueMaterial = null;
 
         this._build();
-        this._refresh();
 
         this.setVisible(true);
     }
 
-    setVisible(visible) {
+    setVisible(visible, avoidRefresh = false) {
         if (this._myVisible != visible) {
             this._myVisible = visible;
-            this._myVisualLine.setVisible(visible);
+            this._myVisualLine.setVisible(visible, true);
             this._myArrowRootObject.pp_setActive(visible);
+
+            if (this._myVisible && !avoidRefresh) {
+                this.forceRefresh();
+            }
         }
     }
 
@@ -71,6 +74,11 @@ PP.VisualArrow = class VisualArrow {
     }
 
     refresh() {
+        this.update(0);
+    }
+
+    forceRefresh() {
+        this._myDirty = true;
         this.update(0);
     }
 

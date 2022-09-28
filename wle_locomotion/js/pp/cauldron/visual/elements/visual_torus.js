@@ -53,11 +53,11 @@ PP.VisualTorus = class VisualTorus {
         this.setVisible(true);
     }
 
-    setVisible(visible) {
+    setVisible(visible, avoidRefresh = false) {
         if (this._myVisible != visible) {
             this._myVisible = visible;
 
-            if (this._myVisible) {
+            if (this._myVisible && !avoidRefresh) {
                 this.forceRefresh();
             } else {
                 for (let visualSegment of this._myVisualSegmentList) {

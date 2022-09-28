@@ -56,15 +56,18 @@ PP.VisualLine = class VisualLine {
         this._myFlatOpaqueMaterial = null;
 
         this._build();
-        this._refresh();
 
         this.setVisible(true);
     }
 
-    setVisible(visible) {
+    setVisible(visible, avoidRefresh = false) {
         if (this._myVisible != visible) {
             this._myVisible = visible;
             this._myLineRootObject.pp_setActive(visible);
+
+            if (this._myVisible && !avoidRefresh) {
+                this.forceRefresh();
+            }
         }
     }
 
@@ -86,6 +89,11 @@ PP.VisualLine = class VisualLine {
     }
 
     refresh() {
+        this.update(0);
+    }
+
+    forceRefresh() {
+        this._myDirty = true;
         this.update(0);
     }
 

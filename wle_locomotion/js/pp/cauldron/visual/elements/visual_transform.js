@@ -44,17 +44,19 @@ PP.VisualTransform = class VisualTransform {
         this._myVisualUp.setAutoRefresh(false);
         this._myVisualForward.setAutoRefresh(false);
 
-        this._refresh();
-
         this.setVisible(true);
     }
 
-    setVisible(visible) {
+    setVisible(visible, avoidRefresh = false) {
         if (this._myVisible != visible) {
             this._myVisible = visible;
-            this._myVisualRight.setVisible(visible);
-            this._myVisualUp.setVisible(visible);
-            this._myVisualForward.setVisible(visible);
+            this._myVisualRight.setVisible(visible, true);
+            this._myVisualUp.setVisible(visible, true);
+            this._myVisualForward.setVisible(visible, true);
+
+            if (this._myVisible && !avoidRefresh) {
+                this.forceRefresh();
+            }
         }
     }
 
@@ -76,6 +78,11 @@ PP.VisualTransform = class VisualTransform {
     }
 
     refresh() {
+        this.update(0);
+    }
+
+    forceRefresh() {
+        this._myDirty = true;
         this.update(0);
     }
 
