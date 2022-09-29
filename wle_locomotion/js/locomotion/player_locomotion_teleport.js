@@ -48,6 +48,8 @@ PlayerLocomotionTeleportParams = class PlayerLocomotionTeleportParams {
 
         this.myTeleportParablePositionUpOffset = 0.05;
 
+        this.myTeleportParablePositionVisualAlignOnSurface = true;
+
         this.myDebugActive = false;
         this.myDebugDetectActive = false;
         this.myDebugShowActive = false;
@@ -72,6 +74,7 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport extends PlayerLocomoti
 
         this._myTeleportPositionValid = false;
         this._myTeleportPosition = PP.vec3_create();
+        this._myTeleportSurfaceNormal = PP.vec3_create();
         this._myTeleportRotationOnUp = 0;
 
         this._myGravitySpeed = 0;
@@ -362,11 +365,11 @@ PlayerLocomotionTeleport.prototype._setupVisuals = function () {
 
         this._myVisualTeleportPositionObject = PP.myVisualData.myRootObject.pp_addObject();
 
-        PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Teleport Torus Radius", 0.25, 0.1, 3));
+        PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Teleport Torus Radius", 0.175, 0.1, 3));
         PP.myEasyTuneVariables.add(new PP.EasyTuneInt("Teleport Torus Segments", 24, 1));
-        PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Teleport Torus Thickness", 0.025, 0.1, 3));
+        PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Teleport Torus Thickness", 0.02, 0.1, 3));
 
-        PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Teleport Torus Inner Radius", 0.06, 0.1, 3));
+        PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Teleport Torus Inner Radius", 0.04, 0.1, 3));
 
         {
             let visualParams = new PP.VisualTorusParams();
@@ -570,6 +573,8 @@ PlayerLocomotionTeleport.prototype._detectTeleportPositionParable = function () 
                 teleportCollisionRuntimeParams.reset();
                 this._myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRotationOnUp, teleportCollisionRuntimeParams);
 
+                this._myTeleportSurfaceNormal.vec3_copy(teleportCollisionRuntimeParams.myGroundNormal);
+
                 parableHitPosition.vec3_copy(hit.myPosition);
                 parableHitNormal.vec3_copy(hit.myNormal);
 
@@ -595,6 +600,8 @@ PlayerLocomotionTeleport.prototype._detectTeleportPositionParable = function () 
                         teleportCollisionRuntimeParams.reset();
                         this._myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRotationOnUp, teleportCollisionRuntimeParams);
 
+                        this._myTeleportSurfaceNormal.vec3_copy(teleportCollisionRuntimeParams.myGroundNormal);
+
                         if (!this._myTeleportPositionValid && teleportCollisionRuntimeParams.myTeleportCanceled && teleportCollisionRuntimeParams.myIsCollidingHorizontally) {
                             flatTeleportHorizontalHitNormal = teleportCollisionRuntimeParams.myHorizontalCollisionHit.myNormal.vec3_removeComponentAlongAxis(up, flatTeleportHorizontalHitNormal);
 
@@ -616,7 +623,11 @@ PlayerLocomotionTeleport.prototype._detectTeleportPositionParable = function () 
                                 if (raycastResult.isColliding()) {
                                     let hit = raycastResult.myHits.pp_first();
                                     this._myTeleportPosition.vec3_copy(hit.myPosition);
-                                    this._myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRotationOnUp);
+
+                                    teleportCollisionRuntimeParams.reset();
+                                    this._myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRotationOnUp, teleportCollisionRuntimeParams);
+
+                                    this._myTeleportSurfaceNormal.vec3_copy(teleportCollisionRuntimeParams.myGroundNormal);
                                 }
                             }
                         }
@@ -641,7 +652,11 @@ PlayerLocomotionTeleport.prototype._detectTeleportPositionParable = function () 
                                 if (raycastResult.isColliding()) {
                                     let hit = raycastResult.myHits.pp_first();
                                     this._myTeleportPosition.vec3_copy(hit.myPosition);
-                                    this._myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRotationOnUp);
+
+                                    teleportCollisionRuntimeParams.reset();
+                                    this._myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRotationOnUp, teleportCollisionRuntimeParams);
+
+                                    this._myTeleportSurfaceNormal.vec3_copy(teleportCollisionRuntimeParams.myGroundNormal);
                                 }
                             }
                         }
@@ -667,7 +682,11 @@ PlayerLocomotionTeleport.prototype._detectTeleportPositionParable = function () 
                                 if (raycastResult.isColliding()) {
                                     let hit = raycastResult.myHits.pp_first();
                                     this._myTeleportPosition.vec3_copy(hit.myPosition);
-                                    this._myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRotationOnUp);
+
+                                    teleportCollisionRuntimeParams.reset();
+                                    this._myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRotationOnUp, teleportCollisionRuntimeParams);
+
+                                    this._myTeleportSurfaceNormal.vec3_copy(teleportCollisionRuntimeParams.myGroundNormal);
                                 }
                             }
                         }
@@ -700,6 +719,8 @@ PlayerLocomotionTeleport.prototype._detectTeleportPositionParable = function () 
                 teleportCollisionRuntimeParams.reset();
                 this._myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRotationOnUp, teleportCollisionRuntimeParams);
 
+                this._myTeleportSurfaceNormal.vec3_copy(teleportCollisionRuntimeParams.myGroundNormal);
+
                 if (!this._myTeleportPositionValid && teleportCollisionRuntimeParams.myTeleportCanceled && teleportCollisionRuntimeParams.myIsCollidingHorizontally) {
                     flatTeleportHorizontalHitNormal = teleportCollisionRuntimeParams.myHorizontalCollisionHit.myNormal.vec3_removeComponentAlongAxis(up, flatTeleportHorizontalHitNormal);
 
@@ -721,7 +742,11 @@ PlayerLocomotionTeleport.prototype._detectTeleportPositionParable = function () 
                         if (raycastResult.isColliding()) {
                             let hit = raycastResult.myHits.pp_first();
                             this._myTeleportPosition.vec3_copy(hit.myPosition);
-                            this._myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRotationOnUp);
+
+                            teleportCollisionRuntimeParams.reset();
+                            this._myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRotationOnUp, teleportCollisionRuntimeParams);
+
+                            this._myTeleportSurfaceNormal.vec3_copy(teleportCollisionRuntimeParams.myGroundNormal);
                         }
                     }
                 }
@@ -747,7 +772,11 @@ PlayerLocomotionTeleport.prototype._detectTeleportPositionParable = function () 
                         if (raycastResult.isColliding()) {
                             let hit = raycastResult.myHits.pp_first();
                             this._myTeleportPosition.vec3_copy(hit.myPosition);
-                            this._myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRotationOnUp);
+
+                            teleportCollisionRuntimeParams.reset();
+                            this._myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRotationOnUp, teleportCollisionRuntimeParams);
+
+                            this._myTeleportSurfaceNormal.vec3_copy(teleportCollisionRuntimeParams.myGroundNormal);
                         }
                     }
                 }
@@ -860,7 +889,11 @@ PlayerLocomotionTeleport.prototype._showTeleportParablePosition = function () {
         visualPosition = this._myTeleportPosition.vec3_add(playerUp.vec3_scale(this._myParams.myTeleportParablePositionUpOffset, visualPosition), visualPosition);
 
         this._myVisualTeleportPositionObject.pp_setPosition(visualPosition);
-        this._myVisualTeleportPositionObject.pp_setUp(playerUp, visualForward);
+        if (this._myParams.myTeleportParablePositionVisualAlignOnSurface) {
+            this._myVisualTeleportPositionObject.pp_setUp(this._myTeleportSurfaceNormal, visualForward);
+        } else {
+            this._myVisualTeleportPositionObject.pp_setUp(playerUp, visualForward);
+        }
 
         {
             let visualParams = this._myValidVisualTeleportPositionTorus.getParams();
