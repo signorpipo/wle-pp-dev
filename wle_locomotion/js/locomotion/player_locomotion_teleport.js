@@ -63,6 +63,10 @@ PlayerLocomotionTeleportParams = class PlayerLocomotionTeleportParams {
         this.myVisualTeleportPositionMinAngleDistanceToLerp = 1;
         this.myVisualTeleportPositionMaxAngleDistanceToLerp = 180;
 
+        this.myStickIdleThreshold = 0.1;
+        this.myRotationOnUpMinStickIntensity = 0.5;
+        this.myRotationOnUpActive = true;
+
         this.myDebugActive = false;
         this.myDebugDetectActive = false;
         this.myDebugShowActive = false;
@@ -82,13 +86,12 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport extends PlayerLocomoti
 
         this._myTeleportDetectionValid = false;
         this._myStickIdleCharge = false;
-        this._myStickIdleThreshold = 0.1;
-        this._myRotationOnUpMinStickIntensity = 0.5;
 
         this._myTeleportPositionValid = false;
         this._myTeleportPosition = PP.vec3_create();
         this._myTeleportSurfaceNormal = PP.vec3_create();
         this._myTeleportRotationOnUp = 0;
+        this._myTeleportRotationOnUpNext = 0;
         this._myVisualTeleportTransformQuatReset = true;
         this._myVisualTeleportTransformQuat = PP.quat2_create();
         this._myVisualTeleportTransformPositionLerping = false;
@@ -200,6 +203,9 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport extends PlayerLocomoti
     }
 
     _detectStart(dt) {
+        this._myTeleportRotationOnUp = 0;
+        this._myTeleportRotationOnUpNext = 0;
+
         if (!this._mySessionActive) {
             this._myParable.setSpeed(this._myParams.myTeleportParableSpeed);
             this._myParable.setGravity(this._myParams.myTeleportParableGravity);
@@ -231,7 +237,7 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport extends PlayerLocomoti
         } else {
             let axes = PP.myLeftGamepad.getAxesInfo().getAxes();
 
-            if (axes.vec2_length() <= this._myStickIdleThreshold) {
+            if (axes.vec2_length() <= this._myParams.myStickIdleThreshold) {
                 this._myStickIdleCharge = true;
             }
 
@@ -253,7 +259,7 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport extends PlayerLocomoti
             }
         } else {
             let axes = PP.myLeftGamepad.getAxesInfo().getAxes();
-            if (axes.vec2_length() <= this._myStickIdleThreshold) {
+            if (axes.vec2_length() <= this._myParams.myStickIdleThreshold) {
                 confirmTeleport = true;
             }
         }
@@ -279,6 +285,7 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport extends PlayerLocomoti
             this._detectTeleportPositionVR();
         } else {
             this._myTeleportRotationOnUp = 0;
+            this._myTeleportRotationOnUpNext = 0;
             this._detectTeleportPositionNonVR();
         }
     }
@@ -825,9 +832,16 @@ PlayerLocomotionTeleport.prototype._detectTeleportRotationVR = function () {
     return function _detectTeleportRotationVR(dt) {
         let axes = PP.myLeftGamepad.getAxesInfo().getAxes();
 
-        if (axes.vec2_length() > this._myRotationOnUpMinStickIntensity) {
+        if (axes.vec2_length() > this._myParams.myRotationOnUpMinStickIntensity) {
+            this._myTeleportRotationOnUp = this._myTeleportRotationOnUpNext;
+
             axesVec3.vec3_set(axes[0], 0, axes[1]);
-            this._myTeleportRotationOnUp = axesVec3.vec3_angleSigned(axesForward, axesUp);
+            this._myTeleportRotationOnUpNext = axesVec3.vec3_angleSigned(axesForward, axesUp);
+        }
+
+        if (!this._myParams.myRotationOnUpActive) {
+            this._myTeleportRotationOnUp = 0;
+            this._myTeleportRotationOnUpNext = 0;
         }
     };
 }();
