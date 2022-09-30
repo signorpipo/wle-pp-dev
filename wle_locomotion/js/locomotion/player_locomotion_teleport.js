@@ -33,7 +33,9 @@ PlayerLocomotionTeleportParams = class PlayerLocomotionTeleportParams {
         this.myGravityAcceleration = 0;
 
         this.myForwardMinAngleToBeValidUp = 7.5;
+        this.myParableForwardMinAngleToBeValidUp = 30;
         this.myForwardMinAngleToBeValidDown = 7.5;
+        this.myParableForwardMinAngleToBeValidDown = 0;
         this.myTeleportReferenceExtraVerticalRotation = -30;
 
         this.myTeleportParableSpeed = 15;
@@ -516,7 +518,9 @@ PlayerLocomotionTeleport.prototype._detectTeleportPositionVR = function () {
         }
 
         if (handForward.vec3_angle(playerUp) >= this._myParams.myForwardMinAngleToBeValidUp &&
-            handForward.vec3_angle(playerUpNegate) >= this._myParams.myForwardMinAngleToBeValidDown
+            handForward.vec3_angle(playerUpNegate) >= this._myParams.myForwardMinAngleToBeValidDown &&
+            teleportDirection.vec3_angle(playerUp) >= this._myParams.myParableForwardMinAngleToBeValidUp &&
+            teleportDirection.vec3_angle(playerUpNegate) >= this._myParams.myParableForwardMinAngleToBeValidDown
         ) {
             this._myTeleportDetectionValid = true;
         }
