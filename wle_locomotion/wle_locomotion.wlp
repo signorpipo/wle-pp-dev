@@ -213,6 +213,24 @@
                         "_myBottomButton": "53",
                         "_myTopButton": "58"
                     }
+                },
+                {
+                    "type": "pp-gamepad-control-scheme",
+                    "pp-gamepad-control-scheme": {
+                        "_mySelect": "55",
+                        "_mySqueeze": "56",
+                        "_myThumbstick": "57",
+                        "_myBottomButton": "53",
+                        "_myTopButton": "58",
+                        "_mySelectText": "",
+                        "_myLineMaterial": "36",
+                        "_myThumbstickText": "Press Twice: Change Teleport/Smooth",
+                        "_myLineLengthMultiplier": 1.5,
+                        "_myTextMaterial": "786",
+                        "_myBottomButtonText": "Smooth: Fly Down",
+                        "_myTopButtonText": "Smooth: Fly Up",
+                        "_myStartVisible": false
+                    }
                 }
             ]
         },
@@ -245,6 +263,25 @@
                         "_myThumbstick": "65",
                         "_myBottomButton": "61",
                         "_myTopButton": "66"
+                    }
+                },
+                {
+                    "type": "pp-gamepad-control-scheme",
+                    "pp-gamepad-control-scheme": {
+                        "_mySelect": "63",
+                        "_mySqueeze": "64",
+                        "_myThumbstick": "65",
+                        "_myBottomButton": "61",
+                        "_myTopButton": "66",
+                        "_mySelectText": "",
+                        "_myLineMaterial": "36",
+                        "_myThumbstickText": "Snap Turn",
+                        "_myLineLengthMultiplier": 1.5,
+                        "_myTextMaterial": "786",
+                        "_myBottomButtonText": "",
+                        "_myTopButtonText": "",
+                        "_myStartVisible": false,
+                        "_myHandedness": "right"
                     }
                 }
             ],
@@ -12882,6 +12919,32 @@
                     0.0,
                     0.0,
                     0.0,
+                    1.0
+                ]
+            }
+        },
+        "786": {
+            "name": "Scheme Text",
+            "pipeline": "765",
+            "Phong": {
+                "ambientColor": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "diffuseColor": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ]
+            },
+            "Text": {
+                "color": [
+                    0.599384,
+                    0.4133794,
+                    0.8784313,
                     1.0
                 ]
             }
