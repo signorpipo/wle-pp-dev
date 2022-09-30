@@ -50,6 +50,19 @@ PlayerLocomotionTeleportParams = class PlayerLocomotionTeleportParams {
 
         this.myTeleportParablePositionVisualAlignOnSurface = true;
 
+        this.myVisualTeleportPositionLerpActive = true;
+        this.myVisualTeleportPositionLerpFactor = 10;
+        this.myVisualTeleportPositionMinDistanceToResetLerp = 0.005;
+        this.myVisualTeleportPositionMinDistanceToLerp = 0.15;
+        this.myVisualTeleportPositionMaxDistanceToLerp = 5;
+
+        this.myVisualTeleportPositionMinDistanceToCloseLerpFactor = 0.02;
+        this.myVisualTeleportPositionCloseLerpFactor = 30;
+
+        this.myVisualTeleportPositionMinAngleDistanceToResetLerp = 0.1;
+        this.myVisualTeleportPositionMinAngleDistanceToLerp = 1;
+        this.myVisualTeleportPositionMaxAngleDistanceToLerp = 180;
+
         this.myDebugActive = false;
         this.myDebugDetectActive = false;
         this.myDebugShowActive = false;
@@ -76,6 +89,10 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport extends PlayerLocomoti
         this._myTeleportPosition = PP.vec3_create();
         this._myTeleportSurfaceNormal = PP.vec3_create();
         this._myTeleportRotationOnUp = 0;
+        this._myVisualTeleportTransformQuatReset = true;
+        this._myVisualTeleportTransformQuat = PP.quat2_create();
+        this._myVisualTeleportTransformPositionLerping = false;
+        this._myVisualTeleportTransformRotationLerping = false;
 
         this._myGravitySpeed = 0;
 
@@ -117,6 +134,11 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport extends PlayerLocomoti
         PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Parable Gravity", this._myParams.myTeleportParableGravity, 10, 3));
         PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Parable Speed", this._myParams.myTeleportParableSpeed, 10, 3, 0));
         PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Teleport Max Distance", this._myParams.myMaxDistance, 10, 3, 0));
+
+        PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Teleport Min Distance Lerp", this._myParams.myVisualTeleportPositionMinDistanceToLerp, 1, 3, 0));
+        PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Teleport Max Distance Lerp", this._myParams.myVisualTeleportPositionMaxDistanceToLerp, 1, 3, 0));
+        PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Teleport Min Angle Distance Lerp", this._myParams.myVisualTeleportPositionMinAngleDistanceToLerp, 10, 3, 0));
+        PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Teleport Max Angle Distance Lerp", this._myParams.myVisualTeleportPositionMaxAngleDistanceToLerp, 10, 3, 0));
     }
 
     start() {
@@ -132,6 +154,11 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport extends PlayerLocomoti
     }
 
     update(dt) {
+        this._myParams.myVisualTeleportPositionMinDistanceToLerp = PP.myEasyTuneVariables.get("Teleport Min Distance Lerp");
+        this._myParams.myVisualTeleportPositionMaxDistanceToLerp = PP.myEasyTuneVariables.get("Teleport Max Distance Lerp");
+        this._myParams.myVisualTeleportPositionMinAngleDistanceToLerp = PP.myEasyTuneVariables.get("Teleport Min Angle Distance Lerp");
+        this._myParams.myVisualTeleportPositionMaxAngleDistanceToLerp = PP.myEasyTuneVariables.get("Teleport Max Angle Distance Lerp");
+
         this._myFSM.update(dt);
 
         if (this._myParams.myAdjustPositionEveryFrame || this._myParams.myGravityAcceleration != 0) {
@@ -155,6 +182,9 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport extends PlayerLocomoti
         if (this._myTeleportDetectionValid) {
             this._showTeleportPosition(dt);
         } else {
+            this._myVisualTeleportTransformQuatReset = true;
+            this._myVisualTeleportTransformPositionLerping = false;
+            this._myVisualTeleportTransformRotationLerping = false;
             this._hideTeleportPosition(dt);
         }
 
@@ -182,6 +212,9 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport extends PlayerLocomoti
     }
 
     _detectEnd(dt) {
+        this._myVisualTeleportTransformQuatReset = true;
+        this._myVisualTeleportTransformPositionLerping = false;
+        this._myVisualTeleportTransformRotationLerping = false;
         this._hideTeleportPosition(dt);
     }
 
@@ -250,10 +283,10 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport extends PlayerLocomoti
         }
     }
 
-    _showTeleportPosition() {
+    _showTeleportPosition(dt) {
         this._hideTeleportPosition();
 
-        this._showTeleportParable();
+        this._showTeleportParable(dt);
     }
 
     _hideTeleportPosition() {
@@ -866,7 +899,11 @@ PlayerLocomotionTeleport.prototype._showTeleportParable = function () {
 
             }
 
-            this._showTeleportParablePosition();
+            this._showTeleportParablePosition(dt);
+        } else {
+            this._myVisualTeleportTransformQuatReset = true;
+            this._myVisualTeleportTransformPositionLerping = false;
+            this._myVisualTeleportTransformRotationLerping = false;
         }
     };
 }();
@@ -878,8 +915,14 @@ PlayerLocomotionTeleport.prototype._showTeleportParablePosition = function () {
 
     let visualPosition = PP.vec3_create();
     let visualForward = PP.vec3_create();
+    let visualRotationQuat = PP.quat_create();
 
-    return function _showTeleportParablePosition() {
+    let currentVisualTeleportTransformQuat = PP.quat2_create();
+    let currentVisualTeleportPosition = PP.vec3_create();
+    let currentVisualTeleportRotationQuat = PP.quat_create();
+    let differenceRotationQuat = PP.quat_create();
+
+    return function _showTeleportParablePosition(dt) {
         playerUp = this._myParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
         feetTransformQuat = this._myParams.myPlayerHeadManager.getFeetTransformQuat(feetTransformQuat);
         feetRotationQuat = feetTransformQuat.quat2_getRotationQuat(feetRotationQuat);
@@ -888,11 +931,55 @@ PlayerLocomotionTeleport.prototype._showTeleportParablePosition = function () {
 
         visualPosition = this._myTeleportPosition.vec3_add(playerUp.vec3_scale(this._myParams.myTeleportParablePositionUpOffset, visualPosition), visualPosition);
 
-        this._myVisualTeleportPositionObject.pp_setPosition(visualPosition);
         if (this._myParams.myTeleportParablePositionVisualAlignOnSurface) {
-            this._myVisualTeleportPositionObject.pp_setUp(this._myTeleportSurfaceNormal, visualForward);
+            visualRotationQuat.quat_setUp(this._myTeleportSurfaceNormal, visualForward);
         } else {
-            this._myVisualTeleportPositionObject.pp_setUp(playerUp, visualForward);
+            visualRotationQuat.quat_setUp(playerUp, visualForward);
+        }
+
+        this._myVisualTeleportTransformQuat.quat2_setPositionRotationQuat(visualPosition, visualRotationQuat);
+
+        if (this._myVisualTeleportTransformQuatReset || !this._myParams.myVisualTeleportPositionLerpActive) {
+            this._myVisualTeleportPositionObject.pp_setTransformQuat(this._myVisualTeleportTransformQuat);
+            this._myVisualTeleportTransformQuatReset = false;
+        } else {
+            currentVisualTeleportTransformQuat = this._myVisualTeleportPositionObject.pp_getTransformQuat(currentVisualTeleportTransformQuat);
+            currentVisualTeleportPosition = currentVisualTeleportTransformQuat.quat2_getPosition(currentVisualTeleportPosition);
+            currentVisualTeleportRotationQuat = currentVisualTeleportTransformQuat.quat2_getRotationQuat(currentVisualTeleportRotationQuat);
+            currentVisualTeleportRotationQuat.quat_rotationToQuat(visualRotationQuat, differenceRotationQuat);
+
+            let positionDistance = currentVisualTeleportPosition.vec3_distance(visualPosition);
+            let rotationAngleDistance = differenceRotationQuat.quat_getAngle();
+
+            if ((!this._myVisualTeleportTransformPositionLerping || positionDistance < this._myParams.myVisualTeleportPositionMinDistanceToResetLerp) &&
+                (positionDistance < this._myParams.myVisualTeleportPositionMinDistanceToLerp ||
+                    positionDistance > this._myParams.myVisualTeleportPositionMaxDistanceToLerp)) {
+                this._myVisualTeleportTransformPositionLerping = false;
+                currentVisualTeleportPosition.vec3_copy(visualPosition);
+            } else {
+                this._myVisualTeleportTransformPositionLerping = true;
+
+                let interpolationValue = this._myParams.myVisualTeleportPositionLerpFactor * dt;
+                if (positionDistance < this._myParams.myVisualTeleportPositionMinDistanceToCloseLerpFactor) {
+                    interpolationValue = this._myParams.myVisualTeleportPositionCloseLerpFactor * dt;
+                }
+                currentVisualTeleportPosition.vec3_lerp(visualPosition, interpolationValue, currentVisualTeleportPosition);
+            }
+
+            if ((!this._myVisualTeleportTransformRotationLerping || rotationAngleDistance < this._myParams.myVisualTeleportPositionMinAngleDistanceToResetLerp) &&
+                (rotationAngleDistance < this._myParams.myVisualTeleportPositionMinAngleDistanceToLerp ||
+                    positionDistance > this._myParams.myVisualTeleportPositionMaxAngleDistanceToLerp)) {
+                this._myVisualTeleportTransformRotationLerping = false;
+                currentVisualTeleportRotationQuat.quat_copy(visualRotationQuat);
+            } else {
+                let interpolationValue = this._myParams.myVisualTeleportPositionLerpFactor * dt;
+
+                this._myVisualTeleportTransformRotationLerping = true;
+                currentVisualTeleportRotationQuat.quat_slerp(visualRotationQuat, interpolationValue, currentVisualTeleportRotationQuat);
+            }
+
+            currentVisualTeleportTransformQuat.quat2_setPositionRotationQuat(currentVisualTeleportPosition, currentVisualTeleportRotationQuat);
+            this._myVisualTeleportPositionObject.pp_setTransformQuat(currentVisualTeleportTransformQuat);
         }
 
         {
@@ -931,7 +1018,6 @@ PlayerLocomotionTeleport.prototype._isTeleportHitValid = function () {
             playerUp = this._myParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
 
             if (hit.myNormal.vec3_isConcordant(playerUp)) {
-
                 isValid = this._isTeleportPositionValid(hit.myPosition, rotationOnUp, checkTeleportCollisionRuntimeParams);
             }
         }

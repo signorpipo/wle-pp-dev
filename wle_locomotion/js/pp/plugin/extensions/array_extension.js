@@ -97,7 +97,8 @@
             - vec3_rotationTo       / vec3_rotationToPivoted
             - vec3_toRadians        / vec3_toDegrees            / vec3_toQuat       / vec3_toMatrix
             - vec3_addRotation
-            - vec3_log       / vec3_error         / vec3_warn     
+            - vec3_log       / vec3_error         / vec3_warn    
+            - vec3_lerp      / vec3_interpolate 
             
         VECTOR 4:
             ○ vec4_set      / vec4_copy
@@ -117,6 +118,7 @@
             ○ quat_fromRadians      / quat_fromDegrees      / quat_fromAxis / quat_fromAxes
             - quat_toRadians        / quat_toDegrees        / quat_toMatrix
             - quat_addRotation      / quat_subRotation
+            - quat_lerp             / quat_interpolate      / quat_slerp    / quat_sinterpolate
 
         QUAT 2:
             ○ quat2_copy        / quat2_identity
@@ -127,6 +129,7 @@
             - quat2_toWorld     / quat2_toLocal
             - quat2_toMatrix
             ○ quat2_fromMatrix
+            - quat2_lerp        / quat2_interpolate
 
         MATRIX 3:
             - mat3_toDegrees    / mat3_toRadians    / mat3_toQuat
@@ -1182,6 +1185,24 @@ Array.prototype.vec3_rotationToPivotedQuat = function () {
     };
 }();
 
+Array.prototype.vec3_lerp = function (to, interpolationValue, out = glMatrix.vec3.create()) {
+    if (interpolationValue <= 0) {
+        out.vec3_copy(this);
+        return out;
+    } else if (interpolationValue >= 1) {
+        out.vec3_copy(to);
+        return out;
+    }
+
+    glMatrix.vec3.lerp(out, this, to, interpolationValue);
+    return out;
+};
+
+Array.prototype.vec3_interpolate = function (to, interpolationValue, easingFunction = PP.EasingFunction.linear, out = glMatrix.vec3.create()) {
+    let lerpValue = easingFunction(interpolationValue);
+    return this.vec3_lerp(to, lerpValue, out);
+};
+
 // VECTOR 4
 
 // glMatrix Bridge
@@ -1574,6 +1595,43 @@ Array.prototype.quat_rotateAxisRadians = function () {
     };
 }();
 
+Array.prototype.quat_lerp = function (to, interpolationValue, out = glMatrix.quat.create()) {
+    if (interpolationValue <= 0) {
+        out.quat_copy(this);
+        return out;
+    } else if (interpolationValue >= 1) {
+        out.quat_copy(to);
+        return out;
+    }
+
+    glMatrix.quat.lerp(out, this, to, interpolationValue);
+    out.quat_normalize(out);
+    return out;
+};
+
+Array.prototype.quat_interpolate = function (to, interpolationValue, easingFunction = PP.EasingFunction.linear, out = glMatrix.quat.create()) {
+    let lerpValue = easingFunction(interpolationValue);
+    return this.quat_lerp(to, lerpValue, out);
+};
+
+Array.prototype.quat_slerp = function (to, interpolationValue, out = glMatrix.quat.create()) {
+    if (interpolationValue <= 0) {
+        out.quat_copy(this);
+        return out;
+    } else if (interpolationValue >= 1) {
+        out.quat_copy(to);
+        return out;
+    }
+
+    glMatrix.quat.slerp(out, this, to, interpolationValue);
+    return out;
+};
+
+Array.prototype.quat_sinterpolate = function (to, interpolationValue, easingFunction = PP.EasingFunction.linear, out = glMatrix.quat.create()) {
+    let lerpValue = easingFunction(interpolationValue);
+    return this.quat_slerp(to, lerpValue, out);
+};
+
 //QUAT 2
 
 // glMatrix Bridge
@@ -1737,6 +1795,25 @@ Array.prototype.quat2_toMatrix = function (out = glMatrix.mat4.create()) {
 Array.prototype.quat2_fromMatrix = function (transformMatrix) {
     transformMatrix.mat4_toQuat(this);
     return this;
+};
+
+Array.prototype.quat2_lerp = function (to, interpolationValue, out = glMatrix.quat2.create()) {
+    if (interpolationValue <= 0) {
+        out.quat2_copy(this);
+        return out;
+    } else if (interpolationValue >= 1) {
+        out.quat2_copy(to);
+        return out;
+    }
+
+    glMatrix.quat2.lerp(out, this, to, interpolationValue);
+    out.quat2_normalize(out);
+    return out;
+};
+
+Array.prototype.quat2_interpolate = function (to, interpolationValue, easingFunction = PP.EasingFunction.linear, out = glMatrix.quat2.create()) {
+    let lerpValue = easingFunction(interpolationValue);
+    return this.quat2_lerp(to, lerpValue, out);
 };
 
 //MATRIX 3
