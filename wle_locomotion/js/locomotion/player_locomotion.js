@@ -118,6 +118,7 @@ PlayerLocomotion = class PlayerLocomotion {
                 params.myMustBeOnGround = true;
 
                 params.myTeleportBlockLayerFlags.setAllFlagsActive(true);
+                params.myTeleportFloorLayerFlags.setAllFlagsActive(true);
 
                 params.myTeleportFeetPositionMustBeVisible = false;
                 params.myTeleportHeadPositionMustBeVisible = false;

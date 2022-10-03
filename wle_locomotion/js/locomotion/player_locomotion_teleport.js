@@ -10,6 +10,7 @@ PlayerLocomotionTeleportParams = class PlayerLocomotionTeleportParams {
         this.myMustBeOnGround = false;
 
         this.myTeleportBlockLayerFlags = new PP.PhysicsLayerFlags();
+        this.myTeleportFloorLayerFlags = new PP.PhysicsLayerFlags();
 
         this.myTeleportFeetPositionMustBeVisible = false;
         this.myTeleportHeadPositionMustBeVisible = false;
@@ -1028,17 +1029,48 @@ PlayerLocomotionTeleport.prototype._showTeleportParablePosition = function () {
 }();
 
 PlayerLocomotionTeleport.prototype._isTeleportHitValid = function () {
+    let raycastSetup = new PP.RaycastSetup();
+    let raycastResult = new PP.RaycastResult();
+
     let playerUp = PP.vec3_create();
     return function _isTeleportHitValid(hit, rotationOnUp, checkTeleportCollisionRuntimeParams) {
         let isValid = false;
 
+        let isTeleportPositionValid = this._isTeleportPositionValid(hit.myPosition, rotationOnUp, checkTeleportCollisionRuntimeParams);
+
+        let isHitValid = false;
         if (hit.isValid() && !hit.myIsInsideCollision) {
             playerUp = this._myParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
 
             if (hit.myNormal.vec3_isConcordant(playerUp)) {
-                isValid = this._isTeleportPositionValid(hit.myPosition, rotationOnUp, checkTeleportCollisionRuntimeParams);
+                isHitValid = true;
             }
         }
+
+        // #TODO when the flags on the physx will be available just check that the hit object physx has the floor flag
+        let isFloor = false;
+        {
+            raycastSetup.myObjectsToIgnore.pp_clear();
+            raycastSetup.myIgnoreHitsInsideCollision = true;
+            raycastSetup.myBlockLayerFlags.setMask(this._myParams.myTeleportFloorLayerFlags.getMask());
+
+            let distanceToCheck = 0.01;
+            raycastSetup.myOrigin = hit.myPosition.vec3_add(hit.myNormal.vec3_scale(distanceToCheck, raycastSetup.myOrigin), raycastSetup.myOrigin);
+            raycastSetup.myDirection = hit.myNormal.vec3_negate(raycastSetup.myDirection);
+            raycastSetup.myDistance = distanceToCheck * 1.25;
+            raycastSetup.myDirection.vec3_normalize(raycastSetup.myDirection);
+
+            raycastResult = PP.PhysicsUtils.raycast(raycastSetup, raycastResult);
+
+            if (raycastResult.isColliding()) {
+                let floorHit = raycastResult.myHits.pp_first();
+                if (floorHit.myObject.pp_equals(hit.myObject)) {
+                    isFloor = true;
+                }
+            }
+        }
+
+        isValid = isHitValid && isTeleportPositionValid && isFloor;
 
         return isValid;
     };
