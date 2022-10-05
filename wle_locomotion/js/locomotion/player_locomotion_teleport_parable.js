@@ -70,7 +70,7 @@ PlayerLocomotionTeleportParable.prototype.getPosition = function () {
         forwardPosition = this._myForward.vec3_scale(this._mySpeed * elapsedTime, forwardPosition);
         forwardPosition = forwardPosition.vec3_add(this._myStartPosition, forwardPosition);
 
-        upPosition = this._myUp.vec3_scale(this._myGravity * elapsedTime * elapsedTime / 2);
+        upPosition = this._myUp.vec3_scale(this._myGravity * elapsedTime * elapsedTime / 2, upPosition);
 
         outPosition = forwardPosition.vec3_add(upPosition, outPosition);
 

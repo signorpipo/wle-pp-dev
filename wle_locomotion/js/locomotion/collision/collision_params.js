@@ -332,7 +332,7 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.mySliding90DegreesSign = 0;
         this.mySlidingRecompute90DegreesSign = true;
         this.myLastValidIsSliding = false;
-        this.mySlidingPreviousHorizontalMovement = PP.vec3_create();
+        this.mySlidingPreviousHorizontalMovement.vec3_zero();
 
         this.myOriginalTeleportPosition.vec3_zero();
         this.myFixedTeleportPosition.vec3_zero();

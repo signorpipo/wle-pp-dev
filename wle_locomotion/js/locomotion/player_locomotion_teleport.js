@@ -653,7 +653,7 @@ PlayerLocomotionTeleport.prototype._detectTeleportPositionParable = function () 
                                 flatTeleportHorizontalHitNormal.vec3_normalize(flatTeleportHorizontalHitNormal);
 
                                 let backwardStep = this._myParams.myCollisionCheckParams.myRadius * 1.1;
-                                raycastSetup.myOrigin = verticalHitOrigin.vec3_add(flatTeleportHorizontalHitNormal.vec3_scale(backwardStep), raycastSetup.myOrigin);
+                                raycastSetup.myOrigin = verticalHitOrigin.vec3_add(flatTeleportHorizontalHitNormal.vec3_scale(backwardStep, raycastSetup.myOrigin), raycastSetup.myOrigin);
                                 raycastSetup.myDirection.vec3_copy(verticalHitDirection);
                                 raycastSetup.myDistance = bottomCheckMaxLength;
 
@@ -682,7 +682,7 @@ PlayerLocomotionTeleport.prototype._detectTeleportPositionParable = function () 
                                 flatParableHitNormal.vec3_normalize(flatParableHitNormal);
 
                                 let backwardStep = this._myParams.myCollisionCheckParams.myRadius * 1.1;
-                                raycastSetup.myOrigin = verticalHitOrigin.vec3_add(flatParableHitNormal.vec3_scale(backwardStep), raycastSetup.myOrigin);
+                                raycastSetup.myOrigin = verticalHitOrigin.vec3_add(flatParableHitNormal.vec3_scale(backwardStep, raycastSetup.myOrigin), raycastSetup.myOrigin);
                                 raycastSetup.myDirection.vec3_copy(verticalHitDirection);
                                 raycastSetup.myDistance = bottomCheckMaxLength;
 
@@ -712,7 +712,7 @@ PlayerLocomotionTeleport.prototype._detectTeleportPositionParable = function () 
                                 flatParableDirectionNegate.vec3_normalize(flatParableDirectionNegate);
 
                                 let backwardStep = this._myParams.myCollisionCheckParams.myRadius * 1.1;
-                                raycastSetup.myOrigin = verticalHitOrigin.vec3_add(flatParableDirectionNegate.vec3_scale(backwardStep), raycastSetup.myOrigin);
+                                raycastSetup.myOrigin = verticalHitOrigin.vec3_add(flatParableDirectionNegate.vec3_scale(backwardStep, raycastSetup.myOrigin), raycastSetup.myOrigin);
                                 raycastSetup.myDirection.vec3_copy(verticalHitDirection);
                                 raycastSetup.myDistance = bottomCheckMaxLength;
 
@@ -771,7 +771,7 @@ PlayerLocomotionTeleport.prototype._detectTeleportPositionParable = function () 
                         flatTeleportHorizontalHitNormal.vec3_normalize(flatTeleportHorizontalHitNormal);
 
                         let backwardStep = this._myParams.myCollisionCheckParams.myRadius * 1.1;
-                        raycastSetup.myOrigin = verticalHitOrigin.vec3_add(flatTeleportHorizontalHitNormal.vec3_scale(backwardStep), raycastSetup.myOrigin);
+                        raycastSetup.myOrigin = verticalHitOrigin.vec3_add(flatTeleportHorizontalHitNormal.vec3_scale(backwardStep, raycastSetup.myOrigin), raycastSetup.myOrigin);
                         raycastSetup.myDirection.vec3_copy(verticalHitDirection);
                         raycastSetup.myDistance = bottomCheckMaxLength;
 
@@ -801,7 +801,7 @@ PlayerLocomotionTeleport.prototype._detectTeleportPositionParable = function () 
                         flatParableDirectionNegate.vec3_normalize(flatParableDirectionNegate);
 
                         let backwardStep = this._myParams.myCollisionCheckParams.myRadius * 1.1;
-                        raycastSetup.myOrigin = verticalHitOrigin.vec3_add(flatParableDirectionNegate.vec3_scale(backwardStep), raycastSetup.myOrigin);
+                        raycastSetup.myOrigin = verticalHitOrigin.vec3_add(flatParableDirectionNegate.vec3_scale(backwardStep, raycastSetup.myOrigin), raycastSetup.myOrigin);
                         raycastSetup.myDirection.vec3_copy(verticalHitDirection);
                         raycastSetup.myDistance = bottomCheckMaxLength;
 
@@ -899,7 +899,7 @@ PlayerLocomotionTeleport.prototype._showTeleportParable = function () {
         if (this._myTeleportPositionValid) {
             playerUp = this._myParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
 
-            upDifference = nextPosition.vec3_sub(this._myTeleportPosition, upDifference).vec3_componentAlongAxis(playerUp);
+            upDifference = nextPosition.vec3_sub(this._myTeleportPosition, upDifference).vec3_componentAlongAxis(playerUp, upDifference);
             let upDistance = upDifference.vec3_length();
             if (upDistance >= this._myParams.myTeleportParableMinVerticalDistanceToShowVerticalLine) {
                 let lineLength = Math.min(upDistance - this._myParams.myTeleportParableMinVerticalDistanceToShowVerticalLine, this._myParams.myTeleportParableMinVerticalDistanceToShowVerticalLine);

@@ -73,6 +73,8 @@ PlayerLocomotionSmooth.prototype.update = function () {
     let directionOnUp = PP.vec3_create();
     let verticalMovement = PP.vec3_create();
     let feetTransformQuat = PP.quat2_create();
+
+    let directionReferenceTransformQuat = PP.quat2_create();
     return function update(dt) {
         playerUp = this._myParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
 
@@ -85,7 +87,7 @@ PlayerLocomotionSmooth.prototype.update = function () {
         if (!axes.vec2_isZero()) {
             this._myStickIdleTimer.start();
 
-            direction = this._myCurrentDirectionConverter.convert(axes, this._myDirectionReference.pp_getTransformQuat(), playerUp, direction);
+            direction = this._myCurrentDirectionConverter.convert(axes, this._myDirectionReference.pp_getTransformQuat(directionReferenceTransformQuat), playerUp, direction);
 
             if (!direction.vec3_isZero()) {
                 this._myRuntimeParams.myIsFlying = this._myRuntimeParams.myIsFlying || direction.vec3_componentAlongAxis(playerUp, directionOnUp).vec3_length() > 0.000001;

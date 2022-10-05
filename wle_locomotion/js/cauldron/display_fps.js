@@ -22,6 +22,8 @@ WL.registerComponent('display-fps', {
 
         this._myVisualFPS = new PP.VisualText(visualParams);
 
+        this._myTempQuat2 = PP.quat2_create();
+
         //PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Z", 0.35, 0.1, 3));
         //PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Y", -0.115, 0.1, 3));
         //PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("X", 0.115, 0.1, 3));
@@ -43,6 +45,6 @@ WL.registerComponent('display-fps', {
             this._myFrames = 0;
         }
 
-        this._myVisualFPSParent.pp_setTransformQuat(PP.myPlayerObjects.myHead.pp_getTransformQuat());
+        this._myVisualFPSParent.pp_setTransformQuat(PP.myPlayerObjects.myHead.pp_getTransformQuat(this._myTempQuat2));
     }
 });
