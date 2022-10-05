@@ -4,25 +4,8 @@ PlayerLocomotionTeleportParams = class PlayerLocomotionTeleportParams {
 
         this.myCollisionCheckParams = null;
 
-        this.myMaxDistance = 0;
-        this.myMaxHeightDifference = 0;
-        this.myGroundAngleToIgnoreUpward = 0;
-        this.myMustBeOnGround = false;
-
-        this.myTeleportBlockLayerFlags = new PP.PhysicsLayerFlags();
-        this.myTeleportFloorLayerFlags = new PP.PhysicsLayerFlags();
-
-        this.myTeleportFeetPositionMustBeVisible = false;
-        this.myTeleportHeadPositionMustBeVisible = false;
-        this.myTeleportHeadOrFeetPositionMustBeVisible = false; // wins over previous parameters
-
-        this.myVisibilityCheckRadius = 0.05;
-        this.myVisibilityCheckFeetPositionVerticalOffset = 0.1;
-        this.myVisibilityCheckDistanceFromHitThreshold = 0.1;
-        this.myVisibilityCheckCircumferenceSliceAmount = 6;
-        this.myVisibilityCheckCircumferenceStepAmount = 1;
-        this.myVisibilityCheckCircumferenceRotationPerStep = 30;
-        this.myVisibilityBlockLayerFlags = new PP.PhysicsLayerFlags();
+        this.myDetectionParams = new PlayerLocomotionTeleportDetectionParams();
+        this.myVisualizerParams = new PlayerLocomotionTeleportDetectionVisualizerParams();
 
         this.myPerformTeleportAsMovement = false;
         this.myTeleportAsMovementMaxDistanceFromTeleportPosition = 0.001;
@@ -30,45 +13,10 @@ PlayerLocomotionTeleportParams = class PlayerLocomotionTeleportParams {
         this.myTeleportAsMovementRemoveVerticalMovement = true;
         this.myTeleportAsMovementExtraVerticalMovementPerMeter = 1; // this simulate the gravity for the teleport movement
 
+        this.myStickIdleThreshold = 0.1;
+
         this.myAdjustPositionEveryFrame = true;
         this.myGravityAcceleration = 0;
-
-        this.myForwardMinAngleToBeValidUp = 7.5;
-        this.myParableForwardMinAngleToBeValidUp = 30;
-        this.myForwardMinAngleToBeValidDown = 7.5;
-        this.myParableForwardMinAngleToBeValidDown = 0;
-        this.myTeleportReferenceExtraVerticalRotation = -30;
-
-        this.myTeleportParableSpeed = 15;
-        this.myTeleportParableGravity = -30;
-        this.myTeleportParableStepLength = 0.25;
-
-        this.myTeleportParableValidMaterial = null;
-        this.myTeleportParableInvalidMaterial = null;
-
-        this.myTeleportParableLineEndOffset = 0.05;
-        this.myTeleportParableMinVerticalDistanceToShowVerticalLine = 0.25;
-
-        this.myTeleportParablePositionUpOffset = 0.05;
-
-        this.myTeleportParablePositionVisualAlignOnSurface = true;
-
-        this.myVisualTeleportPositionLerpActive = true;
-        this.myVisualTeleportPositionLerpFactor = 10;
-        this.myVisualTeleportPositionMinDistanceToResetLerp = 0.005;
-        this.myVisualTeleportPositionMinDistanceToLerp = 0.15;
-        this.myVisualTeleportPositionMaxDistanceToLerp = 5;
-
-        this.myVisualTeleportPositionMinDistanceToCloseLerpFactor = 0.02;
-        this.myVisualTeleportPositionCloseLerpFactor = 30;
-
-        this.myVisualTeleportPositionMinAngleDistanceToResetLerp = 0.1;
-        this.myVisualTeleportPositionMinAngleDistanceToLerp = 1;
-        this.myVisualTeleportPositionMaxAngleDistanceToLerp = 180;
-
-        this.myStickIdleThreshold = 0.1;
-        this.myRotationOnUpMinStickIntensity = 0.5;
-        this.myRotationOnUpActive = true;
 
         this.myDebugActive = false;
         this.myDebugDetectActive = false;

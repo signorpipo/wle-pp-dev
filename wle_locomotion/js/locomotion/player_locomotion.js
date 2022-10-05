@@ -112,19 +112,19 @@ PlayerLocomotion = class PlayerLocomotion {
 
                 params.myCollisionCheckParams = this._myCollisionCheckParamsTeleport;
 
-                params.myMaxDistance = 3;
-                params.myMaxHeightDifference = 4;
-                params.myGroundAngleToIgnoreUpward = this._myCollisionCheckParamsSmooth.myGroundAngleToIgnore;
-                params.myMustBeOnGround = true;
+                params.myDetectionParams.myMaxDistance = 3;
+                params.myDetectionParams.myMaxHeightDifference = 4;
+                params.myDetectionParams.myGroundAngleToIgnoreUpward = this._myCollisionCheckParamsSmooth.myGroundAngleToIgnore;
+                params.myDetectionParams.myMustBeOnGround = true;
 
-                params.myTeleportBlockLayerFlags.setAllFlagsActive(true);
-                params.myTeleportFloorLayerFlags.setAllFlagsActive(true);
+                params.myDetectionParams.myTeleportBlockLayerFlags.setAllFlagsActive(true);
+                params.myDetectionParams.myTeleportFloorLayerFlags.setAllFlagsActive(true);
 
-                params.myTeleportFeetPositionMustBeVisible = false;
-                params.myTeleportHeadPositionMustBeVisible = false;
-                params.myTeleportHeadOrFeetPositionMustBeVisible = true;
+                params.myDetectionParams.myTeleportFeetPositionMustBeVisible = false;
+                params.myDetectionParams.myTeleportHeadPositionMustBeVisible = false;
+                params.myDetectionParams.myTeleportHeadOrFeetPositionMustBeVisible = true;
 
-                params.myVisibilityBlockLayerFlags.setAllFlagsActive(true);
+                params.myDetectionParams.myVisibilityBlockLayerFlags.setAllFlagsActive(true);
 
                 params.myPerformTeleportAsMovement = false;
                 params.myTeleportAsMovementRemoveVerticalMovement = true;
