@@ -13461,7 +13461,8 @@
                 "js/pp/debug/elements",
                 "js/pp/cauldron/visual/elements",
                 "js/pp/cauldron/visual/components",
-                "js/pp/cauldron/visual"
+                "js/pp/cauldron/visual",
+                "js/locomotion/teleport"
             ],
             "useInternalBundler": false
         },

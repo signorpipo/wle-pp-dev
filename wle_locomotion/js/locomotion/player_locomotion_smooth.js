@@ -21,8 +21,8 @@ PlayerLocomotionSmoothParams = class PlayerLocomotionSmoothParams {
 };
 
 PlayerLocomotionSmooth = class PlayerLocomotionSmooth extends PlayerLocomotionMovement {
-    constructor(params, runtimeParams) {
-        super(runtimeParams);
+    constructor(params, locomotionRuntimeParams) {
+        super(locomotionRuntimeParams);
 
         this._myParams = params;
 
@@ -50,10 +50,8 @@ PlayerLocomotionSmooth = class PlayerLocomotionSmooth extends PlayerLocomotionMo
         this._myDirectionConverterVR = new PP.Direction2DTo3DConverter(directionConverterVRParams);
         this._myCurrentDirectionConverter = this._myDirectionConverterNonVR;
 
-        this._myRuntimeParams.myIsFlying = false;
-    }
+        this._myLocomotionRuntimeParams.myIsFlying = false;
 
-    init() {
         if (WL.xrSession) {
             this._onXRSessionStart(WL.xrSession);
         }
@@ -90,8 +88,8 @@ PlayerLocomotionSmooth.prototype.update = function () {
             direction = this._myCurrentDirectionConverter.convert(axes, this._myDirectionReference.pp_getTransformQuat(directionReferenceTransformQuat), playerUp, direction);
 
             if (!direction.vec3_isZero()) {
-                this._myRuntimeParams.myIsFlying = this._myRuntimeParams.myIsFlying || direction.vec3_componentAlongAxis(playerUp, directionOnUp).vec3_length() > 0.000001;
-                if (!this._myRuntimeParams.myIsFlying) {
+                this._myLocomotionRuntimeParams.myIsFlying = this._myLocomotionRuntimeParams.myIsFlying || direction.vec3_componentAlongAxis(playerUp, directionOnUp).vec3_length() > 0.000001;
+                if (!this._myLocomotionRuntimeParams.myIsFlying) {
                     direction = direction.vec3_removeComponentAlongAxis(playerUp, direction);
                 }
 
@@ -101,9 +99,9 @@ PlayerLocomotionSmooth.prototype.update = function () {
                 }
                 let speed = Math.pp_lerp(0, this._myParams.myMaxSpeed, movementIntensity);
 
-                if (this._myRuntimeParams.myCollisionRuntimeParams.myIsSliding) {
+                if (this._myLocomotionRuntimeParams.myCollisionRuntimeParams.myIsSliding) {
 
-                    //speed = Math.pp_lerp(speed * 0.05, speed, 1 - Math.abs(this._myRuntimeParams.myCollisionRuntimeParams.mySlidingMovementAngle) / 90);
+                    //speed = Math.pp_lerp(speed * 0.05, speed, 1 - Math.abs(this._myLocomotionRuntimeParams.myCollisionRuntimeParams.mySlidingMovementAngle) / 90);
                     //speed = speed * 0.1;
                     speed = speed / 2;
                 }
@@ -123,20 +121,20 @@ PlayerLocomotionSmooth.prototype.update = function () {
             if (PP.myLeftGamepad.getButtonInfo(PP.ButtonType.TOP_BUTTON).isPressed()) {
                 verticalMovement = playerUp.vec3_scale(this._myParams.myMaxSpeed * dt, verticalMovement);
                 headMovement = headMovement.vec3_add(verticalMovement, headMovement);
-                this._myRuntimeParams.myIsFlying = true;
+                this._myLocomotionRuntimeParams.myIsFlying = true;
             } else if (PP.myLeftGamepad.getButtonInfo(PP.ButtonType.BOTTOM_BUTTON).isPressed()) {
                 verticalMovement = playerUp.vec3_scale(-this._myParams.myMaxSpeed * dt, verticalMovement);
                 headMovement = headMovement.vec3_add(verticalMovement, headMovement);
-                this._myRuntimeParams.myIsFlying = true;
+                this._myLocomotionRuntimeParams.myIsFlying = true;
             }
         }
 
         if (PP.myLeftGamepad.getButtonInfo(PP.ButtonType.BOTTOM_BUTTON).isPressEnd(2)) {
-            this._myRuntimeParams.myIsFlying = false;
+            this._myLocomotionRuntimeParams.myIsFlying = false;
         }
 
         if (!PP.myLeftGamepad.getButtonInfo(PP.ButtonType.THUMBSTICK).isPressed()) {
-            if (!this._myRuntimeParams.myIsFlying) {
+            if (!this._myLocomotionRuntimeParams.myIsFlying) {
                 let gravity = -2;
                 verticalMovement = playerUp.vec3_scale(gravity * dt, verticalMovement);
                 headMovement = headMovement.vec3_add(verticalMovement, headMovement);
@@ -144,8 +142,8 @@ PlayerLocomotionSmooth.prototype.update = function () {
 
             feetTransformQuat = this._myParams.myPlayerHeadManager.getFeetTransformQuat(feetTransformQuat);
 
-            CollisionCheckGlobal.move(headMovement, feetTransformQuat, this._myParams.myCollisionCheckParams, this._myRuntimeParams.myCollisionRuntimeParams);
-            headMovement.vec3_copy(this._myRuntimeParams.myCollisionRuntimeParams.myFixedMovement);
+            CollisionCheckGlobal.move(headMovement, feetTransformQuat, this._myParams.myCollisionCheckParams, this._myLocomotionRuntimeParams.myCollisionRuntimeParams);
+            headMovement.vec3_copy(this._myLocomotionRuntimeParams.myCollisionRuntimeParams.myFixedMovement);
 
             if (PP.myLeftGamepad.getButtonInfo(PP.ButtonType.SQUEEZE).isPressed()) {
                 headMovement.vec3_zero();
@@ -156,8 +154,8 @@ PlayerLocomotionSmooth.prototype.update = function () {
             this._myParams.myPlayerHeadManager.moveHead(headMovement);
         }
 
-        if (this._myRuntimeParams.myCollisionRuntimeParams.myIsOnGround) {
-            this._myRuntimeParams.myIsFlying = false;
+        if (this._myLocomotionRuntimeParams.myCollisionRuntimeParams.myIsOnGround) {
+            this._myLocomotionRuntimeParams.myIsFlying = false;
             this._myCurrentDirectionConverter.resetFly();
         }
     };

@@ -152,9 +152,6 @@ PlayerLocomotion = class PlayerLocomotion {
         this._myPlayerHeadManager.start();
         this._myPlayerLocomotionRotate.start();
 
-        this._myPlayerLocomotionSmooth.init();
-        this._myPlayerLocomotionTeleport.init();
-
         this._myLocomotionMovementFSM.perform("start");
         this._myLocomotionMovementFSM.perform("next");
     }

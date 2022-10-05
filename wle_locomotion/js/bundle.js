@@ -201,10 +201,15 @@ require('./locomotion/player_head_manager');
 require('./locomotion/player_locomotion_rotate');
 require('./locomotion/player_locomotion_movement');
 require('./locomotion/player_locomotion_smooth');
-require('./locomotion/player_locomotion_teleport');
 require('./locomotion/player_locomotion');
 require('./locomotion/player_locomotion_component');
-require('./locomotion/player_locomotion_teleport_parable');
+
+require('./locomotion/teleport/player_locomotion_teleport_parable');
+require('./locomotion/teleport/player_locomotion_teleport_state');
+require('./locomotion/teleport/player_locomotion_teleport_detection_state');
+require('./locomotion/teleport/player_locomotion_teleport_teleport_state');
+require('./locomotion/teleport/player_locomotion_teleport');
+
 require('./locomotion/draft/locomotion_draft');
 require('./locomotion/draft/locomotion_draft_2');
 require('./locomotion/draft/locomotion_fly_draft');

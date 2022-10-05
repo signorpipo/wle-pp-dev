@@ -6,8 +6,8 @@ PlayerLocomotionMovementRuntimeParams = class PlayerLocomotionMovementRuntimePar
 };
 
 PlayerLocomotionMovement = class PlayerLocomotionMovement {
-    constructor(runtimeParams) {
-        this._myRuntimeParams = runtimeParams;
+    constructor(locomotionRuntimeParams) {
+        this._myLocomotionRuntimeParams = locomotionRuntimeParams;
     }
 
     start() {
