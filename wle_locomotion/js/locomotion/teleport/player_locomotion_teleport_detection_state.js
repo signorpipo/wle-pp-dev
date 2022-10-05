@@ -1,64 +1,51 @@
+PlayerLocomotionTeleportDetectionStateRuntimeParams = class PlayerLocomotionTeleportDetectionStateRuntimeParams {
+    constructor() {
+        this.myTeleportDetectionValid = false;
+        this.myTeleportPositionValid = false;
+        this.myTeleportSurfaceNormal = PP.vec3_create();
+
+        this.myParable = new PlayerLocomotionTeleportParable();
+    }
+};
+
 PlayerLocomotionTeleportDetectionState = class PlayerLocomotionTeleportDetectionState extends PlayerLocomotionTeleportState {
     constructor(teleportParams, teleportRuntimeParams, locomotionRuntimeParams) {
         super(teleportParams, teleportRuntimeParams, locomotionRuntimeParams);
 
-        this._myTeleportDetectionValid = false;
-        this._myStickIdleCharge = false;
+        this._myDetectionRuntimeParams = new PlayerLocomotionTeleportDetectionStateRuntimeParams();
 
-        this._myTeleportPositionValid = false;
-        this._myTeleportSurfaceNormal = PP.vec3_create();
+        this._myVisualizer = new PlayerLocomotionTeleportDetectionVisualizer(this._myTeleportParams, this._myTeleportRuntimeParams, this._myDetectionRuntimeParams);
+
         this._myTeleportRotationOnUpNext = 0;
-        this._myVisualTeleportTransformQuatReset = true;
-        this._myVisualTeleportTransformQuat = PP.quat2_create();
-        this._myVisualTeleportTransformPositionLerping = false;
-        this._myVisualTeleportTransformRotationLerping = false;
-
-        this._myParable = new PlayerLocomotionTeleportParable();
 
         PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Parable Steps", this._myTeleportParams.myTeleportParableStepLength, 1, 3, 0.01));
         PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Parable Gravity", this._myTeleportParams.myTeleportParableGravity, 10, 3));
         PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Parable Speed", this._myTeleportParams.myTeleportParableSpeed, 10, 3, 0));
         PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Teleport Max Distance", this._myTeleportParams.myMaxDistance, 10, 3, 0));
-
-        PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Teleport Min Distance Lerp", this._myTeleportParams.myVisualTeleportPositionMinDistanceToLerp, 1, 3, 0));
-        PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Teleport Max Distance Lerp", this._myTeleportParams.myVisualTeleportPositionMaxDistanceToLerp, 1, 3, 0));
-        PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Teleport Min Angle Distance Lerp", this._myTeleportParams.myVisualTeleportPositionMinAngleDistanceToLerp, 10, 3, 0));
-        PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Teleport Max Angle Distance Lerp", this._myTeleportParams.myVisualTeleportPositionMaxAngleDistanceToLerp, 10, 3, 0));
-
-        this._setupVisuals();
     }
 
     start() {
-        this._detectStart();
+        this._myTeleportRuntimeParams.myTeleportRotationOnUp = 0;
+        this._myTeleportRotationOnUpNext = 0;
+
+        this._myDetectionRuntimeParams.myParable.setSpeed(this._myTeleportParams.myTeleportParableSpeed);
+        this._myDetectionRuntimeParams.myParable.setGravity(this._myTeleportParams.myTeleportParableGravity);
+        this._myDetectionRuntimeParams.myParable.setStepLength(this._myTeleportParams.myTeleportParableStepLength);
+
+        this._myVisualizer.start();
     }
 
     end() {
-        this._detectEnd();
+        this._myVisualizer.end();
     }
 
     update(dt, fsm) {
-        this._myTeleportParams.myVisualTeleportPositionMinDistanceToLerp = PP.myEasyTuneVariables.get("Teleport Min Distance Lerp");
-        this._myTeleportParams.myVisualTeleportPositionMaxDistanceToLerp = PP.myEasyTuneVariables.get("Teleport Max Distance Lerp");
-        this._myTeleportParams.myVisualTeleportPositionMinAngleDistanceToLerp = PP.myEasyTuneVariables.get("Teleport Min Angle Distance Lerp");
-        this._myTeleportParams.myVisualTeleportPositionMaxAngleDistanceToLerp = PP.myEasyTuneVariables.get("Teleport Max Angle Distance Lerp");
-
-        this._detectUpdate(dt, fsm);
-    }
-
-    _detectUpdate(dt, fsm) {
         this._detectTeleportPosition();
 
-        if (this._myTeleportDetectionValid) {
-            this._showTeleportPosition(dt);
-        } else {
-            this._myVisualTeleportTransformQuatReset = true;
-            this._myVisualTeleportTransformPositionLerping = false;
-            this._myVisualTeleportTransformRotationLerping = false;
-            this._hideTeleportPosition(dt);
-        }
+        this._myVisualizer.update(dt);
 
         if (this._confirmTeleport()) {
-            if (this._myTeleportPositionValid) {
+            if (this._myDetectionRuntimeParams.myTeleportPositionValid) {
                 fsm.perform("teleport");
             } else {
                 fsm.perform("cancel");
@@ -66,22 +53,6 @@ PlayerLocomotionTeleportDetectionState = class PlayerLocomotionTeleportDetection
         } else if (this._cancelTeleport()) {
             fsm.perform("cancel");
         }
-    }
-
-    _detectStart() {
-        this._myTeleportRuntimeParams.myTeleportRotationOnUp = 0;
-        this._myTeleportRotationOnUpNext = 0;
-
-        this._myParable.setSpeed(this._myTeleportParams.myTeleportParableSpeed);
-        this._myParable.setGravity(this._myTeleportParams.myTeleportParableGravity);
-        this._myParable.setStepLength(this._myTeleportParams.myTeleportParableStepLength);
-    }
-
-    _detectEnd(dt) {
-        this._myVisualTeleportTransformQuatReset = true;
-        this._myVisualTeleportTransformPositionLerping = false;
-        this._myVisualTeleportTransformRotationLerping = false;
-        this._hideTeleportPosition(dt);
     }
 
     _confirmTeleport() {
@@ -123,160 +94,7 @@ PlayerLocomotionTeleportDetectionState = class PlayerLocomotionTeleportDetection
             this._detectTeleportPositionNonVR();
         }
     }
-
-    _showTeleportPosition(dt) {
-        this._hideTeleportPosition();
-
-        this._showTeleportParable(dt);
-    }
-
-    _hideTeleportPosition() {
-        for (let visualLine of this._myValidVisualLines) {
-            visualLine.setVisible(false);
-        }
-
-        for (let visualLine of this._myInvalidVisualLines) {
-            visualLine.setVisible(false);
-        }
-
-        this._myValidVisualPoint.setVisible(false);
-        this._myInvalidVisualPoint.setVisible(false);
-
-        this._myValidVisualVerticalLine.setVisible(false);
-
-        this._myValidVisualTeleportPositionTorus.setVisible(false);
-        this._myValidVisualTeleportPositionTorusInner.setVisible(false);
-    }
-
-    _addVisualLines(amount) {
-        for (let i = 0; i < amount; i++) {
-            {
-                let visualParams = new PP.VisualLineParams();
-
-                if (this._myTeleportParams.myTeleportParableValidMaterial != null) {
-                    visualParams.myMaterial = this._myTeleportParams.myTeleportParableValidMaterial;
-                } else {
-                    visualParams.myMaterial = this._myTeleportParableValidMaterial;
-                }
-
-                this._myValidVisualLines.push(new PP.VisualLine(visualParams));
-            }
-
-            {
-                let visualParams = new PP.VisualLineParams();
-
-                if (this._myTeleportParams.myTeleportParableValidMaterial != null) {
-                    visualParams.myMaterial = this._myTeleportParams.myTeleportParableInvalidMaterial;
-                } else {
-                    visualParams.myMaterial = this._myTeleportParableInvalidMaterial;
-                }
-
-                this._myInvalidVisualLines.push(new PP.VisualLine(visualParams));
-            }
-        }
-    }
 };
-
-PlayerLocomotionTeleportDetectionState.prototype._setupVisuals = function () {
-    let innerTorusPosition = PP.vec3_create();
-    return function _setupVisuals() {
-        this._myTeleportParableValidMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
-        this._myTeleportParableValidMaterial.color = [0, 0.5, 1, 1];
-        this._myTeleportParableInvalidMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
-        this._myTeleportParableInvalidMaterial.color = [0.75, 0.05, 0, 1];
-
-        this._myValidVisualLines = [];
-        this._myInvalidVisualLines = [];
-        this._addVisualLines(30);
-
-        {
-            let visualParams = new PP.VisualPointParams();
-
-            if (this._myTeleportParams.myTeleportParableValidMaterial != null) {
-                visualParams.myMaterial = this._myTeleportParams.myTeleportParableValidMaterial;
-            } else {
-                visualParams.myMaterial = this._myTeleportParableValidMaterial;
-            }
-
-            this._myValidVisualPoint = new PP.VisualPoint(visualParams);
-        }
-
-        {
-            let visualParams = new PP.VisualPointParams();
-
-            if (this._myTeleportParams.myTeleportParableInvalidMaterial != null) {
-                visualParams.myMaterial = this._myTeleportParams.myTeleportParableInvalidMaterial;
-            } else {
-                visualParams.myMaterial = this._myTeleportParableInvalidMaterial;
-            }
-
-            this._myInvalidVisualPoint = new PP.VisualPoint(visualParams);
-        }
-
-        {
-            let visualParams = new PP.VisualLineParams();
-
-            if (this._myTeleportParams.myTeleportParableValidMaterial != null) {
-                visualParams.myMaterial = this._myTeleportParams.myTeleportParableValidMaterial;
-            } else {
-                visualParams.myMaterial = this._myTeleportParableValidMaterial;
-            }
-
-            this._myValidVisualVerticalLine = new PP.VisualLine(visualParams);
-        }
-
-        this._myVisualTeleportPositionObject = PP.myVisualData.myRootObject.pp_addObject();
-
-        PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Teleport Torus Radius", 0.175, 0.1, 3));
-        PP.myEasyTuneVariables.add(new PP.EasyTuneInt("Teleport Torus Segments", 24, 1));
-        PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Teleport Torus Thickness", 0.02, 0.1, 3));
-
-        PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Teleport Torus Inner Radius", 0.04, 0.1, 3));
-
-        {
-            let visualParams = new PP.VisualTorusParams();
-            visualParams.myRadius = PP.myEasyTuneVariables.get("Teleport Torus Radius");
-            visualParams.mySegmentAmount = PP.myEasyTuneVariables.get("Teleport Torus Segments");
-            visualParams.mySegmentThickness = PP.myEasyTuneVariables.get("Teleport Torus Thickness");
-
-            if (this._myTeleportParams.myTeleportParableValidMaterial != null) {
-                visualParams.myMaterial = this._myTeleportParams.myTeleportParableValidMaterial;
-            } else {
-                visualParams.myMaterial = this._myTeleportParableValidMaterial;
-            }
-
-            visualParams.myParent = this._myVisualTeleportPositionObject;
-
-            this._myValidVisualTeleportPositionTorus = new PP.VisualTorus(visualParams);
-        }
-
-        {
-            let visualParams = new PP.VisualTorusParams();
-            visualParams.myRadius = PP.myEasyTuneVariables.get("Teleport Torus Inner Radius");
-            visualParams.mySegmentAmount = PP.myEasyTuneVariables.get("Teleport Torus Segments");
-            visualParams.mySegmentThickness = PP.myEasyTuneVariables.get("Teleport Torus Thickness");
-
-            if (this._myTeleportParams.myTeleportParableValidMaterial != null) {
-                visualParams.myMaterial = this._myTeleportParams.myTeleportParableValidMaterial;
-            } else {
-                visualParams.myMaterial = this._myTeleportParableValidMaterial;
-            }
-
-            visualParams.myParent = this._myVisualTeleportPositionObject;
-
-            let visualTorusParams = this._myValidVisualTeleportPositionTorus.getParams();
-
-            let innerTorusCenter = (visualTorusParams.myRadius - (visualTorusParams.mySegmentThickness / 2)) / 2;
-            innerTorusPosition.vec3_set(0, 0, innerTorusCenter);
-
-            visualParams.myTransform.mat4_setPosition(innerTorusPosition);
-
-            this._myValidVisualTeleportPositionTorusInner = new PP.VisualTorus(visualParams);
-        }
-
-        this._hideTeleportPosition();
-    };
-}();
 
 PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionNonVR = function () {
     let mousePosition = PP.vec3_create();
@@ -284,8 +102,8 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionNonVR = 
 
     let playerUp = PP.vec3_create();
     return function _detectTeleportPositionNonVR(dt) {
-        this._myTeleportPositionValid = false;
-        this._myTeleportDetectionValid = true;
+        this._myDetectionRuntimeParams.myTeleportPositionValid = false;
+        this._myDetectionRuntimeParams.myTeleportDetectionValid = true;
 
         playerUp = this._myTeleportParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
 
@@ -310,13 +128,13 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionVR = fun
     let extraRotationAxis = PP.vec3_create();
     let teleportDirection = PP.vec3_create();
     return function _detectTeleportPositionVR(dt) {
-        this._myParable.setSpeed(PP.myEasyTuneVariables.get("Parable Speed"));
-        this._myParable.setGravity(PP.myEasyTuneVariables.get("Parable Gravity"));
-        this._myParable.setStepLength(PP.myEasyTuneVariables.get("Parable Steps"));
+        this._myDetectionRuntimeParams.myParable.setSpeed(PP.myEasyTuneVariables.get("Parable Speed"));
+        this._myDetectionRuntimeParams.myParable.setGravity(PP.myEasyTuneVariables.get("Parable Gravity"));
+        this._myDetectionRuntimeParams.myParable.setStepLength(PP.myEasyTuneVariables.get("Parable Steps"));
         this._myTeleportParams.myMaxDistance = PP.myEasyTuneVariables.get("Teleport Max Distance");
 
-        this._myTeleportPositionValid = false;
-        this._myTeleportDetectionValid = false;
+        this._myDetectionRuntimeParams.myTeleportPositionValid = false;
+        this._myDetectionRuntimeParams.myTeleportDetectionValid = false;
 
         let referenceObject = PP.myPlayerObjects.myHandLeft;
         teleportStartPosition = referenceObject.pp_convertPositionObjectToWorld(leftHandOffsetPosition, teleportStartPosition);
@@ -342,10 +160,10 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionVR = fun
             teleportDirection.vec3_angle(playerUp) >= this._myTeleportParams.myParableForwardMinAngleToBeValidUp &&
             teleportDirection.vec3_angle(playerUpNegate) >= this._myTeleportParams.myParableForwardMinAngleToBeValidDown
         ) {
-            this._myTeleportDetectionValid = true;
+            this._myDetectionRuntimeParams.myTeleportDetectionValid = true;
         }
 
-        if (this._myTeleportDetectionValid) {
+        if (this._myDetectionRuntimeParams.myTeleportDetectionValid) {
             this._detectTeleportPositionParable(teleportStartPosition, teleportDirection, playerUp);
         }
     };
@@ -371,14 +189,14 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable 
 
     let teleportCollisionRuntimeParams = new CollisionRuntimeParams();
     return function _detectTeleportPositionParable(startPosition, direction, up) {
-        this._myParable.setStartPosition(startPosition);
-        this._myParable.setForward(direction);
-        this._myParable.setUp(up);
+        this._myDetectionRuntimeParams.myParable.setStartPosition(startPosition);
+        this._myDetectionRuntimeParams.myParable.setForward(direction);
+        this._myDetectionRuntimeParams.myParable.setUp(up);
 
         let currentPositionIndex = 1;
         let positionFlatDistance = 0;
         let positionParableDistance = 0;
-        prevParablePosition = this._myParable.getPosition(currentPositionIndex - 1, prevParablePosition);
+        prevParablePosition = this._myDetectionRuntimeParams.myParable.getPosition(currentPositionIndex - 1, prevParablePosition);
 
         raycastSetup.myObjectsToIgnore.pp_clear();
         raycastSetup.myIgnoreHitsInsideCollision = true;
@@ -387,7 +205,7 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable 
         let maxParableDistance = this._myTeleportParams.myMaxDistance * 2;
 
         do {
-            parablePosition = this._myParable.getPosition(currentPositionIndex, parablePosition);
+            parablePosition = this._myDetectionRuntimeParams.myParable.getPosition(currentPositionIndex, parablePosition);
 
             raycastSetup.myOrigin.vec3_copy(prevParablePosition);
             raycastSetup.myDirection = parablePosition.vec3_sub(prevParablePosition, raycastSetup.myDirection);
@@ -402,7 +220,7 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable 
 
             prevParablePosition.vec3_copy(parablePosition);
             positionFlatDistance = parablePosition.vec3_sub(startPosition, parablePosition).vec3_removeComponentAlongAxis(up, parablePosition).vec3_length();
-            positionParableDistance = this._myParable.getDistance(currentPositionIndex);
+            positionParableDistance = this._myDetectionRuntimeParams.myParable.getDistance(currentPositionIndex);
 
             currentPositionIndex++;
         } while (
@@ -410,14 +228,14 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable 
             positionParableDistance <= maxParableDistance &&
             !raycastResult.isColliding());
 
-        let maxParableDistanceOverFlatDistance = this._myParable.getDistanceOverFlatDistance(this._myTeleportParams.myMaxDistance, maxParableDistance);
+        let maxParableDistanceOverFlatDistance = this._myDetectionRuntimeParams.myParable.getDistanceOverFlatDistance(this._myTeleportParams.myMaxDistance, maxParableDistance);
 
         let fixedPositionParableDistance = positionParableDistance;
         if (positionParableDistance > maxParableDistanceOverFlatDistance || positionParableDistance > maxParableDistance) {
             fixedPositionParableDistance = Math.min(maxParableDistanceOverFlatDistance, maxParableDistance);
         }
 
-        this._myParableDistance = fixedPositionParableDistance;
+        this._myDetectionRuntimeParams.myParableDistance = fixedPositionParableDistance;
 
         let hitCollisionValid = false;
 
@@ -431,18 +249,18 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable 
             if (hitParableDistance <= fixedPositionParableDistance) {
                 hitCollisionValid = true;
 
-                this._myParableDistance = hitParableDistance;
+                this._myDetectionRuntimeParams.myParableDistance = hitParableDistance;
 
                 teleportCollisionRuntimeParams.reset();
-                this._myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRuntimeParams.myTeleportRotationOnUp, teleportCollisionRuntimeParams);
+                this._myDetectionRuntimeParams.myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRuntimeParams.myTeleportRotationOnUp, teleportCollisionRuntimeParams);
 
                 this._myTeleportRuntimeParams.myTeleportPosition.vec3_copy(teleportCollisionRuntimeParams.myNewPosition);
-                this._myTeleportSurfaceNormal.vec3_copy(teleportCollisionRuntimeParams.myGroundNormal);
+                this._myDetectionRuntimeParams.myTeleportSurfaceNormal.vec3_copy(teleportCollisionRuntimeParams.myGroundNormal);
 
                 parableHitPosition.vec3_copy(hit.myPosition);
                 parableHitNormal.vec3_copy(hit.myNormal);
 
-                if (!this._myTeleportPositionValid) {
+                if (!this._myDetectionRuntimeParams.myTeleportPositionValid) {
                     verticalHitOrigin = hit.myPosition.vec3_add(hit.myNormal.vec3_scale(0.01, verticalHitOrigin), verticalHitOrigin);
                     verticalHitDirection = up.vec3_negate(verticalHitDirection);
 
@@ -460,12 +278,12 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable 
                         let hit = raycastResult.myHits.pp_first();
 
                         teleportCollisionRuntimeParams.reset();
-                        this._myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRuntimeParams.myTeleportRotationOnUp, teleportCollisionRuntimeParams);
+                        this._myDetectionRuntimeParams.myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRuntimeParams.myTeleportRotationOnUp, teleportCollisionRuntimeParams);
 
                         this._myTeleportRuntimeParams.myTeleportPosition.vec3_copy(teleportCollisionRuntimeParams.myNewPosition);
-                        this._myTeleportSurfaceNormal.vec3_copy(teleportCollisionRuntimeParams.myGroundNormal);
+                        this._myDetectionRuntimeParams.myTeleportSurfaceNormal.vec3_copy(teleportCollisionRuntimeParams.myGroundNormal);
 
-                        if (!this._myTeleportPositionValid && teleportCollisionRuntimeParams.myTeleportCanceled && teleportCollisionRuntimeParams.myIsCollidingHorizontally) {
+                        if (!this._myDetectionRuntimeParams.myTeleportPositionValid && teleportCollisionRuntimeParams.myTeleportCanceled && teleportCollisionRuntimeParams.myIsCollidingHorizontally) {
                             flatTeleportHorizontalHitNormal = teleportCollisionRuntimeParams.myHorizontalCollisionHit.myNormal.vec3_removeComponentAlongAxis(up, flatTeleportHorizontalHitNormal);
 
                             if (!flatTeleportHorizontalHitNormal.vec3_isZero(0.00001)) {
@@ -487,15 +305,15 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable 
                                     let hit = raycastResult.myHits.pp_first();
 
                                     teleportCollisionRuntimeParams.reset();
-                                    this._myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRuntimeParams.myTeleportRotationOnUp, teleportCollisionRuntimeParams);
+                                    this._myDetectionRuntimeParams.myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRuntimeParams.myTeleportRotationOnUp, teleportCollisionRuntimeParams);
 
                                     this._myTeleportRuntimeParams.myTeleportPosition.vec3_copy(teleportCollisionRuntimeParams.myNewPosition);
-                                    this._myTeleportSurfaceNormal.vec3_copy(teleportCollisionRuntimeParams.myGroundNormal);
+                                    this._myDetectionRuntimeParams.myTeleportSurfaceNormal.vec3_copy(teleportCollisionRuntimeParams.myGroundNormal);
                                 }
                             }
                         }
 
-                        if (!this._myTeleportPositionValid) {
+                        if (!this._myDetectionRuntimeParams.myTeleportPositionValid) {
                             flatParableHitNormal = parableHitNormal.vec3_removeComponentAlongAxis(up, flatParableHitNormal);
                             if (!flatParableHitNormal.vec3_isZero(0.00001)) {
                                 flatParableHitNormal.vec3_normalize(flatParableHitNormal);
@@ -516,15 +334,15 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable 
                                     let hit = raycastResult.myHits.pp_first();
 
                                     teleportCollisionRuntimeParams.reset();
-                                    this._myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRuntimeParams.myTeleportRotationOnUp, teleportCollisionRuntimeParams);
+                                    this._myDetectionRuntimeParams.myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRuntimeParams.myTeleportRotationOnUp, teleportCollisionRuntimeParams);
 
                                     this._myTeleportRuntimeParams.myTeleportPosition.vec3_copy(teleportCollisionRuntimeParams.myNewPosition);
-                                    this._myTeleportSurfaceNormal.vec3_copy(teleportCollisionRuntimeParams.myGroundNormal);
+                                    this._myDetectionRuntimeParams.myTeleportSurfaceNormal.vec3_copy(teleportCollisionRuntimeParams.myGroundNormal);
                                 }
                             }
                         }
 
-                        if (!this._myTeleportPositionValid) {
+                        if (!this._myDetectionRuntimeParams.myTeleportPositionValid) {
                             flatParableDirectionNegate = direction.vec3_negate(flatParableDirectionNegate).vec3_removeComponentAlongAxis(up, flatParableDirectionNegate).vec3_normalize(flatParableDirectionNegate);
 
                             if (!flatParableDirectionNegate.vec3_isZero(0.00001)) {
@@ -546,10 +364,10 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable 
                                     let hit = raycastResult.myHits.pp_first();
 
                                     teleportCollisionRuntimeParams.reset();
-                                    this._myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRuntimeParams.myTeleportRotationOnUp, teleportCollisionRuntimeParams);
+                                    this._myDetectionRuntimeParams.myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRuntimeParams.myTeleportRotationOnUp, teleportCollisionRuntimeParams);
 
                                     this._myTeleportRuntimeParams.myTeleportPosition.vec3_copy(teleportCollisionRuntimeParams.myNewPosition);
-                                    this._myTeleportSurfaceNormal.vec3_copy(teleportCollisionRuntimeParams.myGroundNormal);
+                                    this._myDetectionRuntimeParams.myTeleportSurfaceNormal.vec3_copy(teleportCollisionRuntimeParams.myGroundNormal);
                                 }
                             }
                         }
@@ -559,7 +377,7 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable 
         }
 
         if (!hitCollisionValid) {
-            parableFinalPosition = this._myParable.getPositionByDistance(this._myParableDistance, parableFinalPosition);
+            parableFinalPosition = this._myDetectionRuntimeParams.myParable.getPositionByDistance(this._myDetectionRuntimeParams.myParableDistance, parableFinalPosition);
 
             verticalHitOrigin.vec3_copy(parableFinalPosition);
             verticalHitDirection = up.vec3_negate(verticalHitDirection);
@@ -578,12 +396,12 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable 
                 let hit = raycastResult.myHits.pp_first();
 
                 teleportCollisionRuntimeParams.reset();
-                this._myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRuntimeParams.myTeleportRotationOnUp, teleportCollisionRuntimeParams);
+                this._myDetectionRuntimeParams.myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRuntimeParams.myTeleportRotationOnUp, teleportCollisionRuntimeParams);
 
                 this._myTeleportRuntimeParams.myTeleportPosition.vec3_copy(teleportCollisionRuntimeParams.myNewPosition);
-                this._myTeleportSurfaceNormal.vec3_copy(teleportCollisionRuntimeParams.myGroundNormal);
+                this._myDetectionRuntimeParams.myTeleportSurfaceNormal.vec3_copy(teleportCollisionRuntimeParams.myGroundNormal);
 
-                if (!this._myTeleportPositionValid && teleportCollisionRuntimeParams.myTeleportCanceled && teleportCollisionRuntimeParams.myIsCollidingHorizontally) {
+                if (!this._myDetectionRuntimeParams.myTeleportPositionValid && teleportCollisionRuntimeParams.myTeleportCanceled && teleportCollisionRuntimeParams.myIsCollidingHorizontally) {
                     flatTeleportHorizontalHitNormal = teleportCollisionRuntimeParams.myHorizontalCollisionHit.myNormal.vec3_removeComponentAlongAxis(up, flatTeleportHorizontalHitNormal);
 
                     if (!flatTeleportHorizontalHitNormal.vec3_isZero(0.00001)) {
@@ -605,15 +423,15 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable 
                             let hit = raycastResult.myHits.pp_first();
 
                             teleportCollisionRuntimeParams.reset();
-                            this._myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRuntimeParams.myTeleportRotationOnUp, teleportCollisionRuntimeParams);
+                            this._myDetectionRuntimeParams.myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRuntimeParams.myTeleportRotationOnUp, teleportCollisionRuntimeParams);
 
                             this._myTeleportRuntimeParams.myTeleportPosition.vec3_copy(teleportCollisionRuntimeParams.myNewPosition);
-                            this._myTeleportSurfaceNormal.vec3_copy(teleportCollisionRuntimeParams.myGroundNormal);
+                            this._myDetectionRuntimeParams.myTeleportSurfaceNormal.vec3_copy(teleportCollisionRuntimeParams.myGroundNormal);
                         }
                     }
                 }
 
-                if (!this._myTeleportPositionValid) {
+                if (!this._myDetectionRuntimeParams.myTeleportPositionValid) {
                     flatParableDirectionNegate = direction.vec3_negate(flatParableDirectionNegate).vec3_removeComponentAlongAxis(up, flatParableDirectionNegate).vec3_normalize(flatParableDirectionNegate);
 
                     if (!flatParableDirectionNegate.vec3_isZero(0.00001)) {
@@ -635,10 +453,10 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable 
                             let hit = raycastResult.myHits.pp_first();
 
                             teleportCollisionRuntimeParams.reset();
-                            this._myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRuntimeParams.myTeleportRotationOnUp, teleportCollisionRuntimeParams);
+                            this._myDetectionRuntimeParams.myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRuntimeParams.myTeleportRotationOnUp, teleportCollisionRuntimeParams);
 
                             this._myTeleportRuntimeParams.myTeleportPosition.vec3_copy(teleportCollisionRuntimeParams.myNewPosition);
-                            this._myTeleportSurfaceNormal.vec3_copy(teleportCollisionRuntimeParams.myGroundNormal);
+                            this._myDetectionRuntimeParams.myTeleportSurfaceNormal.vec3_copy(teleportCollisionRuntimeParams.myGroundNormal);
                         }
                     }
                 }
@@ -664,183 +482,6 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportRotationVR = fun
         if (!this._myTeleportParams.myRotationOnUpActive) {
             this._myTeleportRuntimeParams.myTeleportRotationOnUp = 0;
             this._myTeleportRotationOnUpNext = 0;
-        }
-    };
-}();
-
-PlayerLocomotionTeleportDetectionState.prototype._showTeleportParable = function () {
-    let currentPosition = PP.vec3_create();
-    let nextPosition = PP.vec3_create();
-
-    let playerUp = PP.vec3_create();
-    let upDifference = PP.vec3_create();
-    return function _showTeleportParable(dt) {
-        let showParableDistance = Math.max(this._myParableDistance - this._myTeleportParams.myTeleportParableLineEndOffset);
-        let lastParableIndex = this._myParable.getPositionIndexByDistance(showParableDistance);
-        let lastParableIndexDistance = this._myParable.getDistance(lastParableIndex);
-
-        if (lastParableIndex + 1 > this._myValidVisualLines.length) {
-            this._addVisualLines(lastParableIndex + 1, this._myValidVisualLines.length);
-        }
-
-        for (let i = 0; i <= lastParableIndex; i++) {
-            currentPosition = this._myParable.getPosition(i, currentPosition);
-            nextPosition = this._myParable.getPosition(i + 1, nextPosition);
-
-            let visuaLine = (this._myTeleportPositionValid) ? this._myValidVisualLines[i] : this._myInvalidVisualLines[i];
-
-            let currentVisualLineParams = visuaLine.getParams();
-
-            if (i == lastParableIndex) {
-                let stepLength = Math.max(0, showParableDistance - lastParableIndexDistance);
-                nextPosition = nextPosition.vec3_sub(currentPosition, nextPosition).vec3_normalize(nextPosition);
-                nextPosition = currentPosition.vec3_add(nextPosition.vec3_scale(stepLength, nextPosition), nextPosition);
-            }
-
-            currentVisualLineParams.setStartEnd(currentPosition, nextPosition);
-            currentVisualLineParams.myThickness = 0.005;
-
-            visuaLine.paramsUpdated();
-            visuaLine.setVisible(true);
-
-            if (this._myTeleportParams.myDebugActive && this._myTeleportParams.myDebugShowActive) {
-                PP.myDebugVisualManager.drawPoint(0, currentPosition, [1, 0, 0, 1], 0.01);
-            }
-        }
-
-        let visualPoint = (this._myTeleportPositionValid) ? this._myValidVisualPoint : this._myInvalidVisualPoint;
-        let visualPointParams = visualPoint.getParams();
-        visualPointParams.myPosition.vec3_copy(nextPosition);
-        visualPointParams.myRadius = 0.01;
-        visualPoint.paramsUpdated();
-        visualPoint.setVisible(true);
-
-        if (this._myTeleportPositionValid) {
-            playerUp = this._myTeleportParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
-
-            upDifference = nextPosition.vec3_sub(this._myTeleportRuntimeParams.myTeleportPosition, upDifference).vec3_componentAlongAxis(playerUp, upDifference);
-            let upDistance = upDifference.vec3_length();
-            if (upDistance >= this._myTeleportParams.myTeleportParableMinVerticalDistanceToShowVerticalLine) {
-                let lineLength = Math.min(upDistance - this._myTeleportParams.myTeleportParableMinVerticalDistanceToShowVerticalLine, this._myTeleportParams.myTeleportParableMinVerticalDistanceToShowVerticalLine);
-
-                let visualLineParams = this._myValidVisualVerticalLine.getParams();
-
-                visualLineParams.myStart.vec3_copy(nextPosition);
-                visualLineParams.myDirection = playerUp.vec3_negate(visualLineParams.myDirection);
-                visualLineParams.myLength = lineLength;
-                visualLineParams.myThickness = 0.005;
-
-                this._myValidVisualVerticalLine.paramsUpdated();
-                this._myValidVisualVerticalLine.setVisible(true);
-
-            }
-
-            this._showTeleportParablePosition(dt);
-        } else {
-            this._myVisualTeleportTransformQuatReset = true;
-            this._myVisualTeleportTransformPositionLerping = false;
-            this._myVisualTeleportTransformRotationLerping = false;
-        }
-    };
-}();
-
-PlayerLocomotionTeleportDetectionState.prototype._showTeleportParablePosition = function () {
-    let playerUp = PP.vec3_create();
-    let feetTransformQuat = PP.quat2_create();
-    let feetRotationQuat = PP.quat_create();
-
-    let visualPosition = PP.vec3_create();
-    let visualForward = PP.vec3_create();
-    let visualRotationQuat = PP.quat_create();
-
-    let currentVisualTeleportTransformQuat = PP.quat2_create();
-    let currentVisualTeleportPosition = PP.vec3_create();
-    let currentVisualTeleportRotationQuat = PP.quat_create();
-    let differenceRotationQuat = PP.quat_create();
-
-    return function _showTeleportParablePosition(dt) {
-        playerUp = this._myTeleportParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
-        feetTransformQuat = this._myTeleportParams.myPlayerHeadManager.getFeetTransformQuat(feetTransformQuat);
-        feetRotationQuat = feetTransformQuat.quat2_getRotationQuat(feetRotationQuat);
-        feetRotationQuat = feetRotationQuat.quat_rotateAxis(this._myTeleportRuntimeParams.myTeleportRotationOnUp, playerUp, feetRotationQuat);
-        visualForward = feetRotationQuat.quat_getForward(visualForward);
-
-        visualPosition = this._myTeleportRuntimeParams.myTeleportPosition.vec3_add(playerUp.vec3_scale(this._myTeleportParams.myTeleportParablePositionUpOffset, visualPosition), visualPosition);
-
-        if (this._myTeleportParams.myTeleportParablePositionVisualAlignOnSurface) {
-            visualRotationQuat.quat_setUp(this._myTeleportSurfaceNormal, visualForward);
-        } else {
-            visualRotationQuat.quat_setUp(playerUp, visualForward);
-        }
-
-        this._myVisualTeleportTransformQuat.quat2_setPositionRotationQuat(visualPosition, visualRotationQuat);
-
-        if (this._myVisualTeleportTransformQuatReset || !this._myTeleportParams.myVisualTeleportPositionLerpActive) {
-            this._myVisualTeleportPositionObject.pp_setTransformQuat(this._myVisualTeleportTransformQuat);
-            this._myVisualTeleportTransformQuatReset = false;
-        } else {
-            currentVisualTeleportTransformQuat = this._myVisualTeleportPositionObject.pp_getTransformQuat(currentVisualTeleportTransformQuat);
-            currentVisualTeleportPosition = currentVisualTeleportTransformQuat.quat2_getPosition(currentVisualTeleportPosition);
-            currentVisualTeleportRotationQuat = currentVisualTeleportTransformQuat.quat2_getRotationQuat(currentVisualTeleportRotationQuat);
-            currentVisualTeleportRotationQuat.quat_rotationToQuat(visualRotationQuat, differenceRotationQuat);
-
-            let positionDistance = currentVisualTeleportPosition.vec3_distance(visualPosition);
-            let rotationAngleDistance = differenceRotationQuat.quat_getAngle();
-
-            if ((!this._myVisualTeleportTransformPositionLerping || positionDistance < this._myTeleportParams.myVisualTeleportPositionMinDistanceToResetLerp) &&
-                (positionDistance < this._myTeleportParams.myVisualTeleportPositionMinDistanceToLerp ||
-                    positionDistance > this._myTeleportParams.myVisualTeleportPositionMaxDistanceToLerp)) {
-                this._myVisualTeleportTransformPositionLerping = false;
-                currentVisualTeleportPosition.vec3_copy(visualPosition);
-            } else {
-                this._myVisualTeleportTransformPositionLerping = true;
-
-                let interpolationValue = this._myTeleportParams.myVisualTeleportPositionLerpFactor * dt;
-                if (positionDistance < this._myTeleportParams.myVisualTeleportPositionMinDistanceToCloseLerpFactor) {
-                    interpolationValue = this._myTeleportParams.myVisualTeleportPositionCloseLerpFactor * dt;
-                }
-                currentVisualTeleportPosition.vec3_lerp(visualPosition, interpolationValue, currentVisualTeleportPosition);
-            }
-
-            if ((!this._myVisualTeleportTransformRotationLerping || rotationAngleDistance < this._myTeleportParams.myVisualTeleportPositionMinAngleDistanceToResetLerp) &&
-                (rotationAngleDistance < this._myTeleportParams.myVisualTeleportPositionMinAngleDistanceToLerp ||
-                    positionDistance > this._myTeleportParams.myVisualTeleportPositionMaxAngleDistanceToLerp)) {
-                this._myVisualTeleportTransformRotationLerping = false;
-                currentVisualTeleportRotationQuat.quat_copy(visualRotationQuat);
-            } else {
-                let interpolationValue = this._myTeleportParams.myVisualTeleportPositionLerpFactor * dt;
-
-                this._myVisualTeleportTransformRotationLerping = true;
-                currentVisualTeleportRotationQuat.quat_slerp(visualRotationQuat, interpolationValue, currentVisualTeleportRotationQuat);
-            }
-
-            currentVisualTeleportTransformQuat.quat2_setPositionRotationQuat(currentVisualTeleportPosition, currentVisualTeleportRotationQuat);
-            this._myVisualTeleportPositionObject.pp_setTransformQuat(currentVisualTeleportTransformQuat);
-        }
-
-        {
-            let visualParams = this._myValidVisualTeleportPositionTorus.getParams();
-            visualParams.myRadius = PP.myEasyTuneVariables.get("Teleport Torus Radius");
-            visualParams.mySegmentAmount = PP.myEasyTuneVariables.get("Teleport Torus Segments");
-            visualParams.mySegmentThickness = PP.myEasyTuneVariables.get("Teleport Torus Thickness");
-
-            this._myValidVisualTeleportPositionTorus.paramsUpdated();
-        }
-
-        {
-            let visualParams = this._myValidVisualTeleportPositionTorusInner.getParams();
-            visualParams.myRadius = PP.myEasyTuneVariables.get("Teleport Torus Inner Radius");
-            visualParams.mySegmentAmount = PP.myEasyTuneVariables.get("Teleport Torus Segments");
-            visualParams.mySegmentThickness = PP.myEasyTuneVariables.get("Teleport Torus Thickness");
-
-            this._myValidVisualTeleportPositionTorusInner.paramsUpdated();
-        }
-
-        this._myValidVisualTeleportPositionTorus.setVisible(true);
-        this._myValidVisualTeleportPositionTorusInner.setVisible(true);
-
-        if (this._myTeleportParams.myDebugActive && this._myTeleportParams.myDebugShowActive) {
-            PP.myDebugVisualManager.drawPoint(0, this._myTeleportRuntimeParams.myTeleportPosition, [0, 0, 1, 1], 0.02);
         }
     };
 }();

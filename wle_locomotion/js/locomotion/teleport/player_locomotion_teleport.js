@@ -91,6 +91,7 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport extends PlayerLocomoti
         this._myTeleportParams = teleportParams;
         this._myTeleportRuntimeParams = new PlayerLocomotionTeleportRuntimeParams();
 
+        this._myStickIdleCharge = true;
         this._myGravitySpeed = 0;
 
         this._myDetectionState = new PlayerLocomotionTeleportDetectionState(this._myTeleportParams, this._myTeleportRuntimeParams, this._myLocomotionRuntimeParams);

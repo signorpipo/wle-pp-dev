@@ -4,17 +4,13 @@ PlayerLocomotionTeleportTeleportState = class PlayerLocomotionTeleportTeleportSt
     }
 
     update(dt, fsm) {
-        this._teleportUpdate(dt, fsm);
+        this._teleportToPosition(this._myTeleportRuntimeParams.myTeleportPosition, this._myTeleportRuntimeParams.myTeleportRotationOnUp, this._myLocomotionRuntimeParams.myCollisionRuntimeParams);
+
+        fsm.perform("done");
     }
 
     completeTeleport() {
         this._teleportToPosition(this._myTeleportRuntimeParams.myTeleportPosition, this._myTeleportRuntimeParams.myTeleportRotationOnUp, this._myLocomotionRuntimeParams.myCollisionRuntimeParams);
-    }
-
-    _teleportUpdate(dt, fsm) {
-        this._teleportToPosition(this._myTeleportRuntimeParams.myTeleportPosition, this._myTeleportRuntimeParams.myTeleportRotationOnUp, this._myLocomotionRuntimeParams.myCollisionRuntimeParams);
-
-        fsm.perform("done");
     }
 };
 
