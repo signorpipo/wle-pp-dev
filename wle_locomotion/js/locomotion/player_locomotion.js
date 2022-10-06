@@ -11,6 +11,7 @@ PlayerLocomotionParams = class PlayerLocomotionParams {
 
         this.myIsSnapTurn = false;
         this.mySnapTurnAngle = 0;
+        this.mySnapTurnSpeedDegrees = 0;
 
         this.myFlyEnabled = false;
         this.myMinAngleToFlyUpNonVR = 0;
@@ -70,6 +71,13 @@ PlayerLocomotion = class PlayerLocomotion {
             params.myMaxRotationSpeed = this._myParams.myMaxRotationSpeed;
             params.myIsSnapTurn = this._myParams.myIsSnapTurn;
             params.mySnapTurnAngle = this._myParams.mySnapTurnAngle;
+
+            if (this._myParams.mySnapTurnSpeedDegrees > LocomotionUtils.EPSILON_NUMBER) {
+                params.mySmoothSnapActive = true;
+                params.mySmoothSnapSpeedDegrees = this._myParams.mySnapTurnSpeedDegrees;
+            } else {
+                params.mySmoothSnapActive = false;
+            }
 
             params.myRotationMinStickIntensityThreshold = 0.1;
             params.mySnapTurnActivateThreshold = 0.5;

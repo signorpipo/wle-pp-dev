@@ -4,13 +4,15 @@ PlayerLocomotionRotateParams = class PlayerLocomotionRotateParams {
 
         this.myMaxRotationSpeed = 0;
         this.myIsSnapTurn = false;
-        this.mySnapTurnAngle = 0;
+
+        this.mySmoothSnapActive = true;
+        this.mySmoothSnapSpeedDegrees = 240;
 
         this.myRotationMinStickIntensityThreshold = 0;
         this.mySnapTurnActivateThreshold = 0;
         this.mySnapTurnResetThreshold = 0;
 
-        this.myClampVerticalAngle = false;
+        this.myClampVerticalAngle = true;
         this.myMaxVerticalAngle = 0;
 
         this.myHandedness = PP.Handedness.RIGHT;
@@ -21,14 +23,32 @@ PlayerLocomotionRotate = class PlayerLocomotionRotate {
     constructor(params) {
         this._myParams = params;
 
-        this._mySnapDone = false;
-        this._mySnapVerticalDone = false;
+        this._mySnapCharge = false;
+        this._mySnapVerticalCharge = false;
+
+        this._mySmoothSnapHorizontalRunning = false;
+        this._mySmoothSnapHorizontalAngleToPerform = 0;
+
+        this._mySmoothSnapVerticalRunning = false;
+        this._mySmoothSnapVerticalAngleToPerform = 0;
+
+        PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Teleport Smooth Speed", this._myParams.mySmoothSnapSpeedDegrees, 10, 3, 0));
     }
 
     start() {
     }
 
+    stop() {
+        this._mySmoothSnapHorizontalRunning = false;
+        this._mySmoothSnapHorizontalAngleToPerform = 0;
+
+        this._mySmoothSnapVerticalRunning = false;
+        this._mySmoothSnapVerticalAngleToPerform = 0;
+    }
+
     update(dt) {
+        this._myParams.mySmoothSnapSpeedDegrees = PP.myEasyTuneVariables.get("Teleport Smooth Speed");
+
         this._rotateHeadHorizontally(dt);
 
         if (this._myParams.myPlayerHeadManager.canRotateVertically()) {
@@ -44,33 +64,53 @@ PlayerLocomotionRotate.prototype._rotateHeadHorizontally = function () {
         playerUp = this._myParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
 
         headRotation.quat_identity();
-        {
-            let axes = PP.myGamepads[this._myParams.myHandedness].getAxesInfo().getAxes();
 
-            if (!this._myParams.myIsSnapTurn) {
-                if (Math.abs(axes[0]) > this._myParams.myRotationMinStickIntensityThreshold) {
-                    let rotationIntensity = -axes[0];
-                    let speed = Math.pp_lerp(0, this._myParams.myMaxRotationSpeed, Math.abs(rotationIntensity)) * Math.pp_sign(rotationIntensity);
+        let axes = PP.myGamepads[this._myParams.myHandedness].getAxesInfo().getAxes();
 
-                    headRotation.quat_fromAxis(speed * dt, playerUp);
+        if (!this._myParams.myIsSnapTurn) {
+            if (Math.abs(axes[0]) > this._myParams.myRotationMinStickIntensityThreshold) {
+                let rotationIntensity = -axes[0];
+                let speed = Math.pp_lerp(0, this._myParams.myMaxRotationSpeed, Math.abs(rotationIntensity)) * Math.pp_sign(rotationIntensity);
+
+                headRotation.quat_fromAxis(speed * dt, playerUp);
+            }
+        } else {
+            if (!this._mySnapCharge) {
+                if (Math.abs(axes[0]) < this._myParams.mySnapTurnResetThreshold) {
+                    this._mySnapCharge = true;
                 }
-            } else {
-                if (this._mySnapDone) {
-                    if (Math.abs(axes[0]) < this._myParams.mySnapTurnResetThreshold) {
-                        this._mySnapDone = false;
-                    }
-                } else {
-                    if (Math.abs(axes[0]) > this._myParams.mySnapTurnActivateThreshold) {
-                        let rotation = -Math.pp_sign(axes[0]) * this._myParams.mySnapTurnAngle;
-                        headRotation.quat_fromAxis(rotation, playerUp);
+            } else if (!this._mySmoothSnapHorizontalRunning) {
+                if (Math.abs(axes[0]) > this._myParams.mySnapTurnActivateThreshold) {
+                    let angleToRotate = -Math.pp_sign(axes[0]) * this._myParams.mySnapTurnAngle;
 
-                        this._mySnapDone = true;
+                    if (!this._myParams.mySmoothSnapActive) {
+                        headRotation.quat_fromAxis(angleToRotate, playerUp);
+                    } else {
+                        this._mySmoothSnapHorizontalRunning = true;
+                        this._mySmoothSnapHorizontalAngleToPerform = angleToRotate;
                     }
+
+                    this._mySnapCharge = false;
                 }
             }
         }
 
-        if (headRotation.quat_getAngle() > 0.00001) {
+        if (this._mySmoothSnapHorizontalRunning) {
+            let angleToRotate = Math.pp_sign(this._mySmoothSnapHorizontalAngleToPerform) * (this._myParams.mySmoothSnapSpeedDegrees * dt);
+            if (Math.abs(angleToRotate) > Math.abs(this._mySmoothSnapHorizontalAngleToPerform) - LocomotionUtils.EPSILON_NUMBER) {
+                angleToRotate = this._mySmoothSnapHorizontalAngleToPerform;
+            }
+
+            headRotation.quat_fromAxis(angleToRotate, playerUp);
+            this._mySmoothSnapHorizontalAngleToPerform -= angleToRotate;
+
+            if (Math.abs(this._mySmoothSnapHorizontalAngleToPerform) < LocomotionUtils.EPSILON_NUMBER) {
+                this._mySmoothSnapHorizontalRunning = false;
+                this._mySmoothSnapHorizontalAngleToPerform = 0;
+            }
+        }
+
+        if (headRotation.quat_getAngle() > LocomotionUtils.EPSILON_DEGREES) {
             this._myParams.myPlayerHeadManager.rotateHeadHorizontallyQuat(headRotation);
         }
     };
@@ -114,15 +154,53 @@ PlayerLocomotionRotate.prototype._rotateHeadVertically = function () {
                 angleToRotate = Math.pp_lerp(0, this._myParams.myMaxRotationSpeed, Math.abs(rotationIntensity)) * Math.pp_sign(rotationIntensity) * dt;
             }
         } else {
-            if (this._mySnapVerticalDone) {
+            if (!this._mySnapVerticalCharge) {
                 if (Math.abs(axes[1]) < this._myParams.mySnapTurnResetThreshold) {
-                    this._mySnapVerticalDone = false;
+                    this._mySnapVerticalCharge = true;
                 }
-            } else {
+            } else if (!this._mySmoothSnapVerticalRunning) {
                 if (Math.abs(axes[1]) > this._myParams.mySnapTurnActivateThreshold) {
                     angleToRotate = Math.pp_sign(axes[1]) * this._myParams.mySnapTurnAngle;
-                    this._mySnapVerticalDone = true;
+
+                    // adjust rotation to closest snap step
+
+                    let angleWithUp = Math.pp_angleClamp(headUp.vec3_angleSigned(referenceUp, referenceRight));
+                    let snapStep = Math.round(angleWithUp / this._myParams.mySnapTurnAngle);
+
+                    let snapAngle = Math.pp_angleClamp(snapStep * this._myParams.mySnapTurnAngle);
+                    let angleToAlign = -Math.pp_angleDistanceSigned(angleWithUp, snapAngle);
+
+                    if (Math.abs(angleToAlign) > 1) {
+                        if (Math.pp_sign(angleToRotate) == Math.pp_sign(angleToAlign)) {
+                            angleToRotate = angleToAlign;
+                        } else {
+                            angleToRotate = (-Math.pp_sign(angleToAlign) * this._myParams.mySnapTurnAngle) + angleToAlign;
+                        }
+                    } else if (Math.abs(angleToAlign) > LocomotionUtils.EPSILON_DEGREES) {
+                        angleToRotate += angleToAlign;
+                    }
+
+                    if (this._myParams.mySmoothSnapActive) {
+                        this._mySmoothSnapVerticalRunning = true;
+                        this._mySmoothSnapVerticalAngleToPerform = angleToRotate;
+                    }
+
+                    this._mySnapVerticalCharge = false;
                 }
+            }
+        }
+
+        if (this._mySmoothSnapVerticalRunning) {
+            angleToRotate = Math.pp_sign(this._mySmoothSnapVerticalAngleToPerform) * (this._myParams.mySmoothSnapSpeedDegrees * dt);
+            if (Math.abs(angleToRotate) > Math.abs(this._mySmoothSnapVerticalAngleToPerform) - LocomotionUtils.EPSILON_NUMBER) {
+                angleToRotate = this._mySmoothSnapVerticalAngleToPerform;
+            }
+
+            this._mySmoothSnapVerticalAngleToPerform -= angleToRotate;
+
+            if (Math.abs(this._mySmoothSnapVerticalAngleToPerform) < LocomotionUtils.EPSILON_NUMBER) {
+                this._mySmoothSnapVerticalRunning = false;
+                this._mySmoothSnapVerticalAngleToPerform = 0;
             }
         }
 
@@ -138,22 +216,6 @@ PlayerLocomotionRotate.prototype._rotateHeadVertically = function () {
                     let fixAngle = (Math.abs(angleWithUp) - maxVerticalAngle) * Math.pp_sign(angleWithUp);
                     headRotation.quat_fromAxis(fixAngle, referenceRight);
                     this._myParams.myPlayerHeadManager.rotateHeadVerticallyQuat(headRotation);
-                } else if (this._myIsSnapTurn) {
-                    // adjust snap to closes snap step
-                    let snapStep = Math.round(angleWithUp / this._mySnapTurnAngle);
-
-                    let previousAngleWithUp = Math.pp_angleClamp(headUp.vec3_angleSigned(referenceUp, referenceRight));
-                    if (Math.abs(Math.abs(previousAngleWithUp) - maxVerticalAngle) < 0.00001) {
-                        // if it was maxed go to the snap step right before the snap
-                        snapStep = Math.floor(Math.abs(previousAngleWithUp / this._mySnapTurnAngle)) * Math.pp_sign(previousAngleWithUp);
-                    }
-
-                    let snapAngle = snapStep * this._mySnapTurnAngle;
-                    let fixAngle = angleWithUp - snapAngle;
-                    if (Math.abs(fixAngle) > 0.00001) {
-                        headRotation.quat_fromAxis(fixAngle, referenceRight);
-                        this._myParams.myPlayerHeadManager.rotateHeadVerticallyQuat(headRotation);
-                    }
                 }
             }
         }

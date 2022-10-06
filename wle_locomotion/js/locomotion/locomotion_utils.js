@@ -1,6 +1,6 @@
 LocomotionUtils = {
     EPSILON_NUMBER: Math.PP_EPSILON_NUMBER,
-    EPSILON_ANGLE: Math.PP_EPSILON_ANGLE,
+    EPSILON_DEGREES: Math.PP_EPSILON_DEGREES,
 
     computeSurfacePerceivedAngle: function () {
         let forwardOnSurface = PP.vec3_create();
