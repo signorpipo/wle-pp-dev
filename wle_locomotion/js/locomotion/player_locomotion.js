@@ -112,6 +112,8 @@ PlayerLocomotion = class PlayerLocomotion {
 
                 params.myCollisionCheckParams = this._myCollisionCheckParamsTeleport;
 
+                params.myHandedness = PP.Handedness.LEFT;
+
                 params.myDetectionParams.myMaxDistance = 3;
                 params.myDetectionParams.myMaxHeightDifference = 4;
                 params.myDetectionParams.myGroundAngleToIgnoreUpward = this._myCollisionCheckParamsSmooth.myGroundAngleToIgnore;

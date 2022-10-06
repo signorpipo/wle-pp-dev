@@ -100,7 +100,7 @@ PlayerLocomotionTeleportDetectionState = class PlayerLocomotionTeleportDetection
                 confirmTeleport = PP.myMouse.isButtonPressEnd(PP.MouseButtonType.MIDDLE);
             }
         } else {
-            let axes = PP.myLeftGamepad.getAxesInfo().getAxes();
+            let axes = PP.myGamepads[this._myTeleportParams.myHandedness].getAxesInfo().getAxes();
             if (axes.vec2_length() <= this._myTeleportParams.myStickIdleThreshold) {
                 confirmTeleport = true;
             }
@@ -115,7 +115,7 @@ PlayerLocomotionTeleportDetectionState = class PlayerLocomotionTeleportDetection
         if (!PP.XRUtils.isXRSessionActive()) {
             cancelTeleport = PP.myMouse.isButtonPressEnd(PP.MouseButtonType.RIGHT) || !PP.myMouse.isInsideView();
         } else {
-            cancelTeleport = PP.myLeftGamepad.getButtonInfo(PP.ButtonType.THUMBSTICK).isPressed();
+            cancelTeleport = PP.myGamepads[this._myTeleportParams.myHandedness].getButtonInfo(PP.ButtonType.THUMBSTICK).isPressed();
         }
 
         return cancelTeleport;
@@ -154,6 +154,10 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionNonVR = 
 PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionVR = function () {
     let leftHandOffsetPosition = [0.01, -0.04, 0.08];
     let rightHandOffsetPosition = [-0.01, -0.04, 0.08];
+    let handOffsetList = [];
+    handOffsetList[PP.Handedness.LEFT] = leftHandOffsetPosition;
+    handOffsetList[PP.Handedness.RIGHT] = rightHandOffsetPosition;
+
     let teleportStartPosition = PP.vec3_create();
 
     let handForward = PP.vec3_create();
@@ -173,8 +177,8 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionVR = fun
         this._myDetectionRuntimeParams.myTeleportPositionValid = false;
         this._myDetectionRuntimeParams.myTeleportDetectionValid = false;
 
-        let referenceObject = PP.myPlayerObjects.myHandLeft;
-        teleportStartPosition = referenceObject.pp_convertPositionObjectToWorld(leftHandOffsetPosition, teleportStartPosition);
+        let referenceObject = PP.myPlayerObjects.myHands[this._myTeleportParams.myHandedness];
+        teleportStartPosition = referenceObject.pp_convertPositionObjectToWorld(handOffsetList[this._myTeleportParams.myHandedness], teleportStartPosition);
 
         handForward = referenceObject.pp_getForward(handForward);
         handRight = referenceObject.pp_getRight(handRight);
@@ -523,7 +527,7 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportRotationVR = fun
     let axesForward = PP.vec3_create(0, 0, 1);
     let axesUp = PP.vec3_create(0, 1, 0);
     return function _detectTeleportRotationVR(dt) {
-        let axes = PP.myLeftGamepad.getAxesInfo().getAxes();
+        let axes = PP.myGamepads[this._myTeleportParams.myHandedness].getAxesInfo().getAxes();
 
         if (axes.vec2_length() > this._myTeleportParams.myDetectionParams.myRotationOnUpMinStickIntensity) {
             this._myTeleportRuntimeParams.myTeleportRotationOnUp = this._myTeleportRotationOnUpNext;

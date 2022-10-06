@@ -7,6 +7,8 @@ PlayerLocomotionTeleportParams = class PlayerLocomotionTeleportParams {
         this.myDetectionParams = new PlayerLocomotionTeleportDetectionParams();
         this.myVisualizerParams = new PlayerLocomotionTeleportDetectionVisualizerParams();
 
+        this.myHandedness = PP.Handedness.LEFT;
+
         this.myPerformTeleportAsMovement = false;
         this.myTeleportAsMovementMaxDistanceFromTeleportPosition = 0.001;
         this.myTeleportAsMovementMaxSteps = 2;
@@ -104,7 +106,7 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport extends PlayerLocomoti
         if (!PP.XRUtils.isXRSessionActive()) {
             startDetecting = PP.myMouse.isButtonPressStart(PP.MouseButtonType.MIDDLE);
         } else {
-            let axes = PP.myLeftGamepad.getAxesInfo().getAxes();
+            let axes = PP.myGamepads[this._myTeleportParams.myHandedness].getAxesInfo().getAxes();
 
             if (axes.vec2_length() <= this._myTeleportParams.myStickIdleThreshold) {
                 this._myStickIdleCharge = true;
