@@ -1,8 +1,7 @@
 PlayerLocomotionDirectionReferenceType = {
     HEAD: 0,
-    HAND_LEFT: 1,
-    HAND_RIGHT: 2,
-    CUSTOM_OBJECT: 3,
+    HAND: 1,
+    CUSTOM_OBJECT: 2,
 };
 
 PlayerLocomotionParams = class PlayerLocomotionParams {
@@ -19,6 +18,8 @@ PlayerLocomotionParams = class PlayerLocomotionParams {
         this.myMinAngleToFlyUpVR = 0;
         this.myMinAngleToFlyDownVR = 0;
         this.myMinAngleToFlyRight = 0;
+
+        this.myMainHand = PP.Handedness.LEFT;
 
         this.myVRDirectionReferenceType = PlayerLocomotionDirectionReferenceType.HEAD;
         this.myVRDirectionReferenceObject = null;
@@ -78,6 +79,8 @@ PlayerLocomotion = class PlayerLocomotion {
             params.myMaxVerticalAngle = 90;
 
             this._myPlayerLocomotionRotate = new PlayerLocomotionRotate(params);
+
+            params.myHandedness = PP.InputUtils.getOppositeHandedness(this._myParams.myMainHand);
         }
 
         {
@@ -87,6 +90,8 @@ PlayerLocomotion = class PlayerLocomotion {
                 params.myPlayerHeadManager = this._myPlayerHeadManager;
 
                 params.myCollisionCheckParams = this._myCollisionCheckParamsSmooth;
+
+                params.myHandedness = this._myParams.myMainHand;
 
                 params.myMaxSpeed = this._myParams.myMaxSpeed;
 
@@ -112,7 +117,7 @@ PlayerLocomotion = class PlayerLocomotion {
 
                 params.myCollisionCheckParams = this._myCollisionCheckParamsTeleport;
 
-                params.myHandedness = PP.Handedness.LEFT;
+                params.myHandedness = this._myParams.myMainHand;
 
                 params.myDetectionParams.myMaxDistance = 3;
                 params.myDetectionParams.myMaxHeightDifference = 4;

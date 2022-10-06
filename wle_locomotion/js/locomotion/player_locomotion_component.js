@@ -9,7 +9,8 @@ WL.registerComponent('player-locomotion', {
     _myMinAngleToFlyUpVR: { type: WL.Type.Float, default: 60 },
     _myMinAngleToFlyDownVR: { type: WL.Type.Float, default: 1 },
     _myMinAngleToFlyRight: { type: WL.Type.Float, default: 30 },
-    _myVRDirectionReferenceType: { type: WL.Type.Enum, values: ['head', 'hand left', 'hand right', 'custom object'], default: 'hand left' },
+    _myMainHand: { type: WL.Type.Enum, values: ['left', 'right'], default: 'left' },
+    _myVRDirectionReferenceType: { type: WL.Type.Enum, values: ['head', 'hand', 'custom object'], default: 'hand' },
     _myVRDirectionReferenceObject: { type: WL.Type.Object }
 }, {
     init() {
@@ -29,6 +30,8 @@ WL.registerComponent('player-locomotion', {
         params.myMinAngleToFlyUpVR = this._myMinAngleToFlyUpVR;
         params.myMinAngleToFlyDownVR = this._myMinAngleToFlyDownVR;
         params.myMinAngleToFlyRight = this._myMinAngleToFlyRight;
+
+        params.myMainHand = PP.InputUtils.getHandednessByIndex(this._myMainHand);
 
         params.myVRDirectionReferenceType = this._myVRDirectionReferenceType;
         params.myVRDirectionReferenceObject = this._myVRDirectionReferenceObject;

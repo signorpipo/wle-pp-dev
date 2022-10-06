@@ -43,5 +43,19 @@ PP.InputUtils = {
         }
 
         return inputSourceType;
-    }
+    },
+    getOppositeHandedness: function (handedness) {
+        let oppositeHandedness = null;
+
+        switch (handedness) {
+            case PP.Handedness.LEFT:
+                oppositeHandedness = PP.Handedness.RIGHT;
+                break;
+            case PP.Handedness.RIGHT:
+                oppositeHandedness = PP.Handedness.LEFT;
+                break;
+        }
+
+        return oppositeHandedness;
+    },
 };

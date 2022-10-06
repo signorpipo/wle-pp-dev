@@ -17,6 +17,8 @@ PlayerLocomotionSmoothParams = class PlayerLocomotionSmoothParams {
 
         this.myVRDirectionReferenceType = PlayerLocomotionDirectionReferenceType.HEAD;
         this.myVRDirectionReferenceObject = null;
+
+        this.myHandedness = PP.Handedness.LEFT;
     }
 };
 
@@ -78,7 +80,7 @@ PlayerLocomotionSmooth.prototype.update = function () {
 
         headMovement.vec3_zero();
 
-        let axes = PP.myLeftGamepad.getAxesInfo().getAxes();
+        let axes = PP.myGamepads[this._myParams.myHandedness].getAxesInfo().getAxes();
         axes[0] = Math.abs(axes[0]) > this._myParams.myMovementMinStickIntensityThreshold ? axes[0] : 0;
         axes[1] = Math.abs(axes[1]) > this._myParams.myMovementMinStickIntensityThreshold ? axes[1] : 0;
 
@@ -94,7 +96,7 @@ PlayerLocomotionSmooth.prototype.update = function () {
                 }
 
                 let movementIntensity = axes.vec2_length();
-                if (PP.myLeftGamepad.getButtonInfo(PP.ButtonType.SELECT).isPressed()) {
+                if (PP.myGamepads[this._myParams.myHandedness].getButtonInfo(PP.ButtonType.SELECT).isPressed()) {
                     movementIntensity = 0.1;
                 }
                 let speed = Math.pp_lerp(0, this._myParams.myMaxSpeed, movementIntensity);
@@ -117,23 +119,23 @@ PlayerLocomotionSmooth.prototype.update = function () {
             }
         }
 
-        if (!PP.myLeftGamepad.getButtonInfo(PP.ButtonType.SQUEEZE).isPressed()) {
-            if (PP.myLeftGamepad.getButtonInfo(PP.ButtonType.TOP_BUTTON).isPressed()) {
+        if (!PP.myGamepads[this._myParams.myHandedness].getButtonInfo(PP.ButtonType.SQUEEZE).isPressed()) {
+            if (PP.myGamepads[this._myParams.myHandedness].getButtonInfo(PP.ButtonType.TOP_BUTTON).isPressed()) {
                 verticalMovement = playerUp.vec3_scale(this._myParams.myMaxSpeed * dt, verticalMovement);
                 headMovement = headMovement.vec3_add(verticalMovement, headMovement);
                 this._myLocomotionRuntimeParams.myIsFlying = true;
-            } else if (PP.myLeftGamepad.getButtonInfo(PP.ButtonType.BOTTOM_BUTTON).isPressed()) {
+            } else if (PP.myGamepads[this._myParams.myHandedness].getButtonInfo(PP.ButtonType.BOTTOM_BUTTON).isPressed()) {
                 verticalMovement = playerUp.vec3_scale(-this._myParams.myMaxSpeed * dt, verticalMovement);
                 headMovement = headMovement.vec3_add(verticalMovement, headMovement);
                 this._myLocomotionRuntimeParams.myIsFlying = true;
             }
         }
 
-        if (PP.myLeftGamepad.getButtonInfo(PP.ButtonType.BOTTOM_BUTTON).isPressEnd(2)) {
+        if (PP.myGamepads[this._myParams.myHandedness].getButtonInfo(PP.ButtonType.BOTTOM_BUTTON).isPressEnd(2)) {
             this._myLocomotionRuntimeParams.myIsFlying = false;
         }
 
-        if (!PP.myLeftGamepad.getButtonInfo(PP.ButtonType.THUMBSTICK).isPressed()) {
+        if (!PP.myGamepads[this._myParams.myHandedness].getButtonInfo(PP.ButtonType.THUMBSTICK).isPressed()) {
             if (!this._myLocomotionRuntimeParams.myIsFlying) {
                 let gravity = -2;
                 verticalMovement = playerUp.vec3_scale(gravity * dt, verticalMovement);
@@ -145,7 +147,7 @@ PlayerLocomotionSmooth.prototype.update = function () {
             CollisionCheckGlobal.move(headMovement, feetTransformQuat, this._myParams.myCollisionCheckParams, this._myLocomotionRuntimeParams.myCollisionRuntimeParams);
             headMovement.vec3_copy(this._myLocomotionRuntimeParams.myCollisionRuntimeParams.myFixedMovement);
 
-            if (PP.myLeftGamepad.getButtonInfo(PP.ButtonType.SQUEEZE).isPressed()) {
+            if (PP.myGamepads[this._myParams.myHandedness].getButtonInfo(PP.ButtonType.SQUEEZE).isPressed()) {
                 headMovement.vec3_zero();
             }
         }
@@ -168,12 +170,9 @@ PlayerLocomotionSmooth.prototype._onXRSessionStart = function () {
                 this._myDirectionReference = PP.myPlayerHeadManager.myHead;
                 break;
             case 1:
-                this._myDirectionReference = PP.myPlayerObjects.myHandLeft;
+                this._myDirectionReference = PP.myPlayerObjects.myHands[this._myParams.myHandedness];
                 break;
             case 2:
-                this._myDirectionReference = PP.myPlayerObjects.myHandRight;
-                break;
-            case 3:
                 this._myDirectionReference = this._myParams.myVRDirectionReferenceObject;
                 break;
         }

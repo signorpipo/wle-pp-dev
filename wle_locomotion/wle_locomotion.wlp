@@ -85,7 +85,8 @@
                     "type": "player-locomotion",
                     "player-locomotion": {
                         "_myIsSnapTurn": true,
-                        "_myFlyEnabled": false
+                        "_myFlyEnabled": false,
+                        "_myMainHand": "left"
                     },
                     "active": true
                 }

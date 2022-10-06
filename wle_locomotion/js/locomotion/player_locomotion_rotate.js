@@ -12,6 +12,8 @@ PlayerLocomotionRotateParams = class PlayerLocomotionRotateParams {
 
         this.myClampVerticalAngle = false;
         this.myMaxVerticalAngle = 0;
+
+        this.myHandedness = PP.Handedness.RIGHT;
     }
 };
 
@@ -43,7 +45,7 @@ PlayerLocomotionRotate.prototype._rotateHeadHorizontally = function () {
 
         headRotation.quat_identity();
         {
-            let axes = PP.myRightGamepad.getAxesInfo().getAxes();
+            let axes = PP.myGamepads[this._myParams.myHandedness].getAxesInfo().getAxes();
 
             if (!this._myParams.myIsSnapTurn) {
                 if (Math.abs(axes[0]) > this._myParams.myRotationMinStickIntensityThreshold) {
@@ -103,7 +105,7 @@ PlayerLocomotionRotate.prototype._rotateHeadVertically = function () {
 
         referenceRight.vec3_normalize(referenceRight);
 
-        let axes = PP.myRightGamepad.getAxesInfo().getAxes();
+        let axes = PP.myGamepads[this._myParams.myHandedness].getAxesInfo().getAxes();
         let angleToRotate = 0;
 
         if (!this._myParams.myIsSnapTurn) {
