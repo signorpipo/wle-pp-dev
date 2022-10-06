@@ -297,7 +297,7 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable 
                 parableHitPosition.vec3_copy(hit.myPosition);
                 parableHitNormal.vec3_copy(hit.myNormal);
 
-                if (!this._myDetectionRuntimeParams.myTeleportPositionValid) {
+                if (!this._myDetectionRuntimeParams.myTeleportPositionValid && !this._myTeleportAsMovementFailed) {
                     verticalHitOrigin = hit.myPosition.vec3_add(hit.myNormal.vec3_scale(0.01, verticalHitOrigin), verticalHitOrigin);
                     verticalHitDirection = up.vec3_negate(verticalHitDirection);
 
@@ -320,7 +320,10 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable 
                         this._myTeleportRuntimeParams.myTeleportPosition.vec3_copy(teleportCollisionRuntimeParams.myNewPosition);
                         this._myDetectionRuntimeParams.myTeleportSurfaceNormal.vec3_copy(teleportCollisionRuntimeParams.myGroundNormal);
 
-                        if (!this._myDetectionRuntimeParams.myTeleportPositionValid && teleportCollisionRuntimeParams.myTeleportCanceled && teleportCollisionRuntimeParams.myIsCollidingHorizontally) {
+                        if (!this._myDetectionRuntimeParams.myTeleportPositionValid &&
+                            !this._myTeleportAsMovementFailed &&
+                            teleportCollisionRuntimeParams.myTeleportCanceled &&
+                            teleportCollisionRuntimeParams.myIsCollidingHorizontally) {
                             flatTeleportHorizontalHitNormal = teleportCollisionRuntimeParams.myHorizontalCollisionHit.myNormal.vec3_removeComponentAlongAxis(up, flatTeleportHorizontalHitNormal);
 
                             if (!flatTeleportHorizontalHitNormal.vec3_isZero(0.00001)) {
@@ -348,9 +351,11 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable 
                                     this._myDetectionRuntimeParams.myTeleportSurfaceNormal.vec3_copy(teleportCollisionRuntimeParams.myGroundNormal);
                                 }
                             }
+                        } else {
+                            //console.error("2", this._myDetectionRuntimeParams.myTeleportPositionValid, this._myTeleportAsMovementFailed);
                         }
 
-                        if (!this._myDetectionRuntimeParams.myTeleportPositionValid) {
+                        if (!this._myDetectionRuntimeParams.myTeleportPositionValid && !this._myTeleportAsMovementFailed) {
                             flatParableHitNormal = parableHitNormal.vec3_removeComponentAlongAxis(up, flatParableHitNormal);
                             if (!flatParableHitNormal.vec3_isZero(0.00001)) {
                                 flatParableHitNormal.vec3_normalize(flatParableHitNormal);
@@ -377,9 +382,11 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable 
                                     this._myDetectionRuntimeParams.myTeleportSurfaceNormal.vec3_copy(teleportCollisionRuntimeParams.myGroundNormal);
                                 }
                             }
+                        } else {
+                            //console.error("3", this._myDetectionRuntimeParams.myTeleportPositionValid, this._myTeleportAsMovementFailed);
                         }
 
-                        if (!this._myDetectionRuntimeParams.myTeleportPositionValid) {
+                        if (!this._myDetectionRuntimeParams.myTeleportPositionValid && !this._myTeleportAsMovementFailed) {
                             flatParableDirectionNegate = direction.vec3_negate(flatParableDirectionNegate).vec3_removeComponentAlongAxis(up, flatParableDirectionNegate).vec3_normalize(flatParableDirectionNegate);
 
                             if (!flatParableDirectionNegate.vec3_isZero(0.00001)) {
@@ -407,11 +414,17 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable 
                                     this._myDetectionRuntimeParams.myTeleportSurfaceNormal.vec3_copy(teleportCollisionRuntimeParams.myGroundNormal);
                                 }
                             }
+                        } else {
+                            //console.error("4", this._myDetectionRuntimeParams.myTeleportPositionValid, this._myTeleportAsMovementFailed);
                         }
                     }
+                } else {
+                    //console.error("1", this._myDetectionRuntimeParams.myTeleportPositionValid, this._myTeleportAsMovementFailed);
                 }
             }
         }
+
+        //console.error("-");
 
         if (!hitCollisionValid) {
             parableFinalPosition = this._myDetectionRuntimeParams.myParable.getPositionByDistance(this._myDetectionRuntimeParams.myParableDistance, parableFinalPosition);
@@ -438,7 +451,10 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable 
                 this._myTeleportRuntimeParams.myTeleportPosition.vec3_copy(teleportCollisionRuntimeParams.myNewPosition);
                 this._myDetectionRuntimeParams.myTeleportSurfaceNormal.vec3_copy(teleportCollisionRuntimeParams.myGroundNormal);
 
-                if (!this._myDetectionRuntimeParams.myTeleportPositionValid && teleportCollisionRuntimeParams.myTeleportCanceled && teleportCollisionRuntimeParams.myIsCollidingHorizontally) {
+                if (!this._myDetectionRuntimeParams.myTeleportPositionValid &&
+                    !this._myTeleportAsMovementFailed &&
+                    teleportCollisionRuntimeParams.myTeleportCanceled &&
+                    teleportCollisionRuntimeParams.myIsCollidingHorizontally) {
                     flatTeleportHorizontalHitNormal = teleportCollisionRuntimeParams.myHorizontalCollisionHit.myNormal.vec3_removeComponentAlongAxis(up, flatTeleportHorizontalHitNormal);
 
                     if (!flatTeleportHorizontalHitNormal.vec3_isZero(0.00001)) {
@@ -468,7 +484,7 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable 
                     }
                 }
 
-                if (!this._myDetectionRuntimeParams.myTeleportPositionValid) {
+                if (!this._myDetectionRuntimeParams.myTeleportPositionValid && !this._myTeleportAsMovementFailed) {
                     flatParableDirectionNegate = direction.vec3_negate(flatParableDirectionNegate).vec3_removeComponentAlongAxis(up, flatParableDirectionNegate).vec3_normalize(flatParableDirectionNegate);
 
                     if (!flatParableDirectionNegate.vec3_isZero(0.00001)) {
@@ -530,6 +546,8 @@ PlayerLocomotionTeleportDetectionState.prototype._isTeleportHitValid = function 
     let playerUp = PP.vec3_create();
     return function _isTeleportHitValid(hit, rotationOnUp, checkTeleportCollisionRuntimeParams) {
         let isValid = false;
+
+        this._myTeleportAsMovementFailed = false;
 
         if (hit.isValid() && !hit.myIsInsideCollision) {
             playerUp = this._myTeleportParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);

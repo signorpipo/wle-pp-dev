@@ -22,6 +22,8 @@ PlayerLocomotionTeleportTeleportState.prototype._teleportToPosition = function (
     let teleportRotation = PP.quat_create();
     let teleportCollisionRuntimeParams = new CollisionRuntimeParams();
     return function _teleportToPosition(teleportPosition, rotationOnUp, collisionRuntimeParams) {
+        this._myTeleportAsMovementFailed = false;
+
         playerUp = this._myTeleportParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
 
         feetTransformQuat = this._myTeleportParams.myPlayerHeadManager.getFeetTransformQuat(feetTransformQuat);

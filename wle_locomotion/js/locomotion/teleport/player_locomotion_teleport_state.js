@@ -6,6 +6,8 @@ PlayerLocomotionTeleportState = class PlayerLocomotionTeleportState extends PP.S
 
         this._myTeleportParams = teleportParams;
         this._myTeleportRuntimeParams = teleportRuntimeParams;
+
+        this._myTeleportAsMovementFailed = false;
     }
 };
 
@@ -93,6 +95,8 @@ PlayerLocomotionTeleportState.prototype._checkTeleportAsMovement = function () {
             if (!teleportMovementValid) {
                 collisionRuntimeParams.myTeleportCanceled = true;
             }
+
+            this._myTeleportAsMovementFailed = !teleportMovementValid;
         }
     };
 }();
