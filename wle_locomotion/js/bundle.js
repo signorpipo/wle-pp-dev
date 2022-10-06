@@ -208,6 +208,7 @@ require('./locomotion/teleport/player_locomotion_teleport_parable');
 require('./locomotion/teleport/player_locomotion_teleport_state');
 require('./locomotion/teleport/player_locomotion_teleport_detection_visualizer');
 require('./locomotion/teleport/player_locomotion_teleport_detection_state');
+require('./locomotion/teleport/player_locomotion_teleport_detection_state_visibility');
 require('./locomotion/teleport/player_locomotion_teleport_teleport_state');
 require('./locomotion/teleport/player_locomotion_teleport');
 
