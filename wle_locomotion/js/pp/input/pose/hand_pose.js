@@ -121,7 +121,7 @@ PP.HandPose = class HandPose {
             return this._myOutTransformQuat;
         }
 
-        return this._myOutTransformQuat.pp_toWorld(this._myReferenceObject.pp_getTransformQuat(this._myOutPlayerTransformQuat), this._myOutTransformQuat);
+        return this._myOutTransformQuat.quat_toWorld(this._myReferenceObject.pp_getTransformQuat(this._myOutPlayerTransformQuat), this._myOutTransformQuat);
     }
 
     getLinearVelocity() {
