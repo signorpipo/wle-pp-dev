@@ -47,7 +47,7 @@ PP.WidgetFrameUI = class WidgetFrameUI {
     }
 
     _updateObjectsTransforms(forceRefreshObjectsTransforms) {
-        let inputSourceType = PP.InputUtils.getInputSourceType(this._myAdditionalSetup.myHandedness);
+        let inputSourceType = PP.InputUtils.getInputSourceTypeByHandedness(this._myAdditionalSetup.myHandedness);
 
         if (inputSourceType != this._myInputSourceType || forceRefreshObjectsTransforms) {
             this._myInputSourceType = inputSourceType;

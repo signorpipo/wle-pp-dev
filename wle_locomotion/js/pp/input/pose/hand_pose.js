@@ -2,6 +2,7 @@ PP.HandPoseParams = class HandPoseParams {
     constructor() {
         this.myReferenceObject = null;
         this.myFixForward = true;
+        this.myFixTrackedHandRotation = true;
         this.myForceEmulatedVelocities = false;
     }
 };
@@ -15,6 +16,7 @@ PP.HandPose = class HandPose {
 
         this._myHandedness = handedness;
         this._myFixForward = handPoseParams.myFixForward;
+        this._myFixTrackedHandRotation = handPoseParams.myFixTrackedHandRotation;
         this._myForceEmulatedVelocities = handPoseParams.myForceEmulatedVelocities;
 
         this._myReferenceSpace = null;
@@ -33,6 +35,8 @@ PP.HandPose = class HandPose {
         this._myIsLinearVelocityEmulated = true;
         this._myIsAngularVelocityEmulated = true;
 
+        this._myIsTrackedHand = false;
+
         // out data
         this._myOutPosition = PP.vec3_create();
 
@@ -44,6 +48,8 @@ PP.HandPose = class HandPose {
         this._myOutPlayerRotationQuat = PP.quat_create();
 
         this._myOutAxes = [PP.vec3_create(), PP.vec3_create(), PP.vec3_create()];
+        this._myOutForward = PP.vec3_create();
+        this._myOutRight = PP.vec3_create();
         this._myOutRotationQuat = PP.quat_create();
 
         this._myOutRotationDegrees = PP.vec3_create();
@@ -97,6 +103,14 @@ PP.HandPose = class HandPose {
             this._myOutRotationQuat.pp_copy(this._myRotation);
             out = this._myOutRotationQuat;
             out.quat_rotateAxisRadians(Math.PI, out.quat_getAxes(this._myOutAxes)[1], out);
+        }
+
+        if (this._myFixTrackedHandRotation && this._myIsTrackedHand) {
+            out.quat_rotateAxis(-60, out.quat_getRight(this._myOutRight), out);
+
+            let forwardRotation = 20;
+            forwardRotation = (this._myHandedness == PP.Handedness.LEFT) ? forwardRotation : -forwardRotation;
+            out.quat_rotateAxis(forwardRotation, out.quat_getForward(this._myOutForward), out);
         }
 
         if (this._myReferenceObject == null) {
@@ -164,6 +178,10 @@ PP.HandPose = class HandPose {
         this._myFixForward = fixForward;
     }
 
+    setFixTrackedHandRotation(fixTrackedHandRotation) {
+        this.myFixTrackedHandRotation = fixTrackedHandRotation;
+    }
+
     setForceEmulatedVelocities(forceEmulatedVelocities) {
         this._myForceEmulatedVelocities = forceEmulatedVelocities;
     }
@@ -171,6 +189,7 @@ PP.HandPose = class HandPose {
     setHandPoseParams(handPoseParams) {
         this.setReferenceObject(handPoseParams.myReferenceObject);
         this.setFixForward(handPoseParams.myFixForward);
+        this.setFixTrackedHandRotation(handPoseParams.myFixTrackedHandRotation);
         this.setForceEmulatedVelocities(handPoseParams.myForceEmulatedVelocities);
     }
 
@@ -301,6 +320,7 @@ PP.HandPose = class HandPose {
                 for (let item of event.added) {
                     if (item.handedness == this._myHandedness) {
                         this._myInputSource = item;
+                        this._myIsTrackedHand = PP.InputUtils.getInputSourceType(this._myInputSource) == PP.InputSourceType.TRACKED_HAND;
                     }
                 }
             }
@@ -310,6 +330,7 @@ PP.HandPose = class HandPose {
             for (let item of session.inputSources) {
                 if (item.handedness == this._myHandedness) {
                     this._myInputSource = item;
+                    this._myIsTrackedHand = PP.InputUtils.getInputSourceType(this._myInputSource) == PP.InputSourceType.TRACKED_HAND;
                 }
             }
         }

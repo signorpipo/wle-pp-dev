@@ -30,10 +30,14 @@ PP.InputUtils = {
 
         return inputSource;
     },
-    getInputSourceType: function (handedness) {
+    getInputSourceTypeByHandedness: function (handedness) {
+        let inputSource = PP.InputUtils.getInputSource(handedness);
+
+        return PP.InputUtils.getInputSourceType(inputSource);
+    },
+    getInputSourceType: function (inputSource) {
         let inputSourceType = null;
 
-        let inputSource = PP.InputUtils.getInputSource(handedness);
         if (inputSource) {
             if (inputSource.hand) {
                 inputSourceType = PP.InputSourceType.TRACKED_HAND;
