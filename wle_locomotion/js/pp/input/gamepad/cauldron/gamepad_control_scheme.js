@@ -37,6 +37,13 @@ WL.registerComponent('pp-gamepad-control-scheme', {
         this.setVisible(this._myStartVisible);
     },
     update: function (dt) {
+        if (this._mySetVisibleNextUpdate) {
+            this._mySetVisibleNextUpdate = false;
+            this.setVisible(this._myVisible);
+        }
+    },
+    onActivate() {
+        this._mySetVisibleNextUpdate = true;
     },
     isVisible() {
         return this._myVisible;

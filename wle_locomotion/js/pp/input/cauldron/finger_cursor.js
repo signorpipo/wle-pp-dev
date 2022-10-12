@@ -109,7 +109,7 @@ WL.registerComponent('pp-finger-cursor', {
         this.active = active;
     },
     _updateHand() {
-        this._myHandInputSource = PP.InputUtils.getInputSource(this._myHandednessString, PP.InputSourceType.HAND);
+        this._myHandInputSource = PP.InputUtils.getInputSource(this._myHandednessString, PP.InputSourceType.TRACKED_HAND);
 
         if (this._myHandInputSource) {
             let tip = Module['webxr_frame'].getJointPose(this._myHandInputSource.hand.get("index-finger-tip"), this._myReferenceSpace);

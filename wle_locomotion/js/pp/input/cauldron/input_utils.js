@@ -20,7 +20,7 @@ PP.InputUtils = {
             for (let i = 0; i < WL.xrSession.inputSources.length; i++) {
                 let input = WL.xrSession.inputSources[i];
 
-                let isCorrectType = (!inputSourceType) || (inputSourceType == PP.InputSourceType.GAMEPAD && !input.hand) || (inputSourceType == PP.InputSourceType.HAND && input.hand);
+                let isCorrectType = (!inputSourceType) || (inputSourceType == PP.InputSourceType.GAMEPAD && !input.hand) || (inputSourceType == PP.InputSourceType.TRACKED_HAND && input.hand);
                 if (isCorrectType && input.handedness == handedness) {
                     inputSource = input;
                     break;
@@ -36,7 +36,7 @@ PP.InputUtils = {
         let inputSource = PP.InputUtils.getInputSource(handedness);
         if (inputSource) {
             if (inputSource.hand) {
-                inputSourceType = PP.InputSourceType.HAND;
+                inputSourceType = PP.InputSourceType.TRACKED_HAND;
             } else {
                 inputSourceType = PP.InputSourceType.GAMEPAD;
             }
