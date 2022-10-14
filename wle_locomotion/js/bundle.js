@@ -123,6 +123,7 @@ require('./pp/input/gamepad/cauldron/gamepad_manager');
 require('./pp/input/gamepad/cauldron/gamepad_utils');
 require('./pp/input/gamepad/cauldron/gamepad_control_scheme');
 
+require('./pp/input/pose/base_pose.js');
 require('./pp/input/pose/hand_pose');
 require('./pp/input/pose/head_pose');
 require('./pp/input/pose/components/set_player_height');
