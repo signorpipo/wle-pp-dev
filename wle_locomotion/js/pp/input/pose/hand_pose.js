@@ -1,4 +1,4 @@
-PP.HandPoseParams = class HandPoseParams extends PP.BasePose {
+PP.HandPoseParams = class HandPoseParams extends PP.BasePoseParams {
     constructor() {
         super();
 

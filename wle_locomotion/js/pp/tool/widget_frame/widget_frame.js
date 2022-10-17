@@ -9,6 +9,7 @@ PP.WidgetFrame = class WidgetFrame {
         this._myAdditionalSetup = null;
 
         this._myUI = new PP.WidgetFrameUI();
+        this._myShowVisibilityButton = false;
 
         this._myWidgetVisibleChangedCallbacks = new Map();      // Signature: callback(isWidgetVisible)
         this._myPinChangedCallbacks = new Map();                // Signature: callback(isPinned)
@@ -16,6 +17,15 @@ PP.WidgetFrame = class WidgetFrame {
 
     getWidgetObject() {
         return this._myUI.myWidgetObject;
+    }
+
+    setVisible(visible) {
+        this.myIsWidgetVisible = !visible;
+        this._toggleVisibility(false, true);
+    }
+
+    isVisible() {
+        return this.myIsWidgetVisible;
     }
 
     toggleVisibility() {
@@ -47,6 +57,7 @@ PP.WidgetFrame = class WidgetFrame {
 
         this._myUI.build(parentObject, this._mySetup, additionalSetup);
         this._myUI.setVisibilityButtonVisible(additionalSetup.myShowVisibilityButton);
+        this._myShowVisibilityButton = additionalSetup.myShowVisibilityButton;
         if (!additionalSetup.myShowOnStart) {
             this._toggleVisibility(false, false);
         }
@@ -96,6 +107,8 @@ PP.WidgetFrame = class WidgetFrame {
                 callback(this.myIsWidgetVisible);
             }
         }
+
+        this._myUI.setVisibilityButtonVisible(this._myShowVisibilityButton);
     }
 
     _togglePin(isButton) {

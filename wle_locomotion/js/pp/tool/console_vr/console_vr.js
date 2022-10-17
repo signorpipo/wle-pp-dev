@@ -19,8 +19,25 @@ WL.registerComponent('pp-console-vr', {
         additionalSetup.myTextMaterial = PP.myDefaultResources.myMaterials.myText;
 
         this._myWidget.start(this.object, additionalSetup);
+
+        this._myWidgetVisibleBackup = this._myWidget.isVisible();
+        this._mySetVisibleNextUpdate = false;
     },
     update: function (dt) {
+        if (this._mySetVisibleNextUpdate) {
+            this._mySetVisibleNextUpdate = false;
+            this._myWidget.setVisible(false);
+            this._myWidget.setVisible(this._myWidgetVisibleBackup);
+        }
+
         this._myWidget.update(dt);
-    }
+    },
+    onActivate() {
+        this._mySetVisibleNextUpdate = true;
+    },
+    onDeactivate() {
+        this._myWidgetVisibleBackup = this._myWidget.isVisible();
+
+        this._myWidget.setVisible(false);
+    },
 });

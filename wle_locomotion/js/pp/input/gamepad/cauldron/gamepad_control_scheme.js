@@ -32,6 +32,7 @@ WL.registerComponent('pp-gamepad-control-scheme', {
         this._myControlSchemeDirection = (this._myHandednessType == PP.Handedness.LEFT) ? 1 : -1;
 
         this._myVisible = false;
+        this._mySetVisibleNextUpdate = false;
 
         this._createControlScheme();
         this.setVisible(this._myStartVisible);
@@ -39,11 +40,17 @@ WL.registerComponent('pp-gamepad-control-scheme', {
     update: function (dt) {
         if (this._mySetVisibleNextUpdate) {
             this._mySetVisibleNextUpdate = false;
+            this.setVisible(false);
             this.setVisible(this._myVisible);
         }
     },
     onActivate() {
         this._mySetVisibleNextUpdate = true;
+    },
+    onDeactivate() {
+        let backupVisible = this._myVisible;
+        this.setVisible(false);
+        this._myVisible = backupVisible;
     },
     isVisible() {
         return this._myVisible;
