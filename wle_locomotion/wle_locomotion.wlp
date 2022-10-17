@@ -12703,7 +12703,8 @@
                     "type": "pp-tracked-hand-draw-all-joints",
                     "pp-tracked-hand-draw-all-joints": {
                         "_myJointMesh": "p1",
-                        "_myJointMaterial": "35"
+                        "_myJointMaterial": "35",
+                        "_myHideMetacarpals": true
                     }
                 }
             ]
@@ -13102,7 +13103,7 @@
                         "_myPulseOnHover": false,
                         "_myCursorMesh": "p2",
                         "_myCursorMaterial": "32",
-                        "_myShowFingerCursor": true
+                        "_myShowFingerCursor": false
                     },
                     "active": true
                 }

@@ -31,7 +31,6 @@ WL.registerComponent('pp-tracked-hand-draw-joint', {
     update: function (dt) {
         this._myTrackedHandJointPose.update(dt);
         this._myJointMeshObject.pp_setTransformLocal(this._myTrackedHandJointPose.getTransform());
-
     },
     _buildTrackedHandHierarchy() {
         this._myJointMeshObject = this.object.pp_addObject();
@@ -40,6 +39,6 @@ WL.registerComponent('pp-tracked-hand-draw-joint', {
         mesh.mesh = this._myJointMesh;
         mesh.material = this._myJointMaterial;
 
-        this._myJointMeshObject.pp_setScale(0);
+        this._myJointMeshObject.pp_setScaleLocal(0);
     }
 });
