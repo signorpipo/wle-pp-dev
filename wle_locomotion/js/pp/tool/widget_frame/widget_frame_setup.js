@@ -91,6 +91,13 @@ PP.WidgetFrameSetup = class WidgetFrameSetup {
         this.myPivotObjectTransforms[PP.ToolInputSourceType.GAMEPAD][PP.ToolHandedness.RIGHT].myRotation = [-0.645, -0.425, -0.25, 0.584];
         this.myPivotObjectTransforms[PP.ToolInputSourceType.GAMEPAD][PP.ToolHandedness.RIGHT].myRotation.quat_normalize(this.myPivotObjectTransforms[PP.ToolInputSourceType.GAMEPAD][PP.ToolHandedness.RIGHT].myRotation);
 
+        this.myPivotObjectTransforms[PP.ToolInputSourceType.TRACKED_HAND][PP.ToolHandedness.LEFT].myRotation = [-0.645, 0.425, 0.25, 0.584];
+        this.myPivotObjectTransforms[PP.ToolInputSourceType.TRACKED_HAND][PP.ToolHandedness.LEFT].myRotation.quat_normalize(this.myPivotObjectTransforms[PP.ToolInputSourceType.GAMEPAD][PP.ToolHandedness.LEFT].myRotation);
+
+        this.myPivotObjectTransforms[PP.ToolInputSourceType.TRACKED_HAND][PP.ToolHandedness.RIGHT].myRotation = [-0.645, -0.425, -0.25, 0.584];
+        this.myPivotObjectTransforms[PP.ToolInputSourceType.TRACKED_HAND][PP.ToolHandedness.RIGHT].myRotation.quat_normalize(this.myPivotObjectTransforms[PP.ToolInputSourceType.GAMEPAD][PP.ToolHandedness.RIGHT].myRotation);
+
+        /*
         this.myPivotObjectTransforms[PP.ToolInputSourceType.TRACKED_HAND][PP.ToolHandedness.LEFT].myPosition = [-0.04, 0.045, -0.055];
         this.myPivotObjectTransforms[PP.ToolInputSourceType.TRACKED_HAND][PP.ToolHandedness.LEFT].myRotation = [0, 0.536, -0.43, 0.727];
         this.myPivotObjectTransforms[PP.ToolInputSourceType.TRACKED_HAND][PP.ToolHandedness.LEFT].myRotation.quat_normalize(this.myPivotObjectTransforms[PP.ToolInputSourceType.TRACKED_HAND][PP.ToolHandedness.LEFT].myRotation);
@@ -98,6 +105,7 @@ PP.WidgetFrameSetup = class WidgetFrameSetup {
         this.myPivotObjectTransforms[PP.ToolInputSourceType.TRACKED_HAND][PP.ToolHandedness.RIGHT].myPosition = [0.04, 0.045, -0.055];
         this.myPivotObjectTransforms[PP.ToolInputSourceType.TRACKED_HAND][PP.ToolHandedness.RIGHT].myRotation = [0, -0.536, 0.43, 0.727];
         this.myPivotObjectTransforms[PP.ToolInputSourceType.TRACKED_HAND][PP.ToolHandedness.RIGHT].myRotation.quat_normalize(this.myPivotObjectTransforms[PP.ToolInputSourceType.TRACKED_HAND][PP.ToolHandedness.RIGHT].myRotation);
+        */
 
         this.myWidgetObjectTransforms = this._createDefaultObjectTransforms();
 
@@ -106,7 +114,6 @@ PP.WidgetFrameSetup = class WidgetFrameSetup {
 
         this.myWidgetObjectTransforms[PP.ToolInputSourceType.TRACKED_HAND][PP.ToolHandedness.LEFT].myPosition = [0.1, 0.23, -0.02];
         this.myWidgetObjectTransforms[PP.ToolInputSourceType.TRACKED_HAND][PP.ToolHandedness.RIGHT].myPosition = [0.07, 0.23, -0.02];
-
     }
 
     _createDefaultObjectTransforms() {

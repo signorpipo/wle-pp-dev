@@ -105,6 +105,7 @@
 
         QUAT:
             ○ quat_set          / quat_copy     / quat_identity
+            - quat_clone 
             - quat_normalize    / quat_invert
             - quat_isNormalized
             - quat_length
@@ -1233,6 +1234,11 @@ Array.prototype.quat_normalize = function (out = glMatrix.quat.create()) {
 Array.prototype.quat_copy = function (quat) {
     glMatrix.quat.copy(this, quat);
     return this;
+};
+
+Array.prototype.quat_clone = function (out = glMatrix.quat.create()) {
+    glMatrix.quat.copy(out, this);
+    return out;
 };
 
 Array.prototype.quat_set = function (x, y = null, z = null, w = null) {
