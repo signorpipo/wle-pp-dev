@@ -41,6 +41,22 @@ PP.BasePose = class BasePose {
         return this._myReferenceObject;
     }
 
+    setFixForward(fixForward) {
+        this._myFixForward = fixForward;
+    }
+
+    isFixForward() {
+        return this._myFixForward;
+    }
+
+    setForceEmulatedVelocities(forceEmulatedVelocities) {
+        this._myForceEmulatedVelocities = forceEmulatedVelocities;
+    }
+
+    isForceEmulatedVelocities() {
+        return this._myForceEmulatedVelocities;
+    }
+
     getReferenceSpace() {
         return this._myReferenceSpace;
     }
@@ -108,14 +124,6 @@ PP.BasePose = class BasePose {
 
     isAngularVelocityEmulated() {
         return this._myIsAngularVelocityEmulated;
-    }
-
-    setFixForward(fixForward) {
-        this._myFixForward = fixForward;
-    }
-
-    setForceEmulatedVelocities(forceEmulatedVelocities) {
-        this._myForceEmulatedVelocities = forceEmulatedVelocities;
     }
 
     start() {
@@ -189,6 +197,8 @@ PP.BasePose = class BasePose {
                 this._myIsLinearVelocityEmulated = true;
                 this._myIsAngularVelocityEmulated = true;
             }
+
+            this._updateHook(dt, xrPose);
         } else {
             // keep previous position and rotation but reset velocity because reasons
 
@@ -203,6 +213,8 @@ PP.BasePose = class BasePose {
             this._myIsValid = false;
             this._myIsLinearVelocityEmulated = true;
             this._myIsAngularVelocityEmulated = true;
+
+            this._updateHook(dt, null);
         }
     }
 
@@ -214,6 +226,9 @@ PP.BasePose = class BasePose {
 
     _getPose(xrFrame) {
         return null;
+    }
+
+    _updateHook(dt, xrPose) {
     }
 
     _onXRSessionStartHook(manualStart, session) {
