@@ -8,11 +8,11 @@ PlayerLocomotionTeleportDetectionParams = class PlayerLocomotionTeleportDetectio
         this.myTeleportBlockLayerFlags = new PP.PhysicsLayerFlags();
         this.myTeleportFloorLayerFlags = new PP.PhysicsLayerFlags();
 
-        this.myForwardMinAngleToBeValidUp = 7.5;
         this.myParableForwardMinAngleToBeValidUp = 30;
-        this.myForwardMinAngleToBeValidDown = 7.5;
         this.myParableForwardMinAngleToBeValidDown = 0;
-        this.myTeleportReferenceExtraVerticalRotation = -30;
+
+        this.myTeleportParableStartPositionOffset = [0.01, -0.04, 0.08]; // Hand Left: [0.01, -0.04, 0.08] / Hand Right: [-0.01, -0.04, 0.08]
+        this.myTeleportParableStartRotationOffset = [30, 0, 0];
 
         this.myTeleportParableSpeed = 15;
         this.myTeleportParableGravity = -30;
@@ -152,22 +152,14 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionNonVR = 
 }();
 
 PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionVR = function () {
-    let leftHandOffsetPosition = [0.01, -0.04, 0.08];
-    let rightHandOffsetPosition = [-0.01, -0.04, 0.08];
-    let handOffsetList = [];
-    handOffsetList[PP.Handedness.LEFT] = leftHandOffsetPosition;
-    handOffsetList[PP.Handedness.RIGHT] = rightHandOffsetPosition;
+    let teleportStartTransformLocal = PP.quat2_create();
+    let teleportStartTransformWorld = PP.quat2_create();
 
     let teleportStartPosition = PP.vec3_create();
-
-    let handForward = PP.vec3_create();
-    let handRight = PP.vec3_create();
-    let handUp = PP.vec3_create();
+    let teleportDirection = PP.vec3_create();
 
     let playerUp = PP.vec3_create();
     let playerUpNegate = PP.vec3_create();
-    let extraRotationAxis = PP.vec3_create();
-    let teleportDirection = PP.vec3_create();
     return function _detectTeleportPositionVR(dt) {
         this._myDetectionRuntimeParams.myParable.setSpeed(PP.myEasyTuneVariables.get("Parable Speed"));
         this._myDetectionRuntimeParams.myParable.setGravity(PP.myEasyTuneVariables.get("Parable Gravity"));
@@ -178,27 +170,17 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionVR = fun
         this._myDetectionRuntimeParams.myTeleportDetectionValid = false;
 
         let referenceObject = PP.myPlayerObjects.myHands[this._myTeleportParams.myHandedness];
-        teleportStartPosition = referenceObject.pp_convertPositionObjectToWorld(handOffsetList[this._myTeleportParams.myHandedness], teleportStartPosition);
 
-        handForward = referenceObject.pp_getForward(handForward);
-        handRight = referenceObject.pp_getRight(handRight);
-        handUp = referenceObject.pp_getUp(handUp);
+        teleportStartTransformLocal.quat2_setPositionRotationDegrees(this._myTeleportParams.myDetectionParams.myTeleportParableStartPositionOffset, this._myTeleportParams.myDetectionParams.myTeleportParableStartRotationOffset);
+        teleportStartTransformWorld = referenceObject.pp_convertTransformObjectToWorldQuat(teleportStartTransformLocal, teleportStartTransformWorld);
+
+        teleportStartPosition = teleportStartTransformWorld.quat2_getPosition(teleportStartPosition);
+        teleportDirection = teleportStartTransformWorld.quat2_getForward(teleportDirection);
 
         playerUp = this._myTeleportParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
         playerUpNegate = playerUp.vec3_negate(playerUpNegate);
 
-        extraRotationAxis = handForward.vec3_cross(playerUp, extraRotationAxis).vec3_normalize(extraRotationAxis);
-
-        let teleportExtraRotationAngle = this._myTeleportParams.myDetectionParams.myTeleportReferenceExtraVerticalRotation;
-        teleportDirection = handForward.vec3_rotateAxis(teleportExtraRotationAngle, extraRotationAxis, teleportDirection);
-
-        if (!handUp.vec3_isConcordant(playerUp)) {
-            teleportDirection = handForward.vec3_rotateAxis(-teleportExtraRotationAngle, extraRotationAxis, teleportDirection);
-        }
-
-        if (handForward.vec3_angle(playerUp) >= this._myTeleportParams.myDetectionParams.myForwardMinAngleToBeValidUp &&
-            handForward.vec3_angle(playerUpNegate) >= this._myTeleportParams.myDetectionParams.myForwardMinAngleToBeValidDown &&
-            teleportDirection.vec3_angle(playerUp) >= this._myTeleportParams.myDetectionParams.myParableForwardMinAngleToBeValidUp &&
+        if (teleportDirection.vec3_angle(playerUp) >= this._myTeleportParams.myDetectionParams.myParableForwardMinAngleToBeValidUp &&
             teleportDirection.vec3_angle(playerUpNegate) >= this._myTeleportParams.myDetectionParams.myParableForwardMinAngleToBeValidDown
         ) {
             this._myDetectionRuntimeParams.myTeleportDetectionValid = true;
