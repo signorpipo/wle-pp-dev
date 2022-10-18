@@ -137,8 +137,11 @@ require('./pp/input/pose/components/set_hand_local_transform');
 require('./pp/input/pose/components/set_head_local_transform');
 require('./pp/input/pose/components/set_vr_head_local_transform');
 require('./pp/input/pose/components/set_non_vr_head_local_transform');
+require('./pp/input/pose/components/set_tracked_hand_joint_local_transform');
 require('./pp/input/pose/components/copy_hand_transform');
 require('./pp/input/pose/components/copy_head_transform');
+require('./pp/input/pose/components/copy_player_transform');
+require('./pp/input/pose/components/copy_player_pivot_transform');
 
 //	TOOL
 require('./pp/tool/cauldron/cauldron/tool_types');

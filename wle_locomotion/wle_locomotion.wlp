@@ -188,7 +188,7 @@
                     "type": "pp-switch-hand-object",
                     "pp-switch-hand-object": {
                         "_myGamepad": "69",
-                        "_myTrackedHand": "816"
+                        "_myTrackedHand": "788"
                     },
                     "active": true
                 }
@@ -220,7 +220,7 @@
                     "type": "pp-switch-hand-object",
                     "pp-switch-hand-object": {
                         "_myGamepad": "801",
-                        "_myTrackedHand": "817",
+                        "_myTrackedHand": "803",
                         "_myHandedness": "right"
                     }
                 }
@@ -12825,7 +12825,7 @@
                         "_myHandedness": "left",
                         "_myTextMaterial": "33",
                         "_myPlaneMaterial": "32",
-                        "_myShowOnStart": true,
+                        "_myShowOnStart": false,
                         "_myShowVisibilityButton": false
                     },
                     "active": true
@@ -13794,6 +13794,77 @@
             },
             "parent": "854",
             "skin": "853"
+        },
+        "881": {
+            "name": "Test Set Joint Transform",
+            "components": [
+                {
+                    "type": "pp-copy-player-pivot-transform"
+                }
+            ],
+            "parent": "71",
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ]
+        },
+        "882": {
+            "name": "Empty",
+            "parent": "881",
+            "components": [
+                {
+                    "type": "pp-set-tracked-hand-joint-local-transform",
+                    "pp-set-tracked-hand-joint-local-transform": {
+                        "_myJointType": "Pinky Tip",
+                        "_mySetLocalScaleAsJointRadius": true
+                    }
+                }
+            ]
+        },
+        "883": {
+            "name": "Empty.000",
+            "parent": "882",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p2",
+                        "material": "35"
+                    }
+                }
+            ],
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ]
         }
     },
     "meshes": {
