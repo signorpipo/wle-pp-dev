@@ -6,6 +6,7 @@ PlayerLocomotionTeleportParams = class PlayerLocomotionTeleportParams {
 
         this.myDetectionParams = new PlayerLocomotionTeleportDetectionParams();
         this.myVisualizerParams = new PlayerLocomotionTeleportDetectionVisualizerParams();
+        this.myTeleportParams = new PlayerLocomotionTeleportTeleportParams();
 
         this.myHandedness = PP.Handedness.LEFT;
 
