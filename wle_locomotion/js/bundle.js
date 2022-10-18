@@ -114,6 +114,7 @@ require('./pp/input/cauldron/input_manager_component');
 require('./pp/input/cauldron/switch_hand_object');
 require('./pp/input/cauldron/tracked_hand_draw_joint');
 require('./pp/input/cauldron/tracked_hand_draw_all_joints');
+require('./pp/input/cauldron/tracked_hand_draw_skin');
 
 require('./pp/input/gamepad/gamepad_buttons');
 require('./pp/input/gamepad/base_gamepad');

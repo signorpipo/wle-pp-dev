@@ -30,7 +30,8 @@ WL.registerComponent('pp-tracked-hand-draw-joint', {
     },
     update: function (dt) {
         this._myTrackedHandJointPose.update(dt);
-        this._myJointMeshObject.pp_setTransformLocal(this._myTrackedHandJointPose.getTransform());
+        this._myJointMeshObject.pp_setTransformLocalQuat(this._myTrackedHandJointPose.getTransformQuat());
+        this._myJointMeshObject.pp_setScaleLocal(this._myTrackedHandJointPose.getJointRadius());
     },
     _buildTrackedHandHierarchy() {
         this._myJointMeshObject = this.object.pp_addObject();

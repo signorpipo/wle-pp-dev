@@ -188,7 +188,7 @@
                     "type": "pp-switch-hand-object",
                     "pp-switch-hand-object": {
                         "_myGamepad": "69",
-                        "_myTrackedHand": "788"
+                        "_myTrackedHand": "816"
                     },
                     "active": true
                 }
@@ -220,7 +220,7 @@
                     "type": "pp-switch-hand-object",
                     "pp-switch-hand-object": {
                         "_myGamepad": "801",
-                        "_myTrackedHand": "803",
+                        "_myTrackedHand": "817",
                         "_myHandedness": "right"
                     }
                 }
@@ -1226,14 +1226,14 @@
                 0.0,
                 0.0,
                 12.0,
-                0.0,
+                -0.0,
                 0.0,
                 0.0,
                 0.0,
                 1.0000019,
                 0.0,
                 0.0,
-                1.6858771800798425e-7,
+                0.0,
                 0.0,
                 1.0
             ]
@@ -1359,7 +1359,7 @@
                 0.0,
                 0.1,
                 0.0,
-                -0.0000037,
+                0.0,
                 0.0,
                 0.0,
                 1.0
@@ -12706,6 +12706,12 @@
                         "_myJointMaterial": "35",
                         "_myHideMetacarpals": true
                     }
+                },
+                {
+                    "type": "pp-set-active",
+                    "pp-set-active": {
+                        "_myActive": false
+                    }
                 }
             ]
         },
@@ -12819,7 +12825,7 @@
                         "_myHandedness": "left",
                         "_myTextMaterial": "33",
                         "_myPlaneMaterial": "32",
-                        "_myShowOnStart": false,
+                        "_myShowOnStart": true,
                         "_myShowVisibilityButton": false
                     },
                     "active": true
@@ -13230,6 +13236,12 @@
                         "_myJointMaterial": "35",
                         "_myHandedness": "right"
                     }
+                },
+                {
+                    "type": "pp-set-active",
+                    "pp-set-active": {
+                        "_myActive": false
+                    }
                 }
             ]
         },
@@ -13244,6 +13256,544 @@
                     }
                 }
             ]
+        },
+        "816": {
+            "name": "Skinned Tracked Hand Left",
+            "parent": "23",
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "components": [
+                {
+                    "type": "pp-tracked-hand-draw-skin",
+                    "pp-tracked-hand-draw-skin": {
+                        "_myHandSkin": "820",
+                        "_myFixForward": false
+                    }
+                },
+                {
+                    "type": "pp-set-active",
+                    "pp-set-active": {
+                        "_myActive": false
+                    }
+                }
+            ]
+        },
+        "817": {
+            "name": "Skinned Tracked Hand Right",
+            "parent": "24",
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "components": [
+                {
+                    "type": "pp-tracked-hand-draw-skin",
+                    "pp-tracked-hand-draw-skin": {
+                        "_myHandSkin": "853",
+                        "_myHandedness": "right",
+                        "_myFixForward": false
+                    }
+                },
+                {
+                    "type": "pp-set-active",
+                    "pp-set-active": {
+                        "_myActive": false
+                    }
+                }
+            ]
+        },
+        "821": {
+            "link": {
+                "name": "Armature",
+                "file": "assets\\models\\tracked_hand_left.glb"
+            },
+            "parent": "816"
+        },
+        "822": {
+            "link": {
+                "name": "l_handMeshNode<Armature",
+                "file": "assets\\models\\tracked_hand_left.glb"
+            },
+            "parent": "821",
+            "components": [
+                {
+                    "mesh": {
+                        "skin": "820"
+                    }
+                }
+            ]
+        },
+        "823": {
+            "link": {
+                "name": "xr_standard_trigger_pressed_max<Armature",
+                "file": "assets\\models\\tracked_hand_left.glb"
+            },
+            "parent": "821"
+        },
+        "824": {
+            "link": {
+                "name": "xr_standard_trigger_pressed_min<Armature",
+                "file": "assets\\models\\tracked_hand_left.glb"
+            },
+            "parent": "821"
+        },
+        "825": {
+            "link": {
+                "name": "xr_standard_trigger_pressed_value<Armature",
+                "file": "assets\\models\\tracked_hand_left.glb"
+            },
+            "parent": "821"
+        },
+        "826": {
+            "link": {
+                "name": "pinky-finger-tip<Armature",
+                "file": "assets\\models\\tracked_hand_left.glb"
+            },
+            "parent": "821",
+            "skin": "820"
+        },
+        "827": {
+            "link": {
+                "name": "pinky-finger-phalanx-distal<Armature",
+                "file": "assets\\models\\tracked_hand_left.glb"
+            },
+            "parent": "821",
+            "skin": "820"
+        },
+        "828": {
+            "link": {
+                "name": "pinky-finger-phalanx-intermediate<Armature",
+                "file": "assets\\models\\tracked_hand_left.glb"
+            },
+            "parent": "821",
+            "skin": "820"
+        },
+        "829": {
+            "link": {
+                "name": "pinky-finger-phalanx-proximal<Armature",
+                "file": "assets\\models\\tracked_hand_left.glb"
+            },
+            "parent": "821",
+            "skin": "820"
+        },
+        "830": {
+            "link": {
+                "name": "pinky-finger-metacarpal<Armature",
+                "file": "assets\\models\\tracked_hand_left.glb"
+            },
+            "parent": "821",
+            "skin": "820"
+        },
+        "831": {
+            "link": {
+                "name": "ring-finger-tip<Armature",
+                "file": "assets\\models\\tracked_hand_left.glb"
+            },
+            "parent": "821",
+            "skin": "820"
+        },
+        "832": {
+            "link": {
+                "name": "ring-finger-phalanx-distal<Armature",
+                "file": "assets\\models\\tracked_hand_left.glb"
+            },
+            "parent": "821",
+            "skin": "820"
+        },
+        "833": {
+            "link": {
+                "name": "ring-finger-phalanx-intermediate<Armature",
+                "file": "assets\\models\\tracked_hand_left.glb"
+            },
+            "parent": "821",
+            "skin": "820"
+        },
+        "834": {
+            "link": {
+                "name": "ring-finger-phalanx-proximal<Armature",
+                "file": "assets\\models\\tracked_hand_left.glb"
+            },
+            "parent": "821",
+            "skin": "820"
+        },
+        "835": {
+            "link": {
+                "name": "ring-finger-metacarpal<Armature",
+                "file": "assets\\models\\tracked_hand_left.glb"
+            },
+            "parent": "821",
+            "skin": "820"
+        },
+        "836": {
+            "link": {
+                "name": "middle-finger-tip<Armature",
+                "file": "assets\\models\\tracked_hand_left.glb"
+            },
+            "parent": "821",
+            "skin": "820"
+        },
+        "837": {
+            "link": {
+                "name": "middle-finger-phalanx-distal<Armature",
+                "file": "assets\\models\\tracked_hand_left.glb"
+            },
+            "parent": "821",
+            "skin": "820"
+        },
+        "838": {
+            "link": {
+                "name": "middle-finger-phalanx-intermediate<Armature",
+                "file": "assets\\models\\tracked_hand_left.glb"
+            },
+            "parent": "821",
+            "skin": "820"
+        },
+        "839": {
+            "link": {
+                "name": "middle-finger-phalanx-proximal<Armature",
+                "file": "assets\\models\\tracked_hand_left.glb"
+            },
+            "parent": "821",
+            "skin": "820"
+        },
+        "840": {
+            "link": {
+                "name": "middle-finger-metacarpal<Armature",
+                "file": "assets\\models\\tracked_hand_left.glb"
+            },
+            "parent": "821",
+            "skin": "820"
+        },
+        "841": {
+            "link": {
+                "name": "index-finger-tip<Armature",
+                "file": "assets\\models\\tracked_hand_left.glb"
+            },
+            "parent": "821",
+            "skin": "820"
+        },
+        "842": {
+            "link": {
+                "name": "index-finger-phalanx-distal<Armature",
+                "file": "assets\\models\\tracked_hand_left.glb"
+            },
+            "parent": "821",
+            "skin": "820"
+        },
+        "843": {
+            "link": {
+                "name": "index-finger-phalanx-intermediate<Armature",
+                "file": "assets\\models\\tracked_hand_left.glb"
+            },
+            "parent": "821",
+            "skin": "820"
+        },
+        "844": {
+            "link": {
+                "name": "index-finger-phalanx-proximal<Armature",
+                "file": "assets\\models\\tracked_hand_left.glb"
+            },
+            "parent": "821",
+            "skin": "820"
+        },
+        "845": {
+            "link": {
+                "name": "index-finger-metacarpal<Armature",
+                "file": "assets\\models\\tracked_hand_left.glb"
+            },
+            "parent": "821",
+            "skin": "820"
+        },
+        "846": {
+            "link": {
+                "name": "thumb-tip<Armature",
+                "file": "assets\\models\\tracked_hand_left.glb"
+            },
+            "parent": "821",
+            "skin": "820"
+        },
+        "847": {
+            "link": {
+                "name": "thumb-phalanx-distal<Armature",
+                "file": "assets\\models\\tracked_hand_left.glb"
+            },
+            "parent": "821",
+            "skin": "820"
+        },
+        "848": {
+            "link": {
+                "name": "thumb-phalanx-proximal<Armature",
+                "file": "assets\\models\\tracked_hand_left.glb"
+            },
+            "parent": "821",
+            "skin": "820"
+        },
+        "849": {
+            "link": {
+                "name": "thumb-metacarpal<Armature",
+                "file": "assets\\models\\tracked_hand_left.glb"
+            },
+            "parent": "821",
+            "skin": "820"
+        },
+        "850": {
+            "link": {
+                "name": "wrist<Armature",
+                "file": "assets\\models\\tracked_hand_left.glb"
+            },
+            "parent": "821",
+            "skin": "820"
+        },
+        "854": {
+            "link": {
+                "name": "Armature",
+                "file": "assets\\models\\tracked_hand_right.glb"
+            },
+            "parent": "817"
+        },
+        "855": {
+            "link": {
+                "name": "r_handMeshNode<Armature",
+                "file": "assets\\models\\tracked_hand_right.glb"
+            },
+            "parent": "854",
+            "components": [
+                {
+                    "mesh": {
+                        "skin": "853"
+                    }
+                }
+            ]
+        },
+        "856": {
+            "link": {
+                "name": "wrist<Armature",
+                "file": "assets\\models\\tracked_hand_right.glb"
+            },
+            "parent": "854",
+            "skin": "853"
+        },
+        "857": {
+            "link": {
+                "name": "thumb-metacarpal<Armature",
+                "file": "assets\\models\\tracked_hand_right.glb"
+            },
+            "parent": "854",
+            "skin": "853"
+        },
+        "858": {
+            "link": {
+                "name": "thumb-phalanx-proximal<Armature",
+                "file": "assets\\models\\tracked_hand_right.glb"
+            },
+            "parent": "854",
+            "skin": "853"
+        },
+        "859": {
+            "link": {
+                "name": "thumb-phalanx-distal<Armature",
+                "file": "assets\\models\\tracked_hand_right.glb"
+            },
+            "parent": "854",
+            "skin": "853"
+        },
+        "860": {
+            "link": {
+                "name": "thumb-tip<Armature",
+                "file": "assets\\models\\tracked_hand_right.glb"
+            },
+            "parent": "854",
+            "skin": "853"
+        },
+        "861": {
+            "link": {
+                "name": "index-finger-metacarpal<Armature",
+                "file": "assets\\models\\tracked_hand_right.glb"
+            },
+            "parent": "854",
+            "skin": "853"
+        },
+        "862": {
+            "link": {
+                "name": "index-finger-phalanx-proximal<Armature",
+                "file": "assets\\models\\tracked_hand_right.glb"
+            },
+            "parent": "854",
+            "skin": "853"
+        },
+        "863": {
+            "link": {
+                "name": "index-finger-phalanx-intermediate<Armature",
+                "file": "assets\\models\\tracked_hand_right.glb"
+            },
+            "parent": "854",
+            "skin": "853"
+        },
+        "864": {
+            "link": {
+                "name": "index-finger-phalanx-distal<Armature",
+                "file": "assets\\models\\tracked_hand_right.glb"
+            },
+            "parent": "854",
+            "skin": "853"
+        },
+        "865": {
+            "link": {
+                "name": "index-finger-tip<Armature",
+                "file": "assets\\models\\tracked_hand_right.glb"
+            },
+            "parent": "854",
+            "skin": "853"
+        },
+        "866": {
+            "link": {
+                "name": "middle-finger-metacarpal<Armature",
+                "file": "assets\\models\\tracked_hand_right.glb"
+            },
+            "parent": "854",
+            "skin": "853"
+        },
+        "867": {
+            "link": {
+                "name": "middle-finger-phalanx-proximal<Armature",
+                "file": "assets\\models\\tracked_hand_right.glb"
+            },
+            "parent": "854",
+            "skin": "853"
+        },
+        "868": {
+            "link": {
+                "name": "middle-finger-phalanx-intermediate<Armature",
+                "file": "assets\\models\\tracked_hand_right.glb"
+            },
+            "parent": "854",
+            "skin": "853"
+        },
+        "869": {
+            "link": {
+                "name": "middle-finger-phalanx-distal<Armature",
+                "file": "assets\\models\\tracked_hand_right.glb"
+            },
+            "parent": "854",
+            "skin": "853"
+        },
+        "870": {
+            "link": {
+                "name": "middle-finger-tip<Armature",
+                "file": "assets\\models\\tracked_hand_right.glb"
+            },
+            "parent": "854",
+            "skin": "853"
+        },
+        "871": {
+            "link": {
+                "name": "ring-finger-metacarpal<Armature",
+                "file": "assets\\models\\tracked_hand_right.glb"
+            },
+            "parent": "854",
+            "skin": "853"
+        },
+        "872": {
+            "link": {
+                "name": "ring-finger-phalanx-proximal<Armature",
+                "file": "assets\\models\\tracked_hand_right.glb"
+            },
+            "parent": "854",
+            "skin": "853"
+        },
+        "873": {
+            "link": {
+                "name": "ring-finger-phalanx-intermediate<Armature",
+                "file": "assets\\models\\tracked_hand_right.glb"
+            },
+            "parent": "854",
+            "skin": "853"
+        },
+        "874": {
+            "link": {
+                "name": "ring-finger-phalanx-distal<Armature",
+                "file": "assets\\models\\tracked_hand_right.glb"
+            },
+            "parent": "854",
+            "skin": "853"
+        },
+        "875": {
+            "link": {
+                "name": "ring-finger-tip<Armature",
+                "file": "assets\\models\\tracked_hand_right.glb"
+            },
+            "parent": "854",
+            "skin": "853"
+        },
+        "876": {
+            "link": {
+                "name": "pinky-finger-metacarpal<Armature",
+                "file": "assets\\models\\tracked_hand_right.glb"
+            },
+            "parent": "854",
+            "skin": "853"
+        },
+        "877": {
+            "link": {
+                "name": "pinky-finger-phalanx-proximal<Armature",
+                "file": "assets\\models\\tracked_hand_right.glb"
+            },
+            "parent": "854",
+            "skin": "853"
+        },
+        "878": {
+            "link": {
+                "name": "pinky-finger-phalanx-intermediate<Armature",
+                "file": "assets\\models\\tracked_hand_right.glb"
+            },
+            "parent": "854",
+            "skin": "853"
+        },
+        "879": {
+            "link": {
+                "name": "pinky-finger-phalanx-distal<Armature",
+                "file": "assets\\models\\tracked_hand_right.glb"
+            },
+            "parent": "854",
+            "skin": "853"
+        },
+        "880": {
+            "link": {
+                "name": "pinky-finger-tip<Armature",
+                "file": "assets\\models\\tracked_hand_right.glb"
+            },
+            "parent": "854",
+            "skin": "853"
         }
     },
     "meshes": {
@@ -13377,6 +13927,18 @@
             "link": {
                 "name": "Cube",
                 "file": "assets\\models\\cube.fbx"
+            }
+        },
+        "819": {
+            "link": {
+                "name": "Mesh",
+                "file": "assets\\models\\tracked_hand_left.glb"
+            }
+        },
+        "852": {
+            "link": {
+                "name": "Mesh.001",
+                "file": "assets\\models\\tracked_hand_right.glb"
             }
         }
     },
@@ -13624,6 +14186,18 @@
                     0.8784313,
                     1.0
                 ]
+            }
+        },
+        "818": {
+            "link": {
+                "name": "Default_Material",
+                "file": "assets\\models\\tracked_hand_left.glb"
+            }
+        },
+        "851": {
+            "link": {
+                "name": "lambert2",
+                "file": "assets\\models\\tracked_hand_right.glb"
             }
         }
     },
@@ -13966,7 +14540,74 @@
         }
     },
     "animations": {},
-    "skins": {},
+    "skins": {
+        "820": {
+            "link": {
+                "name": "Armature",
+                "file": "assets\\models\\tracked_hand_left.glb"
+            },
+            "joints": [
+                "826",
+                "827",
+                "828",
+                "829",
+                "830",
+                "831",
+                "832",
+                "833",
+                "834",
+                "835",
+                "836",
+                "837",
+                "838",
+                "839",
+                "840",
+                "841",
+                "842",
+                "843",
+                "844",
+                "845",
+                "846",
+                "847",
+                "848",
+                "849",
+                "850"
+            ]
+        },
+        "853": {
+            "link": {
+                "name": "Armature",
+                "file": "assets\\models\\tracked_hand_right.glb"
+            },
+            "joints": [
+                "856",
+                "857",
+                "858",
+                "859",
+                "860",
+                "861",
+                "862",
+                "863",
+                "864",
+                "865",
+                "866",
+                "867",
+                "868",
+                "869",
+                "870",
+                "871",
+                "872",
+                "873",
+                "874",
+                "875",
+                "876",
+                "877",
+                "878",
+                "879",
+                "880"
+            ]
+        }
+    },
     "pipelines": {
         "2": {
             "link": {
@@ -14170,6 +14811,8 @@
     "files": [
         "assets/models/quest_controllers_credits_Jezza3D.fbx",
         "assets/models/suzanne.fbx",
-        "assets/models/cube.fbx"
+        "assets/models/cube.fbx",
+        "assets/models/tracked_hand_left.glb",
+        "assets/models/tracked_hand_right.glb"
     ]
 }

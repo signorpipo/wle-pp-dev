@@ -73,17 +73,3 @@ PP.TrackedHandJointPose = class TrackedHandJointPose extends PP.BasePose {
         this._myInputSource = null;
     }
 };
-
-PP.TrackedHandJointPose.prototype.getTransformMatrix = function () {
-    let scale = PP.vec3_create();
-    let transform = PP.mat4_create();
-    return function getTransformMatrix() {
-        this.getTransformQuat().quat2_toMatrix(transform);
-        scale.vec3_set(this._myJointRadius, this._myJointRadius, this._myJointRadius);
-        transform.mat4_setScale(scale);
-
-        return transform;
-    };
-}();
-
-Object.defineProperty(PP.TrackedHandJointPose.prototype, "getTransformMatrix", { enumerable: false });

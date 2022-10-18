@@ -28,20 +28,30 @@ PP.TrackedHandPose = class TrackedHandPose {
         this._myTrackedHandJointPoseList = [];
         for (let jointType of trackedHandPoseParams.myTrackedHandJointTypeList) {
             let trackedHandJointPose = new PP.TrackedHandJointPose(this._myHandedness, jointType, this._myTrackedHandJointPoseParams);
-            this._myTrackedHandJointPoseList.push(trackedHandJointPose);
+            this._myTrackedHandJointPoseList[jointType] = trackedHandJointPose;
         }
     }
 
     start() {
-        for (let jointPose of this._myTrackedHandJointPoseList) {
+        for (let jointPoseKey in this._myTrackedHandJointPoseList) {
+            let jointPose = this._myTrackedHandJointPoseList[jointPoseKey];
             jointPose.start();
         }
     }
 
     update(dt) {
-        for (let jointPose of this._myTrackedHandJointPoseList) {
+        for (let jointPoseKey in this._myTrackedHandJointPoseList) {
+            let jointPose = this._myTrackedHandJointPoseList[jointPoseKey];
             jointPose.update(dt);
         }
+    }
+
+    getJointPose(jointType) {
+        return this._myTrackedHandJointPoseList[jointType];
+    }
+
+    getJointPoseByIndex(jointPoseTypeIndex) {
+        return this._myTrackedHandJointPoseList[PP.InputUtils.getJointTypeByIndex(jointPoseTypeIndex)];
     }
 
     addTrackedHandJointType(jointType) {
@@ -58,7 +68,8 @@ PP.TrackedHandPose = class TrackedHandPose {
     setReferenceObject(referenceObject) {
         this._myReferenceObject = referenceObject;
         this._myTrackedHandJointPoseParams.myReferenceObject = this._myReferenceObject;
-        for (let jointPose of this._myTrackedHandJointPoseList) {
+        for (let jointPoseKey in this._myTrackedHandJointPoseList) {
+            let jointPose = this._myTrackedHandJointPoseList[jointPoseKey];
             jointPose.setReferenceObject(referenceObject);
         }
     }
@@ -70,7 +81,8 @@ PP.TrackedHandPose = class TrackedHandPose {
     setFixForward(fixForward) {
         this._myFixForward = fixForward;
         this._myTrackedHandJointPoseParams.myFixForward = this._myFixForward;
-        for (let jointPose of this._myTrackedHandJointPoseList) {
+        for (let jointPoseKey in this._myTrackedHandJointPoseList) {
+            let jointPose = this._myTrackedHandJointPoseList[jointPoseKey];
             jointPose.setFixForward(fixForward);
         }
     }
@@ -82,7 +94,8 @@ PP.TrackedHandPose = class TrackedHandPose {
     setForceEmulatedVelocities(forceEmulatedVelocities) {
         this._myForceEmulatedVelocities = forceEmulatedVelocities;
         this._myTrackedHandJointPoseParams.myForceEmulatedVelocities = this._myForceEmulatedVelocities;
-        for (let jointPose of this._myTrackedHandJointPoseList) {
+        for (let jointPoseKey in this._myTrackedHandJointPoseList) {
+            let jointPose = this._myTrackedHandJointPoseList[jointPoseKey];
             jointPose.setForceEmulatedVelocities(forceEmulatedVelocities);
         }
     }
