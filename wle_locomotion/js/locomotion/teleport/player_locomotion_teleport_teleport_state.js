@@ -6,13 +6,18 @@ PlayerLocomotionTeleportTeleportType = {
 
 PlayerLocomotionTeleportTeleportParams = class PlayerLocomotionTeleportTeleportParams {
     constructor() {
-        this.myTeleportType = PlayerLocomotionTeleportTeleportType.BLINK;
+        this.myTeleportType = PlayerLocomotionTeleportTeleportType.SHIFT;
 
         this.myBlinkFadeOutSeconds = 0.1;
         this.myBlinkFadeInSeconds = 0.1;
         this.myBlinkWaitSeconds = 0.1;
         this.myBlinkSphereColor = [0, 0, 0];
         this.myBlinkSphereScale = 0.1;
+
+        this.myShiftSeconds = 0.15;
+        this.myShiftSecondsMultiplierOverDistanceFunction = null;
+        this.myShiftEasingFunction = PP.EasingFunction.easeInOut;
+        this.myShiftSmoothRotation = false;
     }
 };
 
@@ -27,10 +32,11 @@ PlayerLocomotionTeleportTeleportState = class PlayerLocomotionTeleportTeleportSt
         this._myFSM.addState("idle");
 
         this._myBlinkState = new PlayerLocomotionTeleportTeleportBlinkState(teleportParams, teleportRuntimeParams, locomotionRuntimeParams);
+        this._myShiftState = new PlayerLocomotionTeleportTeleportShiftState(teleportParams, teleportRuntimeParams, locomotionRuntimeParams);
 
         this._myFSM.addState("instant_teleport", this._instantUpdate.bind(this));
         this._myFSM.addState("blink_teleport", this._myBlinkState);
-        this._myFSM.addState("shift_teleport", this._instantUpdate.bind(this));
+        this._myFSM.addState("shift_teleport", this._myShiftState);
 
         this._myFSM.addTransition("init", "idle", "start");
 

@@ -19,7 +19,7 @@ PlayerLocomotionTeleportTeleportBlinkState = class PlayerLocomotionTeleportTelep
         this._myBlinkSphere.pp_setActive(false);
 
         this._myFSM = new PP.FSM();
-        //this._myFSM.setDebugLogActive(true, "Locomotion Teleport Teleport");
+        //this._myFSM.setDebugLogActive(true, "Locomotion Teleport Teleport Blink");
 
         this._myFSM.addState("init");
         this._myFSM.addState("idle");
@@ -107,7 +107,7 @@ PlayerLocomotionTeleportTeleportBlinkState = class PlayerLocomotionTeleportTelep
     _teleportDone() {
         this._myBlinkSphere.pp_setActive(false);
 
-        this._myParentFSM.perform("done");
+        this._myParentFSM.performDelayed("done");
     }
 
     _stop(teleport) {

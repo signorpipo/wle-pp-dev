@@ -121,20 +121,12 @@ PlayerLocomotionTeleportState.prototype._teleportToPosition = function () {
             feetTransformQuat.quat2_setPositionRotationQuat(feetPosition, feetRotationQuat);
         }
 
-        teleportCollisionRuntimeParams.copy(collisionRuntimeParams);
-        if (!this._myTeleportParams.myPerformTeleportAsMovement) {
-            this._checkTeleport(teleportPosition, feetTransformQuat, teleportCollisionRuntimeParams);
-        } else {
-            this._checkTeleportAsMovement(teleportPosition, feetTransformQuat, teleportCollisionRuntimeParams);
-        }
+        //CollisionCheckGlobal.checkPosition(feetTransformQuat, this._myTeleportParams.myCollisionCheckParams, collisionRuntimeParams);
 
-        if (!teleportCollisionRuntimeParams.myTeleportCanceled) {
-            collisionRuntimeParams.copy(teleportCollisionRuntimeParams);
-            this._myTeleportParams.myPlayerHeadManager.teleportFeetPosition(collisionRuntimeParams.myNewPosition);
-            if (rotationOnUp != 0) {
-                teleportRotation.quat_fromAxis(rotationOnUp, playerUp);
-                this._myTeleportParams.myPlayerHeadManager.rotateHeadHorizontallyQuat(teleportRotation);
-            }
+        this._myTeleportParams.myPlayerHeadManager.teleportFeetPosition(teleportPosition);
+        if (rotationOnUp != 0) {
+            teleportRotation.quat_fromAxis(rotationOnUp, playerUp);
+            this._myTeleportParams.myPlayerHeadManager.rotateHeadHorizontallyQuat(teleportRotation);
         }
     };
 }();

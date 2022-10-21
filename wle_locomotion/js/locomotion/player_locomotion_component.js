@@ -42,6 +42,8 @@ WL.registerComponent('player-locomotion', {
 
         this._myPlayerLocomotion = new PlayerLocomotion(params);
         this._myPlayerLocomotion.start();
+
+        PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Float 1", 0.15, 0.5, 3));
     },
     update(dt) {
         _myTotalRaycasts = 0; // #TODO debug stuff, remove later
