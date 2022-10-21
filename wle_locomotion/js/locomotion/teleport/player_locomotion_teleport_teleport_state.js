@@ -6,9 +6,13 @@ PlayerLocomotionTeleportTeleportType = {
 
 PlayerLocomotionTeleportTeleportParams = class PlayerLocomotionTeleportTeleportParams {
     constructor() {
-        this.myTeleportType = PlayerLocomotionTeleportTeleportType.INSTANT;
+        this.myTeleportType = PlayerLocomotionTeleportTeleportType.BLINK;
 
-
+        this.myBlinkFadeOutSeconds = 0.1;
+        this.myBlinkFadeInSeconds = 0.1;
+        this.myBlinkWaitSeconds = 0.1;
+        this.myBlinkSphereColor = [0, 0, 0];
+        this.myBlinkSphereScale = 0.1;
     }
 };
 
@@ -22,9 +26,11 @@ PlayerLocomotionTeleportTeleportState = class PlayerLocomotionTeleportTeleportSt
         this._myFSM.addState("init");
         this._myFSM.addState("idle");
 
-        this._myFSM.addState("instant_teleport", this._updateInstant.bind(this));
-        this._myFSM.addState("blink_teleport", this._updateInstant.bind(this));
-        this._myFSM.addState("shift_teleport", this._updateInstant.bind(this));
+        this._myBlinkState = new PlayerLocomotionTeleportTeleportBlinkState(teleportParams, teleportRuntimeParams, locomotionRuntimeParams);
+
+        this._myFSM.addState("instant_teleport", this._instantUpdate.bind(this));
+        this._myFSM.addState("blink_teleport", this._myBlinkState);
+        this._myFSM.addState("shift_teleport", this._instantUpdate.bind(this));
 
         this._myFSM.addTransition("init", "idle", "start");
 
@@ -37,7 +43,7 @@ PlayerLocomotionTeleportTeleportState = class PlayerLocomotionTeleportTeleportSt
         this._myFSM.addTransition("shift_teleport", "idle", "done", this._teleportDone.bind(this));
 
         this._myFSM.addTransition("idle", "idle", "stop");
-        this._myFSM.addTransition("instant_teleport", "idle", "stop");
+        this._myFSM.addTransition("instant_teleport", "idle", "stop", this._instantStop.bind(this));
         this._myFSM.addTransition("blink_teleport", "idle", "stop");
         this._myFSM.addTransition("shift_teleport", "idle", "stop");
 
@@ -59,7 +65,7 @@ PlayerLocomotionTeleportTeleportState = class PlayerLocomotionTeleportTeleportSt
                 this._myFSM.perform("start_shift");
                 break;
             default:
-                this._myFSM.perform("start_blink");
+                this._myFSM.perform("start_instant");
         }
     }
 
@@ -75,54 +81,21 @@ PlayerLocomotionTeleportTeleportState = class PlayerLocomotionTeleportTeleportSt
         this._teleportToPosition(this._myTeleportRuntimeParams.myTeleportPosition, this._myTeleportRuntimeParams.myTeleportRotationOnUp, this._myLocomotionRuntimeParams.myCollisionRuntimeParams);
     }
 
-    _updateInstant(dt, fsm) {
+    _instantUpdate(dt, fsm) {
+        this._teleportToPosition(this._myTeleportRuntimeParams.myTeleportPosition, this._myTeleportRuntimeParams.myTeleportRotationOnUp, this._myLocomotionRuntimeParams.myCollisionRuntimeParams);
+        this._myLocomotionRuntimeParams.myTeleportJustPerformed = true;
         fsm.perform("done");
     }
 
+    _instantStop(fsm) {
+        this._instantUpdate(0, fsm);
+    }
+
     _completeTeleport() {
-        this._teleportToPosition(this._myTeleportRuntimeParams.myTeleportPosition, this._myTeleportRuntimeParams.myTeleportRotationOnUp, this._myLocomotionRuntimeParams.myCollisionRuntimeParams);
+        fsm.perform("stop");
     }
 
     _teleportDone() {
-        this._teleportToPosition(this._myTeleportRuntimeParams.myTeleportPosition, this._myTeleportRuntimeParams.myTeleportRotationOnUp, this._myLocomotionRuntimeParams.myCollisionRuntimeParams);
-        this._myParentFSM.perform("done");
+        this._myParentFSM.performDelayed("done");
     }
 };
-
-PlayerLocomotionTeleportTeleportState.prototype._teleportToPosition = function () {
-    let playerUp = PP.vec3_create();
-    let feetPosition = PP.vec3_create();
-    let feetTransformQuat = PP.quat2_create();
-    let feetRotationQuat = PP.quat_create();
-    let teleportRotation = PP.quat_create();
-    let teleportCollisionRuntimeParams = new CollisionRuntimeParams();
-    return function _teleportToPosition(teleportPosition, rotationOnUp, collisionRuntimeParams) {
-        this._myTeleportAsMovementFailed = false;
-
-        playerUp = this._myTeleportParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
-
-        feetTransformQuat = this._myTeleportParams.myPlayerHeadManager.getFeetTransformQuat(feetTransformQuat);
-        feetPosition = feetTransformQuat.quat2_getPosition(feetPosition);
-        if (rotationOnUp != 0) {
-            feetRotationQuat = feetTransformQuat.quat2_getRotationQuat(feetRotationQuat);
-            feetRotationQuat = feetRotationQuat.quat_rotateAxis(rotationOnUp, playerUp, feetRotationQuat);
-            feetTransformQuat.quat2_setPositionRotationQuat(feetPosition, feetRotationQuat);
-        }
-
-        teleportCollisionRuntimeParams.copy(collisionRuntimeParams);
-        if (!this._myTeleportParams.myPerformTeleportAsMovement) {
-            this._checkTeleport(teleportPosition, feetTransformQuat, teleportCollisionRuntimeParams);
-        } else {
-            this._checkTeleportAsMovement(teleportPosition, feetTransformQuat, teleportCollisionRuntimeParams);
-        }
-
-        if (!teleportCollisionRuntimeParams.myTeleportCanceled) {
-            collisionRuntimeParams.copy(teleportCollisionRuntimeParams);
-            this._myTeleportParams.myPlayerHeadManager.teleportFeetPosition(collisionRuntimeParams.myNewPosition);
-            if (rotationOnUp != 0) {
-                teleportRotation.quat_fromAxis(rotationOnUp, playerUp);
-                this._myTeleportParams.myPlayerHeadManager.rotateHeadHorizontallyQuat(teleportRotation);
-            }
-        }
-    };
-}();

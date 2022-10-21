@@ -51,7 +51,9 @@
                         "_myCircle": "p5",
                         "_myPhongOpaque": "780",
                         "_myFlatOpaque": "779",
-                        "_myText": "781"
+                        "_myText": "781",
+                        "_myFlatTrasparentNoDepth": "885",
+                        "_myFlatTransparentNoDepth": "885"
                     }
                 },
                 {
@@ -14270,6 +14272,45 @@
                 "name": "lambert2",
                 "file": "assets\\models\\tracked_hand_right.glb"
             }
+        },
+        "885": {
+            "link": {
+                "name": "lambert2",
+                "file": "assets\\models\\tracked_hand_right.glb"
+            },
+            "name": "Flat Transparent No Depth",
+            "pipeline": "884",
+            "Flat": {
+                "color": [
+                    0.5019608,
+                    0.5019608,
+                    0.5019608,
+                    1.0
+                ]
+            }
+        },
+        "888": {
+            "link": {
+                "name": "Lambert_Body",
+                "file": "assets\\models\\quest_controllers_credits_Jezza3D.fbx"
+            },
+            "name": "test",
+            "Phong": {
+                "diffuseColor": [
+                    0.599384,
+                    0.4133794,
+                    0.8784313,
+                    1.0
+                ],
+                "specularColor": [
+                    1.0,
+                    1.0,
+                    1.0,
+                    0.2509804
+                ],
+                "ambientFactor": 0.5
+            },
+            "pipeline": "13"
         }
     },
     "shaders": {
@@ -14690,7 +14731,8 @@
             "link": {
                 "name": "DistanceFieldVector",
                 "file": "default"
-            }
+            },
+            "sampleAlphaToCoverage": true
         },
         "7": {
             "link": {
@@ -14769,6 +14811,36 @@
                 "name": "Sky",
                 "file": "default"
             }
+        },
+        "884": {
+            "link": {
+                "name": "Flat Opaque Textured",
+                "file": "default"
+            },
+            "name": "Flat Transparent No Depth",
+            "features": {
+                "TEXTURED": false
+            },
+            "depthFunction": "always",
+            "depthTest": false,
+            "depthWrite": true,
+            "blending": true,
+            "blendSrcRgb": "source alpha",
+            "blendSrcAlpha": "source alpha",
+            "blendDestRgb": "one minus source alpha",
+            "blendDestAlpha": "one minus source alpha",
+            "blendEqAlpha": "max",
+            "sampleAlphaToCoverage": false
+        },
+        "889": {
+            "link": {
+                "name": "Phong Opaque",
+                "file": "default"
+            },
+            "features": {
+                "WITH_FOG": true
+            },
+            "name": "Phong Opaque 2"
         }
     },
     "settings": {

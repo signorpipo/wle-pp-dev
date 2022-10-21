@@ -1,7 +1,12 @@
+
+
 PlayerLocomotionMovementRuntimeParams = class PlayerLocomotionMovementRuntimeParams {
     constructor() {
         this.myIsFlying = false;
         this.myCollisionRuntimeParams = null;
+
+        this.myIsTeleporting = false;
+        this.myTeleportJustPerformed = false;
     }
 };
 

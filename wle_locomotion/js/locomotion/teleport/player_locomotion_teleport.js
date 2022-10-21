@@ -84,6 +84,8 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport extends PlayerLocomoti
     }
 
     update(dt) {
+        this._myLocomotionRuntimeParams.myTeleportJustPerformed = false;
+
         this._myFSM.update(dt);
 
         if (this._myTeleportParams.myAdjustPositionEveryFrame || this._myTeleportParams.myGravityAcceleration != 0) {

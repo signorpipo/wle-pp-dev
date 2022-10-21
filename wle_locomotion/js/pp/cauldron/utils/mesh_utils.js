@@ -290,29 +290,32 @@ PP.MeshUtils = {
             return invertedMesh;
         };
     }(),
-    setAlpha: function (object, alpha) {
-        let meshComponents = object.pp_getComponentsHierarchy("mesh");
+    setAlpha: function () {
+        let color = PP.vec4_create();
+        return function setAlpha(object, alpha) {
+            let meshComponents = object.pp_getComponentsHierarchy("mesh");
 
-        for (let meshComponent of meshComponents) {
-            if (meshComponent.material.color != null) {
-                let color = meshComponent.material.color;
-                color[3] = alpha;
-                meshComponent.material.color = color;
-            }
+            for (let meshComponent of meshComponents) {
+                if (meshComponent.material.color != null) {
+                    color.vec4_copy(meshComponent.material.color);
+                    color[3] = alpha;
+                    meshComponent.material.color = color;
+                }
 
-            if (meshComponent.material.diffuseColor != null) {
-                let color = meshComponent.material.diffuseColor;
-                color[3] = alpha;
-                meshComponent.material.diffuseColor = color;
-            }
+                if (meshComponent.material.diffuseColor != null) {
+                    color.vec4_copy(meshComponent.material.diffuseColor);
+                    color[3] = alpha;
+                    meshComponent.material.diffuseColor = color;
+                }
 
-            if (meshComponent.material.ambientColor != null) {
-                let color = meshComponent.material.ambientColor;
-                color[3] = alpha;
-                meshComponent.material.ambientColor = color;
+                if (meshComponent.material.ambientColor != null) {
+                    color.vec4_copy(meshComponent.material.ambientColor);
+                    color[3] = alpha;
+                    meshComponent.material.ambientColor = color;
+                }
             }
-        }
-    },
+        };
+    }(),
     setMaterial: function (object, material, cloneMaterial = false) {
         let meshComponents = object.pp_getComponentsHierarchy("mesh");
 

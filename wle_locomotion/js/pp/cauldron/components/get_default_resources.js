@@ -7,6 +7,7 @@ WL.registerComponent('pp-get-default-resources', {
     _myCircle: { type: WL.Type.Mesh },
 
     _myFlatOpaque: { type: WL.Type.Material },
+    _myFlatTransparentNoDepth: { type: WL.Type.Material },
     _myPhongOpaque: { type: WL.Type.Material },
     _myText: { type: WL.Type.Material },
 
@@ -25,6 +26,7 @@ WL.registerComponent('pp-get-default-resources', {
         PP.myDefaultResources.myMeshes.myInvertedCylinder = PP.MeshUtils.invertMesh(this._myCylinder);
 
         PP.myDefaultResources.myMaterials.myFlatOpaque = this._myFlatOpaque.clone();
+        PP.myDefaultResources.myMaterials.myFlatTransparentNoDepth = this._myFlatTransparentNoDepth.clone();
         PP.myDefaultResources.myMaterials.myPhongOpaque = this._myPhongOpaque.clone();
         PP.myDefaultResources.myMaterials.myText = this._myText.clone();
     }
@@ -46,7 +48,8 @@ PP.myDefaultResources = {
     },
     myMaterials: {
         myFlatOpaque: null,
+        myFlatTransparentNoDepth: null, // for now the pipeline needs to be the last one to make this work properly
         myPhongOpaque: null,
-        myText: null
+        myText: null,
     }
 };
