@@ -115,7 +115,7 @@ PP.WidgetFrameSetup = class WidgetFrameSetup {
         this.myWidgetObjectTransforms[PP.ToolInputSourceType.TRACKED_HAND][PP.ToolHandedness.LEFT].myPosition = [0.1, 0.23, -0.02];
         this.myWidgetObjectTransforms[PP.ToolInputSourceType.TRACKED_HAND][PP.ToolHandedness.RIGHT].myPosition = [0.07, 0.23, -0.02];
 
-        this._myPivotObjectDistanceFromNonVRHead = 0.4;
+        this._myPivotObjectDistanceFromNonVRHead = 0.6;
     }
 
     _createDefaultObjectTransforms() {
