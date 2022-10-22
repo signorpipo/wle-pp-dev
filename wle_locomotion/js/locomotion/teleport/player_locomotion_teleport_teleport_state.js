@@ -14,10 +14,18 @@ PlayerLocomotionTeleportTeleportParams = class PlayerLocomotionTeleportTeleportP
         this.myBlinkSphereColor = [0, 0, 0];
         this.myBlinkSphereScale = 0.1;
 
-        this.myShiftSeconds = 0.15;
-        this.myShiftSecondsMultiplierOverDistanceFunction = null;
-        this.myShiftEasingFunction = PP.EasingFunction.easeInOut;
-        this.myShiftSmoothRotation = false;
+        this.myShiftMovementSeconds = 0.15;
+        this.myShiftMovementSecondsMultiplierOverDistanceFunction = null;
+        this.myShiftMovementEasingFunction = PP.EasingFunction.easeInOut;
+
+        this.myShiftRotateSeconds = 1;
+        this.myShiftRotateSecondsMultiplierOverAngleFunction = null;
+        this.myShiftRotateEasingFunction = PP.EasingFunction.easeOut;
+        this.myShiftRotateStartAfterMovementPercentage = 0.7;
+
+        this.myShiftRotateSecondsMultiplierOverAngleFunction = function (angle) {
+            return PP.EasingFunction.easeOut(angle / 180);
+        };
     }
 };
 
