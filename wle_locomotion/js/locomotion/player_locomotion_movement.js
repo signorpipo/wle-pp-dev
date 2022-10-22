@@ -5,6 +5,7 @@ PlayerLocomotionMovementRuntimeParams = class PlayerLocomotionMovementRuntimePar
         this.myIsFlying = false;
         this.myCollisionRuntimeParams = null;
 
+        this.myIsTeleportDetecting = false;
         this.myIsTeleporting = false;
         this.myTeleportJustPerformed = false;
     }

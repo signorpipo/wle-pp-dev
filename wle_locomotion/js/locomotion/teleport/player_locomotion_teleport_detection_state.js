@@ -62,6 +62,7 @@ PlayerLocomotionTeleportDetectionState = class PlayerLocomotionTeleportDetection
     }
 
     start() {
+        this._myLocomotionRuntimeParams.myIsTeleportDetecting = true;
         this._myTeleportRuntimeParams.myTeleportRotationOnUp = 0;
         this._myTeleportRotationOnUpNext = 0;
 
@@ -73,6 +74,7 @@ PlayerLocomotionTeleportDetectionState = class PlayerLocomotionTeleportDetection
     }
 
     end() {
+        this._myLocomotionRuntimeParams.myIsTeleportDetecting = false;
         this._myVisualizer.end();
     }
 
