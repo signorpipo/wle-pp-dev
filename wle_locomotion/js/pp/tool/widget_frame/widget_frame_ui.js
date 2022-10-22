@@ -54,33 +54,6 @@ PP.WidgetFrameUI = class WidgetFrameUI {
         this._updateObjectsTransforms(false);
     }
 
-    _updateObjectsTransforms(forceRefreshObjectsTransforms) {
-        if (PP.XRUtils.isXRSessionActive()) {
-            let inputSourceType = PP.InputUtils.getInputSourceTypeByHandedness(this._myAdditionalSetup.myHandedness);
-
-            if (inputSourceType != this._myInputSourceType || forceRefreshObjectsTransforms) {
-                this._myInputSourceType = inputSourceType;
-
-                if (!this._myIsPinned) {
-                    this.myPivotObject.setTranslationLocal(this._mySetup.myPivotObjectTransforms[this._myInputSourceType][this._myAdditionalSetup.myHandedness].myPosition);
-                    this.myPivotObject.resetRotation();
-                    this.myPivotObject.rotateObject(this._mySetup.myPivotObjectTransforms[this._myInputSourceType][this._myAdditionalSetup.myHandedness].myRotation);
-
-                    this.myWidgetObject.setTranslationLocal(this._mySetup.myWidgetObjectTransforms[this._myInputSourceType][this._myAdditionalSetup.myHandedness].myPosition);
-                    this.myWidgetObject.resetRotation();
-                    this.myWidgetObject.rotateObject(this._mySetup.myWidgetObjectTransforms[this._myInputSourceType][this._myAdditionalSetup.myHandedness].myRotation);
-
-                    this.myVisibilityButtonPanel.setTranslationLocal(this._mySetup.myVisibilityButtonPosition[this._myAdditionalSetup.myHandedness].myPosition);
-                    this.myPinButtonPanel.setTranslationLocal(this._mySetup.myPinButtonPosition[this._myAdditionalSetup.myHandedness].myPosition);
-                }
-            }
-        } else {
-            this.myFixForwardObject.pp_setPosition(PP.myPlayerObjects.myNonVRHead.pp_getPosition());
-            this.myFixForwardObject.pp_translate(PP.myPlayerObjects.myNonVRHead.pp_getForward().vec3_scale(this._mySetup._myPivotObjectDistanceFromNonVRHead));
-            this.myFixForwardObject.pp_lookTo(PP.myPlayerObjects.myNonVRHead.pp_getBackward(), PP.myPlayerObjects.myNonVRHead.pp_getUp());
-        }
-    }
-
     //Skeleton
     _createSkeleton() {
         this.myFixForwardObject = WL.scene.addObject(this._myParentObject);
@@ -193,3 +166,40 @@ PP.WidgetFrameUI = class WidgetFrameUI {
         this.myPinButtonPanel.setTranslationLocal(this._mySetup.myPinButtonPosition[PP.ToolHandedness.NONE].myPosition);
     }
 };
+
+PP.WidgetFrameUI.prototype._updateObjectsTransforms = function () {
+    let position = PP.vec3_create();
+    let forward = PP.vec3_create();
+    let backward = PP.vec3_create();
+    let up = PP.vec3_create();
+    return function _updateObjectsTransforms(forceRefreshObjectsTransforms) {
+        if (PP.XRUtils.isXRSessionActive()) {
+            let inputSourceType = PP.InputUtils.getInputSourceTypeByHandedness(this._myAdditionalSetup.myHandedness);
+
+            if (inputSourceType != this._myInputSourceType || forceRefreshObjectsTransforms) {
+                this._myInputSourceType = inputSourceType;
+
+                if (!this._myIsPinned) {
+                    this.myPivotObject.setTranslationLocal(this._mySetup.myPivotObjectTransforms[this._myInputSourceType][this._myAdditionalSetup.myHandedness].myPosition);
+                    this.myPivotObject.resetRotation();
+                    this.myPivotObject.rotateObject(this._mySetup.myPivotObjectTransforms[this._myInputSourceType][this._myAdditionalSetup.myHandedness].myRotation);
+
+                    this.myWidgetObject.setTranslationLocal(this._mySetup.myWidgetObjectTransforms[this._myInputSourceType][this._myAdditionalSetup.myHandedness].myPosition);
+                    this.myWidgetObject.resetRotation();
+                    this.myWidgetObject.rotateObject(this._mySetup.myWidgetObjectTransforms[this._myInputSourceType][this._myAdditionalSetup.myHandedness].myRotation);
+
+                    this.myVisibilityButtonPanel.setTranslationLocal(this._mySetup.myVisibilityButtonPosition[this._myAdditionalSetup.myHandedness].myPosition);
+                    this.myPinButtonPanel.setTranslationLocal(this._mySetup.myPinButtonPosition[this._myAdditionalSetup.myHandedness].myPosition);
+                }
+            }
+        } else {
+            this.myFixForwardObject.pp_setPosition(PP.myPlayerObjects.myNonVRHead.pp_getPosition(position));
+            this.myFixForwardObject.pp_translate(PP.myPlayerObjects.myNonVRHead.pp_getForward(forward).vec3_scale(this._mySetup._myPivotObjectDistanceFromNonVRHead, forward));
+            this.myFixForwardObject.pp_lookTo(PP.myPlayerObjects.myNonVRHead.pp_getBackward(backward), PP.myPlayerObjects.myNonVRHead.pp_getUp(up));
+        }
+    };
+}();
+
+
+
+Object.defineProperty(PP.RaycastResult.prototype, "copy", { enumerable: false });
