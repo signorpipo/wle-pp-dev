@@ -23,6 +23,8 @@ WL.registerComponent('pp-easy-tune', {
         PP.refreshEasyTuneWidget = function () {
             this._myWidget.refresh();
         }.bind(this);
+
+        this._myStarted = false;
     },
     start: function () {
 
@@ -39,6 +41,8 @@ WL.registerComponent('pp-easy-tune', {
 
         this._myWidgetVisibleBackup = this._myWidget.isVisible();
         this._mySetVisibleNextUpdate = false;
+
+        this._myStarted = true;
     },
     update: function (dt) {
         if (this._mySetVisibleNextUpdate) {
@@ -53,9 +57,11 @@ WL.registerComponent('pp-easy-tune', {
         this._mySetVisibleNextUpdate = true;
     },
     onDeactivate() {
-        this._myWidgetVisibleBackup = this._myWidget.isVisible();
+        if (this._myStarted) {
+            this._myWidgetVisibleBackup = this._myWidget.isVisible();
 
-        this._myWidget.setVisible(false);
+            this._myWidget.setVisible(false);
+        }
     },
 });
 

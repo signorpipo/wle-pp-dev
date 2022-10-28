@@ -57,9 +57,13 @@ WL.registerComponent('pp-gamepad-control-scheme', {
     },
     setVisible(visible) {
         this._myVisible = visible;
-        this._myRootObject.pp_setActive(this._myVisible);
-        if (this._myVisible) {
-            this._hideEmptySchemes();
+
+        if (this._myRootObject != null) {
+            this._myRootObject.pp_setActive(this._myVisible);
+
+            if (this._myVisible) {
+                this._hideEmptySchemes();
+            }
         }
     },
     setSelectText(text) {

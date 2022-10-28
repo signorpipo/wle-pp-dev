@@ -51,10 +51,14 @@ WL.registerComponent('player-locomotion', {
         this._myPlayerLocomotion.update(dt);
     },
     onActivate() {
-        this._myPlayerLocomotion.setIdle(false);
+        if (this._myPlayerLocomotion != null) {
+            this._myPlayerLocomotion.setIdle(false);
+        }
     },
     onDeactivate() {
-        this._myPlayerLocomotion.setIdle(true);
+        if (this._myPlayerLocomotion != null) {
+            this._myPlayerLocomotion.setIdle(true);
+        }
     }
 });
 

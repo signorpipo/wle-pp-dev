@@ -7,6 +7,8 @@ WL.registerComponent('pp-console-vr', {
 }, {
     init: function () {
         this._myWidget = new PP.ConsoleVRWidget();
+
+        this._myStarted = false;
     },
     start: function () {
         let additionalSetup = {};
@@ -22,6 +24,8 @@ WL.registerComponent('pp-console-vr', {
 
         this._myWidgetVisibleBackup = this._myWidget.isVisible();
         this._mySetVisibleNextUpdate = false;
+
+        this._myStarted = true;
     },
     update: function (dt) {
         if (this._mySetVisibleNextUpdate) {
@@ -36,8 +40,10 @@ WL.registerComponent('pp-console-vr', {
         this._mySetVisibleNextUpdate = true;
     },
     onDeactivate() {
-        this._myWidgetVisibleBackup = this._myWidget.isVisible();
+        if (this._myStarted) {
+            this._myWidgetVisibleBackup = this._myWidget.isVisible();
 
-        this._myWidget.setVisible(false);
+            this._myWidget.setVisible(false);
+        }
     },
 });
