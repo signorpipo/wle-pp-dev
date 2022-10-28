@@ -17,12 +17,14 @@ WL.registerComponent('pp-easy-tune', {
         PP.myEasyTuneVariables = new PP.EasyTuneVariables();
 
         this._myWidget = new PP.EasyTuneWidget();
-        PP.setEasyTuneWidgetActiveVariable = function (variableName) {
+
+        PP._setEasyTuneWidgetActiveVariableCallbacks.push(function (variableName) {
             this._myWidget.setActiveVariable(variableName);
-        }.bind(this);
-        PP.refreshEasyTuneWidget = function () {
+        }.bind(this));
+
+        PP._refreshEasyTuneWidgetCallbacks.push(function () {
             this._myWidget.refresh();
-        }.bind(this);
+        }.bind(this));
 
         this._myStarted = false;
     },
@@ -69,10 +71,18 @@ PP.myEasyTuneVariables = null;
 
 PP.myEasyTuneTarget = null;
 
-PP.setEasyTuneWidgetActiveVariable = function () {
-    console.log("setEasyTuneWidgetActiveVariable function not initialized yet");
+PP.setEasyTuneWidgetActiveVariable = function (variableName) {
+    for (let callback of PP._setEasyTuneWidgetActiveVariableCallbacks) {
+        callback(variableName);
+    }
 };
 
+PP._setEasyTuneWidgetActiveVariableCallbacks = [];
+
 PP.refreshEasyTuneWidget = function () {
-    console.log("refreshEasyTuneWidget function not initialized yet");
+    for (let callback of PP._refreshEasyTuneWidgetCallbacks) {
+        callback();
+    }
 };
+
+PP._refreshEasyTuneWidgetCallbacks = [];
