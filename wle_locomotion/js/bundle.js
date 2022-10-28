@@ -200,6 +200,7 @@ require('./locomotion/collision/collision_params');
 require('./locomotion/collision/collision_check');
 require('./locomotion/collision/collision_movement_check');
 require('./locomotion/collision/collision_teleport_check');
+require('./locomotion/collision/collision_position_check');
 require('./locomotion/collision/horizontal_collision_check');
 require('./locomotion/collision/horizontal_collision_sliding');
 require('./locomotion/collision/horizontal_collision_movement_check');

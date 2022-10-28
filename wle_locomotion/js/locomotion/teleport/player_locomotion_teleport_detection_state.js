@@ -124,6 +124,11 @@ PlayerLocomotionTeleportDetectionState = class PlayerLocomotionTeleportDetection
     }
 
     _detectTeleportPosition() {
+        this._myDetectionRuntimeParams.myParable.setSpeed(PP.myEasyTuneVariables.get("Parable Speed"));
+        this._myDetectionRuntimeParams.myParable.setGravity(PP.myEasyTuneVariables.get("Parable Gravity"));
+        this._myDetectionRuntimeParams.myParable.setStepLength(PP.myEasyTuneVariables.get("Parable Steps"));
+        this._myTeleportParams.myDetectionParams.myMaxDistance = PP.myEasyTuneVariables.get("Teleport Max Distance");
+
         if (PP.XRUtils.isXRSessionActive()) {
             this._detectTeleportRotationVR();
             this._detectTeleportPositionVR();
@@ -163,10 +168,6 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionVR = fun
     let playerUp = PP.vec3_create();
     let playerUpNegate = PP.vec3_create();
     return function _detectTeleportPositionVR(dt) {
-        this._myDetectionRuntimeParams.myParable.setSpeed(PP.myEasyTuneVariables.get("Parable Speed"));
-        this._myDetectionRuntimeParams.myParable.setGravity(PP.myEasyTuneVariables.get("Parable Gravity"));
-        this._myDetectionRuntimeParams.myParable.setStepLength(PP.myEasyTuneVariables.get("Parable Steps"));
-        this._myTeleportParams.myDetectionParams.myMaxDistance = PP.myEasyTuneVariables.get("Teleport Max Distance");
 
         this._myDetectionRuntimeParams.myTeleportPositionValid = false;
         this._myDetectionRuntimeParams.myTeleportDetectionValid = false;

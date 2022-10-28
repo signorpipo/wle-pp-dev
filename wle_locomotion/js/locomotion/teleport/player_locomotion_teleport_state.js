@@ -103,25 +103,24 @@ PlayerLocomotionTeleportState.prototype._checkTeleportAsMovement = function () {
 
 PlayerLocomotionTeleportState.prototype._teleportToPosition = function () {
     let playerUp = PP.vec3_create();
-    let feetPosition = PP.vec3_create();
     let feetTransformQuat = PP.quat2_create();
-    let feetRotationQuat = PP.quat_create();
+    let newFeetTransformQuat = PP.quat2_create();
+    let newFeetRotationQuat = PP.quat_create();
     let teleportRotation = PP.quat_create();
-    let teleportCollisionRuntimeParams = new CollisionRuntimeParams();
     return function _teleportToPosition(teleportPosition, rotationOnUp, collisionRuntimeParams) {
         this._myTeleportAsMovementFailed = false;
 
         playerUp = this._myTeleportParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
 
         feetTransformQuat = this._myTeleportParams.myPlayerHeadManager.getFeetTransformQuat(feetTransformQuat);
-        feetPosition = feetTransformQuat.quat2_getPosition(feetPosition);
+        newFeetRotationQuat = feetTransformQuat.quat2_getRotationQuat(newFeetRotationQuat);
         if (rotationOnUp != 0) {
-            feetRotationQuat = feetTransformQuat.quat2_getRotationQuat(feetRotationQuat);
-            feetRotationQuat = feetRotationQuat.quat_rotateAxis(rotationOnUp, playerUp, feetRotationQuat);
-            feetTransformQuat.quat2_setPositionRotationQuat(feetPosition, feetRotationQuat);
+            newFeetRotationQuat = newFeetRotationQuat.quat_rotateAxis(rotationOnUp, playerUp, newFeetRotationQuat);
         }
 
-        //CollisionCheckGlobal.checkPosition(feetTransformQuat, this._myTeleportParams.myCollisionCheckParams, collisionRuntimeParams);
+        newFeetTransformQuat.quat2_setPositionRotationQuat(teleportPosition, newFeetRotationQuat);
+
+        CollisionCheckGlobal.positionCheck(newFeetTransformQuat, this._myTeleportParams.myCollisionCheckParams, collisionRuntimeParams);
 
         this._myTeleportParams.myPlayerHeadManager.teleportFeetPosition(teleportPosition);
         if (rotationOnUp != 0) {
