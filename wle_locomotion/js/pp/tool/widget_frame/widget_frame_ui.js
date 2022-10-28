@@ -6,6 +6,9 @@ PP.WidgetFrameUI = class WidgetFrameUI {
 
         this._myParentObject = null;
         this._myIsPinned = false;
+
+        this._myWidgetVisible = true;
+        this._myVisibilityButtonVisible = true;
     }
 
     build(parentObject, setup, additionalSetup) {
@@ -28,6 +31,7 @@ PP.WidgetFrameUI = class WidgetFrameUI {
     }
 
     setWidgetVisible(visible) {
+        this._myWidgetVisible = visible;
         this.myFlagsButtonPanel.pp_setActiveHierarchy(visible);
         if (visible) {
             this._updateObjectsTransforms(true);
@@ -35,6 +39,7 @@ PP.WidgetFrameUI = class WidgetFrameUI {
     }
 
     setVisibilityButtonVisible(visible) {
+        this._myVisibilityButtonVisible = visible;
         this.myVisibilityButtonPanel.pp_setActiveHierarchy(visible);
     }
 
@@ -79,6 +84,8 @@ PP.WidgetFrameUI = class WidgetFrameUI {
                     this.myPinButtonPanel.setTranslationLocal(this._mySetup.myPinButtonPosition[this._myAdditionalSetup.myHandedness].myPosition);
                 }
             }
+        } else {
+            this.myVisibilityButtonPanel.pp_setActiveHierarchy(this._myWidgetVisible || this._myVisibilityButtonVisible);
         }
     }
 
@@ -169,6 +176,8 @@ PP.WidgetFrameUI = class WidgetFrameUI {
     }
 
     _onXRSessionStart() {
+        this.myVisibilityButtonPanel.pp_setActiveHierarchy(this._myVisibilityButtonVisible);
+
         this._setTransformForVR();
     }
 
