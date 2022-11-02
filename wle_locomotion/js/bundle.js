@@ -59,6 +59,7 @@ require('./pp/cauldron/components/set_active');
 require('./pp/cauldron/components/adjust_hierarchy_physx_scale');
 require('./pp/cauldron/components/get_player_objects');
 require('./pp/cauldron/components/get_default_resources');
+require('./pp/cauldron/components/show_fps');
 
 require('./pp/cauldron/fsm/fsm');
 require('./pp/cauldron/fsm/state');
@@ -191,7 +192,6 @@ require('./cauldron/toggle_require_mouse_down');
 require('./cauldron/character_spawner');
 require('./cauldron/ai_movement');
 require('./cauldron/stick_movement');
-require('./cauldron/display_fps');
 
 //LOCOMOTION
 

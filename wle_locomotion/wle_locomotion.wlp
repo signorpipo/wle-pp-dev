@@ -7377,11 +7377,10 @@
             ],
             "components": [
                 {
-                    "type": "display-fps",
-                    "display-fps": {
-                        "_myRefreshTime": 0.05
-                    },
-                    "active": true
+                    "type": "pp-show-fps",
+                    "pp-show-fps": {
+                        "_myTextMaterial": null
+                    }
                 }
             ]
         },
