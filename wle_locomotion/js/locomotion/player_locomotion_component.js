@@ -12,7 +12,8 @@ WL.registerComponent('player-locomotion', {
     _myMinAngleToFlyRight: { type: WL.Type.Float, default: 30 },
     _myMainHand: { type: WL.Type.Enum, values: ['left', 'right'], default: 'left' },
     _myVRDirectionReferenceType: { type: WL.Type.Enum, values: ['head', 'hand', 'custom object'], default: 'hand' },
-    _myVRDirectionReferenceObject: { type: WL.Type.Object }
+    _myVRDirectionReferenceObject: { type: WL.Type.Object },
+    _myTeleportPositionObject: { type: WL.Type.Object },
 }, {
     init() {
     },
@@ -39,6 +40,8 @@ WL.registerComponent('player-locomotion', {
         params.myVRDirectionReferenceObject = this._myVRDirectionReferenceObject;
 
         params.myForeheadExtraHeight = 0.15;
+
+        params.myTeleportPositionObject = this._myTeleportPositionObject;
 
         this._myPlayerLocomotion = new PlayerLocomotion(params);
         this._myPlayerLocomotion.start();

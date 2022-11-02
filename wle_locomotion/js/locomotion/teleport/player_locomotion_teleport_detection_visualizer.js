@@ -3,6 +3,8 @@ PlayerLocomotionTeleportDetectionVisualizerParams = class PlayerLocomotionTelepo
         this.myTeleportParableValidMaterial = null;
         this.myTeleportParableInvalidMaterial = null;
 
+        this.myTeleportPositionObject = null;
+
         this.myTeleportParableLineEndOffset = 0.05;
         this.myTeleportParableMinVerticalDistanceToShowVerticalLine = 0.25;
 
@@ -95,6 +97,10 @@ PlayerLocomotionTeleportDetectionVisualizer = class PlayerLocomotionTeleportDete
 
         this._myValidVisualTeleportPositionTorus.setVisible(false);
         this._myValidVisualTeleportPositionTorusInner.setVisible(false);
+
+        if (this._myTeleportParams.myVisualizerParams.myTeleportPositionObject != null) {
+            this._myTeleportParams.myVisualizerParams.myTeleportPositionObject.pp_setActive(false);
+        }
     }
 
     _addVisualLines(amount) {
@@ -221,6 +227,12 @@ PlayerLocomotionTeleportDetectionVisualizer.prototype._setupVisuals = function (
             visualParams.myTransform.mat4_setPosition(innerTorusPosition);
 
             this._myValidVisualTeleportPositionTorusInner = new PP.VisualTorus(visualParams);
+        }
+
+        if (this._myTeleportParams.myVisualizerParams.myTeleportPositionObject != null) {
+            this._myTeleportParams.myVisualizerParams.myTeleportPositionObject.pp_setParent(this._myVisualTeleportPositionObject);
+            this._myTeleportParams.myVisualizerParams.myTeleportPositionObject.pp_resetTransformLocal();
+            this._myTeleportParams.myVisualizerParams.myTeleportPositionObject.pp_setActive(false);
         }
 
         this._hideTeleportPosition();
@@ -395,8 +407,14 @@ PlayerLocomotionTeleportDetectionVisualizer.prototype._showTeleportParablePositi
             this._myValidVisualTeleportPositionTorusInner.paramsUpdated();
         }
 
-        this._myValidVisualTeleportPositionTorus.setVisible(true);
-        this._myValidVisualTeleportPositionTorusInner.setVisible(true);
+        if (this._myTeleportParams.myVisualizerParams.myTeleportPositionObject == null) {
+            this._myValidVisualTeleportPositionTorus.setVisible(true);
+            this._myValidVisualTeleportPositionTorusInner.setVisible(true);
+        } else {
+            this._myValidVisualTeleportPositionTorus.setVisible(false);
+            this._myValidVisualTeleportPositionTorusInner.setVisible(false);
+            this._myTeleportParams.myVisualizerParams.myTeleportPositionObject.pp_setActive(true);
+        }
 
         if (this._myTeleportParams.myDebugActive && this._myTeleportParams.myDebugShowActive) {
             PP.myDebugVisualManager.drawPoint(0, this._myTeleportRuntimeParams.myTeleportPosition, [0, 0, 1, 1], 0.02);

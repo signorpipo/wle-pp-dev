@@ -88,7 +88,8 @@
                     "player-locomotion": {
                         "_myIsSnapTurn": true,
                         "_myFlyEnabled": false,
-                        "_myMainHand": "left"
+                        "_myMainHand": "left",
+                        "_myTeleportPositionObject": null
                     },
                     "active": true
                 }
@@ -13864,6 +13865,63 @@
                 0.0,
                 0.0,
                 0.0,
+                0.0,
+                1.0
+            ]
+        },
+        "890": {
+            "name": "Kit",
+            "parent": "18",
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                -10.0,
+                0.0,
+                1.0
+            ]
+        },
+        "891": {
+            "name": "Teleport Position Indicator",
+            "parent": "890"
+        },
+        "892": {
+            "name": "Mesh",
+            "parent": "891",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "81",
+                        "material": "35"
+                    }
+                }
+            ],
+            "transformation": [
+                0.002,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.002,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.002,
+                0.0,
+                0.0,
+                0.3499999,
                 0.0,
                 1.0
             ]

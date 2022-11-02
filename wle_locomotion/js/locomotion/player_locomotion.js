@@ -26,6 +26,8 @@ PlayerLocomotionParams = class PlayerLocomotionParams {
         this.myVRDirectionReferenceObject = null;
 
         this.myForeheadExtraHeight = 0;
+
+        this.myTeleportPositionObject = null;
     }
 };
 
@@ -140,6 +142,8 @@ PlayerLocomotion = class PlayerLocomotion {
                 params.myDetectionParams.myTeleportHeadOrFeetPositionMustBeVisible = true;
 
                 params.myDetectionParams.myVisibilityBlockLayerFlags.setAllFlagsActive(true);
+
+                params.myVisualizerParams.myTeleportPositionObject = this._myParams.myTeleportPositionObject;
 
                 params.myPerformTeleportAsMovement = false;
                 params.myTeleportAsMovementRemoveVerticalMovement = true;
