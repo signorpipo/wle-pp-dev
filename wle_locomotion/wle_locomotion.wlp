@@ -15,14 +15,6 @@
                     }
                 },
                 {
-                    "type": "pp-mute-all",
-                    "active": false
-                },
-                {
-                    "type": "pp-clear-console-on-session",
-                    "active": true
-                },
-                {
                     "type": "pp-get-player-objects",
                     "pp-get-player-objects": {
                         "_myPlayer": "19",
@@ -58,6 +50,13 @@
                 },
                 {
                     "type": "pp-visual-manager"
+                },
+                {
+                    "type": "pp-mute-everything",
+                    "active": false
+                },
+                {
+                    "type": "pp-clear-console-on-xr-session-start"
                 }
             ]
         },
@@ -13921,6 +13920,36 @@
                 0.0,
                 0.0,
                 0.3499999,
+                0.0,
+                1.0
+            ]
+        },
+        "893": {
+            "name": "Gamepad Button Display",
+            "components": [
+                {
+                    "type": "gamepad-button-display",
+                    "gamepad-button-display": {
+                        "_myButtonIndex": 2
+                    }
+                }
+            ],
+            "parent": "71",
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                -10000.0,
                 0.0,
                 1.0
             ]

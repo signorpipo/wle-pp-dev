@@ -56,8 +56,8 @@ PP.XRGamepadCore = class XRGamepadCore extends PP.GamepadCore {
 
                 buttonData.myIsTouched = gamepadButton.touched;
                 buttonData.myValue = gamepadButton.value;
-            } else if (buttonType == PP.ButtonType.BOTTOM_BUTTON && this._myGamepad.buttons.length >= 3) {
-                //This way if you are using a basic touch controller bottom button will work anyway
+            } else if (buttonType == PP.ButtonType.TOP_BUTTON && this._myGamepad.buttons.length >= 3) {
+                //This way if you are using a basic touch controller, top button will work anyway
                 let touchButton = this._myGamepad.buttons[2];
                 buttonData.myIsPressed = touchButton.pressed;
                 buttonData.myIsTouched = touchButton.touched;
