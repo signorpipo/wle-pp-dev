@@ -103,7 +103,7 @@ CollisionCheck.prototype._verticalMovementFix = function () {
 
                 if (raycastResult.myHits.length > 0) {
                     if (furtherDirectionPositionSet) {
-                        if (raycastResult.myHits[0].myPosition.vec3_isFurtherAlongDirection(furtherDirectionPosition, furtherDirection)) {
+                        if (raycastResult.myHits[0].myPosition.vec3_isFurtherAlongAxis(furtherDirectionPosition, furtherDirection)) {
                             furtherDirectionPosition.vec3_copy(raycastResult.myHits[0].myPosition);
                         }
                     } else {
@@ -118,18 +118,18 @@ CollisionCheck.prototype._verticalMovementFix = function () {
                 if (isMovementDownward) {
                     outFixedMovement = furtherDirectionPosition.vec3_sub(feetPosition, outFixedMovement).vec3_componentAlongAxis(up, outFixedMovement);
 
-                    if (snapEnabled && outFixedMovement.vec3_isFurtherAlongDirection(verticalMovement, upNegate)) {
+                    if (snapEnabled && outFixedMovement.vec3_isFurtherAlongAxis(verticalMovement, upNegate)) {
                         collisionRuntimeParams.myHasSnappedOnGround = true;
-                    } else if (fixPositionEnabled && outFixedMovement.vec3_isFurtherAlongDirection(verticalMovement, up)) {
+                    } else if (fixPositionEnabled && outFixedMovement.vec3_isFurtherAlongAxis(verticalMovement, up)) {
                         collisionRuntimeParams.myHasFixedPositionGround = true;
                     }
                 } else {
                     outFixedMovement = furtherDirectionPosition.vec3_sub(feetPosition.vec3_add(up.vec3_scale(height, outFixedMovement), outFixedMovement), outFixedMovement).
                         vec3_componentAlongAxis(up, outFixedMovement);
 
-                    if (snapEnabled && outFixedMovement.vec3_isFurtherAlongDirection(verticalMovement, up)) {
+                    if (snapEnabled && outFixedMovement.vec3_isFurtherAlongAxis(verticalMovement, up)) {
                         collisionRuntimeParams.myHasSnappedOnCeiling = true;
-                    } else if (fixPositionEnabled && outFixedMovement.vec3_isFurtherAlongDirection(verticalMovement, upNegate)) {
+                    } else if (fixPositionEnabled && outFixedMovement.vec3_isFurtherAlongAxis(verticalMovement, upNegate)) {
                         collisionRuntimeParams.myHasFixedPositionCeiling = true;
                     }
                 }

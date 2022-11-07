@@ -13,7 +13,7 @@ LocomotionUtils = {
                 if (Math.abs(surfacePerceivedAngle) < 0.0001) {
                     surfacePerceivedAngle = 0;
                 } else {
-                    let isFurtherOnUp = forwardOnSurface.vec3_isFurtherAlongDirection(forward, up);
+                    let isFurtherOnUp = forwardOnSurface.vec3_isFurtherAlongAxis(forward, up);
                     if ((!isFurtherOnUp && isGround) || (isFurtherOnUp && !isGround)) {
                         surfacePerceivedAngle *= -1;
                     }

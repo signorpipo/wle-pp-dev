@@ -326,7 +326,7 @@ CollisionCheck.prototype._horizontalPositionVerticalCheck = function () {
                     if (!collisionRuntimeParams.myIsCollidingHorizontally) {
                         collisionRuntimeParams.myIsCollidingHorizontally = true;
                         collisionRuntimeParams.myHorizontalCollisionHit.copy(this._myRaycastResult.myHits[0]);
-                    } else if (this._myRaycastResult.myHits[0].myPosition.vec3_isFurtherAlongDirection(collisionRuntimeParams.myHorizontalCollisionHit.myPosition, verticalDirection)) {
+                    } else if (this._myRaycastResult.myHits[0].myPosition.vec3_isFurtherAlongAxis(collisionRuntimeParams.myHorizontalCollisionHit.myPosition, verticalDirection)) {
                         collisionRuntimeParams.myHorizontalCollisionHit.copy(this._myRaycastResult.myHits[0]);
                     }
 
@@ -350,7 +350,7 @@ CollisionCheck.prototype._horizontalPositionVerticalCheck = function () {
                             if (!collisionRuntimeParams.myIsCollidingHorizontally) {
                                 collisionRuntimeParams.myIsCollidingHorizontally = true;
                                 collisionRuntimeParams.myHorizontalCollisionHit.copy(this._myRaycastResult.myHits[0]);
-                            } else if (this._myRaycastResult.myHits[0].myPosition.vec3_isFurtherAlongDirection(collisionRuntimeParams.myHorizontalCollisionHit.myPosition, verticalDirection)) {
+                            } else if (this._myRaycastResult.myHits[0].myPosition.vec3_isFurtherAlongAxis(collisionRuntimeParams.myHorizontalCollisionHit.myPosition, verticalDirection)) {
                                 collisionRuntimeParams.myHorizontalCollisionHit.copy(this._myRaycastResult.myHits[0]);
                             }
 
@@ -370,7 +370,7 @@ CollisionCheck.prototype._horizontalPositionVerticalCheck = function () {
                             if (!collisionRuntimeParams.myIsCollidingHorizontally) {
                                 collisionRuntimeParams.myIsCollidingHorizontally = true;
                                 collisionRuntimeParams.myHorizontalCollisionHit.copy(this._myRaycastResult.myHits[0]);
-                            } else if (this._myRaycastResult.myHits[0].myPosition.vec3_isFurtherAlongDirection(collisionRuntimeParams.myHorizontalCollisionHit.myPosition, verticalDirection)) {
+                            } else if (this._myRaycastResult.myHits[0].myPosition.vec3_isFurtherAlongAxis(collisionRuntimeParams.myHorizontalCollisionHit.myPosition, verticalDirection)) {
                                 collisionRuntimeParams.myHorizontalCollisionHit.copy(this._myRaycastResult.myHits[0]);
                             }
 
@@ -397,7 +397,7 @@ CollisionCheck.prototype._horizontalPositionVerticalCheck = function () {
                                 if (!collisionRuntimeParams.myIsCollidingHorizontally) {
                                     collisionRuntimeParams.myIsCollidingHorizontally = true;
                                     collisionRuntimeParams.myHorizontalCollisionHit.copy(this._myRaycastResult.myHits[0]);
-                                } else if (this._myRaycastResult.myHits[0].myPosition.vec3_isFurtherAlongDirection(collisionRuntimeParams.myHorizontalCollisionHit.myPosition, verticalDirection)) {
+                                } else if (this._myRaycastResult.myHits[0].myPosition.vec3_isFurtherAlongAxis(collisionRuntimeParams.myHorizontalCollisionHit.myPosition, verticalDirection)) {
                                     collisionRuntimeParams.myHorizontalCollisionHit.copy(this._myRaycastResult.myHits[0]);
                                 }
 
@@ -417,7 +417,7 @@ CollisionCheck.prototype._horizontalPositionVerticalCheck = function () {
                                 if (!collisionRuntimeParams.myIsCollidingHorizontally) {
                                     collisionRuntimeParams.myIsCollidingHorizontally = true;
                                     collisionRuntimeParams.myHorizontalCollisionHit.copy(this._myRaycastResult.myHits[0]);
-                                } else if (this._myRaycastResult.myHits[0].myPosition.vec3_isFurtherAlongDirection(collisionRuntimeParams.myHorizontalCollisionHit.myPosition, verticalDirection)) {
+                                } else if (this._myRaycastResult.myHits[0].myPosition.vec3_isFurtherAlongAxis(collisionRuntimeParams.myHorizontalCollisionHit.myPosition, verticalDirection)) {
                                     collisionRuntimeParams.myHorizontalCollisionHit.copy(this._myRaycastResult.myHits[0]);
                                 }
 
