@@ -1,31 +1,30 @@
 WL.registerComponent('pp-gamepad-mesh-animator', {
     _myHandedness: { type: WL.Type.Enum, values: ['left', 'right'], default: 'left' },
-    _myMesh: { type: WL.Type.Object, default: null },
     _mySelect: { type: WL.Type.Object, default: null },
     _mySqueeze: { type: WL.Type.Object, default: null },
     _myThumbstick: { type: WL.Type.Object, default: null },
     _myTopButton: { type: WL.Type.Object, default: null },
     _myBottomButton: { type: WL.Type.Object, default: null },
     _mySelectRotateAngle: { type: WL.Type.Float, default: 15 },
-    _mySqueezeRotateAngle: { type: WL.Type.Float, default: 15 },
-    _myThumbstickRotateAngle: { type: WL.Type.Float, default: 20 },
-    _myThumbstickPressOffset: { type: WL.Type.Float, default: 0.0015 },
-    _myTopButtonPressOffset: { type: WL.Type.Float, default: 0.002 },
-    _myBottomButtonPressOffset: { type: WL.Type.Float, default: 0.002 },
+    _mySqueezeRotateAngle: { type: WL.Type.Float, default: 11 },
+    _myThumbstickRotateAngle: { type: WL.Type.Float, default: 15 },
+    _myThumbstickPressOffset: { type: WL.Type.Float, default: 0.000625 },
+    _myTopButtonPressOffset: { type: WL.Type.Float, default: 0.0015 },
+    _myBottomButtonPressOffset: { type: WL.Type.Float, default: 0.0015 },
     _myUsePressForSqueeze: { type: WL.Type.Bool, default: false },
     _mySqueezePressOffset: { type: WL.Type.Float, default: 0.0015 },
 }, {
     init: function () {
-        this._myGamepad = null;
         this._myIsMeshEnabled = false;
 
         this._myTiltDirection = PP.vec3_create();
     },
     start: function () {
+        let gamepad = null;
         if (this._myHandedness == 0) {
-            this._myGamepad = PP.myLeftGamepad; //@EDIT get gamepad LEFT here based on how you store it in your game
+            gamepad = PP.myLeftGamepad; //@EDIT get gamepad LEFT here based on how you store it in your game
         } else {
-            this._myGamepad = PP.myRightGamepad; //@EDIT get gamepad RIGHT here based on how you store it in your game
+            gamepad = PP.myRightGamepad; //@EDIT get gamepad RIGHT here based on how you store it in your game
         }
 
         if (this._mySelect != null) {
@@ -35,6 +34,7 @@ WL.registerComponent('pp-gamepad-mesh-animator', {
 
         if (this._mySqueeze != null) {
             this._mySqueezeOriginalPosition = this._mySqueeze.pp_getPositionLocal();
+            this._mySqueezeOriginalRotation = this._mySqueeze.pp_getRotationLocalQuat();
             this._mySqueezeOriginalLeft = this._mySqueeze.pp_getLeftLocal();
             this._mySqueezeOriginalForward = this._mySqueeze.pp_getForwardLocal();
         }
@@ -59,44 +59,34 @@ WL.registerComponent('pp-gamepad-mesh-animator', {
 
         //PRESSED
         if (this._myThumbstick != null) {
-            this._myGamepad.registerButtonEventListener(PP.ButtonType.THUMBSTICK, PP.ButtonEvent.PRESS_START, this, this._thumbstickPressedStart.bind(this));
-            this._myGamepad.registerButtonEventListener(PP.ButtonType.THUMBSTICK, PP.ButtonEvent.PRESS_END, this, this._thumbstickPressedEnd.bind(this));
+            gamepad.registerButtonEventListener(PP.ButtonType.THUMBSTICK, PP.ButtonEvent.PRESS_START, this, this._thumbstickPressedStart.bind(this));
+            gamepad.registerButtonEventListener(PP.ButtonType.THUMBSTICK, PP.ButtonEvent.PRESS_END, this, this._thumbstickPressedEnd.bind(this));
         }
 
         if (this._myTopButton != null) {
-            this._myGamepad.registerButtonEventListener(PP.ButtonType.TOP_BUTTON, PP.ButtonEvent.PRESS_START, this, this._topButtonPressedStart.bind(this));
-            this._myGamepad.registerButtonEventListener(PP.ButtonType.TOP_BUTTON, PP.ButtonEvent.PRESS_END, this, this._topButtonPressedEnd.bind(this));
+            gamepad.registerButtonEventListener(PP.ButtonType.TOP_BUTTON, PP.ButtonEvent.PRESS_START, this, this._topButtonPressedStart.bind(this));
+            gamepad.registerButtonEventListener(PP.ButtonType.TOP_BUTTON, PP.ButtonEvent.PRESS_END, this, this._topButtonPressedEnd.bind(this));
         }
 
         if (this._myBottomButton != null) {
 
-            this._myGamepad.registerButtonEventListener(PP.ButtonType.BOTTOM_BUTTON, PP.ButtonEvent.PRESS_START, this, this._bottomButtonPressedStart.bind(this));
-            this._myGamepad.registerButtonEventListener(PP.ButtonType.BOTTOM_BUTTON, PP.ButtonEvent.PRESS_END, this, this._bottomButtonPressedEnd.bind(this));
+            gamepad.registerButtonEventListener(PP.ButtonType.BOTTOM_BUTTON, PP.ButtonEvent.PRESS_START, this, this._bottomButtonPressedStart.bind(this));
+            gamepad.registerButtonEventListener(PP.ButtonType.BOTTOM_BUTTON, PP.ButtonEvent.PRESS_END, this, this._bottomButtonPressedEnd.bind(this));
         }
 
         //VALUE CHANGED
         if (this._mySelect != null) {
-            this._myGamepad.registerButtonEventListener(PP.ButtonType.SELECT, PP.ButtonEvent.VALUE_CHANGED, this, this._selectValueChanged.bind(this));
+            gamepad.registerButtonEventListener(PP.ButtonType.SELECT, PP.ButtonEvent.VALUE_CHANGED, this, this._selectValueChanged.bind(this));
         }
 
         if (this._mySqueeze != null) {
-            this._myGamepad.registerButtonEventListener(PP.ButtonType.SQUEEZE, PP.ButtonEvent.VALUE_CHANGED, this, this._squeezeValueChanged.bind(this));
+            gamepad.registerButtonEventListener(PP.ButtonType.SQUEEZE, PP.ButtonEvent.VALUE_CHANGED, this, this._squeezeValueChanged.bind(this));
         }
 
         //AXES CHANGED
         if (this._myThumbstick != null) {
-            this._myGamepad.registerAxesEventListener(PP.AxesEvent.AXES_CHANGED, this, this._thumbstickValueChanged.bind(this));
+            gamepad.registerAxesEventListener(PP.AxesEvent.AXES_CHANGED, this, this._thumbstickValueChanged.bind(this));
         }
-
-        this._myFirstUpdate = true;
-    },
-    update: function (dt) {
-        if (this._myFirstUpdate) {
-            this._myFirstUpdate = false;
-            this._myMesh.pp_setScaleLocal([0.00001, 0.00001, 0.00001]);
-        }
-
-        this._enableMeshInSession();
     },
     _thumbstickPressedStart: function () {
         let tempVector = PP.vec3_create();
@@ -130,6 +120,7 @@ WL.registerComponent('pp-gamepad-mesh-animator', {
     },
     _squeezeValueChanged: function (buttonInfo, gamepad) {
         this._mySqueeze.pp_setPositionLocal(this._mySqueezeOriginalPosition);
+        this._mySqueeze.pp_setRotationLocalQuat(this._mySqueezeOriginalRotation);
 
         if (buttonInfo.myValue > 0.00001) {
             if (this._myUsePressForSqueeze) {
@@ -140,7 +131,7 @@ WL.registerComponent('pp-gamepad-mesh-animator', {
 
                 this._mySqueeze.pp_translateAxisLocal(translation * buttonInfo.myValue, this._mySqueezeOriginalLeft);
             } else {
-                let rotation = this._mySqueezeRotateAngle;
+                let rotation = -this._mySqueezeRotateAngle;
                 if (this._myHandedness == 1) {
                     rotation *= -1;
                 }
@@ -161,14 +152,6 @@ WL.registerComponent('pp-gamepad-mesh-animator', {
 
         if (Math.abs(forwardRotation) > 0.0001) {
             this._myThumbstick.pp_rotateAxisLocal(forwardRotation, this._myThumbstickOriginalForward);
-        }
-    },
-    _enableMeshInSession: function () {
-        if (!this._myIsMeshEnabled) {
-            if (WL.xrSession) {
-                this._myMesh.pp_resetScaleLocal();
-                this._myIsMeshEnabled = true;
-            }
         }
     }
 });
