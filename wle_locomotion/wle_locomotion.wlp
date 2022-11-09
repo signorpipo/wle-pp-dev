@@ -88,7 +88,10 @@
                         "_myIsSnapTurn": true,
                         "_myFlyEnabled": false,
                         "_myMainHand": "left",
-                        "_myTeleportPositionObject": null
+                        "_myTeleportPositionObject": null,
+                        "_myTeleportParableStartReferenceObject": "895",
+                        "_myVRDirectionReferenceType": "custom object",
+                        "_myVRDirectionReferenceObject": "895"
                     },
                     "active": true
                 }
@@ -12851,6 +12854,24 @@
                 {
                     "type": "pp-set-hand-local-transform"
                 }
+            ],
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0
             ]
         },
         "801": {
@@ -13956,6 +13977,37 @@
                 -10000.0,
                 0.0,
                 1.0
+            ]
+        },
+        "895": {
+            "link": {
+                "name": "Left_Select<Left_Quest_Controller",
+                "file": "assets\\models\\quest_controllers_credits_Jezza3D.fbx"
+            },
+            "parent": "791",
+            "name": "Teleport Parable Start Reference Object",
+            "transformation": [
+                1.0,
+                6.278330602071946e-7,
+                -5.642598921440367e-7,
+                0.0,
+                -2.5140442971860466e-7,
+                0.8596238,
+                0.5109274,
+                0.0,
+                8.05828392458352e-7,
+                -0.5109274,
+                0.8596238,
+                0.0,
+                0.009961,
+                -0.0391333,
+                0.0754164,
+                1.0
+            ],
+            "components": [
+                {
+                    "active": false
+                }
             ]
         }
     },

@@ -13,6 +13,7 @@ WL.registerComponent('player-locomotion', {
     _myMainHand: { type: WL.Type.Enum, values: ['left', 'right'], default: 'left' },
     _myVRDirectionReferenceType: { type: WL.Type.Enum, values: ['head', 'hand', 'custom object'], default: 'hand' },
     _myVRDirectionReferenceObject: { type: WL.Type.Object },
+    _myTeleportParableStartReferenceObject: { type: WL.Type.Object },
     _myTeleportPositionObject: { type: WL.Type.Object },
 }, {
     init() {
@@ -38,6 +39,8 @@ WL.registerComponent('player-locomotion', {
 
         params.myVRDirectionReferenceType = this._myVRDirectionReferenceType;
         params.myVRDirectionReferenceObject = this._myVRDirectionReferenceObject;
+
+        params.myTeleportParableStartReferenceObject = this._myTeleportParableStartReferenceObject;
 
         params.myForeheadExtraHeight = 0.15;
 

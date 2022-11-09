@@ -11,7 +11,10 @@ PlayerLocomotionTeleportDetectionParams = class PlayerLocomotionTeleportDetectio
         this.myParableForwardMinAngleToBeValidUp = 30;
         this.myParableForwardMinAngleToBeValidDown = 0;
 
-        this.myTeleportParableStartPositionOffset = [0.01, -0.04, 0.08]; // Hand Left: [0.01, -0.04, 0.08] / Hand Right: [-0.01, -0.04, 0.08]
+        this.myTeleportParableStartReferenceObject = null;
+
+        // used if reference is null
+        this.myTeleportParableStartPositionOffset = [0, -0.04, 0.08];
         this.myTeleportParableStartRotationOffset = [30, 0, 0];
 
         this.myTeleportParableSpeed = 15;
@@ -168,14 +171,19 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionVR = fun
     let playerUp = PP.vec3_create();
     let playerUpNegate = PP.vec3_create();
     return function _detectTeleportPositionVR(dt) {
-
         this._myDetectionRuntimeParams.myTeleportPositionValid = false;
         this._myDetectionRuntimeParams.myTeleportDetectionValid = false;
 
-        let referenceObject = PP.myPlayerObjects.myHands[this._myTeleportParams.myHandedness];
+        if (this._myTeleportParams.myDetectionParams.myTeleportParableStartReferenceObject == null) {
+            let referenceObject = PP.myPlayerObjects.myHands[this._myTeleportParams.myHandedness];
 
-        teleportStartTransformLocal.quat2_setPositionRotationDegrees(this._myTeleportParams.myDetectionParams.myTeleportParableStartPositionOffset, this._myTeleportParams.myDetectionParams.myTeleportParableStartRotationOffset);
-        teleportStartTransformWorld = referenceObject.pp_convertTransformObjectToWorldQuat(teleportStartTransformLocal, teleportStartTransformWorld);
+            teleportStartTransformLocal.quat2_setPositionRotationDegrees(this._myTeleportParams.myDetectionParams.myTeleportParableStartPositionOffset, this._myTeleportParams.myDetectionParams.myTeleportParableStartRotationOffset);
+            teleportStartTransformWorld = referenceObject.pp_convertTransformObjectToWorldQuat(teleportStartTransformLocal, teleportStartTransformWorld);
+        } else {
+            let referenceObject = this._myTeleportParams.myDetectionParams.myTeleportParableStartReferenceObject;
+
+            referenceObject.pp_getTransformQuat(teleportStartTransformWorld);
+        }
 
         teleportStartPosition = teleportStartTransformWorld.quat2_getPosition(teleportStartPosition);
         teleportDirection = teleportStartTransformWorld.quat2_getForward(teleportDirection);

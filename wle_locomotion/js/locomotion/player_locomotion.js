@@ -25,6 +25,8 @@ PlayerLocomotionParams = class PlayerLocomotionParams {
         this.myVRDirectionReferenceType = PlayerLocomotionDirectionReferenceType.HEAD;
         this.myVRDirectionReferenceObject = null;
 
+        this.myTeleportParableStartReferenceObject = null;
+
         this.myForeheadExtraHeight = 0;
 
         this.myTeleportPositionObject = null;
@@ -140,6 +142,8 @@ PlayerLocomotion = class PlayerLocomotion {
                 params.myDetectionParams.myTeleportFeetPositionMustBeVisible = false;
                 params.myDetectionParams.myTeleportHeadPositionMustBeVisible = false;
                 params.myDetectionParams.myTeleportHeadOrFeetPositionMustBeVisible = true;
+
+                params.myDetectionParams.myTeleportParableStartReferenceObject = this._myParams.myTeleportParableStartReferenceObject;
 
                 params.myDetectionParams.myVisibilityBlockLayerFlags.setAllFlagsActive(true);
 
