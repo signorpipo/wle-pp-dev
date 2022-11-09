@@ -554,16 +554,6 @@
                 null,
                 null,
                 {
-                    "type": "pp-gamepad-animator",
-                    "pp-gamepad-animator": {
-                        "_mySelect": "55",
-                        "_mySqueeze": "56",
-                        "_myThumbstick": "57",
-                        "_myBottomButton": "53",
-                        "_myTopButton": "58"
-                    }
-                },
-                {
                     "type": "pp-gamepad-control-scheme",
                     "pp-gamepad-control-scheme": {
                         "_mySelect": "55",
@@ -578,7 +568,8 @@
                         "_myTextMaterial": "786",
                         "_myBottomButtonText": "Smooth: Fly Down",
                         "_myTopButtonText": "Smooth: Fly Up",
-                        "_myStartVisible": false
+                        "_myStartVisible": false,
+                        "_myShowOnStart": false
                     }
                 },
                 {
@@ -586,6 +577,17 @@
                     "pp-set-hand-local-transform": {
                         "_myHandedness": "left",
                         "_myFixForward": true
+                    }
+                },
+                {
+                    "type": "pp-gamepad-mesh-animator",
+                    "pp-gamepad-mesh-animator": {
+                        "_mySelect": "55",
+                        "_mySqueeze": "56",
+                        "_myThumbstick": "57",
+                        "_myTopButton": "58",
+                        "_myBottomButton": "53",
+                        "_myUsePressForSqueeze": true
                     }
                 }
             ],
@@ -12946,17 +12948,6 @@
                 null,
                 null,
                 {
-                    "type": "pp-gamepad-animator",
-                    "pp-gamepad-animator": {
-                        "_myHandedness": "right",
-                        "_mySelect": "63",
-                        "_mySqueeze": "64",
-                        "_myThumbstick": "65",
-                        "_myBottomButton": "61",
-                        "_myTopButton": "66"
-                    }
-                },
-                {
                     "type": "pp-gamepad-control-scheme",
                     "pp-gamepad-control-scheme": {
                         "_mySelect": "63",
@@ -12972,7 +12963,8 @@
                         "_myBottomButtonText": "",
                         "_myTopButtonText": "",
                         "_myStartVisible": false,
-                        "_myHandedness": "right"
+                        "_myHandedness": "right",
+                        "_myShowOnStart": false
                     }
                 },
                 {
@@ -12980,6 +12972,18 @@
                     "pp-set-hand-local-transform": {
                         "_myHandedness": "right",
                         "_myFixForward": true
+                    }
+                },
+                {
+                    "type": "pp-gamepad-mesh-animator",
+                    "pp-gamepad-mesh-animator": {
+                        "_mySelect": "63",
+                        "_mySqueeze": "64",
+                        "_myThumbstick": "65",
+                        "_myTopButton": "66",
+                        "_myBottomButton": "61",
+                        "_myUsePressForSqueeze": true,
+                        "_myHandedness": "right"
                     }
                 }
             ],
