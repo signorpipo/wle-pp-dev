@@ -27,7 +27,7 @@
         - pp_getComponentHierarchy
         - pp_getComponentAmountMapDescendants
         - pp_setActiveChildren
-    On some of the function where u can specify Hierarchy/Descendants u can also specify 
+    On some of the functions where u can specify Hierarchy/Descendants u can also specify 
     if the algorithm should explore by Breadth/Depth, example:
         - pp_getComponentHierarchyBreadth
         - pp_setActiveDescendantsDepth
