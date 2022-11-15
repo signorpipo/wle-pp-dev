@@ -69,6 +69,8 @@
         - pp_clone      / pp_isCloneable
         
         - pp_toString   / pp_toStringCompact / pp_toStringExtended
+        
+        - pp_getObjectByName  / pp_getObjectByNameHierarchy / pp_getObjectByNameDescendants / pp_getObjectByNameChildren
 
         - pp_addObject
         - pp_getName    / pp_setName
@@ -1812,6 +1814,7 @@ if (WL && WL.Object) {
 
         return component;
     };
+
     WL.Object.prototype.pp_getComponentChildren = function (type, index) {
         let component = null;
 
@@ -2313,6 +2316,54 @@ if (WL && WL.Object) {
         };
     }();
 
+    //Get By Name
+
+    WL.Object.prototype.pp_getObjectByName = function (name) {
+        return this.pp_getObjectByNameHierarchy(name);
+    }
+
+    WL.Object.prototype.pp_getObjectByNameHierarchy = function (name) {
+        let objects = this.pp_getHierarchy();
+
+        let found = null;
+        for (let object of objects) {
+            if (object.pp_getName() == name) {
+                found = object;
+                break;
+            }
+        }
+
+        return found;
+    }
+
+    WL.Object.prototype.pp_getObjectByNameDescendants = function (name) {
+        let objects = this.pp_getDescendants();
+
+        let found = null;
+        for (let object of objects) {
+            if (object.pp_getName() == name) {
+                found = object;
+                break;
+            }
+        }
+
+        return found;
+    }
+
+    WL.Object.prototype.pp_getObjectByNameChildren = function (name) {
+        let objects = this.pp_getChildren();
+
+        let found = null;
+        for (let object of objects) {
+            if (object.pp_getName() == name) {
+                found = object;
+                break;
+            }
+        }
+
+        return found;
+    }
+
     //Cauldron
 
     WL.Object.prototype.pp_addObject = function () {
@@ -2434,7 +2485,7 @@ if (WL && WL.Object) {
     };
 
     WL.Object.prototype.pp_getComponentAmountMapChildren = function (amountMap = new Map()) {
-        let children = this.children;
+        let children = this.pp_getChildren();
 
         for (let object of children) {
             object.pp_getComponentAmountMap(amountMap);
