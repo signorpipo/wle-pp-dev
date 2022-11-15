@@ -27,6 +27,11 @@
         - pp_getComponentHierarchy
         - pp_getComponentAmountMapDescendants
         - pp_setActiveChildren
+    On some of the function where u can specify Hierarchy/Descendants u can also specify 
+    if the algorithm should explore by Breadth/Depth, example:
+        - pp_getComponentHierarchyBreadth
+        - pp_setActiveDescendantsDepth
+    By default the functions explore by Breadth
 
     The functions leave u the choice of forwarding an out parameter or just get the return value, example:
         - let position = this.object.pp_getPosition()
@@ -72,10 +77,13 @@
         
         - pp_getObjectByName  / pp_getObjectByNameHierarchy / pp_getObjectByNameDescendants / pp_getObjectByNameChildren
 
+        - pp_getHierarchy / pp_getHierarchyBreadth / pp_getHierarchyDepth 
+        - pp_getDescendants / pp_getDescendantsBreadth / pp_getDescendantsDepth 
+        - pp_getChildren
+
         - pp_addObject
         - pp_getName    / pp_setName
         - pp_getID
-        - pp_getHierarchy / pp_getDescendants / pp_getChildren
         - pp_reserveObjects / pp_reserveObjectsHierarchy / pp_reserveObjectsDescendants / pp_reserveObjectsChildren
         - pp_getComponentAmountMap / pp_getComponentAmountMapHierarchy / pp_getComponentAmountMapDescendants / pp_getComponentAmountMapChildren
         - pp_markDirty
@@ -2364,6 +2372,69 @@ if (WL && WL.Object) {
         return found;
     }
 
+    //Get Hierarchy
+
+    WL.Object.prototype.pp_getHierarchy = function () {
+        return this.pp_getHierarchyBreadth();
+    };
+
+    WL.Object.prototype.pp_getHierarchyBreadth = function () {
+        let hierarchy = this.pp_getDescendantsBreadth();
+
+        hierarchy.unshift(this);
+
+        return hierarchy;
+    };
+
+    WL.Object.prototype.pp_getHierarchyDepth = function () {
+        let hierarchy = this.pp_getDescendantsDepth();
+
+        hierarchy.unshift(this);
+
+        return hierarchy;
+    };
+
+    WL.Object.prototype.pp_getDescendants = function () {
+        return this.pp_getDescendantsBreadth();
+    };
+
+    WL.Object.prototype.pp_getDescendantsBreadth = function () {
+        let descendants = [];
+
+        let descendantsQueue = this.children;
+
+        while (descendantsQueue.length > 0) {
+            let descendant = descendantsQueue.shift();
+            descendants.push(descendant);
+            for (let object of descendant.children) {
+                descendantsQueue.push(object);
+            }
+        }
+
+        return descendants;
+    };
+
+    WL.Object.prototype.pp_getDescendantsDepth = function () {
+        let descendants = [];
+
+        let children = this.pp_getChildren();
+
+        for (let child of children) {
+            descendants.push(child);
+
+            let childDescendants = child.pp_getDescendantsDepth();
+            if (childDescendants.length > 0) {
+                descendants.push(...childDescendants);
+            }
+        }
+
+        return descendants;
+    };
+
+    WL.Object.prototype.pp_getChildren = function () {
+        return this.children;
+    };
+
     //Cauldron
 
     WL.Object.prototype.pp_addObject = function () {
@@ -2380,34 +2451,6 @@ if (WL && WL.Object) {
 
     WL.Object.prototype.pp_getID = function () {
         return this.objectId;
-    };
-
-    WL.Object.prototype.pp_getHierarchy = function () {
-        let hierarchy = this.pp_getDescendants();
-
-        hierarchy.unshift(this);
-
-        return hierarchy;
-    };
-
-    WL.Object.prototype.pp_getDescendants = function () {
-        let descendants = [];
-
-        let descendantsQueue = this.children;
-
-        while (descendantsQueue.length > 0) {
-            let descendant = descendantsQueue.shift();
-            descendants.push(descendant);
-            for (let object of descendant.children) {
-                descendantsQueue.push(object);
-            }
-        }
-
-        return descendants;
-    };
-
-    WL.Object.prototype.pp_getChildren = function () {
-        return this.children;
     };
 
     WL.Object.prototype.pp_markDirty = function () {
