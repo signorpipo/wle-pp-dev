@@ -33,6 +33,10 @@
         - pp_setActiveDescendantsDepth
     By default the functions explore by Breadth
 
+    In static functions (accessible directly through WL.Object) the suffix Objects means it will work on a given object list, example:
+        - pp_getComponentsObjects
+        - pp_getObjectByNameObjects
+
     The functions leave u the choice of forwarding an out parameter or just get the return value, example:
         - let position = this.object.pp_getPosition()
         - this.object.pp_getPosition(position)
@@ -66,7 +70,8 @@
 
         - pp_hasUniformScale
 
-        - pp_addComponent   / pp_getComponent  / pp_getComponentHierarchy / pp_getComponentDescendants / pp_getComponentChildren
+        - pp_addComponent
+        - pp_getComponent   / pp_getComponentHierarchy  / pp_getComponentDescendants  / pp_getComponentChildren
         - pp_getComponents  / pp_getComponentsHierarchy / pp_getComponentsDescendants / pp_getComponentsChildren
 
         - pp_setActive  / pp_setActiveSelf  / pp_setActiveHierarchy / pp_setActiveDescendants / pp_setActiveChildren
@@ -76,6 +81,7 @@
         - pp_toString   / pp_toStringCompact / pp_toStringExtended
         
         - pp_getObjectByName  / pp_getObjectByNameHierarchy / pp_getObjectByNameDescendants / pp_getObjectByNameChildren
+        - pp_getObjectsByName  / pp_getObjectsByNameHierarchy / pp_getObjectsByNameDescendants / pp_getObjectsByNameChildren
 
         - pp_getHierarchy / pp_getHierarchyBreadth / pp_getHierarchyDepth 
         - pp_getDescendants / pp_getDescendantsBreadth / pp_getDescendantsDepth 
@@ -89,6 +95,13 @@
         - pp_markDirty
         - pp_equals
         - pp_destroy
+
+        STATIC FUNCTIONS:
+        - pp_getComponentObjects
+        - pp_getComponentsObjects
+        - pp_setActiveObjects
+        - pp_getObjectByNameObjects
+        - pp_getObjectsByNameObjects
 */
 
 import * as glMatrix from 'gl-matrix';
@@ -1797,87 +1810,69 @@ if (WL && WL.Object) {
     };
 
     WL.Object.prototype.pp_getComponentHierarchy = function (type, index) {
-        let component = this.getComponent(type, index);
+        return this.pp_getComponentHierarchyBreadth(type, index);
+    };
 
-        if (!component) {
-            component = this.pp_getComponentDescendants(type, index);
-        }
+    WL.Object.prototype.pp_getComponentHierarchyBreadth = function (type, index) {
+        let objects = this.pp_getHierarchyBreadth();
+        return WL.Object.pp_getComponentObjects(type, index, objects);
+    };
 
-        return component;
+    WL.Object.prototype.pp_getComponentHierarchyDepth = function (type, index) {
+        let objects = this.pp_getHierarchyDepth();
+        return WL.Object.pp_getComponentObjects(type, index, objects);
     };
 
     WL.Object.prototype.pp_getComponentDescendants = function (type, index) {
-        let component = null;
+        return this.pp_getComponentDescendantsBreadth(type, index);
+    };
 
-        let descendants = this.children;
-        while (!component && descendants.length > 0) {
-            let descendant = descendants.shift();
-            component = descendant.getComponent(type, index);
-            if (!component) {
-                for (let object of descendant.children) {
-                    descendants.push(object);
-                }
-            }
-        }
+    WL.Object.prototype.pp_getComponentDescendantsBreadth = function (type, index) {
+        let objects = this.pp_getDescendantsBreadth();
+        return WL.Object.pp_getComponentObjects(type, index, objects);
+    };
 
-        return component;
+    WL.Object.prototype.pp_getComponentDescendantsDepth = function (type, index) {
+        let objects = this.pp_getDescendantsDepth();
+        return WL.Object.pp_getComponentObjects(type, index, objects);
     };
 
     WL.Object.prototype.pp_getComponentChildren = function (type, index) {
-        let component = null;
-
-        let children = this.children;
-        for (let child of children) {
-            component = child.getComponent(type, index);
-            if (component) {
-                break;
-            }
-        }
-
-        return component;
+        let objects = this.pp_getChildren();
+        return WL.Object.pp_getComponentObjects(type, index, objects);
     };
 
     WL.Object.prototype.pp_getComponentsHierarchy = function (type) {
-        let components = this.getComponents(type);
+        return this.pp_getComponentsHierarchyBreadth(type);
+    };
 
-        let descendantsComponents = this.pp_getComponentsDescendants(type);
-        for (let component of descendantsComponents) {
-            components.push(component);
-        }
+    WL.Object.prototype.pp_getComponentsHierarchyBreadth = function (type) {
+        let objects = this.pp_getHierarchyBreadth();
+        return WL.Object.pp_getComponentsObjects(type, objects);
+    };
 
-        return components;
+    WL.Object.prototype.pp_getComponentsHierarchyDepth = function (type) {
+        let objects = this.pp_getHierarchyDepth();
+        return WL.Object.pp_getComponentsObjects(type, objects);
     };
 
     WL.Object.prototype.pp_getComponentsDescendants = function (type) {
-        let components = [];
+        return this.pp_getComponentsDescendantsBreadth(type);
+    };
 
-        let descendants = this.children;
-        while (descendants.length > 0) {
-            let descendant = descendants.shift();
-            let descendantComponents = descendant.getComponents(type);
-            for (let component of descendantComponents) {
-                components.push(component);
-            }
-            for (let object of descendant.children) {
-                descendants.push(object);
-            }
-        }
+    WL.Object.prototype.pp_getComponentsDescendantsBreadth = function (type) {
+        let objects = this.pp_getDescendantsBreadth();
+        return WL.Object.pp_getComponentsObjects(type, objects);
+    };
 
-        return components;
+    WL.Object.prototype.pp_getComponentsDescendantsDepth = function (type) {
+        let objects = this.pp_getDescendantsDepth();
+        return WL.Object.pp_getComponentsObjects(type, objects);
     };
 
     WL.Object.prototype.pp_getComponentsChildren = function (type) {
-        let components = [];
-
-        let children = this.children;
-        for (let child of children) {
-            let childComponents = child.getComponents(type);
-            for (let component of childComponents) {
-                components.push(component);
-            }
-        }
-
-        return components;
+        let objects = this.pp_getChildren();
+        return WL.Object.pp_getComponentsObjects(type, objects);
     };
 
     //Active
@@ -1895,26 +1890,36 @@ if (WL && WL.Object) {
     };
 
     WL.Object.prototype.pp_setActiveHierarchy = function (active) {
-        this.active = active;
-        this.pp_setActiveDescendants(active);
+        this.pp_setActiveHierarchyBreadth(active);
+    };
+
+    WL.Object.prototype.pp_setActiveHierarchyBreadth = function (active) {
+        let objects = this.pp_getHierarchyBreadth();
+        return WL.Object.pp_setActiveObjects(active, objects);
+    };
+
+    WL.Object.prototype.pp_setActiveHierarchyDepth = function (active) {
+        let objects = this.pp_getHierarchyDepth();
+        return WL.Object.pp_setActiveObjects(active, objects);
     };
 
     WL.Object.prototype.pp_setActiveDescendants = function (active) {
-        let descendants = this.children;
-        while (descendants.length > 0) {
-            let descendant = descendants.shift();
-            descendant.active = active;
-            for (let object of descendant.children) {
-                descendants.push(object);
-            }
-        }
+        this.pp_setActiveDescendantsBreadth(active);
+    };
+
+    WL.Object.prototype.pp_setActiveDescendantsBreadth = function (active) {
+        let objects = this.pp_getDescendantsBreadth();
+        return WL.Object.pp_setActiveObjects(active, objects);
+    };
+
+    WL.Object.prototype.pp_setActiveDescendantsDepth = function (active) {
+        let objects = this.pp_getDescendantsDepth();
+        return WL.Object.pp_setActiveObjects(active, objects);
     };
 
     WL.Object.prototype.pp_setActiveChildren = function (active) {
-        let children = this.children;
-        for (let child of children) {
-            child.active = active;
-        }
+        let objects = this.pp_getChildren();
+        return WL.Object.pp_setActiveObjects(active, objects);
     };
 
     //Uniform Scale
@@ -2331,45 +2336,73 @@ if (WL && WL.Object) {
     }
 
     WL.Object.prototype.pp_getObjectByNameHierarchy = function (name) {
-        let objects = this.pp_getHierarchy();
+        return this.pp_getObjectByNameHierarchyBreadth(name);
+    }
 
-        let found = null;
-        for (let object of objects) {
-            if (object.pp_getName() == name) {
-                found = object;
-                break;
-            }
-        }
+    WL.Object.prototype.pp_getObjectByNameHierarchyBreadth = function (name) {
+        let objects = this.pp_getHierarchyBreadth();
+        return WL.Object.pp_getObjectByNameObjects(name, objects);
+    }
 
-        return found;
+    WL.Object.prototype.pp_getObjectByNameHierarchyDepth = function (name) {
+        let objects = this.pp_getHierarchyDepth();
+        return WL.Object.pp_getObjectByNameObjects(name, objects);
     }
 
     WL.Object.prototype.pp_getObjectByNameDescendants = function (name) {
-        let objects = this.pp_getDescendants();
+        return this.pp_getObjectByNameDescendantsBreadth(name);
+    }
 
-        let found = null;
-        for (let object of objects) {
-            if (object.pp_getName() == name) {
-                found = object;
-                break;
-            }
-        }
+    WL.Object.prototype.pp_getObjectByNameDescendantsBreadth = function (name) {
+        let objects = this.pp_getDescendantsBreadth();
+        return WL.Object.pp_getObjectByNameObjects(name, objects);
+    }
 
-        return found;
+    WL.Object.prototype.pp_getObjectByNameDescendantsDepth = function (name) {
+        let objects = this.pp_getDescendantsDepth();
+        return WL.Object.pp_getObjectByNameObjects(name, objects);
     }
 
     WL.Object.prototype.pp_getObjectByNameChildren = function (name) {
         let objects = this.pp_getChildren();
+        return WL.Object.pp_getObjectByNameObjects(name, objects);
+    }
 
-        let found = null;
-        for (let object of objects) {
-            if (object.pp_getName() == name) {
-                found = object;
-                break;
-            }
-        }
+    WL.Object.prototype.pp_getObjectsByName = function (name) {
+        return this.pp_getObjectsByNameHierarchy(name);
+    }
 
-        return found;
+    WL.Object.prototype.pp_getObjectsByNameHierarchy = function (name) {
+        return this.pp_getObjectsByNameHierarchyBreadth(name);
+    }
+
+    WL.Object.prototype.pp_getObjectsByNameHierarchyBreadth = function (name) {
+        let objects = this.pp_getHierarchyBreadth();
+        return WL.Object.pp_getObjectsByNameObjects(name, objects);
+    }
+
+    WL.Object.prototype.pp_getObjectsByNameHierarchyDepth = function (name) {
+        let objects = this.pp_getHierarchyDepth();
+        return WL.Object.pp_getObjectsByNameObjects(name, objects);
+    }
+
+    WL.Object.prototype.pp_getObjectsByNameDescendants = function (name) {
+        return this.pp_getObjectsByNameDescendantsBreadth(name);
+    }
+
+    WL.Object.prototype.pp_getObjectsByNameDescendantsBreadth = function (name) {
+        let objects = this.pp_getDescendantsBreadth();
+        return WL.Object.pp_getObjectsByNameObjects(name, objects);
+    }
+
+    WL.Object.prototype.pp_getObjectsByNameDescendantsDepth = function (name) {
+        let objects = this.pp_getDescendantsDepth();
+        return WL.Object.pp_getObjectsByNameObjects(name, objects);
+    }
+
+    WL.Object.prototype.pp_getObjectsByNameChildren = function (name) {
+        let objects = this.pp_getChildren();
+        return WL.Object.pp_getObjectsByNameObjects(name, objects);
     }
 
     //Get Hierarchy
@@ -2536,6 +2569,62 @@ if (WL && WL.Object) {
 
         return amountMap;
     };
+
+    //Static
+
+    WL.Object.pp_getComponentObjects = function (type, index, objects) {
+        let component = null;
+
+        for (let object of objects) {
+            component = object.getComponent(type, index);
+            if (component != null) {
+                break;
+            }
+        }
+
+        return component;
+    };
+
+    WL.Object.pp_getComponentsObjects = function (type, objects) {
+        let components = [];
+
+        for (let object of objects) {
+            components.push(...object.getComponents(type));
+        }
+
+        return components;
+    };
+
+    WL.Object.pp_setActiveObjects = function (active, objects) {
+        for (let object of objects) {
+            object.active = active;
+        }
+    };
+
+    WL.Object.pp_getObjectByNameObjects = function (name, objects) {
+        let objectFound = null;
+
+        for (let object of objects) {
+            if (object.pp_getName() == name) {
+                objectFound = object;
+                break;
+            }
+        }
+
+        return objectFound;
+    }
+
+    WL.Object.pp_getObjectsByNameObjects = function (name, objects) {
+        let objectsFound = [];
+
+        for (let object of objects) {
+            if (object.pp_getName() == name) {
+                objectsFound.push(object);
+            }
+        }
+
+        return objectsFound;
+    }
 
     //Private Utils
 
@@ -2712,7 +2801,6 @@ if (WL && WL.Object) {
             }
         };
     }();
-
 
 
 
