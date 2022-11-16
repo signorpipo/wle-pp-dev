@@ -21,94 +21,112 @@
         - pp_getComponentAmountMap
 */
 
-if (WL && WL.scene) {
+if (WL && WL.Scene) {
 
-    WL.scene.pp_getRoot = function () {
+    WL.Scene.prototype.pp_getRoot = function () {
         return new WL.Object(0);
     }
 
-    WL.scene.pp_getObjects = function () {
-        return WL.scene.pp_getObjectsBreadth();
+    WL.Scene.prototype.pp_getObjects = function () {
+        return this.pp_getObjectsBreadth();
     }
 
-    WL.scene.pp_getObjectsBreadth = function () {
-        return WL.scene.pp_getRoot().pp_getHierarchyBreadth();
+    WL.Scene.prototype.pp_getObjectsBreadth = function () {
+        return this.pp_getRoot().pp_getHierarchyBreadth();
     }
 
-    WL.scene.pp_getObjectsDepth = function () {
-        return WL.scene.pp_getRoot().pp_getHierarchyDepth();
+    WL.Scene.prototype.pp_getObjectsDepth = function () {
+        return this.pp_getRoot().pp_getHierarchyDepth();
     }
 
     //Get Component    
 
-    WL.scene.pp_getComponent = function (type, index) {
-        return WL.scene.pp_getComponentBreadth(type, index);
+    WL.Scene.prototype.pp_getComponent = function (type, index) {
+        return this.pp_getComponentBreadth(type, index);
     }
 
-    WL.scene.pp_getComponentBreadth = function (type, index) {
-        return WL.scene.pp_getRoot().pp_getComponentHierarchyBreadth(type, index);
+    WL.Scene.prototype.pp_getComponentBreadth = function (type, index) {
+        return this.pp_getRoot().pp_getComponentHierarchyBreadth(type, index);
     }
 
-    WL.scene.pp_getComponentDepth = function (type, index) {
-        return WL.scene.pp_getRoot().pp_getComponentHierarchyDepth(type, index);
+    WL.Scene.prototype.pp_getComponentDepth = function (type, index) {
+        return this.pp_getRoot().pp_getComponentHierarchyDepth(type, index);
     }
 
-    WL.scene.pp_getComponents = function (type) {
-        return WL.scene.pp_getComponentsBreadth(type);
+    WL.Scene.prototype.pp_getComponents = function (type) {
+        return this.pp_getComponentsBreadth(type);
     }
 
-    WL.scene.pp_getComponentsBreadth = function (type) {
-        return WL.scene.pp_getRoot().pp_getComponentsHierarchyBreadth(type);
+    WL.Scene.prototype.pp_getComponentsBreadth = function (type) {
+        return this.pp_getRoot().pp_getComponentsHierarchyBreadth(type);
     }
 
-    WL.scene.pp_getComponentsDepth = function (type) {
-        return WL.scene.pp_getRoot().pp_getComponentsHierarchyDepth(type);
+    WL.Scene.prototype.pp_getComponentsDepth = function (type) {
+        return this.pp_getRoot().pp_getComponentsHierarchyDepth(type);
     }
 
     //Get By Name
 
-    WL.scene.pp_getObjectByName = function (name) {
-        return WL.scene.pp_getObjectByNameBreadth(name);
+    WL.Scene.prototype.pp_getObjectByName = function (name) {
+        return this.pp_getObjectByNameBreadth(name);
     }
 
-    WL.scene.pp_getObjectByNameBreadth = function (name) {
-        return WL.scene.pp_getRoot().pp_getObjectByNameHierarchyBreadth(name);
+    WL.Scene.prototype.pp_getObjectByNameBreadth = function (name) {
+        return this.pp_getRoot().pp_getObjectByNameHierarchyBreadth(name);
     }
 
-    WL.scene.pp_getObjectByNameDepth = function (name) {
-        return WL.scene.pp_getRoot().pp_getObjectByNameHierarchyDepth(name);
+    WL.Scene.prototype.pp_getObjectByNameDepth = function (name) {
+        return this.pp_getRoot().pp_getObjectByNameHierarchyDepth(name);
     }
 
-    WL.scene.pp_getObjectsByName = function (name) {
-        return WL.scene.pp_getObjectsByNameBreadth(name);
+    WL.Scene.prototype.pp_getObjectsByName = function (name) {
+        return this.pp_getObjectsByNameBreadth(name);
     }
 
-    WL.scene.pp_getObjectsByNameBreadth = function (name) {
-        return WL.scene.pp_getRoot().pp_getObjectsByNameHierarchyBreadth(name);
+    WL.Scene.prototype.pp_getObjectsByNameBreadth = function (name) {
+        return this.pp_getRoot().pp_getObjectsByNameHierarchyBreadth(name);
     }
 
-    WL.scene.pp_getObjectsByNameDepth = function (name) {
-        return WL.scene.pp_getRoot().pp_getObjectsByNameHierarchyDepth(name);
+    WL.Scene.prototype.pp_getObjectsByNameDepth = function (name) {
+        return this.pp_getRoot().pp_getObjectsByNameHierarchyDepth(name);
     }
 
     //To String
 
-    WL.scene.pp_toString = function () {
-        return WL.scene.pp_toStringCompact();
+    WL.Scene.prototype.pp_toString = function () {
+        return this.pp_toStringCompact();
     }
 
-    WL.scene.pp_toStringCompact = function () {
-        return WL.scene.pp_getRoot().pp_toStringCompact();
+    WL.Scene.prototype.pp_toStringCompact = function () {
+        return this.pp_getRoot().pp_toStringCompact();
     }
 
-    WL.scene.pp_toStringExtended = function () {
-        return WL.scene.pp_getRoot().pp_toStringExtended();
+    WL.Scene.prototype.pp_toStringExtended = function () {
+        return this.pp_getRoot().pp_toStringExtended();
     }
 
     //Cauldron
 
-    WL.scene.pp_getComponentAmountMap = function (amountMap = new Map()) {
-        return WL.scene.pp_getRoot().pp_getComponentAmountMapHierarchy(amountMap);
+    WL.Scene.prototype.pp_getComponentAmountMap = function (amountMap = new Map()) {
+        return this.pp_getRoot().pp_getComponentAmountMapHierarchy(amountMap);
+    }
+
+
+
+    for (let key in WL.Scene.prototype) {
+        let prefixes = ["pp_", "_pp_"];
+
+        let found = false;
+        for (let prefix of prefixes) {
+            if (key.startsWith(prefix)) {
+                found = true;
+                break;
+            }
+        }
+
+        if (found) {
+            Object.defineProperty(WL.Scene.prototype, key, { enumerable: false });
+        }
     }
 
 }
