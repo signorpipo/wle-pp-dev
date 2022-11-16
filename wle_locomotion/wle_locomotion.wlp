@@ -1127,6 +1127,15 @@
                 0.0,
                 0.0,
                 1.0
+            ],
+            "components": [
+                {
+                    "type": "pp-set-active",
+                    "pp-set-active": {
+                        "_myActive": true
+                    },
+                    "active": false
+                }
             ]
         },
         "157": {
@@ -14008,6 +14017,39 @@
                 {
                     "active": false
                 }
+            ]
+        },
+        "896": {
+            "name": "Meshed Line",
+            "components": [
+                {
+                    "type": "pp-copy-hand-transform",
+                    "pp-copy-hand-transform": {
+                        "_myHandedness": "right"
+                    }
+                },
+                {
+                    "type": "show-meshed-line"
+                }
+            ],
+            "parent": "71",
+            "transformation": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                -10000.0,
+                0.0,
+                1.0
             ]
         }
     },
