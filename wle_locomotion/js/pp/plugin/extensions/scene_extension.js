@@ -41,15 +41,15 @@ if (WL && WL.Scene) {
 
     //Get Component    
 
-    WL.Scene.prototype.pp_getComponent = function (type, index) {
+    WL.Scene.prototype.pp_getComponent = function (type, index = 0) {
         return this.pp_getComponentBreadth(type, index);
     }
 
-    WL.Scene.prototype.pp_getComponentBreadth = function (type, index) {
+    WL.Scene.prototype.pp_getComponentBreadth = function (type, index = 0) {
         return this.pp_getRoot().pp_getComponentHierarchyBreadth(type, index);
     }
 
-    WL.Scene.prototype.pp_getComponentDepth = function (type, index) {
+    WL.Scene.prototype.pp_getComponentDepth = function (type, index = 0) {
         return this.pp_getRoot().pp_getComponentHierarchyDepth(type, index);
     }
 

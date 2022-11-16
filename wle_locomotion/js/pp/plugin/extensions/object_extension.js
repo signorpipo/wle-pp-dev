@@ -1801,7 +1801,7 @@ if (WL && WL.Object) {
         return this.addComponent(type, params);
     };
 
-    WL.Object.prototype.pp_getComponent = function (type, index) {
+    WL.Object.prototype.pp_getComponent = function (type, index = 0) {
         return this.getComponent(type, index);
     };
 
@@ -1809,37 +1809,37 @@ if (WL && WL.Object) {
         return this.getComponents(type);
     };
 
-    WL.Object.prototype.pp_getComponentHierarchy = function (type, index) {
+    WL.Object.prototype.pp_getComponentHierarchy = function (type, index = 0) {
         return this.pp_getComponentHierarchyBreadth(type, index);
     };
 
-    WL.Object.prototype.pp_getComponentHierarchyBreadth = function (type, index) {
+    WL.Object.prototype.pp_getComponentHierarchyBreadth = function (type, index = 0) {
         let objects = this.pp_getHierarchyBreadth();
-        return WL.Object.pp_getComponentObjects(type, index, objects);
+        return WL.Object.pp_getComponentObjects(objects, type, index);
     };
 
-    WL.Object.prototype.pp_getComponentHierarchyDepth = function (type, index) {
+    WL.Object.prototype.pp_getComponentHierarchyDepth = function (type, index = 0) {
         let objects = this.pp_getHierarchyDepth();
-        return WL.Object.pp_getComponentObjects(type, index, objects);
+        return WL.Object.pp_getComponentObjects(objects, type, index);
     };
 
-    WL.Object.prototype.pp_getComponentDescendants = function (type, index) {
+    WL.Object.prototype.pp_getComponentDescendants = function (type, index = 0) {
         return this.pp_getComponentDescendantsBreadth(type, index);
     };
 
-    WL.Object.prototype.pp_getComponentDescendantsBreadth = function (type, index) {
+    WL.Object.prototype.pp_getComponentDescendantsBreadth = function (type, index = 0) {
         let objects = this.pp_getDescendantsBreadth();
-        return WL.Object.pp_getComponentObjects(type, index, objects);
+        return WL.Object.pp_getComponentObjects(objects, type, index);
     };
 
-    WL.Object.prototype.pp_getComponentDescendantsDepth = function (type, index) {
+    WL.Object.prototype.pp_getComponentDescendantsDepth = function (type, index = 0) {
         let objects = this.pp_getDescendantsDepth();
-        return WL.Object.pp_getComponentObjects(type, index, objects);
+        return WL.Object.pp_getComponentObjects(objects, type, index);
     };
 
-    WL.Object.prototype.pp_getComponentChildren = function (type, index) {
+    WL.Object.prototype.pp_getComponentChildren = function (type, index = 0) {
         let objects = this.pp_getChildren();
-        return WL.Object.pp_getComponentObjects(type, index, objects);
+        return WL.Object.pp_getComponentObjects(objects, type, index);
     };
 
     WL.Object.prototype.pp_getComponentsHierarchy = function (type) {
@@ -1848,12 +1848,12 @@ if (WL && WL.Object) {
 
     WL.Object.prototype.pp_getComponentsHierarchyBreadth = function (type) {
         let objects = this.pp_getHierarchyBreadth();
-        return WL.Object.pp_getComponentsObjects(type, objects);
+        return WL.Object.pp_getComponentsObjects(objects, type);
     };
 
     WL.Object.prototype.pp_getComponentsHierarchyDepth = function (type) {
         let objects = this.pp_getHierarchyDepth();
-        return WL.Object.pp_getComponentsObjects(type, objects);
+        return WL.Object.pp_getComponentsObjects(objects, type);
     };
 
     WL.Object.prototype.pp_getComponentsDescendants = function (type) {
@@ -1862,17 +1862,17 @@ if (WL && WL.Object) {
 
     WL.Object.prototype.pp_getComponentsDescendantsBreadth = function (type) {
         let objects = this.pp_getDescendantsBreadth();
-        return WL.Object.pp_getComponentsObjects(type, objects);
+        return WL.Object.pp_getComponentsObjects(objects, type);
     };
 
     WL.Object.prototype.pp_getComponentsDescendantsDepth = function (type) {
         let objects = this.pp_getDescendantsDepth();
-        return WL.Object.pp_getComponentsObjects(type, objects);
+        return WL.Object.pp_getComponentsObjects(objects, type);
     };
 
     WL.Object.prototype.pp_getComponentsChildren = function (type) {
         let objects = this.pp_getChildren();
-        return WL.Object.pp_getComponentsObjects(type, objects);
+        return WL.Object.pp_getComponentsObjects(objects, type);
     };
 
     //Active
@@ -1895,12 +1895,12 @@ if (WL && WL.Object) {
 
     WL.Object.prototype.pp_setActiveHierarchyBreadth = function (active) {
         let objects = this.pp_getHierarchyBreadth();
-        return WL.Object.pp_setActiveObjects(active, objects);
+        return WL.Object.pp_setActiveObjects(objects, active);
     };
 
     WL.Object.prototype.pp_setActiveHierarchyDepth = function (active) {
         let objects = this.pp_getHierarchyDepth();
-        return WL.Object.pp_setActiveObjects(active, objects);
+        return WL.Object.pp_setActiveObjects(objects, active);
     };
 
     WL.Object.prototype.pp_setActiveDescendants = function (active) {
@@ -1909,17 +1909,17 @@ if (WL && WL.Object) {
 
     WL.Object.prototype.pp_setActiveDescendantsBreadth = function (active) {
         let objects = this.pp_getDescendantsBreadth();
-        return WL.Object.pp_setActiveObjects(active, objects);
+        return WL.Object.pp_setActiveObjects(objects, active);
     };
 
     WL.Object.prototype.pp_setActiveDescendantsDepth = function (active) {
         let objects = this.pp_getDescendantsDepth();
-        return WL.Object.pp_setActiveObjects(active, objects);
+        return WL.Object.pp_setActiveObjects(objects, active);
     };
 
     WL.Object.prototype.pp_setActiveChildren = function (active) {
         let objects = this.pp_getChildren();
-        return WL.Object.pp_setActiveObjects(active, objects);
+        return WL.Object.pp_setActiveObjects(objects, active);
     };
 
     //Uniform Scale
@@ -2341,12 +2341,12 @@ if (WL && WL.Object) {
 
     WL.Object.prototype.pp_getObjectByNameHierarchyBreadth = function (name) {
         let objects = this.pp_getHierarchyBreadth();
-        return WL.Object.pp_getObjectByNameObjects(name, objects);
+        return WL.Object.pp_getObjectByNameObjects(objects, name);
     }
 
     WL.Object.prototype.pp_getObjectByNameHierarchyDepth = function (name) {
         let objects = this.pp_getHierarchyDepth();
-        return WL.Object.pp_getObjectByNameObjects(name, objects);
+        return WL.Object.pp_getObjectByNameObjects(objects, name);
     }
 
     WL.Object.prototype.pp_getObjectByNameDescendants = function (name) {
@@ -2355,17 +2355,17 @@ if (WL && WL.Object) {
 
     WL.Object.prototype.pp_getObjectByNameDescendantsBreadth = function (name) {
         let objects = this.pp_getDescendantsBreadth();
-        return WL.Object.pp_getObjectByNameObjects(name, objects);
+        return WL.Object.pp_getObjectByNameObjects(objects, name);
     }
 
     WL.Object.prototype.pp_getObjectByNameDescendantsDepth = function (name) {
         let objects = this.pp_getDescendantsDepth();
-        return WL.Object.pp_getObjectByNameObjects(name, objects);
+        return WL.Object.pp_getObjectByNameObjects(objects, name);
     }
 
     WL.Object.prototype.pp_getObjectByNameChildren = function (name) {
         let objects = this.pp_getChildren();
-        return WL.Object.pp_getObjectByNameObjects(name, objects);
+        return WL.Object.pp_getObjectByNameObjects(objects, name);
     }
 
     WL.Object.prototype.pp_getObjectsByName = function (name) {
@@ -2378,12 +2378,12 @@ if (WL && WL.Object) {
 
     WL.Object.prototype.pp_getObjectsByNameHierarchyBreadth = function (name) {
         let objects = this.pp_getHierarchyBreadth();
-        return WL.Object.pp_getObjectsByNameObjects(name, objects);
+        return WL.Object.pp_getObjectsByNameObjects(objects, name);
     }
 
     WL.Object.prototype.pp_getObjectsByNameHierarchyDepth = function (name) {
         let objects = this.pp_getHierarchyDepth();
-        return WL.Object.pp_getObjectsByNameObjects(name, objects);
+        return WL.Object.pp_getObjectsByNameObjects(objects, name);
     }
 
     WL.Object.prototype.pp_getObjectsByNameDescendants = function (name) {
@@ -2392,17 +2392,17 @@ if (WL && WL.Object) {
 
     WL.Object.prototype.pp_getObjectsByNameDescendantsBreadth = function (name) {
         let objects = this.pp_getDescendantsBreadth();
-        return WL.Object.pp_getObjectsByNameObjects(name, objects);
+        return WL.Object.pp_getObjectsByNameObjects(objects, name);
     }
 
     WL.Object.prototype.pp_getObjectsByNameDescendantsDepth = function (name) {
         let objects = this.pp_getDescendantsDepth();
-        return WL.Object.pp_getObjectsByNameObjects(name, objects);
+        return WL.Object.pp_getObjectsByNameObjects(objects, name);
     }
 
     WL.Object.prototype.pp_getObjectsByNameChildren = function (name) {
         let objects = this.pp_getChildren();
-        return WL.Object.pp_getObjectsByNameObjects(name, objects);
+        return WL.Object.pp_getObjectsByNameObjects(objects, name);
     }
 
     //Get Hierarchy
@@ -2572,7 +2572,7 @@ if (WL && WL.Object) {
 
     //Static
 
-    WL.Object.pp_getComponentObjects = function (type, index, objects) {
+    WL.Object.pp_getComponentObjects = function (objects, type, index = 0) {
         let component = null;
 
         for (let object of objects) {
@@ -2585,7 +2585,7 @@ if (WL && WL.Object) {
         return component;
     };
 
-    WL.Object.pp_getComponentsObjects = function (type, objects) {
+    WL.Object.pp_getComponentsObjects = function (objects, type) {
         let components = [];
 
         for (let object of objects) {
@@ -2595,13 +2595,13 @@ if (WL && WL.Object) {
         return components;
     };
 
-    WL.Object.pp_setActiveObjects = function (active, objects) {
+    WL.Object.pp_setActiveObjects = function (objects, active) {
         for (let object of objects) {
             object.active = active;
         }
     };
 
-    WL.Object.pp_getObjectByNameObjects = function (name, objects) {
+    WL.Object.pp_getObjectByNameObjects = function (objects, name) {
         let objectFound = null;
 
         for (let object of objects) {
@@ -2614,7 +2614,7 @@ if (WL && WL.Object) {
         return objectFound;
     }
 
-    WL.Object.pp_getObjectsByNameObjects = function (name, objects) {
+    WL.Object.pp_getObjectsByNameObjects = function (objects, name) {
         let objectsFound = [];
 
         for (let object of objects) {
