@@ -176,7 +176,7 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
 
             this.hoverBehaviour(rayHit, doClick);
         } else {
-            if (this._isPPMouseValid()) {
+            if (this.viewComponent != null && this._isPPMouseValid()) {
                 PP.myMouse.getPositionScreenNormalized(this.direction);
                 this.direction[2] = -1;
 
@@ -239,7 +239,7 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
 
             let cursorTarget = this.hoveringObject.getComponent("cursor-target");
 
-            if (!hoveringObjectChanged && this._isMoving(rayHit)) {
+            if (!hoveringObjectChanged && this._isMoving(rayHit.locations[0])) {
                 if (cursorTarget) cursorTarget.onMove(this.hoveringObject, this);
                 this.globalTarget.onMove(this.hoveringObject, this);
             }
@@ -508,10 +508,10 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
 
     _WL._componentTypes[_WL._componentTypeIndices["cursor"]].proto._isMoving = function () {
         let hitLocationLocalToTarget = [0, 0, 0];
-        return function _isMoving(rayHit) {
+        return function _isMoving(hitLocation) {
             let isMoving = false;
 
-            hitLocationLocalToTarget = this.hoveringObject.pp_convertPositionWorldToLocal(rayHit.locations[0], hitLocationLocalToTarget);
+            hitLocationLocalToTarget = this.hoveringObject.pp_convertPositionWorldToLocal(hitLocation, hitLocationLocalToTarget);
 
             if (!hitLocationLocalToTarget.vec_equals(this.prevHitLocationLocalToTarget, 0.0001)) {
                 isMoving = true;
