@@ -2,7 +2,7 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
 
     // Modified Functions
 
-    _WL._componentTypes[_WL._componentTypeIndices["mouse-look"]].proto.init = function () {
+    _WL._componentTypes[_WL._componentTypeIndices["mouse-look"]].prototype.init = function () {
         document.addEventListener('mousemove', function () {
             let viewForward = PP.vec3_create();
             let viewUp = PP.vec3_create();
