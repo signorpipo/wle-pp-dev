@@ -120,7 +120,7 @@ PlayerLocomotionTeleportDetectionState = class PlayerLocomotionTeleportDetection
         if (!PP.XRUtils.isXRSessionActive()) {
             cancelTeleport = PP.myMouse.isButtonPressEnd(PP.MouseButtonType.RIGHT) || !PP.myMouse.isInsideView();
         } else {
-            cancelTeleport = PP.myGamepads[this._myTeleportParams.myHandedness].getButtonInfo(PP.ButtonType.THUMBSTICK).isPressed();
+            cancelTeleport = PP.myGamepads[this._myTeleportParams.myHandedness].getButtonInfo(PP.GamepadButtonType.THUMBSTICK).isPressed();
         }
 
         return cancelTeleport;
