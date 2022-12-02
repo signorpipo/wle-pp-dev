@@ -61,7 +61,7 @@ WL.registerComponent('stick-movement', {
             this._setupCollisionCheckParams();
         }
 
-        if (PP.myLeftGamepad.getButtonInfo(PP.GamepadButtonType.SELECT).isPressed()) {
+        if (PP.myLeftGamepad.getButtonInfo(PP.GamepadButtonID.SELECT).isPressed()) {
             let mesh = this.object.pp_getComponentHierarchy("mesh");
             let physX = this.object.pp_getComponentHierarchy("physx");
 
@@ -130,15 +130,15 @@ WL.registerComponent('stick-movement', {
             }
         }
 
-        if (PP.myLeftGamepad.getButtonInfo(PP.GamepadButtonType.TOP_BUTTON).isPressed()) {
+        if (PP.myLeftGamepad.getButtonInfo(PP.GamepadButtonID.TOP_BUTTON).isPressed()) {
             movement.vec3_add([0, this._mySpeed * this._myScale * dt, 0], movement);
             this._myIsFlying = true;
-        } else if (PP.myLeftGamepad.getButtonInfo(PP.GamepadButtonType.BOTTOM_BUTTON).isPressed()) {
+        } else if (PP.myLeftGamepad.getButtonInfo(PP.GamepadButtonID.BOTTOM_BUTTON).isPressed()) {
             movement.vec3_add([0, -this._mySpeed * this._myScale * dt, 0], movement);
             this._myIsFlying = true;
         }
 
-        if (PP.myLeftGamepad.getButtonInfo(PP.GamepadButtonType.BOTTOM_BUTTON).isPressEnd(2)) {
+        if (PP.myLeftGamepad.getButtonInfo(PP.GamepadButtonID.BOTTOM_BUTTON).isPressEnd(2)) {
             this._myIsFlying = false;
         }
 

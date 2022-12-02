@@ -107,7 +107,7 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport extends PlayerLocomoti
         let startDetecting = false;
 
         if (!PP.XRUtils.isXRSessionActive()) {
-            startDetecting = PP.myMouse.isButtonPressStart(PP.MouseButtonType.MIDDLE);
+            startDetecting = PP.myMouse.isButtonPressStart(PP.MouseButtonID.MIDDLE);
         } else {
             let axes = PP.myGamepads[this._myTeleportParams.myHandedness].getAxesInfo().getAxes();
 

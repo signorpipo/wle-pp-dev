@@ -96,7 +96,7 @@ PlayerLocomotionSmooth.prototype.update = function () {
                 }
 
                 let movementIntensity = axes.vec2_length();
-                if (PP.myGamepads[this._myParams.myHandedness].getButtonInfo(PP.GamepadButtonType.SELECT).isPressed()) {
+                if (PP.myGamepads[this._myParams.myHandedness].getButtonInfo(PP.GamepadButtonID.SELECT).isPressed()) {
                     movementIntensity = 0.1;
                 }
                 let speed = Math.pp_lerp(0, this._myParams.myMaxSpeed, movementIntensity);
@@ -119,23 +119,23 @@ PlayerLocomotionSmooth.prototype.update = function () {
             }
         }
 
-        if (!PP.myGamepads[this._myParams.myHandedness].getButtonInfo(PP.GamepadButtonType.SQUEEZE).isPressed()) {
-            if (PP.myGamepads[this._myParams.myHandedness].getButtonInfo(PP.GamepadButtonType.TOP_BUTTON).isPressed()) {
+        if (!PP.myGamepads[this._myParams.myHandedness].getButtonInfo(PP.GamepadButtonID.SQUEEZE).isPressed()) {
+            if (PP.myGamepads[this._myParams.myHandedness].getButtonInfo(PP.GamepadButtonID.TOP_BUTTON).isPressed()) {
                 verticalMovement = playerUp.vec3_scale(this._myParams.myMaxSpeed * dt, verticalMovement);
                 headMovement = headMovement.vec3_add(verticalMovement, headMovement);
                 this._myLocomotionRuntimeParams.myIsFlying = true;
-            } else if (PP.myGamepads[this._myParams.myHandedness].getButtonInfo(PP.GamepadButtonType.BOTTOM_BUTTON).isPressed()) {
+            } else if (PP.myGamepads[this._myParams.myHandedness].getButtonInfo(PP.GamepadButtonID.BOTTOM_BUTTON).isPressed()) {
                 verticalMovement = playerUp.vec3_scale(-this._myParams.myMaxSpeed * dt, verticalMovement);
                 headMovement = headMovement.vec3_add(verticalMovement, headMovement);
                 this._myLocomotionRuntimeParams.myIsFlying = true;
             }
         }
 
-        if (PP.myGamepads[this._myParams.myHandedness].getButtonInfo(PP.GamepadButtonType.BOTTOM_BUTTON).isPressEnd(2)) {
+        if (PP.myGamepads[this._myParams.myHandedness].getButtonInfo(PP.GamepadButtonID.BOTTOM_BUTTON).isPressEnd(2)) {
             this._myLocomotionRuntimeParams.myIsFlying = false;
         }
 
-        if (!PP.myGamepads[this._myParams.myHandedness].getButtonInfo(PP.GamepadButtonType.THUMBSTICK).isPressed()) {
+        if (!PP.myGamepads[this._myParams.myHandedness].getButtonInfo(PP.GamepadButtonID.THUMBSTICK).isPressed()) {
             if (!this._myLocomotionRuntimeParams.myIsFlying) {
                 let gravity = -2;
                 verticalMovement = playerUp.vec3_scale(gravity * dt, verticalMovement);
@@ -147,7 +147,7 @@ PlayerLocomotionSmooth.prototype.update = function () {
             CollisionCheckGlobal.move(headMovement, feetTransformQuat, this._myParams.myCollisionCheckParams, this._myLocomotionRuntimeParams.myCollisionRuntimeParams);
             headMovement.vec3_copy(this._myLocomotionRuntimeParams.myCollisionRuntimeParams.myFixedMovement);
 
-            if (PP.myGamepads[this._myParams.myHandedness].getButtonInfo(PP.GamepadButtonType.SQUEEZE).isPressed()) {
+            if (PP.myGamepads[this._myParams.myHandedness].getButtonInfo(PP.GamepadButtonID.SQUEEZE).isPressed()) {
                 headMovement.vec3_zero();
             }
         }

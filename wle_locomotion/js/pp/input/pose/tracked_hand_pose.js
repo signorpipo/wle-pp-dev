@@ -5,8 +5,8 @@ PP.TrackedHandPoseParams = class TrackedHandPoseParams extends PP.BasePoseParams
         this.myTrackedHandJointTypeList = [];
 
         if (addAllJointTypes) {
-            for (let typeKey in PP.TrackedHandJointType) {
-                this.myTrackedHandJointTypeList.push([PP.TrackedHandJointType[typeKey]]);
+            for (let key in PP.TrackedHandJointType) {
+                this.myTrackedHandJointTypeList.push([PP.TrackedHandJointType[key]]);
             }
         }
     }

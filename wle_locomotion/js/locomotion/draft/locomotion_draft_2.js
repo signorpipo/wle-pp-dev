@@ -137,7 +137,7 @@ WL.registerComponent('locomotion-draft-2', {
                             this._myIsFlying = this._myIsFlying || direction.vec3_componentAlongAxis(playerUp).vec3_length() > 0.0001;
 
                             let movementIntensity = axes.vec2_length();
-                            if (PP.myLeftGamepad.getButtonInfo(PP.GamepadButtonType.SELECT).isPressed()) {
+                            if (PP.myLeftGamepad.getButtonInfo(PP.GamepadButtonID.SELECT).isPressed()) {
                                 movementIntensity = 0.1;
                             }
                             let speed = Math.pp_lerp(0, this._myMaxSpeed, movementIntensity);
@@ -161,11 +161,11 @@ WL.registerComponent('locomotion-draft-2', {
                         }
                     }
 
-                    if (!PP.myLeftGamepad.getButtonInfo(PP.GamepadButtonType.SQUEEZE).isPressed()) {
-                        if (PP.myLeftGamepad.getButtonInfo(PP.GamepadButtonType.TOP_BUTTON).isPressed()) {
+                    if (!PP.myLeftGamepad.getButtonInfo(PP.GamepadButtonID.SQUEEZE).isPressed()) {
+                        if (PP.myLeftGamepad.getButtonInfo(PP.GamepadButtonID.TOP_BUTTON).isPressed()) {
                             headMovement.vec3_add([0, this._myMaxSpeed * dt, 0], headMovement);
                             this._myIsFlying = true;
-                        } else if (PP.myLeftGamepad.getButtonInfo(PP.GamepadButtonType.BOTTOM_BUTTON).isPressed()) {
+                        } else if (PP.myLeftGamepad.getButtonInfo(PP.GamepadButtonID.BOTTOM_BUTTON).isPressed()) {
                             headMovement.vec3_add([0, -this._myMaxSpeed * dt, 0], headMovement);
                             this._myIsFlying = true;
                         }
@@ -173,13 +173,13 @@ WL.registerComponent('locomotion-draft-2', {
                 }
 
 
-                if (PP.myLeftGamepad.getButtonInfo(PP.GamepadButtonType.BOTTOM_BUTTON).isPressEnd(2)) {
+                if (PP.myLeftGamepad.getButtonInfo(PP.GamepadButtonID.BOTTOM_BUTTON).isPressEnd(2)) {
                     this._myIsFlying = false;
                 }
 
                 let movementToApply = headMovement;
 
-                if (!PP.myLeftGamepad.getButtonInfo(PP.GamepadButtonType.THUMBSTICK).isPressed()) {
+                if (!PP.myLeftGamepad.getButtonInfo(PP.GamepadButtonID.THUMBSTICK).isPressed()) {
                     if (!this._myIsFlying) {
                         let gravity = -2;
                         movementToApply.vec3_add(playerUp.vec3_scale(gravity * dt), movementToApply);
@@ -190,7 +190,7 @@ WL.registerComponent('locomotion-draft-2', {
                     this._myCollisionCheck.move(headMovement, feetTransform, this._myCollisionCheckParams, this._myCollisionRuntimeParams);
                     movementToApply.vec3_copy(this._myCollisionRuntimeParams.myFixedMovement);
 
-                    if (PP.myLeftGamepad.getButtonInfo(PP.GamepadButtonType.SQUEEZE).isPressed()) {
+                    if (PP.myLeftGamepad.getButtonInfo(PP.GamepadButtonID.SQUEEZE).isPressed()) {
                         movementToApply.vec3_zero();
                     }
                 }

@@ -102,7 +102,7 @@ PlayerLocomotionTeleportDetectionState = class PlayerLocomotionTeleportDetection
 
         if (!PP.XRUtils.isXRSessionActive()) {
             if (PP.myMouse.isInsideView()) {
-                confirmTeleport = PP.myMouse.isButtonPressEnd(PP.MouseButtonType.MIDDLE);
+                confirmTeleport = PP.myMouse.isButtonPressEnd(PP.MouseButtonID.MIDDLE);
             }
         } else {
             let axes = PP.myGamepads[this._myTeleportParams.myHandedness].getAxesInfo().getAxes();
@@ -118,9 +118,9 @@ PlayerLocomotionTeleportDetectionState = class PlayerLocomotionTeleportDetection
         let cancelTeleport = false;
 
         if (!PP.XRUtils.isXRSessionActive()) {
-            cancelTeleport = PP.myMouse.isButtonPressEnd(PP.MouseButtonType.RIGHT) || !PP.myMouse.isInsideView();
+            cancelTeleport = PP.myMouse.isButtonPressEnd(PP.MouseButtonID.RIGHT) || !PP.myMouse.isInsideView();
         } else {
-            cancelTeleport = PP.myGamepads[this._myTeleportParams.myHandedness].getButtonInfo(PP.GamepadButtonType.THUMBSTICK).isPressed();
+            cancelTeleport = PP.myGamepads[this._myTeleportParams.myHandedness].getButtonInfo(PP.GamepadButtonID.THUMBSTICK).isPressed();
         }
 
         return cancelTeleport;

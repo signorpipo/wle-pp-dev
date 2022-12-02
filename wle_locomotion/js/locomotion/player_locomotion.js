@@ -182,7 +182,7 @@ PlayerLocomotion = class PlayerLocomotion {
     update(dt) {
         this._myPlayerHeadManager.update(dt);
 
-        if (PP.myLeftGamepad.getButtonInfo(PP.GamepadButtonType.THUMBSTICK).isPressEnd(2)) {
+        if (PP.myLeftGamepad.getButtonInfo(PP.GamepadButtonID.THUMBSTICK).isPressEnd(2)) {
             if (this._myLocomotionMovementFSM.isInState("smooth") && this._myPlayerLocomotionSmooth.canStop()) {
                 this._myLocomotionMovementFSM.perform("next");
             } else if (this._myLocomotionMovementFSM.isInState("teleport") && this._myPlayerLocomotionTeleport.canStop()) {
