@@ -13533,6 +13533,18 @@
                     }
                 }
             ]
+        },
+        "901": {
+            "name": "Virtual Gamepad",
+            "parent": "597",
+            "components": [
+                {
+                    "type": "virtual-gamepad",
+                    "virtual-gamepad": {
+                        "_myShowOnDesktop": false
+                    }
+                }
+            ]
         }
     },
     "meshes": {
