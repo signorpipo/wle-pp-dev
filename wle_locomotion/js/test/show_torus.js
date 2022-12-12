@@ -14,7 +14,7 @@ WL.registerComponent('show-torus', {
     update(dt) {
         let visualParams = new PP.VisualTorusParams();
         visualParams.myRadius = PP.myEasyTuneVariables.get("Torus Radius");
-        visualParams.mySegmentAmount = PP.myEasyTuneVariables.get("Torus Segments");
+        visualParams.mySegmentsAmount = PP.myEasyTuneVariables.get("Torus Segments");
         visualParams.mySegmentThickness = PP.myEasyTuneVariables.get("Torus Thickness");
         visualParams.myMaterial = this._myMaterial;
         visualParams.myParent = this.object;

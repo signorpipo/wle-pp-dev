@@ -191,7 +191,7 @@ PlayerLocomotionTeleportDetectionVisualizer.prototype._setupVisuals = function (
         {
             let visualParams = new PP.VisualTorusParams();
             visualParams.myRadius = PP.myEasyTuneVariables.get("Teleport Torus Radius");
-            visualParams.mySegmentAmount = PP.myEasyTuneVariables.get("Teleport Torus Segments");
+            visualParams.mySegmentsAmount = PP.myEasyTuneVariables.get("Teleport Torus Segments");
             visualParams.mySegmentThickness = PP.myEasyTuneVariables.get("Teleport Torus Thickness");
 
             if (this._myTeleportParams.myVisualizerParams.myTeleportParableValidMaterial != null) {
@@ -208,7 +208,7 @@ PlayerLocomotionTeleportDetectionVisualizer.prototype._setupVisuals = function (
         {
             let visualParams = new PP.VisualTorusParams();
             visualParams.myRadius = PP.myEasyTuneVariables.get("Teleport Torus Inner Radius");
-            visualParams.mySegmentAmount = PP.myEasyTuneVariables.get("Teleport Torus Segments");
+            visualParams.mySegmentsAmount = PP.myEasyTuneVariables.get("Teleport Torus Segments");
             visualParams.mySegmentThickness = PP.myEasyTuneVariables.get("Teleport Torus Thickness");
 
             if (this._myTeleportParams.myVisualizerParams.myTeleportParableValidMaterial != null) {
@@ -392,7 +392,7 @@ PlayerLocomotionTeleportDetectionVisualizer.prototype._showTeleportParablePositi
         {
             let visualParams = this._myValidVisualTeleportPositionTorus.getParams();
             visualParams.myRadius = PP.myEasyTuneVariables.get("Teleport Torus Radius");
-            visualParams.mySegmentAmount = PP.myEasyTuneVariables.get("Teleport Torus Segments");
+            visualParams.mySegmentsAmount = PP.myEasyTuneVariables.get("Teleport Torus Segments");
             visualParams.mySegmentThickness = PP.myEasyTuneVariables.get("Teleport Torus Thickness");
 
             this._myValidVisualTeleportPositionTorus.paramsUpdated();
@@ -401,7 +401,7 @@ PlayerLocomotionTeleportDetectionVisualizer.prototype._showTeleportParablePositi
         {
             let visualParams = this._myValidVisualTeleportPositionTorusInner.getParams();
             visualParams.myRadius = PP.myEasyTuneVariables.get("Teleport Torus Inner Radius");
-            visualParams.mySegmentAmount = PP.myEasyTuneVariables.get("Teleport Torus Segments");
+            visualParams.mySegmentsAmount = PP.myEasyTuneVariables.get("Teleport Torus Segments");
             visualParams.mySegmentThickness = PP.myEasyTuneVariables.get("Teleport Torus Thickness");
 
             this._myValidVisualTeleportPositionTorusInner.paramsUpdated();
