@@ -27,15 +27,15 @@ require('@wonderlandengine/components/wonderleap-ad');
 require('./pp/pp');
 
 //	PLUGIN
-require('./pp/plugin/component_mods/clone_component_mod');
-require('./pp/plugin/component_mods/cursor_component_mod');
-require('./pp/plugin/component_mods/cursor_target_component_mod');
-require('./pp/plugin/component_mods/mouse_look_component_mod');
-
 require('./pp/plugin/extensions/array_extension');
 require('./pp/plugin/extensions/object_extension');
 require('./pp/plugin/extensions/math_extension');
 require('./pp/plugin/extensions/scene_extension');
+
+require('./pp/plugin/component_mods/clone_component_mod');
+require('./pp/plugin/component_mods/cursor_component_mod');
+require('./pp/plugin/component_mods/cursor_target_component_mod');
+require('./pp/plugin/component_mods/mouse_look_component_mod');
 
 //	AUDIO
 require('./pp/audio/spatial_audio_listener');
