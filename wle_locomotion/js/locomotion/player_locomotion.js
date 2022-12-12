@@ -176,7 +176,6 @@ PlayerLocomotion = class PlayerLocomotion {
         this._myPlayerLocomotionRotate.start();
 
         this._myLocomotionMovementFSM.perform("start");
-        this._myLocomotionMovementFSM.perform("next");
     }
 
     update(dt) {

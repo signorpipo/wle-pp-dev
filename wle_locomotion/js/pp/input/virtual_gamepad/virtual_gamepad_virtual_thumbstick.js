@@ -18,6 +18,7 @@ VirtualGamepadVirtualThumbstick = class VirtualGamepadVirtualThumbstick {
 
         this._myThumbstickElement.addEventListener("mousedown", this._onMouseDown.bind(this, virtualGamepadParams.myStopPropagatingMouseDownEvents));
         this._myThumbstickElement.addEventListener("touchstart", this._onMouseDown.bind(this, virtualGamepadParams.myStopPropagatingMouseDownEvents));
+
         document.body.addEventListener("mouseup", this._onMouseUp.bind(this));
         document.body.addEventListener("touchend", this._onMouseUp.bind(this));
 

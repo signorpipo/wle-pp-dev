@@ -13541,7 +13541,9 @@
                 {
                     "type": "virtual-gamepad",
                     "virtual-gamepad": {
-                        "_myShowOnDesktop": false
+                        "_myShowOnDesktop": false,
+                        "_myReleaseOnMouseLeave": false,
+                        "_myShowOnHeadset": false
                     }
                 }
             ]
