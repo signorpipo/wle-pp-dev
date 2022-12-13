@@ -6,7 +6,7 @@ VirtualGamepadVirtualThumbstick = class VirtualGamepadVirtualThumbstick {
 
         this._myIsActive = true;
 
-        this._myTouchID = null;
+        this._myPointerID = null;
         this._myThumbstickDragStartPosition = PP.vec2_create();
 
         this._myAxes = PP.vec2_create();
@@ -16,18 +16,12 @@ VirtualGamepadVirtualThumbstick = class VirtualGamepadVirtualThumbstick {
 
         this._build(thumbstickElementParent, virtualGamepadParams, virtualThumbstickHandedness);
 
-        this._myThumbstickElement.addEventListener("mousedown", this._onMouseDown.bind(this, virtualGamepadParams.myStopPropagatingMouseDownEvents));
-        this._myThumbstickElement.addEventListener("touchstart", this._onMouseDown.bind(this, virtualGamepadParams.myStopPropagatingMouseDownEvents));
+        this._myThumbstickElement.addEventListener("pointerdown", this._onPointerDown.bind(this, virtualGamepadParams.myStopPropagatingPointerDownEvents));
+        document.body.addEventListener("pointerup", this._onPointerUp.bind(this));
+        document.body.addEventListener("pointermove", this._onPointerMove.bind(this));
 
-        document.body.addEventListener("mouseup", this._onMouseUp.bind(this));
-        document.body.addEventListener("touchend", this._onMouseUp.bind(this));
-
-        document.body.addEventListener("mousemove", this._onMouseMove.bind(this));
-        document.body.addEventListener("touchmove", this._onMouseMove.bind(this));
-
-        if (virtualGamepadParams.myReleaseOnMouseLeave) {
-            document.body.addEventListener("mouseenter", this._onMouseUp.bind(this));
-            document.body.addEventListener("mouseleave", this._onMouseUp.bind(this));
+        if (virtualGamepadParams.myReleaseOnPointerLeave) {
+            document.body.addEventListener("pointerleave", this._onPointerUp.bind(this));
         }
     }
 
@@ -50,79 +44,49 @@ VirtualGamepadVirtualThumbstick = class VirtualGamepadVirtualThumbstick {
             this._myAxes[0] = 0;
             this._myAxes[1] = 0;
             this._myIsPressed = false;
-            this._myTouchID = null;
+            this._myPointerID = null;
 
-            this._myThumbstickElement.style.transition = "0.2s";
+            this._myThumbstickElement.style.transition = "all " + this._myParams.myReleaseTransitionSeconds + "s ease 0s";
             this._myThumbstickElement.style.transform = "translate(0px, 0px)";
         }
     }
 
-    _onMouseDown(stopPropagatingMouseDownEvents, event) {
+    _onPointerDown(stopPropagatingPointerDownEvents, event) {
         if (!this._myIsActive) return;
         if (this._myIsPressed) return;
 
-        if (stopPropagatingMouseDownEvents) {
+        if (stopPropagatingPointerDownEvents) {
             event.stopPropagation();
         }
         event.preventDefault();
 
         this._myThumbstickIcon.setPressed(true);
 
-        // if this is a touch event, keep track of which one
-        if (event.changedTouches != null && event.changedTouches.length > 0) {
-            this._myTouchID = event.changedTouches[0].identifier;
-        }
+        this._myPointerID = event.pointerId;
 
-        if (event.changedTouches != null && event.changedTouches.length > 0) {
-            this._myThumbstickDragStartPosition[0] = event.changedTouches[0].clientX;
-            this._myThumbstickDragStartPosition[1] = event.changedTouches[0].clientY;
-        } else {
-            this._myThumbstickDragStartPosition[0] = event.clientX;
-            this._myThumbstickDragStartPosition[1] = event.clientY;
-
-        }
+        this._myThumbstickDragStartPosition[0] = event.clientX;
+        this._myThumbstickDragStartPosition[1] = event.clientY;
 
         this._myIsPressed = true;
     }
 
-    _onMouseUp(event) {
+    _onPointerUp(event) {
         if (!this._myIsActive) return;
         if (!this._myIsPressed) return;
 
-        // if this is a touch event, make sure it is the right one
-        if (event.changedTouches != null && event.changedTouches.length > 0 && this._myTouchID != event.changedTouches[0].identifier) return;
+        if (event.pointerId != this._myPointerID) return;
 
         this.reset();
     }
 
-    _onMouseMove(event) {
+    _onPointerMove(event) {
         if (!this._myIsActive) return;
         if (!this._myIsPressed) return;
 
-        let changedTouchFound = null
+        if (event.pointerId != this._myPointerID) return;
 
-        // if this is a touch event, make sure it is the right one
-        if (event.changedTouches != null && event.changedTouches.length > 0) {
-            for (let changedTouch of event.changedTouches) {
-                if (this._myTouchID == changedTouch.identifier) {
-                    changedTouchFound = changedTouch;
-                }
-            }
-
-            if (changedTouchFound == null) {
-                return;
-            }
-        }
-
-        let mouseX = 0;
-        let mouseY = 0;
-        if (changedTouchFound != null) {
-            mouseX = changedTouchFound.clientX;
-            mouseY = changedTouchFound.clientY;
-        } else {
-            mouseX = event.clientX;
-            mouseY = event.clientY;
-        }
+        let mouseX = event.clientX;
+        let mouseY = event.clientY;
 
         let containerRect = this._myThumbstickContainer.getBoundingClientRect();
         let maxDistanceFromCenter = (containerRect.width / 2) * this._myParams.myMaxDistanceFromCenterMultiplier;
@@ -136,7 +100,7 @@ VirtualGamepadVirtualThumbstick = class VirtualGamepadVirtualThumbstick {
         let translateThumbstickX = distanceFromDragStart * Math.cos(angle);
         let translateThumbstickY = distanceFromDragStart * Math.sin(angle);
 
-        this._myThumbstickElement.style.transition = "0.05s";
+        this._myThumbstickElement.style.transition = "all " + this._myParams.myMoveTransitionSeconds + "s ease-out 0s";
         this._myThumbstickElement.style.transform = "translate(" + translateThumbstickX + "px, " + translateThumbstickY + "px)";
 
         this._myAxes[0] = translateThumbstickX / maxDistanceFromCenter;

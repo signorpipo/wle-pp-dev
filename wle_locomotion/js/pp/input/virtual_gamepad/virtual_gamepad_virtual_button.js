@@ -5,7 +5,7 @@ VirtualGamepadVirtualButton = class VirtualGamepadVirtualButton {
 
         this._myIsActive = true;
 
-        this._myTouchID = null;
+        this._myPointerID = null;
 
         this._myIsPressed = false;
 
@@ -13,14 +13,11 @@ VirtualGamepadVirtualButton = class VirtualGamepadVirtualButton {
 
         this._build(buttonElementParent, virtualGamepadParams, virtualButtonHandedness, virtualButtonIndex);
 
-        this._myButtonElement.addEventListener("mousedown", this._onMouseDown.bind(this, virtualGamepadParams.myStopPropagatingMouseDownEvents));
-        this._myButtonElement.addEventListener("touchstart", this._onMouseDown.bind(this, virtualGamepadParams.myStopPropagatingMouseDownEvents));
-        document.body.addEventListener("mouseup", this._onMouseUp.bind(this));
-        document.body.addEventListener("touchend", this._onMouseUp.bind(this));
+        this._myButtonElement.addEventListener("pointerdown", this._onPointerDown.bind(this, virtualGamepadParams.myStopPropagatingPointerDownEvents));
+        document.body.addEventListener("pointerup", this._onPointerUp.bind(this));
 
-        if (virtualGamepadParams.myReleaseOnMouseLeave) {
-            document.body.addEventListener("mouseenter", this._onMouseUp.bind(this));
-            document.body.addEventListener("mouseleave", this._onMouseUp.bind(this));
+        if (virtualGamepadParams.myReleaseOnPointerLeave) {
+            document.body.addEventListener("pointerleave", this._onPointerUp.bind(this));
         }
     }
 
@@ -37,35 +34,31 @@ VirtualGamepadVirtualButton = class VirtualGamepadVirtualButton {
             this._myButtonIcon.setPressed(false);
 
             this._myIsPressed = false;
-            this._myTouchID = null;
+            this._myPointerID = null;
         }
     }
 
-    _onMouseDown(stopPropagatingMouseDownEvents, event) {
+    _onPointerDown(stopPropagatingPointerDownEvents, event) {
         if (!this._myIsActive) return;
         if (this._myIsPressed) return;
 
-        if (stopPropagatingMouseDownEvents) {
+        if (stopPropagatingPointerDownEvents) {
             event.stopPropagation();
         }
         event.preventDefault();
 
         this._myButtonIcon.setPressed(true);
 
-        // if this is a touch event, keep track of which one
-        if (event.changedTouches != null && event.changedTouches.length > 0) {
-            this._myTouchID = event.changedTouches[0].identifier;
-        }
+        this._myPointerID = event.pointerId;
 
         this._myIsPressed = true;
     }
 
-    _onMouseUp(event) {
+    _onPointerUp(event) {
         if (!this._myIsActive) return;
         if (!this._myIsPressed) return;
 
-        // if this is a touch event, make sure it is the right one
-        if (event.changedTouches != null && event.changedTouches.length > 0 && this._myTouchID != event.changedTouches[0].identifier) return;
+        if (event.pointerId != this._myPointerID) return;
 
         this.reset();
     }

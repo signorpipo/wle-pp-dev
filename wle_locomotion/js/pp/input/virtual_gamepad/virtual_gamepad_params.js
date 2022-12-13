@@ -11,6 +11,9 @@ VirtualGamepadThumbstickParams = class VirtualGamepadThumbstickParams {
 
         this.myMaxDistanceFromCenterMultiplier = 1;
 
+        this.myReleaseTransitionSeconds = 0.2;
+        this.myMoveTransitionSeconds = 0;
+
         this.myIconParams = new VirtualGamepadIconParams();
     }
 };
