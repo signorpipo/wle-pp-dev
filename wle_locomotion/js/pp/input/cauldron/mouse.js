@@ -383,6 +383,6 @@ PP.Mouse = class Mouse {
     }
 
     _isEventValid(event) {
-        return event.isPrimary && this._myValidPointerTypes.pp_hasEqual(event.pointerType) && (this._myPointerID == null || this._myPointerID == event.pointerId);
+        return this._myValidPointerTypes.pp_hasEqual(event.pointerType) && (this._myPointerID == null || this._myPointerID == event.pointerId);
     }
 };

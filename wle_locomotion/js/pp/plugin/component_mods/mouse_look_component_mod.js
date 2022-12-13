@@ -3,8 +3,12 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
     // Modified Functions
 
     _WL._componentTypes[_WL._componentTypeIndices["mouse-look"]].prototype.init = function () {
-        this.touchID = null;
-        this.prevTouch = null;
+        this.pointerId = null;
+        this.prevMoveEvent = null;
+
+        this.resetMovingDelay = 0.15;
+        this.resetMovingTimer = new PP.Timer(this.resetMovingDelay, false);
+        this.isMoving = false;
 
         document.body.addEventListener('pointermove', this._onMove.bind(this));
 
@@ -14,11 +18,13 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
                     event.preventDefault();
                 }, false);
             }
+
             WL.canvas.addEventListener('pointerdown', function (event) {
-                if (!event.isPrimary) return;
+                if (this.pointerId != null) return;
 
                 if (!this.mouseDown) {
                     if (event.button == this.mouseButtonIndex) {
+                        this.pointerId = event.pointerId;
                         this.mouseDown = true;
                         document.body.style.cursor = "grabbing";
                         if (event.button == 1) {
@@ -28,8 +34,9 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
                     }
                 }
             }.bind(this));
+
             document.body.addEventListener('pointerup', function (event) {
-                if (!event.isPrimary) return;
+                if (event.pointerId != this.pointerId) return;
 
                 if (this.mouseDown) {
                     if (event.button == this.mouseButtonIndex) {
@@ -38,14 +45,36 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
                     }
                 }
             }.bind(this));
-            document.body.addEventListener('pointerleave', function (event) {
-                if (!event.isPrimary) return;
+        }
 
-                if (this.mouseDown) {
-                    this.mouseDown = false;
-                    document.body.style.cursor = "initial";
-                }
-            }.bind(this));
+        document.body.addEventListener('pointerleave', function (event) {
+            if (event.pointerId != this.pointerId) return;
+
+            this.pointerId = null;
+            this.prevMoveEvent = null;
+
+            if (this.mouseDown) {
+                this.mouseDown = false;
+                document.body.style.cursor = "initial";
+            }
+        }.bind(this));
+    };
+
+    _WL._componentTypes[_WL._componentTypeIndices["mouse-look"]].prototype.update = function (dt) {
+        if (this.resetMovingTimer.isRunning()) {
+            this.resetMovingTimer.update(dt);
+            if (this.resetMovingTimer.isDone()) {
+                this.resetMovingTimer.reset();
+                this.isMoving = false;
+            }
+        }
+
+        if (!this.isMoving) {
+            if (!this.requireMouseDown || !this.mouseDown) {
+                this.pointerId = null;
+            }
+
+            this.prevMoveEvent = null;
         }
     };
 
@@ -59,7 +88,7 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
 
         let newUp = PP.vec3_create();
         return function (event) {
-            if (!event.isPrimary) return;
+            if (this.pointerId != null && event.pointerId != this.pointerId) return;
 
             if (this.active && (this.mouseDown || !this.requireMouseDown)) {
 
@@ -83,8 +112,21 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
                 }
                 referenceRight.vec3_normalize(referenceRight);
 
-                this.rotationX = -this.sensitity * event.movementX;
-                this.rotationY = -this.sensitity * event.movementY;
+                let movementX = event.movementX;
+                let movementY = event.movementY;
+
+                if (movementX == null || movementY == null) {
+                    if (this.prevMoveEvent != null) {
+                        movementX = event.pageX - this.prevMoveEvent.pageX;
+                        movementY = event.pageY - this.prevMoveEvent.pageY;
+                    } else {
+                        movementX = 0;
+                        movementY = 0;
+                    }
+                }
+
+                this.rotationX = -this.sensitity * movementX;
+                this.rotationY = -this.sensitity * movementY;
 
                 this.object.pp_rotateAxis(this.rotationY, referenceRight);
 
@@ -97,6 +139,12 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
                 }
 
                 this.object.pp_rotateAxis(this.rotationX, referenceUp);
+
+                this.prevMoveEvent = event;
+                this.pointerId = event.pointerId;
+
+                this.resetMovingTimer.start(this.resetMovingDelay);
+                this.isMoving = true;
             }
         };
     }();
