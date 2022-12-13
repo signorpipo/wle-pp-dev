@@ -31,6 +31,10 @@ PP.Mouse = class Mouse {
         this._myContextMenuActive = true;
         this._myMiddleButtonScrollActive = true;
 
+        this._myValidPointerTypes = ["mouse", "touch", "pen"];
+
+        this._myLastPointerType = "";
+
         // Support Variables
         this._myProjectionMatrixInverse = PP.mat4_create();
         this._myRotationQuat = PP.quat_create();
@@ -39,16 +43,16 @@ PP.Mouse = class Mouse {
     }
 
     start() {
-        this._myOnMouseMoveCallback = this._onMouseMove.bind(this);
-        document.body.addEventListener("mousemove", this._myOnMouseMoveCallback);
-        this._myOnMouseDownCallback = this._onMouseDown.bind(this);
-        document.body.addEventListener("mousedown", this._myOnMouseDownCallback);
-        this._myOnMouseUpCallback = this._onMouseUp.bind(this);
-        document.body.addEventListener("mouseup", this._myOnMouseUpCallback);
-        this._myOnMouseLeaveCallback = this._onMouseLeave.bind(this);
-        document.body.addEventListener("mouseleave", this._myOnMouseLeaveCallback);
-        this._myOnMouseEnterCallback = this._onMouseEnter.bind(this);
-        document.body.addEventListener("mouseenter", this._myOnMouseEnterCallback);
+        this._myOnPointerMoveCallback = this._onPointerMove.bind(this);
+        document.body.addEventListener("pointermove", this._myOnPointerMoveCallback);
+        this._myOnPointerDownCallback = this._onPointerDown.bind(this);
+        document.body.addEventListener("pointerdown", this._myOnPointerDownCallback);
+        this._myOnPointerUpCallback = this._onPointerUp.bind(this);
+        document.body.addEventListener("pointerup", this._myOnPointerUpCallback);
+        this._myOnPointerLeaveCallback = this._onPointerLeave.bind(this);
+        document.body.addEventListener("pointerleave", this._myOnPointerLeaveCallback);
+        this._myOnPointerEnterCallback = this._onPointerEnter.bind(this);
+        document.body.addEventListener("pointerenter", this._myOnPointerEnterCallback);
     }
 
     update(dt) {
@@ -71,12 +75,12 @@ PP.Mouse = class Mouse {
     }
 
     destroy() {
-        document.body.removeEventListener("mousemove", this._myOnMouseMoveCallback);
-        document.body.removeEventListener("mousedown", this._myOnMouseDownCallback);
-        document.body.removeEventListener("mouseup", this._myOnMouseUpCallback);
-        document.body.removeEventListener("mouseleave", this._myOnMouseLeaveCallback);
+        document.body.removeEventListener("pointermove", this._myOnPointerMoveCallback);
+        document.body.removeEventListener("pointerdown", this._myOnPointerDownCallback);
+        document.body.removeEventListener("pointerup", this._myOnPointerUpCallback);
+        document.body.removeEventListener("pointerleave", this._myOnPointerLeaveCallback);
         document.body.removeEventListener("contextmenu", this._myPreventContextMenuCallback);
-        document.body.removeEventListener("mousedown", this._myPreventMiddleButtonScrollCallback);
+        document.body.removeEventListener("pointerdown", this._myPreventMiddleButtonScrollCallback);
     }
 
     isValid() {
@@ -135,9 +139,9 @@ PP.Mouse = class Mouse {
     setMiddleButtonScrollActive(active) {
         if (this._myMiddleButtonScrollActive != active) {
             if (active) {
-                document.body.removeEventListener("mousedown", this._myPreventMiddleButtonScrollCallback);
+                document.body.removeEventListener("pointerdown", this._myPreventMiddleButtonScrollCallback);
             } else {
-                document.body.addEventListener("mousedown", this._myPreventMiddleButtonScrollCallback, false);
+                document.body.addEventListener("pointerdown", this._myPreventMiddleButtonScrollCallback, false);
             }
             this._myMiddleButtonScrollActive = active;
         }
@@ -224,7 +228,25 @@ PP.Mouse = class Mouse {
         return this._myResetMovingDelay;
     }
 
+    getLastPointerType() {
+        return this._myLastPointerType;
+    }
+
+    addValidPointerType(pointerType) {
+        this._myValidPointerTypes.pp_pushUnique(pointerType);
+    }
+
+    removeValidPointerType(pointerType) {
+        this._myValidPointerTypes.pp_removeEqual(pointerType);
+    }
+
+    getValidPointerTypes() {
+        return this._myValidPointerTypes;
+    }
+
     _updatePositionAndScreen(event) {
+        this._myLastPointerType = event.pointerType;
+
         this._updateScreenSize();
         this._myInternalMousePosition[0] = event.clientX;
         this._myInternalMousePosition[1] = event.clientY;
@@ -232,14 +254,18 @@ PP.Mouse = class Mouse {
         this._myIsValid = true;
     }
 
-    _onMouseMove(event) {
+    _onPointerMove(event) {
+        if (!this._isEventValid(event)) return;
+
         this._myResetMovingTimer.start(this._myResetMovingDelay);
         this._myIsMoving = true;
 
         this._updatePositionAndScreen(event);
     }
 
-    _onMouseDown(event) {
+    _onPointerDown(event) {
+        if (!this._isEventValid(event)) return;
+
         let buttonInfo = this._myButtonInfos.get(event.button);
         if (!buttonInfo.myIsPressed) {
             buttonInfo.myIsPressed = true;
@@ -249,7 +275,9 @@ PP.Mouse = class Mouse {
         this._updatePositionAndScreen(event);
     }
 
-    _onMouseUp(event) {
+    _onPointerUp(event) {
+        if (!this._isEventValid(event)) return;
+
         let buttonInfo = this._myButtonInfos.get(event.button);
         if (buttonInfo.myIsPressed) {
             buttonInfo.myIsPressed = false;
@@ -259,7 +287,9 @@ PP.Mouse = class Mouse {
         this._updatePositionAndScreen(event);
     }
 
-    _onMouseLeave(event) {
+    _onPointerLeave(event) {
+        if (!this._isEventValid(event)) return;
+
         this._myIsInsideView = false;
 
         for (let buttonInfo of this._myButtonInfos.values()) {
@@ -268,9 +298,13 @@ PP.Mouse = class Mouse {
                 buttonInfo.myIsPressEndToProcess = true;
             }
         }
+
+        this._myLastPointerType = event.pointerType;
     }
 
-    _onMouseEnter(event) {
+    _onPointerEnter(event) {
+        if (!this._isEventValid(event)) return;
+
         this._myIsInsideView = true;
 
         for (let buttonInfo of this._myButtonInfos.values()) {
@@ -279,6 +313,8 @@ PP.Mouse = class Mouse {
                 buttonInfo.myIsPressEndToProcess = true;
             }
         }
+
+        this._myLastPointerType = event.pointerType;
     }
 
     _preventContextMenu(event) {
@@ -296,5 +332,9 @@ PP.Mouse = class Mouse {
         let bounds = document.body.getBoundingClientRect();
         this._myScreenSize[0] = bounds.width;
         this._myScreenSize[1] = bounds.height;
+    }
+
+    _isEventValid(event) {
+        return event.isPrimary && this._myValidPointerTypes.pp_hasEqual(event.pointerType);
     }
 };
