@@ -33,7 +33,9 @@ PP.Mouse = class Mouse {
 
         this._myValidPointerTypes = ["mouse", "touch", "pen"];
 
-        this._myLastPointerType = "";
+        this._myPointerID = null;
+        this._myLastPointerID = null;
+        this._myLastPointerType = null;
 
         // Support Variables
         this._myProjectionMatrixInverse = PP.mat4_create();
@@ -72,6 +74,10 @@ PP.Mouse = class Mouse {
         }
 
         this._updateScreenSize();
+
+        if (!this.isAnyButtonPressed() && !this._myIsMoving) {
+            this._myPointerID = null;
+        }
     }
 
     destroy() {
@@ -92,6 +98,19 @@ PP.Mouse = class Mouse {
 
         if (this._myButtonInfos.has(buttonID)) {
             isPressed = this._myButtonInfos.get(buttonID).myIsPressed;
+        }
+
+        return isPressed;
+    }
+
+    isAnyButtonPressed() {
+        let isPressed = false;
+
+        for (let buttonInfo of this._myButtonInfos.values()) {
+            if (buttonInfo.myIsPressed) {
+                isPressed = true;
+                break;
+            }
         }
 
         return isPressed;
@@ -245,8 +264,6 @@ PP.Mouse = class Mouse {
     }
 
     _updatePositionAndScreen(event) {
-        this._myLastPointerType = event.pointerType;
-
         this._updateScreenSize();
         this._myInternalMousePosition[0] = event.clientX;
         this._myInternalMousePosition[1] = event.clientY;
@@ -257,14 +274,26 @@ PP.Mouse = class Mouse {
     _onPointerMove(event) {
         if (!this._isEventValid(event)) return;
 
+        if (!this._myIsInsideView) {
+            this._onPointerEnter(event);
+        }
+
         this._myResetMovingTimer.start(this._myResetMovingDelay);
         this._myIsMoving = true;
 
         this._updatePositionAndScreen(event);
+
+        this._myPointerID = event.pointerId;
+        this._myLastPointerID = this._myPointerID;
+        this._myLastPointerType = event.pointerType;
     }
 
     _onPointerDown(event) {
         if (!this._isEventValid(event)) return;
+
+        if (!this._myIsInsideView) {
+            this._onPointerEnter(event);
+        }
 
         let buttonInfo = this._myButtonInfos.get(event.button);
         if (!buttonInfo.myIsPressed) {
@@ -273,10 +302,14 @@ PP.Mouse = class Mouse {
         }
 
         this._updatePositionAndScreen(event);
+
+        this._myPointerID = event.pointerId;
+        this._myLastPointerID = this._myPointerID;
+        this._myLastPointerType = event.pointerType;
     }
 
     _onPointerUp(event) {
-        if (!this._isEventValid(event)) return;
+        if (!this._isEventValid(event) || this._myPointerID == null) return;
 
         let buttonInfo = this._myButtonInfos.get(event.button);
         if (buttonInfo.myIsPressed) {
@@ -285,10 +318,14 @@ PP.Mouse = class Mouse {
         }
 
         this._updatePositionAndScreen(event);
+
+        this._myPointerID = event.pointerId;
+        this._myLastPointerID = this._myPointerID;
+        this._myLastPointerType = event.pointerType;
     }
 
     _onPointerLeave(event) {
-        if (!this._isEventValid(event)) return;
+        if (!this._myIsInsideView || (!this._isEventValid(event) && event.pointerId == this._myLastPointerID)) return;
 
         this._myIsInsideView = false;
 
@@ -299,11 +336,20 @@ PP.Mouse = class Mouse {
             }
         }
 
+        this._myPointerID = null;
         this._myLastPointerType = event.pointerType;
     }
 
     _onPointerEnter(event) {
-        if (!this._isEventValid(event)) return;
+        if (this._myIsInsideView || !this._isEventValid(event)) {
+            if (this._myIsInsideView && this._myPointerID == null && this._isEventValid(event)) {
+                this._myPointerID = event.pointerId;
+                this._myLastPointerID = this._myPointerID;
+                this._myLastPointerType = event.pointerType;
+            }
+
+            return;
+        }
 
         this._myIsInsideView = true;
 
@@ -314,6 +360,8 @@ PP.Mouse = class Mouse {
             }
         }
 
+        this._myPointerID = event.pointerId;
+        this._myLastPointerID = this._myPointerID;
         this._myLastPointerType = event.pointerType;
     }
 
@@ -335,6 +383,6 @@ PP.Mouse = class Mouse {
     }
 
     _isEventValid(event) {
-        return event.isPrimary && this._myValidPointerTypes.pp_hasEqual(event.pointerType);
+        return event.isPrimary && this._myValidPointerTypes.pp_hasEqual(event.pointerType) && (this._myPointerID == null || this._myPointerID == event.pointerId);
     }
 };
