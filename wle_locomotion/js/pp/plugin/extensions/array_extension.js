@@ -274,16 +274,16 @@ Array.prototype.pp_removeAll = function (callback) {
 
 Array.prototype.pp_removeEqual = function (elementToRemove, elementsEqualCallback = null) {
     if (elementsEqualCallback == null) {
-        return this.pp_remove(element => element === elementToFind);
+        return this.pp_remove(element => element === elementToRemove);
     }
-    return this.pp_remove(element => elementsEqualCallback(element, elementToFind));
+    return this.pp_remove(element => elementsEqualCallback(element, elementToRemove));
 };
 
 Array.prototype.pp_removeAllEqual = function (elementToRemove, elementsEqualCallback = null) {
     if (elementsEqualCallback == null) {
-        return this.pp_removeAll(element => element === elementToFind);
+        return this.pp_removeAll(element => element === elementToRemove);
     }
-    return this.pp_removeAll(element => elementsEqualCallback(element, elementToFind));
+    return this.pp_removeAll(element => elementsEqualCallback(element, elementToRemove));
 };
 
 Array.prototype.pp_pushUnique = function (element, elementsEqualCallback = null) {

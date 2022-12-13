@@ -89,12 +89,14 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
         if (this.viewComponent != null) {
             const onClick = this.onClick.bind(this);
             WL.canvas.addEventListener("click", onClick);
-            const onPointerMove = this.onPointerMove.bind(this);
-            WL.canvas.addEventListener("pointermove", onPointerMove);
             const onPointerDown = this.onPointerDown.bind(this);
             WL.canvas.addEventListener("pointerdown", onPointerDown);
+            const onPointerMove = this.onPointerMove.bind(this);
+            document.body.addEventListener("pointermove", onPointerMove);
             const onPointerUp = this.onPointerUp.bind(this);
-            WL.canvas.addEventListener("pointerup", onPointerUp);
+            document.body.addEventListener("pointerup", onPointerUp);
+            const onPointerLeave = this.onPointerLeave.bind(this);
+            document.body.addEventListener("pointerleave", onPointerLeave);
 
             this.projectionMatrix = new Float32Array(16);
             mat4.invert(this.projectionMatrix, this.viewComponent.projectionMatrix);
@@ -103,9 +105,11 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
 
             this.onDestroyCallbacks.push(() => {
                 WL.canvas.removeEventListener("click", onClick);
-                WL.canvas.removeEventListener("pointermove", onPointerMove);
                 WL.canvas.removeEventListener("pointerdown", onPointerDown);
-                WL.canvas.removeEventListener("pointerup", onPointerUp);
+                document.body.removeEventListener("pointermove", onPointerMove);
+                WL.canvas.removeEventListener("pointerdown", onPointerDown);
+                document.body.removeEventListener("pointerup", onPointerUp);
+                document.body.removeEventListener("pointerleave", onPointerLeave);
                 window.removeEventListener("resize", onViewportResize);
             });
         }
@@ -204,8 +208,8 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
         }
     };
 
-    _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype.hoverBehaviour = function (rayHit, doClick) {
-        if (rayHit.hitCount > 0) {
+    _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype.hoverBehaviour = function (rayHit, doClick, forceUnhover = false) {
+        if (!forceUnhover && rayHit.hitCount > 0) {
             let hoveringObjectChanged = false;
             if (!this.hoveringObject || !this.hoveringObject.equals(rayHit.objects[0])) {
                 /* Unhover previous, if exists */
@@ -219,7 +223,7 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
 
                 /* Hover new object */
                 this.hoveringObject = rayHit.objects[0];
-                if (this.styleCursor) WL.canvas.style.cursor = "pointer";
+                if (this.styleCursor) document.body.style.cursor = "pointer";
 
                 let cursorTarget = this.hoveringObject.getComponent("cursor-target");
                 if (cursorTarget) {
@@ -281,13 +285,13 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
             }
 
             this.prevHitLocationLocalToTarget = this.hoveringObject.pp_convertPositionWorldToLocal(rayHit.locations[0], this.prevHitLocationLocalToTarget);
-        } else if (this.hoveringObject && rayHit.hitCount == 0) {
+        } else if (this.hoveringObject && (forceUnhover || rayHit.hitCount == 0)) {
             let cursorTarget = this.hoveringObject.getComponent("cursor-target");
             if (cursorTarget) cursorTarget.onUnhover(this.hoveringObject, this);
             this.globalTarget.onUnhover(this.hoveringObject, this);
 
             this.hoveringObject = null;
-            if (this.styleCursor) WL.canvas.style.cursor = "default";
+            if (this.styleCursor) document.body.style.cursor = "default";
         }
 
         if (this.hoveringObject) {
@@ -359,7 +363,7 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
         /* Don't care about secondary pointers */
         if (!e.isPrimary) return;
 
-        if (this._isPPMouseValid()) {
+        if (this._isPPMouseValid() && e.pointerType == "mouse") {
             PP.myMouse.getPositionScreenNormalized(this.direction);
             this.direction[2] = -1;
 
@@ -382,7 +386,7 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
             if (!e.isPrimary || e.button !== 0) return;
 
             let rayHit = null;
-            if (this._isPPMouseValid()) {
+            if (this._isPPMouseValid() && e.pointerType == "mouse") {
                 PP.myMouse.getPositionScreenNormalized(this.direction);
                 this.direction[2] = -1;
 
@@ -409,7 +413,7 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
             if (!e.isPrimary || e.button !== 0) return;
 
             let rayHit = null;
-            if (this._isPPMouseValid()) {
+            if (this._isPPMouseValid() && e.pointerType == "mouse") {
                 PP.myMouse.getPositionScreenNormalized(this.direction);
                 this.direction[2] = -1;
 
@@ -431,6 +435,12 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
             this.hoverBehaviour(rayHit, false);
         } else {
             this.isRealDown = false;
+        }
+    };
+
+    _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype.onPointerLeave = function (e) {
+        if (this.active) {
+            this.hoverBehaviour(null, false, true); // trigger unhover
         }
     };
 
@@ -470,7 +480,7 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
         }
 
         this.hoveringObject = null;
-        if (this.styleCursor) WL.canvas.style.cursor = "default";
+        if (this.styleCursor) document.body.style.cursor = "default";
 
         this.isDown = false;
         this.lastIsDown = false;

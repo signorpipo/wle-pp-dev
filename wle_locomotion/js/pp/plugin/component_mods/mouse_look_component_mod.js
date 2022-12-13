@@ -6,8 +6,7 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
         this.touchID = null;
         this.prevTouch = null;
 
-        document.body.addEventListener('mousemove', this._onMove.bind(this));
-        document.body.addEventListener('touchmove', this._onMove.bind(this));
+        document.body.addEventListener('pointermove', this._onMove.bind(this));
 
         if (this.requireMouseDown) {
             if (this.mouseButtonIndex == 2) {
@@ -15,7 +14,9 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
                     event.preventDefault();
                 }, false);
             }
-            WL.canvas.addEventListener('mousedown', function (event) {
+            WL.canvas.addEventListener('pointerdown', function (event) {
+                if (!event.isPrimary) return;
+
                 if (!this.mouseDown) {
                     if (event.button == this.mouseButtonIndex) {
                         this.mouseDown = true;
@@ -27,7 +28,9 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
                     }
                 }
             }.bind(this));
-            document.body.addEventListener('mouseup', function (event) {
+            document.body.addEventListener('pointerup', function (event) {
+                if (!event.isPrimary) return;
+
                 if (this.mouseDown) {
                     if (event.button == this.mouseButtonIndex) {
                         this.mouseDown = false;
@@ -35,43 +38,12 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
                     }
                 }
             }.bind(this));
-            document.body.addEventListener('mouseleave', function (event) {
+            document.body.addEventListener('pointerleave', function (event) {
+                if (!event.isPrimary) return;
+
                 if (this.mouseDown) {
                     this.mouseDown = false;
                     document.body.style.cursor = "initial";
-                }
-            }.bind(this));
-
-            WL.canvas.addEventListener('touchstart', function (event) {
-                if (!this.mouseDown) {
-                    if (this.touchID == null && event.changedTouches != null && event.changedTouches.length > 0) {
-                        this.touchID = event.changedTouches[0].identifier;
-                        this.prevTouch = null;
-
-                        this.mouseDown = true;
-                        document.body.style.cursor = "grabbing";
-                    }
-                }
-            }.bind(this));
-            document.body.addEventListener('touchend', function (event) {
-                if (this.mouseDown) {
-                    let touchFound = null
-
-                    // if this is a touch event, make sure it is the right one
-                    if (event.changedTouches != null && event.changedTouches.length > 0) {
-                        for (let changedTouch of event.changedTouches) {
-                            if (this.touchID == changedTouch.identifier) {
-                                touchFound = changedTouch;
-                                break;
-                            }
-                        }
-                    }
-
-                    if (touchFound != null) {
-                        this.touchID = null;
-                        this.mouseDown = false;
-                        document.body.style.cursor = "initial";
-                    }
                 }
             }.bind(this));
         }
@@ -87,20 +59,9 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
 
         let newUp = PP.vec3_create();
         return function (event) {
-            let touchFound = null
-            if (this.touchID != null) {
-                // if this is a touch event, make sure it is the right one
-                if (event.changedTouches != null && event.changedTouches.length > 0) {
-                    for (let changedTouch of event.changedTouches) {
-                        if (this.touchID == changedTouch.identifier) {
-                            touchFound = changedTouch;
-                            break;
-                        }
-                    }
-                }
-            }
+            if (!event.isPrimary) return;
 
-            if (this.active && (this.mouseDown || !this.requireMouseDown) && (this.touchID == null || touchFound != null)) {
+            if (this.active && (this.mouseDown || !this.requireMouseDown)) {
 
                 viewForward = this.object.pp_getBackward(viewForward); // the view "real" forward is actually the backward
                 viewUp = this.object.pp_getUp(viewUp);
@@ -122,22 +83,8 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
                 }
                 referenceRight.vec3_normalize(referenceRight);
 
-                this.rotationX = 0;
-                this.rotationY = 0;
-
-                if (touchFound != null) {
-                    if (this.prevTouch != null) {
-                        let movementX = 0;
-                        let movementY = 0;
-                        movementX = touchFound.pageX - this.prevTouch.pageX;
-                        movementY = touchFound.pageY - this.prevTouch.pageY;
-                        this.rotationX = -this.sensitity * movementX;
-                        this.rotationY = -this.sensitity * movementY;
-                    }
-                } else {
-                    this.rotationX = -this.sensitity * event.movementX;
-                    this.rotationY = -this.sensitity * event.movementY;
-                }
+                this.rotationX = -this.sensitity * event.movementX;
+                this.rotationY = -this.sensitity * event.movementY;
 
                 this.object.pp_rotateAxis(this.rotationY, referenceRight);
 
@@ -150,10 +97,6 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
                 }
 
                 this.object.pp_rotateAxis(this.rotationX, referenceUp);
-            }
-
-            if (touchFound != null) {
-                this.prevTouch = touchFound;
             }
         };
     }();
