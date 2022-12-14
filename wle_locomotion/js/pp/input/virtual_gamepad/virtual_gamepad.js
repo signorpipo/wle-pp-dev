@@ -154,6 +154,9 @@ VirtualGamepad = class VirtualGamepad {
         document.body.style.webkitUserSelect = "none";
         document.body.style.webkitTapHighlightColor = "transparent";
         document.body.style.touchAction = "none";
+        document.addEventListener('gesturestart', function (e) {
+            e.preventDefault();
+        });
     }
 
     _buildButton(buttonElementParent, virtualButtonHandedness, virtualButtonIndex, gamepadButtonHandedness, gamepadButtonID) {
