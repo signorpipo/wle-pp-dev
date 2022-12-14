@@ -47,7 +47,7 @@ VirtualGamepad = class VirtualGamepad {
                     for (let gamepadButtonID in this._myVirtualGamepadVirtualButtons[handedness]) {
                         let button = this._myVirtualGamepadVirtualButtons[handedness][gamepadButtonID];
                         if (button != null) {
-                            button.reset();
+                            button.setActive(this._myVisible);
                         }
                     }
                 }
@@ -55,7 +55,7 @@ VirtualGamepad = class VirtualGamepad {
                 for (let handedness in this._myVirtualGamepadVirtualThumbsticks) {
                     let thumbstick = this._myVirtualGamepadVirtualThumbsticks[handedness];
                     if (thumbstick != null) {
-                        thumbstick.reset();
+                        thumbstick.setActive(this._myVisible);
                     }
                 }
             }
@@ -150,7 +150,6 @@ VirtualGamepad = class VirtualGamepad {
 
     _documentBodySetup() {
         document.body.style.overflow = "hidden";
-        document.body.style.userSelect = "none";
         document.body.style.userSelect = "none";
         document.body.style.webkitUserSelect = "none";
         document.body.style.webkitTapHighlightColor = "transparent";

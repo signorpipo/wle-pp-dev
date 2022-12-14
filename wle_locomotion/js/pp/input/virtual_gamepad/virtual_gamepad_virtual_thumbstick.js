@@ -7,21 +7,24 @@ VirtualGamepadVirtualThumbstick = class VirtualGamepadVirtualThumbstick {
         this._myIsActive = true;
 
         this._myPointerID = null;
+        this._myPointerButton = null
+
         this._myThumbstickDragStartPosition = PP.vec2_create();
 
         this._myAxes = PP.vec2_create();
         this._myIsPressed = false;
 
-        this._myParams = virtualGamepadParams.myThumbstickParams[gamepadThumbstickHandedness];
+        this._myVirtualGamepadParams = virtualGamepadParams;
+        this._myParams = this._myVirtualGamepadParams.myThumbstickParams[gamepadThumbstickHandedness];
 
-        this._build(thumbstickElementParent, virtualGamepadParams, virtualThumbstickHandedness);
+        this._build(thumbstickElementParent, virtualThumbstickHandedness);
 
-        this._myThumbstickElement.addEventListener("pointerdown", this._onPointerDown.bind(this, virtualGamepadParams.myStopPropagatingPointerDownEvents));
+        this._myThumbstickElement.addEventListener("pointerdown", this._onPointerDown.bind(this, this._myVirtualGamepadParams.myStopPropagatingPointerDownEvents));
         document.body.addEventListener("pointerup", this._onPointerUp.bind(this));
         document.body.addEventListener("pointermove", this._onPointerMove.bind(this));
 
-        if (virtualGamepadParams.myReleaseOnPointerLeave) {
-            document.body.addEventListener("pointerleave", this._onPointerUp.bind(this));
+        if (this._myVirtualGamepadParams.myReleaseOnPointerLeave) {
+            document.body.addEventListener("pointerleave", this._onPointerLeave.bind(this));
         }
     }
 
@@ -34,26 +37,30 @@ VirtualGamepadVirtualThumbstick = class VirtualGamepadVirtualThumbstick {
     }
 
     setActive(active) {
+        if (this._myIsActive != active) {
+            this.reset();
+        }
+
         this._myIsActive = active;
     }
 
     reset() {
-        if (this._myIsPressed) {
-            this._myThumbstickIcon.setPressed(false);
+        this._myThumbstickIcon.setPressed(false);
 
-            this._myAxes[0] = 0;
-            this._myAxes[1] = 0;
-            this._myIsPressed = false;
-            this._myPointerID = null;
+        this._myAxes[0] = 0;
+        this._myAxes[1] = 0;
+        this._myIsPressed = false;
+        this._myPointerID = null;
+        this._myPointerButton = null;
 
-            this._myThumbstickElement.style.transition = "all " + this._myParams.myReleaseTransitionSeconds + "s ease 0s";
-            this._myThumbstickElement.style.transform = "translate(0px, 0px)";
-        }
+        this._myThumbstickElement.style.transition = "all " + this._myParams.myReleaseTransitionSeconds + "s ease 0s";
+        this._myThumbstickElement.style.transform = "translate(0px, 0px)";
     }
 
     _onPointerDown(stopPropagatingPointerDownEvents, event) {
         if (!this._myIsActive) return;
         if (this._myIsPressed) return;
+        if (!this._myVirtualGamepadParams.myValidPointerButtons.pp_hasEqual(event.button)) return;
 
         if (stopPropagatingPointerDownEvents) {
             event.stopPropagation();
@@ -63,6 +70,7 @@ VirtualGamepadVirtualThumbstick = class VirtualGamepadVirtualThumbstick {
         this._myThumbstickIcon.setPressed(true);
 
         this._myPointerID = event.pointerId;
+        this._myPointerButton = event.button;
 
         this._myThumbstickDragStartPosition[0] = event.clientX;
         this._myThumbstickDragStartPosition[1] = event.clientY;
@@ -73,8 +81,15 @@ VirtualGamepadVirtualThumbstick = class VirtualGamepadVirtualThumbstick {
     _onPointerUp(event) {
         if (!this._myIsActive) return;
         if (!this._myIsPressed) return;
+        if (this._myPointerID != event.pointerId) return;
+        if (this._myPointerButton != null && this._myPointerButton != event.button) return;
 
-        if (event.pointerId != this._myPointerID) return;
+        this.reset();
+    }
+
+    _onPointerLeave(event) {
+        if (!this._myIsActive) return;
+        if (this._myPointerID != event.pointerId) return;
 
         this.reset();
     }
@@ -107,16 +122,16 @@ VirtualGamepadVirtualThumbstick = class VirtualGamepadVirtualThumbstick {
         this._myAxes[1] = -(translateThumbstickY / maxDistanceFromCenter);
     }
 
-    _build(thumbstickElementParent, virtualGamepadParams, virtualThumbstickHandedness) {
+    _build(thumbstickElementParent, virtualThumbstickHandedness) {
         // setup variables used for the sizes and the like
 
-        let thumbstickSize = virtualGamepadParams.myThumbstickSize * virtualGamepadParams.myInterfaceScale;
+        let thumbstickSize = this._myVirtualGamepadParams.myThumbstickSize * this._myVirtualGamepadParams.myInterfaceScale;
 
-        let marginBottom = virtualGamepadParams.myMarginBottom * virtualGamepadParams.myInterfaceScale * virtualGamepadParams.myMarginScale;
-        let marginLeft = virtualGamepadParams.myMarginLeft * virtualGamepadParams.myInterfaceScale * virtualGamepadParams.myMarginScale;
-        let marginRight = virtualGamepadParams.myMarginRight * virtualGamepadParams.myInterfaceScale * virtualGamepadParams.myMarginScale;
+        let marginBottom = this._myVirtualGamepadParams.myMarginBottom * this._myVirtualGamepadParams.myInterfaceScale * this._myVirtualGamepadParams.myMarginScale;
+        let marginLeft = this._myVirtualGamepadParams.myMarginLeft * this._myVirtualGamepadParams.myInterfaceScale * this._myVirtualGamepadParams.myMarginScale;
+        let marginRight = this._myVirtualGamepadParams.myMarginRight * this._myVirtualGamepadParams.myInterfaceScale * this._myVirtualGamepadParams.myMarginScale;
 
-        let minSizeMultiplier = Math.max(1, virtualGamepadParams.myMinSizeMultiplier / virtualGamepadParams.myInterfaceScale);
+        let minSizeMultiplier = Math.max(1, this._myVirtualGamepadParams.myMinSizeMultiplier / this._myVirtualGamepadParams.myInterfaceScale);
 
         // actual thumbstick creation
 
@@ -155,7 +170,7 @@ VirtualGamepadVirtualThumbstick = class VirtualGamepadVirtualThumbstick {
         this._myThumbstickElement.style.left = "33%";
         this._myThumbstickContainer.appendChild(this._myThumbstickElement);
 
-        this._myThumbstickIcon = new VirtualGamepadIcon(this._myThumbstickElement, this._myParams.myIconParams, minSizeMultiplier, virtualGamepadParams.myScale);
+        this._myThumbstickIcon = new VirtualGamepadIcon(this._myThumbstickElement, this._myParams.myIconParams, minSizeMultiplier, this._myVirtualGamepadParams.myScale);
     }
 
     _createSizeValue(value, minSizeMultiplier) {

@@ -31,7 +31,7 @@ VirtualGamepadParams = class VirtualGamepadParams {
         this.myInterfaceScale = 1;
         this.myMarginScale = 1;
 
-        this.myReleaseOnMouseLeave = false; // if mouse leaves the canvas it will be like it was released
+        this.myReleaseOnPointerLeave = false; // if mouse leaves the canvas it will be like it was released
         this.myStopPropagatingMouseDownEvents = true; // this can be used to make it so the rest of the game will ignore clicks on the virtual gamepad
 
         // Advanced Params
@@ -65,6 +65,8 @@ VirtualGamepadParams = class VirtualGamepadParams {
         this.myThumbsticksOrder[PP.Handedness.RIGHT] = null;
 
         // Even More Advanced Params
+
+        this.myValidPointerButtons = [];
 
         this.myMarginLeft = 0;
         this.myMarginRight = 0;
@@ -158,5 +160,9 @@ VirtualGamepadParams = class VirtualGamepadParams {
         this.myButtonsRingEndAngle = 245;
 
         this.myMinSizeMultiplier = 5 / 3;
+
+        // Buttons
+
+        this.myValidPointerButtons = [0];
     }
 };

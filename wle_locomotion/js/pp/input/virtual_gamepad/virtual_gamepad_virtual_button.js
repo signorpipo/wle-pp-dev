@@ -6,18 +6,20 @@ VirtualGamepadVirtualButton = class VirtualGamepadVirtualButton {
         this._myIsActive = true;
 
         this._myPointerID = null;
+        this._myPointerButton = null;
 
         this._myIsPressed = false;
 
-        this._myParams = virtualGamepadParams.myButtonParams[gamepadButtonHandedness][gamepadButtonID];
+        this._myVirtualGamepadParams = virtualGamepadParams;
+        this._myParams = this._myVirtualGamepadParams.myButtonParams[gamepadButtonHandedness][gamepadButtonID];
 
-        this._build(buttonElementParent, virtualGamepadParams, virtualButtonHandedness, virtualButtonIndex);
+        this._build(buttonElementParent, virtualButtonHandedness, virtualButtonIndex);
 
-        this._myButtonElement.addEventListener("pointerdown", this._onPointerDown.bind(this, virtualGamepadParams.myStopPropagatingPointerDownEvents));
+        this._myButtonElement.addEventListener("pointerdown", this._onPointerDown.bind(this, this._myVirtualGamepadParams.myStopPropagatingPointerDownEvents));
         document.body.addEventListener("pointerup", this._onPointerUp.bind(this));
 
-        if (virtualGamepadParams.myReleaseOnPointerLeave) {
-            document.body.addEventListener("pointerleave", this._onPointerUp.bind(this));
+        if (this._myVirtualGamepadParams.myReleaseOnPointerLeave) {
+            document.body.addEventListener("pointerleave", this._onPointerLeave.bind(this));
         }
     }
 
@@ -26,21 +28,25 @@ VirtualGamepadVirtualButton = class VirtualGamepadVirtualButton {
     }
 
     setActive(active) {
+        if (this._myIsActive != active) {
+            this.reset();
+        }
+
         this._myIsActive = active;
     }
 
     reset() {
-        if (this._myIsPressed) {
-            this._myButtonIcon.setPressed(false);
+        this._myButtonIcon.setPressed(false);
 
-            this._myIsPressed = false;
-            this._myPointerID = null;
-        }
+        this._myIsPressed = false;
+        this._myPointerID = null;
+        this._myPointerButton = null;
     }
 
     _onPointerDown(stopPropagatingPointerDownEvents, event) {
         if (!this._myIsActive) return;
         if (this._myIsPressed) return;
+        if (!this._myVirtualGamepadParams.myValidPointerButtons.pp_hasEqual(event.button)) return;
 
         if (stopPropagatingPointerDownEvents) {
             event.stopPropagation();
@@ -50,6 +56,7 @@ VirtualGamepadVirtualButton = class VirtualGamepadVirtualButton {
         this._myButtonIcon.setPressed(true);
 
         this._myPointerID = event.pointerId;
+        this._myPointerButton = event.button;
 
         this._myIsPressed = true;
     }
@@ -57,30 +64,37 @@ VirtualGamepadVirtualButton = class VirtualGamepadVirtualButton {
     _onPointerUp(event) {
         if (!this._myIsActive) return;
         if (!this._myIsPressed) return;
-
-        if (event.pointerId != this._myPointerID) return;
+        if (this._myPointerID != event.pointerId) return;
+        if (this._myPointerButton != null && this._myPointerButton != event.button) return;
 
         this.reset();
     }
 
-    _build(buttonElementParent, virtualGamepadParams, virtualButtonHandedness, virtualButtonIndex) {
+    _onPointerLeave(event) {
+        if (!this._myIsActive) return;
+        if (this._myPointerID != event.pointerId) return;
+
+        this.reset();
+    }
+
+    _build(buttonElementParent, virtualButtonHandedness, virtualButtonIndex) {
         // setup variables used for the sizes and the like
 
-        let buttonSize = virtualGamepadParams.myButtonSize * virtualGamepadParams.myInterfaceScale;
-        let buttonsRingRadius = virtualGamepadParams.myButtonsRingRadius * virtualGamepadParams.myInterfaceScale;
+        let buttonSize = this._myVirtualGamepadParams.myButtonSize * this._myVirtualGamepadParams.myInterfaceScale;
+        let buttonsRingRadius = this._myVirtualGamepadParams.myButtonsRingRadius * this._myVirtualGamepadParams.myInterfaceScale;
 
-        let thumbstickSize = virtualGamepadParams.myThumbstickSize * virtualGamepadParams.myInterfaceScale;
+        let thumbstickSize = this._myVirtualGamepadParams.myThumbstickSize * this._myVirtualGamepadParams.myInterfaceScale;
 
-        let marginBottom = virtualGamepadParams.myMarginBottom * virtualGamepadParams.myInterfaceScale * virtualGamepadParams.myMarginScale;
-        let marginLeft = virtualGamepadParams.myMarginLeft * virtualGamepadParams.myInterfaceScale * virtualGamepadParams.myMarginScale;
-        let marginRight = virtualGamepadParams.myMarginRight * virtualGamepadParams.myInterfaceScale * virtualGamepadParams.myMarginScale;
+        let marginBottom = this._myVirtualGamepadParams.myMarginBottom * this._myVirtualGamepadParams.myInterfaceScale * this._myVirtualGamepadParams.myMarginScale;
+        let marginLeft = this._myVirtualGamepadParams.myMarginLeft * this._myVirtualGamepadParams.myInterfaceScale * this._myVirtualGamepadParams.myMarginScale;
+        let marginRight = this._myVirtualGamepadParams.myMarginRight * this._myVirtualGamepadParams.myInterfaceScale * this._myVirtualGamepadParams.myMarginScale;
 
-        let buttonRingStartAngle = virtualGamepadParams.myButtonsRingStartAngle;
-        let buttonRingEndAngle = virtualGamepadParams.myButtonsRingEndAngle;
+        let buttonRingStartAngle = this._myVirtualGamepadParams.myButtonsRingStartAngle;
+        let buttonRingEndAngle = this._myVirtualGamepadParams.myButtonsRingEndAngle;
 
-        let minSizeMultiplier = Math.max(1, virtualGamepadParams.myMinSizeMultiplier / virtualGamepadParams.myInterfaceScale);
+        let minSizeMultiplier = Math.max(1, this._myVirtualGamepadParams.myMinSizeMultiplier / this._myVirtualGamepadParams.myInterfaceScale);
 
-        let buttonsAmount = virtualGamepadParams.myButtonsOrder[PP.Handedness.LEFT].length;
+        let buttonsAmount = this._myVirtualGamepadParams.myButtonsOrder[PP.Handedness.LEFT].length;
 
         let angleStep = (buttonRingEndAngle - buttonRingStartAngle) / (buttonsAmount - 1);
 
@@ -122,7 +136,7 @@ VirtualGamepadVirtualButton = class VirtualGamepadVirtualButton {
         this._myButtonElement.style.transform = "rotate(" + counterAngle + "deg)";
         buttonPivot.appendChild(this._myButtonElement);
 
-        this._myButtonIcon = new VirtualGamepadIcon(this._myButtonElement, this._myParams.myIconParams, minSizeMultiplier, virtualGamepadParams.myInterfaceScale);
+        this._myButtonIcon = new VirtualGamepadIcon(this._myButtonElement, this._myParams.myIconParams, minSizeMultiplier, this._myVirtualGamepadParams.myInterfaceScale);
     }
 
     _createSizeValue(value, minSizeMultiplier) {
