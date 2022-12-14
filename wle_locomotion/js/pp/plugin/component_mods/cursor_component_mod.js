@@ -27,6 +27,11 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
         this.prevHitLocationLocalToTarget = [0, 0, 0];
 
         this.pointerId = null;
+
+        this.lastClientX = null;
+        this.lastClientY = null;
+        this.lastWidth = null;
+        this.lastHeight = null;
     };
 
     _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype.start = function () {
@@ -181,18 +186,9 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
 
             this.hoverBehaviour(rayHit, doClick);
         } else {
-            if (this.viewComponent != null && this._isPPMouseValid()) {
-                PP.myMouse.getPositionScreenNormalized(this.direction);
-                this.direction[2] = -1;
-
-                const rayHit = this.updateDirection();
+            if (this.viewComponent != null && this.lastClientX != null) {
+                const rayHit = this.updateMousePos(this.lastClientX, this.lastClientY, this.lastWidth, this.lastHeight);
                 this.hoverBehaviour(rayHit, false);
-
-                if (this.hoveringObject != null) {
-                    this.pointerId = PP.myMouse.getLastPointerEvent().pointerId;
-                } else {
-                    this.pointerId = null;
-                }
             }
         }
 
@@ -375,18 +371,10 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
             /* Don't care about secondary pointers */
             if (this.pointerId != null && this.pointerId != e.pointerId) return;
 
-            if (this._isPPMouseValid() && e.pointerId == PP.myMouse.getLastPointerEvent().pointerId) {
-                PP.myMouse.getPositionScreenNormalized(this.direction);
-                this.direction[2] = -1;
+            const bounds = document.body.getBoundingClientRect();
+            const rayHit = this.updateMousePos(e.clientX, e.clientY, bounds.width, bounds.height);
 
-                const rayHit = this.updateDirection();
-                this.hoverBehaviour(rayHit, false);
-            } else {
-                const bounds = e.target.getBoundingClientRect();
-                const rayHit = this.updateMousePos(e.clientX, e.clientY, bounds.width, bounds.height);
-
-                this.hoverBehaviour(rayHit, false);
-            }
+            this.hoverBehaviour(rayHit, false);
 
             if (this.hoveringObject != null) {
                 this.pointerId = e.pointerId;
@@ -404,18 +392,8 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
             /* Don't care about secondary pointers or non-left clicks */
             if ((this.pointerId != null && this.pointerId != e.pointerId) || e.button !== 0) return;
 
-            let rayHit = null;
-            if (this._isPPMouseValid() && e.pointerId == PP.myMouse.getLastPointerEvent().pointerId) {
-                PP.myMouse.getPositionScreenNormalized(this.direction);
-                this.direction[2] = -1;
-
-                rayHit = this.updateDirection();
-            } else {
-                const bounds = e.target.getBoundingClientRect();
-                rayHit = this.updateMousePos(e.clientX, e.clientY, bounds.width, bounds.height);
-
-                this.hoverBehaviour(rayHit, false); // simulate a move before the click, to clean previous hover/unhover
-            }
+            const bounds = document.body.getBoundingClientRect();
+            let rayHit = this.updateMousePos(e.clientX, e.clientY, bounds.width, bounds.height);
 
             this.isDown = true;
             this.isRealDown = true;
@@ -437,18 +415,8 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
             /* Don't care about secondary pointers or non-left clicks */
             if ((this.pointerId != null && this.pointerId != e.pointerId) || e.button !== 0) return;
 
-            let rayHit = null;
-            if (this._isPPMouseValid() && e.pointerId == PP.myMouse.getLastPointerEvent().pointerId) {
-                PP.myMouse.getPositionScreenNormalized(this.direction);
-                this.direction[2] = -1;
-
-                rayHit = this.updateDirection();
-            } else {
-                const bounds = e.target.getBoundingClientRect();
-                rayHit = this.updateMousePos(e.clientX, e.clientY, bounds.width, bounds.height);
-
-                this.hoverBehaviour(rayHit, false); // simulate a move before the click, to clean previous hover/unhover
-            }
+            const bounds = document.body.getBoundingClientRect();
+            let rayHit = this.updateMousePos(e.clientX, e.clientY, bounds.width, bounds.height);
 
             if (!this.isDown) {
                 this.isUpWithNoDown = true;
@@ -476,10 +444,20 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
             }
 
             this.pointerId = null;
+
+            this.lastClientX = null;
+            this.lastClientY = null;
+            this.lastWidth = null;
+            this.lastHeight = null;
         }
     };
 
     _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype.updateMousePos = function (clientX, clientY, w, h) {
+        this.lastClientX = clientX;
+        this.lastClientY = clientY;
+        this.lastWidth = w;
+        this.lastHeight = h;
+
         /* Get direction in normalized device coordinate space from mouse position */
         const left = clientX / w;
         const top = clientY / h;
@@ -527,6 +505,11 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
         }
 
         this.pointerId = null;
+
+        this.lastClientX = null;
+        this.lastClientY = null;
+        this.lastWidth = null;
+        this.lastHeight = null;
     };
 
     _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype.onActivate = function () {
@@ -539,11 +522,6 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
 
     _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype.onDestroy = function () {
         for (const f of this.onDestroyCallbacks) f();
-    };
-
-    _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype._isPPMouseValid = function () {
-        return PP != null && PP.myMouse != null && PP.myMouse.isValid() && PP.myMouse.isInsideView() &&
-            PP.myMouse.isTargetingRenderCanvas() && (this.pointerId == null || this.pointerId == PP.myMouse.getLastPointerEvent().pointerId);
     };
 
     _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype._isDown = function () {
