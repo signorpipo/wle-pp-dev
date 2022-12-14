@@ -56,6 +56,12 @@ PP.Mouse = class Mouse {
         document.body.addEventListener("pointerleave", this._myOnPointerLeaveCallback);
         this._myOnPointerEnterCallback = this._onPointerEnter.bind(this);
         document.body.addEventListener("pointerenter", this._myOnPointerEnterCallback);
+
+        // these are needed to being able to detect for example left and right click together, pointer only allow one down at a time
+        this._myOnMouseDownCallback = this._onMouseAction.bind(this, this._onPointerDown.bind(this));
+        document.body.addEventListener("mousedown", this._myOnMouseDownCallback);
+        this._myOnMouseUpCallback = this._onMouseAction.bind(this, this._onPointerUp.bind(this));
+        document.body.addEventListener("mouseup", this._myOnMouseUpCallback);
     }
 
     update(dt) {
@@ -91,8 +97,12 @@ PP.Mouse = class Mouse {
         document.body.removeEventListener("pointerup", this._myOnPointerUpCallback);
         document.body.removeEventListener("pointerleave", this._myOnPointerLeaveCallback);
         document.body.removeEventListener("pointerenter", this._myOnPointerEnterCallback);
+
+        document.body.removeEventListener("mousedown", this._myOnMouseDownCallback);
+        document.body.removeEventListener("mouseup", this._myOnMouseUpCallback);
+
         document.body.removeEventListener("contextmenu", this._myPreventContextMenuCallback);
-        document.body.removeEventListener("pointerdown", this._myPreventMiddleButtonScrollCallback);
+        document.body.removeEventListener("mousedown", this._myPreventMiddleButtonScrollCallback);
     }
 
     isValid() {
@@ -292,9 +302,9 @@ PP.Mouse = class Mouse {
     setMiddleButtonScrollActive(active) {
         if (this._myMiddleButtonScrollActive != active) {
             if (active) {
-                document.body.removeEventListener("pointerdown", this._myPreventMiddleButtonScrollCallback);
+                document.body.removeEventListener("mousedown", this._myPreventMiddleButtonScrollCallback);
             } else {
-                document.body.addEventListener("pointerdown", this._myPreventMiddleButtonScrollCallback, false);
+                document.body.addEventListener("mousedown", this._myPreventMiddleButtonScrollCallback, false);
             }
             this._myMiddleButtonScrollActive = active;
         }
@@ -326,6 +336,15 @@ PP.Mouse = class Mouse {
 
         this._updatePositionAndScreen(event);
         this._updatePointerData(event);
+    }
+
+    _onMouseAction(actionCallback, event) {
+        if (!this._myIsInsideView) return;
+        if (!this._isMouseEventValid()) return;
+        if (!this._isPointerEventIDValid(this._myLastPointerEvent)) return;
+        if (!this._isPointerEventValid(this._myLastPointerEvent)) return;
+
+        actionCallback(event);
     }
 
     _onPointerMove(event) {
@@ -426,5 +445,10 @@ PP.Mouse = class Mouse {
         }
 
         return isValid;
+    }
+
+    _isMouseEventValid() {
+        // mouse events are valid only if the last pointer event was a mouse (id==1)
+        return this._myLastPointerEvent != null && this._myLastPointerEvent.pointerId == 1;
     }
 };
