@@ -34,7 +34,7 @@ PP.Mouse = class Mouse {
         this._myMiddleButtonScrollActive = true;
 
         this._myPointerID = null;
-        this._myLastPointerEvent = null;
+        this._myLastValidPointerEvent = null;
 
         this._myPointerEventValidCallbacks = new Map();      // Signature: callback(event)
 
@@ -86,8 +86,15 @@ PP.Mouse = class Mouse {
             this._myPointerID = null;
         }
 
-        if (this._myIsInsideView && !this._isPointerEventValid(this._myLastPointerEvent)) {
-            this._onPointerLeave(this._myLastPointerEvent);
+        if (this._myLastValidPointerEvent != null) {
+            let isLastValidPointerEventStillValid = this._isPointerEventValid(this._myLastValidPointerEvent);
+            if (!isLastValidPointerEventStillValid) {
+                if (this._myIsInsideView) {
+                    this._onPointerLeave(this._myLastValidPointerEvent);
+                }
+
+                this._myLastValidPointerEvent = null;
+            }
         }
     }
 
@@ -161,7 +168,7 @@ PP.Mouse = class Mouse {
     }
 
     isTargetingRenderCanvas() {
-        return this.isInsideView() && this._myLastPointerEvent != null && this._myLastPointerEvent.target == WL.canvas;
+        return this.isInsideView() && this._myLastValidPointerEvent != null && this._myLastValidPointerEvent.target == WL.canvas;
     }
 
     // the origin and direction are set by the mouse
@@ -259,8 +266,8 @@ PP.Mouse = class Mouse {
         }
     }
 
-    getLastPointerEvent() {
-        return this._myLastPointerEvent;
+    getLastValidPointerEvent() {
+        return this._myLastValidPointerEvent;
     }
 
     // can be used to specify that only some pointerType are valid (eg: mouse, touch, pen) or just some target (eg: WL.canvas)
@@ -340,9 +347,9 @@ PP.Mouse = class Mouse {
 
     _onMouseAction(actionCallback, event) {
         if (!this._myIsInsideView) return;
-        if (!this._isMouseEventValid()) return;
-        if (!this._isPointerEventIDValid(this._myLastPointerEvent)) return;
-        if (!this._isPointerEventValid(this._myLastPointerEvent)) return;
+        if (!this._isMouseAllowed()) return;
+        if (!this._isPointerEventIDValid(this._myLastValidPointerEvent)) return;
+        if (!this._isPointerEventValid(this._myLastValidPointerEvent)) return;
 
         actionCallback(event);
     }
@@ -369,7 +376,7 @@ PP.Mouse = class Mouse {
     }
 
     _onPointerLeave(event) {
-        if (!this._myIsInsideView || this._myLastPointerEvent == null || event.pointerId != this._myLastPointerEvent.pointerId) return;
+        if (!this._myIsInsideView || this._myLastValidPointerEvent == null || event.pointerId != this._myLastValidPointerEvent.pointerId) return;
 
         this._myIsInsideView = false;
 
@@ -427,14 +434,18 @@ PP.Mouse = class Mouse {
 
     _updatePointerData(event) {
         this._myPointerID = event.pointerId;
-        this._myLastPointerEvent = event;
+        this._myLastValidPointerEvent = event;
     }
 
     _isPointerEventIDValid(event) {
+        if (event == null) return false;
+
         return this._myPointerID == null || this._myPointerID == event.pointerId;
     }
 
     _isPointerEventValid(event) {
+        if (event == null) return false;
+
         let isValid = true;
 
         for (let callback of this._myPointerEventValidCallbacks.values()) {
@@ -447,8 +458,8 @@ PP.Mouse = class Mouse {
         return isValid;
     }
 
-    _isMouseEventValid() {
+    _isMouseAllowed() {
         // mouse events are valid only if the last pointer event was a mouse (id==1)
-        return this._myLastPointerEvent != null && this._myLastPointerEvent.pointerId == 1;
+        return this._myLastValidPointerEvent != null && this._myLastValidPointerEvent.pointerId == 1;
     }
 };
