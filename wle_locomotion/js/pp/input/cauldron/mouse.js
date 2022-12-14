@@ -25,17 +25,18 @@ PP.Mouse = class Mouse {
         this._myResetMovingTimer = new PP.Timer(this._myResetMovingDelay, false);
         this._myIsMoving = false;
 
-        this._myIsInsideView = true;
+        this._myIsInsideView = false;
         this._myIsValid = false;
+
+        this._myPointerUpOnPointerLeave = true;
 
         this._myContextMenuActive = true;
         this._myMiddleButtonScrollActive = true;
 
-        this._myValidPointerTypes = ["mouse", "touch", "pen"];
-
         this._myPointerID = null;
-        this._myLastPointerID = null;
-        this._myLastPointerType = null;
+        this._myLastPointerEvent = null;
+
+        this._myPointerEventValidCallbacks = new Map();      // Signature: callback(event)
 
         // Support Variables
         this._myProjectionMatrixInverse = PP.mat4_create();
@@ -45,11 +46,11 @@ PP.Mouse = class Mouse {
     }
 
     start() {
-        this._myOnPointerMoveCallback = this._onPointerMove.bind(this);
+        this._myOnPointerMoveCallback = this._onPointerAction.bind(this, this._onPointerMove.bind(this));
         document.body.addEventListener("pointermove", this._myOnPointerMoveCallback);
-        this._myOnPointerDownCallback = this._onPointerDown.bind(this);
+        this._myOnPointerDownCallback = this._onPointerAction.bind(this, this._onPointerDown.bind(this));
         document.body.addEventListener("pointerdown", this._myOnPointerDownCallback);
-        this._myOnPointerUpCallback = this._onPointerUp.bind(this);
+        this._myOnPointerUpCallback = this._onPointerAction.bind(this, this._onPointerUp.bind(this));
         document.body.addEventListener("pointerup", this._myOnPointerUpCallback);
         this._myOnPointerLeaveCallback = this._onPointerLeave.bind(this);
         document.body.addEventListener("pointerleave", this._myOnPointerLeaveCallback);
@@ -78,6 +79,10 @@ PP.Mouse = class Mouse {
         if (!this.isAnyButtonPressed() && !this._myIsMoving) {
             this._myPointerID = null;
         }
+
+        if (this._myIsInsideView && !this._isPointerEventValid(this._myLastPointerEvent)) {
+            this._onPointerLeave(this._myLastPointerEvent);
+        }
     }
 
     destroy() {
@@ -85,6 +90,7 @@ PP.Mouse = class Mouse {
         document.body.removeEventListener("pointerdown", this._myOnPointerDownCallback);
         document.body.removeEventListener("pointerup", this._myOnPointerUpCallback);
         document.body.removeEventListener("pointerleave", this._myOnPointerLeaveCallback);
+        document.body.removeEventListener("pointerenter", this._myOnPointerEnterCallback);
         document.body.removeEventListener("contextmenu", this._myPreventContextMenuCallback);
         document.body.removeEventListener("pointerdown", this._myPreventMiddleButtonScrollCallback);
     }
@@ -144,26 +150,16 @@ PP.Mouse = class Mouse {
         return this._myIsInsideView;
     }
 
-    setContextMenuActive(active) {
-        if (this._myContextMenuActive != active) {
-            if (active) {
-                document.body.removeEventListener("contextmenu", this._myPreventContextMenuCallback);
-            } else {
-                document.body.addEventListener("contextmenu", this._myPreventContextMenuCallback, false);
-            }
-            this._myContextMenuActive = active;
-        }
+    isTargetingRenderCanvas() {
+        return this.isInsideView() && this._myLastPointerEvent != null && this._myLastPointerEvent.target == WL.canvas;
     }
 
-    setMiddleButtonScrollActive(active) {
-        if (this._myMiddleButtonScrollActive != active) {
-            if (active) {
-                document.body.removeEventListener("pointerdown", this._myPreventMiddleButtonScrollCallback);
-            } else {
-                document.body.addEventListener("pointerdown", this._myPreventMiddleButtonScrollCallback, false);
-            }
-            this._myMiddleButtonScrollActive = active;
-        }
+    // the origin and direction are set by the mouse
+    raycastWorld(raycastSetup, raycastResult = new PP.RaycastResult()) {
+        this.getOriginWorld(raycastSetup.myOrigin);
+        this.getDirectionWorld(raycastSetup.myDirection);
+        raycastResult = PP.PhysicsUtils.raycast(raycastSetup, raycastResult);
+        return raycastResult;
     }
 
     getPositionScreen(out = PP.vec2_create()) {
@@ -231,12 +227,77 @@ PP.Mouse = class Mouse {
         return out;
     }
 
-    // the origin and direction are set by the mouse
-    raycastWorld(raycastSetup, raycastResult = new PP.RaycastResult()) {
-        this.getOriginWorld(raycastSetup.myOrigin);
-        this.getDirectionWorld(raycastSetup.myDirection);
-        raycastResult = PP.PhysicsUtils.raycast(raycastSetup, raycastResult);
-        return raycastResult;
+    setTouchValid(touchValid) {
+        let callbackID = "internal_touch_valid_callback";
+        if (touchValid) {
+            this.removePointerEventValidCallback(callbackID);
+        } else {
+            this.addPointerEventValidCallback(callbackID, function (event) {
+                return event.pointerType == "mouse";
+            });
+        }
+    }
+
+    setTargetOnlyRenderCanvas(targetOnlyRenderCanvas) {
+        let callbackID = "internal_target_only_render_canvas_callback";
+        if (targetOnlyRenderCanvas) {
+            this.addPointerEventValidCallback(callbackID, function (event) {
+                return event.target == WL.canvas;
+            });
+        } else {
+            this.removePointerEventValidCallback(callbackID);
+        }
+    }
+
+    getLastPointerEvent() {
+        return this._myLastPointerEvent;
+    }
+
+    // can be used to specify that only some pointerType are valid (eg: mouse, touch, pen) or just some target (eg: WL.canvas)
+    addPointerEventValidCallback(id, callback) {
+        this._myPointerEventValidCallbacks.set(id, callback);
+    }
+
+    removePointerEventValidCallback(id) {
+        this._myPointerEventValidCallbacks.delete(id);
+    }
+
+    isPointerUpOnPointerLeave() {
+        return this._myPointerUpOnPointerLeave;
+    }
+
+    setPointerUpOnPointerLeave(pointerUpOnPointerLeave) {
+        this._myPointerUpOnPointerLeave = pointerUpOnPointerLeave;
+    }
+
+    isContextMenuActive() {
+        return this._myContextMenuActive;
+    }
+
+    setContextMenuActive(active) {
+        if (this._myContextMenuActive != active) {
+            if (active) {
+                document.body.removeEventListener("contextmenu", this._myPreventContextMenuCallback);
+            } else {
+                document.body.addEventListener("contextmenu", this._myPreventContextMenuCallback, false);
+            }
+            this._myContextMenuActive = active;
+        }
+    }
+
+    isMiddleButtonScrollActive() {
+        return this._myMiddleButtonScrollActive;
+    }
+
+    setMiddleButtonScrollActive(active) {
+        if (this._myMiddleButtonScrollActive != active) {
+            if (active) {
+                document.body.removeEventListener("pointerdown", this._myPreventMiddleButtonScrollCallback);
+            } else {
+                document.body.addEventListener("pointerdown", this._myPreventMiddleButtonScrollCallback, false);
+            }
+            this._myMiddleButtonScrollActive = active;
+        }
     }
 
     setResetMovingDelay(delay) {
@@ -247,20 +308,88 @@ PP.Mouse = class Mouse {
         return this._myResetMovingDelay;
     }
 
-    getLastPointerType() {
-        return this._myLastPointerType;
+    _onPointerAction(actionCallback, event) {
+        if (!this._isPointerEventIDValid(event)) return;
+
+        if (!this._isPointerEventValid(event)) {
+            if (this._myIsInsideView) {
+                this._onPointerLeave(event);
+            }
+            return;
+        }
+
+        if (!this._myIsInsideView) {
+            this._onPointerEnter(event);
+        }
+
+        actionCallback(event);
+
+        this._updatePositionAndScreen(event);
+        this._updatePointerData(event);
     }
 
-    addValidPointerType(pointerType) {
-        this._myValidPointerTypes.pp_pushUnique(pointerType);
+    _onPointerMove(event) {
+        this._myResetMovingTimer.start(this._myResetMovingDelay);
+        this._myIsMoving = true;
     }
 
-    removeValidPointerType(pointerType) {
-        this._myValidPointerTypes.pp_removeEqual(pointerType);
+    _onPointerDown(event) {
+        let buttonInfo = this._myButtonInfos.get(event.button);
+        if (!buttonInfo.myIsPressed) {
+            buttonInfo.myIsPressed = true;
+            buttonInfo.myIsPressStartToProcess = true;
+        }
     }
 
-    getValidPointerTypes() {
-        return this._myValidPointerTypes;
+    _onPointerUp(event) {
+        let buttonInfo = this._myButtonInfos.get(event.button);
+        if (buttonInfo.myIsPressed) {
+            buttonInfo.myIsPressed = false;
+            buttonInfo.myIsPressEndToProcess = true;
+        }
+    }
+
+    _onPointerLeave(event) {
+        if (!this._myIsInsideView || this._myLastPointerEvent == null || event.pointerId != this._myLastPointerEvent.pointerId) return;
+
+        this._myIsInsideView = false;
+
+        this._myIsMoving = false;
+
+        if (this._myPointerUpOnPointerLeave) {
+            for (let buttonInfo of this._myButtonInfos.values()) {
+                if (buttonInfo.myIsPressed) {
+                    buttonInfo.myIsPressed = false;
+                    buttonInfo.myIsPressEndToProcess = true;
+                }
+            }
+        }
+
+        this._myPointerID = null;
+    }
+
+    _onPointerEnter(event) {
+        if ((this._myIsInsideView && this._myPointerID != null) || !this._isPointerEventIDValid(event) || !this._isPointerEventValid(event)) return;
+
+        this._myIsInsideView = true;
+
+        this._updatePositionAndScreen(event);
+        this._updatePointerData(event);
+    }
+
+    _preventContextMenu(event) {
+        if (!this._isPointerEventIDValid(event) || !this._isPointerEventValid(event)) return;
+
+        event.preventDefault();
+    }
+
+    _preventMiddleButtonScroll(event) {
+        if (!this._isPointerEventIDValid(event) || !this._isPointerEventValid(event)) return;
+
+        if (event.button == 1) {
+            event.preventDefault();
+            return false;
+        }
     }
 
     _updatePositionAndScreen(event) {
@@ -271,118 +400,31 @@ PP.Mouse = class Mouse {
         this._myIsValid = true;
     }
 
-    _onPointerMove(event) {
-        if (!this._isEventValid(event)) return;
-
-        if (!this._myIsInsideView) {
-            this._onPointerEnter(event);
-        }
-
-        this._myResetMovingTimer.start(this._myResetMovingDelay);
-        this._myIsMoving = true;
-
-        this._updatePositionAndScreen(event);
-
-        this._myPointerID = event.pointerId;
-        this._myLastPointerID = this._myPointerID;
-        this._myLastPointerType = event.pointerType;
-    }
-
-    _onPointerDown(event) {
-        if (!this._isEventValid(event)) return;
-
-        if (!this._myIsInsideView) {
-            this._onPointerEnter(event);
-        }
-
-        let buttonInfo = this._myButtonInfos.get(event.button);
-        if (!buttonInfo.myIsPressed) {
-            buttonInfo.myIsPressed = true;
-            buttonInfo.myIsPressStartToProcess = true;
-        }
-
-        this._updatePositionAndScreen(event);
-
-        this._myPointerID = event.pointerId;
-        this._myLastPointerID = this._myPointerID;
-        this._myLastPointerType = event.pointerType;
-    }
-
-    _onPointerUp(event) {
-        if (!this._isEventValid(event) || this._myPointerID == null) return;
-
-        let buttonInfo = this._myButtonInfos.get(event.button);
-        if (buttonInfo.myIsPressed) {
-            buttonInfo.myIsPressed = false;
-            buttonInfo.myIsPressEndToProcess = true;
-        }
-
-        this._updatePositionAndScreen(event);
-
-        this._myPointerID = event.pointerId;
-        this._myLastPointerID = this._myPointerID;
-        this._myLastPointerType = event.pointerType;
-    }
-
-    _onPointerLeave(event) {
-        if (!this._myIsInsideView || (!this._isEventValid(event) && event.pointerId == this._myLastPointerID)) return;
-
-        this._myIsInsideView = false;
-
-        for (let buttonInfo of this._myButtonInfos.values()) {
-            if (buttonInfo.myIsPressed) {
-                buttonInfo.myIsPressed = false;
-                buttonInfo.myIsPressEndToProcess = true;
-            }
-        }
-
-        this._myPointerID = null;
-        this._myLastPointerType = event.pointerType;
-    }
-
-    _onPointerEnter(event) {
-        if (this._myIsInsideView || !this._isEventValid(event)) {
-            if (this._myIsInsideView && this._myPointerID == null && this._isEventValid(event)) {
-                this._myPointerID = event.pointerId;
-                this._myLastPointerID = this._myPointerID;
-                this._myLastPointerType = event.pointerType;
-            }
-
-            return;
-        }
-
-        this._myIsInsideView = true;
-
-        for (let buttonInfo of this._myButtonInfos.values()) {
-            if (buttonInfo.myIsPressed) {
-                buttonInfo.myIsPressed = false;
-                buttonInfo.myIsPressEndToProcess = true;
-            }
-        }
-
-        this._myPointerID = event.pointerId;
-        this._myLastPointerID = this._myPointerID;
-        this._myLastPointerType = event.pointerType;
-    }
-
-    _preventContextMenu(event) {
-        event.preventDefault();
-    }
-
-    _preventMiddleButtonScroll(event) {
-        if (event.button == 1) {
-            event.preventDefault();
-            return false;
-        }
-    }
-
     _updateScreenSize() {
         let bounds = document.body.getBoundingClientRect();
         this._myScreenSize[0] = bounds.width;
         this._myScreenSize[1] = bounds.height;
     }
 
-    _isEventValid(event) {
-        return this._myValidPointerTypes.pp_hasEqual(event.pointerType) && (this._myPointerID == null || this._myPointerID == event.pointerId);
+    _updatePointerData(event) {
+        this._myPointerID = event.pointerId;
+        this._myLastPointerEvent = event;
+    }
+
+    _isPointerEventIDValid(event) {
+        return this._myPointerID == null || this._myPointerID == event.pointerId;
+    }
+
+    _isPointerEventValid(event) {
+        let isValid = true;
+
+        for (let callback of this._myPointerEventValidCallbacks.values()) {
+            if (!callback(event)) {
+                isValid = false;
+                break;
+            };
+        }
+
+        return isValid;
     }
 };
