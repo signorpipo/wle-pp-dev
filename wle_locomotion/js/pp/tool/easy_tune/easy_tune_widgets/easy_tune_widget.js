@@ -159,7 +159,10 @@ PP.EasyTuneWidget = class EasyTuneWidget {
             return;
         }
 
-        let prevWidget = this._myCurrentWidget;
+        let prevWidget = null;
+        if (this._myCurrentWidget != null) {
+            prevWidget = this._myCurrentWidget.getWidget();
+        }
 
         if (this._myCurrentVariable.myType in this._myWidgets) {
             this._myCurrentWidget = this._myWidgets[this._myCurrentVariable.myType];
@@ -168,7 +171,7 @@ PP.EasyTuneWidget = class EasyTuneWidget {
         }
 
         this._myCurrentWidget.setEasyTuneVariable(this._myCurrentVariable, this._createIndexString());
-        this._myCurrentWidget.syncWidget(prevWidget);
+        this._myCurrentWidget.getWidget().syncWidget(prevWidget);
 
         if (prevWidget != null) {
             prevWidget.setVisible(false);

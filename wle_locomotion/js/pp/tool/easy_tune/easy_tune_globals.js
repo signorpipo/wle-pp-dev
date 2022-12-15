@@ -9,7 +9,7 @@ PP.importEasyTuneVariables = function (fileURL = null, resetVariablesDefaultValu
         if (navigator.clipboard) {
             navigator.clipboard.readText().then(
                 function (clipboard) {
-                    PP.myEasyTuneVariables.fromJSON(clipboard, resetDefaultValue);
+                    PP.myEasyTuneVariables.fromJSON(clipboard, resetVariablesDefaultValueOnImport);
 
                     PP.refreshEasyTuneWidget();
 

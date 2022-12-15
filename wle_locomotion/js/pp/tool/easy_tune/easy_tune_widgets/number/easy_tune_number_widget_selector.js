@@ -80,18 +80,6 @@ PP.EasyTuneNumberArrayWidgetSelector = class EasyTuneNumberArrayWidgetSelector {
         }
     }
 
-    syncWidget(otherEasyTuneWidget) {
-        let otherActualEasyTuneWidget = null;
-        if (otherEasyTuneWidget != null) {
-            otherActualEasyTuneWidget = otherEasyTuneWidget.getWidget();
-        }
-
-        let widget = this.getWidget();
-        if (widget) {
-            widget.syncWidget(otherActualEasyTuneWidget);
-        }
-    }
-
     getWidget() {
         return this._myWidgets.get(this._myCurrentArraySize);
     }

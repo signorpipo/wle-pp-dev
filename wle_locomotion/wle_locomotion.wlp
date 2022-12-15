@@ -6940,7 +6940,7 @@
             "rotation": [
                 0.9659258,
                 0.258819,
-                3.8991665007870324e-8,
+                3.899166500787032e-8,
                 -8.86089850382632e-8
             ],
             "scale": [
@@ -12244,7 +12244,8 @@
                     "pp-easy-tune": {
                         "_myHandedness": "left",
                         "_myPlaneMaterial": "32",
-                        "_myTextMaterial": "33"
+                        "_myTextMaterial": "33",
+                        "_myEnableVariablesImportExportButtons": true
                     },
                     "active": true
                 }
@@ -13541,11 +13542,13 @@
                 {
                     "type": "virtual-gamepad",
                     "virtual-gamepad": {
-                        "_myShowOnDesktop": true,
+                        "_myShowOnDesktop": false,
                         "_myReleaseOnMouseLeave": true,
-                        "_myShowOnHeadset": true,
-                        "_myOpacity": 0.5
-                    }
+                        "_myShowOnHeadset": false,
+                        "_myOpacity": 0.5,
+                        "_myReleaseOnPointerLeave": true
+                    },
+                    "active": true
                 }
             ]
         }

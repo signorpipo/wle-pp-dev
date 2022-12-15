@@ -75,24 +75,23 @@ PP.EasyTuneBaseWidget = class EasyTuneBaseWidget {
     }
 
     syncWidget(otherEasyTuneWidget) {
-        let otherActualEasyTuneWidget = null;
         if (otherEasyTuneWidget != null) {
-            otherActualEasyTuneWidget = otherEasyTuneWidget.getWidget();
-        }
-
-        if (otherActualEasyTuneWidget != null) {
-            if (otherActualEasyTuneWidget._myResetImportLabelTimer.isRunning()) {
-                this._myResetImportLabelTimer.start(otherActualEasyTuneWidget._myResetImportLabelTimer.getTimeLeft());
+            if (otherEasyTuneWidget._myResetImportLabelTimer.isRunning()) {
+                this._myResetImportLabelTimer.start(otherEasyTuneWidget._myResetImportLabelTimer.getTimeLeft());
+            } else {
+                this._myResetImportLabelTimer.reset();
             }
 
-            if (otherActualEasyTuneWidget._myResetExportLabelTimer.isRunning()) {
-                this._myResetExportLabelTimer.start(otherActualEasyTuneWidget._myResetExportLabelTimer.getTimeLeft());
+            if (otherEasyTuneWidget._myResetExportLabelTimer.isRunning()) {
+                this._myResetExportLabelTimer.start(otherEasyTuneWidget._myResetExportLabelTimer.getTimeLeft());
+            } else {
+                this._myResetExportLabelTimer.reset();
             }
 
-            this._myUI.myImportButtonTextComponent.text = otherActualEasyTuneWidget._myUI.myImportButtonTextComponent.text;
-            this._myUI.myExportButtonTextComponent.text = otherActualEasyTuneWidget._myUI.myExportButtonTextComponent.text;
+            this._myUI.myImportButtonTextComponent.text = otherEasyTuneWidget._myUI.myImportButtonTextComponent.text;
+            this._myUI.myExportButtonTextComponent.text = otherEasyTuneWidget._myUI.myExportButtonTextComponent.text;
 
-            this.setScrollVariableActive(otherActualEasyTuneWidget.isScrollVariableActive(), otherActualEasyTuneWidget.getScrollVariableDirection());
+            this.setScrollVariableActive(otherEasyTuneWidget.isScrollVariableActive(), otherEasyTuneWidget.getScrollVariableDirection());
         } else {
             this._myResetImportLabelTimer.reset();
             this._myUI.myImportButtonTextComponent.text = this._mySetup.myImportButtonText;
