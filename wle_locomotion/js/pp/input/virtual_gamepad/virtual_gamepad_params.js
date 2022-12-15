@@ -82,6 +82,8 @@ VirtualGamepadParams = class VirtualGamepadParams {
         this.myFontSize = 0;
 
         this.myMinSizeMultiplier = 0;  // can be used to specify a min size based on the view width for when the view is in portrait mode
+
+        this.myDisableMouseHoverWhenPressed = false;
     }
 
     defaultSetup() {
@@ -95,6 +97,9 @@ VirtualGamepadParams = class VirtualGamepadParams {
         let backgroundColor = "#616161";
         let iconColor = "#e0e0e0";
 
+        let buttonHoveredBrightness = 0.75;
+        let thumbstickHoveredBrightness = 0.75;
+
         for (let handedness in this.myButtonParams) {
             for (let gamepadButtonID in this.myButtonParams[handedness]) {
                 let buttonParams = this.myButtonParams[handedness][gamepadButtonID];
@@ -102,6 +107,7 @@ VirtualGamepadParams = class VirtualGamepadParams {
                 buttonParams.myIconParams.myBackgroundPressedColor = iconColor;
                 buttonParams.myIconParams.myIconColor = iconColor;
                 buttonParams.myIconParams.myIconPressedColor = backgroundColor;
+                buttonParams.myIconParams.myOverallHoveredBrightness = buttonHoveredBrightness;
             }
         }
 
@@ -127,6 +133,7 @@ VirtualGamepadParams = class VirtualGamepadParams {
             thumbstickParams.myIconParams.myBackgroundPressedColor = iconColor;
             thumbstickParams.myIconParams.myIconColor = backgroundColor;
             thumbstickParams.myIconParams.myIconPressedColor = backgroundColor;
+            thumbstickParams.myIconParams.myOverallHoveredBrightness = thumbstickHoveredBrightness;
         }
 
         // Orders
@@ -161,8 +168,9 @@ VirtualGamepadParams = class VirtualGamepadParams {
 
         this.myMinSizeMultiplier = 5 / 3;
 
-        // Buttons
+        // Cauldron
 
+        this.myDisableMouseHoverWhenPressed = true;
         this.myValidPointerButtons = [0];
     }
 };

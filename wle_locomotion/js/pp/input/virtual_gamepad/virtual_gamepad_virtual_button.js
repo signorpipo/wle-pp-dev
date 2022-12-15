@@ -21,6 +21,9 @@ VirtualGamepadVirtualButton = class VirtualGamepadVirtualButton {
         if (this._myVirtualGamepadParams.myReleaseOnPointerLeave) {
             document.body.addEventListener("pointerleave", this._onPointerLeave.bind(this));
         }
+
+        this._myButtonElement.addEventListener("mouseenter", this._onButtonElementEnter.bind(this));
+        this._myButtonElement.addEventListener("mouseleave", this._onButtonElementLeave.bind(this));
     }
 
     isPressed() {
@@ -30,9 +33,14 @@ VirtualGamepadVirtualButton = class VirtualGamepadVirtualButton {
     setActive(active) {
         if (this._myIsActive != active) {
             this.reset();
+            this._myButtonIcon.reset();
         }
 
         this._myIsActive = active;
+    }
+
+    setMouseHoverActive(hoverActive) {
+        this._myButtonIcon.setMouseHoverActive(hoverActive);
     }
 
     reset() {
@@ -41,6 +49,10 @@ VirtualGamepadVirtualButton = class VirtualGamepadVirtualButton {
         this._myIsPressed = false;
         this._myPointerID = null;
         this._myPointerButton = null;
+    }
+
+    update(dt) {
+        this._myButtonIcon.update(dt);
     }
 
     _onPointerDown(stopPropagatingPointerDownEvents, event) {
@@ -75,6 +87,18 @@ VirtualGamepadVirtualButton = class VirtualGamepadVirtualButton {
         if (this._myPointerID != event.pointerId) return;
 
         this.reset();
+    }
+
+    _onButtonElementEnter(event) {
+        if (!this._myIsActive) return;
+
+        this._myButtonIcon.onMouseEnter(event);
+    }
+
+    _onButtonElementLeave(event) {
+        if (!this._myIsActive) return;
+
+        this._myButtonIcon.onMouseLeave(event);
     }
 
     _build(buttonElementParent, virtualButtonHandedness, virtualButtonIndex) {

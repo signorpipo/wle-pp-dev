@@ -106,6 +106,26 @@ VirtualGamepad = class VirtualGamepad {
                 this.setVisible(false);
             }
         }
+
+        if (this._myVisible) {
+            for (let handedness in this._myVirtualGamepadVirtualButtons) {
+                for (let gamepadButtonID in this._myVirtualGamepadVirtualButtons[handedness]) {
+                    let button = this._myVirtualGamepadVirtualButtons[handedness][gamepadButtonID];
+                    if (button != null) {
+                        button.update(dt);
+                    }
+                }
+            }
+
+            for (let handedness in this._myVirtualGamepadVirtualThumbsticks) {
+                let thumbstick = this._myVirtualGamepadVirtualThumbsticks[handedness];
+                if (thumbstick != null) {
+                    thumbstick.update(dt);
+                }
+            }
+
+            this._setMouseHoverActive(!(this._myParams.myDisableMouseHoverWhenPressed && this._isAnyElementPressed()));
+        }
     }
 
     _buildVirtualGamepad() {
@@ -171,5 +191,49 @@ VirtualGamepad = class VirtualGamepad {
 
     _createSizeValue(value, minSizeMultiplier) {
         return "min(" + value.toFixed(3) + "vmax," + (value * minSizeMultiplier).toFixed(3) + "vw)";
+    }
+
+    _isAnyElementPressed() {
+        let isAnyElementPressed = false;
+
+        for (let handedness in this._myVirtualGamepadVirtualButtons) {
+            for (let gamepadButtonID in this._myVirtualGamepadVirtualButtons[handedness]) {
+                let button = this._myVirtualGamepadVirtualButtons[handedness][gamepadButtonID];
+                if (button != null && button.isPressed()) {
+                    isAnyElementPressed = true;
+                    break;
+                }
+            }
+        }
+
+        if (!isAnyElementPressed) {
+            for (let handedness in this._myVirtualGamepadVirtualThumbsticks) {
+                let thumbstick = this._myVirtualGamepadVirtualThumbsticks[handedness];
+                if (thumbstick != null && thumbstick.isPressed()) {
+                    isAnyElementPressed = true;
+                    break;
+                }
+            }
+        }
+
+        return isAnyElementPressed;
+    }
+
+    _setMouseHoverActive(hoverActive) {
+        for (let handedness in this._myVirtualGamepadVirtualButtons) {
+            for (let gamepadButtonID in this._myVirtualGamepadVirtualButtons[handedness]) {
+                let button = this._myVirtualGamepadVirtualButtons[handedness][gamepadButtonID];
+                if (button != null) {
+                    button.setMouseHoverActive(hoverActive);
+                }
+            }
+        }
+
+        for (let handedness in this._myVirtualGamepadVirtualThumbsticks) {
+            let thumbstick = this._myVirtualGamepadVirtualThumbsticks[handedness];
+            if (thumbstick != null) {
+                thumbstick.setMouseHoverActive(hoverActive);
+            }
+        }
     }
 };
