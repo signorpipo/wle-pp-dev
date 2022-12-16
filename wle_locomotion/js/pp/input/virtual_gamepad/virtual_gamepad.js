@@ -1,5 +1,5 @@
-VirtualGamepad = class VirtualGamepad {
-    constructor(params = new VirtualGamepadParams()) {
+PP.VirtualGamepad = class VirtualGamepad {
+    constructor(params = new PP.VirtualGamepadParams()) {
         this._myParams = params;
 
         this._myVisible = true;
@@ -180,12 +180,12 @@ VirtualGamepad = class VirtualGamepad {
     }
 
     _buildButton(buttonElementParent, virtualButtonHandedness, virtualButtonIndex, gamepadButtonHandedness, gamepadButtonID) {
-        let virtualGamepadVirtualButton = new VirtualGamepadVirtualButton(buttonElementParent, this._myParams, virtualButtonHandedness, virtualButtonIndex, gamepadButtonHandedness, gamepadButtonID);
+        let virtualGamepadVirtualButton = new PP.VirtualGamepadVirtualButton(buttonElementParent, this._myParams, virtualButtonHandedness, virtualButtonIndex, gamepadButtonHandedness, gamepadButtonID);
         this._myVirtualGamepadVirtualButtons[gamepadButtonHandedness][gamepadButtonID] = virtualGamepadVirtualButton;
     }
 
     _buildThumbstick(thumbstickElementParent, virtualThumbstickHandedness, gamepadThumbstickHandedness) {
-        let virtualGamepadVirtualThumbstick = new VirtualGamepadVirtualThumbstick(thumbstickElementParent, this._myParams, virtualThumbstickHandedness, gamepadThumbstickHandedness);
+        let virtualGamepadVirtualThumbstick = new PP.VirtualGamepadVirtualThumbstick(thumbstickElementParent, this._myParams, virtualThumbstickHandedness, gamepadThumbstickHandedness);
         this._myVirtualGamepadVirtualThumbsticks[gamepadThumbstickHandedness] = virtualGamepadVirtualThumbstick;
     }
 

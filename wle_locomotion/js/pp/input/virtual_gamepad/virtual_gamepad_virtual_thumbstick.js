@@ -1,4 +1,4 @@
-VirtualGamepadVirtualThumbstick = class VirtualGamepadVirtualThumbstick {
+PP.VirtualGamepadVirtualThumbstick = class VirtualGamepadVirtualThumbstick {
     constructor(thumbstickElementParent, virtualGamepadParams, virtualThumbstickHandedness, gamepadThumbstickHandedness) {
         this._myThumbstickElement = null;
         this._myThumbstickElementHoverCheck = null;
@@ -207,7 +207,7 @@ VirtualGamepadVirtualThumbstick = class VirtualGamepadVirtualThumbstick {
         this._myThumbstickElement.style.left = "33%";
         this._myThumbstickContainer.appendChild(this._myThumbstickElement);
 
-        this._myThumbstickIcon = new VirtualGamepadIcon(this._myThumbstickElement, this._myParams.myIconParams, minSizeMultiplier, this._myVirtualGamepadParams.myScale);
+        this._myThumbstickIcon = new PP.VirtualGamepadIcon(this._myThumbstickElement, this._myParams.myIconParams, minSizeMultiplier, this._myVirtualGamepadParams.myScale);
     }
 
     _createSizeValue(value, minSizeMultiplier) {

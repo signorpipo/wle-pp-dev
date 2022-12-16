@@ -1,4 +1,4 @@
-VirtualGamepadVirtualButton = class VirtualGamepadVirtualButton {
+PP.VirtualGamepadVirtualButton = class VirtualGamepadVirtualButton {
     constructor(buttonElementParent, virtualGamepadParams, virtualButtonHandedness, virtualButtonIndex, gamepadButtonHandedness, gamepadButtonID) {
         this._myButtonElement = null;
         this._myButtonIcon = null;
@@ -160,7 +160,7 @@ VirtualGamepadVirtualButton = class VirtualGamepadVirtualButton {
         this._myButtonElement.style.transform = "rotate(" + counterAngle + "deg)";
         buttonPivot.appendChild(this._myButtonElement);
 
-        this._myButtonIcon = new VirtualGamepadIcon(this._myButtonElement, this._myParams.myIconParams, minSizeMultiplier, this._myVirtualGamepadParams.myInterfaceScale);
+        this._myButtonIcon = new PP.VirtualGamepadIcon(this._myButtonElement, this._myParams.myIconParams, minSizeMultiplier, this._myVirtualGamepadParams.myInterfaceScale);
     }
 
     _createSizeValue(value, minSizeMultiplier) {

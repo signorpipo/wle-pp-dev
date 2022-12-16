@@ -1,4 +1,4 @@
-WL.registerComponent("virtual-gamepad", {
+WL.registerComponent("pp-virtual-gamepad", {
     _myShowOnDesktop: { type: WL.Type.Bool, default: false },   // you may have to enable headset too
     _myShowOnMobile: { type: WL.Type.Bool, default: true },
     _myShowOnHeadset: { type: WL.Type.Bool, default: false },   // not 100% reliable, this is true if the device supports vr and it is desktop
@@ -68,7 +68,7 @@ WL.registerComponent("virtual-gamepad", {
     _myRightBottomButtonIconLabelOrImageUrl: { type: WL.Type.String, default: '' }
 }, {
     start() {
-        let params = new VirtualGamepadParams();
+        let params = new PP.VirtualGamepadParams();
         params.defaultSetup();
 
         for (let handedness in params.myButtonParams) {
@@ -108,7 +108,7 @@ WL.registerComponent("virtual-gamepad", {
 
         this._advancedSetup(params);
 
-        this._myVirtualGamepad = new VirtualGamepad(params);
+        this._myVirtualGamepad = new PP.VirtualGamepad(params);
         if (!params.myAutoUpdateVisibility) {
             this._myVirtualGamepad.setVisible(false);
         }
@@ -122,8 +122,8 @@ WL.registerComponent("virtual-gamepad", {
             this._myFirstUpdate = false;
 
             if (this._myAddToUniversalGamepad) {
-                let leftVirtualGamepadGamepadCore = new VirtualGamepadGamepadCore(this._myVirtualGamepad, PP.Handedness.LEFT, PP.myLeftGamepad.getGamepadCore("left_xr_gamepad").getHandPose());
-                let rightVirtualGamepadGamepadCore = new VirtualGamepadGamepadCore(this._myVirtualGamepad, PP.Handedness.RIGHT, PP.myRightGamepad.getGamepadCore("right_xr_gamepad").getHandPose());
+                let leftVirtualGamepadGamepadCore = new PP.VirtualGamepadGamepadCore(this._myVirtualGamepad, PP.Handedness.LEFT, PP.myLeftGamepad.getGamepadCore("left_xr_gamepad").getHandPose());
+                let rightVirtualGamepadGamepadCore = new PP.VirtualGamepadGamepadCore(this._myVirtualGamepad, PP.Handedness.RIGHT, PP.myRightGamepad.getGamepadCore("right_xr_gamepad").getHandPose());
 
                 PP.myLeftGamepad.addGamepadCore("left_virtual_gamepad", leftVirtualGamepadGamepadCore);
                 PP.myRightGamepad.addGamepadCore("right_virtual_gamepad", rightVirtualGamepadGamepadCore);

@@ -1,4 +1,4 @@
-VirtualGamepadGamepadCore = class VirtualGamepadGamepadCore extends PP.GamepadCore {
+PP.VirtualGamepadGamepadCore = class VirtualGamepadGamepadCore extends PP.GamepadCore {
 
     constructor(virtualGamepad, handedness, handPose = null) {
         super(handedness, handPose);
