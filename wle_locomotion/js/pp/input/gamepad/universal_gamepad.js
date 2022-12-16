@@ -8,8 +8,8 @@ PP.UniversalGamepad = class UniversalGamepad extends PP.BaseGamepad {
         this._myStarted = false;
 
         // Support Variables
-        this._myButtonData = { myIsPressed: false, myIsTouched: false, myValue: 0 };
-        this._myAxesData = PP.vec2_create(0, 0);
+        this._myButtonData = this._createButtonData();
+        this._myAxesData = this._createAxesData();
         this._myHapticActuators = [];
 
     }
