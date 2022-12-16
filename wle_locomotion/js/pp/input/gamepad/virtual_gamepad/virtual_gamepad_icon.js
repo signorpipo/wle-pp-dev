@@ -68,30 +68,30 @@ PP.VirtualGamepadIcon = class VirtualGamepadIcon {
         if (this._myPressed != pressed) {
             this._myPressed = pressed;
 
-            if (this._myParams.myIconType != PP.VirtualGamepadIconType.NONE) {
+            if (this._myPressed) {
+                this._myBackgroundElement.style.fill = this._myParams.myBackgroundPressedColor;
                 if (this._myIconElement != null) {
-                    if (this._myPressed) {
-                        this._myBackgroundElement.style.fill = this._myParams.myBackgroundPressedColor;
-                        if (this._myIconElement.style.strokeWidth.length > 0) {
-                            this._myIconElement.style.stroke = this._myParams.myIconPressedColor;
-                        } else {
-                            this._myIconElement.style.fill = this._myParams.myIconPressedColor;
-                        }
-
-                        if (this._myParams.myIconType == PP.VirtualGamepadIconType.IMAGE) {
-                            this._myIconElement.style.filter = "brightness(" + this._myParams.myImagePressedBrightness + ")";
-                        }
+                    if (this._myIconElement.style.strokeWidth.length > 0) {
+                        this._myIconElement.style.stroke = this._myParams.myIconPressedColor;
                     } else {
-                        this._myBackgroundElement.style.fill = this._myParams.myBackgroundColor;
-                        if (this._myIconElement.style.strokeWidth.length > 0) {
-                            this._myIconElement.style.stroke = this._myParams.myIconColor;
-                        } else {
-                            this._myIconElement.style.fill = this._myParams.myIconColor;
-                        }
+                        this._myIconElement.style.fill = this._myParams.myIconPressedColor;
+                    }
 
-                        if (this._myParams.myIconType == PP.VirtualGamepadIconType.IMAGE) {
-                            this._myIconElement.style.filter = "none";
-                        }
+                    if (this._myParams.myIconType == PP.VirtualGamepadIconType.IMAGE) {
+                        this._myIconElement.style.filter = "brightness(" + this._myParams.myImagePressedBrightness + ")";
+                    }
+                }
+            } else {
+                this._myBackgroundElement.style.fill = this._myParams.myBackgroundColor;
+                if (this._myIconElement != null) {
+                    if (this._myIconElement.style.strokeWidth.length > 0) {
+                        this._myIconElement.style.stroke = this._myParams.myIconColor;
+                    } else {
+                        this._myIconElement.style.fill = this._myParams.myIconColor;
+                    }
+
+                    if (this._myParams.myIconType == PP.VirtualGamepadIconType.IMAGE) {
+                        this._myIconElement.style.filter = "none";
                     }
                 }
             }

@@ -7,14 +7,13 @@ PP.VirtualGamepadButtonParams = class VirtualGamepadButtonParams {
 PP.VirtualGamepadThumbstickParams = class VirtualGamepadThumbstickParams {
     constructor() {
         this.myBackgroundColor = "";
-        this.myBackgroundPressedColor = "";
 
         this.myMaxDistanceFromCenterMultiplier = 1;
 
         this.myReleaseTransitionSeconds = 0.2;
         this.myMoveTransitionSeconds = 0;
 
-        this.myIncludeBackgroundToDetection = false;
+        this.myIncludeBackgroundToDetection = false; // you can press the background of the icon to move the thumbstick, makes it harder to miss it
 
         this.myIconParams = new PP.VirtualGamepadIconParams();
     }
