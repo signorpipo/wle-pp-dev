@@ -131,12 +131,12 @@ require('./pp/input/gamepad/cauldron/gamepad_manager');
 require('./pp/input/gamepad/cauldron/gamepad_utils');
 require('./pp/input/gamepad/cauldron/gamepad_control_scheme');
 
-require('./pp/input/virtual_gamepad/virtual_gamepad');
-require('./pp/input/virtual_gamepad/virtual_gamepad_component');
-require('./pp/input/virtual_gamepad/virtual_gamepad_params');
-require('./pp/input/virtual_gamepad/virtual_gamepad_virtual_button');
-require('./pp/input/virtual_gamepad/virtual_gamepad_virtual_thumbstick');
-require('./pp/input/virtual_gamepad/virtual_gamepad_icon');
+require('./pp/input/gamepad/virtual_gamepad/virtual_gamepad');
+require('./pp/input/gamepad/virtual_gamepad/virtual_gamepad_component');
+require('./pp/input/gamepad/virtual_gamepad/virtual_gamepad_params');
+require('./pp/input/gamepad/virtual_gamepad/virtual_gamepad_virtual_button');
+require('./pp/input/gamepad/virtual_gamepad/virtual_gamepad_virtual_thumbstick');
+require('./pp/input/gamepad/virtual_gamepad/virtual_gamepad_icon');
 
 require('./pp/input/pose/base_pose.js');
 require('./pp/input/pose/hand_pose');
