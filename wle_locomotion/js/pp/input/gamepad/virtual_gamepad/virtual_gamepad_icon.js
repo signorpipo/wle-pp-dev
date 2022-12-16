@@ -44,14 +44,14 @@ PP.VirtualGamepadIcon = class VirtualGamepadIcon {
 
         this._myPressed = false;
 
-        this._myMouseHoverCount = 0;
+        this._myIsMouseHover = false;
         this._myIsMouseHoverActive = true;
 
         this._build(iconElementParent, minSizeMultiplier, scale);
     }
 
     update(dt) {
-        if (this._myPressed || this._myMouseHoverCount == 0 || !this._myIsMouseHoverActive) {
+        if (this._myPressed || !this._myIsMouseHover || !this._myIsMouseHoverActive) {
             this._myIconContainerElement.style.filter = "none";
         } else {
             this._myIconContainerElement.style.filter = "brightness(" + this._myParams.myOverallHoveredBrightness + ")";
@@ -60,7 +60,7 @@ PP.VirtualGamepadIcon = class VirtualGamepadIcon {
 
     reset() {
         this.setPressed(false);
-        this._myMouseHoverCount = 0;
+        this._myIsMouseHover = false;
         this._myIconContainerElement.style.filter = "none";
     }
 
@@ -99,16 +99,11 @@ PP.VirtualGamepadIcon = class VirtualGamepadIcon {
     }
 
     onMouseEnter() {
-        this._myMouseHoverCount++;
+        this._myIsMouseHover = true;
     }
 
     onMouseLeave() {
-        this._myMouseHoverCount--;
-        this._myMouseHoverCount = Math.max(0, this._myMouseHoverCount);
-    }
-
-    resetMouseHoverCount() {
-        this._myMouseHoverCount = 0;
+        this._myIsMouseHover = false;
     }
 
     setMouseHoverActive(hoverActive) {
