@@ -13542,9 +13542,9 @@
                 {
                     "type": "pp-virtual-gamepad",
                     "pp-virtual-gamepad": {
-                        "_myShowOnDesktop": true,
+                        "_myShowOnDesktop": false,
                         "_myReleaseOnMouseLeave": true,
-                        "_myShowOnHeadset": true,
+                        "_myShowOnHeadset": false,
                         "_myOpacity": 0.5,
                         "_myReleaseOnPointerLeave": true
                     },

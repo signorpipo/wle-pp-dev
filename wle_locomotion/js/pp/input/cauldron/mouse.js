@@ -10,8 +10,7 @@ PP.Mouse = class Mouse {
 
         this._myButtonInfos = new Map();
         for (let key in PP.MouseButtonID) {
-            this._myButtonInfos.set(PP.MouseButtonID[key],
-                { myIsPressed: false, myIsPressStart: false, myIsPressStartToProcess: false, myIsPressEnd: false, myIsPressEndToProcess: false, });
+            this._myButtonInfos.set(PP.MouseButtonID[key], this._createButtonInfo());
         }
 
         this._myPreventContextMenuCallback = this._preventContextMenu.bind(this);
@@ -461,5 +460,9 @@ PP.Mouse = class Mouse {
     _isMouseAllowed() {
         // mouse events are valid only if the last pointer event was a mouse (id==1)
         return this._myLastValidPointerEvent != null && this._myLastValidPointerEvent.pointerId == 1;
+    }
+
+    _createButtonInfo() {
+        return { myIsPressed: false, myIsPressStart: false, myIsPressStartToProcess: false, myIsPressEnd: false, myIsPressEndToProcess: false, };
     }
 };
