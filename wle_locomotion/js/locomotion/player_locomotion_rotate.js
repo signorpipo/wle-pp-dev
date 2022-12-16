@@ -4,6 +4,7 @@ PlayerLocomotionRotateParams = class PlayerLocomotionRotateParams {
 
         this.myMaxRotationSpeed = 0;
         this.myIsSnapTurn = false;
+        this.mySnapTurnOnlyInsideSession = false;
 
         this.mySmoothSnapActive = true;
         this.mySmoothSnapSpeedDegrees = 240;
@@ -66,7 +67,7 @@ PlayerLocomotionRotate.prototype._rotateHeadHorizontally = function () {
 
         let axes = PP.myGamepads[this._myParams.myHandedness].getAxesInfo().getAxes();
 
-        if (!this._myParams.myIsSnapTurn) {
+        if (!this._myParams.myIsSnapTurn || (this._myParams.mySnapTurnOnlyInsideSession && !PP.XRUtils.isSessionActive())) {
             if (Math.abs(axes[0]) > this._myParams.myRotationMinStickIntensityThreshold) {
                 let rotationIntensity = -axes[0];
                 let speed = Math.pp_lerp(0, this._myParams.myMaxRotationSpeed, Math.abs(rotationIntensity)) * Math.pp_sign(rotationIntensity);
@@ -147,7 +148,7 @@ PlayerLocomotionRotate.prototype._rotateHeadVertically = function () {
         let axes = PP.myGamepads[this._myParams.myHandedness].getAxesInfo().getAxes();
         let angleToRotate = 0;
 
-        if (!this._myParams.myIsSnapTurn) {
+        if (!this._myParams.myIsSnapTurn || (this._myParams.mySnapTurnOnlyInsideSession && !PP.XRUtils.isSessionActive())) {
             if (Math.abs(axes[1]) > this._myParams.myRotationMinStickIntensityThreshold) {
                 let rotationIntensity = axes[1];
                 angleToRotate = Math.pp_lerp(0, this._myParams.myMaxRotationSpeed, Math.abs(rotationIntensity)) * Math.pp_sign(rotationIntensity) * dt;

@@ -2,6 +2,7 @@ WL.registerComponent('player-locomotion', {
     _myMaxSpeed: { type: WL.Type.Float, default: 2 },
     _myMaxRotationSpeed: { type: WL.Type.Float, default: 100 },
     _myIsSnapTurn: { type: WL.Type.Bool, default: true },
+    _mySnapTurnOnlyInsideSession: { type: WL.Type.Bool, default: true },
     _mySnapTurnAngle: { type: WL.Type.Float, default: 30 },
     _mySnapTurnSpeedDegrees: { type: WL.Type.Float, default: 0 },
     _myFlyEnabled: { type: WL.Type.Bool, default: false },
@@ -25,6 +26,7 @@ WL.registerComponent('player-locomotion', {
         params.myMaxRotationSpeed = this._myMaxRotationSpeed;
 
         params.myIsSnapTurn = this._myIsSnapTurn;
+        params.mySnapTurnOnlyInsideSession = this._mySnapTurnOnlyInsideSession;
         params.mySnapTurnAngle = this._mySnapTurnAngle;
         params.mySnapTurnSpeedDegrees = this._mySnapTurnSpeedDegrees;
 

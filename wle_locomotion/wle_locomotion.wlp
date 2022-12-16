@@ -13544,7 +13544,7 @@
                     "pp-virtual-gamepad": {
                         "_myShowOnDesktop": false,
                         "_myReleaseOnMouseLeave": true,
-                        "_myShowOnHeadset": false,
+                        "_myShowOnHeadset": true,
                         "_myOpacity": 0.5,
                         "_myReleaseOnPointerLeave": true
                     },
