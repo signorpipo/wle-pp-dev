@@ -1,9 +1,11 @@
 PP.VirtualGamepadVirtualThumbstick = class VirtualGamepadVirtualThumbstick {
     constructor(thumbstickElementParent, virtualGamepadParams, virtualThumbstickHandedness, gamepadThumbstickHandedness) {
         this._myThumbstickElement = null;
-        this._myThumbstickElementHoverCheck = null;
+        this._myThumbstickHoverCheckElement = null;
         this._myThumbstickIcon = null;
         this._myThumbstickContainer = null;
+
+        this._myThumbstickDetectionElement = null;
 
         this._myIsActive = true;
 
@@ -20,7 +22,7 @@ PP.VirtualGamepadVirtualThumbstick = class VirtualGamepadVirtualThumbstick {
 
         this._build(thumbstickElementParent, virtualThumbstickHandedness);
 
-        this._myThumbstickElement.addEventListener("pointerdown", this._onPointerDown.bind(this, this._myVirtualGamepadParams.myStopPropagatingPointerDownEvents));
+        this._myThumbstickDetectionElement.addEventListener("pointerdown", this._onPointerDown.bind(this, this._myVirtualGamepadParams.myStopPropagatingPointerDownEvents));
         document.body.addEventListener("pointerup", this._onPointerUp.bind(this));
         document.body.addEventListener("pointermove", this._onPointerMove.bind(this));
 
@@ -28,8 +30,8 @@ PP.VirtualGamepadVirtualThumbstick = class VirtualGamepadVirtualThumbstick {
             document.body.addEventListener("pointerleave", this._onPointerLeave.bind(this));
         }
 
-        this._myThumbstickElement.addEventListener("mouseenter", this._onThumbstickElementEnter.bind(this));
-        this._myThumbstickElement.addEventListener("mouseleave", this._onThumbstickElementLeave.bind(this));
+        this._myThumbstickDetectionElement.addEventListener("mouseenter", this._onThumbstickEnter.bind(this));
+        this._myThumbstickDetectionElement.addEventListener("mouseleave", this._onThumbstickLeave.bind(this));
     }
 
     isPressed() {
@@ -99,7 +101,7 @@ PP.VirtualGamepadVirtualThumbstick = class VirtualGamepadVirtualThumbstick {
 
         this.reset();
 
-        let hoverCheckRect = this._myThumbstickElementHoverCheck.getBoundingClientRect();
+        let hoverCheckRect = this._myThumbstickHoverCheckElement.getBoundingClientRect();
         let isInsideHoverCheckRect =
             event.clientX >= hoverCheckRect.left && event.clientX <= hoverCheckRect.right &&
             event.clientY >= hoverCheckRect.top && event.clientY <= hoverCheckRect.bottom;
@@ -115,11 +117,11 @@ PP.VirtualGamepadVirtualThumbstick = class VirtualGamepadVirtualThumbstick {
         this.reset();
     }
 
-    _onThumbstickElementEnter(event) {
+    _onThumbstickEnter(event) {
         this._myThumbstickIcon.onMouseEnter(event);
     }
 
-    _onThumbstickElementLeave(event) {
+    _onThumbstickLeave(event) {
         this._myThumbstickIcon.onMouseLeave(event);
     }
 
@@ -191,13 +193,13 @@ PP.VirtualGamepadVirtualThumbstick = class VirtualGamepadVirtualThumbstick {
         thumbstickBackground.style.fill = this._myParams.myBackgroundColor;
         thumbstickContainerSVG.appendChild(thumbstickBackground);
 
-        this._myThumbstickElementHoverCheck = document.createElement("div");
-        this._myThumbstickElementHoverCheck.style.position = "absolute";
-        this._myThumbstickElementHoverCheck.style.width = "34%";
-        this._myThumbstickElementHoverCheck.style.height = "34%";
-        this._myThumbstickElementHoverCheck.style.top = "33%";
-        this._myThumbstickElementHoverCheck.style.left = "33%";
-        this._myThumbstickContainer.appendChild(this._myThumbstickElementHoverCheck);
+        this._myThumbstickElementStill = document.createElement("div");
+        this._myThumbstickElementStill.style.position = "absolute";
+        this._myThumbstickElementStill.style.width = "34%";
+        this._myThumbstickElementStill.style.height = "34%";
+        this._myThumbstickElementStill.style.top = "33%";
+        this._myThumbstickElementStill.style.left = "33%";
+        this._myThumbstickContainer.appendChild(this._myThumbstickElementStill);
 
         this._myThumbstickElement = document.createElement("div");
         this._myThumbstickElement.style.position = "absolute";
@@ -208,6 +210,14 @@ PP.VirtualGamepadVirtualThumbstick = class VirtualGamepadVirtualThumbstick {
         this._myThumbstickContainer.appendChild(this._myThumbstickElement);
 
         this._myThumbstickIcon = new PP.VirtualGamepadIcon(this._myThumbstickElement, this._myParams.myIconParams, minSizeMultiplier, this._myVirtualGamepadParams.myScale);
+
+        if (this._myParams.myIncludeBackgroundToDetection) {
+            this._myThumbstickDetectionElement = this._myThumbstickContainer;
+            this._myThumbstickHoverCheckElement = this._myThumbstickContainer;
+        } else {
+            this._myThumbstickDetectionElement = this._myThumbstickElement;
+            this._myThumbstickHoverCheckElement = this._myThumbstickElementStill;
+        }
     }
 
     _createSizeValue(value, minSizeMultiplier) {

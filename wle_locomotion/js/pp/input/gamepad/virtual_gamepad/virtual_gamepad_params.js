@@ -14,6 +14,8 @@ PP.VirtualGamepadThumbstickParams = class VirtualGamepadThumbstickParams {
         this.myReleaseTransitionSeconds = 0.2;
         this.myMoveTransitionSeconds = 0;
 
+        this.myIncludeBackgroundToDetection = false;
+
         this.myIconParams = new PP.VirtualGamepadIconParams();
     }
 };
@@ -100,6 +102,8 @@ PP.VirtualGamepadParams = class VirtualGamepadParams {
         let buttonHoveredBrightness = 0.75;
         let thumbstickHoveredBrightness = 0.75;
 
+        let thumbstickIncludeBackgroundToDetection = true;
+
         for (let handedness in this.myButtonParams) {
             for (let gamepadButtonID in this.myButtonParams[handedness]) {
                 let buttonParams = this.myButtonParams[handedness][gamepadButtonID];
@@ -134,6 +138,8 @@ PP.VirtualGamepadParams = class VirtualGamepadParams {
             thumbstickParams.myIconParams.myIconColor = backgroundColor;
             thumbstickParams.myIconParams.myIconPressedColor = backgroundColor;
             thumbstickParams.myIconParams.myOverallHoveredBrightness = thumbstickHoveredBrightness;
+
+            thumbstickParams.myIncludeBackgroundToDetection = thumbstickIncludeBackgroundToDetection;
         }
 
         // Orders
