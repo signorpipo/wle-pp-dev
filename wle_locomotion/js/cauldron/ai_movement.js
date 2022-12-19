@@ -164,6 +164,15 @@ WL.registerComponent('ai-movement', {
         }
 
         this._myCollisionCheckParams.myDebugActive = false;
+
+        this._myCollisionCheckParams.myDebugHorizontalMovementActive = true;
+        this._myCollisionCheckParams.myDebugHorizontalPositionActive = true;
+        this._myCollisionCheckParams.myDebugVerticalMovementActive = true;
+        this._myCollisionCheckParams.myDebugVerticalPositionActive = true;
+        this._myCollisionCheckParams.myDebugSlidingActive = true;
+        this._myCollisionCheckParams.myDebugSurfaceInfoActive = true;
+        this._myCollisionCheckParams.myDebugRuntimeParamsActive = false;
+        this._myCollisionCheckParams.myDebugMovementActive = false;
     },
     pp_clone(clonedObject, deepCloneParams, extraData) {
         let clonedComponent = clonedObject.pp_addComponent(this.type, {

@@ -513,8 +513,8 @@ Array.prototype.vec2_zero = function () {
 
 // New Functions
 
-Array.prototype.vec2_isZero = function () {
-    return this.vec2_length() == 0;
+Array.prototype.vec2_isZero = function (epsilon = 0) {
+    return this.vec2_length() <= epsilon;
 };
 
 // VECTOR 3

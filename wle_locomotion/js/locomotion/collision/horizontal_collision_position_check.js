@@ -133,7 +133,7 @@ CollisionCheck.prototype._horizontalPositionCheck = function () {
                     if ((i != 0 && i != heightStepAmount) ||
                         (i == 0 && !groundCeilingCheckIsFine) ||
                         (i == 0 && collisionCheckParams.myGroundAngleToIgnore == 0) ||
-                        (i == heightStepAmount && collisionCheckParams.myCeilingAngleToIgnore == 0)) {
+                        (i != 0 && i == heightStepAmount && collisionCheckParams.myCeilingAngleToIgnore == 0)) {
                         this._horizontalPositionHorizontalCheck(feetPosition, checkPositions, currentHeightOffset, up, forward, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams);
 
                         if (collisionRuntimeParams.myIsCollidingHorizontally) {

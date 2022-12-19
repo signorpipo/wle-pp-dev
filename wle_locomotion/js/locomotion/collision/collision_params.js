@@ -48,6 +48,7 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myAdjustVerticalMovementWithSurfaceAngle = true;
         this.myCheckVerticalFixedForwardEnabled = true;
         this.myCheckVerticalFixedForward = [0, 0, 1];
+        this.myCheckVerticalBothDirection = true;
 
         this.mySnapOnGroundEnabled = true;
         this.mySnapOnGroundExtraDistance = 0.1;

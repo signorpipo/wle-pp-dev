@@ -11,7 +11,8 @@ CollisionCheck.prototype._verticalCheck = function () {
         let isMovementDownward = movementSign < 0;
         outFixedMovement = this._verticalMovementFix(verticalMovement, isMovementDownward, originalMovementSign, feetPosition, height, up, forward, collisionCheckParams, collisionRuntimeParams, outFixedMovement);
 
-        if (outFixedMovement.vec_equals(verticalMovement, 0.00001) || originalMovementSign == 0 || (movementSign != originalMovementSign)) {
+        if (collisionCheckParams.myCheckVerticalBothDirection &&
+            (outFixedMovement.vec_equals(verticalMovement, 0.00001) || originalMovementSign == 0 || (movementSign != originalMovementSign))) {
             newFeetPosition = feetPosition.vec3_add(outFixedMovement, newFeetPosition);
             let isOppositeMovementDownward = !isMovementDownward;
             additionalFixedMovement = this._verticalMovementFix(zero, isOppositeMovementDownward, originalMovementSign, newFeetPosition, height, up, forward, collisionCheckParams, collisionRuntimeParams, additionalFixedMovement);
@@ -157,10 +158,6 @@ CollisionCheck.prototype._verticalPositionCheck = function () {
     return function _verticalPositionCheck(feetPosition, checkUpward, height, up, forward, collisionCheckParams, collisionRuntimeParams) {
         this._myDebugActive = collisionCheckParams.myDebugActive && collisionCheckParams.myDebugVerticalPositionActive;
 
-        if (height < 0.00001) {
-            return true;
-        }
-
         let checkPositions = this._getVerticalCheckPositions(feetPosition, up, forward, collisionCheckParams, collisionRuntimeParams);
 
         let isVerticalPositionOk = true;
@@ -169,8 +166,8 @@ CollisionCheck.prototype._verticalPositionCheck = function () {
         let adjustmentEpsilon = 0.00001;
         smallHeightFixOffset = up.vec3_scale(adjustmentEpsilon, smallHeightFixOffset);
         heightOffset = up.vec3_scale(height - adjustmentEpsilon, heightOffset);
-        if (height - adjustmentEpsilon < adjustmentEpsilon) {
-            heightOffset = up.vec3_scale(adjustmentEpsilon * 2, heightOffset);
+        if (height - adjustmentEpsilon < adjustmentEpsilon * 10) {
+            heightOffset = up.vec3_scale(adjustmentEpsilon * 10, heightOffset);
         }
 
         let insideHitSet = false;
