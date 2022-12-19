@@ -10,7 +10,7 @@ PlayerLocomotionParams = class PlayerLocomotionParams {
         this.myMaxRotationSpeed = 0;
 
         this.myIsSnapTurn = false;
-        this.mySnapTurnOnlyInsideSession = false;
+        this.mySnapTurnOnlyInsideXRSession = false;
         this.mySnapTurnAngle = 0;
         this.mySnapTurnSpeedDegrees = 0;
 
@@ -75,7 +75,7 @@ PlayerLocomotion = class PlayerLocomotion {
 
             params.myMaxRotationSpeed = this._myParams.myMaxRotationSpeed;
             params.myIsSnapTurn = this._myParams.myIsSnapTurn;
-            params.mySnapTurnOnlyInsideSession = this._myParams.mySnapTurnOnlyInsideSession;
+            params.mySnapTurnOnlyInsideXRSession = this._myParams.mySnapTurnOnlyInsideXRSession;
             params.mySnapTurnAngle = this._myParams.mySnapTurnAngle;
 
             if (this._myParams.mySnapTurnSpeedDegrees > LocomotionUtils.EPSILON_NUMBER) {

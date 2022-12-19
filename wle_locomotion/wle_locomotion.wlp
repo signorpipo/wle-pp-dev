@@ -73,7 +73,9 @@
                         "_myTeleportPositionObject": null,
                         "_myTeleportParableStartReferenceObject": "895",
                         "_myVRDirectionReferenceType": "custom object",
-                        "_myVRDirectionReferenceObject": "895"
+                        "_myVRDirectionReferenceObject": "895",
+                        "_mySnapTurnOnlyInsideSession": false,
+                        "_mySnapTurnOnlyInsideXRSession": false
                     },
                     "active": true
                 }
@@ -3566,7 +3568,7 @@
                         "_myShortPrototype": "486",
                         "_myRoomSize": 10.0,
                         "_myRoomHeight": 5.0,
-                        "_myAmount": 50
+                        "_myAmount": 10
                     },
                     "active": true
                 }
@@ -4108,7 +4110,8 @@
                     "stick-movement": {
                         "_myFlyEnabled": true,
                         "_myScale": 0.1
-                    }
+                    },
+                    "active": true
                 }
             ],
             "translation": [
