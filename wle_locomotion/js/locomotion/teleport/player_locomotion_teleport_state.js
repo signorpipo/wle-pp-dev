@@ -120,7 +120,7 @@ PlayerLocomotionTeleportState.prototype._teleportToPosition = function () {
 
         newFeetTransformQuat.quat2_setPositionRotationQuat(teleportPosition, newFeetRotationQuat);
 
-        CollisionCheckGlobal.positionCheck(newFeetTransformQuat, this._myTeleportParams.myCollisionCheckParams, collisionRuntimeParams);
+        CollisionCheckGlobal.positionCheck(true, newFeetTransformQuat, this._myTeleportParams.myCollisionCheckParams, collisionRuntimeParams);
 
         this._myTeleportParams.myPlayerHeadManager.teleportFeetPosition(teleportPosition);
         if (rotationOnUp != 0) {

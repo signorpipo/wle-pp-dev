@@ -279,6 +279,9 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.myOriginalTeleportPosition = PP.vec3_create();
         this.myFixedTeleportPosition = PP.vec3_create();
 
+        this.myOriginalPositionCheckPosition = PP.vec3_create();
+        this.myFixedPositionCheckPosition = PP.vec3_create();
+
         this.myTeleportCanceled = false;
 
         this.myIsPositionOk = false;
@@ -286,6 +289,7 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.myIsTeleport = false; // could be a single bool but not sure if there should be an option and don't want to create an enum for now
         this.myIsMove = false;
         this.myIsPositionCheck = false;
+        this.myIsPositionCheckAllowFix = false;
     }
 
     reset() {
@@ -341,6 +345,9 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.myOriginalTeleportPosition.vec3_zero();
         this.myFixedTeleportPosition.vec3_zero();
 
+        this.myOriginalPositionCheckPosition.vec3_zero();
+        this.myFixedPositionCheckPosition.vec3_zero();
+
         this.myTeleportCanceled = false;
 
         this.myIsPositionOk = false;
@@ -348,6 +355,7 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.myIsTeleport = false;
         this.myIsMove = false;
         this.myIsPositionCheck = false;
+        this.myIsPositionCheckAllowFix = false;
     }
 
     copy(other) {
@@ -406,8 +414,12 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
 
         this.myIsPositionOk = other.myIsPositionOk;
 
+        this.myOriginalPositionCheckPosition.vec3_copy(other.myOriginalPositionCheckPosition);
+        this.myFixedPositionCheckPosition.vec3_copy(other.myFixedPositionCheckPosition);
+
         this.myIsTeleport = other.myIsTeleport;
         this.myIsMove = other.myIsMove;
         this.myIsPositionCheck = other.myIsPositionCheck;
+        this.myIsPositionCheckAllowFix = other.myIsPositionCheckAllowFix;
     }
 };
