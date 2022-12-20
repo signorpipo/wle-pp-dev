@@ -45,6 +45,8 @@ require('./pp/audio/audio_player');
 require('./pp/audio/audio_setup');
 require('./pp/audio/mute_everything');
 
+require('./pp/audio/howler/howler_audio_player');
+
 //	CAULDRON
 require('./pp/cauldron/benchmarks/max_physx');
 require('./pp/cauldron/benchmarks/max_visible_triangles');
