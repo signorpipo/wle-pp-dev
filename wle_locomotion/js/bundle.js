@@ -71,6 +71,7 @@ require('./pp/cauldron/fsm/states/timer_state');
 
 require('./pp/cauldron/utils/ca_utils');
 require('./pp/cauldron/utils/color_utils');
+require('./pp/cauldron/utils/material_utils');
 require('./pp/cauldron/utils/mesh_utils');
 require('./pp/cauldron/utils/save_utils');
 require('./pp/cauldron/utils/text_utils');
