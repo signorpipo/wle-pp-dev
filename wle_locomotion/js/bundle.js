@@ -229,9 +229,11 @@ require('./locomotion/collision/horizontal_collision_position_check');
 require('./locomotion/collision/vertical_collision_check');
 require('./locomotion/collision/collision_surface_check');
 require('./locomotion/player_head_manager');
+require('./locomotion/player_transform_manager');
 require('./locomotion/player_locomotion_rotate');
 require('./locomotion/player_locomotion_movement');
 require('./locomotion/player_locomotion_smooth');
+require('./locomotion/player_obscure_manager');
 require('./locomotion/player_locomotion');
 require('./locomotion/player_locomotion_component');
 

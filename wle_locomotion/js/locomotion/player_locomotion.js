@@ -43,6 +43,7 @@ PlayerLocomotion = class PlayerLocomotion {
 
         this._myCollisionCheckParamsSmooth = new CollisionCheckParams();
         this._myCollisionCheckParamsTeleport = new CollisionCheckParams();
+        this._myCollisionCheckParamsTransformManager = new CollisionCheckParams();
 
         this._myCollisionRuntimeParams = new CollisionRuntimeParams();
         this._myMovementRuntimeParams = new PlayerLocomotionMovementRuntimeParams();
@@ -50,6 +51,7 @@ PlayerLocomotion = class PlayerLocomotion {
 
         this._setupCollisionCheckParamsSmooth();
         this._setupCollisionCheckParamsTeleport();
+        this._myCollisionCheckParamsTransformManager.copy(this._myCollisionCheckParamsTeleport);
 
         {
             let params = new PlayerHeadManagerParams();
@@ -66,6 +68,40 @@ PlayerLocomotion = class PlayerLocomotion {
             params.myExitSessionMaxVerticalAngle = 90;
 
             this._myPlayerHeadManager = new PlayerHeadManager(params);
+        }
+
+        {
+            let params = new PlayerTransformManagerParams();
+
+            params.myPlayerHeadManager = this._myPlayerHeadManager;
+
+            params.myCollisionCheckParams = this._myCollisionCheckParamsTransformManager;
+            params.myCollisionRuntimeParams = this._myCollisionRuntimeParams;
+
+            params.myHeadRadius = 0;
+            params.myHeadCollisionCheckComplexityLevel = 0;
+
+            this._myPlayerTransformManager = new PlayerTransformManager(params);
+        }
+
+        {
+            let params = new PlayerObscureManagerParams();
+
+            params.myPlayerTransformManager = this._myPlayerTransformManager;
+
+            params.myObscureObject = null;
+            params.myObscureMaterial = null;
+            params.myObscureRadius = 0.1;
+
+            params.myObscureFadeOutSeconds = 0.25;
+            params.myObscureFadeInSeconds = 0.25;
+
+            params.myObscureFadeEasingFunction = PP.EasingFunction.linear;
+
+            params.myDistanceToObscureWhenBodyColliding = 1;
+            params.myDistanceToObscureWhenLeaning = 1;
+
+            this._myPlayerObscureManager = new PlayerObscureManager(params);
         }
 
         {
@@ -175,6 +211,10 @@ PlayerLocomotion = class PlayerLocomotion {
         this._fixAlmostUp();
 
         this._myPlayerHeadManager.start();
+        this._myPlayerTransformManager.start();
+
+        this._myPlayerObscureManager.start();
+
         this._myPlayerLocomotionRotate.start();
 
         this._myLocomotionMovementFSM.perform("start");
@@ -182,6 +222,9 @@ PlayerLocomotion = class PlayerLocomotion {
 
     update(dt) {
         this._myPlayerHeadManager.update(dt);
+        this._myPlayerTransformManager.update(dt);
+
+        this._myPlayerObscureManager.update(dt);
 
         if (PP.myLeftGamepad.getButtonInfo(PP.GamepadButtonID.THUMBSTICK).isPressEnd(2)) {
             if (this._myLocomotionMovementFSM.isInState("smooth") && this._myPlayerLocomotionSmooth.canStop()) {
@@ -199,6 +242,10 @@ PlayerLocomotion = class PlayerLocomotion {
                 this._myPlayerLocomotionRotate.update(dt);
                 this._myLocomotionMovementFSM.update(dt);
             }
+        }
+
+        if (PP.myLeftGamepad.getButtonInfo(PP.GamepadButtonID.SELECT).isPressEnd(2)) {
+            this._myPlayerObscureManager.obscureOverride(!this._myPlayerObscureManager.isObscured());
         }
     }
 
