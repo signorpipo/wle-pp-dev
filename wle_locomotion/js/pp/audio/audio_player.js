@@ -36,7 +36,7 @@ PP.AudioPlayer = class AudioPlayer {
                 pool: this._myAudioSetup.myPool,
                 pos: (this._myAudioSetup.mySpatial) ? this._myAudioSetup.myPosition : null,
                 refDistance: this._myAudioSetup.myReferenceDistance,
-                preload: true
+                preload: this._myAudioSetup.myPreload
             });
 
             this._myAudio._pannerAttr.refDistance = this._myAudioSetup.myReferenceDistance;

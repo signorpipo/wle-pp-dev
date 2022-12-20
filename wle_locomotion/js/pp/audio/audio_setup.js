@@ -9,6 +9,7 @@ PP.AudioSetup = class AudioSetup {
         this._myRate = 1.0; //From 0.5 to 4.0
 
         this.myPool = 5;
+        this.myPreload = true;
 
         //Spatial
         this.myPosition = null;
@@ -29,9 +30,15 @@ PP.AudioSetup = class AudioSetup {
         audioSetup.myRate = this.myRate;
 
         audioSetup.myPool = this.myPool;
+        audioSetup.myPreload = this.myPreload;
 
         //Spatial
-        audioSetup.myPosition = this.myPosition;
+        if (this.myPosition != null) {
+            audioSetup.myPosition = this.myPosition.vec3_clone();
+        } else {
+            audioSetup.myPosition = null;
+        }
+
         audioSetup.mySpatial = this.mySpatial;
         audioSetup.myReferenceDistance = this.myReferenceDistance;
 
