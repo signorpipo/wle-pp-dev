@@ -1,5 +1,3 @@
-//stop obscure, insta obscure insta clear manual
-
 PlayerObscureManagerParams = class PlayerObscureManagerParams {
     constructor() {
         this.myPlayerTransformManager = null;
@@ -13,10 +11,15 @@ PlayerObscureManagerParams = class PlayerObscureManagerParams {
 
         this.myObscureFadeEasingFunction = PP.EasingFunction.linear;
 
-        // obscure based on distance ? 
+        this.myDistanceToStartObscureWhenHeadColliding = 0;
+        this.myDistanceToStartObscureWhenBodyColliding = 0;
+        this.myDistanceToStartObscureWhenLeaning = 0;
 
-        this.myDistanceToObscureWhenBodyColliding = 0;
-        this.myDistanceToObscureWhenLeaning = 0;
+        this.myRelativeDistanceToMaxObscureWhenHeadColliding = 0; // relative to the start distance, 1 means that in 1 meters after it started it will be completely obscured
+        this.myRelativeDistanceToMaxObscureWhenBodyColliding = 0;
+        this.myRelativeDistanceToMaxObscureWhenLeaning = 0;
+
+        this.myObscureLevelRelativeDistanceEasingFunction = PP.EasingFunction.linear;
     }
 };
 
@@ -27,9 +30,11 @@ PlayerObscureManager = class PlayerObscureManager {
         this._myObscureMaterial = null;
         this._myObscureParentObject = null;
 
-        this._myIsObscured = false;
+        this._myCurrentObscureLevel = 0;
+        this._myTargetObscureLevel = 0;
+        this._myLastTargetObscureLevel = null;
+        this._myLastIsFadingIn = null;
 
-        this._myCurrentAlpha = 0;
         this._myFadeTimer = new PP.Timer(0, false);
 
         this._myFSM = new PP.FSM();
@@ -37,44 +42,26 @@ PlayerObscureManager = class PlayerObscureManager {
 
         this._myFSM.addState("init");
 
-        this._myFSM.addState("idle");
+        this._myFSM.addState("inactive");
+        this._myFSM.addState("idle", this._idleUpdate.bind(this));
+        this._myFSM.addState("fading", this._fadingUpdate.bind(this));
 
-        this._myFSM.addState("clear", this._clearUpdate.bind(this));
-        this._myFSM.addState("fade_out", this._fadeOutUpdate.bind(this));
-        this._myFSM.addState("obscured", this._obscureUpdate.bind(this));
-        this._myFSM.addState("fade_in", this._fadeInUpdate.bind(this));
+        this._myFSM.addTransition("init", "inactive", "end", this._setObscureLevel.bind(this, 0));
 
-        this._myFSM.addTransition("init", "idle", "start");
-        this._myFSM.addTransition("idle", "clear", "start", this._instaClear.bind(this));
+        this._myFSM.addTransition("inactive", "idle", "start");
 
-        this._myFSM.addTransition("clear", "fade_out", "obscure", this._startObscuring.bind(this));
-        this._myFSM.addTransition("fade_out", "obscured", "done", this._fadeOutDone.bind(this));
-        this._myFSM.addTransition("fade_out", "fade_in", "clear", this._startClearing.bind(this));
+        this._myFSM.addTransition("idle", "fading", "fade", this._startFading.bind(this));
+        this._myFSM.addTransition("fading", "idle", "done", this._fadingDone.bind(this));
 
-        this._myFSM.addTransition("obscured", "fade_in", "clear", this._startClearing.bind(this));
-        this._myFSM.addTransition("fade_in", "clear", "done", this._fadeInDone.bind(this));
-        this._myFSM.addTransition("fade_in", "fade_out", "obscure", this._startObscuring.bind(this));
-
-        this._myFSM.addTransition("clear", "clear", "insta_clear", this._instaClear.bind(this));
-        this._myFSM.addTransition("obscured", "clear", "insta_clear", this._instaClear.bind(this));
-        this._myFSM.addTransition("fade_in", "clear", "insta_clear", this._instaClear.bind(this));
-        this._myFSM.addTransition("fade_out", "clear", "insta_clear", this._instaClear.bind(this));
-
-        this._myFSM.addTransition("clear", "obscured", "insta_obscure", this._instaObscure.bind(this));
-        this._myFSM.addTransition("obscured", "obscured", "insta_obscure", this._instaObscure.bind(this));
-        this._myFSM.addTransition("fade_in", "obscured", "insta_obscure", this._instaObscure.bind(this));
-        this._myFSM.addTransition("fade_out", "obscured", "insta_obscure", this._instaObscure.bind(this));
-
-        this._myFSM.addTransition("idle", "idle", "stop", this._instaClear.bind(this));
-        this._myFSM.addTransition("clear", "idle", "stop", this._instaClear.bind(this));
-        this._myFSM.addTransition("obscured", "idle", "stop", this._instaClear.bind(this));
-        this._myFSM.addTransition("fade_in", "idle", "stop", this._instaClear.bind(this));
-        this._myFSM.addTransition("fade_out", "idle", "stop", this._instaClear.bind(this));
+        this._myFSM.addTransition("inactive", "inactive", "stop", this._setObscureLevel.bind(this, 0));
+        this._myFSM.addTransition("idle", "inactive", "stop", this._setObscureLevel.bind(this, 0));
+        this._myFSM.addTransition("fading", "inactive", "stop", this._setObscureLevel.bind(this, 0));
 
         this._myFSM.init("init");
-        this._myFSM.perform("start");
 
         this._setupVisuals();
+
+        this._myFSM.perform("end");
     }
 
     start() {
@@ -89,129 +76,187 @@ PlayerObscureManager = class PlayerObscureManager {
         this._updateObscured();
 
         this._myFSM.update(dt);
+
+        this._setObscureVisible(this.isObscured());
     }
 
-    obscureOverride(isObscured, instant = false) {
-        this._myObscureOverride = isObscured;
-
-        if (instant) {
-            if (this._myObscureOverride) {
-                this._myFSM.perform("insta_obscure");
-            } else {
-                this._myFSM.perform("insta_clear");
-            }
-        }
-    }
-
-    resetObscureOverride() {
-        this._myObscureOverride = null;
+    isStarted() {
+        return !this._myFSM.isInState("inactive");
     }
 
     isObscured() {
-        return (this._myObscureOverride == null && this._myIsObscured) || (this._myObscureOverride != null && this._myObscureOverride);
+        return this._myCurrentObscureLevel > 0;
     }
 
-    _clearUpdate(dt) {
-        if (this.isObscured()) {
-            this._myFSM.perform("obscure");
+    isFading() {
+        return this._myFSM.isInState("fading");
+    }
+
+    isFadingIn() {
+        return this.isFading() && this._myCurrentObscureLevel > this._myTargetObscureLevel;
+    }
+
+    isFadingOut() {
+        return this.isFading() && this._myCurrentObscureLevel <= this._myTargetObscureLevel;
+    }
+
+    getObscureLevel() {
+        return this._myCurrentObscureLevel;
+    }
+
+    getTargetObscureLevel() {
+        return this._myTargetObscureLevel;
+    }
+
+    getCurrentObscureLevel() {
+        this._myCurrentObscureLevel;
+    }
+
+    obscureLevelOverride(obscureLevel, instantFade = false) {
+        this._myObscurelevelOverride = obscureLevel;
+
+        if (instantFade && this.isStarted()) {
+            this._setObscureLevel(obscureLevel);
         }
     }
 
-    _obscureUpdate(dt) {
-        if (!this.isObscured()) {
-            this._myFSM.perform("clear");
+    resetObscureLevelOverride() {
+        this._myObscurelevelOverride = null;
+    }
+
+    _idleUpdate(dt) {
+        if (Math.abs(this._myTargetObscureLevel - this._myCurrentObscureLevel) > Math.PP_EPSILON_NUMBER) {
+            this._myFSM.perform("fade");
         }
     }
 
-    _fadeInUpdate(dt) {
-        if (this.isObscured()) {
-            this._myFSM.perform("obscure");
+    _fadingUpdate(dt) {
+        if (Math.abs(this._myTargetObscureLevel - this._myCurrentObscureLevel) <= Math.PP_EPSILON_NUMBER) {
+            this._myFSM.perform("done");
             return;
         }
 
-        this._myFadeTimer.update(dt);
-        if (this._myFadeTimer.isDone()) {
-            this._myFSM.perform("done");
-        } else {
-            this._setObscureAlpha(1 - this._myParams.myObscureFadeEasingFunction(this._myFadeTimer.getPercentage()));
-        }
-    }
-
-    _fadeOutUpdate(dt) {
-        if (!this.isObscured()) {
-            this._myFSM.perform("clear");
-            return;
+        if (this._myLastTargetObscureLevel != this._myTargetObscureLevel) {
+            this._refreshFadeTimer();
+            this._myLastTargetObscureLevel = this._myTargetObscureLevel;
         }
 
         this._myFadeTimer.update(dt);
-        if (this._myFadeTimer.isDone()) {
-            this._myFSM.perform("done");
+
+        let newObscureLevel = this._myParams.myObscureFadeEasingFunction(this._myFadeTimer.getPercentage());
+
+        let isFadingIn = this._myCurrentObscureLevel > this._myTargetObscureLevel;
+        if (!isFadingIn) {
+            newObscureLevel = Math.min(newObscureLevel, this._myTargetObscureLevel);
         } else {
-            this._setObscureAlpha(this._myParams.myObscureFadeEasingFunction(this._myFadeTimer.getPercentage()));
+            newObscureLevel = Math.pp_clamp(1 - newObscureLevel, 0, 1);
+            newObscureLevel = Math.max(newObscureLevel, this._myTargetObscureLevel);
+        }
+
+        this._setObscureAlpha(newObscureLevel);
+        this._myCurrentObscureLevel = newObscureLevel;
+
+        if (Math.abs(this._myTargetObscureLevel - this._myCurrentObscureLevel) <= Math.PP_EPSILON_NUMBER || this._myFadeTimer.isDone()) {
+            this._myFSM.perform("done");
         }
     }
 
-    _startClearing() {
-        let percentage = this._myFadeTimer.isRunning() ? this._myFadeTimer.getPercentage() : 1;
-        this._myFadeTimer.start(this._myParams.myObscureFadeInSeconds);
-        this._myFadeTimer.setPercentage(1 - percentage);
-
-        this._setObscureVisible(true);
+    _startFading() {
+        this._myLastTargetObscureLevel = null;
+        this._myLastIsFadingIn = null;
     }
 
-    _startObscuring() {
-        let percentage = this._myFadeTimer.isRunning() ? this._myFadeTimer.getPercentage() : 1;
-        this._myFadeTimer.start(this._myParams.myObscureFadeOutSeconds);
-        this._myFadeTimer.setPercentage(1 - percentage);
-
-        this._setObscureVisible(true);
+    _fadingDone() {
+        this._setObscureLevel(this._myTargetObscureLevel);
     }
 
-    _fadeOutDone() {
-        this._instaObscure();
+    _refreshFadeTimer() {
+        let isFadingIn = this._myCurrentObscureLevel > this._myTargetObscureLevel;
+
+        if (this._myLastIsFadingIn != isFadingIn) {
+            this._setFadeTimerToObscureLevel(isFadingIn);
+        }
+
+        this._myLastIsFadingIn = isFadingIn;
     }
 
-    _fadeInDone() {
-        this._instaClear();
+    _setFadeTimerToObscureLevel(isFadingIn) {
+        let percentage = 0;
+        let closestPercentage = 0;
+        let steps = 1000;
+        let increment = 1 / steps;
+
+        while (percentage < 1) {
+            if (Math.abs(this._myParams.myObscureFadeEasingFunction(percentage) - this._myCurrentObscureLevel) <
+                Math.abs(this._myParams.myObscureFadeEasingFunction(closestPercentage) - this._myCurrentObscureLevel)) {
+                closestPercentage = percentage;
+            }
+
+            percentage += increment;
+        }
+
+        if (Math.abs(this._myParams.myObscureFadeEasingFunction(1) - this._myCurrentObscureLevel) <
+            Math.abs(this._myParams.myObscureFadeEasingFunction(closestPercentage) - this._myCurrentObscureLevel)) {
+            closestPercentage = 1;
+        }
+
+        if (isFadingIn) {
+            this._myFadeTimer.start(this._myParams.myObscureFadeInSeconds);
+            this._myFadeTimer.setPercentage(Math.pp_clamp(1 - closestPercentage, 0, 1));
+        } else {
+            this._myFadeTimer.start(this._myParams.myObscureFadeOutSeconds);
+            this._myFadeTimer.setPercentage(Math.pp_clamp(closestPercentage, 0, 1));
+        }
     }
 
-    _instaClear() {
-        this._myFadeTimer.reset();
-        this._setObscureAlpha(0);
-        this._setObscureVisible(false);
-    }
-
-    _instaObscure() {
-        this._myFadeTimer.reset();
-        this._setObscureVisible(true);
-        this._setObscureAlpha(1);
+    _setObscureLevel(obscureLevel) {
+        this._myTargetObscureLevel = obscureLevel;
+        this._myCurrentObscureLevel = obscureLevel;
+        this._setObscureAlpha(obscureLevel);
+        this._setObscureVisible(this.isObscured());
     }
 
     _setObscureAlpha(alpha) {
-        this._myCurrentAlpha = alpha;
-
         if (this._myParams.myObscureObject == null) {
-            PP.MaterialUtils.setAlpha(this._myObscureMaterial, this._myCurrentAlpha);
+            PP.MaterialUtils.setAlpha(this._myObscureMaterial, alpha);
         } else {
-            PP.MaterialUtils.setObjectAlpha(this._myParams.myObscureObject, this._myCurrentAlpha);
+            PP.MaterialUtils.setObjectAlpha(this._myParams.myObscureObject, alpha);
         }
     }
 
     _updateObscured() {
-        this._myIsObscured = false;
+        this._myTargetObscureLevel = 0;
 
-        if (this._myObscureOverride != null) {
-            this._myIsObscured = this._myObscureOverride;
+        if (this._myObscurelevelOverride != null) {
+            this._myTargetObscureLevel = this._myObscurelevelOverride;
         } else {
             if (this._myParams.myPlayerTransformManager.isHeadColliding()) {
-                this._myIsObscured = true;
-            } else if (this._myParams.myPlayerTransformManager.isBodyColliding()) {
-                if (this._myParams.myPlayerTransformManager.getDistanceToRealFeet() > this._myParams.myDistanceToObscureWhenBodyColliding) {
-                    this._myIsObscured = true;
+                let distance = this._myParams.myPlayerTransformManager.getDistanceToRealHead();
+                let relativeDistance = distance - this._myParams.myDistanceToStartObscureWhenHeadColliding;
+                if (relativeDistance >= 0) {
+                    let relativeDistancePercentage = Math.pp_clamp(relativeDistance / this._myParams.myRelativeDistanceToMaxObscureWhenHeadColliding, 0, 1);
+                    let targetObscureLevel = this._myParams.myObscureLevelRelativeDistanceEasingFunction(relativeDistancePercentage);
+                    this._myTargetObscureLevel = Math.max(this._myTargetObscureLevel, targetObscureLevel);
                 }
-            } else if (this._myParams.myPlayerTransformManager.isLeaning()) {
-                if (this._myParams.myPlayerTransformManager.getDistanceToRealFeet() > this._myParams.myDistanceToObscureWhenLeaning) {
-                    this._myIsObscured = true;
+            }
+
+            if (this._myParams.myPlayerTransformManager.isBodyColliding()) {
+                let distance = this._myParams.myPlayerTransformManager.getDistanceToRealFeet();
+                let relativeDistance = distance - this._myParams.myDistanceToStartObscureWhenBodyColliding;
+                if (relativeDistance >= 0) {
+                    let relativeDistancePercentage = Math.pp_clamp(relativeDistance / this._myParams.myRelativeDistanceToMaxObscureWhenBodyColliding, 0, 1);
+                    let targetObscureLevel = this._myParams.myObscureLevelRelativeDistanceEasingFunction(relativeDistancePercentage);
+                    this._myTargetObscureLevel = Math.max(this._myTargetObscureLevel, targetObscureLevel);
+                }
+            }
+
+            if (this._myParams.myPlayerTransformManager.isLeaning()) {
+                let distance = this._myParams.myPlayerTransformManager.getDistanceToRealFeet();
+                let relativeDistance = distance - this._myParams.myDistanceToStartObscureWhenLeaning;
+                if (relativeDistance >= 0) {
+                    let relativeDistancePercentage = Math.pp_clamp(relativeDistance / this._myParams.myRelativeDistanceToMaxObscureWhenLeaning, 0, 1);
+                    let targetObscureLevel = this._myParams.myObscureLevelRelativeDistanceEasingFunction(relativeDistancePercentage);
+                    this._myTargetObscureLevel = Math.max(this._myTargetObscureLevel, targetObscureLevel);
                 }
             }
         }
@@ -257,5 +302,4 @@ PlayerObscureManager = class PlayerObscureManager {
             this._myObscureParentObject.pp_setParent(null, false);
         }
     }
-
 };

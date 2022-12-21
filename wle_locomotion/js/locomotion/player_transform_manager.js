@@ -93,6 +93,10 @@ PlayerTransformManager = class PlayerTransformManager {
 
     }
 
+    getDistanceToRealHead() { // should be like get distance to last valid head position
+
+    }
+
     getPlayerHeadManager() {
         this._myParams.myPlayerHeadManager;
     }

@@ -97,6 +97,7 @@ PlayerLocomotion = class PlayerLocomotion {
             params.myObscureFadeInSeconds = 0.25;
 
             params.myObscureFadeEasingFunction = PP.EasingFunction.linear;
+            params.myObscureLevelRelativeDistanceEasingFunction = PP.EasingFunction.linear;
 
             params.myDistanceToObscureWhenBodyColliding = 1;
             params.myDistanceToObscureWhenLeaning = 1;
@@ -245,7 +246,11 @@ PlayerLocomotion = class PlayerLocomotion {
         }
 
         if (PP.myLeftGamepad.getButtonInfo(PP.GamepadButtonID.SELECT).isPressEnd(2)) {
-            this._myPlayerObscureManager.obscureOverride(!this._myPlayerObscureManager.isObscured());
+            if (this._myPlayerObscureManager.isFading()) {
+                this._myPlayerObscureManager.obscureLevelOverride(this._myPlayerObscureManager.isFadingOut() ? Math.pp_random(0, 0) : Math.pp_random(1, 1));
+            } else {
+                this._myPlayerObscureManager.obscureLevelOverride(this._myPlayerObscureManager.isObscured() ? Math.pp_random(0, 0) : Math.pp_random(1, 1));
+            }
         }
     }
 
