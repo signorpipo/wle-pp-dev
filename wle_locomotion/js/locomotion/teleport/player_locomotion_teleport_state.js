@@ -125,7 +125,7 @@ PlayerLocomotionTeleportState.prototype._teleportToPosition = function () {
         this._myTeleportParams.myPlayerHeadManager.teleportFeetPosition(teleportPosition);
         if (rotationOnUp != 0) {
             teleportRotation.quat_fromAxis(rotationOnUp, playerUp);
-            this._myTeleportParams.myPlayerHeadManager.rotateHeadHorizontallyQuat(teleportRotation);
+            this._myTeleportParams.myPlayerHeadManager.rotateFeetQuat(teleportRotation);
         }
     };
 }();

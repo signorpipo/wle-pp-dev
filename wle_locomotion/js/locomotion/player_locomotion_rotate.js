@@ -51,7 +51,7 @@ PlayerLocomotionRotate = class PlayerLocomotionRotate {
 
         this._rotateHeadHorizontally(dt);
 
-        if (this._myParams.myPlayerHeadManager.canRotateVertically()) {
+        if (this._myParams.myPlayerHeadManager.canRotateHead()) {
             this._rotateHeadVertically(dt);
         }
     }
@@ -111,7 +111,7 @@ PlayerLocomotionRotate.prototype._rotateHeadHorizontally = function () {
         }
 
         if (headRotation.quat_getAngle() > LocomotionUtils.EPSILON_DEGREES) {
-            this._myParams.myPlayerHeadManager.rotateHeadHorizontallyQuat(headRotation);
+            this._myParams.myPlayerHeadManager.rotateFeetQuat(headRotation);
         }
     };
 }();
@@ -206,7 +206,7 @@ PlayerLocomotionRotate.prototype._rotateHeadVertically = function () {
 
         if (angleToRotate != 0) {
             headRotation.quat_fromAxis(angleToRotate, referenceRight);
-            this._myParams.myPlayerHeadManager.rotateHeadVerticallyQuat(headRotation);
+            this._myParams.myPlayerHeadManager.rotateHeadQuat(headRotation);
 
             if (this._myParams.myClampVerticalAngle) {
                 let maxVerticalAngle = this._myParams.myMaxVerticalAngle - 0.0001;
@@ -215,7 +215,7 @@ PlayerLocomotionRotate.prototype._rotateHeadVertically = function () {
                 if (Math.abs(angleWithUp) > maxVerticalAngle) {
                     let fixAngle = (Math.abs(angleWithUp) - maxVerticalAngle) * Math.pp_sign(angleWithUp);
                     headRotation.quat_fromAxis(fixAngle, referenceRight);
-                    this._myParams.myPlayerHeadManager.rotateHeadVerticallyQuat(headRotation);
+                    this._myParams.myPlayerHeadManager.rotateHeadQuat(headRotation);
                 }
             }
         }

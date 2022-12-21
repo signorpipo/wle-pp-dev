@@ -69,7 +69,11 @@ PlayerHeadManager = class PlayerHeadManager {
         return this._myDelaySessionChangeResyncCounter == 0 && this._myDelayBlurEndResyncCounter == 0 && !this._myDelayBlurEndResyncTimer.isRunning() && !this._mySessionBlurred;
     }
 
-    canRotateVertically() {
+    canRotateFeet() {
+        return true;
+    }
+
+    canRotateHead() {
         return !this._mySessionActive;
     }
 
@@ -77,11 +81,11 @@ PlayerHeadManager = class PlayerHeadManager {
         // implemented outside class definition
     }
 
-    rotateHeadHorizontallyQuat(rotationQuat) {
+    rotateFeetQuat(rotationQuat) {
         // implemented outside class definition 
     }
 
-    rotateHeadVerticallyQuat(rotationQuat) {
+    rotateHeadQuat(rotationQuat) {
         // implemented outside class definition 
     }
 
@@ -188,11 +192,11 @@ PlayerHeadManager.prototype.moveHead = function (movement) {
     PP.myPlayerObjects.myPlayer.pp_translate(movement);
 };
 
-PlayerHeadManager.prototype.rotateHeadHorizontallyQuat = function () {
+PlayerHeadManager.prototype.rotateFeetQuat = function () {
     let currentHeadPosition = PP.vec3_create();
     let newHeadPosition = PP.vec3_create();
     let adjustmentMovement = PP.vec3_create();
-    return function rotateHeadHorizontallyQuat(rotationQuat) {
+    return function rotateFeetQuat(rotationQuat) {
         currentHeadPosition = this._myCurrentHead.pp_getPosition(currentHeadPosition);
 
         PP.myPlayerObjects.myPlayer.pp_rotateAroundQuat(rotationQuat, currentHeadPosition);
@@ -204,11 +208,11 @@ PlayerHeadManager.prototype.rotateHeadHorizontallyQuat = function () {
     };
 }();
 
-PlayerHeadManager.prototype.rotateHeadVerticallyQuat = function () {
+PlayerHeadManager.prototype.rotateHeadQuat = function () {
     let newHeadRotation = PP.quat_create();
     let newHeadUp = PP.vec3_create();
-    return function rotateHeadVerticallyQuat(rotationQuat) {
-        if (this.canRotateVertically()) {
+    return function rotateHeadQuat(rotationQuat) {
+        if (this.canRotateHead()) {
             this._myCurrentHead.pp_rotateQuat(rotationQuat);
             newHeadRotation = this._myCurrentHead.pp_getRotationQuat(newHeadRotation);
 
@@ -444,7 +448,7 @@ PlayerHeadManager.prototype._blurEndResync = function () {
             this.teleportHeadPosition(newHeadPosition);
 
             if (this._myParams.myBlurEndResyncRotation) {
-                this.rotateHeadHorizontallyQuat(rotationToPerform);
+                this.rotateFeetQuat(rotationToPerform);
             }
         }
 
@@ -518,7 +522,7 @@ PlayerHeadManager.prototype._sessionChangeResync = function () {
                     rotationToPerform = currentHeadForward.vec3_rotationToPivotedQuat(fixedResyncForward, playerUp, rotationToPerform);
                 }
 
-                this.rotateHeadHorizontallyQuat(rotationToPerform);
+                this.rotateFeetQuat(rotationToPerform);
             } else {
                 playerUp = PP.myPlayerObjects.myPlayer.pp_getUp(playerUp);
 
@@ -602,8 +606,8 @@ Object.defineProperty(PlayerHeadManager.prototype, "getHeadHeight", { enumerable
 Object.defineProperty(PlayerHeadManager.prototype, "getFeetTransformQuat", { enumerable: false });
 Object.defineProperty(PlayerHeadManager.prototype, "getFeetPosition", { enumerable: false });
 Object.defineProperty(PlayerHeadManager.prototype, "moveHead", { enumerable: false });
-Object.defineProperty(PlayerHeadManager.prototype, "rotateHeadHorizontallyQuat", { enumerable: false });
-Object.defineProperty(PlayerHeadManager.prototype, "rotateHeadVerticallyQuat", { enumerable: false });
+Object.defineProperty(PlayerHeadManager.prototype, "rotateFeetQuat", { enumerable: false });
+Object.defineProperty(PlayerHeadManager.prototype, "rotateHeadQuat", { enumerable: false });
 Object.defineProperty(PlayerHeadManager.prototype, "teleportHeadPosition", { enumerable: false });
 Object.defineProperty(PlayerHeadManager.prototype, "teleportFeetPosition", { enumerable: false });
 Object.defineProperty(PlayerHeadManager.prototype, "teleportPlayerToHeadTransformQuat", { enumerable: false });
