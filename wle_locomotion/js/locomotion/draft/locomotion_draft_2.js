@@ -104,7 +104,7 @@ WL.registerComponent('locomotion-draft-2', {
 
         let skipLocomotion = this._myDelaySessionChangeResyncCounter > 0 || this._myDelayBlurEndResyncCounter > 0 || this._myDelayBlurEndResyncTimer.isRunning();
         if (!skipLocomotion) {
-            this._myCollisionCheckParams.myHeight = this._getHeadHeight(this._myCurrentHeadObject.pp_getPosition());
+            this._myCollisionCheckParams.myHeight = this._getHeight(this._myCurrentHeadObject.pp_getPosition());
             if (this._myCollisionCheckParams.myHeight < 0) {
                 this._myCollisionCheckParams.myHeight = 0;
             } else {
@@ -196,7 +196,7 @@ WL.registerComponent('locomotion-draft-2', {
                 }
 
                 if (movementToApply.vec3_length() > 0.00001) {
-                    this._moveHead(movementToApply);
+                    this._moveFeet(movementToApply);
                 }
 
                 let headRotation = PP.quat_create();
@@ -314,7 +314,7 @@ WL.registerComponent('locomotion-draft-2', {
             }
         }
     },
-    _moveHead(movement) {
+    _moveFeet(movement) {
         PP.myPlayerObjects.myPlayer.pp_translate(movement);
     },
     _rotateHead(rotation) {
@@ -325,19 +325,19 @@ WL.registerComponent('locomotion-draft-2', {
         let newHeadPosition = this._myCurrentHeadObject.pp_getPosition();
         let adjustmentMovement = currentHeadPosition.vec3_sub(newHeadPosition);
 
-        this._moveHead(adjustmentMovement);
+        this._moveFeet(adjustmentMovement);
     },
     _teleportHead(teleportPosition, teleportRotation) {
-        this._teleportHeadPosition(teleportPosition);
+        this._teleportPositionHead(teleportPosition);
 
         let currentHeadRotation = this._myCurrentHeadObject.pp_getRotationQuat();
         let teleportRotationToPerform = currentHeadRotation.quat_rotationToQuat(teleportRotation);
         this._rotateHead(teleportRotationToPerform);
     },
-    _teleportHeadPosition(teleportPosition) {
+    _teleportPositionHead(teleportPosition) {
         let currentHeadPosition = this._myCurrentHeadObject.pp_getPosition();
         let teleportMovementToPerform = teleportPosition.vec3_sub(currentHeadPosition);
-        this._moveHead(teleportMovementToPerform);
+        this._moveFeet(teleportMovementToPerform);
     },
     _onXRSessionStart(session) {
         this._myBlurRecoverHeadTransform = null;
@@ -468,8 +468,8 @@ WL.registerComponent('locomotion-draft-2', {
         if (this._myBlurRecoverHeadTransform != null) {
             let playerUp = PP.myPlayerObjects.myPlayer.pp_getUp();
             if (playerUp.vec3_angle(this._myBlurRecoverPlayerUp) == 0) {
-                let headHeight = this._getHeadHeight(this._myCurrentHeadObject.pp_getPosition());
-                let recoverHeadHeight = this._getHeadHeight(this._myBlurRecoverHeadTransform.quat2_getPosition());
+                let headHeight = this._getHeight(this._myCurrentHeadObject.pp_getPosition());
+                let recoverHeadHeight = this._getHeight(this._myBlurRecoverHeadTransform.quat2_getPosition());
 
                 let recoverHeadPosition = this._myBlurRecoverHeadTransform.quat2_getPosition();
                 let newHeadPosition = recoverHeadPosition.vec3_add(playerUp.vec3_scale(headHeight - recoverHeadHeight));
@@ -478,7 +478,7 @@ WL.registerComponent('locomotion-draft-2', {
                 let currentHeadForward = this._myCurrentHeadObject.pp_getForward();
                 let rotationToPerform = currentHeadForward.vec3_rotationToPivotedQuat(recoverHeadForward, playerUp);
 
-                this._teleportHeadPosition(newHeadPosition);
+                this._teleportPositionHead(newHeadPosition);
                 this._rotateHead(rotationToPerform);
 
                 //console.error("blur end resync");
@@ -502,7 +502,7 @@ WL.registerComponent('locomotion-draft-2', {
                 let flatResyncHeadPosition = resyncHeadPosition.vec3_removeComponentAlongAxis(playerUp);
 
                 let resyncMovement = flatResyncHeadPosition.vec3_sub(flatCurrentHeadPosition);
-                this._moveHead(resyncMovement);
+                this._moveFeet(resyncMovement);
 
                 let currentHeadForward = this._myCurrentHeadObject.pp_getForward();
                 let resyncHeadForward = resyncHeadRotation.quat_getForward();
@@ -545,7 +545,7 @@ WL.registerComponent('locomotion-draft-2', {
                 PP.myPlayerObjects.myPlayer.pp_setPosition(newPlayerPosition);
                 PP.myPlayerObjects.myNonVRCamera.pp_resetPositionLocal();
 
-                let resyncHeadHeight = this._getHeadHeight(resyncHeadPosition);
+                let resyncHeadHeight = this._getHeight(resyncHeadPosition);
                 PP.myPlayerObjects.myNonVRCamera.pp_setPosition(playerUp.vec3_scale(resyncHeadHeight).vec3_add(newPlayerPosition));
 
                 let resyncHeadRotation = this._mySessionChangeResyncHeadTransform.quat2_getRotationQuat();
@@ -601,7 +601,7 @@ WL.registerComponent('locomotion-draft-2', {
             }
         }
     },
-    _getHeadHeight(headPosition) {
+    _getHeight(headPosition) {
         let playerPosition = PP.myPlayerObjects.myPlayer.pp_getPosition();
         let playerUp = PP.myPlayerObjects.myPlayer.pp_getUp();
 
@@ -615,7 +615,7 @@ WL.registerComponent('locomotion-draft-2', {
     },
     _teleportPlayerTransform(headTransform) {
         let headPosition = headTransform.quat2_getPosition();
-        let headHeight = this._getHeadHeight(headPosition);
+        let headHeight = this._getHeight(headPosition);
 
         let playerUp = PP.myPlayerObjects.myPlayer.pp_getUp();
         let newPlayerPosition = headPosition.vec3_sub(playerUp.vec3_scale(headHeight));
@@ -632,7 +632,7 @@ WL.registerComponent('locomotion-draft-2', {
     },
     _getFeetTransform() {
         let headPosition = this._myCurrentHeadObject.pp_getPosition();
-        let headHeight = this._getHeadHeight(headPosition);
+        let headHeight = this._getHeight(headPosition);
 
         let playerUp = PP.myPlayerObjects.myPlayer.pp_getUp();
         let feetPosition = headPosition.vec3_sub(playerUp.vec3_scale(headHeight));

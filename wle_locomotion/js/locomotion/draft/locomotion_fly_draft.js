@@ -137,7 +137,7 @@ WL.registerComponent('locomotion-fly-draft', {
             }
 
             if (positionChanged) {
-                this._moveHead(headMovement);
+                this._moveFeet(headMovement);
             }
 
             let headRotation = PP.quat_create();
@@ -195,7 +195,7 @@ WL.registerComponent('locomotion-fly-draft', {
 
         }
     },
-    _moveHead(movement) {
+    _moveFeet(movement) {
         this._myPlayerObject.pp_translate(movement);
     },
     _rotateHead(rotation) {
@@ -206,19 +206,19 @@ WL.registerComponent('locomotion-fly-draft', {
         let newHeadPosition = this._myCurrentHeadObject.pp_getPosition();
         let adjustmentMovement = currentHeadPosition.vec3_sub(newHeadPosition);
 
-        this._moveHead(adjustmentMovement);
+        this._moveFeet(adjustmentMovement);
     },
     _teleportHead(teleportPosition, teleportRotation) {
-        this._teleportHeadPosition(teleportPosition);
+        this._teleportPositionHead(teleportPosition);
 
         let currentHeadRotation = this._myCurrentHeadObject.pp_getRotationQuat();
         let teleportRotationToPerform = currentHeadRotation.quat_rotationToQuat(teleportRotation);
         this._rotateHead(teleportRotationToPerform);
     },
-    _teleportHeadPosition(teleportPosition) {
+    _teleportPositionHead(teleportPosition) {
         let currentHeadPosition = this._myCurrentHeadObject.pp_getPosition();
         let teleportMovementToPerform = teleportPosition.vec3_sub(currentHeadPosition);
-        this._moveHead(teleportMovementToPerform);
+        this._moveFeet(teleportMovementToPerform);
     },
     _convertStickToWorldDirection(stickAxes, conversionObject, removeUp) {
         let playerUp = this._myPlayerObject.pp_getUp();
@@ -590,7 +590,7 @@ WL.registerComponent('locomotion-fly-draft', {
             this._teleportPlayerTransform(this._myCurrentHeadObject.pp_getTransformQuat());
         }
     },
-    _getHeadHeight(headPosition) {
+    _getHeight(headPosition) {
         let playerPosition = this._myPlayerObject.pp_getPosition();
         let playerUp = this._myPlayerObject.pp_getUp();
 
@@ -601,7 +601,7 @@ WL.registerComponent('locomotion-fly-draft', {
     },
     _teleportPlayerTransform(headTransform) {
         let headPosition = headTransform.quat2_getPosition();
-        let headHeight = this._getHeadHeight(headPosition);
+        let headHeight = this._getHeight(headPosition);
 
         let playerUp = this._myPlayerObject.pp_getUp();
         let newPlayerPosition = headPosition.vec3_sub(playerUp.vec3_scale(headHeight));
@@ -618,13 +618,13 @@ WL.registerComponent('locomotion-fly-draft', {
     },
     _headToPlayer() {
         let headPosition = this._myCurrentHeadObject.pp_getPosition();
-        let headHeight = this._getHeadHeight(headPosition);
+        let headHeight = this._getHeight(headPosition);
 
         let playerPosition = this._myPlayerObject.pp_getPosition();
         let playerUp = this._myPlayerObject.pp_getUp();
         let headToPlayerPosition = playerPosition.vec3_add(playerUp.vec3_scale(headHeight));
 
-        this._teleportHeadPosition(headToPlayerPosition);
+        this._teleportPositionHead(headToPlayerPosition);
 
         let playerForward = this._myPlayerObject.pp_getForward();
         let headForward = this._myCurrentHeadObject.pp_getForward();
@@ -637,8 +637,8 @@ WL.registerComponent('locomotion-fly-draft', {
         if (this._myBlurRecoverHeadTransform != null) {
             let playerUp = this._myPlayerObject.pp_getUp();
             if (playerUp.vec3_angle(this._myBlurRecoverPlayerUp) == 0) {
-                let headHeight = this._getHeadHeight(this._myCurrentHeadObject.pp_getPosition());
-                let recoverHeadHeight = this._getHeadHeight(this._myBlurRecoverHeadTransform.quat2_getPosition());
+                let headHeight = this._getHeight(this._myCurrentHeadObject.pp_getPosition());
+                let recoverHeadHeight = this._getHeight(this._myBlurRecoverHeadTransform.quat2_getPosition());
 
                 let recoverHeadPosition = this._myBlurRecoverHeadTransform.quat2_getPosition();
                 let newHeadPosition = recoverHeadPosition.vec3_add(playerUp.vec3_scale(headHeight - recoverHeadHeight));
@@ -647,7 +647,7 @@ WL.registerComponent('locomotion-fly-draft', {
                 let currentHeadForward = this._myCurrentHeadObject.pp_getForward();
                 let rotationToPerform = currentHeadForward.vec3_rotationToPivotedQuat(recoverHeadForward, playerUp);
 
-                this._teleportHeadPosition(newHeadPosition);
+                this._teleportPositionHead(newHeadPosition);
                 this._rotateHead(rotationToPerform);
 
                 //console.error("blur end resync");
@@ -671,7 +671,7 @@ WL.registerComponent('locomotion-fly-draft', {
                 let flatResyncHeadPosition = resyncHeadPosition.vec3_removeComponentAlongAxis(playerUp);
 
                 let resyncMovement = flatResyncHeadPosition.vec3_sub(flatCurrentHeadPosition);
-                this._moveHead(resyncMovement);
+                this._moveFeet(resyncMovement);
 
                 let currentHeadForward = this._myCurrentHeadObject.pp_getForward();
                 let resyncHeadForward = resyncHeadRotation.quat_getForward();
@@ -714,7 +714,7 @@ WL.registerComponent('locomotion-fly-draft', {
                 this._myPlayerObject.pp_setPosition(newPlayerPosition);
                 this._myCurrentNonVRCameraObject.pp_resetPositionLocal();
 
-                let resyncHeadHeight = this._getHeadHeight(resyncHeadPosition);
+                let resyncHeadHeight = this._getHeight(resyncHeadPosition);
                 this._myCurrentNonVRCameraObject.pp_setPosition(playerUp.vec3_scale(resyncHeadHeight).vec3_add(newPlayerPosition));
 
                 let resyncHeadRotation = this._mySessionChangeResyncHeadTransform.quat2_getRotationQuat();
@@ -776,7 +776,7 @@ WL.registerComponent('locomotion-fly-draft', {
     },
     _getHeadOnPlayerTransform() {
         let headPosition = this._myCurrentHeadObject.pp_getPosition();
-        let headHeight = this._getHeadHeight(headPosition);
+        let headHeight = this._getHeight(headPosition);
 
         let playerPosition = this._myPlayerObject.pp_getPosition();
         let playerUp = this._myPlayerObject.pp_getUp();

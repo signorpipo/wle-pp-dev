@@ -592,7 +592,7 @@ PlayerLocomotionTeleportDetectionState.prototype._isTeleportPositionValid = func
         if (positionVisible) {
             playerUp = this._myTeleportParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
 
-            feetTransformQuat = this._myTeleportParams.myPlayerHeadManager.getFeetTransformQuat(feetTransformQuat);
+            feetTransformQuat = this._myTeleportParams.myPlayerHeadManager.getTransformFeetQuat(feetTransformQuat);
             feetPosition = feetTransformQuat.quat2_getPosition(feetPosition);
             if (rotationOnUp != 0) {
                 feetRotationQuat = feetTransformQuat.quat2_getRotationQuat(feetRotationQuat);

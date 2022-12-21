@@ -10,6 +10,10 @@ PlayerHeadManagerParams = class PlayerHeadManagerParams {
         this.myExitSessionRemoveRightTilt = true; // for now right tilt is removed even if this setting is false, if the vertical angle has to be adjusted
         this.myExitSessionAdjustMaxVerticalAngle = true;
         this.myExitSessionMaxVerticalAngle = 90;
+
+        this.myHeadHeightOffset = 0;
+        // can be used to always add a bit of height, for example to compensate the fact 
+        // that the default height is actually the eye height and you may want to also add a forehead offset
     }
 };
 
@@ -49,35 +53,59 @@ PlayerHeadManager = class PlayerHeadManager {
         return PP.myPlayerObjects.myPlayer;
     }
 
-    getCurrentHead() {
+    getHead() {
         return this._myCurrentHead;
     }
 
-    getHeadHeight() {
+    getHeight() {
         // implemented outside class definition
     }
 
-    getFeetTransformQuat(outFeetTransformQuat = PP.quat2_create()) {
+    getTransformFeetQuat(outTransformFeetQuat = PP.quat2_create()) {
         // implemented outside class definition
     }
 
-    getFeetPosition(outFeetPosition = PP.vec3_create()) {
+    getTransformHeadQuat(outTransformFeetQuat = PP.quat2_create()) {
+        return this.getHead().pp_getTransformQuat(outTransformFeetQuat);
+    }
+
+    getPositionFeet(outPositionFeet = PP.vec3_create()) {
         // implemented outside class definition
+    }
+
+    getPositionHead(outPositionHead = PP.vec3_create()) {
+        return this._myCurrentHead.pp_getPosition(outPositionHead);
+    }
+
+    getRotationFeetQuat(outRotationFeetQuat = PP.quat_create()) {
+        // implemented outside class definition
+    }
+
+    getRotationHeadQuat(outRotationHeadQuat = PP.quat_create()) {
+        return this.getHead().pp_getRotationQuat(outRotationHeadQuat);
     }
 
     isSynced() {
         return this._myDelaySessionChangeResyncCounter == 0 && this._myDelayBlurEndResyncCounter == 0 && !this._myDelayBlurEndResyncTimer.isRunning() && !this._mySessionBlurred;
     }
 
-    canRotateFeet() {
-        return true;
-    }
-
-    canRotateHead() {
-        return !this._mySessionActive;
+    moveFeet(movement) {
+        // implemented outside class definition
     }
 
     moveHead(movement) {
+        this.moveFeet(movement);
+    }
+
+    teleportPositionHead(teleportPosition) {
+        // implemented outside class definition
+    }
+
+    teleportPositionFeet(teleportPosition) {
+        // implemented outside class definition
+    }
+
+    teleportPlayerToHeadTransformQuat(headTransformQuat) {
         // implemented outside class definition
     }
 
@@ -89,16 +117,28 @@ PlayerHeadManager = class PlayerHeadManager {
         // implemented outside class definition 
     }
 
-    teleportHeadPosition(teleportPosition) {
-        // implemented outside class definition
+    canRotateFeet() {
+        return true;
     }
 
-    teleportFeetPosition(teleportPosition) {
-        // implemented outside class definition
+    canRotateHead() {
+        return !this._mySessionActive;
     }
 
-    teleportPlayerToHeadTransformQuat(headTransformQuat) {
-        // implemented outside class definition
+    setRotationFeetQuat() {
+        // implemented outside class definition 
+    }
+
+    setRotationHeadQuat() {
+        // implemented outside class definition 
+    }
+
+    lookToFeet() {
+        //#TODO to implement
+    }
+
+    lookToHead() {
+        //#TODO to implement
     }
 
     update(dt) {
@@ -130,9 +170,9 @@ PlayerHeadManager = class PlayerHeadManager {
     }
 };
 
-PlayerHeadManager.prototype.getHeadHeight = function () {
+PlayerHeadManager.prototype.getHeight = function () {
     let headPosition = PP.vec3_create();
-    return function getHeadHeight() {
+    return function getHeight() {
         headPosition = this._myCurrentHead.pp_getPosition(headPosition);
         let headHeight = this._getPositionHeight(headPosition);
 
@@ -140,19 +180,20 @@ PlayerHeadManager.prototype.getHeadHeight = function () {
     };
 }();
 
-PlayerHeadManager.prototype.getFeetTransformQuat = function () {
-    let headPosition = PP.vec3_create();
-    let playerUp = PP.vec3_create();
+PlayerHeadManager.prototype.getTransformFeetQuat = function () {
     let feetPosition = PP.vec3_create();
     let feetRotationQuat = PP.quat_create();
+    return function getTransformFeetQuat(outTransformFeetQuat = PP.quat2_create()) {
+        outTransformFeetQuat.quat2_setPositionRotationQuat(this.getPositionFeet(feetPosition), this.getRotationFeetQuat(feetRotationQuat));
+        return outTransformFeetQuat;
+    };
+}();
+
+PlayerHeadManager.prototype.getRotationFeetQuat = function () {
+    let playerUp = PP.vec3_create();
     let headForward = PP.vec3_create();
-    return function getFeetTransformQuat(outFeetTransformQuat = PP.quat2_create()) {
-        headPosition = this._myCurrentHead.pp_getPosition(headPosition);
-        let headHeight = this._getPositionHeight(headPosition);
-
+    return function getRotationFeetQuat(outRotationFeetQuat = PP.quat_create()) {
         playerUp = PP.myPlayerObjects.myPlayer.pp_getUp(playerUp);
-        feetPosition = headPosition.vec3_sub(playerUp.vec3_scale(headHeight, feetPosition), feetPosition);
-
         headForward = this._myCurrentHead.pp_getForward(headForward);
 
         // feet are considered to always be flat on the player up
@@ -167,28 +208,26 @@ PlayerHeadManager.prototype.getFeetTransformQuat = function () {
         headForward = headForward.vec3_removeComponentAlongAxis(playerUp, headForward);
         headForward.vec3_normalize(headForward);
 
-        feetRotationQuat.quat_setUp(playerUp, headForward);
-
-        outFeetTransformQuat.quat2_setPositionRotationQuat(feetPosition, feetRotationQuat);
-        return outFeetTransformQuat;
+        outRotationFeetQuat.quat_setUp(playerUp, headForward);
+        return outRotationFeetQuat;
     };
 }();
 
-PlayerHeadManager.prototype.getFeetPosition = function () {
+PlayerHeadManager.prototype.getPositionFeet = function () {
     let headPosition = PP.vec3_create();
     let playerUp = PP.vec3_create();
-    return function getFeetPosition(outFeetPosition = PP.vec3_create()) {
+    return function getPositionFeet(outPositionFeet = PP.vec3_create()) {
         headPosition = this._myCurrentHead.pp_getPosition(headPosition);
         let headHeight = this._getPositionHeight(headPosition);
 
         playerUp = PP.myPlayerObjects.myPlayer.pp_getUp(playerUp);
-        outFeetPosition = headPosition.vec3_sub(playerUp.vec3_scale(headHeight, outFeetPosition), outFeetPosition);
+        outPositionFeet = headPosition.vec3_sub(playerUp.vec3_scale(headHeight, outPositionFeet), outPositionFeet);
 
-        return outFeetPosition;
+        return outPositionFeet;
     };
 }();
 
-PlayerHeadManager.prototype.moveHead = function (movement) {
+PlayerHeadManager.prototype.moveFeet = function (movement) {
     PP.myPlayerObjects.myPlayer.pp_translate(movement);
 };
 
@@ -204,7 +243,7 @@ PlayerHeadManager.prototype.rotateFeetQuat = function () {
         newHeadPosition = this._myCurrentHead.pp_getPosition(newHeadPosition);
         adjustmentMovement = currentHeadPosition.vec3_sub(newHeadPosition, adjustmentMovement);
 
-        this.moveHead(adjustmentMovement);
+        this.moveFeet(adjustmentMovement);
     };
 }();
 
@@ -222,23 +261,43 @@ PlayerHeadManager.prototype.rotateHeadQuat = function () {
     };
 }();
 
-PlayerHeadManager.prototype.teleportHeadPosition = function () {
-    let currentHeadPosition = PP.vec3_create();
-    let teleportMovementToPerform = PP.vec3_create();
-    return function teleportHeadPosition(teleportPosition) {
-        currentHeadPosition = this._myCurrentHead.pp_getPosition(currentHeadPosition);
-        teleportMovementToPerform = teleportPosition.vec3_sub(currentHeadPosition, teleportMovementToPerform);
-        this.moveHead(teleportMovementToPerform);
+PlayerHeadManager.prototype.setRotationFeetQuat = function () {
+    let currentRotationQuat = PP.quat_create();
+    let rotationQuatToRotate = PP.quat_create();
+    return function setRotationFeetQuat(rotationQuat) {
+        currentRotationQuat = this.getRotationFeetQuat(currentRotationQuat);
+        rotationQuatToRotate = currentRotationQuat.quat_rotationToQuat(rotationQuat, rotationQuatToRotate);
+        this.rotateFeetQuat(rotationQuatToRotate);
     };
 }();
 
-PlayerHeadManager.prototype.teleportFeetPosition = function () {
+PlayerHeadManager.prototype.setRotationHeadQuat = function () {
+    let currentRotationQuat = PP.quat_create();
+    let rotationQuatToRotate = PP.quat_create();
+    return function setRotationHeadQuat(rotationQuat) {
+        currentRotationQuat = this.getRotationHeadQuat(currentRotationQuat);
+        rotationQuatToRotate = currentRotationQuat.quat_rotationToQuat(rotationQuat, rotationQuatToRotate);
+        this.rotateHeadQuat(rotationQuatToRotate);
+    };
+}();
+
+PlayerHeadManager.prototype.teleportPositionHead = function () {
+    let currentHeadPosition = PP.vec3_create();
+    let teleportMovementToPerform = PP.vec3_create();
+    return function teleportPositionHead(teleportPosition) {
+        currentHeadPosition = this._myCurrentHead.pp_getPosition(currentHeadPosition);
+        teleportMovementToPerform = teleportPosition.vec3_sub(currentHeadPosition, teleportMovementToPerform);
+        this.moveFeet(teleportMovementToPerform);
+    };
+}();
+
+PlayerHeadManager.prototype.teleportPositionFeet = function () {
     let currentFeetPosition = PP.vec3_create();
     let teleportMovementToPerform = PP.vec3_create();
-    return function teleportFeetPosition(teleportPosition) {
-        currentFeetPosition = this.getFeetPosition(currentFeetPosition);
+    return function teleportPositionFeet(teleportPosition) {
+        currentFeetPosition = this.getPositionFeet(currentFeetPosition);
         teleportMovementToPerform = teleportPosition.vec3_sub(currentFeetPosition, teleportMovementToPerform);
-        this.moveHead(teleportMovementToPerform);
+        this.moveFeet(teleportMovementToPerform);
     };
 }();
 
@@ -283,7 +342,7 @@ PlayerHeadManager.prototype._getPositionHeight = function () {
             height = -height;
         }
 
-        return height;
+        return height + this._myParams.myHeadHeightOffset;
     };
 }();
 
@@ -445,7 +504,7 @@ PlayerHeadManager.prototype._blurEndResync = function () {
             currentHeadForward = this._myCurrentHead.pp_getForward(currentHeadForward);
             rotationToPerform = currentHeadForward.vec3_rotationToPivotedQuat(recoverHeadForward, playerUp, rotationToPerform);
 
-            this.teleportHeadPosition(newHeadPosition);
+            this.teleportPositionHead(newHeadPosition);
 
             if (this._myParams.myBlurEndResyncRotation) {
                 this.rotateFeetQuat(rotationToPerform);
@@ -493,7 +552,7 @@ PlayerHeadManager.prototype._sessionChangeResync = function () {
                 flatResyncHeadPosition = resyncHeadPosition.vec3_removeComponentAlongAxis(playerUp, flatResyncHeadPosition);
 
                 resyncMovement = flatResyncHeadPosition.vec3_sub(flatCurrentHeadPosition, resyncMovement);
-                this.moveHead(resyncMovement);
+                this.moveFeet(resyncMovement);
 
                 currentHeadForward = this._myCurrentHead.pp_getForward(currentHeadForward);
                 resyncHeadForward = resyncHeadRotation.quat_getForward(resyncHeadForward);
@@ -602,14 +661,14 @@ PlayerHeadManager.prototype._sessionChangeResync = function () {
 
 
 
-Object.defineProperty(PlayerHeadManager.prototype, "getHeadHeight", { enumerable: false });
-Object.defineProperty(PlayerHeadManager.prototype, "getFeetTransformQuat", { enumerable: false });
-Object.defineProperty(PlayerHeadManager.prototype, "getFeetPosition", { enumerable: false });
-Object.defineProperty(PlayerHeadManager.prototype, "moveHead", { enumerable: false });
+Object.defineProperty(PlayerHeadManager.prototype, "getHeight", { enumerable: false });
+Object.defineProperty(PlayerHeadManager.prototype, "getTransformFeetQuat", { enumerable: false });
+Object.defineProperty(PlayerHeadManager.prototype, "getPositionFeet", { enumerable: false });
+Object.defineProperty(PlayerHeadManager.prototype, "moveFeet", { enumerable: false });
 Object.defineProperty(PlayerHeadManager.prototype, "rotateFeetQuat", { enumerable: false });
 Object.defineProperty(PlayerHeadManager.prototype, "rotateHeadQuat", { enumerable: false });
-Object.defineProperty(PlayerHeadManager.prototype, "teleportHeadPosition", { enumerable: false });
-Object.defineProperty(PlayerHeadManager.prototype, "teleportFeetPosition", { enumerable: false });
+Object.defineProperty(PlayerHeadManager.prototype, "teleportPositionHead", { enumerable: false });
+Object.defineProperty(PlayerHeadManager.prototype, "teleportPositionFeet", { enumerable: false });
 Object.defineProperty(PlayerHeadManager.prototype, "teleportPlayerToHeadTransformQuat", { enumerable: false });
 Object.defineProperty(PlayerHeadManager.prototype, "_getPositionHeight", { enumerable: false });
 Object.defineProperty(PlayerHeadManager.prototype, "_onXRSessionStart", { enumerable: false });

@@ -112,7 +112,7 @@ PlayerLocomotionTeleportState.prototype._teleportToPosition = function () {
 
         playerUp = this._myTeleportParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
 
-        feetTransformQuat = this._myTeleportParams.myPlayerHeadManager.getFeetTransformQuat(feetTransformQuat);
+        feetTransformQuat = this._myTeleportParams.myPlayerHeadManager.getTransformFeetQuat(feetTransformQuat);
         newFeetRotationQuat = feetTransformQuat.quat2_getRotationQuat(newFeetRotationQuat);
         if (rotationOnUp != 0) {
             newFeetRotationQuat = newFeetRotationQuat.quat_rotateAxis(rotationOnUp, playerUp, newFeetRotationQuat);
@@ -122,7 +122,7 @@ PlayerLocomotionTeleportState.prototype._teleportToPosition = function () {
 
         CollisionCheckGlobal.positionCheck(true, newFeetTransformQuat, this._myTeleportParams.myCollisionCheckParams, collisionRuntimeParams);
 
-        this._myTeleportParams.myPlayerHeadManager.teleportFeetPosition(teleportPosition);
+        this._myTeleportParams.myPlayerHeadManager.teleportPositionFeet(teleportPosition);
         if (rotationOnUp != 0) {
             teleportRotation.quat_fromAxis(rotationOnUp, playerUp);
             this._myTeleportParams.myPlayerHeadManager.rotateFeetQuat(teleportRotation);

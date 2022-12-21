@@ -142,7 +142,7 @@ PlayerLocomotionSmooth.prototype.update = function () {
                 headMovement = headMovement.vec3_add(verticalMovement, headMovement);
             }
 
-            feetTransformQuat = this._myParams.myPlayerHeadManager.getFeetTransformQuat(feetTransformQuat);
+            feetTransformQuat = this._myParams.myPlayerHeadManager.getTransformFeetQuat(feetTransformQuat);
 
             CollisionCheckGlobal.move(headMovement, feetTransformQuat, this._myParams.myCollisionCheckParams, this._myLocomotionRuntimeParams.myCollisionRuntimeParams);
             headMovement.vec3_copy(this._myLocomotionRuntimeParams.myCollisionRuntimeParams.myFixedMovement);
@@ -153,7 +153,7 @@ PlayerLocomotionSmooth.prototype.update = function () {
         }
 
         if (!headMovement.vec3_isZero(0.000001)) {
-            this._myParams.myPlayerHeadManager.moveHead(headMovement);
+            this._myParams.myPlayerHeadManager.moveFeet(headMovement);
         }
 
         if (this._myLocomotionRuntimeParams.myCollisionRuntimeParams.myIsOnGround) {

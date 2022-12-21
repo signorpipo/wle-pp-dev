@@ -16,7 +16,7 @@ PlayerLocomotionTeleportDetectionState.prototype._isTeleportPositionVisible = fu
 
             if (this._myTeleportParams.myDetectionParams.myTeleportHeadOrFeetPositionMustBeVisible ||
                 this._myTeleportParams.myDetectionParams.myTeleportHeadPositionMustBeVisible) {
-                let headheight = this._myTeleportParams.myPlayerHeadManager.getHeadHeight();
+                let headheight = this._myTeleportParams.myPlayerHeadManager.getHeight();
                 headTeleportPosition = teleportPosition.vec3_add(playerUp.vec3_scale(headheight, headTeleportPosition), headTeleportPosition);
                 isHeadVisible = this._isPositionVisible(headTeleportPosition);
             } else {
@@ -61,7 +61,7 @@ PlayerLocomotionTeleportDetectionState.prototype._isPositionVisible = function (
 
         playerUp = this._myTeleportParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
 
-        let currentHead = this._myTeleportParams.myPlayerHeadManager.getCurrentHead();
+        let currentHead = this._myTeleportParams.myPlayerHeadManager.getHead();
         headPosition = currentHead.pp_getPosition(headPosition);
         direction = position.vec3_sub(headPosition, direction).vec3_normalize(direction);
 

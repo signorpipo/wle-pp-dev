@@ -145,10 +145,10 @@ PlayerLocomotionTeleport.prototype._applyGravity = function () {
             gravityMovement.vec3_zero();
         }
 
-        feetTransformQuat = this._myTeleportParams.myPlayerHeadManager.getFeetTransformQuat(feetTransformQuat);
+        feetTransformQuat = this._myTeleportParams.myPlayerHeadManager.getTransformFeetQuat(feetTransformQuat);
         CollisionCheckGlobal.move(gravityMovement, feetTransformQuat, this._myTeleportParams.myCollisionCheckParams, this._myLocomotionRuntimeParams.myCollisionRuntimeParams);
         if (!this._myLocomotionRuntimeParams.myCollisionRuntimeParams.myVerticalMovementCanceled) {
-            this._myTeleportParams.myPlayerHeadManager.teleportFeetPosition(this._myLocomotionRuntimeParams.myCollisionRuntimeParams.myNewPosition);
+            this._myTeleportParams.myPlayerHeadManager.teleportPositionFeet(this._myLocomotionRuntimeParams.myCollisionRuntimeParams.myNewPosition);
         }
 
         if (this._myGravitySpeed > 0 && this._myLocomotionRuntimeParams.myCollisionRuntimeParams.myIsOnCeiling ||

@@ -331,7 +331,7 @@ PlayerLocomotionTeleportDetectionVisualizer.prototype._showTeleportParablePositi
 
     return function _showTeleportParablePosition(dt) {
         playerUp = this._myTeleportParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
-        feetTransformQuat = this._myTeleportParams.myPlayerHeadManager.getFeetTransformQuat(feetTransformQuat);
+        feetTransformQuat = this._myTeleportParams.myPlayerHeadManager.getTransformFeetQuat(feetTransformQuat);
         feetRotationQuat = feetTransformQuat.quat2_getRotationQuat(feetRotationQuat);
         feetRotationQuat = feetRotationQuat.quat_rotateAxis(this._myTeleportRuntimeParams.myTeleportRotationOnUp, playerUp, feetRotationQuat);
         visualForward = feetRotationQuat.quat_getForward(visualForward);

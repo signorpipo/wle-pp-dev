@@ -31,6 +31,7 @@ CollisionCheck = class CollisionCheck {
         this._move(movement, transformQuat, collisionCheckParams, collisionRuntimeParams);
     }
 
+    // instead of position old transform / new transform
     teleport(position, transformQuat, collisionCheckParams, collisionRuntimeParams) {
         this._teleport(position, transformQuat, collisionCheckParams, collisionRuntimeParams);
     }

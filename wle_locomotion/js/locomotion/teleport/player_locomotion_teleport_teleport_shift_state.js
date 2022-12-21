@@ -54,7 +54,7 @@ PlayerLocomotionTeleportTeleportShiftState = class PlayerLocomotionTeleportTelep
 
     _startShifting() {
         this._myLocomotionRuntimeParams.myIsTeleporting = true;
-        this._myFeetStartPosition = this._myTeleportParams.myPlayerHeadManager.getFeetPosition(this._myFeetStartPosition);
+        this._myFeetStartPosition = this._myTeleportParams.myPlayerHeadManager.getPositionFeet(this._myFeetStartPosition);
 
         this._myShiftMovementTimer.start(this._myTeleportParams.myTeleportParams.myShiftMovementSeconds);
 

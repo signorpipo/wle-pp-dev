@@ -125,7 +125,7 @@ PlayerLocomotionRotate.prototype._rotateHeadVertically = function () {
     let newUp = PP.vec3_create();
     let headRotation = PP.quat_create();
     return function _rotateHeadVertically(dt) {
-        let head = this._myParams.myPlayerHeadManager.getCurrentHead();
+        let head = this._myParams.myPlayerHeadManager.getHead();
 
         headForward = head.pp_getForward(headForward);
         headUp = head.pp_getUp(headUp);

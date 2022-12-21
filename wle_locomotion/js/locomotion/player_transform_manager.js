@@ -2,11 +2,16 @@ PlayerTransformManagerParams = class PlayerTransformManagerParams {
     constructor() {
         this.myPlayerHeadManager = null;
 
-        this.myCollisionCheckParams = null;
+        this.myMovementCollisionCheckParams = null;
+        this.myTeleportCollisionCheckParams = null;
+
         this.myCollisionRuntimeParams = null;
 
         this.myHeadRadius = 0;
         this.myHeadCollisionCheckComplexityLevel = 0; // 1,2,3
+
+        this.myRotateOnlyIfValid = false;
+        this.myResetRealResetRotationIfUpChanged = true;
 
         // this.myDistanceToStartApplyGravityWhenLeaning = 0; // this should be moved outisde, that is, if it is leaning stop gravity
     }
@@ -19,8 +24,11 @@ PlayerTransformManager = class PlayerTransformManager {
         this._myParams = params;
         this._myHeadCollisionCheckParams = new CollisionCheckParams();
 
-        this._myFeetTransformMatrix = PP.mat4_create();
-        this._myFeetTransformQuat = PP.quat2_create();
+        this._myValidPositionHead = PP.vec3_create();
+
+        this._myValidPosition = PP.vec3_create();
+        this._myValidRotationQuat = new PP.quat_create();
+        this._myValidHeight = 0;
 
         this._myIsBodyColliding = false;
         this._myIsHeadColliding = false;
@@ -35,46 +43,109 @@ PlayerTransformManager = class PlayerTransformManager {
         // check if new head is ok and update the data
     }
 
-    getResults() {
-        return this._myResults;
+    move(movement, forceMove = false) {
+        // collision check and move
     }
 
-    resetRealFeetToValid() {
-
+    teleportPosition(position, forceTeleport = false) {
+        // collision check and teleport, if force teleport teleport in any case
+        // use current valid rotation
     }
 
-    resetValidFeetToReal() {
-
+    teleportTransformQuat(transformQuat, forceTeleport = false) {
+        // collision check and teleport, if force teleport teleport in any case
     }
 
-    move(movement) {
-
+    teleportToReal(forceTeleport = false) {
+        // implemented outside class definition
     }
 
-    teleport(position) {
+    rotateQuat(rotationQuat, forceRotate = false) {
+        if (this.canRotate() || forceRotate) {
+            this.myPlayerHeadManager.rotateFeetQuat(rotationQuat);
+        }
+    }
 
+    rotateHeadQuat(rotationQuat, forceRotate = false) {
+        if (this.canRotateHead() || forceRotate) {
+            this.myPlayerHeadManager.rotateHeadQuat(rotationQuat);
+        }
+    }
+
+    setRotationQuat(rotationQuat, forceSet = false) {
+        if (this.canRotate() || forceSet) {
+            this.myPlayerHeadManager.setRotationFeetQuat(rotationQuat);
+        }
+    }
+
+    setHeadRotationQuat(rotationQuat, forceSet = false) {
+        if (this.canRotateHead() || forceSet) {
+            this.myPlayerHeadManager.setRotationHeadQuat(rotationQuat);
+        }
+    }
+
+    canRotate() {
+        return !this._myParams.myRotateOnlyIfValid || this.isRealValid();
+    }
+
+    canRotateHead() {
+        return this.canRotate() && this.canrothis._myParams.myPlayerHeadManager.canRotateHead();
     }
 
     getPlayer() {
         return this._myParams.myPlayerHeadManager.getPlayer();
     }
 
-    getCurrentHead() {
-        return this._myParams.myPlayerHeadManager.getCurrentHead();
+    getHead() {
+        return this._myParams.myPlayerHeadManager.getHead();
     }
 
-    getHeadHeight() {
-        return this._myParams.myPlayerHeadManager.getHeadHeight();
+    getTransformQuat(outTransformQuat = PP.quat2_create()) {
+        return outTransformQuat.quat2_setPositionRotationQuat(this.getPosition(), this.getRotationQuat());
     }
 
-    canRotateVertically() {
-        return this._myParams.myPlayerHeadManager.canRotateVertically();
+    getPosition() {
+        return this._myValidPosition;
     }
 
-    getFeetTransformQuat(outFeetTransformQuat = PP.quat2_create()) {
+    getPositionHead() {
+        return this._myValidPositionHead;
     }
 
-    getFeetPosition(outFeetPosition = PP.vec3_create()) {
+    getRotationQuat() {
+        return this._myValidRotationQuat;
+    }
+
+    getHeight() {
+        return this._myValidHeight;
+    }
+
+    getTransformRealQuat(outTransformQuat = PP.quat2_create()) {
+        return this.getPlayerHeadManager().getTransformFeetQuat(outTransformQuat);
+    }
+
+    getPositionReal(outPosition = PP.vec3_create()) {
+        return this.getPlayerHeadManager().getPositionFeet(outPosition);
+    }
+
+    getPositionHeadReal() {
+        return this.getPlayerHeadManager().getPositionHead(outPosition);
+    }
+
+    getRotationQuatReal() {
+        return this.getPlayerHeadManager().getRotationFeetQuat(outPosition);
+    }
+
+    getHeightReal() {
+        return this._myParams.myPlayerHeadManager.getHeight();
+    }
+
+    isRealValid() {
+        return !this.isBodyColliding() && !this.isHeadColliding() && !this.isLeaning();
+    }
+
+    resetReal(resetRotation = false) {
+        // implemented outside class definition
     }
 
     isBodyColliding() {
@@ -89,15 +160,55 @@ PlayerTransformManager = class PlayerTransformManager {
         return this._myIsLeaning;
     }
 
-    getDistanceToRealFeet() {
-
+    getDistanceToReal() {
+        // implemented outside class definition
     }
 
-    getDistanceToRealHead() { // should be like get distance to last valid head position
-
+    getDistanceToRealHead() {
+        // implemented outside class definition
     }
 
     getPlayerHeadManager() {
         this._myParams.myPlayerHeadManager;
     }
 };
+
+PlayerTransformManager.prototype.getDistanceToReal = function () {
+    let realPosition = PP.vec3_create();
+    return function getDistanceToReal() {
+        realPosition = this.getPositionReal(realPosition);
+        return realPosition.vec3_distance(this.getPosition());
+    };
+}();
+
+PlayerTransformManager.prototype.getDistanceToRealHead = function () {
+    let realPosition = PP.vec3_create();
+    return function getDistanceToRealHead() {
+        realPosition = this.getPositionHeadReal(realPosition);
+        return realPosition.vec3_distance(this.getPositionHead());
+    };
+}();
+
+PlayerTransformManager.prototype.resetReal = function () {
+    let realUp = PP.vec3_create();
+    let validUp = PP.vec3_create();
+    return function resetReal(resetRotation = false) {
+        let playerHeadManager = this.getPlayerHeadManager();
+
+        playerHeadManager.teleportPositionFeet(this.getPosition());
+
+        realUp = this.getRotationFeetQuat().quat_getUp(realUp);
+        validUp = this.getRotationQuat().quat_getUp(validUp);
+
+        if (resetRotation || (realUp.vec3_angle(validUp) > Math.PP_EPSILON_DEGREES && this._myParams.myResetRealResetRotationIfUpChanged)) {
+            playerHeadManager.setRotationFeetQuat(this.getRotationQuat());
+        }
+    };
+}();
+
+PlayerTransformManager.prototype.teleportToReal = function () {
+    let transformQuat = PP.quat2_create();
+    return function teleportToReal(forceTeleport = false) {
+        this.teleportTransformQuat(this.getTransformRealQuat(transformQuat), forceTeleport);
+    }
+}();

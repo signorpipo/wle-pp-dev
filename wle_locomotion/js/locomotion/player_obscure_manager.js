@@ -241,7 +241,7 @@ PlayerObscureManager = class PlayerObscureManager {
             }
 
             if (this._myParams.myPlayerTransformManager.isBodyColliding()) {
-                let distance = this._myParams.myPlayerTransformManager.getDistanceToRealFeet();
+                let distance = this._myParams.myPlayerTransformManager.getDistanceToReal();
                 let relativeDistance = distance - this._myParams.myDistanceToStartObscureWhenBodyColliding;
                 if (relativeDistance >= 0) {
                     let relativeDistancePercentage = Math.pp_clamp(relativeDistance / this._myParams.myRelativeDistanceToMaxObscureWhenBodyColliding, 0, 1);
@@ -251,7 +251,7 @@ PlayerObscureManager = class PlayerObscureManager {
             }
 
             if (this._myParams.myPlayerTransformManager.isLeaning()) {
-                let distance = this._myParams.myPlayerTransformManager.getDistanceToRealFeet();
+                let distance = this._myParams.myPlayerTransformManager.getDistanceToReal();
                 let relativeDistance = distance - this._myParams.myDistanceToStartObscureWhenLeaning;
                 if (relativeDistance >= 0) {
                     let relativeDistancePercentage = Math.pp_clamp(relativeDistance / this._myParams.myRelativeDistanceToMaxObscureWhenLeaning, 0, 1);
@@ -297,7 +297,7 @@ PlayerObscureManager = class PlayerObscureManager {
         }
 
         if (visible) {
-            this._myObscureParentObject.pp_setParent(this._myParams.myPlayerTransformManager.getCurrentHead(), false);
+            this._myObscureParentObject.pp_setParent(this._myParams.myPlayerTransformManager.getHead(), false);
         } else {
             this._myObscureParentObject.pp_setParent(null, false);
         }

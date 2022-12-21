@@ -44,7 +44,7 @@ WL.registerComponent('locomotion-floating-error', {
             }
 
             if (positionChanged || true) {
-                this._moveHead(headMovement);
+                this._moveFeet(headMovement);
             }
 
             let headRotation = [0, 0, 0].vec3_degreesToQuat();
@@ -74,7 +74,7 @@ WL.registerComponent('locomotion-floating-error', {
 
         this._myPlayerObject.pp_setTransformQuat(newPlayerTransform);
     },
-    _moveHead(movement) {
+    _moveFeet(movement) {
         this._myPlayerObject.pp_translate(movement);
     },
     _rotateHead(rotation) {
@@ -85,7 +85,7 @@ WL.registerComponent('locomotion-floating-error', {
         let newHeadPosition = this._myHeadObject.pp_getPosition();
         let adjustmentMovement = currentHeadPosition.vec3_sub(newHeadPosition);
 
-        this._moveHead(adjustmentMovement);
+        this._moveFeet(adjustmentMovement);
 
         let adjustedHeadPosition = this._myHeadObject.pp_getPosition();
         let error = adjustedHeadPosition.vec3_sub(currentHeadPosition);
