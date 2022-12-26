@@ -208,8 +208,13 @@ CollisionCheck.prototype._moveStep = function () {
             forwardForPerceivedAngle = horizontalMovement.vec3_normalize(forwardForPerceivedAngle);
         }
 
-        this._gatherSurfaceInfo(newFeetPosition, height, transformUp, forwardForPerceivedAngle, forwardForVertical, true, collisionCheckParams, collisionRuntimeParams);
-        this._gatherSurfaceInfo(newFeetPosition, height, transformUp, forwardForPerceivedAngle, forwardForVertical, false, collisionCheckParams, collisionRuntimeParams);
+        if (collisionCheckParams.myComputeGroundInfoEnabled) {
+            this._gatherSurfaceInfo(newFeetPosition, height, transformUp, forwardForPerceivedAngle, forwardForVertical, true, collisionCheckParams, collisionRuntimeParams);
+        }
+
+        if (collisionCheckParams.myComputeCeilingInfoEnabled) {
+            this._gatherSurfaceInfo(newFeetPosition, height, transformUp, forwardForPerceivedAngle, forwardForVertical, false, collisionCheckParams, collisionRuntimeParams);
+        }
 
         //console.error(_myTotalRaycasts );
 

@@ -24,6 +24,7 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myHorizontalMovementCheckVerticalStraightDiagonal = false;
         this.myHorizontalMovementCheckVerticalHorizontalBorderDiagonal = false;
 
+        this.myHorizontalPositionCheckEnabled = true;
         this.myHalfConeAngle = 60;
         this.myHalfConeSliceAmount = 2;
         this.myCheckConeBorder = true;
@@ -44,6 +45,8 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myCheckHorizontalFixedForwardEnabled = false; // this is basically only useful if the cone angle is 180 degrees
         this.myCheckHorizontalFixedForward = [0, 0, 1];
 
+        this.myVerticalMovementCheckEnabled = true;
+        this.myVerticalPositionCheckEnabled = true;
         this.myFeetRadius = 0.1;
         this.myAdjustVerticalMovementWithSurfaceAngle = true;
         this.myCheckVerticalFixedForwardEnabled = true;
@@ -78,6 +81,8 @@ CollisionCheckParams = class CollisionCheckParams {
 
         this.myHeight = 1;
 
+        this.myComputeGroundInfoEnabled = true;
+        this.myComputeCeilingInfoEnabled = true;
         this.myDistanceToBeOnGround = 0.001;
         this.myDistanceToComputeGroundInfo = 0.1;
         this.myDistanceToBeOnCeiling = 0.001;
@@ -152,16 +157,21 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myHorizontalMovementCheckVerticalStraightDiagonal = params.myHorizontalMovementCheckVerticalStraightDiagonal;
         this.myHorizontalMovementCheckVerticalHorizontalBorderDiagonal = params.myHorizontalMovementCheckVerticalHorizontalBorderDiagonal;
 
+        this.myHorizontalPositionCheckEnabled = params.myHorizontalPositionCheckEnabled;
         this.myHalfConeAngle = params.myHalfConeAngle;
         this.myHalfConeSliceAmount = params.myHalfConeSliceAmount;
         this.myCheckConeBorder = params.myCheckConeBorder;
         this.myCheckConeRay = params.myCheckConeRay;
         this.myHorizontalPositionCheckVerticalIgnoreHitsInsideCollision = params.myHorizontalPositionCheckVerticalIgnoreHitsInsideCollision;
         this.myHorizontalPositionCheckVerticalDirectionType = params.myHorizontalPositionCheckVerticalDirectionType;
+
+        this.myVerticalMovementCheckEnabled = params.myVerticalMovementCheckEnabled;
+        this.myVerticalPositionCheckEnabled = params.myVerticalPositionCheckEnabled;
         this.myFeetRadius = params.myFeetRadius;
         this.myAdjustVerticalMovementWithSurfaceAngle = params.myAdjustVerticalMovementWithSurfaceAngle;
         this.myCheckVerticalFixedForwardEnabled = params.myCheckVerticalFixedForwardEnabled;
         this.myCheckVerticalFixedForward.vec3_copy(params.myCheckVerticalFixedForward);
+        this.myCheckVerticalBothDirection = params.myCheckVerticalBothDirection;
 
         this.mySnapOnGroundEnabled = params.mySnapOnGroundEnabled;
         this.mySnapOnGroundExtraDistance = params.mySnapOnGroundExtraDistance;
@@ -190,6 +200,8 @@ CollisionCheckParams = class CollisionCheckParams {
 
         this.myHeight = params.myHeight;
 
+        this.myComputeGroundInfoEnabled = params.myComputeGroundInfoEnabled;
+        this.myComputeCeilingInfoEnabled = params.myComputeCeilingInfoEnabled;
         this.myDistanceToBeOnGround = params.myDistanceToBeOnGround;
         this.myDistanceToComputeGroundInfo = params.myDistanceToComputeGroundInfo;
         this.myDistanceToBeOnCeiling = params.myDistanceToBeOnCeiling;

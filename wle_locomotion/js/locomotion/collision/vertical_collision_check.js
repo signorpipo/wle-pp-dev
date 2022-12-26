@@ -9,27 +9,34 @@ CollisionCheck.prototype._verticalCheck = function () {
 
         let movementSign = Math.pp_sign(verticalMovement.vec3_lengthSigned(up), -1);
         let isMovementDownward = movementSign < 0;
-        outFixedMovement = this._verticalMovementFix(verticalMovement, isMovementDownward, originalMovementSign, feetPosition, height, up, forward, collisionCheckParams, collisionRuntimeParams, outFixedMovement);
 
-        if (collisionCheckParams.myCheckVerticalBothDirection &&
-            (outFixedMovement.vec_equals(verticalMovement, 0.00001) || originalMovementSign == 0 || (movementSign != originalMovementSign))) {
-            newFeetPosition = feetPosition.vec3_add(outFixedMovement, newFeetPosition);
-            let isOppositeMovementDownward = !isMovementDownward;
-            additionalFixedMovement = this._verticalMovementFix(zero, isOppositeMovementDownward, originalMovementSign, newFeetPosition, height, up, forward, collisionCheckParams, collisionRuntimeParams, additionalFixedMovement);
+        outFixedMovement.vec3_copy(verticalMovement);
+        if (collisionCheckParams.myVerticalMovementCheckEnabled) {
+            outFixedMovement = this._verticalMovementFix(verticalMovement, isMovementDownward, originalMovementSign, feetPosition, height, up, forward, collisionCheckParams, collisionRuntimeParams, outFixedMovement);
 
-            outFixedMovement.vec3_add(additionalFixedMovement, outFixedMovement);
-            isMovementDownward = !isMovementDownward;
+            if (collisionCheckParams.myCheckVerticalBothDirection &&
+                (outFixedMovement.vec_equals(verticalMovement, 0.00001) || originalMovementSign == 0 || (movementSign != originalMovementSign))) {
+                newFeetPosition = feetPosition.vec3_add(outFixedMovement, newFeetPosition);
+                let isOppositeMovementDownward = !isMovementDownward;
+                additionalFixedMovement = this._verticalMovementFix(zero, isOppositeMovementDownward, originalMovementSign, newFeetPosition, height, up, forward, collisionCheckParams, collisionRuntimeParams, additionalFixedMovement);
+
+                outFixedMovement.vec3_add(additionalFixedMovement, outFixedMovement);
+                isMovementDownward = !isMovementDownward;
+            }
         }
 
-        newFeetPosition = feetPosition.vec3_add(outFixedMovement, newFeetPosition);
-        let canStay = this._verticalPositionCheck(newFeetPosition, isMovementDownward, height, up, forward, collisionCheckParams, collisionRuntimeParams);
-        if (!canStay) {
-            outFixedMovement.vec3_zero();
+        if (collisionCheckParams.myVerticalPositionCheckEnabled) {
+            newFeetPosition = feetPosition.vec3_add(outFixedMovement, newFeetPosition);
+            let canStay = this._verticalPositionCheck(newFeetPosition, isMovementDownward, height, up, forward, collisionCheckParams, collisionRuntimeParams);
+            if (!canStay) {
+                outFixedMovement.vec3_zero();
 
-            collisionRuntimeParams.myHasSnappedOnGround = false;
-            collisionRuntimeParams.myHasSnappedOnCeiling = false;
-            collisionRuntimeParams.myHasFixedPositionGround = false;
-            collisionRuntimeParams.myHasFixedPositionCeiling = false;
+                // #TODO probably this should not be reset, you should be required to check if the movement was ok to be sure this values have a meaning
+                collisionRuntimeParams.myHasSnappedOnGround = false;
+                collisionRuntimeParams.myHasSnappedOnCeiling = false;
+                collisionRuntimeParams.myHasFixedPositionGround = false;
+                collisionRuntimeParams.myHasFixedPositionCeiling = false;
+            }
         }
 
         return outFixedMovement;

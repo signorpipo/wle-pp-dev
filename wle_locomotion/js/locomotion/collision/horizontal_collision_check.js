@@ -14,15 +14,20 @@ CollisionCheck.prototype._horizontalCheck = function () {
         }
 
         outFixedMovement.vec3_zero();
-        if (canMove) {
-            newFixedFeetPosition = fixedFeetPosition.vec3_add(movement, newFixedFeetPosition);
-            let canStay = this._horizontalPositionCheck(newFixedFeetPosition, fixedHeight, up, forward, collisionCheckParams, collisionRuntimeParams);
-            if (canStay) {
-                outFixedMovement.vec3_copy(movement);
-            }
 
-            if (outFixedMovement.vec3_isZero(0.000001)) {
-                outFixedMovement.vec3_zero();
+        if (canMove) {
+            if (collisionCheckParams.myHorizontalPositionCheckEnabled) {
+                newFixedFeetPosition = fixedFeetPosition.vec3_add(movement, newFixedFeetPosition);
+                let canStay = this._horizontalPositionCheck(newFixedFeetPosition, fixedHeight, up, forward, collisionCheckParams, collisionRuntimeParams);
+                if (canStay) {
+                    outFixedMovement.vec3_copy(movement);
+                }
+
+                if (outFixedMovement.vec3_isZero(0.000001)) {
+                    outFixedMovement.vec3_zero();
+                }
+            } else {
+                outFixedMovement.vec3_copy(movement);
             }
         } else if (!avoidSlidingExtraCheck && collisionCheckParams.mySlidingEnabled && collisionCheckParams.mySlidingHorizontalMovementCheckBetterNormal) {
             this._horizontalCheckBetterSlideNormal(movement, fixedFeetPosition, fixedHeight, up, forward, collisionCheckParams, collisionRuntimeParams);

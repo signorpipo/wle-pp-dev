@@ -45,8 +45,13 @@ CollisionCheck.prototype._teleport = function () {
 
                 forwardForPerceivedAngle.vec3_copy(transformForward);
 
-                this._gatherSurfaceInfo(newFeetPosition, height, transformUp, forwardForPerceivedAngle, forwardForVertical, true, collisionCheckParams, collisionRuntimeParams);
-                this._gatherSurfaceInfo(newFeetPosition, height, transformUp, forwardForPerceivedAngle, forwardForVertical, false, collisionCheckParams, collisionRuntimeParams);
+                if (collisionCheckParams.myComputeGroundInfoEnabled) {
+                    this._gatherSurfaceInfo(newFeetPosition, height, transformUp, forwardForPerceivedAngle, forwardForVertical, true, collisionCheckParams, collisionRuntimeParams);
+                }
+
+                if (collisionCheckParams.myComputeCeilingInfoEnabled) {
+                    this._gatherSurfaceInfo(newFeetPosition, height, transformUp, forwardForPerceivedAngle, forwardForVertical, false, collisionCheckParams, collisionRuntimeParams);
+                }
 
                 if (collisionRuntimeParams.myGroundAngle < collisionCheckParams.myGroundAngleToIgnore + 0.0001 &&
                     collisionRuntimeParams.myCeilingAngle < collisionCheckParams.myCeilingAngleToIgnore + 0.0001) {

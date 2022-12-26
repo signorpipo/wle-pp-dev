@@ -3,6 +3,9 @@ PlayerLocomotionTeleportDetectionParams = class PlayerLocomotionTeleportDetectio
         this.myMaxDistance = 0;
         this.myMaxHeightDifference = 0;
         this.myGroundAngleToIgnoreUpward = 0;
+        // this can be used to make it so the teleport position is valid on a steeper angle when going downward by setting the higher value on the collision params
+        // and then use this to specify that when going upward u want it to be less, basically to be able to teleprot down a cliff even on a steep ground
+        // that would not let you go up
         this.myMustBeOnGround = false;
 
         this.myTeleportBlockLayerFlags = new PP.PhysicsLayerFlags();

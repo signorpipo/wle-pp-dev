@@ -322,6 +322,7 @@ PlayerLocomotion = class PlayerLocomotion {
         this._myCollisionCheckParamsSmooth.myCheckHeightConeOnCollisionKeepHit = false;
         this._myCollisionCheckParamsSmooth.myHeightCheckStepAmount = 1;
         this._myCollisionCheckParamsSmooth.myCheckVerticalFixedForwardEnabled = true;
+        this._myCollisionCheckParamsSmooth.myCheckVerticalFixedForward = [0, 0, 1];
         this._myCollisionCheckParamsSmooth.myCheckVerticalStraight = true;
         this._myCollisionCheckParamsSmooth.myCheckVerticalDiagonalRay = false;
         this._myCollisionCheckParamsSmooth.myCheckVerticalDiagonalBorder = false;
@@ -376,19 +377,15 @@ PlayerLocomotion = class PlayerLocomotion {
         this._myCollisionCheckParamsTeleport.myHalfConeAngle = 180;
         this._myCollisionCheckParamsTeleport.myHalfConeSliceAmount = 6;
 
-        this._myCollisionCheckParamsTeleport.myCheckVerticalFixedForwardEnabled = true;
-        this._myCollisionCheckParamsTeleport.myCheckVerticalFixedForward = [0, 0, 1];
-
         this._myCollisionCheckParamsTeleport.myCheckHorizontalFixedForwardEnabled = true;
         this._myCollisionCheckParamsTeleport.myCheckHorizontalFixedForward = [0, 0, 1];
 
+        // increased so to let teleport on steep slopes from above
         this._myCollisionCheckParamsTeleport.myGroundAngleToIgnore = 60;
-        this._myCollisionCheckParamsTeleport.myCeilingAngleToIgnore = 30;
-
-        this._myCollisionCheckParamsTeleport.myDistanceToBeOnGround = 0.001;
 
         this._myCollisionCheckParamsTeleport.mySlidingEnabled = false;
 
+        // this is needed for when u want to perform the teleport as a movement
         this._myCollisionCheckParamsTeleport.mySplitMovementEnabled = true;
         this._myCollisionCheckParamsTeleport.mySplitMovementMaxLength = 0.2;
 

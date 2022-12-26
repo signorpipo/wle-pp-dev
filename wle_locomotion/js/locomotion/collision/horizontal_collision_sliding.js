@@ -476,7 +476,9 @@ CollisionCheck.prototype._horizontalCheckBetterSlideNormal = function () {
         let backupDebugActive = collisionCheckParams.myDebugActive;
         collisionCheckParams.myDebugActive = collisionCheckParams.myDebugActive && collisionCheckParams.myDebugSlidingActive;
 
-        this._horizontalPositionCheck(newFixedFeetPosition, height, up, forward, collisionCheckParams, this._myCheckBetterSlidingNormalCollisionRuntimeParams);
+        if (collisionCheckParams.myHorizontalPositionCheckEnabled) {
+            this._horizontalPositionCheck(newFixedFeetPosition, height, up, forward, collisionCheckParams, this._myCheckBetterSlidingNormalCollisionRuntimeParams);
+        }
 
         collisionCheckParams.myDebugActive = backupDebugActive;
 

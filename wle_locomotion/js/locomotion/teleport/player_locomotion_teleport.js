@@ -13,7 +13,12 @@ PlayerLocomotionTeleportParams = class PlayerLocomotionTeleportParams {
         this.myPerformTeleportAsMovement = false;
         this.myTeleportAsMovementMaxDistanceFromTeleportPosition = 0.001;
         this.myTeleportAsMovementMaxSteps = 2;
+        // when checking teleport as movement u may need to move more times to get to the position due to snap and gravity
+        // this specifies how many movement u can try to get to the teleport position
+
         this.myTeleportAsMovementRemoveVerticalMovement = true;
+        // this can be used to remove the vertical movement from the difference from the current and teleport position so that u can apply just
+        // the gravity as vertical movement
         this.myTeleportAsMovementExtraVerticalMovementPerMeter = 1; // this simulate the gravity for the teleport movement
 
         this.myStickIdleThreshold = 0.1;
