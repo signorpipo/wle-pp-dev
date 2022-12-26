@@ -9,6 +9,8 @@ PlayerTransformManagerParams = class PlayerTransformManagerParams {
 
         this.myHeadRadius = 0;
         this.myHeadCollisionCheckComplexityLevel = 0; // 1,2,3
+        this.myHeadCollisionBlockLayerFlags = new PP.PhysicsLayerFlags();
+        this.myHeadCollisionObjectsToIgnore = [];
 
         this.myRotateOnlyIfValid = false;
         this.myResetRealResetRotationIfUpChanged = true;
@@ -22,13 +24,14 @@ PlayerTransformManagerParams = class PlayerTransformManagerParams {
 PlayerTransformManager = class PlayerTransformManager {
     constructor(params) {
         this._myParams = params;
-        this._myHeadCollisionCheckParams = new CollisionCheckParams();
 
-        this._myValidPositionHead = PP.vec3_create();
+        this._myHeadCollisionCheckParams = null;
+        this._setupHeadCollision();
 
         this._myValidPosition = PP.vec3_create();
         this._myValidRotationQuat = new PP.quat_create();
         this._myValidHeight = 0;
+        this._myValidPositionHead = PP.vec3_create();
 
         this._myIsBodyColliding = false;
         this._myIsHeadColliding = false;
@@ -41,22 +44,34 @@ PlayerTransformManager = class PlayerTransformManager {
 
     update(dt) {
         // check if new head is ok and update the data
+
+        //#TODO
     }
 
-    move(movement, forceMove = false) {
+    move(movement, collisionRuntime = null, forceMove = false) {
+        // collision runtime will copy the result, so that u can use that for later reference like if it was sliding
+        // maybe there should be a way to sum all the things happened for proper movement in a summary runtime
+        // or maybe the move should be done once per frame, or at least theoretically
+
         // collision check and move
+
+        //#TODO
     }
 
-    teleportPosition(position, forceTeleport = false) {
+    teleportPosition(position, collisionRuntime = null, forceTeleport = false) {
         // collision check and teleport, if force teleport teleport in any case
         // use current valid rotation
+
+        //#TODO
     }
 
-    teleportTransformQuat(transformQuat, forceTeleport = false) {
+    teleportTransformQuat(transformQuat, collisionRuntime = null, forceTeleport = false) {
         // collision check and teleport, if force teleport teleport in any case
+
+        //#TODO
     }
 
-    teleportToReal(forceTeleport = false) {
+    teleportToReal(collisionRuntime = null, forceTeleport = false) {
         // implemented outside class definition
     }
 
@@ -170,6 +185,68 @@ PlayerTransformManager = class PlayerTransformManager {
 
     getPlayerHeadManager() {
         this._myParams.myPlayerHeadManager;
+    }
+
+    _setupHeadCollision() {
+        this._myHeadCollisionCheckParams = new CollisionCheckParams();
+        let params = this._myHeadCollisionCheckParams;
+
+        params.myRadius = this._myParams.myHeadRadius;
+        params.myDistanceFromFeetToIgnore = 0;
+        params.myDistanceFromHeadToIgnore = 0;
+
+        params.mySplitMovementEnabled = false;
+        params.myHorizontalMovementCheckEnabled = false;
+
+        params.myHalfConeAngle = 180;
+        params.myHalfConeSliceAmount = 6;
+        params.myCheckConeBorder = true;
+        params.myCheckConeRay = true;
+        params.myHorizontalPositionCheckVerticalIgnoreHitsInsideCollision = false;
+        params.myHorizontalPositionCheckVerticalDirectionType = 2; // somewhat expensive, 2 times the check for the vertical check of the horizontal movement!
+
+        params.myHeight = params.myRadius * 2;
+
+        params.myCheckHeight = true;
+        params.myHeightCheckStepAmount = 2;
+        params.myCheckHeightTop = true;
+        params.myCheckHeightConeOnCollision = false;
+        params.myCheckVerticalStraight = true;
+        params.myCheckVerticalDiagonalRay = false;
+        params.myCheckVerticalDiagonalBorder = false;
+        params.myCheckVerticalDiagonalBorderRay = false;
+        params.myCheckVerticalSearchFurtherVerticalHit = false;
+
+        params.myCheckVerticalFixedForwardEnabled = true;
+        params.myCheckVerticalFixedForward = [0, 0, 1];
+
+        params.myCheckHorizontalFixedForwardEnabled = true;
+        params.myCheckHorizontalFixedForward = [0, 0, 1];
+
+        params.myGroundAngleToIgnore = 0;
+        params.myCeilingAngleToIgnore = 0;
+
+        params.myVerticalMovementCheckEnabled = false;
+        params.myVerticalPositionCheckEnabled = false;
+
+        params.myComputeGroundInfoEnabled = false;
+        params.myComputeCeilingInfoEnabled = false;
+
+        params.mySlidingEnabled = false;
+
+        params.myBlockLayerFlags.copy(this._myParams.myHeadCollisionBlockLayerFlags);
+        params.myObjectsToIgnore.pp_copy(this._myParams.myHeadCollisionObjectsToIgnore);
+
+        params.myDebugActive = false;
+
+        params.myDebugHorizontalMovementActive = false;
+        params.myDebugHorizontalPositionActive = true;
+        params.myDebugVerticalMovementActive = false;
+        params.myDebugVerticalPositionActive = false;
+        params.myDebugSlidingActive = false;
+        params.myDebugSurfaceInfoActive = false;
+        params.myDebugRuntimeParamsActive = false;
+        params.myDebugMovementActive = false;
     }
 };
 

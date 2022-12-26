@@ -330,7 +330,7 @@ CollisionCheck.prototype._horizontalPositionVerticalCheck = function () {
                         collisionRuntimeParams.myHorizontalCollisionHit.copy(this._myRaycastResult.myHits[0]);
                     }
 
-                    if (!collisionCheckParams.myCheckVerticalSearchFurtherVerticalHit || !collisionCheckParams.myCheckHeightConeOnCollision) {
+                    if (!collisionCheckParams.myCheckVerticalSearchFurtherVerticalHit) {
                         break;
                     }
                 }
@@ -354,7 +354,7 @@ CollisionCheck.prototype._horizontalPositionVerticalCheck = function () {
                                 collisionRuntimeParams.myHorizontalCollisionHit.copy(this._myRaycastResult.myHits[0]);
                             }
 
-                            if (!collisionCheckParams.myCheckVerticalSearchFurtherVerticalHit || !collisionCheckParams.myCheckHeightConeOnCollision) {
+                            if (!collisionCheckParams.myCheckVerticalSearchFurtherVerticalHit) {
                                 break;
                             }
                         }
@@ -374,7 +374,7 @@ CollisionCheck.prototype._horizontalPositionVerticalCheck = function () {
                                 collisionRuntimeParams.myHorizontalCollisionHit.copy(this._myRaycastResult.myHits[0]);
                             }
 
-                            if (!collisionCheckParams.myCheckVerticalSearchFurtherVerticalHit || !collisionCheckParams.myCheckHeightConeOnCollision) {
+                            if (!collisionCheckParams.myCheckVerticalSearchFurtherVerticalHit) {
                                 break;
                             }
                         }
@@ -401,7 +401,7 @@ CollisionCheck.prototype._horizontalPositionVerticalCheck = function () {
                                     collisionRuntimeParams.myHorizontalCollisionHit.copy(this._myRaycastResult.myHits[0]);
                                 }
 
-                                if (!collisionCheckParams.myCheckVerticalSearchFurtherVerticalHit || !collisionCheckParams.myCheckHeightConeOnCollision) {
+                                if (!collisionCheckParams.myCheckVerticalSearchFurtherVerticalHit) {
                                     break;
                                 }
                             }
@@ -421,7 +421,7 @@ CollisionCheck.prototype._horizontalPositionVerticalCheck = function () {
                                     collisionRuntimeParams.myHorizontalCollisionHit.copy(this._myRaycastResult.myHits[0]);
                                 }
 
-                                if (!collisionCheckParams.myCheckVerticalSearchFurtherVerticalHit || !collisionCheckParams.myCheckHeightConeOnCollision) {
+                                if (!collisionCheckParams.myCheckVerticalSearchFurtherVerticalHit) {
                                     break;
                                 }
                             }
