@@ -1,6 +1,23 @@
 _myTotalRaycasts = 0; // #TODO debug stuff, remove later
 _myTotalRaycastsMax = 0; // #TODO debug stuff, remove later
 
+CollisionCheckUtils = {
+    generateTeleportParamsFromMovementParams: function (smoothParams) {
+        let teleportParams = new CollisionCheckParams();
+        teleportParams.copy(smoothParams);
+
+        teleportParams.myHalfConeAngle = 180;
+        teleportParams.myHalfConeSliceAmount = Math.round((teleportParams.myHalfConeAngle / smoothParams.myHalfConeAngle) * smoothParams.myHalfConeSliceAmount);
+
+        teleportParams.myCheckHorizontalFixedForwardEnabled = true;
+        teleportParams.myCheckHorizontalFixedForward = [0, 0, 1];
+
+        teleportParams.mySlidingEnabled = false;
+
+        return teleportParams;
+    },
+};
+
 CollisionCheck = class CollisionCheck {
     constructor() {
         this._myRaycastSetup = new PP.RaycastSetup();

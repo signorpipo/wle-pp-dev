@@ -42,16 +42,14 @@ PlayerLocomotion = class PlayerLocomotion {
         this._myParams = params;
 
         this._myCollisionCheckParamsSmooth = new CollisionCheckParams();
-        this._myCollisionCheckParamsTeleport = new CollisionCheckParams();
-        this._myCollisionCheckParamsTransformManager = new CollisionCheckParams();
+        this._setupCollisionCheckParamsSmooth();
+        this._myCollisionCheckParamsTeleport = null;
+        this._setupCollisionCheckParamsTeleport();
+
 
         this._myCollisionRuntimeParams = new CollisionRuntimeParams();
         this._myMovementRuntimeParams = new PlayerLocomotionMovementRuntimeParams();
         this._myMovementRuntimeParams.myCollisionRuntimeParams = this._myCollisionRuntimeParams;
-
-        this._setupCollisionCheckParamsSmooth();
-        this._setupCollisionCheckParamsTeleport();
-        this._myCollisionCheckParamsTransformManager.copy(this._myCollisionCheckParamsTeleport);
 
         {
             let params = new PlayerHeadManagerParams();
@@ -75,7 +73,6 @@ PlayerLocomotion = class PlayerLocomotion {
 
             params.myPlayerHeadManager = this._myPlayerHeadManager;
 
-            params.myCollisionCheckParams = this._myCollisionCheckParamsTransformManager;
             params.myCollisionRuntimeParams = this._myCollisionRuntimeParams;
 
             params.myHeadRadius = 0;
@@ -225,8 +222,6 @@ PlayerLocomotion = class PlayerLocomotion {
         this._myPlayerHeadManager.update(dt);
         this._myPlayerTransformManager.update(dt);
 
-        this._myPlayerObscureManager.update(dt);
-
         if (PP.myLeftGamepad.getButtonInfo(PP.GamepadButtonID.THUMBSTICK).isPressEnd(2)) {
             if (this._myLocomotionMovementFSM.isInState("smooth") && this._myPlayerLocomotionSmooth.canStop()) {
                 this._myLocomotionMovementFSM.perform("next");
@@ -245,6 +240,7 @@ PlayerLocomotion = class PlayerLocomotion {
             }
         }
 
+        this._myPlayerObscureManager.update(dt);
         if (PP.myLeftGamepad.getButtonInfo(PP.GamepadButtonID.SELECT).isPressEnd(2)) {
             if (this._myPlayerObscureManager.isFading()) {
                 this._myPlayerObscureManager.obscureLevelOverride(this._myPlayerObscureManager.isFadingOut() ? Math.pp_random(0, 0) : Math.pp_random(1, 1));
@@ -372,26 +368,24 @@ PlayerLocomotion = class PlayerLocomotion {
     }
 
     _setupCollisionCheckParamsTeleport() {
-        this._myCollisionCheckParamsTeleport.copy(this._myCollisionCheckParamsSmooth);
+        this._myCollisionCheckParamsTeleport = CollisionCheckUtils.generateTeleportParamsFromMovementParams(this._myCollisionCheckParamsSmooth);
 
-        this._myCollisionCheckParamsTeleport.myHalfConeAngle = 180;
-        this._myCollisionCheckParamsTeleport.myHalfConeSliceAmount = 6;
-
-        this._myCollisionCheckParamsTeleport.myCheckHorizontalFixedForwardEnabled = true;
-        this._myCollisionCheckParamsTeleport.myCheckHorizontalFixedForward = [0, 0, 1];
-
-        // increased so to let teleport on steep slopes from above
+        // increased so to let teleport on steep slopes from above (from below is fixed through detection myGroundAngleToIgnoreUpward)
         this._myCollisionCheckParamsTeleport.myGroundAngleToIgnore = 60;
 
-        this._myCollisionCheckParamsTeleport.mySlidingEnabled = false;
-
         // this is needed for when u want to perform the teleport as a movement
-        this._myCollisionCheckParamsTeleport.mySplitMovementEnabled = true;
-        this._myCollisionCheckParamsTeleport.mySplitMovementMaxLength = 0.2;
+        // maybe this should be another set of collsion check params copied from the smooth ones?
+        // when you teleport as move, u check with the teleport for the position, and this other params for the move, so that u can use a smaller
+        // cone, and sliding if desired
+        // if nothing is specified it's copied from the teleport and if greater than 90 cone is tuned down, and also the below settings are applied
 
+        // you could also do this if u want to perform the teleport as movement, instead of using the smooth
+        // but this will make even the final teleport check be halved
         //this._myCollisionCheckParamsTeleport.myHalfConeAngle = 90;
         //this._myCollisionCheckParamsTeleport.myHalfConeSliceAmount = 3;
         //this._myCollisionCheckParamsTeleport.myCheckHorizontalFixedForwardEnabled = false;
+        //this._myCollisionCheckParamsTeleport.mySplitMovementEnabled = true;
+        //this._myCollisionCheckParamsTeleport.mySplitMovementMaxLength = 0.2;
 
         this._myCollisionCheckParamsTeleport.myDebugActive = false;
     }

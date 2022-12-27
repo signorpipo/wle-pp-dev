@@ -31,7 +31,7 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myCheckConeRay = true;
         this.myHorizontalPositionCheckVerticalIgnoreHitsInsideCollision = true; // true gives less issues(tm), but may also collide a bit more, resulting in less sliding
         this.myHorizontalPositionCheckVerticalDirectionType = 0; // somewhat expensive, 2 times the check for the vertical check of the horizontal movement!
-        // 0: check upward, gives less issues(tm) (hitting a very small step at the end of a slope) with a grounded movement (not fly or snapped to ceiling), but may also collide a bit more, resulting in less sliding
+        // 0: check upward, gives less issues(tm) (hitting a very small step at the end of a slope /-) with a grounded movement (not fly or snapped to ceiling), but may also collide a bit more, resulting in less sliding
         // 1: check downard, gives less issues(tm) with a ceiling-ed movement (not fly or snapped to ground), but may also collide a bit more, resulting in less sliding and more stuck in front of a wall
         // 2: check both directions, more expensive and better prevent collision, sliding more, but is more expensive and gives more issues            
         //                                                                                                                                                      ___

@@ -3,7 +3,7 @@ PlayerTransformManagerParams = class PlayerTransformManagerParams {
         this.myPlayerHeadManager = null;
 
         this.myMovementCollisionCheckParams = null;
-        this.myTeleportCollisionCheckParams = null;
+        this.myTeleportCollisionCheckParams = null; // can be left null and will be generated from the movement one
 
         this.myCollisionRuntimeParams = null;
 
@@ -24,6 +24,10 @@ PlayerTransformManagerParams = class PlayerTransformManagerParams {
 PlayerTransformManager = class PlayerTransformManager {
     constructor(params) {
         this._myParams = params;
+
+        if (this._myParams.myTeleportCollisionCheckParams == null && this.myMovementCollisionCheckParams != null) {
+            this._setupTeleportCollisionCheckParams();
+        }
 
         this._myHeadCollisionCheckParams = null;
         this._setupHeadCollision();
@@ -203,7 +207,7 @@ PlayerTransformManager = class PlayerTransformManager {
         params.myCheckConeBorder = true;
         params.myCheckConeRay = true;
         params.myHorizontalPositionCheckVerticalIgnoreHitsInsideCollision = false;
-        params.myHorizontalPositionCheckVerticalDirectionType = 2; // somewhat expensive, 2 times the check for the vertical check of the horizontal movement!
+        params.myHorizontalPositionCheckVerticalDirectionType = 0;
 
         params.myHeight = params.myRadius * 2;
 
@@ -247,6 +251,10 @@ PlayerTransformManager = class PlayerTransformManager {
         params.myDebugSurfaceInfoActive = false;
         params.myDebugRuntimeParamsActive = false;
         params.myDebugMovementActive = false;
+    }
+
+    _setupTeleportCollisionCheckParams() {
+        this._myParams.myTeleportCollisionCheckParams = CollisionCheckUtils.generateTeleportParamsFromMovementParams(this._myParams.myMovementCollisionCheckParams);
     }
 };
 
