@@ -4,8 +4,10 @@ PlayerTransformManagerParams = class PlayerTransformManagerParams {
 
         this.myMovementCollisionCheckParams = null;
         this.myTeleportCollisionCheckParams = null; // can be left null and will be generated from the movement one
+        this.myIsLeaningValidAboveDistance = false;
+        this.myLeaningValidDistance = 0;
 
-        this.myCollisionRuntimeParams = null;
+        // max distance to resync valid with head, if you head is further do not resync
 
         this.myHeadRadius = 0;
         this.myHeadCollisionCheckComplexityLevel = 0; // 1,2,3
@@ -16,17 +18,31 @@ PlayerTransformManagerParams = class PlayerTransformManagerParams {
         this.myResetRealResetRotationIfUpChanged = true;
 
         // this.myDistanceToStartApplyGravityWhenLeaning = 0; // this should be moved outisde, that is, if it is leaning stop gravity
+
+        // set valid if head synced (head manager)
+
+        this.myRealMovementAllowVerticalAdjustments = false;
+        // this true means that the real movement should also snap on ground or fix the vertical to pop from it
+        // you may want this if u want that while real moving u can also climb stairs
+
+        // head movement apply vertical snap or not (other option to apply gravity 
+        // (gravity inside this class?) only when movement is applied not for head only)
+
+        this.myDebugActive = false;
     }
 };
-
-// update this before to check the new valid transform and if the head new trnsform is fine, then update movements, so that they will use the proper transform
 
 PlayerTransformManager = class PlayerTransformManager {
     constructor(params) {
         this._myParams = params;
 
-        if (this._myParams.myTeleportCollisionCheckParams == null && this.myMovementCollisionCheckParams != null) {
-            this._setupTeleportCollisionCheckParams();
+        this._myRealMovementCollisionCheckParams = null;
+        this._generateRealMovementParamsFromMovementParams();
+
+        this._myCollisionRuntimeParams = new CollisionRuntimeParams();
+
+        if (this._myParams.myTeleportCollisionCheckParams == null && this._myParams.myMovementCollisionCheckParams != null) {
+            this._generateTeleportParamsFromMovementParams();
         }
 
         this._myHeadCollisionCheckParams = null;
@@ -43,39 +59,47 @@ PlayerTransformManager = class PlayerTransformManager {
     }
 
     start() {
-
+        // get the current head position as valid for initialization no matter if colliding
     }
 
+    // update should be before to check the new valid transform and if the head new transform is fine
+    // then update movements, so that they will use the proper transform
+    // pre/post update?
+    // for sliding if previous frame no horizontal movement then reset sliding on pre update
+    // in generale capire come fare per risolvere i problemi quando c'è un move solo verticale che sputtana i dati dello sliding precedente
+    // che servono per far slidare bene anche dopo, magari un flag per dire non aggiornare le cose relative al movimento orizzontale
+    // o un move check solo verticale
     update(dt) {
-        // check if new head is ok and update the data
-
-        //#TODO
+        // implemented outside class definition
     }
 
-    move(movement, collisionRuntime = null, forceMove = false) {
+    move(movement, outCollisionRuntimeParams = null, forceMove = false) {
         // collision runtime will copy the result, so that u can use that for later reference like if it was sliding
         // maybe there should be a way to sum all the things happened for proper movement in a summary runtime
-        // or maybe the move should be done once per frame, or at least theoretically
+        // or maybe the move should be done once per frame, or at least in theory
 
         // collision check and move
 
+        // move should move the valid transform, but also move the player object so that they head, even is colliding is dragged with it
+        // also teleport, should get the difference from previous and move the player object, this will keep the relative position head-to-valid
+
         //#TODO
     }
 
-    teleportPosition(position, collisionRuntime = null, forceTeleport = false) {
+    teleportPosition(position, outCollisionRuntimeParams = null, forceTeleport = false) {
         // collision check and teleport, if force teleport teleport in any case
         // use current valid rotation
 
         //#TODO
     }
 
-    teleportTransformQuat(transformQuat, collisionRuntime = null, forceTeleport = false) {
+    teleportTransformQuat(transformQuat, outCollisionRuntimeParams = null, forceTeleport = false) {
         // collision check and teleport, if force teleport teleport in any case
 
         //#TODO
     }
 
-    teleportToReal(collisionRuntime = null, forceTeleport = false) {
+    teleportToReal(outCollisionRuntimeParams = null, forceTeleport = false) {
         // implemented outside class definition
     }
 
@@ -123,16 +147,16 @@ PlayerTransformManager = class PlayerTransformManager {
         return outTransformQuat.quat2_setPositionRotationQuat(this.getPosition(), this.getRotationQuat());
     }
 
-    getPosition() {
-        return this._myValidPosition;
+    getPosition(outPosition = PP.vec3_create()) {
+        return outPosition.vec3_copy(this._myValidPosition);
     }
 
-    getPositionHead() {
-        return this._myValidPositionHead;
+    getPositionHead(outPosition = PP.vec3_create()) {
+        return outPosition.vec3_copy(this._myValidPositionHead);
     }
 
-    getRotationQuat() {
-        return this._myValidRotationQuat;
+    getRotationQuat(outRotation = PP.quat_create()) {
+        return outRotation.quat_copy(this._myValidRotationQuat);
     }
 
     getHeight() {
@@ -147,12 +171,12 @@ PlayerTransformManager = class PlayerTransformManager {
         return this.getPlayerHeadManager().getPositionFeet(outPosition);
     }
 
-    getPositionHeadReal() {
+    getPositionHeadReal(outPosition = PP.vec3_create()) {
         return this.getPlayerHeadManager().getPositionHead(outPosition);
     }
 
-    getRotationQuatReal() {
-        return this.getPlayerHeadManager().getRotationFeetQuat(outPosition);
+    getRotationQuatReal(outRotation = PP.quat_create()) {
+        return this.getPlayerHeadManager().getRotationFeetQuat(outRotation);
     }
 
     getHeightReal() {
@@ -161,6 +185,10 @@ PlayerTransformManager = class PlayerTransformManager {
 
     isRealValid() {
         return !this.isBodyColliding() && !this.isHeadColliding() && !this.isLeaning();
+    }
+
+    isRealSynced() {
+        return this.getPlayerHeadManager().isSynced();
     }
 
     resetReal(resetRotation = false) {
@@ -188,7 +216,15 @@ PlayerTransformManager = class PlayerTransformManager {
     }
 
     getPlayerHeadManager() {
-        this._myParams.myPlayerHeadManager;
+        return this._myParams.myPlayerHeadManager;
+    }
+
+    collisionCheckParamsUpdated(recomputeTeleportFromMovement = false) {
+        if (recomputeTeleportFromMovement) {
+            this.generateTeleportParamsFromMovementParams();
+        }
+
+        this._generateRealMovementParamsFromMovementParams();
     }
 
     _setupHeadCollision() {
@@ -253,8 +289,33 @@ PlayerTransformManager = class PlayerTransformManager {
         params.myDebugMovementActive = false;
     }
 
-    _setupTeleportCollisionCheckParams() {
-        this._myParams.myTeleportCollisionCheckParams = CollisionCheckUtils.generateTeleportParamsFromMovementParams(this._myParams.myMovementCollisionCheckParams);
+    _generateTeleportParamsFromMovementParams() {
+        if (this._myParams.myTeleportCollisionCheckParams == null) {
+            this._myParams.myTeleportCollisionCheckParams = new CollisionCheckParams();
+        }
+
+        this._myParams.myTeleportCollisionCheckParams = CollisionCheckUtils.generateTeleportParamsFromMovementParams(this._myParams.myMovementCollisionCheckParams, this._myParams.myTeleportCollisionCheckParams);
+    }
+
+    _generateRealMovementParamsFromMovementParams() {
+        if (this._myRealMovementCollisionCheckParams == null) {
+            this._myRealMovementCollisionCheckParams = new CollisionCheckParams();
+        }
+
+        this._myRealMovementCollisionCheckParams.copy(this._myParams.myMovementCollisionCheckParams);
+        this._myRealMovementCollisionCheckParams.mySlidingEnabled = false;
+
+        if (!this._myParams.myRealMovementAllowVerticalAdjustments) {
+            this._myRealMovementCollisionCheckParams.mySnapOnGroundEnabled = false;
+            this._myRealMovementCollisionCheckParams.mySnapOnCeilingEnabled = false;
+            this._myRealMovementCollisionCheckParams.myGroundPopOutEnabled = false;
+            this._myRealMovementCollisionCheckParams.myCeilingPopOutEnabled = false;
+            this._myRealMovementCollisionCheckParams.myAdjustVerticalMovementWithSurfaceAngle = false;
+        }
+    }
+
+    _debugUpdate(dt) {
+        PP.myDebugVisualManager.drawPoint(0, this._myValidPosition, [1, 0, 0, 1], 0.05);
     }
 };
 
@@ -295,5 +356,49 @@ PlayerTransformManager.prototype.teleportToReal = function () {
     let transformQuat = PP.quat2_create();
     return function teleportToReal(forceTeleport = false) {
         this.teleportTransformQuat(this.getTransformRealQuat(transformQuat), forceTeleport);
+    }
+}();
+
+PlayerTransformManager.prototype.update = function () {
+    let movementToCheck = PP.vec3_create();
+    let position = PP.vec3_create();
+    let positionReal = PP.vec3_create();
+    let feetTransformQuat = PP.quat2_create();
+    let collisionRuntimeParams = new CollisionRuntimeParams();
+    let teleportCollisionRuntimeParams = new CollisionRuntimeParams();
+    return function update(dt) {
+        // check if new head is ok and update the data
+        // if head is not synced (blurred or session changing) avoid this and keep last valid
+        if (this.isRealSynced()) {
+
+            this._myIsBodyColliding = false;
+            this._myIsHeadColliding = false;
+            this._myIsLeaning = false;
+
+            //this._myValidPosition = PP.vec3_create();
+            //this._myValidRotationQuat = new PP.quat_create();
+            //this._myValidHeight = 0;
+            //this._myValidPositionHead = PP.vec3_create();
+
+            collisionRuntimeParams.copy(this._myCollisionRuntimeParams);
+            feetTransformQuat = this.getTransformQuat(feetTransformQuat);
+            movementToCheck = this.getPositionReal(positionReal).vec3_sub(this.getPosition(position), movementToCheck);
+
+            CollisionCheckGlobal.move(movementToCheck, feetTransformQuat, this._myRealMovementCollisionCheckParams, collisionRuntimeParams);
+
+            if (!collisionRuntimeParams.myHorizontalMovementCanceled && !collisionRuntimeParams.myVerticalMovementCanceled) {
+                this._myIsBodyColliding = false;
+
+                this._myValidPosition.vec3_copy(collisionRuntimeParams.myNewPosition);
+            } else {
+                this._myIsBodyColliding = true;
+            }
+
+            //#TODO this should update ground and ceiling info but not sliding info
+        }
+
+        if (this._myParams.myDebugActive) {
+            this._debugUpdate(dt);
+        }
     }
 }();
