@@ -81,6 +81,9 @@ PlayerLocomotion = class PlayerLocomotion {
             params.myHeadRadius = 0;
             params.myHeadCollisionCheckComplexityLevel = 0;
 
+            params.myIsMaxDistanceFromRealToSyncEnabled = true;
+            params.myMaxDistanceFromRealToSync = 1;
+
             params.myDebugActive = true;
 
             this._myPlayerTransformManager = new PlayerTransformManager(params);
@@ -101,10 +104,13 @@ PlayerLocomotion = class PlayerLocomotion {
             params.myObscureFadeEasingFunction = PP.EasingFunction.linear;
             params.myObscureLevelRelativeDistanceEasingFunction = PP.EasingFunction.linear;
 
-            params.myDistanceToStartObscureWhenBodyColliding = 1;
-            params.myDistanceToStartObscureWhenLeaning = 1;
+            params.myDistanceToStartObscureWhenBodyColliding = 3;
+            params.myDistanceToStartObscureWhenLeaning = 3;
+            params.myDistanceToStartObscureWhenFar = 1;
 
             params.myRelativeDistanceToMaxObscureWhenBodyColliding = 1;
+            params.myRelativeDistanceToMaxObscureWhenLeaning = 1;
+            params.myRelativeDistanceToMaxObscureWhenFar = 1;
 
             this._myPlayerObscureManager = new PlayerObscureManager(params);
         }

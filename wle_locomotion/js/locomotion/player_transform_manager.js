@@ -7,6 +7,8 @@ PlayerTransformManagerParams = class PlayerTransformManagerParams {
         this.myIsLeaningValidAboveDistance = false;
         this.myLeaningValidDistance = 0;
 
+        this.myIsMaxDistanceFromRealToSyncEnabled = false;
+        this.myMaxDistanceFromRealToSync = 0;
         // max distance to resync valid with head, if you head is further do not resync
 
         this.myHeadRadius = 0;
@@ -56,6 +58,7 @@ PlayerTransformManager = class PlayerTransformManager {
         this._myIsBodyColliding = false;
         this._myIsHeadColliding = false;
         this._myIsLeaning = false;
+        this._myIsFar = false;
     }
 
     start() {
@@ -183,12 +186,8 @@ PlayerTransformManager = class PlayerTransformManager {
         return this._myParams.myPlayerHeadManager.getHeight();
     }
 
-    isRealValid() {
-        return !this.isBodyColliding() && !this.isHeadColliding() && !this.isLeaning();
-    }
-
-    isRealSynced() {
-        return this.getPlayerHeadManager().isSynced();
+    isSynced() {
+        return !this.isBodyColliding() && !this.isHeadColliding() && !this.isLeaning() && !this.isFar();
     }
 
     resetReal(resetRotation = false) {
@@ -205,6 +204,10 @@ PlayerTransformManager = class PlayerTransformManager {
 
     isLeaning() {
         return this._myIsLeaning;
+    }
+
+    isFar() {
+        return this._myIsFar;
     }
 
     getDistanceToReal() {
@@ -369,11 +372,12 @@ PlayerTransformManager.prototype.update = function () {
     return function update(dt) {
         // check if new head is ok and update the data
         // if head is not synced (blurred or session changing) avoid this and keep last valid
-        if (this.isRealSynced()) {
+        if (this.getPlayerHeadManager().isSynced()) {
 
             this._myIsBodyColliding = false;
             this._myIsHeadColliding = false;
             this._myIsLeaning = false;
+            this._myIsFar = false;
 
             //this._myValidPosition = PP.vec3_create();
             //this._myValidRotationQuat = new PP.quat_create();
@@ -384,12 +388,18 @@ PlayerTransformManager.prototype.update = function () {
             feetTransformQuat = this.getTransformQuat(feetTransformQuat);
             movementToCheck = this.getPositionReal(positionReal).vec3_sub(this.getPosition(position), movementToCheck);
 
+            if (this._myParams.myIsMaxDistanceFromRealToSyncEnabled && movementToCheck.vec3_length() > this._myParams.myMaxDistanceFromRealToSync) {
+                this._myIsFar = true;
+            }
+
             CollisionCheckGlobal.move(movementToCheck, feetTransformQuat, this._myRealMovementCollisionCheckParams, collisionRuntimeParams);
 
             if (!collisionRuntimeParams.myHorizontalMovementCanceled && !collisionRuntimeParams.myVerticalMovementCanceled) {
                 this._myIsBodyColliding = false;
 
-                this._myValidPosition.vec3_copy(collisionRuntimeParams.myNewPosition);
+                if (!this._myIsFar) {
+                    this._myValidPosition.vec3_copy(collisionRuntimeParams.myNewPosition);
+                }
             } else {
                 this._myIsBodyColliding = true;
             }
