@@ -197,8 +197,8 @@ WL.registerComponent('stick-movement', {
         this._myCollisionCheckParams.myGroundCircumferenceSliceAmount = 4;
         this._myCollisionCheckParams.myGroundCircumferenceStepAmount = 1;
         this._myCollisionCheckParams.myGroundCircumferenceRotationPerStep = 45;
-        this._myCollisionCheckParams.myGroundFixDistanceFromFeet = 0.1 * this._myScale;
-        this._myCollisionCheckParams.myGroundFixDistanceFromHead = 0.1 * this._myScale;
+        this._myCollisionCheckParams.myGroundPopOutDistanceFromFeet = 0.1 * this._myScale;
+        this._myCollisionCheckParams.myGroundPopOutDistanceFromHead = 0.1 * this._myScale;
 
         this._myCollisionCheckParams.myCheckHeight = true;
         this._myCollisionCheckParams.myHeightCheckStepAmount = 1;

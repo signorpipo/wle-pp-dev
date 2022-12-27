@@ -693,8 +693,8 @@ WL.registerComponent('locomotion-draft-2', {
         this._myCollisionCheckParams.myGroundCircumferenceSliceAmount = 8;
         this._myCollisionCheckParams.myGroundCircumferenceStepAmount = 2;
         this._myCollisionCheckParams.myGroundCircumferenceRotationPerStep = 22.5;
-        this._myCollisionCheckParams.myGroundFixDistanceFromFeet = 0.1;
-        this._myCollisionCheckParams.myGroundFixDistanceFromHead = 0.1;
+        this._myCollisionCheckParams.myGroundPopOutDistanceFromFeet = 0.1;
+        this._myCollisionCheckParams.myGroundPopOutDistanceFromHead = 0.1;
 
         this._myCollisionCheckParams.myCheckHeight = true;
         this._myCollisionCheckParams.myCheckHeightTop = true;

@@ -2,19 +2,18 @@ _myTotalRaycasts = 0; // #TODO debug stuff, remove later
 _myTotalRaycastsMax = 0; // #TODO debug stuff, remove later
 
 CollisionCheckUtils = {
-    generateTeleportParamsFromMovementParams: function (smoothParams) {
-        let teleportParams = new CollisionCheckParams();
-        teleportParams.copy(smoothParams);
+    generateTeleportParamsFromMovementParams: function (smoothParams, outTeleportParams = new CollisionCheckParams()) {
+        outTeleportParams.copy(smoothParams);
 
-        teleportParams.myHalfConeAngle = 180;
-        teleportParams.myHalfConeSliceAmount = Math.round((teleportParams.myHalfConeAngle / smoothParams.myHalfConeAngle) * smoothParams.myHalfConeSliceAmount);
+        outTeleportParams.myHalfConeAngle = 180;
+        outTeleportParams.myHalfConeSliceAmount = Math.round((outTeleportParams.myHalfConeAngle / smoothParams.myHalfConeAngle) * smoothParams.myHalfConeSliceAmount);
 
-        teleportParams.myCheckHorizontalFixedForwardEnabled = true;
-        teleportParams.myCheckHorizontalFixedForward = [0, 0, 1];
+        outTeleportParams.myCheckHorizontalFixedForwardEnabled = true;
+        outTeleportParams.myCheckHorizontalFixedForward = [0, 0, 1];
 
-        teleportParams.mySlidingEnabled = false;
+        outTeleportParams.mySlidingEnabled = false;
 
-        return teleportParams;
+        return outTeleportParams;
     },
 };
 

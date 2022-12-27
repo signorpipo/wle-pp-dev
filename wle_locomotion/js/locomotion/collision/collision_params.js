@@ -61,8 +61,8 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myGroundCircumferenceSliceAmount = 8;
         this.myGroundCircumferenceStepAmount = 2;
         this.myGroundCircumferenceRotationPerStep = 22.5;
-        this.myGroundFixDistanceFromFeet = 0.1;
-        this.myGroundFixDistanceFromHead = 0.1;
+        this.myGroundPopOutDistanceFromFeet = 0.1;
+        this.myGroundPopOutDistanceFromHead = 0.1;
 
         this.myCheckHeight = true;
         this.myCheckHeightTop = true;
@@ -181,8 +181,8 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myGroundCircumferenceSliceAmount = params.myGroundCircumferenceSliceAmount;
         this.myGroundCircumferenceStepAmount = params.myGroundCircumferenceStepAmount;
         this.myGroundCircumferenceRotationPerStep = params.myGroundCircumferenceRotationPerStep;
-        this.myGroundFixDistanceFromFeet = params.myGroundFixDistanceFromFeet;
-        this.myGroundFixDistanceFromHead = params.myGroundFixDistanceFromHead;
+        this.myGroundPopOutDistanceFromFeet = params.myGroundPopOutDistanceFromFeet;
+        this.myGroundPopOutDistanceFromHead = params.myGroundPopOutDistanceFromHead;
 
         this.myCheckHeight = params.myCheckHeight;
         this.myCheckHeightTop = params.myCheckHeightTop;
@@ -273,8 +273,9 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
 
         this.myHasSnappedOnGround = false;
         this.myHasSnappedOnCeiling = false;
-        this.myHasFixedPositionGround = false;
-        this.myHasFixedPositionCeiling = false;
+        this.myHasPoppedOutGround = false;
+        this.myHasPoppedOutCeiling = false;
+        this.myHasAdjustedVerticalMovement = false;
 
         this.myIsSliding = false;
         this.myIsSlidingIntoOppositeDirection = false;
@@ -301,7 +302,7 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.myIsTeleport = false; // could be a single bool but not sure if there should be an option and don't want to create an enum for now
         this.myIsMove = false;
         this.myIsPositionCheck = false;
-        this.myIsPositionCheckAllowFix = false;
+        this.myIsPositionCheckAllowAdjustments = false;
     }
 
     reset() {
@@ -339,8 +340,9 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
 
         this.myHasSnappedOnGround = false;
         this.myHasSnappedOnCeiling = false;
-        this.myHasFixedPositionGround = false;
-        this.myHasFixedPositionCeiling = false;
+        this.myHasPoppedOutGround = false;
+        this.myHasPoppedOutCeiling = false;
+        this.myHasAdjustedVerticalMovement = false;
 
         this.myIsSliding = false;
         this.myIsSlidingIntoOppositeDirection = false;
@@ -367,7 +369,7 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.myIsTeleport = false;
         this.myIsMove = false;
         this.myIsPositionCheck = false;
-        this.myIsPositionCheckAllowFix = false;
+        this.myIsPositionCheckAllowAdjustments = false;
     }
 
     copy(other) {
@@ -405,8 +407,9 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
 
         this.myHasSnappedOnGround = other.myHasSnappedOnGround;
         this.myHasSnappedOnCeiling = other.myHasSnappedOnCeiling;
-        this.myHasFixedPositionGround = other.myHasFixedPositionGround;
-        this.myHasFixedPositionCeiling = other.myHasFixedPositionCeiling;
+        this.myHasPoppedOutGround = other.myHasPoppedOutGround;
+        this.myHasPoppedOutCeiling = other.myHasPoppedOutCeiling;
+        this.myHasAdjustedVerticalMovement = other.myHasAdjustedVerticalMovement;
 
         this.myIsSliding = other.myIsSliding;
         this.myIsSlidingIntoOppositeDirection = other.myIsSlidingIntoOppositeDirection;
@@ -432,6 +435,6 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.myIsTeleport = other.myIsTeleport;
         this.myIsMove = other.myIsMove;
         this.myIsPositionCheck = other.myIsPositionCheck;
-        this.myIsPositionCheckAllowFix = other.myIsPositionCheckAllowFix;
+        this.myIsPositionCheckAllowAdjustments = other.myIsPositionCheckAllowAdjustments;
     }
 };
