@@ -41,8 +41,8 @@ PlayerLocomotion = class PlayerLocomotion {
     constructor(params) {
         this._myParams = params;
 
-        this._myCollisionCheckParamsSmooth = new CollisionCheckParams();
-        this._setupCollisionCheckParamsSmooth();
+        this._myCollisionCheckParamsMovement = new CollisionCheckParams();
+        this._setupCollisionCheckParamsMovement();
         this._myCollisionCheckParamsTeleport = null;
         this._setupCollisionCheckParamsTeleport();
 
@@ -72,6 +72,9 @@ PlayerLocomotion = class PlayerLocomotion {
             let params = new PlayerTransformManagerParams();
 
             params.myPlayerHeadManager = this._myPlayerHeadManager;
+
+            params.myMovementCollisionCheckParams = this._myCollisionCheckParamsMovement;
+            params.myTeleportCollisionCheckParams = null;
 
             params.myCollisionRuntimeParams = this._myCollisionRuntimeParams;
 
@@ -137,7 +140,7 @@ PlayerLocomotion = class PlayerLocomotion {
 
                 params.myPlayerHeadManager = this._myPlayerHeadManager;
 
-                params.myCollisionCheckParams = this._myCollisionCheckParamsSmooth;
+                params.myCollisionCheckParams = this._myCollisionCheckParamsMovement;
 
                 params.myHandedness = this._myParams.myMainHand;
 
@@ -169,7 +172,7 @@ PlayerLocomotion = class PlayerLocomotion {
 
                 params.myDetectionParams.myMaxDistance = 3;
                 params.myDetectionParams.myMaxHeightDifference = 4;
-                params.myDetectionParams.myGroundAngleToIgnoreUpward = this._myCollisionCheckParamsSmooth.myGroundAngleToIgnore;
+                params.myDetectionParams.myGroundAngleToIgnoreUpward = this._myCollisionCheckParamsMovement.myGroundAngleToIgnore;
                 params.myDetectionParams.myMustBeOnGround = true;
 
                 params.myDetectionParams.myTeleportBlockLayerFlags.setAllFlagsActive(true);
@@ -261,114 +264,114 @@ PlayerLocomotion = class PlayerLocomotion {
     }
 
     _updateCollisionHeight() {
-        this._myCollisionCheckParamsSmooth.myHeight = this._myPlayerHeadManager.getHeight();
-        if (this._myCollisionCheckParamsSmooth.myHeight <= 0.000001) {
-            this._myCollisionCheckParamsSmooth.myHeight = 0;
+        this._myCollisionCheckParamsMovement.myHeight = this._myPlayerHeadManager.getHeight();
+        if (this._myCollisionCheckParamsMovement.myHeight <= 0.000001) {
+            this._myCollisionCheckParamsMovement.myHeight = 0;
         } else {
-            this._myCollisionCheckParamsSmooth.myHeight += this._myParams.myForeheadExtraHeight;
+            this._myCollisionCheckParamsMovement.myHeight += this._myParams.myForeheadExtraHeight;
         }
 
-        this._myCollisionCheckParamsTeleport.myHeight = this._myCollisionCheckParamsSmooth.myHeight;
+        this._myCollisionCheckParamsTeleport.myHeight = this._myCollisionCheckParamsMovement.myHeight;
     }
 
-    _setupCollisionCheckParamsSmooth() {
-        this._myCollisionCheckParamsSmooth.mySplitMovementEnabled = false;
-        this._myCollisionCheckParamsSmooth.mySplitMovementMaxLength = 0;
+    _setupCollisionCheckParamsMovement() {
+        this._myCollisionCheckParamsMovement.mySplitMovementEnabled = false;
+        this._myCollisionCheckParamsMovement.mySplitMovementMaxLength = 0;
 
-        this._myCollisionCheckParamsSmooth.myRadius = 0.3;
-        this._myCollisionCheckParamsSmooth.myDistanceFromFeetToIgnore = 0.1;
-        this._myCollisionCheckParamsSmooth.myDistanceFromHeadToIgnore = 0.1;
+        this._myCollisionCheckParamsMovement.myRadius = 0.3;
+        this._myCollisionCheckParamsMovement.myDistanceFromFeetToIgnore = 0.1;
+        this._myCollisionCheckParamsMovement.myDistanceFromHeadToIgnore = 0.1;
 
-        this._myCollisionCheckParamsSmooth.myHorizontalMovementCheckEnabled = true;
-        this._myCollisionCheckParamsSmooth.myHorizontalMovementStepEnabled = false;
-        this._myCollisionCheckParamsSmooth.myHorizontalMovementStepMaxLength = 0;
-        this._myCollisionCheckParamsSmooth.myHorizontalMovementRadialStepAmount = 1;
-        this._myCollisionCheckParamsSmooth.myHorizontalMovementCheckDiagonal = true;
-        this._myCollisionCheckParamsSmooth.myHorizontalMovementCheckStraight = false;
-        this._myCollisionCheckParamsSmooth.myHorizontalMovementCheckHorizontalBorder = false;
-        this._myCollisionCheckParamsSmooth.myHorizontalMovementCheckVerticalStraight = false;
-        this._myCollisionCheckParamsSmooth.myHorizontalMovementCheckVerticalDiagonal = true;
-        this._myCollisionCheckParamsSmooth.myHorizontalMovementCheckVerticalStraightDiagonal = false;
-        this._myCollisionCheckParamsSmooth.myHorizontalMovementCheckVerticalHorizontalBorderDiagonal = false;
+        this._myCollisionCheckParamsMovement.myHorizontalMovementCheckEnabled = true;
+        this._myCollisionCheckParamsMovement.myHorizontalMovementStepEnabled = false;
+        this._myCollisionCheckParamsMovement.myHorizontalMovementStepMaxLength = 0;
+        this._myCollisionCheckParamsMovement.myHorizontalMovementRadialStepAmount = 1;
+        this._myCollisionCheckParamsMovement.myHorizontalMovementCheckDiagonal = true;
+        this._myCollisionCheckParamsMovement.myHorizontalMovementCheckStraight = false;
+        this._myCollisionCheckParamsMovement.myHorizontalMovementCheckHorizontalBorder = false;
+        this._myCollisionCheckParamsMovement.myHorizontalMovementCheckVerticalStraight = false;
+        this._myCollisionCheckParamsMovement.myHorizontalMovementCheckVerticalDiagonal = true;
+        this._myCollisionCheckParamsMovement.myHorizontalMovementCheckVerticalStraightDiagonal = false;
+        this._myCollisionCheckParamsMovement.myHorizontalMovementCheckVerticalHorizontalBorderDiagonal = false;
 
-        this._myCollisionCheckParamsSmooth.myHalfConeAngle = 60;
-        this._myCollisionCheckParamsSmooth.myHalfConeSliceAmount = 2;
-        this._myCollisionCheckParamsSmooth.myCheckConeBorder = true;
-        this._myCollisionCheckParamsSmooth.myCheckConeRay = true;
-        this._myCollisionCheckParamsSmooth.myHorizontalPositionCheckVerticalIgnoreHitsInsideCollision = false;
-        this._myCollisionCheckParamsSmooth.myHorizontalPositionCheckVerticalDirectionType = 2; // somewhat expensive, 2 times the check for the vertical check of the horizontal movement!
+        this._myCollisionCheckParamsMovement.myHalfConeAngle = 60;
+        this._myCollisionCheckParamsMovement.myHalfConeSliceAmount = 2;
+        this._myCollisionCheckParamsMovement.myCheckConeBorder = true;
+        this._myCollisionCheckParamsMovement.myCheckConeRay = true;
+        this._myCollisionCheckParamsMovement.myHorizontalPositionCheckVerticalIgnoreHitsInsideCollision = false;
+        this._myCollisionCheckParamsMovement.myHorizontalPositionCheckVerticalDirectionType = 2; // somewhat expensive, 2 times the check for the vertical check of the horizontal movement!
 
-        this._myCollisionCheckParamsSmooth.myFeetRadius = 0.1;
-        this._myCollisionCheckParamsSmooth.myAdjustVerticalMovementWithSurfaceAngle = true;
+        this._myCollisionCheckParamsMovement.myFeetRadius = 0.1;
+        this._myCollisionCheckParamsMovement.myAdjustVerticalMovementWithSurfaceAngle = true;
 
-        this._myCollisionCheckParamsSmooth.mySnapOnGroundEnabled = true;
-        this._myCollisionCheckParamsSmooth.mySnapOnGroundExtraDistance = 0.1;
-        this._myCollisionCheckParamsSmooth.mySnapOnCeilingEnabled = false;
-        this._myCollisionCheckParamsSmooth.mySnapOnCeilingExtraDistance = 0.1;
+        this._myCollisionCheckParamsMovement.mySnapOnGroundEnabled = true;
+        this._myCollisionCheckParamsMovement.mySnapOnGroundExtraDistance = 0.1;
+        this._myCollisionCheckParamsMovement.mySnapOnCeilingEnabled = false;
+        this._myCollisionCheckParamsMovement.mySnapOnCeilingExtraDistance = 0.1;
 
-        this._myCollisionCheckParamsSmooth.myGroundCircumferenceSliceAmount = 8;
-        this._myCollisionCheckParamsSmooth.myGroundCircumferenceStepAmount = 2;
-        this._myCollisionCheckParamsSmooth.myGroundCircumferenceRotationPerStep = 22.5;
-        this._myCollisionCheckParamsSmooth.myGroundPopOutDistanceFromFeet = 0.1;
-        this._myCollisionCheckParamsSmooth.myGroundPopOutDistanceFromHead = 0.1;
+        this._myCollisionCheckParamsMovement.myGroundCircumferenceSliceAmount = 8;
+        this._myCollisionCheckParamsMovement.myGroundCircumferenceStepAmount = 2;
+        this._myCollisionCheckParamsMovement.myGroundCircumferenceRotationPerStep = 22.5;
+        this._myCollisionCheckParamsMovement.myGroundPopOutExtraDistance = 0.1;
+        this._myCollisionCheckParamsMovement.myCeilingPopOutExtraDistance = 0.1;
 
-        this._myCollisionCheckParamsSmooth.myCheckHeight = true;
-        this._myCollisionCheckParamsSmooth.myCheckHeightTop = true;
-        this._myCollisionCheckParamsSmooth.myCheckHeightConeOnCollision = true;
-        this._myCollisionCheckParamsSmooth.myCheckHeightConeOnCollisionKeepHit = false;
-        this._myCollisionCheckParamsSmooth.myHeightCheckStepAmount = 1;
-        this._myCollisionCheckParamsSmooth.myCheckVerticalFixedForwardEnabled = true;
-        this._myCollisionCheckParamsSmooth.myCheckVerticalFixedForward = [0, 0, 1];
-        this._myCollisionCheckParamsSmooth.myCheckVerticalStraight = true;
-        this._myCollisionCheckParamsSmooth.myCheckVerticalDiagonalRay = false;
-        this._myCollisionCheckParamsSmooth.myCheckVerticalDiagonalBorder = false;
-        this._myCollisionCheckParamsSmooth.myCheckVerticalDiagonalBorderRay = false;
-        this._myCollisionCheckParamsSmooth.myCheckVerticalSearchFurtherVerticalHit = false;
+        this._myCollisionCheckParamsMovement.myCheckHeight = true;
+        this._myCollisionCheckParamsMovement.myCheckHeightTop = true;
+        this._myCollisionCheckParamsMovement.myCheckHeightConeOnCollision = true;
+        this._myCollisionCheckParamsMovement.myCheckHeightConeOnCollisionKeepHit = false;
+        this._myCollisionCheckParamsMovement.myHeightCheckStepAmount = 1;
+        this._myCollisionCheckParamsMovement.myCheckVerticalFixedForwardEnabled = true;
+        this._myCollisionCheckParamsMovement.myCheckVerticalFixedForward = [0, 0, 1];
+        this._myCollisionCheckParamsMovement.myCheckVerticalStraight = true;
+        this._myCollisionCheckParamsMovement.myCheckVerticalDiagonalRay = false;
+        this._myCollisionCheckParamsMovement.myCheckVerticalDiagonalBorder = false;
+        this._myCollisionCheckParamsMovement.myCheckVerticalDiagonalBorderRay = false;
+        this._myCollisionCheckParamsMovement.myCheckVerticalSearchFurtherVerticalHit = false;
 
-        this._myCollisionCheckParamsSmooth.myGroundAngleToIgnore = 30;
-        this._myCollisionCheckParamsSmooth.myCeilingAngleToIgnore = 30;
+        this._myCollisionCheckParamsMovement.myGroundAngleToIgnore = 30;
+        this._myCollisionCheckParamsMovement.myCeilingAngleToIgnore = 30;
 
-        this._myCollisionCheckParamsSmooth.myHeight = 1;
+        this._myCollisionCheckParamsMovement.myHeight = 1;
 
-        this._myCollisionCheckParamsSmooth.myDistanceToBeOnGround = 0.001;
-        this._myCollisionCheckParamsSmooth.myDistanceToComputeGroundInfo = 0.1;
-        this._myCollisionCheckParamsSmooth.myDistanceToBeOnCeiling = 0.001;
-        this._myCollisionCheckParamsSmooth.myDistanceToComputeCeilingInfo = 0.1;
-        this._myCollisionCheckParamsSmooth.myVerticalFixToBeOnGround = 0;
-        this._myCollisionCheckParamsSmooth.myVerticalFixToComputeGroundInfo = 0;
-        this._myCollisionCheckParamsSmooth.myVerticalFixToBeOnCeiling = 0;
-        this._myCollisionCheckParamsSmooth.myVerticalFixToComputeCeilingInfo = 0;
+        this._myCollisionCheckParamsMovement.myDistanceToBeOnGround = 0.001;
+        this._myCollisionCheckParamsMovement.myDistanceToComputeGroundInfo = 0.1;
+        this._myCollisionCheckParamsMovement.myDistanceToBeOnCeiling = 0.001;
+        this._myCollisionCheckParamsMovement.myDistanceToComputeCeilingInfo = 0.1;
+        this._myCollisionCheckParamsMovement.myVerticalFixToBeOnGround = 0;
+        this._myCollisionCheckParamsMovement.myVerticalFixToComputeGroundInfo = 0;
+        this._myCollisionCheckParamsMovement.myVerticalFixToBeOnCeiling = 0;
+        this._myCollisionCheckParamsMovement.myVerticalFixToComputeCeilingInfo = 0;
 
-        this._myCollisionCheckParamsSmooth.mySlidingEnabled = true;
-        this._myCollisionCheckParamsSmooth.mySlidingHorizontalMovementCheckBetterNormal = true;
-        this._myCollisionCheckParamsSmooth.mySlidingMaxAttempts = 4;
-        this._myCollisionCheckParamsSmooth.mySlidingCheckBothDirections = true;        // expensive, 2 times the check for the whole horizontal movement!
-        this._myCollisionCheckParamsSmooth.mySlidingFlickeringPreventionType = 1;      // expensive, 2 times the check for the whole horizontal movement!
-        this._myCollisionCheckParamsSmooth.mySlidingFlickeringPreventionCheckOnlyIfAlreadySliding = true;
-        this._myCollisionCheckParamsSmooth.mySlidingFlickerPreventionCheckAnywayCounter = 4;
-        this._myCollisionCheckParamsSmooth.mySlidingAdjustSign90Degrees = true;
+        this._myCollisionCheckParamsMovement.mySlidingEnabled = true;
+        this._myCollisionCheckParamsMovement.mySlidingHorizontalMovementCheckBetterNormal = true;
+        this._myCollisionCheckParamsMovement.mySlidingMaxAttempts = 4;
+        this._myCollisionCheckParamsMovement.mySlidingCheckBothDirections = true;        // expensive, 2 times the check for the whole horizontal movement!
+        this._myCollisionCheckParamsMovement.mySlidingFlickeringPreventionType = 1;      // expensive, 2 times the check for the whole horizontal movement!
+        this._myCollisionCheckParamsMovement.mySlidingFlickeringPreventionCheckOnlyIfAlreadySliding = true;
+        this._myCollisionCheckParamsMovement.mySlidingFlickerPreventionCheckAnywayCounter = 4;
+        this._myCollisionCheckParamsMovement.mySlidingAdjustSign90Degrees = true;
 
-        this._myCollisionCheckParamsSmooth.myBlockLayerFlags = new PP.PhysicsLayerFlags();
-        this._myCollisionCheckParamsSmooth.myBlockLayerFlags.setAllFlagsActive(true);
+        this._myCollisionCheckParamsMovement.myBlockLayerFlags = new PP.PhysicsLayerFlags();
+        this._myCollisionCheckParamsMovement.myBlockLayerFlags.setAllFlagsActive(true);
         let physXComponents = PP.myPlayerObjects.myPlayer.pp_getComponentsHierarchy("physx");
         for (let physXComponent of physXComponents) {
-            this._myCollisionCheckParamsSmooth.myObjectsToIgnore.pp_pushUnique(physXComponent.object, (first, second) => first.pp_equals(second));
+            this._myCollisionCheckParamsMovement.myObjectsToIgnore.pp_pushUnique(physXComponent.object, (first, second) => first.pp_equals(second));
         }
 
-        this._myCollisionCheckParamsSmooth.myDebugActive = false;
+        this._myCollisionCheckParamsMovement.myDebugActive = false;
 
-        this._myCollisionCheckParamsSmooth.myDebugHorizontalMovementActive = false;
-        this._myCollisionCheckParamsSmooth.myDebugHorizontalPositionActive = true;
-        this._myCollisionCheckParamsSmooth.myDebugVerticalMovementActive = false;
-        this._myCollisionCheckParamsSmooth.myDebugVerticalPositionActive = false;
-        this._myCollisionCheckParamsSmooth.myDebugSlidingActive = false;
-        this._myCollisionCheckParamsSmooth.myDebugSurfaceInfoActive = false;
-        this._myCollisionCheckParamsSmooth.myDebugRuntimeParamsActive = false;
-        this._myCollisionCheckParamsSmooth.myDebugMovementActive = false;
+        this._myCollisionCheckParamsMovement.myDebugHorizontalMovementActive = false;
+        this._myCollisionCheckParamsMovement.myDebugHorizontalPositionActive = true;
+        this._myCollisionCheckParamsMovement.myDebugVerticalMovementActive = false;
+        this._myCollisionCheckParamsMovement.myDebugVerticalPositionActive = false;
+        this._myCollisionCheckParamsMovement.myDebugSlidingActive = false;
+        this._myCollisionCheckParamsMovement.myDebugSurfaceInfoActive = false;
+        this._myCollisionCheckParamsMovement.myDebugRuntimeParamsActive = false;
+        this._myCollisionCheckParamsMovement.myDebugMovementActive = false;
     }
 
     _setupCollisionCheckParamsTeleport() {
-        this._myCollisionCheckParamsTeleport = CollisionCheckUtils.generateTeleportParamsFromMovementParams(this._myCollisionCheckParamsSmooth);
+        this._myCollisionCheckParamsTeleport = CollisionCheckUtils.generateTeleportParamsFromMovementParams(this._myCollisionCheckParamsMovement);
 
         // increased so to let teleport on steep slopes from above (from below is fixed through detection myGroundAngleToIgnoreUpward)
         this._myCollisionCheckParamsTeleport.myGroundAngleToIgnore = 60;

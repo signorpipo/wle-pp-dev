@@ -36,7 +36,7 @@ CollisionCheck.prototype._verticalCheck = function () {
                 collisionRuntimeParams.myHasSnappedOnCeiling = false;
                 collisionRuntimeParams.myHasPoppedOutGround = false;
                 collisionRuntimeParams.myHasPoppedOutCeiling = false;
-                collisionRuntimeParams.myHasAdjustedVerticalMovement = false;
+                collisionRuntimeParams.myHasReducedVerticalMovement = false;
             }
         }
 
@@ -59,24 +59,24 @@ CollisionCheck.prototype._verticalMovementAdjustment = function () {
         startOffset.vec3_zero();
         endOffset.vec3_zero();
 
-        let fixPositionEnabled = false;
+        let popOutEnabled = false;
         let snapEnabled = false;
 
         if (isMovementDownward) {
             startOffset.vec3_zero();
             endOffset.vec3_copy(verticalMovement);
 
-            if (collisionCheckParams.myGroundPopOutDistanceFromFeet > 0) {
-                startOffset.vec3_add(up.vec3_scale(collisionCheckParams.myGroundPopOutDistanceFromFeet + 0.00001, tempVector), startOffset);
-                fixPositionEnabled = true;
+            if (collisionCheckParams.myGroundPopOutExtraDistance > 0 && collisionCheckParams.myGroundPopOutEnabled) {
+                startOffset.vec3_add(up.vec3_scale(collisionCheckParams.myGroundPopOutExtraDistance + 0.00001, tempVector), startOffset);
+                popOutEnabled = true;
             }
         } else {
             startOffset = up.vec3_scale(height, startOffset);
             endOffset = up.vec3_scale(height, endOffset).vec3_add(verticalMovement, endOffset);
 
-            if (collisionCheckParams.myGroundPopOutDistanceFromHead > 0) {
-                startOffset.vec3_add(up.vec3_scale(-collisionCheckParams.myGroundPopOutDistanceFromHead - 0.00001, tempVector), startOffset);
-                fixPositionEnabled = true;
+            if (collisionCheckParams.myCeilingPopOutExtraDistance > 0 && collisionCheckParams.myCeilingPopOutEnabled) {
+                startOffset.vec3_add(up.vec3_scale(-collisionCheckParams.myCeilingPopOutExtraDistance - 0.00001, tempVector), startOffset);
+                popOutEnabled = true;
             }
         }
 
@@ -123,19 +123,21 @@ CollisionCheck.prototype._verticalMovementAdjustment = function () {
             }
 
             if (furtherDirectionPositionSet) {
-                collisionRuntimeParams.myHasAdjustedVerticalMovement = true;
-
                 upNegate = up.vec3_negate(upNegate);
                 if (isMovementDownward) {
                     outFixedMovement = furtherDirectionPosition.vec3_sub(feetPosition, outFixedMovement).vec3_componentAlongAxis(up, outFixedMovement);
 
                     if (snapEnabled && outFixedMovement.vec3_isFurtherAlongAxis(verticalMovement, upNegate)) {
                         collisionRuntimeParams.myHasSnappedOnGround = true;
-                    } else if (fixPositionEnabled && outFixedMovement.vec3_isFurtherAlongAxis(verticalMovement, up)) {
+                    } else if (popOutEnabled && outFixedMovement.vec3_isFurtherAlongAxis(verticalMovement, up)) {
                         if (!outFixedMovement.vec3_isZero(0.00001) &&
                             (verticalMovement.vec3_isZero(0.00001) || !outFixedMovement.vec3_isConcordant(verticalMovement))) {
                             collisionRuntimeParams.myHasPoppedOutGround = true;
+                        } else {
+                            collisionRuntimeParams.myHasReducedVerticalMovement = true;
                         }
+                    } else {
+                        collisionRuntimeParams.myHasReducedVerticalMovement = true;
                     }
                 } else {
                     outFixedMovement = furtherDirectionPosition.vec3_sub(feetPosition.vec3_add(up.vec3_scale(height, outFixedMovement), outFixedMovement), outFixedMovement).
@@ -143,12 +145,25 @@ CollisionCheck.prototype._verticalMovementAdjustment = function () {
 
                     if (snapEnabled && outFixedMovement.vec3_isFurtherAlongAxis(verticalMovement, up)) {
                         collisionRuntimeParams.myHasSnappedOnCeiling = true;
-                    } else if (fixPositionEnabled && outFixedMovement.vec3_isFurtherAlongAxis(verticalMovement, upNegate)) {
+                    } else if (popOutEnabled && outFixedMovement.vec3_isFurtherAlongAxis(verticalMovement, upNegate)) {
                         if (!outFixedMovement.vec3_isZero(0.00001) &&
                             (verticalMovement.vec3_isZero(0.00001) || !outFixedMovement.vec3_isConcordant(verticalMovement))) {
                             collisionRuntimeParams.myHasPoppedOutCeiling = true;
+                        } else {
+                            collisionRuntimeParams.myHasReducedVerticalMovement = true;
                         }
+                    } else {
+                        collisionRuntimeParams.myHasReducedVerticalMovement = true;
                     }
+                }
+
+                if (!popOutEnabled && !outFixedMovement.vec3_isConcordant(verticalMovement)) {
+                    outFixedMovement.vec3_zero();
+                }
+
+                if (!collisionCheckParams.myVerticalMovementReduceEnabled && collisionRuntimeParams.myHasReducedVerticalMovement) {
+                    outFixedMovement.vec3_copy(verticalMovement);
+                    collisionRuntimeParams.myHasReducedVerticalMovement = false;
                 }
             } else {
                 outFixedMovement.vec3_copy(verticalMovement);

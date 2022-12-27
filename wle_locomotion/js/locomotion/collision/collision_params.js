@@ -58,11 +58,16 @@ CollisionCheckParams = class CollisionCheckParams {
         this.mySnapOnCeilingEnabled = false;
         this.mySnapOnCeilingExtraDistance = 0.1;
 
+        this.myGroundPopOutEnabled = true;
+        this.myGroundPopOutExtraDistance = 0.1;
+        this.myCeilingPopOutEnabled = true;
+        this.myCeilingPopOutExtraDistance = 0.1;
+
+        this.myVerticalMovementReduceEnabled = true;
+
         this.myGroundCircumferenceSliceAmount = 8;
         this.myGroundCircumferenceStepAmount = 2;
         this.myGroundCircumferenceRotationPerStep = 22.5;
-        this.myGroundPopOutDistanceFromFeet = 0.1;
-        this.myGroundPopOutDistanceFromHead = 0.1;
 
         this.myCheckHeight = true;
         this.myCheckHeightTop = true;
@@ -178,11 +183,16 @@ CollisionCheckParams = class CollisionCheckParams {
         this.mySnapOnCeilingEnabled = params.mySnapOnCeilingEnabled;
         this.mySnapOnCeilingExtraDistance = params.mySnapOnCeilingExtraDistance;
 
+        this.myGroundPopOutEnabled = params.myGroundPopOutEnabled;
+        this.myGroundPopOutExtraDistance = params.myGroundPopOutExtraDistance;
+        this.myCeilingPopOutEnabled = params.myCeilingPopOutEnabled;
+        this.myCeilingPopOutExtraDistance = params.myCeilingPopOutExtraDistance;
+
+        this.myVerticalMovementReduceEnabled = params.myVerticalMovementReduceEnabled;
+
         this.myGroundCircumferenceSliceAmount = params.myGroundCircumferenceSliceAmount;
         this.myGroundCircumferenceStepAmount = params.myGroundCircumferenceStepAmount;
         this.myGroundCircumferenceRotationPerStep = params.myGroundCircumferenceRotationPerStep;
-        this.myGroundPopOutDistanceFromFeet = params.myGroundPopOutDistanceFromFeet;
-        this.myGroundPopOutDistanceFromHead = params.myGroundPopOutDistanceFromHead;
 
         this.myCheckHeight = params.myCheckHeight;
         this.myCheckHeightTop = params.myCheckHeightTop;
@@ -275,7 +285,8 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.myHasSnappedOnCeiling = false;
         this.myHasPoppedOutGround = false;
         this.myHasPoppedOutCeiling = false;
-        this.myHasAdjustedVerticalMovement = false;
+        this.myHasAdjustedVerticalMovementWithSurfaceAngle = false;
+        this.myHasReducedVerticalMovement = false;
 
         this.myIsSliding = false;
         this.myIsSlidingIntoOppositeDirection = false;
@@ -342,7 +353,8 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.myHasSnappedOnCeiling = false;
         this.myHasPoppedOutGround = false;
         this.myHasPoppedOutCeiling = false;
-        this.myHasAdjustedVerticalMovement = false;
+        this.myHasAdjustedVerticalMovementWithSurfaceAngle = false;
+        this.myHasReducedVerticalMovement = false;
 
         this.myIsSliding = false;
         this.myIsSlidingIntoOppositeDirection = false;
@@ -409,7 +421,8 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.myHasSnappedOnCeiling = other.myHasSnappedOnCeiling;
         this.myHasPoppedOutGround = other.myHasPoppedOutGround;
         this.myHasPoppedOutCeiling = other.myHasPoppedOutCeiling;
-        this.myHasAdjustedVerticalMovement = other.myHasAdjustedVerticalMovement;
+        this.myHasAdjustedVerticalMovementWithSurfaceAngle = other.myHasAdjustedVerticalMovementWithSurfaceAngle;
+        this.myHasReducedVerticalMovement = other.myHasReducedVerticalMovement;
 
         this.myIsSliding = other.myIsSliding;
         this.myIsSlidingIntoOppositeDirection = other.myIsSlidingIntoOppositeDirection;

@@ -174,6 +174,10 @@ CollisionCheck.prototype._moveStep = function () {
                 extraSurfaceVerticalMovement.vec3_zero();
                 extraSurfaceVerticalMovement = this._computeExtraSurfaceVerticalMovement(fixedHorizontalMovement, transformUp, collisionCheckParams, this._myPrevCollisionRuntimeParams, extraSurfaceVerticalMovement);
                 surfaceAdjustedVerticalMovement.vec3_add(extraSurfaceVerticalMovement, surfaceAdjustedVerticalMovement);
+
+                if (!extraSurfaceVerticalMovement.vec3_isZero(0.00001)) {
+                    collisionRuntimeParams.myHasAdjustedVerticalMovementWithSurfaceAngle = true;
+                }
             }
 
             newFeetPosition = feetPosition.vec3_add(fixedHorizontalMovement, newFeetPosition);
