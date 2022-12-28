@@ -163,6 +163,18 @@ WL.registerComponent('ai-movement', {
             this._myCollisionCheckParams.myObjectsToIgnore.pp_pushUnique(physXComponent.object, (first, second) => first.pp_equals(second));
         }
 
+        this._myCollisionCheckParams.myHorizontalPositionCheckEnabled = true;
+        this._myCollisionCheckParams.myVerticalMovementCheckEnabled = true;
+        this._myCollisionCheckParams.myVerticalPositionCheckEnabled = true;
+        this._myCollisionCheckParams.myVerticalMovementReduceEnabled = true;
+        this._myCollisionCheckParams.myComputeGroundInfoEnabled = true;
+        this._myCollisionCheckParams.myComputeCeilingInfoEnabled = true;
+
+        this._myCollisionCheckParams.myGroundPopOutEnabled = true;
+        this._myCollisionCheckParams.myGroundPopOutExtraDistance = 0.1;
+        this._myCollisionCheckParams.myCeilingPopOutEnabled = true;
+        this._myCollisionCheckParams.myCeilingPopOutExtraDistance = 0.1;
+
         this._myCollisionCheckParams.myDebugActive = false;
 
         this._myCollisionCheckParams.myDebugHorizontalMovementActive = true;

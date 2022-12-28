@@ -305,6 +305,7 @@ PlayerLocomotion = class PlayerLocomotion {
         this._myCollisionCheckParamsMovement.myHorizontalMovementCheckVerticalStraightDiagonal = false;
         this._myCollisionCheckParamsMovement.myHorizontalMovementCheckVerticalHorizontalBorderDiagonal = false;
 
+        this._myCollisionCheckParamsMovement.myHorizontalPositionCheckEnabled = true;
         this._myCollisionCheckParamsMovement.myHalfConeAngle = 60;
         this._myCollisionCheckParamsMovement.myHalfConeSliceAmount = 2;
         this._myCollisionCheckParamsMovement.myCheckConeBorder = true;
@@ -312,6 +313,9 @@ PlayerLocomotion = class PlayerLocomotion {
         this._myCollisionCheckParamsMovement.myHorizontalPositionCheckVerticalIgnoreHitsInsideCollision = false;
         this._myCollisionCheckParamsMovement.myHorizontalPositionCheckVerticalDirectionType = 2; // somewhat expensive, 2 times the check for the vertical check of the horizontal movement!
 
+        this._myCollisionCheckParamsMovement.myVerticalMovementCheckEnabled = true;
+        this._myCollisionCheckParamsMovement.myVerticalPositionCheckEnabled = true;
+        this._myCollisionCheckParamsMovement.myVerticalMovementReduceEnabled = true;
         this._myCollisionCheckParamsMovement.myFeetRadius = 0.1;
         this._myCollisionCheckParamsMovement.myAdjustVerticalMovementWithSurfaceAngle = true;
 
@@ -319,6 +323,11 @@ PlayerLocomotion = class PlayerLocomotion {
         this._myCollisionCheckParamsMovement.mySnapOnGroundExtraDistance = 0.1;
         this._myCollisionCheckParamsMovement.mySnapOnCeilingEnabled = false;
         this._myCollisionCheckParamsMovement.mySnapOnCeilingExtraDistance = 0.1;
+
+        this._myCollisionCheckParamsMovement.myGroundPopOutEnabled = true;
+        this._myCollisionCheckParamsMovement.myGroundPopOutExtraDistance = 0.1;
+        this._myCollisionCheckParamsMovement.myCeilingPopOutEnabled = true;
+        this._myCollisionCheckParamsMovement.myCeilingPopOutExtraDistance = 0.1;
 
         this._myCollisionCheckParamsMovement.myGroundCircumferenceSliceAmount = 8;
         this._myCollisionCheckParamsMovement.myGroundCircumferenceStepAmount = 2;
@@ -333,6 +342,8 @@ PlayerLocomotion = class PlayerLocomotion {
         this._myCollisionCheckParamsMovement.myHeightCheckStepAmount = 1;
         this._myCollisionCheckParamsMovement.myCheckVerticalFixedForwardEnabled = true;
         this._myCollisionCheckParamsMovement.myCheckVerticalFixedForward = [0, 0, 1];
+        this._myCollisionCheckParamsMovement.myCheckVerticalBothDirection = true;
+
         this._myCollisionCheckParamsMovement.myCheckVerticalStraight = true;
         this._myCollisionCheckParamsMovement.myCheckVerticalDiagonalRay = false;
         this._myCollisionCheckParamsMovement.myCheckVerticalDiagonalBorder = false;
@@ -344,6 +355,8 @@ PlayerLocomotion = class PlayerLocomotion {
 
         this._myCollisionCheckParamsMovement.myHeight = 1;
 
+        this._myCollisionCheckParamsMovement.myComputeGroundInfoEnabled = true;
+        this._myCollisionCheckParamsMovement.myComputeCeilingInfoEnabled = true;
         this._myCollisionCheckParamsMovement.myDistanceToBeOnGround = 0.001;
         this._myCollisionCheckParamsMovement.myDistanceToComputeGroundInfo = 0.1;
         this._myCollisionCheckParamsMovement.myDistanceToBeOnCeiling = 0.001;

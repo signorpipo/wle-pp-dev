@@ -4,34 +4,37 @@ CollisionCheckParams = class CollisionCheckParams {
         this.mySplitMovementEnabled = false;
         this.mySplitMovementMaxLength = 0;
 
-        this.myRadius = 0.3;
-        this.myDistanceFromFeetToIgnore = 0.1;
-        this.myDistanceFromHeadToIgnore = 0.1;
+        this.myRadius = 0;
+        this.myDistanceFromFeetToIgnore = 0;
+        this.myDistanceFromHeadToIgnore = 0;
 
         this.myPositionOffsetLocal = PP.vec3_create();
         this.myRotationOffsetLocalQuat = PP.quat_create();
 
         this.myHorizontalMovementCheckEnabled = false;
+
         // usually the horizontal movement is very small and it could be simply skipped has a check, the horizontal position check will be enough
         // with small I mean that it's very unlikely that in 10 cm of movement in a frame u are going to hit something in between but not in the final position
         // if u feel like the movement is bigger or want to be sure u can always enabled this
         // if the movement is really that big it's probably better to use the mySplitMovementEnabled flag and split the movement check into smaller movements
         this.myHorizontalMovementStepEnabled = false;
         this.myHorizontalMovementStepMaxLength = 0;
-        this.myHorizontalMovementRadialStepAmount = 1;
-        this.myHorizontalMovementCheckDiagonal = true;
+
+        this.myHorizontalMovementRadialStepAmount = 0;
+        this.myHorizontalMovementCheckDiagonal = false;
         this.myHorizontalMovementCheckStraight = false;
         this.myHorizontalMovementCheckHorizontalBorder = false;
         this.myHorizontalMovementCheckVerticalStraight = false;
-        this.myHorizontalMovementCheckVerticalDiagonal = true;
+        this.myHorizontalMovementCheckVerticalDiagonal = false;
         this.myHorizontalMovementCheckVerticalStraightDiagonal = false;
         this.myHorizontalMovementCheckVerticalHorizontalBorderDiagonal = false;
 
-        this.myHorizontalPositionCheckEnabled = true;
-        this.myHalfConeAngle = 60;
-        this.myHalfConeSliceAmount = 2;
-        this.myCheckConeBorder = true;
-        this.myCheckConeRay = true;
+        this.myHorizontalPositionCheckEnabled = false;
+
+        this.myHalfConeAngle = 0;
+        this.myHalfConeSliceAmount = 0;
+        this.myCheckConeBorder = false;
+        this.myCheckConeRay = false;
         this.myHorizontalPositionCheckVerticalIgnoreHitsInsideCollision = true; // true gives less issues(tm), but may also collide a bit more, resulting in less sliding
         this.myHorizontalPositionCheckVerticalDirectionType = 0; // somewhat expensive, 2 times the check for the vertical check of the horizontal movement!
         // 0: check upward, gives less issues(tm) (hitting a very small step at the end of a slope /-) with a grounded movement (not fly or snapped to ceiling), but may also collide a bit more, resulting in less sliding
@@ -46,63 +49,65 @@ CollisionCheckParams = class CollisionCheckParams {
         // if the level is properly created the best solution should be myHorizontalPositionCheckVerticalIgnoreHitsInsideCollision = false and myHorizontalPositionCheckVerticalDirectionType = 0
 
         this.myCheckHorizontalFixedForwardEnabled = false; // this is basically only useful if the cone angle is 180 degrees
-        this.myCheckHorizontalFixedForward = [0, 0, 1];
+        this.myCheckHorizontalFixedForward = PP.vec3_create();
 
-        this.myVerticalMovementCheckEnabled = true;
-        this.myVerticalPositionCheckEnabled = true;
-        this.myFeetRadius = 0.1;
-        this.myAdjustVerticalMovementWithSurfaceAngle = true;
-        this.myCheckVerticalFixedForwardEnabled = true;
-        this.myCheckVerticalFixedForward = [0, 0, 1];
-        this.myCheckVerticalBothDirection = true;
+        this.myVerticalMovementCheckEnabled = false;
+        this.myVerticalPositionCheckEnabled = false;
+        this.myFeetRadius = 0;
+        this.myAdjustVerticalMovementWithSurfaceAngle = false;
+        this.myCheckVerticalFixedForwardEnabled = false;
+        this.myCheckVerticalFixedForward = PP.vec3_create();
+        this.myCheckVerticalBothDirection = false;
 
-        this.mySnapOnGroundEnabled = true;
-        this.mySnapOnGroundExtraDistance = 0.1;
+        this.mySnapOnGroundEnabled = false;
+        this.mySnapOnGroundExtraDistance = 0;
         this.mySnapOnCeilingEnabled = false;
-        this.mySnapOnCeilingExtraDistance = 0.1;
+        this.mySnapOnCeilingExtraDistance = 0;
 
-        this.myGroundPopOutEnabled = true;
-        this.myGroundPopOutExtraDistance = 0.1;
-        this.myCeilingPopOutEnabled = true;
-        this.myCeilingPopOutExtraDistance = 0.1;
+        this.myGroundPopOutEnabled = false;
+        this.myGroundPopOutExtraDistance = 0;
+        this.myCeilingPopOutEnabled = false;
+        this.myCeilingPopOutExtraDistance = 0;
 
-        this.myVerticalMovementReduceEnabled = true;
+        this.myVerticalMovementReduceEnabled = false;
 
-        this.myGroundCircumferenceSliceAmount = 8;
-        this.myGroundCircumferenceStepAmount = 2;
-        this.myGroundCircumferenceRotationPerStep = 22.5;
+        this.myGroundCircumferenceSliceAmount = 0;
+        this.myGroundCircumferenceStepAmount = 0;
+        this.myGroundCircumferenceRotationPerStep = 0;
 
-        this.myCheckHeight = true;
-        this.myCheckHeightTop = true;
-        this.myCheckHeightConeOnCollision = true;
-        this.myCheckHeightConeOnCollisionKeepHit = false; // if true and myCheckHeightConeOnCollision is true, if the cone does not hit the height hit will be restored
+        this.myCheckHeight = false;
+        this.myCheckHeightTop = false;
+        this.myCheckHeightConeOnCollision = false;
+        this.myCheckHeightConeOnCollisionKeepHit = false;
+        // if true and myCheckHeightConeOnCollision is true, if the cone does not hit the height hit will be restored
         // the fact that the cone does not hit could be due to the fact that it thinks that the collision can be ignored though, sop restoring can be a bit safer but also collide more
-        this.myHeightCheckStepAmount = 1;
-        this.myCheckVerticalStraight = true;
+
+        this.myHeightCheckStepAmount = 0;
+        this.myCheckVerticalStraight = false;
         this.myCheckVerticalDiagonalRay = false;
         this.myCheckVerticalDiagonalBorder = false;
         this.myCheckVerticalDiagonalBorderRay = false;
         this.myCheckVerticalSearchFurtherVerticalHit = false; //somewhat expensive, but can help fix sime sliding issues
 
-        this.myGroundAngleToIgnore = 30;
-        this.myCeilingAngleToIgnore = 30;
+        this.myGroundAngleToIgnore = 0;
+        this.myCeilingAngleToIgnore = 0;
 
-        this.myHeight = 1;
+        this.myHeight = 0;
 
-        this.myComputeGroundInfoEnabled = true;
-        this.myComputeCeilingInfoEnabled = true;
-        this.myDistanceToBeOnGround = 0.001;
-        this.myDistanceToComputeGroundInfo = 0.1;
-        this.myDistanceToBeOnCeiling = 0.001;
-        this.myDistanceToComputeCeilingInfo = 0.1;
+        this.myComputeGroundInfoEnabled = false;
+        this.myComputeCeilingInfoEnabled = false;
+        this.myDistanceToBeOnGround = 0;
+        this.myDistanceToComputeGroundInfo = 0;
+        this.myDistanceToBeOnCeiling = 0;
+        this.myDistanceToComputeCeilingInfo = 0;
         this.myVerticalFixToBeOnGround = 0;
         this.myVerticalFixToComputeGroundInfo = 0;
         this.myVerticalFixToBeOnCeiling = 0;
         this.myVerticalFixToComputeCeilingInfo = 0;
 
-        this.mySlidingEnabled = true;
-        this.mySlidingHorizontalMovementCheckBetterNormal = true;
-        this.mySlidingMaxAttempts = 4;
+        this.mySlidingEnabled = false;
+        this.mySlidingHorizontalMovementCheckBetterNormal = false;
+        this.mySlidingMaxAttempts = 0;
         this.mySlidingCheckBothDirections = false;       // expensive, 2 times the check for the whole horizontal movement!
         // this can fix some edge cases in which u can get stuck instead of sliding
         // it basically require that u also add flicker prevention
@@ -128,21 +133,21 @@ CollisionCheckParams = class CollisionCheckParams {
         // this help in catching the flicker when the direction is not changing every frame but every 2-3 for example
         // it's especially useful if combo-ed with mySlidingFlickeringPreventionType #1, making it a bit less fluid but also less flickering
 
-        this.mySlidingAdjustSign90Degrees = true;
+        this.mySlidingAdjustSign90Degrees = false;
 
         this.myBlockLayerFlags = new PP.PhysicsLayerFlags();
         this.myObjectsToIgnore = [];
 
         this.myDebugActive = false;
 
-        this.myDebugHorizontalMovementActive = true;
-        this.myDebugHorizontalPositionActive = true;
-        this.myDebugVerticalMovementActive = true;
-        this.myDebugVerticalPositionActive = true;
-        this.myDebugSlidingActive = true;
-        this.myDebugSurfaceInfoActive = true;
-        this.myDebugRuntimeParamsActive = true;
-        this.myDebugMovementActive = true;
+        this.myDebugHorizontalMovementActive = false;
+        this.myDebugHorizontalPositionActive = false;
+        this.myDebugVerticalMovementActive = false;
+        this.myDebugVerticalPositionActive = false;
+        this.myDebugSlidingActive = false;
+        this.myDebugSurfaceInfoActive = false;
+        this.myDebugRuntimeParamsActive = false;
+        this.myDebugMovementActive = false;
     }
 
     copy(params) {
