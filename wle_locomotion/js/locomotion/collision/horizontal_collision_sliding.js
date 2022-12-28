@@ -377,13 +377,10 @@ CollisionCheck.prototype._internalHorizontalSlide = function () {
 
                 currentMovement = slidingMovement.vec3_rotateAxis(currentAngle, up, currentMovement);
 
-                slideMovementForward.vec3_copy(collisionCheckParams.myCheckHorizontalFixedForward);
-
+                slideMovementForward.vec3_copy(forward);
                 if (!collisionCheckParams.myCheckHorizontalFixedForwardEnabled) {
                     if (!currentMovement.vec3_isZero()) {
                         slideMovementForward = currentMovement.vec3_normalize(slideMovementForward);
-                    } else {
-                        slideMovementForward.vec3_copy(forward);
                     }
                 }
 

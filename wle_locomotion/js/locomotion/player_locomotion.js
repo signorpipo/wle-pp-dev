@@ -65,6 +65,8 @@ PlayerLocomotion = class PlayerLocomotion {
             params.myExitSessionAdjustMaxVerticalAngle = true;
             params.myExitSessionMaxVerticalAngle = 90;
 
+            params.myHeadHeightOffset = this._myParams.myForeheadExtraHeight;
+
             this._myPlayerHeadManager = new PlayerHeadManager(params);
         }
 
@@ -78,8 +80,7 @@ PlayerLocomotion = class PlayerLocomotion {
 
             params.myCollisionRuntimeParams = this._myCollisionRuntimeParams;
 
-            params.myHeadRadius = 0;
-            params.myHeadCollisionCheckComplexityLevel = 0;
+            params.myHeadRadius = 0.3;
 
             params.myIsMaxDistanceFromRealToSyncEnabled = true;
             params.myMaxDistanceFromRealToSync = 1;
@@ -277,10 +278,7 @@ PlayerLocomotion = class PlayerLocomotion {
         this._myCollisionCheckParamsMovement.myHeight = this._myPlayerHeadManager.getHeight();
         if (this._myCollisionCheckParamsMovement.myHeight <= 0.000001) {
             this._myCollisionCheckParamsMovement.myHeight = 0;
-        } else {
-            this._myCollisionCheckParamsMovement.myHeight += this._myParams.myForeheadExtraHeight;
         }
-
         this._myCollisionCheckParamsTeleport.myHeight = this._myCollisionCheckParamsMovement.myHeight;
     }
 
@@ -291,6 +289,9 @@ PlayerLocomotion = class PlayerLocomotion {
         this._myCollisionCheckParamsMovement.myRadius = 0.3;
         this._myCollisionCheckParamsMovement.myDistanceFromFeetToIgnore = 0.1;
         this._myCollisionCheckParamsMovement.myDistanceFromHeadToIgnore = 0.1;
+
+        //this._myCollisionCheckParamsMovement.myPositionOffsetLocal.vec3_set(0, 1, 0)
+        //this._myCollisionCheckParamsMovement.myRotationOffsetLocalQuat.quat_fromAxis(45, [1, 1, 0].vec3_normalize());
 
         this._myCollisionCheckParamsMovement.myHorizontalMovementCheckEnabled = true;
         this._myCollisionCheckParamsMovement.myHorizontalMovementStepEnabled = false;
@@ -368,7 +369,7 @@ PlayerLocomotion = class PlayerLocomotion {
             this._myCollisionCheckParamsMovement.myObjectsToIgnore.pp_pushUnique(physXComponent.object, (first, second) => first.pp_equals(second));
         }
 
-        this._myCollisionCheckParamsMovement.myDebugActive = false;
+        this._myCollisionCheckParamsMovement.myDebugActive = true;
 
         this._myCollisionCheckParamsMovement.myDebugHorizontalMovementActive = false;
         this._myCollisionCheckParamsMovement.myDebugHorizontalPositionActive = true;
@@ -400,7 +401,7 @@ PlayerLocomotion = class PlayerLocomotion {
         //this._myCollisionCheckParamsTeleport.mySplitMovementEnabled = true;
         //this._myCollisionCheckParamsTeleport.mySplitMovementMaxLength = 0.2;
 
-        this._myCollisionCheckParamsTeleport.myDebugActive = false;
+        //this._myCollisionCheckParamsTeleport.myDebugActive = true;
     }
 
     _fixAlmostUp() {

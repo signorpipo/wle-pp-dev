@@ -176,7 +176,7 @@ PlayerHeadManager.prototype.getHeight = function () {
         headPosition = this._myCurrentHead.pp_getPosition(headPosition);
         let headHeight = this._getPositionHeight(headPosition);
 
-        return headHeight;
+        return headHeight + this._myParams.myHeadHeightOffset;
     };
 }();
 
@@ -342,7 +342,7 @@ PlayerHeadManager.prototype._getPositionHeight = function () {
             height = -height;
         }
 
-        return height + this._myParams.myHeadHeightOffset;
+        return height;
     };
 }();
 

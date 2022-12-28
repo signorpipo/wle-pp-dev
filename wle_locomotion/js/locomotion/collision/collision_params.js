@@ -8,6 +8,9 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myDistanceFromFeetToIgnore = 0.1;
         this.myDistanceFromHeadToIgnore = 0.1;
 
+        this.myPositionOffsetLocal = PP.vec3_create();
+        this.myRotationOffsetLocalQuat = PP.quat_create();
+
         this.myHorizontalMovementCheckEnabled = false;
         // usually the horizontal movement is very small and it could be simply skipped has a check, the horizontal position check will be enough
         // with small I mean that it's very unlikely that in 10 cm of movement in a frame u are going to hit something in between but not in the final position
@@ -149,6 +152,9 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myRadius = params.myRadius;
         this.myDistanceFromFeetToIgnore = params.myDistanceFromFeetToIgnore;
         this.myDistanceFromHeadToIgnore = params.myDistanceFromHeadToIgnore;
+
+        this.myPositionOffsetLocal.vec3_copy(params.myPositionOffsetLocal);
+        this.myRotationOffsetLocalQuat.quat_copy(params.myRotationOffsetLocalQuat);
 
         this.myHorizontalMovementCheckEnabled = params.myHorizontalMovementCheckEnabled;
         this.myHorizontalMovementStepEnabled = params.myHorizontalMovementStepEnabled;

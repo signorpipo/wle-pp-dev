@@ -3,6 +3,9 @@ CollisionCheck.prototype._move = function () {
     let transformForward = PP.vec3_create();
     let feetPosition = PP.vec3_create();
 
+    let transformOffsetLocalQuat = PP.quat2_create();
+    let offsetTransformQuat = PP.quat2_create();
+
     let horizontalMovement = PP.vec3_create();
     let verticalMovement = PP.vec3_create();
 
@@ -14,9 +17,15 @@ CollisionCheck.prototype._move = function () {
         //return [0, 0, 0];
         //movement = [0, 0, -1];
 
-        transformUp = transformQuat.quat2_getUp(transformUp);
-        transformForward = transformQuat.quat2_getForward(transformForward);
-        feetPosition = transformQuat.quat2_getPosition(feetPosition);
+        transformOffsetLocalQuat.quat2_setPositionRotationQuat(collisionCheckParams.myPositionOffsetLocal, collisionCheckParams.myRotationOffsetLocalQuat);
+        offsetTransformQuat = transformOffsetLocalQuat.quat2_toWorld(transformQuat, offsetTransformQuat);
+        if (transformQuat.vec_equals(offsetTransformQuat, 0.00001)) {
+            offsetTransformQuat.quat2_copy(transformQuat);
+        }
+
+        transformUp = offsetTransformQuat.quat2_getUp(transformUp);
+        transformForward = offsetTransformQuat.quat2_getForward(transformForward);
+        feetPosition = offsetTransformQuat.quat2_getPosition(feetPosition);
 
         let height = collisionCheckParams.myHeight;
         height = height - 0.00001; // this makes it easier to setup things at the same exact height of a character so that it can go under it
@@ -54,12 +63,13 @@ CollisionCheck.prototype._move = function () {
 
         //fixedMovement.vec3_zero();
 
-        collisionRuntimeParams.myOriginalPosition.vec3_copy(feetPosition);
+        collisionRuntimeParams.myOriginalUp = transformQuat.quat2_getUp(collisionRuntimeParams.myOriginalUp);
+        collisionRuntimeParams.myOriginalForward = transformQuat.quat2_getForward(collisionRuntimeParams.myOriginalForward);
+        collisionRuntimeParams.myOriginalPosition = transformQuat.quat2_getPosition(collisionRuntimeParams.myOriginalPosition);
 
-        collisionRuntimeParams.myOriginalHeight = height;
+        //console.error(collisionRuntimeParams.myOriginalPosition.vec3_sub(feetPosition)[1].toFixed(3));
 
-        collisionRuntimeParams.myOriginalForward.vec3_copy(transformForward);
-        collisionRuntimeParams.myOriginalUp.vec3_copy(transformUp);
+        collisionRuntimeParams.myOriginalHeight = collisionCheckParams.myHeight;
 
         collisionRuntimeParams.myOriginalMovement.vec3_copy(movement);
         collisionRuntimeParams.myFixedMovement.vec3_copy(fixedMovement);
@@ -82,6 +92,9 @@ CollisionCheck.prototype._moveStep = function () {
     let newFeetPosition = PP.vec3_create();
     let surfaceAdjustedVerticalMovement = PP.vec3_create();
     let extraSurfaceVerticalMovement = PP.vec3_create();
+
+    let zAxis = PP.vec3_create(0, 0, 1);
+    let xAxis = PP.vec3_create(1, 0, 0);
     return function _moveStep(movement, feetPosition, transformUp, transformForward, height, collisionCheckParams, collisionRuntimeParams, outFixedMovement) {
         // #TODO refactor and split horizontal check and vertical check into: hMovement + vMovement + hPosition + vPosition?
         // Will make the sliding heavier, if I slide repeating all the 4 steps instead of 2 as now, but would be more correct
@@ -114,12 +127,26 @@ CollisionCheck.prototype._moveStep = function () {
 
         {
             forwardForHorizontal.vec3_copy(collisionCheckParams.myCheckHorizontalFixedForward);
-
             if (!collisionCheckParams.myCheckHorizontalFixedForwardEnabled) {
                 if (!horizontalMovement.vec3_isZero()) {
                     forwardForHorizontal = horizontalMovement.vec3_normalize(forwardForHorizontal);
                 } else {
                     forwardForHorizontal.vec3_copy(transformForward);
+                }
+            } else {
+                if (collisionCheckParams.myCheckHorizontalFixedForward.vec3_isOnAxis(transformUp)) {
+                    if (zAxis.vec3_isOnAxis(transformUp)) {
+                        forwardForHorizontal.vec3_copy(xAxis);
+                    } else {
+                        forwardForHorizontal.vec3_copy(zAxis);
+                    }
+                }
+
+                forwardForHorizontal = forwardForHorizontal.vec3_removeComponentAlongAxis(transformUp, forwardForHorizontal);
+                forwardForHorizontal = forwardForHorizontal.vec3_normalize(forwardForHorizontal);
+
+                if (forwardForHorizontal.vec_equals(collisionCheckParams.myCheckHorizontalFixedForward, 0.00001)) {
+                    forwardForHorizontal.vec3_copy(collisionCheckParams.myCheckHorizontalFixedForward);
                 }
             }
 
@@ -149,7 +176,6 @@ CollisionCheck.prototype._moveStep = function () {
 
         {
             forwardForVertical.vec3_copy(collisionCheckParams.myCheckVerticalFixedForward);
-
             if (!collisionCheckParams.myCheckVerticalFixedForwardEnabled) {
                 if (fixedHorizontalMovement.vec3_isZero()) {
                     if (!horizontalMovement.vec3_isZero()) {
@@ -159,6 +185,21 @@ CollisionCheck.prototype._moveStep = function () {
                     }
                 } else {
                     forwardForVertical = fixedHorizontalMovement.vec3_normalize(forwardForVertical);
+                }
+            } else {
+                if (collisionCheckParams.myCheckVerticalFixedForward.vec3_isOnAxis(transformUp)) {
+                    if (zAxis.vec3_isOnAxis(transformUp)) {
+                        forwardForVertical.vec3_copy(xAxis);
+                    } else {
+                        forwardForVertical.vec3_copy(zAxis);
+                    }
+                }
+
+                forwardForVertical = forwardForVertical.vec3_removeComponentAlongAxis(transformUp, forwardForVertical);
+                forwardForVertical = forwardForVertical.vec3_normalize(forwardForVertical);
+
+                if (forwardForVertical.vec_equals(collisionCheckParams.myCheckVerticalFixedForward, 0.00001)) {
+                    forwardForVertical.vec3_copy(collisionCheckParams.myCheckVerticalFixedForward);
                 }
             }
 

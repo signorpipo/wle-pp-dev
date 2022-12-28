@@ -1,5 +1,6 @@
 // even if this can be sued to generally fade, it should be called collision obscure to hint that is meant for collision obscuring
 
+// occlude
 PlayerObscureManagerParams = class PlayerObscureManagerParams {
     constructor() {
         this.myPlayerTransformManager = null;

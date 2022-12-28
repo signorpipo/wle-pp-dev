@@ -2,6 +2,14 @@ CollisionCheck.prototype._teleport = function () {
     let transformUp = PP.vec3_create();
     let transformForward = PP.vec3_create();
     let feetPosition = PP.vec3_create();
+    let originalFeetPosition = PP.vec3_create();
+
+    let transformOffsetLocalQuat = PP.quat2_create();
+    let offsetTransformQuat = PP.quat2_create();
+
+    let feetPositionOffsetToOriginal = PP.vec3_create();
+    let offsetTeleportPosition = PP.vec3_create();
+
     let zero = PP.vec3_create();
     let forwardForHorizontal = PP.vec3_create();
     let forwardForVertical = PP.vec3_create();
@@ -9,10 +17,29 @@ CollisionCheck.prototype._teleport = function () {
     let fixedHorizontalMovement = PP.vec3_create();
     let fixedVerticalMovement = PP.vec3_create();
     let newFeetPosition = PP.vec3_create();
+
+    let zAxis = PP.vec3_create(0, 0, 1);
+    let xAxis = PP.vec3_create(1, 0, 0);
     return function _teleport(teleportPosition, transformQuat, collisionCheckParams, collisionRuntimeParams) {
-        transformUp = transformQuat.quat2_getUp(transformUp);
-        transformForward = transformQuat.quat2_getForward(transformForward);
-        feetPosition = transformQuat.quat2_getPosition(feetPosition);
+        transformOffsetLocalQuat.quat2_setPositionRotationQuat(collisionCheckParams.myPositionOffsetLocal, collisionCheckParams.myRotationOffsetLocalQuat);
+        offsetTransformQuat = transformOffsetLocalQuat.quat2_toWorld(transformQuat, offsetTransformQuat);
+        if (transformQuat.vec_equals(offsetTransformQuat, 0.00001)) {
+            offsetTransformQuat.quat2_copy(transformQuat);
+        }
+
+        transformUp = offsetTransformQuat.quat2_getUp(transformUp);
+        transformForward = offsetTransformQuat.quat2_getForward(transformForward);
+        feetPosition = offsetTransformQuat.quat2_getPosition(feetPosition);
+
+        offsetTeleportPosition.vec3_copy(teleportPosition);
+        originalFeetPosition = transformQuat.quat2_getPosition(originalFeetPosition);
+        feetPositionOffsetToOriginal = originalFeetPosition.vec3_sub(feetPosition, feetPositionOffsetToOriginal);
+        if (feetPositionOffsetToOriginal.vec3_isZero(0.00001)) {
+            feetPositionOffsetToOriginal.vec3_zero();
+        } else {
+            offsetTeleportPosition = offsetTeleportPosition.vec3_sub(feetPositionOffsetToOriginal, offsetTeleportPosition);
+        }
+
 
         let height = collisionCheckParams.myHeight;
         height = height - 0.00001; // this makes it easier to setup things at the same exact height of a character so that it can go under it
@@ -27,15 +54,45 @@ CollisionCheck.prototype._teleport = function () {
         forwardForHorizontal.vec3_copy(collisionCheckParams.myCheckHorizontalFixedForward);
         if (!collisionCheckParams.myCheckHorizontalFixedForwardEnabled) {
             forwardForHorizontal.vec3_copy(transformForward);
+        } else {
+            if (collisionCheckParams.myCheckHorizontalFixedForward.vec3_isOnAxis(transformUp)) {
+                if (zAxis.vec3_isOnAxis(transformUp)) {
+                    forwardForHorizontal.vec3_copy(xAxis);
+                } else {
+                    forwardForHorizontal.vec3_copy(zAxis);
+                }
+            }
+
+            forwardForHorizontal = forwardForHorizontal.vec3_removeComponentAlongAxis(transformUp, forwardForHorizontal);
+            forwardForHorizontal = forwardForHorizontal.vec3_normalize(forwardForHorizontal);
+
+            if (forwardForHorizontal.vec_equals(collisionCheckParams.myCheckHorizontalFixedForward, 0.00001)) {
+                forwardForHorizontal.vec3_copy(collisionCheckParams.myCheckHorizontalFixedForward);
+            }
         }
 
-        fixedHorizontalMovement = this._horizontalCheck(zero, teleportPosition, height, transformUp, forwardForHorizontal, collisionCheckParams, collisionRuntimeParams, false, fixedHorizontalMovement);
+        fixedHorizontalMovement = this._horizontalCheck(zero, offsetTeleportPosition, height, transformUp, forwardForHorizontal, collisionCheckParams, collisionRuntimeParams, false, fixedHorizontalMovement);
         if (!collisionRuntimeParams.myIsCollidingHorizontally) {
-            newFeetPosition = teleportPosition.vec3_add(fixedHorizontalMovement, newFeetPosition);
+            newFeetPosition = offsetTeleportPosition.vec3_add(fixedHorizontalMovement, newFeetPosition);
 
             forwardForVertical.vec3_copy(collisionCheckParams.myCheckVerticalFixedForward);
             if (!collisionCheckParams.myCheckVerticalFixedForwardEnabled) {
                 forwardForVertical.vec3_copy(transformForward);
+            } else {
+                if (collisionCheckParams.myCheckVerticalFixedForward.vec3_isOnAxis(transformUp)) {
+                    if (zAxis.vec3_isOnAxis(transformUp)) {
+                        forwardForVertical.vec3_copy(xAxis);
+                    } else {
+                        forwardForVertical.vec3_copy(zAxis);
+                    }
+                }
+
+                forwardForVertical = forwardForVertical.vec3_removeComponentAlongAxis(transformUp, forwardForVertical);
+                forwardForVertical = forwardForVertical.vec3_normalize(forwardForVertical);
+
+                if (forwardForVertical.vec_equals(collisionCheckParams.myCheckVerticalFixedForward, 0.00001)) {
+                    forwardForVertical.vec3_copy(collisionCheckParams.myCheckVerticalFixedForward);
+                }
             }
 
             let downward = -1;
@@ -53,10 +110,8 @@ CollisionCheck.prototype._teleport = function () {
                     this._gatherSurfaceInfo(newFeetPosition, height, transformUp, forwardForPerceivedAngle, forwardForVertical, false, collisionCheckParams, collisionRuntimeParams);
                 }
 
-                if (collisionRuntimeParams.myGroundAngle < collisionCheckParams.myGroundAngleToIgnore + 0.0001 &&
-                    collisionRuntimeParams.myCeilingAngle < collisionCheckParams.myCeilingAngleToIgnore + 0.0001) {
-                    collisionRuntimeParams.myFixedTeleportPosition.vec3_copy(newFeetPosition);
-                } else {
+                if (collisionRuntimeParams.myGroundAngle >= collisionCheckParams.myGroundAngleToIgnore + 0.0001 ||
+                    collisionRuntimeParams.myCeilingAngle >= collisionCheckParams.myCeilingAngleToIgnore + 0.0001) {
                     collisionRuntimeParams.myTeleportCanceled = true;
                 }
             } else {
@@ -66,16 +121,20 @@ CollisionCheck.prototype._teleport = function () {
             collisionRuntimeParams.myTeleportCanceled = true;
         }
 
-        collisionRuntimeParams.myOriginalPosition.vec3_copy(feetPosition);
+        collisionRuntimeParams.myOriginalUp = transformQuat.quat2_getUp(collisionRuntimeParams.myOriginalUp);
+        collisionRuntimeParams.myOriginalForward = transformQuat.quat2_getForward(collisionRuntimeParams.myOriginalForward);
+        collisionRuntimeParams.myOriginalPosition = transformQuat.quat2_getPosition(collisionRuntimeParams.myOriginalPosition);
 
-        collisionRuntimeParams.myOriginalHeight = height;
-
-        collisionRuntimeParams.myOriginalForward.vec3_copy(transformForward);
-        collisionRuntimeParams.myOriginalUp.vec3_copy(transformUp);
+        collisionRuntimeParams.myOriginalHeight = collisionCheckParams.myHeight;
 
         collisionRuntimeParams.myOriginalTeleportPosition.vec3_copy(teleportPosition);
 
         if (!collisionRuntimeParams.myTeleportCanceled) {
+            collisionRuntimeParams.myFixedTeleportPosition.vec3_copy(newFeetPosition);
+            if (!feetPositionOffsetToOriginal.vec3_isZero(0.00001)) {
+                collisionRuntimeParams.myFixedTeleportPosition = collisionRuntimeParams.myFixedTeleportPosition.vec3_add(feetPositionOffsetToOriginal, collisionRuntimeParams.myFixedTeleportPosition);
+            }
+
             collisionRuntimeParams.myNewPosition.vec3_copy(collisionRuntimeParams.myFixedTeleportPosition);
         } else {
             collisionRuntimeParams.myNewPosition.vec3_copy(collisionRuntimeParams.myOriginalPosition);
