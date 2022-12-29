@@ -310,7 +310,8 @@ CollisionCheck.prototype._horizontalMovementVerticalCheck = function () {
                     }
                 }
 
-                if (collisionCheckParams.myHorizontalMovementCheckVerticalStraight) {
+                if (collisionCheckParams.myHorizontalMovementCheckVerticalStraight &&
+                    (!collisionCheckParams.myHorizontalMovementCheckStraightOnlyForCenter || j == 0)) {
                     if (m == 0) {
                         firstHeightPosition = firstPosition.vec3_sub(heightStep, firstHeightPosition);
 
@@ -335,7 +336,8 @@ CollisionCheck.prototype._horizontalMovementVerticalCheck = function () {
                     }
                 }
 
-                if (collisionCheckParams.myHorizontalMovementCheckVerticalStraightDiagonal) {
+                if (collisionCheckParams.myHorizontalMovementCheckVerticalStraightDiagonal &&
+                    (!collisionCheckParams.myHorizontalMovementCheckStraightOnlyForCenter || j == 0)) {
                     {
                         firstMovementPosition = firstPosition.vec3_add(movementStep, firstMovementPosition);
                         firstHeightPosition = firstPosition.vec3_sub(heightStep, firstHeightPosition);
@@ -448,7 +450,8 @@ CollisionCheck.prototype._horizontalMovementHorizontalCheck = function () {
                     }
                 }
 
-                if (collisionCheckParams.myHorizontalMovementCheckStraight) {
+                if (collisionCheckParams.myHorizontalMovementCheckStraight &&
+                    (!collisionCheckParams.myHorizontalMovementCheckStraightOnlyForCenter || j == 0)) {
                     firstMovementPosition = firstPosition.vec3_add(movementStep, firstMovementPosition);
 
                     isHorizontalCheckOk = this._horizontalCheckRaycast(firstPosition, firstMovementPosition, null, up,

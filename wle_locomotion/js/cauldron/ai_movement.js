@@ -103,6 +103,7 @@ WL.registerComponent('ai-movement', {
         this._myCollisionCheckParams.myHorizontalMovementCheckVerticalDiagonalDownward = false;
         this._myCollisionCheckParams.myHorizontalMovementCheckVerticalStraightDiagonal = false;
         this._myCollisionCheckParams.myHorizontalMovementCheckVerticalHorizontalBorderDiagonal = false;
+        this._myCollisionCheckParams.myHorizontalMovementCheckStraightOnlyForCenter = true;
 
         this._myCollisionCheckParams.myHalfConeAngle = 60;
         this._myCollisionCheckParams.myHalfConeSliceAmount = 1;

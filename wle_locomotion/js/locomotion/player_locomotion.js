@@ -310,6 +310,7 @@ PlayerLocomotion = class PlayerLocomotion {
         this._myCollisionCheckParamsMovement.myHorizontalMovementCheckVerticalDiagonalDownward = false;
         this._myCollisionCheckParamsMovement.myHorizontalMovementCheckVerticalStraightDiagonal = false;
         this._myCollisionCheckParamsMovement.myHorizontalMovementCheckVerticalHorizontalBorderDiagonal = false;
+        this._myCollisionCheckParamsMovement.myHorizontalMovementCheckStraightOnlyForCenter = true;
 
         this._myCollisionCheckParamsMovement.myHorizontalPositionCheckEnabled = true;
         this._myCollisionCheckParamsMovement.myHalfConeAngle = 60;

@@ -35,6 +35,7 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myHorizontalMovementCheckVerticalDiagonalDownward = false;
         this.myHorizontalMovementCheckVerticalStraightDiagonal = false;
         this.myHorizontalMovementCheckVerticalHorizontalBorderDiagonal = false;
+        this.myHorizontalMovementCheckStraightOnlyForCenter = false;
 
         this.myHorizontalPositionCheckEnabled = false;
 
@@ -187,6 +188,7 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myHorizontalMovementCheckVerticalDiagonalDownward = other.myHorizontalMovementCheckVerticalDiagonalDownward;
         this.myHorizontalMovementCheckVerticalStraightDiagonal = other.myHorizontalMovementCheckVerticalStraightDiagonal;
         this.myHorizontalMovementCheckVerticalHorizontalBorderDiagonal = other.myHorizontalMovementCheckVerticalHorizontalBorderDiagonal;
+        this.myHorizontalMovementCheckStraightOnlyForCenter = other.myHorizontalMovementCheckStraightOnlyForCenter;
 
         this.myHorizontalPositionCheckEnabled = other.myHorizontalPositionCheckEnabled;
         this.myHalfConeAngle = other.myHalfConeAngle;
