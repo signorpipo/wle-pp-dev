@@ -186,7 +186,6 @@ WL.registerComponent('stick-movement', {
         this._myCollisionCheckParams.myHorizontalPositionCheckVerticalIgnoreHitsInsideCollision = true;
         this._myCollisionCheckParams.myHorizontalPositionCheckVerticalDirectionType = 0; // somewhat expensive, 2 times the check for the vertical check of the horizontal movement!
 
-
         this._myCollisionCheckParams.myFeetRadius = 0.1 * this._myScale;
         this._myCollisionCheckParams.myAdjustVerticalMovementWithSurfaceAngle = true;
 
@@ -195,6 +194,7 @@ WL.registerComponent('stick-movement', {
         this._myCollisionCheckParams.mySnapOnCeilingEnabled = false;
         this._myCollisionCheckParams.mySnapOnCeilingExtraDistance = 0.1 * this._myScale;
 
+        this._myCollisionCheckParams.myGroundCircumferenceAddCenter = true;
         this._myCollisionCheckParams.myGroundCircumferenceSliceAmount = 4;
         this._myCollisionCheckParams.myGroundCircumferenceStepAmount = 1;
         this._myCollisionCheckParams.myGroundCircumferenceRotationPerStep = 45;

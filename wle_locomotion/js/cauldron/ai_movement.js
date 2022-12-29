@@ -119,6 +119,7 @@ WL.registerComponent('ai-movement', {
         this._myCollisionCheckParams.mySnapOnCeilingEnabled = false;
         this._myCollisionCheckParams.mySnapOnCeilingExtraDistance = 0.1 * this._myScale;
 
+        this._myCollisionCheckParams.myGroundCircumferenceAddCenter = true;
         this._myCollisionCheckParams.myGroundCircumferenceSliceAmount = 4;
         this._myCollisionCheckParams.myGroundCircumferenceStepAmount = 1;
         this._myCollisionCheckParams.myGroundCircumferenceRotationPerStep = 45;

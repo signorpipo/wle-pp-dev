@@ -332,6 +332,8 @@ PlayerTransformManager = class PlayerTransformManager {
 
         params.myVerticalMovementCheckEnabled = true;
         params.myVerticalPositionCheckEnabled = true;
+
+        params.myGroundCircumferenceAddCenter = true;
         params.myGroundCircumferenceSliceAmount = 6;
         params.myGroundCircumferenceStepAmount = 2;
         params.myGroundCircumferenceRotationPerStep = 30;

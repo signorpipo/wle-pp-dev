@@ -78,6 +78,7 @@ CollisionCheckParams = class CollisionCheckParams {
 
         this.myVerticalMovementReduceEnabled = false;
 
+        this.myGroundCircumferenceAddCenter = false;
         this.myGroundCircumferenceSliceAmount = 0;
         this.myGroundCircumferenceStepAmount = 0;
         this.myGroundCircumferenceRotationPerStep = 0;
@@ -215,6 +216,7 @@ CollisionCheckParams = class CollisionCheckParams {
 
         this.myVerticalMovementReduceEnabled = other.myVerticalMovementReduceEnabled;
 
+        this.myGroundCircumferenceAddCenter = other.myGroundCircumferenceAddCenter;
         this.myGroundCircumferenceSliceAmount = other.myGroundCircumferenceSliceAmount;
         this.myGroundCircumferenceStepAmount = other.myGroundCircumferenceStepAmount;
         this.myGroundCircumferenceRotationPerStep = other.myGroundCircumferenceRotationPerStep;

@@ -272,7 +272,7 @@ CollisionCheck.prototype._getVerticalCheckPositions = function () {
         checkPositions.length = 0;
         currentCachedCheckPositionIndex = 0;
 
-        {
+        if (collisionCheckParams.myGroundCircumferenceAddCenter) {
             let tempCheckPosition = _localGetCachedCheckPosition();
             tempCheckPosition.vec3_copy(feetPosition);
             checkPositions.push(tempCheckPosition);
