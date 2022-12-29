@@ -296,15 +296,21 @@ PlayerTransformManager = class PlayerTransformManager {
         params.myDistanceFromFeetToIgnore = 0;
         params.myDistanceFromHeadToIgnore = 0;
 
-        params.mySplitMovementEnabled = false;
+        params.mySplitMovementEnabled = true;
+        params.mySplitMovementMaxLength = 0.5;
+        params.mySplitMovementMaxStepsEnabled = true;
+        params.mySplitMovementMaxSteps = 2;
+        params.mySplitMovementStopWhenHorizontalMovementCanceled = true;
+        params.mySplitMovementStopWhenVerticalMovementCanceled = true;
 
         params.myHorizontalMovementCheckEnabled = true;
         params.myHorizontalMovementRadialStepAmount = 1;
         params.myHorizontalMovementCheckDiagonal = true;
-        params.myHorizontalMovementCheckVerticalDiagonal = true;
+        params.myHorizontalMovementCheckVerticalDiagonalUpward = true;
 
+        params.myHorizontalPositionCheckEnabled = true;
         params.myHalfConeAngle = 180;
-        params.myHalfConeSliceAmount = 6;
+        params.myHalfConeSliceAmount = 3;
         params.myCheckConeBorder = true;
         params.myCheckConeRay = true;
         params.myHorizontalPositionCheckVerticalIgnoreHitsInsideCollision = false;
@@ -326,14 +332,18 @@ PlayerTransformManager = class PlayerTransformManager {
 
         params.myVerticalMovementCheckEnabled = true;
         params.myVerticalPositionCheckEnabled = true;
+        params.myGroundCircumferenceSliceAmount = 6;
+        params.myGroundCircumferenceStepAmount = 2;
+        params.myGroundCircumferenceRotationPerStep = 30;
+        params.myFeetRadius = params.myRadius;
 
         params.myBlockLayerFlags.copy(this._myParams.myHeadCollisionBlockLayerFlags);
         params.myObjectsToIgnore.pp_copy(this._myParams.myHeadCollisionObjectsToIgnore);
 
         params.myDebugActive = false;
 
-        params.myDebugHorizontalMovementActive = false;
-        params.myDebugHorizontalPositionActive = true;
+        params.myDebugHorizontalMovementActive = true;
+        params.myDebugHorizontalPositionActive = false;
         params.myDebugVerticalMovementActive = false;
         params.myDebugVerticalPositionActive = false;
         params.myDebugSlidingActive = false;
@@ -355,16 +365,37 @@ PlayerTransformManager = class PlayerTransformManager {
             this._myRealMovementCollisionCheckParams = new CollisionCheckParams();
         }
 
-        this._myRealMovementCollisionCheckParams.copy(this._myParams.myMovementCollisionCheckParams);
-        this._myRealMovementCollisionCheckParams.mySlidingEnabled = false;
+        let params = this._myRealMovementCollisionCheckParams;
+        params.copy(this._myParams.myMovementCollisionCheckParams);
+
+        params.mySplitMovementEnabled = true;
+        params.mySplitMovementMaxLength = 0.5;
+        params.mySplitMovementMaxStepsEnabled = true;
+        params.mySplitMovementMaxSteps = 2;
+        params.mySplitMovementStopWhenHorizontalMovementCanceled = true;
+        params.mySplitMovementStopWhenVerticalMovementCanceled = true;
+
+        params.mySlidingEnabled = false;
 
         if (!this._myParams.myRealMovementAllowVerticalAdjustments) {
-            this._myRealMovementCollisionCheckParams.mySnapOnGroundEnabled = false;
-            this._myRealMovementCollisionCheckParams.mySnapOnCeilingEnabled = false;
-            this._myRealMovementCollisionCheckParams.myGroundPopOutEnabled = false;
-            this._myRealMovementCollisionCheckParams.myCeilingPopOutEnabled = false;
-            this._myRealMovementCollisionCheckParams.myAdjustVerticalMovementWithSurfaceAngle = false;
+            params.mySnapOnGroundEnabled = false;
+            params.mySnapOnCeilingEnabled = false;
+            params.myGroundPopOutEnabled = false;
+            params.myCeilingPopOutEnabled = false;
+            params.myAdjustVerticalMovementWithSurfaceAngle = false;
+            params.myVerticalMovementReduceEnabled = false;
         }
+
+        params.myDebugActive = false;
+
+        params.myDebugHorizontalMovementActive = false;
+        params.myDebugHorizontalPositionActive = true;
+        params.myDebugVerticalMovementActive = false;
+        params.myDebugVerticalPositionActive = false;
+        params.myDebugSlidingActive = false;
+        params.myDebugSurfaceInfoActive = false;
+        params.myDebugRuntimeParamsActive = false;
+        params.myDebugMovementActive = false;
     }
 
     _debugUpdate(dt) {
@@ -499,6 +530,8 @@ PlayerTransformManager.prototype.update = function () {
                 this._myValidHeight = this.getHeightReal();
                 this._updateCollisionHeight();
             }
+
+            // at the end, update head manager if it is synced to the new valid position
 
             //#TODO this should update ground and ceiling info but not sliding info
         }

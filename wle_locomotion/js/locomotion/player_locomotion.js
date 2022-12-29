@@ -338,8 +338,6 @@ PlayerLocomotion = class PlayerLocomotion {
         this._myCollisionCheckParamsMovement.myGroundCircumferenceSliceAmount = 8;
         this._myCollisionCheckParamsMovement.myGroundCircumferenceStepAmount = 2;
         this._myCollisionCheckParamsMovement.myGroundCircumferenceRotationPerStep = 22.5;
-        this._myCollisionCheckParamsMovement.myGroundPopOutExtraDistance = 0.1;
-        this._myCollisionCheckParamsMovement.myCeilingPopOutExtraDistance = 0.1;
 
         this._myCollisionCheckParamsMovement.myCheckHeight = true;
         this._myCollisionCheckParamsMovement.myCheckHeightTop = true;
