@@ -25,7 +25,8 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myHorizontalMovementCheckStraight = false;
         this.myHorizontalMovementCheckHorizontalBorder = false;
         this.myHorizontalMovementCheckVerticalStraight = false;
-        this.myHorizontalMovementCheckVerticalDiagonal = false;
+        this.myHorizontalMovementCheckVerticalDiagonalUpward = false;
+        this.myHorizontalMovementCheckVerticalDiagonalDownward = false;
         this.myHorizontalMovementCheckVerticalStraightDiagonal = false;
         this.myHorizontalMovementCheckVerticalHorizontalBorderDiagonal = false;
 
@@ -169,7 +170,8 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myHorizontalMovementCheckStraight = params.myHorizontalMovementCheckStraight;
         this.myHorizontalMovementCheckHorizontalBorder = params.myHorizontalMovementCheckHorizontalBorder;
         this.myHorizontalMovementCheckVerticalStraight = params.myHorizontalMovementCheckVerticalStraight;
-        this.myHorizontalMovementCheckVerticalDiagonal = params.myHorizontalMovementCheckVerticalDiagonal;
+        this.myHorizontalMovementCheckVerticalDiagonalUpward = params.myHorizontalMovementCheckVerticalDiagonalUpward;
+        this.myHorizontalMovementCheckVerticalDiagonalDownward = params.myHorizontalMovementCheckVerticalDiagonalDownward;
         this.myHorizontalMovementCheckVerticalStraightDiagonal = params.myHorizontalMovementCheckVerticalStraightDiagonal;
         this.myHorizontalMovementCheckVerticalHorizontalBorderDiagonal = params.myHorizontalMovementCheckVerticalHorizontalBorderDiagonal;
 

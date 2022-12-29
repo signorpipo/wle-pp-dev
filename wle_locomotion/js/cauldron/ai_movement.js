@@ -96,10 +96,11 @@ WL.registerComponent('ai-movement', {
         this._myCollisionCheckParams.myHorizontalMovementStepMaxLength = 0;
         this._myCollisionCheckParams.myHorizontalMovementRadialStepAmount = 1;
         this._myCollisionCheckParams.myHorizontalMovementCheckDiagonal = true;
-        this._myCollisionCheckParams.myHorizontalMovementCheckStraight = false;
+        this._myCollisionCheckParams.myHorizontalMovementCheckStraight = true;
         this._myCollisionCheckParams.myHorizontalMovementCheckHorizontalBorder = false;
         this._myCollisionCheckParams.myHorizontalMovementCheckVerticalStraight = false;
-        this._myCollisionCheckParams.myHorizontalMovementCheckVerticalDiagonal = true;
+        this._myCollisionCheckParams.myHorizontalMovementCheckVerticalDiagonalUpward = true;
+        this._myCollisionCheckParams.myHorizontalMovementCheckVerticalDiagonalDownward = false;
         this._myCollisionCheckParams.myHorizontalMovementCheckVerticalStraightDiagonal = false;
         this._myCollisionCheckParams.myHorizontalMovementCheckVerticalHorizontalBorderDiagonal = false;
 

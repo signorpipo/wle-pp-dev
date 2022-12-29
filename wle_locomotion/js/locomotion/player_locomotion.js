@@ -78,9 +78,12 @@ PlayerLocomotion = class PlayerLocomotion {
             params.myMovementCollisionCheckParams = this._myCollisionCheckParamsMovement;
             params.myTeleportCollisionCheckParams = null;
 
+            params.myHeadCollisionBlockLayerFlags.setMask(params.myMovementCollisionCheckParams.myBlockLayerFlags.getMask());
+            params.myHeadCollisionObjectsToIgnore.pp_copy(params.myMovementCollisionCheckParams.myObjectsToIgnore);
+
             params.myCollisionRuntimeParams = this._myCollisionRuntimeParams;
 
-            params.myHeadRadius = 0.3;
+            params.myHeadRadius = 0.15;
 
             params.myIsMaxDistanceFromRealToSyncEnabled = true;
             params.myMaxDistanceFromRealToSync = 1;
@@ -105,13 +108,15 @@ PlayerLocomotion = class PlayerLocomotion {
             params.myObscureFadeEasingFunction = PP.EasingFunction.linear;
             params.myObscureLevelRelativeDistanceEasingFunction = PP.EasingFunction.linear;
 
-            params.myDistanceToStartObscureWhenBodyColliding = 3;
-            params.myDistanceToStartObscureWhenLeaning = 3;
+            params.myDistanceToStartObscureWhenBodyColliding = 1;
+            params.myDistanceToStartObscureWhenHeadColliding = 1;
+            params.myDistanceToStartObscureWhenLeaning = 1;
             params.myDistanceToStartObscureWhenFar = 1;
 
-            params.myRelativeDistanceToMaxObscureWhenBodyColliding = 1;
-            params.myRelativeDistanceToMaxObscureWhenLeaning = 1;
-            params.myRelativeDistanceToMaxObscureWhenFar = 1;
+            params.myRelativeDistanceToMaxObscureWhenBodyColliding = 5;
+            params.myRelativeDistanceToMaxObscureWhenHeadColliding = 5;
+            params.myRelativeDistanceToMaxObscureWhenLeaning = 5;
+            params.myRelativeDistanceToMaxObscureWhenFar = 5;
 
             this._myPlayerObscureManager = new PlayerObscureManager(params);
         }
@@ -298,10 +303,11 @@ PlayerLocomotion = class PlayerLocomotion {
         this._myCollisionCheckParamsMovement.myHorizontalMovementStepMaxLength = 0;
         this._myCollisionCheckParamsMovement.myHorizontalMovementRadialStepAmount = 1;
         this._myCollisionCheckParamsMovement.myHorizontalMovementCheckDiagonal = true;
-        this._myCollisionCheckParamsMovement.myHorizontalMovementCheckStraight = false;
+        this._myCollisionCheckParamsMovement.myHorizontalMovementCheckStraight = true;
         this._myCollisionCheckParamsMovement.myHorizontalMovementCheckHorizontalBorder = false;
         this._myCollisionCheckParamsMovement.myHorizontalMovementCheckVerticalStraight = false;
-        this._myCollisionCheckParamsMovement.myHorizontalMovementCheckVerticalDiagonal = true;
+        this._myCollisionCheckParamsMovement.myHorizontalMovementCheckVerticalDiagonalUpward = true;
+        this._myCollisionCheckParamsMovement.myHorizontalMovementCheckVerticalDiagonalDownward = false;
         this._myCollisionCheckParamsMovement.myHorizontalMovementCheckVerticalStraightDiagonal = false;
         this._myCollisionCheckParamsMovement.myHorizontalMovementCheckVerticalHorizontalBorderDiagonal = false;
 
@@ -382,7 +388,7 @@ PlayerLocomotion = class PlayerLocomotion {
             this._myCollisionCheckParamsMovement.myObjectsToIgnore.pp_pushUnique(physXComponent.object, (first, second) => first.pp_equals(second));
         }
 
-        this._myCollisionCheckParamsMovement.myDebugActive = true;
+        this._myCollisionCheckParamsMovement.myDebugActive = false;
 
         this._myCollisionCheckParamsMovement.myDebugHorizontalMovementActive = false;
         this._myCollisionCheckParamsMovement.myDebugHorizontalPositionActive = true;
