@@ -57,6 +57,10 @@ CollisionCheck.prototype._move = function () {
             }
 
             movementStepAmount = Math.max(1, movementStepAmount);
+
+            if (movementStepAmount == 1) {
+                movementStep.vec3_copy(movement);
+            }
         }
 
         fixedMovement.vec3_zero();

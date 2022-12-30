@@ -25,7 +25,7 @@ CollisionCheck.prototype._horizontalMovementCheck = function () {
     let currentHeightOffset = PP.vec3_create();
     let leftRadialDirection = PP.vec3_create();
     let rightRadialDirection = PP.vec3_create();
-    return function _horizontalMovementCheck(movement, feetPosition, height, up, collisionCheckParams, collisionRuntimeParams) {
+    return function _horizontalMovementCheck(movement, originalFeetPosition, originalHeight, feetPosition, height, up, collisionCheckParams, collisionRuntimeParams) {
         // #TODO add a flag in the params to specify if u want to allow movement inside collision (to hope that it will end up in a non collision position)
         // also vertical check should check all hits like the position check
         // for now is ok as it is, the movement check is not as important and could also be disabled it the movement per frame is very small
@@ -83,11 +83,11 @@ CollisionCheck.prototype._horizontalMovementCheck = function () {
             groundCeilingObjectsToIgnore = _localGroundCeilingObjectsToIgnore;
             groundCeilingObjectsToIgnore.length = 0;
 
-            let ignoreGroundAngleCallback = this._ignoreSurfaceAngle.bind(this, null, groundObjectsToIgnore, true, up, collisionCheckParams);
+            let ignoreGroundAngleCallback = this._ignoreSurfaceAngle.bind(this, originalFeetPosition, originalHeight, null, groundObjectsToIgnore, true, true, up, collisionCheckParams);
 
             let ignoreCeilingAngleCallback = null;
             if (collisionCheckParams.myCeilingAngleToIgnore > 0) {
-                ignoreCeilingAngleCallback = this._ignoreSurfaceAngle.bind(this, null, groundCeilingObjectsToIgnore, false, up, collisionCheckParams);
+                ignoreCeilingAngleCallback = this._ignoreSurfaceAngle.bind(this, originalFeetPosition, originalHeight, null, groundCeilingObjectsToIgnore, false, true, up, collisionCheckParams);
             }
 
             heightOffset.vec3_zero();
@@ -102,10 +102,10 @@ CollisionCheck.prototype._horizontalMovementCheck = function () {
 
                 let ignoreGroundAngleCallback = null;
                 if (collisionCheckParams.myGroundAngleToIgnore > 0) {
-                    ignoreGroundAngleCallback = this._ignoreSurfaceAngle.bind(this, groundObjectsToIgnore, null, true, up, collisionCheckParams);
+                    ignoreGroundAngleCallback = this._ignoreSurfaceAngle.bind(this, originalFeetPosition, originalHeight, groundObjectsToIgnore, null, true, true, up, collisionCheckParams);
                 }
 
-                let ignoreCeilingAngleCallback = this._ignoreSurfaceAngle.bind(this, null, ceilingObjectsToIgnore, false, up, collisionCheckParams);
+                let ignoreCeilingAngleCallback = this._ignoreSurfaceAngle.bind(this, originalFeetPosition, originalHeight, null, ceilingObjectsToIgnore, false, true, up, collisionCheckParams);
 
                 heightOffset = up.vec3_scale(height, heightOffset);
                 this._horizontalMovementHorizontalCheck(movement, feetPosition, checkPositions, heightOffset, up, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams);
@@ -130,11 +130,11 @@ CollisionCheck.prototype._horizontalMovementCheck = function () {
             let ignoreCeilingAngleCallback = null;
 
             if (collisionCheckParams.myGroundAngleToIgnore > 0) {
-                ignoreGroundAngleCallback = this._ignoreSurfaceAngle.bind(this, groundObjectsToIgnore, null, true, up, collisionCheckParams);
+                ignoreGroundAngleCallback = this._ignoreSurfaceAngle.bind(this, originalFeetPosition, originalHeight, groundObjectsToIgnore, null, true, true, up, collisionCheckParams);
             }
 
             if (collisionCheckParams.myCeilingAngleToIgnore > 0) {
-                ignoreCeilingAngleCallback = this._ignoreSurfaceAngle.bind(this, ceilingObjectsToIgnore, null, false, up, collisionCheckParams);
+                ignoreCeilingAngleCallback = this._ignoreSurfaceAngle.bind(this, originalFeetPosition, originalHeight, ceilingObjectsToIgnore, null, false, true, up, collisionCheckParams);
             }
 
             let heightStepAmount = 0;

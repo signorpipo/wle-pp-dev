@@ -101,6 +101,11 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myGroundAngleToIgnore = 0;
         this.myCeilingAngleToIgnore = 0;
 
+        this.myHorizontalMovementGroundAngleIgnoreDistance = null;
+        this.myHorizontalMovementCeilingAngleIgnoreDistance = null;
+        this.myHorizontalPositionGroundAngleIgnoreDistance = null;
+        this.myHorizontalPositionCeilingAngleIgnoreDistance = null;
+
         this.myHeight = 0;
 
         this.myComputeGroundInfoEnabled = false;
@@ -236,6 +241,11 @@ CollisionCheckParams = class CollisionCheckParams {
 
         this.myGroundAngleToIgnore = other.myGroundAngleToIgnore;
         this.myCeilingAngleToIgnore = other.myCeilingAngleToIgnore;
+
+        this.myHorizontalMovementGroundAngleIgnoreDistance = other.myHorizontalMovementGroundAngleIgnoreDistance;
+        this.myHorizontalMovementCeilingAngleIgnoreDistance = other.myHorizontalMovementCeilingAngleIgnoreDistance;
+        this.myHorizontalPositionGroundAngleIgnoreDistance = other.myHorizontalPositionGroundAngleIgnoreDistance;
+        this.myHorizontalPositionCeilingAngleIgnoreDistance = other.myHorizontalPositionCeilingAngleIgnoreDistance;
 
         this.myHeight = other.myHeight;
 

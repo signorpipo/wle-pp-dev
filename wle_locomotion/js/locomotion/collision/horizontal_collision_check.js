@@ -1,6 +1,7 @@
 CollisionCheck.prototype._horizontalCheck = function () {
     let fixedFeetPosition = PP.vec3_create();
     let newFixedFeetPosition = PP.vec3_create();
+    let newFeetPosition = PP.vec3_create();
     return function _horizontalCheck(movement, feetPosition, height, up, forward, collisionCheckParams, collisionRuntimeParams, avoidSlidingExtraCheck, outFixedMovement) {
         collisionRuntimeParams.myIsCollidingHorizontally = false;
         collisionRuntimeParams.myHorizontalCollisionHit.reset();
@@ -10,7 +11,7 @@ CollisionCheck.prototype._horizontalCheck = function () {
 
         let canMove = true;
         if (collisionCheckParams.myHorizontalMovementCheckEnabled && !movement.vec3_isZero(0.000001)) {
-            canMove = this._horizontalMovementCheck(movement, fixedFeetPosition, fixedHeight, up, collisionCheckParams, collisionRuntimeParams);
+            canMove = this._horizontalMovementCheck(movement, feetPosition, height, fixedFeetPosition, fixedHeight, up, collisionCheckParams, collisionRuntimeParams);
         }
 
         outFixedMovement.vec3_zero();
@@ -18,7 +19,8 @@ CollisionCheck.prototype._horizontalCheck = function () {
         if (canMove) {
             if (collisionCheckParams.myHorizontalPositionCheckEnabled) {
                 newFixedFeetPosition = fixedFeetPosition.vec3_add(movement, newFixedFeetPosition);
-                let canStay = this._horizontalPositionCheck(newFixedFeetPosition, fixedHeight, up, forward, collisionCheckParams, collisionRuntimeParams);
+                newFeetPosition = feetPosition.vec3_add(movement, newFeetPosition);
+                let canStay = this._horizontalPositionCheck(newFeetPosition, height, newFixedFeetPosition, fixedHeight, up, forward, collisionCheckParams, collisionRuntimeParams);
                 if (canStay) {
                     outFixedMovement.vec3_copy(movement);
                 }
@@ -30,7 +32,7 @@ CollisionCheck.prototype._horizontalCheck = function () {
                 outFixedMovement.vec3_copy(movement);
             }
         } else if (!avoidSlidingExtraCheck && collisionCheckParams.mySlidingEnabled && collisionCheckParams.mySlidingHorizontalMovementCheckBetterNormal) {
-            this._horizontalCheckBetterSlideNormal(movement, fixedFeetPosition, fixedHeight, up, forward, collisionCheckParams, collisionRuntimeParams);
+            this._horizontalCheckBetterSlideNormal(movement, feetPosition, height, fixedFeetPosition, fixedHeight, up, forward, collisionCheckParams, collisionRuntimeParams);
         }
 
         return outFixedMovement;
@@ -127,8 +129,17 @@ CollisionCheck.prototype._horizontalCheckRaycast = function () {
 
 CollisionCheck.prototype._ignoreSurfaceAngle = function () {
     let objectsEqualCallback = (first, second) => first.pp_equals(second);
-    return function _ignoreSurfaceAngle(objectsToIgnore, outIgnoredObjects, isGround, up, collisionCheckParams, hit, ignoreHitsInsideCollisionIfObjectToIgnore) {
+    return function _ignoreSurfaceAngle(feetPosition, height, objectsToIgnore, outIgnoredObjects, isGround, isMovementCheck, up, collisionCheckParams, hit, ignoreHitsInsideCollisionIfObjectToIgnore) {
         let isIgnorable = false;
+
+        let surfaceIgnoreDistance = null;
+        let groundIgnoreDistance = isMovementCheck ? collisionCheckParams.myHorizontalMovementGroundAngleIgnoreDistance : collisionCheckParams.myHorizontalPositionGroundAngleIgnoreDistance;
+        let ceilingIgnoreDistance = isMovementCheck ? collisionCheckParams.myHorizontalMovementCeilingAngleIgnoreDistance : collisionCheckParams.myHorizontalPositionCeilingAngleIgnoreDistance;
+        if (isGround && groundIgnoreDistance != null) {
+            surfaceIgnoreDistance = Math.pp_clamp(groundIgnoreDistance + 0.0002, 0, height);
+        } else if (!isGround && ceilingIgnoreDistance != null) {
+            surfaceIgnoreDistance = Math.pp_clamp(height - ceilingIgnoreDistance - 0.0002, 0, height);
+        }
 
         if (!hit.myIsInsideCollision) {
             let surfaceAngle = hit.myNormal.vec3_angle(up);
@@ -136,10 +147,17 @@ CollisionCheck.prototype._ignoreSurfaceAngle = function () {
             if ((isGround && (collisionCheckParams.myGroundAngleToIgnore > 0 && surfaceAngle <= collisionCheckParams.myGroundAngleToIgnore + 0.0001)) ||
                 (!isGround && (collisionCheckParams.myCeilingAngleToIgnore > 0 && (180 - surfaceAngle) <= collisionCheckParams.myCeilingAngleToIgnore + 0.0001))) {
                 if (objectsToIgnore == null || objectsToIgnore.pp_hasEqual(hit.myObject, objectsEqualCallback)) {
-                    isIgnorable = true;
-
-                    if (outIgnoredObjects != null) {
-                        outIgnoredObjects.push(hit.myObject);
+                    if (surfaceIgnoreDistance != null) {
+                        let feetPositionUp = feetPosition.vec3_valueAlongAxis(up);
+                        let hitUp = hit.myPosition.vec3_valueAlongAxis(up);
+                        let hitHeight = hitUp - feetPositionUp;
+                        if ((isGround && hitHeight <= surfaceIgnoreDistance) || (!isGround && hitHeight >= surfaceIgnoreDistance)) {
+                            isIgnorable = true;
+                        } else {
+                            //console.error(hitHeight.toFixed(6));
+                        }
+                    } else {
+                        isIgnorable = true;
                     }
                 }
             }
@@ -149,6 +167,13 @@ CollisionCheck.prototype._ignoreSurfaceAngle = function () {
                 isIgnorable = true;
             }
         }
+
+        if (isIgnorable) {
+            if (outIgnoredObjects != null) {
+                outIgnoredObjects.pp_pushUnique(hit.myObject, objectsEqualCallback);
+            }
+        }
+
 
         return isIgnorable;
     };

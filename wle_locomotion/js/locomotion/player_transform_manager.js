@@ -388,7 +388,9 @@ PlayerTransformManager = class PlayerTransformManager {
             params.myVerticalMovementReduceEnabled = false;
         }
 
-        params.myDebugActive = false;
+        //params.myHorizontalMovementGroundAngleIgnoreDistance = 0.1 * 3;
+        //params.myHorizontalMovementCeilingAngleIgnoreDistance = 0.1 * 3;
+
 
         params.myDebugHorizontalMovementActive = false;
         params.myDebugHorizontalPositionActive = true;

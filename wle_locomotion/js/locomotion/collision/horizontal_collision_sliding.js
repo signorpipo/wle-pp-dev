@@ -433,7 +433,8 @@ CollisionCheck.prototype._horizontalCheckBetterSlideNormal = function () {
     let projectAlongAxis = PP.vec3_create();
     let fixedMovement = PP.vec3_create();
     let newFixedFeetPosition = PP.vec3_create();
-    return function _horizontalCheckBetterSlideNormal(movement, feetPosition, height, up, forward, collisionCheckParams, collisionRuntimeParams) {
+    let newFeetPosition = PP.vec3_create();
+    return function _horizontalCheckBetterSlideNormal(movement, originalFeetPosition, originalHeight, feetPosition, height, up, forward, collisionCheckParams, collisionRuntimeParams) {
         //check for a better slide hit position and normal
 
         movementDirection = movement.vec3_normalize(movementDirection);
@@ -469,12 +470,13 @@ CollisionCheck.prototype._horizontalCheckBetterSlideNormal = function () {
         this._myCheckBetterSlidingNormalCollisionRuntimeParams.myHorizontalCollisionHit.reset();
 
         newFixedFeetPosition = feetPosition.vec3_add(fixedMovement, newFixedFeetPosition);
+        newFeetPosition = feetPosition.vec3_add(fixedMovement, newFeetPosition);
 
         let backupDebugActive = collisionCheckParams.myDebugActive;
         collisionCheckParams.myDebugActive = collisionCheckParams.myDebugActive && collisionCheckParams.myDebugSlidingActive;
 
         if (collisionCheckParams.myHorizontalPositionCheckEnabled) {
-            this._horizontalPositionCheck(newFixedFeetPosition, height, up, forward, collisionCheckParams, this._myCheckBetterSlidingNormalCollisionRuntimeParams);
+            this._horizontalPositionCheck(originalFeetPosition, originalHeight, newFixedFeetPosition, height, up, forward, collisionCheckParams, this._myCheckBetterSlidingNormalCollisionRuntimeParams);
         }
 
         collisionCheckParams.myDebugActive = backupDebugActive;
