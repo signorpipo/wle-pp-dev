@@ -129,16 +129,30 @@ CollisionCheck.prototype._horizontalCheckRaycast = function () {
 
 CollisionCheck.prototype._ignoreSurfaceAngle = function () {
     let objectsEqualCallback = (first, second) => first.pp_equals(second);
-    return function _ignoreSurfaceAngle(feetPosition, height, objectsToIgnore, outIgnoredObjects, isGround, isMovementCheck, up, collisionCheckParams, hit, ignoreHitsInsideCollisionIfObjectToIgnore) {
+
+    let movementDirection = PP.vec3_create();
+    let hitDirection = PP.vec3_create();
+    let hitMovement = PP.vec3_create();
+    let projectAlongAxis = PP.vec3_create();
+    return function _ignoreSurfaceAngle(feetPosition, height, movement, objectsToIgnore, outIgnoredObjects, isGround, isMovementCheck, up, collisionCheckParams, hit, ignoreHitsInsideCollisionIfObjectToIgnore) {
         let isIgnorable = false;
 
-        let surfaceIgnoreDistance = null;
-        let groundIgnoreDistance = isMovementCheck ? collisionCheckParams.myHorizontalMovementGroundAngleIgnoreDistance : collisionCheckParams.myHorizontalPositionGroundAngleIgnoreDistance;
-        let ceilingIgnoreDistance = isMovementCheck ? collisionCheckParams.myHorizontalMovementCeilingAngleIgnoreDistance : collisionCheckParams.myHorizontalPositionCeilingAngleIgnoreDistance;
-        if (isGround && groundIgnoreDistance != null) {
-            surfaceIgnoreDistance = Math.pp_clamp(groundIgnoreDistance + 0.0002, 0, height);
-        } else if (!isGround && ceilingIgnoreDistance != null) {
-            surfaceIgnoreDistance = Math.pp_clamp(height - ceilingIgnoreDistance - 0.0002, 0, height);
+        let surfaceIgnoreHeight = null;
+        let groundIgnoreHeight = isMovementCheck ? collisionCheckParams.myHorizontalMovementGroundAngleIgnoreHeight : collisionCheckParams.myHorizontalPositionGroundAngleIgnoreHeight;
+        let ceilingIgnoreHeight = isMovementCheck ? collisionCheckParams.myHorizontalMovementCeilingAngleIgnoreHeight : collisionCheckParams.myHorizontalPositionCeilingAngleIgnoreHeight;
+        if (isGround && groundIgnoreHeight != null) {
+            surfaceIgnoreHeight = Math.pp_clamp(groundIgnoreHeight + 0.0002, 0, height);
+        } else if (!isGround && ceilingIgnoreHeight != null) {
+            surfaceIgnoreHeight = Math.pp_clamp(height - ceilingIgnoreHeight - 0.0002, 0, height);
+        }
+
+        let surfaceIgnoreMaxMovementLeft = null;
+        if (isMovementCheck) {
+            if (isGround && collisionCheckParams.myHorizontalMovementGroundAngleIgnoreMaxMovementLeft != null) {
+                surfaceIgnoreMaxMovementLeft = collisionCheckParams.myHorizontalMovementGroundAngleIgnoreMaxMovementLeft;
+            } else if (!isGround && collisionCheckParams.myHorizontalMovementCeilingAngleIgnoreMaxMovementLeft != null) {
+                surfaceIgnoreMaxMovementLeft = collisionCheckParams.myHorizontalMovementCeilingAngleIgnoreMaxMovementLeft;
+            }
         }
 
         if (!hit.myIsInsideCollision) {
@@ -147,16 +161,54 @@ CollisionCheck.prototype._ignoreSurfaceAngle = function () {
             if ((isGround && (collisionCheckParams.myGroundAngleToIgnore > 0 && surfaceAngle <= collisionCheckParams.myGroundAngleToIgnore + 0.0001)) ||
                 (!isGround && (collisionCheckParams.myCeilingAngleToIgnore > 0 && (180 - surfaceAngle) <= collisionCheckParams.myCeilingAngleToIgnore + 0.0001))) {
                 if (objectsToIgnore == null || objectsToIgnore.pp_hasEqual(hit.myObject, objectsEqualCallback)) {
-                    if (surfaceIgnoreDistance != null) {
+                    let surfaceHeightCheckOk = true;
+                    let maxMovementLeftCheckOk = true;
+
+                    if (surfaceIgnoreHeight != null) {
+                        surfaceHeightCheckOk = false;
+
                         let feetPositionUp = feetPosition.vec3_valueAlongAxis(up);
                         let hitUp = hit.myPosition.vec3_valueAlongAxis(up);
                         let hitHeight = hitUp - feetPositionUp;
-                        if ((isGround && hitHeight <= surfaceIgnoreDistance) || (!isGround && hitHeight >= surfaceIgnoreDistance)) {
-                            isIgnorable = true;
+                        if ((isGround && hitHeight <= surfaceIgnoreHeight) || (!isGround && hitHeight >= surfaceIgnoreHeight)) {
+                            surfaceHeightCheckOk = true;
                         } else {
                             //console.error(hitHeight.toFixed(6));
                         }
-                    } else {
+                    }
+
+                    if (surfaceHeightCheckOk && isMovementCheck) {
+                        if (surfaceIgnoreMaxMovementLeft != null) {
+                            let movementLength = movement.vec3_length();
+                            if (movementLength > surfaceIgnoreMaxMovementLeft) {
+                                maxMovementLeftCheckOk = false;
+
+                                let hitPosition = hit.myPosition;
+                                let halfConeAngle = Math.min(collisionCheckParams.myHalfConeAngle, 90);
+                                hitDirection = hitPosition.vec3_sub(feetPosition, hitDirection);
+                                movementDirection = movement.vec3_normalize(movementDirection);
+
+                                if (hitDirection.vec3_isToTheRight(movementDirection, up)) {
+                                    projectAlongAxis = movementDirection.vec3_rotateAxis(-halfConeAngle, up, projectAlongAxis);
+                                } else {
+                                    projectAlongAxis = movementDirection.vec3_rotateAxis(halfConeAngle, up, projectAlongAxis);
+                                }
+
+                                hitMovement = hitDirection.vec3_projectOnAxisAlongAxis(movementDirection, projectAlongAxis, hitMovement);
+
+                                let hitMovementLength = hitMovement.vec3_length();
+                                let movementLeft = movementLength - hitMovementLength;
+
+                                if (movementLeft <= surfaceIgnoreMaxMovementLeft) {
+                                    maxMovementLeftCheckOk = true;
+                                } else {
+                                    //console.error(movementLeft.toFixed(3));
+                                }
+                            }
+                        }
+                    }
+
+                    if (surfaceHeightCheckOk && maxMovementLeftCheckOk) {
                         isIgnorable = true;
                     }
                 }

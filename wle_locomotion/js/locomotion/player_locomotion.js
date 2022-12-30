@@ -86,7 +86,7 @@ PlayerLocomotion = class PlayerLocomotion {
             params.myHeadRadius = 0.15;
 
             params.myIsMaxDistanceFromRealToSyncEnabled = true;
-            params.myMaxDistanceFromRealToSync = 1;
+            params.myMaxDistanceFromRealToSync = 100;
 
             params.myDebugActive = true;
 
@@ -359,10 +359,13 @@ PlayerLocomotion = class PlayerLocomotion {
         this._myCollisionCheckParamsMovement.myGroundAngleToIgnore = 30;
         this._myCollisionCheckParamsMovement.myCeilingAngleToIgnore = 30;
 
-        this._myCollisionCheckParamsMovement.myHorizontalMovementGroundAngleIgnoreDistance = 0.1 * 3;
-        this._myCollisionCheckParamsMovement.myHorizontalMovementCeilingAngleIgnoreDistance = 0.1 * 3;
-        //this._myCollisionCheckParamsMovement.myHorizontalPositionGroundAngleIgnoreDistance = 0.1;
-        //this._myCollisionCheckParamsMovement.myHorizontalPositionCeilingAngleIgnoreDistance = 0.1;
+        //this._myCollisionCheckParamsMovement.myHorizontalMovementGroundAngleIgnoreHeight = 0.1 * 3;
+        //this._myCollisionCheckParamsMovement.myHorizontalMovementCeilingAngleIgnoreHeight = 0.1 * 3;
+        //this._myCollisionCheckParamsMovement.myHorizontalPositionGroundAngleIgnoreHeight = 0.1;
+        //this._myCollisionCheckParamsMovement.myHorizontalPositionCeilingAngleIgnoreHeight = 0.1;
+
+        this._myCollisionCheckParamsMovement.myHorizontalMovementGroundAngleIgnoreMaxMovementLeft = 0.1;
+        this._myCollisionCheckParamsMovement.myHorizontalMovementGroundAngleIgnoreMaxMovementLeft = 0.1;
 
         this._myCollisionCheckParamsMovement.myHeight = 1;
 

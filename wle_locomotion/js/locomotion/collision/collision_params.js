@@ -101,10 +101,13 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myGroundAngleToIgnore = 0;
         this.myCeilingAngleToIgnore = 0;
 
-        this.myHorizontalMovementGroundAngleIgnoreDistance = null;
-        this.myHorizontalMovementCeilingAngleIgnoreDistance = null;
-        this.myHorizontalPositionGroundAngleIgnoreDistance = null;
-        this.myHorizontalPositionCeilingAngleIgnoreDistance = null;
+        this.myHorizontalMovementGroundAngleIgnoreHeight = null;
+        this.myHorizontalMovementCeilingAngleIgnoreHeight = null;
+        this.myHorizontalPositionGroundAngleIgnoreHeight = null;
+        this.myHorizontalPositionCeilingAngleIgnoreHeight = null;
+
+        this.myHorizontalMovementGroundAngleIgnoreMaxMovementLeft = null;
+        this.myHorizontalMovementCeilingAngleIgnoreMaxMovementLeft = null;
 
         this.myHeight = 0;
 
@@ -242,10 +245,13 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myGroundAngleToIgnore = other.myGroundAngleToIgnore;
         this.myCeilingAngleToIgnore = other.myCeilingAngleToIgnore;
 
-        this.myHorizontalMovementGroundAngleIgnoreDistance = other.myHorizontalMovementGroundAngleIgnoreDistance;
-        this.myHorizontalMovementCeilingAngleIgnoreDistance = other.myHorizontalMovementCeilingAngleIgnoreDistance;
-        this.myHorizontalPositionGroundAngleIgnoreDistance = other.myHorizontalPositionGroundAngleIgnoreDistance;
-        this.myHorizontalPositionCeilingAngleIgnoreDistance = other.myHorizontalPositionCeilingAngleIgnoreDistance;
+        this.myHorizontalMovementGroundAngleIgnoreHeight = other.myHorizontalMovementGroundAngleIgnoreHeight;
+        this.myHorizontalMovementCeilingAngleIgnoreHeight = other.myHorizontalMovementCeilingAngleIgnoreHeight;
+        this.myHorizontalPositionGroundAngleIgnoreHeight = other.myHorizontalPositionGroundAngleIgnoreHeight;
+        this.myHorizontalPositionCeilingAngleIgnoreHeight = other.myHorizontalPositionCeilingAngleIgnoreHeight;
+
+        this.myHorizontalMovementGroundAngleIgnoreMaxMovementLeft = other.myHorizontalMovementGroundAngleIgnoreMaxMovementLeft;
+        this.myHorizontalMovementCeilingAngleIgnoreMaxMovementLeft = other.myHorizontalMovementCeilingAngleIgnoreMaxMovementLeft;
 
         this.myHeight = other.myHeight;
 
