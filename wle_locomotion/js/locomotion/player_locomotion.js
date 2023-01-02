@@ -90,7 +90,7 @@ PlayerLocomotion = class PlayerLocomotion {
 
             params.myIsLeaningValidIfVerticalMovement = false;
             params.myIsLeaningValidAboveDistance = true;
-            params.myIsLeaningValidAboveDistanceIfNoGround = true;
+            params.myIsLeaningValidAboveDistanceIfNotHopping = true;
             params.myLeaningValidDistance = 2;
             params.myLeaningSplitCheckEnabled = true;
             params.myLeaningSplitCheckMaxLength = 0.2;

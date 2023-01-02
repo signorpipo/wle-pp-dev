@@ -1,8 +1,8 @@
 PlayerTransformManagerSyncFlag = {
     BODY_COLLIDING: 0,
     HEAD_COLLIDING: 1,
-    LEANING: 2,
-    FAR: 3,
+    FAR: 2,
+    LEANING: 3
 };
 
 PlayerTransformManagerParams = class PlayerTransformManagerParams {
@@ -15,37 +15,39 @@ PlayerTransformManagerParams = class PlayerTransformManagerParams {
         this.mySyncEnabledFlagMap = new Map();
         this.mySyncEnabledFlagMap.set(PlayerTransformManagerSyncFlag.BODY_COLLIDING, true);
         this.mySyncEnabledFlagMap.set(PlayerTransformManagerSyncFlag.HEAD_COLLIDING, true);
-        this.mySyncEnabledFlagMap.set(PlayerTransformManagerSyncFlag.LEANING, true);
         this.mySyncEnabledFlagMap.set(PlayerTransformManagerSyncFlag.FAR, true);
+        this.mySyncEnabledFlagMap.set(PlayerTransformManagerSyncFlag.LEANING, true);
 
         this.mySyncPositionFlagMap = new Map();
         this.mySyncPositionFlagMap.set(PlayerTransformManagerSyncFlag.BODY_COLLIDING, true);
         this.mySyncPositionFlagMap.set(PlayerTransformManagerSyncFlag.HEAD_COLLIDING, false);
-        this.mySyncPositionFlagMap.set(PlayerTransformManagerSyncFlag.LEANING, true);
         this.mySyncPositionFlagMap.set(PlayerTransformManagerSyncFlag.FAR, true);
+        this.mySyncPositionFlagMap.set(PlayerTransformManagerSyncFlag.LEANING, true);
 
         this.mySyncPositionHeadFlagMap = new Map();
         this.mySyncPositionHeadFlagMap.set(PlayerTransformManagerSyncFlag.BODY_COLLIDING, false);
         this.mySyncPositionHeadFlagMap.set(PlayerTransformManagerSyncFlag.HEAD_COLLIDING, true);
-        this.mySyncPositionHeadFlagMap.set(PlayerTransformManagerSyncFlag.LEANING, false);
         this.mySyncPositionHeadFlagMap.set(PlayerTransformManagerSyncFlag.FAR, false);
+        this.mySyncPositionHeadFlagMap.set(PlayerTransformManagerSyncFlag.LEANING, false);
 
         this.mySyncRotationFlagMap = new Map();
         this.mySyncRotationFlagMap.set(PlayerTransformManagerSyncFlag.BODY_COLLIDING, false);
         this.mySyncRotationFlagMap.set(PlayerTransformManagerSyncFlag.HEAD_COLLIDING, false);
-        this.mySyncRotationFlagMap.set(PlayerTransformManagerSyncFlag.LEANING, false);
         this.mySyncRotationFlagMap.set(PlayerTransformManagerSyncFlag.FAR, false);
+        this.mySyncRotationFlagMap.set(PlayerTransformManagerSyncFlag.LEANING, false);
 
         this.mySyncHeightFlagMap = new Map();
         this.mySyncHeightFlagMap.set(PlayerTransformManagerSyncFlag.BODY_COLLIDING, true);
         this.mySyncHeightFlagMap.set(PlayerTransformManagerSyncFlag.HEAD_COLLIDING, false);
-        this.mySyncHeightFlagMap.set(PlayerTransformManagerSyncFlag.LEANING, true);
         this.mySyncHeightFlagMap.set(PlayerTransformManagerSyncFlag.FAR, true);
+        this.mySyncHeightFlagMap.set(PlayerTransformManagerSyncFlag.LEANING, true);
 
-        this.myIsLeaningValidIfVerticalMovement = true;
         this.myIsLeaningValidAboveDistance = false;
-        this.myIsLeaningValidAboveDistanceIfNoGround = false;
+        this.myIsLeaningValidAboveDistanceIfNotHopping = false;
         this.myLeaningValidDistance = 0;
+
+        // settings for both hop and lean
+        this.myIsLeaningValidIfVerticalMovement = true;
         this.myLeaningSplitCheckEnabled = false;
         this.myLeaningSplitCheckMaxLength = 0;
         this.myLeaningSplitCheckMaxSteps = null;
@@ -102,6 +104,7 @@ PlayerTransformManager = class PlayerTransformManager {
         this._myIsBodyColliding = false;
         this._myIsHeadColliding = false;
         this._myIsLeaning = false;
+        this._myIsHopping = false;
         this._myIsFar = false;
     }
 
@@ -241,9 +244,9 @@ PlayerTransformManager = class PlayerTransformManager {
     isSynced(syncFlagMap = null) {
         let isBodyColliding = this.isBodyColliding() && (syncFlagMap == null || syncFlagMap.get(PlayerTransformManagerSyncFlag.BODY_COLLIDING));
         let isHeadColliding = this.isHeadColliding() && (syncFlagMap == null || syncFlagMap.get(PlayerTransformManagerSyncFlag.HEAD_COLLIDING));
-        let isLeaning = this.isLeaning() && (syncFlagMap == null || syncFlagMap.get(PlayerTransformManagerSyncFlag.LEANING));
         let isFar = this.isFar() && (syncFlagMap == null || syncFlagMap.get(PlayerTransformManagerSyncFlag.FAR));
-        return !isBodyColliding && !isHeadColliding && !isLeaning && !isFar;
+        let isLeaning = this.isLeaning() && (syncFlagMap == null || syncFlagMap.get(PlayerTransformManagerSyncFlag.LEANING));
+        return !isBodyColliding && !isHeadColliding && !isFar && !isLeaning;
     }
 
     resetReal(resetRotation = false) {
@@ -260,6 +263,10 @@ PlayerTransformManager = class PlayerTransformManager {
 
     isLeaning() {
         return this._myIsLeaning;
+    }
+
+    isHopping() {
+        return this._myIsHopping;
     }
 
     isFar() {
@@ -487,6 +494,7 @@ PlayerTransformManager.prototype.update = function () {
             this._myIsBodyColliding = false;
             this._myIsHeadColliding = false;
             this._myIsLeaning = false;
+            this._myIsHopping = false;
             this._myIsFar = false;
 
             //this._myValidPosition = PP.vec3_create();
@@ -562,6 +570,7 @@ PlayerTransformManager.prototype.update = function () {
 
                         let atLeastOneNotOnGround = false;
                         let atLeastOneOnGround = false;
+                        let isOneOnGroundBetweenNoGround = false;
 
                         for (let i = 0; i < movementStepAmount; i++) {
                             if (movementStepAmount == 1 || i != movementStepAmount - 1) {
@@ -579,21 +588,28 @@ PlayerTransformManager.prototype.update = function () {
                             if (!collisionRuntimeParams.myIsOnGround) {
                                 atLeastOneNotOnGround = true;
                             } else {
+                                if (atLeastOneNotOnGround) {
+                                    isOneOnGroundBetweenNoGround = true;
+                                }
                                 atLeastOneOnGround = true;
                             }
                         }
 
                         if (atLeastOneNotOnGround) {
-                            let distance = movementToCheck.vec3_length();
+                            this._myIsLeaning = true;
+                            if (isOneOnGroundBetweenNoGround) {
+                                this._myIsHopping = true;
+                            }
 
+                            let distance = movementToCheck.vec3_length();
                             if (this._myParams.myIsLeaningValidAboveDistance && distance > this._myParams.myLeaningValidDistance &&
-                                (!atLeastOneOnGround || !this._myParams.myIsLeaningValidAboveDistanceIfNoGround)) {
+                                (!this._myIsHopping || !this._myParams.myIsLeaningValidAboveDistanceIfNotHopping)) {
                                 this._myIsLeaning = false;
-                            } else {
-                                this._myIsLeaning = true;
+                                this._myIsHopping = false;
                             }
                         } else {
                             this._myIsLeaning = false;
+                            this._myIsHopping = false;
                         }
                     }
                 }
