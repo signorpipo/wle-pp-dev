@@ -88,6 +88,14 @@ PlayerLocomotion = class PlayerLocomotion {
             params.myIsMaxDistanceFromRealToSyncEnabled = true;
             params.myMaxDistanceFromRealToSync = 100;
 
+            params.myIsLeaningValidIfVerticalMovement = false;
+            params.myIsLeaningValidAboveDistance = true;
+            params.myIsLeaningValidAboveDistanceIfNoGround = true;
+            params.myLeaningValidDistance = 2;
+            params.myLeaningSplitCheckEnabled = true;
+            params.myLeaningSplitCheckMaxLength = 0.2;
+            params.myLeaningSplitCheckMaxSteps = 5;
+
             params.myDebugActive = true;
 
             this._myPlayerTransformManager = new PlayerTransformManager(params);
@@ -340,6 +348,7 @@ PlayerLocomotion = class PlayerLocomotion {
         this._myCollisionCheckParamsMovement.myGroundCircumferenceSliceAmount = 8;
         this._myCollisionCheckParamsMovement.myGroundCircumferenceStepAmount = 2;
         this._myCollisionCheckParamsMovement.myGroundCircumferenceRotationPerStep = 22.5;
+        this._myCollisionCheckParamsMovement.myVerticalAllowHitInsideCollisionIfOneOk = true;
 
         this._myCollisionCheckParamsMovement.myCheckHeight = true;
         this._myCollisionCheckParamsMovement.myCheckHeightTop = true;

@@ -406,6 +406,7 @@ CollisionCheck.prototype._horizontalMovementHorizontalCheck = function () {
                         {
                             firstMovementPosition = firstPosition.vec3_add(movementStep, firstMovementPosition);
 
+                            //#TODO ignore hits if inside could be a paramter, so you can specify if u want to be able to exit from a collision
                             isHorizontalCheckOk = this._horizontalCheckRaycast(secondPosition, firstMovementPosition, movementDirection, up,
                                 true, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
                                 feetPosition, true,

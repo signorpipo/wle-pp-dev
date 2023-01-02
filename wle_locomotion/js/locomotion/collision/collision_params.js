@@ -83,6 +83,7 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myGroundCircumferenceSliceAmount = 0;
         this.myGroundCircumferenceStepAmount = 0;
         this.myGroundCircumferenceRotationPerStep = 0;
+        this.myVerticalAllowHitInsideCollisionIfOneOk = false;
 
         this.myCheckHeight = false;
         this.myCheckHeightTop = false;
@@ -121,6 +122,8 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myVerticalFixToComputeGroundInfo = 0;
         this.myVerticalFixToBeOnCeiling = 0;
         this.myVerticalFixToComputeCeilingInfo = 0;
+        this.myIsOnGroundIfInsideHit = false;
+        this.myIsOnCeilingIfInsideHit = false;
 
         this.mySlidingEnabled = false;
         this.mySlidingHorizontalMovementCheckBetterNormal = false;
@@ -230,6 +233,7 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myGroundCircumferenceSliceAmount = other.myGroundCircumferenceSliceAmount;
         this.myGroundCircumferenceStepAmount = other.myGroundCircumferenceStepAmount;
         this.myGroundCircumferenceRotationPerStep = other.myGroundCircumferenceRotationPerStep;
+        this.myVerticalAllowHitInsideCollisionIfOneOk = other.myVerticalAllowHitInsideCollisionIfOneOk;
 
         this.myCheckHeight = other.myCheckHeight;
         this.myCheckHeightTop = other.myCheckHeightTop;
@@ -265,6 +269,8 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myVerticalFixToComputeGroundInfo = other.myVerticalFixToComputeGroundInfo;
         this.myVerticalFixToBeOnCeiling = other.myVerticalFixToBeOnCeiling;
         this.myVerticalFixToComputeCeilingInfo = other.myVerticalFixToComputeCeilingInfo;
+        this.myIsOnGroundIfInsideHit = other.myIsOnGroundIfInsideHit;
+        this.myIsOnCeilingIfInsideHit = other.myIsOnCeilingIfInsideHit;
 
         this.mySlidingEnabled = other.mySlidingEnabled;
         this.mySlidingHorizontalMovementCheckBetterNormal = other.mySlidingHorizontalMovementCheckBetterNormal;

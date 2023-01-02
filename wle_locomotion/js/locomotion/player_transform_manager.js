@@ -19,31 +19,36 @@ PlayerTransformManagerParams = class PlayerTransformManagerParams {
         this.mySyncEnabledFlagMap.set(PlayerTransformManagerSyncFlag.FAR, true);
 
         this.mySyncPositionFlagMap = new Map();
-        this.mySyncPositionFlagMap.set(PlayerTransformManagerSyncFlag.BODY_COLLIDING, false);
-        this.mySyncPositionFlagMap.set(PlayerTransformManagerSyncFlag.HEAD_COLLIDING, true);
-        this.mySyncPositionFlagMap.set(PlayerTransformManagerSyncFlag.LEANING, false);
-        this.mySyncPositionFlagMap.set(PlayerTransformManagerSyncFlag.FAR, false);
+        this.mySyncPositionFlagMap.set(PlayerTransformManagerSyncFlag.BODY_COLLIDING, true);
+        this.mySyncPositionFlagMap.set(PlayerTransformManagerSyncFlag.HEAD_COLLIDING, false);
+        this.mySyncPositionFlagMap.set(PlayerTransformManagerSyncFlag.LEANING, true);
+        this.mySyncPositionFlagMap.set(PlayerTransformManagerSyncFlag.FAR, true);
 
         this.mySyncPositionHeadFlagMap = new Map();
-        this.mySyncPositionHeadFlagMap.set(PlayerTransformManagerSyncFlag.BODY_COLLIDING, true);
-        this.mySyncPositionHeadFlagMap.set(PlayerTransformManagerSyncFlag.HEAD_COLLIDING, false);
-        this.mySyncPositionHeadFlagMap.set(PlayerTransformManagerSyncFlag.LEANING, true);
-        this.mySyncPositionHeadFlagMap.set(PlayerTransformManagerSyncFlag.FAR, true);
+        this.mySyncPositionHeadFlagMap.set(PlayerTransformManagerSyncFlag.BODY_COLLIDING, false);
+        this.mySyncPositionHeadFlagMap.set(PlayerTransformManagerSyncFlag.HEAD_COLLIDING, true);
+        this.mySyncPositionHeadFlagMap.set(PlayerTransformManagerSyncFlag.LEANING, false);
+        this.mySyncPositionHeadFlagMap.set(PlayerTransformManagerSyncFlag.FAR, false);
 
         this.mySyncRotationFlagMap = new Map();
-        this.mySyncRotationFlagMap.set(PlayerTransformManagerSyncFlag.BODY_COLLIDING, true);
-        this.mySyncRotationFlagMap.set(PlayerTransformManagerSyncFlag.HEAD_COLLIDING, true);
-        this.mySyncRotationFlagMap.set(PlayerTransformManagerSyncFlag.LEANING, true);
-        this.mySyncRotationFlagMap.set(PlayerTransformManagerSyncFlag.FAR, true);
+        this.mySyncRotationFlagMap.set(PlayerTransformManagerSyncFlag.BODY_COLLIDING, false);
+        this.mySyncRotationFlagMap.set(PlayerTransformManagerSyncFlag.HEAD_COLLIDING, false);
+        this.mySyncRotationFlagMap.set(PlayerTransformManagerSyncFlag.LEANING, false);
+        this.mySyncRotationFlagMap.set(PlayerTransformManagerSyncFlag.FAR, false);
 
         this.mySyncHeightFlagMap = new Map();
         this.mySyncHeightFlagMap.set(PlayerTransformManagerSyncFlag.BODY_COLLIDING, true);
-        this.mySyncHeightFlagMap.set(PlayerTransformManagerSyncFlag.HEAD_COLLIDING, true);
+        this.mySyncHeightFlagMap.set(PlayerTransformManagerSyncFlag.HEAD_COLLIDING, false);
         this.mySyncHeightFlagMap.set(PlayerTransformManagerSyncFlag.LEANING, true);
         this.mySyncHeightFlagMap.set(PlayerTransformManagerSyncFlag.FAR, true);
 
+        this.myIsLeaningValidIfVerticalMovement = true;
         this.myIsLeaningValidAboveDistance = false;
+        this.myIsLeaningValidAboveDistanceIfNoGround = false;
         this.myLeaningValidDistance = 0;
+        this.myLeaningSplitCheckEnabled = false;
+        this.myLeaningSplitCheckMaxLength = 0;
+        this.myLeaningSplitCheckMaxSteps = null;
 
         this.myIsMaxDistanceFromRealToSyncEnabled = false;
         this.myMaxDistanceFromRealToSync = 0;
@@ -391,19 +396,24 @@ PlayerTransformManager = class PlayerTransformManager {
         //params.myHorizontalMovementGroundAngleIgnoreHeight = 0.1 * 3;
         //params.myHorizontalMovementCeilingAngleIgnoreHeight = 0.1 * 3;
 
+        params.myIsOnGroundIfInsideHit = true;
+
+        params.myDebugActive = true;
 
         params.myDebugHorizontalMovementActive = false;
-        params.myDebugHorizontalPositionActive = true;
+        params.myDebugHorizontalPositionActive = false;
         params.myDebugVerticalMovementActive = false;
         params.myDebugVerticalPositionActive = false;
         params.myDebugSlidingActive = false;
-        params.myDebugSurfaceInfoActive = false;
+        params.myDebugSurfaceInfoActive = true;
         params.myDebugRuntimeParamsActive = false;
         params.myDebugMovementActive = false;
     }
 
     _debugUpdate(dt) {
         PP.myDebugVisualManager.drawPoint(0, this._myValidPosition, [1, 0, 0, 1], 0.05);
+        PP.myDebugVisualManager.drawLineEnd(0, this._myValidPosition, this.getPositionReal(), [1, 0, 0, 1], 0.05);
+
         PP.myDebugVisualManager.drawPoint(0, this._myValidPositionHead, [1, 1, 0, 1], 0.05);
     }
 };
@@ -456,10 +466,16 @@ PlayerTransformManager.prototype.update = function () {
     let positionReal = PP.vec3_create();
     let transformQuat = PP.quat2_create();
     let collisionRuntimeParams = new CollisionRuntimeParams();
-    let teleportCollisionRuntimeParams = new CollisionRuntimeParams();
 
     let newPosition = PP.vec3_create();
     let newPositionHead = PP.vec3_create();
+    let movementStep = PP.vec3_create();
+    let currentMovementStep = PP.vec3_create();
+    let transformUp = PP.vec3_create();
+    let verticalMovement = PP.vec3_create();
+    let movementChecked = PP.vec3_create();
+    let newFeetPosition = PP.vec3_create();
+    let leaningTransformQuat = PP.quat2_create();
     return function update(dt) {
         // check if new head is ok and update the data
         // if head is not synced (blurred or session changing) avoid this and keep last valid
@@ -501,13 +517,85 @@ PlayerTransformManager.prototype.update = function () {
             }
 
             // Leaning 
+            if (this._myParams.mySyncEnabledFlagMap.get(PlayerTransformManagerSyncFlag.LEANING) && (true || this._myCollisionRuntimeParams.myIsOnGround)) {
+
+                collisionRuntimeParams.copy(this._myCollisionRuntimeParams);
+                leaningTransformQuat.quat2_setPositionRotationQuat(this._myValidPosition, this._myValidRotationQuat);
+                CollisionCheckGlobal.updateSurfaceInfo(leaningTransformQuat, this._myRealMovementCollisionCheckParams, collisionRuntimeParams);
+                //#TODO utilizzare on ground del body gia calcolato, ma ora non c'è quindi va bene così
+
+                if (collisionRuntimeParams.myIsOnGround) {
+                    transformUp = transformQuat.quat2_getUp(transformUp);
+                    verticalMovement = movementToCheck.vec3_componentAlongAxis(transformUp);
+
+                    if (verticalMovement.vec3_isZero(0.00001) || !this._myParams.myIsLeaningValidIfVerticalMovement) {
+                        let movementStepAmount = 1;
+                        movementStep.vec3_copy(movementToCheck);
+                        if (!movementToCheck.vec3_isZero(0.00001) && this._myParams.myLeaningSplitCheckEnabled) {
+                            movementStepAmount = Math.ceil(movementToCheck.vec3_length() / this._myParams.myLeaningSplitCheckMaxLength);
+                            if (movementStepAmount > 1) {
+                                movementStep = movementStep.vec3_normalize(movementStep).vec3_scale(this._myParams.myLeaningSplitCheckMaxLength, movementStep);
+                                movementStepAmount = (this._myParams.myLeaningSplitCheckMaxSteps != null) ? Math.min(movementStepAmount, this._myParams.myLeaningSplitCheckMaxSteps) : movementStepAmount;
+                            }
+
+                            movementStepAmount = Math.max(1, movementStepAmount);
+
+                            if (movementStepAmount == 1) {
+                                movementStep.vec3_copy(movementToCheck);
+                            }
+                        }
+
+                        movementChecked.vec3_zero();
+                        newFeetPosition.vec3_copy(this._myValidPosition);
+                        collisionRuntimeParams.copy(this._myCollisionRuntimeParams);
+
+                        let atLeastOneNotOnGround = false;
+                        let atLeastOneOnGround = false;
+
+                        for (let i = 0; i < movementStepAmount; i++) {
+                            if (movementStepAmount == 1 || i != movementStepAmount - 1) {
+                                currentMovementStep.vec3_copy(movementStep);
+                            } else {
+                                currentMovementStep = movementToCheck.vec3_sub(movementChecked, currentMovementStep);
+                            }
+
+                            newFeetPosition = newFeetPosition.vec3_add(currentMovementStep, newFeetPosition);
+                            leaningTransformQuat.quat2_setPositionRotationQuat(newFeetPosition, this._myValidRotationQuat);
+                            collisionRuntimeParams.copy(this._myCollisionRuntimeParams);
+                            CollisionCheckGlobal.updateSurfaceInfo(leaningTransformQuat, this._myRealMovementCollisionCheckParams, collisionRuntimeParams);
+                            movementChecked = movementChecked.vec3_add(currentMovementStep, movementChecked);
+
+                            if (!collisionRuntimeParams.myIsOnGround) {
+                                atLeastOneNotOnGround = true;
+                            } else {
+                                atLeastOneOnGround = true;
+                            }
+                        }
+
+                        if (atLeastOneNotOnGround) {
+                            let distance = movementToCheck.vec3_length();
+
+                            if (this._myParams.myIsLeaningValidAboveDistance && distance > this._myParams.myLeaningValidDistance &&
+                                (!atLeastOneOnGround || !this._myParams.myIsLeaningValidAboveDistanceIfNoGround)) {
+                                this._myIsLeaning = false;
+                                console.error(1);
+                            } else {
+                                this._myIsLeaning = true;
+                                console.error(this._myIsLeaning);
+                            }
+                        } else {
+                            this._myIsLeaning = false;
+                        }
+                    }
+                }
+            }
 
             // Head Colliding
             movementToCheck = this.getPositionHeadReal(positionReal).vec3_sub(this.getPositionHead(position), movementToCheck);
             collisionRuntimeParams.reset();
             transformQuat = this.getTransformHeadQuat(transformQuat);
             newPositionHead.vec3_copy(this._myValidPositionHead);
-            if (this._myParams.mySyncEnabledFlagMap.get(PlayerTransformManagerSyncFlag.BODY_COLLIDING)) {
+            if (this._myParams.mySyncEnabledFlagMap.get(PlayerTransformManagerSyncFlag.HEAD_COLLIDING)) {
                 CollisionCheckGlobal.move(movementToCheck, transformQuat, this._myHeadCollisionCheckParams, collisionRuntimeParams);
 
                 if (!collisionRuntimeParams.myHorizontalMovementCanceled && !collisionRuntimeParams.myVerticalMovementCanceled) {

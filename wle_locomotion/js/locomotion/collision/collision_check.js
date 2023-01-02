@@ -56,6 +56,10 @@ CollisionCheck = class CollisionCheck {
         this._positionCheck(allowFix, transformQuat, collisionCheckParams, collisionRuntimeParams);
     }
 
+    updateSurfaceInfo(transformQuat, collisionCheckParams, collisionRuntimeParams) {
+        this._updateSurfaceInfo(transformQuat, collisionCheckParams, collisionRuntimeParams);
+    }
+
     _debugMovement(movement, fixedMovement, feetPosition, up, collisionCheckParams) {
         let originalHorizontalMovement = movement.vec3_removeComponentAlongAxis(up);
 

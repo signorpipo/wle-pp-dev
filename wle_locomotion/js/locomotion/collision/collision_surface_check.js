@@ -1,3 +1,65 @@
+CollisionCheck.prototype._updateSurfaceInfo = function () {
+    let transformUp = PP.vec3_create();
+    let transformForward = PP.vec3_create();
+    let feetPosition = PP.vec3_create();
+
+    let transformOffsetLocalQuat = PP.quat2_create();
+    let offsetTransformQuat = PP.quat2_create();
+
+    let forwardForPerceivedAngle = PP.vec3_create();
+    let forwardForVertical = PP.vec3_create();
+
+    let zAxis = PP.vec3_create(0, 0, 1);
+    let xAxis = PP.vec3_create(1, 0, 0);
+    return function _updateSurfaceInfo(transformQuat, collisionCheckParams, collisionRuntimeParams) {
+        transformOffsetLocalQuat.quat2_setPositionRotationQuat(collisionCheckParams.myPositionOffsetLocal, collisionCheckParams.myRotationOffsetLocalQuat);
+        offsetTransformQuat = transformOffsetLocalQuat.quat2_toWorld(transformQuat, offsetTransformQuat);
+        if (transformQuat.vec_equals(offsetTransformQuat, 0.00001)) {
+            offsetTransformQuat.quat2_copy(transformQuat);
+        }
+
+        transformUp = offsetTransformQuat.quat2_getUp(transformUp);
+        transformForward = offsetTransformQuat.quat2_getForward(transformForward);
+        feetPosition = offsetTransformQuat.quat2_getPosition(feetPosition);
+
+        let height = collisionCheckParams.myHeight;
+        height = height - 0.00001; // this makes it easier to setup things at the same exact height of a character so that it can go under it
+        if (height < 0.00001) {
+            height = 0;
+        }
+
+        forwardForPerceivedAngle.vec3_copy(transformForward);
+
+        forwardForVertical.vec3_copy(collisionCheckParams.myCheckVerticalFixedForward);
+        if (!collisionCheckParams.myCheckVerticalFixedForwardEnabled) {
+            forwardForVertical.vec3_copy(transformForward);
+        } else {
+            if (collisionCheckParams.myCheckVerticalFixedForward.vec3_isOnAxis(transformUp)) {
+                if (zAxis.vec3_isOnAxis(transformUp)) {
+                    forwardForVertical.vec3_copy(xAxis);
+                } else {
+                    forwardForVertical.vec3_copy(zAxis);
+                }
+            }
+
+            forwardForVertical = forwardForVertical.vec3_removeComponentAlongAxis(transformUp, forwardForVertical);
+            forwardForVertical = forwardForVertical.vec3_normalize(forwardForVertical);
+
+            if (forwardForVertical.vec_equals(collisionCheckParams.myCheckVerticalFixedForward, 0.00001)) {
+                forwardForVertical.vec3_copy(collisionCheckParams.myCheckVerticalFixedForward);
+            }
+        }
+
+        if (collisionCheckParams.myComputeGroundInfoEnabled) {
+            this._gatherSurfaceInfo(feetPosition, height, transformUp, forwardForPerceivedAngle, forwardForVertical, true, collisionCheckParams, collisionRuntimeParams);
+        }
+
+        if (collisionCheckParams.myComputeCeilingInfoEnabled) {
+            this._gatherSurfaceInfo(feetPosition, height, transformUp, forwardForPerceivedAngle, forwardForVertical, false, collisionCheckParams, collisionRuntimeParams);
+        }
+    };
+}();
+
 CollisionCheck.prototype._surfaceTooSteep = function () {
     return function _surfaceTooSteep(up, direction, collisionCheckParams, collisionRuntimeParams) {
         let groundTooSteep = false;
@@ -88,12 +150,14 @@ CollisionCheck.prototype._gatherSurfaceInfo = function () {
         let distanceToComputeSurfaceInfo = collisionCheckParams.myDistanceToComputeGroundInfo;
         let verticalFixToBeOnSurface = collisionCheckParams.myVerticalFixToBeOnGround;
         let verticalFixToComputeSurfaceInfo = collisionCheckParams.myVerticalFixToComputeGroundInfo;
+        let isOnSurfaceIfInsideHit = collisionCheckParams.myIsOnGroundIfInsideHit;
         if (!isGround) {
             verticalDirection.vec3_negate(verticalDirection);
             distanceToBeOnSurface = collisionCheckParams.myDistanceToBeOnCeiling;
             distanceToComputeSurfaceInfo = collisionCheckParams.myDistanceToComputeCeilingInfo;
             verticalFixToBeOnSurface = collisionCheckParams.myVerticalFixToBeOnCeiling;
             verticalFixToComputeSurfaceInfo = collisionCheckParams.myVerticalFixToComputeCeilingInfo;
+            isOnSurfaceIfInsideHit = collisionCheckParams.myIsOnCeilingIfInsideHit;
         }
 
         startOffset = verticalDirection.vec3_scale(Math.max(verticalFixToBeOnSurface, verticalFixToComputeSurfaceInfo, 0.00001), startOffset);
@@ -121,21 +185,25 @@ CollisionCheck.prototype._gatherSurfaceInfo = function () {
             let distance = direction.vec3_length();
             direction.vec3_normalize(direction);
 
-            let raycastResult = this._raycastAndDebug(origin, direction, distance, true, collisionCheckParams, collisionRuntimeParams);
+            let raycastResult = this._raycastAndDebug(origin, direction, distance, !isOnSurfaceIfInsideHit, collisionCheckParams, collisionRuntimeParams);
 
             if (raycastResult.isColliding()) {
                 hitFromCurrentPosition = raycastResult.myHits[0].myPosition.vec3_sub(currentPosition, hitFromCurrentPosition);
                 let hitFromCurrentPositionLength = hitFromCurrentPosition.vec3_lengthSigned(verticalDirection);
+                let allHitsInsideCollision = !raycastResult.isColliding(true);
 
                 if ((hitFromCurrentPositionLength >= 0 && hitFromCurrentPositionLength <= verticalFixToBeOnSurface + 0.00001) ||
-                    (hitFromCurrentPositionLength < 0 && Math.abs(hitFromCurrentPositionLength) <= distanceToBeOnSurface + 0.00001)) {
+                    (hitFromCurrentPositionLength < 0 && Math.abs(hitFromCurrentPositionLength) <= distanceToBeOnSurface + 0.00001)
+                    || (allHitsInsideCollision && isOnSurfaceIfInsideHit)) {
                     isOnSurface = true;
                 }
 
-                if ((hitFromCurrentPositionLength >= 0 && hitFromCurrentPositionLength <= verticalFixToComputeSurfaceInfo + 0.00001) ||
-                    (hitFromCurrentPositionLength < 0 && Math.abs(hitFromCurrentPositionLength) <= distanceToComputeSurfaceInfo + 0.00001)) {
-                    let currentSurfaceNormal = raycastResult.myHits[0].myNormal;
-                    surfaceNormal.vec3_add(currentSurfaceNormal, surfaceNormal);
+                if (!allHitsInsideCollision) {
+                    if ((hitFromCurrentPositionLength >= 0 && hitFromCurrentPositionLength <= verticalFixToComputeSurfaceInfo + 0.00001) ||
+                        (hitFromCurrentPositionLength < 0 && Math.abs(hitFromCurrentPositionLength) <= distanceToComputeSurfaceInfo + 0.00001)) {
+                        let currentSurfaceNormal = raycastResult.myHits[0].myNormal;
+                        surfaceNormal.vec3_add(currentSurfaceNormal, surfaceNormal);
+                    }
                 }
             }
         }
@@ -178,3 +246,4 @@ CollisionCheck.prototype._gatherSurfaceInfo = function () {
 Object.defineProperty(CollisionCheck.prototype, "_surfaceTooSteep", { enumerable: false });
 Object.defineProperty(CollisionCheck.prototype, "_computeExtraSurfaceVerticalMovement", { enumerable: false });
 Object.defineProperty(CollisionCheck.prototype, "_gatherSurfaceInfo", { enumerable: false });
+Object.defineProperty(CollisionCheck.prototype, "_updateSurfaceInfo", { enumerable: false });

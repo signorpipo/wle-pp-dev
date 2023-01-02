@@ -229,20 +229,13 @@ CollisionCheck.prototype._verticalPositionCheck = function () {
                 } else if (!insideHitSet) {
                     insideHitSet = true;
                     collisionRuntimeParams.myVerticalCollisionHit.copy(raycastResult.myHits[0]);
+                    if (!collisionCheckParams.myVerticalAllowHitInsideCollisionIfOneOk) {
+                        isVerticalPositionOk = false;
+                        break;
+                    }
                 }
             } else {
                 atLeastOneIsOk = true;
-            }
-
-            let hitsOutsideCollision = raycastResult.getHitsOutsideCollision();
-            if (hitsOutsideCollision.length > 0) {
-                isVerticalPositionOk = false;
-                collisionRuntimeParams.myVerticalCollisionHit.copy(hitsOutsideCollision[0]);
-                break;
-            } else if (raycastResult.myHits.length == 0) {
-                atLeastOneIsOk = true;
-            } else if (!collisionRuntimeParams.myVerticalCollisionHit.isValid()) {
-                collisionRuntimeParams.myVerticalCollisionHit.copy(raycastResult.myHits[0]);
             }
         }
 
