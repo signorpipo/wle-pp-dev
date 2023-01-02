@@ -49,6 +49,8 @@ PlayerTransformManagerParams = class PlayerTransformManagerParams {
         this.myLeaningSplitCheckEnabled = false;
         this.myLeaningSplitCheckMaxLength = 0;
         this.myLeaningSplitCheckMaxSteps = null;
+        this.myLeaningSplitCheckStepEqualLength = false;
+        this.myLeaningSplitCheckStepEqualLengthMinLength = 0;
 
         this.myIsMaxDistanceFromRealToSyncEnabled = false;
         this.myMaxDistanceFromRealToSync = 0;
@@ -398,7 +400,7 @@ PlayerTransformManager = class PlayerTransformManager {
 
         params.myIsOnGroundIfInsideHit = true;
 
-        params.myDebugActive = true;
+        params.myDebugActive = false;
 
         params.myDebugHorizontalMovementActive = false;
         params.myDebugHorizontalPositionActive = false;
@@ -532,16 +534,25 @@ PlayerTransformManager.prototype.update = function () {
                         let movementStepAmount = 1;
                         movementStep.vec3_copy(movementToCheck);
                         if (!movementToCheck.vec3_isZero(0.00001) && this._myParams.myLeaningSplitCheckEnabled) {
-                            movementStepAmount = Math.ceil(movementToCheck.vec3_length() / this._myParams.myLeaningSplitCheckMaxLength);
-                            if (movementStepAmount > 1) {
-                                movementStep = movementStep.vec3_normalize(movementStep).vec3_scale(this._myParams.myLeaningSplitCheckMaxLength, movementStep);
-                                movementStepAmount = (this._myParams.myLeaningSplitCheckMaxSteps != null) ? Math.min(movementStepAmount, this._myParams.myLeaningSplitCheckMaxSteps) : movementStepAmount;
-                            }
+                            let equalStepLength = movementToCheck.vec3_length() / this._myParams.myLeaningSplitCheckMaxSteps;
+                            if (!this._myParams.myLeaningSplitCheckStepEqualLength || equalStepLength < this._myParams.myLeaningSplitCheckStepEqualLengthMinLength) {
+                                let maxLength = this._myParams.myLeaningSplitCheckStepEqualLength ? this._myParams.myLeaningSplitCheckStepEqualLengthMinLength : this._myParams.myLeaningSplitCheckMaxLength;
+                                movementStepAmount = Math.ceil(movementToCheck.vec3_length() / maxLength);
+                                if (movementStepAmount > 1) {
+                                    movementStep = movementStep.vec3_normalize(movementStep).vec3_scale(maxLength, movementStep);
+                                    movementStepAmount = (this._myParams.myLeaningSplitCheckMaxSteps != null) ? Math.min(movementStepAmount, this._myParams.myLeaningSplitCheckMaxSteps) : movementStepAmount;
+                                }
 
-                            movementStepAmount = Math.max(1, movementStepAmount);
+                                movementStepAmount = Math.max(1, movementStepAmount);
 
-                            if (movementStepAmount == 1) {
-                                movementStep.vec3_copy(movementToCheck);
+                                if (movementStepAmount == 1) {
+                                    movementStep.vec3_copy(movementToCheck);
+                                }
+                            } else {
+                                movementStepAmount = this._myParams.myLeaningSplitCheckMaxSteps;
+                                if (movementStepAmount > 1) {
+                                    movementStep = movementStep.vec3_normalize(movementStep).vec3_scale(equalStepLength, movementStep);
+                                }
                             }
                         }
 
@@ -578,10 +589,8 @@ PlayerTransformManager.prototype.update = function () {
                             if (this._myParams.myIsLeaningValidAboveDistance && distance > this._myParams.myLeaningValidDistance &&
                                 (!atLeastOneOnGround || !this._myParams.myIsLeaningValidAboveDistanceIfNoGround)) {
                                 this._myIsLeaning = false;
-                                console.error(1);
                             } else {
                                 this._myIsLeaning = true;
-                                console.error(this._myIsLeaning);
                             }
                         } else {
                             this._myIsLeaning = false;
