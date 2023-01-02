@@ -88,13 +88,12 @@ PlayerLocomotion = class PlayerLocomotion {
             params.myIsMaxDistanceFromRealToSyncEnabled = true;
             params.myMaxDistanceFromRealToSync = 100;
 
-            params.myIsLeaningValidIfVerticalMovement = false;
+            params.myIsFloatingValidIfVerticalMovement = false;
             params.myIsLeaningValidAboveDistance = true;
-            params.myIsLeaningValidAboveDistanceIfNotHopping = true;
             params.myLeaningValidDistance = 2;
-            params.myLeaningSplitCheckEnabled = true;
-            params.myLeaningSplitCheckMaxLength = 0.2;
-            params.myLeaningSplitCheckMaxSteps = 5;
+            params.myFloatingSplitCheckEnabled = true;
+            params.myFloatingSplitCheckMaxLength = 0.2;
+            params.myFloatingSplitCheckMaxSteps = 5;
 
             params.myDebugActive = true;
 
@@ -118,12 +117,12 @@ PlayerLocomotion = class PlayerLocomotion {
 
             params.myDistanceToStartObscureWhenBodyColliding = 1;
             params.myDistanceToStartObscureWhenHeadColliding = 1;
-            params.myDistanceToStartObscureWhenLeaning = 1;
+            params.myDistanceToStartObscureWhenFloating = 1;
             params.myDistanceToStartObscureWhenFar = 1;
 
             params.myRelativeDistanceToMaxObscureWhenBodyColliding = 5;
             params.myRelativeDistanceToMaxObscureWhenHeadColliding = 5;
-            params.myRelativeDistanceToMaxObscureWhenLeaning = 5;
+            params.myRelativeDistanceToMaxObscureWhenFloating = 5;
             params.myRelativeDistanceToMaxObscureWhenFar = 5;
 
             this._myPlayerObscureManager = new PlayerObscureManager(params);

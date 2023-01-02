@@ -16,12 +16,12 @@ PlayerObscureManagerParams = class PlayerObscureManagerParams {
 
         this.myDistanceToStartObscureWhenHeadColliding = 0;
         this.myDistanceToStartObscureWhenBodyColliding = 0;
-        this.myDistanceToStartObscureWhenLeaning = 0;
+        this.myDistanceToStartObscureWhenFloating = 0;
         this.myDistanceToStartObscureWhenFar = 0;
 
         this.myRelativeDistanceToMaxObscureWhenHeadColliding = 0; // relative to the start distance, 1 means that in 1 meters after it started it will be completely obscured
         this.myRelativeDistanceToMaxObscureWhenBodyColliding = 0;
-        this.myRelativeDistanceToMaxObscureWhenLeaning = 0;
+        this.myRelativeDistanceToMaxObscureWhenFloating = 0;
         this.myRelativeDistanceToMaxObscureWhenFar = 0;
 
         this.myObscureLevelRelativeDistanceEasingFunction = PP.EasingFunction.linear;
@@ -255,11 +255,11 @@ PlayerObscureManager = class PlayerObscureManager {
                 }
             }
 
-            if (this._myParams.myPlayerTransformManager.isLeaning()) {
+            if (this._myParams.myPlayerTransformManager.isFloating()) {
                 let distance = this._myParams.myPlayerTransformManager.getDistanceToReal();
-                let relativeDistance = distance - this._myParams.myDistanceToStartObscureWhenLeaning;
+                let relativeDistance = distance - this._myParams.myDistanceToStartObscureWhenFloating;
                 if (relativeDistance >= 0) {
-                    let relativeDistancePercentage = Math.pp_clamp(relativeDistance / this._myParams.myRelativeDistanceToMaxObscureWhenLeaning, 0, 1);
+                    let relativeDistancePercentage = Math.pp_clamp(relativeDistance / this._myParams.myRelativeDistanceToMaxObscureWhenFloating, 0, 1);
                     let targetObscureLevel = this._myParams.myObscureLevelRelativeDistanceEasingFunction(relativeDistancePercentage);
                     this._myTargetObscureLevel = Math.max(this._myTargetObscureLevel, targetObscureLevel);
                 }

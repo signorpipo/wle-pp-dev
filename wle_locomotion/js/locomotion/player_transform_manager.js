@@ -2,7 +2,7 @@ PlayerTransformManagerSyncFlag = {
     BODY_COLLIDING: 0,
     HEAD_COLLIDING: 1,
     FAR: 2,
-    LEANING: 3
+    FLOATING: 3
 };
 
 PlayerTransformManagerParams = class PlayerTransformManagerParams {
@@ -16,43 +16,42 @@ PlayerTransformManagerParams = class PlayerTransformManagerParams {
         this.mySyncEnabledFlagMap.set(PlayerTransformManagerSyncFlag.BODY_COLLIDING, true);
         this.mySyncEnabledFlagMap.set(PlayerTransformManagerSyncFlag.HEAD_COLLIDING, true);
         this.mySyncEnabledFlagMap.set(PlayerTransformManagerSyncFlag.FAR, true);
-        this.mySyncEnabledFlagMap.set(PlayerTransformManagerSyncFlag.LEANING, true);
+        this.mySyncEnabledFlagMap.set(PlayerTransformManagerSyncFlag.FLOATING, true);
 
         this.mySyncPositionFlagMap = new Map();
         this.mySyncPositionFlagMap.set(PlayerTransformManagerSyncFlag.BODY_COLLIDING, true);
         this.mySyncPositionFlagMap.set(PlayerTransformManagerSyncFlag.HEAD_COLLIDING, false);
         this.mySyncPositionFlagMap.set(PlayerTransformManagerSyncFlag.FAR, true);
-        this.mySyncPositionFlagMap.set(PlayerTransformManagerSyncFlag.LEANING, true);
+        this.mySyncPositionFlagMap.set(PlayerTransformManagerSyncFlag.FLOATING, true);
 
         this.mySyncPositionHeadFlagMap = new Map();
         this.mySyncPositionHeadFlagMap.set(PlayerTransformManagerSyncFlag.BODY_COLLIDING, false);
         this.mySyncPositionHeadFlagMap.set(PlayerTransformManagerSyncFlag.HEAD_COLLIDING, true);
         this.mySyncPositionHeadFlagMap.set(PlayerTransformManagerSyncFlag.FAR, false);
-        this.mySyncPositionHeadFlagMap.set(PlayerTransformManagerSyncFlag.LEANING, false);
+        this.mySyncPositionHeadFlagMap.set(PlayerTransformManagerSyncFlag.FLOATING, false);
 
         this.mySyncRotationFlagMap = new Map();
         this.mySyncRotationFlagMap.set(PlayerTransformManagerSyncFlag.BODY_COLLIDING, false);
         this.mySyncRotationFlagMap.set(PlayerTransformManagerSyncFlag.HEAD_COLLIDING, false);
         this.mySyncRotationFlagMap.set(PlayerTransformManagerSyncFlag.FAR, false);
-        this.mySyncRotationFlagMap.set(PlayerTransformManagerSyncFlag.LEANING, false);
+        this.mySyncRotationFlagMap.set(PlayerTransformManagerSyncFlag.FLOATING, false);
 
         this.mySyncHeightFlagMap = new Map();
         this.mySyncHeightFlagMap.set(PlayerTransformManagerSyncFlag.BODY_COLLIDING, true);
         this.mySyncHeightFlagMap.set(PlayerTransformManagerSyncFlag.HEAD_COLLIDING, false);
         this.mySyncHeightFlagMap.set(PlayerTransformManagerSyncFlag.FAR, true);
-        this.mySyncHeightFlagMap.set(PlayerTransformManagerSyncFlag.LEANING, true);
+        this.mySyncHeightFlagMap.set(PlayerTransformManagerSyncFlag.FLOATING, true);
 
         this.myIsLeaningValidAboveDistance = false;
-        this.myIsLeaningValidAboveDistanceIfNotHopping = false;
         this.myLeaningValidDistance = 0;
 
         // settings for both hop and lean
-        this.myIsLeaningValidIfVerticalMovement = true;
-        this.myLeaningSplitCheckEnabled = false;
-        this.myLeaningSplitCheckMaxLength = 0;
-        this.myLeaningSplitCheckMaxSteps = null;
-        this.myLeaningSplitCheckStepEqualLength = false;
-        this.myLeaningSplitCheckStepEqualLengthMinLength = 0;
+        this.myIsFloatingValidIfVerticalMovement = true;
+        this.myFloatingSplitCheckEnabled = false;
+        this.myFloatingSplitCheckMaxLength = 0;
+        this.myFloatingSplitCheckMaxSteps = null;
+        this.myFloatingSplitCheckStepEqualLength = false;
+        this.myFloatingSplitCheckStepEqualLengthMinLength = 0;
 
         this.myIsMaxDistanceFromRealToSyncEnabled = false;
         this.myMaxDistanceFromRealToSync = 0;
@@ -245,8 +244,8 @@ PlayerTransformManager = class PlayerTransformManager {
         let isBodyColliding = this.isBodyColliding() && (syncFlagMap == null || syncFlagMap.get(PlayerTransformManagerSyncFlag.BODY_COLLIDING));
         let isHeadColliding = this.isHeadColliding() && (syncFlagMap == null || syncFlagMap.get(PlayerTransformManagerSyncFlag.HEAD_COLLIDING));
         let isFar = this.isFar() && (syncFlagMap == null || syncFlagMap.get(PlayerTransformManagerSyncFlag.FAR));
-        let isLeaning = this.isLeaning() && (syncFlagMap == null || syncFlagMap.get(PlayerTransformManagerSyncFlag.LEANING));
-        return !isBodyColliding && !isHeadColliding && !isFar && !isLeaning;
+        let isFloating = this.isFloating() && (syncFlagMap == null || syncFlagMap.get(PlayerTransformManagerSyncFlag.FLOATING));
+        return !isBodyColliding && !isHeadColliding && !isFar && !isFloating;
     }
 
     resetReal(resetRotation = false) {
@@ -259,6 +258,14 @@ PlayerTransformManager = class PlayerTransformManager {
 
     isHeadColliding() {
         return this._myIsHeadColliding;
+    }
+
+    isFloating() {
+        return this.isLeaning() || this.isHopping();
+    }
+
+    isHopping() {
+        return this._myIsHopping;
     }
 
     isLeaning() {
@@ -526,8 +533,8 @@ PlayerTransformManager.prototype.update = function () {
                 }
             }
 
-            // Leaning 
-            if (this._myParams.mySyncEnabledFlagMap.get(PlayerTransformManagerSyncFlag.LEANING) && (true || this._myCollisionRuntimeParams.myIsOnGround)) {
+            // Floating 
+            if (this._myParams.mySyncEnabledFlagMap.get(PlayerTransformManagerSyncFlag.FLOATING)) {
 
                 collisionRuntimeParams.copy(this._myCollisionRuntimeParams);
                 leaningTransformQuat.quat2_setPositionRotationQuat(this._myValidPosition, this._myValidRotationQuat);
@@ -538,17 +545,17 @@ PlayerTransformManager.prototype.update = function () {
                     transformUp = transformQuat.quat2_getUp(transformUp);
                     verticalMovement = movementToCheck.vec3_componentAlongAxis(transformUp);
 
-                    if (verticalMovement.vec3_isZero(0.00001) || !this._myParams.myIsLeaningValidIfVerticalMovement) {
+                    if (verticalMovement.vec3_isZero(0.00001) || !this._myParams.myIsFloatingValidIfVerticalMovement) {
                         let movementStepAmount = 1;
                         movementStep.vec3_copy(movementToCheck);
-                        if (!movementToCheck.vec3_isZero(0.00001) && this._myParams.myLeaningSplitCheckEnabled) {
-                            let equalStepLength = movementToCheck.vec3_length() / this._myParams.myLeaningSplitCheckMaxSteps;
-                            if (!this._myParams.myLeaningSplitCheckStepEqualLength || equalStepLength < this._myParams.myLeaningSplitCheckStepEqualLengthMinLength) {
-                                let maxLength = this._myParams.myLeaningSplitCheckStepEqualLength ? this._myParams.myLeaningSplitCheckStepEqualLengthMinLength : this._myParams.myLeaningSplitCheckMaxLength;
+                        if (!movementToCheck.vec3_isZero(0.00001) && this._myParams.myFloatingSplitCheckEnabled) {
+                            let equalStepLength = movementToCheck.vec3_length() / this._myParams.myFloatingSplitCheckMaxSteps;
+                            if (!this._myParams.myFloatingSplitCheckStepEqualLength || equalStepLength < this._myParams.myFloatingSplitCheckStepEqualLengthMinLength) {
+                                let maxLength = this._myParams.myFloatingSplitCheckStepEqualLength ? this._myParams.myFloatingSplitCheckStepEqualLengthMinLength : this._myParams.myFloatingSplitCheckMaxLength;
                                 movementStepAmount = Math.ceil(movementToCheck.vec3_length() / maxLength);
                                 if (movementStepAmount > 1) {
                                     movementStep = movementStep.vec3_normalize(movementStep).vec3_scale(maxLength, movementStep);
-                                    movementStepAmount = (this._myParams.myLeaningSplitCheckMaxSteps != null) ? Math.min(movementStepAmount, this._myParams.myLeaningSplitCheckMaxSteps) : movementStepAmount;
+                                    movementStepAmount = (this._myParams.myFloatingSplitCheckMaxSteps != null) ? Math.min(movementStepAmount, this._myParams.myFloatingSplitCheckMaxSteps) : movementStepAmount;
                                 }
 
                                 movementStepAmount = Math.max(1, movementStepAmount);
@@ -557,7 +564,7 @@ PlayerTransformManager.prototype.update = function () {
                                     movementStep.vec3_copy(movementToCheck);
                                 }
                             } else {
-                                movementStepAmount = this._myParams.myLeaningSplitCheckMaxSteps;
+                                movementStepAmount = this._myParams.myFloatingSplitCheckMaxSteps;
                                 if (movementStepAmount > 1) {
                                     movementStep = movementStep.vec3_normalize(movementStep).vec3_scale(equalStepLength, movementStep);
                                 }
@@ -596,16 +603,15 @@ PlayerTransformManager.prototype.update = function () {
                         }
 
                         if (atLeastOneNotOnGround) {
-                            this._myIsLeaning = true;
                             if (isOneOnGroundBetweenNoGround) {
                                 this._myIsHopping = true;
+                            } else {
+                                this._myIsLeaning = true;
                             }
 
                             let distance = movementToCheck.vec3_length();
-                            if (this._myParams.myIsLeaningValidAboveDistance && distance > this._myParams.myLeaningValidDistance &&
-                                (!this._myIsHopping || !this._myParams.myIsLeaningValidAboveDistanceIfNotHopping)) {
+                            if (this._myParams.myIsLeaningValidAboveDistance && distance > this._myParams.myLeaningValidDistance) {
                                 this._myIsLeaning = false;
-                                this._myIsHopping = false;
                             }
                         } else {
                             this._myIsLeaning = false;
