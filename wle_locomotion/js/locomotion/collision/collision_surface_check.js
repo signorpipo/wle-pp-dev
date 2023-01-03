@@ -60,6 +60,34 @@ CollisionCheck.prototype._updateSurfaceInfo = function () {
     };
 }();
 
+CollisionCheck.prototype._postSurfaceCheck = function () {
+    return function _postSurfaceCheck(fixedVerticalMovement, transformUp, collisionCheckParams, collisionRuntimeParams, previousCollisionRuntimeParams) {
+
+        let isVerticalMovementZero = fixedVerticalMovement.vec3_isZero(0.00001);
+        let isVerticalMovemenDownward = Math.pp_sign(fixedVerticalMovement.vec3_lengthSigned(transformUp), -1) < 0;
+
+        let mustRemainOnGroundOk = true;
+        if (collisionCheckParams.myMustRemainOnGround) {
+            if (previousCollisionRuntimeParams.myIsOnGround && !collisionRuntimeParams.myIsOnGround && (isVerticalMovementZero || isVerticalMovemenDownward)) {
+                mustRemainOnGroundOk = false;
+            }
+        }
+
+        let mustRemainOnCeilingOk = true;
+        if (collisionCheckParams.myMustRemainOnCeiling) {
+            if (previousCollisionRuntimeParams.myIsOnCeiling && !collisionRuntimeParams.myIsOnCeiling && (isVerticalMovementZero || isVerticalMovemenDownward)) {
+                mustRemainOnCeilingOk = false;
+            }
+        }
+
+        /* if (isonground && avoidGroundSteep) {
+            if current angle > ground angle cancel && previous < ground angle
+        } */
+
+        return mustRemainOnGroundOk && mustRemainOnCeilingOk;
+    };
+}();
+
 CollisionCheck.prototype._surfaceTooSteep = function () {
     return function _surfaceTooSteep(up, direction, collisionCheckParams, collisionRuntimeParams) {
         let groundTooSteep = false;

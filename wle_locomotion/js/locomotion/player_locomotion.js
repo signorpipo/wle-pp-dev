@@ -388,6 +388,12 @@ PlayerLocomotion = class PlayerLocomotion {
         this._myCollisionCheckParamsMovement.myVerticalFixToBeOnCeiling = 0;
         this._myCollisionCheckParamsMovement.myVerticalFixToComputeCeilingInfo = 0;
 
+        this._myCollisionCheckParamsMovement.myAllowSurfaceSteepFix = false;
+        this._myCollisionCheckParamsMovement.myMustRemainOnGround = false;
+        this._myCollisionCheckParamsMovement.myMustRemainOnCeiling = false;
+        this._myCollisionCheckParamsMovement.myRegatherGroundInfoOnSurfaceCheckFail = true;
+        this._myCollisionCheckParamsMovement.myRegatherCeilingInfoOnSurfaceCheckFail = true;
+
         this._myCollisionCheckParamsMovement.mySlidingEnabled = true;
         this._myCollisionCheckParamsMovement.mySlidingHorizontalMovementCheckBetterNormal = true;
         this._myCollisionCheckParamsMovement.mySlidingMaxAttempts = 4;

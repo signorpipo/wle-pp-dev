@@ -90,7 +90,7 @@ CollisionCheck.prototype._move = function () {
 
             newFeetPosition = feetPosition.vec3_add(fixedMovement, newFeetPosition);
             fixedMovementStep.vec3_zero();
-            fixedMovementStep = this._moveStep(currentMovementStep, newFeetPosition, transformUp, transformForward, height, collisionCheckParams, collisionRuntimeParams, fixedMovementStep);
+            fixedMovementStep = this._moveStep(currentMovementStep, newFeetPosition, transformUp, transformForward, height, true, collisionCheckParams, collisionRuntimeParams, fixedMovementStep);
             fixedMovement.vec3_add(fixedMovementStep, fixedMovement);
 
             movementChecked = movementChecked.vec3_add(movementStep, movementChecked);
@@ -156,7 +156,7 @@ CollisionCheck.prototype._moveStep = function () {
 
     let zAxis = PP.vec3_create(0, 0, 1);
     let xAxis = PP.vec3_create(1, 0, 0);
-    return function _moveStep(movement, feetPosition, transformUp, transformForward, height, collisionCheckParams, collisionRuntimeParams, outFixedMovement) {
+    return function _moveStep(movement, feetPosition, transformUp, transformForward, height, allowSurfaceSteepFix, collisionCheckParams, collisionRuntimeParams, outFixedMovement) {
         // #TODO refactor and split horizontal check and vertical check into: hMovement + vMovement + hPosition + vPosition?
         // Will make the sliding heavier, if I slide repeating all the 4 steps instead of 2 as now, but would be more correct
 
@@ -186,6 +186,8 @@ CollisionCheck.prototype._moveStep = function () {
 
         this._syncCollisionRuntimeParamsWithPrevious(horizontalMovement, verticalMovement, transformUp, collisionCheckParams, collisionRuntimeParams, this._myPrevCollisionRuntimeParams);
 
+        let surfaceTooSteep = false;
+        let horizontalOk = false;
         {
             forwardForHorizontal.vec3_copy(collisionCheckParams.myCheckHorizontalFixedForward);
             if (!collisionCheckParams.myCheckHorizontalFixedForwardEnabled) {
@@ -215,9 +217,9 @@ CollisionCheck.prototype._moveStep = function () {
 
             if (!horizontalMovement.vec3_isZero()) {
                 horizontalDirection = horizontalMovement.vec3_normalize(horizontalDirection);
-                let surfaceTooSteep = this._surfaceTooSteep(transformUp, horizontalDirection, collisionCheckParams, this._myPrevCollisionRuntimeParams);
+                surfaceTooSteep = this._surfaceTooSteep(transformUp, horizontalDirection, collisionCheckParams, this._myPrevCollisionRuntimeParams);
 
-                if (!surfaceTooSteep) {
+                if (!surfaceTooSteep || (allowSurfaceSteepFix && collisionCheckParams.myAllowSurfaceSteepFix)) {
                     fixedHorizontalMovement = this._horizontalCheck(horizontalMovement, feetPosition, height, transformUp, forwardForHorizontal, collisionCheckParams, collisionRuntimeParams, false, fixedHorizontalMovement);
                     //console.error(_myTotalRaycasts );
                     //collisionRuntimeParams.myIsCollidingHorizontally = true;
@@ -233,7 +235,13 @@ CollisionCheck.prototype._moveStep = function () {
             if (fixedHorizontalMovement.vec3_isZero(0.000001)) {
                 fixedHorizontalMovement.vec3_zero();
             }
+
+            if (!horizontalMovement.vec3_isZero() && fixedHorizontalMovement.vec3_isZero()) {
+                collisionRuntimeParams.myHorizontalMovementCanceled = true;
+            }
         }
+
+        horizontalOk = !collisionRuntimeParams.myHorizontalMovementCanceled;
 
         {
             forwardForVertical.vec3_copy(collisionCheckParams.myCheckVerticalFixedForward);
@@ -262,10 +270,6 @@ CollisionCheck.prototype._moveStep = function () {
                 if (forwardForVertical.vec_equals(collisionCheckParams.myCheckVerticalFixedForward, 0.00001)) {
                     forwardForVertical.vec3_copy(collisionCheckParams.myCheckVerticalFixedForward);
                 }
-            }
-
-            if (!horizontalMovement.vec3_isZero() && fixedHorizontalMovement.vec3_isZero()) {
-                collisionRuntimeParams.myHorizontalMovementCanceled = true;
             }
 
             //console.error(_myTotalRaycasts );
@@ -302,6 +306,14 @@ CollisionCheck.prototype._moveStep = function () {
             collisionRuntimeParams.myVerticalMovementCanceled = true;
             fixedHorizontalMovement.vec3_zero();
             fixedVerticalMovement.vec3_zero();
+
+            if (!collisionCheckParams.myCheckVerticalFixedForwardEnabled) {
+                if (!horizontalMovement.vec3_isZero()) {
+                    forwardForVertical = horizontalMovement.vec3_normalize(forwardForVertical);
+                } else {
+                    forwardForVertical.vec3_copy(transformForward);
+                }
+            }
         }
 
         newFeetPosition = feetPosition.vec3_add(outFixedMovement, newFeetPosition);
@@ -320,6 +332,43 @@ CollisionCheck.prototype._moveStep = function () {
 
         if (collisionCheckParams.myComputeCeilingInfoEnabled) {
             this._gatherSurfaceInfo(newFeetPosition, height, transformUp, forwardForPerceivedAngle, forwardForVertical, false, collisionCheckParams, collisionRuntimeParams);
+        }
+
+        if (!horizontalMovement.vec3_isZero() && !collisionRuntimeParams.myHorizontalMovementCanceled) {
+            let surfaceCheckOk = this._postSurfaceCheck(fixedVerticalMovement, transformUp, collisionCheckParams, collisionRuntimeParams, this._myPrevCollisionRuntimeParams);
+
+            if (!surfaceCheckOk) {
+                collisionRuntimeParams.myHorizontalMovementCanceled = true;
+                collisionRuntimeParams.myVerticalMovementCanceled = true;
+                fixedHorizontalMovement.vec3_zero();
+                fixedVerticalMovement.vec3_zero();
+                outFixedMovement.vec3_zero();
+                newFeetPosition = feetPosition.vec3_add(outFixedMovement, newFeetPosition);
+
+                if (!horizontalMovement.vec3_isZero()) {
+                    forwardForPerceivedAngle = horizontalMovement.vec3_normalize(forwardForPerceivedAngle);
+                } else {
+                    forwardForPerceivedAngle.vec3_copy(transformForward);
+                }
+
+                if (collisionCheckParams.myComputeGroundInfoEnabled && this.myRegatherGroundInfoOnSurfaceCheckFail) {
+                    this._gatherSurfaceInfo(newFeetPosition, height, transformUp, forwardForPerceivedAngle, forwardForVertical, true, collisionCheckParams, collisionRuntimeParams);
+                } else {
+                    collisionRuntimeParams.myIsOnGround = this._myPrevCollisionRuntimeParams.myIsOnGround;
+                    collisionRuntimeParams.myGroundAngle = this._myPrevCollisionRuntimeParams.myGroundAngle;
+                    collisionRuntimeParams.myGroundPerceivedAngle = this._myPrevCollisionRuntimeParams.myGroundPerceivedAngle;
+                    collisionRuntimeParams.myGroundNormal.vec3_copy(this._myPrevCollisionRuntimeParams.myGroundNormal);
+                }
+
+                if (collisionCheckParams.myComputeCeilingInfoEnabled && this.myRegatherCeilingInfoOnSurfaceCheckFail) {
+                    this._gatherSurfaceInfo(newFeetPosition, height, transformUp, forwardForPerceivedAngle, forwardForVertical, false, collisionCheckParams, collisionRuntimeParams);
+                } else {
+                    collisionRuntimeParams.myIsOnCeiling = this._myPrevCollisionRuntimeParams.myIsOnCeiling;
+                    collisionRuntimeParams.myCeilingAngle = this._myPrevCollisionRuntimeParams.myCeilingAngle;
+                    collisionRuntimeParams.myCeilingPerceivedAngle = this._myPrevCollisionRuntimeParams.myCeilingPerceivedAngle;
+                    collisionRuntimeParams.myCeilingNormal.vec3_copy(this._myPrevCollisionRuntimeParams.myCeilingNormal);
+                }
+            }
         }
 
         //console.error(_myTotalRaycasts );
@@ -372,6 +421,17 @@ CollisionCheck.prototype._moveStep = function () {
 
         if (collisionCheckParams.myDebugActive && collisionCheckParams.myDebugRuntimeParamsActive) {
             this._debugRuntimeParams(collisionRuntimeParams);
+        }
+
+        if (surfaceTooSteep && horizontalOk && collisionCheckParams.myAllowSurfaceSteepFix && allowSurfaceSteepFix) {
+            horizontalDirection = horizontalMovement.vec3_normalize(horizontalDirection);
+            let newSurfaceTooSteep = this._surfaceTooSteep(transformUp, horizontalDirection, collisionCheckParams, collisionRuntimeParams);
+
+            if (newSurfaceTooSteep) {
+                outFixedMovement.vec3_zero();
+                collisionRuntimeParams.copy(this._myPrevCollisionRuntimeParams);
+                this._moveStep(movement, feetPosition, transformUp, transformForward, height, false, collisionCheckParams, collisionRuntimeParams, outFixedMovement);
+            }
         }
 
         return outFixedMovement;

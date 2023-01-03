@@ -64,7 +64,7 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myVerticalMovementCheckEnabled = false;
         this.myVerticalPositionCheckEnabled = false;
         this.myFeetRadius = 0;
-        this.myAdjustVerticalMovementWithSurfaceAngle = false;
+        this.myAdjustVerticalMovementWithSurfaceAngle = false; //#TODO split into ceiling and ground
         this.myCheckVerticalFixedForwardEnabled = false;
         this.myCheckVerticalFixedForward = PP.vec3_create();
         this.myCheckVerticalBothDirection = false;
@@ -126,6 +126,12 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myVerticalFixToComputeCeilingInfo = 0;
         this.myIsOnGroundIfInsideHit = false;
         this.myIsOnCeilingIfInsideHit = false;
+
+        this.myAllowSurfaceSteepFix = false; //#TODO split into ceiling and ground
+        this.myMustRemainOnGround = false;
+        this.myMustRemainOnCeiling = false;
+        this.myRegatherGroundInfoOnSurfaceCheckFail = false;
+        this.myRegatherCeilingInfoOnSurfaceCheckFail = false;
 
         this.mySlidingEnabled = false;
         this.mySlidingHorizontalMovementCheckBetterNormal = false;
@@ -275,6 +281,12 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myVerticalFixToComputeCeilingInfo = other.myVerticalFixToComputeCeilingInfo;
         this.myIsOnGroundIfInsideHit = other.myIsOnGroundIfInsideHit;
         this.myIsOnCeilingIfInsideHit = other.myIsOnCeilingIfInsideHit;
+
+        this.myAllowSurfaceSteepFix = other.myAllowSurfaceSteepFix;
+        this.myMustRemainOnGround = other.myMustRemainOnGround;
+        this.myMustRemainOnCeiling = other.myMustRemainOnCeiling;
+        this.myRegatherGroundInfoOnSurfaceCheckFail = other.myRegatherGroundInfoOnSurfaceCheckFail;
+        this.myRegatherCeilingInfoOnSurfaceCheckFail = other.myRegatherCeilingInfoOnSurfaceCheckFail;
 
         this.mySlidingEnabled = other.mySlidingEnabled;
         this.mySlidingHorizontalMovementCheckBetterNormal = other.mySlidingHorizontalMovementCheckBetterNormal;
