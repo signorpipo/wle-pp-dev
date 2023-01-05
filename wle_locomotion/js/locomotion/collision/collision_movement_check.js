@@ -215,20 +215,18 @@ CollisionCheck.prototype._moveStep = function () {
 
             fixedHorizontalMovement.vec3_zero();
 
-            if (!horizontalMovement.vec3_isZero()) {
+            if (!horizontalMovement.vec3_isZero(0.00001)) {
                 horizontalDirection = horizontalMovement.vec3_normalize(horizontalDirection);
                 surfaceTooSteep = this._surfaceTooSteep(transformUp, horizontalDirection, collisionCheckParams, this._myPrevCollisionRuntimeParams);
 
-                if (!surfaceTooSteep || (allowSurfaceSteepFix && collisionCheckParams.myAllowSurfaceSteepFix)) {
-                    fixedHorizontalMovement = this._horizontalCheck(horizontalMovement, feetPosition, height, transformUp, forwardForHorizontal, collisionCheckParams, collisionRuntimeParams, false, fixedHorizontalMovement);
-                    //console.error(_myTotalRaycasts );
-                    //collisionRuntimeParams.myIsCollidingHorizontally = true;
-                    //collisionRuntimeParams.myHorizontalCollisionHit.myNormal = [0, 0, 1];
-                    if (collisionCheckParams.mySlidingEnabled && collisionRuntimeParams.myIsCollidingHorizontally && this._isSlidingNormalValid(horizontalMovement, transformUp, collisionRuntimeParams)) {
-                        fixedHorizontalMovement = this._horizontalSlide(horizontalMovement, feetPosition, height, transformUp, forwardForHorizontal, collisionCheckParams, collisionRuntimeParams, fixedHorizontalMovement);
-                    } else {
-                        //console.error("no slide");
-                    }
+                fixedHorizontalMovement = this._horizontalCheck(horizontalMovement, feetPosition, height, transformUp, forwardForHorizontal, allowSurfaceSteepFix, collisionCheckParams, collisionRuntimeParams, this._myPrevCollisionRuntimeParams, false, fixedHorizontalMovement);
+                //console.error(_myTotalRaycasts );
+                //collisionRuntimeParams.myIsCollidingHorizontally = true;
+                //collisionRuntimeParams.myHorizontalCollisionHit.myNormal = [0, 0, 1];
+                if (collisionCheckParams.mySlidingEnabled && collisionRuntimeParams.myIsCollidingHorizontally && this._isSlidingNormalValid(horizontalMovement, transformUp, collisionRuntimeParams)) {
+                    fixedHorizontalMovement = this._horizontalSlide(horizontalMovement, feetPosition, height, transformUp, forwardForHorizontal, surfaceTooSteep && allowSurfaceSteepFix, collisionCheckParams, collisionRuntimeParams, this._myPrevCollisionRuntimeParams, fixedHorizontalMovement);
+                } else {
+                    //console.error("no slide");
                 }
             }
 

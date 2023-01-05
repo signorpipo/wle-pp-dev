@@ -71,7 +71,7 @@ CollisionCheck.prototype._teleport = function () {
             }
         }
 
-        fixedHorizontalMovement = this._horizontalCheck(zero, offsetTeleportPosition, height, transformUp, forwardForHorizontal, collisionCheckParams, collisionRuntimeParams, false, fixedHorizontalMovement);
+        fixedHorizontalMovement = this._horizontalCheck(zero, offsetTeleportPosition, height, transformUp, forwardForHorizontal, false, collisionCheckParams, collisionRuntimeParams, this._myPrevCollisionRuntimeParams, false, fixedHorizontalMovement);
         if (!collisionRuntimeParams.myIsCollidingHorizontally) {
             newFeetPosition = offsetTeleportPosition.vec3_add(fixedHorizontalMovement, newFeetPosition);
 

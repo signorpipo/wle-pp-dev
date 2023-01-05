@@ -2,37 +2,41 @@ CollisionCheck.prototype._horizontalCheck = function () {
     let fixedFeetPosition = PP.vec3_create();
     let newFixedFeetPosition = PP.vec3_create();
     let newFeetPosition = PP.vec3_create();
-    return function _horizontalCheck(movement, feetPosition, height, up, forward, collisionCheckParams, collisionRuntimeParams, avoidSlidingExtraCheck, outFixedMovement) {
+    let horizontalDirection = PP.vec3_create();
+    return function _horizontalCheck(movement, feetPosition, height, up, forward, allowSurfaceSteepFix, collisionCheckParams, collisionRuntimeParams, previousCollisionRuntimeParams, avoidSlidingExtraCheck, outFixedMovement) {
         collisionRuntimeParams.myIsCollidingHorizontally = false;
         collisionRuntimeParams.myHorizontalCollisionHit.reset();
-
-        fixedFeetPosition = feetPosition.vec3_add(up.vec3_scale(collisionCheckParams.myDistanceFromFeetToIgnore + 0.0001, fixedFeetPosition), fixedFeetPosition);
-        let fixedHeight = Math.max(0, height - collisionCheckParams.myDistanceFromFeetToIgnore - collisionCheckParams.myDistanceFromHeadToIgnore - 0.0001 * 2);
-
-        let canMove = true;
-        if (collisionCheckParams.myHorizontalMovementCheckEnabled && !movement.vec3_isZero(0.000001)) {
-            canMove = this._horizontalMovementCheck(movement, feetPosition, height, fixedFeetPosition, fixedHeight, up, collisionCheckParams, collisionRuntimeParams);
-        }
-
         outFixedMovement.vec3_zero();
 
-        if (canMove) {
-            if (collisionCheckParams.myHorizontalPositionCheckEnabled) {
-                newFixedFeetPosition = fixedFeetPosition.vec3_add(movement, newFixedFeetPosition);
-                newFeetPosition = feetPosition.vec3_add(movement, newFeetPosition);
-                let canStay = this._horizontalPositionCheck(newFeetPosition, height, newFixedFeetPosition, fixedHeight, up, forward, collisionCheckParams, collisionRuntimeParams);
-                if (canStay) {
+        horizontalDirection = movement.vec3_normalize(horizontalDirection);
+        surfaceTooSteep = this._surfaceTooSteep(up, horizontalDirection, collisionCheckParams, previousCollisionRuntimeParams);
+        if (movement.vec3_isZero(0.000001) || !surfaceTooSteep || (allowSurfaceSteepFix && collisionCheckParams.myAllowSurfaceSteepFix)) {
+            fixedFeetPosition = feetPosition.vec3_add(up.vec3_scale(collisionCheckParams.myDistanceFromFeetToIgnore + 0.0001, fixedFeetPosition), fixedFeetPosition);
+            let fixedHeight = Math.max(0, height - collisionCheckParams.myDistanceFromFeetToIgnore - collisionCheckParams.myDistanceFromHeadToIgnore - 0.0001 * 2);
+
+            let canMove = true;
+            if (collisionCheckParams.myHorizontalMovementCheckEnabled && !movement.vec3_isZero(0.000001)) {
+                canMove = this._horizontalMovementCheck(movement, feetPosition, height, fixedFeetPosition, fixedHeight, up, collisionCheckParams, collisionRuntimeParams);
+            }
+
+            if (canMove) {
+                if (collisionCheckParams.myHorizontalPositionCheckEnabled) {
+                    newFixedFeetPosition = fixedFeetPosition.vec3_add(movement, newFixedFeetPosition);
+                    newFeetPosition = feetPosition.vec3_add(movement, newFeetPosition);
+                    let canStay = this._horizontalPositionCheck(newFeetPosition, height, newFixedFeetPosition, fixedHeight, up, forward, collisionCheckParams, collisionRuntimeParams);
+                    if (canStay) {
+                        outFixedMovement.vec3_copy(movement);
+                    }
+
+                    if (outFixedMovement.vec3_isZero(0.000001)) {
+                        outFixedMovement.vec3_zero();
+                    }
+                } else {
                     outFixedMovement.vec3_copy(movement);
                 }
-
-                if (outFixedMovement.vec3_isZero(0.000001)) {
-                    outFixedMovement.vec3_zero();
-                }
-            } else {
-                outFixedMovement.vec3_copy(movement);
+            } else if (!avoidSlidingExtraCheck && collisionCheckParams.mySlidingEnabled && collisionCheckParams.mySlidingHorizontalMovementCheckBetterNormal) {
+                this._horizontalCheckBetterSlideNormal(movement, feetPosition, height, fixedFeetPosition, fixedHeight, up, forward, collisionCheckParams, collisionRuntimeParams);
             }
-        } else if (!avoidSlidingExtraCheck && collisionCheckParams.mySlidingEnabled && collisionCheckParams.mySlidingHorizontalMovementCheckBetterNormal) {
-            this._horizontalCheckBetterSlideNormal(movement, feetPosition, height, fixedFeetPosition, fixedHeight, up, forward, collisionCheckParams, collisionRuntimeParams);
         }
 
         return outFixedMovement;
