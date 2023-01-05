@@ -46,7 +46,8 @@ PlayerTransformManagerParams = class PlayerTransformManagerParams {
         this.myLeaningValidDistance = 0;
 
         // settings for both hop and lean
-        this.myIsFloatingValidIfVerticalMovement = true;
+        this.myIsFloatingValidIfVerticalMovement = false;
+        this.myIsFloatingValidIfRealOnGround = false;
         this.myFloatingSplitCheckEnabled = false;
         this.myFloatingSplitCheckMaxLength = 0;
         this.myFloatingSplitCheckMaxSteps = null;
@@ -578,6 +579,7 @@ PlayerTransformManager.prototype.update = function () {
                         let atLeastOneNotOnGround = false;
                         let atLeastOneOnGround = false;
                         let isOneOnGroundBetweenNoGround = false;
+                        let isLastOnGround = false;
 
                         for (let i = 0; i < movementStepAmount; i++) {
                             if (movementStepAmount == 1 || i != movementStepAmount - 1) {
@@ -599,6 +601,10 @@ PlayerTransformManager.prototype.update = function () {
                                     isOneOnGroundBetweenNoGround = true;
                                 }
                                 atLeastOneOnGround = true;
+
+                                if (i == movementStepAmount - 1) {
+                                    isLastOnGround = true;
+                                }
                             }
                         }
 
@@ -612,6 +618,11 @@ PlayerTransformManager.prototype.update = function () {
                             let distance = movementToCheck.vec3_length();
                             if (this._myParams.myIsLeaningValidAboveDistance && distance > this._myParams.myLeaningValidDistance) {
                                 this._myIsLeaning = false;
+                            }
+
+                            if (isLastOnGround && this._myParams.myIsFloatingValidIfRealOnGround) {
+                                this._myIsLeaning = false;
+                                this._myIsHopping = false;
                             }
                         } else {
                             this._myIsLeaning = false;

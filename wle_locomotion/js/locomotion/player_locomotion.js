@@ -89,6 +89,7 @@ PlayerLocomotion = class PlayerLocomotion {
             params.myMaxDistanceFromRealToSync = 100;
 
             params.myIsFloatingValidIfVerticalMovement = false;
+            params.myIsFloatingValidIfRealOnGround = false;
             params.myIsLeaningValidAboveDistance = true;
             params.myLeaningValidDistance = 2;
             params.myFloatingSplitCheckEnabled = true;
