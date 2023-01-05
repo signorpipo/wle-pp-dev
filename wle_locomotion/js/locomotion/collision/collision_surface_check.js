@@ -92,6 +92,11 @@ CollisionCheck.prototype._postSurfaceCheck = function () {
 
                 if (perceivedAngle > 0) {
                     isOnValidGroundAngleUphill = false;
+                    if (!isOnValidGroundAngleUphill &&
+                        collisionCheckParams.myGroundAngleToIgnoreWithPerceivedAngle > 0 &&
+                        collisionRuntimeParams.myGroundAngle <= collisionCheckParams.myGroundAngleToIgnoreWithPerceivedAngle + 0.0001) {
+                        isOnValidGroundAngleUphill = Math.abs(perceivedAngle) <= collisionCheckParams.myGroundAngleToIgnore + 0.0001;
+                    }
                 }
 
                 if (previousCollisionRuntimeParams.myGroundAngle <= collisionCheckParams.myGroundAngleToIgnore + 0.0001) {
@@ -113,6 +118,11 @@ CollisionCheck.prototype._postSurfaceCheck = function () {
 
                 if (perceivedAngle > 0) {
                     isOnValidCeilingAngleUphill = false;
+                    if (!isOnValidCeilingAngleUphill &&
+                        collisionCheckParams.myCeilingAngleToIgnoreWithPerceivedAngle > 0 &&
+                        collisionRuntimeParams.myCeilingAngle <= collisionCheckParams.myCeilingAngleToIgnoreWithPerceivedAngle + 0.0001) {
+                        isOnValidCeilingAngleUphill = Math.abs(perceivedAngle) <= collisionCheckParams.myCeilingAngleToIgnore + 0.0001;
+                    }
                 }
 
                 if (previousCollisionRuntimeParams.myCeilingAngle <= collisionCheckParams.myCeilingAngleToIgnore + 0.0001) {
@@ -138,6 +148,11 @@ CollisionCheck.prototype._surfaceTooSteep = function () {
                 direction, up, true);
 
             groundTooSteep = groundPerceivedAngle > 0;
+            if (groundTooSteep &&
+                collisionCheckParams.myGroundAngleToIgnoreWithPerceivedAngle > 0 &&
+                collisionRuntimeParams.myGroundAngle <= collisionCheckParams.myGroundAngleToIgnoreWithPerceivedAngle + 0.0001) {
+                groundTooSteep = Math.abs(groundPerceivedAngle) > collisionCheckParams.myGroundAngleToIgnore + 0.0001;
+            }
         }
 
         if (!groundTooSteep) {
@@ -147,6 +162,11 @@ CollisionCheck.prototype._surfaceTooSteep = function () {
                     direction, up, false);
 
                 ceilingTooSteep = ceilingPerceivedAngle > 0;
+                if (ceilingTooSteep &&
+                    collisionCheckParams.myCeilingAngleToIgnoreWithPerceivedAngle > 0 &&
+                    collisionRuntimeParams.myCeilingAngle <= collisionCheckParams.myCeilingAngleToIgnoreWithPerceivedAngle + 0.0001) {
+                    ceilingTooSteep = Math.abs(ceilingPerceivedAngle) > collisionCheckParams.myCeilingAngleToIgnore + 0.0001;
+                }
             }
         }
 

@@ -186,8 +186,6 @@ CollisionCheck.prototype._moveStep = function () {
 
         this._syncCollisionRuntimeParamsWithPrevious(horizontalMovement, verticalMovement, transformUp, collisionCheckParams, collisionRuntimeParams, this._myPrevCollisionRuntimeParams);
 
-        let surfaceTooSteep = false;
-        let horizontalOk = false;
         {
             forwardForHorizontal.vec3_copy(collisionCheckParams.myCheckHorizontalFixedForward);
             if (!collisionCheckParams.myCheckHorizontalFixedForwardEnabled) {
@@ -216,15 +214,12 @@ CollisionCheck.prototype._moveStep = function () {
             fixedHorizontalMovement.vec3_zero();
 
             if (!horizontalMovement.vec3_isZero(0.00001)) {
-                horizontalDirection = horizontalMovement.vec3_normalize(horizontalDirection);
-                surfaceTooSteep = this._surfaceTooSteep(transformUp, horizontalDirection, collisionCheckParams, this._myPrevCollisionRuntimeParams);
-
                 fixedHorizontalMovement = this._horizontalCheck(horizontalMovement, feetPosition, height, transformUp, forwardForHorizontal, allowSurfaceSteepFix, collisionCheckParams, collisionRuntimeParams, this._myPrevCollisionRuntimeParams, false, fixedHorizontalMovement);
                 //console.error(_myTotalRaycasts );
                 //collisionRuntimeParams.myIsCollidingHorizontally = true;
                 //collisionRuntimeParams.myHorizontalCollisionHit.myNormal = [0, 0, 1];
                 if (collisionCheckParams.mySlidingEnabled && collisionRuntimeParams.myIsCollidingHorizontally && this._isSlidingNormalValid(horizontalMovement, transformUp, collisionRuntimeParams)) {
-                    fixedHorizontalMovement = this._horizontalSlide(horizontalMovement, feetPosition, height, transformUp, forwardForHorizontal, surfaceTooSteep && allowSurfaceSteepFix, collisionCheckParams, collisionRuntimeParams, this._myPrevCollisionRuntimeParams, fixedHorizontalMovement);
+                    fixedHorizontalMovement = this._horizontalSlide(horizontalMovement, feetPosition, height, transformUp, forwardForHorizontal, allowSurfaceSteepFix, collisionCheckParams, collisionRuntimeParams, this._myPrevCollisionRuntimeParams, fixedHorizontalMovement);
                 } else {
                     //console.error("no slide");
                 }
@@ -238,8 +233,6 @@ CollisionCheck.prototype._moveStep = function () {
                 collisionRuntimeParams.myHorizontalMovementCanceled = true;
             }
         }
-
-        horizontalOk = !collisionRuntimeParams.myHorizontalMovementCanceled;
 
         {
             forwardForVertical.vec3_copy(collisionCheckParams.myCheckVerticalFixedForward);
@@ -421,14 +414,18 @@ CollisionCheck.prototype._moveStep = function () {
             this._debugRuntimeParams(collisionRuntimeParams);
         }
 
-        if (surfaceTooSteep && horizontalOk && collisionCheckParams.myAllowSurfaceSteepFix && allowSurfaceSteepFix) {
-            horizontalDirection = horizontalMovement.vec3_normalize(horizontalDirection);
-            let newSurfaceTooSteep = this._surfaceTooSteep(transformUp, horizontalDirection, collisionCheckParams, collisionRuntimeParams);
+        if (!collisionRuntimeParams.myHorizontalMovementCanceled && !fixedHorizontalMovement.vec3_isZero()) {
+            horizontalDirection = fixedHorizontalMovement.vec3_normalize(horizontalDirection);
+            let surfaceTooSteep = this._surfaceTooSteep(transformUp, horizontalDirection, collisionCheckParams, this._myPrevCollisionRuntimeParams);
+            if (surfaceTooSteep) {
+                horizontalDirection = fixedHorizontalMovement.vec3_normalize(horizontalDirection);
+                let newSurfaceTooSteep = this._surfaceTooSteep(transformUp, horizontalDirection, collisionCheckParams, collisionRuntimeParams);
 
-            if (newSurfaceTooSteep) {
-                outFixedMovement.vec3_zero();
-                collisionRuntimeParams.copy(this._myPrevCollisionRuntimeParams);
-                this._moveStep(movement, feetPosition, transformUp, transformForward, height, false, collisionCheckParams, collisionRuntimeParams, outFixedMovement);
+                if (newSurfaceTooSteep || !collisionCheckParams.myAllowSurfaceSteepFix || !allowSurfaceSteepFix) {
+                    outFixedMovement.vec3_zero();
+                    collisionRuntimeParams.copy(this._myPrevCollisionRuntimeParams);
+                    this._moveStep(movement, feetPosition, transformUp, transformForward, height, false, collisionCheckParams, collisionRuntimeParams, outFixedMovement);
+                }
             }
         }
 

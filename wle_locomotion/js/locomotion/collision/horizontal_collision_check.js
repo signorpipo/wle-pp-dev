@@ -138,7 +138,7 @@ CollisionCheck.prototype._ignoreSurfaceAngle = function () {
     let hitDirection = PP.vec3_create();
     let hitMovement = PP.vec3_create();
     let projectAlongAxis = PP.vec3_create();
-    return function _ignoreSurfaceAngle(feetPosition, height, movement, objectsToIgnore, outIgnoredObjects, isGround, isMovementCheck, up, collisionCheckParams, hit, ignoreHitsInsideCollisionIfObjectToIgnore) {
+    return function _ignoreSurfaceAngle(feetPosition, height, movementOrForward, objectsToIgnore, outIgnoredObjects, isGround, isMovementCheck, up, collisionCheckParams, hit, ignoreHitsInsideCollisionIfObjectToIgnore) {
         let isIgnorable = false;
 
         let surfaceIgnoreHeight = null;
@@ -160,10 +160,33 @@ CollisionCheck.prototype._ignoreSurfaceAngle = function () {
         }
 
         if (!hit.myIsInsideCollision) {
+            movementDirection = movementOrForward.vec3_normalize(movementDirection);
+
             let surfaceAngle = hit.myNormal.vec3_angle(up);
+            if (!isGround) {
+                surfaceAngle = 180 - surfaceAngle;
+            }
+
+            if (isGround && collisionCheckParams.myGroundAngleToIgnore > 0 && (surfaceAngle > collisionCheckParams.myGroundAngleToIgnore + 0.0001)) {
+                if (collisionCheckParams.myGroundAngleToIgnoreWithPerceivedAngle > 0 &&
+                    surfaceAngle <= collisionCheckParams.myGroundAngleToIgnoreWithPerceivedAngle + 0.0001) {
+                    let perceivedAngle = LocomotionUtils.computeSurfacePerceivedAngle(
+                        hit.myNormal,
+                        movementDirection, up, true);
+                    surfaceAngle = Math.abs(perceivedAngle);
+                }
+            } else if (!isGround && collisionCheckParams.myCeilingAngleToIgnore > 0 && surfaceAngle > collisionCheckParams.myCeilingAngleToIgnore + 0.0001) {
+                if (collisionCheckParams.myCeilingAngleToIgnoreWithPerceivedAngle > 0 &&
+                    surfaceAngle <= collisionCheckParams.myCeilingAngleToIgnoreWithPerceivedAngle + 0.0001) {
+                    let perceivedAngle = LocomotionUtils.computeSurfacePerceivedAngle(
+                        hit.myNormal,
+                        movementDirection, up, false);
+                    surfaceAngle = Math.abs(perceivedAngle);
+                }
+            }
 
             if ((isGround && (collisionCheckParams.myGroundAngleToIgnore > 0 && surfaceAngle <= collisionCheckParams.myGroundAngleToIgnore + 0.0001)) ||
-                (!isGround && (collisionCheckParams.myCeilingAngleToIgnore > 0 && (180 - surfaceAngle) <= collisionCheckParams.myCeilingAngleToIgnore + 0.0001))) {
+                (!isGround && (collisionCheckParams.myCeilingAngleToIgnore > 0 && surfaceAngle <= collisionCheckParams.myCeilingAngleToIgnore + 0.0001))) {
                 if (objectsToIgnore == null || objectsToIgnore.pp_hasEqual(hit.myObject, objectsEqualCallback)) {
                     let surfaceHeightCheckOk = true;
                     let maxMovementLeftCheckOk = true;
@@ -183,14 +206,13 @@ CollisionCheck.prototype._ignoreSurfaceAngle = function () {
 
                     if (surfaceHeightCheckOk && isMovementCheck) {
                         if (surfaceIgnoreMaxMovementLeft != null) {
-                            let movementLength = movement.vec3_length();
+                            let movementLength = movementOrForward.vec3_length();
                             if (movementLength > surfaceIgnoreMaxMovementLeft) {
                                 maxMovementLeftCheckOk = false;
 
                                 let hitPosition = hit.myPosition;
                                 let halfConeAngle = Math.min(collisionCheckParams.myHalfConeAngle, 90);
                                 hitDirection = hitPosition.vec3_sub(feetPosition, hitDirection);
-                                movementDirection = movement.vec3_normalize(movementDirection);
 
                                 if (hitDirection.vec3_isToTheRight(movementDirection, up)) {
                                     projectAlongAxis = movementDirection.vec3_rotateAxis(-halfConeAngle, up, projectAlongAxis);

@@ -102,7 +102,9 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myCheckVerticalSearchFurtherVerticalHit = false; //somewhat expensive, but can help fix sime sliding issues
 
         this.myGroundAngleToIgnore = 0;
+        this.myGroundAngleToIgnoreWithPerceivedAngle = 0;
         this.myCeilingAngleToIgnore = 0;
+        this.myCeilingAngleToIgnoreWithPerceivedAngle = 0;
 
         this.myHorizontalMovementGroundAngleIgnoreHeight = null;
         this.myHorizontalMovementCeilingAngleIgnoreHeight = null;
@@ -259,7 +261,9 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myCheckVerticalSearchFurtherVerticalHit = other.myCheckVerticalSearchFurtherVerticalHit;
 
         this.myGroundAngleToIgnore = other.myGroundAngleToIgnore;
+        this.myGroundAngleToIgnoreWithPerceivedAngle = other.myGroundAngleToIgnoreWithPerceivedAngle;
         this.myCeilingAngleToIgnore = other.myCeilingAngleToIgnore;
+        this.myCeilingAngleToIgnoreWithPerceivedAngle = other.myCeilingAngleToIgnoreWithPerceivedAngle;
 
         this.myHorizontalMovementGroundAngleIgnoreHeight = other.myHorizontalMovementGroundAngleIgnoreHeight;
         this.myHorizontalMovementCeilingAngleIgnoreHeight = other.myHorizontalMovementCeilingAngleIgnoreHeight;
