@@ -61,7 +61,8 @@ CollisionCheck.prototype._updateSurfaceInfo = function () {
 }();
 
 CollisionCheck.prototype._postSurfaceCheck = function () {
-    return function _postSurfaceCheck(fixedVerticalMovement, transformUp, collisionCheckParams, collisionRuntimeParams, previousCollisionRuntimeParams) {
+    let horizontalDirection = PP.vec3_create();
+    return function _postSurfaceCheck(fixedHorizontalMovement, fixedVerticalMovement, transformUp, collisionCheckParams, collisionRuntimeParams, previousCollisionRuntimeParams) {
 
         let isVerticalMovementZero = fixedVerticalMovement.vec3_isZero(0.00001);
         let isVerticalMovemenDownward = Math.pp_sign(fixedVerticalMovement.vec3_lengthSigned(transformUp), -1) < 0;
@@ -80,11 +81,49 @@ CollisionCheck.prototype._postSurfaceCheck = function () {
             }
         }
 
-        /* if (isonground && avoidGroundSteep) {
-            if current angle > ground angle cancel && previous < ground angle
-        } */
+        let isOnValidGroundAngleUphill = true;
+        let isOnValidGroundAngleDownhill = true;
+        if (collisionRuntimeParams.myIsOnGround && collisionRuntimeParams.myGroundAngle > collisionCheckParams.myGroundAngleToIgnore + 0.0001) {
+            if (previousCollisionRuntimeParams.myIsOnGround && !fixedHorizontalMovement.vec3_isZero(0.00001)) {
+                horizontalDirection = fixedHorizontalMovement.vec3_normalize(horizontalDirection);
+                let perceivedAngle = LocomotionUtils.computeSurfacePerceivedAngle(
+                    collisionRuntimeParams.myGroundNormal,
+                    horizontalDirection, transformUp, true);
 
-        return mustRemainOnGroundOk && mustRemainOnCeilingOk;
+                if (perceivedAngle > 0) {
+                    isOnValidGroundAngleUphill = false;
+                }
+
+                if (previousCollisionRuntimeParams.myGroundAngle <= collisionCheckParams.myGroundAngleToIgnore + 0.0001) {
+                    if (collisionCheckParams.myMustRemainOnValidGroundAngleDownhill) {
+                        isOnValidGroundAngleDownhill = false;
+                    }
+                }
+            }
+        }
+
+        let isOnValidCeilingAngleUphill = true;
+        let isOnValidCeilingAngleDownhill = true;
+        if (collisionRuntimeParams.myIsOnCeiling && collisionRuntimeParams.myCeilingAngle > collisionCheckParams.myCeilingAngleToIgnore + 0.0001) {
+            if (previousCollisionRuntimeParams.myIsOnCeiling && !fixedHorizontalMovement.vec3_isZero(0.00001)) {
+                horizontalDirection = fixedHorizontalMovement.vec3_normalize(horizontalDirection);
+                let perceivedAngle = LocomotionUtils.computeSurfacePerceivedAngle(
+                    collisionRuntimeParams.myCeilingNormal,
+                    horizontalDirection, transformUp, false);
+
+                if (perceivedAngle > 0) {
+                    isOnValidCeilingAngleUphill = false;
+                }
+
+                if (previousCollisionRuntimeParams.myCeilingAngle <= collisionCheckParams.myCeilingAngleToIgnore + 0.0001) {
+                    if (collisionCheckParams.myMustRemainOnValidCeilingAngleDownhill) {
+                        isOnValidCeilingAngleDownhill = false;
+                    }
+                }
+            }
+        }
+
+        return mustRemainOnGroundOk && mustRemainOnCeilingOk && isOnValidGroundAngleUphill && isOnValidGroundAngleDownhill && isOnValidCeilingAngleUphill && isOnValidCeilingAngleDownhill;
     };
 }();
 
@@ -95,21 +134,19 @@ CollisionCheck.prototype._surfaceTooSteep = function () {
 
         if (collisionRuntimeParams.myIsOnGround && collisionRuntimeParams.myGroundAngle > collisionCheckParams.myGroundAngleToIgnore + 0.0001) {
             let groundPerceivedAngle = LocomotionUtils.computeSurfacePerceivedAngle(
-                collisionRuntimeParams.myGroundAngle,
                 collisionRuntimeParams.myGroundNormal,
-                up, direction, true);
+                direction, up, true);
 
-            groundTooSteep = groundPerceivedAngle >= 0;
+            groundTooSteep = groundPerceivedAngle > 0;
         }
 
         if (!groundTooSteep) {
             if (collisionRuntimeParams.myIsOnCeiling && collisionRuntimeParams.myCeilingAngle > collisionCheckParams.myCeilingAngleToIgnore + 0.0001) {
                 let ceilingPerceivedAngle = LocomotionUtils.computeSurfacePerceivedAngle(
-                    collisionRuntimeParams.myCeilingAngle,
                     collisionRuntimeParams.myCeilingNormal,
-                    up, direction, false);
+                    direction, up, false);
 
-                ceilingTooSteep = ceilingPerceivedAngle >= 0;
+                ceilingTooSteep = ceilingPerceivedAngle > 0;
             }
         }
 
@@ -127,9 +164,8 @@ CollisionCheck.prototype._computeExtraSurfaceVerticalMovement = function () {
             if (collisionRuntimeParams.myIsOnGround && collisionRuntimeParams.myGroundAngle != 0) {
                 direction = horizontalMovement.vec3_normalize(direction);
                 let groundPerceivedAngle = LocomotionUtils.computeSurfacePerceivedAngle(
-                    collisionRuntimeParams.myGroundAngle,
                     collisionRuntimeParams.myGroundNormal,
-                    up, direction, true);
+                    direction, up, true);
 
                 let extraVerticalLength = horizontalMovement.vec3_length() * Math.tan(Math.pp_toRadians(Math.abs(groundPerceivedAngle)));
                 extraVerticalLength *= Math.pp_sign(groundPerceivedAngle);
@@ -140,9 +176,8 @@ CollisionCheck.prototype._computeExtraSurfaceVerticalMovement = function () {
             } else if (collisionRuntimeParams.myIsOnCeiling && collisionRuntimeParams.myCeilingAngle != 0) {
                 direction = horizontalMovement.vec3_normalize(direction);
                 let ceilingPerceivedAngle = LocomotionUtils.computeSurfacePerceivedAngle(
-                    collisionRuntimeParams.myCeilingAngle,
                     collisionRuntimeParams.myCeilingNormal,
-                    up, direction, false);
+                    direction, up, false);
 
                 let extraVerticalLength = horizontalMovement.vec3_length() * Math.tan(Math.pp_toRadians(Math.abs(ceilingPerceivedAngle)));
                 extraVerticalLength *= Math.pp_sign(ceilingPerceivedAngle);
@@ -240,15 +275,15 @@ CollisionCheck.prototype._gatherSurfaceInfo = function () {
             surfaceNormal.vec3_normalize(surfaceNormal);
             surfaceAngle = surfaceNormal.vec3_angle(verticalDirection);
 
-            if (surfaceAngle < 0.0001) {
+            if (surfaceAngle <= 0.0001) {
                 surfaceAngle = 0;
                 surfaceNormal.vec3_copy(verticalDirection);
-            } else if (surfaceAngle > 180 - 0.0001) {
+            } else if (surfaceAngle >= 180 - 0.0001) {
                 surfaceAngle = 180;
                 surfaceNormal = verticalDirection.vec3_negate(surfaceNormal);
             }
 
-            surfacePerceivedAngle = LocomotionUtils.computeSurfacePerceivedAngle(surfaceAngle, surfaceNormal, up, forwardForPerceivedAngle, isGround);
+            surfacePerceivedAngle = LocomotionUtils.computeSurfacePerceivedAngle(surfaceNormal, forwardForPerceivedAngle, up, isGround);
         }
 
         if (isGround) {

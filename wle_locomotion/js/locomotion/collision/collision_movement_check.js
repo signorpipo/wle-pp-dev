@@ -335,7 +335,7 @@ CollisionCheck.prototype._moveStep = function () {
         }
 
         if (!horizontalMovement.vec3_isZero() && !collisionRuntimeParams.myHorizontalMovementCanceled) {
-            let surfaceCheckOk = this._postSurfaceCheck(fixedVerticalMovement, transformUp, collisionCheckParams, collisionRuntimeParams, this._myPrevCollisionRuntimeParams);
+            let surfaceCheckOk = this._postSurfaceCheck(fixedHorizontalMovement, fixedVerticalMovement, transformUp, collisionCheckParams, collisionRuntimeParams, this._myPrevCollisionRuntimeParams);
 
             if (!surfaceCheckOk) {
                 collisionRuntimeParams.myHorizontalMovementCanceled = true;

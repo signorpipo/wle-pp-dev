@@ -130,6 +130,8 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myAllowSurfaceSteepFix = false; //#TODO split into ceiling and ground
         this.myMustRemainOnGround = false;
         this.myMustRemainOnCeiling = false;
+        this.myMustRemainOnValidGroundAngleDownhill = false;
+        this.myMustRemainOnValidCeilingAngleDownhill = false;
         this.myRegatherGroundInfoOnSurfaceCheckFail = false;
         this.myRegatherCeilingInfoOnSurfaceCheckFail = false;
 
@@ -285,6 +287,8 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myAllowSurfaceSteepFix = other.myAllowSurfaceSteepFix;
         this.myMustRemainOnGround = other.myMustRemainOnGround;
         this.myMustRemainOnCeiling = other.myMustRemainOnCeiling;
+        this.myMustRemainOnValidGroundAngleDownhill = other.myMustRemainOnValidGroundAngleDownhill;
+        this.myMustRemainOnValidCeilingAngleDownhill = other.myMustRemainOnValidCeilingAngleDownhill;
         this.myRegatherGroundInfoOnSurfaceCheckFail = other.myRegatherGroundInfoOnSurfaceCheckFail;
         this.myRegatherCeilingInfoOnSurfaceCheckFail = other.myRegatherCeilingInfoOnSurfaceCheckFail;
 

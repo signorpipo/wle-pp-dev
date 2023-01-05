@@ -98,10 +98,6 @@ PP.BaseGamepad = class BaseGamepad {
         return null;
     }
 
-    isGamepadActive() {
-        return true;
-    }
-
     _start() {
 
     }

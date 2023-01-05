@@ -4,19 +4,35 @@ LocomotionUtils = {
 
     computeSurfacePerceivedAngle: function () {
         let forwardOnSurface = PP.vec3_create();
-        return function computeSurfacePerceivedAngle(surfaceAngle, surfaceNormal, up, forward, isGround) {
-            let surfacePerceivedAngle = surfaceAngle;
+        let verticalDirection = PP.vec3_create();
+        return function computeSurfacePerceivedAngle(surfaceNormal, forward, up, isGround = true) {
+            let surfacePerceivedAngle = 0;
 
-            if (surfaceAngle > 0.0001 && surfaceAngle < 180 - 0.0001) {
-                forwardOnSurface = forward.vec3_projectOnPlaneAlongAxis(surfaceNormal, up, forwardOnSurface);
-                surfacePerceivedAngle = forwardOnSurface.vec3_angle(forward);
-                if (Math.abs(surfacePerceivedAngle) < 0.0001) {
-                    surfacePerceivedAngle = 0;
+            verticalDirection.vec3_copy(up);
+            if (!isGround) {
+                verticalDirection.vec3_negate(verticalDirection);
+            }
+
+            let surfaceAngle = surfaceNormal.vec3_angle(verticalDirection);
+            if (surfaceAngle <= Math.PP_EPSILON_DEGREES) {
+                surfaceAngle = 0;
+            } else if (surfaceAngle >= 180 - Math.PP_EPSILON_DEGREES) {
+                surfaceAngle = 180;
+            }
+
+            forwardOnSurface = forward.vec3_projectOnPlaneAlongAxis(surfaceNormal, up, forwardOnSurface);
+            surfacePerceivedAngle = forwardOnSurface.vec3_angle(forward);
+
+            let isFurtherOnUp = forwardOnSurface.vec3_isFurtherAlongAxis(forward, up);
+            if ((!isFurtherOnUp && isGround) || (isFurtherOnUp && !isGround)) {
+                surfacePerceivedAngle *= -1;
+            }
+
+            if (Math.abs(surfacePerceivedAngle) >= surfaceAngle) {
+                if (surfaceAngle != 0 && surfaceAngle != 180) {
+                    surfacePerceivedAngle = surfaceAngle * Math.pp_sign(surfacePerceivedAngle);
                 } else {
-                    let isFurtherOnUp = forwardOnSurface.vec3_isFurtherAlongAxis(forward, up);
-                    if ((!isFurtherOnUp && isGround) || (isFurtherOnUp && !isGround)) {
-                        surfacePerceivedAngle *= -1;
-                    }
+                    surfacePerceivedAngle = surfaceAngle;
                 }
             }
 

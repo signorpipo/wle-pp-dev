@@ -268,4 +268,5 @@ require('./test/toggle_active');
 require('./test/test_tracked_hand_draw_joints');
 require('./test/gamepad_button_display');
 require('./test/show_meshed_line');
+require('./test/pulse_on_button');
 //require('./test/pwa_install');
