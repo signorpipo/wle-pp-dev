@@ -4,6 +4,8 @@ PlayerLocomotionDirectionReferenceType = {
     CUSTOM_OBJECT: 2,
 };
 
+transformManager = null;
+
 PlayerLocomotionParams = class PlayerLocomotionParams {
     constructor() {
         this.myMaxSpeed = 0;
@@ -105,6 +107,8 @@ PlayerLocomotion = class PlayerLocomotion {
             params.myDebugActive = true;
 
             this._myPlayerTransformManager = new PlayerTransformManager(params);
+
+            transformManager = this._myPlayerTransformManager;
         }
 
         {

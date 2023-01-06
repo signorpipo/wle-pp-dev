@@ -113,6 +113,8 @@ PlayerTransformManager = class PlayerTransformManager {
         this._myIsLeaning = false;
         this._myIsHopping = false;
         this._myIsFar = false;
+
+        this._myLastValidMovementDirection = PP.vec3_create();
     }
 
     start() {
@@ -320,6 +322,10 @@ PlayerTransformManager = class PlayerTransformManager {
         this._generateRealMovementParamsFromMovementParams();
     }
 
+    isRealPositionValid() {
+        return this._myRealCollisionRuntimeParams.myIsPositionCheck && this._myRealCollisionRuntimeParams.myIsPositionOk;
+    }
+
     getRealCollisionRuntimeParams() {
         return this._myRealCollisionRuntimeParams;
     }
@@ -520,6 +526,8 @@ PlayerTransformManager.prototype.update = function () {
     let movementChecked = PP.vec3_create();
     let newFeetPosition = PP.vec3_create();
     let floatingTransformQuat = PP.quat2_create();
+    let horizontalDirection = PP.vec3_create();
+    let rotationQuat = PP.quat_create();
     return function update(dt) {
         // check if new head is ok and update the data
         // if head is not synced (blurred or session changing) avoid this and keep last valid
@@ -538,6 +546,9 @@ PlayerTransformManager.prototype.update = function () {
             //this._myValidPositionHead = PP.vec3_create();
 
             movementToCheck = this.getPositionReal(positionReal).vec3_sub(this.getPosition(position), movementToCheck);
+            if (movementToCheck.vec3_length() > 0.0001) {
+                this._myLastValidMovementDirection = movementToCheck.vec3_normalize(this._myLastValidMovementDirection); //TEMP direction
+            }
 
             // Far
             if (this._myParams.mySyncEnabledFlagMap.get(PlayerTransformManagerSyncFlag.FAR)) {
@@ -713,6 +724,14 @@ PlayerTransformManager.prototype.update = function () {
             //#TODO this should update ground and ceiling info but not sliding info
 
             transformQuat = this.getTransformRealQuat(transformQuat);
+            transformUp = transformQuat.quat2_getUp(transformUp);
+            rotationQuat = transformQuat.quat2_getRotationQuat(rotationQuat);
+            horizontalDirection = this._myLastValidMovementDirection.vec3_removeComponentAlongAxis(transformUp, horizontalDirection);
+            if (!horizontalDirection.vec3_isZero(0.00001)) {
+                horizontalDirection.vec3_normalize(horizontalDirection);
+                rotationQuat.quat_setForward(horizontalDirection);
+                transformQuat.quat2_setRotationQuat(rotationQuat);
+            }
             CollisionCheckGlobal.positionCheck(true, transformQuat, this._myParams.myMovementCollisionCheckParams, this._myRealCollisionRuntimeParams);
         }
 

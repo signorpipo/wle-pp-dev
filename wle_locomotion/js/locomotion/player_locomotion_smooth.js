@@ -136,7 +136,7 @@ PlayerLocomotionSmooth.prototype.update = function () {
         }
 
         if (!PP.myGamepads[this._myParams.myHandedness].getButtonInfo(PP.GamepadButtonID.THUMBSTICK).isPressed()) {
-            if (!this._myLocomotionRuntimeParams.myIsFlying) {
+            if (!this._myLocomotionRuntimeParams.myIsFlying && false) {
                 let gravity = -2;
                 verticalMovement = playerUp.vec3_scale(gravity * dt, verticalMovement);
                 headMovement = headMovement.vec3_add(verticalMovement, headMovement);
@@ -144,6 +144,7 @@ PlayerLocomotionSmooth.prototype.update = function () {
 
             feetTransformQuat = this._myParams.myPlayerHeadManager.getTransformFeetQuat(feetTransformQuat);
 
+            globalDT = dt;
             CollisionCheckGlobal.move(headMovement, feetTransformQuat, this._myParams.myCollisionCheckParams, this._myLocomotionRuntimeParams.myCollisionRuntimeParams);
             headMovement.vec3_copy(this._myLocomotionRuntimeParams.myCollisionRuntimeParams.myFixedMovement);
 
@@ -162,6 +163,8 @@ PlayerLocomotionSmooth.prototype.update = function () {
         }
     };
 }();
+
+globalDT = 0;
 
 PlayerLocomotionSmooth.prototype._onXRSessionStart = function () {
     return function _onXRSessionStart(session) {

@@ -127,7 +127,7 @@
             ○ quat2_copy        / quat2_identity
             - quat2_normalize
             - quat2_getPosition     / quat2_getRotation
-            ○ quat2_setPositionRotation
+            ○ quat2_setPosition     / quat2_setRotation     / quat2_setPositionRotation
             - quat2_getAxes     / quat2_getRight    / quat2_getUp   / quat2_getForward  / quat2_getLeft    / quat2_getDown   / quat2_getBackward
             - quat2_toWorld     / quat2_toLocal
             - quat2_toMatrix
@@ -1707,6 +1707,46 @@ Array.prototype.quat2_getRotationQuat = function (out = glMatrix.quat.create()) 
     glMatrix.quat.copy(out, this);
     return out;
 };
+
+Array.prototype.quat2_setPosition = function () {
+    let rotationQuat = glMatrix.quat.create();
+    return function quat2_setPosition(position) {
+        this.quat2_getRotationQuat(rotationQuat);
+        this.quat2_setPositionRotationQuat(position, rotationQuat);
+        return this;
+    };
+}();
+
+Array.prototype.quat2_setRotation = function (rotation) {
+    return this.quat2_setRotationDegrees(rotation);
+};
+
+Array.prototype.quat2_setRotationDegrees = function () {
+    let position = glMatrix.vec3.create();
+    return function quat2_setRotationDegrees(rotation) {
+        this.quat2_getPosition(position);
+        this.quat2_setPositionRotationDegrees(position, rotation);
+        return this;
+    };
+}();
+
+Array.prototype.quat2_setRotationRadians = function () {
+    let position = glMatrix.vec3.create();
+    return function quat2_setRotationRadians(rotation) {
+        this.quat2_getPosition(position);
+        this.quat2_setPositionRotationRadians(position, rotation);
+        return this;
+    };
+}();
+
+Array.prototype.quat2_setRotationQuat = function () {
+    let position = glMatrix.vec3.create();
+    return function quat2_setRotationQuat(rotation) {
+        this.quat2_getPosition(position);
+        this.quat2_setPositionRotationQuat(position, rotation);
+        return this;
+    };
+}();
 
 Array.prototype.quat2_setPositionRotation = function (position, rotation) {
     return this.quat2_setPositionRotationDegrees(position, rotation);
