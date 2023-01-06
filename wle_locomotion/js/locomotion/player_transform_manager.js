@@ -11,6 +11,8 @@ PlayerTransformManagerParams = class PlayerTransformManagerParams {
 
         this.myMovementCollisionCheckParams = null;
         this.myTeleportCollisionCheckParams = null; // can be left null and will be generated from the movement one
+        this.myTeleportCollisionCheckParamsCopyFromMovement = false;
+        this.myTeleportCollisionCheckParamsCheck360 = false;
 
         this.mySyncEnabledFlagMap = new Map();
         this.mySyncEnabledFlagMap.set(PlayerTransformManagerSyncFlag.BODY_COLLIDING, true);
@@ -92,8 +94,9 @@ PlayerTransformManager = class PlayerTransformManager {
         this._generateRealMovementParamsFromMovementParams();
 
         this._myCollisionRuntimeParams = new CollisionRuntimeParams();
+        this._myRealCollisionRuntimeParams = new CollisionRuntimeParams();
 
-        if (this._myParams.myTeleportCollisionCheckParams == null && this._myParams.myMovementCollisionCheckParams != null) {
+        if (this._myParams.myTeleportCollisionCheckParamsCopyFromMovement) {
             this._generateTeleportParamsFromMovementParams();
         }
 
@@ -297,12 +300,28 @@ PlayerTransformManager = class PlayerTransformManager {
         return this._myParams.myPlayerHeadManager;
     }
 
-    collisionCheckParamsUpdated(recomputeTeleportFromMovement = false) {
-        if (recomputeTeleportFromMovement) {
-            this.generateTeleportParamsFromMovementParams();
+    getParams() {
+        return this._myParams;
+    }
+
+    getMovementCollisionCheckParams() {
+        return this._myParams.myMovementCollisionCheckParams;
+    }
+
+    getTeleportCollisionCheckParams() {
+        return this._myParams.myTeleportCollisionCheckParams;
+    }
+
+    collisionCheckParamsUpdated() {
+        if (this._myParams.myTeleportCollisionCheckParamsCopyFromMovement) {
+            this._generateTeleportParamsFromMovementParams();
         }
 
         this._generateRealMovementParamsFromMovementParams();
+    }
+
+    getRealCollisionRuntimeParams() {
+        return this._myRealCollisionRuntimeParams;
     }
 
     _updateCollisionHeight() {
@@ -385,7 +404,11 @@ PlayerTransformManager = class PlayerTransformManager {
             this._myParams.myTeleportCollisionCheckParams = new CollisionCheckParams();
         }
 
-        this._myParams.myTeleportCollisionCheckParams = CollisionCheckUtils.generateTeleportParamsFromMovementParams(this._myParams.myMovementCollisionCheckParams, this._myParams.myTeleportCollisionCheckParams);
+        if (this._myParams.myTeleportCollisionCheckParamsCheck360) {
+            this._myParams.myTeleportCollisionCheckParams = CollisionCheckUtils.generate360TeleportParamsFromMovementParams(this._myParams.myMovementCollisionCheckParams, this._myParams.myTeleportCollisionCheckParams);
+        } else {
+            this._myParams.myTeleportCollisionCheckParams.copy(this._myParams.myMovementCollisionCheckParams);
+        }
     }
 
     _generateRealMovementParamsFromMovementParams() {
@@ -688,6 +711,9 @@ PlayerTransformManager.prototype.update = function () {
             // at the end, update head manager if it is synced to the new valid position
 
             //#TODO this should update ground and ceiling info but not sliding info
+
+            transformQuat = this.getTransformRealQuat(transformQuat);
+            CollisionCheckGlobal.positionCheck(true, transformQuat, this._myParams.myMovementCollisionCheckParams, this._myRealCollisionRuntimeParams);
         }
 
         if (this._myParams.myDebugActive) {

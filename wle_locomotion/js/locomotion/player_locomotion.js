@@ -77,6 +77,8 @@ PlayerLocomotion = class PlayerLocomotion {
 
             params.myMovementCollisionCheckParams = this._myCollisionCheckParamsMovement;
             params.myTeleportCollisionCheckParams = null;
+            params.myTeleportCollisionCheckParamsCopyFromMovement = true;
+            params.myTeleportCollisionCheckParamsCheck360 = true;
 
             params.myHeadCollisionBlockLayerFlags.setMask(params.myMovementCollisionCheckParams.myBlockLayerFlags.getMask());
             params.myHeadCollisionObjectsToIgnore.pp_copy(params.myMovementCollisionCheckParams.myObjectsToIgnore);
@@ -428,7 +430,7 @@ PlayerLocomotion = class PlayerLocomotion {
     }
 
     _setupCollisionCheckParamsTeleport() {
-        this._myCollisionCheckParamsTeleport = CollisionCheckUtils.generateTeleportParamsFromMovementParams(this._myCollisionCheckParamsMovement);
+        this._myCollisionCheckParamsTeleport = CollisionCheckUtils.generate360TeleportParamsFromMovementParams(this._myCollisionCheckParamsMovement);
 
         // increased so to let teleport on steep slopes from above (from below is fixed through detection myGroundAngleToIgnoreUpward)
         this._myCollisionCheckParamsTeleport.myGroundAngleToIgnore = 60;
