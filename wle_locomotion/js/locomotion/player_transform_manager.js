@@ -47,8 +47,11 @@ PlayerTransformManagerParams = class PlayerTransformManagerParams {
 
         // settings for both hop and lean
         this.myIsFloatingValidIfVerticalMovement = false;
-        this.myIsFloatingValidIfVerticalMovementAndRealOnGround = false;
+        this.myIsFloatingValidIfVerticalMovementAndRealOnGround = false; //#TODO this is more an override
         this.myIsFloatingValidIfRealOnGround = false;
+        this.myIsFloatingValidIfSteepGround = false;
+        this.myIsFloatingValidIfVerticalMovementAndSteepGround = false;
+
         this.myFloatingSplitCheckEnabled = false;
         this.myFloatingSplitCheckMaxLength = 0;
         this.myFloatingSplitCheckMaxSteps = null;
@@ -66,7 +69,7 @@ PlayerTransformManagerParams = class PlayerTransformManagerParams {
         this.myRotateOnlyIfSynced = false;
         this.myResetRealResetRotationIfUpChanged = true;
 
-        // this.myDistanceToStartApplyGravityWhenLeaning = 0; // this should be moved outisde, that is, if it is leaning stop gravity
+        // this.myDistanceToStartApplyGravityWhenFloating = 0; // this should be moved outisde, that is, if it is floating stop gravity
 
         // set valid if head synced (head manager)
 
@@ -493,7 +496,7 @@ PlayerTransformManager.prototype.update = function () {
     let verticalMovement = PP.vec3_create();
     let movementChecked = PP.vec3_create();
     let newFeetPosition = PP.vec3_create();
-    let leaningTransformQuat = PP.quat2_create();
+    let floatingTransformQuat = PP.quat2_create();
     return function update(dt) {
         // check if new head is ok and update the data
         // if head is not synced (blurred or session changing) avoid this and keep last valid
@@ -538,9 +541,15 @@ PlayerTransformManager.prototype.update = function () {
             // Floating 
             if (this._myParams.mySyncEnabledFlagMap.get(PlayerTransformManagerSyncFlag.FLOATING)) {
 
+                if (!this._myIsBodyColliding) {
+                    movementToCheck = newPosition.vec3_sub(position, movementToCheck);
+                } else {
+                    movementToCheck = positionReal.vec3_sub(position, movementToCheck);
+                }
+
                 collisionRuntimeParams.copy(this._myCollisionRuntimeParams);
-                leaningTransformQuat.quat2_setPositionRotationQuat(this._myValidPosition, this._myValidRotationQuat);
-                CollisionCheckGlobal.updateSurfaceInfo(leaningTransformQuat, this._myRealMovementCollisionCheckParams, collisionRuntimeParams);
+                floatingTransformQuat.quat2_setPositionRotationQuat(this._myValidPosition, this._myValidRotationQuat);
+                CollisionCheckGlobal.updateSurfaceInfo(floatingTransformQuat, this._myRealMovementCollisionCheckParams, collisionRuntimeParams);
                 //#TODO utilizzare on ground del body gia calcolato, ma ora non c'è quindi va bene così
 
                 if (collisionRuntimeParams.myIsOnGround) {
@@ -573,14 +582,16 @@ PlayerTransformManager.prototype.update = function () {
                             }
                         }
 
+                        let isOnValidGroundAngle = collisionRuntimeParams.myGroundAngle <= this._myRealMovementCollisionCheckParams.myGroundAngleToIgnore + 0.0001;
+
                         movementChecked.vec3_zero();
                         newFeetPosition.vec3_copy(this._myValidPosition);
                         collisionRuntimeParams.copy(this._myCollisionRuntimeParams);
 
                         let atLeastOneNotOnGround = false;
-                        let atLeastOneOnGround = false;
                         let isOneOnGroundBetweenNoGround = false;
                         let isLastOnGround = false;
+                        let isOneOnSteepGround = false;
 
                         for (let i = 0; i < movementStepAmount; i++) {
                             if (movementStepAmount == 1 || i != movementStepAmount - 1) {
@@ -590,18 +601,21 @@ PlayerTransformManager.prototype.update = function () {
                             }
 
                             newFeetPosition = newFeetPosition.vec3_add(currentMovementStep, newFeetPosition);
-                            leaningTransformQuat.quat2_setPositionRotationQuat(newFeetPosition, this._myValidRotationQuat);
+                            floatingTransformQuat.quat2_setPositionRotationQuat(newFeetPosition, this._myValidRotationQuat);
                             collisionRuntimeParams.copy(this._myCollisionRuntimeParams);
-                            CollisionCheckGlobal.updateSurfaceInfo(leaningTransformQuat, this._myRealMovementCollisionCheckParams, collisionRuntimeParams);
+                            CollisionCheckGlobal.updateSurfaceInfo(floatingTransformQuat, this._myRealMovementCollisionCheckParams, collisionRuntimeParams);
                             movementChecked = movementChecked.vec3_add(currentMovementStep, movementChecked);
 
                             if (!collisionRuntimeParams.myIsOnGround) {
                                 atLeastOneNotOnGround = true;
                             } else {
+                                if (collisionRuntimeParams.myGroundAngle > this._myRealMovementCollisionCheckParams.myGroundAngleToIgnore + 0.0001) {
+                                    isOneOnSteepGround = true;
+                                }
+
                                 if (atLeastOneNotOnGround) {
                                     isOneOnGroundBetweenNoGround = true;
                                 }
-                                atLeastOneOnGround = true;
 
                                 if (i == movementStepAmount - 1) {
                                     isLastOnGround = true;
@@ -609,7 +623,9 @@ PlayerTransformManager.prototype.update = function () {
                             }
                         }
 
-                        if (atLeastOneNotOnGround) {
+                        let isFloatingOnSteepGroundFail = isOneOnSteepGround && isOnValidGroundAngle &&
+                            !this._myParams.myIsFloatingValidIfSteepGround && (!isVertical || !this._myParams.myIsFloatingValidIfVerticalMovementAndSteepGround);
+                        if (atLeastOneNotOnGround || isFloatingOnSteepGroundFail) {
                             if (isOneOnGroundBetweenNoGround) {
                                 this._myIsHopping = true;
                             } else {

@@ -90,12 +90,15 @@ PlayerLocomotion = class PlayerLocomotion {
 
             params.myIsFloatingValidIfVerticalMovement = false;
             params.myIsFloatingValidIfVerticalMovementAndRealOnGround = false;
+            params.myIsFloatingValidIfSteepGround = false;
+            params.myIsFloatingValidIfVerticalMovementAndSteepGround = false;
             params.myIsFloatingValidIfRealOnGround = false;
             params.myIsLeaningValidAboveDistance = true;
             params.myLeaningValidDistance = 2;
             params.myFloatingSplitCheckEnabled = true;
             params.myFloatingSplitCheckMaxLength = 0.2;
             params.myFloatingSplitCheckMaxSteps = 5;
+            params.myRealMovementAllowVerticalAdjustments = false;
 
             params.myDebugActive = true;
 
