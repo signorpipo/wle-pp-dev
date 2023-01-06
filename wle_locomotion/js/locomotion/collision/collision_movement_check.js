@@ -138,6 +138,12 @@ CollisionCheck.prototype._move = function () {
         collisionRuntimeParams.myNewPosition = collisionRuntimeParams.myOriginalPosition.vec3_add(collisionRuntimeParams.myFixedMovement, collisionRuntimeParams.myNewPosition);
 
         collisionRuntimeParams.myIsMove = true;
+
+
+        //console.error(_myTotalRaycasts );
+
+        //_myTotalRaycastsMax = Math.max(_myTotalRaycasts, _myTotalRaycastsMax);
+        //console.error(_myTotalRaycastsMax);
     };
 }();
 
@@ -361,11 +367,6 @@ CollisionCheck.prototype._moveStep = function () {
                 }
             }
         }
-
-        //console.error(_myTotalRaycasts );
-
-        _myTotalRaycastsMax = Math.max(_myTotalRaycasts, _myTotalRaycastsMax);
-        //console.error(_myTotalRaycastsMax);
 
         //return outFixedMovement.vec3_zero();
 

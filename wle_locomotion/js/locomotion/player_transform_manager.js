@@ -82,6 +82,9 @@ PlayerTransformManagerParams = class PlayerTransformManagerParams {
         // real movement apply vertical snap or not (other option to apply gravity) 
         // (gravity inside this class?) only when movement is applied not for head only)
 
+        this.myUpdateRealPositionValid = false;
+        this.myUpdatePositionValid = false;
+
         this.myDebugActive = false;
     }
 };
@@ -115,6 +118,8 @@ PlayerTransformManager = class PlayerTransformManager {
         this._myIsFar = false;
 
         this._myLastValidMovementDirection = PP.vec3_create();
+        this._myIsRealPositionValid = false;
+        this._myIsPositionValid = false;
     }
 
     start() {
@@ -322,8 +327,16 @@ PlayerTransformManager = class PlayerTransformManager {
         this._generateRealMovementParamsFromMovementParams();
     }
 
+    isPositionValid() {
+        return this._myIsPositionValid;
+    }
+
     isRealPositionValid() {
-        return this._myRealCollisionRuntimeParams.myIsPositionCheck && this._myRealCollisionRuntimeParams.myIsPositionOk;
+        return this._myIsRealPositionValid;
+    }
+
+    getCollisionRuntimeParams() {
+        return this._myCollisionRuntimeParams;
     }
 
     getRealCollisionRuntimeParams() {
@@ -723,16 +736,33 @@ PlayerTransformManager.prototype.update = function () {
 
             //#TODO this should update ground and ceiling info but not sliding info
 
-            transformQuat = this.getTransformRealQuat(transformQuat);
-            transformUp = transformQuat.quat2_getUp(transformUp);
-            rotationQuat = transformQuat.quat2_getRotationQuat(rotationQuat);
-            horizontalDirection = this._myLastValidMovementDirection.vec3_removeComponentAlongAxis(transformUp, horizontalDirection);
-            if (!horizontalDirection.vec3_isZero(0.00001)) {
-                horizontalDirection.vec3_normalize(horizontalDirection);
-                rotationQuat.quat_setForward(horizontalDirection);
-                transformQuat.quat2_setRotationQuat(rotationQuat);
+            if (this._myParams.myUpdateRealPositionValid) {
+                transformQuat = this.getTransformRealQuat(transformQuat);
+                transformUp = transformQuat.quat2_getUp(transformUp);
+                rotationQuat = transformQuat.quat2_getRotationQuat(rotationQuat);
+                horizontalDirection = this._myLastValidMovementDirection.vec3_removeComponentAlongAxis(transformUp, horizontalDirection);
+                if (!horizontalDirection.vec3_isZero(0.00001)) {
+                    horizontalDirection.vec3_normalize(horizontalDirection);
+                    rotationQuat.quat_setForward(horizontalDirection);
+                    transformQuat.quat2_setRotationQuat(rotationQuat);
+                }
+                CollisionCheckGlobal.positionCheck(true, transformQuat, this._myParams.myMovementCollisionCheckParams, this._myRealCollisionRuntimeParams);
+                this._myIsRealPositionValid = this._myRealCollisionRuntimeParams.myIsPositionOk;
             }
-            CollisionCheckGlobal.positionCheck(true, transformQuat, this._myParams.myMovementCollisionCheckParams, this._myRealCollisionRuntimeParams);
+
+            if (this._myParams.myUpdatePositionValid) {
+                transformQuat = this.getTransformQuat(transformQuat);
+                transformUp = transformQuat.quat2_getUp(transformUp);
+                rotationQuat = transformQuat.quat2_getRotationQuat(rotationQuat);
+                horizontalDirection = this._myLastValidMovementDirection.vec3_removeComponentAlongAxis(transformUp, horizontalDirection);
+                if (!horizontalDirection.vec3_isZero(0.00001)) {
+                    horizontalDirection.vec3_normalize(horizontalDirection);
+                    rotationQuat.quat_setForward(horizontalDirection);
+                    transformQuat.quat2_setRotationQuat(rotationQuat);
+                }
+                CollisionCheckGlobal.positionCheck(true, transformQuat, this._myParams.myMovementCollisionCheckParams, collisionRuntimeParams);
+                this._myIsPositionValid = collisionRuntimeParams.myIsPositionOk;
+            }
         }
 
         if (this._myParams.myDebugActive) {

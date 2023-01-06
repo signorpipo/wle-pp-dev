@@ -60,6 +60,10 @@ WL.registerComponent('player-locomotion', {
         _myTotalRaycasts = 0; // #TODO debug stuff, remove later
 
         this._myPlayerLocomotion.update(dt);
+
+        //_myTotalRaycastsMax = Math.max(_myTotalRaycasts, _myTotalRaycastsMax);
+        //console.error(_myTotalRaycastsMax);
+        //console.error(_myTotalRaycasts);
     },
     onActivate() {
         if (this._myPlayerLocomotion != null) {

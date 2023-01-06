@@ -104,6 +104,9 @@ PlayerLocomotion = class PlayerLocomotion {
             params.myFloatingSplitCheckMaxSteps = 5;
             params.myRealMovementAllowVerticalAdjustments = false;
 
+            params.myUpdateRealPositionValid = true;
+            params.myUpdatePositionValid = true;
+
             params.myDebugActive = true;
 
             this._myPlayerTransformManager = new PlayerTransformManager(params);
