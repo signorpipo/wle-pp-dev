@@ -47,6 +47,7 @@ PlayerTransformManagerParams = class PlayerTransformManagerParams {
 
         // settings for both hop and lean
         this.myIsFloatingValidIfVerticalMovement = false;
+        this.myIsFloatingValidIfVerticalMovementAndRealOnGround = false;
         this.myIsFloatingValidIfRealOnGround = false;
         this.myFloatingSplitCheckEnabled = false;
         this.myFloatingSplitCheckMaxLength = 0;
@@ -545,8 +546,8 @@ PlayerTransformManager.prototype.update = function () {
                 if (collisionRuntimeParams.myIsOnGround) {
                     transformUp = transformQuat.quat2_getUp(transformUp);
                     verticalMovement = movementToCheck.vec3_componentAlongAxis(transformUp);
-
-                    if (verticalMovement.vec3_isZero(0.00001) || !this._myParams.myIsFloatingValidIfVerticalMovement) {
+                    let isVertical = !verticalMovement.vec3_isZero(0.00001);
+                    if (!isVertical || !this._myParams.myIsFloatingValidIfVerticalMovement) {
                         let movementStepAmount = 1;
                         movementStep.vec3_copy(movementToCheck);
                         if (!movementToCheck.vec3_isZero(0.00001) && this._myParams.myFloatingSplitCheckEnabled) {
@@ -621,6 +622,9 @@ PlayerTransformManager.prototype.update = function () {
                             }
 
                             if (isLastOnGround && this._myParams.myIsFloatingValidIfRealOnGround) {
+                                this._myIsLeaning = false;
+                                this._myIsHopping = false;
+                            } else if (isLastOnGround && isVertical && this._myParams.myIsFloatingValidIfVerticalMovementAndRealOnGround) {
                                 this._myIsLeaning = false;
                                 this._myIsHopping = false;
                             }
