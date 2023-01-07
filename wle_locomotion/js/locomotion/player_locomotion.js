@@ -301,7 +301,7 @@ PlayerLocomotion = class PlayerLocomotion {
     }
 
     _updateCollisionHeight() {
-        this._myCollisionCheckParamsMovement.myHeight = this._myPlayerHeadManager.getHeight();
+        this._myCollisionCheckParamsMovement.myHeight = this._myPlayerHeadManager.getHeightHead();
         if (this._myCollisionCheckParamsMovement.myHeight <= 0.000001) {
             this._myCollisionCheckParamsMovement.myHeight = 0;
         }

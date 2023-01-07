@@ -25,8 +25,8 @@ PlayerHeadManager = class PlayerHeadManager {
         this._myCurrentHead = PP.myPlayerObjects.myNonVRHead;
 
         this._mySessionChangeResyncHeadTransform = null;
-
         this._myBlurRecoverHeadTransform = null;
+        this._myCurrentHeadTransformQuat = PP.quat2_create();
 
         this._myDelaySessionChangeResyncCounter = 0; // needed because VR head takes some frames to get the tracked position
         this._myDelayBlurEndResyncCounter = 0;
@@ -57,7 +57,11 @@ PlayerHeadManager = class PlayerHeadManager {
         return this._myCurrentHead;
     }
 
-    getHeight() {
+    getHeightHead() {
+        return this.getHeightEyes() + this._myParams.myHeadHeightOffset;
+    }
+
+    getHeightEyes() {
         // implemented outside class definition
     }
 
@@ -167,16 +171,18 @@ PlayerHeadManager = class PlayerHeadManager {
                 }
             }
         }
+
+        this._myCurrentHead.pp_getTransformQuat(this._myCurrentHeadTransformQuat);
     }
 };
 
-PlayerHeadManager.prototype.getHeight = function () {
+PlayerHeadManager.prototype.getHeightEyes = function () {
     let headPosition = PP.vec3_create();
-    return function getHeight() {
+    return function getHeightEyes() {
         headPosition = this._myCurrentHead.pp_getPosition(headPosition);
-        let headHeight = this._getPositionHeight(headPosition);
+        let eyesHeight = this._getPositionHeight(headPosition);
 
-        return headHeight + this._myParams.myHeadHeightOffset;
+        return eyesHeight;
     };
 }();
 
@@ -229,6 +235,7 @@ PlayerHeadManager.prototype.getPositionFeet = function () {
 
 PlayerHeadManager.prototype.moveFeet = function (movement) {
     PP.myPlayerObjects.myPlayer.pp_translate(movement);
+    this._myCurrentHead.pp_getTransformQuat(this._myCurrentHeadTransformQuat);
 };
 
 PlayerHeadManager.prototype.rotateFeetQuat = function () {
@@ -257,6 +264,7 @@ PlayerHeadManager.prototype.rotateHeadQuat = function () {
 
             newHeadRotation = newHeadRotation.quat_rotateAxisRadians(Math.PI, newHeadRotation.quat_getUp(newHeadUp), newHeadRotation);
             PP.myPlayerObjects.myNonVRCamera.pp_setRotationQuat(newHeadRotation);
+            this._myCurrentHead.pp_getTransformQuat(this._myCurrentHeadTransformQuat);
         }
     };
 }();
@@ -325,6 +333,7 @@ PlayerHeadManager.prototype.teleportPlayerToHeadTransformQuat = function () {
         rotationToPerform = playerForward.vec3_rotationToPivotedQuat(headForwardNegated, playerUp, rotationToPerform);
 
         PP.myPlayerObjects.myPlayer.pp_rotateQuat(rotationToPerform);
+        this._myCurrentHead.pp_getTransformQuat(this._myCurrentHeadTransformQuat);
     };
 }();
 
@@ -473,10 +482,9 @@ PlayerHeadManager.prototype._onXRSessionBlurEnd = function () {
 }();
 
 PlayerHeadManager.prototype._onViewReset = function () {
-    let currentHeadTransformQuat = PP.quat2_create();
     return function _onViewReset() {
         if (this._mySessionActive) {
-            this.teleportPlayerToHeadTransformQuat(this._myCurrentHead.pp_getTransformQuat(currentHeadTransformQuat));
+            this.teleportPlayerToHeadTransformQuat(this._myCurrentHeadTransformQuat);
         }
     };
 }();
@@ -661,7 +669,7 @@ PlayerHeadManager.prototype._sessionChangeResync = function () {
 
 
 
-Object.defineProperty(PlayerHeadManager.prototype, "getHeight", { enumerable: false });
+Object.defineProperty(PlayerHeadManager.prototype, "getHeightEyes", { enumerable: false });
 Object.defineProperty(PlayerHeadManager.prototype, "getTransformFeetQuat", { enumerable: false });
 Object.defineProperty(PlayerHeadManager.prototype, "getPositionFeet", { enumerable: false });
 Object.defineProperty(PlayerHeadManager.prototype, "moveFeet", { enumerable: false });

@@ -252,7 +252,7 @@ PlayerTransformManager = class PlayerTransformManager {
     }
 
     getHeightReal() {
-        return this._myParams.myPlayerHeadManager.getHeight();
+        return this._myParams.myPlayerHeadManager.getHeightHead();
     }
 
     isSynced(syncFlagMap = null) {
@@ -344,12 +344,13 @@ PlayerTransformManager = class PlayerTransformManager {
     }
 
     _updateCollisionHeight() {
-        let currentHeight = Math.max(0, this.getHeight());
+        let validHeight = Math.max(0, this.getHeight());
+        let realHeight = Math.max(0, this.getHeightReal());
 
-        this._myParams.myMovementCollisionCheckParams.myHeight = currentHeight;
-        this._myParams.myTeleportCollisionCheckParams.myHeight = currentHeight;
+        this._myParams.myMovementCollisionCheckParams.myHeight = validHeight;
+        this._myParams.myTeleportCollisionCheckParams.myHeight = validHeight;
 
-        this._myRealMovementCollisionCheckParams.myHeight = currentHeight;
+        this._myRealMovementCollisionCheckParams.myHeight = realHeight;
     }
 
     _setupHeadCollisionCheckParams() {
