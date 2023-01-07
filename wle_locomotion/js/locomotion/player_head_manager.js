@@ -326,19 +326,22 @@ PlayerHeadManager.prototype.teleportPositionFeet = function () {
 PlayerHeadManager.prototype.teleportPlayerToHeadTransformQuat = function () {
     let headPosition = PP.vec3_create();
     let playerUp = PP.vec3_create();
-    let newPlayerPosition = PP.vec3_create();
+    let flatCurrentPlayerPosition = PP.vec3_create();
+    let flatNewPlayerPosition = PP.vec3_create();
+    let teleportMovement = PP.vec3_create();
     let playerForward = PP.vec3_create();
     let headForward = PP.vec3_create();
     let headForwardNegated = PP.vec3_create();
     let rotationToPerform = PP.quat_create();
     return function teleportPlayerToHeadTransformQuat(headTransformQuat) {
         headPosition = headTransformQuat.quat2_getPosition(headPosition);
-        let headHeight = this._getPositionHeight(headPosition);
 
         playerUp = PP.myPlayerObjects.myPlayer.pp_getUp(playerUp);
-        newPlayerPosition = headPosition.vec3_sub(playerUp.vec3_scale(headHeight, newPlayerPosition), newPlayerPosition);
+        flatCurrentPlayerPosition = PP.myPlayerObjects.myPlayer.pp_getPosition(flatCurrentPlayerPosition).vec3_removeComponentAlongAxis(playerUp, flatCurrentPlayerPosition);
+        flatNewPlayerPosition = headPosition.vec3_removeComponentAlongAxis(playerUp, flatNewPlayerPosition);
 
-        PP.myPlayerObjects.myPlayer.pp_setPosition(newPlayerPosition);
+        teleportMovement = flatNewPlayerPosition.vec3_sub(flatCurrentPlayerPosition, teleportMovement);
+        PP.myPlayerObjects.myPlayer.pp_translate(teleportMovement);
 
         playerForward = PP.myPlayerObjects.myPlayer.pp_getForward(playerForward);
         headForward = headTransformQuat.quat2_getForward(headForward);
