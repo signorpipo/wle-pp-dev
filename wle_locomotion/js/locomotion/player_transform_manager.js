@@ -85,6 +85,12 @@ PlayerTransformManagerParams = class PlayerTransformManagerParams {
         this.myUpdateRealPositionValid = false;
         this.myUpdatePositionValid = false;
 
+        this.myMinHeight = null;
+        this.myMaxHeight = null;
+
+        this.myIsBodyCollidingWhenHeightBelowValue = null;
+        this.myIsBodyCollidingWhenHeightAboveValue = null;
+
         this.myDebugActive = false;
     }
 };
@@ -344,8 +350,8 @@ PlayerTransformManager = class PlayerTransformManager {
     }
 
     _updateCollisionHeight() {
-        let validHeight = Math.max(0, this.getHeight());
-        let realHeight = Math.max(0, this.getHeightReal());
+        let validHeight = this.getHeight();
+        let realHeight = Math.pp_clamp(this.getHeightReal(), this._myParams.myMinHeight, this._myParams.myMaxHeight);
 
         this._myParams.myMovementCollisionCheckParams.myHeight = validHeight;
         this._myParams.myTeleportCollisionCheckParams.myHeight = validHeight;
@@ -579,8 +585,13 @@ PlayerTransformManager.prototype.update = function () {
                 CollisionCheckGlobal.move(movementToCheck, transformQuat, this._myRealMovementCollisionCheckParams, collisionRuntimeParams);
 
                 if (!collisionRuntimeParams.myHorizontalMovementCanceled && !collisionRuntimeParams.myVerticalMovementCanceled) {
-                    this._myIsBodyColliding = false;
-                    newPosition.vec3_copy(collisionRuntimeParams.myNewPosition);
+                    if (Math.pp_clamp(this._myRealMovementCollisionCheckParams.myHeight, this._myParams.myIsBodyCollidingWhenHeightBelowValue,
+                        this._myParams.myIsBodyCollidingWhenHeightAboveValue) != this._myRealMovementCollisionCheckParams.myHeight) {
+                        this._myIsBodyColliding = true;
+                    } else {
+                        this._myIsBodyColliding = false;
+                        newPosition.vec3_copy(collisionRuntimeParams.myNewPosition);
+                    }
                 } else {
                     this._myIsBodyColliding = true;
                 }
@@ -729,7 +740,7 @@ PlayerTransformManager.prototype.update = function () {
             }
 
             if (this.isSynced(this._myParams.mySyncHeightFlagMap)) {
-                this._myValidHeight = this.getHeightReal();
+                this._myValidHeight = this._myRealMovementCollisionCheckParams.myHeight;
                 this._updateCollisionHeight();
             }
 
