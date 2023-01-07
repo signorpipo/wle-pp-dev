@@ -21,17 +21,22 @@ WL.registerComponent('pp-set-tracked-hand-joint-local-transform', {
 
         this._myTrackedHandJointPose = new PP.TrackedHandJointPose(this._myHandednessInternal, this._myJointIDInternal);
         this._myTrackedHandJointPose.setFixForward(this._myFixForward);
+        this._myTrackedHandJointPose.registerPoseUpdatedEventListener(this, this.onPoseUpdated.bind(this));
     },
     start: function () {
         this._myTrackedHandJointPose.start();
     },
     update: function (dt) {
         this._myTrackedHandJointPose.update(dt);
+    },
+    onPoseUpdated: function () {
+        let jointPoseTransform = PP.quat2_create()
+        return function onPoseUpdated() {
+            this.object.pp_setTransformLocalQuat(this._myTrackedHandJointPose.getTransformQuat(jointPoseTransform));
 
-        this.object.pp_setTransformLocalQuat(this._myTrackedHandJointPose.getTransformQuat());
-
-        if (this._mySetLocalScaleAsJointRadius) {
-            this.object.pp_setScaleLocal(this._myTrackedHandJointPose.getJointRadius());
+            if (this._mySetLocalScaleAsJointRadius) {
+                this.object.pp_setScaleLocal(this._myTrackedHandJointPose.getJointRadius());
+            }
         }
-    }
+    }()
 });

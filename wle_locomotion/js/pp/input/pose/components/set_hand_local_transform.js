@@ -5,15 +5,18 @@ WL.registerComponent('pp-set-hand-local-transform', {
     init: function () {
         this._myHandPose = new PP.HandPose(PP.InputUtils.getHandednessByIndex(this._myHandedness));
         this._myHandPose.setFixForward(this._myFixForward);
+        this._myHandPose.registerPoseUpdatedEventListener(this, this.onPoseUpdated.bind(this));
     },
     start: function () {
         this._myHandPose.start();
     },
-    update: function () {
-        let handPoseTransform = PP.quat2_create();
-        return function update(dt) {
-            this._myHandPose.update(dt);
+    update: function update(dt) {
+        this._myHandPose.update(dt);
+    },
+    onPoseUpdated: function () {
+        let handPoseTransform = PP.quat2_create()
+        return function onPoseUpdated() {
             this.object.pp_setTransformLocalQuat(this._myHandPose.getTransformQuat(handPoseTransform));
-        };
-    }(),
+        }
+    }()
 });

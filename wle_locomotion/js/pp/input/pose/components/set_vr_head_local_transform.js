@@ -4,15 +4,18 @@ WL.registerComponent('pp-set-vr-head-local-transform', {
     init: function () {
         this._myHeadPose = new PP.HeadPose();
         this._myHeadPose.setFixForward(this._myFixForward);
+        this._myHeadPose.registerPoseUpdatedEventListener(this, this.onPoseUpdated.bind(this));
     },
     start: function () {
         this._myHeadPose.start();
     },
-    update: function () {
+    update: function update(dt) {
+        this._myHeadPose.update(dt);
+    },
+    onPoseUpdated: function () {
         let headPoseTransform = PP.quat2_create();
-        return function update(dt) {
-            this._myHeadPose.update(dt);
+        return function onPoseUpdated() {
             this.object.pp_setTransformLocalQuat(this._myHeadPose.getTransformQuat(headPoseTransform));
-        };
-    }(),
+        }
+    }()
 });
