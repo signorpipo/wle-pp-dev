@@ -29,6 +29,7 @@ PlayerHeadManager = class PlayerHeadManager {
         this._mySessionChangeResyncHeadTransform = null;
         this._myBlurRecoverHeadTransform = null;
         this._myCurrentHeadTransformQuat = PP.quat2_create();
+        this._myPreviousHeadTransformQuat = PP.quat2_create();
 
         this._myDelaySessionChangeResyncCounter = 0; // needed because VR head takes some frames to get the tracked position
         this._myDelayBlurEndResyncCounter = 0;
@@ -174,7 +175,10 @@ PlayerHeadManager = class PlayerHeadManager {
             }
         }
 
-        this._myCurrentHead.pp_getTransformQuat(this._myCurrentHeadTransformQuat);
+        if (this.isSynced()) {
+            this._myPreviousHeadTransformQuat.quat2_copy(this._myCurrentHeadTransformQuat);
+            this._myCurrentHead.pp_getTransformQuat(this._myCurrentHeadTransformQuat);
+        }
 
         if (this._myParams.myDebugActive) {
             this._debugUpdate(dt);
@@ -247,7 +251,6 @@ PlayerHeadManager.prototype.getPositionFeet = function () {
 
 PlayerHeadManager.prototype.moveFeet = function (movement) {
     PP.myPlayerObjects.myPlayer.pp_translate(movement);
-    this._myCurrentHead.pp_getTransformQuat(this._myCurrentHeadTransformQuat);
 };
 
 PlayerHeadManager.prototype.rotateFeetQuat = function () {
@@ -276,7 +279,6 @@ PlayerHeadManager.prototype.rotateHeadQuat = function () {
 
             newHeadRotation = newHeadRotation.quat_rotateAxisRadians(Math.PI, newHeadRotation.quat_getUp(newHeadUp), newHeadRotation);
             PP.myPlayerObjects.myNonVRCamera.pp_setRotationQuat(newHeadRotation);
-            this._myCurrentHead.pp_getTransformQuat(this._myCurrentHeadTransformQuat);
         }
     };
 }();
@@ -345,7 +347,6 @@ PlayerHeadManager.prototype.teleportPlayerToHeadTransformQuat = function () {
         rotationToPerform = playerForward.vec3_rotationToPivotedQuat(headForwardNegated, playerUp, rotationToPerform);
 
         PP.myPlayerObjects.myPlayer.pp_rotateQuat(rotationToPerform);
-        this._myCurrentHead.pp_getTransformQuat(this._myCurrentHeadTransformQuat);
     };
 }();
 
@@ -495,8 +496,8 @@ PlayerHeadManager.prototype._onXRSessionBlurEnd = function () {
 
 PlayerHeadManager.prototype._onViewReset = function () {
     return function _onViewReset() {
-        if (this._mySessionActive) {
-            this.teleportPlayerToHeadTransformQuat(this._myCurrentHeadTransformQuat);
+        if (this._mySessionActive && this.isSynced()) {
+            this.teleportPlayerToHeadTransformQuat(this._myPreviousHeadTransformQuat);
         }
     };
 }();
