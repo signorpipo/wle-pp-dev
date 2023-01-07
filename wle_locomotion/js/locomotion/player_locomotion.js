@@ -69,6 +69,8 @@ PlayerLocomotion = class PlayerLocomotion {
 
             params.myHeadHeightOffset = this._myParams.myForeheadExtraHeight;
 
+            params.myDebugActive = false;
+
             this._myPlayerHeadManager = new PlayerHeadManager(params);
         }
 

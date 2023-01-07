@@ -14,6 +14,8 @@ PlayerHeadManagerParams = class PlayerHeadManagerParams {
         this.myHeadHeightOffset = 0;
         // can be used to always add a bit of height, for example to compensate the fact 
         // that the default height is actually the eye height and you may want to also add a forehead offset
+
+        this.myDebugActive = false;
     }
 };
 
@@ -173,6 +175,16 @@ PlayerHeadManager = class PlayerHeadManager {
         }
 
         this._myCurrentHead.pp_getTransformQuat(this._myCurrentHeadTransformQuat);
+
+        if (this._myParams.myDebugActive) {
+            this._debugUpdate(dt);
+        }
+    }
+
+    _debugUpdate(dt) {
+        PP.myDebugVisualManager.drawLineEnd(0, this.getPositionFeet(), this.getPositionHead(), [1, 0, 0, 1], 0.01);
+
+        console.error(this.getHeightEyes());
     }
 };
 
@@ -493,7 +505,9 @@ PlayerHeadManager.prototype._blurEndResync = function () {
     let playerUp = PP.vec3_create();
     let currentHeadPosition = PP.vec3_create();
     let recoverHeadPosition = PP.vec3_create();
-    let newHeadPosition = PP.vec3_create();
+    let flatCurrentHeadPosition = PP.vec3_create();
+    let flatRecoverHeadPosition = PP.vec3_create();
+    let recoverMovement = PP.vec3_create();
     let recoverHeadForward = PP.vec3_create();
     let currentHeadForward = PP.vec3_create();
     let rotationToPerform = PP.quat_create();
@@ -501,18 +515,18 @@ PlayerHeadManager.prototype._blurEndResync = function () {
         if (this._myBlurRecoverHeadTransform != null) {
             playerUp = PP.myPlayerObjects.myPlayer.pp_getUp(playerUp);
 
+            currentHeadPosition = this._myCurrentHead.pp_getPosition(currentHeadPosition);
             recoverHeadPosition = this._myBlurRecoverHeadTransform.quat2_getPosition(recoverHeadPosition);
 
-            let headHeight = this._getPositionHeight(this._myCurrentHead.pp_getPosition(currentHeadPosition));
-            let recoverHeadHeight = this._getPositionHeight(recoverHeadPosition);
+            flatCurrentHeadPosition = currentHeadPosition.vec3_removeComponentAlongAxis(playerUp, flatCurrentHeadPosition);
+            flatRecoverHeadPosition = recoverHeadPosition.vec3_removeComponentAlongAxis(playerUp, flatRecoverHeadPosition);
 
-            newHeadPosition = recoverHeadPosition.vec3_add(playerUp.vec3_scale(headHeight - recoverHeadHeight, newHeadPosition), newHeadPosition);
+            recoverMovement = flatRecoverHeadPosition.vec3_sub(flatCurrentHeadPosition, recoverMovement);
+            this.moveFeet(recoverMovement);
 
             recoverHeadForward = this._myBlurRecoverHeadTransform.quat2_getForward(recoverHeadForward);
             currentHeadForward = this._myCurrentHead.pp_getForward(currentHeadForward);
             rotationToPerform = currentHeadForward.vec3_rotationToPivotedQuat(recoverHeadForward, playerUp, rotationToPerform);
-
-            this.teleportPositionHead(newHeadPosition);
 
             if (this._myParams.myBlurEndResyncRotation) {
                 this.rotateFeetQuat(rotationToPerform);
