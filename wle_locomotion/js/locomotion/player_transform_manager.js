@@ -88,8 +88,18 @@ PlayerTransformManagerParams = class PlayerTransformManagerParams {
         this.myMinHeight = null;
         this.myMaxHeight = null;
 
+        // these and the callbacks does not makes much sense
+        // the colliding things are made to not sync the real position, but if the height is below and the body is not colliding
+        // there is not reason not to resync, even if u put the real back on the valid the height will stay the same
+        // if someone puts the head in the ground, there is no way for me to resync and make the head pop out sadly
+        // in this case u either accept that u can move without seeing, or stop moving until the obscure is on
         this.myIsBodyCollidingWhenHeightBelowValue = null;
         this.myIsBodyCollidingWhenHeightAboveValue = null;
+
+        this.myIsBodyCollidingExtraCheckCallback = null;      // Signature: callback(transformManager) -> bool
+        this.myIsLeaningExtraCheckCallback = null;            // Signature: callback(transformManager) -> bool
+        this.myIsHoppingExtraCheckCallback = null;            // Signature: callback(transformManager) -> bool
+        this.myIsFarExtraCheckCallback = null;                // Signature: callback(transformManager) -> bool
 
         this.myDebugActive = false;
     }
@@ -574,6 +584,8 @@ PlayerTransformManager.prototype.update = function () {
             if (this._myParams.mySyncEnabledFlagMap.get(PlayerTransformManagerSyncFlag.FAR)) {
                 if (this._myParams.myIsMaxDistanceFromRealToSyncEnabled && movementToCheck.vec3_length() > this._myParams.myMaxDistanceFromRealToSync) {
                     this._myIsFar = true;
+                } else if (this._myParams.myIsFarExtraCheckCallback != null && this._myParams.myIsFarExtraCheckCallback(this)) {
+                    this._myIsFar = true;
                 }
             }
 
@@ -589,8 +601,12 @@ PlayerTransformManager.prototype.update = function () {
                         this._myParams.myIsBodyCollidingWhenHeightAboveValue) != this._myRealMovementCollisionCheckParams.myHeight) {
                         this._myIsBodyColliding = true;
                     } else {
-                        this._myIsBodyColliding = false;
-                        newPosition.vec3_copy(collisionRuntimeParams.myNewPosition);
+                        if (this._myParams.myIsBodyCollidingExtraCheckCallback != null && this._myParams.myIsBodyCollidingExtraCheckCallback(this)) {
+                            this._myIsBodyColliding = true;
+                        } else {
+                            this._myIsBodyColliding = false;
+                            newPosition.vec3_copy(collisionRuntimeParams.myNewPosition);
+                        }
                     }
                 } else {
                     this._myIsBodyColliding = true;
@@ -690,12 +706,25 @@ PlayerTransformManager.prototype.update = function () {
                             } else {
                                 this._myIsLeaning = true;
                             }
+                        } else {
+                            this._myIsLeaning = false;
+                            this._myIsHopping = false;
 
+                            if (this._myParams.myIsLeaningExtraCheckCallback != null && this._myParams.myIsLeaningExtraCheckCallback(this)) {
+                                this._myIsLeaning = true;
+                            } else if (this._myParams.myIsHoppingExtraCheckCallback != null && this._myParams.myIsHoppingExtraCheckCallback(this)) {
+                                this._myIsHopping = true;
+                            }
+                        }
+
+                        if (this._myIsLeaning) {
                             let distance = movementToCheck.vec3_length();
                             if (this._myParams.myIsLeaningValidAboveDistance && distance > this._myParams.myLeaningValidDistance) {
                                 this._myIsLeaning = false;
                             }
+                        }
 
+                        if (this._myIsLeaning || this._myIsHopping) {
                             if (isLastOnGround && this._myParams.myIsFloatingValidIfRealOnGround) {
                                 this._myIsLeaning = false;
                                 this._myIsHopping = false;
@@ -703,9 +732,6 @@ PlayerTransformManager.prototype.update = function () {
                                 this._myIsLeaning = false;
                                 this._myIsHopping = false;
                             }
-                        } else {
-                            this._myIsLeaning = false;
-                            this._myIsHopping = false;
                         }
                     }
                 }
