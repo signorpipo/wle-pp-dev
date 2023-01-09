@@ -43,9 +43,12 @@ v Se non c'è movimento non applicare la gravità alla testa o addirittura, se �
 
 
 TEMP:
+- bug 2 frame in cui l'altezza era quella dell'ultimo reset
 - lerp posizione, si può evitare considerando la complicanza e poca utile, vedere poi
 	- il reset real to valid lo potrebbe anche fare con un lerp stile smooth teleport
 	- anche il valid to real potrebbe essere lerpato, avendo un valid ultetriore che è quello che synca e poi quello che lerpa e può anche collidere nel mentre che è quello che viene restituito come posizione
+
+- manager resync real to valid on session enter
 
 - non in vr session può evitare tutti i check perché tanto non ti puoi muovere, aggiungere un modo per farlo
 
