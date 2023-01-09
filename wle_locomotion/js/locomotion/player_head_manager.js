@@ -116,25 +116,22 @@ PlayerHeadManager = class PlayerHeadManager {
         return this._myDelaySessionChangeResyncCounter == 0 && this._myDelayBlurEndResyncCounter == 0 && !this._myDelayBlurEndResyncTimer.isRunning() && !this._mySessionBlurred;
     }
 
-    setHeight(height, setOnlyForActiveOne = true) {
+    setHeight(height, setOnlyForActiveOne = false) {
         if (!setOnlyForActiveOne || !this._mySessionActive) {
             this._myParams.myHeightOffsetNonVR = height;
         }
 
-        let isFloor = PP.XRUtils.isReferenceSpaceLocalFloor() || PP.XRUtils.isDeviceEmulated();
-        if (!setOnlyForActiveOne || (this._mySessionActive && !isFloor)) {
+        if (!setOnlyForActiveOne || this._mySessionActive) {
             this._myParams.myHeightOffsetVRWithoutFloor = height;
-        }
 
-        if (!setOnlyForActiveOne || (this._mySessionActive && isFloor)) {
             if (this._myParams.myHeightOffsetVRWithFloor == null) {
                 this._myParams.myHeightOffsetVRWithFloor = 0;
             }
-
+            let isFloor = PP.XRUtils.isReferenceSpaceLocalFloor() || PP.XRUtils.isDeviceEmulated();
             if (this._mySessionActive && isFloor) {
                 this._myParams.myHeightOffsetVRWithFloor = this._myParams.myHeightOffsetVRWithFloor + (height - this.getHeight());
-            } else {
-                this._myParams.myHeightOffsetVRWithFloor = 0;
+            } else if (!this._mySessionActive) {
+                this._myParams.myNextEnterSessionFloorHeight = height;
             }
         }
 
@@ -566,27 +563,32 @@ PlayerHeadManager.prototype._blurEndResync = function () {
     let rotationToPerform = PP.quat_create();
     return function _blurEndResync() {
         if (this._myBlurRecoverHeadTransform != null) {
-            playerUp = PP.myPlayerObjects.myPlayer.pp_getUp(playerUp);
+            if (this._mySessionChangeResyncHeadTransform != null) {
+                this._myBlurRecoverHeadTransform = null;
+                this._sessionChangeResync();
+            } else {
+                playerUp = PP.myPlayerObjects.myPlayer.pp_getUp(playerUp);
 
-            currentHeadPosition = this._myCurrentHead.pp_getPosition(currentHeadPosition);
-            recoverHeadPosition = this._myBlurRecoverHeadTransform.quat2_getPosition(recoverHeadPosition);
+                currentHeadPosition = this._myCurrentHead.pp_getPosition(currentHeadPosition);
+                recoverHeadPosition = this._myBlurRecoverHeadTransform.quat2_getPosition(recoverHeadPosition);
 
-            flatCurrentHeadPosition = currentHeadPosition.vec3_removeComponentAlongAxis(playerUp, flatCurrentHeadPosition);
-            flatRecoverHeadPosition = recoverHeadPosition.vec3_removeComponentAlongAxis(playerUp, flatRecoverHeadPosition);
+                flatCurrentHeadPosition = currentHeadPosition.vec3_removeComponentAlongAxis(playerUp, flatCurrentHeadPosition);
+                flatRecoverHeadPosition = recoverHeadPosition.vec3_removeComponentAlongAxis(playerUp, flatRecoverHeadPosition);
 
-            recoverMovement = flatRecoverHeadPosition.vec3_sub(flatCurrentHeadPosition, recoverMovement);
-            this.moveFeet(recoverMovement);
+                recoverMovement = flatRecoverHeadPosition.vec3_sub(flatCurrentHeadPosition, recoverMovement);
+                this.moveFeet(recoverMovement);
 
-            recoverHeadForward = this._myBlurRecoverHeadTransform.quat2_getForward(recoverHeadForward);
-            currentHeadForward = this._myCurrentHead.pp_getForward(currentHeadForward);
-            rotationToPerform = currentHeadForward.vec3_rotationToPivotedQuat(recoverHeadForward, playerUp, rotationToPerform);
+                recoverHeadForward = this._myBlurRecoverHeadTransform.quat2_getForward(recoverHeadForward);
+                currentHeadForward = this._myCurrentHead.pp_getForward(currentHeadForward);
+                rotationToPerform = currentHeadForward.vec3_rotationToPivotedQuat(recoverHeadForward, playerUp, rotationToPerform);
 
-            if (this._myParams.myBlurEndResyncRotation) {
-                this.rotateFeetQuat(rotationToPerform);
+                if (this._myParams.myBlurEndResyncRotation) {
+                    this.rotateFeetQuat(rotationToPerform);
+                }
+
+                this._myBlurRecoverHeadTransform = null;
             }
         }
-
-        this._myBlurRecoverHeadTransform = null;
     };
 }();
 
@@ -607,7 +609,6 @@ PlayerHeadManager.prototype._sessionChangeResync = function () {
     let rotationToPerform = PP.quat_create();
     let playerPosition = PP.vec3_create();
     let newPlayerPosition = PP.vec3_create();
-    let newNonVRCameraPosition = PP.vec3_create();
     let fixedHeadRight = PP.vec3_create();
     let fixedHeadRightNegate = PP.vec3_create();
     let fixedHeadUp = PP.vec3_create();
@@ -630,23 +631,28 @@ PlayerHeadManager.prototype._sessionChangeResync = function () {
                 this.moveFeet(resyncMovement);
 
                 let isFloor = PP.XRUtils.isReferenceSpaceLocalFloor() || PP.XRUtils.isDeviceEmulated();
-                if (isFloor && (this._myParams.myNextEnterSessionFloorHeight != null || this._myParams.myEnterSessionFloorHeight != null)) {
-                    let floorHeight = (this._myParams.myNextEnterSessionFloorHeight != null) ? this._myParams.myNextEnterSessionFloorHeight : this._myParams.myEnterSessionFloorHeight;
-                    let currentHeadHeight = this._getPositionHeight(currentHeadPosition);
-                    if (this._myParams.myHeightOffsetVRWithFloor == null) {
-                        this._myParams.myHeightOffsetVRWithFloor = 0;
-                    }
-                    this._myParams.myHeightOffsetVRWithFloor = this._myParams.myHeightOffsetVRWithFloor + (floorHeight - currentHeadHeight);
-                    this._updateHeightOffset();
-                } else if (this._myParams.myEnterSessionResyncHeight || this._myParams.myNextEnterSessionResyncHeight) {
+                if (this._myParams.myEnterSessionResyncHeight || this._myParams.myNextEnterSessionResyncHeight) {
                     this._myParams.myNextEnterSessionResyncHeight = false;
                     let resyncHeadHeight = this._getPositionHeight(resyncHeadPosition);
                     let currentHeadHeight = this._getPositionHeight(currentHeadPosition);
+
                     this._myParams.myHeightOffsetVRWithoutFloor = resyncHeadHeight + this._myParams.myForeheadExtraHeight;
                     if (this._myParams.myHeightOffsetVRWithFloor == null) {
                         this._myParams.myHeightOffsetVRWithFloor = 0;
                     }
                     this._myParams.myHeightOffsetVRWithFloor = this._myParams.myHeightOffsetVRWithFloor + (resyncHeadHeight - currentHeadHeight);
+
+                    this._updateHeightOffset();
+                } else if (isFloor && (this._myParams.myNextEnterSessionFloorHeight != null || this._myParams.myEnterSessionFloorHeight != null)) {
+                    let floorHeight = (this._myParams.myNextEnterSessionFloorHeight != null) ? this._myParams.myNextEnterSessionFloorHeight : this._myParams.myEnterSessionFloorHeight;
+                    floorHeight -= this._myParams.myForeheadExtraHeight;
+                    let currentHeadHeight = this._getPositionHeight(currentHeadPosition);
+
+                    if (this._myParams.myHeightOffsetVRWithFloor == null) {
+                        this._myParams.myHeightOffsetVRWithFloor = 0;
+                    }
+                    this._myParams.myHeightOffsetVRWithFloor = this._myParams.myHeightOffsetVRWithFloor + (floorHeight - currentHeadHeight);
+
                     this._updateHeightOffset();
                 }
 
@@ -750,21 +756,23 @@ PlayerHeadManager.prototype._sessionChangeResync = function () {
 
                 PP.myPlayerObjects.myNonVRCamera.pp_setRotationQuat(resyncHeadRotation);
             }
-        }
 
-        if (this._mySessionActive) {
-            this._myParams.myNextEnterSessionFloorHeight = null;
-            this._myFirstEnterSessionResyncDone = true;
-        }
+            if (this._mySessionActive) {
+                this._myParams.myNextEnterSessionFloorHeight = null;
+                this._myFirstEnterSessionResyncDone = true;
+            }
 
-        this._mySessionChangeResyncHeadTransform = null;
+            this._mySessionChangeResyncHeadTransform = null;
+        }
     };
 }();
 
 PlayerHeadManager.prototype._updateHeightOffset = function () {
     return function _updateHeightOffset() {
         if (this._mySessionActive) {
-            if (PP.XRUtils.isReferenceSpaceLocalFloor() || PP.XRUtils.isDeviceEmulated()) {
+            if (PP.XRUtils.isDeviceEmulated()) {
+                this._setPlayerPivotHeightOffset(0, 0);
+            } else if (PP.XRUtils.isReferenceSpaceLocalFloor()) {
                 this._setPlayerPivotHeightOffset(this._myParams.myHeightOffsetVRWithFloor, 0);
             } else {
                 this._setPlayerPivotHeightOffset(this._myParams.myHeightOffsetVRWithoutFloor, this._myParams.myForeheadExtraHeight);
