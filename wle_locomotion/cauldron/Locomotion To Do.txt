@@ -34,16 +34,15 @@ v Se non c'è movimento non applicare la gravità alla testa o addirittura, se �
 - Componente character-controller che semplicemente ha la collisione e puoi dirgli di fare un movimento e lui lo corregge
 	
 - rimuovere tutti i 0.0001 per cose come l'ignore angle, complicano un po' tutto e alla fine se uno vuole può mettere il parametro leggermente più altro lui stesso
+
+- avere flag verticali e orizzontali di collisioni, per esempio i character potresti volerci collidere solo orizzontalmente ma non verticalmente
+	- questo forse ha senso solo nel momento in cui ho introdotto il meccanismo di uscire dalle collisioni, altrimenti potresti entrare in un character dall'alto
 	
 
 - REFACTOR
 
 
 TEMP:
-- fare prototipo view reset bug webxr discord
-- valid height bug, last valid height is not valid, like almost valid
-- forse player head potrebbe avere le altezze/offset e le stta lui invece che il player height component sull'offset
-
 - lerp posizione, si può evitare considerando la complicanza e poca utile, vedere poi
 	- il reset real to valid lo potrebbe anche fare con un lerp stile smooth teleport
 	- anche il valid to real potrebbe essere lerpato, avendo un valid ultetriore che è quello che synca e poi quello che lerpa e può anche collidere nel mentre che è quello che viene restituito come posizione
@@ -68,6 +67,13 @@ TEMP:
 	- o come su lol, sono comunque visibili, ma se premi si spostano dove premi, anche se è già su un thumbstick, anche se qui si potrebbe fare l'opzione che se premi sul thumbstick rimangono li
 	
 
+
+
+
+
+
+
+
 LOCOMOTION EXTRA HARD:
 - lo sliding potrebbe essere spostato come ultima cosa
 	- è sicuramente piu pesante ma si può magari fare che fallbacka su quello leggere con un parametro
@@ -75,6 +81,7 @@ LOCOMOTION EXTRA HARD:
 	- magari poter specificare una direzione di sliding anche per tipo non c'è terreno, cercando di capire se c'è un meno terreno a destra o sinistra
 
 - cosa succede se finisci dentro una collisione, caso possibile un boss ti salta addosso e ci finisci dentro
+	- non è così impossibile, soprattutto se ci sono npc che si possono muovere e saltarti addosso, o altre persone con cui collidi
 	- possibilità di aggiungere flag dei physx che vuoi ignorare se ci sei dentro
 	- collezionare durante gli oggetti ignorati e ignorarli ulteriormente anche se hittano da fuori
 		- in generale, fare sempre tutti i cast anche se uno hitta, per collezionare tutte le info per bene

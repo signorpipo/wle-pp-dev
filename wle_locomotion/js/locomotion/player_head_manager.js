@@ -11,7 +11,11 @@ PlayerHeadManagerParams = class PlayerHeadManagerParams {
         this.myExitSessionAdjustMaxVerticalAngle = true;
         this.myExitSessionMaxVerticalAngle = 90;
 
-        this.myHeadHeightOffset = 0;
+        this.myHeightOffsetVRWithFloor = null;
+        this.myHeightOffsetVRWithoutFloor = null;
+        this.myHeightOffsetNonVR = null;
+
+        this.myForeheadExtraHeight = 0;
         // can be used to always add a bit of height, for example to compensate the fact 
         // that the default height is actually the eye height and you may want to also add a forehead offset
 
@@ -45,6 +49,8 @@ PlayerHeadManager = class PlayerHeadManager {
     }
 
     start() {
+        this._setPlayerPivotHeightOffset(this._myParams.myHeightOffsetNonVR, this._myParams.myForeheadExtraHeight);
+
         if (WL.xrSession) {
             this._onXRSessionStart(WL.xrSession);
         }
@@ -61,7 +67,7 @@ PlayerHeadManager = class PlayerHeadManager {
     }
 
     getHeightHead() {
-        return this.getHeightEyes() + this._myParams.myHeadHeightOffset;
+        return this.getHeightEyes() + this._myParams.myForeheadExtraHeight;
     }
 
     getHeightEyes() {
@@ -419,6 +425,12 @@ PlayerHeadManager.prototype._onXRSessionStart = function () {
 
         this._mySessionActive = true;
         this._mySessionBlurred = false;
+
+        if (PP.XRUtils.isReferenceSpaceLocalFloor() || PP.XRUtils.isDeviceEmulated()) {
+            this._setPlayerPivotHeightOffset(this._myParams.myHeightOffsetVRWithFloor, 0);
+        } else {
+            this._setPlayerPivotHeightOffset(this._myParams.myHeightOffsetVRWithoutFloor, this._myParams.myForeheadExtraHeight);
+        }
     };
 }();
 
@@ -451,6 +463,8 @@ PlayerHeadManager.prototype._onXRSessionEnd = function () {
 
         this._mySessionActive = false;
         this._mySessionBlurred = false;
+
+        this._setPlayerPivotHeightOffset(this._myParams.myHeightOffsetNonVR, this._myParams.myForeheadExtraHeight);
     };
 }();
 
@@ -685,6 +699,15 @@ PlayerHeadManager.prototype._sessionChangeResync = function () {
     };
 }();
 
+PlayerHeadManager.prototype._setPlayerPivotHeightOffset = function () {
+    let playerPivotPosition = PP.vec3_create();
+    return function _setPlayerPivotHeightOffset(offset, amountToRemove) {
+        if (offset != null) {
+            playerPivotPosition = PP.myPlayerObjects.myPlayerPivot.pp_getPositionLocal(playerPivotPosition);
+            PP.myPlayerObjects.myPlayerPivot.pp_setPositionLocal([playerPivotPosition[0], offset - amountToRemove, playerPivotPosition[2]]);
+        }
+    }
+}();
 
 
 Object.defineProperty(PlayerHeadManager.prototype, "getHeightEyes", { enumerable: false });
@@ -704,3 +727,4 @@ Object.defineProperty(PlayerHeadManager.prototype, "_onXRSessionBlurEnd", { enum
 Object.defineProperty(PlayerHeadManager.prototype, "_onViewReset", { enumerable: false });
 Object.defineProperty(PlayerHeadManager.prototype, "_blurEndResync", { enumerable: false });
 Object.defineProperty(PlayerHeadManager.prototype, "_sessionChangeResync", { enumerable: false });
+Object.defineProperty(PlayerHeadManager.prototype, "_setPlayerPivotHeightOffset", { enumerable: false });

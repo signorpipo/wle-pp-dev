@@ -98,17 +98,7 @@
         },
         "20": {
             "name": "Pivot",
-            "parent": "19",
-            "components": [
-                {
-                    "type": "pp-set-player-height",
-                    "pp-set-player-height": {
-                        "_mySetOnlyOnStart": true,
-                        "_myEyesHeight": 1.6499999
-                    },
-                    "active": true
-                }
-            ]
+            "parent": "19"
         },
         "21": {
             "name": "Non VR Camera",

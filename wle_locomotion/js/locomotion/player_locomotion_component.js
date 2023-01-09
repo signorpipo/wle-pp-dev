@@ -44,7 +44,7 @@ WL.registerComponent('player-locomotion', {
 
         params.myTeleportParableStartReferenceObject = this._myTeleportParableStartReferenceObject;
 
-        params.myForeheadExtraHeight = 0.15;
+        params.myForeheadExtraHeight = 0.1;
 
         params.myTeleportPositionObject = this._myTeleportPositionObject;
 

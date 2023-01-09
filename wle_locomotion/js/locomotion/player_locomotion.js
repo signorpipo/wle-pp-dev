@@ -67,7 +67,11 @@ PlayerLocomotion = class PlayerLocomotion {
             params.myExitSessionAdjustMaxVerticalAngle = true;
             params.myExitSessionMaxVerticalAngle = 90;
 
-            params.myHeadHeightOffset = this._myParams.myForeheadExtraHeight;
+            params.myHeightOffsetVRWithFloor = 0;
+            params.myHeightOffsetVRWithoutFloor = 1.75;
+            params.myHeightOffsetNonVR = 1.75;
+
+            params.myForeheadExtraHeight = this._myParams.myForeheadExtraHeight;
 
             params.myDebugActive = false;
 
@@ -134,13 +138,13 @@ PlayerLocomotion = class PlayerLocomotion {
             params.myObscureFadeEasingFunction = PP.EasingFunction.linear;
             params.myObscureLevelRelativeDistanceEasingFunction = PP.EasingFunction.linear;
 
-            params.myDistanceToStartObscureWhenBodyColliding = 1;
-            params.myDistanceToStartObscureWhenHeadColliding = 1;
+            params.myDistanceToStartObscureWhenBodyColliding = 0.2;
+            params.myDistanceToStartObscureWhenHeadColliding = 0;
             params.myDistanceToStartObscureWhenFloating = 1;
             params.myDistanceToStartObscureWhenFar = 1;
 
-            params.myRelativeDistanceToMaxObscureWhenBodyColliding = 5;
-            params.myRelativeDistanceToMaxObscureWhenHeadColliding = 5;
+            params.myRelativeDistanceToMaxObscureWhenBodyColliding = 0.5;
+            params.myRelativeDistanceToMaxObscureWhenHeadColliding = 0.1;
             params.myRelativeDistanceToMaxObscureWhenFloating = 5;
             params.myRelativeDistanceToMaxObscureWhenFar = 5;
 
