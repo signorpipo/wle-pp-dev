@@ -1,0 +1,167 @@
+v Visualizzare teleport
+v Usare materiali per valido e non valido
+v Teleport contro "muro" prova indietro del raggio + 0.01
+v Visualizzare linea che va verso il basso se la distanza fra il punto della curva e il teleport è maggiore di X
+v Aggiungere floor ray che serve per capire infine se il punto è proprio un floor così da poter avere il raggio che si blocca ai muri tutti ma poi se non è un floor specifico allora no per più controllo
+v Refactor Detection e Visual in un file separato
+
+v Aggiungere shift turn (ti giri ma lerpa non è istantaneo)
+
+v Teleport shift / teleport blink
+v Fare sfera invertita con materiale flat opaque che non va il depth check sempre davanti, aggiungere il materiale alle default resources
+v mettere che puoi usar euna mesh al posto della mesh di default per il teleport
+
+v Creare il gestore delle collisioni quando la testa entra in una collisione
+v Ultima posizione valida che non collide (o che è on ground magari, così se ti sporgi riparti da un punto corretto come se stessi collidendo)
+v Se ti sposti troppo dall'ultima posizione valida anche se la testa è fuori diventa oscurata
+
+v Se non c'è movimento non applicare la gravità alla testa o addirittura, se è snappato oppure sta volando non snappare proprio
+	v questa potrebbe essere una opzioni, o piuttosto applicare la gravità, senza movimento, solo se la testa si allontana più di un tot e finché nel punto "originale" c'è ancora il ground
+	v quando muovi, se sei entro la distanza, riparti dal punto non gravitoso quasi come se stessi collidendo
+
+- Provare a lerpare il movimento verticale quando c'è lo snappare (magari snappa direttamente nel collision check, cioè esce di un po' già li ma non totalmente?)
+	- il position check già ammette che dover fare snap sia comunque una posizione ok
+- Aggiungere speed/acceleration nella smooth (tempo per raggiungere max speed, tempo per raggiungere 0)
+
+- Collision manager con character gravity e gravity direction globali, usarli in smooth e teleport
+	- mettere la gravità fuori da locomotion e teleport, e applicarla all'ultima posizione valida se sta collidendo
+
+- Se muovi lo stick e non era in una posizione valida torna alla posizione valida (teletrasporto, se funziona)
+
+- teleport e smooth potrebbero non effettuare effettivamente il check, ma piuttosto richiedere il movimento / teleport (fare i check per decidere se farlo o meno ok) così da rientrare nel flow delle altre cose che vogliono far muovere nel caso
+
+- Pensare a come potrebbe essere un componente esposto semplice player character controller, da li pensare a come riaggiustare i parametri
+- Componente character-controller che semplicemente ha la collisione e puoi dirgli di fare un movimento e lui lo corregge
+	
+- rimuovere tutti i 0.0001 per cose come l'ignore angle, complicano un po' tutto e alla fine se uno vuole può mettere il parametro leggermente più altro lui stesso
+	
+
+- REFACTOR
+
+
+TEMP:
+- fare prototipo view reset bug webxr discord
+- valid height bug, last valid height is not valid, like almost valid
+- forse player head potrebbe avere le altezze/offset e le stta lui invece che il player height component sull'offset
+
+- lerp posizione, si può evitare considerando la complicanza e poca utile, vedere poi
+	- il reset real to valid lo potrebbe anche fare con un lerp stile smooth teleport
+	- anche il valid to real potrebbe essere lerpato, avendo un valid ultetriore che è quello che synca e poi quello che lerpa e può anche collidere nel mentre che è quello che viene restituito come posizione
+
+- non in vr session può evitare tutti i check perché tanto non ti puoi muovere, aggiungere un modo per farlo
+
+- create a surface info and sliding info struct and u get those, it's basically what u really want apart for specific things that u get by asking for the collision runtime right when u ask for the move
+
+- a succesful teleport just override everything, a failed nothing, a succesful movement override the sliding if there was an horizontal part, otherwise not, the ground is always overridden if there was at least a movement performed
+
+- maybe the transform manager should only work for the overall transform, with the head on another class that also manage the hands?
+	- o forse, sebbene l'idea di avere una cosa un po' generica che ti fa il servizio di darti l'ultima valida non collidosa, fino alle mani è piu comodo che sia tutta nel
+	  player character controller
+	- se funziona solo per la feet transform poi ne creo un'altra che funziona genericamente prendendo una posizione con una callback e dandoti l'ultima valida, che puoi usare per la testa o come vuoi
+	  facilmente, poi magari il character controller o qualcosa che wrappa tutto ti da tutto insieme
+
+- aggiungere un modo al transform manager per sapere se la transform valida sta collidendo, così se vuoi vedendolo dici ok c'è un problema non risolvibili teletrasporta in un punto safe
+
+
+- physx collector can use a physx list, also add physx collision data and use that in the collision array
+- provare a fare che i thumbstickspariscono e appaiono solo se premi nella metà dello schermo (pp-virtual-thumbstick, aggiunggere visible callback, se è nulla è sempre visible)
+	- o come su lol, sono comunque visibili, ma se premi si spostano dove premi, anche se è già su un thumbstick, anche se qui si potrebbe fare l'opzione che se premi sul thumbstick rimangono li
+	
+
+LOCOMOTION EXTRA HARD:
+- lo sliding potrebbe essere spostato come ultima cosa
+	- è sicuramente piu pesante ma si può magari fare che fallbacka su quello leggere con un parametro
+	- così può slidare anche in quelle situazioni in cui non sliderebbe tipo se la superficie è troppo steep
+	- magari poter specificare una direzione di sliding anche per tipo non c'è terreno, cercando di capire se c'è un meno terreno a destra o sinistra
+
+- cosa succede se finisci dentro una collisione, caso possibile un boss ti salta addosso e ci finisci dentro
+	- possibilità di aggiungere flag dei physx che vuoi ignorare se ci sei dentro
+	- collezionare durante gli oggetti ignorati e ignorarli ulteriormente anche se hittano da fuori
+		- in generale, fare sempre tutti i cast anche se uno hitta, per collezionare tutte le info per bene
+	- forse è necessario fare un "position check" iniziale, dove prendi un po' di dati del tipo se stai collidendo proprio dal centro o con qualcosa di "troppo vicino"
+	- se collidi con qualcosa di troppo vicino, magari ignori le collisioni con quell'oggetto (o il suo layer) con tutti i raggi a parte quello centrale
+		- questo ti permetterebbe di spostarti "intorno" all'oggetto ma senza entrarci
+		- lo slide comunque utilizzerebbe tutti i check, potrebbe anche quello usare questa tecnica (magari parametro) ma essendo una collisione sarebbe meglio di no, questo per far si che tu puoi effettivamente tirartene manualmente, ma senza approfittare dello slide per ficcarti in situazioni ancora piu strane, in più lo slide potrebbe aiutare a uscirne piano piano se c'è possibilità
+	- se sei già dentro allora ignora anche quello centrale, niente slide
+	- questo vale in particolare per la collisione orizzontale
+	- il controllo iniziale della posizione dovrebbe farlo verso l'ultima direzione valida in cui non c'erano collisioni orizzontali
+		- se nell'ultima direzione valida andava bene e va ancora bene, allora muoviti li
+	- magari fintanto che c'è movimento verticale non permettere questo tipo di fix?
+	- per le collisioni verticali invece, utilizzare comunque il movement fix per snappare etc.. se possibile, dopo di che, 
+		- se già collideva fuori (ma non il centrale) fintanto che il centrale è apposto va bene
+		- se collide con dei raggi ma completamente dentro la collisione, fintanto che ce n'è uno solo che è fuori buono va bene
+		- se collidono tutti fuori (o tutti dentro) a quel punto, come epr l'orizzontale, ignora il verticale per quell'oggetto/layer
+		- con il vertical, che è più semplice, volendo uno potrebbe dire che quelli che non collidono di raggi devono rimanere sani, non solo quello centrale
+	- si potrebbe pensare che in questi casi magari il movimento verticale (escluso quello di snap) viene sempre rimosso fino a che non collide
+		- per evitare di cadere all'infinito, però è un po' una assunzione un po' così, magari finendo di cadere uscivi dalla collisione
+	- se prova a slidare, e l'ultima direzione valida è una di slide possibile (sta nei 90 gradi) provare anche quella esplicitamente per slidare nella direzione giusta
+	- per l'orizzontale si potrebbe aggiungere che non solo il centrale deve essere libero, ma la collisione più vicina non deve essere più vicina di prima
+		- questo potrebbe rendere più complicato uscire dalle collisioni in cui tu sei fra due muri paralleli, ma se puoi slidare e quello può andare nella direzione ultima valida allora dovrebbe funzionare lo stesso
+		- eviterebbe di collidere ancora di più consentendo però di poter uscire
+		- non pul avere tolleranza verso il basso perché altrimenti piano piano potresti collidere di più
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+
+
+
+OLD:
+- Teleport inside VR session
+- Teleport su un muro si ferma e prova un raggio verso la terra indietro del raggio del character
+- Visualize Teleport
+- Mobile Input Support
+- Instant/Blink/Linear Teleport
+- Head/Body inside collision hide view
+- Last valid non collision position (also for when the head move in places where it could not stay)
+- Testa che si allontana senza muovere lo stick tipo ad un edge per guardare sotto?
+- Smooth Locomotion acceleration/speed support
+- Locomotion Refactor (this is going to take a bit, but it should be in a usable state even before)
+- Lerpare se snappa?
+- Se non muovi stick non applicare movimenti verticali fino a una distanza dove attiva la gravità?
+
+
