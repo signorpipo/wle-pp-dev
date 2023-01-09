@@ -61,7 +61,8 @@ PlayerLocomotion = class PlayerLocomotion {
             params.myBlurEndResyncEnabled = true;
             params.myBlurEndResyncRotation = true;
 
-            params.myEnterSessionResyncHeight = false;
+            //params.myNextEnterSessionFloorHeight = 3;
+            params.myEnterSessionResyncHeight = true;
             params.myExitSessionResyncHeight = false;
             params.myExitSessionResyncVerticalAngle = true;
             params.myExitSessionRemoveRightTilt = true;
