@@ -42,6 +42,8 @@ v Se non c'è movimento non applicare la gravità alla testa o addirittura, se �
 
 
 TEMP:
+- non vr camera height issue when exiting session but non vr height is higher and collide
+- rotate feet head keep up
 	
 - resync on move/teleport
 

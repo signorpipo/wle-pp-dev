@@ -118,6 +118,9 @@ PlayerLocomotion = class PlayerLocomotion {
             params.myIsBodyCollidingWhenHeightBelowValue = null;
             params.myIsBodyCollidingWhenHeightAboveValue = null;
 
+            params.myResetToValidOnEnterSession = true;
+            params.myResetToValidOnExitSession = true;
+
             params.myDebugActive = true;
 
             this._myPlayerTransformManager = new PlayerTransformManager(params);

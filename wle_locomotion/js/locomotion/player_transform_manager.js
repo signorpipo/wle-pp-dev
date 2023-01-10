@@ -33,10 +33,10 @@ PlayerTransformManagerParams = class PlayerTransformManagerParams {
         this.mySyncPositionHeadFlagMap.set(PlayerTransformManagerSyncFlag.FLOATING, false);
 
         this.mySyncRotationFlagMap = new Map();
-        this.mySyncRotationFlagMap.set(PlayerTransformManagerSyncFlag.BODY_COLLIDING, false);
+        this.mySyncRotationFlagMap.set(PlayerTransformManagerSyncFlag.BODY_COLLIDING, true);
         this.mySyncRotationFlagMap.set(PlayerTransformManagerSyncFlag.HEAD_COLLIDING, false);
-        this.mySyncRotationFlagMap.set(PlayerTransformManagerSyncFlag.FAR, false);
-        this.mySyncRotationFlagMap.set(PlayerTransformManagerSyncFlag.FLOATING, false);
+        this.mySyncRotationFlagMap.set(PlayerTransformManagerSyncFlag.FAR, true);
+        this.mySyncRotationFlagMap.set(PlayerTransformManagerSyncFlag.FLOATING, true);
 
         this.mySyncHeightFlagMap = new Map();
         this.mySyncHeightFlagMap.set(PlayerTransformManagerSyncFlag.BODY_COLLIDING, true);
@@ -93,13 +93,16 @@ PlayerTransformManagerParams = class PlayerTransformManagerParams {
         // there is not reason not to resync, even if u put the real back on the valid the height will stay the same
         // if someone puts the head in the ground, there is no way for me to resync and make the head pop out sadly
         // in this case u either accept that u can move without seeing, or stop moving until the obscure is on
-        this.myIsBodyCollidingWhenHeightBelowValue = null;
+        this.myIsBodyCollidingWhenHeightBelowValue = null; // could be removed and added with the custom check callback if u want it
         this.myIsBodyCollidingWhenHeightAboveValue = null;
 
         this.myIsBodyCollidingExtraCheckCallback = null;      // Signature: callback(transformManager) -> bool
         this.myIsLeaningExtraCheckCallback = null;            // Signature: callback(transformManager) -> bool
         this.myIsHoppingExtraCheckCallback = null;            // Signature: callback(transformManager) -> bool
         this.myIsFarExtraCheckCallback = null;                // Signature: callback(transformManager) -> bool
+
+        this.myResetToValidOnEnterSession = false;
+        this.myResetToValidOnExitSession = false;
 
         this.myDebugActive = false;
     }
@@ -136,10 +139,18 @@ PlayerTransformManager = class PlayerTransformManager {
         this._myLastValidMovementDirection = PP.vec3_create();
         this._myIsRealPositionValid = false;
         this._myIsPositionValid = false;
+
+        this._myResetRealOnSynced = false;
     }
 
     start() {
         this.resetToReal(true);
+
+        if (WL.xrSession) {
+            this._onXRSessionStart(true, WL.xrSession);
+        }
+        WL.onXRSessionStart.push(this._onXRSessionStart.bind(this, false));
+        WL.onXRSessionEnd.push(this._onXRSessionEnd.bind(this));
     }
 
     // update should be before to check the new valid transform and if the head new transform is fine
@@ -497,6 +508,18 @@ PlayerTransformManager = class PlayerTransformManager {
         params.myDebugMovementActive = false;
     }
 
+    _onXRSessionStart(manualStart, session) {
+        if (this._myParams.myResetToValidOnEnterSession) {
+            this._myResetRealOnSynced = true;
+        }
+    }
+
+    _onXRSessionEnd() {
+        if (this._myParams.myResetToValidOnExitSession) {
+            this._myResetRealOnSynced = true;
+        }
+    }
+
     _debugUpdate(dt) {
         PP.myDebugVisualManager.drawPoint(0, this._myValidPosition, [1, 0, 0, 1], 0.05);
         PP.myDebugVisualManager.drawLineEnd(0, this._myValidPosition, this.getPositionReal(), [1, 0, 0, 1], 0.05);
@@ -524,16 +547,19 @@ PlayerTransformManager.prototype.getDistanceToRealHead = function () {
 PlayerTransformManager.prototype.resetReal = function () {
     let realUp = PP.vec3_create();
     let validUp = PP.vec3_create();
+    let position = PP.vec3_create();
+    let rotationQuat = PP.quat_create();
     return function resetReal(resetRotation = false, updateRealFlags = false) {
         let playerHeadManager = this.getPlayerHeadManager();
 
-        playerHeadManager.teleportPositionFeet(this.getPosition());
+        playerHeadManager.teleportPositionFeet(this.getPosition(position));
 
-        realUp = this.getPlayerHeadManager().getRotationFeetQuat().quat_getUp(realUp);
-        validUp = this.getRotationQuat().quat_getUp(validUp);
+        realUp = this.getPlayerHeadManager().getRotationFeetQuat(rotationQuat).quat_getUp(realUp);
+        validUp = this.getRotationQuat(rotationQuat).quat_getUp(validUp);
 
         if (resetRotation || (realUp.vec3_angle(validUp) > Math.PP_EPSILON_DEGREES && this._myParams.myResetRealResetRotationIfUpChanged)) {
-            playerHeadManager.setRotationFeetQuat(this.getRotationQuat());
+            playerHeadManager.setRotationFeetQuat(this.getRotationQuat(rotationQuat));
+
         }
 
         if (updateRealFlags) {
@@ -549,7 +575,14 @@ PlayerTransformManager.prototype.update = function () {
     let horizontalDirection = PP.vec3_create();
     let rotationQuat = PP.quat_create();
     return function update(dt) {
-        //#TODO this should update ground and ceiling info but not sliding info
+        //#TODO this should update ground and ceiling info but not sliding info        
+
+        if (this._myResetRealOnSynced) {
+            if (this.getPlayerHeadManager().isSynced()) {
+                this._myResetRealOnSynced = false;
+                this.resetReal(true, false);
+            }
+        }
 
         this._updateReal(dt);
 
