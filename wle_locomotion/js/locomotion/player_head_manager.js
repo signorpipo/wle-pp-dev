@@ -298,16 +298,18 @@ PlayerHeadManager.prototype.moveFeet = function (movement) {
 PlayerHeadManager.prototype.rotateFeetQuat = function () {
     let currentHeadPosition = PP.vec3_create();
     let newHeadPosition = PP.vec3_create();
-    let adjustmentMovement = PP.vec3_create();
+    let headAdjustmentMovement = PP.vec3_create();
     return function rotateFeetQuat(rotationQuat) {
         currentHeadPosition = this._myCurrentHead.pp_getPosition(currentHeadPosition);
 
         PP.myPlayerObjects.myPlayer.pp_rotateAroundQuat(rotationQuat, currentHeadPosition);
 
         newHeadPosition = this._myCurrentHead.pp_getPosition(newHeadPosition);
-        adjustmentMovement = currentHeadPosition.vec3_sub(newHeadPosition, adjustmentMovement);
 
-        this.moveFeet(adjustmentMovement);
+        headAdjustmentMovement = currentHeadPosition.vec3_sub(newHeadPosition, headAdjustmentMovement);
+        if (headAdjustmentMovement.vec3_length() > 0.00001) {
+            this.moveFeet(headAdjustmentMovement);
+        }
     };
 }();
 

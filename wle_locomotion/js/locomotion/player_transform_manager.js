@@ -517,30 +517,63 @@ PlayerTransformManager.prototype.getDistanceToRealHead = function () {
 PlayerTransformManager.prototype.resetReal = function () {
     let realUp = PP.vec3_create();
     let validUp = PP.vec3_create();
-    return function resetReal(resetRotation = false) {
+    return function resetReal(resetRotation = false, updateRealFlags = false) {
         let playerHeadManager = this.getPlayerHeadManager();
 
         playerHeadManager.teleportPositionFeet(this.getPosition());
 
-        realUp = this.getRotationFeetQuat().quat_getUp(realUp);
+        realUp = this.getPlayerHeadManager().getRotationFeetQuat().quat_getUp(realUp);
         validUp = this.getRotationQuat().quat_getUp(validUp);
 
         if (resetRotation || (realUp.vec3_angle(validUp) > Math.PP_EPSILON_DEGREES && this._myParams.myResetRealResetRotationIfUpChanged)) {
             playerHeadManager.setRotationFeetQuat(this.getRotationQuat());
         }
 
-        // next frame the colliding flags will be updated, but I could also add a flag to specify to recompute that too, maybe a function that can be called
+        if (updateRealFlags) {
+            this._updateReal(0);
+        }
     };
 }();
 
 PlayerTransformManager.prototype.teleportToReal = function () {
     let transformQuat = PP.quat2_create();
-    return function teleportToReal(forceTeleport = false) {
-        this.teleportTransformQuat(this.getTransformRealQuat(transformQuat), forceTeleport);
+    return function teleportToReal(outCollisionRuntimeParams = null, forceTeleport = false) {
+        this.teleportTransformQuat(this.getTransformRealQuat(transformQuat), outCollisionRuntimeParams, forceTeleport);
     }
 }();
 
 PlayerTransformManager.prototype.update = function () {
+    let transformQuat = PP.quat2_create();
+    let collisionRuntimeParams = new CollisionRuntimeParams();
+    let transformUp = PP.vec3_create();
+    let horizontalDirection = PP.vec3_create();
+    let rotationQuat = PP.quat_create();
+    return function update(dt) {
+        //#TODO this should update ground and ceiling info but not sliding info
+
+        this._updateReal(dt);
+
+        if (this._myParams.myUpdatePositionValid) {
+            transformQuat = this.getTransformQuat(transformQuat);
+            transformUp = transformQuat.quat2_getUp(transformUp);
+            rotationQuat = transformQuat.quat2_getRotationQuat(rotationQuat);
+            horizontalDirection = this._myLastValidMovementDirection.vec3_removeComponentAlongAxis(transformUp, horizontalDirection);
+            if (!horizontalDirection.vec3_isZero(0.00001)) {
+                horizontalDirection.vec3_normalize(horizontalDirection);
+                rotationQuat.quat_setForward(horizontalDirection);
+                transformQuat.quat2_setRotationQuat(rotationQuat);
+            }
+            CollisionCheckGlobal.positionCheck(true, transformQuat, this._myParams.myMovementCollisionCheckParams, collisionRuntimeParams);
+            this._myIsPositionValid = collisionRuntimeParams.myIsPositionOk;
+        }
+
+        if (this._myParams.myDebugActive) {
+            this._debugUpdate(dt);
+        }
+    }
+}();
+
+PlayerTransformManager.prototype._updateReal = function () {
     let movementToCheck = PP.vec3_create();
     let position = PP.vec3_create();
     let positionReal = PP.vec3_create();
@@ -558,7 +591,7 @@ PlayerTransformManager.prototype.update = function () {
     let floatingTransformQuat = PP.quat2_create();
     let horizontalDirection = PP.vec3_create();
     let rotationQuat = PP.quat_create();
-    return function update(dt) {
+    return function _updateReal(dt) {
         // check if new head is ok and update the data
         // if head is not synced (blurred or session changing) avoid this and keep last valid
         if (this.getPlayerHeadManager().isSynced()) {
@@ -591,6 +624,7 @@ PlayerTransformManager.prototype.update = function () {
 
             // Body Colliding
             collisionRuntimeParams.copy(this._myCollisionRuntimeParams);
+            collisionRuntimeParams.myIsOnGround = true; //#TODO temp as long as surface infos are not actually updated
             transformQuat = this.getTransformQuat(transformQuat);
             newPosition.vec3_copy(this._myValidPosition);
             if (this._myParams.mySyncEnabledFlagMap.get(PlayerTransformManagerSyncFlag.BODY_COLLIDING)) {
@@ -770,9 +804,9 @@ PlayerTransformManager.prototype.update = function () {
                 this._updateCollisionHeight();
             }
 
-            // at the end, update head manager if it is synced to the new valid position
-
-            //#TODO this should update ground and ceiling info but not sliding info
+            if (this.isSynced(this._myParams.mySyncPositionFlagMap)) {
+                this.resetReal(true);
+            }
 
             if (this._myParams.myUpdateRealPositionValid) {
                 transformQuat = this.getTransformRealQuat(transformQuat);
@@ -787,24 +821,6 @@ PlayerTransformManager.prototype.update = function () {
                 CollisionCheckGlobal.positionCheck(true, transformQuat, this._myParams.myMovementCollisionCheckParams, this._myRealCollisionRuntimeParams);
                 this._myIsRealPositionValid = this._myRealCollisionRuntimeParams.myIsPositionOk;
             }
-
-            if (this._myParams.myUpdatePositionValid) {
-                transformQuat = this.getTransformQuat(transformQuat);
-                transformUp = transformQuat.quat2_getUp(transformUp);
-                rotationQuat = transformQuat.quat2_getRotationQuat(rotationQuat);
-                horizontalDirection = this._myLastValidMovementDirection.vec3_removeComponentAlongAxis(transformUp, horizontalDirection);
-                if (!horizontalDirection.vec3_isZero(0.00001)) {
-                    horizontalDirection.vec3_normalize(horizontalDirection);
-                    rotationQuat.quat_setForward(horizontalDirection);
-                    transformQuat.quat2_setRotationQuat(rotationQuat);
-                }
-                CollisionCheckGlobal.positionCheck(true, transformQuat, this._myParams.myMovementCollisionCheckParams, collisionRuntimeParams);
-                this._myIsPositionValid = collisionRuntimeParams.myIsPositionOk;
-            }
-        }
-
-        if (this._myParams.myDebugActive) {
-            this._debugUpdate(dt);
         }
     }
 }();
