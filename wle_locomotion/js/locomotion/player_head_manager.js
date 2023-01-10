@@ -49,9 +49,12 @@ PlayerHeadManager = class PlayerHeadManager {
         this._mySessionActive = false;
         this._mySessionBlurred = false;
 
+        this._myIsSyncedDelayCounter = 0;
+
         // Setup
 
         this._myResyncCounterFrames = 3;
+        this._myIsSyncedDelayCounterFrames = 1;
     }
 
     start() {
@@ -113,7 +116,7 @@ PlayerHeadManager = class PlayerHeadManager {
     }
 
     isSynced() {
-        return this._myDelaySessionChangeResyncCounter == 0 && this._myDelayBlurEndResyncCounter == 0 && !this._myDelayBlurEndResyncTimer.isRunning() && !this._mySessionBlurred;
+        return this._myIsSyncedDelayCounter == 0 && this._myDelaySessionChangeResyncCounter == 0 && this._myDelayBlurEndResyncCounter == 0 && !this._myDelayBlurEndResyncTimer.isRunning() && !this._mySessionBlurred;
     }
 
     setHeight(height, setOnlyForActiveOne = false) {
@@ -191,10 +194,16 @@ PlayerHeadManager = class PlayerHeadManager {
     }
 
     update(dt) {
+        if (this._myIsSyncedDelayCounter != 0) {
+            this._myIsSyncedDelayCounter--;
+            this._myIsSyncedDelayCounter = Math.max(0, this._myIsSyncedDelayCounter);
+        }
+
         if (this._myDelaySessionChangeResyncCounter > 0) {
             this._myDelaySessionChangeResyncCounter--;
             if (this._myDelaySessionChangeResyncCounter == 0) {
                 this._sessionChangeResync();
+                this._myIsSyncedDelayCounter = this._myIsSyncedDelayCounterFrames;
             }
         }
 
@@ -202,6 +211,7 @@ PlayerHeadManager = class PlayerHeadManager {
             this._myDelayBlurEndResyncCounter--;
             if (this._myDelayBlurEndResyncCounter == 0) {
                 this._blurEndResync();
+                this._myIsSyncedDelayCounter = this._myIsSyncedDelayCounterFrames;
             }
         }
 
@@ -213,6 +223,7 @@ PlayerHeadManager = class PlayerHeadManager {
                 this._myDelayBlurEndResyncTimer.update(dt);
                 if (this._myDelayBlurEndResyncTimer.isDone()) {
                     this._blurEndResync();
+                    this._myIsSyncedDelayCounter = this._myIsSyncedDelayCounterFrames;
                 }
             }
         }
@@ -320,6 +331,8 @@ PlayerHeadManager.prototype.rotateHeadQuat = function () {
         if (this.canRotateHead()) {
             this._myCurrentHead.pp_rotateQuat(rotationQuat);
             newHeadRotation = this._myCurrentHead.pp_getRotationQuat(newHeadRotation);
+
+            PP.myPlayerObjects.myHead.pp_setRotationQuat(newHeadRotation);
 
             newHeadRotation = newHeadRotation.quat_rotateAxisRadians(Math.PI, newHeadRotation.quat_getUp(newHeadUp), newHeadRotation);
             PP.myPlayerObjects.myNonVRCamera.pp_setRotationQuat(newHeadRotation);
@@ -724,10 +737,7 @@ PlayerHeadManager.prototype._sessionChangeResync = function () {
                     }
                 }
 
-                this._resyncHeadRotationForward(resyncHeadRotation);
-
-                resyncHeadRotation = resyncHeadRotation.quat_rotateAxisRadians(Math.PI, resyncHeadRotation.quat_getUp(resyncHeadUp), resyncHeadRotation);
-                PP.myPlayerObjects.myNonVRCamera.pp_setRotationQuat(resyncHeadRotation);
+                this.setRotationHeadQuat(resyncHeadRotation);
             }
 
             if (this._mySessionActive) {
