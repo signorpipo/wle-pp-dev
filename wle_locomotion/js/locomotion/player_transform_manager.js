@@ -139,7 +139,7 @@ PlayerTransformManager = class PlayerTransformManager {
     }
 
     start() {
-        // get the current head position as valid for initialization no matter if colliding
+        this.resetToReal(true);
     }
 
     // update should be before to check the new valid transform and if the head new transform is fine
@@ -177,10 +177,6 @@ PlayerTransformManager = class PlayerTransformManager {
         // collision check and teleport, if force teleport teleport in any case
 
         //#TODO
-    }
-
-    teleportToReal(outCollisionRuntimeParams = null, forceTeleport = false) {
-        // implemented outside class definition
     }
 
     rotateQuat(rotationQuat, forceRotate = false) {
@@ -279,8 +275,19 @@ PlayerTransformManager = class PlayerTransformManager {
         return !isBodyColliding && !isHeadColliding && !isFar && !isFloating;
     }
 
-    resetReal(resetRotation = false) {
+    resetReal(resetRotation = false, updateRealFlags = false) {
         // implemented outside class definition
+    }
+
+    resetToReal(updateRealFlags = false) {
+        this._myValidPosition = this.getPositionReal(this._myValidPosition);
+        this._myValidPositionHead = this.getPositionHeadReal(this._myValidPositionHead);
+        this._myValidRotationQuat = this.getRotationRealQuat(this._myValidRotationQuat);
+        this._myValidHeight = Math.pp_clamp(this.getHeightReal(), this._myParams.myMinHeight, this._myParams.myMaxHeight);
+
+        if (updateRealFlags) {
+            this._updateReal(0);
+        }
     }
 
     isBodyColliding() {
@@ -533,13 +540,6 @@ PlayerTransformManager.prototype.resetReal = function () {
             this._updateReal(0);
         }
     };
-}();
-
-PlayerTransformManager.prototype.teleportToReal = function () {
-    let transformQuat = PP.quat2_create();
-    return function teleportToReal(outCollisionRuntimeParams = null, forceTeleport = false) {
-        this.teleportTransformQuat(this.getTransformRealQuat(transformQuat), outCollisionRuntimeParams, forceTeleport);
-    }
 }();
 
 PlayerTransformManager.prototype.update = function () {

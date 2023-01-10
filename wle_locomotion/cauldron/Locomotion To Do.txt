@@ -38,7 +38,6 @@ v Se non c'è movimento non applicare la gravità alla testa o addirittura, se �
 - avere flag verticali e orizzontali di collisioni, per esempio i character potresti volerci collidere solo orizzontalmente ma non verticalmente
 	- questo forse ha senso solo nel momento in cui ho introdotto il meccanismo di uscire dalle collisioni, altrimenti potresti entrare in un character dall'alto
 	
-
 - REFACTOR
 
 
