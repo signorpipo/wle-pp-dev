@@ -2725,7 +2725,7 @@ if (WL && WL.Object) {
             let secondAxis = axes[priority[1]];
             let thirdAxis = axes[priority[2]];
 
-            if (firstAxis == null) {
+            if (firstAxis == null || firstAxis.vec3_length() <= this._pp_epsilon) {
                 return;
             }
 

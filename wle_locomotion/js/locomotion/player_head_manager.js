@@ -195,8 +195,10 @@ PlayerHeadManager = class PlayerHeadManager {
         // implemented outside class definition 
     }
 
-    lookToHead() {
-        //#TODO to implement
+    lookAtHead(position, up = null) {
+    }
+
+    lookToHead(direction, up = null) {
     }
 
     update(dt) {
@@ -462,6 +464,26 @@ PlayerHeadManager.prototype.lookToFeet = function () {
         feetRotation = this.getRotationFeetQuat(feetRotation);
         feetRotation.quat_setForward(direction, up);
         this.setRotationFeetQuat(feetRotation, keepUpOverride);
+    };
+}();
+
+PlayerHeadManager.prototype.lookAtHead = function () {
+    let direction = PP.vec3_create();
+    let headPosition = PP.vec3_create();
+    return function lookAtHead(position, up = null) {
+        headPosition = this.getPositionHead(headPosition);
+        direction = position.vec3_sub(headPosition, direction).vec3_normalize(direction);
+
+        this.lookToHead(direction, up);
+    };
+}();
+
+PlayerHeadManager.prototype.lookToHead = function () {
+    let headRotation = PP.quat_create();
+    return function lookToHead(direction, up = null) {
+        headRotation = this.getRotationHeadQuat(headRotation);
+        headRotation.quat_setForward(direction, up);
+        this.setRotationHeadQuat(headRotation);
     };
 }();
 

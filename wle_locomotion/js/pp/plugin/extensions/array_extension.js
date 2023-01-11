@@ -2468,8 +2468,8 @@ Array.prototype._quat_setAxes = function () {
         let secondAxis = axes[priority[1]];
         let thirdAxis = axes[priority[2]];
 
-        if (firstAxis == null) {
-            return this;
+        if (firstAxis == null || firstAxis.vec3_length() <= this._pp_epsilon) {
+            return;
         }
 
         let secondAxisValid = false;
