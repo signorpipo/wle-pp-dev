@@ -612,7 +612,6 @@ PlayerHeadManager.prototype._sessionChangeResync = function () {
     let resyncHeadPosition = PP.vec3_create();
     let resyncHeadRotation = PP.quat_create();
     let playerUp = PP.vec3_create();
-    let playerUpNegate = PP.vec3_create();
     let flatCurrentHeadPosition = PP.vec3_create();
     let flatResyncHeadPosition = PP.vec3_create();
     let resyncMovement = PP.vec3_create();
@@ -634,7 +633,6 @@ PlayerHeadManager.prototype._sessionChangeResync = function () {
                 resyncHeadRotation = this._mySessionChangeResyncHeadTransform.quat2_getRotationQuat(resyncHeadRotation);
 
                 playerUp = PP.myPlayerObjects.myPlayer.pp_getUp(playerUp);
-                playerUpNegate = playerUp.vec3_negate(playerUpNegate);
 
                 flatCurrentHeadPosition = currentHeadPosition.vec3_removeComponentAlongAxis(playerUp, flatCurrentHeadPosition);
                 flatResyncHeadPosition = resyncHeadPosition.vec3_removeComponentAlongAxis(playerUp, flatResyncHeadPosition);
@@ -752,44 +750,23 @@ PlayerHeadManager.prototype._sessionChangeResync = function () {
 
 PlayerHeadManager.prototype._resyncHeadRotationForward = function () {
     let playerUp = PP.vec3_create();
-    let playerUpNegate = PP.vec3_create();
-    let currentHeadForward = PP.vec3_create();
     let resyncHeadForward = PP.vec3_create();
     let resyncHeadUp = PP.vec3_create();
-    let fixedResyncForward = PP.vec3_create();
-    let rotationToPerform = PP.quat_create();
+    let fixedResyncHeadRotation = PP.quat_create();
     return function _resyncHeadRotationForward(resyncHeadRotation) {
         playerUp = PP.myPlayerObjects.myPlayer.pp_getUp(playerUp);
-        playerUpNegate = playerUp.vec3_negate(playerUpNegate);
-
-        currentHeadForward = this._myCurrentHead.pp_getForward(currentHeadForward);
         resyncHeadForward = resyncHeadRotation.quat_getForward(resyncHeadForward);
         resyncHeadUp = resyncHeadRotation.quat_getUp(resyncHeadUp);
-
-        fixedResyncForward.vec3_copy(resyncHeadForward);
-
-        let minAngle = 1;
-        if (resyncHeadForward.vec3_angle(playerUp) < minAngle) {
-            if (resyncHeadUp.vec3_isConcordant(playerUp)) {
-                fixedResyncForward = resyncHeadUp.vec3_negate(fixedResyncForward);
-            } else {
-                fixedResyncForward.vec3_copy(resyncHeadUp);
-            }
-        } else if (resyncHeadForward.vec3_angle(playerUpNegate) < minAngle) {
-            if (resyncHeadUp.vec3_isConcordant(playerUp)) {
-                fixedResyncForward.vec3_copy(resyncHeadUp);
-            } else {
-                fixedResyncForward = resyncHeadUp.vec3_negate(fixedResyncForward);
-            }
-        }
+        fixedResyncHeadRotation.quat_copy(resyncHeadRotation);
+        fixedResyncHeadRotation.quat_setUp(playerUp, resyncHeadForward);
 
         if (!resyncHeadUp.vec3_isConcordant(playerUp)) {
-            rotationToPerform = currentHeadForward.vec3_rotationToPivotedQuat(fixedResyncForward.vec3_negate(), playerUp, rotationToPerform);
-        } else {
-            rotationToPerform = currentHeadForward.vec3_rotationToPivotedQuat(fixedResyncForward, playerUp, rotationToPerform);
+            //if it was upside down, it's like it has to rotate the neck back up,so the forward is actually on the opposite side
+            fixedResyncHeadRotation.quat_rotateAxis(180, playerUp, fixedResyncHeadRotation);
         }
 
-        this.rotateFeetQuat(rotationToPerform);
+        this.setRotationFeetQuat(fixedResyncHeadRotation);
+        return;
     }
 }();
 
