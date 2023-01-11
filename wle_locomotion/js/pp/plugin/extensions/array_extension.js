@@ -112,12 +112,13 @@
             - quat_isNormalized
             - quat_length
             - quat_mul
-            - quat_getAxis          / quat_getAngle
+            - quat_getAxis          / quat_getAngle         / quat_getAxisScaled
             - quat_getAxes          / quat_getRight         / quat_getUp    / quat_getForward   / quat_getLeft  / quat_getDown  / quat_getBackward
             ○ quat_setAxes          / quat_setRight         / quat_setUp    / quat_setForward   / quat_setLeft  / quat_setDown  / quat_setBackward
             - quat_toWorld          / quat_toLocal
             - quat_rotate           / quat_rotateAxis  
             - quat_rotationTo     
+            - quat_getTwist         / quat_getSwing         / quat_getTwistFromSwing    / quat_getSwingFromTwist    / quat_fromTwistSwing
             ○ quat_fromRadians      / quat_fromDegrees      / quat_fromAxis / quat_fromAxes
             - quat_toRadians        / quat_toDegrees        / quat_toMatrix
             - quat_addRotation      / quat_subRotation
@@ -1164,7 +1165,6 @@ Array.prototype.vec3_rotationToQuat = function () {
         rotationAxis.vec3_normalize(rotationAxis);
         let signedAngle = this.vec3_angleSigned(direction, rotationAxis);
         out.quat_fromAxis(signedAngle, rotationAxis);
-        out.quat_normalize(out);
         return out;
     };
 }();
@@ -1203,7 +1203,6 @@ Array.prototype.vec3_rotationToPivotedQuat = function () {
         rotationAxis.vec3_normalize(rotationAxis);
         let signedAngle = thisFlat.vec3_angleSigned(directionFlat, rotationAxis);
         out.quat_fromAxis(signedAngle, rotationAxis);
-        out.quat_normalize(out);
         return out;
     };
 }();
@@ -1313,6 +1312,24 @@ Array.prototype.quat_getAngleRadians = function () {
         return angle;
     };
 }();
+
+Array.prototype.quat_getAxisScaled = function (out = glMatrix.vec3.create()) {
+    return this.quat_getAxisScaledDegrees(out);
+};
+
+Array.prototype.quat_getAxisScaledDegrees = function (out = glMatrix.vec3.create()) {
+    this.quat_getAxis(out);
+    let angle = this.quat_getAngleDegrees();
+    out.vec3_scale(angle, out);
+    return out;
+};
+
+Array.prototype.quat_getAxisScaledRadians = function (out = glMatrix.vec3.create()) {
+    this.quat_getAxis(out);
+    let angle = this.quat_getAngleRadians();
+    out.vec3_scale(angle, out);
+    return out;
+};
 
 Array.prototype.quat_getAxes = function (out = [glMatrix.vec3.create(), glMatrix.vec3.create(), glMatrix.vec3.create()]) {
     this.quat_getLeft(out[0]);
@@ -1553,33 +1570,88 @@ Array.prototype.quat_subRotationQuat = function () {
     return function quat_subRotationQuat(rotation, out = glMatrix.quat.create()) {
         rotation.quat_invert(inverse);
         this.quat_mul(inverse, out);
-        out.quat_normalize(out);
+        if (out.quat_isNormalized()) {
+            out.quat_normalize(out); // it seems that for some small error the quat will not be exactly normalized
+        }
         return out;
     };
 }();
 
-Array.prototype.quat_rotationTo = function (quat, out) {
-    return this.quat_rotationToDegrees(quat, out);
+Array.prototype.quat_rotationTo = function (rotation, out) {
+    return this.quat_rotationToDegrees(rotation, out);
 };
 
 Array.prototype.quat_rotationToDegrees = function () {
     let rotationQuat = glMatrix.quat.create();
-    return function quat_rotationToDegrees(quat, out) {
-        this.quat_rotationToQuat(quat, rotationQuat);
-        return rotationQuat.quat_toDegrees(out);
+    return function quat_rotationToDegrees(rotation, out) {
+        rotation.vec3_degreesToQuat(rotationQuat);
+        return this.quat_rotationToQuat(rotationQuat, out);
     };
 }();
 
 Array.prototype.quat_rotationToRadians = function () {
     let rotationQuat = glMatrix.quat.create();
-    return function quat_rotationToRadians(quat, out) {
-        this.quat_rotationToQuat(quat, rotationQuat);
-        return rotationQuat.quat_toRadians(out);
+    return function quat_rotationToRadians(rotation, out) {
+        rotation.vec3_radiansToQuat(rotationQuat);
+        return this.quat_rotationToQuat(rotationQuat, out);
     };
 }();
 
-Array.prototype.quat_rotationToQuat = function (quat, out) {
-    return quat.quat_subRotationQuat(this, out);
+Array.prototype.quat_rotationToQuat = function (rotation, out) {
+    return rotation.quat_subRotationQuat(this, out);
+};
+
+Array.prototype.quat_getTwist = function () {
+    let rotationAxis = glMatrix.vec3.create();
+    let projection = glMatrix.vec3.create();
+    let rotationAlongAxis = glMatrix.quat.create();
+    return function quat_getTwist(axis, out = glMatrix.quat.create()) {
+        rotationAxis[0] = this[0];
+        rotationAxis[1] = this[1];
+        rotationAxis[2] = this[2];
+
+        let dotProd = glMatrix.vec3.dot(axis, rotationAxis);
+        axis.vec3_scale(dotProd, projection);
+        rotationAlongAxis[0] = projection[0];
+        rotationAlongAxis[1] = projection[1];
+        rotationAlongAxis[2] = projection[2];
+        rotationAlongAxis[3] = this[3];
+        rotationAlongAxis.quat_normalize(rotationAlongAxis);
+        if (dotProd < 0) {
+            rotationAlongAxis[0] = -rotationAlongAxis[0];
+            rotationAlongAxis[1] = -rotationAlongAxis[1];
+            rotationAlongAxis[2] = -rotationAlongAxis[2];
+            rotationAlongAxis[3] = -rotationAlongAxis[3];
+        }
+
+        return out.quat_copy(rotationAlongAxis);
+    };
+}();
+
+Array.prototype.quat_getSwing = function () {
+    let twist = glMatrix.quat.create();
+    return function quat_getSwing(axis, out = glMatrix.quat.create()) {
+        this.quat_getTwist(axis, twist);
+        this.quat_getSwingFromTwist(twist, out);
+        return out;
+    };
+}();
+
+Array.prototype.quat_getSwingFromTwist = function (twist, out = glMatrix.quat.create()) {
+    return this.quat_subRotationQuat(twist, out);
+};
+
+Array.prototype.quat_getTwistFromSwing = function () {
+    let inverse = glMatrix.quat.create();
+    return function quat_getTwistFromSwing(swing, out = glMatrix.quat.create()) {
+        swing.quat_invert(inverse);
+        this.quat_addRotationQuat(inverse, out);
+        return out;
+    };
+}();
+
+Array.prototype.quat_fromTwistSwing = function (twist, swing) {
+    return twist.quat_addRotationQuat(swing, this);
 };
 
 Array.prototype.quat_toMatrix = function (out = glMatrix.mat3.create()) {
@@ -1633,7 +1705,6 @@ Array.prototype.quat_lerp = function (to, interpolationValue, out = glMatrix.qua
     }
 
     glMatrix.quat.lerp(out, this, to, interpolationValue);
-    out.quat_normalize(out);
     return out;
 };
 
@@ -1875,7 +1946,6 @@ Array.prototype.quat2_lerp = function (to, interpolationValue, out = glMatrix.qu
     }
 
     glMatrix.quat2.lerp(out, this, to, interpolationValue);
-    out.quat2_normalize(out);
     return out;
 };
 
@@ -1910,7 +1980,6 @@ Array.prototype.mat3_toRadians = function () {
 
 Array.prototype.mat3_toQuat = function (out = glMatrix.quat.create()) {
     glMatrix.quat.fromMat3(out, this);
-    out.quat_normalize(out);
     return out;
 };
 

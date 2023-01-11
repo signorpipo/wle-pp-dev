@@ -559,7 +559,6 @@ PlayerTransformManager.prototype.resetReal = function () {
 
         if (resetRotation || (realUp.vec3_angle(validUp) > Math.PP_EPSILON_DEGREES && this._myParams.myResetRealResetRotationIfUpChanged)) {
             playerHeadManager.setRotationFeetQuat(this.getRotationQuat(rotationQuat));
-
         }
 
         if (updateRealFlags) {
