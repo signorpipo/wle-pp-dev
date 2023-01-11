@@ -75,6 +75,8 @@ PlayerLocomotion = class PlayerLocomotion {
 
             params.myForeheadExtraHeight = this._myParams.myForeheadExtraHeight;
 
+            params.myFeetRotationKeepUp = true;
+
             params.myDebugActive = false;
 
             this._myPlayerHeadManager = new PlayerHeadManager(params);

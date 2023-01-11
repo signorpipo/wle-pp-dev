@@ -21,6 +21,8 @@ PlayerHeadManagerParams = class PlayerHeadManagerParams {
         this.myNextEnterSessionFloorHeight = null;
         this.myEnterSessionFloorHeight = null;
 
+        this.myRotateFeetKeepUp = false;
+
         this.myForeheadExtraHeight = 0;
         // can be used to always add a bit of height, for example to compensate the fact 
         // that the default height is actually the eye height and you may want to also add a forehead offset
@@ -161,7 +163,7 @@ PlayerHeadManager = class PlayerHeadManager {
         // implemented outside class definition
     }
 
-    rotateFeetQuat(rotationQuat) {
+    rotateFeetQuat(rotationQuat, keepUpOverride = null) {
         // implemented outside class definition 
     }
 
@@ -177,7 +179,7 @@ PlayerHeadManager = class PlayerHeadManager {
         return !this._mySessionActive;
     }
 
-    setRotationFeetQuat() {
+    setRotationFeetQuat(rotationQuat, keepUpOverride = null) {
         // implemented outside class definition 
     }
 
@@ -307,13 +309,42 @@ PlayerHeadManager.prototype.moveFeet = function (movement) {
 };
 
 PlayerHeadManager.prototype.rotateFeetQuat = function () {
+    let playerUp = PP.vec3_create();
+    let rotationAxis = PP.vec3_create();
     let currentHeadPosition = PP.vec3_create();
+    let currentFeetRotation = PP.quat_create();
+    let newFeetRotation = PP.quat_create();
+    let fixedNewFeetRotation = PP.quat_create();
+    let newFeetForward = PP.vec3_create();
+    let fixedRotation = PP.quat_create();
     let newHeadPosition = PP.vec3_create();
     let headAdjustmentMovement = PP.vec3_create();
-    return function rotateFeetQuat(rotationQuat) {
-        currentHeadPosition = this._myCurrentHead.pp_getPosition(currentHeadPosition);
+    return function rotateFeetQuat(rotationQuat, keepUpOverride = null) {
+        let angle = rotationQuat.quat_getAngleRadians();
+        if (angle <= 0.00001) {
+            return;
+        }
 
-        PP.myPlayerObjects.myPlayer.pp_rotateAroundQuat(rotationQuat, currentHeadPosition);
+        currentHeadPosition = this._myCurrentHead.pp_getPosition(currentHeadPosition);
+        playerUp = PP.myPlayerObjects.myPlayer.pp_getUp(playerUp);
+        rotationAxis = rotationQuat.quat_getAxis(rotationAxis);
+
+        if (!rotationAxis.vec3_isOnAxis(playerUp) &&
+            ((keepUpOverride == null && this._myParams.myFeetRotationKeepUp) || (keepUpOverride))) {
+            currentFeetRotation = this.getRotationFeetQuat(currentFeetRotation);
+
+            newFeetRotation = currentFeetRotation.quat_rotateQuat(rotationQuat, newFeetRotation);
+            newFeetForward = newFeetRotation.quat_getForward(newFeetForward);
+
+            fixedNewFeetRotation.quat_copy(newFeetRotation);
+            fixedNewFeetRotation.quat_setUp(playerUp, newFeetForward);
+
+            fixedRotation = currentFeetRotation.quat_rotationToQuat(fixedNewFeetRotation, fixedRotation);
+        } else {
+            fixedRotation.quat_copy(rotationQuat);
+        }
+
+        PP.myPlayerObjects.myPlayer.pp_rotateAroundQuat(fixedRotation, currentHeadPosition);
 
         newHeadPosition = this._myCurrentHead.pp_getPosition(newHeadPosition);
 
@@ -343,10 +374,10 @@ PlayerHeadManager.prototype.rotateHeadQuat = function () {
 PlayerHeadManager.prototype.setRotationFeetQuat = function () {
     let currentRotationQuat = PP.quat_create();
     let rotationQuatToRotate = PP.quat_create();
-    return function setRotationFeetQuat(rotationQuat) {
+    return function setRotationFeetQuat(rotationQuat, keepUpOverride = null) {
         currentRotationQuat = this.getRotationFeetQuat(currentRotationQuat);
         rotationQuatToRotate = currentRotationQuat.quat_rotationToQuat(rotationQuat, rotationQuatToRotate);
-        this.rotateFeetQuat(rotationQuatToRotate);
+        this.rotateFeetQuat(rotationQuatToRotate, keepUpOverride);
     };
 }();
 
