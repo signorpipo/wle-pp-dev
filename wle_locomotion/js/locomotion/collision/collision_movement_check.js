@@ -348,7 +348,7 @@ CollisionCheck.prototype._moveStep = function () {
                     forwardForPerceivedAngle.vec3_copy(transformForward);
                 }
 
-                if (collisionCheckParams.myComputeGroundInfoEnabled && this.myRegatherGroundInfoOnSurfaceCheckFail) {
+                if (collisionCheckParams.myComputeGroundInfoEnabled && collisionCheckParams.myRegatherGroundInfoOnSurfaceCheckFail) {
                     this._gatherSurfaceInfo(newFeetPosition, height, transformUp, forwardForPerceivedAngle, forwardForVertical, true, collisionCheckParams, collisionRuntimeParams);
                 } else {
                     collisionRuntimeParams.myIsOnGround = this._myPrevCollisionRuntimeParams.myIsOnGround;
@@ -357,7 +357,7 @@ CollisionCheck.prototype._moveStep = function () {
                     collisionRuntimeParams.myGroundNormal.vec3_copy(this._myPrevCollisionRuntimeParams.myGroundNormal);
                 }
 
-                if (collisionCheckParams.myComputeCeilingInfoEnabled && this.myRegatherCeilingInfoOnSurfaceCheckFail) {
+                if (collisionCheckParams.myComputeCeilingInfoEnabled && collisionCheckParams.myRegatherCeilingInfoOnSurfaceCheckFail) {
                     this._gatherSurfaceInfo(newFeetPosition, height, transformUp, forwardForPerceivedAngle, forwardForVertical, false, collisionCheckParams, collisionRuntimeParams);
                 } else {
                     collisionRuntimeParams.myIsOnCeiling = this._myPrevCollisionRuntimeParams.myIsOnCeiling;
