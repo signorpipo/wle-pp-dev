@@ -887,20 +887,41 @@ PlayerTransformManager.prototype.move = function () {
     return function move(movement, outCollisionRuntimeParams = null, forceMove = false) {
         transformQuat = this.getTransformQuat(transformQuat);
 
-        fixedMovement.vec3_copy(movement);
+        CollisionCheckGlobal.move(movement, transformQuat, this._myParams.myMovementCollisionCheckParams, this._myCollisionRuntimeParams);
+        if (outCollisionRuntimeParams != null) {
+            outCollisionRuntimeParams.copy(this._myCollisionRuntimeParams);
+        }
+
         if (!forceMove) {
-            CollisionCheckGlobal.move(movement, transformQuat, this._myParams.myMovementCollisionCheckParams, this._myCollisionRuntimeParams);
-            if (outCollisionRuntimeParams != null) {
-                outCollisionRuntimeParams.copy(this._myCollisionRuntimeParams);
-            }
             fixedMovement.vec3_copy(this._myCollisionRuntimeParams.myFixedMovement);
+        } else {
+            fixedMovement.vec3_copy(movement);
         }
 
         if (!fixedMovement.vec3_isZero(0.00001)) {
             this._myValidPosition.vec3_add(fixedMovement, this._myValidPosition);
             this.getPlayerHeadManager().moveFeet(fixedMovement);
+        }
 
-            if (this._myParams.myResetRealOnMove) {
+        if (this._myParams.myResetRealOnMove) {
+            if (PP.XRUtils.isSessionActive()) {
+                this.resetReal(
+                    !this._myParams.myNeverResetRealPositionVR,
+                    !this._myParams.myNeverResetRealRotationVR,
+                    !this._myParams.myNeverResetRealHeightVR,
+                    false);
+            } else {
+                this.resetReal(
+                    !this._myParams.myNeverResetRealPositionNonVR,
+                    !this._myParams.myNeverResetRealRotationNonVR,
+                    !this._myParams.myNeverResetRealHeightNonVR,
+                    false);
+            }
+        }
+
+        //#TODO add move callback
+    };
+}();
                 this.resetReal(
                     !this._myParams.myNeverResetRealPositionVR,
                     !this._myParams.myNeverResetRealRotationVR,

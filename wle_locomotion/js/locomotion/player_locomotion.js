@@ -237,6 +237,7 @@ PlayerLocomotion = class PlayerLocomotion {
                 let params = new PlayerLocomotionTeleportParams();
 
                 params.myPlayerHeadManager = this._myPlayerHeadManager;
+                params.myPlayerTransformManager = this._myPlayerTransformManager;
 
                 params.myCollisionCheckParams = this._myCollisionCheckParamsTeleport;
 
