@@ -123,6 +123,24 @@ PlayerLocomotion = class PlayerLocomotion {
             params.myResetToValidOnEnterSession = true;
             params.myResetToValidOnExitSession = true;
 
+            params.myAlwaysResetRealPositionNonVR = true;
+            params.myAlwaysResetRealRotationNonVR = true;
+            params.myAlwaysResetRealHeightNonVR = true;
+
+            params.myAlwaysResetRealPositionVR = false;
+            params.myAlwaysResetRealRotationVR = false;
+            params.myAlwaysResetRealHeightVR = false;
+
+            params.myNeverResetRealPositionNonVR = false;
+            params.myNeverResetRealRotationNonVR = false;
+            params.myNeverResetRealHeightNonVR = false;
+
+            params.myNeverResetRealPositionVR = false;
+            params.myNeverResetRealRotationVR = false;
+            params.myNeverResetRealHeightVR = true;
+
+            params.myResetRealOnMove = true;
+
             params.myDebugActive = true;
 
             this._myPlayerTransformManager = new PlayerTransformManager(params);
@@ -192,6 +210,7 @@ PlayerLocomotion = class PlayerLocomotion {
                 let params = new PlayerLocomotionSmoothParams();
 
                 params.myPlayerHeadManager = this._myPlayerHeadManager;
+                params.myPlayerTransformManager = this._myPlayerTransformManager;
 
                 params.myCollisionCheckParams = this._myCollisionCheckParamsMovement;
 

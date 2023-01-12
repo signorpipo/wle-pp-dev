@@ -1,6 +1,7 @@
 PlayerLocomotionSmoothParams = class PlayerLocomotionSmoothParams {
     constructor() {
         this.myPlayerHeadManager = null;
+        this.myPlayerTransformManager = null;
 
         this.myCollisionCheckParams = null;
 
@@ -135,26 +136,47 @@ PlayerLocomotionSmooth.prototype.update = function () {
             this._myLocomotionRuntimeParams.myIsFlying = false;
         }
 
-        if (!PP.myGamepads[this._myParams.myHandedness].getButtonInfo(PP.GamepadButtonID.THUMBSTICK).isPressed()) {
-            if (!this._myLocomotionRuntimeParams.myIsFlying && false) {
-                let gravity = -2;
-                verticalMovement = playerUp.vec3_scale(gravity * dt, verticalMovement);
-                headMovement = headMovement.vec3_add(verticalMovement, headMovement);
+        if (PP.myGamepads[PP.InputUtils.getOppositeHandedness(this._myParams.myHandedness)].getButtonInfo(PP.GamepadButtonID.BOTTOM_BUTTON).isPressed()) {
+            if (!PP.myGamepads[this._myParams.myHandedness].getButtonInfo(PP.GamepadButtonID.THUMBSTICK).isPressed()) {
+                if (!this._myLocomotionRuntimeParams.myIsFlying && false) {
+                    let gravity = -2;
+                    verticalMovement = playerUp.vec3_scale(gravity * dt, verticalMovement);
+                    headMovement = headMovement.vec3_add(verticalMovement, headMovement);
+                }
+
+                if (PP.myGamepads[this._myParams.myHandedness].getButtonInfo(PP.GamepadButtonID.SQUEEZE).isPressed()) {
+                    headMovement.vec3_zero();
+                }
+
+                feetTransformQuat = this._myParams.myPlayerHeadManager.getTransformFeetQuat(feetTransformQuat);
+
+                globalDT = dt;
+                CollisionCheckGlobal.move(headMovement, feetTransformQuat, this._myParams.myCollisionCheckParams, this._myLocomotionRuntimeParams.myCollisionRuntimeParams);
+                headMovement.vec3_copy(this._myLocomotionRuntimeParams.myCollisionRuntimeParams.myFixedMovement);
             }
 
-            feetTransformQuat = this._myParams.myPlayerHeadManager.getTransformFeetQuat(feetTransformQuat);
-
-            globalDT = dt;
-            CollisionCheckGlobal.move(headMovement, feetTransformQuat, this._myParams.myCollisionCheckParams, this._myLocomotionRuntimeParams.myCollisionRuntimeParams);
-            headMovement.vec3_copy(this._myLocomotionRuntimeParams.myCollisionRuntimeParams.myFixedMovement);
-
-            if (PP.myGamepads[this._myParams.myHandedness].getButtonInfo(PP.GamepadButtonID.SQUEEZE).isPressed()) {
-                headMovement.vec3_zero();
+            if (!headMovement.vec3_isZero(0.000001)) {
+                this._myParams.myPlayerHeadManager.moveFeet(headMovement);
             }
-        }
+        } else {
+            if (!PP.myGamepads[this._myParams.myHandedness].getButtonInfo(PP.GamepadButtonID.THUMBSTICK).isPressed()) {
+                if (!this._myLocomotionRuntimeParams.myIsFlying && false) {
+                    let gravity = -2;
+                    verticalMovement = playerUp.vec3_scale(gravity * dt, verticalMovement);
+                    headMovement = headMovement.vec3_add(verticalMovement, headMovement);
+                }
 
-        if (!headMovement.vec3_isZero(0.000001)) {
-            this._myParams.myPlayerHeadManager.moveFeet(headMovement);
+                if (PP.myGamepads[this._myParams.myHandedness].getButtonInfo(PP.GamepadButtonID.SQUEEZE).isPressed()) {
+                    headMovement.vec3_zero();
+                }
+
+                feetTransformQuat = this._myParams.myPlayerTransformManager.getTransformQuat(feetTransformQuat);
+
+                globalDT = dt;
+                this._myParams.myPlayerTransformManager.move(headMovement, this._myLocomotionRuntimeParams.myCollisionRuntimeParams);
+            } else {
+                this._myParams.myPlayerTransformManager.move(headMovement, this._myLocomotionRuntimeParams.myCollisionRuntimeParams, true);
+            }
         }
 
         if (this._myLocomotionRuntimeParams.myCollisionRuntimeParams.myIsOnGround) {

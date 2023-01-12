@@ -14,6 +14,7 @@ PlayerTransformManagerParams = class PlayerTransformManagerParams {
         this.myTeleportCollisionCheckParamsCopyFromMovement = false;
         this.myTeleportCollisionCheckParamsCheck360 = false;
 
+        // sync for vr and non vr
         this.mySyncEnabledFlagMap = new Map();
         this.mySyncEnabledFlagMap.set(PlayerTransformManagerSyncFlag.BODY_COLLIDING, true);
         this.mySyncEnabledFlagMap.set(PlayerTransformManagerSyncFlag.HEAD_COLLIDING, true);
@@ -104,6 +105,24 @@ PlayerTransformManagerParams = class PlayerTransformManagerParams {
         this.myResetToValidOnEnterSession = false;
         this.myResetToValidOnExitSession = false;
 
+        this.myAlwaysResetRealPositionNonVR = false;
+        this.myAlwaysResetRealRotationNonVR = false;
+        this.myAlwaysResetRealHeightNonVR = false;
+
+        this.myAlwaysResetRealPositionVR = false;
+        this.myAlwaysResetRealRotationVR = false;
+        this.myAlwaysResetRealHeightVR = false;
+
+        this.myNeverResetRealPositionNonVR = false;
+        this.myNeverResetRealRotationNonVR = false;
+        this.myNeverResetRealHeightNonVR = false;
+
+        this.myNeverResetRealPositionVR = false;
+        this.myNeverResetRealRotationVR = false;
+        this.myNeverResetRealHeightVR = false;
+
+        this.myResetRealOnMove = false;
+
         this.myDebugActive = false;
     }
 };
@@ -190,36 +209,14 @@ PlayerTransformManager = class PlayerTransformManager {
         //#TODO
     }
 
-    rotateQuat(rotationQuat, forceRotate = false) {
-        if (this.canRotate() || forceRotate) {
-            this.myPlayerHeadManager.rotateFeetQuat(rotationQuat);
-        }
+    rotateQuat(rotationQuat, keepUp) {
+        // rotate the valid rotation
+        // maybe check if the new position with this new orientation is valid as an extra check
+        this.myPlayerHeadManager.rotateFeetQuat(rotationQuat);
     }
 
-    rotateHeadQuat(rotationQuat, forceRotate = false) {
-        if (this.canRotateHead() || forceRotate) {
-            this.myPlayerHeadManager.rotateHeadQuat(rotationQuat);
-        }
-    }
-
-    setRotationQuat(rotationQuat, forceSet = false) {
-        if (this.canRotate() || forceSet) {
-            this.myPlayerHeadManager.setRotationFeetQuat(rotationQuat);
-        }
-    }
-
-    setHeadRotationQuat(rotationQuat, forceSet = false) {
-        if (this.canRotateHead() || forceSet) {
-            this.myPlayerHeadManager.setRotationHeadQuat(rotationQuat);
-        }
-    }
-
-    canRotate() {
-        return !this._myParams.myRotateOnlyIfSynced || this.isSynced();
-    }
-
-    canRotateHead() {
-        return this.canRotate() && this.canrothis._myParams.myPlayerHeadManager.canRotateHead();
+    setRotationQuat(rotationQuat) {
+        this.myPlayerHeadManager.setRotationFeetQuat(rotationQuat);
     }
 
     getPlayer() {
@@ -286,8 +283,12 @@ PlayerTransformManager = class PlayerTransformManager {
         return !isBodyColliding && !isHeadColliding && !isFar && !isFloating;
     }
 
-    resetReal(resetRotation = false, updateRealFlags = false) {
+    resetReal(resetPosition = true, resetRotation = true, resetHeight = true, updateRealFlags = false) {
         // implemented outside class definition
+    }
+
+    updateReal() {
+        this._updateReal(0, false);
     }
 
     resetToReal(updateRealFlags = false) {
@@ -297,7 +298,7 @@ PlayerTransformManager = class PlayerTransformManager {
         this._myValidHeight = Math.pp_clamp(this.getHeightReal(), this._myParams.myMinHeight, this._myParams.myMaxHeight);
 
         if (updateRealFlags) {
-            this._updateReal(0);
+            this._updateReal(0, false);
         }
     }
 
@@ -549,20 +550,26 @@ PlayerTransformManager.prototype.resetReal = function () {
     let validUp = PP.vec3_create();
     let position = PP.vec3_create();
     let rotationQuat = PP.quat_create();
-    return function resetReal(resetRotation = false, updateRealFlags = false) {
+    return function resetReal(resetPosition = true, resetRotation = true, resetHeight = true, updateRealFlags = false) {
         let playerHeadManager = this.getPlayerHeadManager();
 
-        playerHeadManager.teleportPositionFeet(this.getPosition(position));
+        if (resetPosition) {
+            playerHeadManager.teleportPositionFeet(this.getPosition(position));
+        }
 
         realUp = this.getPlayerHeadManager().getRotationFeetQuat(rotationQuat).quat_getUp(realUp);
         validUp = this.getRotationQuat(rotationQuat).quat_getUp(validUp);
 
         if (resetRotation || (realUp.vec3_angle(validUp) > Math.PP_EPSILON_DEGREES && this._myParams.myResetRealResetRotationIfUpChanged)) {
-            playerHeadManager.setRotationFeetQuat(this.getRotationQuat(rotationQuat));
+            playerHeadManager.setRotationFeetQuat(this.getRotationQuat(rotationQuat), false);
+        }
+
+        if (resetHeight) {
+            playerHeadManager.setHeight(this.getHeight(), true);
         }
 
         if (updateRealFlags) {
-            this._updateReal(0);
+            this._updateReal(0, false);
         }
     };
 }();
@@ -579,7 +586,19 @@ PlayerTransformManager.prototype.update = function () {
         if (this._myResetRealOnSynced) {
             if (this.getPlayerHeadManager().isSynced()) {
                 this._myResetRealOnSynced = false;
-                this.resetReal(true, false);
+                if (PP.XRUtils.isSessionActive()) {
+                    this.resetReal(
+                        !this._myParams.myNeverResetRealPositionVR,
+                        !this._myParams.myNeverResetRealRotationVR,
+                        !this._myParams.myNeverResetRealHeightVR,
+                        false);
+                } else {
+                    this.resetReal(
+                        !this._myParams.myNeverResetRealPositionNonVR,
+                        !this._myParams.myNeverResetRealRotationNonVR,
+                        !this._myParams.myNeverResetRealHeightNonVR,
+                        false);
+                }
             }
         }
 
@@ -623,7 +642,7 @@ PlayerTransformManager.prototype._updateReal = function () {
     let floatingTransformQuat = PP.quat2_create();
     let horizontalDirection = PP.vec3_create();
     let rotationQuat = PP.quat_create();
-    return function _updateReal(dt) {
+    return function _updateReal(dt, resetRealEnabled = true) {
         // check if new head is ok and update the data
         // if head is not synced (blurred or session changing) avoid this and keep last valid
         if (this.getPlayerHeadManager().isSynced()) {
@@ -634,11 +653,6 @@ PlayerTransformManager.prototype._updateReal = function () {
             this._myIsLeaning = false;
             this._myIsHopping = false;
             this._myIsFar = false;
-
-            //this._myValidPosition = PP.vec3_create();
-            //this._myValidRotationQuat = new PP.quat_create();
-            //this._myValidHeight = 0;
-            //this._myValidPositionHead = PP.vec3_create();
 
             movementToCheck = this.getPositionReal(positionReal).vec3_sub(this.getPosition(position), movementToCheck);
             if (movementToCheck.vec3_length() > 0.0001) {
@@ -836,8 +850,18 @@ PlayerTransformManager.prototype._updateReal = function () {
                 this._updateCollisionHeight();
             }
 
-            if (this.isSynced(this._myParams.mySyncPositionFlagMap)) {
-                this.resetReal(true);
+            if (resetRealEnabled) {
+                if (PP.XRUtils.isSessionActive()) {
+                    let resetPosition = (this.isSynced(this._myParams.mySyncPositionFlagMap) || this._myParams.myAlwaysResetRealPositionVR) && !this._myParams.myNeverResetRealPositionVR;
+                    let resetRotation = (this.isSynced(this._myParams.mySyncRotationFlagMap) || this._myParams.myAlwaysResetRealRotationVR) && !this._myParams.myNeverResetRealRotationVR;
+                    let resetHeight = (this.isSynced(this._myParams.mySyncHeightFlagMap) || this._myParams.myAlwaysResetRealHeightVR) && !this._myParams.myNeverResetRealHeightVR;
+                    this.resetReal(resetPosition, resetRotation, resetHeight, false);
+                } else {
+                    let resetPosition = (this.isSynced(this._myParams.mySyncPositionFlagMap) || this._myParams.myAlwaysResetRealPositionNonVR) && !this._myParams.myNeverResetRealPositionNonVR;
+                    let resetRotation = (this.isSynced(this._myParams.mySyncRotationFlagMap) || this._myParams.myAlwaysResetRealRotationNonVR) && !this._myParams.myNeverResetRealRotationNonVR;
+                    let resetHeight = (this.isSynced(this._myParams.mySyncHeightFlagMap) || this._myParams.myAlwaysResetRealHeightNonVR) && !this._myParams.myNeverResetRealHeightNonVR;
+                    this.resetReal(resetPosition, resetRotation, resetHeight, false);
+                }
             }
 
             if (this._myParams.myUpdateRealPositionValid) {
@@ -855,4 +879,34 @@ PlayerTransformManager.prototype._updateReal = function () {
             }
         }
     }
+}();
+
+PlayerTransformManager.prototype.move = function () {
+    let transformQuat = PP.quat2_create();
+    let fixedMovement = PP.vec3_create();
+    return function move(movement, outCollisionRuntimeParams = null, forceMove = false) {
+        transformQuat = this.getTransformQuat(transformQuat);
+
+        fixedMovement.vec3_copy(movement);
+        if (!forceMove) {
+            CollisionCheckGlobal.move(movement, transformQuat, this._myParams.myMovementCollisionCheckParams, this._myCollisionRuntimeParams);
+            if (outCollisionRuntimeParams != null) {
+                outCollisionRuntimeParams.copy(this._myCollisionRuntimeParams);
+            }
+            fixedMovement.vec3_copy(this._myCollisionRuntimeParams.myFixedMovement);
+        }
+
+        if (!fixedMovement.vec3_isZero(0.00001)) {
+            this._myValidPosition.vec3_add(fixedMovement, this._myValidPosition);
+            this.getPlayerHeadManager().moveFeet(fixedMovement);
+
+            if (this._myParams.myResetRealOnMove) {
+                this.resetReal(
+                    !this._myParams.myNeverResetRealPositionVR,
+                    !this._myParams.myNeverResetRealRotationVR,
+                    !this._myParams.myNeverResetRealHeightVR,
+                    false);
+            }
+        }
+    };
 }();

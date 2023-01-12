@@ -45,8 +45,13 @@ TEMP:
 - non vr camera height issue when exiting session but non vr height is higher and collide
 	
 - resync on move/teleport
+	- move/teleport/rotate also rotate the player by the difference (non teleprotano direttamente ma spostano), si può anche fare un resetReal
 
-- non in vr session può evitare tutti i check perché tanto non ti puoi muovere, aggiungere un modo per farlo
+- sincronizza la rotazione valida con quella reale enabled o no 
+- aggiorna i surface all'inizio in ogni caso
+
+- fai collision check o no per i vari move/teleport/rotate
+- aggiungere setHeight con collision check
 
 - create a surface info and sliding info struct and u get those, it's basically what u really want apart for specific things that u get by asking for the collision runtime right when u ask for the move
 
