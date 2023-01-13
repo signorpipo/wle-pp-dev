@@ -132,7 +132,7 @@ PlayerLocomotion = class PlayerLocomotion {
             params.myAlwaysResetRealHeightVR = false;
 
             params.myNeverResetRealPositionNonVR = false;
-            params.myNeverResetRealRotationNonVR = false;
+            params.myNeverResetRealRotationNonVR = true;
             params.myNeverResetRealHeightNonVR = false;
 
             params.myNeverResetRealPositionVR = false;

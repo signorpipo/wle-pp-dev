@@ -18,36 +18,27 @@ v Se ti sposti troppo dall'ultima posizione valida anche se la testa è fuori di
 v Se non c'è movimento non applicare la gravità alla testa o addirittura, se è snappato oppure sta volando non snappare proprio
 	v questa potrebbe essere una opzioni, o piuttosto applicare la gravità, senza movimento, solo se la testa si allontana più di un tot e finché nel punto "originale" c'è ancora il ground
 	v quando muovi, se sei entro la distanza, riparti dal punto non gravitoso quasi come se stessi collidendo
+	
+v Se muovi lo stick e non era in una posizione valida torna alla posizione valida (teletrasporto, se funziona)
 
-- Provare a lerpare il movimento verticale quando c'è lo snappare (magari snappa direttamente nel collision check, cioè esce di un po' già li ma non totalmente?)
-	- il position check già ammette che dover fare snap sia comunque una posizione ok
+v teleport e smooth potrebbero non effettuare effettivamente il check, ma piuttosto richiedere il movimento / teleport (fare i check per decidere se farlo o meno ok) così da rientrare nel flow delle altre cose che vogliono far muovere nel caso
+
 - Aggiungere speed/acceleration nella smooth (tempo per raggiungere max speed, tempo per raggiungere 0)
 
 - Collision manager con character gravity e gravity direction globali, usarli in smooth e teleport
 	- mettere la gravità fuori da locomotion e teleport, e applicarla all'ultima posizione valida se sta collidendo
 
-- Se muovi lo stick e non era in una posizione valida torna alla posizione valida (teletrasporto, se funziona)
-
-- teleport e smooth potrebbero non effettuare effettivamente il check, ma piuttosto richiedere il movimento / teleport (fare i check per decidere se farlo o meno ok) così da rientrare nel flow delle altre cose che vogliono far muovere nel caso
-
 - Pensare a come potrebbe essere un componente esposto semplice player character controller, da li pensare a come riaggiustare i parametri
 - Componente character-controller che semplicemente ha la collisione e puoi dirgli di fare un movimento e lui lo corregge
 	
 - rimuovere tutti i 0.0001 per cose come l'ignore angle, complicano un po' tutto e alla fine se uno vuole può mettere il parametro leggermente più altro lui stesso
-
-- avere flag verticali e orizzontali di collisioni, per esempio i character potresti volerci collidere solo orizzontalmente ma non verticalmente
-	- questo forse ha senso solo nel momento in cui ho introdotto il meccanismo di uscire dalle collisioni, altrimenti potresti entrare in un character dall'alto
 	
 - REFACTOR
 
 
 TEMP:
-- non vr camera height issue when exiting session but non vr height is higher and collide
-
-- sincronizza la rotazione valida con quella reale enabled o no 
 - aggiorna i surface all'inizio in ogni caso
 
-- fai collision check o no per i vari move/teleport/rotate
 - aggiungere setHeight con collision check
 
 - maybe the transform manager should only work for the overall transform, with the head on another class that also manage the hands?
@@ -100,6 +91,12 @@ LOCOMOTION EXTRA HARD:
 		- questo potrebbe rendere più complicato uscire dalle collisioni in cui tu sei fra due muri paralleli, ma se puoi slidare e quello può andare nella direzione ultima valida allora dovrebbe funzionare lo stesso
 		- eviterebbe di collidere ancora di più consentendo però di poter uscire
 		- non pul avere tolleranza verso il basso perché altrimenti piano piano potresti collidere di più
+
+- avere flag verticali e orizzontali di collisioni, per esempio i character potresti volerci collidere solo orizzontalmente ma non verticalmente
+	- questo forse ha senso solo nel momento in cui ho introdotto il meccanismo di uscire dalle collisioni, altrimenti potresti entrare in un character dall'alto
+		
+- Provare a lerpare il movimento verticale quando c'è lo snappare (magari snappa direttamente nel collision check, cioè esce di un po' già li ma non totalmente?)
+	- il position check già ammette che dover fare snap sia comunque una posizione ok
 
 - transform manager lerp posizione, si può evitare considerando la complicanza e poca utile, vedere poi
 	- il reset real to valid lo potrebbe anche fare con un lerp stile smooth teleport

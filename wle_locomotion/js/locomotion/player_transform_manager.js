@@ -196,30 +196,32 @@ PlayerTransformManager = class PlayerTransformManager {
         // move should move the valid transform, but also move the player object so that they head, even is colliding is dragged with it
         // also teleport, should get the difference from previous and move the player object, this will keep the relative position head-to-valid
 
-        //#TODO
+        // implemented outside class definition
     }
 
     teleportPosition(position, outCollisionRuntimeParams = null, forceTeleport = false) {
         // collision check and teleport, if force teleport teleport in any case
         // use current valid rotation
 
-        //#TODO
+        // implemented outside class definition
     }
 
     teleportTransformQuat(transformQuat, outCollisionRuntimeParams = null, forceTeleport = false) {
         // collision check and teleport, if force teleport teleport in any case
 
-        //#TODO
+        // implemented outside class definition
     }
 
-    rotateQuat(rotationQuat, keepUp) {
-        // rotate the valid rotation
-        // maybe check if the new position with this new orientation is valid as an extra check
-        this.myPlayerHeadManager.rotateFeetQuat(rotationQuat);
+    rotateQuat(rotationQuat) {
+        // implemented outside class definition
     }
 
     setRotationQuat(rotationQuat) {
-        this.myPlayerHeadManager.setRotationFeetQuat(rotationQuat);
+        // implemented outside class definition
+    }
+
+    setHeight(height, forceSet = false) {
+        // implemented outside class definition
     }
 
     getPlayer() {
@@ -839,6 +841,7 @@ PlayerTransformManager.prototype._updateReal = function () {
 
             if (this.isSynced(this._myParams.mySyncPositionFlagMap) && !this._myParams.mySyncPositionDisabled) {
                 this._myValidPosition.vec3_copy(newPosition);
+                //reset real position dato che la posizione new potrebbe essere quella influenzata da snap
             }
 
             if (this.isSynced(this._myParams.mySyncPositionHeadFlagMap)) {
@@ -854,7 +857,7 @@ PlayerTransformManager.prototype._updateReal = function () {
                 this._updateCollisionHeight();
             }
 
-            if (resetRealEnabled) {
+            if (resetRealEnabled) { //no
                 if (PP.XRUtils.isSessionActive()) {
                     let resetPosition = (this.isSynced(this._myParams.mySyncPositionFlagMap) || this._myParams.myAlwaysResetRealPositionVR) && !this._myParams.myNeverResetRealPositionVR;
                     let resetRotation = (this.isSynced(this._myParams.mySyncRotationFlagMap) || this._myParams.myAlwaysResetRealRotationVR) && !this._myParams.myNeverResetRealRotationVR;
@@ -1007,6 +1010,29 @@ PlayerTransformManager.prototype.setRotationQuat = function () {
     return function setRotationQuat(rotationQuat) {
         rotationToPerform = this._myValidRotationQuat.quat_rotationToQuat(rotationQuat, rotationToPerform);
         this.rotateQuat(rotationToPerform);
+    };
+}();
+
+PlayerTransformManager.prototype.setHeight = function () {
+    let transformQuat = PP.quat2_create();
+    return function setHeight(height, forceSet = false) {
+        let fixedHeight = Math.pp_clamp(height, this._myParams.myMinHeight, this._myParams.myMaxHeight);
+        let previousHeight = this.getHeight();
+
+        this._myValidHeight = fixedHeight;
+        this._updateCollisionHeight();
+
+        transformQuat = this.getTransformQuat(transformQuat);
+
+        CollisionCheckGlobal.positionCheck(true, transformQuat, this._myParams.myMovementCollisionCheckParams, this._myCollisionRuntimeParams);
+
+        if (this._myCollisionRuntimeParams.myIsPositionOk || forceSet) {
+            this.getPlayerHeadManager().setHeight(this.getHeight(), true);
+        } else {
+            this._myValidHeight = previousHeight;
+        }
+
+        this._updateCollisionHeight();
     };
 }();
 

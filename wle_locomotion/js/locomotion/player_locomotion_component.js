@@ -55,7 +55,7 @@ WL.registerComponent('player-locomotion', {
         PP.myEasyTuneVariables.add(new PP.EasyTuneTransform("Transform 1", PP.mat4_create()));
         PP.myEasyTuneVariables.add(new PP.EasyTuneBool("Bool 1", false));
 
-        this._myStartCounter = 3;
+        this._myStartCounter = 2;
     },
     update(dt) {
         if (this._myStartCounter > 0) {
