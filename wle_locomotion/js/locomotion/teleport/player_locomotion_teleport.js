@@ -23,7 +23,7 @@ PlayerLocomotionTeleportParams = class PlayerLocomotionTeleportParams {
 
         this.myStickIdleThreshold = 0.1;
 
-        this.myAdjustPositionEveryFrame = true;
+        this.myAdjustPositionEveryFrame = false;
         this.myGravityAcceleration = 0;
 
         this.myDebugActive = false;
@@ -93,6 +93,7 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport extends PlayerLocomoti
 
         this._myFSM.update(dt);
 
+        // no gravity if teleporting
         if (this._myTeleportParams.myAdjustPositionEveryFrame || this._myTeleportParams.myGravityAcceleration != 0) {
             this._applyGravity(dt);
         }

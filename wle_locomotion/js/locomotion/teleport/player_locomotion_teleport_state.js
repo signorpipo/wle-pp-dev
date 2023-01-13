@@ -107,7 +107,7 @@ PlayerLocomotionTeleportState.prototype._teleportToPosition = function () {
     let newFeetTransformQuat = PP.quat2_create();
     let newFeetRotationQuat = PP.quat_create();
     let teleportRotation = PP.quat_create();
-    return function _teleportToPosition(teleportPosition, rotationOnUp, collisionRuntimeParams) {
+    return function _teleportToPosition(teleportPosition, rotationOnUp, collisionRuntimeParams, forceTeleport = false) {
         this._myTeleportAsMovementFailed = false;
 
         playerUp = this._myTeleportParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
@@ -120,12 +120,17 @@ PlayerLocomotionTeleportState.prototype._teleportToPosition = function () {
 
         newFeetTransformQuat.quat2_setPositionRotationQuat(teleportPosition, newFeetRotationQuat);
 
-        CollisionCheckGlobal.positionCheck(true, newFeetTransformQuat, this._myTeleportParams.myCollisionCheckParams, collisionRuntimeParams);
+        if (PP.myGamepads[PP.InputUtils.getOppositeHandedness(this._myTeleportParams.myHandedness)].getButtonInfo(PP.GamepadButtonID.BOTTOM_BUTTON).isPressed()) {
+            CollisionCheckGlobal.positionCheck(true, newFeetTransformQuat, this._myTeleportParams.myCollisionCheckParams, collisionRuntimeParams);
 
-        this._myTeleportParams.myPlayerHeadManager.teleportPositionFeet(teleportPosition);
-        if (rotationOnUp != 0) {
-            teleportRotation.quat_fromAxis(rotationOnUp, playerUp);
-            this._myTeleportParams.myPlayerHeadManager.rotateFeetQuat(teleportRotation);
+            this._myTeleportParams.myPlayerHeadManager.teleportPositionFeet(teleportPosition);
+            if (rotationOnUp != 0) {
+                teleportRotation.quat_fromAxis(rotationOnUp, playerUp);
+                this._myTeleportParams.myPlayerHeadManager.rotateFeetQuat(teleportRotation);
+            }
+        } else {
+            //should teleport then rotate
+            this._myTeleportParams.myPlayerTransformManager.teleportTransformQuat(newFeetTransformQuat, collisionRuntimeParams, forceTeleport);
         }
     };
 }();

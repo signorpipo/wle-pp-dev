@@ -265,7 +265,7 @@ PlayerLocomotion = class PlayerLocomotion {
                 params.myTeleportAsMovementRemoveVerticalMovement = true;
                 params.myTeleportAsMovementExtraVerticalMovementPerMeter = -2;
 
-                params.myGravityAcceleration = -9.81;
+                params.myGravityAcceleration = 0;
 
                 params.myDebugActive = false;
                 params.myDebugDetectActive = true;

@@ -53,6 +53,8 @@ PlayerLocomotionTeleportTeleportShiftState = class PlayerLocomotionTeleportTelep
     }
 
     _startShifting() {
+        this._myTeleportParams.myPlayerTransformManager.getParams().mySyncPositionDisabled = true;
+
         this._myLocomotionRuntimeParams.myIsTeleporting = true;
         this._myFeetStartPosition = this._myTeleportParams.myPlayerHeadManager.getPositionFeet(this._myFeetStartPosition);
 
@@ -84,6 +86,7 @@ PlayerLocomotionTeleportTeleportShiftState = class PlayerLocomotionTeleportTelep
     }
 
     _teleport() {
+        this._myTeleportParams.myPlayerTransformManager.getParams().mySyncPositionDisabled = false;
         //this._myLocomotionRuntimeParams.myIsTeleporting = false;
         this._myLocomotionRuntimeParams.myTeleportJustPerformed = true;
         this._teleportToPosition(this._myTeleportRuntimeParams.myTeleportPosition, this._myStartRotationOnUp - this._myCurrentRotationOnUp, this._myLocomotionRuntimeParams.myCollisionRuntimeParams);
@@ -126,7 +129,8 @@ PlayerLocomotionTeleportTeleportShiftState.prototype._shiftingUpdate = function 
                 this._myCurrentRotationOnUp = newCurrentRotationOnUp;
             }
 
-            this._teleportToPosition(newFeetPosition, rotationOnUp, this._myLocomotionRuntimeParams.myCollisionRuntimeParams);
+            this._teleportToPosition(newFeetPosition, rotationOnUp, this._myLocomotionRuntimeParams.myCollisionRuntimeParams, true);
+
         }
     };
 }();

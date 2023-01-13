@@ -122,6 +122,9 @@ PlayerTransformManagerParams = class PlayerTransformManagerParams {
         this.myNeverResetRealHeightVR = false;
 
         this.myResetRealOnMove = false;
+        this.myResetRealOnTeleport = false;
+
+        this.mySyncPositionDisabled = false;
 
         this.myDebugActive = false;
     }
@@ -833,7 +836,7 @@ PlayerTransformManager.prototype._updateReal = function () {
                 }
             }
 
-            if (this.isSynced(this._myParams.mySyncPositionFlagMap)) {
+            if (this.isSynced(this._myParams.mySyncPositionFlagMap) && !this._myParams.mySyncPositionDisabled) {
                 this._myValidPosition.vec3_copy(newPosition);
             }
 
@@ -903,31 +906,92 @@ PlayerTransformManager.prototype.move = function () {
             this.getPlayerHeadManager().moveFeet(fixedMovement);
         }
 
+        // this make reset happens even for gravity, maybe u should do it manually
         if (this._myParams.myResetRealOnMove) {
-            if (PP.XRUtils.isSessionActive()) {
-                this.resetReal(
-                    !this._myParams.myNeverResetRealPositionVR,
-                    !this._myParams.myNeverResetRealRotationVR,
-                    !this._myParams.myNeverResetRealHeightVR,
-                    false);
-            } else {
-                this.resetReal(
-                    !this._myParams.myNeverResetRealPositionNonVR,
-                    !this._myParams.myNeverResetRealRotationNonVR,
-                    !this._myParams.myNeverResetRealHeightNonVR,
-                    false);
+            if (!this.isSynced()) {
+                if (PP.XRUtils.isSessionActive()) {
+                    this.resetReal(
+                        !this._myParams.myNeverResetRealPositionVR,
+                        !this._myParams.myNeverResetRealRotationVR,
+                        !this._myParams.myNeverResetRealHeightVR,
+                        false);
+                } else {
+                    this.resetReal(
+                        !this._myParams.myNeverResetRealPositionNonVR,
+                        !this._myParams.myNeverResetRealRotationNonVR,
+                        !this._myParams.myNeverResetRealHeightNonVR,
+                        false);
+                }
             }
         }
 
         //#TODO add move callback
     };
 }();
-                this.resetReal(
-                    !this._myParams.myNeverResetRealPositionVR,
-                    !this._myParams.myNeverResetRealRotationVR,
-                    !this._myParams.myNeverResetRealHeightVR,
-                    false);
-            }
-        }
+
+PlayerTransformManager.prototype.teleportPosition = function () {
+    let teleportTransformQuat = PP.quat2_create();
+    return function teleportPosition(teleportPosition, outCollisionRuntimeParams = null, forceTeleport = false) {
+        teleportTransformQuat = this.getTransformQuat(teleportTransformQuat);
+        teleportTransformQuat.quat2_setPosition(teleportPosition);
+        this.teleportTransformQuat(teleportTransformQuat, outCollisionRuntimeParams, forceTeleport);
     };
 }();
+
+PlayerTransformManager.prototype.teleportTransformQuat = function () {
+    let currentPosition = PP.vec3_create();
+    let teleportPositionVec = PP.vec3_create();
+    let teleportRotation = PP.quat_create();
+    let rotatedTransformQuat = PP.quat2_create();
+    let fixedMovement = PP.vec3_create();
+    return function teleportTransformQuat(teleportTransformQuat, outCollisionRuntimeParams = null, forceTeleport = false) {
+        currentPosition = this.getPosition(currentPosition);
+        teleportPositionVec = teleportTransformQuat.quat2_getPosition(teleportPositionVec);
+        teleportRotation = teleportTransformQuat.quat2_getRotationQuat(teleportRotation);
+
+        rotatedTransformQuat.quat2_setPositionRotationQuat(currentPosition, teleportRotation);
+
+        CollisionCheckGlobal.teleport(teleportPositionVec, rotatedTransformQuat, this._myParams.myTeleportCollisionCheckParams, this._myCollisionRuntimeParams);
+        if (outCollisionRuntimeParams != null) {
+            outCollisionRuntimeParams.copy(this._myCollisionRuntimeParams);
+        }
+
+        fixedMovement.vec3_zero();
+        if (!forceTeleport) {
+            if (!this._myCollisionRuntimeParams.myTeleportCanceled) {
+                fixedMovement = this._myCollisionRuntimeParams.myFixedTeleportPosition.vec3_sub(currentPosition, fixedMovement);
+                this.getPlayerHeadManager().setRotationFeetQuat(teleportRotation);
+            }
+        } else {
+            fixedMovement = teleportPositionVec.vec3_sub(currentPosition, fixedMovement);
+            this.getPlayerHeadManager().setRotationFeetQuat(teleportRotation);
+        }
+
+        if (!fixedMovement.vec3_isZero(0.00001)) {
+            this._myValidPosition.vec3_add(fixedMovement, this._myValidPosition);
+            this.getPlayerHeadManager().moveFeet(fixedMovement);
+        }
+
+        if (this._myParams.myResetRealOnTeleport) {
+            if (!this.isSynced()) {
+                if (PP.XRUtils.isSessionActive()) {
+                    this.resetReal(
+                        !this._myParams.myNeverResetRealPositionVR,
+                        !this._myParams.myNeverResetRealRotationVR,
+                        !this._myParams.myNeverResetRealHeightVR,
+                        false);
+                } else {
+                    this.resetReal(
+                        !this._myParams.myNeverResetRealPositionNonVR,
+                        !this._myParams.myNeverResetRealRotationNonVR,
+                        !this._myParams.myNeverResetRealHeightNonVR,
+                        false);
+                }
+            }
+        }
+
+        //#TODO add teleport callback
+    };
+}();
+
+//sliding info, surface info, update

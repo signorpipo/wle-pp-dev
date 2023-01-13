@@ -43,9 +43,6 @@ v Se non c'è movimento non applicare la gravità alla testa o addirittura, se �
 
 TEMP:
 - non vr camera height issue when exiting session but non vr height is higher and collide
-	
-- resync on move/teleport
-	- move/teleport/rotate also rotate the player by the difference (non teleprotano direttamente ma spostano), si può anche fare un resetReal
 
 - sincronizza la rotazione valida con quella reale enabled o no 
 - aggiorna i surface all'inizio in ogni caso
@@ -53,18 +50,11 @@ TEMP:
 - fai collision check o no per i vari move/teleport/rotate
 - aggiungere setHeight con collision check
 
-- create a surface info and sliding info struct and u get those, it's basically what u really want apart for specific things that u get by asking for the collision runtime right when u ask for the move
-
-- a succesful teleport just override everything, a failed nothing, a succesful movement override the sliding if there was an horizontal part, otherwise not, the ground is always overridden if there was at least a movement performed
-
 - maybe the transform manager should only work for the overall transform, with the head on another class that also manage the hands?
 	- o forse, sebbene l'idea di avere una cosa un po' generica che ti fa il servizio di darti l'ultima valida non collidosa, fino alle mani è piu comodo che sia tutta nel
 	  player character controller
 	- se funziona solo per la feet transform poi ne creo un'altra che funziona genericamente prendendo una posizione con una callback e dandoti l'ultima valida, che puoi usare per la testa o come vuoi
 	  facilmente, poi magari il character controller o qualcosa che wrappa tutto ti da tutto insieme
-
-- aggiungere un modo al transform manager per sapere se la transform valida sta collidendo, così se vuoi vedendolo dici ok c'è un problema non risolvibili teletrasporta in un punto safe
-
 
 - physx collector can use a physx list, also add physx collision data and use that in the collision array
 - provare a fare che i thumbstickspariscono e appaiono solo se premi nella metà dello schermo (pp-virtual-thumbstick, aggiunggere visible callback, se è nulla è sempre visible)
