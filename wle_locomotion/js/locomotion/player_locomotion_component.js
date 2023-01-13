@@ -49,17 +49,25 @@ WL.registerComponent('player-locomotion', {
         params.myTeleportPositionObject = this._myTeleportPositionObject;
 
         this._myPlayerLocomotion = new PlayerLocomotion(params);
-        this._myPlayerLocomotion.start();
 
         PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Float 1", 0.15, 0.5, 3));
         PP.myEasyTuneVariables.add(new PP.EasyTuneNumberArray("Float Array 1", [1, 2, 3], 0.5, 3));
         PP.myEasyTuneVariables.add(new PP.EasyTuneTransform("Transform 1", PP.mat4_create()));
         PP.myEasyTuneVariables.add(new PP.EasyTuneBool("Bool 1", false));
+
+        this._myStartCounter = 3;
     },
     update(dt) {
-        _myTotalRaycasts = 0; // #TODO debug stuff, remove later
+        if (this._myStartCounter > 0) {
+            this._myStartCounter--;
+            if (this._myStartCounter == 0) {
+                this._myPlayerLocomotion.start();
+            }
+        } else {
+            _myTotalRaycasts = 0; // #TODO debug stuff, remove later
 
-        this._myPlayerLocomotion.update(dt);
+            this._myPlayerLocomotion.update(dt);
+        }
 
         //_myTotalRaycastsMax = Math.max(_myTotalRaycasts, _myTotalRaycastsMax);
         //console.error(_myTotalRaycastsMax);

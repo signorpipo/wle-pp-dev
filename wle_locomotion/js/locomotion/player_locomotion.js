@@ -180,6 +180,7 @@ PlayerLocomotion = class PlayerLocomotion {
             let params = new PlayerLocomotionRotateParams();
 
             params.myPlayerHeadManager = this._myPlayerHeadManager;
+            params.myPlayerTransformManager = this._myPlayerTransformManager;
 
             params.myMaxRotationSpeed = this._myParams.myMaxRotationSpeed;
             params.myIsSnapTurn = this._myParams.myIsSnapTurn;
