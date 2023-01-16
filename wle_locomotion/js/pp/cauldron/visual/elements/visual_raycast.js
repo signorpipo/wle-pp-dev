@@ -1,6 +1,6 @@
 /*
 let visualParams = new PP.VisualRaycastParams();
-visualParams.myRaycastResult = raycastResult;
+visualParams.myRaycastResults = raycastResults;
 PP.myVisualManager.draw(visualParams);
 
 or
@@ -11,7 +11,7 @@ let visualRaycast = new PP.VisualRaycast(visualParams);
 PP.VisualRaycastParams = class VisualRaycastParams {
 
     constructor() {
-        this._myRaycastResult = new PP.RaycastResult();
+        this._myRaycastResults = new PP.RaycastResults();
 
         this.myHitNormalLength = 0.2;
         this.myThickness = 0.005;
@@ -26,12 +26,12 @@ PP.VisualRaycastParams = class VisualRaycastParams {
         this.myType = PP.VisualElementType.RAYCAST;
     }
 
-    get myRaycastResult() {
-        return this._myRaycastResult;
+    get myRaycastResults() {
+        return this._myRaycastResults;
     }
 
-    set myRaycastResult(result) {
-        this._myRaycastResult.copy(result);
+    set myRaycastResults(result) {
+        this._myRaycastResults.copy(result);
     }
 };
 
@@ -62,12 +62,12 @@ PP.VisualRaycast = class VisualRaycast {
             this._myVisible = visible;
 
             if (this._myVisible) {
-                if (this._myParams.myRaycastResult.myRaycastSetup != null) {
+                if (this._myParams.myRaycastResults.myRaycastSetup != null) {
                     this._myVisualRaycast.setVisible(true);
                 }
 
-                if (this._myParams.myRaycastResult.myHits.length > 0) {
-                    let hitsToShow = Math.min(this._myParams.myRaycastResult.myHits.length, this._myVisualRaycastHitList.length);
+                if (this._myParams.myRaycastResults.myHits.length > 0) {
+                    let hitsToShow = Math.min(this._myParams.myRaycastResults.myHits.length, this._myVisualRaycastHitList.length);
 
                     for (let i = 0; i < hitsToShow; i++) {
                         let visualRaycastHit = this._myVisualRaycastHitList[i];
@@ -110,8 +110,8 @@ PP.VisualRaycast = class VisualRaycast {
 
         this._myVisualRaycast.forceRefresh();
 
-        if (this._myParams.myRaycastResult.myHits.length > 0) {
-            let hitsToRefresh = Math.min(this._myParams.myRaycastResult.myHits.length, this._myVisualRaycastHitList.length);
+        if (this._myParams.myRaycastResults.myHits.length > 0) {
+            let hitsToRefresh = Math.min(this._myParams.myRaycastResults.myHits.length, this._myVisualRaycastHitList.length);
 
             for (let i = 0; i < hitsToRefresh; i++) {
                 let visualRaycastHit = this._myVisualRaycastHitList[i];
@@ -137,15 +137,15 @@ PP.VisualRaycast = class VisualRaycast {
             visualRaycastHit.setVisible(false);
         }
 
-        if (this._myParams.myRaycastResult.myHits.length > 0) {
+        if (this._myParams.myRaycastResults.myHits.length > 0) {
             let raycastDistance = this._myParams.myShowOnlyFirstHit ?
-                this._myParams.myRaycastResult.myHits.pp_first().myDistance :
-                this._myParams.myRaycastResult.myHits.pp_last().myDistance;
+                this._myParams.myRaycastResults.myHits.pp_first().myDistance :
+                this._myParams.myRaycastResults.myHits.pp_last().myDistance;
 
             {
                 let visualRaycastParams = this._myVisualRaycast.getParams();
-                visualRaycastParams.myStart.vec3_copy(this._myParams.myRaycastResult.myRaycastSetup.myOrigin);
-                visualRaycastParams.myDirection.vec3_copy(this._myParams.myRaycastResult.myRaycastSetup.myDirection);
+                visualRaycastParams.myStart.vec3_copy(this._myParams.myRaycastResults.myRaycastSetup.myOrigin);
+                visualRaycastParams.myDirection.vec3_copy(this._myParams.myRaycastResults.myRaycastSetup.myDirection);
                 visualRaycastParams.myLength = raycastDistance;
                 visualRaycastParams.myThickness = this._myParams.myThickness;
 
@@ -162,7 +162,7 @@ PP.VisualRaycast = class VisualRaycast {
                 this._myVisualRaycast.setVisible(this._myVisible);
             }
 
-            let hitsToShow = this._myParams.myShowOnlyFirstHit ? 1 : this._myParams.myRaycastResult.myHits.length;
+            let hitsToShow = this._myParams.myShowOnlyFirstHit ? 1 : this._myParams.myRaycastResults.myHits.length;
             while (hitsToShow > this._myVisualRaycastHitList.length) {
                 this._addVisualRaycastHit();
             }
@@ -172,8 +172,8 @@ PP.VisualRaycast = class VisualRaycast {
 
                 {
                     let visualRaycastHitParams = visualRaycastHit.getParams();
-                    visualRaycastHitParams.myStart.vec3_copy(this._myParams.myRaycastResult.myHits[i].myPosition);
-                    visualRaycastHitParams.myDirection.vec3_copy(this._myParams.myRaycastResult.myHits[i].myNormal);
+                    visualRaycastHitParams.myStart.vec3_copy(this._myParams.myRaycastResults.myHits[i].myPosition);
+                    visualRaycastHitParams.myDirection.vec3_copy(this._myParams.myRaycastResults.myHits[i].myNormal);
                     visualRaycastHitParams.myLength = this._myParams.myHitNormalLength;
                     visualRaycastHitParams.myThickness = this._myParams.myThickness;
 
@@ -191,12 +191,12 @@ PP.VisualRaycast = class VisualRaycast {
                 }
             }
 
-        } else if (this._myParams.myRaycastResult.myRaycastSetup != null) {
+        } else if (this._myParams.myRaycastResults.myRaycastSetup != null) {
             {
                 let visualRaycastParams = this._myVisualRaycast.getParams();
-                visualRaycastParams.myStart.vec3_copy(this._myParams.myRaycastResult.myRaycastSetup.myOrigin);
-                visualRaycastParams.myDirection.vec3_copy(this._myParams.myRaycastResult.myRaycastSetup.myDirection);
-                visualRaycastParams.myLength = this._myParams.myRaycastResult.myRaycastSetup.myDistance;
+                visualRaycastParams.myStart.vec3_copy(this._myParams.myRaycastResults.myRaycastSetup.myOrigin);
+                visualRaycastParams.myDirection.vec3_copy(this._myParams.myRaycastResults.myRaycastSetup.myDirection);
+                visualRaycastParams.myLength = this._myParams.myRaycastResults.myRaycastSetup.myDistance;
                 visualRaycastParams.myThickness = this._myParams.myThickness;
 
                 if (this._myParams.myRayMaterial == null) {
@@ -226,7 +226,7 @@ PP.VisualRaycast = class VisualRaycast {
 
     clone() {
         let clonedParams = new PP.VisualRaycastParams();
-        clonedParams.myRaycastResult = this._myParams.myRaycastResult;
+        clonedParams.myRaycastResults = this._myParams.myRaycastResults;
         clonedParams.myHitNormalLength = this._myParams.myHitNormalLength;
         clonedParams.myThickness = this._myParams.myThickness;
         clonedParams.myShowOnlyFirstHit = this._myParams.myShowOnlyFirstHit;

@@ -8,7 +8,7 @@ raycastSetup.myBlockLayerFlags.setMask(flags);
 raycastSetup.myObjectsToIgnore.pp_clear();
 raycastSetup.myIgnoreHitsInsideCollision = false;
 
-let raycastResult = PP.PhysicsUtils.raycast(raycastSetup);
+let raycastResults = PP.PhysicsUtils.raycast(raycastSetup);
 */
 
 PP.RaycastSetup = class RaycastSetup {
@@ -35,7 +35,7 @@ PP.RaycastSetup = class RaycastSetup {
     }
 };
 
-PP.RaycastResult = class RaycastResult {
+PP.RaycastResults = class RaycastResult {
     constructor() {
         this.myRaycastSetup = null;
         this.myHits = [];
@@ -116,7 +116,7 @@ PP.RaycastResult = class RaycastResult {
     }
 };
 
-PP.RaycastResult.prototype.copy = function () {
+PP.RaycastResults.prototype.copy = function () {
     let copyHitCallback = function (currentElement, elementToCopy) {
         if (currentElement == null) {
             currentElement = new PP.RaycastHit();
@@ -193,4 +193,4 @@ PP.RaycastHit = class RaycastHit {
 
 
 
-Object.defineProperty(PP.RaycastResult.prototype, "copy", { enumerable: false });
+Object.defineProperty(PP.RaycastResults.prototype, "copy", { enumerable: false });

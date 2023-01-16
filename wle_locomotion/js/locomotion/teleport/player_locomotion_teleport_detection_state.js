@@ -212,7 +212,7 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable 
     let parableFinalPosition = PP.vec3_create();
 
     let raycastSetup = new PP.RaycastSetup();
-    let raycastResult = new PP.RaycastResult();
+    let raycastResult = new PP.RaycastResults();
 
     let parableHitPosition = PP.vec3_create();
     let parableHitNormal = PP.vec3_create();
@@ -541,7 +541,7 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportRotationVR = fun
 
 PlayerLocomotionTeleportDetectionState.prototype._isTeleportHitValid = function () {
     let raycastSetup = new PP.RaycastSetup();
-    let raycastResult = new PP.RaycastResult();
+    let raycastResult = new PP.RaycastResults();
 
     let playerUp = PP.vec3_create();
     return function _isTeleportHitValid(hit, rotationOnUp, checkTeleportCollisionRuntimeParams) {

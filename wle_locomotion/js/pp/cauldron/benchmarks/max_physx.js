@@ -24,7 +24,7 @@ WL.registerComponent('pp-benchmark-max-physx', {
         this._myRootObject = WL.scene.addObject(this.object);
 
         this._myRaycastSetup = new PP.RaycastSetup();
-        this._myRaycastResult = new PP.RaycastResult();
+        this._myRaycastResults = new PP.RaycastResults();
 
         this._myStaticPhysXObjects = [];
         this._myStaticPhysXComponents = [];
@@ -150,10 +150,10 @@ WL.registerComponent('pp-benchmark-max-physx', {
             this._myRaycastSetup.myDistance = distance;
             this._myRaycastSetup.myBlockLayerFlags.setMask(255);
 
-            let raycastResult = PP.PhysicsUtils.raycast(this._myRaycastSetup, this._myRaycastResult);
+            let raycastResults = PP.PhysicsUtils.raycast(this._myRaycastSetup, this._myRaycastResults);
 
             if (debugActive) {
-                PP.myDebugVisualManager.drawRaycast(this._myDebugTimer.getDuration(), raycastResult, true, 5, 0.015);
+                PP.myDebugVisualManager.drawRaycast(this._myDebugTimer.getDuration(), raycastResults, true, 5, 0.015);
             }
         }
     },

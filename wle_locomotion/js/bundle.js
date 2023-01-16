@@ -126,7 +126,7 @@ require('./pp/gameplay/character_controller/collision/collision_check_bridge/col
 require('./pp/gameplay/character_controller/collision/collision_check_bridge/collision_check/vertical_collision_check');
 require('./pp/gameplay/character_controller/collision/collision_check_bridge/collision_check/collision_surface_check');
 
-require('./pp/gameplay/character_controller/collision/character_collider_params');
+require('./pp/gameplay/character_controller/collision/character_collider_setup');
 require('./pp/gameplay/character_controller/collision/character_collision_result');
 require('./pp/gameplay/character_controller/collision/character_collision_detector');
 

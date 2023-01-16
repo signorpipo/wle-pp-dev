@@ -51,7 +51,7 @@ PP.DebugVisualManager = class DebugVisualManager extends PP.VisualManager {
 
     drawRaycast(lifetimeSeconds, raycastResult, showOnlyFirstHit = true, hitNormalLength = 0.2, thickness = 0.005) {
         let visualParams = new PP.VisualRaycastParams();
-        visualParams.myRaycastResult = raycastResult;
+        visualParams.myRaycastResults = raycastResult;
         visualParams.myShowOnlyFirstHit = showOnlyFirstHit;
         visualParams.myHitNormalLength = hitNormalLength;
         visualParams.myThickness = thickness;

@@ -55,7 +55,7 @@ PlayerLocomotionTeleportDetectionState.prototype._isPositionVisible = function (
     let raycastEndPosition = PP.vec3_create();
 
     let raycastSetup = new PP.RaycastSetup();
-    let raycastResult = new PP.RaycastResult();
+    let raycastResult = new PP.RaycastResults();
     return function _isPositionVisible(position) {
         let isVisible = true;
 
