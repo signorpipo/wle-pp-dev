@@ -102,12 +102,63 @@ require('./pp/debug/components/debug_transform_component');
 require('./pp/debug/components/debug_manager_component');
 
 //	GAMEPLAY
-require('./pp/gameplay/cauldron/direction_2D_to_3D_converter');
-require('./pp/gameplay/cauldron/number_over_value');
 
+//    CAULDRON
+require('./pp/gameplay/cauldron/cauldron/direction_2D_to_3D_converter');
+require('./pp/gameplay/cauldron/cauldron/number_over_value');
+
+require('./pp/gameplay/cauldron/player/player_head_controller');
+require('./pp/gameplay/cauldron/player/player_occlusion');
+require('./pp/gameplay/cauldron/player/components/player_head_controller_component');
+require('./pp/gameplay/cauldron/player/components/player_occlusion_component');
+
+//    CHARACTER CONTROLLER
+require('./pp/gameplay/character_controller/collision/collision_check_bridge/collision_check_bridge');
+require('./pp/gameplay/character_controller/collision/collision_check_bridge/collision_check/collision_params');
+require('./pp/gameplay/character_controller/collision/collision_check_bridge/collision_check/collision_check');
+require('./pp/gameplay/character_controller/collision/collision_check_bridge/collision_check/collision_movement_check');
+require('./pp/gameplay/character_controller/collision/collision_check_bridge/collision_check/collision_teleport_check');
+require('./pp/gameplay/character_controller/collision/collision_check_bridge/collision_check/collision_position_check');
+require('./pp/gameplay/character_controller/collision/collision_check_bridge/collision_check/horizontal_collision_check');
+require('./pp/gameplay/character_controller/collision/collision_check_bridge/collision_check/horizontal_collision_sliding');
+require('./pp/gameplay/character_controller/collision/collision_check_bridge/collision_check/horizontal_collision_movement_check');
+require('./pp/gameplay/character_controller/collision/collision_check_bridge/collision_check/horizontal_collision_position_check');
+require('./pp/gameplay/character_controller/collision/collision_check_bridge/collision_check/vertical_collision_check');
+require('./pp/gameplay/character_controller/collision/collision_check_bridge/collision_check/collision_surface_check');
+
+require('./pp/gameplay/character_controller/collision/character_collider_params');
+require('./pp/gameplay/character_controller/collision/character_collision_result');
+require('./pp/gameplay/character_controller/collision/character_collision_detector');
+
+require('./pp/gameplay/character_controller/components/character_controller_component');
+
+require('./pp/gameplay/character_controller/player/player_character_controller');
+require('./pp/gameplay/character_controller/player/player_head_character_controller');
+require('./pp/gameplay/character_controller/player/player_hand_character_controller');
+
+require('./pp/gameplay/character_controller/player/components/player_character_controller_component');
+require('./pp/gameplay/character_controller/player/components/player_head_character_controller_component');
+require('./pp/gameplay/character_controller/player/components/player_hand_character_controller_component');
+
+require('./pp/gameplay/character_controller/character_controller_utils');
+
+//    GRAB & THROW
 require('./pp/gameplay/grab_throw/grabbable');
 require('./pp/gameplay/grab_throw/grabber_hand');
 
+//    LOCOMOTION
+require('./pp/gameplay/locomotion/player/player_locomotion_smooth');
+require('./pp/gameplay/locomotion/player/player_locomotion_rotate');
+require('./pp/gameplay/locomotion/player/player_locomotion_gravity');
+
+require('./pp/gameplay/locomotion/player/teleport/player_locomotion_teleport');
+
+require('./pp/gameplay/locomotion/player/components/player_locomotion_teleport_component');
+require('./pp/gameplay/locomotion/player/components/player_locomotion_smooth_component');
+require('./pp/gameplay/locomotion/player/components/player_locomotion_rotate_component');
+require('./pp/gameplay/locomotion/player/components/player_locomotion_gravity_component');
+
+//    UTILS
 require('./pp/gameplay/utils/ca_utils');
 
 //	INPUT
@@ -218,17 +269,6 @@ require('./cauldron/stick_movement');
 //LOCOMOTION
 
 require('./locomotion/locomotion_utils');
-require('./locomotion/collision/collision_params');
-require('./locomotion/collision/collision_check');
-require('./locomotion/collision/collision_movement_check');
-require('./locomotion/collision/collision_teleport_check');
-require('./locomotion/collision/collision_position_check');
-require('./locomotion/collision/horizontal_collision_check');
-require('./locomotion/collision/horizontal_collision_sliding');
-require('./locomotion/collision/horizontal_collision_movement_check');
-require('./locomotion/collision/horizontal_collision_position_check');
-require('./locomotion/collision/vertical_collision_check');
-require('./locomotion/collision/collision_surface_check');
 require('./locomotion/player_head_manager');
 require('./locomotion/player_transform_manager');
 require('./locomotion/player_locomotion_rotate');
