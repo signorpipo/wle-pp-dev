@@ -262,15 +262,15 @@ WL.registerComponent('pp-benchmark-max-physx', {
         if (isStatic) {
             this._myStaticPhysXObjects.push(physX);
             this._myStaticPhysXComponents.push(physXComponent);
-            this._myStaticPhysXCollectors.push(new PP.PhysXCollisionCollector(physXComponent));
+            this._myStaticPhysXCollectors.push(new PP.PhysicsCollisionCollector(physXComponent));
         } else if (isDynamic) {
             this._myDynamicPhysXObjects.push(physX);
             this._myDynamicPhysXComponents.push(physXComponent);
-            this._myDynamicPhysXCollectors.push(new PP.PhysXCollisionCollector(physXComponent));
+            this._myDynamicPhysXCollectors.push(new PP.PhysicsCollisionCollector(physXComponent));
         } else {
             this._myKinematicPhysXObjects.push(physX);
             this._myKinematicPhysXComponents.push(physXComponent);
-            this._myKinematicPhysXCollectors.push(new PP.PhysXCollisionCollector(physXComponent));
+            this._myKinematicPhysXCollectors.push(new PP.PhysicsCollisionCollector(physXComponent));
         }
     }
 });

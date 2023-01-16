@@ -51,9 +51,7 @@ require('./pp/audio/howler/howler_audio_player');
 require('./pp/cauldron/benchmarks/max_physx');
 require('./pp/cauldron/benchmarks/max_visible_triangles');
 
-require('./pp/cauldron/cauldron/number_over_value');
 require('./pp/cauldron/cauldron/object_pool_manager');
-require('./pp/cauldron/cauldron/physx_collision_collector');
 require('./pp/cauldron/cauldron/save_manager');
 require('./pp/cauldron/cauldron/timer');
 
@@ -69,7 +67,6 @@ require('./pp/cauldron/fsm/state');
 require('./pp/cauldron/fsm/transition');
 require('./pp/cauldron/fsm/states/timer_state');
 
-require('./pp/cauldron/utils/ca_utils');
 require('./pp/cauldron/utils/color_utils');
 require('./pp/cauldron/utils/material_utils');
 require('./pp/cauldron/utils/mesh_utils');
@@ -81,6 +78,7 @@ require('./pp/cauldron/utils/browser_utils');
 require('./pp/cauldron/physics/physics_utils');
 require('./pp/cauldron/physics/physics_raycast_data');
 require('./pp/cauldron/physics/physics_layer_flags');
+require('./pp/cauldron/physics/physics_collision_collector');
 
 require('./pp/cauldron/visual/visual_manager');
 
@@ -105,9 +103,12 @@ require('./pp/debug/components/debug_manager_component');
 
 //	GAMEPLAY
 require('./pp/gameplay/cauldron/direction_2D_to_3D_converter');
+require('./pp/gameplay/cauldron/number_over_value');
 
 require('./pp/gameplay/grab_throw/grabbable');
 require('./pp/gameplay/grab_throw/grabber_hand');
+
+require('./pp/gameplay/utils/ca_utils');
 
 //	INPUT
 require('./pp/input/cauldron/finger_cursor');
