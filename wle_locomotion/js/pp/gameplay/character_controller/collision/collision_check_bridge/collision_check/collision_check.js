@@ -18,8 +18,8 @@ CollisionCheckUtils = {
 CollisionCheck = class CollisionCheck {
     constructor() {
         this._myRaycastSetup = new PP.RaycastSetup();
-        this._myRaycastResult = new PP.RaycastResult();
-        this._myFixRaycastResult = new PP.RaycastResult();
+        this._myRaycastResult = new PP.RaycastResults();
+        this._myFixRaycastResult = new PP.RaycastResults();
 
         this._myBackupRaycastHit = new PP.RaycastHit();
 

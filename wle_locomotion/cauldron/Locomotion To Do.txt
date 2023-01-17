@@ -23,18 +23,17 @@ v Se muovi lo stick e non era in una posizione valida torna alla posizione valid
 
 v teleport e smooth potrebbero non effettuare effettivamente il check, ma piuttosto richiedere il movimento / teleport (fare i check per decidere se farlo o meno ok) così da rientrare nel flow delle altre cose che vogliono far muovere nel caso
 
+x Collision manager con character gravity e gravity direction globali, usarli in smooth e teleport
+	x mettere la gravità fuori da locomotion e teleport, e applicarla all'ultima posizione valida se sta collidendo
+
+v Pensare a come potrebbe essere un componente esposto semplice player character controller, da li pensare a come riaggiustare i parametri
+v Componente character-controller che semplicemente ha la collisione e puoi dirgli di fare un movimento e lui lo corregge
+	
 - Aggiungere speed/acceleration nella smooth (tempo per raggiungere max speed, tempo per raggiungere 0)
-
-- Collision manager con character gravity e gravity direction globali, usarli in smooth e teleport
-	- mettere la gravità fuori da locomotion e teleport, e applicarla all'ultima posizione valida se sta collidendo
-
-- Pensare a come potrebbe essere un componente esposto semplice player character controller, da li pensare a come riaggiustare i parametri
-- Componente character-controller che semplicemente ha la collisione e puoi dirgli di fare un movimento e lui lo corregge
 	
 - rimuovere tutti i 0.0001 per cose come l'ignore angle, complicano un po' tutto e alla fine se uno vuole può mettere il parametro leggermente più altro lui stesso
 	
 - REFACTOR
-
 
 TEMP:
 - aggiorna i surface all'inizio in ogni caso

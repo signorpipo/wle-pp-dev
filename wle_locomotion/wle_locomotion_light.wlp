@@ -74,7 +74,8 @@
                         "_myTeleportParableStartReferenceObject": "895",
                         "_myVRDirectionReferenceType": "custom object",
                         "_myVRDirectionReferenceObject": "895",
-                        "_mySnapTurnOnlyInsideXRSession": false
+                        "_mySnapTurnOnlyInsideXRSession": false,
+                        "_mySnapTurnOnlyVR": false
                     },
                     "active": true
                 }

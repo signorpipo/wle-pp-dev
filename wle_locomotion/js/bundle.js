@@ -113,7 +113,6 @@ require('./pp/gameplay/cauldron/player/components/player_head_controller_compone
 require('./pp/gameplay/cauldron/player/components/player_occlusion_component');
 
 //    CHARACTER CONTROLLER
-require('./pp/gameplay/character_controller/collision/collision_check_bridge/collision_check_bridge');
 require('./pp/gameplay/character_controller/collision/collision_check_bridge/collision_check/collision_params');
 require('./pp/gameplay/character_controller/collision/collision_check_bridge/collision_check/collision_check');
 require('./pp/gameplay/character_controller/collision/collision_check_bridge/collision_check/collision_movement_check');
@@ -125,10 +124,15 @@ require('./pp/gameplay/character_controller/collision/collision_check_bridge/col
 require('./pp/gameplay/character_controller/collision/collision_check_bridge/collision_check/horizontal_collision_position_check');
 require('./pp/gameplay/character_controller/collision/collision_check_bridge/collision_check/vertical_collision_check');
 require('./pp/gameplay/character_controller/collision/collision_check_bridge/collision_check/collision_surface_check');
+require('./pp/gameplay/character_controller/collision/collision_check_bridge/collision_check_bridge');
 
 require('./pp/gameplay/character_controller/collision/character_collider_setup');
-require('./pp/gameplay/character_controller/collision/character_collision_result');
-require('./pp/gameplay/character_controller/collision/character_collision_detector');
+require('./pp/gameplay/character_controller/collision/character_collision_results');
+require('./pp/gameplay/character_controller/collision/character_collision_detection');
+
+require('./pp/gameplay/character_controller/character_controller');
+require('./pp/gameplay/character_controller/synced_character_controller');
+require('./pp/gameplay/character_controller/character_controller_utils');
 
 require('./pp/gameplay/character_controller/components/character_controller_component');
 
@@ -147,6 +151,8 @@ require('./pp/gameplay/grab_throw/grabbable');
 require('./pp/gameplay/grab_throw/grabber_hand');
 
 //    LOCOMOTION
+require('./pp/gameplay/locomotion/components/global_gravity');
+
 require('./pp/gameplay/locomotion/player/player_locomotion_smooth');
 require('./pp/gameplay/locomotion/player/player_locomotion_rotate');
 require('./pp/gameplay/locomotion/player/player_locomotion_gravity');
