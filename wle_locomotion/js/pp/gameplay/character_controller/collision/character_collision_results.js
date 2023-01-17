@@ -199,21 +199,18 @@ PP.CharacterCollisionCheckTransformResults = class CharacterCollisionCheckTransf
         this.myStartCheckTransformQuat = PP.quat2_create();
         this.myEndCheckTransformQuat = PP.quat2_create();
         this.myCheckTransformFailed = false;
-        this.myCheckTransformAllowAdjustments = false;
     }
 
     reset() {
         this.myStartCheckTransformQuat.quat2_identity();
         this.myEndCheckTransformQuat.quat2_identity();
         this.myCheckTransformFailed = false;
-        this.myCheckTransformAllowAdjustments = false;
     }
 
     copy(other) {
         this.myStartCheckTransformQuat.quat2_copy(other.myStartCheckTransformQuat);
         this.myEndCheckTransformQuat.quat2_copy(other.myEndCheckTransformQuat);
         this.myCheckTransformFailed = other.myCheckTransformFailed;
-        this.myCheckTransformAllowAdjustments = other.myCheckTransformAllowAdjustments;
     }
 };
 
@@ -227,8 +224,8 @@ PP.CharacterCollisionVerticalAdjustmentsResults = class CharacterCollisionCheckT
 
         this.myHasReducedVerticalMovement = false;
 
-        this.myHasAddedVerticalMovementBasedOnGroundAngle = false;
-        this.myHasAddedVerticalMovementBasedOnCeilingAngle = false;
+        this.myHasAddedVerticalMovementBasedOnGroundPerceivedAngle = false;
+        this.myHasAddedVerticalMovementBasedOnCeilingPerceivedAngle = false;
     }
 
     reset() {
@@ -240,8 +237,8 @@ PP.CharacterCollisionVerticalAdjustmentsResults = class CharacterCollisionCheckT
 
         this.myHasReducedVerticalMovement = false;
 
-        this.myHasAddedVerticalMovementBasedOnGroundAngle = false;
-        this.myHasAddedVerticalMovementBasedOnCeilingAngle = false;
+        this.myHasAddedVerticalMovementBasedOnGroundPerceivedAngle = false;
+        this.myHasAddedVerticalMovementBasedOnCeilingPerceivedAngle = false;
     }
 
     copy(other) {
@@ -253,8 +250,8 @@ PP.CharacterCollisionVerticalAdjustmentsResults = class CharacterCollisionCheckT
 
         this.myHasReducedVerticalMovement = other.myHasReducedVerticalMovement;
 
-        this.myHasAddedVerticalMovementBasedOnGroundAngle = other.myHasAddedVerticalMovementBasedOnGroundAngle;
-        this.myHasAddedVerticalMovementBasedOnCeilingAngle = other.myHasAddedVerticalMovementBasedOnCeilingAngle;
+        this.myHasAddedVerticalMovementBasedOnGroundPerceivedAngle = other.myHasAddedVerticalMovementBasedOnGroundPerceivedAngle;
+        this.myHasAddedVerticalMovementBasedOnCeilingPerceivedAngle = other.myHasAddedVerticalMovementBasedOnCeilingPerceivedAngle;
     }
 };
 
