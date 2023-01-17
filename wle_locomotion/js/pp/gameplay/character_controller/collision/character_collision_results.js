@@ -135,22 +135,16 @@ PP.CharacterCollisionTransformResults = class CharacterCollisionMovementResults 
     constructor() {
         this.myStartTransformQuat = PP.quat2_create();
         this.myEndTransformQuat = PP.quat2_create();
-        this.myStartHeight = 0;
-        this.myEndHeight = 0;
     }
 
     reset() {
         this.myStartTransformQuat.quat2_identity();
         this.myEndTransformQuat.quat2_identity();
-        this.myStartHeight = 0;
-        this.myEndHeight = 0;
     }
 
     copy(other) {
         this.myStartTransformQuat.quat2_copy(other.myStartTransformQuat);
         this.myEndTransformQuat.quat2_copy(other.myEndTransformQuat);
-        this.myStartHeight = other.myStartHeight;
-        this.myEndHeight = other.myEndHeight;
     }
 };
 
@@ -298,7 +292,7 @@ PP.CharacterCollisionInternalResults = class CharacterCollisionSplitMovementResu
         this.myLastValidHasSlid = false;
         this.myHasSlidTowardsOppositeDirection = false;
         this.mySlideFlickerPrevented = false;
-        this.mySlideFlickerPreventionCheckCounter = 0;
+        this.mySlideFlickerPreventionForceCheckCounter = 0;
         this.mySlide90DegreesSign = 0;
         this.mySlideRecompute90DegreesSign = true;
     }
@@ -313,7 +307,7 @@ PP.CharacterCollisionInternalResults = class CharacterCollisionSplitMovementResu
         this.myLastValidHasSlid = false;
         this.myHasSlidTowardsOppositeDirection = false;
         this.mySlideFlickerPrevented = false;
-        this.mySlideFlickerPreventionCheckCounter = 0;
+        this.mySlideFlickerPreventionForceCheckCounter = 0;
         this.mySlide90DegreesSign = 0;
         this.mySlideRecompute90DegreesSign = true;
     }
@@ -328,7 +322,7 @@ PP.CharacterCollisionInternalResults = class CharacterCollisionSplitMovementResu
         this.myLastValidHasSlid = other.myLastValidHasSlid;
         this.myHasSlidTowardsOppositeDirection = other.myHasSlidTowardsOppositeDirection;
         this.mySlideFlickerPrevented = other.mySlideFlickerPrevented;
-        this.mySlideFlickerPreventionCheckCounter = other.mySlideFlickerPreventionCheckCounter;
+        this.mySlideFlickerPreventionForceCheckCounter = other.mySlideFlickerPreventionForceCheckCounter;
         this.mySlide90DegreesSign = other.mySlide90DegreesSign;
         this.mySlideRecompute90DegreesSign = other.mySlideRecompute90DegreesSign;
     }
