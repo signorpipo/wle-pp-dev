@@ -26,10 +26,10 @@ PP.CollisionCheckBridge = {
     checkTransform: function () {
         let collisionCheckParams = new CollisionCheckParams();
         let collisionRuntimeParams = new CollisionRuntimeParams();
-        return function checkTransform(checkTransformQuat, allowFix, characterColliderSetup, prevCharacterCollisionResults, outCharacterCollisionResults = new PP.CharacterCollisionResults()) {
+        return function checkTransform(checkTransformQuat, allowAdjustments, characterColliderSetup, prevCharacterCollisionResults, outCharacterCollisionResults = new PP.CharacterCollisionResults()) {
             this.convertCharacterColliderSetupToCollisionCheckParams(characterColliderSetup, collisionCheckParams);
             this.convertCharacterCollisionResultsToCollisionRuntimeParams(prevCharacterCollisionResults, collisionRuntimeParams);
-            this._myCollisionCheck.positionCheck(allowFix, checkTransformQuat, collisionCheckParams, collisionRuntimeParams);
+            this._myCollisionCheck.positionCheck(allowAdjustments, checkTransformQuat, collisionCheckParams, collisionRuntimeParams);
             this.convertCharacterCollisionResultsToCollisionRuntimeParams(collisionRuntimeParams, outCharacterCollisionResults);
         }
     }(),

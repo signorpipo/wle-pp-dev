@@ -36,17 +36,12 @@ v Componente character-controller che semplicemente ha la collisione e puoi dirg
 - REFACTOR
 
 TEMP:
-- aggiorna i surface all'inizio in ogni caso
-
-- aggiungere setHeight con collision check
-
 - maybe the transform manager should only work for the overall transform, with the head on another class that also manage the hands?
 	- o forse, sebbene l'idea di avere una cosa un po' generica che ti fa il servizio di darti l'ultima valida non collidosa, fino alle mani è piu comodo che sia tutta nel
 	  player character controller
 	- se funziona solo per la feet transform poi ne creo un'altra che funziona genericamente prendendo una posizione con una callback e dandoti l'ultima valida, che puoi usare per la testa o come vuoi
 	  facilmente, poi magari il character controller o qualcosa che wrappa tutto ti da tutto insieme
 
-- physx collector can use a physx list, also add physx collision data and use that in the collision array
 - provare a fare che i thumbstickspariscono e appaiono solo se premi nella metà dello schermo (pp-virtual-thumbstick, aggiunggere visible callback, se è nulla è sempre visible)
 	- o come su lol, sono comunque visibili, ma se premi si spostano dove premi, anche se è già su un thumbstick, anche se qui si potrebbe fare l'opzione che se premi sul thumbstick rimangono li
 	

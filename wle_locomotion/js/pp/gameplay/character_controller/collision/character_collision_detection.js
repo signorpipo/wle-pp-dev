@@ -21,8 +21,8 @@ PP.CharacterCollisionDetection = class CharacterCollisionDetection {
         PP.CollisionCheckBridge.checkTeleportToTransform(teleportTransformQuat, currentTransformQuat, characterColliderSetup, prevCharacterCollisionResults, outCharacterCollisionResults);
     }
 
-    checkTransform(checkTransformQuat, allowFix, characterColliderSetup, prevCharacterCollisionResults, outCharacterCollisionResults = new PP.CharacterCollisionResults()) {
-        PP.CollisionCheckBridge.checkTransform(checkTransformQuat, allowFix, characterColliderSetup, prevCharacterCollisionResults, outCharacterCollisionResults);
+    checkTransform(checkTransformQuat, allowAdjustments, characterColliderSetup, prevCharacterCollisionResults, outCharacterCollisionResults = new PP.CharacterCollisionResults()) {
+        PP.CollisionCheckBridge.checkTransform(checkTransformQuat, allowAdjustments, characterColliderSetup, prevCharacterCollisionResults, outCharacterCollisionResults);
     }
 
     updateSurfaceInfo(currentTransformQuat, characterColliderSetup, prevCharacterCollisionResults, outCharacterCollisionResults = new PP.CharacterCollisionResults()) {
