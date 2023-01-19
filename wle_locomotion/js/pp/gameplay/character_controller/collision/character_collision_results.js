@@ -154,7 +154,7 @@ PP.CharacterCollisionMovementResults = class CharacterCollisionMovementResults {
         this.myEndMovement = PP.vec3_create();
         this.myMovementFailed = false;
         this.myIsColliding = false;
-        this.myMainCollisionHit = new PP.RaycastHit();
+        this.myReferenceCollisionHit = new PP.RaycastHit();
     }
 
     reset() {
@@ -162,7 +162,7 @@ PP.CharacterCollisionMovementResults = class CharacterCollisionMovementResults {
         this.myEndMovement.vec3_zero();
         this.myMovementFailed = false;
         this.myIsColliding = false;
-        this.myMainCollisionHit.reset();
+        this.myReferenceCollisionHit.reset();
     }
 
     copy(other) {
@@ -170,7 +170,7 @@ PP.CharacterCollisionMovementResults = class CharacterCollisionMovementResults {
         this.myEndMovement.vec3_copy(other.myEndMovement);
         this.myMovementFailed = other.myMovementFailed;
         this.myIsColliding = other.myIsColliding;
-        this.myMainCollisionHit.copy(other.myMainCollisionHit);
+        this.myReferenceCollisionHit.copy(other.myReferenceCollisionHit);
     }
 };
 

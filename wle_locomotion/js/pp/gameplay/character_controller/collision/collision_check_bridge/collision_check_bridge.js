@@ -87,11 +87,11 @@ PP.CollisionCheckBridge = {
 
         outCollisionRuntimeParams.myHorizontalMovementCanceled = characterCollisionResults.myHorizontalMovementResults.myMovementFailed;
         outCollisionRuntimeParams.myIsCollidingHorizontally = characterCollisionResults.myHorizontalMovementResults.myIsColliding;
-        outCollisionRuntimeParams.myHorizontalCollisionHit.copy(characterCollisionResults.myHorizontalMovementResults.myMainCollisionHit);
+        outCollisionRuntimeParams.myHorizontalCollisionHit.copy(characterCollisionResults.myHorizontalMovementResults.myReferenceCollisionHit);
 
         outCollisionRuntimeParams.myVerticalMovementCanceled = characterCollisionResults.myVerticalMovementResults.myMovementFailed;
         outCollisionRuntimeParams.myIsCollidingVertically = characterCollisionResults.myVerticalMovementResults.myIsColliding;
-        outCollisionRuntimeParams.myVerticalCollisionHit.copy(characterCollisionResults.myVerticalMovementResults.myMainCollisionHit);
+        outCollisionRuntimeParams.myVerticalCollisionHit.copy(characterCollisionResults.myVerticalMovementResults.myReferenceCollisionHit);
 
         outCollisionRuntimeParams.myHasSnappedOnGround = characterCollisionResults.myVerticalAdjustmentsResults.myHasSnappedOnGround;
         outCollisionRuntimeParams.myHasSnappedOnCeiling = characterCollisionResults.myVerticalAdjustmentsResults.myHasSnappedOnCeiling;
@@ -152,18 +152,18 @@ PP.CollisionCheckBridge = {
             outCharacterCollisionResults.myMovementResults.myMovementFailed = collisionRuntimeParams.myHorizontalMovementCanceled && collisionRuntimeParams.myVerticalMovementCanceled;
             outCharacterCollisionResults.myMovementResults.myIsColliding = collisionRuntimeParams.myIsCollidingHorizontally || collisionRuntimeParams.myIsCollidingVertically;
             if (collisionRuntimeParams.myIsCollidingHorizontally) {
-                outCharacterCollisionResults.myMovementResults.myMainCollisionHit.copy(collisionRuntimeParams.myHorizontalCollisionHit);
+                outCharacterCollisionResults.myMovementResults.myReferenceCollisionHit.copy(collisionRuntimeParams.myHorizontalCollisionHit);
             } else if (collisionRuntimeParams.myIsCollidingVertically) {
-                outCharacterCollisionResults.myMovementResults.myMainCollisionHit.copy(collisionRuntimeParams.myVerticalCollisionHit);
+                outCharacterCollisionResults.myMovementResults.myReferenceCollisionHit.copy(collisionRuntimeParams.myVerticalCollisionHit);
             }
 
             outCharacterCollisionResults.myHorizontalMovementResults.myMovementFailed = collisionRuntimeParams.myHorizontalMovementCanceled;
             outCharacterCollisionResults.myHorizontalMovementResults.myIsColliding = collisionRuntimeParams.myIsCollidingHorizontally;
-            outCharacterCollisionResults.myHorizontalMovementResults.myMainCollisionHit.copy(collisionRuntimeParams.myHorizontalCollisionHit);
+            outCharacterCollisionResults.myHorizontalMovementResults.myReferenceCollisionHit.copy(collisionRuntimeParams.myHorizontalCollisionHit);
 
             outCharacterCollisionResults.myVerticalMovementResults.myMovementFailed = collisionRuntimeParams.myVerticalMovementCanceled;
             outCharacterCollisionResults.myVerticalMovementResults.myIsColliding = collisionRuntimeParams.myIsCollidingVertically;
-            outCharacterCollisionResults.myVerticalMovementResults.myMainCollisionHit.copy(collisionRuntimeParams.myVerticalCollisionHit);
+            outCharacterCollisionResults.myVerticalMovementResults.myReferenceCollisionHit.copy(collisionRuntimeParams.myVerticalCollisionHit);
 
             outCharacterCollisionResults.myTeleportResults.myStartTeleportTransformQuat.quat2_copy(outCharacterCollisionResults.myTransformResults.myStartTransformQuat);
             outCharacterCollisionResults.myTeleportResults.myStartTeleportTransformQuat.quat2_setPosition(collisionRuntimeParams.myOriginalTeleportPosition);
