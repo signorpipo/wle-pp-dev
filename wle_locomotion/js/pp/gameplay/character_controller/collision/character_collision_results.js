@@ -14,8 +14,8 @@ PP.CharacterCollisionResults = class CharacterCollisionResults {
 
         this.mySlideResults = new PP.CharacterCollisionSlideResults();
 
-        this.myGroundSurfaceInfo = new PP.CharacterCollisionSurfaceInfo();
-        this.myCeilingSurfaceInfo = new PP.CharacterCollisionSurfaceInfo();
+        this.myGroundInfo = new PP.CharacterCollisionSurfaceInfo();
+        this.myCeilingInfo = new PP.CharacterCollisionSurfaceInfo();
 
         this.myVerticalAdjustmentsResults = new PP.CharacterCollisionVerticalAdjustmentsResults();
 
@@ -39,8 +39,8 @@ PP.CharacterCollisionResults = class CharacterCollisionResults {
 
         this.mySlideResults.reset();
 
-        this.myGroundSurfaceInfo.reset();
-        this.myCeilingSurfaceInfo.reset();
+        this.myGroundInfo.reset();
+        this.myCeilingInfo.reset();
 
         this.myVerticalAdjustmentsResults.reset();
 
@@ -64,8 +64,8 @@ PP.CharacterCollisionResults = class CharacterCollisionResults {
 
         this.mySlideResults.copy(other.mySlideResults);
 
-        this.myGroundSurfaceInfo.copy(other.myGroundSurfaceInfo);
-        this.myCeilingSurfaceInfo.copy(other.myCeilingSurfaceInfo);
+        this.myGroundInfo.copy(other.myGroundInfo);
+        this.myCeilingInfo.copy(other.myCeilingInfo);
 
         this.myVerticalAdjustmentsResults.copy(other.myVerticalAdjustmentsResults);
 
@@ -280,47 +280,47 @@ PP.CharacterCollisionSplitMovementResults = class CharacterCollisionSplitMovemen
 
 PP.CharacterCollisionInternalResults = class CharacterCollisionSplitMovementResults {
     constructor() {
-        this.myLastValidStartHorizontalMovement = PP.vec3_create();
-        this.myLastValidEndHorizontalMovement = PP.vec3_create();
+        this.myLastRelevantStartHorizontalMovement = PP.vec3_create();
+        this.myLastRelevantEndHorizontalMovement = PP.vec3_create();
 
-        this.myLastValidStartVerticalMovement = PP.vec3_create();
-        this.myLastValidEndVerticalMovement = PP.vec3_create();
+        this.myLastRelevantStartVerticalMovement = PP.vec3_create();
+        this.myLastRelevantEndVerticalMovement = PP.vec3_create();
 
-        this.myLastValidHasSlid = false;
+        this.myLastRelevantHasSlid = false;
         this.myHasSlidTowardsOppositeDirection = false;
-        this.mySlideFlickerPrevented = false;
+        this.myLastRelevantSlideFlickerPrevented = false;
         this.mySlideFlickerPreventionForceCheckCounter = 0;
-        this.mySlide90DegreesSign = 0;
-        this.mySlideRecompute90DegreesSign = true;
+        this.mySlide90DegreesDirectionSign = 0;
+        this.mySlide90DegreesRecomputeDirectionSign = true;
     }
 
     reset() {
-        this.myLastValidStartHorizontalMovement.vec3_zero();
-        this.myLastValidEndHorizontalMovement.vec3_zero();
+        this.myLastRelevantStartHorizontalMovement.vec3_zero();
+        this.myLastRelevantEndHorizontalMovement.vec3_zero();
 
-        this.myLastValidStartVerticalMovement.vec3_zero();
-        this.myLastValidEndVerticalMovement.vec3_zero();
+        this.myLastRelevantStartVerticalMovement.vec3_zero();
+        this.myLastRelevantEndVerticalMovement.vec3_zero();
 
-        this.myLastValidHasSlid = false;
+        this.myLastRelevantHasSlid = false;
         this.myHasSlidTowardsOppositeDirection = false;
-        this.mySlideFlickerPrevented = false;
+        this.myLastRelevantSlideFlickerPrevented = false;
         this.mySlideFlickerPreventionForceCheckCounter = 0;
-        this.mySlide90DegreesSign = 0;
-        this.mySlideRecompute90DegreesSign = true;
+        this.mySlide90DegreesDirectionSign = 0;
+        this.mySlide90DegreesRecomputeDirectionSign = true;
     }
 
     copy(other) {
-        this.myLastValidStartHorizontalMovement.vec3_copy(other.myLastValidStartHorizontalMovement);
-        this.myLastValidEndHorizontalMovement.vec3_copy(other.myLastValidEndHorizontalMovement);
+        this.myLastRelevantStartHorizontalMovement.vec3_copy(other.myLastRelevantStartHorizontalMovement);
+        this.myLastRelevantEndHorizontalMovement.vec3_copy(other.myLastRelevantEndHorizontalMovement);
 
-        this.myLastValidStartVerticalMovement.vec3_copy(other.myLastValidStartVerticalMovement);
-        this.myLastValidEndVerticalMovement.vec3_copy(other.myLastValidEndVerticalMovement);
+        this.myLastRelevantStartVerticalMovement.vec3_copy(other.myLastRelevantStartVerticalMovement);
+        this.myLastRelevantEndVerticalMovement.vec3_copy(other.myLastRelevantEndVerticalMovement);
 
-        this.myLastValidHasSlid = other.myLastValidHasSlid;
+        this.myLastRelevantHasSlid = other.myLastRelevantHasSlid;
         this.myHasSlidTowardsOppositeDirection = other.myHasSlidTowardsOppositeDirection;
-        this.mySlideFlickerPrevented = other.mySlideFlickerPrevented;
+        this.myLastRelevantSlideFlickerPrevented = other.myLastRelevantSlideFlickerPrevented;
         this.mySlideFlickerPreventionForceCheckCounter = other.mySlideFlickerPreventionForceCheckCounter;
-        this.mySlide90DegreesSign = other.mySlide90DegreesSign;
-        this.mySlideRecompute90DegreesSign = other.mySlideRecompute90DegreesSign;
+        this.mySlide90DegreesDirectionSign = other.mySlide90DegreesDirectionSign;
+        this.mySlide90DegreesRecomputeDirectionSign = other.mySlide90DegreesRecomputeDirectionSign;
     }
 };

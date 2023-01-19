@@ -168,6 +168,7 @@ PlayerHeadManager = class PlayerHeadManager {
     }
 
     rotateHeadQuat(rotationQuat) {
+        // #TODO rotate feet with this and then rotate head freely if possible
         // implemented outside class definition 
     }
 
