@@ -39,6 +39,10 @@ PP.CharacterCollisionDetection = class CharacterCollisionDetection {
     }
 };
 
+
+
+// IMPLEMENTATION
+
 PP.CharacterCollisionDetection.prototype.checkTeleportToPosition = function () {
     let teleportTransformQuat = PP.quat2_create();
     return function checkTeleportToPosition(teleportPosition, currentTransformQuat, characterColliderSetup, prevCharacterCollisionResults, outCharacterCollisionResults) {

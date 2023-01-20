@@ -287,7 +287,7 @@ PP.CharacterCollisionInternalResults = class CharacterCollisionSplitMovementResu
         this.myLastRelevantEndVerticalMovement = PP.vec3_create();
 
         this.myLastRelevantHasSlid = false;
-        this.myHasSlidTowardsOppositeDirection = false;
+        this.myHasSlidTowardOppositeDirection = false;
         this.myLastRelevantSlideFlickerPrevented = false;
         this.mySlideFlickerPreventionForceCheckCounter = 0;
         this.mySlide90DegreesDirectionSign = 0;
@@ -302,7 +302,7 @@ PP.CharacterCollisionInternalResults = class CharacterCollisionSplitMovementResu
         this.myLastRelevantEndVerticalMovement.vec3_zero();
 
         this.myLastRelevantHasSlid = false;
-        this.myHasSlidTowardsOppositeDirection = false;
+        this.myHasSlidTowardOppositeDirection = false;
         this.myLastRelevantSlideFlickerPrevented = false;
         this.mySlideFlickerPreventionForceCheckCounter = 0;
         this.mySlide90DegreesDirectionSign = 0;
@@ -317,7 +317,7 @@ PP.CharacterCollisionInternalResults = class CharacterCollisionSplitMovementResu
         this.myLastRelevantEndVerticalMovement.vec3_copy(other.myLastRelevantEndVerticalMovement);
 
         this.myLastRelevantHasSlid = other.myLastRelevantHasSlid;
-        this.myHasSlidTowardsOppositeDirection = other.myHasSlidTowardsOppositeDirection;
+        this.myHasSlidTowardOppositeDirection = other.myHasSlidTowardOppositeDirection;
         this.myLastRelevantSlideFlickerPrevented = other.myLastRelevantSlideFlickerPrevented;
         this.mySlideFlickerPreventionForceCheckCounter = other.mySlideFlickerPreventionForceCheckCounter;
         this.mySlide90DegreesDirectionSign = other.mySlide90DegreesDirectionSign;

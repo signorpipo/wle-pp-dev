@@ -105,7 +105,7 @@ PP.CollisionCheckBridge = {
         outCollisionRuntimeParams.mySlidingCollisionAngle = characterCollisionResults.mySlideResults.mySlideSurfaceAngle;
         //outCollisionRuntimeParams.mySlidingCollisionHit.copy(characterCollisionResults.mySlideResults.mySlideSurfaceNormal);
 
-        outCollisionRuntimeParams.myIsSlidingIntoOppositeDirection = characterCollisionResults.myInternalResults.myHasSlidTowardsOppositeDirection;
+        outCollisionRuntimeParams.myIsSlidingIntoOppositeDirection = characterCollisionResults.myInternalResults.myHasSlidTowardOppositeDirection;
         outCollisionRuntimeParams.myIsSlidingFlickerPrevented = characterCollisionResults.myInternalResults.myLastRelevantSlideFlickerPrevented;
         outCollisionRuntimeParams.mySlidingFlickerPreventionCheckAnywayCounter = characterCollisionResults.myInternalResults.mySlideFlickerPreventionForceCheckCounter;
         outCollisionRuntimeParams.mySliding90DegreesSign = characterCollisionResults.myInternalResults.mySlide90DegreesDirectionSign;
@@ -211,7 +211,7 @@ PP.CollisionCheckBridge = {
             //outCharacterCollisionResults.myInternalResults.myLastRelevantEndVerticalMovement.vec3_copy(collisionRuntimeParams.mySplitMovementMovementChecked);
 
             outCharacterCollisionResults.myInternalResults.myLastRelevantHasSlid = collisionRuntimeParams.myLastRelevantIsSliding;
-            outCharacterCollisionResults.myInternalResults.myHasSlidTowardsOppositeDirection = collisionRuntimeParams.myIsSlidingIntoOppositeDirection;
+            outCharacterCollisionResults.myInternalResults.myHasSlidTowardOppositeDirection = collisionRuntimeParams.myIsSlidingIntoOppositeDirection;
             outCharacterCollisionResults.myInternalResults.myLastRelevantSlideFlickerPrevented = collisionRuntimeParams.myIsSlidingFlickerPrevented;
             outCharacterCollisionResults.myInternalResults.mySlideFlickerPreventionForceCheckCounter = collisionRuntimeParams.mySlidingFlickerPreventionCheckAnywayCounter;
             outCharacterCollisionResults.myInternalResults.mySlide90DegreesDirectionSign = collisionRuntimeParams.mySliding90DegreesSign;
