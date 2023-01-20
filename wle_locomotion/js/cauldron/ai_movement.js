@@ -136,7 +136,7 @@ WL.registerComponent('ai-movement', {
         this._myCollisionCheckParams.myCheckVerticalDiagonalRay = false;
         this._myCollisionCheckParams.myCheckVerticalDiagonalBorder = false;
         this._myCollisionCheckParams.myCheckVerticalDiagonalBorderRay = false;
-        this._myCollisionCheckParams.myCheckVerticalSearchFurtherVerticalHit = false;
+        this._myCollisionCheckParams.myCheckVerticalSearchFartherVerticalHit = false;
 
         this._myCollisionCheckParams.myGroundAngleToIgnore = 30;
         this._myCollisionCheckParams.myCeilingAngleToIgnore = 0;

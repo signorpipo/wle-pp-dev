@@ -413,7 +413,7 @@ PlayerLocomotion = class PlayerLocomotion {
         this._myCollisionCheckParamsMovement.myCheckVerticalDiagonalRay = false;
         this._myCollisionCheckParamsMovement.myCheckVerticalDiagonalBorder = false;
         this._myCollisionCheckParamsMovement.myCheckVerticalDiagonalBorderRay = false;
-        this._myCollisionCheckParamsMovement.myCheckVerticalSearchFurtherVerticalHit = false;
+        this._myCollisionCheckParamsMovement.myCheckVerticalSearchFartherVerticalHit = false;
 
         this._myCollisionCheckParamsMovement.myGroundAngleToIgnore = 30;
         this._myCollisionCheckParamsMovement.myCeilingAngleToIgnore = 30;

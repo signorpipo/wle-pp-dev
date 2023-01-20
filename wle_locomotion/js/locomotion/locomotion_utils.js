@@ -23,8 +23,8 @@ LocomotionUtils = {
             forwardOnSurface = forward.vec3_projectOnPlaneAlongAxis(surfaceNormal, up, forwardOnSurface);
             surfacePerceivedAngle = forwardOnSurface.vec3_angle(forward);
 
-            let isFurtherOnUp = forwardOnSurface.vec3_isFurtherAlongAxis(forward, up);
-            if ((!isFurtherOnUp && isGround) || (isFurtherOnUp && !isGround)) {
+            let isFartherOnUp = forwardOnSurface.vec3_isFartherAlongAxis(forward, up);
+            if ((!isFartherOnUp && isGround) || (isFartherOnUp && !isGround)) {
                 surfacePerceivedAngle *= -1;
             }
 

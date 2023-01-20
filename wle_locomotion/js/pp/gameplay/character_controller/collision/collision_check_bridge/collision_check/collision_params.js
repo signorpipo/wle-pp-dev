@@ -99,7 +99,7 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myCheckVerticalDiagonalRay = false;
         this.myCheckVerticalDiagonalBorder = false;
         this.myCheckVerticalDiagonalBorderRay = false;
-        this.myCheckVerticalSearchFurtherVerticalHit = false; //somewhat expensive, but can help fix sime sliding issues
+        this.myCheckVerticalSearchFartherVerticalHit = false; //somewhat expensive, but can help fix sime sliding issues
 
         this.myGroundAngleToIgnore = 0;
         this.myGroundAngleToIgnoreWithPerceivedAngle = 0;
@@ -258,7 +258,7 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myCheckVerticalDiagonalRay = other.myCheckVerticalDiagonalRay;
         this.myCheckVerticalDiagonalBorder = other.myCheckVerticalDiagonalBorder;
         this.myCheckVerticalDiagonalBorderRay = other.myCheckVerticalDiagonalBorderRay;
-        this.myCheckVerticalSearchFurtherVerticalHit = other.myCheckVerticalSearchFurtherVerticalHit;
+        this.myCheckVerticalSearchFartherVerticalHit = other.myCheckVerticalSearchFartherVerticalHit;
 
         this.myGroundAngleToIgnore = other.myGroundAngleToIgnore;
         this.myGroundAngleToIgnoreWithPerceivedAngle = other.myGroundAngleToIgnoreWithPerceivedAngle;

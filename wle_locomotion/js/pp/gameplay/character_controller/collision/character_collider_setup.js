@@ -93,8 +93,8 @@ PP.CharacterColliderHorizontalCheckSetup = class CharacterColliderHorizontalChec
 
         this.myHorizontalPositionVerticalStraightCheckEnabled = false;
         this.myHorizontalPositionVerticalStraightCentralCheckEnabled = false;
-        this.myHorizontalPositionVerticalRadialDiagonalUpwardCheckEnabled = false;
-        this.myHorizontalPositionVerticalRadialDiagonalDownwardCheckEnabled = false;
+        this.myHorizontalPositionVerticalRadialDiagonalOutwardCheckEnabled = false;
+        this.myHorizontalPositionVerticalRadialDiagonalInwardCheckEnabled = false;
         this.myHorizontalPositionVerticalBorderDiagonalOutwardCheckEnabled = false;
         this.myHorizontalPositionVerticalBorderDiagonalInwardCheckEnabled = false;
         this.myHorizontalPositionVerticalRadialBorderDiagonalUpwardCheckEnabled = false;
@@ -361,8 +361,8 @@ PP.CharacterColliderHorizontalCheckSetup.prototype.copy = function (other) {
 
     this.myHorizontalPositionVerticalStraightCheckEnabled = other.myHorizontalPositionVerticalStraightCheckEnabled;
     this.myHorizontalPositionVerticalStraightCentralCheckEnabled = other.myHorizontalPositionVerticalStraightCentralCheckEnabled;
-    this.myHorizontalPositionVerticalRadialDiagonalUpwardCheckEnabled = other.myHorizontalPositionVerticalRadialDiagonalUpwardCheckEnabled;
-    this.myHorizontalPositionVerticalRadialDiagonalDownwardCheckEnabled = other.myHorizontalPositionVerticalRadialDiagonalDownwardCheckEnabled;
+    this.myHorizontalPositionVerticalRadialDiagonalOutwardCheckEnabled = other.myHorizontalPositionVerticalRadialDiagonalOutwardCheckEnabled;
+    this.myHorizontalPositionVerticalRadialDiagonalInwardCheckEnabled = other.myHorizontalPositionVerticalRadialDiagonalInwardCheckEnabled;
     this.myHorizontalPositionVerticalBorderDiagonalOutwardCheckEnabled = other.myHorizontalPositionVerticalBorderDiagonalOutwardCheckEnabled;
     this.myHorizontalPositionVerticalBorderDiagonalInwardCheckEnabled = other.myHorizontalPositionVerticalBorderDiagonalInwardCheckEnabled;
     this.myHorizontalPositionVerticalRadialBorderDiagonalUpwardCheckEnabled = other.myHorizontalPositionVerticalRadialBorderDiagonalUpwardCheckEnabled;

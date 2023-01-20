@@ -26,8 +26,8 @@ PP.CharacterControllerUtils = {
             directionOnSurface = direction.vec3_projectOnPlaneAlongAxis(surfaceNormal, up, directionOnSurface);
             surfacePerceivedAngle = directionOnSurface.vec3_angle(direction);
 
-            let isFurtherOnUp = directionOnSurface.vec3_isFurtherAlongAxis(direction, up);
-            if ((!isFurtherOnUp && isGround) || (isFurtherOnUp && !isGround)) {
+            let isFartherOnUp = directionOnSurface.vec3_isFartherAlongAxis(direction, up);
+            if ((!isFartherOnUp && isGround) || (isFartherOnUp && !isGround)) {
                 surfacePerceivedAngle *= -1;
             }
 

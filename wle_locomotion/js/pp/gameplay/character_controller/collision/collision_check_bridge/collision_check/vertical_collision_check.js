@@ -112,7 +112,7 @@ CollisionCheck.prototype._verticalMovementAdjustment = function () {
 
                 if (raycastResult.myHits.length > 0) {
                     if (furtherDirectionPositionSet) {
-                        if (raycastResult.myHits[0].myPosition.vec3_isFurtherAlongAxis(furtherDirectionPosition, furtherDirection)) {
+                        if (raycastResult.myHits[0].myPosition.vec3_isFartherAlongAxis(furtherDirectionPosition, furtherDirection)) {
                             furtherDirectionPosition.vec3_copy(raycastResult.myHits[0].myPosition);
                         }
                     } else {
@@ -127,9 +127,9 @@ CollisionCheck.prototype._verticalMovementAdjustment = function () {
                 if (isMovementDownward) {
                     outFixedMovement = furtherDirectionPosition.vec3_sub(feetPosition, outFixedMovement).vec3_componentAlongAxis(up, outFixedMovement);
 
-                    if (snapEnabled && outFixedMovement.vec3_isFurtherAlongAxis(verticalMovement, upNegate)) {
+                    if (snapEnabled && outFixedMovement.vec3_isFartherAlongAxis(verticalMovement, upNegate)) {
                         collisionRuntimeParams.myHasSnappedOnGround = true;
-                    } else if (popOutEnabled && outFixedMovement.vec3_isFurtherAlongAxis(verticalMovement, up)) {
+                    } else if (popOutEnabled && outFixedMovement.vec3_isFartherAlongAxis(verticalMovement, up)) {
                         if (!outFixedMovement.vec3_isZero(0.00001) &&
                             (verticalMovement.vec3_isZero(0.00001) || !outFixedMovement.vec3_isConcordant(verticalMovement))) {
                             collisionRuntimeParams.myHasPoppedOutGround = true;
@@ -143,9 +143,9 @@ CollisionCheck.prototype._verticalMovementAdjustment = function () {
                     outFixedMovement = furtherDirectionPosition.vec3_sub(feetPosition.vec3_add(up.vec3_scale(height, outFixedMovement), outFixedMovement), outFixedMovement).
                         vec3_componentAlongAxis(up, outFixedMovement);
 
-                    if (snapEnabled && outFixedMovement.vec3_isFurtherAlongAxis(verticalMovement, up)) {
+                    if (snapEnabled && outFixedMovement.vec3_isFartherAlongAxis(verticalMovement, up)) {
                         collisionRuntimeParams.myHasSnappedOnCeiling = true;
-                    } else if (popOutEnabled && outFixedMovement.vec3_isFurtherAlongAxis(verticalMovement, upNegate)) {
+                    } else if (popOutEnabled && outFixedMovement.vec3_isFartherAlongAxis(verticalMovement, upNegate)) {
                         if (!outFixedMovement.vec3_isZero(0.00001) &&
                             (verticalMovement.vec3_isZero(0.00001) || !outFixedMovement.vec3_isConcordant(verticalMovement))) {
                             collisionRuntimeParams.myHasPoppedOutCeiling = true;

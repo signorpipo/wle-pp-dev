@@ -44,6 +44,18 @@ PP.PhysicsLayerFlags = class PhysicsLayerFlags {
         }
     }
 
+    addFlags(layerFlags) {
+        this._myLayerMask = this._myLayerMask | layerFlags.getMask();
+    }
+
+    removeFlags(layerFlags) {
+        this._myLayerMask = this._myLayerMask & ~(layerFlags.getMask());
+    }
+
+    intersectFlags(layerFlags) {
+        this._myLayerMask = this._myLayerMask & layerFlags.getMask();
+    }
+
     getMask() {
         return this._myLayerMask;
     }
