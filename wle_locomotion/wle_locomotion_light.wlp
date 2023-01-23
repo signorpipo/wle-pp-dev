@@ -4929,7 +4929,7 @@
             "parent": "71",
             "translation": [
                 0.0,
-                -10000.0,
+                0.0,
                 0.0
             ],
             "rotation": [
@@ -4943,6 +4943,53 @@
                 1.0,
                 1.0
             ]
+        },
+        "916": {
+            "name": "MoveStaticColliderTest",
+            "translation": [
+                0.0,
+                0.0,
+                2.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "scale": [
+                0.3,
+                0.3,
+                0.3
+            ],
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "498"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.3,
+                                0.3,
+                                0.3
+                            ]
+                        },
+                        "static": true,
+                        "kinematic": true
+                    }
+                },
+                {
+                    "type": "move-static-collider"
+                }
+            ],
+            "parent": "71"
         }
     },
     "meshes": {
@@ -5991,7 +6038,7 @@
                     "hand-tracking": false
                 }
             },
-            "visualizePhysX": false
+            "visualizePhysX": true
         },
         "scripting": {
             "sourcePaths": [
