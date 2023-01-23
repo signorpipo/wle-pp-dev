@@ -8,7 +8,7 @@ PP.CharacterColliderSetup = class CharacterColliderSetup {
         this.myHorizontalCheckSetup = new PP.CharacterColliderHorizontalCheckSetup();
         this.myVerticalCheckSetup = new PP.CharacterColliderVerticalCheckSetup();
 
-        this.mySlideSetup = new PP.CharacterColliderSlideSetup();
+        this.myWallSlideSetup = new PP.CharacterColliderWallSlideSetup();
 
         this.myGroundSetup = new PP.CharacterColliderSurfaceSetup();
         this.myCeilingSetup = new PP.CharacterColliderSurfaceSetup();
@@ -50,7 +50,7 @@ PP.CharacterColliderHorizontalCheckSetup = class CharacterColliderHorizontalChec
 
         this.myHorizontalCheckFeetDistanceToIgnore = 0;
         this.myHorizontalCheckHeadDistanceToIgnore = 0;
-        // these distances can be used to make the character ignore small steps, like a stair step, so they can move on it
+        // these distances can be used to make the character ignore small steps (like a stair step) so they can move on it
         // it also needs the surface pop out to be enabeld to then snap on the step
 
         this.myHorizontalCheckFixedForwardEnabled = false; // this is basically only useful if the cone angle is 180 degrees
@@ -97,10 +97,10 @@ PP.CharacterColliderHorizontalCheckSetup = class CharacterColliderHorizontalChec
         this.myHorizontalPositionVerticalRadialDiagonalInwardCheckEnabled = false;
         this.myHorizontalPositionVerticalBorderDiagonalOutwardCheckEnabled = false;
         this.myHorizontalPositionVerticalBorderDiagonalInwardCheckEnabled = false;
-        this.myHorizontalPositionVerticalRadialBorderDiagonalUpwardCheckEnabled = false;
-        this.myHorizontalPositionVerticalRadialBorderDiagonalDownwardCheckEnabled = false;
+        this.myHorizontalPositionVerticalRadialBorderDiagonalOutwardCheckEnabled = false;
+        this.myHorizontalPositionVerticalRadialBorderDiagonalInwardCheckEnabled = false;
 
-        this.myHorizontalPositionVerticalCheckGetFarthestHit = false; //somewhat expensive, but can help fix sime sliding issues
+        this.myHorizontalPositionVerticalCheckGetFarthestHit = false; //somewhat expensive, but can help fix some sliding issues
 
         this.myHorizontalPositionVerticalCheckPerformHorizontalCheckOnHit = false;
         this.myHorizontalPositionVerticalCheckPerformHorizontalCheckOnHitKeepVerticalHitIfNoHorizontalHit = false;
@@ -127,14 +127,14 @@ PP.CharacterColliderVerticalCheckSetup = class CharacterColliderVerticalCheckSet
         this.myVerticalCheckCircumferenceSlices = 0;
         this.myVerticalCheckCircumferenceCentralCheckEnabled = false;
         this.myVerticalCheckCircumferenceRadialSteps = 0;
-        this.myVerticalCheckCircumferenceRotationPerRadialStepDegrees = 0;
+        this.myVerticalCheckCircumferenceRotationPerRadialStep = 0;
 
         this.myVerticalCheckFixedForwardEnabled = false;
         this.myVerticalCheckFixedForward = PP.vec3_create();
 
         this.myVerticalMovementCheckEnabled = false;
         this.myVerticalMovementCheckReductionEnabled = false;
-        this.myVerticalMovementCheckPerformCheckTowardBothDirections = false;
+        this.myVerticalMovementCheckPerformCheckOnBothSides = false;
 
         this.myVerticalPositionCheckEnabled = false;
 
@@ -159,33 +159,33 @@ PP.CharacterColliderSlideFlickerPreventionMode = {
     ALWAYS: 4,                              // less flicker than COLLISION_ANGLE_ABOVE_90_DEGREES_OR_MOVEMENT_ANGLE_ABOVE_85_DEGREES but more false positive
 };
 
-PP.CharacterColliderSlideSetup = class CharacterColliderSlideSetup {
+PP.CharacterColliderWallSlideSetup = class CharacterColliderWallSlideSetup {
     constructor() {
-        this.mySlideEnabled = false;
+        this.myWallSlideEnabled = false;
 
-        this.mySlideMaxAttempts = 0;
+        this.myWallSlideMaxAttempts = 0;
 
-        this.mySlideHorizontalMovementCheckGetBetterReferenceHit = false;
+        this.myWallSlideHorizontalMovementCheckGetBetterReferenceHit = false;
         // if the horizontal movement finds a hit it stops looking, but could end up having a bad reference collision hit
         // this makes it so it will check a better hit to use later for the slide
 
-        this.mySlideCheckBothDirections = false;
+        this.myCheckBothWallSlideDirections = false;
         // expensive, 2 times the checks since it basically check again on the other slide direction
         // this can fix some edge cases in which u can get stuck instead of sliding
         // it basically require that u also add flicker prevention
 
-        this.mySlideFlickerPreventionMode = PP.CharacterColliderSlideFlickerPreventionMode.NONE;
+        this.myWallSlideFlickerPreventionMode = PP.CharacterColliderSlideFlickerPreventionMode.NONE;
 
-        this.mySlideFlickerPreventionCheckOnlyIfAlreadySliding = false;
+        this.myWallSlideFlickerPreventionCheckOnlyIfAlreadySliding = false;
         // this flag make it so the prevention is done only if it was already sliding
         // this can lead to a few frames of flicker if u go toward a corner directly, but allow the movement to be more fluid, avoiding getting stuck and false positive
 
-        this.mySlideFlickerPreventionForceCheckCounter = 0;
+        this.myWallSlideFlickerPreventionForceCheckCounter = 0;
         // if the collision think it needs to check for flicker, it will keep checking for the next X frames based on this value even if the condition are not met anymore
         // this help in catching the flicker when the direction is not changing every frame but every 2-3 for example
         // it's especially useful if combo-ed with CharacterColliderSlideFlickerPreventionMode.USE_PREVIOUS_RESULTS, making it a bit less fluid but also less flickering
 
-        this.mySlide90DegreesAdjustDirectionSign = false;
+        this.my90DegreesWallSlideAdjustDirectionSign = false;
     }
 
     copy(other) {
@@ -216,24 +216,25 @@ PP.CharacterColliderSurfaceSetup = class CharacterColliderSurfaceSetup {
 
         this.myAddVerticalMovementBasedOnSurfacePerceivedAngle = false;
 
-        this.myGatherSurfaceInfo = false;
+        this.myCollectSurfaceInfo = false;
 
         this.myIsOnSurfaceMaxOutsideDistance = 0;
         this.myIsOnSurfaceMaxInsideDistance = 0;
         this.myIsOnSurfaceIfInsideSurface = false;
+        this.myIsOnSurfaceMaxSurfaceAngle = null; // #TODO TO IMPLEMENT
 
-        this.myGatherSurfaceNormalMaxOutsideDistance = 0;
-        this.myGatherSurfaceNormalMaxInsideDistance = 0;
+        this.myCollectSurfaceNormalMaxOutsideDistance = 0;
+        this.myCollectSurfaceNormalMaxInsideDistance = 0;
 
         this.myAllowExitAttemptWhenOnInvalidSurfacePerceivedAngle = false;
         // if u start on an invalid perceived angle (above angle to ignore) u normally can't even try to move uphill, this will let you try and see if with that movement
         // you could end up in a valid perceived angle position
 
-        this.myMustRemainOnSurface = false;
-        this.myMustRemainOnValidSurfaceAngleDownhill = false;
+        this.myMustStayOnSurface = false;
+        this.myMustStayOnValidSurfaceAngleDownhill = false;
         // normally you can move downhill on whatever angle, but you may want the character to stay on an angle that will be valid even if u turn to go back uphill
 
-        this.myRegatherSurfaceInfoOnSurfaceCheckFailed = false;
+        this.myRecollectSurfaceInfoOnSurfaceCheckFailed = false;
         // instead of copying the previous surface info on fail, regather them
     }
 
@@ -299,7 +300,7 @@ PP.CharacterColliderSetup.prototype.copy = function (other) {
     this.myHorizontalCheckSetup.copy(other.myHorizontalCheckSetup);
     this.myVerticalCheckSetup.copy(other.myVerticalCheckSetup);
 
-    this.mySlideSetup.copy(other.mySlideSetup);
+    this.myWallSlideSetup.copy(other.myWallSlideSetup);
 
     this.myGroundSetup.copy(other.myGroundSetup);
     this.myCeilingSetup.copy(other.myCeilingSetup);
@@ -365,8 +366,8 @@ PP.CharacterColliderHorizontalCheckSetup.prototype.copy = function (other) {
     this.myHorizontalPositionVerticalRadialDiagonalInwardCheckEnabled = other.myHorizontalPositionVerticalRadialDiagonalInwardCheckEnabled;
     this.myHorizontalPositionVerticalBorderDiagonalOutwardCheckEnabled = other.myHorizontalPositionVerticalBorderDiagonalOutwardCheckEnabled;
     this.myHorizontalPositionVerticalBorderDiagonalInwardCheckEnabled = other.myHorizontalPositionVerticalBorderDiagonalInwardCheckEnabled;
-    this.myHorizontalPositionVerticalRadialBorderDiagonalUpwardCheckEnabled = other.myHorizontalPositionVerticalRadialBorderDiagonalUpwardCheckEnabled;
-    this.myHorizontalPositionVerticalRadialBorderDiagonalDownwardCheckEnabled = other.myHorizontalPositionVerticalRadialBorderDiagonalDownwardCheckEnabled;
+    this.myHorizontalPositionVerticalRadialBorderDiagonalOutwardCheckEnabled = other.myHorizontalPositionVerticalRadialBorderDiagonalOutwardCheckEnabled;
+    this.myHorizontalPositionVerticalRadialBorderDiagonalInwardCheckEnabled = other.myHorizontalPositionVerticalRadialBorderDiagonalInwardCheckEnabled;
 
     this.myHorizontalPositionVerticalCheckGetFarthestHit = other.myHorizontalPositionVerticalCheckGetFarthestHit;
 
@@ -386,14 +387,14 @@ PP.CharacterColliderVerticalCheckSetup.prototype.copy = function (other) {
     this.myVerticalCheckCircumferenceSlices = other.myVerticalCheckCircumferenceSlices;
     this.myVerticalCheckCircumferenceCentralCheckEnabled = other.myVerticalCheckCircumferenceCentralCheckEnabled;
     this.myVerticalCheckCircumferenceRadialSteps = other.myVerticalCheckCircumferenceRadialSteps;
-    this.myVerticalCheckCircumferenceRotationPerRadialStepDegrees = other.myVerticalCheckCircumferenceRotationPerRadialStepDegrees;
+    this.myVerticalCheckCircumferenceRotationPerRadialStep = other.myVerticalCheckCircumferenceRotationPerRadialStep;
 
     this.myVerticalCheckFixedForwardEnabled = other.myVerticalCheckFixedForwardEnabled;
     this.myVerticalCheckFixedForward.vec3_copy(other.myVerticalCheckFixedForward);
 
     this.myVerticalMovementCheckEnabled = other.myVerticalMovementCheckEnabled;
     this.myVerticalMovementCheckReductionEnabled = other.myVerticalMovementCheckReductionEnabled;
-    this.myVerticalMovementCheckPerformCheckTowardBothDirections = other.myVerticalMovementCheckPerformCheckTowardBothDirections;
+    this.myVerticalMovementCheckPerformCheckOnBothSides = other.myVerticalMovementCheckPerformCheckOnBothSides;
 
     this.myVerticalPositionCheckEnabled = other.myVerticalPositionCheckEnabled;
 
@@ -403,22 +404,22 @@ PP.CharacterColliderVerticalCheckSetup.prototype.copy = function (other) {
     this.myVerticalCheckObjectsToIgnore.pp_copy(other.myVerticalCheckObjectsToIgnore);
 };
 
-PP.CharacterColliderSlideSetup.prototype.copy = function (other) {
-    this.mySlideEnabled = other.mySlideEnabled;
+PP.CharacterColliderWallSlideSetup.prototype.copy = function (other) {
+    this.myWallSlideEnabled = other.myWallSlideEnabled;
 
-    this.mySlideMaxAttempts = other.mySlideMaxAttempts;
+    this.myWallSlideMaxAttempts = other.myWallSlideMaxAttempts;
 
-    this.mySlideHorizontalMovementCheckGetBetterReferenceHit = other.mySlideHorizontalMovementCheckGetBetterReferenceHit;
+    this.myWallSlideHorizontalMovementCheckGetBetterReferenceHit = other.myWallSlideHorizontalMovementCheckGetBetterReferenceHit;
 
-    this.mySlideCheckBothDirections = other.mySlideCheckBothDirections;
+    this.myCheckBothWallSlideDirections = other.myCheckBothWallSlideDirections;
 
-    this.mySlideFlickerPreventionMode = other.mySlideFlickerPreventionMode;
+    this.myWallSlideFlickerPreventionMode = other.myWallSlideFlickerPreventionMode;
 
-    this.mySlideFlickerPreventionCheckOnlyIfAlreadySliding = other.mySlideFlickerPreventionCheckOnlyIfAlreadySliding;
+    this.myWallSlideFlickerPreventionCheckOnlyIfAlreadySliding = other.myWallSlideFlickerPreventionCheckOnlyIfAlreadySliding;
 
-    this.mySlideFlickerPreventionForceCheckCounter = other.mySlideFlickerPreventionForceCheckCounter;
+    this.myWallSlideFlickerPreventionForceCheckCounter = other.myWallSlideFlickerPreventionForceCheckCounter;
 
-    this.mySlide90DegreesAdjustDirectionSign = other.mySlide90DegreesAdjustDirectionSign;
+    this.my90DegreesWallSlideAdjustDirectionSign = other.my90DegreesWallSlideAdjustDirectionSign;
 };
 
 PP.CharacterColliderSurfaceSetup.prototype.copy = function (other) {
@@ -438,21 +439,21 @@ PP.CharacterColliderSurfaceSetup.prototype.copy = function (other) {
 
     this.myAddVerticalMovementBasedOnSurfacePerceivedAngle = other.myAddVerticalMovementBasedOnSurfacePerceivedAngle;
 
-    this.myGatherSurfaceInfo = other.myGatherSurfaceInfo;
+    this.myCollectSurfaceInfo = other.myCollectSurfaceInfo;
 
     this.myIsOnSurfaceMaxOutsideDistance = other.myIsOnSurfaceMaxOutsideDistance;
     this.myIsOnSurfaceMaxInsideDistance = other.myIsOnSurfaceMaxInsideDistance;
     this.myIsOnSurfaceIfInsideSurface = other.myIsOnSurfaceIfInsideSurface;
 
-    this.myGatherSurfaceNormalMaxOutsideDistance = other.myGatherSurfaceNormalMaxOutsideDistance;
-    this.myGatherSurfaceNormalMaxInsideDistance = other.myGatherSurfaceNormalMaxInsideDistance;
+    this.myCollectSurfaceNormalMaxOutsideDistance = other.myCollectSurfaceNormalMaxOutsideDistance;
+    this.myCollectSurfaceNormalMaxInsideDistance = other.myCollectSurfaceNormalMaxInsideDistance;
 
     this.myAllowExitAttemptWhenOnInvalidSurfacePerceivedAngle = other.myAllowExitAttemptWhenOnInvalidSurfacePerceivedAngle;
 
-    this.myMustRemainOnSurface = other.myMustRemainOnSurface;
-    this.myMustRemainOnValidSurfaceAngleDownhill = other.myMustRemainOnValidSurfaceAngleDownhill;
+    this.myMustStayOnSurface = other.myMustStayOnSurface;
+    this.myMustStayOnValidSurfaceAngleDownhill = other.myMustStayOnValidSurfaceAngleDownhill;
 
-    this.myRegatherSurfaceInfoOnSurfaceCheckFailed = other.myRegatherSurfaceInfoOnSurfaceCheckFailed;
+    this.myRecollectSurfaceInfoOnSurfaceCheckFailed = other.myRecollectSurfaceInfoOnSurfaceCheckFailed;
 };
 
 PP.CharacterColliderSplitMovementSetup.prototype.copy = function (other) {
@@ -492,7 +493,7 @@ PP.CharacterColliderDebugSetup.prototype.copy = function (other) {
 Object.defineProperty(PP.CharacterColliderSetup.prototype, "copy", { enumerable: false });
 Object.defineProperty(PP.CharacterColliderHorizontalCheckSetup.prototype, "copy", { enumerable: false });
 Object.defineProperty(PP.CharacterColliderVerticalCheckSetup.prototype, "copy", { enumerable: false });
-Object.defineProperty(PP.CharacterColliderSlideSetup.prototype, "copy", { enumerable: false });
+Object.defineProperty(PP.CharacterColliderWallSlideSetup.prototype, "copy", { enumerable: false });
 Object.defineProperty(PP.CharacterColliderSurfaceSetup.prototype, "copy", { enumerable: false });
 Object.defineProperty(PP.CharacterColliderSplitMovementSetup.prototype, "copy", { enumerable: false });
 Object.defineProperty(PP.CharacterColliderDebugSetup.prototype, "copy", { enumerable: false });

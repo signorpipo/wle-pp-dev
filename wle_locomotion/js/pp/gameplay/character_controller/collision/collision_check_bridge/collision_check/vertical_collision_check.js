@@ -187,6 +187,10 @@ CollisionCheck.prototype._verticalPositionCheck = function () {
     let endPosition = PP.vec3_create();
     let direction = PP.vec3_create();
     return function _verticalPositionCheck(feetPosition, checkUpward, height, up, forward, collisionCheckParams, collisionRuntimeParams) {
+        if (height < 0.00001) {
+            return true;
+        }
+
         this._myDebugActive = collisionCheckParams.myDebugActive && collisionCheckParams.myDebugVerticalPositionActive;
 
         let checkPositions = this._getVerticalCheckPositions(feetPosition, up, forward, collisionCheckParams, collisionRuntimeParams);

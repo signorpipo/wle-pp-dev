@@ -12,7 +12,7 @@ PP.CharacterCollisionResults = class CharacterCollisionResults {
 
         this.myCheckTransformResults = new PP.CharacterCollisionCheckTransformResults();
 
-        this.mySlideResults = new PP.CharacterCollisionSlideResults();
+        this.myWallSlideResults = new PP.CharacterCollisionWallSlideResults();
 
         this.myGroundInfo = new PP.CharacterCollisionSurfaceInfo();
         this.myCeilingInfo = new PP.CharacterCollisionSurfaceInfo();
@@ -37,7 +37,7 @@ PP.CharacterCollisionResults = class CharacterCollisionResults {
 
         this.myCheckTransformResults.reset();
 
-        this.mySlideResults.reset();
+        this.myWallSlideResults.reset();
 
         this.myGroundInfo.reset();
         this.myCeilingInfo.reset();
@@ -62,7 +62,7 @@ PP.CharacterCollisionResults = class CharacterCollisionResults {
 
         this.myCheckTransformResults.copy(other.myCheckTransformResults);
 
-        this.mySlideResults.copy(other.mySlideResults);
+        this.myWallSlideResults.copy(other.myWallSlideResults);
 
         this.myGroundInfo.copy(other.myGroundInfo);
         this.myCeilingInfo.copy(other.myCeilingInfo);
@@ -108,26 +108,26 @@ PP.CharacterCollisionSurfaceInfo = class CharacterCollisionSurfaceInfo {
     }
 };
 
-PP.CharacterCollisionSlideResults = class CharacterCollisionSlideResults {
+PP.CharacterCollisionWallSlideResults = class CharacterCollisionWallSlideResults {
     constructor() {
         this.myHasSlid = false;
-        this.mySlideMovementAngle = 0;
-        this.mySlideSurfaceAngle = 0;
-        this.mySlideSurfaceNormal = PP.vec3_create();
+        this.mySlideMovementAngle = 0;          // signed angle between the start movement and the wall slide movement, basically telling you how much u had to change direction to slide
+        this.mySlideMovementWallAngle = 0;      // signed angle between the inverted surface normal and the wall slide movement
+        this.myWallNormal = PP.vec3_create();
     }
 
     reset() {
         this.myHasSlid = false;
         this.mySlideMovementAngle = 0;
-        this.mySlideSurfaceAngle = 0;
-        this.mySlideSurfaceNormal.vec3_zero();
+        this.mySlideMovementWallAngle = 0;
+        this.myWallNormal.vec3_zero();
     }
 
     copy(other) {
         this.myHasSlid = other.myHasSlid;
         this.mySlideMovementAngle = other.mySlideMovementAngle;
-        this.mySlideSurfaceAngle = other.mySlideSurfaceAngle;
-        this.mySlideSurfaceNormal.vec3_copy(other.mySlideSurfaceNormal);
+        this.mySlideMovementWallAngle = other.mySlideMovementWallAngle;
+        this.myWallNormal.vec3_copy(other.myWallNormal);
     }
 };
 
@@ -257,24 +257,24 @@ PP.CharacterCollisionVerticalAdjustmentsResults = class CharacterCollisionCheckT
 
 PP.CharacterCollisionSplitMovementResults = class CharacterCollisionSplitMovementResults {
     constructor() {
-        this.mySplitMovementSteps = 0;
-        this.mySplitMovementStepsPerformed = 0;
-        this.mySplitMovementInterrupted = false;
-        this.mySplitMovementMovementChecked = PP.vec3_create();
+        this.myStepsToPerform = 0;
+        this.myStepsPerformed = 0;
+        this.myMovementInterrupted = false;
+        this.myMovementChecked = PP.vec3_create();
     }
 
     reset() {
-        this.mySplitMovementSteps = 0;
-        this.mySplitMovementStepsPerformed = 0;
-        this.mySplitMovementInterrupted = false;
-        this.mySplitMovementMovementChecked.vec3_zero();
+        this.myStepsToPerform = 0;
+        this.myStepsPerformed = 0;
+        this.myMovementInterrupted = false;
+        this.myMovementChecked.vec3_zero();
     }
 
     copy(other) {
-        this.mySplitMovementSteps = other.mySplitMovementSteps;
-        this.mySplitMovementStepsPerformed = other.mySplitMovementStepsPerformed;
-        this.mySplitMovementInterrupted = other.mySplitMovementInterrupted;
-        this.mySplitMovementMovementChecked.vec3_copy(other.mySplitMovementMovementChecked);
+        this.myStepsToPerform = other.myStepsToPerform;
+        this.myStepsPerformed = other.myStepsPerformed;
+        this.myMovementInterrupted = other.myMovementInterrupted;
+        this.myMovementChecked.vec3_copy(other.myMovementChecked);
     }
 };
 
@@ -286,12 +286,12 @@ PP.CharacterCollisionInternalResults = class CharacterCollisionSplitMovementResu
         this.myLastRelevantStartVerticalMovement = PP.vec3_create();
         this.myLastRelevantEndVerticalMovement = PP.vec3_create();
 
-        this.myLastRelevantHasSlid = false;
-        this.myHasSlidTowardOppositeDirection = false;
-        this.myLastRelevantSlideFlickerPrevented = false;
-        this.mySlideFlickerPreventionForceCheckCounter = 0;
-        this.mySlide90DegreesDirectionSign = 0;
-        this.mySlide90DegreesRecomputeDirectionSign = true;
+        this.myLastRelevantHasWallSlid = false;
+        this.myHasWallSlidTowardOppositeDirection = false;
+        this.myLastRelevantWallSlideFlickerPrevented = false;
+        this.myWallSlideFlickerPreventionForceCheckCounter = 0;
+        this.myWallSlide90DegreesDirectionSign = 0;
+        this.myWallSlide90DegreesRecomputeDirectionSign = true;
     }
 
     reset() {
@@ -301,12 +301,12 @@ PP.CharacterCollisionInternalResults = class CharacterCollisionSplitMovementResu
         this.myLastRelevantStartVerticalMovement.vec3_zero();
         this.myLastRelevantEndVerticalMovement.vec3_zero();
 
-        this.myLastRelevantHasSlid = false;
-        this.myHasSlidTowardOppositeDirection = false;
-        this.myLastRelevantSlideFlickerPrevented = false;
-        this.mySlideFlickerPreventionForceCheckCounter = 0;
-        this.mySlide90DegreesDirectionSign = 0;
-        this.mySlide90DegreesRecomputeDirectionSign = true;
+        this.myLastRelevantHasWallSlid = false;
+        this.myHasWallSlidTowardOppositeDirection = false;
+        this.myLastRelevantWallSlideFlickerPrevented = false;
+        this.myWallSlideFlickerPreventionForceCheckCounter = 0;
+        this.myWallSlide90DegreesDirectionSign = 0;
+        this.myWallSlide90DegreesRecomputeDirectionSign = true;
     }
 
     copy(other) {
@@ -316,11 +316,11 @@ PP.CharacterCollisionInternalResults = class CharacterCollisionSplitMovementResu
         this.myLastRelevantStartVerticalMovement.vec3_copy(other.myLastRelevantStartVerticalMovement);
         this.myLastRelevantEndVerticalMovement.vec3_copy(other.myLastRelevantEndVerticalMovement);
 
-        this.myLastRelevantHasSlid = other.myLastRelevantHasSlid;
-        this.myHasSlidTowardOppositeDirection = other.myHasSlidTowardOppositeDirection;
-        this.myLastRelevantSlideFlickerPrevented = other.myLastRelevantSlideFlickerPrevented;
-        this.mySlideFlickerPreventionForceCheckCounter = other.mySlideFlickerPreventionForceCheckCounter;
-        this.mySlide90DegreesDirectionSign = other.mySlide90DegreesDirectionSign;
-        this.mySlide90DegreesRecomputeDirectionSign = other.mySlide90DegreesRecomputeDirectionSign;
+        this.myLastRelevantHasWallSlid = other.myLastRelevantHasWallSlid;
+        this.myHasWallSlidTowardOppositeDirection = other.myHasWallSlidTowardOppositeDirection;
+        this.myLastRelevantWallSlideFlickerPrevented = other.myLastRelevantWallSlideFlickerPrevented;
+        this.myWallSlideFlickerPreventionForceCheckCounter = other.myWallSlideFlickerPreventionForceCheckCounter;
+        this.myWallSlide90DegreesDirectionSign = other.myWallSlide90DegreesDirectionSign;
+        this.myWallSlide90DegreesRecomputeDirectionSign = other.myWallSlide90DegreesRecomputeDirectionSign;
     }
 };

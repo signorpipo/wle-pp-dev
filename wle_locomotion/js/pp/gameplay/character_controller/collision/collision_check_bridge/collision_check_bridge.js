@@ -97,17 +97,17 @@ PP.CollisionCheckBridge = {
         outCollisionRuntimeParams.myHasReducedVerticalMovement = characterCollisionResults.myVerticalAdjustmentsResults.myHasReducedVerticalMovement;
         outCollisionRuntimeParams.myHasAdjustedVerticalMovementWithSurfaceAngle = characterCollisionResults.myVerticalAdjustmentsResults.myHasAddedVerticalMovementBasedOnGroundPerceivedAngle || characterCollisionResults.myVerticalAdjustmentsResults.myHasAddedVerticalMovementBasedOnCeilingPerceivedAngle;
 
-        outCollisionRuntimeParams.myIsSliding = characterCollisionResults.mySlideResults.myHasSlid;
-        outCollisionRuntimeParams.mySlidingMovementAngle = characterCollisionResults.mySlideResults.mySlideMovementAngle;
-        outCollisionRuntimeParams.mySlidingCollisionAngle = characterCollisionResults.mySlideResults.mySlideSurfaceAngle;
-        //outCollisionRuntimeParams.mySlidingCollisionHit.copy(characterCollisionResults.mySlideResults.mySlideSurfaceNormal);
+        outCollisionRuntimeParams.myIsSliding = characterCollisionResults.myWallSlideResults.myHasSlid;
+        outCollisionRuntimeParams.mySlidingMovementAngle = characterCollisionResults.myWallSlideResults.mySlideMovementAngle;
+        outCollisionRuntimeParams.mySlidingCollisionAngle = characterCollisionResults.myWallSlideResults.mySlideMovementWallAngle;
+        //outCollisionRuntimeParams.mySlidingCollisionHit.copy(characterCollisionResults.myWallSlideResults.myWallNormal);
 
-        outCollisionRuntimeParams.myIsSlidingIntoOppositeDirection = characterCollisionResults.myInternalResults.myHasSlidTowardOppositeDirection;
-        outCollisionRuntimeParams.myIsSlidingFlickerPrevented = characterCollisionResults.myInternalResults.myLastRelevantSlideFlickerPrevented;
-        outCollisionRuntimeParams.mySlidingFlickerPreventionCheckAnywayCounter = characterCollisionResults.myInternalResults.mySlideFlickerPreventionForceCheckCounter;
-        outCollisionRuntimeParams.mySliding90DegreesSign = characterCollisionResults.myInternalResults.mySlide90DegreesDirectionSign;
-        outCollisionRuntimeParams.mySlidingRecompute90DegreesSign = characterCollisionResults.myInternalResults.mySlide90DegreesRecomputeDirectionSign;
-        outCollisionRuntimeParams.myLastRelevantIsSliding = characterCollisionResults.myInternalResults.myLastRelevantHasSlid;
+        outCollisionRuntimeParams.myIsSlidingIntoOppositeDirection = characterCollisionResults.myInternalResults.myHasWallSlidTowardOppositeDirection;
+        outCollisionRuntimeParams.myIsSlidingFlickerPrevented = characterCollisionResults.myInternalResults.myLastRelevantWallSlideFlickerPrevented;
+        outCollisionRuntimeParams.mySlidingFlickerPreventionCheckAnywayCounter = characterCollisionResults.myInternalResults.myWallSlideFlickerPreventionForceCheckCounter;
+        outCollisionRuntimeParams.mySliding90DegreesSign = characterCollisionResults.myInternalResults.myWallSlide90DegreesDirectionSign;
+        outCollisionRuntimeParams.mySlidingRecompute90DegreesSign = characterCollisionResults.myInternalResults.myWallSlide90DegreesRecomputeDirectionSign;
+        outCollisionRuntimeParams.myLastRelevantIsSliding = characterCollisionResults.myInternalResults.myLastRelevantHasWallSlid;
         outCollisionRuntimeParams.mySlidingPreviousHorizontalMovement.vec3_copy(characterCollisionResults.myInternalResults.myLastRelevantEndHorizontalMovement);
 
         outCollisionRuntimeParams.myOriginalTeleportPosition.vec3_copy(characterCollisionResults.myTeleportResults.myStartTeleportTransformQuat);
@@ -122,10 +122,10 @@ PP.CollisionCheckBridge = {
         outCollisionRuntimeParams.myIsMove = characterCollisionResults.myCheckType == PP.CharacterCollisionCheckType.CHECK_MOVEMENT;
         outCollisionRuntimeParams.myIsPositionCheck = characterCollisionResults.myCheckType == PP.CharacterCollisionCheckType.CHECK_TRANSFORM;
 
-        outCollisionRuntimeParams.mySplitMovementSteps = characterCollisionResults.mySplitMovementResults.mySplitMovementSteps;
-        outCollisionRuntimeParams.mySplitMovementStepsPerformed = characterCollisionResults.mySplitMovementResults.mySplitMovementStepsPerformed;
-        outCollisionRuntimeParams.mySplitMovementStop = characterCollisionResults.mySplitMovementResults.mySplitMovementInterrupted;
-        outCollisionRuntimeParams.mySplitMovementMovementChecked.vec3_copy(characterCollisionResults.mySplitMovementResults.mySplitMovementMovementChecked);
+        outCollisionRuntimeParams.mySplitMovementSteps = characterCollisionResults.mySplitMovementResults.myStepsToPerform;
+        outCollisionRuntimeParams.mySplitMovementStepsPerformed = characterCollisionResults.mySplitMovementResults.myStepsPerformed;
+        outCollisionRuntimeParams.mySplitMovementStop = characterCollisionResults.mySplitMovementResults.myMovementInterrupted;
+        outCollisionRuntimeParams.mySplitMovementMovementChecked.vec3_copy(characterCollisionResults.mySplitMovementResults.myMovementChecked);
     },
     convertCollisionRuntimeParamsToCharacterCollisionResults: function () {
         let rotationQuat = PP.quat_create();
@@ -174,10 +174,10 @@ PP.CollisionCheckBridge = {
             outCharacterCollisionResults.myCheckTransformResults.myEndCheckTransformQuat.quat2_setPosition(collisionRuntimeParams.myFixedPositionCheckPosition);
             outCharacterCollisionResults.myCheckTransformResults.myCheckTransformFailed = !collisionRuntimeParams.myIsPositionOk;
 
-            outCharacterCollisionResults.mySlideResults.myHasSlid = collisionRuntimeParams.myIsSliding;
-            outCharacterCollisionResults.mySlideResults.mySlideMovementAngle = collisionRuntimeParams.mySlidingMovementAngle;
-            outCharacterCollisionResults.mySlideResults.mySlideSurfaceAngle = collisionRuntimeParams.mySlidingCollisionAngle;
-            //outCharacterCollisionResults.mySlideResults.mySlideSurfaceNormal = collisionRuntimeParams.mySlidingCollisionHit;
+            outCharacterCollisionResults.myWallSlideResults.myHasSlid = collisionRuntimeParams.myIsSliding;
+            outCharacterCollisionResults.myWallSlideResults.mySlideMovementAngle = collisionRuntimeParams.mySlidingMovementAngle;
+            outCharacterCollisionResults.myWallSlideResults.mySlideMovementWallAngle = collisionRuntimeParams.mySlidingCollisionAngle;
+            //outCharacterCollisionResults.myWallSlideResults.myWallNormal = collisionRuntimeParams.mySlidingCollisionHit;
 
             outCharacterCollisionResults.myGroundInfo.myIsOnSurface = collisionRuntimeParams.myIsOnGround;
             outCharacterCollisionResults.myGroundInfo.mySurfaceAngle = collisionRuntimeParams.myGroundAngle;
@@ -197,22 +197,22 @@ PP.CollisionCheckBridge = {
             //outCharacterCollisionResults.myVerticalAdjustmentsResults.myHasAddedVerticalMovementBasedOnGroundPerceivedAngle = collisionRuntimeParams.myHasAdjustedVerticalMovementWithSurfaceAngle;
             //outCharacterCollisionResults.myVerticalAdjustmentsResults.myHasAddedVerticalMovementBasedOnCeilingPerceivedAngle = collisionRuntimeParams.myHasAdjustedVerticalMovementWithSurfaceAngle;
 
-            outCharacterCollisionResults.mySplitMovementResults.mySplitMovementSteps = collisionRuntimeParams.mySplitMovementSteps;
-            outCharacterCollisionResults.mySplitMovementResults.mySplitMovementStepsPerformed = collisionRuntimeParams.mySplitMovementStepsPerformed;
-            outCharacterCollisionResults.mySplitMovementResults.mySplitMovementInterrupted = collisionRuntimeParams.mySplitMovementStop;
-            outCharacterCollisionResults.mySplitMovementResults.mySplitMovementMovementChecked.vec3_copy(collisionRuntimeParams.mySplitMovementMovementChecked);
+            outCharacterCollisionResults.mySplitMovementResults.myStepsToPerform = collisionRuntimeParams.mySplitMovementSteps;
+            outCharacterCollisionResults.mySplitMovementResults.myStepsPerformed = collisionRuntimeParams.mySplitMovementStepsPerformed;
+            outCharacterCollisionResults.mySplitMovementResults.myMovementInterrupted = collisionRuntimeParams.mySplitMovementStop;
+            outCharacterCollisionResults.mySplitMovementResults.myMovementChecked.vec3_copy(collisionRuntimeParams.mySplitMovementMovementChecked);
 
             outCharacterCollisionResults.myInternalResults.myLastRelevantStartHorizontalMovement.vec3_copy(collisionRuntimeParams.myLastRelevantOriginalHorizontalMovement);
             outCharacterCollisionResults.myInternalResults.myLastRelevantEndHorizontalMovement.vec3_copy(collisionRuntimeParams.mySlidingPreviousHorizontalMovement);
             outCharacterCollisionResults.myInternalResults.myLastRelevantStartVerticalMovement.vec3_copy(collisionRuntimeParams.myLastRelevantOriginalVerticalMovement);
-            //outCharacterCollisionResults.myInternalResults.myLastRelevantEndVerticalMovement.vec3_copy(collisionRuntimeParams.mySplitMovementMovementChecked);
+            //outCharacterCollisionResults.myInternalResults.myLastRelevantEndVerticalMovement.vec3_copy(collisionRuntimeParams.myMovementChecked);
 
-            outCharacterCollisionResults.myInternalResults.myLastRelevantHasSlid = collisionRuntimeParams.myLastRelevantIsSliding;
-            outCharacterCollisionResults.myInternalResults.myHasSlidTowardOppositeDirection = collisionRuntimeParams.myIsSlidingIntoOppositeDirection;
-            outCharacterCollisionResults.myInternalResults.myLastRelevantSlideFlickerPrevented = collisionRuntimeParams.myIsSlidingFlickerPrevented;
-            outCharacterCollisionResults.myInternalResults.mySlideFlickerPreventionForceCheckCounter = collisionRuntimeParams.mySlidingFlickerPreventionCheckAnywayCounter;
-            outCharacterCollisionResults.myInternalResults.mySlide90DegreesDirectionSign = collisionRuntimeParams.mySliding90DegreesSign;
-            outCharacterCollisionResults.myInternalResults.mySlide90DegreesRecomputeDirectionSign = collisionRuntimeParams.mySlidingRecompute90DegreesSign;
+            outCharacterCollisionResults.myInternalResults.myLastRelevantHasWallSlid = collisionRuntimeParams.myLastRelevantIsSliding;
+            outCharacterCollisionResults.myInternalResults.myHasWallSlidTowardOppositeDirection = collisionRuntimeParams.myIsSlidingIntoOppositeDirection;
+            outCharacterCollisionResults.myInternalResults.myLastRelevantWallSlideFlickerPrevented = collisionRuntimeParams.myIsSlidingFlickerPrevented;
+            outCharacterCollisionResults.myInternalResults.myWallSlideFlickerPreventionForceCheckCounter = collisionRuntimeParams.mySlidingFlickerPreventionCheckAnywayCounter;
+            outCharacterCollisionResults.myInternalResults.myWallSlide90DegreesDirectionSign = collisionRuntimeParams.mySliding90DegreesSign;
+            outCharacterCollisionResults.myInternalResults.myWallSlide90DegreesRecomputeDirectionSign = collisionRuntimeParams.mySlidingRecompute90DegreesSign;
 
             outCharacterCollisionResults.myTransformResults.myStartTransformQuat.quat2_copy(currentTransformQuat);
         }
@@ -268,7 +268,7 @@ PP.CollisionCheckBridge = {
             outCollisionCheckParams.myCheckVerticalStraight = characterColliderSetup.myHorizontalCheckSetup.myHorizontalPositionVerticalStraightCheckEnabled;
             outCollisionCheckParams.myCheckVerticalDiagonalRay = characterColliderSetup.myHorizontalCheckSetup.myHorizontalPositionVerticalRadialDiagonalOutwardCheckEnabled || characterColliderSetup.myHorizontalCheckSetup.myHorizontalPositionVerticalRadialDiagonalInwardCheckEnabled;
             outCollisionCheckParams.myCheckVerticalDiagonalBorder = characterColliderSetup.myHorizontalCheckSetup.myHorizontalPositionVerticalBorderDiagonalOutwardCheckEnabled || characterColliderSetup.myHorizontalCheckSetup.myHorizontalPositionVerticalBorderDiagonalInwardCheckEnabled;
-            outCollisionCheckParams.myCheckVerticalDiagonalBorderRay = characterColliderSetup.myHorizontalCheckSetup.myHorizontalPositionVerticalRadialBorderDiagonalUpwardCheckEnabled || characterColliderSetup.myHorizontalCheckSetup.myHorizontalPositionVerticalRadialBorderDiagonalDownwardCheckEnabled;
+            outCollisionCheckParams.myCheckVerticalDiagonalBorderRay = characterColliderSetup.myHorizontalCheckSetup.myHorizontalPositionVerticalRadialBorderDiagonalOutwardCheckEnabled || characterColliderSetup.myHorizontalCheckSetup.myHorizontalPositionVerticalRadialBorderDiagonalInwardCheckEnabled;
             outCollisionCheckParams.myCheckVerticalSearchFartherVerticalHit = characterColliderSetup.myHorizontalCheckSetup.myHorizontalPositionVerticalCheckGetFarthestHit;
 
             outCollisionCheckParams.myCheckHorizontalFixedForwardEnabled = characterColliderSetup.myHorizontalCheckSetup.myHorizontalCheckFixedForwardEnabled;
@@ -280,14 +280,14 @@ PP.CollisionCheckBridge = {
             outCollisionCheckParams.myAdjustVerticalMovementWithSurfaceAngle = characterColliderSetup.myGroundSetup.myAddVerticalMovementBasedOnSurfacePerceivedAngle || characterColliderSetup.myCeilingSetup.myAddVerticalMovementBasedOnSurfacePerceivedAngle;
             outCollisionCheckParams.myCheckVerticalFixedForwardEnabled = characterColliderSetup.myVerticalCheckSetup.myVerticalCheckFixedForwardEnabled;
             outCollisionCheckParams.myCheckVerticalFixedForward.vec3_copy(characterColliderSetup.myVerticalCheckSetup.myVerticalCheckFixedForward);
-            outCollisionCheckParams.myCheckVerticalBothDirection = characterColliderSetup.myVerticalCheckSetup.myVerticalMovementCheckPerformCheckTowardBothDirections;
+            outCollisionCheckParams.myCheckVerticalBothDirection = characterColliderSetup.myVerticalCheckSetup.myVerticalMovementCheckPerformCheckOnBothSides;
 
             outCollisionCheckParams.myVerticalMovementReduceEnabled = characterColliderSetup.myVerticalCheckSetup.myVerticalMovementCheckReductionEnabled;
 
             outCollisionCheckParams.myGroundCircumferenceAddCenter = characterColliderSetup.myVerticalCheckSetup.myVerticalCheckCircumferenceCentralCheckEnabled;
             outCollisionCheckParams.myGroundCircumferenceSliceAmount = characterColliderSetup.myVerticalCheckSetup.myVerticalCheckCircumferenceSlices;
             outCollisionCheckParams.myGroundCircumferenceStepAmount = characterColliderSetup.myVerticalCheckSetup.myVerticalCheckCircumferenceRadialSteps;
-            outCollisionCheckParams.myGroundCircumferenceRotationPerStep = characterColliderSetup.myVerticalCheckSetup.myVerticalCheckCircumferenceRotationPerRadialStepDegrees;
+            outCollisionCheckParams.myGroundCircumferenceRotationPerStep = characterColliderSetup.myVerticalCheckSetup.myVerticalCheckCircumferenceRotationPerRadialStep;
             outCollisionCheckParams.myVerticalAllowHitInsideCollisionIfOneOk = characterColliderSetup.myVerticalCheckSetup.myVerticalCheckAllowHitsInsideCollisionIfOneValid;
 
             outCollisionCheckParams.myBlockLayerFlags.copy(characterColliderSetup.myHorizontalCheckSetup.myHorizontalCheckBlockLayerFlags);
@@ -320,35 +320,35 @@ PP.CollisionCheckBridge = {
             outCollisionCheckParams.myHorizontalMovementGroundAngleIgnoreMaxMovementLeft = characterColliderSetup.myGroundSetup.mySurfaceAngleToIgnoreMaxHorizontalMovementLeft;
             outCollisionCheckParams.myHorizontalMovementCeilingAngleIgnoreMaxMovementLeft = characterColliderSetup.myCeilingSetup.mySurfaceAngleToIgnoreMaxHorizontalMovementLeft;
 
-            outCollisionCheckParams.myComputeGroundInfoEnabled = characterColliderSetup.myGroundSetup.myGatherSurfaceInfo;
-            outCollisionCheckParams.myComputeCeilingInfoEnabled = characterColliderSetup.myCeilingSetup.myGatherSurfaceInfo;
+            outCollisionCheckParams.myComputeGroundInfoEnabled = characterColliderSetup.myGroundSetup.myCollectSurfaceInfo;
+            outCollisionCheckParams.myComputeCeilingInfoEnabled = characterColliderSetup.myCeilingSetup.myCollectSurfaceInfo;
             outCollisionCheckParams.myDistanceToBeOnGround = characterColliderSetup.myGroundSetup.myIsOnSurfaceMaxOutsideDistance;
-            outCollisionCheckParams.myDistanceToComputeGroundInfo = characterColliderSetup.myGroundSetup.myGatherSurfaceNormalMaxOutsideDistance;
+            outCollisionCheckParams.myDistanceToComputeGroundInfo = characterColliderSetup.myGroundSetup.myCollectSurfaceNormalMaxOutsideDistance;
             outCollisionCheckParams.myDistanceToBeOnCeiling = characterColliderSetup.myCeilingSetup.myIsOnSurfaceMaxOutsideDistance;
-            outCollisionCheckParams.myDistanceToComputeCeilingInfo = characterColliderSetup.myCeilingSetup.myGatherSurfaceNormalMaxOutsideDistance;
+            outCollisionCheckParams.myDistanceToComputeCeilingInfo = characterColliderSetup.myCeilingSetup.myCollectSurfaceNormalMaxOutsideDistance;
             outCollisionCheckParams.myVerticalFixToBeOnGround = characterColliderSetup.myGroundSetup.myIsOnSurfaceMaxInsideDistance;
-            outCollisionCheckParams.myVerticalFixToComputeGroundInfo = characterColliderSetup.myGroundSetup.myGatherSurfaceNormalMaxInsideDistance;
+            outCollisionCheckParams.myVerticalFixToComputeGroundInfo = characterColliderSetup.myGroundSetup.myCollectSurfaceNormalMaxInsideDistance;
             outCollisionCheckParams.myVerticalFixToBeOnCeiling = characterColliderSetup.myCeilingSetup.myIsOnSurfaceMaxInsideDistance;
-            outCollisionCheckParams.myVerticalFixToComputeCeilingInfo = characterColliderSetup.myCeilingSetup.myGatherSurfaceNormalMaxInsideDistance;
+            outCollisionCheckParams.myVerticalFixToComputeCeilingInfo = characterColliderSetup.myCeilingSetup.myCollectSurfaceNormalMaxInsideDistance;
             outCollisionCheckParams.myIsOnGroundIfInsideHit = characterColliderSetup.myGroundSetup.myIsOnSurfaceIfInsideSurface;
             outCollisionCheckParams.myIsOnCeilingIfInsideHit = characterColliderSetup.myCeilingSetup.myIsOnSurfaceIfInsideSurface;
 
             outCollisionCheckParams.myAllowSurfaceSteepFix = characterColliderSetup.myGroundSetup.myAllowExitAttemptWhenOnInvalidSurfacePerceivedAngle || characterColliderSetup.myCeilingSetup.myAllowExitAttemptWhenOnInvalidSurfacePerceivedAngle;
-            outCollisionCheckParams.myMustRemainOnGround = characterColliderSetup.myGroundSetup.myMustRemainOnSurface;
-            outCollisionCheckParams.myMustRemainOnCeiling = characterColliderSetup.myCeilingSetup.myMustRemainOnSurface;
-            outCollisionCheckParams.myMustRemainOnValidGroundAngleDownhill = characterColliderSetup.myGroundSetup.myMustRemainOnValidSurfaceAngleDownhill;
-            outCollisionCheckParams.myMustRemainOnValidCeilingAngleDownhill = characterColliderSetup.myCeilingSetup.myMustRemainOnValidSurfaceAngleDownhill;
-            outCollisionCheckParams.myRegatherGroundInfoOnSurfaceCheckFail = characterColliderSetup.myGroundSetup.myRegatherSurfaceInfoOnSurfaceCheckFailed;
-            outCollisionCheckParams.myRegatherCeilingInfoOnSurfaceCheckFail = characterColliderSetup.myCeilingSetup.myRegatherSurfaceInfoOnSurfaceCheckFailed;
+            outCollisionCheckParams.myMustStayOnGround = characterColliderSetup.myGroundSetup.myMustStayOnSurface;
+            outCollisionCheckParams.myMustStayOnCeiling = characterColliderSetup.myCeilingSetup.myMustStayOnSurface;
+            outCollisionCheckParams.myMustStayOnValidGroundAngleDownhill = characterColliderSetup.myGroundSetup.myMustStayOnValidSurfaceAngleDownhill;
+            outCollisionCheckParams.myMustStayOnValidCeilingAngleDownhill = characterColliderSetup.myCeilingSetup.myMustStayOnValidSurfaceAngleDownhill;
+            outCollisionCheckParams.myRegatherGroundInfoOnSurfaceCheckFail = characterColliderSetup.myGroundSetup.myRecollectSurfaceInfoOnSurfaceCheckFailed;
+            outCollisionCheckParams.myRegatherCeilingInfoOnSurfaceCheckFail = characterColliderSetup.myCeilingSetup.myRecollectSurfaceInfoOnSurfaceCheckFailed;
 
-            outCollisionCheckParams.mySlidingEnabled = characterColliderSetup.mySlideSetup.mySlideEnabled;
-            outCollisionCheckParams.mySlidingHorizontalMovementCheckBetterNormal = characterColliderSetup.mySlideSetup.mySlideHorizontalMovementCheckGetBetterReferenceHit;
-            outCollisionCheckParams.mySlidingMaxAttempts = characterColliderSetup.mySlideSetup.mySlideMaxAttempts;
-            outCollisionCheckParams.mySlidingCheckBothDirections = characterColliderSetup.mySlideSetup.mySlideCheckBothDirections;
-            outCollisionCheckParams.mySlidingFlickeringPreventionType = characterColliderSetup.mySlideSetup.mySlideFlickerPreventionMode;
-            outCollisionCheckParams.mySlidingFlickeringPreventionCheckOnlyIfAlreadySliding = characterColliderSetup.mySlideSetup.mySlideFlickerPreventionCheckOnlyIfAlreadySliding;
-            outCollisionCheckParams.mySlidingFlickerPreventionCheckAnywayCounter = characterColliderSetup.mySlideSetup.mySlideFlickerPreventionForceCheckCounter;
-            outCollisionCheckParams.mySlidingAdjustSign90Degrees = characterColliderSetup.mySlideSetup.mySlide90DegreesAdjustDirectionSign;
+            outCollisionCheckParams.mySlidingEnabled = characterColliderSetup.myWallSlideSetup.myWallSlideEnabled;
+            outCollisionCheckParams.mySlidingHorizontalMovementCheckBetterNormal = characterColliderSetup.myWallSlideSetup.myWallSlideHorizontalMovementCheckGetBetterReferenceHit;
+            outCollisionCheckParams.mySlidingMaxAttempts = characterColliderSetup.myWallSlideSetup.myWallSlideMaxAttempts;
+            outCollisionCheckParams.mySlidingCheckBothDirections = characterColliderSetup.myWallSlideSetup.myCheckBothWallSlideDirections;
+            outCollisionCheckParams.mySlidingFlickeringPreventionType = characterColliderSetup.myWallSlideSetup.myWallSlideFlickerPreventionMode;
+            outCollisionCheckParams.mySlidingFlickeringPreventionCheckOnlyIfAlreadySliding = characterColliderSetup.myWallSlideSetup.myWallSlideFlickerPreventionCheckOnlyIfAlreadySliding;
+            outCollisionCheckParams.mySlidingFlickerPreventionCheckAnywayCounter = characterColliderSetup.myWallSlideSetup.myWallSlideFlickerPreventionForceCheckCounter;
+            outCollisionCheckParams.mySlidingAdjustSign90Degrees = characterColliderSetup.myWallSlideSetup.my90DegreesWallSlideAdjustDirectionSign;
 
             outCollisionCheckParams.mySplitMovementEnabled = characterColliderSetup.mySplitMovementSetup.mySplitMovementEnabled;
             outCollisionCheckParams.mySplitMovementMaxLength = characterColliderSetup.mySplitMovementSetup.mySplitMovementMaxStepLength;

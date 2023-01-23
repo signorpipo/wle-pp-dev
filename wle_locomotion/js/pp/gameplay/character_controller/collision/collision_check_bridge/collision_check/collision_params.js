@@ -130,10 +130,10 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myIsOnCeilingIfInsideHit = false;
 
         this.myAllowSurfaceSteepFix = false; //#TODO split into ceiling and ground
-        this.myMustRemainOnGround = false;
-        this.myMustRemainOnCeiling = false;
-        this.myMustRemainOnValidGroundAngleDownhill = false;
-        this.myMustRemainOnValidCeilingAngleDownhill = false;
+        this.myMustStayOnGround = false;
+        this.myMustStayOnCeiling = false;
+        this.myMustStayOnValidGroundAngleDownhill = false;
+        this.myMustStayOnValidCeilingAngleDownhill = false;
         this.myRegatherGroundInfoOnSurfaceCheckFail = false;
         this.myRegatherCeilingInfoOnSurfaceCheckFail = false;
 
@@ -289,10 +289,10 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myIsOnCeilingIfInsideHit = other.myIsOnCeilingIfInsideHit;
 
         this.myAllowSurfaceSteepFix = other.myAllowSurfaceSteepFix;
-        this.myMustRemainOnGround = other.myMustRemainOnGround;
-        this.myMustRemainOnCeiling = other.myMustRemainOnCeiling;
-        this.myMustRemainOnValidGroundAngleDownhill = other.myMustRemainOnValidGroundAngleDownhill;
-        this.myMustRemainOnValidCeilingAngleDownhill = other.myMustRemainOnValidCeilingAngleDownhill;
+        this.myMustStayOnGround = other.myMustStayOnGround;
+        this.myMustStayOnCeiling = other.myMustStayOnCeiling;
+        this.myMustStayOnValidGroundAngleDownhill = other.myMustStayOnValidGroundAngleDownhill;
+        this.myMustStayOnValidCeilingAngleDownhill = other.myMustStayOnValidCeilingAngleDownhill;
         this.myRegatherGroundInfoOnSurfaceCheckFail = other.myRegatherGroundInfoOnSurfaceCheckFail;
         this.myRegatherCeilingInfoOnSurfaceCheckFail = other.myRegatherCeilingInfoOnSurfaceCheckFail;
 

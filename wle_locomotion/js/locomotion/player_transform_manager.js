@@ -620,7 +620,10 @@ PlayerTransformManager.prototype.update = function () {
                 rotationQuat.quat_setForward(horizontalDirection);
                 transformQuat.quat2_setRotationQuat(rotationQuat);
             }
+            let debugBackup = this._myParams.myMovementCollisionCheckParams.myDebugActive;
+            this._myParams.myMovementCollisionCheckParams.myDebugActive = false;
             CollisionCheckGlobal.positionCheck(true, transformQuat, this._myParams.myMovementCollisionCheckParams, collisionRuntimeParams);
+            this._myParams.myMovementCollisionCheckParams.myDebugActive = debugBackup;
             this._myIsPositionValid = collisionRuntimeParams.myIsPositionOk;
         }
 
@@ -826,7 +829,7 @@ PlayerTransformManager.prototype._updateReal = function () {
             // Head Colliding
             movementToCheck = this.getPositionHeadReal(positionReal).vec3_sub(this.getPositionHead(position), movementToCheck);
             collisionRuntimeParams.reset();
-            transformQuat = this.getTransformHeadQuat(transformQuat);
+            transformQuat = this.getTransformHeadQuat(transformQuat); // get eyes transform
             newPositionHead.vec3_copy(this._myValidPositionHead);
             if (this._myParams.mySyncEnabledFlagMap.get(PlayerTransformManagerSyncFlag.HEAD_COLLIDING)) {
                 CollisionCheckGlobal.move(movementToCheck, transformQuat, this._myHeadCollisionCheckParams, collisionRuntimeParams);
@@ -881,8 +884,12 @@ PlayerTransformManager.prototype._updateReal = function () {
                     rotationQuat.quat_setForward(horizontalDirection);
                     transformQuat.quat2_setRotationQuat(rotationQuat);
                 }
+
+                let debugBackup = this._myParams.myMovementCollisionCheckParams.myDebugActive;
+                this._myParams.myMovementCollisionCheckParams.myDebugActive = false;
                 CollisionCheckGlobal.positionCheck(true, transformQuat, this._myParams.myMovementCollisionCheckParams, this._myRealCollisionRuntimeParams);
                 this._myIsRealPositionValid = this._myRealCollisionRuntimeParams.myIsPositionOk;
+                this._myParams.myMovementCollisionCheckParams.myDebugActive = debugBackup;
             }
         }
     }

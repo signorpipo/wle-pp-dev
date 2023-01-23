@@ -440,8 +440,8 @@ PlayerLocomotion = class PlayerLocomotion {
         this._myCollisionCheckParamsMovement.myVerticalFixToComputeCeilingInfo = 0;
 
         this._myCollisionCheckParamsMovement.myAllowSurfaceSteepFix = false;
-        this._myCollisionCheckParamsMovement.myMustRemainOnGround = false;
-        this._myCollisionCheckParamsMovement.myMustRemainOnCeiling = false;
+        this._myCollisionCheckParamsMovement.myMustStayOnGround = false;
+        this._myCollisionCheckParamsMovement.myMustStayOnCeiling = false;
         this._myCollisionCheckParamsMovement.myRegatherGroundInfoOnSurfaceCheckFail = true;
         this._myCollisionCheckParamsMovement.myRegatherCeilingInfoOnSurfaceCheckFail = true;
 
@@ -461,9 +461,9 @@ PlayerLocomotion = class PlayerLocomotion {
             this._myCollisionCheckParamsMovement.myObjectsToIgnore.pp_pushUnique(physXComponent.object, (first, second) => first.pp_equals(second));
         }
 
-        this._myCollisionCheckParamsMovement.myDebugActive = false;
+        this._myCollisionCheckParamsMovement.myDebugActive = true;
 
-        this._myCollisionCheckParamsMovement.myDebugHorizontalMovementActive = false;
+        this._myCollisionCheckParamsMovement.myDebugHorizontalMovementActive = true;
         this._myCollisionCheckParamsMovement.myDebugHorizontalPositionActive = true;
         this._myCollisionCheckParamsMovement.myDebugVerticalMovementActive = false;
         this._myCollisionCheckParamsMovement.myDebugVerticalPositionActive = false;

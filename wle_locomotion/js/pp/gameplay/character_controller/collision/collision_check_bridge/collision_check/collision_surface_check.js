@@ -62,20 +62,20 @@ CollisionCheck.prototype._updateSurfaceInfo = function () {
 
 CollisionCheck.prototype._postSurfaceCheck = function () {
     let horizontalDirection = PP.vec3_create();
-    return function _postSurfaceCheck(fixedHorizontalMovement, fixedVerticalMovement, transformUp, collisionCheckParams, collisionRuntimeParams, previousCollisionRuntimeParams) {
+    return function _postSurfaceCheck(fixedHorizontalMovement, originalVerticalMovement, transformUp, collisionCheckParams, collisionRuntimeParams, previousCollisionRuntimeParams) {
 
-        let isVerticalMovementZero = fixedVerticalMovement.vec3_isZero(0.00001);
-        let isVerticalMovemenDownward = Math.pp_sign(fixedVerticalMovement.vec3_lengthSigned(transformUp), -1) < 0;
+        let isVerticalMovementZero = originalVerticalMovement.vec3_isZero(0.00001);
+        let isVerticalMovemenDownward = Math.pp_sign(originalVerticalMovement.vec3_lengthSigned(transformUp), -1) < 0;
 
         let mustRemainOnGroundOk = true;
-        if (collisionCheckParams.myMustRemainOnGround) {
+        if (collisionCheckParams.myMustStayOnGround) {
             if (previousCollisionRuntimeParams.myIsOnGround && !collisionRuntimeParams.myIsOnGround && (isVerticalMovementZero || isVerticalMovemenDownward)) {
                 mustRemainOnGroundOk = false;
             }
         }
 
         let mustRemainOnCeilingOk = true;
-        if (collisionCheckParams.myMustRemainOnCeiling) {
+        if (collisionCheckParams.myMustStayOnCeiling) {
             if (previousCollisionRuntimeParams.myIsOnCeiling && !collisionRuntimeParams.myIsOnCeiling && (isVerticalMovementZero || isVerticalMovemenDownward)) {
                 mustRemainOnCeilingOk = false;
             }
@@ -100,7 +100,7 @@ CollisionCheck.prototype._postSurfaceCheck = function () {
                 }
 
                 if (previousCollisionRuntimeParams.myGroundAngle <= collisionCheckParams.myGroundAngleToIgnore + 0.0001) {
-                    if (collisionCheckParams.myMustRemainOnValidGroundAngleDownhill) {
+                    if (collisionCheckParams.myMustStayOnValidGroundAngleDownhill) {
                         isOnValidGroundAngleDownhill = false;
                     }
                 }
@@ -126,7 +126,7 @@ CollisionCheck.prototype._postSurfaceCheck = function () {
                 }
 
                 if (previousCollisionRuntimeParams.myCeilingAngle <= collisionCheckParams.myCeilingAngleToIgnore + 0.0001) {
-                    if (collisionCheckParams.myMustRemainOnValidCeilingAngleDownhill) {
+                    if (collisionCheckParams.myMustStayOnValidCeilingAngleDownhill) {
                         isOnValidCeilingAngleDownhill = false;
                     }
                 }
