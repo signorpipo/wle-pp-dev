@@ -269,7 +269,7 @@ PP.CollisionCheckBridge = {
             outCollisionCheckParams.myCheckVerticalDiagonalRay = characterColliderSetup.myHorizontalCheckSetup.myHorizontalPositionVerticalRadialDiagonalOutwardCheckEnabled || characterColliderSetup.myHorizontalCheckSetup.myHorizontalPositionVerticalRadialDiagonalInwardCheckEnabled;
             outCollisionCheckParams.myCheckVerticalDiagonalBorder = characterColliderSetup.myHorizontalCheckSetup.myHorizontalPositionVerticalBorderDiagonalOutwardCheckEnabled || characterColliderSetup.myHorizontalCheckSetup.myHorizontalPositionVerticalBorderDiagonalInwardCheckEnabled;
             outCollisionCheckParams.myCheckVerticalDiagonalBorderRay = characterColliderSetup.myHorizontalCheckSetup.myHorizontalPositionVerticalRadialBorderDiagonalUpwardCheckEnabled || characterColliderSetup.myHorizontalCheckSetup.myHorizontalPositionVerticalRadialBorderDiagonalDownwardCheckEnabled;
-            outCollisionCheckParams.myCheckVerticalSearchFartherVerticalHit = characterColliderSetup.myHorizontalCheckSetup.myHorizontalPositionVerticalCheckSearchFarthestHit;
+            outCollisionCheckParams.myCheckVerticalSearchFartherVerticalHit = characterColliderSetup.myHorizontalCheckSetup.myHorizontalPositionVerticalCheckGetFarthestHit;
 
             outCollisionCheckParams.myCheckHorizontalFixedForwardEnabled = characterColliderSetup.myHorizontalCheckSetup.myHorizontalCheckFixedForwardEnabled;
             outCollisionCheckParams.myCheckHorizontalFixedForward.vec3_copy(characterColliderSetup.myHorizontalCheckSetup.myHorizontalCheckFixedForward);
@@ -333,7 +333,7 @@ PP.CollisionCheckBridge = {
             outCollisionCheckParams.myIsOnGroundIfInsideHit = characterColliderSetup.myGroundSetup.myIsOnSurfaceIfInsideSurface;
             outCollisionCheckParams.myIsOnCeilingIfInsideHit = characterColliderSetup.myCeilingSetup.myIsOnSurfaceIfInsideSurface;
 
-            outCollisionCheckParams.myAllowSurfaceSteepFix = characterColliderSetup.myGroundSetup.myIsOnInvalidSurfacePerceivedAngleAllowExitAttempt || characterColliderSetup.myCeilingSetup.myIsOnInvalidSurfacePerceivedAngleAllowExitAttempt;
+            outCollisionCheckParams.myAllowSurfaceSteepFix = characterColliderSetup.myGroundSetup.myAllowExitAttemptWhenOnInvalidSurfacePerceivedAngle || characterColliderSetup.myCeilingSetup.myAllowExitAttemptWhenOnInvalidSurfacePerceivedAngle;
             outCollisionCheckParams.myMustRemainOnGround = characterColliderSetup.myGroundSetup.myMustRemainOnSurface;
             outCollisionCheckParams.myMustRemainOnCeiling = characterColliderSetup.myCeilingSetup.myMustRemainOnSurface;
             outCollisionCheckParams.myMustRemainOnValidGroundAngleDownhill = characterColliderSetup.myGroundSetup.myMustRemainOnValidSurfaceAngleDownhill;
@@ -342,7 +342,7 @@ PP.CollisionCheckBridge = {
             outCollisionCheckParams.myRegatherCeilingInfoOnSurfaceCheckFail = characterColliderSetup.myCeilingSetup.myRegatherSurfaceInfoOnSurfaceCheckFailed;
 
             outCollisionCheckParams.mySlidingEnabled = characterColliderSetup.mySlideSetup.mySlideEnabled;
-            outCollisionCheckParams.mySlidingHorizontalMovementCheckBetterNormal = characterColliderSetup.mySlideSetup.mySlideHorizontalMovementCheckBetterReferenceHit;
+            outCollisionCheckParams.mySlidingHorizontalMovementCheckBetterNormal = characterColliderSetup.mySlideSetup.mySlideHorizontalMovementCheckGetBetterReferenceHit;
             outCollisionCheckParams.mySlidingMaxAttempts = characterColliderSetup.mySlideSetup.mySlideMaxAttempts;
             outCollisionCheckParams.mySlidingCheckBothDirections = characterColliderSetup.mySlideSetup.mySlideCheckBothDirections;
             outCollisionCheckParams.mySlidingFlickeringPreventionType = characterColliderSetup.mySlideSetup.mySlideFlickerPreventionMode;

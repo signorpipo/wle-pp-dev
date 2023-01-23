@@ -100,7 +100,7 @@ PP.CharacterColliderHorizontalCheckSetup = class CharacterColliderHorizontalChec
         this.myHorizontalPositionVerticalRadialBorderDiagonalUpwardCheckEnabled = false;
         this.myHorizontalPositionVerticalRadialBorderDiagonalDownwardCheckEnabled = false;
 
-        this.myHorizontalPositionVerticalCheckSearchFarthestHit = false; //somewhat expensive, but can help fix sime sliding issues
+        this.myHorizontalPositionVerticalCheckGetFarthestHit = false; //somewhat expensive, but can help fix sime sliding issues
 
         this.myHorizontalPositionVerticalCheckPerformHorizontalCheckOnHit = false;
         this.myHorizontalPositionVerticalCheckPerformHorizontalCheckOnHitKeepVerticalHitIfNoHorizontalHit = false;
@@ -165,7 +165,7 @@ PP.CharacterColliderSlideSetup = class CharacterColliderSlideSetup {
 
         this.mySlideMaxAttempts = 0;
 
-        this.mySlideHorizontalMovementCheckBetterReferenceHit = false;
+        this.mySlideHorizontalMovementCheckGetBetterReferenceHit = false;
         // if the horizontal movement finds a hit it stops looking, but could end up having a bad reference collision hit
         // this makes it so it will check a better hit to use later for the slide
 
@@ -225,7 +225,7 @@ PP.CharacterColliderSurfaceSetup = class CharacterColliderSurfaceSetup {
         this.myGatherSurfaceNormalMaxOutsideDistance = 0;
         this.myGatherSurfaceNormalMaxInsideDistance = 0;
 
-        this.myIsOnInvalidSurfacePerceivedAngleAllowExitAttempt = false;
+        this.myAllowExitAttemptWhenOnInvalidSurfacePerceivedAngle = false;
         // if u start on an invalid perceived angle (above angle to ignore) u normally can't even try to move uphill, this will let you try and see if with that movement
         // you could end up in a valid perceived angle position
 
@@ -368,7 +368,7 @@ PP.CharacterColliderHorizontalCheckSetup.prototype.copy = function (other) {
     this.myHorizontalPositionVerticalRadialBorderDiagonalUpwardCheckEnabled = other.myHorizontalPositionVerticalRadialBorderDiagonalUpwardCheckEnabled;
     this.myHorizontalPositionVerticalRadialBorderDiagonalDownwardCheckEnabled = other.myHorizontalPositionVerticalRadialBorderDiagonalDownwardCheckEnabled;
 
-    this.myHorizontalPositionVerticalCheckSearchFarthestHit = other.myHorizontalPositionVerticalCheckSearchFarthestHit;
+    this.myHorizontalPositionVerticalCheckGetFarthestHit = other.myHorizontalPositionVerticalCheckGetFarthestHit;
 
     this.myHorizontalPositionVerticalCheckPerformHorizontalCheckOnHit = other.myHorizontalPositionVerticalCheckPerformHorizontalCheckOnHit;
     this.myHorizontalPositionVerticalCheckPerformHorizontalCheckOnHitKeepVerticalHitIfNoHorizontalHit = other.myHorizontalPositionVerticalCheckPerformHorizontalCheckOnHitKeepVerticalHitIfNoHorizontalHit;
@@ -408,7 +408,7 @@ PP.CharacterColliderSlideSetup.prototype.copy = function (other) {
 
     this.mySlideMaxAttempts = other.mySlideMaxAttempts;
 
-    this.mySlideHorizontalMovementCheckBetterReferenceHit = other.mySlideHorizontalMovementCheckBetterReferenceHit;
+    this.mySlideHorizontalMovementCheckGetBetterReferenceHit = other.mySlideHorizontalMovementCheckGetBetterReferenceHit;
 
     this.mySlideCheckBothDirections = other.mySlideCheckBothDirections;
 
@@ -447,7 +447,7 @@ PP.CharacterColliderSurfaceSetup.prototype.copy = function (other) {
     this.myGatherSurfaceNormalMaxOutsideDistance = other.myGatherSurfaceNormalMaxOutsideDistance;
     this.myGatherSurfaceNormalMaxInsideDistance = other.myGatherSurfaceNormalMaxInsideDistance;
 
-    this.myIsOnInvalidSurfacePerceivedAngleAllowExitAttempt = other.myIsOnInvalidSurfacePerceivedAngleAllowExitAttempt;
+    this.myAllowExitAttemptWhenOnInvalidSurfacePerceivedAngle = other.myAllowExitAttemptWhenOnInvalidSurfacePerceivedAngle;
 
     this.myMustRemainOnSurface = other.myMustRemainOnSurface;
     this.myMustRemainOnValidSurfaceAngleDownhill = other.myMustRemainOnValidSurfaceAngleDownhill;
