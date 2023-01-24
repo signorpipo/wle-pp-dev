@@ -44,9 +44,6 @@ PP.CharacterColliderHorizontalCheckSetup = class CharacterColliderHorizontalChec
         this.myHorizontalCheckConeHalfAngle = 0;
 
         this.myHorizontalHeightCheckEnabled = false;
-        this.myHorizontalHeightCheckSteps = 0;
-        this.myHorizontalHeightVerticalCheckEnabled = false;
-        this.myHorizontalHeightHorizontalCheckEnabled = false;
 
         this.myHorizontalCheckFeetDistanceToIgnore = 0;
         this.myHorizontalCheckHeadDistanceToIgnore = 0;
@@ -58,18 +55,26 @@ PP.CharacterColliderHorizontalCheckSetup = class CharacterColliderHorizontalChec
 
         this.myHorizontalMovementCheckEnabled = false;
 
+        this.myHorizontalMovementCheckRadialSteps = 0;
+
         this.myHorizontalMovementCheckSplitMovementEnabled = false;
         this.myHorizontalMovementCheckSplitMovementMaxSteps = null;
         this.myHorizontalMovementCheckSplitMovementMaxStepLength = null;
         this.myHorizontalMovementCheckSplitMovementMinStepLength = null;
 
-        this.myHorizontalMovementCheckRadialSteps = 0;
+        this.myHorizontalMovementCheckGetBetterReferenceHit = false;
+        // if the horizontal movement finds a hit it stops looking, but could end up having a bad reference collision hit
+        // this makes it so it will check a better hit to use later for the slide
 
         this.myHorizontalMovementHorizontalRadialCheckEnabled = false;
         this.myHorizontalMovementHorizontalDiagonalOutwardCheckEnabled = false;
         this.myHorizontalMovementHorizontalDiagonalInwardCheckEnabled = false;
         this.myHorizontalMovementHorizontalStraightCheckEnabled = false;
         this.myHorizontalMovementHorizontalStraightCentralCheckEnabled = false;
+
+        this.myHorizontalMovementHeightCheckSteps = 0;
+        this.myHorizontalMovementHeightHorizontalCheckEnabled = false;
+        this.myHorizontalMovementHeightVerticalCheckEnabled = false;
 
         this.myHorizontalMovementVerticalRadialDiagonalOutwardCheckEnabled = false;
         this.myHorizontalMovementVerticalRadialDiagonalInwardCheckEnabled = false;
@@ -91,6 +96,10 @@ PP.CharacterColliderHorizontalCheckSetup = class CharacterColliderHorizontalChec
         this.myHorizontalPositionHorizontalBorderCheckEnabled = false;
         this.myHorizontalPositionHorizontalRadialCheckEnabled = false;
 
+        this.myHorizontalPositionHeightCheckSteps = 0;
+        this.myHorizontalPositionHeightHorizontalCheckEnabled = false;
+        this.myHorizontalPositionHeightVerticalCheckEnabled = false;
+
         this.myHorizontalPositionVerticalStraightCheckEnabled = false;
         this.myHorizontalPositionVerticalStraightCentralCheckEnabled = false;
         this.myHorizontalPositionVerticalRadialDiagonalOutwardCheckEnabled = false;
@@ -100,7 +109,7 @@ PP.CharacterColliderHorizontalCheckSetup = class CharacterColliderHorizontalChec
         this.myHorizontalPositionVerticalRadialBorderDiagonalOutwardCheckEnabled = false;
         this.myHorizontalPositionVerticalRadialBorderDiagonalInwardCheckEnabled = false;
 
-        this.myHorizontalPositionVerticalCheckGetFarthestHit = false; //somewhat expensive, but can help fix some sliding issues
+        this.myHorizontalPositionVerticalCheckGetFarthestHit = false; // not very useful but already implemented so
 
         this.myHorizontalPositionVerticalCheckPerformHorizontalCheckOnHit = false;
         this.myHorizontalPositionVerticalCheckPerformHorizontalCheckOnHitKeepVerticalHitIfNoHorizontalHit = false;
@@ -165,10 +174,6 @@ PP.CharacterColliderWallSlideSetup = class CharacterColliderWallSlideSetup {
 
         this.myWallSlideMaxAttempts = 0;
 
-        this.myWallSlideHorizontalMovementCheckGetBetterReferenceHit = false;
-        // if the horizontal movement finds a hit it stops looking, but could end up having a bad reference collision hit
-        // this makes it so it will check a better hit to use later for the slide
-
         this.myCheckBothWallSlideDirections = false;
         // expensive, 2 times the checks since it basically check again on the other slide direction
         // this can fix some edge cases in which u can get stuck instead of sliding
@@ -220,7 +225,7 @@ PP.CharacterColliderSurfaceSetup = class CharacterColliderSurfaceSetup {
 
         this.myIsOnSurfaceMaxOutsideDistance = 0;
         this.myIsOnSurfaceMaxInsideDistance = 0;
-        this.myIsOnSurfaceIfInsideSurface = false;
+        this.myIsOnSurfaceIfInsideCollision = false;
         this.myIsOnSurfaceMaxSurfaceAngle = null; // #TODO TO IMPLEMENT
 
         this.myCollectSurfaceNormalMaxOutsideDistance = 0;
@@ -315,9 +320,6 @@ PP.CharacterColliderHorizontalCheckSetup.prototype.copy = function (other) {
     this.myHorizontalCheckConeHalfAngle = other.myHorizontalCheckConeHalfAngle;
 
     this.myHorizontalHeightCheckEnabled = other.myHorizontalHeightCheckEnabled;
-    this.myHorizontalHeightCheckSteps = other.myHorizontalHeightCheckSteps;
-    this.myHorizontalHeightVerticalCheckEnabled = other.myHorizontalHeightVerticalCheckEnabled;
-    this.myHorizontalHeightHorizontalCheckEnabled = other.myHorizontalHeightHorizontalCheckEnabled;
 
     this.myHorizontalCheckFeetDistanceToIgnore = other.myHorizontalCheckFeetDistanceToIgnore;
     this.myHorizontalCheckHeadDistanceToIgnore = other.myHorizontalCheckHeadDistanceToIgnore;
@@ -327,18 +329,24 @@ PP.CharacterColliderHorizontalCheckSetup.prototype.copy = function (other) {
 
     this.myHorizontalMovementCheckEnabled = other.myHorizontalMovementCheckEnabled;
 
+    this.myHorizontalMovementCheckRadialSteps = other.myHorizontalMovementCheckRadialSteps;
+
     this.myHorizontalMovementCheckSplitMovementEnabled = other.myHorizontalMovementCheckSplitMovementEnabled;
     this.myHorizontalMovementCheckSplitMovementMaxSteps = other.myHorizontalMovementCheckSplitMovementMaxSteps;
     this.myHorizontalMovementCheckSplitMovementMaxStepLength = other.myHorizontalMovementCheckSplitMovementMaxStepLength;
     this.myHorizontalMovementCheckSplitMovementMinStepLength = other.myHorizontalMovementCheckSplitMovementMinStepLength;
 
-    this.myHorizontalMovementCheckRadialSteps = other.myHorizontalMovementCheckRadialSteps;
+    this.myHorizontalMovementCheckGetBetterReferenceHit = other.myHorizontalMovementCheckGetBetterReferenceHit;
 
     this.myHorizontalMovementHorizontalRadialCheckEnabled = other.myHorizontalMovementHorizontalRadialCheckEnabled;
     this.myHorizontalMovementHorizontalDiagonalOutwardCheckEnabled = other.myHorizontalMovementHorizontalDiagonalOutwardCheckEnabled;
     this.myHorizontalMovementHorizontalDiagonalInwardCheckEnabled = other.myHorizontalMovementHorizontalDiagonalInwardCheckEnabled;
     this.myHorizontalMovementHorizontalStraightCheckEnabled = other.myHorizontalMovementHorizontalStraightCheckEnabled;
     this.myHorizontalMovementHorizontalStraightCentralCheckEnabled = other.myHorizontalMovementHorizontalStraightCentralCheckEnabled;
+
+    this.myHorizontalMovementHeightCheckSteps = other.myHorizontalMovementHeightCheckSteps;
+    this.myHorizontalMovementHeightVerticalCheckEnabled = other.myHorizontalMovementHeightVerticalCheckEnabled;
+    this.myHorizontalMovementHeightHorizontalCheckEnabled = other.myHorizontalMovementHeightHorizontalCheckEnabled;
 
     this.myHorizontalMovementVerticalRadialDiagonalOutwardCheckEnabled = other.myHorizontalMovementVerticalRadialDiagonalOutwardCheckEnabled;
     this.myHorizontalMovementVerticalRadialDiagonalInwardCheckEnabled = other.myHorizontalMovementVerticalRadialDiagonalInwardCheckEnabled;
@@ -359,6 +367,10 @@ PP.CharacterColliderHorizontalCheckSetup.prototype.copy = function (other) {
     this.myHorizontalPositionCheckConeHalfSlices = other.myHorizontalPositionCheckConeHalfSlices;
     this.myHorizontalPositionHorizontalBorderCheckEnabled = other.myHorizontalPositionHorizontalBorderCheckEnabled;
     this.myHorizontalPositionHorizontalRadialCheckEnabled = other.myHorizontalPositionHorizontalRadialCheckEnabled;
+
+    this.myHorizontalPositionHeightCheckSteps = other.myHorizontalPositionHeightCheckSteps;
+    this.myHorizontalPositionHeightHorizontalCheckEnabled = other.myHorizontalPositionHeightHorizontalCheckEnabled;
+    this.myHorizontalPositionHeightVerticalCheckEnabled = other.myHorizontalPositionHeightVerticalCheckEnabled;
 
     this.myHorizontalPositionVerticalStraightCheckEnabled = other.myHorizontalPositionVerticalStraightCheckEnabled;
     this.myHorizontalPositionVerticalStraightCentralCheckEnabled = other.myHorizontalPositionVerticalStraightCentralCheckEnabled;
@@ -409,8 +421,6 @@ PP.CharacterColliderWallSlideSetup.prototype.copy = function (other) {
 
     this.myWallSlideMaxAttempts = other.myWallSlideMaxAttempts;
 
-    this.myWallSlideHorizontalMovementCheckGetBetterReferenceHit = other.myWallSlideHorizontalMovementCheckGetBetterReferenceHit;
-
     this.myCheckBothWallSlideDirections = other.myCheckBothWallSlideDirections;
 
     this.myWallSlideFlickerPreventionMode = other.myWallSlideFlickerPreventionMode;
@@ -443,7 +453,7 @@ PP.CharacterColliderSurfaceSetup.prototype.copy = function (other) {
 
     this.myIsOnSurfaceMaxOutsideDistance = other.myIsOnSurfaceMaxOutsideDistance;
     this.myIsOnSurfaceMaxInsideDistance = other.myIsOnSurfaceMaxInsideDistance;
-    this.myIsOnSurfaceIfInsideSurface = other.myIsOnSurfaceIfInsideSurface;
+    this.myIsOnSurfaceIfInsideCollision = other.myIsOnSurfaceIfInsideCollision;
 
     this.myCollectSurfaceNormalMaxOutsideDistance = other.myCollectSurfaceNormalMaxOutsideDistance;
     this.myCollectSurfaceNormalMaxInsideDistance = other.myCollectSurfaceNormalMaxInsideDistance;

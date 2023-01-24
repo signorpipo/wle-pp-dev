@@ -25,6 +25,7 @@ PP.CharacterColliderSetupSimplifiedCreationParams = class CharacterColliderSetup
 
         this.myCollectGroundInfo = false;
         this.myShouldSnapOnGround = false;
+        this.myMaxDistanceToSnapOnGround = 0;
         this.myMaxWalkableGroundAngle = 0;
         this.myMaxWalkableGroundStepHeight = 0;
         this.myCanFallFromEdges = false;
@@ -64,7 +65,6 @@ PP.CharacterColliderUtils = {
 // IMPLEMENTATION
 
 PP.CharacterColliderUtils.createCharacterColliderSetupSimplified = function (simplifiedCreationParams, outCharacterColliderSetup = new PP.CharacterColliderSetup()) {
-
     outCharacterColliderSetup.myHeight = simplifiedCreationParams.myHeight;
     outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalCheckConeRadius = simplifiedCreationParams.myRadius;
     outCharacterColliderSetup.myVerticalCheckSetup.myVerticalCheckCircumferenceRadius = simplifiedCreationParams.myRadius / 2;
@@ -77,35 +77,44 @@ PP.CharacterColliderUtils.createCharacterColliderSetupSimplified = function (sim
         outCharacterColliderSetup.myVerticalCheckSetup.myVerticalPositionCheckEnabled = true;
     }
 
-    if (simplifiedCreationParams.myShouldSlideAgainstWall) {
-        outCharacterColliderSetup.myWallSlideSetup.myWallSlideEnabled = true;
-    }
+    outCharacterColliderSetup.myWallSlideSetup.myWallSlideEnabled = simplifiedCreationParams.myShouldSlideAgainstWall;
 
-    outCharacterColliderSetup.myGroundSetup.mySurfaceSnapMaxDistance = simplifiedCreationParams.myRadius / 3;
-    outCharacterColliderSetup.myGroundSetup.mySurfacePopOutMaxDistance = simplifiedCreationParams.myRadius / 3;
-    outCharacterColliderSetup.myGroundSetup.mySurfaceAngleToIgnoreMaxHorizontalMovementLeft = simplifiedCreationParams.myRadius / 2;
-    if (simplifiedCreationParams.myAverageSpeed > 5) {
-        let multiplier = Math.ceil(simplifiedCreationParams.myAverageSpeed / 5);
-        outCharacterColliderSetup.myGroundSetup.mySurfaceAngleToIgnoreMaxHorizontalMovementLeft *= multiplier;
-    }
-
-    if (simplifiedCreationParams.myCollectGroundInfo || simplifiedCreationParams.myMaxWalkableGroundAngle > 0) {
-        outCharacterColliderSetup.myGroundSetup.myCollectSurfaceInfo = true;
-    }
-    if (simplifiedCreationParams.myShouldSnapOnGround) {
-        outCharacterColliderSetup.myGroundSetup.mySurfaceSnapEnabled = true;
-    }
-    outCharacterColliderSetup.myGroundSetup.mySurfaceAngleToIgnore = simplifiedCreationParams.myMaxWalkableGroundAngle;
     outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalCheckFeetDistanceToIgnore = simplifiedCreationParams.myMaxWalkableGroundStepHeight;
 
+
+
+    outCharacterColliderSetup.myGroundSetup.mySurfaceSnapMaxDistance = simplifiedCreationParams.myMaxDistanceToSnapOnGround;
+    outCharacterColliderSetup.myGroundSetup.mySurfacePopOutMaxDistance = simplifiedCreationParams.myMaxDistanceToSnapOnGround;
+    outCharacterColliderSetup.myGroundSetup.mySurfaceAngleToIgnoreMaxHorizontalMovementLeft = simplifiedCreationParams.myRadius;
+
+    outCharacterColliderSetup.myGroundSetup.myCollectSurfaceInfo = simplifiedCreationParams.myCollectGroundInfo || simplifiedCreationParams.myMaxWalkableGroundAngle > 0;
+    outCharacterColliderSetup.myGroundSetup.mySurfaceSnapEnabled = simplifiedCreationParams.myShouldSnapOnGround;
+    outCharacterColliderSetup.myGroundSetup.mySurfaceAngleToIgnore = simplifiedCreationParams.myMaxWalkableGroundAngle;
+    outCharacterColliderSetup.myGroundSetup.myAddVerticalMovementBasedOnSurfacePerceivedAngle = true;
+
+    outCharacterColliderSetup.myGroundSetup.myIsOnSurfaceMaxOutsideDistance = 0.001;
+    outCharacterColliderSetup.myGroundSetup.myIsOnSurfaceMaxInsideDistance = 0.001;
+
+    outCharacterColliderSetup.myGroundSetup.myCollectSurfaceNormalMaxOutsideDistance = (simplifiedCreationParams.myRadius > 0.1) ? 0.1 : 0.01;
+    outCharacterColliderSetup.myGroundSetup.myCollectSurfaceNormalMaxInsideDistance = outCharacterColliderSetup.myGroundSetup.myCollectSurfaceNormalMaxOutsideDistance;
+
+
     if (simplifiedCreationParams.myCanFly) {
+        outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalCheckHeadDistanceToIgnore = outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalCheckFeetDistanceToIgnore;
+
         outCharacterColliderSetup.myCeilingSetup.myCollectSurfaceInfo = outCharacterColliderSetup.myGroundSetup.myCollectSurfaceInfo;
         outCharacterColliderSetup.myCeilingSetup.mySurfaceAngleToIgnore = outCharacterColliderSetup.myGroundSetup.mySurfaceAngleToIgnore;
-        outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalCheckHeadDistanceToIgnore = outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalCheckFeetDistanceToIgnore;
 
         outCharacterColliderSetup.myCeilingSetup.mySurfaceSnapMaxDistance = outCharacterColliderSetup.myGroundSetup.mySurfaceSnapMaxDistance;
         outCharacterColliderSetup.myCeilingSetup.mySurfacePopOutMaxDistance = outCharacterColliderSetup.myGroundSetup.mySurfacePopOutMaxDistance;
         outCharacterColliderSetup.myCeilingSetup.mySurfaceAngleToIgnoreMaxHorizontalMovementLeft = outCharacterColliderSetup.myGroundSetup.mySurfaceAngleToIgnoreMaxHorizontalMovementLeft;
+        outCharacterColliderSetup.myCeilingSetup.myAddVerticalMovementBasedOnSurfacePerceivedAngle = outCharacterColliderSetup.myGroundSetup.myAddVerticalMovementBasedOnSurfacePerceivedAngle;
+
+        outCharacterColliderSetup.myCeilingSetup.myIsOnSurfaceMaxOutsideDistance = outCharacterColliderSetup.myGroundSetup.myIsOnSurfaceMaxOutsideDistance;
+        outCharacterColliderSetup.myCeilingSetup.myIsOnSurfaceMaxInsideDistance = outCharacterColliderSetup.myGroundSetup.myIsOnSurfaceMaxInsideDistance;
+
+        outCharacterColliderSetup.myCeilingSetup.myCollectSurfaceNormalMaxOutsideDistance = outCharacterColliderSetup.myGroundSetup.myCollectSurfaceNormalMaxOutsideDistance;;
+        outCharacterColliderSetup.myCeilingSetup.myCollectSurfaceNormalMaxInsideDistance = outCharacterColliderSetup.myGroundSetup.myCollectSurfaceNormalMaxInsideDistance;
 
     }
 
@@ -114,11 +123,15 @@ PP.CharacterColliderUtils.createCharacterColliderSetupSimplified = function (sim
         outCharacterColliderSetup.myGroundSetup.myIsOnSurfaceMaxSurfaceAngle = Math.max(60, outCharacterColliderSetup.myGroundSetup.mySurfaceAngleToIgnore);
     }
 
+
+
     outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalCheckBlockLayerFlags.copy(simplifiedCreationParams.myHorizontalCheckBlockLayerFlags);
     outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalCheckObjectsToIgnore.pp_copy(simplifiedCreationParams.myHorizontalCheckObjectsToIgnore);
 
     outCharacterColliderSetup.myVerticalCheckSetup.myVerticalCheckBlockLayerFlags.copy(simplifiedCreationParams.myVerticalCheckBlockLayerFlags);
     outCharacterColliderSetup.myVerticalCheckSetup.myVerticalCheckObjectsToIgnore.pp_copy(simplifiedCreationParams.myVerticalCheckObjectsToIgnore);
+
+
 
     if (simplifiedCreationParams.myHorizontalCheckDebugActive) {
         outCharacterColliderSetup.myDebugSetup.myDebugActive = true;
@@ -132,19 +145,145 @@ PP.CharacterColliderUtils.createCharacterColliderSetupSimplified = function (sim
         outCharacterColliderSetup.myDebugSetup.myDebugVerticalPositionCheckActive = true;
     }
 
-    switch (simplifiedCreationParams.myAccuracyLevel) {
-        case PP.CharacterColliderSetupSimplifiedCreationAccuracyLevel.VERY_HIGH:
 
-        case PP.CharacterColliderSetupSimplifiedCreationAccuracyLevel.HIGH:
 
-        case PP.CharacterColliderSetupSimplifiedCreationAccuracyLevel.MEDIUM:
-            // da medium in su
-            if (simplifiedCreationParams.myCanFly) {
-                outCharacterColliderSetup.myVerticalCheckSetup.myVerticalMovementCheckPerformCheckOnBothSides = true;
-            }
+    // ACCURACY
 
-        case PP.CharacterColliderSetupSimplifiedCreationAccuracyLevel.LOW:
+    if (simplifiedCreationParams.myAccuracyLevel >= PP.CharacterColliderSetupSimplifiedCreationAccuracyLevel.VERY_LOW) {
+        outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalCheckConeHalfAngle = 60;
 
-        case PP.CharacterColliderSetupSimplifiedCreationAccuracyLevel.VERY_LOW:
+        outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementHeightVerticalCheckEnabled = true;
+        outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalPositionHeightVerticalCheckEnabled = true;
+
+        // activate based on speed?
+        outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementCheckEnabled = false;
+
+        outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalPositionCheckEnabled = true;
+        outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalPositionCheckConeHalfSlices = 1;
+        outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalPositionHeightCheckSteps = 1;
+        outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalPositionHorizontalRadialCheckEnabled = true;
+        outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalPositionVerticalStraightCheckEnabled = true;
+
+
+
+        outCharacterColliderSetup.myVerticalCheckSetup.myVerticalCheckCircumferenceSlices = 4;
+        outCharacterColliderSetup.myVerticalCheckSetup.myVerticalCheckCircumferenceCentralCheckEnabled = true;
+        outCharacterColliderSetup.myVerticalCheckSetup.myVerticalCheckCircumferenceRadialSteps = 1;
+
+        outCharacterColliderSetup.myVerticalCheckSetup.myVerticalMovementCheckEnabled = true;
+        outCharacterColliderSetup.myVerticalCheckSetup.myVerticalMovementCheckReductionEnabled = true;
+
+        outCharacterColliderSetup.myVerticalCheckSetup.myVerticalPositionCheckEnabled = true;
+
+        outCharacterColliderSetup.myVerticalCheckSetup.myVerticalCheckAllowHitsInsideCollisionIfOneValid = true;
+    }
+
+    if (simplifiedCreationParams.myAccuracyLevel >= PP.CharacterColliderSetupSimplifiedCreationAccuracyLevel.LOW) {
+        outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementCheckEnabled = true;
+        outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementCheckRadialSteps = 1;
+        outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementHeightCheckSteps = 1;
+        outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementHorizontalStraightCentralCheckEnabled = true;
+        outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementVerticalStraightDiagonalUpwardCentralCheckEnabled = true;
+
+
+
+        outCharacterColliderSetup.myVerticalCheckSetup.myVerticalCheckCircumferenceRadialSteps = 2;
+        outCharacterColliderSetup.myVerticalCheckSetup.myVerticalCheckCircumferenceRotationPerRadialStep = 180 / outCharacterColliderSetup.myVerticalCheckSetup.myVerticalCheckCircumferenceSlices;
+
+
+
+        outCharacterColliderSetup.myWallSlideSetup.myWallSlideMaxAttempts = 1;
+        outCharacterColliderSetup.myWallSlideSetup.myCheckBothWallSlideDirections = false;
+        outCharacterColliderSetup.myWallSlideSetup.myWallSlideFlickerPreventionMode = PP.CharacterColliderSlideFlickerPreventionMode.NONE;
+        outCharacterColliderSetup.myWallSlideSetup.myWallSlideFlickerPreventionCheckOnlyIfAlreadySliding = false;
+        outCharacterColliderSetup.myWallSlideSetup.myWallSlideFlickerPreventionForceCheckCounter = 0;
+        outCharacterColliderSetup.myWallSlideSetup.my90DegreesWallSlideAdjustDirectionSign = false;
+
+
+
+        outCharacterColliderSetup.myWallSlideSetup.myWallSlideMaxAttempts = 2;
+    }
+
+    if (simplifiedCreationParams.myAccuracyLevel >= PP.CharacterColliderSetupSimplifiedCreationAccuracyLevel.MEDIUM) {
+        outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementHeightHorizontalCheckEnabled = true;
+        outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementHorizontalDiagonalOutwardCheckEnabled = true;
+        outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementVerticalDiagonalOutwardUpwardCheckEnabled = true;
+
+        outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalPositionCheckConeHalfSlices = 2;
+        outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalPositionHeightHorizontalCheckEnabled = true;
+        outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalPositionHorizontalBorderCheckEnabled = true;
+
+
+
+        outCharacterColliderSetup.myVerticalCheckSetup.myVerticalMovementCheckPerformCheckOnBothSides = true;
+
+        outCharacterColliderSetup.myVerticalCheckSetup.myVerticalCheckCircumferenceSlices = 6;
+        outCharacterColliderSetup.myVerticalCheckSetup.myVerticalCheckCircumferenceRadialSteps = 2;
+        outCharacterColliderSetup.myVerticalCheckSetup.myVerticalCheckCircumferenceRotationPerRadialStep = 180 / outCharacterColliderSetup.myVerticalCheckSetup.myVerticalCheckCircumferenceSlices;
+
+
+
+        outCharacterColliderSetup.myWallSlideSetup.myWallSlideMaxAttempts = 3;
+        outCharacterColliderSetup.myWallSlideSetup.my90DegreesWallSlideAdjustDirectionSign = true;
+    }
+
+    if (simplifiedCreationParams.myAccuracyLevel >= PP.CharacterColliderSetupSimplifiedCreationAccuracyLevel.HIGH) {
+        if (outCharacterColliderSetup.myWallSlideSetup.myWallSlideEnabled) {
+            outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementCheckGetBetterReferenceHit = true;
+
+            outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalPositionVerticalCheckPerformHorizontalCheckOnHit = true;
+            outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalPositionVerticalCheckPerformHorizontalCheckOnHitKeepVerticalHitIfNoHorizontalHit = true;
+        }
+
+        outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementHorizontalDiagonalInwardCheckEnabled = true;
+        outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementHorizontalStraightCheckEnabled = true;
+        outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementHorizontalStraightCentralCheckEnabled = false;
+
+        outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementVerticalDiagonalInwardUpwardCheckEnabled = true;
+        outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementVerticalStraightDiagonalUpwardCheckEnabled = true;
+        outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementVerticalStraightDiagonalUpwardCentralCheckEnabled = false;
+
+
+
+        outCharacterColliderSetup.myVerticalCheckSetup.myVerticalCheckCircumferenceSlices = 8;
+        outCharacterColliderSetup.myVerticalCheckSetup.myVerticalCheckCircumferenceRadialSteps = 2;
+        outCharacterColliderSetup.myVerticalCheckSetup.myVerticalCheckCircumferenceRotationPerRadialStep = 180 / outCharacterColliderSetup.myVerticalCheckSetup.myVerticalCheckCircumferenceSlices;
+
+
+
+        outCharacterColliderSetup.myWallSlideSetup.myWallSlideMaxAttempts = 4;
+
+        if (simplifiedCreationParams.myIsPlayer) {
+            outCharacterColliderSetup.myWallSlideSetup.myCheckBothWallSlideDirections = true;
+            outCharacterColliderSetup.myWallSlideSetup.myWallSlideFlickerPreventionMode = PP.CharacterColliderSlideFlickerPreventionMode.USE_PREVIOUS_RESULTS;
+            outCharacterColliderSetup.myWallSlideSetup.myWallSlideFlickerPreventionCheckOnlyIfAlreadySliding = true;
+            outCharacterColliderSetup.myWallSlideSetup.myWallSlideFlickerPreventionForceCheckCounter = 4;
+        }
+    }
+
+    if (simplifiedCreationParams.myAccuracyLevel >= PP.CharacterColliderSetupSimplifiedCreationAccuracyLevel.VERY_HIGH) {
+        outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementHeightCheckSteps = 2;
+
+        outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementHorizontalRadialCheckEnabled = true;
+        outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementVerticalDiagonalOutwardDownwardCheckEnabled = true;
+        outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementVerticalDiagonalInwardDownwardCheckEnabled = true;
+
+        outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementVerticalStraightCheckEnabled = true;
+        outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementVerticalStraightCentralCheckEnabled = false;
+        outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementVerticalStraightDiagonalDownwardCheckEnabled = true;
+        outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementVerticalStraightDiagonalDownwardCentralCheckEnabled = false;
+
+        outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalPositionHeightCheckSteps = 2;
+
+        outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalPositionVerticalRadialDiagonalOutwardCheckEnabled = true;
+        outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalPositionVerticalBorderDiagonalOutwardCheckEnabled = true;
+
+        outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalPositionVerticalCheckPerformHorizontalCheckOnHit = true;
+        outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalPositionVerticalCheckPerformHorizontalCheckOnHitKeepVerticalHitIfNoHorizontalHit = false;
+
+
+
+        outCharacterColliderSetup.myGroundSetup.myRecollectSurfaceInfoOnSurfaceCheckFailed = true;
+        outCharacterColliderSetup.myCeilingSetup.myRecollectSurfaceInfoOnSurfaceCheckFailed = outCharacterColliderSetup.myGroundSetup.myRecollectSurfaceInfoOnSurfaceCheckFailed;
     }
 };

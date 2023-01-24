@@ -237,14 +237,18 @@ PP.CollisionCheckBridge = {
 
             outCollisionCheckParams.myHorizontalMovementRadialStepAmount = characterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementCheckRadialSteps;
             outCollisionCheckParams.myHorizontalMovementCheckDiagonal = characterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementHorizontalDiagonalOutwardCheckEnabled || characterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementHorizontalDiagonalInwardCheckEnabled;
-            outCollisionCheckParams.myHorizontalMovementCheckStraight = characterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementHorizontalStraightCheckEnabled;
+            outCollisionCheckParams.myHorizontalMovementCheckStraight = characterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementHorizontalStraightCheckEnabled || characterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementHorizontalStraightCentralCheckEnabled;
             outCollisionCheckParams.myHorizontalMovementCheckHorizontalBorder = characterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementHorizontalRadialCheckEnabled;
-            outCollisionCheckParams.myHorizontalMovementCheckVerticalStraight = characterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementVerticalStraightCheckEnabled;
+            outCollisionCheckParams.myHorizontalMovementCheckVerticalStraight = characterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementVerticalStraightCheckEnabled || characterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementVerticalStraightCentralCheckEnabled;
             outCollisionCheckParams.myHorizontalMovementCheckVerticalDiagonalUpward = characterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementVerticalDiagonalOutwardUpwardCheckEnabled || characterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementVerticalDiagonalInwardUpwardCheckEnabled;
             outCollisionCheckParams.myHorizontalMovementCheckVerticalDiagonalDownward = characterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementVerticalDiagonalOutwardDownwardCheckEnabled || characterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementVerticalDiagonalInwardDownwardCheckEnabled;
-            outCollisionCheckParams.myHorizontalMovementCheckVerticalStraightDiagonal = characterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementVerticalStraightDiagonalUpwardCheckEnabled || characterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementVerticalStraightDiagonalDownwardCheckEnabled;
+            outCollisionCheckParams.myHorizontalMovementCheckVerticalStraightDiagonal =
+                characterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementVerticalStraightDiagonalUpwardCheckEnabled ||
+                characterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementVerticalStraightDiagonalDownwardCheckEnabled ||
+                characterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementVerticalStraightDiagonalUpwardCentralCheckEnabled ||
+                characterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementVerticalStraightDiagonalDownwardCentralCheckEnabled;
             outCollisionCheckParams.myHorizontalMovementCheckVerticalHorizontalBorderDiagonal = characterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementVerticalRadialDiagonalOutwardCheckEnabled || characterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementVerticalRadialDiagonalInwardCheckEnabled;
-            outCollisionCheckParams.myHorizontalMovementCheckStraightOnlyForCenter =
+            outCollisionCheckParams.myHorizontalMovementCheckStraightOnlyForCenter = // this is not supported as supposed to
                 characterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementHorizontalStraightCentralCheckEnabled ||
                 characterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementVerticalStraightCentralCheckEnabled ||
                 characterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementVerticalStraightDiagonalUpwardCentralCheckEnabled ||
@@ -260,11 +264,12 @@ PP.CollisionCheckBridge = {
             outCollisionCheckParams.myHorizontalPositionCheckVerticalDirectionType = characterColliderSetup.myHorizontalCheckSetup.myHorizontalPositionVerticalCheckDirection;
 
             outCollisionCheckParams.myCheckHeight = characterColliderSetup.myHorizontalCheckSetup.myHorizontalHeightCheckEnabled;
-            outCollisionCheckParams.myCheckHeightTop = characterColliderSetup.myHorizontalCheckSetup.myHorizontalHeightHorizontalCheckEnabled;
+            //outCollisionCheckParams.myCheckHeightVertical = characterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementHeightVerticalCheckEnabled || characterColliderSetup.myHorizontalCheckSetup.myHorizontalPositionHeightVerticalCheckEnabled;
+            outCollisionCheckParams.myCheckHeightTop = characterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementHeightHorizontalCheckEnabled || characterColliderSetup.myHorizontalCheckSetup.myHorizontalPositionHeightHorizontalCheckEnabled;
             outCollisionCheckParams.myCheckHeightConeOnCollision = characterColliderSetup.myHorizontalCheckSetup.myHorizontalPositionVerticalCheckPerformHorizontalCheckOnHit;
             outCollisionCheckParams.myCheckHeightConeOnCollisionKeepHit = characterColliderSetup.myHorizontalCheckSetup.myHorizontalPositionVerticalCheckPerformHorizontalCheckOnHitKeepVerticalHitIfNoHorizontalHit;
 
-            outCollisionCheckParams.myHeightCheckStepAmount = characterColliderSetup.myHorizontalCheckSetup.myHorizontalHeightCheckSteps;
+            outCollisionCheckParams.myHeightCheckStepAmount = Math.max(characterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementHeightCheckSteps, characterColliderSetup.myHorizontalCheckSetup.myHorizontalPositionHeightCheckSteps);
             outCollisionCheckParams.myCheckVerticalStraight = characterColliderSetup.myHorizontalCheckSetup.myHorizontalPositionVerticalStraightCheckEnabled;
             outCollisionCheckParams.myCheckVerticalDiagonalRay = characterColliderSetup.myHorizontalCheckSetup.myHorizontalPositionVerticalRadialDiagonalOutwardCheckEnabled || characterColliderSetup.myHorizontalCheckSetup.myHorizontalPositionVerticalRadialDiagonalInwardCheckEnabled;
             outCollisionCheckParams.myCheckVerticalDiagonalBorder = characterColliderSetup.myHorizontalCheckSetup.myHorizontalPositionVerticalBorderDiagonalOutwardCheckEnabled || characterColliderSetup.myHorizontalCheckSetup.myHorizontalPositionVerticalBorderDiagonalInwardCheckEnabled;
@@ -330,8 +335,8 @@ PP.CollisionCheckBridge = {
             outCollisionCheckParams.myVerticalFixToComputeGroundInfo = characterColliderSetup.myGroundSetup.myCollectSurfaceNormalMaxInsideDistance;
             outCollisionCheckParams.myVerticalFixToBeOnCeiling = characterColliderSetup.myCeilingSetup.myIsOnSurfaceMaxInsideDistance;
             outCollisionCheckParams.myVerticalFixToComputeCeilingInfo = characterColliderSetup.myCeilingSetup.myCollectSurfaceNormalMaxInsideDistance;
-            outCollisionCheckParams.myIsOnGroundIfInsideHit = characterColliderSetup.myGroundSetup.myIsOnSurfaceIfInsideSurface;
-            outCollisionCheckParams.myIsOnCeilingIfInsideHit = characterColliderSetup.myCeilingSetup.myIsOnSurfaceIfInsideSurface;
+            outCollisionCheckParams.myIsOnGroundIfInsideHit = characterColliderSetup.myGroundSetup.myIsOnSurfaceIfInsideCollision;
+            outCollisionCheckParams.myIsOnCeilingIfInsideHit = characterColliderSetup.myCeilingSetup.myIsOnSurfaceIfInsideCollision;
 
             outCollisionCheckParams.myAllowSurfaceSteepFix = characterColliderSetup.myGroundSetup.myAllowExitAttemptWhenOnInvalidSurfacePerceivedAngle || characterColliderSetup.myCeilingSetup.myAllowExitAttemptWhenOnInvalidSurfacePerceivedAngle;
             outCollisionCheckParams.myMustStayOnGround = characterColliderSetup.myGroundSetup.myMustStayOnSurface;
@@ -342,7 +347,7 @@ PP.CollisionCheckBridge = {
             outCollisionCheckParams.myRegatherCeilingInfoOnSurfaceCheckFail = characterColliderSetup.myCeilingSetup.myRecollectSurfaceInfoOnSurfaceCheckFailed;
 
             outCollisionCheckParams.mySlidingEnabled = characterColliderSetup.myWallSlideSetup.myWallSlideEnabled;
-            outCollisionCheckParams.mySlidingHorizontalMovementCheckBetterNormal = characterColliderSetup.myWallSlideSetup.myWallSlideHorizontalMovementCheckGetBetterReferenceHit;
+            outCollisionCheckParams.mySlidingHorizontalMovementCheckBetterNormal = characterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementCheckGetBetterReferenceHit;
             outCollisionCheckParams.mySlidingMaxAttempts = characterColliderSetup.myWallSlideSetup.myWallSlideMaxAttempts;
             outCollisionCheckParams.mySlidingCheckBothDirections = characterColliderSetup.myWallSlideSetup.myCheckBothWallSlideDirections;
             outCollisionCheckParams.mySlidingFlickeringPreventionType = characterColliderSetup.myWallSlideSetup.myWallSlideFlickerPreventionMode;
