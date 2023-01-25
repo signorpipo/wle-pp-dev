@@ -240,8 +240,6 @@ PP.CharacterColliderSurfaceSetup = class CharacterColliderSurfaceSetup {
 
         this.myMustStayOnSurface = false;
         this.myMustStayBelowSurfaceAngle = null;
-        this.myMustStayOnValidSurfaceAngleDownhill = false;
-        // normally you can move downhill on whatever angle, but you may want the character to stay on an angle that will be valid even if u turn to go back uphill
 
         this.myRecollectSurfaceInfoOnSurfaceCheckFailed = false;
         // instead of copying the previous surface info on fail, regather them

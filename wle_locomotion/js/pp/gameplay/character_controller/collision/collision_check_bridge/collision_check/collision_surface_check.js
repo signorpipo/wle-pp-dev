@@ -83,14 +83,18 @@ CollisionCheck.prototype._postSurfaceCheck = function () {
 
         let mustStayBelowGroundAngleOk = true;
         if (collisionCheckParams.myMustStayBelowGroundAngle != null) {
-            if (previousCollisionRuntimeParams.myIsOnGround && collisionRuntimeParams.myIsOnGround && collisionRuntimeParams.myGroundAngle > collisionCheckParams.myMustStayBelowGroundAngle) {
+            if (previousCollisionRuntimeParams.myIsOnGround && previousCollisionRuntimeParams.myGroundAngle <= collisionCheckParams.myMustStayBelowGroundAngle &&
+                collisionRuntimeParams.myIsOnGround && collisionRuntimeParams.myGroundAngle > collisionCheckParams.myMustStayBelowGroundAngle
+                && !fixedHorizontalMovement.vec3_isZero(0.00001)) {
                 mustStayBelowGroundAngleOk = false;
             }
         }
 
         let mustStayBelowCeilingAngleOk = true;
         if (collisionCheckParams.myMustStayBelowCeilingAngle != null) {
-            if (previousCollisionRuntimeParams.myIsOnCeiling && collisionRuntimeParams.myIsOnCeiling && collisionRuntimeParams.myCeilingAngle > collisionCheckParams.myMustStayBelowCeilingAngle) {
+            if (previousCollisionRuntimeParams.myIsOnCeiling && previousCollisionRuntimeParams.myCeilingAngle <= collisionCheckParams.myMustStayBelowCeilingAngle &&
+                collisionRuntimeParams.myIsOnCeiling && collisionRuntimeParams.myCeilingAngle > collisionCheckParams.myMustStayBelowCeilingAngle
+                && !fixedHorizontalMovement.vec3_isZero(0.00001)) {
                 mustStayBelowCeilingAngleOk = false;
             }
         }
@@ -106,16 +110,15 @@ CollisionCheck.prototype._postSurfaceCheck = function () {
 
                 if (perceivedAngle > 0) {
                     isOnValidGroundAngleUphill = false;
-                    if (!isOnValidGroundAngleUphill &&
-                        collisionCheckParams.myGroundAngleToIgnoreWithPerceivedAngle > 0 &&
+                    if (collisionCheckParams.myGroundAngleToIgnoreWithPerceivedAngle > 0 &&
                         collisionRuntimeParams.myGroundAngle <= collisionCheckParams.myGroundAngleToIgnoreWithPerceivedAngle + 0.0001) {
                         isOnValidGroundAngleUphill = Math.abs(perceivedAngle) <= collisionCheckParams.myGroundAngleToIgnore + 0.0001;
                     }
-                }
-
-                if (previousCollisionRuntimeParams.myGroundAngle <= collisionCheckParams.myGroundAngleToIgnore + 0.0001) {
-                    if (collisionCheckParams.myMustStayOnValidGroundAngleDownhill) {
-                        isOnValidGroundAngleDownhill = false;
+                } else if (perceivedAngle < 0) {
+                    if (previousCollisionRuntimeParams.myGroundAngle <= collisionCheckParams.myGroundAngleToIgnore + 0.0001) {
+                        if (collisionCheckParams.myMustStayOnValidGroundAngleDownhill) {
+                            isOnValidGroundAngleDownhill = false;
+                        }
                     }
                 }
             }
@@ -132,16 +135,15 @@ CollisionCheck.prototype._postSurfaceCheck = function () {
 
                 if (perceivedAngle > 0) {
                     isOnValidCeilingAngleUphill = false;
-                    if (!isOnValidCeilingAngleUphill &&
-                        collisionCheckParams.myCeilingAngleToIgnoreWithPerceivedAngle > 0 &&
+                    if (collisionCheckParams.myCeilingAngleToIgnoreWithPerceivedAngle > 0 &&
                         collisionRuntimeParams.myCeilingAngle <= collisionCheckParams.myCeilingAngleToIgnoreWithPerceivedAngle + 0.0001) {
                         isOnValidCeilingAngleUphill = Math.abs(perceivedAngle) <= collisionCheckParams.myCeilingAngleToIgnore + 0.0001;
                     }
-                }
-
-                if (previousCollisionRuntimeParams.myCeilingAngle <= collisionCheckParams.myCeilingAngleToIgnore + 0.0001) {
-                    if (collisionCheckParams.myMustStayOnValidCeilingAngleDownhill) {
-                        isOnValidCeilingAngleDownhill = false;
+                } else if (perceivedAngle < 0) {
+                    if (previousCollisionRuntimeParams.myCeilingAngle <= collisionCheckParams.myCeilingAngleToIgnore + 0.0001) {
+                        if (collisionCheckParams.myMustStayOnValidCeilingAngleDownhill) {
+                            isOnValidCeilingAngleDownhill = false;
+                        }
                     }
                 }
             }
