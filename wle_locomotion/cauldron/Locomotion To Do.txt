@@ -101,6 +101,8 @@ LOCOMOTION EXTRA HARD:
 	- il reset real to valid lo potrebbe anche fare con un lerp stile smooth teleport
 	- anche il valid to real potrebbe essere lerpato, avendo un valid ultetriore che è quello che synca e poi quello che lerpa e può anche collidere nel mentre che è quello che viene restituito come posizione
 	
+- Surface Slide oppure semplicemente come myAddVerticalMovementBasedOnSurfacePerceivedAngle ma per il vertical
+	
 	
 	
 	

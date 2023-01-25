@@ -219,8 +219,6 @@ PP.CharacterColliderSurfaceSetup = class CharacterColliderSurfaceSetup {
         // if the collision with the surface happens during the horizontal movement check, if the horizontal movement left (total movement to perform minus hit distance)
         // is above this value do not ignore it otherwise you would ignore a surface but are actually going too much inside it
 
-        this.myAddVerticalMovementBasedOnSurfacePerceivedAngle = false;
-
         this.myCollectSurfaceInfo = false;
 
         this.myIsOnSurfaceMaxOutsideDistance = 0;
@@ -231,9 +229,8 @@ PP.CharacterColliderSurfaceSetup = class CharacterColliderSurfaceSetup {
         this.myCollectSurfaceNormalMaxOutsideDistance = 0;
         this.myCollectSurfaceNormalMaxInsideDistance = 0;
 
-        this.myAllowExitAttemptWhenOnInvalidSurfacePerceivedAngle = false;
-        // if u start on an invalid perceived angle (above angle to ignore) u normally can't even try to move uphill, this will let you try and see if with that movement
-        // you could end up in a valid perceived angle position
+        this.myHorizontalMovementAddVerticalMovementBasedOnSurfacePerceivedAngle = false;
+        // this make it so when a character moves on a slope it also add a vertical movement so that the movement is actually on the slope plane
 
         this.myMustStayOnSurface = false;
         this.myMustStayOnValidSurfaceAngleDownhill = false;
@@ -241,6 +238,10 @@ PP.CharacterColliderSurfaceSetup = class CharacterColliderSurfaceSetup {
 
         this.myRecollectSurfaceInfoOnSurfaceCheckFailed = false;
         // instead of copying the previous surface info on fail, regather them
+
+        this.myAllowExitAttemptWhenOnInvalidSurfacePerceivedAngle = false;
+        // if u start on an invalid perceived angle (above angle to ignore) u normally can't even try to move uphill, this will let you try and see if with that movement
+        // you could end up in a valid perceived angle position
     }
 
     copy(other) {
@@ -447,8 +448,6 @@ PP.CharacterColliderSurfaceSetup.prototype.copy = function (other) {
 
     this.mySurfaceAngleToIgnoreMaxHorizontalMovementLeft = other.mySurfaceAngleToIgnoreMaxHorizontalMovementLeft;
 
-    this.myAddVerticalMovementBasedOnSurfacePerceivedAngle = other.myAddVerticalMovementBasedOnSurfacePerceivedAngle;
-
     this.myCollectSurfaceInfo = other.myCollectSurfaceInfo;
 
     this.myIsOnSurfaceMaxOutsideDistance = other.myIsOnSurfaceMaxOutsideDistance;
@@ -458,12 +457,14 @@ PP.CharacterColliderSurfaceSetup.prototype.copy = function (other) {
     this.myCollectSurfaceNormalMaxOutsideDistance = other.myCollectSurfaceNormalMaxOutsideDistance;
     this.myCollectSurfaceNormalMaxInsideDistance = other.myCollectSurfaceNormalMaxInsideDistance;
 
-    this.myAllowExitAttemptWhenOnInvalidSurfacePerceivedAngle = other.myAllowExitAttemptWhenOnInvalidSurfacePerceivedAngle;
+    this.myHorizontalMovementAddVerticalMovementBasedOnSurfacePerceivedAngle = other.myHorizontalMovementAddVerticalMovementBasedOnSurfacePerceivedAngle;
 
     this.myMustStayOnSurface = other.myMustStayOnSurface;
     this.myMustStayOnValidSurfaceAngleDownhill = other.myMustStayOnValidSurfaceAngleDownhill;
 
     this.myRecollectSurfaceInfoOnSurfaceCheckFailed = other.myRecollectSurfaceInfoOnSurfaceCheckFailed;
+
+    this.myAllowExitAttemptWhenOnInvalidSurfacePerceivedAngle = other.myAllowExitAttemptWhenOnInvalidSurfacePerceivedAngle;
 };
 
 PP.CharacterColliderSplitMovementSetup.prototype.copy = function (other) {

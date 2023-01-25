@@ -282,7 +282,7 @@ PP.CollisionCheckBridge = {
             outCollisionCheckParams.myVerticalMovementCheckEnabled = characterColliderSetup.myVerticalCheckSetup.myVerticalMovementCheckEnabled;
             outCollisionCheckParams.myVerticalPositionCheckEnabled = characterColliderSetup.myVerticalCheckSetup.myVerticalPositionCheckEnabled;
             outCollisionCheckParams.myFeetRadius = characterColliderSetup.myVerticalCheckSetup.myVerticalCheckCircumferenceRadius;
-            outCollisionCheckParams.myAdjustVerticalMovementWithSurfaceAngle = characterColliderSetup.myGroundSetup.myAddVerticalMovementBasedOnSurfacePerceivedAngle || characterColliderSetup.myCeilingSetup.myAddVerticalMovementBasedOnSurfacePerceivedAngle;
+            outCollisionCheckParams.myAdjustVerticalMovementWithSurfaceAngle = characterColliderSetup.myGroundSetup.myHorizontalMovementAddVerticalMovementBasedOnSurfacePerceivedAngle || characterColliderSetup.myCeilingSetup.myHorizontalMovementAddVerticalMovementBasedOnSurfacePerceivedAngle;
             outCollisionCheckParams.myCheckVerticalFixedForwardEnabled = characterColliderSetup.myVerticalCheckSetup.myVerticalCheckFixedForwardEnabled;
             outCollisionCheckParams.myCheckVerticalFixedForward.vec3_copy(characterColliderSetup.myVerticalCheckSetup.myVerticalCheckFixedForward);
             outCollisionCheckParams.myCheckVerticalBothDirection = characterColliderSetup.myVerticalCheckSetup.myVerticalMovementCheckPerformCheckOnBothSides;

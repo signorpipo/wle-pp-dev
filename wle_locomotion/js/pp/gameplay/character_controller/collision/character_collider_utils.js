@@ -90,7 +90,7 @@ PP.CharacterColliderUtils.createCharacterColliderSetupSimplified = function (sim
     outCharacterColliderSetup.myGroundSetup.myCollectSurfaceInfo = simplifiedCreationParams.myCollectGroundInfo || simplifiedCreationParams.myMaxWalkableGroundAngle > 0;
     outCharacterColliderSetup.myGroundSetup.mySurfaceSnapEnabled = simplifiedCreationParams.myShouldSnapOnGround;
     outCharacterColliderSetup.myGroundSetup.mySurfaceAngleToIgnore = simplifiedCreationParams.myMaxWalkableGroundAngle;
-    outCharacterColliderSetup.myGroundSetup.myAddVerticalMovementBasedOnSurfacePerceivedAngle = true;
+    outCharacterColliderSetup.myGroundSetup.myHorizontalMovementAddVerticalMovementBasedOnSurfacePerceivedAngle = true;
 
     outCharacterColliderSetup.myGroundSetup.myIsOnSurfaceMaxOutsideDistance = 0.001;
     outCharacterColliderSetup.myGroundSetup.myIsOnSurfaceMaxInsideDistance = 0.001;
@@ -108,7 +108,7 @@ PP.CharacterColliderUtils.createCharacterColliderSetupSimplified = function (sim
         outCharacterColliderSetup.myCeilingSetup.mySurfaceSnapMaxDistance = outCharacterColliderSetup.myGroundSetup.mySurfaceSnapMaxDistance;
         outCharacterColliderSetup.myCeilingSetup.mySurfacePopOutMaxDistance = outCharacterColliderSetup.myGroundSetup.mySurfacePopOutMaxDistance;
         outCharacterColliderSetup.myCeilingSetup.mySurfaceAngleToIgnoreMaxHorizontalMovementLeft = outCharacterColliderSetup.myGroundSetup.mySurfaceAngleToIgnoreMaxHorizontalMovementLeft;
-        outCharacterColliderSetup.myCeilingSetup.myAddVerticalMovementBasedOnSurfacePerceivedAngle = outCharacterColliderSetup.myGroundSetup.myAddVerticalMovementBasedOnSurfacePerceivedAngle;
+        outCharacterColliderSetup.myCeilingSetup.myHorizontalMovementAddVerticalMovementBasedOnSurfacePerceivedAngle = outCharacterColliderSetup.myGroundSetup.myHorizontalMovementAddVerticalMovementBasedOnSurfacePerceivedAngle;
 
         outCharacterColliderSetup.myCeilingSetup.myIsOnSurfaceMaxOutsideDistance = outCharacterColliderSetup.myGroundSetup.myIsOnSurfaceMaxOutsideDistance;
         outCharacterColliderSetup.myCeilingSetup.myIsOnSurfaceMaxInsideDistance = outCharacterColliderSetup.myGroundSetup.myIsOnSurfaceMaxInsideDistance;
@@ -121,6 +121,7 @@ PP.CharacterColliderUtils.createCharacterColliderSetupSimplified = function (sim
     if (!simplifiedCreationParams.myCanFallFromEdges) {
         outCharacterColliderSetup.myGroundSetup.myMustStayOnSurface = true;
         outCharacterColliderSetup.myGroundSetup.myIsOnSurfaceMaxSurfaceAngle = Math.max(60, outCharacterColliderSetup.myGroundSetup.mySurfaceAngleToIgnore);
+        // IS THIS A GOOD IDEA?
     }
 
 
@@ -258,6 +259,14 @@ PP.CharacterColliderUtils.createCharacterColliderSetupSimplified = function (sim
             outCharacterColliderSetup.myWallSlideSetup.myWallSlideFlickerPreventionMode = PP.CharacterColliderSlideFlickerPreventionMode.USE_PREVIOUS_RESULTS;
             outCharacterColliderSetup.myWallSlideSetup.myWallSlideFlickerPreventionCheckOnlyIfAlreadySliding = true;
             outCharacterColliderSetup.myWallSlideSetup.myWallSlideFlickerPreventionForceCheckCounter = 4;
+        }
+
+        let fps = 90;
+        if (simplifiedCreationParams.myAverageSpeed / fps > simplifiedCreationParams.myRadius) {
+            outCharacterColliderSetup.mySplitMovementSetup.mySplitMovementEnabled = other.mySplitMovementEnabled;
+
+            outCharacterColliderSetup.mySplitMovementSetup.mySplitMovementMaxSteps = Math.ceil((simplifiedCreationParams.myAverageSpeed / fps) / simplifiedCreationParams.myRadius);
+            outCharacterColliderSetup.mySplitMovementSetup.mySplitMovementMinStepLength = simplifiedCreationParams.myRadius;
         }
     }
 
