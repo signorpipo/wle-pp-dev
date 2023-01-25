@@ -4990,6 +4990,50 @@
                 }
             ],
             "parent": "71"
+        },
+        "917": {
+            "name": "Wall",
+            "parent": "178",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    },
+                    "active": true
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.1,
+                                1.7949999,
+                                1.0
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "translation": [
+                -5.8780412,
+                0.0115244,
+                -6.7317867
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                -0.7372773,
+                0.6755901
+            ],
+            "scale": [
+                0.1000001,
+                1.7953855,
+                1.0000114
+            ]
         }
     },
     "meshes": {

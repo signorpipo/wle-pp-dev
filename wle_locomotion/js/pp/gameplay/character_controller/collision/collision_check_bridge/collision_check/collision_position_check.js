@@ -3,7 +3,7 @@ CollisionCheck.prototype._positionCheck = function () {
     return function _positionCheck(allowAdjustments, transformQuat, collisionCheckParams, collisionRuntimeParams) {
         feetPosition = transformQuat.quat2_getPosition(feetPosition);
 
-        this._teleport(feetPosition, transformQuat, collisionCheckParams, collisionRuntimeParams);
+        this._teleport(feetPosition, transformQuat, collisionCheckParams, collisionRuntimeParams, true);
 
         collisionRuntimeParams.myIsPositionOk = !collisionRuntimeParams.myTeleportCanceled;
         collisionRuntimeParams.myIsPositionCheck = true;

@@ -20,7 +20,7 @@ CollisionCheck.prototype._teleport = function () {
 
     let zAxis = PP.vec3_create(0, 0, 1);
     let xAxis = PP.vec3_create(1, 0, 0);
-    return function _teleport(teleportPosition, transformQuat, collisionCheckParams, collisionRuntimeParams) {
+    return function _teleport(teleportPosition, transformQuat, collisionCheckParams, collisionRuntimeParams, isPositionCheck = false) {
         transformOffsetLocalQuat.quat2_setPositionRotationQuat(collisionCheckParams.myPositionOffsetLocal, collisionCheckParams.myRotationOffsetLocalQuat);
         offsetTransformQuat = transformOffsetLocalQuat.quat2_toWorld(transformQuat, offsetTransformQuat);
         if (transformQuat.vec_equals(offsetTransformQuat, 0.00001)) {
@@ -110,9 +110,18 @@ CollisionCheck.prototype._teleport = function () {
                     this._gatherSurfaceInfo(newFeetPosition, height, transformUp, forwardForPerceivedAngle, forwardForVertical, false, collisionCheckParams, collisionRuntimeParams);
                 }
 
-                if ((collisionRuntimeParams.myIsOnGround && collisionRuntimeParams.myGroundAngle >= collisionCheckParams.myGroundAngleToIgnore + 0.0001) ||
-                    (collisionRuntimeParams.myIsOnCeiling && collisionRuntimeParams.myCeilingAngle >= collisionCheckParams.myCeilingAngleToIgnore + 0.0001)) {
-                    collisionRuntimeParams.myTeleportCanceled = true;
+                if (collisionRuntimeParams.myIsOnGround && collisionRuntimeParams.myGroundAngle > collisionCheckParams.myGroundAngleToIgnore + 0.0001) {
+                    if ((collisionCheckParams.myDenyTeleportOnNotIgnorabileGroundAngle && !isPositionCheck)
+                        || (collisionCheckParams.myDenyCheckTransformOnNotIgnorabileGroundAngle && isPositionCheck)) {
+                        collisionRuntimeParams.myTeleportCanceled = true;
+                    }
+                }
+
+                if (collisionRuntimeParams.myIsOnCeiling && collisionRuntimeParams.myCeilingAngle > collisionCheckParams.myCeilingAngleToIgnore + 0.0001) {
+                    if ((collisionCheckParams.myDenyTeleportOnNotIgnorabileCeilingAngle && !isPositionCheck)
+                        || (collisionCheckParams.myDenyCheckTransformOnNotIgnorabileCeilingAngle && isPositionCheck)) {
+                        collisionRuntimeParams.myTeleportCanceled = true;
+                    }
                 }
 
                 if (collisionRuntimeParams.myTeleportCanceled) {

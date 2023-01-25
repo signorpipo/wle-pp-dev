@@ -478,6 +478,7 @@ PlayerLocomotion = class PlayerLocomotion {
 
         // increased so to let teleport on steep slopes from above (from below is fixed through detection myGroundAngleToIgnoreUpward)
         this._myCollisionCheckParamsTeleport.myGroundAngleToIgnore = 60;
+        this._myCollisionCheckParamsTeleport.myDenyTeleportOnNotIgnorabileGroundAngle = true;
 
         // this is needed for when u want to perform the teleport as a movement
         // maybe this should be another set of collsion check params copied from the smooth ones?
