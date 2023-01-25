@@ -221,30 +221,19 @@ PP.CharacterCollisionSurfaceResults = class CharacterCollisionCheckTransformResu
     constructor() {
         this.myHasSnappedOnSurface = false;
         this.myHasPoppedOutSurface = false;
-        this.myHorizontalMovementHasAddedVerticalMovementBasedOnSurfacePerceivedAngle = false;
+        this.myHorizontalMovementHasAdjustedVerticalMovementBasedOnSurfacePerceivedAngle = false;
     }
 
     reset() {
         this.myHasSnappedOnSurface = false;
         this.myHasPoppedOutSurface = false;
-        this.myHorizontalMovementHasAddedVerticalMovementBasedOnSurfacePerceivedAngle = false;
+        this.myHorizontalMovementHasAdjustedVerticalMovementBasedOnSurfacePerceivedAngle = false;
     }
 
     copy(other) {
         this.myHasSnappedOnSurface = other.myHasSnappedOnSurface;
         this.myHasPoppedOutSurface = other.myHasPoppedOutSurface;
-        this.myHorizontalMovementHasAddedVerticalMovementBasedOnSurfacePerceivedAngle = other.myHorizontalMovementHasAddedVerticalMovementBasedOnSurfacePerceivedAngle;
-
-        this.myHasSnappedOnGround = other.myHasSnappedOnGround;
-        this.myHasPoppedOutGround = other.myHasPoppedOutGround;
-
-        this.myHasSnappedOnCeiling = other.myHasSnappedOnCeiling;
-        this.myHasPoppedOutCeiling = other.myHasPoppedOutCeiling;
-
-        this.myHasReducedVerticalMovement = other.myHasReducedVerticalMovement;
-
-        this.myHasAddedVerticalMovementBasedOnGroundPerceivedAngle = other.myHasAddedVerticalMovementBasedOnGroundPerceivedAngle;
-        this.myHasAddedVerticalMovementBasedOnCeilingPerceivedAngle = other.myHasAddedVerticalMovementBasedOnCeilingPerceivedAngle;
+        this.myHorizontalMovementHasAdjustedVerticalMovementBasedOnSurfacePerceivedAngle = other.myHorizontalMovementHasAdjustedVerticalMovementBasedOnSurfacePerceivedAngle;
     }
 };
 
@@ -285,6 +274,9 @@ PP.CharacterCollisionInternalResults = class CharacterCollisionSplitMovementResu
         this.myWallSlideFlickerPreventionForceCheckCounter = 0;
         this.myWallSlide90DegreesDirectionSign = 0;
         this.myWallSlide90DegreesRecomputeDirectionSign = true;
+
+        this.myRealIsOnGround = false;
+        this.myRealIsOnCeiling = false;
     }
 
     reset() {
@@ -300,6 +292,9 @@ PP.CharacterCollisionInternalResults = class CharacterCollisionSplitMovementResu
         this.myWallSlideFlickerPreventionForceCheckCounter = 0;
         this.myWallSlide90DegreesDirectionSign = 0;
         this.myWallSlide90DegreesRecomputeDirectionSign = true;
+
+        this.myRealIsOnGround = false;
+        this.myRealIsOnCeiling = false;
     }
 
     copy(other) {
@@ -315,5 +310,8 @@ PP.CharacterCollisionInternalResults = class CharacterCollisionSplitMovementResu
         this.myWallSlideFlickerPreventionForceCheckCounter = other.myWallSlideFlickerPreventionForceCheckCounter;
         this.myWallSlide90DegreesDirectionSign = other.myWallSlide90DegreesDirectionSign;
         this.myWallSlide90DegreesRecomputeDirectionSign = other.myWallSlide90DegreesRecomputeDirectionSign;
+
+        this.myRealIsOnGround = other.myRealIsOnGround;
+        this.myRealIsOnCeiling = other.myRealIsOnCeiling;
     }
 };

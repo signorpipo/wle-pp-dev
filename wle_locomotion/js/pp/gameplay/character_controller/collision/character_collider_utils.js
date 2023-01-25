@@ -90,7 +90,7 @@ PP.CharacterColliderUtils.createCharacterColliderSetupSimplified = function (sim
     outCharacterColliderSetup.myGroundSetup.myCollectSurfaceInfo = simplifiedCreationParams.myCollectGroundInfo || simplifiedCreationParams.myMaxWalkableGroundAngle > 0;
     outCharacterColliderSetup.myGroundSetup.mySurfaceSnapEnabled = simplifiedCreationParams.myShouldSnapOnGround;
     outCharacterColliderSetup.myGroundSetup.mySurfaceAngleToIgnore = simplifiedCreationParams.myMaxWalkableGroundAngle;
-    outCharacterColliderSetup.myGroundSetup.myHorizontalMovementAddVerticalMovementBasedOnSurfacePerceivedAngle = true;
+    outCharacterColliderSetup.myGroundSetup.myHorizontalMovementAdjustVerticalMovementBasedOnSurfacePerceivedAngle = true;
 
     outCharacterColliderSetup.myGroundSetup.myIsOnSurfaceMaxOutsideDistance = 0.001;
     outCharacterColliderSetup.myGroundSetup.myIsOnSurfaceMaxInsideDistance = 0.001;
@@ -108,7 +108,7 @@ PP.CharacterColliderUtils.createCharacterColliderSetupSimplified = function (sim
         outCharacterColliderSetup.myCeilingSetup.mySurfaceSnapMaxDistance = outCharacterColliderSetup.myGroundSetup.mySurfaceSnapMaxDistance;
         outCharacterColliderSetup.myCeilingSetup.mySurfacePopOutMaxDistance = outCharacterColliderSetup.myGroundSetup.mySurfacePopOutMaxDistance;
         outCharacterColliderSetup.myCeilingSetup.mySurfaceAngleToIgnoreMaxHorizontalMovementLeft = outCharacterColliderSetup.myGroundSetup.mySurfaceAngleToIgnoreMaxHorizontalMovementLeft;
-        outCharacterColliderSetup.myCeilingSetup.myHorizontalMovementAddVerticalMovementBasedOnSurfacePerceivedAngle = outCharacterColliderSetup.myGroundSetup.myHorizontalMovementAddVerticalMovementBasedOnSurfacePerceivedAngle;
+        outCharacterColliderSetup.myCeilingSetup.myHorizontalMovementAdjustVerticalMovementBasedOnSurfacePerceivedAngle = outCharacterColliderSetup.myGroundSetup.myHorizontalMovementAdjustVerticalMovementBasedOnSurfacePerceivedAngle;
 
         outCharacterColliderSetup.myCeilingSetup.myIsOnSurfaceMaxOutsideDistance = outCharacterColliderSetup.myGroundSetup.myIsOnSurfaceMaxOutsideDistance;
         outCharacterColliderSetup.myCeilingSetup.myIsOnSurfaceMaxInsideDistance = outCharacterColliderSetup.myGroundSetup.myIsOnSurfaceMaxInsideDistance;

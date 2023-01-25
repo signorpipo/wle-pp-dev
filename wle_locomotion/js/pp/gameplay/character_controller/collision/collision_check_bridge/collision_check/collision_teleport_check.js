@@ -110,8 +110,8 @@ CollisionCheck.prototype._teleport = function () {
                     this._gatherSurfaceInfo(newFeetPosition, height, transformUp, forwardForPerceivedAngle, forwardForVertical, false, collisionCheckParams, collisionRuntimeParams);
                 }
 
-                if (collisionRuntimeParams.myGroundAngle >= collisionCheckParams.myGroundAngleToIgnore + 0.0001 ||
-                    collisionRuntimeParams.myCeilingAngle >= collisionCheckParams.myCeilingAngleToIgnore + 0.0001) {
+                if ((collisionRuntimeParams.myIsOnGround && collisionRuntimeParams.myGroundAngle >= collisionCheckParams.myGroundAngleToIgnore + 0.0001) ||
+                    (collisionRuntimeParams.myIsOnCeiling && collisionRuntimeParams.myCeilingAngle >= collisionCheckParams.myCeilingAngleToIgnore + 0.0001)) {
                     collisionRuntimeParams.myTeleportCanceled = true;
                 }
 

@@ -128,6 +128,8 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myVerticalFixToComputeCeilingInfo = 0;
         this.myIsOnGroundIfInsideHit = false;
         this.myIsOnCeilingIfInsideHit = false;
+        this.myIsOnGroundMaxSurfaceAngle = null;
+        this.myIsOnCeilingMaxSurfaceAngle = null;
 
         this.myAllowSurfaceSteepFix = false; //#TODO split into ceiling and ground
         this.myMustStayOnGround = false;
@@ -289,6 +291,8 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myVerticalFixToComputeCeilingInfo = other.myVerticalFixToComputeCeilingInfo;
         this.myIsOnGroundIfInsideHit = other.myIsOnGroundIfInsideHit;
         this.myIsOnCeilingIfInsideHit = other.myIsOnCeilingIfInsideHit;
+        this.myIsOnGroundMaxSurfaceAngle = other.myIsOnGroundMaxSurfaceAngle;
+        this.myIsOnCeilingMaxSurfaceAngle = other.myIsOnCeilingMaxSurfaceAngle;
 
         this.myAllowSurfaceSteepFix = other.myAllowSurfaceSteepFix;
         this.myMustStayOnGround = other.myMustStayOnGround;
@@ -398,6 +402,9 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.mySplitMovementStepsPerformed = 0;
         this.mySplitMovementStop = false;
         this.mySplitMovementMovementChecked = PP.vec3_create();
+
+        this.myRealIsOnGround = false;
+        this.myRealIsOnCeiling = false;
     }
 
     reset() {
@@ -471,6 +478,9 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.mySplitMovementStepsPerformed = 0;
         this.mySplitMovementStop = false;
         this.mySplitMovementMovementChecked.vec3_zero();
+
+        this.myRealIsOnGround = false;
+        this.myRealIsOnCeiling = false;
     }
 
     copy(other) {
@@ -543,5 +553,8 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.mySplitMovementStepsPerformed = other.mySplitMovementStepsPerformed;
         this.mySplitMovementStop = other.mySplitMovementStop;
         this.mySplitMovementMovementChecked.vec3_copy(other.mySplitMovementMovementChecked);
+
+        this.myRealIsOnGround = other.myRealIsOnGround;
+        this.myRealIsOnCeiling = other.myRealIsOnCeiling;
     }
 };

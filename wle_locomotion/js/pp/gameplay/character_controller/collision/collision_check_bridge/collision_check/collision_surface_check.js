@@ -321,18 +321,24 @@ CollisionCheck.prototype._gatherSurfaceInfo = function () {
         }
 
         if (isGround) {
-            collisionRuntimeParams.myIsOnGround = isOnSurface;
-            if (isOnSurface) {
-                collisionRuntimeParams.myGroundAngle = surfaceAngle;
-                collisionRuntimeParams.myGroundPerceivedAngle = surfacePerceivedAngle;
-                collisionRuntimeParams.myGroundNormal.vec3_copy(surfaceNormal);
+            collisionRuntimeParams.myRealIsOnGround = isOnSurface;
+
+            collisionRuntimeParams.myGroundAngle = surfaceAngle;
+            collisionRuntimeParams.myGroundPerceivedAngle = surfacePerceivedAngle;
+            collisionRuntimeParams.myGroundNormal.vec3_copy(surfaceNormal);
+
+            if (isOnSurface && (collisionCheckParams.myIsOnGroundMaxSurfaceAngle == null || collisionRuntimeParams.myGroundAngle <= collisionCheckParams.myIsOnGroundMaxSurfaceAngle)) {
+                collisionRuntimeParams.myIsOnGround = isOnSurface;
             }
         } else {
-            collisionRuntimeParams.myIsOnCeiling = isOnSurface;
-            if (isOnSurface) {
-                collisionRuntimeParams.myCeilingAngle = surfaceAngle;
-                collisionRuntimeParams.myCeilingPerceivedAngle = surfacePerceivedAngle;
-                collisionRuntimeParams.myCeilingNormal.vec3_copy(surfaceNormal);
+            collisionRuntimeParams.myRealIsOnCeiling = isOnSurface;
+
+            collisionRuntimeParams.myCeilingAngle = surfaceAngle;
+            collisionRuntimeParams.myCeilingPerceivedAngle = surfacePerceivedAngle;
+            collisionRuntimeParams.myCeilingNormal.vec3_copy(surfaceNormal);
+
+            if (isOnSurface && (collisioingMaxSurfaceAngle == null || collisionRuntimeParams.myCeilingAngle <= collisionCheckParams.myIsOnCeilingMaxSurfaceAngle)) {
+                collisionRuntimeParams.myIsOnCeiling = isOnSurface;
             }
         }
     };
