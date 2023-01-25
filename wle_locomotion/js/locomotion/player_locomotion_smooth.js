@@ -160,7 +160,7 @@ PlayerLocomotionSmooth.prototype.update = function () {
             }
         } else {
             if (!PP.myGamepads[this._myParams.myHandedness].getButtonInfo(PP.GamepadButtonID.THUMBSTICK).isPressed()) {
-                if (!this._myLocomotionRuntimeParams.myIsFlying && false) {
+                if (!this._myLocomotionRuntimeParams.myIsFlying) {
                     let gravity = -2;
                     verticalMovement = playerUp.vec3_scale(gravity * dt, verticalMovement);
                     headMovement = headMovement.vec3_add(verticalMovement, headMovement);

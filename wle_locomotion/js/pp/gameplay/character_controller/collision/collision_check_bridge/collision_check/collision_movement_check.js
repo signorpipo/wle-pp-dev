@@ -150,6 +150,7 @@ CollisionCheck.prototype._move = function () {
 CollisionCheck.prototype._moveStep = function () {
     let horizontalMovement = PP.vec3_create();
     let verticalMovement = PP.vec3_create();
+    let verticalMovementAxis = PP.vec3_create();
     let fixedHorizontalMovement = PP.vec3_create();
     let fixedVerticalMovement = PP.vec3_create();
     let horizontalDirection = PP.vec3_create();
@@ -276,10 +277,18 @@ CollisionCheck.prototype._moveStep = function () {
             if (collisionCheckParams.myAdjustVerticalMovementWithSurfaceAngle) {
                 extraSurfaceVerticalMovement.vec3_zero();
                 extraSurfaceVerticalMovement = this._computeExtraSurfaceVerticalMovement(fixedHorizontalMovement, transformUp, collisionCheckParams, this._myPrevCollisionRuntimeParams, extraSurfaceVerticalMovement);
-                surfaceAdjustedVerticalMovement.vec3_add(extraSurfaceVerticalMovement, surfaceAdjustedVerticalMovement);
 
                 if (!extraSurfaceVerticalMovement.vec3_isZero(0.00001)) {
-                    collisionRuntimeParams.myHasAdjustedVerticalMovementWithSurfaceAngle = true;
+                    if (verticalMovement.vec3_isZero(0.00001)) {
+                        surfaceAdjustedVerticalMovement.vec3_copy(extraSurfaceVerticalMovement);
+                        collisionRuntimeParams.myHasAdjustedVerticalMovementWithSurfaceAngle = true;
+                    } else if (!extraSurfaceVerticalMovement.vec3_isConcordant(verticalMovement)) {
+                        surfaceAdjustedVerticalMovement.vec3_add(extraSurfaceVerticalMovement, surfaceAdjustedVerticalMovement);
+                        collisionRuntimeParams.myHasAdjustedVerticalMovementWithSurfaceAngle = true;
+                    } else if (extraSurfaceVerticalMovement.vec3_isFartherAlongAxis(verticalMovement, verticalMovement.vec3_normalize(verticalMovementAxis))) {
+                        surfaceAdjustedVerticalMovement.vec3_copy(extraSurfaceVerticalMovement);
+                        collisionRuntimeParams.myHasAdjustedVerticalMovementWithSurfaceAngle = true;
+                    }
                 }
             }
 
