@@ -38,9 +38,6 @@ v Componente character-controller che semplicemente ha la collisione e puoi dirg
 TEMP:
 - head controller -> feet controller? body controller?
 
-- when to use my is real on ground
-- teleport angle check? aggiungere parametro nei setup?
-- surface angle to ignore nome migliore?
 - implementare myVerticalMovementAdjustHorizontalMovementBasedOnSurfaceAngle
 
 - maybe the transform manager should only work for the overall transform, with the head on another class that also manage the hands?
