@@ -17,7 +17,8 @@ PP.CharacterCollisionResults = class CharacterCollisionResults {
         this.myGroundInfo = new PP.CharacterCollisionSurfaceInfo();
         this.myCeilingInfo = new PP.CharacterCollisionSurfaceInfo();
 
-        this.myVerticalAdjustmentsResults = new PP.CharacterCollisionVerticalAdjustmentsResults();
+        this.myGroundResults = new PP.CharacterCollisionSurfaceResults();
+        this.myCeilingResults = new PP.CharacterCollisionSurfaceResults();
 
         this.mySplitMovementResults = new PP.CharacterCollisionSplitMovementResults();
 
@@ -42,7 +43,8 @@ PP.CharacterCollisionResults = class CharacterCollisionResults {
         this.myGroundInfo.reset();
         this.myCeilingInfo.reset();
 
-        this.myVerticalAdjustmentsResults.reset();
+        this.myGroundResults.reset();
+        this.myCeilingResults.reset();
 
         this.mySplitMovementResults.reset();
 
@@ -67,7 +69,8 @@ PP.CharacterCollisionResults = class CharacterCollisionResults {
         this.myGroundInfo.copy(other.myGroundInfo);
         this.myCeilingInfo.copy(other.myCeilingInfo);
 
-        this.myVerticalAdjustmentsResults.copy(other.myVerticalAdjustmentsResults);
+        this.myGroundResults.copy(other.myGroundResults);
+        this.myCeilingResults.copy(other.myCeilingResults);
 
         this.mySplitMovementResults.copy(other.mySplitMovementResults);
 
@@ -214,34 +217,24 @@ PP.CharacterCollisionCheckTransformResults = class CharacterCollisionCheckTransf
     }
 };
 
-PP.CharacterCollisionVerticalAdjustmentsResults = class CharacterCollisionCheckTransformResults {
+PP.CharacterCollisionSurfaceResults = class CharacterCollisionCheckTransformResults {
     constructor() {
-        this.myHasSnappedOnGround = false;
-        this.myHasPoppedOutGround = false;
-
-        this.myHasSnappedOnCeiling = false;
-        this.myHasPoppedOutCeiling = false;
-
-        this.myHasReducedVerticalMovement = false;
-
-        this.myHasAddedVerticalMovementBasedOnGroundPerceivedAngle = false;
-        this.myHasAddedVerticalMovementBasedOnCeilingPerceivedAngle = false;
+        this.myHasSnappedOnSurface = false;
+        this.myHasPoppedOutSurface = false;
+        this.myHorizontalMovementHasAddedVerticalMovementBasedOnSurfacePerceivedAngle = false;
     }
 
     reset() {
-        this.myHasSnappedOnGround = false;
-        this.myHasPoppedOutGround = false;
-
-        this.myHasSnappedOnCeiling = false;
-        this.myHasPoppedOutCeiling = false;
-
-        this.myHasReducedVerticalMovement = false;
-
-        this.myHasAddedVerticalMovementBasedOnGroundPerceivedAngle = false;
-        this.myHasAddedVerticalMovementBasedOnCeilingPerceivedAngle = false;
+        this.myHasSnappedOnSurface = false;
+        this.myHasPoppedOutSurface = false;
+        this.myHorizontalMovementHasAddedVerticalMovementBasedOnSurfacePerceivedAngle = false;
     }
 
     copy(other) {
+        this.myHasSnappedOnSurface = other.myHasSnappedOnSurface;
+        this.myHasPoppedOutSurface = other.myHasPoppedOutSurface;
+        this.myHorizontalMovementHasAddedVerticalMovementBasedOnSurfacePerceivedAngle = other.myHorizontalMovementHasAddedVerticalMovementBasedOnSurfacePerceivedAngle;
+
         this.myHasSnappedOnGround = other.myHasSnappedOnGround;
         this.myHasPoppedOutGround = other.myHasPoppedOutGround;
 

@@ -81,6 +81,20 @@ CollisionCheck.prototype._postSurfaceCheck = function () {
             }
         }
 
+        let mustStayBelowGroundAngleOk = true;
+        if (collisionCheckParams.myMustStayBelowGroundAngle != null) {
+            if (previousCollisionRuntimeParams.myIsOnGround && collisionRuntimeParams.myIsOnGround && collisionRuntimeParams.myGroundAngle > collisionCheckParams.myMustStayBelowGroundAngle) {
+                mustStayBelowGroundAngleOk = false;
+            }
+        }
+
+        let mustStayBelowCeilingAngleOk = true;
+        if (collisionCheckParams.myMustStayBelowCeilingAngle != null) {
+            if (previousCollisionRuntimeParams.myIsOnCeiling && collisionRuntimeParams.myIsOnCeiling && collisionRuntimeParams.myCeilingAngle > collisionCheckParams.myMustStayBelowCeilingAngle) {
+                mustStayBelowCeilingAngleOk = false;
+            }
+        }
+
         let isOnValidGroundAngleUphill = true;
         let isOnValidGroundAngleDownhill = true;
         if (collisionRuntimeParams.myIsOnGround && collisionRuntimeParams.myGroundAngle > collisionCheckParams.myGroundAngleToIgnore + 0.0001) {
@@ -133,7 +147,7 @@ CollisionCheck.prototype._postSurfaceCheck = function () {
             }
         }
 
-        return mustRemainOnGroundOk && mustRemainOnCeilingOk && isOnValidGroundAngleUphill && isOnValidGroundAngleDownhill && isOnValidCeilingAngleUphill && isOnValidCeilingAngleDownhill;
+        return mustRemainOnGroundOk && mustRemainOnCeilingOk && mustStayBelowGroundAngleOk && mustStayBelowCeilingAngleOk && isOnValidGroundAngleUphill && isOnValidGroundAngleDownhill && isOnValidCeilingAngleUphill && isOnValidCeilingAngleDownhill;
     };
 }();
 

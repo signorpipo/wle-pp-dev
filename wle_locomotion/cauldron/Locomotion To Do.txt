@@ -38,9 +38,6 @@ v Componente character-controller che semplicemente ha la collisione e puoi dirg
 TEMP:
 - head controller -> feet controller? body controller?
 
-- surface distance add to surface info 
-- this.myIsOnSurfaceMaxSurfaceAngle = 0; // #TODO TO IMPLEMENT
-
 - maybe the transform manager should only work for the overall transform, with the head on another class that also manage the hands?
 	- o forse, sebbene l'idea di avere una cosa un po' generica che ti fa il servizio di darti l'ultima valida non collidosa, fino alle mani è piu comodo che sia tutta nel
 	  player character controller
@@ -102,6 +99,9 @@ LOCOMOTION EXTRA HARD:
 	- anche il valid to real potrebbe essere lerpato, avendo un valid ultetriore che è quello che synca e poi quello che lerpa e può anche collidere nel mentre che è quello che viene restituito come posizione
 	
 - Surface Slide oppure semplicemente come myAddVerticalMovementBasedOnSurfacePerceivedAngle ma per il vertical
+	- potrebbe usare la distanza dal ground per capire se il movimento verticale colliderà
+	
+- Surface distance to surface info
 	
 	
 	

@@ -6038,7 +6038,7 @@
                     "hand-tracking": false
                 }
             },
-            "visualizePhysX": true
+            "visualizePhysX": false
         },
         "scripting": {
             "sourcePaths": [

@@ -90,12 +90,13 @@ PP.CollisionCheckBridge = {
         outCollisionRuntimeParams.myIsCollidingVertically = characterCollisionResults.myVerticalMovementResults.myIsColliding;
         outCollisionRuntimeParams.myVerticalCollisionHit.copy(characterCollisionResults.myVerticalMovementResults.myReferenceCollisionHit);
 
-        outCollisionRuntimeParams.myHasSnappedOnGround = characterCollisionResults.myVerticalAdjustmentsResults.myHasSnappedOnGround;
-        outCollisionRuntimeParams.myHasSnappedOnCeiling = characterCollisionResults.myVerticalAdjustmentsResults.myHasSnappedOnCeiling;
-        outCollisionRuntimeParams.myHasPoppedOutGround = characterCollisionResults.myVerticalAdjustmentsResults.myHasPoppedOutGround;
-        outCollisionRuntimeParams.myHasPoppedOutCeiling = characterCollisionResults.myVerticalAdjustmentsResults.myHasPoppedOutCeiling;
-        outCollisionRuntimeParams.myHasReducedVerticalMovement = characterCollisionResults.myVerticalAdjustmentsResults.myHasReducedVerticalMovement;
-        outCollisionRuntimeParams.myHasAdjustedVerticalMovementWithSurfaceAngle = characterCollisionResults.myVerticalAdjustmentsResults.myHasAddedVerticalMovementBasedOnGroundPerceivedAngle || characterCollisionResults.myVerticalAdjustmentsResults.myHasAddedVerticalMovementBasedOnCeilingPerceivedAngle;
+        outCollisionRuntimeParams.myHasSnappedOnGround = characterCollisionResults.myGroundResults.myHasSnappedOnSurface;
+        outCollisionRuntimeParams.myHasSnappedOnCeiling = characterCollisionResults.myCeilingResults.myHasSnappedOnSurface;
+        outCollisionRuntimeParams.myHasPoppedOutGround = characterCollisionResults.myGroundResults.myHasPoppedOutSurface;
+        outCollisionRuntimeParams.myHasPoppedOutCeiling = characterCollisionResults.myCeilingResults.myHasPoppedOutSurface;
+        outCollisionRuntimeParams.myHasAdjustedVerticalMovementWithSurfaceAngle = characterCollisionResults.myGroundResults.myHorizontalMovementHasAddedVerticalMovementBasedOnSurfacePerceivedAngle || characterCollisionResults.myCeilingResults.myHorizontalMovementHasAddedVerticalMovementBasedOnSurfacePerceivedAngle;
+
+        //outCollisionRuntimeParams.myHasReducedVerticalMovement = characterCollisionResults.myVerticalMovementResults.myHasMovementBeenReduced;
 
         outCollisionRuntimeParams.myIsSliding = characterCollisionResults.myWallSlideResults.myHasSlid;
         outCollisionRuntimeParams.mySlidingMovementAngle = characterCollisionResults.myWallSlideResults.mySlideMovementAngle;
@@ -189,13 +190,12 @@ PP.CollisionCheckBridge = {
             outCharacterCollisionResults.myCeilingInfo.mySurfacePerceivedAngle = collisionRuntimeParams.myCeilingPerceivedAngle;
             outCharacterCollisionResults.myCeilingInfo.mySurfaceNormal.vec3_copy(collisionRuntimeParams.myCeilingNormal);
 
-            outCharacterCollisionResults.myVerticalAdjustmentsResults.myHasSnappedOnGround = collisionRuntimeParams.myHasSnappedOnGround;
-            outCharacterCollisionResults.myVerticalAdjustmentsResults.myHasPoppedOutGround = collisionRuntimeParams.myHasPoppedOutGround;
-            outCharacterCollisionResults.myVerticalAdjustmentsResults.myHasSnappedOnCeiling = collisionRuntimeParams.myHasSnappedOnCeiling;
-            outCharacterCollisionResults.myVerticalAdjustmentsResults.myHasPoppedOutCeiling = collisionRuntimeParams.myHasPoppedOutCeiling;
-            outCharacterCollisionResults.myVerticalAdjustmentsResults.myHasReducedVerticalMovement = collisionRuntimeParams.myHasReducedVerticalMovement;
-            //outCharacterCollisionResults.myVerticalAdjustmentsResults.myHasAddedVerticalMovementBasedOnGroundPerceivedAngle = collisionRuntimeParams.myHasAdjustedVerticalMovementWithSurfaceAngle;
-            //outCharacterCollisionResults.myVerticalAdjustmentsResults.myHasAddedVerticalMovementBasedOnCeilingPerceivedAngle = collisionRuntimeParams.myHasAdjustedVerticalMovementWithSurfaceAngle;
+            outCharacterCollisionResults.myGroundResults.myHasSnappedOnSurface = collisionRuntimeParams.myHasSnappedOnGround;
+            outCharacterCollisionResults.myGroundResults.myHasPoppedOutSurface = collisionRuntimeParams.myHasPoppedOutGround;
+            outCharacterCollisionResults.myCeilingResults.myHasSnappedOnSurface = collisionRuntimeParams.myHasSnappedOnCeiling;
+            outCharacterCollisionResults.myCeilingResults.myHasPoppedOutSurface = collisionRuntimeParams.myHasPoppedOutCeiling;
+            //outCharacterCollisionResults.myGroundResults.myHorizontalMovementHasAddedVerticalMovementBasedOnSurfacePerceivedAngle = collisionRuntimeParams.myHasAdjustedVerticalMovementWithSurfaceAngle;
+            //outCharacterCollisionResults.myCeilingResults.myHorizontalMovementHasAddedVerticalMovementBasedOnSurfacePerceivedAngle = collisionRuntimeParams.myHasAdjustedVerticalMovementWithSurfaceAngle;
 
             outCharacterCollisionResults.mySplitMovementResults.myStepsToPerform = collisionRuntimeParams.mySplitMovementSteps;
             outCharacterCollisionResults.mySplitMovementResults.myStepsPerformed = collisionRuntimeParams.mySplitMovementStepsPerformed;

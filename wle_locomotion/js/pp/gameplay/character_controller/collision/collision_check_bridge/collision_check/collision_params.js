@@ -136,6 +136,8 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myMustStayOnValidCeilingAngleDownhill = false;
         this.myRegatherGroundInfoOnSurfaceCheckFail = false;
         this.myRegatherCeilingInfoOnSurfaceCheckFail = false;
+        this.myMustStayBelowGroundAngle = null;
+        this.myMustStayBelowCeilingAngle = null;
 
         this.mySlidingEnabled = false;
         this.mySlidingHorizontalMovementCheckBetterNormal = false;
@@ -295,6 +297,8 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myMustStayOnValidCeilingAngleDownhill = other.myMustStayOnValidCeilingAngleDownhill;
         this.myRegatherGroundInfoOnSurfaceCheckFail = other.myRegatherGroundInfoOnSurfaceCheckFail;
         this.myRegatherCeilingInfoOnSurfaceCheckFail = other.myRegatherCeilingInfoOnSurfaceCheckFail;
+        this.myMustStayBelowGroundAngle = other.myMustStayBelowGroundAngle;
+        this.myMustStayBelowCeilingAngle = other.myMustStayBelowCeilingAngle;
 
         this.mySlidingEnabled = other.mySlidingEnabled;
         this.mySlidingHorizontalMovementCheckBetterNormal = other.mySlidingHorizontalMovementCheckBetterNormal;

@@ -224,15 +224,22 @@ PP.CharacterColliderSurfaceSetup = class CharacterColliderSurfaceSetup {
         this.myIsOnSurfaceMaxOutsideDistance = 0;
         this.myIsOnSurfaceMaxInsideDistance = 0;
         this.myIsOnSurfaceIfInsideCollision = false;
-        this.myIsOnSurfaceMaxSurfaceAngle = null; // #TODO TO IMPLEMENT
+
+        this.myIsOnSurfaceMaxSurfaceAngle = null; // #TODO TO IMPLEMENT add InternalData myIsOnGroundReal
 
         this.myCollectSurfaceNormalMaxOutsideDistance = 0;
         this.myCollectSurfaceNormalMaxInsideDistance = 0;
 
         this.myHorizontalMovementAddVerticalMovementBasedOnSurfacePerceivedAngle = false;
-        // this make it so when a character moves on a slope it also add a vertical movement so that the movement is actually on the slope plane
+        // this make it so when a character moves horizontally on a slope it also add a vertical movement so that the movement is actually on the slope plane
+
+        this.myVerticalMovementAddHorizontalMovementBasedOnSurfaceAngle = false; // #TODO TO IMPLEMENT
+        // this make it so when a character moves vertically on a slope (sort of sliding down the slope) it also add a horizontal movement so that the movement is actually on the slope plane
+        this.myVerticalMovementAddHorizontalMovementBasedOnSurfaceAngleMinSurfaceAngle = null; // #TODO TO IMPLEMENT
+        // this can be used to make it so the movement (and therefore the slide) only happens above a certain angle, like u want to slide down only on steep surfaces
 
         this.myMustStayOnSurface = false;
+        this.myMustStayBelowSurfaceAngle = null; // #TODO TO IMPLEMENT
         this.myMustStayOnValidSurfaceAngleDownhill = false;
         // normally you can move downhill on whatever angle, but you may want the character to stay on an angle that will be valid even if u turn to go back uphill
 
