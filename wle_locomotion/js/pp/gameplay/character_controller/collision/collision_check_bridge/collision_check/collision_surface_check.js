@@ -280,7 +280,28 @@ CollisionCheck.prototype._adjustVerticalMovementWithSurface = function () {
             }
         }
 
+        if (outAdjustedVerticalMovement.vec3_isZero(0.000001)) {
+            outAdjustedVerticalMovement.vec3_zero();
+        }
+
         return outAdjustedVerticalMovement;
+    }
+}();
+
+CollisionCheck.prototype._adjustHorizontalMovementWithSurface = function () {
+    let horizontalDirection = PP.vec3_create();
+    return function _adjustHorizontalMovementWithSurface(horizontalMovement, verticalMovement, up, collisionCheckParams, collisionRuntimeParams, previousCollisionRuntimeParams, outAdjustedHorizontalMovement) {
+        outAdjustedHorizontalMovement.vec3_copy(horizontalMovement);
+
+        if (verticalMovement.vec3_isZero(0.00001)) {
+            return outAdjustedHorizontalMovement;
+        }
+
+        if (outAdjustedHorizontalMovement.vec3_isZero(0.000001)) {
+            outAdjustedHorizontalMovement.vec3_zero();
+        }
+
+        return outAdjustedHorizontalMovement;
     }
 }();
 

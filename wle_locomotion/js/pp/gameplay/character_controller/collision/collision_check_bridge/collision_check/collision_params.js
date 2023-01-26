@@ -391,6 +391,8 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
 
         this.myLastValidOriginalHorizontalMovement = PP.vec3_create();
         this.myLastValidOriginalVerticalMovement = PP.vec3_create();
+        this.myLastValidSurfaceAdjustedHorizontalMovement = PP.vec3_create();
+        this.myLastValidSurfaceAdjustedVerticalMovement = PP.vec3_create();
 
         this.myIsOnGround = false;
         this.myGroundAngle = 0;
@@ -474,6 +476,8 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
 
         this.myLastValidOriginalHorizontalMovement.vec3_zero();
         this.myLastValidOriginalVerticalMovement.vec3_zero();
+        this.myLastValidSurfaceAdjustedHorizontalMovement.vec3_zero();
+        this.myLastValidSurfaceAdjustedVerticalMovement.vec3_zero();
 
         this.myIsOnGround = false;
         this.myGroundAngle = 0;
@@ -557,6 +561,8 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
 
         this.myLastValidOriginalHorizontalMovement.vec3_copy(other.myLastValidOriginalHorizontalMovement);
         this.myLastValidOriginalVerticalMovement.vec3_copy(other.myLastValidOriginalVerticalMovement);
+        this.myLastValidSurfaceAdjustedHorizontalMovement.vec3_copy(other.myLastValidSurfaceAdjustedHorizontalMovement);
+        this.myLastValidSurfaceAdjustedVerticalMovement.vec3_copy(other.myLastValidSurfaceAdjustedVerticalMovement);
 
         this.myIsOnGround = other.myIsOnGround;
         this.myGroundAngle = other.myGroundAngle;

@@ -150,7 +150,6 @@ CollisionCheck.prototype._move = function () {
 CollisionCheck.prototype._moveStep = function () {
     let horizontalMovement = PP.vec3_create();
     let verticalMovement = PP.vec3_create();
-    let verticalMovementAxis = PP.vec3_create();
     let fixedHorizontalMovement = PP.vec3_create();
     let fixedVerticalMovement = PP.vec3_create();
     let horizontalDirection = PP.vec3_create();
@@ -159,7 +158,7 @@ CollisionCheck.prototype._moveStep = function () {
     let forwardForPerceivedAngle = PP.vec3_create();
     let newFeetPosition = PP.vec3_create();
     let surfaceAdjustedVerticalMovement = PP.vec3_create();
-    let extraSurfaceVerticalMovement = PP.vec3_create();
+    let surfaceAdjustedHorizontalMovement = PP.vec3_create();
 
     let zAxis = PP.vec3_create(0, 0, 1);
     let xAxis = PP.vec3_create(1, 0, 0);
@@ -191,12 +190,16 @@ CollisionCheck.prototype._moveStep = function () {
         this._myPrevCollisionRuntimeParams.copy(collisionRuntimeParams);
         collisionRuntimeParams.reset();
 
-        this._syncCollisionRuntimeParamsWithPrevious(horizontalMovement, verticalMovement, transformUp, collisionCheckParams, collisionRuntimeParams, this._myPrevCollisionRuntimeParams);
+        surfaceAdjustedHorizontalMovement = this._adjustHorizontalMovementWithSurface(horizontalMovement, verticalMovement, transformUp, collisionCheckParams, collisionRuntimeParams, this._myPrevCollisionRuntimeParams, surfaceAdjustedHorizontalMovement);
+
+        this._syncCollisionRuntimeParamsWithPrevious(surfaceAdjustedHorizontalMovement, verticalMovement, transformUp, collisionCheckParams, collisionRuntimeParams, this._myPrevCollisionRuntimeParams);
 
         {
             forwardForHorizontal.vec3_copy(collisionCheckParams.myCheckHorizontalFixedForward);
             if (!collisionCheckParams.myCheckHorizontalFixedForwardEnabled) {
-                if (!horizontalMovement.vec3_isZero()) {
+                if (!surfaceAdjustedHorizontalMovement.vec3_isZero()) {
+                    forwardForHorizontal = surfaceAdjustedHorizontalMovement.vec3_normalize(forwardForHorizontal);
+                } else if (!horizontalMovement.vec3_isZero()) {
                     forwardForHorizontal = horizontalMovement.vec3_normalize(forwardForHorizontal);
                 } else {
                     forwardForHorizontal.vec3_copy(transformForward);
@@ -220,13 +223,13 @@ CollisionCheck.prototype._moveStep = function () {
 
             fixedHorizontalMovement.vec3_zero();
 
-            if (!horizontalMovement.vec3_isZero(0.00001)) {
-                fixedHorizontalMovement = this._horizontalCheck(horizontalMovement, feetPosition, height, transformUp, forwardForHorizontal, allowSurfaceSteepFix, collisionCheckParams, collisionRuntimeParams, this._myPrevCollisionRuntimeParams, false, fixedHorizontalMovement);
+            if (!surfaceAdjustedHorizontalMovement.vec3_isZero(0.00001)) {
+                fixedHorizontalMovement = this._horizontalCheck(surfaceAdjustedHorizontalMovement, feetPosition, height, transformUp, forwardForHorizontal, allowSurfaceSteepFix, collisionCheckParams, collisionRuntimeParams, this._myPrevCollisionRuntimeParams, false, fixedHorizontalMovement);
                 //console.error(_myTotalRaycasts );
                 //collisionRuntimeParams.myIsCollidingHorizontally = true;
                 //collisionRuntimeParams.myHorizontalCollisionHit.myNormal = [0, 0, 1];
-                if (collisionCheckParams.mySlidingEnabled && collisionRuntimeParams.myIsCollidingHorizontally && this._isSlidingNormalValid(horizontalMovement, transformUp, collisionRuntimeParams)) {
-                    fixedHorizontalMovement = this._horizontalSlide(horizontalMovement, feetPosition, height, transformUp, forwardForHorizontal, allowSurfaceSteepFix, collisionCheckParams, collisionRuntimeParams, this._myPrevCollisionRuntimeParams, fixedHorizontalMovement);
+                if (collisionCheckParams.mySlidingEnabled && collisionRuntimeParams.myIsCollidingHorizontally && this._isSlidingNormalValid(surfaceAdjustedHorizontalMovement, transformUp, collisionRuntimeParams)) {
+                    fixedHorizontalMovement = this._horizontalSlide(surfaceAdjustedHorizontalMovement, feetPosition, height, transformUp, forwardForHorizontal, allowSurfaceSteepFix, collisionCheckParams, collisionRuntimeParams, this._myPrevCollisionRuntimeParams, fixedHorizontalMovement);
                 } else {
                     //console.error("no slide");
                 }
@@ -236,7 +239,7 @@ CollisionCheck.prototype._moveStep = function () {
                 fixedHorizontalMovement.vec3_zero();
             }
 
-            if (!horizontalMovement.vec3_isZero() && fixedHorizontalMovement.vec3_isZero()) {
+            if (!surfaceAdjustedHorizontalMovement.vec3_isZero() && fixedHorizontalMovement.vec3_isZero()) {
                 collisionRuntimeParams.myHorizontalMovementCanceled = true;
             }
         }
@@ -245,7 +248,9 @@ CollisionCheck.prototype._moveStep = function () {
             forwardForVertical.vec3_copy(collisionCheckParams.myCheckVerticalFixedForward);
             if (!collisionCheckParams.myCheckVerticalFixedForwardEnabled) {
                 if (fixedHorizontalMovement.vec3_isZero()) {
-                    if (!horizontalMovement.vec3_isZero()) {
+                    if (!surfaceAdjustedHorizontalMovement.vec3_isZero()) {
+                        forwardForVertical = surfaceAdjustedHorizontalMovement.vec3_normalize(forwardForVertical);
+                    } else if (!horizontalMovement.vec3_isZero()) {
                         forwardForVertical = horizontalMovement.vec3_normalize(forwardForVertical);
                     } else {
                         forwardForVertical.vec3_copy(transformForward);
@@ -297,7 +302,9 @@ CollisionCheck.prototype._moveStep = function () {
             fixedVerticalMovement.vec3_zero();
 
             if (!collisionCheckParams.myCheckVerticalFixedForwardEnabled) {
-                if (!horizontalMovement.vec3_isZero()) {
+                if (!surfaceAdjustedHorizontalMovement.vec3_isZero()) {
+                    forwardForVertical = surfaceAdjustedHorizontalMovement.vec3_normalize(forwardForVertical);
+                } else if (!horizontalMovement.vec3_isZero()) {
                     forwardForVertical = horizontalMovement.vec3_normalize(forwardForVertical);
                 } else {
                     forwardForVertical.vec3_copy(transformForward);
@@ -311,6 +318,8 @@ CollisionCheck.prototype._moveStep = function () {
 
         if (!fixedHorizontalMovement.vec3_isZero()) {
             forwardForPerceivedAngle = fixedHorizontalMovement.vec3_normalize(forwardForPerceivedAngle);
+        } else if (!surfaceAdjustedHorizontalMovement.vec3_isZero()) {
+            forwardForPerceivedAngle = surfaceAdjustedHorizontalMovement.vec3_normalize(forwardForPerceivedAngle);
         } else if (!horizontalMovement.vec3_isZero()) {
             forwardForPerceivedAngle = horizontalMovement.vec3_normalize(forwardForPerceivedAngle);
         }
@@ -323,7 +332,7 @@ CollisionCheck.prototype._moveStep = function () {
             this._gatherSurfaceInfo(newFeetPosition, height, transformUp, forwardForPerceivedAngle, forwardForVertical, false, collisionCheckParams, collisionRuntimeParams);
         }
 
-        if (!horizontalMovement.vec3_isZero() && !collisionRuntimeParams.myHorizontalMovementCanceled) {
+        if (!surfaceAdjustedHorizontalMovement.vec3_isZero() && !collisionRuntimeParams.myHorizontalMovementCanceled) {
             let surfaceCheckOk = this._postSurfaceCheck(fixedHorizontalMovement, fixedVerticalMovement, transformUp, collisionCheckParams, collisionRuntimeParams, this._myPrevCollisionRuntimeParams);
 
             if (!surfaceCheckOk) {
@@ -334,7 +343,9 @@ CollisionCheck.prototype._moveStep = function () {
                 outFixedMovement.vec3_zero();
                 newFeetPosition = feetPosition.vec3_add(outFixedMovement, newFeetPosition);
 
-                if (!horizontalMovement.vec3_isZero()) {
+                if (!surfaceAdjustedHorizontalMovement.vec3_isZero()) {
+                    forwardForPerceivedAngle = surfaceAdjustedHorizontalMovement.vec3_normalize(forwardForPerceivedAngle);
+                } else if (!horizontalMovement.vec3_isZero()) {
                     forwardForPerceivedAngle = horizontalMovement.vec3_normalize(forwardForPerceivedAngle);
                 } else {
                     forwardForPerceivedAngle.vec3_copy(transformForward);
@@ -366,6 +377,7 @@ CollisionCheck.prototype._moveStep = function () {
             if (collisionCheckParams.mySlidingAdjustSign90Degrees) {
                 if (!collisionRuntimeParams.myHorizontalMovementCanceled && !collisionRuntimeParams.myIsSliding && !fixedHorizontalMovement.vec3_isZero()) {
                     /* let angleWithPreviousThreshold = 0.5;
+                    check use surfaceAdjustedHorizontalMovement instead of horizontalMovement if reenable this
                     if (!this._myPrevCollisionRuntimeParams.myLastValidOriginalHorizontalMovement.vec3_isZero() && !horizontalMovement.vec3_isZero() &&
                         horizontalMovement.vec3_angle(this._myPrevCollisionRuntimeParams.myLastValidOriginalHorizontalMovement) > angleWithPreviousThreshold) {
                         collisionRuntimeParams.mySliding90DegreesSign = horizontalMovement.vec3_signTo(this._myPrevCollisionRuntimeParams.myLastValidOriginalHorizontalMovement, transformUp);
@@ -380,8 +392,16 @@ CollisionCheck.prototype._moveStep = function () {
                 collisionRuntimeParams.myLastValidOriginalHorizontalMovement.vec3_copy(horizontalMovement);
             }
 
+            if (!surfaceAdjustedHorizontalMovement.vec3_isZero()) {
+                collisionRuntimeParams.myLastValidSurfaceAdjustedHorizontalMovement.vec3_copy(surfaceAdjustedHorizontalMovement);
+            }
+
             if (!verticalMovement.vec3_isZero()) {
                 collisionRuntimeParams.myLastValidOriginalVerticalMovement.vec3_copy(verticalMovement);
+            }
+
+            if (!surfaceAdjustedVerticalMovement.vec3_isZero()) {
+                collisionRuntimeParams.myLastValidSurfaceAdjustedVerticalMovement.vec3_copy(surfaceAdjustedVerticalMovement);
             }
 
             if (!fixedHorizontalMovement.vec3_isZero()) {
@@ -428,29 +448,25 @@ CollisionCheck.prototype._moveStep = function () {
 
 CollisionCheck.prototype._syncCollisionRuntimeParamsWithPrevious = function () {
     let previousFixedHorizontalMovement = PP.vec3_create();
-    return function _syncCollisionRuntimeParamsWithPrevious(horizontalMovement, verticalMovement, up, collisionCheckParams, collisionRuntimeParams, previousCollisionRuntimeParams) {
+    return function _syncCollisionRuntimeParamsWithPrevious(surfaceAdjustedHorizontalMovement, verticalMovement, up, collisionCheckParams, collisionRuntimeParams, previousCollisionRuntimeParams) {
         collisionRuntimeParams.myIsSlidingFlickerPrevented = previousCollisionRuntimeParams.myIsSlidingFlickerPrevented;
         //console.error("prevented", collisionRuntimeParams.myIsSlidingFlickerPrevented);
 
         collisionRuntimeParams.myLastValidOriginalHorizontalMovement.vec3_copy(previousCollisionRuntimeParams.myLastValidOriginalHorizontalMovement);
         collisionRuntimeParams.myLastValidOriginalVerticalMovement.vec3_copy(previousCollisionRuntimeParams.myLastValidOriginalVerticalMovement);
+        collisionRuntimeParams.myLastValidSurfaceAdjustedHorizontalMovement.vec3_copy(previousCollisionRuntimeParams.myLastValidSurfaceAdjustedHorizontalMovement);
+        collisionRuntimeParams.myLastValidSurfaceAdjustedVerticalMovement.vec3_copy(previousCollisionRuntimeParams.myLastValidSurfaceAdjustedVerticalMovement);
         collisionRuntimeParams.myLastValidIsSliding = previousCollisionRuntimeParams.myLastValidIsSliding;
-
-        if (!verticalMovement.vec3_isZero()) {
-            collisionRuntimeParams.myLastValidOriginalVerticalMovement.vec3_copy(verticalMovement);
-        } else {
-            collisionRuntimeParams.myLastValidOriginalVerticalMovement.vec3_copy(previousCollisionRuntimeParams.myLastValidOriginalVerticalMovement);
-        }
 
         collisionRuntimeParams.mySliding90DegreesSign = previousCollisionRuntimeParams.mySliding90DegreesSign;
         collisionRuntimeParams.mySlidingRecompute90DegreesSign = previousCollisionRuntimeParams.mySlidingRecompute90DegreesSign;
         if (collisionCheckParams.mySlidingAdjustSign90Degrees) {
             let angleWithPreviousThreshold = 0.5;
-            if (!previousCollisionRuntimeParams.myLastValidOriginalHorizontalMovement.vec3_isZero() && !horizontalMovement.vec3_isZero() &&
-                horizontalMovement.vec3_angle(previousCollisionRuntimeParams.myLastValidOriginalHorizontalMovement) > angleWithPreviousThreshold) {
+            if (!previousCollisionRuntimeParams.myLastValidSurfaceAdjustedHorizontalMovement.vec3_isZero() && !surfaceAdjustedHorizontalMovement.vec3_isZero() &&
+                surfaceAdjustedHorizontalMovement.vec3_angle(previousCollisionRuntimeParams.myLastValidSurfaceAdjustedHorizontalMovement) > angleWithPreviousThreshold) {
                 //previousFixedHorizontalMovement = previousCollisionRuntimeParams.myFixedMovement.vec3_removeComponentAlongAxis(up, previousFixedHorizontalMovement);
                 if (!previousCollisionRuntimeParams.myLastValidIsSliding) {
-                    let angleSigned = horizontalMovement.vec3_angleSigned(previousCollisionRuntimeParams.myLastValidOriginalHorizontalMovement, up);
+                    let angleSigned = surfaceAdjustedHorizontalMovement.vec3_angleSigned(previousCollisionRuntimeParams.myLastValidSurfaceAdjustedHorizontalMovement, up);
                     let angleSignedThreshold = 10;
                     if (Math.abs(angleSigned) < 180 - angleSignedThreshold) {
                         collisionRuntimeParams.mySliding90DegreesSign = Math.pp_sign(angleSigned);

@@ -221,25 +221,25 @@ PP.CharacterCollisionSurfaceResults = class CharacterCollisionCheckTransformResu
     constructor() {
         this.myHasSnappedOnSurface = false;
         this.myHasPoppedOutSurface = false;
-        this.myHorizontalMovementHasAdjustedVerticalMovementBasedOnSurfacePerceivedAngleDownhill = false;
-        this.myHorizontalMovementHasAdjustedVerticalMovementBasedOnSurfacePerceivedAngleUphill = false;
-        this.myVerticalMovementHasAdjustedHorizontalMovementBasedOnSurfaceAngleDownhill = false;
+        this.myHasHorizontalMovementAdjustedVerticalMovementBasedOnSurfacePerceivedAngleDownhill = false;
+        this.myHasHorizontalMovementAdjustedVerticalMovementBasedOnSurfacePerceivedAngleUphill = false;
+        this.myHasVerticalMovementAdjustedHorizontalMovementBasedOnSurfaceAngleDownhill = false;
     }
 
     reset() {
         this.myHasSnappedOnSurface = false;
         this.myHasPoppedOutSurface = false;
-        this.myHorizontalMovementHasAdjustedVerticalMovementBasedOnSurfacePerceivedAngleDownhill = false;
-        this.myHorizontalMovementHasAdjustedVerticalMovementBasedOnSurfacePerceivedAngleUphill = false;
-        this.myVerticalMovementHasAdjustedHorizontalMovementBasedOnSurfaceAngleDownhill = false;
+        this.myHasHorizontalMovementAdjustedVerticalMovementBasedOnSurfacePerceivedAngleDownhill = false;
+        this.myHasHorizontalMovementAdjustedVerticalMovementBasedOnSurfacePerceivedAngleUphill = false;
+        this.myHasVerticalMovementAdjustedHorizontalMovementBasedOnSurfaceAngleDownhill = false;
     }
 
     copy(other) {
         this.myHasSnappedOnSurface = other.myHasSnappedOnSurface;
         this.myHasPoppedOutSurface = other.myHasPoppedOutSurface;
-        this.myHorizontalMovementHasAdjustedVerticalMovementBasedOnSurfacePerceivedAngleDownhill = other.myHorizontalMovementHasAdjustedVerticalMovementBasedOnSurfacePerceivedAngleDownhill;
-        this.myHorizontalMovementHasAdjustedVerticalMovementBasedOnSurfacePerceivedAngleUphill = other.myHorizontalMovementHasAdjustedVerticalMovementBasedOnSurfacePerceivedAngleUphill;
-        this.myVerticalMovementHasAdjustedHorizontalMovementBasedOnSurfaceAngleDownhill = other.myVerticalMovementHasAdjustedHorizontalMovementBasedOnSurfaceAngleDownhill;
+        this.myHasHorizontalMovementAdjustedVerticalMovementBasedOnSurfacePerceivedAngleDownhill = other.myHasHorizontalMovementAdjustedVerticalMovementBasedOnSurfacePerceivedAngleDownhill;
+        this.myHasHorizontalMovementAdjustedVerticalMovementBasedOnSurfacePerceivedAngleUphill = other.myHasHorizontalMovementAdjustedVerticalMovementBasedOnSurfacePerceivedAngleUphill;
+        this.myHasVerticalMovementAdjustedHorizontalMovementBasedOnSurfaceAngleDownhill = other.myHasVerticalMovementAdjustedHorizontalMovementBasedOnSurfaceAngleDownhill;
     }
 };
 
@@ -269,9 +269,11 @@ PP.CharacterCollisionSplitMovementResults = class CharacterCollisionSplitMovemen
 PP.CharacterCollisionInternalResults = class CharacterCollisionSplitMovementResults {
     constructor() {
         this.myLastRelevantStartHorizontalMovement = PP.vec3_create();
+        this.myLastRelevantAdjustedStartHorizontalMovement = PP.vec3_create();
         this.myLastRelevantEndHorizontalMovement = PP.vec3_create();
 
         this.myLastRelevantStartVerticalMovement = PP.vec3_create();
+        this.myLastRelevantAdjustedStartVerticalMovement = PP.vec3_create();
         this.myLastRelevantEndVerticalMovement = PP.vec3_create();
 
         this.myLastRelevantHasWallSlid = false;
@@ -287,9 +289,11 @@ PP.CharacterCollisionInternalResults = class CharacterCollisionSplitMovementResu
 
     reset() {
         this.myLastRelevantStartHorizontalMovement.vec3_zero();
+        this.myLastRelevantAdjustedStartHorizontalMovement.vec3_zero();
         this.myLastRelevantEndHorizontalMovement.vec3_zero();
 
         this.myLastRelevantStartVerticalMovement.vec3_zero();
+        this.myLastRelevantAdjustedStartVerticalMovement.vec3_zero();
         this.myLastRelevantEndVerticalMovement.vec3_zero();
 
         this.myLastRelevantHasWallSlid = false;
@@ -305,9 +309,11 @@ PP.CharacterCollisionInternalResults = class CharacterCollisionSplitMovementResu
 
     copy(other) {
         this.myLastRelevantStartHorizontalMovement.vec3_copy(other.myLastRelevantStartHorizontalMovement);
+        this.myLastRelevantAdjustedStartHorizontalMovement.vec3_copy(other.myLastRelevantAdjustedStartHorizontalMovement);
         this.myLastRelevantEndHorizontalMovement.vec3_copy(other.myLastRelevantEndHorizontalMovement);
 
         this.myLastRelevantStartVerticalMovement.vec3_copy(other.myLastRelevantStartVerticalMovement);
+        this.myLastRelevantAdjustedStartVerticalMovement.vec3_copy(other.myLastRelevantAdjustedStartVerticalMovement);
         this.myLastRelevantEndVerticalMovement.vec3_copy(other.myLastRelevantEndVerticalMovement);
 
         this.myLastRelevantHasWallSlid = other.myLastRelevantHasWallSlid;
