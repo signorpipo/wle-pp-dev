@@ -273,24 +273,7 @@ CollisionCheck.prototype._moveStep = function () {
             //console.error(_myTotalRaycasts );
             // collisionCheckParams.myDebugActive = false;
 
-            surfaceAdjustedVerticalMovement.vec3_copy(verticalMovement);
-            if (collisionCheckParams.myAdjustVerticalMovementWithSurfaceAngle) {
-                extraSurfaceVerticalMovement.vec3_zero();
-                extraSurfaceVerticalMovement = this._computeExtraSurfaceVerticalMovement(fixedHorizontalMovement, transformUp, collisionCheckParams, this._myPrevCollisionRuntimeParams, extraSurfaceVerticalMovement);
-
-                if (!extraSurfaceVerticalMovement.vec3_isZero(0.00001)) {
-                    if (verticalMovement.vec3_isZero(0.00001)) {
-                        surfaceAdjustedVerticalMovement.vec3_copy(extraSurfaceVerticalMovement);
-                        collisionRuntimeParams.myHasAdjustedVerticalMovementWithSurfaceAngle = true;
-                    } else if (!extraSurfaceVerticalMovement.vec3_isConcordant(verticalMovement)) {
-                        surfaceAdjustedVerticalMovement.vec3_add(extraSurfaceVerticalMovement, surfaceAdjustedVerticalMovement);
-                        collisionRuntimeParams.myHasAdjustedVerticalMovementWithSurfaceAngle = true;
-                    } else if (extraSurfaceVerticalMovement.vec3_isFartherAlongAxis(verticalMovement, verticalMovement.vec3_normalize(verticalMovementAxis))) {
-                        surfaceAdjustedVerticalMovement.vec3_copy(extraSurfaceVerticalMovement);
-                        collisionRuntimeParams.myHasAdjustedVerticalMovementWithSurfaceAngle = true;
-                    }
-                }
-            }
+            surfaceAdjustedVerticalMovement = this._adjustVerticalMovementWithSurface(fixedHorizontalMovement, verticalMovement, transformUp, collisionCheckParams, collisionRuntimeParams, this._myPrevCollisionRuntimeParams, surfaceAdjustedVerticalMovement);
 
             newFeetPosition = feetPosition.vec3_add(fixedHorizontalMovement, newFeetPosition);
             let originalMovementSign = Math.pp_sign(verticalMovement.vec3_lengthSigned(transformUp), 0);

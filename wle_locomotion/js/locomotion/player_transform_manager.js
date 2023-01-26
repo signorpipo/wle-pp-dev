@@ -493,7 +493,12 @@ PlayerTransformManager = class PlayerTransformManager {
             params.mySnapOnCeilingEnabled = false;
             params.myGroundPopOutEnabled = false;
             params.myCeilingPopOutEnabled = false;
-            params.myAdjustVerticalMovementWithSurfaceAngle = false;
+            params.myAdjustVerticalMovementWithGroundAngleDownhill = false;
+            params.myAdjustVerticalMovementWithGroundAngleUphill = false;
+            params.myAdjustVerticalMovementWithCeilingAngleDownhill = false;
+            params.myAdjustVerticalMovementWithCeilingAngleUphill = false;
+            params.myAdjustHorizontalMovementWithGroundAngleDownhill = false;
+            params.myAdjustHorizontalMovementWithCeilingAngleDownhill = false;
             params.myVerticalMovementReduceEnabled = false;
         }
 

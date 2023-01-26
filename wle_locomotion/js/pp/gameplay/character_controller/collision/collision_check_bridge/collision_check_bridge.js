@@ -96,7 +96,14 @@ PP.CollisionCheckBridge = {
         outCollisionRuntimeParams.myHasSnappedOnCeiling = characterCollisionResults.myCeilingResults.myHasSnappedOnSurface;
         outCollisionRuntimeParams.myHasPoppedOutGround = characterCollisionResults.myGroundResults.myHasPoppedOutSurface;
         outCollisionRuntimeParams.myHasPoppedOutCeiling = characterCollisionResults.myCeilingResults.myHasPoppedOutSurface;
-        outCollisionRuntimeParams.myHasAdjustedVerticalMovementWithSurfaceAngle = characterCollisionResults.myGroundResults.myHorizontalMovementHasAdjustedVerticalMovementBasedOnSurfacePerceivedAngle || characterCollisionResults.myCeilingResults.myHorizontalMovementHasAdjustedVerticalMovementBasedOnSurfacePerceivedAngle;
+
+        outCollisionRuntimeParams.myHorizontalMovementHasAdjustedVerticalMovementBasedOnGroundPerceivedAngleDownhill = characterCollisionResults.myGroundResults.myHorizontalMovementHasAdjustedVerticalMovementBasedOnSurfacePerceivedAngleDownhill;
+        outCollisionRuntimeParams.myHorizontalMovementHasAdjustedVerticalMovementBasedOnGroundPerceivedAngleUphill = characterCollisionResults.myGroundResults.myHorizontalMovementHasAdjustedVerticalMovementBasedOnSurfacePerceivedAngleUphill;
+        outCollisionRuntimeParams.myVerticalMovementHasAdjustedHorizontalMovementBasedOnGroundAngleDownhill = characterCollisionResults.myGroundResults.myVerticalMovementHasAdjustedHorizontalMovementBasedOnSurfaceAngleDownhill;
+
+        outCollisionRuntimeParams.myHorizontalMovementHasAdjustedVerticalMovementBasedOnCeilingPerceivedAngleDownhill = characterCollisionResults.myCeilingResults.myHorizontalMovementHasAdjustedVerticalMovementBasedOnSurfacePerceivedAngleDownhill;
+        outCollisionRuntimeParams.myHorizontalMovementHasAdjustedVerticalMovementBasedOnCeilingPerceivedAngleUphill = characterCollisionResults.myCeilingResults.myHorizontalMovementHasAdjustedVerticalMovementBasedOnSurfacePerceivedAngleUphill;
+        outCollisionRuntimeParams.myVerticalMovementHasAdjustedHorizontalMovementBasedOnCeilingAngleDownhill = characterCollisionResults.myCeilingResults.myVerticalMovementHasAdjustedHorizontalMovementBasedOnSurfaceAngleDownhill;
 
         //outCollisionRuntimeParams.myHasReducedVerticalMovement = characterCollisionResults.myVerticalMovementResults.myHasMovementBeenReduced;
 
@@ -198,8 +205,14 @@ PP.CollisionCheckBridge = {
             outCharacterCollisionResults.myGroundResults.myHasPoppedOutSurface = collisionRuntimeParams.myHasPoppedOutGround;
             outCharacterCollisionResults.myCeilingResults.myHasSnappedOnSurface = collisionRuntimeParams.myHasSnappedOnCeiling;
             outCharacterCollisionResults.myCeilingResults.myHasPoppedOutSurface = collisionRuntimeParams.myHasPoppedOutCeiling;
-            //outCharacterCollisionResults.myGroundResults.myHorizontalMovementHasAdjustedVerticalMovementBasedOnSurfacePerceivedAngle = collisionRuntimeParams.myHasAdjustedVerticalMovementWithSurfaceAngle;
-            //outCharacterCollisionResults.myCeilingResults.myHorizontalMovementHasAdjustedVerticalMovementBasedOnSurfacePerceivedAngle = collisionRuntimeParams.myHasAdjustedVerticalMovementWithSurfaceAngle;
+
+            outCharacterCollisionResults.myGroundResults.myHorizontalMovementHasAdjustedVerticalMovementBasedOnSurfacePerceivedAngleDownhill = collisionRuntimeParams.myHorizontalMovementHasAdjustedVerticalMovementBasedOnGroundPerceivedAngleDownhill;
+            outCharacterCollisionResults.myGroundResults.myHorizontalMovementHasAdjustedVerticalMovementBasedOnSurfacePerceivedAngleUphill = collisionRuntimeParams.myHorizontalMovementHasAdjustedVerticalMovementBasedOnGroundPerceivedAngleUphill;
+            outCharacterCollisionResults.myGroundResults.myVerticalMovementHasAdjustedHorizontalMovementBasedOnSurfaceAngleDownhill = collisionRuntimeParams.myVerticalMovementHasAdjustedHorizontalMovementBasedOnGroundAngleDownhill;
+
+            outCharacterCollisionResults.myCeilingResults.myHorizontalMovementHasAdjustedVerticalMovementBasedOnSurfacePerceivedAngleDownhill = collisionRuntimeParams.myHorizontalMovementHasAdjustedVerticalMovementBasedOnCeilingPerceivedAngleDownhill;
+            outCharacterCollisionResults.myCeilingResults.myHorizontalMovementHasAdjustedVerticalMovementBasedOnSurfacePerceivedAngleUphill = collisionRuntimeParams.myHorizontalMovementHasAdjustedVerticalMovementBasedOnCeilingPerceivedAngleUphill;
+            outCharacterCollisionResults.myCeilingResults.myVerticalMovementHasAdjustedHorizontalMovementBasedOnSurfaceAngleDownhill = collisionRuntimeParams.myVerticalMovementHasAdjustedHorizontalMovementBasedOnCeilingAngleDownhill;
 
             outCharacterCollisionResults.mySplitMovementResults.myStepsToPerform = collisionRuntimeParams.mySplitMovementSteps;
             outCharacterCollisionResults.mySplitMovementResults.myStepsPerformed = collisionRuntimeParams.mySplitMovementStepsPerformed;
@@ -286,7 +299,25 @@ PP.CollisionCheckBridge = {
             outCollisionCheckParams.myVerticalMovementCheckEnabled = characterColliderSetup.myVerticalCheckSetup.myVerticalMovementCheckEnabled;
             outCollisionCheckParams.myVerticalPositionCheckEnabled = characterColliderSetup.myVerticalCheckSetup.myVerticalPositionCheckEnabled;
             outCollisionCheckParams.myFeetRadius = characterColliderSetup.myVerticalCheckSetup.myVerticalCheckCircumferenceRadius;
-            outCollisionCheckParams.myAdjustVerticalMovementWithSurfaceAngle = characterColliderSetup.myGroundSetup.myHorizontalMovementAdjustVerticalMovementBasedOnSurfacePerceivedAngle || characterColliderSetup.myCeilingSetup.myHorizontalMovementAdjustVerticalMovementBasedOnSurfacePerceivedAngle;
+
+            outCollisionCheckParams.myAdjustVerticalMovementWithGroundAngleDownhill = characterColliderSetup.myGroundSetup.myHorizontalMovementAdjustVerticalMovementBasedOnSurfacePerceivedAngleDownhill;
+            outCollisionCheckParams.myAdjustVerticalMovementWithGroundAngleUphill = characterColliderSetup.myGroundSetup.myHorizontalMovementAdjustVerticalMovementBasedOnSurfacePerceivedAngleUphill;
+            outCollisionCheckParams.myAdjustVerticalMovementWithGroundAngleDownhillMaxAngle = characterColliderSetup.myGroundSetup.myHorizontalMovementAdjustVerticalMovementBasedOnSurfacePerceivedAngleDownhillMaxSurfaceAngle;
+            outCollisionCheckParams.myAdjustVerticalMovementWithGroundAngleUphillMaxAngle = characterColliderSetup.myGroundSetup.myHorizontalMovementAdjustVerticalMovementBasedOnSurfacePerceivedAngleUphillMaxSurfaceAngle;
+            outCollisionCheckParams.myAdjustVerticalMovementWithGroundAngleDownhillMaxPerceivedAngle = characterColliderSetup.myGroundSetup.myHorizontalMovementAdjustVerticalMovementBasedOnSurfacePerceivedAngleDownhillMaxSurfacePerceivedAngle;
+            outCollisionCheckParams.myAdjustVerticalMovementWithGroundAngleUphillMaxPerceivedAngle = characterColliderSetup.myGroundSetup.myHorizontalMovementAdjustVerticalMovementBasedOnSurfacePerceivedAngleUphillMaxSurfacePerceivedAngle;
+            outCollisionCheckParams.myAdjustHorizontalMovementWithGroundAngleDownhill = characterColliderSetup.myGroundSetup.myVerticalMovementAdjustHorizontalMovementBasedOnSurfaceAngleDownhill;
+            outCollisionCheckParams.myAdjustHorizontalMovementWithGroundAngleDownhillMinAngle = characterColliderSetup.myGroundSetup.myVerticalMovementAdjustHorizontalMovementBasedOnSurfaceAngleDownhillMinSurfaceAngle;
+
+            outCollisionCheckParams.myAdjustVerticalMovementWithCeilingAngleDownhill = characterColliderSetup.myCeilingSetup.myHorizontalMovementAdjustVerticalMovementBasedOnSurfacePerceivedAngleDownhill;
+            outCollisionCheckParams.myAdjustVerticalMovementWithCeilingAngleUphill = characterColliderSetup.myCeilingSetup.myHorizontalMovementAdjustVerticalMovementBasedOnSurfacePerceivedAngleUphill;
+            outCollisionCheckParams.myAdjustVerticalMovementWithCeilingAngleDownhillMaxAngle = characterColliderSetup.myCeilingSetup.myHorizontalMovementAdjustVerticalMovementBasedOnSurfacePerceivedAngleDownhillMaxSurfaceAngle;
+            outCollisionCheckParams.myAdjustVerticalMovementWithCeilingAngleUphillMaxAngle = characterColliderSetup.myCeilingSetup.myHorizontalMovementAdjustVerticalMovementBasedOnSurfacePerceivedAngleUphillMaxSurfaceAngle;
+            outCollisionCheckParams.myAdjustVerticalMovementWithCeilingAngleDownhillMaxPerceivedAngle = characterColliderSetup.myCeilingSetup.myHorizontalMovementAdjustVerticalMovementBasedOnSurfacePerceivedAngleDownhillMaxSurfacePerceivedAngle;
+            outCollisionCheckParams.myAdjustVerticalMovementWithCeilingAngleUphillMaxPerceivedAngle = characterColliderSetup.myCeilingSetup.myHorizontalMovementAdjustVerticalMovementBasedOnSurfacePerceivedAngleUphillMaxSurfacePerceivedAngle;
+            outCollisionCheckParams.myAdjustHorizontalMovementWithCeilingAngleDownhill = characterColliderSetup.myCeilingSetup.myVerticalMovementAdjustHorizontalMovementBasedOnSurfaceAngleDownhill;
+            outCollisionCheckParams.myAdjustHorizontalMovementWithCeilingAngleDownhillMinAngle = characterColliderSetup.myCeilingSetup.myVerticalMovementAdjustHorizontalMovementBasedOnSurfaceAngleDownhillMinSurfaceAngle;
+
             outCollisionCheckParams.myCheckVerticalFixedForwardEnabled = characterColliderSetup.myVerticalCheckSetup.myVerticalCheckFixedForwardEnabled;
             outCollisionCheckParams.myCheckVerticalFixedForward.vec3_copy(characterColliderSetup.myVerticalCheckSetup.myVerticalCheckFixedForward);
             outCollisionCheckParams.myCheckVerticalBothDirection = characterColliderSetup.myVerticalCheckSetup.myVerticalMovementCheckPerformCheckOnBothSides;

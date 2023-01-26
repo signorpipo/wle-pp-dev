@@ -104,7 +104,7 @@ CollisionCheck.prototype._postSurfaceCheck = function () {
         if (collisionRuntimeParams.myIsOnGround && collisionRuntimeParams.myGroundAngle > collisionCheckParams.myGroundAngleToIgnore + 0.0001) {
             if (previousCollisionRuntimeParams.myIsOnGround && !fixedHorizontalMovement.vec3_isZero(0.00001)) {
                 horizontalDirection = fixedHorizontalMovement.vec3_normalize(horizontalDirection);
-                let perceivedAngle = LocomotionUtils.computeSurfacePerceivedAngle(
+                let perceivedAngle = this.computeSurfacePerceivedAngle(
                     collisionRuntimeParams.myGroundNormal,
                     horizontalDirection, transformUp, true);
 
@@ -129,7 +129,7 @@ CollisionCheck.prototype._postSurfaceCheck = function () {
         if (collisionRuntimeParams.myIsOnCeiling && collisionRuntimeParams.myCeilingAngle > collisionCheckParams.myCeilingAngleToIgnore + 0.0001) {
             if (previousCollisionRuntimeParams.myIsOnCeiling && !fixedHorizontalMovement.vec3_isZero(0.00001)) {
                 horizontalDirection = fixedHorizontalMovement.vec3_normalize(horizontalDirection);
-                let perceivedAngle = LocomotionUtils.computeSurfacePerceivedAngle(
+                let perceivedAngle = this.computeSurfacePerceivedAngle(
                     collisionRuntimeParams.myCeilingNormal,
                     horizontalDirection, transformUp, false);
 
@@ -159,7 +159,7 @@ CollisionCheck.prototype._surfaceTooSteep = function () {
         let ceilingTooSteep = false;
 
         if (collisionRuntimeParams.myIsOnGround && collisionRuntimeParams.myGroundAngle > collisionCheckParams.myGroundAngleToIgnore + 0.0001) {
-            let groundPerceivedAngle = LocomotionUtils.computeSurfacePerceivedAngle(
+            let groundPerceivedAngle = this.computeSurfacePerceivedAngle(
                 collisionRuntimeParams.myGroundNormal,
                 direction, up, true);
 
@@ -173,7 +173,7 @@ CollisionCheck.prototype._surfaceTooSteep = function () {
 
         if (!groundTooSteep) {
             if (collisionRuntimeParams.myIsOnCeiling && collisionRuntimeParams.myCeilingAngle > collisionCheckParams.myCeilingAngleToIgnore + 0.0001) {
-                let ceilingPerceivedAngle = LocomotionUtils.computeSurfacePerceivedAngle(
+                let ceilingPerceivedAngle = this.computeSurfacePerceivedAngle(
                     collisionRuntimeParams.myCeilingNormal,
                     direction, up, false);
 
@@ -190,6 +190,101 @@ CollisionCheck.prototype._surfaceTooSteep = function () {
     };
 }();
 
+CollisionCheck.prototype._adjustVerticalMovementWithSurface = function () {
+    let horizontalDirection = PP.vec3_create();
+    return function _adjustVerticalMovementWithSurface(horizontalMovement, verticalMovement, up, collisionCheckParams, collisionRuntimeParams, previousCollisionRuntimeParams, outAdjustedVerticalMovement) {
+        outAdjustedVerticalMovement.vec3_copy(verticalMovement);
+
+        if (horizontalMovement.vec3_isZero(0.00001)) {
+            return outAdjustedVerticalMovement;
+        }
+
+        let extraVerticalLength = 0;
+        horizontalDirection = horizontalMovement.vec3_normalize(horizontalDirection);
+        if (previousCollisionRuntimeParams.myIsOnGround) {
+            let groundPerceivedAngle = this.computeSurfacePerceivedAngle(
+                previousCollisionRuntimeParams.myGroundNormal,
+                horizontalDirection, up, true);
+
+            let groundExtraVerticalLength = horizontalMovement.vec3_length() * Math.tan(Math.pp_toRadians(Math.abs(groundPerceivedAngle)));
+            groundExtraVerticalLength *= Math.pp_sign(groundPerceivedAngle);
+
+            if (Math.abs(groundExtraVerticalLength) > 0.00001) {
+                if (groundPerceivedAngle > 0) {
+                    if (collisionCheckParams.myAdjustVerticalMovementWithGroundAngleUphill &&
+                        (collisionCheckParams.myAdjustVerticalMovementWithGroundAngleUphillMaxPerceivedAngle == null || Math.abs(groundPerceivedAngle) <= collisionCheckParams.myAdjustVerticalMovementWithGroundAngleUphillMaxPerceivedAngle) &&
+                        (collisionCheckParams.myAdjustVerticalMovementWithGroundAngleUphillMaxAngle == null || previousCollisionRuntimeParams.myGroundAngle <= collisionCheckParams.myAdjustVerticalMovementWithGroundAngleUphillMaxAngle)) {
+                        extraVerticalLength = groundExtraVerticalLength;
+                        collisionRuntimeParams.myHorizontalMovementHasAdjustedVerticalMovementBasedOnGroundPerceivedAngleUphill = true;
+                    }
+                } else if (groundPerceivedAngle < 0) {
+                    if (collisionCheckParams.myAdjustVerticalMovementWithGroundAngleDownhill &&
+                        (collisionCheckParams.myAdjustVerticalMovementWithGroundAngleDownhillMaxPerceivedAngle == null || Math.abs(groundPerceivedAngle) <= collisionCheckParams.myAdjustVerticalMovementWithGroundAngleDownhillMaxPerceivedAngle) &&
+                        (collisionCheckParams.myAdjustVerticalMovementWithGroundAngleDownhillMaxAngle == null || previousCollisionRuntimeParams.myGroundAngle <= collisionCheckParams.myAdjustVerticalMovementWithGroundAngleDownhillMaxAngle)) {
+                        extraVerticalLength = groundExtraVerticalLength;
+                        collisionRuntimeParams.myHorizontalMovementHasAdjustedVerticalMovementBasedOnGroundPerceivedAngleDownhill = true;
+                    }
+                }
+            }
+        }
+
+        if (previousCollisionRuntimeParams.myIsOnCeiling) {
+            let ceilingPerceivedAngle = this.computeSurfacePerceivedAngle(
+                previousCollisionRuntimeParams.myCeilingNormal,
+                horizontalDirection, up, false);
+
+            let ceilingExtraVerticalLength = horizontalMovement.vec3_length() * Math.tan(Math.pp_toRadians(Math.abs(ceilingPerceivedAngle)));
+            ceilingExtraVerticalLength *= Math.pp_sign(ceilingPerceivedAngle);
+
+            if (Math.abs(ceilingExtraVerticalLength) > 0.00001) {
+                let sameSignThanGround = Math.pp_sign(extraVerticalLength) == Math.pp_sign(ceilingExtraVerticalLength);
+                if (extraVerticalLength == 0 || (sameSignThanGround && Math.abs(ceilingExtraVerticalLength) > Math.abs(extraVerticalLength))) {
+                    if (ceilingPerceivedAngle > 0) {
+                        if (collisionCheckParams.myAdjustVerticalMovementWithCeilingAngleUphill &&
+                            (collisionCheckParams.myAdjustVerticalMovementWithCeilingAngleUphillMaxPerceivedAngle == null || Math.abs(ceilingPerceivedAngle) <= collisionCheckParams.myAdjustVerticalMovementWithCeilingAngleUphillMaxPerceivedAngle) &&
+                            (collisionCheckParams.myAdjustVerticalMovementWithCeilingAngleUphillMaxAngle == null || previousCollisionRuntimeParams.myCeilingAngle <= collisionCheckParams.myAdjustVerticalMovementWithCeilingAngleUphillMaxAngle)) {
+                            extraVerticalLength = ceilingExtraVerticalLength;
+                            collisionRuntimeParams.myHorizontalMovementHasAdjustedVerticalMovementBasedOnCeilingPerceivedAngleUphill = true;
+                            collisionRuntimeParams.myHorizontalMovementHasAdjustedVerticalMovementBasedOnGroundPerceivedAngleUphill = false;
+                        }
+                    } else if (ceilingPerceivedAngle < 0) {
+                        if (collisionCheckParams.myAdjustVerticalMovementWithCeilingAngleDownhill &&
+                            (collisionCheckParams.myAdjustVerticalMovementWithCeilingAngleDownhillMaxPerceivedAngle == null || Math.abs(ceilingPerceivedAngle) <= collisionCheckParams.myAdjustVerticalMovementWithCeilingAngleDownhillMaxPerceivedAngle) &&
+                            (collisionCheckParams.myAdjustVerticalMovementWithCeilingAngleDownhillMaxAngle == null || previousCollisionRuntimeParams.myCeilingAngle <= collisionCheckParams.myAdjustVerticalMovementWithCeilingAngleDownhillMaxAngle)) {
+                            extraVerticalLength = ceilingExtraVerticalLength;
+                            collisionRuntimeParams.myHorizontalMovementHasAdjustedVerticalMovementBasedOnCeilingPerceivedAngleDownhill = true;
+                            collisionRuntimeParams.myHorizontalMovementHasAdjustedVerticalMovementBasedOnGroundPerceivedAngleDownhill = false;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (Math.abs(extraVerticalLength) > 0.00001) {
+            let verticalMovementLength = verticalMovement.vec3_lengthSigned(up);
+            let sameSignThanExtra = Math.pp_sign(extraVerticalLength) == Math.pp_sign(verticalMovementLength);
+            if (verticalMovement.vec3_isZero(0.00001) || (sameSignThanExtra && Math.abs(verticalMovementLength) < Math.abs(extraVerticalLength))) {
+                outAdjustedVerticalMovement = up.vec3_scale(extraVerticalLength, outAdjustedVerticalMovement);
+                //console.error("adjust", extraVerticalLength.toFixed(4));
+            } else if (!sameSignThanExtra && (
+                collisionRuntimeParams.myHorizontalMovementHasAdjustedVerticalMovementBasedOnGroundPerceivedAngleUphill ||
+                collisionRuntimeParams.myHorizontalMovementHasAdjustedVerticalMovementBasedOnCeilingPerceivedAngleUphill)) {
+                outAdjustedVerticalMovement = verticalMovement.vec3_add(up.vec3_scale(extraVerticalLength, outAdjustedVerticalMovement), outAdjustedVerticalMovement);
+                //console.error("add", extraVerticalLength.toFixed(4));
+            } else {
+                //console.error("nope", extraVerticalLength.toFixed(4), verticalMovementLength.toFixed(4));
+                collisionRuntimeParams.myHorizontalMovementHasAdjustedVerticalMovementBasedOnCeilingPerceivedAngleUphill = false;
+                collisionRuntimeParams.myHorizontalMovementHasAdjustedVerticalMovementBasedOnGroundPerceivedAngleUphill = false;
+                collisionRuntimeParams.myHorizontalMovementHasAdjustedVerticalMovementBasedOnCeilingPerceivedAngleDownhill = false;
+                collisionRuntimeParams.myHorizontalMovementHasAdjustedVerticalMovementBasedOnGroundPerceivedAngleDownhill = false;
+            }
+        }
+
+        return outAdjustedVerticalMovement;
+    }
+}();
+
+// useless now
 CollisionCheck.prototype._computeExtraSurfaceVerticalMovement = function () {
     let direction = PP.vec3_create();
     let tempVector = PP.vec3_create();
@@ -199,7 +294,7 @@ CollisionCheck.prototype._computeExtraSurfaceVerticalMovement = function () {
         if (!horizontalMovement.vec3_isZero()) {
             if (collisionRuntimeParams.myRealIsOnGround && collisionRuntimeParams.myGroundAngle != 0) {
                 direction = horizontalMovement.vec3_normalize(direction);
-                let groundPerceivedAngle = LocomotionUtils.computeSurfacePerceivedAngle(
+                let groundPerceivedAngle = this.computeSurfacePerceivedAngle(
                     collisionRuntimeParams.myGroundNormal,
                     direction, up, true);
 
@@ -211,7 +306,7 @@ CollisionCheck.prototype._computeExtraSurfaceVerticalMovement = function () {
                 }
             } else if (collisionRuntimeParams.myRealIsOnCeiling && collisionRuntimeParams.myCeilingAngle != 0) {
                 direction = horizontalMovement.vec3_normalize(direction);
-                let ceilingPerceivedAngle = LocomotionUtils.computeSurfacePerceivedAngle(
+                let ceilingPerceivedAngle = this.computeSurfacePerceivedAngle(
                     collisionRuntimeParams.myCeilingNormal,
                     direction, up, false);
 
@@ -319,7 +414,7 @@ CollisionCheck.prototype._gatherSurfaceInfo = function () {
                 surfaceNormal = verticalDirection.vec3_negate(surfaceNormal);
             }
 
-            surfacePerceivedAngle = LocomotionUtils.computeSurfacePerceivedAngle(surfaceNormal, forwardForPerceivedAngle, up, isGround);
+            surfacePerceivedAngle = this.computeSurfacePerceivedAngle(surfaceNormal, forwardForPerceivedAngle, up, isGround);
         }
 
         if (isGround) {
@@ -339,13 +434,50 @@ CollisionCheck.prototype._gatherSurfaceInfo = function () {
             collisionRuntimeParams.myCeilingPerceivedAngle = surfacePerceivedAngle;
             collisionRuntimeParams.myCeilingNormal.vec3_copy(surfaceNormal);
 
-            if (isOnSurface && (collisioingMaxSurfaceAngle == null || collisionRuntimeParams.myCeilingAngle <= collisionCheckParams.myIsOnCeilingMaxSurfaceAngle)) {
+            if (isOnSurface && (collisionCheckParams.myIsOnCeilingMaxSurfaceAngle == null || collisionRuntimeParams.myCeilingAngle <= collisionCheckParams.myIsOnCeilingMaxSurfaceAngle)) {
                 collisionRuntimeParams.myIsOnCeiling = isOnSurface;
             }
         }
     };
 }();
 
+CollisionCheck.prototype.computeSurfacePerceivedAngle = function () {
+    let forwardOnSurface = PP.vec3_create();
+    let verticalDirection = PP.vec3_create();
+    return function computeSurfacePerceivedAngle(surfaceNormal, forward, up, isGround = true) {
+        let surfacePerceivedAngle = 0;
+
+        verticalDirection.vec3_copy(up);
+        if (!isGround) {
+            verticalDirection.vec3_negate(verticalDirection);
+        }
+
+        let surfaceAngle = surfaceNormal.vec3_angle(verticalDirection);
+        if (surfaceAngle <= Math.PP_EPSILON_DEGREES) {
+            surfaceAngle = 0;
+        } else if (surfaceAngle >= 180 - Math.PP_EPSILON_DEGREES) {
+            surfaceAngle = 180;
+        }
+
+        forwardOnSurface = forward.vec3_projectOnPlaneAlongAxis(surfaceNormal, up, forwardOnSurface);
+        surfacePerceivedAngle = forwardOnSurface.vec3_angle(forward);
+
+        let isFartherOnUp = forwardOnSurface.vec3_isFartherAlongAxis(forward, up);
+        if ((!isFartherOnUp && isGround) || (isFartherOnUp && !isGround)) {
+            surfacePerceivedAngle *= -1;
+        }
+
+        if (Math.abs(surfacePerceivedAngle) >= surfaceAngle) {
+            if (surfaceAngle != 0 && surfaceAngle != 180) {
+                surfacePerceivedAngle = surfaceAngle * Math.pp_sign(surfacePerceivedAngle);
+            } else {
+                surfacePerceivedAngle = surfaceAngle;
+            }
+        }
+
+        return surfacePerceivedAngle;
+    };
+}();
 
 
 Object.defineProperty(CollisionCheck.prototype, "_surfaceTooSteep", { enumerable: false });

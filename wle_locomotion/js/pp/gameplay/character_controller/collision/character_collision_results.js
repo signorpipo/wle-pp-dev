@@ -221,19 +221,25 @@ PP.CharacterCollisionSurfaceResults = class CharacterCollisionCheckTransformResu
     constructor() {
         this.myHasSnappedOnSurface = false;
         this.myHasPoppedOutSurface = false;
-        this.myHorizontalMovementHasAdjustedVerticalMovementBasedOnSurfacePerceivedAngle = false;
+        this.myHorizontalMovementHasAdjustedVerticalMovementBasedOnSurfacePerceivedAngleDownhill = false;
+        this.myHorizontalMovementHasAdjustedVerticalMovementBasedOnSurfacePerceivedAngleUphill = false;
+        this.myVerticalMovementHasAdjustedHorizontalMovementBasedOnSurfaceAngleDownhill = false;
     }
 
     reset() {
         this.myHasSnappedOnSurface = false;
         this.myHasPoppedOutSurface = false;
-        this.myHorizontalMovementHasAdjustedVerticalMovementBasedOnSurfacePerceivedAngle = false;
+        this.myHorizontalMovementHasAdjustedVerticalMovementBasedOnSurfacePerceivedAngleDownhill = false;
+        this.myHorizontalMovementHasAdjustedVerticalMovementBasedOnSurfacePerceivedAngleUphill = false;
+        this.myVerticalMovementHasAdjustedHorizontalMovementBasedOnSurfaceAngleDownhill = false;
     }
 
     copy(other) {
         this.myHasSnappedOnSurface = other.myHasSnappedOnSurface;
         this.myHasPoppedOutSurface = other.myHasPoppedOutSurface;
-        this.myHorizontalMovementHasAdjustedVerticalMovementBasedOnSurfacePerceivedAngle = other.myHorizontalMovementHasAdjustedVerticalMovementBasedOnSurfacePerceivedAngle;
+        this.myHorizontalMovementHasAdjustedVerticalMovementBasedOnSurfacePerceivedAngleDownhill = other.myHorizontalMovementHasAdjustedVerticalMovementBasedOnSurfacePerceivedAngleDownhill;
+        this.myHorizontalMovementHasAdjustedVerticalMovementBasedOnSurfacePerceivedAngleUphill = other.myHorizontalMovementHasAdjustedVerticalMovementBasedOnSurfacePerceivedAngleUphill;
+        this.myVerticalMovementHasAdjustedHorizontalMovementBasedOnSurfaceAngleDownhill = other.myVerticalMovementHasAdjustedHorizontalMovementBasedOnSurfaceAngleDownhill;
     }
 };
 

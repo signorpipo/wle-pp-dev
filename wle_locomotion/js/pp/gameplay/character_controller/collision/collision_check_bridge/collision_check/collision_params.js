@@ -64,7 +64,25 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myVerticalMovementCheckEnabled = false;
         this.myVerticalPositionCheckEnabled = false;
         this.myFeetRadius = 0;
-        this.myAdjustVerticalMovementWithSurfaceAngle = false; //#TODO split into ceiling and ground
+
+        this.myAdjustVerticalMovementWithGroundAngleDownhill = false;
+        this.myAdjustVerticalMovementWithGroundAngleUphill = false;
+        this.myAdjustVerticalMovementWithGroundAngleDownhillMaxAngle = null;
+        this.myAdjustVerticalMovementWithGroundAngleUphillMaxAngle = null;
+        this.myAdjustVerticalMovementWithGroundAngleDownhillMaxPerceivedAngle = null;
+        this.myAdjustVerticalMovementWithGroundAngleUphillMaxPerceivedAngle = null;
+        this.myAdjustHorizontalMovementWithGroundAngleDownhill = false;
+        this.myAdjustHorizontalMovementWithGroundAngleDownhillMinAngle = null;
+
+        this.myAdjustVerticalMovementWithCeilingAngleDownhill = false;
+        this.myAdjustVerticalMovementWithCeilingAngleUphill = false;
+        this.myAdjustVerticalMovementWithCeilingAngleDownhillMaxAngle = null;
+        this.myAdjustVerticalMovementWithCeilingAngleUphillMaxAngle = null;
+        this.myAdjustVerticalMovementWithCeilingAngleDownhillMaxAngle = null;
+        this.myAdjustVerticalMovementWithCeilingAngleUphillMaxAngle = null;
+        this.myAdjustHorizontalMovementWithCeilingAngleDownhill = false;
+        this.myAdjustHorizontalMovementWithCeilingAngleDownhillMinAngle = null;
+
         this.myCheckVerticalFixedForwardEnabled = false;
         this.myCheckVerticalFixedForward = PP.vec3_create();
         this.myCheckVerticalBothDirection = false;
@@ -235,7 +253,25 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myVerticalMovementCheckEnabled = other.myVerticalMovementCheckEnabled;
         this.myVerticalPositionCheckEnabled = other.myVerticalPositionCheckEnabled;
         this.myFeetRadius = other.myFeetRadius;
-        this.myAdjustVerticalMovementWithSurfaceAngle = other.myAdjustVerticalMovementWithSurfaceAngle;
+
+        this.myAdjustVerticalMovementWithGroundAngleDownhill = other.myAdjustVerticalMovementWithGroundAngleDownhill;
+        this.myAdjustVerticalMovementWithGroundAngleUphill = other.myAdjustVerticalMovementWithGroundAngleUphill;
+        this.myAdjustVerticalMovementWithGroundAngleDownhillMaxAngle = other.myAdjustVerticalMovementWithGroundAngleDownhillMaxAngle;
+        this.myAdjustVerticalMovementWithGroundAngleUphillMaxAngle = other.myAdjustVerticalMovementWithGroundAngleUphillMaxAngle;
+        this.myAdjustVerticalMovementWithGroundAngleDownhillMaxPerceivedAngle = other.myAdjustVerticalMovementWithGroundAngleDownhillMaxPerceivedAngle;
+        this.myAdjustVerticalMovementWithGroundAngleUphillMaxPerceivedAngle = other.myAdjustVerticalMovementWithGroundAngleUphillMaxPerceivedAngle;
+        this.myAdjustHorizontalMovementWithGroundAngleDownhill = other.myAdjustHorizontalMovementWithGroundAngleDownhill;
+        this.myAdjustHorizontalMovementWithGroundAngleDownhillMinAngle = other.myAdjustHorizontalMovementWithGroundAngleDownhillMinAngle;
+
+        this.myAdjustVerticalMovementWithCeilingAngleDownhill = other.myAdjustVerticalMovementWithCeilingAngleDownhill;
+        this.myAdjustVerticalMovementWithCeilingAngleUphill = other.myAdjustVerticalMovementWithCeilingAngleUphill;
+        this.myAdjustVerticalMovementWithCeilingAngleDownhillMaxAngle = other.myAdjustVerticalMovementWithCeilingAngleDownhillMaxAngle;
+        this.myAdjustVerticalMovementWithCeilingAngleUphillMaxAngle = other.myAdjustVerticalMovementWithCeilingAngleUphillMaxAngle;
+        this.myAdjustVerticalMovementWithCeilingAngleDownhillMaxAngle = other.myAdjustVerticalMovementWithCeilingAngleDownhillMaxAngle;
+        this.myAdjustVerticalMovementWithCeilingAngleUphillMaxAngle = other.myAdjustVerticalMovementWithCeilingAngleUphillMaxAngle;
+        this.myAdjustHorizontalMovementWithCeilingAngleDownhill = other.myAdjustHorizontalMovementWithCeilingAngleDownhill;
+        this.myAdjustHorizontalMovementWithCeilingAngleDownhillMinAngle = other.myAdjustHorizontalMovementWithCeilingAngleDownhillMinAngle;
+
         this.myCheckVerticalFixedForwardEnabled = other.myCheckVerticalFixedForwardEnabled;
         this.myCheckVerticalFixedForward.vec3_copy(other.myCheckVerticalFixedForward);
         this.myCheckVerticalBothDirection = other.myCheckVerticalBothDirection;
@@ -378,8 +414,15 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.myHasSnappedOnCeiling = false;
         this.myHasPoppedOutGround = false;
         this.myHasPoppedOutCeiling = false;
-        this.myHasAdjustedVerticalMovementWithSurfaceAngle = false;
         this.myHasReducedVerticalMovement = false;
+
+        this.myHorizontalMovementHasAdjustedVerticalMovementBasedOnGroundPerceivedAngleDownhill = false;
+        this.myHorizontalMovementHasAdjustedVerticalMovementBasedOnGroundPerceivedAngleUphill = false;
+        this.myVerticalMovementHasAdjustedHorizontalMovementBasedOnGroundAngleDownhill = false;
+
+        this.myHorizontalMovementHasAdjustedVerticalMovementBasedOnCeilingPerceivedAngleDownhill = false;
+        this.myHorizontalMovementHasAdjustedVerticalMovementBasedOnCeilingPerceivedAngleUphill = false;
+        this.myVerticalMovementHasAdjustedHorizontalMovementBasedOnCeilingAngleDownhill = false;
 
         this.myIsSliding = false;
         this.myIsSlidingIntoOppositeDirection = false;
@@ -454,8 +497,15 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.myHasSnappedOnCeiling = false;
         this.myHasPoppedOutGround = false;
         this.myHasPoppedOutCeiling = false;
-        this.myHasAdjustedVerticalMovementWithSurfaceAngle = false;
         this.myHasReducedVerticalMovement = false;
+
+        this.myHorizontalMovementHasAdjustedVerticalMovementBasedOnGroundPerceivedAngleDownhill = false;
+        this.myHorizontalMovementHasAdjustedVerticalMovementBasedOnGroundPerceivedAngleUphill = false;
+        this.myVerticalMovementHasAdjustedHorizontalMovementBasedOnGroundAngleDownhill = false;
+
+        this.myHorizontalMovementHasAdjustedVerticalMovementBasedOnCeilingPerceivedAngleDownhill = false;
+        this.myHorizontalMovementHasAdjustedVerticalMovementBasedOnCeilingPerceivedAngleUphill = false;
+        this.myVerticalMovementHasAdjustedHorizontalMovementBasedOnCeilingAngleDownhill = false;
 
         this.myIsSliding = false;
         this.myIsSlidingIntoOppositeDirection = false;
@@ -530,8 +580,15 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.myHasSnappedOnCeiling = other.myHasSnappedOnCeiling;
         this.myHasPoppedOutGround = other.myHasPoppedOutGround;
         this.myHasPoppedOutCeiling = other.myHasPoppedOutCeiling;
-        this.myHasAdjustedVerticalMovementWithSurfaceAngle = other.myHasAdjustedVerticalMovementWithSurfaceAngle;
         this.myHasReducedVerticalMovement = other.myHasReducedVerticalMovement;
+
+        this.myHorizontalMovementHasAdjustedVerticalMovementBasedOnGroundPerceivedAngleDownhill = other.myHorizontalMovementHasAdjustedVerticalMovementBasedOnGroundPerceivedAngleDownhill;
+        this.myHorizontalMovementHasAdjustedVerticalMovementBasedOnGroundPerceivedAngleUphill = other.myHorizontalMovementHasAdjustedVerticalMovementBasedOnGroundPerceivedAngleUphill;
+        this.myVerticalMovementHasAdjustedHorizontalMovementBasedOnGroundAngleDownhill = other.myVerticalMovementHasAdjustedHorizontalMovementBasedOnGroundAngleDownhill;
+
+        this.myHorizontalMovementHasAdjustedVerticalMovementBasedOnCeilingPerceivedAngleDownhill = other.myHorizontalMovementHasAdjustedVerticalMovementBasedOnCeilingPerceivedAngleDownhill;
+        this.myHorizontalMovementHasAdjustedVerticalMovementBasedOnCeilingPerceivedAngleUphill = other.myHorizontalMovementHasAdjustedVerticalMovementBasedOnCeilingPerceivedAngleUphill;
+        this.myVerticalMovementHasAdjustedHorizontalMovementBasedOnCeilingAngleDownhill = other.myVerticalMovementHasAdjustedHorizontalMovementBasedOnCeilingAngleDownhill;
 
         this.myIsSliding = other.myIsSliding;
         this.myIsSlidingIntoOppositeDirection = other.myIsSlidingIntoOppositeDirection;

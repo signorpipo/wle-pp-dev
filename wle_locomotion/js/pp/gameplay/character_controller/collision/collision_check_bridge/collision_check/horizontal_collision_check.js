@@ -170,7 +170,7 @@ CollisionCheck.prototype._ignoreSurfaceAngle = function () {
             if (isGround && collisionCheckParams.myGroundAngleToIgnore > 0 && (surfaceAngle > collisionCheckParams.myGroundAngleToIgnore + 0.0001)) {
                 if (collisionCheckParams.myGroundAngleToIgnoreWithPerceivedAngle > 0 &&
                     surfaceAngle <= collisionCheckParams.myGroundAngleToIgnoreWithPerceivedAngle + 0.0001) {
-                    let perceivedAngle = LocomotionUtils.computeSurfacePerceivedAngle(
+                    let perceivedAngle = this.computeSurfacePerceivedAngle(
                         hit.myNormal,
                         movementDirection, up, true);
                     surfaceAngle = Math.abs(perceivedAngle);
@@ -178,7 +178,7 @@ CollisionCheck.prototype._ignoreSurfaceAngle = function () {
             } else if (!isGround && collisionCheckParams.myCeilingAngleToIgnore > 0 && surfaceAngle > collisionCheckParams.myCeilingAngleToIgnore + 0.0001) {
                 if (collisionCheckParams.myCeilingAngleToIgnoreWithPerceivedAngle > 0 &&
                     surfaceAngle <= collisionCheckParams.myCeilingAngleToIgnoreWithPerceivedAngle + 0.0001) {
-                    let perceivedAngle = LocomotionUtils.computeSurfacePerceivedAngle(
+                    let perceivedAngle = this.computeSurfacePerceivedAngle(
                         hit.myNormal,
                         movementDirection, up, false);
                     surfaceAngle = Math.abs(perceivedAngle);
