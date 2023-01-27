@@ -17,7 +17,8 @@ WL.registerComponent('pp-tool-cursor', {
         this._myCursorTargetCollisionGroup = 7;
     },
     start: function () {
-        this._myFixForwardObject = WL.scene.addObject(this.object);
+        this._myToolCursorObject = WL.scene.addObject(this.object);
+        this._myFixForwardObject = WL.scene.addObject(this._myToolCursorObject);
 
         if (this._myFixForward) {
             this._myFixForwardObject.pp_rotateObject([0, 180, 0]);
@@ -46,7 +47,7 @@ WL.registerComponent('pp-tool-cursor', {
             }
         }
 
-        this._myCursorObjectNonVR = WL.scene.addObject(null);
+        this._myCursorObjectNonVR = WL.scene.addObject(this._myToolCursorObject);
 
         {
             let cursorComponent = this._myCursorObjectNonVR.addComponent("cursor", { "collisionGroup": this._myCursorTargetCollisionGroup, "handedness": this._myHandedness + 1 });
@@ -57,27 +58,27 @@ WL.registerComponent('pp-tool-cursor', {
             cursorComponent.setViewComponent(PP.myPlayerObjects.myNonVRCamera.getComponent("view"));
         }
 
-        let fingerCursorObject = null;
+        let fingerCursorMeshObject = null;
         let fingerCollisionSize = 0.0125;
 
         if (this._myShowFingerCursor) {
-            fingerCursorObject = this.object.pp_addObject();
+            fingerCursorMeshObject = this._myToolCursorObject.pp_addObject();
 
-            let meshComponent = fingerCursorObject.addComponent("mesh");
+            let meshComponent = fingerCursorMeshObject.addComponent("mesh");
             meshComponent.mesh = PP.myDefaultResources.myMeshes.mySphere;
             meshComponent.material = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
             meshComponent.material.color = this._myCursorColor;
 
-            fingerCursorObject.pp_setScale(fingerCollisionSize);
+            fingerCursorMeshObject.pp_setScale(fingerCollisionSize);
         }
 
-        this._myFingerCursorObject = WL.scene.addObject(this.object);
+        this._myFingerCursorObject = WL.scene.addObject(this._myToolCursorObject);
         this._myFingerCursorComponent = this._myFingerCursorObject.addComponent("pp-finger-cursor", {
             "_myHandedness": this._myHandedness,
             "_myEnableMultipleClicks": true,
             "_myCollisionGroup": this._myCursorTargetCollisionGroup,
             "_myCollisionSize": fingerCollisionSize,
-            "_myCursorObject": fingerCursorObject
+            "_myCursorObject": fingerCursorMeshObject
         });
 
         this._myCursorObjectVR.pp_setActive(false);

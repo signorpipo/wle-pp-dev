@@ -17,7 +17,7 @@ WL.registerComponent('pp-finger-cursor', {
         this._myMultipleClickDelay = 0.3;
     },
     start: function () {
-        this._myCursorObjectRoot = WL.scene.addObject(null);
+        this._myCursorObjectRoot = WL.scene.addObject(this.object);
 
         if (this._myCursorObject == null) {
             this._myCursorObject = this._myCursorObjectRoot.pp_addObject();
