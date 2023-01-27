@@ -393,7 +393,7 @@ CollisionCheck.prototype._computeExtraSurfaceVerticalMovement = function () {
         outExtraSurfaceVerticalMovement.vec3_zero();
 
         if (!horizontalMovement.vec3_isZero()) {
-            if (collisionRuntimeParams.myRealIsOnGround && collisionRuntimeParams.myGroundAngle != 0) {
+            if (collisionRuntimeParams.myIsOnGround && collisionRuntimeParams.myGroundAngle != 0) {
                 direction = horizontalMovement.vec3_normalize(direction);
                 let groundPerceivedAngle = this.computeSurfacePerceivedAngle(
                     collisionRuntimeParams.myGroundNormal,
@@ -405,7 +405,7 @@ CollisionCheck.prototype._computeExtraSurfaceVerticalMovement = function () {
                 if (Math.abs(extraVerticalLength) > 0.00001 && (collisionCheckParams.mySnapOnGroundEnabled || extraVerticalLength > 0)) {
                     outExtraSurfaceVerticalMovement.vec3_add(up.vec3_scale(extraVerticalLength, tempVector), outExtraSurfaceVerticalMovement);
                 }
-            } else if (collisionRuntimeParams.myRealIsOnCeiling && collisionRuntimeParams.myCeilingAngle != 0) {
+            } else if (collisionRuntimeParams.myIsOnCeiling && collisionRuntimeParams.myCeilingAngle != 0) {
                 direction = horizontalMovement.vec3_normalize(direction);
                 let ceilingPerceivedAngle = this.computeSurfacePerceivedAngle(
                     collisionRuntimeParams.myCeilingNormal,

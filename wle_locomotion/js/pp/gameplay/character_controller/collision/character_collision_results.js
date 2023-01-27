@@ -282,9 +282,6 @@ PP.CharacterCollisionInternalResults = class CharacterCollisionSplitMovementResu
         this.myWallSlideFlickerPreventionForceCheckCounter = 0;
         this.myWallSlide90DegreesDirectionSign = 0;
         this.myWallSlide90DegreesRecomputeDirectionSign = true;
-
-        this.myRealIsOnGround = false;
-        this.myRealIsOnCeiling = false;
     }
 
     reset() {
@@ -302,9 +299,6 @@ PP.CharacterCollisionInternalResults = class CharacterCollisionSplitMovementResu
         this.myWallSlideFlickerPreventionForceCheckCounter = 0;
         this.myWallSlide90DegreesDirectionSign = 0;
         this.myWallSlide90DegreesRecomputeDirectionSign = true;
-
-        this.myRealIsOnGround = false;
-        this.myRealIsOnCeiling = false;
     }
 
     copy(other) {
@@ -322,8 +316,5 @@ PP.CharacterCollisionInternalResults = class CharacterCollisionSplitMovementResu
         this.myWallSlideFlickerPreventionForceCheckCounter = other.myWallSlideFlickerPreventionForceCheckCounter;
         this.myWallSlide90DegreesDirectionSign = other.myWallSlide90DegreesDirectionSign;
         this.myWallSlide90DegreesRecomputeDirectionSign = other.myWallSlide90DegreesRecomputeDirectionSign;
-
-        this.myRealIsOnGround = other.myRealIsOnGround;
-        this.myRealIsOnCeiling = other.myRealIsOnCeiling;
     }
 };

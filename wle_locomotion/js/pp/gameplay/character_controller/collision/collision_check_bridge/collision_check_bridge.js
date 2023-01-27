@@ -79,13 +79,11 @@ PP.CollisionCheckBridge = {
         outCollisionRuntimeParams.myGroundAngle = characterCollisionResults.myGroundInfo.mySurfaceAngle;
         outCollisionRuntimeParams.myGroundPerceivedAngle = characterCollisionResults.myGroundInfo.mySurfacePerceivedAngle;
         outCollisionRuntimeParams.myGroundNormal.vec3_copy(characterCollisionResults.myGroundInfo.mySurfaceNormal);
-        outCollisionRuntimeParams.myRealIsOnGround = characterCollisionResults.myInternalResults.myRealIsOnGround;
 
         outCollisionRuntimeParams.myIsOnCeiling = characterCollisionResults.myCeilingInfo.myIsOnSurface;
         outCollisionRuntimeParams.myCeilingAngle = characterCollisionResults.myCeilingInfo.mySurfaceAngle;
         outCollisionRuntimeParams.myCeilingPerceivedAngle = characterCollisionResults.myCeilingInfo.mySurfacePerceivedAngle;
         outCollisionRuntimeParams.myCeilingNormal.vec3_copy(characterCollisionResults.myCeilingInfo.mySurfaceNormal);
-        outCollisionRuntimeParams.myRealIsOnCeiling = characterCollisionResults.myInternalResults.myRealIsOnCeiling;
 
         outCollisionRuntimeParams.myHorizontalMovementCanceled = characterCollisionResults.myHorizontalMovementResults.myMovementFailed;
         outCollisionRuntimeParams.myIsCollidingHorizontally = characterCollisionResults.myHorizontalMovementResults.myIsColliding;
@@ -196,13 +194,11 @@ PP.CollisionCheckBridge = {
             outCharacterCollisionResults.myGroundInfo.mySurfaceAngle = collisionRuntimeParams.myGroundAngle;
             outCharacterCollisionResults.myGroundInfo.mySurfacePerceivedAngle = collisionRuntimeParams.myGroundPerceivedAngle;
             outCharacterCollisionResults.myGroundInfo.mySurfaceNormal.vec3_copy(collisionRuntimeParams.myGroundNormal);
-            outCharacterCollisionResults.myInternalResults.myRealIsOnGround = collisionRuntimeParams.myRealIsOnGround;
 
             outCharacterCollisionResults.myCeilingInfo.myIsOnSurface = collisionRuntimeParams.myIsOnCeiling;
             outCharacterCollisionResults.myCeilingInfo.mySurfaceAngle = collisionRuntimeParams.myCeilingAngle;
             outCharacterCollisionResults.myCeilingInfo.mySurfacePerceivedAngle = collisionRuntimeParams.myCeilingPerceivedAngle;
             outCharacterCollisionResults.myCeilingInfo.mySurfaceNormal.vec3_copy(collisionRuntimeParams.myCeilingNormal);
-            outCharacterCollisionResults.myInternalResults.myRealIsOnCeiling = collisionRuntimeParams.myRealIsOnCeiling;
 
             outCharacterCollisionResults.myGroundResults.myHasSnappedOnSurface = collisionRuntimeParams.myHasSnappedOnGround;
             outCharacterCollisionResults.myGroundResults.myHasPoppedOutSurface = collisionRuntimeParams.myHasPoppedOutGround;
@@ -378,8 +374,6 @@ PP.CollisionCheckBridge = {
             outCollisionCheckParams.myVerticalFixToComputeCeilingInfo = characterColliderSetup.myCeilingSetup.myCollectSurfaceNormalMaxInsideDistance;
             outCollisionCheckParams.myIsOnGroundIfInsideHit = characterColliderSetup.myGroundSetup.myIsOnSurfaceIfInsideCollision;
             outCollisionCheckParams.myIsOnCeilingIfInsideHit = characterColliderSetup.myCeilingSetup.myIsOnSurfaceIfInsideCollision;
-            outCollisionCheckParams.myIsOnGroundMaxSurfaceAngle = characterColliderSetup.myGroundSetup.myIsOnSurfaceMaxSurfaceAngle;
-            outCollisionCheckParams.myIsOnCeilingMaxSurfaceAngle = characterColliderSetup.myCeilingSetup.myIsOnSurfaceMaxSurfaceAngle;
 
             outCollisionCheckParams.myAllowSurfaceSteepFix = characterColliderSetup.myGroundSetup.myAllowExitAttemptWhenOnNotIgnorableSurfacePerceivedAngle || characterColliderSetup.myCeilingSetup.myAllowExitAttemptWhenOnNotIgnorableSurfacePerceivedAngle;
             outCollisionCheckParams.myMustStayOnGround = characterColliderSetup.myGroundSetup.myMustStayOnSurface;
