@@ -21,7 +21,8 @@ PP.VisualRaycastParams = class VisualRaycastParams {
         this.myRayMaterial = null;
         this.myHitNormalMaterial = null;
 
-        this.myParent = null; // if this is set the parent will not be the visual root anymore, the positions will be local to this object
+        this.myParent = PP.myVisualData.myRootObject;
+        this.myIsLocal = false;
 
         this.myType = PP.VisualElementType.RAYCAST;
     }
@@ -156,6 +157,7 @@ PP.VisualRaycast = class VisualRaycast {
                 }
 
                 visualRaycastParams.myParent = this._myParams.myParent;
+                visualRaycastParams.myIsLocal = this._myParams.myIsLocal;
 
                 this._myVisualRaycast.paramsUpdated();
 
@@ -184,6 +186,7 @@ PP.VisualRaycast = class VisualRaycast {
                     }
 
                     visualRaycastHitParams.myParent = this._myParams.myParent;
+                    visualRaycastHitParams.myIsLocal = this._myParams.myIsLocal;
 
                     visualRaycastHit.paramsUpdated();
 
@@ -206,6 +209,7 @@ PP.VisualRaycast = class VisualRaycast {
                 }
 
                 visualRaycastParams.myParent = this._myParams.myParent;
+                visualRaycastParams.myIsLocal = this._myParams.myIsLocal;
 
                 this._myVisualRaycast.paramsUpdated();
 
@@ -244,6 +248,7 @@ PP.VisualRaycast = class VisualRaycast {
         }
 
         clonedParams.myParent = this._myParams.myParent;
+        clonedParams.myIsLocal = this._myParams.myIsLocal;
 
         let clone = new PP.VisualRaycast(clonedParams);
         clone.setAutoRefresh(this._myAutoRefresh);

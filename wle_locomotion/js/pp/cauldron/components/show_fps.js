@@ -24,6 +24,7 @@ WL.registerComponent('pp-show-fps', {
         }
 
         visualParams.myParent = this._myVisualFPSParent;
+        visualParams.myIsLocal = true;
 
         this._myVisualFPS = new PP.VisualText(visualParams);
 

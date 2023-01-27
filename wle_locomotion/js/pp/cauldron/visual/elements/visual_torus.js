@@ -27,7 +27,8 @@ PP.VisualTorusParams = class VisualTorusParams {
         this.myMaterial = null;     // null means it will default on PP.myDefaultResources.myMaterials.myFlatOpaque
         this.myColor = null;        // if this is set and material is null, it will use the default flat opaque material with this color
 
-        this.myParent = null;       // if this is set the parent will not be the visual root anymore, the positions will be local to this object
+        this.myParent = PP.myVisualData.myRootObject;
+        this.myIsLocal = false;
 
         this.myType = PP.VisualElementType.TORUS;
     }
@@ -140,6 +141,7 @@ PP.VisualTorus = class VisualTorus {
             visualSegment.setVisible(false);
 
             visualSegment.getParams().myParent = this._myTorusRootObject;
+            visualSegment.getParams().myIsLocal = true;
 
             this._myVisualSegmentList.push(visualSegment);
         }
@@ -168,6 +170,7 @@ PP.VisualTorus = class VisualTorus {
         }
 
         clonedParams.myParent = this._myParams.myParent;
+        clonedParams.myIsLocal = this._myParams.myIsLocal;
 
         let clone = new PP.VisualTorus(clonedParams);
         clone.setAutoRefresh(this._myAutoRefresh);
@@ -195,8 +198,13 @@ PP.VisualTorus.prototype._refresh = function () {
             visualSegment.setVisible(false);
         }
 
-        this._myTorusRootObject.pp_setParent(this._myParams.myParent == null ? PP.myVisualData.myRootObject : this._myParams.myParent, false);
-        this._myTorusRootObject.pp_setTransformLocal(this._myParams.myTransform);
+        this._myTorusRootObject.pp_setParent(this._myParams.myParent, false);
+
+        if (this._myParams.myIsLocal) {
+            this._myTorusRootObject.pp_setTransformLocal(this._myParams.myTransform);
+        } else {
+            this._myTorusRootObject.pp_setTransform(this._myParams.myTransform);
+        }
 
         let sliceAngle = 2 * Math.PI / this._myParams.mySegmentsAmount;
         segmentStart.vec3_set(this._myParams.myRadius, 0, 0);

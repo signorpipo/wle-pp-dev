@@ -201,6 +201,7 @@ PlayerLocomotionTeleportDetectionVisualizer.prototype._setupVisuals = function (
             }
 
             visualParams.myParent = this._myVisualTeleportPositionObject;
+            visualParams.myIsLocal = true;
 
             this._myValidVisualTeleportPositionTorus = new PP.VisualTorus(visualParams);
         }
@@ -218,6 +219,7 @@ PlayerLocomotionTeleportDetectionVisualizer.prototype._setupVisuals = function (
             }
 
             visualParams.myParent = this._myVisualTeleportPositionObject;
+            visualParams.myIsLocal = true;
 
             let visualTorusParams = this._myValidVisualTeleportPositionTorus.getParams();
 

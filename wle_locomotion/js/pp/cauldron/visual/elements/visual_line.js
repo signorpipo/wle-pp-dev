@@ -26,7 +26,8 @@ PP.VisualLineParams = class VisualLineParams {
         this.myMaterial = null;     // null means it will default on PP.myDefaultResources.myMaterials.myFlatOpaque
         this.myColor = null;        // if this is set and material is null, it will use the default flat opaque material with this color
 
-        this.myParent = null;       // if this is set the parent will not be the visual root anymore, the positions will be local to this object
+        this.myParent = PP.myVisualData.myRootObject;
+        this.myIsLocal = false;
 
         this.myType = PP.VisualElementType.LINE;
     }
@@ -140,6 +141,7 @@ PP.VisualLine = class VisualLine {
         }
 
         clonedParams.myParent = this._myParams.myParent;
+        clonedParams.myIsLocal = this._myParams.myIsLocal;
 
         let clone = new PP.VisualLine(clonedParams);
         clone.setAutoRefresh(this._myAutoRefresh);
@@ -156,18 +158,28 @@ PP.VisualLine.prototype._refresh = function () {
 
     let forward = PP.vec3_create(0, 1, 0);
     return function _refresh() {
-        this._myLineRootObject.pp_setParent(this._myParams.myParent == null ? PP.myVisualData.myRootObject : this._myParams.myParent, false);
+        this._myLineRootObject.pp_setParent(this._myParams.myParent, false);
 
-        this._myLineRootObject.pp_setPositionLocal(this._myParams.myStart);
-
-        this._myLineObject.pp_resetPositionLocal();
-        this._myLineObject.pp_resetScaleLocal();
+        if (this._myParams.myIsLocal) {
+            this._myLineRootObject.pp_setPositionLocal(this._myParams.myStart);
+        } else {
+            this._myLineRootObject.pp_setPosition(this._myParams.myStart);
+        }
 
         scaleLine.vec3_set(this._myParams.myThickness / 2, this._myParams.myLength / 2, this._myParams.myThickness / 2);
-        this._myLineObject.pp_scaleObject(scaleLine);
+        if (this._myParams.myIsLocal) {
+            this._myLineObject.pp_setScaleLocal(scaleLine);
+        } else {
+            this._myLineObject.pp_setScale(scaleLine);
+        }
 
-        this._myLineObject.pp_setUpLocal(this._myParams.myDirection, forward);
+        if (this._myParams.myIsLocal) {
+            this._myLineObject.pp_setUpLocal(this._myParams.myDirection, forward);
+        } else {
+            this._myLineObject.pp_setUp(this._myParams.myDirection, forward);
+        }
 
+        this._myLineObject.pp_resetPositionLocal();
         translateLine.vec3_set(0, this._myParams.myLength / 2, 0);
         this._myLineObject.pp_translateObject(translateLine);
 

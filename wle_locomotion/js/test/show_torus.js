@@ -18,6 +18,7 @@ WL.registerComponent('show-torus', {
         visualParams.mySegmentThickness = PP.myEasyTuneVariables.get("Torus Thickness");
         visualParams.myMaterial = this._myMaterial;
         visualParams.myParent = this.object;
+        visualParams.myIsLocal = true;
         PP.myVisualManager.draw(visualParams, 0);
     }
 });

@@ -20,7 +20,8 @@ PP.VisualTransformParams = class VisualTransformParams {
         this.myUpMaterial = null;
         this.myRightMaterial = null;
 
-        this.myParent = null; // if this is set the parent will not be the visual root anymore, the positions will be local to this object
+        this.myParent = PP.myVisualData.myRootObject;
+        this.myIsLocal = false;
 
         this.myType = PP.VisualElementType.TRANSFORM;
     }
@@ -132,6 +133,7 @@ PP.VisualTransform = class VisualTransform {
         }
 
         clonedParams.myParent = this._myParams.myParent;
+        clonedParams.myIsLocal = this._myParams.myIsLocal;
 
         let clone = new PP.VisualTransform(clonedParams);
         clone.setAutoRefresh(this._myAutoRefresh);
@@ -180,6 +182,7 @@ PP.VisualTransform.prototype._refresh = function () {
             }
 
             visualArrowParams.myParent = this._myParams.myParent;
+            visualArrowParams.myIsLocal = this._myParams.myIsLocal;
 
             this._myVisualRight.paramsUpdated();
         }
@@ -198,6 +201,7 @@ PP.VisualTransform.prototype._refresh = function () {
             }
 
             visualArrowParams.myParent = this._myParams.myParent;
+            visualArrowParams.myIsLocal = this._myParams.myIsLocal;
 
             this._myVisualUp.paramsUpdated();
         }
@@ -216,6 +220,7 @@ PP.VisualTransform.prototype._refresh = function () {
             }
 
             visualArrowParams.myParent = this._myParams.myParent;
+            visualArrowParams.myIsLocal = this._myParams.myIsLocal;
 
             this._myVisualForward.paramsUpdated();
         }
