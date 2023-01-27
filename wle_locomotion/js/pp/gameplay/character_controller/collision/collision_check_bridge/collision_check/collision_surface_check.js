@@ -192,6 +192,7 @@ CollisionCheck.prototype._surfaceTooSteep = function () {
 
 CollisionCheck.prototype._adjustVerticalMovementWithSurface = function () {
     let horizontalDirection = PP.vec3_create();
+    let extraVerticalMovement = PP.vec3_create();
     return function _adjustVerticalMovementWithSurface(horizontalMovement, verticalMovement, up, collisionCheckParams, collisionRuntimeParams, previousCollisionRuntimeParams, outAdjustedVerticalMovement) {
         outAdjustedVerticalMovement.vec3_copy(verticalMovement);
 
@@ -263,16 +264,17 @@ CollisionCheck.prototype._adjustVerticalMovementWithSurface = function () {
         if (Math.abs(extraVerticalLength) > 0.00001) {
             let verticalMovementLength = verticalMovement.vec3_lengthSigned(up);
             let sameSignThanExtra = Math.pp_sign(extraVerticalLength) == Math.pp_sign(verticalMovementLength);
-            if (verticalMovement.vec3_isZero(0.00001) || (sameSignThanExtra && Math.abs(verticalMovementLength) < Math.abs(extraVerticalLength))) {
-                outAdjustedVerticalMovement = up.vec3_scale(extraVerticalLength, outAdjustedVerticalMovement);
-                //console.error("adjust", extraVerticalLength.toFixed(4));
+            extraVerticalMovement = up.vec3_scale(extraVerticalLength, extraVerticalMovement);
+            if (verticalMovement.vec3_isZero(0.00001)) {
+                outAdjustedVerticalMovement.vec3_copy(extraVerticalMovement);
+            } else if (sameSignThanExtra) {
+                outAdjustedVerticalMovement = verticalMovement.vec3_add(extraVerticalMovement, outAdjustedVerticalMovement);
             } else if (!sameSignThanExtra && (
                 collisionRuntimeParams.myHorizontalMovementHasAdjustedVerticalMovementBasedOnGroundPerceivedAngleUphill ||
                 collisionRuntimeParams.myHorizontalMovementHasAdjustedVerticalMovementBasedOnCeilingPerceivedAngleUphill)) {
-                outAdjustedVerticalMovement = verticalMovement.vec3_add(up.vec3_scale(extraVerticalLength, outAdjustedVerticalMovement), outAdjustedVerticalMovement);
-                //console.error("add", extraVerticalLength.toFixed(4));
+                // do not add for downhill, since it means the vertical movement was about to go away from surface and u should not cancel that
+                outAdjustedVerticalMovement = verticalMovement.vec3_add(extraVerticalMovement, outAdjustedVerticalMovement);
             } else {
-                //console.error("nope", extraVerticalLength.toFixed(4), verticalMovementLength.toFixed(4));
                 collisionRuntimeParams.myHorizontalMovementHasAdjustedVerticalMovementBasedOnCeilingPerceivedAngleUphill = false;
                 collisionRuntimeParams.myHorizontalMovementHasAdjustedVerticalMovementBasedOnGroundPerceivedAngleUphill = false;
                 collisionRuntimeParams.myHorizontalMovementHasAdjustedVerticalMovementBasedOnCeilingPerceivedAngleDownhill = false;
@@ -366,7 +368,13 @@ CollisionCheck.prototype._adjustHorizontalMovementWithSurface = function () {
         }
 
         if (!extraHorizontalMovement.vec3_isZero()) {
-            outAdjustedHorizontalMovement.vec3_copy(extraHorizontalMovement);
+            if (horizontalMovement.vec3_isZero(0.00001)) {
+                outAdjustedHorizontalMovement.vec3_copy(extraHorizontalMovement);
+            } else if (extraHorizontalMovement.vec3_isConcordant(horizontalMovement)) {
+                outAdjustedHorizontalMovement = horizontalMovement.vec3_add(extraHorizontalMovement, outAdjustedHorizontalMovement);
+            } else {
+                outAdjustedHorizontalMovement = horizontalMovement.vec3_add(extraHorizontalMovement, outAdjustedHorizontalMovement);
+            }
         }
 
         if (outAdjustedHorizontalMovement.vec3_isZero(0.000001)) {

@@ -75,7 +75,8 @@
                         "_myVRDirectionReferenceType": "custom object",
                         "_myVRDirectionReferenceObject": "895",
                         "_mySnapTurnOnlyInsideXRSession": false,
-                        "_mySnapTurnOnlyVR": false
+                        "_mySnapTurnOnlyVR": false,
+                        "_myMaxSpeed": 2.0
                     },
                     "active": true
                 }
@@ -6082,7 +6083,8 @@
                     "hand-tracking": false
                 }
             },
-            "visualizePhysX": false
+            "visualizePhysX": false,
+            "visualizeColliders": false
         },
         "scripting": {
             "sourcePaths": [

@@ -75,7 +75,8 @@
                         "_myVRDirectionReferenceType": "custom object",
                         "_myVRDirectionReferenceObject": "895",
                         "_mySnapTurnOnlyInsideSession": false,
-                        "_mySnapTurnOnlyInsideXRSession": false
+                        "_mySnapTurnOnlyInsideXRSession": false,
+                        "_myMaxSpeed": 2.0
                     },
                     "active": true
                 }
@@ -6943,7 +6944,7 @@
             "rotation": [
                 0.9659258,
                 0.258819,
-                3.8991665007870324e-8,
+                3.899166500787032e-8,
                 -8.86089850382632e-8
             ],
             "scale": [
@@ -13553,6 +13554,50 @@
                     },
                     "active": true
                 }
+            ]
+        },
+        "902": {
+            "name": "Obstacle",
+            "parent": "592",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "93"
+                    },
+                    "active": true
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                10.0,
+                                0.1,
+                                1.0
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "translation": [
+                -0.1808164,
+                1.3407846,
+                -26.2794513
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                -0.4226185,
+                0.9063076
+            ],
+            "scale": [
+                10.0,
+                0.0999999,
+                1.0
             ]
         }
     },
