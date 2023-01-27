@@ -31,15 +31,15 @@ WL.registerComponent('pp-tool-cursor', {
         }
 
         {
-            let cursorMeshObject = WL.scene.addObject(this._myCursorObjectVR);
-            cursorMeshObject.pp_setScale(this._myCursorMeshScale);
+            this._myCursorMeshobject = WL.scene.addObject(this._myCursorObjectVR);
+            this._myCursorMeshobject.pp_setScale(this._myCursorMeshScale);
 
-            let cursorMeshComponent = cursorMeshObject.addComponent("mesh");
+            let cursorMeshComponent = this._myCursorMeshobject.addComponent("mesh");
             cursorMeshComponent.mesh = PP.myDefaultResources.myMeshes.mySphere;
             cursorMeshComponent.material = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
             cursorMeshComponent.material.color = this._myCursorColor;
 
-            let cursorComponent = this._myCursorObjectVR.addComponent("cursor", { "collisionGroup": this._myCursorTargetCollisionGroup, "handedness": this._myHandedness + 1, "cursorObject": cursorMeshObject });
+            let cursorComponent = this._myCursorObjectVR.addComponent("cursor", { "collisionGroup": this._myCursorTargetCollisionGroup, "handedness": this._myHandedness + 1, "cursorObject": this._myCursorMeshobject });
             cursorComponent.rayCastMode = 0; //collision
             if (this._myPulseOnHover) {
                 cursorComponent.globalTarget.addHoverFunction(this._pulseOnHover.bind(this));
@@ -87,6 +87,7 @@ WL.registerComponent('pp-tool-cursor', {
     },
     update: function () {
         let transformQuat = PP.quat2_create();
+        let transform = PP.mat4_create();
         return function update(dt) {
             let isUsingHand = this._isUsingHand();
 
@@ -106,6 +107,8 @@ WL.registerComponent('pp-tool-cursor', {
                     this._myCursorObjectNonVR.pp_setTransformQuat(PP.myPlayerObjects.myNonVRCamera.pp_getTransformQuat(transformQuat));
                 }
             }
+
+            this._myCursorMeshobject.pp_setTransform(this._myCursorMeshobject.pp_getTransform(transform));
         };
     }(),
     _isUsingHand: function () {

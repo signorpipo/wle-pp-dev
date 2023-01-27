@@ -38,6 +38,7 @@ v Componente character-controller che semplicemente ha la collisione e puoi dirg
 TEMP:
 - head controller -> feet controller? body controller?
 
+- visual transform add is local to parent
 - when to use my is real on ground, forse uphill usa real, downhill usa corrente
 - implementare myVerticalMovementAdjustHorizontalMovementBasedOnSurfaceAngle
 
