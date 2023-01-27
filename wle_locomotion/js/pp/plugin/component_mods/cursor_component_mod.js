@@ -350,7 +350,10 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
                 this.isDown = true;
             }
         }
-        this.isRealDown = true;
+
+        if (e.inputSource.handedness == this.handedness) {
+            this.isRealDown = true;
+        }
     };
 
     _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype.onSelectEnd = function (e) {
@@ -363,7 +366,10 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
                 this.isDown = false;
             }
         }
-        this.isRealDown = false;
+
+        if (e.inputSource.handedness == this.handedness) {
+            this.isRealDown = false;
+        }
     };
 
     _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype.onPointerMove = function (e) {
@@ -388,10 +394,10 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
     };
 
     _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype.onPointerDown = function (e) {
-        if (this.active) {
-            /* Don't care about secondary pointers or non-left clicks */
-            if ((this.pointerId != null && this.pointerId != e.pointerId) || e.button !== 0) return;
+        /* Don't care about secondary pointers or non-left clicks */
+        if ((this.pointerId != null && this.pointerId != e.pointerId) || e.button !== 0) return;
 
+        if (this.active) {
             const bounds = document.body.getBoundingClientRect();
             let rayHit = this.updateMousePos(e.clientX, e.clientY, bounds.width, bounds.height);
 
@@ -411,10 +417,10 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
     };
 
     _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype.onPointerUp = function (e) {
-        if (this.active) {
-            /* Don't care about secondary pointers or non-left clicks */
-            if ((this.pointerId != null && this.pointerId != e.pointerId) || e.button !== 0) return;
+        /* Don't care about secondary pointers or non-left clicks */
+        if ((this.pointerId != null && this.pointerId != e.pointerId) || e.button !== 0) return;
 
+        if (this.active) {
             const bounds = document.body.getBoundingClientRect();
             let rayHit = this.updateMousePos(e.clientX, e.clientY, bounds.width, bounds.height);
 
