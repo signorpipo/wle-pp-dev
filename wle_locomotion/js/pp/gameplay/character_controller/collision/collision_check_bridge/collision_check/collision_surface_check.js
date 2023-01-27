@@ -289,12 +289,84 @@ CollisionCheck.prototype._adjustVerticalMovementWithSurface = function () {
 }();
 
 CollisionCheck.prototype._adjustHorizontalMovementWithSurface = function () {
-    let horizontalDirection = PP.vec3_create();
+    let extraHorizontalMovement = PP.vec3_create();
+    let groundHorizontalDirection = PP.vec3_create();
+    let ceilingHorizontalDirection = PP.vec3_create();
+    let scaledCeilingHorizontalDirection = PP.vec3_create();
+    let scaledCeilingHorizontalDirectionAlongGroundHorizontalDirection = PP.vec3_create();
+    let scaledCeilingHorizontalDirectionWithoutGroundHorizontalDirection = PP.vec3_create();
     return function _adjustHorizontalMovementWithSurface(horizontalMovement, verticalMovement, up, collisionCheckParams, collisionRuntimeParams, previousCollisionRuntimeParams, outAdjustedHorizontalMovement) {
         outAdjustedHorizontalMovement.vec3_copy(horizontalMovement);
 
         if (verticalMovement.vec3_isZero(0.00001)) {
             return outAdjustedHorizontalMovement;
+        }
+
+        let isMovementDownward = !verticalMovement.vec3_isConcordant(up);
+
+        extraHorizontalMovement.vec3_zero();
+        groundHorizontalDirection.vec3_zero();
+
+        if (previousCollisionRuntimeParams.myIsOnGround) {
+            groundHorizontalDirection = previousCollisionRuntimeParams.myGroundNormal.vec3_removeComponentAlongAxis(up, groundHorizontalDirection);
+            if (!groundHorizontalDirection.vec3_isZero(0.00001)) {
+                groundHorizontalDirection.vec3_normalize(groundHorizontalDirection);
+
+                let groundExtraHorizontalLength = verticalMovement.vec3_length() / Math.tan(Math.pp_toRadians(previousCollisionRuntimeParams.myGroundAngle));
+                groundExtraHorizontalLength *= (isMovementDownward) ? 1 : -1;
+
+                if (Math.abs(groundExtraHorizontalLength) > 0.00001) {
+                    if (isMovementDownward) {
+                        if (collisionCheckParams.myAdjustHorizontalMovementWithGroundAngleDownhill &&
+                            (collisionCheckParams.myAdjustHorizontalMovementWithGroundAngleDownhillMinAngle == null || previousCollisionRuntimeParams.myGroundAngle >= collisionCheckParams.myAdjustHorizontalMovementWithGroundAngleDownhillMinAngle)) {
+                            extraHorizontalMovement = groundHorizontalDirection.vec3_scale(groundExtraHorizontalLength, extraHorizontalMovement);
+                            collisionRuntimeParams.myVerticalMovementHasAdjustedHorizontalMovementBasedOnGroundAngleDownhill = true;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (previousCollisionRuntimeParams.myIsOnCeiling) {
+            ceilingHorizontalDirection = previousCollisionRuntimeParams.myCeilingNormal.vec3_removeComponentAlongAxis(up, ceilingHorizontalDirection);
+            if (!ceilingHorizontalDirection.vec3_isZero(0.00001)) {
+                ceilingHorizontalDirection.vec3_normalize(ceilingHorizontalDirection);
+
+                let ceilingExtraHorizontalLength = verticalMovement.vec3_length() / Math.tan(Math.pp_toRadians(previousCollisionRuntimeParams.myCeilingAngle));
+                ceilingExtraHorizontalLength *= (isMovementDownward) ? -1 : 1;
+
+                if (Math.abs(ceilingExtraHorizontalLength) > 0.00001) {
+                    let sameDirectionAsGround = ceilingHorizontalDirection.vec3_isConcordant(groundHorizontalDirection);
+                    if (extraHorizontalMovement.vec3_isZero() || sameDirectionAsGround) {
+                        if (!isMovementDownward) {
+                            if (collisionCheckParams.myAdjustHorizontalMovementWithCeilingAngleDownhill &&
+                                (collisionCheckParams.myAdjustHorizontalMovementWithCeilingAngleDownhillMinAngle == null || previousCollisionRuntimeParams.myCeilingAngle >= collisionCheckParams.myAdjustHorizontalMovementWithCeilingAngleDownhillMinAngle)) {
+                                scaledCeilingHorizontalDirection = ceilingHorizontalDirection.vec3_scale(ceilingExtraHorizontalLength, scaledCeilingHorizontalDirection);
+                                if (!groundHorizontalDirection.vec3_isZero()) {
+                                    scaledCeilingHorizontalDirectionWithoutGroundHorizontalDirection = scaledCeilingHorizontalDirection.vec3_removeComponentAlongAxis(scaledCeilingHorizontalDirectionWithoutGroundHorizontalDirection);
+                                    scaledCeilingHorizontalDirectionAlongGroundHorizontalDirection = scaledCeilingHorizontalDirection.vec3_componentAlongAxis(scaledCeilingHorizontalDirectionWithoutGroundHorizontalDirection);
+
+                                    if (scaledCeilingHorizontalDirectionAlongGroundHorizontalDirection.vec3_isFartherAlongAxis(extraHorizontalMovement, groundHorizontalDirection)) {
+                                        collisionRuntimeParams.myVerticalMovementHasAdjustedHorizontalMovementBasedOnGroundAngleDownhill = false;
+                                        extraHorizontalMovement.vec3_copy(scaledCeilingHorizontalDirection);
+                                        collisionRuntimeParams.myVerticalMovementHasAdjustedHorizontalMovementBasedOnCeilingAngleDownhill = true;
+                                    } else if (!scaledCeilingHorizontalDirectionWithoutGroundHorizontalDirection.vec3_isZero(0.00001)) {
+                                        extraHorizontalMovement = extraHorizontalMovement.vec3_add(scaledCeilingHorizontalDirectionWithoutGroundHorizontalDirection, extraHorizontalMovement);
+                                        collisionRuntimeParams.myVerticalMovementHasAdjustedHorizontalMovementBasedOnCeilingAngleDownhill = true;
+                                    }
+                                } else {
+                                    extraHorizontalMovement.vec3_copy(scaledCeilingHorizontalDirection);
+                                    collisionRuntimeParams.myVerticalMovementHasAdjustedHorizontalMovementBasedOnCeilingAngleDownhill = true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if (!extraHorizontalMovement.vec3_isZero()) {
+            outAdjustedHorizontalMovement.vec3_copy(extraHorizontalMovement);
         }
 
         if (outAdjustedHorizontalMovement.vec3_isZero(0.000001)) {

@@ -385,6 +385,10 @@ PlayerLocomotion = class PlayerLocomotion {
         this._myCollisionCheckParamsMovement.myAdjustVerticalMovementWithGroundAngleDownhill = true;
         this._myCollisionCheckParamsMovement.myAdjustVerticalMovementWithGroundAngleUphill = true;
         this._myCollisionCheckParamsMovement.myAdjustVerticalMovementWithCeilingAngleUphill = true;
+        this._myCollisionCheckParamsMovement.myAdjustHorizontalMovementWithGroundAngleDownhill = true;
+        this._myCollisionCheckParamsMovement.myAdjustHorizontalMovementWithCeilingAngleDownhill = true;
+        this._myCollisionCheckParamsMovement.myAdjustHorizontalMovementWithCeilingAngleDownhill = true;
+        this._myCollisionCheckParamsMovement.myAdjustHorizontalMovementWithGroundAngleDownhillMinAngle = 30;
 
         this._myCollisionCheckParamsMovement.mySnapOnGroundEnabled = true;
         this._myCollisionCheckParamsMovement.mySnapOnGroundExtraDistance = 0.1;
