@@ -22,6 +22,8 @@ PP.CharacterCollisionResults = class CharacterCollisionResults {
 
         this.mySplitMovementResults = new PP.CharacterCollisionSplitMovementResults();
 
+        this.myDebugResults = new PP.CharacterCollisionDebugResults();
+
         this.myInternalResults = new PP.CharacterCollisionInternalResults();
     }
 
@@ -167,6 +169,20 @@ PP.CharacterCollisionSplitMovementResults = class CharacterCollisionSplitMovemen
         this.myStepsPerformed = 0;
         this.myMovementInterrupted = false;
         this.myMovementChecked = PP.vec3_create();
+    }
+
+    reset() {
+        // implemented outside class definition
+    }
+
+    copy(other) {
+        // implemented outside class definition
+    }
+};
+
+PP.CharacterCollisionDebugResults = class CharacterCollisionDebugResults {
+    constructor() {
+        this._myRaycastsPerformed = 0;
     }
 
     reset() {
@@ -369,21 +385,15 @@ PP.CharacterCollisionSplitMovementResults.prototype.copy = function (other) {
     this.myMovementChecked.vec3_copy(other.myMovementChecked);
 };
 
+PP.CharacterCollisionDebugResults.prototype.reset = function () {
+    this._myRaycastsPerformed = 0;
+};
+
+PP.CharacterCollisionDebugResults.prototype.copy = function (other) {
+    this._myRaycastsPerformed = other._myRaycastsPerformed;
+};
+
 PP.CharacterCollisionInternalResults.prototype.reset = function () {
-    this.myLastRelevantStartHorizontalMovement.vec3_zero();
-    this.myLastRelevantAdjustedStartHorizontalMovement.vec3_zero();
-    this.myLastRelevantEndHorizontalMovement.vec3_zero();
-
-    this.myLastRelevantStartVerticalMovement.vec3_zero();
-    this.myLastRelevantAdjustedStartVerticalMovement.vec3_zero();
-    this.myLastRelevantEndVerticalMovement.vec3_zero();
-
-    this.myLastRelevantHasWallSlid = false;
-    this.myHasWallSlidTowardOppositeDirection = false;
-    this.myLastRelevantWallSlideFlickerPrevented = false;
-    this.myWallSlideFlickerPreventionForceCheckCounter = 0;
-    this.myWallSlide90DegreesDirectionSign = 0;
-    this.myWallSlide90DegreesRecomputeDirectionSign = true;
 };
 
 PP.CharacterCollisionInternalResults.prototype.copy = function (other) {
