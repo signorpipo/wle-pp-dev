@@ -154,6 +154,7 @@ CollisionCheck.prototype._postSurfaceCheck = function () {
 }();
 
 CollisionCheck.prototype._surfaceTooSteep = function () {
+    let surfaceSteepResults = [false, false];
     return function _surfaceTooSteep(up, direction, collisionCheckParams, collisionRuntimeParams) {
         let groundTooSteep = false;
         let ceilingTooSteep = false;
@@ -186,7 +187,9 @@ CollisionCheck.prototype._surfaceTooSteep = function () {
             }
         }
 
-        return groundTooSteep || ceilingTooSteep;
+        surfaceSteepResults[0] = groundTooSteep;
+        surfaceSteepResults[1] = ceilingTooSteep;
+        return surfaceSteepResults;
     };
 }();
 
@@ -436,7 +439,7 @@ CollisionCheck.prototype._gatherSurfaceInfo = function () {
     let endPosition = PP.vec3_create();
     let direction = PP.vec3_create();
     return function _gatherSurfaceInfo(feetPosition, height, up, forwardForPerceivedAngle, forwardForVertical, isGround, collisionCheckParams, collisionRuntimeParams) {
-        this._myDebugActive = collisionCheckParams.myDebugActive && collisionCheckParams.myDebugSurfaceInfoActive;
+        this._myDebugActive = collisionCheckParams.myDebugActive && ((isGround && collisionCheckParams.myDebugGroundInfoActive) || (!isGround && collisionCheckParams.myDebugCeilingInfoActive));
 
         let checkPositions = this._getVerticalCheckPositions(feetPosition, up, forwardForVertical, collisionCheckParams, collisionRuntimeParams);
 

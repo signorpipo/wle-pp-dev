@@ -138,8 +138,8 @@ CollisionCheck.prototype._horizontalMovementCheck = function () {
             }
 
             let heightStepAmount = 0;
-            if (collisionCheckParams.myCheckHeight && collisionCheckParams.myHeightCheckStepAmount > 0 && height > 0.000001) {
-                heightStepAmount = collisionCheckParams.myHeightCheckStepAmount;
+            if (collisionCheckParams.myCheckHeight && collisionCheckParams.myHeightCheckStepAmountMovement > 0 && height > 0.000001) {
+                heightStepAmount = collisionCheckParams.myHeightCheckStepAmountMovement;
                 heightStep = up.vec3_scale(height / heightStepAmount, heightStep);
             }
 
@@ -148,7 +148,7 @@ CollisionCheck.prototype._horizontalMovementCheck = function () {
 
                 // we can skip the ground check since we have already done that, but if there was an error do it again with the proper set of objects to ignore
                 // the ceiling check can always be ignored, it used the proper ground objects already
-                if (collisionCheckParams.myCheckHeightTop || i == 0) {
+                if (collisionCheckParams.myCheckHeightTopMovement || i == 0) {
                     if ((i != 0 && i != heightStepAmount) ||
                         (i == 0 && !groundCeilingCheckIsFine) ||
                         (i == 0 && collisionCheckParams.myGroundAngleToIgnore == 0) ||
@@ -162,7 +162,9 @@ CollisionCheck.prototype._horizontalMovementCheck = function () {
                 }
 
                 if (i > 0) {
-                    this._horizontalMovementVerticalCheck(movement, feetPosition, checkPositions, currentHeightOffset, heightStep, up, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams);
+                    if (collisionCheckParams.myCheckHeightVerticalMovement) {
+                        this._horizontalMovementVerticalCheck(movement, feetPosition, checkPositions, currentHeightOffset, heightStep, up, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams);
+                    }
 
                     if (collisionRuntimeParams.myIsCollidingHorizontally) {
                         break;

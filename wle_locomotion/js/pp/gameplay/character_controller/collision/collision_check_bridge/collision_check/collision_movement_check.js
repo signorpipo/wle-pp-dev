@@ -434,12 +434,16 @@ CollisionCheck.prototype._moveStep = function () {
 
         if (!collisionRuntimeParams.myHorizontalMovementCanceled && !fixedHorizontalMovement.vec3_isZero()) {
             horizontalDirection = fixedHorizontalMovement.vec3_normalize(horizontalDirection);
-            let surfaceTooSteep = this._surfaceTooSteep(transformUp, horizontalDirection, collisionCheckParams, this._myPrevCollisionRuntimeParams);
-            if (surfaceTooSteep) {
+            let surfaceTooSteepResults = this._surfaceTooSteep(transformUp, horizontalDirection, collisionCheckParams, this._myPrevCollisionRuntimeParams);
+            if (surfaceTooSteepResults[0] || surfaceTooSteepResults[1]) {
                 horizontalDirection = fixedHorizontalMovement.vec3_normalize(horizontalDirection);
-                let newSurfaceTooSteep = this._surfaceTooSteep(transformUp, horizontalDirection, collisionCheckParams, collisionRuntimeParams);
+                let newSurfaceTooSteepResults = this._surfaceTooSteep(transformUp, horizontalDirection, collisionCheckParams, collisionRuntimeParams);
 
-                if (newSurfaceTooSteep || !collisionCheckParams.myAllowSurfaceSteepFix || !allowSurfaceSteepFix) {
+                if ((surfaceTooSteepResults[0] && newSurfaceTooSteepResults[0]) ||
+                    (surfaceTooSteepResults[1] && newSurfaceTooSteepResults[1]) ||
+                    !allowSurfaceSteepFix ||
+                    (surfaceTooSteepResults[0] && !collisionCheckParams.myAllowGroundSteepFix) ||
+                    (surfaceTooSteepResults[1] && !collisionCheckParams.myAllowCeilingSteepFix)) {
                     outFixedMovement.vec3_zero();
                     collisionRuntimeParams.copy(this._myPrevCollisionRuntimeParams);
                     this._moveStep(movement, feetPosition, transformUp, transformForward, height, false, collisionCheckParams, collisionRuntimeParams, outFixedMovement);

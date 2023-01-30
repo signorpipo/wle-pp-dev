@@ -130,8 +130,10 @@ WL.registerComponent('ai-movement', {
         this._myCollisionCheckParams.myCeilingPopOutExtraDistance = 0.1 * this._myScale;
 
         this._myCollisionCheckParams.myCheckHeight = true;
-        this._myCollisionCheckParams.myHeightCheckStepAmount = 1;
-        this._myCollisionCheckParams.myCheckHeightTop = false;
+        this._myCollisionCheckParams.myCheckHeightVerticalMovement = true;
+        this._myCollisionCheckParams.myCheckHeightVerticalPosition = true;
+        this._myCollisionCheckParams.myHeightCheckStepAmountMovement = 1;
+        this._myCollisionCheckParams.myHeightCheckStepAmountPosition = 1;
         this._myCollisionCheckParams.myCheckHeightConeOnCollision = false;
         this._myCollisionCheckParams.myCheckVerticalForwardFixed = true;
         this._myCollisionCheckParams.myCheckVerticalStraight = true;
@@ -187,7 +189,6 @@ WL.registerComponent('ai-movement', {
         this._myCollisionCheckParams.myDebugVerticalMovementActive = true;
         this._myCollisionCheckParams.myDebugVerticalPositionActive = true;
         this._myCollisionCheckParams.myDebugSlidingActive = true;
-        this._myCollisionCheckParams.myDebugSurfaceInfoActive = true;
         this._myCollisionCheckParams.myDebugRuntimeParamsActive = false;
         this._myCollisionCheckParams.myDebugMovementActive = false;
     },

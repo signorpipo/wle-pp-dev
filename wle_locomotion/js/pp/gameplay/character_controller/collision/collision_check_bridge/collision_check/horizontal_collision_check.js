@@ -9,8 +9,10 @@ CollisionCheck.prototype._horizontalCheck = function () {
         outFixedMovement.vec3_zero();
 
         horizontalDirection = movement.vec3_normalize(horizontalDirection);
-        surfaceTooSteep = this._surfaceTooSteep(up, horizontalDirection, collisionCheckParams, previousCollisionRuntimeParams);
-        if (movement.vec3_isZero(0.000001) || !surfaceTooSteep || (allowSurfaceSteepFix && collisionCheckParams.myAllowSurfaceSteepFix)) {
+        let surfaceTooSteepResults = this._surfaceTooSteep(up, horizontalDirection, collisionCheckParams, previousCollisionRuntimeParams);
+        if (movement.vec3_isZero(0.000001) ||
+            ((!surfaceTooSteepResults[0] || (allowSurfaceSteepFix && collisionCheckParams.myAllowGroundSteepFix)) &&
+                (!surfaceTooSteepResults[1] || (allowSurfaceSteepFix && collisionCheckParams.myAllowCeilingSteepFix)))) {
             fixedFeetPosition = feetPosition.vec3_add(up.vec3_scale(collisionCheckParams.myDistanceFromFeetToIgnore + 0.0001, fixedFeetPosition), fixedFeetPosition);
             let fixedHeight = Math.max(0, height - collisionCheckParams.myDistanceFromFeetToIgnore - collisionCheckParams.myDistanceFromHeadToIgnore - 0.0001 * 2);
 

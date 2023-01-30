@@ -425,8 +425,12 @@ PlayerTransformManager = class PlayerTransformManager {
         params.myPositionOffsetLocal.vec3_set(0, -params.myRadius / 2, 0)
 
         params.myCheckHeight = true;
-        params.myHeightCheckStepAmount = 2;
-        params.myCheckHeightTop = true;
+        params.myCheckHeightVerticalMovement = true;
+        params.myCheckHeightVerticalPosition = true;
+        params.myHeightCheckStepAmountMovement = 2;
+        params.myHeightCheckStepAmountPosition = 2;
+        params.myCheckHeightTopMovement = true;
+        params.myCheckHeightTopPosition = true;
         params.myCheckVerticalStraight = true;
 
         params.myCheckVerticalFixedForwardEnabled = true;
@@ -454,7 +458,8 @@ PlayerTransformManager = class PlayerTransformManager {
         params.myDebugVerticalMovementActive = false;
         params.myDebugVerticalPositionActive = false;
         params.myDebugSlidingActive = false;
-        params.myDebugSurfaceInfoActive = false;
+        params.myDebugGroundInfoActive = false;
+        params.myDebugCeilingInfoActive = false;
         params.myDebugRuntimeParamsActive = false;
         params.myDebugMovementActive = false;
     }
@@ -514,7 +519,8 @@ PlayerTransformManager = class PlayerTransformManager {
         params.myDebugVerticalMovementActive = false;
         params.myDebugVerticalPositionActive = false;
         params.myDebugSlidingActive = false;
-        params.myDebugSurfaceInfoActive = true;
+        params.myDebugGroundInfoActive = true;
+        params.myDebugCeilingInfoActive = true;
         params.myDebugRuntimeParamsActive = false;
         params.myDebugMovementActive = false;
     }

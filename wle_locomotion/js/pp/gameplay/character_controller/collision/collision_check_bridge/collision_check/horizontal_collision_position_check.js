@@ -119,8 +119,8 @@ CollisionCheck.prototype._horizontalPositionCheck = function () {
             }
 
             let heightStepAmount = 0;
-            if (collisionCheckParams.myCheckHeight && collisionCheckParams.myHeightCheckStepAmount > 0 && height > 0) {
-                heightStepAmount = collisionCheckParams.myHeightCheckStepAmount;
+            if (collisionCheckParams.myCheckHeight && collisionCheckParams.myHeightCheckStepAmountPosition > 0 && height > 0) {
+                heightStepAmount = collisionCheckParams.myHeightCheckStepAmountPosition;
                 up.vec3_scale(height / heightStepAmount, heightStep);
             }
 
@@ -129,7 +129,7 @@ CollisionCheck.prototype._horizontalPositionCheck = function () {
 
                 // we can skip the ground check since we have already done that, but if there was an error do it again with the proper set of objects to ignore
                 // the ceiling check can always be ignored, it used the proper ground objects already
-                if (collisionCheckParams.myCheckHeightTop || i == 0) {
+                if (collisionCheckParams.myCheckHeightTopPosition || i == 0) {
                     if ((i != 0 && i != heightStepAmount) ||
                         (i == 0 && !groundCeilingCheckIsFine) ||
                         (i == 0 && collisionCheckParams.myGroundAngleToIgnore == 0) ||
@@ -143,60 +143,62 @@ CollisionCheck.prototype._horizontalPositionCheck = function () {
                 }
 
                 if (i > 0) {
-                    // this offset is a workaround for objects that in the editor are aligned but due to clamp get a bit tilted when in the game
-                    // and therefore trying an horizontal cast on the vertical hit position could result in hitting the bottom which in theory should be parallel and therefore not possible
-                    let hitHeightOffsetEpsilonValue = 0.0001;
+                    if (collisionCheckParams.myCheckHeightVerticalPosition) {
+                        // this offset is a workaround for objects that in the editor are aligned but due to clamp get a bit tilted when in the game
+                        // and therefore trying an horizontal cast on the vertical hit position could result in hitting the bottom which in theory should be parallel and therefore not possible
+                        let hitHeightOffsetEpsilonValue = 0.0001;
 
-                    if (collisionCheckParams.myHorizontalPositionCheckVerticalDirectionType == 0 || collisionCheckParams.myHorizontalPositionCheckVerticalDirectionType == 2) {
-                        verticalDirection.vec3_copy(up);
-                        this._horizontalPositionVerticalCheck(feetPosition, checkPositions, currentHeightOffset, heightStep, verticalDirection, up, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams);
+                        if (collisionCheckParams.myHorizontalPositionCheckVerticalDirectionType == 0 || collisionCheckParams.myHorizontalPositionCheckVerticalDirectionType == 2) {
+                            verticalDirection.vec3_copy(up);
+                            this._horizontalPositionVerticalCheck(feetPosition, checkPositions, currentHeightOffset, heightStep, verticalDirection, up, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams);
 
-                        if (collisionRuntimeParams.myIsCollidingHorizontally && collisionCheckParams.myCheckHeightConeOnCollision) {
-                            hitHeightOffset = collisionRuntimeParams.myHorizontalCollisionHit.myPosition.vec3_sub(feetPosition, hitHeightOffset).vec3_componentAlongAxis(up, hitHeightOffset);
-                            hitHeightOffset.vec3_add(verticalDirection.vec3_scale(hitHeightOffsetEpsilonValue, hitHeightOffsetEpsilon), hitHeightOffset);
+                            if (collisionRuntimeParams.myIsCollidingHorizontally && collisionCheckParams.myCheckHeightConeOnCollision) {
+                                hitHeightOffset = collisionRuntimeParams.myHorizontalCollisionHit.myPosition.vec3_sub(feetPosition, hitHeightOffset).vec3_componentAlongAxis(up, hitHeightOffset);
+                                hitHeightOffset.vec3_add(verticalDirection.vec3_scale(hitHeightOffsetEpsilonValue, hitHeightOffsetEpsilon), hitHeightOffset);
 
-                            collisionRuntimeParams.myIsCollidingHorizontally = false;
-                            if (collisionCheckParams.myCheckHeightConeOnCollisionKeepHit) {
-                                vertilCheckHit.copy(collisionRuntimeParams.myHorizontalCollisionHit);
-                            }
-                            collisionRuntimeParams.myHorizontalCollisionHit.reset();
-                            this._horizontalPositionHorizontalCheck(feetPosition, checkPositions, hitHeightOffset, up, forward, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams);
+                                collisionRuntimeParams.myIsCollidingHorizontally = false;
+                                if (collisionCheckParams.myCheckHeightConeOnCollisionKeepHit) {
+                                    vertilCheckHit.copy(collisionRuntimeParams.myHorizontalCollisionHit);
+                                }
+                                collisionRuntimeParams.myHorizontalCollisionHit.reset();
+                                this._horizontalPositionHorizontalCheck(feetPosition, checkPositions, hitHeightOffset, up, forward, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams);
 
-                            if (collisionRuntimeParams.myIsCollidingHorizontally) {
-                                break;
-                            } else if (collisionCheckParams.myCheckHeightConeOnCollisionKeepHit) {
-                                collisionRuntimeParams.myIsCollidingHorizontally = true;
-                                collisionRuntimeParams.myHorizontalCollisionHit.copy(vertilCheckHit);
-                                break;
+                                if (collisionRuntimeParams.myIsCollidingHorizontally) {
+                                    break;
+                                } else if (collisionCheckParams.myCheckHeightConeOnCollisionKeepHit) {
+                                    collisionRuntimeParams.myIsCollidingHorizontally = true;
+                                    collisionRuntimeParams.myHorizontalCollisionHit.copy(vertilCheckHit);
+                                    break;
+                                }
                             }
                         }
-                    }
 
-                    if (!collisionRuntimeParams.myIsCollidingHorizontally) {
-                        if (collisionCheckParams.myHorizontalPositionCheckVerticalDirectionType == 1 || collisionCheckParams.myHorizontalPositionCheckVerticalDirectionType == 2) {
-                            verticalDirection = up.vec3_negate(verticalDirection);
-                            downwardHeightOffset = currentHeightOffset.vec3_sub(heightStep, downwardHeightOffset);
-                            downwardHeightStep = heightStep.vec3_negate(downwardHeightStep);
-                            this._horizontalPositionVerticalCheck(feetPosition, checkPositions, downwardHeightOffset, downwardHeightStep, verticalDirection, up, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams);
-                        }
-
-                        if (collisionRuntimeParams.myIsCollidingHorizontally && collisionCheckParams.myCheckHeightConeOnCollision) {
-                            hitHeightOffset = collisionRuntimeParams.myHorizontalCollisionHit.myPosition.vec3_sub(feetPosition, hitHeightOffset).vec3_componentAlongAxis(up, hitHeightOffset);
-                            hitHeightOffset.vec3_add(verticalDirection.vec3_scale(hitHeightOffsetEpsilonValue, hitHeightOffsetEpsilon), hitHeightOffset);
-
-                            collisionRuntimeParams.myIsCollidingHorizontally = false;
-                            if (collisionCheckParams.myCheckHeightConeOnCollisionKeepHit) {
-                                vertilCheckHit.copy(collisionRuntimeParams.myHorizontalCollisionHit);
+                        if (!collisionRuntimeParams.myIsCollidingHorizontally) {
+                            if (collisionCheckParams.myHorizontalPositionCheckVerticalDirectionType == 1 || collisionCheckParams.myHorizontalPositionCheckVerticalDirectionType == 2) {
+                                verticalDirection = up.vec3_negate(verticalDirection);
+                                downwardHeightOffset = currentHeightOffset.vec3_sub(heightStep, downwardHeightOffset);
+                                downwardHeightStep = heightStep.vec3_negate(downwardHeightStep);
+                                this._horizontalPositionVerticalCheck(feetPosition, checkPositions, downwardHeightOffset, downwardHeightStep, verticalDirection, up, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams);
                             }
-                            collisionRuntimeParams.myHorizontalCollisionHit.reset();
-                            this._horizontalPositionHorizontalCheck(feetPosition, checkPositions, hitHeightOffset, up, forward, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams);
 
-                            if (collisionRuntimeParams.myIsCollidingHorizontally) {
-                                break;
-                            } else if (collisionCheckParams.myCheckHeightConeOnCollisionKeepHit) {
-                                collisionRuntimeParams.myIsCollidingHorizontally = true;
-                                collisionRuntimeParams.myHorizontalCollisionHit.copy(vertilCheckHit);
-                                break;
+                            if (collisionRuntimeParams.myIsCollidingHorizontally && collisionCheckParams.myCheckHeightConeOnCollision) {
+                                hitHeightOffset = collisionRuntimeParams.myHorizontalCollisionHit.myPosition.vec3_sub(feetPosition, hitHeightOffset).vec3_componentAlongAxis(up, hitHeightOffset);
+                                hitHeightOffset.vec3_add(verticalDirection.vec3_scale(hitHeightOffsetEpsilonValue, hitHeightOffsetEpsilon), hitHeightOffset);
+
+                                collisionRuntimeParams.myIsCollidingHorizontally = false;
+                                if (collisionCheckParams.myCheckHeightConeOnCollisionKeepHit) {
+                                    vertilCheckHit.copy(collisionRuntimeParams.myHorizontalCollisionHit);
+                                }
+                                collisionRuntimeParams.myHorizontalCollisionHit.reset();
+                                this._horizontalPositionHorizontalCheck(feetPosition, checkPositions, hitHeightOffset, up, forward, ignoreGroundAngleCallback, ignoreCeilingAngleCallback, collisionCheckParams, collisionRuntimeParams);
+
+                                if (collisionRuntimeParams.myIsCollidingHorizontally) {
+                                    break;
+                                } else if (collisionCheckParams.myCheckHeightConeOnCollisionKeepHit) {
+                                    collisionRuntimeParams.myIsCollidingHorizontally = true;
+                                    collisionRuntimeParams.myHorizontalCollisionHit.copy(vertilCheckHit);
+                                    break;
+                                }
                             }
                         }
                     }

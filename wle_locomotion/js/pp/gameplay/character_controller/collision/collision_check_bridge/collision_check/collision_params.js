@@ -106,13 +106,17 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myVerticalAllowHitInsideCollisionIfOneOk = false;
 
         this.myCheckHeight = false;
-        this.myCheckHeightTop = false;
+        this.myCheckHeightVerticalMovement = false;
+        this.myCheckHeightVerticalPosition = false;
+        this.myCheckHeightTopMovement = false;
+        this.myCheckHeightTopPosition = false;
         this.myCheckHeightConeOnCollision = false;
         this.myCheckHeightConeOnCollisionKeepHit = false;
         // if true and myCheckHeightConeOnCollision is true, if the cone does not hit the height hit will be restored
         // the fact that the cone does not hit could be due to the fact that it thinks that the collision can be ignored though, sop restoring can be a bit safer but also collide more
 
-        this.myHeightCheckStepAmount = 0;
+        this.myHeightCheckStepAmountMovement = 0;
+        this.myHeightCheckStepAmountPosition = 0;
         this.myCheckVerticalStraight = false;
         this.myCheckVerticalDiagonalRay = false;
         this.myCheckVerticalDiagonalBorder = false;
@@ -149,7 +153,8 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myIsOnGroundMaxSurfaceAngle = null;
         this.myIsOnCeilingMaxSurfaceAngle = null;
 
-        this.myAllowSurfaceSteepFix = false; //#TODO split into ceiling and ground
+        this.myAllowGroundSteepFix = false;
+        this.myAllowCeilingSteepFix = false;
         this.myMustStayOnGround = false;
         this.myMustStayOnCeiling = false;
         this.myMustStayOnValidGroundAngleDownhill = false;
@@ -204,7 +209,8 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myDebugVerticalMovementActive = false;
         this.myDebugVerticalPositionActive = false;
         this.myDebugSlidingActive = false;
-        this.myDebugSurfaceInfoActive = false;
+        this.myDebugGroundInfoActive = false;
+        this.myDebugCeilingInfoActive = false;
         this.myDebugRuntimeParamsActive = false;
         this.myDebugMovementActive = false;
     }
@@ -295,10 +301,14 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myVerticalAllowHitInsideCollisionIfOneOk = other.myVerticalAllowHitInsideCollisionIfOneOk;
 
         this.myCheckHeight = other.myCheckHeight;
-        this.myCheckHeightTop = other.myCheckHeightTop;
+        this.myCheckHeightVerticalMovement = other.myCheckHeightVerticalMovement;
+        this.myCheckHeightVerticalPosition = other.myCheckHeightVerticalPosition;
+        this.myCheckHeightTopMovement = other.myCheckHeightTopMovement;
+        this.myCheckHeightTopPosition = other.myCheckHeightTopPosition;
         this.myCheckHeightConeOnCollision = other.myCheckHeightConeOnCollision;
         this.myCheckHeightConeOnCollisionKeepHit = other.myCheckHeightConeOnCollisionKeepHit;
-        this.myHeightCheckStepAmount = other.myHeightCheckStepAmount;
+        this.myHeightCheckStepAmountMovement = other.myHeightCheckStepAmountMovement;
+        this.myHeightCheckStepAmountPosition = other.myHeightCheckStepAmountPosition;
         this.myCheckVerticalStraight = other.myCheckVerticalStraight;
         this.myCheckVerticalDiagonalRay = other.myCheckVerticalDiagonalRay;
         this.myCheckVerticalDiagonalBorder = other.myCheckVerticalDiagonalBorder;
@@ -335,7 +345,8 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myIsOnGroundMaxSurfaceAngle = other.myIsOnGroundMaxSurfaceAngle;
         this.myIsOnCeilingMaxSurfaceAngle = other.myIsOnCeilingMaxSurfaceAngle;
 
-        this.myAllowSurfaceSteepFix = other.myAllowSurfaceSteepFix;
+        this.myAllowGroundSteepFix = other.myAllowGroundSteepFix;
+        this.myAllowCeilingSteepFix = other.myAllowCeilingSteepFix;
         this.myMustStayOnGround = other.myMustStayOnGround;
         this.myMustStayOnCeiling = other.myMustStayOnCeiling;
         this.myMustStayOnValidGroundAngleDownhill = other.myMustStayOnValidGroundAngleDownhill;
@@ -370,7 +381,8 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myDebugVerticalMovementActive = other.myDebugVerticalMovementActive;
         this.myDebugVerticalPositionActive = other.myDebugVerticalPositionActive;
         this.myDebugSlidingActive = other.myDebugSlidingActive;
-        this.myDebugSurfaceInfoActive = other.myDebugSurfaceInfoActive;
+        this.myDebugGroundInfoActive = other.myDebugGroundInfoActive;
+        this.myDebugCeilingInfoActive = other.myDebugCeilingInfoActive;
         this.myDebugRuntimeParamsActive = other.myDebugRuntimeParamsActive;
         this.myDebugMovementActive = other.myDebugMovementActive;
     }

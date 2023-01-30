@@ -317,7 +317,7 @@ PlayerLocomotion = class PlayerLocomotion {
             }
         }
 
-        this._myPlayerObscureManager.update(dt);
+        //this._myPlayerObscureManager.update(dt);
         if (PP.myLeftGamepad.getButtonInfo(PP.GamepadButtonID.SELECT).isPressEnd(2)) {
             if (this._myPlayerObscureManager.isFading()) {
                 this._myPlayerObscureManager.obscureLevelOverride(this._myPlayerObscureManager.isFadingOut() ? Math.pp_random(0, 0) : Math.pp_random(1, 1));
@@ -407,10 +407,14 @@ PlayerLocomotion = class PlayerLocomotion {
         this._myCollisionCheckParamsMovement.myVerticalAllowHitInsideCollisionIfOneOk = true;
 
         this._myCollisionCheckParamsMovement.myCheckHeight = true;
-        this._myCollisionCheckParamsMovement.myCheckHeightTop = true;
+        this._myCollisionCheckParamsMovement.myCheckHeightVerticalMovement = true;
+        this._myCollisionCheckParamsMovement.myCheckHeightVerticalPosition = true;
+        this._myCollisionCheckParamsMovement.myCheckHeightTopMovement = true;
+        this._myCollisionCheckParamsMovement.myCheckHeightTopPosition = true;
         this._myCollisionCheckParamsMovement.myCheckHeightConeOnCollision = true;
         this._myCollisionCheckParamsMovement.myCheckHeightConeOnCollisionKeepHit = false;
-        this._myCollisionCheckParamsMovement.myHeightCheckStepAmount = 1;
+        this._myCollisionCheckParamsMovement.myHeightCheckStepAmountMovement = 2;
+        this._myCollisionCheckParamsMovement.myHeightCheckStepAmountPosition = 2;
         this._myCollisionCheckParamsMovement.myCheckVerticalFixedForwardEnabled = true;
         this._myCollisionCheckParamsMovement.myCheckVerticalFixedForward = [0, 0, 1];
         this._myCollisionCheckParamsMovement.myCheckVerticalBothDirection = true;
@@ -445,7 +449,6 @@ PlayerLocomotion = class PlayerLocomotion {
         this._myCollisionCheckParamsMovement.myVerticalFixToBeOnCeiling = 0;
         this._myCollisionCheckParamsMovement.myVerticalFixToComputeCeilingInfo = 0;
 
-        this._myCollisionCheckParamsMovement.myAllowSurfaceSteepFix = false;
         this._myCollisionCheckParamsMovement.myMustStayOnGround = false;
         this._myCollisionCheckParamsMovement.myMustStayOnCeiling = false;
         this._myCollisionCheckParamsMovement.myRegatherGroundInfoOnSurfaceCheckFail = true;
@@ -467,14 +470,15 @@ PlayerLocomotion = class PlayerLocomotion {
             this._myCollisionCheckParamsMovement.myObjectsToIgnore.pp_pushUnique(physXComponent.object, (first, second) => first.pp_equals(second));
         }
 
-        this._myCollisionCheckParamsMovement.myDebugActive = false;
+        this._myCollisionCheckParamsMovement.myDebugActive = true;
 
         this._myCollisionCheckParamsMovement.myDebugHorizontalMovementActive = true;
         this._myCollisionCheckParamsMovement.myDebugHorizontalPositionActive = true;
         this._myCollisionCheckParamsMovement.myDebugVerticalMovementActive = false;
         this._myCollisionCheckParamsMovement.myDebugVerticalPositionActive = false;
         this._myCollisionCheckParamsMovement.myDebugSlidingActive = false;
-        this._myCollisionCheckParamsMovement.myDebugSurfaceInfoActive = false;
+        this._myCollisionCheckParamsMovement.myDebugGroundInfoActive = false;
+        this._myCollisionCheckParamsMovement.myDebugCeilingInfoActive = false;
         this._myCollisionCheckParamsMovement.myDebugRuntimeParamsActive = false;
         this._myCollisionCheckParamsMovement.myDebugMovementActive = false;
     }

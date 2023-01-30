@@ -205,8 +205,12 @@ WL.registerComponent('stick-movement', {
         this._myCollisionCheckParams.myCeilingPopOutExtraDistance = 0.1 * this._myScale;
 
         this._myCollisionCheckParams.myCheckHeight = true;
-        this._myCollisionCheckParams.myHeightCheckStepAmount = 1;
-        this._myCollisionCheckParams.myCheckHeightTop = true;
+        this._myCollisionCheckParams.myCheckHeightVerticalMovement = true;
+        this._myCollisionCheckParams.myCheckHeightVerticalPosition = true;
+        this._myCollisionCheckParams.myHeightCheckStepAmountMovement = 1;
+        this._myCollisionCheckParams.myHeightCheckStepAmountPosition = 1;
+        this._myCollisionCheckParams.myCheckHeightTopMovement = true;
+        this._myCollisionCheckParams.myCheckHeightTopPosition = true;
         this._myCollisionCheckParams.myCheckHeightConeOnCollision = true;
         this._myCollisionCheckParams.myCheckVerticalForwardFixed = true;
         this._myCollisionCheckParams.myCheckVerticalStraight = true;
