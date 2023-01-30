@@ -295,6 +295,7 @@ CollisionCheck.prototype._internalHorizontalSlide = function () {
         invertedNormal.vec3_normalize(invertedNormal);
 
         collisionRuntimeParams.mySlidingCollisionHit.copy(collisionRuntimeParams.myHorizontalCollisionHit);
+        collisionRuntimeParams.mySlidingWallNormal.vec3_copy(collisionRuntimeParams.myHorizontalCollisionHit.myNormal);
 
         outSlideMovement.vec3_zero();
 

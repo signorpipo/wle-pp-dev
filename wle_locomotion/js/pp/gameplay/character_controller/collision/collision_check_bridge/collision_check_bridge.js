@@ -64,13 +64,16 @@ PP.CollisionCheckBridge = {
         characterCollisionResults.myTransformResults.myStartTransformQuat.quat2_getForward(outCollisionRuntimeParams.myOriginalForward);
         characterCollisionResults.myTransformResults.myStartTransformQuat.quat2_getUp(outCollisionRuntimeParams.myOriginalUp);
 
-        //outCollisionRuntimeParams.myOriginalHeight = characterCollisionResults.myOriginalHeight;
+        //ok: outCollisionRuntimeParams.myOriginalHeight = characterCollisionResults.myOriginalHeight;
 
         outCollisionRuntimeParams.myOriginalMovement.vec3_copy(characterCollisionResults.myMovementResults.myStartMovement);
         outCollisionRuntimeParams.myFixedMovement.vec3_copy(characterCollisionResults.myMovementResults.myEndMovement);
 
         outCollisionRuntimeParams.myLastValidOriginalHorizontalMovement.vec3_copy(characterCollisionResults.myInternalResults.myLastRelevantStartHorizontalMovement);
         outCollisionRuntimeParams.myLastValidOriginalVerticalMovement.vec3_copy(characterCollisionResults.myInternalResults.myLastRelevantStartVerticalMovement);
+
+        outCollisionRuntimeParams.myLastValidEndHorizontalMovement.vec3_copy(characterCollisionResults.myInternalResults.myLastRelevantEndHorizontalMovement);
+        outCollisionRuntimeParams.myLastValidEndVerticalMovement.vec3_copy(characterCollisionResults.myInternalResults.myLastRelevantEndVerticalMovement);
 
         outCollisionRuntimeParams.myLastValidSurfaceAdjustedHorizontalMovement.vec3_copy(characterCollisionResults.myInternalResults.myLastRelevantAdjustedStartHorizontalMovement);
         outCollisionRuntimeParams.myLastValidSurfaceAdjustedVerticalMovement.vec3_copy(characterCollisionResults.myInternalResults.myLastRelevantAdjustedStartVerticalMovement);
@@ -106,12 +109,12 @@ PP.CollisionCheckBridge = {
         outCollisionRuntimeParams.myHorizontalMovementHasAdjustedVerticalMovementBasedOnCeilingPerceivedAngleUphill = characterCollisionResults.myCeilingResults.myHasHorizontalMovementAdjustedVerticalMovementBasedOnSurfacePerceivedAngleUphill;
         outCollisionRuntimeParams.myVerticalMovementHasAdjustedHorizontalMovementBasedOnCeilingAngleDownhill = characterCollisionResults.myCeilingResults.myHasVerticalMovementAdjustedHorizontalMovementBasedOnSurfaceAngleDownhill;
 
-        //outCollisionRuntimeParams.myHasReducedVerticalMovement = characterCollisionResults.myVerticalMovementResults.myHasMovementBeenReduced;
+        //ok: outCollisionRuntimeParams.myHasReducedVerticalMovement = characterCollisionResults.myVerticalMovementResults.myHasMovementBeenReduced;
 
         outCollisionRuntimeParams.myIsSliding = characterCollisionResults.myWallSlideResults.myHasSlid;
         outCollisionRuntimeParams.mySlidingMovementAngle = characterCollisionResults.myWallSlideResults.mySlideMovementAngle;
         outCollisionRuntimeParams.mySlidingCollisionAngle = characterCollisionResults.myWallSlideResults.mySlideMovementWallAngle;
-        //outCollisionRuntimeParams.mySlidingCollisionHit.copy(characterCollisionResults.myWallSlideResults.myWallNormal);
+        outCollisionRuntimeParams.mySlidingWallNormal.vec3_copy(characterCollisionResults.myWallSlideResults.myWallNormal);
 
         outCollisionRuntimeParams.myIsSlidingIntoOppositeDirection = characterCollisionResults.myInternalResults.myHasWallSlidTowardOppositeDirection;
         outCollisionRuntimeParams.myIsSlidingFlickerPrevented = characterCollisionResults.myInternalResults.myLastRelevantWallSlideFlickerPrevented;
@@ -188,7 +191,7 @@ PP.CollisionCheckBridge = {
             outCharacterCollisionResults.myWallSlideResults.myHasSlid = collisionRuntimeParams.myIsSliding;
             outCharacterCollisionResults.myWallSlideResults.mySlideMovementAngle = collisionRuntimeParams.mySlidingMovementAngle;
             outCharacterCollisionResults.myWallSlideResults.mySlideMovementWallAngle = collisionRuntimeParams.mySlidingCollisionAngle;
-            //outCharacterCollisionResults.myWallSlideResults.myWallNormal = collisionRuntimeParams.mySlidingCollisionHit;
+            outCharacterCollisionResults.myWallSlideResults.myWallNormal.vec3_copy(ollisionRuntimeParams.mySlidingWallNormal);
 
             outCharacterCollisionResults.myGroundInfo.myIsOnSurface = collisionRuntimeParams.myIsOnGround;
             outCharacterCollisionResults.myGroundInfo.mySurfaceAngle = collisionRuntimeParams.myGroundAngle;
@@ -219,9 +222,9 @@ PP.CollisionCheckBridge = {
             outCharacterCollisionResults.mySplitMovementResults.myMovementChecked.vec3_copy(collisionRuntimeParams.mySplitMovementMovementChecked);
 
             outCharacterCollisionResults.myInternalResults.myLastRelevantStartHorizontalMovement.vec3_copy(collisionRuntimeParams.myLastValidOriginalHorizontalMovement);
-            outCharacterCollisionResults.myInternalResults.myLastRelevantEndHorizontalMovement.vec3_copy(collisionRuntimeParams.mySlidingPreviousHorizontalMovement);
+            outCharacterCollisionResults.myInternalResults.myLastRelevantEndHorizontalMovement.vec3_copy(collisionRuntimeParams.myLastValidEndHorizontalMovement);
             outCharacterCollisionResults.myInternalResults.myLastRelevantStartVerticalMovement.vec3_copy(collisionRuntimeParams.myLastValidOriginalVerticalMovement);
-            //outCharacterCollisionResults.myInternalResults.myLastRelevantEndVerticalMovement.vec3_copy(collisionRuntimeParams.myMovementChecked);
+            outCharacterCollisionResults.myInternalResults.myLastRelevantEndVerticalMovement.vec3_copy(collisionRuntimeParams.myLastValidEndVerticalMovement);
 
             outCharacterCollisionResults.myInternalResults.myLastRelevantAdjustedStartHorizontalMovement.vec3_copy(collisionRuntimeParams.myLastValidSurfaceAdjustedHorizontalMovement);
             outCharacterCollisionResults.myInternalResults.myLastRelevantAdjustedStartVerticalMovement.vec3_copy(collisionRuntimeParams.myLastValidSurfaceAdjustedVerticalMovement);

@@ -393,6 +393,8 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.myLastValidOriginalVerticalMovement = PP.vec3_create();
         this.myLastValidSurfaceAdjustedHorizontalMovement = PP.vec3_create();
         this.myLastValidSurfaceAdjustedVerticalMovement = PP.vec3_create();
+        this.myLastValidEndHorizontalMovement = PP.vec3_create();
+        this.myLastValidEndVerticalMovement = PP.vec3_create();
 
         this.myIsOnGround = false;
         this.myGroundAngle = 0;
@@ -433,6 +435,7 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.mySlidingMovementAngle = 0;
         this.mySlidingCollisionAngle = 0;
         this.mySlidingCollisionHit = new PP.RaycastHit();
+        this.mySlidingWallNormal = new PP.vec3_create();
         this.mySliding90DegreesSign = 0;
         this.mySlidingRecompute90DegreesSign = true;
         this.myLastValidIsSliding = false;
@@ -478,6 +481,9 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.myLastValidOriginalVerticalMovement.vec3_zero();
         this.myLastValidSurfaceAdjustedHorizontalMovement.vec3_zero();
         this.myLastValidSurfaceAdjustedVerticalMovement.vec3_zero();
+        this.myLastValidEndHorizontalMovement.vec3_zero();
+        this.myLastValidEndVerticalMovement.vec3_zero();
+
 
         this.myIsOnGround = false;
         this.myGroundAngle = 0;
@@ -522,6 +528,7 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.mySlidingRecompute90DegreesSign = true;
         this.myLastValidIsSliding = false;
         this.mySlidingPreviousHorizontalMovement.vec3_zero();
+        this.mySlidingWallNormal.vec3_zero();
 
         this.myOriginalTeleportPosition.vec3_zero();
         this.myFixedTeleportPosition.vec3_zero();
@@ -563,6 +570,8 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.myLastValidOriginalVerticalMovement.vec3_copy(other.myLastValidOriginalVerticalMovement);
         this.myLastValidSurfaceAdjustedHorizontalMovement.vec3_copy(other.myLastValidSurfaceAdjustedHorizontalMovement);
         this.myLastValidSurfaceAdjustedVerticalMovement.vec3_copy(other.myLastValidSurfaceAdjustedVerticalMovement);
+        this.myLastValidEndHorizontalMovement.vec3_copy(other.myLastValidEndHorizontalMovement);
+        this.myLastValidEndVerticalMovement.vec3_copy(other.myLastValidEndVerticalMovement);
 
         this.myIsOnGround = other.myIsOnGround;
         this.myGroundAngle = other.myGroundAngle;
@@ -607,6 +616,7 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.mySlidingRecompute90DegreesSign = other.mySlidingRecompute90DegreesSign;
         this.myLastValidIsSliding = other.myLastValidIsSliding;
         this.mySlidingPreviousHorizontalMovement.vec3_copy(other.mySlidingPreviousHorizontalMovement);
+        this.mySlidingWallNormal.vec3_copy(other.mySlidingWallNormal);
 
         this.myOriginalTeleportPosition.vec3_copy(other.myOriginalTeleportPosition);
         this.myFixedTeleportPosition.vec3_copy(other.myFixedTeleportPosition);

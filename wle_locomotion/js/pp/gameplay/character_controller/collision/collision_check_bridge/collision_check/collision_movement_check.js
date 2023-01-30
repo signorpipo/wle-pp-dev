@@ -407,6 +407,7 @@ CollisionCheck.prototype._moveStep = function () {
             if (!fixedHorizontalMovement.vec3_isZero()) {
                 collisionRuntimeParams.myLastValidIsSliding = collisionRuntimeParams.myIsSliding;
                 collisionRuntimeParams.myIsSlidingFlickerPrevented = false;
+                collisionRuntimeParams.myLastValidEndHorizontalMovement.vec3_copy(fixedHorizontalMovement);
                 //fixedHorizontalMovement.vec3_error();
 
                 if (!collisionRuntimeParams.myIsSliding) {
@@ -416,6 +417,10 @@ CollisionCheck.prototype._moveStep = function () {
                 }
             } else {
                 //console.error("still", collisionRuntimeParams.myIsSlidingFlickerPrevented, collisionRuntimeParams.mySlidingFlickerPreventionCheckAnywayCounter);
+            }
+
+            if (!fixedVerticalMovement.vec3_isZero()) {
+                collisionRuntimeParams.myLastValidEndVerticalMovement.vec3_copy(fixedVerticalMovement);
             }
         }
 
