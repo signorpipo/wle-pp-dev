@@ -26,55 +26,11 @@ PP.CharacterCollisionResults = class CharacterCollisionResults {
     }
 
     reset() {
-        this.myCheckType = PP.CharacterCollisionCheckType.NONE;
-
-        this.myTransformResults.reset();
-
-        this.myMovementResults.reset();
-        this.myHorizontalMovementResults.reset();
-        this.myVerticalMovementResults.reset();
-
-        this.myTeleportResults.reset();
-
-        this.myCheckTransformResults.reset();
-
-        this.myWallSlideResults.reset();
-
-        this.myGroundInfo.reset();
-        this.myCeilingInfo.reset();
-
-        this.myGroundResults.reset();
-        this.myCeilingResults.reset();
-
-        this.mySplitMovementResults.reset();
-
-        this.myInternalResults.reset();
+        // implemented outside class definition
     }
 
     copy(other) {
-        this.myCheckType = other.myCheckType;
-
-        this.myTransformResults.copy(other.myTransformResults);
-
-        this.myMovementResults.copy(other.myMovementResults);
-        this.myHorizontalMovementResults.copy(other.myHorizontalMovementResults);
-        this.myVerticalMovementResults.copy(other.myVerticalMovementResults);
-
-        this.myTeleportResults.copy(other.myTeleportResults);
-
-        this.myCheckTransformResults.copy(other.myCheckTransformResults);
-
-        this.myWallSlideResults.copy(other.myWallSlideResults);
-
-        this.myGroundInfo.copy(other.myGroundInfo);
-        this.myCeilingInfo.copy(other.myCeilingInfo);
-
-        this.myGroundResults.copy(other.myGroundResults);
-        this.myCeilingResults.copy(other.myCeilingResults);
-
-        this.mySplitMovementResults.copy(other.mySplitMovementResults);
-
-        this.myInternalResults.copy(other.myInternalResults);
+        // implemented outside class definition
     }
 };
 
@@ -97,17 +53,11 @@ PP.CharacterCollisionSurfaceInfo = class CharacterCollisionSurfaceInfo {
     }
 
     reset() {
-        this.myIsOnSurface = false;
-        this.mySurfaceAngle = 0;
-        this.mySurfacePerceivedAngle = 0;
-        this.mySurfaceNormal.vec3_zero();
+        // implemented outside class definition
     }
 
     copy(other) {
-        this.myIsOnSurface = other.myIsOnSurface;
-        this.mySurfaceAngle = other.mySurfaceAngle;
-        this.mySurfacePerceivedAngle = other.mySurfacePerceivedAngle;
-        this.mySurfaceNormal.vec3_copy(other.mySurfaceNormal);
+        // implemented outside class definition
     }
 };
 
@@ -120,17 +70,11 @@ PP.CharacterCollisionWallSlideResults = class CharacterCollisionWallSlideResults
     }
 
     reset() {
-        this.myHasSlid = false;
-        this.mySlideMovementAngle = 0;
-        this.mySlideMovementWallAngle = 0;
-        this.myWallNormal.vec3_zero();
+        // implemented outside class definition
     }
 
     copy(other) {
-        this.myHasSlid = other.myHasSlid;
-        this.mySlideMovementAngle = other.mySlideMovementAngle;
-        this.mySlideMovementWallAngle = other.mySlideMovementWallAngle;
-        this.myWallNormal.vec3_copy(other.myWallNormal);
+        // implemented outside class definition
     }
 };
 
@@ -141,13 +85,11 @@ PP.CharacterCollisionTransformResults = class CharacterCollisionMovementResults 
     }
 
     reset() {
-        this.myStartTransformQuat.quat2_identity();
-        this.myEndTransformQuat.quat2_identity();
+        // implemented outside class definition
     }
 
     copy(other) {
-        this.myStartTransformQuat.quat2_copy(other.myStartTransformQuat);
-        this.myEndTransformQuat.quat2_copy(other.myEndTransformQuat);
+        // implemented outside class definition
     }
 };
 
@@ -161,19 +103,11 @@ PP.CharacterCollisionMovementResults = class CharacterCollisionMovementResults {
     }
 
     reset() {
-        this.myStartMovement.vec3_zero();
-        this.myEndMovement.vec3_zero();
-        this.myMovementFailed = false;
-        this.myIsColliding = false;
-        this.myReferenceCollisionHit.reset();
+        // implemented outside class definition
     }
 
     copy(other) {
-        this.myStartMovement.vec3_copy(other.myStartMovement);
-        this.myEndMovement.vec3_copy(other.myEndMovement);
-        this.myMovementFailed = other.myMovementFailed;
-        this.myIsColliding = other.myIsColliding;
-        this.myReferenceCollisionHit.copy(other.myReferenceCollisionHit);
+        // implemented outside class definition
     }
 };
 
@@ -185,15 +119,11 @@ PP.CharacterCollisionTeleportResults = class CharacterCollisionTeleportResults {
     }
 
     reset() {
-        this.myStartTeleportTransformQuat.quat2_identity();
-        this.myEndTeleportTransformQuat.quat2_identity();
-        this.myTeleportFailed = false;
+        // implemented outside class definition
     }
 
     copy(other) {
-        this.myStartTeleportTransformQuat.quat2_copy(other.myStartTeleportTransformQuat);
-        this.myEndTeleportTransformQuat.quat2_copy(other.myEndTeleportTransformQuat);
-        this.myTeleportFailed = other.myTeleportFailed;
+        // implemented outside class definition
     }
 };
 
@@ -205,15 +135,11 @@ PP.CharacterCollisionCheckTransformResults = class CharacterCollisionCheckTransf
     }
 
     reset() {
-        this.myStartCheckTransformQuat.quat2_identity();
-        this.myEndCheckTransformQuat.quat2_identity();
-        this.myCheckTransformFailed = false;
+        // implemented outside class definition
     }
 
     copy(other) {
-        this.myStartCheckTransformQuat.quat2_copy(other.myStartCheckTransformQuat);
-        this.myEndCheckTransformQuat.quat2_copy(other.myEndCheckTransformQuat);
-        this.myCheckTransformFailed = other.myCheckTransformFailed;
+        // implemented outside class definition
     }
 };
 
@@ -227,19 +153,11 @@ PP.CharacterCollisionSurfaceResults = class CharacterCollisionCheckTransformResu
     }
 
     reset() {
-        this.myHasSnappedOnSurface = false;
-        this.myHasPoppedOutSurface = false;
-        this.myHasHorizontalMovementAdjustedVerticalMovementBasedOnSurfacePerceivedAngleDownhill = false;
-        this.myHasHorizontalMovementAdjustedVerticalMovementBasedOnSurfacePerceivedAngleUphill = false;
-        this.myHasVerticalMovementAdjustedHorizontalMovementBasedOnSurfaceAngleDownhill = false;
+        // implemented outside class definition
     }
 
     copy(other) {
-        this.myHasSnappedOnSurface = other.myHasSnappedOnSurface;
-        this.myHasPoppedOutSurface = other.myHasPoppedOutSurface;
-        this.myHasHorizontalMovementAdjustedVerticalMovementBasedOnSurfacePerceivedAngleDownhill = other.myHasHorizontalMovementAdjustedVerticalMovementBasedOnSurfacePerceivedAngleDownhill;
-        this.myHasHorizontalMovementAdjustedVerticalMovementBasedOnSurfacePerceivedAngleUphill = other.myHasHorizontalMovementAdjustedVerticalMovementBasedOnSurfacePerceivedAngleUphill;
-        this.myHasVerticalMovementAdjustedHorizontalMovementBasedOnSurfaceAngleDownhill = other.myHasVerticalMovementAdjustedHorizontalMovementBasedOnSurfaceAngleDownhill;
+        // implemented outside class definition
     }
 };
 
@@ -252,17 +170,11 @@ PP.CharacterCollisionSplitMovementResults = class CharacterCollisionSplitMovemen
     }
 
     reset() {
-        this.myStepsToPerform = 0;
-        this.myStepsPerformed = 0;
-        this.myMovementInterrupted = false;
-        this.myMovementChecked.vec3_zero();
+        // implemented outside class definition
     }
 
     copy(other) {
-        this.myStepsToPerform = other.myStepsToPerform;
-        this.myStepsPerformed = other.myStepsPerformed;
-        this.myMovementInterrupted = other.myMovementInterrupted;
-        this.myMovementChecked.vec3_copy(other.myMovementChecked);
+        // implemented outside class definition
     }
 };
 
@@ -285,36 +197,231 @@ PP.CharacterCollisionInternalResults = class CharacterCollisionSplitMovementResu
     }
 
     reset() {
-        this.myLastRelevantStartHorizontalMovement.vec3_zero();
-        this.myLastRelevantAdjustedStartHorizontalMovement.vec3_zero();
-        this.myLastRelevantEndHorizontalMovement.vec3_zero();
-
-        this.myLastRelevantStartVerticalMovement.vec3_zero();
-        this.myLastRelevantAdjustedStartVerticalMovement.vec3_zero();
-        this.myLastRelevantEndVerticalMovement.vec3_zero();
-
-        this.myLastRelevantHasWallSlid = false;
-        this.myHasWallSlidTowardOppositeDirection = false;
-        this.myLastRelevantWallSlideFlickerPrevented = false;
-        this.myWallSlideFlickerPreventionForceCheckCounter = 0;
-        this.myWallSlide90DegreesDirectionSign = 0;
-        this.myWallSlide90DegreesRecomputeDirectionSign = true;
+        // implemented outside class definition
     }
 
     copy(other) {
-        this.myLastRelevantStartHorizontalMovement.vec3_copy(other.myLastRelevantStartHorizontalMovement);
-        this.myLastRelevantAdjustedStartHorizontalMovement.vec3_copy(other.myLastRelevantAdjustedStartHorizontalMovement);
-        this.myLastRelevantEndHorizontalMovement.vec3_copy(other.myLastRelevantEndHorizontalMovement);
-
-        this.myLastRelevantStartVerticalMovement.vec3_copy(other.myLastRelevantStartVerticalMovement);
-        this.myLastRelevantAdjustedStartVerticalMovement.vec3_copy(other.myLastRelevantAdjustedStartVerticalMovement);
-        this.myLastRelevantEndVerticalMovement.vec3_copy(other.myLastRelevantEndVerticalMovement);
-
-        this.myLastRelevantHasWallSlid = other.myLastRelevantHasWallSlid;
-        this.myHasWallSlidTowardOppositeDirection = other.myHasWallSlidTowardOppositeDirection;
-        this.myLastRelevantWallSlideFlickerPrevented = other.myLastRelevantWallSlideFlickerPrevented;
-        this.myWallSlideFlickerPreventionForceCheckCounter = other.myWallSlideFlickerPreventionForceCheckCounter;
-        this.myWallSlide90DegreesDirectionSign = other.myWallSlide90DegreesDirectionSign;
-        this.myWallSlide90DegreesRecomputeDirectionSign = other.myWallSlide90DegreesRecomputeDirectionSign;
+        // implemented outside class definition
     }
 };
+
+
+
+// IMPLEMENTATION
+
+PP.CharacterCollisionResults.prototype.reset = function () {
+    this.myCheckType = PP.CharacterCollisionCheckType.NONE;
+
+    this.myTransformResults.reset();
+
+    this.myMovementResults.reset();
+    this.myHorizontalMovementResults.reset();
+    this.myVerticalMovementResults.reset();
+
+    this.myTeleportResults.reset();
+
+    this.myCheckTransformResults.reset();
+
+    this.myWallSlideResults.reset();
+
+    this.myGroundInfo.reset();
+    this.myCeilingInfo.reset();
+
+    this.myGroundResults.reset();
+    this.myCeilingResults.reset();
+
+    this.mySplitMovementResults.reset();
+
+    this.myInternalResults.reset();
+};
+
+PP.CharacterCollisionResults.prototype.copy = function (other) {
+    this.myCheckType = other.myCheckType;
+
+    this.myTransformResults.copy(other.myTransformResults);
+
+    this.myMovementResults.copy(other.myMovementResults);
+    this.myHorizontalMovementResults.copy(other.myHorizontalMovementResults);
+    this.myVerticalMovementResults.copy(other.myVerticalMovementResults);
+
+    this.myTeleportResults.copy(other.myTeleportResults);
+
+    this.myCheckTransformResults.copy(other.myCheckTransformResults);
+
+    this.myWallSlideResults.copy(other.myWallSlideResults);
+
+    this.myGroundInfo.copy(other.myGroundInfo);
+    this.myCeilingInfo.copy(other.myCeilingInfo);
+
+    this.myGroundResults.copy(other.myGroundResults);
+    this.myCeilingResults.copy(other.myCeilingResults);
+
+    this.mySplitMovementResults.copy(other.mySplitMovementResults);
+
+    this.myInternalResults.copy(other.myInternalResults);
+};
+
+PP.CharacterCollisionSurfaceInfo.prototype.reset = function () {
+    this.myIsOnSurface = false;
+    this.mySurfaceAngle = 0;
+    this.mySurfacePerceivedAngle = 0;
+    this.mySurfaceNormal.vec3_zero();
+};
+
+PP.CharacterCollisionSurfaceInfo.prototype.copy = function (other) {
+    this.myIsOnSurface = other.myIsOnSurface;
+    this.mySurfaceAngle = other.mySurfaceAngle;
+    this.mySurfacePerceivedAngle = other.mySurfacePerceivedAngle;
+    this.mySurfaceNormal.vec3_copy(other.mySurfaceNormal);
+};
+
+PP.CharacterCollisionWallSlideResults.prototype.reset = function () {
+    this.myHasSlid = false;
+    this.mySlideMovementAngle = 0;
+    this.mySlideMovementWallAngle = 0;
+    this.myWallNormal.vec3_zero();
+};
+
+PP.CharacterCollisionWallSlideResults.prototype.copy = function (other) {
+    this.myHasSlid = other.myHasSlid;
+    this.mySlideMovementAngle = other.mySlideMovementAngle;
+    this.mySlideMovementWallAngle = other.mySlideMovementWallAngle;
+    this.myWallNormal.vec3_copy(other.myWallNormal);
+};
+
+PP.CharacterCollisionTransformResults.prototype.reset = function () {
+    this.myStartTransformQuat.quat2_identity();
+    this.myEndTransformQuat.quat2_identity();
+};
+
+PP.CharacterCollisionTransformResults.prototype.copy = function (other) {
+    this.myStartTransformQuat.quat2_copy(other.myStartTransformQuat);
+    this.myEndTransformQuat.quat2_copy(other.myEndTransformQuat);
+};
+
+PP.CharacterCollisionMovementResults.prototype.reset = function () {
+    this.myStartMovement.vec3_zero();
+    this.myEndMovement.vec3_zero();
+    this.myMovementFailed = false;
+    this.myIsColliding = false;
+    this.myReferenceCollisionHit.reset();
+};
+
+PP.CharacterCollisionMovementResults.prototype.copy = function (other) {
+    this.myStartMovement.vec3_copy(other.myStartMovement);
+    this.myEndMovement.vec3_copy(other.myEndMovement);
+    this.myMovementFailed = other.myMovementFailed;
+    this.myIsColliding = other.myIsColliding;
+    this.myReferenceCollisionHit.copy(other.myReferenceCollisionHit);
+};
+
+PP.CharacterCollisionTeleportResults.prototype.reset = function () {
+    this.myStartTeleportTransformQuat.quat2_identity();
+    this.myEndTeleportTransformQuat.quat2_identity();
+    this.myTeleportFailed = false;
+};
+
+PP.CharacterCollisionTeleportResults.prototype.copy = function (other) {
+    this.myStartTeleportTransformQuat.quat2_copy(other.myStartTeleportTransformQuat);
+    this.myEndTeleportTransformQuat.quat2_copy(other.myEndTeleportTransformQuat);
+    this.myTeleportFailed = other.myTeleportFailed;
+};
+
+PP.CharacterCollisionCheckTransformResults.prototype.reset = function () {
+    this.myStartCheckTransformQuat.quat2_identity();
+    this.myEndCheckTransformQuat.quat2_identity();
+    this.myCheckTransformFailed = false;
+};
+
+PP.CharacterCollisionCheckTransformResults.prototype.copy = function (other) {
+    this.myStartCheckTransformQuat.quat2_copy(other.myStartCheckTransformQuat);
+    this.myEndCheckTransformQuat.quat2_copy(other.myEndCheckTransformQuat);
+    this.myCheckTransformFailed = other.myCheckTransformFailed;
+};
+
+PP.CharacterCollisionSurfaceResults.prototype.reset = function () {
+    this.myHasSnappedOnSurface = false;
+    this.myHasPoppedOutSurface = false;
+    this.myHasHorizontalMovementAdjustedVerticalMovementBasedOnSurfacePerceivedAngleDownhill = false;
+    this.myHasHorizontalMovementAdjustedVerticalMovementBasedOnSurfacePerceivedAngleUphill = false;
+    this.myHasVerticalMovementAdjustedHorizontalMovementBasedOnSurfaceAngleDownhill = false;
+};
+
+PP.CharacterCollisionSurfaceResults.prototype.copy = function (other) {
+    this.myHasSnappedOnSurface = other.myHasSnappedOnSurface;
+    this.myHasPoppedOutSurface = other.myHasPoppedOutSurface;
+    this.myHasHorizontalMovementAdjustedVerticalMovementBasedOnSurfacePerceivedAngleDownhill = other.myHasHorizontalMovementAdjustedVerticalMovementBasedOnSurfacePerceivedAngleDownhill;
+    this.myHasHorizontalMovementAdjustedVerticalMovementBasedOnSurfacePerceivedAngleUphill = other.myHasHorizontalMovementAdjustedVerticalMovementBasedOnSurfacePerceivedAngleUphill;
+    this.myHasVerticalMovementAdjustedHorizontalMovementBasedOnSurfaceAngleDownhill = other.myHasVerticalMovementAdjustedHorizontalMovementBasedOnSurfaceAngleDownhill;
+};
+
+PP.CharacterCollisionSplitMovementResults.prototype.reset = function () {
+    this.myStepsToPerform = 0;
+    this.myStepsPerformed = 0;
+    this.myMovementInterrupted = false;
+    this.myMovementChecked.vec3_zero();
+};
+
+PP.CharacterCollisionSplitMovementResults.prototype.copy = function (other) {
+    this.myStepsToPerform = other.myStepsToPerform;
+    this.myStepsPerformed = other.myStepsPerformed;
+    this.myMovementInterrupted = other.myMovementInterrupted;
+    this.myMovementChecked.vec3_copy(other.myMovementChecked);
+};
+
+PP.CharacterCollisionInternalResults.prototype.reset = function () {
+    this.myLastRelevantStartHorizontalMovement.vec3_zero();
+    this.myLastRelevantAdjustedStartHorizontalMovement.vec3_zero();
+    this.myLastRelevantEndHorizontalMovement.vec3_zero();
+
+    this.myLastRelevantStartVerticalMovement.vec3_zero();
+    this.myLastRelevantAdjustedStartVerticalMovement.vec3_zero();
+    this.myLastRelevantEndVerticalMovement.vec3_zero();
+
+    this.myLastRelevantHasWallSlid = false;
+    this.myHasWallSlidTowardOppositeDirection = false;
+    this.myLastRelevantWallSlideFlickerPrevented = false;
+    this.myWallSlideFlickerPreventionForceCheckCounter = 0;
+    this.myWallSlide90DegreesDirectionSign = 0;
+    this.myWallSlide90DegreesRecomputeDirectionSign = true;
+};
+
+PP.CharacterCollisionInternalResults.prototype.copy = function (other) {
+    this.myLastRelevantStartHorizontalMovement.vec3_copy(other.myLastRelevantStartHorizontalMovement);
+    this.myLastRelevantAdjustedStartHorizontalMovement.vec3_copy(other.myLastRelevantAdjustedStartHorizontalMovement);
+    this.myLastRelevantEndHorizontalMovement.vec3_copy(other.myLastRelevantEndHorizontalMovement);
+
+    this.myLastRelevantStartVerticalMovement.vec3_copy(other.myLastRelevantStartVerticalMovement);
+    this.myLastRelevantAdjustedStartVerticalMovement.vec3_copy(other.myLastRelevantAdjustedStartVerticalMovement);
+    this.myLastRelevantEndVerticalMovement.vec3_copy(other.myLastRelevantEndVerticalMovement);
+
+    this.myLastRelevantHasWallSlid = other.myLastRelevantHasWallSlid;
+    this.myHasWallSlidTowardOppositeDirection = other.myHasWallSlidTowardOppositeDirection;
+    this.myLastRelevantWallSlideFlickerPrevented = other.myLastRelevantWallSlideFlickerPrevented;
+    this.myWallSlideFlickerPreventionForceCheckCounter = other.myWallSlideFlickerPreventionForceCheckCounter;
+    this.myWallSlide90DegreesDirectionSign = other.myWallSlide90DegreesDirectionSign;
+    this.myWallSlide90DegreesRecomputeDirectionSign = other.myWallSlide90DegreesRecomputeDirectionSign;
+};
+
+
+
+Object.defineProperty(PP.CharacterCollisionResults.prototype, "reset", { enumerable: false });
+Object.defineProperty(PP.CharacterCollisionTransformResults.prototype, "reset", { enumerable: false });
+Object.defineProperty(PP.CharacterCollisionMovementResults.prototype, "reset", { enumerable: false });
+Object.defineProperty(PP.CharacterCollisionTeleportResults.prototype, "reset", { enumerable: false });
+Object.defineProperty(PP.CharacterCollisionCheckTransformResults.prototype, "reset", { enumerable: false });
+Object.defineProperty(PP.CharacterCollisionWallSlideResults.prototype, "reset", { enumerable: false });
+Object.defineProperty(PP.CharacterCollisionSurfaceInfo.prototype, "reset", { enumerable: false });
+Object.defineProperty(PP.CharacterCollisionSurfaceResults.prototype, "reset", { enumerable: false });
+Object.defineProperty(PP.CharacterCollisionSplitMovementResults.prototype, "reset", { enumerable: false });
+Object.defineProperty(PP.CharacterCollisionInternalResults.prototype, "reset", { enumerable: false });
+Object.defineProperty(PP.CharacterCollisionResults.prototype, "copy", { enumerable: false });
+Object.defineProperty(PP.CharacterCollisionTransformResults.prototype, "copy", { enumerable: false });
+Object.defineProperty(PP.CharacterCollisionMovementResults.prototype, "copy", { enumerable: false });
+Object.defineProperty(PP.CharacterCollisionTeleportResults.prototype, "copy", { enumerable: false });
+Object.defineProperty(PP.CharacterCollisionCheckTransformResults.prototype, "copy", { enumerable: false });
+Object.defineProperty(PP.CharacterCollisionWallSlideResults.prototype, "copy", { enumerable: false });
+Object.defineProperty(PP.CharacterCollisionSurfaceInfo.prototype, "copy", { enumerable: false });
+Object.defineProperty(PP.CharacterCollisionSurfaceResults.prototype, "copy", { enumerable: false });
+Object.defineProperty(PP.CharacterCollisionSplitMovementResults.prototype, "copy", { enumerable: false });
+Object.defineProperty(PP.CharacterCollisionInternalResults.prototype, "copy", { enumerable: false });

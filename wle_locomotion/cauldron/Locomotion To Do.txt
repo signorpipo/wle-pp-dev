@@ -38,8 +38,6 @@ v Componente character-controller che semplicemente ha la collisione e puoi dirg
 TEMP:
 - head controller -> feet controller? body controller?
 
-- when to use my is real on ground, forse uphill usa real, downhill usa corrente
-
 - maybe the transform manager should only work for the overall transform, with the head on another class that also manage the hands?
 	- o forse, sebbene l'idea di avere una cosa un po' generica che ti fa il servizio di darti l'ultima valida non collidosa, fino alle mani è piu comodo che sia tutta nel
 	  player character controller
