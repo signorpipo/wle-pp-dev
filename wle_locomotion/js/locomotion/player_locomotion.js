@@ -420,9 +420,12 @@ PlayerLocomotion = class PlayerLocomotion {
         this._myCollisionCheckParamsMovement.myCheckVerticalBothDirection = true;
 
         this._myCollisionCheckParamsMovement.myCheckVerticalStraight = true;
-        this._myCollisionCheckParamsMovement.myCheckVerticalDiagonalRay = false;
-        this._myCollisionCheckParamsMovement.myCheckVerticalDiagonalBorder = false;
-        this._myCollisionCheckParamsMovement.myCheckVerticalDiagonalBorderRay = false;
+        this._myCollisionCheckParamsMovement.myCheckVerticalDiagonalRayOutward = false;
+        this._myCollisionCheckParamsMovement.myCheckVerticalDiagonalRayInward = false;
+        this._myCollisionCheckParamsMovement.myCheckVerticalDiagonalBorderOutward = false;
+        this._myCollisionCheckParamsMovement.myCheckVerticalDiagonalBorderInward = false;
+        this._myCollisionCheckParamsMovement.myCheckVerticalDiagonalBorderRayOutward = false;
+        this._myCollisionCheckParamsMovement.myCheckVerticalDiagonalBorderRayInward = false;
         this._myCollisionCheckParamsMovement.myCheckVerticalSearchFartherVerticalHit = false;
 
         this._myCollisionCheckParamsMovement.myGroundAngleToIgnore = 30;
