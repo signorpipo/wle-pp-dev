@@ -1,4 +1,4 @@
-PP.CharacterCollisionDetection = class CharacterCollisionDetection {
+PP.CharacterCollisionSystem = class CharacterCollisionSystem {
     constructor() {
         this._myLastCheckRaycastsPerformed = 0;
         this._myCurrentFrameRaycastsPerformed = 0;
@@ -78,7 +78,7 @@ PP.CharacterCollisionDetection = class CharacterCollisionDetection {
 
 // IMPLEMENTATION
 
-PP.CharacterCollisionDetection.prototype.checkTeleportToPosition = function () {
+PP.CharacterCollisionSystem.prototype.checkTeleportToPosition = function () {
     let teleportTransformQuat = PP.quat2_create();
     return function checkTeleportToPosition(teleportPosition, currentTransformQuat, characterColliderSetup, prevCharacterCollisionResults, outCharacterCollisionResults) {
         teleportTransformQuat.quat2_copy(currentTransformQuat);
@@ -89,4 +89,4 @@ PP.CharacterCollisionDetection.prototype.checkTeleportToPosition = function () {
 
 
 
-Object.defineProperty(PP.CharacterCollisionDetection.prototype, "checkTeleportToPosition", { enumerable: false });
+Object.defineProperty(PP.CharacterCollisionSystem.prototype, "checkTeleportToPosition", { enumerable: false });

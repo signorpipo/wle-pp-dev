@@ -128,7 +128,8 @@ require('./pp/gameplay/character_controller/collision/collision_check_bridge/col
 
 require('./pp/gameplay/character_controller/collision/character_collider_setup');
 require('./pp/gameplay/character_controller/collision/character_collision_results');
-require('./pp/gameplay/character_controller/collision/character_collision_detection');
+require('./pp/gameplay/character_controller/collision/character_collision_system');
+require('./pp/gameplay/character_controller/collision/components/character_collision_system_component');
 
 require('./pp/gameplay/character_controller/character_controller');
 require('./pp/gameplay/character_controller/synced_character_controller');
