@@ -410,8 +410,10 @@ PlayerTransformManager = class PlayerTransformManager {
 
         params.myHorizontalMovementCheckEnabled = true;
         params.myHorizontalMovementRadialStepAmount = 1;
-        params.myHorizontalMovementCheckDiagonal = true;
-        params.myHorizontalMovementCheckVerticalDiagonalUpward = true;
+        params.myHorizontalMovementCheckDiagonalOutward = true;
+        params.myHorizontalMovementCheckDiagonalInward = true;
+        params.myHorizontalMovementCheckVerticalDiagonalUpwardOutward = true;
+        params.myHorizontalMovementCheckVerticalDiagonalUpwardInward = true;
 
         params.myHorizontalPositionCheckEnabled = true;
         params.myHalfConeAngle = 180;
