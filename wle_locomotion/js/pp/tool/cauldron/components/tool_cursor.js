@@ -108,8 +108,6 @@ WL.registerComponent('pp-tool-cursor', {
                     this._myCursorObjectNonVR.pp_setTransformQuat(PP.myPlayerObjects.myNonVRCamera.pp_getTransformQuat(transformQuat));
                 }
             }
-
-            this._myCursorMeshobject.pp_setTransform(this._myCursorMeshobject.pp_getTransform(transform));
         };
     }(),
     _isUsingHand: function () {

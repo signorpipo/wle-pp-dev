@@ -127,6 +127,7 @@
         QUAT 2:
             ○ quat2_copy        / quat2_identity
             - quat2_normalize
+            - quat2_isNormalized
             - quat2_getPosition     / quat2_getRotation
             ○ quat2_setPosition     / quat2_setRotation     / quat2_setPositionRotation
             - quat2_getAxes     / quat2_getRight    / quat2_getUp   / quat2_getForward  / quat2_getLeft    / quat2_getDown   / quat2_getBackward
@@ -1849,6 +1850,11 @@ Array.prototype.quat2_setPositionRotationQuat = function (position, rotation) {
 };
 
 // New Functions
+
+
+Array.prototype.quat2_isNormalized = function () {
+    return Math.abs(glMatrix.quat2.length(this) - 1) < this._pp_epsilon;
+};
 
 Array.prototype.quat2_getAxes = function (out = [glMatrix.vec3.create(), glMatrix.vec3.create(), glMatrix.vec3.create()]) {
     this.quat2_getLeft(out[0]);

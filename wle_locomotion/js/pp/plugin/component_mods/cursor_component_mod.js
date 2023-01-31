@@ -51,6 +51,9 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
 
         this.globalTarget = this.object.addComponent('cursor-target');
 
+        this.transformQuat = PP.quat2_create();
+        this.rotationQuat = PP.quat_create();
+        this.transformMatrix = PP.mat4_create();
         this.origin = new Float32Array(3);
         this.cursorObjScale = new Float32Array(3);
         this.direction = [0, 0, 0];
@@ -196,6 +199,7 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
             if (this.hoveringObject && (this.cursorPos[0] != 0 || this.cursorPos[1] != 0 || this.cursorPos[2] != 0)) {
                 this._setCursorVisibility(true);
                 this.cursorObject.setTranslationWorld(this.cursorPos);
+                this.cursorObject.transformLocal = this.cursorObject.transformLocal.quat2_normalize(this.transformQuat);
                 this._setCursorRayTransform(this.cursorPos);
             } else {
                 if (this.visible && this.cursorRayObject) {
