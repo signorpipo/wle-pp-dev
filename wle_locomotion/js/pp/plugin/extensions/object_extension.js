@@ -1974,7 +1974,7 @@ if (WL && WL.Object) {
 
             this.myDeepCloneParams = new PP.DeepCloneParams(); // Used to specify if the object must be deep cloned or not, you can also override the behavior for specific components and variables
 
-            this.myExtraData = new Map(); // This map can be filled with whatever extra data the component clone function could need
+            this.myExtraParamsMap = new Map(); // This map can be filled with whatever extra data the component clone function could need
         }
     };
 
@@ -2119,7 +2119,7 @@ if (WL && WL.Object) {
                     let componentToClone = cloneData[0];
                     let currentClonedObject = cloneData[1];
 
-                    let clonedComponent = componentToClone.pp_clone(currentClonedObject, params.myDeepCloneParams, params.myExtraData);
+                    let clonedComponent = componentToClone.pp_clone(currentClonedObject, params.myDeepCloneParams, params.myExtraParamsMap);
                     if (componentToClone.pp_clonePostProcess != null) {
                         componentsToPostProcessData.push([componentToClone, clonedComponent]);
                     }
@@ -2132,7 +2132,7 @@ if (WL && WL.Object) {
                     let componentToClone = cloneData[0];
                     let currentClonedComponent = cloneData[1];
 
-                    componentToClone.pp_clonePostProcess(currentClonedComponent, params.myDeepCloneParams, params.myExtraData);
+                    componentToClone.pp_clonePostProcess(currentClonedComponent, params.myDeepCloneParams, params.myExtraParamsMap);
                 }
             }
 

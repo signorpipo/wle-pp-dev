@@ -1,7 +1,7 @@
 if (WL && WL.Object) {
 
-    WL.MeshComponent.prototype.pp_clone = function (clonedObject, deepCloneParams, extraData) {
-        let clonedComponent = clonedObject.pp_addComponent(this.type);
+    WL.MeshComponent.prototype.pp_clone = function (targetObject, deepCloneParams = new PP.DeepCloneParams(), extraParamsMap = null) {
+        let clonedComponent = targetObject.pp_addComponent(this.type);
         clonedComponent.active = this.active;
 
         if (deepCloneParams.isDeepCloneComponentVariable("mesh", "material")) {
@@ -21,8 +21,8 @@ if (WL && WL.Object) {
         return clonedComponent;
     };
 
-    WL.CollisionComponent.prototype.pp_clone = function (clonedObject, deepCloneParams, extraData) {
-        let clonedComponent = clonedObject.pp_addComponent(this.type);
+    WL.CollisionComponent.prototype.pp_clone = function (targetObject, deepCloneParams = new PP.DeepCloneParams(), extraParamsMap = null) {
+        let clonedComponent = targetObject.pp_addComponent(this.type);
         clonedComponent.active = this.active;
 
         clonedComponent.collider = this.collider;
@@ -32,8 +32,8 @@ if (WL && WL.Object) {
         return clonedComponent;
     };
 
-    WL.TextComponent.prototype.pp_clone = function (clonedObject, deepCloneParams, extraData) {
-        let clonedComponent = clonedObject.pp_addComponent(this.type);
+    WL.TextComponent.prototype.pp_clone = function (targetObject, deepCloneParams = new PP.DeepCloneParams(), extraParamsMap = null) {
+        let clonedComponent = targetObject.pp_addComponent(this.type);
         clonedComponent.active = this.active;
 
         if (deepCloneParams.isDeepCloneComponent("text")) {
@@ -55,8 +55,8 @@ if (WL && WL.Object) {
     };
 
     // #TODO not completed, missing flags like gravity or groups
-    WL.PhysXComponent.prototype.pp_clone = function (clonedObject, deepCloneParams, extraData) {
-        let clonedComponent = clonedObject.pp_addComponent(this.type, {
+    WL.PhysXComponent.prototype.pp_clone = function (targetObject, deepCloneParams = new PP.DeepCloneParams(), extraParamsMap = null) {
+        let clonedComponent = targetObject.pp_addComponent(this.type, {
             "angularDamping": this.angularDamping,
             "angularVelocity": this.angularVelocity,
             "dynamicFriction": this.dynamicFriction,
