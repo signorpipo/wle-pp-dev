@@ -44,9 +44,9 @@ PP.AudioPlayer = class AudioPlayer {
 
         this._myLastAudioID = null;
 
-        this._myCallbackMap = new Map();
+        this._myCallbacks = new Map();
         for (let eventKey in PP.AudioEvent) {
-            this._myCallbackMap.set(PP.AudioEvent[eventKey], new Map());    // Signature: callback(audioID)
+            this._myCallbacks.set(PP.AudioEvent[eventKey], new Map());    // Signature: callback(audioID)
         }
 
         if (createAudio) {
@@ -185,11 +185,11 @@ PP.AudioPlayer = class AudioPlayer {
     }
 
     registerAudioEventListener(audioEvent, listenerID, callback) {
-        this._myCallbackMap.get(audioEvent).set(listenerID, callback);
+        this._myCallbacks.get(audioEvent).set(listenerID, callback);
     }
 
     unregisterAudioEventListener(audioEvent, listenerID) {
-        this._myCallbackMap.get(audioEvent).delete(listenerID);
+        this._myCallbacks.get(audioEvent).delete(listenerID);
     }
 
     _addListeners() {
@@ -197,7 +197,7 @@ PP.AudioPlayer = class AudioPlayer {
             for (let eventKey in PP.AudioEvent) {
                 let event = PP.AudioEvent[eventKey];
                 this._myAudio.on(event, function (audioID) {
-                    let callbacks = this._myCallbackMap.get(event);
+                    let callbacks = this._myCallbacks.get(event);
                     for (let callback of callbacks.values()) {
                         callback(audioID);
                     }

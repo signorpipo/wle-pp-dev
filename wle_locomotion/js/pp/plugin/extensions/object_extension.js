@@ -26,7 +26,7 @@
     Examples:
         - pp_getComponent
         - pp_getComponentHierarchy
-        - pp_getComponentAmountMapDescendants
+        - pp_getComponentsAmountMapDescendants
         - pp_setActiveChildren
         - pp_setActiveSelf
     By default the functions work on the Hierarchy
@@ -95,7 +95,7 @@
         - pp_getName    / pp_setName
         - pp_getID
         - pp_reserveObjects / pp_reserveObjectsHierarchy / pp_reserveObjectsDescendants / pp_reserveObjectsChildren / pp_reserveObjectsSelf
-        - pp_getComponentAmountMap / pp_getComponentAmountMapHierarchy / pp_getComponentAmountMapDescendants / pp_getComponentAmountMapChildren / pp_getComponentAmountMapSelf
+        - pp_getComponentsAmountMap / pp_getComponentsAmountMapHierarchy / pp_getComponentsAmountMapDescendants / pp_getComponentsAmountMapChildren / pp_getComponentsAmountMapSelf
         - pp_markDirty
         - pp_equals
         - pp_destroy
@@ -1974,15 +1974,15 @@ if (WL && WL.Object) {
 
             this.myDeepCloneParams = new PP.DeepCloneParams(); // Used to specify if the object must be deep cloned or not, you can also override the behavior for specific components and variables
 
-            this.myExtraParamsMap = new Map(); // This map can be filled with whatever extra data the component clone function could need
+            this.myCustomParamsMap = new Map(); // This map can be filled with whatever custom paramater the component clone function could need
         }
     };
 
     PP.DeepCloneParams = class DeepCloneParams {
         constructor() {
             this._myDeepCloneObject = false;
-            this._myOverrideDeepCloneComponentMap = new Map();
-            this._myOverrideDeepCloneComponentVariableMap = new Map();
+            this._myOverrideDeepCloneComponentsMap = new Map();
+            this._myOverrideDeepCloneComponentsVariablesMap = new Map();
         }
 
         // The implementation is component dependant, not every component implements the deep clone
@@ -1993,25 +1993,25 @@ if (WL && WL.Object) {
         // This value override the deep clone object value
         // The implementation is component dependant, not every component implements the deep clone
         setDeepCloneComponent(componentName, deepClone) {
-            this._myOverrideDeepCloneComponentMap.set(componentName, deepClone);
+            this._myOverrideDeepCloneComponentsMap.set(componentName, deepClone);
         }
 
         // This value override both the deep clone object value and the deep clone component one
         // The implementation is component dependant, not every component variable override is taken into consideration
         setDeepCloneComponentVariable(componentName, variableName, deepClone) {
-            let componentMap = null;
+            let componentsVariablesMap = null;
 
-            if (!this._myOverrideDeepCloneComponentVariableMap.has(componentName)) {
-                this._myOverrideDeepCloneComponentVariableMap.set(componentName, new Map());
+            if (!this._myOverrideDeepCloneComponentsVariablesMap.has(componentName)) {
+                this._myOverrideDeepCloneComponentsVariablesMap.set(componentName, new Map());
             }
 
-            componentMap = this._myOverrideDeepCloneComponentVariableMap.get(componentName);
+            componentsVariablesMap = this._myOverrideDeepCloneComponentsVariablesMap.get(componentName);
 
-            componentMap.set(variableName, deepClone);
+            componentsVariablesMap.set(variableName, deepClone);
         }
 
         isDeepCloneComponent(componentName) {
-            let overrideValue = this._myOverrideDeepCloneComponentMap.get(componentName);
+            let overrideValue = this._myOverrideDeepCloneComponentsMap.get(componentName);
 
             if (overrideValue != null) {
                 return overrideValue;
@@ -2021,9 +2021,9 @@ if (WL && WL.Object) {
         }
 
         isDeepCloneComponentVariable(componentName, variableName) {
-            let componentMap = this._myOverrideDeepCloneComponentVariableMap.get(componentName);
-            if (componentMap != null) {
-                let overrideValue = componentMap.get(variableName);
+            let componentsVariablesMap = this._myOverrideDeepCloneComponentsVariablesMap.get(componentName);
+            if (componentsVariablesMap != null) {
+                let overrideValue = componentsVariablesMap.get(variableName);
                 if (overrideValue != null) {
                     return overrideValue;
                 }
@@ -2119,7 +2119,7 @@ if (WL && WL.Object) {
                     let componentToClone = cloneData[0];
                     let currentClonedObject = cloneData[1];
 
-                    let clonedComponent = componentToClone.pp_clone(currentClonedObject, params.myDeepCloneParams, params.myExtraParamsMap);
+                    let clonedComponent = componentToClone.pp_clone(currentClonedObject, params.myDeepCloneParams, params.myCustomParamsMap);
                     if (componentToClone.pp_clonePostProcess != null) {
                         componentsToPostProcessData.push([componentToClone, clonedComponent]);
                     }
@@ -2132,7 +2132,7 @@ if (WL && WL.Object) {
                     let componentToClone = cloneData[0];
                     let currentClonedComponent = cloneData[1];
 
-                    componentToClone.pp_clonePostProcess(currentClonedComponent, params.myDeepCloneParams, params.myExtraParamsMap);
+                    componentToClone.pp_clonePostProcess(currentClonedComponent, params.myDeepCloneParams, params.myCustomParamsMap);
                 }
             }
 
@@ -2519,30 +2519,30 @@ if (WL && WL.Object) {
     };
 
     WL.Object.prototype.pp_reserveObjectsSelf = function (count) {
-        let componentAmountMap = this.pp_getComponentAmountMapSelf();
-        this._pp_reserveObjects(count, componentAmountMap);
+        let componentsAmountMap = this.pp_getComponentsAmountMapSelf();
+        this._pp_reserveObjects(count, componentsAmountMap);
     };
 
     WL.Object.prototype.pp_reserveObjectsHierarchy = function (count) {
-        let componentAmountMap = this.pp_getComponentAmountMapHierarchy();
-        this._pp_reserveObjects(count, componentAmountMap);
+        let componentsAmountMap = this.pp_getComponentsAmountMapHierarchy();
+        this._pp_reserveObjects(count, componentsAmountMap);
     };
 
     WL.Object.prototype.pp_reserveObjectsDescendants = function (count) {
-        let componentAmountMap = this.pp_getComponentAmountMapDescendants();
-        this._pp_reserveObjects(count, componentAmountMap);
+        let componentsAmountMap = this.pp_getComponentsAmountMapDescendants();
+        this._pp_reserveObjects(count, componentsAmountMap);
     };
 
     WL.Object.prototype.pp_reserveObjectsChildren = function (count) {
-        let componentAmountMap = this.pp_getComponentAmountMapChildren();
-        this._pp_reserveObjects(count, componentAmountMap);
+        let componentsAmountMap = this.pp_getComponentsAmountMapChildren();
+        this._pp_reserveObjects(count, componentsAmountMap);
     };
 
-    WL.Object.prototype.pp_getComponentAmountMap = function (amountMap = new Map()) {
-        return this.pp_getComponentAmountMapHierarchy(amountMap);
+    WL.Object.prototype.pp_getComponentsAmountMap = function (amountMap = new Map()) {
+        return this.pp_getComponentsAmountMapHierarchy(amountMap);
     };
 
-    WL.Object.prototype.pp_getComponentAmountMapSelf = function (amountMap = new Map()) {
+    WL.Object.prototype.pp_getComponentsAmountMapSelf = function (amountMap = new Map()) {
         let objectsAmount = amountMap.get("object");
         if (objectsAmount == null) {
             objectsAmount = 0;
@@ -2564,31 +2564,31 @@ if (WL && WL.Object) {
         return amountMap;
     };
 
-    WL.Object.prototype.pp_getComponentAmountMapHierarchy = function (amountMap = new Map()) {
+    WL.Object.prototype.pp_getComponentsAmountMapHierarchy = function (amountMap = new Map()) {
         let hierarchy = this.pp_getHierarchy();
 
         for (let object of hierarchy) {
-            object.pp_getComponentAmountMapSelf(amountMap);
+            object.pp_getComponentsAmountMapSelf(amountMap);
         }
 
         return amountMap;
     };
 
-    WL.Object.prototype.pp_getComponentAmountMapDescendants = function (amountMap = new Map()) {
+    WL.Object.prototype.pp_getComponentsAmountMapDescendants = function (amountMap = new Map()) {
         let descendants = this.pp_getDescendants();
 
         for (let object of descendants) {
-            object.pp_getComponentAmountMapSelf(amountMap);
+            object.pp_getComponentsAmountMapSelf(amountMap);
         }
 
         return amountMap;
     };
 
-    WL.Object.prototype.pp_getComponentAmountMapChildren = function (amountMap = new Map()) {
+    WL.Object.prototype.pp_getComponentsAmountMapChildren = function (amountMap = new Map()) {
         let children = this.pp_getChildren();
 
         for (let object of children) {
-            object.pp_getComponentAmountMapSelf(amountMap);
+            object.pp_getComponentsAmountMapSelf(amountMap);
         }
 
         return amountMap;
@@ -2690,12 +2690,12 @@ if (WL && WL.Object) {
         return Math.min(Math.max(value, min), max);
     };
 
-    WL.Object.prototype._pp_reserveObjects = function (count, componentAmountMap) {
-        let objectsToReserve = componentAmountMap.get("object") * count;
-        componentAmountMap.delete("object");
+    WL.Object.prototype._pp_reserveObjects = function (count, componentsAmountMap) {
+        let objectsToReserve = componentsAmountMap.get("object") * count;
+        componentsAmountMap.delete("object");
 
         let componentsToReserve = {};
-        for (let [componentName, componentCount] of componentAmountMap.entries()) {
+        for (let [componentName, componentCount] of componentsAmountMap.entries()) {
             componentsToReserve[componentName] = componentCount * count;
         }
 

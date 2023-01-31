@@ -1,6 +1,6 @@
 if (WL && WL.Object) {
 
-    WL.MeshComponent.prototype.pp_clone = function (targetObject, deepCloneParams = new PP.DeepCloneParams(), extraParamsMap = null) {
+    WL.MeshComponent.prototype.pp_clone = function (targetObject, deepCloneParams = new PP.DeepCloneParams(), customParamsMap = null) {
         let clonedComponent = targetObject.pp_addComponent(this.type);
         clonedComponent.active = this.active;
 
@@ -21,7 +21,7 @@ if (WL && WL.Object) {
         return clonedComponent;
     };
 
-    WL.CollisionComponent.prototype.pp_clone = function (targetObject, deepCloneParams = new PP.DeepCloneParams(), extraParamsMap = null) {
+    WL.CollisionComponent.prototype.pp_clone = function (targetObject, deepCloneParams = new PP.DeepCloneParams(), customParamsMap = null) {
         let clonedComponent = targetObject.pp_addComponent(this.type);
         clonedComponent.active = this.active;
 
@@ -32,7 +32,7 @@ if (WL && WL.Object) {
         return clonedComponent;
     };
 
-    WL.TextComponent.prototype.pp_clone = function (targetObject, deepCloneParams = new PP.DeepCloneParams(), extraParamsMap = null) {
+    WL.TextComponent.prototype.pp_clone = function (targetObject, deepCloneParams = new PP.DeepCloneParams(), customParamsMap = null) {
         let clonedComponent = targetObject.pp_addComponent(this.type);
         clonedComponent.active = this.active;
 
@@ -55,7 +55,7 @@ if (WL && WL.Object) {
     };
 
     // #TODO not completed, missing flags like gravity or groups
-    WL.PhysXComponent.prototype.pp_clone = function (targetObject, deepCloneParams = new PP.DeepCloneParams(), extraParamsMap = null) {
+    WL.PhysXComponent.prototype.pp_clone = function (targetObject, deepCloneParams = new PP.DeepCloneParams(), customParamsMap = null) {
         let clonedComponent = targetObject.pp_addComponent(this.type, {
             "angularDamping": this.angularDamping,
             "angularVelocity": this.angularVelocity,

@@ -18,7 +18,7 @@
         
         - pp_toString / pp_toStringCompact / pp_toStringExtended
 
-        - pp_getComponentAmountMap
+        - pp_getComponentsAmountMap
 */
 
 if (WL && WL.Scene) {
@@ -107,8 +107,8 @@ if (WL && WL.Scene) {
 
     //Cauldron
 
-    WL.Scene.prototype.pp_getComponentAmountMap = function (amountMap = new Map()) {
-        return this.pp_getRoot().pp_getComponentAmountMapHierarchy(amountMap);
+    WL.Scene.prototype.pp_getComponentsAmountMap = function (amountMap = new Map()) {
+        return this.pp_getRoot().pp_getComponentsAmountMapHierarchy(amountMap);
     }
 
 
