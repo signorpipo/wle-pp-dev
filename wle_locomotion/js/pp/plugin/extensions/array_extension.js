@@ -674,7 +674,7 @@ Array.prototype.vec3_degreesToQuat = function (out = glMatrix.quat.create()) {
 };
 
 Array.prototype.vec3_isNormalized = function () {
-    return Math.abs(glMatrix.vec3.length(this) - 1) < this._pp_epsilon;
+    return Math.abs(glMatrix.vec3.length(this) - 1) < this._pp_normalizedEpsilon;
 };
 
 Array.prototype.vec3_isZero = function (epsilon = 0) {
@@ -1518,7 +1518,7 @@ Array.prototype.quat_toDegrees = function (out = glMatrix.vec3.create()) {
 };
 
 Array.prototype.quat_isNormalized = function () {
-    return Math.abs(glMatrix.quat.length(this) - 1) < this._pp_epsilon;
+    return Math.abs(glMatrix.quat.length(this) - 1) < this._pp_normalizedEpsilon;
 };
 
 Array.prototype.quat_addRotation = function (rotation, out) {
@@ -1853,7 +1853,7 @@ Array.prototype.quat2_setPositionRotationQuat = function (position, rotation) {
 
 
 Array.prototype.quat2_isNormalized = function () {
-    return Math.abs(glMatrix.quat2.length(this) - 1) < this._pp_epsilon;
+    return Math.abs(glMatrix.quat2.length(this) - 1) < this._pp_normalizedEpsilon;
 };
 
 Array.prototype.quat2_getAxes = function (out = [glMatrix.vec3.create(), glMatrix.vec3.create(), glMatrix.vec3.create()]) {
@@ -2416,6 +2416,7 @@ PP.mat4_fromPositionRotationQuatScale = function (position, rotation, scale) {
 
 Array.prototype._pp_epsilon = 0.000001;
 Array.prototype._pp_degreesEpsilon = 0.00001;
+Array.prototype._pp_normalizedEpsilon = 0.000000001;
 
 Array.prototype._pp_clamp = function (value, min, max) {
     return Math.min(Math.max(value, min), max);
