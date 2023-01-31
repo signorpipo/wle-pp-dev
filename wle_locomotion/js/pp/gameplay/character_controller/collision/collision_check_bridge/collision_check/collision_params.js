@@ -37,7 +37,10 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myHorizontalMovementCheckVerticalDiagonalDownward = false;
         this.myHorizontalMovementCheckVerticalStraightDiagonal = false;
         this.myHorizontalMovementCheckVerticalHorizontalBorderDiagonal = false;
-        this.myHorizontalMovementCheckStraightOnlyForCenter = false;
+        this.myHorizontalMovementHorizontalStraightCentralCheckEnabled = false;
+        this.myHorizontalMovementVerticalStraightCentralCheckEnabled = false;
+        this.myHorizontalMovementVerticalStraightDiagonalUpwardCentralCheckEnabled = false;
+        this.myHorizontalMovementVerticalStraightDiagonalDownwardCentralCheckEnabled = false;
 
         this.myHorizontalPositionCheckEnabled = false;
 
@@ -249,7 +252,10 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myHorizontalMovementCheckVerticalDiagonalDownward = other.myHorizontalMovementCheckVerticalDiagonalDownward;
         this.myHorizontalMovementCheckVerticalStraightDiagonal = other.myHorizontalMovementCheckVerticalStraightDiagonal;
         this.myHorizontalMovementCheckVerticalHorizontalBorderDiagonal = other.myHorizontalMovementCheckVerticalHorizontalBorderDiagonal;
-        this.myHorizontalMovementCheckStraightOnlyForCenter = other.myHorizontalMovementCheckStraightOnlyForCenter;
+        this.myHorizontalMovementHorizontalStraightCentralCheckEnabled = other.myHorizontalMovementHorizontalStraightCentralCheckEnabled;
+        this.myHorizontalMovementVerticalStraightCentralCheckEnabled = other.myHorizontalMovementVerticalStraightCentralCheckEnabled;
+        this.myHorizontalMovementVerticalStraightDiagonalUpwardCentralCheckEnabled = other.myHorizontalMovementVerticalStraightDiagonalUpwardCentralCheckEnabled;
+        this.myHorizontalMovementVerticalStraightDiagonalDownwardCentralCheckEnabled = other.myHorizontalMovementVerticalStraightDiagonalDownwardCentralCheckEnabled;
 
         this.myHorizontalPositionCheckEnabled = other.myHorizontalPositionCheckEnabled;
         this.myHalfConeAngle = other.myHalfConeAngle;

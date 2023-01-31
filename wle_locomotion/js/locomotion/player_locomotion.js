@@ -361,14 +361,15 @@ PlayerLocomotion = class PlayerLocomotion {
         this._myCollisionCheckParamsMovement.myHorizontalMovementStepMaxLength = 0;
         this._myCollisionCheckParamsMovement.myHorizontalMovementRadialStepAmount = 1;
         this._myCollisionCheckParamsMovement.myHorizontalMovementCheckDiagonal = true;
-        this._myCollisionCheckParamsMovement.myHorizontalMovementCheckStraight = true;
+        this._myCollisionCheckParamsMovement.myHorizontalMovementCheckStraight = false;
         this._myCollisionCheckParamsMovement.myHorizontalMovementCheckHorizontalBorder = false;
         this._myCollisionCheckParamsMovement.myHorizontalMovementCheckVerticalStraight = false;
-        this._myCollisionCheckParamsMovement.myHorizontalMovementCheckVerticalDiagonalUpward = true;
+        this._myCollisionCheckParamsMovement.myHorizontalMovementCheckVerticalDiagonalUpward = false;
         this._myCollisionCheckParamsMovement.myHorizontalMovementCheckVerticalDiagonalDownward = false;
         this._myCollisionCheckParamsMovement.myHorizontalMovementCheckVerticalStraightDiagonal = false;
         this._myCollisionCheckParamsMovement.myHorizontalMovementCheckVerticalHorizontalBorderDiagonal = false;
-        this._myCollisionCheckParamsMovement.myHorizontalMovementCheckStraightOnlyForCenter = true;
+        this._myCollisionCheckParamsMovement.myHorizontalMovementHorizontalStraightCentralCheckEnabled = true;
+        this._myCollisionCheckParamsMovement.myHorizontalMovementVerticalStraightDiagonalUpwardCentralCheckEnabled = true;
 
         this._myCollisionCheckParamsMovement.myHorizontalPositionCheckEnabled = true;
         this._myCollisionCheckParamsMovement.myHalfConeAngle = 60;
@@ -476,7 +477,7 @@ PlayerLocomotion = class PlayerLocomotion {
         this._myCollisionCheckParamsMovement.myDebugActive = true;
 
         this._myCollisionCheckParamsMovement.myDebugHorizontalMovementActive = true;
-        this._myCollisionCheckParamsMovement.myDebugHorizontalPositionActive = true;
+        this._myCollisionCheckParamsMovement.myDebugHorizontalPositionActive = false;
         this._myCollisionCheckParamsMovement.myDebugVerticalMovementActive = false;
         this._myCollisionCheckParamsMovement.myDebugVerticalPositionActive = false;
         this._myCollisionCheckParamsMovement.myDebugSlidingActive = false;

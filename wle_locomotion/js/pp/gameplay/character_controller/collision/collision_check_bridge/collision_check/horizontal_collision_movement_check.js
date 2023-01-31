@@ -312,8 +312,8 @@ CollisionCheck.prototype._horizontalMovementVerticalCheck = function () {
                     }
                 }
 
-                if (collisionCheckParams.myHorizontalMovementCheckVerticalStraight &&
-                    (!collisionCheckParams.myHorizontalMovementCheckStraightOnlyForCenter || j == 0)) {
+                if (collisionCheckParams.myHorizontalMovementCheckVerticalStraight ||
+                    (collisionCheckParams.myHorizontalMovementHorizontalStraightCentralCheckEnabled && j == 0)) {
                     if (m == 0) {
                         firstHeightPosition = firstPosition.vec3_sub(heightStep, firstHeightPosition);
 
@@ -338,8 +338,9 @@ CollisionCheck.prototype._horizontalMovementVerticalCheck = function () {
                     }
                 }
 
-                if (collisionCheckParams.myHorizontalMovementCheckVerticalStraightDiagonal &&
-                    (!collisionCheckParams.myHorizontalMovementCheckStraightOnlyForCenter || j == 0)) {
+                if (collisionCheckParams.myHorizontalMovementCheckVerticalStraightDiagonal ||
+                    ((collisionCheckParams.myHorizontalMovementVerticalStraightDiagonalUpwardCentralCheckEnabled ||
+                        collisionCheckParams.myHorizontalMovementVerticalStraightDiagonalDownwardCentralCheckEnabled) && j == 0)) {
                     {
                         firstMovementPosition = firstPosition.vec3_add(movementStep, firstMovementPosition);
                         firstHeightPosition = firstPosition.vec3_sub(heightStep, firstHeightPosition);
@@ -453,8 +454,8 @@ CollisionCheck.prototype._horizontalMovementHorizontalCheck = function () {
                     }
                 }
 
-                if (collisionCheckParams.myHorizontalMovementCheckStraight &&
-                    (!collisionCheckParams.myHorizontalMovementCheckStraightOnlyForCenter || j == 0)) {
+                if (collisionCheckParams.myHorizontalMovementCheckStraight ||
+                    (collisionCheckParams.myHorizontalMovementVerticalStraightCentralCheckEnabled && j == 0)) {
                     firstMovementPosition = firstPosition.vec3_add(movementStep, firstMovementPosition);
 
                     isHorizontalCheckOk = this._horizontalCheckRaycast(firstPosition, firstMovementPosition, null, up,
