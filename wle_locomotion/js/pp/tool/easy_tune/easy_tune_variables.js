@@ -27,6 +27,14 @@ PP.EasyTuneVariables = class EasyTuneVariables {
         }
     }
 
+    has(variableName) {
+        return this._myVariables.has(variableName);
+    }
+
+    length() {
+        return this._myVariables.size;
+    }
+
     isActive(variableName) {
         let variable = this._myVariables.get(variableName);
         if (variable) {
@@ -38,6 +46,14 @@ PP.EasyTuneVariables = class EasyTuneVariables {
 
     getEasyTuneVariable(variableName) {
         return this._myVariables.get(variableName);
+    }
+
+    getEasyTuneVariables() {
+        return Array.from(this._myVariables.values());
+    }
+
+    getEasyTuneVariablesNames() {
+        return Array.from(this._myVariables.keys());
     }
 
     fromJSON(json, resetDefaultValue = false) {
