@@ -170,7 +170,7 @@ CollisionCheck.prototype._ignoreSurfaceAngle = function () {
             }
 
             if (isGround && collisionCheckParams.myGroundAngleToIgnore > 0 && (surfaceAngle > collisionCheckParams.myGroundAngleToIgnore + 0.0001)) {
-                if (collisionCheckParams.myGroundAngleToIgnoreWithPerceivedAngle > 0 &&
+                if (collisionCheckParams.myGroundAngleToIgnoreWithPerceivedAngle != null &&
                     surfaceAngle <= collisionCheckParams.myGroundAngleToIgnoreWithPerceivedAngle + 0.0001) {
                     let perceivedAngle = this.computeSurfacePerceivedAngle(
                         hit.myNormal,
@@ -178,7 +178,7 @@ CollisionCheck.prototype._ignoreSurfaceAngle = function () {
                     surfaceAngle = Math.abs(perceivedAngle);
                 }
             } else if (!isGround && collisionCheckParams.myCeilingAngleToIgnore > 0 && surfaceAngle > collisionCheckParams.myCeilingAngleToIgnore + 0.0001) {
-                if (collisionCheckParams.myCeilingAngleToIgnoreWithPerceivedAngle > 0 &&
+                if (collisionCheckParams.myCeilingAngleToIgnoreWithPerceivedAngle != null &&
                     surfaceAngle <= collisionCheckParams.myCeilingAngleToIgnoreWithPerceivedAngle + 0.0001) {
                     let perceivedAngle = this.computeSurfacePerceivedAngle(
                         hit.myNormal,

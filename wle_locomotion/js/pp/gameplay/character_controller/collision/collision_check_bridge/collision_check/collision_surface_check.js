@@ -110,7 +110,7 @@ CollisionCheck.prototype._postSurfaceCheck = function () {
 
                 if (perceivedAngle > 0) {
                     isOnValidGroundAngleUphill = false;
-                    if (collisionCheckParams.myGroundAngleToIgnoreWithPerceivedAngle > 0 &&
+                    if (collisionCheckParams.myGroundAngleToIgnoreWithPerceivedAngle != null &&
                         collisionRuntimeParams.myGroundAngle <= collisionCheckParams.myGroundAngleToIgnoreWithPerceivedAngle + 0.0001) {
                         isOnValidGroundAngleUphill = Math.abs(perceivedAngle) <= collisionCheckParams.myGroundAngleToIgnore + 0.0001;
                     }
@@ -135,7 +135,7 @@ CollisionCheck.prototype._postSurfaceCheck = function () {
 
                 if (perceivedAngle > 0) {
                     isOnValidCeilingAngleUphill = false;
-                    if (collisionCheckParams.myCeilingAngleToIgnoreWithPerceivedAngle > 0 &&
+                    if (collisionCheckParams.myCeilingAngleToIgnoreWithPerceivedAngle != null &&
                         collisionRuntimeParams.myCeilingAngle <= collisionCheckParams.myCeilingAngleToIgnoreWithPerceivedAngle + 0.0001) {
                         isOnValidCeilingAngleUphill = Math.abs(perceivedAngle) <= collisionCheckParams.myCeilingAngleToIgnore + 0.0001;
                     }
@@ -166,7 +166,7 @@ CollisionCheck.prototype._surfaceTooSteep = function () {
 
             groundTooSteep = groundPerceivedAngle > 0;
             if (groundTooSteep &&
-                collisionCheckParams.myGroundAngleToIgnoreWithPerceivedAngle > 0 &&
+                collisionCheckParams.myGroundAngleToIgnoreWithPerceivedAngle != null &&
                 collisionRuntimeParams.myGroundAngle <= collisionCheckParams.myGroundAngleToIgnoreWithPerceivedAngle + 0.0001) {
                 groundTooSteep = Math.abs(groundPerceivedAngle) > collisionCheckParams.myGroundAngleToIgnore + 0.0001;
             }
@@ -180,7 +180,7 @@ CollisionCheck.prototype._surfaceTooSteep = function () {
 
                 ceilingTooSteep = ceilingPerceivedAngle > 0;
                 if (ceilingTooSteep &&
-                    collisionCheckParams.myCeilingAngleToIgnoreWithPerceivedAngle > 0 &&
+                    collisionCheckParams.myCeilingAngleToIgnoreWithPerceivedAngle != null &&
                     collisionRuntimeParams.myCeilingAngle <= collisionCheckParams.myCeilingAngleToIgnoreWithPerceivedAngle + 0.0001) {
                     ceilingTooSteep = Math.abs(ceilingPerceivedAngle) > collisionCheckParams.myCeilingAngleToIgnore + 0.0001;
                 }

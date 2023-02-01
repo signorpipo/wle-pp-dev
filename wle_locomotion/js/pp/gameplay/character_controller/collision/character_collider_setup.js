@@ -208,7 +208,7 @@ PP.CharacterColliderSurfaceSetup = class CharacterColliderSurfaceSetup {
 
         this.mySurfaceAngleToIgnore = 0;
 
-        this.mySurfaceAngleToIgnoreWithSurfacePerceivedAngle = 0;
+        this.mySurfaceAngleToIgnoreWithSurfacePerceivedAngle = null;
         // between this value and mySurfaceAngleToIgnore, use the perceived angle to see if u can actually ignore the surface
         // this basically means that on steep surface u could still go up by moving diagonally
 
