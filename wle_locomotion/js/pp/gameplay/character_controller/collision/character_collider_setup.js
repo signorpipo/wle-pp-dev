@@ -212,11 +212,11 @@ PP.CharacterColliderSurfaceSetup = class CharacterColliderSurfaceSetup {
         // between this value and mySurfaceAngleToIgnore, use the perceived angle to see if u can actually ignore the surface
         // this basically means that on steep surface u could still go up by moving diagonally
 
-        this.mySurfaceAngleToIgnoreMaxVerticalDistanceHorizontalMovement = null;
-        this.mySurfaceAngleToIgnoreMaxVerticalDistanceHorizontalPosition = null;
+        this.myHorizontalMovementSurfaceAngleToIgnoreMaxVerticalDistance = null;
+        this.myHorizontalPositionSurfaceAngleToIgnoreMaxVerticalDistance = null;
         // if the collision with the surface is above this max value, even if the surface angle is ignorable do not ignore it
 
-        this.mySurfaceAngleToIgnoreMaxHorizontalMovementLeft = null;
+        this.myHorizontalMovementSurfaceAngleToIgnoreMaxHorizontalMovementLeft = null;
         // if the collision with the surface happens during the horizontal movement check, if the horizontal movement left (total movement to perform minus hit distance)
         // is above this value do not ignore it otherwise you would ignore a surface but are actually going too much inside it
 
@@ -254,7 +254,7 @@ PP.CharacterColliderSurfaceSetup = class CharacterColliderSurfaceSetup {
         this.myRecollectSurfaceInfoOnSurfaceCheckFailed = false;
         // instead of copying the previous surface info on fail, regather them
 
-        this.myAllowExitAttemptWhenOnNotIgnorableSurfacePerceivedAngle = false;
+        this.myHorizontalMovementAllowExitAttemptWhenOnNotIgnorableSurfacePerceivedAngle = false;
         // if u start on a not ignorable perceived angle (above angle to ignore) u normally can't even try to move uphill, this will let you try and see if with that movement
         // you could end up in a ignorable perceived angle position
     }
@@ -458,10 +458,10 @@ PP.CharacterColliderSurfaceSetup.prototype.copy = function (other) {
     this.mySurfaceAngleToIgnore = other.mySurfaceAngleToIgnore;
     this.mySurfaceAngleToIgnoreWithSurfacePerceivedAngle = other.mySurfaceAngleToIgnoreWithSurfacePerceivedAngle;
 
-    this.mySurfaceAngleToIgnoreMaxVerticalDistanceHorizontalMovement = other.mySurfaceAngleToIgnoreMaxVerticalDistanceHorizontalMovement;
-    this.mySurfaceAngleToIgnoreMaxVerticalDistanceHorizontalPosition = other.mySurfaceAngleToIgnoreMaxVerticalDistanceHorizontalPosition;
+    this.myHorizontalMovementSurfaceAngleToIgnoreMaxVerticalDistance = other.myHorizontalMovementSurfaceAngleToIgnoreMaxVerticalDistance;
+    this.myHorizontalPositionSurfaceAngleToIgnoreMaxVerticalDistance = other.myHorizontalPositionSurfaceAngleToIgnoreMaxVerticalDistance;
 
-    this.mySurfaceAngleToIgnoreMaxHorizontalMovementLeft = other.mySurfaceAngleToIgnoreMaxHorizontalMovementLeft;
+    this.myHorizontalMovementSurfaceAngleToIgnoreMaxHorizontalMovementLeft = other.myHorizontalMovementSurfaceAngleToIgnoreMaxHorizontalMovementLeft;
 
     this.myCollectSurfaceInfo = other.myCollectSurfaceInfo;
 
@@ -492,7 +492,7 @@ PP.CharacterColliderSurfaceSetup.prototype.copy = function (other) {
 
     this.myRecollectSurfaceInfoOnSurfaceCheckFailed = other.myRecollectSurfaceInfoOnSurfaceCheckFailed;
 
-    this.myAllowExitAttemptWhenOnNotIgnorableSurfacePerceivedAngle = other.myAllowExitAttemptWhenOnNotIgnorableSurfacePerceivedAngle;
+    this.myHorizontalMovementAllowExitAttemptWhenOnNotIgnorableSurfacePerceivedAngle = other.myHorizontalMovementAllowExitAttemptWhenOnNotIgnorableSurfacePerceivedAngle;
 };
 
 PP.CharacterColliderSplitMovementSetup.prototype.copy = function (other) {

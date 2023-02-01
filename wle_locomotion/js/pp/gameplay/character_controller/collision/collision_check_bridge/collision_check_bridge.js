@@ -363,13 +363,13 @@ PP.CollisionCheckBridge = {
             outCollisionCheckParams.myCeilingAngleToIgnore = characterColliderSetup.myCeilingSetup.mySurfaceAngleToIgnore;
             outCollisionCheckParams.myCeilingAngleToIgnoreWithPerceivedAngle = characterColliderSetup.myCeilingSetup.mySurfaceAngleToIgnoreWithSurfacePerceivedAngle;
 
-            outCollisionCheckParams.myHorizontalMovementGroundAngleIgnoreHeight = characterColliderSetup.myGroundSetup.mySurfaceAngleToIgnoreMaxVerticalDistanceHorizontalMovement;
-            outCollisionCheckParams.myHorizontalMovementCeilingAngleIgnoreHeight = characterColliderSetup.myCeilingSetup.mySurfaceAngleToIgnoreMaxVerticalDistanceHorizontalMovement;
-            outCollisionCheckParams.myHorizontalPositionGroundAngleIgnoreHeight = characterColliderSetup.myGroundSetup.mySurfaceAngleToIgnoreMaxVerticalDistanceHorizontalPosition;
-            outCollisionCheckParams.myHorizontalPositionCeilingAngleIgnoreHeight = characterColliderSetup.myCeilingSetup.mySurfaceAngleToIgnoreMaxVerticalDistanceHorizontalPosition;
+            outCollisionCheckParams.myHorizontalMovementGroundAngleIgnoreHeight = characterColliderSetup.myGroundSetup.myHorizontalMovementSurfaceAngleToIgnoreMaxVerticalDistance;
+            outCollisionCheckParams.myHorizontalMovementCeilingAngleIgnoreHeight = characterColliderSetup.myCeilingSetup.myHorizontalMovementSurfaceAngleToIgnoreMaxVerticalDistance;
+            outCollisionCheckParams.myHorizontalPositionGroundAngleIgnoreHeight = characterColliderSetup.myGroundSetup.myHorizontalPositionSurfaceAngleToIgnoreMaxVerticalDistance;
+            outCollisionCheckParams.myHorizontalPositionCeilingAngleIgnoreHeight = characterColliderSetup.myCeilingSetup.myHorizontalPositionSurfaceAngleToIgnoreMaxVerticalDistance;
 
-            outCollisionCheckParams.myHorizontalMovementGroundAngleIgnoreMaxMovementLeft = characterColliderSetup.myGroundSetup.mySurfaceAngleToIgnoreMaxHorizontalMovementLeft;
-            outCollisionCheckParams.myHorizontalMovementCeilingAngleIgnoreMaxMovementLeft = characterColliderSetup.myCeilingSetup.mySurfaceAngleToIgnoreMaxHorizontalMovementLeft;
+            outCollisionCheckParams.myHorizontalMovementGroundAngleIgnoreMaxMovementLeft = characterColliderSetup.myGroundSetup.myHorizontalMovementSurfaceAngleToIgnoreMaxHorizontalMovementLeft;
+            outCollisionCheckParams.myHorizontalMovementCeilingAngleIgnoreMaxMovementLeft = characterColliderSetup.myCeilingSetup.myHorizontalMovementSurfaceAngleToIgnoreMaxHorizontalMovementLeft;
 
             outCollisionCheckParams.myComputeGroundInfoEnabled = characterColliderSetup.myGroundSetup.myCollectSurfaceInfo;
             outCollisionCheckParams.myComputeCeilingInfoEnabled = characterColliderSetup.myCeilingSetup.myCollectSurfaceInfo;
@@ -384,8 +384,8 @@ PP.CollisionCheckBridge = {
             outCollisionCheckParams.myIsOnGroundIfInsideHit = characterColliderSetup.myGroundSetup.myIsOnSurfaceIfInsideCollision;
             outCollisionCheckParams.myIsOnCeilingIfInsideHit = characterColliderSetup.myCeilingSetup.myIsOnSurfaceIfInsideCollision;
 
-            outCollisionCheckParams.myAllowGroundSteepFix = characterColliderSetup.myGroundSetup.myAllowExitAttemptWhenOnNotIgnorableSurfacePerceivedAngle;
-            outCollisionCheckParams.myAllowCeilingSteepFix = characterColliderSetup.myCeilingSetup.myAllowExitAttemptWhenOnNotIgnorableSurfacePerceivedAngle;
+            outCollisionCheckParams.myAllowGroundSteepFix = characterColliderSetup.myGroundSetup.myHorizontalMovementAllowExitAttemptWhenOnNotIgnorableSurfacePerceivedAngle;
+            outCollisionCheckParams.myAllowCeilingSteepFix = characterColliderSetup.myCeilingSetup.myHorizontalMovementAllowExitAttemptWhenOnNotIgnorableSurfacePerceivedAngle;
             outCollisionCheckParams.myMustStayOnGround = characterColliderSetup.myGroundSetup.myMustStayOnSurface;
             outCollisionCheckParams.myMustStayOnCeiling = characterColliderSetup.myCeilingSetup.myMustStayOnSurface;
             outCollisionCheckParams.myRegatherGroundInfoOnSurfaceCheckFail = characterColliderSetup.myGroundSetup.myRecollectSurfaceInfoOnSurfaceCheckFailed;
