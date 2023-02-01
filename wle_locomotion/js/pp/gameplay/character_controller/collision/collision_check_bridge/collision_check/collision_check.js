@@ -108,14 +108,19 @@ CollisionCheck = class CollisionCheck {
 };
 
 CollisionCheck.prototype._raycastAndDebug = function () {
-    return function _raycastAndDebug(origin, direction, distance, ignoreHitsInsideCollision, collisionCheckParams, collisionRuntimeParams) {
+    return function _raycastAndDebug(origin, direction, distance, ignoreHitsInsideCollision, isHorizontal, collisionCheckParams, collisionRuntimeParams) {
         this._myRaycastSetup.myOrigin.vec3_copy(origin);
         this._myRaycastSetup.myDirection.vec3_copy(direction);
         this._myRaycastSetup.myDistance = distance;
 
-        this._myRaycastSetup.myBlockLayerFlags.setMask(collisionCheckParams.myBlockLayerFlags.getMask());
+        if (isHorizontal) {
+            this._myRaycastSetup.myBlockLayerFlags.copy(collisionCheckParams.myHorizontalBlockLayerFlags);
+            this._myRaycastSetup.myObjectsToIgnore = collisionCheckParams.myHorizontalObjectsToIgnore;
+        } else {
+            this._myRaycastSetup.myBlockLayerFlags.copy(collisionCheckParams.myVerticalBlockLayerFlags);
+            this._myRaycastSetup.myObjectsToIgnore = collisionCheckParams.myVerticalObjectsToIgnore;
+        }
 
-        this._myRaycastSetup.myObjectsToIgnore = collisionCheckParams.myObjectsToIgnore;
         this._myRaycastSetup.myIgnoreHitsInsideCollision = ignoreHitsInsideCollision;
 
         let raycastResult = PP.PhysicsUtils.raycast(this._myRaycastSetup, this._myRaycastResult);

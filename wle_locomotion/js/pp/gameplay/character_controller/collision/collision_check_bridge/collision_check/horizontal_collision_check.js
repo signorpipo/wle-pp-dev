@@ -64,7 +64,7 @@ CollisionCheck.prototype._horizontalCheckRaycast = function () {
 
         let distance = direction.vec3_length();
         direction.vec3_normalize(direction);
-        let raycastResult = this._raycastAndDebug(origin, direction, distance, ignoreHitsInsideCollision, collisionCheckParams, collisionRuntimeParams);
+        let raycastResult = this._raycastAndDebug(origin, direction, distance, ignoreHitsInsideCollision, true, collisionCheckParams, collisionRuntimeParams);
 
         let isOk = true;
 

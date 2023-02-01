@@ -210,8 +210,11 @@ CollisionCheckParams = class CollisionCheckParams {
 
         this.mySlidingAdjustSign90Degrees = false;
 
-        this.myBlockLayerFlags = new PP.PhysicsLayerFlags();
-        this.myObjectsToIgnore = [];
+        this.myHorizontalBlockLayerFlags = new PP.PhysicsLayerFlags();
+        this.myHorizontalObjectsToIgnore = [];
+
+        this.myVerticalBlockLayerFlags = new PP.PhysicsLayerFlags();
+        this.myVerticalObjectsToIgnore = [];
 
         this.myDebugActive = false;
 
@@ -393,8 +396,11 @@ CollisionCheckParams = class CollisionCheckParams {
 
         this.mySlidingAdjustSign90Degrees = other.mySlidingAdjustSign90Degrees;
 
-        this.myBlockLayerFlags.setMask(other.myBlockLayerFlags.getMask());
-        this.myObjectsToIgnore.pp_copy(other.myObjectsToIgnore);
+        this.myHorizontalBlockLayerFlags.copy(other.myHorizontalBlockLayerFlags);
+        this.myHorizontalObjectsToIgnore.pp_copy(other.myHorizontalObjectsToIgnore);
+
+        this.myVerticalBlockLayerFlags.copy(other.myVerticalBlockLayerFlags);
+        this.myVerticalObjectsToIgnore.pp_copy(other.myVerticalObjectsToIgnore);
 
         this.myDebugActive = other.myDebugActive;
 

@@ -108,7 +108,7 @@ CollisionCheck.prototype._verticalMovementAdjustment = function () {
                 let distance = direction.vec3_length();
                 direction.vec3_normalize(direction);
 
-                let raycastResult = this._raycastAndDebug(origin, direction, distance, true, collisionCheckParams, collisionRuntimeParams);
+                let raycastResult = this._raycastAndDebug(origin, direction, distance, true, false, collisionCheckParams, collisionRuntimeParams);
 
                 if (raycastResult.myHits.length > 0) {
                     if (furtherDirectionPositionSet) {
@@ -222,7 +222,7 @@ CollisionCheck.prototype._verticalPositionCheck = function () {
             let distance = direction.vec3_length();
             direction.vec3_normalize(direction);
 
-            let raycastResult = this._raycastAndDebug(origin, direction, distance, false, collisionCheckParams, collisionRuntimeParams);
+            let raycastResult = this._raycastAndDebug(origin, direction, distance, false, false, collisionCheckParams, collisionRuntimeParams);
 
             if (raycastResult.isColliding()) {
                 let firstHitOutsideCollision = raycastResult.getFirstHitOutsideCollision();

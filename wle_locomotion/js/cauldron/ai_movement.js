@@ -162,12 +162,15 @@ WL.registerComponent('ai-movement', {
         this._myCollisionCheckParams.mySlidingCheckBothDirections = false;       // expensive, 2 times the check for the whole horizontal movement!
         this._myCollisionCheckParams.mySlidingFlickeringPreventionType = 0;      // expensive, 2 times the check for the whole horizontal movement!
 
-        this._myCollisionCheckParams.myBlockLayerFlags = new PP.PhysicsLayerFlags();
-        this._myCollisionCheckParams.myBlockLayerFlags.setAllFlagsActive(true);
+        this._myCollisionCheckParams.myHorizontalBlockLayerFlags = new PP.PhysicsLayerFlags();
+        this._myCollisionCheckParams.myHorizontalBlockLayerFlags.setAllFlagsActive(true);
         let physXComponents = this.object.pp_getComponentsHierarchy("physx");
         for (let physXComponent of physXComponents) {
-            this._myCollisionCheckParams.myObjectsToIgnore.pp_pushUnique(physXComponent.object, (first, second) => first.pp_equals(second));
+            this._myCollisionCheckParams.myHorizontalObjectsToIgnore.pp_pushUnique(physXComponent.object, (first, second) => first.pp_equals(second));
         }
+
+        this._myCollisionCheckParams.myVerticalBlockLayerFlags.copy(this._myCollisionCheckParams.myHorizontalBlockLayerFlags);
+        this._myCollisionCheckParams.myVerticalObjectsToIgnore.pp_copy(this._myCollisionCheckParams.myHorizontalObjectsToIgnore);
 
         this._myCollisionCheckParams.myHorizontalPositionCheckEnabled = true;
         this._myCollisionCheckParams.myVerticalMovementCheckEnabled = true;

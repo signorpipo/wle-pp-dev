@@ -241,7 +241,6 @@ PP.CollisionCheckBridge = {
     }(),
 
     convertCharacterColliderSetupToCollisionCheckParams: function () {
-        let objectsEqualCallback = (first, second) => first.pp_equals(second);
         return function convertCharacterColliderSetupToCollisionCheckParams(characterColliderSetup, outCollisionCheckParams) {
             outCollisionCheckParams.myHeight = characterColliderSetup.myHeight;
 
@@ -344,13 +343,10 @@ PP.CollisionCheckBridge = {
             outCollisionCheckParams.myGroundCircumferenceRotationPerStep = characterColliderSetup.myVerticalCheckSetup.myVerticalCheckCircumferenceRotationPerRadialStep;
             outCollisionCheckParams.myVerticalAllowHitInsideCollisionIfOneOk = characterColliderSetup.myVerticalCheckSetup.myVerticalCheckAllowHitsInsideCollisionIfOneValid;
 
-            // this
-            outCollisionCheckParams.myBlockLayerFlags.copy(characterColliderSetup.myHorizontalCheckSetup.myHorizontalCheckBlockLayerFlags);
-            outCollisionCheckParams.myBlockLayerFlags.addFlags(characterColliderSetup.myHorizontalCheckSetup.myVerticalCheckBlockLayerFlags);
-            outCollisionCheckParams.myObjectsToIgnore.pp_copy(characterColliderSetup.myHorizontalCheckSetup.myHorizontalCheckObjectsToIgnore);
-            for (let objectToIgnore of characterColliderSetup.myVerticalCheckSetup.myVerticalCheckObjectsToIgnore) {
-                outCollisionCheckParams.myObjectsToIgnore.pp_pushUnique(objectToIgnore, objectsEqualCallback);
-            }
+            outCollisionCheckParams.myHorizonalBlockLayerFlags.copy(characterColliderSetup.myHorizontalCheckSetup.myHorizontalCheckBlockLayerFlags);
+            outCollisionCheckParams.myVerticalBlockLayerFlags.copy(characterColliderSetup.myVerticalCheckSetup.myVerticalCheckBlockLayerFlags);
+            outCollisionCheckParams.myHorizontalObjectsToIgnore.pp_copy(characterColliderSetup.myHorizontalCheckSetup.myHorizontalCheckObjectsToIgnore);
+            outCollisionCheckParams.myVerticalObjectsToIgnore.pp_copy(characterColliderSetup.myVerticalCheckSetup.myVerticalCheckObjectsToIgnore);
 
             outCollisionCheckParams.mySnapOnGroundEnabled = characterColliderSetup.myGroundSetup.mySurfaceSnapEnabled;
             outCollisionCheckParams.mySnapOnGroundExtraDistance = characterColliderSetup.myGroundSetup.mySurfaceSnapMaxDistance;

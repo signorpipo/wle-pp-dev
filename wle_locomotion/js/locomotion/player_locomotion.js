@@ -92,8 +92,13 @@ PlayerLocomotion = class PlayerLocomotion {
             params.myTeleportCollisionCheckParamsCopyFromMovement = true;
             params.myTeleportCollisionCheckParamsCheck360 = true;
 
-            params.myHeadCollisionBlockLayerFlags.setMask(params.myMovementCollisionCheckParams.myBlockLayerFlags.getMask());
-            params.myHeadCollisionObjectsToIgnore.pp_copy(params.myMovementCollisionCheckParams.myObjectsToIgnore);
+            params.myHeadCollisionBlockLayerFlags.copy(params.myMovementCollisionCheckParams.myHorizontalBlockLayerFlags);
+            params.myHeadCollisionBlockLayerFlags.addFlags(params.myMovementCollisionCheckParams.myVerticalBlockLayerFlags);
+            params.myHeadCollisionObjectsToIgnore.pp_copy(params.myMovementCollisionCheckParams.myHorizontalObjectsToIgnore);
+            let objectsEqualCallback = (first, second) => first.pp_equals(second);
+            for (let objectToIgnore of params.myMovementCollisionCheckParams.myVerticalObjectsToIgnore) {
+                params.myHeadCollisionObjectsToIgnore.pp_pushUnique(objectToIgnore, objectsEqualCallback);
+            }
 
             params.myCollisionRuntimeParams = this._myCollisionRuntimeParams;
 
@@ -472,12 +477,15 @@ PlayerLocomotion = class PlayerLocomotion {
         this._myCollisionCheckParamsMovement.mySlidingFlickerPreventionCheckAnywayCounter = 4;
         this._myCollisionCheckParamsMovement.mySlidingAdjustSign90Degrees = true;
 
-        this._myCollisionCheckParamsMovement.myBlockLayerFlags = new PP.PhysicsLayerFlags();
-        this._myCollisionCheckParamsMovement.myBlockLayerFlags.setAllFlagsActive(true);
+        this._myCollisionCheckParamsMovement.myHorizontalBlockLayerFlags = new PP.PhysicsLayerFlags();
+        this._myCollisionCheckParamsMovement.myHorizontalBlockLayerFlags.setAllFlagsActive(true);
         let physXComponents = PP.myPlayerObjects.myPlayer.pp_getComponentsHierarchy("physx");
         for (let physXComponent of physXComponents) {
-            this._myCollisionCheckParamsMovement.myObjectsToIgnore.pp_pushUnique(physXComponent.object, (first, second) => first.pp_equals(second));
+            this._myCollisionCheckParamsMovement.myHorizontalObjectsToIgnore.pp_pushUnique(physXComponent.object, (first, second) => first.pp_equals(second));
         }
+
+        this._myCollisionCheckParamsMovement.myVerticalBlockLayerFlags.copy(this._myCollisionCheckParamsMovement.myHorizontalBlockLayerFlags);
+        this._myCollisionCheckParamsMovement.myVerticalObjectsToIgnore.pp_copy(this._myCollisionCheckParamsMovement.myHorizontalObjectsToIgnore);
 
         this._myCollisionCheckParamsMovement.myDebugActive = true;
 

@@ -483,7 +483,7 @@ CollisionCheck.prototype._gatherSurfaceInfo = function () {
             let distance = direction.vec3_length();
             direction.vec3_normalize(direction);
 
-            let raycastResult = this._raycastAndDebug(origin, direction, distance, !isOnSurfaceIfInsideHit, collisionCheckParams, collisionRuntimeParams);
+            let raycastResult = this._raycastAndDebug(origin, direction, distance, !isOnSurfaceIfInsideHit, false, collisionCheckParams, collisionRuntimeParams);
 
             if (raycastResult.isColliding()) {
                 hitFromCurrentPosition = raycastResult.myHits[0].myPosition.vec3_sub(currentPosition, hitFromCurrentPosition);

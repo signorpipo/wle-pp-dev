@@ -450,8 +450,10 @@ PlayerTransformManager = class PlayerTransformManager {
         params.myGroundCircumferenceRotationPerStep = 30;
         params.myFeetRadius = params.myRadius;
 
-        params.myBlockLayerFlags.copy(this._myParams.myHeadCollisionBlockLayerFlags);
-        params.myObjectsToIgnore.pp_copy(this._myParams.myHeadCollisionObjectsToIgnore);
+        params.myHorizontalBlockLayerFlags.copy(this._myParams.myHeadCollisionBlockLayerFlags);
+        params.myHorizontalObjectsToIgnore.pp_copy(this._myParams.myHeadCollisionObjectsToIgnore);
+        params.myVerticalBlockLayerFlags.copy(this._myParams.myHeadCollisionBlockLayerFlags);
+        params.myVerticalObjectsToIgnore.pp_copy(this._myParams.myHeadCollisionObjectsToIgnore);
 
         params.myDebugActive = false;
 

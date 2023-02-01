@@ -56,6 +56,8 @@ PlayerLocomotionTeleportDetectionState.prototype._isPositionVisible = function (
 
     let raycastSetup = new PP.RaycastSetup();
     let raycastResult = new PP.RaycastResults();
+
+    let objectsEqualCallback = (first, second) => first.pp_equals(second);
     return function _isPositionVisible(position) {
         let isVisible = true;
 
@@ -88,7 +90,10 @@ PlayerLocomotionTeleportDetectionState.prototype._isPositionVisible = function (
 
             raycastSetup.myBlockLayerFlags.setMask(this._myTeleportParams.myDetectionParams.myVisibilityBlockLayerFlags.getMask());
 
-            raycastSetup.myObjectsToIgnore = this._myTeleportParams.myCollisionCheckParams.myObjectsToIgnore;
+            raycastSetup.myObjectsToIgnore = this._myTeleportParams.myCollisionCheckParams.myHorizontalObjectsToIgnore;
+            for (let objectToIgnore of this._myTeleportParams.myCollisionCheckParams.myVerticalObjectsToIgnore) {
+                raycastSetup.myObjectsToIgnore.pp_pushUnique(objectToIgnore, objectsEqualCallback);
+            }
             raycastSetup.myIgnoreHitsInsideCollision = true;
 
             raycastResult = PP.PhysicsUtils.raycast(raycastSetup, raycastResult);
