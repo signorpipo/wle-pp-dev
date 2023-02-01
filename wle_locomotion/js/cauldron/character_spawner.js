@@ -25,7 +25,7 @@ WL.registerComponent('character-spawner', {
             let randomZ = Math.pp_random(-this._myRoomSize, this._myRoomSize);
             let y = this._myRoomHeight;
 
-            character.pp_setPositionLocal([randomX, y, randomZ]);
+            character.pp_setPositionLocal(PP.vec3_create(randomX, y, randomZ));
 
             character.pp_setActive(true);
         }

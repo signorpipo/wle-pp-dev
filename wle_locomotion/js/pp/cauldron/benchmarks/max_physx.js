@@ -191,13 +191,13 @@ WL.registerComponent('pp-benchmark-max-physx', {
         let minExtraRotation = 0;
         let maxExtraRotation = Math.pp_toRadians(10);
 
-        let upDirection = [0, 1, 0];
-        let horizontalDirection = [0, 0, -1];
+        let upDirection = PP.vec3_create(0, 1, 0);
+        let horizontalDirection = PP.vec3_create(0, 0, -1);
 
         for (let i = 0; i < cloves / 2; i++) {
-            let verticalDirection = [0, 1, 0];
+            let verticalDirection = PP.vec3_create(0, 1, 0);
 
-            let rotationAxis = [];
+            let rotationAxis = PP.vec3_create();
             glMatrix.vec3.cross(rotationAxis, horizontalDirection, verticalDirection);
             glMatrix.vec3.normalize(rotationAxis, rotationAxis);
 

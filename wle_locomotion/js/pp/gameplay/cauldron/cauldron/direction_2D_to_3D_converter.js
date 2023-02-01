@@ -104,7 +104,7 @@ PP.Direction2DTo3DConverter = class Direction2DTo3DConverter {
 
     // Convert Alternatives
 
-    // if direction3DUp is null, [0, 1, 0] is used
+    // if direction3DUp is null, PP.vec3_create(0, 1, 0) is used
     // does not work properly if forward is aligned with direction3DUp
     convertForward(direction2D, forward, direction3DUp = null, outDirection3D = PP.vec3_create()) {
         // implemented outside class definition

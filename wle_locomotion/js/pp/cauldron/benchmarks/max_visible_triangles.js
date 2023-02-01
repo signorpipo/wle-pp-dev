@@ -18,7 +18,7 @@ WL.registerComponent("pp-benchmark-max-visible-triangles", {
         this._myBackgroundSize = 4;
         this._myBackgroundObject.pp_setActive(true);
         this._myBackgroundObject.pp_setScale(this._myBackgroundSize + 0.1);
-        this._myBackgroundObject.pp_translate([0, 0, -0.001]);
+        this._myBackgroundObject.pp_translate(PP.vec3_create(0, 0, -0.001));
 
         this._myDoubleTimer = new PP.Timer(this._mySecondsBeforeDoubling);
         this._myIsDone = false;

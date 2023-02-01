@@ -21,7 +21,7 @@ CollisionCheck.prototype._move = function () {
     let previousMovementChecked = PP.vec3_create();
     return function _move(movement, transformQuat, collisionCheckParams, collisionRuntimeParams) {
         //return PP.vec3_create();
-        //movement = [0, 0, -1];
+        //movement = PP.vec3_create(0, 0, -1);
 
         transformOffsetLocalQuat.quat2_setPositionRotationQuat(collisionCheckParams.myPositionOffsetLocal, collisionCheckParams.myRotationOffsetLocalQuat);
         offsetTransformQuat = transformOffsetLocalQuat.quat2_toWorld(transformQuat, offsetTransformQuat);

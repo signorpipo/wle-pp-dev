@@ -516,7 +516,7 @@ PlayerLocomotion = class PlayerLocomotion {
     _fixAlmostUp() {
         // get rotation on y and adjust if it's slightly tilted when it's almsot 0,1,0
 
-        let defaultUp = [0, 1, 0];
+        let defaultUp = PP.vec3_create(0, 1, 0);
         let angleWithDefaultUp = PP.myPlayerObjects.myPlayer.pp_getUp().vec3_angle(defaultUp);
         if (angleWithDefaultUp < 1) {
             let forward = PP.myPlayerObjects.myPlayer.pp_getForward();
