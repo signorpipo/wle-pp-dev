@@ -136,7 +136,7 @@ PP.ConsoleVRWidgetSetup = class ConsoleVRWidgetSetup {
         {
             let spaceBetweenMessagesAndButtons = Math.abs((this.myMessagesPanelPosition[1] - this.myMessagesBackgroundScale[1]) - (this.myButtonsPanelPosition[1] + this.myButtonBackgroundScale[1]));
             let pointerCollisionHalfHeight = this.myMessagesBackgroundScale[1] + this.myButtonBackgroundScale[1] + spaceBetweenMessagesAndButtons / 2;
-            this.myPointerCollisionExtents = [this.myMessagesBackgroundScale[0], pointerCollisionHalfHeight, this.myCursorTargetCollisionThickness];
+            this.myPointerCollisionExtents = PP.vec3_create(this.myMessagesBackgroundScale[0], pointerCollisionHalfHeight, this.myCursorTargetCollisionThickness);
         }
 
         this.myPointerCursorTargetPosition = PP.vec3_create(0, 0, 0);

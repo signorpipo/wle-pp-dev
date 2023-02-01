@@ -21,7 +21,7 @@ PP.EasyTuneTransformWidgetSetup = class EasyTuneTransformWidgetSetup extends PP.
         this.myDecreaseButtonText = "-";
 
         this.myDecreaseButtonPosition = PP.vec3_create(-0.13, 0, -0.00001);
-        this.myIncreaseButtonPosition = [-this.myDecreaseButtonPosition[0], 0, -0.00001];
+        this.myIncreaseButtonPosition = PP.vec3_create(-this.myDecreaseButtonPosition[0], 0, -0.00001);
 
         let distanceBetweenComponents = Math.abs(this.myIncreaseButtonPosition[0]) + Math.abs(this.myRightSideButtonPosition[0]);
         let distanceFromVariableLabel = 0.045;

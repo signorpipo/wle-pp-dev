@@ -87,25 +87,25 @@ PP.WidgetFrameSetup = class WidgetFrameSetup {
     _initializeObjectsTransforms() {
         this.myPivotObjectTransforms = this._createDefaultObjectTransforms();
 
-        this.myPivotObjectTransforms[PP.ToolInputSourceType.GAMEPAD][PP.ToolHandedness.LEFT].myRotation = [-0.645, 0.425, 0.25, 0.584];
+        this.myPivotObjectTransforms[PP.ToolInputSourceType.GAMEPAD][PP.ToolHandedness.LEFT].myRotation = PP.quat_create(-0.645, 0.425, 0.25, 0.584);
         this.myPivotObjectTransforms[PP.ToolInputSourceType.GAMEPAD][PP.ToolHandedness.LEFT].myRotation.quat_normalize(this.myPivotObjectTransforms[PP.ToolInputSourceType.GAMEPAD][PP.ToolHandedness.LEFT].myRotation);
 
-        this.myPivotObjectTransforms[PP.ToolInputSourceType.GAMEPAD][PP.ToolHandedness.RIGHT].myRotation = [-0.645, -0.425, -0.25, 0.584];
+        this.myPivotObjectTransforms[PP.ToolInputSourceType.GAMEPAD][PP.ToolHandedness.RIGHT].myRotation = PP.quat_create(-0.645, -0.425, -0.25, 0.584);
         this.myPivotObjectTransforms[PP.ToolInputSourceType.GAMEPAD][PP.ToolHandedness.RIGHT].myRotation.quat_normalize(this.myPivotObjectTransforms[PP.ToolInputSourceType.GAMEPAD][PP.ToolHandedness.RIGHT].myRotation);
 
-        this.myPivotObjectTransforms[PP.ToolInputSourceType.TRACKED_HAND][PP.ToolHandedness.LEFT].myRotation = [-0.645, 0.425, 0.25, 0.584];
+        this.myPivotObjectTransforms[PP.ToolInputSourceType.TRACKED_HAND][PP.ToolHandedness.LEFT].myRotation = PP.quat_create(-0.645, 0.425, 0.25, 0.584);
         this.myPivotObjectTransforms[PP.ToolInputSourceType.TRACKED_HAND][PP.ToolHandedness.LEFT].myRotation.quat_normalize(this.myPivotObjectTransforms[PP.ToolInputSourceType.GAMEPAD][PP.ToolHandedness.LEFT].myRotation);
 
-        this.myPivotObjectTransforms[PP.ToolInputSourceType.TRACKED_HAND][PP.ToolHandedness.RIGHT].myRotation = [-0.645, -0.425, -0.25, 0.584];
+        this.myPivotObjectTransforms[PP.ToolInputSourceType.TRACKED_HAND][PP.ToolHandedness.RIGHT].myRotation = PP.quat_create(-0.645, -0.425, -0.25, 0.584);
         this.myPivotObjectTransforms[PP.ToolInputSourceType.TRACKED_HAND][PP.ToolHandedness.RIGHT].myRotation.quat_normalize(this.myPivotObjectTransforms[PP.ToolInputSourceType.GAMEPAD][PP.ToolHandedness.RIGHT].myRotation);
 
         /*
         this.myPivotObjectTransforms[PP.ToolInputSourceType.TRACKED_HAND][PP.ToolHandedness.LEFT].myPosition = PP.vec3_create(-0.04, 0.045, -0.055);
-        this.myPivotObjectTransforms[PP.ToolInputSourceType.TRACKED_HAND][PP.ToolHandedness.LEFT].myRotation = [0, 0.536, -0.43, 0.727];
+        this.myPivotObjectTransforms[PP.ToolInputSourceType.TRACKED_HAND][PP.ToolHandedness.LEFT].myRotation = PP.quat_create(0, 0.536, -0.43, 0.727);
         this.myPivotObjectTransforms[PP.ToolInputSourceType.TRACKED_HAND][PP.ToolHandedness.LEFT].myRotation.quat_normalize(this.myPivotObjectTransforms[PP.ToolInputSourceType.TRACKED_HAND][PP.ToolHandedness.LEFT].myRotation);
 
         this.myPivotObjectTransforms[PP.ToolInputSourceType.TRACKED_HAND][PP.ToolHandedness.RIGHT].myPosition = PP.vec3_create(0.04, 0.045, -0.055);
-        this.myPivotObjectTransforms[PP.ToolInputSourceType.TRACKED_HAND][PP.ToolHandedness.RIGHT].myRotation = [0, -0.536, 0.43, 0.727];
+        this.myPivotObjectTransforms[PP.ToolInputSourceType.TRACKED_HAND][PP.ToolHandedness.RIGHT].myRotation = PP.quat_create(0, -0.536, 0.43, 0.727);
         this.myPivotObjectTransforms[PP.ToolInputSourceType.TRACKED_HAND][PP.ToolHandedness.RIGHT].myRotation.quat_normalize(this.myPivotObjectTransforms[PP.ToolInputSourceType.TRACKED_HAND][PP.ToolHandedness.RIGHT].myRotation);
         */
 
@@ -130,7 +130,7 @@ PP.WidgetFrameSetup = class WidgetFrameSetup {
                 let handedness = PP.ToolHandedness[handednessKey];
                 defaultObjectTransforms[inputSourceType][handedness] = {};
                 defaultObjectTransforms[inputSourceType][handedness].myPosition = PP.vec3_create(0, 0, 0);
-                defaultObjectTransforms[inputSourceType][handedness].myRotation = [0, 0, 0, 1];
+                defaultObjectTransforms[inputSourceType][handedness].myRotation = PP.quat_create(0, 0, 0, 1);
             }
         }
 
