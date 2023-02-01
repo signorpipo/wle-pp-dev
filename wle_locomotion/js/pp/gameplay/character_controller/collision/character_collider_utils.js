@@ -119,8 +119,8 @@ PP.CharacterColliderUtils.createCharacterColliderSetupSimplified = function (sim
     }
 
     if (!simplifiedCreationParams.myCanFallFromEdges) {
-        outCharacterColliderSetup.myGroundSetup.myMustStayOnSurface = true;
-        outCharacterColliderSetup.myGroundSetup.myMustStayBelowSurfaceAngle = Math.max(60, outCharacterColliderSetup.myGroundSetup.mySurfaceAngleToIgnore);
+        outCharacterColliderSetup.myGroundSetup.myMovementMustStayOnSurface = true;
+        outCharacterColliderSetup.myGroundSetup.myMovementMustStayOnSurfaceAngle = Math.max(60, outCharacterColliderSetup.myGroundSetup.mySurfaceAngleToIgnore);
     }
 
 

@@ -386,12 +386,12 @@ PP.CollisionCheckBridge = {
 
             outCollisionCheckParams.myAllowGroundSteepFix = characterColliderSetup.myGroundSetup.myHorizontalMovementAllowExitAttemptWhenOnNotIgnorableSurfacePerceivedAngle;
             outCollisionCheckParams.myAllowCeilingSteepFix = characterColliderSetup.myCeilingSetup.myHorizontalMovementAllowExitAttemptWhenOnNotIgnorableSurfacePerceivedAngle;
-            outCollisionCheckParams.myMustStayOnGround = characterColliderSetup.myGroundSetup.myMustStayOnSurface;
-            outCollisionCheckParams.myMustStayOnCeiling = characterColliderSetup.myCeilingSetup.myMustStayOnSurface;
+            outCollisionCheckParams.myMustStayOnGround = characterColliderSetup.myGroundSetup.myMovementMustStayOnSurface;
+            outCollisionCheckParams.myMustStayOnCeiling = characterColliderSetup.myCeilingSetup.myMovementMustStayOnSurface;
             outCollisionCheckParams.myRegatherGroundInfoOnSurfaceCheckFail = characterColliderSetup.myGroundSetup.myRecollectSurfaceInfoOnSurfaceCheckFailed;
             outCollisionCheckParams.myRegatherCeilingInfoOnSurfaceCheckFail = characterColliderSetup.myCeilingSetup.myRecollectSurfaceInfoOnSurfaceCheckFailed;
-            outCollisionCheckParams.myMustStayBelowGroundAngle = characterColliderSetup.myGroundSetup.myMustStayBelowSurfaceAngle;
-            outCollisionCheckParams.myMustStayBelowCeilingAngle = characterColliderSetup.myCeilingSetup.myMustStayBelowSurfaceAngle;
+            outCollisionCheckParams.myMustStayBelowGroundAngle = characterColliderSetup.myGroundSetup.myMovementMustStayOnSurfaceAngle;
+            outCollisionCheckParams.myMustStayBelowCeilingAngle = characterColliderSetup.myCeilingSetup.myMovementMustStayOnSurfaceAngle;
 
             outCollisionCheckParams.myTeleportMustBeOnIgnorableGroundAngle = characterColliderSetup.myGroundSetup.myTeleportMustBeOnIgnorableSurfaceAngle;
             outCollisionCheckParams.myCheckTransformMustBeOnIgnorableGroundAngle = characterColliderSetup.myGroundSetup.myCheckTransformMustBeOnIgnorableSurfaceAngle;

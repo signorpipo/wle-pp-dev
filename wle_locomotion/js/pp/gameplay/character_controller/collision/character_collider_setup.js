@@ -243,8 +243,8 @@ PP.CharacterColliderSurfaceSetup = class CharacterColliderSurfaceSetup {
         this.myVerticalMovementAdjustHorizontalMovementBasedOnSurfaceAngleDownhillMinSurfaceAngle = null;
         // this can be used to make it so the movement (and therefore the slide) only happens above a certain angle, like u want to slide down only on steep surfaces
 
-        this.myMustStayOnSurface = false;
-        this.myMustStayBelowSurfaceAngle = null;
+        this.myMovementMustStayOnSurface = false;
+        this.myMovementMustStayOnSurfaceAngle = null;
 
         this.myTeleportMustBeOnSurface = false;
         this.myTeleportMustBeOnIgnorableSurfaceAngle = false;
@@ -482,8 +482,8 @@ PP.CharacterColliderSurfaceSetup.prototype.copy = function (other) {
     this.myVerticalMovementAdjustHorizontalMovementBasedOnSurfaceAngleDownhill = other.myVerticalMovementAdjustHorizontalMovementBasedOnSurfaceAngleDownhill;
     this.myVerticalMovementAdjustHorizontalMovementBasedOnSurfaceAngleDownhillMinSurfaceAngle = other.myVerticalMovementAdjustHorizontalMovementBasedOnSurfaceAngleDownhillMinSurfaceAngle;
 
-    this.myMustStayOnSurface = other.myMustStayOnSurface;
-    this.myMustStayBelowSurfaceAngle = other.myMustStayBelowSurfaceAngle;
+    this.myMovementMustStayOnSurface = other.myMovementMustStayOnSurface;
+    this.myMovementMustStayOnSurfaceAngle = other.myMovementMustStayOnSurfaceAngle;
 
     this.myTeleportMustBeOnSurface = other.myTeleportMustBeOnSurface;
     this.myTeleportMustBeOnIgnorableSurfaceAngle = other.myTeleportMustBeOnIgnorableSurfaceAngle;
