@@ -418,18 +418,18 @@ PP.CollisionCheckBridge = {
             outCollisionCheckParams.mySplitMovementStopCallback = characterColliderSetup.mySplitMovementSetup.mySplitMovementStopOnCallback;
             outCollisionCheckParams.mySplitMovementStopReturnPrevious = characterColliderSetup.mySplitMovementSetup.mySplitMovementStopReturnPreviousResults;
 
-            outCollisionCheckParams.myDebugActive = characterColliderSetup.myDebugSetup.myDebugActive;
+            outCollisionCheckParams.myDebugActive = characterColliderSetup.myDebugSetup.myVisualDebugActive;
 
-            outCollisionCheckParams.myDebugHorizontalMovementActive = characterColliderSetup.myDebugSetup.myDebugHorizontalMovementCheckActive;
-            outCollisionCheckParams.myDebugHorizontalPositionActive = characterColliderSetup.myDebugSetup.myDebugHorizontalPositionCheckActive;
-            outCollisionCheckParams.myDebugVerticalMovementActive = characterColliderSetup.myDebugSetup.myDebugVerticalMovementCheckActive;
-            outCollisionCheckParams.myDebugVerticalPositionActive = characterColliderSetup.myDebugSetup.myDebugVerticalPositionCheckActive;
-            outCollisionCheckParams.myDebugSlidingActive = characterColliderSetup.myDebugSetup.myDebugSlideActive;
+            outCollisionCheckParams.myDebugHorizontalMovementActive = characterColliderSetup.myDebugSetup.myVisualDebugHorizontalMovementCheckActive;
+            outCollisionCheckParams.myDebugHorizontalPositionActive = characterColliderSetup.myDebugSetup.myVisualDebugHorizontalPositionCheckActive;
+            outCollisionCheckParams.myDebugVerticalMovementActive = characterColliderSetup.myDebugSetup.myVisualDebugVerticalMovementCheckActive;
+            outCollisionCheckParams.myDebugVerticalPositionActive = characterColliderSetup.myDebugSetup.myVisualDebugVerticalPositionCheckActive;
+            outCollisionCheckParams.myDebugSlidingActive = characterColliderSetup.myDebugSetup.myVisualDebugSlideActive;
 
-            outCollisionCheckParams.myDebugGroundInfoActive = characterColliderSetup.myDebugSetup.myDebugGroundInfoActive;
-            outCollisionCheckParams.myDebugCeilingInfoActive = characterColliderSetup.myDebugSetup.myDebugGroundInfoActive;
-            outCollisionCheckParams.myDebugRuntimeParamsActive = characterColliderSetup.myDebugSetup.myDebugResultsActive;
-            outCollisionCheckParams.myDebugMovementActive = characterColliderSetup.myDebugSetup.myDebugMovementActive;
+            outCollisionCheckParams.myDebugGroundInfoActive = characterColliderSetup.myDebugSetup.myVisualDebugGroundInfoActive;
+            outCollisionCheckParams.myDebugCeilingInfoActive = characterColliderSetup.myDebugSetup.myVisualDebugGroundInfoActive;
+            outCollisionCheckParams.myDebugRuntimeParamsActive = characterColliderSetup.myDebugSetup.myVisualDebugResultsActive;
+            outCollisionCheckParams.myDebugMovementActive = characterColliderSetup.myDebugSetup.myVisualDebugMovementActive;
         }
     }()
 };

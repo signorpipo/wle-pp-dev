@@ -134,15 +134,15 @@ PP.CharacterColliderUtils.createCharacterColliderSetupSimplified = function (sim
 
 
     if (simplifiedCreationParams.myHorizontalCheckDebugActive) {
-        outCharacterColliderSetup.myDebugSetup.myDebugActive = true;
-        outCharacterColliderSetup.myDebugSetup.myDebugHorizontalMovementCheckActive = true;
-        outCharacterColliderSetup.myDebugSetup.myDebugHorizontalPositionCheckActive = true;
+        outCharacterColliderSetup.myDebugSetup.myVisualDebugActive = true;
+        outCharacterColliderSetup.myDebugSetup.myVisualDebugHorizontalMovementCheckActive = true;
+        outCharacterColliderSetup.myDebugSetup.myVisualDebugHorizontalPositionCheckActive = true;
     }
 
     if (simplifiedCreationParams.myVerticalCheckDebugActive) {
-        outCharacterColliderSetup.myDebugSetup.myDebugActive = true;
-        outCharacterColliderSetup.myDebugSetup.myDebugVerticalMovementCheckActive = true;
-        outCharacterColliderSetup.myDebugSetup.myDebugVerticalPositionCheckActive = true;
+        outCharacterColliderSetup.myDebugSetup.myVisualDebugActive = true;
+        outCharacterColliderSetup.myDebugSetup.myVisualDebugVerticalMovementCheckActive = true;
+        outCharacterColliderSetup.myDebugSetup.myVisualDebugVerticalPositionCheckActive = true;
     }
 
 
