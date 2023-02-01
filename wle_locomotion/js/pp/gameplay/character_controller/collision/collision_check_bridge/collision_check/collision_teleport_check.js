@@ -111,15 +111,15 @@ CollisionCheck.prototype._teleport = function () {
                 }
 
                 if (collisionRuntimeParams.myIsOnGround && collisionRuntimeParams.myGroundAngle > collisionCheckParams.myGroundAngleToIgnore + 0.0001) {
-                    if ((collisionCheckParams.myDenyTeleportOnNotIgnorabileGroundAngle && !isPositionCheck)
-                        || (collisionCheckParams.myDenyCheckTransformOnNotIgnorabileGroundAngle && isPositionCheck)) {
+                    if ((!collisionCheckParams.myAllowTeleportOnNotIgnorabileGroundAngle && !isPositionCheck)
+                        || (!collisionCheckParams.myAllowCheckTransformOnNotIgnorabileGroundAngle && isPositionCheck)) {
                         collisionRuntimeParams.myTeleportCanceled = true;
                     }
                 }
 
                 if (collisionRuntimeParams.myIsOnCeiling && collisionRuntimeParams.myCeilingAngle > collisionCheckParams.myCeilingAngleToIgnore + 0.0001) {
-                    if ((collisionCheckParams.myDenyTeleportOnNotIgnorabileCeilingAngle && !isPositionCheck)
-                        || (collisionCheckParams.myDenyCheckTransformOnNotIgnorabileCeilingAngle && isPositionCheck)) {
+                    if ((!collisionCheckParams.myAllowTeleportOnNotIgnorabileCeilingAngle && !isPositionCheck)
+                        || (!collisionCheckParams.myAllowCheckTransformOnNotIgnorabileCeilingAngle && isPositionCheck)) {
                         collisionRuntimeParams.myTeleportCanceled = true;
                     }
                 }

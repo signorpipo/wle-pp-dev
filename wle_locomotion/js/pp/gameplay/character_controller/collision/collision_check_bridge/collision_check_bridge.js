@@ -393,10 +393,10 @@ PP.CollisionCheckBridge = {
             outCollisionCheckParams.myMustStayBelowGroundAngle = characterColliderSetup.myGroundSetup.myMustStayBelowSurfaceAngle;
             outCollisionCheckParams.myMustStayBelowCeilingAngle = characterColliderSetup.myCeilingSetup.myMustStayBelowSurfaceAngle;
 
-            outCollisionCheckParams.myDenyTeleportOnNotIgnorabileGroundAngle = characterColliderSetup.myGroundSetup.myDenyTeleportOnNotIgnorabileSurfaceAngle;
-            outCollisionCheckParams.myDenyCheckTransformOnNotIgnorabileGroundAngle = characterColliderSetup.myGroundSetup.myDenyCheckTransformOnNotIgnorabileSurfaceAngle;
-            outCollisionCheckParams.myDenyTeleportOnNotIgnorabileCeilingAngle = characterColliderSetup.myCeilingSetup.myDenyTeleportOnNotIgnorabileSurfaceAngle;
-            outCollisionCheckParams.myDenyCheckTransformOnNotIgnorabileCeilingAngle = characterColliderSetup.myCeilingSetup.myDenyCheckTransformOnNotIgnorabileSurfaceAngle;
+            outCollisionCheckParams.myAllowTeleportOnNotIgnorabileGroundAngle = characterColliderSetup.myGroundSetup.myAllowTeleportOnNotIgnorabileSurfaceAngle;
+            outCollisionCheckParams.myAllowCheckTransformOnNotIgnorabileGroundAngle = characterColliderSetup.myGroundSetup.myAllowCheckTransformOnNotIgnorabileSurfaceAngle;
+            outCollisionCheckParams.myAllowTeleportOnNotIgnorabileCeilingAngle = characterColliderSetup.myCeilingSetup.myAllowTeleportOnNotIgnorabileSurfaceAngle;
+            outCollisionCheckParams.myAllowCheckTransformOnNotIgnorabileCeilingAngle = characterColliderSetup.myCeilingSetup.myAllowCheckTransformOnNotIgnorabileSurfaceAngle;
 
             outCollisionCheckParams.mySlidingEnabled = characterColliderSetup.myWallSlideSetup.myWallSlideEnabled;
             outCollisionCheckParams.mySlidingHorizontalMovementCheckBetterNormal = characterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementCheckGetBetterReferenceHit;

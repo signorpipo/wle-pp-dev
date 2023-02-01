@@ -249,8 +249,8 @@ PP.CharacterColliderSurfaceSetup = class CharacterColliderSurfaceSetup {
         this.myRecollectSurfaceInfoOnSurfaceCheckFailed = false;
         // instead of copying the previous surface info on fail, regather them
 
-        this.myDenyTeleportOnNotIgnorabileSurfaceAngle = false;
-        this.myDenyCheckTransformOnNotIgnorabileSurfaceAngle = false;
+        this.myAllowTeleportOnNotIgnorabileSurfaceAngle = false;
+        this.myAllowCheckTransformOnNotIgnorabileSurfaceAngle = false;
 
         this.myAllowExitAttemptWhenOnNotIgnorableSurfacePerceivedAngle = false;
         // if u start on a not ignorable perceived angle (above angle to ignore) u normally can't even try to move uphill, this will let you try and see if with that movement
@@ -485,8 +485,8 @@ PP.CharacterColliderSurfaceSetup.prototype.copy = function (other) {
 
     this.myRecollectSurfaceInfoOnSurfaceCheckFailed = other.myRecollectSurfaceInfoOnSurfaceCheckFailed;
 
-    this.myDenyTeleportOnNotIgnorabileSurfaceAngle = other.myDenyTeleportOnNotIgnorabileSurfaceAngle;
-    this.myDenyCheckTransformOnNotIgnorabileSurfaceAngle = other.myDenyCheckTransformOnNotIgnorabileSurfaceAngle;
+    this.myAllowTeleportOnNotIgnorabileSurfaceAngle = other.myAllowTeleportOnNotIgnorabileSurfaceAngle;
+    this.myAllowCheckTransformOnNotIgnorabileSurfaceAngle = other.myAllowCheckTransformOnNotIgnorabileSurfaceAngle;
 
     this.myAllowExitAttemptWhenOnNotIgnorableSurfacePerceivedAngle = other.myAllowExitAttemptWhenOnNotIgnorableSurfacePerceivedAngle;
 };

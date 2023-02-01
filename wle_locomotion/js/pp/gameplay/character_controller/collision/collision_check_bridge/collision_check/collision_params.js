@@ -175,10 +175,10 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myMustStayBelowGroundAngle = null;
         this.myMustStayBelowCeilingAngle = null;
 
-        this.myDenyTeleportOnNotIgnorabileGroundAngle = false;
-        this.myDenyCheckTransformOnNotIgnorabileGroundAngle = false;
-        this.myDenyTeleportOnNotIgnorabileCeilingAngle = false;
-        this.myDenyCheckTransformOnNotIgnorabileCeilingAngle = false;
+        this.myAllowTeleportOnNotIgnorabileGroundAngle = false;
+        this.myAllowCheckTransformOnNotIgnorabileGroundAngle = false;
+        this.myAllowTeleportOnNotIgnorabileCeilingAngle = false;
+        this.myAllowCheckTransformOnNotIgnorabileCeilingAngle = false;
 
         this.mySlidingEnabled = false;
         this.mySlidingHorizontalMovementCheckBetterNormal = false;
@@ -381,10 +381,10 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myMustStayBelowGroundAngle = other.myMustStayBelowGroundAngle;
         this.myMustStayBelowCeilingAngle = other.myMustStayBelowCeilingAngle;
 
-        this.myDenyTeleportOnNotIgnorabileGroundAngle = other.myDenyTeleportOnNotIgnorabileGroundAngle;
-        this.myDenyCheckTransformOnNotIgnorabileGroundAngle = other.myDenyCheckTransformOnNotIgnorabileGroundAngle;
-        this.myDenyTeleportOnNotIgnorabileCeilingAngle = other.myDenyTeleportOnNotIgnorabileCeilingAngle;
-        this.myDenyCheckTransformOnNotIgnorabileCeilingAngle = other.myDenyCheckTransformOnNotIgnorabileCeilingAngle;
+        this.myAllowTeleportOnNotIgnorabileGroundAngle = other.myAllowTeleportOnNotIgnorabileGroundAngle;
+        this.myAllowCheckTransformOnNotIgnorabileGroundAngle = other.myAllowCheckTransformOnNotIgnorabileGroundAngle;
+        this.myAllowTeleportOnNotIgnorabileCeilingAngle = other.myAllowTeleportOnNotIgnorabileCeilingAngle;
+        this.myAllowCheckTransformOnNotIgnorabileCeilingAngle = other.myAllowCheckTransformOnNotIgnorabileCeilingAngle;
 
         this.mySlidingEnabled = other.mySlidingEnabled;
         this.mySlidingHorizontalMovementCheckBetterNormal = other.mySlidingHorizontalMovementCheckBetterNormal;
