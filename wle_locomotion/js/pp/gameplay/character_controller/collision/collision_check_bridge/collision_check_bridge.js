@@ -393,10 +393,15 @@ PP.CollisionCheckBridge = {
             outCollisionCheckParams.myMustStayBelowGroundAngle = characterColliderSetup.myGroundSetup.myMustStayBelowSurfaceAngle;
             outCollisionCheckParams.myMustStayBelowCeilingAngle = characterColliderSetup.myCeilingSetup.myMustStayBelowSurfaceAngle;
 
-            outCollisionCheckParams.myTeleportGroundAngleCheckEnabled = characterColliderSetup.myGroundSetup.myTeleportSurfaceAngleCheckEnabled;
-            outCollisionCheckParams.myCheckTransformGroundAngleCheckEnabled = characterColliderSetup.myGroundSetup.myCheckTransformSurfaceAngleCheckEnabled;
-            outCollisionCheckParams.myTeleportCeilingAngleCheckEnabled = characterColliderSetup.myCeilingSetup.myTeleportSurfaceAngleCheckEnabled;
-            outCollisionCheckParams.myCheckTransformCeilingAngleCheckEnabled = characterColliderSetup.myCeilingSetup.myCheckTransformSurfaceAngleCheckEnabled;
+            outCollisionCheckParams.myTeleportMustBeOnIgnorableGroundAngle = characterColliderSetup.myGroundSetup.myTeleportMustBeOnIgnorableSurfaceAngle;
+            outCollisionCheckParams.myCheckTransformMustBeOnIgnorableGroundAngle = characterColliderSetup.myGroundSetup.myCheckTransformMustBeOnIgnorableSurfaceAngle;
+            outCollisionCheckParams.myTeleportMustBeOnIgnorableCeilingAngle = characterColliderSetup.myCeilingSetup.myTeleportMustBeOnIgnorableSurfaceAngle;
+            outCollisionCheckParams.myCheckTransformMustBeOnIgnorableCeilingAngle = characterColliderSetup.myCeilingSetup.myCheckTransformMustBeOnIgnorableSurfaceAngle;
+
+            outCollisionCheckParams.myTeleportMustBeOnGround = characterColliderSetup.myGroundSetup.myTeleportMustBeOnSurface;
+            outCollisionCheckParams.myCheckTransformMustBeOnGround = characterColliderSetup.myGroundSetup.myCheckTransformMustBeOnSurface;
+            outCollisionCheckParams.myTeleportMustBeOnCeiling = characterColliderSetup.myCeilingSetup.myTeleportMustBeOnSurface;
+            outCollisionCheckParams.myCheckTransformMustBeOnCeiling = characterColliderSetup.myCeilingSetup.myCheckTransformMustBeOnSurface;
 
             outCollisionCheckParams.mySlidingEnabled = characterColliderSetup.myWallSlideSetup.myWallSlideEnabled;
             outCollisionCheckParams.mySlidingHorizontalMovementCheckBetterNormal = characterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementCheckGetBetterReferenceHit;

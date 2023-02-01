@@ -246,11 +246,13 @@ PP.CharacterColliderSurfaceSetup = class CharacterColliderSurfaceSetup {
         this.myMustStayOnSurface = false;
         this.myMustStayBelowSurfaceAngle = null;
 
+        this.myTeleportMustBeOnSurface = false;
+        this.myTeleportMustBeOnIgnorableSurfaceAngle = false;
+        this.myCheckTransformMustBeOnSurface = false;
+        this.myCheckTransformMustBeOnIgnorableSurfaceAngle = false;
+
         this.myRecollectSurfaceInfoOnSurfaceCheckFailed = false;
         // instead of copying the previous surface info on fail, regather them
-
-        this.myTeleportSurfaceAngleCheckEnabled = false;
-        this.myCheckTransformSurfaceAngleCheckEnabled = false;
 
         this.myAllowExitAttemptWhenOnNotIgnorableSurfacePerceivedAngle = false;
         // if u start on a not ignorable perceived angle (above angle to ignore) u normally can't even try to move uphill, this will let you try and see if with that movement
@@ -483,10 +485,12 @@ PP.CharacterColliderSurfaceSetup.prototype.copy = function (other) {
     this.myMustStayOnSurface = other.myMustStayOnSurface;
     this.myMustStayBelowSurfaceAngle = other.myMustStayBelowSurfaceAngle;
 
-    this.myRecollectSurfaceInfoOnSurfaceCheckFailed = other.myRecollectSurfaceInfoOnSurfaceCheckFailed;
+    this.myTeleportMustBeOnSurface = other.myTeleportMustBeOnSurface;
+    this.myTeleportMustBeOnIgnorableSurfaceAngle = other.myTeleportMustBeOnIgnorableSurfaceAngle;
+    this.myCheckTransformMustBeOnSurface = other.myCheckTransformMustBeOnSurface;
+    this.myCheckTransformMustBeOnIgnorableSurfaceAngle = other.myCheckTransformMustBeOnIgnorableSurfaceAngle;
 
-    this.myTeleportSurfaceAngleCheckEnabled = other.myTeleportSurfaceAngleCheckEnabled;
-    this.myCheckTransformSurfaceAngleCheckEnabled = other.myCheckTransformSurfaceAngleCheckEnabled;
+    this.myRecollectSurfaceInfoOnSurfaceCheckFailed = other.myRecollectSurfaceInfoOnSurfaceCheckFailed;
 
     this.myAllowExitAttemptWhenOnNotIgnorableSurfacePerceivedAngle = other.myAllowExitAttemptWhenOnNotIgnorableSurfacePerceivedAngle;
 };

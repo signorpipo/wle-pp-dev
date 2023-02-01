@@ -175,10 +175,15 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myMustStayBelowGroundAngle = null;
         this.myMustStayBelowCeilingAngle = null;
 
-        this.myTeleportGroundAngleCheckEnabled = false;
-        this.myCheckTransformGroundAngleCheckEnabled = false;
-        this.myTeleportCeilingAngleCheckEnabled = false;
-        this.myCheckTransformCeilingAngleCheckEnabled = false;
+        this.myTeleportMustBeOnIgnorableGroundAngle = false;
+        this.myCheckTransformMustBeOnIgnorableGroundAngle = false;
+        this.myTeleportMustBeOnIgnorableCeilingAngle = false;
+        this.myCheckTransformMustBeOnIgnorableCeilingAngle = false;
+
+        this.myTeleportMustBeOnGround = false;
+        this.myCheckTransformMustBeOnGround = false;
+        this.myTeleportMustBeOnCeiling = false;
+        this.myCheckTransformMustBeOnCeiling = false;
 
         this.mySlidingEnabled = false;
         this.mySlidingHorizontalMovementCheckBetterNormal = false;
@@ -381,10 +386,15 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myMustStayBelowGroundAngle = other.myMustStayBelowGroundAngle;
         this.myMustStayBelowCeilingAngle = other.myMustStayBelowCeilingAngle;
 
-        this.myTeleportGroundAngleCheckEnabled = other.myTeleportGroundAngleCheckEnabled;
-        this.myCheckTransformGroundAngleCheckEnabled = other.myCheckTransformGroundAngleCheckEnabled;
-        this.myTeleportCeilingAngleCheckEnabled = other.myTeleportCeilingAngleCheckEnabled;
-        this.myCheckTransformCeilingAngleCheckEnabled = other.myCheckTransformCeilingAngleCheckEnabled;
+        this.myTeleportMustBeOnIgnorableGroundAngle = other.myTeleportMustBeOnIgnorableGroundAngle;
+        this.myCheckTransformMustBeOnIgnorableGroundAngle = other.myCheckTransformMustBeOnIgnorableGroundAngle;
+        this.myTeleportMustBeOnIgnorableCeilingAngle = other.myTeleportMustBeOnIgnorableCeilingAngle;
+        this.myCheckTransformMustBeOnIgnorableCeilingAngle = other.myCheckTransformMustBeOnIgnorableCeilingAngle;
+
+        this.myTeleportMustBeOnGround = other.myTeleportMustBeOnGround;
+        this.myCheckTransformMustBeOnGround = other.myCheckTransformMustBeOnGround;
+        this.myTeleportMustBeOnCeiling = other.myTeleportMustBeOnCeiling;
+        this.myCheckTransformMustBeOnCeiling = other.myCheckTransformMustBeOnCeiling;
 
         this.mySlidingEnabled = other.mySlidingEnabled;
         this.mySlidingHorizontalMovementCheckBetterNormal = other.mySlidingHorizontalMovementCheckBetterNormal;

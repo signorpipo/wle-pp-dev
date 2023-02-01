@@ -88,7 +88,7 @@ LOCOMOTION EXTRA HARD:
 		- eviterebbe di collidere ancora di più consentendo però di poter uscire
 		- non pul avere tolleranza verso il basso perché altrimenti piano piano potresti collidere di più
 
-- avere flag verticali e orizzontali di collisioni, per esempio i character potresti volerci collidere solo orizzontalmente ma non verticalmente
+v avere flag verticali e orizzontali di collisioni, per esempio i character potresti volerci collidere solo orizzontalmente ma non verticalmente
 	- questo forse ha senso solo nel momento in cui ho introdotto il meccanismo di uscire dalle collisioni, altrimenti potresti entrare in un character dall'alto
 		
 - Provare a lerpare il movimento verticale quando c'è lo snappare (magari snappa direttamente nel collision check, cioè esce di un po' già li ma non totalmente?)

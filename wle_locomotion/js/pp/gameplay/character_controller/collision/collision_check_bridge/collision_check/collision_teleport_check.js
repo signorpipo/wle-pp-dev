@@ -110,16 +110,30 @@ CollisionCheck.prototype._teleport = function () {
                     this._gatherSurfaceInfo(newFeetPosition, height, transformUp, forwardForPerceivedAngle, forwardForVertical, false, collisionCheckParams, collisionRuntimeParams);
                 }
 
+                if (!collisionRuntimeParams.myIsOnGround) {
+                    if ((collisionCheckParams.myTeleportMustBeOnGround && !isPositionCheck)
+                        || (collisionCheckParams.myCheckTransformMustBeOnGround && isPositionCheck)) {
+                        collisionRuntimeParams.myTeleportCanceled = true;
+                    }
+                }
+
+                if (!collisionRuntimeParams.myIsOnCeiling) {
+                    if ((collisionCheckParams.myTeleportMustBeOnCeiling && !isPositionCheck)
+                        || (collisionCheckParams.myCheckTransformMustBeOnCeiling && isPositionCheck)) {
+                        collisionRuntimeParams.myTeleportCanceled = true;
+                    }
+                }
+
                 if (collisionRuntimeParams.myIsOnGround && collisionRuntimeParams.myGroundAngle > collisionCheckParams.myGroundAngleToIgnore + 0.0001) {
-                    if ((collisionCheckParams.myTeleportGroundAngleCheckEnabled && !isPositionCheck)
-                        || (collisionCheckParams.myCheckTransformGroundAngleCheckEnabled && isPositionCheck)) {
+                    if ((collisionCheckParams.myTeleportMustBeOnIgnorableGroundAngle && !isPositionCheck)
+                        || (collisionCheckParams.myCheckTransformMustBeOnIgnorableGroundAngle && isPositionCheck)) {
                         collisionRuntimeParams.myTeleportCanceled = true;
                     }
                 }
 
                 if (collisionRuntimeParams.myIsOnCeiling && collisionRuntimeParams.myCeilingAngle > collisionCheckParams.myCeilingAngleToIgnore + 0.0001) {
-                    if ((collisionCheckParams.myTeleportCeilingAngleCheckEnabled && !isPositionCheck)
-                        || (collisionCheckParams.myCheckTransformCeilingAngleCheckEnabled && isPositionCheck)) {
+                    if ((collisionCheckParams.myTeleportMustBeOnIgnorableCeilingAngle && !isPositionCheck)
+                        || (collisionCheckParams.myCheckTransformMustBeOnIgnorableCeilingAngle && isPositionCheck)) {
                         collisionRuntimeParams.myTeleportCanceled = true;
                     }
                 }
