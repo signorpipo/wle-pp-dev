@@ -266,7 +266,8 @@ PP.CollisionCheckBridge = {
             outCollisionCheckParams.myHorizontalMovementCheckVerticalStraight = characterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementVerticalStraightCheckEnabled;
             outCollisionCheckParams.myHorizontalMovementCheckVerticalDiagonalUpwardOutward = characterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementVerticalDiagonalOutwardUpwardCheckEnabled;
             outCollisionCheckParams.myHorizontalMovementCheckVerticalDiagonalUpwardInward = characterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementVerticalDiagonalInwardUpwardCheckEnabled;
-            outCollisionCheckParams.myHorizontalMovementCheckVerticalDiagonalDownward = characterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementVerticalDiagonalOutwardDownwardCheckEnabled || characterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementVerticalDiagonalInwardDownwardCheckEnabled;
+            outCollisionCheckParams.myHorizontalMovementCheckVerticalDiagonalDownwardOutward = characterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementVerticalDiagonalOutwardDownwardCheckEnabled;
+            outCollisionCheckParams.myHorizontalMovementCheckVerticalDiagonalDownwardInward = characterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementVerticalDiagonalInwardDownwardCheckEnabled;
 
             outCollisionCheckParams.myHorizontalMovementCheckVerticalStraightDiagonal =
                 characterColliderSetup.myHorizontalCheckSetup.myHorizontalMovementVerticalStraightDiagonalUpwardCheckEnabled ||

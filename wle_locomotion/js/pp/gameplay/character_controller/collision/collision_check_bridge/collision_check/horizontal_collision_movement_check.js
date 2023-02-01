@@ -233,30 +233,28 @@ CollisionCheck.prototype._horizontalMovementVerticalCheck = function () {
                         if (!isHorizontalCheckOk) break;
                     }
 
-                    if (collisionCheckParams.myHorizontalMovementCheckVerticalDiagonalDownward) {
-                        {
-                            firstHeightMovementPosition = firstPosition.vec3_add(movementStep, firstHeightMovementPosition);
-                            firstHeightMovementPosition = firstHeightMovementPosition.vec3_sub(heightStep, firstHeightMovementPosition);
+                    if (collisionCheckParams.myHorizontalMovementCheckVerticalDiagonalDownwardOutward) {
+                        firstHeightMovementPosition = firstPosition.vec3_add(movementStep, firstHeightMovementPosition);
+                        firstHeightMovementPosition = firstHeightMovementPosition.vec3_sub(heightStep, firstHeightMovementPosition);
 
-                            isHorizontalCheckOk = this._horizontalCheckRaycast(secondPosition, firstHeightMovementPosition, movementDirection, up,
-                                true, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
-                                feetPosition, true,
-                                collisionCheckParams, collisionRuntimeParams);
+                        isHorizontalCheckOk = this._horizontalCheckRaycast(secondPosition, firstHeightMovementPosition, movementDirection, up,
+                            true, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
+                            feetPosition, true,
+                            collisionCheckParams, collisionRuntimeParams);
 
-                            if (!isHorizontalCheckOk) break;
-                        }
+                        if (!isHorizontalCheckOk) break;
+                    }
 
-                        {
-                            secondHeightMovementPosition = secondPosition.vec3_add(movementStep, secondHeightMovementPosition);
-                            secondHeightMovementPosition = secondHeightMovementPosition.vec3_sub(heightStep, secondHeightMovementPosition);
+                    if (collisionCheckParams.myHorizontalMovementCheckVerticalDiagonalDownwardInward) {
+                        secondHeightMovementPosition = secondPosition.vec3_add(movementStep, secondHeightMovementPosition);
+                        secondHeightMovementPosition = secondHeightMovementPosition.vec3_sub(heightStep, secondHeightMovementPosition);
 
-                            isHorizontalCheckOk = this._horizontalCheckRaycast(firstPosition, secondHeightMovementPosition, movementDirection, up,
-                                true, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
-                                feetPosition, true,
-                                collisionCheckParams, collisionRuntimeParams);
+                        isHorizontalCheckOk = this._horizontalCheckRaycast(firstPosition, secondHeightMovementPosition, movementDirection, up,
+                            true, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
+                            feetPosition, true,
+                            collisionCheckParams, collisionRuntimeParams);
 
-                            if (!isHorizontalCheckOk) break;
-                        }
+                        if (!isHorizontalCheckOk) break;
                     }
 
                     if (collisionCheckParams.myHorizontalMovementCheckVerticalHorizontalBorderDiagonal) {
