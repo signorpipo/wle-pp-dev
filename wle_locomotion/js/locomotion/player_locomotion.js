@@ -93,7 +93,7 @@ PlayerLocomotion = class PlayerLocomotion {
             params.myTeleportCollisionCheckParamsCheck360 = true;
 
             params.myHeadCollisionBlockLayerFlags.copy(params.myMovementCollisionCheckParams.myHorizontalBlockLayerFlags);
-            params.myHeadCollisionBlockLayerFlags.addFlags(params.myMovementCollisionCheckParams.myVerticalBlockLayerFlags);
+            params.myHeadCollisionBlockLayerFlags.add(params.myMovementCollisionCheckParams.myVerticalBlockLayerFlags);
             params.myHeadCollisionObjectsToIgnore.pp_copy(params.myMovementCollisionCheckParams.myHorizontalObjectsToIgnore);
             let objectsEqualCallback = (first, second) => first.pp_equals(second);
             for (let objectToIgnore of params.myMovementCollisionCheckParams.myVerticalObjectsToIgnore) {
@@ -489,8 +489,8 @@ PlayerLocomotion = class PlayerLocomotion {
 
         this._myCollisionCheckParamsMovement.myDebugActive = true;
 
-        this._myCollisionCheckParamsMovement.myDebugHorizontalMovementActive = true;
-        this._myCollisionCheckParamsMovement.myDebugHorizontalPositionActive = false;
+        this._myCollisionCheckParamsMovement.myDebugHorizontalMovementActive = false;
+        this._myCollisionCheckParamsMovement.myDebugHorizontalPositionActive = true;
         this._myCollisionCheckParamsMovement.myDebugVerticalMovementActive = false;
         this._myCollisionCheckParamsMovement.myDebugVerticalPositionActive = false;
         this._myCollisionCheckParamsMovement.myDebugSlidingActive = false;

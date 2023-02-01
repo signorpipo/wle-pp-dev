@@ -44,16 +44,20 @@ PP.PhysicsLayerFlags = class PhysicsLayerFlags {
         }
     }
 
-    addFlags(layerFlags) {
+    add(layerFlags) {
         this._myLayerMask = this._myLayerMask | layerFlags.getMask();
     }
 
-    removeFlags(layerFlags) {
+    remove(layerFlags) {
         this._myLayerMask = this._myLayerMask & ~(layerFlags.getMask());
     }
 
-    intersectFlags(layerFlags) {
+    intersect(layerFlags) {
         this._myLayerMask = this._myLayerMask & layerFlags.getMask();
+    }
+
+    copy(layerFlags) {
+        this._myLayerMask = layerFlags._myLayerMask;
     }
 
     getMask() {
@@ -62,9 +66,5 @@ PP.PhysicsLayerFlags = class PhysicsLayerFlags {
 
     setMask(layerMask) {
         this._myLayerMask = layerMask;
-    }
-
-    copy(layerFlags) {
-        this._myLayerMask = layerFlags._myLayerMask;
     }
 };
