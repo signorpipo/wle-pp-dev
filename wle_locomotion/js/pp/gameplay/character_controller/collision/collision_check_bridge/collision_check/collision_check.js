@@ -70,19 +70,19 @@ CollisionCheck = class CollisionCheck {
         if (!originalHorizontalMovement.vec3_isZero()) {
             originalHorizontalMovement.vec3_normalize(originalHorizontalMovement);
 
-            PP.myDebugVisualManager.drawArrow(0, feetPositionPlusOffset, originalHorizontalMovement, 0.2, [0.5, 0.5, 1, 1]);
+            PP.myDebugVisualManager.drawArrow(0, feetPositionPlusOffset, originalHorizontalMovement, 0.2, PP.vec4_create(0.5, 0.5, 1, 1));
         }
 
         if (!horizontalMovement.vec3_isZero()) {
             horizontalMovement.vec3_normalize(horizontalMovement);
 
-            PP.myDebugVisualManager.drawArrow(0, feetPositionPlusOffset, horizontalMovement, 0.2, [0, 0, 1, 1]);
+            PP.myDebugVisualManager.drawArrow(0, feetPositionPlusOffset, horizontalMovement, 0.2, PP.vec4_create(0, 0, 1, 1));
         }
 
         if (!verticalMovement.vec3_isZero()) {
             verticalMovement.vec3_normalize(verticalMovement);
 
-            PP.myDebugVisualManager.drawArrow(0, feetPosition, verticalMovement, 0.2, [0, 0, 1, 1]);
+            PP.myDebugVisualManager.drawArrow(0, feetPosition, verticalMovement, 0.2, PP.vec4_create(0, 0, 1, 1));
         }
     }
 
@@ -90,19 +90,19 @@ CollisionCheck = class CollisionCheck {
         if (collisionRuntimeParams.myHorizontalCollisionHit.isValid()) {
             PP.myDebugVisualManager.drawArrow(0,
                 collisionRuntimeParams.myHorizontalCollisionHit.myPosition,
-                collisionRuntimeParams.myHorizontalCollisionHit.myNormal, 0.2, [1, 0, 0, 1]);
+                collisionRuntimeParams.myHorizontalCollisionHit.myNormal, 0.2, PP.vec4_create(1, 0, 0, 1));
         }
 
         if (collisionRuntimeParams.mySlidingCollisionHit.isValid()) {
             PP.myDebugVisualManager.drawArrow(0,
                 collisionRuntimeParams.mySlidingCollisionHit.myPosition,
-                collisionRuntimeParams.mySlidingCollisionHit.myNormal, 0.2, [1, 0, 0, 1]);
+                collisionRuntimeParams.mySlidingCollisionHit.myNormal, 0.2, PP.vec4_create(1, 0, 0, 1));
         }
 
         if (collisionRuntimeParams.myVerticalCollisionHit.isValid()) {
             PP.myDebugVisualManager.drawArrow(0,
                 collisionRuntimeParams.myVerticalCollisionHit.myPosition,
-                collisionRuntimeParams.myVerticalCollisionHit.myNormal, 0.2, [1, 0, 0, 1]);
+                collisionRuntimeParams.myVerticalCollisionHit.myNormal, 0.2, PP.vec4_create(1, 0, 0, 1));
         }
     }
 };

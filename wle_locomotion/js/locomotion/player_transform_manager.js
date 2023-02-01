@@ -540,11 +540,11 @@ PlayerTransformManager = class PlayerTransformManager {
     }
 
     _debugUpdate(dt) {
-        PP.myDebugVisualManager.drawPoint(0, this._myValidPosition, [1, 0, 0, 1], 0.05);
-        PP.myDebugVisualManager.drawLineEnd(0, this._myValidPosition, this.getPositionReal(), [1, 0, 0, 1], 0.05);
-        PP.myDebugVisualManager.drawLine(0, this._myValidPosition, this._myValidRotationQuat.quat_getForward(), 0.15, [0, 1, 0, 1], 0.025);
+        PP.myDebugVisualManager.drawPoint(0, this._myValidPosition, PP.vec4_create(1, 0, 0, 1), 0.05);
+        PP.myDebugVisualManager.drawLineEnd(0, this._myValidPosition, this.getPositionReal(), PP.vec4_create(1, 0, 0, 1), 0.05);
+        PP.myDebugVisualManager.drawLine(0, this._myValidPosition, this._myValidRotationQuat.quat_getForward(), 0.15, PP.vec4_create(0, 1, 0, 1), 0.025);
 
-        PP.myDebugVisualManager.drawPoint(0, this._myValidPositionHead, [1, 1, 0, 1], 0.05);
+        PP.myDebugVisualManager.drawPoint(0, this._myValidPositionHead, PP.vec4_create(1, 1, 0, 1), 0.05);
     }
 };
 

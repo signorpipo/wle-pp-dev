@@ -297,7 +297,7 @@ WL.registerComponent('pp-grabber-hand', {
 
             let color = 1 / j;
 
-            PP.myDebugVisualManager.drawLine(5, this.object.pp_getPosition(), direction, 0.2, [olor, color, color, 1]);
+            PP.myDebugVisualManager.drawLine(5, this.object.pp_getPosition(), direction, 0.2, PP.vec4_create(olor, color, color, 1));
         }
     },
     _isAlreadyGrabbed(grabbable) {

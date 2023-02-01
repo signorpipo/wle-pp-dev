@@ -3,7 +3,7 @@ let visualParams = new PP.VisualTextParams();
 visualParams.myText = text;
 visualParams.myTransform.mat4_copy(transform);
 visualParams.myMaterial = PP.myDefaultResources.myMaterials.myText.clone();
-visualParams.myMaterial.color = [1, 1, 1, 1];
+visualParams.myMaterial.color = PP.vec4_create(1, 1, 1, 1);
 PP.myVisualManager.draw(visualParams);
 
 or

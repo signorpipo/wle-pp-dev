@@ -105,7 +105,7 @@ CollisionCheck.prototype._horizontalSlideCheckOpposite = function () {
                     visualParams.myDirection = slideMovement.vec3_normalize();
                     visualParams.myLength = 0.2;
                     visualParams.myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
-                    visualParams.myMaterial.color =  [0, 0, 1, 1];
+                    visualParams.myMaterial.color =  PP.vec4_create(0, 0, 1, 1);
                     PP.myDebugVisualManager.draw(visualParams, 1);
                 }
  
@@ -115,7 +115,7 @@ CollisionCheck.prototype._horizontalSlideCheckOpposite = function () {
                     visualParams.myDirection = oppositeSlideMovement.vec3_normalize();
                     visualParams.myLength = 0.2;
                     visualParams.myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
-                    visualParams.myMaterial.color =  [1, 0, 1, 1];
+                    visualParams.myMaterial.color =  PP.vec4_create(1, 0, 1, 1);
                     PP.myDebugVisualManager.draw(visualParams, 1);
                 }
  
@@ -125,7 +125,7 @@ CollisionCheck.prototype._horizontalSlideCheckOpposite = function () {
                     visualParams.myDirection = hitNormal.vec3_normalize();
                     visualParams.myLength = 0.2;
                     visualParams.myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
-                    visualParams.myMaterial.color =  [1, 1, 1, 1];
+                    visualParams.myMaterial.color =  PP.vec4_create(1, 1, 1, 1);
                     PP.myDebugVisualManager.draw(visualParams, 1);
                 } */
 
@@ -230,7 +230,7 @@ CollisionCheck.prototype._horizontalSlideFlickerCheck = function () {
                                 visualParams.myDirection = slideMovement.vec3_normalize();
                                 visualParams.myLength = 0.2;
                                 visualParams.myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
-                                visualParams.myMaterial.color = [0.5, 0.5, 0.5, 1];
+                                visualParams.myMaterial.color = PP.vec4_create(0.5, 0.5, 0.5, 1);
                                 PP.myDebugVisualManager.draw(visualParams, 2);
                             }
     
@@ -240,7 +240,7 @@ CollisionCheck.prototype._horizontalSlideFlickerCheck = function () {
                                 visualParams.myDirection = flickerFixSlideMovement.vec3_normalize();
                                 visualParams.myLength = 0.2;
                                 visualParams.myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
-                                visualParams.myMaterial.color = [1, 1, 1, 1];
+                                visualParams.myMaterial.color = PP.vec4_create(1, 1, 1, 1);
                                 PP.myDebugVisualManager.draw(visualParams, 2);
                             }
     
@@ -250,7 +250,7 @@ CollisionCheck.prototype._horizontalSlideFlickerCheck = function () {
                                 visualParams.myDirection = hitNormal.vec3_normalize();
                                 visualParams.myLength = 0.2;
                                 visualParams.myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
-                                visualParams.myMaterial.color = [1, 0, 0.5, 1];
+                                visualParams.myMaterial.color = PP.vec4_create(1, 0, 0.5, 1);
                                 PP.myDebugVisualManager.draw(visualParams, 2);
                             } */
 
@@ -464,7 +464,7 @@ CollisionCheck.prototype._horizontalCheckBetterSlideNormal = function () {
         }
 
         if (collisionCheckParams.myDebugActive && collisionCheckParams.myDebugHorizontalMovementActive) {
-            PP.myDebugVisualManager.drawArrow(0, feetPosition, movementDirection, fixedMovement.vec3_length(), [1, 0, 1, 1]);
+            PP.myDebugVisualManager.drawArrow(0, feetPosition, movementDirection, fixedMovement.vec3_length(), PP.vec4_create(1, 0, 1, 1));
         }
 
         this._myCheckBetterSlidingNormalCollisionRuntimeParams.copy(collisionRuntimeParams);

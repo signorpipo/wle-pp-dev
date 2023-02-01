@@ -283,7 +283,7 @@ PlayerObscureManager = class PlayerObscureManager {
             this._myObscureMaterial = this._myParams.myObscureMaterial;
         } else {
             this._myObscureMaterial = PP.myDefaultResources.myMaterials.myFlatTransparentNoDepth.clone();
-            this._myObscureMaterial.color = [0, 0, 0, 1];
+            this._myObscureMaterial.color = PP.vec4_create(0, 0, 0, 1);
         }
 
         this._myObscureParentObject = PP.myVisualData.myRootObject.pp_addObject();

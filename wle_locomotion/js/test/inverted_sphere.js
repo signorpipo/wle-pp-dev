@@ -11,7 +11,7 @@ WL.registerComponent('inverted-sphere', {
         let meshComponet = this._myInvertedSphereObject.pp_addComponent("mesh");
         meshComponet.mesh = invertedSphere;
         meshComponet.material = PP.myDefaultResources.myMaterials.myFlatOpaque;
-        meshComponet.material.color = [1, 0, 0, 1];
+        meshComponet.material.color = PP.vec4_create(1, 0, 0, 1);
 
         this._myInvertedSphereObject.pp_setScale(0.2);
     },

@@ -20,7 +20,7 @@ WL.registerComponent('pp-show-fps', {
             visualParams.myMaterial = this._myTextMaterial.clone();
         } else {
             visualParams.myMaterial = PP.myDefaultResources.myMaterials.myText.clone();
-            visualParams.myMaterial.color = [0, 1, 0, 1];
+            visualParams.myMaterial.color = PP.vec4_create(0, 1, 0, 1);
         }
 
         visualParams.myParent = this._myVisualFPSParent;

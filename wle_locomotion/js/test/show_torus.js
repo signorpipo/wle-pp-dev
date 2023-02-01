@@ -9,7 +9,7 @@ WL.registerComponent('show-torus', {
         PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Torus Extra Length Multiplier", 1, 0.1, 3));
 
         this._myMaterial = PP.myDefaultResources.myMaterials.myPhongOpaque.clone();
-        this._myMaterial.diffuseColor = [1, 0.5, 0.5, 1];
+        this._myMaterial.diffuseColor = PP.vec4_create(1, 0.5, 0.5, 1);
     },
     update(dt) {
         let visualParams = new PP.VisualTorusParams();

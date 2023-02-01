@@ -218,8 +218,8 @@ WL.registerComponent("pp-benchmark-max-visible-triangles", {
         }
     },
     start() {
-        this._myLagColor = [0.5, 0, 0, 1];
-        this._myNormalColor = [0, 0, 0, 1];
+        this._myLagColor = PP.vec4_create(0.5, 0, 0, 1);
+        this._myNormalColor = PP.vec4_create(0, 0, 0, 1);
 
         this._myRealTrianglesAmount = 0;
 

@@ -136,9 +136,9 @@ PlayerLocomotionTeleportDetectionVisualizer.prototype._setupVisuals = function (
     let innerTorusPosition = PP.vec3_create();
     return function _setupVisuals() {
         this._myTeleportParableValidMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
-        this._myTeleportParableValidMaterial.color = [0, 0.5, 1, 1];
+        this._myTeleportParableValidMaterial.color = PP.vec4_create(0, 0.5, 1, 1);
         this._myTeleportParableInvalidMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
-        this._myTeleportParableInvalidMaterial.color = [0.75, 0.05, 0, 1];
+        this._myTeleportParableInvalidMaterial.color = PP.vec4_create(0.75, 0.05, 0, 1);
 
         this._myValidVisualLines = [];
         this._myInvalidVisualLines = [];
@@ -277,7 +277,7 @@ PlayerLocomotionTeleportDetectionVisualizer.prototype._showTeleportParable = fun
             visuaLine.setVisible(true);
 
             if (this._myTeleportParams.myDebugActive && this._myTeleportParams.myDebugShowActive) {
-                PP.myDebugVisualManager.drawPoint(0, currentPosition, [1, 0, 0, 1], 0.01);
+                PP.myDebugVisualManager.drawPoint(0, currentPosition, PP.vec4_create(1, 0, 0, 1), 0.01);
             }
         }
 
@@ -419,7 +419,7 @@ PlayerLocomotionTeleportDetectionVisualizer.prototype._showTeleportParablePositi
         }
 
         if (this._myTeleportParams.myDebugActive && this._myTeleportParams.myDebugShowActive) {
-            PP.myDebugVisualManager.drawPoint(0, this._myTeleportRuntimeParams.myTeleportPosition, [0, 0, 1, 1], 0.02);
+            PP.myDebugVisualManager.drawPoint(0, this._myTeleportRuntimeParams.myTeleportPosition, PP.vec4_create(0, 0, 1, 1), 0.02);
         }
     };
 }();

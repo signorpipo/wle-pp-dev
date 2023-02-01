@@ -10,7 +10,7 @@ WL.registerComponent('show-line-test', {
         visualParams.myDirection = this.object.pp_getForward();
         visualParams.myLength = 0.4;
         visualParams.myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
-        visualParams.myMaterial.color = [0, 0, 1, 1];
+        visualParams.myMaterial.color = PP.vec4_create(0, 0, 1, 1);
         PP.myDebugVisualManager.draw(visualParams);
     }
 });

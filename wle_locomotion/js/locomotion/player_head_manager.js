@@ -248,7 +248,7 @@ PlayerHeadManager = class PlayerHeadManager {
     }
 
     _debugUpdate(dt) {
-        PP.myDebugVisualManager.drawLineEnd(0, this.getPositionFeet(), this.getPositionHead(), [1, 0, 0, 1], 0.01);
+        PP.myDebugVisualManager.drawLineEnd(0, this.getPositionFeet(), this.getPositionHead(), PP.vec4_create(1, 0, 0, 1), 0.01);
 
         console.error(this.getHeightEyes());
     }

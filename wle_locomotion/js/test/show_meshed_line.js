@@ -12,7 +12,7 @@ WL.registerComponent('show-meshed-line', {
         visualParams.myThickness = 0.02;
         visualParams.myRadius = 0.02;
         visualParams.myMaterial = PP.myDefaultResources.myMaterials.myPhongOpaque.clone();
-        visualParams.myMaterial.diffuseColor = [0, 1, 0, 1];
+        visualParams.myMaterial.diffuseColor = PP.vec4_create(0, 1, 0, 1);
 
         this._myVisualLine = new PP.VisualLine(visualParams);
     },

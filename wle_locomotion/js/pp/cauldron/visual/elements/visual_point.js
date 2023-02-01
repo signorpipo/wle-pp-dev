@@ -3,7 +3,7 @@ let visualParams = new PP.VisualPointParams();
 visualParams.myPosition.vec3_copy(position);
 visualParams.myRadius = 0.005;
 visualParams.myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
-visualParams.myMaterial.color = [1, 1, 1, 1];
+visualParams.myMaterial.color = PP.vec4_create(1, 1, 1, 1);
 PP.myVisualManager.draw(visualParams);
 
 or

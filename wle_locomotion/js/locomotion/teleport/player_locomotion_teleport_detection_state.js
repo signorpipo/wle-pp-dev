@@ -337,7 +337,7 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable 
                                 raycastResult = PP.PhysicsUtils.raycast(raycastSetup, raycastResult);
 
                                 if (this._myTeleportParams.myDebugActive && this._myTeleportParams.myDebugDetectActive) {
-                                    PP.myDebugVisualManager.drawPoint(0, raycastSetup.myOrigin, [0, 0, 0, 1], 0.03);
+                                    PP.myDebugVisualManager.drawPoint(0, raycastSetup.myOrigin, PP.vec4_create(0, 0, 0, 1), 0.03);
                                     PP.myDebugVisualManager.drawRaycast(0, raycastResult);
                                 }
 
@@ -368,7 +368,7 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable 
                                 raycastResult = PP.PhysicsUtils.raycast(raycastSetup, raycastResult);
 
                                 if (this._myTeleportParams.myDebugActive && this._myTeleportParams.myDebugDetectActive) {
-                                    PP.myDebugVisualManager.drawPoint(0, raycastSetup.myOrigin, [0, 0, 0, 1], 0.03);
+                                    PP.myDebugVisualManager.drawPoint(0, raycastSetup.myOrigin, PP.vec4_create(0, 0, 0, 1), 0.03);
                                     PP.myDebugVisualManager.drawRaycast(0, raycastResult);
                                 }
 
@@ -400,7 +400,7 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable 
                                 raycastResult = PP.PhysicsUtils.raycast(raycastSetup, raycastResult);
 
                                 if (this._myTeleportParams.myDebugActive && this._myTeleportParams.myDebugDetectActive) {
-                                    PP.myDebugVisualManager.drawPoint(0, raycastSetup.myOrigin, [0, 0, 0, 1], 0.03);
+                                    PP.myDebugVisualManager.drawPoint(0, raycastSetup.myOrigin, PP.vec4_create(0, 0, 0, 1), 0.03);
                                     PP.myDebugVisualManager.drawRaycast(0, raycastResult);
                                 }
 
@@ -468,7 +468,7 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable 
                         raycastResult = PP.PhysicsUtils.raycast(raycastSetup, raycastResult);
 
                         if (this._myTeleportParams.myDebugActive && this._myTeleportParams.myDebugDetectActive) {
-                            PP.myDebugVisualManager.drawPoint(0, raycastSetup.myOrigin, [0, 0, 0, 1], 0.03);
+                            PP.myDebugVisualManager.drawPoint(0, raycastSetup.myOrigin, PP.vec4_create(0, 0, 0, 1), 0.03);
                             PP.myDebugVisualManager.drawRaycast(0, raycastResult);
                         }
 
@@ -498,7 +498,7 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable 
                         raycastResult = PP.PhysicsUtils.raycast(raycastSetup, raycastResult);
 
                         if (this._myTeleportParams.myDebugActive && this._myTeleportParams.myDebugDetectActive) {
-                            PP.myDebugVisualManager.drawPoint(0, raycastSetup.myOrigin, [0, 0, 0, 1], 0.03);
+                            PP.myDebugVisualManager.drawPoint(0, raycastSetup.myOrigin, PP.vec4_create(0, 0, 0, 1), 0.03);
                             PP.myDebugVisualManager.drawRaycast(0, raycastResult);
                         }
 
