@@ -253,7 +253,7 @@ WL.registerComponent('pp-benchmark-max-physx', {
 
         let physXComponent = physX.pp_addComponent("physx", {
             "shape": shape, "shapeData": { index: this._myShapeIndex },
-            "extents": [scale, scale, scale],
+            "extents": PP.vec3_create(scale, scale, scale),
             "static": isStatic,
             "kinematic": !isDynamic,
             "mass": 1

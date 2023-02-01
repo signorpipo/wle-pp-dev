@@ -14,7 +14,7 @@ WL.registerComponent('pp-show-fps', {
         let visualParams = new PP.VisualTextParams();
         visualParams.myText = "0";
 
-        visualParams.myTransform.mat4_setPositionRotationScale([-0.115, -0.115, 0.35], [0, 180, 0], [0.3, 0.3, 0.3]);
+        visualParams.myTransform.mat4_setPositionRotationScale(PP.vec3_create(-0.115, -0.115, 0.35), PP.vec3_create(0, 180, 0), PP.vec3_create(0.3, 0.3, 0.3));
 
         if (this._myTextMaterial != null) {
             visualParams.myMaterial = this._myTextMaterial.clone();
@@ -47,12 +47,12 @@ WL.registerComponent('pp-show-fps', {
                 let visualParams = this._myVisualFPS.getParams();
 
                 if (PP.XRUtils.isSessionActive()) {
-                    visualParams.myTransform.mat4_setPositionRotationScale([-0.115, -0.115, 0.35], [0, 180, 0], [0.3, 0.3, 0.3]);
+                    visualParams.myTransform.mat4_setPositionRotationScale(PP.vec3_create(-0.115, -0.115, 0.35), PP.vec3_create(0, 180, 0), PP.vec3_create(0.3, 0.3, 0.3));
                 } else {
-                    visualParams.myTransform.mat4_setPositionRotationScale([-0.25, -0.130, 0.35], [0, 180, 0], [0.3, 0.3, 0.3]);
+                    visualParams.myTransform.mat4_setPositionRotationScale(PP.vec3_create(-0.25, -0.130, 0.35), PP.vec3_create(0, 180, 0), PP.vec3_create(0.3, 0.3, 0.3));
                 }
 
-                //visualParams.myTransform.mat4_setPositionRotationScale([PP.myEasyTuneVariables.get("FPS X"), PP.myEasyTuneVariables.get("FPS Y"), PP.myEasyTuneVariables.get("FPS Z")], [0, 180, 0], [0.3, 0.3, 0.3]);
+                //visualParams.myTransform.mat4_setPositionRotationScale([PP.myEasyTuneVariables.get("FPS X"), PP.myEasyTuneVariables.get("FPS Y"), PP.myEasyTuneVariables.get("FPS Z")], PP.vec3_create(0, 180, 0), PP.vec3_create(0.3, 0.3, 0.3));
 
                 visualParams.myText = fps.toFixed(0);
                 this._myVisualFPS.paramsUpdated();

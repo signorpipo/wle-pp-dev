@@ -17,8 +17,8 @@ PlayerLocomotionTeleportDetectionParams = class PlayerLocomotionTeleportDetectio
         this.myTeleportParableStartReferenceObject = null;
 
         // used if reference is null
-        this.myTeleportParableStartPositionOffset = [0, -0.04, 0.08];
-        this.myTeleportParableStartRotationOffset = [30, 0, 0];
+        this.myTeleportParableStartPositionOffset = PP.vec3_create(0, -0.04, 0.08);
+        this.myTeleportParableStartRotationOffset = PP.vec3_create(30, 0, 0);
 
         this.myTeleportParableSpeed = 15;
         this.myTeleportParableGravity = -30;

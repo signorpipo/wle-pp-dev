@@ -354,7 +354,7 @@ PlayerLocomotion = class PlayerLocomotion {
         this._myCollisionCheckParamsMovement.myDistanceFromHeadToIgnore = 0.1;
 
         //this._myCollisionCheckParamsMovement.myPositionOffsetLocal.vec3_set(0, 1, 0)
-        //this._myCollisionCheckParamsMovement.myRotationOffsetLocalQuat.quat_fromAxis(45, [1, 1, 0].vec3_normalize());
+        //this._myCollisionCheckParamsMovement.myRotationOffsetLocalQuat.quat_fromAxis(45, PP.vec3_create(1, 1, 0).vec3_normalize());
 
         this._myCollisionCheckParamsMovement.myHorizontalMovementCheckEnabled = true;
         this._myCollisionCheckParamsMovement.myHorizontalMovementStepEnabled = false;

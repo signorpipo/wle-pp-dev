@@ -8,10 +8,10 @@ WL.registerComponent('pp-tool-cursor', {
     init: function () {
         this._myHandednessString = ['left', 'right'][this._myHandedness];
 
-        this._myCursorPositionDefaultOffset = [0, -0.035, -0.05];
-        this._myCursorRotationDefaultOffset = [-30, 0, 0];
+        this._myCursorPositionDefaultOffset = PP.vec3_create(0, -0.035, -0.05);
+        this._myCursorRotationDefaultOffset = PP.vec3_create(-30, 0, 0);
 
-        this._myCursorMeshScale = [0.0025, 0.0025, 0.0025];
+        this._myCursorMeshScale = PP.vec3_create(0.0025, 0.0025, 0.0025);
         this._myCursorColor = [255 / 255, 255 / 255, 255 / 255, 1];
 
         this._myCursorTargetCollisionGroup = 7;
@@ -21,7 +21,7 @@ WL.registerComponent('pp-tool-cursor', {
         this._myFixForwardObject = WL.scene.addObject(this._myToolCursorObject);
 
         if (this._myFixForward) {
-            this._myFixForwardObject.pp_rotateObject([0, 180, 0]);
+            this._myFixForwardObject.pp_rotateObject(PP.vec3_create(0, 180, 0));
         }
 
         this._myCursorObjectVR = WL.scene.addObject(this._myFixForwardObject);

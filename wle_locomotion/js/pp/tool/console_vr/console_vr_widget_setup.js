@@ -26,28 +26,28 @@ PP.ConsoleVRWidgetSetup = class ConsoleVRWidgetSetup {
         this.myMessageTypeColors[PP.ConsoleVRWidget.MessageType.INFO] = [60 / 255, 200 / 255, 255 / 255, 1];
 
         //Messages
-        this.myMessagesPanelPosition = [0, 0.075, 0];
+        this.myMessagesPanelPosition = PP.vec3_create(0, 0.075, 0);
 
-        this.myMessagesBackgroundScale = [0.34, 0.15, 1];
+        this.myMessagesBackgroundScale = PP.vec3_create(0.34, 0.15, 1);
 
         {
             let xPaddingPercentage = 0.03;
             let yPaddingPercentage = xPaddingPercentage * this.myMessagesBackgroundScale[0] / this.myMessagesBackgroundScale[1] * 0.8; //a bit less padding
             let xPosition = -this.myMessagesBackgroundScale[0] + this.myMessagesBackgroundScale[0] * xPaddingPercentage;
             let yPosition = this.myMessagesBackgroundScale[1] - this.myMessagesBackgroundScale[1] * yPaddingPercentage;
-            this.myMessagesTextsPanelPosition = [xPosition, yPosition, 0.007];
+            this.myMessagesTextsPanelPosition = PP.vec3_create(xPosition, yPosition, 0.007);
         }
-        this.myMessagesTextsPanelScale = [0.1, 0.1, 0.1];
+        this.myMessagesTextsPanelScale = PP.vec3_create(0.1, 0.1, 0.1);
 
         this.myMessagesTextStartString = ".\n"; // to avoid issue with text component padding
         this.myMessagesTextAlignment = 1; // left
         this.myMessagesTextJustification = 3; // top
 
         this.myMessagesTextPositions = [];
-        this.myMessagesTextPositions[PP.ConsoleVRWidget.MessageType.LOG] = [0, 0, 0.00001];
-        this.myMessagesTextPositions[PP.ConsoleVRWidget.MessageType.ERROR] = [0, 0, 0];
-        this.myMessagesTextPositions[PP.ConsoleVRWidget.MessageType.WARN] = [0, 0, 0];
-        this.myMessagesTextPositions[PP.ConsoleVRWidget.MessageType.INFO] = [0, 0, 0];
+        this.myMessagesTextPositions[PP.ConsoleVRWidget.MessageType.LOG] = PP.vec3_create(0, 0, 0.00001);
+        this.myMessagesTextPositions[PP.ConsoleVRWidget.MessageType.ERROR] = PP.vec3_create(0, 0, 0);
+        this.myMessagesTextPositions[PP.ConsoleVRWidget.MessageType.WARN] = PP.vec3_create(0, 0, 0);
+        this.myMessagesTextPositions[PP.ConsoleVRWidget.MessageType.INFO] = PP.vec3_create(0, 0, 0);
 
         this.myMessagesTextColors = [];
         this.myMessagesTextColors[PP.ConsoleVRWidget.MessageType.LOG] = this.myMessageTypeColors[PP.ConsoleVRWidget.MessageType.LOG];
@@ -56,14 +56,14 @@ PP.ConsoleVRWidgetSetup = class ConsoleVRWidgetSetup {
         this.myMessagesTextColors[PP.ConsoleVRWidget.MessageType.INFO] = this.myMessageTypeColors[PP.ConsoleVRWidget.MessageType.INFO];
 
         //Buttons     
-        this.myButtonsPanelPosition = [0, -0.11, 0.015];
+        this.myButtonsPanelPosition = PP.vec3_create(0, -0.11, 0.015);
 
-        this.myButtonBackgroundScale = [0.04, 0.02, 1];
+        this.myButtonBackgroundScale = PP.vec3_create(0.04, 0.02, 1);
 
-        this.myButtonTextPosition = [0, 0, 0.007];
-        this.myButtonTextScale = [0.18, 0.18, 0.18];
+        this.myButtonTextPosition = PP.vec3_create(0, 0, 0.007);
+        this.myButtonTextScale = PP.vec3_create(0.18, 0.18, 0.18);
 
-        this.myButtonCursorTargetPosition = [0, 0, 0];
+        this.myButtonCursorTargetPosition = PP.vec3_create(0, 0, 0);
         this.myButtonCursorTargetPosition[2] = this.myButtonTextPosition[2];
 
         this.myButtonsCollisionCollider = this.myCursorTargetCollisionCollider;
@@ -109,10 +109,10 @@ PP.ConsoleVRWidgetSetup = class ConsoleVRWidgetSetup {
         }
 
         //Notify Icon
-        this.myNotifyIconBackgroundScale = [0.01, 0.01, 1];
+        this.myNotifyIconBackgroundScale = PP.vec3_create(0.01, 0.01, 1);
 
         this.myNotifyIconPanelPositions = [];
-        this.myNotifyIconPanelPositions[PP.ToolHandedness.NONE] = [0, 0, 0];
+        this.myNotifyIconPanelPositions[PP.ToolHandedness.NONE] = PP.vec3_create(0, 0, 0);
         this.myNotifyIconPanelPositions[PP.ToolHandedness.NONE][0] = -this.myMessagesBackgroundScale[0] + this.myNotifyIconBackgroundScale[0] + 0.01;
         this.myNotifyIconPanelPositions[PP.ToolHandedness.NONE][1] = -this.myMessagesBackgroundScale[1] + this.myNotifyIconBackgroundScale[1] + 0.01;
         this.myNotifyIconPanelPositions[PP.ToolHandedness.NONE][2] = this.myMessagesTextsPanelPosition[2] - 0.00001; //prevent glitches with text
@@ -121,7 +121,7 @@ PP.ConsoleVRWidgetSetup = class ConsoleVRWidgetSetup {
 
         this.myNotifyIconPanelPositions[PP.ToolHandedness.RIGHT] = this.myNotifyIconPanelPositions[PP.ToolHandedness.NONE];
 
-        this.myNotifyIconCursorTargetPosition = [0, 0, 0];
+        this.myNotifyIconCursorTargetPosition = PP.vec3_create(0, 0, 0);
         this.myNotifyIconCursorTargetPosition[2] = this.myButtonsPanelPosition[2] + this.myButtonTextPosition[2] - this.myMessagesTextsPanelPosition[2]; // a little behind the button target to avoid hiding it
 
         this.myNotifyIconCollisionExtents = this.myNotifyIconBackgroundScale.slice(0);
@@ -139,7 +139,7 @@ PP.ConsoleVRWidgetSetup = class ConsoleVRWidgetSetup {
             this.myPointerCollisionExtents = [this.myMessagesBackgroundScale[0], pointerCollisionHalfHeight, this.myCursorTargetCollisionThickness];
         }
 
-        this.myPointerCursorTargetPosition = [0, 0, 0];
+        this.myPointerCursorTargetPosition = PP.vec3_create(0, 0, 0);
         this.myPointerCursorTargetPosition[1] = (this.myMessagesPanelPosition[1] + this.myMessagesBackgroundScale[1]) - this.myPointerCollisionExtents[1];
         this.myPointerCursorTargetPosition[2] = this.myButtonsPanelPosition[2] + this.myButtonTextPosition[2] - 0.0001; // a little behind the button target to avoid hiding it
     }

@@ -318,13 +318,13 @@ WL.registerComponent("pp-benchmark-max-visible-triangles", {
         this._myDoneTextComponent.text = " ";
         //this._myDoneTextComponent.text = "End";
 
-        this._myTextsObject.pp_setPositionLocal([0, 4.3, 0]);
+        this._myTextsObject.pp_setPositionLocal(PP.vec3_create(0, 4.3, 0));
         this._myTextsObject.pp_setScale(2.75);
 
-        this._myTriangleTextObject.pp_setPositionLocal([-1.4, 0, 0]);
-        this._myPlaneTextObject.pp_setPositionLocal([0.55, 0, 0]);
-        this._myFPSTextObject.pp_setPositionLocal([-0.315, 0, 0]);
-        this._myDoneTextObject.pp_setPositionLocal([0, -4.6, 0]);
+        this._myTriangleTextObject.pp_setPositionLocal(PP.vec3_create(-1.4, 0, 0));
+        this._myPlaneTextObject.pp_setPositionLocal(PP.vec3_create(0.55, 0, 0));
+        this._myFPSTextObject.pp_setPositionLocal(PP.vec3_create(-0.315, 0, 0));
+        this._myDoneTextObject.pp_setPositionLocal(PP.vec3_create(0, -4.6, 0));
         this._myDoneTextObject.pp_setScale(4);
 
         this._myDTHistory = [];

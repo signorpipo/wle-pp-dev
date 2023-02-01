@@ -72,10 +72,10 @@ WL.registerComponent('test-tracked-hand-draw-joints', {
                 //position.vec3_convertPositionToWorld(PP.myPlayerObjects.myPlayerPivot.pp_getTransform(), position);
 
                 this._myTrackedHandObject.pp_setPositionLocal(this._myHandPose.getPosition());
-                //this._myTrackedHandObject.pp_translateObject([-0.02, 0, 0]);
+                //this._myTrackedHandObject.pp_translateObject(PP.vec3_create(-0.02, 0, 0));
 
                 //this._myTrackedHandObject.pp_setScale(tip.radius);
-                //this._myTrackedHandObject.pp_rotateObject([0, 180, 0]);
+                //this._myTrackedHandObject.pp_rotateObject(PP.vec3_create(0, 180, 0));
             }
         }
     },

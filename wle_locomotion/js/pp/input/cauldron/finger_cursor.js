@@ -28,7 +28,7 @@ WL.registerComponent('pp-finger-cursor', {
         this._myCollisionComponent = this._myCursorObject.addComponent('collision');
         this._myCollisionComponent.collider = WL.Collider.Sphere;
         this._myCollisionComponent.group = 1 << this._myCollisionGroup;
-        this._myCollisionComponent.extents = [this._myCollisionSize, this._myCollisionSize, this._myCollisionSize];
+        this._myCollisionComponent.extents = PP.vec3_create(this._myCollisionSize, this._myCollisionSize, this._myCollisionSize);
 
         if (WL.xrSession) {
             this._onXRSessionStart(WL.xrSession);

@@ -12,7 +12,7 @@ WL.registerComponent('bullet-through-wall-test', {
     init: function () {
     },
     start() {
-        this._myDirection = [0, -0.25, 1];
+        this._myDirection = PP.vec3_create(0, -0.25, 1);
         this._myDirection.vec3_normalize(this._myDirection);
         this._myRootObject = WL.scene.addObject(this.object);
         this._myRootObject.pp_resetTransform();
@@ -22,12 +22,12 @@ WL.registerComponent('bullet-through-wall-test', {
         this._myWall.pp_setPositionLocal([0, 0, -this._myWallDistance - this._myWallStartThickness]);
 
         this._myBullet = WL.scene.addObject(this._myRootObject);
-        this._myBullet.pp_setPositionLocal([0, 0, -2]);
+        this._myBullet.pp_setPositionLocal(PP.vec3_create(0, 0, -2));
         this._myBullet.pp_setRotationLocal([Math.pp_random(-180, 180), Math.pp_random(-180, 180), Math.pp_random(-180, 180)]);
 
         this._myWallPhysX = this._myWall.pp_addComponent("physx", {
             "shape": WL.Shape.Box,
-            "extents": [this._myWallSize, this._myWallSize, this._myWallStartThickness],
+            "extents": PP.vec3_create(this._myWallSize, this._myWallSize, this._myWallStartThickness),
             "static": this._myWallStatic,
             "kinematic": true,
             "mass": 1
@@ -35,7 +35,7 @@ WL.registerComponent('bullet-through-wall-test', {
 
         this._myBulletPhysX = this._myBullet.pp_addComponent("physx", {
             "shape": (this._myBulletShape == 0 ? WL.Shape.Box : WL.Shape.Sphere),
-            "extents": [this._myBulletSize, this._myBulletSize, this._myBulletSize],
+            "extents": PP.vec3_create(this._myBulletSize, this._myBulletSize, this._myBulletSize),
             "static": false,
             "kinematic": true,
             "mass": 1
@@ -84,7 +84,7 @@ WL.registerComponent('bullet-through-wall-test', {
             this._myResetPositionTimer.reset();
             this._myKinematicTimer.start(0.5);
             this._myBullet.pp_resetTransformLocal();
-            this._myBullet.pp_setPositionLocal([0, 0, -2]);
+            this._myBullet.pp_setPositionLocal(PP.vec3_create(0, 0, -2));
             this._myBullet.pp_setRotationLocal([Math.pp_random(-180, 180), Math.pp_random(-180, 180), Math.pp_random(-180, 180)]);
 
             if (this._myCollisionTouchDetected && this._myCollisionTouchLostDetected) {
@@ -104,7 +104,7 @@ WL.registerComponent('bullet-through-wall-test', {
             } else {
                 this._myWallThickness = this._myWallThickness * this._myWallThicknessMultiplier;
                 this._myWallPhysX.active = false;
-                this._myWallPhysX.extents = [this._myWallSize, this._myWallSize, this._myWallThickness];
+                this._myWallPhysX.extents = PP.vec3_create(this._myWallSize, this._myWallSize, this._myWallThickness);
                 this._myWall.pp_setPositionLocal([0, 0, -this._myWallDistance - this._myWallThickness]);
                 this._myWallPhysX.active = true;
             }

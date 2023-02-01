@@ -293,7 +293,7 @@ PlayerObscureManager = class PlayerObscureManager {
         obscureVisualParams.myMaterial = (this._myParams.myObscureMaterial != null) ? this._myParams.myObscureMaterial : this._myObscureMaterial;
         obscureVisualParams.myParent = this._myObscureParentObject;
         obscureVisualParams.myIsLocal = true;
-        obscureVisualParams.myTransform.mat4_setScale([this._myParams.myObscureRadius, this._myParams.myObscureRadius, this._myParams.myObscureRadius]);
+        obscureVisualParams.myTransform.mat4_setScale(PP.vec3_create(this._myParams.myObscureRadius, this._myParams.myObscureRadius, this._myParams.myObscureRadius));
         this._myObscureVisual = new PP.VisualMesh(obscureVisualParams);
 
         if (this._myParams.myObscureObject != null) {
