@@ -15,7 +15,7 @@ let visualArrow = new PP.VisualArrow(visualParams);
 PP.VisualArrowParams = class VisualArrowParams {
     constructor() {
         this.myStart = PP.vec3_create();
-        this.myDirection = [0, 0, 1];
+        this.myDirection = PP.vec3_create(0, 0, 1);
         this.myLength = 0;
 
         this.myThickness = 0.005;

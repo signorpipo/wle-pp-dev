@@ -7,7 +7,7 @@ WL.registerComponent('ai-movement', {
 
 }, {
     start() {
-        this._myCurrentDirection = [0, 0, 1];
+        this._myCurrentDirection = PP.vec3_create(0, 0, 1);
 
         this._myChangeDirectionTimer = new PP.Timer(0);
         this._myChangeDirectionTimer.end();

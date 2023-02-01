@@ -436,10 +436,10 @@ PlayerTransformManager = class PlayerTransformManager {
         params.myCheckVerticalStraight = true;
 
         params.myCheckVerticalFixedForwardEnabled = true;
-        params.myCheckVerticalFixedForward = [0, 0, 1];
+        params.myCheckVerticalFixedForward = PP.vec3_create(0, 0, 1);
 
         params.myCheckHorizontalFixedForwardEnabled = true;
-        params.myCheckHorizontalFixedForward = [0, 0, 1];
+        params.myCheckHorizontalFixedForward = PP.vec3_create(0, 0, 1);
 
         params.myVerticalMovementCheckEnabled = true;
         params.myVerticalPositionCheckEnabled = true;

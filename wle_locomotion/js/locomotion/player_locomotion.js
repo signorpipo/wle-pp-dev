@@ -419,7 +419,7 @@ PlayerLocomotion = class PlayerLocomotion {
         this._myCollisionCheckParamsMovement.myHeightCheckStepAmountMovement = 2;
         this._myCollisionCheckParamsMovement.myHeightCheckStepAmountPosition = 2;
         this._myCollisionCheckParamsMovement.myCheckVerticalFixedForwardEnabled = true;
-        this._myCollisionCheckParamsMovement.myCheckVerticalFixedForward = [0, 0, 1];
+        this._myCollisionCheckParamsMovement.myCheckVerticalFixedForward = PP.vec3_create(0, 0, 1);
         this._myCollisionCheckParamsMovement.myCheckVerticalBothDirection = true;
 
         this._myCollisionCheckParamsMovement.myCheckVerticalStraight = true;
@@ -523,7 +523,7 @@ PlayerLocomotion = class PlayerLocomotion {
             let flatForward = forward.vec3_clone();
             flatForward[1] = 0;
 
-            let defaultForward = [0, 0, 1];
+            let defaultForward = PP.vec3_create(0, 0, 1);
             let angleWithDefaultForward = defaultForward.vec3_angleSigned(flatForward, defaultUp);
 
             PP.myPlayerObjects.myPlayer.pp_resetRotation();

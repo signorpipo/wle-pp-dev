@@ -227,7 +227,7 @@ CollisionCheck.prototype._moveStep = function () {
                 fixedHorizontalMovement = this._horizontalCheck(surfaceAdjustedHorizontalMovement, feetPosition, height, transformUp, forwardForHorizontal, allowSurfaceSteepFix, collisionCheckParams, collisionRuntimeParams, this._myPrevCollisionRuntimeParams, false, fixedHorizontalMovement);
                 //console.error(_myTotalRaycasts );
                 //collisionRuntimeParams.myIsCollidingHorizontally = true;
-                //collisionRuntimeParams.myHorizontalCollisionHit.myNormal = [0, 0, 1];
+                //collisionRuntimeParams.myHorizontalCollisionHit.myNormal = PP.vec3_create(0, 0, 1);
                 if (collisionCheckParams.mySlidingEnabled && collisionRuntimeParams.myIsCollidingHorizontally && this._isSlidingNormalValid(surfaceAdjustedHorizontalMovement, transformUp, collisionRuntimeParams)) {
                     fixedHorizontalMovement = this._horizontalSlide(surfaceAdjustedHorizontalMovement, feetPosition, height, transformUp, forwardForHorizontal, allowSurfaceSteepFix, collisionCheckParams, collisionRuntimeParams, this._myPrevCollisionRuntimeParams, fixedHorizontalMovement);
                 } else {

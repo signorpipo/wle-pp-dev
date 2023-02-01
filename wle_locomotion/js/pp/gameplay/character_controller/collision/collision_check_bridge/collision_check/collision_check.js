@@ -9,7 +9,7 @@ CollisionCheckUtils = {
         outTeleportParams.myHalfConeSliceAmount = Math.round((outTeleportParams.myHalfConeAngle / movementParams.myHalfConeAngle) * movementParams.myHalfConeSliceAmount);
 
         outTeleportParams.myCheckHorizontalFixedForwardEnabled = true;
-        outTeleportParams.myCheckHorizontalFixedForward = [0, 0, 1];
+        outTeleportParams.myCheckHorizontalFixedForward = PP.vec3_create(0, 0, 1);
 
         return outTeleportParams;
     },

@@ -31,7 +31,7 @@ PP.MoveStaticColliderComponent = class MoveStaticColliderComponent extends Compo
             if (this._mySetKinematicTimer.isDone()) {
                 this._mySetKinematicTimer.reset();
                 //this._myPhysx.kinematic = true;
-                this.object.pp_translate([0, 0, 1]);
+                this.object.pp_translate(PP.vec3_create(0, 0, 1));
                 this._mySetStaticTrueTimer.start();
                 console.error("moved");
             }
