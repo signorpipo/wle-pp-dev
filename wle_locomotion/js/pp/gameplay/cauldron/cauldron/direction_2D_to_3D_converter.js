@@ -173,7 +173,8 @@ PP.Direction2DTo3DConverter.prototype.convertRotationQuat = function () {
                 this.resetFlyRight();
             }
 
-            return [0, 0, 0];
+            outDirection3D.vec3_zero();
+            return outDirection3D;
         } else {
             if (direction2D[0] == 0) {
                 this._myLastValidFlatRight.vec3_zero();
