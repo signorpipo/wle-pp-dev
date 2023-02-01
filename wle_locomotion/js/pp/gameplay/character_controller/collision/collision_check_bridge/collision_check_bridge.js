@@ -386,17 +386,25 @@ PP.CollisionCheckBridge = {
 
             outCollisionCheckParams.myAllowGroundSteepFix = characterColliderSetup.myGroundSetup.myHorizontalMovementAllowExitAttemptWhenOnNotIgnorableSurfacePerceivedAngle;
             outCollisionCheckParams.myAllowCeilingSteepFix = characterColliderSetup.myCeilingSetup.myHorizontalMovementAllowExitAttemptWhenOnNotIgnorableSurfacePerceivedAngle;
+
             outCollisionCheckParams.myMustStayOnGround = characterColliderSetup.myGroundSetup.myMovementMustStayOnSurface;
             outCollisionCheckParams.myMustStayOnCeiling = characterColliderSetup.myCeilingSetup.myMovementMustStayOnSurface;
             outCollisionCheckParams.myRegatherGroundInfoOnSurfaceCheckFail = characterColliderSetup.myGroundSetup.myRecollectSurfaceInfoOnSurfaceCheckFailed;
             outCollisionCheckParams.myRegatherCeilingInfoOnSurfaceCheckFail = characterColliderSetup.myCeilingSetup.myRecollectSurfaceInfoOnSurfaceCheckFailed;
-            outCollisionCheckParams.myMustStayBelowGroundAngle = characterColliderSetup.myGroundSetup.myMovementMustStayOnSurfaceAngle;
-            outCollisionCheckParams.myMustStayBelowCeilingAngle = characterColliderSetup.myCeilingSetup.myMovementMustStayOnSurfaceAngle;
+            outCollisionCheckParams.myMustStayBelowIgnorableGroundAngleDownhill = characterColliderSetup.myGroundSetup.myMovementMustStayOnIgnorableSurfaceAngleDownhill;
+            outCollisionCheckParams.myMustStayBelowIgnorableCeilingAngleDownhill = characterColliderSetup.myCeilingSetup.myMovementMustStayOnIgnorableSurfaceAngleDownhill;
+            outCollisionCheckParams.myMustStayBelowGroundAngleDownhill = characterColliderSetup.myGroundSetup.myMovementMustStayOnSurfaceAngleDownhill;
+            outCollisionCheckParams.myMustStayBelowCeilingAngleDownhill = characterColliderSetup.myCeilingSetup.myMovementMustStayOnSurfaceAngleDownhill;
 
             outCollisionCheckParams.myTeleportMustBeOnIgnorableGroundAngle = characterColliderSetup.myGroundSetup.myTeleportMustBeOnIgnorableSurfaceAngle;
             outCollisionCheckParams.myCheckTransformMustBeOnIgnorableGroundAngle = characterColliderSetup.myGroundSetup.myCheckTransformMustBeOnIgnorableSurfaceAngle;
             outCollisionCheckParams.myTeleportMustBeOnIgnorableCeilingAngle = characterColliderSetup.myCeilingSetup.myTeleportMustBeOnIgnorableSurfaceAngle;
             outCollisionCheckParams.myCheckTransformMustBeOnIgnorableCeilingAngle = characterColliderSetup.myCeilingSetup.myCheckTransformMustBeOnIgnorableSurfaceAngle;
+
+            outCollisionCheckParams.myTeleportMustBeOnGroundAngle = characterColliderSetup.myGroundSetup.myTeleportMustBeOnSurfaceAngle;
+            outCollisionCheckParams.myCheckTransformMustBeOnGroundAngle = characterColliderSetup.myGroundSetup.myCheckTransformMustBeOnSurfaceAngle;
+            outCollisionCheckParams.myTeleportMustBeOnCeilingAngle = characterColliderSetup.myCeilingSetup.myTeleportMustBeOnSurfaceAngle;
+            outCollisionCheckParams.myCheckTransformMustBeOnCeilingAngle = characterColliderSetup.myCeilingSetup.myCheckTransformMustBeOnSurfaceAngle;
 
             outCollisionCheckParams.myTeleportMustBeOnGround = characterColliderSetup.myGroundSetup.myTeleportMustBeOnSurface;
             outCollisionCheckParams.myCheckTransformMustBeOnGround = characterColliderSetup.myGroundSetup.myCheckTransformMustBeOnSurface;

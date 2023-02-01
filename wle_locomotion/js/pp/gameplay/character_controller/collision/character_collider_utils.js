@@ -113,14 +113,14 @@ PP.CharacterColliderUtils.createCharacterColliderSetupSimplified = function (sim
         outCharacterColliderSetup.myCeilingSetup.myIsOnSurfaceMaxOutsideDistance = outCharacterColliderSetup.myGroundSetup.myIsOnSurfaceMaxOutsideDistance;
         outCharacterColliderSetup.myCeilingSetup.myIsOnSurfaceMaxInsideDistance = outCharacterColliderSetup.myGroundSetup.myIsOnSurfaceMaxInsideDistance;
 
-        outCharacterColliderSetup.myCeilingSetup.myCollectSurfaceNormalMaxOutsideDistance = outCharacterColliderSetup.myGroundSetup.myCollectSurfaceNormalMaxOutsideDistance;;
+        outCharacterColliderSetup.myCeilingSetup.myCollectSurfaceNormalMaxOutsideDistance = outCharacterColliderSetup.myGroundSetup.myCollectSurfaceNormalMaxOutsideDistance;
         outCharacterColliderSetup.myCeilingSetup.myCollectSurfaceNormalMaxInsideDistance = outCharacterColliderSetup.myGroundSetup.myCollectSurfaceNormalMaxInsideDistance;
 
     }
 
     if (!simplifiedCreationParams.myCanFallFromEdges) {
         outCharacterColliderSetup.myGroundSetup.myMovementMustStayOnSurface = true;
-        outCharacterColliderSetup.myGroundSetup.myMovementMustStayOnSurfaceAngle = Math.max(60, outCharacterColliderSetup.myGroundSetup.mySurfaceAngleToIgnore);
+        outCharacterColliderSetup.myGroundSetup.myMovementMustStayOnSurfaceAngleDownhill = Math.max(60, outCharacterColliderSetup.myGroundSetup.mySurfaceAngleToIgnore);
     }
 
 

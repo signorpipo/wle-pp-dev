@@ -172,13 +172,20 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myMustStayOnValidCeilingAngleDownhill = false;
         this.myRegatherGroundInfoOnSurfaceCheckFail = false;
         this.myRegatherCeilingInfoOnSurfaceCheckFail = false;
-        this.myMustStayBelowGroundAngle = null;
-        this.myMustStayBelowCeilingAngle = null;
+        this.myMustStayBelowIgnorableGroundAngleDownhill = false;
+        this.myMustStayBelowIgnorableCeilingAngleDownhill = false;
+        this.myMustStayBelowGroundAngleDownhill = null;
+        this.myMustStayBelowCeilingAngleDownhill = null;
 
         this.myTeleportMustBeOnIgnorableGroundAngle = false;
         this.myCheckTransformMustBeOnIgnorableGroundAngle = false;
         this.myTeleportMustBeOnIgnorableCeilingAngle = false;
         this.myCheckTransformMustBeOnIgnorableCeilingAngle = false;
+
+        this.myTeleportMustBeOnGroundAngle = null;
+        this.myCheckTransformMustBeOnGroundAngle = null;
+        this.myTeleportMustBeOnCeilingAngle = null;
+        this.myCheckTransformMustBeOnCeilingAngle = null;
 
         this.myTeleportMustBeOnGround = false;
         this.myCheckTransformMustBeOnGround = false;
@@ -383,13 +390,20 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myMustStayOnValidCeilingAngleDownhill = other.myMustStayOnValidCeilingAngleDownhill;
         this.myRegatherGroundInfoOnSurfaceCheckFail = other.myRegatherGroundInfoOnSurfaceCheckFail;
         this.myRegatherCeilingInfoOnSurfaceCheckFail = other.myRegatherCeilingInfoOnSurfaceCheckFail;
-        this.myMustStayBelowGroundAngle = other.myMustStayBelowGroundAngle;
-        this.myMustStayBelowCeilingAngle = other.myMustStayBelowCeilingAngle;
+        this.myMustStayBelowGroundAngleDownhill = other.myMustStayBelowGroundAngleDownhill;
+        this.myMustStayBelowCeilingAngleDownhill = other.myMustStayBelowCeilingAngleDownhill;
+        this.myMustStayBelowIgnorableGroundAngleDownhill = other.myMustStayBelowIgnorableGroundAngleDownhill;
+        this.myMustStayBelowIgnorableCeilingAngleDownhill = other.myMustStayBelowIgnorableCeilingAngleDownhill;
 
         this.myTeleportMustBeOnIgnorableGroundAngle = other.myTeleportMustBeOnIgnorableGroundAngle;
         this.myCheckTransformMustBeOnIgnorableGroundAngle = other.myCheckTransformMustBeOnIgnorableGroundAngle;
         this.myTeleportMustBeOnIgnorableCeilingAngle = other.myTeleportMustBeOnIgnorableCeilingAngle;
         this.myCheckTransformMustBeOnIgnorableCeilingAngle = other.myCheckTransformMustBeOnIgnorableCeilingAngle;
+
+        this.myTeleportMustBeOnGroundAngle = other.myTeleportMustBeOnGroundAngle;
+        this.myCheckTransformMustBeOnGroundAngle = other.myCheckTransformMustBeOnGroundAngle;
+        this.myTeleportMustBeOnCeilingAngle = other.myTeleportMustBeOnCeilingAngle;
+        this.myCheckTransformMustBeOnCeilingAngle = other.myCheckTransformMustBeOnCeilingAngle;
 
         this.myTeleportMustBeOnGround = other.myTeleportMustBeOnGround;
         this.myCheckTransformMustBeOnGround = other.myCheckTransformMustBeOnGround;

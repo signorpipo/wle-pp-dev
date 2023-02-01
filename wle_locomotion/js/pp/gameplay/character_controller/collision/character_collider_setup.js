@@ -244,12 +244,16 @@ PP.CharacterColliderSurfaceSetup = class CharacterColliderSurfaceSetup {
         // this can be used to make it so the movement (and therefore the slide) only happens above a certain angle, like u want to slide down only on steep surfaces
 
         this.myMovementMustStayOnSurface = false;
-        this.myMovementMustStayOnSurfaceAngle = null;
+        this.myMovementMustStayOnIgnorableSurfaceAngleDownhill = false;
+        this.myMovementMustStayOnSurfaceAngleDownhill = null;
 
         this.myTeleportMustBeOnSurface = false;
         this.myTeleportMustBeOnIgnorableSurfaceAngle = false;
+        this.myTeleportMustBeOnSurfaceAngle = null;
+
         this.myCheckTransformMustBeOnSurface = false;
         this.myCheckTransformMustBeOnIgnorableSurfaceAngle = false;
+        this.myCheckTransformMustBeOnSurfaceAngle = null;
 
         this.myRecollectSurfaceInfoOnSurfaceCheckFailed = false;
         // instead of copying the previous surface info on fail, regather them
@@ -483,12 +487,16 @@ PP.CharacterColliderSurfaceSetup.prototype.copy = function (other) {
     this.myVerticalMovementAdjustHorizontalMovementBasedOnSurfaceAngleDownhillMinSurfaceAngle = other.myVerticalMovementAdjustHorizontalMovementBasedOnSurfaceAngleDownhillMinSurfaceAngle;
 
     this.myMovementMustStayOnSurface = other.myMovementMustStayOnSurface;
-    this.myMovementMustStayOnSurfaceAngle = other.myMovementMustStayOnSurfaceAngle;
+    this.myMovementMustStayOnIgnorableSurfaceAngleDownhill = other.myMovementMustStayOnIgnorableSurfaceAngleDownhill;
+    this.myMovementMustStayOnSurfaceAngleDownhill = other.myMovementMustStayOnSurfaceAngleDownhill;
 
     this.myTeleportMustBeOnSurface = other.myTeleportMustBeOnSurface;
     this.myTeleportMustBeOnIgnorableSurfaceAngle = other.myTeleportMustBeOnIgnorableSurfaceAngle;
+    this.myTeleportMustBeOnSurfaceAngle = other.myTeleportMustBeOnSurfaceAngle;
+
     this.myCheckTransformMustBeOnSurface = other.myCheckTransformMustBeOnSurface;
     this.myCheckTransformMustBeOnIgnorableSurfaceAngle = other.myCheckTransformMustBeOnIgnorableSurfaceAngle;
+    this.myCheckTransformMustBeOnSurfaceAngle = other.myCheckTransformMustBeOnSurfaceAngle;
 
     this.myRecollectSurfaceInfoOnSurfaceCheckFailed = other.myRecollectSurfaceInfoOnSurfaceCheckFailed;
 

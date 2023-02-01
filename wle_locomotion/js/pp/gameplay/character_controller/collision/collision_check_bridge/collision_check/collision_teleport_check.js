@@ -124,16 +124,52 @@ CollisionCheck.prototype._teleport = function () {
                     }
                 }
 
-                if (collisionRuntimeParams.myIsOnGround && collisionRuntimeParams.myGroundAngle > collisionCheckParams.myGroundAngleToIgnore + 0.0001) {
-                    if ((collisionCheckParams.myTeleportMustBeOnIgnorableGroundAngle && !isPositionCheck)
-                        || (collisionCheckParams.myCheckTransformMustBeOnIgnorableGroundAngle && isPositionCheck)) {
+                if (collisionRuntimeParams.myIsOnGround) {
+                    let minAngle = null;
+                    if (!isPositionCheck) {
+                        if (collisionCheckParams.myTeleportMustBeOnIgnorableGroundAngle) {
+                            minAngle = collisionCheckParams.myGroundAngleToIgnore;
+                        }
+
+                        if (collisionCheckParams.myTeleportMustBeOnGroundAngle != null) {
+                            minAngle = Math.min(minAngle, collisionCheckParams.myTeleportMustBeOnGroundAngle);
+                        }
+                    } else {
+                        if (collisionCheckParams.myCheckTransformMustBeOnIgnorableGroundAngle) {
+                            minAngle = collisionCheckParams.myGroundAngleToIgnore;
+                        }
+
+                        if (collisionCheckParams.myCheckTransformMustBeOnGroundAngle != null) {
+                            minAngle = Math.min(minAngle, collisionCheckParams.myCheckTransformMustBeOnGroundAngle);
+                        }
+                    }
+
+                    if (minAngle != null && collisionRuntimeParams.myGroundAngle > minAngle + 0.0001) {
                         collisionRuntimeParams.myTeleportCanceled = true;
                     }
                 }
 
-                if (collisionRuntimeParams.myIsOnCeiling && collisionRuntimeParams.myCeilingAngle > collisionCheckParams.myCeilingAngleToIgnore + 0.0001) {
-                    if ((collisionCheckParams.myTeleportMustBeOnIgnorableCeilingAngle && !isPositionCheck)
-                        || (collisionCheckParams.myCheckTransformMustBeOnIgnorableCeilingAngle && isPositionCheck)) {
+                if (collisionRuntimeParams.myIsOnCeiling) {
+                    let minAngle = null;
+                    if (!isPositionCheck) {
+                        if (collisionCheckParams.myTeleportMustBeOnIgnorableCeilingAngle) {
+                            minAngle = collisionCheckParams.myCeilingAngleToIgnore;
+                        }
+
+                        if (collisionCheckParams.myTeleportMustBeOnCeilingAngle != null) {
+                            minAngle = Math.min(minAngle, collisionCheckParams.myTeleportMustBeOnCeilingAngle);
+                        }
+                    } else {
+                        if (collisionCheckParams.myCheckTransformMustBeOnIgnorableCeilingAngle) {
+                            minAngle = collisionCheckParams.myCeilingAngleToIgnore;
+                        }
+
+                        if (collisionCheckParams.myCheckTransformMustBeOnCeilingAngle != null) {
+                            minAngle = Math.min(minAngle, collisionCheckParams.myCheckTransformMustBeOnCeilingAngle);
+                        }
+                    }
+
+                    if (minAngle != null && collisionRuntimeParams.myCeilingAngle > minAngle + 0.0001) {
                         collisionRuntimeParams.myTeleportCanceled = true;
                     }
                 }

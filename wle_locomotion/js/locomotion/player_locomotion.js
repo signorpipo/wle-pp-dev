@@ -396,9 +396,8 @@ PlayerLocomotion = class PlayerLocomotion {
         this._myCollisionCheckParamsMovement.myAdjustVerticalMovementWithGroundAngleDownhill = true;
         this._myCollisionCheckParamsMovement.myAdjustVerticalMovementWithGroundAngleUphill = true;
         this._myCollisionCheckParamsMovement.myAdjustVerticalMovementWithCeilingAngleUphill = true;
-        this._myCollisionCheckParamsMovement.myAdjustHorizontalMovementWithGroundAngleDownhill = true;
-        this._myCollisionCheckParamsMovement.myAdjustHorizontalMovementWithCeilingAngleDownhill = true;
-        this._myCollisionCheckParamsMovement.myAdjustHorizontalMovementWithCeilingAngleDownhill = true;
+        this._myCollisionCheckParamsMovement.myAdjustHorizontalMovementWithGroundAngleDownhill = false;
+        this._myCollisionCheckParamsMovement.myAdjustHorizontalMovementWithCeilingAngleDownhill = false;
         this._myCollisionCheckParamsMovement.myAdjustHorizontalMovementWithGroundAngleDownhillMinAngle = 30;
 
         this._myCollisionCheckParamsMovement.mySnapOnGroundEnabled = true;
@@ -487,7 +486,7 @@ PlayerLocomotion = class PlayerLocomotion {
         this._myCollisionCheckParamsMovement.myVerticalBlockLayerFlags.copy(this._myCollisionCheckParamsMovement.myHorizontalBlockLayerFlags);
         this._myCollisionCheckParamsMovement.myVerticalObjectsToIgnore.pp_copy(this._myCollisionCheckParamsMovement.myHorizontalObjectsToIgnore);
 
-        this._myCollisionCheckParamsMovement.myDebugActive = true;
+        this._myCollisionCheckParamsMovement.myDebugActive = false;
 
         this._myCollisionCheckParamsMovement.myDebugHorizontalMovementActive = false;
         this._myCollisionCheckParamsMovement.myDebugHorizontalPositionActive = true;
