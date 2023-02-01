@@ -13,8 +13,8 @@ let raycastResults = PP.PhysicsUtils.raycast(raycastSetup);
 
 PP.RaycastSetup = class RaycastSetup {
     constructor() {
-        this.myOrigin = [0, 0, 0];
-        this.myDirection = [0, 0, 0];
+        this.myOrigin = PP.vec3_create();
+        this.myDirection = PP.vec3_create();
         this.myDistance = 0;
 
         this.myBlockLayerFlags = new PP.PhysicsLayerFlags();
@@ -162,8 +162,8 @@ PP.RaycastResults.prototype.copy = function () {
 
 PP.RaycastHit = class RaycastHit {
     constructor() {
-        this.myPosition = [0, 0, 0];
-        this.myNormal = [0, 0, 0];
+        this.myPosition = PP.vec3_create();
+        this.myNormal = PP.vec3_create();
         this.myDistance = 0;
         this.myObject = null;
 

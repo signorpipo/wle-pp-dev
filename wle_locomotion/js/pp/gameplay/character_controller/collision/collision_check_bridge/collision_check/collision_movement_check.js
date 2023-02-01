@@ -20,7 +20,7 @@ CollisionCheck.prototype._move = function () {
     let previousFixedMovement = PP.vec3_create();
     let previousMovementChecked = PP.vec3_create();
     return function _move(movement, transformQuat, collisionCheckParams, collisionRuntimeParams) {
-        //return [0, 0, 0];
+        //return PP.vec3_create();
         //movement = [0, 0, -1];
 
         transformOffsetLocalQuat.quat2_setPositionRotationQuat(collisionCheckParams.myPositionOffsetLocal, collisionCheckParams.myRotationOffsetLocalQuat);
@@ -181,7 +181,7 @@ CollisionCheck.prototype._moveStep = function () {
         }
 
         if (horizontalMovement.vec3_isZero()) {
-            //return [0, 0, 0];
+            //return PP.vec3_create();
         }
 
         //_myTotalRaycasts = 0;

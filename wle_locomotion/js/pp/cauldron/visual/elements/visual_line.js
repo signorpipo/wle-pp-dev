@@ -15,7 +15,7 @@ let visualLine = new PP.VisualLine(visualParams);
 PP.VisualLineParams = class VisualLineParams {
 
     constructor() {
-        this.myStart = [0, 0, 0];
+        this.myStart = PP.vec3_create();
         this.myDirection = [0, 0, 1];
         this.myLength = 0;
 

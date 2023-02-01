@@ -123,8 +123,8 @@ WL.registerComponent('pp-grabbable', {
         }
 
         if (this._myPhysX.kinematic) {
-            this._myPhysX.linearVelocity = [0, 0, 0];
-            this._myPhysX.angularVelocity = [0, 0, 0];
+            this._myPhysX.linearVelocity = PP.vec3_create();
+            this._myPhysX.angularVelocity = PP.vec3_create();
         }
     }
 });

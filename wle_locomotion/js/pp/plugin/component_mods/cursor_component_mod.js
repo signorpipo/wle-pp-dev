@@ -24,7 +24,7 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
             if (index >= 0) WL.onSceneLoaded.splice(index, 1);
         }];
 
-        this.prevHitLocationLocalToTarget = [0, 0, 0];
+        this.prevHitLocationLocalToTarget = PP.vec3_create();
 
         this.pointerId = null;
 
@@ -56,7 +56,7 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
         this.transformMatrix = PP.mat4_create();
         this.origin = new Float32Array(3);
         this.cursorObjScale = new Float32Array(3);
-        this.direction = [0, 0, 0];
+        this.direction = PP.vec3_create();
         this.tempQuat = new Float32Array(4);
         this.setViewComponent(this.object.getComponent("view"));
         this.isHovering = false;
@@ -543,7 +543,7 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
     };
 
     _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype._isMoving = function () {
-        let hitLocationLocalToTarget = [0, 0, 0];
+        let hitLocationLocalToTarget = PP.vec3_create();
         return function _isMoving(hitLocation) {
             let isMoving = false;
 

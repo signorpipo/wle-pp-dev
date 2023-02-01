@@ -14,7 +14,7 @@ let visualPoint = new PP.VisualPoint(visualParams);
 PP.VisualPointParams = class VisualPointParams {
 
     constructor() {
-        this.myPosition = [0, 0, 0];
+        this.myPosition = PP.vec3_create();
         this.myRadius = 0.005;
 
         this.myMesh = null;         // the mesh is scaled along up axis, null means it will default on PP.myDefaultResources.myMeshes.mySphere

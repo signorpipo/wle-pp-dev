@@ -97,7 +97,7 @@ WL.registerComponent('stick-movement', {
 
         let up = this.object.pp_getUp();
 
-        let movement = [0, 0, 0];
+        let movement = PP.vec3_create();
 
         let minIntensityThreshold = 0.1;
         let axes = PP.myLeftGamepad.getAxesInfo().getAxes();
