@@ -175,10 +175,10 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myMustStayBelowGroundAngle = null;
         this.myMustStayBelowCeilingAngle = null;
 
-        this.myAllowTeleportOnNotIgnorabileGroundAngle = false;
-        this.myAllowCheckTransformOnNotIgnorabileGroundAngle = false;
-        this.myAllowTeleportOnNotIgnorabileCeilingAngle = false;
-        this.myAllowCheckTransformOnNotIgnorabileCeilingAngle = false;
+        this.myTeleportGroundAngleCheckEnabled = false;
+        this.myCheckTransformGroundAngleCheckEnabled = false;
+        this.myTeleportCeilingAngleCheckEnabled = false;
+        this.myCheckTransformCeilingAngleCheckEnabled = false;
 
         this.mySlidingEnabled = false;
         this.mySlidingHorizontalMovementCheckBetterNormal = false;
@@ -381,10 +381,10 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myMustStayBelowGroundAngle = other.myMustStayBelowGroundAngle;
         this.myMustStayBelowCeilingAngle = other.myMustStayBelowCeilingAngle;
 
-        this.myAllowTeleportOnNotIgnorabileGroundAngle = other.myAllowTeleportOnNotIgnorabileGroundAngle;
-        this.myAllowCheckTransformOnNotIgnorabileGroundAngle = other.myAllowCheckTransformOnNotIgnorabileGroundAngle;
-        this.myAllowTeleportOnNotIgnorabileCeilingAngle = other.myAllowTeleportOnNotIgnorabileCeilingAngle;
-        this.myAllowCheckTransformOnNotIgnorabileCeilingAngle = other.myAllowCheckTransformOnNotIgnorabileCeilingAngle;
+        this.myTeleportGroundAngleCheckEnabled = other.myTeleportGroundAngleCheckEnabled;
+        this.myCheckTransformGroundAngleCheckEnabled = other.myCheckTransformGroundAngleCheckEnabled;
+        this.myTeleportCeilingAngleCheckEnabled = other.myTeleportCeilingAngleCheckEnabled;
+        this.myCheckTransformCeilingAngleCheckEnabled = other.myCheckTransformCeilingAngleCheckEnabled;
 
         this.mySlidingEnabled = other.mySlidingEnabled;
         this.mySlidingHorizontalMovementCheckBetterNormal = other.mySlidingHorizontalMovementCheckBetterNormal;
