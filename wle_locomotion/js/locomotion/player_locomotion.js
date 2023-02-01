@@ -371,7 +371,8 @@ PlayerLocomotion = class PlayerLocomotion {
         this._myCollisionCheckParamsMovement.myHorizontalMovementCheckVerticalDiagonalDownwardInward = false;
         this._myCollisionCheckParamsMovement.myHorizontalMovementCheckVerticalStraightDiagonalUpward = false;
         this._myCollisionCheckParamsMovement.myHorizontalMovementCheckVerticalStraightDiagonalDownward = false;
-        this._myCollisionCheckParamsMovement.myHorizontalMovementCheckVerticalHorizontalBorderDiagonal = false;
+        this._myCollisionCheckParamsMovement.myHorizontalMovementCheckVerticalHorizontalBorderDiagonalOutward = false;
+        this._myCollisionCheckParamsMovement.myHorizontalMovementCheckVerticalHorizontalBorderDiagonalInward = false;
         this._myCollisionCheckParamsMovement.myHorizontalMovementHorizontalStraightCentralCheckEnabled = true;
         this._myCollisionCheckParamsMovement.myHorizontalMovementVerticalStraightDiagonalUpwardCentralCheckEnabled = true;
 
