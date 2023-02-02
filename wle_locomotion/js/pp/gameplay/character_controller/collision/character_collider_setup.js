@@ -283,7 +283,12 @@ PP.CharacterColliderSplitMovementSetup = class CharacterColliderSplitMovementSet
 
         this.mySplitMovementStopOnHorizontalMovementFailed = false;
         this.mySplitMovementStopOnVerticalMovementFailed = false;
-        this.mySplitMovementStopOnCallback = null;                        // Signature: callback(collisionRuntimeParams) -> bool
+
+        /*
+        this will not be available until the bridge is removed with a new implementation that directly use the collider and results
+        this.mySplitMovementStopOnCallback = null;              // Signature: callback(paramsToBeDefined)
+        */
+
         this.mySplitMovementStopReturnPreviousResults = false;
     }
 
@@ -540,7 +545,11 @@ PP.CharacterColliderSplitMovementSetup.prototype.copy = function (other) {
 
     this.mySplitMovementStopOnHorizontalMovementFailed = other.mySplitMovementStopOnHorizontalMovementFailed;
     this.mySplitMovementStopOnVerticalMovementFailed = other.mySplitMovementStopOnVerticalMovementFailed;
+
+    /*
     this.mySplitMovementStopOnCallback = other.mySplitMovementStopOnCallback;
+    */
+
     this.mySplitMovementStopReturnPreviousResults = other.mySplitMovementStopReturnPreviousResults;
 };
 

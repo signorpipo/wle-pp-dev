@@ -60,7 +60,6 @@ PP.CharacterCollisionSurfaceInfo = class CharacterCollisionSurfaceInfo {
         this.mySurfaceDistance = null;
 
         this.myIsBaseInsideCollision = false;
-
     }
 
     reset() {

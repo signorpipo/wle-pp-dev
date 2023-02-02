@@ -18,7 +18,6 @@ PP.CharacterCollisionSystem = class CharacterCollisionSystem {
         this._myCurrentFrameRaycastsPerformed = PP.CollisionCheckBridge._myCollisionCheck._myTotalRaycasts;
         this._myMaxFrameRaycastsPerformed = Math.max(this._myCurrentFrameRaycastsPerformed, this._myMaxFrameRaycastsPerformed);
         outCharacterCollisionResults.myDebugResults._myRaycastsPerformed = this._myLastCheckRaycastsPerformed;
-
     }
 
     checkTeleportToPosition(teleportPosition, currentTransformQuat, characterColliderSetup, prevCharacterCollisionResults, outCharacterCollisionResults = new PP.CharacterCollisionResults()) {

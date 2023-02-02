@@ -17,6 +17,7 @@ CollisionCheck.prototype._teleport = function () {
     let fixedHorizontalMovement = PP.vec3_create();
     let fixedVerticalMovement = PP.vec3_create();
     let newFeetPosition = PP.vec3_create();
+    let endPosition = PP.vec3_create();
 
     let zAxis = PP.vec3_create(0, 0, 1);
     let xAxis = PP.vec3_create(1, 0, 0);
@@ -200,6 +201,22 @@ CollisionCheck.prototype._teleport = function () {
             }
         } else {
             collisionRuntimeParams.myTeleportCanceled = true;
+        }
+
+        if (!isPositionCheck) {
+            if (collisionCheckParams.myExtraTeleportCheckCallback != null) {
+                endPosition.vec3_copy(newFeetPosition);
+                newFeetPosition = collisionCheckParams.myExtraTeleportCheckCallback(
+                    offsetTeleportPosition, endPosition, feetPosition, transformUp, transformForward, height,
+                    collisionCheckParams, this._myPrevCollisionRuntimeParams, collisionRuntimeParams, newFeetPosition);
+            }
+        } else {
+            if (collisionCheckParams.myExtraCheckTransformCheckCallback != null) {
+                endPosition.vec3_copy(newFeetPosition);
+                newFeetPosition = collisionCheckParams.myExtraCheckTransformCheckCallback(
+                    endPosition, feetPosition, transformUp, transformForward, height,
+                    collisionCheckParams, this._myPrevCollisionRuntimeParams, collisionRuntimeParams, newFeetPosition);
+            }
         }
 
         collisionRuntimeParams.myOriginalUp = transformQuat.quat2_getUp(collisionRuntimeParams.myOriginalUp);

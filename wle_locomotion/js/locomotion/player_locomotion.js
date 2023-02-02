@@ -466,6 +466,7 @@ PlayerLocomotion = class PlayerLocomotion {
         this._myCollisionCheckParamsMovement.myMustStayOnCeiling = false;
         this._myCollisionCheckParamsMovement.myRegatherGroundInfoOnSurfaceCheckFail = true;
         this._myCollisionCheckParamsMovement.myRegatherCeilingInfoOnSurfaceCheckFail = true;
+        //this._myCollisionCheckParamsMovement.myExtraMovementCheckCallback = function () { return [0, 0, 0.01]; }
 
         this._myCollisionCheckParamsMovement.mySlidingEnabled = true;
         this._myCollisionCheckParamsMovement.mySlidingHorizontalMovementCheckBetterNormal = true;
@@ -506,6 +507,21 @@ PlayerLocomotion = class PlayerLocomotion {
         this._myCollisionCheckParamsTeleport.myGroundAngleToIgnore = 60;
         this._myCollisionCheckParamsTeleport.myTeleportMustBeOnIgnorableGroundAngle = true;
         this._myCollisionCheckParamsTeleport.myTeleportMustBeOnGround = true;
+
+        /*
+        this._myCollisionCheckParamsTeleport.myExtraTeleportCheckCallback = function (
+            offsetTeleportPosition, endPosition, feetPosition, transformUp, transformForward, height,
+            collisionCheckParams, prevCollisionRuntimeParams, collisionRuntimeParams, newFeetPosition
+
+        ) {
+            let isTeleportingUpward = endPosition.vec3_isFartherAlongAxis(feetPosition, transformUp);
+            if (isTeleportingUpward) {
+                collisionRuntimeParams.myTeleportCanceled = collisionRuntimeParams.myGroundAngle > 30 + 0.0001;
+                console.error(collisionRuntimeParams.myTeleportCanceled);
+            }
+
+            return newFeetPosition;
+        }*/
 
         // this is needed for when u want to perform the teleport as a movement
         // maybe this should be another set of collsion check params copied from the smooth ones?
