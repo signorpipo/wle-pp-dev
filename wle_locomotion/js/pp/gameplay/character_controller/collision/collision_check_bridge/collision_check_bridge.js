@@ -148,6 +148,8 @@ PP.CollisionCheckBridge = {
         outCollisionRuntimeParams.mySplitMovementStepsPerformed = characterCollisionResults.mySplitMovementResults.myStepsPerformed;
         outCollisionRuntimeParams.mySplitMovementStop = characterCollisionResults.mySplitMovementResults.myMovementInterrupted;
         outCollisionRuntimeParams.mySplitMovementMovementChecked.vec3_copy(characterCollisionResults.mySplitMovementResults.myMovementChecked);
+
+        return outCollisionRuntimeParams;
     },
     convertCollisionRuntimeParamsToCharacterCollisionResults: function () {
         let rotationQuat = PP.quat_create();
@@ -253,6 +255,8 @@ PP.CollisionCheckBridge = {
             outCharacterCollisionResults.myInternalResults.myWallSlide90DegreesRecomputeDirectionSign = collisionRuntimeParams.mySlidingRecompute90DegreesSign;
 
             outCharacterCollisionResults.myTransformResults.myStartTransformQuat.quat2_copy(currentTransformQuat);
+
+            return outCharacterCollisionResults;
         }
     }(),
 
@@ -356,7 +360,7 @@ PP.CollisionCheckBridge = {
             outCollisionCheckParams.myGroundCircumferenceRotationPerStep = characterColliderSetup.myVerticalCheckSetup.myVerticalCheckCircumferenceRotationPerRadialStep;
             outCollisionCheckParams.myVerticalAllowHitInsideCollisionIfOneOk = characterColliderSetup.myVerticalCheckSetup.myVerticalCheckAllowHitsInsideCollisionIfOneValid;
 
-            outCollisionCheckParams.myHorizonalBlockLayerFlags.copy(characterColliderSetup.myHorizontalCheckSetup.myHorizontalCheckBlockLayerFlags);
+            outCollisionCheckParams.myHorizontalBlockLayerFlags.copy(characterColliderSetup.myHorizontalCheckSetup.myHorizontalCheckBlockLayerFlags);
             outCollisionCheckParams.myVerticalBlockLayerFlags.copy(characterColliderSetup.myVerticalCheckSetup.myVerticalCheckBlockLayerFlags);
             outCollisionCheckParams.myHorizontalObjectsToIgnore.pp_copy(characterColliderSetup.myHorizontalCheckSetup.myHorizontalCheckObjectsToIgnore);
             outCollisionCheckParams.myVerticalObjectsToIgnore.pp_copy(characterColliderSetup.myVerticalCheckSetup.myVerticalCheckObjectsToIgnore);
@@ -454,8 +458,8 @@ PP.CollisionCheckBridge = {
             outCollisionCheckParams.mySplitMovementStopCallback = characterColliderSetup.mySplitMovementSetup.mySplitMovementStopOnCallback;
             outCollisionCheckParams.mySplitMovementStopReturnPrevious = characterColliderSetup.mySplitMovementSetup.mySplitMovementStopReturnPreviousResults;
 
-            outCollisionCheckParams.myPositionOffsetLocal.vec3_copy(characterColliderSetup.myExtraSetup.myPositionOffsetLocal);
-            outCollisionCheckParams.myRotationOffsetLocalQuat.quat_copy(characterColliderSetup.myExtraSetup.myRotationOffsetLocalQuat);
+            outCollisionCheckParams.myPositionOffsetLocal.vec3_copy(characterColliderSetup.myAdditionalSetup.myPositionOffsetLocal);
+            outCollisionCheckParams.myRotationOffsetLocalQuat.quat_copy(characterColliderSetup.myAdditionalSetup.myRotationOffsetLocalQuat);
 
             outCollisionCheckParams.myDebugActive = characterColliderSetup.myDebugSetup.myVisualDebugActive;
 
@@ -469,6 +473,8 @@ PP.CollisionCheckBridge = {
             outCollisionCheckParams.myDebugCeilingInfoActive = characterColliderSetup.myDebugSetup.myVisualDebugGroundInfoActive;
             outCollisionCheckParams.myDebugRuntimeParamsActive = characterColliderSetup.myDebugSetup.myVisualDebugResultsActive;
             outCollisionCheckParams.myDebugMovementActive = characterColliderSetup.myDebugSetup.myVisualDebugMovementActive;
+
+            return outCollisionCheckParams;
         }
     }()
 };

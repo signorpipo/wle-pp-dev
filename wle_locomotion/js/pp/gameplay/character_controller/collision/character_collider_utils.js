@@ -84,11 +84,13 @@ PP.CharacterColliderUtils.createCharacterColliderSetupSimplified = function (sim
 
 
     outCharacterColliderSetup.myGroundSetup.mySurfaceSnapMaxDistance = simplifiedCreationParams.myMaxDistanceToSnapOnGround;
-    outCharacterColliderSetup.myGroundSetup.mySurfacePopOutMaxDistance = simplifiedCreationParams.myMaxDistanceToSnapOnGround;
+    outCharacterColliderSetup.myGroundSetup.mySurfacePopOutMaxDistance = simplifiedCreationParams.myMaxDistanceToSnapOnGround > 0 ?
+        simplifiedCreationParams.myMaxDistanceToSnapOnGround : (simplifiedCreationParams.myRadius > 0.1) ? 0.1 : 0.01;
     outCharacterColliderSetup.myGroundSetup.myHorizontalMovementSurfaceAngleToIgnoreMaxHorizontalMovementLeft = simplifiedCreationParams.myRadius;
 
     outCharacterColliderSetup.myGroundSetup.myCollectSurfaceInfo = simplifiedCreationParams.myCollectGroundInfo || simplifiedCreationParams.myMaxWalkableGroundAngle > 0;
     outCharacterColliderSetup.myGroundSetup.mySurfaceSnapEnabled = simplifiedCreationParams.myShouldSnapOnGround;
+    outCharacterColliderSetup.myGroundSetup.mySurfacePopOutEnabled = true;
     outCharacterColliderSetup.myGroundSetup.mySurfaceAngleToIgnore = simplifiedCreationParams.myMaxWalkableGroundAngle;
     outCharacterColliderSetup.myGroundSetup.myHorizontalMovementAdjustVerticalMovementBasedOnSurfacePerceivedAngle = true;
 
@@ -99,10 +101,12 @@ PP.CharacterColliderUtils.createCharacterColliderSetupSimplified = function (sim
     outCharacterColliderSetup.myGroundSetup.myCollectSurfaceNormalMaxInsideDistance = outCharacterColliderSetup.myGroundSetup.myCollectSurfaceNormalMaxOutsideDistance;
 
 
+
     if (simplifiedCreationParams.myCanFly) {
         outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalCheckHeadDistanceToIgnore = outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalCheckFeetDistanceToIgnore;
 
         outCharacterColliderSetup.myCeilingSetup.myCollectSurfaceInfo = outCharacterColliderSetup.myGroundSetup.myCollectSurfaceInfo;
+        outCharacterColliderSetup.myCeilingSetup.mySurfacePopOutEnabled = outCharacterColliderSetup.myGroundSetup.mySurfacePopOutEnabled;
         outCharacterColliderSetup.myCeilingSetup.mySurfaceAngleToIgnore = outCharacterColliderSetup.myGroundSetup.mySurfaceAngleToIgnore;
 
         outCharacterColliderSetup.myCeilingSetup.mySurfaceSnapMaxDistance = outCharacterColliderSetup.myGroundSetup.mySurfaceSnapMaxDistance;
@@ -301,4 +305,6 @@ PP.CharacterColliderUtils.createCharacterColliderSetupSimplified = function (sim
         outCharacterColliderSetup.myGroundSetup.myRecollectSurfaceInfoOnSurfaceCheckFailed = true;
         outCharacterColliderSetup.myCeilingSetup.myRecollectSurfaceInfoOnSurfaceCheckFailed = outCharacterColliderSetup.myGroundSetup.myRecollectSurfaceInfoOnSurfaceCheckFailed;
     }
+
+    return outCharacterColliderSetup;
 };
