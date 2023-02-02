@@ -224,7 +224,9 @@ PP.CharacterColliderSurfaceSetup = class CharacterColliderSurfaceSetup {
 
         this.myIsOnSurfaceMaxOutsideDistance = 0;
         this.myIsOnSurfaceMaxInsideDistance = 0;
-        this.myIsOnSurfaceIfInsideCollision = false;
+
+        this.myIsBaseInsideCollisionCheckEnabled = false;
+        this.myIsOnSurfaceIfBaseInsideCollision = false;
 
         this.myCollectSurfaceNormalMaxOutsideDistance = 0;
         this.myCollectSurfaceNormalMaxInsideDistance = 0;
@@ -474,7 +476,9 @@ PP.CharacterColliderSurfaceSetup.prototype.copy = function (other) {
 
     this.myIsOnSurfaceMaxOutsideDistance = other.myIsOnSurfaceMaxOutsideDistance;
     this.myIsOnSurfaceMaxInsideDistance = other.myIsOnSurfaceMaxInsideDistance;
-    this.myIsOnSurfaceIfInsideCollision = other.myIsOnSurfaceIfInsideCollision;
+
+    this.myIsBaseInsideCollisionCheckEnabled = other.myIsBaseInsideCollisionCheckEnabled;
+    this.myIsOnSurfaceIfBaseInsideCollision = other.myIsOnSurfaceIfBaseInsideCollision;
 
     this.myCollectSurfaceNormalMaxOutsideDistance = other.myCollectSurfaceNormalMaxOutsideDistance;
     this.myCollectSurfaceNormalMaxInsideDistance = other.myCollectSurfaceNormalMaxInsideDistance;

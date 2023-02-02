@@ -468,6 +468,7 @@ CollisionCheck.prototype._gatherSurfaceInfo = function () {
         let verticalFixToComputeSurfaceInfo = collisionCheckParams.myVerticalFixToComputeGroundInfo;
         let verticalFixToFindSurfaceDistance = collisionCheckParams.myFindGroundDistanceMaxInsideDistance;
         let isOnSurfaceIfInsideHit = collisionCheckParams.myIsOnGroundIfInsideHit;
+        let isBaseInsideCollisionCheckEnabled = collisionCheckParams.myGroundIsBaseInsideCollisionCheckEnabled;
         if (!isGround) {
             verticalDirection.vec3_negate(verticalDirection);
             distanceToBeOnSurface = collisionCheckParams.myDistanceToBeOnCeiling;
@@ -477,6 +478,7 @@ CollisionCheck.prototype._gatherSurfaceInfo = function () {
             verticalFixToComputeSurfaceInfo = collisionCheckParams.myVerticalFixToComputeCeilingInfo;
             verticalFixToFindSurfaceDistance = collisionCheckParams.myFindCeilingDistanceMaxInsideDistance;
             isOnSurfaceIfInsideHit = collisionCheckParams.myIsOnCeilingIfInsideHit;
+            isBaseInsideCollisionCheckEnabled = collisionCheckParams.myCeilingIsBaseInsideCollisionCheckEnabled;
         }
 
         startOffset = verticalDirection.vec3_scale(Math.max(verticalFixToBeOnSurface, verticalFixToComputeSurfaceInfo, verticalFixToFindSurfaceDistance, 0.00001), startOffset);
@@ -500,8 +502,8 @@ CollisionCheck.prototype._gatherSurfaceInfo = function () {
             let currentPosition = checkPositions[i];
             currentPosition.vec3_add(heightOffset, currentPosition);
 
-            let feetHitIsInsideCollision = false;
-            {
+            let baseHitIsInsideCollision = false;
+            if (isBaseInsideCollisionCheckEnabled) {
                 smallStartPosition = currentPosition.vec3_add(smallOffset, smallStartPosition);
                 smallEndPosition = currentPosition.vec3_sub(smallOffset, smallEndPosition);
 
@@ -512,11 +514,11 @@ CollisionCheck.prototype._gatherSurfaceInfo = function () {
                 let raycastResult = this._raycastAndDebug(origin, direction, distance, false, false, collisionCheckParams, collisionRuntimeParams);
 
                 if (raycastResult.isColliding()) {
-                    feetHitIsInsideCollision = raycastResult.myHits[0].myIsInsideCollision;
+                    baseHitIsInsideCollision = raycastResult.myHits[0].myIsInsideCollision;
                 }
             }
 
-            if (!feetHitIsInsideCollision) {
+            if (!baseHitIsInsideCollision) {
                 startPosition = currentPosition.vec3_add(startOffset, startPosition);
                 endPosition = currentPosition.vec3_add(endOffset, endPosition);
 
