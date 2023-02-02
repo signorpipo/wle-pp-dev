@@ -321,7 +321,7 @@ CollisionCheck.prototype._horizontalPositionVerticalCheck = function () {
             if (collisionCheckParams.myCheckVerticalStraight && !previousCheckPositionIsEqual) {
                 isHorizontalCheckOk = this._horizontalCheckRaycast(previousRadialPosition, currentRadialPosition, null, up,
                     collisionCheckParams.myHorizontalPositionCheckVerticalIgnoreHitsInsideCollision, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
-                    feetPosition, !collisionCheckParams.myCheckHeightConeOnCollision,
+                    feetPosition, true,
                     collisionCheckParams, collisionRuntimeParams, true, true);
 
                 if (!isHorizontalCheckOk) {
@@ -344,7 +344,7 @@ CollisionCheck.prototype._horizontalPositionVerticalCheck = function () {
                     !previousCheckPositionIsEqual) {
                     isHorizontalCheckOk = this._horizontalCheckRaycast(previousBasePosition, currentRadialPosition, null, up,
                         collisionCheckParams.myHorizontalPositionCheckVerticalIgnoreHitsInsideCollision, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
-                        feetPosition, !collisionCheckParams.myCheckHeightConeOnCollision,
+                        feetPosition, true,
                         collisionCheckParams, collisionRuntimeParams, true, true);
 
                     if (!isHorizontalCheckOk) {
@@ -366,7 +366,7 @@ CollisionCheck.prototype._horizontalPositionVerticalCheck = function () {
                     !previousCheckPositionIsEqual) {
                     isHorizontalCheckOk = this._horizontalCheckRaycast(previousRadialPosition, basePosition, null, up,
                         collisionCheckParams.myHorizontalPositionCheckVerticalIgnoreHitsInsideCollision, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
-                        feetPosition, !collisionCheckParams.myCheckHeightConeOnCollision,
+                        feetPosition, true,
                         collisionCheckParams, collisionRuntimeParams, true, true);
 
                     if (!isHorizontalCheckOk) {
@@ -392,7 +392,7 @@ CollisionCheck.prototype._horizontalPositionVerticalCheck = function () {
                         if (collisionCheckParams.myCheckVerticalDiagonalBorderOutward) {
                             isHorizontalCheckOk = this._horizontalCheckRaycast(previousPreviousRadialPosition, currentRadialPosition, null, up,
                                 collisionCheckParams.myHorizontalPositionCheckVerticalIgnoreHitsInsideCollision, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
-                                feetPosition, !collisionCheckParams.myCheckHeightConeOnCollision,
+                                feetPosition, true,
                                 collisionCheckParams, collisionRuntimeParams, true, true);
 
                             if (!isHorizontalCheckOk) {
@@ -412,7 +412,7 @@ CollisionCheck.prototype._horizontalPositionVerticalCheck = function () {
                         if (collisionCheckParams.myCheckVerticalDiagonalBorderInward) {
                             isHorizontalCheckOk = this._horizontalCheckRaycast(previousRadialPosition, previousCurrentRadialPosition, null, up,
                                 collisionCheckParams.myHorizontalPositionCheckVerticalIgnoreHitsInsideCollision, ignoreGroundAngleCallback, ignoreCeilingAngleCallback,
-                                feetPosition, !collisionCheckParams.myCheckHeightConeOnCollision,
+                                feetPosition, true,
                                 collisionCheckParams, collisionRuntimeParams, true, true);
 
                             if (!isHorizontalCheckOk) {

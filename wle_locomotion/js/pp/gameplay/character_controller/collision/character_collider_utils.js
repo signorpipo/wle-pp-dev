@@ -298,7 +298,7 @@ PP.CharacterColliderUtils.createCharacterColliderSetupSimplified = function (sim
         outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalPositionVerticalBorderDiagonalOutwardCheckEnabled = true;
 
         outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalPositionVerticalCheckPerformHorizontalCheckOnHit = true;
-        outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalPositionVerticalCheckPerformHorizontalCheckOnHitKeepVerticalHitIfNoHorizontalHit = false;
+        outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalPositionVerticalCheckPerformHorizontalCheckOnHitKeepVerticalHitIfNoHorizontalHit = true;
 
 
 
