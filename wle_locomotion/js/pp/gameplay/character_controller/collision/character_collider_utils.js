@@ -28,7 +28,7 @@ PP.CharacterColliderSetupSimplifiedCreationParams = class CharacterColliderSetup
         this.myMaxDistanceToSnapOnGround = 0;
         this.myMaxWalkableGroundAngle = 0;
         this.myMaxWalkableGroundStepHeight = 0;
-        this.myCanFallFromEdges = false;
+        this.myShouldNotFallFromEdges = false;
 
         this.myHorizontalCheckBlockLayerFlags = new PP.PhysicsLayerFlags();
         this.myHorizontalCheckObjectsToIgnore = [];
@@ -118,7 +118,7 @@ PP.CharacterColliderUtils.createCharacterColliderSetupSimplified = function (sim
 
     }
 
-    if (!simplifiedCreationParams.myCanFallFromEdges) {
+    if (simplifiedCreationParams.myShouldNotFallFromEdges) {
         outCharacterColliderSetup.myGroundSetup.myMovementMustStayOnSurface = true;
         outCharacterColliderSetup.myGroundSetup.myMovementMustStayOnSurfaceAngleDownhill = Math.max(60, outCharacterColliderSetup.myGroundSetup.mySurfaceAngleToIgnore);
     }
