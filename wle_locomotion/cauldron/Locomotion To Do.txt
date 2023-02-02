@@ -49,6 +49,8 @@ TEMP:
 - provare a fare che i thumbstickspariscono e appaiono solo se premi nella metà dello schermo (pp-virtual-thumbstick, aggiunggere visible callback, se è nulla è sempre visible)
 	- o come su lol, sono comunque visibili, ma se premi si spostano dove premi, anche se è già su un thumbstick, anche se qui si potrebbe fare l'opzione che se premi sul thumbstick rimangono li
 	
+- gamepad su desktop ha dimensioni molto piu grandi, essendo lo schermo piu grande, vedere se aggiustare o no questa cosa
+	- se si può capir dalla risoluzione dello schermo, magari qualcosa che scala tutto in base a quella, se solo dalle dimensioni, e quindi il tipo di dispositivo, allora niente
 
 
 
