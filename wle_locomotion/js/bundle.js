@@ -296,6 +296,10 @@ require('./locomotion/teleport/player_locomotion_teleport_teleport_blink_state')
 require('./locomotion/teleport/player_locomotion_teleport_teleport_shift_state');
 require('./locomotion/teleport/player_locomotion_teleport');
 
+require('./locomotion/cleaned/player_locomotion_cleaned');
+require('./locomotion/cleaned/player_locomotion_smooth_cleaned');
+require('./locomotion/cleaned/player_transform_manager_cleaned');
+
 //TEST
 
 require('./test/raycast_test');

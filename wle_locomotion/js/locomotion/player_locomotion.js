@@ -11,6 +11,8 @@ PlayerLocomotionParams = class PlayerLocomotionParams {
         this.myMaxSpeed = 0;
         this.myMaxRotationSpeed = 0;
 
+        this.myCharacterRadius = 0;
+
         this.myIsSnapTurn = false;
         this.mySnapTurnOnlyVR = false;
         this.mySnapTurnAngle = 0;
@@ -354,7 +356,7 @@ PlayerLocomotion = class PlayerLocomotion {
         this._myCollisionCheckParamsMovement.mySplitMovementEnabled = false;
         this._myCollisionCheckParamsMovement.mySplitMovementMaxLength = 0;
 
-        this._myCollisionCheckParamsMovement.myRadius = 0.3;
+        this._myCollisionCheckParamsMovement.myRadius = this._myParams.myCharacterRadius;
         this._myCollisionCheckParamsMovement.myDistanceFromFeetToIgnore = 0.1;
         this._myCollisionCheckParamsMovement.myDistanceFromHeadToIgnore = 0.1;
 

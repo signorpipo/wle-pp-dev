@@ -1,6 +1,7 @@
 WL.registerComponent('player-locomotion', {
     _myMaxSpeed: { type: WL.Type.Float, default: 2 },
     _myMaxRotationSpeed: { type: WL.Type.Float, default: 100 },
+    _myCharacterRadius: { type: WL.Type.Float, default: 0.3 },
     _myIsSnapTurn: { type: WL.Type.Bool, default: true },
     _mySnapTurnOnlyVR: { type: WL.Type.Bool, default: true },
     _mySnapTurnAngle: { type: WL.Type.Float, default: 30 },
@@ -16,6 +17,7 @@ WL.registerComponent('player-locomotion', {
     _myVRDirectionReferenceObject: { type: WL.Type.Object },
     _myTeleportParableStartReferenceObject: { type: WL.Type.Object },
     _myTeleportPositionObject: { type: WL.Type.Object },
+    _myUseCleanedVersion: { type: WL.Type.Bool, default: false }
 }, {
     init() {
     },
@@ -24,6 +26,8 @@ WL.registerComponent('player-locomotion', {
         let params = new PlayerLocomotionParams();
         params.myMaxSpeed = this._myMaxSpeed;
         params.myMaxRotationSpeed = this._myMaxRotationSpeed;
+
+        params.myCharacterRadius = this._myCharacterRadius;
 
         params.myIsSnapTurn = this._myIsSnapTurn;
         params.mySnapTurnOnlyVR = this._mySnapTurnOnlyVR;
@@ -48,7 +52,11 @@ WL.registerComponent('player-locomotion', {
 
         params.myTeleportPositionObject = this._myTeleportPositionObject;
 
-        this._myPlayerLocomotion = new PlayerLocomotion(params);
+        if (this._myUseCleanedVersion) {
+            this._myPlayerLocomotion = new CleanedPlayerLocomotion(params);
+        } else {
+            this._myPlayerLocomotion = new PlayerLocomotion(params);
+        }
 
         PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Float 1", 0.15, 0.5, 3));
         PP.myEasyTuneVariables.add(new PP.EasyTuneNumberArray("Float Array 1", [1, 2, 3], 0.5, 3));
