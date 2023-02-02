@@ -54,6 +54,9 @@ PP.CharacterCollisionSurfaceInfo = class CharacterCollisionSurfaceInfo {
         this.mySurfacePerceivedAngle = 0;
         this.mySurfaceNormal = PP.vec3_create();
 
+        this.mySurfaceHitMaxAngle = 0;
+        this.mySurfaceHitMaxNormal = PP.vec3_create();
+
         this.mySurfaceDistance = null;
 
         this.myIsBaseInsideCollision = false;
@@ -285,19 +288,31 @@ PP.CharacterCollisionResults.prototype.copy = function (other) {
 
 PP.CharacterCollisionSurfaceInfo.prototype.reset = function () {
     this.myIsOnSurface = false;
+
     this.mySurfaceAngle = 0;
     this.mySurfacePerceivedAngle = 0;
     this.mySurfaceNormal.vec3_zero();
+
+    this.mySurfaceHitMaxAngle = 0;
+    this.mySurfaceHitMaxNormal.vec3_zero();
+
     this.mySurfaceDistance = null;
+
     this.myIsBaseInsideCollision = false;
 };
 
 PP.CharacterCollisionSurfaceInfo.prototype.copy = function (other) {
     this.myIsOnSurface = other.myIsOnSurface;
+
     this.mySurfaceAngle = other.mySurfaceAngle;
     this.mySurfacePerceivedAngle = other.mySurfacePerceivedAngle;
     this.mySurfaceNormal.vec3_copy(other.mySurfaceNormal);
+
+    this.mySurfaceHitMaxAngle = other.mySurfaceHitMaxAngle;
+    this.mySurfaceHitMaxNormal.vec3_copy(other.mySurfaceHitMaxNormal);
+
     this.mySurfaceDistance = other.mySurfaceDistance;
+
     this.myIsBaseInsideCollision = other.myIsBaseInsideCollision;
 };
 

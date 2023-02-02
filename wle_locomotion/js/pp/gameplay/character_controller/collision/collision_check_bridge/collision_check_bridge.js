@@ -82,6 +82,8 @@ PP.CollisionCheckBridge = {
         outCollisionRuntimeParams.myGroundAngle = characterCollisionResults.myGroundInfo.mySurfaceAngle;
         outCollisionRuntimeParams.myGroundPerceivedAngle = characterCollisionResults.myGroundInfo.mySurfacePerceivedAngle;
         outCollisionRuntimeParams.myGroundNormal.vec3_copy(characterCollisionResults.myGroundInfo.mySurfaceNormal);
+        outCollisionRuntimeParams.myGroundHitMaxAngle = characterCollisionResults.myGroundInfo.mySurfaceHitMaxAngle;
+        outCollisionRuntimeParams.myGroundHitMaxNormal.vec3_copy(characterCollisionResults.myGroundInfo.mySurfaceHitMaxNormal);
         outCollisionRuntimeParams.myGroundDistance = characterCollisionResults.myGroundInfo.mySurfaceDistance;
         outCollisionRuntimeParams.myGroundIsBaseInsideCollision = characterCollisionResults.myGroundInfo.myIsBaseInsideCollision;
 
@@ -89,6 +91,8 @@ PP.CollisionCheckBridge = {
         outCollisionRuntimeParams.myCeilingAngle = characterCollisionResults.myCeilingInfo.mySurfaceAngle;
         outCollisionRuntimeParams.myCeilingPerceivedAngle = characterCollisionResults.myCeilingInfo.mySurfacePerceivedAngle;
         outCollisionRuntimeParams.myCeilingNormal.vec3_copy(characterCollisionResults.myCeilingInfo.mySurfaceNormal);
+        outCollisionRuntimeParams.myCeilingHitMaxAngle = characterCollisionResults.myCeilingInfo.mySurfaceHitMaxAngle;
+        outCollisionRuntimeParams.myCeilingHitMaxNormal.vec3_copy(characterCollisionResults.myCeilingInfo.mySurfaceHitMaxNormal);
         outCollisionRuntimeParams.myCeilingDistance = characterCollisionResults.myCeilingInfo.mySurfaceDistance;
         outCollisionRuntimeParams.myCeilingIsBaseInsideCollision = characterCollisionResults.myCeilingInfo.myIsBaseInsideCollision;
 
@@ -201,6 +205,8 @@ PP.CollisionCheckBridge = {
             outCharacterCollisionResults.myGroundInfo.mySurfaceAngle = collisionRuntimeParams.myGroundAngle;
             outCharacterCollisionResults.myGroundInfo.mySurfacePerceivedAngle = collisionRuntimeParams.myGroundPerceivedAngle;
             outCharacterCollisionResults.myGroundInfo.mySurfaceNormal.vec3_copy(collisionRuntimeParams.myGroundNormal);
+            outCharacterCollisionResults.myGroundInfo.mySurfaceHitMaxAngle = collisionRuntimeParams.myGroundHitMaxAngle;
+            outCharacterCollisionResults.myGroundInfo.mySurfaceHitMaxNormal.vec3_copy(collisionRuntimeParams.myGroundHitMaxNormal);
             outCharacterCollisionResults.myGroundInfo.mySurfaceDistance = collisionRuntimeParams.myGroundDistance;
             outCharacterCollisionResults.myGroundInfo.myIsBaseInsideCollision = collisionRuntimeParams.myGroundIsBaseInsideCollision;
 
@@ -208,6 +214,8 @@ PP.CollisionCheckBridge = {
             outCharacterCollisionResults.myCeilingInfo.mySurfaceAngle = collisionRuntimeParams.myCeilingAngle;
             outCharacterCollisionResults.myCeilingInfo.mySurfacePerceivedAngle = collisionRuntimeParams.myCeilingPerceivedAngle;
             outCharacterCollisionResults.myCeilingInfo.mySurfaceNormal.vec3_copy(collisionRuntimeParams.myCeilingNormal);
+            outCharacterCollisionResults.myCeilingInfo.mySurfaceHitMaxAngle = collisionRuntimeParams.myCeilingHitMaxAngle;
+            outCharacterCollisionResults.myCeilingInfo.mySurfaceHitMaxNormal.vec3_copy(collisionRuntimeParams.myCeilingHitMaxNormal);
             outCharacterCollisionResults.myCeilingInfo.mySurfaceDistance = collisionRuntimeParams.myCeilingDistance;
             outCharacterCollisionResults.myCeilingInfo.myIsBaseInsideCollision = collisionRuntimeParams.myCeilingIsBaseInsideCollision;
 

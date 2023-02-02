@@ -451,6 +451,7 @@ CollisionCheck.prototype._gatherSurfaceInfo = function () {
     let smallStartPosition = PP.vec3_create();
     let smallEndPosition = PP.vec3_create();
     let surfaceNormal = PP.vec3_create();
+    let surfaceHitMaxNormal = PP.vec3_create();
     let hitFromCurrentPosition = PP.vec3_create();
     let startPosition = PP.vec3_create();
     let endPosition = PP.vec3_create();
@@ -495,6 +496,9 @@ CollisionCheck.prototype._gatherSurfaceInfo = function () {
         let surfaceAngle = 0;
         let surfacePerceivedAngle = 0;
         surfaceNormal.vec3_zero();
+
+        let surfaceHitMaxAngle = 0;
+        surfaceHitMaxNormal.vec3_zero();
 
         let surfaceDistance = null;
         let isBaseInsideCollision = checkPositions.length > 0;
@@ -544,6 +548,12 @@ CollisionCheck.prototype._gatherSurfaceInfo = function () {
                         (hitFromCurrentPositionLength < 0 && Math.abs(hitFromCurrentPositionLength) <= distanceToComputeSurfaceInfo + 0.00001)) {
                         let currentSurfaceNormal = raycastResult.myHits[0].myNormal;
                         surfaceNormal.vec3_add(currentSurfaceNormal, surfaceNormal);
+
+                        let surfaceHitAngle = currentSurfaceNormal.vec3_angle(verticalDirection);
+                        if (surfaceHitAngle > surfaceHitMaxAngle) {
+                            surfaceHitMaxAngle = surfaceHitAngle;
+                            surfaceHitMaxNormal.vec3_copy(currentSurfaceNormal);
+                        }
                     }
 
                     if ((hitFromCurrentPositionLength >= 0 && hitFromCurrentPositionLength <= verticalFixToFindSurfaceDistance + 0.00001) ||
@@ -584,6 +594,9 @@ CollisionCheck.prototype._gatherSurfaceInfo = function () {
             collisionRuntimeParams.myGroundPerceivedAngle = surfacePerceivedAngle;
             collisionRuntimeParams.myGroundNormal.vec3_copy(surfaceNormal);
 
+            collisionRuntimeParams.myGroundHitMaxAngle = surfaceHitMaxAngle;
+            collisionRuntimeParams.myGroundHitMaxNormal.vec3_copy(surfaceHitMaxNormal);
+
             collisionRuntimeParams.myGroundDistance = surfaceDistance;
 
             collisionRuntimeParams.myGroundIsBaseInsideCollision = isBaseInsideCollision;
@@ -597,6 +610,9 @@ CollisionCheck.prototype._gatherSurfaceInfo = function () {
             collisionRuntimeParams.myCeilingAngle = surfaceAngle;
             collisionRuntimeParams.myCeilingPerceivedAngle = surfacePerceivedAngle;
             collisionRuntimeParams.myCeilingNormal.vec3_copy(surfaceNormal);
+
+            collisionRuntimeParams.myCeilingHitMaxAngle = surfaceHitMaxAngle;
+            collisionRuntimeParams.myCeilingHitMaxNormal.vec3_copy(surfaceHitMaxNormal);
 
             collisionRuntimeParams.myCeilingDistance = surfaceDistance;
 

@@ -476,6 +476,8 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.myGroundAngle = 0;
         this.myGroundPerceivedAngle = 0;
         this.myGroundNormal = PP.vec3_create();
+        this.myGroundHitMaxAngle = 0;
+        this.myGroundHitMaxNormal = PP.vec3_create();
         this.myGroundDistance = null;
         this.myGroundIsBaseInsideCollision = false;
 
@@ -483,6 +485,8 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.myCeilingAngle = 0;
         this.myCeilingPerceivedAngle = 0;
         this.myCeilingNormal = PP.vec3_create();
+        this.myCeilingHitMaxAngle = 0;
+        this.myCeilingHitMaxNormal = PP.vec3_create();
         this.myCeilingDistance = null;
         this.myCeilingIsBaseInsideCollision = false;
 
@@ -569,6 +573,8 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.myGroundAngle = 0;
         this.myGroundPerceivedAngle = 0;
         this.myGroundNormal.vec3_zero();
+        this.myGroundHitMaxAngle = 0;
+        this.myGroundHitMaxNormal.vec3_zero();
         this.myGroundDistance = null;
         this.myGroundIsBaseInsideCollision = false;
 
@@ -576,6 +582,8 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.myCeilingAngle = 0;
         this.myCeilingPerceivedAngle = 0;
         this.myCeilingNormal.vec3_zero();
+        this.myCeilingHitMaxAngle = 0;
+        this.myCeilingHitMaxNormal.vec3_zero();
         this.myCeilingDistance = null;
         this.myCeilingIsBaseInsideCollision = false;
 
@@ -661,6 +669,8 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.myGroundAngle = other.myGroundAngle;
         this.myGroundPerceivedAngle = other.myGroundPerceivedAngle;
         this.myGroundNormal.vec3_copy(other.myGroundNormal);
+        this.myGroundHitMaxAngle = other.myGroundHitMaxAngle;
+        this.myGroundHitMaxNormal.vec3_copy(other.myGroundHitMaxNormal);
         this.myGroundDistance = other.myGroundDistance;
         this.myGroundIsBaseInsideCollision = other.myGroundIsBaseInsideCollision;
 
@@ -668,6 +678,8 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.myCeilingAngle = other.myCeilingAngle;
         this.myCeilingPerceivedAngle = other.myCeilingPerceivedAngle;
         this.myCeilingNormal.vec3_copy(other.myCeilingNormal);
+        this.myCeilingHitMaxAngle = other.myCeilingHitMaxAngle;
+        this.myCeilingHitMaxNormal.vec3_copy(other.myCeilingHitMaxNormal);
         this.myCeilingDistance = other.myCeilingDistance;
         this.myCeilingIsBaseInsideCollision = other.myCeilingIsBaseInsideCollision;
 
