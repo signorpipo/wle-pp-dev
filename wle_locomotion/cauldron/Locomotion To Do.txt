@@ -30,6 +30,8 @@ v Pensare a come potrebbe essere un componente esposto semplice player character
 v Componente character-controller che semplicemente ha la collisione e puoi dirgli di fare un movimento e lui lo corregge
 	
 - Aggiungere speed/acceleration nella smooth (tempo per raggiungere max speed, tempo per raggiungere 0)
+
+- fixare smooth locomotion fly quando punti verso il basso e sei sul ground non dovrebbe stortare la direzione che ti fa andare piu lento
 	
 - rimuovere tutti i 0.0001 per cose come l'ignore angle, complicano un po' tutto e alla fine se uno vuole può mettere il parametro leggermente più altro lui stesso
 	

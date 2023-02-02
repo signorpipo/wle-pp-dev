@@ -31,6 +31,8 @@ CleanedPlayerLocomotionSmooth = class CleanedPlayerLocomotionSmooth extends Play
 
         this._myLocomotionRuntimeParams.myIsFlying = false;
 
+        this._myGravitySpeed = 0;
+
         if (WL.xrSession) {
             this._onXRSessionStart(WL.xrSession);
         }
@@ -73,17 +75,7 @@ CleanedPlayerLocomotionSmooth.prototype.update = function () {
                 }
 
                 let movementIntensity = axes.vec2_length();
-                if (PP.myGamepads[this._myParams.myHandedness].getButtonInfo(PP.GamepadButtonID.SELECT).isPressed()) {
-                    movementIntensity = 0.1;
-                }
                 let speed = Math.pp_lerp(0, this._myParams.myMaxSpeed, movementIntensity);
-
-                if (this._myLocomotionRuntimeParams.myCollisionRuntimeParams.myIsSliding) {
-
-                    //speed = Math.pp_lerp(speed * 0.05, speed, 1 - Math.abs(this._myLocomotionRuntimeParams.myCollisionRuntimeParams.mySlidingMovementAngle) / 90);
-                    //speed = speed * 0.1;
-                    speed = speed / 2;
-                }
 
                 headMovement = direction.vec3_scale(speed * dt, headMovement);
             }
@@ -96,7 +88,7 @@ CleanedPlayerLocomotionSmooth.prototype.update = function () {
             }
         }
 
-        if (!PP.myGamepads[this._myParams.myHandedness].getButtonInfo(PP.GamepadButtonID.SQUEEZE).isPressed()) {
+        if (this._myParams.myFlyEnabled) {
             if (PP.myGamepads[this._myParams.myHandedness].getButtonInfo(PP.GamepadButtonID.TOP_BUTTON).isPressed()) {
                 verticalMovement = playerUp.vec3_scale(this._myParams.myMaxSpeed * dt, verticalMovement);
                 headMovement = headMovement.vec3_add(verticalMovement, headMovement);
@@ -106,53 +98,34 @@ CleanedPlayerLocomotionSmooth.prototype.update = function () {
                 headMovement = headMovement.vec3_add(verticalMovement, headMovement);
                 this._myLocomotionRuntimeParams.myIsFlying = true;
             }
+
+            if (PP.myGamepads[this._myParams.myHandedness].getButtonInfo(PP.GamepadButtonID.BOTTOM_BUTTON).isPressEnd(2)) {
+                this._myLocomotionRuntimeParams.myIsFlying = false;
+            }
         }
 
-        if (PP.myGamepads[this._myParams.myHandedness].getButtonInfo(PP.GamepadButtonID.BOTTOM_BUTTON).isPressEnd(2)) {
-            this._myLocomotionRuntimeParams.myIsFlying = false;
-        }
-
-        if (PP.myGamepads[PP.InputUtils.getOppositeHandedness(this._myParams.myHandedness)].getButtonInfo(PP.GamepadButtonID.BOTTOM_BUTTON).isPressed()) {
-            if (!PP.myGamepads[this._myParams.myHandedness].getButtonInfo(PP.GamepadButtonID.THUMBSTICK).isPressed()) {
-                if (!this._myLocomotionRuntimeParams.myIsFlying && false) {
-                    let gravity = -2;
-                    verticalMovement = playerUp.vec3_scale(gravity * dt, verticalMovement);
-                    headMovement = headMovement.vec3_add(verticalMovement, headMovement);
-                }
-
-                if (PP.myGamepads[this._myParams.myHandedness].getButtonInfo(PP.GamepadButtonID.SQUEEZE).isPressed()) {
-                    headMovement.vec3_zero();
-                }
-
-                feetTransformQuat = this._myParams.myPlayerHeadManager.getTransformFeetQuat(feetTransformQuat);
-
-                globalDT = dt;
-                CollisionCheckGlobal.move(headMovement, feetTransformQuat, this._myParams.myCollisionCheckParams, this._myLocomotionRuntimeParams.myCollisionRuntimeParams);
-                headMovement.vec3_copy(this._myLocomotionRuntimeParams.myCollisionRuntimeParams.myFixedMovement);
+        if (!PP.myGamepads[this._myParams.myHandedness].getButtonInfo(PP.GamepadButtonID.THUMBSTICK).isPressed()) {
+            if (!this._myLocomotionRuntimeParams.myIsFlying) {
+                this._myGravitySpeed += this._myParams.myGravityAcceleration * dt;
+                verticalMovement = playerUp.vec3_scale(this._myGravitySpeed * dt, verticalMovement);
+                headMovement = headMovement.vec3_add(verticalMovement, headMovement);
             }
 
-            if (!headMovement.vec3_isZero(0.000001)) {
-                this._myParams.myPlayerHeadManager.moveFeet(headMovement);
+            if (PP.myGamepads[this._myParams.myHandedness].getButtonInfo(PP.GamepadButtonID.SQUEEZE).isPressed()) {
+                headMovement.vec3_zero();
+            }
+
+            feetTransformQuat = this._myParams.myPlayerTransformManager.getTransformQuat(feetTransformQuat);
+
+            globalDT = dt;
+            this._myParams.myPlayerTransformManager.move(headMovement, this._myLocomotionRuntimeParams.myCollisionRuntimeParams);
+
+            if (this._myGravitySpeed > 0 && this._myLocomotionRuntimeParams.myCollisionRuntimeParams.myIsOnCeiling ||
+                this._myGravitySpeed < 0 && this._myLocomotionRuntimeParams.myCollisionRuntimeParams.myIsOnGround) {
+                this._myGravitySpeed = 0;
             }
         } else {
-            if (!PP.myGamepads[this._myParams.myHandedness].getButtonInfo(PP.GamepadButtonID.THUMBSTICK).isPressed()) {
-                if (!this._myLocomotionRuntimeParams.myIsFlying) {
-                    let gravity = -2;
-                    verticalMovement = playerUp.vec3_scale(gravity * dt, verticalMovement);
-                    headMovement = headMovement.vec3_add(verticalMovement, headMovement);
-                }
-
-                if (PP.myGamepads[this._myParams.myHandedness].getButtonInfo(PP.GamepadButtonID.SQUEEZE).isPressed()) {
-                    headMovement.vec3_zero();
-                }
-
-                feetTransformQuat = this._myParams.myPlayerTransformManager.getTransformQuat(feetTransformQuat);
-
-                globalDT = dt;
-                this._myParams.myPlayerTransformManager.move(headMovement, this._myLocomotionRuntimeParams.myCollisionRuntimeParams);
-            } else {
-                this._myParams.myPlayerTransformManager.move(headMovement, this._myLocomotionRuntimeParams.myCollisionRuntimeParams, true);
-            }
+            this._myParams.myPlayerTransformManager.move(headMovement, this._myLocomotionRuntimeParams.myCollisionRuntimeParams, true);
         }
 
         if (this._myLocomotionRuntimeParams.myCollisionRuntimeParams.myIsOnGround) {

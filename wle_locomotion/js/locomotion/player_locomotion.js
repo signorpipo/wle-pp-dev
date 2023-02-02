@@ -235,6 +235,8 @@ PlayerLocomotion = class PlayerLocomotion {
                 params.myMinAngleToFlyDownVR = this._myParams.myMinAngleToFlyDownVR;
                 params.myMinAngleToFlyRight = this._myParams.myMinAngleToFlyRight;
 
+                params.myGravityAcceleration = -20;
+
                 params.myVRDirectionReferenceType = this._myParams.myVRDirectionReferenceType;
                 params.myVRDirectionReferenceObject = this._myParams.myVRDirectionReferenceObject;
 

@@ -743,20 +743,6 @@ CleanedPlayerTransformManager.prototype._updateReal = function () {
                 this._updateCollisionHeight();
             }
 
-            if (resetRealEnabled) { //no
-                if (PP.XRUtils.isSessionActive()) {
-                    let resetPosition = (this.isSynced(this._myParams.mySyncPositionFlagMap) || this._myParams.myAlwaysResetRealPositionVR) && !this._myParams.myNeverResetRealPositionVR;
-                    let resetRotation = (this.isSynced(this._myParams.mySyncRotationFlagMap) || this._myParams.myAlwaysResetRealRotationVR) && !this._myParams.myNeverResetRealRotationVR;
-                    let resetHeight = (this.isSynced(this._myParams.mySyncHeightFlagMap) || this._myParams.myAlwaysResetRealHeightVR) && !this._myParams.myNeverResetRealHeightVR;
-                    this.resetReal(resetPosition, resetRotation, resetHeight, false);
-                } else {
-                    let resetPosition = (this.isSynced(this._myParams.mySyncPositionFlagMap) || this._myParams.myAlwaysResetRealPositionNonVR) && !this._myParams.myNeverResetRealPositionNonVR;
-                    let resetRotation = (this.isSynced(this._myParams.mySyncRotationFlagMap) || this._myParams.myAlwaysResetRealRotationNonVR) && !this._myParams.myNeverResetRealRotationNonVR;
-                    let resetHeight = (this.isSynced(this._myParams.mySyncHeightFlagMap) || this._myParams.myAlwaysResetRealHeightNonVR) && !this._myParams.myNeverResetRealHeightNonVR;
-                    this.resetReal(resetPosition, resetRotation, resetHeight, false);
-                }
-            }
-
             if (this._myParams.myUpdateRealPositionValid) {
                 transformQuat = this.getTransformRealQuat(transformQuat);
                 transformUp = transformQuat.quat2_getUp(transformUp);

@@ -191,6 +191,8 @@ CleanedPlayerLocomotion = class CleanedPlayerLocomotion {
                 params.myMinAngleToFlyDownVR = this._myParams.myMinAngleToFlyDownVR;
                 params.myMinAngleToFlyRight = this._myParams.myMinAngleToFlyRight;
 
+                params.myGravityAcceleration = -20;
+
                 params.myVRDirectionReferenceType = this._myParams.myVRDirectionReferenceType;
                 params.myVRDirectionReferenceObject = this._myParams.myVRDirectionReferenceObject;
 
@@ -279,6 +281,8 @@ CleanedPlayerLocomotion = class CleanedPlayerLocomotion {
                 this._myLocomotionMovementFSM.update(dt);
             }
         }
+
+        this._myPlayerObscureManager.update(dt);
     }
 
     setIdle(idle) {
