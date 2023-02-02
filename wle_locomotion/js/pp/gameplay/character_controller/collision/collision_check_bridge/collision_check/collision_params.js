@@ -163,6 +163,10 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myIsOnCeilingIfInsideHit = false;
         this.myIsOnGroundMaxSurfaceAngle = null;
         this.myIsOnCeilingMaxSurfaceAngle = null;
+        this.myFindGroundDistanceMaxOutsideDistance = 0;
+        this.myFindGroundDistanceMaxInsideDistance = 0;
+        this.myFindCeilingDistanceMaxOutsideDistance = 0;
+        this.myFindCeilingDistanceMaxInsideDistance = 0;
 
         this.myAllowGroundSteepFix = false;
         this.myAllowCeilingSteepFix = false;
@@ -381,6 +385,10 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myIsOnCeilingIfInsideHit = other.myIsOnCeilingIfInsideHit;
         this.myIsOnGroundMaxSurfaceAngle = other.myIsOnGroundMaxSurfaceAngle;
         this.myIsOnCeilingMaxSurfaceAngle = other.myIsOnCeilingMaxSurfaceAngle;
+        this.myFindGroundDistanceMaxOutsideDistance = other.myFindGroundDistanceMaxOutsideDistance;
+        this.myFindGroundDistanceMaxInsideDistance = other.myFindGroundDistanceMaxInsideDistance;
+        this.myFindCeilingDistanceMaxOutsideDistance = other.myFindCeilingDistanceMaxOutsideDistance;
+        this.myFindCeilingDistanceMaxInsideDistance = other.myFindCeilingDistanceMaxInsideDistance;
 
         this.myAllowGroundSteepFix = other.myAllowGroundSteepFix;
         this.myAllowCeilingSteepFix = other.myAllowCeilingSteepFix;
@@ -464,11 +472,13 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.myGroundAngle = 0;
         this.myGroundPerceivedAngle = 0;
         this.myGroundNormal = PP.vec3_create();
+        this.myGroundDistance = null;
 
         this.myIsOnCeiling = false;
         this.myCeilingAngle = 0;
         this.myCeilingPerceivedAngle = 0;
         this.myCeilingNormal = PP.vec3_create();
+        this.myCeilingDistance = null;
 
         this.myHorizontalMovementCanceled = false; // could add HorizontalMovementCanceledReason
         this.myIsCollidingHorizontally = false;
@@ -553,11 +563,13 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.myGroundAngle = 0;
         this.myGroundPerceivedAngle = 0;
         this.myGroundNormal.vec3_zero();
+        this.myGroundDistance = null;
 
         this.myIsOnCeiling = false;
         this.myCeilingAngle = 0;
         this.myCeilingPerceivedAngle = 0;
         this.myCeilingNormal.vec3_zero();
+        this.myCeilingDistance = null;
 
         this.myHorizontalMovementCanceled = false;
         this.myIsCollidingHorizontally = false;
@@ -641,11 +653,13 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.myGroundAngle = other.myGroundAngle;
         this.myGroundPerceivedAngle = other.myGroundPerceivedAngle;
         this.myGroundNormal.vec3_copy(other.myGroundNormal);
+        this.myGroundDistance = other.myGroundDistance;
 
         this.myIsOnCeiling = other.myIsOnCeiling;
         this.myCeilingAngle = other.myCeilingAngle;
         this.myCeilingPerceivedAngle = other.myCeilingPerceivedAngle;
         this.myCeilingNormal.vec3_copy(other.myCeilingNormal);
+        this.myCeilingDistance = other.myCeilingDistance;
 
         this.myHorizontalMovementCanceled = other.myHorizontalMovementCanceled;
         this.myIsCollidingHorizontally = other.myIsCollidingHorizontally;

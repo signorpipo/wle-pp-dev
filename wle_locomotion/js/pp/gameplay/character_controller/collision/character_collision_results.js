@@ -52,6 +52,7 @@ PP.CharacterCollisionSurfaceInfo = class CharacterCollisionSurfaceInfo {
         this.mySurfaceAngle = 0;
         this.mySurfacePerceivedAngle = 0;
         this.mySurfaceNormal = PP.vec3_create();
+        this.mySurfaceDistance = null;
     }
 
     reset() {
@@ -282,6 +283,7 @@ PP.CharacterCollisionSurfaceInfo.prototype.reset = function () {
     this.mySurfaceAngle = 0;
     this.mySurfacePerceivedAngle = 0;
     this.mySurfaceNormal.vec3_zero();
+    this.mySurfaceDistance = null;
 };
 
 PP.CharacterCollisionSurfaceInfo.prototype.copy = function (other) {
@@ -289,6 +291,7 @@ PP.CharacterCollisionSurfaceInfo.prototype.copy = function (other) {
     this.mySurfaceAngle = other.mySurfaceAngle;
     this.mySurfacePerceivedAngle = other.mySurfacePerceivedAngle;
     this.mySurfaceNormal.vec3_copy(other.mySurfaceNormal);
+    this.mySurfaceDistance = other.mySurfaceDistance;
 };
 
 PP.CharacterCollisionWallSlideResults.prototype.reset = function () {

@@ -447,6 +447,9 @@ CollisionCheck.prototype._gatherSurfaceInfo = function () {
     let startOffset = PP.vec3_create();
     let endOffset = PP.vec3_create();
     let heightOffset = PP.vec3_create();
+    let smallOffset = PP.vec3_create();
+    let smallStartPosition = PP.vec3_create();
+    let smallEndPosition = PP.vec3_create();
     let surfaceNormal = PP.vec3_create();
     let hitFromCurrentPosition = PP.vec3_create();
     let startPosition = PP.vec3_create();
@@ -460,63 +463,97 @@ CollisionCheck.prototype._gatherSurfaceInfo = function () {
         verticalDirection.vec3_copy(up);
         let distanceToBeOnSurface = collisionCheckParams.myDistanceToBeOnGround;
         let distanceToComputeSurfaceInfo = collisionCheckParams.myDistanceToComputeGroundInfo;
+        let distanceToFindSurfaceDistance = collisionCheckParams.myFindGroundDistanceMaxOutsideDistance;
         let verticalFixToBeOnSurface = collisionCheckParams.myVerticalFixToBeOnGround;
         let verticalFixToComputeSurfaceInfo = collisionCheckParams.myVerticalFixToComputeGroundInfo;
+        let verticalFixToFindSurfaceDistance = collisionCheckParams.myFindGroundDistanceMaxInsideDistance;
         let isOnSurfaceIfInsideHit = collisionCheckParams.myIsOnGroundIfInsideHit;
         if (!isGround) {
             verticalDirection.vec3_negate(verticalDirection);
             distanceToBeOnSurface = collisionCheckParams.myDistanceToBeOnCeiling;
             distanceToComputeSurfaceInfo = collisionCheckParams.myDistanceToComputeCeilingInfo;
+            distanceToFindSurfaceDistance = collisionCheckParams.myFindCeilingDistanceMaxOutsideDistance;
             verticalFixToBeOnSurface = collisionCheckParams.myVerticalFixToBeOnCeiling;
             verticalFixToComputeSurfaceInfo = collisionCheckParams.myVerticalFixToComputeCeilingInfo;
+            verticalFixToFindSurfaceDistance = collisionCheckParams.myFindCeilingDistanceMaxInsideDistance;
             isOnSurfaceIfInsideHit = collisionCheckParams.myIsOnCeilingIfInsideHit;
         }
 
-        startOffset = verticalDirection.vec3_scale(Math.max(verticalFixToBeOnSurface, verticalFixToComputeSurfaceInfo, 0.00001), startOffset);
-        endOffset = verticalDirection.vec3_negate(endOffset).vec3_scale(Math.max(distanceToBeOnSurface, distanceToComputeSurfaceInfo, 0.00001), endOffset);
+        startOffset = verticalDirection.vec3_scale(Math.max(verticalFixToBeOnSurface, verticalFixToComputeSurfaceInfo, verticalFixToFindSurfaceDistance, 0.00001), startOffset);
+        endOffset = verticalDirection.vec3_negate(endOffset).vec3_scale(Math.max(distanceToBeOnSurface, distanceToComputeSurfaceInfo, distanceToFindSurfaceDistance, 0.00001), endOffset);
 
         heightOffset.vec3_zero();
         if (!isGround) {
             heightOffset = up.vec3_scale(height, heightOffset);
         }
 
+        smallOffset = verticalDirection.vec3_scale(0.0001, smallOffset);
+
         let isOnSurface = false;
         let surfaceAngle = 0;
         let surfacePerceivedAngle = 0;
         surfaceNormal.vec3_zero();
 
+        let surfaceDistance = null;
+
         for (let i = 0; i < checkPositions.length; i++) {
             let currentPosition = checkPositions[i];
-
             currentPosition.vec3_add(heightOffset, currentPosition);
-            startPosition = currentPosition.vec3_add(startOffset, startPosition);
-            endPosition = currentPosition.vec3_add(endOffset, endPosition);
 
-            let origin = startPosition;
-            direction = endPosition.vec3_sub(origin, direction);
-            let distance = direction.vec3_length();
-            direction.vec3_normalize(direction);
+            let feetHitIsInsideCollision = false;
+            {
+                smallStartPosition = currentPosition.vec3_add(smallOffset, smallStartPosition);
+                smallEndPosition = currentPosition.vec3_sub(smallOffset, smallEndPosition);
 
-            let raycastResult = this._raycastAndDebug(origin, direction, distance, !isOnSurfaceIfInsideHit, false, collisionCheckParams, collisionRuntimeParams);
+                let origin = smallStartPosition;
+                direction = smallEndPosition.vec3_sub(origin, direction);
+                let distance = direction.vec3_length();
+                direction.vec3_normalize(direction);
+                let raycastResult = this._raycastAndDebug(origin, direction, distance, false, false, collisionCheckParams, collisionRuntimeParams);
 
-            if (raycastResult.isColliding()) {
-                hitFromCurrentPosition = raycastResult.myHits[0].myPosition.vec3_sub(currentPosition, hitFromCurrentPosition);
-                let hitFromCurrentPositionLength = hitFromCurrentPosition.vec3_lengthSigned(verticalDirection);
-                let allHitsInsideCollision = !raycastResult.isColliding(true);
-
-                if ((hitFromCurrentPositionLength >= 0 && hitFromCurrentPositionLength <= verticalFixToBeOnSurface + 0.00001) ||
-                    (hitFromCurrentPositionLength < 0 && Math.abs(hitFromCurrentPositionLength) <= distanceToBeOnSurface + 0.00001)
-                    || (allHitsInsideCollision && isOnSurfaceIfInsideHit)) {
-                    isOnSurface = true;
+                if (raycastResult.isColliding()) {
+                    feetHitIsInsideCollision = raycastResult.myHits[0].myIsInsideCollision;
                 }
+            }
 
-                if (!allHitsInsideCollision) {
+            if (!feetHitIsInsideCollision) {
+                startPosition = currentPosition.vec3_add(startOffset, startPosition);
+                endPosition = currentPosition.vec3_add(endOffset, endPosition);
+
+                let origin = startPosition;
+                direction = endPosition.vec3_sub(origin, direction);
+                let distance = direction.vec3_length();
+                direction.vec3_normalize(direction);
+                let raycastResult = this._raycastAndDebug(origin, direction, distance, true, false, collisionCheckParams, collisionRuntimeParams);
+
+                if (raycastResult.isColliding()) {
+                    hitFromCurrentPosition = raycastResult.myHits[0].myPosition.vec3_sub(currentPosition, hitFromCurrentPosition);
+                    let hitFromCurrentPositionLength = hitFromCurrentPosition.vec3_lengthSigned(verticalDirection);
+
+                    if ((hitFromCurrentPositionLength >= 0 && hitFromCurrentPositionLength <= verticalFixToBeOnSurface + 0.00001) ||
+                        (hitFromCurrentPositionLength < 0 && Math.abs(hitFromCurrentPositionLength) <= distanceToBeOnSurface + 0.00001)) {
+                        isOnSurface = true;
+                    }
+
                     if ((hitFromCurrentPositionLength >= 0 && hitFromCurrentPositionLength <= verticalFixToComputeSurfaceInfo + 0.00001) ||
                         (hitFromCurrentPositionLength < 0 && Math.abs(hitFromCurrentPositionLength) <= distanceToComputeSurfaceInfo + 0.00001)) {
                         let currentSurfaceNormal = raycastResult.myHits[0].myNormal;
                         surfaceNormal.vec3_add(currentSurfaceNormal, surfaceNormal);
                     }
+
+                    if ((hitFromCurrentPositionLength >= 0 && hitFromCurrentPositionLength <= verticalFixToFindSurfaceDistance + 0.00001) ||
+                        (hitFromCurrentPositionLength < 0 && Math.abs(hitFromCurrentPositionLength) <= distanceToFindSurfaceDistance + 0.00001)) {
+                        if (surfaceDistance == null) {
+                            surfaceDistance = -hitFromCurrentPositionLength;
+                        } else {
+                            if (Math.abs(hitFromCurrentPositionLength) < Math.abs(surfaceDistance)) {
+                                surfaceDistance = -hitFromCurrentPositionLength;
+                            }
+                        }
+                    }
                 }
+            } else if (isOnSurfaceIfInsideHit) {
+                isOnSurface = true;
             }
         }
 
@@ -542,6 +579,8 @@ CollisionCheck.prototype._gatherSurfaceInfo = function () {
             collisionRuntimeParams.myGroundPerceivedAngle = surfacePerceivedAngle;
             collisionRuntimeParams.myGroundNormal.vec3_copy(surfaceNormal);
 
+            collisionRuntimeParams.myGroundDistance = surfaceDistance;
+
             if (isOnSurface && (collisionCheckParams.myIsOnGroundMaxSurfaceAngle == null || collisionRuntimeParams.myGroundAngle <= collisionCheckParams.myIsOnGroundMaxSurfaceAngle)) {
                 collisionRuntimeParams.myIsOnGround = isOnSurface;
             }
@@ -551,6 +590,8 @@ CollisionCheck.prototype._gatherSurfaceInfo = function () {
             collisionRuntimeParams.myCeilingAngle = surfaceAngle;
             collisionRuntimeParams.myCeilingPerceivedAngle = surfacePerceivedAngle;
             collisionRuntimeParams.myCeilingNormal.vec3_copy(surfaceNormal);
+
+            collisionRuntimeParams.myCeilingDistance = surfaceDistance;
 
             if (isOnSurface && (collisionCheckParams.myIsOnCeilingMaxSurfaceAngle == null || collisionRuntimeParams.myCeilingAngle <= collisionCheckParams.myIsOnCeilingMaxSurfaceAngle)) {
                 collisionRuntimeParams.myIsOnCeiling = isOnSurface;

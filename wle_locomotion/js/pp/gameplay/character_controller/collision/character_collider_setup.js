@@ -229,6 +229,9 @@ PP.CharacterColliderSurfaceSetup = class CharacterColliderSurfaceSetup {
         this.myCollectSurfaceNormalMaxOutsideDistance = 0;
         this.myCollectSurfaceNormalMaxInsideDistance = 0;
 
+        this.myFindSurfaceDistanceMaxOutsideDistance = 0;
+        this.myFindSurfaceDistanceMaxInsideDistance = 0;
+
         this.myHorizontalMovementAdjustVerticalMovementBasedOnSurfacePerceivedAngleDownhill = false;
         this.myHorizontalMovementAdjustVerticalMovementBasedOnSurfacePerceivedAngleUphill = false;
         // this make it so when a character moves horizontally on a slope it also add a vertical movement so that the movement is actually on the slope plane

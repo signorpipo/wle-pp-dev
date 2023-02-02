@@ -116,6 +116,41 @@ PP.RaycastResults = class RaycastResult {
     }
 };
 
+PP.RaycastHit = class RaycastHit {
+    constructor() {
+        this.myPosition = PP.vec3_create();
+        this.myNormal = PP.vec3_create();
+        this.myDistance = 0;
+        this.myObject = null;
+
+        this.myIsInsideCollision = false;
+    }
+
+    isValid() {
+        return this.myObject != null;
+    }
+
+    copy(hit) {
+        this.myPosition.vec3_copy(hit.myPosition);
+        this.myNormal.vec3_copy(hit.myNormal);
+        this.myDistance = hit.myDistance;
+        this.myObject = hit.myObject;
+        this.myIsInsideCollision = hit.myIsInsideCollision;
+    }
+
+    reset() {
+        this.myPosition.vec3_zero();
+        this.myNormal.vec3_zero();
+        this.myDistance = 0;
+        this.myObject = null;
+        this.myIsInsideCollision = false;
+    }
+};
+
+
+
+// IMPLEMENTATION
+
 PP.RaycastResults.prototype.copy = function () {
     let copyHitCallback = function (currentElement, elementToCopy) {
         if (currentElement == null) {
@@ -159,37 +194,6 @@ PP.RaycastResults.prototype.copy = function () {
         this.myHits.pp_copy(result.myHits, copyHitCallback);
     };
 }();
-
-PP.RaycastHit = class RaycastHit {
-    constructor() {
-        this.myPosition = PP.vec3_create();
-        this.myNormal = PP.vec3_create();
-        this.myDistance = 0;
-        this.myObject = null;
-
-        this.myIsInsideCollision = false;
-    }
-
-    isValid() {
-        return this.myObject != null;
-    }
-
-    copy(hit) {
-        this.myPosition.vec3_copy(hit.myPosition);
-        this.myNormal.vec3_copy(hit.myNormal);
-        this.myDistance = hit.myDistance;
-        this.myObject = hit.myObject;
-        this.myIsInsideCollision = hit.myIsInsideCollision;
-    }
-
-    reset() {
-        this.myPosition.vec3_zero();
-        this.myNormal.vec3_zero();
-        this.myDistance = 0;
-        this.myObject = null;
-        this.myIsInsideCollision = false;
-    }
-};
 
 
 
