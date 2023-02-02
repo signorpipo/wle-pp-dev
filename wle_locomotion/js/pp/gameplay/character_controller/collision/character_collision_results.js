@@ -49,10 +49,15 @@ PP.CharacterCollisionCheckType = {
 PP.CharacterCollisionSurfaceInfo = class CharacterCollisionSurfaceInfo {
     constructor() {
         this.myIsOnSurface = false;
+
         this.mySurfaceAngle = 0;
         this.mySurfacePerceivedAngle = 0;
         this.mySurfaceNormal = PP.vec3_create();
+
         this.mySurfaceDistance = null;
+
+        this.myIsBaseInsideCollision = false;
+
     }
 
     reset() {
@@ -284,6 +289,7 @@ PP.CharacterCollisionSurfaceInfo.prototype.reset = function () {
     this.mySurfacePerceivedAngle = 0;
     this.mySurfaceNormal.vec3_zero();
     this.mySurfaceDistance = null;
+    this.myIsBaseInsideCollision = false;
 };
 
 PP.CharacterCollisionSurfaceInfo.prototype.copy = function (other) {
@@ -292,6 +298,7 @@ PP.CharacterCollisionSurfaceInfo.prototype.copy = function (other) {
     this.mySurfacePerceivedAngle = other.mySurfacePerceivedAngle;
     this.mySurfaceNormal.vec3_copy(other.mySurfaceNormal);
     this.mySurfaceDistance = other.mySurfaceDistance;
+    this.myIsBaseInsideCollision = other.myIsBaseInsideCollision;
 };
 
 PP.CharacterCollisionWallSlideResults.prototype.reset = function () {

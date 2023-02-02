@@ -477,12 +477,14 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.myGroundPerceivedAngle = 0;
         this.myGroundNormal = PP.vec3_create();
         this.myGroundDistance = null;
+        this.myGroundIsBaseInsideCollision = false;
 
         this.myIsOnCeiling = false;
         this.myCeilingAngle = 0;
         this.myCeilingPerceivedAngle = 0;
         this.myCeilingNormal = PP.vec3_create();
         this.myCeilingDistance = null;
+        this.myCeilingIsBaseInsideCollision = false;
 
         this.myHorizontalMovementCanceled = false; // could add HorizontalMovementCanceledReason
         this.myIsCollidingHorizontally = false;
@@ -568,12 +570,14 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.myGroundPerceivedAngle = 0;
         this.myGroundNormal.vec3_zero();
         this.myGroundDistance = null;
+        this.myGroundIsBaseInsideCollision = false;
 
         this.myIsOnCeiling = false;
         this.myCeilingAngle = 0;
         this.myCeilingPerceivedAngle = 0;
         this.myCeilingNormal.vec3_zero();
         this.myCeilingDistance = null;
+        this.myCeilingIsBaseInsideCollision = false;
 
         this.myHorizontalMovementCanceled = false;
         this.myIsCollidingHorizontally = false;
@@ -658,12 +662,14 @@ CollisionRuntimeParams = class CollisionRuntimeParams {
         this.myGroundPerceivedAngle = other.myGroundPerceivedAngle;
         this.myGroundNormal.vec3_copy(other.myGroundNormal);
         this.myGroundDistance = other.myGroundDistance;
+        this.myGroundIsBaseInsideCollision = other.myGroundIsBaseInsideCollision;
 
         this.myIsOnCeiling = other.myIsOnCeiling;
         this.myCeilingAngle = other.myCeilingAngle;
         this.myCeilingPerceivedAngle = other.myCeilingPerceivedAngle;
         this.myCeilingNormal.vec3_copy(other.myCeilingNormal);
         this.myCeilingDistance = other.myCeilingDistance;
+        this.myCeilingIsBaseInsideCollision = other.myCeilingIsBaseInsideCollision;
 
         this.myHorizontalMovementCanceled = other.myHorizontalMovementCanceled;
         this.myIsCollidingHorizontally = other.myIsCollidingHorizontally;

@@ -260,6 +260,13 @@ PP.CharacterColliderUtils.createCharacterColliderSetupSimplified = function (sim
             outCharacterColliderSetup.myWallSlideSetup.myWallSlideFlickerPreventionForceCheckCounter = 4;
         }
 
+
+
+        outCharacterColliderSetup.myGroundSetup.myIsBaseInsideCollisionCheckEnabled = true;
+        outCharacterColliderSetup.myCeilingSetup.myIsBaseInsideCollisionCheckEnabled = true;
+
+
+
         let fps = 90;
         if (simplifiedCreationParams.myAverageSpeed / fps > simplifiedCreationParams.myRadius) {
             outCharacterColliderSetup.mySplitMovementSetup.mySplitMovementEnabled = other.mySplitMovementEnabled;

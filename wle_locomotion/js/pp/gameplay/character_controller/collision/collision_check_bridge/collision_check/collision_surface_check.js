@@ -497,6 +497,7 @@ CollisionCheck.prototype._gatherSurfaceInfo = function () {
         surfaceNormal.vec3_zero();
 
         let surfaceDistance = null;
+        let isBaseInsideCollision = checkPositions.length > 0;
 
         for (let i = 0; i < checkPositions.length; i++) {
             let currentPosition = checkPositions[i];
@@ -517,6 +518,8 @@ CollisionCheck.prototype._gatherSurfaceInfo = function () {
                     baseHitIsInsideCollision = raycastResult.myHits[0].myIsInsideCollision;
                 }
             }
+
+            isBaseInsideCollision &&= baseHitIsInsideCollision;
 
             if (!baseHitIsInsideCollision) {
                 startPosition = currentPosition.vec3_add(startOffset, startPosition);
@@ -583,6 +586,8 @@ CollisionCheck.prototype._gatherSurfaceInfo = function () {
 
             collisionRuntimeParams.myGroundDistance = surfaceDistance;
 
+            collisionRuntimeParams.myGroundIsBaseInsideCollision = isBaseInsideCollision;
+
             if (isOnSurface && (collisionCheckParams.myIsOnGroundMaxSurfaceAngle == null || collisionRuntimeParams.myGroundAngle <= collisionCheckParams.myIsOnGroundMaxSurfaceAngle)) {
                 collisionRuntimeParams.myIsOnGround = isOnSurface;
             }
@@ -594,6 +599,8 @@ CollisionCheck.prototype._gatherSurfaceInfo = function () {
             collisionRuntimeParams.myCeilingNormal.vec3_copy(surfaceNormal);
 
             collisionRuntimeParams.myCeilingDistance = surfaceDistance;
+
+            collisionRuntimeParams.myCeilingIsBaseInsideCollision = isBaseInsideCollision;
 
             if (isOnSurface && (collisionCheckParams.myIsOnCeilingMaxSurfaceAngle == null || collisionRuntimeParams.myCeilingAngle <= collisionCheckParams.myIsOnCeilingMaxSurfaceAngle)) {
                 collisionRuntimeParams.myIsOnCeiling = isOnSurface;
