@@ -123,6 +123,24 @@ CollisionCheck.prototype._postSurfaceCheck = function () {
             }
         }
 
+        let mustStayOnGroundHitAngleOk = true;
+        if (collisionCheckParams.myMovementMustStayOnGroundHitAngle != null) {
+            if (!horizontalMovementIsZero && previousCollisionRuntimeParams.myIsOnGround &&
+                previousCollisionRuntimeParams.myGroundHitMaxAngle <= collisionCheckParams.myMovementMustStayOnGroundHitAngle &&
+                collisionRuntimeParams.myIsOnGround && collisionRuntimeParams.myGroundHitMaxAngle > collisionCheckParams.myMovementMustStayOnGroundHitAngle + 0.0001) {
+                mustStayOnGroundHitAngleOk = false;
+            }
+        }
+
+        let mustStayOnCeilingHitAngleOk = true;
+        if (collisionCheckParams.myMovementMustStayOnCeilingHitAngle != null) {
+            if (!horizontalMovementIsZero && previousCollisionRuntimeParams.myIsOnCeiling &&
+                previousCollisionRuntimeParams.myCeilingHitMaxAngle <= collisionCheckParams.myMovementMustStayOnCeilingHitAngle &&
+                collisionRuntimeParams.myIsOnCeiling && collisionRuntimeParams.myCeilingHitMaxAngle > collisionCheckParams.myMovementMustStayOnCeilingHitAngle + 0.0001) {
+                mustStayOnCeilingHitAngleOk = false;
+            }
+        }
+
         let isOnValidGroundAngleUphill = true;
         let isOnValidGroundAngleDownhill = true;
         if (collisionRuntimeParams.myIsOnGround && collisionRuntimeParams.myGroundAngle > collisionCheckParams.myGroundAngleToIgnore + 0.0001) {
@@ -163,7 +181,7 @@ CollisionCheck.prototype._postSurfaceCheck = function () {
             }
         }
 
-        return mustRemainOnGroundOk && mustRemainOnCeilingOk && mustStayBelowGroundAngleOk && mustStayBelowCeilingAngleOk && isOnValidGroundAngleUphill && isOnValidGroundAngleDownhill && isOnValidCeilingAngleUphill && isOnValidCeilingAngleDownhill;
+        return mustRemainOnGroundOk && mustRemainOnCeilingOk && mustStayBelowGroundAngleOk && mustStayBelowCeilingAngleOk && mustStayOnGroundHitAngleOk && mustStayOnCeilingHitAngleOk && isOnValidGroundAngleUphill && isOnValidGroundAngleDownhill && isOnValidCeilingAngleUphill && isOnValidCeilingAngleDownhill;
     };
 }();
 

@@ -182,6 +182,8 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myMustStayBelowIgnorableCeilingAngleDownhill = false;
         this.myMustStayBelowGroundAngleDownhill = null;
         this.myMustStayBelowCeilingAngleDownhill = null;
+        this.myMovementMustStayOnGroundHitAngle = null;
+        this.myMovementMustStayOnCeilingHitAngle = null;
 
         this.myTeleportMustBeOnIgnorableGroundAngle = false;
         this.myCheckTransformMustBeOnIgnorableGroundAngle = false;
@@ -406,6 +408,8 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myMustStayBelowCeilingAngleDownhill = other.myMustStayBelowCeilingAngleDownhill;
         this.myMustStayBelowIgnorableGroundAngleDownhill = other.myMustStayBelowIgnorableGroundAngleDownhill;
         this.myMustStayBelowIgnorableCeilingAngleDownhill = other.myMustStayBelowIgnorableCeilingAngleDownhill;
+        this.myMovementMustStayOnGroundHitAngle = other.myMovementMustStayOnGroundHitAngle;
+        this.myMovementMustStayOnCeilingHitAngle = other.myMovementMustStayOnCeilingHitAngle;
 
         this.myTeleportMustBeOnIgnorableGroundAngle = other.myTeleportMustBeOnIgnorableGroundAngle;
         this.myCheckTransformMustBeOnIgnorableGroundAngle = other.myCheckTransformMustBeOnIgnorableGroundAngle;

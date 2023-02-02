@@ -249,6 +249,7 @@ PP.CharacterColliderSurfaceSetup = class CharacterColliderSurfaceSetup {
         // this can be used to make it so the movement (and therefore the slide) only happens above a certain angle, like u want to slide down only on steep surfaces
 
         this.myMovementMustStayOnSurface = false;
+        this.myMovementMustStayOnSurfaceHitMaxAngle = null;
         this.myMovementMustStayOnIgnorableSurfaceAngleDownhill = false;
         this.myMovementMustStayOnSurfaceAngleDownhill = null;
 
@@ -483,6 +484,9 @@ PP.CharacterColliderSurfaceSetup.prototype.copy = function (other) {
     this.myCollectSurfaceNormalMaxOutsideDistance = other.myCollectSurfaceNormalMaxOutsideDistance;
     this.myCollectSurfaceNormalMaxInsideDistance = other.myCollectSurfaceNormalMaxInsideDistance;
 
+    this.myFindSurfaceDistanceMaxOutsideDistance = other.myFindSurfaceDistanceMaxOutsideDistance;
+    this.myFindSurfaceDistanceMaxInsideDistance = other.myFindSurfaceDistanceMaxInsideDistance;
+
     this.myHorizontalMovementAdjustVerticalMovementBasedOnSurfacePerceivedAngleDownhill = other.myHorizontalMovementAdjustVerticalMovementBasedOnSurfacePerceivedAngleDownhill;
     this.myHorizontalMovementAdjustVerticalMovementBasedOnSurfacePerceivedAngleUphill = other.myHorizontalMovementAdjustVerticalMovementBasedOnSurfacePerceivedAngleUphill;
     this.myHorizontalMovementAdjustVerticalMovementBasedOnSurfacePerceivedAngleDownhillMaxSurfaceAngle = other.myHorizontalMovementAdjustVerticalMovementBasedOnSurfacePerceivedAngleDownhillMaxSurfaceAngle;
@@ -494,6 +498,7 @@ PP.CharacterColliderSurfaceSetup.prototype.copy = function (other) {
     this.myVerticalMovementAdjustHorizontalMovementBasedOnSurfaceAngleDownhillMinSurfaceAngle = other.myVerticalMovementAdjustHorizontalMovementBasedOnSurfaceAngleDownhillMinSurfaceAngle;
 
     this.myMovementMustStayOnSurface = other.myMovementMustStayOnSurface;
+    this.myMovementMustStayOnSurfaceHitMaxAngle = other.myMovementMustStayOnSurfaceHitMaxAngle;
     this.myMovementMustStayOnIgnorableSurfaceAngleDownhill = other.myMovementMustStayOnIgnorableSurfaceAngleDownhill;
     this.myMovementMustStayOnSurfaceAngleDownhill = other.myMovementMustStayOnSurfaceAngleDownhill;
 

@@ -419,6 +419,8 @@ PP.CollisionCheckBridge = {
             outCollisionCheckParams.myMustStayBelowIgnorableCeilingAngleDownhill = characterColliderSetup.myCeilingSetup.myMovementMustStayOnIgnorableSurfaceAngleDownhill;
             outCollisionCheckParams.myMustStayBelowGroundAngleDownhill = characterColliderSetup.myGroundSetup.myMovementMustStayOnSurfaceAngleDownhill;
             outCollisionCheckParams.myMustStayBelowCeilingAngleDownhill = characterColliderSetup.myCeilingSetup.myMovementMustStayOnSurfaceAngleDownhill;
+            outCollisionCheckParams.myMovementMustStayOnGroundHitAngle = characterColliderSetup.myGroundSetup.myMovementMustStayOnSurfaceHitMaxAngle;
+            outCollisionCheckParams.myMovementMustStayOnCeilingHitAngle = characterColliderSetup.myCeilingSetup.myMovementMustStayOnSurfaceHitMaxAngle;
 
             outCollisionCheckParams.myTeleportMustBeOnIgnorableGroundAngle = characterColliderSetup.myGroundSetup.myTeleportMustBeOnIgnorableSurfaceAngle;
             outCollisionCheckParams.myCheckTransformMustBeOnIgnorableGroundAngle = characterColliderSetup.myGroundSetup.myCheckTransformMustBeOnIgnorableSurfaceAngle;
