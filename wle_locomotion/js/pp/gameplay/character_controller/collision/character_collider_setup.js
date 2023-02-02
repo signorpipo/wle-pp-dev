@@ -2,9 +2,6 @@ PP.CharacterColliderSetup = class CharacterColliderSetup {
     constructor() {
         this.myHeight = 0;
 
-        this.myPositionOffsetLocal = PP.vec3_create();
-        this.myRotationOffsetLocalQuat = PP.quat_create();
-
         this.myHorizontalCheckSetup = new PP.CharacterColliderHorizontalCheckSetup();
         this.myVerticalCheckSetup = new PP.CharacterColliderVerticalCheckSetup();
 
@@ -14,6 +11,8 @@ PP.CharacterColliderSetup = class CharacterColliderSetup {
         this.myCeilingSetup = new PP.CharacterColliderSurfaceSetup();
 
         this.mySplitMovementSetup = new PP.CharacterColliderSplitMovementSetup();
+
+        this.myAdditionalSetup = new PP.CharacterColliderAdditionalSetup();
 
         this.myDebugSetup = new PP.CharacterColliderDebugSetup();
     }
@@ -293,6 +292,24 @@ PP.CharacterColliderSplitMovementSetup = class CharacterColliderSplitMovementSet
     }
 };
 
+PP.CharacterColliderAdditionalSetup = class CharacterColliderAdditionalSetup {
+    constructor() {
+        this.myPositionOffsetLocal = PP.vec3_create();
+        this.myRotationOffsetLocalQuat = PP.quat_create();
+
+        /*
+        these will not be available until the bridge is removed with a new implementation that directly use the collider and results
+        this.myExtraMovementCheckCallback = null;              // Signature: callback(paramsToBeDefined)
+        this.myExtraTeleportCheckCallback = null;              // Signature: callback(paramsToBeDefined)
+        this.myExtraCheckTransformCheckCallback = null;        // Signature: callback(paramsToBeDefined)
+        */
+    }
+
+    copy(other) {
+        // implemented outside class definition
+    }
+};
+
 PP.CharacterColliderDebugSetup = class CharacterColliderDebugSetup {
     constructor() {
         this.myVisualDebugActive = false;
@@ -325,9 +342,6 @@ PP.CharacterColliderDebugSetup = class CharacterColliderDebugSetup {
 PP.CharacterColliderSetup.prototype.copy = function (other) {
     this.myHeight = other.myHeight;
 
-    this.myPositionOffsetLocal.vec3_copy(other.myPositionOffsetLocal);
-    this.myRotationOffsetLocalQuat.quat_copy(other.myRotationOffsetLocalQuat);
-
     this.myHorizontalCheckSetup.copy(other.myHorizontalCheckSetup);
     this.myVerticalCheckSetup.copy(other.myVerticalCheckSetup);
 
@@ -337,6 +351,8 @@ PP.CharacterColliderSetup.prototype.copy = function (other) {
     this.myCeilingSetup.copy(other.myCeilingSetup);
 
     this.mySplitMovementSetup.copy(other.mySplitMovementSetup);
+
+    this.myAdditionalSetup.copy(other.myAdditionalSetup);
 
     this.myDebugSetup.copy(other.myDebugSetup);
 };
@@ -528,6 +544,17 @@ PP.CharacterColliderSplitMovementSetup.prototype.copy = function (other) {
     this.mySplitMovementStopReturnPreviousResults = other.mySplitMovementStopReturnPreviousResults;
 };
 
+PP.CharacterColliderAdditionalSetup.prototype.copy = function (other) {
+    this.myPositionOffsetLocal.vec3_copy(other.myPositionOffsetLocal);
+    this.myRotationOffsetLocalQuat.quat_copy(other.myRotationOffsetLocalQuat);
+
+    /*
+    this.myExtraMovementCheckCallback = other.myExtraMovementCheckCallback;
+    this.myExtraTeleportCheckCallback = other.myExtraTeleportCheckCallback;
+    this.myExtraCheckTransformCheckCallback = other.myExtraCheckTransformCheckCallback;
+    */
+};
+
 PP.CharacterColliderDebugSetup.prototype.copy = function (other) {
     this.myVisualDebugActive = other.myVisualDebugActive;
 
@@ -548,11 +575,11 @@ PP.CharacterColliderDebugSetup.prototype.copy = function (other) {
 };
 
 
-
 Object.defineProperty(PP.CharacterColliderSetup.prototype, "copy", { enumerable: false });
 Object.defineProperty(PP.CharacterColliderHorizontalCheckSetup.prototype, "copy", { enumerable: false });
 Object.defineProperty(PP.CharacterColliderVerticalCheckSetup.prototype, "copy", { enumerable: false });
 Object.defineProperty(PP.CharacterColliderWallSlideSetup.prototype, "copy", { enumerable: false });
 Object.defineProperty(PP.CharacterColliderSurfaceSetup.prototype, "copy", { enumerable: false });
 Object.defineProperty(PP.CharacterColliderSplitMovementSetup.prototype, "copy", { enumerable: false });
+Object.defineProperty(PP.CharacterColliderAdditionalSetup.prototype, "copy", { enumerable: false });
 Object.defineProperty(PP.CharacterColliderDebugSetup.prototype, "copy", { enumerable: false });

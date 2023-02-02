@@ -260,9 +260,6 @@ PP.CollisionCheckBridge = {
         return function convertCharacterColliderSetupToCollisionCheckParams(characterColliderSetup, outCollisionCheckParams) {
             outCollisionCheckParams.myHeight = characterColliderSetup.myHeight;
 
-            outCollisionCheckParams.myPositionOffsetLocal.vec3_copy(characterColliderSetup.myPositionOffsetLocal);
-            outCollisionCheckParams.myRotationOffsetLocalQuat.quat_copy(characterColliderSetup.myRotationOffsetLocalQuat);
-
             outCollisionCheckParams.myRadius = characterColliderSetup.myHorizontalCheckSetup.myHorizontalCheckConeRadius;
             outCollisionCheckParams.myDistanceFromFeetToIgnore = characterColliderSetup.myHorizontalCheckSetup.myHorizontalCheckFeetDistanceToIgnore;
             outCollisionCheckParams.myDistanceFromHeadToIgnore = characterColliderSetup.myHorizontalCheckSetup.myHorizontalCheckHeadDistanceToIgnore;
@@ -456,6 +453,9 @@ PP.CollisionCheckBridge = {
             outCollisionCheckParams.mySplitMovementStopWhenVerticalMovementCanceled = characterColliderSetup.mySplitMovementSetup.mySplitMovementStopOnVerticalMovementFailed;
             outCollisionCheckParams.mySplitMovementStopCallback = characterColliderSetup.mySplitMovementSetup.mySplitMovementStopOnCallback;
             outCollisionCheckParams.mySplitMovementStopReturnPrevious = characterColliderSetup.mySplitMovementSetup.mySplitMovementStopReturnPreviousResults;
+
+            outCollisionCheckParams.myPositionOffsetLocal.vec3_copy(characterColliderSetup.myExtraSetup.myPositionOffsetLocal);
+            outCollisionCheckParams.myRotationOffsetLocalQuat.quat_copy(characterColliderSetup.myExtraSetup.myRotationOffsetLocalQuat);
 
             outCollisionCheckParams.myDebugActive = characterColliderSetup.myDebugSetup.myVisualDebugActive;
 

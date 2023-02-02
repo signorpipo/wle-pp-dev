@@ -159,6 +159,7 @@ CollisionCheck.prototype._moveStep = function () {
     let newFeetPosition = PP.vec3_create();
     let surfaceAdjustedVerticalMovement = PP.vec3_create();
     let surfaceAdjustedHorizontalMovement = PP.vec3_create();
+    let fixedMovement = PP.vec3_create();
 
     let zAxis = PP.vec3_create(0, 0, 1);
     let xAxis = PP.vec3_create(1, 0, 0);
@@ -371,7 +372,17 @@ CollisionCheck.prototype._moveStep = function () {
             }
         }
 
-        //return outFixedMovement.vec3_zero();
+        //return outFixedMovement.vec3_zero();        
+
+        if (collisionCheckParams.myExtraMovementCheckCallback != null) {
+            fixedMovement.vec3_copy(outFixedMovement);
+            outFixedMovement = collisionCheckParams.myExtraMovementCheckCallback(
+                movement, fixedMovement, feetPosition, transformUp, transformForward, height,
+                collisionCheckParams, this._myPrevCollisionRuntimeParams, collisionRuntimeParams, outFixedMovement);
+
+            fixedHorizontalMovement = outFixedMovement.vec3_removeComponentAlongAxis(transformUp, fixedHorizontalMovement);
+            fixedVerticalMovement = outFixedMovement.vec3_componentAlongAxis(transformUp, fixedVerticalMovement);
+        }
 
         {
             if (collisionCheckParams.mySlidingAdjustSign90Degrees) {
@@ -404,7 +415,7 @@ CollisionCheck.prototype._moveStep = function () {
                 collisionRuntimeParams.myLastValidSurfaceAdjustedVerticalMovement.vec3_copy(surfaceAdjustedVerticalMovement);
             }
 
-            if (!fixedHorizontalMovement.vec3_isZero()) {
+            if (!fixedHorizontalMovement.vec3_isZero(0.000001)) {
                 collisionRuntimeParams.myLastValidIsSliding = collisionRuntimeParams.myIsSliding;
                 collisionRuntimeParams.myIsSlidingFlickerPrevented = false;
                 collisionRuntimeParams.myLastValidEndHorizontalMovement.vec3_copy(fixedHorizontalMovement);
@@ -419,20 +430,13 @@ CollisionCheck.prototype._moveStep = function () {
                 //console.error("still", collisionRuntimeParams.myIsSlidingFlickerPrevented, collisionRuntimeParams.mySlidingFlickerPreventionCheckAnywayCounter);
             }
 
-            if (!fixedVerticalMovement.vec3_isZero()) {
+            if (!fixedVerticalMovement.vec3_isZero(0.000001)) {
                 collisionRuntimeParams.myLastValidEndVerticalMovement.vec3_copy(fixedVerticalMovement);
             }
         }
 
-        if (collisionCheckParams.myDebugActive && collisionCheckParams.myDebugMovementActive) {
-            this._debugMovement(movement, outFixedMovement, newFeetPosition, transformUp, collisionCheckParams);
-        }
-
-        if (collisionCheckParams.myDebugActive && collisionCheckParams.myDebugRuntimeParamsActive) {
-            this._debugRuntimeParams(collisionRuntimeParams);
-        }
-
-        if (!collisionRuntimeParams.myHorizontalMovementCanceled && !fixedHorizontalMovement.vec3_isZero()) {
+        let moveStepFixed = false;
+        if (!collisionRuntimeParams.myHorizontalMovementCanceled && !fixedHorizontalMovement.vec3_isZero(0.000001)) {
             horizontalDirection = fixedHorizontalMovement.vec3_normalize(horizontalDirection);
             let surfaceTooSteepResults = this._surfaceTooSteep(transformUp, horizontalDirection, collisionCheckParams, this._myPrevCollisionRuntimeParams);
             if (surfaceTooSteepResults[0] || surfaceTooSteepResults[1]) {
@@ -447,7 +451,18 @@ CollisionCheck.prototype._moveStep = function () {
                     outFixedMovement.vec3_zero();
                     collisionRuntimeParams.copy(this._myPrevCollisionRuntimeParams);
                     this._moveStep(movement, feetPosition, transformUp, transformForward, height, false, collisionCheckParams, collisionRuntimeParams, outFixedMovement);
+                    moveStepFixed = true;
                 }
+            }
+        }
+
+        if (!moveStepFixed) {
+            if (collisionCheckParams.myDebugActive && collisionCheckParams.myDebugMovementActive) {
+                this._debugMovement(movement, outFixedMovement, newFeetPosition, transformUp, collisionCheckParams);
+            }
+
+            if (collisionCheckParams.myDebugActive && collisionCheckParams.myDebugRuntimeParamsActive) {
+                this._debugRuntimeParams(collisionRuntimeParams);
             }
         }
 

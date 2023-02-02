@@ -236,6 +236,10 @@ CollisionCheckParams = class CollisionCheckParams {
         this.myVerticalBlockLayerFlags = new PP.PhysicsLayerFlags();
         this.myVerticalObjectsToIgnore = [];
 
+        this.myExtraMovementCheckCallback = null;              // Signature: callback(startMovement, endMovement, currentPosition, currentTransformUp, currentTransformForward, currentHeight, collisionCheckParams, prevCollisionRuntimeParams, outCollisionRuntimeParams, outFixedMovement) -> outFixedMovement
+        this.myExtraTeleportCheckCallback = null;              // Signature: callback(collisionRuntimeParams) -> bool
+        this.myExtraCheckTransformCheckCallback = null;        // Signature: callback(collisionRuntimeParams) -> bool
+
         this.myDebugActive = false;
 
         this.myDebugHorizontalMovementActive = false;
@@ -441,6 +445,10 @@ CollisionCheckParams = class CollisionCheckParams {
 
         this.myVerticalBlockLayerFlags.copy(other.myVerticalBlockLayerFlags);
         this.myVerticalObjectsToIgnore.pp_copy(other.myVerticalObjectsToIgnore);
+
+        this.myExtraMovementCheckCallback = other.myExtraMovementCheckCallback;
+        this.myExtraTeleportCheckCallback = other.myExtraTeleportCheckCallback;
+        this.myExtraCheckTransformCheckCallback = other.myExtraCheckTransformCheckCallback;
 
         this.myDebugActive = other.myDebugActive;
 
