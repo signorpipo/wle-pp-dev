@@ -38,6 +38,7 @@ v Componente character-controller che semplicemente ha la collisione e puoi dirg
 - REFACTOR
 
 TEMP:
+- fly verso l'lalto passa attraverso bug? magari è solo un bug dei parametri con canfly del simplified collider
 - head controller -> feet controller? body controller?
 
 - maybe the transform manager should only work for the overall transform, with the head on another class that also manage the hands?

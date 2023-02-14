@@ -24,7 +24,7 @@
 if (WL && WL.Scene) {
 
     WL.Scene.prototype.pp_getRoot = function () {
-        return WL._wrapObject(0);
+        return new WL._wrapObject(0);
     }
 
     WL.Scene.prototype.pp_getObjects = function () {

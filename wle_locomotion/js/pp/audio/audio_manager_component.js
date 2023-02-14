@@ -7,7 +7,7 @@ PP.AudioManagerComponent = class AudioManagerComponent extends Component {
     static Properties = {};
 
     init() {
-        PP.myAudioManager = new PP.AudioManagerClass();
+        PP.myAudioManager = new PP.AudioManager();
     }
 
     start() {
