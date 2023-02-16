@@ -82,6 +82,7 @@
             - vec3_length       / vec3_lengthSquared        / vec3_lengthSigned
             - vec3_distance     / vec3_distanceSquared
             - vec3_add              / vec3_sub              / vec3_mul      / vec3_div      / vec3_scale    / vec3_dot
+            - vec3_equals
             - vec3_transformQuat    / vec3_transformMat4
             - vec3_componentAlongAxis           / vec3_removeComponentAlongAxis / vec3_copyComponentAlongAxis   / vec3_valueAlongAxis  
             - vec3_isConcordant
@@ -626,6 +627,18 @@ Array.prototype.vec3_angleRadians = function (vector) {
     }
 
     return angle;
+};
+
+Array.prototype.vec3_equals = function (vector, epsilon = 0) {
+    let equals = this.length == vector.length;
+
+    if (equals) {
+        equals &&= (Math.abs(this[0] - vector[0]) <= epsilon);
+        equals &&= (Math.abs(this[1] - vector[1]) <= epsilon);
+        equals &&= (Math.abs(this[2] - vector[2]) <= epsilon);
+    }
+
+    return equals;
 };
 
 Array.prototype.vec3_length = function () {

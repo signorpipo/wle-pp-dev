@@ -14,6 +14,8 @@ PP.PhysicsUtils = {
         return PP.PhysicsUtils._myLayerFlagsNames;
     },
     raycast: function () {
+        let isInsideSubVector = PP.vec3_create();
+        let invertedRaycastDirection = PP.vec3_create();
         let objectsEqualCallback = (first, second) => first.pp_equals(second);
         return function raycast(raycastSetup, raycastResults = new PP.RaycastResults()) {
             let internalRaycastResults = WL.physics.rayCast(raycastSetup.myOrigin, raycastSetup.myDirection, raycastSetup.myBlockLayerFlags.getMask(), raycastSetup.myDistance);
@@ -33,6 +35,8 @@ PP.PhysicsUtils = {
                 let distances = null;
                 let locations = null;
                 let normals = null;
+
+                invertedRaycastDirection = raycastSetup.myDirection.vec3_negate(invertedRaycastDirection);
 
                 for (let i = 0; i < hitCount; i++) {
                     if (raycastSetup.myObjectsToIgnore.length != 0) {
@@ -55,14 +59,14 @@ PP.PhysicsUtils = {
                             locations = internalRaycastResults.locations;
                         }
 
-                        isHitInsideCollision &&= raycastSetup.myOrigin.vec3_distance(locations[i]) <= Math.PP_EPSILON_NUMBER;
+                        isHitInsideCollision &&= raycastSetup.myOrigin.vec3_sub(locations[i], isInsideSubVector).vec3_isZero(Math.PP_EPSILON_NUMBER);
 
                         if (isHitInsideCollision) {
                             if (!normals) {
                                 normals = internalRaycastResults.normals;
                             }
 
-                            isHitInsideCollision &&= Math.abs(raycastSetup.myDirection.vec3_angle(normals[i]) - 180) <= Math.PP_EPSILON_DEGREES;
+                            isHitInsideCollision &&= invertedRaycastDirection.vec3_equals(normals[i], Math.PP_EPSILON_DEGREES);
                         }
                     }
 
