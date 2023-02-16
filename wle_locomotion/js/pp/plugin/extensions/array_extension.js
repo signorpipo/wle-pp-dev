@@ -771,25 +771,17 @@ Array.prototype.vec3_isZero = function (epsilon = 0) {
 };
 
 Array.prototype.vec3_componentAlongAxis = function (axis, out = glMatrix.vec3.create()) {
-    let angle = this.vec3_angleRadians(axis);
-    let length = Math.cos(angle) * this.vec3_length();
+    let componentAlongAxisLength = this.vec3_dot(axis);
 
     glMatrix.vec3.copy(out, axis);
-    glMatrix.vec3.scale(out, out, length);
+    glMatrix.vec3.scale(out, out, componentAlongAxisLength);
     return out;
 };
 
-Array.prototype.vec3_valueAlongAxis = function () {
-    let componentAlong = glMatrix.vec3.create();
-    return function vec3_valueAlongAxis(axis) {
-        this.vec3_componentAlongAxis(axis, componentAlong);
-        let value = componentAlong.vec3_length();
-        if (!componentAlong.vec3_isConcordant(axis)) {
-            value = -value;
-        }
-        return value;
-    };
-}();
+Array.prototype.vec3_valueAlongAxis = function (axis) {
+    let valueAlongAxis = this.vec3_dot(axis);
+    return valueAlongAxis;
+};
 
 Array.prototype.vec3_removeComponentAlongAxis = function () {
     let componentAlong = glMatrix.vec3.create();
@@ -815,18 +807,9 @@ Array.prototype.vec3_isConcordant = function (vector) {
     return this.vec3_dot(vector) >= 0;
 };
 
-Array.prototype.vec3_isFartherAlongAxis = function () {
-    let componentAlong = glMatrix.vec3.create();
-    return function vec3_isFartherAlongAxis(vector, axis) {
-        let thisAxisLength = this.vec3_componentAlongAxis(axis, componentAlong).vec3_length();
-        let thisAxisLengthSigned = this.vec3_isConcordant(axis) ? thisAxisLength : -thisAxisLength;
-
-        let vectorAxisLength = vector.vec3_componentAlongAxis(axis, componentAlong).vec3_length();
-        let vectorAxisLengthSigned = vector.vec3_isConcordant(axis) ? vectorAxisLength : -vectorAxisLength;
-
-        return thisAxisLengthSigned > vectorAxisLengthSigned;
-    };
-}();
+Array.prototype.vec3_isFartherAlongAxis = function (vector, axis) {
+    return this.vec3_valueAlongAxis(axis) > vector.vec3_valueAlongAxis(axis);
+};
 
 Array.prototype.vec3_isToTheRight = function (vector, upAxis) {
     return this.vec3_signTo(vector, upAxis) >= 0;

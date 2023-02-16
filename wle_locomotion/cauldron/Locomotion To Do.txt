@@ -42,6 +42,7 @@ v Componente character-controller che semplicemente ha la collisione e puoi dirg
 
 
 TEMP:
+- PP.GamepadUtils.isAnyButtonPressStart() doesn't work
 - fix muoversi guardando indietro dovrebbe comunque andare avanti
 - squared length / normalized use squared length
 - mettere cache non obbligatoria per save manager e override cache
