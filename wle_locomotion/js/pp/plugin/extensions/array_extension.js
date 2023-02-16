@@ -812,7 +812,7 @@ Array.prototype.vec3_copyComponentAlongAxis = function () {
 }();
 
 Array.prototype.vec3_isConcordant = function (vector) {
-    return this.vec3_angleRadians(vector) <= Math.PI / 2;
+    return this.vec3_dot(vector) >= 0;
 };
 
 Array.prototype.vec3_isFartherAlongAxis = function () {
