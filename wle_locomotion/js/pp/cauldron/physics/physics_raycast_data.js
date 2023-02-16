@@ -33,6 +33,17 @@ PP.RaycastSetup = class RaycastSetup {
         this.myObjectsToIgnore.pp_copy(setup.myObjectsToIgnore);
         this.myIgnoreHitsInsideCollision = setup.myIgnoreHitsInsideCollision;
     }
+
+    reset() {
+        this.myOrigin.vec3_zero();
+        this.myDirection.vec3_zero();
+        this.myDistance = 0;
+
+        this.myBlockLayerFlags.setAllFlagsActive(false);
+
+        this.myObjectsToIgnore.pp_clear();
+        this.myIgnoreHitsInsideCollision = false;
+    }
 };
 
 PP.RaycastResults = class RaycastResult {
@@ -111,8 +122,26 @@ PP.RaycastResults = class RaycastResult {
         return removedHit;
     }
 
+    removeAllHits() {
+        if (this._myUnusedHits == null) {
+            this._myUnusedHits = [];
+        }
+
+        this._myUnusedHits.push(...this.myHits);
+
+        this.myHits.pp_clear();
+    }
+
     copy(result) {
         // implemented outside class definition
+    }
+
+    reset() {
+        if (this.myRaycastSetup != null) {
+            this.myRaycastSetup.reset();
+        }
+
+        this.removeAllHits();
     }
 };
 
