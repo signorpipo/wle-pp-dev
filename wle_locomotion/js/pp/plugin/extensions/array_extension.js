@@ -213,28 +213,62 @@ Array.prototype.pp_findEqual = function (elementToFind, elementsEqualCallback = 
         let index = this.pp_findIndexEqual(elementToFind);
         return index < 0 ? undefined : this[index];
     }
-    return this.pp_find(element => elementsEqualCallback(element, elementToFind));
+
+    let elementFound = undefined
+    for (let i = 0; i < this.length; i++) {
+        let currentElement = this[i];
+        if (elementsEqualCallback(currentElement, elementToFind)) {
+            elementFound = currentElement;
+            break;
+        }
+    }
+    return elementFound;
 };
 
 Array.prototype.pp_findAllEqual = function (elementToFind, elementsEqualCallback = null) {
     if (elementsEqualCallback == null) {
         return this._pp_findAllEqualOptimized(elementToFind, false);
     }
-    return this.pp_findAll(element => elementsEqualCallback(element, elementToFind));
+
+    let elementsFound = [];
+    for (let i = 0; i < this.length; i++) {
+        let currentElement = this[i];
+        if (elementsEqualCallback(currentElement, elementToFind)) {
+            elementsFound.push(currentElement);
+        }
+    }
+    return elementsFound;
 };
 
 Array.prototype.pp_findIndexEqual = function (elementToFind, elementsEqualCallback = null) {
     if (elementsEqualCallback == null) {
         return this.indexOf(elementToFind);
     }
-    return this.findIndex(element => elementsEqualCallback(element, elementToFind));
+
+    let indexFound = -1;
+    for (let i = 0; i < this.length; i++) {
+        let currentElement = this[i];
+        if (elementsEqualCallback(currentElement, elementToFind)) {
+            indexFound = i;
+            break;
+        }
+    }
+    return indexFound;
 };
 
 Array.prototype.pp_findAllIndexesEqual = function (elementToFind, elementsEqualCallback = null) {
     if (elementsEqualCallback == null) {
         return this._pp_findAllEqualOptimized(elementToFind, true);
     }
-    return this.pp_findAllIndexes(element => elementsEqualCallback(element, elementToFind));
+
+    let indexesFound = [];
+    for (let i = 0; i < this.length; i++) {
+        let currentElement = this[i];
+        if (elementsEqualCallback(currentElement, elementToFind)) {
+            indexesFound.push(i);
+        }
+    }
+    return indexesFound;
 };
 
 Array.prototype.pp_removeIndex = function (index) {
@@ -2462,13 +2496,13 @@ Array.prototype._vec_prepareOut = function (out) {
 Array.prototype._pp_findAllEqualOptimized = function (elementToFind, getIndexes) {
     // adapted from: https://stackoverflow.com/a/20798567
 
-    let matches = [];
+    let elementsFound = [];
     let index = -1;
     while ((index = this.indexOf(elementToFind, index + 1)) >= 0) {
-        matches.push(getIndexes ? index : this[index]);
+        elementsFound.push(getIndexes ? index : this[index]);
     }
 
-    return matches;
+    return elementsFound;
 }
 
 Array.prototype._quat_setAxes = function () {
