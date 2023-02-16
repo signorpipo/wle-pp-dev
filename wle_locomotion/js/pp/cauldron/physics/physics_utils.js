@@ -18,46 +18,88 @@ PP.PhysicsUtils = {
         return function raycast(raycastSetup, raycastResults = new PP.RaycastResults()) {
             let internalRaycastResults = WL.physics.rayCast(raycastSetup.myOrigin, raycastSetup.myDirection, raycastSetup.myBlockLayerFlags.getMask(), raycastSetup.myDistance);
 
-            raycastResults.myRaycastSetup = raycastSetup;
+            if (raycastResults.myRaycastSetup == null) {
+                raycastResults.myRaycastSetup = new PP.RaycastSetup();
+            }
+
+            raycastResults.myRaycastSetup.copy(raycastSetup);
 
             let currentValidHitIndex = 0;
             let validHitsCount = 0;
 
-            for (let i = 0; i < internalRaycastResults.hitCount; i++) {
-                let isHitValid = true;
+            let hitCount = internalRaycastResults.hitCount;
+            if (hitCount != 0) {
+                let objects = null;
+                let distances = null;
+                let locations = null;
+                let normals = null;
 
-                isHitValid = isHitValid &&
-                    (raycastSetup.myObjectsToIgnore.length == 0 ||
-                        !raycastSetup.myObjectsToIgnore.pp_hasEqual(internalRaycastResults.objects[i], objectsEqualCallback));
+                for (let i = 0; i < hitCount; i++) {
+                    if (raycastSetup.myObjectsToIgnore.length != 0) {
+                        if (objects == null) {
+                            objects = internalRaycastResults.objects;
+                        }
 
-                let isHitInsideCollision = isHitValid &&
-                    internalRaycastResults.distances[i] == 0 &&
-                    (raycastSetup.myOrigin.vec3_distance(internalRaycastResults.locations[i]) < 0.00001 &&
-                        Math.abs(raycastSetup.myDirection.vec3_angle(internalRaycastResults.normals[i]) - 180) < 0.00001);
-
-                isHitValid = isHitValid && (!raycastSetup.myIgnoreHitsInsideCollision || !isHitInsideCollision);
-
-                if (isHitValid) {
-                    let hit = null;
-
-                    if (currentValidHitIndex < raycastResults.myHits.length) {
-                        hit = raycastResults.myHits[currentValidHitIndex];
-                    } else if (raycastResults._myUnusedHits != null && raycastResults._myUnusedHits.length > 0) {
-                        hit = raycastResults._myUnusedHits.pop();
-                        raycastResults.myHits.push(hit);
-                    } else {
-                        hit = new PP.RaycastHit();
-                        raycastResults.myHits.push(hit);
+                        if (raycastSetup.myObjectsToIgnore.pp_hasEqual(objects[i], objectsEqualCallback)) {
+                            continue;
+                        }
                     }
 
-                    hit.myPosition.vec3_copy(internalRaycastResults.locations[i]);
-                    hit.myNormal.vec3_copy(internalRaycastResults.normals[i]);
-                    hit.myDistance = internalRaycastResults.distances[i];
-                    hit.myObject = internalRaycastResults.objects[i];
-                    hit.myIsInsideCollision = isHitInsideCollision;
+                    if (distances == null) {
+                        distances = internalRaycastResults.distances;
+                    }
 
-                    validHitsCount++;
-                    currentValidHitIndex++;
+                    let isHitInsideCollision = distances[i] == 0;
+                    if (isHitInsideCollision) {
+                        if (locations == null) {
+                            locations = internalRaycastResults.locations;
+                        }
+
+                        isHitInsideCollision &&= raycastSetup.myOrigin.vec3_distance(locations[i]) <= Math.PP_EPSILON_NUMBER;
+
+                        if (isHitInsideCollision) {
+                            if (!normals) {
+                                normals = internalRaycastResults.normals;
+                            }
+
+                            isHitInsideCollision &&= Math.abs(raycastSetup.myDirection.vec3_angle(normals[i]) - 180) <= Math.PP_EPSILON_DEGREES;
+                        }
+                    }
+
+                    if (!raycastSetup.myIgnoreHitsInsideCollision || !isHitInsideCollision) {
+                        let hit = null;
+
+                        if (currentValidHitIndex < raycastResults.myHits.length) {
+                            hit = raycastResults.myHits[currentValidHitIndex];
+                        } else if (raycastResults._myUnusedHits != null && raycastResults._myUnusedHits.length > 0) {
+                            hit = raycastResults._myUnusedHits.pop();
+                            raycastResults.myHits.push(hit);
+                        } else {
+                            hit = new PP.RaycastHit();
+                            raycastResults.myHits.push(hit);
+                        }
+
+                        if (objects == null) {
+                            objects = internalRaycastResults.objects;
+                        }
+
+                        if (locations == null) {
+                            locations = internalRaycastResults.locations;
+                        }
+
+                        if (normals == null) {
+                            normals = internalRaycastResults.normals;
+                        }
+
+                        hit.myPosition.vec3_copy(locations[i]);
+                        hit.myNormal.vec3_copy(normals[i]);
+                        hit.myDistance = distances[i];
+                        hit.myObject = objects[i];
+                        hit.myIsInsideCollision = isHitInsideCollision;
+
+                        validHitsCount++;
+                        currentValidHitIndex++;
+                    }
                 }
             }
 
