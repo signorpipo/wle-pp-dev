@@ -108,6 +108,7 @@ CollisionCheck = class CollisionCheck {
 };
 
 CollisionCheck.prototype._raycastAndDebug = function () {
+    let tempRaycastResult = new PP.RaycastResults();
     return function _raycastAndDebug(origin, direction, distance, ignoreHitsInsideCollision, isHorizontal, collisionCheckParams, collisionRuntimeParams) {
         this._myRaycastSetup.myOrigin.vec3_copy(origin);
         this._myRaycastSetup.myDirection.vec3_copy(direction);
@@ -123,7 +124,25 @@ CollisionCheck.prototype._raycastAndDebug = function () {
 
         this._myRaycastSetup.myIgnoreHitsInsideCollision = ignoreHitsInsideCollision;
 
-        let raycastResult = PP.PhysicsUtils.raycast(this._myRaycastSetup, this._myRaycastResult);
+        let raycastResult = null;
+        if (true) {
+            raycastResult = PP.PhysicsUtils.raycast(this._myRaycastSetup, this._myRaycastResult);
+        } else {
+            // quick debug to remove raycasts and/or let all raycasts fail
+
+            let raycastAlways = false;
+            if (raycastAlways || !this._myRaycastResult.isColliding()) {
+                raycastResult = PP.PhysicsUtils.raycast(this._myRaycastSetup, tempRaycastResult);
+            }
+
+            if (!this._myRaycastResult.isColliding() && tempRaycastResult.isColliding()) {
+                this._myRaycastResult.copy(tempRaycastResult);
+            }
+
+            raycastResult = this._myRaycastResult;
+        }
+
+
         _myTotalRaycasts++;
         //raycastResult.myHits = [];
 
