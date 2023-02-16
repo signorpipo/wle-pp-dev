@@ -27,6 +27,7 @@
 */
 
 Math.PP_EPSILON_NUMBER = 0.00001;
+Math.PP_EPSILON_NUMBER_SQUARED = Math.PP_EPSILON_NUMBER * Math.PP_EPSILON_NUMBER;
 Math.PP_EPSILON_DEGREES = 0.0001;
 
 Math.pp_clamp = function (value, start, end) {
