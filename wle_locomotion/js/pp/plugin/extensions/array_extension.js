@@ -750,7 +750,7 @@ Array.prototype.vec3_degreesToQuat = function (out = glMatrix.quat.create()) {
 };
 
 Array.prototype.vec3_isNormalized = function (epsilon = this._pp_normalizedEpsilon) {
-    return Math.abs(this.vec3_lengthSquared() - 1) < epsilon * epsilon;
+    return Math.abs(this.vec3_lengthSquared() - 1) < epsilon;
 };
 
 Array.prototype.vec3_isZero = function (epsilon = 0) {
@@ -1598,7 +1598,7 @@ Array.prototype.quat_toDegrees = function (out = glMatrix.vec3.create()) {
 };
 
 Array.prototype.quat_isNormalized = function (epsilon = this._pp_normalizedEpsilon) {
-    return Math.abs(this.quat_lengthSquared() - 1) < epsilon * epsilon;
+    return Math.abs(this.quat_lengthSquared() - 1) < epsilon;
 };
 
 Array.prototype.quat_addRotation = function (rotation, out) {
@@ -1651,9 +1651,14 @@ Array.prototype.quat_subRotationQuat = function () {
     return function quat_subRotationQuat(rotation, out = glMatrix.quat.create()) {
         rotation.quat_invert(inverse);
         this.quat_mul(inverse, out);
+
         if (this.quat_isNormalized() && rotation.quat_isNormalized()) {
-            out.quat_normalize(out); // it seems that for some small error the quat will not be exactly normalized
+            // I would normally not normalize this result since you may want the untouched sub
+            // But for normalized params it should be normalized
+            // It seems though that for some small error the quat will not be exactly normalized, so I fix it
+            out.quat_normalize(out);
         }
+
         return out;
     };
 }();
@@ -1932,7 +1937,7 @@ Array.prototype.quat2_setPositionRotationQuat = function (position, rotation) {
 // New Functions
 
 Array.prototype.quat2_isNormalized = function (epsilon = this._pp_normalizedEpsilon) {
-    return Math.abs(this.quat2_lengthSquared() - 1) < epsilon * epsilon;
+    return Math.abs(this.quat2_lengthSquared() - 1) < epsilon;
 };
 
 Array.prototype.quat2_length = function () {
@@ -2504,7 +2509,7 @@ PP.mat4_fromPositionRotationQuatScale = function (position, rotation, scale) {
 Array.prototype._pp_epsilon = 0.000001;
 Array.prototype._pp_epsilonSquared = Array.prototype._pp_epsilon * Array.prototype._pp_epsilon;
 Array.prototype._pp_degreesEpsilon = 0.00001;
-Array.prototype._pp_normalizedEpsilon = 0.00000001;
+Array.prototype._pp_normalizedEpsilon = 0.000001;
 
 Array.prototype._pp_clamp = function (value, min, max) {
     return Math.min(Math.max(value, min), max);
