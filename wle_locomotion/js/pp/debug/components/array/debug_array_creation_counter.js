@@ -6,20 +6,20 @@ WL.registerComponent('pp-debug-array-creation-counter', {
     init: function () {
         this._myArrayTypes = ["vec2", "vec3", "vec4", "quat", "quat2", "mat3", "mat4"];
 
-        this._myArrayTypesCounters = [];
+        this._myFunctionsCounters = [];
 
         this._myBackupFunctions = [];
         for (let arrayType of this._myArrayTypes) {
             if (PP[arrayType + "_create"] != null) {
                 this._myBackupFunctions[arrayType] = PP[arrayType + "_create"];
 
-                let arrayTypePair = [arrayType, 0];
-                this._myArrayTypesCounters.push(arrayTypePair);
+                let functionCounterPair = [arrayType, 0];
+                this._myFunctionsCounters.push(functionCounterPair);
 
                 let backupFunction = this._myBackupFunctions[arrayType];
 
                 PP[arrayType + "_create"] = function () {
-                    arrayTypePair[1]++;
+                    functionCounterPair[1]++;
                     return backupFunction(...arguments);
                 };
             }
@@ -34,28 +34,28 @@ WL.registerComponent('pp-debug-array-creation-counter', {
         if (this._myTimer.isDone()) {
             this._myTimer.start();
 
-            this._myArrayTypesCounters.sort(function (first, second) {
+            this._myFunctionsCounters.sort(function (first, second) {
                 return -(first[1] - second[1]);
             });
 
             if (this._myDisplayCollapsed) {
-                let arrayTypesCountersClone = this._myArrayTypesCounters.slice(0);
-                for (let i = 0; i < arrayTypesCountersClone.length; i++) {
-                    arrayTypesCountersClone[i] = arrayTypesCountersClone[i].slice(0);
+                let functionsCountersClone = this._myFunctionsCounters.slice(0);
+                for (let i = 0; i < functionsCountersClone.length; i++) {
+                    functionsCountersClone[i] = functionsCountersClone[i].slice(0);
                 }
 
-                console.log("Array Creation Counter", arrayTypesCountersClone);
+                console.log("Array Creation Counter", functionsCountersClone);
             } else {
-                let errorString = "";
-                for (let arrayType of this._myArrayTypesCounters) {
-                    errorString += "\n" + arrayType[0] + ": " + arrayType[1];
+                let counterString = "";
+                for (let functionCounterPair of this._myFunctionsCounters) {
+                    counterString += "\n" + functionCounterPair[0] + ": " + functionCounterPair[1];
                 }
-                console.log("Array Creation Counter", errorString);
+                console.log("Array Creation Counter", counterString);
             }
         }
 
-        for (let arrayType of this._myArrayTypesCounters) {
-            arrayType[1] = 0;
+        for (let functionCounterPair of this._myFunctionsCounters) {
+            functionCounterPair[1] = 0;
         }
     },
 });

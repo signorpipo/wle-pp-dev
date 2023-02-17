@@ -165,9 +165,12 @@
 import * as glMatrix from 'gl-matrix';
 
 Array.prototype._pp_syncPrototypesProperties = function () {
-    for (let key in Array.prototype) {
-        let prefixes = ["pp_", "vec_", "vec2_", "vec3_", "vec4_", "quat_", "quat2_", "mat3_", "mat4_", "_pp_", "_vec_", "_quat_",];
+    let prototypes = [
+        Array.prototype, Uint8ClampedArray.prototype, Uint8Array.prototype, Uint16Array.prototype, Uint32Array.prototype, Int8Array.prototype,
+        Int16Array.prototype, Int32Array.prototype, Float32Array.prototype, Float64Array.prototype];
+    let prefixes = ["pp_", "vec_", "vec2_", "vec3_", "vec4_", "quat_", "quat2_", "mat3_", "mat4_", "_pp_", "_vec_", "_quat_"];
 
+    for (let key in Array.prototype) {
         let found = false;
         for (let prefix of prefixes) {
             if (key.startsWith(prefix)) {
@@ -177,37 +180,10 @@ Array.prototype._pp_syncPrototypesProperties = function () {
         }
 
         if (found) {
-            Object.defineProperty(Array.prototype, key, { enumerable: false });
-
-            Uint8ClampedArray.prototype[key] = Array.prototype[key];
-            Object.defineProperty(Uint8ClampedArray.prototype, key, { enumerable: false });
-
-            Uint8ClampedArray.prototype[key] = Array.prototype[key];
-            Object.defineProperty(Uint8ClampedArray.prototype, key, { enumerable: false });
-
-            Uint8Array.prototype[key] = Array.prototype[key];
-            Object.defineProperty(Uint8Array.prototype, key, { enumerable: false });
-
-            Uint16Array.prototype[key] = Array.prototype[key];
-            Object.defineProperty(Uint16Array.prototype, key, { enumerable: false });
-
-            Uint32Array.prototype[key] = Array.prototype[key];
-            Object.defineProperty(Uint32Array.prototype, key, { enumerable: false });
-
-            Int8Array.prototype[key] = Array.prototype[key];
-            Object.defineProperty(Int8Array.prototype, key, { enumerable: false });
-
-            Int16Array.prototype[key] = Array.prototype[key];
-            Object.defineProperty(Int16Array.prototype, key, { enumerable: false });
-
-            Int32Array.prototype[key] = Array.prototype[key];
-            Object.defineProperty(Int32Array.prototype, key, { enumerable: false });
-
-            Float32Array.prototype[key] = Array.prototype[key];
-            Object.defineProperty(Float32Array.prototype, key, { enumerable: false });
-
-            Float64Array.prototype[key] = Array.prototype[key];
-            Object.defineProperty(Float64Array.prototype, key, { enumerable: false });
+            for (let prototype of prototypes) {
+                prototype[key] = Array.prototype[key];
+                Object.defineProperty(prototype, key, { enumerable: false });
+            }
         }
     }
 };
@@ -2855,7 +2831,6 @@ Array.prototype._quat_setAxes = function () {
         return this;
     };
 }();
-
 
 
 
