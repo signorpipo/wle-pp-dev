@@ -85,7 +85,7 @@
             - vec3_distance     / vec3_distanceSquared
             - vec3_add              / vec3_sub              / vec3_mul      / vec3_div      / vec3_scale    / vec3_dot
             - vec3_equals
-            - vec3_transformQuat    / vec3_transformMat4
+            - vec3_transformQuat    / vec3_transformMat3    / vec3_transformMat4
             - vec3_componentAlongAxis           / vec3_removeComponentAlongAxis / vec3_copyComponentAlongAxis   / vec3_valueAlongAxis  
             - vec3_isConcordant
             - vec3_isFartherAlongAxis
@@ -300,50 +300,73 @@ Array.prototype.mat4_set = function (
 
 Array.prototype._pp_syncPrototypesProperties();
 
-PP.vec2_create = function (x = null, y = null) {
+PP.vec2_create = function (x, y) {
     let out = glMatrix.vec2.create();
-    if (x != null) {
+    if (x !== undefined) {
         out.vec2_set(x, y);
     }
     return out;
 };
 
-PP.vec3_create = function (x = null, y = null, z = null) {
+PP.vec3_create = function (x, y, z) {
     let out = glMatrix.vec3.create();
-    if (x != null) {
+    if (x !== undefined) {
         out.vec3_set(x, y, z);
     }
     return out;
 };
 
-PP.vec4_create = function (x = null, y = null, z = null, w = null) {
+PP.vec4_create = function (x, y, z, w) {
     let out = glMatrix.vec4.create();
-    if (x != null) {
+    if (x !== undefined) {
         out.vec4_set(x, y, z, w);
     }
     return out;
 };
 
-PP.quat_create = function (x = null, y = null, z = null, w = null) {
+PP.quat_create = function (x, y, z, w) {
     let out = glMatrix.quat.create();
-    if (x != null) {
+    if (x !== undefined) {
         out.quat_set(x, y, z, w);
     }
     return out;
 };
 
-PP.quat2_create = function () {
+PP.quat2_create = function (x1, y1, z1, w1, x2, y2, z2, w2) {
     let out = glMatrix.quat2.create();
+    if (x1 !== undefined) {
+        out.quat2_set(x1, y1, z1, w1, x2, y2, z2, w2);
+    }
     return out;
 };
 
-PP.mat3_create = function () {
+PP.mat3_create = function (
+    m00, m01, m02,
+    m10, m11, m12,
+    m20, m21, m22) {
     let out = glMatrix.mat3.create();
+    if (m00 !== undefined) {
+        out.mat3_set(
+            m00, m01, m02,
+            m10, m11, m12,
+            m20, m21, m22);
+    }
     return out;
 };
 
-PP.mat4_create = function () {
+PP.mat4_create = function (
+    m00, m01, m02, m03,
+    m10, m11, m12, m13,
+    m20, m21, m22, m23,
+    m30, m31, m32, m33) {
     let out = glMatrix.mat4.create();
+    if (m00 !== undefined) {
+        out.mat4_set(
+            m00, m01, m02, m03,
+            m10, m11, m12, m13,
+            m20, m21, m22, m23,
+            m30, m31, m32, m33);
+    }
     return out;
 };
 
@@ -935,6 +958,11 @@ Array.prototype.vec3_cross = function (vector, out = PP.vec3_create()) {
 
 Array.prototype.vec3_transformQuat = function (quat, out = PP.vec3_create()) {
     glMatrix.vec3.transformQuat(out, this, quat);
+    return out;
+};
+
+Array.prototype.vec3_transformMat3 = function (mat3, out = PP.vec3_create()) {
+    glMatrix.vec3.transformMat3(out, this, mat3);
     return out;
 };
 
