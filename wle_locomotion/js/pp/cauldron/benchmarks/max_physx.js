@@ -1,5 +1,3 @@
-import * as glMatrix from 'gl-matrix';
-
 // adjust the gravity to a low value like -0.05 to have better results, since the dynamic objects will move slowly instead of quickly falling far away
 WL.registerComponent('pp-benchmark-max-physx', {
     _myStaticDomeSize: { type: WL.Type.Float, default: 40 },
@@ -198,8 +196,8 @@ WL.registerComponent('pp-benchmark-max-physx', {
             let verticalDirection = PP.vec3_create(0, 1, 0);
 
             let rotationAxis = PP.vec3_create();
-            glMatrix.vec3.cross(rotationAxis, horizontalDirection, verticalDirection);
-            glMatrix.vec3.normalize(rotationAxis, rotationAxis);
+            horizontalDirection.vec3_cross(verticalDirection, rotationAxis);
+            rotationAxis.vec3_normalize(rotationAxis);
 
             for (let j = 0; j < cloves; j++) {
                 if (physXList.length < maxCount) {
@@ -211,7 +209,7 @@ WL.registerComponent('pp-benchmark-max-physx', {
                     physXDirection.vec3_rotateAxisRadians(extraAxisRotation, rotationAxis, physXDirection);
                     physXDirection.vec3_rotateAxisRadians(extraUpRotation, upDirection, physXDirection);
 
-                    glMatrix.vec3.scale(physXDirection, physXDirection, distance);
+                    physXDirection.vec3_scale(distance, physXDirection);
 
                     this._addPhysX(physXDirection, isStatic, isDynamic);
                 }
@@ -227,7 +225,7 @@ WL.registerComponent('pp-benchmark-max-physx', {
                     physXDirection.vec3_rotateAxisRadians(extraAxisRotation, rotationAxis, physXDirection);
                     physXDirection.vec3_rotateAxisRadians(extraUpRotation, upDirection, physXDirection);
 
-                    glMatrix.vec3.scale(physXDirection, physXDirection, distance);
+                    physXDirection.vec3_scale(distance, physXDirection);
 
                     this._addPhysX(physXDirection, isStatic, isDynamic);
                 }

@@ -1,12 +1,10 @@
 
-import * as glMatrix from 'gl-matrix';
-
 WL.registerComponent('vec-create-count', {
 }, {
     init: function () {
     },
     start: function () {
-        this._myDebugWithPP = false;
+        this._myDebugWithPP = true;
 
         this._myVec3CreateCall = 0;
 
@@ -54,21 +52,11 @@ WL.registerComponent('vec-create-count', {
                 console.error("quat2 call:", this._myQuat2CreateCall);
                 console.error("quat call:", this._myQuatCreateCall);
                 console.error("");
-            } else {
-                console.error("vec3 call:", glMatrix.vec3.createCount);
-                console.error("quat call:", glMatrix.quat.createCount);
-                console.error("quat2 call:", glMatrix.quat2.createCount);
-                console.error("mat4 call:", glMatrix.mat4.createCount);
             }
         }
         this._myVec3CreateCall = 0;
         this._myQuatCreateCall = 0;
         this._myQuat2CreateCall = 0;
         this._myMat4CreateCall = 0;
-
-        glMatrix.vec3.resetCreateCount();
-        glMatrix.quat.resetCreateCount();
-        glMatrix.quat2.resetCreateCount();
-        glMatrix.mat4.resetCreateCount();
     },
 });
