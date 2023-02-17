@@ -4,7 +4,7 @@ WL.registerComponent('pp-debug-array-function-calls-counter', {
     _myLogDelay: { type: WL.Type.Float, default: 1.0 },
     _myLogCollapsed: { type: WL.Type.Bool, default: false },
     _myLogFunctionsMaxAmount: { type: WL.Type.Int, default: -1 },
-    _myLogFunctionsWithCounterAbove: { type: WL.Type.Int, default: -1 },
+    _myLogFunctionsWithCallsCounterAbove: { type: WL.Type.Int, default: -1 },
     _myFunctionNamesToInclude: { type: WL.Type.String, default: "" },
     _myFunctionNamesToExclude: { type: WL.Type.String, default: "" }
 }, {
@@ -45,7 +45,7 @@ WL.registerComponent('pp-debug-array-function-calls-counter', {
         functionCallsCountLoggerParams.myLogDelay = this._myLogDelay;
         functionCallsCountLoggerParams.myLogCollapsed = this._myLogCollapsed;
         functionCallsCountLoggerParams.myLogFunctionsMaxAmount = (this._myLogFunctionsMaxAmount >= 0) ? this._myLogFunctionsMaxAmount : null;
-        functionCallsCountLoggerParams.myLogFunctionsWithCounterAbove = (this._myLogFunctionsWithCounterAbove >= 0) ? this._myLogFunctionsWithCounterAbove : null;
+        functionCallsCountLoggerParams.myLogFunctionsWithCallsCounterAbove = (this._myLogFunctionsWithCallsCounterAbove >= 0) ? this._myLogFunctionsWithCallsCounterAbove : null;
 
         this._myFunctionCallsCountLogger = new PP.DebugClassFunctionCallsCountLogger(functionCallsCountLoggerParams);
     },

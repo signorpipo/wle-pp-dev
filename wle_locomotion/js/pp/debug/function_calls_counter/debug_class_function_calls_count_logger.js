@@ -9,7 +9,7 @@ PP.DebugClassFunctionCallsCountLoggerParams = class DebugClassFunctionCallsCount
         this.myLogCollapsed = false;
 
         this.myLogFunctionsMaxAmount = null;
-        this.myLogFunctionsWithCounterAbove = null;
+        this.myLogFunctionsWithCallsCounterAbove = null;
 
         this.myLogSorted = true;
     }
@@ -33,13 +33,13 @@ PP.DebugClassFunctionCallsCountLogger = class DebugClassFunctionCallsCountLogger
 
             let callsCounters = this._myParams.myCallsCounter.getCallsCounters(this._myParams.myLogSorted);
 
-            if (this._myParams.myLogFunctionsWithCounterAbove != null) {
+            if (this._myParams.myLogFunctionsWithCallsCounterAbove != null) {
                 let callsCountersClone = new Map(callsCounters);
                 callsCounters = new Map();
                 let keys = [...callsCountersClone.keys()];
                 for (let i = 0; i < keys.length; i++) {
                     let counter = callsCountersClone.get(keys[i]);
-                    if (counter > this._myParams.myLogFunctionsWithCounterAbove) {
+                    if (counter > this._myParams.myLogFunctionsWithCallsCounterAbove) {
                         callsCounters.set(keys[i], counter);
                     }
                 }
