@@ -100,6 +100,7 @@ require('./pp/debug/debug_visual_manager');
 
 require('./pp/debug/components/debug_transform_component');
 require('./pp/debug/components/debug_manager_component');
+require('./pp/debug/components/array/debug_array_creation_counter');
 
 //	GAMEPLAY
 
