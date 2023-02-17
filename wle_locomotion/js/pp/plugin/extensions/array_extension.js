@@ -128,14 +128,16 @@
             - quat_lerp             / quat_interpolate      / quat_slerp    / quat_sinterpolate
 
         QUAT 2:
-            ○ quat2_set         / quat2_copy        / quat2_identity
-            - quat2_normalize
+            ○ quat2_set             / quat2_copy        / quat2_identity
+            - quat2_normalize       / quat2_invert      / quat2_conjugate
             - quat2_isNormalized
             - quat2_length          / quat2_lengthSquared
+            - quat2_mul
             - quat2_getPosition     / quat2_getRotation
             ○ quat2_setPosition     / quat2_setRotation     / quat2_setPositionRotation
             - quat2_getAxes     / quat2_getRight    / quat2_getUp   / quat2_getForward  / quat2_getLeft    / quat2_getDown   / quat2_getBackward
             - quat2_toWorld     / quat2_toLocal
+            - quat2_rotateAxis  
             - quat2_toMatrix
             ○ quat2_fromMatrix
             - quat2_lerp        / quat2_interpolate
@@ -2056,6 +2058,16 @@ Array.prototype.quat2_normalize = function (out = PP.quat2_create()) {
     return out;
 };
 
+Array.prototype.quat2_invert = function (out = PP.quat2_create()) {
+    glMatrix.quat2.invert(out, this);
+    return out;
+};
+
+Array.prototype.quat2_conjugate = function (out = PP.quat2_create()) {
+    glMatrix.quat2.conjugate(out, this);
+    return out;
+};
+
 Array.prototype.quat2_copy = function (quat2) {
     glMatrix.quat2.copy(this, quat2);
     return this;
@@ -2178,6 +2190,11 @@ Array.prototype.quat2_lengthSquared = function () {
     return glMatrix.quat2.squaredLength(this);
 };
 
+Array.prototype.quat2_mul = function (transformQuat, out = PP.quat2_create()) {
+    glMatrix.quat2.mul(out, this, transformQuat);
+    return out;
+};
+
 Array.prototype.quat2_getAxes = function (out = [PP.vec3_create(), PP.vec3_create(), PP.vec3_create()]) {
     this.quat2_getLeft(out[0]);
     this.quat2_getUp(out[1]);
@@ -2250,6 +2267,25 @@ Array.prototype.quat2_toLocal = function () {
     return function quat2_toLocal(parentTransformQuat, out = PP.quat2_create()) {
         glMatrix.quat2.conjugate(invertQuat, parentTransformQuat);
         glMatrix.quat2.mul(out, invertQuat, this);
+        return out;
+    };
+}();
+
+Array.prototype.quat2_rotateAxis = function (angle, axis, out) {
+    return this.quat2_rotateAxisDegrees(angle, axis, out);
+};
+
+Array.prototype.quat2_rotateAxisDegrees = function (angle, axis, out) {
+    return this.quat2_rotateAxisRadians(glMatrix.glMatrix.toRadian(angle), axis, out);
+};
+
+Array.prototype.quat2_rotateAxisRadians = function () {
+    let rotationQuat = PP.quat_create();
+    return function quat2_rotateAxisRadians(angle, axis, out) {
+        this.quat2_getRotationQuat(rotationQuat);
+        rotationQuat.quat_rotateAxisRadians(angle, axis, rotationQuat);
+        out.quat2_copy(this);
+        out.quat2_setRotationQuat(rotationQuat);
         return out;
     };
 }();
