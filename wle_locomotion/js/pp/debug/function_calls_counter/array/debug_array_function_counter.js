@@ -18,7 +18,11 @@ WL.registerComponent('pp-debug-array-function-counter', {
             Int16Array, Int32Array, Float32Array, Float64Array];
 
         if (this._myDisplayOnlyFunctionThatContains.length > 0) {
-            this._myFunctionCallsCounterParams.myFunctionNamesToInclude.push(this._myDisplayOnlyFunctionThatContains);
+            let toIncludeList = [...this._myDisplayOnlyFunctionThatContains.split(",")];
+            for (let i = 0; i < toIncludeList.length; i++) {
+                toIncludeList[i] = toIncludeList[i].trim();
+            }
+            this._myFunctionCallsCounterParams.myFunctionNamesToInclude.push(...toIncludeList);
         } else if (this._myIncludeOnlyPPExtensionFunctions) {
             this._myFunctionCallsCounterParams.myFunctionNamesToInclude.push(...prefixes);
         }
@@ -59,7 +63,7 @@ WL.registerComponent('pp-debug-array-function-counter', {
             }
 
             if (this._myDisplayCollapsed) {
-                console.log("Array Function Counter", callsCounters);
+                console.log("Array Functions Counter", callsCounters);
             } else {
                 let counterString = "";
 
@@ -67,7 +71,7 @@ WL.registerComponent('pp-debug-array-function-counter', {
                     counterString += "\n" + entry[0] + ": " + entry[1];
                 }
 
-                console.log("Array Function Counter", counterString);
+                console.log("Array Functions Counter", counterString);
             }
         }
 

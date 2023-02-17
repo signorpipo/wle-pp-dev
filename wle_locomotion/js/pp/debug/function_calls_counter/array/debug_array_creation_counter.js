@@ -44,13 +44,13 @@ WL.registerComponent('pp-debug-array-creation-counter', {
                     functionsCountersClone[i] = functionsCountersClone[i].slice(0);
                 }
 
-                console.log("Array Creation Counter", functionsCountersClone);
+                console.log("Array Creations Counter", functionsCountersClone);
             } else {
                 let counterString = "";
                 for (let functionCounterPair of this._myFunctionsCounters) {
                     counterString += "\n" + functionCounterPair[0] + ": " + functionCounterPair[1];
                 }
-                console.log("Array Creation Counter", counterString);
+                console.log("Array Creations Counter", counterString);
             }
         }
 
