@@ -102,6 +102,7 @@ require('./pp/debug/components/debug_transform_component');
 require('./pp/debug/components/debug_manager_component');
 
 require('./pp/debug/function_calls_counter/debug_class_function_calls_counter');
+require('./pp/debug/function_calls_counter/debug_class_function_calls_count_logger');
 require('./pp/debug/function_calls_counter/components/debug_array_creation_counter');
 require('./pp/debug/function_calls_counter/components/debug_array_function_counter');
 

@@ -1,84 +1,58 @@
 
 WL.registerComponent('pp-debug-array-function-counter', {
-    _myIncludeOnlyPPExtensionFunctions: { type: WL.Type.Bool, default: false },
-    _myLogTimer: { type: WL.Type.Float, default: 1.0 },
-    _myDisplayCollapsed: { type: WL.Type.Bool, default: false },
-    _myDisplayOnlyFirstFunctions: { type: WL.Type.Int, default: -1 },
-    _myDisplayOnlyFunctionWithAmountAbove: { type: WL.Type.Int, default: -1 },
-    _myDisplayOnlyFunctionThatContains: { type: WL.Type.String, default: "" }
+    _myIncludeOnlyArrayExtensionFunctions: { type: WL.Type.Bool, default: false },
+    _myLogDelay: { type: WL.Type.Float, default: 1.0 },
+    _myLogCollapsed: { type: WL.Type.Bool, default: false },
+    _myLogFunctionsMaxAmount: { type: WL.Type.Int, default: -1 },
+    _myLogFunctionsWithCounterAbove: { type: WL.Type.Int, default: -1 },
+    _myFunctionNamesToInclude: { type: WL.Type.String, default: "" },
+    _myFunctionNamesToExclude: { type: WL.Type.String, default: "" }
 }, {
     init: function () {
-        this._myFunctionCallsCounterParams = new PP.DebugClassFunctionCallsCounterParams();
-        this._myFunctionCallsCounterParams.myClassNames = [
+        let functionCallsCounterParams = new PP.DebugClassFunctionCallsCounterParams();
+        functionCallsCounterParams.myClassNames = [
             "Array", "Uint8ClampedArray", "Uint8Array", "Uint16Array", "Uint32Array", "Int8Array",
             "Int16Array", "Int32Array", "Float32Array", "Float64Array"];
-        this._myFunctionCallsCounterParams.myExcludeConstructor = true;
+        functionCallsCounterParams.myExcludeConstructor = true;
 
-        if (this._myDisplayOnlyFunctionThatContains.length > 0) {
-            let toIncludeList = [...this._myDisplayOnlyFunctionThatContains.split(",")];
+        if (this._myIncludeOnlyArrayExtensionFunctions) {
+            let prefixes = ["pp_", "vec_", "vec2_", "vec3_", "vec4_", "quat_", "quat2_", "mat3_", "mat4_", "_pp_", "_vec_", "_quat_",];
+            functionCallsCounterParams.myFunctionNamesToInclude.push(...prefixes);
+        }
+
+        if (this._myFunctionNamesToInclude.length > 0) {
+            let toIncludeList = [...this._myFunctionNamesToInclude.split(",")];
             for (let i = 0; i < toIncludeList.length; i++) {
                 toIncludeList[i] = toIncludeList[i].trim();
             }
-            this._myFunctionCallsCounterParams.myFunctionNamesToInclude.push(...toIncludeList);
-        } else if (this._myIncludeOnlyPPExtensionFunctions) {
-            let prefixes = ["pp_", "vec_", "vec2_", "vec3_", "vec4_", "quat_", "quat2_", "mat3_", "mat4_", "_pp_", "_vec_", "_quat_",];
-            this._myFunctionCallsCounterParams.myFunctionNamesToInclude.push(...prefixes);
+            functionCallsCounterParams.myFunctionNamesToInclude.push(...toIncludeList);
         }
 
-        this._myFunctionCallsCounter = new PP.DebugClassFunctionCallsCounter(this._myFunctionCallsCounterParams);
+        if (this._myFunctionNamesToExclude.length > 0) {
+            let toExcludeList = [...this._myFunctionNamesToExclude.split(",")];
+            for (let i = 0; i < toExcludeList.length; i++) {
+                toExcludeList[i] = toExcludeList[i].trim();
+            }
+            functionCallsCounterParams.myFunctionNamesToExclude.push(...toExcludeList);
+        }
 
-        this._myTimer = new PP.Timer(this._myLogTimer);
+        this._myFunctionCallsCounter = new PP.DebugClassFunctionCallsCounter(functionCallsCounterParams);
+
+        let functionCallsCountLoggerParams = new PP.DebugClassFunctionCallsCountLoggerParams();
+        functionCallsCountLoggerParams.myCallsCounter = this._myFunctionCallsCounter;
+        functionCallsCountLoggerParams.myLogTitle = "Array " + functionCallsCountLoggerParams.myLogTitle;
+
+        functionCallsCountLoggerParams.myLogDelay = this._myLogDelay;
+        functionCallsCountLoggerParams.myLogCollapsed = this._myLogCollapsed;
+        functionCallsCountLoggerParams.myLogFunctionsMaxAmount = (this._myLogFunctionsMaxAmount >= 0) ? this._myLogFunctionsMaxAmount : null;
+        functionCallsCountLoggerParams.myLogFunctionsWithCounterAbove = (this._myLogFunctionsWithCounterAbove >= 0) ? this._myLogFunctionsWithCounterAbove : null;
+
+        this._myFunctionCallsCountLogger = new PP.DebugClassFunctionCallsCountLogger(functionCallsCountLoggerParams);
     },
     start: function () {
     },
     update: function (dt) {
-
-        let randomTimer = Math.pp_randomInt(10, 200);
-        for (let i = 0; i < randomTimer; i++) {
-            new PP.Timer(0);
-        }
-
-        this._myTimer.update(dt);
-        if (this._myTimer.isDone()) {
-            this._myTimer.start();
-
-            let callsCounters = this._myFunctionCallsCounter.getCallsCounters(true);
-
-            if (this._myDisplayOnlyFunctionWithAmountAbove >= 0) {
-                let callsCountersClone = new Map(callsCounters);
-                callsCounters = new Map();
-                let keys = [...callsCountersClone.keys()];
-                for (let i = 0; i < keys.length; i++) {
-                    let counter = callsCountersClone.get(keys[i]);
-                    if (counter > this._myDisplayOnlyFunctionWithAmountAbove) {
-                        callsCounters.set(keys[i], counter);
-                    }
-                }
-            }
-
-            if (this._myDisplayOnlyFirstFunctions >= 0) {
-                let callsCountersClone = new Map(callsCounters);
-                callsCounters = new Map();
-                let keys = [...callsCountersClone.keys()];
-                for (let i = 0; i < this._myDisplayOnlyFirstFunctions && i < keys.length; i++) {
-                    let counter = callsCountersClone.get(keys[i]);
-                    callsCounters.set(keys[i], counter);
-                }
-            }
-
-            if (this._myDisplayCollapsed) {
-                console.log("Array Functions Counter", callsCounters);
-            } else {
-                let counterString = "";
-
-                for (let entry of callsCounters.entries()) {
-                    counterString += "\n" + entry[0] + ": " + entry[1];
-                }
-
-                console.log("Array Functions Counter", counterString);
-            }
-        }
-
+        this._myFunctionCallsCountLogger.update(dt);
         this._myFunctionCallsCounter.resetCallsCounters();
     },
 });
