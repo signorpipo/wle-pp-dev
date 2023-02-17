@@ -47,6 +47,8 @@
             - PP.quat2_create
             - PP.quat2_fromPositionRotation
 
+            - PP.mat3_create
+
             - PP.mat4_create
             - PP.mat4_fromPositionRotation     / PP.mat4_fromPositionRotationScale
 
@@ -2448,6 +2450,11 @@ PP.quat2_fromPositionRotationRadians = function (position, rotation) {
 PP.quat2_fromPositionRotationQuat = function (position, rotation) {
     let out = glMatrix.quat2.create();
     out.quat2_setPositionRotationQuat(position, rotation);
+    return out;
+};
+
+PP.mat3_create = function () {
+    let out = glMatrix.mat3.create();
     return out;
 };
 
