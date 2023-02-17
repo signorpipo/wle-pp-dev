@@ -553,7 +553,7 @@ if (WL && WL.Object) {
     WL.Object.prototype.pp_setRotationWorldMatrix = function () {
         let quat = PP.quat_create();
         return function pp_setRotationWorldMatrix(rotation) {
-            glMatrix.quat.fromMat3(quat, rotation);
+            rotation.mat3_toQuat(quat);
             this.pp_setRotationWorldQuat(quat);
         };
     }();
@@ -589,7 +589,7 @@ if (WL && WL.Object) {
     WL.Object.prototype.pp_setRotationLocalMatrix = function () {
         let quat = PP.quat_create();
         return function pp_setRotationLocalMatrix(rotation) {
-            glMatrix.quat.fromMat3(quat, rotation);
+            rotation.mat3_toQuat(quat);
             this.pp_setRotationLocalQuat(quat);
         };
     }();
@@ -1019,7 +1019,7 @@ if (WL && WL.Object) {
     WL.Object.prototype.pp_rotateWorldMatrix = function () {
         let rotationQuat = PP.quat_create();
         return function pp_rotateWorldMatrix(rotation) {
-            glMatrix.quat.fromMat3(rotationQuat, rotation);
+            rotation.mat3_toQuat(rotationQuat);
             rotationQuat.quat_normalize(rotationQuat);
             this.pp_rotateWorldQuat(rotationQuat);
         };
@@ -1062,7 +1062,7 @@ if (WL && WL.Object) {
     WL.Object.prototype.pp_rotateLocalMatrix = function () {
         let rotationQuat = PP.quat_create();
         return function pp_rotateLocalMatrix(rotation) {
-            glMatrix.quat.fromMat3(rotationQuat, rotation);
+            rotation.mat3_toQuat(rotationQuat);
             rotationQuat.quat_normalize(rotationQuat);
             this.pp_rotateLocalQuat(rotationQuat);
         };
@@ -1105,7 +1105,7 @@ if (WL && WL.Object) {
     WL.Object.prototype.pp_rotateObjectMatrix = function () {
         let rotationQuat = PP.quat_create();
         return function pp_rotateObjectMatrix(rotation) {
-            glMatrix.quat.fromMat3(rotationQuat, rotation);
+            rotation.mat3_toQuat(rotationQuat);
             rotationQuat.quat_normalize(rotationQuat);
             this.pp_rotateObjectQuat(rotationQuat);
         };
@@ -1232,7 +1232,7 @@ if (WL && WL.Object) {
     WL.Object.prototype.pp_rotateAroundWorldMatrix = function () {
         let rotationQuat = PP.quat_create();
         return function pp_rotateAroundWorldMatrix(rotation, origin) {
-            glMatrix.quat.fromMat3(rotationQuat, rotation);
+            rotation.mat3_toQuat(rotationQuat);
             rotationQuat.quat_normalize(rotationQuat);
             this.pp_rotateAroundWorldQuat(rotationQuat, origin);
         };
@@ -1274,7 +1274,7 @@ if (WL && WL.Object) {
     WL.Object.prototype.pp_rotateAroundLocalMatrix = function () {
         let rotationQuat = PP.quat_create();
         return function pp_rotateAroundLocalMatrix(rotation, origin) {
-            glMatrix.quat.fromMat3(rotationQuat, rotation);
+            rotation.mat3_toQuat(rotationQuat);
             rotationQuat.quat_normalize(rotationQuat);
             this.pp_rotateAroundLocalQuat(rotationQuat, origin);
         };
@@ -1316,7 +1316,7 @@ if (WL && WL.Object) {
     WL.Object.prototype.pp_rotateAroundObjectMatrix = function () {
         let rotationQuat = PP.quat_create();
         return function pp_rotateAroundObjectMatrix(rotation, origin) {
-            glMatrix.quat.fromMat3(rotationQuat, rotation);
+            rotation.mat3_toQuat(rotationQuat);
             rotationQuat.quat_normalize(rotationQuat);
             this.pp_rotateAroundObjectQuat(rotationQuat, origin);
         };
@@ -2784,7 +2784,7 @@ if (WL && WL.Object) {
                     fixedForward[0], fixedForward[1], fixedForward[2]
                 );
 
-                glMatrix.quat.fromMat3(rotationQuat, rotationMat);
+                rotationMat.mat3_toQuat(rotationQuat);
                 rotationQuat.quat_normalize(rotationQuat);
 
                 if (isLocal) {
