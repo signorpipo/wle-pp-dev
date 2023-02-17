@@ -111,7 +111,7 @@
         QUAT:
             ○ quat_set          / quat_copy     / quat_identity
             - quat_clone 
-            - quat_normalize    / quat_invert
+            - quat_normalize    / quat_invert   / quat_conjugate
             - quat_isNormalized
             - quat_length       / quat_lengthSquared
             - quat_mul
@@ -1364,15 +1364,26 @@ Array.prototype.quat_invert = function (out = glMatrix.quat.create()) {
     return out;
 };
 
+Array.prototype.quat_conjugate = function (out = glMatrix.quat.create()) {
+    glMatrix.quat.conjugate(out, this);
+    return out;
+};
+
 Array.prototype.quat_mul = function (rotation, out = glMatrix.quat.create()) {
     glMatrix.quat.mul(out, this, rotation);
     return out;
 };
 
-Array.prototype.quat_getAxis = function (out = glMatrix.vec3.create()) {
-    glMatrix.quat.getAxisAngle(out, this);
-    return out;
-};
+Array.prototype.quat_getAxis = function () {
+    let zero = glMatrix.vec3.create(0, 0, 0);
+    return function quat_getAxis(out = glMatrix.vec3.create()) {
+        let angle = glMatrix.quat.getAxisAngle(out, this);
+        if (angle <= this._pp_epsilon) {
+            out.vec3_copy(zero);
+        }
+        return out;
+    };
+}();
 
 Array.prototype.quat_getAngle = function () {
     return this.quat_getAngleDegrees();
@@ -1403,12 +1414,19 @@ Array.prototype.quat_getAxisScaledDegrees = function (out = glMatrix.vec3.create
     return out;
 };
 
-Array.prototype.quat_getAxisScaledRadians = function (out = glMatrix.vec3.create()) {
-    this.quat_getAxis(out);
-    let angle = this.quat_getAngleRadians();
-    out.vec3_scale(angle, out);
-    return out;
-};
+Array.prototype.quat_getAxisScaledRadians = function () {
+    let zero = glMatrix.vec3.create(0, 0, 0);
+    return function quat_getAxisScaledRadians(out = glMatrix.vec3.create()) {
+        this.quat_getAxis(out);
+        let angle = this.quat_getAngleRadians();
+        if (angle <= this._pp_epsilon) {
+            out.vec3_copy(zero);
+        } else {
+            out.vec3_scale(angle, out);
+        }
+        return out;
+    };
+}();
 
 Array.prototype.quat_getAxes = function (out = [glMatrix.vec3.create(), glMatrix.vec3.create(), glMatrix.vec3.create()]) {
     this.quat_getLeft(out[0]);
