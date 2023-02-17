@@ -151,6 +151,7 @@
             ○ mat4_set          / mat4_copy         / mat4_identity
             - mat4_clone
             - mat4_invert
+            - mat_mul           / mat4_scale
             - mat4_getPosition  / mat4_getRotation  / mat4_getScale
             ○ mat4_setPosition  / mat4_setRotation  / mat4_setScale
             ○ mat4_setPositionRotation      / mat4_setPositionRotationScale
@@ -2190,8 +2191,8 @@ Array.prototype.quat2_lengthSquared = function () {
     return glMatrix.quat2.squaredLength(this);
 };
 
-Array.prototype.quat2_mul = function (transformQuat, out = PP.quat2_create()) {
-    glMatrix.quat2.mul(out, this, transformQuat);
+Array.prototype.quat2_mul = function (quat2, out = PP.quat2_create()) {
+    glMatrix.quat2.mul(out, this, quat2);
     return out;
 };
 
@@ -2295,8 +2296,8 @@ Array.prototype.quat2_toMatrix = function (out = PP.mat4_create()) {
     return out;
 };
 
-Array.prototype.quat2_fromMatrix = function (transformMatrix) {
-    transformMatrix.mat4_toQuat(this);
+Array.prototype.quat2_fromMatrix = function (mat4) {
+    mat4.mat4_toQuat(this);
     return this;
 };
 
@@ -2371,6 +2372,16 @@ Array.prototype.mat4_identity = function () {
 
 Array.prototype.mat4_invert = function (out = PP.mat4_create()) {
     glMatrix.mat4.invert(out, this);
+    return out;
+};
+
+Array.prototype.mat4_mul = function (mat4, out = PP.mat4_create()) {
+    glMatrix.mat4.mul(out, this, mat4);
+    return out;
+};
+
+Array.prototype.mat4_scale = function (vector, out = PP.mat4_create()) {
+    glMatrix.mat4.scale(out, this, vector);
     return out;
 };
 
@@ -2655,8 +2666,8 @@ Array.prototype.mat4_toQuat = function () {
     };
 }();
 
-Array.prototype.mat4_fromQuat = function (transformQuat) {
-    transformQuat.quat2_toMatrix(this);
+Array.prototype.mat4_fromQuat = function (quat2) {
+    quat2.quat2_toMatrix(this);
     return this;
 };
 

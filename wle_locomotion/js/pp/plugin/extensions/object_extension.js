@@ -267,8 +267,8 @@ if (WL && WL.Object) {
         return function pp_getTransformWorldMatrix(transform = PP.mat4_create()) {
             this.pp_getTransformWorldQuat(transformQuat);
             this.pp_getScaleWorld(scale);
-            glMatrix.mat4.fromQuat2(transform, transformQuat);
-            glMatrix.mat4.scale(transform, transform, scale);
+            transform.mat4_fromQuat(transformQuat);
+            transform.mat4_scale(scale, transform);
             return transform;
         };
     }();
@@ -290,8 +290,8 @@ if (WL && WL.Object) {
         return function pp_getTransformLocal(transform = PP.mat4_create()) {
             this.pp_getTransformLocalQuat(transformQuat);
             this.pp_getScaleLocal(scale);
-            glMatrix.mat4.fromQuat2(transform, transformQuat);
-            glMatrix.mat4.scale(transform, transform, scale);
+            transform.mat4_fromQuat(transformQuat);
+            transform.mat4_scale(scale, transform);
             return transform;
         };
     }();
@@ -791,11 +791,11 @@ if (WL && WL.Object) {
         let one = PP.vec3_create();
         glMatrix.vec3.set(one, 1, 1, 1);
         return function pp_setTransformWorldMatrix(transform) {
-            glMatrix.mat4.getTranslation(position, transform);
-            glMatrix.mat4.getScaling(scale, transform);
+            transform.mat4_getPosition(position);
+            transform.mat4_getScale(scale);
             glMatrix.vec3.divide(inverseScale, one, scale);
-            glMatrix.mat4.scale(transformMatrixNoScale, transform, inverseScale);
-            glMatrix.mat4.getRotation(rotation, transformMatrixNoScale);
+            transform.mat4_scale(inverseScale, transformMatrixNoScale);
+            transformMatrixNoScale.mat4_getRotationQuat(rotation);
             rotation.quat_normalize(rotation);
             this.pp_setScaleWorld(scale);
             this.pp_setRotationWorldQuat(rotation);
@@ -822,11 +822,11 @@ if (WL && WL.Object) {
         let one = PP.vec3_create();
         glMatrix.vec3.set(one, 1, 1, 1);
         return function pp_setTransformLocalMatrix(transform) {
-            glMatrix.mat4.getTranslation(position, transform);
-            glMatrix.mat4.getScaling(scale, transform);
+            transform.mat4_getPosition(position);
+            transform.mat4_getScale(scale);
             glMatrix.vec3.divide(inverseScale, one, scale);
-            glMatrix.mat4.scale(transformMatrixNoScale, transform, inverseScale);
-            glMatrix.mat4.getRotation(rotation, transformMatrixNoScale);
+            transform.mat4_scale(inverseScale, transformMatrixNoScale);
+            transformMatrixNoScale.mat4_getRotationQuat(rotation);
             rotation.quat_normalize(rotation);
             this.pp_setScaleLocal(scale);
             this.pp_setRotationLocalQuat(rotation);
@@ -1361,12 +1361,12 @@ if (WL && WL.Object) {
         let transformQuat = PP.quat2_create();
         let defaultQuat = PP.quat_create();
         return function pp_rotateAroundAxisWorldRadians(angle, axis, origin) {
-            glMatrix.quat2.fromRotationTranslation(transformToRotate, defaultQuat, origin);
+            transformToRotate.quat2_setPositionRotationQuat(origin, defaultQuat);
             this.pp_getTransformWorldQuat(transformQuat);
-            glMatrix.quat2.conjugate(transformToRotateConjugate, transformToRotate);
-            glMatrix.quat2.mul(transformQuat, transformToRotateConjugate, transformQuat);
-            glMatrix.quat2.rotateAroundAxis(transformToRotate, transformToRotate, axis, angle);
-            glMatrix.quat2.mul(transformQuat, transformToRotate, transformQuat);
+            transformToRotate.quat2_conjugate(transformToRotateConjugate);
+            transformToRotateConjugate.quat2_mul(transformQuat, transformQuat);
+            transformToRotate.quat2_rotateAxisRadians(angle, axis, transformToRotate);
+            transformToRotate.quat2_mul(transformQuat, transformQuat);
             this.pp_setTransformWorldQuat(transformQuat);
         };
     }();
@@ -1521,7 +1521,7 @@ if (WL && WL.Object) {
         let matrix = PP.mat4_create();
         return function pp_convertPositionWorldToObject(position, resultPosition = PP.vec3_create()) {
             this.pp_getTransformWorldMatrix(matrix);
-            glMatrix.mat4.invert(matrix, matrix);
+            matrix.mat4_invert(matrix);
             glMatrix.vec3.transformMat4(resultPosition, position, matrix);
             return resultPosition;
         };
@@ -1619,17 +1619,17 @@ if (WL && WL.Object) {
         return function pp_convertTransformObjectToWorldMatrix(transform, resultTransform = PP.mat4_create()) {
             this.pp_getTransformWorldMatrix(convertTransform);
             if (this.pp_hasUniformScaleWorld()) {
-                glMatrix.mat4.mul(resultTransform, convertTransform, transform);
+                convertTransform.mat4_mul(transform, resultTransform);
             } else {
                 glMatrix.vec3.set(position, transform[12], transform[13], transform[14]);
                 this.pp_convertPositionObjectToWorld(position, position);
 
-                glMatrix.mat4.getScaling(scale, convertTransform);
+                convertTransform.mat4_getScale(scale);
                 glMatrix.vec3.divide(inverseScale, one, scale);
-                glMatrix.mat4.scale(convertTransform, convertTransform, inverseScale);
+                convertTransform.mat4_scale(inverseScale, convertTransform);
 
-                glMatrix.mat4.mul(resultTransform, convertTransform, transform);
-                glMatrix.mat4.scale(resultTransform, resultTransform, scale);
+                convertTransform.mat4_mul(transform, resultTransform);
+                resultTransform.mat4_scale(scale, resultTransform);
 
                 resultTransform[12] = position[0];
                 resultTransform[13] = position[1];
@@ -1646,9 +1646,9 @@ if (WL && WL.Object) {
         return function pp_convertTransformObjectToWorldQuat(transform, resultTransform = PP.quat2_create()) {
             this.pp_getRotationWorldQuat(rotation);
             rotation.quat_mul(transform, rotation);
-            glMatrix.quat2.getTranslation(position, transform);
+            transform.quat2_getPosition(position);
             this.pp_convertPositionObjectToWorld(position, position);
-            glMatrix.quat2.fromRotationTranslation(resultTransform, rotation, position);
+            resultTransform.quat2_setPositionRotationQuat(position, rotation);
             return resultTransform;
         };
     }();
@@ -1667,19 +1667,19 @@ if (WL && WL.Object) {
         return function pp_convertTransformWorldToObjectMatrix(transform, resultTransform = PP.mat4_create()) {
             this.pp_getTransformWorldMatrix(convertTransform);
             if (this.pp_hasUniformScaleWorld()) {
-                glMatrix.mat4.invert(convertTransform, convertTransform);
-                glMatrix.mat4.mul(resultTransform, convertTransform, transform);
+                convertTransform.mat4_invert(convertTransform);
+                convertTransform.mat4_mul(transform, resultTransform);
             } else {
                 glMatrix.vec3.set(position, transform[12], transform[13], transform[14]);
                 this.pp_convertPositionWorldToObject(position, position);
 
-                glMatrix.mat4.getScaling(scale, convertTransform);
+                convertTransform.mat4_getScale(scale);
                 glMatrix.vec3.divide(inverseScale, one, scale);
-                glMatrix.mat4.scale(convertTransform, convertTransform, inverseScale);
+                convertTransform.mat4_scale(inverseScale, convertTransform);
 
-                glMatrix.mat4.invert(convertTransform, convertTransform);
-                glMatrix.mat4.mul(resultTransform, convertTransform, transform);
-                glMatrix.mat4.scale(resultTransform, resultTransform, inverseScale);
+                convertTransform.mat4_invert(convertTransform);
+                convertTransform.mat4_mul(transform, resultTransform);
+                resultTransform.mat4_scale(inverseScale, resultTransform);
 
                 resultTransform[12] = position[0];
                 resultTransform[13] = position[1];
@@ -1697,9 +1697,9 @@ if (WL && WL.Object) {
             this.pp_getRotationWorldQuat(rotation);
             rotation.quat_conjugate(rotation);
             rotation.quat_mul(transform, rotation);
-            glMatrix.quat2.getTranslation(position, transform);
+            transform.quat2_getPosition(position);
             this.pp_convertPositionWorldToObject(position, position);
-            glMatrix.quat2.fromRotationTranslation(resultTransform, rotation, position);
+            resultTransform.quat2_setPositionRotationQuat(position, rotation);
             return resultTransform;
         };
     }();
@@ -1714,7 +1714,7 @@ if (WL && WL.Object) {
         if (this.pp_getParent()) {
             this.pp_getParent().pp_convertTransformObjectToWorldMatrix(transform, resultTransform);
         } else {
-            glMatrix.mat4.copy(resultTransform, transform);
+            resultTransform.mat4_copy(transform);
         }
         return resultTransform;
     };
@@ -1723,7 +1723,7 @@ if (WL && WL.Object) {
         if (this.pp_getParent()) {
             this.pp_getParent().pp_convertTransformObjectToWorldQuat(transform, resultTransform);
         } else {
-            glMatrix.quat2.copy(resultTransform, transform);
+            resultTransform.quat2_copy(transform);
         }
         return resultTransform;
     };
@@ -1736,7 +1736,7 @@ if (WL && WL.Object) {
         if (this.pp_getParent()) {
             this.pp_getParent().pp_convertTransformWorldToObjectMatrix(transform, resultTransform);
         } else {
-            glMatrix.mat4.copy(resultTransform, transform);
+            resultTransform.mat4_copy(transform);
         }
         return resultTransform;
     };
@@ -1745,7 +1745,7 @@ if (WL && WL.Object) {
         if (this.pp_getParent()) {
             this.pp_getParent().pp_convertTransformWorldToObjectQuat(transform, resultTransform);
         } else {
-            glMatrix.quat2.copy(resultTransform, transform);
+            resultTransform.quat2_copy(transform);
         }
         return resultTransform;
     };
