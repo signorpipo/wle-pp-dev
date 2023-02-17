@@ -34,10 +34,10 @@ PlayerTransformManagerParams = class PlayerTransformManagerParams {
         this.mySyncPositionHeadFlagMap.set(PlayerTransformManagerSyncFlag.FLOATING, false);
 
         this.mySyncRotationFlagMap = new Map();
-        this.mySyncRotationFlagMap.set(PlayerTransformManagerSyncFlag.BODY_COLLIDING, true);
+        this.mySyncRotationFlagMap.set(PlayerTransformManagerSyncFlag.BODY_COLLIDING, false);
         this.mySyncRotationFlagMap.set(PlayerTransformManagerSyncFlag.HEAD_COLLIDING, false);
-        this.mySyncRotationFlagMap.set(PlayerTransformManagerSyncFlag.FAR, true);
-        this.mySyncRotationFlagMap.set(PlayerTransformManagerSyncFlag.FLOATING, true);
+        this.mySyncRotationFlagMap.set(PlayerTransformManagerSyncFlag.FAR, false);
+        this.mySyncRotationFlagMap.set(PlayerTransformManagerSyncFlag.FLOATING, false);
 
         this.mySyncHeightFlagMap = new Map();
         this.mySyncHeightFlagMap.set(PlayerTransformManagerSyncFlag.BODY_COLLIDING, false);
