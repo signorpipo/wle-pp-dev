@@ -8,14 +8,11 @@ WL.registerComponent('pp-debug-array-function-counter', {
     _myDisplayOnlyFunctionThatContains: { type: WL.Type.String, default: "" }
 }, {
     init: function () {
-        let classes = [Array, Uint8ClampedArray, Uint8Array, Uint16Array, Uint32Array, Int8Array,
-            Int16Array, Int32Array, Float32Array, Float64Array];
-        let prefixes = ["pp_", "vec_", "vec2_", "vec3_", "vec4_", "quat_", "quat2_", "mat3_", "mat4_", "_pp_", "_vec_", "_quat_",];
-
         this._myFunctionCallsCounterParams = new PP.DebugClassFunctionCallsCounterParams();
-        this._myFunctionCallsCounterParams.myClasses = [
-            Array, Uint8ClampedArray, Uint8Array, Uint16Array, Uint32Array, Int8Array,
-            Int16Array, Int32Array, Float32Array, Float64Array];
+        this._myFunctionCallsCounterParams.myClassNames = [
+            "Array", "Uint8ClampedArray", "Uint8Array", "Uint16Array", "Uint32Array", "Int8Array",
+            "Int16Array", "Int32Array", "Float32Array", "Float64Array"];
+        this._myFunctionCallsCounterParams.myExcludeConstructor = true;
 
         if (this._myDisplayOnlyFunctionThatContains.length > 0) {
             let toIncludeList = [...this._myDisplayOnlyFunctionThatContains.split(",")];
@@ -24,6 +21,7 @@ WL.registerComponent('pp-debug-array-function-counter', {
             }
             this._myFunctionCallsCounterParams.myFunctionNamesToInclude.push(...toIncludeList);
         } else if (this._myIncludeOnlyPPExtensionFunctions) {
+            let prefixes = ["pp_", "vec_", "vec2_", "vec3_", "vec4_", "quat_", "quat2_", "mat3_", "mat4_", "_pp_", "_vec_", "_quat_",];
             this._myFunctionCallsCounterParams.myFunctionNamesToInclude.push(...prefixes);
         }
 
@@ -34,6 +32,12 @@ WL.registerComponent('pp-debug-array-function-counter', {
     start: function () {
     },
     update: function (dt) {
+
+        let randomTimer = Math.pp_randomInt(10, 200);
+        for (let i = 0; i < randomTimer; i++) {
+            new PP.Timer(0);
+        }
+
         this._myTimer.update(dt);
         if (this._myTimer.isDone()) {
             this._myTimer.start();
