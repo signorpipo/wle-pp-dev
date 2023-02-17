@@ -5035,6 +5035,130 @@
                 1.7953854,
                 1.0000114
             ]
+        },
+        "918": {
+            "name": "PhysX to Clone",
+            "components": [
+                {
+                    "type": "physx",
+                    "physx": {
+                        "gravity": false,
+                        "kinematic": true,
+                        "trigger": false,
+                        "allowSimulation": true,
+                        "simulate": true,
+                        "static": true
+                    }
+                },
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p2",
+                        "material": "35"
+                    }
+                }
+            ],
+            "translation": [
+                0.5,
+                -9999.0,
+                2.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "scaling": [
+                0.25,
+                0.25,
+                0.25
+            ],
+            "parent": "921"
+        },
+        "919": {
+            "name": "Cloned PhysX",
+            "parent": "921",
+            "translation": [
+                0.0,
+                -10000.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "scaling": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "components": [
+                {
+                    "type": "clone-object",
+                    "clone-object": {
+                        "_myToClone": "918"
+                    }
+                }
+            ]
+        },
+        "920": {
+            "name": "Big Cube PhysX",
+            "parent": "921",
+            "translation": [
+                -0.3772123,
+                -9996.2226562,
+                2.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "scaling": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "components": [
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                2.0,
+                                0.25,
+                                0.25
+                            ]
+                        }
+                    },
+                    "active": false
+                }
+            ]
+        },
+        "921": {
+            "name": "PhysX Clone Test",
+            "parent": "71",
+            "translation": [
+                0.0,
+                -10000.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "scaling": [
+                1.0,
+                1.0,
+                1.0
+            ]
         }
     },
     "meshes": {

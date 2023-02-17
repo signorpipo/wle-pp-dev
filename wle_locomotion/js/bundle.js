@@ -318,3 +318,4 @@ require('./test/gamepad_button_display');
 require('./test/show_meshed_line');
 require('./test/pulse_on_button');
 require('./test/move_static_collider');
+require('./test/clone_object');
