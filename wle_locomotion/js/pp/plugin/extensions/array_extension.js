@@ -375,13 +375,13 @@ PP.quat2_fromPositionRotation = function (position, rotation) {
 };
 
 PP.quat2_fromPositionRotationDegrees = function (position, rotation) {
-    let out = PP.mat4_create();
+    let out = PP.quat2_create();
     out.quat2_setPositionRotationDegrees(position, rotation);
     return out;
 };
 
 PP.quat2_fromPositionRotationRadians = function (position, rotation) {
-    let out = PP.mat4_create();
+    let out = PP.quat2_create();
     out.quat2_setPositionRotationRadians(position, rotation);
     return out;
 };
