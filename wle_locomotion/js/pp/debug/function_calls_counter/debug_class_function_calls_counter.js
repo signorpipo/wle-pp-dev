@@ -17,7 +17,11 @@ PP.DebugClassFunctionCallsCounter = class DebugClassFunctionCallsCounter {
         for (let className of params.myClassNames) {
             let classItem = this._getClassFromName(className);
 
+            // aggiungere che se è un oggetto istanziato allora modifica l'oggetto e non il prototipo
             let prototype = classItem.prototype;
+            if (prototype == null) {
+                prototype = classItem;
+            }
             let properties = Object.getOwnPropertyNames(prototype);
 
             for (let property of properties) {
@@ -56,7 +60,7 @@ PP.DebugClassFunctionCallsCounter = class DebugClassFunctionCallsCounter {
                             };
 
                             Object.defineProperty(prototype, property, { enumerable: backupEnumerable });
-                        } else if (!params.myExcludeConstructor) {
+                        } else if (!params.myExcludeConstructor && classItem.prototype != null) {
                             this._myBackupFunctions[property] = classItem;
 
                             this._myFunctionsCallsCounters.set(property, 0);

@@ -1,5 +1,5 @@
 
-WL.registerComponent('pp-debug-array-function-counter', {
+WL.registerComponent('pp-debug-array-function-calls-counter', {
     _myIncludeOnlyArrayExtensionFunctions: { type: WL.Type.Bool, default: false },
     _myLogDelay: { type: WL.Type.Float, default: 1.0 },
     _myLogCollapsed: { type: WL.Type.Bool, default: false },
