@@ -100,8 +100,10 @@ require('./pp/debug/debug_visual_manager');
 
 require('./pp/debug/components/debug_transform_component');
 require('./pp/debug/components/debug_manager_component');
-require('./pp/debug/components/array/debug_array_creation_counter');
-require('./pp/debug/components/array/debug_array_function_counter');
+
+require('./pp/debug/function_calls_counter/debug_class_function_calls_counter');
+require('./pp/debug/function_calls_counter/array/debug_array_creation_counter');
+require('./pp/debug/function_calls_counter/array/debug_array_function_counter');
 
 //	GAMEPLAY
 
