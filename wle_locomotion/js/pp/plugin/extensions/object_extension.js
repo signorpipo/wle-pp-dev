@@ -108,8 +108,6 @@
         - pp_getObjectsByNameObjects
 */
 
-import * as glMatrix from 'gl-matrix';
-
 if (WL && WL.Object) {
 
     //GETTER
@@ -1132,7 +1130,7 @@ if (WL && WL.Object) {
     };
 
     WL.Object.prototype.pp_rotateAxisWorldDegrees = function (angle, axis) {
-        this.pp_rotateAxisWorldRadians(glMatrix.glMatrix.toRadian(angle), axis);
+        this.pp_rotateAxisWorldRadians(Math.pp_toRadians(angle), axis);
     };
 
     WL.Object.prototype.pp_rotateAxisWorldRadians = function () {
@@ -1150,7 +1148,7 @@ if (WL && WL.Object) {
     };
 
     WL.Object.prototype.pp_rotateAxisLocalDegrees = function (angle, axis) {
-        this.pp_rotateAxisLocalRadians(glMatrix.glMatrix.toRadian(angle), axis);
+        this.pp_rotateAxisLocalRadians(Math.pp_toRadians(angle), axis);
     };
 
     WL.Object.prototype.pp_rotateAxisLocalRadians = function () {
@@ -1168,7 +1166,7 @@ if (WL && WL.Object) {
     };
 
     WL.Object.prototype.pp_rotateAxisObjectDegrees = function (angle, axis) {
-        this.pp_rotateAxisObjectRadians(glMatrix.glMatrix.toRadian(angle), axis);
+        this.pp_rotateAxisObjectRadians(Math.pp_toRadians(angle), axis);
     };
 
     WL.Object.prototype.pp_rotateAxisObjectRadians = function () {
@@ -1348,7 +1346,7 @@ if (WL && WL.Object) {
     };
 
     WL.Object.prototype.pp_rotateAroundAxisWorldDegrees = function (angle, axis, origin) {
-        this.pp_rotateAroundAxisWorldRadians(glMatrix.glMatrix.toRadian(angle), axis, origin);
+        this.pp_rotateAroundAxisWorldRadians(Math.pp_toRadians(angle), axis, origin);
     };
 
     WL.Object.prototype.pp_rotateAroundAxisWorldRadians = function () {
@@ -1374,7 +1372,7 @@ if (WL && WL.Object) {
     };
 
     WL.Object.prototype.pp_rotateAroundAxisLocalDegrees = function (angle, axis, origin) {
-        this.pp_rotateAroundAxisLocalRadians(glMatrix.glMatrix.toRadian(angle), axis, origin);
+        this.pp_rotateAroundAxisLocalRadians(Math.pp_toRadians(angle), axis, origin);
     };
 
     WL.Object.prototype.pp_rotateAroundAxisLocalRadians = function () {
@@ -1394,7 +1392,7 @@ if (WL && WL.Object) {
     };
 
     WL.Object.prototype.pp_rotateAroundAxisObjectDegrees = function (angle, axis, origin) {
-        this.pp_rotateAroundAxisObjectRadians(glMatrix.glMatrix.toRadian(angle), axis, origin);
+        this.pp_rotateAroundAxisObjectRadians(Math.pp_toRadians(angle), axis, origin);
     };
 
     WL.Object.prototype.pp_rotateAroundAxisObjectRadians = function () {
