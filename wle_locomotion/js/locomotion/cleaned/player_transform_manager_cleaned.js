@@ -101,7 +101,7 @@ CleanedPlayerTransformManager = class CleanedPlayerTransformManager {
     }
 
     getTransformQuat(outTransformQuat = PP.quat2_create()) {
-        return outTransformQuat.quat2_setPositionRotationQuat(this.getPosition(), this.getRotationQuat());
+        return outTransformQuat.quat2_setPositionRotationQuat(this.getPosition(this._myValidPosition), this.getRotationQuat(this._myValidRotationQuat));
     }
 
     getPosition(outPosition = PP.vec3_create()) {
@@ -117,7 +117,7 @@ CleanedPlayerTransformManager = class CleanedPlayerTransformManager {
     }
 
     getTransformHeadQuat(outTransformQuat = PP.quat2_create()) {
-        return outTransformQuat.quat2_setPositionRotationQuat(this.getPositionHead(), this.getRotationQuat());
+        return outTransformQuat.quat2_setPositionRotationQuat(this.getPositionHead(this._myValidPositionHead), this.getRotationQuat(this._myValidRotationQuat));
     }
 
     getHeight() {
@@ -601,7 +601,7 @@ CleanedPlayerTransformManager.prototype._updateReal = function () {
 
                 if (collisionRuntimeParams.myIsOnGround) {
                     transformUp = transformQuat.quat2_getUp(transformUp);
-                    verticalMovement = movementToCheck.vec3_componentAlongAxis(transformUp);
+                    verticalMovement = movementToCheck.vec3_componentAlongAxis(transformUp, verticalMovement);
                     let isVertical = !verticalMovement.vec3_isZero(0.00001);
                     if (!isVertical || !this._myParams.myIsFloatingValidIfVerticalMovement) {
                         let movementStepAmount = 1;

@@ -40,10 +40,10 @@ PlayerTransformManagerParams = class PlayerTransformManagerParams {
         this.mySyncRotationFlagMap.set(PlayerTransformManagerSyncFlag.FLOATING, true);
 
         this.mySyncHeightFlagMap = new Map();
-        this.mySyncHeightFlagMap.set(PlayerTransformManagerSyncFlag.BODY_COLLIDING, true);
+        this.mySyncHeightFlagMap.set(PlayerTransformManagerSyncFlag.BODY_COLLIDING, false);
         this.mySyncHeightFlagMap.set(PlayerTransformManagerSyncFlag.HEAD_COLLIDING, false);
-        this.mySyncHeightFlagMap.set(PlayerTransformManagerSyncFlag.FAR, true);
-        this.mySyncHeightFlagMap.set(PlayerTransformManagerSyncFlag.FLOATING, true);
+        this.mySyncHeightFlagMap.set(PlayerTransformManagerSyncFlag.FAR, false);
+        this.mySyncHeightFlagMap.set(PlayerTransformManagerSyncFlag.FLOATING, false);
 
         this.myIsLeaningValidAboveDistance = false;
         this.myLeaningValidDistance = 0;
@@ -233,7 +233,7 @@ PlayerTransformManager = class PlayerTransformManager {
     }
 
     getTransformQuat(outTransformQuat = PP.quat2_create()) {
-        return outTransformQuat.quat2_setPositionRotationQuat(this.getPosition(), this.getRotationQuat());
+        return outTransformQuat.quat2_setPositionRotationQuat(this.getPosition(this._myValidPosition), this.getRotationQuat(this._myValidRotationQuat));
     }
 
     getPosition(outPosition = PP.vec3_create()) {
@@ -249,7 +249,7 @@ PlayerTransformManager = class PlayerTransformManager {
     }
 
     getTransformHeadQuat(outTransformQuat = PP.quat2_create()) {
-        return outTransformQuat.quat2_setPositionRotationQuat(this.getPositionHead(), this.getRotationQuat());
+        return outTransformQuat.quat2_setPositionRotationQuat(this.getPositionHead(this._myValidPositionHead), this.getRotationQuat(this._myValidRotationQuat));
     }
 
     getHeight() {
@@ -733,7 +733,7 @@ PlayerTransformManager.prototype._updateReal = function () {
 
                 if (collisionRuntimeParams.myIsOnGround) {
                     transformUp = transformQuat.quat2_getUp(transformUp);
-                    verticalMovement = movementToCheck.vec3_componentAlongAxis(transformUp);
+                    verticalMovement = movementToCheck.vec3_componentAlongAxis(transformUp, verticalMovement);
                     let isVertical = !verticalMovement.vec3_isZero(0.00001);
                     if (!isVertical || !this._myParams.myIsFloatingValidIfVerticalMovement) {
                         let movementStepAmount = 1;
