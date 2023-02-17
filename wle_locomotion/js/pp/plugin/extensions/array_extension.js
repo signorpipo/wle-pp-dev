@@ -128,7 +128,7 @@
             - quat_lerp             / quat_interpolate      / quat_slerp    / quat_sinterpolate
 
         QUAT 2:
-            ○ quat2_copy        / quat2_identity
+            ○ quat2_set         / quat2_copy        / quat2_identity
             - quat2_normalize
             - quat2_isNormalized
             - quat2_length          / quat2_lengthSquared
@@ -141,11 +141,12 @@
             - quat2_lerp        / quat2_interpolate
 
         MATRIX 3:
+            ○ mat3_set
             - mat3_toDegrees    / mat3_toRadians    / mat3_toQuat
             - mat3_fromAxes
 
         MATRIX 4:
-            ○ mat4_copy         / mat4_identity
+            ○ mat4_set          / mat4_copy         / mat4_identity
             - mat4_clone
             - mat4_invert
             - mat4_getPosition  / mat4_getRotation  / mat4_getScale
@@ -210,8 +211,8 @@ Array.prototype._pp_syncPrototypesProperties = function () {
 
 //CREATION
 
-Array.prototype.vec2_set = function (x, y = null) {
-    if (y == null) {
+Array.prototype.vec2_set = function (x, y) {
+    if (y === undefined) {
         glMatrix.vec2.set(this, x, x);
     } else {
         glMatrix.vec2.set(this, x, y);
@@ -219,8 +220,8 @@ Array.prototype.vec2_set = function (x, y = null) {
     return this;
 };
 
-Array.prototype.vec3_set = function (x, y = null, z = null) {
-    if (y == null) {
+Array.prototype.vec3_set = function (x, y, z) {
+    if (y === undefined) {
         glMatrix.vec3.set(this, x, x, x);
     } else {
         glMatrix.vec3.set(this, x, y, z);
@@ -228,8 +229,8 @@ Array.prototype.vec3_set = function (x, y = null, z = null) {
     return this;
 };
 
-Array.prototype.vec4_set = function (x, y = null, z = null, w = null) {
-    if (y == null) {
+Array.prototype.vec4_set = function (x, y, z, w) {
+    if (y === undefined) {
         glMatrix.vec4.set(this, x, x, x, x);
     } else {
         glMatrix.vec4.set(this, x, y, z, w);
@@ -237,11 +238,59 @@ Array.prototype.vec4_set = function (x, y = null, z = null, w = null) {
     return this;
 };
 
-Array.prototype.quat_set = function (x, y = null, z = null, w = null) {
-    if (y == null) {
+Array.prototype.quat_set = function (x, y, z, w) {
+    if (y === undefined) {
         glMatrix.quat.set(this, x, x, x, x);
     } else {
         glMatrix.quat.set(this, x, y, z, w);
+    }
+    return this;
+};
+
+Array.prototype.quat2_set = function (x1, y1, z1, w1, x2, y2, z2, w2) {
+    if (y === undefined) {
+        glMatrix.quat2.set(this, x1, x1, x1, x1, x1, x1, x1, x1);
+    } else {
+        glMatrix.quat2.set(this, x1, y1, z1, w1, x2, y2, z2, w2);
+    }
+    return this;
+};
+
+Array.prototype.mat3_set = function (
+    m00, m01, m02,
+    m10, m11, m12,
+    m20, m21, m22) {
+    if (y === undefined) {
+        glMatrix.mat3.set(this,
+            m00, m00, m00,
+            m00, m00, m00,
+            m00, m00, m00);
+    } else {
+        glMatrix.mat3.set(this,
+            m00, m01, m02,
+            m10, m11, m12,
+            m20, m21, m22);
+    }
+    return this;
+};
+
+Array.prototype.mat4_set = function (
+    m00, m01, m02, m03,
+    m10, m11, m12, m13,
+    m20, m21, m22, m23,
+    m30, m31, m32, m33) {
+    if (y === undefined) {
+        glMatrix.mat4.set(this,
+            m00, m00, m00, m00,
+            m00, m00, m00, m00,
+            m00, m00, m00, m00,
+            m00, m00, m00, m00);
+    } else {
+        glMatrix.mat4.set(this,
+            m00, m01, m02, m03,
+            m10, m11, m12, m13,
+            m20, m21, m22, m23,
+            m30, m31, m32, m33);
     }
     return this;
 };
