@@ -178,7 +178,7 @@ if (WL && WL.Object) {
         let quat = PP.quat_create();
         return function pp_getRotationWorldMatrix(rotation = PP.mat3_create()) {
             this.pp_getRotationWorldQuat(quat);
-            glMatrix.mat3.fromQuat(rotation, quat);
+            quat.quat_toMatrix(rotation);
             return rotation;
         };
     }();
@@ -215,7 +215,7 @@ if (WL && WL.Object) {
         let quat = PP.quat_create();
         return function pp_getRotationLocalMatrix(rotation = PP.mat3_create()) {
             this.pp_getRotationLocalQuat(quat);
-            glMatrix.mat3.fromQuat(rotation, quat);
+            quat.quat_toMatrix(rotation);
             return rotation;
         };
     }();
@@ -2660,7 +2660,7 @@ if (WL && WL.Object) {
     WL.Object.prototype._pp_quaternionToRadians = function () {
         let mat3 = PP.mat3_create();
         return function _pp_quaternionToRadians(quatRotation, radiansRotation = PP.vec3_create()) {
-            glMatrix.mat3.fromQuat(mat3, quatRotation);
+            quatRotation.quat_toMatrix(mat3);
 
             //Rotation order is ZYX
             radiansRotation[1] = Math.asin(-this._pp_clamp(mat3[2], -1, 1));
@@ -2778,7 +2778,7 @@ if (WL && WL.Object) {
                 glMatrix.vec3.normalize(fixedUp, fixedAxes[priority.pp_findIndexEqual(1)]);
                 glMatrix.vec3.normalize(fixedForward, fixedAxes[priority.pp_findIndexEqual(2)]);
 
-                glMatrix.mat3.set(rotationMat,
+                rotationMat.mat3_set(
                     fixedLeft[0], fixedLeft[1], fixedLeft[2],
                     fixedUp[0], fixedUp[1], fixedUp[2],
                     fixedForward[0], fixedForward[1], fixedForward[2]

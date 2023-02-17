@@ -248,7 +248,7 @@ Array.prototype.quat_set = function (x, y, z, w) {
 };
 
 Array.prototype.quat2_set = function (x1, y1, z1, w1, x2, y2, z2, w2) {
-    if (y === undefined) {
+    if (y1 === undefined) {
         glMatrix.quat2.set(this, x1, x1, x1, x1, x1, x1, x1, x1);
     } else {
         glMatrix.quat2.set(this, x1, y1, z1, w1, x2, y2, z2, w2);
@@ -260,7 +260,7 @@ Array.prototype.mat3_set = function (
     m00, m01, m02,
     m10, m11, m12,
     m20, m21, m22) {
-    if (y === undefined) {
+    if (m01 === undefined) {
         glMatrix.mat3.set(this,
             m00, m00, m00,
             m00, m00, m00,
@@ -279,7 +279,7 @@ Array.prototype.mat4_set = function (
     m10, m11, m12, m13,
     m20, m21, m22, m23,
     m30, m31, m32, m33) {
-    if (y === undefined) {
+    if (m01 === undefined) {
         glMatrix.mat4.set(this,
             m00, m00, m00, m00,
             m00, m00, m00, m00,
