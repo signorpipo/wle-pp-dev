@@ -40,6 +40,10 @@ PP.DebugFunctionCallsCounterParams = class DebugFunctionCallsCounterParams {
 
         this.myClassPathsToInclude = [];            // empty means every class is included
         this.myClassPathsToExclude = [];            // empty means no class is excluded
+
+        // Tricks
+        // - you can specify an object/class/function as a pair [object, "name"] instead of just object
+        //   and the name, if not null, will be used as path instead of the default one
     }
 };
 
@@ -113,6 +117,10 @@ PP.DebugFunctionCallsCounter = class DebugFunctionCallsCounter {
     }
 
     _getReferenceNameFromPath(path) {
+        if (path == null) {
+            return null;
+        }
+
         let pathSplit = path.split(".");
 
         if (pathSplit.length > 0) {
@@ -226,15 +234,39 @@ PP.DebugFunctionCallsCounter = class DebugFunctionCallsCounter {
         let equalCallback = (first, second) => first[0] == second[0];
         let referenceAndParents = [];
 
-        for (let path of byPathList) {
+        for (let pathPair of byPathList) {
+            let path = pathPair;
+            let referenceNameToUse = "";
+            let referencePathToUse = pathPair;
+
+            if (pathPair != null && Array.isArray(pathPair) && pathPair.length != null && pathPair.length == 2 && typeof pathPair[1] == "string") {
+                path = pathPair[0];
+                referencePathToUse = pathPair[1];
+                referencePathToUse = this._getReferenceNameFromPath(referencePathToUse);
+            } else {
+                referenceNameToUse = this._getReferenceNameFromPath(path);
+            }
+
             let reference = this._getReferenceFromPath(path);
             let referenceParent = this._getParentReferenceFromPath(path);
 
-            referenceAndParents.pp_pushUnique([reference, referenceParent, this._getReferenceNameFromPath(path), path], equalCallback);
+            referenceAndParents.pp_pushUnique([reference, referenceParent, referenceNameToUse, referencePathToUse], equalCallback);
         }
 
-        for (let reference of byReferenceList) {
-            referenceAndParents.pp_pushUnique([reference, null, isClass ? reference.name : null, isClass ? reference.name : null], equalCallback);
+        for (let referencePair of byReferenceList) {
+            let reference = referencePair;
+            let referenceNameToUse = "";
+            let referencePathToUse = "";
+            if (pathPair != null && pathPair.length != null && pathPair.length == 2 && typeof pathPair[1] == "string") {
+                path = pathPair[0];
+                referencePathToUse = pathPair[1];
+                referencePathToUse = this._getReferenceNameFromPath(referencePathToUse);
+            } else {
+                referenceNameToUse = isClass ? reference.name : null;
+                referencePathToUse = isClass ? reference.name : null;
+            }
+
+            referenceAndParents.pp_pushUnique([reference, null, referenceNameToUse, referencePathToUse], equalCallback);
         }
 
         return referenceAndParents;
