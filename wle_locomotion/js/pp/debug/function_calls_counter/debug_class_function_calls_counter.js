@@ -17,9 +17,11 @@ PP.DebugClassFunctionCallsCounter = class DebugClassFunctionCallsCounter {
 
         this._myParams = params;
 
-        for (let classPath of this._myParams.myClassesByPath) {
-            let classReference = this._getClassReferenceFromClassPath(classPath);
-            let classParentReferenceParent = this._getClassParentReferenceFromClassPath(classPath);
+        let classesAndParents = this._getClassesAndParents();
+
+        for (let classAndParent of classesAndParents) {
+            let classReference = classAndParent[0];
+            let classParentReferenceParent = classAndParent[1];
 
             this._addCallsCounter(classReference, classParentReferenceParent, true);
         }
@@ -131,5 +133,23 @@ PP.DebugClassFunctionCallsCounter = class DebugClassFunctionCallsCounter {
                 }
             }
         }
+    }
+
+    _getClassesAndParents() {
+        let equalCallback = (first, second) => first[0] == second[0];
+        let classesAndParents = [];
+
+        for (let classPath of this._myParams.myClassesByPath) {
+            let classReference = this._getClassReferenceFromClassPath(classPath);
+            let classParentReferenceParent = this._getClassParentReferenceFromClassPath(classPath);
+
+            classesAndParents.pp_pushUnique([classReference, classParentReferenceParent], equalCallback);
+        }
+
+        for (let classReference of this._myParams.myClassesByReference) {
+            classesAndParents.pp_pushUnique([classReference, null], equalCallback);
+        }
+
+        return classesAndParents;
     }
 };
