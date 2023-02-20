@@ -7,7 +7,7 @@ WL.registerComponent('pp-debug-array-creation-calls-counter', {
         let arrayCreateFunctions = ["vec2_create", "vec3_create", "vec4_create", "quat_create", "quat2_create", "mat3_create", "mat4_create"];
 
         let functionCallsCounterParams = new PP.DebugClassFunctionCallsCounterParams();
-        functionCallsCounterParams.myClassNames = ["PP"];
+        functionCallsCounterParams.myClassesByPath = ["PP"];
         functionCallsCounterParams.myExcludeConstructor = true;
 
         functionCallsCounterParams.myFunctionNamesToInclude.push(...arrayCreateFunctions);

@@ -42,6 +42,9 @@ v Componente character-controller che semplicemente ha la collisione e puoi dirg
 
 
 TEMP:
+- cautils check function exists
+- add pp display ca leaderboard component / An error has occurred while trying to retrieve the leaderboard
+- mettere sign in and play bla bla come default value nel dummy
 - visual manager copy params instead of set
 - fix muoversi guardando indietro dovrebbe comunque andare avanti
 - squared length / normalized use squared length

@@ -1,6 +1,7 @@
 PP.DebugClassFunctionCallsCounterParams = class DebugClassFunctionCallsCounterParams {
     constructor() {
-        this.myClassNames = [];
+        this.myClassesByReference = [];
+        this.myClassesByPath = [];
 
         this.myFunctionNamesToInclude = [];     // empty means every function is included
         this.myFunctionNamesToExclude = [];     // empty means no function is excluded
@@ -14,66 +15,13 @@ PP.DebugClassFunctionCallsCounter = class DebugClassFunctionCallsCounter {
         this._myFunctionsCallsCounters = new Map();
         this._myBackupFunctions = [];
 
-        for (let className of params.myClassNames) {
-            let classItem = this._getClassFromName(className);
+        this._myParams = params;
 
-            // aggiungere che se è un oggetto istanziato allora modifica l'oggetto e non il prototipo
-            let prototype = classItem.prototype;
-            if (prototype == null) {
-                prototype = classItem;
-            }
-            let properties = Object.getOwnPropertyNames(prototype);
+        for (let classPath of this._myParams.myClassesByPath) {
+            let classReference = this._getClassReferenceFromClassPath(classPath);
+            let classParentReferenceParent = this._getClassParentReferenceFromClassPath(classPath);
 
-            for (let property of properties) {
-                if (typeof prototype[property] == "function") {
-                    let isValidFunctionName = params.myFunctionNamesToInclude.length == 0;
-                    for (let functionName of params.myFunctionNamesToInclude) {
-                        if (property.includes(functionName)) {
-                            isValidFunctionName = true;
-                            break;
-                        }
-                    }
-
-                    if (isValidFunctionName) {
-                        for (let functionName of params.myFunctionNamesToExclude) {
-                            if (property.includes(functionName)) {
-                                isValidFunctionName = false;
-                                break;
-                            }
-                        }
-                    }
-
-                    if (isValidFunctionName) {
-                        if (property != "constructor") {
-                            this._myBackupFunctions[property] = prototype[property];
-
-                            this._myFunctionsCallsCounters.set(property, 0);
-                            let functionsCallsCounters = this._myFunctionsCallsCounters;
-
-                            let backupFunction = this._myBackupFunctions[property];
-
-                            let backupEnumerable = prototype.propertyIsEnumerable(property);
-
-                            prototype[property] = function () {
-                                functionsCallsCounters.set(property, functionsCallsCounters.get(property) + 1);
-                                return backupFunction.bind(this)(...arguments);
-                            };
-
-                            Object.defineProperty(prototype, property, { enumerable: backupEnumerable });
-                        } else if (!params.myExcludeConstructor && classItem.prototype != null) {
-                            this._myBackupFunctions[property] = classItem;
-
-                            this._myFunctionsCallsCounters.set(property, 0);
-                            let functionsCallsCounters = this._myFunctionsCallsCounters;
-
-                            this._setClassConstructor(className, function () {
-                                functionsCallsCounters.set(property, functionsCallsCounters.get(property) + 1);
-                                return new classItem(...arguments);
-                            });
-                        }
-                    }
-                }
-            }
+            this._addCallsCounter(classReference, classParentReferenceParent, true);
         }
     }
 
@@ -95,26 +43,93 @@ PP.DebugClassFunctionCallsCounter = class DebugClassFunctionCallsCounter {
         return callsCounter;
     }
 
-    _getClassFromName(className) {
-        let classPath = className.split(".");
+    _getClassReferenceFromClassPath(classPath) {
+        let classPathSplit = classPath.split(".");
         let parent = window;
-        for (let i = 0; i < classPath.length - 1; i++) {
-            parent = parent[classPath[i]];
+        for (let i = 0; i < classPathSplit.length - 1; i++) {
+            parent = parent[classPathSplit[i]];
         }
 
-        return parent[classPath[classPath.length - 1]];
+        return parent[classPathSplit[classPathSplit.length - 1]];
     }
 
-    _setClassConstructor(className, newConstructor) {
-        let classPath = className.split(".");
+    _getClassParentReferenceFromClassPath(classPath) {
+        let classPathSplit = classPath.split(".");
         let parent = window;
-        for (let i = 0; i < classPath.length - 1; i++) {
-            parent = parent[classPath[i]];
+        for (let i = 0; i < classPathSplit.length - 1; i++) {
+            parent = parent[classPathSplit[i]];
         }
 
-        let backupConstructor = parent[classPath[classPath.length - 1]];
+        return parent;
+    }
 
-        parent[classPath[classPath.length - 1]] = newConstructor;
-        parent[classPath[classPath.length - 1]].prototype = backupConstructor.prototype;
+    _setClassConstructor(reference, referenceParent, newConstructor) {
+        let backupConstructor = referenceParent[reference.name];
+
+        referenceParent[reference.name] = newConstructor;
+        referenceParent[reference.name].prototype = backupConstructor.prototype;
+    }
+
+    _addCallsCounter(reference, referenceParent, isClass) {
+        let prototype = null;
+
+        if (isClass) {
+            prototype = reference.prototype;
+        } else {
+            prototype = reference;
+        }
+
+        let properties = Object.getOwnPropertyNames(prototype);
+
+        for (let property of properties) {
+            if (typeof prototype[property] == "function") {
+                let isValidFunctionName = this._myParams.myFunctionNamesToInclude.length == 0;
+                for (let functionName of this._myParams.myFunctionNamesToInclude) {
+                    if (property.includes(functionName)) {
+                        isValidFunctionName = true;
+                        break;
+                    }
+                }
+
+                if (isValidFunctionName) {
+                    for (let functionName of this._myParams.myFunctionNamesToExclude) {
+                        if (property.includes(functionName)) {
+                            isValidFunctionName = false;
+                            break;
+                        }
+                    }
+                }
+
+                if (isValidFunctionName) {
+                    if (property != "constructor") {
+                        this._myBackupFunctions[property] = prototype[property];
+
+                        this._myFunctionsCallsCounters.set(property, 0);
+                        let functionsCallsCounters = this._myFunctionsCallsCounters;
+
+                        let backupFunction = this._myBackupFunctions[property];
+
+                        let backupEnumerable = prototype.propertyIsEnumerable(property);
+
+                        prototype[property] = function () {
+                            functionsCallsCounters.set(property, functionsCallsCounters.get(property) + 1);
+                            return backupFunction.bind(this)(...arguments);
+                        };
+
+                        Object.defineProperty(prototype, property, { enumerable: backupEnumerable });
+                    } else if (!this._myParams.myExcludeConstructor && isClass && referenceParent != null) {
+                        this._myBackupFunctions[property] = reference;
+
+                        this._myFunctionsCallsCounters.set(property, 0);
+                        let functionsCallsCounters = this._myFunctionsCallsCounters;
+
+                        this._setClassConstructor(reference, referenceParent, function () {
+                            functionsCallsCounters.set(property, functionsCallsCounters.get(property) + 1);
+                            return new reference(...arguments);
+                        });
+                    }
+                }
+            }
+        }
     }
 };
