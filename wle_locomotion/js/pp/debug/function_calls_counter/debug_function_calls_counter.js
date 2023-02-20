@@ -199,7 +199,7 @@ PP.DebugFunctionCallsCounter = class DebugFunctionCallsCounter {
         let isClass = false;
 
         try {
-            isClass = typeof reference[propertyName] == "function" && reference[propertyName].prototype != null && typeof reference[propertyName].prototype.constructor == "function" &&
+            isClass = typeof reference[propertyName] == "function" && propertyName != "constructor" && reference[propertyName].prototype != null && typeof reference[propertyName].prototype.constructor == "function" &&
                 (/^class\s/).test(reference[propertyName].toString());
         } catch (error) { }
 
