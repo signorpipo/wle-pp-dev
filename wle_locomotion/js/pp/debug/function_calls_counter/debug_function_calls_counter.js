@@ -22,6 +22,7 @@ PP.DebugFunctionCallsCounter = class DebugFunctionCallsCounter {
     constructor(params = new PP.DebugFunctionCallsCounterParams()) {
         this._myFunctionsCallsCount = new Map();
         this._myBackupFunctions = [];
+        this._myPropertiesAlreadyCounted = new Map();
 
         this._myParams = params;
 
@@ -145,35 +146,44 @@ PP.DebugFunctionCallsCounter = class DebugFunctionCallsCounter {
             }
 
             if (isValidFunctionName) {
-                if (propertyName != "constructor") {
-                    this._myBackupFunctions[propertyName] = counterTarget[propertyName];
+                if (!this._myPropertiesAlreadyCounted.has(propertyName)) {
+                    this._myPropertiesAlreadyCounted.set(propertyName, []);
+                }
 
-                    this._myFunctionsCallsCount.set(propertyName, 0);
-                    let functionsCallsCounters = this._myFunctionsCallsCount;
+                let isPropertyCountedAlready = this._myPropertiesAlreadyCounted.get(propertyName).pp_hasEqual(counterTarget);
+                if (!isPropertyCountedAlready) {
+                    if (propertyName != "constructor") {
+                        this._myBackupFunctions[propertyName] = counterTarget[propertyName];
 
-                    let backupFunction = this._myBackupFunctions[propertyName];
+                        this._myFunctionsCallsCount.set(propertyName, 0);
+                        let functionsCallsCounters = this._myFunctionsCallsCount;
 
-                    let backupEnumerable = counterTarget.propertyIsEnumerable(propertyName);
+                        let backupFunction = this._myBackupFunctions[propertyName];
 
-                    try {
-                        counterTarget[propertyName] = function () {
+                        let backupEnumerable = counterTarget.propertyIsEnumerable(propertyName);
+
+                        try {
+                            counterTarget[propertyName] = function () {
+                                functionsCallsCounters.set(propertyName, functionsCallsCounters.get(propertyName) + 1);
+                                return backupFunction.bind(this)(...arguments);
+                            };
+
+                            Object.defineProperty(counterTarget, propertyName, { enumerable: backupEnumerable });
+                        } catch (error) {
+                        }
+                    } else if (!this._myParams.myExcludeConstructor && isClass && referenceParent != null) {
+                        this._myBackupFunctions[propertyName] = reference;
+
+                        this._myFunctionsCallsCount.set(propertyName, 0);
+                        let functionsCallsCounters = this._myFunctionsCallsCount;
+
+                        this._setClassConstructor(referenceName, referenceParent, function () {
                             functionsCallsCounters.set(propertyName, functionsCallsCounters.get(propertyName) + 1);
-                            return backupFunction.bind(this)(...arguments);
-                        };
-
-                        Object.defineProperty(counterTarget, propertyName, { enumerable: backupEnumerable });
-                    } catch (error) {
+                            return new reference(...arguments);
+                        });
                     }
-                } else if (!this._myParams.myExcludeConstructor && isClass && referenceParent != null) {
-                    this._myBackupFunctions[propertyName] = reference;
 
-                    this._myFunctionsCallsCount.set(propertyName, 0);
-                    let functionsCallsCounters = this._myFunctionsCallsCount;
-
-                    this._setClassConstructor(referenceName, referenceParent, function () {
-                        functionsCallsCounters.set(propertyName, functionsCallsCounters.get(propertyName) + 1);
-                        return new reference(...arguments);
-                    });
+                    this._myPropertiesAlreadyCounted.get(propertyName).push(counterTarget);
                 }
             }
         }
