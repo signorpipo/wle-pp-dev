@@ -16,13 +16,21 @@ PP.DebugFunctionCallsCounterParams = class DebugFunctionCallsCounterParams {
         this.myExcludeConstructor = false;      // constructor calls count can be a problem for some classes (like Array)
         this.myExcludeJavascriptObjectFunctions = false;
 
+        this.myAddPathPrefix = true;
+        // this works at best when the object/class is specified as path, since with reference it's not possible to get the full path or get the variable name of the reference
+
         this.myObjectRecursionDepthLevelforObjects = 0;     // you can specify if you want to also count the children OBJECTS of the objects you have specified
         this.myObjectRecursionDepthLevelforClasses = 0;     // you can specify if you want to also count the children CLASSES of the objects you have specified
         // the depth level specify how deep in the hierarchy, level 0 means no recursion, 1 only children, 2 also grand children, and so on
         // -1 to select all the hierarchy
 
-        this.myAddPathPrefix = true;
-        // this works at best when the object/class is specified as path, since with reference it's not possible to get the full path or get the variable name of the reference
+        // these filters are only useful if u are doing recursion
+
+        this.myObjectNamesToInclude = [];     // empty means every object is included
+        this.myObjectNamesToExclude = [];     // empty means no object is excluded
+
+        this.myClassNamesToInclude = [];     // empty means every class is included
+        this.myClassNamesToExclude = [];     // empty means no class is excluded
     }
 };
 
@@ -123,18 +131,43 @@ PP.DebugFunctionCallsCounter = class DebugFunctionCallsCounter {
     }
 
     _addCallsCounter(reference, referenceParent, referenceName, isClass, referencePath) {
-        let counterTarget = null;
-
+        let includeList = this._myParams.myObjectNamesToInclude;
+        let excludeList = this._myParams.myObjectNamesToExclude;
         if (isClass) {
-            counterTarget = reference.prototype;
-        } else {
-            counterTarget = reference;
+            includeList = this._myParams.myClassNamesToInclude;
+            excludeList = this._myParams.myClassNamesToExclude;
         }
 
-        let propertyNames = this._getAllPropertyNames(reference);
+        let isValidReferenceName = includeList.length == 0;
+        for (let includeName of includeList) {
+            if (referencePath.includes(includeName)) {
+                isValidReferenceName = true;
+                break;
+            }
+        }
 
-        for (let propertyName of propertyNames) {
-            this._addFunctionCallsCounter(counterTarget, propertyName, reference, referenceParent, referenceName, isClass, false, referencePath);
+        if (isValidReferenceName) {
+            for (let excludeName of excludeList) {
+                if (referencePath.includes(excludeName)) {
+                    isValidReferenceName = false;
+                    break;
+                }
+            }
+        }
+
+        if (isValidReferenceName) {
+            let counterTarget = null;
+
+            if (isClass) {
+                counterTarget = reference.prototype;
+            } else {
+                counterTarget = reference;
+            }
+
+            let propertyNames = this._getAllPropertyNames(reference);
+            for (let propertyName of propertyNames) {
+                this._addFunctionCallsCounter(counterTarget, propertyName, reference, referenceParent, referenceName, isClass, false, referencePath);
+            }
         }
     }
 
