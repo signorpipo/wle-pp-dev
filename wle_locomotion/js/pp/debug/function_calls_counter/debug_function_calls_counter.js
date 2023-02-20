@@ -15,6 +15,11 @@ PP.DebugFunctionCallsCounterParams = class DebugFunctionCallsCounterParams {
 
         this.myExcludeConstructor = false;      // constructor calls count can be a problem for some classes (like Array)
         this.myExcludeJavascriptObjectFunctions = false;
+
+        this.myObjectRecursionDepthLevelforObjects = 0;     // you can specify if you want to also count the children OBJECTS of the objects you have specified
+        this.myObjectRecursionDepthLevelforClasses = 0;     // you can specify if you want to also count the children CLASSES of the objects you have specified
+        // the depth level specify how deep in the hierarchy, level 0 means no recursion, 1 only children, 2 also grand children, and so on
+        // -1 to select all the hierarchy
     }
 };
 
@@ -26,7 +31,10 @@ PP.DebugFunctionCallsCounter = class DebugFunctionCallsCounter {
 
         this._myParams = params;
 
+        let objectsAndParents = this._getReferencesAndParents(this._myParams.myObjectsByReference, this._myParams.myObjectsByPath);
         let classesAndParents = this._getReferencesAndParents(this._myParams.myClassesByReference, this._myParams.myClassesByPath);
+
+        this._objectRecursion(objectsAndParents, classesAndParents);
 
         for (let referenceAndParent of classesAndParents) {
             let reference = referenceAndParent[0];
@@ -36,7 +44,6 @@ PP.DebugFunctionCallsCounter = class DebugFunctionCallsCounter {
             this._addCallsCounter(reference, referenceParent, referenceName, true);
         }
 
-        let objectsAndParents = this._getReferencesAndParents(this._myParams.myObjectsByReference, this._myParams.myObjectsByPath);
         for (let referenceAndParent of objectsAndParents) {
             let reference = referenceAndParent[0];
             let referenceParent = referenceAndParent[1];
@@ -228,6 +235,11 @@ PP.DebugFunctionCallsCounter = class DebugFunctionCallsCounter {
         return isClass;
     }
 
+
+    _isObject(reference, propertyName) {
+        return typeof reference[propertyName] == "object";
+    }
+
     _getAllPropertyNames(reference) {
         let properties = Object.getOwnPropertyNames(reference);
 
@@ -244,5 +256,43 @@ PP.DebugFunctionCallsCounter = class DebugFunctionCallsCounter {
         }
 
         return properties;
+    }
+
+    _objectRecursion(objectsAndParents, classesAndParents) {
+        let equalCallback = (first, second) => first[0] == second[0];
+
+        let objectsToVisit = [];
+        for (let objectAndParent of objectsAndParents) {
+            objectsToVisit.pp_pushUnique([objectAndParent[0], 0], equalCallback);
+        }
+
+        while (objectsToVisit.length > 0) {
+            let objectToVisit = objectsToVisit.shift();
+
+            let object = objectToVisit[0];
+            let objectLevel = objectToVisit[1];
+
+            if ((
+                objectLevel + 1 <= this._myParams.myObjectRecursionDepthLevelforObjects || this._myParams.myObjectRecursionDepthLevelforObjects == -1) ||
+                objectLevel + 1 <= this._myParams.myObjectRecursionDepthLevelforClasses || this._myParams.myObjectRecursionDepthLevelforClasses == -1) {
+
+                let propertyNames = this._getAllPropertyNames(reference);
+
+                for (let propertyName of propertyNames) {
+                    let isClass = this._isClass(object, propertyName);
+                    let isObject = this._isObject(object, propertyName);
+
+                    if (isObject && (objectLevel + 1 <= this._myParams.myObjectRecursionDepthLevelforObjects || this._myParams.myObjectRecursionDepthLevelforObjects == -1)) {
+                        objectsToVisit.pp_pushUnique([object[propertyName], objectLevel + 1], equalCallback);
+
+                        objectsAndParents.pp_pushUnique([object[propertyName], object, object[propertyName].name], equalCallback);
+                    }
+
+                    if (isClass && (objectLevel + 1 <= this._myParams.myObjectRecursionDepthLevelforClasses || this._myParams.myObjectRecursionDepthLevelforClasses == -1)) {
+                        classesAndParents.pp_pushUnique([object[propertyName], object, object[propertyName].name], equalCallback);
+                    }
+                }
+            }
+        }
     }
 };
