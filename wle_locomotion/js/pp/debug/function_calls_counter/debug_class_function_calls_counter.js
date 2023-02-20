@@ -98,7 +98,7 @@ PP.DebugClassFunctionCallsCounter = class DebugClassFunctionCallsCounter {
         let propertyNames = this._getAllPropertyNames(reference);
 
         for (let propertyName of propertyNames) {
-            if (typeof counterTarget[propertyName] == "function" && !this._isClass(counterTarget[propertyName])) {
+            if (this._isFunction(counterTarget, propertyName)) {
                 let isValidFunctionName = this._myParams.myFunctionNamesToInclude.length == 0;
                 for (let functionName of this._myParams.myFunctionNamesToInclude) {
                     if (propertyName.includes(functionName)) {
@@ -185,9 +185,25 @@ PP.DebugClassFunctionCallsCounter = class DebugClassFunctionCallsCounter {
         return referenceAndParents;
     }
 
-    _isClass(property) {
-        return typeof property == "function" && property.prototype != null && typeof property.prototype.constructor == "function" &&
-            (/^class\s/).test(property.toString());
+    _isFunction(reference, propertyName) {
+        let isFunction = false;
+
+        try {
+            isFunction = typeof reference[propertyName] == "function" && !this._isClass(reference, propertyName);
+        } catch (error) { }
+
+        return isFunction;
+    }
+
+    _isClass(reference, propertyName) {
+        let isClass = false;
+
+        try {
+            isClass = typeof reference[propertyName] == "function" && reference[propertyName].prototype != null && typeof reference[propertyName].prototype.constructor == "function" &&
+                (/^class\s/).test(reference[propertyName].toString());
+        } catch (error) { }
+
+        return isClass;
     }
 
     _getAllPropertyNames(reference) {
