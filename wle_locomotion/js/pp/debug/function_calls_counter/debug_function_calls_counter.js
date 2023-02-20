@@ -10,14 +10,18 @@ PP.DebugFunctionCallsCounterParams = class DebugFunctionCallsCounterParams {
         // You can also count the call to a specific function, but it must be reachable from window, no reference way
         // It's mostly for global functions, which could be tracked anyway using window as object reference
 
-        this.myFunctionNamesToInclude = [];     // empty means every function is included
-        this.myFunctionNamesToExclude = [];     // empty means no function is excluded
-
         this.myExcludeConstructor = false;      // constructor calls count can be a problem for some classes (like Array)
         this.myExcludeJavascriptObjectFunctions = false;
 
         this.myAddPathPrefix = true;
         // this works at best when the object/class is specified as path, since with reference it's not possible to get the full path or get the variable name of the reference
+
+        this.myFunctionNamesToInclude = [];     // empty means every function is included
+        this.myFunctionNamesToExclude = [];     // empty means no function is excluded
+
+        // these can be used if u want to have a bit more control on function name filtering
+        this.myFunctionPathsToInclude = [];         // empty means every function is included
+        this.myFunctionPathsToExclude = [];         // empty means no function is excluded
 
         this.myObjectRecursionDepthLevelforObjects = 0;     // you can specify if you want to also count the children OBJECTS of the objects you have specified
         this.myObjectRecursionDepthLevelforClasses = 0;     // you can specify if you want to also count the children CLASSES of the objects you have specified
@@ -25,15 +29,17 @@ PP.DebugFunctionCallsCounterParams = class DebugFunctionCallsCounterParams {
         // -1 to select all the hierarchy
 
         // these filters are only useful if u are doing recursion
+        this.myObjectNamesToInclude = [];           // empty means every object is included
+        this.myObjectNamesToExclude = [];           // empty means no object is excluded
+
+        this.myClassNamesToInclude = [];            // empty means every class is included
+        this.myClassNamesToExclude = [];            // empty means no class is excluded
+
         this.myObjectPathsToInclude = [];           // empty means every object is included
         this.myObjectPathsToExclude = [];           // empty means no object is excluded
 
         this.myClassPathsToInclude = [];            // empty means every class is included
         this.myClassPathsToExclude = [];            // empty means no class is excluded
-
-        // these can be used if u want to have a bit more control on function name filtering
-        this.myFunctionPathsToInclude = [];         // empty means every function is included
-        this.myFunctionPathsToExclude = [];         // empty means no function is excluded
     }
 };
 
@@ -134,15 +140,20 @@ PP.DebugFunctionCallsCounter = class DebugFunctionCallsCounter {
     }
 
     _addCallsCounter(reference, referenceParent, referenceName, isClass, referencePath) {
-        let includeList = this._myParams.myObjectPathsToInclude;
-        let excludeList = this._myParams.myObjectPathsToExclude;
+        let includePathList = this._myParams.myObjectPathsToInclude;
+        let excludePathList = this._myParams.myObjectPathsToExclude;
+        let includeNameList = this._myParams.myObjectNamesToInclude;
+        let excludeNameList = this._myParams.myObjectNamesToExclude;
         if (isClass) {
-            includeList = this._myParams.myClassPathsToInclude;
-            excludeList = this._myParams.myClassPathsToExclude;
+            includePathList = this._myParams.myClassPathsToInclude;
+            excludePathList = this._myParams.myClassPathsToExclude;
+            includeNameList = this._myParams.myClassNamesToInclude;
+            excludeNameList = this._myParams.myClassNamesToExclude;
         }
 
-        let isValidReferencePath = this._filterName(referencePath, includeList, excludeList);
-        if (isValidReferencePath) {
+        let isValidReferencePath = this._filterName(referencePath, includePathList, excludePathList);
+        let isValidReferenceName = this._filterName(referenceName, includeNameList, excludeNameList);
+        if (isValidReferencePath && isValidReferenceName) {
             let counterTarget = null;
 
             if (isClass) {
@@ -308,15 +319,20 @@ PP.DebugFunctionCallsCounter = class DebugFunctionCallsCounter {
                     let isClass = this._isClass(object, propertyName);
                     let isObject = this._isObject(object, propertyName);
 
-                    let includeList = this._myParams.myObjectPathsToInclude;
-                    let excludeList = this._myParams.myObjectPathsToExclude;
+                    let includePathList = this._myParams.myObjectPathsToInclude;
+                    let excludePathList = this._myParams.myObjectPathsToExclude;
+                    let includeNameList = this._myParams.myObjectNamesToInclude;
+                    let excludeNameList = this._myParams.myObjectNamesToExclude;
                     if (isClass) {
-                        includeList = this._myParams.myClassPathsToInclude;
-                        excludeList = this._myParams.myClassPathsToExclude;
+                        includePathList = this._myParams.myClassPathsToInclude;
+                        excludePathList = this._myParams.myClassPathsToExclude;
+                        includeNameList = this._myParams.myClassNamesToInclude;
+                        excludeNameList = this._myParams.myClassNamesToExclude;
                     }
 
-                    let isValidReferencePath = this._filterName(currentPath, includeList, excludeList);
-                    if (isValidReferencePath) {
+                    let isValidReferencePath = this._filterName(currentPath, includePathList, excludePathList);
+                    let isValidReferenceName = this._filterName(propertyName, includeNameList, excludeNameList);
+                    if (isValidReferencePath && isValidReferenceName) {
                         if (isObject && (objectLevel + 1 <= this._myParams.myObjectRecursionDepthLevelforObjects || this._myParams.myObjectRecursionDepthLevelforObjects == -1)) {
                             objectsAndParents.pp_pushUnique([object[propertyName], object, propertyName, currentPath], equalCallback);
                         }
