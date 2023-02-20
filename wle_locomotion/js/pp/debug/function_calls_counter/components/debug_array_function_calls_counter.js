@@ -14,6 +14,7 @@ WL.registerComponent('pp-debug-array-function-calls-counter', {
             "Array", "Uint8ClampedArray", "Uint8Array", "Uint16Array", "Uint32Array", "Int8Array",
             "Int16Array", "Int32Array", "Float32Array", "Float64Array"];
         functionCallsCounterParams.myExcludeConstructor = true;
+        functionCallsCounterParams.myExcludeJavascriptObjectFunctions = true;
 
         if (this._myIncludeOnlyArrayExtensionFunctions) {
             let prefixes = ["pp_", "vec_", "vec2_", "vec3_", "vec4_", "quat_", "quat2_", "mat3_", "mat4_", "_pp_", "_vec_", "_quat_",];
