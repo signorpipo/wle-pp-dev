@@ -6,7 +6,9 @@ PP.DebugFunctionCallsCounterParams = class DebugFunctionCallsCounterParams {
         this.myClassesByReference = [];         // By Reference means by using a reference to the class, like doing PP.Timer, but also let ref = PP.Timer and use ref
         this.myClassesByPath = [];              // By Path means by using the full class path, like "PP.Timer", this is requiredneeded if u want to count the constructor
 
-        this.myFunctionsByPath = [];            // You can also count the call to a specific function, but it must be reachable from window, no reference way
+        this.myFunctionsByPath = [];
+        // You can also count the call to a specific function, but it must be reachable from window, no reference way
+        // It's mostly for global functions, which could be tracked anyway using window as object reference
 
         this.myFunctionNamesToInclude = [];     // empty means every function is included
         this.myFunctionNamesToExclude = [];     // empty means no function is excluded
@@ -40,6 +42,15 @@ PP.DebugFunctionCallsCounter = class DebugFunctionCallsCounter {
             let referenceName = referenceAndParent[2];
 
             this._addCallsCounter(reference, referenceParent, referenceName, false);
+        }
+
+        let functionsAndParents = this._getReferencesAndParents([], this._myParams.myFunctionsByPath);
+        for (let referenceAndParent of functionsAndParents) {
+            let reference = referenceAndParent[0];
+            let referenceParent = referenceAndParent[1];
+            let referenceName = referenceAndParent[2];
+
+            this._addFunctionCallsCounter(referenceParent, referenceName, null, null, null, false);
         }
     }
 
@@ -110,55 +121,59 @@ PP.DebugFunctionCallsCounter = class DebugFunctionCallsCounter {
         let propertyNames = this._getAllPropertyNames(reference);
 
         for (let propertyName of propertyNames) {
-            if (this._isFunction(counterTarget, propertyName)) {
-                let isValidFunctionName = this._myParams.myFunctionNamesToInclude.length == 0;
-                for (let functionName of this._myParams.myFunctionNamesToInclude) {
+            this._addFunctionCallsCounter(counterTarget, propertyName, reference, referenceParent, referenceName, isClass);
+        }
+    }
+
+    _addFunctionCallsCounter(counterTarget, propertyName, reference, referenceParent, referenceName, isClass) {
+        if (this._isFunction(counterTarget, propertyName)) {
+            let isValidFunctionName = this._myParams.myFunctionNamesToInclude.length == 0;
+            for (let functionName of this._myParams.myFunctionNamesToInclude) {
+                if (propertyName.includes(functionName)) {
+                    isValidFunctionName = true;
+                    break;
+                }
+            }
+
+            if (isValidFunctionName) {
+                for (let functionName of this._myParams.myFunctionNamesToExclude) {
                     if (propertyName.includes(functionName)) {
-                        isValidFunctionName = true;
+                        isValidFunctionName = false;
                         break;
                     }
                 }
+            }
 
-                if (isValidFunctionName) {
-                    for (let functionName of this._myParams.myFunctionNamesToExclude) {
-                        if (propertyName.includes(functionName)) {
-                            isValidFunctionName = false;
-                            break;
-                        }
-                    }
-                }
+            if (isValidFunctionName) {
+                if (propertyName != "constructor") {
+                    this._myBackupFunctions[propertyName] = counterTarget[propertyName];
 
-                if (isValidFunctionName) {
-                    if (propertyName != "constructor") {
-                        this._myBackupFunctions[propertyName] = counterTarget[propertyName];
+                    this._myFunctionsCallsCount.set(propertyName, 0);
+                    let functionsCallsCounters = this._myFunctionsCallsCount;
 
-                        this._myFunctionsCallsCount.set(propertyName, 0);
-                        let functionsCallsCounters = this._myFunctionsCallsCount;
+                    let backupFunction = this._myBackupFunctions[propertyName];
 
-                        let backupFunction = this._myBackupFunctions[propertyName];
+                    let backupEnumerable = counterTarget.propertyIsEnumerable(propertyName);
 
-                        let backupEnumerable = counterTarget.propertyIsEnumerable(propertyName);
-
-                        try {
-                            counterTarget[propertyName] = function () {
-                                functionsCallsCounters.set(propertyName, functionsCallsCounters.get(propertyName) + 1);
-                                return backupFunction.bind(this)(...arguments);
-                            };
-
-                            Object.defineProperty(counterTarget, propertyName, { enumerable: backupEnumerable });
-                        } catch (error) {
-                        }
-                    } else if (!this._myParams.myExcludeConstructor && isClass && referenceParent != null) {
-                        this._myBackupFunctions[propertyName] = reference;
-
-                        this._myFunctionsCallsCount.set(propertyName, 0);
-                        let functionsCallsCounters = this._myFunctionsCallsCount;
-
-                        this._setClassConstructor(referenceName, referenceParent, function () {
+                    try {
+                        counterTarget[propertyName] = function () {
                             functionsCallsCounters.set(propertyName, functionsCallsCounters.get(propertyName) + 1);
-                            return new reference(...arguments);
-                        });
+                            return backupFunction.bind(this)(...arguments);
+                        };
+
+                        Object.defineProperty(counterTarget, propertyName, { enumerable: backupEnumerable });
+                    } catch (error) {
                     }
+                } else if (!this._myParams.myExcludeConstructor && isClass && referenceParent != null) {
+                    this._myBackupFunctions[propertyName] = reference;
+
+                    this._myFunctionsCallsCount.set(propertyName, 0);
+                    let functionsCallsCounters = this._myFunctionsCallsCount;
+
+                    this._setClassConstructor(referenceName, referenceParent, function () {
+                        functionsCallsCounters.set(propertyName, functionsCallsCounters.get(propertyName) + 1);
+                        return new reference(...arguments);
+                    });
                 }
             }
         }
