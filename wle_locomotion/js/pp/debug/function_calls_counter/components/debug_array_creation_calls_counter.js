@@ -27,6 +27,6 @@ WL.registerComponent('pp-debug-array-creation-calls-counter', {
     },
     update: function (dt) {
         this._myFunctionCallsCountLogger.update(dt);
-        this._myFunctionCallsCounter.resetCallsCounters();
+        this._myFunctionCallsCounter.resetCallsCount();
     },
 });

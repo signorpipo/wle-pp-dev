@@ -31,7 +31,7 @@ PP.DebugClassFunctionCallsCountLogger = class DebugClassFunctionCallsCountLogger
         if (this._myLogTimer.isDone()) {
             this._myLogTimer.start();
 
-            let callsCounters = this._myParams.myCallsCounter.getCallsCounters(this._myParams.myLogSorted);
+            let callsCounters = this._myParams.myCallsCounter.getCallsCount(this._myParams.myLogSorted);
 
             if (this._myParams.myLogFunctionsWithCallsCounterAbove != null) {
                 let callsCountersClone = new Map(callsCounters);

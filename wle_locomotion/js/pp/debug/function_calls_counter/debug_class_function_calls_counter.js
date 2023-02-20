@@ -18,7 +18,7 @@ PP.DebugClassFunctionCallsCounterParams = class DebugClassFunctionCallsCounterPa
 
 PP.DebugClassFunctionCallsCounter = class DebugClassFunctionCallsCounter {
     constructor(params = new PP.DebugClassFunctionCallsCounterParams()) {
-        this._myFunctionsCallsCounters = new Map();
+        this._myFunctionsCallsCount = new Map();
         this._myBackupFunctions = [];
 
         this._myParams = params;
@@ -41,22 +41,22 @@ PP.DebugClassFunctionCallsCounter = class DebugClassFunctionCallsCounter {
         }
     }
 
-    resetCallsCounters() {
-        for (let property of this._myFunctionsCallsCounters.keys()) {
-            this._myFunctionsCallsCounters.set(property, 0);
+    resetCallsCount() {
+        for (let property of this._myFunctionsCallsCount.keys()) {
+            this._myFunctionsCallsCount.set(property, 0);
         }
     }
 
-    getCallsCounters(sortList = false) {
-        let callsCounter = this._myFunctionsCallsCounters;
+    getCallsCount(sortList = false) {
+        let callsCount = this._myFunctionsCallsCount;
 
         if (sortList) {
-            callsCounter = new Map([...callsCounter.entries()].sort(function (first, second) {
+            callsCount = new Map([...callsCount.entries()].sort(function (first, second) {
                 return -(first[1] - second[1]);
             }));
         }
 
-        return callsCounter;
+        return callsCount;
     }
 
     _getReferenceFromPath(path) {
@@ -120,8 +120,8 @@ PP.DebugClassFunctionCallsCounter = class DebugClassFunctionCallsCounter {
                     if (propertyName != "constructor") {
                         this._myBackupFunctions[propertyName] = counterTarget[propertyName];
 
-                        this._myFunctionsCallsCounters.set(propertyName, 0);
-                        let functionsCallsCounters = this._myFunctionsCallsCounters;
+                        this._myFunctionsCallsCount.set(propertyName, 0);
+                        let functionsCallsCounters = this._myFunctionsCallsCount;
 
                         let backupFunction = this._myBackupFunctions[propertyName];
 
@@ -136,8 +136,8 @@ PP.DebugClassFunctionCallsCounter = class DebugClassFunctionCallsCounter {
                     } else if (!this._myParams.myExcludeConstructor && isClass && referenceParent != null) {
                         this._myBackupFunctions[propertyName] = reference;
 
-                        this._myFunctionsCallsCounters.set(propertyName, 0);
-                        let functionsCallsCounters = this._myFunctionsCallsCounters;
+                        this._myFunctionsCallsCount.set(propertyName, 0);
+                        let functionsCallsCounters = this._myFunctionsCallsCount;
 
                         this._setClassConstructor(reference, referenceParent, function () {
                             functionsCallsCounters.set(propertyName, functionsCallsCounters.get(propertyName) + 1);
