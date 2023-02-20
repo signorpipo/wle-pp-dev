@@ -9,7 +9,7 @@ WL.registerComponent('pp-debug-array-function-calls-counter', {
     _myFunctionNamesToExclude: { type: WL.Type.String, default: "" }
 }, {
     init: function () {
-        let functionCallsCounterParams = new PP.DebugClassFunctionCallsCounterParams();
+        let functionCallsCounterParams = new PP.DebugFunctionCallsCounterParams();
         functionCallsCounterParams.myClassesByPath = [
             "Array", "Uint8ClampedArray", "Uint8Array", "Uint16Array", "Uint32Array", "Int8Array",
             "Int16Array", "Int32Array", "Float32Array", "Float64Array"];
@@ -37,9 +37,9 @@ WL.registerComponent('pp-debug-array-function-calls-counter', {
             functionCallsCounterParams.myFunctionNamesToExclude.push(...toExcludeList);
         }
 
-        this._myFunctionCallsCounter = new PP.DebugClassFunctionCallsCounter(functionCallsCounterParams);
+        this._myFunctionCallsCounter = new PP.DebugFunctionCallsCounter(functionCallsCounterParams);
 
-        let functionCallsCountLoggerParams = new PP.DebugClassFunctionCallsCountLoggerParams();
+        let functionCallsCountLoggerParams = new PP.DebugFunctionCallsCountLoggerParams();
         functionCallsCountLoggerParams.myCallsCounter = this._myFunctionCallsCounter;
         functionCallsCountLoggerParams.myLogTitle = "Array " + functionCallsCountLoggerParams.myLogTitle;
 
@@ -48,7 +48,7 @@ WL.registerComponent('pp-debug-array-function-calls-counter', {
         functionCallsCountLoggerParams.myLogFunctionsMaxAmount = (this._myLogFunctionsMaxAmount >= 0) ? this._myLogFunctionsMaxAmount : null;
         functionCallsCountLoggerParams.myLogFunctionsWithCallsCounterAbove = (this._myLogFunctionsWithCallsCounterAbove >= 0) ? this._myLogFunctionsWithCallsCounterAbove : null;
 
-        this._myFunctionCallsCountLogger = new PP.DebugClassFunctionCallsCountLogger(functionCallsCountLoggerParams);
+        this._myFunctionCallsCountLogger = new PP.DebugFunctionCallsCountLogger(functionCallsCountLoggerParams);
     },
     start: function () {
     },

@@ -1,4 +1,4 @@
-PP.DebugClassFunctionCallsCountLoggerParams = class DebugClassFunctionCallsCountLoggerParams {
+PP.DebugFunctionCallsCountLoggerParams = class DebugFunctionCallsCountLoggerParams {
     constructor() {
         this.myCallsCounter = null;
 
@@ -15,7 +15,7 @@ PP.DebugClassFunctionCallsCountLoggerParams = class DebugClassFunctionCallsCount
     }
 };
 
-PP.DebugClassFunctionCallsCountLogger = class DebugClassFunctionCallsCountLogger {
+PP.DebugFunctionCallsCountLogger = class DebugFunctionCallsCountLogger {
     constructor(params) {
         this._myParams = params;
 

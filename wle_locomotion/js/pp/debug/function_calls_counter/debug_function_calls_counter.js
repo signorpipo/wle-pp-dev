@@ -1,4 +1,4 @@
-PP.DebugClassFunctionCallsCounterParams = class DebugClassFunctionCallsCounterParams {
+PP.DebugFunctionCallsCounterParams = class DebugFunctionCallsCounterParams {
     constructor() {
         this.myObjectsByReference = [];         // You can specify to count the call on a specific object instance
         this.myObjectsByPath = [];              // If you want you can specify the instance by path, but it means it must be reachable from window
@@ -16,8 +16,8 @@ PP.DebugClassFunctionCallsCounterParams = class DebugClassFunctionCallsCounterPa
     }
 };
 
-PP.DebugClassFunctionCallsCounter = class DebugClassFunctionCallsCounter {
-    constructor(params = new PP.DebugClassFunctionCallsCounterParams()) {
+PP.DebugFunctionCallsCounter = class DebugFunctionCallsCounter {
+    constructor(params = new PP.DebugFunctionCallsCounterParams()) {
         this._myFunctionsCallsCount = new Map();
         this._myBackupFunctions = [];
 
