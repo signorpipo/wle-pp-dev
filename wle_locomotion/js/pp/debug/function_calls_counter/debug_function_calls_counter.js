@@ -26,11 +26,11 @@ PP.DebugFunctionCallsCounterParams = class DebugFunctionCallsCounterParams {
 
         // these filters are only useful if u are doing recursion
 
-        this.myObjectNamesToInclude = [];     // empty means every object is included
-        this.myObjectNamesToExclude = [];     // empty means no object is excluded
+        this.myObjectPathsToInclude = [];           // empty means every object is included
+        this.myObjectPathsToExclude = [];           // empty means no object is excluded
 
-        this.myClassNamesToInclude = [];     // empty means every class is included
-        this.myClassNamesToExclude = [];     // empty means no class is excluded
+        this.myClassPathsToInclude = [];            // empty means every class is included
+        this.myClassPathsToExclude = [];            // empty means no class is excluded
     }
 };
 
@@ -131,30 +131,14 @@ PP.DebugFunctionCallsCounter = class DebugFunctionCallsCounter {
     }
 
     _addCallsCounter(reference, referenceParent, referenceName, isClass, referencePath) {
-        let includeList = this._myParams.myObjectNamesToInclude;
-        let excludeList = this._myParams.myObjectNamesToExclude;
+        let includeList = this._myParams.myObjectPathsToInclude;
+        let excludeList = this._myParams.myObjectPathsToExclude;
         if (isClass) {
-            includeList = this._myParams.myClassNamesToInclude;
-            excludeList = this._myParams.myClassNamesToExclude;
+            includeList = this._myParams.myClassPathsToInclude;
+            excludeList = this._myParams.myClassPathsToExclude;
         }
 
-        let isValidReferenceName = includeList.length == 0;
-        for (let includeName of includeList) {
-            if (referencePath.includes(includeName)) {
-                isValidReferenceName = true;
-                break;
-            }
-        }
-
-        if (isValidReferenceName) {
-            for (let excludeName of excludeList) {
-                if (referencePath.includes(excludeName)) {
-                    isValidReferenceName = false;
-                    break;
-                }
-            }
-        }
-
+        let isValidReferenceName = this._filterName(referencePath, includeList, excludeList);
         if (isValidReferenceName) {
             let counterTarget = null;
 
@@ -173,23 +157,7 @@ PP.DebugFunctionCallsCounter = class DebugFunctionCallsCounter {
 
     _addFunctionCallsCounter(counterTarget, propertyName, reference, referenceParent, referenceName, isClass, isFunction, referencePath) {
         if (this._isFunction(counterTarget, propertyName)) {
-            let isValidFunctionName = this._myParams.myFunctionNamesToInclude.length == 0;
-            for (let functionName of this._myParams.myFunctionNamesToInclude) {
-                if (propertyName.includes(functionName)) {
-                    isValidFunctionName = true;
-                    break;
-                }
-            }
-
-            if (isValidFunctionName) {
-                for (let functionName of this._myParams.myFunctionNamesToExclude) {
-                    if (propertyName.includes(functionName)) {
-                        isValidFunctionName = false;
-                        break;
-                    }
-                }
-            }
-
+            let isValidFunctionName = this._filterName(propertyName, this._myParams.myFunctionNamesToInclude, this._myParams.myFunctionNamesToExclude);
             if (isValidFunctionName) {
                 if (!this._myPropertiesAlreadyCounted.has(propertyName)) {
                     this._myPropertiesAlreadyCounted.set(propertyName, []);
@@ -348,5 +316,26 @@ PP.DebugFunctionCallsCounter = class DebugFunctionCallsCounter {
                 }
             }
         }
+    }
+
+    _filterName(name, includeList, excludeList) {
+        let isValidName = includeList.length == 0;
+        for (let includeName of includeList) {
+            if (name.includes(includeName)) {
+                isValidName = true;
+                break;
+            }
+        }
+
+        if (isValidName) {
+            for (let excludeName of excludeList) {
+                if (name.includes(excludeName)) {
+                    isValidName = false;
+                    break;
+                }
+            }
+        }
+
+        return isValidName;
     }
 };
