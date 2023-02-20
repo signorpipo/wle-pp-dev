@@ -25,12 +25,15 @@ PP.DebugFunctionCallsCounterParams = class DebugFunctionCallsCounterParams {
         // -1 to select all the hierarchy
 
         // these filters are only useful if u are doing recursion
-
         this.myObjectPathsToInclude = [];           // empty means every object is included
         this.myObjectPathsToExclude = [];           // empty means no object is excluded
 
         this.myClassPathsToInclude = [];            // empty means every class is included
         this.myClassPathsToExclude = [];            // empty means no class is excluded
+
+        // these can be used if u want to have a bit more control on function name filtering
+        this.myFunctionPathsToInclude = [];         // empty means every function is included
+        this.myFunctionPathsToExclude = [];         // empty means no function is excluded
     }
 };
 
@@ -138,8 +141,8 @@ PP.DebugFunctionCallsCounter = class DebugFunctionCallsCounter {
             excludeList = this._myParams.myClassPathsToExclude;
         }
 
-        let isValidReferenceName = this._filterName(referencePath, includeList, excludeList);
-        if (isValidReferenceName) {
+        let isValidReferencePath = this._filterName(referencePath, includeList, excludeList);
+        if (isValidReferencePath) {
             let counterTarget = null;
 
             if (isClass) {
@@ -158,7 +161,8 @@ PP.DebugFunctionCallsCounter = class DebugFunctionCallsCounter {
     _addFunctionCallsCounter(counterTarget, propertyName, reference, referenceParent, referenceName, isClass, isFunction, referencePath) {
         if (this._isFunction(counterTarget, propertyName)) {
             let isValidFunctionName = this._filterName(propertyName, this._myParams.myFunctionNamesToInclude, this._myParams.myFunctionNamesToExclude);
-            if (isValidFunctionName) {
+            let isValidFunctionPath = this._filterName((referencePath != null ? referencePath + "." : "") + propertyName, this._myParams.myFunctionPathsToInclude, this._myParams.myFunctionPathsToExclude);
+            if (isValidFunctionName && isValidFunctionPath) {
                 if (!this._myPropertiesAlreadyCounted.has(propertyName)) {
                     this._myPropertiesAlreadyCounted.set(propertyName, []);
                 }
