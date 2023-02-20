@@ -1,7 +1,10 @@
 PP.DebugClassFunctionCallsCounterParams = class DebugClassFunctionCallsCounterParams {
     constructor() {
-        this.myClassesByReference = [];
-        this.myClassesByPath = [];
+        this.myObjectsByReference = [];
+        this.myObjectsByPath = [];
+
+        this.myClassesByReference = [];         // By Reference means by using a reference to the class, like doing PP.Timer, but also let ref = PP.Timer and use ref
+        this.myClassesByPath = [];              // By Path means by using the full class path, like "PP.Timer", this is requiredneeded if u want to count the constructor
 
         this.myFunctionNamesToInclude = [];     // empty means every function is included
         this.myFunctionNamesToExclude = [];     // empty means no function is excluded
@@ -17,13 +20,21 @@ PP.DebugClassFunctionCallsCounter = class DebugClassFunctionCallsCounter {
 
         this._myParams = params;
 
-        let classesAndParents = this._getClassesAndParents();
+        let classesAndParents = this._getReferencesAndParents(this._myParams.myClassesByReference, this._myParams.myClassesByPath);
 
-        for (let classAndParent of classesAndParents) {
-            let classReference = classAndParent[0];
-            let classParentReferenceParent = classAndParent[1];
+        for (let referenceAndParent of classesAndParents) {
+            let reference = referenceAndParent[0];
+            let referenceParent = referenceAndParent[1];
 
-            this._addCallsCounter(classReference, classParentReferenceParent, true);
+            this._addCallsCounter(reference, referenceParent, true);
+        }
+
+        let objectsAndParents = this._getReferencesAndParents(this._myParams.myObjectsByReference, this._myParams.myObjectsByPath);
+        for (let referenceAndParent of objectsAndParents) {
+            let reference = referenceAndParent[0];
+            let referenceParent = referenceAndParent[1];
+
+            this._addCallsCounter(reference, referenceParent, false);
         }
     }
 
@@ -45,21 +56,21 @@ PP.DebugClassFunctionCallsCounter = class DebugClassFunctionCallsCounter {
         return callsCounter;
     }
 
-    _getClassReferenceFromClassPath(classPath) {
-        let classPathSplit = classPath.split(".");
+    _getReferenceFromPath(path) {
+        let pathSplit = path.split(".");
         let parent = window;
-        for (let i = 0; i < classPathSplit.length - 1; i++) {
-            parent = parent[classPathSplit[i]];
+        for (let i = 0; i < pathSplit.length - 1; i++) {
+            parent = parent[pathSplit[i]];
         }
 
-        return parent[classPathSplit[classPathSplit.length - 1]];
+        return parent[pathSplit[pathSplit.length - 1]];
     }
 
-    _getClassParentReferenceFromClassPath(classPath) {
-        let classPathSplit = classPath.split(".");
+    _getParentReferenceFromPath(path) {
+        let pathSplit = path.split(".");
         let parent = window;
-        for (let i = 0; i < classPathSplit.length - 1; i++) {
-            parent = parent[classPathSplit[i]];
+        for (let i = 0; i < pathSplit.length - 1; i++) {
+            parent = parent[pathSplit[i]];
         }
 
         return parent;
@@ -81,13 +92,13 @@ PP.DebugClassFunctionCallsCounter = class DebugClassFunctionCallsCounter {
             prototype = reference;
         }
 
-        let properties = Object.getOwnPropertyNames(prototype);
+        let propertyNames = Object.getOwnPropertyNames(prototype);
 
-        for (let property of properties) {
-            if (typeof prototype[property] == "function") {
+        for (let propertyName of propertyNames) {
+            if (typeof prototype[propertyName] == "function" && !this._isClass(prototype[propertyName])) {
                 let isValidFunctionName = this._myParams.myFunctionNamesToInclude.length == 0;
                 for (let functionName of this._myParams.myFunctionNamesToInclude) {
-                    if (property.includes(functionName)) {
+                    if (propertyName.includes(functionName)) {
                         isValidFunctionName = true;
                         break;
                     }
@@ -95,7 +106,7 @@ PP.DebugClassFunctionCallsCounter = class DebugClassFunctionCallsCounter {
 
                 if (isValidFunctionName) {
                     for (let functionName of this._myParams.myFunctionNamesToExclude) {
-                        if (property.includes(functionName)) {
+                        if (propertyName.includes(functionName)) {
                             isValidFunctionName = false;
                             break;
                         }
@@ -103,30 +114,30 @@ PP.DebugClassFunctionCallsCounter = class DebugClassFunctionCallsCounter {
                 }
 
                 if (isValidFunctionName) {
-                    if (property != "constructor") {
-                        this._myBackupFunctions[property] = prototype[property];
+                    if (propertyName != "constructor") {
+                        this._myBackupFunctions[propertyName] = prototype[propertyName];
 
-                        this._myFunctionsCallsCounters.set(property, 0);
+                        this._myFunctionsCallsCounters.set(propertyName, 0);
                         let functionsCallsCounters = this._myFunctionsCallsCounters;
 
-                        let backupFunction = this._myBackupFunctions[property];
+                        let backupFunction = this._myBackupFunctions[propertyName];
 
-                        let backupEnumerable = prototype.propertyIsEnumerable(property);
+                        let backupEnumerable = prototype.propertyIsEnumerable(propertyName);
 
-                        prototype[property] = function () {
-                            functionsCallsCounters.set(property, functionsCallsCounters.get(property) + 1);
+                        prototype[propertyName] = function () {
+                            functionsCallsCounters.set(propertyName, functionsCallsCounters.get(propertyName) + 1);
                             return backupFunction.bind(this)(...arguments);
                         };
 
-                        Object.defineProperty(prototype, property, { enumerable: backupEnumerable });
+                        Object.defineProperty(prototype, propertyName, { enumerable: backupEnumerable });
                     } else if (!this._myParams.myExcludeConstructor && isClass && referenceParent != null) {
-                        this._myBackupFunctions[property] = reference;
+                        this._myBackupFunctions[propertyName] = reference;
 
-                        this._myFunctionsCallsCounters.set(property, 0);
+                        this._myFunctionsCallsCounters.set(propertyName, 0);
                         let functionsCallsCounters = this._myFunctionsCallsCounters;
 
                         this._setClassConstructor(reference, referenceParent, function () {
-                            functionsCallsCounters.set(property, functionsCallsCounters.get(property) + 1);
+                            functionsCallsCounters.set(propertyName, functionsCallsCounters.get(propertyName) + 1);
                             return new reference(...arguments);
                         });
                     }
@@ -137,19 +148,42 @@ PP.DebugClassFunctionCallsCounter = class DebugClassFunctionCallsCounter {
 
     _getClassesAndParents() {
         let equalCallback = (first, second) => first[0] == second[0];
-        let classesAndParents = [];
+        let referenceAndParents = [];
 
-        for (let classPath of this._myParams.myClassesByPath) {
-            let classReference = this._getClassReferenceFromClassPath(classPath);
-            let classParentReferenceParent = this._getClassParentReferenceFromClassPath(classPath);
+        for (let path of this._myParams.myClassesByPath) {
+            let reference = this._getReferenceFromPath(path);
+            let referenceParent = this._getParentReferenceFromPath(path);
 
-            classesAndParents.pp_pushUnique([classReference, classParentReferenceParent], equalCallback);
+            referenceAndParents.pp_pushUnique([reference, referenceParent], equalCallback);
         }
 
         for (let classReference of this._myParams.myClassesByReference) {
-            classesAndParents.pp_pushUnique([classReference, null], equalCallback);
+            referenceAndParents.pp_pushUnique([classReference, null], equalCallback);
         }
 
-        return classesAndParents;
+        return referenceAndParents;
+    }
+
+    _getReferencesAndParents(byReferenceList, byPathList) {
+        let equalCallback = (first, second) => first[0] == second[0];
+        let referenceAndParents = [];
+
+        for (let path of byPathList) {
+            let reference = this._getReferenceFromPath(path);
+            let referenceParent = this._getParentReferenceFromPath(path);
+
+            referenceAndParents.pp_pushUnique([reference, referenceParent], equalCallback);
+        }
+
+        for (let reference of byReferenceList) {
+            referenceAndParents.pp_pushUnique([reference, null], equalCallback);
+        }
+
+        return referenceAndParents;
+    }
+
+    _isClass(property) {
+        return typeof property == "function" && property.prototype != null && typeof property.prototype.constructor == "function" &&
+            (/^class\s/).test(property.toString());
     }
 };
