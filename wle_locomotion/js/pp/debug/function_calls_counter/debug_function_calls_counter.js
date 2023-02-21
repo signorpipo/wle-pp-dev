@@ -10,7 +10,7 @@ PP.DebugFunctionCallsCounterParams = class DebugFunctionCallsCounterParams {
         // You can also count the call to a specific function, but it must be reachable from window, no reference way
         // It's mostly for global functions, which could be tracked anyway using window as object reference
 
-        this.myExcludeConstructor = false;      // constructor calls count can be a problem for some classes (like Array)
+        this.myExcludeConstructors = false;      // constructor calls count can be a problem for some classes (like Array)
         this.myExcludeJavascriptObjectFunctions = false;
 
         this.myAddPathPrefix = true;
@@ -59,8 +59,8 @@ PP.DebugFunctionCallsCounter = class DebugFunctionCallsCounter {
 
         this._myResetOnce = false;
 
-        let objectsAndParents = this._getReferencesAndParents(this._myParams.myObjectsByReference, this._myParams.myObjectsByPath, false, false);
         let classesAndParents = this._getReferencesAndParents(this._myParams.myClassesByReference, this._myParams.myClassesByPath, true, false);
+        let objectsAndParents = this._getReferencesAndParents(this._myParams.myObjectsByReference, this._myParams.myObjectsByPath, false, false);
         let functionsAndParents = this._getReferencesAndParents([], this._myParams.myFunctionsByPath, false, true);
 
         this._objectRecursion(objectsAndParents, classesAndParents);
@@ -232,53 +232,66 @@ PP.DebugFunctionCallsCounter = class DebugFunctionCallsCounter {
                         }
 
                         if (propertyName != "constructor") {
+                            let hadCallsCountAlreadySet = this._myFunctionsCallsCount.has(callsCountName);
                             this._myFunctionsCallsCount.set(callsCountName, 0);
-                            let functionsCallsCounters = this._myFunctionsCallsCount;
-
-                            let backupFunction = counterTarget[propertyName];
-
-                            let backupEnumerable = counterTarget.propertyIsEnumerable(propertyName);
-
                             try {
-                                Object.defineProperty(counterTarget, propertyName, {
-                                    value: function () {
-                                        functionsCallsCounters.set(callsCountName, functionsCallsCounters.get(callsCountName) + 1);
-                                        return backupFunction.bind(this)(...arguments);
-                                    },
-                                    enumerable: backupEnumerable
-                                });
+                                let functionsCallsCounters = this._myFunctionsCallsCount;
+
+                                let backupFunction = counterTarget[propertyName];
+
+                                let backupEnumerable = counterTarget.propertyIsEnumerable(propertyName);
+
+                                let newFunction = function () {
+                                    functionsCallsCounters.set(callsCountName, functionsCallsCounters.get(callsCountName) + 1);
+                                    return backupFunction.bind(this)(...arguments);
+                                };
 
                                 let properties = Object.getOwnPropertyNames(backupFunction);
                                 for (let property of properties) {
                                     try {
-                                        Object.defineProperty(counterTarget[propertyName], property, { value: backupFunction[property] });
+                                        Object.defineProperty(newFunction, property, { value: backupFunction[property] });
                                     } catch (error) {
                                     }
                                 }
+
+                                Object.defineProperty(counterTarget, propertyName, {
+                                    value: newFunction,
+                                    enumerable: backupEnumerable
+                                });
                             } catch (error) {
+                                if (!hadCallsCountAlreadySet) {
+                                    this._myFunctionsCallsCount.delete(callsCountName);
+                                }
                             }
-                        } else if (!this._myParams.myExcludeConstructor && isClass && referenceParent != null && referenceParent[referenceName] != null
+                        } else if (!this._myParams.myExcludeConstructors && isClass && referenceParent != null && referenceParent[referenceName] != null
                             && referenceParent[referenceName].prototype != null) {
+                            let hadCallsCountAlreadySet = this._myFunctionsCallsCount.has(callsCountName);
                             this._myFunctionsCallsCount.set(callsCountName, 0);
-                            let functionsCallsCounters = this._myFunctionsCallsCount;
+                            try {
+                                let functionsCallsCounters = this._myFunctionsCallsCount;
 
-                            let backupConstructor = referenceParent[referenceName];
-                            let newConstructor = function () {
-                                functionsCallsCounters.set(callsCountName, functionsCallsCounters.get(callsCountName) + 1);
-                                return new reference(...arguments);
-                            };
+                                let backupConstructor = referenceParent[referenceName];
+                                let newConstructor = function () {
+                                    functionsCallsCounters.set(callsCountName, functionsCallsCounters.get(callsCountName) + 1);
+                                    return new reference(...arguments);
+                                };
 
-                            Object.defineProperty(newConstructor, "toString", {
-                                value: function () { return backupConstructor.toString() },
-                                enumerable: backupConstructor.propertyIsEnumerable("toString")
-                            });
+                                Object.defineProperty(newConstructor, "toString", {
+                                    value: function () { return backupConstructor.toString() },
+                                    enumerable: backupConstructor.propertyIsEnumerable("toString")
+                                });
 
-                            Object.defineProperty(newConstructor, "toLocaleString", {
-                                value: function () { return backupConstructor.toLocaleString() },
-                                enumerable: backupConstructor.propertyIsEnumerable("toLocaleString")
-                            });
+                                Object.defineProperty(newConstructor, "toLocaleString", {
+                                    value: function () { return backupConstructor.toLocaleString() },
+                                    enumerable: backupConstructor.propertyIsEnumerable("toLocaleString")
+                                });
 
-                            this._setClassConstructor(referenceName, referenceParent, newConstructor);
+                                this._setClassConstructor(referenceName, referenceParent, newConstructor);
+                            } catch (error) {
+                                if (!hadCallsCountAlreadySet) {
+                                    this._myFunctionsCallsCount.delete(callsCountName);
+                                }
+                            }
 
                             this._myFunctionsToSkip.push(referenceParent[referenceName]);
                         }
@@ -407,7 +420,11 @@ PP.DebugFunctionCallsCounter = class DebugFunctionCallsCounter {
                 let propertyNames = this._getAllPropertyNames(object);
 
                 for (let propertyName of propertyNames) {
-                    if (object[propertyName] == null) {
+                    try {
+                        if (object[propertyName] == null) {
+                            continue;
+                        }
+                    } catch (error) {
                         continue;
                     }
 
@@ -439,7 +456,7 @@ PP.DebugFunctionCallsCounter = class DebugFunctionCallsCounter {
                         }
 
                         if (isClass && (objectLevel + 1 <= this._myParams.myObjectRecursionDepthLevelforClasses || this._myParams.myObjectRecursionDepthLevelforClasses == -1)) {
-                            classesAndParents.pp_pushUnique([object[propertyName], object, object[propertyName].name, currentPath, propertyName], equalCallback);
+                            classesAndParents.pp_pushUnique([object[propertyName], object, propertyName, currentPath, propertyName], equalCallback);
                         }
 
                         if (isObject) {
@@ -475,17 +492,17 @@ PP.DebugFunctionCallsCounter = class DebugFunctionCallsCounter {
     _setClassConstructor(referenceName, referenceParent, newConstructor) {
         let backupConstructor = referenceParent[referenceName];
 
-        referenceParent[referenceName] = newConstructor;
-
         let properties = Object.getOwnPropertyNames(backupConstructor);
         for (let property of properties) {
             try {
-                Object.defineProperty(referenceParent[referenceName], property, {
+                Object.defineProperty(newConstructor, property, {
                     value: backupConstructor[property],
                     enumerable: backupConstructor.propertyIsEnumerable(property)
                 });
             } catch (error) {
             }
         }
+
+        referenceParent[referenceName] = newConstructor;
     }
 };
