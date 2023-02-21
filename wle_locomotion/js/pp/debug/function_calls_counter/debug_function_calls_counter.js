@@ -253,7 +253,8 @@ PP.DebugFunctionCallsCounter = class DebugFunctionCallsCounter {
                             Object.defineProperty(counterTarget, propertyName, { enumerable: backupEnumerable });
                         } catch (error) {
                         }
-                    } else if (!this._myParams.myExcludeConstructor && isClass && referenceParent != null) {
+                    } else if (!this._myParams.myExcludeConstructor && isClass && referenceParent != null && referenceParent[referenceName] != null
+                        && referenceParent[referenceName].prototype != null) {
                         this._myFunctionsCallsCount.set(callsCountName, 0);
                         let functionsCallsCounters = this._myFunctionsCallsCount;
 
