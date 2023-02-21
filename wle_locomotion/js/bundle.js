@@ -327,3 +327,4 @@ require('./test/show_meshed_line');
 require('./test/pulse_on_button');
 require('./test/move_static_collider');
 require('./test/clone_object');
+require('./test/test_get_transform_local');
