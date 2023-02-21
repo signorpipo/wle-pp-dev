@@ -429,10 +429,22 @@ PP.DebugFunctionCallsCounter = class DebugFunctionCallsCounter {
                     }
 
                     let currentPath = "";
+                    let currentName = "";
                     if (objectPath != null) {
-                        currentPath = objectPath + ".";
+                        if (objectPath == "_WL._components" && (object[propertyName]._type != null)) {
+                            currentName = "[" + propertyName + "]" + "{\"" + object[propertyName]._type + "\"}";
+                            currentPath = objectPath + currentName;
+                        } else if (objectPath == "_WL._componentTypes" && (object[propertyName].TypeName != null)) {
+                            currentName = object[propertyName].TypeName;
+                            currentPath = objectPath + "[\"" + currentName + "\"]";
+                        } else {
+                            currentName = propertyName;
+                            currentPath = objectPath + "." + currentName;
+                        }
+                    } else {
+                        currentName = propertyName;
+                        currentPath = currentName;
                     }
-                    currentPath = currentPath + propertyName;
 
                     let isClass = this._isClass(object, propertyName);
                     let isObject = this._isObject(object, propertyName);
@@ -452,11 +464,11 @@ PP.DebugFunctionCallsCounter = class DebugFunctionCallsCounter {
                     let isValidReferenceName = this._filterName(propertyName, includeNameList, excludeNameList);
                     if (isValidReferencePath && isValidReferenceName) {
                         if (isObject && (objectLevel + 1 <= this._myParams.myObjectRecursionDepthLevelforObjects || this._myParams.myObjectRecursionDepthLevelforObjects == -1)) {
-                            objectsAndParents.pp_pushUnique([object[propertyName], object, propertyName, currentPath, propertyName], equalCallback);
+                            objectsAndParents.pp_pushUnique([object[propertyName], object, propertyName, currentPath, currentName], equalCallback);
                         }
 
                         if (isClass && (objectLevel + 1 <= this._myParams.myObjectRecursionDepthLevelforClasses || this._myParams.myObjectRecursionDepthLevelforClasses == -1)) {
-                            classesAndParents.pp_pushUnique([object[propertyName], object, propertyName, currentPath, propertyName], equalCallback);
+                            classesAndParents.pp_pushUnique([object[propertyName], object, propertyName, currentPath, currentName], equalCallback);
                         }
 
                         if (isObject) {
