@@ -211,8 +211,8 @@ PP.DebugFunctionCallsCounter = class DebugFunctionCallsCounter {
     }
 
     _addFunctionCallsCounter(counterTarget, propertyName, reference, referenceParent, referenceName, isClass, isFunction, referencePath) {
-        if (!this._myFunctionsToSkip.pp_hasEqual(counterTarget[propertyName])) {
-            if (this._isFunction(counterTarget, propertyName)) {
+        if (this._isFunction(counterTarget, propertyName)) {
+            if (!this._myFunctionsToSkip.pp_hasEqual(counterTarget[propertyName])) {
                 let isValidFunctionName = this._filterName(propertyName, this._myParams.myFunctionNamesToInclude, this._myParams.myFunctionNamesToExclude);
                 let isValidFunctionPath = this._filterName((referencePath != null ? referencePath + "." : "") + propertyName, this._myParams.myFunctionPathsToInclude, this._myParams.myFunctionPathsToExclude);
                 if (isValidFunctionName && isValidFunctionPath) {
@@ -240,10 +240,13 @@ PP.DebugFunctionCallsCounter = class DebugFunctionCallsCounter {
                             let backupEnumerable = counterTarget.propertyIsEnumerable(propertyName);
 
                             try {
-                                counterTarget[propertyName] = function () {
-                                    functionsCallsCounters.set(callsCountName, functionsCallsCounters.get(callsCountName) + 1);
-                                    return backupFunction.bind(this)(...arguments);
-                                };
+                                Object.defineProperty(counterTarget, propertyName, {
+                                    value: function () {
+                                        functionsCallsCounters.set(callsCountName, functionsCallsCounters.get(callsCountName) + 1);
+                                        return backupFunction.bind(this)(...arguments);
+                                    },
+                                    enumerable: backupEnumerable
+                                });
 
                                 let properties = Object.getOwnPropertyNames(backupFunction);
                                 for (let property of properties) {
@@ -252,8 +255,6 @@ PP.DebugFunctionCallsCounter = class DebugFunctionCallsCounter {
                                     } catch (error) {
                                     }
                                 }
-
-                                Object.defineProperty(counterTarget, propertyName, { enumerable: backupEnumerable });
                             } catch (error) {
                             }
                         } else if (!this._myParams.myExcludeConstructor && isClass && referenceParent != null && referenceParent[referenceName] != null
@@ -261,10 +262,23 @@ PP.DebugFunctionCallsCounter = class DebugFunctionCallsCounter {
                             this._myFunctionsCallsCount.set(callsCountName, 0);
                             let functionsCallsCounters = this._myFunctionsCallsCount;
 
-                            this._setClassConstructor(referenceName, referenceParent, function () {
+                            let backupConstructor = referenceParent[referenceName];
+                            let newConstructor = function () {
                                 functionsCallsCounters.set(callsCountName, functionsCallsCounters.get(callsCountName) + 1);
                                 return new reference(...arguments);
+                            };
+
+                            Object.defineProperty(newConstructor, "toString", {
+                                value: function () { return backupConstructor.toString() },
+                                enumerable: backupConstructor.propertyIsEnumerable("toString")
                             });
+
+                            Object.defineProperty(newConstructor, "toLocaleString", {
+                                value: function () { return backupConstructor.toLocaleString() },
+                                enumerable: backupConstructor.propertyIsEnumerable("toLocaleString")
+                            });
+
+                            this._setClassConstructor(referenceName, referenceParent, newConstructor);
 
                             this._myFunctionsToSkip.push(referenceParent[referenceName]);
                         }
@@ -466,7 +480,10 @@ PP.DebugFunctionCallsCounter = class DebugFunctionCallsCounter {
         let properties = Object.getOwnPropertyNames(backupConstructor);
         for (let property of properties) {
             try {
-                Object.defineProperty(referenceParent[referenceName], property, { value: backupConstructor[property] });
+                Object.defineProperty(referenceParent[referenceName], property, {
+                    value: backupConstructor[property],
+                    enumerable: backupConstructor.propertyIsEnumerable(property)
+                });
             } catch (error) {
             }
         }

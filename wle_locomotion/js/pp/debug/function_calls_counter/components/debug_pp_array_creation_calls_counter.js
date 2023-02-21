@@ -37,7 +37,7 @@ WL.registerComponent('pp-debug-pp-array-creation-calls-counter', {
 
         let functionCallsCounterParams = new PP.DebugFunctionCallsCounterParams();
         functionCallsCounterParams.myObjectsByPath = ["PP"];
-        functionCallsCounterParams.myExcludeConstructor = true;
+        functionCallsCounterParams.myExcludeConstructor = false;
         functionCallsCounterParams.myExcludeJavascriptObjectFunctions = true;
         functionCallsCounterParams.myAddPathPrefix = true;
 
