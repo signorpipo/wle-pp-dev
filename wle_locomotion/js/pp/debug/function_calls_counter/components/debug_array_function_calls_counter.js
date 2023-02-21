@@ -2,6 +2,7 @@
 WL.registerComponent('pp-debug-array-function-calls-counter', {
     _myIncludeOnlyArrayExtensionFunctions: { type: WL.Type.Bool, default: false },
     _myDelayStart: { type: WL.Type.Float, default: 0.0 },
+    _myLogFunction: { type: WL.Type.Enum, values: ['log', 'error', 'warn', 'debug'], default: 'log' },
     _myLogDelay: { type: WL.Type.Float, default: 1.0 },
     _myLogCollapsed: { type: WL.Type.Bool, default: false },
     _myLogMaxFunctionCalls: { type: WL.Type.Bool, default: false },
@@ -74,6 +75,7 @@ WL.registerComponent('pp-debug-array-function-calls-counter', {
         functionCallsCountLoggerParams.myLogTitle = "Array " + functionCallsCountLoggerParams.myLogTitle;
 
         functionCallsCountLoggerParams.myLogDelay = this._myLogDelay;
+        functionCallsCountLoggerParams.myLogFunction = ['log', 'error', 'warn', 'debug'][this._myLogFunction];
         functionCallsCountLoggerParams.myLogCollapsed = this._myLogCollapsed;
         functionCallsCountLoggerParams.myLogFunctionsMaxAmount = (this._myLogFunctionsMaxAmount >= 0) ? this._myLogFunctionsMaxAmount : null;
         functionCallsCountLoggerParams.myLogFunctionsWithCallsCounterAbove = (this._myLogFunctionsWithCallsCounterAbove >= 0) ? this._myLogFunctionsWithCallsCounterAbove : null;

@@ -1,6 +1,5 @@
 
-WL.registerComponent('pp-debug-pp-function-calls-counter', {
-    _myCountCallsOnPPGlobalObjects: { type: WL.Type.Bool, default: false },
+WL.registerComponent('pp-debug-wl-function-calls-counter', {
     _myDelayStart: { type: WL.Type.Float, default: 0.0 },
     _myLogFunction: { type: WL.Type.Enum, values: ['log', 'error', 'warn', 'debug'], default: 'log' },
     _myLogDelay: { type: WL.Type.Float, default: 1.0 },
@@ -40,14 +39,12 @@ WL.registerComponent('pp-debug-pp-function-calls-counter', {
     },
     _start() {
         let functionCallsCounterParams = new PP.DebugFunctionCallsCounterParams();
-        functionCallsCounterParams.myObjectsByPath = ["PP"];
+        functionCallsCounterParams.myObjectsByPath = ["WL"];
         functionCallsCounterParams.myExcludeConstructors = false;
         functionCallsCounterParams.myExcludeJavascriptObjectFunctions = true;
         functionCallsCounterParams.myAddPathPrefix = true;
 
-        if (this._myCountCallsOnPPGlobalObjects) {
-            functionCallsCounterParams.myObjectRecursionDepthLevelforObjects = 1;
-        }
+        functionCallsCounterParams.myObjectRecursionDepthLevelforObjects = 1;
         functionCallsCounterParams.myObjectRecursionDepthLevelforClasses = 3;
 
         if (this._myFunctionNamesToInclude.length > 0) {
@@ -70,7 +67,7 @@ WL.registerComponent('pp-debug-pp-function-calls-counter', {
 
         let functionCallsCountLoggerParams = new PP.DebugFunctionCallsCountLoggerParams();
         functionCallsCountLoggerParams.myCallsCounter = this._myFunctionCallsCounter;
-        functionCallsCountLoggerParams.myLogTitle = "PP " + functionCallsCountLoggerParams.myLogTitle;
+        functionCallsCountLoggerParams.myLogTitle = "WL " + functionCallsCountLoggerParams.myLogTitle;
 
         functionCallsCountLoggerParams.myLogDelay = this._myLogDelay;
         functionCallsCountLoggerParams.myLogFunction = ['log', 'error', 'warn', 'debug'][this._myLogFunction];
