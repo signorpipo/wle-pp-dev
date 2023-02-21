@@ -42,7 +42,7 @@ WL.registerComponent('pp-debug-array-function-calls-counter', {
         functionCallsCounterParams.myClassesByPath = [
             "Array", "Uint8ClampedArray", "Uint8Array", "Uint16Array", "Uint32Array", "Int8Array",
             "Int16Array", "Int32Array", "Float32Array", "Float64Array"];
-        functionCallsCounterParams.myExcludeConstructor = true;
+        functionCallsCounterParams.myExcludeConstructor = false;
         functionCallsCounterParams.myExcludeJavascriptObjectFunctions = true;
         functionCallsCounterParams.myAddPathPrefix = true;
 

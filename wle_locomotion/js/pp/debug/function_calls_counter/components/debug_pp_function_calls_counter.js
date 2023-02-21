@@ -40,14 +40,14 @@ WL.registerComponent('pp-debug-pp-function-calls-counter', {
     _start() {
         let functionCallsCounterParams = new PP.DebugFunctionCallsCounterParams();
         functionCallsCounterParams.myObjectsByPath = ["PP"];
-        functionCallsCounterParams.myExcludeConstructor = true;
+        functionCallsCounterParams.myExcludeConstructor = false;
         functionCallsCounterParams.myExcludeJavascriptObjectFunctions = true;
         functionCallsCounterParams.myAddPathPrefix = true;
 
         if (this._myCountCallsOnPPGlobalObjects) {
             functionCallsCounterParams.myObjectRecursionDepthLevelforObjects = 1;
         }
-        functionCallsCounterParams.myObjectRecursionDepthLevelforClasses = 5;
+        functionCallsCounterParams.myObjectRecursionDepthLevelforClasses = 3;
 
         if (this._myFunctionNamesToInclude.length > 0) {
             let toIncludeList = [...this._myFunctionNamesToInclude.split(",")];

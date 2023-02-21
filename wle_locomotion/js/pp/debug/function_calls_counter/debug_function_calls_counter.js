@@ -60,17 +60,17 @@ PP.DebugFunctionCallsCounter = class DebugFunctionCallsCounter {
 
         let objectsAndParents = this._getReferencesAndParents(this._myParams.myObjectsByReference, this._myParams.myObjectsByPath, false, false);
         let classesAndParents = this._getReferencesAndParents(this._myParams.myClassesByReference, this._myParams.myClassesByPath, true, false);
+        let functionsAndParents = this._getReferencesAndParents([], this._myParams.myFunctionsByPath, false, true);
 
         this._objectRecursion(objectsAndParents, classesAndParents);
 
-        for (let referenceAndParent of classesAndParents) {
+        for (let referenceAndParent of functionsAndParents) {
             let reference = referenceAndParent[0];
             let referenceParent = referenceAndParent[1];
             let referenceName = referenceAndParent[2];
             let referencePath = referenceAndParent[3];
-            let renamedReferenceName = referenceAndParent[4];
 
-            this._addCallsCounter(reference, referenceParent, referenceName, true, referencePath, renamedReferenceName);
+            this._addFunctionCallsCounter(referenceParent, referenceName, null, null, "function", false, true, referencePath);
         }
 
         for (let referenceAndParent of objectsAndParents) {
@@ -83,14 +83,14 @@ PP.DebugFunctionCallsCounter = class DebugFunctionCallsCounter {
             this._addCallsCounter(reference, referenceParent, referenceName, false, referencePath, renamedReferenceName);
         }
 
-        let functionsAndParents = this._getReferencesAndParents([], this._myParams.myFunctionsByPath, false, true);
-        for (let referenceAndParent of functionsAndParents) {
+        for (let referenceAndParent of classesAndParents) {
             let reference = referenceAndParent[0];
             let referenceParent = referenceAndParent[1];
             let referenceName = referenceAndParent[2];
             let referencePath = referenceAndParent[3];
+            let renamedReferenceName = referenceAndParent[4];
 
-            this._addFunctionCallsCounter(referenceParent, referenceName, null, null, "function", false, true, referencePath);
+            this._addCallsCounter(reference, referenceParent, referenceName, true, referencePath, renamedReferenceName);
         }
 
         this.resetCallsCount();
@@ -179,13 +179,6 @@ PP.DebugFunctionCallsCounter = class DebugFunctionCallsCounter {
         return parent;
     }
 
-    _setClassConstructor(referenceName, referenceParent, newConstructor) {
-        let backupConstructor = referenceParent[referenceName];
-
-        referenceParent[referenceName] = newConstructor;
-        referenceParent[referenceName].prototype = backupConstructor.prototype;
-    }
-
     _addCallsCounter(reference, referenceParent, referenceName, isClass, referencePath, renamedReferenceName) {
         let includePathList = this._myParams.myObjectPathsToInclude;
         let excludePathList = this._myParams.myObjectPathsToExclude;
@@ -249,6 +242,14 @@ PP.DebugFunctionCallsCounter = class DebugFunctionCallsCounter {
                                 functionsCallsCounters.set(callsCountName, functionsCallsCounters.get(callsCountName) + 1);
                                 return backupFunction.bind(this)(...arguments);
                             };
+
+                            let properties = Object.getOwnPropertyNames(backupFunction);
+                            for (let property of properties) {
+                                try {
+                                    Object.defineProperty(counterTarget[propertyName], property, { value: backupFunction[property] });
+                                } catch (error) {
+                                }
+                            }
 
                             Object.defineProperty(counterTarget, propertyName, { enumerable: backupEnumerable });
                         } catch (error) {
@@ -450,5 +451,19 @@ PP.DebugFunctionCallsCounter = class DebugFunctionCallsCounter {
         }
 
         return isValidName;
+    }
+
+    _setClassConstructor(referenceName, referenceParent, newConstructor) {
+        let backupConstructor = referenceParent[referenceName];
+
+        referenceParent[referenceName] = newConstructor;
+
+        let properties = Object.getOwnPropertyNames(backupConstructor);
+        for (let property of properties) {
+            try {
+                Object.defineProperty(referenceParent[referenceName], property, { value: backupConstructor[property] });
+            } catch (error) {
+            }
+        }
     }
 };

@@ -1,5 +1,5 @@
 
-WL.registerComponent('pp-debug-array-creation-calls-counter', {
+WL.registerComponent('pp-debug-pp-array-creation-calls-counter', {
     _myDelayStart: { type: WL.Type.Float, default: 0.0 },
     _myLogDelay: { type: WL.Type.Float, default: 1.0 },
     _myLogCollapsed: { type: WL.Type.Bool, default: false },
