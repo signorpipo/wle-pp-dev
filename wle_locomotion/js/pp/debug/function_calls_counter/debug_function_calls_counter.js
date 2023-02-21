@@ -51,9 +51,12 @@ PP.DebugFunctionCallsCounterParams = class DebugFunctionCallsCounterParams {
 PP.DebugFunctionCallsCounter = class DebugFunctionCallsCounter {
     constructor(params = new PP.DebugFunctionCallsCounterParams()) {
         this._myFunctionsCallsCount = new Map();
+        this._myMaxFunctionsCallsCount = new Map();
         this._myPropertiesAlreadyCounted = new Map();
 
         this._myParams = params;
+
+        this._myResetOnce = false;
 
         let objectsAndParents = this._getReferencesAndParents(this._myParams.myObjectsByReference, this._myParams.myObjectsByPath, false, false);
         let classesAndParents = this._getReferencesAndParents(this._myParams.myClassesByReference, this._myParams.myClassesByPath, true, false);
@@ -92,13 +95,43 @@ PP.DebugFunctionCallsCounter = class DebugFunctionCallsCounter {
     }
 
     resetCallsCount() {
+        this._myResetOnce = true;
+
         for (let property of this._myFunctionsCallsCount.keys()) {
+            if (this._myMaxFunctionsCallsCount.has(property)) {
+                this._myMaxFunctionsCallsCount.set(property, Math.max(this._myMaxFunctionsCallsCount.get(property), this._myFunctionsCallsCount.get(property)));
+            } else {
+                this._myMaxFunctionsCallsCount.set(property, this._myFunctionsCallsCount.get(property));
+            }
+
             this._myFunctionsCallsCount.set(property, 0);
+        }
+    }
+
+    resetMaxCallsCount() {
+        for (let property of this._myMaxFunctionsCallsCount.keys()) {
+            this._myMaxFunctionsCallsCount.set(property, 0);
         }
     }
 
     getCallsCount(sortList = false) {
         let callsCount = this._myFunctionsCallsCount;
+
+        if (sortList) {
+            callsCount = new Map([...callsCount.entries()].sort(function (first, second) {
+                return -(first[1] - second[1]);
+            }));
+        }
+
+        return callsCount;
+    }
+
+    getMaxCallsCount(sortList = false) {
+        if (!this._myResetOnce) {
+            return this.getCallsCount(sortList);
+        }
+
+        let callsCount = this._myMaxFunctionsCallsCount;
 
         if (sortList) {
             callsCount = new Map([...callsCount.entries()].sort(function (first, second) {
