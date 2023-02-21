@@ -92,6 +92,9 @@ PP.DebugFunctionCallsCounter = class DebugFunctionCallsCounter {
 
             this._addFunctionCallsCounter(referenceParent, referenceName, null, null, "function", false, true, referencePath);
         }
+
+        this.resetCallsCount();
+        this.resetMaxCallsCount();
     }
 
     resetCallsCount() {

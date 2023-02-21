@@ -1,14 +1,43 @@
 
 WL.registerComponent('pp-debug-array-function-calls-counter', {
     _myIncludeOnlyArrayExtensionFunctions: { type: WL.Type.Bool, default: false },
+    _myDelayStart: { type: WL.Type.Float, default: 0.0 },
     _myLogDelay: { type: WL.Type.Float, default: 1.0 },
     _myLogCollapsed: { type: WL.Type.Bool, default: false },
+    _myLogMaxFunctionCalls: { type: WL.Type.Bool, default: false },
     _myLogFunctionsMaxAmount: { type: WL.Type.Int, default: -1 },
     _myLogFunctionsWithCallsCounterAbove: { type: WL.Type.Int, default: -1 },
     _myFunctionNamesToInclude: { type: WL.Type.String, default: "" },
-    _myFunctionNamesToExclude: { type: WL.Type.String, default: "" }
+    _myFunctionNamesToExclude: { type: WL.Type.String, default: "" },
 }, {
     init: function () {
+        this._mySkipFirstUpdate = true;
+        this._myStartTimer = new PP.Timer(this._myDelayStart);
+        if (this._myDelayStart == 0) {
+            this._myStartTimer.end();
+            this._mySkipFirstUpdate = false;
+            this._start();
+        }
+    },
+    start: function () {
+    },
+    update: function (dt) {
+        if (this._mySkipFirstUpdate) {
+            this._mySkipFirstUpdate = false;
+            return;
+        }
+
+        if (this._myStartTimer.isRunning()) {
+            this._myStartTimer.update(dt);
+            if (this._myStartTimer.isDone()) {
+                this._start();
+            }
+        } else {
+            this._myFunctionCallsCountLogger.update(dt);
+            this._myFunctionCallsCounter.resetCallsCount();
+        }
+    },
+    _start() {
         let functionCallsCounterParams = new PP.DebugFunctionCallsCounterParams();
         functionCallsCounterParams.myClassesByPath = [
             "Array", "Uint8ClampedArray", "Uint8Array", "Uint16Array", "Uint32Array", "Int8Array",
@@ -48,13 +77,8 @@ WL.registerComponent('pp-debug-array-function-calls-counter', {
         functionCallsCountLoggerParams.myLogCollapsed = this._myLogCollapsed;
         functionCallsCountLoggerParams.myLogFunctionsMaxAmount = (this._myLogFunctionsMaxAmount >= 0) ? this._myLogFunctionsMaxAmount : null;
         functionCallsCountLoggerParams.myLogFunctionsWithCallsCounterAbove = (this._myLogFunctionsWithCallsCounterAbove >= 0) ? this._myLogFunctionsWithCallsCounterAbove : null;
+        functionCallsCountLoggerParams.myLogMaxFunctionCalls = this._myLogMaxFunctionCalls;
 
         this._myFunctionCallsCountLogger = new PP.DebugFunctionCallsCountLogger(functionCallsCountLoggerParams);
-    },
-    start: function () {
-    },
-    update: function (dt) {
-        this._myFunctionCallsCountLogger.update(dt);
-        this._myFunctionCallsCounter.resetCallsCount();
-    },
+    }
 });
