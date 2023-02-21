@@ -7,6 +7,8 @@ WL.registerComponent('pp-debug-pp-array-creation-calls-counter', {
     _myLogMaxFunctionCalls: { type: WL.Type.Bool, default: false }
 }, {
     init: function () {
+        if (!this.active) return;
+
         this._mySkipFirstUpdate = true;
         this._myStartTimer = new PP.Timer(this._myDelayStart);
         if (this._myDelayStart == 0) {

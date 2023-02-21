@@ -19,6 +19,8 @@ WL.registerComponent('pp-debug-function-calls-counter', {
     _myObjectRecursionDepthLevelforClasses: { type: WL.Type.Int, default: 0 }
 }, {
     init: function () {
+        if (!this.active) return;
+
         this._mySkipFirstUpdate = true;
         this._myStartTimer = new PP.Timer(this._myDelayStart);
         if (this._myDelayStart == 0) {

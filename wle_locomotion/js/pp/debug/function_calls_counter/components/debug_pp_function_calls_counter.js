@@ -12,6 +12,8 @@ WL.registerComponent('pp-debug-pp-function-calls-counter', {
     _myFunctionNamesToExclude: { type: WL.Type.String, default: "" },
 }, {
     init: function () {
+        if (!this.active) return;
+
         this._mySkipFirstUpdate = true;
         this._myStartTimer = new PP.Timer(this._myDelayStart);
         if (this._myDelayStart == 0 && !this._myCountCallsOnPPGlobalObjects) {
