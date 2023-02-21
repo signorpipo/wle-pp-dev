@@ -44,6 +44,7 @@ PP.DebugFunctionCallsCounterParams = class DebugFunctionCallsCounterParams {
         // Tricks
         // - you can specify an object/class/function as a pair [object, "name"] instead of just object
         //   and the name, if not null, will be used as path instead of the default one
+        //   WARNING: this means that there is a specific case, an array of 2 elements with a string, which can't be tracked if you don't put it inside an array like above
     }
 };
 
@@ -54,8 +55,8 @@ PP.DebugFunctionCallsCounter = class DebugFunctionCallsCounter {
 
         this._myParams = params;
 
-        let objectsAndParents = this._getReferencesAndParents(this._myParams.myObjectsByReference, this._myParams.myObjectsByPath, false);
-        let classesAndParents = this._getReferencesAndParents(this._myParams.myClassesByReference, this._myParams.myClassesByPath, true);
+        let objectsAndParents = this._getReferencesAndParents(this._myParams.myObjectsByReference, this._myParams.myObjectsByPath, false, false);
+        let classesAndParents = this._getReferencesAndParents(this._myParams.myClassesByReference, this._myParams.myClassesByPath, true, false);
 
         this._objectRecursion(objectsAndParents, classesAndParents);
 
@@ -64,8 +65,9 @@ PP.DebugFunctionCallsCounter = class DebugFunctionCallsCounter {
             let referenceParent = referenceAndParent[1];
             let referenceName = referenceAndParent[2];
             let referencePath = referenceAndParent[3];
+            let renamedReferenceName = referenceAndParent[4];
 
-            this._addCallsCounter(reference, referenceParent, referenceName, true, referencePath);
+            this._addCallsCounter(reference, referenceParent, referenceName, true, referencePath, renamedReferenceName);
         }
 
         for (let referenceAndParent of objectsAndParents) {
@@ -73,11 +75,12 @@ PP.DebugFunctionCallsCounter = class DebugFunctionCallsCounter {
             let referenceParent = referenceAndParent[1];
             let referenceName = referenceAndParent[2];
             let referencePath = referenceAndParent[3];
+            let renamedReferenceName = referenceAndParent[4];
 
-            this._addCallsCounter(reference, referenceParent, referenceName, false, referencePath);
+            this._addCallsCounter(reference, referenceParent, referenceName, false, referencePath, renamedReferenceName);
         }
 
-        let functionsAndParents = this._getReferencesAndParents([], this._myParams.myFunctionsByPath, false);
+        let functionsAndParents = this._getReferencesAndParents([], this._myParams.myFunctionsByPath, false, true);
         for (let referenceAndParent of functionsAndParents) {
             let reference = referenceAndParent[0];
             let referenceParent = referenceAndParent[1];
@@ -147,7 +150,7 @@ PP.DebugFunctionCallsCounter = class DebugFunctionCallsCounter {
         referenceParent[referenceName].prototype = backupConstructor.prototype;
     }
 
-    _addCallsCounter(reference, referenceParent, referenceName, isClass, referencePath) {
+    _addCallsCounter(reference, referenceParent, referenceName, isClass, referencePath, renamedReferenceName) {
         let includePathList = this._myParams.myObjectPathsToInclude;
         let excludePathList = this._myParams.myObjectPathsToExclude;
         let includeNameList = this._myParams.myObjectNamesToInclude;
@@ -160,7 +163,7 @@ PP.DebugFunctionCallsCounter = class DebugFunctionCallsCounter {
         }
 
         let isValidReferencePath = this._filterName(referencePath, includePathList, excludePathList);
-        let isValidReferenceName = this._filterName(referenceName, includeNameList, excludeNameList);
+        let isValidReferenceName = this._filterName(renamedReferenceName, includeNameList, excludeNameList);
         if (isValidReferencePath && isValidReferenceName) {
             let counterTarget = null;
 
@@ -238,35 +241,44 @@ PP.DebugFunctionCallsCounter = class DebugFunctionCallsCounter {
             let path = pathPair;
             let referenceNameToUse = "";
             let referencePathToUse = pathPair;
+            let renamedReferenceName = "";
 
             if (pathPair != null && Array.isArray(pathPair) && pathPair.length != null && pathPair.length == 2 && typeof pathPair[1] == "string") {
                 path = pathPair[0];
                 referencePathToUse = pathPair[1];
-                referencePathToUse = this._getReferenceNameFromPath(referencePathToUse);
-            } else {
-                referenceNameToUse = this._getReferenceNameFromPath(path);
             }
+
+            referenceNameToUse = this._getReferenceNameFromPath(path);
+            renamedReferenceName = this._getReferenceNameFromPath(referencePathToUse);
 
             let reference = this._getReferenceFromPath(path);
             let referenceParent = this._getParentReferenceFromPath(path);
 
-            referenceAndParents.pp_pushUnique([reference, referenceParent, referenceNameToUse, referencePathToUse], equalCallback);
+            referenceAndParents.pp_pushUnique([reference, referenceParent, referenceNameToUse, referencePathToUse, renamedReferenceName], equalCallback);
         }
 
         for (let referencePair of byReferenceList) {
             let reference = referencePair;
             let referenceNameToUse = "";
             let referencePathToUse = "";
-            if (pathPair != null && pathPair.length != null && pathPair.length == 2 && typeof pathPair[1] == "string") {
-                path = pathPair[0];
-                referencePathToUse = pathPair[1];
-                referencePathToUse = this._getReferenceNameFromPath(referencePathToUse);
+            let renamedReferenceName = "";
+
+            if (referencePair != null && referencePair.length != null && referencePair.length == 2 && typeof referencePair[1] == "string") {
+                reference = referencePair[0];
+                referencePathToUse = referencePair[1];
+                renamedReferenceName = this._getReferenceNameFromPath(referencePathToUse);
             } else {
-                referenceNameToUse = isClass ? reference.name : null;
                 referencePathToUse = isClass ? reference.name : null;
+                renamedReferenceName = isClass ? reference.name : null;
             }
 
-            referenceAndParents.pp_pushUnique([reference, null, referenceNameToUse, referencePathToUse], equalCallback);
+            if (isClass) {
+                referenceNameToUse = reference.name;
+            } else {
+                referenceNameToUse = this._getReferenceNameFromPath(referencePathToUse);
+            }
+
+            referenceAndParents.pp_pushUnique([reference, null, referenceNameToUse, referencePathToUse, renamedReferenceName], equalCallback);
         }
 
         return referenceAndParents;
@@ -366,11 +378,11 @@ PP.DebugFunctionCallsCounter = class DebugFunctionCallsCounter {
                     let isValidReferenceName = this._filterName(propertyName, includeNameList, excludeNameList);
                     if (isValidReferencePath && isValidReferenceName) {
                         if (isObject && (objectLevel + 1 <= this._myParams.myObjectRecursionDepthLevelforObjects || this._myParams.myObjectRecursionDepthLevelforObjects == -1)) {
-                            objectsAndParents.pp_pushUnique([object[propertyName], object, propertyName, currentPath], equalCallback);
+                            objectsAndParents.pp_pushUnique([object[propertyName], object, propertyName, currentPath, propertyName], equalCallback);
                         }
 
                         if (isClass && (objectLevel + 1 <= this._myParams.myObjectRecursionDepthLevelforClasses || this._myParams.myObjectRecursionDepthLevelforClasses == -1)) {
-                            classesAndParents.pp_pushUnique([object[propertyName], object, object[propertyName].name, currentPath], equalCallback);
+                            classesAndParents.pp_pushUnique([object[propertyName], object, object[propertyName].name, currentPath, propertyName], equalCallback);
                         }
 
                         if (isObject) {
