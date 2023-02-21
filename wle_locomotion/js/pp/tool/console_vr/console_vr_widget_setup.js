@@ -23,7 +23,7 @@ PP.ConsoleVRWidgetSetup = class ConsoleVRWidgetSetup {
         this.myMessageTypeColors[PP.ConsoleVRWidget.MessageType.LOG] = this.myDefaultTextColor;
         this.myMessageTypeColors[PP.ConsoleVRWidget.MessageType.ERROR] = [255 / 255, 40 / 255, 40 / 255, 1];
         this.myMessageTypeColors[PP.ConsoleVRWidget.MessageType.WARN] = [250 / 255, 220 / 255, 40 / 255, 1];
-        this.myMessageTypeColors[PP.ConsoleVRWidget.MessageType.INFO] = [60 / 255, 200 / 255, 255 / 255, 1];
+        this.myMessageTypeColors[PP.ConsoleVRWidget.MessageType.DEBUG] = [60 / 255, 200 / 255, 255 / 255, 1];
 
         //Messages
         this.myMessagesPanelPosition = PP.vec3_create(0, 0.075, 0);
@@ -47,13 +47,13 @@ PP.ConsoleVRWidgetSetup = class ConsoleVRWidgetSetup {
         this.myMessagesTextPositions[PP.ConsoleVRWidget.MessageType.LOG] = PP.vec3_create(0, 0, 0.00001);
         this.myMessagesTextPositions[PP.ConsoleVRWidget.MessageType.ERROR] = PP.vec3_create(0, 0, 0);
         this.myMessagesTextPositions[PP.ConsoleVRWidget.MessageType.WARN] = PP.vec3_create(0, 0, 0);
-        this.myMessagesTextPositions[PP.ConsoleVRWidget.MessageType.INFO] = PP.vec3_create(0, 0, 0);
+        this.myMessagesTextPositions[PP.ConsoleVRWidget.MessageType.DEBUG] = PP.vec3_create(0, 0, 0);
 
         this.myMessagesTextColors = [];
         this.myMessagesTextColors[PP.ConsoleVRWidget.MessageType.LOG] = this.myMessageTypeColors[PP.ConsoleVRWidget.MessageType.LOG];
         this.myMessagesTextColors[PP.ConsoleVRWidget.MessageType.ERROR] = this.myMessageTypeColors[PP.ConsoleVRWidget.MessageType.ERROR];
         this.myMessagesTextColors[PP.ConsoleVRWidget.MessageType.WARN] = this.myMessageTypeColors[PP.ConsoleVRWidget.MessageType.WARN];
-        this.myMessagesTextColors[PP.ConsoleVRWidget.MessageType.INFO] = this.myMessageTypeColors[PP.ConsoleVRWidget.MessageType.INFO];
+        this.myMessagesTextColors[PP.ConsoleVRWidget.MessageType.DEBUG] = this.myMessageTypeColors[PP.ConsoleVRWidget.MessageType.DEBUG];
 
         //Buttons     
         this.myButtonsPanelPosition = PP.vec3_create(0, -0.11, 0.015);
@@ -79,13 +79,13 @@ PP.ConsoleVRWidgetSetup = class ConsoleVRWidgetSetup {
         this.myFilterButtonsTextColors[PP.ConsoleVRWidget.MessageType.LOG] = this.myMessageTypeColors[PP.ConsoleVRWidget.MessageType.LOG];
         this.myFilterButtonsTextColors[PP.ConsoleVRWidget.MessageType.ERROR] = this.myMessageTypeColors[PP.ConsoleVRWidget.MessageType.ERROR];
         this.myFilterButtonsTextColors[PP.ConsoleVRWidget.MessageType.WARN] = this.myMessageTypeColors[PP.ConsoleVRWidget.MessageType.WARN];
-        this.myFilterButtonsTextColors[PP.ConsoleVRWidget.MessageType.INFO] = this.myMessageTypeColors[PP.ConsoleVRWidget.MessageType.INFO];
+        this.myFilterButtonsTextColors[PP.ConsoleVRWidget.MessageType.DEBUG] = this.myMessageTypeColors[PP.ConsoleVRWidget.MessageType.DEBUG];
 
         this.myFilterButtonsTextLabel = [];
         this.myFilterButtonsTextLabel[PP.ConsoleVRWidget.MessageType.LOG] = "log";
         this.myFilterButtonsTextLabel[PP.ConsoleVRWidget.MessageType.ERROR] = "error";
         this.myFilterButtonsTextLabel[PP.ConsoleVRWidget.MessageType.WARN] = "warn";
-        this.myFilterButtonsTextLabel[PP.ConsoleVRWidget.MessageType.INFO] = "info";
+        this.myFilterButtonsTextLabel[PP.ConsoleVRWidget.MessageType.DEBUG] = "debug";
 
         //Buttons positioning
         {
@@ -101,9 +101,9 @@ PP.ConsoleVRWidgetSetup = class ConsoleVRWidgetSetup {
             this.myFilterButtonsPositions[PP.ConsoleVRWidget.MessageType.LOG] = [initialPosition + spaceWidth * 2 + halfButtonWidth, 0, 0];
             this.myFilterButtonsPositions[PP.ConsoleVRWidget.MessageType.ERROR] = [this.myFilterButtonsPositions[PP.ConsoleVRWidget.MessageType.LOG][0] + halfButtonWidth + spaceWidth + halfButtonWidth, 0, 0];
             this.myFilterButtonsPositions[PP.ConsoleVRWidget.MessageType.WARN] = [this.myFilterButtonsPositions[PP.ConsoleVRWidget.MessageType.ERROR][0] + halfButtonWidth + spaceWidth + halfButtonWidth, 0, 0];
-            this.myFilterButtonsPositions[PP.ConsoleVRWidget.MessageType.INFO] = [this.myFilterButtonsPositions[PP.ConsoleVRWidget.MessageType.WARN][0] + halfButtonWidth + spaceWidth + halfButtonWidth, 0, 0];
+            this.myFilterButtonsPositions[PP.ConsoleVRWidget.MessageType.DEBUG] = [this.myFilterButtonsPositions[PP.ConsoleVRWidget.MessageType.WARN][0] + halfButtonWidth + spaceWidth + halfButtonWidth, 0, 0];
 
-            this.myClearButtonPosition = [this.myFilterButtonsPositions[PP.ConsoleVRWidget.MessageType.INFO][0] + halfButtonWidth + spaceWidth * 4 + halfButtonWidth, 0, 0];
+            this.myClearButtonPosition = [this.myFilterButtonsPositions[PP.ConsoleVRWidget.MessageType.DEBUG][0] + halfButtonWidth + spaceWidth * 4 + halfButtonWidth, 0, 0];
             this.myUpButtonPosition = [this.myClearButtonPosition[0] + halfButtonWidth + spaceWidth * 4 + halfButtonWidth, 0, 0];
             this.myDownButtonPosition = [this.myUpButtonPosition[0] + halfButtonWidth + spaceWidth + halfButtonWidth, 0, 0];
         }
