@@ -37,8 +37,6 @@ CollisionCheck = class CollisionCheck {
 
         _myTotalRaycasts = 0;
         _myTotalRaycastsMax = 0;
-
-        //console.error = function () { };
     }
 
     move(movement, transformQuat, collisionCheckParams, collisionRuntimeParams) {

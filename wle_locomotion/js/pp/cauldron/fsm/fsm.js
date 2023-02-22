@@ -77,11 +77,11 @@ PP.FSM = class FSM {
         if (!state || typeof state == 'function') {
             stateObject = {};
             if (typeof state == 'function') {
-                stateObject.update = state;
+                stateObject.update = function update() { return state(...arguments); };
             } else {
                 stateObject.update = null;
             }
-            stateObject.clone = function () {
+            stateObject.clone = function clone() {
                 let cloneObject = {};
                 cloneObject.update = this.update;
                 cloneObject.clone = this.clone;
@@ -101,11 +101,11 @@ PP.FSM = class FSM {
         if (!transition || typeof transition == 'function') {
             transitionObject = {};
             if (typeof transition == 'function') {
-                transitionObject.perform = transition;
+                transitionObject.perform = function perform() { return transition(...arguments); };
             } else {
                 transitionObject.perform = null;
             }
-            transitionObject.clone = function () {
+            transitionObject.clone = function clone() {
                 let cloneObject = {};
                 cloneObject.perform = this.perform;
                 cloneObject.clone = this.clone;

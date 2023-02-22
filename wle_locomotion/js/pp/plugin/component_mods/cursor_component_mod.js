@@ -4,7 +4,7 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
 
     // Modified Functions
 
-    _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype.init = function () {
+    _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype.init = function init() {
         /* VR session cache, in case in VR */
         this.session = null;
         this.collisionMask = (1 << this.collisionGroup);
@@ -34,7 +34,7 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
         this.lastHeight = null;
     };
 
-    _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype.start = function () {
+    _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype.start = function start() {
         if (this.handedness == 0) {
             const inputComp = this.object.getComponent('input');
             if (!inputComp) {
@@ -92,7 +92,7 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
         this._setCursorVisibility(false);
     };
 
-    _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype.setViewComponent = function (viewComponent) {
+    _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype.setViewComponent = function setViewComponent(viewComponent) {
         this.viewComponent = viewComponent;
         /* If this object also has a view component, we will enable inverse-projected mouse clicks,
          * otherwise just use the objects transformation */
@@ -124,14 +124,14 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
         }
     };
 
-    _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype.onViewportResize = function () {
+    _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype.onViewportResize = function onViewportResize() {
         if (!this.viewComponent) return;
         /* Projection matrix will change if the viewport is resized, which will affect the
          * projection matrix because of the aspect ratio. */
         mat4.invert(this.projectionMatrix, this.viewComponent.projectionMatrix);
     };
 
-    _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype._setCursorRayTransform = function (hitPosition) {
+    _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype._setCursorRayTransform = function _setCursorRayTransform(hitPosition) {
         if (!this.cursorRayObject) return;
         if (this.cursorRayScalingAxis != 4) {
             this.cursorRayObject.resetScaling();
@@ -145,14 +145,14 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
         }
     };
 
-    _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype._setCursorVisibility = function (visible) {
+    _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype._setCursorVisibility = function _setCursorVisibility(visible) {
         this.visible = visible;
         if (!this.cursorObject) return;
 
         this.cursorObject.pp_setActive(visible);
     };
 
-    _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype.update = function (dt) {
+    _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype.update = function update(dt) {
         if (this.doubleClickTimer > 0) {
             this.doubleClickTimer -= dt;
         }
@@ -164,7 +164,7 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
         this.doUpdate(false);
     };
 
-    _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype.doUpdate = function (doClick) {
+    _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype.doUpdate = function doUpdate(doClick) {
         /* If in VR, set the cursor ray based on object transform */
         if (this.session) {
             /* Since Google Cardboard tap is registered as arTouchDown without a gamepad, we need to check for gamepad presence */
@@ -219,7 +219,7 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
         }
     };
 
-    _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype.hoverBehaviour = function (rayHit, doClick, forceUnhover = false) {
+    _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype.hoverBehaviour = function hoverBehaviour(rayHit, doClick, forceUnhover = false) {
         if (!forceUnhover && rayHit.hitCount > 0) {
             let hoveringObjectChanged = false;
             if (!this.hoveringObject || !this.hoveringObject.equals(rayHit.objects[0])) {
@@ -315,7 +315,7 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
         this.isUpWithNoDown = false;
     };
 
-    _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype.setupVREvents = function (s) {
+    _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype.setupVREvents = function setupVREvents(s) {
         /* If in VR, one-time bind the listener */
         this.session = s;
         const onSessionEnd = function (e) {
@@ -344,10 +344,10 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
         this.onViewportResize();
     };
 
-    _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype.onSelect = function (e) {
+    _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype.onSelect = function onSelect(e) {
     };
 
-    _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype.onSelectStart = function (e) {
+    _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype.onSelectStart = function onSelectStart(e) {
         if (this.active) {
             this.arTouchDown = true;
             if (e.inputSource.handedness == this.handedness) {
@@ -360,7 +360,7 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
         }
     };
 
-    _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype.onSelectEnd = function (e) {
+    _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype.onSelectEnd = function onSelectEnd(e) {
         if (this.active) {
             this.arTouchDown = false;
             if (e.inputSource.handedness == this.handedness) {
@@ -376,7 +376,7 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
         }
     };
 
-    _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype.onPointerMove = function (e) {
+    _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype.onPointerMove = function onPointerMove(e) {
         if (this.active) {
             /* Don't care about secondary pointers */
             if (this.pointerId != null && this.pointerId != e.pointerId) return;
@@ -394,10 +394,10 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
         }
     };
 
-    _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype.onClick = function (e) {
+    _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype.onClick = function onClick(e) {
     };
 
-    _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype.onPointerDown = function (e) {
+    _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype.onPointerDown = function onPointerDown(e) {
         /* Don't care about secondary pointers or non-left clicks */
         if ((this.pointerId != null && this.pointerId != e.pointerId) || e.button !== 0) return;
 
@@ -420,7 +420,7 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
         }
     };
 
-    _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype.onPointerUp = function (e) {
+    _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype.onPointerUp = function onPointerUp(e) {
         /* Don't care about secondary pointers or non-left clicks */
         if ((this.pointerId != null && this.pointerId != e.pointerId) || e.button !== 0) return;
 
@@ -447,7 +447,7 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
         }
     };
 
-    _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype.onPointerLeave = function (e) {
+    _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype.onPointerLeave = function onPointerLeave(e) {
         if (this.pointerId == null || this.pointerId == e.pointerId) {
             if (this.active) {
                 this.hoverBehaviour(null, false, true); // trigger unhover
@@ -462,7 +462,7 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
         }
     };
 
-    _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype.updateMousePos = function (clientX, clientY, w, h) {
+    _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype.updateMousePos = function updateMousePos(clientX, clientY, w, h) {
         this.lastClientX = clientX;
         this.lastClientY = clientY;
         this.lastWidth = w;
@@ -475,7 +475,7 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
         return this.updateDirection();
     };
 
-    _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype.updateDirection = function () {
+    _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype.updateDirection = function updateDirection() {
         this.object.getTranslationWorld(this.origin);
 
         /* Reverse-project the direction into view space */
@@ -495,7 +495,7 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
         return rayHit;
     };
 
-    _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype.onDeactivate = function () {
+    _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype.onDeactivate = function onDeactivate() {
         if (this.hoveringObject) {
             const cursorTarget = this.hoveringObject.getComponent('cursor-target');
             if (cursorTarget) cursorTarget.onUnhover(this.hoveringObject, this);
@@ -522,7 +522,7 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
         this.lastHeight = null;
     };
 
-    _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype.onActivate = function () {
+    _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype.onActivate = function onActivate() {
         this.showRay = true;
 
         this.isDown = false;
@@ -530,15 +530,15 @@ if (_WL && _WL._componentTypes && _WL._componentTypes[_WL._componentTypeIndices[
         this.isUpWithNoDown = false;
     };
 
-    _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype.onDestroy = function () {
+    _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype.onDestroy = function onDestroy() {
         for (const f of this.onDestroyCallbacks) f();
     };
 
-    _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype._isDown = function () {
+    _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype._isDown = function _isDown() {
         return this.isDown !== this.lastIsDown && this.isDown;
     };
 
-    _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype._isUp = function () {
+    _WL._componentTypes[_WL._componentTypeIndices["cursor"]].prototype._isUp = function _isUp() {
         return this.isDown !== this.lastIsDown && !this.isDown;
     };
 

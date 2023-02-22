@@ -259,7 +259,7 @@ PP.VisualRaycast = class VisualRaycast {
     }
 };
 
-PP.VisualRaycastParams.prototype.copy = function (other) {
+PP.VisualRaycastParams.prototype.copy = function copy(other) {
     this.myRaycastResults = other.myRaycastResults;
     this.myHitNormalLength = other.myHitNormalLength;
     this.myThickness = other.myThickness;

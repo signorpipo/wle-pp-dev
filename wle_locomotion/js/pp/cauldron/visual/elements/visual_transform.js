@@ -213,7 +213,7 @@ PP.VisualTransform.prototype._refresh = function () {
     };
 }();
 
-PP.VisualTransformParams.prototype.copy = function (other) {
+PP.VisualTransformParams.prototype.copy = function copy(other) {
     this.myTransform.mat4_copy(other.myTransform);
     this.myLength = other.myLength;
     this.myThickness = other.myThickness;

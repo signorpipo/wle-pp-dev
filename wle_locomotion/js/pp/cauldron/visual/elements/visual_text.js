@@ -157,7 +157,7 @@ PP.VisualText = class VisualText {
     }
 };
 
-PP.VisualTextParams.prototype.copy = function (other) {
+PP.VisualTextParams.prototype.copy = function copy(other) {
     this.myText = other.myText;
     this.myAlignment = other.myAlignment;
     this.myJustification = other.myJustification;

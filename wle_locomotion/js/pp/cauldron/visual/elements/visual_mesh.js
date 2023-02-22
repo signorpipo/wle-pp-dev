@@ -143,7 +143,7 @@ PP.VisualMesh = class VisualMesh {
     }
 };
 
-PP.VisualMeshParams.prototype.copy = function (other) {
+PP.VisualMeshParams.prototype.copy = function copy(other) {
     this.myTransform.pp_copy(other.myTransform);
 
     if (other.myMesh != null) {

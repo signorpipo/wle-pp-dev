@@ -7,7 +7,7 @@ WL.registerComponent('vec-create-count', {
         this._myVec3CreateCall = 0;
 
         let oldVec3 = PP.vec3_create;
-        PP.vec3_create = function () {
+        PP.vec3_create = function vec3_create() {
             this._myVec3CreateCall++;
             return oldVec3(...arguments);
         }.bind(this);
@@ -15,7 +15,7 @@ WL.registerComponent('vec-create-count', {
         this._myQuatCreateCall = 0;
 
         let oldQuat = PP.quat_create;
-        PP.quat_create = function () {
+        PP.quat_create = function quat_create() {
             this._myQuatCreateCall++;
             return oldQuat(...arguments);
         }.bind(this);
@@ -23,7 +23,7 @@ WL.registerComponent('vec-create-count', {
         this._myQuat2CreateCall = 0;
 
         let oldQuat2 = PP.quat2_create;
-        PP.quat2_create = function () {
+        PP.quat2_create = function quat2_create() {
             this._myQuat2CreateCall++;
             return oldQuat2(...arguments);
         }.bind(this);
@@ -31,7 +31,7 @@ WL.registerComponent('vec-create-count', {
         this._myMat4CreateCall = 0;
 
         let oldMat4 = PP.mat4_create;
-        PP.mat4_create = function () {
+        PP.mat4_create = function mat4_create() {
             this._myMat4CreateCall++;
             return oldMat4(...arguments);
         }.bind(this);

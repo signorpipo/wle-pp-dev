@@ -163,7 +163,7 @@ PP.VisualPoint.prototype._refresh = function () {
     }
 }();
 
-PP.VisualPointParams.prototype.copy = function (other) {
+PP.VisualPointParams.prototype.copy = function copy(other) {
     this.myPosition.vec3_copy(other.myPosition);
     this.myRadius = other.myRadius;
 

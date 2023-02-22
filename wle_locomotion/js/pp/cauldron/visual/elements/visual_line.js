@@ -194,7 +194,7 @@ PP.VisualLine.prototype._refresh = function () {
     };
 }();
 
-PP.VisualLineParams.prototype.copy = function (other) {
+PP.VisualLineParams.prototype.copy = function copy(other) {
     this.myStart.vec3_copy(other.myStart);
     this.myDirection.vec3_copy(other.myDirection);
     this.myLength = other.myLength;

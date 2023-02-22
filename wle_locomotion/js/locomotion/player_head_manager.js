@@ -311,7 +311,7 @@ PlayerHeadManager.prototype.getPositionFeet = function () {
     };
 }();
 
-PlayerHeadManager.prototype.moveFeet = function (movement) {
+PlayerHeadManager.prototype.moveFeet = function moveFeet(movement) {
     PP.myPlayerObjects.myPlayer.pp_translate(movement);
 };
 

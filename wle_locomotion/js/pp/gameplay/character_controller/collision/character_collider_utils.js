@@ -64,7 +64,7 @@ PP.CharacterColliderUtils = {
 
 // IMPLEMENTATION
 
-PP.CharacterColliderUtils.createCharacterColliderSetupSimplified = function (simplifiedCreationParams, outCharacterColliderSetup = new PP.CharacterColliderSetup()) {
+PP.CharacterColliderUtils.createCharacterColliderSetupSimplified = function createCharacterColliderSetupSimplified(simplifiedCreationParams, outCharacterColliderSetup = new PP.CharacterColliderSetup()) {
     outCharacterColliderSetup.myHeight = simplifiedCreationParams.myHeight;
     outCharacterColliderSetup.myHorizontalCheckSetup.myHorizontalCheckConeRadius = simplifiedCreationParams.myRadius;
     outCharacterColliderSetup.myVerticalCheckSetup.myVerticalCheckCircumferenceRadius = simplifiedCreationParams.myRadius / 2;

@@ -344,7 +344,7 @@ PP.CharacterColliderDebugSetup = class CharacterColliderDebugSetup {
 
 // IMPLEMENTATION
 
-PP.CharacterColliderSetup.prototype.copy = function (other) {
+PP.CharacterColliderSetup.prototype.copy = function copy(other) {
     this.myHeight = other.myHeight;
 
     this.myHorizontalCheckSetup.copy(other.myHorizontalCheckSetup);
@@ -362,7 +362,7 @@ PP.CharacterColliderSetup.prototype.copy = function (other) {
     this.myDebugSetup.copy(other.myDebugSetup);
 };
 
-PP.CharacterColliderHorizontalCheckSetup.prototype.copy = function (other) {
+PP.CharacterColliderHorizontalCheckSetup.prototype.copy = function copy(other) {
     this.myHorizontalCheckConeRadius = other.myHorizontalCheckConeRadius;
     this.myHorizontalCheckConeHalfAngle = other.myHorizontalCheckConeHalfAngle;
 
@@ -440,7 +440,7 @@ PP.CharacterColliderHorizontalCheckSetup.prototype.copy = function (other) {
     this.myHorizontalCheckObjectsToIgnore.pp_copy(other.myHorizontalCheckObjectsToIgnore);
 };
 
-PP.CharacterColliderVerticalCheckSetup.prototype.copy = function (other) {
+PP.CharacterColliderVerticalCheckSetup.prototype.copy = function copy(other) {
     this.myVerticalCheckCircumferenceRadius = other.myVerticalCheckCircumferenceRadius;
 
     this.myVerticalCheckCircumferenceSlices = other.myVerticalCheckCircumferenceSlices;
@@ -463,7 +463,7 @@ PP.CharacterColliderVerticalCheckSetup.prototype.copy = function (other) {
     this.myVerticalCheckObjectsToIgnore.pp_copy(other.myVerticalCheckObjectsToIgnore);
 };
 
-PP.CharacterColliderWallSlideSetup.prototype.copy = function (other) {
+PP.CharacterColliderWallSlideSetup.prototype.copy = function copy(other) {
     this.myWallSlideEnabled = other.myWallSlideEnabled;
 
     this.myWallSlideMaxAttempts = other.myWallSlideMaxAttempts;
@@ -479,7 +479,7 @@ PP.CharacterColliderWallSlideSetup.prototype.copy = function (other) {
     this.my90DegreesWallSlideAdjustDirectionSign = other.my90DegreesWallSlideAdjustDirectionSign;
 };
 
-PP.CharacterColliderSurfaceSetup.prototype.copy = function (other) {
+PP.CharacterColliderSurfaceSetup.prototype.copy = function copy(other) {
     this.mySurfaceSnapEnabled = other.mySurfaceSnapEnabled;
     this.mySurfaceSnapMaxDistance = other.mySurfaceSnapMaxDistance;
 
@@ -536,7 +536,7 @@ PP.CharacterColliderSurfaceSetup.prototype.copy = function (other) {
     this.myHorizontalMovementAllowExitAttemptWhenOnNotIgnorableSurfacePerceivedAngle = other.myHorizontalMovementAllowExitAttemptWhenOnNotIgnorableSurfacePerceivedAngle;
 };
 
-PP.CharacterColliderSplitMovementSetup.prototype.copy = function (other) {
+PP.CharacterColliderSplitMovementSetup.prototype.copy = function copy(other) {
     this.mySplitMovementEnabled = other.mySplitMovementEnabled;
 
     this.mySplitMovementMaxSteps = other.mySplitMovementMaxSteps;
@@ -553,7 +553,7 @@ PP.CharacterColliderSplitMovementSetup.prototype.copy = function (other) {
     this.mySplitMovementStopReturnPreviousResults = other.mySplitMovementStopReturnPreviousResults;
 };
 
-PP.CharacterColliderAdditionalSetup.prototype.copy = function (other) {
+PP.CharacterColliderAdditionalSetup.prototype.copy = function copy(other) {
     this.myPositionOffsetLocal.vec3_copy(other.myPositionOffsetLocal);
     this.myRotationOffsetLocalQuat.quat_copy(other.myRotationOffsetLocalQuat);
 
@@ -564,7 +564,7 @@ PP.CharacterColliderAdditionalSetup.prototype.copy = function (other) {
     */
 };
 
-PP.CharacterColliderDebugSetup.prototype.copy = function (other) {
+PP.CharacterColliderDebugSetup.prototype.copy = function copy(other) {
     this.myVisualDebugActive = other.myVisualDebugActive;
 
     this.myVisualDebugMovementActive = other.myVisualDebugMovementActive;

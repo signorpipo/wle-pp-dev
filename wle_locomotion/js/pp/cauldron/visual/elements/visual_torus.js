@@ -237,7 +237,7 @@ PP.VisualTorus.prototype._refresh = function () {
     };
 }();
 
-PP.VisualTorusParams.prototype.copy = function (other) {
+PP.VisualTorusParams.prototype.copy = function copy(other) {
     this.myRadius = other.myRadius;
     this.mySegmentsAmount = other.mySegmentsAmount;
     this.mySegmentThickness = other.mySegmentThickness;

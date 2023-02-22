@@ -233,7 +233,7 @@ PP.CharacterCollisionInternalResults = class CharacterCollisionSplitMovementResu
 
 // IMPLEMENTATION
 
-PP.CharacterCollisionResults.prototype.reset = function () {
+PP.CharacterCollisionResults.prototype.reset = function reset() {
     this.myCheckType = PP.CharacterCollisionCheckType.NONE;
 
     this.myTransformResults.reset();
@@ -259,7 +259,7 @@ PP.CharacterCollisionResults.prototype.reset = function () {
     this.myInternalResults.reset();
 };
 
-PP.CharacterCollisionResults.prototype.copy = function (other) {
+PP.CharacterCollisionResults.prototype.copy = function copy(other) {
     this.myCheckType = other.myCheckType;
 
     this.myTransformResults.copy(other.myTransformResults);
@@ -285,7 +285,7 @@ PP.CharacterCollisionResults.prototype.copy = function (other) {
     this.myInternalResults.copy(other.myInternalResults);
 };
 
-PP.CharacterCollisionSurfaceInfo.prototype.reset = function () {
+PP.CharacterCollisionSurfaceInfo.prototype.reset = function reset() {
     this.myIsOnSurface = false;
 
     this.mySurfaceAngle = 0;
@@ -300,7 +300,7 @@ PP.CharacterCollisionSurfaceInfo.prototype.reset = function () {
     this.myIsBaseInsideCollision = false;
 };
 
-PP.CharacterCollisionSurfaceInfo.prototype.copy = function (other) {
+PP.CharacterCollisionSurfaceInfo.prototype.copy = function copy(other) {
     this.myIsOnSurface = other.myIsOnSurface;
 
     this.mySurfaceAngle = other.mySurfaceAngle;
@@ -315,31 +315,31 @@ PP.CharacterCollisionSurfaceInfo.prototype.copy = function (other) {
     this.myIsBaseInsideCollision = other.myIsBaseInsideCollision;
 };
 
-PP.CharacterCollisionWallSlideResults.prototype.reset = function () {
+PP.CharacterCollisionWallSlideResults.prototype.reset = function reset() {
     this.myHasSlid = false;
     this.mySlideMovementAngle = 0;
     this.mySlideMovementWallAngle = 0;
     this.myWallNormal.vec3_zero();
 };
 
-PP.CharacterCollisionWallSlideResults.prototype.copy = function (other) {
+PP.CharacterCollisionWallSlideResults.prototype.copy = function copy(other) {
     this.myHasSlid = other.myHasSlid;
     this.mySlideMovementAngle = other.mySlideMovementAngle;
     this.mySlideMovementWallAngle = other.mySlideMovementWallAngle;
     this.myWallNormal.vec3_copy(other.myWallNormal);
 };
 
-PP.CharacterCollisionTransformResults.prototype.reset = function () {
+PP.CharacterCollisionTransformResults.prototype.reset = function reset() {
     this.myStartTransformQuat.quat2_identity();
     this.myEndTransformQuat.quat2_identity();
 };
 
-PP.CharacterCollisionTransformResults.prototype.copy = function (other) {
+PP.CharacterCollisionTransformResults.prototype.copy = function copy(other) {
     this.myStartTransformQuat.quat2_copy(other.myStartTransformQuat);
     this.myEndTransformQuat.quat2_copy(other.myEndTransformQuat);
 };
 
-PP.CharacterCollisionMovementResults.prototype.reset = function () {
+PP.CharacterCollisionMovementResults.prototype.reset = function reset() {
     this.myStartMovement.vec3_zero();
     this.myEndMovement.vec3_zero();
     this.myMovementFailed = false;
@@ -347,7 +347,7 @@ PP.CharacterCollisionMovementResults.prototype.reset = function () {
     this.myReferenceCollisionHit.reset();
 };
 
-PP.CharacterCollisionMovementResults.prototype.copy = function (other) {
+PP.CharacterCollisionMovementResults.prototype.copy = function copy(other) {
     this.myStartMovement.vec3_copy(other.myStartMovement);
     this.myEndMovement.vec3_copy(other.myEndMovement);
     this.myMovementFailed = other.myMovementFailed;
@@ -355,31 +355,31 @@ PP.CharacterCollisionMovementResults.prototype.copy = function (other) {
     this.myReferenceCollisionHit.copy(other.myReferenceCollisionHit);
 };
 
-PP.CharacterCollisionTeleportResults.prototype.reset = function () {
+PP.CharacterCollisionTeleportResults.prototype.reset = function reset() {
     this.myStartTeleportTransformQuat.quat2_identity();
     this.myEndTeleportTransformQuat.quat2_identity();
     this.myTeleportFailed = false;
 };
 
-PP.CharacterCollisionTeleportResults.prototype.copy = function (other) {
+PP.CharacterCollisionTeleportResults.prototype.copy = function copy(other) {
     this.myStartTeleportTransformQuat.quat2_copy(other.myStartTeleportTransformQuat);
     this.myEndTeleportTransformQuat.quat2_copy(other.myEndTeleportTransformQuat);
     this.myTeleportFailed = other.myTeleportFailed;
 };
 
-PP.CharacterCollisionCheckTransformResults.prototype.reset = function () {
+PP.CharacterCollisionCheckTransformResults.prototype.reset = function reset() {
     this.myStartCheckTransformQuat.quat2_identity();
     this.myEndCheckTransformQuat.quat2_identity();
     this.myCheckTransformFailed = false;
 };
 
-PP.CharacterCollisionCheckTransformResults.prototype.copy = function (other) {
+PP.CharacterCollisionCheckTransformResults.prototype.copy = function copy(other) {
     this.myStartCheckTransformQuat.quat2_copy(other.myStartCheckTransformQuat);
     this.myEndCheckTransformQuat.quat2_copy(other.myEndCheckTransformQuat);
     this.myCheckTransformFailed = other.myCheckTransformFailed;
 };
 
-PP.CharacterCollisionSurfaceResults.prototype.reset = function () {
+PP.CharacterCollisionSurfaceResults.prototype.reset = function reset() {
     this.myHasSnappedOnSurface = false;
     this.myHasPoppedOutSurface = false;
     this.myHasHorizontalMovementAdjustedVerticalMovementBasedOnSurfacePerceivedAngleDownhill = false;
@@ -387,7 +387,7 @@ PP.CharacterCollisionSurfaceResults.prototype.reset = function () {
     this.myHasVerticalMovementAdjustedHorizontalMovementBasedOnSurfaceAngleDownhill = false;
 };
 
-PP.CharacterCollisionSurfaceResults.prototype.copy = function (other) {
+PP.CharacterCollisionSurfaceResults.prototype.copy = function copy(other) {
     this.myHasSnappedOnSurface = other.myHasSnappedOnSurface;
     this.myHasPoppedOutSurface = other.myHasPoppedOutSurface;
     this.myHasHorizontalMovementAdjustedVerticalMovementBasedOnSurfacePerceivedAngleDownhill = other.myHasHorizontalMovementAdjustedVerticalMovementBasedOnSurfacePerceivedAngleDownhill;
@@ -395,32 +395,32 @@ PP.CharacterCollisionSurfaceResults.prototype.copy = function (other) {
     this.myHasVerticalMovementAdjustedHorizontalMovementBasedOnSurfaceAngleDownhill = other.myHasVerticalMovementAdjustedHorizontalMovementBasedOnSurfaceAngleDownhill;
 };
 
-PP.CharacterCollisionSplitMovementResults.prototype.reset = function () {
+PP.CharacterCollisionSplitMovementResults.prototype.reset = function reset() {
     this.myStepsToPerform = 0;
     this.myStepsPerformed = 0;
     this.myMovementInterrupted = false;
     this.myMovementChecked.vec3_zero();
 };
 
-PP.CharacterCollisionSplitMovementResults.prototype.copy = function (other) {
+PP.CharacterCollisionSplitMovementResults.prototype.copy = function copy(other) {
     this.myStepsToPerform = other.myStepsToPerform;
     this.myStepsPerformed = other.myStepsPerformed;
     this.myMovementInterrupted = other.myMovementInterrupted;
     this.myMovementChecked.vec3_copy(other.myMovementChecked);
 };
 
-PP.CharacterCollisionDebugResults.prototype.reset = function () {
+PP.CharacterCollisionDebugResults.prototype.reset = function reset() {
     this._myRaycastsPerformed = 0;
 };
 
-PP.CharacterCollisionDebugResults.prototype.copy = function (other) {
+PP.CharacterCollisionDebugResults.prototype.copy = function copy(other) {
     this._myRaycastsPerformed = other._myRaycastsPerformed;
 };
 
-PP.CharacterCollisionInternalResults.prototype.reset = function () {
+PP.CharacterCollisionInternalResults.prototype.reset = function reset() {
 };
 
-PP.CharacterCollisionInternalResults.prototype.copy = function (other) {
+PP.CharacterCollisionInternalResults.prototype.copy = function copy(other) {
     this.myLastRelevantStartHorizontalMovement.vec3_copy(other.myLastRelevantStartHorizontalMovement);
     this.myLastRelevantAdjustedStartHorizontalMovement.vec3_copy(other.myLastRelevantAdjustedStartHorizontalMovement);
     this.myLastRelevantEndHorizontalMovement.vec3_copy(other.myLastRelevantEndHorizontalMovement);
