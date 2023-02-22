@@ -29,6 +29,10 @@ PP.VisualTextParams = class VisualTextParams {
 
         this.myType = PP.VisualElementType.TEXT;
     }
+
+    copy(other) {
+        // implemented outside class definition
+    }
 };
 
 PP.VisualText = class VisualText {
@@ -137,27 +141,7 @@ PP.VisualText = class VisualText {
 
     clone() {
         let clonedParams = new PP.VisualTextParams();
-
-        clonedParams.myText = this._myParams.myText;
-        clonedParams.myAlignment = this._myParams.myAlignment;
-        clonedParams.myJustification = this._myParams.myJustification;
-
-        clonedParams.myTransform.mat4_copy(this._myParams.myTransform);
-
-        if (this._myParams.myMaterial != null) {
-            clonedParams.myMaterial = this._myParams.myMaterial.clone();
-        } else {
-            clonedParams.myMaterial = null;
-        }
-
-        if (this._myParams.myColor != null) {
-            clonedParams.myColor.vec4_copy(this._myParams.myColor);
-        } else {
-            clonedParams.myColor = null;
-        }
-
-        clonedParams.myParent = this._myParams.myParent;
-        clonedParams.myIsLocal = this._myParams.myIsLocal;
+        clonedParams.copy(this._myParams);
 
         let clone = new PP.VisualText(clonedParams);
         clone.setAutoRefresh(this._myAutoRefresh);
@@ -167,3 +151,32 @@ PP.VisualText = class VisualText {
         return clone;
     }
 };
+
+PP.VisualTextParams.prototype.copy = function (other) {
+    this.myText = other.myText;
+    this.myAlignment = other.myAlignment;
+    this.myJustification = other.myJustification;
+
+    this.myTransform.mat4_copy(other.myTransform);
+
+    if (other.myMaterial != null) {
+        this.myMaterial = other.myMaterial.clone();
+    } else {
+        this.myMaterial = null;
+    }
+
+    if (other.myColor != null) {
+        this.myColor.vec4_copy(other.myColor);
+    } else {
+        this.myColor = null;
+    }
+
+    this.myParent = other.myParent;
+    this.myIsLocal = other.myIsLocal;
+
+    this.myType = other.myType;
+};
+
+
+
+Object.defineProperty(PP.VisualTextParams.prototype, "copy", { enumerable: false });

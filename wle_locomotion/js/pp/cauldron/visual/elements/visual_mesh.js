@@ -24,6 +24,10 @@ PP.VisualMeshParams = class VisualMeshParams {
 
         this.myType = PP.VisualElementType.MESH;
     }
+
+    copy(other) {
+        // implemented outside class definition
+    }
 };
 
 PP.VisualMesh = class VisualMesh {
@@ -123,22 +127,7 @@ PP.VisualMesh = class VisualMesh {
 
     clone() {
         let clonedParams = new PP.VisualMeshParams();
-        clonedParams.myTransform.pp_copy(this._myParams.myTransform);
-
-        if (this._myParams.myMesh != null) {
-            clonedParams.myMesh = this._myParams.myMesh;
-        } else {
-            clonedParams.myMesh = null;
-        }
-
-        if (this._myParams.myMaterial != null) {
-            clonedParams.myMaterial = this._myParams.myMaterial.clone();
-        } else {
-            clonedParams.myMaterial = null;
-        }
-
-        clonedParams.myParent = this._myParams.myParent;
-        clonedParams.myIsLocal = this._myParams.myIsLocal;
+        clonedParams.copy(this._myParams);
 
         let clone = new PP.VisualMesh(clonedParams);
         clone.setAutoRefresh(this._myAutoRefresh);
@@ -148,3 +137,28 @@ PP.VisualMesh = class VisualMesh {
         return clone;
     }
 };
+
+PP.VisualMeshParams.prototype.copy = function (other) {
+    this.myTransform.pp_copy(other.myTransform);
+
+    if (other.myMesh != null) {
+        this.myMesh = other.myMesh;
+    } else {
+        this.myMesh = null;
+    }
+
+    if (other.myMaterial != null) {
+        this.myMaterial = other.myMaterial.clone();
+    } else {
+        this.myMaterial = null;
+    }
+
+    this.myParent = other.myParent;
+    this.myIsLocal = other.myIsLocal;
+
+    this.myType = other.myType;
+};
+
+
+
+Object.defineProperty(PP.VisualMeshParams.prototype, "copy", { enumerable: false });

@@ -27,6 +27,10 @@ PP.VisualPointParams = class VisualPointParams {
 
         this.myType = PP.VisualElementType.POINT;
     }
+
+    copy(other) {
+        // implemented outside class definition
+    }
 };
 
 PP.VisualPoint = class VisualPoint {
@@ -106,25 +110,7 @@ PP.VisualPoint = class VisualPoint {
 
     clone() {
         let clonedParams = new PP.VisualPointParams();
-        clonedParams.myPosition.vec3_copy(this._myParams.myPosition);
-        clonedParams.myRadius = this._myParams.myRadius;
-
-        clonedParams.myMesh = this._myParams.myMesh;
-
-        if (this._myParams.myMaterial != null) {
-            clonedParams.myMaterial = this._myParams.myMaterial.clone();
-        } else {
-            clonedParams.myMaterial = null;
-        }
-
-        if (this._myParams.myColor != null) {
-            clonedParams.myColor.vec4_copy(this._myParams.myColor);
-        } else {
-            clonedParams.myColor = null;
-        }
-
-        clonedParams.myParent = this._myParams.myParent;
-        clonedParams.myIsLocal = this._myParams.myIsLocal;
+        clonedParams.copy(this._myParams);
 
         let clone = new PP.VisualPoint(clonedParams);
         clone.setAutoRefresh(this._myAutoRefresh);
@@ -172,5 +158,31 @@ PP.VisualPoint.prototype._refresh = function () {
     }
 }();
 
+PP.VisualPointParams.prototype.copy = function (other) {
+    this.myPosition.vec3_copy(other.myPosition);
+    this.myRadius = other.myRadius;
+
+    this.myMesh = other.myMesh;
+
+    if (other.myMaterial != null) {
+        this.myMaterial = other.myMaterial.clone();
+    } else {
+        this.myMaterial = null;
+    }
+
+    if (other.myColor != null) {
+        this.myColor.vec4_copy(other.myColor);
+    } else {
+        this.myColor = null;
+    }
+
+    this.myParent = other.myParent;
+    this.myIsLocal = other.myIsLocal;
+
+    this.myType = other.myType;
+};
+
+
 
 Object.defineProperty(PP.VisualPoint.prototype, "_refresh", { enumerable: false });
+Object.defineProperty(PP.VisualPointParams.prototype, "copy", { enumerable: false });

@@ -40,6 +40,10 @@ PP.VisualArrowParams = class VisualArrowParams {
 
         return this;
     }
+
+    copy(other) {
+        // implemented outside class definition
+    }
 };
 
 PP.VisualArrow = class VisualArrow {
@@ -128,28 +132,7 @@ PP.VisualArrow = class VisualArrow {
 
     clone() {
         let clonedParams = new PP.VisualArrowParams();
-        clonedParams.myStart.vec3_copy(this._myParams.myStart);
-        clonedParams.myDirection.vec3_copy(this._myParams.myDirection);
-        clonedParams.myLength = this._myParams.myLength;
-        clonedParams.myThickness = this._myParams.myThickness;
-
-        clonedParams.myArrowMesh = this._myParams.myArrowMesh;
-        clonedParams.myLineMesh = this._myParams.myLineMesh;
-
-        if (this._myParams.myMaterial != null) {
-            clonedParams.myMaterial = this._myParams.myMaterial.clone();
-        } else {
-            clonedParams.myMaterial = null;
-        }
-
-        if (this._myParams.myColor != null) {
-            clonedParams.myColor.vec4_copy(this._myParams.myColor);
-        } else {
-            clonedParams.myColor = null;
-        }
-
-        clonedParams.myParent = this._myParams.myParent;
-        clonedParams.myIsLocal = this._myParams.myIsLocal;
+        clonedParams.copy(this._myParams);
 
         let clone = new PP.VisualArrow(clonedParams);
         clone.setAutoRefresh(this._myAutoRefresh);
@@ -228,6 +211,34 @@ PP.VisualArrow.prototype._refresh = function () {
     };
 }();
 
+PP.VisualArrowParams.prototype.copy = function (other) {
+    this.myStart.vec3_copy(other.myStart);
+    this.myDirection.vec3_copy(other.myDirection);
+    this.myLength = other.myLength;
+    this.myThickness = other.myThickness;
+
+    this.myArrowMesh = other.myArrowMesh;
+    this.myLineMesh = other.myLineMesh;
+
+    if (other.myMaterial != null) {
+        this.myMaterial = other.myMaterial.clone();
+    } else {
+        this.myMaterial = null;
+    }
+
+    if (other.myColor != null) {
+        this.myColor.vec4_copy(other.myColor);
+    } else {
+        this.myColor = null;
+    }
+
+    this.myParent = other.myParent;
+    this.myIsLocal = other.myIsLocal;
+
+    this.myType = other.myType;
+};
+
 
 
 Object.defineProperty(PP.VisualArrow.prototype, "_refresh", { enumerable: false });
+Object.defineProperty(PP.VisualArrowParams.prototype, "copy", { enumerable: false });

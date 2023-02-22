@@ -34,6 +34,10 @@ PP.VisualRaycastParams = class VisualRaycastParams {
     set myRaycastResults(result) {
         this._myRaycastResults.copy(result);
     }
+
+    copy(other) {
+        // implemented outside class definition
+    }
 };
 
 PP.VisualRaycast = class VisualRaycast {
@@ -230,25 +234,7 @@ PP.VisualRaycast = class VisualRaycast {
 
     clone() {
         let clonedParams = new PP.VisualRaycastParams();
-        clonedParams.myRaycastResults = this._myParams.myRaycastResults;
-        clonedParams.myHitNormalLength = this._myParams.myHitNormalLength;
-        clonedParams.myThickness = this._myParams.myThickness;
-        clonedParams.myShowOnlyFirstHit = this._myParams.myShowOnlyFirstHit;
-
-        if (this._myParams.myRayMaterial != null) {
-            clonedParams.myRayMaterial = this._myParams.myRayMaterial.clone();
-        } else {
-            clonedParams.myRayMaterial = null;
-        }
-
-        if (this._myParams.myHitNormalMaterial != null) {
-            clonedParams.myHitNormalMaterial = this._myParams.myHitNormalMaterial.clone();
-        } else {
-            clonedParams.myHitNormalMaterial = null;
-        }
-
-        clonedParams.myParent = this._myParams.myParent;
-        clonedParams.myIsLocal = this._myParams.myIsLocal;
+        clonedParams.copy(this._myParams);
 
         let clone = new PP.VisualRaycast(clonedParams);
         clone.setAutoRefresh(this._myAutoRefresh);
@@ -267,3 +253,31 @@ PP.VisualRaycast = class VisualRaycast {
         this._myVisualRaycastHitList.push(visualRaycastHit);
     }
 };
+
+PP.VisualRaycastParams.prototype.copy = function (other) {
+    this.myRaycastResults = other.myRaycastResults;
+    this.myHitNormalLength = other.myHitNormalLength;
+    this.myThickness = other.myThickness;
+    this.myShowOnlyFirstHit = other.myShowOnlyFirstHit;
+
+    if (other.myRayMaterial != null) {
+        this.myRayMaterial = other.myRayMaterial.clone();
+    } else {
+        this.myRayMaterial = null;
+    }
+
+    if (other.myHitNormalMaterial != null) {
+        this.myHitNormalMaterial = other.myHitNormalMaterial.clone();
+    } else {
+        this.myHitNormalMaterial = null;
+    }
+
+    this.myParent = other.myParent;
+    this.myIsLocal = other.myIsLocal;
+
+    this.myType = other.myType;
+};
+
+
+
+Object.defineProperty(PP.VisualRaycastParams.prototype, "copy", { enumerable: false });

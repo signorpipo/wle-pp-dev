@@ -40,6 +40,10 @@ PP.VisualLineParams = class VisualLineParams {
 
         return this;
     }
+
+    copy(other) {
+        // implemented outside class definition
+    }
 };
 
 PP.VisualLine = class VisualLine {
@@ -121,27 +125,7 @@ PP.VisualLine = class VisualLine {
 
     clone() {
         let clonedParams = new PP.VisualLineParams();
-        clonedParams.myStart.vec3_copy(this._myParams.myStart);
-        clonedParams.myDirection.vec3_copy(this._myParams.myDirection);
-        clonedParams.myLength = this._myParams.myLength;
-        clonedParams.myThickness = this._myParams.myThickness;
-
-        clonedParams.myMesh = this._myParams.myMesh;
-
-        if (this._myParams.myMaterial != null) {
-            clonedParams.myMaterial = this._myParams.myMaterial.clone();
-        } else {
-            clonedParams.myMaterial = null;
-        }
-
-        if (this._myParams.myColor != null) {
-            clonedParams.myColor.vec4_copy(this._myParams.myColor);
-        } else {
-            clonedParams.myColor = null;
-        }
-
-        clonedParams.myParent = this._myParams.myParent;
-        clonedParams.myIsLocal = this._myParams.myIsLocal;
+        clonedParams.copy(this._myParams);
 
         let clone = new PP.VisualLine(clonedParams);
         clone.setAutoRefresh(this._myAutoRefresh);
@@ -205,6 +189,33 @@ PP.VisualLine.prototype._refresh = function () {
     };
 }();
 
+PP.VisualLineParams.prototype.copy = function (other) {
+    this.myStart.vec3_copy(other.myStart);
+    this.myDirection.vec3_copy(other.myDirection);
+    this.myLength = other.myLength;
+    this.myThickness = other.myThickness;
+
+    this.myMesh = other.myMesh;
+
+    if (other.myMaterial != null) {
+        this.myMaterial = other.myMaterial.clone();
+    } else {
+        this.myMaterial = null;
+    }
+
+    if (other.myColor != null) {
+        this.myColor.vec4_copy(other.myColor);
+    } else {
+        this.myColor = null;
+    }
+
+    this.myParent = other.myParent;
+    this.myIsLocal = other.myIsLocal;
+
+    this.myType = other.myType;
+};
+
 
 
 Object.defineProperty(PP.VisualLine.prototype, "_refresh", { enumerable: false });
+Object.defineProperty(PP.VisualLineParams.prototype, "copy", { enumerable: false });

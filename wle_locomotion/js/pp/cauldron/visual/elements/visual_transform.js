@@ -25,6 +25,10 @@ PP.VisualTransformParams = class VisualTransformParams {
 
         this.myType = PP.VisualElementType.TRANSFORM;
     }
+
+    copy(other) {
+        // implemented outside class definition
+    }
 };
 
 PP.VisualTransform = class VisualTransform {
@@ -110,30 +114,7 @@ PP.VisualTransform = class VisualTransform {
 
     clone() {
         let clonedParams = new PP.VisualTransformParams();
-        clonedParams.myTransform.mat4_copy(this._myParams.myTransform);
-        clonedParams.myLength = this._myParams.myLength;
-        clonedParams.myThickness = this._myParams.myThickness;
-
-        if (this._myParams.myRightMaterial != null) {
-            clonedParams.myRightMaterial = this._myParams.myRightMaterial.clone();
-        } else {
-            clonedParams.myRightMaterial = null;
-        }
-
-        if (this._myParams.myUpMaterial != null) {
-            clonedParams.myUpMaterial = this._myParams.myUpMaterial.clone();
-        } else {
-            clonedParams.myUpMaterial = null;
-        }
-
-        if (this._myParams.myForwardMaterial != null) {
-            clonedParams.myForwardMaterial = this._myParams.myForwardMaterial.clone();
-        } else {
-            clonedParams.myForwardMaterial = null;
-        }
-
-        clonedParams.myParent = this._myParams.myParent;
-        clonedParams.myIsLocal = this._myParams.myIsLocal;
+        clonedParams.copy(this._myParams);
 
         let clone = new PP.VisualTransform(clonedParams);
         clone.setAutoRefresh(this._myAutoRefresh);
@@ -227,6 +208,36 @@ PP.VisualTransform.prototype._refresh = function () {
     };
 }();
 
+PP.VisualTransformParams.prototype.copy = function (other) {
+    this.myTransform.mat4_copy(other.myTransform);
+    this.myLength = other.myLength;
+    this.myThickness = other.myThickness;
+
+    if (other.myRightMaterial != null) {
+        this.myRightMaterial = other.myRightMaterial.clone();
+    } else {
+        this.myRightMaterial = null;
+    }
+
+    if (other.myUpMaterial != null) {
+        this.myUpMaterial = other.myUpMaterial.clone();
+    } else {
+        this.myUpMaterial = null;
+    }
+
+    if (other.myForwardMaterial != null) {
+        this.myForwardMaterial = other.myForwardMaterial.clone();
+    } else {
+        this.myForwardMaterial = null;
+    }
+
+    this.myParent = other.myParent;
+    this.myIsLocal = other.myIsLocal;
+
+    this.myType = other.myType;
+};
+
 
 
 Object.defineProperty(PP.VisualTransform.prototype, "_refresh", { enumerable: false });
+Object.defineProperty(PP.VisualTransformParams.prototype, "copy", { enumerable: false });

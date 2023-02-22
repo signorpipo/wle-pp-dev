@@ -32,6 +32,10 @@ PP.VisualTorusParams = class VisualTorusParams {
 
         this.myType = PP.VisualElementType.TORUS;
     }
+
+    copy(other) {
+        // implemented outside class definition
+    }
 };
 
 PP.VisualTorus = class VisualTorus {
@@ -149,28 +153,7 @@ PP.VisualTorus = class VisualTorus {
 
     clone() {
         let clonedParams = new PP.VisualTorusParams();
-        clonedParams.myRadius = this._myParams.myRadius;
-        clonedParams.mySegmentsAmount = this._myParams.mySegmentsAmount;
-        clonedParams.mySegmentThickness = this._myParams.mySegmentThickness;
-
-        clonedParams.myTransform.mat4_copy(this._myParams.myTransform);
-
-        clonedParams.mySegmentMesh = this._myParams.mySegmentMesh;
-
-        if (this._myParams.myMaterial != null) {
-            clonedParams.myMaterial = this._myParams.myMaterial.clone();
-        } else {
-            clonedParams.myMaterial = null;
-        }
-
-        if (this._myParams.myColor != null) {
-            clonedParams.myColor.vec4_copy(this._myParams.myColor);
-        } else {
-            clonedParams.myColor = null;
-        }
-
-        clonedParams.myParent = this._myParams.myParent;
-        clonedParams.myIsLocal = this._myParams.myIsLocal;
+        clonedParams.copy(this._myParams);
 
         let clone = new PP.VisualTorus(clonedParams);
         clone.setAutoRefresh(this._myAutoRefresh);
@@ -249,6 +232,34 @@ PP.VisualTorus.prototype._refresh = function () {
     };
 }();
 
+PP.VisualTorusParams.prototype.copy = function (other) {
+    this.myRadius = other.myRadius;
+    this.mySegmentsAmount = other.mySegmentsAmount;
+    this.mySegmentThickness = other.mySegmentThickness;
+
+    this.myTransform.mat4_copy(other.myTransform);
+
+    this.mySegmentMesh = other.mySegmentMesh;
+
+    if (other.myMaterial != null) {
+        this.myMaterial = other.myMaterial.clone();
+    } else {
+        this.myMaterial = null;
+    }
+
+    if (other.myColor != null) {
+        this.myColor.vec4_copy(other.myColor);
+    } else {
+        this.myColor = null;
+    }
+
+    this.myParent = other.myParent;
+    this.myIsLocal = other.myIsLocal;
+
+    this.myType = other.myType;
+};
+
 
 
 Object.defineProperty(PP.VisualTorus.prototype, "_refresh", { enumerable: false });
+Object.defineProperty(PP.VisualTorusParams.prototype, "copy", { enumerable: false });
