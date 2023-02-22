@@ -47,7 +47,7 @@ PP.VisualManager = class VisualManager {
                 let visualElements = this._myVisualElementsTypeMap.get(visualElementParams.myType);
                 if (visualElements.has(idToReuse)) {
                     visualElement = visualElements.get(idToReuse)[0];
-                    visualElement.setParams(visualElementParams);
+                    visualElement.copyParams(visualElementParams);
                     visualElement.setVisible(false);
                     idReused = true;
                 }
@@ -183,7 +183,7 @@ PP.VisualManager = class VisualManager {
         element = this._myVisualElementsPool.getObject(params.myType);
 
         if (element != null) {
-            element.setParams(params);
+            element.copyParams(params);
         }
 
         return element;

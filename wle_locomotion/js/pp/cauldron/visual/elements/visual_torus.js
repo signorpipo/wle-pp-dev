@@ -92,6 +92,11 @@ PP.VisualTorus = class VisualTorus {
         this._markDirty();
     }
 
+    copyParams(params) {
+        this._myParams.copy(params);
+        this._markDirty();
+    }
+
     paramsUpdated() {
         this._markDirty();
     }

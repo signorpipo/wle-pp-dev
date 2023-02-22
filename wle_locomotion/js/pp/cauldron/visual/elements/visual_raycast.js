@@ -102,6 +102,11 @@ PP.VisualRaycast = class VisualRaycast {
         this._markDirty();
     }
 
+    copyParams(params) {
+        this._myParams.copy(params);
+        this._markDirty();
+    }
+
     paramsUpdated() {
         this._markDirty();
     }
