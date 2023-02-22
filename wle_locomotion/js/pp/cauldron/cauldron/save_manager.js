@@ -1,6 +1,7 @@
 PP.SaveManager = class SaveManager {
     constructor() {
         this._mySaveCache = new Map();
+        this._myCacheEnabled = true;
 
         this._myCommitSavesDelayTimer = new PP.Timer(0, false);
         this._myDelaySavesCommit = true;
@@ -41,6 +42,10 @@ PP.SaveManager = class SaveManager {
         this._myCacheDefaultValueOnFail = cache;
     }
 
+    setCacheEnabled(enabled) {
+        this._myCacheEnabled = enabled;
+    }
+
     update(dt) {
         if (this._myCommitSavesDelayTimer.isRunning()) {
             this._myCommitSavesDelayTimer.update(dt);
@@ -50,9 +55,9 @@ PP.SaveManager = class SaveManager {
         }
     }
 
-    save(id, value, overrideDelaySavesCommit = null) {
+    save(id, value, overrideDelaySavesCommit = null, overrideCacheEnabled = null) {
         let sameValue = false;
-        if (this._mySaveCache.has(id)) {
+        if (this._mySaveCache.has(id) && this._isCacheEnabled(overrideCacheEnabled)) {
             sameValue = this._mySaveCache.get(id) === value;
         }
 
@@ -118,8 +123,8 @@ PP.SaveManager = class SaveManager {
         }
     }
 
-    has(id) {
-        return this._mySaveCache.has(id) || PP.SaveUtils.has(id);
+    has(id, overrideCacheEnabled = null) {
+        return (this._mySaveCache.has(id) && this._isCacheEnabled(overrideCacheEnabled)) || PP.SaveUtils.has(id);
     }
 
     delete(id) {
@@ -147,20 +152,20 @@ PP.SaveManager = class SaveManager {
         }
     }
 
-    load(id, defaultValue = null) {
-        return this._load(id, defaultValue, "load");
+    load(id, defaultValue = null, overrideCacheEnabled = null) {
+        return this._load(id, defaultValue, "load", overrideCacheEnabled);
     }
 
-    loadString(id, defaultValue = null) {
-        return this._load(id, defaultValue, "loadString");
+    loadString(id, defaultValue = null, overrideCacheEnabled = null) {
+        return this._load(id, defaultValue, "loadString", overrideCacheEnabled);
     }
 
-    loadNumber(id, defaultValue = null) {
-        return this._load(id, defaultValue, "loadNumber");
+    loadNumber(id, defaultValue = null, overrideCacheEnabled = null) {
+        return this._load(id, defaultValue, "loadNumber", overrideCacheEnabled);
     }
 
-    loadBool(id, defaultValue = null) {
-        return this._load(id, defaultValue, "loadBool");
+    loadBool(id, defaultValue = null, overrideCacheEnabled = null) {
+        return this._load(id, defaultValue, "loadBool", overrideCacheEnabled);
     }
 
     getCommitSavesDelay() {
@@ -173,6 +178,10 @@ PP.SaveManager = class SaveManager {
 
     isCacheDefaultValueOnFail() {
         return this._myCacheDefaultValueOnFail;
+    }
+
+    isCacheEnabled() {
+        return this._myCacheEnabled;
     }
 
     _commitSave(id, isCommitSaveDelayed) {
@@ -199,12 +208,12 @@ PP.SaveManager = class SaveManager {
         return failed;
     }
 
-    _load(id, defaultValue, functionName) {
+    _load(id, defaultValue, functionName, overrideCacheEnabled = null) {
         let value = null;
         let failed = false;
         let loadFromCache = false;
 
-        if (this._mySaveCache.has(id)) {
+        if (this._mySaveCache.has(id) && this._isCacheEnabled(overrideCacheEnabled)) {
             value = this._mySaveCache.get(id);
 
             if (value == null && defaultValue != null) {
@@ -427,5 +436,9 @@ PP.SaveManager = class SaveManager {
                 this._myLoadIDCallbacks.delete(valueID);
             }
         }
+    }
+
+    _isCacheEnabled(overrideCacheEnabled = null) {
+        return (this._myCacheEnabled && overrideCacheEnabled == null) || (overrideCacheEnabled != null && overrideCacheEnabled);
     }
 };

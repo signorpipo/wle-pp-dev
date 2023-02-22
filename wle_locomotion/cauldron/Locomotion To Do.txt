@@ -43,7 +43,6 @@ v Componente character-controller che semplicemente ha la collisione e puoi dirg
 
 TEMP:
 - mettere i nomi a tutte le funzioni delle estensioni
-- mettere cache non obbligatoria per save manager e override cache
 
 - fix muoversi guardando indietro dovrebbe comunque andare avanti
 - fly verso l'lalto passa attraverso bug? magari è solo un bug dei parametri con canfly del simplified collider
