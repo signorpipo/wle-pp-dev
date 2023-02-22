@@ -1,7 +1,8 @@
 WL.registerComponent('pp-grabbable', {
     _myThrowLinearVelocityMultiplier: { type: WL.Type.Float, default: 1 },
     _myThrowAngularVelocityMultiplier: { type: WL.Type.Float, default: 1 },
-    _myKinematicValueOnRelease: { type: WL.Type.Enum, values: ['true', 'false', 'keep'], default: 'false' },
+    _myKinematicValueOnRelease: { type: WL.Type.Enum, values: ['true', 'false', 'own'], default: 'false' },
+    _myParentOnRelease: { type: WL.Type.Enum, values: ['null', 'own'], default: 'own' },
 }, {
     init: function () {
         this._myIsGrabbed = false;
@@ -110,7 +111,12 @@ WL.registerComponent('pp-grabbable', {
         this._myReleaseCallbacks.delete(id);
     },
     _release() {
-        this.object.pp_setParent(this._myOldParent);
+        if (this._myParentOnRelease == 0) {
+            this.object.pp_setParent(null);
+        } else {
+            this.object.pp_setParent(this._myOldParent);
+        }
+
         this._myIsGrabbed = false;
         this._myGrabber = null;
 
