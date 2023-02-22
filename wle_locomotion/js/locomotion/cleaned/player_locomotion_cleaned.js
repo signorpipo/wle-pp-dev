@@ -102,7 +102,7 @@ CleanedPlayerLocomotion = class CleanedPlayerLocomotion {
             params.myNeverResetRealRotationVR = false;
             params.myNeverResetRealHeightVR = true;
 
-            params.myResetRealOnMove = true;
+            params.myResetRealOnMove = false;
 
             params.myDebugActive = false;
 
@@ -223,7 +223,7 @@ CleanedPlayerLocomotion = class CleanedPlayerLocomotion {
 
                 params.myDetectionParams.myTeleportParableStartReferenceObject = this._myParams.myTeleportParableStartReferenceObject;
 
-                params.myDetectionParams.myVisibilityBlockLayerFlags.setAllFlagsActive(true);
+                params.myDetectionParams.myVisibilityBlockLayerFlags.copy(params.myDetectionParams.myTeleportBlockLayerFlags);
 
                 params.myVisualizerParams.myTeleportPositionObject = this._myParams.myTeleportPositionObject;
 
@@ -258,6 +258,18 @@ CleanedPlayerLocomotion = class CleanedPlayerLocomotion {
         this._myPlayerLocomotionRotate.start();
 
         this._myLocomotionMovementFSM.perform("start");
+    }
+
+    canStop() {
+        let canStop = false;
+
+        if (this._myLocomotionMovementFSM.isInState("smooth") && this._myPlayerLocomotionSmooth.canStop()) {
+            canStop = true;
+        } else if (this._myLocomotionMovementFSM.isInState("teleport") && this._myPlayerLocomotionTeleport.canStop()) {
+            canStop = true;
+        }
+
+        return canStop;
     }
 
     update(dt) {

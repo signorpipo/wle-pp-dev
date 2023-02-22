@@ -1,3 +1,5 @@
+import { Howl } from 'howler';
+
 PP.AudioEvent = {
     END: "end",
     STOP: "stop",
@@ -59,6 +61,10 @@ PP.AudioPlayer = class AudioPlayer {
     }
 
     play() {
+        if (Howler.state != "running" && this._myAudioSetup.myPreventPlayWhenAudioContextNotRunning) {
+            return false;
+        }
+
         let audioID = this._myAudio.play();
         if (audioID != null) {
             this._myLastAudioID = audioID;
@@ -67,6 +73,8 @@ PP.AudioPlayer = class AudioPlayer {
             this.updatePitch(this._myAudioSetup.myPitch, true);
             this.updateVolume(this._myAudioSetup.myVolume, true);
         }
+
+        return audioID != null;
     }
 
     stop() {

@@ -229,6 +229,12 @@ PP.CharacterColliderUtils.createCharacterColliderSetupSimplified = function (sim
 
         outCharacterColliderSetup.myWallSlideSetup.myWallSlideMaxAttempts = 3;
         outCharacterColliderSetup.myWallSlideSetup.my90DegreesWallSlideAdjustDirectionSign = true;
+
+        if (simplifiedCreationParams.myIsPlayer) {
+            outCharacterColliderSetup.myWallSlideSetup.myWallSlideFlickerPreventionMode = PP.CharacterColliderSlideFlickerPreventionMode.USE_PREVIOUS_RESULTS;
+            outCharacterColliderSetup.myWallSlideSetup.myWallSlideFlickerPreventionCheckOnlyIfAlreadySliding = true;
+            outCharacterColliderSetup.myWallSlideSetup.myWallSlideFlickerPreventionForceCheckCounter = 4;
+        }
     }
 
     if (simplifiedCreationParams.myAccuracyLevel >= PP.CharacterColliderSetupSimplifiedCreationAccuracyLevel.HIGH) {
@@ -259,9 +265,6 @@ PP.CharacterColliderUtils.createCharacterColliderSetupSimplified = function (sim
 
         if (simplifiedCreationParams.myIsPlayer) {
             outCharacterColliderSetup.myWallSlideSetup.myCheckBothWallSlideDirections = true;
-            outCharacterColliderSetup.myWallSlideSetup.myWallSlideFlickerPreventionMode = PP.CharacterColliderSlideFlickerPreventionMode.USE_PREVIOUS_RESULTS;
-            outCharacterColliderSetup.myWallSlideSetup.myWallSlideFlickerPreventionCheckOnlyIfAlreadySliding = true;
-            outCharacterColliderSetup.myWallSlideSetup.myWallSlideFlickerPreventionForceCheckCounter = 4;
         }
 
 

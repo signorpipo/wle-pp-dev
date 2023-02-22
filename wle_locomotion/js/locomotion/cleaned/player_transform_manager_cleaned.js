@@ -175,6 +175,10 @@ CleanedPlayerTransformManager = class CleanedPlayerTransformManager {
         }
     }
 
+    resetHeadToReal() {
+        this._myValidPositionHead = this.getPositionHeadReal(this._myValidPositionHead);
+    }
+
     isBodyColliding() {
         return this._myIsBodyColliding;
     }

@@ -192,6 +192,9 @@ CollisionCheck.prototype._moveStep = function () {
         collisionRuntimeParams.reset();
 
         surfaceAdjustedHorizontalMovement = this._adjustHorizontalMovementWithSurface(horizontalMovement, verticalMovement, transformUp, collisionCheckParams, collisionRuntimeParams, this._myPrevCollisionRuntimeParams, surfaceAdjustedHorizontalMovement);
+        if (surfaceAdjustedHorizontalMovement.vec3_isZero(0.00001)) {
+            surfaceAdjustedHorizontalMovement.vec3_zero();
+        }
 
         this._syncCollisionRuntimeParamsWithPrevious(surfaceAdjustedHorizontalMovement, verticalMovement, transformUp, collisionCheckParams, collisionRuntimeParams, this._myPrevCollisionRuntimeParams);
 
@@ -224,7 +227,7 @@ CollisionCheck.prototype._moveStep = function () {
 
             fixedHorizontalMovement.vec3_zero();
 
-            if (!surfaceAdjustedHorizontalMovement.vec3_isZero(0.00001)) {
+            if (!surfaceAdjustedHorizontalMovement.vec3_isZero()) {
                 fixedHorizontalMovement = this._horizontalCheck(surfaceAdjustedHorizontalMovement, feetPosition, height, transformUp, forwardForHorizontal, allowSurfaceSteepFix, collisionCheckParams, collisionRuntimeParams, this._myPrevCollisionRuntimeParams, false, fixedHorizontalMovement);
                 //console.error(_myTotalRaycasts );
                 //collisionRuntimeParams.myIsCollidingHorizontally = true;

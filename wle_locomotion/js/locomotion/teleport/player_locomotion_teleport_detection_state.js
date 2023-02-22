@@ -25,7 +25,7 @@ PlayerLocomotionTeleportDetectionParams = class PlayerLocomotionTeleportDetectio
         this.myTeleportParableStepLength = 0.25;
 
         this.myRotationOnUpMinStickIntensity = 0.5;
-        this.myRotationOnUpActive = true;
+        this.myRotationOnUpActive = false;
 
         this.myTeleportFeetPositionMustBeVisible = false;
         this.myTeleportHeadPositionMustBeVisible = false;
@@ -75,6 +75,9 @@ PlayerLocomotionTeleportDetectionState = class PlayerLocomotionTeleportDetection
         this._myDetectionRuntimeParams.myParable.setSpeed(this._myTeleportParams.myDetectionParams.myTeleportParableSpeed);
         this._myDetectionRuntimeParams.myParable.setGravity(this._myTeleportParams.myDetectionParams.myTeleportParableGravity);
         this._myDetectionRuntimeParams.myParable.setStepLength(this._myTeleportParams.myDetectionParams.myTeleportParableStepLength);
+
+        this._myTeleportParams.myPlayerTransformManager.resetReal(true, false, false);
+        this._myTeleportParams.myPlayerTransformManager.resetHeadToReal();
 
         this._myVisualizer.start();
     }
@@ -225,6 +228,8 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable 
     let flatParableDirectionNegate = PP.vec3_create();
 
     let teleportCollisionRuntimeParams = new CollisionRuntimeParams();
+
+    let objectsEqualCallback = (first, second) => first.pp_equals(second);
     return function _detectTeleportPositionParable(startPosition, direction, up) {
         this._myDetectionRuntimeParams.myParable.setStartPosition(startPosition);
         this._myDetectionRuntimeParams.myParable.setForward(direction);
@@ -235,9 +240,13 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable 
         let positionParableDistance = 0;
         prevParablePosition = this._myDetectionRuntimeParams.myParable.getPosition(currentPositionIndex - 1, prevParablePosition);
 
-        raycastSetup.myObjectsToIgnore.pp_clear();
         raycastSetup.myIgnoreHitsInsideCollision = true;
         raycastSetup.myBlockLayerFlags.setMask(this._myTeleportParams.myDetectionParams.myTeleportBlockLayerFlags.getMask());
+
+        raycastSetup.myObjectsToIgnore.pp_copy(this._myTeleportParams.myCollisionCheckParams.myHorizontalObjectsToIgnore);
+        for (let objectToIgnore of this._myTeleportParams.myCollisionCheckParams.myVerticalObjectsToIgnore) {
+            raycastSetup.myObjectsToIgnore.pp_pushUnique(objectToIgnore, objectsEqualCallback);
+        }
 
         let maxParableDistance = this._myTeleportParams.myDetectionParams.myMaxDistance * 2;
 
@@ -544,6 +553,7 @@ PlayerLocomotionTeleportDetectionState.prototype._isTeleportHitValid = function 
     let raycastResult = new PP.RaycastResults();
 
     let playerUp = PP.vec3_create();
+    let objectsEqualCallback = (first, second) => first.pp_equals(second);
     return function _isTeleportHitValid(hit, rotationOnUp, checkTeleportCollisionRuntimeParams) {
         let isValid = false;
 
@@ -555,9 +565,13 @@ PlayerLocomotionTeleportDetectionState.prototype._isTeleportHitValid = function 
             if (true || hit.myNormal.vec3_isConcordant(playerUp)) {
                 // #TODO when the flags on the physx will be available just check that the hit object physx has the floor flag
 
-                raycastSetup.myObjectsToIgnore.pp_clear();
                 raycastSetup.myIgnoreHitsInsideCollision = true;
                 raycastSetup.myBlockLayerFlags.setMask(this._myTeleportParams.myDetectionParams.myTeleportFloorLayerFlags.getMask());
+
+                raycastSetup.myObjectsToIgnore.pp_copy(this._myTeleportParams.myCollisionCheckParams.myHorizontalObjectsToIgnore);
+                for (let objectToIgnore of this._myTeleportParams.myCollisionCheckParams.myVerticalObjectsToIgnore) {
+                    raycastSetup.myObjectsToIgnore.pp_pushUnique(objectToIgnore, objectsEqualCallback);
+                }
 
                 let distanceToCheck = 0.01;
                 raycastSetup.myOrigin = hit.myPosition.vec3_add(hit.myNormal.vec3_scale(distanceToCheck, raycastSetup.myOrigin), raycastSetup.myOrigin);

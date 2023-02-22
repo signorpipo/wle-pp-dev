@@ -44,13 +44,15 @@ v Componente character-controller che semplicemente ha la collisione e puoi dirg
 TEMP:
 - cautils check function exists 
 - cautils add catch alle promise
-- mettere i nomi a tutte le funzioni delle estensioni
 - add pp display ca leaderboard component / An error has occurred while trying to retrieve the leaderboard
 - mettere sign in and play bla bla come default value nel dummy
+
+- mettere i nomi a tutte le funzioni delle estensioni
 - visual manager copy params instead of set
-- fix muoversi guardando indietro dovrebbe comunque andare avanti
-- squared length / normalized use squared length
 - mettere cache non obbligatoria per save manager e override cache
+- grabbable set parent to null after
+
+- fix muoversi guardando indietro dovrebbe comunque andare avanti
 - fly verso l'lalto passa attraverso bug? magari è solo un bug dei parametri con canfly del simplified collider
 - head controller -> feet controller? body controller?
 
@@ -119,6 +121,8 @@ v avere flag verticali e orizzontali di collisioni, per esempio i character potr
 	
 v Surface Slide oppure semplicemente come myAddVerticalMovementBasedOnSurfacePerceivedAngle ma per il vertical
 	x potrebbe usare la distanza dal ground per capire se il movimento verticale colliderà
+	
+- flags per controllo angolo potrebbero essere diversi dal verticale, così puoi snappare su piccoli oggetti dinamici che però non fanno sembrare che sei su una mega slope
 	
 	
 	

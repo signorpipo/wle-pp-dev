@@ -26,8 +26,8 @@ PP.BaseGamepad = class BaseGamepad {
         this._myPulseInfo = new PP.GamepadPulseInfo();
 
         //Setup
-        this._myMultiplePressMaxDelay = 0.3;
-        this._myMultipleTouchMaxDelay = 0.3;
+        this._myMultiplePressMaxDelay = 0.4;
+        this._myMultipleTouchMaxDelay = 0.4;
     }
 
     getHandedness() {

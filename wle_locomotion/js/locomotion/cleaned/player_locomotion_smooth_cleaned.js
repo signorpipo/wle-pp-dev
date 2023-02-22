@@ -1,5 +1,5 @@
 CleanedPlayerLocomotionSmooth = class CleanedPlayerLocomotionSmooth extends PlayerLocomotionMovement {
-    totype
+
     constructor(params, locomotionRuntimeParams) {
         super(locomotionRuntimeParams);
 
@@ -63,6 +63,7 @@ CleanedPlayerLocomotionSmooth.prototype.update = function () {
         axes[0] = Math.abs(axes[0]) > this._myParams.myMovementMinStickIntensityThreshold ? axes[0] : 0;
         axes[1] = Math.abs(axes[1]) > this._myParams.myMovementMinStickIntensityThreshold ? axes[1] : 0;
 
+        let horizontalMovement = false;
         if (!axes.vec2_isZero()) {
             this._myStickIdleTimer.start();
 
@@ -78,6 +79,8 @@ CleanedPlayerLocomotionSmooth.prototype.update = function () {
                 let speed = Math.pp_lerp(0, this._myParams.myMaxSpeed, movementIntensity);
 
                 headMovement = direction.vec3_scale(speed * dt, headMovement);
+
+                horizontalMovement = true;
             }
         } else {
             if (this._myStickIdleTimer.isRunning()) {
@@ -119,6 +122,10 @@ CleanedPlayerLocomotionSmooth.prototype.update = function () {
 
             globalDT = dt;
             this._myParams.myPlayerTransformManager.move(headMovement, this._myLocomotionRuntimeParams.myCollisionRuntimeParams);
+            if (horizontalMovement) {
+                this._myParams.myPlayerTransformManager.resetReal(true, false, false);
+                this._myParams.myPlayerTransformManager.resetHeadToReal();
+            }
 
             if (this._myGravitySpeed > 0 && this._myLocomotionRuntimeParams.myCollisionRuntimeParams.myIsOnCeiling ||
                 this._myGravitySpeed < 0 && this._myLocomotionRuntimeParams.myCollisionRuntimeParams.myIsOnGround) {
@@ -126,6 +133,10 @@ CleanedPlayerLocomotionSmooth.prototype.update = function () {
             }
         } else {
             this._myParams.myPlayerTransformManager.move(headMovement, this._myLocomotionRuntimeParams.myCollisionRuntimeParams, true);
+            if (horizontalMovement) {
+                this._myParams.myPlayerTransformManager.resetReal(true, false, false);
+                this._myParams.myPlayerTransformManager.resetHeadToReal();
+            }
         }
 
         if (this._myLocomotionRuntimeParams.myCollisionRuntimeParams.myIsOnGround) {
@@ -141,7 +152,7 @@ CleanedPlayerLocomotionSmooth.prototype._onXRSessionStart = function () {
     return function _onXRSessionStart(session) {
         switch (this._myParams.myVRDirectionReferenceType) {
             case 0:
-                this._myDirectionReference = PP.myPlayerHeadManager.myHead;
+                this._myDirectionReference = PP.myPlayerObjects.myHead;
                 break;
             case 1:
                 this._myDirectionReference = PP.myPlayerObjects.myHands[this._myParams.myHandedness];

@@ -126,5 +126,17 @@ WL.registerComponent('pp-grabbable', {
             this._myPhysX.linearVelocity = PP.vec3_create();
             this._myPhysX.angularVelocity = PP.vec3_create();
         }
+    },
+    pp_clone(targetObject) {
+        let clonedComponent = targetObject.pp_addComponent(this.type);
+
+        clonedComponent._myThrowLinearVelocityMultiplier = this._myThrowLinearVelocityMultiplier;
+        clonedComponent._myThrowAngularVelocityMultiplier = this._myThrowAngularVelocityMultiplier;
+        clonedComponent._myKinematicValueOnRelease = this._myKinematicValueOnRelease;
+
+        return clonedComponent;
+    },
+    pp_clonePostProcess() {
+        this.start();
     }
 });

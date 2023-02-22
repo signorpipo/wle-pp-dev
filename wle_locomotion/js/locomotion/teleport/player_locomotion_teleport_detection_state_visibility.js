@@ -90,10 +90,11 @@ PlayerLocomotionTeleportDetectionState.prototype._isPositionVisible = function (
 
             raycastSetup.myBlockLayerFlags.setMask(this._myTeleportParams.myDetectionParams.myVisibilityBlockLayerFlags.getMask());
 
-            raycastSetup.myObjectsToIgnore = this._myTeleportParams.myCollisionCheckParams.myHorizontalObjectsToIgnore;
+            raycastSetup.myObjectsToIgnore.pp_copy(this._myTeleportParams.myCollisionCheckParams.myHorizontalObjectsToIgnore);
             for (let objectToIgnore of this._myTeleportParams.myCollisionCheckParams.myVerticalObjectsToIgnore) {
                 raycastSetup.myObjectsToIgnore.pp_pushUnique(objectToIgnore, objectsEqualCallback);
             }
+
             raycastSetup.myIgnoreHitsInsideCollision = true;
 
             raycastResult = PP.PhysicsUtils.raycast(raycastSetup, raycastResult);

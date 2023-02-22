@@ -64,13 +64,18 @@ WL.registerComponent('player-locomotion', {
         PP.myEasyTuneVariables.add(new PP.EasyTuneBool("Bool 1", false));
 
         this._myStartCounter = 1;
+
+        this._myPlayerLocomotion.start();
     },
     update(dt) {
         if (this._myStartCounter > 0) {
             this._myStartCounter--;
             if (this._myStartCounter == 0) {
-                this._myPlayerLocomotion.start();
+                this._myPlayerLocomotion._myPlayerTransformManager.resetReal(true, false, false, true);
+                this._myPlayerLocomotion._myPlayerTransformManager.resetHeadToReal();
             }
+
+            this._myPlayerLocomotion._myPlayerHeadManager.update(dt);
         } else {
             _myTotalRaycasts = 0; // #TODO debug stuff, remove later
 

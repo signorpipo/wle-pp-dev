@@ -292,6 +292,10 @@ PlayerTransformManager = class PlayerTransformManager {
         // implemented outside class definition
     }
 
+    resetHeadToReal() {
+        this._myValidPositionHead = this.getPositionHeadReal(this._myValidPositionHead);
+    }
+
     updateReal() {
         this._updateReal(0, false);
     }

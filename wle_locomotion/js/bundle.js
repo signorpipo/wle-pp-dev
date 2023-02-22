@@ -44,6 +44,7 @@ require('./pp/audio/audio_manager');
 require('./pp/audio/audio_player');
 require('./pp/audio/audio_setup');
 require('./pp/audio/mute_everything');
+require('./pp/audio/audio_utils');
 
 require('./pp/audio/howler/howler_audio_player');
 
@@ -243,6 +244,7 @@ require('./pp/tool/easy_tune/easy_object_tuners/easy_scale');
 require('./pp/tool/easy_tune/easy_object_tuners/easy_set_tune_target_child_number');
 require('./pp/tool/easy_tune/easy_object_tuners/easy_set_tune_target_grab');
 require('./pp/tool/easy_tune/easy_object_tuners/easy_transform');
+require('./pp/tool/easy_tune/easy_object_tuners/easy_mesh_ambient_factor');
 
 require('./pp/tool/easy_tune/easy_tune_widgets/base/easy_tune_base_widget');
 require('./pp/tool/easy_tune/easy_tune_widgets/base/easy_tune_base_widget_ui');
