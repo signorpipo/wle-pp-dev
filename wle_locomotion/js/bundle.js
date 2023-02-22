@@ -175,8 +175,9 @@ require('./pp/gameplay/locomotion/player/components/player_locomotion_smooth_com
 require('./pp/gameplay/locomotion/player/components/player_locomotion_rotate_component');
 require('./pp/gameplay/locomotion/player/components/player_locomotion_gravity_component');
 
-//    UTILS
-require('./pp/gameplay/utils/ca_utils');
+//    INTEGRATIONS
+require('./pp/gameplay/integrations/construct_arcade/ca_utils');
+require('./pp/gameplay/integrations/construct_arcade/ca_display_leaderboard');
 
 //	INPUT
 require('./pp/input/cauldron/finger_cursor');

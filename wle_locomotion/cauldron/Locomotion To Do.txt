@@ -42,11 +42,6 @@ v Componente character-controller che semplicemente ha la collisione e puoi dirg
 
 
 TEMP:
-- cautils check function exists 
-- cautils add catch alle promise
-- add pp display ca leaderboard component / An error has occurred while trying to retrieve the leaderboard
-- mettere sign in and play bla bla come default value nel dummy
-
 - mettere i nomi a tutte le funzioni delle estensioni
 - visual manager copy params instead of set
 - mettere cache non obbligatoria per save manager e override cache
