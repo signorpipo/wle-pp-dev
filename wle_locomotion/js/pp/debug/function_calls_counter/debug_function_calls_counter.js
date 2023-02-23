@@ -324,7 +324,9 @@ PP.DebugFunctionCallsCounter = class DebugFunctionCallsCounter {
             let reference = this._getReferenceFromPath(path);
             let referenceParent = this._getParentReferenceFromPath(path);
 
-            referenceAndParents.pp_pushUnique([reference, referenceParent, referenceNameToUse, referencePathToUse, renamedReferenceName], equalCallback);
+            if (reference != null) {
+                referenceAndParents.pp_pushUnique([reference, referenceParent, referenceNameToUse, referencePathToUse, renamedReferenceName], equalCallback);
+            }
         }
 
         for (let referencePair of byReferenceList) {
@@ -348,7 +350,9 @@ PP.DebugFunctionCallsCounter = class DebugFunctionCallsCounter {
                 referenceNameToUse = this._getReferenceNameFromPath(referencePathToUse);
             }
 
-            referenceAndParents.pp_pushUnique([reference, null, referenceNameToUse, referencePathToUse, renamedReferenceName], equalCallback);
+            if (reference != null) {
+                referenceAndParents.pp_pushUnique([reference, null, referenceNameToUse, referencePathToUse, renamedReferenceName], equalCallback);
+            }
         }
 
         return referenceAndParents;
@@ -483,7 +487,7 @@ PP.DebugFunctionCallsCounter = class DebugFunctionCallsCounter {
     _filterName(name, includeList, excludeList) {
         let isValidName = includeList.length == 0;
         for (let includeName of includeList) {
-            if (name.match(includeName) != null) {
+            if (name.match(new RegExp(includeName)) != null) {
                 isValidName = true;
                 break;
             }
@@ -491,7 +495,7 @@ PP.DebugFunctionCallsCounter = class DebugFunctionCallsCounter {
 
         if (isValidName) {
             for (let excludeName of excludeList) {
-                if (name.match(excludeName) != null) {
+                if (name.match(new RegExp(excludeName)) != null) {
                     isValidName = false;
                     break;
                 }
