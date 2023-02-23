@@ -16,12 +16,12 @@ PP.DebugFunctionCallsCounterParams = class DebugFunctionCallsCounterParams {
         this.myAddPathPrefix = true;
         // this works at best when the object/class is specified as path, since with reference it's not possible to get the full path or get the variable name of the reference
 
-        this.myFunctionNamesToInclude = [];     // empty means every function is included
-        this.myFunctionNamesToExclude = [];     // empty means no function is excluded
+        this.myFunctionNamesToInclude = [];     // empty means every function is included, can be a regex
+        this.myFunctionNamesToExclude = [];     // empty means no function is excluded, can be a regex
 
         // these can be used if u want to have a bit more control on function name filtering
-        this.myFunctionPathsToInclude = [];         // empty means every function is included
-        this.myFunctionPathsToExclude = [];         // empty means no function is excluded
+        this.myFunctionPathsToInclude = [];         // empty means every function is included, can be a regex
+        this.myFunctionPathsToExclude = [];         // empty means no function is excluded, can be a regex
 
         this.myObjectRecursionDepthLevelforObjects = 0;     // you can specify if you want to also count the children OBJECTS of the objects you have specified
         this.myObjectRecursionDepthLevelforClasses = 0;     // you can specify if you want to also count the children CLASSES of the objects you have specified
@@ -29,17 +29,17 @@ PP.DebugFunctionCallsCounterParams = class DebugFunctionCallsCounterParams {
         // -1 to select all the hierarchy
 
         // these filters are only useful if u are doing recursion
-        this.myObjectNamesToInclude = [];           // empty means every object is included
-        this.myObjectNamesToExclude = [];           // empty means no object is excluded
+        this.myObjectNamesToInclude = [];           // empty means every object is included, can be a regex
+        this.myObjectNamesToExclude = [];           // empty means no object is excluded, can be a regex
 
-        this.myClassNamesToInclude = [];            // empty means every class is included
-        this.myClassNamesToExclude = [];            // empty means no class is excluded
+        this.myClassNamesToInclude = [];            // empty means every class is included, can be a regex
+        this.myClassNamesToExclude = [];            // empty means no class is excluded, can be a regex
 
-        this.myObjectPathsToInclude = [];           // empty means every object is included
-        this.myObjectPathsToExclude = [];           // empty means no object is excluded
+        this.myObjectPathsToInclude = [];           // empty means every object is included, can be a regex
+        this.myObjectPathsToExclude = [];           // empty means no object is excluded, can be a regex
 
-        this.myClassPathsToInclude = [];            // empty means every class is included
-        this.myClassPathsToExclude = [];            // empty means no class is excluded
+        this.myClassPathsToInclude = [];            // empty means every class is included, can be a regex
+        this.myClassPathsToExclude = [];            // empty means no class is excluded, can be a regex
 
         // Tricks
         // - you can specify an object/class/function as a pair [object, "name"] instead of just object
@@ -483,7 +483,7 @@ PP.DebugFunctionCallsCounter = class DebugFunctionCallsCounter {
     _filterName(name, includeList, excludeList) {
         let isValidName = includeList.length == 0;
         for (let includeName of includeList) {
-            if (name.includes(includeName)) {
+            if (name.match(includeName) != null) {
                 isValidName = true;
                 break;
             }
@@ -491,7 +491,7 @@ PP.DebugFunctionCallsCounter = class DebugFunctionCallsCounter {
 
         if (isValidName) {
             for (let excludeName of excludeList) {
-                if (name.includes(excludeName)) {
+                if (name.match(excludeName) != null) {
                     isValidName = false;
                     break;
                 }
