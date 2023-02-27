@@ -31,6 +31,8 @@ CleanedPlayerTransformManager = class CleanedPlayerTransformManager {
         this._myIsPositionValid = false;
 
         this._myResetRealOnSynced = false;
+
+        this._myActive = true;
     }
 
     start() {
@@ -41,6 +43,10 @@ CleanedPlayerTransformManager = class CleanedPlayerTransformManager {
         }
         WL.onXRSessionStart.push(this._onXRSessionStart.bind(this, false));
         WL.onXRSessionEnd.push(this._onXRSessionEnd.bind(this));
+    }
+
+    setActive(active) {
+        this._myActive = active;
     }
 
     // update should be before to check the new valid transform and if the head new transform is fine
@@ -402,14 +408,18 @@ CleanedPlayerTransformManager = class CleanedPlayerTransformManager {
     }
 
     _onXRSessionStart(manualStart, session) {
-        if (this._myParams.myResetToValidOnEnterSession && !manualStart) {
-            this._myResetRealOnSynced = true;
+        if (this._myActive) {
+            if (this._myParams.myResetToValidOnEnterSession && !manualStart) {
+                this._myResetRealOnSynced = true;
+            }
         }
     }
 
     _onXRSessionEnd() {
-        if (this._myParams.myResetToValidOnExitSession) {
-            this._myResetRealOnSynced = true;
+        if (this._myActive) {
+            if (this._myParams.myResetToValidOnExitSession) {
+                this._myResetRealOnSynced = true;
+            }
         }
     }
 

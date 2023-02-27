@@ -247,6 +247,7 @@ CleanedPlayerLocomotion = class CleanedPlayerLocomotion {
         this._myIdle = false;
 
         this._myStarted = false;
+        this._myActive = true;
     }
 
     start() {
@@ -262,6 +263,31 @@ CleanedPlayerLocomotion = class CleanedPlayerLocomotion {
         this._myLocomotionMovementFSM.perform("start");
 
         this._myStarted = true;
+
+        let currentActive = this._myActive
+        this._myActive = !this._myActive;
+        this.setActive(currentActive);
+    }
+
+    setActive(active) {
+        if (this._myActive != active) {
+            this._myActive = active;
+
+            if (this._myStarted) {
+                if (this._myActive) {
+                    this._myPlayerObscureManager.start();
+                    if (!this._myIdle) {
+                        this._myLocomotionMovementFSM.perform("start");
+                    }
+                } else {
+                    this._myLocomotionMovementFSM.perform("idle");
+                    this._myPlayerObscureManager.stop();
+                }
+            }
+
+            this._myPlayerHeadManager.setActive(this._myActive);
+            this._myPlayerTransformManager.setActive(this._myActive);
+        }
     }
 
     isStarted() {

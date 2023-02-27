@@ -58,19 +58,14 @@ WL.registerComponent('player-locomotion', {
             this._myPlayerLocomotion = new PlayerLocomotion(params);
         }
 
-        PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Float 1", 0.15, 0.5, 3));
-        PP.myEasyTuneVariables.add(new PP.EasyTuneNumberArray("Float Array 1", [1, 2, 3], 0.5, 3));
-        PP.myEasyTuneVariables.add(new PP.EasyTuneTransform("Transform 1", PP.mat4_create()));
-        PP.myEasyTuneVariables.add(new PP.EasyTuneBool("Bool 1", false));
-
-        this._myStartCounter = 1;
-
-        this._myPlayerLocomotion.start();
+        this._myStartCounter = 2;
     },
     update(dt) {
         if (this._myStartCounter > 0) {
             this._myStartCounter--;
             if (this._myStartCounter == 0) {
+                this._myPlayerLocomotion.start();
+
                 this._myPlayerLocomotion._myPlayerTransformManager.resetReal(true, false, false, true);
                 this._myPlayerLocomotion._myPlayerTransformManager.resetHeadToReal();
             }
@@ -87,13 +82,17 @@ WL.registerComponent('player-locomotion', {
         //console.error(_myTotalRaycasts);
     },
     onActivate() {
-        if (this._myPlayerLocomotion != null) {
-            this._myPlayerLocomotion.setIdle(false);
+        if (this._myStartCounter == 0) {
+            if (this._myPlayerLocomotion != null) {
+                this._myPlayerLocomotion.setActive(true);
+            }
         }
     },
     onDeactivate() {
-        if (this._myPlayerLocomotion != null) {
-            this._myPlayerLocomotion.setIdle(true);
+        if (this._myStartCounter == 0) {
+            if (this._myPlayerLocomotion != null) {
+                this._myPlayerLocomotion.setActive(false);
+            }
         }
     }
 });

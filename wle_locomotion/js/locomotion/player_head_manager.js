@@ -53,6 +53,8 @@ PlayerHeadManager = class PlayerHeadManager {
 
         this._myIsSyncedDelayCounter = 0;
 
+        this._myActive = true;
+
         // Setup
 
         this._myResyncCounterFrames = 3;
@@ -67,6 +69,10 @@ PlayerHeadManager = class PlayerHeadManager {
         }
         WL.onXRSessionStart.push(this._onXRSessionStart.bind(this, false));
         WL.onXRSessionEnd.push(this._onXRSessionEnd.bind(this));
+    }
+
+    setActive(active) {
+        this._myActive = active;
     }
 
     getParams() {
@@ -538,7 +544,7 @@ PlayerHeadManager.prototype._onXRSessionStart = function () {
             }
         }.bind(this));
 
-        if (this._myParams.mySessionChangeResyncEnabled && !manualStart) {
+        if (this._myParams.mySessionChangeResyncEnabled && !manualStart && this._myActive) {
             if (this._myDelaySessionChangeResyncCounter == 0) {
                 let previousHeadObject = this._myCurrentHead;
                 this._mySessionChangeResyncHeadTransform = previousHeadObject.pp_getTransformQuat();
@@ -555,13 +561,15 @@ PlayerHeadManager.prototype._onXRSessionStart = function () {
         this._mySessionActive = true;
         this._mySessionBlurred = false;
 
-        this._updateHeightOffset();
+        if (this._myActive) {
+            this._updateHeightOffset();
+        }
     };
 }();
 
 PlayerHeadManager.prototype._onXRSessionEnd = function () {
     return function _onXRSessionEnd(session) {
-        if (this._myParams.mySessionChangeResyncEnabled) {
+        if (this._myParams.mySessionChangeResyncEnabled && this._myActive) {
             if (this._myDelaySessionChangeResyncCounter == 0) {
                 let previousHeadTransform = this._myCurrentHead.pp_getTransformQuat();
 
@@ -589,20 +597,24 @@ PlayerHeadManager.prototype._onXRSessionEnd = function () {
         this._mySessionActive = false;
         this._mySessionBlurred = false;
 
-        this._updateHeightOffset();
+        if (this._myActive) {
+            this._updateHeightOffset();
+        }
     };
 }();
 
 PlayerHeadManager.prototype._onXRSessionBlurStart = function () {
     return function _onXRSessionBlurStart(session) {
-        if (this._myParams.myBlurEndResyncEnabled && this._myBlurRecoverHeadTransform == null && this._mySessionActive) {
-            if (this._myDelaySessionChangeResyncCounter > 0) {
-                this._myBlurRecoverHeadTransform = this._mySessionChangeResyncHeadTransform;
-            } else {
-                this._myBlurRecoverHeadTransform = this._myCurrentHead.pp_getTransformQuat();
+        if (this._myActive) {
+            if (this._myParams.myBlurEndResyncEnabled && this._myBlurRecoverHeadTransform == null && this._mySessionActive) {
+                if (this._myDelaySessionChangeResyncCounter > 0) {
+                    this._myBlurRecoverHeadTransform = this._mySessionChangeResyncHeadTransform;
+                } else {
+                    this._myBlurRecoverHeadTransform = this._myCurrentHead.pp_getTransformQuat();
+                }
+            } else if (!this._mySessionActive || !this._myParams.myBlurEndResyncEnabled) {
+                this._myBlurRecoverHeadTransform = null;
             }
-        } else if (!this._mySessionActive || !this._myParams.myBlurEndResyncEnabled) {
-            this._myBlurRecoverHeadTransform = null;
         }
 
         this._myDelayBlurEndResyncCounter = 0;
@@ -613,23 +625,25 @@ PlayerHeadManager.prototype._onXRSessionBlurStart = function () {
 
 PlayerHeadManager.prototype._onXRSessionBlurEnd = function () {
     return function _onXRSessionBlurEnd(session) {
-        if (this._myDelaySessionChangeResyncCounter == 0) {
-            if (this._myParams.myBlurEndResyncEnabled && this._myBlurRecoverHeadTransform != null && this._mySessionActive) {
-                this._myDelayBlurEndResyncCounter = this._myResyncCounterFrames;
-                if (this._myVisibilityHidden) {
-                    // this._myDelayBlurEndResyncTimer.start();
+        if (this._myActive) {
+            if (this._myDelaySessionChangeResyncCounter == 0) {
+                if (this._myParams.myBlurEndResyncEnabled && this._myBlurRecoverHeadTransform != null && this._mySessionActive) {
+                    this._myDelayBlurEndResyncCounter = this._myResyncCounterFrames;
+                    if (this._myVisibilityHidden) {
+                        // this._myDelayBlurEndResyncTimer.start();
 
-                    // this was added because on the end of hidden u can have the resync delay cause of the guardian resync
-                    // but I just decided to skip this since it's not reliable and the guardian resync can happen in other cases
-                    // with no notification anyway
+                        // this was added because on the end of hidden u can have the resync delay cause of the guardian resync
+                        // but I just decided to skip this since it's not reliable and the guardian resync can happen in other cases
+                        // with no notification anyway
+                    }
+                } else {
+                    this._myBlurRecoverHeadTransform = null;
+                    this._myDelayBlurEndResyncCounter = 0;
                 }
             } else {
+                this._myDelaySessionChangeResyncCounter = this._myResyncCounterFrames;
                 this._myBlurRecoverHeadTransform = null;
-                this._myDelayBlurEndResyncCounter = 0;
             }
-        } else {
-            this._myDelaySessionChangeResyncCounter = this._myResyncCounterFrames;
-            this._myBlurRecoverHeadTransform = null;
         }
 
         this._mySessionBlurred = false;
@@ -638,8 +652,10 @@ PlayerHeadManager.prototype._onXRSessionBlurEnd = function () {
 
 PlayerHeadManager.prototype._onViewReset = function () {
     return function _onViewReset() {
-        if (this._mySessionActive && this.isSynced()) {
-            this.teleportPlayerToHeadTransformQuat(this._myPreviousHeadTransformQuat);
+        if (this._myActive) {
+            if (this._mySessionActive && this.isSynced()) {
+                this.teleportPlayerToHeadTransformQuat(this._myPreviousHeadTransformQuat);
+            }
         }
     };
 }();
