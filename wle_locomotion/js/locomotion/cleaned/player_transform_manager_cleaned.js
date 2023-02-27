@@ -402,7 +402,7 @@ CleanedPlayerTransformManager = class CleanedPlayerTransformManager {
     }
 
     _onXRSessionStart(manualStart, session) {
-        if (this._myParams.myResetToValidOnEnterSession) {
+        if (this._myParams.myResetToValidOnEnterSession && !manualStart) {
             this._myResetRealOnSynced = true;
         }
     }
@@ -476,6 +476,8 @@ CleanedPlayerTransformManager.prototype.update = function () {
     return function update(dt) {
         //#TODO this should update ground and ceiling info but not sliding info        
 
+        this._updateReal(dt);
+
         if (this._myResetRealOnSynced) {
             if (this.getPlayerHeadManager().isSynced()) {
                 this._myResetRealOnSynced = false;
@@ -494,8 +496,6 @@ CleanedPlayerTransformManager.prototype.update = function () {
                 }
             }
         }
-
-        this._updateReal(dt);
 
         if (this._myParams.myUpdatePositionValid) {
             transformQuat = this.getTransformQuat(transformQuat);

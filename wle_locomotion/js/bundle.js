@@ -155,8 +155,6 @@ require('./pp/gameplay/character_controller/player/components/player_character_c
 require('./pp/gameplay/character_controller/player/components/player_head_character_controller_component');
 require('./pp/gameplay/character_controller/player/components/player_hand_character_controller_component');
 
-require('./pp/gameplay/character_controller/character_controller_utils');
-
 //    GRAB & THROW
 require('./pp/gameplay/grab_throw/grabbable');
 require('./pp/gameplay/grab_throw/grabber_hand');

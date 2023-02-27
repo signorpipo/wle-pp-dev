@@ -78,6 +78,8 @@ PlayerObscureManager = class PlayerObscureManager {
     }
 
     update(dt) {
+        this._myObscureParentObject.pp_resetTransformLocal();
+
         this._updateObscured();
 
         this._myFSM.update(dt);

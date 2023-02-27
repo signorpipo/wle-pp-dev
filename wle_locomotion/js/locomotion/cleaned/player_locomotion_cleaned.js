@@ -245,6 +245,8 @@ CleanedPlayerLocomotion = class CleanedPlayerLocomotion {
         this._setupLocomotionMovementFSM();
 
         this._myIdle = false;
+
+        this._myStarted = false;
     }
 
     start() {
@@ -258,6 +260,12 @@ CleanedPlayerLocomotion = class CleanedPlayerLocomotion {
         this._myPlayerLocomotionRotate.start();
 
         this._myLocomotionMovementFSM.perform("start");
+
+        this._myStarted = true;
+    }
+
+    isStarted() {
+        return this._myStarted;
     }
 
     canStop() {

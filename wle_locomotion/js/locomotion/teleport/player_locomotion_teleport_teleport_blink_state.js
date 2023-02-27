@@ -63,6 +63,7 @@ PlayerLocomotionTeleportTeleportBlinkState = class PlayerLocomotionTeleportTelep
 
     update(dt, fsm) {
         this._myBlinkSphere.pp_setParent(this._myTeleportParams.myPlayerHeadManager.getHead(), false);
+        this._myBlinkSphere.pp_resetTransformLocal();
 
         this._myFSM.update(dt);
     }

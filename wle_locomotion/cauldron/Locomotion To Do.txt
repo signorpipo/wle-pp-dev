@@ -42,6 +42,8 @@ v Componente character-controller che semplicemente ha la collisione e puoi dirg
 
 
 TEMP:
+- mouse look should rotate player if possible, aggiungerla direttamente al rotate manager?
+- add head manager flag to reset transform on view reset
 - fix muoversi guardando indietro dovrebbe comunque andare avanti
 - fly verso l'lalto passa attraverso bug? magari è solo un bug dei parametri con canfly del simplified collider
 - head controller -> feet controller? body controller?

@@ -63,9 +63,9 @@ PlayerHeadManager = class PlayerHeadManager {
         this._updateHeightOffset();
 
         if (WL.xrSession) {
-            this._onXRSessionStart(WL.xrSession);
+            this._onXRSessionStart(true, WL.xrSession);
         }
-        WL.onXRSessionStart.push(this._onXRSessionStart.bind(this));
+        WL.onXRSessionStart.push(this._onXRSessionStart.bind(this, false));
         WL.onXRSessionEnd.push(this._onXRSessionEnd.bind(this));
     }
 
@@ -508,7 +508,7 @@ PlayerHeadManager.prototype._getPositionHeight = function () {
 
 // #TODO what happens if the player go in the blurred state before wle has loaded?
 PlayerHeadManager.prototype._onXRSessionStart = function () {
-    return function _onXRSessionStart(session) {
+    return function _onXRSessionStart(manualStart, session) {
         this._myBlurRecoverHeadTransform = null;
         this._myVisibilityHidden = false;
 
@@ -538,7 +538,7 @@ PlayerHeadManager.prototype._onXRSessionStart = function () {
             }
         }.bind(this));
 
-        if (this._myParams.mySessionChangeResyncEnabled) {
+        if (this._myParams.mySessionChangeResyncEnabled && !manualStart) {
             if (this._myDelaySessionChangeResyncCounter == 0) {
                 let previousHeadObject = this._myCurrentHead;
                 this._mySessionChangeResyncHeadTransform = previousHeadObject.pp_getTransformQuat();

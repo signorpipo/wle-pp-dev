@@ -115,7 +115,7 @@ CleanedPlayerLocomotionSmooth.prototype.update = function () {
             }
 
             if (PP.myGamepads[this._myParams.myHandedness].getButtonInfo(PP.GamepadButtonID.SQUEEZE).isPressed()) {
-                headMovement.vec3_zero();
+                // headMovement.vec3_zero();
             }
 
             feetTransformQuat = this._myParams.myPlayerTransformManager.getTransformQuat(feetTransformQuat);
