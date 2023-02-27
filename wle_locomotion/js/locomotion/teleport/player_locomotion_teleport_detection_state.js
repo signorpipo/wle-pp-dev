@@ -61,10 +61,10 @@ PlayerLocomotionTeleportDetectionState = class PlayerLocomotionTeleportDetection
 
         this._myTeleportRotationOnUpNext = 0;
 
-        PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Parable Steps", this._myTeleportParams.myDetectionParams.myTeleportParableStepLength, 1, 3, 0.01));
-        PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Parable Gravity", this._myTeleportParams.myDetectionParams.myTeleportParableGravity, 10, 3));
-        PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Parable Speed", this._myTeleportParams.myDetectionParams.myTeleportParableSpeed, 10, 3, 0));
-        PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Teleport Max Distance", this._myTeleportParams.myDetectionParams.myMaxDistance, 10, 3, 0));
+        //PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Parable Steps", this._myTeleportParams.myDetectionParams.myTeleportParableStepLength, 1, 3, 0.01));
+        //PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Parable Gravity", this._myTeleportParams.myDetectionParams.myTeleportParableGravity, 10, 3));
+        //PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Parable Speed", this._myTeleportParams.myDetectionParams.myTeleportParableSpeed, 10, 3, 0));
+        //PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Teleport Max Distance", this._myTeleportParams.myDetectionParams.myMaxDistance, 10, 3, 0));
     }
 
     start() {

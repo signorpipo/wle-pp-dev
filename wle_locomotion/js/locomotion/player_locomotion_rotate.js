@@ -32,7 +32,7 @@ PlayerLocomotionRotate = class PlayerLocomotionRotate {
         this._mySmoothSnapVerticalRunning = false;
         this._mySmoothSnapVerticalAngleToPerform = 0;
 
-        PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Teleport Smooth Speed", this._myParams.mySmoothSnapSpeedDegrees, 10, 3, 0));
+        //PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Teleport Smooth Speed", this._myParams.mySmoothSnapSpeedDegrees, 10, 3, 0));
     }
 
     start() {

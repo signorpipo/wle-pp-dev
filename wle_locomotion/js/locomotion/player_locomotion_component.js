@@ -58,7 +58,7 @@ WL.registerComponent('player-locomotion', {
             this._myPlayerLocomotion = new PlayerLocomotion(params);
         }
 
-        this._myStartCounter = 2;
+        this._myStartCounter = 1;
     },
     update(dt) {
         if (this._myStartCounter > 0) {

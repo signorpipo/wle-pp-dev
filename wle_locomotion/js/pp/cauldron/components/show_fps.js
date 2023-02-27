@@ -28,9 +28,9 @@ WL.registerComponent('pp-show-fps', {
 
         this._myVisualFPS = new PP.VisualText(visualParams);
 
-        PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("FPS X", -0.25, 0.1, 3));
-        PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("FPS Y", -0.130, 0.1, 3));
-        PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("FPS Z", 0.35, 0.1, 3));
+        //PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("FPS X", -0.25, 0.1, 3));
+        //PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("FPS Y", -0.130, 0.1, 3));
+        //PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("FPS Z", 0.35, 0.1, 3));
     },
     update: function () {
         let playerTransformQuat = PP.quat2_create();
