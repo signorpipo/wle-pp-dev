@@ -12,7 +12,7 @@ WL.registerComponent('pp-show-fps', {
         this._myVisualFPSParent = this.object.pp_addObject();
 
         let visualParams = new PP.VisualTextParams();
-        visualParams.myText = "0";
+        visualParams.myText = "00";
 
         visualParams.myTransform.mat4_setPositionRotationScale(PP.vec3_create(-0.115, -0.115, 0.35), PP.vec3_create(0, 180, 0), PP.vec3_create(0.3, 0.3, 0.3));
 
@@ -20,7 +20,7 @@ WL.registerComponent('pp-show-fps', {
             visualParams.myMaterial = this._myTextMaterial.clone();
         } else {
             visualParams.myMaterial = PP.myDefaultResources.myMaterials.myText.clone();
-            visualParams.myMaterial.color = PP.vec4_create(0, 1, 0, 1);
+            visualParams.myMaterial.color = PP.vec4_create(1, 1, 1, 1);
         }
 
         visualParams.myParent = this._myVisualFPSParent;
