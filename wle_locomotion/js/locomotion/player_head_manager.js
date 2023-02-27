@@ -5,6 +5,8 @@ PlayerHeadManagerParams = class PlayerHeadManagerParams {
         this.myBlurEndResyncEnabled = false;
         this.myBlurEndResyncRotation = false;
 
+        this.myResetTransformOnViewResetEnabled = true;
+
         this.myNextEnterSessionResyncHeight = false;
         this.myEnterSessionResyncHeight = false;
 
@@ -653,7 +655,7 @@ PlayerHeadManager.prototype._onXRSessionBlurEnd = function () {
 PlayerHeadManager.prototype._onViewReset = function () {
     return function _onViewReset() {
         if (this._myActive) {
-            if (this._mySessionActive && this.isSynced()) {
+            if (this._myParams.myResetTransformOnViewResetEnabled && this._mySessionActive && this.isSynced()) {
                 this.teleportPlayerToHeadTransformQuat(this._myPreviousHeadTransformQuat);
             }
         }
