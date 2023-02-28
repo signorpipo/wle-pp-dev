@@ -53,7 +53,7 @@ WL.registerComponent('player-locomotion', {
         params.myTeleportPositionObject = this._myTeleportPositionObject;
 
         if (this._myUseCleanedVersion) {
-            this._myPlayerLocomotion = new CleanedPlayerLocomotion(params);
+            this._myPlayerLocomotion = new PP.CleanedPlayerLocomotion(params);
         } else {
             this._myPlayerLocomotion = new PlayerLocomotion(params);
         }

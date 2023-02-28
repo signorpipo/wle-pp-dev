@@ -1,4 +1,4 @@
-CleanedPlayerLocomotion = class CleanedPlayerLocomotion {
+PP.CleanedPlayerLocomotion = class CleanedPlayerLocomotion {
     constructor(params) {
         this._myParams = params;
 
@@ -106,7 +106,7 @@ CleanedPlayerLocomotion = class CleanedPlayerLocomotion {
 
             params.myDebugActive = false;
 
-            this._myPlayerTransformManager = new CleanedPlayerTransformManager(params);
+            this._myPlayerTransformManager = new PP.CleanedPlayerTransformManager(params);
 
             transformManager = this._myPlayerTransformManager;
         }
@@ -196,7 +196,7 @@ CleanedPlayerLocomotion = class CleanedPlayerLocomotion {
                 params.myVRDirectionReferenceType = this._myParams.myVRDirectionReferenceType;
                 params.myVRDirectionReferenceObject = this._myParams.myVRDirectionReferenceObject;
 
-                this._myPlayerLocomotionSmooth = new CleanedPlayerLocomotionSmooth(params, this._myMovementRuntimeParams);
+                this._myPlayerLocomotionSmooth = new PP.CleanedPlayerLocomotionSmooth(params, this._myMovementRuntimeParams);
             }
 
             {

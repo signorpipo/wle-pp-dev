@@ -1,4 +1,4 @@
-CleanedPlayerLocomotionSmooth = class CleanedPlayerLocomotionSmooth extends PlayerLocomotionMovement {
+PP.CleanedPlayerLocomotionSmooth = class CleanedPlayerLocomotionSmooth extends PlayerLocomotionMovement {
 
     constructor(params, locomotionRuntimeParams) {
         super(locomotionRuntimeParams);
@@ -45,7 +45,7 @@ CleanedPlayerLocomotionSmooth = class CleanedPlayerLocomotionSmooth extends Play
     }
 };
 
-CleanedPlayerLocomotionSmooth.prototype.update = function () {
+PP.CleanedPlayerLocomotionSmooth.prototype.update = function () {
     let playerUp = PP.vec3_create();
     let headMovement = PP.vec3_create();
     let direction = PP.vec3_create();
@@ -148,7 +148,7 @@ CleanedPlayerLocomotionSmooth.prototype.update = function () {
 
 globalDT = 0;
 
-CleanedPlayerLocomotionSmooth.prototype._onXRSessionStart = function () {
+PP.CleanedPlayerLocomotionSmooth.prototype._onXRSessionStart = function () {
     return function _onXRSessionStart(session) {
         switch (this._myParams.myVRDirectionReferenceType) {
             case 0:
@@ -167,7 +167,7 @@ CleanedPlayerLocomotionSmooth.prototype._onXRSessionStart = function () {
     };
 }();
 
-CleanedPlayerLocomotionSmooth.prototype._onXRSessionEnd = function () {
+PP.CleanedPlayerLocomotionSmooth.prototype._onXRSessionEnd = function () {
     let playerUp = PP.vec3_create();
     return function _onXRSessionEnd(session) {
         this._myDirectionReference = PP.myPlayerObjects.myHead;
@@ -179,6 +179,6 @@ CleanedPlayerLocomotionSmooth.prototype._onXRSessionEnd = function () {
 
 
 
-Object.defineProperty(CleanedPlayerLocomotionSmooth.prototype, "update", { enumerable: false });
-Object.defineProperty(CleanedPlayerLocomotionSmooth.prototype, "_onXRSessionStart", { enumerable: false });
-Object.defineProperty(CleanedPlayerLocomotionSmooth.prototype, "_onXRSessionEnd", { enumerable: false });
+Object.defineProperty(PP.CleanedPlayerLocomotionSmooth.prototype, "update", { enumerable: false });
+Object.defineProperty(PP.CleanedPlayerLocomotionSmooth.prototype, "_onXRSessionStart", { enumerable: false });
+Object.defineProperty(PP.CleanedPlayerLocomotionSmooth.prototype, "_onXRSessionEnd", { enumerable: false });

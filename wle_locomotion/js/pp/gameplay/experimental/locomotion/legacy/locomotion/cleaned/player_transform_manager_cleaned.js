@@ -1,4 +1,4 @@
-CleanedPlayerTransformManager = class CleanedPlayerTransformManager {
+PP.CleanedPlayerTransformManager = class CleanedPlayerTransformManager {
     constructor(params) {
         this._myParams = params;
 
@@ -432,7 +432,7 @@ CleanedPlayerTransformManager = class CleanedPlayerTransformManager {
     }
 };
 
-CleanedPlayerTransformManager.prototype.getDistanceToReal = function () {
+PP.CleanedPlayerTransformManager.prototype.getDistanceToReal = function () {
     let realPosition = PP.vec3_create();
     return function getDistanceToReal() {
         realPosition = this.getPositionReal(realPosition);
@@ -440,7 +440,7 @@ CleanedPlayerTransformManager.prototype.getDistanceToReal = function () {
     };
 }();
 
-CleanedPlayerTransformManager.prototype.getDistanceToRealHead = function () {
+PP.CleanedPlayerTransformManager.prototype.getDistanceToRealHead = function () {
     let realPosition = PP.vec3_create();
     return function getDistanceToRealHead() {
         realPosition = this.getPositionHeadReal(realPosition);
@@ -448,7 +448,7 @@ CleanedPlayerTransformManager.prototype.getDistanceToRealHead = function () {
     };
 }();
 
-CleanedPlayerTransformManager.prototype.resetReal = function () {
+PP.CleanedPlayerTransformManager.prototype.resetReal = function () {
     let realUp = PP.vec3_create();
     let validUp = PP.vec3_create();
     let position = PP.vec3_create();
@@ -477,7 +477,7 @@ CleanedPlayerTransformManager.prototype.resetReal = function () {
     };
 }();
 
-CleanedPlayerTransformManager.prototype.update = function () {
+PP.CleanedPlayerTransformManager.prototype.update = function () {
     let transformQuat = PP.quat2_create();
     let collisionRuntimeParams = new PP.CollisionRuntimeParams();
     let transformUp = PP.vec3_create();
@@ -530,7 +530,7 @@ CleanedPlayerTransformManager.prototype.update = function () {
     }
 }();
 
-CleanedPlayerTransformManager.prototype._updateReal = function () {
+PP.CleanedPlayerTransformManager.prototype._updateReal = function () {
     let movementToCheck = PP.vec3_create();
     let position = PP.vec3_create();
     let positionReal = PP.vec3_create();
@@ -778,7 +778,7 @@ CleanedPlayerTransformManager.prototype._updateReal = function () {
     }
 }();
 
-CleanedPlayerTransformManager.prototype.move = function () {
+PP.CleanedPlayerTransformManager.prototype.move = function () {
     let transformQuat = PP.quat2_create();
     let fixedMovement = PP.vec3_create();
     return function move(movement, outCollisionRuntimeParams = null, forceMove = false) {
@@ -823,7 +823,7 @@ CleanedPlayerTransformManager.prototype.move = function () {
     };
 }();
 
-CleanedPlayerTransformManager.prototype.teleportPosition = function () {
+PP.CleanedPlayerTransformManager.prototype.teleportPosition = function () {
     let teleportTransformQuat = PP.quat2_create();
     return function teleportPosition(teleportPosition, outCollisionRuntimeParams = null, forceTeleport = false) {
         teleportTransformQuat = this.getTransformQuat(teleportTransformQuat);
@@ -832,7 +832,7 @@ CleanedPlayerTransformManager.prototype.teleportPosition = function () {
     };
 }();
 
-CleanedPlayerTransformManager.prototype.teleportTransformQuat = function () {
+PP.CleanedPlayerTransformManager.prototype.teleportTransformQuat = function () {
     let currentPosition = PP.vec3_create();
     let teleportPositionVec = PP.vec3_create();
     let teleportRotation = PP.quat_create();
@@ -888,14 +888,14 @@ CleanedPlayerTransformManager.prototype.teleportTransformQuat = function () {
     };
 }();
 
-CleanedPlayerTransformManager.prototype.rotateQuat = function () {
+PP.CleanedPlayerTransformManager.prototype.rotateQuat = function () {
     return function rotateQuat(rotationQuat) {
         this._myValidRotationQuat.quat_rotateQuat(rotationQuat, this._myValidRotationQuat);
         this.getPlayerHeadManager().rotateFeetQuat(rotationQuat);
     };
 }();
 
-CleanedPlayerTransformManager.prototype.setRotationQuat = function () {
+PP.CleanedPlayerTransformManager.prototype.setRotationQuat = function () {
     let rotationToPerform = PP.quat_create();
     return function setRotationQuat(rotationQuat) {
         rotationToPerform = this._myValidRotationQuat.quat_rotationToQuat(rotationQuat, rotationToPerform);
@@ -903,7 +903,7 @@ CleanedPlayerTransformManager.prototype.setRotationQuat = function () {
     };
 }();
 
-CleanedPlayerTransformManager.prototype.setHeight = function () {
+PP.CleanedPlayerTransformManager.prototype.setHeight = function () {
     let transformQuat = PP.quat2_create();
     return function setHeight(height, forceSet = false) {
         let fixedHeight = Math.pp_clamp(height, this._myParams.myMinHeight, this._myParams.myMaxHeight);
