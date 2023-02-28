@@ -1,12 +1,10 @@
-PlayerLocomotionDirectionReferenceType = {
+PP.PlayerLocomotionDirectionReferenceType = {
     HEAD: 0,
     HAND: 1,
     CUSTOM_OBJECT: 2,
 };
 
-transformManager = null;
-
-PlayerLocomotionParams = class PlayerLocomotionParams {
+PP.PlayerLocomotionParams = class PlayerLocomotionParams {
     constructor() {
         this.myMaxSpeed = 0;
         this.myMaxRotationSpeed = 0;
@@ -27,7 +25,7 @@ PlayerLocomotionParams = class PlayerLocomotionParams {
 
         this.myMainHand = PP.Handedness.LEFT;
 
-        this.myVRDirectionReferenceType = PlayerLocomotionDirectionReferenceType.HEAD;
+        this.myVRDirectionReferenceType = PP.PlayerLocomotionDirectionReferenceType.HEAD;
         this.myVRDirectionReferenceObject = null;
 
         this.myTeleportParableStartReferenceObject = null;
@@ -41,7 +39,7 @@ PlayerLocomotionParams = class PlayerLocomotionParams {
 // #TODO add lerped snap on vertical over like half a second to avoid the "snap effect"
 // this could be done by detatching the actual vertical position of the player from the collision real one when a snap is detected above a certain threshold
 // with a timer, after which the vertical position is just copied, while during the detatching is lerped toward the collision vertical one
-PlayerLocomotion = class PlayerLocomotion {
+PP.PlayerLocomotion = class PlayerLocomotion {
     constructor(params) {
         this._myParams = params;
 
@@ -52,7 +50,7 @@ PlayerLocomotion = class PlayerLocomotion {
 
 
         this._myCollisionRuntimeParams = new PP.CollisionRuntimeParams();
-        this._myMovementRuntimeParams = new PlayerLocomotionMovementRuntimeParams();
+        this._myMovementRuntimeParams = new PP.PlayerLocomotionMovementRuntimeParams();
         this._myMovementRuntimeParams.myCollisionRuntimeParams = this._myCollisionRuntimeParams;
 
         {
@@ -151,8 +149,6 @@ PlayerLocomotion = class PlayerLocomotion {
             params.myDebugActive = true;
 
             this._myPlayerTransformManager = new PlayerTransformManager(params);
-
-            transformManager = this._myPlayerTransformManager;
         }
 
         {
@@ -184,7 +180,7 @@ PlayerLocomotion = class PlayerLocomotion {
         }
 
         {
-            let params = new PlayerLocomotionRotateParams();
+            let params = new PP.PlayerLocomotionRotateParams();
 
             params.myPlayerHeadManager = this._myPlayerHeadManager;
             params.myPlayerTransformManager = this._myPlayerTransformManager;
@@ -194,7 +190,7 @@ PlayerLocomotion = class PlayerLocomotion {
             params.mySnapTurnOnlyVR = this._myParams.mySnapTurnOnlyVR;
             params.mySnapTurnAngle = this._myParams.mySnapTurnAngle;
 
-            if (this._myParams.mySnapTurnSpeedDegrees > LocomotionUtils.EPSILON_NUMBER) {
+            if (this._myParams.mySnapTurnSpeedDegrees > PP.LocomotionUtils.EPSILON_NUMBER) {
                 params.mySmoothSnapActive = true;
                 params.mySmoothSnapSpeedDegrees = this._myParams.mySnapTurnSpeedDegrees;
             } else {
@@ -208,14 +204,14 @@ PlayerLocomotion = class PlayerLocomotion {
             params.myClampVerticalAngle = true;
             params.myMaxVerticalAngle = 90;
 
-            this._myPlayerLocomotionRotate = new PlayerLocomotionRotate(params);
+            this._myPlayerLocomotionRotate = new PP.PlayerLocomotionRotate(params);
 
             params.myHandedness = PP.InputUtils.getOppositeHandedness(this._myParams.myMainHand);
         }
 
         {
             {
-                let params = new PlayerLocomotionSmoothParams();
+                let params = new PP.PlayerLocomotionSmoothParams();
 
                 params.myPlayerHeadManager = this._myPlayerHeadManager;
                 params.myPlayerTransformManager = this._myPlayerTransformManager;
@@ -240,11 +236,11 @@ PlayerLocomotion = class PlayerLocomotion {
                 params.myVRDirectionReferenceType = this._myParams.myVRDirectionReferenceType;
                 params.myVRDirectionReferenceObject = this._myParams.myVRDirectionReferenceObject;
 
-                this._myPlayerLocomotionSmooth = new PlayerLocomotionSmooth(params, this._myMovementRuntimeParams);
+                this._myPlayerLocomotionSmooth = new PP.PlayerLocomotionSmooth(params, this._myMovementRuntimeParams);
             }
 
             {
-                let params = new PlayerLocomotionTeleportParams();
+                let params = new PP.PlayerLocomotionTeleportParams();
 
                 params.myPlayerHeadManager = this._myPlayerHeadManager;
                 params.myPlayerTransformManager = this._myPlayerTransformManager;
@@ -282,7 +278,7 @@ PlayerLocomotion = class PlayerLocomotion {
                 params.myDebugShowActive = true;
                 params.myDebugVisibilityActive = false;
 
-                this._myPlayerLocomotionTeleport = new PlayerLocomotionTeleport(params, this._myMovementRuntimeParams);
+                this._myPlayerLocomotionTeleport = new PP.PlayerLocomotionTeleport(params, this._myMovementRuntimeParams);
             }
         }
 

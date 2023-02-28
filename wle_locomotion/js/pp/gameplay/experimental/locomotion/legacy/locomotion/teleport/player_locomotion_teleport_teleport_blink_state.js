@@ -1,4 +1,4 @@
-PlayerLocomotionTeleportTeleportBlinkState = class PlayerLocomotionTeleportTeleportBlinkState extends PlayerLocomotionTeleportState {
+PP.PlayerLocomotionTeleportTeleportBlinkState = class PlayerLocomotionTeleportTeleportBlinkState extends PP.PlayerLocomotionTeleportState {
     constructor(teleportParams, teleportRuntimeParams, locomotionRuntimeParams) {
         super(teleportParams, teleportRuntimeParams, locomotionRuntimeParams);
 

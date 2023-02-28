@@ -1,6 +1,6 @@
 
 
-PlayerLocomotionMovementRuntimeParams = class PlayerLocomotionMovementRuntimeParams {
+PP.PlayerLocomotionMovementRuntimeParams = class PlayerLocomotionMovementRuntimeParams {
     constructor() {
         this.myIsFlying = false;
         this.myCollisionRuntimeParams = null;
@@ -11,7 +11,7 @@ PlayerLocomotionMovementRuntimeParams = class PlayerLocomotionMovementRuntimePar
     }
 };
 
-PlayerLocomotionMovement = class PlayerLocomotionMovement {
+PP.PlayerLocomotionMovement = class PlayerLocomotionMovement {
     constructor(locomotionRuntimeParams) {
         this._myLocomotionRuntimeParams = locomotionRuntimeParams;
     }

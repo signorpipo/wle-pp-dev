@@ -22,8 +22,8 @@ WL.registerComponent('player-locomotion', {
     init() {
     },
     start() {
-        CollisionCheckGlobal = new PP.CollisionCheck();
-        let params = new PlayerLocomotionParams();
+        PP.myCollisionCheck = new PP.CollisionCheck();
+        let params = new PP.PlayerLocomotionParams();
         params.myMaxSpeed = this._myMaxSpeed;
         params.myMaxRotationSpeed = this._myMaxRotationSpeed;
 
@@ -55,7 +55,7 @@ WL.registerComponent('player-locomotion', {
         if (this._myUseCleanedVersion) {
             this._myPlayerLocomotion = new PP.CleanedPlayerLocomotion(params);
         } else {
-            this._myPlayerLocomotion = new PlayerLocomotion(params);
+            this._myPlayerLocomotion = new PP.PlayerLocomotion(params);
         }
 
         this._myStartCounter = 1;
@@ -72,14 +72,14 @@ WL.registerComponent('player-locomotion', {
 
             this._myPlayerLocomotion._myPlayerHeadManager.update(dt);
         } else {
-            CollisionCheckGlobal._myTotalRaycasts = 0; // #TODO debug stuff, remove later
+            PP.myCollisionCheck._myTotalRaycasts = 0; // #TODO debug stuff, remove later
 
             this._myPlayerLocomotion.update(dt);
         }
 
-        //CollisionCheckGlobal._myTotalRaycastsMax = Math.max(CollisionCheckGlobal._myTotalRaycasts, CollisionCheckGlobal._myTotalRaycastsMax);
-        //console.error(CollisionCheckGlobal._myTotalRaycastsMax);
-        //console.error(CollisionCheckGlobal._myTotalRaycasts);
+        //PP.myCollisionCheck._myTotalRaycastsMax = Math.max(PP.myCollisionCheck._myTotalRaycasts, PP.myCollisionCheck._myTotalRaycastsMax);
+        //console.error(PP.myCollisionCheck._myTotalRaycastsMax);
+        //console.error(PP.myCollisionCheck._myTotalRaycasts);
     },
     onActivate() {
         if (this._myStartCounter == 0) {
@@ -97,4 +97,4 @@ WL.registerComponent('player-locomotion', {
     }
 });
 
-CollisionCheckGlobal = null;
+PP.myCollisionCheck = null;

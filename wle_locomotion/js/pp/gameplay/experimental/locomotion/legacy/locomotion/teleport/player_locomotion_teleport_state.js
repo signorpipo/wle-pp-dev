@@ -1,4 +1,4 @@
-PlayerLocomotionTeleportState = class PlayerLocomotionTeleportState extends PP.State {
+PP.PlayerLocomotionTeleportState = class PlayerLocomotionTeleportState extends PP.State {
     constructor(teleportParams, teleportRuntimeParams, locomotionRuntimeParams) {
         super();
 
@@ -11,16 +11,16 @@ PlayerLocomotionTeleportState = class PlayerLocomotionTeleportState extends PP.S
     }
 };
 
-PlayerLocomotionTeleportState.prototype._checkTeleport = function () {
+PP.PlayerLocomotionTeleportState.prototype._checkTeleport = function () {
     return function _checkTeleport(teleportPosition, feetTransformQuat, collisionRuntimeParams, checkTeleportCollisionRuntimeParams = null) {
-        CollisionCheckGlobal.teleport(teleportPosition, feetTransformQuat, this._myTeleportParams.myCollisionCheckParams, collisionRuntimeParams);
+        PP.myCollisionCheck.teleport(teleportPosition, feetTransformQuat, this._myTeleportParams.myCollisionCheckParams, collisionRuntimeParams);
         if (checkTeleportCollisionRuntimeParams != null) {
             checkTeleportCollisionRuntimeParams.copy(collisionRuntimeParams);
         }
     };
 }();
 
-PlayerLocomotionTeleportState.prototype._checkTeleportAsMovement = function () {
+PP.PlayerLocomotionTeleportState.prototype._checkTeleportAsMovement = function () {
     let checkTeleportMovementCollisionRuntimeParams = new PP.CollisionRuntimeParams();
     let feetRotationQuat = PP.quat_create();
     let feetPosition = PP.vec3_create();
@@ -75,7 +75,7 @@ PlayerLocomotionTeleportState.prototype._checkTeleportAsMovement = function () {
                 }
 
                 movementFeetTransformQuat.quat2_setPositionRotationQuat(currentFeetPosition, feetRotationQuat);
-                CollisionCheckGlobal.move(teleportMovement, movementFeetTransformQuat, this._myTeleportParams.myCollisionCheckParams, checkTeleportMovementCollisionRuntimeParams);
+                PP.myCollisionCheck.move(teleportMovement, movementFeetTransformQuat, this._myTeleportParams.myCollisionCheckParams, checkTeleportMovementCollisionRuntimeParams);
 
                 if (!checkTeleportMovementCollisionRuntimeParams.myHorizontalMovementCanceled && !checkTeleportMovementCollisionRuntimeParams.myVerticalMovementCanceled) {
                     movementToTeleportPosition = fixedTeleportPosition.vec3_sub(checkTeleportMovementCollisionRuntimeParams.myNewPosition, movementToTeleportPosition);
@@ -101,7 +101,7 @@ PlayerLocomotionTeleportState.prototype._checkTeleportAsMovement = function () {
     };
 }();
 
-PlayerLocomotionTeleportState.prototype._teleportToPosition = function () {
+PP.PlayerLocomotionTeleportState.prototype._teleportToPosition = function () {
     let playerUp = PP.vec3_create();
     let feetTransformQuat = PP.quat2_create();
     let newFeetTransformQuat = PP.quat2_create();
@@ -121,7 +121,7 @@ PlayerLocomotionTeleportState.prototype._teleportToPosition = function () {
         newFeetTransformQuat.quat2_setPositionRotationQuat(teleportPosition, newFeetRotationQuat);
 
         if (PP.myGamepads[PP.InputUtils.getOppositeHandedness(this._myTeleportParams.myHandedness)].getButtonInfo(PP.GamepadButtonID.BOTTOM_BUTTON).isPressed()) {
-            CollisionCheckGlobal.positionCheck(true, newFeetTransformQuat, this._myTeleportParams.myCollisionCheckParams, collisionRuntimeParams);
+            PP.myCollisionCheck.positionCheck(true, newFeetTransformQuat, this._myTeleportParams.myCollisionCheckParams, collisionRuntimeParams);
 
             this._myTeleportParams.myPlayerHeadManager.teleportPositionFeet(teleportPosition);
             if (rotationOnUp != 0) {

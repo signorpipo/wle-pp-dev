@@ -1,12 +1,12 @@
-PlayerLocomotionTeleportTeleportType = {
+PP.PlayerLocomotionTeleportTeleportType = {
     INSTANT: 0,
     BLINK: 1,
     SHIFT: 2,
 };
 
-PlayerLocomotionTeleportTeleportParams = class PlayerLocomotionTeleportTeleportParams {
+PP.PlayerLocomotionTeleportTeleportParams = class PlayerLocomotionTeleportTeleportParams {
     constructor() {
-        this.myTeleportType = PlayerLocomotionTeleportTeleportType.SHIFT;
+        this.myTeleportType = PP.PlayerLocomotionTeleportTeleportType.SHIFT;
 
         this.myBlinkFadeOutSeconds = 0.1;
         this.myBlinkFadeInSeconds = 0.1;
@@ -29,7 +29,7 @@ PlayerLocomotionTeleportTeleportParams = class PlayerLocomotionTeleportTeleportP
     }
 };
 
-PlayerLocomotionTeleportTeleportState = class PlayerLocomotionTeleportTeleportState extends PlayerLocomotionTeleportState {
+PP.PlayerLocomotionTeleportTeleportState = class PlayerLocomotionTeleportTeleportState extends PP.PlayerLocomotionTeleportState {
     constructor(teleportParams, teleportRuntimeParams, locomotionRuntimeParams) {
         super(teleportParams, teleportRuntimeParams, locomotionRuntimeParams);
 
@@ -39,8 +39,8 @@ PlayerLocomotionTeleportTeleportState = class PlayerLocomotionTeleportTeleportSt
         this._myFSM.addState("init");
         this._myFSM.addState("idle");
 
-        this._myBlinkState = new PlayerLocomotionTeleportTeleportBlinkState(teleportParams, teleportRuntimeParams, locomotionRuntimeParams);
-        this._myShiftState = new PlayerLocomotionTeleportTeleportShiftState(teleportParams, teleportRuntimeParams, locomotionRuntimeParams);
+        this._myBlinkState = new PP.PlayerLocomotionTeleportTeleportBlinkState(teleportParams, teleportRuntimeParams, locomotionRuntimeParams);
+        this._myShiftState = new PP.PlayerLocomotionTeleportTeleportShiftState(teleportParams, teleportRuntimeParams, locomotionRuntimeParams);
 
         this._myFSM.addState("instant_teleport", this._instantUpdate.bind(this));
         this._myFSM.addState("blink_teleport", this._myBlinkState);

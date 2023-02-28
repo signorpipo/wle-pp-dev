@@ -8,7 +8,7 @@ PP.CleanedPlayerLocomotion = class CleanedPlayerLocomotion {
         this._setupCollisionCheckParamsTeleport();
 
         this._myCollisionRuntimeParams = new PP.CollisionRuntimeParams();
-        this._myMovementRuntimeParams = new PlayerLocomotionMovementRuntimeParams();
+        this._myMovementRuntimeParams = new PP.PlayerLocomotionMovementRuntimeParams();
         this._myMovementRuntimeParams.myCollisionRuntimeParams = this._myCollisionRuntimeParams;
 
         {
@@ -107,8 +107,6 @@ PP.CleanedPlayerLocomotion = class CleanedPlayerLocomotion {
             params.myDebugActive = false;
 
             this._myPlayerTransformManager = new PP.CleanedPlayerTransformManager(params);
-
-            transformManager = this._myPlayerTransformManager;
         }
 
         {
@@ -140,7 +138,7 @@ PP.CleanedPlayerLocomotion = class CleanedPlayerLocomotion {
         }
 
         {
-            let params = new PlayerLocomotionRotateParams();
+            let params = new PP.PlayerLocomotionRotateParams();
 
             params.myPlayerHeadManager = this._myPlayerHeadManager;
             params.myPlayerTransformManager = this._myPlayerTransformManager;
@@ -150,7 +148,7 @@ PP.CleanedPlayerLocomotion = class CleanedPlayerLocomotion {
             params.mySnapTurnOnlyVR = this._myParams.mySnapTurnOnlyVR;
             params.mySnapTurnAngle = this._myParams.mySnapTurnAngle;
 
-            if (this._myParams.mySnapTurnSpeedDegrees > LocomotionUtils.EPSILON_NUMBER) {
+            if (this._myParams.mySnapTurnSpeedDegrees > PP.LocomotionUtils.EPSILON_NUMBER) {
                 params.mySmoothSnapActive = true;
                 params.mySmoothSnapSpeedDegrees = this._myParams.mySnapTurnSpeedDegrees;
             } else {
@@ -164,14 +162,14 @@ PP.CleanedPlayerLocomotion = class CleanedPlayerLocomotion {
             params.myClampVerticalAngle = true;
             params.myMaxVerticalAngle = 90;
 
-            this._myPlayerLocomotionRotate = new PlayerLocomotionRotate(params);
+            this._myPlayerLocomotionRotate = new PP.PlayerLocomotionRotate(params);
 
             params.myHandedness = PP.InputUtils.getOppositeHandedness(this._myParams.myMainHand);
         }
 
         {
             {
-                let params = new PlayerLocomotionSmoothParams();
+                let params = new PP.PlayerLocomotionSmoothParams();
 
                 params.myPlayerHeadManager = this._myPlayerHeadManager;
                 params.myPlayerTransformManager = this._myPlayerTransformManager;
@@ -200,7 +198,7 @@ PP.CleanedPlayerLocomotion = class CleanedPlayerLocomotion {
             }
 
             {
-                let params = new PlayerLocomotionTeleportParams();
+                let params = new PP.PlayerLocomotionTeleportParams();
 
                 params.myPlayerHeadManager = this._myPlayerHeadManager;
                 params.myPlayerTransformManager = this._myPlayerTransformManager;
@@ -238,7 +236,7 @@ PP.CleanedPlayerLocomotion = class CleanedPlayerLocomotion {
                 params.myDebugShowActive = true;
                 params.myDebugVisibilityActive = false;
 
-                this._myPlayerLocomotionTeleport = new PlayerLocomotionTeleport(params, this._myMovementRuntimeParams);
+                this._myPlayerLocomotionTeleport = new PP.PlayerLocomotionTeleport(params, this._myMovementRuntimeParams);
             }
         }
 

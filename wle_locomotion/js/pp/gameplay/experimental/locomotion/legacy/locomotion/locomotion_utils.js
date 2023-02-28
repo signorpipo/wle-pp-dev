@@ -1,4 +1,4 @@
-LocomotionUtils = {
+PP.LocomotionUtils = {
     EPSILON_NUMBER: Math.PP_EPSILON_NUMBER,
     EPSILON_DEGREES: Math.PP_EPSILON_DEGREES,
 

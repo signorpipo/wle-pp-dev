@@ -1,4 +1,4 @@
-PlayerLocomotionTeleportTeleportShiftState = class PlayerLocomotionTeleportTeleportShiftState extends PlayerLocomotionTeleportState {
+PP.PlayerLocomotionTeleportTeleportShiftState = class PlayerLocomotionTeleportTeleportShiftState extends PP.PlayerLocomotionTeleportState {
     constructor(teleportParams, teleportRuntimeParams, locomotionRuntimeParams) {
         super(teleportParams, teleportRuntimeParams, locomotionRuntimeParams);
 
@@ -93,7 +93,7 @@ PlayerLocomotionTeleportTeleportShiftState = class PlayerLocomotionTeleportTelep
     }
 };
 
-PlayerLocomotionTeleportTeleportShiftState.prototype._shiftingUpdate = function () {
+PP.PlayerLocomotionTeleportTeleportShiftState.prototype._shiftingUpdate = function () {
     let movementToTeleportFeet = PP.vec3_create();
     let newFeetPosition = PP.vec3_create();
     return function _shiftingUpdate(dt, fsm) {
@@ -137,4 +137,4 @@ PlayerLocomotionTeleportTeleportShiftState.prototype._shiftingUpdate = function 
 
 
 
-Object.defineProperty(PlayerLocomotionTeleportTeleportShiftState.prototype, "_shiftingUpdate", { enumerable: false });
+Object.defineProperty(PP.PlayerLocomotionTeleportTeleportShiftState.prototype, "_shiftingUpdate", { enumerable: false });

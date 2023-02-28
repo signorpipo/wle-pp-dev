@@ -1,12 +1,12 @@
-PlayerLocomotionTeleportParams = class PlayerLocomotionTeleportParams {
+PP.PlayerLocomotionTeleportParams = class PlayerLocomotionTeleportParams {
     constructor() {
         this.myPlayerHeadManager = null;
 
         this.myCollisionCheckParams = null;
 
-        this.myDetectionParams = new PlayerLocomotionTeleportDetectionParams();
-        this.myVisualizerParams = new PlayerLocomotionTeleportDetectionVisualizerParams();
-        this.myTeleportParams = new PlayerLocomotionTeleportTeleportParams();
+        this.myDetectionParams = new PP.PlayerLocomotionTeleportDetectionParams();
+        this.myVisualizerParams = new PP.PlayerLocomotionTeleportDetectionVisualizerParams();
+        this.myTeleportParams = new PP.PlayerLocomotionTeleportTeleportParams();
 
         this.myHandedness = PP.Handedness.LEFT;
 
@@ -33,25 +33,25 @@ PlayerLocomotionTeleportParams = class PlayerLocomotionTeleportParams {
     }
 };
 
-PlayerLocomotionTeleportRuntimeParams = class PlayerLocomotionTeleportRuntimeParams {
+PP.PlayerLocomotionTeleportRuntimeParams = class PlayerLocomotionTeleportRuntimeParams {
     constructor() {
         this.myTeleportPosition = PP.vec3_create();
         this.myTeleportRotationOnUp = 0;
     }
 };
 
-PlayerLocomotionTeleport = class PlayerLocomotionTeleport extends PlayerLocomotionMovement {
+PP.PlayerLocomotionTeleport = class PlayerLocomotionTeleport extends PP.PlayerLocomotionMovement {
     constructor(teleportParams, locomotionRuntimeParams) {
         super(locomotionRuntimeParams);
 
         this._myTeleportParams = teleportParams;
-        this._myTeleportRuntimeParams = new PlayerLocomotionTeleportRuntimeParams();
+        this._myTeleportRuntimeParams = new PP.PlayerLocomotionTeleportRuntimeParams();
 
         this._myStickIdleCharge = true;
         this._myGravitySpeed = 0;
 
-        this._myDetectionState = new PlayerLocomotionTeleportDetectionState(this._myTeleportParams, this._myTeleportRuntimeParams, this._myLocomotionRuntimeParams);
-        this._myTeleportState = new PlayerLocomotionTeleportTeleportState(this._myTeleportParams, this._myTeleportRuntimeParams, this._myLocomotionRuntimeParams);
+        this._myDetectionState = new PP.PlayerLocomotionTeleportDetectionState(this._myTeleportParams, this._myTeleportRuntimeParams, this._myLocomotionRuntimeParams);
+        this._myTeleportState = new PP.PlayerLocomotionTeleportTeleportState(this._myTeleportParams, this._myTeleportRuntimeParams, this._myLocomotionRuntimeParams);
 
         this._myFSM = new PP.FSM();
         //this._myFSM.setDebugLogActive(true, "Locomotion Teleport");
@@ -135,7 +135,7 @@ PlayerLocomotionTeleport = class PlayerLocomotionTeleport extends PlayerLocomoti
     }
 };
 
-PlayerLocomotionTeleport.prototype._applyGravity = function () {
+PP.PlayerLocomotionTeleport.prototype._applyGravity = function () {
     let playerUp = PP.vec3_create();
     let gravityMovement = PP.vec3_create();
     let feetTransformQuat = PP.quat2_create();
@@ -152,7 +152,7 @@ PlayerLocomotionTeleport.prototype._applyGravity = function () {
         }
 
         feetTransformQuat = this._myTeleportParams.myPlayerHeadManager.getTransformFeetQuat(feetTransformQuat);
-        CollisionCheckGlobal.move(gravityMovement, feetTransformQuat, this._myTeleportParams.myCollisionCheckParams, this._myLocomotionRuntimeParams.myCollisionRuntimeParams);
+        PP.myCollisionCheck.move(gravityMovement, feetTransformQuat, this._myTeleportParams.myCollisionCheckParams, this._myLocomotionRuntimeParams.myCollisionRuntimeParams);
         if (!this._myLocomotionRuntimeParams.myCollisionRuntimeParams.myVerticalMovementCanceled) {
             this._myTeleportParams.myPlayerHeadManager.teleportPositionFeet(this._myLocomotionRuntimeParams.myCollisionRuntimeParams.myNewPosition);
         }

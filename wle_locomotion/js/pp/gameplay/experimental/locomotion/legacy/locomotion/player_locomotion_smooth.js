@@ -1,4 +1,4 @@
-PlayerLocomotionSmoothParams = class PlayerLocomotionSmoothParams {
+PP.PlayerLocomotionSmoothParams = class PlayerLocomotionSmoothParams {
     constructor() {
         this.myPlayerHeadManager = null;
         this.myPlayerTransformManager = null;
@@ -18,14 +18,14 @@ PlayerLocomotionSmoothParams = class PlayerLocomotionSmoothParams {
 
         this.myGravityAcceleration = 0;
 
-        this.myVRDirectionReferenceType = PlayerLocomotionDirectionReferenceType.HEAD;
+        this.myVRDirectionReferenceType = PP.PlayerLocomotionDirectionReferenceType.HEAD;
         this.myVRDirectionReferenceObject = null;
 
         this.myHandedness = PP.Handedness.LEFT;
     }
 };
 
-PlayerLocomotionSmooth = class PlayerLocomotionSmooth extends PlayerLocomotionMovement {
+PP.PlayerLocomotionSmooth = class PlayerLocomotionSmooth extends PP.PlayerLocomotionMovement {
     constructor(params, locomotionRuntimeParams) {
         super(locomotionRuntimeParams);
 
@@ -69,7 +69,7 @@ PlayerLocomotionSmooth = class PlayerLocomotionSmooth extends PlayerLocomotionMo
     }
 };
 
-PlayerLocomotionSmooth.prototype.update = function () {
+PP.PlayerLocomotionSmooth.prototype.update = function () {
     let playerUp = PP.vec3_create();
     let headMovement = PP.vec3_create();
     let direction = PP.vec3_create();
@@ -152,8 +152,7 @@ PlayerLocomotionSmooth.prototype.update = function () {
 
                 feetTransformQuat = this._myParams.myPlayerHeadManager.getTransformFeetQuat(feetTransformQuat);
 
-                globalDT = dt;
-                CollisionCheckGlobal.move(headMovement, feetTransformQuat, this._myParams.myCollisionCheckParams, this._myLocomotionRuntimeParams.myCollisionRuntimeParams);
+                PP.myCollisionCheck.move(headMovement, feetTransformQuat, this._myParams.myCollisionCheckParams, this._myLocomotionRuntimeParams.myCollisionRuntimeParams);
                 headMovement.vec3_copy(this._myLocomotionRuntimeParams.myCollisionRuntimeParams.myFixedMovement);
             }
 
@@ -174,7 +173,6 @@ PlayerLocomotionSmooth.prototype.update = function () {
 
                 feetTransformQuat = this._myParams.myPlayerTransformManager.getTransformQuat(feetTransformQuat);
 
-                globalDT = dt;
                 this._myParams.myPlayerTransformManager.move(headMovement, this._myLocomotionRuntimeParams.myCollisionRuntimeParams);
             } else {
                 this._myParams.myPlayerTransformManager.move(headMovement, this._myLocomotionRuntimeParams.myCollisionRuntimeParams, true);
@@ -188,9 +186,7 @@ PlayerLocomotionSmooth.prototype.update = function () {
     };
 }();
 
-globalDT = 0;
-
-PlayerLocomotionSmooth.prototype._onXRSessionStart = function () {
+PP.PlayerLocomotionSmooth.prototype._onXRSessionStart = function () {
     return function _onXRSessionStart(session) {
         switch (this._myParams.myVRDirectionReferenceType) {
             case 0:
@@ -209,7 +205,7 @@ PlayerLocomotionSmooth.prototype._onXRSessionStart = function () {
     };
 }();
 
-PlayerLocomotionSmooth.prototype._onXRSessionEnd = function () {
+PP.PlayerLocomotionSmooth.prototype._onXRSessionEnd = function () {
     let playerUp = PP.vec3_create();
     return function _onXRSessionEnd(session) {
         this._myDirectionReference = PP.myPlayerObjects.myHead;
@@ -221,6 +217,6 @@ PlayerLocomotionSmooth.prototype._onXRSessionEnd = function () {
 
 
 
-Object.defineProperty(PlayerLocomotionSmooth.prototype, "update", { enumerable: false });
-Object.defineProperty(PlayerLocomotionSmooth.prototype, "_onXRSessionStart", { enumerable: false });
-Object.defineProperty(PlayerLocomotionSmooth.prototype, "_onXRSessionEnd", { enumerable: false });
+Object.defineProperty(PP.PlayerLocomotionSmooth.prototype, "update", { enumerable: false });
+Object.defineProperty(PP.PlayerLocomotionSmooth.prototype, "_onXRSessionStart", { enumerable: false });
+Object.defineProperty(PP.PlayerLocomotionSmooth.prototype, "_onXRSessionEnd", { enumerable: false });

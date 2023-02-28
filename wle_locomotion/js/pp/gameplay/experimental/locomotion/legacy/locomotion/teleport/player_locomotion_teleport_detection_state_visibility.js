@@ -1,4 +1,4 @@
-PlayerLocomotionTeleportDetectionState.prototype._isTeleportPositionVisible = function () {
+PP.PlayerLocomotionTeleportDetectionState.prototype._isTeleportPositionVisible = function () {
     let playerUp = PP.vec3_create();
 
     let offsetFeetTeleportPosition = PP.vec3_create();
@@ -42,7 +42,7 @@ PlayerLocomotionTeleportDetectionState.prototype._isTeleportPositionVisible = fu
     };
 }();
 
-PlayerLocomotionTeleportDetectionState.prototype._isPositionVisible = function () {
+PP.PlayerLocomotionTeleportDetectionState.prototype._isPositionVisible = function () {
     let playerUp = PP.vec3_create();
     let standardUp = PP.vec3_create(0, 1, 0);
     let standardForward = PP.vec3_create(0, 0, 1);
@@ -118,7 +118,7 @@ PlayerLocomotionTeleportDetectionState.prototype._isPositionVisible = function (
     };
 }();
 
-PlayerLocomotionTeleportDetectionState.prototype._getVisibilityCheckPositions = function () {
+PP.PlayerLocomotionTeleportDetectionState.prototype._getVisibilityCheckPositions = function () {
     let checkPositions = [];
     let cachedCheckPositions = [];
     let currentCachedCheckPositionIndex = 0;

@@ -1,4 +1,4 @@
-PlayerLocomotionRotateParams = class PlayerLocomotionRotateParams {
+PP.PlayerLocomotionRotateParams = class PlayerLocomotionRotateParams {
     constructor() {
         this.myPlayerHeadManager = null;
 
@@ -20,7 +20,7 @@ PlayerLocomotionRotateParams = class PlayerLocomotionRotateParams {
     }
 };
 
-PlayerLocomotionRotate = class PlayerLocomotionRotate {
+PP.PlayerLocomotionRotate = class PlayerLocomotionRotate {
     constructor(params) {
         this._myParams = params;
 
@@ -57,7 +57,7 @@ PlayerLocomotionRotate = class PlayerLocomotionRotate {
     }
 };
 
-PlayerLocomotionRotate.prototype._rotateHeadHorizontally = function () {
+PP.PlayerLocomotionRotate.prototype._rotateHeadHorizontally = function () {
     let playerUp = PP.vec3_create();
     let headRotation = PP.quat_create();
     return function _rotateHeadHorizontally(dt) {
@@ -97,20 +97,20 @@ PlayerLocomotionRotate.prototype._rotateHeadHorizontally = function () {
 
         if (this._mySmoothSnapHorizontalRunning) {
             let angleToRotate = Math.pp_sign(this._mySmoothSnapHorizontalAngleToPerform) * (this._myParams.mySmoothSnapSpeedDegrees * dt);
-            if (Math.abs(angleToRotate) > Math.abs(this._mySmoothSnapHorizontalAngleToPerform) - LocomotionUtils.EPSILON_NUMBER) {
+            if (Math.abs(angleToRotate) > Math.abs(this._mySmoothSnapHorizontalAngleToPerform) - PP.LocomotionUtils.EPSILON_NUMBER) {
                 angleToRotate = this._mySmoothSnapHorizontalAngleToPerform;
             }
 
             headRotation.quat_fromAxis(angleToRotate, playerUp);
             this._mySmoothSnapHorizontalAngleToPerform -= angleToRotate;
 
-            if (Math.abs(this._mySmoothSnapHorizontalAngleToPerform) < LocomotionUtils.EPSILON_NUMBER) {
+            if (Math.abs(this._mySmoothSnapHorizontalAngleToPerform) < PP.LocomotionUtils.EPSILON_NUMBER) {
                 this._mySmoothSnapHorizontalRunning = false;
                 this._mySmoothSnapHorizontalAngleToPerform = 0;
             }
         }
 
-        if (headRotation.quat_getAngle() > LocomotionUtils.EPSILON_DEGREES) {
+        if (headRotation.quat_getAngle() > PP.LocomotionUtils.EPSILON_DEGREES) {
             if (PP.myGamepads[PP.InputUtils.getOppositeHandedness(this._myParams.myHandedness)].getButtonInfo(PP.GamepadButtonID.BOTTOM_BUTTON).isPressed()) {
                 this._myParams.myPlayerHeadManager.rotateFeetQuat(headRotation);
             } else {
@@ -120,7 +120,7 @@ PlayerLocomotionRotate.prototype._rotateHeadHorizontally = function () {
     };
 }();
 
-PlayerLocomotionRotate.prototype._rotateHeadVertically = function () {
+PP.PlayerLocomotionRotate.prototype._rotateHeadVertically = function () {
     let headForward = PP.vec3_create();
     let headUp = PP.vec3_create();
     let referenceUp = PP.vec3_create();
@@ -180,7 +180,7 @@ PlayerLocomotionRotate.prototype._rotateHeadVertically = function () {
                         } else {
                             angleToRotate = (-Math.pp_sign(angleToAlign) * this._myParams.mySnapTurnAngle) + angleToAlign;
                         }
-                    } else if (Math.abs(angleToAlign) > LocomotionUtils.EPSILON_DEGREES) {
+                    } else if (Math.abs(angleToAlign) > PP.LocomotionUtils.EPSILON_DEGREES) {
                         angleToRotate += angleToAlign;
                     }
 
@@ -196,13 +196,13 @@ PlayerLocomotionRotate.prototype._rotateHeadVertically = function () {
 
         if (this._mySmoothSnapVerticalRunning) {
             angleToRotate = Math.pp_sign(this._mySmoothSnapVerticalAngleToPerform) * (this._myParams.mySmoothSnapSpeedDegrees * dt);
-            if (Math.abs(angleToRotate) > Math.abs(this._mySmoothSnapVerticalAngleToPerform) - LocomotionUtils.EPSILON_NUMBER) {
+            if (Math.abs(angleToRotate) > Math.abs(this._mySmoothSnapVerticalAngleToPerform) - PP.LocomotionUtils.EPSILON_NUMBER) {
                 angleToRotate = this._mySmoothSnapVerticalAngleToPerform;
             }
 
             this._mySmoothSnapVerticalAngleToPerform -= angleToRotate;
 
-            if (Math.abs(this._mySmoothSnapVerticalAngleToPerform) < LocomotionUtils.EPSILON_NUMBER) {
+            if (Math.abs(this._mySmoothSnapVerticalAngleToPerform) < PP.LocomotionUtils.EPSILON_NUMBER) {
                 this._mySmoothSnapVerticalRunning = false;
                 this._mySmoothSnapVerticalAngleToPerform = 0;
             }
@@ -228,5 +228,5 @@ PlayerLocomotionRotate.prototype._rotateHeadVertically = function () {
 
 
 
-Object.defineProperty(PlayerLocomotionRotate.prototype, "_rotateHeadHorizontally", { enumerable: false });
-Object.defineProperty(PlayerLocomotionRotate.prototype, "_rotateHeadVertically", { enumerable: false });
+Object.defineProperty(PP.PlayerLocomotionRotate.prototype, "_rotateHeadHorizontally", { enumerable: false });
+Object.defineProperty(PP.PlayerLocomotionRotate.prototype, "_rotateHeadVertically", { enumerable: false });

@@ -1,4 +1,4 @@
-PP.CleanedPlayerLocomotionSmooth = class CleanedPlayerLocomotionSmooth extends PlayerLocomotionMovement {
+PP.CleanedPlayerLocomotionSmooth = class CleanedPlayerLocomotionSmooth extends PP.PlayerLocomotionMovement {
 
     constructor(params, locomotionRuntimeParams) {
         super(locomotionRuntimeParams);
@@ -120,7 +120,6 @@ PP.CleanedPlayerLocomotionSmooth.prototype.update = function () {
 
             feetTransformQuat = this._myParams.myPlayerTransformManager.getTransformQuat(feetTransformQuat);
 
-            globalDT = dt;
             this._myParams.myPlayerTransformManager.move(headMovement, this._myLocomotionRuntimeParams.myCollisionRuntimeParams);
             if (horizontalMovement) {
                 this._myParams.myPlayerTransformManager.resetReal(true, false, false);
@@ -145,8 +144,6 @@ PP.CleanedPlayerLocomotionSmooth.prototype.update = function () {
         }
     };
 }();
-
-globalDT = 0;
 
 PP.CleanedPlayerLocomotionSmooth.prototype._onXRSessionStart = function () {
     return function _onXRSessionStart(session) {

@@ -1,4 +1,4 @@
-PlayerLocomotionTeleportDetectionParams = class PlayerLocomotionTeleportDetectionParams {
+PP.PlayerLocomotionTeleportDetectionParams = class PlayerLocomotionTeleportDetectionParams {
     constructor() {
         this.myMaxDistance = 0;
         this.myMaxHeightDifference = 0;
@@ -41,23 +41,23 @@ PlayerLocomotionTeleportDetectionParams = class PlayerLocomotionTeleportDetectio
     }
 };
 
-PlayerLocomotionTeleportDetectionRuntimeParams = class PlayerLocomotionTeleportDetectionRuntimeParams {
+PP.PlayerLocomotionTeleportDetectionRuntimeParams = class PlayerLocomotionTeleportDetectionRuntimeParams {
     constructor() {
         this.myTeleportDetectionValid = false;
         this.myTeleportPositionValid = false;
         this.myTeleportSurfaceNormal = PP.vec3_create();
 
-        this.myParable = new PlayerLocomotionTeleportParable();
+        this.myParable = new PP.PlayerLocomotionTeleportParable();
     }
 };
 
-PlayerLocomotionTeleportDetectionState = class PlayerLocomotionTeleportDetectionState extends PlayerLocomotionTeleportState {
+PP.PlayerLocomotionTeleportDetectionState = class PlayerLocomotionTeleportDetectionState extends PP.PlayerLocomotionTeleportState {
     constructor(teleportParams, teleportRuntimeParams, locomotionRuntimeParams) {
         super(teleportParams, teleportRuntimeParams, locomotionRuntimeParams);
 
-        this._myDetectionRuntimeParams = new PlayerLocomotionTeleportDetectionRuntimeParams();
+        this._myDetectionRuntimeParams = new PP.PlayerLocomotionTeleportDetectionRuntimeParams();
 
-        this._myVisualizer = new PlayerLocomotionTeleportDetectionVisualizer(this._myTeleportParams, this._myTeleportRuntimeParams, this._myDetectionRuntimeParams);
+        this._myVisualizer = new PP.PlayerLocomotionTeleportDetectionVisualizer(this._myTeleportParams, this._myTeleportRuntimeParams, this._myDetectionRuntimeParams);
 
         this._myTeleportRotationOnUpNext = 0;
 
@@ -149,7 +149,7 @@ PlayerLocomotionTeleportDetectionState = class PlayerLocomotionTeleportDetection
     }
 };
 
-PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionNonVR = function () {
+PP.PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionNonVR = function () {
     let mousePosition = PP.vec3_create();
     let mouseDirection = PP.vec3_create();
 
@@ -167,7 +167,7 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionNonVR = 
     };
 }();
 
-PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionVR = function () {
+PP.PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionVR = function () {
     let teleportStartTransformLocal = PP.quat2_create();
     let teleportStartTransformWorld = PP.quat2_create();
 
@@ -209,7 +209,7 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionVR = fun
     };
 }();
 
-PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable = function () {
+PP.PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable = function () {
     let parablePosition = PP.vec3_create();
     let prevParablePosition = PP.vec3_create();
     let parableFinalPosition = PP.vec3_create();
@@ -527,7 +527,7 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable 
     };
 }();
 
-PlayerLocomotionTeleportDetectionState.prototype._detectTeleportRotationVR = function () {
+PP.PlayerLocomotionTeleportDetectionState.prototype._detectTeleportRotationVR = function () {
     let axesVec3 = PP.vec3_create();
     let axesForward = PP.vec3_create(0, 0, 1);
     let axesUp = PP.vec3_create(0, 1, 0);
@@ -548,7 +548,7 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportRotationVR = fun
     };
 }();
 
-PlayerLocomotionTeleportDetectionState.prototype._isTeleportHitValid = function () {
+PP.PlayerLocomotionTeleportDetectionState.prototype._isTeleportHitValid = function () {
     let raycastSetup = new PP.RaycastSetup();
     let raycastResult = new PP.RaycastResults();
 
@@ -594,7 +594,7 @@ PlayerLocomotionTeleportDetectionState.prototype._isTeleportHitValid = function 
     };
 }();
 
-PlayerLocomotionTeleportDetectionState.prototype._isTeleportPositionValid = function () {
+PP.PlayerLocomotionTeleportDetectionState.prototype._isTeleportPositionValid = function () {
     let playerUp = PP.vec3_create();
     let feetTransformQuat = PP.quat2_create();
     let feetRotationQuat = PP.quat_create();

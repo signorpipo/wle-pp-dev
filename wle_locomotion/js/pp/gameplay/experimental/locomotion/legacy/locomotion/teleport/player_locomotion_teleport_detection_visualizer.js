@@ -1,4 +1,4 @@
-PlayerLocomotionTeleportDetectionVisualizerParams = class PlayerLocomotionTeleportDetectionVisualizerParams {
+PP.PlayerLocomotionTeleportDetectionVisualizerParams = class PlayerLocomotionTeleportDetectionVisualizerParams {
     constructor() {
         this.myTeleportParableValidMaterial = null;
         this.myTeleportParableInvalidMaterial = null;
@@ -27,7 +27,7 @@ PlayerLocomotionTeleportDetectionVisualizerParams = class PlayerLocomotionTelepo
     }
 };
 
-PlayerLocomotionTeleportDetectionVisualizer = class PlayerLocomotionTeleportDetectionVisualizer {
+PP.PlayerLocomotionTeleportDetectionVisualizer = class PlayerLocomotionTeleportDetectionVisualizer {
     constructor(teleportParams, teleportRuntimeParams, detectionRuntimeParams) {
         this._myDetectionRuntimeParams = detectionRuntimeParams;
 
@@ -132,7 +132,7 @@ PlayerLocomotionTeleportDetectionVisualizer = class PlayerLocomotionTeleportDete
     }
 };
 
-PlayerLocomotionTeleportDetectionVisualizer.prototype._setupVisuals = function () {
+PP.PlayerLocomotionTeleportDetectionVisualizer.prototype._setupVisuals = function () {
     let innerTorusPosition = PP.vec3_create();
     return function _setupVisuals() {
         this._myTeleportParableValidMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
@@ -249,7 +249,7 @@ PlayerLocomotionTeleportDetectionVisualizer.prototype._setupVisuals = function (
     };
 }();
 
-PlayerLocomotionTeleportDetectionVisualizer.prototype._showTeleportParable = function () {
+PP.PlayerLocomotionTeleportDetectionVisualizer.prototype._showTeleportParable = function () {
     let currentPosition = PP.vec3_create();
     let nextPosition = PP.vec3_create();
 
@@ -325,7 +325,7 @@ PlayerLocomotionTeleportDetectionVisualizer.prototype._showTeleportParable = fun
     };
 }();
 
-PlayerLocomotionTeleportDetectionVisualizer.prototype._showTeleportParablePosition = function () {
+PP.PlayerLocomotionTeleportDetectionVisualizer.prototype._showTeleportParablePosition = function () {
     let playerUp = PP.vec3_create();
     let feetTransformQuat = PP.quat2_create();
     let feetRotationQuat = PP.quat_create();
