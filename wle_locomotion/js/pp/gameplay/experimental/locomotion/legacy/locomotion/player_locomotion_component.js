@@ -17,7 +17,7 @@ WL.registerComponent('pp-player-locomotion', {
     _myVRDirectionReferenceObject: { type: WL.Type.Object },
     _myTeleportParableStartReferenceObject: { type: WL.Type.Object },
     _myTeleportPositionObject: { type: WL.Type.Object },
-    _myUseCleanedVersion: { type: WL.Type.Bool, default: false }
+    _myUseCleanedVersion: { type: WL.Type.Bool, default: true }
 }, {
     init() {
     },

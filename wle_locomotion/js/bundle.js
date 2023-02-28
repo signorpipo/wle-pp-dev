@@ -124,14 +124,13 @@ require('./pp/gameplay/grab_throw/grabber_hand');
 require('./pp/gameplay/integrations/construct_arcade/ca_utils');
 require('./pp/gameplay/integrations/construct_arcade/ca_display_leaderboard');
 
-
 //    EXPERIMENTAL
 
 //          CAULDRON
 require('./pp/gameplay/experimental/cauldron/player/player_head_controller');
 require('./pp/gameplay/experimental/cauldron/player/player_occlusion');
-require('./pp/gameplay/experimental/cauldron/player/components/player_head_controller_component');
-require('./pp/gameplay/experimental/cauldron/player/components/player_occlusion_component');
+//require('./pp/gameplay/experimental/cauldron/player/components/player_head_controller_component');
+//require('./pp/gameplay/experimental/cauldron/player/components/player_occlusion_component');
 
 //          CHARACTER CONTROLLER
 require('./pp/gameplay/experimental/character_controller/collision/legacy/collision_check/collision_params');
@@ -151,21 +150,21 @@ require('./pp/gameplay/experimental/character_controller/collision/character_col
 require('./pp/gameplay/experimental/character_controller/collision/character_collider_utils');
 require('./pp/gameplay/experimental/character_controller/collision/character_collision_results');
 require('./pp/gameplay/experimental/character_controller/collision/character_collision_system');
-require('./pp/gameplay/experimental/character_controller/collision/components/character_collision_system_component');
+//require('./pp/gameplay/experimental/character_controller/collision/components/character_collision_system_component');
 
 require('./pp/gameplay/experimental/character_controller/character_controller');
 require('./pp/gameplay/experimental/character_controller/synced_character_controller');
 require('./pp/gameplay/experimental/character_controller/character_controller_utils');
 
-require('./pp/gameplay/experimental/character_controller/components/character_controller_component');
+//require('./pp/gameplay/experimental/character_controller/components/character_controller_component');
 
 require('./pp/gameplay/experimental/character_controller/player/player_character_controller');
 require('./pp/gameplay/experimental/character_controller/player/player_head_character_controller');
 require('./pp/gameplay/experimental/character_controller/player/player_hand_character_controller');
 
-require('./pp/gameplay/experimental/character_controller/player/components/player_character_controller_component');
-require('./pp/gameplay/experimental/character_controller/player/components/player_head_character_controller_component');
-require('./pp/gameplay/experimental/character_controller/player/components/player_hand_character_controller_component');
+//require('./pp/gameplay/experimental/character_controller/player/components/player_character_controller_component');
+//require('./pp/gameplay/experimental/character_controller/player/components/player_head_character_controller_component');
+//require('./pp/gameplay/experimental/character_controller/player/components/player_hand_character_controller_component');
 
 //          LOCOMOTION
 require('./pp/gameplay/experimental/locomotion/components/global_gravity');
@@ -176,10 +175,10 @@ require('./pp/gameplay/experimental/locomotion/player/player_locomotion_gravity'
 
 require('./pp/gameplay/experimental/locomotion/player/teleport/player_locomotion_teleport');
 
-require('./pp/gameplay/experimental/locomotion/player/components/player_locomotion_teleport_component');
-require('./pp/gameplay/experimental/locomotion/player/components/player_locomotion_smooth_component');
-require('./pp/gameplay/experimental/locomotion/player/components/player_locomotion_rotate_component');
-require('./pp/gameplay/experimental/locomotion/player/components/player_locomotion_gravity_component');
+//require('./pp/gameplay/experimental/locomotion/player/components/player_locomotion_teleport_component');
+//require('./pp/gameplay/experimental/locomotion/player/components/player_locomotion_smooth_component');
+//require('./pp/gameplay/experimental/locomotion/player/components/player_locomotion_rotate_component');
+//require('./pp/gameplay/experimental/locomotion/player/components/player_locomotion_gravity_component');
 
 require('./pp/gameplay/experimental/locomotion/legacy/locomotion/locomotion_utils');
 require('./pp/gameplay/experimental/locomotion/legacy/locomotion/player_head_manager');
