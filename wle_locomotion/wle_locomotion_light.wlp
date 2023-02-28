@@ -68,7 +68,7 @@
                     "type": "player-locomotion",
                     "player-locomotion": {
                         "_myIsSnapTurn": true,
-                        "_myFlyEnabled": false,
+                        "_myFlyEnabled": true,
                         "_myMainHand": "left",
                         "_myTeleportPositionObject": null,
                         "_myTeleportParableStartReferenceObject": "895",
