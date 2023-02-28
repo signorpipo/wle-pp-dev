@@ -1,4 +1,4 @@
-CollisionCheck.prototype._horizontalPositionCheck = function () {
+PP.CollisionCheck.prototype._horizontalPositionCheck = function () {
     let checkPositions = [];
     let cachedCheckPositions = [];
     let currentCachedCheckPositionIndex = 0;
@@ -210,7 +210,7 @@ CollisionCheck.prototype._horizontalPositionCheck = function () {
     };
 }();
 
-CollisionCheck.prototype._horizontalPositionHorizontalCheck = function () {
+PP.CollisionCheck.prototype._horizontalPositionHorizontalCheck = function () {
     let basePosition = PP.vec3_create();
     let forwardNegate = PP.vec3_create();
     let currentRadialPosition = PP.vec3_create();
@@ -290,7 +290,7 @@ CollisionCheck.prototype._horizontalPositionHorizontalCheck = function () {
     };
 }();
 
-CollisionCheck.prototype._horizontalPositionVerticalCheck = function () {
+PP.CollisionCheck.prototype._horizontalPositionVerticalCheck = function () {
     let basePosition = PP.vec3_create();
     let previousBasePosition = PP.vec3_create();
     let currentRadialPosition = PP.vec3_create();
@@ -439,6 +439,6 @@ CollisionCheck.prototype._horizontalPositionVerticalCheck = function () {
 
 
 
-Object.defineProperty(CollisionCheck.prototype, "_horizontalPositionCheck", { enumerable: false });
-Object.defineProperty(CollisionCheck.prototype, "_horizontalPositionHorizontalCheck", { enumerable: false });
-Object.defineProperty(CollisionCheck.prototype, "_horizontalPositionVerticalCheck", { enumerable: false });
+Object.defineProperty(PP.CollisionCheck.prototype, "_horizontalPositionCheck", { enumerable: false });
+Object.defineProperty(PP.CollisionCheck.prototype, "_horizontalPositionHorizontalCheck", { enumerable: false });
+Object.defineProperty(PP.CollisionCheck.prototype, "_horizontalPositionVerticalCheck", { enumerable: false });

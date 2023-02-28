@@ -1,4 +1,4 @@
-CollisionCheck.prototype._verticalCheck = function () {
+PP.CollisionCheck.prototype._verticalCheck = function () {
     let newFeetPosition = PP.vec3_create();
     let additionalFixedMovement = PP.vec3_create();
     let zero = PP.vec3_create();
@@ -44,7 +44,7 @@ CollisionCheck.prototype._verticalCheck = function () {
     };
 }();
 
-CollisionCheck.prototype._verticalMovementAdjustment = function () {
+PP.CollisionCheck.prototype._verticalMovementAdjustment = function () {
     let startOffset = PP.vec3_create();
     let endOffset = PP.vec3_create();
     let tempVector = PP.vec3_create();
@@ -180,7 +180,7 @@ CollisionCheck.prototype._verticalMovementAdjustment = function () {
     };
 }();
 
-CollisionCheck.prototype._verticalPositionCheck = function () {
+PP.CollisionCheck.prototype._verticalPositionCheck = function () {
     let smallHeightFixOffset = PP.vec3_create();
     let heightOffset = PP.vec3_create();
     let startPosition = PP.vec3_create();
@@ -249,7 +249,7 @@ CollisionCheck.prototype._verticalPositionCheck = function () {
     };
 }();
 
-CollisionCheck.prototype._getVerticalCheckPositions = function () {
+PP.CollisionCheck.prototype._getVerticalCheckPositions = function () {
     let checkPositions = [];
     let cachedCheckPositions = [];
     let currentCachedCheckPositionIndex = 0;
@@ -297,7 +297,7 @@ CollisionCheck.prototype._getVerticalCheckPositions = function () {
 
 
 
-Object.defineProperty(CollisionCheck.prototype, "_verticalCheck", { enumerable: false });
-Object.defineProperty(CollisionCheck.prototype, "_verticalMovementAdjustment", { enumerable: false });
-Object.defineProperty(CollisionCheck.prototype, "_verticalPositionCheck", { enumerable: false });
-Object.defineProperty(CollisionCheck.prototype, "_getVerticalCheckPositions", { enumerable: false });
+Object.defineProperty(PP.CollisionCheck.prototype, "_verticalCheck", { enumerable: false });
+Object.defineProperty(PP.CollisionCheck.prototype, "_verticalMovementAdjustment", { enumerable: false });
+Object.defineProperty(PP.CollisionCheck.prototype, "_verticalPositionCheck", { enumerable: false });
+Object.defineProperty(PP.CollisionCheck.prototype, "_getVerticalCheckPositions", { enumerable: false });

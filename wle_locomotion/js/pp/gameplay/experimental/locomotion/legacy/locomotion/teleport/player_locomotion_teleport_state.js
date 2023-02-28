@@ -21,7 +21,7 @@ PlayerLocomotionTeleportState.prototype._checkTeleport = function () {
 }();
 
 PlayerLocomotionTeleportState.prototype._checkTeleportAsMovement = function () {
-    let checkTeleportMovementCollisionRuntimeParams = new CollisionRuntimeParams();
+    let checkTeleportMovementCollisionRuntimeParams = new PP.CollisionRuntimeParams();
     let feetRotationQuat = PP.quat_create();
     let feetPosition = PP.vec3_create();
     let feetUp = PP.vec3_create();

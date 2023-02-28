@@ -1,4 +1,4 @@
-CollisionCheck.prototype._horizontalSlide = function () {
+PP.CollisionCheck.prototype._horizontalSlide = function () {
     let previousHorizontalMovement = PP.vec3_create();
     let horizontalDirection = PP.vec3_create();
     return function _horizontalSlide(movement, feetPosition, height, up, forward, allowSurfaceSteepFix, collisionCheckParams, collisionRuntimeParams, previousCollisionRuntimeParams, outSlideMovement) {
@@ -38,7 +38,7 @@ CollisionCheck.prototype._horizontalSlide = function () {
     };
 }();
 
-CollisionCheck.prototype._horizontalSlideCheckOpposite = function () {
+PP.CollisionCheck.prototype._horizontalSlideCheckOpposite = function () {
     let horizontalCollisionNormal = PP.vec3_create();
     let oppositeSlideMovement = PP.vec3_create();
     let hitNormal = PP.vec3_create();
@@ -140,7 +140,7 @@ CollisionCheck.prototype._horizontalSlideCheckOpposite = function () {
     };
 }();
 
-CollisionCheck.prototype._horizontalSlideFlickerCheck = function () {
+PP.CollisionCheck.prototype._horizontalSlideFlickerCheck = function () {
     let previousHorizontalMovement = PP.vec3_create();
     let newFeetPosition = PP.vec3_create();
     let fixedMovement = PP.vec3_create();
@@ -275,7 +275,7 @@ CollisionCheck.prototype._horizontalSlideFlickerCheck = function () {
     };
 }();
 
-CollisionCheck.prototype._internalHorizontalSlide = function () {
+PP.CollisionCheck.prototype._internalHorizontalSlide = function () {
     let invertedNormal = PP.vec3_create();
     let slidingMovement = PP.vec3_create();
     let movement90 = PP.vec3_create();
@@ -429,7 +429,7 @@ CollisionCheck.prototype._internalHorizontalSlide = function () {
     };
 }();
 
-CollisionCheck.prototype._horizontalCheckBetterSlideNormal = function () {
+PP.CollisionCheck.prototype._horizontalCheckBetterSlideNormal = function () {
     let movementDirection = PP.vec3_create();
     let hitDirection = PP.vec3_create();
     let projectAlongAxis = PP.vec3_create();
@@ -490,7 +490,7 @@ CollisionCheck.prototype._horizontalCheckBetterSlideNormal = function () {
     };
 }();
 
-CollisionCheck.prototype._isSlidingNormalValid = function () {
+PP.CollisionCheck.prototype._isSlidingNormalValid = function () {
     let flatNormal = PP.vec3_create();
     return function _isSlidingNormalValid(movement, up, collisionRuntimeParams) {
         let isValid = false;
@@ -512,9 +512,9 @@ CollisionCheck.prototype._isSlidingNormalValid = function () {
 
 
 
-Object.defineProperty(CollisionCheck.prototype, "_horizontalSlide", { enumerable: false });
-Object.defineProperty(CollisionCheck.prototype, "_horizontalSlideCheckOpposite", { enumerable: false });
-Object.defineProperty(CollisionCheck.prototype, "_horizontalSlideFlickerCheck", { enumerable: false });
-Object.defineProperty(CollisionCheck.prototype, "_internalHorizontalSlide", { enumerable: false });
-Object.defineProperty(CollisionCheck.prototype, "_horizontalCheckBetterSlideNormal", { enumerable: false });
-Object.defineProperty(CollisionCheck.prototype, "_isSlidingNormalValid", { enumerable: false });
+Object.defineProperty(PP.CollisionCheck.prototype, "_horizontalSlide", { enumerable: false });
+Object.defineProperty(PP.CollisionCheck.prototype, "_horizontalSlideCheckOpposite", { enumerable: false });
+Object.defineProperty(PP.CollisionCheck.prototype, "_horizontalSlideFlickerCheck", { enumerable: false });
+Object.defineProperty(PP.CollisionCheck.prototype, "_internalHorizontalSlide", { enumerable: false });
+Object.defineProperty(PP.CollisionCheck.prototype, "_horizontalCheckBetterSlideNormal", { enumerable: false });
+Object.defineProperty(PP.CollisionCheck.prototype, "_isSlidingNormalValid", { enumerable: false });

@@ -1,9 +1,9 @@
 PP.CollisionCheckBridge = {
-    _myCollisionCheck: new CollisionCheck(),
+    _myCollisionCheck: new PP.CollisionCheck(),
 
     checkMovement: function () {
-        let collisionCheckParams = new CollisionCheckParams();
-        let collisionRuntimeParams = new CollisionRuntimeParams();
+        let collisionCheckParams = new PP.CollisionCheckParams();
+        let collisionRuntimeParams = new PP.CollisionRuntimeParams();
         return function checkMovement(movement, currentTransformQuat, characterColliderSetup, prevCharacterCollisionResults, outCharacterCollisionResults = new PP.CharacterCollisionResults()) {
             this.convertCharacterColliderSetupToCollisionCheckParams(characterColliderSetup, collisionCheckParams);
             this.convertCharacterCollisionResultsToCollisionRuntimeParams(prevCharacterCollisionResults, collisionRuntimeParams);
@@ -13,8 +13,8 @@ PP.CollisionCheckBridge = {
     }(),
     checkTeleportToTransform: function () {
         let teleportPosition = PP.vec3_create();
-        let collisionCheckParams = new CollisionCheckParams();
-        let collisionRuntimeParams = new CollisionRuntimeParams();
+        let collisionCheckParams = new PP.CollisionCheckParams();
+        let collisionRuntimeParams = new PP.CollisionRuntimeParams();
         return function checkTeleportToTransform(teleportTransformQuat, currentTransformQuat, characterColliderSetup, prevCharacterCollisionResults, outCharacterCollisionResults = new PP.CharacterCollisionResults()) {
             this.convertCharacterColliderSetupToCollisionCheckParams(characterColliderSetup, collisionCheckParams);
             this.convertCharacterCollisionResultsToCollisionRuntimeParams(prevCharacterCollisionResults, collisionRuntimeParams);
@@ -24,18 +24,18 @@ PP.CollisionCheckBridge = {
         }
     }(),
     checkTransform: function () {
-        let collisionCheckParams = new CollisionCheckParams();
-        let collisionRuntimeParams = new CollisionRuntimeParams();
+        let collisionCheckParams = new PP.CollisionCheckParams();
+        let collisionRuntimeParams = new PP.CollisionRuntimeParams();
         return function checkTransform(checkTransformQuat, characterColliderSetup, prevCharacterCollisionResults, outCharacterCollisionResults = new PP.CharacterCollisionResults()) {
             this.convertCharacterColliderSetupToCollisionCheckParams(characterColliderSetup, collisionCheckParams);
             this.convertCharacterCollisionResultsToCollisionRuntimeParams(prevCharacterCollisionResults, collisionRuntimeParams);
             this._myCollisionCheck.positionCheck(true, checkTransformQuat, collisionCheckParams, collisionRuntimeParams);
-            this.convertCollisionRuntimeParamsToCharacterCollisionResults(collisionRuntimeParams, currentTransformQuat, outCharacterCollisionResults);
+            this.convertCollisionRuntimeParamsToCharacterCollisionResults(collisionRuntimeParams, checkTransformQuat, outCharacterCollisionResults);
         }
     }(),
     updateGroundInfo: function () {
-        let collisionCheckParams = new CollisionCheckParams();
-        let collisionRuntimeParams = new CollisionRuntimeParams();
+        let collisionCheckParams = new PP.CollisionCheckParams();
+        let collisionRuntimeParams = new PP.CollisionRuntimeParams();
         return function updateGroundInfo(currentTransformQuat, characterColliderSetup, prevCharacterCollisionResults, outCharacterCollisionResults = new PP.CharacterCollisionResults()) {
             this.convertCharacterColliderSetupToCollisionCheckParams(characterColliderSetup, collisionCheckParams);
             this.convertCharacterCollisionResultsToCollisionRuntimeParams(prevCharacterCollisionResults, collisionRuntimeParams);
@@ -45,8 +45,8 @@ PP.CollisionCheckBridge = {
         }
     }(),
     updateCeilingInfo: function () {
-        let collisionCheckParams = new CollisionCheckParams();
-        let collisionRuntimeParams = new CollisionRuntimeParams();
+        let collisionCheckParams = new PP.CollisionCheckParams();
+        let collisionRuntimeParams = new PP.CollisionRuntimeParams();
         return function updateCeilingInfo(currentTransformQuat, characterColliderSetup, prevCharacterCollisionResults, outCharacterCollisionResults = new PP.CharacterCollisionResults()) {
             this.convertCharacterColliderSetupToCollisionCheckParams(characterColliderSetup, collisionCheckParams);
             this.convertCharacterCollisionResultsToCollisionRuntimeParams(prevCharacterCollisionResults, collisionRuntimeParams);

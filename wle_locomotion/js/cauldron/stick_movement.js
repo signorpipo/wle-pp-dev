@@ -30,9 +30,8 @@ WL.registerComponent('stick-movement', {
         this._myDirectionConverterHead = new PP.Direction2DTo3DConverter(directionConverterHeadParams);
         this._myDirectionConverterHand = new PP.Direction2DTo3DConverter(directionConverterHandParams);
 
-        this._myCollisionCheck = new CollisionCheck();
         this._myCollisionCheckParams = null;
-        this._myCollisionRuntimeParams = new CollisionRuntimeParams();
+        this._myCollisionRuntimeParams = new PP.CollisionRuntimeParams();
 
         this._myDirectionReferenceObject = PP.myPlayerObjects.myHead;
         this._mySessionActive = false;
@@ -146,7 +145,7 @@ WL.registerComponent('stick-movement', {
             movement.vec3_add(up.vec3_scale(-3 * this._myScale * dt), movement);
         }
 
-        this._myCollisionCheck.move(movement, this.object.pp_getTransformQuat(), this._myCollisionCheckParams, this._myCollisionRuntimeParams);
+        CollisionCheckGlobal.move(movement, this.object.pp_getTransformQuat(), this._myCollisionCheckParams, this._myCollisionRuntimeParams);
 
         this.object.pp_translate(this._myCollisionRuntimeParams.myFixedMovement);
 
@@ -157,7 +156,7 @@ WL.registerComponent('stick-movement', {
         }
     },
     _setupCollisionCheckParams() {
-        this._myCollisionCheckParams = new CollisionCheckParams();
+        this._myCollisionCheckParams = new PP.CollisionCheckParams();
 
         this._myCollisionCheckParams.mySplitMovementEnabled = false;
         this._myCollisionCheckParams.mySplitMovementMaxLength = 0;

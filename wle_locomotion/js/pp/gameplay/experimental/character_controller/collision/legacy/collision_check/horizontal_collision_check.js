@@ -1,4 +1,4 @@
-CollisionCheck.prototype._horizontalCheck = function () {
+PP.CollisionCheck.prototype._horizontalCheck = function () {
     let fixedFeetPosition = PP.vec3_create();
     let newFixedFeetPosition = PP.vec3_create();
     let newFeetPosition = PP.vec3_create();
@@ -45,7 +45,7 @@ CollisionCheck.prototype._horizontalCheck = function () {
     };
 }();
 
-CollisionCheck.prototype._horizontalCheckRaycast = function () {
+PP.CollisionCheck.prototype._horizontalCheckRaycast = function () {
     let direction = PP.vec3_create();
     let fixedFeetPosition = PP.vec3_create();
     let fixedHitPosition = PP.vec3_create();
@@ -133,7 +133,7 @@ CollisionCheck.prototype._horizontalCheckRaycast = function () {
     };
 }();
 
-CollisionCheck.prototype._ignoreSurfaceAngle = function () {
+PP.CollisionCheck.prototype._ignoreSurfaceAngle = function () {
     let objectsEqualCallback = (first, second) => first.pp_equals(second);
 
     let movementDirection = PP.vec3_create();
@@ -261,7 +261,7 @@ CollisionCheck.prototype._ignoreSurfaceAngle = function () {
 
 
 
-Object.defineProperty(CollisionCheck.prototype, "_horizontalCheck", { enumerable: false });
-Object.defineProperty(CollisionCheck.prototype, "_horizontalCheckRaycast", { enumerable: false });
-Object.defineProperty(CollisionCheck.prototype, "_ignoreSurfaceAngle", { enumerable: false });
+Object.defineProperty(PP.CollisionCheck.prototype, "_horizontalCheck", { enumerable: false });
+Object.defineProperty(PP.CollisionCheck.prototype, "_horizontalCheckRaycast", { enumerable: false });
+Object.defineProperty(PP.CollisionCheck.prototype, "_ignoreSurfaceAngle", { enumerable: false });
 

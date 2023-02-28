@@ -17,9 +17,8 @@ WL.registerComponent('ai-movement', {
 
         this._mySpeed = Math.pp_random(this._myMinSpeed, this._myMaxSpeed);
 
-        this._myCollisionCheck = new CollisionCheck();
         this._myCollisionCheckParams = null;
-        this._myCollisionRuntimeParams = new CollisionRuntimeParams();
+        this._myCollisionRuntimeParams = new PP.CollisionRuntimeParams();
 
         this._myFirstTime = true;
 
@@ -53,7 +52,7 @@ WL.registerComponent('ai-movement', {
             let movement = this._myCurrentDirection.vec3_scale(this._mySpeed * this._myScale * dt, tempMovement);
             movement.vec3_add(up.vec3_scale(-3 * this._myScale * dt, tempGravity), movement);
 
-            this._myCollisionCheck.move(movement, this.object.pp_getTransformQuat(tempTransformQuat), this._myCollisionCheckParams, this._myCollisionRuntimeParams);
+            CollisionCheckGlobal.move(movement, this.object.pp_getTransformQuat(tempTransformQuat), this._myCollisionCheckParams, this._myCollisionRuntimeParams);
 
             if (this._myCollisionRuntimeParams.myHorizontalMovementCanceled) {
                 if (this._myCollisionTimer.isDone()) {
@@ -82,7 +81,7 @@ WL.registerComponent('ai-movement', {
         };
     }(),
     _setupCollisionCheckParams() {
-        this._myCollisionCheckParams = new CollisionCheckParams();
+        this._myCollisionCheckParams = new PP.CollisionCheckParams();
 
         this._myCollisionCheckParams.mySplitMovementEnabled = false;
         this._myCollisionCheckParams.mySplitMovementMaxLength = 0;

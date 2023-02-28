@@ -227,7 +227,7 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable 
     let flatParableHitNormal = PP.vec3_create();
     let flatParableDirectionNegate = PP.vec3_create();
 
-    let teleportCollisionRuntimeParams = new CollisionRuntimeParams();
+    let teleportCollisionRuntimeParams = new PP.CollisionRuntimeParams();
 
     let objectsEqualCallback = (first, second) => first.pp_equals(second);
     return function _detectTeleportPositionParable(startPosition, direction, up) {
@@ -600,7 +600,7 @@ PlayerLocomotionTeleportDetectionState.prototype._isTeleportPositionValid = func
     let feetRotationQuat = PP.quat_create();
     let feetPosition = PP.vec3_create();
     let differenceOnUpVector = PP.vec3_create();
-    let teleportCheckCollisionRuntimeParams = new CollisionRuntimeParams();
+    let teleportCheckCollisionRuntimeParams = new PP.CollisionRuntimeParams();
     return function _isTeleportPositionValid(teleportPosition, rotationOnUp, checkTeleportCollisionRuntimeParams) {
         let isValid = false;
 

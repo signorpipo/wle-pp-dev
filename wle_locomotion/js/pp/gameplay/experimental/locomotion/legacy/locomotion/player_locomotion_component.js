@@ -22,7 +22,7 @@ WL.registerComponent('player-locomotion', {
     init() {
     },
     start() {
-        CollisionCheckGlobal = new CollisionCheck();
+        CollisionCheckGlobal = new PP.CollisionCheck();
         let params = new PlayerLocomotionParams();
         params.myMaxSpeed = this._myMaxSpeed;
         params.myMaxRotationSpeed = this._myMaxRotationSpeed;
@@ -72,14 +72,14 @@ WL.registerComponent('player-locomotion', {
 
             this._myPlayerLocomotion._myPlayerHeadManager.update(dt);
         } else {
-            _myTotalRaycasts = 0; // #TODO debug stuff, remove later
+            CollisionCheckGlobal._myTotalRaycasts = 0; // #TODO debug stuff, remove later
 
             this._myPlayerLocomotion.update(dt);
         }
 
-        //_myTotalRaycastsMax = Math.max(_myTotalRaycasts, _myTotalRaycastsMax);
-        //console.error(_myTotalRaycastsMax);
-        //console.error(_myTotalRaycasts);
+        //CollisionCheckGlobal._myTotalRaycastsMax = Math.max(CollisionCheckGlobal._myTotalRaycasts, CollisionCheckGlobal._myTotalRaycastsMax);
+        //console.error(CollisionCheckGlobal._myTotalRaycastsMax);
+        //console.error(CollisionCheckGlobal._myTotalRaycasts);
     },
     onActivate() {
         if (this._myStartCounter == 0) {

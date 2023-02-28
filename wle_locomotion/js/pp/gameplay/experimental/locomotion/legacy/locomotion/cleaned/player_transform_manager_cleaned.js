@@ -5,8 +5,8 @@ CleanedPlayerTransformManager = class CleanedPlayerTransformManager {
         this._myRealMovementCollisionCheckParams = null;
         this._generateRealMovementParamsFromMovementParams();
 
-        this._myCollisionRuntimeParams = new CollisionRuntimeParams();
-        this._myRealCollisionRuntimeParams = new CollisionRuntimeParams();
+        this._myCollisionRuntimeParams = new PP.CollisionRuntimeParams();
+        this._myRealCollisionRuntimeParams = new PP.CollisionRuntimeParams();
 
         if (this._myParams.myTeleportCollisionCheckParamsCopyFromMovement) {
             this._generateTeleportParamsFromMovementParams();
@@ -272,7 +272,7 @@ CleanedPlayerTransformManager = class CleanedPlayerTransformManager {
     }
 
     _setupHeadCollisionCheckParams() {
-        this._myHeadCollisionCheckParams = new CollisionCheckParams();
+        this._myHeadCollisionCheckParams = new PP.CollisionCheckParams();
         let params = this._myHeadCollisionCheckParams;
 
         params.myRadius = this._myParams.myHeadRadius;
@@ -348,11 +348,11 @@ CleanedPlayerTransformManager = class CleanedPlayerTransformManager {
 
     _generateTeleportParamsFromMovementParams() {
         if (this._myParams.myTeleportCollisionCheckParams == null) {
-            this._myParams.myTeleportCollisionCheckParams = new CollisionCheckParams();
+            this._myParams.myTeleportCollisionCheckParams = new PP.CollisionCheckParams();
         }
 
         if (this._myParams.myTeleportCollisionCheckParamsCheck360) {
-            this._myParams.myTeleportCollisionCheckParams = CollisionCheckUtils.generate360TeleportParamsFromMovementParams(this._myParams.myMovementCollisionCheckParams, this._myParams.myTeleportCollisionCheckParams);
+            this._myParams.myTeleportCollisionCheckParams = PP.CollisionCheckUtils.generate360TeleportParamsFromMovementParams(this._myParams.myMovementCollisionCheckParams, this._myParams.myTeleportCollisionCheckParams);
         } else {
             this._myParams.myTeleportCollisionCheckParams.copy(this._myParams.myMovementCollisionCheckParams);
         }
@@ -360,7 +360,7 @@ CleanedPlayerTransformManager = class CleanedPlayerTransformManager {
 
     _generateRealMovementParamsFromMovementParams() {
         if (this._myRealMovementCollisionCheckParams == null) {
-            this._myRealMovementCollisionCheckParams = new CollisionCheckParams();
+            this._myRealMovementCollisionCheckParams = new PP.CollisionCheckParams();
         }
 
         let params = this._myRealMovementCollisionCheckParams;
@@ -479,7 +479,7 @@ CleanedPlayerTransformManager.prototype.resetReal = function () {
 
 CleanedPlayerTransformManager.prototype.update = function () {
     let transformQuat = PP.quat2_create();
-    let collisionRuntimeParams = new CollisionRuntimeParams();
+    let collisionRuntimeParams = new PP.CollisionRuntimeParams();
     let transformUp = PP.vec3_create();
     let horizontalDirection = PP.vec3_create();
     let rotationQuat = PP.quat_create();
@@ -535,7 +535,7 @@ CleanedPlayerTransformManager.prototype._updateReal = function () {
     let position = PP.vec3_create();
     let positionReal = PP.vec3_create();
     let transformQuat = PP.quat2_create();
-    let collisionRuntimeParams = new CollisionRuntimeParams();
+    let collisionRuntimeParams = new PP.CollisionRuntimeParams();
 
     let newPosition = PP.vec3_create();
     let newPositionHead = PP.vec3_create();

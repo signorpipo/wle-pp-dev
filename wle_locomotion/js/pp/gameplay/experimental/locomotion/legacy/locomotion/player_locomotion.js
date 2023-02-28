@@ -45,13 +45,13 @@ PlayerLocomotion = class PlayerLocomotion {
     constructor(params) {
         this._myParams = params;
 
-        this._myCollisionCheckParamsMovement = new CollisionCheckParams();
+        this._myCollisionCheckParamsMovement = new PP.CollisionCheckParams();
         this._setupCollisionCheckParamsMovement();
         this._myCollisionCheckParamsTeleport = null;
         this._setupCollisionCheckParamsTeleport();
 
 
-        this._myCollisionRuntimeParams = new CollisionRuntimeParams();
+        this._myCollisionRuntimeParams = new PP.CollisionRuntimeParams();
         this._myMovementRuntimeParams = new PlayerLocomotionMovementRuntimeParams();
         this._myMovementRuntimeParams.myCollisionRuntimeParams = this._myCollisionRuntimeParams;
 
@@ -505,7 +505,7 @@ PlayerLocomotion = class PlayerLocomotion {
     }
 
     _setupCollisionCheckParamsTeleport() {
-        this._myCollisionCheckParamsTeleport = CollisionCheckUtils.generate360TeleportParamsFromMovementParams(this._myCollisionCheckParamsMovement);
+        this._myCollisionCheckParamsTeleport = PP.CollisionCheckUtils.generate360TeleportParamsFromMovementParams(this._myCollisionCheckParamsMovement);
 
         // increased so to let teleport on steep slopes from above (from below is fixed through detection myGroundAngleToIgnoreUpward)
         this._myCollisionCheckParamsTeleport.myGroundAngleToIgnore = 60;

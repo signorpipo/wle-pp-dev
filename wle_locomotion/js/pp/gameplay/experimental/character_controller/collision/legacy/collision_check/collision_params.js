@@ -1,5 +1,5 @@
 
-CollisionCheckParams = class CollisionCheckParams {
+PP.CollisionCheckParams = class CollisionCheckParams {
     constructor() {
         this.mySplitMovementEnabled = false;
         this.mySplitMovementMaxLength = 0;
@@ -464,7 +464,7 @@ CollisionCheckParams = class CollisionCheckParams {
     }
 };
 
-CollisionRuntimeParams = class CollisionRuntimeParams {
+PP.CollisionRuntimeParams = class CollisionRuntimeParams {
     constructor() {
         this.myOriginalPosition = PP.vec3_create();
         this.myNewPosition = PP.vec3_create();

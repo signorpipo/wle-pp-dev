@@ -1,4 +1,4 @@
-CollisionCheck.prototype._positionCheck = function () {
+PP.CollisionCheck.prototype._positionCheck = function () {
     let feetPosition = PP.vec3_create();
     return function _positionCheck(allowAdjustments, transformQuat, collisionCheckParams, collisionRuntimeParams) {
         feetPosition = transformQuat.quat2_getPosition(feetPosition);
@@ -25,4 +25,4 @@ CollisionCheck.prototype._positionCheck = function () {
 
 
 
-Object.defineProperty(CollisionCheck.prototype, "_positionCheck", { enumerable: false });
+Object.defineProperty(PP.CollisionCheck.prototype, "_positionCheck", { enumerable: false });

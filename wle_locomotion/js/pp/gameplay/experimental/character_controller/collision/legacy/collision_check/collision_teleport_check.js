@@ -1,4 +1,4 @@
-CollisionCheck.prototype._teleport = function () {
+PP.CollisionCheck.prototype._teleport = function () {
     let transformUp = PP.vec3_create();
     let transformForward = PP.vec3_create();
     let feetPosition = PP.vec3_create();
@@ -248,4 +248,4 @@ CollisionCheck.prototype._teleport = function () {
 
 
 
-Object.defineProperty(CollisionCheck.prototype, "_teleport", { enumerable: false });
+Object.defineProperty(PP.CollisionCheck.prototype, "_teleport", { enumerable: false });

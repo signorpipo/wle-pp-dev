@@ -1,8 +1,5 @@
-_myTotalRaycasts = 0; // #TODO debug stuff, remove later
-_myTotalRaycastsMax = 0; // #TODO debug stuff, remove later
-
-CollisionCheckUtils = {
-    generate360TeleportParamsFromMovementParams: function (movementParams, outTeleportParams = new CollisionCheckParams()) {
+PP.CollisionCheckUtils = {
+    generate360TeleportParamsFromMovementParams: function (movementParams, outTeleportParams = new PP.CollisionCheckParams()) {
         outTeleportParams.copy(movementParams);
 
         outTeleportParams.myHalfConeAngle = 180;
@@ -15,7 +12,7 @@ CollisionCheckUtils = {
     },
 };
 
-CollisionCheck = class CollisionCheck {
+PP.CollisionCheck = class CollisionCheck {
     constructor() {
         this._myRaycastSetup = new PP.RaycastSetup();
         this._myRaycastResult = new PP.RaycastResults();
@@ -23,20 +20,20 @@ CollisionCheck = class CollisionCheck {
 
         this._myBackupRaycastHit = new PP.RaycastHit();
 
-        this._myPrevCollisionRuntimeParams = new CollisionRuntimeParams();
+        this._myPrevCollisionRuntimeParams = new PP.CollisionRuntimeParams();
 
-        this._mySlidingCollisionRuntimeParams = new CollisionRuntimeParams();
-        this._myCheckBetterSlidingNormalCollisionRuntimeParams = new CollisionRuntimeParams();
-        this._myInternalSlidingCollisionRuntimeParams = new CollisionRuntimeParams();
-        this._mySlidingFlickeringFixCollisionRuntimeParams = new CollisionRuntimeParams();
-        this._mySlidingFlickeringFixSlidingCollisionRuntimeParams = new CollisionRuntimeParams();
-        this._mySlidingOppositeDirectionCollisionRuntimeParams = new CollisionRuntimeParams();
-        this._mySlidingOnVerticalCheckCollisionRuntimeParams = new CollisionRuntimeParams();
+        this._mySlidingCollisionRuntimeParams = new PP.CollisionRuntimeParams();
+        this._myCheckBetterSlidingNormalCollisionRuntimeParams = new PP.CollisionRuntimeParams();
+        this._myInternalSlidingCollisionRuntimeParams = new PP.CollisionRuntimeParams();
+        this._mySlidingFlickeringFixCollisionRuntimeParams = new PP.CollisionRuntimeParams();
+        this._mySlidingFlickeringFixSlidingCollisionRuntimeParams = new PP.CollisionRuntimeParams();
+        this._mySlidingOppositeDirectionCollisionRuntimeParams = new PP.CollisionRuntimeParams();
+        this._mySlidingOnVerticalCheckCollisionRuntimeParams = new PP.CollisionRuntimeParams();
 
         this._myDebugActive = false;
 
-        _myTotalRaycasts = 0;
-        _myTotalRaycastsMax = 0;
+        this._myTotalRaycasts = 0;
+        this._myTotalRaycastsMax = 0;
     }
 
     move(movement, transformQuat, collisionCheckParams, collisionRuntimeParams) {
@@ -105,7 +102,7 @@ CollisionCheck = class CollisionCheck {
     }
 };
 
-CollisionCheck.prototype._raycastAndDebug = function () {
+PP.CollisionCheck.prototype._raycastAndDebug = function () {
     let tempRaycastResult = new PP.RaycastResults();
     return function _raycastAndDebug(origin, direction, distance, ignoreHitsInsideCollision, isHorizontal, collisionCheckParams, collisionRuntimeParams) {
         this._myRaycastSetup.myOrigin.vec3_copy(origin);
@@ -141,7 +138,7 @@ CollisionCheck.prototype._raycastAndDebug = function () {
         }
 
 
-        _myTotalRaycasts++;
+        this._myTotalRaycasts++;
         //raycastResult.myHits = [];
 
         if (this._myDebugActive) {
@@ -154,5 +151,5 @@ CollisionCheck.prototype._raycastAndDebug = function () {
 
 
 
-Object.defineProperty(CollisionCheck.prototype, "_raycastAndDebug", { enumerable: false });
+Object.defineProperty(PP.CollisionCheck.prototype, "_raycastAndDebug", { enumerable: false });
 
