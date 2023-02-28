@@ -47,7 +47,7 @@ PlayerLocomotionRotate = class PlayerLocomotionRotate {
     }
 
     update(dt) {
-        this._myParams.mySmoothSnapSpeedDegrees = PP.myEasyTuneVariables.get("Teleport Smooth Speed");
+        //this._myParams.mySmoothSnapSpeedDegrees = PP.myEasyTuneVariables.get("Teleport Smooth Speed");
 
         this._rotateHeadHorizontally(dt);
 

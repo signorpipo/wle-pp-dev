@@ -133,10 +133,10 @@ PlayerLocomotionTeleportDetectionState = class PlayerLocomotionTeleportDetection
     }
 
     _detectTeleportPosition() {
-        this._myDetectionRuntimeParams.myParable.setSpeed(PP.myEasyTuneVariables.get("Parable Speed"));
-        this._myDetectionRuntimeParams.myParable.setGravity(PP.myEasyTuneVariables.get("Parable Gravity"));
-        this._myDetectionRuntimeParams.myParable.setStepLength(PP.myEasyTuneVariables.get("Parable Steps"));
-        this._myTeleportParams.myDetectionParams.myMaxDistance = PP.myEasyTuneVariables.get("Teleport Max Distance");
+        //this._myDetectionRuntimeParams.myParable.setSpeed(PP.myEasyTuneVariables.get("Parable Speed"));
+        //this._myDetectionRuntimeParams.myParable.setGravity(PP.myEasyTuneVariables.get("Parable Gravity"));
+        //this._myDetectionRuntimeParams.myParable.setStepLength(PP.myEasyTuneVariables.get("Parable Steps"));
+        //this._myTeleportParams.myDetectionParams.myMaxDistance = PP.myEasyTuneVariables.get("Teleport Max Distance");
 
         if (PP.XRUtils.isSessionActive()) {
             this._detectTeleportRotationVR();

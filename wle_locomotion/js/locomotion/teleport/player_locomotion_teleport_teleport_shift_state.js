@@ -45,9 +45,9 @@ PlayerLocomotionTeleportTeleportShiftState = class PlayerLocomotionTeleportTelep
     }
 
     update(dt, fsm) {
-        this._myTeleportParams.myTeleportParams.myShiftMovementSeconds = PP.myEasyTuneVariables.get("Shift Movement Seconds");
-        this._myTeleportParams.myTeleportParams.myShiftRotateSeconds = PP.myEasyTuneVariables.get("Shift Rotate Seconds");
-        this._myTeleportParams.myTeleportParams.myShiftRotateStartAfterMovementPercentage = PP.myEasyTuneVariables.get("Shift Rotate Start Percentage");
+        //this._myTeleportParams.myTeleportParams.myShiftMovementSeconds = PP.myEasyTuneVariables.get("Shift Movement Seconds");
+        //this._myTeleportParams.myTeleportParams.myShiftRotateSeconds = PP.myEasyTuneVariables.get("Shift Rotate Seconds");
+        //this._myTeleportParams.myTeleportParams.myShiftRotateStartAfterMovementPercentage = PP.myEasyTuneVariables.get("Shift Rotate Start Percentage");
 
         this._myFSM.update(dt);
     }
