@@ -1,4 +1,4 @@
-WL.registerComponent('player-locomotion', {
+WL.registerComponent('pp-player-locomotion', {
     _myMaxSpeed: { type: WL.Type.Float, default: 2 },
     _myMaxRotationSpeed: { type: WL.Type.Float, default: 100 },
     _myCharacterRadius: { type: WL.Type.Float, default: 0.3 },

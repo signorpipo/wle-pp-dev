@@ -54,7 +54,7 @@ PP.PlayerLocomotion = class PlayerLocomotion {
         this._myMovementRuntimeParams.myCollisionRuntimeParams = this._myCollisionRuntimeParams;
 
         {
-            let params = new PlayerHeadManagerParams();
+            let params = new PP.PlayerHeadManagerParams();
 
             params.mySessionChangeResyncEnabled = true;
 
@@ -79,11 +79,11 @@ PP.PlayerLocomotion = class PlayerLocomotion {
 
             params.myDebugActive = false;
 
-            this._myPlayerHeadManager = new PlayerHeadManager(params);
+            this._myPlayerHeadManager = new PP.PlayerHeadManager(params);
         }
 
         {
-            let params = new PlayerTransformManagerParams();
+            let params = new PP.PlayerTransformManagerParams();
 
             params.myPlayerHeadManager = this._myPlayerHeadManager;
 
@@ -148,11 +148,11 @@ PP.PlayerLocomotion = class PlayerLocomotion {
 
             params.myDebugActive = true;
 
-            this._myPlayerTransformManager = new PlayerTransformManager(params);
+            this._myPlayerTransformManager = new PP.PlayerTransformManager(params);
         }
 
         {
-            let params = new PlayerObscureManagerParams();
+            let params = new PP.PlayerObscureManagerParams();
 
             params.myPlayerTransformManager = this._myPlayerTransformManager;
 
@@ -176,7 +176,7 @@ PP.PlayerLocomotion = class PlayerLocomotion {
             params.myRelativeDistanceToMaxObscureWhenFloating = 5;
             params.myRelativeDistanceToMaxObscureWhenFar = 5;
 
-            this._myPlayerObscureManager = new PlayerObscureManager(params);
+            this._myPlayerObscureManager = new PP.PlayerObscureManager(params);
         }
 
         {

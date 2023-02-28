@@ -1,11 +1,11 @@
-PlayerTransformManagerSyncFlag = {
+PP.PlayerTransformManagerSyncFlag = {
     BODY_COLLIDING: 0,
     HEAD_COLLIDING: 1,
     FAR: 2,
     FLOATING: 3
 };
 
-PlayerTransformManagerParams = class PlayerTransformManagerParams {
+PP.PlayerTransformManagerParams = class PlayerTransformManagerParams {
     constructor() {
         this.myPlayerHeadManager = null;
 
@@ -16,34 +16,34 @@ PlayerTransformManagerParams = class PlayerTransformManagerParams {
 
         // sync for vr and non vr
         this.mySyncEnabledFlagMap = new Map();
-        this.mySyncEnabledFlagMap.set(PlayerTransformManagerSyncFlag.BODY_COLLIDING, true);
-        this.mySyncEnabledFlagMap.set(PlayerTransformManagerSyncFlag.HEAD_COLLIDING, true);
-        this.mySyncEnabledFlagMap.set(PlayerTransformManagerSyncFlag.FAR, true);
-        this.mySyncEnabledFlagMap.set(PlayerTransformManagerSyncFlag.FLOATING, true);
+        this.mySyncEnabledFlagMap.set(PP.PlayerTransformManagerSyncFlag.BODY_COLLIDING, true);
+        this.mySyncEnabledFlagMap.set(PP.PlayerTransformManagerSyncFlag.HEAD_COLLIDING, true);
+        this.mySyncEnabledFlagMap.set(PP.PlayerTransformManagerSyncFlag.FAR, true);
+        this.mySyncEnabledFlagMap.set(PP.PlayerTransformManagerSyncFlag.FLOATING, true);
 
         this.mySyncPositionFlagMap = new Map();
-        this.mySyncPositionFlagMap.set(PlayerTransformManagerSyncFlag.BODY_COLLIDING, true);
-        this.mySyncPositionFlagMap.set(PlayerTransformManagerSyncFlag.HEAD_COLLIDING, false);
-        this.mySyncPositionFlagMap.set(PlayerTransformManagerSyncFlag.FAR, true);
-        this.mySyncPositionFlagMap.set(PlayerTransformManagerSyncFlag.FLOATING, true);
+        this.mySyncPositionFlagMap.set(PP.PlayerTransformManagerSyncFlag.BODY_COLLIDING, true);
+        this.mySyncPositionFlagMap.set(PP.PlayerTransformManagerSyncFlag.HEAD_COLLIDING, false);
+        this.mySyncPositionFlagMap.set(PP.PlayerTransformManagerSyncFlag.FAR, true);
+        this.mySyncPositionFlagMap.set(PP.PlayerTransformManagerSyncFlag.FLOATING, true);
 
         this.mySyncPositionHeadFlagMap = new Map();
-        this.mySyncPositionHeadFlagMap.set(PlayerTransformManagerSyncFlag.BODY_COLLIDING, false);
-        this.mySyncPositionHeadFlagMap.set(PlayerTransformManagerSyncFlag.HEAD_COLLIDING, true);
-        this.mySyncPositionHeadFlagMap.set(PlayerTransformManagerSyncFlag.FAR, false);
-        this.mySyncPositionHeadFlagMap.set(PlayerTransformManagerSyncFlag.FLOATING, false);
+        this.mySyncPositionHeadFlagMap.set(PP.PlayerTransformManagerSyncFlag.BODY_COLLIDING, false);
+        this.mySyncPositionHeadFlagMap.set(PP.PlayerTransformManagerSyncFlag.HEAD_COLLIDING, true);
+        this.mySyncPositionHeadFlagMap.set(PP.PlayerTransformManagerSyncFlag.FAR, false);
+        this.mySyncPositionHeadFlagMap.set(PP.PlayerTransformManagerSyncFlag.FLOATING, false);
 
         this.mySyncRotationFlagMap = new Map();
-        this.mySyncRotationFlagMap.set(PlayerTransformManagerSyncFlag.BODY_COLLIDING, false);
-        this.mySyncRotationFlagMap.set(PlayerTransformManagerSyncFlag.HEAD_COLLIDING, false);
-        this.mySyncRotationFlagMap.set(PlayerTransformManagerSyncFlag.FAR, false);
-        this.mySyncRotationFlagMap.set(PlayerTransformManagerSyncFlag.FLOATING, false);
+        this.mySyncRotationFlagMap.set(PP.PlayerTransformManagerSyncFlag.BODY_COLLIDING, false);
+        this.mySyncRotationFlagMap.set(PP.PlayerTransformManagerSyncFlag.HEAD_COLLIDING, false);
+        this.mySyncRotationFlagMap.set(PP.PlayerTransformManagerSyncFlag.FAR, false);
+        this.mySyncRotationFlagMap.set(PP.PlayerTransformManagerSyncFlag.FLOATING, false);
 
         this.mySyncHeightFlagMap = new Map();
-        this.mySyncHeightFlagMap.set(PlayerTransformManagerSyncFlag.BODY_COLLIDING, false);
-        this.mySyncHeightFlagMap.set(PlayerTransformManagerSyncFlag.HEAD_COLLIDING, false);
-        this.mySyncHeightFlagMap.set(PlayerTransformManagerSyncFlag.FAR, false);
-        this.mySyncHeightFlagMap.set(PlayerTransformManagerSyncFlag.FLOATING, false);
+        this.mySyncHeightFlagMap.set(PP.PlayerTransformManagerSyncFlag.BODY_COLLIDING, false);
+        this.mySyncHeightFlagMap.set(PP.PlayerTransformManagerSyncFlag.HEAD_COLLIDING, false);
+        this.mySyncHeightFlagMap.set(PP.PlayerTransformManagerSyncFlag.FAR, false);
+        this.mySyncHeightFlagMap.set(PP.PlayerTransformManagerSyncFlag.FLOATING, false);
 
         this.myIsLeaningValidAboveDistance = false;
         this.myLeaningValidDistance = 0;
@@ -130,7 +130,7 @@ PlayerTransformManagerParams = class PlayerTransformManagerParams {
     }
 };
 
-PlayerTransformManager = class PlayerTransformManager {
+PP.PlayerTransformManager = class PlayerTransformManager {
     constructor(params) {
         this._myParams = params;
 
@@ -281,10 +281,10 @@ PlayerTransformManager = class PlayerTransformManager {
     }
 
     isSynced(syncFlagMap = null) {
-        let isBodyColliding = this.isBodyColliding() && (syncFlagMap == null || syncFlagMap.get(PlayerTransformManagerSyncFlag.BODY_COLLIDING));
-        let isHeadColliding = this.isHeadColliding() && (syncFlagMap == null || syncFlagMap.get(PlayerTransformManagerSyncFlag.HEAD_COLLIDING));
-        let isFar = this.isFar() && (syncFlagMap == null || syncFlagMap.get(PlayerTransformManagerSyncFlag.FAR));
-        let isFloating = this.isFloating() && (syncFlagMap == null || syncFlagMap.get(PlayerTransformManagerSyncFlag.FLOATING));
+        let isBodyColliding = this.isBodyColliding() && (syncFlagMap == null || syncFlagMap.get(PP.PlayerTransformManagerSyncFlag.BODY_COLLIDING));
+        let isHeadColliding = this.isHeadColliding() && (syncFlagMap == null || syncFlagMap.get(PP.PlayerTransformManagerSyncFlag.HEAD_COLLIDING));
+        let isFar = this.isFar() && (syncFlagMap == null || syncFlagMap.get(PP.PlayerTransformManagerSyncFlag.FAR));
+        let isFloating = this.isFloating() && (syncFlagMap == null || syncFlagMap.get(PP.PlayerTransformManagerSyncFlag.FLOATING));
         return !isBodyColliding && !isHeadColliding && !isFar && !isFloating;
     }
 
@@ -554,7 +554,7 @@ PlayerTransformManager = class PlayerTransformManager {
     }
 };
 
-PlayerTransformManager.prototype.getDistanceToReal = function () {
+PP.PlayerTransformManager.prototype.getDistanceToReal = function () {
     let realPosition = PP.vec3_create();
     return function getDistanceToReal() {
         realPosition = this.getPositionReal(realPosition);
@@ -562,7 +562,7 @@ PlayerTransformManager.prototype.getDistanceToReal = function () {
     };
 }();
 
-PlayerTransformManager.prototype.getDistanceToRealHead = function () {
+PP.PlayerTransformManager.prototype.getDistanceToRealHead = function () {
     let realPosition = PP.vec3_create();
     return function getDistanceToRealHead() {
         realPosition = this.getPositionHeadReal(realPosition);
@@ -570,7 +570,7 @@ PlayerTransformManager.prototype.getDistanceToRealHead = function () {
     };
 }();
 
-PlayerTransformManager.prototype.resetReal = function () {
+PP.PlayerTransformManager.prototype.resetReal = function () {
     let realUp = PP.vec3_create();
     let validUp = PP.vec3_create();
     let position = PP.vec3_create();
@@ -599,7 +599,7 @@ PlayerTransformManager.prototype.resetReal = function () {
     };
 }();
 
-PlayerTransformManager.prototype.update = function () {
+PP.PlayerTransformManager.prototype.update = function () {
     let transformQuat = PP.quat2_create();
     let collisionRuntimeParams = new PP.CollisionRuntimeParams();
     let transformUp = PP.vec3_create();
@@ -652,7 +652,7 @@ PlayerTransformManager.prototype.update = function () {
     }
 }();
 
-PlayerTransformManager.prototype._updateReal = function () {
+PP.PlayerTransformManager.prototype._updateReal = function () {
     let movementToCheck = PP.vec3_create();
     let position = PP.vec3_create();
     let positionReal = PP.vec3_create();
@@ -688,7 +688,7 @@ PlayerTransformManager.prototype._updateReal = function () {
             }
 
             // Far
-            if (this._myParams.mySyncEnabledFlagMap.get(PlayerTransformManagerSyncFlag.FAR)) {
+            if (this._myParams.mySyncEnabledFlagMap.get(PP.PlayerTransformManagerSyncFlag.FAR)) {
                 if (this._myParams.myIsMaxDistanceFromRealToSyncEnabled && movementToCheck.vec3_length() > this._myParams.myMaxDistanceFromRealToSync) {
                     this._myIsFar = true;
                 } else if (this._myParams.myIsFarExtraCheckCallback != null && this._myParams.myIsFarExtraCheckCallback(this)) {
@@ -701,7 +701,7 @@ PlayerTransformManager.prototype._updateReal = function () {
             collisionRuntimeParams.myIsOnGround = true; //#TODO temp as long as surface infos are not actually updated
             transformQuat = this.getTransformQuat(transformQuat);
             newPosition.vec3_copy(this._myValidPosition);
-            if (this._myParams.mySyncEnabledFlagMap.get(PlayerTransformManagerSyncFlag.BODY_COLLIDING)) {
+            if (this._myParams.mySyncEnabledFlagMap.get(PP.PlayerTransformManagerSyncFlag.BODY_COLLIDING)) {
                 PP.myCollisionCheck.move(movementToCheck, transformQuat, this._myRealMovementCollisionCheckParams, collisionRuntimeParams);
 
                 if (!collisionRuntimeParams.myHorizontalMovementCanceled && !collisionRuntimeParams.myVerticalMovementCanceled) {
@@ -722,7 +722,7 @@ PlayerTransformManager.prototype._updateReal = function () {
             }
 
             // Floating 
-            if (this._myParams.mySyncEnabledFlagMap.get(PlayerTransformManagerSyncFlag.FLOATING)) {
+            if (this._myParams.mySyncEnabledFlagMap.get(PP.PlayerTransformManagerSyncFlag.FLOATING)) {
 
                 if (!this._myIsBodyColliding) {
                     movementToCheck = newPosition.vec3_sub(position, movementToCheck);
@@ -850,7 +850,7 @@ PlayerTransformManager.prototype._updateReal = function () {
             collisionRuntimeParams.reset();
             transformQuat = this.getTransformHeadQuat(transformQuat); // get eyes transform
             newPositionHead.vec3_copy(this._myValidPositionHead);
-            if (this._myParams.mySyncEnabledFlagMap.get(PlayerTransformManagerSyncFlag.HEAD_COLLIDING)) {
+            if (this._myParams.mySyncEnabledFlagMap.get(PP.PlayerTransformManagerSyncFlag.HEAD_COLLIDING)) {
                 PP.myCollisionCheck.move(movementToCheck, transformQuat, this._myHeadCollisionCheckParams, collisionRuntimeParams);
 
                 if (!collisionRuntimeParams.myHorizontalMovementCanceled && !collisionRuntimeParams.myVerticalMovementCanceled) {
@@ -914,7 +914,7 @@ PlayerTransformManager.prototype._updateReal = function () {
     }
 }();
 
-PlayerTransformManager.prototype.move = function () {
+PP.PlayerTransformManager.prototype.move = function () {
     let transformQuat = PP.quat2_create();
     let fixedMovement = PP.vec3_create();
     return function move(movement, outCollisionRuntimeParams = null, forceMove = false) {
@@ -959,7 +959,7 @@ PlayerTransformManager.prototype.move = function () {
     };
 }();
 
-PlayerTransformManager.prototype.teleportPosition = function () {
+PP.PlayerTransformManager.prototype.teleportPosition = function () {
     let teleportTransformQuat = PP.quat2_create();
     return function teleportPosition(teleportPosition, outCollisionRuntimeParams = null, forceTeleport = false) {
         teleportTransformQuat = this.getTransformQuat(teleportTransformQuat);
@@ -968,7 +968,7 @@ PlayerTransformManager.prototype.teleportPosition = function () {
     };
 }();
 
-PlayerTransformManager.prototype.teleportTransformQuat = function () {
+PP.PlayerTransformManager.prototype.teleportTransformQuat = function () {
     let currentPosition = PP.vec3_create();
     let teleportPositionVec = PP.vec3_create();
     let teleportRotation = PP.quat_create();
@@ -1024,14 +1024,14 @@ PlayerTransformManager.prototype.teleportTransformQuat = function () {
     };
 }();
 
-PlayerTransformManager.prototype.rotateQuat = function () {
+PP.PlayerTransformManager.prototype.rotateQuat = function () {
     return function rotateQuat(rotationQuat) {
         this._myValidRotationQuat.quat_rotateQuat(rotationQuat, this._myValidRotationQuat);
         this.getPlayerHeadManager().rotateFeetQuat(rotationQuat);
     };
 }();
 
-PlayerTransformManager.prototype.setRotationQuat = function () {
+PP.PlayerTransformManager.prototype.setRotationQuat = function () {
     let rotationToPerform = PP.quat_create();
     return function setRotationQuat(rotationQuat) {
         rotationToPerform = this._myValidRotationQuat.quat_rotationToQuat(rotationQuat, rotationToPerform);
@@ -1039,7 +1039,7 @@ PlayerTransformManager.prototype.setRotationQuat = function () {
     };
 }();
 
-PlayerTransformManager.prototype.setHeight = function () {
+PP.PlayerTransformManager.prototype.setHeight = function () {
     let transformQuat = PP.quat2_create();
     return function setHeight(height, forceSet = false) {
         let fixedHeight = Math.pp_clamp(height, this._myParams.myMinHeight, this._myParams.myMaxHeight);

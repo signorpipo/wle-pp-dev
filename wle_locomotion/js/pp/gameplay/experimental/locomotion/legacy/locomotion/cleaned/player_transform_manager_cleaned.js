@@ -155,10 +155,10 @@ PP.CleanedPlayerTransformManager = class CleanedPlayerTransformManager {
     }
 
     isSynced(syncFlagMap = null) {
-        let isBodyColliding = this.isBodyColliding() && (syncFlagMap == null || syncFlagMap.get(PlayerTransformManagerSyncFlag.BODY_COLLIDING));
-        let isHeadColliding = this.isHeadColliding() && (syncFlagMap == null || syncFlagMap.get(PlayerTransformManagerSyncFlag.HEAD_COLLIDING));
-        let isFar = this.isFar() && (syncFlagMap == null || syncFlagMap.get(PlayerTransformManagerSyncFlag.FAR));
-        let isFloating = this.isFloating() && (syncFlagMap == null || syncFlagMap.get(PlayerTransformManagerSyncFlag.FLOATING));
+        let isBodyColliding = this.isBodyColliding() && (syncFlagMap == null || syncFlagMap.get(PP.PlayerTransformManagerSyncFlag.BODY_COLLIDING));
+        let isHeadColliding = this.isHeadColliding() && (syncFlagMap == null || syncFlagMap.get(PP.PlayerTransformManagerSyncFlag.HEAD_COLLIDING));
+        let isFar = this.isFar() && (syncFlagMap == null || syncFlagMap.get(PP.PlayerTransformManagerSyncFlag.FAR));
+        let isFloating = this.isFloating() && (syncFlagMap == null || syncFlagMap.get(PP.PlayerTransformManagerSyncFlag.FLOATING));
         return !isBodyColliding && !isHeadColliding && !isFar && !isFloating;
     }
 
@@ -566,7 +566,7 @@ PP.CleanedPlayerTransformManager.prototype._updateReal = function () {
             }
 
             // Far
-            if (this._myParams.mySyncEnabledFlagMap.get(PlayerTransformManagerSyncFlag.FAR)) {
+            if (this._myParams.mySyncEnabledFlagMap.get(PP.PlayerTransformManagerSyncFlag.FAR)) {
                 if (this._myParams.myIsMaxDistanceFromRealToSyncEnabled && movementToCheck.vec3_length() > this._myParams.myMaxDistanceFromRealToSync) {
                     this._myIsFar = true;
                 } else if (this._myParams.myIsFarExtraCheckCallback != null && this._myParams.myIsFarExtraCheckCallback(this)) {
@@ -579,7 +579,7 @@ PP.CleanedPlayerTransformManager.prototype._updateReal = function () {
             collisionRuntimeParams.myIsOnGround = true; //#TODO temp as long as surface infos are not actually updated
             transformQuat = this.getTransformQuat(transformQuat);
             newPosition.vec3_copy(this._myValidPosition);
-            if (this._myParams.mySyncEnabledFlagMap.get(PlayerTransformManagerSyncFlag.BODY_COLLIDING)) {
+            if (this._myParams.mySyncEnabledFlagMap.get(PP.PlayerTransformManagerSyncFlag.BODY_COLLIDING)) {
                 PP.myCollisionCheck.move(movementToCheck, transformQuat, this._myRealMovementCollisionCheckParams, collisionRuntimeParams);
 
                 if (!collisionRuntimeParams.myHorizontalMovementCanceled && !collisionRuntimeParams.myVerticalMovementCanceled) {
@@ -600,7 +600,7 @@ PP.CleanedPlayerTransformManager.prototype._updateReal = function () {
             }
 
             // Floating 
-            if (this._myParams.mySyncEnabledFlagMap.get(PlayerTransformManagerSyncFlag.FLOATING)) {
+            if (this._myParams.mySyncEnabledFlagMap.get(PP.PlayerTransformManagerSyncFlag.FLOATING)) {
 
                 if (!this._myIsBodyColliding) {
                     movementToCheck = newPosition.vec3_sub(position, movementToCheck);
@@ -728,7 +728,7 @@ PP.CleanedPlayerTransformManager.prototype._updateReal = function () {
             collisionRuntimeParams.reset();
             transformQuat = this.getTransformHeadQuat(transformQuat); // get eyes transform
             newPositionHead.vec3_copy(this._myValidPositionHead);
-            if (this._myParams.mySyncEnabledFlagMap.get(PlayerTransformManagerSyncFlag.HEAD_COLLIDING)) {
+            if (this._myParams.mySyncEnabledFlagMap.get(PP.PlayerTransformManagerSyncFlag.HEAD_COLLIDING)) {
                 PP.myCollisionCheck.move(movementToCheck, transformQuat, this._myHeadCollisionCheckParams, collisionRuntimeParams);
 
                 if (!collisionRuntimeParams.myHorizontalMovementCanceled && !collisionRuntimeParams.myVerticalMovementCanceled) {

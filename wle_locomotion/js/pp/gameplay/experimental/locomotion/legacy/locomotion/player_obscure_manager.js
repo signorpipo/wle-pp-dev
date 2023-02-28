@@ -1,7 +1,7 @@
 // even if this can be sued to generally fade, it should be called collision obscure to hint that is meant for collision obscuring
 
 // occlude
-PlayerObscureManagerParams = class PlayerObscureManagerParams {
+PP.PlayerObscureManagerParams = class PlayerObscureManagerParams {
     constructor() {
         this.myPlayerTransformManager = null;
 
@@ -28,7 +28,7 @@ PlayerObscureManagerParams = class PlayerObscureManagerParams {
     }
 };
 
-PlayerObscureManager = class PlayerObscureManager {
+PP.PlayerObscureManager = class PlayerObscureManager {
     constructor(params) {
         this._myParams = params;
 
@@ -237,6 +237,9 @@ PlayerObscureManager = class PlayerObscureManager {
         if (this._myObscurelevelOverride != null) {
             this._myTargetObscureLevel = this._myObscurelevelOverride;
         } else {
+            // #TODO check if VALID head is colliding, in that case use max obscure level
+            // this prevent being able to see when resetting head to real even though real is colliding
+            // for example if u stand up and go with the head in the ceiling and reset by moving
             if (this._myParams.myPlayerTransformManager.isHeadColliding()) {
                 let distance = this._myParams.myPlayerTransformManager.getDistanceToRealHead();
                 let relativeDistance = distance - this._myParams.myDistanceToStartObscureWhenHeadColliding;

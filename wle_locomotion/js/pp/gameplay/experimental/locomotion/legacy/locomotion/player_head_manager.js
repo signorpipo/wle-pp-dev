@@ -1,4 +1,4 @@
-PlayerHeadManagerParams = class PlayerHeadManagerParams {
+PP.PlayerHeadManagerParams = class PlayerHeadManagerParams {
     constructor() {
         this.mySessionChangeResyncEnabled = false;
 
@@ -34,8 +34,8 @@ PlayerHeadManagerParams = class PlayerHeadManagerParams {
 };
 
 // could be intended as the generic player body manager (maybe with hands and stuff also)
-PlayerHeadManager = class PlayerHeadManager {
-    constructor(params = new PlayerHeadManagerParams()) {
+PP.PlayerHeadManager = class PlayerHeadManager {
+    constructor(params = new PP.PlayerHeadManagerParams()) {
         this._myParams = params;
 
         this._myCurrentHead = PP.myPlayerObjects.myNonVRHead;
@@ -262,7 +262,7 @@ PlayerHeadManager = class PlayerHeadManager {
     }
 };
 
-PlayerHeadManager.prototype.getHeightEyes = function () {
+PP.PlayerHeadManager.prototype.getHeightEyes = function () {
     let headPosition = PP.vec3_create();
     return function getHeightEyes() {
         headPosition = this._myCurrentHead.pp_getPosition(headPosition);
@@ -272,7 +272,7 @@ PlayerHeadManager.prototype.getHeightEyes = function () {
     };
 }();
 
-PlayerHeadManager.prototype.getTransformFeetQuat = function () {
+PP.PlayerHeadManager.prototype.getTransformFeetQuat = function () {
     let feetPosition = PP.vec3_create();
     let feetRotationQuat = PP.quat_create();
     return function getTransformFeetQuat(outTransformFeetQuat = PP.quat2_create()) {
@@ -281,7 +281,7 @@ PlayerHeadManager.prototype.getTransformFeetQuat = function () {
     };
 }();
 
-PlayerHeadManager.prototype.getRotationFeetQuat = function () {
+PP.PlayerHeadManager.prototype.getRotationFeetQuat = function () {
     let playerUp = PP.vec3_create();
     let headForward = PP.vec3_create();
     return function getRotationFeetQuat(outRotationFeetQuat = PP.quat_create()) {
@@ -305,7 +305,7 @@ PlayerHeadManager.prototype.getRotationFeetQuat = function () {
     };
 }();
 
-PlayerHeadManager.prototype.getPositionFeet = function () {
+PP.PlayerHeadManager.prototype.getPositionFeet = function () {
     let headPosition = PP.vec3_create();
     let playerUp = PP.vec3_create();
     return function getPositionFeet(outPositionFeet = PP.vec3_create()) {
@@ -319,11 +319,11 @@ PlayerHeadManager.prototype.getPositionFeet = function () {
     };
 }();
 
-PlayerHeadManager.prototype.moveFeet = function moveFeet(movement) {
+PP.PlayerHeadManager.prototype.moveFeet = function moveFeet(movement) {
     PP.myPlayerObjects.myPlayer.pp_translate(movement);
 };
 
-PlayerHeadManager.prototype.rotateFeetQuat = function () {
+PP.PlayerHeadManager.prototype.rotateFeetQuat = function () {
     let playerUp = PP.vec3_create();
     let rotationAxis = PP.vec3_create();
     let currentHeadPosition = PP.vec3_create();
@@ -370,7 +370,7 @@ PlayerHeadManager.prototype.rotateFeetQuat = function () {
     };
 }();
 
-PlayerHeadManager.prototype.rotateHeadQuat = function () {
+PP.PlayerHeadManager.prototype.rotateHeadQuat = function () {
     let newHeadRotation = PP.quat_create();
     let newHeadUp = PP.vec3_create();
     return function rotateHeadQuat(rotationQuat) {
@@ -386,7 +386,7 @@ PlayerHeadManager.prototype.rotateHeadQuat = function () {
     };
 }();
 
-PlayerHeadManager.prototype.setRotationFeetQuat = function () {
+PP.PlayerHeadManager.prototype.setRotationFeetQuat = function () {
     let currentRotationQuat = PP.quat_create();
     let rotationQuatToRotate = PP.quat_create();
     return function setRotationFeetQuat(rotationQuat, keepUpOverride = null) {
@@ -396,7 +396,7 @@ PlayerHeadManager.prototype.setRotationFeetQuat = function () {
     };
 }();
 
-PlayerHeadManager.prototype.setRotationHeadQuat = function () {
+PP.PlayerHeadManager.prototype.setRotationHeadQuat = function () {
     let currentRotationQuat = PP.quat_create();
     let rotationQuatToRotate = PP.quat_create();
     return function setRotationHeadQuat(rotationQuat) {
@@ -406,7 +406,7 @@ PlayerHeadManager.prototype.setRotationHeadQuat = function () {
     };
 }();
 
-PlayerHeadManager.prototype.teleportPositionHead = function () {
+PP.PlayerHeadManager.prototype.teleportPositionHead = function () {
     let currentHeadPosition = PP.vec3_create();
     let teleportMovementToPerform = PP.vec3_create();
     return function teleportPositionHead(teleportPosition) {
@@ -416,7 +416,7 @@ PlayerHeadManager.prototype.teleportPositionHead = function () {
     };
 }();
 
-PlayerHeadManager.prototype.teleportPositionFeet = function () {
+PP.PlayerHeadManager.prototype.teleportPositionFeet = function () {
     let currentFeetPosition = PP.vec3_create();
     let teleportMovementToPerform = PP.vec3_create();
     return function teleportPositionFeet(teleportPosition) {
@@ -426,7 +426,7 @@ PlayerHeadManager.prototype.teleportPositionFeet = function () {
     };
 }();
 
-PlayerHeadManager.prototype.teleportPlayerToHeadTransformQuat = function () {
+PP.PlayerHeadManager.prototype.teleportPlayerToHeadTransformQuat = function () {
     let headPosition = PP.vec3_create();
     let playerUp = PP.vec3_create();
     let flatCurrentPlayerPosition = PP.vec3_create();
@@ -456,7 +456,7 @@ PlayerHeadManager.prototype.teleportPlayerToHeadTransformQuat = function () {
     };
 }();
 
-PlayerHeadManager.prototype.lookAtFeet = function () {
+PP.PlayerHeadManager.prototype.lookAtFeet = function () {
     let direction = PP.vec3_create();
     let feetPosition = PP.vec3_create();
     return function lookAtFeet(position, up = null, keepUpOverride = null) {
@@ -467,7 +467,7 @@ PlayerHeadManager.prototype.lookAtFeet = function () {
     };
 }();
 
-PlayerHeadManager.prototype.lookToFeet = function () {
+PP.PlayerHeadManager.prototype.lookToFeet = function () {
     let feetRotation = PP.quat_create();
     return function lookToFeet(direction, up = null, keepUpOverride = null) {
         feetRotation = this.getRotationFeetQuat(feetRotation);
@@ -476,7 +476,7 @@ PlayerHeadManager.prototype.lookToFeet = function () {
     };
 }();
 
-PlayerHeadManager.prototype.lookAtHead = function () {
+PP.PlayerHeadManager.prototype.lookAtHead = function () {
     let direction = PP.vec3_create();
     let headPosition = PP.vec3_create();
     return function lookAtHead(position, up = null) {
@@ -487,7 +487,7 @@ PlayerHeadManager.prototype.lookAtHead = function () {
     };
 }();
 
-PlayerHeadManager.prototype.lookToHead = function () {
+PP.PlayerHeadManager.prototype.lookToHead = function () {
     let headRotation = PP.quat_create();
     return function lookToHead(direction, up = null) {
         headRotation = this.getRotationHeadQuat(headRotation);
@@ -496,7 +496,7 @@ PlayerHeadManager.prototype.lookToHead = function () {
     };
 }();
 
-PlayerHeadManager.prototype._getPositionHeight = function () {
+PP.PlayerHeadManager.prototype._getPositionHeight = function () {
     let playerPosition = PP.vec3_create();
     let playerUp = PP.vec3_create();
     let heightVector = PP.vec3_create();
@@ -515,7 +515,7 @@ PlayerHeadManager.prototype._getPositionHeight = function () {
 }();
 
 // #TODO what happens if the player go in the blurred state before wle has loaded?
-PlayerHeadManager.prototype._onXRSessionStart = function () {
+PP.PlayerHeadManager.prototype._onXRSessionStart = function () {
     return function _onXRSessionStart(manualStart, session) {
         this._myBlurRecoverHeadTransform = null;
         this._myVisibilityHidden = false;
@@ -569,7 +569,7 @@ PlayerHeadManager.prototype._onXRSessionStart = function () {
     };
 }();
 
-PlayerHeadManager.prototype._onXRSessionEnd = function () {
+PP.PlayerHeadManager.prototype._onXRSessionEnd = function () {
     return function _onXRSessionEnd(session) {
         if (this._myParams.mySessionChangeResyncEnabled && this._myActive) {
             if (this._myDelaySessionChangeResyncCounter == 0) {
@@ -605,7 +605,7 @@ PlayerHeadManager.prototype._onXRSessionEnd = function () {
     };
 }();
 
-PlayerHeadManager.prototype._onXRSessionBlurStart = function () {
+PP.PlayerHeadManager.prototype._onXRSessionBlurStart = function () {
     return function _onXRSessionBlurStart(session) {
         if (this._myActive) {
             if (this._myParams.myBlurEndResyncEnabled && this._myBlurRecoverHeadTransform == null && this._mySessionActive) {
@@ -625,7 +625,7 @@ PlayerHeadManager.prototype._onXRSessionBlurStart = function () {
     };
 }();
 
-PlayerHeadManager.prototype._onXRSessionBlurEnd = function () {
+PP.PlayerHeadManager.prototype._onXRSessionBlurEnd = function () {
     return function _onXRSessionBlurEnd(session) {
         if (this._myActive) {
             if (this._myDelaySessionChangeResyncCounter == 0) {
@@ -652,7 +652,7 @@ PlayerHeadManager.prototype._onXRSessionBlurEnd = function () {
     };
 }();
 
-PlayerHeadManager.prototype._onViewReset = function () {
+PP.PlayerHeadManager.prototype._onViewReset = function () {
     return function _onViewReset() {
         if (this._myActive) {
             if (this._myParams.myResetTransformOnViewResetEnabled && this._mySessionActive && this.isSynced()) {
@@ -662,7 +662,7 @@ PlayerHeadManager.prototype._onViewReset = function () {
     };
 }();
 
-PlayerHeadManager.prototype._blurEndResync = function () {
+PP.PlayerHeadManager.prototype._blurEndResync = function () {
     let playerUp = PP.vec3_create();
     let currentHeadPosition = PP.vec3_create();
     let recoverHeadPosition = PP.vec3_create();
@@ -703,7 +703,7 @@ PlayerHeadManager.prototype._blurEndResync = function () {
     };
 }();
 
-PlayerHeadManager.prototype._sessionChangeResync = function () {
+PP.PlayerHeadManager.prototype._sessionChangeResync = function () {
     let currentHeadPosition = PP.vec3_create();
     let resyncHeadPosition = PP.vec3_create();
     let resyncHeadRotation = PP.quat_create();
@@ -844,7 +844,7 @@ PlayerHeadManager.prototype._sessionChangeResync = function () {
     };
 }();
 
-PlayerHeadManager.prototype._resyncHeadRotationForward = function () {
+PP.PlayerHeadManager.prototype._resyncHeadRotationForward = function () {
     let playerUp = PP.vec3_create();
     let resyncHeadForward = PP.vec3_create();
     let resyncHeadUp = PP.vec3_create();
@@ -866,7 +866,7 @@ PlayerHeadManager.prototype._resyncHeadRotationForward = function () {
     }
 }();
 
-PlayerHeadManager.prototype._updateHeightOffset = function () {
+PP.PlayerHeadManager.prototype._updateHeightOffset = function () {
     return function _updateHeightOffset() {
         if (this._mySessionActive) {
             if (PP.XRUtils.isDeviceEmulated()) {
@@ -882,7 +882,7 @@ PlayerHeadManager.prototype._updateHeightOffset = function () {
     }
 }();
 
-PlayerHeadManager.prototype._setPlayerPivotHeightOffset = function () {
+PP.PlayerHeadManager.prototype._setPlayerPivotHeightOffset = function () {
     let playerPivotPosition = PP.vec3_create();
     return function _setPlayerPivotHeightOffset(offset, amountToRemove) {
         if (offset != null) {
@@ -893,21 +893,21 @@ PlayerHeadManager.prototype._setPlayerPivotHeightOffset = function () {
 }();
 
 
-Object.defineProperty(PlayerHeadManager.prototype, "getHeightEyes", { enumerable: false });
-Object.defineProperty(PlayerHeadManager.prototype, "getTransformFeetQuat", { enumerable: false });
-Object.defineProperty(PlayerHeadManager.prototype, "getPositionFeet", { enumerable: false });
-Object.defineProperty(PlayerHeadManager.prototype, "moveFeet", { enumerable: false });
-Object.defineProperty(PlayerHeadManager.prototype, "rotateFeetQuat", { enumerable: false });
-Object.defineProperty(PlayerHeadManager.prototype, "rotateHeadQuat", { enumerable: false });
-Object.defineProperty(PlayerHeadManager.prototype, "teleportPositionHead", { enumerable: false });
-Object.defineProperty(PlayerHeadManager.prototype, "teleportPositionFeet", { enumerable: false });
-Object.defineProperty(PlayerHeadManager.prototype, "teleportPlayerToHeadTransformQuat", { enumerable: false });
-Object.defineProperty(PlayerHeadManager.prototype, "_getPositionHeight", { enumerable: false });
-Object.defineProperty(PlayerHeadManager.prototype, "_onXRSessionStart", { enumerable: false });
-Object.defineProperty(PlayerHeadManager.prototype, "_onXRSessionEnd", { enumerable: false });
-Object.defineProperty(PlayerHeadManager.prototype, "_onXRSessionBlurStart", { enumerable: false });
-Object.defineProperty(PlayerHeadManager.prototype, "_onXRSessionBlurEnd", { enumerable: false });
-Object.defineProperty(PlayerHeadManager.prototype, "_onViewReset", { enumerable: false });
-Object.defineProperty(PlayerHeadManager.prototype, "_blurEndResync", { enumerable: false });
-Object.defineProperty(PlayerHeadManager.prototype, "_sessionChangeResync", { enumerable: false });
-Object.defineProperty(PlayerHeadManager.prototype, "_setPlayerPivotHeightOffset", { enumerable: false });
+Object.defineProperty(PP.PlayerHeadManager.prototype, "getHeightEyes", { enumerable: false });
+Object.defineProperty(PP.PlayerHeadManager.prototype, "getTransformFeetQuat", { enumerable: false });
+Object.defineProperty(PP.PlayerHeadManager.prototype, "getPositionFeet", { enumerable: false });
+Object.defineProperty(PP.PlayerHeadManager.prototype, "moveFeet", { enumerable: false });
+Object.defineProperty(PP.PlayerHeadManager.prototype, "rotateFeetQuat", { enumerable: false });
+Object.defineProperty(PP.PlayerHeadManager.prototype, "rotateHeadQuat", { enumerable: false });
+Object.defineProperty(PP.PlayerHeadManager.prototype, "teleportPositionHead", { enumerable: false });
+Object.defineProperty(PP.PlayerHeadManager.prototype, "teleportPositionFeet", { enumerable: false });
+Object.defineProperty(PP.PlayerHeadManager.prototype, "teleportPlayerToHeadTransformQuat", { enumerable: false });
+Object.defineProperty(PP.PlayerHeadManager.prototype, "_getPositionHeight", { enumerable: false });
+Object.defineProperty(PP.PlayerHeadManager.prototype, "_onXRSessionStart", { enumerable: false });
+Object.defineProperty(PP.PlayerHeadManager.prototype, "_onXRSessionEnd", { enumerable: false });
+Object.defineProperty(PP.PlayerHeadManager.prototype, "_onXRSessionBlurStart", { enumerable: false });
+Object.defineProperty(PP.PlayerHeadManager.prototype, "_onXRSessionBlurEnd", { enumerable: false });
+Object.defineProperty(PP.PlayerHeadManager.prototype, "_onViewReset", { enumerable: false });
+Object.defineProperty(PP.PlayerHeadManager.prototype, "_blurEndResync", { enumerable: false });
+Object.defineProperty(PP.PlayerHeadManager.prototype, "_sessionChangeResync", { enumerable: false });
+Object.defineProperty(PP.PlayerHeadManager.prototype, "_setPlayerPivotHeightOffset", { enumerable: false });

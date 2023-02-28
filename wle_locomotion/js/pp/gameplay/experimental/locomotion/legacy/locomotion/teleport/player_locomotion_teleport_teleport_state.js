@@ -69,13 +69,13 @@ PP.PlayerLocomotionTeleportTeleportState = class PlayerLocomotionTeleportTelepor
         this._myParentFSM = fsm;
 
         switch (this._myTeleportParams.myTeleportParams.myTeleportType) {
-            case PlayerLocomotionTeleportTeleportType.INSTANT:
+            case PP.PlayerLocomotionTeleportTeleportType.INSTANT:
                 this._myFSM.perform("start_instant");
                 break;
-            case PlayerLocomotionTeleportTeleportType.BLINK:
+            case PP.PlayerLocomotionTeleportTeleportType.BLINK:
                 this._myFSM.perform("start_blink");
                 break;
-            case PlayerLocomotionTeleportTeleportType.SHIFT:
+            case PP.PlayerLocomotionTeleportTeleportType.SHIFT:
                 this._myFSM.perform("start_shift");
                 break;
             default:

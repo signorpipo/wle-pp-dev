@@ -65,8 +65,8 @@
             "parent": "18",
             "components": [
                 {
-                    "type": "player-locomotion",
-                    "player-locomotion": {
+                    "type": "pp-player-locomotion",
+                    "pp-player-locomotion": {
                         "_myIsSnapTurn": true,
                         "_myFlyEnabled": true,
                         "_myMainHand": "left",
