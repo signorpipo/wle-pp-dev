@@ -22,6 +22,9 @@ PP.PlayerLocomotionSmoothParams = class PlayerLocomotionSmoothParams {
         this.myVRDirectionReferenceObject = null;
 
         this.myHandedness = PP.Handedness.LEFT;
+
+        this.myMoveThroughCollisionShortcutEnabled = false;
+        this.myMoveHeadShortcutEnabled = false;
     }
 };
 

@@ -194,6 +194,9 @@ PP.CleanedPlayerLocomotion = class CleanedPlayerLocomotion {
                 params.myVRDirectionReferenceType = this._myParams.myVRDirectionReferenceType;
                 params.myVRDirectionReferenceObject = this._myParams.myVRDirectionReferenceObject;
 
+                params.myMoveThroughCollisionShortcutEnabled = this._myParams.myMoveThroughCollisionShortcutEnabled;
+                params.myMoveHeadShortcutEnabled = this._myParams.myMoveHeadShortcutEnabled;
+
                 this._myPlayerLocomotionSmooth = new PP.CleanedPlayerLocomotionSmooth(params, this._myMovementRuntimeParams);
             }
 

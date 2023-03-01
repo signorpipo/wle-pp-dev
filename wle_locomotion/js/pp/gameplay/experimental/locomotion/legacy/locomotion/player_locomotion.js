@@ -33,6 +33,9 @@ PP.PlayerLocomotionParams = class PlayerLocomotionParams {
         this.myForeheadExtraHeight = 0;
 
         this.myTeleportPositionObject = null;
+
+        this.myMoveThroughCollisionShortcutEnabled = false;
+        this.myMoveHeadShortcutEnabled = false;
     }
 };
 
@@ -235,6 +238,9 @@ PP.PlayerLocomotion = class PlayerLocomotion {
 
                 params.myVRDirectionReferenceType = this._myParams.myVRDirectionReferenceType;
                 params.myVRDirectionReferenceObject = this._myParams.myVRDirectionReferenceObject;
+
+                params.myMoveThroughCollisionShortcutEnabled = this._myParams.myMoveThroughCollisionShortcutEnabled;
+                params.myMoveHeadShortcutEnabled = this._myParams.myMoveHeadShortcutEnabled;
 
                 this._myPlayerLocomotionSmooth = new PP.PlayerLocomotionSmooth(params, this._myMovementRuntimeParams);
             }

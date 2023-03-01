@@ -107,7 +107,15 @@ PP.CleanedPlayerLocomotionSmooth.prototype.update = function () {
             }
         }
 
-        if (!PP.myGamepads[this._myParams.myHandedness].getButtonInfo(PP.GamepadButtonID.THUMBSTICK).isPressed()) {
+        if (this._myParams.myMoveHeadShortcutEnabled && PP.myGamepads[PP.InputUtils.getOppositeHandedness(this._myParams.myHandedness)].getButtonInfo(PP.GamepadButtonID.THUMBSTICK).isPressed()) {
+            this._myParams.myPlayerTransformManager.getPlayerHeadManager().moveFeet(headMovement);
+        } else if (this._myParams.myMoveThroughCollisionShortcutEnabled && PP.myGamepads[this._myParams.myHandedness].getButtonInfo(PP.GamepadButtonID.THUMBSTICK).isPressed()) {
+            this._myParams.myPlayerTransformManager.move(headMovement, this._myLocomotionRuntimeParams.myCollisionRuntimeParams, true);
+            if (horizontalMovement) {
+                this._myParams.myPlayerTransformManager.resetReal(true, false, false);
+                this._myParams.myPlayerTransformManager.resetHeadToReal();
+            }
+        } else {
             if (!this._myLocomotionRuntimeParams.myIsFlying) {
                 this._myGravitySpeed += this._myParams.myGravityAcceleration * dt;
                 verticalMovement = playerUp.vec3_scale(this._myGravitySpeed * dt, verticalMovement);
@@ -129,12 +137,6 @@ PP.CleanedPlayerLocomotionSmooth.prototype.update = function () {
             if (this._myGravitySpeed > 0 && this._myLocomotionRuntimeParams.myCollisionRuntimeParams.myIsOnCeiling ||
                 this._myGravitySpeed < 0 && this._myLocomotionRuntimeParams.myCollisionRuntimeParams.myIsOnGround) {
                 this._myGravitySpeed = 0;
-            }
-        } else {
-            this._myParams.myPlayerTransformManager.move(headMovement, this._myLocomotionRuntimeParams.myCollisionRuntimeParams, true);
-            if (horizontalMovement) {
-                this._myParams.myPlayerTransformManager.resetReal(true, false, false);
-                this._myParams.myPlayerTransformManager.resetHeadToReal();
             }
         }
 

@@ -77,7 +77,9 @@
                         "_mySnapTurnOnlyInsideXRSession": false,
                         "_mySnapTurnOnlyVR": false,
                         "_myMaxSpeed": 2.0,
-                        "_myUseCleanedVersion": true
+                        "_myUseCleanedVersion": true,
+                        "_myMoveThroughCollisionShortcutEnabled": true,
+                        "_myMoveHeadShortcutEnabled": true
                     },
                     "active": true
                 }

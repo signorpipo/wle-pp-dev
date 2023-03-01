@@ -17,7 +17,9 @@ WL.registerComponent('pp-player-locomotion', {
     _myVRDirectionReferenceObject: { type: WL.Type.Object },
     _myTeleportParableStartReferenceObject: { type: WL.Type.Object },
     _myTeleportPositionObject: { type: WL.Type.Object },
-    _myUseCleanedVersion: { type: WL.Type.Bool, default: true }
+    _myUseCleanedVersion: { type: WL.Type.Bool, default: true },
+    _myMoveThroughCollisionShortcutEnabled: { type: WL.Type.Bool, default: false },
+    _myMoveHeadShortcutEnabled: { type: WL.Type.Bool, default: false },
 }, {
     init() {
     },
@@ -51,6 +53,9 @@ WL.registerComponent('pp-player-locomotion', {
         params.myForeheadExtraHeight = 0.1;
 
         params.myTeleportPositionObject = this._myTeleportPositionObject;
+
+        params.myMoveThroughCollisionShortcutEnabled = this._myMoveThroughCollisionShortcutEnabled;
+        params.myMoveHeadShortcutEnabled = this._myMoveHeadShortcutEnabled;
 
         if (this._myUseCleanedVersion) {
             this._myPlayerLocomotion = new PP.CleanedPlayerLocomotion(params);
