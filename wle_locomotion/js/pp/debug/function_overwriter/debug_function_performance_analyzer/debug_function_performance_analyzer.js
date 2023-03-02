@@ -216,6 +216,8 @@ PP.DebugFunctionPerformanceAnalyzer = class DebugFunctionPerformanceAnalyzer ext
     }
 
     _updateMaxResults() {
+        let beforeTime = PP.JSUtils.now();
+
         for (let property of this._myFunctionPerformanceAnalysisResults.keys()) {
             if (this._myFunctionPerformanceAnalysisMaxResults.has(property)) {
                 this._myFunctionPerformanceAnalysisMaxResults.get(property).max(this._myFunctionPerformanceAnalysisResults.get(property));
@@ -225,6 +227,8 @@ PP.DebugFunctionPerformanceAnalyzer = class DebugFunctionPerformanceAnalyzer ext
                 this._myFunctionPerformanceAnalysisMaxResults.set(property, maxResults)
             }
         }
+
+        this._myTimeSinceLastResetToIgnore.myValue += PP.JSUtils.now() - beforeTime;
     }
 
     _getOverwrittenFunctionInternal(reference, propertyName, referencePath, isClass, isFunction, isConstructor) {
