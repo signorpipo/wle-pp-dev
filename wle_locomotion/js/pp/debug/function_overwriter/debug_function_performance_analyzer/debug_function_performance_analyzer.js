@@ -114,46 +114,11 @@ PP.DebugFunctionPerformanceAnalyzer = class DebugFunctionPerformanceAnalyzer ext
     }
 
     _getOverwrittenFunction(reference, propertyName, referencePath, isClass, isFunction) {
-        let propertyID = this._getPropertyID(propertyName, referencePath, isFunction);
-
-        let newFunction = reference[propertyName];
-
-        this._myResultsAlreadyAdded = this._myFunctionPerformanceAnalysisResults.has(propertyID);
-        let analysisResults = new PP.DebugFunctionPerformanceAnalysisResults();
-
-        analysisResults.myReference = reference;
-        analysisResults.myName = propertyName;
-        analysisResults.myPath = referencePath;
-        analysisResults.myID = referencePath;
-
-        this._myFunctionPerformanceAnalysisResults.set(propertyID, analysisResults);
-
-        try {
-
-            let functionPerformanceAnalysisResults = this._myFunctionPerformanceAnalysisResults.get(propertyID);
-            let timeSinceLastResetToIgnoreReference = this._myTimeSinceLastResetToIgnore;
-
-            let originalFunction = counterTarget[propertyName];
-            newFunction = function () {
-                let beforeTime = PP.JSUtils.now();
-                let returnValue = originalFunction.bind(this)(...arguments);
-                let afterTime = PP.JSUtils.now();
-                let executionTime = afterTime - beforeTime;
-                functionPerformanceAnalysisResults.myCallsCount += 1;
-                functionPerformanceAnalysisResults.myTotalExecutionTime += executionTime;
-                timeSinceLastResetToIgnoreReference.myValue += PP.JSUtils.now() - afterTime;
-                return returnValue;
-            };
-        } catch (error) {
-            console.error("Function:", propertyName, "of:", reference, "can't be overwritten.\nError:", error);
-        }
-
-        return newFunction;
+        return this._getOverwrittenFunctionInternal(reference, propertyName, referencePath, isClass, isFunction, false);
     }
 
     _getOverwrittenConstructor(reference, propertyName, referencePath, isClass, isFunction) {
-        //#TODO
-        return reference[propertyName];
+        return this._getOverwrittenFunctionInternal(reference, propertyName, referencePath, isClass, isFunction, true);
     }
 
     _onOverwriteSuccess(reference, propertyName, referenceParentForConstructor, referenceNameForConstructor, referencePath, isClass, isFunction, isConstructor) {
@@ -260,5 +225,56 @@ PP.DebugFunctionPerformanceAnalyzer = class DebugFunctionPerformanceAnalyzer ext
                 this._myFunctionPerformanceAnalysisMaxResults.set(property, maxResults)
             }
         }
+    }
+
+    _getOverwrittenFunctionInternal(reference, propertyName, referencePath, isClass, isFunction, isConstructor) {
+        let propertyID = this._getPropertyID(propertyName, referencePath, isFunction);
+
+        let newFunction = reference[propertyName];
+
+        this._myResultsAlreadyAdded = this._myFunctionPerformanceAnalysisResults.has(propertyID);
+        let analysisResults = new PP.DebugFunctionPerformanceAnalysisResults();
+
+        analysisResults.myReference = reference;
+        analysisResults.myName = propertyName;
+        analysisResults.myPath = referencePath;
+        analysisResults.myID = referencePath;
+
+        this._myFunctionPerformanceAnalysisResults.set(propertyID, analysisResults);
+
+        try {
+
+            let functionPerformanceAnalysisResults = this._myFunctionPerformanceAnalysisResults.get(propertyID);
+            let timeSinceLastResetToIgnoreReference = this._myTimeSinceLastResetToIgnore;
+
+            if (isConstructor) {
+                let originalFunction = counterTarget[propertyName];
+                newFunction = function () {
+                    let beforeTime = PP.JSUtils.now();
+                    let returnValue = originalFunction.bind(this)(...arguments);
+                    let afterTime = PP.JSUtils.now();
+                    let executionTime = afterTime - beforeTime;
+                    functionPerformanceAnalysisResults.myCallsCount += 1;
+                    functionPerformanceAnalysisResults.myTotalExecutionTime += executionTime;
+                    timeSinceLastResetToIgnoreReference.myValue += PP.JSUtils.now() - afterTime;
+                    return returnValue;
+                };
+            } else {
+                newFunction = function () {
+                    let beforeTime = PP.JSUtils.now();
+                    let returnValue = new reference(...arguments);
+                    let afterTime = PP.JSUtils.now();
+                    let executionTime = afterTime - beforeTime;
+                    functionPerformanceAnalysisResults.myCallsCount += 1;
+                    functionPerformanceAnalysisResults.myTotalExecutionTime += executionTime;
+                    timeSinceLastResetToIgnoreReference.myValue += PP.JSUtils.now() - afterTime;
+                    return returnValue;
+                };
+            }
+        } catch (error) {
+            console.error("Function:", propertyName, "of:", reference, "can't be overwritten.\nError:", error);
+        }
+
+        return newFunction;
     }
 };

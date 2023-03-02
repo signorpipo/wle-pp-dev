@@ -75,7 +75,7 @@ require('./pp/cauldron/utils/save_utils');
 require('./pp/cauldron/utils/text_utils');
 require('./pp/cauldron/utils/xr_utils');
 require('./pp/cauldron/utils/browser_utils');
-require('./pp/cauldron/utils/javascript_utils');
+require('./pp/cauldron/utils/js_utils');
 
 require('./pp/cauldron/physics/physics_utils');
 require('./pp/cauldron/physics/physics_raycast_data');
@@ -102,6 +102,9 @@ require('./pp/debug/debug_visual_manager');
 
 require('./pp/debug/components/debug_transform_component');
 require('./pp/debug/components/debug_manager_component');
+
+require('./pp/debug/function_overwriter/debug_function_overwriter');
+require('./pp/debug/function_overwriter/debug_function_performance_analyzer/debug_function_performance_analyzer');
 
 require('./pp/debug/function_calls_counter/debug_function_calls_counter');
 require('./pp/debug/function_calls_counter/debug_function_calls_count_logger');

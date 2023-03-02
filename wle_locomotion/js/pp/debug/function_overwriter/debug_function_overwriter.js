@@ -152,49 +152,50 @@ PP.DebugFunctionOverwriter = class DebugFunctionOverwriter {
     }
 
     _overwriteFunction(reference, propertyName, referenceParentForConstructor, referenceNameForConstructor, referencePath, isClass, isFunction) {
-        if (PP.JSUtils.isFunctionByName(reference, propertyName)) {
-            let isValidFunctionName = this._filterName(propertyName, this._myParams.myFunctionNamesToInclude, this._myParams.myFunctionNamesToExclude);
-            let isValidFunctionPath = this._filterName((referencePath != null ? referencePath + "." : "") + propertyName, this._myParams.myFunctionPathsToInclude, this._myParams.myFunctionPathsToExclude);
-            if (isValidFunctionName && isValidFunctionPath) {
-                if (!this._myPropertiesAlreadyOverwritten.has(propertyName)) {
-                    this._myPropertiesAlreadyOverwritten.set(propertyName, []);
-                }
-
-                let isPropertyCountedAlready = this._myPropertiesAlreadyOverwritten.get(propertyName).pp_hasEqual(reference);
-                if (!isPropertyCountedAlready) {
-
-                    let overwriteSuccess = false;
-                    let isConstructor = false;
-                    if (propertyName != "constructor") {
-                        try {
-                            let newFunction = this._getOverwrittenFunction(reference, propertyName, referencePath, isClass, isFunction);
-                            if (newFunction != reference[propertyName]) {
-                                overwriteSuccess = PP.JSUtils.overwriteReferenceProperty(newFunction, reference, propertyName, this._myParams.myDebugLogActive);
-                            } else {
-                                overwriteSuccess = true;
-                            }
-                        } catch (error) {
+        let isPropertyCountedAlready = this._myPropertiesAlreadyOverwritten.get(propertyName).pp_hasEqual(reference);
+        if (!isPropertyCountedAlready) {
+            if (PP.JSUtils.isFunctionByName(reference, propertyName)) {
+                if (!this._myParams.myExcludeJavascriptObjectFunctions || !this._isJavascriptObjectFunction(propertyName)) {
+                    let isValidFunctionName = this._filterName(propertyName, this._myParams.myFunctionNamesToInclude, this._myParams.myFunctionNamesToExclude);
+                    let isValidFunctionPath = this._filterName((referencePath != null ? referencePath + "." : "") + propertyName, this._myParams.myFunctionPathsToInclude, this._myParams.myFunctionPathsToExclude);
+                    if (isValidFunctionName && isValidFunctionPath) {
+                        if (!this._myPropertiesAlreadyOverwritten.has(propertyName)) {
+                            this._myPropertiesAlreadyOverwritten.set(propertyName, []);
                         }
-                    } else if (!this._myParams.myExcludeConstructors && isClass && referenceParentForConstructor != null &&
-                        [referenceNameForConstructor] != null && referenceParentForConstructor[referenceNameForConstructor].prototype != null) {
-                        isConstructor = true;
 
-                        try {
-                            let newConstructor = this._getOverwrittenConstructor(referenceParentForConstructor, referenceNameForConstructor, referencePath, isClass, isFunction);
-                            if (newConstructor != referenceParentForConstructor[referenceNameForConstructor]) {
-                                overwriteSuccess = PP.JSUtils.overwriteReferenceProperty(newConstructor, referenceParentForConstructor, referenceNameForConstructor, this._myParams.myDebugLogActive);
-                            } else {
-                                overwriteSuccess = true;
+                        let overwriteSuccess = false;
+                        let isConstructor = false;
+                        if (propertyName != "constructor") {
+                            try {
+                                let newFunction = this._getOverwrittenFunction(reference, propertyName, referencePath, isClass, isFunction);
+                                if (newFunction != reference[propertyName]) {
+                                    overwriteSuccess = PP.JSUtils.overwriteReferenceProperty(newFunction, reference, propertyName, this._myParams.myDebugLogActive);
+                                } else {
+                                    overwriteSuccess = true;
+                                }
+                            } catch (error) {
                             }
-                        } catch (error) {
-                        }
-                    }
+                        } else if (!this._myParams.myExcludeConstructors && isClass && referenceParentForConstructor != null &&
+                            [referenceNameForConstructor] != null && referenceParentForConstructor[referenceNameForConstructor].prototype != null) {
+                            isConstructor = true;
 
-                    if (overwriteSuccess) {
-                        this._myPropertiesAlreadyOverwritten.get(propertyName).push(reference);
-                        this._onOverwriteSuccess(reference, propertyName, referenceParentForConstructor, referenceNameForConstructor, referencePath, isClass, isFunction, isConstructor);
-                    } else {
-                        this._onOverwriteFailure(reference, propertyName, referenceParentForConstructor, referenceNameForConstructor, referencePath, isClass, isFunction, isConstructor);
+                            try {
+                                let newConstructor = this._getOverwrittenConstructor(referenceParentForConstructor, referenceNameForConstructor, referencePath, isClass, isFunction);
+                                if (newConstructor != referenceParentForConstructor[referenceNameForConstructor]) {
+                                    overwriteSuccess = PP.JSUtils.overwriteReferenceProperty(newConstructor, referenceParentForConstructor, referenceNameForConstructor, this._myParams.myDebugLogActive);
+                                } else {
+                                    overwriteSuccess = true;
+                                }
+                            } catch (error) {
+                            }
+                        }
+
+                        if (overwriteSuccess) {
+                            this._myPropertiesAlreadyOverwritten.get(propertyName).push(reference);
+                            this._onOverwriteSuccess(reference, propertyName, referenceParentForConstructor, referenceNameForConstructor, referencePath, isClass, isFunction, isConstructor);
+                        } else {
+                            this._onOverwriteFailure(reference, propertyName, referenceParentForConstructor, referenceNameForConstructor, referencePath, isClass, isFunction, isConstructor);
+                        }
                     }
                 }
             }
@@ -360,3 +361,18 @@ PP.DebugFunctionOverwriter = class DebugFunctionOverwriter {
         return isValidName;
     }
 };
+
+
+
+PP.DebugFunctionOverwriter.prototype._isJavascriptObjectFunction = function () {
+    let javascriptObjectFunctions = [
+        "__defineGetter__", "__defineSetter__", "hasOwnProperty", "__lookupGetter__", "__lookupSetter__", "isPrototypeOf",
+        "propertyIsEnumerable", "toString", "valueOf", "__proto__", "toLocaleString", "arguments", "caller", "apply", "bind", "call"];
+    return function _isJavascriptObjectFunction(propertyName) {
+        return javascriptObjectFunctions.pp_hasEqual(propertyName);
+    };
+}();
+
+
+
+Object.defineProperty(PP.DebugFunctionOverwriter.prototype, "_isJavascriptObjectFunction", { enumerable: false });
