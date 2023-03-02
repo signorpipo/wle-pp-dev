@@ -1,4 +1,4 @@
-PP.DebugFunctionPerformanceAnalysisResultsLoggerParams = class DebugFunctionPerformanceAnalysisResultsLoggerParams {
+PP.DebugFunctionsPerformanceAnalysisResultsLoggerParams = class DebugFunctionsPerformanceAnalysisResultsLoggerParams {
     constructor() {
         this.myPerformanceAnalyzer = null;
 
@@ -10,7 +10,7 @@ PP.DebugFunctionPerformanceAnalysisResultsLoggerParams = class DebugFunctionPerf
 
         this.myLogCollapsed = false;
 
-        this.myLogSortOrder = PP.DebugFunctionPerformanceAnalyzerSortOrder.NONE;
+        this.myLogSortOrder = PP.DebugFunctionsPerformanceAnalyzerSortOrder.NONE;
 
         this.myLogMaxAmountOfResults = null;
         this.myLogResultsWithCallsCountAbove = null;
@@ -25,7 +25,7 @@ PP.DebugFunctionPerformanceAnalysisResultsLoggerParams = class DebugFunctionPerf
     }
 };
 
-PP.DebugFunctionPerformanceAnalysisResultsLogger = class DebugFunctionPerformanceAnalysisResultsLogger {
+PP.DebugFunctionsPerformanceAnalysisResultsLogger = class DebugFunctionsPerformanceAnalysisResultsLogger {
     constructor(params) {
         this._myParams = params;
 
@@ -147,19 +147,19 @@ PP.DebugFunctionPerformanceAnalysisResultsLogger = class DebugFunctionPerformanc
                     }
 
                     switch (this._myParams.myLogSortOrder) {
-                        case PP.DebugFunctionPerformanceAnalyzerSortOrder.CALLS_COUNT:
+                        case PP.DebugFunctionsPerformanceAnalyzerSortOrder.CALLS_COUNT:
                             textOrdered.push(callsCountText);
                             textOrdered.push(totalExecutionTimeText);
                             textOrdered.push(totalExecutionTimePercentageText);
                             textOrdered.push(averageExecutionTimeText);
                             break;
-                        case PP.DebugFunctionPerformanceAnalyzerSortOrder.TOTAL_EXECUTION_TIME:
+                        case PP.DebugFunctionsPerformanceAnalyzerSortOrder.TOTAL_EXECUTION_TIME:
                             textOrdered.push(totalExecutionTimeText);
                             textOrdered.push(totalExecutionTimePercentageText);
                             textOrdered.push(averageExecutionTimeText);
                             textOrdered.push(callsCountText);
                             break;
-                        case PP.DebugFunctionPerformanceAnalyzerSortOrder.AVERAGE_EXECUTION_TIME:
+                        case PP.DebugFunctionsPerformanceAnalyzerSortOrder.AVERAGE_EXECUTION_TIME:
                             textOrdered.push(averageExecutionTimeText);
                             textOrdered.push(totalExecutionTimeText);
                             textOrdered.push(totalExecutionTimePercentageText);

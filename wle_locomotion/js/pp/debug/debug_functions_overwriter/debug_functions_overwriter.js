@@ -1,4 +1,4 @@
-PP.DebugFunctionOverwriterParams = class DebugFunctionOverwriterParams {
+PP.DebugFunctionsOverwriterParams = class DebugFunctionsOverwriterParams {
     constructor() {
         this.myObjectsByReference = [];         // You can specify to count the call on a specific object instance
         this.myObjectsByPath = [];              // If you want you can specify the instance by path, but it means it must be reachable from window
@@ -47,8 +47,8 @@ PP.DebugFunctionOverwriterParams = class DebugFunctionOverwriterParams {
     }
 };
 
-PP.DebugFunctionOverwriter = class DebugFunctionOverwriter {
-    constructor(params = new PP.DebugFunctionOverwriterParams()) {
+PP.DebugFunctionsOverwriter = class DebugFunctionsOverwriter {
+    constructor(params = new PP.DebugFunctionsOverwriterParams()) {
         this._myParams = params;
 
         this._myPropertiesAlreadyOverwritten = new Map();
@@ -364,7 +364,7 @@ PP.DebugFunctionOverwriter = class DebugFunctionOverwriter {
 
 
 
-PP.DebugFunctionOverwriter.prototype._isJavascriptObjectFunction = function () {
+PP.DebugFunctionsOverwriter.prototype._isJavascriptObjectFunction = function () {
     let javascriptObjectFunctions = [
         "__defineGetter__", "__defineSetter__", "hasOwnProperty", "__lookupGetter__", "__lookupSetter__", "isPrototypeOf",
         "propertyIsEnumerable", "toString", "valueOf", "__proto__", "toLocaleString", "arguments", "caller", "apply", "bind", "call"];
@@ -375,4 +375,4 @@ PP.DebugFunctionOverwriter.prototype._isJavascriptObjectFunction = function () {
 
 
 
-Object.defineProperty(PP.DebugFunctionOverwriter.prototype, "_isJavascriptObjectFunction", { enumerable: false });
+Object.defineProperty(PP.DebugFunctionsOverwriter.prototype, "_isJavascriptObjectFunction", { enumerable: false });

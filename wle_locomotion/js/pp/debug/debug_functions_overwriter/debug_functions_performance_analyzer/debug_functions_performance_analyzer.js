@@ -1,6 +1,6 @@
 
 
-PP.DebugFunctionPerformanceAnalyzerParams = class DebugFunctionPerformanceAnalyzerParams extends PP.DebugFunctionOverwriterParams {
+PP.DebugFunctionsPerformanceAnalyzerParams = class DebugFunctionsPerformanceAnalyzerParams extends PP.DebugFunctionsOverwriterParams {
     constructor() {
         super();
 
@@ -53,15 +53,15 @@ PP.DebugFunctionPerformanceAnalysisResults = class DebugFunctionPerformanceAnaly
     }
 };
 
-PP.DebugFunctionPerformanceAnalyzerSortOrder = {
+PP.DebugFunctionsPerformanceAnalyzerSortOrder = {
     NONE: 0,
     CALLS_COUNT: 1,
     TOTAL_EXECUTION_TIME: 2,
     AVERAGE_EXECUTION_TIME: 3
 };
 
-PP.DebugFunctionPerformanceAnalyzer = class DebugFunctionPerformanceAnalyzer extends PP.DebugFunctionOverwriter {
-    constructor(params = new PP.DebugFunctionOverwriterParams()) {
+PP.DebugFunctionsPerformanceAnalyzer = class DebugFunctionsPerformanceAnalyzer extends PP.DebugFunctionsOverwriter {
+    constructor(params = new PP.DebugFunctionsOverwriterParams()) {
         super(params);
 
         this._myFunctionPerformanceAnalysisResults = new Map();
@@ -95,7 +95,7 @@ PP.DebugFunctionPerformanceAnalyzer = class DebugFunctionPerformanceAnalyzer ext
         }
     }
 
-    getResults(sortOrder = PP.DebugFunctionPerformanceAnalyzerSortOrder.NONE) {
+    getResults(sortOrder = PP.DebugFunctionsPerformanceAnalyzerSortOrder.NONE) {
         this._updateDerivatesResults();
         this._updateMaxResults();
 
@@ -104,7 +104,7 @@ PP.DebugFunctionPerformanceAnalyzer = class DebugFunctionPerformanceAnalyzer ext
         return results;
     }
 
-    getMaxResults(sortOrder = PP.DebugFunctionPerformanceAnalyzerSortOrder.NONE) {
+    getMaxResults(sortOrder = PP.DebugFunctionsPerformanceAnalyzerSortOrder.NONE) {
         this._updateDerivatesResults();
         this._updateMaxResults();
 
@@ -135,11 +135,11 @@ PP.DebugFunctionPerformanceAnalyzer = class DebugFunctionPerformanceAnalyzer ext
     _sortResults(results, sortOrder) {
         let sortedResults = results;
 
-        if (sortOrder != PP.DebugFunctionPerformanceAnalyzerSortOrder.NONE) {
+        if (sortOrder != PP.DebugFunctionsPerformanceAnalyzerSortOrder.NONE) {
             sortedResults = new Map([...results.entries()].sort(function (first, second) {
                 let sortResult = 0;
 
-                if (sortOrder == PP.DebugFunctionPerformanceAnalyzerSortOrder.CALLS_COUNT) {
+                if (sortOrder == PP.DebugFunctionsPerformanceAnalyzerSortOrder.CALLS_COUNT) {
                     sortResult = -(first.myCallsCount - second.myCallsCount);
                     if (sortResult == 0) {
                         sortResult = -(first.myTotalExecutionTime - second.myTotalExecutionTime);
@@ -147,7 +147,7 @@ PP.DebugFunctionPerformanceAnalyzer = class DebugFunctionPerformanceAnalyzer ext
                             sortResult = -(first.myAverageExecutionTime - second.myAverageExecutionTime);
                         }
                     }
-                } else if (sortOrder == PP.DebugFunctionPerformanceAnalyzerSortOrder.TOTAL_EXECUTION_TIME) {
+                } else if (sortOrder == PP.DebugFunctionsPerformanceAnalyzerSortOrder.TOTAL_EXECUTION_TIME) {
                     sortResult = -(first.myTotalExecutionTime - second.myTotalExecutionTime);
                     if (sortResult == 0) {
                         sortResult = -(first.myAverageExecutionTime - second.myAverageExecutionTime);
