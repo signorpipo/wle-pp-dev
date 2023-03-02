@@ -1,6 +1,6 @@
 PP.JSUtils = {
     now: function () {
-        window.performance.now();
+        return window.performance.now();
     },
     getReferencePropertyNames: function (reference) {
         let propertyNames = Object.getOwnPropertyNames(reference);
@@ -17,6 +17,44 @@ PP.JSUtils = {
         }
 
         return propertyNames;
+    },
+    getReferencePropertyDescriptor: function (reference, propertyName) {
+        let propertyDescriptor = null;
+
+        propertyDescriptor = Object.getOwnPropertyDescriptor(reference, propertyName);
+
+        if (propertyDescriptor == null && reference.prototype != null) {
+            propertyDescriptor = Object.getOwnPropertyDescriptor(reference.prototype, propertyName)
+        }
+
+        if (propertyDescriptor == null && Object.getPrototypeOf(reference) != null) {
+            propertyDescriptor = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(reference), propertyName);
+        }
+
+        if (propertyDescriptor == null && reference.prototype != null && Object.getPrototypeOf(reference.prototype) != null) {
+            propertyDescriptor = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(reference.prototype), propertyName);
+        }
+
+        return propertyDescriptor;
+    },
+    getReferenceProperty: function (reference, propertyName) {
+        let property = undefined;
+
+        property = reference[propertyName];
+
+        if (property === undefined && reference.prototype != null) {
+            property = reference.prototype[propertyName];
+        }
+
+        if (property === undefined && Object.getPrototypeOf(reference) != null) {
+            property = Object.getPrototypeOf(reference)[propertyName];
+        }
+
+        if (property === undefined && reference.prototype != null && Object.getPrototypeOf(reference.prototype) != null) {
+            property = Object.getPrototypeOf(reference.prototype)[propertyName];
+        }
+
+        return property;
     },
     getReferenceFromPath: function (path, pathStartReference = window) {
         let reference = null;
@@ -60,16 +98,16 @@ PP.JSUtils = {
             let isWritable = true;
 
             if (originalProperty != null) {
-                isEnumerable = Object.getOwnPropertyDescriptor(reference, propertyName).enumerable;
-                isConfigurable = Object.getOwnPropertyDescriptor(reference, propertyName).configurable;
-                isWritable = Object.getOwnPropertyDescriptor(reference, propertyName).writable;
+                isEnumerable = this.getReferencePropertyDescriptor(reference, propertyName).enumerable;
+                isConfigurable = this.getReferencePropertyDescriptor(reference, propertyName).configurable;
+                isWritable = this.getReferencePropertyDescriptor(reference, propertyName).writable;
 
-                let currentPropertyNames = this.getReferencePropertyNames(reference);
+                let currentPropertyNames = this.getReferencePropertyNames(originalProperty);
                 for (let currentPropertyName of currentPropertyNames) {
                     try {
-                        let isCurrentEnumerable = Object.getOwnPropertyDescriptor(originalProperty, currentPropertyName).enumerable;
-                        let isCurrentConfigurable = Object.getOwnPropertyDescriptor(originalProperty, currentPropertyName).configurable;
-                        let isCurrentWritable = Object.getOwnPropertyDescriptor(originalProperty, currentPropertyName).writable;
+                        let isCurrentEnumerable = this.getReferencePropertyDescriptor(originalProperty, currentPropertyName).enumerable;
+                        let isCurrentConfigurable = this.getReferencePropertyDescriptor(originalProperty, currentPropertyName).configurable;
+                        let isCurrentWritable = this.getReferencePropertyDescriptor(originalProperty, currentPropertyName).writable;
                         Object.defineProperty(newProperty, currentPropertyName, {
                             value: originalProperty[currentPropertyName],
                             enumerable: isCurrentEnumerable,

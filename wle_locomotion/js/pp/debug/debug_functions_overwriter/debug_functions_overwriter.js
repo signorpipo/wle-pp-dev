@@ -54,7 +54,7 @@ PP.DebugFunctionsOverwriter = class DebugFunctionsOverwriter {
         this._myPropertiesAlreadyOverwritten = new Map();
     }
 
-    overwrite() {
+    overwriteFunctions() {
         let classesAndParents = this._getReferencesAndParents(this._myParams.myClassesByReference, this._myParams.myClassesByPath, true);
         let objectsAndParents = this._getReferencesAndParents(this._myParams.myObjectsByReference, this._myParams.myObjectsByPath, false);
         let functionsAndParents = this._getReferencesAndParents([], this._myParams.myFunctionsByPath, false);
@@ -138,7 +138,11 @@ PP.DebugFunctionsOverwriter = class DebugFunctionsOverwriter {
                         if (overwriteTargetReference[propertyName] == null) {
                             overwriteTargetReference = reference;
                         }
-                    } catch (e) { }
+                    } catch (error) {
+                        if (this._myParams.myDebugLogActive) {
+                            console.error(error);
+                        }
+                    }
 
                     referenceParentForConstructor = referenceParent;
                     referenceNameForConstructor = referenceName;
@@ -152,7 +156,7 @@ PP.DebugFunctionsOverwriter = class DebugFunctionsOverwriter {
     }
 
     _overwriteFunction(reference, propertyName, referenceParentForConstructor, referenceNameForConstructor, referencePath, isClass, isFunction) {
-        let isPropertyCountedAlready = this._myPropertiesAlreadyOverwritten.get(propertyName).pp_hasEqual(reference);
+        let isPropertyCountedAlready = this._myPropertiesAlreadyOverwritten.get(propertyName) != null && this._myPropertiesAlreadyOverwritten.get(propertyName).pp_hasEqual(reference);
         if (!isPropertyCountedAlready) {
             if (PP.JSUtils.isFunctionByName(reference, propertyName)) {
                 if (!this._myParams.myExcludeJavascriptObjectFunctions || !this._isJavascriptObjectFunction(propertyName)) {
@@ -174,6 +178,9 @@ PP.DebugFunctionsOverwriter = class DebugFunctionsOverwriter {
                                     overwriteSuccess = true;
                                 }
                             } catch (error) {
+                                if (this._myParams.myDebugLogActive) {
+                                    console.error(error);
+                                }
                             }
                         } else if (!this._myParams.myExcludeConstructors && isClass && referenceParentForConstructor != null &&
                             [referenceNameForConstructor] != null && referenceParentForConstructor[referenceNameForConstructor].prototype != null) {
@@ -187,6 +194,9 @@ PP.DebugFunctionsOverwriter = class DebugFunctionsOverwriter {
                                     overwriteSuccess = true;
                                 }
                             } catch (error) {
+                                if (this._myParams.myDebugLogActive) {
+                                    console.error(error);
+                                }
                             }
                         }
 
@@ -285,6 +295,9 @@ PP.DebugFunctionsOverwriter = class DebugFunctionsOverwriter {
                             continue;
                         }
                     } catch (error) {
+                        if (this._myParams.myDebugLogActive) {
+                            console.error(error);
+                        }
                         continue;
                     }
 
