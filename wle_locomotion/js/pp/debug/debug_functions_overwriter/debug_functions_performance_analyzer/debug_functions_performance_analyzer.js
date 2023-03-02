@@ -70,7 +70,7 @@ PP.DebugFunctionsPerformanceAnalyzer = class DebugFunctionsPerformanceAnalyzer e
         this._myResultsAlreadyAdded = false;
 
         this._myTimeSinceLastResetToIgnore = { myValue: 0 };
-        this._myTimeOfLastReset = PP.JSUtils.now();
+        this._myTimeOfLastReset = window.performance.now();
         this._myMaxTimeElapsedSinceLastReset = 0;
     }
 
@@ -82,7 +82,7 @@ PP.DebugFunctionsPerformanceAnalyzer = class DebugFunctionsPerformanceAnalyzer e
     }
 
     getTimeElapsedSinceLastReset() {
-        return PP.JSUtils.now() - this._myTimeOfLastReset - this._myTimeSinceLastResetToIgnore.myValue;
+        return window.performance.now() - this._myTimeOfLastReset - this._myTimeSinceLastResetToIgnore.myValue;
     }
 
     getMaxTimeElapsedSinceLastReset() {
@@ -99,7 +99,7 @@ PP.DebugFunctionsPerformanceAnalyzer = class DebugFunctionsPerformanceAnalyzer e
         }
 
         this._myTimeSinceLastResetToIgnore.myValue = 0;
-        this._myTimeOfLastReset = PP.JSUtils.now();
+        this._myTimeOfLastReset = window.performance.now();
     }
 
     resetMaxResults() {
@@ -202,7 +202,7 @@ PP.DebugFunctionsPerformanceAnalyzer = class DebugFunctionsPerformanceAnalyzer e
 
     _updateDerivatesResults() {
         let timeElapsedSinceLastReset = this.getTimeElapsedSinceLastReset();
-        let beforeTime = PP.JSUtils.now();
+        let beforeTime = window.performance.now();
 
         for (let property of this._myFunctionPerformanceAnalysisResults.keys()) {
             let results = this._myFunctionPerformanceAnalysisResults.get(property);
@@ -226,11 +226,11 @@ PP.DebugFunctionsPerformanceAnalyzer = class DebugFunctionsPerformanceAnalyzer e
             results.myTimeElapsedSinceLastReset = timeElapsedSinceLastReset;
         }
 
-        this._myTimeSinceLastResetToIgnore.myValue += PP.JSUtils.now() - beforeTime;
+        this._myTimeSinceLastResetToIgnore.myValue += window.performance.now() - beforeTime;
     }
 
     _updateMaxResults() {
-        let beforeTime = PP.JSUtils.now();
+        let beforeTime = window.performance.now();
 
         this._myMaxTimeElapsedSinceLastReset = Math.max(this._myMaxTimeElapsedSinceLastReset, this.getTimeElapsedSinceLastReset());
 
@@ -244,7 +244,7 @@ PP.DebugFunctionsPerformanceAnalyzer = class DebugFunctionsPerformanceAnalyzer e
             }
         }
 
-        this._myTimeSinceLastResetToIgnore.myValue += PP.JSUtils.now() - beforeTime;
+        this._myTimeSinceLastResetToIgnore.myValue += window.performance.now() - beforeTime;
     }
 
     _getOverwrittenFunctionInternal(reference, propertyName, referencePath, isClass, isFunction, isConstructor) {
@@ -272,24 +272,24 @@ PP.DebugFunctionsPerformanceAnalyzer = class DebugFunctionsPerformanceAnalyzer e
 
             if (!isConstructor) {
                 newFunction = function () {
-                    let beforeTime = PP.JSUtils.now();
+                    let beforeTime = window.performance.now();
                     let returnValue = originalFunction.bind(this)(...arguments);
-                    let afterTime = PP.JSUtils.now();
+                    let afterTime = window.performance.now();
                     let executionTime = afterTime - beforeTime;
                     functionPerformanceAnalysisResults.myCallsCount += 1;
                     functionPerformanceAnalysisResults.myTotalExecutionTime += executionTime;
-                    timeSinceLastResetToIgnoreReference.myValue += PP.JSUtils.now() - afterTime;
+                    timeSinceLastResetToIgnoreReference.myValue += window.performance.now() - afterTime;
                     return returnValue;
                 };
             } else {
                 newFunction = function () {
-                    let beforeTime = PP.JSUtils.now();
+                    let beforeTime = window.performance.now();
                     let returnValue = new originalFunction(...arguments);
-                    let afterTime = PP.JSUtils.now();
+                    let afterTime = window.performance.now();
                     let executionTime = afterTime - beforeTime;
                     functionPerformanceAnalysisResults.myCallsCount += 1;
                     functionPerformanceAnalysisResults.myTotalExecutionTime += executionTime;
-                    timeSinceLastResetToIgnoreReference.myValue += PP.JSUtils.now() - afterTime;
+                    timeSinceLastResetToIgnoreReference.myValue += window.performance.now() - afterTime;
                     return returnValue;
                 };
             }

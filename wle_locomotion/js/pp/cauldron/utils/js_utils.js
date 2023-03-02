@@ -1,7 +1,4 @@
 PP.JSUtils = {
-    now: function () {
-        return window.performance.now();
-    },
     getReferencePropertyNames: function (reference) {
         let propertyNames = Object.getOwnPropertyNames(reference);
 

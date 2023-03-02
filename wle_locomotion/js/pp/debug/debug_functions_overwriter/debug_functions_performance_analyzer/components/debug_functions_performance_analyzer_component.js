@@ -9,13 +9,13 @@ WL.registerComponent('pp-debug-functions-performance-analyzer', {
     _myLogCollapsed: { type: WL.Type.Bool, default: false },
     _myLogMaxResults: { type: WL.Type.Bool, default: false },
     _myLogSortOrder: { type: WL.Type.Enum, values: ["none", "calls count", "total execution time", "average execution time"], default: "none" },
-    _myLogMaxAmountOfFunctions: { type: WL.Type.Int, default: -1 },
-    _myLogFunctionsWithCallsCountAbove: { type: WL.Type.Int, default: -1 },
-    _myLogFunctionsWithTotalExecutionTimePercentageAbove: { type: WL.Type.Int, default: -1 },
     _myLogCallsCountResults: { type: WL.Type.Bool, default: true },
     _myLogTotalExecutionTimeResults: { type: WL.Type.Bool, default: true },
     _myLogTotalExecutionTimePercentageResults: { type: WL.Type.Bool, default: true },
     _myLogAverageExecutionTimeResults: { type: WL.Type.Bool, default: true },
+    _myLogMaxAmountOfFunctions: { type: WL.Type.Int, default: -1 },
+    _myLogFunctionsWithCallsCountAbove: { type: WL.Type.Int, default: -1 },
+    _myLogFunctionsWithTotalExecutionTimePercentageAbove: { type: WL.Type.Int, default: -1 },
     _myFunctionNamesToInclude: { type: WL.Type.String, default: "" },
     _myFunctionNamesToExclude: { type: WL.Type.String, default: "" },
     _myExcludeConstructors: { type: WL.Type.Bool, default: false },
@@ -27,8 +27,6 @@ WL.registerComponent('pp-debug-functions-performance-analyzer', {
     _myResetMaxResultsShortcutEnabled: { type: WL.Type.Bool, default: false }
 }, {
     init() {
-        if (!this.active) return;
-
         this._myFunctionsPerformanceAnalyzer = null;
         this._myFunctionsPerformanceAnalysisResultsLogger = null;
 
