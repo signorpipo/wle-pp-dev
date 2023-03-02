@@ -107,7 +107,8 @@ require('./pp/debug/debug_functions_overwriter/debug_functions_overwriter');
 require('./pp/debug/debug_functions_overwriter/debug_functions_performance_analyzer/debug_functions_performance_analyzer');
 require('./pp/debug/debug_functions_overwriter/debug_functions_performance_analyzer/debug_functions_performance_analysis_results_logger');
 require('./pp/debug/debug_functions_overwriter/debug_functions_performance_analyzer/components/debug_functions_performance_analyzer_component');
-require('./pp/debug/debug_functions_overwriter/debug_functions_performance_analyzer/components/debug_pp_function_performance_analyzer_component');
+require('./pp/debug/debug_functions_overwriter/debug_functions_performance_analyzer/components/debug_pp_functions_performance_analyzer_component');
+require('./pp/debug/debug_functions_overwriter/debug_functions_performance_analyzer/components/debug_array_functions_performance_analyzer_component');
 
 require('./pp/debug/function_calls_counter/debug_function_calls_counter');
 require('./pp/debug/function_calls_counter/debug_function_calls_count_logger');
