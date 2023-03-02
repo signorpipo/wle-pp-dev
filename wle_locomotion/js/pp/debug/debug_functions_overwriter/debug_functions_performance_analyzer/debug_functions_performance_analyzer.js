@@ -1,5 +1,3 @@
-
-
 PP.DebugFunctionsPerformanceAnalyzerParams = class DebugFunctionsPerformanceAnalyzerParams extends PP.DebugFunctionsOverwriterParams {
     constructor() {
         super();
@@ -143,7 +141,7 @@ PP.DebugFunctionsPerformanceAnalyzer = class DebugFunctionsPerformanceAnalyzer e
 
     _onOverwriteFailure(reference, propertyName, referenceParentForConstructor, referenceNameForConstructor, referencePath, isClass, isFunction, isConstructor) {
         if (this._myResultsAlreadyAdded) {
-            let propertyID = this._getPropertyID(propertyName, referencePath, isFunction);
+            let propertyID = this._getPropertyID(propertyName, referencePath, isFunction, isConstructor);
             this._myFunctionPerformanceAnalysisResults.delete(propertyID);
         }
     }
@@ -188,8 +186,8 @@ PP.DebugFunctionsPerformanceAnalyzer = class DebugFunctionsPerformanceAnalyzer e
         return sortedResults;
     }
 
-    _getPropertyID(propertyName, referencePath, isFunction) {
-        let id = propertyName;
+    _getPropertyID(propertyName, referencePath, isFunction, isConstructor) {
+        let id = isConstructor ? "constructor" : propertyName;
 
         if (referencePath != null && this._myParams.myAddPathPrefixToFunctionID) {
             if (!isFunction) {
@@ -252,7 +250,7 @@ PP.DebugFunctionsPerformanceAnalyzer = class DebugFunctionsPerformanceAnalyzer e
     _getOverwrittenFunctionInternal(reference, propertyName, referencePath, isClass, isFunction, isConstructor) {
         if (this._myParams.myFilterDebugFunctionsPerformanceAnalyzerClasses && this._isPerformanceAnalyzer(reference, propertyName, isClass)) return reference[propertyName];
 
-        let propertyID = this._getPropertyID(propertyName, referencePath, isFunction);
+        let propertyID = this._getPropertyID(propertyName, referencePath, isFunction, isConstructor);
 
         let newFunction = reference[propertyName];
 

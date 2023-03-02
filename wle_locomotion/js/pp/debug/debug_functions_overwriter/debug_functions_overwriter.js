@@ -232,7 +232,7 @@ PP.DebugFunctionsOverwriter = class DebugFunctionsOverwriter {
             referenceNameForFilter = PP.JSUtils.getReferenceNameFromPath(referencePath);
 
             let reference = PP.JSUtils.getReferenceFromPath(path);
-            let referenceParent = PP.JSUtils.getParentReferenceFromPath(path);
+            let referenceParent = PP.JSUtils.getReferenceParentFromPath(path);
 
             if (reference != null) {
                 referenceAndParents.pp_pushUnique([reference, referenceParent, referenceName, referencePath, referenceNameForFilter], equalCallback);

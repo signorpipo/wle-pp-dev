@@ -21,47 +21,51 @@ PP.JSUtils = {
     getReferencePropertyDescriptor: function (reference, propertyName) {
         let propertyDescriptor = null;
 
-        propertyDescriptor = Object.getOwnPropertyDescriptor(reference, propertyName);
+        let propertyParent = this.getReferencePropertyParent(reference, propertyName);
 
-        if (propertyDescriptor == null && reference.prototype != null) {
-            propertyDescriptor = Object.getOwnPropertyDescriptor(reference.prototype, propertyName)
-        }
-
-        if (propertyDescriptor == null && Object.getPrototypeOf(reference) != null) {
-            propertyDescriptor = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(reference), propertyName);
-        }
-
-        if (propertyDescriptor == null && reference.prototype != null && Object.getPrototypeOf(reference.prototype) != null) {
-            propertyDescriptor = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(reference.prototype), propertyName);
+        if (propertyParent != null) {
+            propertyDescriptor = Object.getOwnPropertyDescriptor(propertyParent, propertyName);
         }
 
         return propertyDescriptor;
     },
     getReferenceProperty: function (reference, propertyName) {
-        let property = undefined;
+        return reference[propertyName];
+    },
+    getReferencePropertyParent: function (reference, propertyName) {
+        let parent = null;
 
-        property = reference[propertyName];
+        let possibleParents = [];
 
-        if (property === undefined && reference.prototype != null) {
-            property = reference.prototype[propertyName];
+        let prototypes = [];
+        prototypes.pp_pushUnique(reference);
+
+        while (prototypes.length > 0) {
+            let prototype = prototypes.shift();
+            if (prototype != null) {
+                possibleParents.pp_pushUnique(prototype);
+
+                prototypes.pp_pushUnique(prototype.prototype);
+                prototypes.pp_pushUnique(Object.getPrototypeOf(prototype));
+            }
         }
 
-        if (property === undefined && Object.getPrototypeOf(reference) != null) {
-            property = Object.getPrototypeOf(reference)[propertyName];
+        for (let possibleParent of possibleParents) {
+            let propertyNames = Object.getOwnPropertyNames(possibleParent);
+            if (propertyNames.pp_hasEqual(propertyName)) {
+                parent = possibleParent;
+                break;
+            }
         }
 
-        if (property === undefined && reference.prototype != null && Object.getPrototypeOf(reference.prototype) != null) {
-            property = Object.getPrototypeOf(reference.prototype)[propertyName];
-        }
-
-        return property;
+        return parent;
     },
     getReferenceFromPath: function (path, pathStartReference = window) {
         let reference = null;
 
         let referenceName = this.getReferenceNameFromPath(path);
         if (referenceName != null) {
-            return this.getParentReferenceFromPath(path, pathStartReference)[referenceName];
+            return this.getReferenceParentFromPath(path, pathStartReference)[referenceName];
         }
 
         return reference;
@@ -78,7 +82,7 @@ PP.JSUtils = {
 
         return referenceName;
     },
-    getParentReferenceFromPath: function (path, pathStartReference = window) {
+    getReferenceParentFromPath: function (path, pathStartReference = window) {
         let pathSplit = path.split(".");
         let currentParent = pathStartReference;
         for (let i = 0; i < pathSplit.length - 1; i++) {
@@ -106,8 +110,11 @@ PP.JSUtils = {
                 for (let currentPropertyName of currentPropertyNames) {
                     try {
                         let isCurrentEnumerable = this.getReferencePropertyDescriptor(originalProperty, currentPropertyName).enumerable;
+                        isCurrentEnumerable = typeof isCurrentEnumerable == "boolean" ? isCurrentEnumerable : false;
                         let isCurrentConfigurable = this.getReferencePropertyDescriptor(originalProperty, currentPropertyName).configurable;
+                        isCurrentConfigurable = typeof isCurrentConfigurable == "boolean" ? isCurrentConfigurable : false;
                         let isCurrentWritable = this.getReferencePropertyDescriptor(originalProperty, currentPropertyName).writable;
+                        isCurrentWritable = typeof isCurrentWritable == "boolean" ? isCurrentWritable : false;
                         Object.defineProperty(newProperty, currentPropertyName, {
                             value: originalProperty[currentPropertyName],
                             enumerable: isCurrentEnumerable,
