@@ -1,6 +1,5 @@
 
-WL.registerComponent('pp-debug-array-functions-performance-analyzer', {
-    _myIncludeOnlyArrayExtensionFunctions: { type: WL.Type.Bool, default: false },
+WL.registerComponent('pp-debug-pp-array-creation-performance-analyzer', {
     _myDelayStart: { type: WL.Type.Float, default: 0.0 },
     _myLogFunction: { type: WL.Type.Enum, values: ["log", "error", "warn", "debug"], default: "log" },
     _mySecondsBetweenLogs: { type: WL.Type.Float, default: 1.0 },
@@ -14,17 +13,14 @@ WL.registerComponent('pp-debug-array-functions-performance-analyzer', {
     _myLogMaxAmountOfFunctions: { type: WL.Type.Int, default: -1 },
     _myLogFunctionsWithCallsCountAbove: { type: WL.Type.Int, default: -1 },
     _myLogFunctionsWithTotalExecutionTimePercentageAbove: { type: WL.Type.Int, default: -1 },
-    _myFunctionNamesToInclude: { type: WL.Type.String, default: "" },
-    _myFunctionNamesToExclude: { type: WL.Type.String, default: "" },
-    _myExcludeConstructors: { type: WL.Type.Bool, default: false },
     _myClearConsoleBeforeLog: { type: WL.Type.Bool, default: false },
     _myResetMaxResultsShortcutEnabled: { type: WL.Type.Bool, default: false }
 }, {
     init() {
         this.object.pp_addComponent("pp-debug-functions-performance-analyzer", {
-            _myClassesByPath: "Array, Uint8ClampedArray, Uint8Array, Uint16Array, Uint32Array, Int8Array, Int16Array, Int32Array, Float32Array, Float64Array",
+            _myObjectsByPath: "PP",
             _myDelayStart: this._myDelayStart,
-            _myLogTitle: "Array Functions Performance Analysis Results",
+            _myLogTitle: "PP Array Creation Performance Analysis Results",
             _myLogFunction: this._myLogFunction,
             _mySecondsBetweenLogs: this._mySecondsBetweenLogs,
             _myLogCollapsed: this._myLogCollapsed,
@@ -37,9 +33,8 @@ WL.registerComponent('pp-debug-array-functions-performance-analyzer', {
             _myLogTotalExecutionTimeResults: this._myLogTotalExecutionTimeResults,
             _myLogTotalExecutionTimePercentageResults: this._myLogTotalExecutionTimePercentageResults,
             _myLogAverageExecutionTimeResults: this._myLogAverageExecutionTimeResults,
-            _myFunctionNamesToInclude: this._myFunctionNamesToInclude + (this._myFunctionNamesToInclude.length > 0 ? ", " : "") + "pp_, vec_, vec2_, vec3_, vec4_, quat_, quat2_, mat3_, mat4_, _pp_, _vec_, _quat_",
-            _myFunctionNamesToExclude: this._myFunctionNamesToExclude,
-            _myExcludeConstructors: this._myExcludeConstructors,
+            _myFunctionNamesToInclude: "vec2_create, vec3_create, vec4_create, quat_create, quat2_create, mat3_create, mat4_create",
+            _myExcludeConstructors: true,
             _myExcludeJavascriptObjectFunctions: true,
             _myAddPathPrefixToFunctionID: true,
             _myClearConsoleBeforeLog: this._myClearConsoleBeforeLog,
