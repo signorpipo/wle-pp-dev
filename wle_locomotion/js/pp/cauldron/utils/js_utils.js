@@ -18,7 +18,7 @@ PP.JSUtils = {
     getReferencePropertyDescriptor: function (reference, propertyName) {
         let propertyDescriptor = null;
 
-        let propertyParent = this.getReferencePropertyParent(reference, propertyName);
+        let propertyParent = this.getReferencePropertyOwnParent(reference, propertyName);
 
         if (propertyParent != null) {
             propertyDescriptor = Object.getOwnPropertyDescriptor(propertyParent, propertyName);
@@ -29,7 +29,7 @@ PP.JSUtils = {
     getReferenceProperty: function (reference, propertyName) {
         return reference[propertyName];
     },
-    getReferencePropertyParent: function (reference, propertyName) {
+    getReferencePropertyOwnParent: function (reference, propertyName) {
         let parent = null;
 
         let possibleParents = [];
