@@ -290,12 +290,16 @@ PP.DebugFunctionsPerformanceAnalyzer = class DebugFunctionsPerformanceAnalyzer e
                     let returnValue = undefined;
 
                     let startOriginalFunctionTime = window.performance.now();
+                    let endOriginalFunctionTime = window.performance.now();
                     try {
-                        returnValue = originalFunction.bind(this)(...arguments);
+                        let bindFunction = originalFunction.bind(this);
+                        startOriginalFunctionTime = window.performance.now();
+                        returnValue = bindFunction(...arguments);
+                        endOriginalFunctionTime = window.performance.now();
                     } catch (error) {
+                        endOriginalFunctionTime = window.performance.now();
                         errorToThrow = error;
                     }
-                    let endOriginalFunctionTime = window.performance.now();
 
                     let originalFunctionOverheadExecutionTime = executionTimes.myOriginalFunctionOverheadExecutionTimes.pop();
 
@@ -309,15 +313,18 @@ PP.DebugFunctionsPerformanceAnalyzer = class DebugFunctionsPerformanceAnalyzer e
 
                     executionTimes.myLastFunctionExecutionTime = executionTime;
 
-                    let overheadExecutionTime = 0;
+                    let beforeOverhead = startOriginalFunctionTime - startTime;
+                    let overheadToIgnoreForLastReset = 0.00015;
+                    let inBetweenOverhead = beforeOverhead - endOriginalFunctionTime + overheadToIgnoreForLastReset;
                     if (executionTimes.myOriginalFunctionOverheadExecutionTimes.length > 0) {
-                        overheadExecutionTime = (window.performance.now() - startTime) - executionTime;
-                        executionTimes.myOriginalFunctionOverheadExecutionTimes[executionTimes.myOriginalFunctionOverheadExecutionTimes.length - 1] += overheadExecutionTime;
-                    } else {
-                        overheadExecutionTime = (window.performance.now() - startTime) - executionTime;
+                        executionTimes.myOriginalFunctionOverheadExecutionTimes[executionTimes.myOriginalFunctionOverheadExecutionTimes.length - 1] +=
+                            inBetweenOverhead + originalFunctionOverheadExecutionTime;
+                        executionTimes.myOriginalFunctionOverheadExecutionTimes[executionTimes.myOriginalFunctionOverheadExecutionTimes.length - 1] +=
+                            window.performance.now();
                     }
 
-                    executionTimes.myOverheadExecutionTimeSinceLastReset += overheadExecutionTime - originalFunctionOverheadExecutionTime;
+                    executionTimes.myOverheadExecutionTimeSinceLastReset += inBetweenOverhead;
+                    executionTimes.myOverheadExecutionTimeSinceLastReset += window.performance.now();
 
                     if (errorToThrow != null) {
                         throw errorToThrow;
@@ -334,12 +341,15 @@ PP.DebugFunctionsPerformanceAnalyzer = class DebugFunctionsPerformanceAnalyzer e
                     let returnValue = undefined;
 
                     let startOriginalFunctionTime = window.performance.now();
+                    let endOriginalFunctionTime = window.performance.now();
                     try {
+                        startOriginalFunctionTime = window.performance.now();
                         returnValue = new originalFunction(...arguments);
+                        endOriginalFunctionTime = window.performance.now();
                     } catch (error) {
+                        endOriginalFunctionTime = window.performance.now();
                         errorToThrow = error;
                     }
-                    let endOriginalFunctionTime = window.performance.now();
 
                     let originalFunctionOverheadExecutionTime = executionTimes.myOriginalFunctionOverheadExecutionTimes.pop();
 
@@ -353,15 +363,18 @@ PP.DebugFunctionsPerformanceAnalyzer = class DebugFunctionsPerformanceAnalyzer e
 
                     executionTimes.myLastFunctionExecutionTime = executionTime;
 
-                    let overheadExecutionTime = 0;
+                    let beforeOverhead = startOriginalFunctionTime - startTime;
+                    let overheadToIgnoreForLastReset = 0.00015;
+                    let inBetweenOverhead = beforeOverhead - endOriginalFunctionTime + overheadToIgnoreForLastReset;
                     if (executionTimes.myOriginalFunctionOverheadExecutionTimes.length > 0) {
-                        overheadExecutionTime = (window.performance.now() - startTime) - executionTime;
-                        executionTimes.myOriginalFunctionOverheadExecutionTimes[executionTimes.myOriginalFunctionOverheadExecutionTimes.length - 1] += overheadExecutionTime;
-                    } else {
-                        overheadExecutionTime = (window.performance.now() - startTime) - executionTime;
+                        executionTimes.myOriginalFunctionOverheadExecutionTimes[executionTimes.myOriginalFunctionOverheadExecutionTimes.length - 1] +=
+                            inBetweenOverhead + originalFunctionOverheadExecutionTime;
+                        executionTimes.myOriginalFunctionOverheadExecutionTimes[executionTimes.myOriginalFunctionOverheadExecutionTimes.length - 1] +=
+                            window.performance.now();
                     }
 
-                    executionTimes.myOverheadExecutionTimeSinceLastReset += overheadExecutionTime - originalFunctionOverheadExecutionTime;
+                    executionTimes.myOverheadExecutionTimeSinceLastReset += inBetweenOverhead;
+                    executionTimes.myOverheadExecutionTimeSinceLastReset += window.performance.now();
 
                     if (errorToThrow != null) {
                         throw errorToThrow;
