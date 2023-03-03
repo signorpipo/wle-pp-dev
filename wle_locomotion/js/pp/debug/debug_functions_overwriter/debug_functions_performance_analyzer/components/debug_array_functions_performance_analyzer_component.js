@@ -37,7 +37,7 @@ WL.registerComponent('pp-debug-array-functions-performance-analyzer', {
             _myLogTotalExecutionTimeResults: this._myLogTotalExecutionTimeResults,
             _myLogTotalExecutionTimePercentageResults: this._myLogTotalExecutionTimePercentageResults,
             _myLogAverageExecutionTimeResults: this._myLogAverageExecutionTimeResults,
-            _myFunctionPathsToInclude: this._myFunctionPathsToInclude + (this._myFunctionPathsToInclude.length > 0 ? ", " : "") + "pp_, vec_, vec2_, vec3_, vec4_, quat_, quat2_, mat3_, mat4_, _pp_, _vec_, _quat_",
+            _myFunctionPathsToInclude: this._myFunctionPathsToInclude + (this._myFunctionPathsToInclude.length > 0 ? ", " : "") + (this._myIncludeOnlyArrayExtensionFunctions ? "pp_, vec_, vec2_, vec3_, vec4_, quat_, quat2_, mat3_, mat4_, _pp_, _vec_, _quat_" : ""),
             _myFunctionPathsToExclude: this._myFunctionPathsToExclude,
             _myExcludeConstructors: this._myExcludeConstructors,
             _myExcludeJavascriptObjectFunctions: true,
