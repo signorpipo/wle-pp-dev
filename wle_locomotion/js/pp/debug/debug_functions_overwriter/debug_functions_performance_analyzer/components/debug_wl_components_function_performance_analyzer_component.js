@@ -1,5 +1,7 @@
 
 WL.registerComponent('pp-debug-wl-components-functions-performance-analyzer', {
+    _myAnalyzeComponentTypes: { type: WL.Type.Bool, default: true },
+    _myAnalyzeComponentInstances: { type: WL.Type.Bool, default: false },
     _myDelayStart: { type: WL.Type.Float, default: 0.0 },
     _myLogFunction: { type: WL.Type.Enum, values: ["log", "error", "warn", "debug"], default: "log" },
     _mySecondsBetweenLogs: { type: WL.Type.Float, default: 1.0 },
@@ -20,10 +22,23 @@ WL.registerComponent('pp-debug-wl-components-functions-performance-analyzer', {
     _myResetMaxResultsShortcutEnabled: { type: WL.Type.Bool, default: false }
 }, {
     init() {
+        let objectsByPath = "";
+
+        if (this._myAnalyzeComponentTypes) {
+            objectsByPath += "_WL._componentTypes";
+        }
+
+        if (this._myAnalyzeComponentInstances) {
+            if (objectsByPath.length > 0) {
+                objectsByPath += ", ";
+            }
+            objectsByPath += "_WL._components";
+        }
+
         this._myAnalyzerComponent = this.object.pp_addComponent("pp-debug-functions-performance-analyzer", {
-            _myObjectsByPath: "_WL._components, _WL._componentTypes",
+            _myObjectsByPath: objectsByPath,
             _myDelayStart: this._myDelayStart + 0.001,
-            _myLogTitle: "WL Functions Performance Analysis Results",
+            _myLogTitle: "WL Components Performance Analysis Results",
             _myLogFunction: this._myLogFunction,
             _mySecondsBetweenLogs: this._mySecondsBetweenLogs,
             _myLogCollapsed: this._myLogCollapsed,
@@ -37,7 +52,7 @@ WL.registerComponent('pp-debug-wl-components-functions-performance-analyzer', {
             _myLogTotalExecutionTimePercentageResults: this._myLogTotalExecutionTimePercentageResults,
             _myLogAverageExecutionTimeResults: this._myLogAverageExecutionTimeResults,
             _myFunctionPathsToInclude: this._myFunctionPathsToInclude,
-            _myFunctionPathsToExclude: this._myFunctionPathsToExclude,
+            _myFunctionPathsToExclude: this._myFunctionPathsToExclude + (this._myFunctionPathsToExclude.length > 0 ? ", " : "") + "_WL\\._components\\., _WL\\._componentTypes\\.",
             _myExcludeConstructors: this._myExcludeConstructors,
             _myExcludeJavascriptObjectFunctions: true,
             _myAddPathPrefixToFunctionID: true,
