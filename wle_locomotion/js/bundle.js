@@ -113,14 +113,6 @@ require('./pp/debug/debug_functions_overwriter/debug_functions_performance_analy
 require('./pp/debug/debug_functions_overwriter/debug_functions_performance_analyzer/components/debug_wl_function_performance_analyzer_component');
 require('./pp/debug/debug_functions_overwriter/debug_functions_performance_analyzer/components/debug_wl_components_function_performance_analyzer_component.js');
 
-require('./pp/debug/function_calls_counter/debug_function_calls_counter');
-require('./pp/debug/function_calls_counter/debug_function_calls_count_logger');
-require('./pp/debug/function_calls_counter/components/debug_pp_array_creation_calls_counter');
-require('./pp/debug/function_calls_counter/components/debug_array_function_calls_counter');
-require('./pp/debug/function_calls_counter/components/debug_pp_function_calls_counter');
-require('./pp/debug/function_calls_counter/components/debug_function_calls_counter_component');
-require('./pp/debug/function_calls_counter/components/debug_wl_function_calls_counter');
-
 //	GAMEPLAY
 
 //    CAULDRON
