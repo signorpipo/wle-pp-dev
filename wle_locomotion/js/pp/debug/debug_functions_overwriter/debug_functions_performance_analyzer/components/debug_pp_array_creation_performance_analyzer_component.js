@@ -33,7 +33,7 @@ WL.registerComponent('pp-debug-pp-array-creation-performance-analyzer', {
             _myLogTotalExecutionTimeResults: this._myLogTotalExecutionTimeResults,
             _myLogTotalExecutionTimePercentageResults: this._myLogTotalExecutionTimePercentageResults,
             _myLogAverageExecutionTimeResults: this._myLogAverageExecutionTimeResults,
-            _myFunctionNamesToInclude: "vec2_create, vec3_create, vec4_create, quat_create, quat2_create, mat3_create, mat4_create",
+            _myFunctionPathsToInclude: "vec2_create, vec3_create, vec4_create, quat_create, quat2_create, mat3_create, mat4_create",
             _myExcludeConstructors: true,
             _myExcludeJavascriptObjectFunctions: true,
             _myAddPathPrefixToFunctionID: true,

@@ -16,8 +16,8 @@ WL.registerComponent('pp-debug-functions-performance-analyzer', {
     _myLogMaxAmountOfFunctions: { type: WL.Type.Int, default: -1 },
     _myLogFunctionsWithCallsCountAbove: { type: WL.Type.Int, default: -1 },
     _myLogFunctionsWithTotalExecutionTimePercentageAbove: { type: WL.Type.Int, default: -1 },
-    _myFunctionNamesToInclude: { type: WL.Type.String, default: "" },
-    _myFunctionNamesToExclude: { type: WL.Type.String, default: "" },
+    _myFunctionPathsToInclude: { type: WL.Type.String, default: "" },
+    _myFunctionPathsToExclude: { type: WL.Type.String, default: "" },
     _myExcludeConstructors: { type: WL.Type.Bool, default: false },
     _myExcludeJavascriptObjectFunctions: { type: WL.Type.Bool, default: true },
     _myAddPathPrefixToFunctionID: { type: WL.Type.Bool, default: true },
@@ -83,20 +83,20 @@ WL.registerComponent('pp-debug-functions-performance-analyzer', {
         functionsPerformanceAnalyzerParams.myExcludeJavascriptObjectFunctions = this._myExcludeJavascriptObjectFunctions;
         functionsPerformanceAnalyzerParams.myAddPathPrefixToFunctionID = this._myAddPathPrefixToFunctionID;
 
-        if (this._myFunctionNamesToInclude.length > 0) {
-            let toIncludeList = [...this._myFunctionNamesToInclude.split(",")];
+        if (this._myFunctionPathsToInclude.length > 0) {
+            let toIncludeList = [...this._myFunctionPathsToInclude.split(",")];
             for (let i = 0; i < toIncludeList.length; i++) {
                 toIncludeList[i] = toIncludeList[i].trim();
             }
-            functionsPerformanceAnalyzerParams.myFunctionNamesToInclude.push(...toIncludeList);
+            functionsPerformanceAnalyzerParams.myFunctionPathsToInclude.push(...toIncludeList);
         }
 
-        if (this._myFunctionNamesToExclude.length > 0) {
-            let toExcludeList = [...this._myFunctionNamesToExclude.split(",")];
+        if (this._myFunctionPathsToExclude.length > 0) {
+            let toExcludeList = [...this._myFunctionPathsToExclude.split(",")];
             for (let i = 0; i < toExcludeList.length; i++) {
                 toExcludeList[i] = toExcludeList[i].trim();
             }
-            functionsPerformanceAnalyzerParams.myFunctionNamesToExclude.push(...toExcludeList);
+            functionsPerformanceAnalyzerParams.myFunctionPathsToExclude.push(...toExcludeList);
         }
 
         functionsPerformanceAnalyzerParams.myObjectAddObjectDescendantsDepthLevel = this._myObjectAddObjectDescendantsDepthLevel;

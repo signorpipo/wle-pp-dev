@@ -13,12 +13,12 @@ PP.DebugFunctionsOverwriterParams = class DebugFunctionsOverwriterParams {
         this.myExcludeConstructors = false;      // constructor calls count can be a problem for some classes (like Array)
         this.myExcludeJavascriptObjectFunctions = false;
 
-        this.myFunctionNamesToInclude = [];     // empty means every function is included, can be a regex
-        this.myFunctionNamesToExclude = [];     // empty means no function is excluded, can be a regex
+        this.myFunctionNamesToInclude = [];     // empty means every function is included, can be a regex (. must be escaped with \\.)
+        this.myFunctionNamesToExclude = [];     // empty means no function is excluded, can be a regex (. must be escaped with \\.)
 
         // these can be used if u want to have a bit more control on function name filtering
-        this.myFunctionPathsToInclude = [];         // empty means every function is included, can be a regex
-        this.myFunctionPathsToExclude = [];         // empty means no function is excluded, can be a regex
+        this.myFunctionPathsToInclude = [];         // empty means every function is included, can be a regex (. must be escaped with \\.)
+        this.myFunctionPathsToExclude = [];         // empty means no function is excluded, can be a regex (. must be escaped with \\.)
 
         this.myObjectAddObjectDescendantsDepthLevel = 0;        // you can specify if you want to also count the OBJECT descendants of the objects you have specified
         this.myObjectAddClassDescendantsDepthLevel = 0;       // you can specify if you want to also count the CLASS descendants of the objects you have specified
@@ -26,17 +26,17 @@ PP.DebugFunctionsOverwriterParams = class DebugFunctionsOverwriterParams {
         // -1 to select all the hierarchy
 
         // these filters are only useful if u are doing recursion
-        this.myObjectNamesToInclude = [];           // empty means every object is included, can be a regex
-        this.myObjectNamesToExclude = [];           // empty means no object is excluded, can be a regex
+        this.myObjectNamesToInclude = [];           // empty means every object is included, can be a regex (. must be escaped with \\.)
+        this.myObjectNamesToExclude = [];           // empty means no object is excluded, can be a regex (. must be escaped with \\.)
 
-        this.myClassNamesToInclude = [];            // empty means every class is included, can be a regex
-        this.myClassNamesToExclude = [];            // empty means no class is excluded, can be a regex
+        this.myClassNamesToInclude = [];            // empty means every class is included, can be a regex (. must be escaped with \\.)
+        this.myClassNamesToExclude = [];            // empty means no class is excluded, can be a regex (. must be escaped with \\.)
 
-        this.myObjectPathsToInclude = [];           // empty means every object is included, can be a regex
-        this.myObjectPathsToExclude = [];           // empty means no object is excluded, can be a regex
+        this.myObjectPathsToInclude = [];           // empty means every object is included, can be a regex (. must be escaped with \\.)
+        this.myObjectPathsToExclude = [];           // empty means no object is excluded, can be a regex (. must be escaped with \\.)
 
-        this.myClassPathsToInclude = [];            // empty means every class is included, can be a regex
-        this.myClassPathsToExclude = [];            // empty means no class is excluded, can be a regex
+        this.myClassPathsToInclude = [];            // empty means every class is included, can be a regex (. must be escaped with \\.)
+        this.myClassPathsToExclude = [];            // empty means no class is excluded, can be a regex (. must be escaped with \\.)
 
         // Tricks
         // - you can specify an object/class/function as a pair [object, "name"] instead of just object
