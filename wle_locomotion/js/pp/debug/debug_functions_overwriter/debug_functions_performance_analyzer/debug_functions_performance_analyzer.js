@@ -72,6 +72,7 @@ PP.DebugFunctionsPerformanceAnalyzer = class DebugFunctionsPerformanceAnalyzer e
         this._myExecutionTimes = {
             myOverheadExecutionTimeSinceLastReset: 0,
             myLastFunctionExecutionTime: 0,
+            myTotalOverheadToIgnoreForLastReset: 0,
             myOriginalFunctionOverheadExecutionTimes: []
         };
         this._myTimeOfLastReset = window.performance.now();
@@ -108,6 +109,8 @@ PP.DebugFunctionsPerformanceAnalyzer = class DebugFunctionsPerformanceAnalyzer e
         }
 
         this._myExecutionTimes.myOverheadExecutionTimeSinceLastReset = 0;
+        this._myExecutionTimes.myTotalOverheadToIgnoreForLastReset = 0;
+
         this._myTimeOfLastReset = window.performance.now();
     }
 
@@ -280,6 +283,7 @@ PP.DebugFunctionsPerformanceAnalyzer = class DebugFunctionsPerformanceAnalyzer e
 
             let originalFunction = reference[propertyName];
             let functionCallOverhead = 0.0025; // ms taken by an analyzed function that is empty
+            let overheadToIgnoreForLastReset = 0.000125; // ms to add to adjust a bit for window.performance.now() max precision which is 0.0005
 
             if (!isConstructor) {
                 newFunction = function () {
@@ -313,8 +317,9 @@ PP.DebugFunctionsPerformanceAnalyzer = class DebugFunctionsPerformanceAnalyzer e
 
                     executionTimes.myLastFunctionExecutionTime = executionTime;
 
+                    executionTimes.myTotalOverheadToIgnoreForLastReset += overheadToIgnoreForLastReset;
+
                     let beforeOverhead = startOriginalFunctionTime - startTime;
-                    let overheadToIgnoreForLastReset = 0.00015;
                     let inBetweenOverhead = beforeOverhead - endOriginalFunctionTime + overheadToIgnoreForLastReset;
                     if (executionTimes.myOriginalFunctionOverheadExecutionTimes.length > 0) {
                         executionTimes.myOriginalFunctionOverheadExecutionTimes[executionTimes.myOriginalFunctionOverheadExecutionTimes.length - 1] +=
@@ -363,8 +368,9 @@ PP.DebugFunctionsPerformanceAnalyzer = class DebugFunctionsPerformanceAnalyzer e
 
                     executionTimes.myLastFunctionExecutionTime = executionTime;
 
+                    executionTimes.myTotalOverheadToIgnoreForLastReset += overheadToIgnoreForLastReset;
+
                     let beforeOverhead = startOriginalFunctionTime - startTime;
-                    let overheadToIgnoreForLastReset = 0.00015;
                     let inBetweenOverhead = beforeOverhead - endOriginalFunctionTime + overheadToIgnoreForLastReset;
                     if (executionTimes.myOriginalFunctionOverheadExecutionTimes.length > 0) {
                         executionTimes.myOriginalFunctionOverheadExecutionTimes[executionTimes.myOriginalFunctionOverheadExecutionTimes.length - 1] +=
