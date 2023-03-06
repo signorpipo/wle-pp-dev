@@ -101,6 +101,8 @@ WL.registerComponent('pp-debug-functions-performance-analyzer', {
         functionsPerformanceAnalyzerParams.myObjectAddObjectDescendantsDepthLevel = this._myObjectAddObjectDescendantsDepthLevel;
         functionsPerformanceAnalyzerParams.myObjectAddClassDescendantsDepthLevel = this._myObjectAddClassDescendantsDepthLevel;
 
+        functionsPerformanceAnalyzerParams.myExecutionTimeAnalysisEnabled = this._myLogTotalExecutionTimeResults || this._myLogTotalExecutionTimePercentageResults || this._myLogAverageExecutionTimeResults;
+
         this._myFunctionsPerformanceAnalyzer = new PP.DebugFunctionsPerformanceAnalyzer(functionsPerformanceAnalyzerParams);
         this._myFunctionsPerformanceAnalyzer.overwriteFunctions();
 

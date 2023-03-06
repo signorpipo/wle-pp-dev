@@ -2,6 +2,8 @@ PP.DebugFunctionsPerformanceAnalyzerParams = class DebugFunctionsPerformanceAnal
     constructor() {
         super();
 
+        this.myExecutionTimeAnalysisEnabled = true;
+
         this.myAddPathPrefixToFunctionID = true;
         // this works at best when the object/class is specified as path
         // since with reference it's not possible to get the full path or get the variable name of the reference
@@ -289,52 +291,75 @@ PP.DebugFunctionsPerformanceAnalyzer = class DebugFunctionsPerformanceAnalyzer e
             let functionCallOverhead = 0.000175;     // ms taken by an analyzed function that is empty
             let overheadError = 0.00035;        // ms to add to adjust a bit for window.performance.now() max precision which is 0.0005
 
+            let executionTimeAnalysisEnabled = this._myParams.myExecutionTimeAnalysisEnabled;
+
             if (!isConstructor) {
                 newFunction = function () {
                     let startTime = window.performance.now();
-                    executionTimes.myOriginalFunctionOverheadExecutionTimes.push(0);
 
                     let errorToThrow = null;
                     let returnValue = undefined;
+                    let bindFunction = null;
+                    let startOriginalFunctionTime = 0;
+                    let endOriginalFunctionTime = 0;
+                    let originalFunctionOverheadExecutionTime = 0;
+                    let executionTimeToAdjust = 0;
+                    let executionTime = 0;
+                    let beforeOverhead = 0;
+                    let inBetweenOverhead = 0;
 
-                    let startOriginalFunctionTime = window.performance.now();
-                    let endOriginalFunctionTime = window.performance.now();
-                    try {
-                        let bindFunction = originalFunction.bind(this);
+                    if (executionTimeAnalysisEnabled) {
+                        executionTimes.myOriginalFunctionOverheadExecutionTimes.push(0);
+
                         startOriginalFunctionTime = window.performance.now();
-                        returnValue = bindFunction(...arguments);
                         endOriginalFunctionTime = window.performance.now();
-                    } catch (error) {
-                        endOriginalFunctionTime = window.performance.now();
-                        errorToThrow = error;
+
+                        try {
+                            bindFunction = originalFunction.bind(this);
+                            startOriginalFunctionTime = window.performance.now();
+                            returnValue = bindFunction(...arguments);
+                            endOriginalFunctionTime = window.performance.now();
+                        } catch (error) {
+                            endOriginalFunctionTime = window.performance.now();
+                            errorToThrow = error;
+                        }
+                    } else {
+                        try {
+                            bindFunction = originalFunction.bind(this);
+                            returnValue = bindFunction(...arguments);
+                        } catch (error) {
+                            errorToThrow = error;
+                        }
                     }
 
                     functionPerformanceAnalysisResults.myCallsCount += 1;
 
-                    let originalFunctionOverheadExecutionTime = executionTimes.myOriginalFunctionOverheadExecutionTimes.pop();
+                    if (executionTimeAnalysisEnabled) {
+                        originalFunctionOverheadExecutionTime = executionTimes.myOriginalFunctionOverheadExecutionTimes.pop();
 
-                    let executionTimeToAdjust = endOriginalFunctionTime - startOriginalFunctionTime - originalFunctionOverheadExecutionTime;
-                    let executionTime = executionTimeToAdjust - functionCallOverhead;
-                    if (originalFunction.myPerformanceAnalyzerHasBeenOverwritten) {
-                        executionTime = executionTimes.myLastFunctionExecutionTime;
+                        executionTimeToAdjust = endOriginalFunctionTime - startOriginalFunctionTime - originalFunctionOverheadExecutionTime;
+                        executionTime = executionTimeToAdjust - functionCallOverhead;
+                        if (originalFunction.myPerformanceAnalyzerHasBeenOverwritten) {
+                            executionTime = executionTimes.myLastFunctionExecutionTime;
+                        }
+
+                        functionPerformanceAnalysisResults._myTotalExecutionTimeInternal += executionTime;
+                        functionPerformanceAnalysisResults.myTotalExecutionTime = Math.max(0, functionPerformanceAnalysisResults._myTotalExecutionTimeInternal);
+
+                        executionTimes.myLastFunctionExecutionTime = executionTime;
+
+                        beforeOverhead = startOriginalFunctionTime - startTime;
+                        inBetweenOverhead = beforeOverhead - endOriginalFunctionTime - overheadError;
+                        if (executionTimes.myOriginalFunctionOverheadExecutionTimes.length > 0) {
+                            executionTimes.myOriginalFunctionOverheadExecutionTimes[executionTimes.myOriginalFunctionOverheadExecutionTimes.length - 1] +=
+                                inBetweenOverhead + originalFunctionOverheadExecutionTime + overheadError * 2.75;
+                            executionTimes.myOriginalFunctionOverheadExecutionTimes[executionTimes.myOriginalFunctionOverheadExecutionTimes.length - 1] +=
+                                window.performance.now();
+                        }
+
+                        executionTimes.myOverheadExecutionTimeSinceLastReset += inBetweenOverhead;
+                        executionTimes.myOverheadExecutionTimeSinceLastReset += window.performance.now();
                     }
-
-                    functionPerformanceAnalysisResults._myTotalExecutionTimeInternal += executionTime;
-                    functionPerformanceAnalysisResults.myTotalExecutionTime = Math.max(0, functionPerformanceAnalysisResults._myTotalExecutionTimeInternal);
-
-                    executionTimes.myLastFunctionExecutionTime = executionTime;
-
-                    let beforeOverhead = startOriginalFunctionTime - startTime;
-                    let inBetweenOverhead = beforeOverhead - endOriginalFunctionTime - overheadError;
-                    if (executionTimes.myOriginalFunctionOverheadExecutionTimes.length > 0) {
-                        executionTimes.myOriginalFunctionOverheadExecutionTimes[executionTimes.myOriginalFunctionOverheadExecutionTimes.length - 1] +=
-                            inBetweenOverhead + originalFunctionOverheadExecutionTime + overheadError * 2.75;
-                        executionTimes.myOriginalFunctionOverheadExecutionTimes[executionTimes.myOriginalFunctionOverheadExecutionTimes.length - 1] +=
-                            window.performance.now();
-                    }
-
-                    executionTimes.myOverheadExecutionTimeSinceLastReset += inBetweenOverhead;
-                    executionTimes.myOverheadExecutionTimeSinceLastReset += window.performance.now();
 
                     if (errorToThrow != null) {
                         throw errorToThrow;
@@ -345,48 +370,68 @@ PP.DebugFunctionsPerformanceAnalyzer = class DebugFunctionsPerformanceAnalyzer e
             } else {
                 newFunction = function () {
                     let startTime = window.performance.now();
-                    executionTimes.myOriginalFunctionOverheadExecutionTimes.push(0);
 
                     let errorToThrow = null;
                     let returnValue = undefined;
+                    let bindFunction = null;
+                    let startOriginalFunctionTime = 0;
+                    let endOriginalFunctionTime = 0;
+                    let originalFunctionOverheadExecutionTime = 0;
+                    let executionTimeToAdjust = 0;
+                    let executionTime = 0;
+                    let beforeOverhead = 0;
+                    let inBetweenOverhead = 0;
 
-                    let startOriginalFunctionTime = window.performance.now();
-                    let endOriginalFunctionTime = window.performance.now();
-                    try {
+                    if (executionTimeAnalysisEnabled) {
+                        executionTimes.myOriginalFunctionOverheadExecutionTimes.push(0);
+
                         startOriginalFunctionTime = window.performance.now();
-                        returnValue = new originalFunction(...arguments);
                         endOriginalFunctionTime = window.performance.now();
-                    } catch (error) {
-                        endOriginalFunctionTime = window.performance.now();
-                        errorToThrow = error;
+
+                        try {
+                            startOriginalFunctionTime = window.performance.now();
+                            returnValue = new originalFunction(...arguments);
+                            endOriginalFunctionTime = window.performance.now();
+                        } catch (error) {
+                            endOriginalFunctionTime = window.performance.now();
+                            errorToThrow = error;
+                        }
+                    } else {
+                        try {
+                            returnValue = new originalFunction(...arguments);
+                        } catch (error) {
+                            errorToThrow = error;
+                        }
                     }
 
                     functionPerformanceAnalysisResults.myCallsCount += 1;
 
-                    let originalFunctionOverheadExecutionTime = executionTimes.myOriginalFunctionOverheadExecutionTimes.pop();
+                    if (executionTimeAnalysisEnabled) {
+                        originalFunctionOverheadExecutionTime = executionTimes.myOriginalFunctionOverheadExecutionTimes.pop();
 
-                    let executionTimeToAdjust = endOriginalFunctionTime - startOriginalFunctionTime - originalFunctionOverheadExecutionTime;
-                    let executionTime = executionTimeToAdjust - functionCallOverhead;
-                    if (originalFunction.myPerformanceAnalyzerHasBeenOverwritten) {
-                        executionTime = executionTimes.myLastFunctionExecutionTime;
+                        executionTimeToAdjust = endOriginalFunctionTime - startOriginalFunctionTime - originalFunctionOverheadExecutionTime;
+                        executionTime = executionTimeToAdjust - functionCallOverhead;
+                        if (originalFunction.myPerformanceAnalyzerHasBeenOverwritten) {
+                            executionTime = executionTimes.myLastFunctionExecutionTime;
+                        }
+
+                        functionPerformanceAnalysisResults._myTotalExecutionTimeInternal += executionTime;
+                        functionPerformanceAnalysisResults.myTotalExecutionTime = Math.max(0, functionPerformanceAnalysisResults._myTotalExecutionTimeInternal);
+
+                        executionTimes.myLastFunctionExecutionTime = executionTime;
+
+                        beforeOverhead = startOriginalFunctionTime - startTime;
+                        inBetweenOverhead = beforeOverhead - endOriginalFunctionTime - overheadError;
+                        if (executionTimes.myOriginalFunctionOverheadExecutionTimes.length > 0) {
+                            executionTimes.myOriginalFunctionOverheadExecutionTimes[executionTimes.myOriginalFunctionOverheadExecutionTimes.length - 1] +=
+                                inBetweenOverhead + originalFunctionOverheadExecutionTime + overheadError * 2.75;
+                            executionTimes.myOriginalFunctionOverheadExecutionTimes[executionTimes.myOriginalFunctionOverheadExecutionTimes.length - 1] +=
+                                window.performance.now();
+                        }
+
+                        executionTimes.myOverheadExecutionTimeSinceLastReset += inBetweenOverhead;
+                        executionTimes.myOverheadExecutionTimeSinceLastReset += window.performance.now();
                     }
-
-                    functionPerformanceAnalysisResults._myTotalExecutionTimeInternal += executionTime;
-                    functionPerformanceAnalysisResults.myTotalExecutionTime = Math.max(0, functionPerformanceAnalysisResults._myTotalExecutionTimeInternal);
-
-                    executionTimes.myLastFunctionExecutionTime = executionTime;
-
-                    let beforeOverhead = startOriginalFunctionTime - startTime;
-                    let inBetweenOverhead = beforeOverhead - endOriginalFunctionTime - overheadError;
-                    if (executionTimes.myOriginalFunctionOverheadExecutionTimes.length > 0) {
-                        executionTimes.myOriginalFunctionOverheadExecutionTimes[executionTimes.myOriginalFunctionOverheadExecutionTimes.length - 1] +=
-                            inBetweenOverhead + originalFunctionOverheadExecutionTime + overheadError * 2.75;
-                        executionTimes.myOriginalFunctionOverheadExecutionTimes[executionTimes.myOriginalFunctionOverheadExecutionTimes.length - 1] +=
-                            window.performance.now();
-                    }
-
-                    executionTimes.myOverheadExecutionTimeSinceLastReset += inBetweenOverhead;
-                    executionTimes.myOverheadExecutionTimeSinceLastReset += window.performance.now();
 
                     if (errorToThrow != null) {
                         throw errorToThrow;
