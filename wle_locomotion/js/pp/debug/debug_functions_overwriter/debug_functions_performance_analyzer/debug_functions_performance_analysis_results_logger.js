@@ -8,8 +8,6 @@ PP.DebugFunctionsPerformanceAnalysisResultsLoggerParams = class DebugFunctionsPe
 
         this.myLogMaxResults = false;
 
-        this.myLogCollapsed = false;
-
         this.myLogSortOrder = PP.DebugFunctionsPerformanceAnalyzerSortOrder.NONE;
 
         this.myLogMaxAmountOfFunctions = null;
@@ -116,100 +114,91 @@ PP.DebugFunctionsPerformanceAnalysisResultsLogger = class DebugFunctionsPerforma
                 analysisResultsToLog.set(key, resultsToLog);
             }
 
-            if (this._myParams.myLogCollapsed) {
-                if ((this._myParams.myLogTotalExecutionTimeResults || this._myParams.myLogTotalExecutionTimePercentageResults || this._myParams.myLogAverageExecutionTimeResults)) {
-                    console[this._myParams.myLogFunction]("\n" + this._myParams.myLogTitle, "\n\nTotal Time:", timeSinceLastReset.toFixed(4), "ms\n", analysisResultsToLog);
-                } else {
-                    console[this._myParams.myLogFunction]("\n" + this._myParams.myLogTitle, "\n", analysisResultsToLog);
-                }
-            } else {
-                let resultsText = "";
+            let resultsText = "";
 
-                for (let entry of analysisResults.entries()) {
-                    let name = entry[0];
-                    let results = entry[1];
-                    resultsText += "\n" + name;
+            for (let entry of analysisResults.entries()) {
+                let name = entry[0];
+                let results = entry[1];
+                resultsText += "\n" + name;
 
-                    let parametersToLog = 0;
-                    if (this._myParams.myLogCallsCountResults) {
-                        parametersToLog++;
-                    }
-
-                    if (this._myParams.myLogTotalExecutionTimeResults) {
-                        parametersToLog++;
-                    }
-
-                    if (this._myParams.myLogTotalExecutionTimePercentageResults) {
-                        parametersToLog++;
-                    }
-
-                    if (this._myParams.myLogAverageExecutionTimeResults) {
-                        parametersToLog++;
-                    }
-
-                    let textOrdered = [];
-
-                    let callsCountText = ((parametersToLog > 1) ? "Calls Count: " : "") + results.myCallsCount;
-                    let totalExecutionTimeText = ((parametersToLog > 1) ? "Total Time: " : "") + results.myTotalExecutionTime.toFixed(4) + "ms";
-                    let totalExecutionTimePercentageText = ((parametersToLog > 1) ? "Total Time: " : "") + (results.myTotalExecutionTimePercentage * 100).toFixed(2) + "%";
-                    let averageExecutionTimeText = ((parametersToLog > 1) ? "Average Time: " : "") + results.myAverageExecutionTime.toFixed(4) + "ms";
-
-                    if (!this._myParams.myLogCallsCountResults) {
-                        callsCountText = null;
-                    }
-
-                    if (!this._myParams.myLogTotalExecutionTimeResults) {
-                        totalExecutionTimeText = null;
-                    }
-
-                    if (!this._myParams.myLogTotalExecutionTimePercentageResults) {
-                        totalExecutionTimePercentageText = null;
-                    }
-
-                    if (!this._myParams.myLogAverageExecutionTimeResults) {
-                        averageExecutionTimeText = null;
-                    }
-
-                    switch (this._myParams.myLogSortOrder) {
-                        case PP.DebugFunctionsPerformanceAnalyzerSortOrder.CALLS_COUNT:
-                            textOrdered.push(callsCountText);
-                            textOrdered.push(totalExecutionTimeText);
-                            textOrdered.push(totalExecutionTimePercentageText);
-                            textOrdered.push(averageExecutionTimeText);
-                            break;
-                        case PP.DebugFunctionsPerformanceAnalyzerSortOrder.TOTAL_EXECUTION_TIME:
-                            textOrdered.push(totalExecutionTimeText);
-                            textOrdered.push(totalExecutionTimePercentageText);
-                            textOrdered.push(averageExecutionTimeText);
-                            textOrdered.push(callsCountText);
-                            break;
-                        case PP.DebugFunctionsPerformanceAnalyzerSortOrder.AVERAGE_EXECUTION_TIME:
-                            textOrdered.push(averageExecutionTimeText);
-                            textOrdered.push(totalExecutionTimeText);
-                            textOrdered.push(totalExecutionTimePercentageText);
-                            textOrdered.push(callsCountText);
-                            break;
-                        default:
-                            textOrdered.push(callsCountText);
-                            textOrdered.push(totalExecutionTimeText);
-                            textOrdered.push(totalExecutionTimePercentageText);
-                            textOrdered.push(averageExecutionTimeText);
-                    }
-
-                    for (let text of textOrdered) {
-                        if (text != null) {
-                            resultsText += " - " + text;
-                        }
-                    }
+                let parametersToLog = 0;
+                if (this._myParams.myLogCallsCountResults) {
+                    parametersToLog++;
                 }
 
-                if ((this._myParams.myLogTotalExecutionTimeResults || this._myParams.myLogTotalExecutionTimePercentageResults || this._myParams.myLogAverageExecutionTimeResults)) {
-                    console[this._myParams.myLogFunction]("\n" + this._myParams.myLogTitle, "\n\nTotal Time:", timeSinceLastReset.toFixed(4), "ms\n", resultsText);
-                } else {
-                    console[this._myParams.myLogFunction]("\n" + this._myParams.myLogTitle, "\n", resultsText);
+                if (this._myParams.myLogTotalExecutionTimeResults) {
+                    parametersToLog++;
+                }
+
+                if (this._myParams.myLogTotalExecutionTimePercentageResults) {
+                    parametersToLog++;
+                }
+
+                if (this._myParams.myLogAverageExecutionTimeResults) {
+                    parametersToLog++;
+                }
+
+                let textOrdered = [];
+
+                let callsCountText = ((parametersToLog > 1) ? "Calls Count: " : "") + results.myCallsCount;
+                let totalExecutionTimeText = ((parametersToLog > 1) ? "Total Time: " : "") + results.myTotalExecutionTime.toFixed(4) + "ms";
+                let totalExecutionTimePercentageText = ((parametersToLog > 1) ? "Total Time: " : "") + (results.myTotalExecutionTimePercentage * 100).toFixed(2) + "%";
+                let averageExecutionTimeText = ((parametersToLog > 1) ? "Average Time: " : "") + results.myAverageExecutionTime.toFixed(4) + "ms";
+
+                if (!this._myParams.myLogCallsCountResults) {
+                    callsCountText = null;
+                }
+
+                if (!this._myParams.myLogTotalExecutionTimeResults) {
+                    totalExecutionTimeText = null;
+                }
+
+                if (!this._myParams.myLogTotalExecutionTimePercentageResults) {
+                    totalExecutionTimePercentageText = null;
+                }
+
+                if (!this._myParams.myLogAverageExecutionTimeResults) {
+                    averageExecutionTimeText = null;
+                }
+
+                switch (this._myParams.myLogSortOrder) {
+                    case PP.DebugFunctionsPerformanceAnalyzerSortOrder.CALLS_COUNT:
+                        textOrdered.push(callsCountText);
+                        textOrdered.push(totalExecutionTimeText);
+                        textOrdered.push(totalExecutionTimePercentageText);
+                        textOrdered.push(averageExecutionTimeText);
+                        break;
+                    case PP.DebugFunctionsPerformanceAnalyzerSortOrder.TOTAL_EXECUTION_TIME:
+                        textOrdered.push(totalExecutionTimeText);
+                        textOrdered.push(totalExecutionTimePercentageText);
+                        textOrdered.push(averageExecutionTimeText);
+                        textOrdered.push(callsCountText);
+                        break;
+                    case PP.DebugFunctionsPerformanceAnalyzerSortOrder.AVERAGE_EXECUTION_TIME:
+                        textOrdered.push(averageExecutionTimeText);
+                        textOrdered.push(totalExecutionTimeText);
+                        textOrdered.push(totalExecutionTimePercentageText);
+                        textOrdered.push(callsCountText);
+                        break;
+                    default:
+                        textOrdered.push(callsCountText);
+                        textOrdered.push(totalExecutionTimeText);
+                        textOrdered.push(totalExecutionTimePercentageText);
+                        textOrdered.push(averageExecutionTimeText);
+                }
+
+                for (let text of textOrdered) {
+                    if (text != null) {
+                        resultsText += " - " + text;
+                    }
                 }
             }
-        }
 
+            if ((this._myParams.myLogTotalExecutionTimeResults || this._myParams.myLogTotalExecutionTimePercentageResults || this._myParams.myLogAverageExecutionTimeResults)) {
+                console[this._myParams.myLogFunction]("\n" + this._myParams.myLogTitle, "\n\nTotal Time:", timeSinceLastReset.toFixed(4), "ms\n", resultsText);
+            } else {
+                console[this._myParams.myLogFunction]("\n" + this._myParams.myLogTitle, "\n", resultsText);
+            }
+        }
     }
 };

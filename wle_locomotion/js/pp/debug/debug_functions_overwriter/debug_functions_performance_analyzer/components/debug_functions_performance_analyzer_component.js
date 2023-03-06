@@ -6,7 +6,6 @@ WL.registerComponent('pp-debug-functions-performance-analyzer', {
     _myLogTitle: { type: WL.Type.String, default: "Functions Performance Analysis Results" },
     _myLogFunction: { type: WL.Type.Enum, values: ["log", "error", "warn", "debug"], default: "log" },
     _mySecondsBetweenLogs: { type: WL.Type.Float, default: 1.0 },
-    _myLogCollapsed: { type: WL.Type.Bool, default: false },
     _myLogMaxResults: { type: WL.Type.Bool, default: false },
     _myLogSortOrder: { type: WL.Type.Enum, values: ["none", "calls count", "total execution time", "average execution time"], default: "none" },
     _myLogCallsCountResults: { type: WL.Type.Bool, default: true },
@@ -111,7 +110,6 @@ WL.registerComponent('pp-debug-functions-performance-analyzer', {
 
         functionsPerformanceAnalysisResultsLoggerParams.mySecondsBetweenLogs = this._mySecondsBetweenLogs;
         functionsPerformanceAnalysisResultsLoggerParams.myLogFunction = ['log', 'error', 'warn', 'debug'][this._myLogFunction];
-        functionsPerformanceAnalysisResultsLoggerParams.myLogCollapsed = this._myLogCollapsed;
         functionsPerformanceAnalysisResultsLoggerParams.myLogMaxAmountOfFunctions = (this._myLogMaxAmountOfFunctions >= 0) ? this._myLogMaxAmountOfFunctions : null;
         functionsPerformanceAnalysisResultsLoggerParams.myLogFunctionsWithCallsCountAbove = (this._myLogFunctionsWithCallsCountAbove >= 0) ? this._myLogFunctionsWithCallsCountAbove : null;
         functionsPerformanceAnalysisResultsLoggerParams.myLogFunctionsWithTotalExecutionTimePercentageAbove = (this._myLogFunctionsWithTotalExecutionTimePercentageAbove >= 0) ? this._myLogFunctionsWithTotalExecutionTimePercentageAbove : null;
