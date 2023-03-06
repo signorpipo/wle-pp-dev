@@ -22,6 +22,8 @@ PP.DebugFunctionPerformanceAnalysisResults = class DebugFunctionPerformanceAnaly
         this.myTotalExecutionTimePercentage = 0;
         this.myAverageExecutionTime = 0;
         this.myTimeElapsedSinceLastReset = 0;
+
+        this._myTotalExecutionTimeInternal = 0;
     }
 
     reset() {
@@ -30,6 +32,8 @@ PP.DebugFunctionPerformanceAnalysisResults = class DebugFunctionPerformanceAnaly
         this.myTotalExecutionTimePercentage = 0;
         this.myAverageExecutionTime = 0;
         this.myTimeElapsedSinceLastReset = 0;
+
+        this._myTotalExecutionTimeInternal = 0;
     }
 
     max(other) {
@@ -50,6 +54,8 @@ PP.DebugFunctionPerformanceAnalysisResults = class DebugFunctionPerformanceAnaly
         this.myTotalExecutionTimePercentage = other.myTotalExecutionTimePercentage;
         this.myAverageExecutionTime = other.myAverageExecutionTime;
         this.myTimeElapsedSinceLastReset = other.myTimeElapsedSinceLastReset;
+
+        this._myTotalExecutionTimeInternal = other._myTotalExecutionTimeInternal;
     }
 };
 
@@ -72,7 +78,6 @@ PP.DebugFunctionsPerformanceAnalyzer = class DebugFunctionsPerformanceAnalyzer e
         this._myExecutionTimes = {
             myOverheadExecutionTimeSinceLastReset: 0,
             myLastFunctionExecutionTime: 0,
-            myTotalOverheadToIgnoreForLastReset: 0,
             myOriginalFunctionOverheadExecutionTimes: []
         };
         this._myTimeOfLastReset = window.performance.now();
@@ -109,7 +114,6 @@ PP.DebugFunctionsPerformanceAnalyzer = class DebugFunctionsPerformanceAnalyzer e
         }
 
         this._myExecutionTimes.myOverheadExecutionTimeSinceLastReset = 0;
-        this._myExecutionTimes.myTotalOverheadToIgnoreForLastReset = 0;
 
         this._myTimeOfLastReset = window.performance.now();
     }
@@ -282,8 +286,8 @@ PP.DebugFunctionsPerformanceAnalyzer = class DebugFunctionsPerformanceAnalyzer e
             let executionTimes = this._myExecutionTimes;
 
             let originalFunction = reference[propertyName];
-            let functionCallOverhead = 0.0025; // ms taken by an analyzed function that is empty
-            let overheadToIgnoreForLastReset = 0.000125; // ms to add to adjust a bit for window.performance.now() max precision which is 0.0005
+            let functionCallOverhead = 0.000175;     // ms taken by an analyzed function that is empty
+            let overheadError = 0.00035;        // ms to add to adjust a bit for window.performance.now() max precision which is 0.0005
 
             if (!isConstructor) {
                 newFunction = function () {
@@ -305,25 +309,26 @@ PP.DebugFunctionsPerformanceAnalyzer = class DebugFunctionsPerformanceAnalyzer e
                         errorToThrow = error;
                     }
 
+                    functionPerformanceAnalysisResults.myCallsCount += 1;
+
                     let originalFunctionOverheadExecutionTime = executionTimes.myOriginalFunctionOverheadExecutionTimes.pop();
 
                     let executionTimeToAdjust = endOriginalFunctionTime - startOriginalFunctionTime - originalFunctionOverheadExecutionTime;
-                    let executionTime = Math.max(0, executionTimeToAdjust - functionCallOverhead);
+                    let executionTime = executionTimeToAdjust - functionCallOverhead;
                     if (originalFunction.myPerformanceAnalyzerHasBeenOverwritten) {
                         executionTime = executionTimes.myLastFunctionExecutionTime;
                     }
-                    functionPerformanceAnalysisResults.myCallsCount += 1;
-                    functionPerformanceAnalysisResults.myTotalExecutionTime += executionTime;
+
+                    functionPerformanceAnalysisResults._myTotalExecutionTimeInternal += executionTime;
+                    functionPerformanceAnalysisResults.myTotalExecutionTime = Math.max(0, functionPerformanceAnalysisResults._myTotalExecutionTimeInternal);
 
                     executionTimes.myLastFunctionExecutionTime = executionTime;
 
-                    executionTimes.myTotalOverheadToIgnoreForLastReset += overheadToIgnoreForLastReset;
-
                     let beforeOverhead = startOriginalFunctionTime - startTime;
-                    let inBetweenOverhead = beforeOverhead - endOriginalFunctionTime + overheadToIgnoreForLastReset;
+                    let inBetweenOverhead = beforeOverhead - endOriginalFunctionTime - overheadError;
                     if (executionTimes.myOriginalFunctionOverheadExecutionTimes.length > 0) {
                         executionTimes.myOriginalFunctionOverheadExecutionTimes[executionTimes.myOriginalFunctionOverheadExecutionTimes.length - 1] +=
-                            inBetweenOverhead + originalFunctionOverheadExecutionTime;
+                            inBetweenOverhead + originalFunctionOverheadExecutionTime + overheadError * 2.75;
                         executionTimes.myOriginalFunctionOverheadExecutionTimes[executionTimes.myOriginalFunctionOverheadExecutionTimes.length - 1] +=
                             window.performance.now();
                     }
@@ -356,25 +361,26 @@ PP.DebugFunctionsPerformanceAnalyzer = class DebugFunctionsPerformanceAnalyzer e
                         errorToThrow = error;
                     }
 
+                    functionPerformanceAnalysisResults.myCallsCount += 1;
+
                     let originalFunctionOverheadExecutionTime = executionTimes.myOriginalFunctionOverheadExecutionTimes.pop();
 
                     let executionTimeToAdjust = endOriginalFunctionTime - startOriginalFunctionTime - originalFunctionOverheadExecutionTime;
-                    let executionTime = Math.max(0, executionTimeToAdjust - functionCallOverhead);
+                    let executionTime = executionTimeToAdjust - functionCallOverhead;
                     if (originalFunction.myPerformanceAnalyzerHasBeenOverwritten) {
                         executionTime = executionTimes.myLastFunctionExecutionTime;
                     }
-                    functionPerformanceAnalysisResults.myCallsCount += 1;
-                    functionPerformanceAnalysisResults.myTotalExecutionTime += executionTime;
+
+                    functionPerformanceAnalysisResults._myTotalExecutionTimeInternal += executionTime;
+                    functionPerformanceAnalysisResults.myTotalExecutionTime = Math.max(0, functionPerformanceAnalysisResults._myTotalExecutionTimeInternal);
 
                     executionTimes.myLastFunctionExecutionTime = executionTime;
 
-                    executionTimes.myTotalOverheadToIgnoreForLastReset += overheadToIgnoreForLastReset;
-
                     let beforeOverhead = startOriginalFunctionTime - startTime;
-                    let inBetweenOverhead = beforeOverhead - endOriginalFunctionTime + overheadToIgnoreForLastReset;
+                    let inBetweenOverhead = beforeOverhead - endOriginalFunctionTime - overheadError;
                     if (executionTimes.myOriginalFunctionOverheadExecutionTimes.length > 0) {
                         executionTimes.myOriginalFunctionOverheadExecutionTimes[executionTimes.myOriginalFunctionOverheadExecutionTimes.length - 1] +=
-                            inBetweenOverhead + originalFunctionOverheadExecutionTime;
+                            inBetweenOverhead + originalFunctionOverheadExecutionTime + overheadError * 2.75;
                         executionTimes.myOriginalFunctionOverheadExecutionTimes[executionTimes.myOriginalFunctionOverheadExecutionTimes.length - 1] +=
                             window.performance.now();
                     }

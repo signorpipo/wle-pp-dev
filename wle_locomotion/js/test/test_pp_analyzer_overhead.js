@@ -6,7 +6,7 @@ WL.registerComponent('pp-analyzer-overhead', {
         this._myCurrentActive = true;
     },
     update: function (dt) {
-        for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < 10000; i++) {
             PP.myTestAnalyzerOverhead();
         }
 

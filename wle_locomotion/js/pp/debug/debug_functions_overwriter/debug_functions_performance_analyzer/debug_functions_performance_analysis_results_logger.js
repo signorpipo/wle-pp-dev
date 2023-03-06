@@ -141,9 +141,9 @@ PP.DebugFunctionsPerformanceAnalysisResultsLogger = class DebugFunctionsPerforma
                 let textOrdered = [];
 
                 let callsCountText = ((parametersToLog > 1) ? "Calls Count: " : "") + results.myCallsCount;
-                let totalExecutionTimeText = ((parametersToLog > 1) ? "Total Time: " : "") + results.myTotalExecutionTime.toFixed(4) + "ms";
+                let totalExecutionTimeText = ((parametersToLog > 1) ? "Total Time: " : "") + results.myTotalExecutionTime.toFixed(5) + "ms";
                 let totalExecutionTimePercentageText = ((parametersToLog > 1) ? "Total Time: " : "") + (results.myTotalExecutionTimePercentage * 100).toFixed(2) + "%";
-                let averageExecutionTimeText = ((parametersToLog > 1) ? "Average Time: " : "") + results.myAverageExecutionTime.toFixed(4) + "ms";
+                let averageExecutionTimeText = ((parametersToLog > 1) ? "Average Time: " : "") + results.myAverageExecutionTime.toFixed(5) + "ms";
 
                 if (!this._myParams.myLogCallsCountResults) {
                     callsCountText = null;
@@ -195,7 +195,7 @@ PP.DebugFunctionsPerformanceAnalysisResultsLogger = class DebugFunctionsPerforma
             }
 
             if ((this._myParams.myLogTotalExecutionTimeResults || this._myParams.myLogTotalExecutionTimePercentageResults || this._myParams.myLogAverageExecutionTimeResults)) {
-                console[this._myParams.myLogFunction]("\n" + this._myParams.myLogTitle, "\n\nTotal Time:", timeSinceLastReset.toFixed(4), "ms\n", resultsText);
+                console[this._myParams.myLogFunction]("\n" + this._myParams.myLogTitle, "\n\nTotal Time:", timeSinceLastReset.toFixed(5), "ms\n", resultsText);
             } else {
                 console[this._myParams.myLogFunction]("\n" + this._myParams.myLogTitle, "\n", resultsText);
             }
