@@ -13,7 +13,7 @@ WL.registerComponent('pp-debug-wl-components-functions-performance-analyzer', {
     _myLogAverageExecutionTimeResults: { type: WL.Type.Bool, default: true },
     _myLogMaxAmountOfFunctions: { type: WL.Type.Int, default: -1 },
     _myLogFunctionsWithCallsCountAbove: { type: WL.Type.Int, default: -1 },
-    _myLogFunctionsWithTotalExecutionTimePercentageAbove: { type: WL.Type.Int, default: -1 },
+    _myLogFunctionsWithTotalExecutionTimePercentageAbove: { type: WL.Type.Float, default: -1 },
     _myFunctionPathsToInclude: { type: WL.Type.String, default: "" },
     _myFunctionPathsToExclude: { type: WL.Type.String, default: "" },
     _myExcludeConstructors: { type: WL.Type.Bool, default: false },

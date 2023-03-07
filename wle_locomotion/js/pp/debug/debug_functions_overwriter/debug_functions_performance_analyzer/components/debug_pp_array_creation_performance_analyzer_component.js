@@ -11,7 +11,7 @@ WL.registerComponent('pp-debug-pp-array-creation-performance-analyzer', {
     _myLogAverageExecutionTimeResults: { type: WL.Type.Bool, default: true },
     _myLogMaxAmountOfFunctions: { type: WL.Type.Int, default: -1 },
     _myLogFunctionsWithCallsCountAbove: { type: WL.Type.Int, default: -1 },
-    _myLogFunctionsWithTotalExecutionTimePercentageAbove: { type: WL.Type.Int, default: -1 },
+    _myLogFunctionsWithTotalExecutionTimePercentageAbove: { type: WL.Type.Float, default: -1 },
     _myClearConsoleBeforeLog: { type: WL.Type.Bool, default: false },
     _myResetMaxResultsShortcutEnabled: { type: WL.Type.Bool, default: false }
 }, {

@@ -1,5 +1,6 @@
 
 WL.registerComponent('pp-debug-array-functions-performance-analyzer', {
+    _myIncludeOnlyMainArrayTypes: { type: WL.Type.Bool, default: true },
     _myIncludeOnlyArrayExtensionFunctions: { type: WL.Type.Bool, default: false },
     _myDelayStart: { type: WL.Type.Float, default: 0.0 },
     _myLogFunction: { type: WL.Type.Enum, values: ["log", "error", "warn", "debug"], default: "log" },
@@ -12,7 +13,7 @@ WL.registerComponent('pp-debug-array-functions-performance-analyzer', {
     _myLogAverageExecutionTimeResults: { type: WL.Type.Bool, default: true },
     _myLogMaxAmountOfFunctions: { type: WL.Type.Int, default: -1 },
     _myLogFunctionsWithCallsCountAbove: { type: WL.Type.Int, default: -1 },
-    _myLogFunctionsWithTotalExecutionTimePercentageAbove: { type: WL.Type.Int, default: -1 },
+    _myLogFunctionsWithTotalExecutionTimePercentageAbove: { type: WL.Type.Float, default: -1 },
     _myFunctionPathsToInclude: { type: WL.Type.String, default: "" },
     _myFunctionPathsToExclude: { type: WL.Type.String, default: "" },
     _myExcludeConstructors: { type: WL.Type.Bool, default: false },
@@ -20,8 +21,13 @@ WL.registerComponent('pp-debug-array-functions-performance-analyzer', {
     _myResetMaxResultsShortcutEnabled: { type: WL.Type.Bool, default: false }
 }, {
     init() {
+        let classesByPath = "Array, Uint8ClampedArray, Uint8Array, Uint16Array, Uint32Array, Int8Array, Int16Array, Int32Array, Float32Array, Float64Array";
+        if (this._myIncludeOnlyMainArrayTypes) {
+            classesByPath = "Array, Uint8Array, Uint16Array, Float32Array";
+        }
+
         this.object.pp_addComponent("pp-debug-functions-performance-analyzer", {
-            _myClassesByPath: "Array, Uint8ClampedArray, Uint8Array, Uint16Array, Uint32Array, Int8Array, Int16Array, Int32Array, Float32Array, Float64Array",
+            _myClassesByPath: classesByPath,
             _myDelayStart: this._myDelayStart,
             _myLogTitle: "Array Functions Performance Analysis Results",
             _myLogFunction: this._myLogFunction,
