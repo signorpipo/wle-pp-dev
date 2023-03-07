@@ -32,6 +32,16 @@ PP.JSUtils = {
     getReferencePropertyOwnParent: function (reference, propertyName) {
         let parent = null;
 
+        let parents = this.getReferencePropertyOwnParents(reference, propertyName);
+        if (parents.length > 0) {
+            parent = parents[0];
+        }
+
+        return parent;
+    },
+    getReferencePropertyOwnParents: function (reference, propertyName) {
+        let parents = [];
+
         let possibleParents = [];
 
         let prototypes = [];
@@ -50,12 +60,11 @@ PP.JSUtils = {
         for (let possibleParent of possibleParents) {
             let propertyNames = Object.getOwnPropertyNames(possibleParent);
             if (propertyNames.pp_hasEqual(propertyName)) {
-                parent = possibleParent;
-                break;
+                parents.push(possibleParent);
             }
         }
 
-        return parent;
+        return parents;
     },
     getReferenceFromPath: function (path, pathStartReference = window) {
         let reference = null;
@@ -142,32 +151,32 @@ PP.JSUtils = {
 
         return success;
     },
-    isFunctionByName(reference, propertyName) {
+    isFunctionByName(functionParent, functionName) {
         let isFunction = false;
 
         try {
-            isFunction = typeof reference[propertyName] == "function" && !this.isClassByName(reference, propertyName);
+            isFunction = typeof functionParent[functionName] == "function" && !this.isClassByName(functionParent, functionName);
         } catch (error) { }
 
         return isFunction;
     },
-    isClassByName(reference, propertyName) {
+    isClassByName(classParent, className) {
         let isClass = false;
 
         try {
             isClass =
-                typeof reference[propertyName] == "function" && propertyName != "constructor" &&
-                reference[propertyName].prototype != null && typeof reference[propertyName].prototype.constructor == "function" &&
-                (/^class/).test(reference[propertyName].toString());
+                typeof classParent[className] == "function" && className != "constructor" &&
+                classParent[className].prototype != null && typeof classParent[className].prototype.constructor == "function" &&
+                (/^class/).test(classParent[className].toString());
         } catch (error) { }
 
         return isClass;
     },
-    isObjectByName(reference, propertyName) {
+    isObjectByName(objectParent, objectName) {
         let isObject = false;
 
         try {
-            isObject = typeof reference[propertyName] == "object";
+            isObject = typeof objectParent[objectName] == "object";
         } catch (error) { }
 
         return isObject;

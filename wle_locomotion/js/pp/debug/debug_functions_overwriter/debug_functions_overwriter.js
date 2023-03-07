@@ -126,6 +126,10 @@ PP.DebugFunctionsOverwriter = class DebugFunctionsOverwriter {
         let isValidReferenceName = this._filterName(referenceNameForFilter, includeNameList, excludeNameList);
         if (isValidReferencePath && isValidReferenceName) {
             let propertyNames = PP.JSUtils.getReferencePropertyNames(reference);
+            if (propertyNames.pp_hasEqual("constructor")) {
+                propertyNames.unshift("constructor"); // be sure it's added first to spot bugs, not important that it appears twice in the list
+            }
+
             for (let propertyName of propertyNames) {
                 let overwriteTargetReference = null;
 
@@ -133,10 +137,24 @@ PP.DebugFunctionsOverwriter = class DebugFunctionsOverwriter {
                 let referenceNameForConstructor = null;
 
                 if (isClass) {
-                    overwriteTargetReference = reference.prototype;
+                    let fixedReference = reference;
+
+                    if (referenceParent != null) {
+                        try {
+                            if (referenceParent[referenceName] != null) {
+                                fixedReference = referenceParent[referenceName];
+                            }
+                        } catch (error) {
+                            if (this._myParams.myDebugLogActive) {
+                                console.error(error);
+                            }
+                        }
+                    }
+
+                    overwriteTargetReference = fixedReference.prototype;
                     try {
                         if (overwriteTargetReference[propertyName] == null) {
-                            overwriteTargetReference = reference;
+                            overwriteTargetReference = fixedReference;
                         }
                     } catch (error) {
                         if (this._myParams.myDebugLogActive) {
@@ -178,6 +196,8 @@ PP.DebugFunctionsOverwriter = class DebugFunctionsOverwriter {
                                     overwriteSuccess = true;
                                 }
                             } catch (error) {
+                                overwriteSuccess = false;
+
                                 if (this._myParams.myDebugLogActive) {
                                     console.error(error);
                                 }
@@ -190,10 +210,15 @@ PP.DebugFunctionsOverwriter = class DebugFunctionsOverwriter {
                                 let newConstructor = this._getOverwrittenConstructor(referenceParentForConstructor, referenceNameForConstructor, referencePath, isClass, isFunction);
                                 if (newConstructor != referenceParentForConstructor[referenceNameForConstructor]) {
                                     overwriteSuccess = PP.JSUtils.overwriteReferenceProperty(newConstructor, referenceParentForConstructor, referenceNameForConstructor, this._myParams.myDebugLogActive);
+                                    if (overwriteSuccess) {
+                                        overwriteSuccess = PP.JSUtils.overwriteReferenceProperty(newConstructor, referenceParentForConstructor[referenceNameForConstructor].prototype, propertyName, this._myParams.myDebugLogActive);
+                                    }
                                 } else {
                                     overwriteSuccess = true;
                                 }
                             } catch (error) {
+                                overwriteSuccess = false;
+
                                 if (this._myParams.myDebugLogActive) {
                                     console.error(error);
                                 }
