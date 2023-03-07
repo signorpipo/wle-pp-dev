@@ -125,6 +125,7 @@ require('./pp/gameplay/grab_throw/grabber_hand');
 
 //    INTEGRATIONS
 require('./pp/gameplay/integrations/construct_arcade/ca_utils');
+require('./pp/gameplay/integrations/construct_arcade/ca_dummy_server');
 require('./pp/gameplay/integrations/construct_arcade/ca_display_leaderboard');
 
 //    EXPERIMENTAL
