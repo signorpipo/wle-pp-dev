@@ -100,7 +100,7 @@ PP.KeyboardGamepadCore = class KeyboardGamepadCore extends PP.GamepadCore {
         return this._myButtonData;
     }
 
-    getAxesData() {
+    getAxesData(axesID) {
         this._myAxesData.vec2_zero();
 
         if (this.isGamepadCoreActive()) {

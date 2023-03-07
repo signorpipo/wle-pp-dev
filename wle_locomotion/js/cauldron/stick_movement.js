@@ -99,7 +99,7 @@ WL.registerComponent('stick-movement', {
         let movement = PP.vec3_create();
 
         let minIntensityThreshold = 0.1;
-        let axes = PP.myLeftGamepad.getAxesInfo().getAxes();
+        let axes = PP.myLeftGamepad.getAxesInfo(PP.GamepadAxesID.THUMBSTICK).getAxes();
         axes[0] = Math.abs(axes[0]) > minIntensityThreshold ? axes[0] : 0;
         axes[1] = Math.abs(axes[1]) > minIntensityThreshold ? axes[1] : 0;
 
