@@ -57,7 +57,7 @@ WL.registerComponent('pp-debug-wl-components-functions-performance-analyzer', {
             _myLogTotalExecutionTimePercentageResults: this._myLogTotalExecutionTimePercentageResults,
             _myLogAverageExecutionTimeResults: this._myLogAverageExecutionTimeResults,
             _myFunctionPathsToInclude: this._myFunctionPathsToInclude,
-            _myFunctionPathsToExclude: this._myFunctionPathsToExclude + (this._myFunctionPathsToExclude.length > 0 ? ", " : "") + "_WL\\._components\\., _WL\\._componentTypes\\.",
+            _myFunctionPathsToExclude: this._myFunctionPathsToExclude + (this._myFunctionPathsToExclude.length > 0 ? ", " : "") + "_WL\\._components\\., _WL\\._componentTypes\\., functions-performance-analyzer",
             _myExcludeConstructors: this._myExcludeConstructors,
             _myExcludeJavascriptObjectFunctions: true,
             _myAddPathPrefixToFunctionID: true,
