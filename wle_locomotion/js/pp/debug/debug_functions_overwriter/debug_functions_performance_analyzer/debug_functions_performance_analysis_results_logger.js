@@ -6,6 +6,9 @@ PP.DebugFunctionsPerformanceAnalysisResultsLoggerParams = class DebugFunctionsPe
         this.mySecondsBetweenLogs = 1;
         this.myLogFunction = "log";
 
+        this.myFormatLog = true;
+        this.myFormatLogIndentationCharacter = "-";
+
         this.myLogMaxResults = false;
 
         this.myLogSortOrder = PP.DebugFunctionsPerformanceAnalyzerSortOrder.NONE;
@@ -29,6 +32,12 @@ PP.DebugFunctionsPerformanceAnalysisResultsLogger = class DebugFunctionsPerforma
         this._myParams = params;
 
         this._myLogTimer = new PP.Timer(this._myParams.mySecondsBetweenLogs);
+
+        this._myMaxNameLength = 0;
+        this._myMaxCallsCountLength = 0;
+        this._myMaxTotalExecutionTimeLength = 0;
+        this._myMaxTotalExecutionTimePercentageLength = 0;
+        this._myMaxAverageExecutionTimeLength = 0;
     }
 
     update(dt) {
@@ -119,7 +128,18 @@ PP.DebugFunctionsPerformanceAnalysisResultsLogger = class DebugFunctionsPerforma
             for (let entry of analysisResults.entries()) {
                 let name = entry[0];
                 let results = entry[1];
-                resultsText += "\n" + name;
+
+                this._myMaxNameLength = Math.max(this._myMaxNameLength, name.length);
+
+                this._myMaxCallsCountLength = Math.max(this._myMaxCallsCountLength, results.myCallsCount.toFixed(0).length);
+                this._myMaxTotalExecutionTimeLength = Math.max(this._myMaxTotalExecutionTimeLength, results.myTotalExecutionTime.toFixed(5).length);
+                this._myMaxTotalExecutionTimePercentageLength = Math.max(this._myMaxTotalExecutionTimePercentageLength, (results.myTotalExecutionTimePercentage * 100).toFixed(2).length);
+                this._myMaxAverageExecutionTimeLength = Math.max(this._myMaxAverageExecutionTimeLength, results.myAverageExecutionTime.toFixed(5).length);
+            }
+
+            for (let entry of analysisResults.entries()) {
+                let name = entry[0];
+                let results = entry[1];
 
                 let parametersToLog = 0;
                 if (this._myParams.myLogCallsCountResults) {
@@ -140,10 +160,37 @@ PP.DebugFunctionsPerformanceAnalysisResultsLogger = class DebugFunctionsPerforma
 
                 let textOrdered = [];
 
-                let callsCountText = ((parametersToLog > 1) ? "Calls Count: " : "") + results.myCallsCount;
-                let totalExecutionTimeText = ((parametersToLog > 1) ? "Total Time: " : "") + results.myTotalExecutionTime.toFixed(5) + "ms";
-                let totalExecutionTimePercentageText = ((parametersToLog > 1) ? "Total Time: " : "") + (results.myTotalExecutionTimePercentage * 100).toFixed(2) + "%";
-                let averageExecutionTimeText = ((parametersToLog > 1) ? "Average Time: " : "") + results.myAverageExecutionTime.toFixed(5) + "ms";
+                let callsCountText = ((parametersToLog > 1) ? "Calls Count: " : "");
+                if (this._myParams.myFormatLog) {
+                    for (let i = 0; i < this._myMaxCallsCountLength - results.myCallsCount.toFixed(0).length; i++) {
+                        callsCountText += " ";
+                    }
+                }
+                callsCountText += results.myCallsCount.toFixed(0);
+
+                let totalExecutionTimeText = ((parametersToLog > 1) ? "Total Time: " : "");
+                if (this._myParams.myFormatLog) {
+                    for (let i = 0; i < this._myMaxTotalExecutionTimeLength - results.myTotalExecutionTime.toFixed(5).length; i++) {
+                        totalExecutionTimeText += " ";
+                    }
+                }
+                totalExecutionTimeText += results.myTotalExecutionTime.toFixed(5) + "ms";
+
+                let totalExecutionTimePercentageText = ((parametersToLog > 1) ? "Total Time: " : "");
+                if (this._myParams.myFormatLog) {
+                    for (let i = 0; i < this._myMaxTotalExecutionTimePercentageLength - (results.myTotalExecutionTimePercentage * 100).toFixed(2).length; i++) {
+                        totalExecutionTimePercentageText += " ";
+                    }
+                }
+                totalExecutionTimePercentageText += (results.myTotalExecutionTimePercentage * 100).toFixed(2) + "%";
+
+                let averageExecutionTimeText = ((parametersToLog > 1) ? "Average Time: " : "");
+                if (this._myParams.myFormatLog) {
+                    for (let i = 0; i < this._myMaxAverageExecutionTimeLength - results.myAverageExecutionTime.toFixed(5).length; i++) {
+                        averageExecutionTimeText += " ";
+                    }
+                }
+                averageExecutionTimeText += results.myAverageExecutionTime.toFixed(5) + "ms";
 
                 if (!this._myParams.myLogCallsCountResults) {
                     callsCountText = null;
@@ -187,9 +234,28 @@ PP.DebugFunctionsPerformanceAnalysisResultsLogger = class DebugFunctionsPerforma
                         textOrdered.push(averageExecutionTimeText);
                 }
 
+                resultsText += "\n";
+                if (this._myParams.myFormatLog) {
+                    let nameIndented = name + " ";
+                    while (nameIndented.length < this._myMaxNameLength + 1) {
+                        nameIndented += this._myParams.myFormatLogIndentationCharacter;
+                    }
+                    nameIndented += this._myParams.myFormatLogIndentationCharacter + " ";
+                    resultsText += nameIndented;
+                } else {
+                    resultsText += name + " - ";
+                }
+
+                let avoidFirst = true;
                 for (let text of textOrdered) {
                     if (text != null) {
-                        resultsText += " - " + text;
+                        if (avoidFirst) {
+                            avoidFirst = false;
+                        } else {
+                            resultsText += " - ";
+                        }
+
+                        resultsText += text;
                     }
                 }
             }
