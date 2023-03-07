@@ -324,7 +324,7 @@ PP.CADummyServer = class CADummyServer {
 
     getUser(callbackOnDone, callbackOnError) {
         let user = {};
-        user.displayName = "Jonathan";
+        user.displayName = "J";
 
         if (callbackOnDone) {
             callbackOnDone(user);
