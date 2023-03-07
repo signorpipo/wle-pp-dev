@@ -228,6 +228,7 @@ require('./pp/input/gamepad/gamepad_cores/gamepad_core');
 require('./pp/input/gamepad/gamepad_cores/xr_gamepad_core');
 require('./pp/input/gamepad/gamepad_cores/keyboard_gamepad_core');
 require('./pp/input/gamepad/gamepad_cores/virtual_gamepad_gamepad_core');
+require('./pp/input/gamepad/gamepad_cores/classic_gamepad_core');
 require('./pp/input/gamepad/cauldron/gamepad_mesh_animator');
 require('./pp/input/gamepad/cauldron/gamepad_manager');
 require('./pp/input/gamepad/cauldron/gamepad_utils');
