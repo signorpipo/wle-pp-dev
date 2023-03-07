@@ -103,6 +103,9 @@ WL.registerComponent('pp-debug-functions-performance-analyzer', {
 
         functionsPerformanceAnalyzerParams.myExecutionTimeAnalysisEnabled = this._myLogTotalExecutionTimeResults || this._myLogTotalExecutionTimePercentageResults || this._myLogAverageExecutionTimeResults;
 
+        functionsPerformanceAnalyzerParams.myClassesByReference = (this._myClassesByReference != null) ? this._myClassesByReference : [];
+        functionsPerformanceAnalyzerParams.myObjectsByReference = (this._myObjectsByReference != null) ? this._myObjectsByReference : [];
+
         this._myFunctionsPerformanceAnalyzer = new PP.DebugFunctionsPerformanceAnalyzer(functionsPerformanceAnalyzerParams);
         this._myFunctionsPerformanceAnalyzer.overwriteFunctions();
 

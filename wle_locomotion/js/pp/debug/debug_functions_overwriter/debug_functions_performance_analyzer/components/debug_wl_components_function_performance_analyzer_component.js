@@ -34,7 +34,14 @@ WL.registerComponent('pp-debug-wl-components-functions-performance-analyzer', {
             objectsByPath += "_WL._components";
         }
 
+        let objectByReference = [];
+        let nativeComponentTypes = ["mesh", "physx", "animation", "collision", "input", "light", "text", "view"];
+        for (let nativeComponentType of nativeComponentTypes) {
+            objectByReference.push([Object.getPrototypeOf(WL._wrapComponent(nativeComponentType, WL.Object._typeIndexFor(nativeComponentType), 0)), "_WL._componentTypes[\"" + nativeComponentType + "\"]"]);
+        }
+
         this._myAnalyzerComponent = this.object.pp_addComponent("pp-debug-functions-performance-analyzer", {
+            _myObjectsByReference: objectByReference,
             _myObjectsByPath: objectsByPath,
             _myDelayStart: this._myDelayStart + 0.001,
             _myLogTitle: "WL Components Performance Analysis Results",
