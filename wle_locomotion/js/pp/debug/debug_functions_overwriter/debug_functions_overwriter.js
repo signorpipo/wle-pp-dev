@@ -191,7 +191,7 @@ PP.DebugFunctionsOverwriter = class DebugFunctionsOverwriter {
                             try {
                                 let newFunction = this._getOverwrittenFunction(reference, propertyName, referencePath, isClass, isFunction);
                                 if (newFunction != reference[propertyName]) {
-                                    overwriteSuccess = PP.JSUtils.overwriteReferenceProperty(newFunction, reference, propertyName, this._myParams.myDebugLogActive);
+                                    overwriteSuccess = PP.JSUtils.overwriteReferenceProperty(newFunction, reference, propertyName, false, true, this._myParams.myDebugLogActive);
                                 } else {
                                     overwriteSuccess = true;
                                 }
@@ -209,9 +209,9 @@ PP.DebugFunctionsOverwriter = class DebugFunctionsOverwriter {
                             try {
                                 let newConstructor = this._getOverwrittenConstructor(referenceParentForConstructor, referenceNameForConstructor, referencePath, isClass, isFunction);
                                 if (newConstructor != referenceParentForConstructor[referenceNameForConstructor]) {
-                                    overwriteSuccess = PP.JSUtils.overwriteReferenceProperty(newConstructor, referenceParentForConstructor, referenceNameForConstructor, this._myParams.myDebugLogActive);
+                                    overwriteSuccess = PP.JSUtils.overwriteReferenceProperty(newConstructor, referenceParentForConstructor, referenceNameForConstructor, false, true, this._myParams.myDebugLogActive);
                                     if (overwriteSuccess) {
-                                        overwriteSuccess = PP.JSUtils.overwriteReferenceProperty(newConstructor, referenceParentForConstructor[referenceNameForConstructor].prototype, propertyName, this._myParams.myDebugLogActive);
+                                        overwriteSuccess = PP.JSUtils.overwriteReferenceProperty(newConstructor, referenceParentForConstructor[referenceNameForConstructor].prototype, propertyName, false, true, this._myParams.myDebugLogActive);
                                     }
                                 } else {
                                     overwriteSuccess = true;

@@ -1,14 +1,38 @@
 PP.JSUtils = {
-    getReferencePropertyNames: function (reference) {
-        let propertyNames = Object.getOwnPropertyNames(reference);
+    getReferencePrototypes(reference) {
+        let prototypes = [];
 
-        let prototypes = [reference.prototype, Object.getPrototypeOf(reference)];
+        prototypes.push(reference);
+
+        let referenceProto = Object.getPrototypeOf(reference);
+        while (referenceProto != null) {
+            prototypes.pp_pushUnique(referenceProto);
+            referenceProto = Object.getPrototypeOf(referenceProto);
+        }
+
+        let prototypesToCheck = [reference];
+        while (prototypesToCheck.length > 0) {
+            let prototypeToCheck = prototypesToCheck.shift();
+            if (prototypeToCheck != null) {
+                prototypes.pp_pushUnique(prototypeToCheck);
+
+                prototypesToCheck.pp_pushUnique(Object.getPrototypeOf(prototypeToCheck));
+                prototypesToCheck.pp_pushUnique(prototypeToCheck.prototype);
+            }
+        }
+
+        return prototypes;
+    },
+    getReferencePropertyNames: function (reference) {
+        let propertyNames = [];
+
+        let prototypes = this.getReferencePrototypes(reference);
 
         for (let prototype of prototypes) {
             if (prototype != null) {
-                let recursivePropertyNames = this.getReferencePropertyNames(prototype);
-                for (let recursivePropertyName of recursivePropertyNames) {
-                    propertyNames.pp_pushUnique(recursivePropertyName);
+                let ownPropertyNames = Object.getOwnPropertyNames(prototype);
+                for (let ownPropertyName of ownPropertyNames) {
+                    propertyNames.pp_pushUnique(ownPropertyName);
                 }
             }
         }
@@ -27,7 +51,14 @@ PP.JSUtils = {
         return propertyDescriptor;
     },
     getReferenceProperty: function (reference, propertyName) {
-        return reference[propertyName];
+        let property = undefined;
+
+        let descriptor = this.getReferencePropertyDescriptor(reference, propertyName);
+        if (descriptor != null) {
+            property = descriptor.value;
+        }
+
+        return property;
     },
     getReferencePropertyOwnParent: function (reference, propertyName) {
         let parent = null;
@@ -42,20 +73,7 @@ PP.JSUtils = {
     getReferencePropertyOwnParents: function (reference, propertyName) {
         let parents = [];
 
-        let possibleParents = [];
-
-        let prototypes = [];
-        prototypes.pp_pushUnique(reference);
-
-        while (prototypes.length > 0) {
-            let prototype = prototypes.shift();
-            if (prototype != null) {
-                possibleParents.pp_pushUnique(prototype);
-
-                prototypes.pp_pushUnique(prototype.prototype);
-                prototypes.pp_pushUnique(Object.getPrototypeOf(prototype));
-            }
-        }
+        let possibleParents = this.getReferencePrototypes(reference);
 
         for (let possibleParent of possibleParents) {
             let propertyNames = Object.getOwnPropertyNames(possibleParent);
@@ -97,59 +115,76 @@ PP.JSUtils = {
 
         return currentParent;
     },
-    overwriteReferenceProperty: function (newProperty, reference, propertyName, debugLogActive = false) {
+    overwriteReferenceProperty: function (newProperty, reference, propertyName, overwriteOnOwnParent = true, javascriptObjectFunctionsSpecialOverwrite = false, debugLogActive = false) {
         let success = false;
 
         try {
-            let originalProperty = reference[propertyName];
+            let propertyOwnParent = this.getReferencePropertyOwnParent(reference, propertyName);
+            if (propertyOwnParent != null) {
+                let originalPropertyDescriptor = Object.getOwnPropertyDescriptor(propertyOwnParent, propertyName);
 
-            let isEnumerable = false;
-            let isConfigurable = true;
-            let isWritable = true;
+                if (originalPropertyDescriptor != null) {
+                    if (originalPropertyDescriptor.get == null && originalPropertyDescriptor.set == null && originalPropertyDescriptor.value != null) {
+                        let originalProperty = originalPropertyDescriptor.value;
 
-            if (originalProperty != null) {
-                isEnumerable = this.getReferencePropertyDescriptor(reference, propertyName).enumerable;
-                isConfigurable = this.getReferencePropertyDescriptor(reference, propertyName).configurable;
-                isWritable = this.getReferencePropertyDescriptor(reference, propertyName).writable;
+                        Object.setPrototypeOf(newProperty, Object.getPrototypeOf(originalProperty));
 
-                let currentPropertyNames = this.getReferencePropertyNames(originalProperty);
-                for (let currentPropertyName of currentPropertyNames) {
-                    try {
-                        let isCurrentEnumerable = this.getReferencePropertyDescriptor(originalProperty, currentPropertyName).enumerable;
-                        isCurrentEnumerable = typeof isCurrentEnumerable == "boolean" ? isCurrentEnumerable : false;
-                        let isCurrentConfigurable = this.getReferencePropertyDescriptor(originalProperty, currentPropertyName).configurable;
-                        isCurrentConfigurable = typeof isCurrentConfigurable == "boolean" ? isCurrentConfigurable : false;
-                        let isCurrentWritable = this.getReferencePropertyDescriptor(originalProperty, currentPropertyName).writable;
-                        isCurrentWritable = typeof isCurrentWritable == "boolean" ? isCurrentWritable : false;
-                        Object.defineProperty(newProperty, currentPropertyName, {
-                            value: originalProperty[currentPropertyName],
-                            enumerable: isCurrentEnumerable,
-                            configurable: isCurrentConfigurable,
-                            writable: isCurrentWritable
-                        });
-                    } catch (error) {
-                        if (debugLogActive) {
-                            console.error("Property:", currentPropertyName, "of:", originalProperty, "can't be overwritten.\nError:", error);
+                        let currentPropertyNames = Object.getOwnPropertyNames(originalProperty);
+                        for (let currentPropertyName of currentPropertyNames) {
+                            try {
+                                let currentPropertyDescriptor = Object.getOwnPropertyDescriptor(originalProperty, currentPropertyName);
+
+                                Object.defineProperty(newProperty, currentPropertyName, {
+                                    value: currentPropertyDescriptor.value,
+                                    enumerable: currentPropertyDescriptor.enumerable,
+                                    configurable: currentPropertyDescriptor.configurable,
+                                    writable: currentPropertyDescriptor.writable
+                                });
+                            } catch (error) {
+                                if (debugLogActive) {
+                                    console.error("Property:", currentPropertyName, "of:", originalProperty.name, "can't be overwritten.");
+                                }
+                            }
+                        }
+
+                        if (javascriptObjectFunctionsSpecialOverwrite) {
+                            this._javascriptObjectFunctionsSpecialOverwrite(newProperty, originalProperty);
                         }
                     }
+
+                    let overwriteTarget = reference;
+                    if (overwriteOnOwnParent) {
+                        overwriteTarget = propertyOwnParent;
+                    }
+
+                    Object.defineProperty(overwriteTarget, propertyName, {
+                        value: newProperty,
+                        enumerable: originalPropertyDescriptor.enumerable,
+                        configurable: originalPropertyDescriptor.configurable,
+                        writable: originalPropertyDescriptor.writable,
+                    });
+
+                    success = true;
                 }
             }
-
-            Object.defineProperty(reference, propertyName, {
-                value: newProperty,
-                enumerable: isEnumerable,
-                configurable: isConfigurable,
-                writable: isWritable
-            });
-
-            success = true;
         } catch (error) {
             if (debugLogActive) {
-                console.error("Property:", propertyName, "of:", reference, "can't be overwritten.\nError:", error);
+                console.error("Property:", propertyName, "of:", reference, "can't be overwritten.");
             }
         }
 
         return success;
+    },
+    doesReferencePropertyUseAccessors(reference, propertyName) {
+        let propertyUseAccessors = false;
+
+        let propertyDescriptor = this.getReferencePropertyDescriptor(reference, propertyName);
+
+        if (propertyDescriptor != null && (propertyDescriptor.get != null || propertyDescriptor.set != null)) {
+            propertyUseAccessors = true;
+        }
+
+        return propertyUseAccessors;
     },
     isFunctionByName(functionParent, functionName) {
         let isFunction = false;
@@ -180,5 +215,25 @@ PP.JSUtils = {
         } catch (error) { }
 
         return isObject;
+    },
+    _javascriptObjectFunctionsSpecialOverwrite(newProperty, originalProperty) {
+        try {
+            if (typeof newProperty == "function" && typeof originalProperty == "function") {
+                let functionsToOverwrite = ["toString", "toLocaleString", "valueOf"];
+
+                for (let functionToOverwrite of functionsToOverwrite) {
+                    let propertyDescriptorToOverwrite = this.getReferencePropertyDescriptor(originalProperty, functionToOverwrite);
+
+                    if (propertyDescriptorToOverwrite != null && propertyDescriptorToOverwrite.value != null &&
+                        (propertyDescriptorToOverwrite.value == Object[functionToOverwrite])) {
+                        let valueToReturn = Object[functionToOverwrite].bind(originalProperty)();
+                        let overwrittenFunction = function () { return valueToReturn; };
+                        this.overwriteReferenceProperty(overwrittenFunction, newProperty, functionToOverwrite, false, false);
+                    }
+                }
+            }
+        } catch (error) {
+            // ignored
+        }
     }
 };
