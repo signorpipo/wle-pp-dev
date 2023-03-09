@@ -266,199 +266,200 @@ PP.DebugFunctionsPerformanceAnalyzer = class DebugFunctionsPerformanceAnalyzer e
     }
 
     _getOverwrittenFunctionInternal(reference, propertyName, referencePath, isClass, isFunction, isConstructor) {
-        if (this._myParams.myFilterDebugFunctionsPerformanceAnalyzerClasses && this._isPerformanceAnalyzer(reference, propertyName, isClass)) return reference[propertyName];
-        if (propertyName == "myPerformanceAnalyzerOriginalFunction") return reference[propertyName];
+        let newFunction = PP.JSUtils.getReferenceProperty(reference, propertyName);
 
-        let propertyID = this._getPropertyID(propertyName, referencePath, isFunction, isConstructor);
+        if (!this._myParams.myFilterDebugFunctionsPerformanceAnalyzerClasses || !this._isPerformanceAnalyzer(reference, propertyName, isClass)) {
+            if (propertyName != "_myPerformanceAnalyzerOriginalFunction") {
+                let propertyID = this._getPropertyID(propertyName, referencePath, isFunction, isConstructor);
 
-        let newFunction = reference[propertyName];
+                this._myResultsAlreadyAdded = this._myFunctionPerformanceAnalysisResults.has(propertyID);
+                let analysisResults = new PP.DebugFunctionPerformanceAnalysisResults();
 
-        this._myResultsAlreadyAdded = this._myFunctionPerformanceAnalysisResults.has(propertyID);
-        let analysisResults = new PP.DebugFunctionPerformanceAnalysisResults();
+                analysisResults.myReference = reference;
+                analysisResults.myName = propertyName;
+                analysisResults.myPath = referencePath;
+                analysisResults.myID = referencePath;
 
-        analysisResults.myReference = reference;
-        analysisResults.myName = propertyName;
-        analysisResults.myPath = referencePath;
-        analysisResults.myID = referencePath;
+                this._myFunctionPerformanceAnalysisResults.set(propertyID, analysisResults);
 
-        this._myFunctionPerformanceAnalysisResults.set(propertyID, analysisResults);
+                try {
+                    let functionPerformanceAnalysisResults = this._myFunctionPerformanceAnalysisResults.get(propertyID);
+                    let executionTimes = this._myExecutionTimes;
 
-        try {
-            let functionPerformanceAnalysisResults = this._myFunctionPerformanceAnalysisResults.get(propertyID);
-            let executionTimes = this._myExecutionTimes;
+                    let originalFunction = reference[propertyName];
+                    let functionCallOverhead = 0.000175;     // ms taken by an analyzed function that is empty
+                    let overheadError = 0.00035;        // ms to add to adjust a bit for window.performance.now() max precision which is 0.0005
 
-            let originalFunction = reference[propertyName];
-            let functionCallOverhead = 0.000175;     // ms taken by an analyzed function that is empty
-            let overheadError = 0.00035;        // ms to add to adjust a bit for window.performance.now() max precision which is 0.0005
+                    let executionTimeAnalysisEnabled = this._myParams.myExecutionTimeAnalysisEnabled;
 
-            let executionTimeAnalysisEnabled = this._myParams.myExecutionTimeAnalysisEnabled;
+                    if (!isConstructor) {
+                        newFunction = function () {
+                            let startTime = window.performance.now();
 
-            if (!isConstructor) {
-                newFunction = function () {
-                    let startTime = window.performance.now();
+                            let errorToThrow = null;
+                            let returnValue = undefined;
+                            let bindFunction = null;
+                            let startOriginalFunctionTime = 0;
+                            let endOriginalFunctionTime = 0;
+                            let originalFunctionOverheadExecutionTime = 0;
+                            let executionTimeToAdjust = 0;
+                            let executionTime = 0;
+                            let beforeOverhead = 0;
+                            let inBetweenOverhead = 0;
 
-                    let errorToThrow = null;
-                    let returnValue = undefined;
-                    let bindFunction = null;
-                    let startOriginalFunctionTime = 0;
-                    let endOriginalFunctionTime = 0;
-                    let originalFunctionOverheadExecutionTime = 0;
-                    let executionTimeToAdjust = 0;
-                    let executionTime = 0;
-                    let beforeOverhead = 0;
-                    let inBetweenOverhead = 0;
+                            if (executionTimeAnalysisEnabled) {
+                                executionTimes.myOriginalFunctionOverheadExecutionTimes.push(0);
 
-                    if (executionTimeAnalysisEnabled) {
-                        executionTimes.myOriginalFunctionOverheadExecutionTimes.push(0);
+                                startOriginalFunctionTime = window.performance.now();
+                                endOriginalFunctionTime = window.performance.now();
 
-                        startOriginalFunctionTime = window.performance.now();
-                        endOriginalFunctionTime = window.performance.now();
+                                try {
+                                    bindFunction = originalFunction.bind(this);
+                                    startOriginalFunctionTime = window.performance.now();
+                                    returnValue = bindFunction(...arguments);
+                                    endOriginalFunctionTime = window.performance.now();
+                                } catch (error) {
+                                    endOriginalFunctionTime = window.performance.now();
+                                    errorToThrow = error;
+                                }
+                            } else {
+                                try {
+                                    bindFunction = originalFunction.bind(this);
+                                    returnValue = bindFunction(...arguments);
+                                } catch (error) {
+                                    errorToThrow = error;
+                                }
+                            }
 
-                        try {
-                            bindFunction = originalFunction.bind(this);
-                            startOriginalFunctionTime = window.performance.now();
-                            returnValue = bindFunction(...arguments);
-                            endOriginalFunctionTime = window.performance.now();
-                        } catch (error) {
-                            endOriginalFunctionTime = window.performance.now();
-                            errorToThrow = error;
-                        }
+                            functionPerformanceAnalysisResults.myCallsCount += 1;
+
+                            if (executionTimeAnalysisEnabled) {
+                                originalFunctionOverheadExecutionTime = executionTimes.myOriginalFunctionOverheadExecutionTimes.pop();
+
+                                executionTimeToAdjust = endOriginalFunctionTime - startOriginalFunctionTime - originalFunctionOverheadExecutionTime;
+                                executionTime = executionTimeToAdjust - functionCallOverhead;
+                                if (originalFunction._myPerformanceAnalyzerHasBeenOverwritten) {
+                                    executionTime = executionTimes.myLastFunctionExecutionTime;
+                                }
+
+                                functionPerformanceAnalysisResults._myTotalExecutionTimeInternal += executionTime;
+                                functionPerformanceAnalysisResults.myTotalExecutionTime = Math.max(0, functionPerformanceAnalysisResults._myTotalExecutionTimeInternal);
+
+                                executionTimes.myLastFunctionExecutionTime = executionTime;
+
+                                beforeOverhead = startOriginalFunctionTime - startTime;
+                                inBetweenOverhead = beforeOverhead - endOriginalFunctionTime - overheadError;
+                                if (executionTimes.myOriginalFunctionOverheadExecutionTimes.length > 0) {
+                                    executionTimes.myOriginalFunctionOverheadExecutionTimes[executionTimes.myOriginalFunctionOverheadExecutionTimes.length - 1] +=
+                                        inBetweenOverhead + originalFunctionOverheadExecutionTime + overheadError * 2.75;
+                                    executionTimes.myOriginalFunctionOverheadExecutionTimes[executionTimes.myOriginalFunctionOverheadExecutionTimes.length - 1] +=
+                                        window.performance.now();
+                                }
+
+                                executionTimes.myOverheadExecutionTimeSinceLastReset += inBetweenOverhead;
+                                executionTimes.myOverheadExecutionTimeSinceLastReset += window.performance.now();
+                            }
+
+                            if (errorToThrow != null) {
+                                throw errorToThrow;
+                            }
+
+                            return returnValue;
+                        };
                     } else {
-                        try {
-                            bindFunction = originalFunction.bind(this);
-                            returnValue = bindFunction(...arguments);
-                        } catch (error) {
-                            errorToThrow = error;
-                        }
+                        newFunction = function () {
+                            let startTime = window.performance.now();
+
+                            let errorToThrow = null;
+                            let returnValue = undefined;
+                            let bindFunction = null;
+                            let startOriginalFunctionTime = 0;
+                            let endOriginalFunctionTime = 0;
+                            let originalFunctionOverheadExecutionTime = 0;
+                            let executionTimeToAdjust = 0;
+                            let executionTime = 0;
+                            let beforeOverhead = 0;
+                            let inBetweenOverhead = 0;
+
+                            if (executionTimeAnalysisEnabled) {
+                                executionTimes.myOriginalFunctionOverheadExecutionTimes.push(0);
+
+                                startOriginalFunctionTime = window.performance.now();
+                                endOriginalFunctionTime = window.performance.now();
+
+                                try {
+                                    startOriginalFunctionTime = window.performance.now();
+                                    returnValue = new originalFunction(...arguments);
+                                    endOriginalFunctionTime = window.performance.now();
+                                } catch (error) {
+                                    endOriginalFunctionTime = window.performance.now();
+                                    errorToThrow = error;
+                                }
+                            } else {
+                                try {
+                                    returnValue = new originalFunction(...arguments);
+                                } catch (error) {
+                                    errorToThrow = error;
+                                }
+                            }
+
+                            functionPerformanceAnalysisResults.myCallsCount += 1;
+
+                            if (executionTimeAnalysisEnabled) {
+                                originalFunctionOverheadExecutionTime = executionTimes.myOriginalFunctionOverheadExecutionTimes.pop();
+
+                                executionTimeToAdjust = endOriginalFunctionTime - startOriginalFunctionTime - originalFunctionOverheadExecutionTime;
+                                executionTime = executionTimeToAdjust - functionCallOverhead;
+                                if (originalFunction._myPerformanceAnalyzerHasBeenOverwritten) {
+                                    executionTime = executionTimes.myLastFunctionExecutionTime;
+                                }
+
+                                functionPerformanceAnalysisResults._myTotalExecutionTimeInternal += executionTime;
+                                functionPerformanceAnalysisResults.myTotalExecutionTime = Math.max(0, functionPerformanceAnalysisResults._myTotalExecutionTimeInternal);
+
+                                executionTimes.myLastFunctionExecutionTime = executionTime;
+
+                                beforeOverhead = startOriginalFunctionTime - startTime;
+                                inBetweenOverhead = beforeOverhead - endOriginalFunctionTime - overheadError;
+                                if (executionTimes.myOriginalFunctionOverheadExecutionTimes.length > 0) {
+                                    executionTimes.myOriginalFunctionOverheadExecutionTimes[executionTimes.myOriginalFunctionOverheadExecutionTimes.length - 1] +=
+                                        inBetweenOverhead + originalFunctionOverheadExecutionTime + overheadError * 2.75;
+                                    executionTimes.myOriginalFunctionOverheadExecutionTimes[executionTimes.myOriginalFunctionOverheadExecutionTimes.length - 1] +=
+                                        window.performance.now();
+                                }
+
+                                executionTimes.myOverheadExecutionTimeSinceLastReset += inBetweenOverhead;
+                                executionTimes.myOverheadExecutionTimeSinceLastReset += window.performance.now();
+                            }
+
+                            if (errorToThrow != null) {
+                                throw errorToThrow;
+                            }
+
+                            return returnValue;
+                        };
                     }
 
-                    functionPerformanceAnalysisResults.myCallsCount += 1;
+                    if (newFunction != null) {
+                        Object.defineProperty(newFunction, "_myPerformanceAnalyzerHasBeenOverwritten", {
+                            value: true,
+                            enumerable: false,
+                            configurable: false,
+                            writable: false
+                        });
 
-                    if (executionTimeAnalysisEnabled) {
-                        originalFunctionOverheadExecutionTime = executionTimes.myOriginalFunctionOverheadExecutionTimes.pop();
-
-                        executionTimeToAdjust = endOriginalFunctionTime - startOriginalFunctionTime - originalFunctionOverheadExecutionTime;
-                        executionTime = executionTimeToAdjust - functionCallOverhead;
-                        if (originalFunction.myPerformanceAnalyzerHasBeenOverwritten) {
-                            executionTime = executionTimes.myLastFunctionExecutionTime;
-                        }
-
-                        functionPerformanceAnalysisResults._myTotalExecutionTimeInternal += executionTime;
-                        functionPerformanceAnalysisResults.myTotalExecutionTime = Math.max(0, functionPerformanceAnalysisResults._myTotalExecutionTimeInternal);
-
-                        executionTimes.myLastFunctionExecutionTime = executionTime;
-
-                        beforeOverhead = startOriginalFunctionTime - startTime;
-                        inBetweenOverhead = beforeOverhead - endOriginalFunctionTime - overheadError;
-                        if (executionTimes.myOriginalFunctionOverheadExecutionTimes.length > 0) {
-                            executionTimes.myOriginalFunctionOverheadExecutionTimes[executionTimes.myOriginalFunctionOverheadExecutionTimes.length - 1] +=
-                                inBetweenOverhead + originalFunctionOverheadExecutionTime + overheadError * 2.75;
-                            executionTimes.myOriginalFunctionOverheadExecutionTimes[executionTimes.myOriginalFunctionOverheadExecutionTimes.length - 1] +=
-                                window.performance.now();
-                        }
-
-                        executionTimes.myOverheadExecutionTimeSinceLastReset += inBetweenOverhead;
-                        executionTimes.myOverheadExecutionTimeSinceLastReset += window.performance.now();
+                        Object.defineProperty(newFunction, "_myPerformanceAnalyzerOriginalFunction", {
+                            value: originalFunction,
+                            enumerable: false,
+                            configurable: false,
+                            writable: false
+                        });
                     }
-
-                    if (errorToThrow != null) {
-                        throw errorToThrow;
+                } catch (error) {
+                    if (this._myParams.myDebugLogActive) {
+                        console.error("Function:", propertyName, "of:", reference, "can't be overwritten.\nError:", error);
                     }
-
-                    return returnValue;
-                };
-            } else {
-                newFunction = function () {
-                    let startTime = window.performance.now();
-
-                    let errorToThrow = null;
-                    let returnValue = undefined;
-                    let bindFunction = null;
-                    let startOriginalFunctionTime = 0;
-                    let endOriginalFunctionTime = 0;
-                    let originalFunctionOverheadExecutionTime = 0;
-                    let executionTimeToAdjust = 0;
-                    let executionTime = 0;
-                    let beforeOverhead = 0;
-                    let inBetweenOverhead = 0;
-
-                    if (executionTimeAnalysisEnabled) {
-                        executionTimes.myOriginalFunctionOverheadExecutionTimes.push(0);
-
-                        startOriginalFunctionTime = window.performance.now();
-                        endOriginalFunctionTime = window.performance.now();
-
-                        try {
-                            startOriginalFunctionTime = window.performance.now();
-                            returnValue = new originalFunction(...arguments);
-                            endOriginalFunctionTime = window.performance.now();
-                        } catch (error) {
-                            endOriginalFunctionTime = window.performance.now();
-                            errorToThrow = error;
-                        }
-                    } else {
-                        try {
-                            returnValue = new originalFunction(...arguments);
-                        } catch (error) {
-                            errorToThrow = error;
-                        }
-                    }
-
-                    functionPerformanceAnalysisResults.myCallsCount += 1;
-
-                    if (executionTimeAnalysisEnabled) {
-                        originalFunctionOverheadExecutionTime = executionTimes.myOriginalFunctionOverheadExecutionTimes.pop();
-
-                        executionTimeToAdjust = endOriginalFunctionTime - startOriginalFunctionTime - originalFunctionOverheadExecutionTime;
-                        executionTime = executionTimeToAdjust - functionCallOverhead;
-                        if (originalFunction.myPerformanceAnalyzerHasBeenOverwritten) {
-                            executionTime = executionTimes.myLastFunctionExecutionTime;
-                        }
-
-                        functionPerformanceAnalysisResults._myTotalExecutionTimeInternal += executionTime;
-                        functionPerformanceAnalysisResults.myTotalExecutionTime = Math.max(0, functionPerformanceAnalysisResults._myTotalExecutionTimeInternal);
-
-                        executionTimes.myLastFunctionExecutionTime = executionTime;
-
-                        beforeOverhead = startOriginalFunctionTime - startTime;
-                        inBetweenOverhead = beforeOverhead - endOriginalFunctionTime - overheadError;
-                        if (executionTimes.myOriginalFunctionOverheadExecutionTimes.length > 0) {
-                            executionTimes.myOriginalFunctionOverheadExecutionTimes[executionTimes.myOriginalFunctionOverheadExecutionTimes.length - 1] +=
-                                inBetweenOverhead + originalFunctionOverheadExecutionTime + overheadError * 2.75;
-                            executionTimes.myOriginalFunctionOverheadExecutionTimes[executionTimes.myOriginalFunctionOverheadExecutionTimes.length - 1] +=
-                                window.performance.now();
-                        }
-
-                        executionTimes.myOverheadExecutionTimeSinceLastReset += inBetweenOverhead;
-                        executionTimes.myOverheadExecutionTimeSinceLastReset += window.performance.now();
-                    }
-
-                    if (errorToThrow != null) {
-                        throw errorToThrow;
-                    }
-
-                    return returnValue;
-                };
-            }
-
-            if (newFunction != null) {
-                Object.defineProperty(newFunction, "myPerformanceAnalyzerHasBeenOverwritten", {
-                    value: true,
-                    enumerable: false,
-                    configurable: false,
-                    writable: false
-                });
-
-                Object.defineProperty(newFunction, "myPerformanceAnalyzerOriginalFunction", {
-                    value: originalFunction,
-                    enumerable: false,
-                    configurable: false,
-                    writable: false
-                });
-            }
-        } catch (error) {
-            if (this._myParams.myDebugLogActive) {
-                console.error("Function:", propertyName, "of:", reference, "can't be overwritten.\nError:", error);
+                }
             }
         }
 

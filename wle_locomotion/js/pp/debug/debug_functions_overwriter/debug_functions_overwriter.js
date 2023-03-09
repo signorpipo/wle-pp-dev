@@ -1,3 +1,5 @@
+// #TODO add getter/setter accessors overwrite
+
 PP.DebugFunctionsOverwriterParams = class DebugFunctionsOverwriterParams {
     constructor() {
         this.myObjectsByReference = [];         // You can specify to count the call on a specific object instance
@@ -93,11 +95,11 @@ PP.DebugFunctionsOverwriter = class DebugFunctionsOverwriter {
     // Hooks
 
     _getOverwrittenFunction(reference, propertyName, referencePath, isClass, isFunction) {
-        return reference[propertyName];
+        return PP.JSUtils.getReferenceProperty(reference, propertyName);
     }
 
     _getOverwrittenConstructor(reference, propertyName, referencePath, isClass, isFunction) {
-        return reference[propertyName];
+        return PP.JSUtils.getReferenceProperty(reference, propertyName);
     }
 
     _onOverwriteSuccess(reference, propertyName, referenceParentForConstructor, referenceNameForConstructor, referencePath, isClass, isFunction, isConstructor) {
@@ -140,25 +142,19 @@ PP.DebugFunctionsOverwriter = class DebugFunctionsOverwriter {
                     let fixedReference = reference;
 
                     if (referenceParent != null) {
-                        try {
-                            if (referenceParent[referenceName] != null) {
-                                fixedReference = referenceParent[referenceName];
-                            }
-                        } catch (error) {
-                            if (this._myParams.myDebugLogActive) {
-                                console.error(error);
-                            }
+                        let ownReferenceDescriptor = Object.getOwnPropertyDescriptor(referenceParent, referenceName);
+                        if (ownReferenceDescriptor != null && ownReferenceDescriptor.value != null) {
+                            fixedReference = ownReferenceDescriptor.value;
                         }
                     }
 
                     overwriteTargetReference = fixedReference.prototype;
-                    try {
-                        if (overwriteTargetReference[propertyName] == null) {
+                    if (overwriteTargetReference == null) {
+                        overwriteTargetReference = fixedReference;
+                    } else {
+                        let referenceProperty = PP.JSUtils.getReferenceProperty(overwriteTargetReference, propertyName);
+                        if (referenceProperty == null) {
                             overwriteTargetReference = fixedReference;
-                        }
-                    } catch (error) {
-                        if (this._myParams.myDebugLogActive) {
-                            console.error(error);
                         }
                     }
 
@@ -190,7 +186,7 @@ PP.DebugFunctionsOverwriter = class DebugFunctionsOverwriter {
                         if (propertyName != "constructor") {
                             try {
                                 let newFunction = this._getOverwrittenFunction(reference, propertyName, referencePath, isClass, isFunction);
-                                if (newFunction != reference[propertyName]) {
+                                if (newFunction != PP.JSUtils.getReferenceProperty(reference, propertyName)) {
                                     overwriteSuccess = PP.JSUtils.overwriteReferenceProperty(newFunction, reference, propertyName, false, true, this._myParams.myDebugLogActive);
                                 } else {
                                     overwriteSuccess = true;
@@ -202,25 +198,27 @@ PP.DebugFunctionsOverwriter = class DebugFunctionsOverwriter {
                                     console.error(error);
                                 }
                             }
-                        } else if (!this._myParams.myExcludeConstructors && isClass && referenceParentForConstructor != null &&
-                            [referenceNameForConstructor] != null && referenceParentForConstructor[referenceNameForConstructor].prototype != null) {
-                            isConstructor = true;
+                        } else if (!this._myParams.myExcludeConstructors && isClass && referenceParentForConstructor != null) {
+                            let referenceForConstructor = PP.JSUtils.getReferenceProperty(referenceParentForConstructor, referenceNameForConstructor);
+                            if (referenceForConstructor != null && referenceForConstructor.prototype != null) {
+                                isConstructor = true;
 
-                            try {
-                                let newConstructor = this._getOverwrittenConstructor(referenceParentForConstructor, referenceNameForConstructor, referencePath, isClass, isFunction);
-                                if (newConstructor != referenceParentForConstructor[referenceNameForConstructor]) {
-                                    overwriteSuccess = PP.JSUtils.overwriteReferenceProperty(newConstructor, referenceParentForConstructor, referenceNameForConstructor, false, true, this._myParams.myDebugLogActive);
-                                    if (overwriteSuccess) {
-                                        overwriteSuccess = PP.JSUtils.overwriteReferenceProperty(newConstructor, referenceParentForConstructor[referenceNameForConstructor].prototype, propertyName, false, true, this._myParams.myDebugLogActive);
+                                try {
+                                    let newConstructor = this._getOverwrittenConstructor(referenceParentForConstructor, referenceNameForConstructor, referencePath, isClass, isFunction);
+                                    if (newConstructor != referenceForConstructor) {
+                                        overwriteSuccess = PP.JSUtils.overwriteReferenceProperty(newConstructor, referenceParentForConstructor, referenceNameForConstructor, false, true, this._myParams.myDebugLogActive);
+                                        if (overwriteSuccess) {
+                                            overwriteSuccess = PP.JSUtils.overwriteReferenceProperty(newConstructor, referenceForConstructor.prototype, propertyName, false, true, this._myParams.myDebugLogActive);
+                                        }
+                                    } else {
+                                        overwriteSuccess = true;
                                     }
-                                } else {
-                                    overwriteSuccess = true;
-                                }
-                            } catch (error) {
-                                overwriteSuccess = false;
+                                } catch (error) {
+                                    overwriteSuccess = false;
 
-                                if (this._myParams.myDebugLogActive) {
-                                    console.error(error);
+                                    if (this._myParams.myDebugLogActive) {
+                                        console.error(error);
+                                    }
                                 }
                             }
                         }
@@ -315,25 +313,19 @@ PP.DebugFunctionsOverwriter = class DebugFunctionsOverwriter {
                 let propertyNames = PP.JSUtils.getReferencePropertyNames(object);
 
                 for (let propertyName of propertyNames) {
-                    try {
-                        if (object[propertyName] == null) {
-                            continue;
-                        }
-                    } catch (error) {
-                        if (this._myParams.myDebugLogActive) {
-                            console.error(error);
-                        }
+                    let objectProperty = PP.JSUtils.getReferenceProperty(object, propertyName);
+                    if (objectProperty == null) {
                         continue;
                     }
 
                     let currentPath = "";
                     let currentName = "";
                     if (objectPath != null) {
-                        if (objectPath == "_WL._components" && (object[propertyName]._type != null)) {
-                            currentName = "[" + propertyName + "]" + "{\"" + object[propertyName]._type + "\"}";
+                        if (objectPath == "_WL._components" && (objectProperty._type != null)) {
+                            currentName = "[" + propertyName + "]" + "{\"" + objectProperty._type + "\"}";
                             currentPath = objectPath + currentName;
-                        } else if (objectPath == "_WL._componentTypes" && (object[propertyName].TypeName != null)) {
-                            currentName = object[propertyName].TypeName;
+                        } else if (objectPath == "_WL._componentTypes" && (objectProperty.TypeName != null)) {
+                            currentName = objectProperty.TypeName;
                             currentPath = objectPath + "[\"" + currentName + "\"]";
                         } else {
                             currentName = propertyName;
@@ -362,15 +354,15 @@ PP.DebugFunctionsOverwriter = class DebugFunctionsOverwriter {
                     let isValidReferenceName = this._filterName(propertyName, includeNameList, excludeNameList);
                     if (isValidReferencePath && isValidReferenceName) {
                         if (isObject && (objectLevel + 1 <= this._myParams.myObjectAddObjectDescendantsDepthLevel || this._myParams.myObjectAddObjectDescendantsDepthLevel == -1)) {
-                            objectsAndParents.pp_pushUnique([object[propertyName], object, propertyName, currentPath, currentName], equalCallback);
+                            objectsAndParents.pp_pushUnique([objectProperty, object, propertyName, currentPath, currentName], equalCallback);
                         }
 
                         if (isClass && (objectLevel + 1 <= this._myParams.myObjectAddClassDescendantsDepthLevel || this._myParams.myObjectAddClassDescendantsDepthLevel == -1)) {
-                            classesAndParents.pp_pushUnique([object[propertyName], object, propertyName, currentPath, currentName], equalCallback);
+                            classesAndParents.pp_pushUnique([objectProperty, object, propertyName, currentPath, currentName], equalCallback);
                         }
 
                         if (isObject) {
-                            objectsToVisit.pp_pushUnique([object[propertyName], objectLevel + 1, currentPath], equalCallback);
+                            objectsToVisit.pp_pushUnique([objectProperty, objectLevel + 1, currentPath], equalCallback);
                         }
                     }
                 }

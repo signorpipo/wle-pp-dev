@@ -53,9 +53,17 @@ PP.JSUtils = {
     getReferenceProperty: function (reference, propertyName) {
         let property = undefined;
 
-        let descriptor = this.getReferencePropertyDescriptor(reference, propertyName);
-        if (descriptor != null) {
-            property = descriptor.value;
+        let propertyDescriptor = this.getReferencePropertyDescriptor(reference, propertyName);
+        if (propertyDescriptor != null) {
+            if (propertyDescriptor.get != null) {
+                try {
+                    property = propertyDescriptor.get.bind(reference)();
+                } catch (error) {
+                    // ignored
+                }
+            } else {
+                property = propertyDescriptor.value;
+            }
         }
 
         return property;
