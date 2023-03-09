@@ -79,7 +79,8 @@
                         "_myMaxSpeed": 2.0,
                         "_myUseCleanedVersion": true,
                         "_myMoveThroughCollisionShortcutEnabled": true,
-                        "_myMoveHeadShortcutEnabled": true
+                        "_myMoveHeadShortcutEnabled": true,
+                        "_myPhysicsBlockLayerFlags": "0, 1, 1, 0, 0, 0, 0, 0"
                     },
                     "active": true
                 }

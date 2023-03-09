@@ -1,4 +1,5 @@
 WL.registerComponent('pp-player-locomotion', {
+    _myPhysicsBlockLayerFlags: { type: WL.Type.String, default: "1, 0, 0, 0, 0, 0, 0, 0" },
     _myMaxSpeed: { type: WL.Type.Float, default: 2 },
     _myMaxRotationSpeed: { type: WL.Type.Float, default: 100 },
     _myCharacterRadius: { type: WL.Type.Float, default: 0.3 },
@@ -57,6 +58,8 @@ WL.registerComponent('pp-player-locomotion', {
         params.myMoveThroughCollisionShortcutEnabled = this._myMoveThroughCollisionShortcutEnabled;
         params.myMoveHeadShortcutEnabled = this._myMoveHeadShortcutEnabled;
 
+        params.myPhysicsBlockLayerFlags.copy(this._getPhysicsBlockLayersFlags());
+
         if (this._myUseCleanedVersion) {
             this._myPlayerLocomotion = new PP.CleanedPlayerLocomotion(params);
         } else {
@@ -99,6 +102,16 @@ WL.registerComponent('pp-player-locomotion', {
                 this._myPlayerLocomotion.setActive(false);
             }
         }
+    },
+    _getPhysicsBlockLayersFlags() {
+        let physicsFlags = new PP.PhysicsLayerFlags();
+
+        let flags = [...this._myPhysicsBlockLayerFlags.split(",")];
+        for (let i = 0; i < flags.length; i++) {
+            physicsFlags.setFlagActive(i, flags[i].trim() == "1");
+        }
+
+        return physicsFlags;
     }
 });
 

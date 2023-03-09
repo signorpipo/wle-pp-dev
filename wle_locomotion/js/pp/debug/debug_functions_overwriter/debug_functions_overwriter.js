@@ -1,4 +1,5 @@
 // #TODO add getter/setter accessors overwrite
+// #TODO if both a class and the parent class are in the list, they should be overwritten in parent first order
 
 PP.DebugFunctionsOverwriterParams = class DebugFunctionsOverwriterParams {
     constructor() {

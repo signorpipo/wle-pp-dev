@@ -36,6 +36,8 @@ PP.PlayerLocomotionParams = class PlayerLocomotionParams {
 
         this.myMoveThroughCollisionShortcutEnabled = false;
         this.myMoveHeadShortcutEnabled = false;
+
+        this.myPhysicsBlockLayerFlags = new PP.PhysicsLayerFlags();
     }
 };
 
@@ -260,16 +262,15 @@ PP.PlayerLocomotion = class PlayerLocomotion {
                 params.myDetectionParams.myGroundAngleToIgnoreUpward = this._myCollisionCheckParamsMovement.myGroundAngleToIgnore;
                 params.myDetectionParams.myMustBeOnGround = true;
 
-                params.myDetectionParams.myTeleportBlockLayerFlags.setAllFlagsActive(true);
-                params.myDetectionParams.myTeleportFloorLayerFlags.setAllFlagsActive(true);
-
+                params.myDetectionParams.myTeleportBlockLayerFlags.copy(this._myParams.myPhysicsBlockLayerFlags);
+                params.myDetectionParams.myTeleportFloorLayerFlags.copy(this._myParams.myPhysicsBlockLayerFlags);
                 params.myDetectionParams.myTeleportFeetPositionMustBeVisible = false;
                 params.myDetectionParams.myTeleportHeadPositionMustBeVisible = false;
                 params.myDetectionParams.myTeleportHeadOrFeetPositionMustBeVisible = true;
 
                 params.myDetectionParams.myTeleportParableStartReferenceObject = this._myParams.myTeleportParableStartReferenceObject;
 
-                params.myDetectionParams.myVisibilityBlockLayerFlags.setAllFlagsActive(true);
+                params.myDetectionParams.myVisibilityBlockLayerFlags.copy(this._myParams.myPhysicsBlockLayerFlags);
 
                 params.myVisualizerParams.myTeleportPositionObject = this._myParams.myTeleportPositionObject;
 
@@ -483,8 +484,7 @@ PP.PlayerLocomotion = class PlayerLocomotion {
         this._myCollisionCheckParamsMovement.mySlidingFlickerPreventionCheckAnywayCounter = 4;
         this._myCollisionCheckParamsMovement.mySlidingAdjustSign90Degrees = true;
 
-        this._myCollisionCheckParamsMovement.myHorizontalBlockLayerFlags = new PP.PhysicsLayerFlags();
-        this._myCollisionCheckParamsMovement.myHorizontalBlockLayerFlags.setAllFlagsActive(true);
+        this._myCollisionCheckParamsMovement.myHorizontalBlockLayerFlags.copy(this._myParams.myPhysicsBlockLayerFlags);
         let physXComponents = PP.myPlayerObjects.myPlayer.pp_getComponentsHierarchy("physx");
         for (let physXComponent of physXComponents) {
             this._myCollisionCheckParamsMovement.myHorizontalObjectsToIgnore.pp_pushUnique(physXComponent.object, (first, second) => first.pp_equals(second));
