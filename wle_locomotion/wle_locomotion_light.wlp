@@ -80,7 +80,8 @@
                         "_myUseCleanedVersion": true,
                         "_myMoveThroughCollisionShortcutEnabled": true,
                         "_myMoveHeadShortcutEnabled": true,
-                        "_myPhysicsBlockLayerFlags": "0, 1, 1, 0, 0, 0, 0, 0"
+                        "_myPhysicsBlockLayerFlags": "0, 1, 1, 0, 0, 0, 0, 0",
+                        "_myMinAngleToFlyRight": 60.0
                     },
                     "active": true
                 }
@@ -4260,7 +4261,7 @@
         },
         "900": {
             "name": "FPS",
-            "parent": "597",
+            "parent": "19",
             "components": [
                 null,
                 null,
@@ -4381,7 +4382,7 @@
                         "_myReleaseOnMouseLeave": true,
                         "_myShowOnHeadset": true,
                         "_myOpacity": 0.5,
-                        "_myReleaseOnPointerLeave": false
+                        "_myReleaseOnPointerLeave": true
                     },
                     "active": true
                 }
