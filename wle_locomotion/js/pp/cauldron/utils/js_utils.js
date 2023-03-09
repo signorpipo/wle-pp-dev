@@ -89,7 +89,7 @@ PP.JSUtils = {
 
         let referenceName = this.getReferenceNameFromPath(path);
         if (referenceName != null) {
-            return this.getReferenceParentFromPath(path, pathStartReference)[referenceName];
+            reference = this.getReferenceProperty(this.getReferenceParentFromPath(path, pathStartReference), referenceName);
         }
 
         return reference;
@@ -110,7 +110,7 @@ PP.JSUtils = {
         let pathSplit = path.split(".");
         let currentParent = pathStartReference;
         for (let i = 0; i < pathSplit.length - 1; i++) {
-            currentParent = currentParent[pathSplit[i]];
+            currentParent = this.getReferenceProperty(currentParent, pathSplit[i]);
         }
 
         return currentParent;
@@ -126,30 +126,7 @@ PP.JSUtils = {
                 if (originalPropertyDescriptor != null) {
                     if (originalPropertyDescriptor.get == null && originalPropertyDescriptor.set == null && originalPropertyDescriptor.value != null) {
                         let originalProperty = originalPropertyDescriptor.value;
-
-                        Object.setPrototypeOf(newProperty, Object.getPrototypeOf(originalProperty));
-
-                        let currentPropertyNames = Object.getOwnPropertyNames(originalProperty);
-                        for (let currentPropertyName of currentPropertyNames) {
-                            try {
-                                let currentPropertyDescriptor = Object.getOwnPropertyDescriptor(originalProperty, currentPropertyName);
-
-                                Object.defineProperty(newProperty, currentPropertyName, {
-                                    value: currentPropertyDescriptor.value,
-                                    enumerable: currentPropertyDescriptor.enumerable,
-                                    configurable: currentPropertyDescriptor.configurable,
-                                    writable: currentPropertyDescriptor.writable
-                                });
-                            } catch (error) {
-                                if (debugLogActive) {
-                                    console.error("Property:", currentPropertyName, "of:", originalProperty.name, "can't be overwritten.");
-                                }
-                            }
-                        }
-
-                        if (javascriptObjectFunctionsSpecialOverwrite) {
-                            this._javascriptObjectFunctionsSpecialOverwrite(newProperty, originalProperty);
-                        }
+                        this.copyReferenceProperties(originalProperty, newProperty, true, javascriptObjectFunctionsSpecialOverwrite, debugLogActive);
                     }
 
                     let overwriteTarget = reference;
@@ -175,6 +152,59 @@ PP.JSUtils = {
 
         return success;
     },
+    copyReferenceProperties(fromReference, toReference, cleanCopy = false, javascriptObjectFunctionsSpecialCopy = false, debugLogActive = false) {
+        if (fromReference != null) {
+            if (cleanCopy) {
+                this.cleanReferenceProperties(toReference);
+            }
+
+            Object.setPrototypeOf(toReference, Object.getPrototypeOf(fromReference));
+
+            let fromReferencePropertyNames = Object.getOwnPropertyNames(fromReference);
+            for (let fromReferencePropertyName of fromReferencePropertyNames) {
+                try {
+                    let fromReferencePropertyDescriptor = Object.getOwnPropertyDescriptor(fromReference, fromReferencePropertyName);
+
+                    Object.defineProperty(toReference, fromReferencePropertyName, {
+                        value: fromReferencePropertyDescriptor.value,
+                        enumerable: fromReferencePropertyDescriptor.enumerable,
+                        configurable: fromReferencePropertyDescriptor.configurable,
+                        writable: fromReferencePropertyDescriptor.writable
+                    });
+                } catch (error) {
+                    if (debugLogActive) {
+                        console.error("Property:", fromReferencePropertyName, "of:", fromReference.name, "can't be overwritten.");
+                    }
+                }
+            }
+
+            if (javascriptObjectFunctionsSpecialCopy) {
+                this._javascriptObjectFunctionsSpecialCopy(fromReference, toReference);
+            }
+        }
+    },
+    cleanReferenceProperties(reference) {
+        let referenceNames = Object.getOwnPropertyNames(reference);
+        referenceNames.pp_pushUnique("__proto__");
+
+        for (let referenceName of referenceNames) {
+            try {
+                Object.defineProperty(reference, referenceName, {
+                    value: undefined
+                });
+            } catch (error) {
+                // ignored
+            }
+
+            try {
+                delete reference[referenceName];
+            } catch (error) {
+                // ignored
+            }
+        }
+
+        Object.setPrototypeOf(reference, null);
+    },
     doesReferencePropertyUseAccessors(reference, propertyName) {
         let propertyUseAccessors = false;
 
@@ -189,46 +219,49 @@ PP.JSUtils = {
     isFunctionByName(functionParent, functionName) {
         let isFunction = false;
 
-        try {
-            isFunction = typeof functionParent[functionName] == "function" && !this.isClassByName(functionParent, functionName);
-        } catch (error) { }
+        let functionProperty = this.getReferenceProperty(functionParent, functionName);
+        if (functionProperty != null) {
+            isFunction = typeof functionProperty == "function" && !this.isClassByName(functionParent, functionName);
+        }
 
         return isFunction;
     },
     isClassByName(classParent, className) {
         let isClass = false;
 
-        try {
+        let classProperty = this.getReferenceProperty(classParent, className);
+        if (classProperty != null) {
             isClass =
-                typeof classParent[className] == "function" && className != "constructor" &&
-                classParent[className].prototype != null && typeof classParent[className].prototype.constructor == "function" &&
-                (/^class/).test(classParent[className].toString());
-        } catch (error) { }
+                typeof classProperty == "function" && className != "constructor" &&
+                classProperty.prototype != null && typeof classProperty.prototype.constructor == "function" &&
+                classProperty.toString != null && typeof classProperty.toString == "function" && (/^class/).test(classProperty.toString());
+        }
 
         return isClass;
     },
     isObjectByName(objectParent, objectName) {
         let isObject = false;
 
-        try {
-            isObject = typeof objectParent[objectName] == "object";
-        } catch (error) { }
+        let objectProperty = this.getReferenceProperty(objectParent, objectName);
+        if (objectProperty != null) {
+            isObject = typeof objectProperty == "object";
+        }
 
         return isObject;
     },
-    _javascriptObjectFunctionsSpecialOverwrite(newProperty, originalProperty) {
+    _javascriptObjectFunctionsSpecialCopy(fromReference, toReference) {
         try {
-            if (typeof newProperty == "function" && typeof originalProperty == "function") {
+            if (typeof toReference == "function" && typeof fromReference == "function") {
                 let functionsToOverwrite = ["toString", "toLocaleString", "valueOf"];
 
                 for (let functionToOverwrite of functionsToOverwrite) {
-                    let propertyDescriptorToOverwrite = this.getReferencePropertyDescriptor(originalProperty, functionToOverwrite);
+                    let propertyDescriptorToOverwrite = this.getReferencePropertyDescriptor(fromReference, functionToOverwrite);
 
                     if (propertyDescriptorToOverwrite != null && propertyDescriptorToOverwrite.value != null &&
                         (propertyDescriptorToOverwrite.value == Object[functionToOverwrite])) {
-                        let valueToReturn = Object[functionToOverwrite].bind(originalProperty)();
+                        let valueToReturn = Object[functionToOverwrite].bind(fromReference)();
                         let overwrittenFunction = function () { return valueToReturn; };
-                        this.overwriteReferenceProperty(overwrittenFunction, newProperty, functionToOverwrite, false, false);
+                        this.overwriteReferenceProperty(overwrittenFunction, toReference, functionToOverwrite, false, false);
                     }
                 }
             }

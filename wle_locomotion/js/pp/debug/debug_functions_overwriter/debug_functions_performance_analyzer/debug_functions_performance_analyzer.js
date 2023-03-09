@@ -442,8 +442,6 @@ PP.DebugFunctionsPerformanceAnalyzer = class DebugFunctionsPerformanceAnalyzer e
             }
 
             if (newFunction != null) {
-                newFunction.prototype = undefined;
-
                 Object.defineProperty(newFunction, "myPerformanceAnalyzerHasBeenOverwritten", {
                     value: true,
                     enumerable: false,
