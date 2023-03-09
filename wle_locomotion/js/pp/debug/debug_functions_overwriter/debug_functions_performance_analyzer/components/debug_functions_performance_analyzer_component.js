@@ -2,6 +2,7 @@
 WL.registerComponent('pp-debug-functions-performance-analyzer', {
     _myObjectsByPath: { type: WL.Type.String, default: "" },
     _myClassesByPath: { type: WL.Type.String, default: "" },
+    _myFunctionsByPath: { type: WL.Type.String, default: "" },
     _myDelayStart: { type: WL.Type.Float, default: 0.0 },
     _myLogTitle: { type: WL.Type.String, default: "Functions Performance Analysis Results" },
     _myLogFunction: { type: WL.Type.Enum, values: ["log", "error", "warn", "debug"], default: "log" },
@@ -76,6 +77,14 @@ WL.registerComponent('pp-debug-functions-performance-analyzer', {
                 toIncludeList[i] = toIncludeList[i].trim();
             }
             functionsPerformanceAnalyzerParams.myClassesByPath.push(...toIncludeList);
+        }
+
+        if (this._myFunctionsByPath.length > 0) {
+            let toIncludeList = [...this._myFunctionsByPath.split(",")];
+            for (let i = 0; i < toIncludeList.length; i++) {
+                toIncludeList[i] = toIncludeList[i].trim();
+            }
+            functionsPerformanceAnalyzerParams.myFunctionsByPath.push(...toIncludeList);
         }
 
         functionsPerformanceAnalyzerParams.myExcludeConstructors = this._myExcludeConstructors;
