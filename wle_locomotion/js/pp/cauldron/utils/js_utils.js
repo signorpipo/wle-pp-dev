@@ -56,17 +56,36 @@ PP.JSUtils = {
         let propertyDescriptor = this.getReferencePropertyDescriptor(reference, propertyName);
         if (propertyDescriptor != null) {
             if (propertyDescriptor.get != null) {
-                try {
-                    property = propertyDescriptor.get.bind(reference)();
-                } catch (error) {
-                    // ignored
-                }
+                property = propertyDescriptor.get.bind(reference)();
             } else {
                 property = propertyDescriptor.value;
             }
         }
 
         return property;
+    },
+    setReferenceProperty: function (valueToSet, reference, propertyName) {
+        let propertyDescriptor = this.getReferencePropertyDescriptor(reference, propertyName);
+
+        let setUsed = false;
+        if (propertyDescriptor != null) {
+            if (propertyDescriptor.set != null) {
+                setUsed = true;
+
+                propertyDescriptor.set.bind(reference)(valueToSet);
+            }
+        }
+
+        if (!setUsed) {
+            let propertyParent = this.getReferencePropertyOwnParent(reference, propertyName);
+            if (propertyParent == null) {
+                propertyParent = reference;
+            }
+
+            Object.defineProperty(propertyParent, propertyName, {
+                value: valueToSet
+            });
+        }
     },
     getReferencePropertyOwnParent: function (reference, propertyName) {
         let parent = null;
