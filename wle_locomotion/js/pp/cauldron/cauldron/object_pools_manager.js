@@ -1,4 +1,4 @@
-PP.ObjectPoolsContainer = class ObjectPoolsContainer {
+PP.ObjectPoolsManager = class ObjectPoolsManager {
     constructor() {
         this._myPools = new Map();
     }
@@ -42,7 +42,13 @@ PP.ObjectPoolsContainer = class ObjectPoolsContainer {
         return null;
     }
 
-    releaseObject(poolID, object) {
-        this._myPools.get(poolID).release(object);
+    releaseObject(poolIDOrObject, object) {
+        if (object === undefined) {
+            for (let pool of this._myPools.values()) {
+                pool.release(poolIDOrObject);
+            }
+        } else {
+            this._myPools.get(poolIDOrObject).release(object);
+        }
     }
 };

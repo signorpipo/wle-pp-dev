@@ -45,6 +45,8 @@ TEMP:
 - Bundle pp separati anche in ubundled, un file con i require nella cartella pp al top level e tu require quella
 - aggiungere component a tutti i js che sono component
 - rimuovi set player height ppefault
+- pp gateway che aggiunge da solo tutti i component anche con i parametri did efault (come per input manager)
+- alcuni cauldron components to gameplay folder?
 
 - for template project put models in a pp folder
 - mouse look should rotate player if possible, aggiungerla direttamente al rotate manager?
