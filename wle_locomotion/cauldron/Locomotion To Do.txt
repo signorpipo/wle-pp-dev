@@ -42,11 +42,10 @@ v Componente character-controller che semplicemente ha la collisione e puoi dirg
 
 
 TEMP:
-- Bundle pp separati anche in ubundled, un file con i require nella cartella pp al top level e tu require quella
 - aggiungere component a tutti i js che sono component
 - rimuovi set player height ppefault
-
 - for template project put models in a pp folder
+
 - mouse look should rotate player if possible, aggiungerla direttamente al rotate manager?
 - fix muoversi guardando indietro dovrebbe comunque andare avanti
 - fly verso l'lalto passa attraverso bug? magari è solo un bug dei parametri con canfly del simplified collider
