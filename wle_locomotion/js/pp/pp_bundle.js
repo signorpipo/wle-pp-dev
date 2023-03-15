@@ -110,9 +110,9 @@ require("./gameplay/integrations/construct_arcade/ca_display_leaderboard");
 
 //          CAULDRON
 require("./gameplay/experimental/cauldron/player/player_head_controller");
-require("./gameplay/experimental/cauldron/player/player_occlusion");
+require("./gameplay/experimental/cauldron/player/player_view_occlusion");
 //require("./gameplay/experimental/cauldron/player/components/player_head_controller_component");
-//require("./gameplay/experimental/cauldron/player/components/player_occlusion_component");
+//require("./gameplay/experimental/cauldron/player/components/player_view_occlusion_component");
 
 //          CHARACTER CONTROLLER
 require("./gameplay/experimental/character_controller/collision/legacy/collision_check/collision_params");
