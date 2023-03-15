@@ -1,7 +1,10 @@
 //PP
 
-require("./pp");
-require("./pp_gateway_component");
+require("./pp/pp");
+
+require("./pp/components/pp_gateway_component");
+require("./pp/components/get_player_objects");
+require("./pp/components/get_default_resources");
 
 //	PLUGIN
 require("./plugin/extensions/array_extension");
@@ -37,8 +40,6 @@ require("./cauldron/cauldron/timer");
 require("./cauldron/components/clear_console_on_xr_session_start");
 require("./cauldron/components/set_active");
 require("./cauldron/components/adjust_hierarchy_physx_scale");
-require("./cauldron/components/get_player_objects");
-require("./cauldron/components/get_default_resources");
 require("./cauldron/components/show_fps");
 
 require("./cauldron/fsm/fsm");
