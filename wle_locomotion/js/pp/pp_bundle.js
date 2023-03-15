@@ -1,6 +1,7 @@
 //PP
 
 require("./pp");
+require("./pp_gateway_component");
 
 //	PLUGIN
 require("./plugin/extensions/array_extension");

@@ -54,6 +54,10 @@ TEMP:
 - fly verso l'lalto passa attraverso bug? magari è solo un bug dei parametri con canfly del simplified collider
 - head controller -> feet controller? body controller?
 
+- dovrebbe essere semplice poter modificare il setup e far si che abbia effetto sulle cose che lo usano, per esempio aggiungere un oggetto da ignorare e automaticamente il resto che non è solo
+  lo smooth movement anche lo fa, invece adesso devo andare a prendere tutti i vari collider e settarlo a mano
+	- magari aggiungere una callback on collider updated cosi che chi vuole si registra e in quel caso copia ci sta
+
 - maybe the transform manager should only work for the overall transform, with the head on another class that also manage the hands?
 	- o forse, sebbene l'idea di avere una cosa un po' generica che ti fa il servizio di darti l'ultima valida non collidosa, fino alle mani è piu comodo che sia tutta nel
 	  player character controller

@@ -22,7 +22,7 @@ require("@wonderlandengine/components/vr-mode-active-switch");
 require("@wonderlandengine/components/wasd-controls");
 require("@wonderlandengine/components/wonderleap-ad");
 
-require("./pp/bundle");
+require("./pp/pp_bundle");
 
 //CAULDRON
 

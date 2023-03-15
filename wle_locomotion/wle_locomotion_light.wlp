@@ -4,17 +4,6 @@
             "name": "Scene",
             "components": [
                 {
-                    "type": "pp-debug-manager",
-                    "pp-debug-manager": {
-                        "_myCubeMesh": "p1",
-                        "_myFlatMaterial": "31",
-                        "_myConeMesh": "p3",
-                        "_mySphereMesh": "p2",
-                        "_myTextMaterial": "596",
-                        "_myDebugMaterial": "31"
-                    }
-                },
-                {
                     "type": "pp-get-player-objects",
                     "pp-get-player-objects": {
                         "_myPlayer": "19",
@@ -28,9 +17,6 @@
                         "_myNonVRHead": "115",
                         "_myVRHead": "120"
                     }
-                },
-                {
-                    "type": "pp-input-manager"
                 },
                 {
                     "type": "pp-get-default-resources",
@@ -49,14 +35,14 @@
                     }
                 },
                 {
-                    "type": "pp-visual-manager"
-                },
-                {
                     "type": "pp-mute-everything",
                     "active": false
                 },
                 {
                     "type": "pp-clear-console-on-xr-session-start"
+                },
+                {
+                    "type": "pp-gateway"
                 }
             ]
         },
