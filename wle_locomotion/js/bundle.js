@@ -52,3 +52,4 @@ require("./test/move_static_collider");
 require("./test/clone_object");
 require("./test/test_get_transform_local");
 require("./test/test_pp_analyzer_overhead");
+require("./test/mouse_raycast_test");
