@@ -44,20 +44,19 @@ v Componente character-controller che semplicemente ha la collisione e puoi dirg
 TEMP:
 - ondestroy su tutto
 - package api in PP with peer dependency
-- aggiungere un component che espone PP e forse anche WL (di debug?) cosi da poter fare i test da console
-- User manager a cui aggiungi I serve come per ca sdk
-- onsession start callback from xr utils
 
 - Aggiungere prototype extension a intellisense in qualche modo
 - rendere funzioni delle extension disponibili singolarmente come export, con primo parametro this oppure se vuoi ti fai .bind(this) se non possibile?
 - fare ArrayUtils e mettere li le estensioni per l'array che poi ignetti nell'array come extension, così puoi anche prenderle a parte
   - Vec3Utils.create ma nella estension mettere anche vec3_create come global
+  - vec3_create can't be counted anymore ma con le utils funzionerebbe di nuovo
+	
+- controllare enable/active dove usato, tendenzialmente enable avrebbe più senso, quindi sarebbe meglio switchare
 
-- debug global per sapere se i debug sono attivi e quindi abilita / disabilita le cose di debug come i tool
-	- IsDebugActive/Enabled isToolActive (forse meglio active)
-	- controllare enable/active dove usato
+- User manager a cui aggiungi I serve come per ca sdk
 
 - rimuovi set player height ppefault
+- cambiare physx flag name project settings e cambiare pivot to player pivot
 
 - mouse look should rotate player if possible, aggiungerla direttamente al rotate manager?
 - fix muoversi guardando indietro dovrebbe comunque andare avanti
