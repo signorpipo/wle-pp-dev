@@ -43,7 +43,16 @@ v Componente character-controller che semplicemente ha la collisione e puoi dirg
 
 TEMP:
 - ondestroy su tutto
+- ricontrollare i bug physx se ci sono ancora
+- ricontrollare bug view reset
+- utils and tools -> dev
+
 - package api in PP with peer dependency
+- rimuovi set player height ppefault
+- cambiare physx flag name project settings e cambiare pivot to player pivot
+- cambiare left con Left, console to console-tool, hand Hand grabbable Grabbable
+- resettare gli head local che usano non vr camer che ora si chiama camera non vr vr-head to head-vr component
+- rixare VR to XR e XRMode
 
 - Aggiungere prototype extension a intellisense in qualche modo
 - rendere funzioni delle extension disponibili singolarmente come export, con primo parametro this oppure se vuoi ti fai .bind(this) se non possibile?
@@ -54,9 +63,6 @@ TEMP:
 - controllare enable/active dove usato, tendenzialmente enable avrebbe più senso, quindi sarebbe meglio switchare
 
 - User manager a cui aggiungi I serve come per ca sdk
-
-- rimuovi set player height ppefault
-- cambiare physx flag name project settings e cambiare pivot to player pivot
 
 - mouse look should rotate player if possible, aggiungerla direttamente al rotate manager?
 - fix muoversi guardando indietro dovrebbe comunque andare avanti
