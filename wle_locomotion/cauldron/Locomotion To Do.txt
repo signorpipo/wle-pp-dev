@@ -42,33 +42,42 @@ v Componente character-controller che semplicemente ha la collisione e puoi dirg
 
 
 TEMP:
+- serve ancora il puntino nella console vr all'inizio?
+
 - ondestroy su tutto
 - ricontrollare i bug physx se ci sono ancora
 - ricontrollare bug view reset
 - utils and tools -> dev
+- usare emitters per event listener
+- HorizontalCheckSetup o Params?
+- Globals.getScene e robe del genere? re export tutto quello che è nei _global in Globals
 
 - package api in PP with peer dependency
 - rimuovi set player height ppefault
 - cambiare physx flag name project settings e cambiare pivot to player pivot
 - cambiare left con Left, console to console-tool, hand Hand grabbable Grabbable
 - resettare gli head local che usano non vr camer che ora si chiama camera non vr vr-head to head-vr component
-- rixare VR to XR e XRMode
+- fixare VR to XR e XRMode
 
 - Aggiungere prototype extension a intellisense in qualche modo
 - rendere funzioni delle extension disponibili singolarmente come export, con primo parametro this oppure se vuoi ti fai .bind(this) se non possibile?
 - fare ArrayUtils e mettere li le estensioni per l'array che poi ignetti nell'array come extension, così puoi anche prenderle a parte
   - Vec3Utils.create ma nella estension mettere anche vec3_create come global
   - vec3_create can't be counted anymore ma con le utils funzionerebbe di nuovo
-	
+  
+- Aggiungere una changed callback nei collider setup, e magari anche nei visual params e rimuovere params updated (chiami direttamente il changed da li e la visual si registra)
+  - magari classe parents tipo ChangeableParams che ha questa cosa di suo e copy e reset
+  - i copy e reset nei figli hanno un bool per specificare se vuoi o no copiare anche le callback? Magari no tanto sarebbe davvero inutile, e nel caso te lo fai a mano, aggiungerlo proprio se servirà
 - controllare enable/active dove usato, tendenzialmente enable avrebbe più senso, quindi sarebbe meglio switchare
 
 - User manager a cui aggiungi I serve come per ca sdk
 
 - mouse look should rotate player if possible, aggiungerla direttamente al rotate manager?
-- fix muoversi guardando indietro dovrebbe comunque andare avanti
-- fly verso l'lalto passa attraverso bug? magari è solo un bug dei parametri con canfly del simplified collider
+- fix muoversi guardando indietro dovrebbe comunque andare avanti (muvoersi guardando dritto verso il pavimento)
 - head controller -> feet controller? body controller?
 
+- ShouldSlideAgainstWall -> SlideAgainstWall e basta e simili
+- poter usare la locomotion ma con collision disattivate completamente (uguale teleport)
 - dovrebbe essere semplice poter modificare il setup e far si che abbia effetto sulle cose che lo usano, per esempio aggiungere un oggetto da ignorare e automaticamente il resto che non è solo
   lo smooth movement anche lo fa, invece adesso devo andare a prendere tutti i vari collider e settarlo a mano
 	- magari aggiungere una callback on collider updated cosi che chi vuole si registra e in quel caso copia ci sta
