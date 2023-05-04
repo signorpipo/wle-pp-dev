@@ -64,30 +64,11 @@ PPEFAULT CHANGE:
 
 TEMP:
 
-- Fix grabbable enum in project
-- rimuovere offset player pivot
-- colori ambient 0.5
-- bug console vr quando le api si scontrano e spawnano particles
-- fix _component in playground files (gateway.js invece di gateway_component)
-- easeIn for fade view
-- bug rotationAxis vec3_cross 180
-- getTranslation to getPosition
-- pp_clonePostProcess il primo parametro è il component
-- playground, dopo il clone non chiama start per forza se esce da una pool, chaimarlo on activate
-- console original functions to globals
 
-- aggiungere get ai metodi vec3? vec3_getLength così che se poi esiste setLength ha più senso?
-	- vec3_distance -> vec3_getDistanceTo()
-- get object by name substring
-- cloneComponentBase -> cloneComponentDefault o alternativa
-- pp_clonePostProcess o pp_postClone
-- pool release all (getPool/getObject o get e basta e tenere getPool? cosi da avere gli stessi metodi uguali alla pool)
+
+- bug console vr quando le api si scontrano e spawnano particles
 
 - Aggiungere prototype extension a intellisense in qualche modo
-- rendere funzioni delle extension disponibili singolarmente come export, con primo parametro this oppure se vuoi ti fai .bind(this) se non possibile?
-- fare ArrayUtils e mettere li le estensioni per l'array che poi ignetti nell'array come extension, così puoi anche prenderle a parte
-  - Vec3Utils.create ma nella estension mettere anche vec3_create come global
-  - vec3_create can't be counted anymore ma con le utils funzionerebbe di nuovo
   
 - Aggiungere una changed callback nei collider setup, e magari anche nei visual params e rimuovere params updated (chiami direttamente il changed da li e la visual si registra)
   - magari classe parents tipo ChangeableParams che ha questa cosa di suo e copy e reset
@@ -98,8 +79,12 @@ TEMP:
 - mouse look should rotate player if possible, aggiungerla direttamente al rotate manager?
 - fix muoversi guardando indietro dovrebbe comunque andare avanti (muvoersi guardando dritto verso il pavimento)
 - head controller -> feet controller? body controller?
+	
+- Grabber hand non xr
 
-- ShouldSlideAgainstWall -> SlideAgainstWall e basta e simili
+
+
+
 - poter usare la locomotion ma con collision disattivate completamente (uguale teleport)
 - dovrebbe essere semplice poter modificare il setup e far si che abbia effetto sulle cose che lo usano, per esempio aggiungere un oggetto da ignorare e automaticamente il resto che non è solo
   lo smooth movement anche lo fa, invece adesso devo andare a prendere tutti i vari collider e settarlo a mano
