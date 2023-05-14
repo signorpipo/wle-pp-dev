@@ -64,11 +64,36 @@ PPEFAULT CHANGE:
 
 TEMP:
 
+- Mettere che di default ci sono i suoni dei passi e del teleport nel locomotion component
+- Bug casdk local leaderboard not working se non sei loggato
+- aggiungere materiali teleport valido non valido al component locomotion
+	- aggiustarli nel playground
+- bug teleport has no gravity
+- add normalization for quat ogni volta che uso .invert (forse meglio rimuovere invece la normalizzazione efarlo a mano, praticamente dovresti farlo ovunque)
+	- swing può usare conjugate invece di twist però
+- view reset bug, non rimane dove tu stavi gia guardando
+- add a hide if hand pose invalid component
+	- volendo si può ancora aggiungere al set active
+- remove pp_isEmpty from emitter mod
+- vec3_angleSigned nella doc non c'è
+- remove Globals.getSceneObjects dal file scene objects globals stesso, usarlo solo per le funzioni esterne e farlo anche negli altri file
+- Function overwriter senza debug in cauldron?
+- _alreadyRegisteredEngines add my? cercare let _ without my
+- particles spawner fix object pool method
+- fix particles spawner not setting the horizontal speed scale
+- aggiungere il particle component sugli oggetti direttamente e clonarli (solo quello che è clonabile)
+  - però non puoi più usare ig rabbable come target ma alla fine penso sia accettabile
+- audio setup not able to set a null path (empty strings convert to false)
+	- audio setup ref distance default 0
+- playground move components inside component folder, change source path
+- mesh modifier e locomotion to 1.0.0
+- Browser Utils open link con fake click
+- _cursorPos to cursorPos e rimuovere _ da quelli che non la hanno
+- add some pp component (as experimental?) like fade view in out e particle spawned component
+- add event forwarding to cursor mod
+- check Global.getWASM in setDefautlCloneCallbacks che non funziona se non setuppi main engine ma non ha senso
 
-
-- bug console vr quando le api si scontrano e spawnano particles
-
-- Aggiungere prototype extension a intellisense in qualche modo
+- Aggiungere prototype extension a intellisense in qualche modo (J forse sa come fare, augmented type)
   
 - Aggiungere una changed callback nei collider setup, e magari anche nei visual params e rimuovere params updated (chiami direttamente il changed da li e la visual si registra)
   - magari classe parents tipo ChangeableParams che ha questa cosa di suo e copy e reset
@@ -78,6 +103,7 @@ TEMP:
 
 - mouse look should rotate player if possible, aggiungerla direttamente al rotate manager?
 - fix muoversi guardando indietro dovrebbe comunque andare avanti (muvoersi guardando dritto verso il pavimento)
+	- molto fastidioso se usi hand come direction reference perché basta muoverti e mettere la mano indietro
 - head controller -> feet controller? body controller?
 	
 - Grabber hand non xr
