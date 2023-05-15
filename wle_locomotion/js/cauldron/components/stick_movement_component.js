@@ -4,11 +4,11 @@ import { PhysicsLayerFlags } from "../../pp/cauldron/physics/physics_layer_flags
 import { XRUtils } from "../../pp/cauldron/utils/xr_utils";
 import { ComponentUtils } from "../../pp/cauldron/wl/utils/component_utils";
 import { Direction2DTo3DConverter, Direction2DTo3DConverterParams } from "../../pp/gameplay/cauldron/cauldron/direction_2D_to_3D_converter";
+import { CollisionCheckBridge } from "../../pp/gameplay/experimental/character_controller/collision/collision_check_bridge";
 import { CollisionCheckParams, CollisionRuntimeParams } from "../../pp/gameplay/experimental/character_controller/collision/legacy/collision_check/collision_params";
 import { GamepadAxesID, GamepadButtonID } from "../../pp/input/gamepad/gamepad_buttons";
 import { vec3_create } from "../../pp/plugin/js/extensions/array_extension";
 import { Globals } from "../../pp/pp/globals";
-import { CollisionCheckBridge } from "../../pp/gameplay/experimental/character_controller/collision/collision_check_bridge";
 
 export class StickMovementComponent extends Component {
     static TypeName = "stick-movement";
