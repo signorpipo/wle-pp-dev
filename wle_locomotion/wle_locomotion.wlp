@@ -66,20 +66,7 @@
             "components": [
                 {
                     "type": "pp-player-locomotion",
-                    "pp-player-locomotion": {
-                        "_myIsSnapTurn": true,
-                        "_myFlyEnabled": false,
-                        "_myMainHand": "left",
-                        "_myTeleportPositionObject": null,
-                        "_myTeleportParableStartReferenceObject": "895",
-                        "_myVRDirectionReferenceType": "custom object",
-                        "_myVRDirectionReferenceObject": "895",
-                        "_mySnapTurnOnlyInsideSession": false,
-                        "_mySnapTurnOnlyInsideXRSession": false,
-                        "_myMaxSpeed": 2.0,
-                        "_mySnapTurnOnlyVR": false,
-                        "_myPhysicsBlockLayerFlags": "0, 1, 1, 0, 0, 0, 0, 0"
-                    },
+                    "pp-player-locomotion": {},
                     "active": true
                 }
             ],
@@ -102,20 +89,10 @@
         },
         "20": {
             "name": "Pivot",
-            "parent": "19",
-            "components": [
-                {
-                    "type": "pp-set-player-height",
-                    "pp-set-player-height": {
-                        "_mySetOnlyOnStart": true,
-                        "_myEyesHeight": 1.6499999
-                    },
-                    "active": true
-                }
-            ]
+            "parent": "19"
         },
         "21": {
-            "name": "Non VR Camera",
+            "name": "Camera Non XR",
             "parent": "118",
             "components": [
                 {
@@ -205,7 +182,7 @@
                     "pp-switch-hand-object": {
                         "_myGamepad": "801",
                         "_myTrackedHand": "803",
-                        "_myHandedness": "right"
+                        "_myHandedness": "Right"
                     }
                 }
             ],
@@ -565,7 +542,7 @@
                 {
                     "type": "pp-set-hand-local-transform",
                     "pp-set-hand-local-transform": {
-                        "_myHandedness": "left",
+                        "_myHandedness": "Left",
                         "_myFixForward": true
                     }
                 },
@@ -715,7 +692,7 @@
                 {
                     "type": "pp-set-hand-local-transform",
                     "pp-set-hand-local-transform": {
-                        "_myHandedness": "right"
+                        "_myHandedness": "Right"
                     }
                 },
                 {
@@ -969,34 +946,6 @@
                 }
             ]
         },
-        "115": {
-            "name": "Non VR Head",
-            "parent": "119",
-            "components": [
-                {
-                    "type": "pp-set-non-vr-head-local-transform",
-                    "pp-set-non-vr-head-local-transform": {
-                        "_myNonVRCamera": "21"
-                    }
-                }
-            ],
-            "translation": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                1.0,
-                1.0,
-                1.0
-            ]
-        },
         "116": {
             "name": "Copy Hand",
             "parent": "71",
@@ -1058,15 +1007,6 @@
         "119": {
             "name": "Heads",
             "parent": "20"
-        },
-        "120": {
-            "name": "VR Head",
-            "parent": "119",
-            "components": [
-                {
-                    "type": "pp-set-vr-head-local-transform"
-                }
-            ]
         },
         "121": {
             "name": "Hands",
@@ -11975,7 +11915,6 @@
                 {
                     "type": "light",
                     "light": {
-                        "attenuation": 0.0,
                         "color": [
                             0.6627451,
                             0.5146021,
@@ -11983,9 +11922,10 @@
                         ],
                         "type": "spot",
                         "shadows": false,
-                        "range": 100.0,
                         "outerAngle": 180.0,
-                        "innerAngle": 100.0
+                        "innerAngle": 100.0,
+                        "shadowRange": 100.0,
+                        "intensity": 33.329998
                     }
                 }
             ],
@@ -12013,7 +11953,7 @@
                 {
                     "type": "pp-copy-hand-transform",
                     "pp-copy-hand-transform": {
-                        "_myHandedness": "right"
+                        "_myHandedness": "Right"
                     }
                 },
                 {
@@ -12235,24 +12175,13 @@
                     }
                 },
                 {
-                    "type": "pp-console-vr",
-                    "pp-console-vr": {
-                        "_myHandedness": "left",
-                        "_myTextMaterial": "33",
-                        "_myPlaneMaterial": "32",
-                        "_myShowOnStart": false,
-                        "_myShowVisibilityButton": false
-                    },
+                    "type": "pp-console-vr-tool",
+                    "pp-console-vr-tool": {},
                     "active": true
                 },
                 {
-                    "type": "pp-easy-tune",
-                    "pp-easy-tune": {
-                        "_myHandedness": "left",
-                        "_myPlaneMaterial": "32",
-                        "_myTextMaterial": "33",
-                        "_myEnableVariablesImportExportButtons": true
-                    },
+                    "type": "pp-easy-tune-tool",
+                    "pp-easy-tune-tool": {},
                     "active": true
                 }
             ]
@@ -12392,14 +12321,14 @@
                         "_myBottomButtonText": "",
                         "_myTopButtonText": "",
                         "_myStartVisible": false,
-                        "_myHandedness": "right",
+                        "_myHandedness": "Right",
                         "_myShowOnStart": false
                     }
                 },
                 {
                     "type": "pp-set-hand-local-transform",
                     "pp-set-hand-local-transform": {
-                        "_myHandedness": "right",
+                        "_myHandedness": "Right",
                         "_myFixForward": true
                     }
                 },
@@ -12412,7 +12341,7 @@
                         "_myTopButton": "66",
                         "_myBottomButton": "61",
                         "_myUsePressForSqueeze": true,
-                        "_myHandedness": "right"
+                        "_myHandedness": "Right"
                     }
                 }
             ],
@@ -12530,14 +12459,14 @@
                 {
                     "type": "pp-set-hand-local-transform",
                     "pp-set-hand-local-transform": {
-                        "_myHandedness": "right",
+                        "_myHandedness": "Right",
                         "_myFixForward": true
                     }
                 },
                 {
                     "type": "pp-tool-cursor",
                     "pp-tool-cursor": {
-                        "_myHandedness": "right",
+                        "_myHandedness": "Right",
                         "_myPulseOnHover": false,
                         "_myCursorMesh": "p2",
                         "_myCursorMaterial": "32",
@@ -12664,7 +12593,7 @@
                     "pp-tracked-hand-draw-all-joints": {
                         "_myJointMesh": "p1",
                         "_myJointMaterial": "35",
-                        "_myHandedness": "right"
+                        "_myHandedness": "Right"
                     }
                 },
                 {
@@ -12682,7 +12611,7 @@
                 {
                     "type": "pp-set-hand-local-transform",
                     "pp-set-hand-local-transform": {
-                        "_myHandedness": "right"
+                        "_myHandedness": "Right"
                     }
                 }
             ]
@@ -12730,7 +12659,7 @@
                     "type": "pp-tracked-hand-draw-skin",
                     "pp-tracked-hand-draw-skin": {
                         "_myHandSkin": "853",
-                        "_myHandedness": "right",
+                        "_myHandedness": "Right",
                         "_myFixForward": false
                     }
                 },
@@ -13404,7 +13333,7 @@
                 {
                     "type": "pp-copy-hand-transform",
                     "pp-copy-hand-transform": {
-                        "_myHandedness": "right"
+                        "_myHandedness": "Right"
                     }
                 },
                 {
@@ -13813,7 +13742,12 @@
                     1.0,
                     0.2509804
                 ],
-                "ambientFactor": 0.5
+                "ambientColor": [
+                    0.5,
+                    0.5,
+                    0.5,
+                    1.0
+                ]
             }
         },
         "36": {
@@ -13835,28 +13769,49 @@
                     1.0,
                     0.5019608
                 ],
-                "ambientFactor": 0.5
+                "ambientColor": [
+                    0.5,
+                    0.5,
+                    0.5,
+                    1.0
+                ]
             }
         },
         "80": {
             "link": {
                 "name": "DefaultMaterial",
                 "file": "assets\\models\\suzanne.fbx"
+            },
+            "Phong": {
+                "ambientColor": [
+                    0.05,
+                    0.05,
+                    0.05,
+                    1.0
+                ]
             }
         },
         "83": {
             "link": {
                 "name": "Material",
                 "file": "assets\\models\\cube.fbx"
+            },
+            "Phong": {
+                "ambientColor": [
+                    0.05,
+                    0.05,
+                    0.05,
+                    1.0
+                ]
             }
         },
         "92": {
             "name": "Floor",
             "Phong": {
                 "ambientColor": [
-                    0.0,
-                    0.0,
-                    0.0,
+                    0.5,
+                    0.5,
+                    0.5,
                     1.0
                 ],
                 "diffuseColor": [
@@ -13865,7 +13820,6 @@
                     0.2177623,
                     1.0
                 ],
-                "ambientFactor": 0.5,
                 "specularColor": [
                     1.0,
                     1.0,
@@ -13878,12 +13832,11 @@
             "name": "Wall",
             "Phong": {
                 "ambientColor": [
-                    0.0,
-                    0.0,
-                    0.0,
+                    0.5,
+                    0.5,
+                    0.5,
                     1.0
                 ],
-                "ambientFactor": 0.5,
                 "specularColor": [
                     1.0,
                     1.0,
@@ -13902,12 +13855,11 @@
             "name": "Special",
             "Phong": {
                 "ambientColor": [
-                    0.0,
-                    0.0,
-                    0.0,
+                    0.5,
+                    0.5,
+                    0.5,
                     1.0
                 ],
-                "ambientFactor": 0.5,
                 "specularColor": [
                     1.0,
                     1.0,
@@ -13947,9 +13899,9 @@
             "pipeline": "13",
             "Phong": {
                 "ambientColor": [
-                    0.0,
-                    0.0,
-                    0.0,
+                    0.05,
+                    0.05,
+                    0.05,
                     1.0
                 ],
                 "diffuseColor": [
@@ -14012,12 +13964,28 @@
             "link": {
                 "name": "Default_Material",
                 "file": "assets\\models\\tracked_hand_left.glb"
+            },
+            "Phong": {
+                "ambientColor": [
+                    0.05,
+                    0.05,
+                    0.05,
+                    1.0
+                ]
             }
         },
         "851": {
             "link": {
                 "name": "lambert2",
                 "file": "assets\\models\\tracked_hand_right.glb"
+            },
+            "Phong": {
+                "ambientColor": [
+                    0.05,
+                    0.05,
+                    0.05,
+                    1.0
+                ]
             }
         },
         "885": {
@@ -14055,7 +14023,12 @@
                     1.0,
                     0.2509804
                 ],
-                "ambientFactor": 0.5
+                "ambientColor": [
+                    0.5,
+                    0.5,
+                    0.5,
+                    1.0
+                ]
             },
             "pipeline": "13"
         }
@@ -14508,7 +14481,8 @@
                 "file": "default"
             },
             "features": {
-                "WITH_FOG": true
+                "WITH_FOG": true,
+                "DEPRECATED_LIGHT_ATTENUATION": true
             }
         },
         "14": {
@@ -14517,13 +14491,17 @@
                 "file": "default"
             },
             "features": {
-                "ALPHA_MASKED": true
+                "ALPHA_MASKED": true,
+                "DEPRECATED_LIGHT_ATTENUATION": true
             }
         },
         "16": {
             "link": {
                 "name": "Foliage",
                 "file": "default"
+            },
+            "features": {
+                "DEPRECATED_LIGHT_ATTENUATION": true
             }
         },
         "17": {
@@ -14595,7 +14573,8 @@
                 "file": "default"
             },
             "features": {
-                "WITH_FOG": true
+                "WITH_FOG": true,
+                "DEPRECATED_LIGHT_ATTENUATION": true
             },
             "name": "Phong Opaque 2"
         },
@@ -14603,12 +14582,18 @@
             "link": {
                 "name": "Phong Normalmapped",
                 "file": "default"
+            },
+            "features": {
+                "DEPRECATED_LIGHT_ATTENUATION": true
             }
         },
         "898": {
             "link": {
                 "name": "Phong Lightmapped",
                 "file": "default"
+            },
+            "features": {
+                "DEPRECATED_LIGHT_ATTENUATION": true
             }
         }
     },
@@ -14616,9 +14601,9 @@
         "project": {
             "name": "wle_locomotion",
             "version": [
+                1,
                 0,
-                9,
-                5
+                1
             ]
         },
         "rendering": {
@@ -14653,88 +14638,15 @@
         },
         "scripting": {
             "sourcePaths": [
-                "js/bundle.js",
-                "js/pp",
-                "js/pp/audio",
-                "js/pp/audio/howler",
-                "js/pp/cauldron",
-                "js/pp/cauldron/benchmarks",
-                "js/pp/cauldron/cauldron",
-                "js/pp/cauldron/components",
-                "js/pp/cauldron/fsm",
-                "js/pp/cauldron/physics",
-                "js/pp/cauldron/utils",
-                "js/pp/cauldron/visual",
-                "js/pp/cauldron/visual/components",
-                "js/pp/cauldron/visual/elements",
-                "js/pp/debug",
-                "js/pp/debug/components",
-                "js/pp/debug/debug_functions_overwriter",
-                "js/pp/debug/debug_functions_performance_analyzer",
-                "js/pp/debug/debug_functions_performance_analyzer/components",
-                "js/pp/gameplay",
-                "js/pp/gameplay/cauldron",
-                "js/pp/gameplay/cauldron/cauldron",
-                "js/pp/gameplay/grab_throw",
-                "js/pp/gameplay/integrations",
-                "js/pp/gameplay/integrations/construct_arcade",
-                "js/pp/gameplay/experimental",
-                "js/pp/gameplay/experimental/cauldron",
-                "js/pp/gameplay/experimental/cauldron/player",
-                "js/pp/gameplay/experimental/cauldron/player/components",
-                "js/pp/gameplay/experimental/character_controller",
-                "js/pp/gameplay/experimental/character_controller/collision",
-                "js/pp/gameplay/experimental/character_controller/collision/components",
-                "js/pp/gameplay/experimental/character_controller/collision/legacy/collision_check",
-                "js/pp/gameplay/experimental/character_controller/components",
-                "js/pp/gameplay/experimental/character_controller/player",
-                "js/pp/gameplay/experimental/character_controller/player/components",
-                "js/pp/gameplay/experimental/locomotion",
-                "js/pp/gameplay/experimental/locomotion/components",
-                "js/pp/gameplay/experimental/locomotion/legacy/locomotion",
-                "js/pp/gameplay/experimental/locomotion/legacy/locomotion/cleaned",
-                "js/pp/gameplay/experimental/locomotion/legacy/locomotion/teleport",
-                "js/pp/gameplay/experimental/locomotion/player",
-                "js/pp/gameplay/experimental/locomotion/player/components",
-                "js/pp/gameplay/experimental/locomotion/player/teleport",
-                "js/pp/input",
-                "js/pp/input/cauldron",
-                "js/pp/input/gamepad",
-                "js/pp/input/gamepad/cauldron",
-                "js/pp/input/gamepad/gamepad_cores",
-                "js/pp/input/gamepad/virtual_gamepad",
-                "js/pp/input/pose",
-                "js/pp/input/pose/components",
-                "js/pp/plugin",
-                "js/pp/plugin/component_mods",
-                "js/pp/plugin/extensions",
-                "js/pp/tool",
-                "js/pp/tool/cauldron",
-                "js/pp/tool/cauldron/cauldron",
-                "js/pp/tool/cauldron/components",
-                "js/pp/tool/console_vr",
-                "js/pp/tool/easy_tune",
-                "js/pp/tool/easy_tune/components",
-                "js/pp/tool/easy_tune/easy_object_tuners",
-                "js/pp/tool/easy_tune/easy_tune_widgets",
-                "js/pp/tool/easy_tune/easy_tune_widgets/base",
-                "js/pp/tool/easy_tune/easy_tune_widgets/bool",
-                "js/pp/tool/easy_tune/easy_tune_widgets/none",
-                "js/pp/tool/easy_tune/easy_tune_widgets/number",
-                "js/pp/tool/easy_tune/easy_tune_widgets/transform",
-                "js/pp/tool/widget_frame",
-                "js/test",
-                "js/locomotion",
-                "js/cauldron",
-                "js/locomotion/collision",
-                "js/locomotion/draft",
-                "js/locomotion/teleport"
+                "js",
+                "js/pp/index.js",
+                "js/cauldron/components",
+                "js/test/components"
             ],
             "libraryPaths": [
                 "/js/lib/"
             ],
-            "autoManageEntryPoint": false,
-            "bundlingType": "npm"
+            "bundlingType": "esbuild"
         },
         "vr": {
             "leftEyeObject": "26",
@@ -14774,5 +14686,6 @@
                 "file": "default"
             }
         }
-    }
+    },
+    "languages": {}
 }
