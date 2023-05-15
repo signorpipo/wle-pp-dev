@@ -1,56 +1,85 @@
 /*
 Easy Tune Variables Examples
 
-Number:         PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Float", 1.00, 0.1, 3));
-Number Array:   PP.myEasyTuneVariables.add(new PP.EasyTuneNumberArray("Float Array", [1.00, 2.00, 3.00], 0.1, 3));
-Int:            PP.myEasyTuneVariables.add(new PP.EasyTuneInt("Int", 1, 1));
-Int Array:      PP.myEasyTuneVariables.add(new PP.EasyTuneIntArray("Int Array", [1, 2, 3], 1));
-Bool:           PP.myEasyTuneVariables.add(new PP.EasyTuneBool("Bool", false));
-Bool Array:     PP.myEasyTuneVariables.add(new PP.EasyTuneBoolArray("Bool Array", [false, true, false]));
-Transform:      PP.myEasyTuneVariables.add(new PP.EasyTuneTransform("Transform", PP.mat4_create(), true));
+Number:         Globals.getEasyTuneVariables().add(new EasyTuneNumber("Float", 1.00, 0.1, 3));
+Number Array:   Globals.getEasyTuneVariables().add(new EasyTuneNumberArray("Float Array", [1.00, 2.00, 3.00], 0.1, 3));
+Int:            Globals.getEasyTuneVariables().add(new EasyTuneInt("Int", 1, 1));
+Int Array:      Globals.getEasyTuneVariables().add(new EasyTuneIntArray("Int Array", [1, 2, 3], 1));
+Bool:           Globals.getEasyTuneVariables().add(new EasyTuneBool("Bool", false));
+Bool Array:     Globals.getEasyTuneVariables().add(new EasyTuneBoolArray("Bool Array", [false, true, false]));
+Transform:      Globals.getEasyTuneVariables().add(new EasyTuneTransform("Transform", mat4_create(), true));
 */
 
-PP.EasyTuneVariableType = {
+import { Emitter } from "@wonderlandengine/api";
+import { mat4_create } from "../../plugin/js/extensions/array_extension";
+import { Globals } from "../../pp/globals";
+import { EasyTuneUtils } from "./easy_tune_utils";
+
+export let EasyTuneVariableType = {
     NONE: 0,
     NUMBER: 1,
     BOOL: 2,
     TRANSFORM: 3
 };
 
-PP.EasyTuneVariable = class EasyTuneVariable {
-    constructor(name, type) {
-        this.myName = name.slice(0);
-        this.myType = type;
+export class EasyTuneVariable {
 
-        this.myValue = null;
-        this.myDefaultValue = null;
+    constructor(name, type, engine = Globals.getMainEngine()) {
+        this._myName = name.slice(0);
+        this._myType = type;
 
-        this.myIsActive = false;
+        this._myValue = null;
+        this._myDefaultValue = null;
 
-        this._myValueChangedCallbacks = new Map();      // Signature: callback(name, value)
+        this._myActive = false;
+
+        this._myValueChangedEmitter = new Emitter();      // Signature: listener(value, easyTuneVariables)
+
+        this._myEngine = engine;
+    }
+
+    getName() {
+        return this._myName;
+    }
+
+    getType() {
+        return this._myType;
+    }
+
+    isActive() {
+        return this._myActive;
+    }
+
+    setActive(active) {
+        this._myActive = active;
     }
 
     getValue() {
-        return this.myValue;
+        return this._myValue;
     }
 
     setValue(value, resetDefaultValue = false) {
-        let oldValue = this.myValue;
-        this.myValue = value;
+        let valueChanged = this._myValue != value;
+
+        this._myValue = value;
 
         if (resetDefaultValue) {
-            PP.EasyTuneVariable.prototype.setDefaultValue.call(this, value);
+            EasyTuneVariable.prototype.setDefaultValue.call(this, value);
         }
 
-        PP.refreshEasyTuneWidget();
+        EasyTuneUtils.refreshWidget(this._myEngine);
 
-        if (oldValue != value) {
-            this._triggerValueChangedCallback();
+        if (valueChanged) {
+            this._myValueChangedEmitter.notify(this.getValue(), this);
         }
     }
 
+    getDefaultValue() {
+        return this._myDefaultValue;
+    }
+
     setDefaultValue(value) {
-        this.myDefaultValue = value;
+        this._myDefaultValue = value;
     }
 
     fromJSON(valueJSON, resetDefaultValue = false) {
@@ -61,224 +90,251 @@ PP.EasyTuneVariable = class EasyTuneVariable {
         return JSON.stringify(this.getValue());
     }
 
-    registerValueChangedEventListener(id, callback) {
-        this._myValueChangedCallbacks.set(id, callback);
+    registerValueChangedEventListener(id, listener) {
+        this._myValueChangedEmitter.add(listener, { id: id });
     }
 
     unregisterValueChangedEventListener(id) {
-        this._myValueChangedCallbacks.delete(id);
+        this._myValueChangedEmitter.remove(id);
     }
+}
 
-    _triggerValueChangedCallback() {
-        if (this._myValueChangedCallbacks.size > 0) {
-            this._myValueChangedCallbacks.forEach(function (callback) { callback(this.myName, this.getValue()); }.bind(this));
-        }
-    }
-};
+export class EasyTuneVariableArray extends EasyTuneVariable {
 
-PP.EasyTuneVariableArray = class EasyTuneVariableArray extends PP.EasyTuneVariable {
-    constructor(name, type, value) {
-        super(name, type);
+    constructor(name, type, value, engine) {
+        super(name, type, engine);
 
-        PP.EasyTuneVariableArray.prototype.setValue.call(this, value, true);
-    }
-
-    getValue() {
-        return this.myValue.slice(0);
+        EasyTuneVariableArray.prototype.setValue.call(this, value, true);
     }
 
     setValue(value, resetDefaultValue = false) {
-        let oldValue = this.myValue;
-        this.myValue = value.slice(0);
+        let valueChanged = this._myValue != null && !this._myValue.pp_equals(value);
 
-        if (resetDefaultValue) {
-            PP.EasyTuneVariableArray.prototype.setDefaultValue.call(this, value);
+        if (this._myValue == null) {
+            this._myValue = value.pp_clone();
+        } else {
+            this._myValue.pp_copy(value);
         }
 
-        PP.refreshEasyTuneWidget();
+        if (resetDefaultValue) {
+            EasyTuneVariableArray.prototype.setDefaultValue.call(this, value);
+        }
 
-        if (oldValue == null || !oldValue.pp_equals(value)) {
-            this._triggerValueChangedCallback();
+        EasyTuneUtils.refreshWidget(this._myEngine);
+
+        if (valueChanged) {
+            this._myValueChangedEmitter.notify(this.getValue(), this);
         }
     }
 
     setDefaultValue(value) {
-        this.myDefaultValue = value.slice(0);
+        if (this._myDefaultValue == null) {
+            this._myDefaultValue = value.pp_clone();
+        } else {
+            this._myDefaultValue.pp_copy(value);
+        }
     }
-};
+}
 
-//NUMBER
+// NUMBER
 
-PP.EasyTuneNumberArray = class EasyTuneNumberArray extends PP.EasyTuneVariableArray {
-    constructor(name, value, stepPerSecond, decimalPlaces, min = null, max = null, editAllValuesTogether = false) {
-        super(name, PP.EasyTuneVariableType.NUMBER, value);
+export class EasyTuneNumberArray extends EasyTuneVariableArray {
 
-        this.myDecimalPlaces = decimalPlaces;
-        this.myStepPerSecond = stepPerSecond;
+    constructor(name, value, stepPerSecond, decimalPlaces, min = null, max = null, editAllValuesTogether = false, engine) {
+        super(name, EasyTuneVariableType.NUMBER, value, engine);
 
-        this.myDefaultStepPerSecond = this.myStepPerSecond;
+        this._myDecimalPlaces = decimalPlaces;
+        this._myStepPerSecond = stepPerSecond;
 
-        this.myMin = min;
-        this.myMax = max;
+        this._myDefaultStepPerSecond = this._myStepPerSecond;
 
-        this.myEditAllValuesTogether = editAllValuesTogether;
+        this._myMin = min;
+        this._myMax = max;
+
+        this._myEditAllValuesTogether = editAllValuesTogether;
 
         this._clampValue(true);
     }
 
     setMax(max) {
-        this.myMax = max;
+        this._myMax = max;
         this._clampValue(false);
     }
 
     setMin(min) {
-        this.myMin = min;
+        this._myMin = min;
         this._clampValue(false);
     }
 
     _clampValue(resetDefaultValue) {
-        let clampedValue = this.myValue.vec_clamp(this.myMin, this.myMax);
+        let clampedValue = this._myValue.vec_clamp(this._myMin, this._myMax);
 
         if (!resetDefaultValue) {
-            let clampedDefaultValue = this.myDefaultValue.vec_clamp(this.myMin, this.myMax);
-            let defaultValueChanged = !clampedDefaultValue.vec_equals(this.myDefaultValue, 0.00001);
+            let clampedDefaultValue = this.getDefaultValue().vec_clamp(this._myMin, this._myMax);
+            let defaultValueChanged = !clampedDefaultValue.vec_equals(this.getDefaultValue(), 0.00001);
             if (defaultValueChanged) {
-                PP.EasyTuneVariableArray.prototype.setDefaultValue.call(this, clampedDefaultValue);
+                EasyTuneVariableArray.prototype.setDefaultValue.call(this, clampedDefaultValue);
             }
         }
 
-        PP.EasyTuneVariableArray.prototype.setValue.call(this, clampedValue, resetDefaultValue);
+        EasyTuneVariableArray.prototype.setValue.call(this, clampedValue, resetDefaultValue);
     }
-};
+}
 
-PP.EasyTuneNumber = class EasyTuneNumber extends PP.EasyTuneNumberArray {
-    constructor(name, value, stepPerSecond, decimalPlaces, min, max) {
-        super(name, [value], stepPerSecond, decimalPlaces, min, max);
+export class EasyTuneNumber extends EasyTuneNumberArray {
+
+    constructor(name, value, stepPerSecond, decimalPlaces, min, max, engine) {
+        super(name, [value], stepPerSecond, decimalPlaces, min, max, engine);
+
+        this._myTempValue = [0];
+        this._myTempDefaultValue = [0];
     }
 
     getValue() {
-        return this.myValue[0];
+        return super.getValue()[0];
     }
 
     setValue(value, resetDefaultValue = false) {
-        super.setValue([value], resetDefaultValue);
+        this._myTempValue[0] = value;
+        super.setValue(this._myTempValue, resetDefaultValue);
+    }
+
+    getDefaultValue() {
+        return super.getDefaultValue()[0];
     }
 
     setDefaultValue(value) {
-        super.setValue([value]);
+        this._myTempDefaultValue[0] = value;
+        super.setDefaultValue(this._myTempValue);
     }
-};
+}
 
-PP.EasyTuneInt = class EasyTuneInt extends PP.EasyTuneNumber {
-    constructor(name, value, stepPerSecond, min, max) {
-        super(name, value, stepPerSecond, 0, min, max);
+export class EasyTuneInt extends EasyTuneNumber {
+
+    constructor(name, value, stepPerSecond, min, max, engine) {
+        super(name, value, stepPerSecond, 0, min, max, engine);
     }
-};
+}
 
-PP.EasyTuneIntArray = class EasyTuneIntArray extends PP.EasyTuneNumberArray {
-    constructor(name, value, stepPerSecond, min, max, editAllValuesTogether) {
-        let tempValue = value.slice(0);
+export class EasyTuneIntArray extends EasyTuneNumberArray {
+
+    constructor(name, value, stepPerSecond, min, max, editAllValuesTogether, engine) {
+        let tempValue = value.pp_clone();
 
         for (let i = 0; i < value.length; i++) {
             tempValue[i] = Math.round(tempValue[i]);
         }
 
-        super(name, tempValue, stepPerSecond, 0, min != null ? Math.round(min) : null, max != null ? Math.round(max) : max, editAllValuesTogether);
+        super(name, tempValue, stepPerSecond, 0, min != null ? Math.round(min) : null, max != null ? Math.round(max) : max, editAllValuesTogether, engine);
     }
-};
+}
 
-//BOOL
+// BOOL
 
-PP.EasyTuneBoolArray = class EasyTuneBoolArray extends PP.EasyTuneVariableArray {
-    constructor(name, value) {
-        super(name, PP.EasyTuneVariableType.BOOL, value);
+export class EasyTuneBoolArray extends EasyTuneVariableArray {
+
+    constructor(name, value, engine) {
+        super(name, EasyTuneVariableType.BOOL, value, engine);
     }
-};
+}
 
-PP.EasyTuneBool = class EasyTuneBool extends PP.EasyTuneBoolArray {
-    constructor(name, value) {
-        super(name, [value]);
+export class EasyTuneBool extends EasyTuneBoolArray {
+
+    constructor(name, value, engine) {
+        super(name, [value], engine);
+
+        this._myTempValue = [0];
+        this._myTempDefaultValue = [0];
     }
 
     getValue() {
-        return this.myValue[0];
+        return super.getValue()[0];
     }
 
     setValue(value, resetDefaultValue = false) {
-        super.setValue([value], resetDefaultValue);
+        this._myTempValue[0] = value;
+        super.setValue(this._myTempValue, resetDefaultValue);
+    }
+
+    getDefaultValue() {
+        return super.getDefaultValue()[0];
     }
 
     setDefaultValue(value) {
-        super.setValue([value]);
+        this._myTempDefaultValue[0] = value;
+        super.setDefaultValue(this._myTempValue);
     }
-};
+}
 
-//EASY TUNE EASY TRANSFORM
+// EASY TUNE EASY TRANSFORM
 
-PP.EasyTuneTransform = class EasyTuneTransform extends PP.EasyTuneVariable {
-    constructor(name, value, scaleAsOne = true, positionStepPerSecond = 1, rotationStepPerSecond = 50, scaleStepPerSecond = 1) {
-        super(name, PP.EasyTuneVariableType.TRANSFORM);
+export class EasyTuneTransform extends EasyTuneVariable {
 
-        this.myDecimalPlaces = 3;
+    constructor(name, value, scaleAsOne = true, positionStepPerSecond = 1, rotationStepPerSecond = 50, scaleStepPerSecond = 1, engine) {
+        super(name, EasyTuneVariableType.TRANSFORM, engine);
 
-        this.myPosition = value.mat4_getPosition();
-        this.myRotation = value.mat4_getRotationDegrees();
-        this.myScale = value.mat4_getScale();
+        this._myDecimalPlaces = 3;
 
-        let decimalPlacesMultiplier = Math.pow(10, this.myDecimalPlaces);
+        this._myPosition = value.mat4_getPosition();
+        this._myRotation = value.mat4_getRotationDegrees();
+        this._myScale = value.mat4_getScale();
+
+        let decimalPlacesMultiplier = Math.pow(10, this._myDecimalPlaces);
         for (let i = 0; i < 3; i++) {
-            this.myScale[i] = Math.max(this.myScale[i], 1 / decimalPlacesMultiplier);
+            this._myScale[i] = Math.max(this._myScale[i], 1 / decimalPlacesMultiplier);
         }
 
-        this.myScaleAsOne = scaleAsOne;
+        this._myScaleAsOne = scaleAsOne;
 
-        this.myPositionStepPerSecond = positionStepPerSecond;
-        this.myRotationStepPerSecond = rotationStepPerSecond;
-        this.myScaleStepPerSecond = scaleStepPerSecond;
+        this._myPositionStepPerSecond = positionStepPerSecond;
+        this._myRotationStepPerSecond = rotationStepPerSecond;
+        this._myScaleStepPerSecond = scaleStepPerSecond;
 
-        this.myDefaultPosition = this.myPosition.vec3_clone();
-        this.myDefaultRotation = this.myRotation.vec3_clone();
-        this.myDefaultScale = this.myScale.vec3_clone();
+        this._myDefaultPosition = this._myPosition.vec3_clone();
+        this._myDefaultRotation = this._myRotation.vec3_clone();
+        this._myDefaultScale = this._myScale.vec3_clone();
 
-        this.myDefaultPositionStepPerSecond = this.myPositionStepPerSecond;
-        this.myDefaultRotationStepPerSecond = this.myRotationStepPerSecond;
-        this.myDefaultScaleStepPerSecond = this.myScaleStepPerSecond;
+        this._myDefaultPositionStepPerSecond = this._myPositionStepPerSecond;
+        this._myDefaultRotationStepPerSecond = this._myRotationStepPerSecond;
+        this._myDefaultScaleStepPerSecond = this._myScaleStepPerSecond;
 
-        this.myTransform = PP.mat4_create();
-        this.myTransform.mat4_setPositionRotationDegreesScale(this.myPosition, this.myRotation, this.myScale);
+        this._myTransform = mat4_create();
+        this._myTransform.mat4_setPositionRotationDegreesScale(this._myPosition, this._myRotation, this._myScale);
 
-        this.myTempTransform = PP.mat4_create();
+        this._myTempTransform = mat4_create();
     }
 
     getValue() {
-        this.myTransform.mat4_setPositionRotationDegreesScale(this.myPosition, this.myRotation, this.myScale);
-        return this.myTransform.slice(0);
+        this._myTransform.mat4_setPositionRotationDegreesScale(this._myPosition, this._myRotation, this._myScale);
+        return this._myTransform;
     }
 
     setValue(value, resetDefaultValue = false) {
-        this.myTempTransform.mat4_setPositionRotationDegreesScale(this.myPosition, this.myRotation, this.myScale);
+        this._myTempTransform.mat4_setPositionRotationDegreesScale(this._myPosition, this._myRotation, this._myScale);
 
-        value.mat4_getPosition(this.myPosition);
-        value.mat4_getRotationDegrees(this.myRotation);
-        value.mat4_getScale(this.myScale);
+        value.mat4_getPosition(this._myPosition);
+        value.mat4_getRotationDegrees(this._myRotation);
+        value.mat4_getScale(this._myScale);
 
-        this.myTransform.mat4_setPositionRotationDegreesScale(this.myPosition, this.myRotation, this.myScale);
+        this._myTransform.mat4_setPositionRotationDegreesScale(this._myPosition, this._myRotation, this._myScale);
+
+        let valueChanged = !this._myTempTransform.pp_equals(this._myTransform)
 
         if (resetDefaultValue) {
-            PP.EasyTuneTransform.prototype.setDefaultValue.call(this, value);
+            EasyTuneTransform.prototype.setDefaultValue.call(this, value);
         }
 
-        PP.refreshEasyTuneWidget();
+        EasyTuneUtils.refreshWidget(this._myEngine);
 
-        if (!this.myTempTransform.pp_equals(this.myTransform)) {
-            this._triggerValueChangedCallback();
+        if (valueChanged) {
+            this._myValueChangedEmitter.notify(this.getValue(), this);
         }
     }
 
     setDefaultValue(value) {
-        this.myDefaultPosition = value.mat4_getPosition();
-        this.myDefaultRotation = value.mat4_getRotationDegrees();
-        this.myDefaultScale = value.mat4_getScale();
+        this._myDefaultPosition = value.mat4_getPosition();
+        this._myDefaultRotation = value.mat4_getRotationDegrees();
+        this._myDefaultScale = value.mat4_getScale();
     }
 
     fromJSON(valueJSON, resetDefaultValue = false) {
@@ -288,4 +344,4 @@ PP.EasyTuneTransform = class EasyTuneTransform extends PP.EasyTuneVariable {
     toJSON() {
         return this.getValue().vec_toString();
     }
-};
+}

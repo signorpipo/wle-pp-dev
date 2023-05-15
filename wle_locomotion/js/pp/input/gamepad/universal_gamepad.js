@@ -1,4 +1,6 @@
-PP.UniversalGamepad = class UniversalGamepad extends PP.BaseGamepad {
+import { BaseGamepad } from "./base_gamepad";
+
+export class UniversalGamepad extends BaseGamepad {
 
     constructor(handedness) {
         super(handedness);
@@ -11,7 +13,6 @@ PP.UniversalGamepad = class UniversalGamepad extends PP.BaseGamepad {
         this._myButtonData = this._createButtonData();
         this._myAxesData = this._createAxesData();
         this._myHapticActuators = [];
-
     }
 
     addGamepadCore(id, gamepadCore) {
@@ -59,7 +60,7 @@ PP.UniversalGamepad = class UniversalGamepad extends PP.BaseGamepad {
         return handPose;
     }
 
-    _start() {
+    _startHook() {
         for (let core of this._myGamepadCores.values()) {
             core.start();
         }
@@ -80,15 +81,15 @@ PP.UniversalGamepad = class UniversalGamepad extends PP.BaseGamepad {
     }
 
     _getButtonData(buttonID) {
-        this._myButtonData.myIsPressed = false;
-        this._myButtonData.myIsTouched = false;
+        this._myButtonData.myPressed = false;
+        this._myButtonData.myTouched = false;
         this._myButtonData.myValue = 0;
 
         for (let core of this._myGamepadCores.values()) {
             if (core.isGamepadCoreActive()) {
                 let coreButtonData = core.getButtonData(buttonID);
-                this._myButtonData.myIsPressed = this._myButtonData.myIsPressed || coreButtonData.myIsPressed;
-                this._myButtonData.myIsTouched = this._myButtonData.myIsTouched || coreButtonData.myIsTouched;
+                this._myButtonData.myPressed = this._myButtonData.myPressed || coreButtonData.myPressed;
+                this._myButtonData.myTouched = this._myButtonData.myTouched || coreButtonData.myTouched;
                 if (Math.abs(coreButtonData.myValue) > Math.abs(this._myButtonData.myValue)) {
                     this._myButtonData.myValue = coreButtonData.myValue;
                 }
@@ -129,4 +130,10 @@ PP.UniversalGamepad = class UniversalGamepad extends PP.BaseGamepad {
 
         return this._myHapticActuators;
     }
-};
+
+    _destroyHook() {
+        for (let gamepadCore of this._myGamepadCores.values()) {
+            gamepadCore.destroy();
+        }
+    }
+}

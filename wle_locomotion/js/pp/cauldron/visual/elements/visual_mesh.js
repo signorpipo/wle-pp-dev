@@ -1,38 +1,43 @@
 /*
-let visualParams = new PP.VisualMeshParams();
+let visualParams = new VisualMeshParams();
 visualParams.myTransform = transform;
-visualParams.myMesh = PP.myDefaultResources.myMeshes.mySphere;
-visualParams.myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
-visualParams.myMaterial.color = PP.vec4_create(1, 1, 1, 1);
-PP.myVisualManager.draw(visualParams);
+visualParams.myMesh = myDefaultResources.myMeshes.mySphere;
+visualParams.myMaterial = myDefaultResources.myMaterials.myFlatOpaque.clone();
+visualParams.myMaterial.color = vec4_create(1, 1, 1, 1);
+Globals.getVisualManager().draw(visualParams);
 
 or
 
-let visualMesh = new PP.VisualMesh(visualParams);
+let visualMesh = new VisualMesh(visualParams);
 */
 
-PP.VisualMeshParams = class VisualMeshParams {
+import { MeshComponent } from "@wonderlandengine/api";
+import { mat4_create } from "../../../plugin/js/extensions/array_extension";
+import { Globals } from "../../../pp/globals";
+import { VisualElementType } from "./visual_element_types";
 
-    constructor() {
-        this.myTransform = PP.mat4_create();
+export class VisualMeshParams {
+
+    constructor(engine = Globals.getMainEngine()) {
+        this.myTransform = mat4_create();
 
         this.myMesh = null;
         this.myMaterial = null;
 
-        this.myParent = PP.myVisualData.myRootObject;
-        this.myIsLocal = false;
+        this.myParent = Globals.getSceneObjects(engine).myVisualElements;
+        this.myLocal = false;
 
-        this.myType = PP.VisualElementType.MESH;
+        this.myType = VisualElementType.MESH;
     }
 
     copy(other) {
-        // implemented outside class definition
+        // Implemented outside class definition
     }
-};
+}
 
-PP.VisualMesh = class VisualMesh {
+export class VisualMesh {
 
-    constructor(params = new PP.VisualMeshParams()) {
+    constructor(params = new VisualMeshParams()) {
         this._myParams = params;
 
         this._myVisible = false;
@@ -42,6 +47,8 @@ PP.VisualMesh = class VisualMesh {
 
         this._myMeshObject = null;
         this._myMeshComponent = null;
+
+        this._myDestroyed = false;
 
         this._build();
         this.forceRefresh();
@@ -97,29 +104,29 @@ PP.VisualMesh = class VisualMesh {
     _refresh() {
         this._myMeshObject.pp_setParent(this._myParams.myParent, false);
 
-        if (this._myParams.myIsLocal) {
+        if (this._myParams.myLocal) {
             this._myMeshObject.pp_setTransformLocal(this._myParams.myTransform);
         } else {
             this._myMeshObject.pp_setTransform(this._myParams.myTransform);
         }
 
         if (this._myParams.myMesh == null) {
-            this._myMeshComponent.mesh = PP.myDefaultResources.myMeshes.mySphere;
+            this._myMeshComponent.mesh = Globals.getDefaultMeshes(this._myParams.myParent.pp_getEngine()).mySphere;
         } else {
             this._myMeshComponent.mesh = this._myParams.myMesh;
         }
 
         if (this._myParams.myMaterial == null) {
-            this._myMeshComponent.material = PP.myVisualData.myDefaultMaterials.myDefaultMeshMaterial;
+            this._myMeshComponent.material = Globals.getVisualResources(this._myParams.myParent.pp_getEngine()).myDefaultMaterials.myMesh;
         } else {
             this._myMeshComponent.material = this._myParams.myMaterial;
         }
     }
 
     _build() {
-        this._myMeshObject = WL.scene.addObject(null);
+        this._myMeshObject = Globals.getSceneObjects(this._myParams.myParent.pp_getEngine()).myVisualElements.pp_addObject();
 
-        this._myMeshComponent = this._myMeshObject.addComponent('mesh');
+        this._myMeshComponent = this._myMeshObject.pp_addComponent(MeshComponent);
     }
 
     _markDirty() {
@@ -131,19 +138,33 @@ PP.VisualMesh = class VisualMesh {
     }
 
     clone() {
-        let clonedParams = new PP.VisualMeshParams();
+        let clonedParams = new VisualMeshParams(this._myParams.myParent.pp_getEngine());
         clonedParams.copy(this._myParams);
 
-        let clone = new PP.VisualMesh(clonedParams);
+        let clone = new VisualMesh(clonedParams);
         clone.setAutoRefresh(this._myAutoRefresh);
         clone.setVisible(this._myVisible);
         clone._myDirty = this._myDirty;
 
         return clone;
     }
-};
 
-PP.VisualMeshParams.prototype.copy = function copy(other) {
+    destroy() {
+        this._myDestroyed = true;
+
+        this._myMeshObject.pp_destroy();
+    }
+
+    isDestroyed() {
+        return this._myDestroyed;
+    }
+}
+
+
+
+// IMPLEMENTATION
+
+VisualMeshParams.prototype.copy = function copy(other) {
     this.myTransform.pp_copy(other.myTransform);
 
     if (other.myMesh != null) {
@@ -159,11 +180,7 @@ PP.VisualMeshParams.prototype.copy = function copy(other) {
     }
 
     this.myParent = other.myParent;
-    this.myIsLocal = other.myIsLocal;
+    this.myLocal = other.myLocal;
 
     this.myType = other.myType;
 };
-
-
-
-Object.defineProperty(PP.VisualMeshParams.prototype, "copy", { enumerable: false });

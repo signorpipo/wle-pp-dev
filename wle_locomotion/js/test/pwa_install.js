@@ -1,4 +1,4 @@
-deferredPrompt = null;
+let _deferredPrompt = null;
 
 console.error("REGISTERING PWA INSTALL");
 window.addEventListener('beforeinstallprompt', (e) => {
@@ -8,5 +8,5 @@ window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
 
     // Stash the event so it can be triggered later.
-    deferredPrompt = e;
+    _deferredPrompt = e;
 });

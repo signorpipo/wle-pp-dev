@@ -1,8 +1,17 @@
-// even if this can be sued to generally fade, it should be called collision obscure to hint that is meant for collision obscuring
+// Even if this can be sued to generally fade, it should be called collision obscure to hint that is meant for collision obscuring
 
-// occlude
-PP.PlayerObscureManagerParams = class PlayerObscureManagerParams {
-    constructor() {
+import { Timer } from "../../../../../cauldron/cauldron/timer";
+import { FSM } from "../../../../../cauldron/fsm/fsm";
+import { EasingFunction } from "../../../../../cauldron/js/utils/math_utils";
+import { MaterialUtils } from "../../../../../cauldron/utils/material_utils";
+import { VisualMesh, VisualMeshParams } from "../../../../../cauldron/visual/elements/visual_mesh";
+import { vec3_create, vec4_create } from "../../../../../plugin/js/extensions/array_extension";
+import { Globals } from "../../../../../pp/globals";
+
+// Occlude
+export class PlayerObscureManagerParams {
+
+    constructor(engine = Globals.getMainEngine()) {
         this.myPlayerTransformManager = null;
 
         this.myObscureObject = null;
@@ -12,23 +21,26 @@ PP.PlayerObscureManagerParams = class PlayerObscureManagerParams {
         this.myObscureFadeOutSeconds = 0.1;
         this.myObscureFadeInSeconds = 0.1;
 
-        this.myObscureFadeEasingFunction = PP.EasingFunction.linear;
+        this.myObscureFadeEasingFunction = EasingFunction.linear;
 
         this.myDistanceToStartObscureWhenHeadColliding = 0;
         this.myDistanceToStartObscureWhenBodyColliding = 0;
         this.myDistanceToStartObscureWhenFloating = 0;
         this.myDistanceToStartObscureWhenFar = 0;
 
-        this.myRelativeDistanceToMaxObscureWhenHeadColliding = 0; // relative to the start distance, 1 means that in 1 meters after it started it will be completely obscured
+        this.myRelativeDistanceToMaxObscureWhenHeadColliding = 0; // Relative to the start distance, 1 means that in 1 meters after it started it will be completely obscured
         this.myRelativeDistanceToMaxObscureWhenBodyColliding = 0;
         this.myRelativeDistanceToMaxObscureWhenFloating = 0;
         this.myRelativeDistanceToMaxObscureWhenFar = 0;
 
-        this.myObscureLevelRelativeDistanceEasingFunction = PP.EasingFunction.linear;
-    }
-};
+        this.myObscureLevelRelativeDistanceEasingFunction = EasingFunction.linear;
 
-PP.PlayerObscureManager = class PlayerObscureManager {
+        this.myEngine = engine;
+    }
+}
+
+export class PlayerObscureManager {
+
     constructor(params) {
         this._myParams = params;
 
@@ -40,10 +52,10 @@ PP.PlayerObscureManager = class PlayerObscureManager {
         this._myLastTargetObscureLevel = null;
         this._myLastIsFadingIn = null;
 
-        this._myFadeTimer = new PP.Timer(0, false);
+        this._myFadeTimer = new Timer(0, false);
 
-        this._myFSM = new PP.FSM();
-        //this._myFSM.setDebugLogActive(true, " Obscure");
+        this._myFSM = new FSM();
+        //this._myFSM.setLogEnabled(true, " Obscure");
 
         this._myFSM.addState("init");
 
@@ -67,6 +79,8 @@ PP.PlayerObscureManager = class PlayerObscureManager {
         this._setupVisuals();
 
         this._myFSM.perform("end");
+
+        this._myDestroyed = false;
     }
 
     start() {
@@ -119,8 +133,8 @@ PP.PlayerObscureManager = class PlayerObscureManager {
         this._myCurrentObscureLevel;
     }
 
-    obscureLevelOverride(obscureLevel, instantFade = false) {
-        this._myObscurelevelOverride = obscureLevel;
+    overrideObscureLevel(obscureLevel, instantFade = false) {
+        this._myObscureLevelOverride = obscureLevel;
 
         if (instantFade && this.isStarted()) {
             this._setObscureLevel(obscureLevel);
@@ -128,17 +142,17 @@ PP.PlayerObscureManager = class PlayerObscureManager {
     }
 
     resetObscureLevelOverride() {
-        this._myObscurelevelOverride = null;
+        this._myObscureLevelOverride = null;
     }
 
     _idleUpdate(dt) {
-        if (Math.abs(this._myTargetObscureLevel - this._myCurrentObscureLevel) > Math.PP_EPSILON_NUMBER) {
+        if (Math.abs(this._myTargetObscureLevel - this._myCurrentObscureLevel) > Math.PP_EPSILON) {
             this._myFSM.perform("fade");
         }
     }
 
     _fadingUpdate(dt) {
-        if (Math.abs(this._myTargetObscureLevel - this._myCurrentObscureLevel) <= Math.PP_EPSILON_NUMBER) {
+        if (Math.abs(this._myTargetObscureLevel - this._myCurrentObscureLevel) <= Math.PP_EPSILON) {
             this._myFSM.perform("done");
             return;
         }
@@ -163,7 +177,7 @@ PP.PlayerObscureManager = class PlayerObscureManager {
         this._setObscureAlpha(newObscureLevel);
         this._myCurrentObscureLevel = newObscureLevel;
 
-        if (Math.abs(this._myTargetObscureLevel - this._myCurrentObscureLevel) <= Math.PP_EPSILON_NUMBER || this._myFadeTimer.isDone()) {
+        if (Math.abs(this._myTargetObscureLevel - this._myCurrentObscureLevel) <= Math.PP_EPSILON || this._myFadeTimer.isDone()) {
             this._myFSM.perform("done");
         }
     }
@@ -225,21 +239,21 @@ PP.PlayerObscureManager = class PlayerObscureManager {
 
     _setObscureAlpha(alpha) {
         if (this._myParams.myObscureObject == null) {
-            PP.MaterialUtils.setAlpha(this._myObscureMaterial, alpha);
+            MaterialUtils.setAlpha(this._myObscureMaterial, alpha);
         } else {
-            PP.MaterialUtils.setObjectAlpha(this._myParams.myObscureObject, alpha);
+            MaterialUtils.setObjectAlpha(this._myParams.myObscureObject, alpha);
         }
     }
 
     _updateObscured() {
         this._myTargetObscureLevel = 0;
 
-        if (this._myObscurelevelOverride != null) {
-            this._myTargetObscureLevel = this._myObscurelevelOverride;
+        if (this._myObscureLevelOverride != null) {
+            this._myTargetObscureLevel = this._myObscureLevelOverride;
         } else {
-            // #TODO check if VALID head is colliding, in that case use max obscure level
-            // this prevent being able to see when resetting head to real even though real is colliding
-            // for example if u stand up and go with the head in the ceiling and reset by moving
+            // #TODO Check if VALID head is colliding, in that case use max obscure level
+            // This prevent being able to see when resetting head to real even though real is colliding
+            // For example if u stand up and go with the head in the ceiling and reset by moving
             if (this._myParams.myPlayerTransformManager.isHeadColliding()) {
                 let distance = this._myParams.myPlayerTransformManager.getDistanceToRealHead();
                 let relativeDistance = distance - this._myParams.myDistanceToStartObscureWhenHeadColliding;
@@ -287,19 +301,19 @@ PP.PlayerObscureManager = class PlayerObscureManager {
         if (this._myParams.myObscureMaterial != null) {
             this._myObscureMaterial = this._myParams.myObscureMaterial;
         } else {
-            this._myObscureMaterial = PP.myDefaultResources.myMaterials.myFlatTransparentNoDepth.clone();
-            this._myObscureMaterial.color = PP.vec4_create(0, 0, 0, 1);
+            this._myObscureMaterial = Globals.getDefaultMaterials(this._myParams.myEngine).myFlatTransparentNoDepth.clone();
+            this._myObscureMaterial.color = vec4_create(0, 0, 0, 1);
         }
 
-        this._myObscureParentObject = PP.myVisualData.myRootObject.pp_addObject();
+        this._myObscureParentObject = Globals.getPlayerObjects(this._myParams.myEngine).myPlayerCauldron.pp_addObject();
 
-        let obscureVisualParams = new PP.VisualMeshParams();
-        obscureVisualParams.myMesh = PP.myDefaultResources.myMeshes.myInvertedSphere;
+        let obscureVisualParams = new VisualMeshParams(this._myParams.myEngine);
+        obscureVisualParams.myMesh = Globals.getDefaultMeshes(this._myParams.myEngine).myInvertedSphere;
         obscureVisualParams.myMaterial = (this._myParams.myObscureMaterial != null) ? this._myParams.myObscureMaterial : this._myObscureMaterial;
         obscureVisualParams.myParent = this._myObscureParentObject;
-        obscureVisualParams.myIsLocal = true;
-        obscureVisualParams.myTransform.mat4_setScale(PP.vec3_create(this._myParams.myObscureRadius, this._myParams.myObscureRadius, this._myParams.myObscureRadius));
-        this._myObscureVisual = new PP.VisualMesh(obscureVisualParams);
+        obscureVisualParams.myLocal = true;
+        obscureVisualParams.myTransform.mat4_setScale(vec3_create(this._myParams.myObscureRadius, this._myParams.myObscureRadius, this._myParams.myObscureRadius));
+        this._myObscureVisual = new VisualMesh(obscureVisualParams);
 
         if (this._myParams.myObscureObject != null) {
             this._myParams.myObscureObject.pp_setParent(this._myObscureParentObject, false);
@@ -320,7 +334,17 @@ PP.PlayerObscureManager = class PlayerObscureManager {
         if (visible) {
             this._myObscureParentObject.pp_setParent(this._myParams.myPlayerTransformManager.getHead(), false);
         } else {
-            this._myObscureParentObject.pp_setParent(null, false);
+            this._myObscureParentObject.pp_setParent(Globals.getPlayerObjects(this._myParams.myEngine)?.myPlayerCauldron, false);
         }
     }
-};
+
+    destroy() {
+        this._myDestroyed = true;
+
+        this._myObscureVisual.destroy();
+    }
+
+    isDestroyed() {
+        return this._myDestroyed;
+    }
+}

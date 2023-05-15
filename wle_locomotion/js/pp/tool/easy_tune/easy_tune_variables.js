@@ -1,10 +1,11 @@
-PP.EasyTuneVariables = class EasyTuneVariables {
+export class EasyTuneVariables {
+
     constructor() {
         this._myVariables = new Map();
     }
 
     add(variable) {
-        this._myVariables.set(variable.myName, variable);
+        this._myVariables.set(variable.getName(), variable);
     }
 
     remove(variableName) {
@@ -38,7 +39,7 @@ PP.EasyTuneVariables = class EasyTuneVariables {
     isActive(variableName) {
         let variable = this._myVariables.get(variableName);
         if (variable) {
-            return variable.myIsActive;
+            return variable.isActive();
         }
 
         return false;
@@ -48,7 +49,7 @@ PP.EasyTuneVariables = class EasyTuneVariables {
         return this._myVariables.get(variableName);
     }
 
-    getEasyTuneVariables() {
+    getEasyTuneVariablesList() {
         return Array.from(this._myVariables.values());
     }
 
@@ -60,7 +61,7 @@ PP.EasyTuneVariables = class EasyTuneVariables {
         let objectJSON = JSON.parse(json);
 
         for (let variable of this._myVariables.values()) {
-            let variableValueJSON = objectJSON[variable.myName];
+            let variableValueJSON = objectJSON[variable.getName()];
             if (variableValueJSON !== undefined) {
                 variable.fromJSON(variableValueJSON, resetDefaultValue);
             }
@@ -71,7 +72,7 @@ PP.EasyTuneVariables = class EasyTuneVariables {
         let objectJSON = {};
 
         for (let variable of this._myVariables.values()) {
-            objectJSON[variable.myName] = variable.toJSON();
+            objectJSON[variable.getName()] = variable.toJSON();
         }
 
         return JSON.stringify(objectJSON);
@@ -84,4 +85,4 @@ PP.EasyTuneVariables = class EasyTuneVariables {
     unregisterValueChangedEventListener(variableName, callbackID, callback) {
         this._myVariables.get(variableName).unregisterValueChangedEventListener(callbackID);
     }
-};
+}

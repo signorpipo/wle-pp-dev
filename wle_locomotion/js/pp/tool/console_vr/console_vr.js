@@ -1,52 +1,58 @@
-PP.ConsoleVR = {
-    _myRealLog: console.log,
-    _myRealError: console.error,
-    _myRealWarn: console.warn,
-    _myRealInfo: console.info,
-    _myRealDebug: console.debug,
-    _myRealAssert: console.assert,
-    _myRealClear: console.clear,
-    _myForwardToBrowserConsole: true,
+import { ConsoleOriginalFunctions } from "./console_original_functions";
 
-    log: function (...args) {
+export class ConsoleVR {
+
+    constructor() {
+        this._myForwardToBrowserConsole = true;
+    }
+
+    log(...args) {
         if (this._myForwardToBrowserConsole) {
-            this._myRealLog.apply(console, args);
+            ConsoleOriginalFunctions.getConsoleOriginalLog().apply(console, args);
         }
-    },
-    error: function (...args) {
+    }
+
+    error(...args) {
         if (this._myForwardToBrowserConsole) {
-            this._myRealError.apply(console, args);
+            ConsoleOriginalFunctions.getConsoleOriginalError().apply(console, args);
         }
-    },
-    warn: function (...args) {
+    }
+
+    warn(...args) {
         if (this._myForwardToBrowserConsole) {
-            this._myRealWarn.apply(console, args);
+            ConsoleOriginalFunctions.getConsoleOriginalWarn().apply(console, args);
         }
-    },
-    info: function (...args) {
+    }
+
+    info(...args) {
         if (this._myForwardToBrowserConsole) {
-            this._myRealInfo.apply(console, args);
+            ConsoleOriginalFunctions.getConsoleOriginalInfo().apply(console, args);
         }
-    },
-    debug: function (...args) {
+    }
+
+    debug(...args) {
         if (this._myForwardToBrowserConsole) {
-            this._myRealDebug.apply(console, args);
+            ConsoleOriginalFunctions.getConsoleOriginalDebug().apply(console, args);
         }
-    },
-    assert: function (...args) {
+    }
+
+    assert(...args) {
         if (this._myForwardToBrowserConsole) {
-            this._myRealAssert.apply(console, args);
+            ConsoleOriginalFunctions.getConsoleOriginalAssert().apply(console, args);
         }
-    },
-    clear: function () {
+    }
+
+    clear() {
         if (this._myForwardToBrowserConsole) {
-            this._myRealClear.apply(console);
+            ConsoleOriginalFunctions.getConsoleOriginalClear().apply(console);
         }
-    },
-    setForwardToBrowserConsole: function (forwardToBrowserConsole) {
+    }
+
+    setForwardToBrowserConsole(forwardToBrowserConsole) {
         this._myForwardToBrowserConsole = forwardToBrowserConsole;
-    },
-    isForwardToBrowserConsole: function () {
+    }
+
+    isForwardToBrowserConsole() {
         return this._myForwardToBrowserConsole;
     }
-};
+}

@@ -1,49 +1,67 @@
+import { AnimationComponent, CollisionComponent, Component, InputComponent, LightComponent, MeshComponent, PhysXComponent, Property, TextComponent, ViewComponent } from "@wonderlandengine/api";
+import { Timer } from "../../../../cauldron/cauldron/timer";
+import { ComponentUtils } from "../../../../cauldron/wl/utils/component_utils";
+import { DebugFunctionsPerformanceAnalyzerComponent } from "./debug_functions_performance_analyzer_component";
 
-WL.registerComponent('pp-debug-wl-components-functions-performance-analyzer', {
-    _myAnalyzeComponentTypes: { type: WL.Type.Bool, default: true },
-    _myAnalyzeComponentInstances: { type: WL.Type.Bool, default: false },
-    _myDelayStart: { type: WL.Type.Float, default: 0.0 },
-    _myLogFunction: { type: WL.Type.Enum, values: ["log", "error", "warn", "debug"], default: "log" },
-    _mySecondsBetweenLogs: { type: WL.Type.Float, default: 1.0 },
-    _myLogMaxResults: { type: WL.Type.Bool, default: false },
-    _myLogSortOrder: { type: WL.Type.Enum, values: ["none", "calls count", "total execution time", "average execution time"], default: "none" },
-    _myLogCallsCountResults: { type: WL.Type.Bool, default: true },
-    _myLogTotalExecutionTimeResults: { type: WL.Type.Bool, default: true },
-    _myLogTotalExecutionTimePercentageResults: { type: WL.Type.Bool, default: true },
-    _myLogAverageExecutionTimeResults: { type: WL.Type.Bool, default: true },
-    _myLogMaxAmountOfFunctions: { type: WL.Type.Int, default: -1 },
-    _myLogFunctionsWithCallsCountAbove: { type: WL.Type.Int, default: -1 },
-    _myLogFunctionsWithTotalExecutionTimePercentageAbove: { type: WL.Type.Float, default: -1 },
-    _myFunctionPathsToInclude: { type: WL.Type.String, default: "" },
-    _myFunctionPathsToExclude: { type: WL.Type.String, default: "" },
-    _myExcludeConstructors: { type: WL.Type.Bool, default: false },
-    _myClearConsoleBeforeLog: { type: WL.Type.Bool, default: false },
-    _myResetMaxResultsShortcutEnabled: { type: WL.Type.Bool, default: false }
-}, {
+export class DebugWLComponentsFunctionsPerformanceAnalyzerComponent extends Component {
+    static TypeName = "pp-debug-wl-components-functions-performance-analyzer";
+    static Properties = {
+        _myAnalyzeComponentTypes: Property.bool(true),
+        _myAnalyzeComponentInstances: Property.bool(false),
+        _myComponentInstanceID: Property.enum(["Object ID", "Object Name", "Object ID - Object Name"], "Object ID - Object Name"),
+        _myDelayStart: Property.float(0.0),
+        _myLogFunction: Property.enum(["Log", "Error", "Warn", "Debug"], "Log"),
+        _mySecondsBetweenLogs: Property.float(1.0),
+        _myLogMaxResults: Property.bool(false),
+        _myLogSortOrder: Property.enum(["None", "Calls Count", "Total Execution Time", "Average Execution Time"], "None"),
+        _myLogCallsCountResults: Property.bool(true),
+        _myLogTotalExecutionTimeResults: Property.bool(true),
+        _myLogTotalExecutionTimePercentageResults: Property.bool(true),
+        _myLogAverageExecutionTimeResults: Property.bool(true),
+        _myLogMaxAmountOfFunctions: Property.int(-1),
+        _myLogFunctionsWithCallsCountAbove: Property.int(-1),
+        _myLogFunctionsWithTotalExecutionTimePercentageAbove: Property.float(-1),
+        _myFunctionPathsToInclude: Property.string(""),
+        _myFunctionPathsToExclude: Property.string(""),
+        _myExcludeConstructors: Property.bool(false),
+        _myClearConsoleBeforeLog: Property.bool(false),
+        _myResetMaxResultsShortcutEnabled: Property.bool(false)
+    };
+
     init() {
-        let objectsByPath = "";
-
-        if (this._myAnalyzeComponentTypes) {
-            objectsByPath += "_WL._componentTypes";
+        this._myStartTimer = new Timer(this._myDelayStart);
+        if (this._myDelayStart == 0) {
+            this._myStartTimer.end();
+            this._start();
         }
+    }
+
+    update(dt) {
+        if (this._myStartTimer.isRunning()) {
+            this._myStartTimer.update(dt);
+            if (this._myStartTimer.isDone()) {
+                this._start();
+            }
+        }
+    }
+
+    _start() {
+
+        let objectsByReference = [];
+        let classesByReference = [];
 
         if (this._myAnalyzeComponentInstances) {
-            if (objectsByPath.length > 0) {
-                objectsByPath += ", ";
-            }
-            objectsByPath += "_WL._components";
+            this._addComponentInstanceReferences(objectsByReference);
         }
 
-        let objectByReference = [];
-        let nativeComponentTypes = ["mesh", "physx", "animation", "collision", "input", "light", "text", "view"];
-        for (let nativeComponentType of nativeComponentTypes) {
-            objectByReference.push([Object.getPrototypeOf(WL._wrapComponent(nativeComponentType, WL.Object._typeIndexFor(nativeComponentType), 0)), "_WL._componentTypes[\"" + nativeComponentType + "\"]"]);
+        if (this._myAnalyzeComponentTypes) {
+            this._addComponentTypeReferences(classesByReference);
         }
 
-        this._myAnalyzerComponent = this.object.pp_addComponent("pp-debug-functions-performance-analyzer", {
-            _myObjectsByReference: objectByReference,
-            _myObjectsByPath: objectsByPath,
-            _myDelayStart: this._myDelayStart + 0.001,
+        this._myAnalyzerComponent = this.object.pp_addComponent(DebugFunctionsPerformanceAnalyzerComponent, {
+            _myObjectsByReference: objectsByReference,
+            _myClassesByReference: classesByReference,
+            _myDelayStart: 0,
             _myLogTitle: "WL Components Performance Analysis Results",
             _myLogFunction: this._myLogFunction,
             _mySecondsBetweenLogs: this._mySecondsBetweenLogs,
@@ -57,18 +75,60 @@ WL.registerComponent('pp-debug-wl-components-functions-performance-analyzer', {
             _myLogTotalExecutionTimePercentageResults: this._myLogTotalExecutionTimePercentageResults,
             _myLogAverageExecutionTimeResults: this._myLogAverageExecutionTimeResults,
             _myFunctionPathsToInclude: this._myFunctionPathsToInclude,
-            _myFunctionPathsToExclude: this._myFunctionPathsToExclude + (this._myFunctionPathsToExclude.length > 0 ? ", " : "") + "_WL\\._components\\., _WL\\._componentTypes\\., functions-performance-analyzer",
+            _myFunctionPathsToExclude: this._myFunctionPathsToExclude,
             _myExcludeConstructors: this._myExcludeConstructors,
-            _myExcludeJavascriptObjectFunctions: true,
+            _myExcludeJSObjectFunctions: true,
             _myAddPathPrefixToFunctionID: true,
-            _myObjectAddObjectDescendantsDepthLevel: 1,
-            _myObjectAddClassDescendantsDepthLevel: 1,
+            _myObjectAddClassDescendantsDepthLevel: 0,
             _myClearConsoleBeforeLog: this._myClearConsoleBeforeLog,
             _myResetMaxResultsShortcutEnabled: this._myResetMaxResultsShortcutEnabled
         });
-    },
-    update(dt) {
-        let a = 2;
-        let b = a * 2;
     }
-});
+
+    _addComponentTypeReferences(classesByReference) {
+        let nativeComponentTypes = [
+            AnimationComponent,
+            CollisionComponent,
+            InputComponent,
+            LightComponent,
+            MeshComponent,
+            PhysXComponent,
+            TextComponent,
+            ViewComponent
+        ];
+
+        for (let nativeComponentType of nativeComponentTypes) {
+            classesByReference.push([nativeComponentType.prototype, "{\"" + nativeComponentType.TypeName + "\"}"]);
+        }
+
+        for (let componentClass of ComponentUtils.getJavascriptComponentClassesByIndex(this.engine)) {
+            classesByReference.push([componentClass.prototype, "{\"" + componentClass.TypeName + "\"}"]);
+        }
+    }
+
+    _addComponentInstanceReferences(objectsByReference) {
+        // #TODO add native components
+
+        for (let componentInstance of ComponentUtils.getJavascriptComponentInstances(this.engine)) {
+            let id = "";
+
+            switch (this._myComponentInstanceID) {
+                case 0:
+                    id = componentInstance.object.pp_getID();
+                    break;
+                case 1:
+                    id = componentInstance.object.pp_getName();
+                    break;
+                case 2:
+                    id = componentInstance.object.pp_getID();
+                    if (componentInstance.object.pp_getName().length > 0) {
+                        id = id + " - " + componentInstance.object.pp_getName();
+                    }
+                    break;
+            }
+
+            objectsByReference.push([componentInstance,
+                "{\"" + componentInstance.type + "\"}[" + id + "]"]);
+        }
+    }
+}

@@ -1,50 +1,54 @@
-PP.GamepadsManager = class GamepadsManager {
+import { Handedness } from "../../cauldron/input_types";
+import { UniversalGamepad } from "../universal_gamepad";
+
+export class GamepadsManager {
+
     constructor() {
-        this._myLeftGamepad = new PP.UniversalGamepad(PP.Handedness.LEFT);
-        this._myRightGamepad = new PP.UniversalGamepad(PP.Handedness.RIGHT);
+        this._myGamepads = [];
+
+        this._myGamepads[Handedness.LEFT] = new UniversalGamepad(Handedness.LEFT);
+        this._myGamepads[Handedness.RIGHT] = new UniversalGamepad(Handedness.RIGHT);
+
+        this._myDestroyed = false;
     }
 
     start() {
-        this._myLeftGamepad.start();
-        this._myRightGamepad.start();
+        for (let key in this._myGamepads) {
+            this._myGamepads[key].start();
+        }
     }
 
     update(dt) {
-        this._myLeftGamepad.update(dt);
-        this._myRightGamepad.update(dt);
+        for (let key in this._myGamepads) {
+            this._myGamepads[key].update(dt);
+        }
     }
 
     getLeftGamepad() {
-        return this._myLeftGamepad;
+        return this._myGamepads[Handedness.LEFT];
     }
 
     getRightGamepad() {
-        return this._myRightGamepad;
+        return this._myGamepads[Handedness.RIGHT];
     }
 
     getGamepad(handedness) {
-        let gamepad = null;
-
-        switch (handedness) {
-            case PP.Handedness.LEFT:
-                gamepad = this._myLeftGamepad;
-                break;
-            case PP.Handedness.RIGHT:
-                gamepad = this._myRightGamepad;
-                break;
-            default:
-                gamepad = null;
-        }
-
-        return gamepad;
+        return this._myGamepads[handedness];
     }
 
     getGamepads() {
-        let gamepads = [];
-
-        gamepads[PP.Handedness.LEFT] = this._myLeftGamepad;
-        gamepads[PP.Handedness.RIGHT] = this._myRightGamepad;
-
-        return gamepads;
+        return this._myGamepads;
     }
-};
+
+    destroy() {
+        this._myDestroyed = true;
+
+        for (let key in this._myGamepads) {
+            this._myGamepads[key].destroy();
+        }
+    }
+
+    isDestroyed() {
+        return this._myDestroyed;
+    }
+}

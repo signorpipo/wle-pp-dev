@@ -1,24 +1,27 @@
-PP.ObjectPoolParams = class ObjectPoolParams {
+export class ObjectPoolParams {
+
     constructor() {
         this.myInitialPoolSize = 0;
-        this.myAmountToAddWhenEmpty = 0;        //If all the objects are busy, this amount will be added to the pool
-        this.myPercentageToAddWhenEmpty = 0;    //If all the objects are busy, this percentage of the current pool size will be added to the pool        
+        this.myAmountToAddWhenEmpty = 0;        // If all the objects are busy, this amount will be added to the pool
+        this.myPercentageToAddWhenEmpty = 0;    // If all the objects are busy, this percentage of the current pool size will be added to the pool        
 
         this.myCloneParams = undefined;
 
-        this.myOptimizeObjectsAllocation = true;    //If true it will pre-allocate the memory before adding new objects to the pool
+        this.myOptimizeObjectsAllocation = true;    // If true it will pre-allocate the memory before adding new objects to the pool
 
-        //These extra functions can be used if u want to use the pool with objects that are not from WLE (WL.Object)
-        this.myCloneCallback = undefined;                       //Signature: callback(object, cloneParams) -> clonedObject
-        this.mySetActiveCallback = undefined;                   //Signature: callback(object, active)
-        this.myEqualCallback = undefined;                       //Signature: callback(firstObject, secondObject) -> bool
-        this.myOptimizeObjectsAllocationCallback = undefined;   //Signature: callback(object, numberOfObjectsToAllocate)
+        // These extra functions can be used if u want to use the pool with objects that are not from WL (WL Object)
+        this.myCloneCallback = undefined;                       // Signature: callback(object, cloneParams) -> clonedObject
+        this.mySetActiveCallback = undefined;                   // Signature: callback(object, active)
+        this.myEqualCallback = undefined;                       // Signature: callback(firstObject, secondObject) -> bool
+        this.myDestroyCallback = undefined;                     // Signature: callback(object)
+        this.myOptimizeObjectsAllocationCallback = undefined;   // Signature: callback(object, numberOfObjectsToAllocate)
 
-        this.myEnableDebugLog = true;
+        this.myLogEnabled = false;
     }
-};
+}
 
-PP.ObjectPool = class ObjectPool {
+export class ObjectPool {
+
     constructor(poolObject, objectPoolParams) {
         this._myObjectPoolParams = objectPoolParams;
         this._myPrototype = this._clone(poolObject);
@@ -27,6 +30,8 @@ PP.ObjectPool = class ObjectPool {
         this._myBusyObjects = [];
 
         this._addToPool(objectPoolParams.myInitialPoolSize, false);
+
+        this._myDestroyed = false;
     }
 
     get() {
@@ -35,11 +40,11 @@ PP.ObjectPool = class ObjectPool {
         if (object == null) {
             let amountToAdd = Math.ceil(this._myBusyObjects.length * this._myObjectPoolParams.myPercentageToAddWhenEmpty);
             amountToAdd += this._myObjectPoolParams.myAmountToAddWhenEmpty;
-            this._addToPool(amountToAdd, this._myObjectPoolParams.myEnableDebugLog);
+            this._addToPool(amountToAdd, this._myObjectPoolParams.myLogEnabled);
             object = this._myAvailableObjects.shift();
         }
 
-        //object could still be null if the amountToAdd is 0
+        // Object could still be null if the amountToAdd is 0
         if (object != null) {
             this._myBusyObjects.push(object);
         }
@@ -49,9 +54,16 @@ PP.ObjectPool = class ObjectPool {
 
     release(object) {
         let released = this._myBusyObjects.pp_remove(this._equals.bind(this, object));
-        if (released) {
+        if (released != null) {
             this._setActive(released, false);
             this._myAvailableObjects.push(released);
+        }
+    }
+
+    releaseAll() {
+        for (let busyObject of this._myBusyObjects) {
+            this._setActive(busyObject, false);
+            this._myAvailableObjects.push(busyObject);
         }
     }
 
@@ -76,16 +88,16 @@ PP.ObjectPool = class ObjectPool {
         return this._myAvailableObjects.length;
     }
 
-    _addToPool(size, log) {
+    _addToPool(size, logEnabled) {
         if (size <= 0) {
             return;
         }
 
         if (this._myObjectPoolParams.myOptimizeObjectsAllocation) {
-            if (this._myObjectPoolParams.myOptimizeObjectsAllocationCallback) {
+            if (this._myObjectPoolParams.myOptimizeObjectsAllocationCallback != null) {
                 this._myObjectPoolParams.myOptimizeObjectsAllocationCallback(this._myPrototype, size);
-            } else if (this._myPrototype.pp_reserveObjectsHierarchy != null) {
-                this._myPrototype.pp_reserveObjectsHierarchy(size);
+            } else if (this._myPrototype.pp_reserveObjects != null) {
+                this._myPrototype.pp_reserveObjects(size);
             }
         }
 
@@ -93,7 +105,7 @@ PP.ObjectPool = class ObjectPool {
             this._myAvailableObjects.push(this._clone(this._myPrototype));
         }
 
-        if (log) {
+        if (logEnabled) {
             console.warn("Added new elements to the pool:", size);
         }
     }
@@ -143,4 +155,32 @@ PP.ObjectPool = class ObjectPool {
 
         return equals;
     }
-};
+
+    destroy() {
+        this._myDestroyed = true;
+
+        for (let object of this._myAvailableObjects) {
+            this._destroyObject(object);
+        }
+
+        for (let object of this._myBusyObjects) {
+            this._destroyObject(object);
+        }
+
+        this._destroyObject(this._myPrototype);
+    }
+
+    isDestroyed() {
+        return this._myDestroyed;
+    }
+
+    _destroyObject(object) {
+        if (this._myObjectPoolParams.myDestroyCallback != null) {
+            this._myObjectPoolParams.myDestroyCallback(object);
+        } else if (object.pp_destroy != null) {
+            object.pp_destroy(active);
+        } else if (object.destroy != null) {
+            object.destroy(active);
+        }
+    }
+}

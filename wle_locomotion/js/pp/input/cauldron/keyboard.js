@@ -1,4 +1,6 @@
-PP.KeyID = {
+import { Globals } from "../../pp/globals";
+
+export let KeyID = {
     _0: "0",
     _1: "1",
     _2: "2",
@@ -79,46 +81,54 @@ PP.KeyID = {
     CONTROL_LEFT: "ControlLeft",
     CONTROL_RIGHT: "ControlRight",
     ALT_LEFT: "AltLeft",
-    ALT_RIGHT: "AltRight",
+    ALT_RIGHT: "AltRight"
 };
 
-PP.Keyboard = class Keyboard {
-    constructor() {
+export class Keyboard {
+
+    constructor(engine = Globals.getMainEngine()) {
+        this._myEngine = engine;
+
         this._myKeyInfos = new Map();
 
-        for (let key in PP.KeyID) {
-            this.addKey(PP.KeyID[key]);
+        for (let key in KeyID) {
+            this.addKey(KeyID[key]);
         }
+
+        this._myOnKeyDownEventListener = null;
+        this._myOnKeyUpEventListener = null;
+
+        this._myDestroyed = false;
     }
 
     isKeyPressed(keyID) {
-        let isPressed = false;
+        let pressed = false;
 
         if (this._myKeyInfos.has(keyID)) {
-            isPressed = this._myKeyInfos.get(keyID).myIsPressed;
+            pressed = this._myKeyInfos.get(keyID).myPressed;
         }
 
-        return isPressed;
+        return pressed;
     }
 
     isKeyPressStart(keyID) {
-        let isPressStart = false;
+        let pressStart = false;
 
         if (this._myKeyInfos.has(keyID)) {
-            isPressStart = this._myKeyInfos.get(keyID).myIsPressStart;
+            pressStart = this._myKeyInfos.get(keyID).myPressStart;
         }
 
-        return isPressStart;
+        return pressStart;
     }
 
     isKeyPressEnd(keyID) {
-        let isPressEnd = false;
+        let pressEnd = false;
 
         if (this._myKeyInfos.has(keyID)) {
-            isPressEnd = this._myKeyInfos.get(keyID).myIsPressEnd;
+            pressEnd = this._myKeyInfos.get(keyID).myPressEnd;
         }
 
-        return isPressEnd;
+        return pressEnd;
     }
 
     addKey(keyID) {
@@ -126,25 +136,27 @@ PP.Keyboard = class Keyboard {
     }
 
     start() {
-        window.addEventListener('keydown', this._keyDown.bind(this));
-        window.addEventListener('keyup', this._keyUp.bind(this));
+        this._myOnKeyDownEventListener = this._keyDown.bind(this);
+        Globals.getWindow(this._myEngine).addEventListener("keydown", this._myOnKeyDownEventListener);
+        this._myOnKeyUpEventListener = this._keyUp.bind(this);
+        Globals.getWindow(this._myEngine).addEventListener("keyup", this._myOnKeyUpEventListener);
     }
 
     update(dt) {
-        if (!document.hasFocus()) {
+        if (!Globals.getDocument(this._myEngine).hasFocus()) {
             for (let keyInfo of this._myKeyInfos.values()) {
-                if (keyInfo.myIsPressed) {
-                    keyInfo.myIsPressed = false;
-                    keyInfo.myIsPressEndToProcess = true;
+                if (keyInfo.myPressed) {
+                    keyInfo.myPressed = false;
+                    keyInfo.myPressEndToProcess = true;
                 }
             }
         }
 
         for (let keyInfo of this._myKeyInfos.values()) {
-            keyInfo.myIsPressStart = keyInfo.myIsPressStartToProcess;
-            keyInfo.myIsPressEnd = keyInfo.myIsPressEndToProcess;
-            keyInfo.myIsPressStartToProcess = false;
-            keyInfo.myIsPressEndToProcess = false;
+            keyInfo.myPressStart = keyInfo.myPressStartToProcess;
+            keyInfo.myPressEnd = keyInfo.myPressEndToProcess;
+            keyInfo.myPressStartToProcess = false;
+            keyInfo.myPressEndToProcess = false;
         }
     }
 
@@ -162,21 +174,32 @@ PP.Keyboard = class Keyboard {
         }
     }
 
-    _keyPressedChanged(keyID, isPressed) {
+    _keyPressedChanged(keyID, pressed) {
         if (this._myKeyInfos.has(keyID)) {
             let keyInfo = this._myKeyInfos.get(keyID);
 
-            if (isPressed) {
-                keyInfo.myIsPressed = true;
-                keyInfo.myIsPressStartToProcess = true;
+            if (pressed) {
+                keyInfo.myPressed = true;
+                keyInfo.myPressStartToProcess = true;
             } else {
-                keyInfo.myIsPressed = false;
-                keyInfo.myIsPressEndToProcess = true;
+                keyInfo.myPressed = false;
+                keyInfo.myPressEndToProcess = true;
             }
         }
     }
 
     _createKeyInfo() {
-        return { myIsPressed: false, myIsPressStart: false, myIsPressStartToProcess: false, myIsPressEnd: false, myIsPressEndToProcess: false, };
+        return { myPressed: false, myPressStart: false, myPressStartToProcess: false, myPressEnd: false, myPressEndToProcess: false, };
     }
-};
+
+    destroy() {
+        this._myDestroyed = true;
+
+        Globals.getWindow(this._myEngine).removeEventListener("keydown", this._myOnKeyDownEventListener);
+        Globals.getWindow(this._myEngine).removeEventListener("keyup", this._myOnKeyUpEventListener);
+    }
+
+    isDestroyed() {
+        return this._myDestroyed;
+    }
+}

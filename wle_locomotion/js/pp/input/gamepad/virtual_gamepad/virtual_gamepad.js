@@ -1,31 +1,48 @@
-PP.VirtualGamepad = class VirtualGamepad {
-    constructor(params = new PP.VirtualGamepadParams()) {
+import { BrowserUtils } from "../../../cauldron/utils/browser_utils";
+import { XRUtils } from "../../../cauldron/utils/xr_utils";
+import { vec2_create } from "../../../plugin/js/extensions/array_extension";
+import { Globals } from "../../../pp/globals";
+import { Handedness } from "../../cauldron/input_types";
+import { GamepadAxesID, GamepadButtonID } from "../gamepad_buttons";
+import { VirtualGamepadParams } from "./virtual_gamepad_params";
+import { VirtualGamepadVirtualButton } from "./virtual_gamepad_virtual_button";
+import { VirtualGamepadVirtualThumbstick } from "./virtual_gamepad_virtual_thumbstick";
+
+export class VirtualGamepad {
+
+    constructor(params = new VirtualGamepadParams()) {
         this._myParams = params;
 
         this._myVisible = true;
         this._myVirtualGamepadContainer = null;
 
         this._myVirtualGamepadVirtualButtons = [];
-        this._myVirtualGamepadVirtualButtons[PP.Handedness.LEFT] = [];
-        this._myVirtualGamepadVirtualButtons[PP.Handedness.RIGHT] = [];
+        this._myVirtualGamepadVirtualButtons[Handedness.LEFT] = [];
+        this._myVirtualGamepadVirtualButtons[Handedness.RIGHT] = [];
 
-        this._myVirtualGamepadVirtualButtons[PP.Handedness.LEFT][PP.GamepadButtonID.SELECT] = null;
-        this._myVirtualGamepadVirtualButtons[PP.Handedness.LEFT][PP.GamepadButtonID.SQUEEZE] = null;
-        this._myVirtualGamepadVirtualButtons[PP.Handedness.LEFT][PP.GamepadButtonID.THUMBSTICK] = null;
-        this._myVirtualGamepadVirtualButtons[PP.Handedness.LEFT][PP.GamepadButtonID.TOP_BUTTON] = null;
-        this._myVirtualGamepadVirtualButtons[PP.Handedness.LEFT][PP.GamepadButtonID.BOTTOM_BUTTON] = null;
+        this._myVirtualGamepadVirtualButtons[Handedness.LEFT][GamepadButtonID.SELECT] = null;
+        this._myVirtualGamepadVirtualButtons[Handedness.LEFT][GamepadButtonID.SQUEEZE] = null;
+        this._myVirtualGamepadVirtualButtons[Handedness.LEFT][GamepadButtonID.THUMBSTICK] = null;
+        this._myVirtualGamepadVirtualButtons[Handedness.LEFT][GamepadButtonID.TOP_BUTTON] = null;
+        this._myVirtualGamepadVirtualButtons[Handedness.LEFT][GamepadButtonID.BOTTOM_BUTTON] = null;
 
-        this._myVirtualGamepadVirtualButtons[PP.Handedness.RIGHT][PP.GamepadButtonID.SELECT] = null;
-        this._myVirtualGamepadVirtualButtons[PP.Handedness.RIGHT][PP.GamepadButtonID.SQUEEZE] = null;
-        this._myVirtualGamepadVirtualButtons[PP.Handedness.RIGHT][PP.GamepadButtonID.THUMBSTICK] = null;
-        this._myVirtualGamepadVirtualButtons[PP.Handedness.RIGHT][PP.GamepadButtonID.TOP_BUTTON] = null;
-        this._myVirtualGamepadVirtualButtons[PP.Handedness.RIGHT][PP.GamepadButtonID.BOTTOM_BUTTON] = null;
+        this._myVirtualGamepadVirtualButtons[Handedness.RIGHT][GamepadButtonID.SELECT] = null;
+        this._myVirtualGamepadVirtualButtons[Handedness.RIGHT][GamepadButtonID.SQUEEZE] = null;
+        this._myVirtualGamepadVirtualButtons[Handedness.RIGHT][GamepadButtonID.THUMBSTICK] = null;
+        this._myVirtualGamepadVirtualButtons[Handedness.RIGHT][GamepadButtonID.TOP_BUTTON] = null;
+        this._myVirtualGamepadVirtualButtons[Handedness.RIGHT][GamepadButtonID.BOTTOM_BUTTON] = null;
 
-        this._myButtonsAmount = this._myVirtualGamepadVirtualButtons[PP.Handedness.LEFT].length;
+        this._myButtonsAmount = this._myVirtualGamepadVirtualButtons[Handedness.LEFT].length;
 
         this._myVirtualGamepadVirtualThumbsticks = [];
-        this._myVirtualGamepadVirtualThumbsticks[PP.Handedness.LEFT] = null;
-        this._myVirtualGamepadVirtualThumbsticks[PP.Handedness.RIGHT] = null;
+        this._myVirtualGamepadVirtualThumbsticks[Handedness.LEFT] = [];
+        this._myVirtualGamepadVirtualThumbsticks[Handedness.RIGHT] = [];
+        this._myVirtualGamepadVirtualThumbsticks[Handedness.LEFT][GamepadAxesID.THUMBSTICK] = null;
+        this._myVirtualGamepadVirtualThumbsticks[Handedness.RIGHT][GamepadAxesID.THUMBSTICK] = null;
+
+        this._myGestureStartEventListener = null;
+
+        this._myDestroyed = false;
     }
 
     isVisible() {
@@ -53,9 +70,11 @@ PP.VirtualGamepad = class VirtualGamepad {
                 }
 
                 for (let handedness in this._myVirtualGamepadVirtualThumbsticks) {
-                    let thumbstick = this._myVirtualGamepadVirtualThumbsticks[handedness];
-                    if (thumbstick != null) {
-                        thumbstick.setActive(this._myVisible);
+                    for (let gamepadAxesID in this._myVirtualGamepadVirtualThumbsticks[handedness]) {
+                        let thumbstick = this._myVirtualGamepadVirtualThumbsticks[handedness][gamepadAxesID];
+                        if (thumbstick != null) {
+                            thumbstick.setActive(this._myVisible);
+                        }
                     }
                 }
             }
@@ -73,10 +92,10 @@ PP.VirtualGamepad = class VirtualGamepad {
         return false;
     }
 
-    getAxes(handedness, outAxes = PP.vec2_create(0, 0)) {
+    getAxes(handedness, gamepadAxesID, outAxes = vec2_create(0, 0)) {
         if (!this._myVisible) return outAxes;
 
-        let thumbstick = this._myVirtualGamepadVirtualThumbsticks[handedness];
+        let thumbstick = this._myVirtualGamepadVirtualThumbsticks[handedness][gamepadAxesID];
         if (thumbstick != null) {
             outAxes.vec2_copy(thumbstick.getAxes());
         }
@@ -94,13 +113,13 @@ PP.VirtualGamepad = class VirtualGamepad {
 
     update(dt) {
         if (this._myParams.myAutoUpdateVisibility) {
-            if (PP.XRUtils.isSessionActive() && WL.vrSupported == 1) {
+            if (XRUtils.isSessionActive(this._myParams.myEngine) && XRUtils.isVRSupported(this._myParams.myEngine)) {
                 this.setVisible(false);
-            } else if (this._myParams.myShowOnDesktop && PP.BrowserUtils.isDesktop() && WL.vrSupported == 0) {
+            } else if (this._myParams.myShowOnDesktop && BrowserUtils.isDesktop(this._myParams.myEngine) && !XRUtils.isVRSupported(this._myParams.myEngine)) {
                 this.setVisible(true);
-            } else if (this._myParams.myShowOnHeadset && PP.BrowserUtils.isDesktop() && WL.vrSupported == 1) {
+            } else if (this._myParams.myShowOnHeadset && BrowserUtils.isDesktop(this._myParams.myEngine) && XRUtils.isVRSupported(this._myParams.myEngine)) {
                 this.setVisible(true);
-            } else if (this._myParams.myShowOnMobile && PP.BrowserUtils.isMobile()) {
+            } else if (this._myParams.myShowOnMobile && BrowserUtils.isMobile(this._myParams.myEngine)) {
                 this.setVisible(true);
             } else {
                 this.setVisible(false);
@@ -118,75 +137,84 @@ PP.VirtualGamepad = class VirtualGamepad {
             }
 
             for (let handedness in this._myVirtualGamepadVirtualThumbsticks) {
-                let thumbstick = this._myVirtualGamepadVirtualThumbsticks[handedness];
-                if (thumbstick != null) {
-                    thumbstick.update(dt);
+                for (let gamepadAxesID in this._myVirtualGamepadVirtualThumbsticks[handedness]) {
+                    let thumbstick = this._myVirtualGamepadVirtualThumbsticks[handedness][gamepadAxesID];
+                    if (thumbstick != null) {
+                        thumbstick.update(dt);
+                    }
                 }
             }
 
-            this._setMouseHoverActive(!(this._myParams.myDisableMouseHoverWhenPressed && this._isAnyElementPressed()));
+            this._setMouseHoverEnabled(!(this._myParams.myDisableMouseHoverWhenPressed && this._isAnyElementPressed()));
         }
     }
 
     _buildVirtualGamepad() {
-        this._documentBodySetup();
+        this._setupDocumentBody();
 
-        this._myVirtualGamepadContainer = document.createElement("div");
+        this._myVirtualGamepadContainer = Globals.getDocument(this._myParams.myEngine).createElement("div");
         this._myVirtualGamepadContainer.style.display = "block";
         this._myVirtualGamepadContainer.style.opacity = this._myParams.myOpacity.toString();
-        document.body.appendChild(this._myVirtualGamepadContainer);
+        Globals.getBody(this._myParams.myEngine).appendChild(this._myVirtualGamepadContainer);
 
-        let leftDiv = document.createElement("div");
+        let leftDiv = Globals.getDocument(this._myParams.myEngine).createElement("div");
         this._myVirtualGamepadContainer.appendChild(leftDiv);
 
-        let rightDiv = document.createElement("div");
+        let rightDiv = Globals.getDocument(this._myParams.myEngine).createElement("div");
         this._myVirtualGamepadContainer.appendChild(rightDiv);
 
-        let buttonsAmount = this._myParams.myButtonsOrder[PP.Handedness.LEFT].length;
+        let buttonsAmount = this._myParams.myButtonsOrder[Handedness.LEFT].length;
         for (let i = 0; i < buttonsAmount; i++) {
-            if (this._myParams.myButtonsOrder[PP.Handedness.LEFT][i] != null) {
-                let gamepadButtonHandedness = this._myParams.myButtonsOrder[PP.Handedness.LEFT][i][0];
-                let gamepadButtonID = this._myParams.myButtonsOrder[PP.Handedness.LEFT][i][1];
-                this._buildButton(leftDiv, PP.Handedness.LEFT, i, gamepadButtonHandedness, gamepadButtonID);
+            if (this._myParams.myButtonsOrder[Handedness.LEFT][i] != null) {
+                let gamepadButtonHandedness = this._myParams.myButtonsOrder[Handedness.LEFT][i][0];
+                let gamepadButtonID = this._myParams.myButtonsOrder[Handedness.LEFT][i][1];
+                this._buildButton(leftDiv, Handedness.LEFT, i, gamepadButtonHandedness, gamepadButtonID);
             }
 
-            if (this._myParams.myButtonsOrder[PP.Handedness.RIGHT][i] != null) {
-                let gamepadButtonHandedness = this._myParams.myButtonsOrder[PP.Handedness.RIGHT][i][0];
-                let gamepadButtonID = this._myParams.myButtonsOrder[PP.Handedness.RIGHT][i][1];
-                this._buildButton(rightDiv, PP.Handedness.RIGHT, i, gamepadButtonHandedness, gamepadButtonID);
+            if (this._myParams.myButtonsOrder[Handedness.RIGHT][i] != null) {
+                let gamepadButtonHandedness = this._myParams.myButtonsOrder[Handedness.RIGHT][i][0];
+                let gamepadButtonID = this._myParams.myButtonsOrder[Handedness.RIGHT][i][1];
+                this._buildButton(rightDiv, Handedness.RIGHT, i, gamepadButtonHandedness, gamepadButtonID);
             }
         }
 
-        if (this._myParams.myThumbsticksOrder[PP.Handedness.LEFT] != null) {
-            let gamepadThumbstickHandedness = this._myParams.myThumbsticksOrder[PP.Handedness.LEFT];
-            this._buildThumbstick(leftDiv, PP.Handedness.LEFT, gamepadThumbstickHandedness);
-        }
+        let thumbsticksAmount = this._myParams.myThumbsticksOrder[Handedness.LEFT].length;
+        for (let i = 0; i < thumbsticksAmount; i++) {
+            if (this._myParams.myThumbsticksOrder[Handedness.LEFT][i] != null) {
+                let gamepadThumbstickHandedness = this._myParams.myThumbsticksOrder[Handedness.LEFT][i][0];
+                let gamepadAxesID = this._myParams.myThumbsticksOrder[Handedness.LEFT][i][1];
+                this._buildThumbstick(leftDiv, Handedness.LEFT, gamepadThumbstickHandedness, gamepadAxesID);
+            }
 
-        if (this._myParams.myThumbsticksOrder[PP.Handedness.RIGHT] != null) {
-            let gamepadThumbstickHandedness = this._myParams.myThumbsticksOrder[PP.Handedness.RIGHT];
-            this._buildThumbstick(rightDiv, PP.Handedness.RIGHT, gamepadThumbstickHandedness);
+            if (this._myParams.myThumbsticksOrder[Handedness.RIGHT][i] != null) {
+                let gamepadThumbstickHandedness = this._myParams.myThumbsticksOrder[Handedness.RIGHT][i][0];
+                let gamepadAxesID = this._myParams.myThumbsticksOrder[Handedness.RIGHT][i][1];
+                this._buildThumbstick(rightDiv, Handedness.RIGHT, gamepadThumbstickHandedness, gamepadAxesID);
+            }
         }
     }
 
-    _documentBodySetup() {
-        document.body.style.overflow = "hidden";
-        document.body.style.userSelect = "none";
-        document.body.style.webkitUserSelect = "none";
-        document.body.style.webkitTapHighlightColor = "transparent";
-        document.body.style.touchAction = "none";
-        document.addEventListener('gesturestart', function (e) {
+    _setupDocumentBody() {
+        Globals.getBody(this._myParams.myEngine).style.overflow = "hidden";
+        Globals.getBody(this._myParams.myEngine).style.userSelect = "none";
+        Globals.getBody(this._myParams.myEngine).style.webkitUserSelect = "none";
+        Globals.getBody(this._myParams.myEngine).style.webkitTapHighlightColor = "transparent";
+        Globals.getBody(this._myParams.myEngine).style.touchAction = "none";
+
+        this._myGestureStartEventListener = function (e) {
             e.preventDefault();
-        });
+        };
+        Globals.getDocument(this._myParams.myEngine).addEventListener("gesturestart", this._myGestureStartEventListener);
     }
 
     _buildButton(buttonElementParent, virtualButtonHandedness, virtualButtonIndex, gamepadButtonHandedness, gamepadButtonID) {
-        let virtualGamepadVirtualButton = new PP.VirtualGamepadVirtualButton(buttonElementParent, this._myParams, virtualButtonHandedness, virtualButtonIndex, gamepadButtonHandedness, gamepadButtonID);
+        let virtualGamepadVirtualButton = new VirtualGamepadVirtualButton(buttonElementParent, this._myParams, virtualButtonHandedness, virtualButtonIndex, gamepadButtonHandedness, gamepadButtonID);
         this._myVirtualGamepadVirtualButtons[gamepadButtonHandedness][gamepadButtonID] = virtualGamepadVirtualButton;
     }
 
-    _buildThumbstick(thumbstickElementParent, virtualThumbstickHandedness, gamepadThumbstickHandedness) {
-        let virtualGamepadVirtualThumbstick = new PP.VirtualGamepadVirtualThumbstick(thumbstickElementParent, this._myParams, virtualThumbstickHandedness, gamepadThumbstickHandedness);
-        this._myVirtualGamepadVirtualThumbsticks[gamepadThumbstickHandedness] = virtualGamepadVirtualThumbstick;
+    _buildThumbstick(thumbstickElementParent, virtualThumbstickHandedness, gamepadThumbstickHandedness, gamepadAxesID) {
+        let virtualGamepadVirtualThumbstick = new VirtualGamepadVirtualThumbstick(thumbstickElementParent, this._myParams, virtualThumbstickHandedness, gamepadThumbstickHandedness, gamepadAxesID);
+        this._myVirtualGamepadVirtualThumbsticks[gamepadThumbstickHandedness][gamepadAxesID] = virtualGamepadVirtualThumbstick;
     }
 
     _createSizeValue(value, minSizeMultiplier) {
@@ -194,46 +222,77 @@ PP.VirtualGamepad = class VirtualGamepad {
     }
 
     _isAnyElementPressed() {
-        let isAnyElementPressed = false;
+        let anyElementPressed = false;
 
         for (let handedness in this._myVirtualGamepadVirtualButtons) {
             for (let gamepadButtonID in this._myVirtualGamepadVirtualButtons[handedness]) {
                 let button = this._myVirtualGamepadVirtualButtons[handedness][gamepadButtonID];
                 if (button != null && button.isPressed()) {
-                    isAnyElementPressed = true;
+                    anyElementPressed = true;
                     break;
                 }
             }
         }
 
-        if (!isAnyElementPressed) {
+        if (!anyElementPressed) {
             for (let handedness in this._myVirtualGamepadVirtualThumbsticks) {
-                let thumbstick = this._myVirtualGamepadVirtualThumbsticks[handedness];
-                if (thumbstick != null && thumbstick.isPressed()) {
-                    isAnyElementPressed = true;
-                    break;
+                for (let gamepadAxesID in this._myVirtualGamepadVirtualThumbsticks[handedness]) {
+                    let thumbstick = this._myVirtualGamepadVirtualThumbsticks[handedness][gamepadAxesID];
+                    if (thumbstick != null && thumbstick.isPressed()) {
+                        anyElementPressed = true;
+                        break;
+                    }
                 }
             }
         }
 
-        return isAnyElementPressed;
+        return anyElementPressed;
     }
 
-    _setMouseHoverActive(hoverActive) {
+    _setMouseHoverEnabled(hoverActive) {
         for (let handedness in this._myVirtualGamepadVirtualButtons) {
             for (let gamepadButtonID in this._myVirtualGamepadVirtualButtons[handedness]) {
                 let button = this._myVirtualGamepadVirtualButtons[handedness][gamepadButtonID];
                 if (button != null) {
-                    button.setMouseHoverActive(hoverActive);
+                    button.setMouseHoverEnabled(hoverActive);
                 }
             }
         }
 
         for (let handedness in this._myVirtualGamepadVirtualThumbsticks) {
-            let thumbstick = this._myVirtualGamepadVirtualThumbsticks[handedness];
-            if (thumbstick != null) {
-                thumbstick.setMouseHoverActive(hoverActive);
+            for (let gamepadAxesID in this._myVirtualGamepadVirtualThumbsticks[handedness]) {
+                let thumbstick = this._myVirtualGamepadVirtualThumbsticks[handedness][gamepadAxesID];
+                if (thumbstick != null) {
+                    thumbstick.setMouseHoverEnabled(hoverActive);
+                }
             }
         }
     }
-};
+
+    destroy() {
+        this._myDestroyed = true;
+
+        Globals.getDocument(this._myParams.myEngine).removeEventListener("gesturestart", this._myGestureStartEventListener);
+
+        for (let handedness in this._myVirtualGamepadVirtualButtons) {
+            for (let gamepadButtonID in this._myVirtualGamepadVirtualButtons[handedness]) {
+                let button = this._myVirtualGamepadVirtualButtons[handedness][gamepadButtonID];
+
+                button.destroy();
+            }
+        }
+
+        for (let handedness in this._myVirtualGamepadVirtualThumbsticks) {
+            for (let gamepadAxesID in this._myVirtualGamepadVirtualThumbsticks[handedness]) {
+                let thumbstick = this._myVirtualGamepadVirtualThumbsticks[handedness][gamepadAxesID];
+                thumbstick.destroy();
+            }
+        }
+
+        this._myVirtualGamepadContainer.remove();
+    }
+
+    isDestroyed() {
+        return this._myDestroyed;
+    }
+}

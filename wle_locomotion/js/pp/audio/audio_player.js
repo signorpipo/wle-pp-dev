@@ -1,6 +1,8 @@
-import { Howl } from 'howler';
+import { Emitter } from "@wonderlandengine/api";
+import { Howl } from "howler";
+import { AudioSetup } from "./audio_setup";
 
-PP.AudioEvent = {
+export let AudioEvent = {
     END: "end",
     STOP: "stop",
     LOAD: "load",
@@ -16,12 +18,13 @@ PP.AudioEvent = {
     UNLOCK: "unlock"
 };
 
-PP.AudioPlayer = class AudioPlayer {
+export class AudioPlayer {
+
     constructor(audioSetupOrAudioFilePath, createAudio = true) {
         if (audioSetupOrAudioFilePath == null) {
-            this._myAudioSetup = new PP.AudioSetup();
-        } else if (typeof audioSetupOrAudioFilePath === 'string') {
-            this._myAudioSetup = new PP.AudioSetup(audioSetupOrAudioFile);
+            this._myAudioSetup = new AudioSetup();
+        } else if (typeof audioSetupOrAudioFilePath === "string") {
+            this._myAudioSetup = new AudioSetup(audioSetupOrAudioFilePath);
         } else {
             this._myAudioSetup = audioSetupOrAudioFilePath.clone();
         }
@@ -46,9 +49,9 @@ PP.AudioPlayer = class AudioPlayer {
 
         this._myLastAudioID = null;
 
-        this._myCallbacks = new Map();
-        for (let eventKey in PP.AudioEvent) {
-            this._myCallbacks.set(PP.AudioEvent[eventKey], new Map());    // Signature: callback(audioID)
+        this._myAudioEventEmitters = new Map();
+        for (let eventKey in AudioEvent) {
+            this._myAudioEventEmitters.set(AudioEvent[eventKey], new Emitter());    // Signature: listener(audioID)
         }
 
         if (createAudio) {
@@ -90,16 +93,16 @@ PP.AudioPlayer = class AudioPlayer {
     }
 
     isPlaying(checkOnlyLast = false) {
-        let isPlaying = false;
+        let playing = false;
 
         if (checkOnlyLast) {
-            isPlaying = this._myAudio.playing(this._myLastAudioID);
+            playing = this._myAudio.playing(this._myLastAudioID);
         }
         else {
-            isPlaying = this._myAudio.playing();
+            playing = this._myAudio.playing();
         }
 
-        return isPlaying;
+        return playing;
     }
 
     isLoaded() {
@@ -192,25 +195,23 @@ PP.AudioPlayer = class AudioPlayer {
         return this._myAudioSetup.myRate;
     }
 
-    registerAudioEventListener(audioEvent, listenerID, callback) {
-        this._myCallbacks.get(audioEvent).set(listenerID, callback);
+    registerAudioEventListener(audioEvent, id, listener) {
+        this._myAudioEventEmitters.get(audioEvent).add(id, listener);
     }
 
-    unregisterAudioEventListener(audioEvent, listenerID) {
-        this._myCallbacks.get(audioEvent).delete(listenerID);
+    unregisterAudioEventListener(audioEvent, id) {
+        this._myAudioEventEmitters.get(audioEvent).remove(id);
     }
 
     _addListeners() {
         if (this._myAudio != null) {
-            for (let eventKey in PP.AudioEvent) {
-                let event = PP.AudioEvent[eventKey];
+            for (let eventKey in AudioEvent) {
+                let event = AudioEvent[eventKey];
                 this._myAudio.on(event, function (audioID) {
-                    let callbacks = this._myCallbacks.get(event);
-                    for (let callback of callbacks.values()) {
-                        callback(audioID);
-                    }
+                    let emitter = this._myAudioEventEmitters.get(event);
+                    emitter.notify(audioID);
                 }.bind(this));
             }
         }
     }
-};
+}

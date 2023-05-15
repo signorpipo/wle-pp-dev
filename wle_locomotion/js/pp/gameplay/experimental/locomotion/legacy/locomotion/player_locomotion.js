@@ -1,11 +1,32 @@
-PP.PlayerLocomotionDirectionReferenceType = {
+import { PhysXComponent } from "@wonderlandengine/api";
+import { FSM } from "../../../../../cauldron/fsm/fsm";
+import { EasingFunction } from "../../../../../cauldron/js/utils/math_utils";
+import { PhysicsLayerFlags } from "../../../../../cauldron/physics/physics_layer_flags";
+import { Handedness } from "../../../../../input/cauldron/input_types";
+import { InputUtils } from "../../../../../input/cauldron/input_utils";
+import { GamepadButtonID } from "../../../../../input/gamepad/gamepad_buttons";
+import { Globals } from "../../../../../pp/globals";
+import { CollisionCheckUtils } from "../../../character_controller/collision/legacy/collision_check/collision_check";
+import { CollisionCheckParams, CollisionRuntimeParams } from "../../../character_controller/collision/legacy/collision_check/collision_params";
+import { PlayerHeadManager, PlayerHeadManagerParams } from "./player_head_manager";
+import { PlayerLocomotionMovementRuntimeParams } from "./player_locomotion_movement";
+import { PlayerLocomotionRotate, PlayerLocomotionRotateParams } from "./player_locomotion_rotate";
+import { PlayerLocomotionSmooth, PlayerLocomotionSmoothParams } from "./player_locomotion_smooth";
+import { PlayerObscureManager, PlayerObscureManagerParams } from "./player_obscure_manager";
+import { PlayerTransformManager, PlayerTransformManagerParams } from "./player_transform_manager";
+import { PlayerLocomotionTeleport, PlayerLocomotionTeleportParams } from "./teleport/player_locomotion_teleport";
+
+export let PlayerLocomotionDirectionReferenceType = {
     HEAD: 0,
     HAND: 1,
     CUSTOM_OBJECT: 2,
 };
 
-PP.PlayerLocomotionParams = class PlayerLocomotionParams {
-    constructor() {
+export class PlayerLocomotionParams {
+
+    constructor(engine = Globals.getMainEngine()) {
+        this.myDefaultHeight = 0;
+
         this.myMaxSpeed = 0;
         this.myMaxRotationSpeed = 0;
 
@@ -17,15 +38,17 @@ PP.PlayerLocomotionParams = class PlayerLocomotionParams {
         this.mySnapTurnSpeedDegrees = 0;
 
         this.myFlyEnabled = false;
+        this.myStartFlying = false;
+
         this.myMinAngleToFlyUpNonVR = 0;
         this.myMinAngleToFlyDownNonVR = 0;
         this.myMinAngleToFlyUpVR = 0;
         this.myMinAngleToFlyDownVR = 0;
         this.myMinAngleToFlyRight = 0;
 
-        this.myMainHand = PP.Handedness.LEFT;
+        this.myMainHand = Handedness.LEFT;
 
-        this.myVRDirectionReferenceType = PP.PlayerLocomotionDirectionReferenceType.HEAD;
+        this.myVRDirectionReferenceType = PlayerLocomotionDirectionReferenceType.HEAD;
         this.myVRDirectionReferenceObject = null;
 
         this.myTeleportParableStartReferenceObject = null;
@@ -33,33 +56,51 @@ PP.PlayerLocomotionParams = class PlayerLocomotionParams {
         this.myForeheadExtraHeight = 0;
 
         this.myTeleportPositionObject = null;
+        this.myTeleportMaxDistance = 0;
+        this.myTeleportMaxHeightDifference = 0;
+
+        this.myColliderAccuracy = null;
+        this.myColliderCheckOnlyFeet = false;
+        this.myColliderSlideAgainstWall = false;
+        this.myColliderMaxWalkableGroundAngle = 0;
+        this.myColliderSnapOnGround = false;
+        this.myColliderMaxDistanceToSnapOnGround = 0;
+        this.myColliderMaxWalkableGroundStepHeight = 0;
+        this.myColliderPreventFallingFromEdges = false;
+
+        this.myDebugHorizontalEnabled = false;
+        this.myDebugVerticalEnabled = false;
 
         this.myMoveThroughCollisionShortcutEnabled = false;
         this.myMoveHeadShortcutEnabled = false;
 
-        this.myPhysicsBlockLayerFlags = new PP.PhysicsLayerFlags();
-    }
-};
+        this.myPhysicsBlockLayerFlags = new PhysicsLayerFlags();
 
-// #TODO add lerped snap on vertical over like half a second to avoid the "snap effect"
-// this could be done by detatching the actual vertical position of the player from the collision real one when a snap is detected above a certain threshold
+        this.myEngine = engine;
+    }
+}
+
+// #TODO Add lerped snap on vertical over like half a second to avoid the "snap effect"
+// This could be done by detatching the actual vertical position of the player from the collision real one when a snap is detected above a certain threshold
 // with a timer, after which the vertical position is just copied, while during the detatching is lerped toward the collision vertical one
-PP.PlayerLocomotion = class PlayerLocomotion {
+export class PlayerLocomotion {
+
     constructor(params) {
         this._myParams = params;
 
-        this._myCollisionCheckParamsMovement = new PP.CollisionCheckParams();
+        this._myCollisionCheckParamsMovement = new CollisionCheckParams();
         this._setupCollisionCheckParamsMovement();
         this._myCollisionCheckParamsTeleport = null;
         this._setupCollisionCheckParamsTeleport();
 
 
-        this._myCollisionRuntimeParams = new PP.CollisionRuntimeParams();
-        this._myMovementRuntimeParams = new PP.PlayerLocomotionMovementRuntimeParams();
+        this._myCollisionRuntimeParams = new CollisionRuntimeParams();
+        this._myMovementRuntimeParams = new PlayerLocomotionMovementRuntimeParams();
+        this._myMovementRuntimeParams.myIsFlying = this._myParams.myStartFlying;
         this._myMovementRuntimeParams.myCollisionRuntimeParams = this._myCollisionRuntimeParams;
 
         {
-            let params = new PP.PlayerHeadManagerParams();
+            let params = new PlayerHeadManagerParams(this._myParams.myEngine);
 
             params.mySessionChangeResyncEnabled = true;
 
@@ -75,20 +116,20 @@ PP.PlayerLocomotion = class PlayerLocomotion {
             params.myExitSessionMaxVerticalAngle = 90;
 
             params.myHeightOffsetVRWithFloor = 0;
-            params.myHeightOffsetVRWithoutFloor = 1.75;
-            params.myHeightOffsetNonVR = 1.75;
+            params.myHeightOffsetVRWithoutFloor = this._myParams.myDefaultHeight;
+            params.myHeightOffsetNonVR = this._myParams.myDefaultHeight;
 
             params.myForeheadExtraHeight = this._myParams.myForeheadExtraHeight;
 
             params.myFeetRotationKeepUp = true;
 
-            params.myDebugActive = false;
+            params.myDebugEnabled = false;
 
-            this._myPlayerHeadManager = new PP.PlayerHeadManager(params);
+            this._myPlayerHeadManager = new PlayerHeadManager(params);
         }
 
         {
-            let params = new PP.PlayerTransformManagerParams();
+            let params = new PlayerTransformManagerParams(this._myParams.myEngine);
 
             params.myPlayerHeadManager = this._myPlayerHeadManager;
 
@@ -109,7 +150,7 @@ PP.PlayerLocomotion = class PlayerLocomotion {
 
             params.myHeadRadius = 0.15;
 
-            params.myIsMaxDistanceFromRealToSyncEnabled = true;
+            params.myMaxDistanceFromRealToSyncEnabled = true;
             params.myMaxDistanceFromRealToSync = 100;
 
             params.myIsFloatingValidIfVerticalMovement = false;
@@ -151,13 +192,13 @@ PP.PlayerLocomotion = class PlayerLocomotion {
 
             params.myResetRealOnMove = true;
 
-            params.myDebugActive = true;
+            params.myDebugEnabled = true;
 
-            this._myPlayerTransformManager = new PP.PlayerTransformManager(params);
+            this._myPlayerTransformManager = new PlayerTransformManager(params);
         }
 
         {
-            let params = new PP.PlayerObscureManagerParams();
+            let params = new PlayerObscureManagerParams(this._myParams.myEngine);
 
             params.myPlayerTransformManager = this._myPlayerTransformManager;
 
@@ -168,8 +209,8 @@ PP.PlayerLocomotion = class PlayerLocomotion {
             params.myObscureFadeOutSeconds = 0.25;
             params.myObscureFadeInSeconds = 0.25;
 
-            params.myObscureFadeEasingFunction = PP.EasingFunction.linear;
-            params.myObscureLevelRelativeDistanceEasingFunction = PP.EasingFunction.linear;
+            params.myObscureFadeEasingFunction = EasingFunction.linear;
+            params.myObscureLevelRelativeDistanceEasingFunction = EasingFunction.linear;
 
             params.myDistanceToStartObscureWhenBodyColliding = 0.2;
             params.myDistanceToStartObscureWhenHeadColliding = 0;
@@ -181,11 +222,11 @@ PP.PlayerLocomotion = class PlayerLocomotion {
             params.myRelativeDistanceToMaxObscureWhenFloating = 5;
             params.myRelativeDistanceToMaxObscureWhenFar = 5;
 
-            this._myPlayerObscureManager = new PP.PlayerObscureManager(params);
+            this._myPlayerObscureManager = new PlayerObscureManager(params);
         }
 
         {
-            let params = new PP.PlayerLocomotionRotateParams();
+            let params = new PlayerLocomotionRotateParams(this._myParams.myEngine);
 
             params.myPlayerHeadManager = this._myPlayerHeadManager;
             params.myPlayerTransformManager = this._myPlayerTransformManager;
@@ -195,11 +236,11 @@ PP.PlayerLocomotion = class PlayerLocomotion {
             params.mySnapTurnOnlyVR = this._myParams.mySnapTurnOnlyVR;
             params.mySnapTurnAngle = this._myParams.mySnapTurnAngle;
 
-            if (this._myParams.mySnapTurnSpeedDegrees > PP.LocomotionUtils.EPSILON_NUMBER) {
-                params.mySmoothSnapActive = true;
+            if (this._myParams.mySnapTurnSpeedDegrees > Math.PP_EPSILON) {
+                params.mySmoothSnapEnabled = true;
                 params.mySmoothSnapSpeedDegrees = this._myParams.mySnapTurnSpeedDegrees;
             } else {
-                params.mySmoothSnapActive = false;
+                params.mySmoothSnapEnabled = false;
             }
 
             params.myRotationMinStickIntensityThreshold = 0.1;
@@ -209,14 +250,14 @@ PP.PlayerLocomotion = class PlayerLocomotion {
             params.myClampVerticalAngle = true;
             params.myMaxVerticalAngle = 90;
 
-            this._myPlayerLocomotionRotate = new PP.PlayerLocomotionRotate(params);
+            this._myPlayerLocomotionRotate = new PlayerLocomotionRotate(params);
 
-            params.myHandedness = PP.InputUtils.getOppositeHandedness(this._myParams.myMainHand);
+            params.myHandedness = InputUtils.getOppositeHandedness(this._myParams.myMainHand);
         }
 
         {
             {
-                let params = new PP.PlayerLocomotionSmoothParams();
+                let params = new PlayerLocomotionSmoothParams(this._myParams.myEngine);
 
                 params.myPlayerHeadManager = this._myPlayerHeadManager;
                 params.myPlayerTransformManager = this._myPlayerTransformManager;
@@ -244,11 +285,11 @@ PP.PlayerLocomotion = class PlayerLocomotion {
                 params.myMoveThroughCollisionShortcutEnabled = this._myParams.myMoveThroughCollisionShortcutEnabled;
                 params.myMoveHeadShortcutEnabled = this._myParams.myMoveHeadShortcutEnabled;
 
-                this._myPlayerLocomotionSmooth = new PP.PlayerLocomotionSmooth(params, this._myMovementRuntimeParams);
+                this._myPlayerLocomotionSmooth = new PlayerLocomotionSmooth(params, this._myMovementRuntimeParams);
             }
 
             {
-                let params = new PP.PlayerLocomotionTeleportParams();
+                let params = new PlayerLocomotionTeleportParams(this._myParams.myEngine);
 
                 params.myPlayerHeadManager = this._myPlayerHeadManager;
                 params.myPlayerTransformManager = this._myPlayerTransformManager;
@@ -257,8 +298,8 @@ PP.PlayerLocomotion = class PlayerLocomotion {
 
                 params.myHandedness = this._myParams.myMainHand;
 
-                params.myDetectionParams.myMaxDistance = 3;
-                params.myDetectionParams.myMaxHeightDifference = 4;
+                params.myDetectionParams.myMaxDistance = this._myParams.myTeleportMaxDistance;
+                params.myDetectionParams.myMaxHeightDifference = this._myParams.myTeleportMaxHeightDifference;
                 params.myDetectionParams.myGroundAngleToIgnoreUpward = this._myCollisionCheckParamsMovement.myGroundAngleToIgnore;
                 params.myDetectionParams.myMustBeOnGround = true;
 
@@ -280,18 +321,20 @@ PP.PlayerLocomotion = class PlayerLocomotion {
 
                 params.myGravityAcceleration = 0;
 
-                params.myDebugActive = false;
-                params.myDebugDetectActive = true;
-                params.myDebugShowActive = true;
-                params.myDebugVisibilityActive = false;
+                params.myDebugEnabled = false;
+                params.myDebugDetectEnabled = true;
+                params.myDebugShowEnabled = true;
+                params.myDebugVisibilityEnabled = false;
 
-                this._myPlayerLocomotionTeleport = new PP.PlayerLocomotionTeleport(params, this._myMovementRuntimeParams);
+                this._myPlayerLocomotionTeleport = new PlayerLocomotionTeleport(params, this._myMovementRuntimeParams);
             }
         }
 
         this._setupLocomotionMovementFSM();
 
         this._myIdle = false;
+
+        this._myDestroyed = false;
     }
 
     start() {
@@ -311,7 +354,7 @@ PP.PlayerLocomotion = class PlayerLocomotion {
         this._myPlayerHeadManager.update(dt);
         this._myPlayerTransformManager.update(dt);
 
-        if (PP.myLeftGamepad.getButtonInfo(PP.GamepadButtonID.THUMBSTICK).isPressEnd(2)) {
+        if (Globals.getLeftGamepad(this._myParams.myEngine).getButtonInfo(GamepadButtonID.THUMBSTICK).isPressEnd(2)) {
             if (this._myLocomotionMovementFSM.isInState("smooth") && this._myPlayerLocomotionSmooth.canStop()) {
                 this._myLocomotionMovementFSM.perform("next");
             } else if (this._myLocomotionMovementFSM.isInState("teleport") && this._myPlayerLocomotionTeleport.canStop()) {
@@ -330,11 +373,11 @@ PP.PlayerLocomotion = class PlayerLocomotion {
         }
 
         //this._myPlayerObscureManager.update(dt);
-        if (PP.myLeftGamepad.getButtonInfo(PP.GamepadButtonID.SELECT).isPressEnd(2)) {
+        if (Globals.getLeftGamepad(this._myParams.myEngine).getButtonInfo(GamepadButtonID.SELECT).isPressEnd(2)) {
             if (this._myPlayerObscureManager.isFading()) {
-                this._myPlayerObscureManager.obscureLevelOverride(this._myPlayerObscureManager.isFadingOut() ? Math.pp_random(0, 0) : Math.pp_random(1, 1));
+                this._myPlayerObscureManager.overrideObscureLevel(this._myPlayerObscureManager.isFadingOut() ? Math.pp_random(0, 0) : Math.pp_random(1, 1));
             } else {
-                this._myPlayerObscureManager.obscureLevelOverride(this._myPlayerObscureManager.isObscured() ? Math.pp_random(0, 0) : Math.pp_random(1, 1));
+                this._myPlayerObscureManager.overrideObscureLevel(this._myPlayerObscureManager.isObscured() ? Math.pp_random(0, 0) : Math.pp_random(1, 1));
             }
         }
     }
@@ -366,7 +409,7 @@ PP.PlayerLocomotion = class PlayerLocomotion {
         this._myCollisionCheckParamsMovement.myDistanceFromHeadToIgnore = 0.1;
 
         //this._myCollisionCheckParamsMovement.myPositionOffsetLocal.vec3_set(0, 1, 0)
-        //this._myCollisionCheckParamsMovement.myRotationOffsetLocalQuat.quat_fromAxis(45, PP.vec3_create(1, 1, 0).vec3_normalize());
+        //this._myCollisionCheckParamsMovement.myRotationOffsetLocalQuat.quat_fromAxis(45, vec3_create(1, 1, 0).vec3_normalize());
 
         this._myCollisionCheckParamsMovement.myHorizontalMovementCheckEnabled = true;
         this._myCollisionCheckParamsMovement.myHorizontalMovementStepEnabled = false;
@@ -394,7 +437,7 @@ PP.PlayerLocomotion = class PlayerLocomotion {
         this._myCollisionCheckParamsMovement.myCheckConeBorder = true;
         this._myCollisionCheckParamsMovement.myCheckConeRay = true;
         this._myCollisionCheckParamsMovement.myHorizontalPositionCheckVerticalIgnoreHitsInsideCollision = false;
-        this._myCollisionCheckParamsMovement.myHorizontalPositionCheckVerticalDirectionType = 2; // somewhat expensive, 2 times the check for the vertical check of the horizontal movement!
+        this._myCollisionCheckParamsMovement.myHorizontalPositionCheckVerticalDirectionType = 2; // Somewhat expensive, 2 times the check for the vertical check of the horizontal movement!
 
         this._myCollisionCheckParamsMovement.myVerticalMovementCheckEnabled = true;
         this._myCollisionCheckParamsMovement.myVerticalPositionCheckEnabled = true;
@@ -433,7 +476,7 @@ PP.PlayerLocomotion = class PlayerLocomotion {
         this._myCollisionCheckParamsMovement.myHeightCheckStepAmountMovement = 2;
         this._myCollisionCheckParamsMovement.myHeightCheckStepAmountPosition = 2;
         this._myCollisionCheckParamsMovement.myCheckVerticalFixedForwardEnabled = true;
-        this._myCollisionCheckParamsMovement.myCheckVerticalFixedForward = PP.vec3_create(0, 0, 1);
+        this._myCollisionCheckParamsMovement.myCheckVerticalFixedForward = vec3_create(0, 0, 1);
         this._myCollisionCheckParamsMovement.myCheckVerticalBothDirection = true;
 
         this._myCollisionCheckParamsMovement.myCheckVerticalStraight = true;
@@ -478,14 +521,14 @@ PP.PlayerLocomotion = class PlayerLocomotion {
         this._myCollisionCheckParamsMovement.mySlidingEnabled = true;
         this._myCollisionCheckParamsMovement.mySlidingHorizontalMovementCheckBetterNormal = true;
         this._myCollisionCheckParamsMovement.mySlidingMaxAttempts = 4;
-        this._myCollisionCheckParamsMovement.mySlidingCheckBothDirections = true;        // expensive, 2 times the check for the whole horizontal movement!
-        this._myCollisionCheckParamsMovement.mySlidingFlickeringPreventionType = 1;      // expensive, 2 times the check for the whole horizontal movement!
+        this._myCollisionCheckParamsMovement.mySlidingCheckBothDirections = true;        // Expensive, 2 times the check for the whole horizontal movement!
+        this._myCollisionCheckParamsMovement.mySlidingFlickeringPreventionType = 1;      // Expensive, 2 times the check for the whole horizontal movement!
         this._myCollisionCheckParamsMovement.mySlidingFlickeringPreventionCheckOnlyIfAlreadySliding = true;
         this._myCollisionCheckParamsMovement.mySlidingFlickerPreventionCheckAnywayCounter = 4;
         this._myCollisionCheckParamsMovement.mySlidingAdjustSign90Degrees = true;
 
         this._myCollisionCheckParamsMovement.myHorizontalBlockLayerFlags.copy(this._myParams.myPhysicsBlockLayerFlags);
-        let physXComponents = PP.myPlayerObjects.myPlayer.pp_getComponentsHierarchy("physx");
+        let physXComponents = Globals.getPlayerObjects(this._myParams.myEngine).myPlayer.pp_getComponents(PhysXComponent);
         for (let physXComponent of physXComponents) {
             this._myCollisionCheckParamsMovement.myHorizontalObjectsToIgnore.pp_pushUnique(physXComponent.object, (first, second) => first.pp_equals(second));
         }
@@ -493,23 +536,23 @@ PP.PlayerLocomotion = class PlayerLocomotion {
         this._myCollisionCheckParamsMovement.myVerticalBlockLayerFlags.copy(this._myCollisionCheckParamsMovement.myHorizontalBlockLayerFlags);
         this._myCollisionCheckParamsMovement.myVerticalObjectsToIgnore.pp_copy(this._myCollisionCheckParamsMovement.myHorizontalObjectsToIgnore);
 
-        this._myCollisionCheckParamsMovement.myDebugActive = false;
+        this._myCollisionCheckParamsMovement.myDebugEnabled = false;
 
-        this._myCollisionCheckParamsMovement.myDebugHorizontalMovementActive = false;
-        this._myCollisionCheckParamsMovement.myDebugHorizontalPositionActive = true;
-        this._myCollisionCheckParamsMovement.myDebugVerticalMovementActive = false;
-        this._myCollisionCheckParamsMovement.myDebugVerticalPositionActive = false;
-        this._myCollisionCheckParamsMovement.myDebugSlidingActive = false;
-        this._myCollisionCheckParamsMovement.myDebugGroundInfoActive = false;
-        this._myCollisionCheckParamsMovement.myDebugCeilingInfoActive = false;
-        this._myCollisionCheckParamsMovement.myDebugRuntimeParamsActive = false;
-        this._myCollisionCheckParamsMovement.myDebugMovementActive = false;
+        this._myCollisionCheckParamsMovement.myDebugHorizontalMovementEnabled = false;
+        this._myCollisionCheckParamsMovement.myDebugHorizontalPositionEnabled = true;
+        this._myCollisionCheckParamsMovement.myDebugVerticalMovementEnabled = false;
+        this._myCollisionCheckParamsMovement.myDebugVerticalPositionEnabled = false;
+        this._myCollisionCheckParamsMovement.myDebugSlidingEnabled = false;
+        this._myCollisionCheckParamsMovement.myDebugGroundInfoEnabled = false;
+        this._myCollisionCheckParamsMovement.myDebugCeilingInfoEnabled = false;
+        this._myCollisionCheckParamsMovement.myDebugRuntimeParamsEnabled = false;
+        this._myCollisionCheckParamsMovement.myDebugMovementEnabled = false;
     }
 
     _setupCollisionCheckParamsTeleport() {
-        this._myCollisionCheckParamsTeleport = PP.CollisionCheckUtils.generate360TeleportParamsFromMovementParams(this._myCollisionCheckParamsMovement);
+        this._myCollisionCheckParamsTeleport = CollisionCheckUtils.generate360TeleportParamsFromMovementParams(this._myCollisionCheckParamsMovement);
 
-        // increased so to let teleport on steep slopes from above (from below is fixed through detection myGroundAngleToIgnoreUpward)
+        // Increased so to let teleport on steep slopes from above (from below is fixed through detection myGroundAngleToIgnoreUpward)
         this._myCollisionCheckParamsTeleport.myGroundAngleToIgnore = 60;
         this._myCollisionCheckParamsTeleport.myTeleportMustBeOnIgnorableGroundAngle = true;
         this._myCollisionCheckParamsTeleport.myTeleportMustBeOnGround = true;
@@ -529,13 +572,13 @@ PP.PlayerLocomotion = class PlayerLocomotion {
             return newFeetPosition;
         }*/
 
-        // this is needed for when u want to perform the teleport as a movement
-        // maybe this should be another set of collsion check params copied from the smooth ones?
-        // when you teleport as move, u check with the teleport for the position, and this other params for the move, so that u can use a smaller
+        // This is needed for when u want to perform the teleport as a movement
+        // Maybe this should be another set of collsion check params copied from the smooth ones?
+        // When you teleport as move, u check with the teleport for the position, and this other params for the move, so that u can use a smaller
         // cone, and sliding if desired
-        // if nothing is specified it's copied from the teleport and if greater than 90 cone is tuned down, and also the below settings are applied
+        // If nothing is specified it's copied from the teleport and if greater than 90 cone is tuned down, and also the below settings are applied
 
-        // you could also do this if u want to perform the teleport as movement, instead of using the smooth
+        // You could also do this if u want to perform the teleport as movement, instead of using the smooth
         // but this will make even the final teleport check be halved
         //this._myCollisionCheckParamsTeleport.myHalfConeAngle = 90;
         //this._myCollisionCheckParamsTeleport.myHalfConeSliceAmount = 3;
@@ -543,30 +586,30 @@ PP.PlayerLocomotion = class PlayerLocomotion {
         //this._myCollisionCheckParamsTeleport.mySplitMovementEnabled = true;
         //this._myCollisionCheckParamsTeleport.mySplitMovementMaxLength = 0.2;
 
-        //this._myCollisionCheckParamsTeleport.myDebugActive = true;
+        //this._myCollisionCheckParamsTeleport.myDebugEnabled = true;
     }
 
     _fixAlmostUp() {
-        // get rotation on y and adjust if it's slightly tilted when it's almsot 0,1,0
+        // Get rotation on y and adjust if it's slightly tilted when it's almsot 0,1,0
 
-        let defaultUp = PP.vec3_create(0, 1, 0);
-        let angleWithDefaultUp = PP.myPlayerObjects.myPlayer.pp_getUp().vec3_angle(defaultUp);
+        let defaultUp = vec3_create(0, 1, 0);
+        let angleWithDefaultUp = Globals.getPlayerObjects(this._myParams.myEngine).myPlayer.pp_getUp().vec3_angle(defaultUp);
         if (angleWithDefaultUp < 1) {
-            let forward = PP.myPlayerObjects.myPlayer.pp_getForward();
+            let forward = Globals.getPlayerObjects(this._myParams.myEngine).myPlayer.pp_getForward();
             let flatForward = forward.vec3_clone();
             flatForward[1] = 0;
 
-            let defaultForward = PP.vec3_create(0, 0, 1);
+            let defaultForward = vec3_create(0, 0, 1);
             let angleWithDefaultForward = defaultForward.vec3_angleSigned(flatForward, defaultUp);
 
-            PP.myPlayerObjects.myPlayer.pp_resetRotation();
-            PP.myPlayerObjects.myPlayer.pp_rotateAxis(angleWithDefaultForward, defaultUp);
+            Globals.getPlayerObjects(this._myParams.myEngine).myPlayer.pp_resetRotation();
+            Globals.getPlayerObjects(this._myParams.myEngine).myPlayer.pp_rotateAxis(angleWithDefaultForward, defaultUp);
         }
     }
 
     _setupLocomotionMovementFSM() {
-        this._myLocomotionMovementFSM = new PP.FSM();
-        //this._myLocomotionMovementFSM.setDebugLogActive(true, "Locomotion Movement");
+        this._myLocomotionMovementFSM = new FSM();
+        //this._myLocomotionMovementFSM.setLogEnabled(true, "Locomotion Movement");
 
         this._myLocomotionMovementFSM.addState("init");
         this._myLocomotionMovementFSM.addState("smooth", (dt) => this._myPlayerLocomotionSmooth.update(dt));
@@ -606,4 +649,18 @@ PP.PlayerLocomotion = class PlayerLocomotion {
 
         this._myLocomotionMovementFSM.init("init");
     }
-};
+
+    destroy() {
+        this._myDestroyed = true;
+
+        this._myPlayerHeadManager.destroy();
+        this._myPlayerLocomotionSmooth.destroy();
+        this._myPlayerTransformManager.destroy();
+        this._myPlayerObscureManager.destroy();
+        this._myPlayerLocomotionTeleport.destroy();
+    }
+
+    isDestroyed() {
+        return this._myDestroyed;
+    }
+}

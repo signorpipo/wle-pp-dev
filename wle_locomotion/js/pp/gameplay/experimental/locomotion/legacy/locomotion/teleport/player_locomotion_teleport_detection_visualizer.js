@@ -1,4 +1,11 @@
-PP.PlayerLocomotionTeleportDetectionVisualizerParams = class PlayerLocomotionTeleportDetectionVisualizerParams {
+import { VisualLine, VisualLineParams } from "../../../../../../cauldron/visual/elements/visual_line";
+import { VisualPoint, VisualPointParams } from "../../../../../../cauldron/visual/elements/visual_point";
+import { VisualTorus, VisualTorusParams } from "../../../../../../cauldron/visual/elements/visual_torus";
+import { quat2_create, quat_create, vec3_create, vec4_create } from "../../../../../../plugin/js/extensions/array_extension";
+import { Globals } from "../../../../../../pp/globals";
+
+export class PlayerLocomotionTeleportDetectionVisualizerParams {
+
     constructor() {
         this.myTeleportParableValidMaterial = null;
         this.myTeleportParableInvalidMaterial = null;
@@ -12,7 +19,7 @@ PP.PlayerLocomotionTeleportDetectionVisualizerParams = class PlayerLocomotionTel
 
         this.myTeleportParablePositionVisualAlignOnSurface = true;
 
-        this.myVisualTeleportPositionLerpActive = true;
+        this.myVisualTeleportPositionLerpEnabled = true;
         this.myVisualTeleportPositionLerpFactor = 10;
         this.myVisualTeleportPositionMinDistanceToResetLerp = 0.005;
         this.myVisualTeleportPositionMinDistanceToLerp = 0.15;
@@ -27,7 +34,8 @@ PP.PlayerLocomotionTeleportDetectionVisualizerParams = class PlayerLocomotionTel
     }
 };
 
-PP.PlayerLocomotionTeleportDetectionVisualizer = class PlayerLocomotionTeleportDetectionVisualizer {
+export class PlayerLocomotionTeleportDetectionVisualizer {
+
     constructor(teleportParams, teleportRuntimeParams, detectionRuntimeParams) {
         this._myDetectionRuntimeParams = detectionRuntimeParams;
 
@@ -35,16 +43,18 @@ PP.PlayerLocomotionTeleportDetectionVisualizer = class PlayerLocomotionTeleportD
         this._myTeleportRuntimeParams = teleportRuntimeParams;
 
         this._myVisualTeleportTransformQuatReset = true;
-        this._myVisualTeleportTransformQuat = PP.quat2_create();
+        this._myVisualTeleportTransformQuat = quat2_create();
         this._myVisualTeleportTransformPositionLerping = false;
         this._myVisualTeleportTransformRotationLerping = false;
 
-        //PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Teleport Min Distance Lerp", this._myTeleportParams.myVisualizerParams.myVisualTeleportPositionMinDistanceToLerp, 1, 3, 0));
-        //PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Teleport Max Distance Lerp", this._myTeleportParams.myVisualizerParams.myVisualTeleportPositionMaxDistanceToLerp, 1, 3, 0));
-        //PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Teleport Min Angle Distance Lerp", this._myTeleportParams.myVisualizerParams.myVisualTeleportPositionMinAngleDistanceToLerp, 10, 3, 0));
-        //PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Teleport Max Angle Distance Lerp", this._myTeleportParams.myVisualizerParams.myVisualTeleportPositionMaxAngleDistanceToLerp, 10, 3, 0));
+        //Globals.getEasyTuneVariables(this._myTeleportParams.myEngine).add(new EasyTuneNumber("Teleport Min Distance Lerp", this._myTeleportParams.myVisualizerParams.myVisualTeleportPositionMinDistanceToLerp, 1, 3, 0, undefined, this._myTeleportParams.myEngine));
+        //Globals.getEasyTuneVariables(this._myTeleportParams.myEngine).add(new EasyTuneNumber("Teleport Max Distance Lerp", this._myTeleportParams.myVisualizerParams.myVisualTeleportPositionMaxDistanceToLerp, 1, 3, 0, undefined, this._myTeleportParams.myEngine));
+        //Globals.getEasyTuneVariables(this._myTeleportParams.myEngine).add(new EasyTuneNumber("Teleport Min Angle Distance Lerp", this._myTeleportParams.myVisualizerParams.myVisualTeleportPositionMinAngleDistanceToLerp, 10, 3, 0, undefined, this._myTeleportParams.myEngine));
+        //Globals.getEasyTuneVariables(this._myTeleportParams.myEngine).add(new EasyTuneNumber("Teleport Max Angle Distance Lerp", this._myTeleportParams.myVisualizerParams.myVisualTeleportPositionMaxAngleDistanceToLerp, 10, 3, 0, undefined, this._myTeleportParams.myEngine));
 
         this._setupVisuals();
+
+        this._myDestroyed = false;
     }
 
     start() {
@@ -60,10 +70,10 @@ PP.PlayerLocomotionTeleportDetectionVisualizer = class PlayerLocomotionTeleportD
     }
 
     update(dt) {
-        //this._myTeleportParams.myVisualizerParams.myVisualTeleportPositionMinDistanceToLerp = PP.myEasyTuneVariables.get("Teleport Min Distance Lerp");
-        //this._myTeleportParams.myVisualizerParams.myVisualTeleportPositionMaxDistanceToLerp = PP.myEasyTuneVariables.get("Teleport Max Distance Lerp");
-        //this._myTeleportParams.myVisualizerParams.myVisualTeleportPositionMinAngleDistanceToLerp = PP.myEasyTuneVariables.get("Teleport Min Angle Distance Lerp");
-        //this._myTeleportParams.myVisualizerParams.myVisualTeleportPositionMaxAngleDistanceToLerp = PP.myEasyTuneVariables.get("Teleport Max Angle Distance Lerp");
+        //this._myTeleportParams.myVisualizerParams.myVisualTeleportPositionMinDistanceToLerp = Globals.getEasyTuneVariables(this._myTeleportParams.myEngine).get("Teleport Min Distance Lerp");
+        //this._myTeleportParams.myVisualizerParams.myVisualTeleportPositionMaxDistanceToLerp = Globals.getEasyTuneVariables(this._myTeleportParams.myEngine).get("Teleport Max Distance Lerp");
+        //this._myTeleportParams.myVisualizerParams.myVisualTeleportPositionMinAngleDistanceToLerp = Globals.getEasyTuneVariables(this._myTeleportParams.myEngine).get("Teleport Min Angle Distance Lerp");
+        //this._myTeleportParams.myVisualizerParams.myVisualTeleportPositionMaxAngleDistanceToLerp = Globals.getEasyTuneVariables(this._myTeleportParams.myEngine).get("Teleport Max Angle Distance Lerp");
 
         if (this._myDetectionRuntimeParams.myTeleportDetectionValid) {
             this._showTeleportPosition(dt);
@@ -106,7 +116,7 @@ PP.PlayerLocomotionTeleportDetectionVisualizer = class PlayerLocomotionTeleportD
     _addVisualLines(amount) {
         for (let i = 0; i < amount; i++) {
             {
-                let visualParams = new PP.VisualLineParams();
+                let visualParams = new VisualLineParams(this._myTeleportParams.myEngine);
 
                 if (this._myTeleportParams.myVisualizerParams.myTeleportParableValidMaterial != null) {
                     visualParams.myMaterial = this._myTeleportParams.myVisualizerParams.myTeleportParableValidMaterial;
@@ -114,11 +124,11 @@ PP.PlayerLocomotionTeleportDetectionVisualizer = class PlayerLocomotionTeleportD
                     visualParams.myMaterial = this._myTeleportParableValidMaterial;
                 }
 
-                this._myValidVisualLines.push(new PP.VisualLine(visualParams));
+                this._myValidVisualLines.push(new VisualLine(visualParams));
             }
 
             {
-                let visualParams = new PP.VisualLineParams();
+                let visualParams = new VisualLineParams(this._myTeleportParams.myEngine);
 
                 if (this._myTeleportParams.myVisualizerParams.myTeleportParableValidMaterial != null) {
                     visualParams.myMaterial = this._myTeleportParams.myVisualizerParams.myTeleportParableInvalidMaterial;
@@ -126,26 +136,53 @@ PP.PlayerLocomotionTeleportDetectionVisualizer = class PlayerLocomotionTeleportD
                     visualParams.myMaterial = this._myTeleportParableInvalidMaterial;
                 }
 
-                this._myInvalidVisualLines.push(new PP.VisualLine(visualParams));
+                this._myInvalidVisualLines.push(new VisualLine(visualParams));
             }
         }
     }
-};
 
-PP.PlayerLocomotionTeleportDetectionVisualizer.prototype._setupVisuals = function () {
-    let innerTorusPosition = PP.vec3_create();
+    destroy() {
+        this._myDestroyed = true;
+
+        for (let visual of this._myValidVisualLines) {
+            visual.destroy();
+        }
+
+        for (let visual of this._myInvalidVisualLines) {
+            visual.destroy();
+        }
+
+        this._myValidVisualPoint.destroy();
+        this._myInvalidVisualPoint.destroy();
+
+        this._myValidVisualVerticalLine.destroy();
+        this._myValidVisualTeleportPositionTorus.destroy();
+        this._myValidVisualTeleportPositionTorusInner.destroy();
+    }
+
+    isDestroyed() {
+        return this._myDestroyed;
+    }
+}
+
+
+
+// IMPLEMENTATION
+
+PlayerLocomotionTeleportDetectionVisualizer.prototype._setupVisuals = function () {
+    let innerTorusPosition = vec3_create();
     return function _setupVisuals() {
-        this._myTeleportParableValidMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
-        this._myTeleportParableValidMaterial.color = PP.vec4_create(0, 0.5, 1, 1);
-        this._myTeleportParableInvalidMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
-        this._myTeleportParableInvalidMaterial.color = PP.vec4_create(0.75, 0.05, 0, 1);
+        this._myTeleportParableValidMaterial = Globals.getDefaultMaterials(this._myTeleportParams.myEngine).myFlatOpaque.clone();
+        this._myTeleportParableValidMaterial.color = vec4_create(0, 0.5, 1, 1);
+        this._myTeleportParableInvalidMaterial = Globals.getDefaultMaterials(this._myTeleportParams.myEngine).myFlatOpaque.clone();
+        this._myTeleportParableInvalidMaterial.color = vec4_create(0.75, 0.05, 0, 1);
 
         this._myValidVisualLines = [];
         this._myInvalidVisualLines = [];
         this._addVisualLines(30);
 
         {
-            let visualParams = new PP.VisualPointParams();
+            let visualParams = new VisualPointParams(this._myTeleportParams.myEngine);
 
             if (this._myTeleportParams.myVisualizerParams.myTeleportParableValidMaterial != null) {
                 visualParams.myMaterial = this._myTeleportParams.myVisualizerParams.myTeleportParableValidMaterial;
@@ -153,11 +190,11 @@ PP.PlayerLocomotionTeleportDetectionVisualizer.prototype._setupVisuals = functio
                 visualParams.myMaterial = this._myTeleportParableValidMaterial;
             }
 
-            this._myValidVisualPoint = new PP.VisualPoint(visualParams);
+            this._myValidVisualPoint = new VisualPoint(visualParams);
         }
 
         {
-            let visualParams = new PP.VisualPointParams();
+            let visualParams = new VisualPointParams(this._myTeleportParams.myEngine);
 
             if (this._myTeleportParams.myVisualizerParams.myTeleportParableInvalidMaterial != null) {
                 visualParams.myMaterial = this._myTeleportParams.myVisualizerParams.myTeleportParableInvalidMaterial;
@@ -165,11 +202,11 @@ PP.PlayerLocomotionTeleportDetectionVisualizer.prototype._setupVisuals = functio
                 visualParams.myMaterial = this._myTeleportParableInvalidMaterial;
             }
 
-            this._myInvalidVisualPoint = new PP.VisualPoint(visualParams);
+            this._myInvalidVisualPoint = new VisualPoint(visualParams);
         }
 
         {
-            let visualParams = new PP.VisualLineParams();
+            let visualParams = new VisualLineParams(this._myTeleportParams.myEngine);
 
             if (this._myTeleportParams.myVisualizerParams.myTeleportParableValidMaterial != null) {
                 visualParams.myMaterial = this._myTeleportParams.myVisualizerParams.myTeleportParableValidMaterial;
@@ -177,26 +214,26 @@ PP.PlayerLocomotionTeleportDetectionVisualizer.prototype._setupVisuals = functio
                 visualParams.myMaterial = this._myTeleportParableValidMaterial;
             }
 
-            this._myValidVisualVerticalLine = new PP.VisualLine(visualParams);
+            this._myValidVisualVerticalLine = new VisualLine(visualParams);
         }
 
-        this._myVisualTeleportPositionObject = PP.myVisualData.myRootObject.pp_addObject();
+        this._myVisualTeleportPositionObject = Globals.getPlayerObjects(this._myTeleportParams.myEngine).myPlayerCauldron.pp_addObject();
 
-        //PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Teleport Torus Radius", 0.175, 0.1, 3));
-        //PP.myEasyTuneVariables.add(new PP.EasyTuneInt("Teleport Torus Segments", 24, 1));
-        //PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Teleport Torus Thickness", 0.02, 0.1, 3));
+        //Globals.getEasyTuneVariables(this._myTeleportParams.myEngine).add(new EasyTuneNumber("Teleport Torus Radius", 0.175, 0.1, 3, undefined, undefined, this._myTeleportParams.myEngine));
+        //Globals.getEasyTuneVariables(this._myTeleportParams.myEngine).add(new EasyTuneInt("Teleport Torus Segments", 24, 1, undefined, undefined, this._myTeleportParams.myEngine));
+        //Globals.getEasyTuneVariables(this._myTeleportParams.myEngine).add(new EasyTuneNumber("Teleport Torus Thickness", 0.02, 0.1, 3, undefined, undefined, this._myTeleportParams.myEngine));
 
-        //PP.myEasyTuneVariables.add(new PP.EasyTuneNumber("Teleport Torus Inner Radius", 0.04, 0.1, 3));
+        //Globals.getEasyTuneVariables(this._myTeleportParams.myEngine).add(new EasyTuneNumber("Teleport Torus Inner Radius", 0.04, 0.1, 3, undefined, undefined, this._myTeleportParams.myEngine));
 
         {
-            let visualParams = new PP.VisualTorusParams();
+            let visualParams = new VisualTorusParams(this._myTeleportParams.myEngine);
             visualParams.myRadius = 0.175;
             visualParams.mySegmentsAmount = 24;
             visualParams.mySegmentThickness = 0.02;
 
-            //visualParams.myRadius = PP.myEasyTuneVariables.get("Teleport Torus Radius");
-            //visualParams.mySegmentsAmount = PP.myEasyTuneVariables.get("Teleport Torus Segments");
-            //visualParams.mySegmentThickness = PP.myEasyTuneVariables.get("Teleport Torus Thickness");
+            //visualParams.myRadius = Globals.getEasyTuneVariables(this._myTeleportParams.myEngine).get("Teleport Torus Radius");
+            //visualParams.mySegmentsAmount = Globals.getEasyTuneVariables(this._myTeleportParams.myEngine).get("Teleport Torus Segments");
+            //visualParams.mySegmentThickness = Globals.getEasyTuneVariables(this._myTeleportParams.myEngine).get("Teleport Torus Thickness");
 
             if (this._myTeleportParams.myVisualizerParams.myTeleportParableValidMaterial != null) {
                 visualParams.myMaterial = this._myTeleportParams.myVisualizerParams.myTeleportParableValidMaterial;
@@ -205,20 +242,20 @@ PP.PlayerLocomotionTeleportDetectionVisualizer.prototype._setupVisuals = functio
             }
 
             visualParams.myParent = this._myVisualTeleportPositionObject;
-            visualParams.myIsLocal = true;
+            visualParams.myLocal = true;
 
-            this._myValidVisualTeleportPositionTorus = new PP.VisualTorus(visualParams);
+            this._myValidVisualTeleportPositionTorus = new VisualTorus(visualParams);
         }
 
         {
-            let visualParams = new PP.VisualTorusParams();
+            let visualParams = new VisualTorusParams(this._myTeleportParams.myEngine);
             visualParams.myRadius = 0.04;
             visualParams.mySegmentsAmount = 24;
             visualParams.mySegmentThickness = 0.02;
 
-            //visualParams.myRadius = PP.myEasyTuneVariables.get("Teleport Torus Inner Radius");
-            //visualParams.mySegmentsAmount = PP.myEasyTuneVariables.get("Teleport Torus Segments");
-            //visualParams.mySegmentThickness = PP.myEasyTuneVariables.get("Teleport Torus Thickness");
+            //visualParams.myRadius = Globals.getEasyTuneVariables(this._myTeleportParams.myEngine).get("Teleport Torus Inner Radius");
+            //visualParams.mySegmentsAmount = Globals.getEasyTuneVariables(this._myTeleportParams.myEngine).get("Teleport Torus Segments");
+            //visualParams.mySegmentThickness = Globals.getEasyTuneVariables(this._myTeleportParams.myEngine).get("Teleport Torus Thickness");
 
             if (this._myTeleportParams.myVisualizerParams.myTeleportParableValidMaterial != null) {
                 visualParams.myMaterial = this._myTeleportParams.myVisualizerParams.myTeleportParableValidMaterial;
@@ -227,7 +264,7 @@ PP.PlayerLocomotionTeleportDetectionVisualizer.prototype._setupVisuals = functio
             }
 
             visualParams.myParent = this._myVisualTeleportPositionObject;
-            visualParams.myIsLocal = true;
+            visualParams.myLocal = true;
 
             let visualTorusParams = this._myValidVisualTeleportPositionTorus.getParams();
 
@@ -236,7 +273,7 @@ PP.PlayerLocomotionTeleportDetectionVisualizer.prototype._setupVisuals = functio
 
             visualParams.myTransform.mat4_setPosition(innerTorusPosition);
 
-            this._myValidVisualTeleportPositionTorusInner = new PP.VisualTorus(visualParams);
+            this._myValidVisualTeleportPositionTorusInner = new VisualTorus(visualParams);
         }
 
         if (this._myTeleportParams.myVisualizerParams.myTeleportPositionObject != null) {
@@ -249,12 +286,12 @@ PP.PlayerLocomotionTeleportDetectionVisualizer.prototype._setupVisuals = functio
     };
 }();
 
-PP.PlayerLocomotionTeleportDetectionVisualizer.prototype._showTeleportParable = function () {
-    let currentPosition = PP.vec3_create();
-    let nextPosition = PP.vec3_create();
+PlayerLocomotionTeleportDetectionVisualizer.prototype._showTeleportParable = function () {
+    let currentPosition = vec3_create();
+    let nextPosition = vec3_create();
 
-    let playerUp = PP.vec3_create();
-    let upDifference = PP.vec3_create();
+    let playerUp = vec3_create();
+    let upDifference = vec3_create();
     return function _showTeleportParable(dt) {
         let showParableDistance = Math.max(this._myDetectionRuntimeParams.myParableDistance - this._myTeleportParams.myVisualizerParams.myTeleportParableLineEndOffset);
         let lastParableIndex = this._myDetectionRuntimeParams.myParable.getPositionIndexByDistance(showParableDistance);
@@ -284,8 +321,8 @@ PP.PlayerLocomotionTeleportDetectionVisualizer.prototype._showTeleportParable = 
             visuaLine.paramsUpdated();
             visuaLine.setVisible(true);
 
-            if (this._myTeleportParams.myDebugActive && this._myTeleportParams.myDebugShowActive) {
-                PP.myDebugVisualManager.drawPoint(0, currentPosition, PP.vec4_create(1, 0, 0, 1), 0.01);
+            if (this._myTeleportParams.myDebugEnabled && this._myTeleportParams.myDebugShowEnabled && Globals.isDebugEnabled(this._myTeleportParams.myEngine)) {
+                Globals.getDebugVisualManager(this._myTeleportParams.myEngine).drawPoint(0, currentPosition, vec4_create(1, 0, 0, 1), 0.01);
             }
         }
 
@@ -325,19 +362,19 @@ PP.PlayerLocomotionTeleportDetectionVisualizer.prototype._showTeleportParable = 
     };
 }();
 
-PP.PlayerLocomotionTeleportDetectionVisualizer.prototype._showTeleportParablePosition = function () {
-    let playerUp = PP.vec3_create();
-    let feetTransformQuat = PP.quat2_create();
-    let feetRotationQuat = PP.quat_create();
+PlayerLocomotionTeleportDetectionVisualizer.prototype._showTeleportParablePosition = function () {
+    let playerUp = vec3_create();
+    let feetTransformQuat = quat2_create();
+    let feetRotationQuat = quat_create();
 
-    let visualPosition = PP.vec3_create();
-    let visualForward = PP.vec3_create();
-    let visualRotationQuat = PP.quat_create();
+    let visualPosition = vec3_create();
+    let visualForward = vec3_create();
+    let visualRotationQuat = quat_create();
 
-    let currentVisualTeleportTransformQuat = PP.quat2_create();
-    let currentVisualTeleportPosition = PP.vec3_create();
-    let currentVisualTeleportRotationQuat = PP.quat_create();
-    let differenceRotationQuat = PP.quat_create();
+    let currentVisualTeleportTransformQuat = quat2_create();
+    let currentVisualTeleportPosition = vec3_create();
+    let currentVisualTeleportRotationQuat = quat_create();
+    let differenceRotationQuat = quat_create();
 
     return function _showTeleportParablePosition(dt) {
         playerUp = this._myTeleportParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
@@ -356,7 +393,7 @@ PP.PlayerLocomotionTeleportDetectionVisualizer.prototype._showTeleportParablePos
 
         this._myVisualTeleportTransformQuat.quat2_setPositionRotationQuat(visualPosition, visualRotationQuat);
 
-        if (this._myVisualTeleportTransformQuatReset || !this._myTeleportParams.myVisualizerParams.myVisualTeleportPositionLerpActive) {
+        if (this._myVisualTeleportTransformQuatReset || !this._myTeleportParams.myVisualizerParams.myVisualTeleportPositionLerpEnabled) {
             this._myVisualTeleportPositionObject.pp_setTransformQuat(this._myVisualTeleportTransformQuat);
             this._myVisualTeleportTransformQuatReset = false;
         } else {
@@ -405,9 +442,9 @@ PP.PlayerLocomotionTeleportDetectionVisualizer.prototype._showTeleportParablePos
             visualParams.mySegmentsAmount = 24;
             visualParams.mySegmentThickness = 0.02;
 
-            //visualParams.myRadius = PP.myEasyTuneVariables.get("Teleport Torus Radius");
-            //visualParams.mySegmentsAmount = PP.myEasyTuneVariables.get("Teleport Torus Segments");
-            //visualParams.mySegmentThickness = PP.myEasyTuneVariables.get("Teleport Torus Thickness");
+            //visualParams.myRadius = Globals.getEasyTuneVariables(this._myTeleportParams.myEngine).get("Teleport Torus Radius");
+            //visualParams.mySegmentsAmount = Globals.getEasyTuneVariables(this._myTeleportParams.myEngine).get("Teleport Torus Segments");
+            //visualParams.mySegmentThickness = Globals.getEasyTuneVariables(this._myTeleportParams.myEngine).get("Teleport Torus Thickness");
 
             this._myValidVisualTeleportPositionTorus.paramsUpdated();
         }
@@ -418,9 +455,9 @@ PP.PlayerLocomotionTeleportDetectionVisualizer.prototype._showTeleportParablePos
             visualParams.mySegmentsAmount = 24;
             visualParams.mySegmentThickness = 0.02;
 
-            //visualParams.myRadius = PP.myEasyTuneVariables.get("Teleport Torus Inner Radius");
-            //visualParams.mySegmentsAmount = PP.myEasyTuneVariables.get("Teleport Torus Segments");
-            //visualParams.mySegmentThickness = PP.myEasyTuneVariables.get("Teleport Torus Thickness");
+            //visualParams.myRadius = Globals.getEasyTuneVariables(this._myTeleportParams.myEngine).get("Teleport Torus Inner Radius");
+            //visualParams.mySegmentsAmount = Globals.getEasyTuneVariables(this._myTeleportParams.myEngine).get("Teleport Torus Segments");
+            //visualParams.mySegmentThickness = Globals.getEasyTuneVariables(this._myTeleportParams.myEngine).get("Teleport Torus Thickness");
 
             this._myValidVisualTeleportPositionTorusInner.paramsUpdated();
         }
@@ -434,8 +471,8 @@ PP.PlayerLocomotionTeleportDetectionVisualizer.prototype._showTeleportParablePos
             this._myTeleportParams.myVisualizerParams.myTeleportPositionObject.pp_setActive(true);
         }
 
-        if (this._myTeleportParams.myDebugActive && this._myTeleportParams.myDebugShowActive) {
-            PP.myDebugVisualManager.drawPoint(0, this._myTeleportRuntimeParams.myTeleportPosition, PP.vec4_create(0, 0, 1, 1), 0.02);
+        if (this._myTeleportParams.myDebugEnabled && this._myTeleportParams.myDebugShowEnabled && Globals.isDebugEnabled(this._myTeleportParams.myEngine)) {
+            Globals.getDebugVisualManager(this._myTeleportParams.myEngine).drawPoint(0, this._myTeleportRuntimeParams.myTeleportPosition, vec4_create(0, 0, 1, 1), 0.02);
         }
     };
 }();

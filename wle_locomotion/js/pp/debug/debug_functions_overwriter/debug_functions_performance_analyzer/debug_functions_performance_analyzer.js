@@ -1,18 +1,24 @@
-PP.DebugFunctionsPerformanceAnalyzerParams = class DebugFunctionsPerformanceAnalyzerParams extends PP.DebugFunctionsOverwriterParams {
+import { JSUtils } from "../../../cauldron/js/utils/js_utils";
+import { Globals } from "../../../pp/globals";
+import { DebugFunctionsOverwriter, DebugFunctionsOverwriterParams } from "../debug_functions_overwriter";
+
+export class DebugFunctionsPerformanceAnalyzerParams extends DebugFunctionsOverwriterParams {
+
     constructor() {
         super();
 
         this.myExecutionTimeAnalysisEnabled = true;
 
         this.myAddPathPrefixToFunctionID = true;
-        // this works at best when the object/class is specified as path
+        // This works at best when the object/class is specified as path
         // since with reference it's not possible to get the full path or get the variable name of the reference
 
         this.myFilterDebugFunctionsPerformanceAnalyzerClasses = true;
     }
-};
+}
 
-PP.DebugFunctionPerformanceAnalysisResults = class DebugFunctionPerformanceAnalysisResults {
+export class DebugFunctionPerformanceAnalysisResults {
+
     constructor() {
         this.myReference = null;
         this.myName = "";
@@ -59,17 +65,18 @@ PP.DebugFunctionPerformanceAnalysisResults = class DebugFunctionPerformanceAnaly
 
         this._myTotalExecutionTimeInternal = other._myTotalExecutionTimeInternal;
     }
-};
+}
 
-PP.DebugFunctionsPerformanceAnalyzerSortOrder = {
+export let DebugFunctionsPerformanceAnalyzerSortOrder = {
     NONE: 0,
     CALLS_COUNT: 1,
     TOTAL_EXECUTION_TIME: 2,
     AVERAGE_EXECUTION_TIME: 3
 };
 
-PP.DebugFunctionsPerformanceAnalyzer = class DebugFunctionsPerformanceAnalyzer extends PP.DebugFunctionsOverwriter {
-    constructor(params = new PP.DebugFunctionsOverwriterParams()) {
+export class DebugFunctionsPerformanceAnalyzer extends DebugFunctionsOverwriter {
+
+    constructor(params = new DebugFunctionsPerformanceAnalyzerParams()) {
         super(params);
 
         this._myFunctionPerformanceAnalysisResults = new Map();
@@ -82,7 +89,7 @@ PP.DebugFunctionsPerformanceAnalyzer = class DebugFunctionsPerformanceAnalyzer e
             myLastFunctionExecutionTime: 0,
             myOriginalFunctionOverheadExecutionTimes: []
         };
-        this._myTimeOfLastReset = window.performance.now();
+        this._myTimeOfLastReset = Globals.getWindow(this._myParams.myEngine).performance.now();
         this._myMaxTimeElapsedSinceLastReset = 0;
 
         let originalPush = Array.prototype["push"];
@@ -99,7 +106,7 @@ PP.DebugFunctionsPerformanceAnalyzer = class DebugFunctionsPerformanceAnalyzer e
     }
 
     getTimeElapsedSinceLastReset() {
-        return window.performance.now() - this._myTimeOfLastReset - this._myExecutionTimes.myOverheadExecutionTimeSinceLastReset;
+        return Globals.getWindow(this._myParams.myEngine).performance.now() - this._myTimeOfLastReset - this._myExecutionTimes.myOverheadExecutionTimeSinceLastReset;
     }
 
     getMaxTimeElapsedSinceLastReset() {
@@ -117,7 +124,7 @@ PP.DebugFunctionsPerformanceAnalyzer = class DebugFunctionsPerformanceAnalyzer e
 
         this._myExecutionTimes.myOverheadExecutionTimeSinceLastReset = 0;
 
-        this._myTimeOfLastReset = window.performance.now();
+        this._myTimeOfLastReset = Globals.getWindow(this._myParams.myEngine).performance.now();
     }
 
     resetMaxResults() {
@@ -127,7 +134,7 @@ PP.DebugFunctionsPerformanceAnalyzer = class DebugFunctionsPerformanceAnalyzer e
         }
     }
 
-    getResults(sortOrder = PP.DebugFunctionsPerformanceAnalyzerSortOrder.NONE) {
+    getResults(sortOrder = DebugFunctionsPerformanceAnalyzerSortOrder.NONE) {
         this._updateDerivatesResults();
         this._updateMaxResults();
 
@@ -136,7 +143,7 @@ PP.DebugFunctionsPerformanceAnalyzer = class DebugFunctionsPerformanceAnalyzer e
         return results;
     }
 
-    getMaxResults(sortOrder = PP.DebugFunctionsPerformanceAnalyzerSortOrder.NONE) {
+    getMaxResults(sortOrder = DebugFunctionsPerformanceAnalyzerSortOrder.NONE) {
         this._updateDerivatesResults();
         this._updateMaxResults();
 
@@ -167,11 +174,11 @@ PP.DebugFunctionsPerformanceAnalyzer = class DebugFunctionsPerformanceAnalyzer e
     _sortResults(results, sortOrder) {
         let sortedResults = results;
 
-        if (sortOrder != PP.DebugFunctionsPerformanceAnalyzerSortOrder.NONE) {
+        if (sortOrder != DebugFunctionsPerformanceAnalyzerSortOrder.NONE) {
             sortedResults = new Map([...results.entries()].sort(function (first, second) {
                 let sortResult = 0;
 
-                if (sortOrder == PP.DebugFunctionsPerformanceAnalyzerSortOrder.CALLS_COUNT) {
+                if (sortOrder == DebugFunctionsPerformanceAnalyzerSortOrder.CALLS_COUNT) {
                     sortResult = -(first[1].myCallsCount - second[1].myCallsCount);
                     if (sortResult == 0) {
                         sortResult = -(first[1].myTotalExecutionTime - second[1].myTotalExecutionTime);
@@ -179,7 +186,7 @@ PP.DebugFunctionsPerformanceAnalyzer = class DebugFunctionsPerformanceAnalyzer e
                             sortResult = -(first[1].myAverageExecutionTime - second[1].myAverageExecutionTime);
                         }
                     }
-                } else if (sortOrder == PP.DebugFunctionsPerformanceAnalyzerSortOrder.TOTAL_EXECUTION_TIME) {
+                } else if (sortOrder == DebugFunctionsPerformanceAnalyzerSortOrder.TOTAL_EXECUTION_TIME) {
                     sortResult = -(first[1].myTotalExecutionTime - second[1].myTotalExecutionTime);
                     if (sortResult == 0) {
                         sortResult = -(first[1].myAverageExecutionTime - second[1].myAverageExecutionTime);
@@ -220,7 +227,7 @@ PP.DebugFunctionsPerformanceAnalyzer = class DebugFunctionsPerformanceAnalyzer e
 
     _updateDerivatesResults() {
         let timeElapsedSinceLastReset = this.getTimeElapsedSinceLastReset();
-        let beforeTime = window.performance.now();
+        let beforeTime = Globals.getWindow(this._myParams.myEngine).performance.now();
 
         for (let property of this._myFunctionPerformanceAnalysisResults.keys()) {
             let results = this._myFunctionPerformanceAnalysisResults.get(property);
@@ -244,11 +251,11 @@ PP.DebugFunctionsPerformanceAnalyzer = class DebugFunctionsPerformanceAnalyzer e
             results.myTimeElapsedSinceLastReset = timeElapsedSinceLastReset;
         }
 
-        this._myExecutionTimes.myOverheadExecutionTimeSinceLastReset += window.performance.now() - beforeTime;
+        this._myExecutionTimes.myOverheadExecutionTimeSinceLastReset += Globals.getWindow(this._myParams.myEngine).performance.now() - beforeTime;
     }
 
     _updateMaxResults() {
-        let beforeTime = window.performance.now();
+        let beforeTime = Globals.getWindow(this._myParams.myEngine).performance.now();
 
         this._myMaxTimeElapsedSinceLastReset = Math.max(this._myMaxTimeElapsedSinceLastReset, this.getTimeElapsedSinceLastReset());
 
@@ -256,24 +263,24 @@ PP.DebugFunctionsPerformanceAnalyzer = class DebugFunctionsPerformanceAnalyzer e
             if (this._myFunctionPerformanceAnalysisMaxResults.has(property)) {
                 this._myFunctionPerformanceAnalysisMaxResults.get(property).max(this._myFunctionPerformanceAnalysisResults.get(property));
             } else {
-                let maxResults = new PP.DebugFunctionPerformanceAnalysisResults();
+                let maxResults = new DebugFunctionPerformanceAnalysisResults();
                 maxResults.copy(this._myFunctionPerformanceAnalysisResults.get(property));
                 this._myFunctionPerformanceAnalysisMaxResults.set(property, maxResults)
             }
         }
 
-        this._myExecutionTimes.myOverheadExecutionTimeSinceLastReset += window.performance.now() - beforeTime;
+        this._myExecutionTimes.myOverheadExecutionTimeSinceLastReset += Globals.getWindow(this._myParams.myEngine).performance.now() - beforeTime;
     }
 
     _getOverwrittenFunctionInternal(reference, propertyName, referencePath, isClass, isFunction, isConstructor) {
-        let newFunction = PP.JSUtils.getReferenceProperty(reference, propertyName);
+        let newFunction = JSUtils.getObjectProperty(reference, propertyName);
 
         if (!this._myParams.myFilterDebugFunctionsPerformanceAnalyzerClasses || !this._isPerformanceAnalyzer(reference, propertyName, isClass)) {
             if (propertyName != "_myPerformanceAnalyzerOriginalFunction") {
                 let propertyID = this._getPropertyID(propertyName, referencePath, isFunction, isConstructor);
 
                 this._myResultsAlreadyAdded = this._myFunctionPerformanceAnalysisResults.has(propertyID);
-                let analysisResults = new PP.DebugFunctionPerformanceAnalysisResults();
+                let analysisResults = new DebugFunctionPerformanceAnalysisResults();
 
                 analysisResults.myReference = reference;
                 analysisResults.myName = propertyName;
@@ -283,12 +290,14 @@ PP.DebugFunctionsPerformanceAnalyzer = class DebugFunctionsPerformanceAnalyzer e
                 this._myFunctionPerformanceAnalysisResults.set(propertyID, analysisResults);
 
                 try {
+                    let window = Globals.getWindow(this._myParams.myEngine);
+
                     let functionPerformanceAnalysisResults = this._myFunctionPerformanceAnalysisResults.get(propertyID);
                     let executionTimes = this._myExecutionTimes;
 
                     let originalFunction = reference[propertyName];
-                    let functionCallOverhead = 0.000175;     // ms taken by an analyzed function that is empty
-                    let overheadError = 0.00035;        // ms to add to adjust a bit for window.performance.now() max precision which is 0.0005
+                    let functionCallOverhead = 0.000175;    // ms taken by an analyzed function that is empty
+                    let overheadError = 0.00035;            // ms to add to adjust a bit for window.performance.now() max precision which is 0.0005
 
                     let executionTimeAnalysisEnabled = this._myParams.myExecutionTimeAnalysisEnabled;
 
@@ -456,7 +465,7 @@ PP.DebugFunctionsPerformanceAnalyzer = class DebugFunctionsPerformanceAnalyzer e
                         });
                     }
                 } catch (error) {
-                    if (this._myParams.myDebugLogActive) {
+                    if (this._myParams.myLogEnabled) {
                         console.error("Function:", propertyName, "of:", reference, "can't be overwritten.\nError:", error);
                     }
                 }
@@ -470,11 +479,11 @@ PP.DebugFunctionsPerformanceAnalyzer = class DebugFunctionsPerformanceAnalyzer e
         let isPerformanceAnalyzer = false;
 
         if (isClass) {
-            if (reference == PP.DebugFunctionsPerformanceAnalyzer.prototype || reference == PP.DebugFunctionPerformanceAnalysisResults.prototype) {
+            if (reference == DebugFunctionsPerformanceAnalyzer.prototype || reference == DebugFunctionPerformanceAnalysisResults.prototype) {
                 isPerformanceAnalyzer = true;
             }
         }
 
         return isPerformanceAnalyzer;
     }
-};
+}

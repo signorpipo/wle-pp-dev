@@ -1,4 +1,5 @@
-PP.PlayerLocomotionRotate = class PlayerLocomotionRotate {
+class PlayerLocomotionRotate {
+
     constructor() {
     }
-};
+}

@@ -1,4 +1,6 @@
-PP.GamepadButtonID = {
+import { vec2_create } from "../../plugin/js/extensions/array_extension";
+
+export let GamepadButtonID = {
     SELECT: 0,          // Trigger
     SQUEEZE: 1,         // Grip
     TOUCHPAD: 2,
@@ -8,39 +10,40 @@ PP.GamepadButtonID = {
     THUMB_REST: 6
 };
 
-PP.GamepadButtonEvent = {
+export let GamepadButtonEvent = {
     PRESS_START: 0,
     PRESS_END: 1,
-    PRESSED: 2,         //Every frame that it is pressed
-    NOT_PRESSED: 3,     //Every frame that it is not pressed
+    PRESSED: 2,         // Every frame that it is pressed
+    NOT_PRESSED: 3,     // Every frame that it is not pressed
     TOUCH_START: 4,
     TOUCH_END: 5,
-    TOUCHED: 6,         //Every frame that it is touched
-    NOT_TOUCHED: 7,     //Every frame that it is not touched
+    TOUCHED: 6,         // Every frame that it is touched
+    NOT_TOUCHED: 7,     // Every frame that it is not touched
     VALUE_CHANGED: 8,
-    ALWAYS: 9,          //Every frame
+    ALWAYS: 9           // Every frame
 };
 
-PP.GamepadAxesID = {
+export let GamepadAxesID = {
     THUMBSTICK: 0
 };
 
-PP.GamepadAxesEvent = {
+export let GamepadAxesEvent = {
     X_CHANGED: 0,
     Y_CHANGED: 1,
     AXES_CHANGED: 2,
     ALWAYS: 3
 };
 
-PP.GamepadButtonInfo = class GamepadButtonInfo {
+export class GamepadButtonInfo {
+
     constructor(id, handedness) {
         this.myID = id;
         this.myHandedness = handedness;
 
-        this.myIsPressed = false;
+        this.myPressed = false;
         this.myPrevIsPressed = false;
 
-        this.myIsTouched = false;
+        this.myTouched = false;
         this.myPrevIsTouched = false;
 
         this.myValue = 0.0;
@@ -82,34 +85,34 @@ PP.GamepadButtonInfo = class GamepadButtonInfo {
     }
 
     isPressed() {
-        return this.myIsPressed;
+        return this.myPressed;
     }
 
     isTouched() {
-        return this.myIsTouched;
+        return this.myTouched;
     }
 
     isPressStart(multiplePressCount = null) {
-        return (this.myIsPressed && !this.myPrevIsPressed) && (multiplePressCount == null || this.myMultiplePressStartCount == multiplePressCount);
+        return (this.myPressed && !this.myPrevIsPressed) && (multiplePressCount == null || this.myMultiplePressStartCount == multiplePressCount);
     }
 
     isPressEnd(multiplePressCount = null) {
-        return (!this.myIsPressed && this.myPrevIsPressed) && (multiplePressCount == null || this.myMultiplePressEndCount == multiplePressCount);
+        return (!this.myPressed && this.myPrevIsPressed) && (multiplePressCount == null || this.myMultiplePressEndCount == multiplePressCount);
     }
 
     isTouchStart(multipleTouchCount = null) {
-        return (this.myIsTouched && !this.myPrevIsTouched) && (multipleTouchCount == null || this.myMultipleTouchStartCount == multipleTouchCount);
+        return (this.myTouched && !this.myPrevIsTouched) && (multipleTouchCount == null || this.myMultipleTouchStartCount == multipleTouchCount);
     }
 
     isTouchEnd(multipleTouchCount = null) {
-        return (!this.myIsTouched && this.myPrevIsTouched) && (multipleTouchCount == null || this.myMultipleTouchEndCount == multipleTouchCount);
+        return (!this.myTouched && this.myPrevIsTouched) && (multipleTouchCount == null || this.myMultipleTouchEndCount == multipleTouchCount);
     }
 
     clone() {
-        let value = new PP.GamepadButtonInfo(this.myID, this.myHandedness);
-        value.myIsPressed = this.myIsPressed;
+        let value = new GamepadButtonInfo(this.myID, this.myHandedness);
+        value.myPressed = this.myPressed;
         value.myPrevIsPressed = this.myPrevIsPressed;
-        value.myIsTouched = this.myIsTouched;
+        value.myTouched = this.myTouched;
         value.myPrevIsTouched = this.myPrevIsTouched;
         value.myValue = this.myValue;
         value.myPrevValue = this.myPrevValue;
@@ -136,16 +139,17 @@ PP.GamepadButtonInfo = class GamepadButtonInfo {
 
         return value;
     }
-};
+}
 
-PP.GamepadAxesInfo = class GamepadAxesInfo {
+export class GamepadAxesInfo {
+
     constructor(id, handedness) {
         this.myID = id;
 
         this.myHandedness = handedness;
 
-        this.myAxes = PP.vec2_create(0, 0); // this.myAxes[0] is X,  this.myAxes[1] is Y
-        this.myPrevAxes = PP.vec2_create(0, 0);
+        this.myAxes = vec2_create(0, 0); // this.myAxes[0] is X,  this.myAxes[1] is Y
+        this.myPrevAxes = vec2_create(0, 0);
     }
 
     getID() {
@@ -161,28 +165,29 @@ PP.GamepadAxesInfo = class GamepadAxesInfo {
     }
 
     clone() {
-        let value = new PP.GamepadAxesInfo(this.myID, this.myHandedness);
+        let value = new GamepadAxesInfo(this.myID, this.myHandedness);
         value.myAxes.vec2_copy(this.myAxes);
         value.myPrevAxes.vec2_copy(this.myPrevAxes);
 
         return value;
     }
-};
+}
 
-PP.GamepadPulseInfo = class GamepadPulseInfo {
+export class GamepadPulseInfo {
+
     constructor() {
         this.myIntensity = 0.0;
         this.myDuration = 0.0;
 
-        this.myIsDevicePulsing = false; // true if the gamepad actually sent a request to pulse to the device
+        this.myDevicePulsing = false; // true if the gamepad actually sent a request to pulse to the device
     }
 
     clone() {
-        let value = new PP.GamepadPulseInfo();
+        let value = new GamepadPulseInfo();
         value.myIntensity = this.myIntensity;
         value.myDuration = this.myDuration;
-        value.myIsDevicePulsing = this.myIsDevicePulsing;
+        value.myDevicePulsing = this.myDevicePulsing;
 
         return value;
     }
-};
+}

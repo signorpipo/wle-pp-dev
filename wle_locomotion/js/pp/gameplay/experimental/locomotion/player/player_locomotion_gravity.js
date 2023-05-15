@@ -1,4 +1,5 @@
-PP.PlayerLocomotionGravity = class PlayerLocomotionGravity {
+class PlayerLocomotionGravity {
+
     constructor() {
     }
-};
+}

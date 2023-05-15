@@ -1,14 +1,14 @@
-import { Component, Type } from '@wonderlandengine/api';
+import { Component } from "@wonderlandengine/api";
 
-PP.PlayerLocomotionRotateComponent = class PlayerLocomotionRotateComponent extends Component {
-    static TypeName = 'pp-player-locomotion-rotate';
+class PlayerLocomotionRotateComponent extends Component {
+    static TypeName = "pp-player-locomotion-rotate";
     static Properties = {};
 
     init() {
     }
 
     start() {
-        this._myPlayerLocomotionRotate = new PP.PlayerLocomotionRotate();
+        //this._myPlayerLocomotionRotate = new PlayerLocomotionRotate();
     }
 
     update(dt) {
@@ -18,6 +18,4 @@ PP.PlayerLocomotionRotateComponent = class PlayerLocomotionRotateComponent exten
     getPlayerLocomotionRotate() {
         return this._myPlayerLocomotionRotate;
     }
-};
-
-WL.registerComponent(PP.PlayerLocomotionRotateComponent);
+}

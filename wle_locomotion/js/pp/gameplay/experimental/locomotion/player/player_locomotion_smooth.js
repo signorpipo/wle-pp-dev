@@ -1,4 +1,5 @@
-PP.PlayerLocomotionSmooth = class PlayerLocomotionSmooth {
+class PlayerLocomotionSmooth {
+
     constructor() {
     }
-};
+}

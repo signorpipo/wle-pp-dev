@@ -1,6 +1,5 @@
+export class PlayerLocomotionMovementRuntimeParams {
 
-
-PP.PlayerLocomotionMovementRuntimeParams = class PlayerLocomotionMovementRuntimeParams {
     constructor() {
         this.myIsFlying = false;
         this.myCollisionRuntimeParams = null;
@@ -9,9 +8,10 @@ PP.PlayerLocomotionMovementRuntimeParams = class PlayerLocomotionMovementRuntime
         this.myIsTeleporting = false;
         this.myTeleportJustPerformed = false;
     }
-};
+}
 
-PP.PlayerLocomotionMovement = class PlayerLocomotionMovement {
+export class PlayerLocomotionMovement {
+
     constructor(locomotionRuntimeParams) {
         this._myLocomotionRuntimeParams = locomotionRuntimeParams;
     }
@@ -27,4 +27,4 @@ PP.PlayerLocomotionMovement = class PlayerLocomotionMovement {
     canStop() {
         return true;
     }
-};
+}

@@ -1,19 +1,15 @@
 {
   "name": "wle_locomotion",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "build": "esbuild ./js/bundle.js --sourcemap --bundle --outfile=\"deploy/wle_locomotion-bundle.js\""
-  },
   "author": "Pipo",
+  "description": "So many edge cases",
   "license": "ISC",
-  "devDependencies": {
-    "esbuild": "^0.14.54"
-  },
+  "type": "module",
+  "wonderlandengine": {},
   "dependencies": {
-    "@wonderlandengine/api": "0.9.4",
-    "@wonderlandengine/components": "^0.8.16",
-    "gl-matrix": "^3.4.3"
+    "@wonderlandengine/api": "^1.0.0",
+    "@wonderlandengine/components": "^1.0.3",
+    "gl-matrix": "^3.4.3",
+    "howler": "^2.2.3"
   }
 }

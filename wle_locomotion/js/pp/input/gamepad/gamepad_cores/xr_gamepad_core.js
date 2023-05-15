@@ -1,16 +1,26 @@
 // xr-standard mapping is assumed
 
-PP.XRGamepadCore = class XRGamepadCore extends PP.GamepadCore {
+import { XRUtils } from "../../../cauldron/utils/xr_utils";
+import { GamepadButtonID } from "../gamepad_buttons";
+import { GamepadCore } from "./gamepad_core";
 
-    constructor(handedness, handPoseParams = new PP.HandPoseParams()) {
-        super(handedness, new PP.HandPose(handedness, handPoseParams));
+export class XRGamepadCore extends GamepadCore {
+
+    constructor(handPose) {
+        super(handPose);
 
         this._mySelectPressed = false;
         this._mySqueezePressed = false;
 
-        this._myIsXRSessionActive = false;
+        this._myXRSessionActive = false;
         this._myInputSource = null;
         this._myGamepad = null;
+
+        this._mySelectStartEventListener = null;
+        this._mySelectEndEventListener = null;
+        this._mySqueezeStartEventListener = null;
+        this._mySqueezeEndEventListener = null;
+
 
         // Support Variables
         this._myButtonData = this._createButtonData();
@@ -20,46 +30,45 @@ PP.XRGamepadCore = class XRGamepadCore extends PP.GamepadCore {
 
     isGamepadCoreActive() {
         // connected == null is to fix webxr emulator that leaves that field undefined
-        return this._myIsXRSessionActive && this._myGamepad != null && (this._myGamepad.connected == null || this._myGamepad.connected);
+        return this._myXRSessionActive && this._myGamepad != null && (this._myGamepad.connected == null || this._myGamepad.connected);
     }
 
-    start() {
-        this._myHandPose.start();
+    _startHook() {
+        XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this), true, false, this.getEngine());
+    }
 
-        if (WL.xrSession) {
-            this._onXRSessionStart(WL.xrSession);
+    _preUpdateHook(dt) {
+        this._myInputSource = this.getHandPose().getInputSource();
+        if (this._myInputSource != null) {
+            this._myGamepad = this._myInputSource.gamepad;
+        } else {
+            this._myGamepad = null;
         }
-        WL.onXRSessionStart.push(this._onXRSessionStart.bind(this));
-        WL.onXRSessionEnd.push(this._onXRSessionEnd.bind(this));
-    }
-
-    preUpdate(dt) {
-        this._updateHandPose(dt);
     }
 
     getButtonData(buttonID) {
-        this._myButtonData.myIsPressed = false;
-        this._myButtonData.myIsTouched = false;
+        this._myButtonData.myPressed = false;
+        this._myButtonData.myTouched = false;
         this._myButtonData.myValue = 0;
 
         if (this.isGamepadCoreActive()) {
             if (buttonID < this._myGamepad.buttons.length) {
                 let gamepadButton = this._myGamepad.buttons[buttonID];
 
-                if (buttonID != PP.GamepadButtonID.SELECT && buttonID != PP.GamepadButtonID.SQUEEZE) {
-                    this._myButtonData.myIsPressed = gamepadButton.pressed;
+                if (buttonID != GamepadButtonID.SELECT && buttonID != GamepadButtonID.SQUEEZE) {
+                    this._myButtonData.myPressed = gamepadButton.pressed;
                 } else {
-                    this._myButtonData.myIsPressed = this._getSpecialButtonPressed(buttonID);
+                    this._myButtonData.myPressed = this._getSpecialButtonPressed(buttonID);
                 }
 
-                this._myButtonData.myIsTouched = gamepadButton.touched;
+                this._myButtonData.myTouched = gamepadButton.touched;
                 this._myButtonData.myValue = gamepadButton.value;
-            } else if (buttonID == PP.GamepadButtonID.TOP_BUTTON && this._myGamepad.buttons.length >= 3) {
+            } else if (buttonID == GamepadButtonID.TOP_BUTTON && this._myGamepad.buttons.length >= 3) {
                 // This way if you are using a basic touch gamepad, top button will work anyway
 
                 let touchButton = this._myGamepad.buttons[2];
-                this._myButtonData.myIsPressed = touchButton.pressed;
-                this._myButtonData.myIsTouched = touchButton.touched;
+                this._myButtonData.myPressed = touchButton.pressed;
+                this._myButtonData.myTouched = touchButton.touched;
                 this._myButtonData.myValue = touchButton.value;
             }
         }
@@ -118,44 +127,43 @@ PP.XRGamepadCore = class XRGamepadCore extends PP.GamepadCore {
         return this._myHapticActuators;
     }
 
-    _updateHandPose(dt) {
-        this._myHandPose.update(dt);
-
-        this._myInputSource = this._myHandPose.getInputSource();
-        if (this._myInputSource != null) {
-            this._myGamepad = this._myInputSource.gamepad;
-        } else {
-            this._myGamepad = null;
-        }
-    }
-
     // This is to be more compatible
     _getSpecialButtonPressed(buttonID) {
-        let isPressed = false;
+        let pressed = false;
 
         if (this.isGamepadCoreActive()) {
-            if (buttonID == PP.GamepadButtonID.SELECT) {
-                isPressed = this._mySelectPressed;
-            } else if (buttonID == PP.GamepadButtonID.SQUEEZE) {
-                isPressed = this._mySqueezePressed;
+            if (buttonID == GamepadButtonID.SELECT) {
+                pressed = this._mySelectPressed;
+            } else if (buttonID == GamepadButtonID.SQUEEZE) {
+                pressed = this._mySqueezePressed;
             }
         }
 
-        return isPressed;
+        return pressed;
     }
 
     _onXRSessionStart(session) {
-        session.addEventListener("selectstart", this._selectStart.bind(this));
-        session.addEventListener("selectend", this._selectEnd.bind(this));
+        this._mySelectStartEventListener = this._selectStart.bind(this);
+        this._mySelectEndEventListener = this._selectEnd.bind(this);
+        this._mySqueezeStartEventListener = this._squeezeStart.bind(this);
+        this._mySqueezeEndEventListener = this._squeezeEnd.bind(this);
 
-        session.addEventListener("squeezestart", this._squeezeStart.bind(this));
-        session.addEventListener("squeezeend", this._squeezeEnd.bind(this));
+        session.addEventListener("selectstart", this._mySelectStartEventListener);
+        session.addEventListener("selectend", this._mySelectEndEventListener);
 
-        this._myIsXRSessionActive = true;
+        session.addEventListener("squeezestart", this._mySqueezeStartEventListener);
+        session.addEventListener("squeezeend", this._mySqueezeEndEventListener);
+
+        this._myXRSessionActive = true;
     }
 
     _onXRSessionEnd(session) {
-        this._myIsXRSessionActive = false;
+        this._mySelectStartEventListener = null;
+        this._mySelectEndEventListener = null;
+        this._mySqueezeStartEventListener = null;
+        this._mySqueezeEndEventListener = null;
+
+        this._myXRSessionActive = false;
     }
 
     // Select and Squeeze are managed this way to be more compatible
@@ -182,4 +190,13 @@ PP.XRGamepadCore = class XRGamepadCore extends PP.GamepadCore {
             this._mySqueezePressed = false;
         }
     }
-};
+
+    _destroyHook() {
+        XRUtils.getSession(this.getEngine())?.removeEventListener("selectstart", this._mySelectStartEventListener);
+        XRUtils.getSession(this.getEngine())?.removeEventListener("selectend", this._mySelectEndEventListener);
+        XRUtils.getSession(this.getEngine())?.removeEventListener("squeezestart", this._mySqueezeStartEventListener);
+        XRUtils.getSession(this.getEngine())?.removeEventListener("squeezeend", this._mySqueezeEndEventListener);
+
+        XRUtils.unregisterSessionStartEndEventListeners(this, this.getEngine());
+    }
+}
