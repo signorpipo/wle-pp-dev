@@ -4,45 +4,28 @@
             "name": "Scene",
             "components": [
                 {
-                    "type": "pp-get-player-objects",
-                    "pp-get-player-objects": {
+                    "type": "pp-gateway",
+                    "pp-gateway": {
+                        "_myScene": "18",
                         "_myPlayer": "19",
                         "_myPlayerPivot": "20",
-                        "_myNonVRCamera": "21",
-                        "_myHead": "25",
+                        "_myCameraNonXR": "21",
                         "_myEyeLeft": "26",
                         "_myEyeRight": "27",
                         "_myHandLeft": "791",
                         "_myHandRight": "815",
-                        "_myNonVRHead": "115",
-                        "_myVRHead": "120"
-                    }
-                },
-                {
-                    "type": "pp-get-default-resources",
-                    "pp-get-default-resources": {
+                        "_myHead": "25",
                         "_myPlane": "p0",
                         "_myCube": "p1",
                         "_mySphere": "p2",
                         "_myCone": "p3",
                         "_myCylinder": "p4",
                         "_myCircle": "p5",
-                        "_myPhongOpaque": "780",
                         "_myFlatOpaque": "779",
-                        "_myText": "781",
-                        "_myFlatTrasparentNoDepth": "885",
-                        "_myFlatTransparentNoDepth": "885"
+                        "_myFlatTransparentNoDepth": "885",
+                        "_myPhongOpaque": "780",
+                        "_myText": "781"
                     }
-                },
-                {
-                    "type": "pp-mute-everything",
-                    "active": false
-                },
-                {
-                    "type": "pp-clear-console-on-xr-session-start"
-                },
-                {
-                    "type": "pp-gateway"
                 }
             ]
         },
@@ -53,6 +36,9 @@
                 {
                     "type": "pp-player-locomotion",
                     "pp-player-locomotion": {
+                        "_myPhysicsBlockLayerFlags": "0, 1, 0, 0, 0, 0, 0, 0",
+                        "_myFlyEnabled": true,
+                        "_myMoveThroughCollisionShortcutEnabled": true
                     },
                     "active": true
                 }
@@ -75,7 +61,7 @@
             ]
         },
         "20": {
-            "name": "Pivot",
+            "name": "Player Pivot",
             "parent": "19"
         },
         "21": {
@@ -2928,7 +2914,7 @@
         },
         "597": {
             "name": "HUD",
-            "parent": "18",
+            "parent": "19",
             "translation": [
                 0.0,
                 0.0,
@@ -2936,14 +2922,14 @@
             ],
             "rotation": [
                 0.0,
+                1.0,
                 0.0,
-                0.0,
-                1.0
+                -3.427277306400356e-7
             ],
             "scaling": [
-                1.0,
-                1.0,
-                1.0
+                1.000001,
+                1.000001,
+                1.0000029
             ]
         },
         "777": {
@@ -2963,25 +2949,25 @@
                         "outerAngle": 180.0,
                         "innerAngle": 100.0,
                         "shadowRange": 100.0,
-                        "intensity": 33.329998
+                        "intensity": 100.0
                     }
                 }
             ],
             "translation": [
-                -5.0,
-                23.0,
-                0.0
+                5.0,
+                20.0000038,
+                2.9999997
             ],
             "rotation": [
-                0.0,
-                0.0,
-                0.3007058,
-                0.9537169
+                0.0779005,
+                0.452015,
+                0.3047828,
+                0.8346984
             ],
             "scaling": [
-                1.0000001,
-                1.0000001,
-                1.0
+                1.0000057,
+                0.9999992,
+                1.0000041
             ]
         },
         "788": {
@@ -3126,14 +3112,12 @@
                 },
                 {
                     "type": "pp-console-vr-tool",
-                    "pp-console-vr-tool": {
-                    },
+                    "pp-console-vr-tool": {},
                     "active": true
                 },
                 {
                     "type": "pp-easy-tune-tool",
-                    "pp-easy-tune-tool": {
-                    },
+                    "pp-easy-tune-tool": {},
                     "active": true
                 }
             ]
@@ -4186,7 +4170,7 @@
         },
         "900": {
             "name": "FPS",
-            "parent": "19",
+            "parent": "597",
             "components": [
                 null,
                 null,
@@ -4294,6 +4278,22 @@
                         "_myTextMaterial": null
                     }
                 }
+            ],
+            "translation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                1.0,
+                0.0,
+                3.427270769407187e-7
+            ],
+            "scaling": [
+                0.9999989,
+                0.9999989,
+                0.999997
             ]
         },
         "901": {
@@ -5088,6 +5088,44 @@
                 1.0,
                 1.0,
                 1.0
+            ]
+        },
+        "923": {
+            "name": "Light",
+            "parent": "28",
+            "components": [
+                {
+                    "type": "light",
+                    "light": {
+                        "color": [
+                            0.6627451,
+                            0.5146021,
+                            0.5146021
+                        ],
+                        "type": "spot",
+                        "shadows": false,
+                        "outerAngle": 180.0,
+                        "innerAngle": 100.0,
+                        "shadowRange": 100.0,
+                        "intensity": 100.0
+                    }
+                }
+            ],
+            "translation": [
+                -5.0000009,
+                20.0000057,
+                -3.0
+            ],
+            "rotation": [
+                0.0779005,
+                0.452015,
+                0.3047828,
+                0.8346984
+            ],
+            "scaling": [
+                1.0000057,
+                0.9999992,
+                1.0000041
             ]
         }
     },

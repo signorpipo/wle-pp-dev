@@ -1,4 +1,5 @@
 import { Component, Property } from "@wonderlandengine/api";
+import { vec3_create } from "../../pp/plugin/js/extensions/array_extension";
 
 export class CharacterSpawnerComponent extends Component {
     static TypeName = "character-spawner";

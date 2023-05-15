@@ -159,7 +159,7 @@ export class AIMovementComponent extends Component {
         this._myCollisionCheckParams.myDebugMovementActive = false;
     }
 
-    pp_clone(clonedObject, deepCloneParams, extraData) {
+    pp_clone(targetObject) {
         let clonedComponent = ComponentUtils.cloneDefault(this, targetObject);
 
         return clonedComponent;

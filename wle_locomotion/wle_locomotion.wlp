@@ -3474,9 +3474,10 @@
                 {
                     "type": "pp-set-active",
                     "pp-set-active": {
-                        "_mySetActiveOn": "descendants",
+                        "_mySetActiveOn": "Descendants",
                         "_myActive": false
-                    }
+                    },
+                    "active": true
                 },
                 {
                     "type": "character-spawner",
@@ -3485,7 +3486,7 @@
                         "_myShortPrototype": "486",
                         "_myRoomSize": 10.0,
                         "_myRoomHeight": 5.0,
-                        "_myAmount": 10
+                        "_myAmount": 25
                     },
                     "active": true
                 }
@@ -11895,30 +11896,30 @@
                             0.5146021,
                             0.5146021
                         ],
-                        "type": "sun",
+                        "type": "spot",
                         "shadows": false,
                         "outerAngle": 180.0,
                         "innerAngle": 100.0,
                         "shadowRange": 100.0,
-                        "intensity": 1.0
+                        "intensity": 100.0
                     }
                 }
             ],
             "translation": [
-                -5.00002,
-                23.0000553,
-                -0.0000014
+                5.0000014,
+                20.0,
+                3.0
             ],
             "rotation": [
-                0.1294095,
+                0.12941,
                 0.4829629,
-                0.2999502,
-                0.8124222
+                0.2999503,
+                0.812422
             ],
             "scaling": [
-                0.9999991,
-                0.9999995,
-                0.9999991
+                0.999999,
+                0.9999992,
+                0.9999988
             ]
         },
         "784": {
@@ -13504,6 +13505,44 @@
                 10.0,
                 0.0999998,
                 1.0
+            ]
+        },
+        "903": {
+            "name": "45",
+            "parent": "28",
+            "components": [
+                {
+                    "type": "light",
+                    "light": {
+                        "color": [
+                            0.6627451,
+                            0.5146021,
+                            0.5146021
+                        ],
+                        "type": "spot",
+                        "shadows": false,
+                        "outerAngle": 180.0,
+                        "innerAngle": 100.0,
+                        "shadowRange": 100.0,
+                        "intensity": 100.0
+                    }
+                }
+            ],
+            "translation": [
+                -5.0000028,
+                20.0000381,
+                -3.0
+            ],
+            "rotation": [
+                0.12941,
+                0.4829629,
+                0.2999503,
+                0.812422
+            ],
+            "scaling": [
+                0.999999,
+                0.9999992,
+                0.9999988
             ]
         }
     },
