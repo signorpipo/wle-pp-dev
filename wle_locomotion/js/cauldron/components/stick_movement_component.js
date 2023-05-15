@@ -8,6 +8,7 @@ import { CollisionCheckParams, CollisionRuntimeParams } from "../../pp/gameplay/
 import { GamepadAxesID, GamepadButtonID } from "../../pp/input/gamepad/gamepad_buttons";
 import { vec3_create } from "../../pp/plugin/js/extensions/array_extension";
 import { Globals } from "../../pp/pp/globals";
+import { CollisionCheckBridge } from "../../pp/gameplay/experimental/character_controller/collision/collision_check_bridge";
 
 export class StickMovementComponent extends Component {
     static TypeName = "stick-movement";
@@ -50,7 +51,7 @@ export class StickMovementComponent extends Component {
         this._myDirectionReferenceObject = Globals.getPlayerObjects(this.engine).myHead;
         this._mySessionActive = false;
 
-        XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this));
+        XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this), false, false, this.engine);
 
         this._myStickIdleTimer = new Timer(0.25, false);
         this._myIsFlying = false;
@@ -156,7 +157,7 @@ export class StickMovementComponent extends Component {
             movement.vec3_add(up.vec3_scale(-3 * this._myScale * dt), movement);
         }
 
-        Globals.getCollisionCheck(this.engine).move(movement, this.object.pp_getTransformQuat(), this._myCollisionCheckParams, this._myCollisionRuntimeParams);
+        CollisionCheckBridge.getCollisionCheck(this.engine).move(movement, this.object.pp_getTransformQuat(), this._myCollisionCheckParams, this._myCollisionRuntimeParams);
 
         this.object.pp_translate(this._myCollisionRuntimeParams.myFixedMovement);
 

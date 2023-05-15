@@ -15,17 +15,17 @@ export function setCollisionCheck(collisionCheck, engine = Globals.getMainEngine
 }
 
 export function initBridge(engine = Globals.getMainEngine()) {
-    setCollisionCheck(new CollisionCheck(engine), engine);
+    CollisionCheckBridge.setCollisionCheck(new CollisionCheck(engine), engine);
 }
 
 export let checkMovement = function () {
     let collisionCheckParams = new CollisionCheckParams();
     let collisionRuntimeParams = new CollisionRuntimeParams();
     return function checkMovement(movement, currentTransformQuat, characterColliderSetup, prevCharacterCollisionResults, outCharacterCollisionResults = new CharacterCollisionResults(), engine = Globals.getMainEngine()) {
-        this.convertCharacterColliderSetupToCollisionCheckParams(characterColliderSetup, collisionCheckParams);
-        this.convertCharacterCollisionResultsToCollisionRuntimeParams(prevCharacterCollisionResults, collisionRuntimeParams);
-        getCollisionCheck(engine).move(movement, currentTransformQuat, collisionCheckParams, collisionRuntimeParams);
-        this.convertCollisionRuntimeParamsToCharacterCollisionResults(collisionRuntimeParams, currentTransformQuat, outCharacterCollisionResults);
+        CollisionCheckBridge.convertCharacterColliderSetupToCollisionCheckParams(characterColliderSetup, collisionCheckParams);
+        CollisionCheckBridge.convertCharacterCollisionResultsToCollisionRuntimeParams(prevCharacterCollisionResults, collisionRuntimeParams);
+        CollisionCheckBridge.getCollisionCheck(engine).move(movement, currentTransformQuat, collisionCheckParams, collisionRuntimeParams);
+        CollisionCheckBridge.convertCollisionRuntimeParamsToCharacterCollisionResults(collisionRuntimeParams, currentTransformQuat, outCharacterCollisionResults);
     }
 }();
 
@@ -34,11 +34,11 @@ export let checkTeleportToTransform = function () {
     let collisionCheckParams = new CollisionCheckParams();
     let collisionRuntimeParams = new CollisionRuntimeParams();
     return function checkTeleportToTransform(teleportTransformQuat, currentTransformQuat, characterColliderSetup, prevCharacterCollisionResults, outCharacterCollisionResults = new CharacterCollisionResults(), engine = Globals.getMainEngine()) {
-        this.convertCharacterColliderSetupToCollisionCheckParams(characterColliderSetup, collisionCheckParams);
-        this.convertCharacterCollisionResultsToCollisionRuntimeParams(prevCharacterCollisionResults, collisionRuntimeParams);
+        CollisionCheckBridge.convertCharacterColliderSetupToCollisionCheckParams(characterColliderSetup, collisionCheckParams);
+        CollisionCheckBridge.convertCharacterCollisionResultsToCollisionRuntimeParams(prevCharacterCollisionResults, collisionRuntimeParams);
         teleportPosition = teleportTransformQuat.quat2_getPosition(teleportPosition);
-        getCollisionCheck(engine).teleport(teleportPosition, teleportTransformQuat, collisionCheckParams, collisionRuntimeParams);
-        this.convertCollisionRuntimeParamsToCharacterCollisionResults(collisionRuntimeParams, currentTransformQuat, outCharacterCollisionResults);
+        CollisionCheckBridge.getCollisionCheck(engine).teleport(teleportPosition, teleportTransformQuat, collisionCheckParams, collisionRuntimeParams);
+        CollisionCheckBridge.convertCollisionRuntimeParamsToCharacterCollisionResults(collisionRuntimeParams, currentTransformQuat, outCharacterCollisionResults);
     }
 }();
 
@@ -46,10 +46,10 @@ export let checkTransform = function () {
     let collisionCheckParams = new CollisionCheckParams();
     let collisionRuntimeParams = new CollisionRuntimeParams();
     return function checkTransform(checkTransformQuat, characterColliderSetup, prevCharacterCollisionResults, outCharacterCollisionResults = new CharacterCollisionResults(), engine = Globals.getMainEngine()) {
-        this.convertCharacterColliderSetupToCollisionCheckParams(characterColliderSetup, collisionCheckParams);
-        this.convertCharacterCollisionResultsToCollisionRuntimeParams(prevCharacterCollisionResults, collisionRuntimeParams);
-        getCollisionCheck(engine).positionCheck(true, checkTransformQuat, collisionCheckParams, collisionRuntimeParams);
-        this.convertCollisionRuntimeParamsToCharacterCollisionResults(collisionRuntimeParams, checkTransformQuat, outCharacterCollisionResults);
+        CollisionCheckBridge.convertCharacterColliderSetupToCollisionCheckParams(characterColliderSetup, collisionCheckParams);
+        CollisionCheckBridge.convertCharacterCollisionResultsToCollisionRuntimeParams(prevCharacterCollisionResults, collisionRuntimeParams);
+        CollisionCheckBridge.getCollisionCheck(engine).positionCheck(true, checkTransformQuat, collisionCheckParams, collisionRuntimeParams);
+        CollisionCheckBridge.convertCollisionRuntimeParamsToCharacterCollisionResults(collisionRuntimeParams, checkTransformQuat, outCharacterCollisionResults);
     }
 }();
 
@@ -57,11 +57,11 @@ export let updateGroundInfo = function () {
     let collisionCheckParams = new CollisionCheckParams();
     let collisionRuntimeParams = new CollisionRuntimeParams();
     return function updateGroundInfo(currentTransformQuat, characterColliderSetup, prevCharacterCollisionResults, outCharacterCollisionResults = new CharacterCollisionResults(), engine = Globals.getMainEngine()) {
-        this.convertCharacterColliderSetupToCollisionCheckParams(characterColliderSetup, collisionCheckParams);
-        this.convertCharacterCollisionResultsToCollisionRuntimeParams(prevCharacterCollisionResults, collisionRuntimeParams);
+        CollisionCheckBridge.convertCharacterColliderSetupToCollisionCheckParams(characterColliderSetup, collisionCheckParams);
+        CollisionCheckBridge.convertCharacterCollisionResultsToCollisionRuntimeParams(prevCharacterCollisionResults, collisionRuntimeParams);
         collisionCheckParams.myComputeCeilingInfoEnabled = false;
-        getCollisionCheck(engine).updateSurfaceInfo(currentTransformQuat, collisionCheckParams, collisionRuntimeParams);
-        this.convertCollisionRuntimeParamsToCharacterCollisionResults(collisionRuntimeParams, currentTransformQuat, outCharacterCollisionResults);
+        CollisionCheckBridge.getCollisionCheck(engine).updateSurfaceInfo(currentTransformQuat, collisionCheckParams, collisionRuntimeParams);
+        CollisionCheckBridge.convertCollisionRuntimeParamsToCharacterCollisionResults(collisionRuntimeParams, currentTransformQuat, outCharacterCollisionResults);
     }
 }();
 
@@ -69,11 +69,11 @@ export let updateCeilingInfo = function () {
     let collisionCheckParams = new CollisionCheckParams();
     let collisionRuntimeParams = new CollisionRuntimeParams();
     return function updateCeilingInfo(currentTransformQuat, characterColliderSetup, prevCharacterCollisionResults, outCharacterCollisionResults = new CharacterCollisionResults(), engine = Globals.getMainEngine()) {
-        this.convertCharacterColliderSetupToCollisionCheckParams(characterColliderSetup, collisionCheckParams);
-        this.convertCharacterCollisionResultsToCollisionRuntimeParams(prevCharacterCollisionResults, collisionRuntimeParams);
+        CollisionCheckBridge.convertCharacterColliderSetupToCollisionCheckParams(characterColliderSetup, collisionCheckParams);
+        CollisionCheckBridge.convertCharacterCollisionResultsToCollisionRuntimeParams(prevCharacterCollisionResults, collisionRuntimeParams);
         collisionCheckParams.myComputeGroundInfoEnabled = false;
-        getCollisionCheck(engine).updateSurfaceInfo(currentTransformQuat, collisionCheckParams, collisionRuntimeParams);
-        this.convertCollisionRuntimeParamsToCharacterCollisionResults(collisionRuntimeParams, currentTransformQuat, outCharacterCollisionResults);
+        CollisionCheckBridge.getCollisionCheck(engine).updateSurfaceInfo(currentTransformQuat, collisionCheckParams, collisionRuntimeParams);
+        CollisionCheckBridge.convertCollisionRuntimeParamsToCharacterCollisionResults(collisionRuntimeParams, currentTransformQuat, outCharacterCollisionResults);
     }
 }();
 
@@ -502,6 +502,8 @@ export let convertCharacterColliderSetupToCollisionCheckParams = function () {
 }()
 
 export let CollisionCheckBridge = {
+    getCollisionCheck,
+    setCollisionCheck,
     initBridge,
     checkMovement,
     checkTeleportToTransform,

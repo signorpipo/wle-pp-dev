@@ -23,7 +23,7 @@ export class TestTrackedHandDrawJointsComponent extends Component {
         this._myHandPose.start();
         this._buildTrackedHandHierarchy();
 
-        XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this));
+        XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this), false, false, this.engine);
     }
 
     update(dt) {

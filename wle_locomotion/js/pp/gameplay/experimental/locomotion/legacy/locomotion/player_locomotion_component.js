@@ -1,7 +1,7 @@
 import { Component, Property } from "@wonderlandengine/api";
 import { PhysicsLayerFlags } from "../../../../../cauldron/physics/physics_layer_flags";
 import { InputUtils } from "../../../../../input/cauldron/input_utils";
-import { CollisionCheckBridge, getCollisionCheck } from "../../../character_controller/collision/collision_check_bridge";
+import { CollisionCheckBridge } from "../../../character_controller/collision/collision_check_bridge";
 import { CleanedPlayerLocomotion } from "./cleaned/player_locomotion_cleaned";
 import { PlayerLocomotion, PlayerLocomotionParams } from "./player_locomotion";
 
@@ -127,14 +127,14 @@ export class PlayerLocomotionComponent extends Component {
 
             this._myPlayerLocomotion._myPlayerHeadManager.update(dt);
         } else {
-            getCollisionCheck(this.engine)._myTotalRaycasts = 0; // #TODO Debug stuff, remove later
+            CollisionCheckBridge.getCollisionCheck(this.engine)._myTotalRaycasts = 0; // #TODO Debug stuff, remove later
 
             this._myPlayerLocomotion.update(dt);
         }
 
-        //getCollisionCheck(this.engine)._myTotalRaycastsMax = Math.max(getCollisionCheck(this.engine)._myTotalRaycasts, getCollisionCheck(this.engine)._myTotalRaycastsMax);
-        //console.error(getCollisionCheck(this.engine)._myTotalRaycastsMax);
-        //console.error(getCollisionCheck(this.engine)._myTotalRaycasts);
+        //CollisionCheckBridge.getCollisionCheck(this.engine)._myTotalRaycastsMax = Math.max(CollisionCheckBridge.getCollisionCheck(this.engine)._myTotalRaycasts, CollisionCheckBridge.getCollisionCheck(this.engine)._myTotalRaycastsMax);
+        //console.error(CollisionCheckBridge.getCollisionCheck(this.engine)._myTotalRaycastsMax);
+        //console.error(CollisionCheckBridge.getCollisionCheck(this.engine)._myTotalRaycasts);
     }
 
     onActivate() {
