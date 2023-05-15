@@ -1,4 +1,4 @@
-import { Component, Type } from "@wonderlandengine/api";
+import { Component, Property } from "@wonderlandengine/api";
 
 export class TouchStartTestComponent extends Component {
     static TypeName = "touch-start-test";

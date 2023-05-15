@@ -1,4 +1,4 @@
-import { Component, Type } from "@wonderlandengine/api";
+import { Component, Property } from "@wonderlandengine/api";
 
 export class PulseOnButtonComponent extends Component {
     static TypeName = "pulse-on-button";

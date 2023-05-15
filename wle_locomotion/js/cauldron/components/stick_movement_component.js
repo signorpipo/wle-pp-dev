@@ -1,18 +1,18 @@
-import { Component, Type } from "@wonderlandengine/api";
+import { Component, Property } from "@wonderlandengine/api";
 import { ComponentUtils } from "../../pp/cauldron/wl/utils/component_utils";
 
 export class StickMovementComponent extends Component {
     static TypeName = "stick-movement";
     static Properties = {
-        _myScale: { type: WL.Type.Float, default: 1.0 },
-        _mySpeed: { type: WL.Type.Float, default: 4.0 },
-        _myFlyEnabled: { type: WL.Type.Bool, default: false },
-        _myMinAngleToFlyUpHead: { type: WL.Type.Float, default: 30 },
-        _myMinAngleToFlyDownHead: { type: WL.Type.Float, default: 50 },
-        _myMinAngleToFlyUpHand: { type: WL.Type.Float, default: 60 },
-        _myMinAngleToFlyDownHand: { type: WL.Type.Float, default: 1 },
-        _myMinAngleToFlyRight: { type: WL.Type.Float, default: 30 },
-        _myDirectionReference: { type: WL.Type.Enum, values: ['head', 'hand left', 'hand right'], default: 'hand left' }
+        _myScale: Property.float(1.0),
+        _mySpeed: Property.float(4.0),
+        _myFlyEnabled: Property.bool(false),
+        _myMinAngleToFlyUpHead: Property.float(30),
+        _myMinAngleToFlyDownHead: Property.float(50),
+        _myMinAngleToFlyUpHand: Property.float(60),
+        _myMinAngleToFlyDownHand: Property.float(1),
+        _myMinAngleToFlyRight: Property.float(30),
+        _myDirectionReference: Property.enum(['head', 'hand left', 'hand right'], 'hand left')
 
     };
 
@@ -45,8 +45,8 @@ export class StickMovementComponent extends Component {
         if (WL.xrSession) {
             this._onXRSessionStart(WL.xrSession);
         }
-        WL.onXRSessionStart.push(this._onXRSessionStart.bind(this));
-        WL.onXRSessionEnd.push(this._onXRSessionEnd.bind(this));
+        WL.onXRSessionStart.add(this._onXRSessionStart.bind(this));
+        WL.onXRSessionEnd.add(this._onXRSessionEnd.bind(this));
 
         this._myStickIdleTimer = new PP.Timer(0.25, false);
         this._myIsFlying = false;

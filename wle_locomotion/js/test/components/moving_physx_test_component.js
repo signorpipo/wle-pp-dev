@@ -1,11 +1,11 @@
-import { Component, Type } from "@wonderlandengine/api";
+import { Component, Property } from "@wonderlandengine/api";
 
 export class MovingPhysXTestComponent extends Component {
     static TypeName = "moving-physx-test";
     static Properties = {
-        _myPhysXType: { type: WL.Type.Enum, values: ['static', 'kinematic'], default: 'static' },
-        _myFrameType: { type: WL.Type.Enum, values: ['single_frame', 'multiple_frames'], default: 'single_frame' },
-        _myForceType: { type: WL.Type.Enum, values: ['force', 'linearVelocity'], default: 'force' },
+        _myPhysXType: Property.enum(['static', 'kinematic'], 'static'),
+        _myFrameType: Property.enum(['single_frame', 'multiple_frames'], 'single_frame'),
+        _myForceType: Property.enum(['force', 'linearVelocity'], 'force'),
     };
 
     start() {

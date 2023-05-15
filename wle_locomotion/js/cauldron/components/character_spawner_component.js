@@ -1,13 +1,13 @@
-import { Component, Type } from "@wonderlandengine/api";
+import { Component, Property } from "@wonderlandengine/api";
 
 export class CharacterSpawnerComponent extends Component {
     static TypeName = "character-spawner";
     static Properties = {
-        _myRoomSize: { type: WL.Type.Float, default: 1.0 },
-        _myRoomHeight: { type: WL.Type.Float, default: 1.0 },
-        _myAmount: { type: WL.Type.Int, default: 1.0 },
-        _myTallPrototype: { type: WL.Type.Object },
-        _myShortPrototype: { type: WL.Type.Object }
+        _myRoomSize: Property.float(1.0),
+        _myRoomHeight: Property.float(1.0),
+        _myAmount: Property.int(1.0),
+        _myTallPrototype: Property.object(),
+        _myShortPrototype: Property.object()
 
     };
 

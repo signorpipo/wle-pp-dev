@@ -1,9 +1,9 @@
-import { Component, Type } from "@wonderlandengine/api";
+import { Component, Property } from "@wonderlandengine/api";
 
 export class GamepadButtonDisplayComponent extends Component {
     static TypeName = "gamepad-button-display";
     static Properties = {
-        _myButtonIndex: { type: WL.Type.Int, default: 0 }
+        _myButtonIndex: Property.int(0)
     };
 
     start() {

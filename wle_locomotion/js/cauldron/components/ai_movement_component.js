@@ -1,15 +1,15 @@
-import { Component, MeshComponent, Type } from "@wonderlandengine/api";
+import { Component, MeshComponent, Property } from "@wonderlandengine/api";
 import { ComponentUtils } from "../../pp/cauldron/wl/utils/component_utils";
 import { CloneParams } from "../../pp/cauldron/wl/utils/object_utils";
 
 export class AIMovementComponent extends Component {
     static TypeName = "ai-movement";
     static Properties = {
-        _myScale: { type: WL.Type.Float, default: 1.0 },
-        _myMinSpeed: { type: WL.Type.Float, default: 1.0 },
-        _myMaxSpeed: { type: WL.Type.Float, default: 3.0 },
-        _myMinDirectionTime: { type: WL.Type.Float, default: 1.0 },
-        _myMaxDirectionTime: { type: WL.Type.Float, default: 5.0 }
+        _myScale: Property.float(1.0),
+        _myMinSpeed: Property.float(1.0),
+        _myMaxSpeed: Property.float(3.0),
+        _myMinDirectionTime: Property.float(1.0),
+        _myMaxDirectionTime: Property.float(5.0)
 
     };
 

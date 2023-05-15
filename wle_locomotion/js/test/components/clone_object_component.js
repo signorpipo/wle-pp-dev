@@ -1,9 +1,9 @@
-import { Component, Type } from "@wonderlandengine/api";
+import { Component, Property } from "@wonderlandengine/api";
 
 export class CloneObjectComponent extends Component {
     static TypeName = "clone-object";
     static Properties = {
-        _myToClone: { type: WL.Type.Object }
+        _myToClone: Property.object()
     };
 
     start() {

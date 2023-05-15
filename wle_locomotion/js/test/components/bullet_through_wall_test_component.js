@@ -1,17 +1,17 @@
-import { Component, Type } from "@wonderlandengine/api";
+import { Component, Property } from "@wonderlandengine/api";
 
 export class BulletThroughWallTestComponent extends Component {
     static TypeName = "bullet-through-wall-test";
     static Properties = {
-        _myBulletSize: { type: WL.Type.Float, default: 0.1 },
-        _myBulletShape: { type: WL.Type.Enum, values: ['box', 'sphere'], default: 'box' },
-        _myBulletStartSpeed: { type: WL.Type.Float, default: 20 },
-        _myBulletSpeedMultiplier: { type: WL.Type.Float, default: 1.25 },
-        _myWallSize: { type: WL.Type.Float, default: 10.0 },
-        _myWallStartThickness: { type: WL.Type.Float, default: 0.1 },
-        _myWallThicknessMultiplier: { type: WL.Type.Float, default: 2 },
-        _myWallDistance: { type: WL.Type.Float, default: 20.0 },
-        _myWallStatic: { type: WL.Type.Bool, default: true },
+        _myBulletSize: Property.float(0.1),
+        _myBulletShape: Property.enum(['box', 'sphere'], 'box'),
+        _myBulletStartSpeed: Property.float(20),
+        _myBulletSpeedMultiplier: Property.float(1.25),
+        _myWallSize: Property.float(10.0),
+        _myWallStartThickness: Property.float(0.1),
+        _myWallThicknessMultiplier: Property.float(2),
+        _myWallDistance: Property.float(20.0),
+        _myWallStatic: Property.bool(true),
     };
 
     start() {

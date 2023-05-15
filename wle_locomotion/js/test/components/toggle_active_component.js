@@ -1,9 +1,9 @@
-import { Component, Type } from "@wonderlandengine/api";
+import { Component, Property } from "@wonderlandengine/api";
 
 export class ToggleActiveComponent extends Component {
     static TypeName = "toggle-active";
     static Properties = {
-        _myObject: { type: WL.Type.Object }
+        _myObject: Property.object()
     };
 
     start() {

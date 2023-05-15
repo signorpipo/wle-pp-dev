@@ -1,11 +1,11 @@
-import { Component, Type } from "@wonderlandengine/api";
+import { Component, Property } from "@wonderlandengine/api";
 
 export class TestTrackedHandDrawJointsComponent extends Component {
     static TypeName = "test-tracked-hand-draw-joints";
     static Properties = {
-        _myHandedness: { type: WL.Type.Enum, values: ['left', 'right'], default: 'left' },
-        _myJointMesh: { type: WL.Type.Mesh },
-        _myJointMaterial: { type: WL.Type.Material }
+        _myHandedness: Property.enum(['left', 'right'], 'left'),
+        _myJointMesh: Property.mesh(),
+        _myJointMaterial: Property.material()
     };
 
     init() {
@@ -22,8 +22,8 @@ export class TestTrackedHandDrawJointsComponent extends Component {
         if (WL.xrSession) {
             this._onXRSessionStart(WL.xrSession);
         }
-        WL.onXRSessionStart.push(this._onXRSessionStart.bind(this));
-        WL.onXRSessionEnd.push(this._onXRSessionEnd.bind(this));
+        WL.onXRSessionStart.add(this._onXRSessionStart.bind(this));
+        WL.onXRSessionEnd.add(this._onXRSessionEnd.bind(this));
     }
 
     update(dt) {

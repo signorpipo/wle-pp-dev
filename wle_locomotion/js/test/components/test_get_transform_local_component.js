@@ -1,4 +1,4 @@
-import { Component, Type } from "@wonderlandengine/api";
+import { Component, Property } from "@wonderlandengine/api";
 
 export class TestGetTransformLocalComponent extends Component {
     static TypeName = "test-get-transform-local";
