@@ -41,7 +41,7 @@ export class TestTrackedHandDrawJointsComponent extends Component {
                     tip.transform.orientation.y,
                     tip.transform.orientation.z,
                     tip.transform.orientation.w];
-                //quat.quat_toWorld(getPlayerObjects().myPlayerPivot.pp_getTransformQuat(), quat);
+                //quat.quat_toWorld(Globals.getPlayerObjects(this.engine).myPlayerPivot.pp_getTransformQuat(), quat);
                 quat.quat_rotateAxis(180, quat.quat_getUp(), quat);
                 quat = this._myHandPose.getRotationQuat();
 
@@ -76,7 +76,7 @@ export class TestTrackedHandDrawJointsComponent extends Component {
 
                 position = position.vec3_add(positionIndex).vec3_scale(0.5);
 
-                //position.vec3_convertPositionToWorld(getPlayerObjects().myPlayerPivot.pp_getTransform(), position);
+                //position.vec3_convertPositionToWorld(Globals.getPlayerObjects(this.engine).myPlayerPivot.pp_getTransform(), position);
 
                 this._myTrackedHandObject.pp_setPositionLocal(this._myHandPose.getPosition());
                 //this._myTrackedHandObject.pp_translateObject(vec3_create(-0.02, 0, 0));

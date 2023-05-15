@@ -1,6 +1,6 @@
 import { CollisionEventType, Component, Property, Shape } from "@wonderlandengine/api";
 import { Timer } from "../../pp/cauldron/cauldron/timer";
-import { getScene } from "../../pp/cauldron/wl/engine_globals";
+import { Globals } from "../../pp/pp/globals";
 
 export class BulletThroughWallTestComponent extends Component {
     static TypeName = "bullet-through-wall-test";
@@ -19,14 +19,14 @@ export class BulletThroughWallTestComponent extends Component {
     start() {
         this._myDirection = vec3_create(0, -0.25, 1);
         this._myDirection.vec3_normalize(this._myDirection);
-        this._myRootObject = getScene().addObject(this.object);
+        this._myRootObject = Globals.getScene(this.engine).addObject(this.object);
         this._myRootObject.pp_resetTransform();
         this._myRootObject.pp_lookTo(this._myDirection);
 
-        this._myWall = getScene().addObject(this._myRootObject);
+        this._myWall = Globals.getScene(this.engine).addObject(this._myRootObject);
         this._myWall.pp_setPositionLocal([0, 0, -this._myWallDistance - this._myWallStartThickness]);
 
-        this._myBullet = getScene().addObject(this._myRootObject);
+        this._myBullet = Globals.getScene(this.engine).addObject(this._myRootObject);
         this._myBullet.pp_setPositionLocal(vec3_create(0, 0, -2));
         this._myBullet.pp_setRotationLocal([Math.pp_random(-180, 180), Math.pp_random(-180, 180), Math.pp_random(-180, 180)]);
 

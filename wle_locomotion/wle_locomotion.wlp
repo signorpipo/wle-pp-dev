@@ -26,6 +26,9 @@
                         "_myPhongOpaque": "780",
                         "_myText": "781"
                     }
+                },
+                {
+                    "type": "remove-main-engine"
                 }
             ]
         },

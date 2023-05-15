@@ -1,7 +1,7 @@
 import { Component } from "@wonderlandengine/api";
 import { Timer } from "../../pp/cauldron/cauldron/timer";
 import { PhysicsUtils } from "../../pp/cauldron/physics/physics_utils";
-import { getDebugVisualManager } from "../../pp/debug/debug_globals";
+import { Globals } from "../../pp/pp/globals";
 
 export class RaycastTestComponent extends Component {
     static TypeName = "raycast-test";
@@ -32,7 +32,7 @@ export class RaycastTestComponent extends Component {
 
             let raycastResult = PhysicsUtils.raycast(raycastSetup);
 
-            getDebugVisualManager().drawRaycast(0, raycastResult, false);
+            Globals.getDebugVisualManager(this.engine).drawRaycast(0, raycastResult, false);
         }
     }
 }

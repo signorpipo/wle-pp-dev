@@ -1,8 +1,7 @@
 import { Component } from "@wonderlandengine/api";
 import { VisualLineParams } from "../../pp/cauldron/visual/elements/visual_line";
-import { getDebugVisualManager } from "../../pp/debug/debug_globals";
 import { vec4_create } from "../../pp/plugin/js/extensions/array_extension";
-import { getDefaultResources } from "../../pp/pp/default_resources_globals";
+import { Globals } from "../../pp/pp/globals";
 
 export class ShowLineTestComponent extends Component {
     static TypeName = "show-line-test";
@@ -13,8 +12,8 @@ export class ShowLineTestComponent extends Component {
         visualParams.myStart = this.object.pp_getPosition();
         visualParams.myDirection = this.object.pp_getForward();
         visualParams.myLength = 0.4;
-        visualParams.myMaterial = getDefaultResources().myMaterials.myFlatOpaque.clone();
+        visualParams.myMaterial = Globals.getDefaultResources(this.engine).myMaterials.myFlatOpaque.clone();
         visualParams.myMaterial.color = vec4_create(0, 0, 1, 1);
-        getDebugVisualManager().draw(visualParams);
+        Globals.getDebugVisualManager(this.engine).draw(visualParams);
     }
 }

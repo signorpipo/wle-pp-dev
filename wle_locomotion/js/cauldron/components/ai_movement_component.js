@@ -2,9 +2,9 @@ import { Component, Property } from "@wonderlandengine/api";
 import { Timer } from "../../pp/cauldron/cauldron/timer";
 import { PhysicsLayerFlags } from "../../pp/cauldron/physics/physics_layer_flags";
 import { ComponentUtils } from "../../pp/cauldron/wl/utils/component_utils";
-import { getCollisionCheck } from "../../pp/gameplay/experimental/character_controller/collision/collision_check_bridge";
 import { CollisionCheckParams, CollisionRuntimeParams } from "../../pp/gameplay/experimental/character_controller/collision/legacy/collision_check/collision_params";
 import { quat2_create, vec3_create } from "../../pp/plugin/js/extensions/array_extension";
+import { Globals } from "../../pp/pp/globals";
 
 export class AIMovementComponent extends Component {
     static TypeName = "ai-movement";
@@ -197,7 +197,7 @@ AIMovementComponent.prototype.update = function () {
         let movement = this._myCurrentDirection.vec3_scale(this._mySpeed * this._myScale * dt, tempMovement);
         movement.vec3_add(up.vec3_scale(-3 * this._myScale * dt, tempGravity), movement);
 
-        getCollisionCheck().move(movement, this.object.pp_getTransformQuat(tempTransformQuat), this._myCollisionCheckParams, this._myCollisionRuntimeParams);
+        Globals.getCollisionCheck(this.engine).move(movement, this.object.pp_getTransformQuat(tempTransformQuat), this._myCollisionCheckParams, this._myCollisionRuntimeParams);
 
         if (this._myCollisionRuntimeParams.myHorizontalMovementCanceled) {
             if (this._myCollisionTimer.isDone()) {

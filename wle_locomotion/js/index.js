@@ -13,7 +13,16 @@
 
 /* wle:auto-imports:start */
 import {MouseLookComponent} from '@wonderlandengine/components';
+import {CharacterSpawnerComponent} from './cauldron/components/character_spawner_component.js';
+import {RemoveMainEngineComponent} from './cauldron/components/remove_main_engine_component.js';
+import {StickMovementComponent} from './cauldron/components/stick_movement_component.js';
+import {AdjustHierarchyPhysXScaleComponent} from './pp/index.js';
+import {BenchmarkMaxPhysXComponent} from './pp/index.js';
+import {BenchmarkMaxVisibleTrianglesComponent} from './pp/index.js';
 import {ConsoleVRToolComponent} from './pp/index.js';
+import {CopyHandTransformComponent} from './pp/index.js';
+import {CopyPlayerPivotTransformComponent} from './pp/index.js';
+import {DebugTransformComponent} from './pp/index.js';
 import {EasyTuneToolComponent} from './pp/index.js';
 import {GamepadControlSchemeComponent} from './pp/index.js';
 import {GamepadMeshAnimatorComponent} from './pp/index.js';
@@ -22,6 +31,7 @@ import {PlayerLocomotionComponent} from './pp/index.js';
 import {SetActiveComponent} from './pp/index.js';
 import {SetHandLocalTransformComponent} from './pp/index.js';
 import {SetHeadLocalTransformComponent} from './pp/index.js';
+import {SetTrackedHandJointLocalTransformComponent} from './pp/index.js';
 import {ShowFPSComponent} from './pp/index.js';
 import {SpatialAudioListenerComponent} from './pp/index.js';
 import {SwitchHandObjectComponent} from './pp/index.js';
@@ -29,10 +39,16 @@ import {ToolCursorComponent} from './pp/index.js';
 import {TrackedHandDrawAllJointsComponent} from './pp/index.js';
 import {TrackedHandDrawSkinComponent} from './pp/index.js';
 import {VirtualGamepadComponent} from './pp/index.js';
-import {CloneObjectComponent} from './test/components/clone_object_component.js';
-import {MoveStaticColliderComponent} from './test/components/move_static_collider_component.js';
-import {PulseOnButtonComponent} from './test/components/pulse_on_button_component.js';
+import {BulletThroughWallTestComponent} from './test/components/bullet_through_wall_test_component.js';
+import {GamepadButtonDisplayComponent} from './test/components/gamepad_button_display_component.js';
+import {InvertedSphereComponent} from './test/components/inverted_sphere_component.js';
+import {MovingPhysXTestComponent} from './test/components/moving_physx_test_component.js';
+import {RaycastTestComponent} from './test/components/raycast_test_component.js';
 import {ResetTransformComponent} from './test/components/reset_transform_component.js';
+import {ShowMeshedLineComponent} from './test/components/show_meshed_line_component.js';
+import {ShowTorusComponent} from './test/components/show_torus_component.js';
+import {ToggleActiveComponent} from './test/components/toggle_active_component.js';
+import {VecCreateCountComponent} from './test/components/vec_create_count_component.js';
 /* wle:auto-imports:end */
 
 import { loadRuntime } from '@wonderlandengine/api';
@@ -89,7 +105,16 @@ if (document.readyState === 'loading') {
 
 /* wle:auto-register:start */
 engine.registerComponent(MouseLookComponent);
+engine.registerComponent(CharacterSpawnerComponent);
+engine.registerComponent(RemoveMainEngineComponent);
+engine.registerComponent(StickMovementComponent);
+engine.registerComponent(AdjustHierarchyPhysXScaleComponent);
+engine.registerComponent(BenchmarkMaxPhysXComponent);
+engine.registerComponent(BenchmarkMaxVisibleTrianglesComponent);
 engine.registerComponent(ConsoleVRToolComponent);
+engine.registerComponent(CopyHandTransformComponent);
+engine.registerComponent(CopyPlayerPivotTransformComponent);
+engine.registerComponent(DebugTransformComponent);
 engine.registerComponent(EasyTuneToolComponent);
 engine.registerComponent(GamepadControlSchemeComponent);
 engine.registerComponent(GamepadMeshAnimatorComponent);
@@ -98,6 +123,7 @@ engine.registerComponent(PlayerLocomotionComponent);
 engine.registerComponent(SetActiveComponent);
 engine.registerComponent(SetHandLocalTransformComponent);
 engine.registerComponent(SetHeadLocalTransformComponent);
+engine.registerComponent(SetTrackedHandJointLocalTransformComponent);
 engine.registerComponent(ShowFPSComponent);
 engine.registerComponent(SpatialAudioListenerComponent);
 engine.registerComponent(SwitchHandObjectComponent);
@@ -105,10 +131,16 @@ engine.registerComponent(ToolCursorComponent);
 engine.registerComponent(TrackedHandDrawAllJointsComponent);
 engine.registerComponent(TrackedHandDrawSkinComponent);
 engine.registerComponent(VirtualGamepadComponent);
-engine.registerComponent(CloneObjectComponent);
-engine.registerComponent(MoveStaticColliderComponent);
-engine.registerComponent(PulseOnButtonComponent);
+engine.registerComponent(BulletThroughWallTestComponent);
+engine.registerComponent(GamepadButtonDisplayComponent);
+engine.registerComponent(InvertedSphereComponent);
+engine.registerComponent(MovingPhysXTestComponent);
+engine.registerComponent(RaycastTestComponent);
 engine.registerComponent(ResetTransformComponent);
+engine.registerComponent(ShowMeshedLineComponent);
+engine.registerComponent(ShowTorusComponent);
+engine.registerComponent(ToggleActiveComponent);
+engine.registerComponent(VecCreateCountComponent);
 /* wle:auto-register:end */
 
 engine.scene.load(`${Constants.ProjectName}.bin`);

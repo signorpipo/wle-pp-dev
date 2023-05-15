@@ -1,8 +1,7 @@
 import { Component } from "@wonderlandengine/api";
 import { Timer } from "../../pp/cauldron/cauldron/timer";
 import { PhysicsUtils } from "../../pp/cauldron/physics/physics_utils";
-import { getDebugVisualManager } from "../../pp/debug/debug_globals";
-import { getMouse } from "../../pp/input/cauldron/input_globals";
+import { Globals } from "../../pp/pp/globals";
 
 export class MouseRaycastTestComponent extends Component {
     static TypeName = "mouse-raycast-test";
@@ -28,11 +27,11 @@ export class MouseRaycastTestComponent extends Component {
 
             let raycastResult = PhysicsUtils.raycast(raycastSetup);
 
-            getMouse().raycastWorld(raycastSetup, raycastResult);
+            Globals.getMouse(this.engine).raycastWorld(raycastSetup, raycastResult);
 
-            getDebugVisualManager().drawRaycast(0, raycastResult, false);
+            Globals.getDebugVisualManager(this.engine).drawRaycast(0, raycastResult, false);
 
-            console.error(getMouse().isInsideView());
+            console.error(Globals.getMouse(this.engine).isInsideView());
         }
     }
 }

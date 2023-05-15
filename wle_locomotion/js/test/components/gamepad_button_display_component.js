@@ -25,7 +25,7 @@ export class GamepadButtonDisplayComponent extends Component {
             let button = this._myGamepad.buttons[this._myButtonIndex];
             console.error(button.pressed, button.touched, button.value);
 
-            //console.error(getGamepads()[Handedness.LEFT].getButtonInfo(this._myButtonIndex).isTouched());
+            //console.error(Globals.getGamepads(this.engine)[Handedness.LEFT].getButtonInfo(this._myButtonIndex).isTouched());
         }
     }
 }
