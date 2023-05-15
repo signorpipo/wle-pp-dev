@@ -13,6 +13,7 @@
 
 /* wle:auto-imports:start */
 import {MouseLookComponent} from '@wonderlandengine/components';
+import {AIMovementComponent} from './cauldron/components/ai_movement_component.js';
 import {CharacterSpawnerComponent} from './cauldron/components/character_spawner_component.js';
 import {RemoveMainEngineComponent} from './cauldron/components/remove_main_engine_component.js';
 import {StickMovementComponent} from './cauldron/components/stick_movement_component.js';
@@ -105,6 +106,7 @@ if (document.readyState === 'loading') {
 
 /* wle:auto-register:start */
 engine.registerComponent(MouseLookComponent);
+engine.registerComponent(AIMovementComponent);
 engine.registerComponent(CharacterSpawnerComponent);
 engine.registerComponent(RemoveMainEngineComponent);
 engine.registerComponent(StickMovementComponent);
