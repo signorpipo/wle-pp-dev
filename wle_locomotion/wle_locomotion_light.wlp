@@ -2945,7 +2945,7 @@
                             0.5146021,
                             0.5146021
                         ],
-                        "type": "spot",
+                        "type": "point",
                         "shadows": false,
                         "outerAngle": 180.0,
                         "innerAngle": 100.0,
@@ -5103,7 +5103,7 @@
                             0.5146021,
                             0.5146021
                         ],
-                        "type": "spot",
+                        "type": "point",
                         "shadows": false,
                         "outerAngle": 180.0,
                         "innerAngle": 100.0,
