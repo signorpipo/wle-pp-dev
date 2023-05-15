@@ -64,7 +64,6 @@ PPEFAULT CHANGE:
 
 TEMP:
 
-- bug virtual gamepad con i pulsanti che si premono da soli
 - Mettere che di default ci sono i suoni dei passi e del teleport nel locomotion component
 - Bug casdk local leaderboard not working se non sei loggato
 - aggiungere materiali teleport valido non valido al component locomotion
