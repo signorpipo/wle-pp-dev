@@ -1,10 +1,10 @@
 import { Component, Property } from "@wonderlandengine/api";
-import { ComponentUtils } from "../../pp/cauldron/wl/utils/component_utils";
-import { quat2_create, vec3_create } from "../../pp/plugin/js/extensions/array_extension";
 import { Timer } from "../../pp/cauldron/cauldron/timer";
-import { CollisionCheckParams, CollisionRuntimeParams } from "../../pp/gameplay/experimental/character_controller/collision/legacy/collision_check/collision_params";
 import { PhysicsLayerFlags } from "../../pp/cauldron/physics/physics_layer_flags";
+import { ComponentUtils } from "../../pp/cauldron/wl/utils/component_utils";
 import { getCollisionCheck } from "../../pp/gameplay/experimental/character_controller/collision/collision_check_bridge";
+import { CollisionCheckParams, CollisionRuntimeParams } from "../../pp/gameplay/experimental/character_controller/collision/legacy/collision_check/collision_params";
+import { quat2_create, vec3_create } from "../../pp/plugin/js/extensions/array_extension";
 
 export class AIMovementComponent extends Component {
     static TypeName = "ai-movement";

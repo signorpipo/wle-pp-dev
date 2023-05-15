@@ -1,8 +1,8 @@
-import { Component, Property } from "@wonderlandengine/api";
-import { getDefaultResources } from "../../pp/pp/default_resources_globals";
-import { vec4_create } from "../../pp/plugin/js/extensions/array_extension";
-import { getDebugVisualManager } from "../../pp/debug/debug_globals";
+import { Component } from "@wonderlandengine/api";
 import { VisualLineParams } from "../../pp/cauldron/visual/elements/visual_line";
+import { getDebugVisualManager } from "../../pp/debug/debug_globals";
+import { vec4_create } from "../../pp/plugin/js/extensions/array_extension";
+import { getDefaultResources } from "../../pp/pp/default_resources_globals";
 
 export class ShowLineTestComponent extends Component {
     static TypeName = "show-line-test";

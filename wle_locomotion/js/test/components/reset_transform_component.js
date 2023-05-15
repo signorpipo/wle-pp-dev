@@ -1,4 +1,4 @@
-import { Component, Property } from "@wonderlandengine/api";
+import { Component } from "@wonderlandengine/api";
 
 export class ResetTransformComponent extends Component {
     static TypeName = "reset-transform";

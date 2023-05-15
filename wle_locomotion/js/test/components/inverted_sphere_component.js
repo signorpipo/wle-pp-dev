@@ -1,7 +1,7 @@
 import { Component } from "@wonderlandengine/api";
 import { MeshUtils } from "../../pp/cauldron/utils/mesh_utils";
-import { getDefaultResources } from "../../pp/pp/default_resources_globals";
 import { vec4_create } from "../../pp/plugin/js/extensions/array_extension";
+import { getDefaultResources } from "../../pp/pp/default_resources_globals";
 
 export class InvertedSphereComponent extends Component {
     static TypeName = "inverted-sphere";

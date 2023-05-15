@@ -1,11 +1,10 @@
 
 import { Component } from "@wonderlandengine/api";
-import { mat4_create, quat2_create, quat_create, vec3_create } from "../../pp/plugin/js/extensions/array_extension";
 import { Timer } from "../../pp/cauldron/cauldron/timer";
-import { Vec3Utils } from "../../pp/cauldron/js/utils/vec3_utils";
-import { QuatUtils } from "../../pp/cauldron/js/utils/quat_utils";
-import { Quat2Utils } from "../../pp/cauldron/js/utils/quat2_utils";
 import { Mat4Utils } from "../../pp/cauldron/js/utils/mat4_utils";
+import { Quat2Utils } from "../../pp/cauldron/js/utils/quat2_utils";
+import { QuatUtils } from "../../pp/cauldron/js/utils/quat_utils";
+import { Vec3Utils } from "../../pp/cauldron/js/utils/vec3_utils";
 
 export class VecCreateCountComponent extends Component {
     static TypeName = "vec-create-count";

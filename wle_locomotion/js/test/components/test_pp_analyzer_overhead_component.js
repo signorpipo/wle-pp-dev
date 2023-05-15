@@ -1,4 +1,4 @@
-import { Component, Property } from "@wonderlandengine/api";
+import { Component } from "@wonderlandengine/api";
 
 export let myTestAnalyzerOverhead = {};
 myTestAnalyzerOverhead.myFunction = function myTestAnalyzerOverhead() {

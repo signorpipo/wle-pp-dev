@@ -1,8 +1,8 @@
 import { Component, Property } from "@wonderlandengine/api";
 import { XRUtils } from "../../pp/cauldron/utils/xr_utils";
-import { HandPose } from "../../pp/input/pose/hand_pose";
 import { Handedness, InputSourceType } from "../../pp/input/cauldron/input_types";
 import { InputUtils } from "../../pp/input/cauldron/input_utils";
+import { HandPose } from "../../pp/input/pose/hand_pose";
 
 export class TestTrackedHandDrawJointsComponent extends Component {
     static TypeName = "test-tracked-hand-draw-joints";

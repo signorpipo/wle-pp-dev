@@ -1,6 +1,6 @@
 import { Component, Property } from "@wonderlandengine/api";
-import { GamepadButtonID } from "../../pp/input/gamepad/gamepad_buttons";
 import { getLeftGamepad } from "../../pp/input/cauldron/input_globals";
+import { GamepadButtonID } from "../../pp/input/gamepad/gamepad_buttons";
 
 export class ToggleActiveComponent extends Component {
     static TypeName = "toggle-active";

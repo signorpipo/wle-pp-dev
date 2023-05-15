@@ -1,14 +1,14 @@
 import { Component, Property } from "@wonderlandengine/api";
-import { ComponentUtils } from "../../pp/cauldron/wl/utils/component_utils";
-import { vec3_create } from "../../pp/plugin/js/extensions/array_extension";
 import { Timer } from "../../pp/cauldron/cauldron/timer";
-import { CollisionCheckParams, CollisionRuntimeParams } from "../../pp/gameplay/experimental/character_controller/collision/legacy/collision_check/collision_params";
-import { Direction2DTo3DConverter, Direction2DTo3DConverterParams } from "../../pp/gameplay/cauldron/cauldron/direction_2D_to_3D_converter";
-import { GamepadAxesID, GamepadButtonID } from "../../pp/input/gamepad/gamepad_buttons";
 import { PhysicsLayerFlags } from "../../pp/cauldron/physics/physics_layer_flags";
-import { getCollisionCheck } from "../../pp/gameplay/experimental/character_controller/collision/collision_check_bridge";
-import { getLeftGamepad } from "../../pp/input/cauldron/input_globals";
 import { XRUtils } from "../../pp/cauldron/utils/xr_utils";
+import { ComponentUtils } from "../../pp/cauldron/wl/utils/component_utils";
+import { Direction2DTo3DConverter, Direction2DTo3DConverterParams } from "../../pp/gameplay/cauldron/cauldron/direction_2D_to_3D_converter";
+import { getCollisionCheck } from "../../pp/gameplay/experimental/character_controller/collision/collision_check_bridge";
+import { CollisionCheckParams, CollisionRuntimeParams } from "../../pp/gameplay/experimental/character_controller/collision/legacy/collision_check/collision_params";
+import { getLeftGamepad } from "../../pp/input/cauldron/input_globals";
+import { GamepadAxesID, GamepadButtonID } from "../../pp/input/gamepad/gamepad_buttons";
+import { vec3_create } from "../../pp/plugin/js/extensions/array_extension";
 import { getPlayerObjects } from "../../pp/pp/scene_objects_globals";
 
 export class StickMovementComponent extends Component {

@@ -1,4 +1,4 @@
-import { Component, Property } from "@wonderlandengine/api";
+import { Component } from "@wonderlandengine/api";
 import { Timer } from "../../pp/cauldron/cauldron/timer";
 
 export class ToggleRequireMouseDownComponent extends Component {

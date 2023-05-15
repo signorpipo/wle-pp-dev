@@ -1,6 +1,6 @@
-import { Component, Property } from "@wonderlandengine/api";
-import { GamepadButtonID } from "../../pp/input/gamepad/gamepad_buttons";
+import { Component } from "@wonderlandengine/api";
 import { getLeftGamepad, getRightGamepad } from "../../pp/input/cauldron/input_globals";
+import { GamepadButtonID } from "../../pp/input/gamepad/gamepad_buttons";
 
 export class PulseOnButtonComponent extends Component {
     static TypeName = "pulse-on-button";

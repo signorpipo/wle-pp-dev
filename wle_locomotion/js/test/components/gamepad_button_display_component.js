@@ -1,6 +1,6 @@
 import { Component, Property } from "@wonderlandengine/api";
-import { HandPose } from "../../pp/input/pose/hand_pose";
 import { Handedness } from "../../pp/input/cauldron/input_types";
+import { HandPose } from "../../pp/input/pose/hand_pose";
 
 export class GamepadButtonDisplayComponent extends Component {
     static TypeName = "gamepad-button-display";

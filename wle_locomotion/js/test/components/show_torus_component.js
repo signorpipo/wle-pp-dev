@@ -1,9 +1,9 @@
-import { Component, Property } from "@wonderlandengine/api";
-import { getDefaultResources } from "../../pp/pp/default_resources_globals";
-import { vec4_create } from "../../pp/plugin/js/extensions/array_extension";
-import { getEasyTuneVariables } from "../../pp/tool/easy_tune/easy_tune_globals";
+import { Component } from "@wonderlandengine/api";
 import { VisualTorusParams } from "../../pp/cauldron/visual/elements/visual_torus";
 import { getVisualManager } from "../../pp/cauldron/visual/visual_globals";
+import { vec4_create } from "../../pp/plugin/js/extensions/array_extension";
+import { getDefaultResources } from "../../pp/pp/default_resources_globals";
+import { getEasyTuneVariables } from "../../pp/tool/easy_tune/easy_tune_globals";
 import { EasyTuneInt, EasyTuneNumber } from "../../pp/tool/easy_tune/easy_tune_variable_types";
 
 export class ShowTorusComponent extends Component {

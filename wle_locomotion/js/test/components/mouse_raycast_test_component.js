@@ -1,8 +1,8 @@
 import { Component } from "@wonderlandengine/api";
 import { Timer } from "../../pp/cauldron/cauldron/timer";
-import { getMouse } from "../../pp/input/cauldron/input_globals";
 import { PhysicsUtils } from "../../pp/cauldron/physics/physics_utils";
 import { getDebugVisualManager } from "../../pp/debug/debug_globals";
+import { getMouse } from "../../pp/input/cauldron/input_globals";
 
 export class MouseRaycastTestComponent extends Component {
     static TypeName = "mouse-raycast-test";

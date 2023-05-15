@@ -1,4 +1,4 @@
-import { Component, Property } from "@wonderlandengine/api";
+import { Component } from "@wonderlandengine/api";
 import { getCanvas } from "../../pp/cauldron/wl/engine_globals";
 
 export class TouchStartTestComponent extends Component {
