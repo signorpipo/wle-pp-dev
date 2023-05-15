@@ -100,11 +100,11 @@ export class MovingPhysXTestComponent extends Component {
         }
     }
 
-    _setStatic(static) {
+    _setStatic(staticValue) {
         if (this._myPhysXType == 0) {
-            this._myPhysX.static = static;
+            this._myPhysX.static = staticValue;
         } else {
-            this._myPhysX.kinematic = static;
+            this._myPhysX.kinematic = staticValue;
         }
     }
 

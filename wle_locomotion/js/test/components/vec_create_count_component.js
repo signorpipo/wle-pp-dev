@@ -2,47 +2,53 @@
 import { Component } from "@wonderlandengine/api";
 import { mat4_create, quat2_create, quat_create, vec3_create } from "../../pp/plugin/js/extensions/array_extension";
 import { Timer } from "../../pp/cauldron/cauldron/timer";
+import { Vec3Utils } from "../../pp/cauldron/js/utils/vec3_utils";
+import { QuatUtils } from "../../pp/cauldron/js/utils/quat_utils";
+import { Quat2Utils } from "../../pp/cauldron/js/utils/quat2_utils";
+import { Mat4Utils } from "../../pp/cauldron/js/utils/mat4_utils";
 
 export class VecCreateCountComponent extends Component {
     static TypeName = "vec-create-count";
     static Properties = {};
 
     init() {
-        this._myDebugWithPP = true;
+        if (this.active) {
+            this._myDebugWithPP = true;
 
-        this._myVec3CreateCall = 0;
+            this._myVec3CreateCall = 0;
 
-        let oldVec3 = vec3_create;
-        vec3_create = function vec3_create() {
-            this._myVec3CreateCall++;
-            return oldVec3(...arguments);
-        }.bind(this);
+            let oldVec3 = Vec3Utils.create;
+            Vec3Utils.create = function create() {
+                this._myVec3CreateCall++;
+                return oldVec3(...arguments);
+            }.bind(this);
 
-        this._myQuatCreateCall = 0;
+            this._myQuatCreateCall = 0;
 
-        let oldQuat = quat_create;
-        quat_create = function quat2_create() {
-            this._myQuatCreateCall++;
-            return oldQuat(...arguments);
-        }.bind(this);
+            let oldQuat = QuatUtils.create;
+            QuatUtils.create = function create() {
+                this._myQuatCreateCall++;
+                return oldQuat(...arguments);
+            }.bind(this);
 
-        this._myQuat2CreateCall = 0;
+            this._myQuat2CreateCall = 0;
 
-        let oldQuat2 = quat2_create;
-        quat2_create = function quat2_create() {
-            this._myQuat2CreateCall++;
-            return oldQuat2(...arguments);
-        }.bind(this);
+            let oldQuat2 = Quat2Utils.create;
+            Quat2Utils.create = function create() {
+                this._myQuat2CreateCall++;
+                return oldQuat2(...arguments);
+            }.bind(this);
 
-        this._myMat4CreateCall = 0;
+            this._myMat4CreateCall = 0;
 
-        let oldMat4 = mat4_create;
-        mat4_create = function mat4_create() {
-            this._myMat4CreateCall++;
-            return oldMat4(...arguments);
-        }.bind(this);
+            let oldMat4 = Mat4utils.create;
+            Mat4Utils.create = function create() {
+                this._myMat4CreateCall++;
+                return oldMat4(...arguments);
+            }.bind(this);
 
-        this._myTimer = new Timer(1);
+            this._myTimer = new Timer(1);
+        }
     }
 
     update(dt) {

@@ -4,59 +4,28 @@
             "name": "Scene",
             "components": [
                 {
-                    "type": "pp-debug-manager",
-                    "pp-debug-manager": {
-                        "_myCubeMesh": "p1",
-                        "_myFlatMaterial": "31",
-                        "_myConeMesh": "p3",
-                        "_mySphereMesh": "p2",
-                        "_myTextMaterial": "596",
-                        "_myDebugMaterial": "31"
-                    }
-                },
-                {
-                    "type": "pp-get-player-objects",
-                    "pp-get-player-objects": {
+                    "type": "pp-gateway",
+                    "pp-gateway": {
+                        "_myScene": "18",
                         "_myPlayer": "19",
                         "_myPlayerPivot": "20",
-                        "_myNonVRCamera": "21",
-                        "_myHead": "25",
+                        "_myCameraNonXR": "21",
                         "_myEyeLeft": "26",
                         "_myEyeRight": "27",
                         "_myHandLeft": "791",
                         "_myHandRight": "815",
-                        "_myNonVRHead": "115",
-                        "_myVRHead": "120"
-                    }
-                },
-                {
-                    "type": "pp-input-manager"
-                },
-                {
-                    "type": "pp-get-default-resources",
-                    "pp-get-default-resources": {
+                        "_myHead": "25",
                         "_myPlane": "p0",
                         "_myCube": "p1",
                         "_mySphere": "p2",
                         "_myCone": "p3",
                         "_myCylinder": "p4",
                         "_myCircle": "p5",
-                        "_myPhongOpaque": "780",
                         "_myFlatOpaque": "779",
-                        "_myText": "781",
-                        "_myFlatTrasparentNoDepth": "885",
-                        "_myFlatTransparentNoDepth": "885"
+                        "_myFlatTransparentNoDepth": "885",
+                        "_myPhongOpaque": "780",
+                        "_myText": "781"
                     }
-                },
-                {
-                    "type": "pp-visual-manager"
-                },
-                {
-                    "type": "pp-mute-everything",
-                    "active": false
-                },
-                {
-                    "type": "pp-clear-console-on-xr-session-start"
                 }
             ]
         },
@@ -66,7 +35,12 @@
             "components": [
                 {
                     "type": "pp-player-locomotion",
-                    "pp-player-locomotion": {},
+                    "pp-player-locomotion": {
+                        "_myPhysicsBlockLayerFlags": "0, 1, 0, 0, 0, 0, 0, 0",
+                        "_myFlyEnabled": true,
+                        "_myMoveThroughCollisionShortcutEnabled": true,
+                        "_myMoveHeadShortcutEnabled": false
+                    },
                     "active": true
                 }
             ],
@@ -88,7 +62,7 @@
             ]
         },
         "20": {
-            "name": "Pivot",
+            "name": "Player Pivot",
             "parent": "19"
         },
         "21": {
@@ -6886,7 +6860,7 @@
             "rotation": [
                 0.9659258,
                 0.258819,
-                3.8991665007870324e-8,
+                3.899166500787032e-8,
                 -8.86089850382632e-8
             ],
             "scaling": [
@@ -6985,7 +6959,7 @@
         },
         "597": {
             "name": "HUD",
-            "parent": "18",
+            "parent": "19",
             "translation": [
                 0.0,
                 0.0,
@@ -6998,9 +6972,9 @@
                 1.0
             ],
             "scaling": [
-                1.0,
-                1.0,
-                1.0
+                1.0000014,
+                1.000001,
+                1.0000021
             ]
         },
         "599": {
@@ -11715,7 +11689,8 @@
             "name": "vec create count",
             "components": [
                 {
-                    "type": "vec-create-count"
+                    "type": "vec-create-count",
+                    "active": false
                 }
             ],
             "parent": "71",
@@ -11909,7 +11884,7 @@
             ]
         },
         "777": {
-            "name": "Light",
+            "name": "45",
             "parent": "28",
             "components": [
                 {
@@ -11920,30 +11895,30 @@
                             0.5146021,
                             0.5146021
                         ],
-                        "type": "spot",
+                        "type": "sun",
                         "shadows": false,
                         "outerAngle": 180.0,
                         "innerAngle": 100.0,
                         "shadowRange": 100.0,
-                        "intensity": 33.329998
+                        "intensity": 1.0
                     }
                 }
             ],
             "translation": [
-                -5.0,
-                23.0,
-                0.0
+                -5.00002,
+                23.0000553,
+                -0.0000014
             ],
             "rotation": [
-                0.0,
-                0.0,
-                0.3007058,
-                0.9537169
+                0.1294095,
+                0.4829629,
+                0.2999502,
+                0.8124222
             ],
             "scaling": [
-                1.0000001,
-                1.0000001,
-                1.0
+                0.9999991,
+                0.9999995,
+                0.9999991
             ]
         },
         "784": {
