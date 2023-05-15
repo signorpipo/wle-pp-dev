@@ -1,4 +1,6 @@
 import { Component, Property } from "@wonderlandengine/api";
+import { GamepadButtonID } from "../../pp/input/gamepad/gamepad_buttons";
+import { getLeftGamepad } from "../../pp/input/cauldron/input_globals";
 
 export class ToggleActiveComponent extends Component {
     static TypeName = "toggle-active";
@@ -11,7 +13,7 @@ export class ToggleActiveComponent extends Component {
     }
 
     update(dt) {
-        if (PP.myLeftGamepad.getButtonInfo(PP.GamepadButtonID.SQUEEZE).isPressEnd()) {
+        if (getLeftGamepad().getButtonInfo(GamepadButtonID.SQUEEZE).isPressEnd()) {
             this._myCurrentActive = !this._myCurrentActive;
             this._myObject.pp_setActive(this._myCurrentActive);
         }

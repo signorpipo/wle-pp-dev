@@ -1,16 +1,20 @@
 import { Component, Property } from "@wonderlandengine/api";
+import { getDefaultResources } from "../../pp/pp/default_resources_globals";
+import { vec4_create } from "../../pp/plugin/js/extensions/array_extension";
+import { getDebugVisualManager } from "../../pp/debug/debug_globals";
+import { VisualLineParams } from "../../pp/cauldron/visual/elements/visual_line";
 
 export class ShowLineTestComponent extends Component {
     static TypeName = "show-line-test";
     static Properties = {};
 
     update(dt) {
-        let visualParams = new PP.VisualLineParams();
+        let visualParams = new VisualLineParams();
         visualParams.myStart = this.object.pp_getPosition();
         visualParams.myDirection = this.object.pp_getForward();
         visualParams.myLength = 0.4;
-        visualParams.myMaterial = PP.myDefaultResources.myMaterials.myFlatOpaque.clone();
-        visualParams.myMaterial.color = PP.vec4_create(0, 0, 1, 1);
-        PP.myDebugVisualManager.draw(visualParams);
+        visualParams.myMaterial = getDefaultResources().myMaterials.myFlatOpaque.clone();
+        visualParams.myMaterial.color = vec4_create(0, 0, 1, 1);
+        getDebugVisualManager().draw(visualParams);
     }
 }

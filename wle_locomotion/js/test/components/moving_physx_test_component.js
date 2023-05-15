@@ -1,4 +1,7 @@
 import { Component, Property } from "@wonderlandengine/api";
+import { TimerState } from "../../pp/cauldron/fsm/states/timer_state";
+import { Timer } from "../../pp/cauldron/cauldron/timer";
+import { FSM } from "../../pp/cauldron/fsm/fsm";
 
 export class MovingPhysXTestComponent extends Component {
     static TypeName = "moving-physx-test";
@@ -23,18 +26,18 @@ export class MovingPhysXTestComponent extends Component {
             this._myPhysX.active = true;
         }
 
-        this._myFSM = new PP.FSM();
+        this._myFSM = new FSM();
         this._myFSM.setDebugLogActive(true, "Moving Physx");
 
         let wait = 0.2;
-        this._myFSM.addState("wait_not_static", new PP.TimerState(wait, "end"));
-        this._myFSM.addState("inactive_to_static", new PP.TimerState(wait, "end"));
-        this._myFSM.addState("static", new PP.TimerState(wait, "end"));
-        this._myFSM.addState("active_static", new PP.TimerState(wait, "end"));
-        this._myFSM.addState("inactive_to_not_static", new PP.TimerState(wait, "end"));
-        this._myFSM.addState("not_static", new PP.TimerState(wait, "end"));
-        this._myFSM.addState("active_not_static", new PP.TimerState(wait, "end"));
-        this._myFSM.addState("active_not_static_move", new PP.TimerState(wait, "end"));
+        this._myFSM.addState("wait_not_static", new TimerState(wait, "end"));
+        this._myFSM.addState("inactive_to_static", new TimerState(wait, "end"));
+        this._myFSM.addState("static", new TimerState(wait, "end"));
+        this._myFSM.addState("active_static", new TimerState(wait, "end"));
+        this._myFSM.addState("inactive_to_not_static", new TimerState(wait, "end"));
+        this._myFSM.addState("not_static", new TimerState(wait, "end"));
+        this._myFSM.addState("active_not_static", new TimerState(wait, "end"));
+        this._myFSM.addState("active_not_static_move", new TimerState(wait, "end"));
 
         this._myFSM.addTransition("active_not_static_move", "inactive_to_static", "end", this._setActive.bind(this, false));
         this._myFSM.addTransition("inactive_to_static", "static", "end", this._setStatic.bind(this, true));
@@ -50,7 +53,7 @@ export class MovingPhysXTestComponent extends Component {
             this._myFSM.init("active_not_static_move");
         }
 
-        this._myTimer = new PP.Timer(wait);
+        this._myTimer = new Timer(wait);
 
     }
 

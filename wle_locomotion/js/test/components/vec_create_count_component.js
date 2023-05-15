@@ -1,5 +1,7 @@
 
-import { Component, Property } from "@wonderlandengine/api";
+import { Component } from "@wonderlandengine/api";
+import { mat4_create, quat2_create, quat_create, vec3_create } from "../../pp/plugin/js/extensions/array_extension";
+import { Timer } from "../../pp/cauldron/cauldron/timer";
 
 export class VecCreateCountComponent extends Component {
     static TypeName = "vec-create-count";
@@ -10,37 +12,37 @@ export class VecCreateCountComponent extends Component {
 
         this._myVec3CreateCall = 0;
 
-        let oldVec3 = PP.vec3_create;
-        PP.vec3_create = function vec3_create() {
+        let oldVec3 = vec3_create;
+        vec3_create = function vec3_create() {
             this._myVec3CreateCall++;
             return oldVec3(...arguments);
         }.bind(this);
 
         this._myQuatCreateCall = 0;
 
-        let oldQuat = PP.quat_create;
-        PP.quat_create = function quat_create() {
+        let oldQuat = quat_create;
+        quat_create = function quat2_create() {
             this._myQuatCreateCall++;
             return oldQuat(...arguments);
         }.bind(this);
 
         this._myQuat2CreateCall = 0;
 
-        let oldQuat2 = PP.quat2_create;
-        PP.quat2_create = function quat2_create() {
+        let oldQuat2 = quat2_create;
+        quat2_create = function quat2_create() {
             this._myQuat2CreateCall++;
             return oldQuat2(...arguments);
         }.bind(this);
 
         this._myMat4CreateCall = 0;
 
-        let oldMat4 = PP.mat4_create;
-        PP.mat4_create = function mat4_create() {
+        let oldMat4 = mat4_create;
+        mat4_create = function mat4_create() {
             this._myMat4CreateCall++;
             return oldMat4(...arguments);
         }.bind(this);
 
-        this._myTimer = new PP.Timer(1);
+        this._myTimer = new Timer(1);
     }
 
     update(dt) {

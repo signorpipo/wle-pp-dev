@@ -1,4 +1,8 @@
 import { Component, Property } from "@wonderlandengine/api";
+import { XRUtils } from "../../pp/cauldron/utils/xr_utils";
+import { HandPose } from "../../pp/input/pose/hand_pose";
+import { Handedness, InputSourceType } from "../../pp/input/cauldron/input_types";
+import { InputUtils } from "../../pp/input/cauldron/input_utils";
 
 export class TestTrackedHandDrawJointsComponent extends Component {
     static TypeName = "test-tracked-hand-draw-joints";
@@ -9,26 +13,22 @@ export class TestTrackedHandDrawJointsComponent extends Component {
     };
 
     init() {
-        this._myHandPose = new PP.HandPose(PP.InputUtils.getHandednessByIndex(this._myHandedness));
+        this._myHandPose = new HandPose(InputUtils.getHandednessByIndex(this._myHandedness));
         this._myHandPose.setFixForward(true);
     }
 
     start() {
-        this._myHandednessType = PP.InputUtils.getHandednessByIndex(this._myHandedness);
+        this._myHandednessType = InputUtils.getHandednessByIndex(this._myHandedness);
 
         this._myHandPose.start();
         this._buildTrackedHandHierarchy();
 
-        if (WL.xrSession) {
-            this._onXRSessionStart(WL.xrSession);
-        }
-        WL.onXRSessionStart.add(this._onXRSessionStart.bind(this));
-        WL.onXRSessionEnd.add(this._onXRSessionEnd.bind(this));
+        XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this));
     }
 
     update(dt) {
         this._myHandPose.update(dt);
-        let handInputSource = PP.InputUtils.getInputSource(this._myHandednessType, PP.InputSourceType.TRACKED_HAND);
+        let handInputSource = InputUtils.getInputSource(this._myHandednessType, InputSourceType.TRACKED_HAND);
 
         if (handInputSource) {
             let tip = Module['webxr_frame'].getJointPose(handInputSource.hand.get("wrist"), this._myReferenceSpace);
@@ -41,13 +41,13 @@ export class TestTrackedHandDrawJointsComponent extends Component {
                     tip.transform.orientation.y,
                     tip.transform.orientation.z,
                     tip.transform.orientation.w];
-                //quat.quat_toWorld(PP.myPlayerObjects.myPlayerPivot.pp_getTransformQuat(), quat);
+                //quat.quat_toWorld(getPlayerObjects().myPlayerPivot.pp_getTransformQuat(), quat);
                 quat.quat_rotateAxis(180, quat.quat_getUp(), quat);
                 quat = this._myHandPose.getRotationQuat();
 
                 quat.quat_rotateAxis(-60, quat.quat_getRight(), quat);
                 forwardRotation = 20;
-                forwardRotation = (this._myHandednessType == PP.Handedness.LEFT) ? forwardRotation : -forwardRotation;
+                forwardRotation = (this._myHandednessType == Handedness.LEFT) ? forwardRotation : -forwardRotation;
                 quat.quat_rotateAxis(forwardRotation, quat.quat_getForward(), quat);
                 //quat.quat_rotateAxis(15, quat.quat_getRight(), quat);
 
@@ -76,13 +76,13 @@ export class TestTrackedHandDrawJointsComponent extends Component {
 
                 position = position.vec3_add(positionIndex).vec3_scale(0.5);
 
-                //position.vec3_convertPositionToWorld(PP.myPlayerObjects.myPlayerPivot.pp_getTransform(), position);
+                //position.vec3_convertPositionToWorld(getPlayerObjects().myPlayerPivot.pp_getTransform(), position);
 
                 this._myTrackedHandObject.pp_setPositionLocal(this._myHandPose.getPosition());
-                //this._myTrackedHandObject.pp_translateObject(PP.vec3_create(-0.02, 0, 0));
+                //this._myTrackedHandObject.pp_translateObject(vec3_create(-0.02, 0, 0));
 
                 //this._myTrackedHandObject.pp_setScale(tip.radius);
-                //this._myTrackedHandObject.pp_rotateObject(PP.vec3_create(0, 180, 0));
+                //this._myTrackedHandObject.pp_rotateObject(vec3_create(0, 180, 0));
             }
         }
     }

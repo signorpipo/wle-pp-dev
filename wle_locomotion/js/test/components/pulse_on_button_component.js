@@ -1,16 +1,18 @@
 import { Component, Property } from "@wonderlandengine/api";
+import { GamepadButtonID } from "../../pp/input/gamepad/gamepad_buttons";
+import { getLeftGamepad, getRightGamepad } from "../../pp/input/cauldron/input_globals";
 
 export class PulseOnButtonComponent extends Component {
     static TypeName = "pulse-on-button";
     static Properties = {};
 
     update(dt) {
-        if (PP.myLeftGamepad.getButtonInfo(PP.GamepadButtonID.SQUEEZE).isPressEnd()) {
-            PP.myLeftGamepad.pulse(0.5, 0.01);
+        if (getLeftGamepad().getButtonInfo(GamepadButtonID.SQUEEZE).isPressEnd()) {
+            getLeftGamepad().pulse(0.5, 0.01);
         }
 
-        if (PP.myRightGamepad.getButtonInfo(PP.GamepadButtonID.SQUEEZE).isPressEnd()) {
-            PP.myRightGamepad.pulse(0.5, 0.1);
+        if (getRightGamepad().getButtonInfo(GamepadButtonID.SQUEEZE).isPressEnd()) {
+            getRightGamepad().pulse(0.5, 0.1);
         }
     }
 }

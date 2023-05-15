@@ -1,15 +1,16 @@
 import { Component, Property } from '@wonderlandengine/api';
+import { Timer } from '../../pp/cauldron/cauldron/timer';
 
 export class MoveStaticColliderComponent extends Component {
     static TypeName = 'move-static-collider';
     static Properties = {};
 
     start() {
-        this._mySetStaticFalseTimer = new PP.Timer(2);
-        this._mySetStaticTrueTimer = new PP.Timer(2, false);
+        this._mySetStaticFalseTimer = new Timer(2);
+        this._mySetStaticTrueTimer = new Timer(2, false);
         this._myPhysx = this.object.pp_getComponent("physx");
 
-        this._mySetKinematicTimer = new PP.Timer(1, false);
+        this._mySetKinematicTimer = new Timer(1, false);
     }
 
     update(dt) {
@@ -28,7 +29,7 @@ export class MoveStaticColliderComponent extends Component {
             if (this._mySetKinematicTimer.isDone()) {
                 this._mySetKinematicTimer.reset();
                 //this._myPhysx.kinematic = true;
-                this.object.pp_translate(PP.vec3_create(0, 0, 1));
+                this.object.pp_translate(vec3_create(0, 0, 1));
                 this._mySetStaticTrueTimer.start();
                 console.error("moved");
             }
@@ -45,5 +46,3 @@ export class MoveStaticColliderComponent extends Component {
         }
     }
 };
-
-WL.registerComponent(PP.MoveStaticColliderComponent);

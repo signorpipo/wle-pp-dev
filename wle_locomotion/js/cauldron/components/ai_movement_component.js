@@ -1,6 +1,10 @@
-import { Component, MeshComponent, Property } from "@wonderlandengine/api";
+import { Component, Property } from "@wonderlandengine/api";
 import { ComponentUtils } from "../../pp/cauldron/wl/utils/component_utils";
-import { CloneParams } from "../../pp/cauldron/wl/utils/object_utils";
+import { quat2_create, vec3_create } from "../../pp/plugin/js/extensions/array_extension";
+import { Timer } from "../../pp/cauldron/cauldron/timer";
+import { CollisionCheckParams, CollisionRuntimeParams } from "../../pp/gameplay/experimental/character_controller/collision/legacy/collision_check/collision_params";
+import { PhysicsLayerFlags } from "../../pp/cauldron/physics/physics_layer_flags";
+import { getCollisionCheck } from "../../pp/gameplay/experimental/character_controller/collision/collision_check_bridge";
 
 export class AIMovementComponent extends Component {
     static TypeName = "ai-movement";
@@ -14,18 +18,18 @@ export class AIMovementComponent extends Component {
     };
 
     start() {
-        this._myCurrentDirection = PP.vec3_create(0, 0, 1);
+        this._myCurrentDirection = vec3_create(0, 0, 1);
 
-        this._myChangeDirectionTimer = new PP.Timer(0);
+        this._myChangeDirectionTimer = new Timer(0);
         this._myChangeDirectionTimer.end();
 
-        this._myCollisionTimer = new PP.Timer(1);
+        this._myCollisionTimer = new Timer(1);
         this._myCollisionTimer.end();
 
         this._mySpeed = Math.pp_random(this._myMinSpeed, this._myMaxSpeed);
 
         this._myCollisionCheckParams = null;
-        this._myCollisionRuntimeParams = new PP.CollisionRuntimeParams();
+        this._myCollisionRuntimeParams = new CollisionRuntimeParams();
 
         this._myFirstTime = true;
 
@@ -42,7 +46,7 @@ export class AIMovementComponent extends Component {
     }
 
     _setupCollisionCheckParams() {
-        this._myCollisionCheckParams = new PP.CollisionCheckParams();
+        this._myCollisionCheckParams = new CollisionCheckParams();
 
         this._myCollisionCheckParams.mySplitMovementEnabled = false;
         this._myCollisionCheckParams.mySplitMovementMaxLength = 0;
@@ -122,7 +126,7 @@ export class AIMovementComponent extends Component {
         this._myCollisionCheckParams.mySlidingCheckBothDirections = false;       // expensive, 2 times the check for the whole horizontal movement!
         this._myCollisionCheckParams.mySlidingFlickeringPreventionType = 0;      // expensive, 2 times the check for the whole horizontal movement!
 
-        this._myCollisionCheckParams.myHorizontalBlockLayerFlags = new PP.PhysicsLayerFlags();
+        this._myCollisionCheckParams.myHorizontalBlockLayerFlags = new PhysicsLayerFlags();
         this._myCollisionCheckParams.myHorizontalBlockLayerFlags.setAllFlagsActive(true);
         let physXComponents = this.object.pp_getComponentsHierarchy("physx");
         for (let physXComponent of physXComponents) {
@@ -167,10 +171,10 @@ export class AIMovementComponent extends Component {
 // IMPLEMENTATION
 
 AIMovementComponent.prototype.update = function () {
-    let tempUp = PP.vec3_create();
-    let tempMovement = PP.vec3_create();
-    let tempGravity = PP.vec3_create();
-    let tempTransformQuat = PP.quat2_create();
+    let tempUp = vec3_create();
+    let tempMovement = vec3_create();
+    let tempGravity = vec3_create();
+    let tempTransformQuat = quat2_create();
     return function update(dt) {
         if (dt > 0.25) {
             dt = 0.25;
@@ -193,7 +197,7 @@ AIMovementComponent.prototype.update = function () {
         let movement = this._myCurrentDirection.vec3_scale(this._mySpeed * this._myScale * dt, tempMovement);
         movement.vec3_add(up.vec3_scale(-3 * this._myScale * dt, tempGravity), movement);
 
-        PP.myCollisionCheck.move(movement, this.object.pp_getTransformQuat(tempTransformQuat), this._myCollisionCheckParams, this._myCollisionRuntimeParams);
+        getCollisionCheck().move(movement, this.object.pp_getTransformQuat(tempTransformQuat), this._myCollisionCheckParams, this._myCollisionRuntimeParams);
 
         if (this._myCollisionRuntimeParams.myHorizontalMovementCanceled) {
             if (this._myCollisionTimer.isDone()) {
@@ -208,7 +212,7 @@ AIMovementComponent.prototype.update = function () {
 }();
 
 AIMovementComponent.prototype._changeDirection = function () {
-    let tempUp = PP.vec3_create();
+    let tempUp = vec3_create();
     return function _changeDirection(goOpposite) {
         let up = this.object.pp_getUp(tempUp);
 

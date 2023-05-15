@@ -1,4 +1,6 @@
 import { Component, Property } from "@wonderlandengine/api";
+import { HandPose } from "../../pp/input/pose/hand_pose";
+import { Handedness } from "../../pp/input/cauldron/input_types";
 
 export class GamepadButtonDisplayComponent extends Component {
     static TypeName = "gamepad-button-display";
@@ -7,7 +9,7 @@ export class GamepadButtonDisplayComponent extends Component {
     };
 
     start() {
-        this._myHandPose = new PP.HandPose(PP.Handedness.LEFT);
+        this._myHandPose = new HandPose(Handedness.LEFT);
         this._myHandPose.start();
     }
 
@@ -23,7 +25,7 @@ export class GamepadButtonDisplayComponent extends Component {
             let button = this._myGamepad.buttons[this._myButtonIndex];
             console.error(button.pressed, button.touched, button.value);
 
-            //console.error(PP.myGamepads[PP.Handedness.LEFT].getButtonInfo(this._myButtonIndex).isTouched());
+            //console.error(getGamepads()[Handedness.LEFT].getButtonInfo(this._myButtonIndex).isTouched());
         }
     }
 }

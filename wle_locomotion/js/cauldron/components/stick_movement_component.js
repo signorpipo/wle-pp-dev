@@ -1,5 +1,15 @@
 import { Component, Property } from "@wonderlandengine/api";
 import { ComponentUtils } from "../../pp/cauldron/wl/utils/component_utils";
+import { vec3_create } from "../../pp/plugin/js/extensions/array_extension";
+import { Timer } from "../../pp/cauldron/cauldron/timer";
+import { CollisionCheckParams, CollisionRuntimeParams } from "../../pp/gameplay/experimental/character_controller/collision/legacy/collision_check/collision_params";
+import { Direction2DTo3DConverter, Direction2DTo3DConverterParams } from "../../pp/gameplay/cauldron/cauldron/direction_2D_to_3D_converter";
+import { GamepadAxesID, GamepadButtonID } from "../../pp/input/gamepad/gamepad_buttons";
+import { PhysicsLayerFlags } from "../../pp/cauldron/physics/physics_layer_flags";
+import { getCollisionCheck } from "../../pp/gameplay/experimental/character_controller/collision/collision_check_bridge";
+import { getLeftGamepad } from "../../pp/input/cauldron/input_globals";
+import { XRUtils } from "../../pp/cauldron/utils/xr_utils";
+import { getPlayerObjects } from "../../pp/pp/scene_objects_globals";
 
 export class StickMovementComponent extends Component {
     static TypeName = "stick-movement";
@@ -17,7 +27,7 @@ export class StickMovementComponent extends Component {
     };
 
     start() {
-        let directionConverterHeadParams = new PP.Direction2DTo3DConverterParams();
+        let directionConverterHeadParams = new Direction2DTo3DConverterParams();
         directionConverterHeadParams.myAutoUpdateFlyForward = this._myFlyEnabled;
         directionConverterHeadParams.myAutoUpdateFlyRight = this._myFlyEnabled;
         directionConverterHeadParams.myMinAngleToFlyForwardUp = this._myMinAngleToFlyUpHead;
@@ -25,7 +35,7 @@ export class StickMovementComponent extends Component {
         directionConverterHeadParams.myMinAngleToFlyRightUp = this._myMinAngleToFlyRight;
         directionConverterHeadParams.myMinAngleToFlyRightDown = this._myMinAngleToFlyRight;
 
-        let directionConverterHandParams = new PP.Direction2DTo3DConverterParams();
+        let directionConverterHandParams = new Direction2DTo3DConverterParams();
         directionConverterHandParams.myAutoUpdateFlyForward = this._myFlyEnabled;
         directionConverterHandParams.myAutoUpdateFlyRight = this._myFlyEnabled;
         directionConverterHandParams.myMinAngleToFlyForwardUp = this._myMinAngleToFlyUpHand;
@@ -33,22 +43,18 @@ export class StickMovementComponent extends Component {
         directionConverterHandParams.myMinAngleToFlyRightUp = this._myMinAngleToFlyRight;
         directionConverterHandParams.myMinAngleToFlyRightDown = this._myMinAngleToFlyRight;
 
-        this._myDirectionConverterHead = new PP.Direction2DTo3DConverter(directionConverterHeadParams);
-        this._myDirectionConverterHand = new PP.Direction2DTo3DConverter(directionConverterHandParams);
+        this._myDirectionConverterHead = new Direction2DTo3DConverter(directionConverterHeadParams);
+        this._myDirectionConverterHand = new Direction2DTo3DConverter(directionConverterHandParams);
 
         this._myCollisionCheckParams = null;
-        this._myCollisionRuntimeParams = new PP.CollisionRuntimeParams();
+        this._myCollisionRuntimeParams = new CollisionRuntimeParams();
 
-        this._myDirectionReferenceObject = PP.myPlayerObjects.myHead;
+        this._myDirectionReferenceObject = getPlayerObjects().myHead;
         this._mySessionActive = false;
 
-        if (WL.xrSession) {
-            this._onXRSessionStart(WL.xrSession);
-        }
-        WL.onXRSessionStart.add(this._onXRSessionStart.bind(this));
-        WL.onXRSessionEnd.add(this._onXRSessionEnd.bind(this));
+        XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this));
 
-        this._myStickIdleTimer = new PP.Timer(0.25, false);
+        this._myStickIdleTimer = new Timer(0.25, false);
         this._myIsFlying = false;
 
         this._myFirstTime = true;
@@ -67,7 +73,7 @@ export class StickMovementComponent extends Component {
             this._setupCollisionCheckParams();
         }
 
-        if (PP.myLeftGamepad.getButtonInfo(PP.GamepadButtonID.SELECT).isPressed()) {
+        if (getLeftGamepad().getButtonInfo(GamepadButtonID.SELECT).isPressed()) {
             let mesh = this.object.pp_getComponentHierarchy("mesh");
             let physX = this.object.pp_getComponentHierarchy("physx");
 
@@ -103,10 +109,10 @@ export class StickMovementComponent extends Component {
 
         let up = this.object.pp_getUp();
 
-        let movement = PP.vec3_create();
+        let movement = vec3_create();
 
         let minIntensityThreshold = 0.1;
-        let axes = PP.myLeftGamepad.getAxesInfo(PP.GamepadAxesID.THUMBSTICK).getAxes();
+        let axes = getLeftGamepad().getAxesInfo(GamepadAxesID.THUMBSTICK).getAxes();
         axes[0] = Math.abs(axes[0]) > minIntensityThreshold ? axes[0] : 0;
         axes[1] = Math.abs(axes[1]) > minIntensityThreshold ? axes[1] : 0;
 
@@ -136,15 +142,15 @@ export class StickMovementComponent extends Component {
             }
         }
 
-        if (PP.myLeftGamepad.getButtonInfo(PP.GamepadButtonID.TOP_BUTTON).isPressed()) {
+        if (getLeftGamepad().getButtonInfo(GamepadButtonID.TOP_BUTTON).isPressed()) {
             movement.vec3_add([0, this._mySpeed * this._myScale * dt, 0], movement);
             this._myIsFlying = true;
-        } else if (PP.myLeftGamepad.getButtonInfo(PP.GamepadButtonID.BOTTOM_BUTTON).isPressed()) {
+        } else if (getLeftGamepad().getButtonInfo(GamepadButtonID.BOTTOM_BUTTON).isPressed()) {
             movement.vec3_add([0, -this._mySpeed * this._myScale * dt, 0], movement);
             this._myIsFlying = true;
         }
 
-        if (PP.myLeftGamepad.getButtonInfo(PP.GamepadButtonID.BOTTOM_BUTTON).isPressEnd(2)) {
+        if (getLeftGamepad().getButtonInfo(GamepadButtonID.BOTTOM_BUTTON).isPressEnd(2)) {
             this._myIsFlying = false;
         }
 
@@ -152,7 +158,7 @@ export class StickMovementComponent extends Component {
             movement.vec3_add(up.vec3_scale(-3 * this._myScale * dt), movement);
         }
 
-        PP.myCollisionCheck.move(movement, this.object.pp_getTransformQuat(), this._myCollisionCheckParams, this._myCollisionRuntimeParams);
+        getCollisionCheck().move(movement, this.object.pp_getTransformQuat(), this._myCollisionCheckParams, this._myCollisionRuntimeParams);
 
         this.object.pp_translate(this._myCollisionRuntimeParams.myFixedMovement);
 
@@ -164,7 +170,7 @@ export class StickMovementComponent extends Component {
     }
 
     _setupCollisionCheckParams() {
-        this._myCollisionCheckParams = new PP.CollisionCheckParams();
+        this._myCollisionCheckParams = new CollisionCheckParams();
 
         this._myCollisionCheckParams.mySplitMovementEnabled = false;
         this._myCollisionCheckParams.mySplitMovementMaxLength = 0;
@@ -242,7 +248,7 @@ export class StickMovementComponent extends Component {
         this._myCollisionCheckParams.mySlidingCheckBothDirections = false;       // expensive, 2 times the check for the whole horizontal movement!
         this._myCollisionCheckParams.mySlidingFlickeringPreventionType = 1;      // expensive, 2 times the check for the whole horizontal movement!
 
-        this._myCollisionCheckParams.myHorizontalBlockLayerFlags = new PP.PhysicsLayerFlags();
+        this._myCollisionCheckParams.myHorizontalBlockLayerFlags = new PhysicsLayerFlags();
         this._myCollisionCheckParams.myHorizontalBlockLayerFlags.setAllFlagsActive(true);
         let physXComponents = this.object.pp_getComponentsHierarchy("physx");
         for (let physXComponent of physXComponents) {
@@ -269,18 +275,18 @@ export class StickMovementComponent extends Component {
 
     _onXRSessionStart() {
         if (this._myDirectionReference == 0) {
-            this._myDirectionReferenceObject = PP.myPlayerObjects.myHead;
+            this._myDirectionReferenceObject = getPlayerObjects().myHead;
         } else if (this._myDirectionReference == 1) {
-            this._myDirectionReferenceObject = PP.myPlayerObjects.myHandLeft;
+            this._myDirectionReferenceObject = getPlayerObjects().myHandLeft;
         } else {
-            this._myDirectionReferenceObject = PP.myPlayerObjects.myHandRight;
+            this._myDirectionReferenceObject = getPlayerObjects().myHandRight;
         }
         this._mySessionActive = true;
     }
 
     _onXRSessionEnd() {
         this._mySessionActive = false;
-        this._myDirectionReferenceObject = PP.myPlayerObjects.myHead;
+        this._myDirectionReferenceObject = getPlayerObjects().myHead;
     }
 
     pp_clone(clonedObject, deepCloneParams, extraData) {

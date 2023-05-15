@@ -1,4 +1,5 @@
 import { Component } from "@wonderlandengine/api";
+import { Timer } from "../../pp/cauldron/cauldron/timer";
 
 export class Vec3FunctionCountComponent extends Component {
     static TypeName = "vec3-function-count";
@@ -18,7 +19,7 @@ export class Vec3FunctionCountComponent extends Component {
         this.vec3_isConcordantTotal = 0;
         this.vec3_zeroTotal = 0;
 
-        this._myTimer = new PP.Timer(2);
+        this._myTimer = new Timer(2);
     }
 
     update(dt) {

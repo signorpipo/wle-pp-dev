@@ -1,11 +1,15 @@
 import { Component } from "@wonderlandengine/api";
+import { Timer } from "../../pp/cauldron/cauldron/timer";
+import { getMouse } from "../../pp/input/cauldron/input_globals";
+import { PhysicsUtils } from "../../pp/cauldron/physics/physics_utils";
+import { getDebugVisualManager } from "../../pp/debug/debug_globals";
 
 export class MouseRaycastTestComponent extends Component {
     static TypeName = "mouse-raycast-test";
     static Properties = {};
 
     start() {
-        this._myTimer = new PP.Timer(0);
+        this._myTimer = new Timer(0);
         this._myTimer.update(this._myTimer.getDuration());
     }
 
@@ -16,19 +20,19 @@ export class MouseRaycastTestComponent extends Component {
 
             let distance = 1000;
 
-            let raycastSetup = new PP.RaycastSetup();
+            let raycastSetup = new raycastSetup();
             raycastSetup.myBlockLayerFlags.setAllFlagsActive(true);
             raycastSetup.myObjectsToIgnore = [];
             raycastSetup.myIgnoreHitsInsideCollision = false;
             raycastSetup.myDistance = distance;
 
-            let raycastResult = PP.PhysicsUtils.raycast(raycastSetup);
+            let raycastResult = PhysicsUtils.raycast(raycastSetup);
 
-            PP.myMouse.raycastWorld(raycastSetup, raycastResult);
+            getMouse().raycastWorld(raycastSetup, raycastResult);
 
-            PP.myDebugVisualManager.drawRaycast(0, raycastResult, false);
+            getDebugVisualManager().drawRaycast(0, raycastResult, false);
 
-            console.error(PP.myMouse.isInsideView());
+            console.error(getMouse().isInsideView());
         }
     }
 }

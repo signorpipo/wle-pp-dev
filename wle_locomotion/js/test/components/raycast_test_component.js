@@ -1,11 +1,14 @@
 import { Component } from "@wonderlandengine/api";
+import { Timer } from "../../pp/cauldron/cauldron/timer";
+import { PhysicsUtils } from "../../pp/cauldron/physics/physics_utils";
+import { getDebugVisualManager } from "../../pp/debug/debug_globals";
 
 export class RaycastTestComponent extends Component {
     static TypeName = "raycast-test";
     static Properties = {};
 
     start() {
-        this._myTimer = new PP.Timer(0);
+        this._myTimer = new Timer(0);
         this._myTimer.update(this._myTimer.getDuration());
     }
 
@@ -16,7 +19,7 @@ export class RaycastTestComponent extends Component {
 
             let distance = 1000;
 
-            let raycastSetup = new PP.RaycastSetup();
+            let raycastSetup = new raycastSetup();
 
             raycastSetup.myOrigin.vec3_copy(this.object.pp_getPosition());
             raycastSetup.myDirection.vec3_copy(this.object.pp_getForward());
@@ -27,9 +30,9 @@ export class RaycastTestComponent extends Component {
             raycastSetup.myObjectsToIgnore = [];
             raycastSetup.myIgnoreHitsInsideCollision = false;
 
-            let raycastResult = PP.PhysicsUtils.raycast(raycastSetup);
+            let raycastResult = PhysicsUtils.raycast(raycastSetup);
 
-            PP.myDebugVisualManager.drawRaycast(0, raycastResult, false);
+            getDebugVisualManager().drawRaycast(0, raycastResult, false);
         }
     }
 }
