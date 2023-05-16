@@ -44,7 +44,7 @@ export function initCursorComponentModPrototype() {
         this._lastHeight = null;
         this._lastPointerID = null;
 
-        this._handedness = null;
+        this.handedness = null;
 
         this._transformQuat = quat2_create();
         this._origin = vec3_create();
@@ -59,7 +59,7 @@ export function initCursorComponentModPrototype() {
         this._isDownForUpWithDown = false;
         this._isUpWithNoDown = false;
 
-        this._cursorPos = vec3_create();
+        this.cursorPos = vec3_create();
         this._tempVec = vec3_create();
 
         this._viewComponent = null;
@@ -84,16 +84,16 @@ export function initCursorComponentModPrototype() {
             if (!inputComp) {
                 console.warn("cursor component on object " + this.object.pp_getName() + " was configured with handedness \"input component\", " + "but object has no input component.");
             } else {
-                this._handedness = inputComp.handedness;
+                this.handedness = inputComp.handedness;
                 this.input = inputComp;
             }
         } else {
-            this._handedness = InputUtils.getHandednessByIndex(this.handedness - 1);
+            this.handedness = InputUtils.getHandednessByIndex(this.handedness - 1);
         }
 
         this.pp_setViewComponent(this.object.pp_getComponent(ViewComponent));
 
-        XRUtils.registerSessionStartEventListener(this, this.setupXREvents.bind(this), true, false, this.engine);
+        XRUtils.registerSessionStartEventListener(this, this.setupVREvents.bind(this), true, false, this.engine);
         this._onDestroyListeners.push(() => {
             XRUtils.unregisterSessionStartEventListener(this, this.engine);
         });
@@ -163,9 +163,9 @@ export function initCursorComponentModPrototype() {
 
         let hitTestResultDistance = Infinity;
         if (this._hitTestLocation != null && this._hitTestLocation.visible) {
-            this._hitTestObject.pp_getPositionWorld(this._cursorPos);
-            this._rayHitLocation.vec3_copy(this._cursorPos);
-            hitTestResultDistance = this._cursorPos.vec3_distance(this.object.pp_getPositionWorld(this._tempVec));
+            this._hitTestObject.pp_getPositionWorld(this.cursorPos);
+            this._rayHitLocation.vec3_copy(this.cursorPos);
+            hitTestResultDistance = this.cursorPos.vec3_distance(this.object.pp_getPositionWorld(this._tempVec));
 
             this._hitObjectData[0] = this._hitTestObject;
             this._hitObjectData[1] = this._rayHitLocation;
@@ -176,9 +176,9 @@ export function initCursorComponentModPrototype() {
         if (rayHit.hitCount > 0) {
             let rayHitDistance = rayHit.distances[0];
             if (rayHitDistance <= hitTestResultDistance) {
-                // Overwrite _cursorPos set by hit test location
-                this._cursorPos.vec3_copy(rayHit.locations[0]);
-                this._rayHitLocation.vec3_copy(this._cursorPos);
+                // Overwrite cursorPos set by hit test location
+                this.cursorPos.vec3_copy(rayHit.locations[0]);
+                this._rayHitLocation.vec3_copy(this.cursorPos);
 
                 this._hitObjectData[0] = rayHit.objects[0];
                 this._hitObjectData[1] = this._rayHitLocation;
@@ -186,7 +186,7 @@ export function initCursorComponentModPrototype() {
                 this.hoveringReality = true;
             }
         } else if (hitTestResultDistance == Infinity) {
-            this._cursorPos.vec3_zero();
+            this.cursorPos.vec3_zero();
 
             this._hitObjectData[0] = null;
             this._hitObjectData[1] = null;
@@ -242,11 +242,11 @@ export function initCursorComponentModPrototype() {
         }
 
         if (this.cursorObject) {
-            if (this.hoveringObject && (this._cursorPos[0] != 0 || this._cursorPos[1] != 0 || this._cursorPos[2] != 0)) {
+            if (this.hoveringObject && (this.cursorPos[0] != 0 || this.cursorPos[1] != 0 || this.cursorPos[2] != 0)) {
                 this._setCursorVisibility(true);
-                this.cursorObject.pp_setPosition(this._cursorPos);
+                this.cursorObject.pp_setPosition(this.cursorPos);
                 this.cursorObject.pp_setTransformLocalQuat(this.cursorObject.pp_getTransformLocalQuat(this._transformQuat).quat2_normalize(this._transformQuat));
-                this._setCursorRayTransform(this._cursorPos);
+                this._setCursorRayTransform(this.cursorPos);
             } else {
                 if (this.visible && this.cursorRayObject) {
                     this._setCursorRayTransform(null);
@@ -440,7 +440,7 @@ export function initCursorComponentModPrototype() {
         this._isUpWithNoDown = false;
     };
 
-    cursorComponentMod.setupXREvents = function setupXREvents(session) {
+    cursorComponentMod.setupVREvents = function setupVREvents(session) {
         // If in XR, one-time bind the listener 
 
         let onSelect = this.onSelect.bind(this);
@@ -469,7 +469,7 @@ export function initCursorComponentModPrototype() {
     cursorComponentMod.onSelectStart = function onSelectStart(e) {
         if (this.active) {
             this.arTouchDown = true;
-            if (e.inputSource.handedness == this._handedness) {
+            if (e.inputSource.handedness == this.handedness) {
                 this._isDown = true;
                 this._isRealDown = true;
 
@@ -479,7 +479,7 @@ export function initCursorComponentModPrototype() {
             }
         }
 
-        if (e.inputSource.handedness == this._handedness) {
+        if (e.inputSource.handedness == this.handedness) {
             this._isRealDown = true;
         }
     };
@@ -487,7 +487,7 @@ export function initCursorComponentModPrototype() {
     cursorComponentMod.onSelectEnd = function onSelectEnd(e) {
         if (this.active) {
             this.arTouchDown = false;
-            if (e.inputSource.handedness == this._handedness) {
+            if (e.inputSource.handedness == this.handedness) {
                 if (!this._isDownForUpWithDown) {
                     this._isUpWithNoDown = true;
                 }
@@ -499,7 +499,7 @@ export function initCursorComponentModPrototype() {
             }
         }
 
-        if (e.inputSource.handedness == this._handedness) {
+        if (e.inputSource.handedness == this.handedness) {
             this._isRealDown = false;
         }
     };
