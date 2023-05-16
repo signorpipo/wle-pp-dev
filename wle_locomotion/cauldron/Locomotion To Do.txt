@@ -75,7 +75,6 @@ TEMP:
 - add a hide if hand pose invalid component
 	- volendo si può ancora aggiungere al set active
 - Function overwriter senza debug in cauldron?
-- _alreadyRegisteredEngines add my? cercare let _ without my
 - particles spawner fix object pool method
 - fix particles spawner not setting the horizontal speed scale
 - aggiungere il particle component sugli oggetti direttamente e clonarli (solo quello che è clonabile)
