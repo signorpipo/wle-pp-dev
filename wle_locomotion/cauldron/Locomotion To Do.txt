@@ -64,6 +64,7 @@ PPEFAULT CHANGE:
 
 TEMP:
 
+- console vr, on show fa vedere brevemente il quadratino per dirti che ci sono aggiornamenti
 - add pools manager to globals
 	- Create pool e destroy pool
 - Mettere che di default ci sono i suoni dei passi e del teleport nel locomotion component
