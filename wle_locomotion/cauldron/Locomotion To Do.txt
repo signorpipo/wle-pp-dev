@@ -74,18 +74,13 @@ TEMP:
 - view reset bug, non rimane dove tu stavi gia guardando
 - add a hide if hand pose invalid component
 	- volendo si può ancora aggiungere al set active
-- remove pp_isEmpty from emitter mod
-- remove Globals.getSceneObjects dal file scene objects globals stesso, usarlo solo per le funzioni esterne e farlo anche negli altri file
 - Function overwriter senza debug in cauldron?
 - _alreadyRegisteredEngines add my? cercare let _ without my
 - particles spawner fix object pool method
 - fix particles spawner not setting the horizontal speed scale
 - aggiungere il particle component sugli oggetti direttamente e clonarli (solo quello che è clonabile)
   - però non puoi più usare ig rabbable come target ma alla fine penso sia accettabile
-- audio setup not able to set a null path (empty strings convert to false)
-	- audio setup ref distance default 0
 - playground move components inside component folder, change source path
-- mesh modifier e locomotion to 1.0.0
 - Browser Utils open link con fake click
 - add some pp component (as experimental?) like fade view in out e particle spawned component
 

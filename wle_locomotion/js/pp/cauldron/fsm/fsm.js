@@ -395,7 +395,7 @@ export class FSM {
 
         cloneFSM._myLogEnabled = this._myLogEnabled;
         cloneFSM._myLogShowDelayedInfo = this._myLogShowDelayedInfo;
-        cloneFSM._myLogFSMName = this._myLogFSMName.slice(0);
+        cloneFSM._myLogFSMName = this._myLogFSMName;
 
         cloneFSM._myPerformMode = this._myPerformMode;
         cloneFSM._myPerformDelayedMode = this._myPerformDelayedMode;

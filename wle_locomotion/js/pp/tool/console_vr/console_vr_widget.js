@@ -39,7 +39,7 @@ export class ConsoleVRWidgetMessage {
 
         let countString = (("(x").concat(this._myMessagesCount)).concat(") ");
 
-        let text = this._myOriginalText.slice(0);
+        let text = this._myOriginalText;
         text = countString.concat(text);
         this.myLines = text.split("\n");
     }
