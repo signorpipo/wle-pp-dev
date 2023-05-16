@@ -64,6 +64,10 @@ PPEFAULT CHANGE:
 
 TEMP:
 
+- cursor ray does not work if there is not cursor object, it should work even without
+	- cursor ray should be set to invisible outside VR
+- add pools manager to globals
+	- Create pool e destroy pool
 - Mettere che di default ci sono i suoni dei passi e del teleport nel locomotion component
 - Bug casdk local leaderboard not working se non sei loggato
 - aggiungere materiali teleport valido non valido al component locomotion
@@ -88,7 +92,6 @@ TEMP:
 - playground move components inside component folder, change source path
 - mesh modifier e locomotion to 1.0.0
 - Browser Utils open link con fake click
-- _cursorPos to cursorPos e rimuovere _ da quelli che non la hanno
 - add some pp component (as experimental?) like fade view in out e particle spawned component
 - add event forwarding to cursor mod
 - check Global.getWASM in setDefautlCloneCallbacks che non funziona se non setuppi main engine ma non ha senso

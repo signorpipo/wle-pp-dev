@@ -5,6 +5,7 @@ import { InputUtils } from "../../../../input/cauldron/input_utils";
 import { Globals } from "../../../../pp/globals";
 import { mat4_create, quat2_create, vec3_create } from "../../../js/extensions/array_extension";
 import { PluginUtils } from "../../../utils/plugin_utils";
+import { Handedness } from "../../../../input/cauldron/input_types";
 
 export function initCursorComponentMod() {
     initCursorComponentModPrototype();
@@ -22,6 +23,8 @@ export function initCursorComponentModPrototype() {
         this.hitTestTarget = this.object.pp_addComponent(CursorTarget);
         this.hoveringObject = null;
         this.hoveringObjectTarget = null;
+
+        this.cursorPos = vec3_create();
 
         this._collisionMask = (1 << this.collisionGroup);
 
@@ -44,8 +47,6 @@ export function initCursorComponentModPrototype() {
         this._lastHeight = null;
         this._lastPointerID = null;
 
-        this.handedness = null;
-
         this._transformQuat = quat2_create();
         this._origin = vec3_create();
         this._direction = vec3_create();
@@ -59,7 +60,6 @@ export function initCursorComponentModPrototype() {
         this._isDownForUpWithDown = false;
         this._isUpWithNoDown = false;
 
-        this.cursorPos = vec3_create();
         this._tempVec = vec3_create();
 
         this._viewComponent = null;
@@ -97,8 +97,9 @@ export function initCursorComponentModPrototype() {
         this._onDestroyListeners.push(() => {
             XRUtils.unregisterSessionStartEventListener(this, this.engine);
         });
+
         if (this.cursorRayObject) {
-            this.cursorRayObject.pp_setActive(true);
+            this.cursorRayObject.pp_setActive(false);
             this._cursorRayScale.set(this.cursorRayObject.pp_getScaleLocal());
 
             // Set ray to a good default distance of the cursor of 1m 
@@ -241,23 +242,33 @@ export function initCursorComponentModPrototype() {
             }
         }
 
-        if (this.cursorObject) {
-            if (this.hoveringObject && (this.cursorPos[0] != 0 || this.cursorPos[1] != 0 || this.cursorPos[2] != 0)) {
+        if (this.hoveringObject && (this.cursorPos[0] != 0 || this.cursorPos[1] != 0 || this.cursorPos[2] != 0)) {
+            if (this.cursorObject) {
                 this._setCursorVisibility(true);
+
                 this.cursorObject.pp_setPosition(this.cursorPos);
                 this.cursorObject.pp_setTransformLocalQuat(this.cursorObject.pp_getTransformLocalQuat(this._transformQuat).quat2_normalize(this._transformQuat));
-                this._setCursorRayTransform(this.cursorPos);
-            } else {
-                if (this.visible && this.cursorRayObject) {
-                    this._setCursorRayTransform(null);
-                }
+            }
 
+            if (this.cursorRayObject) {
+                this._setCursorRayTransform(this.cursorPos);
+            }
+        } else {
+            if (this.cursorObject) {
                 this._setCursorVisibility(false);
+            }
+
+            if (this.cursorRayObject) {
+                this._setCursorRayTransform(null);
             }
         }
 
         if (this.cursorRayObject) {
-            this.cursorRayObject.pp_setActive(true);
+            if (XRUtils.isSessionActive(this.engine) || (this.handedness != Handedness.LEFT && this.handedness != Handedness.RIGHT)) {
+                this.cursorRayObject.pp_setActive(true);
+            } else {
+                this.cursorRayObject.pp_setActive(false);
+            }
         }
 
         if (this.hoveringObject == null) {
