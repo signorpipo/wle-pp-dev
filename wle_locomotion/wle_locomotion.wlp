@@ -39,7 +39,7 @@
                 {
                     "type": "pp-player-locomotion",
                     "pp-player-locomotion": {
-                        "_myPhysicsBlockLayerFlags": "0, 1, 0, 0, 0, 0, 0, 0",
+                        "_myPhysicsBlockLayerFlags": "0, 1, 1, 0, 0, 0, 0, 0",
                         "_myFlyEnabled": true,
                         "_myMoveThroughCollisionShortcutEnabled": true,
                         "_myMoveHeadShortcutEnabled": false
@@ -6864,7 +6864,7 @@
             "rotation": [
                 0.9659258,
                 0.258819,
-                3.899166500787032e-8,
+                3.8991665007870324e-8,
                 -8.86089850382632e-8
             ],
             "scaling": [

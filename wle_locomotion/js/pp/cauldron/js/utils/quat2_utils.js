@@ -180,7 +180,6 @@ export let getForward = function () {
         QuatUtils.toMatrix(quat, rotationMatrix);
 
         Vec3Utils.set(out, rotationMatrix[6], rotationMatrix[7], rotationMatrix[8]);
-        Vec3Utils.normalize(out, out);
 
         return out;
     };
@@ -198,7 +197,6 @@ export let getLeft = function () {
         QuatUtils.toMatrix(quat, rotationMatrix);
 
         Vec3Utils.set(out, rotationMatrix[0], rotationMatrix[1], rotationMatrix[2]);
-        Vec3Utils.normalize(out, out);
 
         return out;
     };
@@ -216,7 +214,6 @@ export let getUp = function () {
         QuatUtils.toMatrix(quat, rotationMatrix);
 
         Vec3Utils.set(out, rotationMatrix[3], rotationMatrix[4], rotationMatrix[5]);
-        Vec3Utils.normalize(out, out);
 
         return out;
     };

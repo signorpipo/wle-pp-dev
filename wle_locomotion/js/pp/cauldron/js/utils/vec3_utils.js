@@ -317,7 +317,6 @@ export let projectOnAxisAlongAxis = function () {
                 let angleWithAlongAxis = Vec3Utils.angleRadians(fixedProjectAlongAxis, thisToAxis);
                 let lengthToRemove = Vec3Utils.length(thisToAxis) / Math.cos(angleWithAlongAxis);
 
-                Vec3Utils.normalize(fixedProjectAlongAxis, fixedProjectAlongAxis);
                 Vec3Utils.scale(fixedProjectAlongAxis, lengthToRemove, fixedProjectAlongAxis);
                 Vec3Utils.add(out, fixedProjectAlongAxis, out);
 
@@ -357,7 +356,6 @@ export let projectOnPlaneAlongAxis = function () {
             let angleWithAlongAxis = Vec3Utils.angleRadians(fixedProjectAlongAxis, thisToPlane);
             let lengthToRemove = Vec3Utils.length(thisToPlane) / Math.cos(angleWithAlongAxis);
 
-            Vec3Utils.normalize(fixedProjectAlongAxis, fixedProjectAlongAxis);
             Vec3Utils.scale(fixedProjectAlongAxis, lengthToRemove, fixedProjectAlongAxis);
             Vec3Utils.add(out, fixedProjectAlongAxis, out);
 

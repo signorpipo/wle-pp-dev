@@ -136,7 +136,6 @@ export let getForward = function () {
         QuatUtils.toMatrix(quat, rotationMatrix);
 
         Vec3Utils.set(out, rotationMatrix[6], rotationMatrix[7], rotationMatrix[8]);
-        Vec3Utils.normalize(out, out);
 
         return out;
     };
@@ -154,7 +153,6 @@ export let getLeft = function () {
         QuatUtils.toMatrix(quat, rotationMatrix);
 
         Vec3Utils.set(out, rotationMatrix[0], rotationMatrix[1], rotationMatrix[2]);
-        Vec3Utils.normalize(out, out);
 
         return out;
     };
@@ -172,7 +170,6 @@ export let getUp = function () {
         QuatUtils.toMatrix(quat, rotationMatrix);
 
         Vec3Utils.set(out, rotationMatrix[3], rotationMatrix[4], rotationMatrix[5]);
-        Vec3Utils.normalize(out, out);
 
         return out;
     };
@@ -361,14 +358,6 @@ export let subRotationQuat = function () {
     return function subRotationQuat(first, second, out = QuatUtils.create()) {
         QuatUtils.invert(second, inverse);
         QuatUtils.mul(first, inverse, out);
-
-        if (QuatUtils.isNormalized(first) && QuatUtils.isNormalized(second)) {
-            // I would normally not normalize quat results since you may want the untouched sub
-            // But for normalized params it should be normalized
-            // It seems though that for some small error the quat will not be exactly normalized, so I fix it
-            QuatUtils.normalize(out, out);
-        }
-
         return out;
     };
 }();
@@ -394,7 +383,7 @@ export let rotationToRadians = function () {
 }();
 
 export function rotationToQuat(first, second, out) {
-    return QuatUtils.subRotationQuat(second, first, out);
+    return QuatUtils.normalize(QuatUtils.subRotationQuat(second, first, out), out);
 }
 
 export let getTwist = function () {
@@ -440,7 +429,7 @@ export function getSwingFromTwist(quat, twist, out = QuatUtils.create()) {
 export let getTwistFromSwing = function () {
     let inverse = create();
     return function getTwistFromSwing(quat, swing, out = QuatUtils.create()) {
-        QuatUtils.invert(swing, inverse);
+        QuatUtils.conjugate(swing, inverse);
         QuatUtils.addRotationQuat(quat, inverse, out);
         return out;
     };
@@ -683,7 +672,6 @@ let _setAxes = function () {
             );
 
             Mat3Utils.toQuat(rotationMat, rotationQuat);
-            QuatUtils.normalize(rotationQuat, rotationQuat);
 
             QuatUtils.copy(rotationQuat, quat);
         } else {

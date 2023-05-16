@@ -113,7 +113,6 @@ export let getRotationQuat = function () {
         Vec3Utils.div(one, tempScale, inverseScale);
         Mat4Utils.scale(matrix, inverseScale, transformMatrixNoScale);
         gl_mat4.getRotation(out, transformMatrixNoScale);
-        QuatUtils.normalize(out, out);
         return out;
     };
 }();
