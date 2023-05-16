@@ -33,7 +33,7 @@ export function initCursorComponentModPrototype() {
         this._multipleClickObject = null;
         this._multipleClickDelay = 0.3;
 
-        this._onDestroyListeners = [];
+        this._onDestroyCallbacks = [];
 
         this._prevHitLocationLocalToTarget = vec3_create();
 
@@ -46,6 +46,8 @@ export function initCursorComponentModPrototype() {
         this._lastWidth = null;
         this._lastHeight = null;
         this._lastPointerID = null;
+
+        this._lastEvent = null;
 
         this._transformQuat = quat2_create();
         this._origin = vec3_create();
@@ -94,7 +96,7 @@ export function initCursorComponentModPrototype() {
         this.pp_setViewComponent(this.object.pp_getComponent(ViewComponent));
 
         XRUtils.registerSessionStartEventListener(this, this.setupVREvents.bind(this), true, false, this.engine);
-        this._onDestroyListeners.push(() => {
+        this._onDestroyCallbacks.push(() => {
             XRUtils.unregisterSessionStartEventListener(this, this.engine);
         });
 
@@ -112,93 +114,6 @@ export function initCursorComponentModPrototype() {
             this._hitTestObject = this.object.pp_addObject();
             this._hitTestLocation = this.hitTestObject.pp_addComponent(HitTestLocation, { scaleObject: false, });
         }
-    };
-
-    cursorComponentMod._onViewportResize = function _onViewportResize() {
-        if (!this._viewComponent) return;
-
-        // Projection matrix will change if the viewport is resized, which will affect the
-        // projection matrix because of the aspect ratio
-        this._viewComponent.projectionMatrix.mat4_invert(this._projectionMatrix);
-    };
-
-    cursorComponentMod._setCursorRayTransform = function _setCursorRayTransform(hitPosition) {
-        if (!this.cursorRayObject) return;
-        if (this.cursorRayScalingAxis != 4) {
-            this.cursorRayObject.pp_resetScaleLocal();
-
-            if (hitPosition != null) {
-                this.cursorRayObject.pp_getPosition(this._cursorRayOrigin);
-                let dist = this._cursorRayOrigin.vec3_distance(hitPosition);
-                this._cursorRayScale[this.cursorRayScalingAxis] = dist;
-                this.cursorRayObject.pp_scaleObject(this._cursorRayScale);
-            }
-        }
-    };
-
-    cursorComponentMod._setCursorVisibility = function _setCursorVisibility(visible) {
-        this.visible = visible;
-        if (!this.cursorObject) return;
-
-        this.cursorObject.pp_setActive(visible);
-    };
-
-    cursorComponentMod.rayCast = function rayCast() {
-        let rayHit =
-            this.rayCastMode == 0
-                ? Globals.getScene(this.engine).rayCast(
-                    this._origin,
-                    this._direction,
-                    this._collisionMask
-                )
-                : Globals.getPhysics(this.engine).rayCast(
-                    this._origin,
-                    this._direction,
-                    this._collisionMask,
-                    this.maxDistance
-                );
-
-        this._hitObjectData[0] = null;
-        this._hitObjectData[1] = null;
-        this._hitObjectData[2] = null;
-
-        let hitTestResultDistance = Infinity;
-        if (this._hitTestLocation != null && this._hitTestLocation.visible) {
-            this._hitTestObject.pp_getPositionWorld(this.cursorPos);
-            this._rayHitLocation.vec3_copy(this.cursorPos);
-            hitTestResultDistance = this.cursorPos.vec3_distance(this.object.pp_getPositionWorld(this._tempVec));
-
-            this._hitObjectData[0] = this._hitTestObject;
-            this._hitObjectData[1] = this._rayHitLocation;
-        }
-
-        this.hoveringReality = false;
-
-        if (rayHit.hitCount > 0) {
-            let rayHitDistance = rayHit.distances[0];
-            if (rayHitDistance <= hitTestResultDistance) {
-                // Overwrite cursorPos set by hit test location
-                this.cursorPos.vec3_copy(rayHit.locations[0]);
-                this._rayHitLocation.vec3_copy(this.cursorPos);
-
-                this._hitObjectData[0] = rayHit.objects[0];
-                this._hitObjectData[1] = this._rayHitLocation;
-            } else {
-                this.hoveringReality = true;
-            }
-        } else if (hitTestResultDistance == Infinity) {
-            this.cursorPos.vec3_zero();
-
-            this._hitObjectData[0] = null;
-            this._hitObjectData[1] = null;
-        }
-
-        let xrFrame = XRUtils.getFrame(this.engine);
-        if (this.hoveringReality && xrFrame != null) {
-            this._hitObjectData[2] = this._hitTestLocation.getHitTestResults(xrFrame)[0];
-        }
-
-        return this._hitObjectData;
     };
 
     cursorComponentMod.update = function update(dt) {
@@ -223,14 +138,14 @@ export function initCursorComponentModPrototype() {
                 this.object.pp_getForward(this._direction);
             }
 
-            let hitObjectData = this.rayCast();
-            this.hoverBehaviour(hitObjectData[0], hitObjectData[1], hitObjectData[2]);
+            let hitObjectData = this._pp_rayCast();
+            this._pp_hoverBehaviour(hitObjectData[0], hitObjectData[1], hitObjectData[2]);
         } else if (this._viewComponent != null) {
             if (this._lastPointerID != null) {
-                this.updateMousePos(this._lastClientX, this._lastClientY, this._lastWidth, this._lastHeight);
+                this._pp_updateMousePos(this._lastClientX, this._lastClientY, this._lastWidth, this._lastHeight);
 
-                let hitObjectData = this.rayCast();
-                this.hoverBehaviour(hitObjectData[0], hitObjectData[1], hitObjectData[2]);
+                let hitObjectData = this._pp_rayCast();
+                this._pp_hoverBehaviour(hitObjectData[0], hitObjectData[1], hitObjectData[2]);
 
                 if (this.hoveringObject != null) {
                     this._pointerID = this._lastPointerID;
@@ -238,7 +153,7 @@ export function initCursorComponentModPrototype() {
                     this._pointerID = null;
                 }
             } else if (this.hoveringObject != null) {
-                this.hoverBehaviour(null, null, null, true); // Trigger unhover
+                this._pp_hoverBehaviour(null, null, null, true); // Trigger unhover
             }
         }
 
@@ -278,7 +193,220 @@ export function initCursorComponentModPrototype() {
         this._updatePointerStyle = false;
     };
 
-    cursorComponentMod.hoverBehaviour = function hoverBehaviour(hitObject, hitLocation, hitTestResults, forceUnhover = false) {
+    cursorComponentMod.onActivate = function onActivate() {
+        this._isDown = false;
+        this._lastIsDown = false;
+
+        this._isDownForUpWithDown = false;
+        this._isUpWithNoDown = false;
+    };
+
+    cursorComponentMod.onDeactivate = function onDeactivate() {
+        if (this.hoveringObject) {
+            if (!this.hoveringReality) {
+                if (this.hoveringObjectTarget) this.hoveringObjectTarget.onUnhover.notify(this.hoveringObject, this);
+                this.globalTarget.onUnhover.notify(this.hoveringObject, this);
+            }
+        }
+
+        this.hoveringObject = null;
+        this.hoveringObjectTarget = null;
+        if (this.styleCursor) {
+            Globals.getBody(this.engine).style.cursor = "default";
+        }
+
+        this._isDown = false;
+        this._lastIsDown = false;
+
+        this._isDownForUpWithDown = false;
+        this._isUpWithNoDown = false;
+
+        this._setCursorVisibility(false);
+        if (this.cursorRayObject) {
+            this.cursorRayObject.pp_setActive(false);
+        }
+
+        this._pointerID = null;
+
+        this._lastClientX = null;
+        this._lastClientY = null;
+        this._lastWidth = null;
+        this._lastHeight = null;
+    };
+
+    cursorComponentMod.onDestroy = function onDestroy() {
+        if (this._hitTestObject != null) {
+            this._hitTestObject.pp_destroy();
+        }
+
+        for (let callback of this._onDestroyCallbacks) {
+            callback();
+        }
+    };
+
+    cursorComponentMod.updateDirection = function () {
+        let transformWorld = quat2_create();
+        return function updateDirection() {
+            this.object.pp_getPosition(this._origin);
+
+            // Reverse-project the direction into view space 
+            this._direction.vec3_transformMat4(this._projectionMatrix, this._direction);
+            this._direction.vec3_normalize(this._direction);
+            this._direction.vec3_transformQuat(this.object.pp_getTransformQuat(transformWorld), this._direction);
+        };
+    }();
+
+    cursorComponentMod.setupVREvents = function setupVREvents(session) {
+        // If in XR, one-time bind the listener 
+
+        let onSelect = this.onSelect.bind(this);
+        session.addEventListener("select", onSelect);
+        let onSelectStart = this.onSelectStart.bind(this);
+        session.addEventListener("selectstart", onSelectStart);
+        let onSelectEnd = this.onSelectEnd.bind(this);
+        session.addEventListener("selectend", onSelectEnd);
+
+        this._onDestroyCallbacks.push(() => {
+            if (!XRUtils.isSessionActive(this.engine)) return;
+
+            let session = XRUtils.getSession(this.engine);
+            session.removeEventListener("select", onSelect);
+            session.removeEventListener("selectstart", onSelectStart);
+            session.removeEventListener("selectend", onSelectEnd);
+        });
+
+        // After XR session was entered, the projection matrix changed 
+        this._onViewportResize();
+    };
+
+    cursorComponentMod.onSelect = function onSelect(e) {
+    };
+
+    cursorComponentMod.onSelectStart = function onSelectStart(e) {
+        if (this.active) {
+            this.arTouchDown = true;
+            if (e.inputSource.handedness == this.handedness) {
+                this._isDown = true;
+                this._isRealDown = true;
+
+                if (!this._lastIsDown) {
+                    this._isDownForUpWithDown = true;
+                }
+            }
+        }
+
+        if (e.inputSource.handedness == this.handedness) {
+            this._isRealDown = true;
+        }
+    };
+
+    cursorComponentMod.onSelectEnd = function onSelectEnd(e) {
+        if (this.active) {
+            this.arTouchDown = false;
+            if (e.inputSource.handedness == this.handedness) {
+                if (!this._isDownForUpWithDown) {
+                    this._isUpWithNoDown = true;
+                }
+
+                this._isDown = false;
+                this._isRealDown = false;
+
+                this._isDownForUpWithDown = false;
+            }
+        }
+
+        if (e.inputSource.handedness == this.handedness) {
+            this._isRealDown = false;
+        }
+    };
+
+    cursorComponentMod.onPointerMove = function onPointerMove(e) {
+        if (this.active) {
+            // Don't care about secondary pointers 
+            if (this._pointerID != null && this._pointerID != e.pointerId) return;
+
+            let bounds = Globals.getBody(this.engine).getBoundingClientRect();
+            this._pp_updateMouseData(e.clientX, e.clientY, bounds.width, bounds.height, e.pointerId);
+        }
+    };
+
+    cursorComponentMod.onClick = function onClick(e) {
+    };
+
+    cursorComponentMod.onPointerDown = function onPointerDown(e) {
+        // Don't care about secondary pointers or non-left clicks 
+        if ((this._pointerID != null && this._pointerID != e.pointerId) || e.button !== 0) return;
+
+        if (this.active) {
+            let bounds = Globals.getBody(this.engine).getBoundingClientRect();
+            this._pp_updateMouseData(e.clientX, e.clientY, bounds.width, bounds.height, e.pointerId);
+
+            this._isDown = true;
+            this._isRealDown = true;
+
+            if (!this._lastIsDown) {
+                this._isDownForUpWithDown = true;
+            }
+        } else {
+            this._isRealDown = true;
+        }
+    };
+
+    cursorComponentMod.onPointerUp = function onPointerUp(e) {
+        // Don't care about secondary pointers or non-left clicks 
+        if ((this._pointerID != null && this._pointerID != e.pointerId) || e.button !== 0) return;
+
+        if (this.active) {
+            let bounds = Globals.getBody(this.engine).getBoundingClientRect();
+            this._pp_updateMouseData(e.clientX, e.clientY, bounds.width, bounds.height, e.pointerId);
+
+            if (!this._isDownForUpWithDown) {
+                this._isUpWithNoDown = true;
+            }
+
+            this._isDown = false;
+            this._isRealDown = false;
+
+            this._isDownForUpWithDown = false;
+
+            this._updatePointerStyle = true;
+        } else {
+            this._isRealDown = false;
+        }
+    };
+
+    cursorComponentMod._onViewportResize = function _onViewportResize() {
+        if (!this._viewComponent) return;
+
+        // Projection matrix will change if the viewport is resized, which will affect the
+        // projection matrix because of the aspect ratio
+        this._viewComponent.projectionMatrix.mat4_invert(this._projectionMatrix);
+    };
+
+    cursorComponentMod._setCursorRayTransform = function _setCursorRayTransform(hitPosition) {
+        if (!this.cursorRayObject) return;
+        if (this.cursorRayScalingAxis != 4) {
+            this.cursorRayObject.pp_resetScaleLocal();
+
+            if (hitPosition != null) {
+                this.cursorRayObject.pp_getPosition(this._cursorRayOrigin);
+                let dist = this._cursorRayOrigin.vec3_distance(hitPosition);
+                this._cursorRayScale[this.cursorRayScalingAxis] = dist;
+                this.cursorRayObject.pp_scaleObject(this._cursorRayScale);
+            }
+        }
+    };
+
+    cursorComponentMod._setCursorVisibility = function _setCursorVisibility(visible) {
+        this.visible = visible;
+        if (!this.cursorObject) return;
+
+        this.cursorObject.pp_setActive(visible);
+    };
+
+    // New Functions 
+
+    cursorComponentMod._pp_hoverBehaviour = function _pp_hoverBehaviour(hitObject, hitLocation, hitTestResults, forceUnhover = false) {
         if (!forceUnhover && hitObject != null) {
             let hoveringObjectChanged = false;
             if (!this.hoveringObject || !this.hoveringObject.pp_equals(hitObject)) {
@@ -451,135 +579,65 @@ export function initCursorComponentModPrototype() {
         this._isUpWithNoDown = false;
     };
 
-    cursorComponentMod.setupVREvents = function setupVREvents(session) {
-        // If in XR, one-time bind the listener 
+    cursorComponentMod._pp_rayCast = function _pp_rayCast() {
+        let rayHit =
+            this.rayCastMode == 0
+                ? Globals.getScene(this.engine).rayCast(
+                    this._origin,
+                    this._direction,
+                    this._collisionMask
+                )
+                : Globals.getPhysics(this.engine).rayCast(
+                    this._origin,
+                    this._direction,
+                    this._collisionMask,
+                    this.maxDistance
+                );
 
-        let onSelect = this.onSelect.bind(this);
-        session.addEventListener("select", onSelect);
-        let onSelectStart = this.onSelectStart.bind(this);
-        session.addEventListener("selectstart", onSelectStart);
-        let onSelectEnd = this.onSelectEnd.bind(this);
-        session.addEventListener("selectend", onSelectEnd);
+        this._hitObjectData[0] = null;
+        this._hitObjectData[1] = null;
+        this._hitObjectData[2] = null;
 
-        this._onDestroyListeners.push(() => {
-            if (!XRUtils.isSessionActive(this.engine)) return;
+        let hitTestResultDistance = Infinity;
+        if (this._hitTestLocation != null && this._hitTestLocation.visible) {
+            this._hitTestObject.pp_getPositionWorld(this.cursorPos);
+            this._rayHitLocation.vec3_copy(this.cursorPos);
+            hitTestResultDistance = this.cursorPos.vec3_distance(this.object.pp_getPositionWorld(this._tempVec));
 
-            let session = XRUtils.getSession(this.engine);
-            session.removeEventListener("select", onSelect);
-            session.removeEventListener("selectstart", onSelectStart);
-            session.removeEventListener("selectend", onSelectEnd);
-        });
+            this._hitObjectData[0] = this._hitTestObject;
+            this._hitObjectData[1] = this._rayHitLocation;
+        }
 
-        // After XR session was entered, the projection matrix changed 
-        this._onViewportResize();
-    };
+        this.hoveringReality = false;
 
-    cursorComponentMod.onSelect = function onSelect(e) {
-    };
+        if (rayHit.hitCount > 0) {
+            let rayHitDistance = rayHit.distances[0];
+            if (rayHitDistance <= hitTestResultDistance) {
+                // Overwrite cursorPos set by hit test location
+                this.cursorPos.vec3_copy(rayHit.locations[0]);
+                this._rayHitLocation.vec3_copy(this.cursorPos);
 
-    cursorComponentMod.onSelectStart = function onSelectStart(e) {
-        if (this.active) {
-            this.arTouchDown = true;
-            if (e.inputSource.handedness == this.handedness) {
-                this._isDown = true;
-                this._isRealDown = true;
-
-                if (!this._lastIsDown) {
-                    this._isDownForUpWithDown = true;
-                }
+                this._hitObjectData[0] = rayHit.objects[0];
+                this._hitObjectData[1] = this._rayHitLocation;
+            } else {
+                this.hoveringReality = true;
             }
+        } else if (hitTestResultDistance == Infinity) {
+            this.cursorPos.vec3_zero();
+
+            this._hitObjectData[0] = null;
+            this._hitObjectData[1] = null;
         }
 
-        if (e.inputSource.handedness == this.handedness) {
-            this._isRealDown = true;
-        }
-    };
-
-    cursorComponentMod.onSelectEnd = function onSelectEnd(e) {
-        if (this.active) {
-            this.arTouchDown = false;
-            if (e.inputSource.handedness == this.handedness) {
-                if (!this._isDownForUpWithDown) {
-                    this._isUpWithNoDown = true;
-                }
-
-                this._isDown = false;
-                this._isRealDown = false;
-
-                this._isDownForUpWithDown = false;
-            }
+        let xrFrame = XRUtils.getFrame(this.engine);
+        if (this.hoveringReality && xrFrame != null) {
+            this._hitObjectData[2] = this._hitTestLocation.getHitTestResults(xrFrame)[0];
         }
 
-        if (e.inputSource.handedness == this.handedness) {
-            this._isRealDown = false;
-        }
+        return this._hitObjectData;
     };
 
-    cursorComponentMod.onPointerMove = function onPointerMove(e) {
-        if (this.active) {
-            // Don't care about secondary pointers 
-            if (this._pointerID != null && this._pointerID != e.pointerId) return;
-
-            let bounds = Globals.getBody(this.engine).getBoundingClientRect();
-            this.updateMouseData(e.clientX, e.clientY, bounds.width, bounds.height, e.pointerId);
-        }
-    };
-
-    cursorComponentMod.onClick = function onClick(e) {
-    };
-
-    cursorComponentMod.onPointerDown = function onPointerDown(e) {
-        // Don't care about secondary pointers or non-left clicks 
-        if ((this._pointerID != null && this._pointerID != e.pointerId) || e.button !== 0) return;
-
-        if (this.active) {
-            let bounds = Globals.getBody(this.engine).getBoundingClientRect();
-            this.updateMouseData(e.clientX, e.clientY, bounds.width, bounds.height, e.pointerId);
-
-            this._isDown = true;
-            this._isRealDown = true;
-
-            if (!this._lastIsDown) {
-                this._isDownForUpWithDown = true;
-            }
-        } else {
-            this._isRealDown = true;
-        }
-    };
-
-    cursorComponentMod.onPointerUp = function onPointerUp(e) {
-        // Don't care about secondary pointers or non-left clicks 
-        if ((this._pointerID != null && this._pointerID != e.pointerId) || e.button !== 0) return;
-
-        if (this.active) {
-            let bounds = Globals.getBody(this.engine).getBoundingClientRect();
-            this.updateMouseData(e.clientX, e.clientY, bounds.width, bounds.height, e.pointerId);
-
-            if (!this._isDownForUpWithDown) {
-                this._isUpWithNoDown = true;
-            }
-
-            this._isDown = false;
-            this._isRealDown = false;
-
-            this._isDownForUpWithDown = false;
-
-            this._updatePointerStyle = true;
-        } else {
-            this._isRealDown = false;
-        }
-    };
-
-    cursorComponentMod.updateMousePos = function updateMousePos(clientX, clientY, w, h) {
-        // Get direction in normalized device coordinate space from mouse position 
-        let left = clientX / w;
-        let top = clientY / h;
-        this._direction.vec3_set(left * 2 - 1, -top * 2 + 1, -1.0);
-
-        this.updateDirection();
-    };
-
-    cursorComponentMod.updateMouseData = function updateMousePos(clientX, clientY, w, h, pointerID) {
+    cursorComponentMod._pp_updateMouseData = function _pp_updateMouseData(clientX, clientY, w, h, pointerID) {
         this._lastClientX = clientX;
         this._lastClientY = clientY;
         this._lastWidth = w;
@@ -587,79 +645,14 @@ export function initCursorComponentModPrototype() {
         this._lastPointerID = pointerID;
     };
 
-    cursorComponentMod.updateDirection = function () {
-        let transformWorld = quat2_create();
-        return function updateDirection() {
-            this.object.pp_getPosition(this._origin);
+    cursorComponentMod._pp_updateMousePos = function _pp_updateMousePos(clientX, clientY, w, h) {
+        // Get direction in normalized device coordinate space from mouse position 
+        let left = clientX / w;
+        let top = clientY / h;
+        this._direction.vec3_set(left * 2 - 1, -top * 2 + 1, -1.0);
 
-            // Reverse-project the direction into view space 
-            this._direction.vec3_transformMat4(this._projectionMatrix, this._direction);
-            this._direction.vec3_normalize(this._direction);
-            this._direction.vec3_transformQuat(this.object.pp_getTransformQuat(transformWorld), this._direction);
-        };
-    }();
-
-    cursorComponentMod.onActivate = function onActivate() {
-        this._isDown = false;
-        this._lastIsDown = false;
-
-        this._isDownForUpWithDown = false;
-        this._isUpWithNoDown = false;
+        this.updateDirection();
     };
-
-    cursorComponentMod.onDeactivate = function onDeactivate() {
-        if (this.hoveringObject) {
-            if (!this.hoveringReality) {
-                if (this.hoveringObjectTarget) this.hoveringObjectTarget.onUnhover.notify(this.hoveringObject, this);
-                this.globalTarget.onUnhover.notify(this.hoveringObject, this);
-            }
-        }
-
-        this.hoveringObject = null;
-        this.hoveringObjectTarget = null;
-        if (this.styleCursor) {
-            Globals.getBody(this.engine).style.cursor = "default";
-        }
-
-        this._isDown = false;
-        this._lastIsDown = false;
-
-        this._isDownForUpWithDown = false;
-        this._isUpWithNoDown = false;
-
-        this._setCursorVisibility(false);
-        if (this.cursorRayObject) {
-            this.cursorRayObject.pp_setActive(false);
-        }
-
-        this._pointerID = null;
-
-        this._lastClientX = null;
-        this._lastClientY = null;
-        this._lastWidth = null;
-        this._lastHeight = null;
-    };
-
-    cursorComponentMod.onDestroy = function onDestroy() {
-        if (this._hitTestObject != null) {
-            this._hitTestObject.pp_destroy();
-        }
-
-        for (let f of this._onDestroyListeners) f();
-    };
-
-
-    cursorComponentMod.notify = function notify(event, originalEvent = null) {
-        if (this.hoveringObject) {
-            if (this.hoveringObjectTarget) {
-                this.hoveringObjectTarget[event].notify(target, this, originalEvent != null ? originalEvent : undefined);
-            }
-
-            this.globalTarget[event].notify(target, this, originalEvent != null ? originalEvent : undefined);
-        }
-    };
-
-    // New Functions 
 
     cursorComponentMod.pp_setViewComponent = function pp_setViewComponent(viewComponent) {
         this._viewComponent = viewComponent;
@@ -686,7 +679,7 @@ export function initCursorComponentModPrototype() {
                 let onViewportResize = this._onViewportResize.bind(this);
                 this.engine.onResize.add(onViewportResize);
 
-                this._onDestroyListeners.push(() => {
+                this._onDestroyCallbacks.push(() => {
                     Globals.getCanvas(this.engine).removeEventListener("click", onClick);
                     Globals.getCanvas(this.engine).removeEventListener("pointerdown", onPointerDown);
                     Globals.getCanvas(this.engine).removeEventListener("pointermove", onPointerMove);
