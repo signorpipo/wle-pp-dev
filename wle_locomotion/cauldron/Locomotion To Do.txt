@@ -64,8 +64,6 @@ PPEFAULT CHANGE:
 
 TEMP:
 
-- cursor ray does not work if there is not cursor object, it should work even without
-	- cursor ray should be set to invisible outside VR
 - add pools manager to globals
 	- Create pool e destroy pool
 - Mettere che di default ci sono i suoni dei passi e del teleport nel locomotion component
@@ -73,13 +71,10 @@ TEMP:
 - aggiungere materiali teleport valido non valido al component locomotion
 	- aggiustarli nel playground
 - bug teleport has no gravity
-- add normalization for quat ogni volta che uso .invert (forse meglio rimuovere invece la normalizzazione efarlo a mano, praticamente dovresti farlo ovunque)
-	- swing può usare conjugate invece di twist però
 - view reset bug, non rimane dove tu stavi gia guardando
 - add a hide if hand pose invalid component
 	- volendo si può ancora aggiungere al set active
 - remove pp_isEmpty from emitter mod
-- vec3_angleSigned nella doc non c'è
 - remove Globals.getSceneObjects dal file scene objects globals stesso, usarlo solo per le funzioni esterne e farlo anche negli altri file
 - Function overwriter senza debug in cauldron?
 - _alreadyRegisteredEngines add my? cercare let _ without my
@@ -93,8 +88,6 @@ TEMP:
 - mesh modifier e locomotion to 1.0.0
 - Browser Utils open link con fake click
 - add some pp component (as experimental?) like fade view in out e particle spawned component
-- add event forwarding to cursor mod
-- check Global.getWASM in setDefautlCloneCallbacks che non funziona se non setuppi main engine ma non ha senso
 
 - Aggiungere prototype extension a intellisense in qualche modo (J forse sa come fare, augmented type)
   
