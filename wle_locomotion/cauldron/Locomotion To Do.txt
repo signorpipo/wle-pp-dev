@@ -64,40 +64,40 @@ PPEFAULT CHANGE:
 
 TEMP:
 
-- console vr, on show fa vedere brevemente il quadratino per dirti che ci sono aggiornamenti
-- add pools manager to globals
-	- Create pool e destroy pool
-- Mettere che di default ci sono i suoni dei passi e del teleport nel locomotion component
-- Bug casdk local leaderboard not working se non sei loggato
-- aggiungere materiali teleport valido non valido al component locomotion
-	- aggiustarli nel playground
-- bug teleport has no gravity
-- view reset bug, non rimane dove tu stavi gia guardando
-- add a hide if hand pose invalid component
+○ console vr, on show fa vedere brevemente il quadratino per dirti che ci sono aggiornamenti
+○ add pools manager to globals
+	○ Create pool e destroy pool
+○ Mettere che di default ci sono i suoni dei passi e del teleport nel locomotion component
+○ Bug casdk local leaderboard not working se non sei loggato
+○ aggiungere materiali teleport valido non valido al component locomotion
+	○ aggiustarli nel playground
+○ bug teleport has no gravity
+○ view reset bug, non rimane dove tu stavi gia guardando
+○ add a hide if hand pose invalid component
 	- volendo si può ancora aggiungere al set active
-- Function overwriter senza debug in cauldron?
-- particles spawner fix object pool method
-- fix particles spawner not setting the horizontal speed scale
-- aggiungere il particle component sugli oggetti direttamente e clonarli (solo quello che è clonabile)
-  - però non puoi più usare ig rabbable come target ma alla fine penso sia accettabile
-- playground move components inside component folder, change source path
-- Browser Utils open link con fake click
-- add some pp component (as experimental?) like fade view in out e particle spawned component
+○ Function overwriter senza debug in cauldron?
+○ particles spawner fix object pool method
+○ fix particles spawner not setting the horizontal speed scale
+○ aggiungere il particle component sugli oggetti direttamente e clonarli (solo quello che è clonabile)
+  ○ però non puoi più usare i grabbable come target ma alla fine penso sia accettabile
+○ playground move components inside component folder, change source path
+○ Browser Utils open link con fake click
+○ add some pp component (as experimental?) like fade view in out e particle spawned component
 
-- Aggiungere prototype extension a intellisense in qualche modo (J forse sa come fare, augmented type)
+○ Aggiungere prototype extension a intellisense in qualche modo (J forse sa come fare, augmented type)
   
-- Aggiungere una changed callback nei collider setup, e magari anche nei visual params e rimuovere params updated (chiami direttamente il changed da li e la visual si registra)
-  - magari classe parents tipo ChangeableParams che ha questa cosa di suo e copy e reset
-  - i copy e reset nei figli hanno un bool per specificare se vuoi o no copiare anche le callback? Magari no tanto sarebbe davvero inutile, e nel caso te lo fai a mano, aggiungerlo proprio se servirà
+○ Aggiungere una changed callback nei collider setup, e magari anche nei visual params e rimuovere params updated (chiami direttamente il changed da li e la visual si registra)
+  ○ magari classe parents tipo ChangeableParams che ha questa cosa di suo e copy e reset
+  ○ i copy e reset nei figli hanno un bool per specificare se vuoi o no copiare anche le callback? Magari no tanto sarebbe davvero inutile, e nel caso te lo fai a mano, aggiungerlo proprio se servirà
 
-- User manager a cui aggiungi I server come per ca sdk
+○ User manager a cui aggiungi I server come per ca sdk
 
-- mouse look should rotate player if possible, aggiungerla direttamente al rotate manager?
-- fix muoversi guardando indietro dovrebbe comunque andare avanti (muvoersi guardando dritto verso il pavimento)
-	- molto fastidioso se usi hand come direction reference perché basta muoverti e mettere la mano indietro
-- head controller -> feet controller? body controller?
+○ mouse look should rotate player if possible, aggiungerla direttamente al rotate manager?
+○ fix muoversi guardando indietro dovrebbe comunque andare avanti (muvoersi guardando dritto verso il pavimento)
+	○ molto fastidioso se usi hand come direction reference perché basta muoverti e mettere la mano indietro
+○ head controller -> feet controller? body controller?
 	
-- Grabber hand non xr
+○ Grabber hand non xr
 
 
 
