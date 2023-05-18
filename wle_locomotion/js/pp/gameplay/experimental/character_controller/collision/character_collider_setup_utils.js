@@ -25,7 +25,7 @@ export class CharacterColliderSetupSimplifiedCreationParams {
 
         this.myCanFly = false;
 
-        this.myShouldSlideAgainstWall = false;
+        this.myShouldSlideAlongWall = false;
 
         this.myCollectGroundInfo = false;
         this.myShouldSnapOnGround = false;
@@ -58,7 +58,7 @@ export function createSimplified(simplifiedCreationParams, outCharacterColliderS
         outCharacterColliderSetup.myVerticalCheckParams.myVerticalPositionCheckEnabled = true;
     }
 
-    outCharacterColliderSetup.myWallSlideParams.myWallSlideEnabled = simplifiedCreationParams.myShouldSlideAgainstWall;
+    outCharacterColliderSetup.myWallSlideParams.myWallSlideEnabled = simplifiedCreationParams.myShouldSlideAlongWall;
 
     outCharacterColliderSetup.myHorizontalCheckParams.myHorizontalCheckFeetDistanceToIgnore = simplifiedCreationParams.myMaxWalkableGroundStepHeight;
 

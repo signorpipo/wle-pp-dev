@@ -35,7 +35,7 @@ export class PlayerLocomotionComponent extends Component {
 
         _myColliderAccuracy: Property.enum(["Very Low", "Low", "Medium", "High", "Very High"], "High"),
         _myColliderCheckOnlyFeet: Property.bool(false),
-        _myColliderSlideAgainstWall: Property.bool(true),
+        _myColliderSlideAlongWall: Property.bool(true),
         _myColliderMaxWalkableGroundAngle: Property.float(30),
         _myColliderSnapOnGround: Property.bool(true),
         _myColliderMaxDistanceToSnapOnGround: Property.float(0.1),
@@ -90,7 +90,7 @@ export class PlayerLocomotionComponent extends Component {
 
         params.myColliderAccuracy = this._myColliderAccuracy;
         params.myColliderCheckOnlyFeet = this._myColliderCheckOnlyFeet;
-        params.myColliderSlideAgainstWall = this._myColliderSlideAgainstWall;
+        params.myColliderSlideAlongWall = this._myColliderSlideAlongWall;
         params.myColliderMaxWalkableGroundAngle = this._myColliderMaxWalkableGroundAngle;
         params.myColliderSnapOnGround = this._myColliderSnapOnGround;
         params.myColliderMaxDistanceToSnapOnGround = this._myColliderMaxDistanceToSnapOnGround;
