@@ -1,7 +1,7 @@
 import { mat4 as gl_mat4, quat2 as gl_quat2 } from "gl-matrix";
 import { create as mat3_utils_create } from "./mat3_utils";
 import { Mat4Utils } from "./mat4_utils";
-import { EasingFunction } from "./math_utils";
+import { EasingFunction, MathUtils } from "./math_utils";
 import { QuatUtils, create as quat_utils_create } from "./quat_utils";
 import { Vec3Utils, create as vec3_utils_create } from "./vec3_utils";
 
@@ -186,7 +186,7 @@ export let getForward = function () {
 }();
 
 export function getBackward(quat, out) {
-    Quat2Utils.getForward(quat, out);
+    out = Quat2Utils.getForward(quat, out);
     Vec3Utils.negate(out, out);
     return out;
 }
@@ -203,7 +203,7 @@ export let getLeft = function () {
 }();
 
 export function getRight(quat, out) {
-    Quat2Utils.getLeft(quat, out);
+    out = Quat2Utils.getLeft(quat, out);
     Vec3Utils.negate(out, out);
     return out;
 }
@@ -220,7 +220,7 @@ export let getUp = function () {
 }();
 
 export function getDown(quat, out) {
-    Quat2Utils.getUp(quat, out);
+    out = Quat2Utils.getUp(quat, out);
     Vec3Utils.negate(out, out);
     return out;
 }
@@ -249,7 +249,7 @@ export function rotateAxisDegrees(quat, angle, axis, out) {
 
 export let rotateAxisRadians = function () {
     let rotationQuat = quat_utils_create();
-    return function rotateAxisRadians(quat, angle, axis, out) {
+    return function rotateAxisRadians(quat, angle, axis, out = Quat2Utils.create()) {
         Quat2Utils.getRotationQuat(quat, rotationQuat);
         QuatUtils.rotateAxisRadians(rotationQuat, angle, axis, rotationQuat);
         Quat2Utils.copy(quat, out);

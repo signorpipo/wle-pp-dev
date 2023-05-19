@@ -240,7 +240,7 @@ export function getForward(matrix, out = Vec3Utils.create()) {
 }
 
 export function getBackward(matrix, out) {
-    Mat4Utils.getForward(matrix, out);
+    out = Mat4Utils.getForward(matrix, out);
     Vec3Utils.negate(out, out);
     return out;
 }
@@ -252,7 +252,7 @@ export function getLeft(matrix, out = Vec3Utils.create()) {
 }
 
 export function getRight(matrix, out) {
-    Mat4Utils.getLeft(matrix, out);
+    out = Mat4Utils.getLeft(matrix, out);
     Vec3Utils.negate(out, out);
     return out;
 }
@@ -264,7 +264,7 @@ export function getUp(matrix, out = Vec3Utils.create()) {
 }
 
 export function getDown(matrix, out) {
-    Mat4Utils.getUp(matrix, out);
+    out = Mat4Utils.getUp(matrix, out);
     Vec3Utils.negate(out, out);
     return out;
 }

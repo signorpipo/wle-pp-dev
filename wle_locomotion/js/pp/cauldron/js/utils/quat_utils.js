@@ -142,7 +142,7 @@ export let getForward = function () {
 }();
 
 export function getBackward(quat, out) {
-    QuatUtils.getForward(quat, out);
+    out = QuatUtils.getForward(quat, out);
     Vec3Utils.negate(out, out);
     return out;
 }
@@ -159,7 +159,7 @@ export let getLeft = function () {
 }();
 
 export function getRight(quat, out) {
-    QuatUtils.getLeft(quat, out);
+    out = QuatUtils.getLeft(quat, out);
     Vec3Utils.negate(out, out);
     return out;
 }
@@ -176,7 +176,7 @@ export let getUp = function () {
 }();
 
 export function getDown(quat, out) {
-    QuatUtils.getUp(quat, out);
+    out = QuatUtils.getUp(quat, out);
     Vec3Utils.negate(out, out);
     return out;
 }

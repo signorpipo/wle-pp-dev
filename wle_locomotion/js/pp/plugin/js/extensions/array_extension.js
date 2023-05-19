@@ -1261,7 +1261,7 @@ export function initArrayExtensionProtoype() {
         return Quat2Utils.rotateAxisDegrees(this, ...arguments);
     };
 
-    quat2Extension.quat2_rotateAxisRadians = function quat2_rotateAxisRadians(angle, axis, out) {
+    quat2Extension.quat2_rotateAxisRadians = function quat2_rotateAxisRadians(angle, axis, out = Quat2Utils.create()) {
         return Quat2Utils.rotateAxisRadians(this, ...arguments);
     };
 
