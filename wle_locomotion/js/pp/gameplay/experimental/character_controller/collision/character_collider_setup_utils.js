@@ -22,6 +22,7 @@ export class CharacterColliderSetupSimplifiedCreationParams {
         this.myCheckOnlyFeet = false;
 
         this.myMaxSpeed = 0;
+        this.myAverageFPS = 72;
 
         this.myCanFly = false;
 
@@ -258,8 +259,7 @@ export function createSimplified(simplifiedCreationParams, outCharacterColliderS
 
 
 
-        let fps = 72;
-        if (simplifiedCreationParams.myMaxSpeed / fps > simplifiedCreationParams.myRadius) {
+        if (simplifiedCreationParams.myMaxSpeed / simplifiedCreationParams.myAverageFPS > simplifiedCreationParams.myRadius) {
             outCharacterColliderSetup.mySplitMovementParams.mySplitMovementEnabled = true;
 
             outCharacterColliderSetup.mySplitMovementParams.mySplitMovementMaxSteps = Math.ceil((simplifiedCreationParams.myMaxSpeed / fps) / simplifiedCreationParams.myRadius);
