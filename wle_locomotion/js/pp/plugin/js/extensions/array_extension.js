@@ -499,15 +499,15 @@ export function initArrayExtensionProtoype() {
         return Vec3Utils.lengthSigned(this, ...arguments);
     };
 
-    vec3Extension.vec3_angleSigned = function vec3_angleSigned(vector, upAxis) {
+    vec3Extension.vec3_angleSigned = function vec3_angleSigned(vector, referenceAxis) {
         return Vec3Utils.angleSigned(this, ...arguments);
     };
 
-    vec3Extension.vec3_angleSignedDegrees = function vec3_angleSignedDegrees(vector, upAxis) {
+    vec3Extension.vec3_angleSignedDegrees = function vec3_angleSignedDegrees(vector, referenceAxis) {
         return Vec3Utils.angleSignedDegrees(this, ...arguments);
     };
 
-    vec3Extension.vec3_angleSignedRadians = function vec3_angleSignedRadians(vector, upAxis) {
+    vec3Extension.vec3_angleSignedRadians = function vec3_angleSignedRadians(vector, referenceAxis) {
         return Vec3Utils.angleSignedRadians(this, ...arguments);
     };
 
@@ -563,11 +563,11 @@ export function initArrayExtensionProtoype() {
         return Vec3Utils.isFartherAlongAxis(this, ...arguments);
     };
 
-    vec3Extension.vec3_isToTheRight = function vec3_isToTheRight(vector, upAxis) {
+    vec3Extension.vec3_isToTheRight = function vec3_isToTheRight(vector, referenceAxis) {
         return Vec3Utils.isToTheRight(this, ...arguments);
     };
 
-    vec3Extension.vec3_signTo = function vec3_signTo(vector, upAxis, zeroSign = 1) {
+    vec3Extension.vec3_signTo = function vec3_signTo(vector, referenceAxis, zeroSign = 1) {
         return Vec3Utils.signTo(this, ...arguments);
     };
 

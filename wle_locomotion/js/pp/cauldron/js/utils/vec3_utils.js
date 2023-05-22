@@ -173,20 +173,20 @@ export function lengthSigned(vector, positiveDirection) {
     return signedLength;
 }
 
-export function angleSigned(first, second, upAxis) {
-    return Vec3Utils.angleSignedDegrees(first, second, upAxis);
+export function angleSigned(first, second, referenceAxis) {
+    return Vec3Utils.angleSignedDegrees(first, second, referenceAxis);
 }
 
-export function angleSignedDegrees(first, second, upAxis) {
-    return MathUtils.toDegrees(Vec3Utils.angleSignedRadians(first, second, upAxis));
+export function angleSignedDegrees(first, second, referenceAxis) {
+    return MathUtils.toDegrees(Vec3Utils.angleSignedRadians(first, second, referenceAxis));
 }
 
 export let angleSignedRadians = function () {
     let crossAxis = create();
-    return function angleSignedRadians(first, second, upAxis) {
+    return function angleSignedRadians(first, second, referenceAxis) {
         Vec3Utils.cross(first, second, crossAxis);
         let angle = Vec3Utils.angleRadians(first, second);
-        if (!Vec3Utils.isConcordant(crossAxis, upAxis)) {
+        if (!Vec3Utils.isConcordant(crossAxis, referenceAxis)) {
             angle = -angle;
         }
 
@@ -267,18 +267,18 @@ export function isFartherAlongAxis(first, second, axis) {
     return Vec3Utils.valueAlongAxis(first, axis) > Vec3Utils.valueAlongAxis(second, axis);
 }
 
-export function isToTheRight(first, second, upAxis) {
-    return Vec3Utils.signTo(first, second, upAxis) >= 0;
+export function isToTheRight(first, second, referenceAxis) {
+    return Vec3Utils.signTo(first, second, referenceAxis) >= 0;
 }
 
 export let signTo = function () {
     let componentAlongThis = create();
     let componentAlongVector = create();
-    return function signTo(first, second, upAxis, zeroSign = 1) {
-        Vec3Utils.removeComponentAlongAxis(first, upAxis, componentAlongThis);
-        Vec3Utils.removeComponentAlongAxis(second, upAxis, componentAlongVector);
+    return function signTo(first, second, referenceAxis, zeroSign = 1) {
+        Vec3Utils.removeComponentAlongAxis(first, referenceAxis, componentAlongThis);
+        Vec3Utils.removeComponentAlongAxis(second, referenceAxis, componentAlongVector);
 
-        let angleSignedResult = Vec3Utils.angleSigned(first, second, upAxis);
+        let angleSignedResult = Vec3Utils.angleSigned(first, second, referenceAxis);
         return angleSignedResult > 0 ? 1 : (angleSignedResult == 0 ? zeroSign : -1);
     };
 }();
