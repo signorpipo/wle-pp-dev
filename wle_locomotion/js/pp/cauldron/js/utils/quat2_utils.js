@@ -268,21 +268,21 @@ export function fromMatrix(matrix, out = Quat2Utils.create()) {
     return out;
 }
 
-export function lerp(from, to, interpolationValue, out = Quat2Utils.create()) {
-    if (interpolationValue <= 0) {
+export function lerp(from, to, interpolationFactor, out = Quat2Utils.create()) {
+    if (interpolationFactor <= 0) {
         Quat2Utils.copy(from, out);
         return out;
-    } else if (interpolationValue >= 1) {
+    } else if (interpolationFactor >= 1) {
         Quat2Utils.copy(to, out);
         return out;
     }
 
-    gl_quat2.lerp(out, from, to, interpolationValue);
+    gl_quat2.lerp(out, from, to, interpolationFactor);
     return out;
 }
 
-export function interpolate(from, to, interpolationValue, easingFunction = EasingFunction.linear, out = Quat2Utils.create()) {
-    let lerpValue = easingFunction(interpolationValue);
+export function interpolate(from, to, interpolationFactor, easingFunction = EasingFunction.linear, out = Quat2Utils.create()) {
+    let lerpValue = easingFunction(interpolationFactor);
     return Quat2Utils.lerp(from, to, lerpValue, out);
 }
 

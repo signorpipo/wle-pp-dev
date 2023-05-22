@@ -480,39 +480,39 @@ export let rotateAxisRadians = function () {
     };
 }();
 
-export function lerp(from, to, interpolationValue, out = QuatUtils.create()) {
-    if (interpolationValue <= 0) {
+export function lerp(from, to, interpolationFactor, out = QuatUtils.create()) {
+    if (interpolationFactor <= 0) {
         QuatUtils.copy(from, out);
         return out;
-    } else if (interpolationValue >= 1) {
+    } else if (interpolationFactor >= 1) {
         QuatUtils.copy(to, out);
         return out;
     }
 
-    gl_quat.lerp(out, from, to, interpolationValue);
+    gl_quat.lerp(out, from, to, interpolationFactor);
     return out;
 }
 
-export function interpolate(from, to, interpolationValue, easingFunction = EasingFunction.linear, out = QuatUtils.create()) {
-    let lerpValue = easingFunction(interpolationValue);
+export function interpolate(from, to, interpolationFactor, easingFunction = EasingFunction.linear, out = QuatUtils.create()) {
+    let lerpValue = easingFunction(interpolationFactor);
     return QuatUtils.lerp(from, to, lerpValue, out);
 }
 
-export function slerp(from, to, interpolationValue, out = QuatUtils.create()) {
-    if (interpolationValue <= 0) {
+export function slerp(from, to, interpolationFactor, out = QuatUtils.create()) {
+    if (interpolationFactor <= 0) {
         QuatUtils.copy(from, out);
         return out;
-    } else if (interpolationValue >= 1) {
+    } else if (interpolationFactor >= 1) {
         QuatUtils.copy(to, out);
         return out;
     }
 
-    gl_quat.slerp(out, from, to, interpolationValue);
+    gl_quat.slerp(out, from, to, interpolationFactor);
     return out;
 }
 
-export function sinterpolate(from, to, interpolationValue, easingFunction = EasingFunction.linear, out = QuatUtils.create()) {
-    let lerpValue = easingFunction(interpolationValue);
+export function sinterpolate(from, to, interpolationFactor, easingFunction = EasingFunction.linear, out = QuatUtils.create()) {
+    let lerpValue = easingFunction(interpolationFactor);
     return QuatUtils.slerp(from, to, lerpValue, out);
 }
 

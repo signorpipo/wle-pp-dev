@@ -722,21 +722,21 @@ export let rotationToPivotedQuat = function () {
     };
 }();
 
-export function lerp(from, to, interpolationValue, out = Vec3Utils.create()) {
-    if (interpolationValue <= 0) {
+export function lerp(from, to, interpolationFactor, out = Vec3Utils.create()) {
+    if (interpolationFactor <= 0) {
         Vec3Utils.copy(from, out);
         return out;
-    } else if (interpolationValue >= 1) {
+    } else if (interpolationFactor >= 1) {
         Vec3Utils.copy(to, out);
         return out;
     }
 
-    gl_vec3.lerp(out, from, to, interpolationValue);
+    gl_vec3.lerp(out, from, to, interpolationFactor);
     return out;
 }
 
-export function interpolate(from, to, interpolationValue, easingFunction = EasingFunction.linear, out = Vec3Utils.create()) {
-    let lerpValue = easingFunction(interpolationValue);
+export function interpolate(from, to, interpolationFactor, easingFunction = EasingFunction.linear, out = Vec3Utils.create()) {
+    let lerpValue = easingFunction(interpolationFactor);
     return Vec3Utils.lerp(from, to, lerpValue, out);
 }
 

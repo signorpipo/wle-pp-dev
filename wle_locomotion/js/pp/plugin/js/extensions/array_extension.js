@@ -791,11 +791,11 @@ export function initArrayExtensionProtoype() {
         return Vec3Utils.rotationToPivotedQuat(this, ...arguments);
     };
 
-    vec3Extension.vec3_lerp = function vec3_lerp(to, interpolationValue, out = Vec3Utils.create()) {
+    vec3Extension.vec3_lerp = function vec3_lerp(to, interpolationFactor, out = Vec3Utils.create()) {
         return Vec3Utils.lerp(this, ...arguments);
     };
 
-    vec3Extension.vec3_interpolate = function vec3_interpolate(to, interpolationValue, easingFunction = EasingFunction.linear, out = Vec3Utils.create()) {
+    vec3Extension.vec3_interpolate = function vec3_interpolate(to, interpolationFactor, easingFunction = EasingFunction.linear, out = Vec3Utils.create()) {
         return Vec3Utils.interpolate(this, ...arguments);
     };
 
@@ -1097,19 +1097,19 @@ export function initArrayExtensionProtoype() {
         return QuatUtils.rotateAxisRadians(this, ...arguments);
     };
 
-    quatExtension.quat_lerp = function quat_lerp(to, interpolationValue, out = QuatUtils.create()) {
+    quatExtension.quat_lerp = function quat_lerp(to, interpolationFactor, out = QuatUtils.create()) {
         return QuatUtils.lerp(this, ...arguments);
     };
 
-    quatExtension.quat_interpolate = function quat_interpolate(to, interpolationValue, easingFunction = EasingFunction.linear, out = QuatUtils.create()) {
+    quatExtension.quat_interpolate = function quat_interpolate(to, interpolationFactor, easingFunction = EasingFunction.linear, out = QuatUtils.create()) {
         return QuatUtils.interpolate(this, ...arguments);
     };
 
-    quatExtension.quat_slerp = function quat_slerp(to, interpolationValue, out = QuatUtils.create()) {
+    quatExtension.quat_slerp = function quat_slerp(to, interpolationFactor, out = QuatUtils.create()) {
         return QuatUtils.slerp(this, ...arguments);
     };
 
-    quatExtension.quat_sinterpolate = function quat_sinterpolate(to, interpolationValue, easingFunction = EasingFunction.linear, out = QuatUtils.create()) {
+    quatExtension.quat_sinterpolate = function quat_sinterpolate(to, interpolationFactor, easingFunction = EasingFunction.linear, out = QuatUtils.create()) {
         return QuatUtils.sinterpolate(this, ...arguments);
     };
 
@@ -1273,11 +1273,11 @@ export function initArrayExtensionProtoype() {
         return Quat2Utils.fromMatrix(matrix, this);
     };
 
-    quat2Extension.quat2_lerp = function quat2_lerp(to, interpolationValue, out = Quat2Utils.create()) {
+    quat2Extension.quat2_lerp = function quat2_lerp(to, interpolationFactor, out = Quat2Utils.create()) {
         return Quat2Utils.lerp(this, ...arguments);
     };
 
-    quat2Extension.quat2_interpolate = function quat2_interpolate(to, interpolationValue, easingFunction = EasingFunction.linear, out = Quat2Utils.create()) {
+    quat2Extension.quat2_interpolate = function quat2_interpolate(to, interpolationFactor, easingFunction = EasingFunction.linear, out = Quat2Utils.create()) {
         return Quat2Utils.interpolate(this, ...arguments);
     };
 
