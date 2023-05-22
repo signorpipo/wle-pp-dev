@@ -138,7 +138,7 @@ export * from "./debug/debug_functions_overwriter/debug_functions_performance_an
 
 //    CAULDRON
 export * from "./gameplay/cauldron/cauldron/direction_2D_to_3D_converter";
-export * from "./gameplay/cauldron/cauldron/number_over_value";
+export * from "./gameplay/cauldron/cauldron/number_over_factor";
 
 //    GRAB & THROW
 export * from "./gameplay/grab_throw/grabbable_component";
