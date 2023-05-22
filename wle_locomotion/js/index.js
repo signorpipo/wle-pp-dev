@@ -15,6 +15,7 @@
 import {MouseLookComponent} from '@wonderlandengine/components';
 import {AIMovementComponent} from './cauldron/components/ai_movement_component.js';
 import {CharacterSpawnerComponent} from './cauldron/components/character_spawner_component.js';
+import {ExampleEasyTuneVariablesComponent} from './cauldron/components/example_easy_tune_variables_component.js';
 import {RemoveMainEngineComponent} from './cauldron/components/remove_main_engine_component.js';
 import {StickMovementComponent} from './cauldron/components/stick_movement_component.js';
 import {AdjustHierarchyPhysXScaleComponent} from './pp/index.js';
@@ -108,6 +109,7 @@ if (document.readyState === 'loading') {
 engine.registerComponent(MouseLookComponent);
 engine.registerComponent(AIMovementComponent);
 engine.registerComponent(CharacterSpawnerComponent);
+engine.registerComponent(ExampleEasyTuneVariablesComponent);
 engine.registerComponent(RemoveMainEngineComponent);
 engine.registerComponent(StickMovementComponent);
 engine.registerComponent(AdjustHierarchyPhysXScaleComponent);

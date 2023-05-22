@@ -29,6 +29,9 @@
                 },
                 {
                     "type": "remove-main-engine"
+                },
+                {
+                    "type": "example-easy-tune-variables"
                 }
             ]
         },

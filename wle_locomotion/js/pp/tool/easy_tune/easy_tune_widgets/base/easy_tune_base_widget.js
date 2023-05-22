@@ -142,7 +142,7 @@ export class EasyTuneBaseWidget {
         this._myResetExportLabelTimer.setDuration(this._myConfig.myImportExportResetLabelSeconds);
 
         this._myUI.build(parentObject, this._myConfig, easyTuneParams);
-        this._myUI.setImportExportButtonsVisible(easyTuneParams.myVariablesImportExportButtonsVisible);
+        this._myUI.setImportExportButtonsVisible(easyTuneParams.myShowVariablesImportExportButtons);
 
         this._startHook(parentObject, easyTuneParams);
 
