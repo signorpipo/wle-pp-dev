@@ -133,7 +133,7 @@
             - quat2_rotateAxis  
             - quat2_toMatrix
             ○ quat2_fromMatrix
-            - quat2_lerp        / quat2_interpolate
+            - quat2_lerp        / quat2_interpolate / quat2_slerp    / quat2_sinterpolate
 
         MATRIX 3:
             ○ mat3_set
@@ -1279,6 +1279,14 @@ export function initArrayExtensionProtoype() {
 
     quat2Extension.quat2_interpolate = function quat2_interpolate(to, interpolationFactor, easingFunction = EasingFunction.linear, out = Quat2Utils.create()) {
         return Quat2Utils.interpolate(this, ...arguments);
+    };
+
+    quat2Extension.quat2_slerp = function quat2_slerp(to, interpolationFactor, out = Quat2Utils.create()) {
+        return Quat2Utils.slerp(this, ...arguments);
+    };
+
+    quat2Extension.quat2_sinterpolate = function quat2_sinterpolate(to, interpolationFactor, easingFunction = EasingFunction.linear, out = Quat2Utils.create()) {
+        return Quat2Utils.sinterpolate(this, ...arguments);
     };
 
     // MATRIX 3

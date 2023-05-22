@@ -494,8 +494,8 @@ export function lerp(from, to, interpolationFactor, out = QuatUtils.create()) {
 }
 
 export function interpolate(from, to, interpolationFactor, easingFunction = EasingFunction.linear, out = QuatUtils.create()) {
-    let lerpValue = easingFunction(interpolationFactor);
-    return QuatUtils.lerp(from, to, lerpValue, out);
+    let lerpFactor = easingFunction(interpolationFactor);
+    return QuatUtils.lerp(from, to, lerpFactor, out);
 }
 
 export function slerp(from, to, interpolationFactor, out = QuatUtils.create()) {
@@ -512,8 +512,8 @@ export function slerp(from, to, interpolationFactor, out = QuatUtils.create()) {
 }
 
 export function sinterpolate(from, to, interpolationFactor, easingFunction = EasingFunction.linear, out = QuatUtils.create()) {
-    let lerpValue = easingFunction(interpolationFactor);
-    return QuatUtils.slerp(from, to, lerpValue, out);
+    let lerpFactor = easingFunction(interpolationFactor);
+    return QuatUtils.slerp(from, to, lerpFactor, out);
 }
 
 export let QuatUtils = {

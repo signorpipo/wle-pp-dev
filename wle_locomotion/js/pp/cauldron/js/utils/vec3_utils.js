@@ -736,8 +736,8 @@ export function lerp(from, to, interpolationFactor, out = Vec3Utils.create()) {
 }
 
 export function interpolate(from, to, interpolationFactor, easingFunction = EasingFunction.linear, out = Vec3Utils.create()) {
-    let lerpValue = easingFunction(interpolationFactor);
-    return Vec3Utils.lerp(from, to, lerpValue, out);
+    let lerpFactor = easingFunction(interpolationFactor);
+    return Vec3Utils.lerp(from, to, lerpFactor, out);
 }
 
 export let perpendicularRandom = function () {

@@ -282,8 +282,43 @@ export function lerp(from, to, interpolationFactor, out = Quat2Utils.create()) {
 }
 
 export function interpolate(from, to, interpolationFactor, easingFunction = EasingFunction.linear, out = Quat2Utils.create()) {
-    let lerpValue = easingFunction(interpolationFactor);
-    return Quat2Utils.lerp(from, to, lerpValue, out);
+    let lerpFactor = easingFunction(interpolationFactor);
+    return Quat2Utils.lerp(from, to, lerpFactor, out);
+}
+
+export let slerp = function () {
+    let fromPosition = vec3_utils_create();
+    let toPosition = vec3_utils_create();
+    let interpolatedPosition = vec3_utils_create();
+    let fromRotationQuat = quat_utils_create();
+    let toRotationQuat = quat_utils_create();
+    let interpolatedRotationQuat = quat_utils_create();
+    return function slerp(from, to, interpolationFactor, out = Quat2Utils.create()) {
+        if (interpolationFactor <= 0) {
+            Quat2Utils.copy(from, out);
+            return out;
+        } else if (interpolationFactor >= 1) {
+            Quat2Utils.copy(to, out);
+            return out;
+        }
+
+        Quat2Utils.getPosition(from, fromPosition);
+        Quat2Utils.getPosition(to, toPosition);
+
+        Quat2Utils.getRotationQuat(from, fromRotationQuat);
+        Quat2Utils.getRotationQuat(to, toRotationQuat);
+
+        Vec3Utils.lerp(fromPosition, toPosition, interpolationFactor, interpolatedPosition);
+        QuatUtils.slerp(fromRotationQuat, toRotationQuat, interpolationFactor, interpolatedRotationQuat);
+
+        Quat2Utils.setPositionRotationQuat(out, interpolatedPosition, interpolatedRotationQuat);
+        return out;
+    };
+}();
+
+export function sinterpolate(from, to, interpolationFactor, easingFunction = EasingFunction.linear, out = Quat2Utils.create()) {
+    let lerpFactor = easingFunction(interpolationFactor);
+    return Quat2Utils.slerp(from, to, lerpFactor, out);
 }
 
 export let Quat2Utils = {
@@ -327,5 +362,7 @@ export let Quat2Utils = {
     toMatrix,
     fromMatrix,
     lerp,
-    interpolate
+    interpolate,
+    slerp,
+    sinterpolate
 };

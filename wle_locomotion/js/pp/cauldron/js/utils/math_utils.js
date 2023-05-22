@@ -111,8 +111,8 @@ export function lerp(from, to, interpolationFactor) {
 }
 
 export function interpolate(from, to, interpolationFactor, easingFunction = EasingFunction.linear) {
-    let lerpValue = easingFunction(interpolationFactor);
-    return MathUtils.lerp(from, to, lerpValue);
+    let lerpFactor = easingFunction(interpolationFactor);
+    return MathUtils.lerp(from, to, lerpFactor);
 }
 
 export function angleDistance(from, to) {
