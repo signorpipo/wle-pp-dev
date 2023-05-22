@@ -387,7 +387,7 @@ export class CleanedPlayerLocomotion {
 
         simplifiedParams.myCheckOnlyFeet = this._myParams.myColliderCheckOnlyFeet;
 
-        simplifiedParams.myAverageSpeed = this._myParams.myMaxSpeed;
+        simplifiedParams.myMaxSpeed = this._myParams.myMaxSpeed;
 
         simplifiedParams.myCanFly = this._myParams.myFlyEnabled;
 
