@@ -12,7 +12,7 @@ import { AddPPToWindowComponent } from "./add_pp_to_window_component";
 import { GetDefaultResourcesComponent } from "./get_default_resources_component";
 import { GetSceneObjectsComponent } from "./get_scene_objects_component";
 
-let _myRegisteredEngines = [];
+let _myRegisteredEngines = new WeakMap();
 
 export class PPGatewayComponent extends Component {
     static TypeName = "pp-gateway";
@@ -31,8 +31,8 @@ export class PPGatewayComponent extends Component {
     };
 
     static onRegister(engine) {
-        if (!_myRegisteredEngines.includes(engine)) {
-            _myRegisteredEngines.push(engine)
+        if (!_myRegisteredEngines.has(engine)) {
+            _myRegisteredEngines.set(engine, null);
             initPP(engine);
         }
     }
