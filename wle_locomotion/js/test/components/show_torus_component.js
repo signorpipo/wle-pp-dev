@@ -9,10 +9,10 @@ export class ShowTorusComponent extends Component {
     static Properties = {};
 
     start() {
-        Globals.getEasyTuneVariables(this.engine).add(new EasyTuneNumber("Torus Radius", 0.25, 0.1, 3));
+        Globals.getEasyTuneVariables(this.engine).add(new EasyTuneNumber("Torus Radius", 0.25, 3, 0.1));
         Globals.getEasyTuneVariables(this.engine).add(new EasyTuneInt("Torus Segments", 12, 1));
-        Globals.getEasyTuneVariables(this.engine).add(new EasyTuneNumber("Torus Thickness", 0.05, 0.1, 3));
-        Globals.getEasyTuneVariables(this.engine).add(new EasyTuneNumber("Torus Extra Length Multiplier", 1, 0.1, 3));
+        Globals.getEasyTuneVariables(this.engine).add(new EasyTuneNumber("Torus Thickness", 0.05, 3, 0.1));
+        Globals.getEasyTuneVariables(this.engine).add(new EasyTuneNumber("Torus Extra Length Multiplier", 1, 3, 0.1));
 
         this._myMaterial = Globals.getDefaultResources(this.engine).myMaterials.myPhongOpaque.clone();
         this._myMaterial.diffuseColor = vec4_create(1, 0.5, 0.5, 1);

@@ -8,12 +8,12 @@ export class ExampleEasyTuneVariablesComponent extends Component {
     static Properties = {};
 
     start() {
-        Globals.getEasyTuneVariables(this.engine).add(new EasyTuneNumber("Float", 1.00, 0.1, 3));
-        Globals.getEasyTuneVariables(this.engine).add(new EasyTuneNumberArray("Float Array", [1.00, 2.00, 3.00], 0.1, 3));
+        Globals.getEasyTuneVariables(this.engine).add(new EasyTuneNumber("Float", 1.00, 3, 0.1));
+        Globals.getEasyTuneVariables(this.engine).add(new EasyTuneNumberArray("Float Array", [1.00, 2.00, 3.00], 3, 0.1));
         Globals.getEasyTuneVariables(this.engine).add(new EasyTuneInt("Int", 1, 1));
         Globals.getEasyTuneVariables(this.engine).add(new EasyTuneIntArray("Int Array", [1, 2, 3], 1));
         Globals.getEasyTuneVariables(this.engine).add(new EasyTuneBool("Bool", false));
         Globals.getEasyTuneVariables(this.engine).add(new EasyTuneBoolArray("Bool Array", [false, true, false]));
-        Globals.getEasyTuneVariables(this.engine).add(new EasyTuneTransform("Transform", mat4_create(), true));
+        Globals.getEasyTuneVariables(this.engine).add(new EasyTuneTransform("Transform", mat4_create(), 3, true));
     }
 }
