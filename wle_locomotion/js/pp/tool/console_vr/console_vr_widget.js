@@ -677,7 +677,7 @@ export class ConsoleVRWidget {
                         break;
                 }
             } else if (this._myConfig.myClearBrowserConsoleWhenClearPressed) {
-                ConsoleOriginalFunctions.getConsoleOriginalClear()();
+                ConsoleOriginalFunctions.clear();
             }
         }
     }
