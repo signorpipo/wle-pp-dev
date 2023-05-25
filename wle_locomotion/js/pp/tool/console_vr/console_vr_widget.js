@@ -84,6 +84,10 @@ export class ConsoleVRWidget {
         this._myErrorEventListener = null;
         this._myUnhandledRejectionEventListener = null;
 
+        this._myConsolePrintAddMessageEnabled = true;
+        this._myConsolePrintUpdateTextEnabled = true;
+        this._myTextDirty = false;
+
         this._myEngine = engine;
 
         this._myDestroyed = false;
@@ -170,6 +174,11 @@ export class ConsoleVRWidget {
         this._myWidgetFrame.update(dt);
 
         if (this._myWidgetFrame.isVisible()) {
+            if (this._myTextDirty) {
+                this._myTextDirty = false;
+                this._updateAllTexts();
+            }
+
             this._updateScroll(dt);
         }
 
@@ -263,22 +272,41 @@ export class ConsoleVRWidget {
 
         consoleText = this._myConfig.myMessagesTextStartString.concat(consoleText);
 
-        this._myUI.myMessagesTextComponents[messageType].text = consoleText;
+        try {
+            this._myConsolePrintUpdateTextEnabled = false;
+            this._myUI.myMessagesTextComponents[messageType].text = consoleText;
+            this._myConsolePrintUpdateTextEnabled = true;
+        } catch (error) {
+            this._myConsolePrintUpdateTextEnabled = true;
+            throw error;
+        }
     }
 
     _consolePrint(consoleFunction, sender, ...args) {
-        if (consoleFunction != ConsoleVRWidgetConsoleFunction.ASSERT || (args.length > 0 && !args[0])) {
-            let message = this._argsToMessage(consoleFunction, ...args);
-            this._addMessage(message);
+        if (this._myConsolePrintAddMessageEnabled && (consoleFunction != ConsoleVRWidgetConsoleFunction.ASSERT || (args.length > 0 && !args[0]))) {
+            try {
+                this._myConsolePrintAddMessageEnabled = false;
 
-            if (this._myMessages.length >= this._myConfig.myMaxMessages + this._myConfig.myMaxMessagesDeletePad) {
-                this._myMessages = this._myMessages.slice(this._myMessages.length - this._myConfig.myMaxMessages);
-                this._clampScrollOffset();
+                let message = this._argsToMessage(consoleFunction, ...args);
+                this._addMessage(message);
+
+                if (this._myMessages.length >= this._myConfig.myMaxMessages + this._myConfig.myMaxMessagesDeletePad) {
+                    this._myMessages = this._myMessages.slice(this._myMessages.length - this._myConfig.myMaxMessages);
+                    this._clampScrollOffset();
+                }
+
+                this._myConsolePrintAddMessageEnabled = true;
+            } catch (error) {
+                this._myConsolePrintAddMessageEnabled = true;
+                throw error;
             }
 
-            this._updateAllTexts();
-
-            this._pulseGamepad();
+            if (this._myConsolePrintUpdateTextEnabled) {
+                this._updateAllTexts();
+                this._pulseGamepad();
+            } else {
+                this._myTextDirty = true;
+            }
         }
 
         switch (sender) {
@@ -349,8 +377,11 @@ export class ConsoleVRWidget {
     }
 
     _stringifyItem(item) {
-        if (typeof item === "object") {
-            let stringifiedItem = null;
+        let stringifiedItem = null;
+
+        if (item instanceof Error) {
+            stringifiedItem = item.stack;
+        } else if (typeof item === "object") {
             let linesBetweenItems = 2;
 
             try {
@@ -374,11 +405,11 @@ export class ConsoleVRWidget {
             stringifiedItem = stringifiedItem.replaceAll("'[", "[");
             stringifiedItem = stringifiedItem.replaceAll("]\"", "]");
             stringifiedItem = stringifiedItem.replaceAll("]'", "]");
-
-            return stringifiedItem;
+        } else {
+            stringifiedItem = item;
         }
 
-        return item;
+        return stringifiedItem;
     }
 
     _splitLongLines(messageText) {
