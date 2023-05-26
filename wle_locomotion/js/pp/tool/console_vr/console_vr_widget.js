@@ -86,6 +86,8 @@ export class ConsoleVRWidget {
 
         this._myConsolePrintAddMessageEnabled = true;
         this._myConsolePrintUpdateTextEnabled = true;
+        this._myConsolePrintAddMessageEnabledReset = false;
+        this._myConsolePrintUpdateTextEnabledReset = false;
         this._myTextDirty = false;
 
         this._myEngine = engine;
@@ -116,6 +118,31 @@ export class ConsoleVRWidget {
         this._addListeners();
 
         this._overrideConsolesFunctions();
+    }
+
+    update(dt) {
+        this._myWidgetFrame.update(dt);
+
+        if (this._myWidgetFrame.isVisible()) {
+            if (this._myConsolePrintAddMessageEnabledReset) {
+                this._myConsolePrintAddMessageEnabledReset = false;
+                this._myConsolePrintAddMessageEnabled = true;
+            }
+
+            if (this._myConsolePrintUpdateTextEnabledReset) {
+                this._myConsolePrintUpdateTextEnabledReset = false;
+                this._myConsolePrintUpdateTextEnabled = true;
+            }
+
+            if (this._myTextDirty) {
+                this._myTextDirty = false;
+                this._updateAllTexts();
+            }
+
+            this._updateScroll(dt);
+        }
+
+        this._updateGamepadsExtraActions(dt);
     }
 
     // This must be done only when all the setup is complete, to avoid issues with other part of the code calling the console and then triggering the console vr while not ready yet
@@ -168,21 +195,6 @@ export class ConsoleVRWidget {
         Globals.getConsoleVR(this._myEngine).debug = this._consolePrint.bind(this, ConsoleVRWidgetConsoleFunction.DEBUG, ConsoleVRWidgetSender.CONSOLE_VR);
         Globals.getConsoleVR(this._myEngine).assert = this._consolePrint.bind(this, ConsoleVRWidgetConsoleFunction.ASSERT, ConsoleVRWidgetSender.CONSOLE_VR);
         Globals.getConsoleVR(this._myEngine).clear = this._clearConsole.bind(this, true, ConsoleVRWidgetSender.CONSOLE_VR);
-    }
-
-    update(dt) {
-        this._myWidgetFrame.update(dt);
-
-        if (this._myWidgetFrame.isVisible()) {
-            if (this._myTextDirty) {
-                this._myTextDirty = false;
-                this._updateAllTexts();
-            }
-
-            this._updateScroll(dt);
-        }
-
-        this._updateGamepadsExtraActions(dt);
     }
 
     // Text section
@@ -277,7 +289,7 @@ export class ConsoleVRWidget {
             this._myUI.myMessagesTextComponents[messageType].text = consoleText;
             this._myConsolePrintUpdateTextEnabled = true;
         } catch (error) {
-            this._myConsolePrintUpdateTextEnabled = true;
+            this._myConsolePrintUpdateTextEnabledReset = true;
             throw error;
         }
     }
@@ -285,8 +297,6 @@ export class ConsoleVRWidget {
     _consolePrint(consoleFunction, sender, ...args) {
         if (this._myConsolePrintAddMessageEnabled && (consoleFunction != ConsoleVRWidgetConsoleFunction.ASSERT || (args.length > 0 && !args[0]))) {
             try {
-                this._myConsolePrintAddMessageEnabled = false;
-
                 let message = this._argsToMessage(consoleFunction, ...args);
                 this._addMessage(message);
 
@@ -294,10 +304,21 @@ export class ConsoleVRWidget {
                     this._myMessages = this._myMessages.slice(this._myMessages.length - this._myConfig.myMaxMessages);
                     this._clampScrollOffset();
                 }
-
-                this._myConsolePrintAddMessageEnabled = true;
             } catch (error) {
-                this._myConsolePrintAddMessageEnabled = true;
+                this._myConsolePrintAddMessageEnabled = false;
+                this._myConsolePrintAddMessageEnabledReset = true;
+
+                this._myTextDirty = true;
+
+                try {
+                    let errorMessage = "An error occurred while trying to add a new message to the Console VR Widget";
+                    let message = new ConsoleVRWidgetMessage(ConsoleVRWidgetMessageType.ERROR, [errorMessage]);
+                    this._myMessages.push(message);
+                    ConsoleOriginalFunctions.error(errorMessage);
+                } catch (anotherError) {
+                    // ignored
+                }
+
                 throw error;
             }
 
