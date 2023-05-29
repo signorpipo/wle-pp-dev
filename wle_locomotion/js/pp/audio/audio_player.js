@@ -20,7 +20,7 @@ export let AudioEvent = {
 
 export class AudioPlayer {
 
-    constructor(audioSetupOrAudioFilePath, createAudio = true) {
+    constructor(audioSetupOrAudioFilePath, audioInstance = null) {
         if (audioSetupOrAudioFilePath == null) {
             this._myAudioSetup = new AudioSetup();
         } else if (typeof audioSetupOrAudioFilePath === "string") {
@@ -31,20 +31,22 @@ export class AudioPlayer {
 
         this._myAudio = null;
 
-        if (createAudio) {
+        if (audioInstance == null) {
             this._myAudio = new Howl({
                 src: [this._myAudioSetup.myAudioFilePath],
                 loop: this._myAudioSetup.myLoop,
                 volume: this._myAudioSetup.myVolume,
-                autoplay: this._myAudioSetup.myAutoplay,
+                autoplay: false,
                 rate: this._myAudioSetup.myRate,
                 pool: this._myAudioSetup.myPool,
                 pos: (this._myAudioSetup.mySpatial) ? this._myAudioSetup.myPosition : null,
                 refDistance: this._myAudioSetup.myReferenceDistance,
-                preload: this._myAudioSetup.myPreload
+                preload: this._myAudioSetup.myPreLoad
             });
 
             this._myAudio._pannerAttr.refDistance = this._myAudioSetup.myReferenceDistance;
+        } else {
+            this._myAudio = audioInstance;
         }
 
         this._myLastAudioID = null;
@@ -54,8 +56,10 @@ export class AudioPlayer {
             this._myAudioEventEmitters.set(AudioEvent[eventKey], new Emitter());    // Signature: listener(audioID)
         }
 
-        if (createAudio) {
-            this._addListeners();
+        this._addListeners();
+
+        if (this._myAudioSetup.myAutoPlay) {
+            this.play();
         }
     }
 
