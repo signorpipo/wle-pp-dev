@@ -109,8 +109,10 @@ export class AudioPlayer {
         return this._myAudio.state() == "loaded";
     }
 
-    fade(fromVolume, toVolume, duration, updateOnlyLast = false) {
-        this.setVolume(toVolume);
+    fade(fromVolume, toVolume, duration, updateOnlyLast = true, setValueOnPlayer = true) {
+        if (setValueOnPlayer) {
+            this.setVolume(toVolume);
+        }
 
         if (updateOnlyLast) {
             this._myAudio.fade(fromVolume, toVolume, duration * 1000, this._myLastAudioID);
@@ -119,8 +121,30 @@ export class AudioPlayer {
         }
     }
 
-    updatePosition(position, updateOnlyLast = false) {
-        this.setPosition(position);
+    isFading(checkOnlyLast = true) {
+        let fading = false;
+
+        if (checkOnlyLast) {
+            let lastSound = this._myAudio._soundById(this._myLastAudioID);
+            if (lastSound != null) {
+                fading = lastSound._fadeTo != null;
+            }
+        } else {
+            for (let sound of this._myAudio._sounds) {
+                if (sound._fadeTo != null) {
+                    fading = true;
+                    break;
+                }
+            }
+        }
+
+        return fading;
+    }
+
+    updatePosition(position, updateOnlyLast = true, setValueOnPlayer = true) {
+        if (setValueOnPlayer) {
+            this.setPosition(position);
+        }
 
         if (this._myAudioSetup.mySpatial && position) {
             if (updateOnlyLast) {
@@ -131,12 +155,14 @@ export class AudioPlayer {
         }
     }
 
-    updatePitch(pitch, updateOnlyLast = false) {
-        this.updateRate(pitch, updateOnlyLast);
+    updatePitch(pitch, updateOnlyLast = true, setValueOnPlayer = true) {
+        this.updateRate(pitch, updateOnlyLast, setValueOnPlayer);
     }
 
-    updateRate(rate, updateOnlyLast = false) {
-        this.setRate(rate);
+    updateRate(rate, updateOnlyLast = true, setValueOnPlayer = true) {
+        if (setValueOnPlayer) {
+            this.setRate(rate);
+        }
 
         if (rate != null) {
             if (updateOnlyLast) {
@@ -147,8 +173,10 @@ export class AudioPlayer {
         }
     }
 
-    updateVolume(volume, updateOnlyLast = false) {
-        this.setVolume(volume);
+    updateVolume(volume, updateOnlyLast = true, setValueOnPlayer = true) {
+        if (setValueOnPlayer) {
+            this.setVolume(volume);
+        }
 
         if (volume != null) {
             if (updateOnlyLast) {
@@ -195,8 +223,8 @@ export class AudioPlayer {
         return this._myAudioSetup.myRate;
     }
 
-    registerAudioEventListener(audioEvent, id, listener) {
-        this._myAudioEventEmitters.get(audioEvent).add(id, listener);
+    registerAudioEventListener(audioEvent, id, listener, notifyOnce = false) {
+        this._myAudioEventEmitters.get(audioEvent).add(listener, { id: id, once: notifyOnce });
     }
 
     unregisterAudioEventListener(audioEvent, id) {
