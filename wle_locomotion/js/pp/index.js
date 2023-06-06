@@ -278,7 +278,7 @@ export * from "./input/pose/components/set_tracked_hand_joint_local_transform_co
 export * from "./input/pose/components/copy_hand_transform_component";
 export * from "./input/pose/components/copy_head_transform_component";
 export * from "./input/pose/components/copy_player_transform_component";
-export * from "./input/pose/components/copy_player_pivot_transform_component";
+export * from "./input/pose/components/copy_reference_space_transform_component";
 
 //	TOOL
 export * from "./tool/cauldron/tool_types";

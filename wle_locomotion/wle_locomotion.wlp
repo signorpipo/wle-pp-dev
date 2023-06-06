@@ -8,7 +8,7 @@
                     "pp-gateway": {
                         "_myScene": "18",
                         "_myPlayer": "19",
-                        "_myPlayerPivot": "20",
+                        "_myReferenceSpace": "20",
                         "_myCameraNonXR": "21",
                         "_myEyeLeft": "26",
                         "_myEyeRight": "27",
@@ -68,7 +68,7 @@
             ]
         },
         "20": {
-            "name": "Player Pivot",
+            "name": "Reference Space",
             "parent": "19",
             "rotation": [
                 0.0,

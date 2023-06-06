@@ -7,7 +7,7 @@
                     "type": "pp-gateway",
                     "pp-gateway": {
                         "_myPlayer": "19",
-                        "_myPlayerPivot": "20",
+                        "_myReferenceSpace": "20",
                         "_myCameraNonXR": "21",
                         "_myEyeLeft": "26",
                         "_myEyeRight": "27",
@@ -62,7 +62,7 @@
             ]
         },
         "20": {
-            "name": "Player Pivot",
+            "name": "Reference Space",
             "parent": "19",
             "translation": [
                 0.0,
@@ -2873,7 +2873,7 @@
                 "optionalFeatures": {
                     "hand-tracking": true,
                     "local-floor": true,
-                    "hit-test": false
+                    "hit-test": true
                 },
                 "requiredFeatures": {
                     "local-floor": false,

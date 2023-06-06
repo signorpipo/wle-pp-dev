@@ -305,7 +305,7 @@ export class PlayerObscureManager {
             this._myObscureMaterial.color = vec4_create(0, 0, 0, 1);
         }
 
-        this._myObscureParentObject = Globals.getPlayerObjects(this._myParams.myEngine).myPlayerCauldron.pp_addObject();
+        this._myObscureParentObject = Globals.getPlayerObjects(this._myParams.myEngine).myCauldron.pp_addObject();
 
         let obscureVisualParams = new VisualMeshParams(this._myParams.myEngine);
         obscureVisualParams.myMesh = Globals.getDefaultMeshes(this._myParams.myEngine).myInvertedSphere;
@@ -334,7 +334,7 @@ export class PlayerObscureManager {
         if (visible) {
             this._myObscureParentObject.pp_setParent(this._myParams.myPlayerTransformManager.getHead(), false);
         } else {
-            this._myObscureParentObject.pp_setParent(Globals.getPlayerObjects(this._myParams.myEngine)?.myPlayerCauldron, false);
+            this._myObscureParentObject.pp_setParent(Globals.getPlayerObjects(this._myParams.myEngine)?.myCauldron, false);
         }
     }
 

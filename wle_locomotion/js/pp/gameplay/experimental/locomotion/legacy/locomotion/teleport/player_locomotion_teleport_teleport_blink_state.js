@@ -12,7 +12,7 @@ export class PlayerLocomotionTeleportTeleportBlinkState extends PlayerLocomotion
     constructor(teleportParams, teleportRuntimeParams, locomotionRuntimeParams) {
         super(teleportParams, teleportRuntimeParams, locomotionRuntimeParams);
 
-        this._myBlinkSphere = Globals.getPlayerObjects(this._myTeleportParams.myEngine).myPlayerCauldron.pp_addObject();
+        this._myBlinkSphere = Globals.getPlayerObjects(this._myTeleportParams.myEngine).myCauldron.pp_addObject();
         this._myBlinkSphereMeshComponent = this._myBlinkSphere.pp_addComponent(MeshComponent);
         this._myBlinkSphereMeshComponent.mesh = Globals.getDefaultMeshes(this._myTeleportParams.myEngine).myInvertedSphere;
         this._myBlinkSphereMeshComponent.material = Globals.getDefaultMaterials(this._myTeleportParams.myEngine).myFlatTransparentNoDepth.clone();
@@ -67,7 +67,7 @@ export class PlayerLocomotionTeleportTeleportBlinkState extends PlayerLocomotion
 
     end() {
         this._myBlinkSphere.pp_setActive(false);
-        this._myBlinkSphere.pp_setParent(Globals.getPlayerObjects(this._myTeleportParams.myEngine).myPlayerCauldron, false);
+        this._myBlinkSphere.pp_setParent(Globals.getPlayerObjects(this._myTeleportParams.myEngine).myCauldron, false);
         this._myFSM.perform("stop");
     }
 

@@ -17,8 +17,9 @@ export class PlayerObjects {
 
     constructor() {
         this.myPlayer = null;
-        this.myPlayerCauldron = null;
-        this.myPlayerPivot = null;
+
+        this.myCauldron = null;
+        this.myReferenceSpace = null;
 
         this.myCameraNonXR = null;
 

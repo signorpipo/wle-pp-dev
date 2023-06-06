@@ -910,11 +910,11 @@ PlayerHeadManager.prototype._updateHeightOffset = function () {
 }();
 
 PlayerHeadManager.prototype._setPlayerPivotHeightOffset = function () {
-    let playerPivotPosition = vec3_create();
+    let referenceSpacePosition = vec3_create();
     return function _setPlayerPivotHeightOffset(offset, amountToRemove) {
         if (offset != null) {
-            playerPivotPosition = Globals.getPlayerObjects(this._myParams.myEngine).myPlayerPivot.pp_getPositionLocal(playerPivotPosition);
-            Globals.getPlayerObjects(this._myParams.myEngine).myPlayerPivot.pp_setPositionLocal([playerPivotPosition[0], offset - amountToRemove, playerPivotPosition[2]]);
+            referenceSpacePosition = Globals.getPlayerObjects(this._myParams.myEngine).myReferenceSpace.pp_getPositionLocal(referenceSpacePosition);
+            Globals.getPlayerObjects(this._myParams.myEngine).myReferenceSpace.pp_setPositionLocal([referenceSpacePosition[0], offset - amountToRemove, referenceSpacePosition[2]]);
         }
     }
 }();
