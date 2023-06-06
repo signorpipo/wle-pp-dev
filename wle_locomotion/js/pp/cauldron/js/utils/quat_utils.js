@@ -362,28 +362,28 @@ export let subRotationQuat = function () {
     };
 }();
 
-export function rotationTo(first, second, out) {
-    return QuatUtils.rotationToDegrees(first, second, out);
+export function rotationTo(from, to, out) {
+    return QuatUtils.rotationToDegrees(from, to, out);
 }
 
 export let rotationToDegrees = function () {
-    let secondQuat = create();
-    return function rotationToDegrees(first, second, out) {
-        Vec3Utils.degreesToQuat(second, secondQuat);
-        return QuatUtils.rotationToQuat(first, secondQuat, out);
+    let toQuat = create();
+    return function rotationToDegrees(from, to, out) {
+        Vec3Utils.degreesToQuat(to, toQuat);
+        return QuatUtils.rotationToQuat(from, toQuat, out);
     };
 }();
 
 export let rotationToRadians = function () {
-    let secondQuat = create();
-    return function rotationToRadians(first, second, out) {
-        Vec3Utils.radiansToQuat(second, secondQuat);
-        return QuatUtils.rotationToQuat(first, secondQuat, out);
+    let toQuat = create();
+    return function rotationToRadians(from, to, out) {
+        Vec3Utils.radiansToQuat(to, toQuat);
+        return QuatUtils.rotationToQuat(from, toQuat, out);
     };
 }();
 
-export function rotationToQuat(first, second, out) {
-    return QuatUtils.normalize(QuatUtils.subRotationQuat(second, first, out), out);
+export function rotationToQuat(from, to, out) {
+    return QuatUtils.normalize(QuatUtils.subRotationQuat(to, from, out), out);
 }
 
 export let getTwist = function () {
