@@ -55,7 +55,7 @@ const Constants = {
     ProjectName: 'wle_locomotion_pplayground',
     RuntimeBaseName: 'WonderlandRuntime',
     WebXRRequiredFeatures: ['local',],
-    WebXROptionalFeatures: ['local','hand-tracking',],
+    WebXROptionalFeatures: ['local','local-floor','hand-tracking',],
 };
 /* wle:auto-constants:end */
 

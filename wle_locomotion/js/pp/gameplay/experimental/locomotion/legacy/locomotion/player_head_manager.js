@@ -894,6 +894,8 @@ PlayerHeadManager.prototype._resyncHeadRotationForward = function () {
 PlayerHeadManager.prototype._updateHeightOffset = function () {
     return function _updateHeightOffset() {
         if (this._mySessionActive) {
+            // #TODO As of now reference type is not properly updated for device emulated and is available the frame after the session started
+            // if this is fixed, then the emulator will behave like a normal headset for height and we can remove all these ifs
             if (XRUtils.isDeviceEmulated(this._myParams.myEngine)) {
                 this._setPlayerPivotHeightOffset(0, 0);
             } else if (XRUtils.isReferenceSpaceFloorBased(this._myParams.myEngine)) {
