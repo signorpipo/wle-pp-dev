@@ -37,7 +37,7 @@ export class VisualManager {
             this._myActive = active;
 
             if (!this._myActive) {
-                this.clearDraw();
+                this.clearVisualElement();
             }
         }
     }
@@ -77,7 +77,7 @@ export class VisualManager {
         }
 
         if (visualElement == null) {
-            visualElement = this._getVisualElement(visualElementParams);
+            visualElement = this._getVisualElementFromPool(visualElementParams);
         }
 
         if (visualElement == null) {
@@ -111,7 +111,7 @@ export class VisualManager {
         return elementID;
     }
 
-    getDraw(elementID) {
+    getVisualElement(elementID) {
         let visualElement = null;
 
         for (let visualElements of this._myVisualElementsTypeMap.values()) {
@@ -125,7 +125,29 @@ export class VisualManager {
         return visualElement;
     }
 
-    clearDraw(elementID = null) {
+    getVisualElementParams(elementID) {
+        return this.getVisualElement(elementID).getParams();
+    }
+
+    getVisualElementID(visualElement) {
+        let elementID = null;
+        for (let currentVisualElements of this._myVisualElementsTypeMap.values()) {
+            for (let [currentElementID, currentVisualElement] of currentVisualElements.entries()) {
+                if (currentVisualElement[0] == visualElement) {
+                    elementID = currentElementID;
+                    break;
+                }
+            }
+
+            if (elementID != null) {
+                break;
+            }
+        }
+
+        return elementID;
+    }
+
+    clearVisualElement(elementID = null) {
         if (elementID == null) {
             for (let visualElements of this._myVisualElementsTypeMap.values()) {
                 for (let visualElement of visualElements.values()) {
@@ -150,7 +172,7 @@ export class VisualManager {
         }
     }
 
-    allocateDraw(visualElementType, amount) {
+    allocateVisualElementType(visualElementType, amount) {
         if (!Globals.getObjectPoolManager(this._myEngine).hasPool(this._getTypePoolID(visualElementType))) {
             this._addVisualElementTypeToPool(visualElementType);
         }
@@ -195,7 +217,7 @@ export class VisualManager {
         }
     }
 
-    _getVisualElement(params) {
+    _getVisualElementFromPool(params) {
         let element = null;
 
         if (!Globals.getObjectPoolManager(this._myEngine).hasPool(this._getTypePoolID(params.myType))) {
