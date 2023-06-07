@@ -1,6 +1,6 @@
 import { Component, Property } from "@wonderlandengine/api";
 import { AudioManagerComponent } from "../../audio/components/audio_manager_component";
-import { ObjectPoolsManagerComponent } from "../../cauldron/object_pool/components/object_pools_manager_component";
+import { ObjectPoolManagerComponent } from "../../cauldron/object_pool/components/object_pool_manager_component";
 import { VisualManagerComponent } from "../../cauldron/visual/components/visual_manager_component";
 import { AddWLToWindowComponent } from "../../cauldron/wl/components/add_wl_to_window_component";
 import { DebugManagerComponent } from "../../debug/components/debug_manager_component";
@@ -23,7 +23,7 @@ export class PPGatewayComponent extends Component {
         _myAddPPToWindow: Property.bool(true),
         _myAddWLToWindow: Property.bool(true),
         _myInitEasyTuneVariables: Property.bool(true),
-        ...ObjectPoolsManagerComponent.Properties,
+        ...ObjectPoolManagerComponent.Properties,
         ...InputManagerComponent.Properties,
         ...AudioManagerComponent.Properties,
         ...VisualManagerComponent.Properties,
@@ -68,7 +68,7 @@ export class PPGatewayComponent extends Component {
             this._myInitEasyTuneVariablesComponent = this.object.pp_addComponent(InitEasyTuneVariablesComponent, false);
         }
 
-        this._myObjectPoolsManagerComponent = this.object.pp_addComponent(ObjectPoolsManagerComponent, false);
+        this._myObjectPoolManagerComponent = this.object.pp_addComponent(ObjectPoolManagerComponent, false);
         this._myInputManagerComponent = this.object.pp_addComponent(InputManagerComponent, this._getProperties(InputManagerComponent.Properties));
         this._myAudioManagerComponent = this.object.pp_addComponent(AudioManagerComponent, false);
         this._myVisualManagerComponent = this.object.pp_addComponent(VisualManagerComponent, false);
@@ -99,7 +99,7 @@ export class PPGatewayComponent extends Component {
             this._myInitEasyTuneVariablesComponent.active = true;
         }
 
-        this._myObjectPoolsManagerComponent.active = true;
+        this._myObjectPoolManagerComponent.active = true;
         this._myInputManagerComponent.active = true;
         this._myAudioManagerComponent.active = true;
         this._myVisualManagerComponent.active = true;

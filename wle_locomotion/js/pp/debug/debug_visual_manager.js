@@ -92,6 +92,10 @@ export class DebugVisualManager extends VisualManager {
             this.draw(visualParams, lifetimeSeconds);
         }
     }
+
+    _getClassName() {
+        return "debug_visual_manager";
+    }
 }
 
 DebugVisualManager.prototype.drawLineEnd = function () {

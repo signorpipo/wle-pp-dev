@@ -1,4 +1,4 @@
-export class ObjectPoolsManager {
+export class ObjectPoolManager {
 
     constructor() {
         this._myPools = new Map();

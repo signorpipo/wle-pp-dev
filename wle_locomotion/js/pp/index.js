@@ -78,8 +78,8 @@ export * from "./cauldron/js/utils/mat4_utils";
 
 export * from "./cauldron/object_pool/object_pool";
 export * from "./cauldron/object_pool/object_pool_globals";
-export * from "./cauldron/object_pool/object_pools_manager";
-export * from "./cauldron/object_pool/components/object_pools_manager_component";
+export * from "./cauldron/object_pool/object_pool_manager";
+export * from "./cauldron/object_pool/components/object_pool_manager_component";
 
 export * from "./cauldron/utils/color_utils";
 export * from "./cauldron/utils/material_utils";
