@@ -1,7 +1,6 @@
 import { Globals } from "../../pp/globals";
 import { Timer } from "../cauldron/timer";
 import { ObjectPool, ObjectPoolParams } from "../object_pool/object_pool";
-import { ObjectPoolsManager } from "../object_pool/object_pools_manager";
 import { VisualArrow, VisualArrowParams } from "./elements/visual_arrow";
 import { VisualElementType } from "./elements/visual_element_types";
 import { VisualLine, VisualLineParams } from "./elements/visual_line";
@@ -21,12 +20,14 @@ export class VisualManager {
 
         this._myVisualElementsTypeMap = new Map();
         this._myVisualElementLastID = 0;
-        this._myVisualElementsPool = new ObjectPoolsManager();
         this._myVisualElementsToShow = [];
 
         this._myActive = true;
 
         this._myDestroyed = false;
+
+        this._myObjectPoolsManagerPrefix = "visual_manager_" + Math.pp_randomUUID() + "_visual_element_type_";
+        this._myTypePoolIDs = new Map();
 
         this._addStandardVisualElementTypes();
     }
@@ -128,7 +129,7 @@ export class VisualManager {
         if (elementID == null) {
             for (let visualElements of this._myVisualElementsTypeMap.values()) {
                 for (let visualElement of visualElements.values()) {
-                    this._myVisualElementsPool.release(visualElement[0].getParams().myType, visualElement[0]);
+                    Globals.getObjectPoolsManager(this._myEngine).release(this._getTypePoolID(visualElement[0].getParams().myType), visualElement[0]);
                 }
             }
 
@@ -139,7 +140,7 @@ export class VisualManager {
             for (let visualElements of this._myVisualElementsTypeMap.values()) {
                 if (visualElements.has(elementID)) {
                     let visualElementPair = visualElements.get(elementID);
-                    this._myVisualElementsPool.release(visualElementPair[0].getParams().myType, visualElementPair[0]);
+                    Globals.getObjectPoolsManager(this._myEngine).release(this._getTypePoolID(visualElementPair[0].getParams().myType), visualElementPair[0]);
                     visualElements.delete(elementID);
 
                     this._myVisualElementsToShow.pp_removeEqual(visualElementPair[0]);
@@ -150,11 +151,11 @@ export class VisualManager {
     }
 
     allocateDraw(visualElementType, amount) {
-        if (!this._myVisualElementsPool.hasPool(visualElementType)) {
+        if (!Globals.getObjectPoolsManager(this._myEngine).hasPool(this._getTypePoolID(visualElementType))) {
             this._addVisualElementTypeToPool(visualElementType);
         }
 
-        let pool = this._myVisualElementsPool.getPool(visualElementType);
+        let pool = Globals.getObjectPoolsManager(this._myEngine).getPool(this._getTypePoolID(visualElementType));
 
         let difference = pool.getAvailableSize() - amount;
         if (difference < 0) {
@@ -181,7 +182,7 @@ export class VisualManager {
             for (let visualElementsEntry of visualElements.entries()) {
                 let visualElement = visualElementsEntry[1];
                 if (visualElement[1].isDone()) {
-                    this._myVisualElementsPool.release(visualElement[0].getParams().myType, visualElement[0]);
+                    Globals.getObjectPoolsManager(this._myEngine).release(this._getTypePoolID(visualElement[0].getParams().myType), visualElement[0]);
                     idsToRemove.push(visualElementsEntry[0]);
                 }
 
@@ -197,11 +198,11 @@ export class VisualManager {
     _getVisualElement(params) {
         let element = null;
 
-        if (!this._myVisualElementsPool.hasPool(params.myType)) {
+        if (!Globals.getObjectPoolsManager(this._myEngine).hasPool(this._getTypePoolID(params.myType))) {
             this._addVisualElementTypeToPool(params.myType);
         }
 
-        element = this._myVisualElementsPool.get(params.myType);
+        element = Globals.getObjectPoolsManager(this._myEngine).get(this._getTypePoolID(params.myType));
 
         if (element != null) {
             element.copyParams(params);
@@ -228,7 +229,7 @@ export class VisualManager {
             visualElementPrototype.setVisible(false);
             visualElementPrototype.setAutoRefresh(true);
 
-            this._myVisualElementsPool.addPool(type, new ObjectPool(visualElementPrototype, objectPoolParams));
+            Globals.getObjectPoolsManager(this._myEngine).addPool(this._getTypePoolID(type), new ObjectPool(visualElementPrototype, objectPoolParams));
         } else {
             console.error("Visual element type not supported");
         }
@@ -245,10 +246,21 @@ export class VisualManager {
         this.addVisualElementType(VisualElementType.TORUS, () => new VisualTorus(new VisualTorusParams(this._myEngine)));
     }
 
+    _getTypePoolID(type) {
+        let typePoolID = this._myTypePoolIDs.get(type);
+
+        if (typePoolID == null) {
+            typePoolID = this._myObjectPoolsManagerPrefix + type;
+            this._myTypePoolIDs.set(type, typePoolID);
+        }
+
+        return typePoolID;
+    }
+
     destroy() {
         this._myDestroyed = true;
 
-        this._myVisualElementsPool.destroy();
+        Globals.getObjectPoolsManager(this._myEngine).destroy();
     }
 
     isDestroyed() {

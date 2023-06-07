@@ -10,7 +10,7 @@ export class ObjectPoolsManager {
         if (!this._myPools.has(poolID)) {
             this._myPools.set(poolID, pool);
         } else {
-            console.error("Pool already created with ID:", poolID);
+            console.warn("Trying to add a Pool with an ID that has been already used:", poolID);
         }
     }
 

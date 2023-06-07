@@ -23,10 +23,10 @@ export class PPGatewayComponent extends Component {
         _myAddPPToWindow: Property.bool(true),
         _myAddWLToWindow: Property.bool(true),
         _myInitEasyTuneVariables: Property.bool(true),
+        ...ObjectPoolsManagerComponent.Properties,
         ...InputManagerComponent.Properties,
         ...AudioManagerComponent.Properties,
         ...VisualManagerComponent.Properties,
-        ...ObjectPoolsManagerComponent.Properties,
         ...DebugManagerComponent.Properties,
         ...GetSceneObjectsComponent.Properties,
         ...GetDefaultResourcesComponent.Properties
@@ -68,10 +68,10 @@ export class PPGatewayComponent extends Component {
             this._myInitEasyTuneVariablesComponent = this.object.pp_addComponent(InitEasyTuneVariablesComponent, false);
         }
 
+        this._myObjectPoolsManagerComponent = this.object.pp_addComponent(ObjectPoolsManagerComponent, false);
         this._myInputManagerComponent = this.object.pp_addComponent(InputManagerComponent, this._getProperties(InputManagerComponent.Properties));
         this._myAudioManagerComponent = this.object.pp_addComponent(AudioManagerComponent, false);
         this._myVisualManagerComponent = this.object.pp_addComponent(VisualManagerComponent, false);
-        this._myObjectPoolsManagerComponent = this.object.pp_addComponent(ObjectPoolsManagerComponent, false);
         this._myDebugManagerComponent = this.object.pp_addComponent(DebugManagerComponent, false);
     }
 
@@ -99,10 +99,10 @@ export class PPGatewayComponent extends Component {
             this._myInitEasyTuneVariablesComponent.active = true;
         }
 
+        this._myObjectPoolsManagerComponent.active = true;
         this._myInputManagerComponent.active = true;
         this._myAudioManagerComponent.active = true;
         this._myVisualManagerComponent.active = true;
-        this._myObjectPoolsManagerComponent.active = true;
         this._myDebugManagerComponent.active = true;
     }
 
