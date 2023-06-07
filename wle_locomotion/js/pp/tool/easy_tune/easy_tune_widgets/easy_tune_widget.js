@@ -60,7 +60,7 @@ export class EasyTuneWidget {
         this._myDestroyed = false;
     }
 
-    setActiveVariable(variableName) {
+    setCurrentVariable(variableName) {
         if (!this._myStarted) {
             this._myStartVariable = variableName;
         } else if (this._myEasyTuneVariables.has(variableName)) {
@@ -146,7 +146,7 @@ export class EasyTuneWidget {
 
         this._updateGamepadWidgetVisibility();
 
-        this._updateActiveVariable();
+        this._updateWidgetCurrentVariable();
     }
 
     _initializeWidgets() {
@@ -311,13 +311,13 @@ export class EasyTuneWidget {
         return variableIndex;
     }
 
-    _updateActiveVariable() {
+    _updateWidgetCurrentVariable() {
         for (let variable of this._myEasyTuneVariables.getEasyTuneVariablesList()) {
-            variable.setActive(false);
+            variable.setWidgetCurrentVariable(false);
         }
 
         if (this._myWidgetFrame.isVisible() && this._myCurrentVariable) {
-            this._myCurrentVariable.setActive(true);
+            this._myCurrentVariable.setWidgetCurrentVariable(true);
         }
     }
 

@@ -38,10 +38,10 @@ export class EasyTuneVariables {
         return this._myVariables.size;
     }
 
-    isActive(variableName) {
+    isWidgetCurrentVariable(variableName) {
         let variable = this._myVariables.get(variableName);
         if (variable) {
-            return variable.isActive();
+            return variable.isWidgetCurrentVariable();
         }
 
         return false;
