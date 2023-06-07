@@ -252,6 +252,8 @@ export class CleanedPlayerLocomotion {
                 params.myDetectionParams.myVisibilityBlockLayerFlags.copy(params.myDetectionParams.myTeleportBlockLayerFlags);
 
                 params.myVisualizerParams.myTeleportPositionObject = this._myParams.myTeleportPositionObject;
+                params.myVisualizerParams.myTeleportValidMaterial = this._myParams.myTeleportValidMaterial;
+                params.myVisualizerParams.myTeleportInvalidMaterial = this._myParams.myTeleportInvalidMaterial;
 
                 params.myPerformTeleportAsMovement = false;
                 params.myTeleportAsMovementRemoveVerticalMovement = true;

@@ -1,13 +1,13 @@
 /*
 Easy Tune Variables Examples
 
-Number:         Globals.getEasyTuneVariables().add(new EasyTuneNumber("Float", 1.00, 3, 0.1));
-Number Array:   Globals.getEasyTuneVariables().add(new EasyTuneNumberArray("Float Array", [1.00, 2.00, 3.00], 3, 0.1));
-Int:            Globals.getEasyTuneVariables().add(new EasyTuneInt("Int", 1, 1));
-Int Array:      Globals.getEasyTuneVariables().add(new EasyTuneIntArray("Int Array", [1, 2, 3], 1));
+Number:         Globals.getEasyTuneVariables().add(new EasyTuneNumber("Float", 1.00, null, true, 3, 0.1));
+Number Array:   Globals.getEasyTuneVariables().add(new EasyTuneNumberArray("Float Array", [1.00, 2.00, 3.00], null, true, 3, 0.1));
+Int:            Globals.getEasyTuneVariables().add(new EasyTuneInt("Int", 1, null, true, 1));
+Int Array:      Globals.getEasyTuneVariables().add(new EasyTuneIntArray("Int Array", [1, 2, 3], null, true, 1));
 Bool:           Globals.getEasyTuneVariables().add(new EasyTuneBool("Bool", false));
-Bool Array:     Globals.getEasyTuneVariables().add(new EasyTuneBoolArray("Bool Array", [false, true, false]));
-Transform:      Globals.getEasyTuneVariables().add(new EasyTuneTransform("Transform", mat4_create(), 3, true));
+Bool Array:     Globals.getEasyTuneVariables().add(new EasyTuneBoolArray("Bool Array", [false, true, false], null, true));
+Transform:      Globals.getEasyTuneVariables().add(new EasyTuneTransform("Transform", mat4_create(), null, true, 3, true));
 */
 
 import { Emitter } from "@wonderlandengine/api";

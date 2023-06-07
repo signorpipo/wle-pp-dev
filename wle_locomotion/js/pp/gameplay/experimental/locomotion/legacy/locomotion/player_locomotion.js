@@ -54,13 +54,14 @@ export class PlayerLocomotionParams {
         this.myVRDirectionReferenceType = PlayerLocomotionDirectionReferenceType.HEAD;
         this.myVRDirectionReferenceObject = null;
 
-        this.myTeleportParableStartReferenceObject = null;
-
         this.myForeheadExtraHeight = 0;
 
+        this.myTeleportParableStartReferenceObject = null;
         this.myTeleportPositionObject = null;
         this.myTeleportMaxDistance = 0;
         this.myTeleportMaxHeightDifference = 0;
+        this.myTeleportValidMaterial = null;
+        this.myTeleportInvalidMaterial = null;
 
         this.myColliderAccuracy = null;
         this.myColliderCheckOnlyFeet = false;

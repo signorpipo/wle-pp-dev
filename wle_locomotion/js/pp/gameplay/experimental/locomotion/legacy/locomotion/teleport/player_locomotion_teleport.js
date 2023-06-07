@@ -182,8 +182,8 @@ PlayerLocomotionTeleport.prototype._applyGravity = function () {
         if (!this._myLocomotionRuntimeParams.myIsFlying && !this._myLocomotionRuntimeParams.myIsTeleporting) {
             this._myLocomotionRuntimeParams.myGravitySpeed += this._myTeleportParams.myGravityAcceleration * dt;
 
-            if (Math.abs(this._myLocomotionRuntimeParams.myGravitySpeed) > Math.abs(this.myTeleportParams.myMaxGravitySpeed)) {
-                this._myLocomotionRuntimeParams.myGravitySpeed = Math.pp_sign(this._myTeleportParams.myGravityAcceleration) * Math.abs(this.myTeleportParams.myMaxGravitySpeed);
+            if (Math.abs(this._myLocomotionRuntimeParams.myGravitySpeed) > Math.abs(this._myTeleportParams.myMaxGravitySpeed)) {
+                this._myLocomotionRuntimeParams.myGravitySpeed = Math.pp_sign(this._myTeleportParams.myGravityAcceleration) * Math.abs(this._myTeleportParams.myMaxGravitySpeed);
             }
 
             gravityMovement = playerUp.vec3_scale(this._myLocomotionRuntimeParams.myGravitySpeed * dt, gravityMovement);
