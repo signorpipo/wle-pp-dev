@@ -84,7 +84,7 @@ export class PlayerLocomotionTeleportTeleportBlinkState extends PlayerLocomotion
         this._myBlinkSphereMeshComponent.material.color = this._myBlinkSphereMaterialColor;
         this._myBlinkSphere.pp_setActive(true);
 
-        //this._myLocomotionRuntimeParams.myIsTeleporting = true;
+        this._myLocomotionRuntimeParams.myIsTeleporting = true;
     }
 
     _startFadeIn() {
@@ -130,7 +130,7 @@ export class PlayerLocomotionTeleportTeleportBlinkState extends PlayerLocomotion
     }
 
     _teleport() {
-        //this._myLocomotionRuntimeParams.myIsTeleporting = false;
+        this._myLocomotionRuntimeParams.myIsTeleporting = false;
         this._myLocomotionRuntimeParams.myTeleportJustPerformed = true;
         this._teleportToPosition(this._myTeleportRuntimeParams.myTeleportPosition, this._myTeleportRuntimeParams.myTeleportRotationOnUp, this._myLocomotionRuntimeParams.myCollisionRuntimeParams);
     }

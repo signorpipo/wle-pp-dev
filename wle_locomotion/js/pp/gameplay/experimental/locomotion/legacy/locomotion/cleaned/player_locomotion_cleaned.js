@@ -256,7 +256,7 @@ export class CleanedPlayerLocomotion {
                 params.myTeleportAsMovementRemoveVerticalMovement = true;
                 params.myTeleportAsMovementExtraVerticalMovementPerMeter = -2;
 
-                params.myGravityAcceleration = 0;
+                params.myGravityAcceleration = -20;
 
                 params.myDebugEnabled = false;
                 params.myDebugDetectEnabled = true;

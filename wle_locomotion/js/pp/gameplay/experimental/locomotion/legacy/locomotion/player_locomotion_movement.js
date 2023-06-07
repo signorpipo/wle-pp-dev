@@ -2,6 +2,7 @@ export class PlayerLocomotionMovementRuntimeParams {
 
     constructor() {
         this.myIsFlying = false;
+        this.myGravitySpeed = 0;
         this.myCollisionRuntimeParams = null;
 
         this.myIsTeleportDetecting = false;

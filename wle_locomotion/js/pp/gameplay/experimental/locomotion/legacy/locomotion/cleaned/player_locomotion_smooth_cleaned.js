@@ -38,8 +38,6 @@ export class CleanedPlayerLocomotionSmooth extends PlayerLocomotionMovement {
         this._myDirectionConverterVR = new Direction2DTo3DConverter(directionConverterVRParams);
         this._myCurrentDirectionConverter = this._myDirectionConverterNonVR;
 
-        this._myGravitySpeed = 0;
-
         this._myDestroyed = false;
 
         XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this), true, false, this._myParams.myEngine);
@@ -146,9 +144,11 @@ CleanedPlayerLocomotionSmooth.prototype.update = function () {
             }
         } else {
             if (!this._myLocomotionRuntimeParams.myIsFlying) {
-                this._myGravitySpeed += this._myParams.myGravityAcceleration * dt;
-                verticalMovement = playerUp.vec3_scale(this._myGravitySpeed * dt, verticalMovement);
+                this._myLocomotionRuntimeParams.myGravitySpeed += this._myParams.myGravityAcceleration * dt;
+                verticalMovement = playerUp.vec3_scale(this._myLocomotionRuntimeParams.myGravitySpeed * dt, verticalMovement);
                 headMovement = headMovement.vec3_add(verticalMovement, headMovement);
+            } else {
+                this._myLocomotionRuntimeParams.myGravitySpeed = 0;
             }
 
             if (Globals.getGamepads(this._myParams.myEngine)[this._myParams.myHandedness].getButtonInfo(GamepadButtonID.SQUEEZE).isPressed()) {
@@ -163,9 +163,9 @@ CleanedPlayerLocomotionSmooth.prototype.update = function () {
                 this._myParams.myPlayerTransformManager.resetHeadToReal();
             }
 
-            if (this._myGravitySpeed > 0 && this._myLocomotionRuntimeParams.myCollisionRuntimeParams.myIsOnCeiling ||
-                this._myGravitySpeed < 0 && this._myLocomotionRuntimeParams.myCollisionRuntimeParams.myIsOnGround) {
-                this._myGravitySpeed = 0;
+            if (this._myLocomotionRuntimeParams.myGravitySpeed > 0 && this._myLocomotionRuntimeParams.myCollisionRuntimeParams.myIsOnCeiling ||
+                this._myLocomotionRuntimeParams.myGravitySpeed < 0 && this._myLocomotionRuntimeParams.myCollisionRuntimeParams.myIsOnGround) {
+                this._myLocomotionRuntimeParams.myGravitySpeed = 0;
             }
         }
 
