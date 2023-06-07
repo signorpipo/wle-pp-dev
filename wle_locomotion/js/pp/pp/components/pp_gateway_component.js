@@ -1,5 +1,6 @@
 import { Component, Property } from "@wonderlandengine/api";
 import { AudioManagerComponent } from "../../audio/components/audio_manager_component";
+import { ObjectPoolsManagerComponent } from "../../cauldron/object_pool/components/object_pools_manager_component";
 import { VisualManagerComponent } from "../../cauldron/visual/components/visual_manager_component";
 import { AddWLToWindowComponent } from "../../cauldron/wl/components/add_wl_to_window_component";
 import { DebugManagerComponent } from "../../debug/components/debug_manager_component";
@@ -25,6 +26,7 @@ export class PPGatewayComponent extends Component {
         ...InputManagerComponent.Properties,
         ...AudioManagerComponent.Properties,
         ...VisualManagerComponent.Properties,
+        ...ObjectPoolsManagerComponent.Properties,
         ...DebugManagerComponent.Properties,
         ...GetSceneObjectsComponent.Properties,
         ...GetDefaultResourcesComponent.Properties
@@ -69,6 +71,7 @@ export class PPGatewayComponent extends Component {
         this._myInputManagerComponent = this.object.pp_addComponent(InputManagerComponent, this._getProperties(InputManagerComponent.Properties));
         this._myAudioManagerComponent = this.object.pp_addComponent(AudioManagerComponent, false);
         this._myVisualManagerComponent = this.object.pp_addComponent(VisualManagerComponent, false);
+        this._myObjectPoolsManagerComponent = this.object.pp_addComponent(ObjectPoolsManagerComponent, false);
         this._myDebugManagerComponent = this.object.pp_addComponent(DebugManagerComponent, false);
     }
 
@@ -99,6 +102,7 @@ export class PPGatewayComponent extends Component {
         this._myInputManagerComponent.active = true;
         this._myAudioManagerComponent.active = true;
         this._myVisualManagerComponent.active = true;
+        this._myObjectPoolsManagerComponent.active = true;
         this._myDebugManagerComponent.active = true;
     }
 

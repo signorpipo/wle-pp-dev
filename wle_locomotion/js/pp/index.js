@@ -50,8 +50,6 @@ export * from "./audio/components/spatial_audio_listener_component";
 export * from "./cauldron/benchmarks/benchmark_max_physx_component";
 export * from "./cauldron/benchmarks/benchmark_max_visible_triangles_component";
 
-export * from "./cauldron/cauldron/object_pool";
-export * from "./cauldron/cauldron/object_pools_manager";
 export * from "./cauldron/cauldron/save_manager";
 export * from "./cauldron/cauldron/timer";
 export * from "./cauldron/cauldron/window_globals";
@@ -77,6 +75,11 @@ export * from "./cauldron/js/utils/quat_utils";
 export * from "./cauldron/js/utils/quat2_utils";
 export * from "./cauldron/js/utils/mat3_utils";
 export * from "./cauldron/js/utils/mat4_utils";
+
+export * from "./cauldron/object_pool/object_pool";
+export * from "./cauldron/object_pool/object_pool_globals";
+export * from "./cauldron/object_pool/object_pools_manager";
+export * from "./cauldron/object_pool/components/object_pools_manager_component";
 
 export * from "./cauldron/utils/color_utils";
 export * from "./cauldron/utils/material_utils";

@@ -1,7 +1,7 @@
 import { Globals } from "../../pp/globals";
-import { ObjectPoolParams } from "../cauldron/object_pool";
-import { ObjectPoolsManager } from "../cauldron/object_pools_manager";
 import { Timer } from "../cauldron/timer";
+import { ObjectPool, ObjectPoolParams } from "../object_pool/object_pool";
+import { ObjectPoolsManager } from "../object_pool/object_pools_manager";
 import { VisualArrow, VisualArrowParams } from "./elements/visual_arrow";
 import { VisualElementType } from "./elements/visual_element_types";
 import { VisualLine, VisualLineParams } from "./elements/visual_line";
@@ -228,7 +228,7 @@ export class VisualManager {
             visualElementPrototype.setVisible(false);
             visualElementPrototype.setAutoRefresh(true);
 
-            this._myVisualElementsPool.addPool(type, visualElementPrototype, objectPoolParams);
+            this._myVisualElementsPool.addPool(type, new ObjectPool(visualElementPrototype, objectPoolParams));
         } else {
             console.error("Visual element type not supported");
         }
