@@ -4,8 +4,10 @@ export class EasyTuneVariables {
         this._myVariables = new Map();
     }
 
-    add(variable) {
-        this._myVariables.set(variable.getName(), variable);
+    add(variable, overwriteCurrentOne = false) {
+        if (overwriteCurrentOne || !this._myVariables.has(variable.getName())) {
+            this._myVariables.set(variable.getName(), variable);
+        }
     }
 
     remove(variableName) {
