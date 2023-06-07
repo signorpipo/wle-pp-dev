@@ -30,6 +30,7 @@ export class PlayerLocomotionSmoothParams {
         this.myMinAngleToFlyRight = 0;
 
         this.myGravityAcceleration = 0;
+        this.myMaxGravitySpeed = 0;
 
         this.myVRDirectionReferenceType = PlayerLocomotionDirectionReferenceType.HEAD;
         this.myVRDirectionReferenceObject = null;

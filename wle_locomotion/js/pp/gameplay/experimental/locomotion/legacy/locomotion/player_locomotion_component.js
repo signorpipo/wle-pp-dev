@@ -13,6 +13,8 @@ export class PlayerLocomotionComponent extends Component {
         _myCharacterRadius: Property.float(0.3),
         _myMaxSpeed: Property.float(2),
         _myMaxRotationSpeed: Property.float(100),
+        _myGravityAcceleration: Property.float(-20),
+        _myMaxGravitySpeed: Property.float(-1),
         _myIsSnapTurn: Property.bool(true),
         _mySnapTurnOnlyVR: Property.bool(true),
         _mySnapTurnAngle: Property.float(30),
@@ -59,6 +61,9 @@ export class PlayerLocomotionComponent extends Component {
 
         params.myMaxSpeed = this._myMaxSpeed;
         params.myMaxRotationSpeed = this._myMaxRotationSpeed;
+
+        params.myGravityAcceleration = this._myGravityAcceleration;
+        params.myMaxGravitySpeed = this._myMaxGravitySpeed;
 
         params.myCharacterRadius = this._myCharacterRadius;
 

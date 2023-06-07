@@ -145,6 +145,11 @@ CleanedPlayerLocomotionSmooth.prototype.update = function () {
         } else {
             if (!this._myLocomotionRuntimeParams.myIsFlying) {
                 this._myLocomotionRuntimeParams.myGravitySpeed += this._myParams.myGravityAcceleration * dt;
+
+                if (Math.abs(this._myLocomotionRuntimeParams.myGravitySpeed) > Math.abs(this._myParams.myMaxGravitySpeed)) {
+                    this._myLocomotionRuntimeParams.myGravitySpeed = Math.pp_sign(this._myParams.myGravityAcceleration) * Math.abs(this._myParams.myMaxGravitySpeed);
+                }
+
                 verticalMovement = playerUp.vec3_scale(this._myLocomotionRuntimeParams.myGravitySpeed * dt, verticalMovement);
                 headMovement = headMovement.vec3_add(verticalMovement, headMovement);
             } else {

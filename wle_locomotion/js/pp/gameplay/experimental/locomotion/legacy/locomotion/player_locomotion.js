@@ -30,6 +30,9 @@ export class PlayerLocomotionParams {
         this.myMaxSpeed = 0;
         this.myMaxRotationSpeed = 0;
 
+        this.myGravityAcceleration = 0;
+        this.myMaxGravitySpeed = 0;
+
         this.myCharacterRadius = 0;
 
         this.myIsSnapTurn = false;

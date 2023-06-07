@@ -212,7 +212,8 @@ export class CleanedPlayerLocomotion {
                 params.myMinAngleToFlyDownVR = this._myParams.myMinAngleToFlyDownVR;
                 params.myMinAngleToFlyRight = this._myParams.myMinAngleToFlyRight;
 
-                params.myGravityAcceleration = -20;
+                params.myGravityAcceleration = this._myParams.myGravityAcceleration;
+                params.myMaxGravitySpeed = this._myParams.myMaxGravitySpeed;
 
                 params.myVRDirectionReferenceType = this._myParams.myVRDirectionReferenceType;
                 params.myVRDirectionReferenceObject = this._myParams.myVRDirectionReferenceObject;
@@ -256,7 +257,8 @@ export class CleanedPlayerLocomotion {
                 params.myTeleportAsMovementRemoveVerticalMovement = true;
                 params.myTeleportAsMovementExtraVerticalMovementPerMeter = -2;
 
-                params.myGravityAcceleration = -20;
+                params.myGravityAcceleration = this._myParams.myGravityAcceleration;
+                params.myMaxGravitySpeed = this._myParams.myMaxGravitySpeed;
 
                 params.myDebugEnabled = false;
                 params.myDebugDetectEnabled = true;

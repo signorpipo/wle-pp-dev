@@ -39,6 +39,7 @@ export class PlayerLocomotionTeleportParams {
 
         this.myAdjustPositionEveryFrame = false;
         this.myGravityAcceleration = 0;
+        this.myMaxGravitySpeed = 0;
 
         this.myEngine = engine;
 
@@ -180,6 +181,11 @@ PlayerLocomotionTeleport.prototype._applyGravity = function () {
         gravityMovement.vec3_zero();
         if (!this._myLocomotionRuntimeParams.myIsFlying && !this._myLocomotionRuntimeParams.myIsTeleporting) {
             this._myLocomotionRuntimeParams.myGravitySpeed += this._myTeleportParams.myGravityAcceleration * dt;
+
+            if (Math.abs(this._myLocomotionRuntimeParams.myGravitySpeed) > Math.abs(this.myTeleportParams.myMaxGravitySpeed)) {
+                this._myLocomotionRuntimeParams.myGravitySpeed = Math.pp_sign(this._myTeleportParams.myGravityAcceleration) * Math.abs(this.myTeleportParams.myMaxGravitySpeed);
+            }
+
             gravityMovement = playerUp.vec3_scale(this._myLocomotionRuntimeParams.myGravitySpeed * dt, gravityMovement);
         } else {
             this._myLocomotionRuntimeParams.myGravitySpeed = 0;
