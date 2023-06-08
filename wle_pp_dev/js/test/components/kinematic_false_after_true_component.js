@@ -1,9 +1,6 @@
 import { Component, PhysXComponent } from "@wonderlandengine/api";
-import { Timer } from "../../pp/cauldron/cauldron/timer";
-import { PhysicsUtils } from "../../pp/cauldron/physics/physics_utils";
-import { Globals } from "../../pp/pp/globals";
 import { GamepadButtonID } from "../../pp/input/gamepad/gamepad_buttons";
-import { vec3_create } from "../../pp/plugin/js/extensions/array_extension";
+import { Globals } from "../../pp/pp/globals";
 
 export class KinematicFalseAfterTrueComponent extends Component {
     static TypeName = "kinematic-false-after-true";

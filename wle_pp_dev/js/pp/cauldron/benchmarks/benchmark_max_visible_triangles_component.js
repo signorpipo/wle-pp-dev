@@ -2,10 +2,10 @@ import { Alignment, Component, Justification, MeshComponent, Property, TextCompo
 import { vec2_create, vec3_create, vec4_create } from "../../plugin/js/extensions/array_extension";
 import { Globals } from "../../pp/globals";
 import { Timer } from "../cauldron/timer";
+import { ObjectPool, ObjectPoolParams } from "../object_pool/object_pool";
 import { MeshCreationParams, MeshCreationTriangleParams, MeshCreationVertexParams, MeshUtils } from "../utils/mesh_utils";
 import { XRUtils } from "../utils/xr_utils";
 import { CloneParams } from "../wl/utils/object_utils";
-import { ObjectPool, ObjectPoolParams } from "../object_pool/object_pool";
 
 export class BenchmarkMaxVisibleTrianglesComponent extends Component {
     static TypeName = "pp-benchmark-max-visible-triangles";
