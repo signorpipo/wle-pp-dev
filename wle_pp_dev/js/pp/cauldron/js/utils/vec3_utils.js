@@ -194,6 +194,44 @@ export let angleSignedRadians = function () {
     };
 }();
 
+export function anglePivoted(first, second, referenceAxis) {
+    return Vec3Utils.anglePivotedDegrees(first, second, referenceAxis);
+}
+
+export function anglePivotedDegrees(first, second, referenceAxis) {
+    return MathUtils.toDegrees(Vec3Utils.anglePivotedRadians(first, second, referenceAxis));
+}
+
+export let anglePivotedRadians = function () {
+    let flatFirst = create();
+    let flatSecond = create();
+    return function anglePivotedRadians(first, second, referenceAxis) {
+        flatFirst = Vec3Utils.removeComponentAlongAxis(first, referenceAxis, flatFirst);
+        flatSecond = Vec3Utils.removeComponentAlongAxis(second, referenceAxis, flatSecond);
+
+        return Vec3Utils.angleRadians(flatFirst, flatSecond);
+    };
+}();
+
+export function anglePivotedSigned(first, second, referenceAxis) {
+    return Vec3Utils.anglePivotedSignedDegrees(first, second, referenceAxis);
+}
+
+export function anglePivotedSignedDegrees(first, second, referenceAxis) {
+    return MathUtils.toDegrees(Vec3Utils.anglePivotedSignedRadians(first, second, referenceAxis));
+}
+
+export let anglePivotedSignedRadians = function () {
+    let flatFirst = create();
+    let flatSecond = create();
+    return function anglePivotedSignedRadians(first, second, referenceAxis) {
+        flatFirst = Vec3Utils.removeComponentAlongAxis(first, referenceAxis, flatFirst);
+        flatSecond = Vec3Utils.removeComponentAlongAxis(second, referenceAxis, flatSecond);
+
+        return Vec3Utils.angleSignedRadians(flatFirst, flatSecond, referenceAxis);
+    };
+}();
+
 export function toRadians(vector, out = Vec3Utils.create()) {
     Vec3Utils.set(out, MathUtils.toRadians(vector[0]), MathUtils.toRadians(vector[1]), MathUtils.toRadians(vector[2]));
     return out;
@@ -810,6 +848,12 @@ export let Vec3Utils = {
     angleSigned,
     angleSignedDegrees,
     angleSignedRadians,
+    anglePivoted,
+    anglePivotedDegrees,
+    anglePivotedRadians,
+    anglePivotedSigned,
+    anglePivotedSignedDegrees,
+    anglePivotedSignedRadians,
     toRadians,
     toDegrees,
     toQuat,

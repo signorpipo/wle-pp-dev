@@ -89,7 +89,7 @@
             - vec3_projectOnPlane               / vec3_projectOnPlaneAlongAxis
             - vec3_convertPositionToWorld       / vec3_convertPositionToLocal 
             - vec3_convertDirectionToWorld      / vec3_convertDirectionToLocal   
-            - vec3_angle            / vec3_angleSigned
+            - vec3_angle            / vec3_angleSigned          / vec3_anglePivoted
             - vec3_rotate           / vec3_rotateAxis           / vec3_rotateAround / vec3_rotateAroundAxis
             - vec3_rotationTo       / vec3_rotationToPivoted
             - vec3_toRadians        / vec3_toDegrees            / vec3_toQuat       / vec3_toMatrix
@@ -509,6 +509,30 @@ export function initArrayExtensionProtoype() {
 
     vec3Extension.vec3_angleSignedRadians = function vec3_angleSignedRadians(vector, referenceAxis) {
         return Vec3Utils.angleSignedRadians(this, ...arguments);
+    };
+
+    vec3Extension.vec3_anglePivoted = function vec3_anglePivoted(vector, referenceAxis) {
+        return Vec3Utils.anglePivoted(this, ...arguments);
+    };
+
+    vec3Extension.vec3_anglePivotedDegrees = function vec3_anglePivotedDegrees(vector, referenceAxis) {
+        return Vec3Utils.anglePivotedDegrees(this, ...arguments);
+    };
+
+    vec3Extension.vec3_anglePivotedRadians = function vec3_anglePivotedRadians(vector, referenceAxis) {
+        return Vec3Utils.anglePivotedRadians(this, ...arguments);
+    };
+
+    vec3Extension.vec3_anglePivotedSigned = function vec3_anglePivotedSigned(vector, referenceAxis) {
+        return Vec3Utils.anglePivotedSigned(this, ...arguments);
+    };
+
+    vec3Extension.vec3_anglePivotedSignedDegrees = function vec3_anglePivotedSignedDegrees(vector, referenceAxis) {
+        return Vec3Utils.anglePivotedSignedDegrees(this, ...arguments);
+    };
+
+    vec3Extension.vec3_anglePivotedSignedRadians = function vec3_anglePivotedSignedRadians(vector, referenceAxis) {
+        return Vec3Utils.anglePivotedSignedRadians(this, ...arguments);
     };
 
     vec3Extension.vec3_toRadians = function vec3_toRadians(out = Vec3Utils.create()) {
