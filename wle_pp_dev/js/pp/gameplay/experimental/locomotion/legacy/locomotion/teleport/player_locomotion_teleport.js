@@ -120,7 +120,7 @@ export class PlayerLocomotionTeleport extends PlayerLocomotionMovement {
 
         this._myFSM.update(dt);
 
-        if (this._myTeleportParams.myAdjustPositionEveryFrame || this._myTeleportParams.myGravityAcceleration != 0) {
+        if (!this._myLocomotionRuntimeParams.myIsTeleporting && (this._myTeleportParams.myAdjustPositionEveryFrame || this._myTeleportParams.myGravityAcceleration != 0)) {
             this._applyGravity(dt);
         }
 
