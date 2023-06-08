@@ -93,6 +93,10 @@ export class PlayerObscureManager {
         this._myFSM.perform("stop");
     }
 
+    getParams() {
+        return this._myParams;
+    }
+
     update(dt) {
         this._myObscureParentObject.pp_resetTransformLocal();
 

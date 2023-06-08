@@ -17,6 +17,10 @@ export class PlayerLocomotionMovement {
         this._myLocomotionRuntimeParams = locomotionRuntimeParams;
     }
 
+    getRuntimeParams() {
+        return this._myLocomotionRuntimeParams;
+    }
+
     start() {
 
     }

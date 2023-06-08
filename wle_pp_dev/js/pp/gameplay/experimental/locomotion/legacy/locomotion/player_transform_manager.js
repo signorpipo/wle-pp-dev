@@ -199,6 +199,10 @@ export class PlayerTransformManager {
         XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this), true, false, this._myParams.myEngine);
     }
 
+    getParams() {
+        return this._myParams;
+    }
+
     setActive(active) {
         this._myActive = active;
     }

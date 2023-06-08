@@ -51,6 +51,9 @@ export class PlayerLocomotionSmooth extends PlayerLocomotionMovement {
 
         this._myParams = params;
 
+        this._myCurrentSpeed = 0;
+        this._myLastHorizontalMovement = vec3_create();
+
         this._myDirectionReference = Globals.getPlayerObjects(this._myParams.myEngine).myHead;
 
         this._myStickIdleTimer = new Timer(0.25, false);
@@ -78,6 +81,23 @@ export class PlayerLocomotionSmooth extends PlayerLocomotionMovement {
         this._myDestroyed = false;
 
         XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this), true, false, this._myParams.myEngine);
+    }
+
+    start() {
+        this._myCurrentSpeed = 0;
+        this._myLastHorizontalMovement.vec3_zero();
+    }
+
+    getParams() {
+        return this._myParams;
+    }
+
+    getCurrentSpeed() {
+        return this._myCurrentSpeed;
+    }
+
+    getLastHorizontalSpeed() {
+        return this._myLastHorizontalMovement;
     }
 
     update(dt) {
@@ -109,6 +129,9 @@ PlayerLocomotionSmooth.prototype.update = function () {
 
     let directionReferenceTransformQuat = quat2_create();
     return function update(dt) {
+        this._myCurrentSpeed = 0;
+        this._myLastHorizontalMovement.vec3_zero();
+
         playerUp = this._myParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
 
         headMovement.vec3_zero();
@@ -138,9 +161,11 @@ PlayerLocomotionSmooth.prototype.update = function () {
                 }
 
                 let movementIntensity = axes.vec2_length();
-                let speed = Math.pp_lerp(0, maxSpeed, movementIntensity);
+                this._myCurrentSpeed = Math.pp_lerp(0, maxSpeed, movementIntensity);
 
-                headMovement = direction.vec3_scale(speed * dt, headMovement);
+                // SLID SLOW DOWN
+
+                headMovement = direction.vec3_scale(this._myCurrentSpeed * dt, headMovement);
 
                 horizontalMovement = true;
             }
@@ -193,16 +218,17 @@ PlayerLocomotionSmooth.prototype.update = function () {
                 this._myLocomotionRuntimeParams.myGravitySpeed = 0;
             }
 
-            if (Globals.getGamepads(this._myParams.myEngine)[this._myParams.myHandedness].getButtonInfo(GamepadButtonID.SQUEEZE).isPressed()) {
-                //headMovement.vec3_zero();
-            }
-
             feetTransformQuat = this._myParams.myPlayerTransformManager.getTransformQuat(feetTransformQuat);
 
             this._myParams.myPlayerTransformManager.move(headMovement, this._myLocomotionRuntimeParams.myCollisionRuntimeParams);
             if (horizontalMovement) {
                 this._myParams.myPlayerTransformManager.resetReal(true, false, false);
                 this._myParams.myPlayerTransformManager.resetHeadToReal();
+
+                this._myLocomotionRuntimeParams.myCollisionRuntimeParams.myFixedMovement.vec3_removeComponentAlongAxis(
+                    this._myLocomotionRuntimeParams.myCollisionRuntimeParams.myOriginalUp,
+                    this._myLastHorizontalMovement
+                );
             }
 
             if (this._myLocomotionRuntimeParams.myGravitySpeed > 0 && this._myLocomotionRuntimeParams.myCollisionRuntimeParams.myIsOnCeiling ||
