@@ -238,6 +238,7 @@ export class CleanedPlayerLocomotion {
                 params.myDetectionParams.myMaxDistance = this._myParams.myTeleportMaxDistance;
                 params.myDetectionParams.myMaxHeightDifference = this._myParams.myTeleportMaxHeightDifference;
                 params.myDetectionParams.myGroundAngleToIgnoreUpward = this._myCollisionCheckParamsMovement.myGroundAngleToIgnore;
+                params.myDetectionParams.myRotationOnUpEnabled = this._myParams.myTeleportRotationOnUpEnabled;
                 params.myDetectionParams.myMustBeOnGround = true;
 
                 params.myDetectionParams.myTeleportBlockLayerFlags.copy(this._myParams.myPhysicsBlockLayerFlags);
@@ -254,6 +255,7 @@ export class CleanedPlayerLocomotion {
                 params.myVisualizerParams.myTeleportPositionObject = this._myParams.myTeleportPositionObject;
                 params.myVisualizerParams.myTeleportValidMaterial = this._myParams.myTeleportValidMaterial;
                 params.myVisualizerParams.myTeleportInvalidMaterial = this._myParams.myTeleportInvalidMaterial;
+                params.myVisualizerParams.myTeleportPositionObjectRotateWithHead = this._myParams.myTeleportPositionObjectRotateWithHead;
 
                 params.myPerformTeleportAsMovement = false;
                 params.myTeleportAsMovementRemoveVerticalMovement = true;

@@ -11,6 +11,7 @@ export class PlayerLocomotionTeleportDetectionVisualizerParams {
         this.myTeleportInvalidMaterial = null;
 
         this.myTeleportPositionObject = null;
+        this.myTeleportPositionObjectRotateWithHead = true;
 
         this.myTeleportParableLineEndOffset = 0.05;
         this.myTeleportParableMinVerticalDistanceToShowVerticalLine = 0.25;
@@ -367,6 +368,10 @@ PlayerLocomotionTeleportDetectionVisualizer.prototype._showTeleportParablePositi
     let feetTransformQuat = quat2_create();
     let feetRotationQuat = quat_create();
 
+    let parableFirstPosition = vec3_create();
+    let parableSecondPosition = vec3_create();
+    let parableDirection = vec3_create();
+
     let visualPosition = vec3_create();
     let visualForward = vec3_create();
     let visualRotationQuat = quat_create();
@@ -381,9 +386,19 @@ PlayerLocomotionTeleportDetectionVisualizer.prototype._showTeleportParablePositi
         feetTransformQuat = this._myTeleportParams.myPlayerHeadManager.getTransformFeetQuat(feetTransformQuat);
         feetRotationQuat = feetTransformQuat.quat2_getRotationQuat(feetRotationQuat);
         feetRotationQuat = feetRotationQuat.quat_rotateAxis(this._myTeleportRuntimeParams.myTeleportRotationOnUp, playerUp, feetRotationQuat);
-        visualForward = feetRotationQuat.quat_getForward(visualForward);
 
         visualPosition = this._myTeleportRuntimeParams.myTeleportPosition.vec3_add(playerUp.vec3_scale(this._myTeleportParams.myVisualizerParams.myTeleportParablePositionUpOffset, visualPosition), visualPosition);
+
+        visualForward = feetRotationQuat.quat_getForward(visualForward);
+
+        if (!this._myTeleportParams.myVisualizerParams.myTeleportPositionObjectRotateWithHead) {
+            parableFirstPosition = this._myDetectionRuntimeParams.myParable.getPosition(0, parableFirstPosition);
+            parableSecondPosition = this._myDetectionRuntimeParams.myParable.getPosition(1, parableSecondPosition);
+            parableDirection = parableSecondPosition.vec3_sub(parableFirstPosition, parableDirection).vec3_removeComponentAlongAxis(playerUp, parableDirection);
+            if (parableDirection.vec3_length() > Math.PP_EPSILON) {
+                visualForward = parableDirection.vec3_normalize(visualForward);
+            }
+        }
 
         if (this._myTeleportParams.myVisualizerParams.myTeleportParablePositionVisualAlignOnSurface) {
             visualRotationQuat.quat_setUp(this._myDetectionRuntimeParams.myTeleportSurfaceNormal, visualForward);

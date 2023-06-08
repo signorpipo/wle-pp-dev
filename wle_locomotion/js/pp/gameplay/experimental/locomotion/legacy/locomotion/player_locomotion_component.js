@@ -32,9 +32,11 @@ export class PlayerLocomotionComponent extends Component {
 
         _myTeleportMaxDistance: Property.float(3),
         _myTeleportMaxHeightDifference: Property.float(3),
+        _myTeleportRotationOnUpEnabled: Property.bool(false),
         _myTeleportValidMaterial: Property.material(),
         _myTeleportInvalidMaterial: Property.material(),
         _myTeleportPositionObject: Property.object(),
+        _myTeleportPositionObjectRotateWithHead: Property.bool(true),
         _myTeleportParableStartReferenceObject: Property.object(),
 
         _myColliderAccuracy: Property.enum(["Very Low", "Low", "Medium", "High", "Very High"], "High"),
@@ -89,12 +91,14 @@ export class PlayerLocomotionComponent extends Component {
 
         params.myForeheadExtraHeight = 0.1;
 
-        params.myTeleportParableStartReferenceObject = this._myTeleportParableStartReferenceObject;
-        params.myTeleportPositionObject = this._myTeleportPositionObject;
         params.myTeleportMaxDistance = this._myTeleportMaxDistance;
         params.myTeleportMaxHeightDifference = this._myTeleportMaxHeightDifference;
+        params.myTeleportRotationOnUpEnabled = this._myTeleportRotationOnUpEnabled;
         params.myTeleportValidMaterial = this._myTeleportValidMaterial;
         params.myTeleportInvalidMaterial = this._myTeleportInvalidMaterial;
+        params.myTeleportPositionObject = this._myTeleportPositionObject;
+        params.myTeleportPositionObjectRotateWithHead = this._myTeleportPositionObjectRotateWithHead;
+        params.myTeleportParableStartReferenceObject = this._myTeleportParableStartReferenceObject;
 
         params.myColliderAccuracy = this._myColliderAccuracy;
         params.myColliderCheckOnlyFeet = this._myColliderCheckOnlyFeet;

@@ -56,12 +56,14 @@ export class PlayerLocomotionParams {
 
         this.myForeheadExtraHeight = 0;
 
-        this.myTeleportParableStartReferenceObject = null;
-        this.myTeleportPositionObject = null;
         this.myTeleportMaxDistance = 0;
         this.myTeleportMaxHeightDifference = 0;
+        this.myTeleportRotationOnUpEnabled = null;
         this.myTeleportValidMaterial = null;
         this.myTeleportInvalidMaterial = null;
+        this.myTeleportPositionObject = null;
+        this.myTeleportPositionObjectRotateWithHead = null;
+        this.myTeleportParableStartReferenceObject = null;
 
         this.myColliderAccuracy = null;
         this.myColliderCheckOnlyFeet = false;
@@ -305,6 +307,7 @@ export class PlayerLocomotion {
                 params.myDetectionParams.myMaxDistance = this._myParams.myTeleportMaxDistance;
                 params.myDetectionParams.myMaxHeightDifference = this._myParams.myTeleportMaxHeightDifference;
                 params.myDetectionParams.myGroundAngleToIgnoreUpward = this._myCollisionCheckParamsMovement.myGroundAngleToIgnore;
+                params.myDetectionParams.myRotationOnUpEnabled = this._myParams.myTeleportRotationOnUpEnabled;
                 params.myDetectionParams.myMustBeOnGround = true;
 
                 params.myDetectionParams.myTeleportBlockLayerFlags.copy(this._myParams.myPhysicsBlockLayerFlags);
@@ -318,6 +321,7 @@ export class PlayerLocomotion {
                 params.myDetectionParams.myVisibilityBlockLayerFlags.copy(this._myParams.myPhysicsBlockLayerFlags);
 
                 params.myVisualizerParams.myTeleportPositionObject = this._myParams.myTeleportPositionObject;
+                params.myVisualizerParams.myTeleportPositionObjectRotateWithHead = this._myParams.myTeleportPositionObjectRotateWithHead;
 
                 params.myPerformTeleportAsMovement = false;
                 params.myTeleportAsMovementRemoveVerticalMovement = true;
