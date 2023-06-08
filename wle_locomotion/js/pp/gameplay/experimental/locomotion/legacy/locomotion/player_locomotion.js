@@ -18,6 +18,7 @@ import { PlayerLocomotionSmooth, PlayerLocomotionSmoothParams } from "./player_l
 import { PlayerObscureManager, PlayerObscureManagerParams } from "./player_obscure_manager";
 import { PlayerTransformManager, PlayerTransformManagerParams, PlayerTransformManagerSyncFlag } from "./player_transform_manager";
 import { PlayerLocomotionTeleport, PlayerLocomotionTeleportParams } from "./teleport/player_locomotion_teleport";
+import { PlayerLocomotionTeleportTeleportType } from "./teleport/player_locomotion_teleport_teleport_state";
 
 export let PlayerLocomotionDirectionReferenceType = {
     HEAD: 0,
@@ -59,6 +60,7 @@ export class PlayerLocomotionParams {
 
         this.myForeheadExtraHeight = 0;
 
+        this.myTeleportType = PlayerLocomotionTeleportTeleportType.INSTANT;
         this.myTeleportMaxDistance = 0;
         this.myTeleportMaxHeightDifference = 0;
         this.myTeleportRotationOnUpEnabled = null;
@@ -341,6 +343,8 @@ export class PlayerLocomotion {
                 params.myDetectionParams.myTeleportParableStartReferenceObject = this._myParams.myTeleportParableStartReferenceObject;
 
                 params.myDetectionParams.myVisibilityBlockLayerFlags.copy(params.myDetectionParams.myTeleportBlockLayerFlags);
+
+                params.myTeleportParams.myTeleportType = this._myParams.myTeleportType;
 
                 params.myVisualizerParams.myTeleportPositionObject = this._myParams.myTeleportPositionObject;
                 params.myVisualizerParams.myTeleportValidMaterial = this._myParams.myTeleportValidMaterial;

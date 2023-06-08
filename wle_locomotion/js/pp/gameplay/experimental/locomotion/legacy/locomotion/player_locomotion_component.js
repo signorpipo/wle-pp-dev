@@ -29,6 +29,7 @@ export class PlayerLocomotionComponent extends Component {
         _myVRDirectionReferenceType: Property.enum(["Head", "Hand", "Custom Object"], "Hand"),
         _myVRDirectionReferenceObject: Property.object(),
 
+        _myTeleportType: Property.enum(["Instant", "Blink", "Shift"], "Shift"),
         _myTeleportMaxDistance: Property.float(3),
         _myTeleportMaxHeightDifference: Property.float(3),
         _myTeleportRotationOnUpEnabled: Property.bool(false),
@@ -92,6 +93,7 @@ export class PlayerLocomotionComponent extends Component {
 
         params.myForeheadExtraHeight = 0.1;
 
+        params.myTeleportType = this._myTeleportType;
         params.myTeleportMaxDistance = this._myTeleportMaxDistance;
         params.myTeleportMaxHeightDifference = this._myTeleportMaxHeightDifference;
         params.myTeleportRotationOnUpEnabled = this._myTeleportRotationOnUpEnabled;
