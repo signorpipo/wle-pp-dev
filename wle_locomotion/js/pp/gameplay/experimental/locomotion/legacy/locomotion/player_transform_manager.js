@@ -23,7 +23,10 @@ export class PlayerTransformManagerParams {
         this.myTeleportCollisionCheckParamsCopyFromMovement = false;
         this.myTeleportCollisionCheckParamsCheck360 = false;
 
-        // Sync for VR and NOn VR
+        this.myAlwaysSyncPositionWithReal = false;
+        this.myAlwaysSyncHeadPositionWithReal = false;
+
+        // Sync for VR and Non VR
         this.mySyncEnabledFlagMap = new Map();
         this.mySyncEnabledFlagMap.set(PlayerTransformManagerSyncFlag.BODY_COLLIDING, true);
         this.mySyncEnabledFlagMap.set(PlayerTransformManagerSyncFlag.HEAD_COLLIDING, true);
@@ -332,7 +335,11 @@ export class PlayerTransformManager {
 
     resetToReal(updateRealFlags = false) {
         this._myValidPosition = this.getPositionReal(this._myValidPosition);
-        this._myValidPositionHead = this.getPositionHeadReal(this._myValidPositionHead);
+
+        if (!this._myParams.myAlwaysSyncPositionWithReal) {
+            this._myValidPositionHead = this.getPositionHeadReal(this._myValidPositionHead);
+        }
+
         this._myValidRotationQuat = this.getRotationRealQuat(this._myValidRotationQuat);
         this._myValidHeight = Math.pp_clamp(this.getHeightReal(), this._myParams.myMinHeight, this._myParams.myMaxHeight);
 
@@ -342,7 +349,9 @@ export class PlayerTransformManager {
     }
 
     resetHeadToReal() {
-        this._myValidPositionHead = this.getPositionHeadReal(this._myValidPositionHead);
+        if (!this._myParams.myAlwaysSyncPositionWithReal) {
+            this._myValidPositionHead = this.getPositionHeadReal(this._myValidPositionHead);
+        }
     }
 
     isBodyColliding() {
@@ -773,6 +782,10 @@ PlayerTransformManager.prototype._updateReal = function () {
                 }
             }
 
+            if (this._myParams.myAlwaysSyncPositionWithReal) {
+                newPosition.vec3_copy(positionReal);
+            }
+
             // Floating 
             if (this._myParams.mySyncEnabledFlagMap.get(PlayerTransformManagerSyncFlag.FLOATING)) {
 
@@ -913,12 +926,17 @@ PlayerTransformManager.prototype._updateReal = function () {
                 }
             }
 
-            if (this.isSynced(this._myParams.mySyncPositionFlagMap) && !this._myParams.mySyncPositionDisabled) {
+            if (this._myParams.myAlwaysSyncHeadPositionWithReal) {
+                newPositionHead.vec3_copy(positionReal);
+            }
+
+            if ((this.isSynced(this._myParams.mySyncPositionFlagMap) || this._myParams.myAlwaysSyncPositionWithReal) && !this._myParams.mySyncPositionDisabled) {
                 this._myValidPosition.vec3_copy(newPosition);
                 // Reset real position dato che la posizione new potrebbe essere quella influenzata da snap
             }
 
-            if (this.isSynced(this._myParams.mySyncPositionHeadFlagMap)) {
+            if (this.isSynced(this._myParams.mySyncPositionHeadFlagMap) || this._myParams.myAlwaysSyncHeadPositionWithReal
+                || (this.isSynced(this._myParams.mySyncPositionFlagMap) && this._myParams.myAlwaysSyncPositionWithReal)) {
                 this._myValidPositionHead = this.getPositionHeadReal(newPositionHead);
             }
 

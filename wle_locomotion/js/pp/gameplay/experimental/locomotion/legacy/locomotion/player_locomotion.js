@@ -16,7 +16,7 @@ import { PlayerLocomotionMovementRuntimeParams } from "./player_locomotion_movem
 import { PlayerLocomotionRotate, PlayerLocomotionRotateParams } from "./player_locomotion_rotate";
 import { PlayerLocomotionSmooth, PlayerLocomotionSmoothParams } from "./player_locomotion_smooth";
 import { PlayerObscureManager, PlayerObscureManagerParams } from "./player_obscure_manager";
-import { PlayerTransformManager, PlayerTransformManagerParams } from "./player_transform_manager";
+import { PlayerTransformManager, PlayerTransformManagerParams, PlayerTransformManagerSyncFlag } from "./player_transform_manager";
 import { PlayerLocomotionTeleport, PlayerLocomotionTeleportParams } from "./teleport/player_locomotion_teleport";
 
 export let PlayerLocomotionDirectionReferenceType = {
@@ -67,6 +67,9 @@ export class PlayerLocomotionParams {
         this.myTeleportPositionObject = null;
         this.myTeleportPositionObjectRotateWithHead = null;
         this.myTeleportParableStartReferenceObject = null;
+
+        this.mySyncWithRealWorldPositionOnlyIfValid = true;
+        this.myViewOcclusionInsideWallsEnabled = true;
 
         this.myColliderAccuracy = null;
         this.myColliderCheckOnlyFeet = false;
@@ -158,6 +161,18 @@ export class PlayerLocomotion {
 
             params.myHeadRadius = 0.15;
 
+            params.myAlwaysSyncPositionWithReal = !this._myParams.mySyncWithRealWorldPositionOnlyIfValid;
+            params.myAlwaysSyncHeadPositionWithReal = false;
+
+            if (!this._myParams.myViewOcclusionInsideWallsEnabled && !this._myParams.mySyncWithRealWorldPositionOnlyIfValid) {
+                params.mySyncEnabledFlagMap.set(PlayerTransformManagerSyncFlag.BODY_COLLIDING, false);
+                params.mySyncEnabledFlagMap.set(PlayerTransformManagerSyncFlag.HEAD_COLLIDING, false);
+                params.mySyncEnabledFlagMap.set(PlayerTransformManagerSyncFlag.FAR, false);
+                params.mySyncEnabledFlagMap.set(PlayerTransformManagerSyncFlag.FLOATING, false);
+
+                params.myAlwaysSyncHeadPositionWithReal = !this._myParams.mySyncWithRealWorldPositionOnlyIfValid;
+            }
+
             params.myMaxDistanceFromRealToSyncEnabled = true;
             params.myMaxDistanceFromRealToSync = 100;
 
@@ -209,6 +224,8 @@ export class PlayerLocomotion {
             let params = new PlayerObscureManagerParams(this._myParams.myEngine);
 
             params.myPlayerTransformManager = this._myPlayerTransformManager;
+
+            params.myEnabled = this._myParams.myViewOcclusionInsideWallsEnabled;
 
             params.myObscureObject = null;
             params.myObscureMaterial = null;

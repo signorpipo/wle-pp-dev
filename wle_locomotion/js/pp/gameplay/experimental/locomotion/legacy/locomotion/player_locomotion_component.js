@@ -38,6 +38,10 @@ export class PlayerLocomotionComponent extends Component {
         _myTeleportPositionObjectRotateWithHead: Property.bool(true),
         _myTeleportParableStartReferenceObject: Property.object(),
 
+        // these 2 flags works 100% properly only if both true or false
+        _mySyncWithRealWorldPositionOnlyIfValid: Property.bool(true),   // valid means the real player has not moved inside walls
+        _myViewOcclusionInsideWallsEnabled: Property.bool(true),
+
         _myColliderAccuracy: Property.enum(["Very Low", "Low", "Medium", "High", "Very High"], "High"),
         _myColliderCheckOnlyFeet: Property.bool(false),
         _myColliderSlideAlongWall: Property.bool(true),
@@ -96,6 +100,9 @@ export class PlayerLocomotionComponent extends Component {
         params.myTeleportPositionObject = this._myTeleportPositionObject;
         params.myTeleportPositionObjectRotateWithHead = this._myTeleportPositionObjectRotateWithHead;
         params.myTeleportParableStartReferenceObject = this._myTeleportParableStartReferenceObject;
+
+        params.mySyncWithRealWorldPositionOnlyIfValid = this._mySyncWithRealWorldPositionOnlyIfValid;
+        params.myViewOcclusionInsideWallsEnabled = this._myViewOcclusionInsideWallsEnabled;
 
         params.myColliderAccuracy = this._myColliderAccuracy;
         params.myColliderCheckOnlyFeet = this._myColliderCheckOnlyFeet;

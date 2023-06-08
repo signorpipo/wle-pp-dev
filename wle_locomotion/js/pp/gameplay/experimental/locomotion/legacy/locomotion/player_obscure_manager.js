@@ -14,6 +14,8 @@ export class PlayerObscureManagerParams {
     constructor(engine = Globals.getMainEngine()) {
         this.myPlayerTransformManager = null;
 
+        this.myEnabled = true;
+
         this.myObscureObject = null;
         this.myObscureMaterial = null;
         this.myObscureRadius = 0;
@@ -248,49 +250,51 @@ export class PlayerObscureManager {
     _updateObscured() {
         this._myTargetObscureLevel = 0;
 
-        if (this._myObscureLevelOverride != null) {
-            this._myTargetObscureLevel = this._myObscureLevelOverride;
-        } else {
-            // #TODO Check if VALID head is colliding, in that case use max obscure level
-            // This prevent being able to see when resetting head to real even though real is colliding
-            // For example if u stand up and go with the head in the ceiling and reset by moving
-            if (this._myParams.myPlayerTransformManager.isHeadColliding()) {
-                let distance = this._myParams.myPlayerTransformManager.getDistanceToRealHead();
-                let relativeDistance = distance - this._myParams.myDistanceToStartObscureWhenHeadColliding;
-                if (relativeDistance >= 0) {
-                    let relativeDistancePercentage = Math.pp_clamp(relativeDistance / this._myParams.myRelativeDistanceToMaxObscureWhenHeadColliding, 0, 1);
-                    let targetObscureLevel = this._myParams.myObscureLevelRelativeDistanceEasingFunction(relativeDistancePercentage);
-                    this._myTargetObscureLevel = Math.max(this._myTargetObscureLevel, targetObscureLevel);
+        if (this._myParams.myEnabled) {
+            if (this._myObscureLevelOverride != null) {
+                this._myTargetObscureLevel = this._myObscureLevelOverride;
+            } else {
+                // #TODO Check if VALID head is colliding, in that case use max obscure level
+                // This prevent being able to see when resetting head to real even though real is colliding
+                // For example if u stand up and go with the head in the ceiling and reset by moving
+                if (this._myParams.myPlayerTransformManager.isHeadColliding()) {
+                    let distance = this._myParams.myPlayerTransformManager.getDistanceToRealHead();
+                    let relativeDistance = distance - this._myParams.myDistanceToStartObscureWhenHeadColliding;
+                    if (relativeDistance >= 0) {
+                        let relativeDistancePercentage = Math.pp_clamp(relativeDistance / this._myParams.myRelativeDistanceToMaxObscureWhenHeadColliding, 0, 1);
+                        let targetObscureLevel = this._myParams.myObscureLevelRelativeDistanceEasingFunction(relativeDistancePercentage);
+                        this._myTargetObscureLevel = Math.max(this._myTargetObscureLevel, targetObscureLevel);
+                    }
                 }
-            }
 
-            if (this._myParams.myPlayerTransformManager.isBodyColliding()) {
-                let distance = this._myParams.myPlayerTransformManager.getDistanceToReal();
-                let relativeDistance = distance - this._myParams.myDistanceToStartObscureWhenBodyColliding;
-                if (relativeDistance >= 0) {
-                    let relativeDistancePercentage = Math.pp_clamp(relativeDistance / this._myParams.myRelativeDistanceToMaxObscureWhenBodyColliding, 0, 1);
-                    let targetObscureLevel = this._myParams.myObscureLevelRelativeDistanceEasingFunction(relativeDistancePercentage);
-                    this._myTargetObscureLevel = Math.max(this._myTargetObscureLevel, targetObscureLevel);
+                if (this._myParams.myPlayerTransformManager.isBodyColliding()) {
+                    let distance = this._myParams.myPlayerTransformManager.getDistanceToReal();
+                    let relativeDistance = distance - this._myParams.myDistanceToStartObscureWhenBodyColliding;
+                    if (relativeDistance >= 0) {
+                        let relativeDistancePercentage = Math.pp_clamp(relativeDistance / this._myParams.myRelativeDistanceToMaxObscureWhenBodyColliding, 0, 1);
+                        let targetObscureLevel = this._myParams.myObscureLevelRelativeDistanceEasingFunction(relativeDistancePercentage);
+                        this._myTargetObscureLevel = Math.max(this._myTargetObscureLevel, targetObscureLevel);
+                    }
                 }
-            }
 
-            if (this._myParams.myPlayerTransformManager.isFloating()) {
-                let distance = this._myParams.myPlayerTransformManager.getDistanceToReal();
-                let relativeDistance = distance - this._myParams.myDistanceToStartObscureWhenFloating;
-                if (relativeDistance >= 0) {
-                    let relativeDistancePercentage = Math.pp_clamp(relativeDistance / this._myParams.myRelativeDistanceToMaxObscureWhenFloating, 0, 1);
-                    let targetObscureLevel = this._myParams.myObscureLevelRelativeDistanceEasingFunction(relativeDistancePercentage);
-                    this._myTargetObscureLevel = Math.max(this._myTargetObscureLevel, targetObscureLevel);
+                if (this._myParams.myPlayerTransformManager.isFloating()) {
+                    let distance = this._myParams.myPlayerTransformManager.getDistanceToReal();
+                    let relativeDistance = distance - this._myParams.myDistanceToStartObscureWhenFloating;
+                    if (relativeDistance >= 0) {
+                        let relativeDistancePercentage = Math.pp_clamp(relativeDistance / this._myParams.myRelativeDistanceToMaxObscureWhenFloating, 0, 1);
+                        let targetObscureLevel = this._myParams.myObscureLevelRelativeDistanceEasingFunction(relativeDistancePercentage);
+                        this._myTargetObscureLevel = Math.max(this._myTargetObscureLevel, targetObscureLevel);
+                    }
                 }
-            }
 
-            if (this._myParams.myPlayerTransformManager.isFar()) {
-                let distance = this._myParams.myPlayerTransformManager.getDistanceToReal();
-                let relativeDistance = distance - this._myParams.myDistanceToStartObscureWhenFar;
-                if (relativeDistance >= 0) {
-                    let relativeDistancePercentage = Math.pp_clamp(relativeDistance / this._myParams.myRelativeDistanceToMaxObscureWhenFar, 0, 1);
-                    let targetObscureLevel = this._myParams.myObscureLevelRelativeDistanceEasingFunction(relativeDistancePercentage);
-                    this._myTargetObscureLevel = Math.max(this._myTargetObscureLevel, targetObscureLevel);
+                if (this._myParams.myPlayerTransformManager.isFar()) {
+                    let distance = this._myParams.myPlayerTransformManager.getDistanceToReal();
+                    let relativeDistance = distance - this._myParams.myDistanceToStartObscureWhenFar;
+                    if (relativeDistance >= 0) {
+                        let relativeDistancePercentage = Math.pp_clamp(relativeDistance / this._myParams.myRelativeDistanceToMaxObscureWhenFar, 0, 1);
+                        let targetObscureLevel = this._myParams.myObscureLevelRelativeDistanceEasingFunction(relativeDistancePercentage);
+                        this._myTargetObscureLevel = Math.max(this._myTargetObscureLevel, targetObscureLevel);
+                    }
                 }
             }
         }
