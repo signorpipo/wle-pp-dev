@@ -229,10 +229,6 @@ export * from "./gameplay/experimental/locomotion/legacy/locomotion/teleport/pla
 export * from "./gameplay/experimental/locomotion/legacy/locomotion/teleport/player_locomotion_teleport_teleport_shift_state";
 export * from "./gameplay/experimental/locomotion/legacy/locomotion/teleport/player_locomotion_teleport";
 
-export * from "./gameplay/experimental/locomotion/legacy/locomotion/cleaned/player_locomotion_cleaned";
-export * from "./gameplay/experimental/locomotion/legacy/locomotion/cleaned/player_locomotion_smooth_cleaned";
-export * from "./gameplay/experimental/locomotion/legacy/locomotion/cleaned/player_transform_manager_cleaned";
-
 //	INPUT
 export * from "./input/cauldron/input_types";
 export * from "./input/cauldron/input_utils";

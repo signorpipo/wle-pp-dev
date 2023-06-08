@@ -2,7 +2,6 @@ import { Component, Property } from "@wonderlandengine/api";
 import { PhysicsLayerFlags } from "../../../../../cauldron/physics/physics_layer_flags";
 import { InputUtils } from "../../../../../input/cauldron/input_utils";
 import { CollisionCheckBridge } from "../../../character_controller/collision/collision_check_bridge";
-import { CleanedPlayerLocomotion } from "./cleaned/player_locomotion_cleaned";
 import { PlayerLocomotion, PlayerLocomotionParams } from "./player_locomotion";
 
 export class PlayerLocomotionComponent extends Component {
@@ -47,8 +46,6 @@ export class PlayerLocomotionComponent extends Component {
         _myColliderMaxDistanceToSnapOnGround: Property.float(0.1),
         _myColliderMaxWalkableGroundStepHeight: Property.float(0.1),
         _myColliderPreventFallingFromEdges: Property.bool(false),
-
-        _myUseCleanedVersion: Property.bool(true),
 
         _myDebugHorizontalEnabled: Property.bool(false),
         _myDebugVerticalEnabled: Property.bool(false),
@@ -118,11 +115,7 @@ export class PlayerLocomotionComponent extends Component {
 
         params.myPhysicsBlockLayerFlags.copy(this._getPhysicsBlockLayersFlags());
 
-        if (this._myUseCleanedVersion) {
-            this._myPlayerLocomotion = new CleanedPlayerLocomotion(params);
-        } else {
-            this._myPlayerLocomotion = new PlayerLocomotion(params);
-        }
+        this._myPlayerLocomotion = new PlayerLocomotion(params);
 
         this._myStartCounter = 1;
     }
@@ -133,11 +126,11 @@ export class PlayerLocomotionComponent extends Component {
             if (this._myStartCounter == 0) {
                 this._myPlayerLocomotion.start();
 
-                this._myPlayerLocomotion._myPlayerTransformManager.resetReal(true, false, false, true);
-                this._myPlayerLocomotion._myPlayerTransformManager.resetHeadToReal();
+                this._myPlayerLocomotion.getPlayerTransformManager().resetReal(true, false, false, true);
+                this._myPlayerLocomotion.getPlayerTransformManager().resetHeadToReal();
             }
 
-            this._myPlayerLocomotion._myPlayerHeadManager.update(dt);
+            this._myPlayerLocomotion.getPlayerHeadManager().update(dt);
         } else {
             CollisionCheckBridge.getCollisionCheck(this.engine)._myTotalRaycasts = 0; // #TODO Debug stuff, remove later
 
@@ -147,6 +140,10 @@ export class PlayerLocomotionComponent extends Component {
         //CollisionCheckBridge.getCollisionCheck(this.engine)._myTotalRaycastsMax = Math.max(CollisionCheckBridge.getCollisionCheck(this.engine)._myTotalRaycasts, CollisionCheckBridge.getCollisionCheck(this.engine)._myTotalRaycastsMax);
         //console.error(CollisionCheckBridge.getCollisionCheck(this.engine)._myTotalRaycastsMax);
         //console.error(CollisionCheckBridge.getCollisionCheck(this.engine)._myTotalRaycasts);
+    }
+
+    getPlayerLocomotion() {
+        return this._myPlayerLocomotion;
     }
 
     onActivate() {

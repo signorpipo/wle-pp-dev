@@ -186,6 +186,7 @@ export class PlayerTransformManager {
 
         this._myResetRealOnSynced = false;
 
+        this._myActive = true;
         this._myDestroyed = false;
     }
 
@@ -193,6 +194,10 @@ export class PlayerTransformManager {
         this.resetToReal(true);
 
         XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this), true, false, this._myParams.myEngine);
+    }
+
+    setActive(active) {
+        this._myActive = active;
     }
 
     // update should be before to check the new valid transform and if the head new transform is fine
@@ -230,6 +235,15 @@ export class PlayerTransformManager {
         // Collision check and teleport, if force teleport teleport in any case
 
         // Implemented outside class definition
+    }
+
+    teleportAndReset(position, rotationQuat) {
+        this.teleportPosition(position, null, true);
+        if (rotationQuat != null) {
+            this.setRotationQuat(rotationQuat);
+        }
+        this.resetReal(true, false, false, true);
+        this.resetHeadToReal();
     }
 
     rotateQuat(rotationQuat) {
@@ -312,10 +326,6 @@ export class PlayerTransformManager {
         // Implemented outside class definition
     }
 
-    resetHeadToReal() {
-        this._myValidPositionHead = this.getPositionHeadReal(this._myValidPositionHead);
-    }
-
     updateReal() {
         this._updateReal(0, false);
     }
@@ -329,6 +339,10 @@ export class PlayerTransformManager {
         if (updateRealFlags) {
             this._updateReal(0, false);
         }
+    }
+
+    resetHeadToReal() {
+        this._myValidPositionHead = this.getPositionHeadReal(this._myValidPositionHead);
     }
 
     isBodyColliding() {
@@ -554,14 +568,18 @@ export class PlayerTransformManager {
     }
 
     _onXRSessionStart(manualCall, session) {
-        if (this._myParams.myResetToValidOnEnterSession) {
-            this._myResetRealOnSynced = true;
+        if (this._myActive) {
+            if (this._myParams.myResetToValidOnEnterSession && !manualCall) {
+                this._myResetRealOnSynced = true;
+            }
         }
     }
 
     _onXRSessionEnd() {
-        if (this._myParams.myResetToValidOnExitSession) {
-            this._myResetRealOnSynced = true;
+        if (this._myActive) {
+            if (this._myParams.myResetToValidOnExitSession) {
+                this._myResetRealOnSynced = true;
+            }
         }
     }
 
@@ -572,7 +590,17 @@ export class PlayerTransformManager {
 
         Globals.getDebugVisualManager(this._myParams.myEngine).drawPoint(0, this._myValidPositionHead, vec4_create(1, 1, 0, 1), 0.05);
     }
-}
+
+    destroy() {
+        this._myDestroyed = true;
+
+        XRUtils.unregisterSessionStartEndEventListeners(this, this._myParams.myEngine);
+    }
+
+    isDestroyed() {
+        return this._myDestroyed;
+    }
+};
 
 
 
@@ -632,6 +660,8 @@ PlayerTransformManager.prototype.update = function () {
     return function update(dt) {
         // #TODO This should update ground and ceiling info but not sliding info        
 
+        this._updateReal(dt);
+
         if (this._myResetRealOnSynced) {
             if (this.getPlayerHeadManager().isSynced()) {
                 this._myResetRealOnSynced = false;
@@ -650,8 +680,6 @@ PlayerTransformManager.prototype.update = function () {
                 }
             }
         }
-
-        this._updateReal(dt);
 
         if (this._myParams.myUpdatePositionValid) {
             transformQuat = this.getTransformQuat(transformQuat);
@@ -901,20 +929,6 @@ PlayerTransformManager.prototype._updateReal = function () {
             if (this.isSynced(this._myParams.mySyncHeightFlagMap)) {
                 this._myValidHeight = this._myRealMovementCollisionCheckParams.myHeight;
                 this._updateCollisionHeight();
-            }
-
-            if (resetRealEnabled) { // No
-                if (XRUtils.isSessionActive(this._myParams.myEngine)) {
-                    let resetPosition = (this.isSynced(this._myParams.mySyncPositionFlagMap) || this._myParams.myAlwaysResetRealPositionVR) && !this._myParams.myNeverResetRealPositionVR;
-                    let resetRotation = (this.isSynced(this._myParams.mySyncRotationFlagMap) || this._myParams.myAlwaysResetRealRotationVR) && !this._myParams.myNeverResetRealRotationVR;
-                    let resetHeight = (this.isSynced(this._myParams.mySyncHeightFlagMap) || this._myParams.myAlwaysResetRealHeightVR) && !this._myParams.myNeverResetRealHeightVR;
-                    this.resetReal(resetPosition, resetRotation, resetHeight, false);
-                } else {
-                    let resetPosition = (this.isSynced(this._myParams.mySyncPositionFlagMap) || this._myParams.myAlwaysResetRealPositionNonVR) && !this._myParams.myNeverResetRealPositionNonVR;
-                    let resetRotation = (this.isSynced(this._myParams.mySyncRotationFlagMap) || this._myParams.myAlwaysResetRealRotationNonVR) && !this._myParams.myNeverResetRealRotationNonVR;
-                    let resetHeight = (this.isSynced(this._myParams.mySyncHeightFlagMap) || this._myParams.myAlwaysResetRealHeightNonVR) && !this._myParams.myNeverResetRealHeightNonVR;
-                    this.resetReal(resetPosition, resetRotation, resetHeight, false);
-                }
             }
 
             if (this._myParams.myUpdateRealPositionValid) {
