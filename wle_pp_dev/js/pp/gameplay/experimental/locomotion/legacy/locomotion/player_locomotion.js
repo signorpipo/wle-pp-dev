@@ -39,6 +39,8 @@ export class PlayerLocomotionParams {
 
         this.myCharacterRadius = 0;
 
+        this.mySpeedSlowDownPercentageOnWallSlid = 1;
+
         this.myIsSnapTurn = false;
         this.mySnapTurnOnlyVR = false;
         this.mySnapTurnAngle = 0;
@@ -294,6 +296,7 @@ export class PlayerLocomotion {
                 params.myHandedness = this._myParams.myMainHand;
 
                 params.myMaxSpeed = this._myParams.myMaxSpeed;
+                params.mySpeedSlowDownPercentageOnWallSlid = this._myParams.mySpeedSlowDownPercentageOnWallSlid;
 
                 params.myMovementMinStickIntensityThreshold = 0.1;
 

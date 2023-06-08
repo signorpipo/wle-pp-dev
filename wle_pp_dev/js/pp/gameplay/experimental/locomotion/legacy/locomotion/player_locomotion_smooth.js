@@ -18,6 +18,7 @@ export class PlayerLocomotionSmoothParams {
         this.myCollisionCheckParams = null;
 
         this.myMaxSpeed = 0;
+        this.mySpeedSlowDownPercentageOnWallSlid = 1; // this is the target value for a 90 degrees slid, the more u move toward the wall the slower u go 
 
         this.myMovementMinStickIntensityThreshold = 0;
 
@@ -163,7 +164,14 @@ PlayerLocomotionSmooth.prototype.update = function () {
                 let movementIntensity = axes.vec2_length();
                 this._myCurrentSpeed = Math.pp_lerp(0, maxSpeed, movementIntensity);
 
-                // SLID SLOW DOWN
+                if (this._myLocomotionRuntimeParams.myCollisionRuntimeParams.myIsSliding && this._myParams.mySpeedSlowDownPercentageOnWallSlid != 1) {
+                    let slowPercentage = this._myParams.mySpeedSlowDownPercentageOnWallSlid;
+
+                    let slidStrength = Math.pp_mapToRange(Math.abs(this._myLocomotionRuntimeParams.myCollisionRuntimeParams.mySlidingMovementAngle), 0, 90, 0, 1);
+                    slowPercentage = Math.pp_lerp(1, slowPercentage, slidStrength);
+
+                    this._myCurrentSpeed = this._myCurrentSpeed * slowPercentage;
+                }
 
                 headMovement = direction.vec3_scale(this._myCurrentSpeed * dt, headMovement);
 
