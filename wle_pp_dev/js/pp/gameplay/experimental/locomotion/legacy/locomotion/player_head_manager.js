@@ -456,7 +456,6 @@ PlayerHeadManager.prototype.teleportPlayerToHeadTransformQuat = function () {
     let teleportMovement = vec3_create();
     let playerForward = vec3_create();
     let headForward = vec3_create();
-    let headForwardNegated = vec3_create();
     let rotationToPerform = quat_create();
     return function teleportPlayerToHeadTransformQuat(headTransformQuat) {
         headPosition = headTransformQuat.quat2_getPosition(headPosition);
@@ -470,9 +469,8 @@ PlayerHeadManager.prototype.teleportPlayerToHeadTransformQuat = function () {
 
         playerForward = Globals.getPlayerObjects(this._myParams.myEngine).myPlayer.pp_getForward(playerForward);
         headForward = headTransformQuat.quat2_getForward(headForward);
-        headForwardNegated = headForward.vec3_negate(headForwardNegated); // The head is rotated 180 degrees from the player for rendering reasons
 
-        rotationToPerform = playerForward.vec3_rotationToPivotedQuat(headForwardNegated, playerUp, rotationToPerform);
+        rotationToPerform = playerForward.vec3_rotationToPivotedQuat(headForward, playerUp, rotationToPerform);
 
         Globals.getPlayerObjects(this._myParams.myEngine).myPlayer.pp_rotateQuat(rotationToPerform);
     };
@@ -742,7 +740,7 @@ PlayerHeadManager.prototype._sessionChangeResync = function () {
     let playerPosition = vec3_create();
     let newPlayerPosition = vec3_create();
     let fixedHeadRight = vec3_create();
-    let fixedHeadRightNegate = vec3_create();
+    let fixedHeadLeft = vec3_create();
     let fixedHeadUp = vec3_create();
     let fixedHeadForward = vec3_create();
     let fixedHeadRotation = quat_create();
@@ -836,7 +834,7 @@ PlayerHeadManager.prototype._sessionChangeResync = function () {
                     fixedHeadForward = fixedHeadUp.vec3_cross(fixedHeadRight, fixedHeadForward);
                     fixedHeadForward.vec3_normalize(fixedHeadForward);
 
-                    fixedHeadRotation.quat_fromAxes(fixedHeadRight.vec3_negate(fixedHeadRightNegate), fixedHeadUp, fixedHeadForward);
+                    fixedHeadRotation.quat_fromAxes(fixedHeadRight.vec3_negate(fixedHeadLeft), fixedHeadUp, fixedHeadForward);
                     resyncHeadRotation.quat_copy(fixedHeadRotation);
                 }
 
