@@ -32,7 +32,7 @@ export class Direction2DTo3DConverter {
 
         // Config
 
-        this._myMinAngleToBeValid = 5;
+        this._myMinAngleToBeValid = 10;
     }
 
     // @direction3DUp can be used to flat the direction if the @conversionTransform is not aligned with it
@@ -91,8 +91,6 @@ export class Direction2DTo3DConverter {
         } else {
             this.stopFlyingForward();
         }
-
-        this._myLastValidFlatForward.vec3_zero();
     }
 
     resetFlyRight() {
@@ -101,8 +99,6 @@ export class Direction2DTo3DConverter {
         } else {
             this.stopFlyingRight();
         }
-
-        this._myLastValidFlatRight.vec3_zero();
     }
 
     // Convert Alternatives
@@ -176,6 +172,9 @@ Direction2DTo3DConverter.prototype.convertRotationQuat = function () {
                 this.resetFlyRight();
             }
 
+            this._myLastValidFlatRight.vec3_zero();
+            this._myLastValidFlatForward.vec3_zero();
+
             outDirection3D.vec3_zero();
             return outDirection3D;
         } else {
@@ -220,6 +219,10 @@ Direction2DTo3DConverter.prototype.convertRotationQuat = function () {
 
                 forward = forward.vec3_removeComponentAlongAxis(direction3DUp, forward);
                 forward.vec3_normalize(forward);
+
+                if (forward.vec3_isZero(Math.PP_EPSILON)) {
+                    forward.vec3_set(0, 0, 1);
+                }
             }
 
             if (!this._myFlyingRight) {
@@ -234,6 +237,10 @@ Direction2DTo3DConverter.prototype.convertRotationQuat = function () {
 
                 right = right.vec3_removeComponentAlongAxis(direction3DUp, right);
                 right.vec3_normalize(right);
+
+                if (right.vec3_isZero(Math.PP_EPSILON)) {
+                    right.vec3_set(-1, 0, 0);
+                }
             }
 
             // Update last valid
