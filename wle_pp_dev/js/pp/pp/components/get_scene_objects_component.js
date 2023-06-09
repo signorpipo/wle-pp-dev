@@ -65,6 +65,8 @@ export class GetSceneObjectsComponent extends Component {
 
             this._mySceneObjects.myPlayerObjects.myCauldron = this._mySceneObjects.myPlayerObjects.myPlayer.pp_addObject();
             this._mySceneObjects.myPlayerObjects.myCauldron.pp_setName("Cauldron");
+            this._mySceneObjects.myPlayerObjects.myHeadDebugs = this._mySceneObjects.myPlayerObjects.myHead.pp_addObject();
+            this._mySceneObjects.myPlayerObjects.myHeadDebugs.pp_setName("Head Debugs");
 
             Globals.setSceneObjects(this._mySceneObjects, this.engine);
         }

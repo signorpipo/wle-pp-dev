@@ -32,5 +32,6 @@ export class PlayerObjects {
         this.myHandRight = null;
 
         this.myHead = null;
+        this.myHeadDebugs = null;
     }
 }

@@ -151,7 +151,7 @@ export class VisualManager {
         if (elementID == null) {
             for (let visualElements of this._myVisualElementsTypeMap.values()) {
                 for (let visualElement of visualElements.values()) {
-                    Globals.getObjectPoolManager(this._myEngine).release(this._getTypePoolID(visualElement[0].getParams().myType), visualElement[0]);
+                    this._releaseElement(visualElement[0]);
                 }
             }
 
@@ -162,7 +162,7 @@ export class VisualManager {
             for (let visualElements of this._myVisualElementsTypeMap.values()) {
                 if (visualElements.has(elementID)) {
                     let visualElementPair = visualElements.get(elementID);
-                    Globals.getObjectPoolManager(this._myEngine).release(this._getTypePoolID(visualElementPair[0].getParams().myType), visualElementPair[0]);
+                    this._releaseElement(visualElementPair[0]);
                     visualElements.delete(elementID);
 
                     this._myVisualElementsToShow.pp_removeEqual(visualElementPair[0]);
@@ -204,7 +204,7 @@ export class VisualManager {
             for (let visualElementsEntry of visualElements.entries()) {
                 let visualElement = visualElementsEntry[1];
                 if (visualElement[1].isDone()) {
-                    Globals.getObjectPoolManager(this._myEngine).release(this._getTypePoolID(visualElement[0].getParams().myType), visualElement[0]);
+                    this._releaseElement(visualElement[0]);
                     idsToRemove.push(visualElementsEntry[0]);
                 }
 
@@ -277,6 +277,16 @@ export class VisualManager {
         }
 
         return typePoolID;
+    }
+
+    _releaseElement(visualElement) {
+        let defaultElementsParent = Globals.getSceneObjects(this._myEngine).myVisualElements;
+        if (visualElement.getParams().myParent != defaultElementsParent) {
+            visualElement.getParams().myParent = defaultElementsParent;
+            visualElement.forceRefresh(); // just used to trigger the parent change, I'm lazy
+        }
+
+        Globals.getObjectPoolManager(this._myEngine).release(this._getTypePoolID(visualElement.getParams().myType), visualElement);
     }
 
     _getClassName() {

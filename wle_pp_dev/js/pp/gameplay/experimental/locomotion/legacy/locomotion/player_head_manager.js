@@ -897,21 +897,21 @@ PlayerHeadManager.prototype._updateHeightOffset = function () {
             // #TODO As of now reference type is not properly updated for device emulated and is available the frame after the session started
             // if this is fixed, then the emulator will behave like a normal headset for height and we can remove all these ifs
             if (XRUtils.isDeviceEmulated(this._myParams.myEngine)) {
-                this._setPlayerPivotHeightOffset(0, 0);
+                this._setReferenceSpaceHeightOffset(0, 0);
             } else if (XRUtils.isReferenceSpaceFloorBased(this._myParams.myEngine)) {
-                this._setPlayerPivotHeightOffset(this._myParams.myHeightOffsetVRWithFloor, 0);
+                this._setReferenceSpaceHeightOffset(this._myParams.myHeightOffsetVRWithFloor, 0);
             } else {
-                this._setPlayerPivotHeightOffset(this._myParams.myHeightOffsetVRWithoutFloor, this._myParams.myForeheadExtraHeight);
+                this._setReferenceSpaceHeightOffset(this._myParams.myHeightOffsetVRWithoutFloor, this._myParams.myForeheadExtraHeight);
             }
         } else {
-            this._setPlayerPivotHeightOffset(this._myParams.myHeightOffsetNonVR, this._myParams.myForeheadExtraHeight);
+            this._setReferenceSpaceHeightOffset(this._myParams.myHeightOffsetNonVR, this._myParams.myForeheadExtraHeight);
         }
     }
 }();
 
-PlayerHeadManager.prototype._setPlayerPivotHeightOffset = function () {
+PlayerHeadManager.prototype._setReferenceSpaceHeightOffset = function () {
     let referenceSpacePosition = vec3_create();
-    return function _setPlayerPivotHeightOffset(offset, amountToRemove) {
+    return function _setReferenceSpaceHeightOffset(offset, amountToRemove) {
         if (offset != null) {
             referenceSpacePosition = Globals.getPlayerObjects(this._myParams.myEngine).myReferenceSpace.pp_getPositionLocal(referenceSpacePosition);
             Globals.getPlayerObjects(this._myParams.myEngine).myReferenceSpace.pp_setPositionLocal([referenceSpacePosition[0], offset - amountToRemove, referenceSpacePosition[2]]);
@@ -935,4 +935,4 @@ Object.defineProperty(PlayerHeadManager.prototype, "_onXRSessionBlurEnd", { enum
 Object.defineProperty(PlayerHeadManager.prototype, "_onViewReset", { enumerable: false });
 Object.defineProperty(PlayerHeadManager.prototype, "_blurEndResync", { enumerable: false });
 Object.defineProperty(PlayerHeadManager.prototype, "_sessionChangeResync", { enumerable: false });
-Object.defineProperty(PlayerHeadManager.prototype, "_setPlayerPivotHeightOffset", { enumerable: false });
+Object.defineProperty(PlayerHeadManager.prototype, "_setReferenceSpaceHeightOffset", { enumerable: false });
