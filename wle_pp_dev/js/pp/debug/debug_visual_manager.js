@@ -20,6 +20,7 @@ export class DebugVisualManager extends VisualManager {
         this._myDefaultPointRadius = 0.01;
         this._myDefaultAxisLength = 0.2;
 
+        this._myDefaultTextLookAtPlayer = true;
         this._myDefaultTextAlignment = Alignment.Center;
         this._myDefaultTextJustification = Justification.Middle;
 
@@ -75,7 +76,7 @@ export class DebugVisualManager extends VisualManager {
         }
     }
 
-    drawText(lifetimeSeconds, text, transform, color = this._myDefaultColor, alignment = this._myDefaultTextAlignment, justification = this._myDefaultTextJustification) {
+    drawText(lifetimeSeconds, text, transform, color = this._myDefaultColor, lookAtPlayer = this._myDefaultTextLookAtPlayer, alignment = this._myDefaultTextAlignment, justification = this._myDefaultTextJustification) {
         if (this.isActive()) {
             let visualParams = new VisualTextParams(this._myEngine);
             visualParams.myText = text;
@@ -84,6 +85,11 @@ export class DebugVisualManager extends VisualManager {
             visualParams.myTransform.mat4_copy(transform);
             visualParams.myColor = vec4_create();
             visualParams.myColor.vec4_copy(color);
+
+            if (lookAtPlayer) {
+                visualParams.myLookAtObject = Globals.getPlayerObjects(this._myEngine).myHead;
+            }
+
             this.draw(visualParams, lifetimeSeconds);
         }
     }

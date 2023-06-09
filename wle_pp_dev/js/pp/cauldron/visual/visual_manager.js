@@ -197,7 +197,7 @@ export class VisualManager {
         for (let visualElement of this._myVisualElementsToShow) {
             visualElement.setVisible(true);
         }
-        this._myVisualElementsToShow = [];
+        this._myVisualElementsToShow.pp_clear();
 
         for (let visualElements of this._myVisualElementsTypeMap.values()) {
             let idsToRemove = [];
@@ -206,9 +206,10 @@ export class VisualManager {
                 if (visualElement[1].isDone()) {
                     this._releaseElement(visualElement[0]);
                     idsToRemove.push(visualElementsEntry[0]);
+                } else {
+                    visualElement[0].update(dt);
+                    visualElement[1].update(dt);
                 }
-
-                visualElement[1].update(dt);
             }
 
             for (let id of idsToRemove) {
