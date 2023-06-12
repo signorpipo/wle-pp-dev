@@ -15,12 +15,12 @@
 import {MouseLookComponent} from '@wonderlandengine/components';
 import {ExampleEasyTuneVariablesComponent} from './cauldron/components/example_easy_tune_variables_component.js';
 import {RemoveMainEngineComponent} from './cauldron/components/remove_main_engine_component.js';
-import {PlayerLocomotionComponent} from './pp/gameplay/experimental/locomotion/legacy/locomotion/player_locomotion_component.js';
 import {ConsoleVRToolComponent} from './pp/index.js';
 import {EasyTuneToolComponent} from './pp/index.js';
 import {GamepadControlSchemeComponent} from './pp/index.js';
 import {GamepadMeshAnimatorComponent} from './pp/index.js';
 import {PPGatewayComponent} from './pp/index.js';
+import {PlayerLocomotionComponent} from './pp/index.js';
 import {SetActiveComponent} from './pp/index.js';
 import {SetHandLocalTransformComponent} from './pp/index.js';
 import {SetHeadLocalTransformComponent} from './pp/index.js';
@@ -93,12 +93,12 @@ if (document.readyState === 'loading') {
 engine.registerComponent(MouseLookComponent);
 engine.registerComponent(ExampleEasyTuneVariablesComponent);
 engine.registerComponent(RemoveMainEngineComponent);
-engine.registerComponent(PlayerLocomotionComponent);
 engine.registerComponent(ConsoleVRToolComponent);
 engine.registerComponent(EasyTuneToolComponent);
 engine.registerComponent(GamepadControlSchemeComponent);
 engine.registerComponent(GamepadMeshAnimatorComponent);
 engine.registerComponent(PPGatewayComponent);
+engine.registerComponent(PlayerLocomotionComponent);
 engine.registerComponent(SetActiveComponent);
 engine.registerComponent(SetHandLocalTransformComponent);
 engine.registerComponent(SetHeadLocalTransformComponent);

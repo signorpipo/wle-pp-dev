@@ -28,7 +28,8 @@
                     }
                 },
                 {
-                    "type": "remove-main-engine"
+                    "type": "remove-main-engine",
+                    "active": false
                 },
                 {
                     "type": "example-easy-tune-variables"
@@ -42,8 +43,8 @@
                 {
                     "type": "pp-player-locomotion",
                     "pp-player-locomotion": {
-                        "_myPhysicsBlockLayerFlags": "0, 1, 0, 0, 0, 0, 0, 0",
-                        "_myFlyEnabled": true,
+                        "_myPhysicsBlockLayerFlags": "0, 1, 1, 0, 0, 0, 0, 0",
+                        "_myFlyEnabled": false,
                         "_myMoveThroughCollisionShortcutEnabled": true,
                         "_myMoveHeadShortcutEnabled": true
                     },
@@ -57,9 +58,9 @@
             ],
             "rotation": [
                 0.0,
-                1.0,
                 0.0,
-                3.427270769407187e-7
+                0.0,
+                1.0
             ],
             "scaling": [
                 0.9999989,
@@ -69,7 +70,13 @@
         },
         "20": {
             "name": "Reference Space",
-            "parent": "19"
+            "parent": "19",
+            "rotation": [
+                0.0,
+                1.0,
+                0.0,
+                -4.371138828673793e-8
+            ]
         },
         "21": {
             "name": "Camera Non XR",
