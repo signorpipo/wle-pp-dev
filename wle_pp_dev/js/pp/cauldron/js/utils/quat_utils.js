@@ -386,6 +386,30 @@ export function rotationToQuat(from, to, out) {
     return QuatUtils.normalize(QuatUtils.subRotationQuat(to, from, out), out);
 }
 
+export function rotationAroundAxis(quat, axis, out) {
+    return QuatUtils.rotationAroundAxisDegrees(quat, axis, out);
+}
+
+export let rotationAroundAxisDegrees = function () {
+    let rotationAroundQuat = create();
+    return function rotationAroundAxisDegrees(quat, axis, out = Vec3Utils.create()) {
+        QuatUtils.rotationAroundAxisQuat(quat, axis, rotationAroundQuat);
+        return QuatUtils.toDegrees(rotationAroundQuat, out);
+    };
+}();
+
+export let rotationAroundAxisRadians = function () {
+    let rotationAroundQuat = create();
+    return function rotationAroundAxisRadians(quat, axis, out = Vec3Utils.create()) {
+        QuatUtils.rotationAroundAxisQuat(quat, axis, rotationAroundQuat);
+        return QuatUtils.toRadians(rotationAroundQuat, out);
+    };
+}();
+
+export function rotationAroundAxisQuat(quat, axis, out = QuatUtils.create()) {
+    return QuatUtils.getTwist(quat, axis, out);
+}
+
 export let getTwist = function () {
     let rotationAxis = vec3_utils_create();
     let projection = vec3_utils_create();
@@ -572,6 +596,10 @@ export let QuatUtils = {
     rotationToDegrees,
     rotationToRadians,
     rotationToQuat,
+    rotationAroundAxis,
+    rotationAroundAxisDegrees,
+    rotationAroundAxisRadians,
+    rotationAroundAxisQuat,
     getTwist,
     getSwing,
     getSwingFromTwist,

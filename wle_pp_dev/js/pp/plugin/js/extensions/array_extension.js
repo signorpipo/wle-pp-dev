@@ -114,6 +114,7 @@
             - quat_toWorld          / quat_toLocal
             - quat_rotate           / quat_rotateAxis  
             - quat_rotationTo     
+            - quat_rotationAroundAxis    
             - quat_getTwist         / quat_getSwing         / quat_getTwistFromSwing    / quat_getSwingFromTwist    / quat_fromTwistSwing
             ○ quat_fromRadians      / quat_fromDegrees      / quat_fromAxis / quat_fromAxes
             - quat_toRadians        / quat_toDegrees        / quat_toMatrix
@@ -1067,6 +1068,22 @@ export function initArrayExtensionProtoype() {
 
     quatExtension.quat_rotationToQuat = function quat_rotationToQuat(to, out) {
         return QuatUtils.rotationToQuat(this, ...arguments);
+    };
+
+    quatExtension.quat_rotationAroundAxis = function quat_rotationAroundAxis(axis, out) {
+        return QuatUtils.rotationAroundAxis(this, ...arguments);
+    };
+
+    quatExtension.quat_rotationAroundAxisDegrees = function quat_rotationAroundAxisDegrees(axis, out = Vec3Utils.create()) {
+        return QuatUtils.rotationAroundAxisDegrees(this, ...arguments);
+    };
+
+    quatExtension.quat_rotationAroundAxisRadians = function quat_rotationAroundAxisRadians(axis, out = Vec3Utils.create()) {
+        return QuatUtils.rotationAroundAxisRadians(this, ...arguments);
+    };
+
+    quatExtension.quat_rotationAroundAxisQuat = function quat_rotationAroundAxisQuat(axis, out = QuatUtils.create()) {
+        return QuatUtils.rotationAroundAxisQuat(this, ...arguments);
     };
 
     quatExtension.quat_getTwist = function quat_getTwist(axis, out = QuatUtils.create()) {
