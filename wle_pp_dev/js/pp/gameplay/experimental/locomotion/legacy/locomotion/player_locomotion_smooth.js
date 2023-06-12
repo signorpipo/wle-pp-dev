@@ -66,6 +66,7 @@ export class PlayerLocomotionSmooth extends PlayerLocomotionMovement {
         directionConverterNonVRParams.myMinAngleToFlyForwardDown = this._myParams.myMinAngleToFlyDownNonVR;
         directionConverterNonVRParams.myMinAngleToFlyRightUp = this._myParams.myMinAngleToFlyRight;
         directionConverterNonVRParams.myMinAngleToFlyRightDown = this._myParams.myMinAngleToFlyRight;
+        directionConverterNonVRParams.myInvertForwardWhenUpsideDown = this._myParams.myDirectionInvertForwardWhenUpsideDown;
 
         let directionConverterVRParams = new Direction2DTo3DConverterParams(this._myParams.myEngine);
         directionConverterVRParams.myAutoUpdateFlyForward = this._myParams.myFlyEnabled;
@@ -74,6 +75,7 @@ export class PlayerLocomotionSmooth extends PlayerLocomotionMovement {
         directionConverterVRParams.myMinAngleToFlyForwardDown = this._myParams.myMinAngleToFlyDownVR;
         directionConverterVRParams.myMinAngleToFlyRightUp = this._myParams.myMinAngleToFlyRight;
         directionConverterVRParams.myMinAngleToFlyRightDown = this._myParams.myMinAngleToFlyRight;
+        directionConverterVRParams.myInvertForwardWhenUpsideDown = this._myParams.myDirectionInvertForwardWhenUpsideDown;
 
         this._myDirectionConverterNonVR = new Direction2DTo3DConverter(directionConverterNonVRParams);
         this._myDirectionConverterVR = new Direction2DTo3DConverter(directionConverterVRParams);

@@ -57,6 +57,7 @@ export class PlayerLocomotionParams {
 
         this.myMainHand = Handedness.LEFT;
 
+        this.myDirectionInvertForwardWhenUpsideDown = true;
         this.myVRDirectionReferenceType = PlayerLocomotionDirectionReferenceType.HEAD;
         this.myVRDirectionReferenceObject = null;
 
@@ -310,6 +311,7 @@ export class PlayerLocomotion {
                 params.myGravityAcceleration = this._myParams.myGravityAcceleration;
                 params.myMaxGravitySpeed = this._myParams.myMaxGravitySpeed;
 
+                params.myDirectionInvertForwardWhenUpsideDown = this._myParams.myDirectionInvertForwardWhenUpsideDown;
                 params.myVRDirectionReferenceType = this._myParams.myVRDirectionReferenceType;
                 params.myVRDirectionReferenceObject = this._myParams.myVRDirectionReferenceObject;
 

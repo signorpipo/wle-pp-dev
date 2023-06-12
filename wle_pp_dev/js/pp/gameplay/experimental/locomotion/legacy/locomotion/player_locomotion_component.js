@@ -26,8 +26,10 @@ export class PlayerLocomotionComponent extends Component {
         _myMinAngleToFlyUpVR: Property.float(60),
         _myMinAngleToFlyDownVR: Property.float(1),
         _myMinAngleToFlyRight: Property.float(60),
+
         _myMainHand: Property.enum(["Left", "Right"], "Left"),
-        _myVRDirectionReferenceType: Property.enum(["Head", "Hand", "Custom Object"], "Hand"),
+        _myDirectionInvertForwardWhenUpsideDown: Property.bool(true),
+        _myVRDirectionReferenceType: Property.enum(["Head", "Hand", "Custom Object"], "Head"),
         _myVRDirectionReferenceObject: Property.object(),
 
         _myTeleportType: Property.enum(["Instant", "Blink", "Shift"], "Shift"),
@@ -91,6 +93,7 @@ export class PlayerLocomotionComponent extends Component {
 
         params.myMainHand = InputUtils.getHandednessByIndex(this._myMainHand);
 
+        params.myDirectionInvertForwardWhenUpsideDown = this._myDirectionInvertForwardWhenUpsideDown;
         params.myVRDirectionReferenceType = this._myVRDirectionReferenceType;
         params.myVRDirectionReferenceObject = this._myVRDirectionReferenceObject;
 
