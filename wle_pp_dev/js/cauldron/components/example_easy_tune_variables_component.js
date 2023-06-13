@@ -8,12 +8,12 @@ export class ExampleEasyTuneVariablesComponent extends Component {
     static Properties = {};
 
     start() {
-        Globals.getEasyTuneVariables(this.engine).add(new EasyTuneNumber("Float", 1.00, 3, 0.1));
-        Globals.getEasyTuneVariables(this.engine).add(new EasyTuneNumberArray("Float Array", [1.00, 2.00, 3.00], 3, 0.1));
-        Globals.getEasyTuneVariables(this.engine).add(new EasyTuneInt("Int", 1, 1));
-        Globals.getEasyTuneVariables(this.engine).add(new EasyTuneIntArray("Int Array", [1, 2, 3], 1));
-        Globals.getEasyTuneVariables(this.engine).add(new EasyTuneBool("Bool", false));
-        Globals.getEasyTuneVariables(this.engine).add(new EasyTuneBoolArray("Bool Array", [false, true, false]));
-        Globals.getEasyTuneVariables(this.engine).add(new EasyTuneTransform("Transform", mat4_create(), 3, true));
+        Globals.getEasyTuneVariables(this.engine).add(new EasyTuneNumber("Float", 1.00, null, true, 3, 0.1));
+        Globals.getEasyTuneVariables(this.engine).add(new EasyTuneNumberArray("Float Array", [1.00, 2.00, 3.00], null, true, 3, 0.1));
+        Globals.getEasyTuneVariables(this.engine).add(new EasyTuneInt("Int", 1, null, true, 1));
+        Globals.getEasyTuneVariables(this.engine).add(new EasyTuneIntArray("Int Array", [1, 2, 3], null, true, 1));
+        Globals.getEasyTuneVariables(this.engine).add(new EasyTuneBool("Bool", false, null, true,));
+        Globals.getEasyTuneVariables(this.engine).add(new EasyTuneBoolArray("Bool Array", [false, true, false], null, true,));
+        Globals.getEasyTuneVariables(this.engine).add(new EasyTuneTransform("Transform", mat4_create(), null, true, true, 3));
     }
 }

@@ -40,7 +40,9 @@
                     "type": "pp-player-locomotion",
                     "pp-player-locomotion": {
                         "_myPhysicsBlockLayerFlags": "0, 1, 0, 0, 0, 0, 0, 0",
-                        "_myMoveThroughCollisionShortcutEnabled": true
+                        "_myMoveThroughCollisionShortcutEnabled": true,
+                        "_myTeleportValidMaterial": "149",
+                        "_myTeleportInvalidMaterial": "148"
                     }
                 }
             ],
@@ -3041,8 +3043,14 @@
     "textures": {},
     "images": {},
     "files": [
-        "assets/models/pp/meta_quest_1_gamepads_credits_Jezza3D.fbx",
-        "assets/models/pp/wondermelon.fbx"
+        {
+            "fileName": "assets/models/pp/meta_quest_1_gamepads_credits_Jezza3D.fbx",
+            "importerName": "AssimpImporter"
+        },
+        {
+            "fileName": "assets/models/pp/wondermelon.fbx",
+            "importerName": "AssimpImporter"
+        }
     ],
     "fonts": {
         "147": {

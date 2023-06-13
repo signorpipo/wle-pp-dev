@@ -34,7 +34,7 @@ export class PlayerLocomotionComponent extends Component {
 
         _myTeleportType: Property.enum(["Instant", "Blink", "Shift"], "Shift"),
         _myTeleportMaxDistance: Property.float(3),
-        _myTeleportMaxHeightDifference: Property.float(3),
+        _myTeleportMaxHeightDifference: Property.float(1.25),
         _myTeleportRotationOnUpEnabled: Property.bool(false),
         _myTeleportValidMaterial: Property.material(),
         _myTeleportInvalidMaterial: Property.material(),
