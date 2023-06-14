@@ -2888,7 +2888,9 @@
             "sourcePaths": [
                 "js",
                 "js/pp/index.js",
-                "js/playground/components"
+                "js/playground/components",
+                "js/cauldron/components",
+                "js/test/components"
             ],
             "bundlingType": "esbuild",
             "libraryPaths": [
