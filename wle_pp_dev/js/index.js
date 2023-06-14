@@ -13,7 +13,6 @@
 
 /* wle:auto-imports:start */
 import {MouseLookComponent} from '@wonderlandengine/components';
-import {ExampleEasyTuneVariablesComponent} from './cauldron/components/example_easy_tune_variables_component.js';
 import {FadeViewComponent} from './playground/components/fade_view_component.js';
 import {FunComponent} from './playground/components/fun_component.js';
 import {GrabbableSpawnerComponent} from './playground/components/grabbable_spawner_component.js';
@@ -27,7 +26,6 @@ import {SFXOnGrabThrowComponent} from './playground/components/sfx_on_grab_throw
 import {TargetHitCheckComponent} from './playground/components/target_hit_check_component.js';
 import {WaveMovementComponent} from './playground/components/wave_movement_component.js';
 import {ConsoleVRToolComponent} from './pp/index.js';
-import {EasyMeshColorComponent} from './pp/index.js';
 import {EasyTuneToolComponent} from './pp/index.js';
 import {GamepadMeshAnimatorComponent} from './pp/index.js';
 import {GrabbableComponent} from './pp/index.js';
@@ -42,7 +40,6 @@ import {SwitchHandObjectComponent} from './pp/index.js';
 import {ToolCursorComponent} from './pp/index.js';
 import {TrackedHandDrawAllJointsComponent} from './pp/index.js';
 import {VirtualGamepadComponent} from './pp/index.js';
-import {ScaleToZeroComponent} from './test/components/scale_to_zero_component.js';
 /* wle:auto-imports:end */
 
 import { loadRuntime } from '@wonderlandengine/api';
@@ -99,7 +96,6 @@ if (document.readyState === 'loading') {
 
 /* wle:auto-register:start */
 engine.registerComponent(MouseLookComponent);
-engine.registerComponent(ExampleEasyTuneVariablesComponent);
 engine.registerComponent(FadeViewComponent);
 engine.registerComponent(FunComponent);
 engine.registerComponent(GrabbableSpawnerComponent);
@@ -113,7 +109,6 @@ engine.registerComponent(SFXOnGrabThrowComponent);
 engine.registerComponent(TargetHitCheckComponent);
 engine.registerComponent(WaveMovementComponent);
 engine.registerComponent(ConsoleVRToolComponent);
-engine.registerComponent(EasyMeshColorComponent);
 engine.registerComponent(EasyTuneToolComponent);
 engine.registerComponent(GamepadMeshAnimatorComponent);
 engine.registerComponent(GrabbableComponent);
@@ -128,7 +123,6 @@ engine.registerComponent(SwitchHandObjectComponent);
 engine.registerComponent(ToolCursorComponent);
 engine.registerComponent(TrackedHandDrawAllJointsComponent);
 engine.registerComponent(VirtualGamepadComponent);
-engine.registerComponent(ScaleToZeroComponent);
 /* wle:auto-register:end */
 
 let loadDelaySeconds = 0;
