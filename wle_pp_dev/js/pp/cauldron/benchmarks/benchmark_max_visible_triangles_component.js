@@ -203,11 +203,11 @@ export class BenchmarkMaxVisibleTrianglesComponent extends Component {
     _displayPlanes(count) {
         while (this._myPlanes.length > count) {
             let plane = this._myPlanes.pop();
-            this._myPlanePool.release(plane);
+            Globals.getObjectPoolManager(this.engine).release(this._myPoolID, plane);
         }
 
         while (this._myPlanes.length < count) {
-            let plane = this._myPlanePool.get();
+            let plane = Globals.getObjectPoolManager(this.engine).get(this._myPoolID);
             this._myPlanes.push(plane);
         }
 
@@ -310,7 +310,9 @@ export class BenchmarkMaxVisibleTrianglesComponent extends Component {
         poolParams.myCloneParams = new CloneParams();
         poolParams.myCloneParams.myComponentDeepCloneParams.setDeepCloneComponentVariable(MeshComponent.TypeName, "material", this._myCloneMaterial);
         poolParams.myCloneParams.myComponentDeepCloneParams.setDeepCloneComponentVariable(MeshComponent.TypeName, "mesh", this._myCloneMesh);
-        this._myPlanePool = new ObjectPool(this._myPlaneObject, poolParams);
+
+        this._myPoolID = this.TypeName + "_" + Math.pp_randomUUID();
+        Globals.getObjectPoolManager(this.engine).addPool(this._myPoolID, new ObjectPool(this._myPlaneObject, poolParams));
 
         this._myBackgroundObject.pp_setActive(false);
         this._myPlaneObject.pp_setActive(false);
@@ -498,5 +500,9 @@ export class BenchmarkMaxVisibleTrianglesComponent extends Component {
         let mesh = MeshUtils.create(meshCreationParams);
 
         return mesh;
+    }
+
+    onDestroy() {
+        Globals.getObjectPoolManager(this.engine)?.removePool(this._myPoolID);
     }
 }
