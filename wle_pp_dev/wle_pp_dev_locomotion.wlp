@@ -14631,7 +14631,7 @@
     },
     "settings": {
         "project": {
-            "name": "wle_pp_dev_locomotion",
+            "name": "wle-pp-dev-locomotion",
             "version": [
                 1,
                 0,
