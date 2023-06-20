@@ -786,7 +786,7 @@
                         },
                         "gravity": false,
                         "kinematic": false,
-                        "static": false,
+                        "static": true,
                         "convexMesh": {
                             "mesh": "81",
                             "scaling": [
@@ -3626,7 +3626,7 @@
                     "physx": {
                         "gravity": false,
                         "kinematic": true,
-                        "shape": "triangleMesh",
+                        "shape": "box",
                         "triangleMesh": {
                             "mesh": "p1",
                             "scaling": [
@@ -3780,7 +3780,7 @@
                 {
                     "type": "physx",
                     "physx": {
-                        "shape": "triangleMesh",
+                        "shape": "box",
                         "triangleMesh": {
                             "mesh": "p1",
                             "scaling": [
@@ -4152,7 +4152,7 @@
                 {
                     "type": "physx",
                     "physx": {
-                        "shape": "triangleMesh",
+                        "shape": "box",
                         "triangleMesh": {
                             "mesh": "p1",
                             "scaling": [
@@ -6875,7 +6875,7 @@
             "rotation": [
                 0.9659258,
                 0.258819,
-                3.8991665007870324e-8,
+                3.899166500787032e-8,
                 -8.86089850382632e-8
             ],
             "scaling": [
