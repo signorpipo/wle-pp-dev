@@ -7,7 +7,7 @@ import { VisualRaycastParams } from "../cauldron/visual/elements/visual_raycast"
 import { VisualTextParams } from "../cauldron/visual/elements/visual_text";
 import { VisualTransformParams } from "../cauldron/visual/elements/visual_transform";
 import { VisualManager } from "../cauldron/visual/visual_manager";
-import { mat4_create, quat_create, vec3_create, vec4_create } from "../plugin/js/extensions/array_extension";
+import { quat_create, vec3_create, vec4_create } from "../plugin/js/extensions/array_extension";
 import { Globals } from "../pp/globals";
 
 export class DebugVisualManager extends VisualManager {
