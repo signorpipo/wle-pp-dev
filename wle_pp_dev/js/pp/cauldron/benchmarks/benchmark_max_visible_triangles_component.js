@@ -311,7 +311,7 @@ export class BenchmarkMaxVisibleTrianglesComponent extends Component {
         poolParams.myCloneParams.myComponentDeepCloneParams.setDeepCloneComponentVariable(MeshComponent.TypeName, "material", this._myCloneMaterial);
         poolParams.myCloneParams.myComponentDeepCloneParams.setDeepCloneComponentVariable(MeshComponent.TypeName, "mesh", this._myCloneMesh);
 
-        this._myPoolID = this.TypeName + "_" + Math.pp_randomUUID();
+        this._myPoolID = this.type + "_" + Math.pp_randomUUID();
         Globals.getObjectPoolManager(this.engine).addPool(this._myPoolID, new ObjectPool(this._myPlaneObject, poolParams));
 
         this._myBackgroundObject.pp_setActive(false);
@@ -381,35 +381,41 @@ export class BenchmarkMaxVisibleTrianglesComponent extends Component {
         this._myDoneTextObject.pp_setScale(4);
 
         this._myDTHistory = [];
+
+        this._myFramesToSkip = 10;
     }
 
     update(dt) {
         if (!this._myValid) return;
 
-        if (this._mySessionStarted || !this._myStartOnXRStart) {
-            if (this._myStartTimer.isRunning()) {
-                this._myStartTimer.update(dt);
+        if (this._myFramesToSkip == 0) {
+            if (this._mySessionStarted || !this._myStartOnXRStart) {
+                if (this._myStartTimer.isRunning()) {
+                    this._myStartTimer.update(dt);
 
-                this._myDTHistory.push(dt);
+                    this._myDTHistory.push(dt);
 
-                if (this._myStartTimer.isDone()) {
-                    this._myStableFrameRate = this._computeAverageFrameRate(true);
-                    if (this._myTargetFrameRate > 0) {
-                        this._myStableFrameRate = this._myTargetFrameRate;
+                    if (this._myStartTimer.isDone()) {
+                        this._myStableFrameRate = this._computeAverageFrameRate(true);
+                        if (this._myTargetFrameRate > 0) {
+                            this._myStableFrameRate = this._myTargetFrameRate;
+                        }
+
+                        if (this._myLogEnabled) {
+                            console.log("\nPlane Triangles (Adjusted):", this._myRealTrianglesAmount);
+                            console.log("Target Frame Rate:", this._myStableFrameRate, "- Threshold: ", (this._myStableFrameRate - this._myTargetFrameRateThreshold));
+                            console.log("");
+                        }
+                        this._start();
                     }
-
-                    if (this._myLogEnabled) {
-                        console.log("\nPlane Triangles (Adjusted):", this._myRealTrianglesAmount);
-                        console.log("Target Frame Rate:", this._myStableFrameRate, "- Threshold: ", (this._myStableFrameRate - this._myTargetFrameRateThreshold));
-                        console.log("");
-                    }
-                    this._start();
+                } else {
+                    this._update(dt);
                 }
             } else {
-                this._update(dt);
+                this._mySessionStarted = XRUtils.getSession(this.engine) != null;
             }
         } else {
-            this._mySessionStarted = XRUtils.getSession(this.engine) != null;
+            this._myFramesToSkip--;
         }
     }
 
@@ -417,8 +423,8 @@ export class BenchmarkMaxVisibleTrianglesComponent extends Component {
         let frameRate = 0;
 
         this._myDTHistory.sort();
-        let elementToRemove = Math.floor(this._myDTHistory.length) * Math.min(0.9, this._myDTHistoryToIgnorePercentage * (firstCompute ? 2 : 1));
-        for (let i = 0; i < elementToRemove; i++) {
+        let elementsToRemove = Math.floor(this._myDTHistory.length * Math.min(0.9, this._myDTHistoryToIgnorePercentage * (firstCompute ? 2 : 1)));
+        for (let i = 0; i < elementsToRemove && this._myDTHistory.length > 1; i++) {
             this._myDTHistory.pop();
         }
 
