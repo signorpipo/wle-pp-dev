@@ -238,18 +238,23 @@ export class PlayerTransformManager {
         // Implemented outside class definition
     }
 
+    teleportPositionRotationQuat(position, rotationQuat, outCollisionRuntimeParams = null, forceTeleport = false) {
+        // Collision check and teleport, if force teleport teleport in any case
+
+        // Implemented outside class definition
+    }
+
     teleportTransformQuat(transformQuat, outCollisionRuntimeParams = null, forceTeleport = false) {
         // Collision check and teleport, if force teleport teleport in any case
 
         // Implemented outside class definition
     }
 
-    teleportAndReset(position, rotationQuat) {
-        this.teleportPosition(position, null, true);
-        if (rotationQuat != null) {
-            this.setRotationQuat(rotationQuat);
-        }
-        this.resetReal(true, false, false, true, true);
+    // Quick way to force teleport to a position and reset the real to this
+    forceTeleportAndReset(position, rotationQuat) {
+        this.teleportPositionRotationQuat(position, rotationQuat, null, true);
+
+        this.resetReal(true, true);
     }
 
     rotateQuat(rotationQuat) {
@@ -1042,6 +1047,15 @@ PlayerTransformManager.prototype.teleportPosition = function () {
     };
 }();
 
+PlayerTransformManager.prototype.teleportPositionRotationQuat = function () {
+    let teleportTransformQuat = quat2_create();
+    return function teleportPositionRotationQuat(teleportPosition, teleportRotationQuat, outCollisionRuntimeParams = null, forceTeleport = false) {
+        teleportTransformQuat = this.getTransformQuat(teleportTransformQuat);
+        teleportTransformQuat.quat2_setPositionRotationQuat(teleportPosition, teleportRotationQuat);
+        this.teleportTransformQuat(teleportTransformQuat, outCollisionRuntimeParams, forceTeleport);
+    };
+}();
+
 PlayerTransformManager.prototype.teleportTransformQuat = function () {
     let currentPosition = vec3_create();
     let teleportPositionVec = vec3_create();
@@ -1064,10 +1078,13 @@ PlayerTransformManager.prototype.teleportTransformQuat = function () {
         if (!forceTeleport) {
             if (!this._myCollisionRuntimeParams.myTeleportCanceled) {
                 fixedMovement = this._myCollisionRuntimeParams.myFixedTeleportPosition.vec3_sub(currentPosition, fixedMovement);
-                this.getPlayerHeadManager().setRotationFeetQuat(teleportRotation);
             }
         } else {
             fixedMovement = teleportPositionVec.vec3_sub(currentPosition, fixedMovement);
+        }
+
+        if (!this._myCollisionRuntimeParams.myTeleportCanceled || forceTeleport) {
+            this._myValidRotationQuat.quat_copy(teleportRotation);
             this.getPlayerHeadManager().setRotationFeetQuat(teleportRotation);
         }
 
