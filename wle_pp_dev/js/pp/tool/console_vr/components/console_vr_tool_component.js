@@ -14,7 +14,7 @@ export class ConsoleVRToolComponent extends Component {
     };
 
     init() {
-        // #TODO this should check for tool enabled but it might not have been initialized yet, not way to specify component order
+        // #TODO this should check for tool enabled but it might not have been initialized yet, no way to specify component order
 
         this.object.pp_addComponent(InitConsoleVRComponent);
 
