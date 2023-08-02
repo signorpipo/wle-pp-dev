@@ -47,8 +47,14 @@ export class ConsoleVRWidgetMessage {
     }
 }
 
-// Doesn't support
+// Does Not Support:
 //  - Placeholder like %d and other similar kind of way to build strings
+//
+// Known Issues:
+//  - Since the actual call to the browser console is done by the widget, u will not be able to click
+//    on the browser console source code link (usually on the right of the logged message) to go to the line where 
+//    the console function has been called, since it will always go to the line where 
+//    the console VR widget forwards the call to the browser console
 export class ConsoleVRWidget {
 
     constructor(engine = Globals.getMainEngine()) {
