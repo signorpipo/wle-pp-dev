@@ -21,6 +21,8 @@ export class EasyTuneToolComponent extends Component {
 
     init() {
         // #TODO this should check for tool enabled but it might not have been initialized yet, not way to specify component order
+        // It can't be moved to start either, because other components might call setWidgetCurrentVariable or refreshWidget during start, 
+        // so it needs to be initialized before that
 
         this.object.pp_addComponent(InitEasyTuneVariablesComponent);
 

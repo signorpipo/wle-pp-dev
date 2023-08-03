@@ -147,8 +147,10 @@ export class ToolCursorComponent extends Component {
     }
 
     onDestroy() {
-        this._myCursorComponentXR.globalTarget.onHover.remove(this);
-        this._myCursorComponentNonXR.globalTarget.onHover.remove(this);
+        if (this._myStarted) {
+            this._myCursorComponentXR.globalTarget.onHover.remove(this);
+            this._myCursorComponentNonXR.globalTarget.onHover.remove(this);
+        }
     }
 }
 

@@ -7,6 +7,7 @@ import { DebugManagerComponent } from "../../debug/components/debug_manager_comp
 import { EnableDebugComponent } from "../../debug/components/enable_debug_component";
 import { InputManagerComponent } from "../../input/cauldron/components/input_manager_component";
 import { EnableToolComponent } from "../../tool/cauldron/components/enable_tool_component";
+import { InitConsoleVRComponent } from "../../tool/console_vr/components/init_console_vr_component";
 import { InitEasyTuneVariablesComponent } from "../../tool/easy_tune/components/init_easy_tune_variables_component";
 import { initPP } from "../init_pp";
 import { AddPPToWindowComponent } from "./add_pp_to_window_component";
@@ -22,6 +23,7 @@ export class PPGatewayComponent extends Component {
         _myEnableTool: Property.bool(true),
         _myAddPPToWindow: Property.bool(true),
         _myAddWLToWindow: Property.bool(true),
+        _myInitConsoleVR: Property.bool(true),
         _myInitEasyTuneVariables: Property.bool(true),
         ...ObjectPoolManagerComponent.Properties,
         ...InputManagerComponent.Properties,
@@ -63,6 +65,11 @@ export class PPGatewayComponent extends Component {
             this._myAddWLToWindowComponent = this.object.pp_addComponent(AddWLToWindowComponent, false);
         }
 
+        this._myInitConsoleVRComponent = null;
+        if (this._myInitConsoleVR) {
+            this._myInitConsoleVRComponent = this.object.pp_addComponent(InitConsoleVRComponent, false);
+        }
+
         this._myInitEasyTuneVariablesComponent = null;
         if (this._myInitEasyTuneVariables) {
             this._myInitEasyTuneVariablesComponent = this.object.pp_addComponent(InitEasyTuneVariablesComponent, false);
@@ -93,6 +100,10 @@ export class PPGatewayComponent extends Component {
 
         if (this._myAddWLToWindowComponent != null) {
             this._myAddWLToWindowComponent.active = true;
+        }
+
+        if (this._myInitConsoleVRComponent != null) {
+            this._myInitConsoleVRComponent.active = true;
         }
 
         if (this._myInitEasyTuneVariablesComponent != null) {

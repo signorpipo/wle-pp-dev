@@ -13,18 +13,14 @@ export class ConsoleVRToolComponent extends Component {
         _myPulseOnNewMessage: Property.enum(["Never", "Always", "When Hidden"], "Never")
     };
 
-    init() {
-        // #TODO this should check for tool enabled but it might not have been initialized yet, no way to specify component order
-
-        this.object.pp_addComponent(InitConsoleVRComponent);
-
-        this._myWidget = new ConsoleVRWidget(this.engine);
-
-        this._myStarted = false;
-    }
-
     start() {
+        this._myStarted = false;
+
         if (Globals.isToolEnabled(this.engine)) {
+            this.object.pp_addComponent(InitConsoleVRComponent);
+
+            this._myWidget = new ConsoleVRWidget(this.engine);
+
             let params = new ConsoleVRWidgetParams(this.engine);
             params.myHandedness = [null, "left", "right"][this._myHandedness];
             params.myOverrideBrowserConsole = this._myOverrideBrowserConsole;
