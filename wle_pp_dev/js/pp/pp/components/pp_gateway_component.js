@@ -23,8 +23,6 @@ export class PPGatewayComponent extends Component {
         _myEnableTool: Property.bool(true),
         _myAddPPToWindow: Property.bool(true),
         _myAddWLToWindow: Property.bool(true),
-        _myInitConsoleVR: Property.bool(true),
-        _myInitEasyTuneVariables: Property.bool(true),
         ...ObjectPoolManagerComponent.Properties,
         ...InputManagerComponent.Properties,
         ...AudioManagerComponent.Properties,
@@ -65,15 +63,8 @@ export class PPGatewayComponent extends Component {
             this._myAddWLToWindowComponent = this.object.pp_addComponent(AddWLToWindowComponent, false);
         }
 
-        this._myInitConsoleVRComponent = null;
-        if (this._myInitConsoleVR) {
-            this._myInitConsoleVRComponent = this.object.pp_addComponent(InitConsoleVRComponent, false);
-        }
-
-        this._myInitEasyTuneVariablesComponent = null;
-        if (this._myInitEasyTuneVariables) {
-            this._myInitEasyTuneVariablesComponent = this.object.pp_addComponent(InitEasyTuneVariablesComponent, false);
-        }
+        this._myInitConsoleVRComponent = this.object.pp_addComponent(InitConsoleVRComponent, false);
+        this._myInitEasyTuneVariablesComponent = this.object.pp_addComponent(InitEasyTuneVariablesComponent, false);
 
         this._myObjectPoolManagerComponent = this.object.pp_addComponent(ObjectPoolManagerComponent, false);
         this._myInputManagerComponent = this.object.pp_addComponent(InputManagerComponent, this._getProperties(InputManagerComponent.Properties));
@@ -102,13 +93,8 @@ export class PPGatewayComponent extends Component {
             this._myAddWLToWindowComponent.active = true;
         }
 
-        if (this._myInitConsoleVRComponent != null) {
-            this._myInitConsoleVRComponent.active = true;
-        }
-
-        if (this._myInitEasyTuneVariablesComponent != null) {
-            this._myInitEasyTuneVariablesComponent.active = true;
-        }
+        this._myInitConsoleVRComponent.active = true;
+        this._myInitEasyTuneVariablesComponent.active = true;
 
         this._myObjectPoolManagerComponent.active = true;
         this._myInputManagerComponent.active = true;
