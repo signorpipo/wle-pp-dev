@@ -61,7 +61,6 @@ export class EasyTuneToolComponent extends Component {
             this._myWidget.start(this.object, params, Globals.getEasyTuneVariables(this.engine));
 
             this._myWidgetVisibleBackup = null;
-            this._mySetVisibleNextUpdate = false;
 
             this._myStarted = true;
             this._myFirstUpdate = true;
@@ -78,24 +77,23 @@ export class EasyTuneToolComponent extends Component {
                     }
                 }
 
-                if (this._mySetVisibleNextUpdate) {
-                    this._mySetVisibleNextUpdate = false;
-                    if (this._myWidgetVisibleBackup != null) {
-                        this._myWidget.setVisible(false);
-                        this._myWidget.setVisible(this._myWidgetVisibleBackup);
+                if (this._myWidgetVisibleBackup != null) {
+                    this._myWidget.setVisible(false);
+                    this._myWidget.setVisible(this._myWidgetVisibleBackup);
 
-                        this._myWidgetVisibleBackup = null;
-                    }
+                    this._myWidgetVisibleBackup = null;
                 }
 
                 this._myWidget.update(dt);
             }
-        }
-    }
+        } else if (this._myStarted) {
+            if (this._myWidgetVisibleBackup == null) {
+                this._myWidgetVisibleBackup = this._myWidget.isVisible();
+            }
 
-    onActivate() {
-        if (this._myStarted) {
-            this._mySetVisibleNextUpdate = true;
+            if (this._myWidget.isVisible()) {
+                this._myWidget.setVisible(false);
+            }
         }
     }
 
@@ -105,7 +103,9 @@ export class EasyTuneToolComponent extends Component {
                 this._myWidgetVisibleBackup = this._myWidget.isVisible();
             }
 
-            this._myWidget.setVisible(false);
+            if (this._myWidget.isVisible()) {
+                this._myWidget.setVisible(false);
+            }
         }
     }
 
