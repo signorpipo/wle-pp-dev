@@ -32,7 +32,7 @@ export class ConsoleVRToolComponent extends Component {
 
             this._myWidget.start(this.object, params);
 
-            this._myWidgetVisibleBackup = this._myWidget.isVisible();
+            this._myWidgetVisibleBackup = null;
             this._mySetVisibleNextUpdate = false;
 
             this._myStarted = true;
@@ -44,10 +44,13 @@ export class ConsoleVRToolComponent extends Component {
             if (this._myStarted) {
                 if (this._mySetVisibleNextUpdate) {
                     this._mySetVisibleNextUpdate = false;
-                    this._myWidget.setVisible(false);
-                    this._myWidget.setVisible(this._myWidgetVisibleBackup);
-                }
+                    if (this._myWidgetVisibleBackup != null) {
+                        this._myWidget.setVisible(false);
+                        this._myWidget.setVisible(this._myWidgetVisibleBackup);
 
+                        this._myWidgetVisibleBackup = null;
+                    }
+                }
 
                 this._myWidget.update(dt);
             }
@@ -55,24 +58,24 @@ export class ConsoleVRToolComponent extends Component {
     }
 
     onActivate() {
-        if (Globals.isToolEnabled(this.engine)) {
-            if (this._myStarted) {
-                this._mySetVisibleNextUpdate = true;
-            }
+        if (this._myStarted) {
+            this._mySetVisibleNextUpdate = true;
         }
     }
 
     onDeactivate() {
-        if (Globals.isToolEnabled(this.engine)) {
-            if (this._myStarted) {
+        if (this._myStarted) {
+            if (this._myWidgetVisibleBackup == null) {
                 this._myWidgetVisibleBackup = this._myWidget.isVisible();
-
-                this._myWidget.setVisible(false);
             }
+
+            this._myWidget.setVisible(false);
         }
     }
 
     onDestroy() {
-        this._myWidget.destroy();
+        if (this._myStarted) {
+            this._myWidget.destroy();
+        }
     }
 }
