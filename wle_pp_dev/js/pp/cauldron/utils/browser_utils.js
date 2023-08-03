@@ -2,10 +2,10 @@ import { Globals } from "../../pp/globals";
 import { XRUtils } from "./xr_utils";
 
 export let isMobile = function () {
-    let checkMobile = new RegExp("mobi", "i");
+    let checkMobileRegex = new RegExp("mobi", "i");
     return function isMobile(engine = Globals.getMainEngine()) {
         let userAgent = Globals.getNavigator(engine).userAgent;
-        return userAgent != null && userAgent.match(checkMobile) != null;
+        return userAgent != null && userAgent.match(checkMobileRegex) != null;
     };
 }();
 

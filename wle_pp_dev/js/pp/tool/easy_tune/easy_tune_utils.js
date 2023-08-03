@@ -231,9 +231,9 @@ export let EasyTuneUtils = {
 
 
 let _importExportVariablesReplaceFileURLParams = function () {
-    let matchEasyTuneURLParams = new RegExp("\\{.+?\\}", "g");
+    let matchEasyTuneURLParamsRegex = new RegExp("\\{.+?\\}", "g");
     return function _importExportVariablesReplaceFileURLParams(fileURL, engine = Globals.getMainEngine()) {
-        let params = fileURL.match(matchEasyTuneURLParams);
+        let params = fileURL.match(matchEasyTuneURLParamsRegex);
 
         if (params == null || params.length == 0) {
             return fileURL;

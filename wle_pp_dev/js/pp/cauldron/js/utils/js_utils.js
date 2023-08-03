@@ -307,11 +307,11 @@ export function isFunction(property) {
 }
 
 export let isClass = function () {
-    let checkClass = new RegExp("^class");
+    let checkClassRegex = new RegExp("^class");
     return function isClass(property) {
         return typeof property == "function" &&
             property.prototype != null && typeof property.prototype.constructor == "function" &&
-            property.toString != null && typeof property.toString == "function" && property.toString()?.match(checkClass) != null;
+            property.toString != null && typeof property.toString == "function" && property.toString()?.match(checkClassRegex) != null;
     };
 }();
 
