@@ -50,7 +50,7 @@ export function openLink(url, newTab = true, exitXRSession = true, onSuccessCall
     document.body.removeChild(element);
 }
 
-export function openLinkPersistent(url, newTab = true, exitXRSession = true, timeOutSeconds = null, onSuccessCallback = null, onFailureCallback = null, engine = Globals.getMainEngine()) {
+export function openLinkPersistent(url, newTab = true, exitXRSession = true, timeOutSeconds = 15, onSuccessCallback = null, onFailureCallback = null, engine = Globals.getMainEngine()) {
     let totalSeconds = 0;
     let secondsTillNextAttempt = 0.5;
     let onPersistentFailureCallback = function (...args) {
