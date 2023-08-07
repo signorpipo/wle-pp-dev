@@ -206,10 +206,14 @@ export let convertCollisionRuntimeParamsToCharacterCollisionResults = function (
         outCharacterCollisionResults.myHorizontalMovementResults.myMovementFailed = collisionRuntimeParams.myHorizontalMovementCanceled;
         outCharacterCollisionResults.myHorizontalMovementResults.myMovementCollided = collisionRuntimeParams.myIsCollidingHorizontally;
         outCharacterCollisionResults.myHorizontalMovementResults.myReferenceCollisionHit.copy(collisionRuntimeParams.myHorizontalCollisionHit);
+        outCharacterCollisionResults.myHorizontalMovementResults.myInitialMovement = collisionRuntimeParams.myOriginalMovement.vec3_removeComponentAlongAxis(collisionRuntimeParams.myOffsetUp, outCharacterCollisionResults.myHorizontalMovementResults.myInitialMovement);
+        outCharacterCollisionResults.myHorizontalMovementResults.myFinalMovement = collisionRuntimeParams.myFixedMovement.vec3_removeComponentAlongAxis(collisionRuntimeParams.myOffsetUp, outCharacterCollisionResults.myHorizontalMovementResults.myFinalMovement);
 
         outCharacterCollisionResults.myVerticalMovementResults.myMovementFailed = collisionRuntimeParams.myVerticalMovementCanceled;
         outCharacterCollisionResults.myVerticalMovementResults.myMovementCollided = collisionRuntimeParams.myIsCollidingVertically;
         outCharacterCollisionResults.myVerticalMovementResults.myReferenceCollisionHit.copy(collisionRuntimeParams.myVerticalCollisionHit);
+        outCharacterCollisionResults.myVerticalMovementResults.myInitialMovement = collisionRuntimeParams.myOriginalMovement.vec3_componentAlongAxis(collisionRuntimeParams.myOffsetUp, outCharacterCollisionResults.myVerticalMovementResults.myInitialMovement);
+        outCharacterCollisionResults.myVerticalMovementResults.myFinalMovement = collisionRuntimeParams.myFixedMovement.vec3_componentAlongAxis(collisionRuntimeParams.myOffsetUp, outCharacterCollisionResults.myVerticalMovementResults.myFinalMovement);
 
         outCharacterCollisionResults.myTeleportResults.myInitialTeleportTransformQuat.quat2_copy(outCharacterCollisionResults.myTransformResults.myInitialTransformQuat);
         outCharacterCollisionResults.myTeleportResults.myInitialTeleportTransformQuat.quat2_setPosition(collisionRuntimeParams.myOriginalTeleportPosition);
