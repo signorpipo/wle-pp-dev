@@ -210,7 +210,7 @@ CollisionCheck.prototype._verticalPositionCheck = function () {
         let isVerticalPositionOk = true;
         let atLeastOneIsOk = false;
 
-        let adjustmentEpsilon = 0.00001;
+        let adjustmentEpsilon = 0.0001; // Small offset to prevent hitting with the surface where u are on
         smallHeightFixOffset = up.vec3_scale(adjustmentEpsilon, smallHeightFixOffset);
         heightOffset = up.vec3_scale(height - adjustmentEpsilon, heightOffset);
         if (height - adjustmentEpsilon < adjustmentEpsilon * 10) {
