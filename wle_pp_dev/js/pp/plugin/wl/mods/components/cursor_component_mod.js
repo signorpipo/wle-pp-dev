@@ -598,6 +598,11 @@ export function initCursorComponentModPrototype() {
                     this.maxDistance
                 );
 
+        let rayHitCollisionDistanceValid = true;
+        if (this.rayCastMode == 0 && rayHit.hitCount > 0 && rayHit.distances[0] > this.maxDistance) {
+            rayHitCollisionDistanceValid = false;
+        }
+
         this._hitObjectData[0] = null;
         this._hitObjectData[1] = null;
         this._hitObjectData[2] = null;
@@ -614,7 +619,7 @@ export function initCursorComponentModPrototype() {
 
         this.hoveringReality = false;
 
-        if (rayHit.hitCount > 0) {
+        if (rayHit.hitCount > 0 && rayHitCollisionDistanceValid) {
             let rayHitDistance = rayHit.distances[0];
             if (rayHitDistance <= hitTestResultDistance) {
                 // Overwrite cursorPos set by hit test location

@@ -8,7 +8,7 @@
   "wonderlandengine": {},
   "dependencies": {
     "@wonderlandengine/api": "^1.0.1",
-    "@wonderlandengine/components": "^1.0.3",
+    "@wonderlandengine/components": "^1.0.5",
     "gl-matrix": "^3.4.3",
     "howler": "^2.2.3"
   }
