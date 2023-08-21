@@ -1,0 +1,26 @@
+{
+    "compilerOptions": {
+        "target": "ES2022",
+        "module": "ES2022",
+        "moduleResolution": "nodenext",
+        "experimentalDecorators": true,
+        "resolveJsonModule": true,
+        "strictNullChecks": true,
+        "lib": [
+            "DOM",
+            "ES2022"
+        ]
+    },
+    "include": [
+        "js"
+    ],
+    "exclude": [
+        "node_modules",
+        "deploy",
+        "cache",
+        "languages",
+        ".editor",
+        "assets",
+        "static"
+    ]
+}
