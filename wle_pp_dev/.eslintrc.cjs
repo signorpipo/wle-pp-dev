@@ -13,15 +13,14 @@ module.exports = {
     globals: {
     },
     plugins: [
-        "@typescript-eslint/eslint-plugin",
         "deprecation"
     ],
     extends: [
         "eslint:recommended"
     ],
     rules: {
-        "deprecation/deprecation": "warn",
-        "no-unused-vars": ["warn", { "args": "none", "varsIgnorePattern": "^__" }]
+        "no-unused-vars": ["warn", { "args": "none", "varsIgnorePattern": "^__" }],
+        "deprecation/deprecation": "warn"
     },
     ignorePatterns: [
         "/node_modules/", "/deploy/", "/cache/", "/.editor/", "/languages/", "/.editor/", "/assets/", "/static/", "/**/.eslintrc.cjs"
