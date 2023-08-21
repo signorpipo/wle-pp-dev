@@ -1,6 +1,6 @@
 import { Component } from '@wonderlandengine/api';
-import { Timer } from '../../pp/cauldron/cauldron/timer';
 import { vec3_create } from '../../pp';
+import { Timer } from '../../pp/cauldron/cauldron/timer';
 
 export class MoveStaticColliderComponent extends Component {
     static TypeName = 'move-static-collider';
