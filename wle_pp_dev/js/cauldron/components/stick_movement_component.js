@@ -289,7 +289,7 @@ export class StickMovementComponent extends Component {
     }
 
     pp_clone(clonedObject, deepCloneParams, extraData) {
-        let clonedComponent = ComponentUtils.cloneDefault(this, targetObject);
+        let clonedComponent = ComponentUtils.cloneDefault(this, clonedObject);
 
         return clonedComponent;
     }

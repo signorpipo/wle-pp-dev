@@ -1,4 +1,5 @@
 import { CollisionEventType, Component, Property, Shape } from "@wonderlandengine/api";
+import { vec3_create } from "../../pp";
 import { Timer } from "../../pp/cauldron/cauldron/timer";
 import { Globals } from "../../pp/pp/globals";
 

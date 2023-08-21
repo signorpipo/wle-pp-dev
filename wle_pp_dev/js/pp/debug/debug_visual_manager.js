@@ -133,7 +133,7 @@ DebugVisualManager.prototype.drawLineEnd = function () {
     return function drawLineEnd(lifetimeSeconds, start, end, color = this._myDefaultColor, thickness = this._myDefaultLineThickness) {
         if (this.isActive()) {
             direction = end.vec3_sub(start, direction);
-            length = direction.vec3_length();
+            let length = direction.vec3_length();
             direction.vec3_normalize(direction);
             this.drawLine(lifetimeSeconds, start, direction, length, color, thickness);
         }
@@ -145,7 +145,7 @@ DebugVisualManager.prototype.drawArrowEnd = function () {
     return function drawArrowEnd(lifetimeSeconds, start, end, color = this._myDefaultColor, thickness = this._myDefaultLineThickness) {
         if (this.isActive()) {
             direction = end.vec3_sub(start, direction);
-            length = direction.vec3_length();
+            let length = direction.vec3_length();
             direction.vec3_normalize(direction);
             this.drawArrow(lifetimeSeconds, start, direction, length, color, thickness);
         }

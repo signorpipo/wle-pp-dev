@@ -383,10 +383,6 @@ export class PlayerTransformManager {
         return this.isLeaning() || this.isHopping();
     }
 
-    isHopping() {
-        return this._myIsHopping;
-    }
-
     isLeaning() {
         return this._myIsLeaning;
     }
@@ -409,10 +405,6 @@ export class PlayerTransformManager {
 
     getPlayerHeadManager() {
         return this._myParams.myPlayerHeadManager;
-    }
-
-    getParams() {
-        return this._myParams;
     }
 
     getMovementCollisionCheckParams() {
@@ -626,7 +618,7 @@ export class PlayerTransformManager {
     isDestroyed() {
         return this._myDestroyed;
     }
-};
+}
 
 
 

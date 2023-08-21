@@ -272,7 +272,6 @@ PlayerLocomotionSmooth.prototype._onXRSessionStart = function () {
 }();
 
 PlayerLocomotionSmooth.prototype._onXRSessionEnd = function () {
-    let playerUp = vec3_create();
     return function _onXRSessionEnd(session) {
         this._myDirectionReference = Globals.getPlayerObjects(this._myParams.myEngine).myHead;
         this._myCurrentDirectionConverter = this._myDirectionConverterNonVR;

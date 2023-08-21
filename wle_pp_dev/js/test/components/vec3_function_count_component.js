@@ -1,6 +1,19 @@
 import { Component } from "@wonderlandengine/api";
 import { Timer } from "../../pp/cauldron/cauldron/timer";
 
+let vec3_addTotal = 0;
+let vec3_scaleTotal = 0;
+let vec3_copyTotal = 0;
+let vec3_lengthTotal = 0;
+let vec3_normalizeTotal = 0;
+let vec3_angleTotal = 0;
+let vec3_angleSignedTotal = 0;
+let vec3_rotateAxisTotal = 0;
+let vec3_componentAlongAxisTotal = 0;
+let vec3_subTotal = 0;
+let vec3_isConcordantTotal = 0;
+let vec3_zeroTotal = 0;
+
 export class Vec3FunctionCountComponent extends Component {
     static TypeName = "vec3-function-count";
     static Properties = {};
@@ -54,18 +67,5 @@ export class Vec3FunctionCountComponent extends Component {
             console.error("zeroTotal:", this.vec3_zeroTotal);
             console.error(" ");
         }
-
-        vec3_addTotal = 0;
-        vec3_scaleTotal = 0;
-        vec3_copyTotal = 0;
-        vec3_lengthTotal = 0;
-        vec3_normalizeTotal = 0;
-        vec3_angleTotal = 0;
-        vec3_angleSignedTotal = 0;
-        vec3_rotateAxisTotal = 0;
-        vec3_componentAlongAxisTotal = 0;
-        vec3_subTotal = 0;
-        vec3_isConcordantTotal = 0;
-        vec3_zeroTotal = 0;
     }
 }

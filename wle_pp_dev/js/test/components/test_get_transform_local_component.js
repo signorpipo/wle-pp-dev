@@ -6,7 +6,7 @@ export class TestGetTransformLocalComponent extends Component {
 
     update(dt) {
         for (let i = 0; i < 2000; i++) {
-            let b = this.object.transformLocal;
+            this.object.getTransformLocal();
         }
     }
 }

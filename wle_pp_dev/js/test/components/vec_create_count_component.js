@@ -40,7 +40,7 @@ export class VecCreateCountComponent extends Component {
 
             this._myMat4CreateCall = 0;
 
-            let oldMat4 = Mat4utils.create;
+            let oldMat4 = Mat4Utils.create;
             Mat4Utils.create = function create() {
                 this._myMat4CreateCall++;
                 return oldMat4(...arguments);

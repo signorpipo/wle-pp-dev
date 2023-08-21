@@ -21,7 +21,7 @@ module.exports = {
     ],
     rules: {
         "deprecation/deprecation": "warn",
-        "no-unused-vars": ["warn", { "args": "none", "varsIgnorePattern": "^_" }]
+        "no-unused-vars": ["warn", { "args": "none", "varsIgnorePattern": "^__" }]
     },
     ignorePatterns: [
         "/node_modules/", "/deploy/", "/cache/", "/.editor/", "/languages/", "/.editor/", "/assets/", "/static/", "/**/.eslintrc.cjs"

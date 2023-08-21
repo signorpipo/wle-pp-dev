@@ -31,9 +31,10 @@ export class TestTrackedHandDrawJointsComponent extends Component {
         let handInputSource = InputUtils.getInputSource(this._myHandednessType, InputSourceType.TRACKED_HAND);
 
         if (handInputSource) {
-            let tip = Module['webxr_frame'].getJointPose(handInputSource.hand.get("wrist"), this._myReferenceSpace);
-            let index = Module['webxr_frame'].getJointPose(handInputSource.hand.get("middle-finger-phalanx-proximal"), this._myReferenceSpace);
-            let tippp = Module['webxr_frame'].getJointPose(handInputSource.hand.get("index-finger-tip"), this._myReferenceSpace);
+            let xrFrame = XRUtils.getFrame(this.engine);
+            let tip = xrFrame.getJointPose(handInputSource.hand.get("wrist"), this._myReferenceSpace);
+            let index = xrFrame.getJointPose(handInputSource.hand.get("middle-finger-phalanx-proximal"), this._myReferenceSpace);
+            let tippp = xrFrame.getJointPose(handInputSource.hand.get("index-finger-tip"), this._myReferenceSpace);
 
             if (tip && index) {
                 let quat = [
@@ -46,7 +47,7 @@ export class TestTrackedHandDrawJointsComponent extends Component {
                 quat = this._myHandPose.getRotationQuat();
 
                 quat.quat_rotateAxis(-60, quat.quat_getRight(), quat);
-                forwardRotation = 20;
+                let forwardRotation = 20;
                 forwardRotation = (this._myHandednessType == Handedness.LEFT) ? forwardRotation : -forwardRotation;
                 quat.quat_rotateAxis(forwardRotation, quat.quat_getForward(), quat);
                 //quat.quat_rotateAxis(15, quat.quat_getRight(), quat);
@@ -88,7 +89,7 @@ export class TestTrackedHandDrawJointsComponent extends Component {
     }
 
     _onXRSessionStart(session) {
-        session.requestReferenceSpace(WebXR.refSpace).then(function (referenceSpace) { this._myReferenceSpace = referenceSpace; }.bind(this));
+        session.requestReferenceSpace(XRUtils.getReferenceSpaceType(this.engine)).then(function (referenceSpace) { this._myReferenceSpace = referenceSpace; }.bind(this));
     }
 
     _onXRSessionEnd(session) {
@@ -96,11 +97,12 @@ export class TestTrackedHandDrawJointsComponent extends Component {
     }
 
     _buildTrackedHandHierarchy() {
-        let child = this.object.pp_getChildren()[0];
         this._myTrackedHandObject = this.object.pp_addObject();
         this._myTrackedHandObject2 = this.object.pp_addObject();
         this._myTrackedHandObject3 = this.object.pp_addObject();
         this._myTrackedHandObjectMesh = this._myTrackedHandObject.pp_addObject();
+
+        //let child = this.object.pp_getChildren()[0];
         //child.pp_setParent(this._myTrackedHandObject, false);
         //child.pp_resetTransformLocal();
 
