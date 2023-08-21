@@ -136,8 +136,8 @@ CollisionCheck.prototype._raycastAndDebug = function () {
 
         let raycastResult = null;
 
-        let raycastDebugEnabled = false;
-        if (raycastDebugEnabled && Globals.isDebugEnabled(this._myEngine)) {
+        let raycastPerformanceDebugEnabled = false;
+        if (raycastPerformanceDebugEnabled && Globals.isDebugEnabled(this._myEngine)) {
             // Quick debug to remove raycasts and/or let all raycasts fail
 
             let raycastAlways = false;
