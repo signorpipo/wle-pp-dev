@@ -29,13 +29,13 @@ x Collision manager con character gravity e gravity direction globali, usarli in
 v Pensare a come potrebbe essere un componente esposto semplice player character controller, da li pensare a come riaggiustare i parametri
 v Componente character-controller che semplicemente ha la collisione e puoi dirgli di fare un movimento e lui lo corregge
 	
-- Aggiungere speed/acceleration nella smooth (tempo per raggiungere max speed, tempo per raggiungere 0)
+o Aggiungere speed/acceleration nella smooth (tempo per raggiungere max speed, tempo per raggiungere 0)
 
-- fixare smooth locomotion fly quando punti verso il basso e sei sul ground non dovrebbe stortare la direzione che ti fa andare piu lento
+o fixare smooth locomotion fly quando punti verso il basso e sei sul ground non dovrebbe stortare la direzione che ti fa andare piu lento
 	
-- rimuovere tutti i 0.0001 per cose come l'ignore angle, complicano un po' tutto e alla fine se uno vuole può mettere il parametro leggermente più altro lui stesso
+o rimuovere tutti i 0.0001 per cose come l'ignore angle, complicano un po' tutto e alla fine se uno vuole può mettere il parametro leggermente più altro lui stesso
 	
-- REFACTOR
+rip REFACTOR
 
 
 
@@ -102,22 +102,22 @@ TEMP:
 
 
 
-- poter usare la locomotion ma con collision disattivate completamente (uguale teleport)
-- dovrebbe essere semplice poter modificare il setup e far si che abbia effetto sulle cose che lo usano, per esempio aggiungere un oggetto da ignorare e automaticamente il resto che non è solo
+o poter usare la locomotion ma con collision disattivate completamente (uguale teleport)
+o dovrebbe essere semplice poter modificare il setup e far si che abbia effetto sulle cose che lo usano, per esempio aggiungere un oggetto da ignorare e automaticamente il resto che non è solo
   lo smooth movement anche lo fa, invece adesso devo andare a prendere tutti i vari collider e settarlo a mano
 	- magari aggiungere una callback on collider updated cosi che chi vuole si registra e in quel caso copia ci sta
 
-- maybe the transform manager should only work for the overall transform, with the head on another class that also manage the hands?
+o maybe the transform manager should only work for the overall transform, with the head on another class that also manage the hands?
 	- o forse, sebbene l'idea di avere una cosa un po' generica che ti fa il servizio di darti l'ultima valida non collidosa, fino alle mani è piu comodo che sia tutta nel
 	  player character controller
 	- se funziona solo per la feet transform poi ne creo un'altra che funziona genericamente prendendo una posizione con una callback e dandoti l'ultima valida, che puoi usare per la testa o come vuoi
 	  facilmente, poi magari il character controller o qualcosa che wrappa tutto ti da tutto insieme
 
-- provare a fare che i thumbstickspariscono e appaiono solo se premi nella metà dello schermo (pp-virtual-thumbstick, aggiunggere visible callback, se è nulla è sempre visible)
+o provare a fare che i thumbstick spariscono e appaiono solo se premi nella metà dello schermo (pp-virtual-thumbstick, aggiunggere visible callback, se è nulla è sempre visible)
 	- o come su lol, sono comunque visibili, ma se premi si spostano dove premi, anche se è già su un thumbstick, anche se qui si potrebbe fare l'opzione che se premi sul thumbstick rimangono li
 	
-- gamepad su desktop ha dimensioni molto piu grandi, essendo lo schermo piu grande, vedere se aggiustare o no questa cosa
-	- se si può capir dalla risoluzione dello schermo, magari qualcosa che scala tutto in base a quella, se solo dalle dimensioni, e quindi il tipo di dispositivo, allora niente
+o gamepad su desktop ha dimensioni molto piu grandi, essendo lo schermo piu grande, vedere se aggiustare o no questa cosa
+	- se si può capire dalla risoluzione dello schermo, magari qualcosa che scala tutto in base a quella, se solo dalle dimensioni, e quindi il tipo di dispositivo, allora niente
 
 
 
@@ -127,12 +127,12 @@ TEMP:
 
 
 LOCOMOTION EXTRA HARD:
-- lo sliding potrebbe essere spostato come ultima cosa
+o lo sliding potrebbe essere spostato come ultima cosa
 	- è sicuramente piu pesante ma si può magari fare che fallbacka su quello leggere con un parametro
 	- così può slidare anche in quelle situazioni in cui non sliderebbe tipo se la superficie è troppo steep
 	- magari poter specificare una direzione di sliding anche per tipo non c'è terreno, cercando di capire se c'è un meno terreno a destra o sinistra
 
-- cosa succede se finisci dentro una collisione, caso possibile un boss ti salta addosso e ci finisci dentro
+o cosa succede se finisci dentro una collisione, caso possibile un boss ti salta addosso e ci finisci dentro
 	- non è così impossibile, soprattutto se ci sono npc che si possono muovere e saltarti addosso, o altre persone con cui collidi
 	- possibilità di aggiungere flag dei physx che vuoi ignorare se ci sei dentro
 	- collezionare durante gli oggetti ignorati e ignorarli ulteriormente anche se hittano da fuori
@@ -162,10 +162,10 @@ LOCOMOTION EXTRA HARD:
 v avere flag verticali e orizzontali di collisioni, per esempio i character potresti volerci collidere solo orizzontalmente ma non verticalmente
 	- questo forse ha senso solo nel momento in cui ho introdotto il meccanismo di uscire dalle collisioni, altrimenti potresti entrare in un character dall'alto
 		
-- Provare a lerpare il movimento verticale quando c'è lo snappare (magari snappa direttamente nel collision check, cioè esce di un po' già li ma non totalmente?)
+o Provare a lerpare il movimento verticale quando c'è lo snappare (magari snappa direttamente nel collision check, cioè esce di un po' già li ma non totalmente?)
 	- il position check già ammette che dover fare snap sia comunque una posizione ok
 
-- transform manager lerp posizione, si può evitare considerando la complicanza e poca utile, vedere poi
+o transform manager lerp posizione, si può evitare considerando la complicanza e poca utile, vedere poi
 	- il reset real to valid lo potrebbe anche fare con un lerp stile smooth teleport
 	- anche il valid to real potrebbe essere lerpato, avendo un valid ultetriore che è quello che synca e poi quello che lerpa e può anche collidere nel mentre che è quello che viene restituito come posizione
 	- Per smooth snap/pop out fare una specie di media tra i vari raggi, il check della posizione verticale lo fa comunque su quello fixato
@@ -173,8 +173,7 @@ v avere flag verticali e orizzontali di collisioni, per esempio i character potr
 v Surface Slide oppure semplicemente come myAddVerticalMovementBasedOnSurfacePerceivedAngle ma per il vertical
 	x potrebbe usare la distanza dal ground per capire se il movimento verticale colliderà
 	
-- flags per controllo angolo potrebbero essere diversi dal verticale, così puoi snappare su piccoli oggetti dinamici che però non fanno sembrare che sei su una mega slope
-	
+o flags per controllo angolo potrebbero essere diversi dal verticale, così puoi snappare su piccoli oggetti dinamici che però non fanno sembrare che sei su una mega slope
 	
 	
 	
