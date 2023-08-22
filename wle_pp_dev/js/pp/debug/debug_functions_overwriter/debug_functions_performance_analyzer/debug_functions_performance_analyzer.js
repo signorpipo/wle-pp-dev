@@ -307,7 +307,7 @@ export class DebugFunctionsPerformanceAnalyzer extends DebugFunctionsOverwriter 
 
                             let errorToThrow = null;
                             let returnValue = undefined;
-                            let bindFunction = null;
+                            let boundOriginalFunction = null;
                             let startOriginalFunctionTime = 0;
                             let endOriginalFunctionTime = 0;
                             let originalFunctionOverheadExecutionTime = 0;
@@ -323,9 +323,9 @@ export class DebugFunctionsPerformanceAnalyzer extends DebugFunctionsOverwriter 
                                 endOriginalFunctionTime = window.performance.now();
 
                                 try {
-                                    bindFunction = originalFunction.bind(this);
+                                    boundOriginalFunction = originalFunction.bind(this);
                                     startOriginalFunctionTime = window.performance.now();
-                                    returnValue = bindFunction(...arguments);
+                                    returnValue = boundOriginalFunction(...arguments);
                                     endOriginalFunctionTime = window.performance.now();
                                 } catch (error) {
                                     endOriginalFunctionTime = window.performance.now();
@@ -333,8 +333,8 @@ export class DebugFunctionsPerformanceAnalyzer extends DebugFunctionsOverwriter 
                                 }
                             } else {
                                 try {
-                                    bindFunction = originalFunction.bind(this);
-                                    returnValue = bindFunction(...arguments);
+                                    boundOriginalFunction = originalFunction.bind(this);
+                                    returnValue = boundOriginalFunction(...arguments);
                                 } catch (error) {
                                     errorToThrow = error;
                                 }
