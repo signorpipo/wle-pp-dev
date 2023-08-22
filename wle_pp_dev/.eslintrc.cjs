@@ -23,7 +23,15 @@ module.exports = {
         "deprecation/deprecation": "warn"
     },
     ignorePatterns: [
-        "/node_modules/", "/deploy/", "/cache/", "/.editor/", "/languages/", "/.editor/", "/assets/", "/static/", "/**/.eslintrc.cjs"
+        "/node_modules/",
+        "/deploy/",
+        "/cache/",
+        "/.editor/",
+        "/languages/",
+        "/.editor/",
+        "/assets/",
+        "/static/",
+        ".eslintrc.cjs"
     ],
     overrides: [
     ]
