@@ -167,15 +167,12 @@
                 {
                     "type": "light",
                     "light": {
-                        "attenuation": 1.0,
                         "color": [
                             0.3921568,
                             0.329466,
                             0.1384083
                         ],
-                        "type": "sun",
-                        "range": 1.0,
-                        "shadows": false
+                        "type": "sun"
                     }
                 }
             ],
@@ -203,15 +200,12 @@
                 {
                     "type": "light",
                     "light": {
-                        "attenuation": 1.0,
                         "color": [
                             0.1876201,
                             0.3921568,
                             0.3368116
                         ],
-                        "type": "sun",
-                        "range": 1.0,
-                        "shadows": false
+                        "type": "sun"
                     }
                 }
             ],
@@ -2874,8 +2868,7 @@
             "webxr": {
                 "optionalFeatures": {
                     "hand-tracking": true,
-                    "local-floor": true,
-                    "hit-test": true
+                    "local-floor": true
                 },
                 "requiredFeatures": {
                     "local-floor": false,
