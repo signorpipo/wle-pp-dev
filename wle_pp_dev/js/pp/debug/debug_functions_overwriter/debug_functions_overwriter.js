@@ -188,7 +188,7 @@ export class DebugFunctionsOverwriter {
         try {
             let propertyCountedAlready = this._myPropertiesAlreadyOverwritten.get(propertyName) != null && this._myPropertiesAlreadyOverwritten.get(propertyName).pp_hasEqual(reference);
             if (!propertyCountedAlready) {
-                if (JSUtils.isFunctionByName(reference, propertyName)) {
+                if (JSUtils.isFunctionByName(reference, propertyName) || (propertyName == "constructor" && JSUtils.isClassByName(reference, propertyName))) {
                     if (!this._myParams.myExcludeJSObjectFunctions || !this._isJSObjectFunction(propertyName)) {
                         let validFunctionName = this._filterName(propertyName, this._myParams.myFunctionNamesToInclude, this._myParams.myFunctionNamesToExclude);
                         let validFunctionPath = this._filterName((referencePath != null ? referencePath + "." : "") + propertyName, this._myParams.myFunctionPathsToInclude, this._myParams.myFunctionPathsToExclude);
@@ -381,7 +381,7 @@ export class DebugFunctionsOverwriter {
                             objectsAndParents.pp_pushUnique([objectProperty, object, propertyName, currentPath, currentName], equalCallback);
                         }
 
-                        if (isClass && (objectLevel + 1 <= this._myParams.myObjectAddClassDescendantsDepthLevel || this._myParams.myObjectAddClassDescendantsDepthLevel == -1)) {
+                        if (isClass && propertyName != "constructor" && (objectLevel + 1 <= this._myParams.myObjectAddClassDescendantsDepthLevel || this._myParams.myObjectAddClassDescendantsDepthLevel == -1)) {
                             classesAndParents.pp_pushUnique([objectProperty, object, propertyName, currentPath, currentName], equalCallback);
                         }
 

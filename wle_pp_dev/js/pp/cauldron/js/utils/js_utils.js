@@ -285,7 +285,7 @@ export function isClassByName(classParent, className) {
 
     let classProperty = JSUtils.getObjectProperty(classParent, className);
     if (classProperty != null) {
-        isClassResult = JSUtils.isClass(classProperty) && className != "constructor";
+        isClassResult = JSUtils.isClass(classProperty);
     }
 
     return isClassResult;
