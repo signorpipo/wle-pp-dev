@@ -14,7 +14,7 @@ export class ToolCursorComponent extends Component {
         _myPulseOnHover: Property.bool(false),
         _myShowFingerCursor: Property.bool(false),
         _myUpdatePointerCursorStyle: Property.bool(true)
-    }
+    };
 
     init() {
         this._myHandednessType = InputUtils.getHandednessByIndex(this._myHandedness);

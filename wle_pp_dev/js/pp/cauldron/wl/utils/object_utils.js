@@ -1998,7 +1998,7 @@ export let clone = function () {
                 let componentToClone = cloneData[0];
                 let currentClonedComponent = cloneData[1];
 
-                ComponentUtils.clonePostProcess(componentToClone, currentClonedComponent, cloneParams.myComponentDeepCloneParams, cloneParams.myComponentCustomCloneParams)
+                ComponentUtils.clonePostProcess(componentToClone, currentClonedComponent, cloneParams.myComponentDeepCloneParams, cloneParams.myComponentCustomCloneParams);
             }
         }
 
@@ -2925,7 +2925,7 @@ export let ObjectUtils = {
     getObjectByIDObjects,
     getObjectsByIDObjects,
     wrapObject
-}
+};
 
 
 

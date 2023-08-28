@@ -367,14 +367,14 @@ BasePose.prototype.getRotationDegrees = function () {
     let rotationQuat = quat_create();
     return function getRotationDegrees(out = vec3_create(), referenceObjectOverride = undefined) {
         return this.getRotationQuat(rotationQuat, referenceObjectOverride).quat_toDegrees(out);
-    }
+    };
 }();
 
 BasePose.prototype.getRotationRadians = function () {
     let rotationQuat = quat_create();
     return function getRotationRadians(out = vec3_create(), referenceObjectOverride = undefined) {
         return this.getRotationQuat(rotationQuat, referenceObjectOverride).quat_toRadians(out);
-    }
+    };
 }();
 
 BasePose.prototype.getRotationQuat = function () {

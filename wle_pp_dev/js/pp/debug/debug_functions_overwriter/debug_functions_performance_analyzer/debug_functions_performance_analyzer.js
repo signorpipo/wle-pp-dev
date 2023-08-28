@@ -94,8 +94,8 @@ export class DebugFunctionsPerformanceAnalyzer extends DebugFunctionsOverwriter 
 
         let originalPush = Array.prototype["push"];
         let originalPop = Array.prototype["pop"];
-        this._myExecutionTimes.myOriginalFunctionOverheadExecutionTimes.push = function () { return originalPush.bind(this)(...arguments); }
-        this._myExecutionTimes.myOriginalFunctionOverheadExecutionTimes.pop = function () { return originalPop.bind(this)(...arguments); }
+        this._myExecutionTimes.myOriginalFunctionOverheadExecutionTimes.push = function () { return originalPush.bind(this)(...arguments); };
+        this._myExecutionTimes.myOriginalFunctionOverheadExecutionTimes.pop = function () { return originalPop.bind(this)(...arguments); };
     }
 
     overwriteFunctions() {
@@ -265,7 +265,7 @@ export class DebugFunctionsPerformanceAnalyzer extends DebugFunctionsOverwriter 
             } else {
                 let maxResults = new DebugFunctionPerformanceAnalysisResults();
                 maxResults.copy(this._myFunctionPerformanceAnalysisResults.get(property));
-                this._myFunctionPerformanceAnalysisMaxResults.set(property, maxResults)
+                this._myFunctionPerformanceAnalysisMaxResults.set(property, maxResults);
             }
         }
 

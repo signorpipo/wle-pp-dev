@@ -480,7 +480,7 @@ export class PlayerTransformManager {
         params.myHorizontalPositionCheckVerticalDirectionType = 0;
 
         params.myHeight = params.myRadius; // On purpose the height "radius" is half, to avoid hitting before with head than body collision (through height)
-        params.myPositionOffsetLocal.vec3_set(0, -params.myRadius / 2, 0)
+        params.myPositionOffsetLocal.vec3_set(0, -params.myRadius / 2, 0);
 
         params.myCheckHeight = true;
         params.myCheckHeightVerticalMovement = true;
@@ -725,7 +725,7 @@ PlayerTransformManager.prototype.update = function () {
         if (this._myParams.myDebugEnabled && Globals.isDebugEnabled(this._myParams.myEngine)) {
             this._debugUpdate(dt);
         }
-    }
+    };
 }();
 
 PlayerTransformManager.prototype._updateReal = function () {
@@ -982,7 +982,7 @@ PlayerTransformManager.prototype._updateReal = function () {
                 this._myParams.myMovementCollisionCheckParams.myDebugEnabled = debugBackup;
             }
         }
-    }
+    };
 }();
 
 PlayerTransformManager.prototype.move = function () {

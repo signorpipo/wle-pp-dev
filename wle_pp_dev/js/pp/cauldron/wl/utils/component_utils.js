@@ -383,14 +383,14 @@ export function setDefaultWLComponentCloneCallbacks(engine = Globals.getMainEngi
     for (let nativeType of ComponentUtils.getWLNativeComponentTypes()) {
         let cloneCallback = ComponentUtils.getDefaultWLComponentCloneCallback(nativeType);
         if (cloneCallback != null) {
-            ComponentUtils.setCloneCallback(nativeType, cloneCallback, engine)
+            ComponentUtils.setCloneCallback(nativeType, cloneCallback, engine);
         }
     }
 
     for (let javascriptType of ComponentUtils.getWLJavascriptComponentTypes()) {
         let cloneCallback = ComponentUtils.getDefaultWLComponentCloneCallback(javascriptType);
         if (cloneCallback != null) {
-            ComponentUtils.setCloneCallback(javascriptType, cloneCallback, engine)
+            ComponentUtils.setCloneCallback(javascriptType, cloneCallback, engine);
         }
     }
 }

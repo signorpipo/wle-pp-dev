@@ -317,7 +317,7 @@ export function initArrayExtensionProtoype() {
 
     // New Functions
 
-    let vecExtension = {}
+    let vecExtension = {};
 
     vecExtension.vec_zero = function vec_zero(out = null) {
         return VecUtils.zero(this, ...arguments);

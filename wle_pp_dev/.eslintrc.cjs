@@ -19,8 +19,9 @@ module.exports = {
         "eslint:recommended"
     ],
     rules: {
-        "no-unused-vars": ["warn", { "args": "none", "varsIgnorePattern": "^__" }],
-        "deprecation/deprecation": "warn"
+        "semi": "error",
+        "no-unused-vars": ["error", { "args": "none", "varsIgnorePattern": "^__" }],
+        "deprecation/deprecation": "error"
     },
     ignorePatterns: [
         "/node_modules/",

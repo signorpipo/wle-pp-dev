@@ -13,6 +13,5 @@ export class TouchStartTestComponent extends Component {
         Globals.getCanvas(this.engine).addEventListener('touchend', function (e) {
             console.error("index:", e);
         }.bind(this));
-
     }
 }

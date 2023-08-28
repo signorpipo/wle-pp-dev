@@ -886,7 +886,7 @@ PlayerHeadManager.prototype._resyncHeadRotationForward = function () {
 
         this.setRotationFeetQuat(fixedResyncHeadRotation);
         return;
-    }
+    };
 }();
 
 PlayerHeadManager.prototype._updateHeightOffset = function () {
@@ -904,7 +904,7 @@ PlayerHeadManager.prototype._updateHeightOffset = function () {
         } else {
             this._setReferenceSpaceHeightOffset(this._myParams.myHeightOffsetNonVR, this._myParams.myForeheadExtraHeight);
         }
-    }
+    };
 }();
 
 PlayerHeadManager.prototype._setReferenceSpaceHeightOffset = function () {
@@ -914,13 +914,13 @@ PlayerHeadManager.prototype._setReferenceSpaceHeightOffset = function () {
             referenceSpacePosition = Globals.getPlayerObjects(this._myParams.myEngine).myReferenceSpace.pp_getPositionLocal(referenceSpacePosition);
             Globals.getPlayerObjects(this._myParams.myEngine).myReferenceSpace.pp_setPositionLocal([referenceSpacePosition[0], offset - amountToRemove, referenceSpacePosition[2]]);
         }
-    }
+    };
 }();
 
 PlayerHeadManager.prototype._getHeadTransformFromLocal = function () {
     return function _getHeadTransformFromLocal(transformLocal) {
         return this._myCurrentHead.pp_convertTransformLocalToWorldQuat(transformLocal);
-    }
+    };
 }();
 
 
