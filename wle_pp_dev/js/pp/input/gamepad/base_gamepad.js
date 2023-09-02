@@ -390,7 +390,12 @@ export class BaseGamepad {
                 } else if (this._myPulseInfo.myDevicePulsing) {
                     for (let hapticActuator of hapticActuators) {
                         hapticActuator.pulse(0, 1);
-                        hapticActuator.reset();
+
+                        try {
+                            hapticActuator.reset();
+                        } catch (error) {
+                            // Do nothing
+                        }
                     }
                     this._myPulseInfo.myDevicePulsing = false;
                 }
