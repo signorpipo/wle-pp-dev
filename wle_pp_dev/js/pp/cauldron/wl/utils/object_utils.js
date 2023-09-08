@@ -2424,7 +2424,15 @@ export function equals(object, otherObject) {
 }
 
 export function destroy(object) {
-    return object.destroy();
+    let destroyReturnValue = undefined;
+
+    try {
+        destroyReturnValue = object.destroy();
+    } catch (error) {
+        // Do nothing
+    }
+
+    return destroyReturnValue;
 }
 
 export function reserveObjects(object, count) {
