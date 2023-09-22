@@ -75,7 +75,7 @@
                 0.0,
                 1.0,
                 0.0,
-                -4.371138828673793e-8
+                -4.3711388286737935e-8
             ]
         },
         "21": {
@@ -5980,6 +5980,96 @@
                 "name": "FullScreenTriangle.vert",
                 "file": "default"
             }
+        },
+        "924": {
+            "link": {
+                "name": "lib\\Color.glsl",
+                "file": "default"
+            }
+        },
+        "925": {
+            "link": {
+                "name": "lib\\Compatibility.frag",
+                "file": "default"
+            }
+        },
+        "926": {
+            "link": {
+                "name": "lib\\CoordinateSystems.glsl",
+                "file": "default"
+            }
+        },
+        "927": {
+            "link": {
+                "name": "lib\\GI.frag",
+                "file": "default"
+            }
+        },
+        "928": {
+            "link": {
+                "name": "lib\\Inputs.frag",
+                "file": "default"
+            }
+        },
+        "929": {
+            "link": {
+                "name": "lib\\Lights.frag",
+                "file": "default"
+            }
+        },
+        "930": {
+            "link": {
+                "name": "lib\\Materials.frag",
+                "file": "default"
+            }
+        },
+        "931": {
+            "link": {
+                "name": "lib\\Math.glsl",
+                "file": "default"
+            }
+        },
+        "932": {
+            "link": {
+                "name": "lib\\Packing.frag",
+                "file": "default"
+            }
+        },
+        "933": {
+            "link": {
+                "name": "lib\\Quaternion.glsl",
+                "file": "default"
+            }
+        },
+        "934": {
+            "link": {
+                "name": "lib\\Slug.frag",
+                "file": "default"
+            }
+        },
+        "935": {
+            "link": {
+                "name": "lib\\Slug.vert",
+                "file": "default"
+            }
+        },
+        "936": {
+            "link": {
+                "name": "lib\\Surface.frag",
+                "file": "default"
+            }
+        },
+        "937": {
+            "link": {
+                "name": "lib\\Textures.frag",
+                "file": "default"
+            }
+        },
+        "939": {
+            "link": {
+                "name": "lib\\Uniforms.glsl",
+                "file": "default"
+            }
         }
     },
     "animations": {},
@@ -6157,27 +6247,6 @@
                 "file": "default"
             }
         },
-        "884": {
-            "link": {
-                "name": "Flat Opaque Textured",
-                "file": "default"
-            },
-            "name": "Flat Transparent No Depth",
-            "features": {
-                "TEXTURED": false,
-                "ALPHA_MASKED": true
-            },
-            "depthFunction": "always",
-            "depthTest": false,
-            "depthWrite": true,
-            "blending": true,
-            "blendSrcRgb": "source alpha",
-            "blendSrcAlpha": "source alpha",
-            "blendDestRgb": "one minus source alpha",
-            "blendDestAlpha": "one minus source alpha",
-            "blendEqAlpha": "max",
-            "sampleAlphaToCoverage": false
-        },
         "889": {
             "link": {
                 "name": "Phong Opaque",
@@ -6206,6 +6275,33 @@
             "features": {
                 "DEPRECATED_LIGHT_ATTENUATION": true
             }
+        },
+        "938": {
+            "link": {
+                "name": "TileFeedback",
+                "file": "default"
+            }
+        },
+        "884": {
+            "link": {
+                "name": "Flat Opaque Textured",
+                "file": "default"
+            },
+            "name": "Flat Transparent No Depth",
+            "features": {
+                "TEXTURED": false,
+                "ALPHA_MASKED": true
+            },
+            "depthFunction": "always",
+            "depthTest": false,
+            "depthWrite": true,
+            "blending": true,
+            "blendSrcRgb": "source alpha",
+            "blendSrcAlpha": "one minus destination alpha",
+            "blendDestRgb": "one minus source alpha",
+            "blendDestAlpha": "one",
+            "blendEqAlpha": "add",
+            "sampleAlphaToCoverage": false
         }
     },
     "settings": {
@@ -6213,8 +6309,9 @@
             "name": "wle-pp-dev-locomotion-light",
             "version": [
                 1,
-                0,
-                3
+                1,
+                1,
+                1
             ]
         },
         "rendering": {
@@ -6284,13 +6381,28 @@
             }
         }
     },
-    "files": [
-        "assets/models/quest_controllers_credits_Jezza3D.fbx",
-        "assets/models/suzanne.fbx",
-        "assets/models/cube.fbx",
-        "assets/models/tracked_hand_left.glb",
-        "assets/models/tracked_hand_right.glb"
-    ],
+    "files": {
+        "940": {
+            "fileName": "assets/models/quest_controllers_credits_Jezza3D.fbx",
+            "importerName": "AssimpImporter"
+        },
+        "941": {
+            "fileName": "assets/models/suzanne.fbx",
+            "importerName": "AssimpImporter"
+        },
+        "942": {
+            "fileName": "assets/models/cube.fbx",
+            "importerName": "AssimpImporter"
+        },
+        "943": {
+            "fileName": "assets/models/tracked_hand_left.glb",
+            "importerName": ""
+        },
+        "944": {
+            "fileName": "assets/models/tracked_hand_right.glb",
+            "importerName": ""
+        }
+    },
     "fonts": {
         "899": {
             "link": {

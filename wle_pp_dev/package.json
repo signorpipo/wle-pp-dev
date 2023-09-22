@@ -7,14 +7,14 @@
     "type": "module",
     "wonderlandengine": {},
     "dependencies": {
-        "@wonderlandengine/api": "^1.0.1",
-        "@wonderlandengine/components": "^1.0.5",
+        "@wonderlandengine/api": "^1.1.2",
+        "@wonderlandengine/components": "^1.0.6",
         "gl-matrix": "^3.4.3",
-        "howler": "^2.2.3"
+        "howler": "^2.2.4"
     },
     "devDependencies": {
-        "@typescript-eslint/parser": "^6.4.0",
-        "eslint": "^8.47.0",
+        "@typescript-eslint/parser": "^6.7.2",
+        "eslint": "^8.49.0",
         "eslint-plugin-deprecation": "^1.5.0"
     }
 }
