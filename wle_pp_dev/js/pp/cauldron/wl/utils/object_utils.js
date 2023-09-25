@@ -11,21 +11,26 @@ import { SceneUtils } from "./scene_utils";
 export class CloneParams {
 
     constructor() {
-        this.myIgnoreNonCloneable = false;  // Ignores components that are not clonable
-        this.myIgnoreComponents = false;    // All components are ignored, cloning only the object hierarchy
-        this.myIgnoreChildren = false;      // Clones only the given object without the children
+        this.myCloneParent = undefined;  // Defaults to the object to clone parent, null can be used to specify u want the scene root as the parent
 
-        this.myComponentsToIgnore = [];     // Ignores all component types in this list (example: "mesh"), has lower priority over myComponentsToInclude
-        this.myComponentsToInclude = [];    // Clones only the component types in this list (example: "mesh"), has higher priority over myComponentsToIgnore, if empty it's ignored
-        this.myIgnoreComponentCallback = null; // Signature: callback(component) returns true if the component must be ignored, it is called after the previous filters
+        this.myIgnoreNonCloneable = false;      // Ignores components that are not clonable
+        this.myIgnoreComponents = false;        // All components are ignored, cloning only the object hierarchy
+        this.myIgnoreDescendants = false;       // Clones only the given object without the descendants
 
-        this.myChildrenToIgnore = [];       // Ignores all the objects in this list (example: "mesh"), has lower priority over myChildrenToInclude
-        this.myChildrenToInclude = [];      // Clones only the objects in this list (example: "mesh"), has higher priority over myChildrenToIgnore, if empty it's ignored
-        this.myIgnoreChildCallback = null;  // Signature: callback(object) returns true if the object must be ignored, it is called after the previous filters
+        this.myComponentsToIgnore = [];         // Ignores all component types in this list (example: "mesh"), has lower priority over myComponentsToInclude
+        this.myComponentsToInclude = [];        // Clones only the component types in this list (example: "mesh"), has higher priority over myComponentsToIgnore, if empty it's ignored
+        this.myIgnoreComponentCallback = null;  // Signature: callback(component) returns true if the component must be ignored, it is called after the previous filters
+
+        this.myDescendantsToIgnore = [];        // Ignores all the objects in this list (example: "mesh"), has lower priority over myDescendantsToInclude
+        this.myDescendantsToInclude = [];       // Clones only the objects in this list (example: "mesh"), has higher priority over myDescendantsToIgnore, if empty it's ignored
+        this.myIgnoreDescendantCallback = null; // Signature: callback(object) returns true if the object must be ignored, it is called after the previous filters
 
         this.myUseDefaultComponentClone = false;               // Use the default component clone function
-        this.myUseDefaultComponentCloneAsFallback = false;     // Use the default component clone function only as fallback
+        this.myUseDefaultComponentCloneAsFallback = false;     // Use the default component clone function only as fallback, that is if there is no custom component clone
         this.myDefaultComponentCloneAutoStartIfNotActive = true;
+
+        this.myUseDefaultObjectClone = false;   // Use the default object clone function, ignoring all the other clone settings but myCloneParent and myDefaultComponentCloneAutoStartIfNotActive
+        this.myUseDefaultObjectCloneAsFallback = false;     // Use the default object clone function only as fallback, that is if the object is not pp cloneable
 
         this.myComponentDeepCloneParams = new DeepCloneParams(); // Used to specify if the object components must be deep cloned or not, you can also override the behavior for specific components and variables
 
@@ -1896,9 +1901,25 @@ export let clone = function () {
     return function clone(object, cloneParams = new CloneParams()) {
         let clonedObject = null;
 
-        if (ObjectUtils.isCloneable(object, cloneParams)) {
+        let cloneParent = cloneParams.myCloneParent === undefined ? ObjectUtils.getParent(object) : cloneParams.myCloneParent;
+
+        if (cloneParams.myUseDefaultObjectClone) {
+            clonedObject = object.clone(cloneParent);
+
+            if (cloneParams.myDefaultComponentCloneAutoStartIfNotActive) {
+                let clonedComponents = clonedObject.pp_getComponents();
+                for (let clonedComponent of clonedComponents) {
+
+                    // Trigger start, which otherwise would be called later, on first activation
+                    if (cloneParams.myDefaultComponentCloneAutoStartIfNotActive && !clonedComponent.active) {
+                        clonedComponent.active = true;
+                        clonedComponent.active = false;
+                    }
+                }
+            }
+        } else if (ObjectUtils.isCloneable(object, cloneParams)) {
             let objectsToCloneData = [];
-            objectsToCloneData.push([ObjectUtils.getParent(object), object]);
+            objectsToCloneData.push([cloneParent, object]);
 
             // Create the object hierarchy
             let objectsToCloneComponentsData = [];
@@ -1917,20 +1938,20 @@ export let clone = function () {
                     objectsToCloneComponentsData.push([objectToClone, currentClonedObject]);
                 }
 
-                if (!cloneParams.myIgnoreChildren) {
+                if (!cloneParams.myIgnoreDescendants) {
                     for (let child of ObjectUtils.getChildren(objectToClone)) {
-                        let cloneChild = false;
-                        if (cloneParams.myChildrenToInclude.length > 0) {
-                            cloneChild = cloneParams.myChildrenToInclude.find(childToInclude => ObjectUtils.equals(childToInclude, child)) != null;
+                        let cloneDescendant = false;
+                        if (cloneParams.myDescendantsToInclude.length > 0) {
+                            cloneDescendant = cloneParams.myDescendantsToInclude.find(descendantToInclude => ObjectUtils.equals(descendantToInclude, child)) != null;
                         } else {
-                            cloneChild = cloneParams.myChildrenToIgnore.find(childToIgnore => ObjectUtils.equals(childToIgnore, child)) == null;
+                            cloneDescendant = cloneParams.myDescendantsToIgnore.find(descendantToIgnore => ObjectUtils.equals(descendantToIgnore, child)) == null;
                         }
 
-                        if (cloneChild && cloneParams.myIgnoreChildCallback != null) {
-                            cloneChild = !cloneParams.myIgnoreChildCallback(child);
+                        if (cloneDescendant && cloneParams.myIgnoreDescendantCallback != null) {
+                            cloneDescendant = !cloneParams.myIgnoreDescendantCallback(child);
                         }
 
-                        if (cloneChild) {
+                        if (cloneDescendant) {
                             objectsToCloneData.push([currentClonedObject, child]);
                         }
                     }
@@ -2000,6 +2021,20 @@ export let clone = function () {
 
                 ComponentUtils.clonePostProcess(componentToClone, currentClonedComponent, cloneParams.myComponentDeepCloneParams, cloneParams.myComponentCustomCloneParams);
             }
+        } else if (cloneParams.myUseDefaultObjectCloneAsFallback) {
+            clonedObject = object.clone(cloneParent);
+
+            if (cloneParams.myDefaultComponentCloneAutoStartIfNotActive) {
+                let clonedComponents = clonedObject.pp_getComponents();
+                for (let clonedComponent of clonedComponents) {
+
+                    // Trigger start, which otherwise would be called later, on first activation
+                    if (cloneParams.myDefaultComponentCloneAutoStartIfNotActive && !clonedComponent.active) {
+                        clonedComponent.active = true;
+                        clonedComponent.active = false;
+                    }
+                }
+            }
         }
 
         return clonedObject;
@@ -2038,20 +2073,20 @@ export function isCloneable(object, cloneParams = new CloneParams()) {
             }
         }
 
-        if (cloneable && !cloneParams.myIgnoreChildren) {
+        if (cloneable && !cloneParams.myIgnoreDescendants) {
             for (let child of ObjectUtils.getChildren(objectToClone)) {
-                let cloneChild = false;
-                if (cloneParams.myChildrenToInclude.length > 0) {
-                    cloneChild = cloneParams.myChildrenToInclude.find(childToInclude => ObjectUtils.equals(childToInclude, child)) != null;
+                let cloneDescendant = false;
+                if (cloneParams.myDescendantsToInclude.length > 0) {
+                    cloneDescendant = cloneParams.myDescendantsToInclude.find(descendantToInclude => ObjectUtils.equals(descendantToInclude, child)) != null;
                 } else {
-                    cloneChild = cloneParams.myChildrenToIgnore.find(childToInclude => ObjectUtils.equals(childToInclude, child)) == null;
+                    cloneDescendant = cloneParams.myDescendantsToIgnore.find(descendantToInclude => ObjectUtils.equals(descendantToInclude, child)) == null;
                 }
 
-                if (cloneChild && cloneParams.myIgnoreChildCallback != null) {
-                    cloneChild = !cloneParams.myIgnoreChildCallback(child);
+                if (cloneDescendant && cloneParams.myIgnoreDescendantCallback != null) {
+                    cloneDescendant = !cloneParams.myIgnoreDescendantCallback(child);
                 }
 
-                if (cloneChild) {
+                if (cloneDescendant) {
                     objectsToClone.push(child);
                 }
             }

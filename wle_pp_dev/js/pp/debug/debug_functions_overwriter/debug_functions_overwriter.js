@@ -15,9 +15,9 @@ export class DebugFunctionsOverwriterParams {
         this.myClassesByReference = [];         // By Reference means by using a reference to the class, like doing Timer, but also let ref = Timer and use ref
         this.myClassesByPath = [];              // By Path means by using the full class path, like "Timer", this is requiredneeded if u want to count the constructor
 
-        this.myFunctionsByPath = [];
         // You can also count the call to a specific function, but it must be reachable from window, no reference way
         // It's mostly for global functions, which could be tracked anyway using window as object reference
+        this.myFunctionsByPath = [];
 
         this.myExcludeConstructors = false;      // Constructor calls count can be a problem for some classes (like Array)
         this.myExcludeJSObjectFunctions = false;

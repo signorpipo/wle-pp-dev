@@ -258,7 +258,7 @@ export function clonePostProcess(componentToClone, clonedComponent, deeClonePara
 export function cloneDefault(componentToClone, targetObject, autoStartIfNotActive = true) {
     let clonedComponent = ObjectUtils.addComponent(targetObject, componentToClone.type, componentToClone);
 
-    // Trigger start, which otherwise would be called later
+    // Trigger start, which otherwise would be called later, on first activation
     if (autoStartIfNotActive && !clonedComponent.active) {
         clonedComponent.active = true;
         clonedComponent.active = false;
