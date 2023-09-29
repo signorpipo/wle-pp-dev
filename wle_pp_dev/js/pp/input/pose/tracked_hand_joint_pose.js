@@ -15,7 +15,7 @@ export class TrackedHandJointPose extends BasePose {
 
         this._myJointRadius = 0;
 
-        this._myInputSourcesChangeEventListener = null;
+        this._myUpdateInputSourceCallback = null;
     }
 
     getHandedness() {
@@ -49,17 +49,11 @@ export class TrackedHandJointPose extends BasePose {
     }
 
     _onXRSessionStartHook(manualCall, session) {
-        this._myInputSourcesChangeEventListener = function (event) {
-            if (event.removed) {
-                for (let item of event.removed) {
-                    if (item == this._myInputSource) {
-                        this._myInputSource = null;
-                    }
-                }
-            }
+        this._myUpdateInputSourceCallback = function () {
+            this._myInputSource = null;
 
-            if (event.added) {
-                for (let item of event.added) {
+            if (session.inputSources != null && session.inputSources.length > 0) {
+                for (let item of session.inputSources) {
                     if (item.handedness == this._myHandedness) {
                         if (InputUtils.getInputSourceType(item) == InputSourceType.TRACKED_HAND) {
                             this._myInputSource = item;
@@ -69,26 +63,18 @@ export class TrackedHandJointPose extends BasePose {
             }
         }.bind(this);
 
-        session.addEventListener("inputsourceschange", this._myInputSourcesChangeEventListener);
+        this._myUpdateInputSourceCallback();
 
-        if (manualCall && this._myInputSource == null && session.inputSources) {
-            for (let item of session.inputSources) {
-                if (item.handedness == this._myHandedness) {
-                    if (InputUtils.getInputSourceType(item) == InputSourceType.TRACKED_HAND) {
-                        this._myInputSource = item;
-                    }
-                }
-            }
-        }
+        session.addEventListener("inputsourceschange", this._myUpdateInputSourceCallback);
     }
 
     _onXRSessionEndHook() {
         this._myInputSource = null;
 
-        this._myInputSourcesChangeEventListener = null;
+        this._myUpdateInputSourceCallback = null;
     }
 
     _destroyHook() {
-        XRUtils.getSession(this.getEngine())?.removeEventListener("inputsourceschange", this._myInputSourcesChangeEventListener);
+        XRUtils.getSession(this.getEngine())?.removeEventListener("inputsourceschange", this._myUpdateInputSourceCallback);
     }
 }

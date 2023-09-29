@@ -177,6 +177,7 @@ export class BasePose {
     }
 
     _updateHook(dt, updateVelocity, xrPose) {
+
     }
 
     _onXRSessionStartHook(manualCall, session) {
