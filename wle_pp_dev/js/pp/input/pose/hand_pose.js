@@ -25,7 +25,7 @@ export class HandPose extends BasePose {
 
         this._myTrackedHand = false;
 
-        this._myInputSourceChangeEventListener = null;
+        this._myInputSourcesChangeEventListener = null;
     }
 
     getHandedness() {
@@ -65,7 +65,7 @@ export class HandPose extends BasePose {
     }
 
     _onXRSessionStartHook(manualCall, session) {
-        this._myInputSourceChangeEventListener = function () {
+        this._myInputSourcesChangeEventListener = function () {
             this._myInputSource = null;
 
             if (session.inputSources != null && session.inputSources.length > 0) {
@@ -78,19 +78,19 @@ export class HandPose extends BasePose {
             }
         }.bind(this);
 
-        this._myInputSourceChangeEventListener();
+        this._myInputSourcesChangeEventListener();
 
-        session.addEventListener("inputsourceschange", this._myInputSourceChangeEventListener);
+        session.addEventListener("inputsourceschange", this._myInputSourcesChangeEventListener);
     }
 
     _onXRSessionEndHook() {
         this._myInputSource = null;
 
-        this._myInputSourceChangeEventListener = null;
+        this._myInputSourcesChangeEventListener = null;
     }
 
     _destroyHook() {
-        XRUtils.getSession(this.getEngine())?.removeEventListener("inputsourceschange", this._myInputSourceChangeEventListener);
+        XRUtils.getSession(this.getEngine())?.removeEventListener("inputsourceschange", this._myInputSourcesChangeEventListener);
     }
 }
 
