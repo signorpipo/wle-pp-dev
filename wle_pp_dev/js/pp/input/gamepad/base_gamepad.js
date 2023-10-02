@@ -7,14 +7,14 @@ export class BaseGamepad {
     constructor(handedness) {
         this._myHandedness = handedness;
 
-        this._myButtonInfos = [];
+        this._myButtonInfos = {};
         this._myButtonInfosIDs = [];
         for (let key in GamepadButtonID) {
             this._myButtonInfos[GamepadButtonID[key]] = new GamepadButtonInfo(GamepadButtonID[key], this._myHandedness);
             this._myButtonInfosIDs.push(GamepadButtonID[key]);
         }
 
-        this._myAxesInfos = [];
+        this._myAxesInfos = {};
         this._myAxesInfosIDs = [];
         for (let key in GamepadAxesID) {
             this._myAxesInfos[GamepadAxesID[key]] = new GamepadAxesInfo(GamepadAxesID[key], this._myHandedness);
