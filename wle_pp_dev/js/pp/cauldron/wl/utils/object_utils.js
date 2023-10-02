@@ -2408,8 +2408,8 @@ export function getDescendantsDepth(object) {
         descendants.push(child);
 
         let childDescendants = ObjectUtils.getDescendantsDepth(child);
-        if (childDescendants.length > 0) {
-            descendants.push(...childDescendants);
+        for (let i = 0; i < childDescendants.length; i++) {
+            descendants.push(childDescendants[i]);
         }
     }
 
@@ -2569,7 +2569,10 @@ export function getComponentsObjects(objects, typeOrClass) {
     let components = [];
 
     for (let currentObject of objects) {
-        components.push(...currentObject.getComponents(typeOrClass));
+        let currentObjectComponents = currentObject.getComponents(typeOrClass);
+        for (let i = 0; i < currentObjectComponents.length; i++) {
+            components.push(currentObjectComponents[i]);
+        }
     }
 
     return components;

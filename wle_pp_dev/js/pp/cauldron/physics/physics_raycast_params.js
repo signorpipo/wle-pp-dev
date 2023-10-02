@@ -137,7 +137,9 @@ export class RaycastResults {
             this._myUnusedHits = [];
         }
 
-        this._myUnusedHits.push(...this.myHits);
+        for (let i = 0; i < this.myHits.length; i++) {
+            this._myUnusedHits.push(this.myHits[i]);
+        }
 
         this.myHits.pp_clear();
     }
