@@ -625,18 +625,20 @@ export class PlayerTransformManager {
 // IMPLEMENTATION
 
 PlayerTransformManager.prototype.getDistanceToReal = function () {
+    let position = vec3_create();
     let realPosition = vec3_create();
     return function getDistanceToReal() {
         realPosition = this.getPositionReal(realPosition);
-        return realPosition.vec3_distance(this.getPosition());
+        return realPosition.vec3_distance(this.getPosition(position));
     };
 }();
 
 PlayerTransformManager.prototype.getDistanceToRealHead = function () {
+    let position = vec3_create();
     let realPosition = vec3_create();
     return function getDistanceToRealHead() {
         realPosition = this.getPositionHeadReal(realPosition);
-        return realPosition.vec3_distance(this.getPositionHead());
+        return realPosition.vec3_distance(this.getPositionHead(position));
     };
 }();
 
