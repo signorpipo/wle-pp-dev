@@ -57,13 +57,13 @@ export class PhysicsCollisionCollector {
         if (this._myActive != active) {
             this._myActive = active;
 
-            this._myCollisions = [];
+            this._myCollisions.pp_clear();
 
-            this._myCollisionsStart = [];
-            this._myCollisionsEnd = [];
+            this._myCollisionsStart.pp_clear();
+            this._myCollisionsEnd.pp_clear();
             this._myUpdateActive = false;
-            this._myCollisionsStartToProcess = [];
-            this._myCollisionsEndToProcess = [];
+            this._myCollisionsStartToProcess.pp_clear();
+            this._myCollisionsEndToProcess.pp_clear();
 
             if (this._myActive) {
                 this._myCollisionCallbackID = this._myPhysX.onCollision(this._onCollision.bind(this));
@@ -87,11 +87,15 @@ export class PhysicsCollisionCollector {
 
         this._myUpdateActive = true;
 
-        this._myCollisionsStart = this._myCollisionsStartToProcess;
-        this._myCollisionsStartToProcess = [];
+        let prevCollisionsStartToProcess = this._myCollisionsStartToProcess;
+        this._myCollisionsStartToProcess = this._myCollisionsStart;
+        this._myCollisionsStartToProcess.pp_clear();
+        this._myCollisionsStart = prevCollisionsStartToProcess;
 
-        this._myCollisionsEnd = this._myCollisionsEndToProcess;
-        this._myCollisionsEndToProcess = [];
+        let prevCollisionsEndToProcess = this._myCollisionsEndToProcess;
+        this._myCollisionsEndToProcess = this._myCollisionsEnd;
+        this._myCollisionsEndToProcess.pp_clear();
+        this._myCollisionsEnd = prevCollisionsEndToProcess;
 
         if (this._myTrigger) {
             this._triggerDesyncFix(dt);
