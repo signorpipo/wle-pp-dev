@@ -222,7 +222,9 @@ export class PhysicsCollisionCollector {
             if (collisionsToEnd.length > 0) {
                 //console.error("DESYNC RESOLVED");
 
-                for (let collision of collisionsToEnd) {
+                for (let i = 0; i < collisionsToEnd.length; i++) {
+                    let collision = collisionsToEnd[i];
+
                     let physX = collision.pp_getComponentSelf(PhysXComponent);
                     if (physX) {
                         this._onCollisionEnd(CollisionEventType.TriggerTouchLost, physX);
