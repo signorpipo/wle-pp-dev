@@ -210,14 +210,39 @@ export class PhysicsCollisionCollector {
     }
 
     _triggerDesyncFix(dt) {
+        // Implemented outside class definition
+    }
+
+    destroy() {
+        this._myDestroyed = true;
+
+        if (this._myCollisionCallbackID != null) {
+            this._myPhysX.removeCollisionCallback(this._myCollisionCallbackID);
+            this._myCollisionCallbackID = null;
+        }
+    }
+
+    isDestroyed() {
+        return this._myDestroyed;
+    }
+}
+
+
+
+
+// IMPLEMENTATION
+
+PhysicsCollisionCollector.prototype._triggerDesyncFix = function () {
+    let findAllCallback = function (element) {
+        let physX = element.pp_getComponentSelf(PhysXComponent);
+        return physX == null || !physX.active;
+    };
+    return function _triggerDesyncFix(dt) {
         this._myTriggerDesyncFixDelay.update(dt);
         if (this._myTriggerDesyncFixDelay.isDone()) {
             this._myTriggerDesyncFixDelay.start();
 
-            let collisionsToEnd = this._myCollisions.pp_findAll(function (element) {
-                let physX = element.pp_getComponentSelf(PhysXComponent);
-                return physX == null || !physX.active;
-            });
+            let collisionsToEnd = this._myCollisions.pp_findAll(findAllCallback);
 
             if (collisionsToEnd.length > 0) {
                 //console.error("DESYNC RESOLVED");
@@ -234,18 +259,5 @@ export class PhysicsCollisionCollector {
                 }
             }
         }
-    }
-
-    destroy() {
-        this._myDestroyed = true;
-
-        if (this._myCollisionCallbackID != null) {
-            this._myPhysX.removeCollisionCallback(this._myCollisionCallbackID);
-            this._myCollisionCallbackID = null;
-        }
-    }
-
-    isDestroyed() {
-        return this._myDestroyed;
-    }
-}
+    };
+}();
