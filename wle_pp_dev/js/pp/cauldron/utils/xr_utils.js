@@ -1,4 +1,5 @@
 import { Globals } from "../../pp/globals";
+import { BrowserUtils } from "./browser_utils";
 
 export function getSession(engine = Globals.getMainEngine()) {
     let xr = Globals.getXR(engine);
@@ -103,8 +104,8 @@ export function isARSupported(engine = Globals.getMainEngine()) {
     return engine.arSupported;
 }
 
-export function isDeviceEmulated(engine = Globals.getMainEngine()) {
-    let emulated = ("CustomWebXRPolyfill" in Globals.getWindow(engine));
+export function isDeviceEmulated(onlyOnLocalhost = true) {
+    let emulated = window.CustomWebXRPolyfill != null && (!onlyOnLocalhost || BrowserUtils.isLocalhost());
     return emulated;
 }
 
