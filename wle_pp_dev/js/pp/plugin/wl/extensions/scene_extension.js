@@ -83,28 +83,28 @@ export function initSceneExtensionPrototype() {
 
     // Get Object By Name
 
-    sceneExtension.pp_getObjectByName = function pp_getObjectByName(name, regex = false, index = 0) {
-        return SceneUtils.getObjectByName(this, name, regex, index);
+    sceneExtension.pp_getObjectByName = function pp_getObjectByName(name, isRegex = false, index = 0) {
+        return SceneUtils.getObjectByName(this, name, isRegex, index);
     };
 
-    sceneExtension.pp_getObjectByNameBreadth = function pp_getObjectByNameBreadth(name, regex = false, index = 0) {
-        return SceneUtils.getObjectByNameBreadth(this, name, regex, index);
+    sceneExtension.pp_getObjectByNameBreadth = function pp_getObjectByNameBreadth(name, isRegex = false, index = 0) {
+        return SceneUtils.getObjectByNameBreadth(this, name, isRegex, index);
     };
 
-    sceneExtension.pp_getObjectByNameDepth = function pp_getObjectByNameDepth(name, regex = false, index = 0) {
-        return SceneUtils.getObjectByNameDepth(this, name, regex, index);
+    sceneExtension.pp_getObjectByNameDepth = function pp_getObjectByNameDepth(name, isRegex = false, index = 0) {
+        return SceneUtils.getObjectByNameDepth(this, name, isRegex, index);
     };
 
-    sceneExtension.pp_getObjectsByName = function pp_getObjectsByName(name, regex = false) {
-        return SceneUtils.getObjectsByName(this, name, regex);
+    sceneExtension.pp_getObjectsByName = function pp_getObjectsByName(name, isRegex = false) {
+        return SceneUtils.getObjectsByName(this, name, isRegex);
     };
 
-    sceneExtension.pp_getObjectsByNameBreadth = function pp_getObjectsByNameBreadth(name, regex = false) {
-        return SceneUtils.getObjectsByNameBreadth(this, name, regex);
+    sceneExtension.pp_getObjectsByNameBreadth = function pp_getObjectsByNameBreadth(name, isRegex = false) {
+        return SceneUtils.getObjectsByNameBreadth(this, name, isRegex);
     };
 
-    sceneExtension.pp_getObjectsByNameDepth = function pp_getObjectsByNameDepth(name, regex = false) {
-        return SceneUtils.getObjectsByNameDepth(this, name, regex);
+    sceneExtension.pp_getObjectsByNameDepth = function pp_getObjectsByNameDepth(name, isRegex = false) {
+        return SceneUtils.getObjectsByNameDepth(this, name, isRegex);
     };
 
     // Get Object By ID

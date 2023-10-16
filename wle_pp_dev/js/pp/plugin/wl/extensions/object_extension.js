@@ -1309,68 +1309,68 @@ export function initObjectExtensionProtoype() {
 
     // Get Object By Name
 
-    objectExtension.pp_getObjectByName = function pp_getObjectByName(name, regex = false, index = 0) {
-        return ObjectUtils.getObjectByName(this, name, regex, index);
+    objectExtension.pp_getObjectByName = function pp_getObjectByName(name, isRegex = false, index = 0) {
+        return ObjectUtils.getObjectByName(this, name, isRegex, index);
     };
 
-    objectExtension.pp_getObjectByNameHierarchy = function pp_getObjectByNameHierarchy(name, regex = false, index = 0) {
-        return ObjectUtils.getObjectByNameHierarchy(this, name, regex, index);
+    objectExtension.pp_getObjectByNameHierarchy = function pp_getObjectByNameHierarchy(name, isRegex = false, index = 0) {
+        return ObjectUtils.getObjectByNameHierarchy(this, name, isRegex, index);
     };
 
-    objectExtension.pp_getObjectByNameHierarchyBreadth = function pp_getObjectByNameHierarchyBreadth(name, regex = false, index = 0) {
-        return ObjectUtils.getObjectByNameHierarchyBreadth(this, name, regex, index);
+    objectExtension.pp_getObjectByNameHierarchyBreadth = function pp_getObjectByNameHierarchyBreadth(name, isRegex = false, index = 0) {
+        return ObjectUtils.getObjectByNameHierarchyBreadth(this, name, isRegex, index);
     };
 
-    objectExtension.pp_getObjectByNameHierarchyDepth = function pp_getObjectByNameHierarchyDepth(name, regex = false, index = 0) {
-        return ObjectUtils.getObjectByNameHierarchyDepth(this, name, regex, index);
+    objectExtension.pp_getObjectByNameHierarchyDepth = function pp_getObjectByNameHierarchyDepth(name, isRegex = false, index = 0) {
+        return ObjectUtils.getObjectByNameHierarchyDepth(this, name, isRegex, index);
     };
 
-    objectExtension.pp_getObjectByNameDescendants = function pp_getObjectByNameDescendants(name, regex = false, index = 0) {
-        return ObjectUtils.getObjectByNameDescendants(this, name, regex, index);
+    objectExtension.pp_getObjectByNameDescendants = function pp_getObjectByNameDescendants(name, isRegex = false, index = 0) {
+        return ObjectUtils.getObjectByNameDescendants(this, name, isRegex, index);
     };
 
-    objectExtension.pp_getObjectByNameDescendantsBreadth = function pp_getObjectByNameDescendantsBreadth(name, regex = false, index = 0) {
-        return ObjectUtils.getObjectByNameDescendantsBreadth(this, name, regex, index);
+    objectExtension.pp_getObjectByNameDescendantsBreadth = function pp_getObjectByNameDescendantsBreadth(name, isRegex = false, index = 0) {
+        return ObjectUtils.getObjectByNameDescendantsBreadth(this, name, isRegex, index);
     };
 
-    objectExtension.pp_getObjectByNameDescendantsDepth = function pp_getObjectByNameDescendantsDepth(name, regex = false, index = 0) {
-        return ObjectUtils.getObjectByNameDescendantsDepth(this, name, regex, index);
+    objectExtension.pp_getObjectByNameDescendantsDepth = function pp_getObjectByNameDescendantsDepth(name, isRegex = false, index = 0) {
+        return ObjectUtils.getObjectByNameDescendantsDepth(this, name, isRegex, index);
     };
 
-    objectExtension.pp_getObjectByNameChildren = function pp_getObjectByNameChildren(name, regex = false, index = 0) {
-        return ObjectUtils.getObjectByNameChildren(this, name, regex, index);
+    objectExtension.pp_getObjectByNameChildren = function pp_getObjectByNameChildren(name, isRegex = false, index = 0) {
+        return ObjectUtils.getObjectByNameChildren(this, name, isRegex, index);
     };
 
-    objectExtension.pp_getObjectsByName = function pp_getObjectsByName(name, regex = false) {
-        return ObjectUtils.getObjectsByName(this, name, regex);
+    objectExtension.pp_getObjectsByName = function pp_getObjectsByName(name, isRegex = false) {
+        return ObjectUtils.getObjectsByName(this, name, isRegex);
     };
 
-    objectExtension.pp_getObjectsByNameHierarchy = function pp_getObjectsByNameHierarchy(name, regex = false) {
-        return ObjectUtils.getObjectsByNameHierarchy(this, name, regex);
+    objectExtension.pp_getObjectsByNameHierarchy = function pp_getObjectsByNameHierarchy(name, isRegex = false) {
+        return ObjectUtils.getObjectsByNameHierarchy(this, name, isRegex);
     };
 
-    objectExtension.pp_getObjectsByNameHierarchyBreadth = function pp_getObjectsByNameHierarchyBreadth(name, regex = false) {
-        return ObjectUtils.getObjectsByNameHierarchyBreadth(this, name, regex);
+    objectExtension.pp_getObjectsByNameHierarchyBreadth = function pp_getObjectsByNameHierarchyBreadth(name, isRegex = false) {
+        return ObjectUtils.getObjectsByNameHierarchyBreadth(this, name, isRegex);
     };
 
-    objectExtension.pp_getObjectsByNameHierarchyDepth = function pp_getObjectsByNameHierarchyDepth(name, regex = false) {
-        return ObjectUtils.getObjectsByNameHierarchyDepth(this, name, regex);
+    objectExtension.pp_getObjectsByNameHierarchyDepth = function pp_getObjectsByNameHierarchyDepth(name, isRegex = false) {
+        return ObjectUtils.getObjectsByNameHierarchyDepth(this, name, isRegex);
     };
 
-    objectExtension.pp_getObjectsByNameDescendants = function pp_getObjectsByNameDescendants(name, regex = false) {
-        return ObjectUtils.getObjectsByNameDescendants(this, name, regex);
+    objectExtension.pp_getObjectsByNameDescendants = function pp_getObjectsByNameDescendants(name, isRegex = false) {
+        return ObjectUtils.getObjectsByNameDescendants(this, name, isRegex);
     };
 
-    objectExtension.pp_getObjectsByNameDescendantsBreadth = function pp_getObjectsByNameDescendantsBreadth(name, regex = false) {
-        return ObjectUtils.getObjectsByNameDescendantsBreadth(this, name, regex);
+    objectExtension.pp_getObjectsByNameDescendantsBreadth = function pp_getObjectsByNameDescendantsBreadth(name, isRegex = false) {
+        return ObjectUtils.getObjectsByNameDescendantsBreadth(this, name, isRegex);
     };
 
-    objectExtension.pp_getObjectsByNameDescendantsDepth = function pp_getObjectsByNameDescendantsDepth(name, regex = false) {
-        return ObjectUtils.getObjectsByNameDescendantsDepth(this, name, regex);
+    objectExtension.pp_getObjectsByNameDescendantsDepth = function pp_getObjectsByNameDescendantsDepth(name, isRegex = false) {
+        return ObjectUtils.getObjectsByNameDescendantsDepth(this, name, isRegex);
     };
 
-    objectExtension.pp_getObjectsByNameChildren = function pp_getObjectsByNameChildren(name, regex = false) {
-        return ObjectUtils.getObjectsByNameChildren(this, name, regex);
+    objectExtension.pp_getObjectsByNameChildren = function pp_getObjectsByNameChildren(name, isRegex = false) {
+        return ObjectUtils.getObjectsByNameChildren(this, name, isRegex);
     };
 
     // Get Object By ID
