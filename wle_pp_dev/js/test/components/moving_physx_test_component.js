@@ -27,7 +27,7 @@ export class MovingPhysXTestComponent extends Component {
         }
 
         this._myFSM = new FSM();
-        this._myFSM.setDebugLogActive(true, "Moving Physx");
+        this._myFSM.setLogEnabled(true, "Moving Physx");
 
         let wait = 0.2;
         this._myFSM.addState("wait_not_static", new TimerState(wait, "end"));
