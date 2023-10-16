@@ -49,7 +49,7 @@ export class CADisplayLeaderboardComponent extends Component {
     }
 
     updateLeaderboard() {
-        CAUtils.getLeaderboard(this._myLeaderboardID, this._myAscending, this._myLocal, this._myScoresAmount, this._onLeaderboardRetrieved.bind(this), undefined, undefined, this.engine);
+        CAUtils.getLeaderboard(this._myLeaderboardID, this._myAscending, this._myLocal, this._myScoresAmount, this._onLeaderboardRetrieved.bind(this));
     }
 
     _onLeaderboardRetrieved(leaderboard) {
