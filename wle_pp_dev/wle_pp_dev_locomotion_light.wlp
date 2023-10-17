@@ -44,28 +44,10 @@
                     "type": "pp-player-locomotion",
                     "pp-player-locomotion": {
                         "_myPhysicsBlockLayerFlags": "0, 1, 1, 0, 0, 0, 0, 0",
-                        "_myFlyEnabled": false,
                         "_myMoveThroughCollisionShortcutEnabled": true,
                         "_myMoveHeadShortcutEnabled": true
-                    },
-                    "active": true
+                    }
                 }
-            ],
-            "translation": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                0.9999989,
-                0.9999989,
-                0.999997
             ]
         },
         "20": {
@@ -75,7 +57,7 @@
                 0.0,
                 1.0,
                 0.0,
-                -4.3711388286737935e-8
+                0.0
             ]
         },
         "21": {
@@ -87,48 +69,13 @@
                 },
                 {
                     "type": "mouse-look",
-                    "mouse-look": {
-                        "requireMouseDown": true
-                    },
-                    "active": true
+                    "mouse-look": {}
                 }
-            ],
-            "translation": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                1.0,
-                1.0,
-                1.0
             ]
         },
         "22": {
             "name": "Eyes",
-            "parent": "118",
-            "translation": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                1.0,
-                1.0,
-                1.0
-            ]
+            "parent": "118"
         },
         "23": {
             "name": "Hands Left",
@@ -139,25 +86,8 @@
                     "pp-switch-hand-object": {
                         "_myGamepad": "69",
                         "_myTrackedHand": "788"
-                    },
-                    "active": true
+                    }
                 }
-            ],
-            "translation": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                1.0,
-                1.0,
-                1.0
             ]
         },
         "24": {
@@ -172,22 +102,6 @@
                         "_myHandedness": "Right"
                     }
                 }
-            ],
-            "translation": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                1.0,
-                1.0,
-                1.0
             ]
         },
         "25": {
@@ -196,32 +110,12 @@
             "components": [
                 {
                     "type": "pp-set-head-local-transform",
-                    "pp-set-head-local-transform": {
-                        "_myNonVRCamera": "21"
-                    }
+                    "pp-set-head-local-transform": {}
                 },
                 {
                     "type": "pp-spatial-audio-listener",
-                    "pp-spatial-audio-listener": {
-                        "_myEnabled": "always"
-                    }
+                    "pp-spatial-audio-listener": {}
                 }
-            ],
-            "translation": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                1.0,
-                1.0,
-                1.0
             ]
         },
         "26": {
@@ -256,23 +150,7 @@
         },
         "28": {
             "name": "Lights",
-            "parent": "156",
-            "translation": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                1.0,
-                1.0,
-                1.0
-            ]
+            "parent": "156"
         },
         "52": {
             "link": {
@@ -377,136 +255,16 @@
         },
         "67": {
             "name": "Pivot",
-            "parent": "789",
-            "translation": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                0.9999992,
-                1.0,
-                0.9999992
-            ]
+            "parent": "789"
         },
         "68": {
             "name": "Pivot",
-            "parent": "70",
-            "translation": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                0.9999992,
-                1.0000001,
-                1.0000002
-            ]
+            "parent": "70"
         },
         "69": {
             "name": "Gamepad Left",
             "parent": "23",
             "components": [
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
                 {
                     "type": "pp-gamepad-control-scheme",
                     "pp-gamepad-control-scheme": {
@@ -515,23 +273,18 @@
                         "_myThumbstick": "57",
                         "_myBottomButton": "53",
                         "_myTopButton": "58",
-                        "_mySelectText": "",
                         "_myLineMaterial": "36",
                         "_myThumbstickText": "Press Twice: Change Teleport/Smooth",
                         "_myLineLengthMultiplier": 1.5,
                         "_myTextMaterial": "786",
                         "_myBottomButtonText": "Smooth: Fly Down",
                         "_myTopButtonText": "Smooth: Fly Up",
-                        "_myStartVisible": false,
                         "_myShowOnStart": false
                     }
                 },
                 {
                     "type": "pp-set-hand-local-transform",
-                    "pp-set-hand-local-transform": {
-                        "_myHandedness": "Left",
-                        "_myFixForward": true
-                    }
+                    "pp-set-hand-local-transform": {}
                 },
                 {
                     "type": "pp-gamepad-mesh-animator",
@@ -549,38 +302,11 @@
                 -0.1,
                 0.0,
                 0.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                1.0,
-                1.0,
-                1.0
             ]
         },
         "70": {
             "name": "Mesh",
-            "parent": "801",
-            "translation": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                1.0,
-                1.0,
-                1.0
-            ]
+            "parent": "801"
         },
         "71": {
             "name": "Test",
@@ -590,8 +316,7 @@
                     "type": "pp-set-active",
                     "pp-set-active": {
                         "_myActive": false
-                    },
-                    "active": true
+                    }
                 },
                 {
                     "type": "reset-transform"
@@ -601,17 +326,6 @@
                 0.0,
                 10000.0,
                 0.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                1.0,
-                1.0,
-                1.0
             ]
         },
         "118": {
@@ -632,207 +346,43 @@
             "components": [
                 {
                     "type": "pp-set-active",
-                    "pp-set-active": {
-                        "_myActive": true
-                    },
+                    "pp-set-active": {},
                     "active": false
                 }
-            ],
-            "translation": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                1.0,
-                1.0,
-                1.0
             ]
         },
         "157": {
             "name": "Floor",
             "parent": "156",
-            "translation": [
-                0.0,
-                0.0,
-                0.0
-            ],
             "rotation": [
                 -0.7071068,
                 0.0,
                 0.0,
                 0.7071067
-            ],
-            "scaling": [
-                1.0,
-                0.9999979,
-                0.9999979
             ]
         },
         "158": {
             "name": "Mesh",
             "parent": "157",
             "components": [
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
                 {
                     "type": "mesh",
                     "mesh": {
                         "mesh": "p0",
                         "material": "92"
-                    },
-                    "active": true
+                    }
                 }
-            ],
-            "translation": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "rotation": [
-                -0.0,
-                0.0,
-                0.0,
-                1.0
             ],
             "scaling": [
                 12.0,
                 12.0,
-                1.0000019
+                1.0
             ]
         },
         "159": {
             "name": "PhysX",
             "parent": "157",
             "components": [
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
                 {
                     "type": "physx",
                     "physx": {
@@ -855,19 +405,8 @@
             ],
             "translation": [
                 0.0,
-                1.192095311353114e-7,
+                0.0,
                 -1.000002
-            ],
-            "rotation": [
-                -0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                1.0,
-                1.0,
-                1.0
             ]
         },
         "160": {
@@ -879,20 +418,8 @@
                     "mesh": {
                         "material": "92",
                         "mesh": "p2"
-                    },
-                    "active": true
+                    }
                 }
-            ],
-            "translation": [
-                0.0,
-                -0.0,
-                0.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
             ],
             "scaling": [
                 0.1,
@@ -935,17 +462,6 @@
                 0.0,
                 4.0,
                 -13.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                1.0,
-                1.0,
-                1.0
             ]
         },
         "164": {
@@ -957,20 +473,13 @@
                     "mesh": {
                         "mesh": "p0",
                         "material": "93"
-                    },
-                    "active": true
+                    }
                 }
             ],
             "translation": [
                 0.0,
                 4.0,
                 -12.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
             ],
             "scaling": [
                 12.0,
@@ -995,12 +504,6 @@
                 1.0,
                 -12.0
             ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
             "scaling": [
                 0.1,
                 0.1,
@@ -1010,21 +513,11 @@
         "166": {
             "name": "Wall 2",
             "parent": "161",
-            "translation": [
-                0.0,
-                0.0,
-                0.0
-            ],
             "rotation": [
                 0.0,
                 0.7071068,
                 0.0,
                 0.7071067
-            ],
-            "scaling": [
-                1.0000058,
-                1.0,
-                1.0000058
             ]
         },
         "167": {
@@ -1036,25 +529,18 @@
                     "mesh": {
                         "mesh": "p0",
                         "material": "93"
-                    },
-                    "active": true
+                    }
                 }
             ],
             "translation": [
-                -0.0000013,
+                0.0,
                 4.0,
                 -12.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
             ],
             "scaling": [
                 12.0,
                 4.0,
-                0.9999997
+                1.0
             ]
         },
         "168": {
@@ -1084,17 +570,6 @@
                 0.0,
                 4.0,
                 -13.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                1.0,
-                1.0,
-                1.0
             ]
         },
         "169": {
@@ -1114,12 +589,6 @@
                 1.0,
                 -12.0
             ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
             "scaling": [
                 0.3,
                 0.3,
@@ -1129,21 +598,11 @@
         "170": {
             "name": "Wall 3",
             "parent": "161",
-            "translation": [
-                0.0,
-                0.0,
-                0.0
-            ],
             "rotation": [
                 0.0,
                 -0.7071068,
                 0.0,
                 0.7071067
-            ],
-            "scaling": [
-                1.0000071,
-                1.0,
-                1.0000071
             ]
         },
         "171": {
@@ -1173,17 +632,6 @@
                 0.0,
                 4.0,
                 -13.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                1.0,
-                1.0,
-                1.0
             ]
         },
         "172": {
@@ -1195,20 +643,13 @@
                     "mesh": {
                         "mesh": "p0",
                         "material": "93"
-                    },
-                    "active": true
+                    }
                 }
             ],
             "translation": [
                 0.0,
                 4.0,
                 -12.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
             ],
             "scaling": [
                 12.0,
@@ -1233,12 +674,6 @@
                 1.0,
                 -12.0
             ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
             "scaling": [
                 0.2,
                 0.2,
@@ -1248,21 +683,11 @@
         "174": {
             "name": "Wall 4",
             "parent": "161",
-            "translation": [
+            "rotation": [
                 0.0,
+                1.0,
                 0.0,
                 0.0
-            ],
-            "rotation": [
-                7.549797942374425e-8,
-                1.0,
-                -7.549803626716314e-8,
-                2.3841693064241554e-7
-            ],
-            "scaling": [
-                1.0000069,
-                1.0,
-                1.0000069
             ]
         },
         "175": {
@@ -1274,20 +699,13 @@
                     "mesh": {
                         "mesh": "p0",
                         "material": "93"
-                    },
-                    "active": true
+                    }
                 }
             ],
             "translation": [
                 0.0,
                 4.0,
                 -12.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
             ],
             "scaling": [
                 12.0,
@@ -1322,17 +740,6 @@
                 0.0,
                 4.0,
                 -13.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                1.0,
-                1.0,
-                1.0
             ]
         },
         "177": {
@@ -1349,14 +756,8 @@
             ],
             "translation": [
                 -0.0010108,
-                1.000041,
+                1.0,
                 -12.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
             ],
             "scaling": [
                 0.05,
@@ -1377,8 +778,7 @@
                     "mesh": {
                         "mesh": "p1",
                         "material": "93"
-                    },
-                    "active": true
+                    }
                 },
                 {
                     "type": "physx",
@@ -1400,12 +800,6 @@
                 1.5,
                 1.275063
             ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
             "scaling": [
                 3.0,
                 0.1,
@@ -1425,11 +819,6 @@
                 0.707279,
                 0.0,
                 0.7069345
-            ],
-            "scaling": [
-                0.9999998,
-                1.0,
-                0.9999998
             ]
         },
         "188": {
@@ -1461,13 +850,7 @@
             "translation": [
                 -0.0008294,
                 0.05,
-                0.0000076
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
+                0.0
             ],
             "scaling": [
                 0.6,
@@ -1482,17 +865,6 @@
                 -0.0011753,
                 0.1,
                 2.400032
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                1.0,
-                1.0,
-                1.0
             ]
         },
         "203": {
@@ -1502,17 +874,6 @@
                 1.9522743,
                 0.0,
                 6.8818545
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                1.0,
-                1.0,
-                1.0
             ]
         },
         "222": {
@@ -1522,17 +883,6 @@
                 -0.0864067,
                 0.0,
                 1.2061828
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                1.0,
-                1.0,
-                1.0
             ]
         },
         "223": {
@@ -1565,12 +915,6 @@
                 1.4460678,
                 -0.2597762,
                 0.0646464
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
             ],
             "scaling": [
                 0.1,
@@ -1609,12 +953,6 @@
                 -0.2597762,
                 0.6587334
             ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
             "scaling": [
                 0.1,
                 1.0,
@@ -1651,12 +989,6 @@
                 -0.1664389,
                 1.6856677,
                 -0.5752846
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
             ],
             "scaling": [
                 0.1,
@@ -1695,12 +1027,6 @@
                 1.6856677,
                 0.9520962
             ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
             "scaling": [
                 0.1,
                 1.0,
@@ -1737,12 +1063,6 @@
                 0.8949394,
                 -0.2597762,
                 -1.1640062
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
             ],
             "scaling": [
                 0.1,
@@ -1781,12 +1101,6 @@
                 -0.2597762,
                 -1.1640062
             ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
             "scaling": [
                 0.1,
                 1.0,
@@ -1823,12 +1137,6 @@
                 -1.1616516,
                 -0.2597762,
                 -2.3208541
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
             ],
             "scaling": [
                 0.1,
@@ -1867,12 +1175,6 @@
                 -0.2597762,
                 -2.9829883
             ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
             "scaling": [
                 0.1,
                 1.0,
@@ -1909,12 +1211,6 @@
                 -1.9983061,
                 -0.2597762,
                 -2.9829883
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
             ],
             "scaling": [
                 0.1,
@@ -1953,12 +1249,6 @@
                 1.6856677,
                 -1.8842886
             ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
             "scaling": [
                 0.1,
                 1.0,
@@ -1995,12 +1285,6 @@
                 1.5237846,
                 1.6856677,
                 -1.8842886
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
             ],
             "scaling": [
                 0.1,
@@ -2039,12 +1323,6 @@
                 1.6856677,
                 -2.6769685
             ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
             "scaling": [
                 0.1,
                 1.0,
@@ -2082,12 +1360,6 @@
                 1.6856677,
                 -2.1447381
             ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
             "scaling": [
                 0.1,
                 1.0,
@@ -2107,17 +1379,6 @@
                     "active": false
                 }
             ],
-            "translation": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
             "scaling": [
                 0.1,
                 0.1,
@@ -2131,17 +1392,6 @@
                 -0.0013584,
                 0.0,
                 2.8001174
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                1.0,
-                1.0,
-                1.0
             ]
         },
         "556": {
@@ -2173,13 +1423,7 @@
             "translation": [
                 -0.0008277,
                 0.05,
-                0.0000076
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
+                0.0
             ],
             "scaling": [
                 0.5999994,
@@ -2194,17 +1438,6 @@
                 -0.0009651,
                 0.2,
                 1.9999771
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                1.0,
-                1.0,
-                1.0
             ]
         },
         "558": {
@@ -2236,13 +1469,7 @@
             "translation": [
                 -0.0008295,
                 0.05,
-                0.0000076
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
+                0.0
             ],
             "scaling": [
                 0.5999994,
@@ -2257,17 +1484,6 @@
                 -0.0007739,
                 0.3,
                 1.5999679
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                1.0,
-                1.0,
-                1.0
             ]
         },
         "560": {
@@ -2299,13 +1515,7 @@
             "translation": [
                 -0.0008295,
                 0.05,
-                0.0000076
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
+                0.0
             ],
             "scaling": [
                 0.5999994,
@@ -2320,17 +1530,6 @@
                 -0.0005792,
                 0.4,
                 1.2000044
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                1.0,
-                1.0,
-                1.0
             ]
         },
         "562": {
@@ -2362,13 +1561,7 @@
             "translation": [
                 -0.0008295,
                 0.05,
-                0.0000076
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
+                0.0
             ],
             "scaling": [
                 0.5999994,
@@ -2383,17 +1576,6 @@
                 -0.0003862,
                 0.5,
                 0.7999801
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                1.0,
-                1.0,
-                1.0
             ]
         },
         "564": {
@@ -2425,13 +1607,7 @@
             "translation": [
                 -0.0008295,
                 0.05,
-                0.0000076
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
+                0.0
             ],
             "scaling": [
                 0.5999994,
@@ -2446,17 +1622,6 @@
                 -0.0001778,
                 0.6,
                 0.400032
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                1.0,
-                1.0,
-                1.0
             ]
         },
         "566": {
@@ -2488,13 +1653,7 @@
             "translation": [
                 -0.0008295,
                 0.05,
-                0.0000076
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
+                0.0
             ],
             "scaling": [
                 0.5999994,
@@ -2506,20 +1665,9 @@
             "name": "Step",
             "parent": "187",
             "translation": [
-                0.000017,
+                0.0,
                 0.7000001,
-                0.0000152
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                1.0,
-                1.0,
-                1.0
+                0.0
             ]
         },
         "568": {
@@ -2551,13 +1699,7 @@
             "translation": [
                 -0.0008295,
                 0.05,
-                0.0000076
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
+                0.0
             ],
             "scaling": [
                 0.5999994,
@@ -2572,17 +1714,6 @@
                 0.0001887,
                 0.8,
                 -0.4000014
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                1.0,
-                1.0,
-                1.0
             ]
         },
         "570": {
@@ -2614,13 +1745,7 @@
             "translation": [
                 -0.0008295,
                 0.05,
-                0.0000076
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
+                0.0
             ],
             "scaling": [
                 0.5999994,
@@ -2635,17 +1760,6 @@
                 0.0003991,
                 0.9000002,
                 -0.800041
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                1.0,
-                1.0,
-                1.0
             ]
         },
         "572": {
@@ -2677,13 +1791,7 @@
             "translation": [
                 -0.0008295,
                 0.05,
-                0.0000076
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
+                0.0
             ],
             "scaling": [
                 0.5999994,
@@ -2696,19 +1804,8 @@
             "parent": "187",
             "translation": [
                 0.000594,
-                1.0000002,
+                1.0,
                 -1.1999664
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                1.0,
-                1.0,
-                1.0
             ]
         },
         "574": {
@@ -2740,13 +1837,7 @@
             "translation": [
                 -0.0008295,
                 0.05,
-                0.0000076
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
+                0.0
             ],
             "scaling": [
                 0.5999994,
@@ -2785,12 +1876,6 @@
                 0.1499999,
                 -0.3999786
             ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
             "scaling": [
                 0.5999994,
                 0.05,
@@ -2827,12 +1912,6 @@
                 -0.0004396,
                 0.25,
                 -0.7999724
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
             ],
             "scaling": [
                 0.5999994,
@@ -2871,12 +1950,6 @@
                 0.3500001,
                 -1.1999664
             ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
             "scaling": [
                 0.5999994,
                 0.05,
@@ -2910,15 +1983,9 @@
                 }
             ],
             "translation": [
-                -0.0000385,
+                0.0,
                 0.4500001,
                 -1.5999565
-            ],
-            "rotation": [
-                0.0,
-                -0.0,
-                0.0,
-                1.0
             ],
             "scaling": [
                 0.5999994,
@@ -2929,21 +1996,11 @@
         "597": {
             "name": "HUD",
             "parent": "19",
-            "translation": [
-                0.0,
-                0.0,
-                0.0
-            ],
             "rotation": [
                 0.0,
                 1.0,
                 0.0,
-                -3.427277306400356e-7
-            ],
-            "scaling": [
-                1.000001,
-                1.000001,
-                1.0000029
+                0.0
             ]
         },
         "777": {
@@ -2958,8 +2015,6 @@
                             0.5146021,
                             0.5146021
                         ],
-                        "type": "point",
-                        "shadows": false,
                         "outerAngle": 180.0,
                         "innerAngle": 100.0,
                         "shadowRange": 100.0,
@@ -2977,11 +2032,6 @@
                 0.452015,
                 0.3047828,
                 0.8346984
-            ],
-            "scaling": [
-                1.0000057,
-                0.9999992,
-                1.0000041
             ]
         },
         "788": {
@@ -2992,8 +2042,7 @@
                     "type": "pp-tracked-hand-draw-all-joints",
                     "pp-tracked-hand-draw-all-joints": {
                         "_myJointMesh": "p1",
-                        "_myJointMaterial": "35",
-                        "_myHideMetacarpals": true
+                        "_myJointMaterial": "35"
                     }
                 },
                 {
@@ -3002,22 +2051,6 @@
                         "_myActive": false
                     }
                 }
-            ],
-            "translation": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                1.0,
-                1.0,
-                1.0
             ]
         },
         "789": {
@@ -3028,111 +2061,17 @@
             "name": "Tool Hand Left",
             "parent": "23",
             "components": [
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
                 {
                     "type": "pp-set-hand-local-transform",
-                    "pp-set-hand-local-transform": {
-                        "_myFixForward": true
-                    }
+                    "pp-set-hand-local-transform": {}
                 },
                 {
                     "type": "pp-console-vr-tool",
-                    "pp-console-vr-tool": {},
-                    "active": true
+                    "pp-console-vr-tool": {}
                 },
                 {
                     "type": "pp-easy-tune-tool",
-                    "pp-easy-tune-tool": {},
-                    "active": true
+                    "pp-easy-tune-tool": {}
                 }
             ]
         },
@@ -3143,118 +2082,12 @@
                 {
                     "type": "pp-set-hand-local-transform"
                 }
-            ],
-            "translation": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                1.0,
-                1.0,
-                1.0
             ]
         },
         "801": {
             "name": "Gamepad Right",
             "parent": "24",
             "components": [
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
                 {
                     "type": "pp-gamepad-control-scheme",
                     "pp-gamepad-control-scheme": {
@@ -3263,14 +2096,10 @@
                         "_myThumbstick": "65",
                         "_myBottomButton": "61",
                         "_myTopButton": "66",
-                        "_mySelectText": "",
                         "_myLineMaterial": "36",
                         "_myThumbstickText": "Snap Turn",
                         "_myLineLengthMultiplier": 1.5,
                         "_myTextMaterial": "786",
-                        "_myBottomButtonText": "",
-                        "_myTopButtonText": "",
-                        "_myStartVisible": false,
                         "_myHandedness": "Right",
                         "_myShowOnStart": false
                     }
@@ -3278,8 +2107,7 @@
                 {
                     "type": "pp-set-hand-local-transform",
                     "pp-set-hand-local-transform": {
-                        "_myHandedness": "Right",
-                        "_myFixForward": true
+                        "_myHandedness": "Right"
                     }
                 },
                 {
@@ -3299,245 +2127,30 @@
                 0.1,
                 0.0,
                 0.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                1.0,
-                1.0,
-                1.0
             ]
         },
         "802": {
             "name": "Tool Hand Right",
             "parent": "24",
             "components": [
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
                 {
                     "type": "pp-set-hand-local-transform",
                     "pp-set-hand-local-transform": {
-                        "_myHandedness": "Right",
-                        "_myFixForward": true
+                        "_myHandedness": "Right"
                     }
                 },
                 {
                     "type": "pp-tool-cursor",
                     "pp-tool-cursor": {
-                        "_myHandedness": "Right",
-                        "_myPulseOnHover": false,
-                        "_myCursorMesh": "p2",
-                        "_myCursorMaterial": "32",
-                        "_myShowFingerCursor": false
-                    },
-                    "active": true
+                        "_myHandedness": "Right"
+                    }
                 }
-            ],
-            "translation": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                1.0,
-                1.0,
-                1.0
             ]
         },
         "803": {
             "name": "Tracked Hand Right",
             "parent": "24",
             "components": [
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
                 {
                     "type": "pp-tracked-hand-draw-all-joints",
                     "pp-tracked-hand-draw-all-joints": {
@@ -3573,8 +2186,7 @@
                 {
                     "type": "pp-tracked-hand-draw-skin",
                     "pp-tracked-hand-draw-skin": {
-                        "_myHandSkin": "820",
-                        "_myFixForward": false
+                        "_myHandSkin": "820"
                     }
                 },
                 {
@@ -3583,22 +2195,6 @@
                         "_myActive": false
                     }
                 }
-            ],
-            "translation": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                1.0,
-                1.0,
-                1.0
             ]
         },
         "817": {
@@ -3609,8 +2205,7 @@
                     "type": "pp-tracked-hand-draw-skin",
                     "pp-tracked-hand-draw-skin": {
                         "_myHandSkin": "853",
-                        "_myHandedness": "Right",
-                        "_myFixForward": false
+                        "_myHandedness": "Right"
                     }
                 },
                 {
@@ -3619,22 +2214,6 @@
                         "_myActive": false
                     }
                 }
-            ],
-            "translation": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                1.0,
-                1.0,
-                1.0
             ]
         },
         "821": {
@@ -4107,17 +2686,6 @@
                 0.0,
                 -10.0,
                 0.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                1.0,
-                1.0,
-                1.0
             ]
         },
         "891": {
@@ -4140,12 +2708,6 @@
                 0.0,
                 0.3499999,
                 0.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
             ],
             "scaling": [
                 0.002,
@@ -4172,120 +2734,20 @@
             ],
             "rotation": [
                 0.2649303,
-                3.5521475183486473e-7,
-                2.279547572925367e-7,
+                0.0,
+                0.0,
                 0.9642675
             ],
             "scaling": [
                 1.0,
-                0.9999998,
-                0.9999998
+                1.0,
+                1.0
             ]
         },
         "900": {
             "name": "FPS",
             "parent": "597",
             "components": [
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
                 {
                     "type": "pp-show-fps",
                     "pp-show-fps": {
@@ -4293,21 +2755,11 @@
                     }
                 }
             ],
-            "translation": [
-                0.0,
-                0.0,
-                0.0
-            ],
             "rotation": [
                 0.0,
                 1.0,
                 0.0,
-                3.427270769407187e-7
-            ],
-            "scaling": [
-                0.9999989,
-                0.9999989,
-                0.999997
+                0.0
             ]
         },
         "901": {
@@ -4317,13 +2769,8 @@
                 {
                     "type": "pp-virtual-gamepad",
                     "pp-virtual-gamepad": {
-                        "_myShowOnDesktop": false,
-                        "_myReleaseOnMouseLeave": true,
-                        "_myShowOnHeadset": true,
-                        "_myOpacity": 0.5,
-                        "_myReleaseOnPointerLeave": true
-                    },
-                    "active": true
+                        "_myShowOnHeadset": true
+                    }
                 }
             ]
         },
@@ -4336,8 +2783,7 @@
                     "mesh": {
                         "mesh": "p1",
                         "material": "93"
-                    },
-                    "active": true
+                    }
                 },
                 {
                     "type": "physx",
@@ -4359,12 +2805,6 @@
                 1.0,
                 0.0
             ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
             "scaling": [
                 0.1,
                 1.0,
@@ -4380,8 +2820,7 @@
                     "mesh": {
                         "mesh": "p1",
                         "material": "93"
-                    },
-                    "active": true
+                    }
                 },
                 {
                     "type": "physx",
@@ -4402,17 +2841,6 @@
                 -1.75,
                 1.0,
                 0.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                1.0,
-                1.0,
-                1.0
             ]
         },
         "904": {
@@ -4424,8 +2852,7 @@
                     "mesh": {
                         "mesh": "p1",
                         "material": "93"
-                    },
-                    "active": true
+                    }
                 },
                 {
                     "type": "physx",
@@ -4446,17 +2873,6 @@
                 0.0,
                 0.0,
                 -3.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                1.0,
-                1.0,
-                1.0
             ]
         },
         "905": {
@@ -4468,8 +2884,7 @@
                     "mesh": {
                         "mesh": "p1",
                         "material": "93"
-                    },
-                    "active": true
+                    }
                 },
                 {
                     "type": "physx",
@@ -4490,17 +2905,6 @@
                 -1.0,
                 2.5,
                 -4.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                1.0,
-                1.0,
-                1.0
             ]
         },
         "906": {
@@ -4512,8 +2916,7 @@
                     "mesh": {
                         "mesh": "p1",
                         "material": "93"
-                    },
-                    "active": true
+                    }
                 },
                 {
                     "type": "physx",
@@ -4556,8 +2959,7 @@
                     "mesh": {
                         "mesh": "p1",
                         "material": "93"
-                    },
-                    "active": true
+                    }
                 },
                 {
                     "type": "physx",
@@ -4588,7 +2990,7 @@
             "scaling": [
                 0.1000002,
                 1.7953865,
-                1.0000114
+                1.0
             ]
         },
         "908": {
@@ -4600,8 +3002,7 @@
                     "mesh": {
                         "mesh": "p1",
                         "material": "93"
-                    },
-                    "active": true
+                    }
                 },
                 {
                     "type": "physx",
@@ -4632,7 +3033,7 @@
             "scaling": [
                 0.1000002,
                 3.5720267,
-                1.0000052
+                1.0
             ]
         },
         "909": {
@@ -4644,8 +3045,7 @@
                     "mesh": {
                         "mesh": "p1",
                         "material": "93"
-                    },
-                    "active": true
+                    }
                 },
                 {
                     "type": "physx",
@@ -4676,7 +3076,7 @@
             "scaling": [
                 0.0999959,
                 0.499983,
-                1.0000083
+                1.0
             ]
         },
         "911": {
@@ -4688,8 +3088,7 @@
                     "mesh": {
                         "mesh": "p1",
                         "material": "93"
-                    },
-                    "active": true
+                    }
                 },
                 {
                     "type": "physx",
@@ -4711,12 +3110,6 @@
                 1.5,
                 7.5566735
             ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
             "scaling": [
                 3.0,
                 0.1,
@@ -4732,8 +3125,7 @@
                     "mesh": {
                         "mesh": "p1",
                         "material": "93"
-                    },
-                    "active": true
+                    }
                 },
                 {
                     "type": "physx",
@@ -4755,12 +3147,6 @@
                 1.5,
                 1.8361172
             ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
             "scaling": [
                 0.1,
                 0.1,
@@ -4776,8 +3162,7 @@
                     "mesh": {
                         "mesh": "p1",
                         "material": "93"
-                    },
-                    "active": true
+                    }
                 },
                 {
                     "type": "physx",
@@ -4789,10 +3174,8 @@
                                 1.7949999,
                                 1.0
                             ]
-                        },
-                        "kinematic": false
-                    },
-                    "active": true
+                        }
+                    }
                 },
                 {
                     "type": "physx",
@@ -4803,11 +3186,6 @@
                     }
                 }
             ],
-            "translation": [
-                0.0,
-                0.0,
-                0.0
-            ],
             "rotation": [
                 0.9686249,
                 0.2483949,
@@ -4817,7 +3195,7 @@
             "scaling": [
                 0.0999998,
                 1.7953943,
-                0.9999961
+                1.0
             ]
         },
         "914": {
@@ -4829,8 +3207,7 @@
                     "mesh": {
                         "mesh": "p1",
                         "material": "93"
-                    },
-                    "active": true
+                    }
                 },
                 {
                     "type": "physx",
@@ -4853,15 +3230,15 @@
                 -1.8370454
             ],
             "rotation": [
-                -0.0,
-                -0.0,
+                0.0,
+                0.0,
                 -0.2588191,
                 0.9659258
             ],
             "scaling": [
                 0.1000002,
                 3.5721044,
-                1.0000214
+                1.0
             ]
         },
         "915": {
@@ -4871,23 +3248,7 @@
                     "type": "pulse-on-button"
                 }
             ],
-            "parent": "71",
-            "translation": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                1.0,
-                1.0,
-                1.0
-            ]
+            "parent": "71"
         },
         "916": {
             "name": "MoveStaticColliderTest",
@@ -4895,12 +3256,6 @@
                 0.0,
                 0.0,
                 2.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
             ],
             "components": [
                 {
@@ -4945,8 +3300,7 @@
                     "mesh": {
                         "mesh": "p1",
                         "material": "93"
-                    },
-                    "active": true
+                    }
                 },
                 {
                     "type": "physx",
@@ -4977,7 +3331,7 @@
             "scaling": [
                 0.1,
                 1.7953854,
-                1.0000114
+                1.0
             ]
         },
         "918": {
@@ -4988,9 +3342,6 @@
                     "physx": {
                         "gravity": false,
                         "kinematic": true,
-                        "trigger": false,
-                        "allowSimulation": true,
-                        "simulate": true,
                         "static": true
                     }
                 },
@@ -5007,12 +3358,6 @@
                 -9999.0,
                 2.0
             ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
             "scaling": [
                 0.25,
                 0.25,
@@ -5027,17 +3372,6 @@
                 0.0,
                 -10000.0,
                 0.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                1.0,
-                1.0,
-                1.0
             ],
             "components": [
                 {
@@ -5055,17 +3389,6 @@
                 -0.3772123,
                 -9996.2226562,
                 2.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                1.0,
-                1.0,
-                1.0
             ],
             "components": [
                 {
@@ -5091,17 +3414,6 @@
                 0.0,
                 -10000.0,
                 0.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                1.0,
-                1.0,
-                1.0
             ]
         },
         "923": {
@@ -5116,8 +3428,6 @@
                             0.5146021,
                             0.5146021
                         ],
-                        "type": "point",
-                        "shadows": false,
                         "outerAngle": 180.0,
                         "innerAngle": 100.0,
                         "shadowRange": 100.0,
@@ -5135,11 +3445,6 @@
                 0.452015,
                 0.3047828,
                 0.8346984
-            ],
-            "scaling": [
-                1.0000057,
-                0.9999992,
-                1.0000041
             ]
         }
     },
@@ -6310,8 +4615,7 @@
             "version": [
                 1,
                 1,
-                1,
-                1
+                2
             ]
         },
         "rendering": {
