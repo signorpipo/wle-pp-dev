@@ -2,6 +2,8 @@ let _myAnalyticsEnabled = false;
 
 let _mySendAnalyticsCallback = null;
 
+let _myEventsSentOnce = [];
+
 let _myDataLogEnabled = false;
 let _myEventsLogEnabled = false;
 
@@ -17,6 +19,79 @@ export function isAnalyticsEnabled() {
 
 export function setSendAnalyticsCallback(callback) {
     _mySendAnalyticsCallback = callback;
+}
+
+
+export function sendData(...args) {
+    try {
+        if (_myAnalyticsEnabled) {
+            if (_myDataLogEnabled) {
+                console.log("Analytics data sent: " + args);
+            }
+
+            if (_mySendAnalyticsCallback != null) {
+                _mySendAnalyticsCallback(...args);
+            } else if (_myErrorsLogEnabled) {
+                console.error("You need to set the send analytics callback");
+            }
+        }
+    } catch (error) {
+        if (_myErrorsLogEnabled) {
+            console.error(error);
+        }
+    }
+}
+
+export function sendEvent(eventName, value = 1, sendOnce = false) {
+    try {
+        if (_myAnalyticsEnabled) {
+            let sendEventAllowed = true;
+
+            if (sendOnce) {
+                sendEventAllowed = !AnalyticsUtils.hasEventAlreadyBeenSent(eventName);
+            }
+
+            if (sendEventAllowed) {
+                if (_myEventsLogEnabled) {
+                    console.log("Analytics event sent: " + eventName + " - Value: " + value);
+                }
+
+                if (_mySendAnalyticsCallback != null) {
+                    _mySendAnalyticsCallback("event", eventName, { "value": value });
+
+                    if (sendOnce) {
+                        _myEventsSentOnce.pp_pushUnique(eventName);
+                    }
+                } else if (_myErrorsLogEnabled) {
+                    console.error("You need to set the send analytics callback");
+                }
+            }
+        }
+    } catch (error) {
+        if (_myErrorsLogEnabled) {
+            console.error(error);
+        }
+    }
+}
+
+export function sendEventOnce(eventName, value = 1) {
+    AnalyticsUtils.sendEvent(eventName, value, true);
+}
+
+export function clearEventSentOnceState(eventName) {
+    _myEventsSentOnce.pp_removeEqual(eventName);
+}
+
+export function clearAllEventsSentOnceState() {
+    _myEventsSentOnce.pp_clear();
+}
+
+export function hasEventAlreadyBeenSent(eventName) {
+    return _myEventsSentOnce.pp_hasEqual(eventName);
+}
+
+export function getEventsAlreadyBeenSent() {
+    return _myEventsSentOnce;
 }
 
 export function setDataLogEnabled(enabled) {
@@ -43,56 +118,21 @@ export function isErrorsLogEnabled() {
     return _myErrorsLogEnabled;
 }
 
-export function sendData(...args) {
-    try {
-        if (_myAnalyticsEnabled) {
-            if (_myDataLogEnabled) {
-                console.log("Analytics data sent: " + args);
-            }
-
-            if (_mySendAnalyticsCallback != null) {
-                _mySendAnalyticsCallback(...args);
-            } else if (_myErrorsLogEnabled) {
-                console.error("You need to set the send analytics callback");
-            }
-        }
-    } catch (error) {
-        if (_myErrorsLogEnabled) {
-            console.error(error);
-        }
-    }
-}
-
-export function sendEvent(eventName, value = 1) {
-    try {
-        if (_myAnalyticsEnabled) {
-            if (_myEventsLogEnabled) {
-                console.log("Analytics event sent: " + eventName + " - Value: " + value);
-            }
-
-            if (_mySendAnalyticsCallback != null) {
-                _mySendAnalyticsCallback("event", eventName, { "value": value });
-            } else if (_myErrorsLogEnabled) {
-                console.error("You need to set the send analytics callback");
-            }
-        }
-    } catch (error) {
-        if (_myErrorsLogEnabled) {
-            console.error(error);
-        }
-    }
-}
-
 export let AnalyticsUtils = {
     setAnalyticsEnabled,
     isAnalyticsEnabled,
     setSendAnalyticsCallback,
+    sendData,
+    sendEvent,
+    sendEventOnce,
+    clearEventSentOnceState,
+    clearAllEventsSentOnceState,
+    hasEventAlreadyBeenSent,
+    getEventsAlreadyBeenSent,
     setDataLogEnabled,
     isDataLogEnabled,
     setEventsLogEnabled,
     isEventsLogEnabled,
     setErrorsLogEnabled,
-    isErrorsLogEnabled,
-    sendData,
-    sendEvent
+    isErrorsLogEnabled
 };
