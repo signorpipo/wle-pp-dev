@@ -1,6 +1,6 @@
 let _myAnalyticsEnabled = false;
 
-let _mySendAnalyticsCallback = null;
+let _mySendDataCallback = null;
 
 let _myEventsSentOnce = [];
 
@@ -17,10 +17,9 @@ export function isAnalyticsEnabled() {
     return _myAnalyticsEnabled;
 }
 
-export function setSendAnalyticsCallback(callback) {
-    _mySendAnalyticsCallback = callback;
+export function setSendDataCallback(callback) {
+    _mySendDataCallback = callback;
 }
-
 
 export function sendData(...args) {
     try {
@@ -29,10 +28,10 @@ export function sendData(...args) {
                 console.log("Analytics data sent: " + args);
             }
 
-            if (_mySendAnalyticsCallback != null) {
-                _mySendAnalyticsCallback(...args);
+            if (_mySendDataCallback != null) {
+                _mySendDataCallback(...args);
             } else if (_myErrorsLogEnabled) {
-                console.error("You need to set the send analytics callback");
+                console.error("You need to set the send data callback");
             }
         }
     } catch (error) {
@@ -56,14 +55,14 @@ export function sendEvent(eventName, value = 1, sendOnce = false) {
                     console.log("Analytics event sent: " + eventName + " - Value: " + value);
                 }
 
-                if (_mySendAnalyticsCallback != null) {
-                    _mySendAnalyticsCallback("event", eventName, { "value": value });
+                if (_mySendDataCallback != null) {
+                    _mySendDataCallback("event", eventName, { "value": value });
 
                     if (sendOnce) {
                         _myEventsSentOnce.pp_pushUnique(eventName);
                     }
                 } else if (_myErrorsLogEnabled) {
-                    console.error("You need to set the send analytics callback");
+                    console.error("You need to set the send data callback");
                 }
             }
         }
@@ -121,7 +120,7 @@ export function isErrorsLogEnabled() {
 export let AnalyticsUtils = {
     setAnalyticsEnabled,
     isAnalyticsEnabled,
-    setSendAnalyticsCallback,
+    setSendDataCallback,
     sendData,
     sendEvent,
     sendEventOnce,
