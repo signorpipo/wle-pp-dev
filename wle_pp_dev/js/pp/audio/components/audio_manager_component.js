@@ -5,7 +5,7 @@ import { AudioManager } from "../audio_manager";
 export class AudioManagerComponent extends Component {
     static TypeName = "pp-audio-manager";
     static Properties = {
-        _myPreloadAudio: Property.bool(true),
+        _myPreloadAudio: Property.bool(false),
         _myCleanUpAudioSourcesOnInit: Property.bool(true)
     };
 
