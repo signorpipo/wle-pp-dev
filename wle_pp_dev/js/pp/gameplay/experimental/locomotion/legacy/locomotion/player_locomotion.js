@@ -1,4 +1,4 @@
-import { PhysXComponent } from "@wonderlandengine/api";
+import { Emitter, PhysXComponent } from "@wonderlandengine/api";
 import { FSM } from "../../../../../cauldron/fsm/fsm";
 import { EasingFunction } from "../../../../../cauldron/js/utils/math_utils";
 import { PhysicsLayerFlags } from "../../../../../cauldron/physics/physics_layer_flags";
@@ -388,6 +388,9 @@ export class PlayerLocomotion {
         this._myActive = true;
         this._myStarted = false;
         this._myDestroyed = false;
+
+        this._myPreUpdateEmitter = new Emitter();     // Signature: callback(dt, playerLocomotion)
+        this._myPostUpdateEmitter = new Emitter();     // Signature: callback(dt, playerLocomotion)
     }
 
     start() {
@@ -451,6 +454,8 @@ export class PlayerLocomotion {
     }
 
     update(dt) {
+        this._myPreUpdateEmitter.notify(dt, this);
+
         this._myPlayerHeadManager.update(dt);
         this._myPlayerTransformManager.update(dt);
 
@@ -474,6 +479,8 @@ export class PlayerLocomotion {
         }
 
         this._myPlayerObscureManager.update(dt);
+
+        this._myPostUpdateEmitter.notify(dt, this);
     }
 
     setIdle(idle) {
@@ -508,6 +515,22 @@ export class PlayerLocomotion {
 
     getPlayerObscureManager() {
         return this._myPlayerObscureManager;
+    }
+
+    registerPreUpdateCallback(id, callback) {
+        this._myPreUpdateEmitter.add(callback, { id: id });
+    }
+
+    unregisterPreUpdateCallback(id) {
+        this._myPreUpdateEmitter.remove(id);
+    }
+
+    registerPostUpdateCallback(id, callback) {
+        this._myPostUpdateEmitter.add(callback, { id: id });
+    }
+
+    unregisterPostUpdateCallback(id) {
+        this._myPostUpdateEmitter.remove(id);
     }
 
     _updateCollisionHeight() {

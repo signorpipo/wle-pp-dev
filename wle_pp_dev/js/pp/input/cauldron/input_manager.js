@@ -1,3 +1,4 @@
+import { Emitter } from "@wonderlandengine/api";
 import { Globals } from "../../pp/globals";
 import { GamepadsManager } from "../gamepad/cauldron/gamepads_manager";
 import { BasePoseParams } from "../pose/base_pose";
@@ -43,6 +44,9 @@ export class InputManager {
         this._myTrackedHandPosesEnabled = true;
         this._myTrackedHandPosesStarted = false;
 
+        this._myPreUpdateEmitter = new Emitter();     // Signature: callback(dt, inputManager)
+        this._myPostUpdateEmitter = new Emitter();     // Signature: callback(dt, inputManager)
+
         this._myDestroyed = false;
     }
 
@@ -70,6 +74,8 @@ export class InputManager {
     }
 
     update(dt) {
+        this._myPreUpdateEmitter.notify(dt, this);
+
         this._myMouse.update(dt);
         this._myKeyboard.update(dt);
 
@@ -86,6 +92,8 @@ export class InputManager {
         this._updateTrackedHandPoses();
 
         this._myGamepadsManager.update(dt);
+
+        this._myPostUpdateEmitter.notify(dt, this);
     }
 
     getMouse() {
@@ -146,6 +154,22 @@ export class InputManager {
         if (this._myStarted && this._myTrackedHandPosesEnabled) {
             this._startTrackedHandPoses();
         }
+    }
+
+    registerPreUpdateCallback(id, callback) {
+        this._myPreUpdateEmitter.add(callback, { id: id });
+    }
+
+    unregisterPreUpdateCallback(id) {
+        this._myPreUpdateEmitter.remove(id);
+    }
+
+    registerPostUpdateCallback(id, callback) {
+        this._myPostUpdateEmitter.add(callback, { id: id });
+    }
+
+    unregisterPostUpdateCallback(id) {
+        this._myPostUpdateEmitter.remove(id);
     }
 
     _startTrackedHandPoses() {
