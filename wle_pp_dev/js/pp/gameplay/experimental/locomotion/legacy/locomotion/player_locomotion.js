@@ -85,6 +85,7 @@ export class PlayerLocomotionParams {
         this.myViewOcclusionInsideWallsEnabled = true;
 
         this.mySyncNonVRHeightWithVROnExitSession = false;
+        this.mySyncNonVRVerticalAngleWithVROnExitSession = false;
 
         this.myColliderAccuracy = null;
         this.myColliderCheckOnlyFeet = false;
@@ -136,8 +137,8 @@ export class PlayerLocomotion {
 
             //params.myNextEnterSessionFloorHeight = 3;
             params.myEnterSessionResyncHeight = false;
-            params.myExitSessionResyncHeight = false;
-            params.myExitSessionResyncVerticalAngle = true;
+            params.myExitSessionResyncHeight = this._myParams.mySyncNonVRHeightWithVROnExitSession;
+            params.myExitSessionResyncVerticalAngle = this._myParams.mySyncNonVRVerticalAngleWithVROnExitSession;
             params.myExitSessionRemoveRightTilt = true;
             params.myExitSessionAdjustMaxVerticalAngle = true;
             params.myExitSessionMaxVerticalAngle = 90;

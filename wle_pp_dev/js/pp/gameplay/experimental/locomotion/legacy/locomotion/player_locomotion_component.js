@@ -48,6 +48,9 @@ export class PlayerLocomotionComponent extends Component {
         _mySyncWithRealWorldPositionOnlyIfValid: Property.bool(true),   // valid means the real player has not moved inside walls
         _myViewOcclusionInsideWallsEnabled: Property.bool(true),
 
+        _mySyncNonVRHeightWithVROnExitSession: Property.bool(false),
+        _mySyncNonVRVerticalAngleWithVROnExitSession: Property.bool(false),
+
         _myColliderAccuracy: Property.enum(["Very Low", "Low", "Medium", "High", "Very High"], "High"),
         _myColliderCheckOnlyFeet: Property.bool(false),
         _myColliderSlideAlongWall: Property.bool(true),
@@ -56,8 +59,6 @@ export class PlayerLocomotionComponent extends Component {
         _myColliderMaxDistanceToSnapOnGround: Property.float(0.1),
         _myColliderMaxWalkableGroundStepHeight: Property.float(0.1),
         _myColliderPreventFallingFromEdges: Property.bool(false),
-
-        _mySyncNonVRHeightWithVROnExitSession: Property.bool(false),
 
         _myDebugHorizontalEnabled: Property.bool(false),
         _myDebugVerticalEnabled: Property.bool(false),
@@ -122,6 +123,7 @@ export class PlayerLocomotionComponent extends Component {
         params.myViewOcclusionInsideWallsEnabled = this._myViewOcclusionInsideWallsEnabled;
 
         params.mySyncNonVRHeightWithVROnExitSession = this._mySyncNonVRHeightWithVROnExitSession;
+        params.mySyncNonVRVerticalAngleWithVROnExitSession = this._mySyncNonVRVerticalAngleWithVROnExitSession;
 
         params.myColliderAccuracy = this._myColliderAccuracy;
         params.myColliderCheckOnlyFeet = this._myColliderCheckOnlyFeet;
