@@ -84,6 +84,8 @@ export class PlayerLocomotionParams {
         this.mySyncWithRealWorldPositionOnlyIfValid = true;
         this.myViewOcclusionInsideWallsEnabled = true;
 
+        this.mySyncNonVRHeightWithVROnExitSession = false;
+
         this.myColliderAccuracy = null;
         this.myColliderCheckOnlyFeet = false;
         this.myColliderSlideAlongWall = false;
@@ -223,11 +225,11 @@ export class PlayerLocomotion {
             params.myNeverResetRealRotationNonVR = true;
             params.myNeverResetRealHeightNonVR = false;
 
+            params.myResetRealHeightNonVROnExitSession = this._myParams.mySyncNonVRHeightWithVROnExitSession;
+
             params.myNeverResetRealPositionVR = false;
             params.myNeverResetRealRotationVR = false;
             params.myNeverResetRealHeightVR = true;
-
-            params.myResetRealOnMove = false;
 
             params.myDebugEnabled = false;
 

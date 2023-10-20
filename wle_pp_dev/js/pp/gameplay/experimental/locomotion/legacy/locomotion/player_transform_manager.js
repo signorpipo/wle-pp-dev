@@ -129,6 +129,8 @@ export class PlayerTransformManagerParams {
         this.myNeverResetRealRotationNonVR = false;
         this.myNeverResetRealHeightNonVR = false;
 
+        this.myResetRealHeightNonVROnExitSession = false;
+
         this.myNeverResetRealPositionVR = false;
         this.myNeverResetRealRotationVR = false;
         this.myNeverResetRealHeightVR = false;
@@ -698,7 +700,7 @@ PlayerTransformManager.prototype.update = function () {
                     this.resetReal(
                         !this._myParams.myNeverResetRealPositionNonVR,
                         !this._myParams.myNeverResetRealRotationNonVR,
-                        !this._myParams.myNeverResetRealHeightNonVR,
+                        !this._myParams.myNeverResetRealHeightNonVR && this._myParams.myResetRealHeightNonVROnExitSession,
                         true,
                         true);
                 }
