@@ -7,7 +7,7 @@ export class ConsoleVRToolComponent extends Component {
     static TypeName = "pp-console-vr-tool";
     static Properties = {
         _myHandedness: Property.enum(["None", "Left", "Right"], "None"),
-        _myOverrideBrowserConsoleFunctions: Property.enum(["None", "All", "Errors"], "All"),
+        _myOverrideBrowserConsoleFunctions: Property.enum(["None", "All", "Errors & Warns"], "All"),
         _myShowOnStart: Property.bool(false),
         _myShowVisibilityButton: Property.bool(false),
         _myPulseOnNewMessage: Property.enum(["Never", "Always", "When Hidden"], "Never")
