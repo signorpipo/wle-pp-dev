@@ -60,12 +60,12 @@ export class PlayerLocomotionComponent extends Component {
         _myColliderMaxWalkableGroundStepHeight: Property.float(0.1),
         _myColliderPreventFallingFromEdges: Property.bool(false),
 
-        _myDebugHorizontalEnabled: Property.bool(false),
-        _myDebugVerticalEnabled: Property.bool(false),
-
         _myMoveThroughCollisionShortcutEnabled: Property.bool(false),   // main hand (default left) thumbstick pressed while moving
         _myMoveHeadShortcutEnabled: Property.bool(false),               // non main hand (default right) thumbstick pressed while moving
-        _myTripleSpeedShortcutEnabled: Property.bool(false)             // main hand (default left) select pressed while moving
+        _myTripleSpeedShortcutEnabled: Property.bool(false),            // main hand (default left) select pressed while moving
+
+        _myDebugHorizontalEnabled: Property.bool(false),
+        _myDebugVerticalEnabled: Property.bool(false)
     };
 
     start() {

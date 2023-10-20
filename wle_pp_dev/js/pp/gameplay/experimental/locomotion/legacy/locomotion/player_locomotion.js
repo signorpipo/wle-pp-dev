@@ -96,12 +96,12 @@ export class PlayerLocomotionParams {
         this.myColliderMaxWalkableGroundStepHeight = 0;
         this.myColliderPreventFallingFromEdges = false;
 
-        this.myDebugHorizontalEnabled = false;
-        this.myDebugVerticalEnabled = false;
-
         this.myMoveThroughCollisionShortcutEnabled = false; // main hand (default left) thumbstick pressed while moving
         this.myMoveHeadShortcutEnabled = false;             // non main hand (default right) thumbstick pressed while moving
         this.myTripleSpeedShortcutEnabled = false;          // main hand (default left) select pressed while moving
+
+        this.myDebugHorizontalEnabled = false;
+        this.myDebugVerticalEnabled = false;
 
         this.myPhysicsBlockLayerFlags = new PhysicsLayerFlags();
 
