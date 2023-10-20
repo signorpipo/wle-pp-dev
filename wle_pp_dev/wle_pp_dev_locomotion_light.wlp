@@ -4593,20 +4593,13 @@
                 "file": "default"
             },
             "name": "Flat Transparent No Depth",
-            "features": {
-                "TEXTURED": false,
-                "ALPHA_MASKED": true
-            },
             "depthFunction": "always",
             "depthTest": false,
-            "depthWrite": true,
             "blending": true,
             "blendSrcRgb": "source alpha",
             "blendSrcAlpha": "one minus destination alpha",
             "blendDestRgb": "one minus source alpha",
-            "blendDestAlpha": "one",
-            "blendEqAlpha": "add",
-            "sampleAlphaToCoverage": false
+            "blendDestAlpha": "one"
         }
     },
     "settings": {

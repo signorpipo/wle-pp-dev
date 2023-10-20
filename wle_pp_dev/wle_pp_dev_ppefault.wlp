@@ -1068,17 +1068,13 @@
                 "file": "default"
             },
             "name": "Flat Transparent No Depth",
-            "features": {
-                "ALPHA_MASKED": true
-            },
             "depthTest": false,
             "depthFunction": "always",
             "blending": true,
             "blendSrcRgb": "source alpha",
             "blendSrcAlpha": "one minus destination alpha",
             "blendDestRgb": "one minus source alpha",
-            "blendDestAlpha": "one",
-            "blendEqAlpha": "add"
+            "blendDestAlpha": "one"
         }
     },
     "textures": {},
