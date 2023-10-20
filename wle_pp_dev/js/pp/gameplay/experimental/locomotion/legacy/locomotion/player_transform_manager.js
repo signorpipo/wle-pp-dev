@@ -187,7 +187,7 @@ export class PlayerTransformManager {
         this._myIsRealPositionValid = false;
         this._myIsPositionValid = false;
 
-        this._myResetRealOnSynced = false;
+        this._myResetRealOnHeadSynced = false;
 
         this._myActive = true;
         this._myDestroyed = false;
@@ -333,15 +333,15 @@ export class PlayerTransformManager {
         return !isBodyColliding && !isHeadColliding && !isFar && !isFloating;
     }
 
-    resetReal(resetPosition = true, resetRotation = false, resetHeight = false, resetHeadToReal = true, updateRealFlags = false) {
+    resetReal(resetPosition = true, resetRotation = false, resetHeight = false, resetHeadToReal = true, updateValidToReal = false) {
         // Implemented outside class definition
     }
 
-    updateReal() {
-        this._updateReal(0);
+    updateValidToReal() {
+        this._updateValidToReal(0);
     }
 
-    resetToReal(resetToPlayerInsteadOfHead = false, updateRealFlags = false) {
+    resetToReal(resetToPlayerInsteadOfHead = false, updateValidToReal = false) {
         if (resetToPlayerInsteadOfHead) {
             this._myValidPosition = this.getPlayerHeadManager().getPlayer().pp_getPosition(this._myValidPosition);
         } else {
@@ -360,8 +360,8 @@ export class PlayerTransformManager {
 
         this._myValidHeight = Math.pp_clamp(this.getHeightReal(), this._myParams.myMinHeight, this._myParams.myMaxHeight);
 
-        if (updateRealFlags) {
-            this._updateReal(0);
+        if (updateValidToReal) {
+            this._updateValidToReal(0);
         }
     }
 
@@ -588,7 +588,7 @@ export class PlayerTransformManager {
     _onXRSessionStart(session) {
         if (this._myActive) {
             if (this._myParams.myResetToValidOnEnterSession) {
-                this._myResetRealOnSynced = true;
+                this._myResetRealOnHeadSynced = true;
             }
         }
     }
@@ -596,7 +596,7 @@ export class PlayerTransformManager {
     _onXRSessionEnd() {
         if (this._myActive) {
             if (this._myParams.myResetToValidOnExitSession) {
-                this._myResetRealOnSynced = true;
+                this._myResetRealOnHeadSynced = true;
             }
         }
     }
@@ -647,7 +647,7 @@ PlayerTransformManager.prototype.resetReal = function () {
     let validUp = vec3_create();
     let position = vec3_create();
     let rotationQuat = quat_create();
-    return function resetReal(resetPosition = true, resetRotation = false, resetHeight = false, resetHeadToReal = true, updateRealFlags = false) {
+    return function resetReal(resetPosition = true, resetRotation = false, resetHeight = false, resetHeadToReal = true, updateValidToReal = false) {
         let playerHeadManager = this.getPlayerHeadManager();
 
         if (resetPosition) {
@@ -665,8 +665,8 @@ PlayerTransformManager.prototype.resetReal = function () {
             playerHeadManager.setHeightHead(this.getHeight(), true);
         }
 
-        if (updateRealFlags) {
-            this._updateReal(0);
+        if (updateValidToReal) {
+            this._updateValidToReal(0);
         }
 
         if (resetHeadToReal) {
@@ -684,9 +684,9 @@ PlayerTransformManager.prototype.update = function () {
     return function update(dt) {
         // #TODO This should update ground and ceiling info but not sliding info    
 
-        if (this._myResetRealOnSynced) {
+        if (this._myResetRealOnHeadSynced) {
             if (this.getPlayerHeadManager().isSynced()) {
-                this._myResetRealOnSynced = false;
+                this._myResetRealOnHeadSynced = false;
                 if (XRUtils.isSessionActive(this._myParams.myEngine)) {
                     this.resetReal(
                         !this._myParams.myNeverResetRealPositionVR,
@@ -705,7 +705,7 @@ PlayerTransformManager.prototype.update = function () {
             }
         }
 
-        this._updateReal(dt);
+        this._updateValidToReal(dt);
 
         if (this._myParams.myUpdatePositionValid) {
             transformQuat = this.getTransformQuat(transformQuat);
@@ -730,7 +730,7 @@ PlayerTransformManager.prototype.update = function () {
     };
 }();
 
-PlayerTransformManager.prototype._updateReal = function () {
+PlayerTransformManager.prototype._updateValidToReal = function () {
     let movementToCheck = vec3_create();
     let position = vec3_create();
     let positionReal = vec3_create();
@@ -748,7 +748,7 @@ PlayerTransformManager.prototype._updateReal = function () {
     let floatingTransformQuat = quat2_create();
     let horizontalDirection = vec3_create();
     let rotationQuat = quat_create();
-    return function _updateReal(dt) {
+    return function _updateValidToReal(dt) {
         // Check if new head is ok and update the data
         // If head is not synced (blurred or session changing) avoid this and keep last valid
         if (this.getPlayerHeadManager().isSynced()) {
