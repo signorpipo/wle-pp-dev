@@ -682,9 +682,7 @@ PlayerTransformManager.prototype.update = function () {
     let horizontalDirection = vec3_create();
     let rotationQuat = quat_create();
     return function update(dt) {
-        // #TODO This should update ground and ceiling info but not sliding info        
-
-        this._updateReal(dt);
+        // #TODO This should update ground and ceiling info but not sliding info    
 
         if (this._myResetRealOnSynced) {
             if (this.getPlayerHeadManager().isSynced()) {
@@ -706,6 +704,8 @@ PlayerTransformManager.prototype.update = function () {
                 }
             }
         }
+
+        this._updateReal(dt);
 
         if (this._myParams.myUpdatePositionValid) {
             transformQuat = this.getTransformQuat(transformQuat);
