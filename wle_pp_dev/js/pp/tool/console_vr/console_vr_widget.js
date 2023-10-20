@@ -4,7 +4,7 @@ import { Globals } from "../../pp/globals";
 import { ToolHandedness } from "../cauldron/tool_types";
 import { WidgetFrame, WidgetParams } from "../widget_frame/widget_frame";
 import { ConsoleOriginalFunctions } from "./console_original_functions";
-import { ConsoleVRWidgetConsoleFunction, ConsoleVRWidgetMessageType, ConsoleVRWidgetPulseOnNewMessage, ConsoleVRWidgetSender } from "./console_vr_types";
+import { ConsoleVRWidgetConsoleFunction, ConsoleVRWidgetMessageType, ConsoleVRWidgetPulseOnNewMessage, ConsoleVRWidgetSender, OverrideBrowserConsoleFunctions } from "./console_vr_types";
 import { ConsoleVRWidgetConfig } from "./console_vr_widget_config";
 import { ConsoleVRWidgetUI } from "./console_vr_widget_ui";
 
@@ -13,7 +13,7 @@ export class ConsoleVRWidgetParams extends WidgetParams {
     constructor() {
         super();
 
-        this.myOverrideBrowserConsole = false;
+        this.myOverrideBrowserConsoleFunctions = false;
         this.myShowOnStart = false;
         this.myShowVisibilityButton = false;
         this.myPulseOnNewMessage = ConsoleVRWidgetPulseOnNewMessage.NEVER;
@@ -164,13 +164,22 @@ export class ConsoleVRWidget {
         this._myOldBrowserConsole[ConsoleVRWidgetConsoleFunction.ASSERT] = console.assert;
         this._myOldBrowserConsoleClear = console.clear;
 
-        if (this._myParams.myOverrideBrowserConsole) {
-            console.log = this._consolePrint.bind(this, ConsoleVRWidgetConsoleFunction.LOG, ConsoleVRWidgetSender.BROWSER_CONSOLE);
+        if (this._myParams.myOverrideBrowserConsoleFunctions != OverrideBrowserConsoleFunctions.NONE) {
+
+            if (this._myParams.myOverrideBrowserConsoleFunctions == OverrideBrowserConsoleFunctions.ALL) {
+                console.log = this._consolePrint.bind(this, ConsoleVRWidgetConsoleFunction.LOG, ConsoleVRWidgetSender.BROWSER_CONSOLE);
+            }
+
             console.error = this._consolePrint.bind(this, ConsoleVRWidgetConsoleFunction.ERROR, ConsoleVRWidgetSender.BROWSER_CONSOLE);
             console.warn = this._consolePrint.bind(this, ConsoleVRWidgetConsoleFunction.WARN, ConsoleVRWidgetSender.BROWSER_CONSOLE);
-            console.info = this._consolePrint.bind(this, ConsoleVRWidgetConsoleFunction.INFO, ConsoleVRWidgetSender.BROWSER_CONSOLE);
-            console.debug = this._consolePrint.bind(this, ConsoleVRWidgetConsoleFunction.DEBUG, ConsoleVRWidgetSender.BROWSER_CONSOLE);
+
+            if (this._myParams.myOverrideBrowserConsoleFunctions == OverrideBrowserConsoleFunctions.ALL) {
+                console.info = this._consolePrint.bind(this, ConsoleVRWidgetConsoleFunction.INFO, ConsoleVRWidgetSender.BROWSER_CONSOLE);
+                console.debug = this._consolePrint.bind(this, ConsoleVRWidgetConsoleFunction.DEBUG, ConsoleVRWidgetSender.BROWSER_CONSOLE);
+            }
+
             console.assert = this._consolePrint.bind(this, ConsoleVRWidgetConsoleFunction.ASSERT, ConsoleVRWidgetSender.BROWSER_CONSOLE);
+
             console.clear = this._clearConsole.bind(this, true, ConsoleVRWidgetSender.BROWSER_CONSOLE);
 
             this._myErrorEventListener = function (errorEvent) {

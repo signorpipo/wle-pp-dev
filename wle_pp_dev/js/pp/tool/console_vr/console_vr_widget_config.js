@@ -179,7 +179,7 @@ export class ConsoleVRWidgetConfig {
         this.myPulseIntensity = 0.3;
         this.myPulseDuration = 0.085;
 
-        this.myClearBrowserConsoleWhenClearPressed = true;
+        this.myClearBrowserConsoleWhenClearPressed = false;
 
         this.myGamepadScrollOnlyOnHover = true;
     }
