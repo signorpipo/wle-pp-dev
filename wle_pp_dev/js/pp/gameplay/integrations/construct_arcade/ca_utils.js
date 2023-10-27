@@ -38,18 +38,17 @@ export function getDummyServer() {
 }
 
 export function isSDKAvailable() {
-    return window.casdk != null;
+    return window.heyVR != null;
 }
 
 export function getSDK() {
-    return window.casdk;
+    return window.heyVR;
 }
 
 export function getLeaderboard(leaderboardID, ascending, aroundPlayer, scoresAmount, onDoneCallback = null, onErrorCallback = null, useDummyServerOverride = null) {
     if (CAUtils.isSDKAvailable()) {
-        let casdk = CAUtils.getSDK();
         try {
-            casdk.getLeaderboard(leaderboardID, ascending, aroundPlayer, scoresAmount).then(function (result) {
+            _getLeaderboard(leaderboardID, ascending, aroundPlayer, scoresAmount).then(function (result) {
                 if (result.leaderboard != null) {
                     if (!aroundPlayer) {
                         if (onDoneCallback != null) {
@@ -154,11 +153,13 @@ export function getLeaderboardDummy(leaderboardID, ascending, aroundPlayer, scor
 
 export function submitScore(leaderboardID, scoreToSubmit, onDoneCallback = null, onErrorCallback = null, useDummyServerOverride = null) {
     if (CAUtils.isSDKAvailable()) {
-        let casdk = CAUtils.getSDK();
-
         try {
-            casdk.submitScore(leaderboardID, scoreToSubmit).then(function (result) {
-                if (result.error != null) {
+            _submitScore(leaderboardID, scoreToSubmit).then(function (result) {
+                if (result.scoreSubmitted) {
+                    if (onDoneCallback != null) {
+                        onDoneCallback();
+                    }
+                } else {
                     if (_myDummyServer != null && _myDummyServer.submitScore != null &&
                         (_myUseDummyServerOnError && useDummyServerOverride == null) || (useDummyServerOverride != null && useDummyServerOverride)) {
                         CAUtils.submitScoreDummy(leaderboardID, scoreToSubmit, onDoneCallback, onErrorCallback, CAError.SUBMIT_SCORE_FAILED);
@@ -168,8 +169,6 @@ export function submitScore(leaderboardID, scoreToSubmit, onDoneCallback = null,
                         error.type = CAError.SUBMIT_SCORE_FAILED;
                         onErrorCallback(error, result);
                     }
-                } else {
-                    onDoneCallback();
                 }
             }).catch(function (result) {
                 if (_myDummyServer != null && _myDummyServer.submitScore != null &&
@@ -221,15 +220,13 @@ export function submitScoreDummy(leaderboardID, scoreToSubmit, onDoneCallback = 
 
 export function getUser(onDoneCallback = null, onErrorCallback = null, useDummyServerOverride = null) {
     if (CAUtils.isSDKAvailable()) {
-        let casdk = CAUtils.getSDK();
-
         try {
-            casdk.getUser().then(function (result) {
-                if (result.user != null) {
+            _getUser().then(function (result) {
+                if (result.user != null && result.user.displayName != null) {
                     if (onDoneCallback != null) {
                         onDoneCallback(result.user);
                     }
-                } else {
+                } else if (result.user != null) {
                     if (_myDummyServer != null && _myDummyServer.getUser != null &&
                         (_myUseDummyServerOnError && useDummyServerOverride == null) || (useDummyServerOverride != null && useDummyServerOverride)) {
                         CAUtils.getUserDummy(onDoneCallback, onErrorCallback, CAError.USER_NOT_LOGGED_IN);
@@ -237,6 +234,16 @@ export function getUser(onDoneCallback = null, onErrorCallback = null, useDummyS
                         let error = {};
                         error.reason = "User not logged in";
                         error.type = CAError.USER_NOT_LOGGED_IN;
+                        onErrorCallback(error, result);
+                    }
+                } else {
+                    if (_myDummyServer != null && _myDummyServer.getUser != null &&
+                        (_myUseDummyServerOnError && useDummyServerOverride == null) || (useDummyServerOverride != null && useDummyServerOverride)) {
+                        CAUtils.getUserDummy(onDoneCallback, onErrorCallback, CAError.GET_USER_FAILED);
+                    } else if (onErrorCallback != null) {
+                        let error = {};
+                        error.reason = "Get user failed";
+                        error.type = CAError.GET_USER_FAILED;
                         onErrorCallback(error, result);
                     }
                 }
@@ -304,3 +311,58 @@ export let CAUtils = {
     getUser,
     getUserDummy
 };
+
+
+
+
+function _getLeaderboard(leaderboardID, ascending, aroundPlayer, scoresAmount) {
+    let heyVR = CAUtils.getSDK();
+
+    if (aroundPlayer) {
+        return heyVR.leaderboard.getMy(leaderboardID, scoresAmount).then(function (result) {
+            let adjustedLeaderboard = [];
+            for (let leaderboardEntry of result) {
+                adjustedLeaderboard.push({ rank: leaderboardEntry.rank - 1, displayName: leaderboardEntry.user, score: leaderboardEntry.score });
+            }
+            return { leaderboard: adjustedLeaderboard };
+        }).catch(function (error) {
+            if (error != null && error.status != null && error.status.debug == "err_unauthenticated") {
+                return { leaderboard: [] };
+            } else {
+                return { leaderboard: null };
+            }
+        });
+    } else {
+        return heyVR.leaderboard.get(leaderboardID, scoresAmount).then(function (result) {
+            let adjustedLeaderboard = [];
+            for (let leaderboardEntry of result) {
+                adjustedLeaderboard.push({ rank: leaderboardEntry.rank - 1, displayName: leaderboardEntry.user, score: leaderboardEntry.score });
+            }
+            return { leaderboard: adjustedLeaderboard };
+        }).catch(function () {
+            return { leaderboard: null };
+        });
+    }
+}
+
+function _submitScore(leaderboardID, scoreToSubmit) {
+    let heyVR = CAUtils.getSDK();
+    return heyVR.leaderboard.postScore(leaderboardID, scoreToSubmit).then(function () {
+        return { scoreSubmitted: true };
+    }).catch(function () {
+        return { scoreSubmitted: false };
+    });
+}
+
+function _getUser() {
+    let heyVR = CAUtils.getSDK();
+    return heyVR.user.getName().then(result => {
+        return { user: { displayName: result } };
+    }).catch(function (error) {
+        if (error != null && error.status != null && error.status.debug == "err_unauthenticated") {
+            return { user: { displayName: null } };
+        } else {
+            return { user: null };
+        }
+    });
+}

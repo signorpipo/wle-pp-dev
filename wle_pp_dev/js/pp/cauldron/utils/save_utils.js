@@ -23,11 +23,11 @@ export function load(id, defaultValue = null) {
 export function loadString(id, defaultValue = null) {
     let item = localStorage.getItem(id);
 
-    if (item == null) {
-        item = defaultValue;
+    if (item != null) {
+        return item;
     }
 
-    return item;
+    return defaultValue;
 }
 
 export function loadNumber(id, defaultValue = null) {
@@ -43,10 +43,12 @@ export function loadNumber(id, defaultValue = null) {
 export function loadBool(id, defaultValue = null) {
     let item = SaveUtils.loadString(id);
 
-    if (item == "true") {
-        return true;
-    } else if (item == "false") {
-        return false;
+    if (item != null) {
+        if (item == "true") {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     return defaultValue;
