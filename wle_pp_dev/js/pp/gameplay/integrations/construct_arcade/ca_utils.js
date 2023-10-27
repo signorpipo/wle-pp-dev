@@ -4,12 +4,12 @@ let _myUseDummyServerOnError = false;
 
 export let CAError = {
     NONE: 0,
-    DUMMY_NOT_INITIALIZED: 1,
-    CA_SDK_MISSING: 2,
-    SUBMIT_SCORE_FAILED: 3,
-    GET_LEADERBOARD_FAILED: 4,
-    USER_NOT_LOGGED_IN: 5,
-    GET_USER_FAILED: 6,
+    CA_SDK_MISSING: 1,
+    DUMMY_NOT_INITIALIZED: 2,
+    GET_LEADERBOARD_FAILED: 3,
+    SUBMIT_SCORE_FAILED: 4,
+    GET_USER_FAILED: 5,
+    USER_NOT_LOGGED_IN: 6,
     USER_HAS_NO_SCORE: 7
 };
 
@@ -158,6 +158,16 @@ export function submitScore(leaderboardID, scoreToSubmit, onDoneCallback = null,
                 if (result.scoreSubmitted) {
                     if (onDoneCallback != null) {
                         onDoneCallback();
+                    }
+                } else if (result.scoreSubmitted != null) {
+                    if (_myDummyServer != null && _myDummyServer.submitScore != null &&
+                        (_myUseDummyServerOnError && useDummyServerOverride == null) || (useDummyServerOverride != null && useDummyServerOverride)) {
+                        CAUtils.submitScoreDummy(leaderboardID, scoreToSubmit, onDoneCallback, onErrorCallback, CAError.USER_NOT_LOGGED_IN);
+                    } else if (onErrorCallback != null) {
+                        let error = {};
+                        error.reason = "The score can't be submitted because the user is not logged in";
+                        error.type = CAError.USER_NOT_LOGGED_IN;
+                        onErrorCallback(error, result);
                     }
                 } else {
                     if (_myDummyServer != null && _myDummyServer.submitScore != null &&
@@ -349,8 +359,12 @@ function _submitScore(leaderboardID, scoreToSubmit) {
     let heyVR = CAUtils.getSDK();
     return heyVR.leaderboard.postScore(leaderboardID, scoreToSubmit).then(function () {
         return { scoreSubmitted: true };
-    }).catch(function () {
-        return { scoreSubmitted: false };
+    }).catch(function (error) {
+        if (error != null && error.status != null && error.status.debug == "err_unauthenticated") {
+            return { scoreSubmitted: false };
+        } else {
+            return { scoreSubmitted: null };
+        }
     });
 }
 
