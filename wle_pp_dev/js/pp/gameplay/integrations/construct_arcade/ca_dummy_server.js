@@ -11,7 +11,7 @@ export class CADummyServer {
         let leaderboard = null;
 
         if (caError != CAError.CA_SDK_MISSING) {
-            if (aroundPlayer && caError != CAError.GET_LEADERBOARD_FAILED) {
+            if (aroundPlayer && (caError == CAError.USER_NOT_LOGGED_IN || caError == CAError.GET_USER_FAILED || caError == CAError.USER_HAS_NO_SCORE)) {
                 leaderboard = [
                     { rank: 0, displayName: "Sign In", score: 0 },
                     { rank: 1, displayName: "And", score: 0 },
