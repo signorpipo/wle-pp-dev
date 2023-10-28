@@ -5,6 +5,7 @@ import { ToolHandedness } from "../../../cauldron/tool_types";
 export class EasyTuneBaseWidgetConfig {
 
     constructor() {
+
     }
 
     build() {

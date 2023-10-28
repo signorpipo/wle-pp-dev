@@ -1,10 +1,9 @@
-import { Globals } from "../../../pp/globals";
 import { CAError } from "./ca_utils";
 
 export class CADummyServer {
 
-    constructor(engine = Globals.getMainEngine()) {
-        this._myEngine = engine;
+    constructor() {
+
     }
 
     getLeaderboard(leaderboardID, ascending, aroundPlayer, scoresAmount, onDoneCallback = null, onErrorCallback = null, caError = CAError.NONE) {

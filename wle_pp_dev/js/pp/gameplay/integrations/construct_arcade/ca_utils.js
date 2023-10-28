@@ -60,8 +60,8 @@ export function getLeaderboard(leaderboardID, ascending, aroundPlayer, scoresAmo
                             function (user) {
                                 let userName = user.displayName;
                                 let userValid = false;
-                                for (let value of userLeaderboard) {
-                                    if (value.displayName == userName && value.score != 0) {
+                                for (let userLeaderboardEntry of userLeaderboard) {
+                                    if (userLeaderboardEntry.displayName == userName) {
                                         userValid = true;
                                         break;
                                     }
