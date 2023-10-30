@@ -27,7 +27,6 @@ module.exports = {
         "/node_modules/",
         "/deploy/",
         "/cache/",
-        "/.editor/",
         "/languages/",
         "/.editor/",
         "/assets/",
