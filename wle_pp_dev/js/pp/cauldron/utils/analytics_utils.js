@@ -25,7 +25,7 @@ export function sendData(...args) {
     try {
         if (_myAnalyticsEnabled) {
             if (_myDataLogEnabled) {
-                console.log("Analytics data sent: " + args);
+                console.log("Analytics Data sent: " + args);
             }
 
             if (_mySendDataCallback != null) {
@@ -52,7 +52,7 @@ export function sendEvent(eventName, value = 1, sendOnce = false) {
 
             if (sendEventAllowed) {
                 if (_myEventsLogEnabled) {
-                    console.log("Analytics event sent: " + eventName + " - Value: " + value);
+                    console.log("Analytics Event sent: " + eventName + " - Value: " + value);
                 }
 
                 if (_mySendDataCallback != null) {
