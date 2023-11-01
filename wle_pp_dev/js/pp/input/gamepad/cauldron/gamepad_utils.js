@@ -349,6 +349,7 @@ export let GamepadUtils = {
     getSimultaneousTouchMaxDelay,
     isAnyButtonPressStart,
     areButtonsPressStart,
+    isAnyButtonPressEnd,
     areButtonsPressEnd,
     isAnyButtonTouchStart,
     areButtonsTouchStart,
