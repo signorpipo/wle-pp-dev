@@ -56,7 +56,8 @@ export class PlayerLocomotionParams {
 
         this.myFlyEnabled = false;
         this.myStartFlying = false;
-
+        this.myFlyWithButtonsEnabled = false;
+        this.myFlyWithViewAngleEnabled = false;
         this.myMinAngleToFlyUpNonVR = 0;
         this.myMinAngleToFlyDownNonVR = 0;
         this.myMinAngleToFlyUpVR = 0;
@@ -314,6 +315,8 @@ export class PlayerLocomotion {
                 params.myMovementMinStickIntensityThreshold = 0.1;
 
                 params.myFlyEnabled = this._myParams.myFlyEnabled;
+                params.myFlyWithButtonsEnabled = this._myParams.myFlyWithButtonsEnabled;
+                params.myFlyWithViewAngleEnabled = this._myParams.myFlyWithViewAngleEnabled;
                 params.myMinAngleToFlyUpNonVR = this._myParams.myMinAngleToFlyUpNonVR;
                 params.myMinAngleToFlyDownNonVR = this._myParams.myMinAngleToFlyDownNonVR;
                 params.myMinAngleToFlyUpVR = this._myParams.myMinAngleToFlyUpVR;

@@ -23,6 +23,8 @@ export class PlayerLocomotionSmoothParams {
         this.myMovementMinStickIntensityThreshold = 0;
 
         this.myFlyEnabled = false;
+        this.myFlyWithButtonsEnabled = false;
+        this.myFlyWithViewAngleEnabled = false;
         this.myMinAngleToFlyUpNonVR = 0;
         this.myMinAngleToFlyDownNonVR = 0;
         this.myMinAngleToFlyUpVR = 0;
@@ -60,8 +62,8 @@ export class PlayerLocomotionSmooth extends PlayerLocomotionMovement {
         this._myStickIdleTimer = new Timer(0.25, false);
 
         let directionConverterNonVRParams = new Direction2DTo3DConverterParams(this._myParams.myEngine);
-        directionConverterNonVRParams.myAutoUpdateFlyForward = this._myParams.myFlyEnabled;
-        directionConverterNonVRParams.myAutoUpdateFlyRight = this._myParams.myFlyEnabled;
+        directionConverterNonVRParams.myAutoUpdateFlyForward = this._myParams.myFlyEnabled && this._myParams.myFlyWithViewAngleEnabled;
+        directionConverterNonVRParams.myAutoUpdateFlyRight = this._myParams.myFlyEnabled && this._myParams.myFlyWithViewAngleEnabled;
         directionConverterNonVRParams.myMinAngleToFlyForwardUp = this._myParams.myMinAngleToFlyUpNonVR;
         directionConverterNonVRParams.myMinAngleToFlyForwardDown = this._myParams.myMinAngleToFlyDownNonVR;
         directionConverterNonVRParams.myMinAngleToFlyRightUp = this._myParams.myMinAngleToFlyRight;
@@ -69,8 +71,8 @@ export class PlayerLocomotionSmooth extends PlayerLocomotionMovement {
         directionConverterNonVRParams.myInvertForwardWhenUpsideDown = this._myParams.myDirectionInvertForwardWhenUpsideDown;
 
         let directionConverterVRParams = new Direction2DTo3DConverterParams(this._myParams.myEngine);
-        directionConverterVRParams.myAutoUpdateFlyForward = this._myParams.myFlyEnabled;
-        directionConverterVRParams.myAutoUpdateFlyRight = this._myParams.myFlyEnabled;
+        directionConverterVRParams.myAutoUpdateFlyForward = this._myParams.myFlyEnabled && this._myParams.myFlyWithViewAngleEnabled;
+        directionConverterVRParams.myAutoUpdateFlyRight = this._myParams.myFlyEnabled && this._myParams.myFlyWithViewAngleEnabled;
         directionConverterVRParams.myMinAngleToFlyForwardUp = this._myParams.myMinAngleToFlyUpVR;
         directionConverterVRParams.myMinAngleToFlyForwardDown = this._myParams.myMinAngleToFlyDownVR;
         directionConverterVRParams.myMinAngleToFlyRightUp = this._myParams.myMinAngleToFlyRight;
@@ -188,7 +190,7 @@ PlayerLocomotionSmooth.prototype.update = function () {
             }
         }
 
-        if (this._myParams.myFlyEnabled) {
+        if (this._myParams.myFlyEnabled && this._myParams.myFlyWithButtonsEnabled) {
             if (Globals.getGamepads(this._myParams.myEngine)[this._myParams.myHandedness].getButtonInfo(GamepadButtonID.TOP_BUTTON).isPressed()) {
                 verticalMovement = playerUp.vec3_scale(maxSpeed * dt, verticalMovement);
                 headMovement = headMovement.vec3_add(verticalMovement, headMovement);

@@ -21,8 +21,11 @@ export class PlayerLocomotionComponent extends Component {
         _mySnapTurnOnlyVR: Property.bool(true),
         _mySnapTurnAngle: Property.float(30),
         _mySnapTurnSpeedDegrees: Property.float(0),
+
         _myFlyEnabled: Property.bool(false),
         _myStartFlying: Property.bool(false),
+        _myFlyWithButtonsEnabled: Property.bool(true),
+        _myFlyWithViewAngleEnabled: Property.bool(true),
         _myMinAngleToFlyUpNonVR: Property.float(30),
         _myMinAngleToFlyDownNonVR: Property.float(50),
         _myMinAngleToFlyUpVR: Property.float(60),
@@ -95,6 +98,8 @@ export class PlayerLocomotionComponent extends Component {
 
         params.myFlyEnabled = this._myFlyEnabled;
         params.myStartFlying = this._myStartFlying;
+        params.myFlyWithButtonsEnabled = this._myFlyWithButtonsEnabled;
+        params.myFlyWithViewAngleEnabled = this._myFlyWithViewAngleEnabled;
         params.myMinAngleToFlyUpNonVR = this._myMinAngleToFlyUpNonVR;
         params.myMinAngleToFlyDownNonVR = this._myMinAngleToFlyDownNonVR;
         params.myMinAngleToFlyUpVR = this._myMinAngleToFlyUpVR;
