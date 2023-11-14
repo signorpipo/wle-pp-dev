@@ -626,6 +626,8 @@ export class PlayerLocomotion {
         //this._myCollisionCheckParamsTeleport.mySplitMovementMaxLength = this._myCollisionCheckParamsTeleport.myRadius * 0.75;
         //this._myCollisionCheckParamsTeleport.mySplitMovementMinLengthEnabled = true;
         //this._myCollisionCheckParamsTeleport.mySplitMovementMinLength = params.mySplitMovementMaxLength;
+        //this._myCollisionCheckParamsTeleport.mySplitMovementStopWhenHorizontalMovementCanceled = true;
+        //this._myCollisionCheckParamsTeleport.mySplitMovementStopWhenVerticalMovementCanceled = true;
 
         //this._myCollisionCheckParamsTeleport.myDebugEnabled = true;
     }
