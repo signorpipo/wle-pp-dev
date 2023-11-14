@@ -192,7 +192,7 @@ export class PlayerLocomotion {
             }
 
             params.myMaxDistanceFromRealToSyncEnabled = true;
-            params.myMaxDistanceFromRealToSync = 100;
+            params.myMaxDistanceFromRealToSync = 0.75;
 
             params.myIsFloatingValidIfVerticalMovement = false;
             params.myIsFloatingValidIfVerticalMovementAndRealOnGround = false;
