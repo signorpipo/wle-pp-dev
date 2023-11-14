@@ -259,11 +259,13 @@ export function createSimplified(simplifiedCreationParams, outCharacterColliderS
 
 
 
-        if (simplifiedCreationParams.myMaxSpeed / simplifiedCreationParams.myAverageFPS > simplifiedCreationParams.myRadius) {
+        let safeRadius = simplifiedCreationParams.myRadius * 0.75;
+        if (simplifiedCreationParams.myMaxSpeed / simplifiedCreationParams.myAverageFPS > safeRadius) {
             outCharacterColliderSetup.mySplitMovementParams.mySplitMovementEnabled = true;
 
-            outCharacterColliderSetup.mySplitMovementParams.mySplitMovementMaxSteps = Math.ceil((simplifiedCreationParams.myMaxSpeed / simplifiedCreationParams.myAverageFPS) / simplifiedCreationParams.myRadius);
-            outCharacterColliderSetup.mySplitMovementParams.mySplitMovementMinStepLength = simplifiedCreationParams.myRadius * 0.75;
+            outCharacterColliderSetup.mySplitMovementParams.mySplitMovementMaxSteps = Math.ceil((simplifiedCreationParams.myMaxSpeed / simplifiedCreationParams.myAverageFPS) / safeRadius);
+            outCharacterColliderSetup.mySplitMovementParams.mySplitMovementMaxStepLength = safeRadius;
+            outCharacterColliderSetup.mySplitMovementParams.mySplitMovementMinStepLength = safeRadius;
         }
     }
 

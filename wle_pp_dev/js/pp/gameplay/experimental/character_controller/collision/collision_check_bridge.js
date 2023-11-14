@@ -300,7 +300,7 @@ export let convertCharacterColliderSetupToCollisionCheckParams = function () {
         outCollisionCheckParams.myHorizontalMovementCheckEnabled = characterColliderSetup.myHorizontalCheckParams.myHorizontalMovementCheckEnabled;
 
         outCollisionCheckParams.myHorizontalMovementStepEnabled = characterColliderSetup.myHorizontalCheckParams.myHorizontalMovementCheckSplitMovementEnabled;
-        outCollisionCheckParams.myHorizontalMovementStepMaxLength = characterColliderSetup.myHorizontalCheckParams.myHorizontalMovementCheckSplitMovementMaxStepLength;
+        outCollisionCheckParams.myHorizontalMovementStepMaxLength = characterColliderSetup.myHorizontalCheckParams.myHorizontalMovementCheckSplitMovementMaxStepLength == null ? 0 : characterColliderSetup.myHorizontalCheckParams.myHorizontalMovementCheckSplitMovementMaxStepLength;
 
         outCollisionCheckParams.myHorizontalMovementRadialStepAmount = characterColliderSetup.myHorizontalCheckParams.myHorizontalMovementCheckRadialSteps;
 
@@ -477,11 +477,12 @@ export let convertCharacterColliderSetupToCollisionCheckParams = function () {
         outCollisionCheckParams.mySlidingAdjustSign90Degrees = characterColliderSetup.myWallSlideParams.my90DegreesWallSlideAdjustDirectionSign;
 
         outCollisionCheckParams.mySplitMovementEnabled = characterColliderSetup.mySplitMovementParams.mySplitMovementEnabled;
-        outCollisionCheckParams.mySplitMovementMaxLength = characterColliderSetup.mySplitMovementParams.mySplitMovementMaxStepLength;
+        outCollisionCheckParams.mySplitMovementMaxLength = characterColliderSetup.mySplitMovementParams.mySplitMovementMaxStepLength == null ? 0 : characterColliderSetup.mySplitMovementParams.mySplitMovementMaxStepLength;
+        outCollisionCheckParams.mySplitMovementMaxLengthEnabled = characterColliderSetup.mySplitMovementParams.mySplitMovementMaxStepLength != null;
+        outCollisionCheckParams.mySplitMovementMaxSteps = characterColliderSetup.mySplitMovementParams.mySplitMovementMaxSteps == null ? 0 : characterColliderSetup.mySplitMovementParams.mySplitMovementMaxSteps;
         outCollisionCheckParams.mySplitMovementMaxStepsEnabled = characterColliderSetup.mySplitMovementParams.mySplitMovementMaxSteps != null;
-        outCollisionCheckParams.mySplitMovementMaxSteps = characterColliderSetup.mySplitMovementParams.mySplitMovementMaxSteps;
-        outCollisionCheckParams.mySplitMovementStepEqualLength = characterColliderSetup.mySplitMovementParams.mySplitMovementMaxStepLength == null;
-        outCollisionCheckParams.mySplitMovementStepEqualLengthMinLength = characterColliderSetup.mySplitMovementParams.mySplitMovementMinStepLength;
+        outCollisionCheckParams.mySplitMovementMinLength = characterColliderSetup.mySplitMovementParams.mySplitMovementMinStepLength == null ? 0 : characterColliderSetup.mySplitMovementParams.mySplitMovementMinStepLength;
+        outCollisionCheckParams.mySplitMovementMinLengthEnabled = characterColliderSetup.mySplitMovementParams.mySplitMovementMinStepLength != null;
         outCollisionCheckParams.mySplitMovementStopWhenHorizontalMovementCanceled = characterColliderSetup.mySplitMovementParams.mySplitMovementStopOnHorizontalMovementFailed;
         outCollisionCheckParams.mySplitMovementStopWhenVerticalMovementCanceled = characterColliderSetup.mySplitMovementParams.mySplitMovementStopOnVerticalMovementFailed;
         outCollisionCheckParams.mySplitMovementStopCallback = characterColliderSetup.mySplitMovementParams.mySplitMovementStopOnCallback;

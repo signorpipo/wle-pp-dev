@@ -55,25 +55,30 @@ CollisionCheck.prototype._move = function () {
         movementStep.vec3_copy(movement);
 
         if (!movement.vec3_isZero(0.00001) && collisionCheckParams.mySplitMovementEnabled) {
-            let equalStepLength = movement.vec3_length() / collisionCheckParams.mySplitMovementMaxSteps;
-            if (!collisionCheckParams.mySplitMovementStepEqualLength || equalStepLength < collisionCheckParams.mySplitMovementStepEqualLengthMinLength) {
-                let maxLength = collisionCheckParams.mySplitMovementStepEqualLength ? collisionCheckParams.mySplitMovementStepEqualLengthMinLength : collisionCheckParams.mySplitMovementMaxLength;
-                movementStepAmount = Math.ceil(movement.vec3_length() / maxLength);
-                if (movementStepAmount > 1) {
-                    movementStep = movementStep.vec3_normalize(movementStep).vec3_scale(maxLength, movementStep);
-                    movementStepAmount = (collisionCheckParams.mySplitMovementMaxStepsEnabled) ? Math.min(movementStepAmount, collisionCheckParams.mySplitMovementMaxSteps) : movementStepAmount;
-                }
+            let minLength = collisionCheckParams.mySplitMovementMinLengthEnabled ? collisionCheckParams.mySplitMovementMinLength : null;
+            let maxLength = collisionCheckParams.mySplitMovementMaxLengthEnabled && collisionCheckParams.mySplitMovementMaxLength > 0 ? collisionCheckParams.mySplitMovementMaxLength : null;
+            let maxSteps = collisionCheckParams.mySplitMovementMaxStepsEnabled && collisionCheckParams.mySplitMovementMaxSteps > 0 ? collisionCheckParams.mySplitMovementMaxSteps : 1;
 
-                movementStepAmount = Math.max(1, movementStepAmount);
+            let movementLength = movement.vec3_length();
+            let equalStepLength = movementLength / maxSteps;
 
-                if (movementStepAmount == 1) {
-                    movementStep.vec3_copy(movement);
+            let stepLength = Math.pp_clamp(equalStepLength, minLength, maxLength);
+            if (stepLength != equalStepLength) {
+                movementStepAmount = Math.ceil(movementLength / stepLength);
+                movementStep = movementStep.vec3_normalize(movementStep).vec3_scale(stepLength, movementStep);
+
+                if (collisionCheckParams.mySplitMovementMaxStepsEnabled) {
+                    movementStepAmount = Math.min(movementStepAmount, maxSteps);
                 }
             } else {
-                movementStepAmount = collisionCheckParams.mySplitMovementMaxSteps;
-                if (movementStepAmount > 1) {
-                    movementStep = movementStep.vec3_normalize(movementStep).vec3_scale(equalStepLength, movementStep);
-                }
+                movementStepAmount = maxSteps;
+                movementStep = movementStep.vec3_normalize(movementStep).vec3_scale(equalStepLength, movementStep);
+            }
+
+            movementStepAmount = Math.max(1, movementStepAmount);
+
+            if (movementStepAmount == 1) {
+                movementStep.vec3_copy(movement);
             }
         }
 

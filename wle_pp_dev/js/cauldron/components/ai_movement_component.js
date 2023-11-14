@@ -48,9 +48,6 @@ export class AIMovementComponent extends Component {
     _setupCollisionCheckParams() {
         this._myCollisionCheckParams = new CollisionCheckParams();
 
-        this._myCollisionCheckParams.mySplitMovementEnabled = false;
-        this._myCollisionCheckParams.mySplitMovementMaxLength = 0;
-
         this._myCollisionCheckParams.myRadius = 0.3 * this._myScale;
         this._myCollisionCheckParams.myDistanceFromFeetToIgnore = 0.1 * this._myScale;
         this._myCollisionCheckParams.myDistanceFromHeadToIgnore = 0.1 * this._myScale;

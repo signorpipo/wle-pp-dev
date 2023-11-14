@@ -460,7 +460,10 @@ export class PlayerTransformManager {
         params.myDistanceFromHeadToIgnore = 0;
 
         params.mySplitMovementEnabled = true;
-        params.mySplitMovementMaxLength = 0.5;
+        params.mySplitMovementMaxLengthEnabled = true;
+        params.mySplitMovementMaxLength = params.myRadius * 0.75;
+        params.mySplitMovementMinLengthEnabled = true;
+        params.mySplitMovementMinLength = params.mySplitMovementMaxLength;
         params.mySplitMovementMaxStepsEnabled = true;
         params.mySplitMovementMaxSteps = 2;
         params.mySplitMovementStopWhenHorizontalMovementCanceled = true;
@@ -515,7 +518,7 @@ export class PlayerTransformManager {
 
         params.myDebugEnabled = false;
 
-        params.myDebugHorizontalMovementEnabled = true;
+        params.myDebugHorizontalMovementEnabled = false;
         params.myDebugHorizontalPositionEnabled = false;
         params.myDebugVerticalMovementEnabled = false;
         params.myDebugVerticalPositionEnabled = false;
@@ -547,7 +550,10 @@ export class PlayerTransformManager {
         params.copy(this._myParams.myMovementCollisionCheckParams);
 
         params.mySplitMovementEnabled = true;
-        params.mySplitMovementMaxLength = 0.5;
+        params.mySplitMovementMaxLengthEnabled = true;
+        params.mySplitMovementMaxLength = params.myRadius * 0.75;
+        params.mySplitMovementMinLengthEnabled = true;
+        params.mySplitMovementMinLength = params.mySplitMovementMaxLength;
         params.mySplitMovementMaxStepsEnabled = true;
         params.mySplitMovementMaxSteps = 2;
         params.mySplitMovementStopWhenHorizontalMovementCanceled = true;
@@ -581,8 +587,8 @@ export class PlayerTransformManager {
         params.myDebugVerticalMovementEnabled = false;
         params.myDebugVerticalPositionEnabled = false;
         params.myDebugSlidingEnabled = false;
-        params.myDebugGroundInfoEnabled = true;
-        params.myDebugCeilingInfoEnabled = true;
+        params.myDebugGroundInfoEnabled = false;
+        params.myDebugCeilingInfoEnabled = false;
         params.myDebugRuntimeParamsEnabled = false;
         params.myDebugMovementEnabled = false;
     }

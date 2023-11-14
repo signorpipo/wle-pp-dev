@@ -623,7 +623,10 @@ export class PlayerLocomotion {
         //this._myCollisionCheckParamsTeleport.myHalfConeSliceAmount = 3;
         //this._myCollisionCheckParamsTeleport.myCheckHorizontalFixedForwardEnabled = false;
         //this._myCollisionCheckParamsTeleport.mySplitMovementEnabled = true;
-        //this._myCollisionCheckParamsTeleport.mySplitMovementMaxLength = 0.2;
+        //this._myCollisionCheckParamsTeleport.mySplitMovementMaxLengthEnabled = true;
+        //this._myCollisionCheckParamsTeleport.mySplitMovementMaxLength = this._myCollisionCheckParamsTeleport.myRadius * 0.75;
+        //this._myCollisionCheckParamsTeleport.mySplitMovementMinLengthEnabled = true;
+        //this._myCollisionCheckParamsTeleport.mySplitMovementMinLength = params.mySplitMovementMaxLength;
 
         //this._myCollisionCheckParamsTeleport.myDebugEnabled = true;
     }
