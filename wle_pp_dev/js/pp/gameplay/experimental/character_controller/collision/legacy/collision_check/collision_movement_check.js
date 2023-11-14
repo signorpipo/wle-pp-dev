@@ -46,7 +46,15 @@ CollisionCheck.prototype._move = function () {
         //height = 1.75;
 
         horizontalMovement = movement.vec3_removeComponentAlongAxis(transformUp, horizontalMovement);
+        if (horizontalMovement.vec3_isZero(0.000001)) {
+            horizontalMovement.vec3_zero();
+        }
+
         verticalMovement = movement.vec3_componentAlongAxis(transformUp, verticalMovement);
+        if (verticalMovement.vec3_isZero(0.000001)) {
+            verticalMovement.vec3_zero();
+        }
+
         //feetPosition = feetPosition.vec3_add(horizontalMovement.vec3_normalize().vec3_scale(0.5));
         //height = height / 2;
         //horizontalMovement.vec3_normalize(horizontalMovement).vec3_scale(0.3, horizontalMovement); movement = horizontalMovement.vec3_add(verticalMovement);
@@ -108,8 +116,10 @@ CollisionCheck.prototype._move = function () {
             stepsPerformed = i + 1;
 
             if ((collisionRuntimeParams.myHorizontalMovementCanceled && collisionRuntimeParams.myVerticalMovementCanceled) ||
-                (collisionRuntimeParams.myHorizontalMovementCanceled && collisionCheckParams.mySplitMovementStopWhenHorizontalMovementCanceled) ||
-                (collisionRuntimeParams.myVerticalMovementCanceled && collisionCheckParams.mySplitMovementStopWhenVerticalMovementCanceled) ||
+                (collisionRuntimeParams.myHorizontalMovementCanceled &&
+                    (collisionCheckParams.mySplitMovementStopWhenHorizontalMovementCanceled || (verticalMovement.vec3_isZero() && fixedMovementStep.vec3_isZero()))) ||
+                (collisionRuntimeParams.myVerticalMovementCanceled &&
+                    (collisionCheckParams.mySplitMovementStopWhenVerticalMovementCanceled || (horizontalMovement.vec3_isZero() && fixedMovementStep.vec3_isZero()))) ||
                 (collisionCheckParams.mySplitMovementStopCallback != null && collisionCheckParams.mySplitMovementStopCallback(collisionRuntimeParams))) {
                 if (collisionCheckParams.mySplitMovementStopReturnPrevious) {
                     collisionRuntimeParams.copy(previousCollisionRuntimeParams);
