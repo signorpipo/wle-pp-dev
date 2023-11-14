@@ -485,6 +485,7 @@ export let convertCharacterColliderSetupToCollisionCheckParams = function () {
         outCollisionCheckParams.mySplitMovementMinLengthEnabled = characterColliderSetup.mySplitMovementParams.mySplitMovementMinStepLength != null;
         outCollisionCheckParams.mySplitMovementStopWhenHorizontalMovementCanceled = characterColliderSetup.mySplitMovementParams.mySplitMovementStopOnHorizontalMovementFailed;
         outCollisionCheckParams.mySplitMovementStopWhenVerticalMovementCanceled = characterColliderSetup.mySplitMovementParams.mySplitMovementStopOnVerticalMovementFailed;
+        outCollisionCheckParams.mySplitMovementStopCallback = null;
         outCollisionCheckParams.mySplitMovementStopReturnPrevious = characterColliderSetup.mySplitMovementParams.mySplitMovementStopReturnPreviousResults;
 
         outCollisionCheckParams.myPositionOffsetLocal.vec3_copy(characterColliderSetup.myAdditionalParams.myPositionOffsetLocal);
