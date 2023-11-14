@@ -57,7 +57,7 @@ export class PlayerTransformManagerParams {
         this.mySyncHeightFlagMap.set(PlayerTransformManagerSyncFlag.FAR, false);
         this.mySyncHeightFlagMap.set(PlayerTransformManagerSyncFlag.FLOATING, false);
 
-        this.myIsLeaningValidAboveDistance = false;
+        this.myIsLeaningValidAboveDistance = false; // Used to make the character fall if it's leaning too much
         this.myLeaningValidDistance = 0;
 
         // Settings for both hop and lean
@@ -68,7 +68,8 @@ export class PlayerTransformManagerParams {
         this.myIsFloatingValidIfVerticalMovementAndSteepGround = false;
 
         this.myFloatingSplitCheckEnabled = false;
-        this.myFloatingSplitCheckMaxLength = 0;
+        this.myFloatingSplitCheckMinLength = null;
+        this.myFloatingSplitCheckMaxLength = null;
         this.myFloatingSplitCheckMaxSteps = null;
         this.myFloatingSplitCheckStepEqualLength = false;
         this.myFloatingSplitCheckStepEqualLengthMinLength = 0;
@@ -465,7 +466,7 @@ export class PlayerTransformManager {
         params.mySplitMovementMinLengthEnabled = true;
         params.mySplitMovementMinLength = params.mySplitMovementMaxLength;
         params.mySplitMovementMaxStepsEnabled = true;
-        params.mySplitMovementMaxSteps = 2;
+        params.mySplitMovementMaxSteps = 3;
         params.mySplitMovementStopWhenHorizontalMovementCanceled = true;
         params.mySplitMovementStopWhenVerticalMovementCanceled = true;
 
@@ -555,7 +556,7 @@ export class PlayerTransformManager {
         params.mySplitMovementMinLengthEnabled = true;
         params.mySplitMovementMinLength = params.mySplitMovementMaxLength;
         params.mySplitMovementMaxStepsEnabled = true;
-        params.mySplitMovementMaxSteps = 2;
+        params.mySplitMovementMaxSteps = 3;
         params.mySplitMovementStopWhenHorizontalMovementCanceled = true;
         params.mySplitMovementStopWhenVerticalMovementCanceled = true;
 
@@ -833,25 +834,30 @@ PlayerTransformManager.prototype._updateValidToReal = function () {
                         let movementStepAmount = 1;
                         movementStep.vec3_copy(movementToCheck);
                         if (!movementToCheck.vec3_isZero(0.00001) && this._myParams.myFloatingSplitCheckEnabled) {
-                            let equalStepLength = movementToCheck.vec3_length() / this._myParams.myFloatingSplitCheckMaxSteps;
-                            if (!this._myParams.myFloatingSplitCheckStepEqualLength || equalStepLength < this._myParams.myFloatingSplitCheckStepEqualLengthMinLength) {
-                                let maxLength = this._myParams.myFloatingSplitCheckStepEqualLength ? this._myParams.myFloatingSplitCheckStepEqualLengthMinLength : this._myParams.myFloatingSplitCheckMaxLength;
-                                movementStepAmount = Math.ceil(movementToCheck.vec3_length() / maxLength);
-                                if (movementStepAmount > 1) {
-                                    movementStep = movementStep.vec3_normalize(movementStep).vec3_scale(maxLength, movementStep);
-                                    movementStepAmount = (this._myParams.myFloatingSplitCheckMaxSteps != null) ? Math.min(movementStepAmount, this._myParams.myFloatingSplitCheckMaxSteps) : movementStepAmount;
-                                }
+                            let minLength = this._myParams.myFloatingSplitCheckMinLength;
+                            let maxLength = this._myParams.myFloatingSplitCheckMaxLength;
+                            let maxSteps = this._myParams.myFloatingSplitCheckMaxSteps != null ? this._myParams.myFloatingSplitCheckMaxSteps : 1;
 
-                                movementStepAmount = Math.max(1, movementStepAmount);
+                            let movementLength = movementToCheck.vec3_length();
+                            let equalStepLength = movementLength / maxSteps;
 
-                                if (movementStepAmount == 1) {
-                                    movementStep.vec3_copy(movementToCheck);
+                            let stepLength = Math.pp_clamp(equalStepLength, minLength, maxLength);
+                            if (stepLength != equalStepLength) {
+                                movementStepAmount = Math.ceil(movementLength / stepLength);
+                                movementStep = movementStep.vec3_normalize(movementStep).vec3_scale(stepLength, movementStep);
+
+                                if (this._myParams.myFloatingSplitCheckMaxSteps != null) {
+                                    movementStepAmount = Math.min(movementStepAmount, maxSteps);
                                 }
                             } else {
-                                movementStepAmount = this._myParams.myFloatingSplitCheckMaxSteps;
-                                if (movementStepAmount > 1) {
-                                    movementStep = movementStep.vec3_normalize(movementStep).vec3_scale(equalStepLength, movementStep);
-                                }
+                                movementStepAmount = maxSteps;
+                                movementStep = movementStep.vec3_normalize(movementStep).vec3_scale(equalStepLength, movementStep);
+                            }
+
+                            movementStepAmount = Math.max(1, movementStepAmount);
+
+                            if (movementStepAmount == 1) {
+                                movementStep.vec3_copy(movementToCheck);
                             }
                         }
 

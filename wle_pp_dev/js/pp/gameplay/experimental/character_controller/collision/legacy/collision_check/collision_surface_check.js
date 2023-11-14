@@ -623,7 +623,9 @@ CollisionCheck.prototype._gatherSurfaceInfo = function () {
             collisionRuntimeParams.myGroundIsBaseInsideCollision = isBaseInsideCollision;
 
             if (isOnSurface && (collisionCheckParams.myIsOnGroundMaxSurfaceAngle == null || collisionRuntimeParams.myGroundAngle <= collisionCheckParams.myIsOnGroundMaxSurfaceAngle)) {
-                collisionRuntimeParams.myIsOnGround = isOnSurface;
+                collisionRuntimeParams.myIsOnGround = true;
+            } else {
+                collisionRuntimeParams.myIsOnGround = false;
             }
         } else {
             collisionRuntimeParams.myRealIsOnCeiling = isOnSurface;
@@ -640,7 +642,9 @@ CollisionCheck.prototype._gatherSurfaceInfo = function () {
             collisionRuntimeParams.myCeilingIsBaseInsideCollision = isBaseInsideCollision;
 
             if (isOnSurface && (collisionCheckParams.myIsOnCeilingMaxSurfaceAngle == null || collisionRuntimeParams.myCeilingAngle <= collisionCheckParams.myIsOnCeilingMaxSurfaceAngle)) {
-                collisionRuntimeParams.myIsOnCeiling = isOnSurface;
+                collisionRuntimeParams.myIsOnCeiling = true;
+            } else {
+                collisionRuntimeParams.myIsOnCeiling = false;
             }
         }
     };

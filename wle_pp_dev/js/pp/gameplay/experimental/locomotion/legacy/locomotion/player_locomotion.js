@@ -192,18 +192,17 @@ export class PlayerLocomotion {
             }
 
             params.myMaxDistanceFromRealToSyncEnabled = true;
-            params.myMaxDistanceFromRealToSync = 0.75;
+            params.myMaxDistanceFromRealToSync = 0.5;
 
             params.myIsFloatingValidIfVerticalMovement = false;
             params.myIsFloatingValidIfVerticalMovementAndRealOnGround = false;
             params.myIsFloatingValidIfSteepGround = false;
             params.myIsFloatingValidIfVerticalMovementAndSteepGround = false;
             params.myIsFloatingValidIfRealOnGround = false;
-            params.myIsLeaningValidAboveDistance = true;
-            params.myLeaningValidDistance = 2;
             params.myFloatingSplitCheckEnabled = true;
-            params.myFloatingSplitCheckMaxLength = 0.2;
-            params.myFloatingSplitCheckMaxSteps = 5;
+            params.myFloatingSplitCheckMinLength = this._myCollisionCheckParamsMovement.myFeetRadius * 1.5;
+            params.myFloatingSplitCheckMaxLength = this._myCollisionCheckParamsMovement.myFeetRadius * 1.5;
+            params.myFloatingSplitCheckMaxSteps = 3;
             params.myRealMovementAllowVerticalAdjustments = false;
 
             params.myUpdateRealPositionValid = false;
