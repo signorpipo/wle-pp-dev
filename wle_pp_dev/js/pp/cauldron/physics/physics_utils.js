@@ -1,7 +1,10 @@
 import { vec3_create } from "../../plugin/js/extensions/array_extension";
+import { Globals } from "../../pp/globals";
 import { RaycastHit, RaycastParams, RaycastResults } from "./physics_raycast_params";
 
 let _myLayerFlagsNames = ["0", "1", "2", "3", "4", "5", "6", "7"];
+
+let _myRaycastCount = new WeakMap();
 
 export function setLayerFlagsNames(layerFlagsNames) {
     _myLayerFlagsNames = layerFlagsNames;
@@ -9,6 +12,15 @@ export function setLayerFlagsNames(layerFlagsNames) {
 
 export function getLayerFlagsNames() {
     return _myLayerFlagsNames;
+}
+
+export function getRaycastCount(physics = Globals.getPhysics()) {
+    let raycastCount = _myRaycastCount.get(physics);
+    return raycastCount != null ? raycastCount : 0;
+}
+
+export function resetRaycastCount(physics = Globals.getPhysics()) {
+    _myRaycastCount.set(physics, 0);
 }
 
 export let raycast = function () {
@@ -116,6 +128,8 @@ export let raycast = function () {
             }
         }
 
+        _increaseRaycastCount(raycastParams.myPhysics);
+
         return raycastResults;
     };
 }();
@@ -123,5 +137,19 @@ export let raycast = function () {
 export let PhysicsUtils = {
     setLayerFlagsNames,
     getLayerFlagsNames,
+    getRaycastCount,
+    resetRaycastCount,
     raycast
 };
+
+
+
+function _increaseRaycastCount(physics = Globals.getPhysics()) {
+    let raycastCount = _myRaycastCount.get(physics);
+
+    if (raycastCount == null) {
+        _myRaycastCount.set(physics, 1);
+    } else {
+        _myRaycastCount.set(physics, raycastCount + 1);
+    }
+}

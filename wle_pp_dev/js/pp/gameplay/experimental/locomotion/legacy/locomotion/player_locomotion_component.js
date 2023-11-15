@@ -1,6 +1,7 @@
 import { Component, Property } from "@wonderlandengine/api";
 import { Timer } from "../../../../../cauldron/cauldron/timer";
 import { PhysicsLayerFlags } from "../../../../../cauldron/physics/physics_layer_flags";
+import { PhysicsUtils } from "../../../../../cauldron/physics/physics_utils";
 import { InputUtils } from "../../../../../input/cauldron/input_utils";
 import { Globals } from "../../../../../pp/globals";
 import { CollisionCheckBridge } from "../../../character_controller/collision/collision_check_bridge";
@@ -74,6 +75,7 @@ export class PlayerLocomotionComponent extends Component {
 
         _myCollisionCheckDisabled: Property.bool(false),
 
+        _myRaycastCountLogEnabled: Property.bool(false),
         _myPerformanceLogEnabled: Property.bool(false)
     };
 
@@ -179,6 +181,10 @@ export class PlayerLocomotionComponent extends Component {
             startTime = window.performance.now();
         }
 
+        if (this._myRaycastCountLogEnabled && Globals.isDebugEnabled(this.engine)) {
+            PhysicsUtils.resetRaycastCount(this.engine.physics);
+        }
+
         if (this._myStartCounter > 0) {
             this._myStartCounter--;
             if (this._myStartCounter == 0) {
@@ -217,6 +223,11 @@ export class PlayerLocomotionComponent extends Component {
                 this._myDebugPerformanceLogTotalTime = 0;
                 this._myDebugPerformanceLogFrameCount = 0;
             }
+        }
+
+        if (this._myRaycastCountLogEnabled && Globals.isDebugEnabled(this.engine)) {
+            console.log("Raycast count: " + PhysicsUtils.getRaycastCount(this.engine.physics));
+            PhysicsUtils.resetRaycastCount(this.engine.physics);
         }
     }
 
