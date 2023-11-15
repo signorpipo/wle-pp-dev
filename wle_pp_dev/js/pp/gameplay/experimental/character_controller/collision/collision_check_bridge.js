@@ -14,6 +14,24 @@ export function setCollisionCheck(collisionCheck, engine = Globals.getMainEngine
     _myCollisionChecks.set(engine, collisionCheck);
 }
 
+export function isCollisionCheckDisabled(engine = Globals.getMainEngine()) {
+    let collisionCheck = CollisionCheckBridge.getCollisionCheck(engine);
+
+    if (collisionCheck != null) {
+        return collisionCheck.isCollisionCheckDisabled();
+    }
+
+    return false;
+}
+
+export function setCollisionCheckDisabled(collisionCheckDisabled, engine = Globals.getMainEngine()) {
+    let collisionCheck = CollisionCheckBridge.getCollisionCheck(engine);
+
+    if (collisionCheck != null) {
+        collisionCheck.setCollisionCheckDisabled(collisionCheckDisabled);
+    }
+}
+
 export function initBridge(engine = Globals.getMainEngine()) {
     if (!_myCollisionChecks.has(engine)) {
         CollisionCheckBridge.setCollisionCheck(new CollisionCheck(engine), engine);
@@ -511,6 +529,8 @@ export let convertCharacterColliderSetupToCollisionCheckParams = function () {
 export let CollisionCheckBridge = {
     getCollisionCheck,
     setCollisionCheck,
+    isCollisionCheckDisabled,
+    setCollisionCheckDisabled,
     initBridge,
     checkMovement,
     checkTeleportToTransform,

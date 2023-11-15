@@ -72,11 +72,17 @@ export class PlayerLocomotionComponent extends Component {
         _myDebugHorizontalEnabled: Property.bool(false),
         _myDebugVerticalEnabled: Property.bool(false),
 
-        _myDebugPerformanceLogEnabled: Property.bool(false),
+        _myCollisionCheckDisabled: Property.bool(false),
+
+        _myPerformanceLogEnabled: Property.bool(false)
     };
 
     start() {
         CollisionCheckBridge.initBridge(this.engine);
+
+        if (this._myCollisionCheckDisabled && Globals.isDebugEnabled(this.engine)) {
+            CollisionCheckBridge.setCollisionCheckDisabled(true);
+        }
 
         let params = new PlayerLocomotionParams(this.engine);
 
@@ -88,8 +94,13 @@ export class PlayerLocomotionComponent extends Component {
         params.myMaxSpeed = this._myMaxSpeed;
         params.myMaxRotationSpeed = this._myMaxRotationSpeed;
 
-        params.myGravityAcceleration = this._myGravityAcceleration;
-        params.myMaxGravitySpeed = this._myMaxGravitySpeed;
+        if (this._myCollisionCheckDisabled && Globals.isDebugEnabled(this.engine)) {
+            params.myGravityAcceleration = 0;
+            params.myMaxGravitySpeed = 0;
+        } else {
+            params.myGravityAcceleration = this._myGravityAcceleration;
+            params.myMaxGravitySpeed = this._myMaxGravitySpeed;
+        }
 
         params.myCharacterRadius = this._myCharacterRadius;
 
@@ -164,7 +175,7 @@ export class PlayerLocomotionComponent extends Component {
 
     update(dt) {
         let startTime = 0;
-        if (this._myDebugPerformanceLogEnabled && Globals.isDebugEnabled(this.engine)) {
+        if (this._myPerformanceLogEnabled && Globals.isDebugEnabled(this.engine)) {
             startTime = window.performance.now();
         }
 
@@ -190,7 +201,7 @@ export class PlayerLocomotionComponent extends Component {
         //console.error(CollisionCheckBridge.getCollisionCheck(this.engine)._myTotalRaycastsMax);
         //console.error(CollisionCheckBridge.getCollisionCheck(this.engine)._myTotalRaycasts);
 
-        if (this._myDebugPerformanceLogEnabled && Globals.isDebugEnabled(this.engine)) {
+        if (this._myPerformanceLogEnabled && Globals.isDebugEnabled(this.engine)) {
             let endTime = window.performance.now();
             this._myDebugPerformanceLogTotalTime += endTime - startTime;
             this._myDebugPerformanceLogFrameCount++;
