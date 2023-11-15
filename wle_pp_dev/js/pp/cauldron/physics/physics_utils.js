@@ -5,6 +5,7 @@ import { RaycastHit, RaycastParams, RaycastResults } from "./physics_raycast_par
 let _myLayerFlagsNames = ["0", "1", "2", "3", "4", "5", "6", "7"];
 
 let _myRaycastCount = new WeakMap();
+let _myRaycastVisualDebugEnabled = new WeakMap();
 
 export function setLayerFlagsNames(layerFlagsNames) {
     _myLayerFlagsNames = layerFlagsNames;
@@ -21,6 +22,14 @@ export function getRaycastCount(physics = Globals.getPhysics()) {
 
 export function resetRaycastCount(physics = Globals.getPhysics()) {
     _myRaycastCount.set(physics, 0);
+}
+
+export function isRaycastVisualDebugEnabled(physics = Globals.getPhysics()) {
+    return _myRaycastVisualDebugEnabled.get(physics);
+}
+
+export function setRaycastVisualDebugEnabled(visualDebugEnabled, physics = Globals.getPhysics()) {
+    _myRaycastVisualDebugEnabled.set(physics, visualDebugEnabled);
 }
 
 export let raycast = function () {
@@ -128,7 +137,13 @@ export let raycast = function () {
             }
         }
 
-        _increaseRaycastCount(raycastParams.myPhysics);
+        if (Globals.isDebugEnabled(raycastParams.myPhysics._engine)) {
+            if (PhysicsUtils.isRaycastVisualDebugEnabled(raycastParams.myPhysics)) {
+                Globals.getDebugVisualManager(raycastParams.myPhysics._engine).drawRaycast(0, raycastResults);
+            }
+
+            _increaseRaycastCount(raycastParams.myPhysics);
+        }
 
         return raycastResults;
     };
@@ -139,6 +154,8 @@ export let PhysicsUtils = {
     getLayerFlagsNames,
     getRaycastCount,
     resetRaycastCount,
+    isRaycastVisualDebugEnabled,
+    setRaycastVisualDebugEnabled,
     raycast
 };
 

@@ -76,6 +76,7 @@ export class PlayerLocomotionComponent extends Component {
         _myCollisionCheckDisabled: Property.bool(false),
 
         _myRaycastCountLogEnabled: Property.bool(false),
+        _myRaycastVisualDebugEnabled: Property.bool(false),
         _myPerformanceLogEnabled: Property.bool(false)
     };
 
@@ -181,6 +182,12 @@ export class PlayerLocomotionComponent extends Component {
             startTime = window.performance.now();
         }
 
+        let raycastVisualDebugEnabledBackup = false;
+        if (this._myRaycastVisualDebugEnabled && Globals.isDebugEnabled(this.engine)) {
+            raycastVisualDebugEnabledBackup = PhysicsUtils.isRaycastVisualDebugEnabled(this.engine.physics);
+            PhysicsUtils.setRaycastVisualDebugEnabled(true, this.engine.physics);
+        }
+
         if (this._myRaycastCountLogEnabled && Globals.isDebugEnabled(this.engine)) {
             PhysicsUtils.resetRaycastCount(this.engine.physics);
         }
@@ -223,6 +230,10 @@ export class PlayerLocomotionComponent extends Component {
                 this._myDebugPerformanceLogTotalTime = 0;
                 this._myDebugPerformanceLogFrameCount = 0;
             }
+        }
+
+        if (this._myRaycastVisualDebugEnabled && Globals.isDebugEnabled(this.engine)) {
+            PhysicsUtils.setRaycastVisualDebugEnabled(raycastVisualDebugEnabledBackup, this.engine.physics);
         }
 
         if (this._myRaycastCountLogEnabled && Globals.isDebugEnabled(this.engine)) {
