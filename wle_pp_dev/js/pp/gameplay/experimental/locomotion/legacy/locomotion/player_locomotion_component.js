@@ -1,6 +1,8 @@
 import { Component, Property } from "@wonderlandengine/api";
+import { Timer } from "../../../../../cauldron/cauldron/timer";
 import { PhysicsLayerFlags } from "../../../../../cauldron/physics/physics_layer_flags";
 import { InputUtils } from "../../../../../input/cauldron/input_utils";
+import { Globals } from "../../../../../pp/globals";
 import { CollisionCheckBridge } from "../../../character_controller/collision/collision_check_bridge";
 import { PlayerLocomotion, PlayerLocomotionParams } from "./player_locomotion";
 
@@ -68,7 +70,9 @@ export class PlayerLocomotionComponent extends Component {
         _myTripleSpeedShortcutEnabled: Property.bool(false),            // main hand (default left) select pressed while moving
 
         _myDebugHorizontalEnabled: Property.bool(false),
-        _myDebugVerticalEnabled: Property.bool(false)
+        _myDebugVerticalEnabled: Property.bool(false),
+
+        _myDebugPerformanceLogEnabled: Property.bool(false),
     };
 
     start() {
@@ -152,9 +156,18 @@ export class PlayerLocomotionComponent extends Component {
 
         this._myStartCounter = 1;
         this._myResetReal = true;
+
+        this._myDebugPerformanceLogTimer = new Timer(0.5);
+        this._myDebugPerformanceLogTotalTime = 0;
+        this._myDebugPerformanceLogFrameCount = 0;
     }
 
     update(dt) {
+        let startTime = 0;
+        if (this._myDebugPerformanceLogEnabled && Globals.isDebugEnabled(this.engine)) {
+            startTime = window.performance.now();
+        }
+
         if (this._myStartCounter > 0) {
             this._myStartCounter--;
             if (this._myStartCounter == 0) {
@@ -176,6 +189,24 @@ export class PlayerLocomotionComponent extends Component {
         //CollisionCheckBridge.getCollisionCheck(this.engine)._myTotalRaycastsMax = Math.max(CollisionCheckBridge.getCollisionCheck(this.engine)._myTotalRaycasts, CollisionCheckBridge.getCollisionCheck(this.engine)._myTotalRaycastsMax);
         //console.error(CollisionCheckBridge.getCollisionCheck(this.engine)._myTotalRaycastsMax);
         //console.error(CollisionCheckBridge.getCollisionCheck(this.engine)._myTotalRaycasts);
+
+        if (this._myDebugPerformanceLogEnabled && Globals.isDebugEnabled(this.engine)) {
+            let endTime = window.performance.now();
+            this._myDebugPerformanceLogTotalTime += endTime - startTime;
+            this._myDebugPerformanceLogFrameCount++;
+
+            this._myDebugPerformanceLogTimer.update(dt);
+            if (this._myDebugPerformanceLogTimer.isDone()) {
+                this._myDebugPerformanceLogTimer.start();
+
+                let averageTime = this._myDebugPerformanceLogTotalTime / this._myDebugPerformanceLogFrameCount;
+
+                console.log("Locomotion ms: " + averageTime.toFixed(3));
+
+                this._myDebugPerformanceLogTotalTime = 0;
+                this._myDebugPerformanceLogFrameCount = 0;
+            }
+        }
     }
 
     getPlayerLocomotion() {
