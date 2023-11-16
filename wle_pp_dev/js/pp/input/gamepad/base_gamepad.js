@@ -195,6 +195,14 @@ export class BaseGamepad {
         buttonInfo.myPressed = buttonData.myPressed;
         buttonInfo.myTouched = buttonData.myTouched;
         buttonInfo.myValue = buttonData.myValue;
+
+        if (buttonInfo.myPressed) {
+            buttonInfo.myTouched = true;
+
+            if (buttonInfo.myValue == 0) {
+                buttonInfo.myValue = 1;
+            }
+        }
     }
 
     _postUpdateButtonInfos(dt) {
