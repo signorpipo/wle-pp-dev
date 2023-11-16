@@ -38,7 +38,14 @@ export class XRGamepadCore extends GamepadCore {
     }
 
     _preUpdateHook(dt) {
+        let prevInputSource = this._myInputSource;
         this._myInputSource = this.getHandPose().getInputSource();
+
+        if (prevInputSource != this._myInputSource) {
+            this._mySelectPressed = false;
+            this._mySqueezePressed = false;
+        }
+
         if (this._myInputSource != null) {
             this._myGamepad = this._myInputSource.gamepad;
         } else {
@@ -164,6 +171,9 @@ export class XRGamepadCore extends GamepadCore {
         this._mySelectEndEventListener = null;
         this._mySqueezeStartEventListener = null;
         this._mySqueezeEndEventListener = null;
+
+        this._mySelectPressed = false;
+        this._mySqueezePressed = false;
 
         this._myXRSessionActive = false;
     }

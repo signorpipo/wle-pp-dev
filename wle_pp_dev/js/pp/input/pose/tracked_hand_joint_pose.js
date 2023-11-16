@@ -53,10 +53,12 @@ export class TrackedHandJointPose extends BasePose {
             this._myInputSource = null;
 
             if (session.inputSources != null && session.inputSources.length > 0) {
-                for (let item of session.inputSources) {
-                    if (item.handedness == this._myHandedness) {
-                        if (InputUtils.getInputSourceType(item) == InputSourceType.TRACKED_HAND) {
-                            this._myInputSource = item;
+
+                for (let i = 0; i < session.inputSources.length; i++) {
+                    let inputSource = session.inputSources[i];
+                    if (inputSource.handedness == this._myHandedness) {
+                        if (InputUtils.getInputSourceType(inputSource) == InputSourceType.TRACKED_HAND) {
+                            this._myInputSource = inputSource;
                         }
                     }
                 }
