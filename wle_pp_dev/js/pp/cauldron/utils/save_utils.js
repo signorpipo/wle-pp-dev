@@ -43,12 +43,20 @@ export function loadNumber(id, defaultValue = null) {
 export function loadBool(id, defaultValue = null) {
     let item = SaveUtils.loadString(id);
 
+    if (item == "true") {
+        return true;
+    } else if (item == "false") {
+        return false;
+    }
+
+    return defaultValue;
+}
+
+export function loadObject(id, defaultValue = null) {
+    let item = SaveUtils.loadString(id);
+
     if (item != null) {
-        if (item == "true") {
-            return true;
-        } else {
-            return false;
-        }
+        return JSON.parse(item);
     }
 
     return defaultValue;
@@ -62,5 +70,6 @@ export let SaveUtils = {
     load,
     loadString,
     loadNumber,
-    loadBool
+    loadBool,
+    loadObject
 };
