@@ -17,6 +17,7 @@ export class SaveManager {
         this._myDelaySavesCommit = true;
         this._myCommitSavesDirty = false;
         this._myCommitSavesDirtyClearOnFail = true;
+        this._myCommitSavesOnInterrupt = true;
 
         this._myClearEmitter = new Emitter();                   // Signature: listener()
         this._myDeleteEmitter = new Emitter();                  // Signature: listener(id)
@@ -29,9 +30,15 @@ export class SaveManager {
         this._myLoadEmitter = new Emitter();                    // Signature: listener(id, value)
         this._myLoadIDEmitters = new Map();                     // Signature: listener(id, value)
 
+        this._myXRVisibilityChangeEventListener = null;
         XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this), true, false, this._myEngine);
 
-        this._myVisibilityChangeEventListener = null;
+        this._myWindowVisibilityChangeEventListener = function () {
+            if (document.visibilityState != "visible") {
+                this._onInterrupt();
+            }
+        }.bind(this);
+        window.addEventListener('visibilitychange', this._myWindowVisibilityChangeEventListener);
 
         this._myDestroyed = false;
     }
@@ -59,6 +66,10 @@ export class SaveManager {
         this._myCommitSavesDirtyClearOnFail = clearOnFail;
     }
 
+    setCommitSavesOnInterrupt(commitSavesOnInterrupt) {
+        this._myCommitSavesOnInterrupt = commitSavesOnInterrupt;
+    }
+
     getCommitSavesDelay() {
         return this._myCommitSavesDelayTimer.getDuration();
     }
@@ -73,6 +84,10 @@ export class SaveManager {
 
     isCommitSavesDirtyClearOnFail() {
         return this._myCommitSavesDirtyClearOnFail;
+    }
+
+    isCommitSavesOnInterrupt() {
+        return this._myCommitSavesOnInterrupt;
     }
 
     update(dt) {
@@ -220,23 +235,25 @@ export class SaveManager {
     }
 
     _onXRSessionStart(session) {
-        this._myVisibilityChangeEventListener = function (event) {
+        this._myXRVisibilityChangeEventListener = function (event) {
             if (event.session.visibilityState != "visible") {
                 this._onXRSessionInterrupt();
             }
         }.bind(this);
 
-        session.addEventListener("visibilitychange", this._myVisibilityChangeEventListener);
+        session.addEventListener("visibilitychange", this._myXRVisibilityChangeEventListener);
     }
 
     _onXRSessionEnd() {
-        this._myVisibilityChangeEventListener = null;
+        this._myXRVisibilityChangeEventListener = null;
 
-        this._onXRSessionInterrupt();
+        this._onInterrupt();
     }
 
-    _onXRSessionInterrupt() {
-        this.commitSaves();
+    _onInterrupt() {
+        if (this._myCommitSavesOnInterrupt && this._myCommitSavesDirty) {
+            this.commitSaves();
+        }
     }
 
     registerClearEventListener(listenerID, listener) {
@@ -374,8 +391,10 @@ export class SaveManager {
     destroy() {
         this._myDestroyed = true;
 
-        XRUtils.getSession(this._myEngine)?.removeEventListener("visibilitychange", this._myVisibilityChangeEventListener);
+        XRUtils.getSession(this._myEngine)?.removeEventListener("visibilitychange", this._myXRVisibilityChangeEventListener);
         XRUtils.unregisterSessionStartEndEventListeners(this, this._myEngine);
+
+        window.removeEventListener('visibilitychange', this._myWindowVisibilityChangeEventListener);
     }
 
     isDestroyed() {
