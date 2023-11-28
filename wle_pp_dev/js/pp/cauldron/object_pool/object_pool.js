@@ -102,16 +102,32 @@ export class ObjectPool {
         this._addToPool(amount, false);
     }
 
+    getObjects() {
+        let objects = [];
+        objects.push(...this._myAvailableObjects);
+        objects.push(...this._myBusyObjects);
+
+        return objects;
+    }
+
     getSize() {
         return this._myBusyObjects.length + this._myAvailableObjects.length;
+    }
+
+    getAvailableObjects() {
+        return this._myAvailableObjects;
     }
 
     getAvailableSize() {
         return this._myAvailableObjects.length;
     }
 
+    getBusyObjects() {
+        return this._myBusyObjects;
+    }
+
     getBusySize() {
-        return this._myAvailableObjects.length;
+        return this._myBusyObjects.length;
     }
 
     _addToPool(size, logEnabled) {
