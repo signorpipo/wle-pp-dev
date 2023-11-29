@@ -25,7 +25,7 @@ export function sendData(...args) {
     try {
         if (_myAnalyticsEnabled) {
             if (_myDataLogEnabled) {
-                console.log("Analytics Data sent: " + args);
+                console.log("Analytics Data: " + args);
             }
 
             if (_mySendDataCallback != null) {
@@ -41,7 +41,7 @@ export function sendData(...args) {
     }
 }
 
-export function sendEvent(eventName, value = 1, sendOnce = false) {
+export function sendEvent(eventName, value = null, sendOnce = false) {
     try {
         if (_myAnalyticsEnabled) {
             let sendEventAllowed = true;
@@ -52,11 +52,19 @@ export function sendEvent(eventName, value = 1, sendOnce = false) {
 
             if (sendEventAllowed) {
                 if (_myEventsLogEnabled) {
-                    console.log("Analytics Event sent: " + eventName + " - Value: " + value);
+                    if (value != null) {
+                        console.log("Analytics Event: " + eventName + " - Value: " + value);
+                    } else {
+                        console.log("Analytics Event: " + eventName);
+                    }
                 }
 
                 if (_mySendDataCallback != null) {
-                    _mySendDataCallback("event", eventName, { "value": value });
+                    if (value != null) {
+                        _mySendDataCallback("event", eventName, { "value": value });
+                    } else {
+                        _mySendDataCallback("event", eventName);
+                    }
 
                     if (sendOnce) {
                         _myEventsSentOnce.pp_pushUnique(eventName);
@@ -73,7 +81,7 @@ export function sendEvent(eventName, value = 1, sendOnce = false) {
     }
 }
 
-export function sendEventOnce(eventName, value = 1) {
+export function sendEventOnce(eventName, value = null) {
     AnalyticsUtils.sendEvent(eventName, value, true);
 }
 
