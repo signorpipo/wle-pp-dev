@@ -20,6 +20,7 @@ export function initMouseLookComponentModPrototype() {
         this.resetMovingDelay = 0.15;
         this.resetMovingTimer = new Timer(this.resetMovingDelay, false);
         this.isMoving = false;
+        this.mouseDown = false;
 
         this.pointerMoveListener = this._onMove.bind(this);
 

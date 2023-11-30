@@ -118,7 +118,9 @@ export class FingerCursorComponent extends Component {
     }
 
     onDeactivate() {
-        this._myCursorParentObject.pp_setActive(false);
+        if (this._myCursorParentObject != null) {
+            this._myCursorParentObject.pp_setActive(false);
+        }
     }
 
     _updateHand() {
