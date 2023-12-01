@@ -145,7 +145,7 @@ PlayerLocomotionSmooth.prototype.update = function () {
         axes[0] = Math.abs(axes[0]) > this._myParams.myMovementMinStickIntensityThreshold ? axes[0] : 0;
         axes[1] = Math.abs(axes[1]) > this._myParams.myMovementMinStickIntensityThreshold ? axes[1] : 0;
 
-        let horizontalMovement = false;
+        let isManuallyMoving = false;
         let maxSpeed = this._myParams.myMaxSpeed;
 
         if (this._myParams.myTripleSpeedShortcutEnabled && Globals.isDebugEnabled(this._myParams.myEngine)) {
@@ -179,7 +179,7 @@ PlayerLocomotionSmooth.prototype.update = function () {
 
                 headMovement = direction.vec3_scale(this._myCurrentSpeed * dt, headMovement);
 
-                horizontalMovement = true;
+                isManuallyMoving = true;
             }
         } else {
             if (this._myStickIdleTimer.isRunning()) {
@@ -195,10 +195,14 @@ PlayerLocomotionSmooth.prototype.update = function () {
                 verticalMovement = playerUp.vec3_scale(maxSpeed * dt, verticalMovement);
                 headMovement = headMovement.vec3_add(verticalMovement, headMovement);
                 this._myLocomotionRuntimeParams.myIsFlying = true;
+
+                isManuallyMoving = true;
             } else if (Globals.getGamepads(this._myParams.myEngine)[this._myParams.myHandedness].getButtonInfo(GamepadButtonID.BOTTOM_BUTTON).isPressed()) {
                 verticalMovement = playerUp.vec3_scale(-maxSpeed * dt, verticalMovement);
                 headMovement = headMovement.vec3_add(verticalMovement, headMovement);
                 this._myLocomotionRuntimeParams.myIsFlying = true;
+
+                isManuallyMoving = true;
             }
 
             if (Globals.getGamepads(this._myParams.myEngine)[this._myParams.myHandedness].getButtonInfo(GamepadButtonID.BOTTOM_BUTTON).isPressEnd(2)) {
@@ -212,7 +216,7 @@ PlayerLocomotionSmooth.prototype.update = function () {
         } else if (this._myParams.myMoveThroughCollisionShortcutEnabled && Globals.isDebugEnabled(this._myParams.myEngine) &&
             Globals.getGamepads(this._myParams.myEngine)[this._myParams.myHandedness].getButtonInfo(GamepadButtonID.THUMBSTICK).isPressed()) {
             this._myParams.myPlayerTransformManager.move(headMovement, this._myLocomotionRuntimeParams.myCollisionRuntimeParams, true);
-            if (horizontalMovement) {
+            if (isManuallyMoving) {
                 this._myParams.myPlayerTransformManager.resetReal();
             }
         } else {
@@ -232,7 +236,7 @@ PlayerLocomotionSmooth.prototype.update = function () {
             feetTransformQuat = this._myParams.myPlayerTransformManager.getTransformQuat(feetTransformQuat);
 
             this._myParams.myPlayerTransformManager.move(headMovement, this._myLocomotionRuntimeParams.myCollisionRuntimeParams);
-            if (horizontalMovement) {
+            if (isManuallyMoving) {
                 this._myParams.myPlayerTransformManager.resetReal();
 
                 this._myLocomotionRuntimeParams.myCollisionRuntimeParams.myFixedMovement.vec3_removeComponentAlongAxis(

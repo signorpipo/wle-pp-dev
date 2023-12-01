@@ -82,6 +82,8 @@ export class PlayerLocomotionParams {
         this.myTeleportPositionObjectRotateWithHead = null;
         this.myTeleportParableStartReferenceObject = null;
 
+        this.myResetRealOnStart = true;
+
         this.mySyncWithRealWorldPositionOnlyIfValid = true;
         this.myViewOcclusionInsideWallsEnabled = true;
 
@@ -392,10 +394,13 @@ export class PlayerLocomotion {
 
         this._myActive = true;
         this._myStarted = false;
-        this._myDestroyed = false;
+
+        this._myResetRealOnStartCounter = 3;
 
         this._myPreUpdateEmitter = new Emitter();     // Signature: callback(dt, playerLocomotion)
         this._myPostUpdateEmitter = new Emitter();     // Signature: callback(dt, playerLocomotion)
+
+        this._myDestroyed = false;
     }
 
     start() {
@@ -462,24 +467,31 @@ export class PlayerLocomotion {
         this._myPreUpdateEmitter.notify(dt, this);
 
         this._myPlayerHeadManager.update(dt);
-        this._myPlayerTransformManager.update(dt);
-
-        if (this._myParams.mySwitchLocomotionTypeShortcutEnabled &&
-            Globals.getLeftGamepad(this._myParams.myEngine).getButtonInfo(GamepadButtonID.THUMBSTICK).isPressEnd(2)) {
-            if (this._myLocomotionMovementFSM.isInState("smooth") && this._myPlayerLocomotionSmooth.canStop()) {
-                this._myLocomotionMovementFSM.perform("next");
-            } else if (this._myLocomotionMovementFSM.isInState("teleport") && this._myPlayerLocomotionTeleport.canStop()) {
-                this._myLocomotionMovementFSM.perform("next");
-            }
+        if (this._myPlayerHeadManager.isSynced()) {
+            this._updateCollisionHeight();
         }
 
-        if (this._myPlayerHeadManager.isSynced()) {
+        if (this._myParams.myResetRealOnStart && this._myResetRealOnStartCounter > 0) {
+            this._myResetRealOnStartCounter--;
+            this._myPlayerTransformManager.resetReal(true, true);
+            this._myPlayerTransformManager.update(dt);
+        } else {
+            this._myPlayerTransformManager.update(dt);
 
-            this._updateCollisionHeight();
+            if (this._myPlayerHeadManager.isSynced()) {
+                if (!this._myIdle) {
+                    if (this._myParams.mySwitchLocomotionTypeShortcutEnabled &&
+                        Globals.getLeftGamepad(this._myParams.myEngine).getButtonInfo(GamepadButtonID.THUMBSTICK).isPressEnd(2)) {
+                        if (this._myLocomotionMovementFSM.isInState("smooth") && this._myPlayerLocomotionSmooth.canStop()) {
+                            this._myLocomotionMovementFSM.perform("next");
+                        } else if (this._myLocomotionMovementFSM.isInState("teleport") && this._myPlayerLocomotionTeleport.canStop()) {
+                            this._myLocomotionMovementFSM.perform("next");
+                        }
+                    }
 
-            if (!this._myIdle) {
-                this._myPlayerLocomotionRotate.update(dt);
-                this._myLocomotionMovementFSM.update(dt);
+                    this._myPlayerLocomotionRotate.update(dt);
+                    this._myLocomotionMovementFSM.update(dt);
+                }
             }
         }
 
