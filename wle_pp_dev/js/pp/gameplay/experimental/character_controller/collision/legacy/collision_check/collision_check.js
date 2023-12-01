@@ -46,7 +46,6 @@ export class CollisionCheck {
         this._myDebugEnabled = false;
 
         this._myTotalRaycasts = 0;
-        this._myTotalRaycastsMax = 0;
     }
 
     move(movement, transformQuat, collisionCheckParams, collisionRuntimeParams) {
@@ -202,7 +201,6 @@ CollisionCheck.prototype._raycastAndDebug = function () {
 
 
         this._myTotalRaycasts++;
-        //raycastResult.myHits = [];
 
         if (this._myDebugEnabled && Globals.isDebugEnabled(this._myEngine)) {
             Globals.getDebugVisualManager(this._myEngine).drawRaycast(0, raycastResult);

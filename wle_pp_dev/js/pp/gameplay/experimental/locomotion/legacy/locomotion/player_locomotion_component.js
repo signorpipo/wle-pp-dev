@@ -81,8 +81,6 @@ export class PlayerLocomotionComponent extends Component {
     };
 
     start() {
-        CollisionCheckBridge.initBridge(this.engine);
-
         if (this._myCollisionCheckDisabled && Globals.isDebugEnabled(this.engine)) {
             CollisionCheckBridge.setCollisionCheckDisabled(true);
         }
@@ -168,7 +166,7 @@ export class PlayerLocomotionComponent extends Component {
 
         this._myPlayerLocomotion = new PlayerLocomotion(params);
 
-        this._myStartCounter = 1;
+        this._myLocomotionStarted = false;
         this._myResetReal = true;
 
         this._myDebugPerformanceLogTimer = new Timer(0.5);
@@ -192,27 +190,12 @@ export class PlayerLocomotionComponent extends Component {
             PhysicsUtils.resetRaycastCount(this.engine.physics);
         }
 
-        if (this._myStartCounter > 0) {
-            this._myStartCounter--;
-            if (this._myStartCounter == 0) {
-                this._myPlayerLocomotion.start();
-            }
-
-            this._myPlayerLocomotion.getPlayerHeadManager().update(dt);
-        } else {
-            if (this._myResetReal) {
-                this._myResetReal = false;
-                this._myPlayerLocomotion.getPlayerTransformManager().resetReal(true, true);
-            }
-
-            CollisionCheckBridge.getCollisionCheck(this.engine)._myTotalRaycasts = 0; // #TODO Debug stuff, remove later
-
-            this._myPlayerLocomotion.update(dt);
+        if (!this._myLocomotionStarted) {
+            this._myLocomotionStarted = true;
+            this._myPlayerLocomotion.start();
         }
 
-        //CollisionCheckBridge.getCollisionCheck(this.engine)._myTotalRaycastsMax = Math.max(CollisionCheckBridge.getCollisionCheck(this.engine)._myTotalRaycasts, CollisionCheckBridge.getCollisionCheck(this.engine)._myTotalRaycastsMax);
-        //console.error(CollisionCheckBridge.getCollisionCheck(this.engine)._myTotalRaycastsMax);
-        //console.error(CollisionCheckBridge.getCollisionCheck(this.engine)._myTotalRaycasts);
+        this._myPlayerLocomotion.update(dt);
 
         if (this._myPerformanceLogEnabled && Globals.isDebugEnabled(this.engine)) {
             let endTime = window.performance.now();
@@ -247,18 +230,14 @@ export class PlayerLocomotionComponent extends Component {
     }
 
     onActivate() {
-        if (this._myStartCounter == 0) {
-            if (this._myPlayerLocomotion != null) {
-                this._myPlayerLocomotion.setActive(true);
-            }
+        if (this._myPlayerLocomotion != null) {
+            this._myPlayerLocomotion.setActive(true);
         }
     }
 
     onDeactivate() {
-        if (this._myStartCounter == 0) {
-            if (this._myPlayerLocomotion != null) {
-                this._myPlayerLocomotion.setActive(false);
-            }
+        if (this._myPlayerLocomotion != null) {
+            this._myPlayerLocomotion.setActive(false);
         }
     }
 

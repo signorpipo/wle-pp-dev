@@ -5,6 +5,7 @@ import { VisualManagerComponent } from "../../cauldron/visual/components/visual_
 import { AddWLToWindowComponent } from "../../cauldron/wl/components/add_wl_to_window_component";
 import { DebugManagerComponent } from "../../debug/components/debug_manager_component";
 import { EnableDebugComponent } from "../../debug/components/enable_debug_component";
+import { CharacterCollisionSystemComponent } from "../../gameplay/experimental/character_controller/collision/components/character_collision_system_component";
 import { InputManagerComponent } from "../../input/cauldron/components/input_manager_component";
 import { EnableToolComponent } from "../../tool/cauldron/components/enable_tool_component";
 import { InitConsoleVRComponent } from "../../tool/console_vr/components/init_console_vr_component";
@@ -26,6 +27,7 @@ export class PPGatewayComponent extends Component {
         ...InputManagerComponent.Properties,
         ...AudioManagerComponent.Properties,
         ...VisualManagerComponent.Properties,
+        ...CharacterCollisionSystemComponent.Properties,
         ...ObjectPoolManagerComponent.Properties,
         ...DebugManagerComponent.Properties,
         ...GetSceneObjectsComponent.Properties,
@@ -70,6 +72,8 @@ export class PPGatewayComponent extends Component {
         this._myInputManagerComponent = this.object.pp_addComponent(InputManagerComponent, this._getProperties(InputManagerComponent.Properties), false);
         this._myAudioManagerComponent = this.object.pp_addComponent(AudioManagerComponent, this._getProperties(AudioManagerComponent.Properties), false);
         this._myVisualManagerComponent = this.object.pp_addComponent(VisualManagerComponent, this._getProperties(VisualManagerComponent.Properties), false);
+        this._myCharacterCollisionSystemComponent = this.object.pp_addComponent(CharacterCollisionSystemComponent, this._getProperties(CharacterCollisionSystemComponent.Properties), false);
+
         this._myDebugManagerComponent = this.object.pp_addComponent(DebugManagerComponent, this._getProperties(DebugManagerComponent.Properties), false);
     }
 
@@ -100,6 +104,8 @@ export class PPGatewayComponent extends Component {
         this._myInputManagerComponent.active = true;
         this._myAudioManagerComponent.active = true;
         this._myVisualManagerComponent.active = true;
+        this._myCharacterCollisionSystemComponent.active = true;
+
         this._myDebugManagerComponent.active = true;
     }
 

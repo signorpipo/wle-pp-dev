@@ -160,12 +160,6 @@ CollisionCheck.prototype._move = function () {
         collisionRuntimeParams.myNewPosition = collisionRuntimeParams.myOriginalPosition.vec3_add(collisionRuntimeParams.myFixedMovement, collisionRuntimeParams.myNewPosition);
 
         collisionRuntimeParams.myIsMove = true;
-
-
-        //console.error(this._myTotalRaycasts );
-
-        //this._myTotalRaycastsMax = Math.max(this._myTotalRaycasts, this._myTotalRaycastsMax);
-        //console.error(this._myTotalRaycastsMax);
     };
 }();
 
@@ -207,7 +201,6 @@ CollisionCheck.prototype._moveStep = function () {
             //return vec3_create();
         }
 
-        //this._myTotalRaycasts = 0;
         //collisionCheckParams.myDebugEnabled = true;
 
         this._myPrevCollisionRuntimeParams.copy(collisionRuntimeParams);
@@ -251,7 +244,6 @@ CollisionCheck.prototype._moveStep = function () {
 
             if (!surfaceAdjustedHorizontalMovement.vec3_isZero()) {
                 fixedHorizontalMovement = this._horizontalCheck(surfaceAdjustedHorizontalMovement, feetPosition, height, transformUp, forwardForHorizontal, allowSurfaceSteepFix, collisionCheckParams, collisionRuntimeParams, this._myPrevCollisionRuntimeParams, false, fixedHorizontalMovement);
-                //console.error(this._myTotalRaycasts );
                 //collisionRuntimeParams.myIsCollidingHorizontally = true;
                 //collisionRuntimeParams.myHorizontalCollisionHit.myNormal = vec3_create(0, 0, 1);
                 if (collisionCheckParams.mySlidingEnabled && collisionRuntimeParams.myIsCollidingHorizontally && this._isSlidingNormalValid(surfaceAdjustedHorizontalMovement, transformUp, collisionRuntimeParams)) {
@@ -301,7 +293,6 @@ CollisionCheck.prototype._moveStep = function () {
                 }
             }
 
-            //console.error(this._myTotalRaycasts );
             //collisionCheckParams.myDebugEnabled = false;
 
             surfaceAdjustedVerticalMovement = this._adjustVerticalMovementWithSurface(fixedHorizontalMovement, verticalMovement, transformUp, collisionCheckParams, collisionRuntimeParams, this._myPrevCollisionRuntimeParams, surfaceAdjustedVerticalMovement);
@@ -317,7 +308,6 @@ CollisionCheck.prototype._moveStep = function () {
             }
         }
 
-        //console.error(this._myTotalRaycasts );
         outFixedMovement.vec3_zero();
         if (!collisionRuntimeParams.myIsCollidingVertically) {
             outFixedMovement = fixedHorizontalMovement.vec3_add(fixedVerticalMovement, outFixedMovement);
