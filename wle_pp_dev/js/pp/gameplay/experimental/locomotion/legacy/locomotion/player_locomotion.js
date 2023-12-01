@@ -85,16 +85,19 @@ export class PlayerLocomotionParams {
         this.myResetRealOnStart = true;
 
         // #WARN With @myResetRealOnStartFramesAmount at 1 it can happen that you enter the session like 1 frame before the game load
-        // and the head pose has not properly initialized yet in the WebXR API, so the reset real will not happen has expected
+        // and the head pose might have not been properly initialized yet in the WebXR API, so the reset real will not happen has expected
         // Since this is a sort of edge case (either u enter after the load, or you were already in for more than 2-3 frames), and that
         // setting this to more than 1 can cause a visible (even if very short) stutter after the load (due to resetting the head multiple times),
         // it's better to keep this value at 1
-        // Otherwise a value of 3 will make u sure that the head pose will be initialized and the reset real will happen as expected in any case
+        // A possible effect of the edge case is the view being obscured on start because it thinks you are colliding
+        //
+        // A value of 3 will make u sure that the head pose will be initialized and the reset real will happen as expected in any case
         // For example, if u have a total fade at start and nothing can be seen aside the clear color for at least, let's say, 10 frames, 
         // you can set this to 3 safely, since there will be no visible stutter to be seen (beside the clear color)
         this.myResetRealOnStartFramesAmount = 1;
 
-        this.mySyncWithRealWorldPositionOnlyIfValid = true;
+        // these 2 flags works 100% properly only if both true or false
+        this.mySyncWithRealWorldPositionOnlyIfValid = true;     // valid means the real player has not moved inside walls
         this.myViewOcclusionInsideWallsEnabled = true;
 
         this.mySyncNonVRHeightWithVROnExitSession = false;

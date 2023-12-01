@@ -8,7 +8,7 @@ export class BasePoseParams {
     constructor(engine = Globals.getMainEngine()) {
         this.myReferenceObject = null;
         this.myForwardFixed = true;
-        this.myUpdateOnViewReset = true;
+        this.myUpdateOnViewReset = false;
         this.myForceEmulatedVelocities = false;
 
         this.myEngine = engine;
@@ -41,9 +41,9 @@ export class BasePose {
         this._myLinearVelocityEmulated = true;
         this._myAngularVelocityEmulated = true;
 
-        this._myPrePoseUpdatedEventEmitter = new Emitter();         // Signature: listener(dt, pose)
-        this._myPoseUpdatedEmitter = new Emitter();                 // Signature: listener(dt, pose)
-        this._myPostPoseUpdatedEventEmitter = new Emitter();        // Signature: listener(dt, pose)
+        this._myPrePoseUpdatedEventEmitter = new Emitter();         // Signature: listener(dt, pose, manualUpdate)
+        this._myPoseUpdatedEmitter = new Emitter();                 // Signature: listener(dt, pose, manualUpdate)
+        this._myPostPoseUpdatedEventEmitter = new Emitter();        // Signature: listener(dt, pose, manualUpdate)
 
         this._myViewResetEventListener = null;
 
@@ -181,7 +181,7 @@ export class BasePose {
     }
 
     update(dt) {
-        this._update(dt, true);
+        this._update(dt, true, false);
     }
 
     // Hooks
@@ -216,7 +216,7 @@ export class BasePose {
 
     // Hooks End
 
-    _update(dt, updateVelocity) {
+    _update(dt, updateVelocity, manualUpdate) {
         this._myPrevPosition.vec3_copy(this._myPosition);
         this._myPrevRotationQuat.quat_copy(this._myRotationQuat);
 
@@ -306,9 +306,9 @@ export class BasePose {
             this._updateHook(dt, updateVelocity, null);
         }
 
-        this._myPrePoseUpdatedEventEmitter.notify(dt, this);
-        this._myPoseUpdatedEmitter.notify(dt, this);
-        this._myPostPoseUpdatedEventEmitter.notify(dt, this);
+        this._myPrePoseUpdatedEventEmitter.notify(dt, this, manualUpdate);
+        this._myPoseUpdatedEmitter.notify(dt, this, manualUpdate);
+        this._myPostPoseUpdatedEventEmitter.notify(dt, this, manualUpdate);
     }
 
     _computeEmulatedLinearVelocity(dt) {
@@ -341,7 +341,7 @@ export class BasePose {
 
     _onViewReset() {
         if (this._myUpdateOnViewReset) {
-            this._update(0, false);
+            this._update(0, false, true);
         }
 
         this._onViewResetHook();

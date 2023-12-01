@@ -2067,11 +2067,15 @@
                 },
                 {
                     "type": "pp-console-vr-tool",
-                    "pp-console-vr-tool": {}
+                    "pp-console-vr-tool": {
+                        "_myHandedness": "Left"
+                    }
                 },
                 {
                     "type": "pp-easy-tune-tool",
-                    "pp-easy-tune-tool": {}
+                    "pp-easy-tune-tool": {
+                        "_myHandedness": "Left"
+                    }
                 }
             ]
         },

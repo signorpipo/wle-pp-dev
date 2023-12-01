@@ -32,9 +32,11 @@ export class SetHandLocalTransformComponent extends Component {
 SetHandLocalTransformComponent.prototype.onPoseUpdated = function () {
     let handPoseTransform = quat2_create();
     return function onPoseUpdated(dt, pose) {
-        if (this.active && XRUtils.isSessionActive(this.engine)) {
-            if (pose.isValid()) {
-                this.object.pp_setTransformLocalQuat(pose.getTransformQuat(handPoseTransform, null));
+        if (this.active) {
+            if (XRUtils.isSessionActive(this.engine)) {
+                if (pose.isValid()) {
+                    this.object.pp_setTransformLocalQuat(pose.getTransformQuat(handPoseTransform, null));
+                }
             }
         }
     };

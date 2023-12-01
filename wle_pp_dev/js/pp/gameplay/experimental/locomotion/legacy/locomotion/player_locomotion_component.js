@@ -51,6 +51,17 @@ export class PlayerLocomotionComponent extends Component {
         _myTeleportParableStartReferenceObject: Property.object(),
 
         _myResetRealOnStart: Property.bool(true),
+
+        // #WARN With @myResetRealOnStartFramesAmount at 1 it can happen that you enter the session like 1 frame before the game load
+        // and the head pose might have not been properly initialized yet in the WebXR API, so the reset real will not happen has expected
+        // Since this is a sort of edge case (either u enter after the load, or you were already in for more than 2-3 frames), and that
+        // setting this to more than 1 can cause a visible (even if very short) stutter after the load (due to resetting the head multiple times),
+        // it's better to keep this value at 1
+        // A possible effect of the edge case is the view being obscured on start because it thinks you are colliding
+        //
+        // A value of 3 will make u sure that the head pose will be initialized and the reset real will happen as expected in any case
+        // For example, if u have a total fade at start and nothing can be seen aside the clear color for at least, let's say, 10 frames, 
+        // you can set this to 3 safely, since there will be no visible stutter to be seen (beside the clear color)
         _myResetRealOnStartFramesAmount: Property.int(1),
 
         // these 2 flags works 100% properly only if both true or false
@@ -182,7 +193,9 @@ export class PlayerLocomotionComponent extends Component {
         Globals.getHeadPose(this.engine).registerPostPoseUpdatedEventEventListener(this, this.onPostPoseUpdatedEvent.bind(this));
     }
 
-    onPostPoseUpdatedEvent(dt, pose) {
+    onPostPoseUpdatedEvent(dt, pose, manualUpdate) {
+        if (manualUpdate) return;
+
         let startTime = 0;
         if (this._myPerformanceLogEnabled && Globals.isDebugEnabled(this.engine)) {
             startTime = window.performance.now();
