@@ -15,7 +15,7 @@ export class SetHeadLocalTransformComponent extends Component {
         // Implemented outside class definition
     }
 
-    onPoseUpdated() {
+    onPoseUpdated(dt, pose) {
         // Implemented outside class definition
     }
 
@@ -48,7 +48,7 @@ SetHeadLocalTransformComponent.prototype.update = function () {
 
 SetHeadLocalTransformComponent.prototype.onPoseUpdated = function () {
     let headPoseTransform = quat2_create();
-    return function onPoseUpdated(pose) {
+    return function onPoseUpdated(dt, pose) {
         if (this.active && XRUtils.isSessionActive(this.engine)) {
             if (pose.isValid()) {
                 this.object.pp_setTransformLocalQuat(pose.getTransformQuat(headPoseTransform, null));

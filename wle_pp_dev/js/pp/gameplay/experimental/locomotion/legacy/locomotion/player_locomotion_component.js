@@ -50,6 +50,9 @@ export class PlayerLocomotionComponent extends Component {
         _myTeleportPositionObjectRotateWithHead: Property.bool(true),
         _myTeleportParableStartReferenceObject: Property.object(),
 
+        _myResetRealOnStart: Property.bool(true),
+        _myResetRealOnStartFramesAmount: Property.int(1),
+
         // these 2 flags works 100% properly only if both true or false
         _mySyncWithRealWorldPositionOnlyIfValid: Property.bool(true),   // valid means the real player has not moved inside walls
         _myViewOcclusionInsideWallsEnabled: Property.bool(true),
@@ -140,6 +143,9 @@ export class PlayerLocomotionComponent extends Component {
         params.myTeleportPositionObjectRotateWithHead = this._myTeleportPositionObjectRotateWithHead;
         params.myTeleportParableStartReferenceObject = this._myTeleportParableStartReferenceObject;
 
+        params.myResetRealOnStart = this._myResetRealOnStart;
+        params.myResetRealOnStartFramesAmount = this._myResetRealOnStartFramesAmount;
+
         params.mySyncWithRealWorldPositionOnlyIfValid = this._mySyncWithRealWorldPositionOnlyIfValid;
         params.myViewOcclusionInsideWallsEnabled = this._myViewOcclusionInsideWallsEnabled;
 
@@ -172,9 +178,11 @@ export class PlayerLocomotionComponent extends Component {
         this._myDebugPerformanceLogTimer = new Timer(0.5);
         this._myDebugPerformanceLogTotalTime = 0;
         this._myDebugPerformanceLogFrameCount = 0;
+
+        Globals.getHeadPose(this.engine).registerPostPoseUpdatedEventEventListener(this, this.onPostPoseUpdatedEvent.bind(this));
     }
 
-    update(dt) {
+    onPostPoseUpdatedEvent(dt, pose) {
         let startTime = 0;
         if (this._myPerformanceLogEnabled && Globals.isDebugEnabled(this.engine)) {
             startTime = window.performance.now();

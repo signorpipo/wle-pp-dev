@@ -199,7 +199,7 @@ export class PlayerTransformManager {
     start() {
         this.resetToReal(true);
 
-        XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this), true, false, this._myParams.myEngine);
+        XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this), true, true, this._myParams.myEngine);
     }
 
     getParams() {
@@ -594,10 +594,12 @@ export class PlayerTransformManager {
         params.myDebugMovementEnabled = false;
     }
 
-    _onXRSessionStart(session) {
-        if (this._myActive) {
-            if (this._myParams.myResetToValidOnEnterSession) {
-                this._myResetRealOnHeadSynced = true;
+    _onXRSessionStart(manualCall, session) {
+        if (!manualCall) {
+            if (this._myActive) {
+                if (this._myParams.myResetToValidOnEnterSession) {
+                    this._myResetRealOnHeadSynced = true;
+                }
             }
         }
     }

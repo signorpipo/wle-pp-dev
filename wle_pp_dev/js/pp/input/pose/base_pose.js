@@ -41,7 +41,9 @@ export class BasePose {
         this._myLinearVelocityEmulated = true;
         this._myAngularVelocityEmulated = true;
 
-        this._myPoseUpdatedEmitter = new Emitter();   // Signature: listener(pose)
+        this._myPrePoseUpdatedEventEmitter = new Emitter();         // Signature: listener(dt, pose)
+        this._myPoseUpdatedEmitter = new Emitter();                 // Signature: listener(dt, pose)
+        this._myPostPoseUpdatedEventEmitter = new Emitter();        // Signature: listener(dt, pose)
 
         this._myViewResetEventListener = null;
 
@@ -150,12 +152,28 @@ export class BasePose {
         return this._myAngularVelocityEmulated;
     }
 
+    registerPrePoseUpdatedEventEventListener(id, listener) {
+        this._myPrePoseUpdatedEventEmitter.add(listener, { id: id });
+    }
+
+    unregisterPrePoseUpdatedEventEventListener(id) {
+        this._myPrePoseUpdatedEventEmitter.remove(id);
+    }
+
     registerPoseUpdatedEventListener(id, listener) {
         this._myPoseUpdatedEmitter.add(listener, { id: id });
     }
 
     unregisterPoseUpdatedEventListener(id) {
         this._myPoseUpdatedEmitter.remove(id);
+    }
+
+    registerPostPoseUpdatedEventEventListener(id, listener) {
+        this._myPostPoseUpdatedEventEmitter.add(listener, { id: id });
+    }
+
+    unregisterPostPoseUpdatedEventEventListener(id) {
+        this._myPostPoseUpdatedEventEmitter.remove(id);
     }
 
     start() {
@@ -288,7 +306,9 @@ export class BasePose {
             this._updateHook(dt, updateVelocity, null);
         }
 
-        this._myPoseUpdatedEmitter.notify(this);
+        this._myPrePoseUpdatedEventEmitter.notify(dt, this);
+        this._myPoseUpdatedEmitter.notify(dt, this);
+        this._myPostPoseUpdatedEventEmitter.notify(dt, this);
     }
 
     _computeEmulatedLinearVelocity(dt) {

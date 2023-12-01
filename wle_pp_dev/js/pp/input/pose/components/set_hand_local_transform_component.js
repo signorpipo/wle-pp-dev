@@ -16,7 +16,7 @@ export class SetHandLocalTransformComponent extends Component {
         Globals.getHandPose(this._myHandednessType, this.engine).registerPoseUpdatedEventListener(this, this.onPoseUpdated.bind(this));
     }
 
-    onPoseUpdated() {
+    onPoseUpdated(dt, pose) {
         // Implemented outside class definition
     }
 
@@ -31,7 +31,7 @@ export class SetHandLocalTransformComponent extends Component {
 
 SetHandLocalTransformComponent.prototype.onPoseUpdated = function () {
     let handPoseTransform = quat2_create();
-    return function onPoseUpdated(pose) {
+    return function onPoseUpdated(dt, pose) {
         if (this.active && XRUtils.isSessionActive(this.engine)) {
             if (pose.isValid()) {
                 this.object.pp_setTransformLocalQuat(pose.getTransformQuat(handPoseTransform, null));

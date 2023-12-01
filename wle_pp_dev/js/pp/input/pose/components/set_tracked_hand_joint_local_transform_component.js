@@ -28,7 +28,7 @@ export class SetTrackedHandJointLocalTransformComponent extends Component {
         Globals.getTrackedHandPose(this._myHandednessType, this.engine).getJointPose(this._myJointIDType).registerPoseUpdatedEventListener(this, this.onPoseUpdated.bind(this));
     }
 
-    onPoseUpdated() {
+    onPoseUpdated(dt, pose) {
         // Implemented outside class definition
     }
 
@@ -43,7 +43,7 @@ export class SetTrackedHandJointLocalTransformComponent extends Component {
 
 SetTrackedHandJointLocalTransformComponent.prototype.onPoseUpdated = function () {
     let jointPoseTransform = quat2_create();
-    return function onPoseUpdated(pose) {
+    return function onPoseUpdated(dt, pose) {
         if (this.active && XRUtils.isSessionActive(this.engine)) {
             if (pose.isValid()) {
                 this.object.pp_setTransformLocalQuat(pose.getTransformQuat(jointPoseTransform, null));
