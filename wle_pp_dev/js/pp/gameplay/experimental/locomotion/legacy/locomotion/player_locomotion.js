@@ -480,28 +480,32 @@ export class PlayerLocomotion {
         this._myPreUpdateEmitter.notify(dt, this);
 
         this._myPlayerHeadManager.update(dt);
-        if (this._myPlayerHeadManager.isSynced()) {
-            this._updateCollisionHeight();
-        }
 
         if (this._myParams.myResetRealOnStart && this._myResetRealOnStartCounter > 0) {
             this._myResetRealOnStartCounter--;
+
             this._myPlayerTransformManager.resetReal(true, true);
-            this._myPlayerTransformManager.update(dt);
-        } else {
             this._myPlayerTransformManager.update(dt);
 
             if (this._myPlayerHeadManager.isSynced()) {
-                if (!this._myIdle) {
-                    if (this._myParams.mySwitchLocomotionTypeShortcutEnabled &&
-                        Globals.getLeftGamepad(this._myParams.myEngine).getButtonInfo(GamepadButtonID.THUMBSTICK).isPressEnd(2)) {
-                        if (this._myLocomotionMovementFSM.isInState("smooth") && this._myPlayerLocomotionSmooth.canStop()) {
-                            this._myLocomotionMovementFSM.perform("next");
-                        } else if (this._myLocomotionMovementFSM.isInState("teleport") && this._myPlayerLocomotionTeleport.canStop()) {
-                            this._myLocomotionMovementFSM.perform("next");
-                        }
-                    }
+                this._updateCollisionHeight();
+            }
+        } else {
+            this._myPlayerTransformManager.update(dt);
 
+            if (this._myParams.mySwitchLocomotionTypeShortcutEnabled &&
+                Globals.getLeftGamepad(this._myParams.myEngine).getButtonInfo(GamepadButtonID.THUMBSTICK).isPressEnd(2)) {
+                if (this._myLocomotionMovementFSM.isInState("smooth") && this._myPlayerLocomotionSmooth.canStop()) {
+                    this._myLocomotionMovementFSM.perform("next");
+                } else if (this._myLocomotionMovementFSM.isInState("teleport") && this._myPlayerLocomotionTeleport.canStop()) {
+                    this._myLocomotionMovementFSM.perform("next");
+                }
+            }
+
+            if (this._myPlayerHeadManager.isSynced()) {
+                this._updateCollisionHeight();
+
+                if (!this._myIdle) {
                     this._myPlayerLocomotionRotate.update(dt);
                     this._myLocomotionMovementFSM.update(dt);
                 }
