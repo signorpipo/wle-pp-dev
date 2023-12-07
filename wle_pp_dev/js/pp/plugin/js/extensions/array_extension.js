@@ -583,12 +583,16 @@ export function initArrayExtensionProtoype() {
         return Vec3Utils.isZero(this, epsilon);
     };
 
-    vec3Extension.vec3_componentAlongAxis = function vec3_componentAlongAxis(axis, out = Vec3Utils.create()) {
-        return Vec3Utils.componentAlongAxis(this, axis, out);
-    };
-
     vec3Extension.vec3_valueAlongAxis = function vec3_valueAlongAxis(axis) {
         return Vec3Utils.valueAlongAxis(this, axis);
+    };
+
+    vec3Extension.vec3_valueAlongPlane = function vec3_valueAlongPlane(planeNormal) {
+        return Vec3Utils.valueAlongPlane(this, planeNormal);
+    };
+
+    vec3Extension.vec3_componentAlongAxis = function vec3_componentAlongAxis(axis, out = Vec3Utils.create()) {
+        return Vec3Utils.componentAlongAxis(this, axis, out);
     };
 
     vec3Extension.vec3_removeComponentAlongAxis = function vec3_removeComponentAlongAxis(axis, out = Vec3Utils.create()) {

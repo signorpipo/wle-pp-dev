@@ -206,8 +206,8 @@ export let anglePivotedRadians = function () {
     let flatFirst = create();
     let flatSecond = create();
     return function anglePivotedRadians(first, second, referenceAxis) {
-        flatFirst = Vec3Utils.removeComponentAlongAxis(first, referenceAxis, flatFirst);
-        flatSecond = Vec3Utils.removeComponentAlongAxis(second, referenceAxis, flatSecond);
+        Vec3Utils.removeComponentAlongAxis(first, referenceAxis, flatFirst);
+        Vec3Utils.removeComponentAlongAxis(second, referenceAxis, flatSecond);
 
         return Vec3Utils.angleRadians(flatFirst, flatSecond);
     };
@@ -225,8 +225,8 @@ export let anglePivotedSignedRadians = function () {
     let flatFirst = create();
     let flatSecond = create();
     return function anglePivotedSignedRadians(first, second, referenceAxis) {
-        flatFirst = Vec3Utils.removeComponentAlongAxis(first, referenceAxis, flatFirst);
-        flatSecond = Vec3Utils.removeComponentAlongAxis(second, referenceAxis, flatSecond);
+        Vec3Utils.removeComponentAlongAxis(first, referenceAxis, flatFirst);
+        Vec3Utils.removeComponentAlongAxis(second, referenceAxis, flatSecond);
 
         return Vec3Utils.angleSignedRadians(flatFirst, flatSecond, referenceAxis);
     };
@@ -264,17 +264,25 @@ export function isZero(vector, epsilon = 0) {
     return Vec3Utils.lengthSquared(vector) <= (epsilon * epsilon);
 }
 
-export function componentAlongAxis(vector, axis, out = Vec3Utils.create()) {
-    let componentAlongAxisLength = Vec3Utils.dot(vector, axis);
-
-    Vec3Utils.copy(axis, out);
-    Vec3Utils.scale(out, componentAlongAxisLength, out);
-    return out;
-}
-
 export function valueAlongAxis(vector, axis) {
     let valueAlongAxis = Vec3Utils.dot(vector, axis);
     return valueAlongAxis;
+}
+
+export let valueAlongPlane = function () {
+    let componentAlong = create();
+    return function valueAlongPlane(vector, planeNormal) {
+        Vec3Utils.removeComponentAlongAxis(vector, planeNormal, componentAlong);
+        return Vec3Utils.length(componentAlong);
+    };
+}();
+
+export function componentAlongAxis(vector, axis, out = Vec3Utils.create()) {
+    let valueAlongAxis = Vec3Utils.valueAlongAxis(vector, axis);
+
+    Vec3Utils.copy(axis, out);
+    Vec3Utils.scale(out, valueAlongAxis, out);
+    return out;
 }
 
 export let removeComponentAlongAxis = function () {
@@ -858,8 +866,9 @@ export let Vec3Utils = {
     degreesToQuat,
     isNormalized,
     isZero,
-    componentAlongAxis,
     valueAlongAxis,
+    valueAlongPlane,
+    componentAlongAxis,
     removeComponentAlongAxis,
     copyComponentAlongAxis,
     isConcordant,
