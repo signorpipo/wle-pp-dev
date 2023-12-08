@@ -120,6 +120,10 @@ export function initMathExtensionStatic() {
         return MathUtils.interpolate(from, to, interpolationFactor, easingFunction);
     };
 
+    mathExtension.pp_interpolatePeriodic = function pp_interpolatePeriodic(from, to, interpolationFactor, easingFunction = EasingFunction.linear) {
+        return MathUtils.interpolatePeriodic(from, to, interpolationFactor, easingFunction);
+    };
+
     mathExtension.pp_angleDistance = function pp_angleDistance(from, to) {
         return MathUtils.angleDistance(from, to);
     };
