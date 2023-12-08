@@ -24,7 +24,7 @@ export let EasingFunction = {
 
 export let EasingSupportFunction = {
     triangleWave: inputValue => (2 / Math.PI) * Math.asin(Math.sin((Math.PI / 2) * inputValue)),
-    positiveTriangleWave: inputValue => 1 - Math.abs((Math.abs(inputValue % 2)) - 1)
+    positiveTriangleWave: inputValue => 1 - Math.abs((Math.abs(inputValue) % 2) - 1)
 };
 
 export let EPSILON = 0.000001;
