@@ -33,6 +33,14 @@ export function setRaycastVisualDebugEnabled(visualDebugEnabled, physics = Globa
 }
 
 export let raycast = function () {
+    // #WARN These initializations assume that there can't be more than @maxHitCount hits within a single rayCast call
+    // if the hitCount is greater, these arrays will be allocated again
+    let maxHitCount = 20;
+    let objects = new Array(maxHitCount);
+    let distances = new Float32Array(maxHitCount);
+    let locations = Array.from({ length: maxHitCount }, () => new Float32Array(3));
+    let normals = Array.from({ length: maxHitCount }, () => new Float32Array(3));
+
     let insideCheckSubVector = vec3_create();
     let invertedRaycastDirection = vec3_create();
     let objectsEqualCallback = (first, second) => first.pp_equals(second);
@@ -50,17 +58,28 @@ export let raycast = function () {
 
         let hitCount = internalRaycastResults.hitCount;
         if (hitCount != 0) {
-            let objects = null;
-            let distances = null;
-            let locations = null;
-            let normals = null;
+            if (hitCount > maxHitCount) {
+                console.warn("Raycast hitcount is more than the expected one: " + hitCount + " - Allocation of needed resources performed");
+
+                maxHitCount = Math.ceil(hitCount + hitCount * 0.5);
+                objects = new Array(maxHitCount);
+                distances = new Float32Array(maxHitCount);
+                locations = Array.from({ length: maxHitCount }, () => new Float32Array(3));
+                normals = Array.from({ length: maxHitCount }, () => new Float32Array(3));
+            }
+
+            let objectsAlreadyGet = false;
+            let distancesAlreadyGet = false;
+            let locationsAlreadyGet = false;
+            let normalsAlreadyGet = false;
 
             invertedRaycastDirection = raycastParams.myDirection.vec3_negate(invertedRaycastDirection);
 
             for (let i = 0; i < hitCount; i++) {
                 if (raycastParams.myObjectsToIgnore.length != 0) {
-                    if (objects == null) {
-                        objects = internalRaycastResults.objects;
+                    if (!objectsAlreadyGet) {
+                        objectsAlreadyGet = true;
+                        internalRaycastResults.pp_getObjects(objects);
                     }
 
                     if (raycastParams.myObjectsToIgnore.pp_hasEqual(objects[i], objectsEqualCallback)) {
@@ -68,21 +87,24 @@ export let raycast = function () {
                     }
                 }
 
-                if (distances == null) {
-                    distances = internalRaycastResults.distances;
+                if (!distancesAlreadyGet) {
+                    distancesAlreadyGet = true;
+                    internalRaycastResults.pp_getDistances(distances);
                 }
 
                 let hitInsideCollision = distances[i] == 0;
                 if (hitInsideCollision) {
-                    if (locations == null) {
-                        locations = internalRaycastResults.locations;
+                    if (!locationsAlreadyGet) {
+                        locationsAlreadyGet = true;
+                        internalRaycastResults.pp_getLocations(locations);
                     }
 
                     hitInsideCollision &&= raycastParams.myOrigin.vec3_sub(locations[i], insideCheckSubVector).vec3_isZero(Math.PP_EPSILON);
 
                     if (hitInsideCollision) {
-                        if (!normals) {
-                            normals = internalRaycastResults.normals;
+                        if (!normalsAlreadyGet) {
+                            normalsAlreadyGet = true;
+                            internalRaycastResults.pp_getNormals(normals);
                         }
 
                         hitInsideCollision &&= invertedRaycastDirection.vec3_equals(normals[i], Math.PP_EPSILON_DEGREES);
@@ -102,16 +124,19 @@ export let raycast = function () {
                         raycastResults.myHits.push(hit);
                     }
 
-                    if (objects == null) {
-                        objects = internalRaycastResults.objects;
+                    if (!objectsAlreadyGet) {
+                        objectsAlreadyGet = true;
+                        internalRaycastResults.pp_getObjects(objects);
                     }
 
-                    if (locations == null) {
-                        locations = internalRaycastResults.locations;
+                    if (!locationsAlreadyGet) {
+                        locationsAlreadyGet = true;
+                        internalRaycastResults.pp_getLocations(locations);
                     }
 
-                    if (normals == null) {
-                        normals = internalRaycastResults.normals;
+                    if (!normalsAlreadyGet) {
+                        normalsAlreadyGet = true;
+                        internalRaycastResults.pp_getNormals(normals);
                     }
 
                     hit.myPosition.vec3_copy(locations[i]);
