@@ -137,9 +137,9 @@ export let raycast = function () {
             }
         }
 
-        if (Globals.isDebugEnabled(raycastParams.myPhysics._engine)) {
+        if (Globals.isDebugEnabled(raycastParams.myPhysics.pp_getEngine())) {
             if (PhysicsUtils.isRaycastVisualDebugEnabled(raycastParams.myPhysics)) {
-                Globals.getDebugVisualManager(raycastParams.myPhysics._engine).drawRaycast(0, raycastResults);
+                Globals.getDebugVisualManager(raycastParams.myPhysics.pp_getEngine()).drawRaycast(0, raycastResults);
             }
 
             _increaseRaycastCount(raycastParams.myPhysics);

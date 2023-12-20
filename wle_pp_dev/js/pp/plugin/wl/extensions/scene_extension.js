@@ -27,7 +27,7 @@ import { Scene } from "@wonderlandengine/api";
 import { SceneUtils } from "../../../cauldron/wl/utils/scene_utils";
 import { PluginUtils } from "../../utils/plugin_utils";
 
-export function initSceneExtension(engine) {
+export function initSceneExtension() {
     initSceneExtensionPrototype();
 }
 
