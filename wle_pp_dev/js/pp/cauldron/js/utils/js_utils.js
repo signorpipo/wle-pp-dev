@@ -19,7 +19,12 @@ export function getObjectPrototypes(object) {
             ArrayUtils.pushUnique(prototypes, prototypeToCheck);
 
             ArrayUtils.pushUnique(prototypesToCheck, Object.getPrototypeOf(prototypeToCheck));
-            ArrayUtils.pushUnique(prototypesToCheck, prototypeToCheck.prototype);
+
+            try {
+                ArrayUtils.pushUnique(prototypesToCheck, prototypeToCheck.prototype);
+            } catch (e) {
+                // Ignored
+            }
         }
     }
 
