@@ -201,7 +201,6 @@ export class Keyboard {
     }
 
     _keyUp(event) {
-        console.error(event);
         this._keyPressedChanged(event.key, false);
         if (event.key != event.code) {
             this._keyPressedChanged(event.code, false);
