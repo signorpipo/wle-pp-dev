@@ -12,6 +12,33 @@ export let KeyID = {
     _8: "8",
     _9: "9",
 
+    KeyA: "KeyA",
+    KeyB: "KeyB",
+    KeyC: "KeyC",
+    KeyD: "KeyD",
+    KeyE: "KeyE",
+    KeyF: "KeyF",
+    KeyG: "KeyG",
+    KeyH: "KeyH",
+    KeyI: "KeyI",
+    KeyJ: "KeyJ",
+    KeyK: "KeyK",
+    KeyL: "KeyL",
+    KeyM: "KeyM",
+    KeyN: "KeyN",
+    KeyO: "KeyO",
+    KeyP: "KeyP",
+    KeyQ: "KeyQ",
+    KeyR: "KeyR",
+    KeyS: "KeyS",
+    KeyT: "KeyT",
+    KeyU: "KeyU",
+    KeyV: "KeyV",
+    KeyW: "KeyW",
+    KeyX: "KeyX",
+    KeyY: "KeyY",
+    KeyZ: "KeyZ",
+
     A: "A",
     B: "B",
     C: "C",
@@ -174,6 +201,7 @@ export class Keyboard {
     }
 
     _keyUp(event) {
+        console.error(event);
         this._keyPressedChanged(event.key, false);
         if (event.key != event.code) {
             this._keyPressedChanged(event.code, false);
