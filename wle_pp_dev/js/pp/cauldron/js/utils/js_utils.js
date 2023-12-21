@@ -22,7 +22,7 @@ export function getObjectPrototypes(object) {
 
             try {
                 ArrayUtils.pushUnique(prototypesToCheck, prototypeToCheck.prototype);
-            } catch (e) {
+            } catch (error) {
                 // Ignored
             }
         }

@@ -1,7 +1,7 @@
 import { Physics, RayHit } from "@wonderlandengine/api";
 import { PluginUtils } from "../../utils/plugin_utils";
 
-export function initGetterExtension() {
+export function initGetterExtensions() {
     initPhysicsGetterExtensionPrototype();
     initRayHitGetterExtensionPrototype();
 }
