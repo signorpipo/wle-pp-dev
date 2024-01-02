@@ -441,6 +441,8 @@ export class PlayerLocomotion {
         this.setActive(currentActive);
     }
 
+    // #WARN Only a few params are actually used by this class after the setup phase, like @myCollisionCheckDisabled
+    // Params like @myMaxSpeed must be edited directly on the PlayerLocomotionSmooth object
     getParams() {
         return this._myParams;
     }
