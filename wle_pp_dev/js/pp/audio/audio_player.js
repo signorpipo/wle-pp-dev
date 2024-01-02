@@ -1,4 +1,4 @@
-import { Emitter } from "@wonderlandengine/api";
+import { RetainEmitter } from "@wonderlandengine/api";
 import { Howl, Howler } from "howler";
 import { AudioSetup } from "./audio_setup";
 
@@ -53,7 +53,7 @@ export class AudioPlayer {
 
         this._myAudioEventEmitters = new Map();
         for (let eventKey in AudioEvent) {
-            this._myAudioEventEmitters.set(AudioEvent[eventKey], new Emitter());    // Signature: listener(audioID)
+            this._myAudioEventEmitters.set(AudioEvent[eventKey], new RetainEmitter());    // Signature: listener(audioID)
         }
 
         this._addListeners();
@@ -229,8 +229,8 @@ export class AudioPlayer {
         return this._myAudioSetup.myRate;
     }
 
-    registerAudioEventListener(audioEvent, id, listener, notifyOnce = false) {
-        this._myAudioEventEmitters.get(audioEvent).add(listener, { id: id, once: notifyOnce });
+    registerAudioEventListener(audioEvent, id, listener, notifyOnce = false, notifyIfAlreadyHappened = false) {
+        this._myAudioEventEmitters.get(audioEvent).add(listener, { id: id, once: notifyOnce, immediate: notifyIfAlreadyHappened });
     }
 
     unregisterAudioEventListener(audioEvent, id) {
