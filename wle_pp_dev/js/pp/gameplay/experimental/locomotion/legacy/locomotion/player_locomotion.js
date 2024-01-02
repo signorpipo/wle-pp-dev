@@ -119,6 +119,8 @@ export class PlayerLocomotionParams {
         this.myDebugHorizontalEnabled = false;
         this.myDebugVerticalEnabled = false;
 
+        this.myCollisionCheckDisabled = false;
+
         this.myPhysicsBlockLayerFlags = new PhysicsLayerFlags();
 
         this.myEngine = engine;
@@ -439,6 +441,10 @@ export class PlayerLocomotion {
         this.setActive(currentActive);
     }
 
+    getParams() {
+        return this._myParams;
+    }
+
     setActive(active) {
         if (this._myActive != active) {
             this._myActive = active;
@@ -479,6 +485,15 @@ export class PlayerLocomotion {
     update(dt) {
         this._myPreUpdateEmitter.notify(dt, this);
 
+        let collisionCheckEnabledBackup = false;
+        let maxGravitySpeedBackup = 0;
+        if (this._myParams.myCollisionCheckDisabled && Globals.isDebugEnabled(this._myParams.myEngine)) {
+            collisionCheckEnabledBackup = CollisionCheckBridge.isCollisionCheckDisabled();
+            maxGravitySpeedBackup = this.getPlayerLocomotionSmooth().getParams().myMaxGravitySpeed;
+            CollisionCheckBridge.setCollisionCheckDisabled(true);
+            this.getPlayerLocomotionSmooth().getParams().myMaxGravitySpeed = 0;
+        }
+
         this._myPlayerHeadManager.update(dt);
 
         if (this._myParams.myResetRealOnStart && this._myResetRealOnStartCounter > 0) {
@@ -513,6 +528,11 @@ export class PlayerLocomotion {
         }
 
         this._myPlayerObscureManager.update(dt);
+
+        if (this._myParams.myCollisionCheckDisabled && Globals.isDebugEnabled(this._myParams.myEngine)) {
+            CollisionCheckBridge.setCollisionCheckDisabled(collisionCheckEnabledBackup);
+            this.getPlayerLocomotionSmooth().getParams().myMaxGravitySpeed = maxGravitySpeedBackup;
+        }
 
         this._myPostUpdateEmitter.notify(dt, this);
     }

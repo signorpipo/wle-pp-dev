@@ -95,10 +95,6 @@ export class PlayerLocomotionComponent extends Component {
     };
 
     start() {
-        if (this._myCollisionCheckDisabled && Globals.isDebugEnabled(this.engine)) {
-            CollisionCheckBridge.setCollisionCheckDisabled(true);
-        }
-
         let params = new PlayerLocomotionParams(this.engine);
 
         params.myDefaultLocomotionType = this._myDefaultLocomotionType;
@@ -108,14 +104,6 @@ export class PlayerLocomotionComponent extends Component {
 
         params.myMaxSpeed = this._myMaxSpeed;
         params.myMaxRotationSpeed = this._myMaxRotationSpeed;
-
-        if (this._myCollisionCheckDisabled && Globals.isDebugEnabled(this.engine)) {
-            params.myGravityAcceleration = 0;
-            params.myMaxGravitySpeed = 0;
-        } else {
-            params.myGravityAcceleration = this._myGravityAcceleration;
-            params.myMaxGravitySpeed = this._myMaxGravitySpeed;
-        }
 
         params.myCharacterRadius = this._myCharacterRadius;
 
@@ -178,6 +166,8 @@ export class PlayerLocomotionComponent extends Component {
 
         params.myDebugHorizontalEnabled = this._myDebugHorizontalEnabled;
         params.myDebugVerticalEnabled = this._myDebugVerticalEnabled;
+
+        params.myCollisionCheckDisabled = this._myCollisionCheckDisabled;
 
         params.myPhysicsBlockLayerFlags.copy(this._getPhysicsBlockLayersFlags());
 
