@@ -35,10 +35,6 @@ export class VisualManager {
     setActive(active) {
         if (this._myActive != active) {
             this._myActive = active;
-
-            if (!this._myActive) {
-                this.clearVisualElement();
-            }
         }
     }
 
