@@ -6,7 +6,9 @@ export function cloneMesh(componentToClone, targetObject, deepCloneParams = new 
     let clonedComponent = ComponentUtils.cloneDefault(componentToClone, targetObject, true);
 
     if (deepCloneParams.isDeepCloneComponentVariable(MeshComponent.TypeName, "material")) {
-        clonedComponent.material = componentToClone.material.clone();
+        if (componentToClone.material != null) {
+            clonedComponent.material = componentToClone.material.clone();
+        }
     }
 
     if (deepCloneParams.isDeepCloneComponentVariable(MeshComponent.TypeName, "mesh")) {
@@ -26,7 +28,9 @@ export function cloneText(componentToClone, targetObject, deepCloneParams = new 
     let clonedComponent = ComponentUtils.cloneDefault(componentToClone, targetObject);
 
     if (deepCloneParams.isDeepCloneComponentVariable(TextComponent.TypeName, "material")) {
-        clonedComponent.material = componentToClone.material.clone();
+        if (componentToClone.material != null) {
+            clonedComponent.material = componentToClone.material.clone();
+        }
     }
 
     return clonedComponent;

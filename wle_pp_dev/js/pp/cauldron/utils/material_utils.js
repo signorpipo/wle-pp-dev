@@ -50,7 +50,9 @@ export function setObjectClonedMaterials(object) {
     let meshComponents = object.pp_getComponents(MeshComponent);
 
     for (let meshComponent of meshComponents) {
-        meshComponent.material = meshComponent.material.clone();
+        if (meshComponent.material != null) {
+            meshComponent.material = meshComponent.material.clone();
+        }
     }
 }
 
