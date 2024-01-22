@@ -39,6 +39,7 @@ export class PlayerLocomotionSmoothParams {
 
         this.myHandedness = Handedness.LEFT;
 
+        this.myDebugFlyMaxSpeedMultiplier = 5;
         this.myMoveThroughCollisionShortcutEnabled = false;
         this.myMoveHeadShortcutEnabled = false;
         this.myTripleSpeedShortcutEnabled = false;
@@ -83,6 +84,8 @@ export class PlayerLocomotionSmooth extends PlayerLocomotionMovement {
         this._myDirectionConverterVR = new Direction2DTo3DConverter(directionConverterVRParams);
         this._myCurrentDirectionConverter = this._myDirectionConverterNonVR;
 
+        this._myDebugFlyEnabled = false;
+
         this._myDestroyed = false;
 
         XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this), true, false, this._myParams.myEngine);
@@ -107,6 +110,21 @@ export class PlayerLocomotionSmooth extends PlayerLocomotionMovement {
 
     update(dt) {
         // Implemented outside class definition
+    }
+
+    setDebugFlyEnabled(enabled) {
+        if (this._myDebugFlyEnabled != enabled) {
+            if (!enabled) {
+                this._myLocomotionRuntimeParams.myIsFlying = false;
+                this._myCurrentDirectionConverter.resetFly();
+            }
+        }
+
+        this._myDebugFlyEnabled = enabled;
+    }
+
+    isDebugFlyEnabled() {
+        return this._myDebugFlyEnabled;
     }
 
     destroy() {
@@ -134,6 +152,8 @@ PlayerLocomotionSmooth.prototype.update = function () {
 
     let directionReferenceTransformQuat = quat2_create();
     return function update(dt) {
+        let debugFlyEnabled = this._myDebugFlyEnabled && Globals.isDebugEnabled(this._myParams.myEngine);
+
         this._myCurrentSpeed = 0;
         this._myLastHorizontalMovement.vec3_zero();
 
@@ -147,11 +167,18 @@ PlayerLocomotionSmooth.prototype.update = function () {
 
         let isManuallyMoving = false;
         let maxSpeed = this._myParams.myMaxSpeed;
+        if (debugFlyEnabled) {
+            maxSpeed = maxSpeed * this._myParams.myDebugFlyMaxSpeedMultiplier;
+        }
 
-        if (this._myParams.myTripleSpeedShortcutEnabled && Globals.isDebugEnabled(this._myParams.myEngine)) {
+        if ((this._myParams.myTripleSpeedShortcutEnabled && Globals.isDebugEnabled(this._myParams.myEngine)) || debugFlyEnabled) {
             if (Globals.getGamepads(this._myParams.myEngine)[this._myParams.myHandedness].getButtonInfo(GamepadButtonID.SELECT).isPressed()) {
                 maxSpeed *= 3;
             }
+        }
+
+        if (debugFlyEnabled && Globals.getGamepads(this._myParams.myEngine)[InputUtils.getOppositeHandedness(this._myParams.myHandedness)].getButtonInfo(GamepadButtonID.SELECT).isPressed()) {
+            maxSpeed = this._myParams.myMaxSpeed;
         }
 
         if (!axes.vec2_isZero()) {
@@ -190,7 +217,7 @@ PlayerLocomotionSmooth.prototype.update = function () {
             }
         }
 
-        if (this._myParams.myFlyEnabled && this._myParams.myFlyWithButtonsEnabled) {
+        if ((this._myParams.myFlyEnabled && this._myParams.myFlyWithButtonsEnabled) || debugFlyEnabled) {
             if (Globals.getGamepads(this._myParams.myEngine)[this._myParams.myHandedness].getButtonInfo(GamepadButtonID.TOP_BUTTON).isPressed()) {
                 verticalMovement = playerUp.vec3_scale(maxSpeed * dt, verticalMovement);
                 headMovement = headMovement.vec3_add(verticalMovement, headMovement);
@@ -213,8 +240,9 @@ PlayerLocomotionSmooth.prototype.update = function () {
         if (this._myParams.myMoveHeadShortcutEnabled && Globals.isDebugEnabled(this._myParams.myEngine) &&
             Globals.getGamepads(this._myParams.myEngine)[InputUtils.getOppositeHandedness(this._myParams.myHandedness)].getButtonInfo(GamepadButtonID.THUMBSTICK).isPressed()) {
             this._myParams.myPlayerTransformManager.getPlayerHeadManager().moveFeet(headMovement);
-        } else if (this._myParams.myMoveThroughCollisionShortcutEnabled && Globals.isDebugEnabled(this._myParams.myEngine) &&
-            Globals.getGamepads(this._myParams.myEngine)[this._myParams.myHandedness].getButtonInfo(GamepadButtonID.THUMBSTICK).isPressed()) {
+        } else if ((this._myParams.myMoveThroughCollisionShortcutEnabled && Globals.isDebugEnabled(this._myParams.myEngine) &&
+            Globals.getGamepads(this._myParams.myEngine)[this._myParams.myHandedness].getButtonInfo(GamepadButtonID.THUMBSTICK).isPressed())
+            || debugFlyEnabled) {
             this._myParams.myPlayerTransformManager.move(headMovement, this._myLocomotionRuntimeParams.myCollisionRuntimeParams, true);
             if (isManuallyMoving) {
                 this._myParams.myPlayerTransformManager.resetReal();

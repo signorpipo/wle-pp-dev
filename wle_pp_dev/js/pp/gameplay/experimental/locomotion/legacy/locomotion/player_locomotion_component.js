@@ -11,7 +11,7 @@ export class PlayerLocomotionComponent extends Component {
     static Properties = {
         _myDefaultLocomotionType: Property.enum(["Smooth", "Teleport"], "Smooth"),
         _myAlwaysSmoothForNonVR: Property.bool(true),
-        _mySwitchLocomotionTypeShortcutEnabled: Property.bool(true), // double press main hand (default left) thumbstick to switch
+        _mySwitchLocomotionTypeShortcutEnabled: Property.bool(true), // Double press main hand (default left) thumbstick to switch
         _myPhysicsBlockLayerFlags: Property.string("0, 0, 0, 0, 0, 0, 0, 0"),
         _myDefaultHeight: Property.float(1.75),
         _myCharacterRadius: Property.float(0.3),
@@ -80,6 +80,8 @@ export class PlayerLocomotionComponent extends Component {
         _myColliderMaxWalkableGroundStepHeight: Property.float(0.1),
         _myColliderPreventFallingFromEdges: Property.bool(false),
 
+        _myDebugFlyShortcutEnabled: Property.bool(false),               // main hand (default left) select + thumbstick press, auto switch to smooth
+        _myDebugFlyMaxSpeedMultiplier: Property.float(5),
         _myMoveThroughCollisionShortcutEnabled: Property.bool(false),   // main hand (default left) thumbstick pressed while moving
         _myMoveHeadShortcutEnabled: Property.bool(false),               // non main hand (default right) thumbstick pressed while moving
         _myTripleSpeedShortcutEnabled: Property.bool(false),            // main hand (default left) select pressed while moving
@@ -105,6 +107,8 @@ export class PlayerLocomotionComponent extends Component {
 
         params.myMaxSpeed = this._myMaxSpeed;
         params.myMaxRotationSpeed = this._myMaxRotationSpeed;
+        params.myGravityAcceleration = this._myGravityAcceleration;
+        params.myMaxGravitySpeed = this._myMaxGravitySpeed;
 
         params.myCharacterRadius = this._myCharacterRadius;
 
@@ -161,6 +165,8 @@ export class PlayerLocomotionComponent extends Component {
         params.myColliderMaxWalkableGroundStepHeight = this._myColliderMaxWalkableGroundStepHeight;
         params.myColliderPreventFallingFromEdges = this._myColliderPreventFallingFromEdges;
 
+        params.myDebugFlyShortcutEnabled = this._myDebugFlyShortcutEnabled;
+        params.myDebugFlyMaxSpeedMultiplier = this._myDebugFlyMaxSpeedMultiplier;
         params.myMoveThroughCollisionShortcutEnabled = this._myMoveThroughCollisionShortcutEnabled;
         params.myMoveHeadShortcutEnabled = this._myMoveHeadShortcutEnabled;
         params.myTripleSpeedShortcutEnabled = this._myTripleSpeedShortcutEnabled;

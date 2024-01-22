@@ -20,6 +20,7 @@ import { PlayerObscureManager, PlayerObscureManagerParams } from "./player_obscu
 import { PlayerTransformManager, PlayerTransformManagerParams, PlayerTransformManagerSyncFlag } from "./player_transform_manager";
 import { PlayerLocomotionTeleport, PlayerLocomotionTeleportParams } from "./teleport/player_locomotion_teleport";
 import { PlayerLocomotionTeleportTeleportType } from "./teleport/player_locomotion_teleport_teleport_state";
+import { GamepadUtils } from "../../../../../input/gamepad/cauldron/gamepad_utils";
 
 export let PlayerLocomotionDirectionReferenceType = {
     HEAD: 0,
@@ -37,7 +38,7 @@ export class PlayerLocomotionParams {
     constructor(engine = Globals.getMainEngine()) {
         this.myDefaultLocomotionType = PlayerLocomotionType.SMOOTH;
         this.myAlwaysSmoothForNonVR = true;
-        this.mySwitchLocomotionTypeShortcutEnabled = true; // double press main hand (default left) thumbstick to switch
+        this.mySwitchLocomotionTypeShortcutEnabled = true; // Double press main hand (default left) thumbstick to switch
 
         this.myDefaultHeight = 0;
 
@@ -114,6 +115,8 @@ export class PlayerLocomotionParams {
         this.myColliderMaxWalkableGroundStepHeight = 0;
         this.myColliderPreventFallingFromEdges = false;
 
+        this.myDebugFlyShortcutEnabled = false;             // main hand (default left) select + thumbstick press, auto switch to smooth
+        this.myDebugFlyMaxSpeedMultiplier = 5;
         this.myMoveThroughCollisionShortcutEnabled = false; // main hand (default left) thumbstick pressed while moving
         this.myMoveHeadShortcutEnabled = false;             // non main hand (default right) thumbstick pressed while moving
         this.myTripleSpeedShortcutEnabled = false;          // main hand (default left) select pressed while moving
@@ -348,6 +351,7 @@ export class PlayerLocomotion {
                 params.myVRDirectionReferenceType = this._myParams.myVRDirectionReferenceType;
                 params.myVRDirectionReferenceObject = this._myParams.myVRDirectionReferenceObject;
 
+                params.myDebugFlyMaxSpeedMultiplier = this._myParams.myDebugFlyMaxSpeedMultiplier;
                 params.myMoveThroughCollisionShortcutEnabled = this._myParams.myMoveThroughCollisionShortcutEnabled;
                 params.myMoveHeadShortcutEnabled = this._myParams.myMoveHeadShortcutEnabled;
                 params.myTripleSpeedShortcutEnabled = this._myParams.myTripleSpeedShortcutEnabled;
@@ -516,7 +520,7 @@ export class PlayerLocomotion {
 
             if (!this._myParams.myAlwaysSmoothForNonVR || XRUtils.isSessionActive()) {
                 if (this._myParams.mySwitchLocomotionTypeShortcutEnabled &&
-                    Globals.getLeftGamepad(this._myParams.myEngine).getButtonInfo(GamepadButtonID.THUMBSTICK).isPressEnd(2)) {
+                    this._getMainHandGamepad().getButtonInfo(GamepadButtonID.THUMBSTICK).isPressEnd(2)) {
                     if (this._myLocomotionMovementFSM.isInState("smooth") && this._myPlayerLocomotionSmooth.canStop()) {
                         this._myLocomotionMovementFSM.perform("next");
                     } else if (this._myLocomotionMovementFSM.isInState("teleport") && this._myPlayerLocomotionTeleport.canStop()) {
@@ -534,6 +538,18 @@ export class PlayerLocomotion {
                 if (this._myLocomotionMovementFSM.isInState("smooth") && this._myPlayerLocomotionSmooth.canStop()) {
                     this._mySwitchToTeleportOnEnterSession = false;
                     this._myLocomotionMovementFSM.perform("next");
+                }
+            }
+
+            if (this._myParams.myDebugFlyShortcutEnabled && Globals.isDebugEnabled(this._myParams.myEngine)) {
+                if (GamepadUtils.areButtonsPressEnd([this._getMainHandGamepad(), GamepadButtonID.SELECT, GamepadButtonID.THUMBSTICK])) {
+                    if (this._myLocomotionMovementFSM.isInState("teleport") && this._myPlayerLocomotionTeleport.canStop()) {
+                        this._myLocomotionMovementFSM.perform("next");
+                    }
+
+                    if (this._myLocomotionMovementFSM.isInState("smooth")) {
+                        this._myPlayerLocomotionSmooth.setDebugFlyEnabled(!this._myPlayerLocomotionSmooth.isDebugFlyEnabled());
+                    }
                 }
             }
 
@@ -764,6 +780,10 @@ export class PlayerLocomotion {
         }.bind(this));
 
         this._myLocomotionMovementFSM.init("init");
+    }
+
+    _getMainHandGamepad() {
+        return Globals.getGamepads(this._myParams.myEngine)[this._myParams.myMainHand];
     }
 
     destroy() {
