@@ -1,17 +1,19 @@
-import { Component } from "@wonderlandengine/api";
+import { Component, Property } from "@wonderlandengine/api";
 import { Globals } from "../../../pp/globals";
 import { SaveManager } from "../save_manager";
 
 export class SaveManagerComponent extends Component {
     static TypeName = "pp-save-manager";
-    static Properties = {};
+    static Properties = {
+        _mySaveID: Property.string("")
+    };
 
     init() {
         this._mySaveManager = null;
 
         // Prevents double global from same engine
-        if (!Globals.hasSaveManager(this.engine)) {
-            this._mySaveManager = new SaveManager();
+        if (this._mySaveID.length > 0 && !Globals.hasSaveManager(this.engine)) {
+            this._mySaveManager = new SaveManager(this._mySaveID, this.engine);
 
             Globals.setSaveManager(this._mySaveManager, this.engine);
         }
