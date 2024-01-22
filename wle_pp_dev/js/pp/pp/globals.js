@@ -1,4 +1,5 @@
 import * as AudioGlobals from "../audio/audio_globals";
+import * as AnalyticsGlobals from "../cauldron/cauldron/analytics_globals";
 import * as WindowGlobals from "../cauldron/cauldron/window_globals";
 import * as ObjectPoolManagerGlobals from "../cauldron/object_pool/object_pool_globals";
 import * as VisualGlobals from "../cauldron/visual/visual_globals";
@@ -13,6 +14,7 @@ import * as DefaultResourcesGlobals from "./default_resources_globals";
 import * as SceneObjectsGlobals from "./scene_objects_globals";
 
 export let Globals = {
+    ...AnalyticsGlobals,
     ...EngineGlobals,
     ...SceneObjectsGlobals,
     ...DefaultResourcesGlobals,

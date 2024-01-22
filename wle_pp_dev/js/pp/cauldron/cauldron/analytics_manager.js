@@ -1,6 +1,6 @@
 export class AnalyticsManager {
     constructor() {
-        this._myAnalyticsEnabled = false;
+        this._myAnalyticsEnabled = true;
 
         this._mySendDataCallback = null;
 
@@ -15,9 +15,14 @@ export class AnalyticsManager {
 
     update(dt) {
         if (this._myEventCooldowns.size > 0) {
-            for (let [eventName, currentCooldown] of this._myEventCooldowns.entries()) {
-                let newCooldown = Math.max(0, currentCooldown - dt);
-                this._myEventCooldowns.set(eventName, newCooldown);
+            let eventNamesToUpdateCooldown = this._myEventCooldowns.keys();
+            for (let eventName of eventNamesToUpdateCooldown) {
+                let newCooldown = this._myEventCooldowns.get(eventName) - dt;
+                if (newCooldown <= 0) {
+                    this._myEventCooldowns.delete(eventName);
+                } else {
+                    this._myEventCooldowns.set(eventName, newCooldown);
+                }
             }
         }
     }

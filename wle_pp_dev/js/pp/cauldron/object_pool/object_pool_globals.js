@@ -6,8 +6,8 @@ export function getObjectPoolManager(engine = Globals.getMainEngine()) {
     return _myObjectPoolManagers.get(engine);
 }
 
-export function setObjectPoolManager(audioManager, engine = Globals.getMainEngine()) {
-    _myObjectPoolManagers.set(engine, audioManager);
+export function setObjectPoolManager(objectPoolManager, engine = Globals.getMainEngine()) {
+    _myObjectPoolManagers.set(engine, objectPoolManager);
 }
 
 export function removeObjectPoolManager(engine = Globals.getMainEngine()) {

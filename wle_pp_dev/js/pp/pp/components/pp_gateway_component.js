@@ -2,6 +2,7 @@ import { Component, Property } from "@wonderlandengine/api";
 import { AudioManagerComponent } from "../../audio/components/audio_manager_component";
 import { ObjectPoolManagerComponent } from "../../cauldron/object_pool/components/object_pool_manager_component";
 import { VisualManagerComponent } from "../../cauldron/visual/components/visual_manager_component";
+import { AnalyticsManagerComponent } from "../../cauldron/cauldron/components/analytics_manager_component";
 import { AddWLToWindowComponent } from "../../cauldron/wl/components/add_wl_to_window_component";
 import { DebugManagerComponent } from "../../debug/components/debug_manager_component";
 import { EnableDebugComponent } from "../../debug/components/enable_debug_component";
@@ -29,6 +30,7 @@ export class PPGatewayComponent extends Component {
         ...VisualManagerComponent.Properties,
         ...CharacterCollisionSystemComponent.Properties,
         ...ObjectPoolManagerComponent.Properties,
+        ...AnalyticsManagerComponent.Properties,
         ...DebugManagerComponent.Properties,
         ...GetSceneObjectsComponent.Properties,
         ...GetDefaultResourcesComponent.Properties
@@ -73,6 +75,7 @@ export class PPGatewayComponent extends Component {
         this._myAudioManagerComponent = this.object.pp_addComponent(AudioManagerComponent, this._getProperties(AudioManagerComponent.Properties), false);
         this._myVisualManagerComponent = this.object.pp_addComponent(VisualManagerComponent, this._getProperties(VisualManagerComponent.Properties), false);
         this._myCharacterCollisionSystemComponent = this.object.pp_addComponent(CharacterCollisionSystemComponent, this._getProperties(CharacterCollisionSystemComponent.Properties), false);
+        this._myAnalyticsManagerComponent = this.object.pp_addComponent(AnalyticsManagerComponent, this._getProperties(AnalyticsManagerComponent.Properties), false);
 
         this._myDebugManagerComponent = this.object.pp_addComponent(DebugManagerComponent, this._getProperties(DebugManagerComponent.Properties), false);
     }
@@ -105,6 +108,7 @@ export class PPGatewayComponent extends Component {
         this._myAudioManagerComponent.active = true;
         this._myVisualManagerComponent.active = true;
         this._myCharacterCollisionSystemComponent.active = true;
+        this._myAnalyticsManagerComponent.active = true;
 
         this._myDebugManagerComponent.active = true;
     }

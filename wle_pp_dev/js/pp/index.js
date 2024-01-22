@@ -51,8 +51,12 @@ export * from "./cauldron/benchmarks/benchmark_max_physx_component";
 export * from "./cauldron/benchmarks/benchmark_max_visible_triangles_component";
 
 export * from "./cauldron/cauldron/save_manager";
+export * from "./cauldron/cauldron/analytics_globals";
+export * from "./cauldron/cauldron/analytics_manager";
 export * from "./cauldron/cauldron/timer";
 export * from "./cauldron/cauldron/window_globals";
+
+export * from "./cauldron/cauldron/components/analytics_manager_component";
 
 export * from "./cauldron/components/clear_console_on_xr_session_start_component";
 export * from "./cauldron/components/set_active_component";
@@ -136,7 +140,7 @@ export * from "./debug/debug_functions_overwriter/debug_functions_performance_an
 export * from "./debug/debug_functions_overwriter/debug_functions_performance_analyzer/components/debug_array_functions_performance_analyzer_component";
 export * from "./debug/debug_functions_overwriter/debug_functions_performance_analyzer/components/debug_pp_array_creation_performance_analyzer_component";
 export * from "./debug/debug_functions_overwriter/debug_functions_performance_analyzer/components/debug_wl_function_performance_analyzer_component";
-export * from "./debug/debug_functions_overwriter/debug_functions_performance_analyzer/components/debug_wl_components_function_performance_analyzer_component.js";
+export * from "./debug/debug_functions_overwriter/debug_functions_performance_analyzer/components/debug_wl_components_function_performance_analyzer_component";
 
 //	GAMEPLAY
 
@@ -231,7 +235,7 @@ export * from "./input/gamepad/virtual_gamepad/virtual_gamepad_virtual_button";
 export * from "./input/gamepad/virtual_gamepad/virtual_gamepad_virtual_thumbstick";
 export * from "./input/gamepad/virtual_gamepad/virtual_gamepad_icon";
 
-export * from "./input/pose/base_pose.js";
+export * from "./input/pose/base_pose";
 export * from "./input/pose/hand_pose";
 export * from "./input/pose/head_pose";
 export * from "./input/pose/tracked_hand_joint_pose";
