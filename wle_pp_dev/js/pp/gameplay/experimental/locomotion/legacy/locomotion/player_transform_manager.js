@@ -965,7 +965,7 @@ PlayerTransformManager.prototype._updateValidToReal = function () {
 
             if ((this.isSynced(this._myParams.mySyncPositionFlagMap) || this._myParams.myAlwaysSyncPositionWithReal) && !this._myParams.mySyncPositionDisabled) {
                 this._myValidPosition.vec3_copy(newPosition);
-                // Reset real position dato che la posizione new potrebbe essere quella influenzata da snap
+                // Reset real position since the new position might be influenced by the snap?
             }
 
             if (this.isSynced(this._myParams.mySyncPositionHeadFlagMap) || this._myParams.myAlwaysSyncHeadPositionWithReal
