@@ -19,5 +19,8 @@
     },
     "optionalDependencies": {
         "@playkostudios/wle-cleaner": "^0.7.1"
+    },
+    "scripts": {
+        "clean-projects": "wle-cleaner \"./*.wlp\" -r -e dev/wle-cleaner-editor-bundle-extras.js --no-legacy-preamble"
     }
 }
