@@ -11,7 +11,13 @@ export class SaveManager {
 
         this._mySaveID = saveID;
 
-        this._mySaveObject = SaveUtils.loadObject(this._mySaveID, {});
+        this._mySaveObject = {};
+
+        try {
+            this._mySaveObject = SaveUtils.loadObject(this._mySaveID, {});
+        } catch (error) {
+            // Do nothing
+        }
 
         this._myCommitSavesDelayTimer = new Timer(0, false);
         this._myDelaySavesCommit = true;
