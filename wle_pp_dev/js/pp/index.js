@@ -50,12 +50,14 @@ export * from "./audio/components/spatial_audio_listener_component";
 export * from "./cauldron/benchmarks/benchmark_max_physx_component";
 export * from "./cauldron/benchmarks/benchmark_max_visible_triangles_component";
 
+export * from "./cauldron/cauldron/save_globals";
 export * from "./cauldron/cauldron/save_manager";
 export * from "./cauldron/cauldron/analytics_globals";
 export * from "./cauldron/cauldron/analytics_manager";
 export * from "./cauldron/cauldron/timer";
 export * from "./cauldron/cauldron/window_globals";
 
+export * from "./cauldron/cauldron/components/save_manager_component";
 export * from "./cauldron/cauldron/components/analytics_manager_component";
 
 export * from "./cauldron/components/clear_console_on_xr_session_start_component";
