@@ -5,6 +5,7 @@ import { PhysicsLayerFlags } from "../../../../../cauldron/physics/physics_layer
 import { XRUtils } from "../../../../../cauldron/utils/xr_utils";
 import { Handedness } from "../../../../../input/cauldron/input_types";
 import { InputUtils } from "../../../../../input/cauldron/input_utils";
+import { GamepadUtils } from "../../../../../input/gamepad/cauldron/gamepad_utils";
 import { GamepadButtonID } from "../../../../../input/gamepad/gamepad_buttons";
 import { vec3_create } from "../../../../../plugin/js/extensions/array_extension";
 import { Globals } from "../../../../../pp/globals";
@@ -20,7 +21,6 @@ import { PlayerObscureManager, PlayerObscureManagerParams } from "./player_obscu
 import { PlayerTransformManager, PlayerTransformManagerParams, PlayerTransformManagerSyncFlag } from "./player_transform_manager";
 import { PlayerLocomotionTeleport, PlayerLocomotionTeleportParams } from "./teleport/player_locomotion_teleport";
 import { PlayerLocomotionTeleportTeleportType } from "./teleport/player_locomotion_teleport_teleport_state";
-import { GamepadUtils } from "../../../../../input/gamepad/cauldron/gamepad_utils";
 
 export let PlayerLocomotionDirectionReferenceType = {
     HEAD: 0,
