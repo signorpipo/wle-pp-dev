@@ -4,13 +4,13 @@ import { PhysicsLayerFlags } from "../../../../../cauldron/physics/physics_layer
 import { PhysicsUtils } from "../../../../../cauldron/physics/physics_utils";
 import { InputUtils } from "../../../../../input/cauldron/input_utils";
 import { Globals } from "../../../../../pp/globals";
-import { CollisionCheckBridge } from "../../../character_controller/collision/collision_check_bridge";
 import { PlayerLocomotion, PlayerLocomotionParams } from "./player_locomotion";
 
 export class PlayerLocomotionComponent extends Component {
     static TypeName = "pp-player-locomotion";
     static Properties = {
         _myDefaultLocomotionType: Property.enum(["Smooth", "Teleport"], "Smooth"),
+        _myAlwaysSmoothForNonVR: Property.bool(true),
         _mySwitchLocomotionTypeShortcutEnabled: Property.bool(true), // double press main hand (default left) thumbstick to switch
         _myPhysicsBlockLayerFlags: Property.string("0, 0, 0, 0, 0, 0, 0, 0"),
         _myDefaultHeight: Property.float(1.75),
@@ -98,6 +98,7 @@ export class PlayerLocomotionComponent extends Component {
         let params = new PlayerLocomotionParams(this.engine);
 
         params.myDefaultLocomotionType = this._myDefaultLocomotionType;
+        params.myAlwaysSmoothForNonVR = this._myAlwaysSmoothForNonVR;
         params.mySwitchLocomotionTypeShortcutEnabled = this._mySwitchLocomotionTypeShortcutEnabled;
 
         params.myDefaultHeight = this._myDefaultHeight;

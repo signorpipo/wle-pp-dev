@@ -2,6 +2,7 @@ import { Emitter, PhysXComponent } from "@wonderlandengine/api";
 import { FSM } from "../../../../../cauldron/fsm/fsm";
 import { EasingFunction } from "../../../../../cauldron/js/utils/math_utils";
 import { PhysicsLayerFlags } from "../../../../../cauldron/physics/physics_layer_flags";
+import { XRUtils } from "../../../../../cauldron/utils/xr_utils";
 import { Handedness } from "../../../../../input/cauldron/input_types";
 import { InputUtils } from "../../../../../input/cauldron/input_utils";
 import { GamepadButtonID } from "../../../../../input/gamepad/gamepad_buttons";
@@ -35,6 +36,7 @@ export class PlayerLocomotionParams {
 
     constructor(engine = Globals.getMainEngine()) {
         this.myDefaultLocomotionType = PlayerLocomotionType.SMOOTH;
+        this.myAlwaysSmoothForNonVR = true;
         this.mySwitchLocomotionTypeShortcutEnabled = true; // double press main hand (default left) thumbstick to switch
 
         this.myDefaultHeight = 0;
@@ -405,6 +407,8 @@ export class PlayerLocomotion {
 
         this._setupLocomotionMovementFSM();
 
+        this._mySwitchToTeleportOnEnterSession = false;
+
         this._myIdle = false;
 
         this._myActive = true;
@@ -510,11 +514,25 @@ export class PlayerLocomotion {
         } else {
             this._myPlayerTransformManager.update(dt);
 
-            if (this._myParams.mySwitchLocomotionTypeShortcutEnabled &&
-                Globals.getLeftGamepad(this._myParams.myEngine).getButtonInfo(GamepadButtonID.THUMBSTICK).isPressEnd(2)) {
-                if (this._myLocomotionMovementFSM.isInState("smooth") && this._myPlayerLocomotionSmooth.canStop()) {
+            if (!this._myParams.myAlwaysSmoothForNonVR || XRUtils.isSessionActive()) {
+                if (this._myParams.mySwitchLocomotionTypeShortcutEnabled &&
+                    Globals.getLeftGamepad(this._myParams.myEngine).getButtonInfo(GamepadButtonID.THUMBSTICK).isPressEnd(2)) {
+                    if (this._myLocomotionMovementFSM.isInState("smooth") && this._myPlayerLocomotionSmooth.canStop()) {
+                        this._myLocomotionMovementFSM.perform("next");
+                    } else if (this._myLocomotionMovementFSM.isInState("teleport") && this._myPlayerLocomotionTeleport.canStop()) {
+                        this._myLocomotionMovementFSM.perform("next");
+                    }
+                }
+            }
+
+            if (this._myParams.myAlwaysSmoothForNonVR && !XRUtils.isSessionActive()) {
+                if (this._myLocomotionMovementFSM.isInState("teleport") && this._myPlayerLocomotionTeleport.canStop()) {
+                    this._mySwitchToTeleportOnEnterSession = true;
                     this._myLocomotionMovementFSM.perform("next");
-                } else if (this._myLocomotionMovementFSM.isInState("teleport") && this._myPlayerLocomotionTeleport.canStop()) {
+                }
+            } else if (this._mySwitchToTeleportOnEnterSession && XRUtils.isSessionActive()) {
+                if (this._myLocomotionMovementFSM.isInState("smooth") && this._myPlayerLocomotionSmooth.canStop()) {
+                    this._mySwitchToTeleportOnEnterSession = false;
                     this._myLocomotionMovementFSM.perform("next");
                 }
             }
@@ -650,14 +668,14 @@ export class PlayerLocomotion {
         this._myCollisionCheckParamsTeleport.myExtraTeleportCheckCallback = function (
             offsetTeleportPosition, endPosition, feetPosition, transformUp, transformForward, height,
             collisionCheckParams, prevCollisionRuntimeParams, collisionRuntimeParams, newFeetPosition
-
+ 
         ) {
             let isTeleportingUpward = endPosition.vec3_isFartherAlongAxis(feetPosition, transformUp);
             if (isTeleportingUpward) {
                 collisionRuntimeParams.myTeleportCanceled = collisionRuntimeParams.myGroundAngle > 30 + 0.0001;
                 console.error(collisionRuntimeParams.myTeleportCanceled);
             }
-
+ 
             return newFeetPosition;
         }*/
 
