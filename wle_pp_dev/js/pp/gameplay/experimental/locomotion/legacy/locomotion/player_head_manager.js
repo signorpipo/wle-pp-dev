@@ -459,6 +459,8 @@ PlayerHeadManager.prototype.teleportPlayerToHeadTransformQuat = function () {
     let teleportMovement = vec3_create();
     let playerForward = vec3_create();
     let headForward = vec3_create();
+    let referenceSpaceForward = vec3_create();
+    let referenceSpaceForwardNegated = vec3_create();
     let rotationToPerform = quat_create();
     return function teleportPlayerToHeadTransformQuat(headTransformQuat) {
         headPosition = headTransformQuat.quat2_getPosition(headPosition);
@@ -474,6 +476,18 @@ PlayerHeadManager.prototype.teleportPlayerToHeadTransformQuat = function () {
         headForward = headTransformQuat.quat2_getForward(headForward);
 
         rotationToPerform = playerForward.vec3_rotationToPivotedQuat(headForward, playerUp, rotationToPerform);
+
+        Globals.getPlayerObjects(this._myParams.myEngine).myPlayer.pp_rotateQuat(rotationToPerform);
+
+        // Adjust player rotation based on the reference space rotation, which should not actually be touched,
+        // but just in case
+
+        playerForward = Globals.getPlayerObjects(this._myParams.myEngine).myPlayer.pp_getForward(playerForward);
+
+        referenceSpaceForward = Globals.getPlayerObjects(this._myParams.myEngine).myReferenceSpace.pp_getForward(referenceSpaceForward);
+        referenceSpaceForwardNegated = referenceSpaceForward.vec3_negate(referenceSpaceForwardNegated);
+
+        rotationToPerform = referenceSpaceForwardNegated.vec3_rotationToPivotedQuat(playerForward, playerUp, rotationToPerform);
 
         Globals.getPlayerObjects(this._myParams.myEngine).myPlayer.pp_rotateQuat(rotationToPerform);
     };

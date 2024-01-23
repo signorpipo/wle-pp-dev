@@ -42,7 +42,8 @@
                         "_myPhysicsBlockLayerFlags": "0, 1, 0, 0, 0, 0, 0, 0",
                         "_myMoveThroughCollisionShortcutEnabled": true,
                         "_myTeleportValidMaterial": "149",
-                        "_myTeleportInvalidMaterial": "148"
+                        "_myTeleportInvalidMaterial": "148",
+                        "_myAlwaysSmoothForNonVR": false
                     }
                 }
             ],
