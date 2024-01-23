@@ -63,6 +63,7 @@ export class PlayerHeadManager {
 
         this._myIsSyncedDelayCounter = 0;
 
+        this._myViewResetThisFrame = false;
         this._myViewResetEventListener = null;
 
         this._myActive = true;
@@ -218,6 +219,8 @@ export class PlayerHeadManager {
     }
 
     update(dt) {
+        this._myViewResetThisFrame = false;
+
         if (this._myIsSyncedDelayCounter != 0) {
             this._myIsSyncedDelayCounter--;
             this._myIsSyncedDelayCounter = Math.max(0, this._myIsSyncedDelayCounter);
@@ -547,7 +550,6 @@ PlayerHeadManager.prototype._onXRSessionStart = function () {
         let referenceSpace = XRUtils.getReferenceSpace(this._myParams.myEngine);
 
         if (referenceSpace.addEventListener != null) {
-
             this._myViewResetEventListener = this._onViewReset.bind(this);
             referenceSpace.addEventListener("reset", this._myViewResetEventListener);
         }
@@ -678,7 +680,8 @@ PlayerHeadManager.prototype._onXRSessionBlurEnd = function () {
 PlayerHeadManager.prototype._onViewReset = function () {
     return function _onViewReset() {
         if (this._myActive) {
-            if (this._myParams.myResetTransformOnViewResetEnabled && this._mySessionActive && this.isSynced()) {
+            if (!this._myViewResetThisFrame && this._myParams.myResetTransformOnViewResetEnabled && this._mySessionActive && this.isSynced()) {
+                this._myViewResetThisFrame = true;
                 this.teleportPlayerToHeadTransformQuat(this._getHeadTransformFromLocal(this._myCurrentHeadTransformLocalQuat));
             }
         }
