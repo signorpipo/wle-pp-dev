@@ -801,6 +801,7 @@ let _setAxes = function () {
 
                 if (Vec3Utils.isZero(rotationAxis)) {
                     Vec3Utils.perpendicularRandom(currentAxis, rotationAxis);
+                    Vec3Utils.normalize(rotationAxis, rotationAxis);
                 }
 
                 QuatUtils.fromAxisRadians(angleBetween, rotationAxis, rotationQuat);

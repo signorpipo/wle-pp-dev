@@ -347,6 +347,11 @@ export let projectOnAxisAlongAxis = function () {
             Vec3Utils.cross(projectAlongAxis, axis, up);
             Vec3Utils.normalize(up, up);
 
+            if (Vec3Utils.isZero(up)) {
+                Vec3Utils.perpendicularRandom(projectAlongAxis, up);
+                Vec3Utils.normalize(up, up);
+            }
+
             Vec3Utils.removeComponentAlongAxis(vector, up, out);
             if (!Vec3Utils.isOnAxis(out, axis)) {
                 Vec3Utils.projectOnAxis(out, axis, vectorProjectedToAxis);
@@ -721,6 +726,12 @@ export let rotationToQuat = function () {
     return function rotationToQuat(from, to, out = QuatUtils.create()) {
         Vec3Utils.cross(from, to, rotationAxis);
         Vec3Utils.normalize(rotationAxis, rotationAxis);
+
+        if (Vec3Utils.isZero(rotationAxis)) {
+            Vec3Utils.perpendicularRandom(from, rotationAxis);
+            Vec3Utils.normalize(rotationAxis, rotationAxis);
+        }
+
         let signedAngle = Vec3Utils.angleSigned(from, to, rotationAxis);
         QuatUtils.fromAxisRadians(signedAngle, rotationAxis, out);
         return out;
@@ -759,6 +770,12 @@ export let rotationToPivotedQuat = function () {
 
         Vec3Utils.cross(fromFlat, toFlat, rotationAxis);
         Vec3Utils.normalize(rotationAxis, rotationAxis);
+
+        if (Vec3Utils.isZero(rotationAxis)) {
+            Vec3Utils.perpendicularRandom(fromFlat, rotationAxis);
+            Vec3Utils.normalize(rotationAxis, rotationAxis);
+        }
+
         let signedAngle = Vec3Utils.angleSignedRadians(fromFlat, toFlat, rotationAxis);
         QuatUtils.fromAxisRadians(signedAngle, rotationAxis, out);
         return out;
