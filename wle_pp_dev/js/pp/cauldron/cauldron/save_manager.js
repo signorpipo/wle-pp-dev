@@ -16,7 +16,7 @@ export class SaveManager {
         try {
             this._mySaveObject = SaveUtils.loadObject(this._mySaveID, {});
         } catch (error) {
-            // Do nothing
+            this._mySaveObject = {};
         }
 
         this._myCommitSavesDelayTimer = new Timer(0, false);
