@@ -11,28 +11,29 @@ export class SaveManager {
 
         this._mySaveID = saveID;
 
-        this._mySaveObject = {};
-
-        let loadSucceded = false;
-        let maxAttempts = 3;
-        do {
-            try {
-                this._mySaveObject = SaveUtils.loadObject(this._mySaveID, {});
-                loadSucceded = true;
-            } catch (error) {
-                maxAttempts--;
-            }
-        } while (maxAttempts > 0 && !loadSucceded);
-
-        if (!loadSucceded) {
-            this._mySaveObject = {};
-        }
-
         this._myCommitSavesDelayTimer = new Timer(0, false);
         this._myDelaySavesCommit = true;
         this._myCommitSavesDirty = false;
         this._myCommitSavesDirtyClearOnFail = true;
         this._myCommitSavesOnInterrupt = true;
+        this._myCommitSavesWhenLoadFailed = false;
+
+        this._mySaveObject = {};
+        this._myLoadSucceded = false;
+
+        let maxAttempts = 3;
+        do {
+            try {
+                this._mySaveObject = SaveUtils.loadObject(this._mySaveID, {});
+                this._myLoadSucceded = true;
+            } catch (error) {
+                maxAttempts--;
+            }
+        } while (maxAttempts > 0 && !this._myLoadSucceded);
+
+        if (!this._myLoadSucceded) {
+            this._mySaveObject = {};
+        }
 
         this._myClearEmitter = new Emitter();                   // Signature: listener()
         this._myDeleteEmitter = new Emitter();                  // Signature: listener(id)
@@ -85,6 +86,10 @@ export class SaveManager {
         this._myCommitSavesOnInterrupt = commitSavesOnInterrupt;
     }
 
+    setCommitSavesWhenLoadFailed(commitSavesWhenLoadFailed) {
+        this._myCommitSavesWhenLoadFailed = commitSavesWhenLoadFailed;
+    }
+
     getCommitSavesDelay() {
         return this._myCommitSavesDelayTimer.getDuration();
     }
@@ -103,6 +108,10 @@ export class SaveManager {
 
     isCommitSavesOnInterrupt() {
         return this._myCommitSavesOnInterrupt;
+    }
+
+    isCommitSavesWhenLoadFailed() {
+        return this._myCommitSavesWhenLoadFailed;
     }
 
     update(dt) {
@@ -232,11 +241,14 @@ export class SaveManager {
 
     _commitSaves() {
         let succeded = true;
-        try {
-            let saveObjectStringified = JSON.stringify(this._mySaveObject);
-            SaveUtils.save(this._mySaveID, saveObjectStringified);
-        } catch (error) {
-            succeded = false;
+
+        if (this._myLoadSucceded || this._myCommitSavesWhenLoadFailed) {
+            try {
+                let saveObjectStringified = JSON.stringify(this._mySaveObject);
+                SaveUtils.save(this._mySaveID, saveObjectStringified);
+            } catch (error) {
+                succeded = false;
+            }
         }
 
         this._myCommitSavesEmitter.notify(succeded);
