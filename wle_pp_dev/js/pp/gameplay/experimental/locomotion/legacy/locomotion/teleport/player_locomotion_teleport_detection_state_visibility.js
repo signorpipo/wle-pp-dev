@@ -51,6 +51,7 @@ PlayerLocomotionTeleportDetectionState.prototype._isTeleportPositionVisible = fu
 PlayerLocomotionTeleportDetectionState.prototype._isPositionVisible = function () {
     let playerUp = vec3_create();
     let standardUp = vec3_create(0, 1, 0);
+    let standardUpNegated = vec3_create(0, -1, 0);
     let standardForward = vec3_create(0, 0, 1);
     let referenceUp = vec3_create();
     let headPosition = vec3_create();
@@ -74,7 +75,7 @@ PlayerLocomotionTeleportDetectionState.prototype._isPositionVisible = function (
         direction = position.vec3_sub(headPosition, direction).vec3_normalize(direction);
 
         referenceUp.vec3_copy(standardUp);
-        if (direction.vec3_angle(standardUp) < 0.0001) {
+        if (direction.vec3_angle(standardUp) < 0.0001 || direction.vec3_angle(standardUpNegated) < 0.0001) {
             referenceUp.vec3_copy(standardForward);
         }
 
