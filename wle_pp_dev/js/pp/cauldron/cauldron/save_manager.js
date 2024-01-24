@@ -22,6 +22,9 @@ export class SaveManager {
         this._mySaveObject = {};
         this._myLoadSavesSucceded = false;
 
+        this._mySaveObjectLoadedOnce = false;
+        this._myAtLeastOneValueSavedOnce = false;
+
         this._myClearEmitter = new Emitter();                   // Signature: listener()
         this._myDeleteEmitter = new Emitter();                  // Signature: listener(id)
         this._myDeleteIDEmitters = new Map();                   // Signature: listener(id)
@@ -156,6 +159,8 @@ export class SaveManager {
             }
         }
 
+        this._myAtLeastOneValueSavedOnce = true;
+
         this._mySaveEmitter.notify(id, value);
 
         if (this._mySaveIDEmitters.size > 0) {
@@ -191,6 +196,8 @@ export class SaveManager {
             }
         }
 
+        this._myAtLeastOneValueSavedOnce = true;
+
         this._myDeleteEmitter.notify(id);
 
         if (this._myDeleteIDEmitters.size > 0) {
@@ -214,6 +221,8 @@ export class SaveManager {
                 this._commitSaves();
             }
         }
+
+        this._myAtLeastOneValueSavedOnce = true;
 
         this._myClearEmitter.notify();
     }
@@ -290,6 +299,8 @@ export class SaveManager {
             saveObjectReset = true;
         }
 
+        this._mySaveObjectLoadedOnce = true;
+
         this._myLoadSavesEmitter.notify(loadSavesSucceded, saveObjectReset);
 
         return loadSavesSucceded;
@@ -298,7 +309,7 @@ export class SaveManager {
     _onXRSessionStart(session) {
         this._myXRVisibilityChangeEventListener = function (event) {
             if (event.session.visibilityState != "visible") {
-                this._onXRSessionInterrupt();
+                this._onInterrupt();
             }
         }.bind(this);
 
@@ -312,7 +323,7 @@ export class SaveManager {
     }
 
     _onInterrupt() {
-        if (this._myCommitSavesOnInterrupt && this._myCommitSavesDirty) {
+        if (this._myCommitSavesOnInterrupt && this._myCommitSavesDirty && (this._mySaveObjectLoadedOnce || this._myAtLeastOneValueSavedOnce)) {
             this.commitSaves();
         }
     }
