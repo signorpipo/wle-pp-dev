@@ -5,7 +5,8 @@ import { SaveManager } from "../save_manager";
 export class SaveManagerComponent extends Component {
     static TypeName = "pp-save-manager";
     static Properties = {
-        _mySaveID: Property.string("")
+        _mySaveID: Property.string(""),
+        _myAutoLoadSaves: Property.bool(true),
     };
 
     init() {
@@ -13,7 +14,7 @@ export class SaveManagerComponent extends Component {
 
         // Prevents double global from same engine
         if (this._mySaveID.length > 0 && !Globals.hasSaveManager(this.engine)) {
-            this._mySaveManager = new SaveManager(this._mySaveID, this.engine);
+            this._mySaveManager = new SaveManager(this._mySaveID, this._myAutoLoadSaves, this.engine);
 
             Globals.setSaveManager(this._mySaveManager, this.engine);
         }

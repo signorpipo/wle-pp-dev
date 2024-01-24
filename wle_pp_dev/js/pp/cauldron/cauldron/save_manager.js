@@ -6,7 +6,7 @@ import { Timer } from "./timer";
 
 export class SaveManager {
 
-    constructor(saveID, engine = Globals.getMainEngine()) {
+    constructor(saveID, autoLoadSaves = true, engine = Globals.getMainEngine()) {
         this._myEngine = engine;
 
         this._mySaveID = saveID;
@@ -16,24 +16,11 @@ export class SaveManager {
         this._myCommitSavesDirty = false;
         this._myCommitSavesDirtyClearOnFail = true;
         this._myCommitSavesOnInterrupt = true;
-        this._myCommitSavesWhenLoadFailed = false;
+        this._myCommitSavesWhenLoadSavesFailed = false;
+        this._myResetSaveObjectOnLoadSavesFail = false;
 
         this._mySaveObject = {};
-        this._myLoadSucceded = false;
-
-        let maxAttempts = 3;
-        do {
-            try {
-                this._mySaveObject = SaveUtils.loadObject(this._mySaveID, {});
-                this._myLoadSucceded = true;
-            } catch (error) {
-                maxAttempts--;
-            }
-        } while (maxAttempts > 0 && !this._myLoadSucceded);
-
-        if (!this._myLoadSucceded) {
-            this._mySaveObject = {};
-        }
+        this._myLoadSavesSucceded = false;
 
         this._myClearEmitter = new Emitter();                   // Signature: listener()
         this._myDeleteEmitter = new Emitter();                  // Signature: listener(id)
@@ -45,6 +32,11 @@ export class SaveManager {
         this._myCommitSavesEmitter = new Emitter();             // Signature: listener(succeeded)
         this._myLoadEmitter = new Emitter();                    // Signature: listener(id, value)
         this._myLoadIDEmitters = new Map();                     // Signature: listener(id, value)
+        this._myLoadSavesEmitter = new Emitter();               // Signature: listener(loadSavesSucceded, saveObjectReset)
+
+        if (autoLoadSaves) {
+            this.loadSaves();
+        }
 
         this._myXRVisibilityChangeEventListener = null;
         XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this), true, false, this._myEngine);
@@ -86,8 +78,12 @@ export class SaveManager {
         this._myCommitSavesOnInterrupt = commitSavesOnInterrupt;
     }
 
-    setCommitSavesWhenLoadFailed(commitSavesWhenLoadFailed) {
-        this._myCommitSavesWhenLoadFailed = commitSavesWhenLoadFailed;
+    setCommitSavesWhenLoadSavesFailed(commitSavesWhenLoadSavesFailed) {
+        this._myCommitSavesWhenLoadSavesFailed = commitSavesWhenLoadSavesFailed;
+    }
+
+    setResetSaveObjectOnLoadSavesFail(resetSaveObjectOnLoadSavesFail) {
+        this._myResetSaveObjectOnLoadSavesFail = resetSaveObjectOnLoadSavesFail;
     }
 
     getCommitSavesDelay() {
@@ -110,8 +106,16 @@ export class SaveManager {
         return this._myCommitSavesOnInterrupt;
     }
 
-    isCommitSavesWhenLoadFailed() {
-        return this._myCommitSavesWhenLoadFailed;
+    isCommitSavesWhenLoadSavesFailed() {
+        return this._myCommitSavesWhenLoadSavesFailed;
+    }
+
+    isResetSaveObjectOnLoadSavesFail() {
+        return this._myResetSaveObjectOnLoadSavesFail;
+    }
+
+    hasLoadSavesSucceded() {
+        return this._myLoadSavesSucceded;
     }
 
     update(dt) {
@@ -242,7 +246,7 @@ export class SaveManager {
     _commitSaves() {
         let succeded = true;
 
-        if (this._myLoadSucceded || this._myCommitSavesWhenLoadFailed) {
+        if (this._myLoadSavesSucceded || this._myCommitSavesWhenLoadSavesFailed) {
             try {
                 let saveObjectStringified = JSON.stringify(this._mySaveObject);
                 SaveUtils.save(this._mySaveID, saveObjectStringified);
@@ -251,14 +255,44 @@ export class SaveManager {
             }
         }
 
-        this._myCommitSavesEmitter.notify(succeded);
-
         if (succeded || this._myCommitSavesDirtyClearOnFail) {
             this._myCommitSavesDirty = false;
             this._myCommitSavesDelayTimer.reset();
         }
 
+        this._myCommitSavesEmitter.notify(succeded);
+
         return succeded;
+    }
+
+    loadSaves() {
+        let saveObject = {};
+        let loadSavesSucceded = false;
+        let saveObjectReset = false;
+
+        let maxLoadObjectAttempts = 3;
+        do {
+            try {
+                saveObject = SaveUtils.loadObject(this._mySaveID, {});
+                loadSavesSucceded = true;
+            } catch (error) {
+                maxLoadObjectAttempts--;
+            }
+        } while (maxLoadObjectAttempts > 0 && !loadSavesSucceded);
+
+        if (loadSavesSucceded) {
+            this._mySaveObject = saveObject;
+            this._myLoadSavesSucceded = true;
+        } else if (this._myResetSaveObjectOnLoadSavesFail) {
+            this._mySaveObject = {};
+            this._myLoadSavesSucceded = false;
+
+            saveObjectReset = true;
+        }
+
+        this._myLoadSavesEmitter.notify(loadSavesSucceded, saveObjectReset);
+
+        return loadSavesSucceded;
     }
 
     _onXRSessionStart(session) {
@@ -413,6 +447,14 @@ export class SaveManager {
                 this._myLoadIDEmitters.delete(valueID);
             }
         }
+    }
+
+    registerLoadSavesEventListener(listenerID, listener) {
+        this._myLoadSavesEmitter.add(listener, { id: listenerID });
+    }
+
+    unregisterLoadSavesEventListener(listenerID) {
+        this._myLoadSavesEmitter.remove(listenerID);
     }
 
     destroy() {
