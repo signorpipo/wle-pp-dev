@@ -276,6 +276,7 @@ export class PlayerHeadManager {
 
     _isNonVRFloorBased() {
         return this._myParams.myNonVRFloorBasedMode == NonVRReferenceSpaceMode.FLOOR ||
+            (this._myLastReferenceSpaceIsFloorBased == null && this._myParams.myNonVRFloorBasedMode == NonVRReferenceSpaceMode.FLOOR_THEN_KEEP_VR) ||
             (this._myLastReferenceSpaceIsFloorBased != null && this._myLastReferenceSpaceIsFloorBased &&
                 (this._myParams.myNonVRFloorBasedMode == NonVRReferenceSpaceMode.NO_FLOOR_THEN_KEEP_VR || this._myParams.myNonVRFloorBasedMode == NonVRReferenceSpaceMode.FLOOR_THEN_KEEP_VR));
     }
