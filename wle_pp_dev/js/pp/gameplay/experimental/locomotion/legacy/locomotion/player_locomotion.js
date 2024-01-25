@@ -166,10 +166,7 @@ export class PlayerLocomotion {
             params.myExitSessionAdjustMaxVerticalAngle = true;
             params.myExitSessionMaxVerticalAngle = 90;
 
-            params.myHeightOffsetVRWithFloor = 0;
-            params.myHeightOffsetVRWithoutFloor = this._myParams.myDefaultHeight;
-            params.myHeightOffsetNonVR = this._myParams.myDefaultHeight;
-
+            params.myDefaultHeight = this._myParams.myDefaultHeight;
             params.myForeheadExtraHeight = this._myParams.myForeheadExtraHeight;
 
             params.myFeetRotationKeepUp = true;
