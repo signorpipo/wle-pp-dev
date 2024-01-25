@@ -13,7 +13,7 @@ import { CharacterColliderSetupSimplifiedCreationParams, CharacterColliderSetupU
 import { CollisionCheckBridge } from "../../../character_controller/collision/collision_check_bridge";
 import { CollisionCheckUtils } from "../../../character_controller/collision/legacy/collision_check/collision_check";
 import { CollisionCheckParams, CollisionRuntimeParams } from "../../../character_controller/collision/legacy/collision_check/collision_params";
-import { PlayerHeadManager, PlayerHeadManagerParams } from "./player_head_manager";
+import { NonVRReferenceSpaceMode, PlayerHeadManager, PlayerHeadManagerParams } from "./player_head_manager";
 import { PlayerLocomotionMovementRuntimeParams } from "./player_locomotion_movement";
 import { PlayerLocomotionRotate, PlayerLocomotionRotateParams } from "./player_locomotion_rotate";
 import { PlayerLocomotionSmooth, PlayerLocomotionSmoothParams } from "./player_locomotion_smooth";
@@ -165,6 +165,8 @@ export class PlayerLocomotion {
             params.myExitSessionRemoveRightTilt = true;
             params.myExitSessionAdjustMaxVerticalAngle = true;
             params.myExitSessionMaxVerticalAngle = 90;
+
+            params.myNonVRFloorBasedMode = NonVRReferenceSpaceMode.FLOOR_THEN_KEEP_VR;
 
             params.myDefaultHeight = this._myParams.myDefaultHeight;
             params.myForeheadExtraHeight = this._myParams.myForeheadExtraHeight;
