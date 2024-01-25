@@ -23,6 +23,7 @@ export class PlayerHeadManagerParams {
         this.myNextEnterSessionResyncHeight = false;
         this.myEnterSessionResyncHeight = false;
 
+        // #TODO There might also be a flag to enable/disable position sync
         this.myExitSessionResyncHeight = false;
         this.myExitSessionResyncVerticalAngle = false;
         this.myExitSessionRemoveRightTilt = false; // For now right tilt is removed even if this setting is false, if the vertical angle has to be adjusted
@@ -38,6 +39,7 @@ export class PlayerHeadManagerParams {
         this.myRotateFeetKeepUp = false;
 
         this.myDefaultHeight = 0;
+        this.myDefaultHeightOffsetWithFloor = 0;
         this.myForeheadExtraHeight = 0;
         // Can be used to always add a bit of height, for example to compensate the fact 
         // that the default height is actually the eye height and you may want to also add a forehead offset
@@ -92,8 +94,9 @@ export class PlayerHeadManager {
     start() {
         this._myHeightNonVR = this._myParams.myDefaultHeight;
         this._myHeightVRWithoutFloor = this._myParams.myDefaultHeight;
-        this._myHeightOffsetWithFloor = 0;
+        this._myHeightOffsetWithFloor = this._myParams.myDefaultHeightOffsetWithFloor;
         this._updateHeightOffset();
+        this._setCameraNonXRHeight(this._myHeightNonVR);
 
         XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this), true, true, this._myParams.myEngine);
     }
@@ -150,23 +153,27 @@ export class PlayerHeadManager {
         return this._myIsSyncedDelayCounter == 0 && this._myDelaySessionChangeResyncCounter == 0 && this._myDelayBlurEndResyncCounter == 0 && !this._myDelayBlurEndResyncTimer.isRunning() && !this._mySessionBlurred;
     }
 
-    setHeightHead(height, setOnlyForActiveOne = false, nextEnterSessionFloorHeightSyncEnabled = false) {
+    setHeightHead(height, setOnlyForActiveOne = false, setForVRWithFloorEvenIfCurrentlyNonVR = false) {
         if (!setOnlyForActiveOne || !this._mySessionActive) {
             this._myHeightNonVR = height;
+            this._myHeightNonVROnEnterSession = height;
         }
 
         if (!setOnlyForActiveOne || this._mySessionActive) {
             this._myHeightVRWithoutFloor = height;
 
-            let isFloor = XRUtils.isReferenceSpaceFloorBased(this._myParams.myEngine);
-            if (this._mySessionActive && isFloor) {
+            if (this._mySessionActive) {
                 this._myHeightOffsetWithFloor = this._myHeightOffsetWithFloor + (height - this.getHeightHead());
-            } else if (!this._mySessionActive && nextEnterSessionFloorHeightSyncEnabled) {
+            } else if (setForVRWithFloorEvenIfCurrentlyNonVR) {
                 this._myParams.myNextEnterSessionFloorHeight = height;
             }
         }
 
         this._updateHeightOffset();
+
+        if (!this._mySessionActive) {
+            this._setCameraNonXRHeight(this._myHeightNonVR);
+        }
     }
 
     moveFeet(movement) {
@@ -228,6 +235,11 @@ export class PlayerHeadManager {
     lookToHead(direction, up = null) {
     }
 
+    resetCameraNonXR() {
+        Globals.getPlayerObjects(this._myParams.myEngine).myCameraNonXR.pp_resetTransformLocal();
+        this._setCameraNonXRHeight(this._myHeightNonVR);
+    }
+
     update(dt) {
         this._myViewResetThisFrame = false;
 
@@ -279,6 +291,15 @@ export class PlayerHeadManager {
             (this._myLastReferenceSpaceIsFloorBased == null && this._myParams.myNonVRFloorBasedMode == NonVRReferenceSpaceMode.FLOOR_THEN_KEEP_VR) ||
             (this._myLastReferenceSpaceIsFloorBased != null && this._myLastReferenceSpaceIsFloorBased &&
                 (this._myParams.myNonVRFloorBasedMode == NonVRReferenceSpaceMode.NO_FLOOR_THEN_KEEP_VR || this._myParams.myNonVRFloorBasedMode == NonVRReferenceSpaceMode.FLOOR_THEN_KEEP_VR));
+    }
+
+    _setCameraNonXRHeight(height) {
+        let eyeHeight = height - this._myParams.myForeheadExtraHeight;
+        let cameraNonVRPosition = Globals.getPlayerObjects(this._myParams.myEngine).myCameraNonXR.pp_getPosition();
+        let cameraNonVRPositionLocalToPlayer = cameraNonVRPosition.vec3_convertPositionToLocal(Globals.getPlayerObjects(this._myParams.myEngine).myPlayer.pp_getTransform());
+        cameraNonVRPositionLocalToPlayer.vec3_set(cameraNonVRPositionLocalToPlayer[0], eyeHeight, cameraNonVRPositionLocalToPlayer[2]);
+        let adjustedCameraNonVRPosition = cameraNonVRPositionLocalToPlayer.vec3_convertPositionToWorld(Globals.getPlayerObjects(this._myParams.myEngine).myPlayer.pp_getTransform());
+        Globals.getPlayerObjects(this._myParams.myEngine).myCameraNonXR.pp_setPosition(adjustedCameraNonVRPosition);
     }
 
     _debugUpdate(dt) {
@@ -422,8 +443,10 @@ PlayerHeadManager.prototype.rotateHeadQuat = function () {
 
             Globals.getPlayerObjects(this._myParams.myEngine).myHead.pp_setRotationQuat(newHeadRotation);
 
-            newHeadRotation = newHeadRotation.quat_rotateAxisRadians(Math.PI, newHeadRotation.quat_getUp(newHeadUp), newHeadRotation);
-            Globals.getPlayerObjects(this._myParams.myEngine).myCameraNonXR.pp_setRotationQuat(newHeadRotation);
+            if (!this._mySessionActive) {
+                newHeadRotation = newHeadRotation.quat_rotateAxisRadians(Math.PI, newHeadRotation.quat_getUp(newHeadUp), newHeadRotation);
+                Globals.getPlayerObjects(this._myParams.myEngine).myCameraNonXR.pp_setRotationQuat(newHeadRotation);
+            }
         }
     };
 }();
@@ -668,9 +691,9 @@ PlayerHeadManager.prototype._onXRSessionEnd = function () {
             this._updateHeightOffset();
 
             if (!this._myParams.myExitSessionResetNonVRTransformLocal) {
-                let cameraNonVRPosition = Globals.getPlayerObjects(this._myParams.myEngine).myCameraNonXR.pp_getPosition();
-                let nonVRCurrentHeight = this._getPositionEyesHeight(cameraNonVRPosition) + this._myParams.myForeheadExtraHeight;
-                cameraNonVRPosition.vec3_set(cameraNonVRPosition[0], cameraNonVRPosition[1] - (nonVRCurrentHeight - this._myHeightNonVROnEnterSession), cameraNonVRPosition[1]);
+                this._setCameraNonXRHeight(this._myHeightNonVROnEnterSession);
+            } else {
+                this._setCameraNonXRHeight(this._myHeightNonVR);
             }
         }
     };
@@ -848,6 +871,12 @@ PlayerHeadManager.prototype._sessionChangeResync = function () {
 
                 this._updateHeightOffset();
 
+                if (this._myParams.myExitSessionResyncHeight || this._myParams.myExitSessionResetNonVRTransformLocal) {
+                    this._setCameraNonXRHeight(this._myHeightNonVR);
+                } else {
+                    this._setCameraNonXRHeight(this._myHeightNonVROnEnterSession);
+                }
+
                 resyncHeadRotation = this._mySessionChangeResyncHeadTransform.quat2_getRotationQuat(resyncHeadRotation);
 
                 if (this._myParams.myExitSessionRemoveRightTilt ||
@@ -934,7 +963,6 @@ PlayerHeadManager.prototype._resyncHeadRotationForward = function () {
 }();
 
 PlayerHeadManager.prototype._updateHeightOffset = function () {
-    let cameraNonXRPosition = vec3_create();
     return function _updateHeightOffset() {
         if (this._mySessionActive) {
             if (XRUtils.isReferenceSpaceFloorBased(this._myParams.myEngine)) {
@@ -943,17 +971,11 @@ PlayerHeadManager.prototype._updateHeightOffset = function () {
                 this._setReferenceSpaceHeightOffset(this._myHeightVRWithoutFloor, this._myParams.myForeheadExtraHeight);
             }
         } else {
-            let cameraNonXRHeight = 0;
             if (this._isNonVRFloorBased()) {
-                cameraNonXRHeight = this._myHeightNonVR - this._myParams.myForeheadExtraHeight - this._myHeightOffsetWithFloor;
                 this._setReferenceSpaceHeightOffset(this._myHeightOffsetWithFloor, 0);
             } else {
                 this._setReferenceSpaceHeightOffset(this._myHeightNonVR, this._myParams.myForeheadExtraHeight);
             }
-
-            cameraNonXRPosition = Globals.getPlayerObjects(this._myParams.myEngine).myCameraNonXR.pp_getPositionLocal(cameraNonXRPosition);
-            cameraNonXRPosition.vec3_set(cameraNonXRPosition[0], cameraNonXRHeight, cameraNonXRPosition[2]);
-            Globals.getPlayerObjects(this._myParams.myEngine).myCameraNonXR.pp_setPositionLocal(cameraNonXRPosition);
         }
     };
 }();
