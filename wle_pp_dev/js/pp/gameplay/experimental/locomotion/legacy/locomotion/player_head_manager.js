@@ -23,7 +23,6 @@ export class PlayerHeadManagerParams {
         this.myNextEnterSessionResyncHeight = false;
         this.myEnterSessionResyncHeight = false;
 
-        // #TODO There might also be a flag to enable/disable position sync
         this.myExitSessionResyncHeight = false;
         this.myExitSessionResyncVerticalAngle = false;
         this.myExitSessionRemoveRightTilt = false; // For now right tilt is removed even if this setting is false, if the vertical angle has to be adjusted
