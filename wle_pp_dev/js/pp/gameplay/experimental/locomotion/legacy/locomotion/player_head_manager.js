@@ -683,16 +683,12 @@ PlayerHeadManager.prototype._onXRSessionEnd = function () {
         this._mySessionBlurred = false;
 
         if (this._myActive) {
-            if (this._myParams.myExitSessionResetNonVRTransformLocal) {
-                Globals.getPlayerObjects(this._myParams.myEngine).myCameraNonXR.pp_resetTransformLocal();
-            }
-
             this._updateHeightOffset();
 
-            if (!this._myParams.myExitSessionResetNonVRTransformLocal) {
-                this._setCameraNonXRHeight(this._myHeightNonVROnEnterSession);
+            if (this._myParams.myExitSessionResetNonVRTransformLocal) {
+                this.resetCameraNonXR();
             } else {
-                this._setCameraNonXRHeight(this._myHeightNonVR);
+                this._setCameraNonXRHeight(this._myHeightNonVROnEnterSession);
             }
         }
     };
