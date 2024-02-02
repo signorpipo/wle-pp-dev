@@ -61,6 +61,7 @@ export class EasyTuneVariable {
 
     setWidgetCurrentVariable(widgetCurrentVariable) {
         this._myWidgetCurrentVariable = widgetCurrentVariable;
+        return this;
     }
 
     getValue() {
@@ -81,6 +82,8 @@ export class EasyTuneVariable {
         if (valueChanged) {
             this._myValueChangedEmitter.notify(this.getValue(), this);
         }
+
+        return this;
     }
 
     getDefaultValue() {
@@ -89,6 +92,7 @@ export class EasyTuneVariable {
 
     setDefaultValue(value) {
         this._myDefaultValue = value;
+        return this;
     }
 
     shouldShowOnWidget() {
@@ -97,6 +101,7 @@ export class EasyTuneVariable {
 
     setShowOnWidget(showOnWidget) {
         this._myShowOnWidget = showOnWidget;
+        return this;
     }
 
     isManualImportEnabled() {
@@ -113,14 +118,17 @@ export class EasyTuneVariable {
 
     setManualImportEnabled(enabled) {
         this._myManualImportEnabled = enabled;
+        return this;
     }
 
     setAutoImportEnabled(enabled) {
         this._myAutoImportEnabled = enabled;
+        return this;
     }
 
     setExportEnabled(enabled) {
         this._myExportEnabled = enabled;
+        return this;
     }
 
     fromJSON(valueJSON, resetDefaultValue = false) {
@@ -166,6 +174,8 @@ export class EasyTuneVariableArray extends EasyTuneVariable {
         if (valueChanged) {
             this._myValueChangedEmitter.notify(this.getValue(), this);
         }
+
+        return this;
     }
 
     setDefaultValue(value) {
@@ -174,6 +184,8 @@ export class EasyTuneVariableArray extends EasyTuneVariable {
         } else {
             this._myDefaultValue.pp_copy(value);
         }
+
+        return this;
     }
 }
 
@@ -237,7 +249,7 @@ export class EasyTuneNumber extends EasyTuneNumberArray {
 
     setValue(value, resetDefaultValue = false) {
         this._myTempValue[0] = value;
-        super.setValue(this._myTempValue, resetDefaultValue);
+        return super.setValue(this._myTempValue, resetDefaultValue);
     }
 
     getDefaultValue() {
@@ -246,7 +258,7 @@ export class EasyTuneNumber extends EasyTuneNumberArray {
 
     setDefaultValue(value) {
         this._myTempDefaultValue[0] = value;
-        super.setDefaultValue(this._myTempValue);
+        return super.setDefaultValue(this._myTempValue);
     }
 }
 
@@ -294,7 +306,7 @@ export class EasyTuneBool extends EasyTuneBoolArray {
 
     setValue(value, resetDefaultValue = false) {
         this._myTempValue[0] = value;
-        super.setValue(this._myTempValue, resetDefaultValue);
+        return super.setValue(this._myTempValue, resetDefaultValue);
     }
 
     getDefaultValue() {
@@ -303,7 +315,7 @@ export class EasyTuneBool extends EasyTuneBoolArray {
 
     setDefaultValue(value) {
         this._myTempDefaultValue[0] = value;
-        super.setDefaultValue(this._myTempValue);
+        return super.setDefaultValue(this._myTempValue);
     }
 }
 
@@ -370,12 +382,16 @@ export class EasyTuneTransform extends EasyTuneVariable {
         if (valueChanged) {
             this._myValueChangedEmitter.notify(this.getValue(), this);
         }
+
+        return this;
     }
 
     setDefaultValue(value) {
         this._myDefaultPosition = value.mat4_getPosition();
         this._myDefaultRotation = value.mat4_getRotationDegrees();
         this._myDefaultScale = value.mat4_getScale();
+
+        return this;
     }
 
     fromJSON(valueJSON, resetDefaultValue = false) {
