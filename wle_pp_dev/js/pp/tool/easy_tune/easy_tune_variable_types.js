@@ -103,7 +103,7 @@ export class EasyTuneVariable {
         return this;
     }
 
-    shouldShowOnWidget() {
+    isShownOnWidget() {
         return this._myShowOnWidget;
     }
 

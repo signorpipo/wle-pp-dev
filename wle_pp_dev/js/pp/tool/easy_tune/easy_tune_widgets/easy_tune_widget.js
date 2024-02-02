@@ -378,7 +378,7 @@ export class EasyTuneWidget {
         let validNames = [];
         for (let name of names) {
             let variable = this._myEasyTuneVariables.getEasyTuneVariable(name);
-            if (variable.shouldShowOnWidget()) {
+            if (variable.isShownOnWidget()) {
                 validNames.push(name);
             }
         }
