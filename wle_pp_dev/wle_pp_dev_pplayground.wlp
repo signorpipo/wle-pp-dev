@@ -1999,7 +1999,7 @@
             "name": "How To",
             "parent": "227",
             "rotation": [
-                -6.161216958844307e-8,
+                -6.161216958844308e-8,
                 0.9659258,
                 -0.2588191,
                 -6.176237832278275e-8
@@ -2017,17 +2017,17 @@
         },
         "253": {
             "name": "Outline Text",
-            "parent": "252",
+            "parent": "272",
             "rotation": [
-                -7.549790836947069e-8,
+                -7.550218583673995e-8,
                 1.0,
-                -7.549790836947069e-8,
-                -4.371138118131057e-8
+                -8.27842399075962e-8,
+                -4.371379702661216e-8
             ],
             "scaling": [
+                0.8999997,
                 0.8999999,
-                0.8999999,
-                0.8999999
+                0.8999998
             ],
             "components": [
                 {
@@ -2040,9 +2040,9 @@
                 }
             ],
             "translation": [
-                0.0,
-                0.0,
-                -0.0049999
+                -0.0,
+                9.5367431640625e-7,
+                -0.0049996
             ]
         },
         "254": {
@@ -2283,17 +2283,17 @@
         },
         "270": {
             "name": "Text",
-            "parent": "252",
+            "parent": "272",
             "rotation": [
-                -7.549790836947069e-8,
+                -7.550218583673995e-8,
                 1.0,
-                -7.549790836947069e-8,
-                -4.371138118131057e-8
+                -8.27842399075962e-8,
+                -4.371379702661216e-8
             ],
             "scaling": [
+                0.8999997,
                 0.8999999,
-                0.8999999,
-                0.8999999
+                0.8999998
             ],
             "components": [
                 {
@@ -2306,9 +2306,119 @@
                 }
             ],
             "translation": [
+                -0.0,
                 0.0,
+                -0.0099997
+            ]
+        },
+        "272": {
+            "name": "XR Text",
+            "parent": "252",
+            "components": [
+                {
+                    "type": "pp-set-active",
+                    "pp-set-active": {
+                        "_mySetActiveWhen": "Enter XR",
+                        "_mySetActiveOn": "Descendants"
+                    }
+                },
+                {
+                    "type": "pp-set-active",
+                    "pp-set-active": {
+                        "_myActive": false,
+                        "_mySetActiveWhen": "Exit XR",
+                        "_mySetActiveOn": "Descendants"
+                    }
+                },
+                {
+                    "type": "pp-set-active",
+                    "pp-set-active": {
+                        "_myActive": false,
+                        "_mySetActiveOn": "Descendants"
+                    }
+                }
+            ]
+        },
+        "273": {
+            "name": "Non XR Text",
+            "parent": "252",
+            "components": [
+                {
+                    "type": "pp-set-active",
+                    "pp-set-active": {
+                        "_mySetActiveWhen": "Enter XR",
+                        "_myActive": false,
+                        "_mySetActiveOn": "Descendants"
+                    }
+                },
+                {
+                    "type": "pp-set-active",
+                    "pp-set-active": {
+                        "_myActive": true,
+                        "_mySetActiveWhen": "Exit XR",
+                        "_mySetActiveOn": "Descendants"
+                    }
+                }
+            ]
+        },
+        "274": {
+            "name": "Outline Text",
+            "parent": "273",
+            "rotation": [
+                -7.550218583673995e-8,
+                1.0,
+                -8.27842399075962e-8,
+                -4.371379702661216e-8
+            ],
+            "scaling": [
+                0.8999997,
+                0.8999999,
+                0.8999998
+            ],
+            "components": [
+                {
+                    "type": "text",
+                    "text": {
+                        "text": "The grab & throw feature is available only in VR\n\nYou can switch to teleport locomotion by pressing R twice\nUse the middle mouse button to teleport\n\nPress R and Y together to open the console widget\nPress H and N together to open the easy tune widget",
+                        "material": "269",
+                        "effect": "outline"
+                    }
+                }
+            ],
+            "translation": [
+                -0.0,
+                9.5367431640625e-7,
+                -0.0049996
+            ]
+        },
+        "275": {
+            "name": "Text",
+            "parent": "273",
+            "rotation": [
+                -7.550218583673995e-8,
+                1.0,
+                -8.27842399075962e-8,
+                -4.371379702661216e-8
+            ],
+            "scaling": [
+                0.8999997,
+                0.8999999,
+                0.8999998
+            ],
+            "components": [
+                {
+                    "type": "text",
+                    "text": {
+                        "text": "The grab & throw feature is available only in VR\n\nYou can switch to teleport locomotion by pressing R twice\nUse the middle mouse button to teleport\n\nPress R and Y together to open the console widget\nPress H and N together to open the easy tune widget",
+                        "material": "110",
+                        "effect": "none"
+                    }
+                }
+            ],
+            "translation": [
+                -0.0,
                 0.0,
-                -0.0099999
+                -0.0099997
             ]
         }
     },
