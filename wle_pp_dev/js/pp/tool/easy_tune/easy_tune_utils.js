@@ -3,6 +3,10 @@ import { Globals } from "../../pp/globals";
 let _mySetWidgetCurrentVariableCallbacks = new WeakMap();    // Signature: callback(variableName)
 let _myRefreshWidgetCallbacks = new WeakMap();               // Signature: callback()
 
+let _myAutoImportEnabledDefaultValues = new WeakMap();
+let _myManualImportEnabledDefaultValues = new WeakMap();
+let _myExportEnabledDefaultValues = new WeakMap();
+
 export function setWidgetCurrentVariable(variableName, engine = Globals.getMainEngine()) {
     if (_mySetWidgetCurrentVariableCallbacks.has(engine)) {
         for (let callback of _mySetWidgetCurrentVariableCallbacks.get(engine).values()) {
@@ -189,6 +193,48 @@ export function exportVariables(fileURL = null, onSuccessCallback = null, onFail
     }
 }
 
+export function setAutoImportEnabledDefaultValue(defaultValue, engine = Globals.getMainEngine()) {
+    _myAutoImportEnabledDefaultValues.set(engine, defaultValue);
+}
+
+export function setManualImportEnabledDefaultValue(defaultValue, engine = Globals.getMainEngine()) {
+    _myManualImportEnabledDefaultValues.set(engine, defaultValue);
+}
+
+export function setExportEnabledDefaultValue(defaultValue, engine = Globals.getMainEngine()) {
+    _myExportEnabledDefaultValues.set(engine, defaultValue);
+}
+
+export function getAutoImportEnabledDefaultValue(engine = Globals.getMainEngine()) {
+    let defaultValue = true;
+
+    if (_myAutoImportEnabledDefaultValues.has(engine)) {
+        defaultValue = _myAutoImportEnabledDefaultValues.get(engine);
+    }
+
+    return defaultValue;
+}
+
+export function getManualImportEnabledDefaultValue(engine = Globals.getMainEngine()) {
+    let defaultValue = true;
+
+    if (_myManualImportEnabledDefaultValues.has(engine)) {
+        defaultValue = _myManualImportEnabledDefaultValues.get(engine);
+    }
+
+    return defaultValue;
+}
+
+export function getExportEnabledDefaultValue(engine = Globals.getMainEngine()) {
+    let defaultValue = true;
+
+    if (_myExportEnabledDefaultValues.has(engine)) {
+        defaultValue = _myExportEnabledDefaultValues.get(engine);
+    }
+
+    return defaultValue;
+}
+
 export function addSetWidgetCurrentVariableCallback(id, callback, engine = Globals.getMainEngine()) {
     if (!_mySetWidgetCurrentVariableCallbacks.has(engine)) {
         _mySetWidgetCurrentVariableCallbacks.set(engine, new Map());
@@ -222,6 +268,12 @@ export let EasyTuneUtils = {
     refreshWidget,
     importVariables,
     exportVariables,
+    setAutoImportEnabledDefaultValue,
+    setManualImportEnabledDefaultValue,
+    setExportEnabledDefaultValue,
+    getAutoImportEnabledDefaultValue,
+    getManualImportEnabledDefaultValue,
+    getExportEnabledDefaultValue,
     addSetWidgetCurrentVariableCallback,
     removeSetWidgetCurrentVariableCallback,
     addRefreshWidgetCallback,

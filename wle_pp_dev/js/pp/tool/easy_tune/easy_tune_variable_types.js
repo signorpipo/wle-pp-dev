@@ -32,9 +32,9 @@ export class EasyTuneVariable {
         this._myDefaultValue = null;
 
         this._myShowOnWidget = showOnWidget;
-        this._myAutoImportEnabled = true;
-        this._myManualImportEnabled = true;
-        this._myExportEnabled = true;
+        this._myAutoImportEnabled = EasyTuneUtils.getAutoImportEnabledDefaultValue(engine);
+        this._myManualImportEnabled = EasyTuneUtils.getManualImportEnabledDefaultValue(engine);
+        this._myExportEnabled = EasyTuneUtils.getExportEnabledDefaultValue(engine);
 
         this._myWidgetCurrentVariable = false;
 
