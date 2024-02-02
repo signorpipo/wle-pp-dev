@@ -21,12 +21,12 @@ export function refreshWidget(engine = Globals.getMainEngine()) {
 
 // fileURL can contain parameters inside brackets, like {param}
 // Those parameters will be replaced with the same one on the current page url, like www.currentpage.com/?param=2
-export function importVariables(fileURL = null, resetVariablesDefaultValueOnImport = false, onSuccessCallback = null, onFailureCallback = null, engine = Globals.getMainEngine()) {
+export function importVariables(fileURL = null, resetVariablesDefaultValueOnImport = false, manualImport = false, onSuccessCallback = null, onFailureCallback = null, engine = Globals.getMainEngine()) {
     if (fileURL == null || fileURL.length == 0) {
         if (Globals.getNavigator(engine).clipboard) {
             Globals.getNavigator(engine).clipboard.readText().then(
                 function (clipboard) {
-                    Globals.getEasyTuneVariables(engine).fromJSON(clipboard, resetVariablesDefaultValueOnImport);
+                    Globals.getEasyTuneVariables(engine).fromJSON(clipboard, resetVariablesDefaultValueOnImport, manualImport);
 
                     EasyTuneUtils.refreshWidget(engine);
 
@@ -60,7 +60,7 @@ export function importVariables(fileURL = null, resetVariablesDefaultValueOnImpo
                 if (response.ok) {
                     response.text().then(
                         function (text) {
-                            Globals.getEasyTuneVariables(engine).fromJSON(text, resetVariablesDefaultValueOnImport);
+                            Globals.getEasyTuneVariables(engine).fromJSON(text, resetVariablesDefaultValueOnImport, manualImport);
 
                             EasyTuneUtils.refreshWidget(engine);
 

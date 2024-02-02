@@ -32,6 +32,9 @@ export class EasyTuneVariable {
         this._myDefaultValue = null;
 
         this._myShowOnWidget = showOnWidget;
+        this._myAutoImportEnabled = true;
+        this._myManualImportEnabled = true;
+        this._myExportEnabled = true;
 
         this._myWidgetCurrentVariable = false;
 
@@ -94,6 +97,30 @@ export class EasyTuneVariable {
 
     setShowOnWidget(showOnWidget) {
         this._myShowOnWidget = showOnWidget;
+    }
+
+    isManualImportEnabled() {
+        return this._myManualImportEnabled;
+    }
+
+    isAutoImportEnabled() {
+        return this._myAutoImportEnabled;
+    }
+
+    isExportEnabled() {
+        return this._myExportEnabled;
+    }
+
+    setManualImportEnabled(enabled) {
+        this._myManualImportEnabled = enabled;
+    }
+
+    setAutoImportEnabled(enabled) {
+        this._myAutoImportEnabled = enabled;
+    }
+
+    setExportEnabled(enabled) {
+        this._myExportEnabled = enabled;
     }
 
     fromJSON(valueJSON, resetDefaultValue = false) {
