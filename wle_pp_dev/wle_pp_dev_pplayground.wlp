@@ -2299,7 +2299,7 @@
             ]
         },
         "272": {
-            "name": "XR Text",
+            "name": "VR Text",
             "parent": "252",
             "components": [
                 {
@@ -2327,7 +2327,7 @@
             ]
         },
         "273": {
-            "name": "Non XR Text",
+            "name": "Non VR Text",
             "parent": "252",
             "components": [
                 {
@@ -2365,7 +2365,7 @@
                 {
                     "type": "text",
                     "text": {
-                        "text": "The grab & throw feature is available only in VR\n\nYou can switch to teleport locomotion by pressing R twice\nUse the middle mouse button to teleport\n\nPress R and Y together to open the console widget\nPress H and N together to open the easy tune widget",
+                        "text": "The grab & throw feature is available only in VR\n\nPress R and Y together to open the console widget\nPress H and N together to open the easy tune widget",
                         "material": "269",
                         "effect": "outline"
                     }
@@ -2395,7 +2395,7 @@
                 {
                     "type": "text",
                     "text": {
-                        "text": "The grab & throw feature is available only in VR\n\nYou can switch to teleport locomotion by pressing R twice\nUse the middle mouse button to teleport\n\nPress R and Y together to open the console widget\nPress H and N together to open the easy tune widget",
+                        "text": "The grab & throw feature is available only in VR\n\nPress R and Y together to open the console widget\nPress H and N together to open the easy tune widget",
                         "material": "110"
                     }
                 }
