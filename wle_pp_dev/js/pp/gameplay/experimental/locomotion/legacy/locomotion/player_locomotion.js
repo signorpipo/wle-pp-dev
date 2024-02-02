@@ -311,7 +311,7 @@ export class PlayerLocomotion {
             params.mySnapTurnResetThreshold = 0.4;
 
             params.myClampVerticalAngle = true;
-            params.myMaxVerticalAngle = 90;
+            params.myMaxVerticalAngle = 89;
 
             this._myPlayerLocomotionRotate = new PlayerLocomotionRotate(params);
 

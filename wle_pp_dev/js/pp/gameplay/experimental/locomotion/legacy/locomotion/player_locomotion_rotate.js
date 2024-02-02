@@ -228,7 +228,7 @@ PlayerLocomotionRotate.prototype._rotateHeadVertically = function () {
             this._myParams.myPlayerHeadManager.rotateHeadQuat(headRotation);
 
             if (this._myParams.myClampVerticalAngle) {
-                let maxVerticalAngle = this._myParams.myMaxVerticalAngle - 0.0001;
+                let maxVerticalAngle = Math.max(0, this._myParams.myMaxVerticalAngle - 0.0001);
                 newUp = head.pp_getUp(newUp);
                 let angleWithUp = Math.pp_angleClamp(newUp.vec3_angleSigned(referenceUp, referenceRight));
                 if (Math.abs(angleWithUp) > maxVerticalAngle) {
