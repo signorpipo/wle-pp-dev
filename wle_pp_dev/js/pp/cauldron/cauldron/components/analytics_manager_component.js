@@ -1,10 +1,13 @@
-import { Component } from "@wonderlandengine/api";
+import { Component, Property } from "@wonderlandengine/api";
 import { Globals } from "../../../pp/globals";
+import { BrowserUtils } from "../../utils/browser_utils";
 import { AnalyticsManager } from "../analytics_manager";
 
 export class AnalyticsManagerComponent extends Component {
     static TypeName = "pp-analytics-manager";
-    static Properties = {};
+    static Properties = {
+        _myDisableAnalyticsOnLocalhost: Property.bool(true)
+    };
 
     init() {
         this._myAnalyticsManager = null;
@@ -13,7 +16,12 @@ export class AnalyticsManagerComponent extends Component {
         if (!Globals.hasAnalyticsManager(this.engine)) {
             this._myAnalyticsManager = new AnalyticsManager();
 
+            if (BrowserUtils.isLocalhost() && this._myDisableAnalyticsOnLocalhost) {
+                this._myAnalyticsManager.setAnalyticsEnabled(false);
+            }
+
             Globals.setAnalyticsManager(this._myAnalyticsManager, this.engine);
+
         }
     }
 
