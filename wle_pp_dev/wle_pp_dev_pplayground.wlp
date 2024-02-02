@@ -2299,7 +2299,7 @@
             ]
         },
         "272": {
-            "name": "VR Text",
+            "name": "XR Text",
             "parent": "252",
             "components": [
                 {
@@ -2327,7 +2327,7 @@
             ]
         },
         "273": {
-            "name": "Non VR Text",
+            "name": "Non XR Text",
             "parent": "252",
             "components": [
                 {
