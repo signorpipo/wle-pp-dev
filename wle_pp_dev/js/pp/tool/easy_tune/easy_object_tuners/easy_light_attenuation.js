@@ -14,7 +14,7 @@ export class EasyLightAttenuation extends EasyObjectTuner {
     }
 
     _createEasyTuneVariable(variableName) {
-        return new EasyTuneNumber(variableName, this._getDefaultValue(), null, true, 3, 0.01, 0, 1);
+        return new EasyTuneNumber(variableName, this._getDefaultValue(), null, true, 3, 0.01, 0, 1, undefined, this._myEngine);
     }
 
     _getObjectValue(object) {

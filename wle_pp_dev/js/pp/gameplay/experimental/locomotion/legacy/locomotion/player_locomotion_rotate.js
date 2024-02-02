@@ -42,7 +42,7 @@ export class PlayerLocomotionRotate {
         this._mySmoothSnapVerticalRunning = false;
         this._mySmoothSnapVerticalAngleToPerform = 0;
 
-        //Globals.getEasyTuneVariables(this._myParams.myEngine).add(new EasyTuneNumber("Teleport Smooth Speed", this._myParams.mySmoothSnapSpeedDegrees, 10, 3, 0, undefined, this._myParams.myEngine));
+        //Globals.getEasyTuneVariables(this._myParams.myEngine).add(new EasyTuneNumber("Teleport Smooth Speed", this._myParams.mySmoothSnapSpeedDegrees, 10, 3, 0, undefined, undefined, this._myParams.myEngine));
     }
 
     start() {
