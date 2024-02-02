@@ -53,7 +53,9 @@ export class AnalyticsManager {
 
                     dataSent = true;
                 } else if (this._myErrorsLogEnabled) {
-                    console.error("You need to set the send data callback");
+                    console.error("Analytics Error: You need to set the send data callback");
+                } else {
+                    console.warn("Analytics Error: You need to set the send data callback");
                 }
             }
         } catch (error) {
@@ -89,7 +91,9 @@ export class AnalyticsManager {
 
                     eventSent = true;
                 } else if (this._myErrorsLogEnabled) {
-                    console.error("You need to set the send data callback");
+                    console.error("Analytics Error: You need to set the send data callback");
+                } else {
+                    console.warn("Analytics Error: You need to set the send data callback");
                 }
             }
         } catch (error) {
