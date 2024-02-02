@@ -1999,10 +1999,10 @@
             "name": "How To",
             "parent": "227",
             "rotation": [
-                -6.161216958844308e-8,
+                0.0,
                 0.9659258,
                 -0.2588191,
-                -6.176237832278275e-8
+                0.0
             ],
             "scaling": [
                 0.2000113,
@@ -2019,10 +2019,10 @@
             "name": "Outline Text",
             "parent": "272",
             "rotation": [
-                -7.550218583673995e-8,
+                0.0,
                 1.0,
-                -8.27842399075962e-8,
-                -4.371379702661216e-8
+                0.0,
+                0.0
             ],
             "scaling": [
                 0.8999997,
@@ -2040,8 +2040,8 @@
                 }
             ],
             "translation": [
-                -0.0,
-                9.5367431640625e-7,
+                0.0,
+                0.0,
                 -0.0049996
             ]
         },
@@ -2066,12 +2066,6 @@
                 0.55,
                 0.0
             ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
             "scaling": [
                 1.875,
                 0.025,
@@ -2094,12 +2088,6 @@
                 0.0,
                 -0.55,
                 0.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
             ],
             "scaling": [
                 1.875,
@@ -2285,10 +2273,10 @@
             "name": "Text",
             "parent": "272",
             "rotation": [
-                -7.550218583673995e-8,
+                0.0,
                 1.0,
-                -8.27842399075962e-8,
-                -4.371379702661216e-8
+                0.0,
+                0.0
             ],
             "scaling": [
                 0.8999997,
@@ -2300,13 +2288,12 @@
                     "type": "text",
                     "text": {
                         "text": "Grab the items on your right with the squeeze button and release it to throw\nTry to hit the target!\n\nYou can switch to teleport locomotion by pressing the left thumbstick twice\n\nPress the left and right thumbsticks together to open the console widget\nPress the right top and bottom buttons together to open the easy tune widget",
-                        "material": "110",
-                        "effect": "none"
+                        "material": "110"
                     }
                 }
             ],
             "translation": [
-                -0.0,
+                0.0,
                 0.0,
                 -0.0099997
             ]
@@ -2354,7 +2341,6 @@
                 {
                     "type": "pp-set-active",
                     "pp-set-active": {
-                        "_myActive": true,
                         "_mySetActiveWhen": "Exit XR",
                         "_mySetActiveOn": "Descendants"
                     }
@@ -2365,10 +2351,10 @@
             "name": "Outline Text",
             "parent": "273",
             "rotation": [
-                -7.550218583673995e-8,
+                0.0,
                 1.0,
-                -8.27842399075962e-8,
-                -4.371379702661216e-8
+                0.0,
+                0.0
             ],
             "scaling": [
                 0.8999997,
@@ -2386,8 +2372,8 @@
                 }
             ],
             "translation": [
-                -0.0,
-                9.5367431640625e-7,
+                0.0,
+                0.0,
                 -0.0049996
             ]
         },
@@ -2395,10 +2381,10 @@
             "name": "Text",
             "parent": "273",
             "rotation": [
-                -7.550218583673995e-8,
+                0.0,
                 1.0,
-                -8.27842399075962e-8,
-                -4.371379702661216e-8
+                0.0,
+                0.0
             ],
             "scaling": [
                 0.8999997,
@@ -2410,13 +2396,12 @@
                     "type": "text",
                     "text": {
                         "text": "The grab & throw feature is available only in VR\n\nYou can switch to teleport locomotion by pressing R twice\nUse the middle mouse button to teleport\n\nPress R and Y together to open the console widget\nPress H and N together to open the easy tune widget",
-                        "material": "110",
-                        "effect": "none"
+                        "material": "110"
                     }
                 }
             ],
             "translation": [
-                -0.0,
+                0.0,
                 0.0,
                 -0.0099997
             ]
