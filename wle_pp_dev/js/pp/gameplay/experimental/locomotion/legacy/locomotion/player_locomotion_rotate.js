@@ -24,7 +24,7 @@ export class PlayerLocomotionRotateParams {
         this.mySnapTurnResetThreshold = 0;
 
         this.myClampVerticalAngle = true;
-        this.myMaxVerticalAngle = 0;
+        this.myMaxVerticalAngle = 89;
 
         this.myHandedness = Handedness.RIGHT;
 
