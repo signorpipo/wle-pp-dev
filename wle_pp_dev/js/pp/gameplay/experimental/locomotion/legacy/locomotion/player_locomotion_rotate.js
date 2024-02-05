@@ -9,6 +9,9 @@ export class PlayerLocomotionRotateParams {
     constructor(engine = Globals.getMainEngine()) {
         this.myPlayerHeadManager = null;
 
+        this.myHorizontalRotationEnabled = true;
+        this.myVerticalRotationEnabled = true;
+
         this.myMaxRotationSpeed = 0;
         this.myIsSnapTurn = false;
         this.mySnapTurnOnlyVR = false;
@@ -64,9 +67,11 @@ export class PlayerLocomotionRotate {
     update(dt) {
         //this._myParams.mySmoothSnapSpeedDegrees = Globals.getEasyTuneVariables(this._myParams.myEngine).get("Teleport Smooth Speed");
 
-        this._rotateHeadHorizontally(dt);
+        if (this._myParams.myHorizontalRotationEnabled) {
+            this._rotateHeadHorizontally(dt);
+        }
 
-        if (this._myParams.myPlayerHeadManager.canRotateHead()) {
+        if (this._myParams.myVerticalRotationEnabled && this._myParams.myPlayerHeadManager.canRotateHead()) {
             this._rotateHeadVertically(dt);
         }
     }
