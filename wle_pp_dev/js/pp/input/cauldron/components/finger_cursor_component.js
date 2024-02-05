@@ -127,7 +127,13 @@ export class FingerCursorComponent extends Component {
         this._myHandInputSource = InputUtils.getInputSource(this._myHandednessType, InputSourceType.TRACKED_HAND, this.engine);
 
         if (this._myHandInputSource) {
-            let tip = XRUtils.getFrame(this.engine).getJointPose(this._myHandInputSource.hand.get(TrackedHandJointID.INDEX_FINGER_TIP), XRUtils.getReferenceSpace(this.engine));
+            let tip = null;
+
+            try {
+                tip = XRUtils.getFrame(this.engine).getJointPose(this._myHandInputSource.hand.get(TrackedHandJointID.INDEX_FINGER_TIP), XRUtils.getReferenceSpace(this.engine));
+            } catch (error) {
+                // Do nothing
+            }
 
             if (tip) {
                 this._myCursorObject.pp_setRotationLocalQuat([
