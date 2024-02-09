@@ -1,4 +1,5 @@
 import { Timer } from "../../../../../cauldron/cauldron/timer";
+import { Quat2Utils } from "../../../../../cauldron/js/utils/quat2_utils";
 import { XRUtils } from "../../../../../cauldron/utils/xr_utils";
 import { mat4_create, quat2_create, quat_create, vec3_create, vec4_create } from "../../../../../plugin/js/extensions/array_extension";
 import { Globals } from "../../../../../pp/globals";
@@ -845,11 +846,24 @@ PlayerHeadManager.prototype._onXRSessionBlurEnd = function () {
 }();
 
 PlayerHeadManager.prototype._onViewReset = function () {
+    let identityTransformQuat = Quat2Utils.identity(quat2_create());
+    let prevHeadPosition = vec3_create();
+    let resetHeadPosition = vec3_create();
     return function _onViewReset() {
         if (this._myActive) {
             if (!this._myViewResetThisFrame && this._myParams.myResetTransformOnViewResetEnabled && this._mySessionActive && this.isSynced()) {
                 this._myViewResetThisFrame = true;
-                this.teleportPlayerToHeadTransformQuat(this._getHeadTransformFromLocal(this._myCurrentHeadTransformLocalQuat));
+                let previousHeadTransformQuat = this._getHeadTransformFromLocal(this._myCurrentHeadTransformLocalQuat);
+                this.teleportPlayerToHeadTransformQuat(previousHeadTransformQuat);
+
+                let isFloor = XRUtils.isReferenceSpaceFloorBased(this._myParams.myEngine);
+                if (!isFloor) {
+                    let resetHeadTransformQuat = this._getHeadTransformFromLocal(identityTransformQuat);
+                    let prevHeadHeight = this._getPositionEyesHeight(previousHeadTransformQuat.quat2_getPosition(prevHeadPosition));
+                    let currentHeadHeight = this._getPositionEyesHeight(resetHeadTransformQuat.quat2_getPosition(resetHeadPosition));
+                    this._myHeightOffsetWithoutFloor = this._myHeightOffsetWithoutFloor + (prevHeadHeight - currentHeadHeight);
+                    this._updateHeightOffset();
+                }
             }
         }
     };
