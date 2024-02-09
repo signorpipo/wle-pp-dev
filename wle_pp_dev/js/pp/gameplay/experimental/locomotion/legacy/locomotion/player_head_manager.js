@@ -158,25 +158,16 @@ export class PlayerHeadManager {
         return this._myIsSyncedDelayCounter == 0 && this._myDelaySessionChangeResyncCounter == 0 && this._myDelayNextEnterSessionSetHeightVRCounter == 0 && this._myDelayBlurEndResyncCounter == 0 && !this._myDelayBlurEndResyncTimer.isRunning() && !this._mySessionBlurred;
     }
 
-    setHeightHead(height, setOnlyForActiveOne = false) {
-        if (!setOnlyForActiveOne || !this._mySessionActive) {
-            this._setHeightHeadNonVR(height);
-        }
+    setHeightHead(height, setOnlyForActiveOne = true) {
+        this._setHeightHead(height, height, height, setOnlyForActiveOne);
+    }
 
-        if (!setOnlyForActiveOne || this._mySessionActive) {
-            this._setHeightHeadVRWithoutFloor(height);
-            this._setHeightHeadVRWithFloor(height);
-        }
-
-        this._updateHeightOffset();
-
-        if (!this._mySessionActive) {
-            this._setCameraNonXRHeight(this._myHeightNonVR);
-        }
+    resetHeightHeadToDefault(resetOnlyForActiveOne = true) {
+        this._setHeightHead(this._myHeightNonVR, this._myHeightVRWithoutFloor, this._myHeightVRWithFloor, resetOnlyForActiveOne);
     }
 
     setHeightHeadNonVR(height) {
-        this.setHeightHeadNonVR(height);
+        this._setHeightHeadNonVR(height);
 
         if (!this._mySessionActive) {
             this._updateHeightOffset();
@@ -202,6 +193,18 @@ export class PlayerHeadManager {
         if (this._mySessionActive) {
             this._updateHeightOffset();
         }
+    }
+
+    getDefaultHeightHeadNonVR() {
+        return this._myHeightNonVR;
+    }
+
+    getDefaultHeightHeadVRWithoutFloor() {
+        return this._myHeightVRWithoutFloor;
+    }
+
+    getDefaultHeightHeadVRWithFloor() {
+        return this._myHeightVRWithFloor;
     }
 
     moveFeet(movement) {
@@ -343,6 +346,23 @@ export class PlayerHeadManager {
 
         if (this._myParams.myDebugEnabled && Globals.isDebugEnabled(this._myParams.myEngine)) {
             this._debugUpdate(dt);
+        }
+    }
+
+    _setHeightHead(heightNonVR, heightVRWithoutFloor, heightVRWithFloor, setOnlyForActiveOne = true) {
+        if (!setOnlyForActiveOne || !this._mySessionActive) {
+            this._setHeightHeadNonVR(heightNonVR);
+        }
+
+        if (!setOnlyForActiveOne || this._mySessionActive) {
+            this._setHeightHeadVRWithoutFloor(heightVRWithoutFloor);
+            this._setHeightHeadVRWithFloor(heightVRWithFloor);
+        }
+
+        this._updateHeightOffset();
+
+        if (!this._mySessionActive) {
+            this._setCameraNonXRHeight(this._myHeightNonVR);
         }
     }
 
