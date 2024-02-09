@@ -158,7 +158,6 @@ export class PlayerLocomotion {
             params.myBlurEndResyncEnabled = true;
             params.myBlurEndResyncRotation = true;
 
-            //params.myNextEnterSessionFloorHeight = 3;
             params.myEnterSessionResyncHeight = false;
             params.myExitSessionResyncHeight = this._myParams.mySyncNonVRHeightWithVROnExitSession;
             params.myExitSessionResyncVerticalAngle = this._myParams.mySyncNonVRVerticalAngleWithVROnExitSession;

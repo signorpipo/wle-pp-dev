@@ -32,9 +32,6 @@ export class PlayerHeadManagerParams {
 
         this.myNonVRFloorBasedMode = NonVRReferenceSpaceMode.NO_FLOOR;
 
-        this.myNextEnterSessionFloorHeight = null;
-        this.myEnterSessionFloorHeight = null;
-
         this.myRotateFeetKeepUp = false;
 
         this.myDefaultHeightNonVR = 0;
@@ -78,7 +75,10 @@ export class PlayerHeadManager {
         this._myHeightNonVR = 0;
         this._myHeightNonVROnEnterSession = 0;
         this._myHeightVRWithoutFloor = 0;
+        this._myHeightVRWithFloor = null;
         this._myHeightOffsetWithFloor = 0;
+        this._myNextEnterSessionSetHeightVRWithFloor = false;
+        this._myDelayNextEnterSessionSetHeightVRWithFloorCounter = 0;
 
         this._myLastReferenceSpaceIsFloorBased = null;
 
@@ -151,7 +151,7 @@ export class PlayerHeadManager {
     }
 
     isSynced() {
-        return this._myIsSyncedDelayCounter == 0 && this._myDelaySessionChangeResyncCounter == 0 && this._myDelayBlurEndResyncCounter == 0 && !this._myDelayBlurEndResyncTimer.isRunning() && !this._mySessionBlurred;
+        return this._myIsSyncedDelayCounter == 0 && this._myDelaySessionChangeResyncCounter == 0 && this._myDelayNextEnterSessionSetHeightVRWithFloorCounter == 0 && this._myDelayBlurEndResyncCounter == 0 && !this._myDelayBlurEndResyncTimer.isRunning() && !this._mySessionBlurred;
     }
 
     setHeightHead(height, setOnlyForActiveOne = false, setForVRWithFloorEvenIfCurrentlyNonVR = false) {
@@ -271,6 +271,27 @@ export class PlayerHeadManager {
             }
         }
 
+        if (this._myDelayNextEnterSessionSetHeightVRWithFloorCounter > 0) {
+            this._myDelayNextEnterSessionSetHeightVRWithFloorCounter--;
+            if (this._myDelayNextEnterSessionSetHeightVRWithFloorCounter == 0) {
+                if (this._mySessionActive) {
+                    let isFloor = XRUtils.isReferenceSpaceFloorBased(this._myParams.myEngine);
+                    if (isFloor && this._myNextEnterSessionSetHeightVRWithFloor) {
+                        let currentHeadPosition = this._myCurrentHead.pp_getPosition();
+
+                        let floorHeight = this._myHeightVRWithFloor - this._myParams.myForeheadExtraHeight;
+                        let currentHeadHeight = this._getPositionEyesHeight(currentHeadPosition);
+
+                        this._myHeightOffsetWithFloor = this._myHeightOffsetWithFloor + (floorHeight - currentHeadHeight);
+
+                        this._updateHeightOffset();
+                    }
+
+                    this._myNextEnterSessionSetHeightVRWithFloor = false;
+                }
+            }
+        }
+
         if (this.isSynced()) {
             this._myCurrentHead.pp_getTransformLocalQuat(this._myCurrentHeadTransformLocalQuat);
         }
@@ -289,12 +310,16 @@ export class PlayerHeadManager {
         this._myHeightVRWithoutFloor = heightWithoutFloor;
 
         if (heightWithFloor != null) {
+            this._myHeightVRWithFloor = heightWithFloor;
+            this._myNextEnterSessionSetHeightVRWithFloor = false;
+
             if (this._mySessionActive) {
                 this._myHeightOffsetWithFloor = this._myHeightOffsetWithFloor + (heightWithFloor - this.getHeightHead());
             } else if (setForVRWithFloorEvenIfCurrentlyNonVR) {
-                this._myParams.myNextEnterSessionFloorHeight = heightWithFloor;
+                this._myNextEnterSessionSetHeightVRWithFloor = true;
             }
         } else {
+            this._myHeightVRWithFloor = null;
             this._myHeightOffsetWithFloor = 0;
         }
     }
@@ -611,6 +636,7 @@ PlayerHeadManager.prototype._onXRSessionStart = function () {
         this._myDelaySessionChangeResyncCounter = 0;
         this._myDelayBlurEndResyncCounter = 0;
         this._myDelayBlurEndResyncTimer.reset();
+        this._myDelayNextEnterSessionSetHeightVRWithFloorCounter = 0;
 
         let referenceSpace = XRUtils.getReferenceSpace(this._myParams.myEngine);
 
@@ -650,6 +676,10 @@ PlayerHeadManager.prototype._onXRSessionStart = function () {
             this._mySessionChangeResyncHeadTransform = null;
         }
 
+        if (this._myNextEnterSessionSetHeightVRWithFloor) {
+            this._myDelayNextEnterSessionSetHeightVRWithFloorCounter = this._myResyncCounterFrames;
+        }
+
         this._mySessionActive = true;
         this._mySessionBlurred = false;
 
@@ -678,6 +708,7 @@ PlayerHeadManager.prototype._onXRSessionEnd = function () {
             this._mySessionChangeResyncHeadTransform = null;
         }
 
+        this._myDelayNextEnterSessionSetHeightVRWithFloorCounter = 0;
 
         this._myVisibilityChangeEventListener = null;
         this._myViewResetEventListener = null;
@@ -835,24 +866,18 @@ PlayerHeadManager.prototype._sessionChangeResync = function () {
                 resyncMovement = flatResyncHeadPosition.vec3_sub(flatCurrentHeadPosition, resyncMovement);
                 this.moveFeet(resyncMovement);
 
-                let isFloor = XRUtils.isReferenceSpaceFloorBased(this._myParams.myEngine);
                 if (this._myParams.myEnterSessionResyncHeight || this._myParams.myNextEnterSessionResyncHeight) {
                     this._myParams.myNextEnterSessionResyncHeight = false;
                     let resyncHeadHeight = this._getPositionEyesHeight(resyncHeadPosition);
                     let currentHeadHeight = this._getPositionEyesHeight(currentHeadPosition);
 
                     this._myHeightVRWithoutFloor = resyncHeadHeight + this._myParams.myForeheadExtraHeight;
+                    this._myHeightVRWithFloor = resyncHeadHeight + this._myParams.myForeheadExtraHeight;
                     this._myHeightOffsetWithFloor = this._myHeightOffsetWithFloor + (resyncHeadHeight - currentHeadHeight);
 
                     this._updateHeightOffset();
-                } else if (isFloor && (this._myParams.myNextEnterSessionFloorHeight != null || this._myParams.myEnterSessionFloorHeight != null)) {
-                    let floorHeight = (this._myParams.myNextEnterSessionFloorHeight != null) ? this._myParams.myNextEnterSessionFloorHeight : this._myParams.myEnterSessionFloorHeight;
-                    floorHeight -= this._myParams.myForeheadExtraHeight;
-                    let currentHeadHeight = this._getPositionEyesHeight(currentHeadPosition);
 
-                    this._myHeightOffsetWithFloor = this._myHeightOffsetWithFloor + (floorHeight - currentHeadHeight);
-
-                    this._updateHeightOffset();
+                    this._myNextEnterSessionSetHeightVRWithFloor = false;
                 }
 
                 this._resyncHeadRotationForward(resyncHeadRotation);
@@ -932,11 +957,6 @@ PlayerHeadManager.prototype._sessionChangeResync = function () {
                 }
 
                 this.setRotationHeadQuat(resyncHeadRotation);
-            }
-
-            if (this._mySessionActive) {
-                this._myParams.myNextEnterSessionFloorHeight = null;
-                this._myFirstEnterSessionResyncDone = true;
             }
 
             this._mySessionChangeResyncHeadTransform = null;
