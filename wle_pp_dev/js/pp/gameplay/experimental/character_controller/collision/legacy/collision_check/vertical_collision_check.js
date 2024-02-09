@@ -174,7 +174,7 @@ CollisionCheck.prototype._verticalMovementAdjustment = function () {
                 }
 
                 if (!collisionCheckParams.myVerticalMovementReduceEnabled && collisionRuntimeParams.myHasReducedVerticalMovement) {
-                    outFixedMovement.vec3_copy(verticalMovement);
+                    outFixedMovement.vec3_zero();
                     collisionRuntimeParams.myHasReducedVerticalMovement = false;
                 }
             } else {
