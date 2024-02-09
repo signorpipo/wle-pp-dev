@@ -37,8 +37,9 @@ export class PlayerHeadManagerParams {
 
         this.myRotateFeetKeepUp = false;
 
-        this.myDefaultHeight = 0;
-        this.myDefaultHeightOffsetWithFloor = 0;
+        this.myDefaultHeightNonVR = 0;
+        this.myDefaultHeightVRWithoutFloor = 0;
+        this.myDefaultHeightVRWithFloor = null; // null means just keep the detected one
         this.myForeheadExtraHeight = 0;
         // Can be used to always add a bit of height, for example to compensate the fact 
         // that the default height is actually the eye height and you may want to also add a forehead offset
@@ -91,10 +92,11 @@ export class PlayerHeadManager {
     }
 
     start() {
-        this._myHeightNonVR = this._myParams.myDefaultHeight;
-        this._myHeightVRWithoutFloor = this._myParams.myDefaultHeight;
-        this._myHeightOffsetWithFloor = this._myParams.myDefaultHeightOffsetWithFloor;
+        this._setHeightHeadNonVR(this._myParams.myDefaultHeightNonVR);
+        this._setHeightHeadVR(this._myParams.myDefaultHeightVRWithoutFloor, this._myParams.myDefaultHeightVRWithFloor, this._myParams.myDefaultHeightVRWithFloor != null);
+
         this._updateHeightOffset();
+
         this._setCameraNonXRHeight(this._myHeightNonVR);
 
         XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this), true, true, this._myParams.myEngine);
@@ -154,18 +156,11 @@ export class PlayerHeadManager {
 
     setHeightHead(height, setOnlyForActiveOne = false, setForVRWithFloorEvenIfCurrentlyNonVR = false) {
         if (!setOnlyForActiveOne || !this._mySessionActive) {
-            this._myHeightNonVR = height;
-            this._myHeightNonVROnEnterSession = height;
+            this._setHeightHeadNonVR(height);
         }
 
         if (!setOnlyForActiveOne || this._mySessionActive) {
-            this._myHeightVRWithoutFloor = height;
-
-            if (this._mySessionActive) {
-                this._myHeightOffsetWithFloor = this._myHeightOffsetWithFloor + (height - this.getHeightHead());
-            } else if (setForVRWithFloorEvenIfCurrentlyNonVR) {
-                this._myParams.myNextEnterSessionFloorHeight = height;
-            }
+            this._setHeightHeadVR(height, height, setForVRWithFloorEvenIfCurrentlyNonVR);
         }
 
         this._updateHeightOffset();
@@ -282,6 +277,25 @@ export class PlayerHeadManager {
 
         if (this._myParams.myDebugEnabled && Globals.isDebugEnabled(this._myParams.myEngine)) {
             this._debugUpdate(dt);
+        }
+    }
+
+    _setHeightHeadNonVR(height) {
+        this._myHeightNonVR = height;
+        this._myHeightNonVROnEnterSession = height;
+    }
+
+    _setHeightHeadVR(heightWithoutFloor, heightWithFloor, setForVRWithFloorEvenIfCurrentlyNonVR = false) {
+        this._myHeightVRWithoutFloor = heightWithoutFloor;
+
+        if (heightWithFloor != null) {
+            if (this._mySessionActive) {
+                this._myHeightOffsetWithFloor = this._myHeightOffsetWithFloor + (heightWithFloor - this.getHeightHead());
+            } else if (setForVRWithFloorEvenIfCurrentlyNonVR) {
+                this._myParams.myNextEnterSessionFloorHeight = heightWithFloor;
+            }
+        } else {
+            this._myHeightOffsetWithFloor = 0;
         }
     }
 

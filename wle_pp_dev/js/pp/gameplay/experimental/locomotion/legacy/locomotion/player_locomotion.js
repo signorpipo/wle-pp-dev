@@ -168,7 +168,8 @@ export class PlayerLocomotion {
 
             params.myNonVRFloorBasedMode = NonVRReferenceSpaceMode.FLOOR_THEN_KEEP_VR;
 
-            params.myDefaultHeight = this._myParams.myDefaultHeight;
+            params.myDefaultHeightNonVR = this._myParams.myDefaultHeight;
+            params.myDefaultHeightVRWithoutFloor = this._myParams.myDefaultHeight;
             params.myForeheadExtraHeight = this._myParams.myForeheadExtraHeight;
 
             params.myFeetRotationKeepUp = true;
