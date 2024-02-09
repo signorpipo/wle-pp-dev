@@ -30,7 +30,7 @@ export class PlayerHeadManagerParams {
         this.myExitSessionMaxVerticalAngle = 0;
         this.myExitSessionResetNonVRTransformLocal = true;
 
-        this.myNonVRFloorBasedMode = NonVRReferenceSpaceMode.NO_FLOOR;
+        this.myNonVRFloorBasedMode = NonVRReferenceSpaceMode.FLOOR_THEN_KEEP_VR;
 
         this.myRotateFeetKeepUp = false;
 
@@ -382,10 +382,15 @@ export class PlayerHeadManager {
         }
     }
 
-    _isNonVRFloorBased() {
-        return this._myParams.myNonVRFloorBasedMode == NonVRReferenceSpaceMode.FLOOR ||
-            (this._myLastReferenceSpaceIsFloorBased == null && this._myParams.myNonVRFloorBasedMode == NonVRReferenceSpaceMode.FLOOR_THEN_KEEP_VR) ||
+    _shouldNonVRUseVRWithFloor() {
+        return (this._myLastReferenceSpaceIsFloorBased == null && this._myParams.myNonVRFloorBasedMode == NonVRReferenceSpaceMode.FLOOR_THEN_KEEP_VR) ||
             (this._myLastReferenceSpaceIsFloorBased != null && this._myLastReferenceSpaceIsFloorBased &&
+                (this._myParams.myNonVRFloorBasedMode == NonVRReferenceSpaceMode.NO_FLOOR_THEN_KEEP_VR || this._myParams.myNonVRFloorBasedMode == NonVRReferenceSpaceMode.FLOOR_THEN_KEEP_VR));
+    }
+
+    _shouldNonVRUseVRWithoutFloor() {
+        return (this._myLastReferenceSpaceIsFloorBased == null && this._myParams.myNonVRFloorBasedMode == NonVRReferenceSpaceMode.NO_FLOOR_THEN_KEEP_VR) ||
+            (this._myLastReferenceSpaceIsFloorBased != null && !this._myLastReferenceSpaceIsFloorBased &&
                 (this._myParams.myNonVRFloorBasedMode == NonVRReferenceSpaceMode.NO_FLOOR_THEN_KEEP_VR || this._myParams.myNonVRFloorBasedMode == NonVRReferenceSpaceMode.FLOOR_THEN_KEEP_VR));
     }
 
@@ -1070,10 +1075,14 @@ PlayerHeadManager.prototype._updateHeightOffset = function () {
                 this._setReferenceSpaceHeightOffset(this._myHeightOffsetWithoutFloor, 0);
             }
         } else {
-            if (this._isNonVRFloorBased()) {
+            if (this._shouldNonVRUseVRWithFloor()) {
                 this._setReferenceSpaceHeightOffset(this._myHeightOffsetWithFloor, 0);
-            } else {
+            } else if (this._shouldNonVRUseVRWithoutFloor()) {
                 this._setReferenceSpaceHeightOffset(this._myHeightOffsetWithoutFloor, 0);
+            } else if (this._myParams.myNonVRFloorBasedMode == NonVRReferenceSpaceMode.FLOOR) {
+                this._setReferenceSpaceHeightOffset(0, 0);
+            } else {
+                this._setReferenceSpaceHeightOffset(this._myHeightNonVR, this._myParams.myForeheadExtraHeight);
             }
         }
     };
