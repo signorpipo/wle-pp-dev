@@ -1,6 +1,6 @@
 import { Timer } from "../../../../../cauldron/cauldron/timer";
 import { XRUtils } from "../../../../../cauldron/utils/xr_utils";
-import { quat2_create, quat_create, vec3_create, vec4_create } from "../../../../../plugin/js/extensions/array_extension";
+import { mat4_create, quat2_create, quat_create, vec3_create, vec4_create } from "../../../../../plugin/js/extensions/array_extension";
 import { Globals } from "../../../../../pp/globals";
 
 export let NonVRReferenceSpaceMode = {
@@ -293,12 +293,7 @@ export class PlayerHeadManager {
     }
 
     _setCameraNonXRHeight(height) {
-        let eyeHeight = height - this._myParams.myForeheadExtraHeight;
-        let cameraNonVRPosition = Globals.getPlayerObjects(this._myParams.myEngine).myCameraNonXR.pp_getPosition();
-        let cameraNonVRPositionLocalToPlayer = cameraNonVRPosition.vec3_convertPositionToLocal(Globals.getPlayerObjects(this._myParams.myEngine).myPlayer.pp_getTransform());
-        cameraNonVRPositionLocalToPlayer.vec3_set(cameraNonVRPositionLocalToPlayer[0], eyeHeight, cameraNonVRPositionLocalToPlayer[2]);
-        let adjustedCameraNonVRPosition = cameraNonVRPositionLocalToPlayer.vec3_convertPositionToWorld(Globals.getPlayerObjects(this._myParams.myEngine).myPlayer.pp_getTransform());
-        Globals.getPlayerObjects(this._myParams.myEngine).myCameraNonXR.pp_setPosition(adjustedCameraNonVRPosition);
+        // Implemented outside class definition
     }
 
     _debugUpdate(dt) {
@@ -957,6 +952,21 @@ PlayerHeadManager.prototype._resyncHeadRotationForward = function () {
     };
 }();
 
+PlayerHeadManager.prototype._setCameraNonXRHeight = function () {
+    let cameraNonVRPosition = vec3_create();
+    let cameraNonVRPositionLocalToPlayer = vec3_create();
+    let adjustedCameraNonVRPosition = vec3_create();
+    let playerTranform = mat4_create();
+    return function _setCameraNonXRHeight(height) {
+        let eyeHeight = height - this._myParams.myForeheadExtraHeight;
+        cameraNonVRPosition = Globals.getPlayerObjects(this._myParams.myEngine).myCameraNonXR.pp_getPosition(cameraNonVRPosition);
+        cameraNonVRPositionLocalToPlayer = cameraNonVRPosition.vec3_convertPositionToLocal(Globals.getPlayerObjects(this._myParams.myEngine).myPlayer.pp_getTransform(playerTranform), cameraNonVRPositionLocalToPlayer);
+        cameraNonVRPositionLocalToPlayer.vec3_set(cameraNonVRPositionLocalToPlayer[0], eyeHeight, cameraNonVRPositionLocalToPlayer[2]);
+        adjustedCameraNonVRPosition = cameraNonVRPositionLocalToPlayer.vec3_convertPositionToWorld(Globals.getPlayerObjects(this._myParams.myEngine).myPlayer.pp_getTransform(playerTranform), adjustedCameraNonVRPosition);
+        Globals.getPlayerObjects(this._myParams.myEngine).myCameraNonXR.pp_setPosition(adjustedCameraNonVRPosition);
+    };
+}();
+
 PlayerHeadManager.prototype._updateHeightOffset = function () {
     return function _updateHeightOffset() {
         if (this._mySessionActive) {
@@ -977,11 +987,16 @@ PlayerHeadManager.prototype._updateHeightOffset = function () {
 
 PlayerHeadManager.prototype._setReferenceSpaceHeightOffset = function () {
     let referenceSpacePosition = vec3_create();
+    let referenceSpacePositionLocalToPlayer = vec3_create();
+    let adjustedReferenceSpacePosition = vec3_create();
+    let playerTranform = mat4_create();
     return function _setReferenceSpaceHeightOffset(offset, amountToRemove) {
         if (offset != null) {
-            referenceSpacePosition = Globals.getPlayerObjects(this._myParams.myEngine).myReferenceSpace.pp_getPositionLocal(referenceSpacePosition);
-            referenceSpacePosition.vec3_set(referenceSpacePosition[0], offset - amountToRemove, referenceSpacePosition[2]);
-            Globals.getPlayerObjects(this._myParams.myEngine).myReferenceSpace.pp_setPositionLocal(referenceSpacePosition);
+            referenceSpacePosition = Globals.getPlayerObjects(this._myParams.myEngine).myReferenceSpace.pp_getPosition(referenceSpacePosition);
+            referenceSpacePositionLocalToPlayer = referenceSpacePosition.vec3_convertPositionToLocal(Globals.getPlayerObjects(this._myParams.myEngine).myPlayer.pp_getTransform(playerTranform), referenceSpacePositionLocalToPlayer);
+            referenceSpacePositionLocalToPlayer.vec3_set(referenceSpacePositionLocalToPlayer[0], offset - amountToRemove, referenceSpacePositionLocalToPlayer[2]);
+            adjustedReferenceSpacePosition = referenceSpacePositionLocalToPlayer.vec3_convertPositionToWorld(Globals.getPlayerObjects(this._myParams.myEngine).myPlayer.pp_getTransform(playerTranform), adjustedReferenceSpacePosition);
+            Globals.getPlayerObjects(this._myParams.myEngine).myReferenceSpace.pp_setPosition(adjustedReferenceSpacePosition);
         }
     };
 }();
