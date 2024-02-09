@@ -263,12 +263,12 @@ export class PlayerObscureManager {
                 // For example if u stand up and go with the head in the ceiling and reset by moving
                 // Add a setting for this though, since someone could prefer being able to see in this case,
                 // so to be able to know where to move (since it might be resetting to this invalid position)
-                if (this._myParams.myPlayerTransformManager.isHeadColliding()) {
+                if (this._myParams.myPlayerTransformManager.isHeadColliding() || !this._myParams.myPlayerTransformManager.isPositionHeadValid()) {
                     let distance = this._myParams.myPlayerTransformManager.getDistanceToRealHead();
                     let relativeDistance = distance - this._myParams.myDistanceToStartObscureWhenHeadColliding;
                     if (relativeDistance >= 0) {
                         let relativeDistancePercentage = Math.pp_clamp(relativeDistance / this._myParams.myRelativeDistanceToMaxObscureWhenHeadColliding, 0, 1);
-                        if (isNaN(relativeDistancePercentage)) {
+                        if (isNaN(relativeDistancePercentage) || !this._myParams.myPlayerTransformManager.isPositionHeadValid()) {
                             relativeDistancePercentage = 1;
                         }
                         let targetObscureLevel = this._myParams.myObscureLevelRelativeDistanceEasingFunction(relativeDistancePercentage);
