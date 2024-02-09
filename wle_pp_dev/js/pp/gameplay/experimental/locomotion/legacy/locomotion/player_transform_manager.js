@@ -998,7 +998,7 @@ PlayerTransformManager.prototype._updateValidToReal = function () {
 
             if (this.isSynced(this._myParams.mySyncPositionHeadFlagMap) || this._myParams.myAlwaysSyncHeadPositionWithReal
                 || (this.isSynced(this._myParams.mySyncPositionFlagMap) && this._myParams.myAlwaysSyncPositionWithReal)) {
-                this._myValidPositionHead = this.getPositionHeadReal(newPositionHead);
+                this._myValidPositionHead.vec3_copy(newPositionHead);
             }
 
             if (this.isSynced(this._myParams.mySyncRotationFlagMap)) {
