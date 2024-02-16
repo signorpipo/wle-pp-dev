@@ -85,6 +85,22 @@ export class PlayerTransformManagerParams {
         this.myRotateOnlyIfSynced = false;
         this.myResetRealResetRotationIfUpChanged = true;
 
+        // This make it so the head must be able to reach from the feet to the real head, sort of
+        // like you were teleported in a space squashed to your feet and then have to get up
+        // It can be used to prevent being able to see through the floor, since when the head is reset to the real one
+        // if the real one is on the other side of the above floor there would be no collision
+        // The risk is that, if you have objects close to your feet, your head could get stuck on them while trying to "get up"
+        // and the view could be obscured thinking you have those objects in your view
+        this.myResetHeadToFeetInsteadOfReal = false;
+
+        // This other flag is to fix the above issue, doing the "squash and get up" only if the head is not reachable normally
+        // The above issue can still happen but should be more rare, only if you teleport to a place where there could be garbage stuff
+        this.myResetHeadToFeetInsteadOfRealOnlyIfRealNotReachable = false;
+
+        // Can be used to specify that the head should reset a bit above the actual feet level, so to avoid small objects that could very frequently
+        // happen to be close to the floor
+        this.myResetHeadToFeetUpOffset = 0;
+
         //this.myDistanceToStartApplyGravityWhenFloating = 0; // This should be moved outisde, that is, if it is floating stop gravity
 
         // Set valid if head synced (head manager)
@@ -195,6 +211,8 @@ export class PlayerTransformManager {
         this._myIsRealHeadositionValid = false;
 
         this._myResetRealOnHeadSynced = false;
+
+        this._myResetHeadToFeetOnNextUpdateValidToReal = false;
 
         this._myActive = true;
         this._myDestroyed = false;
@@ -697,7 +715,13 @@ PlayerTransformManager.prototype.resetReal = function () {
         }
 
         if (resetHeadToReal) {
-            this.resetHeadToReal();
+            if (this._myParams.myResetHeadToFeetInsteadOfRealOnlyIfRealNotReachable) {
+                this._myResetHeadToFeetOnNextUpdateValidToReal = true;
+            } else if (this._myParams.myResetHeadToFeetInsteadOfReal) {
+                this.resetHeadToFeet();
+            } else {
+                this.resetHeadToReal();
+            }
         }
     };
 }();
@@ -976,20 +1000,32 @@ PlayerTransformManager.prototype._updateValidToReal = function () {
             }
 
             // Head Colliding
-            movementToCheck = this.getPositionHeadReal(positionReal).vec3_sub(this.getPositionHead(position), movementToCheck);
-            collisionRuntimeParams.reset();
-            transformQuat = this.getTransformHeadQuat(transformQuat); // Get eyes transform
-            newPositionHead.vec3_copy(this._myValidPositionHead);
-            if (this._myParams.mySyncEnabledFlagMap.get(PlayerTransformManagerSyncFlag.HEAD_COLLIDING)) {
-                CollisionCheckBridge.getCollisionCheck(this._myParams.myEngine).move(movementToCheck, transformQuat, this._myHeadCollisionCheckParams, collisionRuntimeParams);
-
-                if (!collisionRuntimeParams.myHorizontalMovementCanceled && !collisionRuntimeParams.myVerticalMovementCanceled) {
-                    this._myIsHeadColliding = false;
-                    newPositionHead.vec3_copy(collisionRuntimeParams.myNewPosition);
-                } else {
-                    this._myIsHeadColliding = true;
+            let firstHeadCollidingCheckDone = false;
+            do {
+                if (firstHeadCollidingCheckDone && this._myResetHeadToFeetOnNextUpdateValidToReal) {
+                    this._myResetHeadToFeetOnNextUpdateValidToReal = false;
+                    this.resetHeadToFeet();
                 }
-            }
+
+                movementToCheck = this.getPositionHeadReal(positionReal).vec3_sub(this.getPositionHead(position), movementToCheck);
+                collisionRuntimeParams.reset();
+                transformQuat = this.getTransformHeadQuat(transformQuat); // Get eyes transform
+                newPositionHead.vec3_copy(this._myValidPositionHead);
+                if (this._myParams.mySyncEnabledFlagMap.get(PlayerTransformManagerSyncFlag.HEAD_COLLIDING)) {
+                    CollisionCheckBridge.getCollisionCheck(this._myParams.myEngine).move(movementToCheck, transformQuat, this._myHeadCollisionCheckParams, collisionRuntimeParams);
+
+                    if (!collisionRuntimeParams.myHorizontalMovementCanceled && !collisionRuntimeParams.myVerticalMovementCanceled) {
+                        this._myIsHeadColliding = false;
+                        newPositionHead.vec3_copy(collisionRuntimeParams.myNewPosition);
+                    } else {
+                        this._myIsHeadColliding = true;
+                    }
+                }
+
+                firstHeadCollidingCheckDone = true;
+            } while (this._myIsHeadColliding && this._myResetHeadToFeetOnNextUpdateValidToReal);
+
+            this._myResetHeadToFeetOnNextUpdateValidToReal = false;
 
             if (this._myParams.myAlwaysSyncHeadPositionWithReal) {
                 newPositionHead.vec3_copy(positionReal);
@@ -1211,12 +1247,12 @@ PlayerTransformManager.prototype.setHeight = function () {
 PlayerTransformManager.prototype.resetHeadToFeet = function () {
     let transformQuat = quat2_create();
     let headUp = vec3_create();
-    return function resetHeadToFeet(height, forceSet = false) {
+    return function resetHeadToFeet() {
         this._myValidPositionHead = this.getPosition(this._myValidPositionHead);
 
-        transformQuat = this.getTransformHeadQuat(transformQuat); // Get eyes transform
+        transformQuat = this.getTransformHeadQuat(transformQuat);
         headUp = transformQuat.quat2_getUp(headUp);
-        this._myValidPositionHead.vec3_add(headUp.vec3_scale(this._myHeadCollisionCheckParams.myHeight + 0.00001, headUp), this._myValidPositionHead);
+        this._myValidPositionHead.vec3_add(headUp.vec3_scale(this._myHeadCollisionCheckParams.myHeight + 0.00001 + this._myParams.myResetHeadToFeetUpOffset, headUp), this._myValidPositionHead);
     };
 }();
 

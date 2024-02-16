@@ -99,6 +99,10 @@ export class PlayerLocomotionParams {
         // you can set this to 3 safely, since there will be no visible stutter to be seen (beside the clear color)
         this.myResetRealOnStartFramesAmount = 1;
 
+        // Can fix some head through floor issues, when you can move your head completely to the other side of the floor
+        // If the floors are thick enough that this can't happen, you can leave this to false
+        this.myResetHeadToFeetInsteadOfReal = false;
+
         // these 2 flags works 100% properly only if both true or false
         this.mySyncWithRealWorldPositionOnlyIfValid = true;     // valid means the real player has not moved inside walls
         this.myViewOcclusionInsideWallsEnabled = true;
@@ -248,6 +252,8 @@ export class PlayerLocomotion {
             params.myNeverResetRealHeightNonVR = false;
 
             params.myResetRealHeightNonVROnExitSession = this._myParams.mySyncNonVRHeightWithVROnExitSession;
+
+            params.myResetHeadToFeetInsteadOfRealOnlyIfRealNotReachable = this._myParams.myResetHeadToFeetInsteadOfReal;
 
             params.myNeverResetRealPositionVR = false;
             params.myNeverResetRealRotationVR = false;
