@@ -197,6 +197,7 @@ export class PlayerTransformManager {
         this._myValidRotationQuat = quat_create();
         this._myValidHeight = 0;
         this._myValidPositionHead = vec3_create();
+        this._myValidPositionHeadBackupForResetToFeet = vec3_create();
 
         this._myIsBodyColliding = false;
         this._myIsHeadColliding = false;
@@ -375,6 +376,7 @@ export class PlayerTransformManager {
 
         if (!this._myParams.myAlwaysSyncPositionWithReal) {
             this._myValidPositionHead = this.getPositionHeadReal(this._myValidPositionHead);
+            this._myValidPositionHeadBackupForResetToFeet.vec3_copy(this._myValidPositionHead);
         }
 
         if (resetToPlayerInsteadOfHead) {
@@ -393,6 +395,7 @@ export class PlayerTransformManager {
     resetHeadToReal() {
         if (!this._myParams.myAlwaysSyncPositionWithReal) {
             this._myValidPositionHead = this.getPositionHeadReal(this._myValidPositionHead);
+            this._myValidPositionHeadBackupForResetToFeet.vec3_copy(this._myValidPositionHead);
         }
     }
 
@@ -692,6 +695,8 @@ PlayerTransformManager.prototype.resetReal = function () {
     let validUp = vec3_create();
     let position = vec3_create();
     let rotationQuat = quat_create();
+
+    let validPositionHeadBackupForResetToFeet = vec3_create();
     return function resetReal(resetPosition = true, resetRotation = false, resetHeight = false, resetHeadToReal = true, updateValidToReal = false) {
         let playerHeadManager = this.getPlayerHeadManager();
 
@@ -717,6 +722,9 @@ PlayerTransformManager.prototype.resetReal = function () {
         if (resetHeadToReal) {
             if (this._myParams.myResetHeadToFeetInsteadOfRealOnlyIfRealNotReachable) {
                 this._myResetHeadToFeetOnNextUpdateValidToReal = true;
+                validPositionHeadBackupForResetToFeet.vec3_copy(this._myValidPositionHead);
+                this.resetHeadToFeet();
+                this._myValidPositionHeadBackupForResetToFeet.vec3_copy(validPositionHeadBackupForResetToFeet);
             } else if (this._myParams.myResetHeadToFeetInsteadOfReal) {
                 this.resetHeadToFeet();
             } else {
@@ -1007,6 +1015,10 @@ PlayerTransformManager.prototype._updateValidToReal = function () {
                     this.resetHeadToFeet();
                 }
 
+                if (this._myResetHeadToFeetOnNextUpdateValidToReal) {
+                    this._myValidPositionHead.vec3_copy(this._myValidPositionHeadBackupForResetToFeet);
+                }
+
                 movementToCheck = this.getPositionHeadReal(positionReal).vec3_sub(this.getPositionHead(position), movementToCheck);
                 collisionRuntimeParams.reset();
                 transformQuat = this.getTransformHeadQuat(transformQuat); // Get eyes transform
@@ -1039,6 +1051,7 @@ PlayerTransformManager.prototype._updateValidToReal = function () {
             if (this.isSynced(this._myParams.mySyncPositionHeadFlagMap) || this._myParams.myAlwaysSyncHeadPositionWithReal
                 || (this.isSynced(this._myParams.mySyncPositionFlagMap) && this._myParams.myAlwaysSyncPositionWithReal)) {
                 this._myValidPositionHead.vec3_copy(newPositionHead);
+                this._myValidPositionHeadBackupForResetToFeet.vec3_copy(this._myValidPositionHead);
             }
 
             if (this.isSynced(this._myParams.mySyncRotationFlagMap)) {
@@ -1253,6 +1266,7 @@ PlayerTransformManager.prototype.resetHeadToFeet = function () {
         transformQuat = this.getTransformHeadQuat(transformQuat);
         headUp = transformQuat.quat2_getUp(headUp);
         this._myValidPositionHead.vec3_add(headUp.vec3_scale(this._myHeadCollisionCheckParams.myHeight + 0.00001 + this._myParams.myResetHeadToFeetUpOffset, headUp), this._myValidPositionHead);
+        this._myValidPositionHeadBackupForResetToFeet.vec3_copy(this._myValidPositionHead);
     };
 }();
 
