@@ -67,6 +67,7 @@ export class PlayerLocomotionComponent extends Component {
         // Can fix some head through floor issues, when you can move your head completely to the other side of the floor
         // If the floors are thick enough that this can't happen, you can leave this to false
         _myResetHeadToFeetInsteadOfReal: Property.bool(false),
+        _myResetHeadToRealMinDistance: Property.float(0.3),
 
         // these 2 flags works 100% properly only if both true or false
         _mySyncWithRealWorldPositionOnlyIfValid: Property.bool(true),   // valid means the real player has not moved inside walls
@@ -154,6 +155,7 @@ export class PlayerLocomotionComponent extends Component {
         params.myResetRealOnStart = this._myResetRealOnStart;
         params.myResetRealOnStartFramesAmount = this._myResetRealOnStartFramesAmount;
         params.myResetHeadToFeetInsteadOfReal = this._myResetHeadToFeetInsteadOfReal;
+        params.myResetHeadToRealMinDistance = this._myResetHeadToRealMinDistance;
 
         params.mySyncWithRealWorldPositionOnlyIfValid = this._mySyncWithRealWorldPositionOnlyIfValid;
         params.myViewOcclusionInsideWallsEnabled = this._myViewOcclusionInsideWallsEnabled;

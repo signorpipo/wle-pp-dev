@@ -101,6 +101,8 @@ export class PlayerTransformManagerParams {
         // happen to be close to the floor
         this.myResetHeadToFeetUpOffset = 0;
 
+        this.myResetHeadToRealMinDistance = 0;
+
         //this.myDistanceToStartApplyGravityWhenFloating = 0; // This should be moved outisde, that is, if it is floating stop gravity
 
         // Set valid if head synced (head manager)
@@ -280,7 +282,7 @@ export class PlayerTransformManager {
     forceTeleportAndReset(position, rotationQuat) {
         this.teleportPositionRotationQuat(position, rotationQuat, null, true);
 
-        this.resetReal(true, true);
+        this._myPlayerTransformManager.resetReal(true, true, undefined, undefined, undefined, true);
     }
 
     rotateQuat(rotationQuat) {
@@ -359,7 +361,7 @@ export class PlayerTransformManager {
         return !isBodyColliding && !isHeadColliding && !isFar && !isFloating;
     }
 
-    resetReal(resetPosition = true, resetRotation = false, resetHeight = false, resetHeadToReal = true, updateValidToReal = false) {
+    resetReal(resetPosition = true, resetRotation = false, resetHeight = false, resetHeadToReal = true, updateValidToReal = false, ignoreResetHeadMinDistance = false) {
         // Implemented outside class definition
     }
 
@@ -696,8 +698,10 @@ PlayerTransformManager.prototype.resetReal = function () {
     let position = vec3_create();
     let rotationQuat = quat_create();
 
+    let positionHeadReal = vec3_create();
+    let distanceToRealHead = vec3_create();
     let validPositionHeadBackupForResetToFeet = vec3_create();
-    return function resetReal(resetPosition = true, resetRotation = false, resetHeight = false, resetHeadToReal = true, updateValidToReal = false) {
+    return function resetReal(resetPosition = true, resetRotation = false, resetHeight = false, resetHeadToReal = true, updateValidToReal = false, ignoreResetHeadMinDistance = false) {
         let playerHeadManager = this.getPlayerHeadManager();
 
         if (resetPosition) {
@@ -720,15 +724,19 @@ PlayerTransformManager.prototype.resetReal = function () {
         }
 
         if (resetHeadToReal) {
-            if (this._myParams.myResetHeadToFeetInsteadOfRealOnlyIfRealNotReachable) {
-                this._myResetHeadToFeetOnNextUpdateValidToReal = true;
-                validPositionHeadBackupForResetToFeet.vec3_copy(this._myValidPositionHead);
-                this.resetHeadToFeet();
-                this._myValidPositionHeadBackupForResetToFeet.vec3_copy(validPositionHeadBackupForResetToFeet);
-            } else if (this._myParams.myResetHeadToFeetInsteadOfReal) {
-                this.resetHeadToFeet();
-            } else {
-                this.resetHeadToReal();
+            positionHeadReal = this.getPositionHeadReal(positionHeadReal);
+            distanceToRealHead = this._myValidPositionHead.vec3_distance(positionHeadReal);
+            if (ignoreResetHeadMinDistance || distanceToRealHead >= this._myParams.myResetHeadToRealMinDistance) {
+                if (this._myParams.myResetHeadToFeetInsteadOfRealOnlyIfRealNotReachable) {
+                    this._myResetHeadToFeetOnNextUpdateValidToReal = true;
+                    validPositionHeadBackupForResetToFeet.vec3_copy(this._myValidPositionHead);
+                    this.resetHeadToFeet();
+                    this._myValidPositionHeadBackupForResetToFeet.vec3_copy(validPositionHeadBackupForResetToFeet);
+                } else if (this._myParams.myResetHeadToFeetInsteadOfReal) {
+                    this.resetHeadToFeet();
+                } else {
+                    this.resetHeadToReal();
+                }
             }
         }
     };

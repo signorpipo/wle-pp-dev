@@ -102,6 +102,7 @@ export class PlayerLocomotionParams {
         // Can fix some head through floor issues, when you can move your head completely to the other side of the floor
         // If the floors are thick enough that this can't happen, you can leave this to false
         this.myResetHeadToFeetInsteadOfReal = false;
+        this.myResetHeadToRealMinDistance = 0;
 
         // these 2 flags works 100% properly only if both true or false
         this.mySyncWithRealWorldPositionOnlyIfValid = true;     // valid means the real player has not moved inside walls
@@ -254,6 +255,7 @@ export class PlayerLocomotion {
             params.myResetRealHeightNonVROnExitSession = this._myParams.mySyncNonVRHeightWithVROnExitSession;
 
             params.myResetHeadToFeetInsteadOfRealOnlyIfRealNotReachable = this._myParams.myResetHeadToFeetInsteadOfReal;
+            params.myResetHeadToRealMinDistance = this._myParams.myResetHeadToRealMinDistance;
 
             params.myNeverResetRealPositionVR = false;
             params.myNeverResetRealRotationVR = false;
@@ -514,7 +516,7 @@ export class PlayerLocomotion {
         if (this._myParams.myResetRealOnStart && this._myResetRealOnStartCounter > 0) {
             this._myResetRealOnStartCounter--;
 
-            this._myPlayerTransformManager.resetReal(true, true);
+            this._myPlayerTransformManager.resetReal(true, true, undefined, undefined, undefined, true);
             this._myPlayerTransformManager.update(dt);
 
             if (this._myPlayerHeadManager.isSynced()) {
