@@ -378,6 +378,10 @@ export class PlayerTransformManager {
         }
     }
 
+    resetHeadToFeet() {
+        // Implemented outside class definition
+    }
+
     isBodyColliding() {
         return this._myIsBodyColliding;
     }
@@ -1201,6 +1205,18 @@ PlayerTransformManager.prototype.setHeight = function () {
         }
 
         this._updateCollisionHeight();
+    };
+}();
+
+PlayerTransformManager.prototype.resetHeadToFeet = function () {
+    let transformQuat = quat2_create();
+    let headUp = vec3_create();
+    return function resetHeadToFeet(height, forceSet = false) {
+        this._myValidPositionHead = this.getPosition(this._myValidPositionHead);
+
+        transformQuat = this.getTransformHeadQuat(transformQuat); // Get eyes transform
+        headUp = transformQuat.quat2_getUp(headUp);
+        this._myValidPositionHead.vec3_add(headUp.vec3_scale(this._myHeadCollisionCheckParams.myHeight + 0.00001, headUp), this._myValidPositionHead);
     };
 }();
 
