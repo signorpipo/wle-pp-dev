@@ -51,7 +51,7 @@ CollisionCheck.prototype._teleport = function () {
         if (height < 0.00001) {
             height = 0;
         }
-        //height = 1.75;
+        //height = 1.70;
 
         this._myPrevCollisionRuntimeParams.copy(collisionRuntimeParams);
         collisionRuntimeParams.reset();

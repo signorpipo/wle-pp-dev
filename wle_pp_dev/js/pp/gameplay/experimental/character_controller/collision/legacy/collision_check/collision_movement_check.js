@@ -43,7 +43,7 @@ CollisionCheck.prototype._move = function () {
         if (height < 0.00001) {
             height = 0;
         }
-        //height = 1.75;
+        //height = 1.70;
 
         horizontalMovement = movement.vec3_removeComponentAlongAxis(transformUp, horizontalMovement);
         if (horizontalMovement.vec3_isZero(0.000001)) {

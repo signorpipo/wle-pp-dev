@@ -13,7 +13,7 @@ export class PlayerLocomotionComponent extends Component {
         _myAlwaysSmoothForNonVR: Property.bool(true),
         _mySwitchLocomotionTypeShortcutEnabled: Property.bool(true), // Double press main hand (default left) thumbstick to switch
         _myPhysicsBlockLayerFlags: Property.string("0, 0, 0, 0, 0, 0, 0, 0"),
-        _myDefaultHeight: Property.float(1.75),
+        _myDefaultHeight: Property.float(1.70),
         _myCharacterRadius: Property.float(0.3),
         _myMaxSpeed: Property.float(2),
         _myMaxRotationSpeed: Property.float(100),
