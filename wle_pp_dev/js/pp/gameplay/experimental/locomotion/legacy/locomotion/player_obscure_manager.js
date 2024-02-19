@@ -55,7 +55,7 @@ export class PlayerObscureManager {
         this._myLastTargetObscureLevel = null;
         this._myLastIsFadingIn = null;
 
-        this._myInstantObscureNextUpdate = false;
+        this._myInstantObscureFramesCount = 0;
 
         this._myFadeTimer = new Timer(0, false);
 
@@ -110,6 +110,10 @@ export class PlayerObscureManager {
         this._myFSM.update(dt);
 
         this._setObscureVisible(this.isObscured());
+
+        if (this._myInstantObscureFramesCount > 0) {
+            this._myInstantObscureFramesCount--;
+        }
     }
 
     isStarted() {
@@ -158,11 +162,9 @@ export class PlayerObscureManager {
 
     _idleUpdate(dt) {
         if (Math.abs(this._myTargetObscureLevel - this._myCurrentObscureLevel) > Math.PP_EPSILON) {
-            if (this._myInstantObscureNextUpdate) {
+            if (this._myInstantObscureFramesCount > 0) {
                 this._setObscureAlpha(this._myTargetObscureLevel);
                 this._myCurrentObscureLevel = this._myTargetObscureLevel;
-
-                this._myInstantObscureNextUpdate = false;
             } else {
                 this._myFSM.perform("fade");
             }
@@ -182,10 +184,8 @@ export class PlayerObscureManager {
 
         this._myFadeTimer.update(dt);
 
-        if (this._myInstantObscureNextUpdate) {
+        if (this._myInstantObscureFramesCount > 0) {
             this._myFadeTimer.end();
-
-            this._myInstantObscureNextUpdate = false;
         }
 
         let newObscureLevel = this._myParams.myObscureFadeEasingFunction(this._myFadeTimer.getPercentage());
@@ -379,11 +379,11 @@ export class PlayerObscureManager {
     }
 
     _onXRSessionStart() {
-        this._myInstantObscureNextUpdate = true;
+        this._myInstantObscureFramesCount = 5;
     }
 
     _onXRSessionEnd() {
-        this._myInstantObscureNextUpdate = true;
+        this._myInstantObscureFramesCount = 5;
     }
 
     destroy() {

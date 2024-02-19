@@ -101,6 +101,8 @@ export class PlayerTransformManagerParams {
         // The above issue can still happen but should be more rare, only if you teleport to a place where there could be garbage stuff
         this.myResetHeadToFeetInsteadOfRealOnlyIfRealNotReachable = false;
 
+        this.myResetHeadToFeetMoveTowardReal = true;
+
         // Can be used to specify that the head should reset a bit above the actual feet level, so to avoid small objects that could very frequently
         // happen to be close to the floor
         this.myResetHeadToFeetUpOffset = 0;
@@ -1029,6 +1031,10 @@ PlayerTransformManager.prototype._updateValidToReal = function () {
             backupHorizontalBlockLayerFlags.copy(this._myHeadCollisionCheckParams.myHorizontalBlockLayerFlags);
             backupVerticalBlockLayerFlags.copy(this._myHeadCollisionCheckParams.myVerticalBlockLayerFlags);
 
+            let backupVerticalMovementReduceEnabled = this._myHeadCollisionCheckParams.myVerticalMovementReduceEnabled;
+
+            let headReducedVerticalMovementFeetAdjustment = false;
+
             // Head Colliding
             let firstHeadCollidingCheckDone = false;
             do {
@@ -1043,7 +1049,15 @@ PlayerTransformManager.prototype._updateValidToReal = function () {
                         this._myHeadCollisionCheckParams.myVerticalBlockLayerFlags.copy(this._myParams.myHeadCollisionBlockLayerFlagsForResetToFeet);
                     }
 
+                    if (this._myParams.myResetHeadToFeetMoveTowardReal) {
+                        this._myHeadCollisionCheckParams.myVerticalMovementReduceEnabled = true;
+                    }
+
                     this._myResetHeadToFeetDirty = false;
+                } else {
+                    this._myHeadCollisionCheckParams.myHorizontalBlockLayerFlags.copy(backupHorizontalBlockLayerFlags);
+                    this._myHeadCollisionCheckParams.myVerticalBlockLayerFlags.copy(backupVerticalBlockLayerFlags);
+                    this._myHeadCollisionCheckParams.myVerticalMovementReduceEnabled = backupVerticalMovementReduceEnabled;
                 }
 
                 if (this._myResetHeadToFeetOnNextUpdateValidToReal) {
@@ -1058,7 +1072,13 @@ PlayerTransformManager.prototype._updateValidToReal = function () {
                     CollisionCheckBridge.getCollisionCheck(this._myParams.myEngine).move(movementToCheck, transformQuat, this._myHeadCollisionCheckParams, collisionRuntimeParams);
 
                     if (!collisionRuntimeParams.myHorizontalMovementCanceled && !collisionRuntimeParams.myVerticalMovementCanceled) {
-                        this._myIsHeadColliding = false;
+                        if (!backupVerticalMovementReduceEnabled && collisionRuntimeParams.myHasReducedVerticalMovement) {
+                            this._myIsHeadColliding = true;
+                            headReducedVerticalMovementFeetAdjustment = true;
+                        } else {
+                            this._myIsHeadColliding = false;
+                        }
+
                         newPositionHead.vec3_copy(collisionRuntimeParams.myNewPosition);
                     } else {
                         this._myIsHeadColliding = true;
@@ -1070,6 +1090,7 @@ PlayerTransformManager.prototype._updateValidToReal = function () {
 
             this._myHeadCollisionCheckParams.myHorizontalBlockLayerFlags.copy(backupHorizontalBlockLayerFlags);
             this._myHeadCollisionCheckParams.myVerticalBlockLayerFlags.copy(backupVerticalBlockLayerFlags);
+            this._myHeadCollisionCheckParams.myVerticalMovementReduceEnabled = backupVerticalMovementReduceEnabled;
 
             this._myResetHeadToFeetOnNextUpdateValidToReal = false;
             this._myResetHeadToFeetDirty = false;
@@ -1083,10 +1104,23 @@ PlayerTransformManager.prototype._updateValidToReal = function () {
                 // Reset real position since the new position might be influenced by the snap?
             }
 
-            if (this.isSynced(this._myParams.mySyncPositionHeadFlagMap) || this._myParams.myAlwaysSyncHeadPositionWithReal
-                || (this.isSynced(this._myParams.mySyncPositionFlagMap) && this._myParams.myAlwaysSyncPositionWithReal)) {
-                this._myValidPositionHead.vec3_copy(newPositionHead);
-                this._myValidPositionHeadBackupForResetToFeet.vec3_copy(this._myValidPositionHead);
+            {
+                let backupIsHeadColliding = this._myIsHeadColliding;
+                if (headReducedVerticalMovementFeetAdjustment) {
+                    // This is to allow the sync of the head if this is the only think preventing it
+                    this._myIsHeadColliding = false;
+                }
+
+                if (this.isSynced(this._myParams.mySyncPositionHeadFlagMap) || this._myParams.myAlwaysSyncHeadPositionWithReal
+                    || (this.isSynced(this._myParams.mySyncPositionFlagMap) && this._myParams.myAlwaysSyncPositionWithReal)) {
+                    this._myValidPositionHead.vec3_copy(newPositionHead);
+                    this._myValidPositionHeadBackupForResetToFeet.vec3_copy(this._myValidPositionHead);
+                }
+
+                if (headReducedVerticalMovementFeetAdjustment) {
+                    // Restoring it to colliding after
+                    this._myIsHeadColliding = backupIsHeadColliding;
+                }
             }
 
             if (this.isSynced(this._myParams.mySyncRotationFlagMap)) {
