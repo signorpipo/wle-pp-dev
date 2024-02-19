@@ -81,6 +81,10 @@ export class PlayerTransformManagerParams {
         this.myHeadRadius = 0;
         this.myHeadCollisionBlockLayerFlags = new PhysicsLayerFlags();
         this.myHeadCollisionObjectsToIgnore = [];
+        // Can be used if when resetting to feet there might be dynamic objects which you would like to exclude for this reset check,
+        // but you might still to normally avoid, for example for opbject you can grab and therefore put close to the ehad, which are not a big deal
+        // and you can accept being able to see inside them when resetting the head, but not for normal movements
+        this.myHeadCollisionBlockLayerFlagsForResetToFeet = null;
 
         this.myRotateOnlyIfSynced = false;
         this.myResetRealResetRotationIfUpChanged = true;
@@ -379,6 +383,8 @@ export class PlayerTransformManager {
         if (!this._myParams.myAlwaysSyncPositionWithReal) {
             this._myValidPositionHead = this.getPositionHeadReal(this._myValidPositionHead);
             this._myValidPositionHeadBackupForResetToFeet.vec3_copy(this._myValidPositionHead);
+
+            this._myResetHeadToFeetDirty = false;
         }
 
         if (resetToPlayerInsteadOfHead) {
@@ -398,6 +404,8 @@ export class PlayerTransformManager {
         if (!this._myParams.myAlwaysSyncPositionWithReal) {
             this._myValidPositionHead = this.getPositionHeadReal(this._myValidPositionHead);
             this._myValidPositionHeadBackupForResetToFeet.vec3_copy(this._myValidPositionHead);
+
+            this._myResetHeadToFeetDirty = false;
         }
     }
 
@@ -831,6 +839,9 @@ PlayerTransformManager.prototype._updateValidToReal = function () {
     let floatingTransformQuat = quat2_create();
     let horizontalDirection = vec3_create();
     let rotationQuat = quat_create();
+
+    let backupHorizontalBlockLayerFlags = new PhysicsLayerFlags();
+    let backupVerticalBlockLayerFlags = new PhysicsLayerFlags();
     return function _updateValidToReal(dt) {
         // Check if new head is ok and update the data
         // If head is not synced (blurred or session changing) avoid this and keep last valid
@@ -1015,12 +1026,24 @@ PlayerTransformManager.prototype._updateValidToReal = function () {
                 }
             }
 
+            backupHorizontalBlockLayerFlags.copy(this._myHeadCollisionCheckParams.myHorizontalBlockLayerFlags);
+            backupVerticalBlockLayerFlags.copy(this._myHeadCollisionCheckParams.myVerticalBlockLayerFlags);
+
             // Head Colliding
             let firstHeadCollidingCheckDone = false;
             do {
                 if (firstHeadCollidingCheckDone && this._myResetHeadToFeetOnNextUpdateValidToReal) {
                     this._myResetHeadToFeetOnNextUpdateValidToReal = false;
                     this.resetHeadToFeet();
+                }
+
+                if (this._myResetHeadToFeetDirty) {
+                    if (this._myParams.myHeadCollisionBlockLayerFlagsForResetToFeet != null) {
+                        this._myHeadCollisionCheckParams.myHorizontalBlockLayerFlags.copy(this._myParams.myHeadCollisionBlockLayerFlagsForResetToFeet);
+                        this._myHeadCollisionCheckParams.myVerticalBlockLayerFlags.copy(this._myParams.myHeadCollisionBlockLayerFlagsForResetToFeet);
+                    }
+
+                    this._myResetHeadToFeetDirty = false;
                 }
 
                 if (this._myResetHeadToFeetOnNextUpdateValidToReal) {
@@ -1045,7 +1068,11 @@ PlayerTransformManager.prototype._updateValidToReal = function () {
                 firstHeadCollidingCheckDone = true;
             } while (this._myIsHeadColliding && this._myResetHeadToFeetOnNextUpdateValidToReal);
 
+            this._myHeadCollisionCheckParams.myHorizontalBlockLayerFlags.copy(backupHorizontalBlockLayerFlags);
+            this._myHeadCollisionCheckParams.myVerticalBlockLayerFlags.copy(backupVerticalBlockLayerFlags);
+
             this._myResetHeadToFeetOnNextUpdateValidToReal = false;
+            this._myResetHeadToFeetDirty = false;
 
             if (this._myParams.myAlwaysSyncHeadPositionWithReal) {
                 newPositionHead.vec3_copy(positionReal);
@@ -1275,6 +1302,8 @@ PlayerTransformManager.prototype.resetHeadToFeet = function () {
         headUp = transformQuat.quat2_getUp(headUp);
         this._myValidPositionHead.vec3_add(headUp.vec3_scale(this._myHeadCollisionCheckParams.myHeight + 0.00001 + this._myParams.myResetHeadToFeetUpOffset, headUp), this._myValidPositionHead);
         this._myValidPositionHeadBackupForResetToFeet.vec3_copy(this._myValidPositionHead);
+
+        this._myResetHeadToFeetDirty = true;
     };
 }();
 
