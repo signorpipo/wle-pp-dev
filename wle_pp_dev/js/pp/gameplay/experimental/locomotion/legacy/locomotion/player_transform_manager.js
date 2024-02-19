@@ -105,7 +105,7 @@ export class PlayerTransformManagerParams {
 
         // Can be used to specify that the head should reset a bit above the actual feet level, so to avoid small objects that could very frequently
         // happen to be close to the floor
-        this.myResetHeadToFeetUpOffset = 0;
+        this.myResetHeadToFeetUpOffset = 0.10;
 
         this.myResetHeadToRealMinDistance = 0;
 
@@ -1334,7 +1334,7 @@ PlayerTransformManager.prototype.resetHeadToFeet = function () {
 
         transformQuat = this.getTransformHeadQuat(transformQuat);
         headUp = transformQuat.quat2_getUp(headUp);
-        this._myValidPositionHead.vec3_add(headUp.vec3_scale(this._myHeadCollisionCheckParams.myHeight + 0.00001 + this._myParams.myResetHeadToFeetUpOffset, headUp), this._myValidPositionHead);
+        this._myValidPositionHead.vec3_add(headUp.vec3_scale(this._myHeadCollisionCheckParams.myHeight / 2 + 0.00001 + this._myParams.myResetHeadToFeetUpOffset, headUp), this._myValidPositionHead);
         this._myValidPositionHeadBackupForResetToFeet.vec3_copy(this._myValidPositionHead);
 
         this._myResetHeadToFeetDirty = true;
