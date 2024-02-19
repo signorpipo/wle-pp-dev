@@ -106,6 +106,7 @@ export class PlayerTransformManagerParams {
         // Can be used to specify that the head should reset a bit above the actual feet level, so to avoid small objects that could very frequently
         // happen to be close to the floor
         this.myResetHeadToFeetUpOffset = 0.25;
+        this.myResetHeadToFeetGroudnAngleIgnoreEnabled = false;
 
         this.myResetHeadToRealMinDistance = 0;
 
@@ -1059,7 +1060,7 @@ PlayerTransformManager.prototype._updateValidToReal = function () {
                         this._myHeadCollisionCheckParams.myVerticalMovementReduceEnabled = true;
                     }
 
-                    {
+                    if (this._myParams.myResetHeadToFeetGroudnAngleIgnoreEnabled) {
                         this._myHeadCollisionCheckParams.myGroundAngleToIgnore = this._myParams.myMovementCollisionCheckParams.myGroundAngleToIgnore;
                         this._myHeadCollisionCheckParams.myGroundAngleToIgnoreWithPerceivedAngle = this._myParams.myMovementCollisionCheckParams.myGroundAngleToIgnoreWithPerceivedAngle;
 
@@ -1110,14 +1111,17 @@ PlayerTransformManager.prototype._updateValidToReal = function () {
                 firstHeadCollidingCheckDone = true;
             } while (this._myIsHeadColliding && this._myResetHeadToFeetOnNextUpdateValidToReal);
 
-            this._myHeadCollisionCheckParams.myHorizontalBlockLayerFlags.copy(backupHorizontalBlockLayerFlags);
-            this._myHeadCollisionCheckParams.myVerticalBlockLayerFlags.copy(backupVerticalBlockLayerFlags);
-            this._myHeadCollisionCheckParams.myVerticalMovementReduceEnabled = backupVerticalMovementReduceEnabled;
-            this._myHeadCollisionCheckParams.myGroundAngleToIgnore = backupGroundAngleToIgnore;
-            this._myHeadCollisionCheckParams.myGroundAngleToIgnoreWithPerceivedAngle = backupGroundAngleToIgnoreWithPerceivedAngle;
-            this._myHeadCollisionCheckParams.myHorizontalMovementGroundAngleIgnoreHeight = backupHorizontalMovementGroundAngleIgnoreHeight;
-            this._myHeadCollisionCheckParams.myHorizontalPositionGroundAngleIgnoreHeight = backupHorizontalPositionGroundAngleIgnoreHeight;
-            this._myHeadCollisionCheckParams.myHorizontalMovementGroundAngleIgnoreMaxMovementLeft = backupHorizontalMovementGroundAngleIgnoreMaxMovementLeft;
+            {
+                this._myHeadCollisionCheckParams.myHorizontalBlockLayerFlags.copy(backupHorizontalBlockLayerFlags);
+                this._myHeadCollisionCheckParams.myVerticalBlockLayerFlags.copy(backupVerticalBlockLayerFlags);
+                this._myHeadCollisionCheckParams.myVerticalMovementReduceEnabled = backupVerticalMovementReduceEnabled;
+
+                this._myHeadCollisionCheckParams.myGroundAngleToIgnore = backupGroundAngleToIgnore;
+                this._myHeadCollisionCheckParams.myGroundAngleToIgnoreWithPerceivedAngle = backupGroundAngleToIgnoreWithPerceivedAngle;
+                this._myHeadCollisionCheckParams.myHorizontalMovementGroundAngleIgnoreHeight = backupHorizontalMovementGroundAngleIgnoreHeight;
+                this._myHeadCollisionCheckParams.myHorizontalPositionGroundAngleIgnoreHeight = backupHorizontalPositionGroundAngleIgnoreHeight;
+                this._myHeadCollisionCheckParams.myHorizontalMovementGroundAngleIgnoreMaxMovementLeft = backupHorizontalMovementGroundAngleIgnoreMaxMovementLeft;
+            }
 
             this._myResetHeadToFeetOnNextUpdateValidToReal = false;
             this._myResetHeadToFeetDirty = false;
