@@ -58,12 +58,15 @@ export class FingerCursorComponent extends Component {
             let overlaps = this._myCollisionComponent.queryOverlaps();
             let overlapTarget = null;
             for (let i = 0; i < overlaps.length; ++i) {
-                let object = overlaps[i].object;
-                let target = object.pp_getComponent(CursorTarget);
-                if (target && (overlapTarget == null || !target.isSurface)) {
-                    overlapTarget = target;
-                    if (!target.isSurface) {
-                        break;
+                let collision = overlaps[i];
+                if (collision.group & this._myCollisionComponent.group) {
+                    let object = collision.object;
+                    let target = object.pp_getComponent(CursorTarget);
+                    if (target && (overlapTarget == null || !target.isSurface)) {
+                        overlapTarget = target;
+                        if (!target.isSurface) {
+                            break;
+                        }
                     }
                 }
             }
@@ -89,6 +92,8 @@ export class FingerCursorComponent extends Component {
 
     _targetTouchEnd() {
         if (this._myLastTarget) {
+            this._myLastTarget.onClick.notify(this._myLastTarget.object, this);
+
             if (this._myMultipleClicksEnabled && this._myTripleClickTimer > 0 && this._myMultipleClickObject && this._myMultipleClickObject.pp_equals(this._myLastTarget.object)) {
                 this._myLastTarget.onTripleClick.notify(this._myLastTarget.object, this);
 
@@ -99,7 +104,7 @@ export class FingerCursorComponent extends Component {
                 this._myTripleClickTimer = this._myMultipleClickDelay;
                 this._myDoubleClickTimer = 0;
             } else {
-                this._myLastTarget.onClick.notify(this._myLastTarget.object, this);
+                this._myLastTarget.onSingleClick.notify(this._myLastTarget.object, this);
 
                 this._myTripleClickTimer = 0;
                 this._myDoubleClickTimer = this._myMultipleClickDelay;
@@ -107,6 +112,8 @@ export class FingerCursorComponent extends Component {
             }
 
             this._myLastTarget.onUp.notify(this._myLastTarget.object, this);
+            this._myLastTarget.onUpWithDown.notify(this._myLastTarget.object, this);
+
             this._myLastTarget.onUnhover.notify(this._myLastTarget.object, this);
 
             this._myLastTarget = null;
