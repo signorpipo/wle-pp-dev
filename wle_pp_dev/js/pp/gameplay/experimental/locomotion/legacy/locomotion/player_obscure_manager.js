@@ -4,6 +4,7 @@ import { Timer } from "../../../../../cauldron/cauldron/timer";
 import { FSM } from "../../../../../cauldron/fsm/fsm";
 import { EasingFunction } from "../../../../../cauldron/js/utils/math_utils";
 import { MaterialUtils } from "../../../../../cauldron/utils/material_utils";
+import { XRUtils } from "../../../../../cauldron/utils/xr_utils";
 import { VisualMesh, VisualMeshParams } from "../../../../../cauldron/visual/elements/visual_mesh";
 import { vec3_create, vec4_create } from "../../../../../plugin/js/extensions/array_extension";
 import { Globals } from "../../../../../pp/globals";
@@ -54,6 +55,8 @@ export class PlayerObscureManager {
         this._myLastTargetObscureLevel = null;
         this._myLastIsFadingIn = null;
 
+        this._myInstantObscureNextUpdate = false;
+
         this._myFadeTimer = new Timer(0, false);
 
         this._myFSM = new FSM();
@@ -81,6 +84,8 @@ export class PlayerObscureManager {
         this._setupVisuals();
 
         this._myFSM.perform("end");
+
+        XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this), false, false, this._myParams.myEngine);
 
         this._myDestroyed = false;
     }
@@ -153,7 +158,14 @@ export class PlayerObscureManager {
 
     _idleUpdate(dt) {
         if (Math.abs(this._myTargetObscureLevel - this._myCurrentObscureLevel) > Math.PP_EPSILON) {
-            this._myFSM.perform("fade");
+            if (this._myInstantObscureNextUpdate) {
+                this._setObscureAlpha(this._myTargetObscureLevel);
+                this._myCurrentObscureLevel = this._myTargetObscureLevel;
+
+                this._myInstantObscureNextUpdate = false;
+            } else {
+                this._myFSM.perform("fade");
+            }
         }
     }
 
@@ -169,6 +181,12 @@ export class PlayerObscureManager {
         }
 
         this._myFadeTimer.update(dt);
+
+        if (this._myInstantObscureNextUpdate) {
+            this._myFadeTimer.end();
+
+            this._myInstantObscureNextUpdate = false;
+        }
 
         let newObscureLevel = this._myParams.myObscureFadeEasingFunction(this._myFadeTimer.getPercentage());
 
@@ -358,6 +376,14 @@ export class PlayerObscureManager {
         } else {
             this._myObscureParentObject.pp_setParent(Globals.getPlayerObjects(this._myParams.myEngine)?.myCauldron, false);
         }
+    }
+
+    _onXRSessionStart() {
+        this._myInstantObscureNextUpdate = true;
+    }
+
+    _onXRSessionEnd() {
+        this._myInstantObscureNextUpdate = true;
     }
 
     destroy() {
