@@ -1050,6 +1050,11 @@ PlayerTransformManager.prototype._updateValidToReal = function () {
                     this.resetHeadToFeet();
                 }
 
+                if (this._myResetHeadToFeetOnNextUpdateValidToReal) {
+                    this._myValidPositionHead.vec3_copy(this._myValidPositionHeadBackupForResetToFeet);
+                    this._myResetHeadToFeetDirty = false;
+                }
+
                 if (this._myResetHeadToFeetDirty) {
                     if (this._myParams.myHeadCollisionBlockLayerFlagsForResetToFeet != null) {
                         this._myHeadCollisionCheckParams.myHorizontalBlockLayerFlags.copy(this._myParams.myHeadCollisionBlockLayerFlagsForResetToFeet);
@@ -1081,10 +1086,6 @@ PlayerTransformManager.prototype._updateValidToReal = function () {
                     this._myHeadCollisionCheckParams.myHorizontalMovementGroundAngleIgnoreHeight = backupHorizontalMovementGroundAngleIgnoreHeight;
                     this._myHeadCollisionCheckParams.myHorizontalPositionGroundAngleIgnoreHeight = backupHorizontalPositionGroundAngleIgnoreHeight;
                     this._myHeadCollisionCheckParams.myHorizontalMovementGroundAngleIgnoreMaxMovementLeft = backupHorizontalMovementGroundAngleIgnoreMaxMovementLeft;
-                }
-
-                if (this._myResetHeadToFeetOnNextUpdateValidToReal) {
-                    this._myValidPositionHead.vec3_copy(this._myValidPositionHeadBackupForResetToFeet);
                 }
 
                 movementToCheck = this.getPositionHeadReal(positionReal).vec3_sub(this.getPositionHead(position), movementToCheck);
