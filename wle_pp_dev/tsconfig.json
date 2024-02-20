@@ -6,19 +6,28 @@
         "moduleResolution": "nodenext",
         "experimentalDecorators": true,
         "resolveJsonModule": true,
-        "strictNullChecks": true,
-        "noImplicitReturns": true,
+        "esModuleInterop": true,
         "allowJs": true,
+        "skipLibCheck": true,
         "strict": true,
+        "alwaysStrict": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "noImplicitAny": true,
+        "noImplicitOverride": true,
+        "sourceMap": true,
+        "inlineSources": true,
+        "declaration": true,
         "lib": [
             "DOM",
             "ES2022"
         ]
     },
     "include": [
-        "."
+        "src"
     ],
     "exclude": [
+        "dist",
         "dev",
         "assets",
         "static",
