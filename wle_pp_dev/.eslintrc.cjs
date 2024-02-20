@@ -17,13 +17,15 @@ module.exports = {
         "@typescript-eslint/eslint-plugin"
     ],
     extends: [
-        "eslint:recommended"
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended"
     ],
     rules: {
         "semi": "error",
         "no-unused-vars": ["error", { "args": "none", "varsIgnorePattern": "^__" }],
         "deprecation/deprecation": "error",
-        "@typescript-eslint/no-unused-vars": ["warn", { "args": "none", "varsIgnorePattern": "^__" }]
+        "@typescript-eslint/no-unused-vars": "off",
+        "@typescript-eslint/no-explicit-any": "off"
     },
     ignorePatterns: [
         "/dev/",
@@ -40,13 +42,7 @@ module.exports = {
         {
             "files": ["*.ts"],
             "rules": {
-                "prefer-const": "error"
-            }
-        },
-        {
-            "files": ["*.d.ts"],
-            "rules": {
-                "no-unused-vars": "off"
+                "@typescript-eslint/explicit-function-return-type": "error"
             }
         }
     ]
