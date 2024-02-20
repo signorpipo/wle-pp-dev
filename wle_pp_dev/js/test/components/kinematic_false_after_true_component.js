@@ -1,6 +1,6 @@
 import { Component, PhysXComponent } from "@wonderlandengine/api";
-import { GamepadButtonID } from "../../pp/input/gamepad/gamepad_buttons";
-import { Globals } from "../../pp/pp/globals";
+import { GamepadButtonID } from "../../pp/input/gamepad/gamepad_buttons.js";
+import { Globals } from "../../pp/pp/globals.js";
 
 export class KinematicFalseAfterTrueComponent extends Component {
     static TypeName = "kinematic-false-after-true";

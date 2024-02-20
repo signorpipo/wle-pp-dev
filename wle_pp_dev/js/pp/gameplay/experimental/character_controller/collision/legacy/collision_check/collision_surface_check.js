@@ -1,5 +1,5 @@
-import { quat2_create, vec3_create } from "../../../../../../plugin/js/extensions/array_extension";
-import { CollisionCheck } from "./collision_check";
+import { quat2_create, vec3_create } from "../../../../../../plugin/js/extensions/array_extension.js";
+import { CollisionCheck } from "./collision_check.js";
 
 CollisionCheck.prototype._updateSurfaceInfo = function () {
     let transformUp = vec3_create();

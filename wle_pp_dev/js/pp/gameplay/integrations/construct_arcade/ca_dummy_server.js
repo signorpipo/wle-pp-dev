@@ -1,4 +1,4 @@
-import { CAError } from "./ca_utils";
+import { CAError } from "./ca_utils.js";
 
 export class CADummyServer {
 

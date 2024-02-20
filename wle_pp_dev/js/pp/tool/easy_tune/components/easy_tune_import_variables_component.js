@@ -1,5 +1,5 @@
 import { Component, Property } from "@wonderlandengine/api";
-import { EasyTuneUtils } from "../easy_tune_utils";
+import { EasyTuneUtils } from "../easy_tune_utils.js";
 
 export class EasyTuneImportVariablesComponent extends Component {
     static TypeName = "pp-easy-tune-import-variables";

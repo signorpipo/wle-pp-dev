@@ -1,8 +1,8 @@
-import { RaycastParams, RaycastResults } from "../../../../../../cauldron/physics/physics_raycast_params";
-import { PhysicsUtils } from "../../../../../../cauldron/physics/physics_utils";
-import { vec3_create } from "../../../../../../plugin/js/extensions/array_extension";
-import { Globals } from "../../../../../../pp/globals";
-import { PlayerLocomotionTeleportDetectionState } from "./player_locomotion_teleport_detection_state";
+import { RaycastParams, RaycastResults } from "../../../../../../cauldron/physics/physics_raycast_params.js";
+import { PhysicsUtils } from "../../../../../../cauldron/physics/physics_utils.js";
+import { vec3_create } from "../../../../../../plugin/js/extensions/array_extension.js";
+import { Globals } from "../../../../../../pp/globals.js";
+import { PlayerLocomotionTeleportDetectionState } from "./player_locomotion_teleport_detection_state.js";
 
 PlayerLocomotionTeleportDetectionState.prototype._isTeleportPositionVisible = function () {
     let playerUp = vec3_create();

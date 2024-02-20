@@ -1,7 +1,7 @@
-import { Timer } from "../../../../../../cauldron/cauldron/timer";
-import { FSM } from "../../../../../../cauldron/fsm/fsm";
-import { vec3_create } from "../../../../../../plugin/js/extensions/array_extension";
-import { PlayerLocomotionTeleportState } from "./player_locomotion_teleport_state";
+import { Timer } from "../../../../../../cauldron/cauldron/timer.js";
+import { FSM } from "../../../../../../cauldron/fsm/fsm.js";
+import { vec3_create } from "../../../../../../plugin/js/extensions/array_extension.js";
+import { PlayerLocomotionTeleportState } from "./player_locomotion_teleport_state.js";
 
 export class PlayerLocomotionTeleportTeleportShiftState extends PlayerLocomotionTeleportState {
 

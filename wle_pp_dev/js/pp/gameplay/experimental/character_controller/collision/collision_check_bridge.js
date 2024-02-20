@@ -1,8 +1,8 @@
-import { quat_create, vec3_create } from "../../../../plugin/js/extensions/array_extension";
-import { Globals } from "../../../../pp/globals";
-import { CharacterCollisionCheckType, CharacterCollisionResults } from "./character_collision_results";
-import { CollisionCheck } from "./legacy/collision_check/collision_check";
-import { CollisionCheckParams, CollisionRuntimeParams } from "./legacy/collision_check/collision_params";
+import { quat_create, vec3_create } from "../../../../plugin/js/extensions/array_extension.js";
+import { Globals } from "../../../../pp/globals.js";
+import { CharacterCollisionCheckType, CharacterCollisionResults } from "./character_collision_results.js";
+import { CollisionCheck } from "./legacy/collision_check/collision_check.js";
+import { CollisionCheckParams, CollisionRuntimeParams } from "./legacy/collision_check/collision_params.js";
 
 let _myCollisionChecks = new WeakMap();
 

@@ -1,5 +1,5 @@
-import { PhysicsLayerFlags } from "../../../../cauldron/physics/physics_layer_flags";
-import { CharacterColliderSetup, CharacterColliderSlideFlickerPreventionMode } from "./character_collider_setup";
+import { PhysicsLayerFlags } from "../../../../cauldron/physics/physics_layer_flags.js";
+import { CharacterColliderSetup, CharacterColliderSlideFlickerPreventionMode } from "./character_collider_setup.js";
 
 export let CharacterColliderSetupSimplifiedCreationAccuracyLevel = {
     VERY_LOW: 0,

@@ -1,6 +1,6 @@
 import { Emitter } from "@wonderlandengine/api";
-import { vec2_create } from "../../plugin/js/extensions/array_extension";
-import { GamepadAxesEvent, GamepadAxesID, GamepadAxesInfo, GamepadButtonEvent, GamepadButtonID, GamepadButtonInfo, GamepadPulseInfo } from "./gamepad_buttons";
+import { vec2_create } from "../../plugin/js/extensions/array_extension.js";
+import { GamepadAxesEvent, GamepadAxesID, GamepadAxesInfo, GamepadButtonEvent, GamepadButtonID, GamepadButtonInfo, GamepadPulseInfo } from "./gamepad_buttons.js";
 
 export class BaseGamepad {
 

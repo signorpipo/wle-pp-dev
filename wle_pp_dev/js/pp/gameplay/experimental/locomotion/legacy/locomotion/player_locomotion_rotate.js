@@ -1,8 +1,8 @@
-import { XRUtils } from "../../../../../cauldron/utils/xr_utils";
-import { Handedness } from "../../../../../input/cauldron/input_types";
-import { GamepadAxesID } from "../../../../../input/gamepad/gamepad_buttons";
-import { quat_create, vec3_create } from "../../../../../plugin/js/extensions/array_extension";
-import { Globals } from "../../../../../pp/globals";
+import { XRUtils } from "../../../../../cauldron/utils/xr_utils.js";
+import { Handedness } from "../../../../../input/cauldron/input_types.js";
+import { GamepadAxesID } from "../../../../../input/gamepad/gamepad_buttons.js";
+import { quat_create, vec3_create } from "../../../../../plugin/js/extensions/array_extension.js";
+import { Globals } from "../../../../../pp/globals.js";
 
 export class PlayerLocomotionRotateParams {
 

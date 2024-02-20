@@ -1,5 +1,5 @@
 import { Component, Property } from "@wonderlandengine/api";
-import { BrowserUtils } from "../../pp";
+import { BrowserUtils } from "../../pp/index.js";
 
 export class SetActiveOnMobileComponent extends Component {
     static TypeName = "set-active-on-mobile";

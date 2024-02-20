@@ -12,9 +12,9 @@ let visualText = new VisualText(visualParams);
 */
 
 import { Alignment, Justification, TextComponent } from "@wonderlandengine/api";
-import { mat4_create, vec3_create } from "../../../plugin/js/extensions/array_extension";
-import { Globals } from "../../../pp/globals";
-import { VisualElementType } from "./visual_element_types";
+import { mat4_create, vec3_create } from "../../../plugin/js/extensions/array_extension.js";
+import { Globals } from "../../../pp/globals.js";
+import { VisualElementType } from "./visual_element_types.js";
 
 export class VisualTextParams {
 

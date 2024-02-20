@@ -1,5 +1,5 @@
-import { Globals } from "../../../pp/globals";
-import { ArrayUtils } from "./array_utils";
+import { Globals } from "../../../pp/globals.js";
+import { ArrayUtils } from "./array_utils.js";
 
 export function getObjectPrototypes(object) {
     let prototypes = [];

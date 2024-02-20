@@ -1,5 +1,5 @@
 import { Component } from "@wonderlandengine/api";
-import { Timer } from "../../pp/cauldron/cauldron/timer";
+import { Timer } from "../../pp/cauldron/cauldron/timer.js";
 
 let vec3_addTotal = 0;
 let vec3_scaleTotal = 0;

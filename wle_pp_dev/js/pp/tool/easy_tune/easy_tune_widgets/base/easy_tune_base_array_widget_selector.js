@@ -1,5 +1,5 @@
 import { Emitter } from "@wonderlandengine/api";
-import { Globals } from "../../../../pp/globals";
+import { Globals } from "../../../../pp/globals.js";
 
 export class EasyTuneBaseArrayWidgetSelector {
 

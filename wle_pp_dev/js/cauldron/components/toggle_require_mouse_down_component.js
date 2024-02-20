@@ -1,5 +1,5 @@
 import { Component } from "@wonderlandengine/api";
-import { Timer } from "../../pp/cauldron/cauldron/timer";
+import { Timer } from "../../pp/cauldron/cauldron/timer.js";
 
 export class ToggleRequireMouseDownComponent extends Component {
     static TypeName = "toggle-require-mouse-down";

@@ -1,6 +1,6 @@
 import { Component, Property } from "@wonderlandengine/api";
-import { XRUtils } from "../../../cauldron/utils/xr_utils";
-import { vec3_create } from "../../../plugin/js/extensions/array_extension";
+import { XRUtils } from "../../../cauldron/utils/xr_utils.js";
+import { vec3_create } from "../../../plugin/js/extensions/array_extension.js";
 
 export class SetPlayerHeightComponent extends Component {
     static TypeName = "pp-set-player-height";

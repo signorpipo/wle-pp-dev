@@ -1,14 +1,14 @@
 import { Alignment, Justification } from "@wonderlandengine/api";
-import { XRUtils } from "../cauldron/utils/xr_utils";
-import { VisualArrowParams } from "../cauldron/visual/elements/visual_arrow";
-import { VisualLineParams } from "../cauldron/visual/elements/visual_line";
-import { VisualPointParams } from "../cauldron/visual/elements/visual_point";
-import { VisualRaycastParams } from "../cauldron/visual/elements/visual_raycast";
-import { VisualTextParams } from "../cauldron/visual/elements/visual_text";
-import { VisualTransformParams } from "../cauldron/visual/elements/visual_transform";
-import { VisualManager } from "../cauldron/visual/visual_manager";
-import { quat_create, vec3_create, vec4_create } from "../plugin/js/extensions/array_extension";
-import { Globals } from "../pp/globals";
+import { XRUtils } from "../cauldron/utils/xr_utils.js";
+import { VisualArrowParams } from "../cauldron/visual/elements/visual_arrow.js";
+import { VisualLineParams } from "../cauldron/visual/elements/visual_line.js";
+import { VisualPointParams } from "../cauldron/visual/elements/visual_point.js";
+import { VisualRaycastParams } from "../cauldron/visual/elements/visual_raycast.js";
+import { VisualTextParams } from "../cauldron/visual/elements/visual_text.js";
+import { VisualTransformParams } from "../cauldron/visual/elements/visual_transform.js";
+import { VisualManager } from "../cauldron/visual/visual_manager.js";
+import { quat_create, vec3_create, vec4_create } from "../plugin/js/extensions/array_extension.js";
+import { Globals } from "../pp/globals.js";
 
 export class DebugVisualManager extends VisualManager {
 

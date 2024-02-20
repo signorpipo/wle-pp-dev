@@ -1,6 +1,6 @@
 import { RetainEmitter } from "@wonderlandengine/api";
 import { Howl, Howler } from "howler";
-import { AudioSetup } from "./audio_setup";
+import { AudioSetup } from "./audio_setup.js";
 
 export let AudioEvent = {
     END: "end",

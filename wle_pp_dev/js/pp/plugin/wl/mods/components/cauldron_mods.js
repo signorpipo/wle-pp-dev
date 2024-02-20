@@ -1,5 +1,5 @@
 import { Emitter } from "@wonderlandengine/api";
-import { PluginUtils } from "../../../utils/plugin_utils";
+import { PluginUtils } from "../../../utils/plugin_utils.js";
 
 export function initCauldronMods() {
     initEmitterModPrototype();

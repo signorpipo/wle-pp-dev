@@ -1,13 +1,13 @@
 import { Emitter } from "@wonderlandengine/api";
-import { Globals } from "../../pp/globals";
-import { GamepadsManager } from "../gamepad/cauldron/gamepads_manager";
-import { BasePoseParams } from "../pose/base_pose";
-import { HandPose, HandPoseParams } from "../pose/hand_pose";
-import { HeadPose } from "../pose/head_pose";
-import { TrackedHandPose, TrackedHandPoseParams } from "../pose/tracked_hand_pose";
-import { Handedness } from "./input_types";
-import { Keyboard } from "./keyboard";
-import { Mouse } from "./mouse";
+import { Globals } from "../../pp/globals.js";
+import { GamepadsManager } from "../gamepad/cauldron/gamepads_manager.js";
+import { BasePoseParams } from "../pose/base_pose.js";
+import { HandPose, HandPoseParams } from "../pose/hand_pose.js";
+import { HeadPose } from "../pose/head_pose.js";
+import { TrackedHandPose, TrackedHandPoseParams } from "../pose/tracked_hand_pose.js";
+import { Handedness } from "./input_types.js";
+import { Keyboard } from "./keyboard.js";
+import { Mouse } from "./mouse.js";
 
 export class InputManager {
 

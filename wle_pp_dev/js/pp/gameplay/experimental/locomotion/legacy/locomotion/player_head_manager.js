@@ -1,8 +1,8 @@
-import { Timer } from "../../../../../cauldron/cauldron/timer";
-import { Quat2Utils } from "../../../../../cauldron/js/utils/quat2_utils";
-import { XRUtils } from "../../../../../cauldron/utils/xr_utils";
-import { mat4_create, quat2_create, quat_create, vec3_create, vec4_create } from "../../../../../plugin/js/extensions/array_extension";
-import { Globals } from "../../../../../pp/globals";
+import { Timer } from "../../../../../cauldron/cauldron/timer.js";
+import { Quat2Utils } from "../../../../../cauldron/js/utils/quat2_utils.js";
+import { XRUtils } from "../../../../../cauldron/utils/xr_utils.js";
+import { mat4_create, quat2_create, quat_create, vec3_create, vec4_create } from "../../../../../plugin/js/extensions/array_extension.js";
+import { Globals } from "../../../../../pp/globals.js";
 
 export let NonVRReferenceSpaceMode = {
     NO_FLOOR: 0,

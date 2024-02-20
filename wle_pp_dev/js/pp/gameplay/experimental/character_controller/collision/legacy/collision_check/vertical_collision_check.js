@@ -1,6 +1,6 @@
-import { RaycastHit } from "../../../../../../cauldron/physics/physics_raycast_params";
-import { vec3_create } from "../../../../../../plugin/js/extensions/array_extension";
-import { CollisionCheck } from "./collision_check";
+import { RaycastHit } from "../../../../../../cauldron/physics/physics_raycast_params.js";
+import { vec3_create } from "../../../../../../plugin/js/extensions/array_extension.js";
+import { CollisionCheck } from "./collision_check.js";
 
 CollisionCheck.prototype._verticalCheck = function () {
     let newFeetPosition = vec3_create();

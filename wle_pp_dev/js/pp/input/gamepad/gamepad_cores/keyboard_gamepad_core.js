@@ -1,8 +1,8 @@
-import { Globals } from "../../../pp/globals";
-import { Handedness } from "../../cauldron/input_types";
-import { KeyID } from "../../cauldron/keyboard";
-import { GamepadButtonID } from "../gamepad_buttons";
-import { GamepadCore } from "./gamepad_core";
+import { Globals } from "../../../pp/globals.js";
+import { Handedness } from "../../cauldron/input_types.js";
+import { KeyID } from "../../cauldron/keyboard.js";
+import { GamepadButtonID } from "../gamepad_buttons.js";
+import { GamepadCore } from "./gamepad_core.js";
 
 export class KeyboardGamepadCore extends GamepadCore {
 

@@ -1,6 +1,6 @@
-import { vec3_create } from "../../plugin/js/extensions/array_extension";
-import { Globals } from "../../pp/globals";
-import { RaycastHit, RaycastParams, RaycastResults } from "./physics_raycast_params";
+import { vec3_create } from "../../plugin/js/extensions/array_extension.js";
+import { Globals } from "../../pp/globals.js";
+import { RaycastHit, RaycastParams, RaycastResults } from "./physics_raycast_params.js";
 
 let _myLayerFlagsNames = ["0", "1", "2", "3", "4", "5", "6", "7"];
 

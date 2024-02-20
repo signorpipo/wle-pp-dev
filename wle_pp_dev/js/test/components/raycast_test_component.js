@@ -1,7 +1,7 @@
 import { Component } from "@wonderlandengine/api";
-import { Timer } from "../../pp/cauldron/cauldron/timer";
-import { PhysicsUtils } from "../../pp/cauldron/physics/physics_utils";
-import { Globals } from "../../pp/pp/globals";
+import { Timer } from "../../pp/cauldron/cauldron/timer.js";
+import { PhysicsUtils } from "../../pp/cauldron/physics/physics_utils.js";
+import { Globals } from "../../pp/pp/globals.js";
 
 export class RaycastTestComponent extends Component {
     static TypeName = "raycast-test";

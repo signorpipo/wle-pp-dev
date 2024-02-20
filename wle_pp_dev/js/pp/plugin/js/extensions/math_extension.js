@@ -26,8 +26,8 @@
         - pp_isInsideAngleRange
 */
 
-import { EasingFunction, MathUtils } from "../../../cauldron/js/utils/math_utils";
-import { PluginUtils } from "../../utils/plugin_utils";
+import { EasingFunction, MathUtils } from "../../../cauldron/js/utils/math_utils.js";
+import { PluginUtils } from "../../utils/plugin_utils.js";
 
 export function initMathExtension() {
     initMathExtensionStatic();

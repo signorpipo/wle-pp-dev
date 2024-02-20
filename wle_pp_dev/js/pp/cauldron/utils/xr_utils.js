@@ -1,5 +1,5 @@
-import { Globals } from "../../pp/globals";
-import { BrowserUtils } from "./browser_utils";
+import { Globals } from "../../pp/globals.js";
+import { BrowserUtils } from "./browser_utils.js";
 
 export function getSession(engine = Globals.getMainEngine()) {
     let xr = Globals.getXR(engine);

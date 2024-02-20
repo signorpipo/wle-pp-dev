@@ -1,8 +1,8 @@
 // xr-standard mapping is assumed
 
-import { XRUtils } from "../../../cauldron/utils/xr_utils";
-import { GamepadButtonID } from "../gamepad_buttons";
-import { GamepadCore } from "./gamepad_core";
+import { XRUtils } from "../../../cauldron/utils/xr_utils.js";
+import { GamepadButtonID } from "../gamepad_buttons.js";
+import { GamepadCore } from "./gamepad_core.js";
 
 export class XRGamepadCore extends GamepadCore {
 

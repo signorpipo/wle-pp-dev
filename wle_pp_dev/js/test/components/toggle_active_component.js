@@ -1,6 +1,6 @@
 import { Component, Property } from "@wonderlandengine/api";
-import { GamepadButtonID } from "../../pp/input/gamepad/gamepad_buttons";
-import { Globals } from "../../pp/pp/globals";
+import { GamepadButtonID } from "../../pp/input/gamepad/gamepad_buttons.js";
+import { Globals } from "../../pp/pp/globals.js";
 
 export class ToggleActiveComponent extends Component {
     static TypeName = "toggle-active";

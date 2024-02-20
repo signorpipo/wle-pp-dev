@@ -1,6 +1,6 @@
 import { Howler } from "howler";
-import { Globals } from "../pp/globals";
-import { AudioPlayer } from "./audio_player";
+import { Globals } from "../pp/globals.js";
+import { AudioPlayer } from "./audio_player.js";
 
 export class AudioManager {
 

@@ -1,5 +1,5 @@
-import { vec3_create } from "../../../../../../plugin/js/extensions/array_extension";
-import { CollisionCheck } from "./collision_check";
+import { vec3_create } from "../../../../../../plugin/js/extensions/array_extension.js";
+import { CollisionCheck } from "./collision_check.js";
 
 CollisionCheck.prototype._positionCheck = function () {
     let feetPosition = vec3_create();

@@ -1,8 +1,8 @@
 import { Emitter } from "@wonderlandengine/api";
-import { Globals } from "../../pp/globals";
-import { SaveUtils } from "../utils/save_utils";
-import { XRUtils } from "../utils/xr_utils";
-import { Timer } from "./timer";
+import { Globals } from "../../pp/globals.js";
+import { SaveUtils } from "../utils/save_utils.js";
+import { XRUtils } from "../utils/xr_utils.js";
+import { Timer } from "./timer.js";
 
 export class SaveManager {
 

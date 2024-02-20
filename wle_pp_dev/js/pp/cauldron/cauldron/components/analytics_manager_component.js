@@ -1,7 +1,7 @@
 import { Component, Property } from "@wonderlandengine/api";
-import { Globals } from "../../../pp/globals";
-import { BrowserUtils } from "../../utils/browser_utils";
-import { AnalyticsManager } from "../analytics_manager";
+import { Globals } from "../../../pp/globals.js";
+import { BrowserUtils } from "../../utils/browser_utils.js";
+import { AnalyticsManager } from "../analytics_manager.js";
 
 export class AnalyticsManagerComponent extends Component {
     static TypeName = "pp-analytics-manager";

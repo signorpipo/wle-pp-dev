@@ -1,7 +1,7 @@
 import { Component, Property } from "@wonderlandengine/api";
-import { Globals } from "../../../pp/globals";
-import { ConsoleVRWidget, ConsoleVRWidgetParams } from "../console_vr_widget";
-import { InitConsoleVRComponent } from "./init_console_vr_component";
+import { Globals } from "../../../pp/globals.js";
+import { ConsoleVRWidget, ConsoleVRWidgetParams } from "../console_vr_widget.js";
+import { InitConsoleVRComponent } from "./init_console_vr_component.js";
 
 export class ConsoleVRToolComponent extends Component {
     static TypeName = "pp-console-vr-tool";

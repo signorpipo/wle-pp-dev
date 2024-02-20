@@ -1,9 +1,9 @@
-import { VisualArrow, VisualArrowParams } from "../../../../../../cauldron/visual/elements/visual_arrow";
-import { VisualLine, VisualLineParams } from "../../../../../../cauldron/visual/elements/visual_line";
-import { VisualPoint, VisualPointParams } from "../../../../../../cauldron/visual/elements/visual_point";
-import { VisualTorus, VisualTorusParams } from "../../../../../../cauldron/visual/elements/visual_torus";
-import { quat2_create, quat_create, vec3_create, vec4_create } from "../../../../../../plugin/js/extensions/array_extension";
-import { Globals } from "../../../../../../pp/globals";
+import { VisualArrow, VisualArrowParams } from "../../../../../../cauldron/visual/elements/visual_arrow.js";
+import { VisualLine, VisualLineParams } from "../../../../../../cauldron/visual/elements/visual_line.js";
+import { VisualPoint, VisualPointParams } from "../../../../../../cauldron/visual/elements/visual_point.js";
+import { VisualTorus, VisualTorusParams } from "../../../../../../cauldron/visual/elements/visual_torus.js";
+import { quat2_create, quat_create, vec3_create, vec4_create } from "../../../../../../plugin/js/extensions/array_extension.js";
+import { Globals } from "../../../../../../pp/globals.js";
 
 export class PlayerLocomotionTeleportDetectionVisualizerParams {
 

@@ -1,10 +1,10 @@
 import { Component, Property } from "@wonderlandengine/api";
-import { Timer } from "../../../../../cauldron/cauldron/timer";
-import { PhysicsLayerFlags } from "../../../../../cauldron/physics/physics_layer_flags";
-import { PhysicsUtils } from "../../../../../cauldron/physics/physics_utils";
-import { InputUtils } from "../../../../../input/cauldron/input_utils";
-import { Globals } from "../../../../../pp/globals";
-import { PlayerLocomotion, PlayerLocomotionParams } from "./player_locomotion";
+import { Timer } from "../../../../../cauldron/cauldron/timer.js";
+import { PhysicsLayerFlags } from "../../../../../cauldron/physics/physics_layer_flags.js";
+import { PhysicsUtils } from "../../../../../cauldron/physics/physics_utils.js";
+import { InputUtils } from "../../../../../input/cauldron/input_utils.js";
+import { Globals } from "../../../../../pp/globals.js";
+import { PlayerLocomotion, PlayerLocomotionParams } from "./player_locomotion.js";
 
 export class PlayerLocomotionComponent extends Component {
     static TypeName = "pp-player-locomotion";

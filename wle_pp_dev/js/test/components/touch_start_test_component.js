@@ -1,5 +1,5 @@
 import { Component } from "@wonderlandengine/api";
-import { Globals } from "../../pp/pp/globals";
+import { Globals } from "../../pp/pp/globals.js";
 
 export class TouchStartTestComponent extends Component {
     static TypeName = "touch-start-test";

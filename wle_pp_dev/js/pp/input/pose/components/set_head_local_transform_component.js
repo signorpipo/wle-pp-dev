@@ -1,7 +1,7 @@
 import { Component } from "@wonderlandengine/api";
-import { XRUtils } from "../../../cauldron/utils/xr_utils";
-import { quat2_create, quat_create, vec3_create } from "../../../plugin/js/extensions/array_extension";
-import { Globals } from "../../../pp/globals";
+import { XRUtils } from "../../../cauldron/utils/xr_utils.js";
+import { quat2_create, quat_create, vec3_create } from "../../../plugin/js/extensions/array_extension.js";
+import { Globals } from "../../../pp/globals.js";
 
 export class SetHeadLocalTransformComponent extends Component {
     static TypeName = "pp-set-head-local-transform";

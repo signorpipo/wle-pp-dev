@@ -11,9 +11,9 @@ Transform:      Globals.getEasyTuneVariables().add(new EasyTuneTransform("Transf
 */
 
 import { Emitter } from "@wonderlandengine/api";
-import { mat4_create } from "../../plugin/js/extensions/array_extension";
-import { Globals } from "../../pp/globals";
-import { EasyTuneUtils } from "./easy_tune_utils";
+import { mat4_create } from "../../plugin/js/extensions/array_extension.js";
+import { Globals } from "../../pp/globals.js";
+import { EasyTuneUtils } from "./easy_tune_utils.js";
 
 export let EasyTuneVariableType = {
     NONE: 0,

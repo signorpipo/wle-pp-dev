@@ -1,15 +1,15 @@
-import { PhysicsLayerFlags } from "../../../../../../cauldron/physics/physics_layer_flags";
-import { RaycastParams, RaycastResults } from "../../../../../../cauldron/physics/physics_raycast_params";
-import { PhysicsUtils } from "../../../../../../cauldron/physics/physics_utils";
-import { XRUtils } from "../../../../../../cauldron/utils/xr_utils";
-import { MouseButtonID } from "../../../../../../input/cauldron/mouse";
-import { GamepadAxesID, GamepadButtonID } from "../../../../../../input/gamepad/gamepad_buttons";
-import { quat2_create, quat_create, vec3_create, vec4_create } from "../../../../../../plugin/js/extensions/array_extension";
-import { Globals } from "../../../../../../pp/globals";
-import { CollisionRuntimeParams } from "../../../../character_controller/collision/legacy/collision_check/collision_params";
-import { PlayerLocomotionTeleportDetectionVisualizer } from "./player_locomotion_teleport_detection_visualizer";
-import { PlayerLocomotionTeleportParable } from "./player_locomotion_teleport_parable";
-import { PlayerLocomotionTeleportState } from "./player_locomotion_teleport_state";
+import { PhysicsLayerFlags } from "../../../../../../cauldron/physics/physics_layer_flags.js";
+import { RaycastParams, RaycastResults } from "../../../../../../cauldron/physics/physics_raycast_params.js";
+import { PhysicsUtils } from "../../../../../../cauldron/physics/physics_utils.js";
+import { XRUtils } from "../../../../../../cauldron/utils/xr_utils.js";
+import { MouseButtonID } from "../../../../../../input/cauldron/mouse.js";
+import { GamepadAxesID, GamepadButtonID } from "../../../../../../input/gamepad/gamepad_buttons.js";
+import { quat2_create, quat_create, vec3_create, vec4_create } from "../../../../../../plugin/js/extensions/array_extension.js";
+import { Globals } from "../../../../../../pp/globals.js";
+import { CollisionRuntimeParams } from "../../../../character_controller/collision/legacy/collision_check/collision_params.js";
+import { PlayerLocomotionTeleportDetectionVisualizer } from "./player_locomotion_teleport_detection_visualizer.js";
+import { PlayerLocomotionTeleportParable } from "./player_locomotion_teleport_parable.js";
+import { PlayerLocomotionTeleportState } from "./player_locomotion_teleport_state.js";
 
 export class PlayerLocomotionTeleportDetectionParams {
 

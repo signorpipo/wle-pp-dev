@@ -1,7 +1,7 @@
 import { Component } from "@wonderlandengine/api";
-import { VisualLine, VisualLineParams } from "../../pp/cauldron/visual/elements/visual_line";
-import { vec4_create } from "../../pp/plugin/js/extensions/array_extension";
-import { Globals } from "../../pp/pp/globals";
+import { VisualLine, VisualLineParams } from "../../pp/cauldron/visual/elements/visual_line.js";
+import { vec4_create } from "../../pp/plugin/js/extensions/array_extension.js";
+import { Globals } from "../../pp/pp/globals.js";
 
 export class ShowMeshedLineComponent extends Component {
     static TypeName = "show-meshed-line";

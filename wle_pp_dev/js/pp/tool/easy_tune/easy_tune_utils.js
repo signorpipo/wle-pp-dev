@@ -1,4 +1,4 @@
-import { Globals } from "../../pp/globals";
+import { Globals } from "../../pp/globals.js";
 
 let _mySetWidgetCurrentVariableCallbacks = new WeakMap();    // Signature: callback(variableName)
 let _myRefreshWidgetCallbacks = new WeakMap();               // Signature: callback()

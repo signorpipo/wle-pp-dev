@@ -1,7 +1,7 @@
-import { XRUtils } from "../../cauldron/utils/xr_utils";
-import { InputSourceType } from "../cauldron/input_types";
-import { InputUtils } from "../cauldron/input_utils";
-import { BasePose, BasePoseParams } from "./base_pose";
+import { XRUtils } from "../../cauldron/utils/xr_utils.js";
+import { InputSourceType } from "../cauldron/input_types.js";
+import { InputUtils } from "../cauldron/input_utils.js";
+import { BasePose, BasePoseParams } from "./base_pose.js";
 
 export class TrackedHandJointPose extends BasePose {
 

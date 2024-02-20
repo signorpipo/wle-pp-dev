@@ -1,13 +1,13 @@
-import { Timer } from "../../../../../cauldron/cauldron/timer";
-import { XRUtils } from "../../../../../cauldron/utils/xr_utils";
-import { Handedness } from "../../../../../input/cauldron/input_types";
-import { InputUtils } from "../../../../../input/cauldron/input_utils";
-import { GamepadAxesID, GamepadButtonID } from "../../../../../input/gamepad/gamepad_buttons";
-import { quat2_create, vec3_create } from "../../../../../plugin/js/extensions/array_extension";
-import { Globals } from "../../../../../pp/globals";
-import { Direction2DTo3DConverter, Direction2DTo3DConverterParams } from "../../../../cauldron/cauldron/direction_2D_to_3D_converter";
-import { PlayerLocomotionDirectionReferenceType } from "./player_locomotion";
-import { PlayerLocomotionMovement } from "./player_locomotion_movement";
+import { Timer } from "../../../../../cauldron/cauldron/timer.js";
+import { XRUtils } from "../../../../../cauldron/utils/xr_utils.js";
+import { Handedness } from "../../../../../input/cauldron/input_types.js";
+import { InputUtils } from "../../../../../input/cauldron/input_utils.js";
+import { GamepadAxesID, GamepadButtonID } from "../../../../../input/gamepad/gamepad_buttons.js";
+import { quat2_create, vec3_create } from "../../../../../plugin/js/extensions/array_extension.js";
+import { Globals } from "../../../../../pp/globals.js";
+import { Direction2DTo3DConverter, Direction2DTo3DConverterParams } from "../../../../cauldron/cauldron/direction_2D_to_3D_converter.js";
+import { PlayerLocomotionDirectionReferenceType } from "./player_locomotion.js";
+import { PlayerLocomotionMovement } from "./player_locomotion_movement.js";
 
 export class PlayerLocomotionSmoothParams {
 

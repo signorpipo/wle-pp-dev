@@ -1,7 +1,7 @@
 import { Component, Property } from "@wonderlandengine/api";
-import { XRUtils } from "../../../cauldron/utils/xr_utils";
-import { InputSourceType } from "../input_types";
-import { InputUtils } from "../input_utils";
+import { XRUtils } from "../../../cauldron/utils/xr_utils.js";
+import { InputSourceType } from "../input_types.js";
+import { InputUtils } from "../input_utils.js";
 
 export class SwitchHandObjectComponent extends Component {
     static TypeName = "pp-switch-hand-object";

@@ -1,26 +1,26 @@
 import { Emitter, PhysXComponent } from "@wonderlandengine/api";
-import { FSM } from "../../../../../cauldron/fsm/fsm";
-import { EasingFunction } from "../../../../../cauldron/js/utils/math_utils";
-import { PhysicsLayerFlags } from "../../../../../cauldron/physics/physics_layer_flags";
-import { XRUtils } from "../../../../../cauldron/utils/xr_utils";
-import { Handedness } from "../../../../../input/cauldron/input_types";
-import { InputUtils } from "../../../../../input/cauldron/input_utils";
-import { GamepadUtils } from "../../../../../input/gamepad/cauldron/gamepad_utils";
-import { GamepadButtonID } from "../../../../../input/gamepad/gamepad_buttons";
-import { vec3_create } from "../../../../../plugin/js/extensions/array_extension";
-import { Globals } from "../../../../../pp/globals";
-import { CharacterColliderSetupSimplifiedCreationParams, CharacterColliderSetupUtils } from "../../../character_controller/collision/character_collider_setup_utils";
-import { CollisionCheckBridge } from "../../../character_controller/collision/collision_check_bridge";
-import { CollisionCheckUtils } from "../../../character_controller/collision/legacy/collision_check/collision_check";
-import { CollisionCheckParams, CollisionRuntimeParams } from "../../../character_controller/collision/legacy/collision_check/collision_params";
-import { NonVRReferenceSpaceMode, PlayerHeadManager, PlayerHeadManagerParams } from "./player_head_manager";
-import { PlayerLocomotionMovementRuntimeParams } from "./player_locomotion_movement";
-import { PlayerLocomotionRotate, PlayerLocomotionRotateParams } from "./player_locomotion_rotate";
-import { PlayerLocomotionSmooth, PlayerLocomotionSmoothParams } from "./player_locomotion_smooth";
-import { PlayerObscureManager, PlayerObscureManagerParams } from "./player_obscure_manager";
-import { PlayerTransformManager, PlayerTransformManagerParams, PlayerTransformManagerSyncFlag } from "./player_transform_manager";
-import { PlayerLocomotionTeleport, PlayerLocomotionTeleportParams } from "./teleport/player_locomotion_teleport";
-import { PlayerLocomotionTeleportTeleportType } from "./teleport/player_locomotion_teleport_teleport_state";
+import { FSM } from "../../../../../cauldron/fsm/fsm.js";
+import { EasingFunction } from "../../../../../cauldron/js/utils/math_utils.js";
+import { PhysicsLayerFlags } from "../../../../../cauldron/physics/physics_layer_flags.js";
+import { XRUtils } from "../../../../../cauldron/utils/xr_utils.js";
+import { Handedness } from "../../../../../input/cauldron/input_types.js";
+import { InputUtils } from "../../../../../input/cauldron/input_utils.js";
+import { GamepadUtils } from "../../../../../input/gamepad/cauldron/gamepad_utils.js";
+import { GamepadButtonID } from "../../../../../input/gamepad/gamepad_buttons.js";
+import { vec3_create } from "../../../../../plugin/js/extensions/array_extension.js";
+import { Globals } from "../../../../../pp/globals.js";
+import { CharacterColliderSetupSimplifiedCreationParams, CharacterColliderSetupUtils } from "../../../character_controller/collision/character_collider_setup_utils.js";
+import { CollisionCheckBridge } from "../../../character_controller/collision/collision_check_bridge.js";
+import { CollisionCheckUtils } from "../../../character_controller/collision/legacy/collision_check/collision_check.js";
+import { CollisionCheckParams, CollisionRuntimeParams } from "../../../character_controller/collision/legacy/collision_check/collision_params.js";
+import { NonVRReferenceSpaceMode, PlayerHeadManager, PlayerHeadManagerParams } from "./player_head_manager.js";
+import { PlayerLocomotionMovementRuntimeParams } from "./player_locomotion_movement.js";
+import { PlayerLocomotionRotate, PlayerLocomotionRotateParams } from "./player_locomotion_rotate.js";
+import { PlayerLocomotionSmooth, PlayerLocomotionSmoothParams } from "./player_locomotion_smooth.js";
+import { PlayerObscureManager, PlayerObscureManagerParams } from "./player_obscure_manager.js";
+import { PlayerTransformManager, PlayerTransformManagerParams, PlayerTransformManagerSyncFlag } from "./player_transform_manager.js";
+import { PlayerLocomotionTeleport, PlayerLocomotionTeleportParams } from "./teleport/player_locomotion_teleport.js";
+import { PlayerLocomotionTeleportTeleportType } from "./teleport/player_locomotion_teleport_teleport_state.js";
 
 export let PlayerLocomotionDirectionReferenceType = {
     HEAD: 0,

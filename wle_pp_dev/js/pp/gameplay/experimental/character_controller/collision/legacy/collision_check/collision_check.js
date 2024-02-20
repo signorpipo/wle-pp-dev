@@ -1,8 +1,8 @@
-import { RaycastHit, RaycastParams, RaycastResults } from "../../../../../../cauldron/physics/physics_raycast_params";
-import { PhysicsUtils } from "../../../../../../cauldron/physics/physics_utils";
-import { quat2_create, vec3_create, vec4_create } from "../../../../../../plugin/js/extensions/array_extension";
-import { Globals } from "../../../../../../pp/globals";
-import { CollisionCheckParams, CollisionRuntimeParams } from "./collision_params";
+import { RaycastHit, RaycastParams, RaycastResults } from "../../../../../../cauldron/physics/physics_raycast_params.js";
+import { PhysicsUtils } from "../../../../../../cauldron/physics/physics_utils.js";
+import { quat2_create, vec3_create, vec4_create } from "../../../../../../plugin/js/extensions/array_extension.js";
+import { Globals } from "../../../../../../pp/globals.js";
+import { CollisionCheckParams, CollisionRuntimeParams } from "./collision_params.js";
 
 export function generate360TeleportParamsFromMovementParams(movementParams, outTeleportParams = new CollisionCheckParams()) {
     outTeleportParams.copy(movementParams);

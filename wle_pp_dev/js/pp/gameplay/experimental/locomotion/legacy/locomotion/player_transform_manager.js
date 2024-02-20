@@ -1,10 +1,10 @@
-import { PhysicsLayerFlags } from "../../../../../cauldron/physics/physics_layer_flags";
-import { XRUtils } from "../../../../../cauldron/utils/xr_utils";
-import { quat2_create, quat_create, vec3_create, vec4_create } from "../../../../../plugin/js/extensions/array_extension";
-import { Globals } from "../../../../../pp/globals";
-import { CollisionCheckBridge } from "../../../character_controller/collision/collision_check_bridge";
-import { CollisionCheckUtils } from "../../../character_controller/collision/legacy/collision_check/collision_check";
-import { CollisionCheckParams, CollisionRuntimeParams } from "../../../character_controller/collision/legacy/collision_check/collision_params";
+import { PhysicsLayerFlags } from "../../../../../cauldron/physics/physics_layer_flags.js";
+import { XRUtils } from "../../../../../cauldron/utils/xr_utils.js";
+import { quat2_create, quat_create, vec3_create, vec4_create } from "../../../../../plugin/js/extensions/array_extension.js";
+import { Globals } from "../../../../../pp/globals.js";
+import { CollisionCheckBridge } from "../../../character_controller/collision/collision_check_bridge.js";
+import { CollisionCheckUtils } from "../../../character_controller/collision/legacy/collision_check/collision_check.js";
+import { CollisionCheckParams, CollisionRuntimeParams } from "../../../character_controller/collision/legacy/collision_check/collision_params.js";
 
 export let PlayerTransformManagerSyncFlag = {
     BODY_COLLIDING: 0,

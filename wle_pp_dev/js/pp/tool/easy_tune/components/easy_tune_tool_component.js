@@ -1,8 +1,8 @@
 import { Component, Property } from "@wonderlandengine/api";
-import { Globals } from "../../../pp/globals";
-import { EasyTuneUtils } from "../easy_tune_utils";
-import { EasyTuneWidget, EasyTuneWidgetParams } from "../easy_tune_widgets/easy_tune_widget";
-import { InitEasyTuneVariablesComponent } from "./init_easy_tune_variables_component";
+import { Globals } from "../../../pp/globals.js";
+import { EasyTuneUtils } from "../easy_tune_utils.js";
+import { EasyTuneWidget, EasyTuneWidgetParams } from "../easy_tune_widgets/easy_tune_widget.js";
+import { InitEasyTuneVariablesComponent } from "./init_easy_tune_variables_component.js";
 
 export class EasyTuneToolComponent extends Component {
     static TypeName = "pp-easy-tune-tool";

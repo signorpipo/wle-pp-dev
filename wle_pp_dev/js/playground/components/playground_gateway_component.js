@@ -1,5 +1,5 @@
 import { Component } from "@wonderlandengine/api";
-import { initPlayground } from "../init_playground";
+import { initPlayground } from "../init_playground.js";
 
 let _myRegisteredEngines = new WeakMap();
 

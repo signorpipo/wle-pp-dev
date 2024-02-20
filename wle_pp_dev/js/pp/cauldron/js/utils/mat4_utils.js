@@ -1,9 +1,9 @@
 
 import { mat4 as gl_mat4 } from "gl-matrix";
-import { MathUtils } from "./math_utils";
-import { Quat2Utils } from "./quat2_utils";
-import { QuatUtils, create as quat_utils_create } from "./quat_utils";
-import { Vec3Utils, create as vec3_utils_create, set as vec3_utils_set } from "./vec3_utils";
+import { MathUtils } from "./math_utils.js";
+import { Quat2Utils } from "./quat2_utils.js";
+import { QuatUtils, create as quat_utils_create } from "./quat_utils.js";
+import { Vec3Utils, create as vec3_utils_create, set as vec3_utils_set } from "./vec3_utils.js";
 
 // glMatrix Bridge
 

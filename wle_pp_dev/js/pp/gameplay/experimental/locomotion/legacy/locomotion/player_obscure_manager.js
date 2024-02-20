@@ -1,13 +1,13 @@
 // Even if this can be sued to generally fade, it should be called collision obscure to hint that is meant for collision obscuring
 
-import { Timer } from "../../../../../cauldron/cauldron/timer";
-import { FSM } from "../../../../../cauldron/fsm/fsm";
-import { EasingFunction } from "../../../../../cauldron/js/utils/math_utils";
-import { MaterialUtils } from "../../../../../cauldron/utils/material_utils";
-import { XRUtils } from "../../../../../cauldron/utils/xr_utils";
-import { VisualMesh, VisualMeshParams } from "../../../../../cauldron/visual/elements/visual_mesh";
-import { vec3_create, vec4_create } from "../../../../../plugin/js/extensions/array_extension";
-import { Globals } from "../../../../../pp/globals";
+import { Timer } from "../../../../../cauldron/cauldron/timer.js";
+import { FSM } from "../../../../../cauldron/fsm/fsm.js";
+import { EasingFunction } from "../../../../../cauldron/js/utils/math_utils.js";
+import { MaterialUtils } from "../../../../../cauldron/utils/material_utils.js";
+import { XRUtils } from "../../../../../cauldron/utils/xr_utils.js";
+import { VisualMesh, VisualMeshParams } from "../../../../../cauldron/visual/elements/visual_mesh.js";
+import { vec3_create, vec4_create } from "../../../../../plugin/js/extensions/array_extension.js";
+import { Globals } from "../../../../../pp/globals.js";
 
 // Occlude
 export class PlayerObscureManagerParams {

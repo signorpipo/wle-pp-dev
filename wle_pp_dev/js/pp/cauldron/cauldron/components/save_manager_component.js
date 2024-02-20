@@ -1,6 +1,6 @@
 import { Component, Property } from "@wonderlandengine/api";
-import { Globals } from "../../../pp/globals";
-import { SaveManager } from "../save_manager";
+import { Globals } from "../../../pp/globals.js";
+import { SaveManager } from "../save_manager.js";
 
 export class SaveManagerComponent extends Component {
     static TypeName = "pp-save-manager";

@@ -1,10 +1,10 @@
 import { LightComponent } from "@wonderlandengine/api";
-import { ColorUtils } from "../../../cauldron/utils/color_utils";
-import { GamepadButtonID } from "../../../input/gamepad/gamepad_buttons";
-import { vec3_create } from "../../../plugin/js/extensions/array_extension";
-import { Globals } from "../../../pp/globals";
-import { EasyTuneIntArray } from "../easy_tune_variable_types";
-import { EasyObjectTuner } from "./easy_object_tuner";
+import { ColorUtils } from "../../../cauldron/utils/color_utils.js";
+import { GamepadButtonID } from "../../../input/gamepad/gamepad_buttons.js";
+import { vec3_create } from "../../../plugin/js/extensions/array_extension.js";
+import { Globals } from "../../../pp/globals.js";
+import { EasyTuneIntArray } from "../easy_tune_variable_types.js";
+import { EasyObjectTuner } from "./easy_object_tuner.js";
 
 export class EasyLightColor extends EasyObjectTuner {
 

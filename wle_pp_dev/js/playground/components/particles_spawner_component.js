@@ -1,6 +1,6 @@
 import { Component, MeshComponent, Property } from "@wonderlandengine/api";
-import { CloneParams, Globals, ObjectPool, ObjectPoolParams } from "../../pp";
-import { ParticleComponent } from "./particle_component";
+import { CloneParams, Globals, ObjectPool, ObjectPoolParams } from "../../pp/index.js";
+import { ParticleComponent } from "./particle_component.js";
 
 export class ParticlesSpawnerComponent extends Component {
     static TypeName = "particles-spawner";

@@ -1,10 +1,10 @@
 import { Component, Property } from "@wonderlandengine/api";
-import { Globals } from "../../../pp/globals";
-import { Handedness } from "../../cauldron/input_types";
-import { GamepadButtonID } from "../gamepad_buttons";
-import { VirtualGamepadGamepadCore } from "../gamepad_cores/virtual_gamepad_gamepad_core";
-import { VirtualGamepad } from "./virtual_gamepad";
-import { VirtualGamepadParams } from "./virtual_gamepad_params";
+import { Globals } from "../../../pp/globals.js";
+import { Handedness } from "../../cauldron/input_types.js";
+import { GamepadButtonID } from "../gamepad_buttons.js";
+import { VirtualGamepadGamepadCore } from "../gamepad_cores/virtual_gamepad_gamepad_core.js";
+import { VirtualGamepad } from "./virtual_gamepad.js";
+import { VirtualGamepadParams } from "./virtual_gamepad_params.js";
 
 export class VirtualGamepadComponent extends Component {
     static TypeName = "pp-virtual-gamepad";

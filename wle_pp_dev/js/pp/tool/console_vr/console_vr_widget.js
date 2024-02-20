@@ -1,12 +1,12 @@
-import { GamepadAxesID, GamepadButtonID } from "../../input/gamepad/gamepad_buttons";
-import { vec2_create } from "../../plugin/js/extensions/array_extension";
-import { Globals } from "../../pp/globals";
-import { ToolHandedness } from "../cauldron/tool_types";
-import { WidgetFrame, WidgetParams } from "../widget_frame/widget_frame";
-import { ConsoleOriginalFunctions } from "./console_original_functions";
-import { ConsoleVRWidgetConsoleFunction, ConsoleVRWidgetMessageType, ConsoleVRWidgetPulseOnNewMessage, ConsoleVRWidgetSender, OverrideBrowserConsoleFunctions } from "./console_vr_types";
-import { ConsoleVRWidgetConfig } from "./console_vr_widget_config";
-import { ConsoleVRWidgetUI } from "./console_vr_widget_ui";
+import { GamepadAxesID, GamepadButtonID } from "../../input/gamepad/gamepad_buttons.js";
+import { vec2_create } from "../../plugin/js/extensions/array_extension.js";
+import { Globals } from "../../pp/globals.js";
+import { ToolHandedness } from "../cauldron/tool_types.js";
+import { WidgetFrame, WidgetParams } from "../widget_frame/widget_frame.js";
+import { ConsoleOriginalFunctions } from "./console_original_functions.js";
+import { ConsoleVRWidgetConsoleFunction, ConsoleVRWidgetMessageType, ConsoleVRWidgetPulseOnNewMessage, ConsoleVRWidgetSender, OverrideBrowserConsoleFunctions } from "./console_vr_types.js";
+import { ConsoleVRWidgetConfig } from "./console_vr_widget_config.js";
+import { ConsoleVRWidgetUI } from "./console_vr_widget_ui.js";
 
 export class ConsoleVRWidgetParams extends WidgetParams {
 

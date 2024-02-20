@@ -1,7 +1,7 @@
-import { quat2_create, vec3_create } from "../../../../../../plugin/js/extensions/array_extension";
-import { Globals } from "../../../../../../pp/globals";
-import { CollisionCheck } from "./collision_check";
-import { CollisionRuntimeParams } from "./collision_params";
+import { quat2_create, vec3_create } from "../../../../../../plugin/js/extensions/array_extension.js";
+import { Globals } from "../../../../../../pp/globals.js";
+import { CollisionCheck } from "./collision_check.js";
+import { CollisionRuntimeParams } from "./collision_params.js";
 
 CollisionCheck.prototype._move = function () {
     let transformUp = vec3_create();

@@ -1,6 +1,6 @@
-import { vec3_create, vec4_create } from "../../../../../../plugin/js/extensions/array_extension";
-import { Globals } from "../../../../../../pp/globals";
-import { CollisionCheck } from "./collision_check";
+import { vec3_create, vec4_create } from "../../../../../../plugin/js/extensions/array_extension.js";
+import { Globals } from "../../../../../../pp/globals.js";
+import { CollisionCheck } from "./collision_check.js";
 
 CollisionCheck.prototype._horizontalSlide = function () {
     let previousHorizontalMovement = vec3_create();
