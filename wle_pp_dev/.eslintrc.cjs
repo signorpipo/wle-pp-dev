@@ -13,7 +13,8 @@ module.exports = {
     globals: {
     },
     plugins: [
-        "deprecation"
+        "deprecation",
+        "@typescript-eslint/eslint-plugin"
     ],
     extends: [
         "eslint:recommended"
@@ -21,7 +22,8 @@ module.exports = {
     rules: {
         "semi": "error",
         "no-unused-vars": ["error", { "args": "none", "varsIgnorePattern": "^__" }],
-        "deprecation/deprecation": "error"
+        "deprecation/deprecation": "error",
+        "@typescript-eslint/no-unused-vars": ["warn", { "args": "none", "varsIgnorePattern": "^__" }]
     },
     ignorePatterns: [
         "/node_modules/",
@@ -34,5 +36,17 @@ module.exports = {
         ".eslintrc.cjs"
     ],
     overrides: [
+        {
+            "files": ["*.ts"],
+            "rules": {
+                "prefer-const": "error"
+            }
+        },
+        {
+            "files": ["*.d.ts"],
+            "rules": {
+                "no-unused-vars": "off"
+            }
+        }
     ]
 };

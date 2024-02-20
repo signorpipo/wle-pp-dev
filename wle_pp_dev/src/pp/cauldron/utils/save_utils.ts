@@ -1,27 +1,27 @@
-export function save(id, value) {
+export function save(id: string, value: string): void {
     if (value != null) {
         localStorage.setItem(id, value);
     }
 }
 
-export function has(id) {
+export function has(id: string): boolean {
     return SaveUtils.loadString(id, null) != null;
 }
 
-export function remove(id) {
+export function remove(id: string): void {
     return localStorage.removeItem(id);
 }
 
-export function clear() {
+export function clear(): void {
     return localStorage.clear();
 }
 
-export function load(id, defaultValue = null) {
+export function load(id: string, defaultValue: string | null = null): string | null {
     return SaveUtils.loadString(id, defaultValue);
 }
 
-export function loadString(id, defaultValue = null) {
-    let item = localStorage.getItem(id);
+export function loadString(id: string, defaultValue: string | null = null): string | null {
+    const item = localStorage.getItem(id);
 
     if (item != null) {
         return item;
@@ -30,8 +30,8 @@ export function loadString(id, defaultValue = null) {
     return defaultValue;
 }
 
-export function loadNumber(id, defaultValue = null) {
-    let item = SaveUtils.loadString(id);
+export function loadNumber(id: string, defaultValue: number | null = null): number | null {
+    const item = SaveUtils.loadString(id);
 
     if (item != null) {
         return Number(item);
@@ -40,8 +40,8 @@ export function loadNumber(id, defaultValue = null) {
     return defaultValue;
 }
 
-export function loadBool(id, defaultValue = null) {
-    let item = SaveUtils.loadString(id);
+export function loadBool(id: string, defaultValue: boolean | null = null): boolean | null {
+    const item = SaveUtils.loadString(id);
 
     if (item == "true") {
         return true;
@@ -52,8 +52,8 @@ export function loadBool(id, defaultValue = null) {
     return defaultValue;
 }
 
-export function loadObject(id, defaultValue = null) {
-    let item = SaveUtils.loadString(id);
+export function loadObject(id: string, defaultValue: object | null = null): object | null {
+    const item = SaveUtils.loadString(id);
 
     if (item != null) {
         try {
@@ -66,7 +66,7 @@ export function loadObject(id, defaultValue = null) {
     return defaultValue;
 }
 
-export let SaveUtils = {
+export const SaveUtils = {
     save,
     has,
     remove,
