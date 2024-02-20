@@ -754,12 +754,6 @@ PlayerTransformManager.prototype.resetReal = function () {
 }();
 
 PlayerTransformManager.prototype.update = function () {
-    let transformQuat = quat2_create();
-    let collisionRuntimeParams = new CollisionRuntimeParams();
-    let headCollisionRuntimeParams = new CollisionRuntimeParams();
-    let transformUp = vec3_create();
-    let horizontalDirection = vec3_create();
-    let rotationQuat = quat_create();
     return function update(dt) {
         // #TODO This should update ground and ceiling info but not sliding info    
 
@@ -785,36 +779,7 @@ PlayerTransformManager.prototype.update = function () {
         }
 
         this._updateValidToReal(dt);
-
-        if (this._myParams.myUpdatePositionValid) {
-            transformQuat = this.getTransformQuat(transformQuat);
-            transformUp = transformQuat.quat2_getUp(transformUp);
-            rotationQuat = transformQuat.quat2_getRotationQuat(rotationQuat);
-            horizontalDirection = this._myLastValidMovementDirection.vec3_removeComponentAlongAxis(transformUp, horizontalDirection);
-            if (!horizontalDirection.vec3_isZero(0.00001)) {
-                horizontalDirection.vec3_normalize(horizontalDirection);
-                rotationQuat.quat_setForward(horizontalDirection);
-                transformQuat.quat2_setRotationQuat(rotationQuat);
-            }
-            let debugBackup = this._myParams.myMovementCollisionCheckParams.myDebugEnabled;
-            this._myParams.myMovementCollisionCheckParams.myDebugEnabled = false;
-            CollisionCheckBridge.getCollisionCheck(this._myParams.myEngine).positionCheck(true, transformQuat, this._myParams.myMovementCollisionCheckParams, collisionRuntimeParams);
-            this._myParams.myMovementCollisionCheckParams.myDebugEnabled = debugBackup;
-            this._myIsPositionValid = collisionRuntimeParams.myIsPositionOk;
-        } else {
-            this._myIsPositionValid = true;
-        }
-
-        if (this._myParams.myUpdatePositionHeadValid) {
-            transformQuat = this.getTransformHeadQuat(transformQuat);
-            let debugBackup = this._myHeadCollisionCheckParams.myDebugEnabled;
-            this._myHeadCollisionCheckParams.myDebugEnabled = false;
-            CollisionCheckBridge.getCollisionCheck(this._myParams.myEngine).positionCheck(true, transformQuat, this._myHeadCollisionCheckParams, headCollisionRuntimeParams);
-            this._myHeadCollisionCheckParams.myDebugEnabled = debugBackup;
-            this._myIsPositionHeadValid = headCollisionRuntimeParams.myIsPositionOk;
-        } else {
-            this._myIsPositionHeadValid = true;
-        }
+        this._updatePositionsValid(dt);
 
         if (this._myParams.myDebugEnabled && Globals.isDebugEnabled(this._myParams.myEngine)) {
             this._debugUpdate(dt);
@@ -828,11 +793,8 @@ PlayerTransformManager.prototype._updateValidToReal = function () {
     let positionReal = vec3_create();
     let transformQuat = quat2_create();
     let collisionRuntimeParams = new CollisionRuntimeParams();
-    let headCollisionRuntimeParams = new CollisionRuntimeParams();
-
 
     let newPosition = vec3_create();
-    let newPositionHead = vec3_create();
     let movementStep = vec3_create();
     let currentMovementStep = vec3_create();
     let transformUp = vec3_create();
@@ -840,11 +802,6 @@ PlayerTransformManager.prototype._updateValidToReal = function () {
     let movementChecked = vec3_create();
     let newFeetPosition = vec3_create();
     let floatingTransformQuat = quat2_create();
-    let horizontalDirection = vec3_create();
-    let rotationQuat = quat_create();
-
-    let backupHorizontalBlockLayerFlags = new PhysicsLayerFlags();
-    let backupVerticalBlockLayerFlags = new PhysicsLayerFlags();
     return function _updateValidToReal(dt) {
         // Check if new head is ok and update the data
         // If head is not synced (blurred or session changing) avoid this and keep last valid
@@ -1029,6 +986,40 @@ PlayerTransformManager.prototype._updateValidToReal = function () {
                 }
             }
 
+            if ((this.isSynced(this._myParams.mySyncPositionFlagMap) || this._myParams.myAlwaysSyncPositionWithReal) && !this._myParams.mySyncPositionDisabled) {
+                this._myValidPosition.vec3_copy(newPosition);
+                // Reset real position since the new position might be influenced by the snap?
+            }
+
+            if (this.isSynced(this._myParams.mySyncRotationFlagMap)) {
+                this._myValidRotationQuat = this.getRotationRealQuat(this._myValidRotationQuat);
+            }
+
+            if (this.isSynced(this._myParams.mySyncHeightFlagMap)) {
+                this._myValidHeight = this._myRealMovementCollisionCheckParams.myHeight;
+                this._updateCollisionHeight();
+            }
+
+            this._updateValidHeadToRealHead(dt);
+        }
+    };
+}();
+
+PlayerTransformManager.prototype._updateValidHeadToRealHead = function () {
+    let movementToCheck = vec3_create();
+    let position = vec3_create();
+    let positionReal = vec3_create();
+    let transformQuat = quat2_create();
+    let collisionRuntimeParams = new CollisionRuntimeParams();
+
+    let newPositionHead = vec3_create();
+
+    let backupHorizontalBlockLayerFlags = new PhysicsLayerFlags();
+    let backupVerticalBlockLayerFlags = new PhysicsLayerFlags();
+    return function _updateValidHeadToRealHead(dt) {
+        if (this.getPlayerHeadManager().isSynced()) {
+            this._myIsHeadColliding = false;
+
             backupHorizontalBlockLayerFlags.copy(this._myHeadCollisionCheckParams.myHorizontalBlockLayerFlags);
             backupVerticalBlockLayerFlags.copy(this._myHeadCollisionCheckParams.myVerticalBlockLayerFlags);
 
@@ -1131,69 +1122,93 @@ PlayerTransformManager.prototype._updateValidToReal = function () {
                 newPositionHead.vec3_copy(positionReal);
             }
 
-            if ((this.isSynced(this._myParams.mySyncPositionFlagMap) || this._myParams.myAlwaysSyncPositionWithReal) && !this._myParams.mySyncPositionDisabled) {
-                this._myValidPosition.vec3_copy(newPosition);
-                // Reset real position since the new position might be influenced by the snap?
+            let backupIsHeadColliding = this._myIsHeadColliding;
+            if (headReducedVerticalMovementFeetAdjustment) {
+                // This is to allow the sync of the head if this is the only think preventing it
+                this._myIsHeadColliding = false;
             }
 
-            {
-                let backupIsHeadColliding = this._myIsHeadColliding;
-                if (headReducedVerticalMovementFeetAdjustment) {
-                    // This is to allow the sync of the head if this is the only think preventing it
-                    this._myIsHeadColliding = false;
-                }
-
-                if (this.isSynced(this._myParams.mySyncPositionHeadFlagMap) || this._myParams.myAlwaysSyncHeadPositionWithReal
-                    || (this.isSynced(this._myParams.mySyncPositionFlagMap) && this._myParams.myAlwaysSyncPositionWithReal)) {
-                    this._myValidPositionHead.vec3_copy(newPositionHead);
-                    this._myValidPositionHeadBackupForResetToFeet.vec3_copy(this._myValidPositionHead);
-                }
-
-                if (headReducedVerticalMovementFeetAdjustment) {
-                    // Restoring it to colliding after
-                    this._myIsHeadColliding = backupIsHeadColliding;
-                }
+            if (this.isSynced(this._myParams.mySyncPositionHeadFlagMap) || this._myParams.myAlwaysSyncHeadPositionWithReal
+                || (this.isSynced(this._myParams.mySyncPositionFlagMap) && this._myParams.myAlwaysSyncPositionWithReal)) {
+                this._myValidPositionHead.vec3_copy(newPositionHead);
+                this._myValidPositionHeadBackupForResetToFeet.vec3_copy(this._myValidPositionHead);
             }
 
-            if (this.isSynced(this._myParams.mySyncRotationFlagMap)) {
-                this._myValidRotationQuat = this.getRotationRealQuat(this._myValidRotationQuat);
+            if (headReducedVerticalMovementFeetAdjustment) {
+                // Restoring it to colliding after
+                this._myIsHeadColliding = backupIsHeadColliding;
+            }
+        }
+    };
+}();
+
+PlayerTransformManager.prototype._updatePositionsValid = function () {
+    let transformQuat = quat2_create();
+    let collisionRuntimeParams = new CollisionRuntimeParams();
+    let headCollisionRuntimeParams = new CollisionRuntimeParams();
+    let transformUp = vec3_create();
+    let horizontalDirection = vec3_create();
+    let rotationQuat = quat_create();
+    return function _updatePositionsValid(dt) {
+        if (this._myParams.myUpdatePositionValid) {
+            transformQuat = this.getTransformQuat(transformQuat);
+            transformUp = transformQuat.quat2_getUp(transformUp);
+            rotationQuat = transformQuat.quat2_getRotationQuat(rotationQuat);
+            horizontalDirection = this._myLastValidMovementDirection.vec3_removeComponentAlongAxis(transformUp, horizontalDirection);
+            if (!horizontalDirection.vec3_isZero(0.00001)) {
+                horizontalDirection.vec3_normalize(horizontalDirection);
+                rotationQuat.quat_setForward(horizontalDirection);
+                transformQuat.quat2_setRotationQuat(rotationQuat);
+            }
+            let debugBackup = this._myParams.myMovementCollisionCheckParams.myDebugEnabled;
+            this._myParams.myMovementCollisionCheckParams.myDebugEnabled = false;
+            CollisionCheckBridge.getCollisionCheck(this._myParams.myEngine).positionCheck(true, transformQuat, this._myParams.myMovementCollisionCheckParams, collisionRuntimeParams);
+            this._myParams.myMovementCollisionCheckParams.myDebugEnabled = debugBackup;
+            this._myIsPositionValid = collisionRuntimeParams.myIsPositionOk;
+        } else {
+            this._myIsPositionValid = true;
+        }
+
+        if (this._myParams.myUpdatePositionHeadValid) {
+            transformQuat = this.getTransformHeadQuat(transformQuat);
+            let debugBackup = this._myHeadCollisionCheckParams.myDebugEnabled;
+            this._myHeadCollisionCheckParams.myDebugEnabled = false;
+            CollisionCheckBridge.getCollisionCheck(this._myParams.myEngine).positionCheck(true, transformQuat, this._myHeadCollisionCheckParams, headCollisionRuntimeParams);
+            this._myHeadCollisionCheckParams.myDebugEnabled = debugBackup;
+            this._myIsPositionHeadValid = headCollisionRuntimeParams.myIsPositionOk;
+        } else {
+            this._myIsPositionHeadValid = true;
+        }
+
+        if (this._myParams.myUpdateRealPositionValid) {
+            transformQuat = this.getTransformRealQuat(transformQuat);
+            transformUp = transformQuat.quat2_getUp(transformUp);
+            rotationQuat = transformQuat.quat2_getRotationQuat(rotationQuat);
+            horizontalDirection = this._myLastValidMovementDirection.vec3_removeComponentAlongAxis(transformUp, horizontalDirection);
+            if (!horizontalDirection.vec3_isZero(0.00001)) {
+                horizontalDirection.vec3_normalize(horizontalDirection);
+                rotationQuat.quat_setForward(horizontalDirection);
+                transformQuat.quat2_setRotationQuat(rotationQuat);
             }
 
-            if (this.isSynced(this._myParams.mySyncHeightFlagMap)) {
-                this._myValidHeight = this._myRealMovementCollisionCheckParams.myHeight;
-                this._updateCollisionHeight();
-            }
+            let debugBackup = this._myParams.myMovementCollisionCheckParams.myDebugEnabled;
+            this._myParams.myMovementCollisionCheckParams.myDebugEnabled = false;
+            CollisionCheckBridge.getCollisionCheck(this._myParams.myEngine).positionCheck(true, transformQuat, this._myParams.myMovementCollisionCheckParams, this._myRealCollisionRuntimeParams);
+            this._myIsRealPositionValid = this._myRealCollisionRuntimeParams.myIsPositionOk;
+            this._myParams.myMovementCollisionCheckParams.myDebugEnabled = debugBackup;
+        } else {
+            this._myIsRealPositionValid = true;
+        }
 
-            if (this._myParams.myUpdateRealPositionValid) {
-                transformQuat = this.getTransformRealQuat(transformQuat);
-                transformUp = transformQuat.quat2_getUp(transformUp);
-                rotationQuat = transformQuat.quat2_getRotationQuat(rotationQuat);
-                horizontalDirection = this._myLastValidMovementDirection.vec3_removeComponentAlongAxis(transformUp, horizontalDirection);
-                if (!horizontalDirection.vec3_isZero(0.00001)) {
-                    horizontalDirection.vec3_normalize(horizontalDirection);
-                    rotationQuat.quat_setForward(horizontalDirection);
-                    transformQuat.quat2_setRotationQuat(rotationQuat);
-                }
-
-                let debugBackup = this._myParams.myMovementCollisionCheckParams.myDebugEnabled;
-                this._myParams.myMovementCollisionCheckParams.myDebugEnabled = false;
-                CollisionCheckBridge.getCollisionCheck(this._myParams.myEngine).positionCheck(true, transformQuat, this._myParams.myMovementCollisionCheckParams, this._myRealCollisionRuntimeParams);
-                this._myIsRealPositionValid = this._myRealCollisionRuntimeParams.myIsPositionOk;
-                this._myParams.myMovementCollisionCheckParams.myDebugEnabled = debugBackup;
-            } else {
-                this._myIsRealPositionValid = true;
-            }
-
-            if (this._myParams.myUpdateRealPositionHeadValid) {
-                transformQuat = this.getTransformHeadRealQuat(transformQuat);
-                let debugBackup = this._myHeadCollisionCheckParams.myDebugEnabled;
-                this._myHeadCollisionCheckParams.myDebugEnabled = false;
-                CollisionCheckBridge.getCollisionCheck(this._myParams.myEngine).positionCheck(true, transformQuat, this._myHeadCollisionCheckParams, headCollisionRuntimeParams);
-                this._myHeadCollisionCheckParams.myDebugEnabled = debugBackup;
-                this._myIsRealPositionHeadValid = headCollisionRuntimeParams.myIsPositionOk;
-            } else {
-                this._myIsRealPositionHeadValid = true;
-            }
+        if (this._myParams.myUpdateRealPositionHeadValid) {
+            transformQuat = this.getTransformHeadRealQuat(transformQuat);
+            let debugBackup = this._myHeadCollisionCheckParams.myDebugEnabled;
+            this._myHeadCollisionCheckParams.myDebugEnabled = false;
+            CollisionCheckBridge.getCollisionCheck(this._myParams.myEngine).positionCheck(true, transformQuat, this._myHeadCollisionCheckParams, headCollisionRuntimeParams);
+            this._myHeadCollisionCheckParams.myDebugEnabled = debugBackup;
+            this._myIsRealPositionHeadValid = headCollisionRuntimeParams.myIsPositionOk;
+        } else {
+            this._myIsRealPositionHeadValid = true;
         }
     };
 }();
