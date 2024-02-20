@@ -24,7 +24,6 @@ module.exports = {
         "semi": "error",
         "no-unused-vars": ["error", { "args": "none", "varsIgnorePattern": "^__" }],
         "deprecation/deprecation": "error",
-        "curly": ["error", "multi-line"],
         "@typescript-eslint/no-unused-vars": "off",
         "@typescript-eslint/no-explicit-any": "off"
     },
