@@ -26,13 +26,14 @@ module.exports = {
         "@typescript-eslint/no-unused-vars": ["warn", { "args": "none", "varsIgnorePattern": "^__" }]
     },
     ignorePatterns: [
+        "/dev/",
+        "/assets/",
+        "/static/",
         "/node_modules/",
         "/deploy/",
         "/cache/",
         "/languages/",
         "/.editor/",
-        "/assets/",
-        "/static/",
         ".eslintrc.cjs"
     ],
     overrides: [

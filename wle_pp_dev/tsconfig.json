@@ -14,6 +14,16 @@
         ]
     },
     "include": [
-        "src"
+        "."
+    ],
+    "exclude": [
+        "dev",
+        "assets",
+        "static",
+        "node_modules",
+        "deploy",
+        "cache",
+        "languages",
+        ".editor"
     ]
 }
