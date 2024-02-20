@@ -9,6 +9,7 @@
         "strictNullChecks": true,
         "noImplicitReturns": true,
         "allowJs": true,
+        "strict": true,
         "lib": [
             "DOM",
             "ES2022"
