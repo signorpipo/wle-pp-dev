@@ -397,6 +397,7 @@ export class PlayerTransformManager {
             this._myValidPositionHead = this.getPositionHeadReal(this._myValidPositionHead);
             this._myValidPositionHeadBackupForResetToFeet.vec3_copy(this._myValidPositionHead);
 
+            this._myResetHeadToFeetOnNextUpdateValidToReal = false;
             this._myResetHeadToFeetDirty = false;
         }
 
@@ -418,6 +419,7 @@ export class PlayerTransformManager {
             this._myValidPositionHead = this.getPositionHeadReal(this._myValidPositionHead);
             this._myValidPositionHeadBackupForResetToFeet.vec3_copy(this._myValidPositionHead);
 
+            this._myResetHeadToFeetOnNextUpdateValidToReal = false;
             this._myResetHeadToFeetDirty = false;
         }
     }
