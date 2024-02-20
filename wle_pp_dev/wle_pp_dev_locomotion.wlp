@@ -11486,15 +11486,16 @@
         },
         "scripting": {
             "sourcePaths": [
-                "js",
-                "js/pp/index.js",
-                "js/cauldron/components",
-                "js/test/components"
+                "src",
+                "src/pp/index.js",
+                "src/cauldron/components",
+                "src/test/components"
             ],
             "libraryPaths": [
                 "/js/lib/"
             ],
-            "bundlingType": "esbuild"
+            "bundlingType": "esbuild",
+            "entryPoint": "src/index.js"
         },
         "vr": {
             "leftEyeObject": "26",

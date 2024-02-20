@@ -1,27 +1,19 @@
 {
     "compilerOptions": {
+        "outDir": "dist",
         "target": "ES2022",
         "module": "nodenext",
         "moduleResolution": "nodenext",
         "experimentalDecorators": true,
         "resolveJsonModule": true,
         "strictNullChecks": true,
+        "allowJs": true,
         "lib": [
             "DOM",
             "ES2022"
         ]
     },
     "include": [
-        ".",
-        "js"
-    ],
-    "exclude": [
-        "node_modules",
-        "deploy",
-        "cache",
-        "languages",
-        ".editor",
-        "assets",
-        "static"
+        "src"
     ]
 }

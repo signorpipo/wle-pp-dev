@@ -3154,16 +3154,17 @@
         },
         "scripting": {
             "sourcePaths": [
-                "js",
-                "js/pp/index.js",
-                "js/playground/components",
-                "js/cauldron/components",
-                "js/test/components"
+                "src",
+                "src/pp/index.js",
+                "src/playground/components",
+                "src/cauldron/components",
+                "src/test/components"
             ],
             "bundlingType": "esbuild",
             "libraryPaths": [
                 "/js/lib/"
-            ]
+            ],
+            "entryPoint": "src/index.js"
         },
         "vr": {
             "leftEyeObject": "26",
