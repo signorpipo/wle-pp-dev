@@ -425,6 +425,54 @@ export class PlayerHeadManager {
         console.error(this.getHeightEyes());
     }
 
+    _getPositionEyesHeight(position) {
+        // Implemented outside class definition
+    }
+
+    _onXRSessionStart(manualCall, session) {
+        // Implemented outside class definition
+    }
+
+    _onXRSessionEnd(session) {
+        // Implemented outside class definition
+    }
+
+    _onXRSessionBlurStart(session) {
+        // Implemented outside class definition
+    }
+
+    _onXRSessionBlurEnd(session) {
+        // Implemented outside class definition
+    }
+
+    _onViewReset() {
+        // Implemented outside class definition
+    }
+
+    _blurEndResync() {
+        // Implemented outside class definition
+    }
+
+    _sessionChangeResync() {
+        // Implemented outside class definition
+    }
+
+    _setReferenceSpaceHeightOffset(offset, amountToRemove) {
+        // Implemented outside class definition
+    }
+
+    _updateHeightOffset() {
+        // Implemented outside class definition
+    }
+
+    _getHeadTransformFromLocal(transformLocal) {
+        // Implemented outside class definition
+    }
+
+    _resyncHeadRotationForward(resyncHeadRotation) {
+        // Implemented outside class definition
+    }
+
     destroy() {
         this._myDestroyed = true;
 
@@ -1143,15 +1191,3 @@ PlayerHeadManager.prototype._getHeadTransformFromLocal = function () {
         return this._myCurrentHead.pp_convertTransformLocalToWorldQuat(transformLocal);
     };
 }();
-
-
-
-Object.defineProperty(PlayerHeadManager.prototype, "_getPositionEyesHeight", { enumerable: false });
-Object.defineProperty(PlayerHeadManager.prototype, "_onXRSessionStart", { enumerable: false });
-Object.defineProperty(PlayerHeadManager.prototype, "_onXRSessionEnd", { enumerable: false });
-Object.defineProperty(PlayerHeadManager.prototype, "_onXRSessionBlurStart", { enumerable: false });
-Object.defineProperty(PlayerHeadManager.prototype, "_onXRSessionBlurEnd", { enumerable: false });
-Object.defineProperty(PlayerHeadManager.prototype, "_onViewReset", { enumerable: false });
-Object.defineProperty(PlayerHeadManager.prototype, "_blurEndResync", { enumerable: false });
-Object.defineProperty(PlayerHeadManager.prototype, "_sessionChangeResync", { enumerable: false });
-Object.defineProperty(PlayerHeadManager.prototype, "_setReferenceSpaceHeightOffset", { enumerable: false });

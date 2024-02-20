@@ -127,6 +127,14 @@ export class PlayerLocomotionSmooth extends PlayerLocomotionMovement {
         return this._myDebugFlyEnabled;
     }
 
+    _onXRSessionStart(session) {
+        // Implemented outside class definition
+    }
+
+    _onXRSessionEnd(session) {
+        // Implemented outside class definition
+    }
+
     destroy() {
         this._myDestroyed = true;
 
@@ -313,8 +321,3 @@ PlayerLocomotionSmooth.prototype._onXRSessionEnd = function () {
         this._myCurrentDirectionConverter.resetFly();
     };
 }();
-
-
-
-Object.defineProperty(PlayerLocomotionSmooth.prototype, "_onXRSessionStart", { enumerable: false });
-Object.defineProperty(PlayerLocomotionSmooth.prototype, "_onXRSessionEnd", { enumerable: false });

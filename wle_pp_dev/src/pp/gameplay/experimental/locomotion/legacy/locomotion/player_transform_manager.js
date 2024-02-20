@@ -674,6 +674,18 @@ export class PlayerTransformManager {
         }
     }
 
+    _updatePositionsValid(dt) {
+        // Implemented outside class definition
+    }
+
+    _updateValidToReal(dt) {
+        // Implemented outside class definition
+    }
+
+    _updateValidHeadToRealHead() {
+        // Implemented outside class definition
+    }
+
     _debugUpdate(dt) {
         Globals.getDebugVisualManager(this._myParams.myEngine).drawPoint(0, this._myValidPosition, vec4_create(1, 0, 0, 1), 0.05);
         Globals.getDebugVisualManager(this._myParams.myEngine).drawLineEnd(0, this._myValidPosition, this.getPositionReal(), vec4_create(1, 0, 0, 1), 0.05);

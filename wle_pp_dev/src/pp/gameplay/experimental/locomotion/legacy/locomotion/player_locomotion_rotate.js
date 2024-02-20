@@ -75,6 +75,14 @@ export class PlayerLocomotionRotate {
             this._rotateHeadVertically(dt);
         }
     }
+
+    _rotateHeadHorizontally(dt) {
+        // Implemented outside class definition
+    }
+
+    _rotateHeadVertically(dt) {
+        // Implemented outside class definition
+    }
 }
 
 
@@ -245,8 +253,3 @@ PlayerLocomotionRotate.prototype._rotateHeadVertically = function () {
         }
     };
 }();
-
-
-
-Object.defineProperty(PlayerLocomotionRotate.prototype, "_rotateHeadHorizontally", { enumerable: false });
-Object.defineProperty(PlayerLocomotionRotate.prototype, "_rotateHeadVertically", { enumerable: false });

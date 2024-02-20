@@ -18,6 +18,18 @@ export class PlayerLocomotionTeleportState extends State {
 
         this._myTeleportAsMovementFailed = false;
     }
+
+    _checkTeleport(teleportPosition, feetTransformQuat, collisionRuntimeParams, checkTeleportCollisionRuntimeParams = null) {
+        // Implemented outside class definition
+    }
+
+    _checkTeleportAsMovement(teleportPosition, feetTransformQuat, collisionRuntimeParams, checkTeleportCollisionRuntimeParams) {
+        // Implemented outside class definition
+    }
+
+    _teleportToPosition(teleportPosition, rotationOnUp, collisionRuntimeParams, forceTeleport = false) {
+        // Implemented outside class definition
+    }
 }
 
 

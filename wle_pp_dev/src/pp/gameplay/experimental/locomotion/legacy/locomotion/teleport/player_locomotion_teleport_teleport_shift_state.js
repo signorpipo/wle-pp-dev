@@ -97,6 +97,10 @@ export class PlayerLocomotionTeleportTeleportShiftState extends PlayerLocomotion
         this._myLocomotionRuntimeParams.myTeleportJustPerformed = true;
         this._teleportToPosition(this._myTeleportRuntimeParams.myTeleportPosition, this._myStartRotationOnUp - this._myCurrentRotationOnUp, this._myLocomotionRuntimeParams.myCollisionRuntimeParams);
     }
+
+    _shiftingUpdate(dt, fsm) {
+        // Implemented outside class definition
+    }
 }
 
 
@@ -143,7 +147,3 @@ PlayerLocomotionTeleportTeleportShiftState.prototype._shiftingUpdate = function 
         }
     };
 }();
-
-
-
-Object.defineProperty(PlayerLocomotionTeleportTeleportShiftState.prototype, "_shiftingUpdate", { enumerable: false });

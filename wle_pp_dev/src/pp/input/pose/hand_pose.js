@@ -52,7 +52,7 @@ export class HandPose extends BasePose {
         this.myFixTrackedHandRotation = fixTrackedHandRotation;
     }
 
-    getRotationQuat(referenceObjectOverride = undefined) {
+    getRotationQuat(out = quat_create(), referenceObjectOverride = undefined) {
         // Implemented outside class definition
     }
 
@@ -65,7 +65,7 @@ export class HandPose extends BasePose {
     }
 
     _onXRSessionStartHook(manualCall, session) {
-        this._myInputSourcesChangeEventListener = function () {
+        this._myInputSourcesChangeEventListener = () => {
             this._myInputSource = null;
 
             if (session.inputSources != null && session.inputSources.length > 0) {
@@ -77,7 +77,7 @@ export class HandPose extends BasePose {
                     }
                 }
             }
-        }.bind(this);
+        };
 
         this._myInputSourcesChangeEventListener();
 

@@ -144,6 +144,18 @@ export class PlayerLocomotionTeleportDetectionVisualizer {
         }
     }
 
+    _showTeleportParablePosition(dt) {
+        // Implemented outside class definition
+    }
+
+    _showTeleportParable(dt) {
+        // Implemented outside class definition
+    }
+
+    _setupVisuals() {
+        // Implemented outside class definition
+    }
+
     destroy() {
         this._myDestroyed = true;
 

@@ -49,7 +49,7 @@ export class TrackedHandJointPose extends BasePose {
     }
 
     _onXRSessionStartHook(manualCall, session) {
-        this._myInputSourcesChangeEventListener = function () {
+        this._myInputSourcesChangeEventListener = () => {
             this._myInputSource = null;
 
             if (session.inputSources != null && session.inputSources.length > 0) {
@@ -63,7 +63,7 @@ export class TrackedHandJointPose extends BasePose {
                     }
                 }
             }
-        }.bind(this);
+        };
 
         this._myInputSourcesChangeEventListener();
 

@@ -165,6 +165,18 @@ export class PlayerLocomotionTeleportDetectionState extends PlayerLocomotionTele
         }
     }
 
+    _isTeleportPositionValid(teleportPosition, rotationOnUp, checkTeleportCollisionRuntimeParams) {
+        // Implemented outside class definition
+    }
+
+    _isTeleportHitValid(hit, rotationOnUp, checkTeleportCollisionRuntimeParams) {
+        // Implemented outside class definition
+    }
+
+    _detectTeleportRotationVR(dt) {
+        // Implemented outside class definition
+    }
+
     destroy() {
         this._myDestroyed = true;
 
