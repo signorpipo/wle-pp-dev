@@ -76,6 +76,8 @@ export class PlayerLocomotionComponent extends Component {
         _mySyncNonVRHeightWithVROnExitSession: Property.bool(false),
         _mySyncNonVRVerticalAngleWithVROnExitSession: Property.bool(false),
 
+        _mySyncHeadWithRealAfterLocomotionUpdateIfNeeded: Property.bool(true),
+
         _myColliderAccuracy: Property.enum(["Very Low", "Low", "Medium", "High", "Very High"], "High"),
         _myColliderCheckOnlyFeet: Property.bool(false),
         _myColliderSlideAlongWall: Property.bool(true),
@@ -162,6 +164,8 @@ export class PlayerLocomotionComponent extends Component {
 
         params.mySyncNonVRHeightWithVROnExitSession = this._mySyncNonVRHeightWithVROnExitSession;
         params.mySyncNonVRVerticalAngleWithVROnExitSession = this._mySyncNonVRVerticalAngleWithVROnExitSession;
+
+        params.mySyncHeadWithRealAfterLocomotionUpdateIfNeeded = this._mySyncHeadWithRealAfterLocomotionUpdateIfNeeded;
 
         params.myColliderAccuracy = this._myColliderAccuracy;
         params.myColliderCheckOnlyFeet = this._myColliderCheckOnlyFeet;

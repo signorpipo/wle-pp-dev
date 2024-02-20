@@ -111,6 +111,8 @@ export class PlayerLocomotionParams {
         this.mySyncNonVRHeightWithVROnExitSession = false;
         this.mySyncNonVRVerticalAngleWithVROnExitSession = false;
 
+        this.mySyncHeadWithRealAfterLocomotionUpdateIfNeeded = false;
+
         this.myColliderAccuracy = null;
         this.myColliderCheckOnlyFeet = false;
         this.myColliderSlideAlongWall = false;
@@ -571,6 +573,10 @@ export class PlayerLocomotion {
                     this._myLocomotionMovementFSM.update(dt);
                 }
             }
+        }
+
+        if (this._myParams.mySyncHeadWithRealAfterLocomotionUpdateIfNeeded) {
+            this._myPlayerTransformManager.updateValidHeadToRealHeadIfNeeded();
         }
 
         this._myPlayerObscureManager.update(dt);

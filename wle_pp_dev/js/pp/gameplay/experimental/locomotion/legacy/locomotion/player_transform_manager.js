@@ -376,6 +376,16 @@ export class PlayerTransformManager {
         this._updateValidToReal(0);
     }
 
+    updateValidHeadToRealHead() {
+        this._updateValidHeadToRealHead(0);
+    }
+
+    updateValidHeadToRealHeadIfNeeded() {
+        if (this._myResetHeadToFeetDirty) {
+            this._updateValidHeadToRealHead(0);
+        }
+    }
+
     resetToReal(resetToPlayerInsteadOfHead = false, updateValidToReal = false) {
         if (resetToPlayerInsteadOfHead) {
             this._myValidPosition = this.getPlayerHeadManager().getPlayer().pp_getPosition(this._myValidPosition);
