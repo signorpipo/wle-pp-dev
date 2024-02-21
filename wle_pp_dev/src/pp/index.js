@@ -1,3 +1,12 @@
+// TS complains about exporting multiple times the same name, like for some functions in the vec libraries
+// Since it is not actually an issue until you specifically import one from the main import path (like import { equals } from "wle-pp"),
+// the errors given by TS for this file can be disabled safely
+// Note that you can still import those functions without issue by importing them with the full path,
+// for example: import { equals } from "wle-pp/pp/cauldron/js/utils/mat4_utils.js
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+
 //  PP
 export * from "./pp/init_pp.js";
 export * from "./pp/register_pp_components.js";
