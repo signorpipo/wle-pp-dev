@@ -20,6 +20,11 @@ export let AudioEvent = {
 
 export class AudioPlayer {
 
+    /**
+     * TS type inference helper
+     * 
+     * @param {any} audioInstance
+     */
     constructor(audioSetupOrAudioFilePath, audioInstance = null) {
         if (audioSetupOrAudioFilePath == null) {
             this._myAudioSetup = new AudioSetup();

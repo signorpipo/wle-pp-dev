@@ -171,6 +171,11 @@ export class EasyTuneBaseArrayWidgetSelector {
         }
     }
 
+    /**
+     * TS type inference helper
+     * 
+     * @returns {any}
+     */
     _getEasyTuneArrayWidget(arraySize) {
         return null;
     }
