@@ -18,12 +18,14 @@ module.exports = {
     ],
     extends: [
         "eslint:recommended",
+        "plugin:import/recommended",
         "plugin:@typescript-eslint/recommended"
     ],
     rules: {
         "semi": "error",
         "no-unused-vars": ["error", { "args": "none", "varsIgnorePattern": "^__" }],
         "deprecation/deprecation": "error",
+        "import/extensions": ["error", "always"],
         "@typescript-eslint/no-unused-vars": "off",
         "@typescript-eslint/no-explicit-any": "off"
     },
