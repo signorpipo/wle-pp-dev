@@ -26,6 +26,7 @@ module.exports = {
         "no-unused-vars": ["error", { "args": "none", "varsIgnorePattern": "^__" }],
         "deprecation/deprecation": "error",
         "import/extensions": ["error", "always"],
+        "import/no-unresolved": "off",
         "@typescript-eslint/no-unused-vars": "off",
         "@typescript-eslint/no-explicit-any": "off"
     },

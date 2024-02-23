@@ -1,9 +1,9 @@
-import { Component } from '@wonderlandengine/api';
-import { vec3_create } from '../../pp';
-import { Timer } from '../../pp/cauldron/cauldron/timer';
+import { Component } from "@wonderlandengine/api";
+import { vec3_create } from "../../pp/index.js";
+import { Timer } from "../../pp/cauldron/cauldron/timer.js";
 
 export class MoveStaticColliderComponent extends Component {
-    static TypeName = 'move-static-collider';
+    static TypeName = "move-static-collider";
     static Properties = {};
 
     start() {
