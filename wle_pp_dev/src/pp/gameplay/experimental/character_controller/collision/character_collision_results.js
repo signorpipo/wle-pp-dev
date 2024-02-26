@@ -54,7 +54,7 @@ export class CharacterCollisionSurfaceInfo {
     constructor() {
         this.myOnSurface = false;
 
-        this.mySurfaceObject = null;
+        this.mySurfaceReferenceCollisionHit = new RaycastHit();
 
         this.mySurfaceAngle = 0;
         this.mySurfacePerceivedAngle = 0;
@@ -303,11 +303,11 @@ CharacterCollisionResults.prototype.copy = function copy(other) {
 CharacterCollisionSurfaceInfo.prototype.reset = function reset() {
     this.myOnSurface = false;
 
-    this.mySurfaceObject = null;
-
     this.mySurfaceAngle = 0;
     this.mySurfacePerceivedAngle = 0;
     this.mySurfaceNormal.vec3_zero();
+
+    this.mySurfaceReferenceCollisionHit.reset();
 
     this.mySurfaceHitMaxAngle = 0;
     this.mySurfaceHitMaxNormal.vec3_zero();
@@ -320,11 +320,11 @@ CharacterCollisionSurfaceInfo.prototype.reset = function reset() {
 CharacterCollisionSurfaceInfo.prototype.copy = function copy(other) {
     this.myOnSurface = other.myOnSurface;
 
-    this.mySurfaceObject = other.mySurfaceObject;
-
     this.mySurfaceAngle = other.mySurfaceAngle;
     this.mySurfacePerceivedAngle = other.mySurfacePerceivedAngle;
     this.mySurfaceNormal.vec3_copy(other.mySurfaceNormal);
+
+    this.mySurfaceReferenceCollisionHit.copy(other.mySurfaceReferenceCollisionHit);
 
     this.mySurfaceHitMaxAngle = other.mySurfaceHitMaxAngle;
     this.mySurfaceHitMaxNormal.vec3_copy(other.mySurfaceHitMaxNormal);

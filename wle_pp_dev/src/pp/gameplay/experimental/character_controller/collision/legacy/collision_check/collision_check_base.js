@@ -168,7 +168,7 @@ CollisionCheckBase.prototype._setRuntimeParamsForMoveCollisionCheckDisabled = fu
 
         collisionRuntimeParams.myRealIsOnGround = true;
         collisionRuntimeParams.myIsOnGround = true;
-        collisionRuntimeParams.myGroundObject = null;
+        collisionRuntimeParams.myGroundCollisionHit.reset();
         collisionRuntimeParams.myGroundAngle = 0;
         collisionRuntimeParams.myGroundPerceivedAngle = 0;
         collisionRuntimeParams.myGroundNormal.vec3_set(0, 1, 0);
@@ -179,7 +179,7 @@ CollisionCheckBase.prototype._setRuntimeParamsForMoveCollisionCheckDisabled = fu
 
         collisionRuntimeParams.myRealIsOnCeiling = false;
         collisionRuntimeParams.myIsOnCeiling = false;
-        collisionRuntimeParams.myCeilingObject = null;
+        collisionRuntimeParams.myCeilingCollisionHit.reset();
         collisionRuntimeParams.myCeilingAngle = 0;
         collisionRuntimeParams.myCeilingPerceivedAngle = 0;
         collisionRuntimeParams.myCeilingNormal.vec3_set(0, 1, 0);
@@ -223,7 +223,7 @@ CollisionCheckBase.prototype._setRuntimeParamsForTeleportCollisionCheckDisabled 
 
         collisionRuntimeParams.myRealIsOnGround = true;
         collisionRuntimeParams.myIsOnGround = true;
-        collisionRuntimeParams.myGroundObject = null;
+        collisionRuntimeParams.myGroundCollisionHit.reset();
         collisionRuntimeParams.myGroundAngle = 0;
         collisionRuntimeParams.myGroundPerceivedAngle = 0;
         collisionRuntimeParams.myGroundNormal.vec3_set(0, 1, 0);
@@ -234,7 +234,7 @@ CollisionCheckBase.prototype._setRuntimeParamsForTeleportCollisionCheckDisabled 
 
         collisionRuntimeParams.myRealIsOnCeiling = false;
         collisionRuntimeParams.myIsOnCeiling = false;
-        collisionRuntimeParams.myCeilingObject = null;
+        collisionRuntimeParams.myCeilingCollisionHit.reset();
         collisionRuntimeParams.myCeilingAngle = 0;
         collisionRuntimeParams.myCeilingPerceivedAngle = 0;
         collisionRuntimeParams.myCeilingNormal.vec3_set(0, 1, 0);
@@ -289,7 +289,7 @@ CollisionCheckBase.prototype._setRuntimeParamsForUpdateSurfaceInfoCollisionCheck
     return function _setRuntimeParamsForUpdateSurfaceInfoCollisionCheckDisabled(transformQuat, collisionCheckParams, collisionRuntimeParams) {
         collisionRuntimeParams.myRealIsOnGround = true;
         collisionRuntimeParams.myIsOnGround = true;
-        collisionRuntimeParams.myGroundObject = null;
+        collisionRuntimeParams.myGroundCollisionHit.reset();
         collisionRuntimeParams.myGroundAngle = 0;
         collisionRuntimeParams.myGroundPerceivedAngle = 0;
         collisionRuntimeParams.myGroundNormal.vec3_set(0, 1, 0);
@@ -300,7 +300,7 @@ CollisionCheckBase.prototype._setRuntimeParamsForUpdateSurfaceInfoCollisionCheck
 
         collisionRuntimeParams.myRealIsOnCeiling = false;
         collisionRuntimeParams.myIsOnCeiling = false;
-        collisionRuntimeParams.myCeilingObject = null;
+        collisionRuntimeParams.myCeilingCollisionHit.reset();
         collisionRuntimeParams.myCeilingAngle = 0;
         collisionRuntimeParams.myCeilingPerceivedAngle = 0;
         collisionRuntimeParams.myCeilingNormal.vec3_set(0, 1, 0);
