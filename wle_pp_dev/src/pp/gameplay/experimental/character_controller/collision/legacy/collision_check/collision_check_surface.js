@@ -566,6 +566,7 @@ CollisionCheckSurface.prototype._gatherSurfaceInfo = function () {
         let surfaceAngle = 0;
         let surfacePerceivedAngle = 0;
         surfaceNormal.vec3_zero();
+        let surfaceObject = null;
 
         let surfaceHitMaxAngle = 0;
         surfaceHitMaxNormal.vec3_zero();
@@ -578,6 +579,7 @@ CollisionCheckSurface.prototype._gatherSurfaceInfo = function () {
             currentPosition.vec3_add(heightOffset, currentPosition);
 
             let baseHitIsInsideCollision = false;
+            let baseInsideCollisionSurfaceObject = null;
             if (isBaseInsideCollisionCheckEnabled) {
                 smallStartPosition = currentPosition.vec3_add(smallOffset, smallStartPosition);
                 smallEndPosition = currentPosition.vec3_sub(smallOffset, smallEndPosition);
@@ -590,6 +592,7 @@ CollisionCheckSurface.prototype._gatherSurfaceInfo = function () {
 
                 if (raycastResult.isColliding()) {
                     baseHitIsInsideCollision = raycastResult.myHits[0].myInsideCollision;
+                    baseInsideCollisionSurfaceObject = raycastResult.myHits[0].myObject;
                 }
             }
 
@@ -612,6 +615,9 @@ CollisionCheckSurface.prototype._gatherSurfaceInfo = function () {
                     if ((hitFromCurrentPositionLength >= 0 && hitFromCurrentPositionLength <= verticalFixToBeOnSurface + 0.00001) ||
                         (hitFromCurrentPositionLength < 0 && Math.abs(hitFromCurrentPositionLength) <= distanceToBeOnSurface + 0.00001)) {
                         isOnSurface = true;
+                        if (surfaceObject == null) {
+                            surfaceObject = raycastResult.myHits[0].myObject;
+                        }
                     }
 
                     if ((hitFromCurrentPositionLength >= 0 && hitFromCurrentPositionLength <= verticalFixToComputeSurfaceInfo + 0.00001) ||
@@ -630,15 +636,20 @@ CollisionCheckSurface.prototype._gatherSurfaceInfo = function () {
                         (hitFromCurrentPositionLength < 0 && Math.abs(hitFromCurrentPositionLength) <= distanceToFindSurfaceDistance + 0.00001)) {
                         if (surfaceDistance == null) {
                             surfaceDistance = -hitFromCurrentPositionLength;
+                            surfaceObject = raycastResult.myHits[0].myObject;
                         } else {
                             if (Math.abs(hitFromCurrentPositionLength) < Math.abs(surfaceDistance)) {
                                 surfaceDistance = -hitFromCurrentPositionLength;
+                                surfaceObject = raycastResult.myHits[0].myObject;
                             }
                         }
                     }
                 }
             } else if (isOnSurfaceIfInsideHit) {
                 isOnSurface = true;
+                if (surfaceObject == null) {
+                    surfaceObject = baseInsideCollisionSurfaceObject;
+                }
             }
         }
 
@@ -660,6 +671,8 @@ CollisionCheckSurface.prototype._gatherSurfaceInfo = function () {
         if (isGround) {
             collisionRuntimeParams.myRealIsOnGround = isOnSurface;
 
+            collisionRuntimeParams.myGroundObject = surfaceObject;
+
             collisionRuntimeParams.myGroundAngle = surfaceAngle;
             collisionRuntimeParams.myGroundPerceivedAngle = surfacePerceivedAngle;
             collisionRuntimeParams.myGroundNormal.vec3_copy(surfaceNormal);
@@ -678,6 +691,8 @@ CollisionCheckSurface.prototype._gatherSurfaceInfo = function () {
             }
         } else {
             collisionRuntimeParams.myRealIsOnCeiling = isOnSurface;
+
+            collisionRuntimeParams.myCeilingObject = surfaceObject;
 
             collisionRuntimeParams.myCeilingAngle = surfaceAngle;
             collisionRuntimeParams.myCeilingPerceivedAngle = surfacePerceivedAngle;

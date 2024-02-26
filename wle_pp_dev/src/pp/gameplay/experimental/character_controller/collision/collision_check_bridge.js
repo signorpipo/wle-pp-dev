@@ -121,6 +121,7 @@ export function convertCharacterCollisionResultsToCollisionRuntimeParams(charact
     outCollisionRuntimeParams.myLastValidSurfaceAdjustedVerticalMovement.vec3_copy(characterCollisionResults.myInternalResults.myLastRelevantAdjustedInitialVerticalMovement);
 
     outCollisionRuntimeParams.myIsOnGround = characterCollisionResults.myGroundInfo.myOnSurface;
+    outCollisionRuntimeParams.myGroundObject = characterCollisionResults.myGroundInfo.mySurfaceObject;
     outCollisionRuntimeParams.myGroundAngle = characterCollisionResults.myGroundInfo.mySurfaceAngle;
     outCollisionRuntimeParams.myGroundPerceivedAngle = characterCollisionResults.myGroundInfo.mySurfacePerceivedAngle;
     outCollisionRuntimeParams.myGroundNormal.vec3_copy(characterCollisionResults.myGroundInfo.mySurfaceNormal);
@@ -130,6 +131,7 @@ export function convertCharacterCollisionResultsToCollisionRuntimeParams(charact
     outCollisionRuntimeParams.myGroundIsBaseInsideCollision = characterCollisionResults.myGroundInfo.myBaseInsideCollision;
 
     outCollisionRuntimeParams.myIsOnCeiling = characterCollisionResults.myCeilingInfo.myOnSurface;
+    outCollisionRuntimeParams.myCeilingObject = characterCollisionResults.myCeilingInfo.mySurfaceObject;
     outCollisionRuntimeParams.myCeilingAngle = characterCollisionResults.myCeilingInfo.mySurfaceAngle;
     outCollisionRuntimeParams.myCeilingPerceivedAngle = characterCollisionResults.myCeilingInfo.mySurfacePerceivedAngle;
     outCollisionRuntimeParams.myCeilingNormal.vec3_copy(characterCollisionResults.myCeilingInfo.mySurfaceNormal);
@@ -251,6 +253,7 @@ export let convertCollisionRuntimeParamsToCharacterCollisionResults = function (
         outCharacterCollisionResults.myWallSlideResults.myWallNormal.vec3_copy(collisionRuntimeParams.mySlidingWallNormal);
 
         outCharacterCollisionResults.myGroundInfo.myOnSurface = collisionRuntimeParams.myIsOnGround;
+        outCharacterCollisionResults.myGroundInfo.mySurfaceObject = collisionRuntimeParams.myGroundObject;
         outCharacterCollisionResults.myGroundInfo.mySurfaceAngle = collisionRuntimeParams.myGroundAngle;
         outCharacterCollisionResults.myGroundInfo.mySurfacePerceivedAngle = collisionRuntimeParams.myGroundPerceivedAngle;
         outCharacterCollisionResults.myGroundInfo.mySurfaceNormal.vec3_copy(collisionRuntimeParams.myGroundNormal);
@@ -260,6 +263,7 @@ export let convertCollisionRuntimeParamsToCharacterCollisionResults = function (
         outCharacterCollisionResults.myGroundInfo.myBaseInsideCollision = collisionRuntimeParams.myGroundIsBaseInsideCollision;
 
         outCharacterCollisionResults.myCeilingInfo.myOnSurface = collisionRuntimeParams.myIsOnCeiling;
+        outCharacterCollisionResults.myCeilingInfo.mySurfaceObject = collisionRuntimeParams.myCeilingObject;
         outCharacterCollisionResults.myCeilingInfo.mySurfaceAngle = collisionRuntimeParams.myCeilingAngle;
         outCharacterCollisionResults.myCeilingInfo.mySurfacePerceivedAngle = collisionRuntimeParams.myCeilingPerceivedAngle;
         outCharacterCollisionResults.myCeilingInfo.mySurfaceNormal.vec3_copy(collisionRuntimeParams.myCeilingNormal);

@@ -54,6 +54,8 @@ export class CharacterCollisionSurfaceInfo {
     constructor() {
         this.myOnSurface = false;
 
+        this.mySurfaceObject = null;
+
         this.mySurfaceAngle = 0;
         this.mySurfacePerceivedAngle = 0;
         this.mySurfaceNormal = vec3_create();
@@ -301,6 +303,8 @@ CharacterCollisionResults.prototype.copy = function copy(other) {
 CharacterCollisionSurfaceInfo.prototype.reset = function reset() {
     this.myOnSurface = false;
 
+    this.mySurfaceObject = null;
+
     this.mySurfaceAngle = 0;
     this.mySurfacePerceivedAngle = 0;
     this.mySurfaceNormal.vec3_zero();
@@ -315,6 +319,8 @@ CharacterCollisionSurfaceInfo.prototype.reset = function reset() {
 
 CharacterCollisionSurfaceInfo.prototype.copy = function copy(other) {
     this.myOnSurface = other.myOnSurface;
+
+    this.mySurfaceObject = other.mySurfaceObject;
 
     this.mySurfaceAngle = other.mySurfaceAngle;
     this.mySurfacePerceivedAngle = other.mySurfacePerceivedAngle;

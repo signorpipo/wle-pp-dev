@@ -494,6 +494,7 @@ export class CollisionRuntimeParams {
         this.myLastValidEndVerticalMovement = vec3_create();
 
         this.myIsOnGround = false;
+        this.myGroundObject = null;
         this.myGroundAngle = 0;
         this.myGroundPerceivedAngle = 0;
         this.myGroundNormal = vec3_create();
@@ -503,6 +504,7 @@ export class CollisionRuntimeParams {
         this.myGroundIsBaseInsideCollision = false;
 
         this.myIsOnCeiling = false;
+        this.myCeilingObject = null;
         this.myCeilingAngle = 0;
         this.myCeilingPerceivedAngle = 0;
         this.myCeilingNormal = vec3_create();
@@ -593,6 +595,7 @@ export class CollisionRuntimeParams {
 
 
         this.myIsOnGround = false;
+        this.myGroundObject = null;
         this.myGroundAngle = 0;
         this.myGroundPerceivedAngle = 0;
         this.myGroundNormal.vec3_zero();
@@ -602,6 +605,7 @@ export class CollisionRuntimeParams {
         this.myGroundIsBaseInsideCollision = false;
 
         this.myIsOnCeiling = false;
+        this.myCeilingObject = null;
         this.myCeilingAngle = 0;
         this.myCeilingPerceivedAngle = 0;
         this.myCeilingNormal.vec3_zero();
@@ -691,6 +695,7 @@ export class CollisionRuntimeParams {
         this.myLastValidEndVerticalMovement.vec3_copy(other.myLastValidEndVerticalMovement);
 
         this.myIsOnGround = other.myIsOnGround;
+        this.myGroundObject = other.myGroundObject;
         this.myGroundAngle = other.myGroundAngle;
         this.myGroundPerceivedAngle = other.myGroundPerceivedAngle;
         this.myGroundNormal.vec3_copy(other.myGroundNormal);
@@ -700,6 +705,7 @@ export class CollisionRuntimeParams {
         this.myGroundIsBaseInsideCollision = other.myGroundIsBaseInsideCollision;
 
         this.myIsOnCeiling = other.myIsOnCeiling;
+        this.myCeilingObject = other.myCeilingObject;
         this.myCeilingAngle = other.myCeilingAngle;
         this.myCeilingPerceivedAngle = other.myCeilingPerceivedAngle;
         this.myCeilingNormal.vec3_copy(other.myCeilingNormal);

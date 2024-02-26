@@ -185,6 +185,7 @@ CollisionCheck.prototype._teleport = function () {
                     } else {
                         collisionRuntimeParams.myRealIsOnGround = this._myPrevCollisionRuntimeParams.myRealIsOnGround;
                         collisionRuntimeParams.myIsOnGround = this._myPrevCollisionRuntimeParams.myIsOnGround;
+                        collisionRuntimeParams.myGroundObject = this._myPrevCollisionRuntimeParams.myGroundObject;
                         collisionRuntimeParams.myGroundAngle = this._myPrevCollisionRuntimeParams.myGroundAngle;
                         collisionRuntimeParams.myGroundPerceivedAngle = this._myPrevCollisionRuntimeParams.myGroundPerceivedAngle;
                         collisionRuntimeParams.myGroundNormal.vec3_copy(this._myPrevCollisionRuntimeParams.myGroundNormal);
@@ -199,6 +200,7 @@ CollisionCheck.prototype._teleport = function () {
                     } else {
                         collisionRuntimeParams.myRealIsOnCeiling = this._myPrevCollisionRuntimeParams.myRealIsOnCeiling;
                         collisionRuntimeParams.myIsOnCeiling = this._myPrevCollisionRuntimeParams.myIsOnCeiling;
+                        collisionRuntimeParams.myCeilingObject = this._myPrevCollisionRuntimeParams.myCeilingObject;
                         collisionRuntimeParams.myCeilingAngle = this._myPrevCollisionRuntimeParams.myCeilingAngle;
                         collisionRuntimeParams.myCeilingPerceivedAngle = this._myPrevCollisionRuntimeParams.myCeilingPerceivedAngle;
                         collisionRuntimeParams.myCeilingNormal.vec3_copy(this._myPrevCollisionRuntimeParams.myCeilingNormal);
