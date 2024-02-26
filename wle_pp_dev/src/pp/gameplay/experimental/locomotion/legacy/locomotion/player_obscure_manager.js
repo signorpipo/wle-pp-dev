@@ -40,6 +40,7 @@ export class PlayerObscureManagerParams {
         this.myObscureLevelRelativeDistanceEasingFunction = EasingFunction.linear;
 
         this.myDisableObscureWhileTeleporting = true;
+        this.myDisableObscureWhileTeleportingDuration = 0.5;
 
         this.myEngine = engine;
     }
@@ -61,6 +62,13 @@ export class PlayerObscureManager {
         this._myInstantObscureFramesCount = 0;
 
         this._myFadeTimer = new Timer(0, false);
+
+        this._myDisableObscureWhileTeleportingTimer = null;
+        if (this._myParams.myDisableObscureWhileTeleportingDuration != null) {
+            this._myDisableObscureWhileTeleportingTimer = new Timer(this._myParams.myDisableObscureWhileTeleportingDuration);
+        } else {
+            this._myDisableObscureWhileTeleportingTimer = new Timer(0, false);
+        }
 
         this._myFSM = new FSM();
         //this._myFSM.setLogEnabled(true, " Obscure");
@@ -106,6 +114,16 @@ export class PlayerObscureManager {
     }
 
     update(dt) {
+        if (!this._myParams.myPlayerLocomotionTeleport.isTeleporting()) {
+            if (this._myParams.myDisableObscureWhileTeleportingDuration != null) {
+                this._myDisableObscureWhileTeleportingTimer.start();
+            } else {
+                this._myDisableObscureWhileTeleportingTimer.reset();
+            }
+        } else {
+            this._myDisableObscureWhileTeleportingTimer.update(dt);
+        }
+
         this._myObscureParentObject.pp_resetTransformLocal();
 
         this._updateObscured();
@@ -278,7 +296,7 @@ export class PlayerObscureManager {
         if (this._myParams.myEnabled) {
             if (this._myObscureLevelOverride != null) {
                 this._myTargetObscureLevel = this._myObscureLevelOverride;
-            } else if (!this._myParams.myPlayerLocomotionTeleport.isTeleporting() || !this._myParams.myDisableObscureWhileTeleporting) {
+            } else if (!this._myParams.myPlayerLocomotionTeleport.isTeleporting() || !this._myParams.myDisableObscureWhileTeleporting || this._myDisableObscureWhileTeleportingTimer.isDone()) {
                 // #TODO Check if VALID head is colliding, in that case use max obscure level
                 // This prevent being able to see when resetting head to real even though real is colliding
                 // For example if u stand up and go with the head in the ceiling and reset by moving
