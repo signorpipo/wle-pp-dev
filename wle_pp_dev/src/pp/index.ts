@@ -178,7 +178,6 @@ export * from "./gameplay/experimental/locomotion/legacy/locomotion/teleport/pla
 export * from "./gameplay/experimental/locomotion/legacy/locomotion/teleport/player_locomotion_teleport_state.js";
 export * from "./gameplay/experimental/locomotion/legacy/locomotion/teleport/player_locomotion_teleport_detection_visualizer.js";
 export * from "./gameplay/experimental/locomotion/legacy/locomotion/teleport/player_locomotion_teleport_detection_state.js";
-export * from "./gameplay/experimental/locomotion/legacy/locomotion/teleport/player_locomotion_teleport_detection_state_visibility.js";
 export * from "./gameplay/experimental/locomotion/legacy/locomotion/teleport/player_locomotion_teleport_teleport_state.js";
 export * from "./gameplay/experimental/locomotion/legacy/locomotion/teleport/player_locomotion_teleport_teleport_blink_state.js";
 export * from "./gameplay/experimental/locomotion/legacy/locomotion/teleport/player_locomotion_teleport_teleport_shift_state.js";
