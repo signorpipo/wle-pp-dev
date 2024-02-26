@@ -153,16 +153,8 @@ export * from "./gameplay/integrations/construct_arcade/ca_display_leaderboard_c
 
 //          CHARACTER CONTROLLER
 export * from "./gameplay/experimental/character_controller/collision/legacy/collision_check/collision_params.js";
-export { CollisionCheckUtils, CollisionCheck } from "./gameplay/experimental/character_controller/collision/legacy/collision_check/collision_check.js";
-export * from "./gameplay/experimental/character_controller/collision/legacy/collision_check/collision_movement_check.js";
-export * from "./gameplay/experimental/character_controller/collision/legacy/collision_check/collision_teleport_check.js";
-export * from "./gameplay/experimental/character_controller/collision/legacy/collision_check/collision_position_check.js";
-export * from "./gameplay/experimental/character_controller/collision/legacy/collision_check/horizontal_collision_check.js";
-export * from "./gameplay/experimental/character_controller/collision/legacy/collision_check/horizontal_collision_sliding.js";
-export * from "./gameplay/experimental/character_controller/collision/legacy/collision_check/horizontal_collision_movement_check.js";
-export * from "./gameplay/experimental/character_controller/collision/legacy/collision_check/horizontal_collision_position_check.js";
-export * from "./gameplay/experimental/character_controller/collision/legacy/collision_check/vertical_collision_check.js";
-export * from "./gameplay/experimental/character_controller/collision/legacy/collision_check/collision_surface_check.js";
+export { CollisionCheck } from "./gameplay/experimental/character_controller/collision/legacy/collision_check/collision_check.js";
+export { CollisionCheckUtils } from "./gameplay/experimental/character_controller/collision/legacy/collision_check/collision_check_utils.js";
 
 export { CollisionCheckBridge } from "./gameplay/experimental/character_controller/collision/collision_check_bridge.js";
 export * from "./gameplay/experimental/character_controller/collision/character_collider_setup.js";
