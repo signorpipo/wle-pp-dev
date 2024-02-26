@@ -14,6 +14,7 @@ export class PlayerObscureManagerParams {
 
     constructor(engine = Globals.getMainEngine()) {
         this.myPlayerTransformManager = null;
+        this.myPlayerLocomotionTeleport = null;
 
         this.myEnabled = true;
 
@@ -37,6 +38,8 @@ export class PlayerObscureManagerParams {
         this.myRelativeDistanceToMaxObscureWhenFar = 0;
 
         this.myObscureLevelRelativeDistanceEasingFunction = EasingFunction.linear;
+
+        this.myDisableObscureWhileTeleporting = true;
 
         this.myEngine = engine;
     }
@@ -275,7 +278,7 @@ export class PlayerObscureManager {
         if (this._myParams.myEnabled) {
             if (this._myObscureLevelOverride != null) {
                 this._myTargetObscureLevel = this._myObscureLevelOverride;
-            } else {
+            } else if (!this._myParams.myPlayerLocomotionTeleport.isTeleporting() || !this._myParams.myDisableObscureWhileTeleporting) {
                 // #TODO Check if VALID head is colliding, in that case use max obscure level
                 // This prevent being able to see when resetting head to real even though real is colliding
                 // For example if u stand up and go with the head in the ceiling and reset by moving

@@ -107,6 +107,10 @@ export class PlayerLocomotionTeleport extends PlayerLocomotionMovement {
         return this._myFSM.isInState("idle");
     }
 
+    isTeleporting() {
+        return this._myFSM.isInState("teleport");
+    }
+
     getParams() {
         return this._myTeleportParams;
     }

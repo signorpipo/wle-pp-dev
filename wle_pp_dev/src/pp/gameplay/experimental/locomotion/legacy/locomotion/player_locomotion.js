@@ -269,36 +269,6 @@ export class PlayerLocomotion {
         }
 
         {
-            let params = new PlayerObscureManagerParams(this._myParams.myEngine);
-
-            params.myPlayerTransformManager = this._myPlayerTransformManager;
-
-            params.myEnabled = this._myParams.myViewOcclusionInsideWallsEnabled;
-
-            params.myObscureObject = null;
-            params.myObscureMaterial = null;
-            params.myObscureRadius = 0.5;
-
-            params.myObscureFadeOutSeconds = 0;
-            params.myObscureFadeInSeconds = 0.25;
-
-            params.myObscureFadeEasingFunction = EasingFunction.linear;
-            params.myObscureLevelRelativeDistanceEasingFunction = EasingFunction.linear;
-
-            params.myDistanceToStartObscureWhenBodyColliding = 0.75;
-            params.myDistanceToStartObscureWhenHeadColliding = 0;
-            params.myDistanceToStartObscureWhenFloating = 0.75;
-            params.myDistanceToStartObscureWhenFar = 0.75;
-
-            params.myRelativeDistanceToMaxObscureWhenBodyColliding = 0.5;
-            params.myRelativeDistanceToMaxObscureWhenHeadColliding = 0.05;
-            params.myRelativeDistanceToMaxObscureWhenFloating = 0.5;
-            params.myRelativeDistanceToMaxObscureWhenFar = 0.5;
-
-            this._myPlayerObscureManager = new PlayerObscureManager(params);
-        }
-
-        {
             let params = new PlayerLocomotionRotateParams(this._myParams.myEngine);
 
             params.myPlayerHeadManager = this._myPlayerHeadManager;
@@ -416,6 +386,38 @@ export class PlayerLocomotion {
 
                 this._myPlayerLocomotionTeleport = new PlayerLocomotionTeleport(params, this._myMovementRuntimeParams);
             }
+
+            {
+                let params = new PlayerObscureManagerParams(this._myParams.myEngine);
+
+                params.myPlayerTransformManager = this._myPlayerTransformManager;
+                params.myPlayerLocomotionTeleport = this._myPlayerLocomotionTeleport;
+
+                params.myEnabled = this._myParams.myViewOcclusionInsideWallsEnabled;
+
+                params.myObscureObject = null;
+                params.myObscureMaterial = null;
+                params.myObscureRadius = 0.5;
+
+                params.myObscureFadeOutSeconds = 0;
+                params.myObscureFadeInSeconds = 0.25;
+
+                params.myObscureFadeEasingFunction = EasingFunction.linear;
+                params.myObscureLevelRelativeDistanceEasingFunction = EasingFunction.linear;
+
+                params.myDistanceToStartObscureWhenBodyColliding = 0.75;
+                params.myDistanceToStartObscureWhenHeadColliding = 0;
+                params.myDistanceToStartObscureWhenFloating = 0.75;
+                params.myDistanceToStartObscureWhenFar = 0.75;
+
+                params.myRelativeDistanceToMaxObscureWhenBodyColliding = 0.5;
+                params.myRelativeDistanceToMaxObscureWhenHeadColliding = 0.05;
+                params.myRelativeDistanceToMaxObscureWhenFloating = 0.5;
+                params.myRelativeDistanceToMaxObscureWhenFar = 0.5;
+
+                this._myPlayerObscureManager = new PlayerObscureManager(params);
+            }
+
         }
 
         this._setupLocomotionMovementFSM();
