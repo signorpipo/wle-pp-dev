@@ -3,9 +3,7 @@ export * from "./pp/init_pp.js";
 export * from "./pp/register_pp_components.js";
 export { Globals } from "./pp/globals.js";
 export * from "./pp/scene_objects.js";
-export * from "./pp/scene_objects_globals.js";
 export * from "./pp/default_resources.js";
-export * from "./pp/default_resources_globals.js";
 
 export * from "./pp/components/pp_gateway_component.js";
 export * from "./pp/components/get_scene_objects_component.js";
@@ -35,7 +33,6 @@ export * from "./plugin/wl/mods/components/mouse_look_component_mod.js";
 
 //	AUDIO
 export * from "./audio/audio_manager.js";
-export * from "./audio/audio_globals.js";
 export * from "./audio/audio_player.js";
 export * from "./audio/audio_setup.js";
 export { AudioUtils } from "./audio/audio_utils.js";
@@ -50,12 +47,9 @@ export * from "./audio/components/spatial_audio_listener_component.js";
 export * from "./cauldron/benchmarks/benchmark_max_physx_component.js";
 export * from "./cauldron/benchmarks/benchmark_max_visible_triangles_component.js";
 
-export * from "./cauldron/cauldron/save_globals.js";
 export * from "./cauldron/cauldron/save_manager.js";
-export * from "./cauldron/cauldron/analytics_globals.js";
 export * from "./cauldron/cauldron/analytics_manager.js";
 export * from "./cauldron/cauldron/timer.js";
-export * from "./cauldron/cauldron/window_globals.js";
 
 export * from "./cauldron/cauldron/components/save_manager_component.js";
 export * from "./cauldron/cauldron/components/analytics_manager_component.js";
@@ -83,7 +77,6 @@ export { Mat3Utils } from "./cauldron/js/utils/mat3_utils.js";
 export { Mat4Utils } from "./cauldron/js/utils/mat4_utils.js";
 
 export * from "./cauldron/object_pool/object_pool.js";
-export * from "./cauldron/object_pool/object_pool_globals.js";
 export * from "./cauldron/object_pool/object_pool_manager.js";
 export * from "./cauldron/object_pool/components/object_pool_manager_component.js";
 
@@ -103,7 +96,6 @@ export * from "./cauldron/physics/physics_collision_collector.js";
 
 export * from "./cauldron/visual/visual_manager.js";
 export * from "./cauldron/visual/visual_resources.js";
-export * from "./cauldron/visual/visual_globals.js";
 
 export * from "./cauldron/visual/elements/visual_element_types.js";
 export * from "./cauldron/visual/elements/visual_line.js";
@@ -117,7 +109,6 @@ export * from "./cauldron/visual/elements/visual_torus.js";
 
 export * from "./cauldron/visual/components/visual_manager_component.js";
 
-export * from "./cauldron/wl/engine_globals.js";
 export * from "./cauldron/wl/register_wl_components.js";
 export { SceneUtils } from "./cauldron/wl/utils/scene_utils.js";
 export { ObjectUtils, CloneParams } from "./cauldron/wl/utils/object_utils.js";
@@ -128,7 +119,6 @@ export * from "./cauldron/wl/components/add_wl_to_window_component.js";
 //	DEBUG
 export * from "./debug/debug_manager.js";
 export * from "./debug/debug_visual_manager.js";
-export * from "./debug/debug_globals.js";
 
 export * from "./debug/components/debug_transform_component.js";
 export * from "./debug/components/debug_manager_component.js";
@@ -180,7 +170,6 @@ export { CharacterControllerUtils } from "./gameplay/experimental/character_cont
 export { CharacterColliderSetupUtils, CharacterColliderSetupSimplifiedCreationParams, CharacterColliderSetupSimplifiedCreationAccuracyLevel } from "./gameplay/experimental/character_controller/collision/character_collider_setup_utils.js";
 export * from "./gameplay/experimental/character_controller/collision/character_collision_results.js";
 export * from "./gameplay/experimental/character_controller/collision/character_collision_system.js";
-export * from "./gameplay/experimental/character_controller/collision/character_collision_system_globals.js";
 export * from "./gameplay/experimental/character_controller/collision/components/character_collision_system_component.js";
 
 //          LOCOMOTION
@@ -208,7 +197,6 @@ export * from "./input/cauldron/input_types.js";
 export { InputUtils } from "./input/cauldron/input_utils.js";
 export * from "./input/cauldron/keyboard.js";
 export * from "./input/cauldron/mouse.js";
-export * from "./input/cauldron/input_globals.js";
 export * from "./input/cauldron/input_manager.js";
 
 export * from "./input/cauldron/components/finger_cursor_component.js";
@@ -255,7 +243,6 @@ export * from "./input/pose/components/copy_reference_space_transform_component.
 
 //	TOOL
 export * from "./tool/cauldron/tool_types.js";
-export * from "./tool/cauldron/tool_globals.js";
 export * from "./tool/cauldron/components/tool_cursor_component.js";
 export * from "./tool/cauldron/components/enable_tool_component.js";
 
@@ -264,7 +251,6 @@ export * from "./tool/console_vr/console_vr_widget_ui.js";
 export * from "./tool/console_vr/console_vr_widget.js";
 export * from "./tool/console_vr/console_vr.js";
 export * from "./tool/console_vr/console_vr_types.js";
-export * from "./tool/console_vr/console_vr_globals.js";
 export { ConsoleOriginalFunctions } from "./tool/console_vr/console_original_functions.js";
 
 export * from "./tool/console_vr/components/console_vr_tool_component.js";
@@ -272,7 +258,6 @@ export * from "./tool/console_vr/components/init_console_vr_component.js";
 
 export * from "./tool/easy_tune/easy_tune_variables.js";
 export * from "./tool/easy_tune/easy_tune_variable_types.js";
-export * from "./tool/easy_tune/easy_tune_globals.js";
 export { EasyTuneUtils } from "./tool/easy_tune/easy_tune_utils.js";
 
 export * from "./tool/easy_tune/components/easy_tune_tool_component.js";
