@@ -31,15 +31,15 @@ module.exports = {
         "@typescript-eslint/no-explicit-any": "off"
     },
     ignorePatterns: [
-        "dev",
-        "assets",
-        "static",
-        "node_modules",
-        "deploy",
-        "cache",
-        "languages",
-        ".editor",
-        ".eslintrc.cjs"
+        "/dev",
+        "/assets",
+        "/static",
+        "/node_modules",
+        "/deploy",
+        "/cache",
+        "/languages",
+        "/.editor",
+        "/.eslintrc.cjs"
     ],
     overrides: [
         {
