@@ -11,7 +11,7 @@ import { vec3_create } from "../../../../../plugin/js/extensions/array_extension
 import { Globals } from "../../../../../pp/globals.js";
 import { CharacterColliderSetupSimplifiedCreationParams, CharacterColliderSetupUtils } from "../../../character_controller/collision/character_collider_setup_utils.js";
 import { CollisionCheckBridge } from "../../../character_controller/collision/collision_check_bridge.js";
-import { CollisionCheckUtils } from "../../../character_controller/collision/legacy/collision_check/collision_check.js";
+import { CollisionCheckUtils } from "../../../character_controller/collision/legacy/collision_check/collision_check_utils.js";
 import { CollisionCheckParams, CollisionRuntimeParams } from "../../../character_controller/collision/legacy/collision_check/collision_params.js";
 import { NonVRReferenceSpaceMode, PlayerHeadManager, PlayerHeadManagerParams } from "./player_head_manager.js";
 import { PlayerLocomotionMovementRuntimeParams } from "./player_locomotion_movement.js";

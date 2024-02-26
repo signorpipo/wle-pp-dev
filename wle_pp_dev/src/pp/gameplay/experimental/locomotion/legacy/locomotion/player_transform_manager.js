@@ -3,7 +3,7 @@ import { XRUtils } from "../../../../../cauldron/utils/xr_utils.js";
 import { quat2_create, quat_create, vec3_create, vec4_create } from "../../../../../plugin/js/extensions/array_extension.js";
 import { Globals } from "../../../../../pp/globals.js";
 import { CollisionCheckBridge } from "../../../character_controller/collision/collision_check_bridge.js";
-import { CollisionCheckUtils } from "../../../character_controller/collision/legacy/collision_check/collision_check.js";
+import { CollisionCheckUtils } from "../../../character_controller/collision/legacy/collision_check/collision_check_utils.js";
 import { CollisionCheckParams, CollisionRuntimeParams } from "../../../character_controller/collision/legacy/collision_check/collision_params.js";
 
 export let PlayerTransformManagerSyncFlag = {
