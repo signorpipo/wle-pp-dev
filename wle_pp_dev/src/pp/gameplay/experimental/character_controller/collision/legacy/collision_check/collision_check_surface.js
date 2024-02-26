@@ -618,7 +618,7 @@ CollisionCheckSurface.prototype._gatherSurfaceInfo = function () {
                     if ((hitFromCurrentPositionLength >= 0 && hitFromCurrentPositionLength <= verticalFixToBeOnSurface + 0.00001) ||
                         (hitFromCurrentPositionLength < 0 && Math.abs(hitFromCurrentPositionLength) <= distanceToBeOnSurface + 0.00001)) {
                         isOnSurface = true;
-                        if (surfaceCollisionHit.isValid()) {
+                        if (!surfaceCollisionHit.isValid()) {
                             surfaceCollisionHit.copy(raycastResult.myHits[0]);
                         }
                     }
@@ -650,7 +650,7 @@ CollisionCheckSurface.prototype._gatherSurfaceInfo = function () {
                 }
             } else if (isOnSurfaceIfInsideHit) {
                 isOnSurface = true;
-                if (surfaceCollisionHit.isValid()) {
+                if (!surfaceCollisionHit.isValid()) {
                     surfaceCollisionHit.copy(surfaceCollisionHitForBaseInsideCollision);
                 }
             }
