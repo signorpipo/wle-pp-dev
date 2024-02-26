@@ -1,7 +1,56 @@
+import { Globals } from "../../../../../../index.js";
 import { quat2_create, vec3_create } from "../../../../../../plugin/js/extensions/array_extension.js";
-import { CollisionCheck } from "./collision_check.js";
+import { CollisionCheckBase } from "./collision_check_base.js";
 
-CollisionCheck.prototype._updateSurfaceInfo = function () {
+export class CollisionCheckSurface extends CollisionCheckBase {
+
+    updateSurfaceInfo(transformQuat, collisionCheckParams, collisionRuntimeParams) {
+        if (this.isCollisionCheckDisabled() && Globals.isDebugEnabled(this._myEngine)) {
+            this._setRuntimeParamsForUpdateSurfaceInfoCollisionCheckDisabled(transformQuat, collisionCheckParams, collisionRuntimeParams);
+            return;
+        }
+
+        this._updateSurfaceInfo(transformQuat, collisionCheckParams, collisionRuntimeParams);
+    }
+
+    computeSurfacePerceivedAngle(surfaceNormal, forward, up, isGround = true) {
+        // Implemented outside class definition
+    }
+
+    _updateSurfaceInfo(transformQuat, collisionCheckParams, collisionRuntimeParams) {
+        // Implemented outside class definition
+    }
+
+    _postSurfaceCheck(fixedHorizontalMovement, originalVerticalMovement, transformUp, collisionCheckParams, collisionRuntimeParams, previousCollisionRuntimeParams) {
+        // Implemented outside class definition
+    }
+
+    _surfaceTooSteep(up, direction, collisionCheckParams, collisionRuntimeParams) {
+        // Implemented outside class definition
+    }
+
+    _adjustVerticalMovementWithSurface(horizontalMovement, verticalMovement, up, collisionCheckParams, collisionRuntimeParams, previousCollisionRuntimeParams, outAdjustedVerticalMovement) {
+        // Implemented outside class definition
+    }
+
+    _adjustHorizontalMovementWithSurface(horizontalMovement, verticalMovement, up, collisionCheckParams, collisionRuntimeParams, previousCollisionRuntimeParams, outAdjustedHorizontalMovement) {
+        // Implemented outside class definition
+    }
+
+    _computeExtraSurfaceVerticalMovement(horizontalMovement, up, collisionCheckParams, collisionRuntimeParams, outExtraSurfaceVerticalMovement) {
+        // Implemented outside class definition
+    }
+
+    _gatherSurfaceInfo(feetPosition, height, up, forwardForPerceivedAngle, forwardForVertical, isGround, collisionCheckParams, collisionRuntimeParams) {
+        // Implemented outside class definition
+    }
+}
+
+
+
+// IMPLEMENTATION
+
+CollisionCheckSurface.prototype._updateSurfaceInfo = function () {
     let transformUp = vec3_create();
     let transformForward = vec3_create();
     let feetPosition = vec3_create();
@@ -63,7 +112,7 @@ CollisionCheck.prototype._updateSurfaceInfo = function () {
     };
 }();
 
-CollisionCheck.prototype._postSurfaceCheck = function () {
+CollisionCheckSurface.prototype._postSurfaceCheck = function () {
     let horizontalDirection = vec3_create();
     return function _postSurfaceCheck(fixedHorizontalMovement, originalVerticalMovement, transformUp, collisionCheckParams, collisionRuntimeParams, previousCollisionRuntimeParams) {
 
@@ -188,7 +237,7 @@ CollisionCheck.prototype._postSurfaceCheck = function () {
     };
 }();
 
-CollisionCheck.prototype._surfaceTooSteep = function () {
+CollisionCheckSurface.prototype._surfaceTooSteep = function () {
     let surfaceSteepResults = [false, false];
     return function _surfaceTooSteep(up, direction, collisionCheckParams, collisionRuntimeParams) {
         let groundTooSteep = false;
@@ -228,7 +277,7 @@ CollisionCheck.prototype._surfaceTooSteep = function () {
     };
 }();
 
-CollisionCheck.prototype._adjustVerticalMovementWithSurface = function () {
+CollisionCheckSurface.prototype._adjustVerticalMovementWithSurface = function () {
     let horizontalDirection = vec3_create();
     let extraVerticalMovement = vec3_create();
     return function _adjustVerticalMovementWithSurface(horizontalMovement, verticalMovement, up, collisionCheckParams, collisionRuntimeParams, previousCollisionRuntimeParams, outAdjustedVerticalMovement) {
@@ -328,7 +377,7 @@ CollisionCheck.prototype._adjustVerticalMovementWithSurface = function () {
     };
 }();
 
-CollisionCheck.prototype._adjustHorizontalMovementWithSurface = function () {
+CollisionCheckSurface.prototype._adjustHorizontalMovementWithSurface = function () {
     let extraHorizontalMovement = vec3_create();
     let groundHorizontalDirection = vec3_create();
     let ceilingHorizontalDirection = vec3_create();
@@ -424,7 +473,7 @@ CollisionCheck.prototype._adjustHorizontalMovementWithSurface = function () {
 }();
 
 // Useless now
-CollisionCheck.prototype._computeExtraSurfaceVerticalMovement = function () {
+CollisionCheckSurface.prototype._computeExtraSurfaceVerticalMovement = function () {
     let direction = vec3_create();
     let tempVector = vec3_create();
     return function _computeExtraSurfaceVerticalMovement(horizontalMovement, up, collisionCheckParams, collisionRuntimeParams, outExtraSurfaceVerticalMovement) {
@@ -463,7 +512,7 @@ CollisionCheck.prototype._computeExtraSurfaceVerticalMovement = function () {
     };
 }();
 
-CollisionCheck.prototype._gatherSurfaceInfo = function () {
+CollisionCheckSurface.prototype._gatherSurfaceInfo = function () {
     let verticalDirection = vec3_create();
     let startOffset = vec3_create();
     let endOffset = vec3_create();
@@ -650,7 +699,7 @@ CollisionCheck.prototype._gatherSurfaceInfo = function () {
     };
 }();
 
-CollisionCheck.prototype.computeSurfacePerceivedAngle = function () {
+CollisionCheckSurface.prototype.computeSurfacePerceivedAngle = function () {
     let forwardOnSurface = vec3_create();
     let verticalDirection = vec3_create();
     return function computeSurfacePerceivedAngle(surfaceNormal, forward, up, isGround = true) {
@@ -687,9 +736,3 @@ CollisionCheck.prototype.computeSurfacePerceivedAngle = function () {
         return surfacePerceivedAngle;
     };
 }();
-
-
-Object.defineProperty(CollisionCheck.prototype, "_surfaceTooSteep", { enumerable: false });
-Object.defineProperty(CollisionCheck.prototype, "_computeExtraSurfaceVerticalMovement", { enumerable: false });
-Object.defineProperty(CollisionCheck.prototype, "_gatherSurfaceInfo", { enumerable: false });
-Object.defineProperty(CollisionCheck.prototype, "_updateSurfaceInfo", { enumerable: false });

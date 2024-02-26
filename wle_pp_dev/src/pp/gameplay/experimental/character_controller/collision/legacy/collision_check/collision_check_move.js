@@ -1,9 +1,37 @@
 import { quat2_create, vec3_create } from "../../../../../../plugin/js/extensions/array_extension.js";
 import { Globals } from "../../../../../../pp/globals.js";
-import { CollisionCheck } from "./collision_check.js";
+import { CollisionCheckVertical } from "./collision_check_vertical.js";
 import { CollisionRuntimeParams } from "./collision_params.js";
 
-CollisionCheck.prototype._move = function () {
+export class CollisionCheckMove extends CollisionCheckVertical {
+
+    move(movement, transformQuat, collisionCheckParams, collisionRuntimeParams) {
+        if (this.isCollisionCheckDisabled() && Globals.isDebugEnabled(this._myEngine)) {
+            this._setRuntimeParamsForMoveCollisionCheckDisabled(movement, transformQuat, collisionCheckParams, collisionRuntimeParams);
+            return;
+        }
+
+        this._move(movement, transformQuat, collisionCheckParams, collisionRuntimeParams);
+    }
+
+    _move(movement, transformQuat, collisionCheckParams, collisionRuntimeParams) {
+        // Implemented outside class definition
+    }
+
+    _moveStep(movement, feetPosition, transformUp, transformForward, height, allowSurfaceSteepFix, collisionCheckParams, collisionRuntimeParams, outFixedMovement) {
+        // Implemented outside class definition
+    }
+
+    _syncCollisionRuntimeParamsWithPrevious(surfaceAdjustedHorizontalMovement, verticalMovement, up, collisionCheckParams, collisionRuntimeParams, previousCollisionRuntimeParams) {
+        // Implemented outside class definition
+    }
+}
+
+
+
+// IMPLEMENTATION
+
+CollisionCheckMove.prototype._move = function () {
     let transformUp = vec3_create();
     let transformForward = vec3_create();
     let feetPosition = vec3_create();
@@ -163,7 +191,7 @@ CollisionCheck.prototype._move = function () {
     };
 }();
 
-CollisionCheck.prototype._moveStep = function () {
+CollisionCheckMove.prototype._moveStep = function () {
     let horizontalMovement = vec3_create();
     let verticalMovement = vec3_create();
     let fixedHorizontalMovement = vec3_create();
@@ -496,7 +524,7 @@ CollisionCheck.prototype._moveStep = function () {
     };
 }();
 
-CollisionCheck.prototype._syncCollisionRuntimeParamsWithPrevious = function () {
+CollisionCheckMove.prototype._syncCollisionRuntimeParamsWithPrevious = function () {
     let previousFixedHorizontalMovement = vec3_create();
     return function _syncCollisionRuntimeParamsWithPrevious(surfaceAdjustedHorizontalMovement, verticalMovement, up, collisionCheckParams, collisionRuntimeParams, previousCollisionRuntimeParams) {
         collisionRuntimeParams.myIsSlidingFlickerPrevented = previousCollisionRuntimeParams.myIsSlidingFlickerPrevented;
@@ -536,9 +564,3 @@ CollisionCheck.prototype._syncCollisionRuntimeParamsWithPrevious = function () {
         }
     };
 }();
-
-
-
-Object.defineProperty(CollisionCheck.prototype, "_move", { enumerable: false });
-Object.defineProperty(CollisionCheck.prototype, "_moveStep", { enumerable: false });
-Object.defineProperty(CollisionCheck.prototype, "_syncCollisionRuntimeParamsWithPrevious", { enumerable: false });

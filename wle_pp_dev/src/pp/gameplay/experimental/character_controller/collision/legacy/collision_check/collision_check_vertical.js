@@ -1,8 +1,31 @@
 import { RaycastHit } from "../../../../../../cauldron/physics/physics_raycast_params.js";
 import { vec3_create } from "../../../../../../plugin/js/extensions/array_extension.js";
-import { CollisionCheck } from "./collision_check.js";
+import { CollisionCheckHorizontal } from "./collision_check_horizontal.js";
 
-CollisionCheck.prototype._verticalCheck = function () {
+export class CollisionCheckVertical extends CollisionCheckHorizontal {
+
+    _verticalCheck(verticalMovement, originalMovementSign, feetPosition, height, up, forward, collisionCheckParams, collisionRuntimeParams, outFixedMovement) {
+        // Implemented outside class definition
+    }
+
+    _verticalMovementAdjustment(verticalMovement, isMovementDownward, originalMovementSign, feetPosition, height, up, forward, collisionCheckParams, collisionRuntimeParams, outFixedMovement) {
+        // Implemented outside class definition
+    }
+
+    _verticalPositionCheck(feetPosition, checkUpward, height, up, forward, collisionCheckParams, collisionRuntimeParams) {
+        // Implemented outside class definition
+    }
+
+    _getVerticalCheckPositions(feetPosition, up, forward, collisionCheckParams, collisionRuntimeParams) {
+        // Implemented outside class definition
+    }
+}
+
+
+
+// IMPLEMENTATION
+
+CollisionCheckVertical.prototype._verticalCheck = function () {
     let newFeetPosition = vec3_create();
     let additionalFixedMovement = vec3_create();
     let zero = vec3_create(0, 0, 0);
@@ -59,7 +82,7 @@ CollisionCheck.prototype._verticalCheck = function () {
     };
 }();
 
-CollisionCheck.prototype._verticalMovementAdjustment = function () {
+CollisionCheckVertical.prototype._verticalMovementAdjustment = function () {
     let startOffset = vec3_create();
     let endOffset = vec3_create();
     let tempVector = vec3_create();
@@ -208,7 +231,7 @@ CollisionCheck.prototype._verticalMovementAdjustment = function () {
     };
 }();
 
-CollisionCheck.prototype._verticalPositionCheck = function () {
+CollisionCheckVertical.prototype._verticalPositionCheck = function () {
     let smallHeightFixOffset = vec3_create();
     let heightOffset = vec3_create();
     let startPosition = vec3_create();
@@ -277,7 +300,7 @@ CollisionCheck.prototype._verticalPositionCheck = function () {
     };
 }();
 
-CollisionCheck.prototype._getVerticalCheckPositions = function () {
+CollisionCheckVertical.prototype._getVerticalCheckPositions = function () {
     let checkPositions = [];
     let cachedCheckPositions = [];
     let currentCachedCheckPositionIndex = 0;
@@ -322,10 +345,3 @@ CollisionCheck.prototype._getVerticalCheckPositions = function () {
         return checkPositions;
     };
 }();
-
-
-
-Object.defineProperty(CollisionCheck.prototype, "_verticalCheck", { enumerable: false });
-Object.defineProperty(CollisionCheck.prototype, "_verticalMovementAdjustment", { enumerable: false });
-Object.defineProperty(CollisionCheck.prototype, "_verticalPositionCheck", { enumerable: false });
-Object.defineProperty(CollisionCheck.prototype, "_getVerticalCheckPositions", { enumerable: false });
