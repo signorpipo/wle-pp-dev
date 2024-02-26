@@ -14,7 +14,7 @@ import * as EasyTuneGlobals from "../tool/easy_tune/easy_tune_globals.js";
 import * as DefaultResourcesGlobals from "./default_resources_globals.js";
 import * as SceneObjectsGlobals from "./scene_objects_globals.js";
 
-export let Globals = {
+export const Globals = {
     ...EngineGlobals,
     ...SceneObjectsGlobals,
     ...DefaultResourcesGlobals,
