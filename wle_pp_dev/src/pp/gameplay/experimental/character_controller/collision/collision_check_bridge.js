@@ -455,10 +455,15 @@ export let convertCharacterColliderSetupToCollisionCheckParams = function () {
         outCollisionCheckParams.myIsOnGroundIfInsideHit = characterColliderSetup.myGroundParams.myOnSurfaceIfBaseInsideCollision;
         outCollisionCheckParams.myIsOnCeilingIfInsideHit = characterColliderSetup.myCeilingParams.myOnSurfaceIfBaseInsideCollision;
 
-        outCollisionCheckParams.myFindGroundDistanceMaxOutsideDistance = characterColliderSetup.myGroundParams.myFindSurfaceDistanceMaxOutsideDistance;
-        outCollisionCheckParams.myFindGroundDistanceMaxInsideDistance = characterColliderSetup.myGroundParams.myFindSurfaceDistanceMaxInsideDistance;
-        outCollisionCheckParams.myFindCeilingDistanceMaxOutsideDistance = characterColliderSetup.myCeilingParams.myFindSurfaceDistanceMaxOutsideDistance;
-        outCollisionCheckParams.myFindCeilingDistanceMaxInsideDistance = characterColliderSetup.myCeilingParams.myFindSurfaceDistanceMaxInsideDistance;
+        outCollisionCheckParams.myFindGroundDistanceMaxOutsideDistance = characterColliderSetup.myGroundParams.myCollectSurfaceDistanceOutsideDistance;
+        outCollisionCheckParams.myFindGroundDistanceMaxInsideDistance = characterColliderSetup.myGroundParams.myCollectSurfaceDistanceInsideDistance;
+        outCollisionCheckParams.myFindCeilingDistanceMaxOutsideDistance = characterColliderSetup.myCeilingParams.myCollectSurfaceDistanceOutsideDistance;
+        outCollisionCheckParams.myFindCeilingDistanceMaxInsideDistance = characterColliderSetup.myCeilingParams.myCollectSurfaceDistanceInsideDistance;
+
+        outCollisionCheckParams.myCollectGroundCollisionHitOutsideDistance = characterColliderSetup.myGroundParams.myCollectSurfaceCollisionHitOutsideDistance;
+        outCollisionCheckParams.myCollectGroundCollisionHitInsideDistance = characterColliderSetup.myGroundParams.myCollectSurfaceCollisionHitInsideDistance;
+        outCollisionCheckParams.myCollectCeilingCollisionHitOutsideDistance = characterColliderSetup.myCeilingParams.myCollectSurfaceCollisionHitOutsideDistance;
+        outCollisionCheckParams.myCollectCeilingCollisionHitInsideDistance = characterColliderSetup.myCeilingParams.myCollectSurfaceCollisionHitInsideDistance;
 
         outCollisionCheckParams.myAllowGroundSteepFix = characterColliderSetup.myGroundParams.myHorizontalMovementAllowExitAttemptWhenOnNotIgnorableSurfacePerceivedAngle;
         outCollisionCheckParams.myAllowCeilingSteepFix = characterColliderSetup.myCeilingParams.myHorizontalMovementAllowExitAttemptWhenOnNotIgnorableSurfacePerceivedAngle;

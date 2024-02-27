@@ -174,6 +174,10 @@ export class CollisionCheckParams {
         this.myFindGroundDistanceMaxInsideDistance = 0;
         this.myFindCeilingDistanceMaxOutsideDistance = 0;
         this.myFindCeilingDistanceMaxInsideDistance = 0;
+        this.myCollectGroundCollisionHitOutsideDistance = 0;
+        this.myCollectGroundCollisionHitInsideDistance = 0;
+        this.myCollectCeilingCollisionHitOutsideDistance = 0;
+        this.myCollectCeilingCollisionHitInsideDistance = 0;
 
         this.myAllowGroundSteepFix = false;
         this.myAllowCeilingSteepFix = false;
@@ -405,6 +409,10 @@ export class CollisionCheckParams {
         this.myFindGroundDistanceMaxInsideDistance = other.myFindGroundDistanceMaxInsideDistance;
         this.myFindCeilingDistanceMaxOutsideDistance = other.myFindCeilingDistanceMaxOutsideDistance;
         this.myFindCeilingDistanceMaxInsideDistance = other.myFindCeilingDistanceMaxInsideDistance;
+        this.myCollectGroundCollisionHitOutsideDistance = other.myCollectGroundCollisionHitOutsideDistance;
+        this.myCollectGroundCollisionHitInsideDistance = other.myCollectGroundCollisionHitInsideDistance;
+        this.myCollectCeilingCollisionHitOutsideDistance = other.myCollectCeilingCollisionHitOutsideDistance;
+        this.myCollectCeilingCollisionHitInsideDistance = other.myCollectCeilingCollisionHitInsideDistance;
 
         this.myAllowGroundSteepFix = other.myAllowGroundSteepFix;
         this.myAllowCeilingSteepFix = other.myAllowCeilingSteepFix;

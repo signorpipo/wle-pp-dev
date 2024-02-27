@@ -538,9 +538,11 @@ CollisionCheckSurface.prototype._gatherSurfaceInfo = function () {
         let distanceToBeOnSurface = collisionCheckParams.myDistanceToBeOnGround;
         let distanceToComputeSurfaceInfo = collisionCheckParams.myDistanceToComputeGroundInfo;
         let distanceToFindSurfaceDistance = collisionCheckParams.myFindGroundDistanceMaxOutsideDistance;
+        let distanceToCollectCollisionHit = collisionCheckParams.myCollectGroundCollisionHitOutsideDistance;
         let verticalFixToBeOnSurface = collisionCheckParams.myVerticalFixToBeOnGround;
         let verticalFixToComputeSurfaceInfo = collisionCheckParams.myVerticalFixToComputeGroundInfo;
         let verticalFixToFindSurfaceDistance = collisionCheckParams.myFindGroundDistanceMaxInsideDistance;
+        let verticalFixToCollectCollisionHit = collisionCheckParams.myCollectGroundCollisionHitInsideDistance;
         let isOnSurfaceIfInsideHit = collisionCheckParams.myIsOnGroundIfInsideHit;
         let isBaseInsideCollisionCheckEnabled = collisionCheckParams.myGroundIsBaseInsideCollisionCheckEnabled;
         if (!isGround) {
@@ -548,9 +550,11 @@ CollisionCheckSurface.prototype._gatherSurfaceInfo = function () {
             distanceToBeOnSurface = collisionCheckParams.myDistanceToBeOnCeiling;
             distanceToComputeSurfaceInfo = collisionCheckParams.myDistanceToComputeCeilingInfo;
             distanceToFindSurfaceDistance = collisionCheckParams.myFindCeilingDistanceMaxOutsideDistance;
+            distanceToCollectCollisionHit = collisionCheckParams.myCollectCeilingCollisionHitOutsideDistance;
             verticalFixToBeOnSurface = collisionCheckParams.myVerticalFixToBeOnCeiling;
             verticalFixToComputeSurfaceInfo = collisionCheckParams.myVerticalFixToComputeCeilingInfo;
             verticalFixToFindSurfaceDistance = collisionCheckParams.myFindCeilingDistanceMaxInsideDistance;
+            verticalFixToCollectCollisionHit = collisionCheckParams.myCollectCeilingCollisionHitInsideDistance;
             isOnSurfaceIfInsideHit = collisionCheckParams.myIsOnCeilingIfInsideHit;
             isBaseInsideCollisionCheckEnabled = collisionCheckParams.myCeilingIsBaseInsideCollisionCheckEnabled;
         }
@@ -576,6 +580,7 @@ CollisionCheckSurface.prototype._gatherSurfaceInfo = function () {
         surfaceHitMaxNormal.vec3_zero();
 
         let surfaceDistance = null;
+        let surfaceDistanceForCollectCollisionHit = null;
         let isBaseInsideCollision = checkPositions.length > 0;
 
         for (let i = 0; i < checkPositions.length; i++) {
@@ -647,11 +652,26 @@ CollisionCheckSurface.prototype._gatherSurfaceInfo = function () {
                             }
                         }
                     }
+
+                    if ((hitFromCurrentPositionLength >= 0 && hitFromCurrentPositionLength <= verticalFixToCollectCollisionHit + 0.00001) ||
+                        (hitFromCurrentPositionLength < 0 && Math.abs(hitFromCurrentPositionLength) <= distanceToCollectCollisionHit + 0.00001)) {
+                        if (surfaceDistanceForCollectCollisionHit == null) {
+                            surfaceDistanceForCollectCollisionHit = -hitFromCurrentPositionLength;
+                            surfaceCollisionHit.copy(raycastResult.myHits[0]);
+                        } else {
+                            if (Math.abs(hitFromCurrentPositionLength) < Math.abs(surfaceDistanceForCollectCollisionHit)) {
+                                surfaceDistanceForCollectCollisionHit = -hitFromCurrentPositionLength;
+                                surfaceCollisionHit.copy(raycastResult.myHits[0]);
+                            }
+                        }
+                    }
                 }
             } else if (isOnSurfaceIfInsideHit) {
-                isOnSurface = true;
-                if (!surfaceCollisionHit.isValid()) {
-                    surfaceCollisionHit.copy(surfaceCollisionHitForBaseInsideCollision);
+                if (!isOnSurface) {
+                    isOnSurface = true;
+                    if (!surfaceCollisionHit.isValid()) {
+                        surfaceCollisionHit.copy(surfaceCollisionHitForBaseInsideCollision);
+                    }
                 }
             }
         }
