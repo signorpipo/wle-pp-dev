@@ -120,6 +120,11 @@ export class BasePose {
         // Implemented outside class definition
     }
 
+    /**
+     * TS type inference helper
+     * 
+     * @param {any} referenceObjectOverride
+     */
     getTransformQuat(out = quat2_create(), referenceObjectOverride = undefined) {
         // Implemented outside class definition
     }
