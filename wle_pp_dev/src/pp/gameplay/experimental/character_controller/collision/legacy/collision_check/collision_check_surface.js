@@ -570,6 +570,7 @@ CollisionCheckSurface.prototype._gatherSurfaceInfo = function () {
         smallOffset = verticalDirection.vec3_scale(0.0001, smallOffset);
 
         let isOnSurface = false;
+        let isActuallyOnSurface = false;
         let surfaceAngle = 0;
         let surfacePerceivedAngle = 0;
         surfaceNormal.vec3_zero();
@@ -623,6 +624,7 @@ CollisionCheckSurface.prototype._gatherSurfaceInfo = function () {
                     if ((hitFromCurrentPositionLength >= 0 && hitFromCurrentPositionLength <= verticalFixToBeOnSurface + 0.00001) ||
                         (hitFromCurrentPositionLength < 0 && Math.abs(hitFromCurrentPositionLength) <= distanceToBeOnSurface + 0.00001)) {
                         isOnSurface = true;
+                        isActuallyOnSurface = true;
                     }
 
                     if ((hitFromCurrentPositionLength >= 0 && hitFromCurrentPositionLength <= verticalFixToComputeSurfaceInfo + 0.00001) ||
@@ -707,6 +709,8 @@ CollisionCheckSurface.prototype._gatherSurfaceInfo = function () {
             } else {
                 collisionRuntimeParams.myIsOnGround = false;
             }
+
+            collisionRuntimeParams.myOnGroundDueToBasePartiallyInsideCollision = isOnSurface && !isActuallyOnSurface;
         } else {
             collisionRuntimeParams.myRealIsOnCeiling = isOnSurface;
 
@@ -728,6 +732,8 @@ CollisionCheckSurface.prototype._gatherSurfaceInfo = function () {
             } else {
                 collisionRuntimeParams.myIsOnCeiling = false;
             }
+
+            collisionRuntimeParams.myOnCeilingDueToBasePartiallyInsideCollision = isOnSurface && !isActuallyOnSurface;
         }
     };
 }();

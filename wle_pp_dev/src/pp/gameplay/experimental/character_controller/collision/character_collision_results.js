@@ -66,6 +66,7 @@ export class CharacterCollisionSurfaceInfo {
         this.mySurfaceDistance = null;
 
         this.myBaseInsideCollision = false;
+        this.myOnSurfaceDueToBasePartiallyInsideCollision = false;
     }
 
     reset() {
@@ -315,6 +316,7 @@ CharacterCollisionSurfaceInfo.prototype.reset = function reset() {
     this.mySurfaceDistance = null;
 
     this.myBaseInsideCollision = false;
+    this.myOnSurfaceDueToBasePartiallyInsideCollision = false;
 };
 
 CharacterCollisionSurfaceInfo.prototype.copy = function copy(other) {
@@ -332,6 +334,7 @@ CharacterCollisionSurfaceInfo.prototype.copy = function copy(other) {
     this.mySurfaceDistance = other.mySurfaceDistance;
 
     this.myBaseInsideCollision = other.myBaseInsideCollision;
+    this.myOnSurfaceDueToBasePartiallyInsideCollision = other.myOnSurfaceDueToBasePartiallyInsideCollision;
 };
 
 CharacterCollisionWallSlideResults.prototype.reset = function reset() {

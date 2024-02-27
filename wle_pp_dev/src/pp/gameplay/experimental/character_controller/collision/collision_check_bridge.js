@@ -129,6 +129,7 @@ export function convertCharacterCollisionResultsToCollisionRuntimeParams(charact
     outCollisionRuntimeParams.myGroundHitMaxNormal.vec3_copy(characterCollisionResults.myGroundInfo.mySurfaceHitMaxNormal);
     outCollisionRuntimeParams.myGroundDistance = characterCollisionResults.myGroundInfo.mySurfaceDistance;
     outCollisionRuntimeParams.myGroundIsBaseInsideCollision = characterCollisionResults.myGroundInfo.myBaseInsideCollision;
+    outCollisionRuntimeParams.myOnGroundDueToBasePartiallyInsideCollision = characterCollisionResults.myGroundInfo.myOnSurfaceDueToBasePartiallyInsideCollision;
 
     outCollisionRuntimeParams.myIsOnCeiling = characterCollisionResults.myCeilingInfo.myOnSurface;
     outCollisionRuntimeParams.myCeilingCollisionHit.copy(characterCollisionResults.myCeilingInfo.mySurfaceReferenceCollisionHit);
@@ -139,6 +140,7 @@ export function convertCharacterCollisionResultsToCollisionRuntimeParams(charact
     outCollisionRuntimeParams.myCeilingHitMaxNormal.vec3_copy(characterCollisionResults.myCeilingInfo.mySurfaceHitMaxNormal);
     outCollisionRuntimeParams.myCeilingDistance = characterCollisionResults.myCeilingInfo.mySurfaceDistance;
     outCollisionRuntimeParams.myCeilingIsBaseInsideCollision = characterCollisionResults.myCeilingInfo.myBaseInsideCollision;
+    outCollisionRuntimeParams.myOnCeilingDueToBasePartiallyInsideCollision = characterCollisionResults.myCeilingInfo.myOnSurfaceDueToBasePartiallyInsideCollision;
 
     outCollisionRuntimeParams.myHorizontalMovementCanceled = characterCollisionResults.myHorizontalMovementResults.myMovementFailed;
     outCollisionRuntimeParams.myIsCollidingHorizontally = characterCollisionResults.myHorizontalMovementResults.myMovementCollided;

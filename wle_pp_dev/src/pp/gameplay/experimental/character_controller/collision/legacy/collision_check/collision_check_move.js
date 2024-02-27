@@ -408,6 +408,7 @@ CollisionCheckMove.prototype._moveStep = function () {
                     collisionRuntimeParams.myGroundHitMaxNormal.vec3_copy(this._myPrevCollisionRuntimeParams.myGroundHitMaxNormal);
                     collisionRuntimeParams.myGroundDistance = this._myPrevCollisionRuntimeParams.myGroundDistance;
                     collisionRuntimeParams.myGroundIsBaseInsideCollision = this._myPrevCollisionRuntimeParams.myGroundIsBaseInsideCollision;
+                    collisionRuntimeParams.myOnGroundDueToBasePartiallyInsideCollision = this._myPrevCollisionRuntimeParams.myOnGroundDueToBasePartiallyInsideCollision;
                 }
 
                 if (collisionCheckParams.myComputeCeilingInfoEnabled && collisionCheckParams.myRegatherCeilingInfoOnSurfaceCheckFail) {
@@ -423,6 +424,7 @@ CollisionCheckMove.prototype._moveStep = function () {
                     collisionRuntimeParams.myCeilingHitMaxNormal.vec3_copy(this._myPrevCollisionRuntimeParams.myCeilingHitMaxNormal);
                     collisionRuntimeParams.myCeilingDistance = this._myPrevCollisionRuntimeParams.myCeilingDistance;
                     collisionRuntimeParams.myCeilingIsBaseInsideCollision = this._myPrevCollisionRuntimeParams.myCeilingIsBaseInsideCollision;
+                    collisionRuntimeParams.myOnCeilingDueToBasePartiallyInsideCollision = this._myPrevCollisionRuntimeParams.myOnCeilingDueToBasePartiallyInsideCollision;
                 }
             }
         }
