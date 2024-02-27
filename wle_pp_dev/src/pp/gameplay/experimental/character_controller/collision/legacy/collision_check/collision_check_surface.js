@@ -623,9 +623,6 @@ CollisionCheckSurface.prototype._gatherSurfaceInfo = function () {
                     if ((hitFromCurrentPositionLength >= 0 && hitFromCurrentPositionLength <= verticalFixToBeOnSurface + 0.00001) ||
                         (hitFromCurrentPositionLength < 0 && Math.abs(hitFromCurrentPositionLength) <= distanceToBeOnSurface + 0.00001)) {
                         isOnSurface = true;
-                        if (!surfaceCollisionHit.isValid()) {
-                            surfaceCollisionHit.copy(raycastResult.myHits[0]);
-                        }
                     }
 
                     if ((hitFromCurrentPositionLength >= 0 && hitFromCurrentPositionLength <= verticalFixToComputeSurfaceInfo + 0.00001) ||
@@ -644,11 +641,9 @@ CollisionCheckSurface.prototype._gatherSurfaceInfo = function () {
                         (hitFromCurrentPositionLength < 0 && Math.abs(hitFromCurrentPositionLength) <= distanceToFindSurfaceDistance + 0.00001)) {
                         if (surfaceDistance == null) {
                             surfaceDistance = -hitFromCurrentPositionLength;
-                            surfaceCollisionHit.copy(raycastResult.myHits[0]);
                         } else {
                             if (Math.abs(hitFromCurrentPositionLength) < Math.abs(surfaceDistance)) {
                                 surfaceDistance = -hitFromCurrentPositionLength;
-                                surfaceCollisionHit.copy(raycastResult.myHits[0]);
                             }
                         }
                     }
