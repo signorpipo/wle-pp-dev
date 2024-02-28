@@ -104,7 +104,8 @@
         - pp_destroy
 */
 
-import { Component, type ComponentConstructor, Object3D, WonderlandEngine, type NumberArray } from "@wonderlandengine/api";
+import { Component, Object3D, WonderlandEngine, type ComponentConstructor, type NumberArray } from "@wonderlandengine/api";
+import { Matrix3, Matrix4, Quaternion, Quaternion2, Vector3 } from "../../../cauldron/js/array_type_definitions.js";
 import { Mat3Utils } from "../../../cauldron/js/utils/mat3_utils.js";
 import { Mat4Utils } from "../../../cauldron/js/utils/mat4_utils.js";
 import { Quat2Utils } from "../../../cauldron/js/utils/quat2_utils.js";
@@ -112,7 +113,6 @@ import { QuatUtils } from "../../../cauldron/js/utils/quat_utils.js";
 import { Vec3Utils } from "../../../cauldron/js/utils/vec3_utils.js";
 import { CloneParams, ObjectUtils } from "../../../cauldron/wl/utils/object_utils.js";
 import { PluginUtils } from "../../utils/plugin_utils.js";
-import { Matrix3, Matrix4, Quaternion, Quaternion2, Vector3 } from "../../../cauldron/js/array_type_definitions.js";
 
 export function initObjectExtension(): void {
     initObjectExtensionProtoype();
@@ -362,235 +362,235 @@ export function initObjectExtensionProtoype(): void {
 
     // Position
 
-    objectExtension.pp_setPosition = function pp_setPosition(position: Vector3): void {
+    objectExtension.pp_setPosition = function pp_setPosition(position: Vector3): Object3D {
         return ObjectUtils.setPosition(this, position);
     };
 
-    objectExtension.pp_setPositionWorld = function pp_setPositionWorld(position: Vector3): void {
+    objectExtension.pp_setPositionWorld = function pp_setPositionWorld(position: Vector3): Object3D {
         return ObjectUtils.setPositionWorld(this, position);
     };
 
-    objectExtension.pp_setPositionLocal = function pp_setPositionLocal(position: Vector3): void {
+    objectExtension.pp_setPositionLocal = function pp_setPositionLocal(position: Vector3): Object3D {
         return ObjectUtils.setPositionLocal(this, position);
     };
 
     // Rotation
 
-    objectExtension.pp_setRotation = function pp_setRotation(rotation: Vector3): void {
+    objectExtension.pp_setRotation = function pp_setRotation(rotation: Vector3): Object3D {
         return ObjectUtils.setRotation(this, rotation);
     };
 
-    objectExtension.pp_setRotationDegrees = function pp_setRotationDegrees(rotation: Vector3): void {
+    objectExtension.pp_setRotationDegrees = function pp_setRotationDegrees(rotation: Vector3): Object3D {
         return ObjectUtils.setRotationDegrees(this, rotation);
     };
 
-    objectExtension.pp_setRotationRadians = function pp_setRotationRadians(rotation: Vector3): void {
+    objectExtension.pp_setRotationRadians = function pp_setRotationRadians(rotation: Vector3): Object3D {
         return ObjectUtils.setRotationRadians(this, rotation);
     };
 
-    objectExtension.pp_setRotationMatrix = function pp_setRotationMatrix(rotation: Matrix3): void {
+    objectExtension.pp_setRotationMatrix = function pp_setRotationMatrix(rotation: Matrix3): Object3D {
         return ObjectUtils.setRotationMatrix(this, rotation);
     };
 
-    objectExtension.pp_setRotationQuat = function pp_setRotationQuat(rotation: Quaternion): void {
+    objectExtension.pp_setRotationQuat = function pp_setRotationQuat(rotation: Quaternion): Object3D {
         return ObjectUtils.setRotationQuat(this, rotation);
     };
 
     // Rotation World
 
-    objectExtension.pp_setRotationWorld = function pp_setRotationWorld(rotation: Vector3): void {
+    objectExtension.pp_setRotationWorld = function pp_setRotationWorld(rotation: Vector3): Object3D {
         return ObjectUtils.setRotationWorld(this, rotation);
     };
 
-    objectExtension.pp_setRotationWorldDegrees = function pp_setRotationWorldDegrees(rotation: Vector3): void {
+    objectExtension.pp_setRotationWorldDegrees = function pp_setRotationWorldDegrees(rotation: Vector3): Object3D {
         return ObjectUtils.setRotationWorldDegrees(this, rotation);
     };
 
-    objectExtension.pp_setRotationWorldRadians = function pp_setRotationWorldRadians(rotation: Vector3): void {
+    objectExtension.pp_setRotationWorldRadians = function pp_setRotationWorldRadians(rotation: Vector3): Object3D {
         return ObjectUtils.setRotationWorldRadians(this, rotation);
     };
 
-    objectExtension.pp_setRotationWorldMatrix = function pp_setRotationWorldMatrix(rotation: Matrix3): void {
+    objectExtension.pp_setRotationWorldMatrix = function pp_setRotationWorldMatrix(rotation: Matrix3): Object3D {
         return ObjectUtils.setRotationWorldMatrix(this, rotation);
     };
 
-    objectExtension.pp_setRotationWorldQuat = function pp_setRotationWorldQuat(rotation: Quaternion): void {
+    objectExtension.pp_setRotationWorldQuat = function pp_setRotationWorldQuat(rotation: Quaternion): Object3D {
         return ObjectUtils.setRotationWorldQuat(this, rotation);
     };
 
     // Rotation Local
 
-    objectExtension.pp_setRotationLocal = function pp_setRotationLocal(rotation: Vector3): void {
+    objectExtension.pp_setRotationLocal = function pp_setRotationLocal(rotation: Vector3): Object3D {
         return ObjectUtils.setRotationLocal(this, rotation);
     };
 
-    objectExtension.pp_setRotationLocalDegrees = function pp_setRotationLocalDegrees(rotation: Vector3): void {
+    objectExtension.pp_setRotationLocalDegrees = function pp_setRotationLocalDegrees(rotation: Vector3): Object3D {
         return ObjectUtils.setRotationLocalDegrees(this, rotation);
     };
 
-    objectExtension.pp_setRotationLocalRadians = function pp_setRotationLocalRadians(rotation: Vector3): void {
+    objectExtension.pp_setRotationLocalRadians = function pp_setRotationLocalRadians(rotation: Vector3): Object3D {
         return ObjectUtils.setRotationLocalRadians(this, rotation);
     };
 
-    objectExtension.pp_setRotationLocalMatrix = function pp_setRotationLocalMatrix(rotation: Matrix3): void {
+    objectExtension.pp_setRotationLocalMatrix = function pp_setRotationLocalMatrix(rotation: Matrix3): Object3D {
         return ObjectUtils.setRotationLocalMatrix(this, rotation);
     };
 
-    objectExtension.pp_setRotationLocalQuat = function pp_setRotationLocalQuat(rotation: Quaternion): void {
+    objectExtension.pp_setRotationLocalQuat = function pp_setRotationLocalQuat(rotation: Quaternion): Object3D {
         return ObjectUtils.setRotationLocalQuat(this, rotation);
     };
 
     // Scale
 
-    objectExtension.pp_setScale = function pp_setScale(scale: number | Vector3): void {
+    objectExtension.pp_setScale = function pp_setScale(scale: number | Vector3): Object3D {
         return ObjectUtils.setScale(this, scale);
     };
 
-    objectExtension.pp_setScaleWorld = function pp_setScaleWorld(scale: number | Vector3): void {
+    objectExtension.pp_setScaleWorld = function pp_setScaleWorld(scale: number | Vector3): Object3D {
         return ObjectUtils.setScaleWorld(this, scale);
     };
 
-    objectExtension.pp_setScaleLocal = function pp_setScaleLocal(scale: number | Vector3): void {
+    objectExtension.pp_setScaleLocal = function pp_setScaleLocal(scale: number | Vector3): Object3D {
         return ObjectUtils.setScaleLocal(this, scale);
     };
 
     // Axes    
 
-    objectExtension.pp_setAxes = function pp_setAxes(left: Vector3 | null = null, up: Vector3 | null = null, forward: Vector3 | null = null): void {
+    objectExtension.pp_setAxes = function pp_setAxes(left: Vector3 | null = null, up: Vector3 | null = null, forward: Vector3 | null = null): Object3D {
         return ObjectUtils.setAxes(this, left, up, forward);
     };
 
-    objectExtension.pp_setAxesWorld = function pp_setAxesWorld(left: Vector3 | null = null, up: Vector3 | null = null, forward: Vector3 | null = null): void {
+    objectExtension.pp_setAxesWorld = function pp_setAxesWorld(left: Vector3 | null = null, up: Vector3 | null = null, forward: Vector3 | null = null): Object3D {
         return ObjectUtils.setAxesWorld(this, left, up, forward);
     };
 
-    objectExtension.pp_setAxesLocal = function pp_setAxesLocal(left: Vector3 | null = null, up: Vector3 | null = null, forward: Vector3 | null = null): void {
+    objectExtension.pp_setAxesLocal = function pp_setAxesLocal(left: Vector3 | null = null, up: Vector3 | null = null, forward: Vector3 | null = null): Object3D {
         return ObjectUtils.setAxesLocal(this, left, up, forward);
     };
 
     // Forward
 
-    objectExtension.pp_setForward = function pp_setForward(forward: Vector3, up: Vector3 | null = null, left: Vector3 | null = null): void {
+    objectExtension.pp_setForward = function pp_setForward(forward: Vector3, up: Vector3 | null = null, left: Vector3 | null = null): Object3D {
         return ObjectUtils.setForward(this, forward, up, left);
     };
 
-    objectExtension.pp_setForwardWorld = function pp_setForwardWorld(forward: Vector3, up: Vector3 | null = null, left: Vector3 | null = null): void {
+    objectExtension.pp_setForwardWorld = function pp_setForwardWorld(forward: Vector3, up: Vector3 | null = null, left: Vector3 | null = null): Object3D {
         return ObjectUtils.setForwardWorld(this, forward, up, left);
     };
 
-    objectExtension.pp_setForwardLocal = function pp_setForwardLocal(forward: Vector3, up: Vector3 | null = null, left: Vector3 | null = null): void {
+    objectExtension.pp_setForwardLocal = function pp_setForwardLocal(forward: Vector3, up: Vector3 | null = null, left: Vector3 | null = null): Object3D {
         return ObjectUtils.setForwardLocal(this, forward, up, left);
     };
 
     // Backward
 
-    objectExtension.pp_setBackward = function pp_setBackward(backward: Vector3, up: Vector3 | null = null, left: Vector3 | null = null): void {
+    objectExtension.pp_setBackward = function pp_setBackward(backward: Vector3, up: Vector3 | null = null, left: Vector3 | null = null): Object3D {
         return ObjectUtils.setBackward(this, backward, up, left);
     };
 
-    objectExtension.pp_setBackwardWorld = function pp_setBackwardWorld(backward: Vector3, up: Vector3 | null = null, left: Vector3 | null = null): void {
+    objectExtension.pp_setBackwardWorld = function pp_setBackwardWorld(backward: Vector3, up: Vector3 | null = null, left: Vector3 | null = null): Object3D {
         return ObjectUtils.setBackwardWorld(this, backward, up, left);
     };
 
-    objectExtension.pp_setBackwardLocal = function pp_setBackwardLocal(backward: Vector3, up: Vector3 | null = null, left: Vector3 | null = null): void {
+    objectExtension.pp_setBackwardLocal = function pp_setBackwardLocal(backward: Vector3, up: Vector3 | null = null, left: Vector3 | null = null): Object3D {
         return ObjectUtils.setBackwardLocal(this, backward, up, left);
     };
 
     // Up
 
-    objectExtension.pp_setUp = function pp_setUp(up: Vector3, forward: Vector3 | null = null, left: Vector3 | null = null): void {
+    objectExtension.pp_setUp = function pp_setUp(up: Vector3, forward: Vector3 | null = null, left: Vector3 | null = null): Object3D {
         return ObjectUtils.setUp(this, up, forward, left);
     };
 
-    objectExtension.pp_setUpWorld = function pp_setUpWorld(up: Vector3, forward: Vector3 | null = null, left: Vector3 | null = null): void {
+    objectExtension.pp_setUpWorld = function pp_setUpWorld(up: Vector3, forward: Vector3 | null = null, left: Vector3 | null = null): Object3D {
         return ObjectUtils.setUpWorld(this, up, forward, left);
     };
 
-    objectExtension.pp_setUpLocal = function pp_setUpLocal(up: Vector3, forward: Vector3 | null = null, left: Vector3 | null = null): void {
+    objectExtension.pp_setUpLocal = function pp_setUpLocal(up: Vector3, forward: Vector3 | null = null, left: Vector3 | null = null): Object3D {
         return ObjectUtils.setUpLocal(this, up, forward, left);
     };
 
     // Down
 
-    objectExtension.pp_setDown = function pp_setDown(down: Vector3, forward: Vector3 | null = null, left: Vector3 | null = null): void {
+    objectExtension.pp_setDown = function pp_setDown(down: Vector3, forward: Vector3 | null = null, left: Vector3 | null = null): Object3D {
         return ObjectUtils.setDown(this, down, forward, left);
     };
 
-    objectExtension.pp_setDownWorld = function pp_setDownWorld(down: Vector3, forward: Vector3 | null = null, left: Vector3 | null = null): void {
+    objectExtension.pp_setDownWorld = function pp_setDownWorld(down: Vector3, forward: Vector3 | null = null, left: Vector3 | null = null): Object3D {
         return ObjectUtils.setDownWorld(this, down, forward, left);
     };
 
-    objectExtension.pp_setDownLocal = function pp_setDownLocal(down: Vector3, forward: Vector3 | null = null, left: Vector3 | null = null): void {
+    objectExtension.pp_setDownLocal = function pp_setDownLocal(down: Vector3, forward: Vector3 | null = null, left: Vector3 | null = null): Object3D {
         return ObjectUtils.setDownLocal(this, down, forward, left);
     };
 
     // Left
 
-    objectExtension.pp_setLeft = function pp_setLeft(left: Vector3, up: Vector3 | null = null, forward: Vector3 | null = null): void {
+    objectExtension.pp_setLeft = function pp_setLeft(left: Vector3, up: Vector3 | null = null, forward: Vector3 | null = null): Object3D {
         return ObjectUtils.setLeft(this, left, up, forward);
     };
 
-    objectExtension.pp_setLeftWorld = function pp_setLeftWorld(left: Vector3, up: Vector3 | null = null, forward: Vector3 | null = null): void {
+    objectExtension.pp_setLeftWorld = function pp_setLeftWorld(left: Vector3, up: Vector3 | null = null, forward: Vector3 | null = null): Object3D {
         return ObjectUtils.setLeftWorld(this, left, up, forward);
     };
 
-    objectExtension.pp_setLeftLocal = function pp_setLeftLocal(left: Vector3, up: Vector3 | null = null, forward: Vector3 | null = null): void {
+    objectExtension.pp_setLeftLocal = function pp_setLeftLocal(left: Vector3, up: Vector3 | null = null, forward: Vector3 | null = null): Object3D {
         return ObjectUtils.setLeftLocal(this, left, up, forward);
     };
 
     // Right
 
-    objectExtension.pp_setRight = function pp_setRight(right: Vector3, up: Vector3 | null = null, forward: Vector3 | null = null): void {
+    objectExtension.pp_setRight = function pp_setRight(right: Vector3, up: Vector3 | null = null, forward: Vector3 | null = null): Object3D {
         return ObjectUtils.setRight(this, right, up, forward);
     };
 
-    objectExtension.pp_setRightWorld = function pp_setRightWorld(right: Vector3, up: Vector3 | null = null, forward: Vector3 | null = null): void {
+    objectExtension.pp_setRightWorld = function pp_setRightWorld(right: Vector3, up: Vector3 | null = null, forward: Vector3 | null = null): Object3D {
         return ObjectUtils.setRightWorld(this, right, up, forward);
     };
 
-    objectExtension.pp_setRightLocal = function pp_setRightLocal(right: Vector3, up: Vector3 | null = null, forward: Vector3 | null = null): void {
+    objectExtension.pp_setRightLocal = function pp_setRightLocal(right: Vector3, up: Vector3 | null = null, forward: Vector3 | null = null): Object3D {
         return ObjectUtils.setRightLocal(this, right, up, forward);
     };
 
     // Transform
 
-    objectExtension.pp_setTransform = function pp_setTransform(transform: Matrix4): void {
+    objectExtension.pp_setTransform = function pp_setTransform(transform: Matrix4): Object3D {
         return ObjectUtils.setTransform(this, transform);
     };
 
-    objectExtension.pp_setTransformMatrix = function pp_setTransformMatrix(transform: Matrix4): void {
+    objectExtension.pp_setTransformMatrix = function pp_setTransformMatrix(transform: Matrix4): Object3D {
         return ObjectUtils.setTransformMatrix(this, transform);
     };
 
-    objectExtension.pp_setTransformQuat = function pp_setTransformQuat(transform: Quaternion2): void {
+    objectExtension.pp_setTransformQuat = function pp_setTransformQuat(transform: Quaternion2): Object3D {
         return ObjectUtils.setTransformQuat(this, transform);
     };
 
     // Transform World
 
-    objectExtension.pp_setTransformWorld = function pp_setTransformWorld(transform: Matrix4): void {
+    objectExtension.pp_setTransformWorld = function pp_setTransformWorld(transform: Matrix4): Object3D {
         return ObjectUtils.setTransformWorld(this, transform);
     };
 
-    objectExtension.pp_setTransformWorldMatrix = function pp_setTransformWorldMatrix(transform: Matrix4): void {
+    objectExtension.pp_setTransformWorldMatrix = function pp_setTransformWorldMatrix(transform: Matrix4): Object3D {
         return ObjectUtils.setTransformWorldMatrix(this, transform);
     };
 
-    objectExtension.pp_setTransformWorldQuat = function pp_setTransformWorldQuat(transform: Quaternion2): void {
+    objectExtension.pp_setTransformWorldQuat = function pp_setTransformWorldQuat(transform: Quaternion2): Object3D {
         return ObjectUtils.setTransformWorldQuat(this, transform);
     };
 
     // Transform Local
 
-    objectExtension.pp_setTransformLocal = function pp_setTransformLocal(transform: Matrix4): void {
+    objectExtension.pp_setTransformLocal = function pp_setTransformLocal(transform: Matrix4): Object3D {
         return ObjectUtils.setTransformLocal(this, transform);
     };
 
-    objectExtension.pp_setTransformLocalMatrix = function pp_setTransformLocalMatrix(transform: Matrix4): void {
+    objectExtension.pp_setTransformLocalMatrix = function pp_setTransformLocalMatrix(transform: Matrix4): Object3D {
         return ObjectUtils.setTransformLocalMatrix(this, transform);
     };
 
-    objectExtension.pp_setTransformLocalQuat = function pp_setTransformLocalQuat(transform: Quaternion2): void {
+    objectExtension.pp_setTransformLocalQuat = function pp_setTransformLocalQuat(transform: Quaternion2): Object3D {
         return ObjectUtils.setTransformLocalQuat(this, transform);
     };
 
@@ -598,57 +598,57 @@ export function initObjectExtensionProtoype(): void {
 
     // Position
 
-    objectExtension.pp_resetPosition = function pp_resetPosition(): void {
+    objectExtension.pp_resetPosition = function pp_resetPosition(): Object3D {
         return ObjectUtils.resetPosition(this);
     };
 
-    objectExtension.pp_resetPositionWorld = function pp_resetPositionWorld(): void {
+    objectExtension.pp_resetPositionWorld = function pp_resetPositionWorld(): Object3D {
         return ObjectUtils.resetPositionWorld(this);
     };
 
-    objectExtension.pp_resetPositionLocal = function pp_resetPositionLocal(): void {
+    objectExtension.pp_resetPositionLocal = function pp_resetPositionLocal(): Object3D {
         return ObjectUtils.resetPositionLocal(this);
     };
 
     // Rotation
 
-    objectExtension.pp_resetRotation = function pp_resetRotation(): void {
+    objectExtension.pp_resetRotation = function pp_resetRotation(): Object3D {
         return ObjectUtils.resetRotation(this);
     };
 
-    objectExtension.pp_resetRotationWorld = function pp_resetRotationWorld(): void {
+    objectExtension.pp_resetRotationWorld = function pp_resetRotationWorld(): Object3D {
         return ObjectUtils.resetRotationWorld(this);
     };
 
-    objectExtension.pp_resetRotationLocal = function pp_resetRotationLocal(): void {
+    objectExtension.pp_resetRotationLocal = function pp_resetRotationLocal(): Object3D {
         return ObjectUtils.resetRotationLocal(this);
     };
 
     // Scale
 
-    objectExtension.pp_resetScale = function pp_resetScale(): void {
+    objectExtension.pp_resetScale = function pp_resetScale(): Object3D {
         return ObjectUtils.resetScale(this);
     };
 
-    objectExtension.pp_resetScaleWorld = function pp_resetScaleWorld(): void {
+    objectExtension.pp_resetScaleWorld = function pp_resetScaleWorld(): Object3D {
         return ObjectUtils.resetScaleWorld(this);
     };
 
-    objectExtension.pp_resetScaleLocal = function pp_resetScaleLocal(): void {
+    objectExtension.pp_resetScaleLocal = function pp_resetScaleLocal(): Object3D {
         return ObjectUtils.resetScaleLocal(this);
     };
 
     // Transform
 
-    objectExtension.pp_resetTransform = function pp_resetTransform(): void {
+    objectExtension.pp_resetTransform = function pp_resetTransform(): Object3D {
         return ObjectUtils.resetTransform(this);
     };
 
-    objectExtension.pp_resetTransformWorld = function pp_resetTransformWorld(): void {
+    objectExtension.pp_resetTransformWorld = function pp_resetTransformWorld(): Object3D {
         return ObjectUtils.resetTransformWorld(this);
     };
 
-    objectExtension.pp_resetTransformLocal = function pp_resetTransformLocal(): void {
+    objectExtension.pp_resetTransformLocal = function pp_resetTransformLocal(): Object3D {
         return ObjectUtils.resetTransformLocal(this);
     };
 
@@ -656,357 +656,357 @@ export function initObjectExtensionProtoype(): void {
 
     // Translate
 
-    objectExtension.pp_translate = function pp_translate(translation: Vector3): void {
+    objectExtension.pp_translate = function pp_translate(translation: Vector3): Object3D {
         return ObjectUtils.translate(this, translation);
     };
 
-    objectExtension.pp_translateWorld = function pp_translateWorld(translation: Vector3): void {
+    objectExtension.pp_translateWorld = function pp_translateWorld(translation: Vector3): Object3D {
         return ObjectUtils.translateWorld(this, translation);
     };
 
-    objectExtension.pp_translateLocal = function pp_translateLocal(translation: Vector3): void {
+    objectExtension.pp_translateLocal = function pp_translateLocal(translation: Vector3): Object3D {
         return ObjectUtils.translateLocal(this, translation);
     };
 
-    objectExtension.pp_translateObject = function pp_translateObject(translation: Vector3): void {
+    objectExtension.pp_translateObject = function pp_translateObject(translation: Vector3): Object3D {
         return ObjectUtils.translateObject(this, translation);
     };
 
     // Translate Axis
 
-    objectExtension.pp_translateAxis = function pp_translateAxis(amount: number, direction: Vector3): void {
+    objectExtension.pp_translateAxis = function pp_translateAxis(amount: number, direction: Vector3): Object3D {
         return ObjectUtils.translateAxis(this, amount, direction);
     };
 
-    objectExtension.pp_translateAxisWorld = function pp_translateAxisWorld(amount: number, direction: Vector3): void {
+    objectExtension.pp_translateAxisWorld = function pp_translateAxisWorld(amount: number, direction: Vector3): Object3D {
         return ObjectUtils.translateAxisWorld(this, amount, direction);
     };
 
-    objectExtension.pp_translateAxisLocal = function pp_translateAxisLocal(amount: number, direction: Vector3): void {
+    objectExtension.pp_translateAxisLocal = function pp_translateAxisLocal(amount: number, direction: Vector3): Object3D {
         return ObjectUtils.translateAxisLocal(this, amount, direction);
     };
 
-    objectExtension.pp_translateAxisObject = function pp_translateAxisObject(amount: number, direction: Vector3): void {
+    objectExtension.pp_translateAxisObject = function pp_translateAxisObject(amount: number, direction: Vector3): Object3D {
         return ObjectUtils.translateAxisObject(this, amount, direction);
     };
 
     // Rotate
 
-    objectExtension.pp_rotate = function pp_rotate(rotation: Vector3): void {
+    objectExtension.pp_rotate = function pp_rotate(rotation: Vector3): Object3D {
         return ObjectUtils.rotate(this, rotation);
     };
 
-    objectExtension.pp_rotateDegrees = function pp_rotateDegrees(rotation: Vector3): void {
+    objectExtension.pp_rotateDegrees = function pp_rotateDegrees(rotation: Vector3): Object3D {
         return ObjectUtils.rotateDegrees(this, rotation);
     };
 
-    objectExtension.pp_rotateRadians = function pp_rotateRadians(rotation: Vector3): void {
+    objectExtension.pp_rotateRadians = function pp_rotateRadians(rotation: Vector3): Object3D {
         return ObjectUtils.rotateRadians(this, rotation);
     };
 
-    objectExtension.pp_rotateMatrix = function pp_rotateMatrix(rotation: Matrix3): void {
+    objectExtension.pp_rotateMatrix = function pp_rotateMatrix(rotation: Matrix3): Object3D {
         return ObjectUtils.rotateMatrix(this, rotation);
     };
 
-    objectExtension.pp_rotateQuat = function pp_rotateQuat(rotation: Quaternion): void {
+    objectExtension.pp_rotateQuat = function pp_rotateQuat(rotation: Quaternion): Object3D {
         return ObjectUtils.rotateQuat(this, rotation);
     };
 
     // Rotate World
 
-    objectExtension.pp_rotateWorld = function pp_rotateWorld(rotation: Vector3): void {
+    objectExtension.pp_rotateWorld = function pp_rotateWorld(rotation: Vector3): Object3D {
         return ObjectUtils.rotateWorld(this, rotation);
     };
 
-    objectExtension.pp_rotateWorldDegrees = function pp_rotateWorldDegrees(rotation: Vector3): void {
+    objectExtension.pp_rotateWorldDegrees = function pp_rotateWorldDegrees(rotation: Vector3): Object3D {
         return ObjectUtils.rotateWorldDegrees(this, rotation);
     };
 
-    objectExtension.pp_rotateWorldRadians = function pp_rotateWorldRadians(rotation: Vector3): void {
+    objectExtension.pp_rotateWorldRadians = function pp_rotateWorldRadians(rotation: Vector3): Object3D {
         return ObjectUtils.rotateWorldRadians(this, rotation);
     };
 
-    objectExtension.pp_rotateWorldMatrix = function pp_rotateWorldMatrix(rotation: Matrix3): void {
+    objectExtension.pp_rotateWorldMatrix = function pp_rotateWorldMatrix(rotation: Matrix3): Object3D {
         return ObjectUtils.rotateWorldMatrix(this, rotation);
     };
 
-    objectExtension.pp_rotateWorldQuat = function pp_rotateWorldQuat(rotation: Quaternion): void {
+    objectExtension.pp_rotateWorldQuat = function pp_rotateWorldQuat(rotation: Quaternion): Object3D {
         return ObjectUtils.rotateWorldQuat(this, rotation);
     };
 
     // Rotate Local
 
-    objectExtension.pp_rotateLocal = function pp_rotateLocal(rotation: Vector3): void {
+    objectExtension.pp_rotateLocal = function pp_rotateLocal(rotation: Vector3): Object3D {
         return ObjectUtils.rotateLocal(this, rotation);
     };
 
-    objectExtension.pp_rotateLocalDegrees = function pp_rotateLocalDegrees(rotation: Vector3): void {
+    objectExtension.pp_rotateLocalDegrees = function pp_rotateLocalDegrees(rotation: Vector3): Object3D {
         return ObjectUtils.rotateLocalDegrees(this, rotation);
     };
 
-    objectExtension.pp_rotateLocalRadians = function pp_rotateLocalRadians(rotation: Vector3): void {
+    objectExtension.pp_rotateLocalRadians = function pp_rotateLocalRadians(rotation: Vector3): Object3D {
         return ObjectUtils.rotateLocalRadians(this, rotation);
     };
 
-    objectExtension.pp_rotateLocalMatrix = function pp_rotateLocalMatrix(rotation: Matrix3): void {
+    objectExtension.pp_rotateLocalMatrix = function pp_rotateLocalMatrix(rotation: Matrix3): Object3D {
         return ObjectUtils.rotateLocalMatrix(this, rotation);
     };
 
-    objectExtension.pp_rotateLocalQuat = function pp_rotateLocalQuat(rotation: Quaternion): void {
+    objectExtension.pp_rotateLocalQuat = function pp_rotateLocalQuat(rotation: Quaternion): Object3D {
         return ObjectUtils.rotateLocalQuat(this, rotation);
     };
 
     // Rotate Object
 
-    objectExtension.pp_rotateObject = function pp_rotateObject(rotation: Vector3): void {
+    objectExtension.pp_rotateObject = function pp_rotateObject(rotation: Vector3): Object3D {
         return ObjectUtils.rotateObject(this, rotation);
     };
 
-    objectExtension.pp_rotateObjectDegrees = function pp_rotateObjectDegrees(rotation: Vector3): void {
+    objectExtension.pp_rotateObjectDegrees = function pp_rotateObjectDegrees(rotation: Vector3): Object3D {
         return ObjectUtils.rotateObjectDegrees(this, rotation);
     };
 
-    objectExtension.pp_rotateObjectRadians = function pp_rotateObjectRadians(rotation: Vector3): void {
+    objectExtension.pp_rotateObjectRadians = function pp_rotateObjectRadians(rotation: Vector3): Object3D {
         return ObjectUtils.rotateObjectRadians(this, rotation);
     };
 
-    objectExtension.pp_rotateObjectMatrix = function pp_rotateObjectMatrix(rotation: Matrix3): void {
+    objectExtension.pp_rotateObjectMatrix = function pp_rotateObjectMatrix(rotation: Matrix3): Object3D {
         return ObjectUtils.rotateObjectMatrix(this, rotation);
     };
 
-    objectExtension.pp_rotateObjectQuat = function pp_rotateObjectQuat(rotation: Quaternion): void {
+    objectExtension.pp_rotateObjectQuat = function pp_rotateObjectQuat(rotation: Quaternion): Object3D {
         return ObjectUtils.rotateObjectQuat(this, rotation);
     };
 
     // Rotate Axis
 
-    objectExtension.pp_rotateAxis = function pp_rotateAxis(angle: number, axis: Vector3): void {
+    objectExtension.pp_rotateAxis = function pp_rotateAxis(angle: number, axis: Vector3): Object3D {
         return ObjectUtils.rotateAxis(this, angle, axis);
     };
 
-    objectExtension.pp_rotateAxisDegrees = function pp_rotateAxisDegrees(angle: number, axis: Vector3): void {
+    objectExtension.pp_rotateAxisDegrees = function pp_rotateAxisDegrees(angle: number, axis: Vector3): Object3D {
         return ObjectUtils.rotateAxisDegrees(this, angle, axis);
     };
 
-    objectExtension.pp_rotateAxisRadians = function pp_rotateAxisRadians(angle: number, axis: Vector3): void {
+    objectExtension.pp_rotateAxisRadians = function pp_rotateAxisRadians(angle: number, axis: Vector3): Object3D {
         return ObjectUtils.rotateAxisRadians(this, angle, axis);
     };
 
     // Rotate Axis World
 
-    objectExtension.pp_rotateAxisWorld = function pp_rotateAxisWorld(angle: number, axis: Vector3): void {
+    objectExtension.pp_rotateAxisWorld = function pp_rotateAxisWorld(angle: number, axis: Vector3): Object3D {
         return ObjectUtils.rotateAxisWorld(this, angle, axis);
     };
 
-    objectExtension.pp_rotateAxisWorldDegrees = function pp_rotateAxisWorldDegrees(angle: number, axis: Vector3): void {
+    objectExtension.pp_rotateAxisWorldDegrees = function pp_rotateAxisWorldDegrees(angle: number, axis: Vector3): Object3D {
         return ObjectUtils.rotateAxisWorldDegrees(this, angle, axis);
     };
 
-    objectExtension.pp_rotateAxisWorldRadians = function pp_rotateAxisWorldRadians(angle: number, axis: Vector3): void {
+    objectExtension.pp_rotateAxisWorldRadians = function pp_rotateAxisWorldRadians(angle: number, axis: Vector3): Object3D {
         return ObjectUtils.rotateAxisWorldRadians(this, angle, axis);
     };
 
     // Rotate Axis Local
 
-    objectExtension.pp_rotateAxisLocal = function pp_rotateAxisLocal(angle: number, axis: Vector3): void {
+    objectExtension.pp_rotateAxisLocal = function pp_rotateAxisLocal(angle: number, axis: Vector3): Object3D {
         return ObjectUtils.rotateAxisLocal(this, angle, axis);
     };
 
-    objectExtension.pp_rotateAxisLocalDegrees = function pp_rotateAxisLocalDegrees(angle: number, axis: Vector3): void {
+    objectExtension.pp_rotateAxisLocalDegrees = function pp_rotateAxisLocalDegrees(angle: number, axis: Vector3): Object3D {
         return ObjectUtils.rotateAxisLocalDegrees(this, angle, axis);
     };
 
-    objectExtension.pp_rotateAxisLocalRadians = function pp_rotateAxisLocalRadians(angle: number, axis: Vector3): void {
+    objectExtension.pp_rotateAxisLocalRadians = function pp_rotateAxisLocalRadians(angle: number, axis: Vector3): Object3D {
         return ObjectUtils.rotateAxisLocalRadians(this, angle, axis);
     };
 
     // Rotate Axis Object
 
-    objectExtension.pp_rotateAxisObject = function pp_rotateAxisObject(angle: number, axis: Vector3): void {
+    objectExtension.pp_rotateAxisObject = function pp_rotateAxisObject(angle: number, axis: Vector3): Object3D {
         return ObjectUtils.rotateAxisObject(this, angle, axis);
     };
 
-    objectExtension.pp_rotateAxisObjectDegrees = function pp_rotateAxisObjectDegrees(angle: number, axis: Vector3): void {
+    objectExtension.pp_rotateAxisObjectDegrees = function pp_rotateAxisObjectDegrees(angle: number, axis: Vector3): Object3D {
         return ObjectUtils.rotateAxisObjectDegrees(this, angle, axis);
     };
 
-    objectExtension.pp_rotateAxisObjectRadians = function pp_rotateAxisObjectRadians(angle: number, axis: Vector3): void {
+    objectExtension.pp_rotateAxisObjectRadians = function pp_rotateAxisObjectRadians(angle: number, axis: Vector3): Object3D {
         return ObjectUtils.rotateAxisObjectRadians(this, angle, axis);
     };
 
     // Rotate Around
 
-    objectExtension.pp_rotateAround = function pp_rotateAround(rotation: Vector3, origin: Vector3): void {
+    objectExtension.pp_rotateAround = function pp_rotateAround(rotation: Vector3, origin: Vector3): Object3D {
         return ObjectUtils.rotateAround(this, rotation, origin);
     };
 
-    objectExtension.pp_rotateAroundDegrees = function pp_rotateAroundDegrees(rotation: Vector3, origin: Vector3): void {
+    objectExtension.pp_rotateAroundDegrees = function pp_rotateAroundDegrees(rotation: Vector3, origin: Vector3): Object3D {
         return ObjectUtils.rotateAroundDegrees(this, rotation, origin);
     };
 
-    objectExtension.pp_rotateAroundRadians = function pp_rotateAroundRadians(rotation: Vector3, origin: Vector3): void {
+    objectExtension.pp_rotateAroundRadians = function pp_rotateAroundRadians(rotation: Vector3, origin: Vector3): Object3D {
         return ObjectUtils.rotateAroundRadians(this, rotation, origin);
     };
 
-    objectExtension.pp_rotateAroundMatrix = function pp_rotateAroundMatrix(rotation: Matrix3, origin: Vector3): void {
+    objectExtension.pp_rotateAroundMatrix = function pp_rotateAroundMatrix(rotation: Matrix3, origin: Vector3): Object3D {
         return ObjectUtils.rotateAroundMatrix(this, rotation, origin);
     };
 
-    objectExtension.pp_rotateAroundQuat = function pp_rotateAroundQuat(rotation: Quaternion, origin: Vector3): void {
+    objectExtension.pp_rotateAroundQuat = function pp_rotateAroundQuat(rotation: Quaternion, origin: Vector3): Object3D {
         return ObjectUtils.rotateAroundQuat(this, rotation, origin);
     };
 
     // Rotate Around World
 
-    objectExtension.pp_rotateAroundWorld = function pp_rotateAroundWorld(rotation: Vector3, origin: Vector3): void {
+    objectExtension.pp_rotateAroundWorld = function pp_rotateAroundWorld(rotation: Vector3, origin: Vector3): Object3D {
         return ObjectUtils.rotateAroundWorld(this, rotation, origin);
     };
 
-    objectExtension.pp_rotateAroundWorldDegrees = function pp_rotateAroundWorldDegrees(rotation: Vector3, origin: Vector3): void {
+    objectExtension.pp_rotateAroundWorldDegrees = function pp_rotateAroundWorldDegrees(rotation: Vector3, origin: Vector3): Object3D {
         return ObjectUtils.rotateAroundWorldDegrees(this, rotation, origin);
     };
 
-    objectExtension.pp_rotateAroundWorldRadians = function pp_rotateAroundWorldRadians(rotation: Vector3, origin: Vector3): void {
+    objectExtension.pp_rotateAroundWorldRadians = function pp_rotateAroundWorldRadians(rotation: Vector3, origin: Vector3): Object3D {
         return ObjectUtils.rotateAroundWorldRadians(this, rotation, origin);
     };
 
-    objectExtension.pp_rotateAroundWorldMatrix = function pp_rotateAroundWorldMatrix(rotation: Matrix3, origin: Vector3): void {
+    objectExtension.pp_rotateAroundWorldMatrix = function pp_rotateAroundWorldMatrix(rotation: Matrix3, origin: Vector3): Object3D {
         return ObjectUtils.rotateAroundWorldMatrix(this, rotation, origin);
     };
 
-    objectExtension.pp_rotateAroundWorldQuat = function pp_rotateAroundWorldQuat(rotation: Quaternion, origin: Vector3): void {
+    objectExtension.pp_rotateAroundWorldQuat = function pp_rotateAroundWorldQuat(rotation: Quaternion, origin: Vector3): Object3D {
         return ObjectUtils.rotateAroundWorldQuat(this, rotation, origin);
     };
 
     // Rotate Around Local
 
-    objectExtension.pp_rotateAroundLocal = function pp_rotateAroundLocal(rotation: Vector3, origin: Vector3): void {
+    objectExtension.pp_rotateAroundLocal = function pp_rotateAroundLocal(rotation: Vector3, origin: Vector3): Object3D {
         return ObjectUtils.rotateAroundLocal(this, rotation, origin);
     };
 
-    objectExtension.pp_rotateAroundLocalDegrees = function pp_rotateAroundLocalDegrees(rotation: Vector3, origin: Vector3): void {
+    objectExtension.pp_rotateAroundLocalDegrees = function pp_rotateAroundLocalDegrees(rotation: Vector3, origin: Vector3): Object3D {
         return ObjectUtils.rotateAroundLocalDegrees(this, rotation, origin);
     };
 
-    objectExtension.pp_rotateAroundLocalRadians = function pp_rotateAroundLocalRadians(rotation: Vector3, origin: Vector3): void {
+    objectExtension.pp_rotateAroundLocalRadians = function pp_rotateAroundLocalRadians(rotation: Vector3, origin: Vector3): Object3D {
         return ObjectUtils.rotateAroundLocalRadians(this, rotation, origin);
     };
 
-    objectExtension.pp_rotateAroundLocalMatrix = function pp_rotateAroundLocalMatrix(rotation: Matrix3, origin: Vector3): void {
+    objectExtension.pp_rotateAroundLocalMatrix = function pp_rotateAroundLocalMatrix(rotation: Matrix3, origin: Vector3): Object3D {
         return ObjectUtils.rotateAroundLocalMatrix(this, rotation, origin);
     };
 
-    objectExtension.pp_rotateAroundLocalQuat = function pp_rotateAroundLocalQuat(rotation: Quaternion, origin: Vector3): void {
+    objectExtension.pp_rotateAroundLocalQuat = function pp_rotateAroundLocalQuat(rotation: Quaternion, origin: Vector3): Object3D {
         return ObjectUtils.rotateAroundLocalQuat(this, rotation, origin);
     };
 
     // Rotate Around Object
 
-    objectExtension.pp_rotateAroundObject = function pp_rotateAroundObject(rotation: Vector3, origin: Vector3): void {
+    objectExtension.pp_rotateAroundObject = function pp_rotateAroundObject(rotation: Vector3, origin: Vector3): Object3D {
         return ObjectUtils.rotateAroundObject(this, rotation, origin);
     };
 
-    objectExtension.pp_rotateAroundObjectDegrees = function pp_rotateAroundObjectDegrees(rotation: Vector3, origin: Vector3): void {
+    objectExtension.pp_rotateAroundObjectDegrees = function pp_rotateAroundObjectDegrees(rotation: Vector3, origin: Vector3): Object3D {
         return ObjectUtils.rotateAroundObjectDegrees(this, rotation, origin);
     };
 
-    objectExtension.pp_rotateAroundObjectRadians = function pp_rotateAroundObjectRadians(rotation: Vector3, origin: Vector3): void {
+    objectExtension.pp_rotateAroundObjectRadians = function pp_rotateAroundObjectRadians(rotation: Vector3, origin: Vector3): Object3D {
         return ObjectUtils.rotateAroundObjectRadians(this, rotation, origin);
     };
 
-    objectExtension.pp_rotateAroundObjectMatrix = function pp_rotateAroundObjectMatrix(rotation: Matrix3, origin: Vector3): void {
+    objectExtension.pp_rotateAroundObjectMatrix = function pp_rotateAroundObjectMatrix(rotation: Matrix3, origin: Vector3): Object3D {
         return ObjectUtils.rotateAroundObjectMatrix(this, rotation, origin);
     };
 
-    objectExtension.pp_rotateAroundObjectQuat = function pp_rotateAroundObjectQuat(rotation: Quaternion, origin: Vector3): void {
+    objectExtension.pp_rotateAroundObjectQuat = function pp_rotateAroundObjectQuat(rotation: Quaternion, origin: Vector3): Object3D {
         return ObjectUtils.rotateAroundObjectQuat(this, rotation, origin);
     };
 
     // Rotate Around Axis
 
-    objectExtension.pp_rotateAroundAxis = function pp_rotateAroundAxis(angle: number, axis: Vector3, origin: Vector3): void {
+    objectExtension.pp_rotateAroundAxis = function pp_rotateAroundAxis(angle: number, axis: Vector3, origin: Vector3): Object3D {
         return ObjectUtils.rotateAroundAxis(this, angle, axis, origin);
     };
 
-    objectExtension.pp_rotateAroundAxisDegrees = function pp_rotateAroundAxisDegrees(angle: number, axis: Vector3, origin: Vector3): void {
+    objectExtension.pp_rotateAroundAxisDegrees = function pp_rotateAroundAxisDegrees(angle: number, axis: Vector3, origin: Vector3): Object3D {
         return ObjectUtils.rotateAroundAxisDegrees(this, angle, axis, origin);
     };
 
-    objectExtension.pp_rotateAroundAxisRadians = function pp_rotateAroundAxisRadians(angle: number, axis: Vector3, origin: Vector3): void {
+    objectExtension.pp_rotateAroundAxisRadians = function pp_rotateAroundAxisRadians(angle: number, axis: Vector3, origin: Vector3): Object3D {
         return ObjectUtils.rotateAroundAxisRadians(this, angle, axis, origin);
     };
 
     // Rotate Around Axis World
 
-    objectExtension.pp_rotateAroundAxisWorld = function pp_rotateAroundAxisWorld(angle: number, axis: Vector3, origin: Vector3): void {
+    objectExtension.pp_rotateAroundAxisWorld = function pp_rotateAroundAxisWorld(angle: number, axis: Vector3, origin: Vector3): Object3D {
         return ObjectUtils.rotateAroundAxisWorld(this, angle, axis, origin);
     };
 
-    objectExtension.pp_rotateAroundAxisWorldDegrees = function pp_rotateAroundAxisWorldDegrees(angle: number, axis: Vector3, origin: Vector3): void {
+    objectExtension.pp_rotateAroundAxisWorldDegrees = function pp_rotateAroundAxisWorldDegrees(angle: number, axis: Vector3, origin: Vector3): Object3D {
         return ObjectUtils.rotateAroundAxisWorldDegrees(this, angle, axis, origin);
     };
 
-    objectExtension.pp_rotateAroundAxisWorldRadians = function pp_rotateAroundAxisWorldRadians(angle: number, axis: Vector3, origin: Vector3): void {
+    objectExtension.pp_rotateAroundAxisWorldRadians = function pp_rotateAroundAxisWorldRadians(angle: number, axis: Vector3, origin: Vector3): Object3D {
         return ObjectUtils.rotateAroundAxisWorldRadians(this, angle, axis, origin);
     };
 
     // Rotate Around Axis Local
 
-    objectExtension.pp_rotateAroundAxisLocal = function pp_rotateAroundAxisLocal(angle: number, axis: Vector3, origin: Vector3): void {
+    objectExtension.pp_rotateAroundAxisLocal = function pp_rotateAroundAxisLocal(angle: number, axis: Vector3, origin: Vector3): Object3D {
         return ObjectUtils.rotateAroundAxisLocal(this, angle, axis, origin);
     };
 
-    objectExtension.pp_rotateAroundAxisLocalDegrees = function pp_rotateAroundAxisLocalDegrees(angle: number, axis: Vector3, origin: Vector3): void {
+    objectExtension.pp_rotateAroundAxisLocalDegrees = function pp_rotateAroundAxisLocalDegrees(angle: number, axis: Vector3, origin: Vector3): Object3D {
         return ObjectUtils.rotateAroundAxisLocalDegrees(this, angle, axis, origin);
     };
 
-    objectExtension.pp_rotateAroundAxisLocalRadians = function pp_rotateAroundAxisLocalRadians(angle: number, axis: Vector3, origin: Vector3): void {
+    objectExtension.pp_rotateAroundAxisLocalRadians = function pp_rotateAroundAxisLocalRadians(angle: number, axis: Vector3, origin: Vector3): Object3D {
         return ObjectUtils.rotateAroundAxisLocalRadians(this, angle, axis, origin);
     };
 
     // Rotate Around Axis Object
 
-    objectExtension.pp_rotateAroundAxisObject = function pp_rotateAroundAxisObject(angle: number, axis: Vector3, origin: Vector3): void {
+    objectExtension.pp_rotateAroundAxisObject = function pp_rotateAroundAxisObject(angle: number, axis: Vector3, origin: Vector3): Object3D {
         return ObjectUtils.rotateAroundAxisObject(this, angle, axis, origin);
     };
 
-    objectExtension.pp_rotateAroundAxisObjectDegrees = function pp_rotateAroundAxisObjectDegrees(angle: number, axis: Vector3, origin: Vector3): void {
+    objectExtension.pp_rotateAroundAxisObjectDegrees = function pp_rotateAroundAxisObjectDegrees(angle: number, axis: Vector3, origin: Vector3): Object3D {
         return ObjectUtils.rotateAroundAxisObjectDegrees(this, angle, axis, origin);
     };
 
-    objectExtension.pp_rotateAroundAxisObjectRadians = function pp_rotateAroundAxisObjectRadians(angle: number, axis: Vector3, origin: Vector3): void {
+    objectExtension.pp_rotateAroundAxisObjectRadians = function pp_rotateAroundAxisObjectRadians(angle: number, axis: Vector3, origin: Vector3): Object3D {
         return ObjectUtils.rotateAroundAxisObjectRadians(this, angle, axis, origin);
     };
 
     // Scale
 
-    objectExtension.pp_scaleObject = function pp_scaleObject(scale: number | Vector3): void {
+    objectExtension.pp_scaleObject = function pp_scaleObject(scale: number | Vector3): Object3D {
         return ObjectUtils.scaleObject(this, scale);
     };
 
     // Look At
 
-    objectExtension.pp_lookAt = function pp_lookAt(position: NumberArray, up: NumberArray): void {
+    objectExtension.pp_lookAt = function pp_lookAt(position: NumberArray, up: NumberArray): Object3D {
         return ObjectUtils.lookAt(this, position, up);
     };
 
-    objectExtension.pp_lookAtWorld = function pp_lookAtWorld(position: NumberArray, up: NumberArray): void {
+    objectExtension.pp_lookAtWorld = function pp_lookAtWorld(position: NumberArray, up: NumberArray): Object3D {
         return ObjectUtils.lookAtWorld(this, position, up);
     };
 
-    objectExtension.pp_lookAtLocal = function pp_lookAtLocal(position: NumberArray, up: NumberArray): void {
+    objectExtension.pp_lookAtLocal = function pp_lookAtLocal(position: NumberArray, up: NumberArray): Object3D {
         return ObjectUtils.lookAtLocal(this, position, up);
     };
 
-    objectExtension.pp_lookTo = function pp_lookTo(direction: NumberArray, up: NumberArray): void {
+    objectExtension.pp_lookTo = function pp_lookTo(direction: NumberArray, up: NumberArray): Object3D {
         return ObjectUtils.lookTo(this, direction, up);
     };
 
-    objectExtension.pp_lookToWorld = function pp_lookToWorld(direction: NumberArray, up: NumberArray): void {
+    objectExtension.pp_lookToWorld = function pp_lookToWorld(direction: NumberArray, up: NumberArray): Object3D {
         return ObjectUtils.lookToWorld(this, direction, up);
     };
 
-    objectExtension.pp_lookToLocal = function pp_lookToLocal(direction: NumberArray, up: NumberArray): void {
+    objectExtension.pp_lookToLocal = function pp_lookToLocal(direction: NumberArray, up: NumberArray): Object3D {
         return ObjectUtils.lookToLocal(this, direction, up);
     };
 
@@ -1014,7 +1014,7 @@ export function initObjectExtensionProtoype(): void {
 
     // Parent
 
-    objectExtension.pp_setParent = function pp_setParent(newParent: Object3D, keepTransformWorld: boolean = true): void {
+    objectExtension.pp_setParent = function pp_setParent(newParent: Object3D, keepTransformWorld: boolean = true): Object3D {
         return ObjectUtils.setParent(this, newParent, keepTransformWorld);
     };
 
@@ -1234,39 +1234,39 @@ export function initObjectExtensionProtoype(): void {
 
     // Active
 
-    objectExtension.pp_setActive = function pp_setActive(active: boolean): void {
+    objectExtension.pp_setActive = function pp_setActive(active: boolean): Object3D {
         return ObjectUtils.setActive(this, active);
     };
 
-    objectExtension.pp_setActiveSelf = function pp_setActiveSelf(active: boolean): void {
+    objectExtension.pp_setActiveSelf = function pp_setActiveSelf(active: boolean): Object3D {
         return ObjectUtils.setActiveSelf(this, active);
     };
 
-    objectExtension.pp_setActiveHierarchy = function pp_setActiveHierarchy(active: boolean): void {
+    objectExtension.pp_setActiveHierarchy = function pp_setActiveHierarchy(active: boolean): Object3D {
         return ObjectUtils.setActiveHierarchy(this, active);
     };
 
-    objectExtension.pp_setActiveHierarchyBreadth = function pp_setActiveHierarchyBreadth(active: boolean): void {
+    objectExtension.pp_setActiveHierarchyBreadth = function pp_setActiveHierarchyBreadth(active: boolean): Object3D {
         return ObjectUtils.setActiveHierarchyBreadth(this, active);
     };
 
-    objectExtension.pp_setActiveHierarchyDepth = function pp_setActiveHierarchyDepth(active: boolean): void {
+    objectExtension.pp_setActiveHierarchyDepth = function pp_setActiveHierarchyDepth(active: boolean): Object3D {
         return ObjectUtils.setActiveHierarchyDepth(this, active);
     };
 
-    objectExtension.pp_setActiveDescendants = function pp_setActiveDescendants(active: boolean): void {
+    objectExtension.pp_setActiveDescendants = function pp_setActiveDescendants(active: boolean): Object3D {
         return ObjectUtils.setActiveDescendants(this, active);
     };
 
-    objectExtension.pp_setActiveDescendantsBreadth = function pp_setActiveDescendantsBreadth(active: boolean): void {
+    objectExtension.pp_setActiveDescendantsBreadth = function pp_setActiveDescendantsBreadth(active: boolean): Object3D {
         return ObjectUtils.setActiveDescendantsBreadth(this, active);
     };
 
-    objectExtension.pp_setActiveDescendantsDepth = function pp_setActiveDescendantsDepth(active: boolean): void {
+    objectExtension.pp_setActiveDescendantsDepth = function pp_setActiveDescendantsDepth(active: boolean): Object3D {
         return ObjectUtils.setActiveDescendantsDepth(this, active);
     };
 
-    objectExtension.pp_setActiveChildren = function pp_setActiveChildren(active: boolean): void {
+    objectExtension.pp_setActiveChildren = function pp_setActiveChildren(active: boolean): Object3D {
         return ObjectUtils.setActiveChildren(this, active);
     };
 
@@ -1448,7 +1448,7 @@ export function initObjectExtensionProtoype(): void {
         return ObjectUtils.getName(this);
     };
 
-    objectExtension.pp_setName = function pp_setName(name: string): void {
+    objectExtension.pp_setName = function pp_setName(name: string): Object3D {
         return ObjectUtils.setName(this, name);
     };
 
@@ -1460,7 +1460,7 @@ export function initObjectExtensionProtoype(): void {
         return ObjectUtils.getID(this);
     };
 
-    objectExtension.pp_markDirty = function pp_markDirty(): void {
+    objectExtension.pp_markDirty = function pp_markDirty(): Object3D {
         return ObjectUtils.markDirty(this);
     };
 
@@ -1476,23 +1476,23 @@ export function initObjectExtensionProtoype(): void {
         return ObjectUtils.destroy(this);
     };
 
-    objectExtension.pp_reserveObjects = function pp_reserveObjects(count: number): void {
+    objectExtension.pp_reserveObjects = function pp_reserveObjects(count: number): Object3D {
         return ObjectUtils.reserveObjects(this, count);
     };
 
-    objectExtension.pp_reserveObjectsSelf = function pp_reserveObjectsSelf(count: number): void {
+    objectExtension.pp_reserveObjectsSelf = function pp_reserveObjectsSelf(count: number): Object3D {
         return ObjectUtils.reserveObjectsSelf(this, count);
     };
 
-    objectExtension.pp_reserveObjectsHierarchy = function pp_reserveObjectsHierarchy(count: number): void {
+    objectExtension.pp_reserveObjectsHierarchy = function pp_reserveObjectsHierarchy(count: number): Object3D {
         return ObjectUtils.reserveObjectsHierarchy(this, count);
     };
 
-    objectExtension.pp_reserveObjectsDescendants = function pp_reserveObjectsDescendants(count: number): void {
+    objectExtension.pp_reserveObjectsDescendants = function pp_reserveObjectsDescendants(count: number): Object3D {
         return ObjectUtils.reserveObjectsDescendants(this, count);
     };
 
-    objectExtension.pp_reserveObjectsChildren = function pp_reserveObjectsChildren(count: number): void {
+    objectExtension.pp_reserveObjectsChildren = function pp_reserveObjectsChildren(count: number): Object3D {
         return ObjectUtils.reserveObjectsChildren(this, count);
     };
 
