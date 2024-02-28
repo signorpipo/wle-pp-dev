@@ -3128,7 +3128,8 @@
                 1,
                 1,
                 6
-            ]
+            ],
+            "customIndexHtml": true
         },
         "rendering": {
             "clearColor": [
@@ -3150,7 +3151,13 @@
                     "hand-tracking": false
                 }
             },
-            "viewObject": "21"
+            "viewObject": "21",
+            "pwa": {
+                "enable": true,
+                "customServiceWorker": true,
+                "customManifest": true,
+                "appIcon": "286"
+            }
         },
         "scripting": {
             "sourcePaths": [
@@ -3313,8 +3320,24 @@
             "blendDestAlpha": "one"
         }
     },
-    "textures": {},
-    "images": {},
+    "textures": {
+        "287": {
+            "link": {
+                "name": "icon.png",
+                "file": "assets\\textures\\icon.png"
+            }
+        }
+    },
+    "images": {
+        "286": {
+            "link": {
+                "name": "icon.png",
+                "file": "assets\\textures\\icon.png"
+            },
+            "stream": false,
+            "compression": "none"
+        }
+    },
     "files": {
         "248": {
             "fileName": "assets/models/pp/meta_quest_1_gamepads_credits_Jezza3D.fbx",
@@ -3323,6 +3346,10 @@
         "249": {
             "fileName": "assets/models/pp/wondermelon.fbx",
             "importerName": "AssimpImporter"
+        },
+        "288": {
+            "fileName": "assets/textures/icon.png",
+            "importerName": ""
         }
     },
     "fonts": {
