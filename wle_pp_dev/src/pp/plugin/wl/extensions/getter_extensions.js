@@ -69,5 +69,7 @@ export function initRayHitGetterExtensionPrototype() {
         return out;
     };
 
+
+
     PluginUtils.injectProperties(extension, RayHit.prototype, false, true, true);
 }
