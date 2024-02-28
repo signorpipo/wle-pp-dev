@@ -1726,19 +1726,22 @@ export function convertTransformLocalToObjectQuat(object, transform, resultTrans
 
 // Component
 
-export function addComponent(object, typeOrClass, paramsOrActive, active = null) {
-    let params = null;
+export function addComponent(object, typeOrClass, paramsOrActive = null, active = null) {
+    let params = undefined;
 
     if (typeof paramsOrActive == "boolean") {
         params = {};
         params["active"] = paramsOrActive;
     } else {
-        params = paramsOrActive;
+        if (paramsOrActive != null) {
+            params = paramsOrActive;
+        }
 
         if (active != null) {
             if (params == null) {
                 params = {};
             }
+
             params["active"] = active;
         }
     }
