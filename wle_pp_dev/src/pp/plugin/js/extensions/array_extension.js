@@ -56,7 +56,7 @@
             ○ pp_clear      
 
         GENERIC VECTOR (array with only numbers):
-            - vec_zero
+            ° vec_zero
             - vec_isZero
             - vec_scale
             - vec_round     / vec_floor         / vec_ceil      / vec_clamp
@@ -328,8 +328,8 @@ export function initArrayExtensionProtoype() {
 
     let vecExtension = {};
 
-    vecExtension.vec_zero = function vec_zero(out = null) {
-        return VecUtils.zero(this, out);
+    vecExtension.vec_zero = function vec_zero() {
+        return VecUtils.zero(this);
     };
 
     vecExtension.vec_isZero = function vec_isZero(epsilon = 0) {

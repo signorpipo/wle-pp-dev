@@ -1,14 +1,12 @@
 import { ArrayUtils } from "./array_utils.js";
 import { MathUtils } from "./math_utils.js";
 
-export function zero(vector, out = null) {
-    out = _prepareOut(vector, out);
-
-    for (let i = 0; i < out.length; i++) {
-        out[i] = 0;
+export function zero(vector) {
+    for (let i = 0; i < vector.length; i++) {
+        vector[i] = 0;
     }
 
-    return out;
+    return vector;
 }
 
 export function isZero(vector, epsilon = 0) {
