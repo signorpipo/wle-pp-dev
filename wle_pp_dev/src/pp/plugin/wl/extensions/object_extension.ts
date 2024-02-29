@@ -126,235 +126,235 @@ export function initObjectExtensionProtoype(): void {
 
     // Position
 
-    objectExtension.pp_getPosition = function pp_getPosition(this: Object3D, outPosition: Vector3 = Vec3Utils.create()): Vector3 {
+    objectExtension.pp_getPosition = function pp_getPosition(this: Readonly<Object3D>, outPosition: Vector3 = Vec3Utils.create()): Vector3 {
         return ObjectUtils.getPosition(this, outPosition);
     };
 
-    objectExtension.pp_getPositionWorld = function pp_getPositionWorld(this: Object3D, outPosition: Vector3 = Vec3Utils.create()): Vector3 {
+    objectExtension.pp_getPositionWorld = function pp_getPositionWorld(this: Readonly<Object3D>, outPosition: Vector3 = Vec3Utils.create()): Vector3 {
         return ObjectUtils.getPositionWorld(this, outPosition);
     };
 
-    objectExtension.pp_getPositionLocal = function pp_getPositionLocal(this: Object3D, outPosition: Vector3 = Vec3Utils.create()): Vector3 {
+    objectExtension.pp_getPositionLocal = function pp_getPositionLocal(this: Readonly<Object3D>, outPosition: Vector3 = Vec3Utils.create()): Vector3 {
         return ObjectUtils.getPositionLocal(this, outPosition);
     };
 
     // Rotation
 
-    objectExtension.pp_getRotation = function pp_getRotation(this: Object3D, outRotation: Vector3 = Vec3Utils.create()): Vector3 {
+    objectExtension.pp_getRotation = function pp_getRotation(this: Readonly<Object3D>, outRotation: Vector3 = Vec3Utils.create()): Vector3 {
         return ObjectUtils.getRotation(this, outRotation);
     };
 
-    objectExtension.pp_getRotationDegrees = function pp_getRotationDegrees(this: Object3D, outRotation: Vector3 = Vec3Utils.create()): Vector3 {
+    objectExtension.pp_getRotationDegrees = function pp_getRotationDegrees(this: Readonly<Object3D>, outRotation: Vector3 = Vec3Utils.create()): Vector3 {
         return ObjectUtils.getRotationDegrees(this, outRotation);
     };
 
-    objectExtension.pp_getRotationRadians = function pp_getRotationRadians(this: Object3D, outRotation: Vector3 = Vec3Utils.create()): Vector3 {
+    objectExtension.pp_getRotationRadians = function pp_getRotationRadians(this: Readonly<Object3D>, outRotation: Vector3 = Vec3Utils.create()): Vector3 {
         return ObjectUtils.getRotationRadians(this, outRotation);
     };
 
-    objectExtension.pp_getRotationMatrix = function pp_getRotationMatrix(this: Object3D, outRotation: Matrix3 = Mat3Utils.create()): Matrix3 {
+    objectExtension.pp_getRotationMatrix = function pp_getRotationMatrix(this: Readonly<Object3D>, outRotation: Matrix3 = Mat3Utils.create()): Matrix3 {
         return ObjectUtils.getRotationMatrix(this, outRotation);
     };
 
-    objectExtension.pp_getRotationQuat = function pp_getRotationQuat(this: Object3D, outRotation: Quaternion = QuatUtils.create()): Quaternion {
+    objectExtension.pp_getRotationQuat = function pp_getRotationQuat(this: Readonly<Object3D>, outRotation: Quaternion = QuatUtils.create()): Quaternion {
         return ObjectUtils.getRotationQuat(this, outRotation);
     };
 
     // Rotation World
 
-    objectExtension.pp_getRotationWorld = function pp_getRotationWorld(this: Object3D, outRotation: Vector3 = Vec3Utils.create()): Vector3 {
+    objectExtension.pp_getRotationWorld = function pp_getRotationWorld(this: Readonly<Object3D>, outRotation: Vector3 = Vec3Utils.create()): Vector3 {
         return ObjectUtils.getRotationWorld(this, outRotation);
     };
 
-    objectExtension.pp_getRotationWorldDegrees = function pp_getRotationWorldDegrees(this: Object3D, outRotation: Vector3 = Vec3Utils.create()): Vector3 {
+    objectExtension.pp_getRotationWorldDegrees = function pp_getRotationWorldDegrees(this: Readonly<Object3D>, outRotation: Vector3 = Vec3Utils.create()): Vector3 {
         return ObjectUtils.getRotationWorldDegrees(this, outRotation);
     };
 
-    objectExtension.pp_getRotationWorldRadians = function pp_getRotationWorldRadians(this: Object3D, outRotation: Vector3 = Vec3Utils.create()): Vector3 {
+    objectExtension.pp_getRotationWorldRadians = function pp_getRotationWorldRadians(this: Readonly<Object3D>, outRotation: Vector3 = Vec3Utils.create()): Vector3 {
         return ObjectUtils.getRotationWorldRadians(this, outRotation);
     };
 
-    objectExtension.pp_getRotationWorldMatrix = function pp_getRotationWorldMatrix(this: Object3D, outRotation: Matrix3 = Mat3Utils.create()): Matrix3 {
+    objectExtension.pp_getRotationWorldMatrix = function pp_getRotationWorldMatrix(this: Readonly<Object3D>, outRotation: Matrix3 = Mat3Utils.create()): Matrix3 {
         return ObjectUtils.getRotationWorldMatrix(this, outRotation);
     };
 
-    objectExtension.pp_getRotationWorldQuat = function pp_getRotationWorldQuat(this: Object3D, outRotation: Quaternion = QuatUtils.create()): Quaternion {
+    objectExtension.pp_getRotationWorldQuat = function pp_getRotationWorldQuat(this: Readonly<Object3D>, outRotation: Quaternion = QuatUtils.create()): Quaternion {
         return ObjectUtils.getRotationWorldQuat(this, outRotation);
     };
 
     // Rotation Local
 
-    objectExtension.pp_getRotationLocal = function pp_getRotationLocal(this: Object3D, outRotation: Vector3 = Vec3Utils.create()): Vector3 {
+    objectExtension.pp_getRotationLocal = function pp_getRotationLocal(this: Readonly<Object3D>, outRotation: Vector3 = Vec3Utils.create()): Vector3 {
         return ObjectUtils.getRotationLocal(this, outRotation);
     };
 
-    objectExtension.pp_getRotationLocalDegrees = function pp_getRotationLocalDegrees(this: Object3D, outRotation: Vector3 = Vec3Utils.create()): Vector3 {
+    objectExtension.pp_getRotationLocalDegrees = function pp_getRotationLocalDegrees(this: Readonly<Object3D>, outRotation: Vector3 = Vec3Utils.create()): Vector3 {
         return ObjectUtils.getRotationLocalDegrees(this, outRotation);
     };
 
-    objectExtension.pp_getRotationLocalRadians = function pp_getRotationLocalRadians(this: Object3D, outRotation: Vector3 = Vec3Utils.create()): Vector3 {
+    objectExtension.pp_getRotationLocalRadians = function pp_getRotationLocalRadians(this: Readonly<Object3D>, outRotation: Vector3 = Vec3Utils.create()): Vector3 {
         return ObjectUtils.getRotationLocalRadians(this, outRotation);
     };
 
-    objectExtension.pp_getRotationLocalMatrix = function pp_getRotationLocalMatrix(this: Object3D, outRotation: Matrix3 = Mat3Utils.create()): Matrix3 {
+    objectExtension.pp_getRotationLocalMatrix = function pp_getRotationLocalMatrix(this: Readonly<Object3D>, outRotation: Matrix3 = Mat3Utils.create()): Matrix3 {
         return ObjectUtils.getRotationLocalMatrix(this, outRotation);
     };
 
-    objectExtension.pp_getRotationLocalQuat = function pp_getRotationLocalQuat(this: Object3D, outRotation: Quaternion = QuatUtils.create()): Quaternion {
+    objectExtension.pp_getRotationLocalQuat = function pp_getRotationLocalQuat(this: Readonly<Object3D>, outRotation: Quaternion = QuatUtils.create()): Quaternion {
         return ObjectUtils.getRotationLocalQuat(this, outRotation);
     };
 
     // Scale
 
-    objectExtension.pp_getScale = function pp_getScale(this: Object3D, outScale: Vector3 = Vec3Utils.create()): Vector3 {
+    objectExtension.pp_getScale = function pp_getScale(this: Readonly<Object3D>, outScale: Vector3 = Vec3Utils.create()): Vector3 {
         return ObjectUtils.getScale(this, outScale);
     };
 
-    objectExtension.pp_getScaleWorld = function pp_getScaleWorld(this: Object3D, outScale: Vector3 = Vec3Utils.create()): Vector3 {
+    objectExtension.pp_getScaleWorld = function pp_getScaleWorld(this: Readonly<Object3D>, outScale: Vector3 = Vec3Utils.create()): Vector3 {
         return ObjectUtils.getScaleWorld(this, outScale);
     };
 
-    objectExtension.pp_getScaleLocal = function pp_getScaleLocal(this: Object3D, outScale: Vector3 = Vec3Utils.create()): Vector3 {
+    objectExtension.pp_getScaleLocal = function pp_getScaleLocal(this: Readonly<Object3D>, outScale: Vector3 = Vec3Utils.create()): Vector3 {
         return ObjectUtils.getScaleLocal(this, outScale);
     };
 
     // Transform
 
-    objectExtension.pp_getTransform = function pp_getTransform(this: Object3D, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
+    objectExtension.pp_getTransform = function pp_getTransform(this: Readonly<Object3D>, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
         return ObjectUtils.getTransform(this, outTransform);
     };
 
-    objectExtension.pp_getTransformMatrix = function pp_getTransformMatrix(this: Object3D, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
+    objectExtension.pp_getTransformMatrix = function pp_getTransformMatrix(this: Readonly<Object3D>, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
         return ObjectUtils.getTransformMatrix(this, outTransform);
     };
 
-    objectExtension.pp_getTransformQuat = function pp_getTransformQuat(this: Object3D, outTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
+    objectExtension.pp_getTransformQuat = function pp_getTransformQuat(this: Readonly<Object3D>, outTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
         return ObjectUtils.getTransformQuat(this, outTransform);
     };
 
     // Transform World
 
-    objectExtension.pp_getTransformWorld = function pp_getTransformWorld(this: Object3D, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
+    objectExtension.pp_getTransformWorld = function pp_getTransformWorld(this: Readonly<Object3D>, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
         return ObjectUtils.getTransformWorld(this, outTransform);
     };
 
-    objectExtension.pp_getTransformWorldMatrix = function pp_getTransformWorldMatrix(this: Object3D, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
+    objectExtension.pp_getTransformWorldMatrix = function pp_getTransformWorldMatrix(this: Readonly<Object3D>, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
         return ObjectUtils.getTransformWorldMatrix(this, outTransform);
     };
 
-    objectExtension.pp_getTransformWorldQuat = function pp_getTransformWorldQuat(this: Object3D, outTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
+    objectExtension.pp_getTransformWorldQuat = function pp_getTransformWorldQuat(this: Readonly<Object3D>, outTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
         return ObjectUtils.getTransformWorldQuat(this, outTransform);
     };
 
     // Transform Local
 
-    objectExtension.pp_getTransformLocal = function pp_getTransformLocal(this: Object3D, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
+    objectExtension.pp_getTransformLocal = function pp_getTransformLocal(this: Readonly<Object3D>, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
         return ObjectUtils.getTransformLocal(this, outTransform);
     };
 
-    objectExtension.pp_getTransformLocalMatrix = function pp_getTransformLocalMatrix(this: Object3D, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
+    objectExtension.pp_getTransformLocalMatrix = function pp_getTransformLocalMatrix(this: Readonly<Object3D>, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
         return ObjectUtils.getTransformLocalMatrix(this, outTransform);
     };
 
-    objectExtension.pp_getTransformLocalQuat = function pp_getTransformLocalQuat(this: Object3D, outTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
+    objectExtension.pp_getTransformLocalQuat = function pp_getTransformLocalQuat(this: Readonly<Object3D>, outTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
         return ObjectUtils.getTransformLocalQuat(this, outTransform);
     };
 
     // Axes
 
-    objectExtension.pp_getAxes = function pp_getAxes(this: Object3D, axes: [Vector3, Vector3, Vector3] = [Vec3Utils.create(), Vec3Utils.create(), Vec3Utils.create()]): [Vector3, Vector3, Vector3] {
+    objectExtension.pp_getAxes = function pp_getAxes(this: Readonly<Object3D>, axes: [Vector3, Vector3, Vector3] = [Vec3Utils.create(), Vec3Utils.create(), Vec3Utils.create()]): [Vector3, Vector3, Vector3] {
         return ObjectUtils.getAxes(this, axes);
     };
 
-    objectExtension.pp_getAxesWorld = function pp_getAxesWorld(this: Object3D, axes: [Vector3, Vector3, Vector3] = [Vec3Utils.create(), Vec3Utils.create(), Vec3Utils.create()]): [Vector3, Vector3, Vector3] {
+    objectExtension.pp_getAxesWorld = function pp_getAxesWorld(this: Readonly<Object3D>, axes: [Vector3, Vector3, Vector3] = [Vec3Utils.create(), Vec3Utils.create(), Vec3Utils.create()]): [Vector3, Vector3, Vector3] {
         return ObjectUtils.getAxesWorld(this, axes);
     };
 
-    objectExtension.pp_getAxesLocal = function pp_getAxesLocal(this: Object3D, axes: [Vector3, Vector3, Vector3] = [Vec3Utils.create(), Vec3Utils.create(), Vec3Utils.create()]): [Vector3, Vector3, Vector3] {
+    objectExtension.pp_getAxesLocal = function pp_getAxesLocal(this: Readonly<Object3D>, axes: [Vector3, Vector3, Vector3] = [Vec3Utils.create(), Vec3Utils.create(), Vec3Utils.create()]): [Vector3, Vector3, Vector3] {
         return ObjectUtils.getAxesLocal(this, axes);
     };
 
     // Forward
 
-    objectExtension.pp_getForward = function pp_getForward(this: Object3D, forward: Vector3 = Vec3Utils.create()): Vector3 {
+    objectExtension.pp_getForward = function pp_getForward(this: Readonly<Object3D>, forward: Vector3 = Vec3Utils.create()): Vector3 {
         return ObjectUtils.getForward(this, forward);
     };
 
-    objectExtension.pp_getForwardWorld = function pp_getForwardWorld(this: Object3D, forward: Vector3 = Vec3Utils.create()): Vector3 {
+    objectExtension.pp_getForwardWorld = function pp_getForwardWorld(this: Readonly<Object3D>, forward: Vector3 = Vec3Utils.create()): Vector3 {
         return ObjectUtils.getForwardWorld(this, forward);
     };
 
-    objectExtension.pp_getForwardLocal = function pp_getForwardLocal(this: Object3D, forward: Vector3 = Vec3Utils.create()): Vector3 {
+    objectExtension.pp_getForwardLocal = function pp_getForwardLocal(this: Readonly<Object3D>, forward: Vector3 = Vec3Utils.create()): Vector3 {
         return ObjectUtils.getForwardLocal(this, forward);
     };
 
     // Backward
 
-    objectExtension.pp_getBackward = function pp_getBackward(this: Object3D, backward: Vector3 = Vec3Utils.create()): Vector3 {
+    objectExtension.pp_getBackward = function pp_getBackward(this: Readonly<Object3D>, backward: Vector3 = Vec3Utils.create()): Vector3 {
         return ObjectUtils.getBackward(this, backward);
     };
 
-    objectExtension.pp_getBackwardWorld = function pp_getBackwardWorld(this: Object3D, backward: Vector3 = Vec3Utils.create()): Vector3 {
+    objectExtension.pp_getBackwardWorld = function pp_getBackwardWorld(this: Readonly<Object3D>, backward: Vector3 = Vec3Utils.create()): Vector3 {
         return ObjectUtils.getBackwardWorld(this, backward);
     };
 
-    objectExtension.pp_getBackwardLocal = function pp_getBackwardLocal(this: Object3D, backward: Vector3 = Vec3Utils.create()): Vector3 {
+    objectExtension.pp_getBackwardLocal = function pp_getBackwardLocal(this: Readonly<Object3D>, backward: Vector3 = Vec3Utils.create()): Vector3 {
         return ObjectUtils.getBackwardLocal(this, backward);
     };
 
     // Up
 
-    objectExtension.pp_getUp = function pp_getUp(this: Object3D, up: Vector3 = Vec3Utils.create()): Vector3 {
+    objectExtension.pp_getUp = function pp_getUp(this: Readonly<Object3D>, up: Vector3 = Vec3Utils.create()): Vector3 {
         return ObjectUtils.getUp(this, up);
     };
 
-    objectExtension.pp_getUpWorld = function pp_getUpWorld(this: Object3D, up: Vector3 = Vec3Utils.create()): Vector3 {
+    objectExtension.pp_getUpWorld = function pp_getUpWorld(this: Readonly<Object3D>, up: Vector3 = Vec3Utils.create()): Vector3 {
         return ObjectUtils.getUpWorld(this, up);
     };
 
-    objectExtension.pp_getUpLocal = function pp_getUpLocal(this: Object3D, up: Vector3 = Vec3Utils.create()): Vector3 {
+    objectExtension.pp_getUpLocal = function pp_getUpLocal(this: Readonly<Object3D>, up: Vector3 = Vec3Utils.create()): Vector3 {
         return ObjectUtils.getUpLocal(this, up);
     };
 
     // Down
 
-    objectExtension.pp_getDown = function pp_getDown(this: Object3D, down: Vector3 = Vec3Utils.create()): Vector3 {
+    objectExtension.pp_getDown = function pp_getDown(this: Readonly<Object3D>, down: Vector3 = Vec3Utils.create()): Vector3 {
         return ObjectUtils.getDown(this, down);
     };
 
-    objectExtension.pp_getDownWorld = function pp_getDownWorld(this: Object3D, down: Vector3 = Vec3Utils.create()): Vector3 {
+    objectExtension.pp_getDownWorld = function pp_getDownWorld(this: Readonly<Object3D>, down: Vector3 = Vec3Utils.create()): Vector3 {
         return ObjectUtils.getDownWorld(this, down);
     };
 
-    objectExtension.pp_getDownLocal = function pp_getDownLocal(this: Object3D, down: Vector3 = Vec3Utils.create()): Vector3 {
+    objectExtension.pp_getDownLocal = function pp_getDownLocal(this: Readonly<Object3D>, down: Vector3 = Vec3Utils.create()): Vector3 {
         return ObjectUtils.getDownLocal(this, down);
     };
 
     // Left
 
-    objectExtension.pp_getLeft = function pp_getLeft(this: Object3D, left: Vector3 = Vec3Utils.create()): Vector3 {
+    objectExtension.pp_getLeft = function pp_getLeft(this: Readonly<Object3D>, left: Vector3 = Vec3Utils.create()): Vector3 {
         return ObjectUtils.getLeft(this, left);
     };
 
-    objectExtension.pp_getLeftWorld = function pp_getLeftWorld(this: Object3D, left: Vector3 = Vec3Utils.create()): Vector3 {
+    objectExtension.pp_getLeftWorld = function pp_getLeftWorld(this: Readonly<Object3D>, left: Vector3 = Vec3Utils.create()): Vector3 {
         return ObjectUtils.getLeftWorld(this, left);
     };
 
-    objectExtension.pp_getLeftLocal = function pp_getLeftLocal(this: Object3D, left: Vector3 = Vec3Utils.create()): Vector3 {
+    objectExtension.pp_getLeftLocal = function pp_getLeftLocal(this: Readonly<Object3D>, left: Vector3 = Vec3Utils.create()): Vector3 {
         return ObjectUtils.getLeftLocal(this, left);
     };
 
     // Right
 
-    objectExtension.pp_getRight = function pp_getRight(this: Object3D, right: Vector3 = Vec3Utils.create()): Vector3 {
+    objectExtension.pp_getRight = function pp_getRight(this: Readonly<Object3D>, right: Vector3 = Vec3Utils.create()): Vector3 {
         return ObjectUtils.getRight(this, right);
     };
 
-    objectExtension.pp_getRightWorld = function pp_getRightWorld(this: Object3D, right: Vector3 = Vec3Utils.create()): Vector3 {
+    objectExtension.pp_getRightWorld = function pp_getRightWorld(this: Readonly<Object3D>, right: Vector3 = Vec3Utils.create()): Vector3 {
         return ObjectUtils.getRightWorld(this, right);
     };
 
-    objectExtension.pp_getRightLocal = function pp_getRightLocal(this: Object3D, right: Vector3 = Vec3Utils.create()): Vector3 {
+    objectExtension.pp_getRightLocal = function pp_getRightLocal(this: Readonly<Object3D>, right: Vector3 = Vec3Utils.create()): Vector3 {
         return ObjectUtils.getRightLocal(this, right);
     };
 
@@ -598,57 +598,57 @@ export function initObjectExtensionProtoype(): void {
 
     // Position
 
-    objectExtension.pp_resetPosition = function pp_resetPosition(this: Object3D,): Object3D {
+    objectExtension.pp_resetPosition = function pp_resetPosition(this: Object3D): Object3D {
         return ObjectUtils.resetPosition(this);
     };
 
-    objectExtension.pp_resetPositionWorld = function pp_resetPositionWorld(this: Object3D,): Object3D {
+    objectExtension.pp_resetPositionWorld = function pp_resetPositionWorld(this: Object3D): Object3D {
         return ObjectUtils.resetPositionWorld(this);
     };
 
-    objectExtension.pp_resetPositionLocal = function pp_resetPositionLocal(this: Object3D,): Object3D {
+    objectExtension.pp_resetPositionLocal = function pp_resetPositionLocal(this: Object3D): Object3D {
         return ObjectUtils.resetPositionLocal(this);
     };
 
     // Rotation
 
-    objectExtension.pp_resetRotation = function pp_resetRotation(this: Object3D,): Object3D {
+    objectExtension.pp_resetRotation = function pp_resetRotation(this: Object3D): Object3D {
         return ObjectUtils.resetRotation(this);
     };
 
-    objectExtension.pp_resetRotationWorld = function pp_resetRotationWorld(this: Object3D,): Object3D {
+    objectExtension.pp_resetRotationWorld = function pp_resetRotationWorld(this: Object3D): Object3D {
         return ObjectUtils.resetRotationWorld(this);
     };
 
-    objectExtension.pp_resetRotationLocal = function pp_resetRotationLocal(this: Object3D,): Object3D {
+    objectExtension.pp_resetRotationLocal = function pp_resetRotationLocal(this: Object3D): Object3D {
         return ObjectUtils.resetRotationLocal(this);
     };
 
     // Scale
 
-    objectExtension.pp_resetScale = function pp_resetScale(this: Object3D,): Object3D {
+    objectExtension.pp_resetScale = function pp_resetScale(this: Object3D): Object3D {
         return ObjectUtils.resetScale(this);
     };
 
-    objectExtension.pp_resetScaleWorld = function pp_resetScaleWorld(this: Object3D,): Object3D {
+    objectExtension.pp_resetScaleWorld = function pp_resetScaleWorld(this: Object3D): Object3D {
         return ObjectUtils.resetScaleWorld(this);
     };
 
-    objectExtension.pp_resetScaleLocal = function pp_resetScaleLocal(this: Object3D,): Object3D {
+    objectExtension.pp_resetScaleLocal = function pp_resetScaleLocal(this: Object3D): Object3D {
         return ObjectUtils.resetScaleLocal(this);
     };
 
     // Transform
 
-    objectExtension.pp_resetTransform = function pp_resetTransform(this: Object3D,): Object3D {
+    objectExtension.pp_resetTransform = function pp_resetTransform(this: Object3D): Object3D {
         return ObjectUtils.resetTransform(this);
     };
 
-    objectExtension.pp_resetTransformWorld = function pp_resetTransformWorld(this: Object3D,): Object3D {
+    objectExtension.pp_resetTransformWorld = function pp_resetTransformWorld(this: Object3D): Object3D {
         return ObjectUtils.resetTransformWorld(this);
     };
 
-    objectExtension.pp_resetTransformLocal = function pp_resetTransformLocal(this: Object3D,): Object3D {
+    objectExtension.pp_resetTransformLocal = function pp_resetTransformLocal(this: Object3D): Object3D {
         return ObjectUtils.resetTransformLocal(this);
     };
 
@@ -1018,139 +1018,139 @@ export function initObjectExtensionProtoype(): void {
         return ObjectUtils.setParent(this, newParent, keepTransformWorld);
     };
 
-    objectExtension.pp_getParent = function pp_getParent(this: Object3D,): Object3D {
+    objectExtension.pp_getParent = function pp_getParent(this: Readonly<Object3D>): Object3D {
         return ObjectUtils.getParent(this);
     };
 
     // Convert Vector Object World
 
-    objectExtension.pp_convertPositionObjectToWorld = function pp_convertPositionObjectToWorld(this: Object3D, position: Readonly<Vector3>, outPosition: Vector3 = Vec3Utils.create()): Vector3 {
+    objectExtension.pp_convertPositionObjectToWorld = function pp_convertPositionObjectToWorld(this: Readonly<Object3D>, position: Readonly<Vector3>, outPosition: Vector3 = Vec3Utils.create()): Vector3 {
         return ObjectUtils.convertPositionObjectToWorld(this, position, outPosition);
     };
 
-    objectExtension.pp_convertDirectionObjectToWorld = function pp_convertDirectionObjectToWorld(this: Object3D, direction: Readonly<Vector3>, outDirection: Vector3 = Vec3Utils.create()): Vector3 {
+    objectExtension.pp_convertDirectionObjectToWorld = function pp_convertDirectionObjectToWorld(this: Readonly<Object3D>, direction: Readonly<Vector3>, outDirection: Vector3 = Vec3Utils.create()): Vector3 {
         return ObjectUtils.convertDirectionObjectToWorld(this, direction, outDirection);
     };
 
-    objectExtension.pp_convertPositionWorldToObject = function pp_convertPositionWorldToObject(this: Object3D, position: Readonly<Vector3>, outPosition: Vector3 = Vec3Utils.create()): Vector3 {
+    objectExtension.pp_convertPositionWorldToObject = function pp_convertPositionWorldToObject(this: Readonly<Object3D>, position: Readonly<Vector3>, outPosition: Vector3 = Vec3Utils.create()): Vector3 {
         return ObjectUtils.convertPositionWorldToObject(this, position, outPosition);
     };
 
-    objectExtension.pp_convertDirectionWorldToObject = function pp_convertDirectionWorldToObject(this: Object3D, direction: Readonly<Vector3>, outDirection: Vector3 = Vec3Utils.create()): Vector3 {
+    objectExtension.pp_convertDirectionWorldToObject = function pp_convertDirectionWorldToObject(this: Readonly<Object3D>, direction: Readonly<Vector3>, outDirection: Vector3 = Vec3Utils.create()): Vector3 {
         return ObjectUtils.convertDirectionWorldToObject(this, direction, outDirection);
     };
 
     // Convert Vector Local World
 
-    objectExtension.pp_convertPositionLocalToWorld = function pp_convertPositionLocalToWorld(this: Object3D, position: Readonly<Vector3>, outPosition: Vector3 = Vec3Utils.create()): Vector3 {
+    objectExtension.pp_convertPositionLocalToWorld = function pp_convertPositionLocalToWorld(this: Readonly<Object3D>, position: Readonly<Vector3>, outPosition: Vector3 = Vec3Utils.create()): Vector3 {
         return ObjectUtils.convertPositionLocalToWorld(this, position, outPosition);
     };
 
-    objectExtension.pp_convertDirectionLocalToWorld = function pp_convertDirectionLocalToWorld(this: Object3D, direction: Readonly<Vector3>, outDirection: Vector3 = Vec3Utils.create()): Vector3 {
+    objectExtension.pp_convertDirectionLocalToWorld = function pp_convertDirectionLocalToWorld(this: Readonly<Object3D>, direction: Readonly<Vector3>, outDirection: Vector3 = Vec3Utils.create()): Vector3 {
         return ObjectUtils.convertDirectionLocalToWorld(this, direction, outDirection);
     };
 
-    objectExtension.pp_convertPositionWorldToLocal = function pp_convertPositionWorldToLocal(this: Object3D, position: Readonly<Vector3>, outPosition: Vector3 = Vec3Utils.create()): Vector3 {
+    objectExtension.pp_convertPositionWorldToLocal = function pp_convertPositionWorldToLocal(this: Readonly<Object3D>, position: Readonly<Vector3>, outPosition: Vector3 = Vec3Utils.create()): Vector3 {
         return ObjectUtils.convertPositionWorldToLocal(this, position, outPosition);
     };
 
-    objectExtension.pp_convertDirectionWorldToLocal = function pp_convertDirectionWorldToLocal(this: Object3D, direction: Readonly<Vector3>, outDirection: Vector3 = Vec3Utils.create()): Vector3 {
+    objectExtension.pp_convertDirectionWorldToLocal = function pp_convertDirectionWorldToLocal(this: Readonly<Object3D>, direction: Readonly<Vector3>, outDirection: Vector3 = Vec3Utils.create()): Vector3 {
         return ObjectUtils.convertDirectionWorldToLocal(this, direction, outDirection);
     };
 
     // Convert Vector Local Object
 
-    objectExtension.pp_convertPositionObjectToLocal = function pp_convertPositionObjectToLocal(this: Object3D, position: Readonly<Vector3>, outPosition: Vector3 = Vec3Utils.create()): Vector3 {
+    objectExtension.pp_convertPositionObjectToLocal = function pp_convertPositionObjectToLocal(this: Readonly<Object3D>, position: Readonly<Vector3>, outPosition: Vector3 = Vec3Utils.create()): Vector3 {
         return ObjectUtils.convertPositionObjectToLocal(this, position, outPosition);
     };
 
-    objectExtension.pp_convertDirectionObjectToLocal = function pp_convertDirectionObjectToLocal(this: Object3D, direction: Readonly<Vector3>, outDirection: Vector3 = Vec3Utils.create()): Vector3 {
+    objectExtension.pp_convertDirectionObjectToLocal = function pp_convertDirectionObjectToLocal(this: Readonly<Object3D>, direction: Readonly<Vector3>, outDirection: Vector3 = Vec3Utils.create()): Vector3 {
         return ObjectUtils.convertDirectionObjectToLocal(this, direction, outDirection);
     };
 
-    objectExtension.pp_convertPositionLocalToObject = function pp_convertPositionLocalToObject(this: Object3D, position: Readonly<Vector3>, outPosition: Vector3 = Vec3Utils.create()): Vector3 {
+    objectExtension.pp_convertPositionLocalToObject = function pp_convertPositionLocalToObject(this: Readonly<Object3D>, position: Readonly<Vector3>, outPosition: Vector3 = Vec3Utils.create()): Vector3 {
         return ObjectUtils.convertPositionLocalToObject(this, position, outPosition);
     };
 
-    objectExtension.pp_convertDirectionLocalToObject = function pp_convertDirectionLocalToObject(this: Object3D, direction: Readonly<Vector3>, outDirection: Vector3 = Vec3Utils.create()): Vector3 {
+    objectExtension.pp_convertDirectionLocalToObject = function pp_convertDirectionLocalToObject(this: Readonly<Object3D>, direction: Readonly<Vector3>, outDirection: Vector3 = Vec3Utils.create()): Vector3 {
         return ObjectUtils.convertDirectionLocalToObject(this, direction, outDirection);
     };
 
     // Convert Transform Object World
 
-    objectExtension.pp_convertTransformObjectToWorld = function pp_convertTransformObjectToWorld(this: Object3D, transform: Readonly<Matrix4>, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
+    objectExtension.pp_convertTransformObjectToWorld = function pp_convertTransformObjectToWorld(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
         return ObjectUtils.convertTransformObjectToWorld(this, transform, outTransform);
     };
 
-    objectExtension.pp_convertTransformObjectToWorldMatrix = function pp_convertTransformObjectToWorldMatrix(this: Object3D, transform: Readonly<Matrix4>, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
+    objectExtension.pp_convertTransformObjectToWorldMatrix = function pp_convertTransformObjectToWorldMatrix(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
         return ObjectUtils.convertTransformObjectToWorldMatrix(this, transform, outTransform);
     };
 
-    objectExtension.pp_convertTransformObjectToWorldQuat = function pp_convertTransformObjectToWorldQuat(this: Object3D, transform: Readonly<Quaternion2>, outTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
+    objectExtension.pp_convertTransformObjectToWorldQuat = function pp_convertTransformObjectToWorldQuat(this: Readonly<Object3D>, transform: Readonly<Quaternion2>, outTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
         return ObjectUtils.convertTransformObjectToWorldQuat(this, transform, outTransform);
     };
 
-    objectExtension.pp_convertTransformWorldToObject = function pp_convertTransformWorldToObject(this: Object3D, transform: Readonly<Matrix4>, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
+    objectExtension.pp_convertTransformWorldToObject = function pp_convertTransformWorldToObject(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
         return ObjectUtils.convertTransformWorldToObject(this, transform, outTransform);
     };
 
-    objectExtension.pp_convertTransformWorldToObjectMatrix = function pp_convertTransformWorldToObjectMatrix(this: Object3D, transform: Readonly<Matrix4>, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
+    objectExtension.pp_convertTransformWorldToObjectMatrix = function pp_convertTransformWorldToObjectMatrix(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
         return ObjectUtils.convertTransformWorldToObjectMatrix(this, transform, outTransform);
     };
 
-    objectExtension.pp_convertTransformWorldToObjectQuat = function pp_convertTransformWorldToObjectQuat(this: Object3D, transform: Readonly<Quaternion2>, outTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
+    objectExtension.pp_convertTransformWorldToObjectQuat = function pp_convertTransformWorldToObjectQuat(this: Readonly<Object3D>, transform: Readonly<Quaternion2>, outTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
         return ObjectUtils.convertTransformWorldToObjectQuat(this, transform, outTransform);
     };
 
     // Convert Transform Local World
 
-    objectExtension.pp_convertTransformLocalToWorld = function pp_convertTransformLocalToWorld(this: Object3D, transform: Readonly<Matrix4>, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
+    objectExtension.pp_convertTransformLocalToWorld = function pp_convertTransformLocalToWorld(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
         return ObjectUtils.convertTransformLocalToWorld(this, transform, outTransform);
     };
 
-    objectExtension.pp_convertTransformLocalToWorldMatrix = function pp_convertTransformLocalToWorldMatrix(this: Object3D, transform: Readonly<Matrix4>, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
+    objectExtension.pp_convertTransformLocalToWorldMatrix = function pp_convertTransformLocalToWorldMatrix(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
         return ObjectUtils.convertTransformLocalToWorldMatrix(this, transform, outTransform);
     };
 
-    objectExtension.pp_convertTransformLocalToWorldQuat = function pp_convertTransformLocalToWorldQuat(this: Object3D, transform: Readonly<Quaternion2>, outTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
+    objectExtension.pp_convertTransformLocalToWorldQuat = function pp_convertTransformLocalToWorldQuat(this: Readonly<Object3D>, transform: Readonly<Quaternion2>, outTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
         return ObjectUtils.convertTransformLocalToWorldQuat(this, transform, outTransform);
     };
 
-    objectExtension.pp_convertTransformWorldToLocal = function pp_convertTransformWorldToLocal(this: Object3D, transform: Readonly<Matrix4>, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
+    objectExtension.pp_convertTransformWorldToLocal = function pp_convertTransformWorldToLocal(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
         return ObjectUtils.convertTransformWorldToLocal(this, transform, outTransform);
     };
 
-    objectExtension.pp_convertTransformWorldToLocalMatrix = function pp_convertTransformWorldToLocalMatrix(this: Object3D, transform: Readonly<Matrix4>, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
+    objectExtension.pp_convertTransformWorldToLocalMatrix = function pp_convertTransformWorldToLocalMatrix(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
         return ObjectUtils.convertTransformWorldToLocalMatrix(this, transform, outTransform);
     };
 
-    objectExtension.pp_convertTransformWorldToLocalQuat = function pp_convertTransformWorldToLocalQuat(this: Object3D, transform: Readonly<Quaternion2>, outTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
+    objectExtension.pp_convertTransformWorldToLocalQuat = function pp_convertTransformWorldToLocalQuat(this: Readonly<Object3D>, transform: Readonly<Quaternion2>, outTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
         return ObjectUtils.convertTransformWorldToLocalQuat(this, transform, outTransform);
     };
 
     // Convert Transform Object Local
 
-    objectExtension.pp_convertTransformObjectToLocal = function pp_convertTransformObjectToLocal(this: Object3D, transform: Readonly<Matrix4>, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
+    objectExtension.pp_convertTransformObjectToLocal = function pp_convertTransformObjectToLocal(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
         return ObjectUtils.convertTransformObjectToLocal(this, transform, outTransform);
     };
 
-    objectExtension.pp_convertTransformObjectToLocalMatrix = function pp_convertTransformObjectToLocalMatrix(this: Object3D, transform: Readonly<Matrix4>, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
+    objectExtension.pp_convertTransformObjectToLocalMatrix = function pp_convertTransformObjectToLocalMatrix(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
         return ObjectUtils.convertTransformObjectToLocalMatrix(this, transform, outTransform);
     };
 
-    objectExtension.pp_convertTransformObjectToLocalQuat = function pp_convertTransformObjectToLocalQuat(this: Object3D, transform: Readonly<Quaternion2>, outTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
+    objectExtension.pp_convertTransformObjectToLocalQuat = function pp_convertTransformObjectToLocalQuat(this: Readonly<Object3D>, transform: Readonly<Quaternion2>, outTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
         return ObjectUtils.convertTransformObjectToLocalQuat(this, transform, outTransform);
     };
 
-    objectExtension.pp_convertTransformLocalToObject = function pp_convertTransformLocalToObject(this: Object3D, transform: Readonly<Matrix4>, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
+    objectExtension.pp_convertTransformLocalToObject = function pp_convertTransformLocalToObject(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
         return ObjectUtils.convertTransformLocalToObject(this, transform, outTransform);
     };
 
-    objectExtension.pp_convertTransformLocalToObjectMatrix = function pp_convertTransformLocalToObjectMatrix(this: Object3D, transform: Readonly<Matrix4>, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
+    objectExtension.pp_convertTransformLocalToObjectMatrix = function pp_convertTransformLocalToObjectMatrix(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
         return ObjectUtils.convertTransformLocalToObjectMatrix(this, transform, outTransform);
     };
 
-    objectExtension.pp_convertTransformLocalToObjectQuat = function pp_convertTransformLocalToObjectQuat(this: Object3D, transform: Readonly<Quaternion2>, outTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
+    objectExtension.pp_convertTransformLocalToObjectQuat = function pp_convertTransformLocalToObjectQuat(this: Readonly<Object3D>, transform: Readonly<Quaternion2>, outTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
         return ObjectUtils.convertTransformLocalToObjectQuat(this, transform, outTransform);
     };
 
@@ -1160,75 +1160,75 @@ export function initObjectExtensionProtoype(): void {
         return ObjectUtils.addComponent(this, typeOrClass, paramsOrActive, active);
     };
 
-    objectExtension.pp_getComponent = function pp_getComponent<T extends Component>(this: Object3D, typeOrClass: string | ComponentConstructor<T>, index: number = 0): T | null {
+    objectExtension.pp_getComponent = function pp_getComponent<T extends Component>(this: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T>, index: number = 0): T | null {
         return ObjectUtils.getComponent(this, typeOrClass, index);
     };
 
-    objectExtension.pp_getComponentSelf = function pp_getComponentSelf<T extends Component>(this: Object3D, typeOrClass: string | ComponentConstructor<T>, index: number = 0): T | null {
+    objectExtension.pp_getComponentSelf = function pp_getComponentSelf<T extends Component>(this: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T>, index: number = 0): T | null {
         return ObjectUtils.getComponentSelf(this, typeOrClass, index);
     };
 
-    objectExtension.pp_getComponentHierarchy = function pp_getComponentHierarchy<T extends Component>(this: Object3D, typeOrClass: string | ComponentConstructor<T>, index: number = 0): T | null {
+    objectExtension.pp_getComponentHierarchy = function pp_getComponentHierarchy<T extends Component>(this: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T>, index: number = 0): T | null {
         return ObjectUtils.getComponentHierarchy(this, typeOrClass, index);
     };
 
-    objectExtension.pp_getComponentHierarchyBreadth = function pp_getComponentHierarchyBreadth<T extends Component>(this: Object3D, typeOrClass: string | ComponentConstructor<T>, index: number = 0): T | null {
+    objectExtension.pp_getComponentHierarchyBreadth = function pp_getComponentHierarchyBreadth<T extends Component>(this: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T>, index: number = 0): T | null {
         return ObjectUtils.getComponentHierarchyBreadth(this, typeOrClass, index);
     };
 
-    objectExtension.pp_getComponentHierarchyDepth = function pp_getComponentHierarchyDepth<T extends Component>(this: Object3D, typeOrClass: string | ComponentConstructor<T>, index: number = 0): T | null {
+    objectExtension.pp_getComponentHierarchyDepth = function pp_getComponentHierarchyDepth<T extends Component>(this: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T>, index: number = 0): T | null {
         return ObjectUtils.getComponentHierarchyDepth(this, typeOrClass, index);
     };
 
-    objectExtension.pp_getComponentDescendants = function pp_getComponentDescendants<T extends Component>(this: Object3D, typeOrClass: string | ComponentConstructor<T>, index: number = 0): T | null {
+    objectExtension.pp_getComponentDescendants = function pp_getComponentDescendants<T extends Component>(this: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T>, index: number = 0): T | null {
         return ObjectUtils.getComponentDescendants(this, typeOrClass, index);
     };
 
-    objectExtension.pp_getComponentDescendantsBreadth = function pp_getComponentDescendantsBreadth<T extends Component>(this: Object3D, typeOrClass: string | ComponentConstructor<T>, index: number = 0): T | null {
+    objectExtension.pp_getComponentDescendantsBreadth = function pp_getComponentDescendantsBreadth<T extends Component>(this: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T>, index: number = 0): T | null {
         return ObjectUtils.getComponentDescendantsBreadth(this, typeOrClass, index);
     };
 
-    objectExtension.pp_getComponentDescendantsDepth = function pp_getComponentDescendantsDepth<T extends Component>(this: Object3D, typeOrClass: string | ComponentConstructor<T>, index: number = 0): T | null {
+    objectExtension.pp_getComponentDescendantsDepth = function pp_getComponentDescendantsDepth<T extends Component>(this: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T>, index: number = 0): T | null {
         return ObjectUtils.getComponentDescendantsDepth(this, typeOrClass, index);
     };
 
-    objectExtension.pp_getComponentChildren = function pp_getComponentChildren<T extends Component>(this: Object3D, typeOrClass: string | ComponentConstructor<T>, index: number = 0): T | null {
+    objectExtension.pp_getComponentChildren = function pp_getComponentChildren<T extends Component>(this: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T>, index: number = 0): T | null {
         return ObjectUtils.getComponentChildren(this, typeOrClass, index);
     };
 
-    objectExtension.pp_getComponents = function pp_getComponents<T extends Component>(this: Object3D, typeOrClass: string | ComponentConstructor<T>): T[] {
+    objectExtension.pp_getComponents = function pp_getComponents<T extends Component>(this: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T>): T[] {
         return ObjectUtils.getComponents(this, typeOrClass);
     };
 
-    objectExtension.pp_getComponentsSelf = function pp_getComponentsSelf<T extends Component>(this: Object3D, typeOrClass: string | ComponentConstructor<T>): T[] {
+    objectExtension.pp_getComponentsSelf = function pp_getComponentsSelf<T extends Component>(this: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T>): T[] {
         return ObjectUtils.getComponentsSelf(this, typeOrClass);
     };
 
-    objectExtension.pp_getComponentsHierarchy = function pp_getComponentsHierarchy<T extends Component>(this: Object3D, typeOrClass: string | ComponentConstructor<T>): T[] {
+    objectExtension.pp_getComponentsHierarchy = function pp_getComponentsHierarchy<T extends Component>(this: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T>): T[] {
         return ObjectUtils.getComponentsHierarchy(this, typeOrClass);
     };
 
-    objectExtension.pp_getComponentsHierarchyBreadth = function pp_getComponentsHierarchyBreadth<T extends Component>(this: Object3D, typeOrClass: string | ComponentConstructor<T>): T[] {
+    objectExtension.pp_getComponentsHierarchyBreadth = function pp_getComponentsHierarchyBreadth<T extends Component>(this: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T>): T[] {
         return ObjectUtils.getComponentsHierarchyBreadth(this, typeOrClass);
     };
 
-    objectExtension.pp_getComponentsHierarchyDepth = function pp_getComponentsHierarchyDepth<T extends Component>(this: Object3D, typeOrClass: string | ComponentConstructor<T>): T[] {
+    objectExtension.pp_getComponentsHierarchyDepth = function pp_getComponentsHierarchyDepth<T extends Component>(this: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T>): T[] {
         return ObjectUtils.getComponentsHierarchyDepth(this, typeOrClass);
     };
 
-    objectExtension.pp_getComponentsDescendants = function pp_getComponentsDescendants<T extends Component>(this: Object3D, typeOrClass: string | ComponentConstructor<T>): T[] {
+    objectExtension.pp_getComponentsDescendants = function pp_getComponentsDescendants<T extends Component>(this: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T>): T[] {
         return ObjectUtils.getComponentsDescendants(this, typeOrClass);
     };
 
-    objectExtension.pp_getComponentsDescendantsBreadth = function pp_getComponentsDescendantsBreadth<T extends Component>(this: Object3D, typeOrClass: string | ComponentConstructor<T>): T[] {
+    objectExtension.pp_getComponentsDescendantsBreadth = function pp_getComponentsDescendantsBreadth<T extends Component>(this: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T>): T[] {
         return ObjectUtils.getComponentsDescendantsBreadth(this, typeOrClass);
     };
 
-    objectExtension.pp_getComponentsDescendantsDepth = function pp_getComponentsDescendantsDepth<T extends Component>(this: Object3D, typeOrClass: string | ComponentConstructor<T>): T[] {
+    objectExtension.pp_getComponentsDescendantsDepth = function pp_getComponentsDescendantsDepth<T extends Component>(this: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T>): T[] {
         return ObjectUtils.getComponentsDescendantsDepth(this, typeOrClass);
     };
 
-    objectExtension.pp_getComponentsChildren = function pp_getComponentsChildren<T extends Component>(this: Object3D, typeOrClass: string | ComponentConstructor<T>): T[] {
+    objectExtension.pp_getComponentsChildren = function pp_getComponentsChildren<T extends Component>(this: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T>): T[] {
         return ObjectUtils.getComponentsChildren(this, typeOrClass);
     };
 
@@ -1272,179 +1272,179 @@ export function initObjectExtensionProtoype(): void {
 
     // Uniform Scale
 
-    objectExtension.pp_hasUniformScale = function pp_hasUniformScale(this: Object3D,): boolean {
+    objectExtension.pp_hasUniformScale = function pp_hasUniformScale(this: Readonly<Object3D>): boolean {
         return ObjectUtils.hasUniformScale(this);
     };
 
-    objectExtension.pp_hasUniformScaleWorld = function pp_hasUniformScaleWorld(this: Object3D,): boolean {
+    objectExtension.pp_hasUniformScaleWorld = function pp_hasUniformScaleWorld(this: Readonly<Object3D>): boolean {
         return ObjectUtils.hasUniformScaleWorld(this);
     };
 
-    objectExtension.pp_hasUniformScaleLocal = function pp_hasUniformScaleLocal(this: Object3D,): boolean {
+    objectExtension.pp_hasUniformScaleLocal = function pp_hasUniformScaleLocal(this: Readonly<Object3D>): boolean {
         return ObjectUtils.hasUniformScaleLocal(this);
     };
 
     // Clone
 
-    objectExtension.pp_clone = function pp_clone(this: Object3D, cloneParams: Readonly<CloneParams> = new CloneParams()): Object3D | null {
+    objectExtension.pp_clone = function pp_clone(this: Readonly<Object3D>, cloneParams: Readonly<CloneParams> = new CloneParams()): Object3D | null {
         return ObjectUtils.clone(this, cloneParams);
     };
 
-    objectExtension.pp_isCloneable = function pp_isCloneable(this: Object3D, cloneParams: Readonly<CloneParams> = new CloneParams()): boolean {
+    objectExtension.pp_isCloneable = function pp_isCloneable(this: Readonly<Object3D>, cloneParams: Readonly<CloneParams> = new CloneParams()): boolean {
         return ObjectUtils.isCloneable(this, cloneParams);
     };
 
     // To String
 
-    objectExtension.pp_toString = function pp_toString(this: Object3D,): string {
+    objectExtension.pp_toString = function pp_toString(this: Readonly<Object3D>): string {
         return ObjectUtils.toString(this);
     };
 
-    objectExtension.pp_toStringExtended = function pp_toStringExtended(this: Object3D,): string {
+    objectExtension.pp_toStringExtended = function pp_toStringExtended(this: Readonly<Object3D>): string {
         return ObjectUtils.toStringExtended(this);
     };
 
-    objectExtension.pp_toStringCompact = function pp_toStringCompact(this: Object3D,): string {
+    objectExtension.pp_toStringCompact = function pp_toStringCompact(this: Readonly<Object3D>): string {
         return ObjectUtils.toStringCompact(this);
     };
 
     // Get Object By Name
 
-    objectExtension.pp_getObjectByName = function pp_getObjectByName(this: Object3D, name: string, isRegex: boolean = false, index: number = 0): Object3D | null {
+    objectExtension.pp_getObjectByName = function pp_getObjectByName(this: Readonly<Object3D>, name: string, isRegex: boolean = false, index: number = 0): Object3D | null {
         return ObjectUtils.getObjectByName(this, name, isRegex, index);
     };
 
-    objectExtension.pp_getObjectByNameHierarchy = function pp_getObjectByNameHierarchy(this: Object3D, name: string, isRegex: boolean = false, index: number = 0): Object3D | null {
+    objectExtension.pp_getObjectByNameHierarchy = function pp_getObjectByNameHierarchy(this: Readonly<Object3D>, name: string, isRegex: boolean = false, index: number = 0): Object3D | null {
         return ObjectUtils.getObjectByNameHierarchy(this, name, isRegex, index);
     };
 
-    objectExtension.pp_getObjectByNameHierarchyBreadth = function pp_getObjectByNameHierarchyBreadth(this: Object3D, name: string, isRegex: boolean = false, index: number = 0): Object3D | null {
+    objectExtension.pp_getObjectByNameHierarchyBreadth = function pp_getObjectByNameHierarchyBreadth(this: Readonly<Object3D>, name: string, isRegex: boolean = false, index: number = 0): Object3D | null {
         return ObjectUtils.getObjectByNameHierarchyBreadth(this, name, isRegex, index);
     };
 
-    objectExtension.pp_getObjectByNameHierarchyDepth = function pp_getObjectByNameHierarchyDepth(this: Object3D, name: string, isRegex: boolean = false, index: number = 0): Object3D | null {
+    objectExtension.pp_getObjectByNameHierarchyDepth = function pp_getObjectByNameHierarchyDepth(this: Readonly<Object3D>, name: string, isRegex: boolean = false, index: number = 0): Object3D | null {
         return ObjectUtils.getObjectByNameHierarchyDepth(this, name, isRegex, index);
     };
 
-    objectExtension.pp_getObjectByNameDescendants = function pp_getObjectByNameDescendants(this: Object3D, name: string, isRegex: boolean = false, index: number = 0): Object3D | null {
+    objectExtension.pp_getObjectByNameDescendants = function pp_getObjectByNameDescendants(this: Readonly<Object3D>, name: string, isRegex: boolean = false, index: number = 0): Object3D | null {
         return ObjectUtils.getObjectByNameDescendants(this, name, isRegex, index);
     };
 
-    objectExtension.pp_getObjectByNameDescendantsBreadth = function pp_getObjectByNameDescendantsBreadth(this: Object3D, name: string, isRegex: boolean = false, index: number = 0): Object3D | null {
+    objectExtension.pp_getObjectByNameDescendantsBreadth = function pp_getObjectByNameDescendantsBreadth(this: Readonly<Object3D>, name: string, isRegex: boolean = false, index: number = 0): Object3D | null {
         return ObjectUtils.getObjectByNameDescendantsBreadth(this, name, isRegex, index);
     };
 
-    objectExtension.pp_getObjectByNameDescendantsDepth = function pp_getObjectByNameDescendantsDepth(this: Object3D, name: string, isRegex: boolean = false, index: number = 0): Object3D | null {
+    objectExtension.pp_getObjectByNameDescendantsDepth = function pp_getObjectByNameDescendantsDepth(this: Readonly<Object3D>, name: string, isRegex: boolean = false, index: number = 0): Object3D | null {
         return ObjectUtils.getObjectByNameDescendantsDepth(this, name, isRegex, index);
     };
 
-    objectExtension.pp_getObjectByNameChildren = function pp_getObjectByNameChildren(this: Object3D, name: string, isRegex: boolean = false, index: number = 0): Object3D | null {
+    objectExtension.pp_getObjectByNameChildren = function pp_getObjectByNameChildren(this: Readonly<Object3D>, name: string, isRegex: boolean = false, index: number = 0): Object3D | null {
         return ObjectUtils.getObjectByNameChildren(this, name, isRegex, index);
     };
 
-    objectExtension.pp_getObjectsByName = function pp_getObjectsByName(this: Object3D, name: string, isRegex: boolean = false): Object3D | null {
+    objectExtension.pp_getObjectsByName = function pp_getObjectsByName(this: Readonly<Object3D>, name: string, isRegex: boolean = false): Object3D | null {
         return ObjectUtils.getObjectsByName(this, name, isRegex);
     };
 
-    objectExtension.pp_getObjectsByNameHierarchy = function pp_getObjectsByNameHierarchy(this: Object3D, name: string, isRegex: boolean = false): Object3D[] {
+    objectExtension.pp_getObjectsByNameHierarchy = function pp_getObjectsByNameHierarchy(this: Readonly<Object3D>, name: string, isRegex: boolean = false): Object3D[] {
         return ObjectUtils.getObjectsByNameHierarchy(this, name, isRegex);
     };
 
-    objectExtension.pp_getObjectsByNameHierarchyBreadth = function pp_getObjectsByNameHierarchyBreadth(this: Object3D, name: string, isRegex: boolean = false): Object3D[] {
+    objectExtension.pp_getObjectsByNameHierarchyBreadth = function pp_getObjectsByNameHierarchyBreadth(this: Readonly<Object3D>, name: string, isRegex: boolean = false): Object3D[] {
         return ObjectUtils.getObjectsByNameHierarchyBreadth(this, name, isRegex);
     };
 
-    objectExtension.pp_getObjectsByNameHierarchyDepth = function pp_getObjectsByNameHierarchyDepth(this: Object3D, name: string, isRegex: boolean = false): Object3D[] {
+    objectExtension.pp_getObjectsByNameHierarchyDepth = function pp_getObjectsByNameHierarchyDepth(this: Readonly<Object3D>, name: string, isRegex: boolean = false): Object3D[] {
         return ObjectUtils.getObjectsByNameHierarchyDepth(this, name, isRegex);
     };
 
-    objectExtension.pp_getObjectsByNameDescendants = function pp_getObjectsByNameDescendants(this: Object3D, name: string, isRegex: boolean = false): Object3D[] {
+    objectExtension.pp_getObjectsByNameDescendants = function pp_getObjectsByNameDescendants(this: Readonly<Object3D>, name: string, isRegex: boolean = false): Object3D[] {
         return ObjectUtils.getObjectsByNameDescendants(this, name, isRegex);
     };
 
-    objectExtension.pp_getObjectsByNameDescendantsBreadth = function pp_getObjectsByNameDescendantsBreadth(this: Object3D, name: string, isRegex: boolean = false): Object3D[] {
+    objectExtension.pp_getObjectsByNameDescendantsBreadth = function pp_getObjectsByNameDescendantsBreadth(this: Readonly<Object3D>, name: string, isRegex: boolean = false): Object3D[] {
         return ObjectUtils.getObjectsByNameDescendantsBreadth(this, name, isRegex);
     };
 
-    objectExtension.pp_getObjectsByNameDescendantsDepth = function pp_getObjectsByNameDescendantsDepth(this: Object3D, name: string, isRegex: boolean = false): Object3D[] {
+    objectExtension.pp_getObjectsByNameDescendantsDepth = function pp_getObjectsByNameDescendantsDepth(this: Readonly<Object3D>, name: string, isRegex: boolean = false): Object3D[] {
         return ObjectUtils.getObjectsByNameDescendantsDepth(this, name, isRegex);
     };
 
-    objectExtension.pp_getObjectsByNameChildren = function pp_getObjectsByNameChildren(this: Object3D, name: string, isRegex: boolean = false): Object3D[] {
+    objectExtension.pp_getObjectsByNameChildren = function pp_getObjectsByNameChildren(this: Readonly<Object3D>, name: string, isRegex: boolean = false): Object3D[] {
         return ObjectUtils.getObjectsByNameChildren(this, name, isRegex);
     };
 
     // Get Object By ID
 
-    objectExtension.pp_getObjectByID = function pp_getObjectByID(this: Object3D, id: number): Object3D | null {
+    objectExtension.pp_getObjectByID = function pp_getObjectByID(this: Readonly<Object3D>, id: number): Object3D | null {
         return ObjectUtils.getObjectByID(this, id);
     };
 
-    objectExtension.pp_getObjectByIDHierarchy = function pp_getObjectByIDHierarchy(this: Object3D, id: number): Object3D | null {
+    objectExtension.pp_getObjectByIDHierarchy = function pp_getObjectByIDHierarchy(this: Readonly<Object3D>, id: number): Object3D | null {
         return ObjectUtils.getObjectByIDHierarchy(this, id);
     };
 
-    objectExtension.pp_getObjectByIDHierarchyBreadth = function pp_getObjectByIDHierarchyBreadth(this: Object3D, id: number): Object3D | null {
+    objectExtension.pp_getObjectByIDHierarchyBreadth = function pp_getObjectByIDHierarchyBreadth(this: Readonly<Object3D>, id: number): Object3D | null {
         return ObjectUtils.getObjectByIDHierarchyBreadth(this, id);
     };
 
-    objectExtension.pp_getObjectByIDHierarchyDepth = function pp_getObjectByIDHierarchyDepth(this: Object3D, id: number): Object3D | null {
+    objectExtension.pp_getObjectByIDHierarchyDepth = function pp_getObjectByIDHierarchyDepth(this: Readonly<Object3D>, id: number): Object3D | null {
         return ObjectUtils.getObjectByIDHierarchyDepth(this, id);
     };
 
-    objectExtension.pp_getObjectByIDDescendants = function pp_getObjectByIDDescendants(this: Object3D, id: number): Object3D | null {
+    objectExtension.pp_getObjectByIDDescendants = function pp_getObjectByIDDescendants(this: Readonly<Object3D>, id: number): Object3D | null {
         return ObjectUtils.getObjectByIDDescendants(this, id);
     };
 
-    objectExtension.pp_getObjectByIDDescendantsBreadth = function pp_getObjectByIDDescendantsBreadth(this: Object3D, id: number): Object3D | null {
+    objectExtension.pp_getObjectByIDDescendantsBreadth = function pp_getObjectByIDDescendantsBreadth(this: Readonly<Object3D>, id: number): Object3D | null {
         return ObjectUtils.getObjectByIDDescendantsBreadth(this, id);
     };
 
-    objectExtension.pp_getObjectByIDDescendantsDepth = function pp_getObjectByIDDescendantsDepth(this: Object3D, id: number): Object3D | null {
+    objectExtension.pp_getObjectByIDDescendantsDepth = function pp_getObjectByIDDescendantsDepth(this: Readonly<Object3D>, id: number): Object3D | null {
         return ObjectUtils.getObjectByIDDescendantsDepth(this, id);
     };
 
-    objectExtension.pp_getObjectByIDChildren = function pp_getObjectByIDChildren(this: Object3D, id: number): Object3D | null {
+    objectExtension.pp_getObjectByIDChildren = function pp_getObjectByIDChildren(this: Readonly<Object3D>, id: number): Object3D | null {
         return ObjectUtils.getObjectByIDChildren(this, id);
     };
 
     // Get Hierarchy
 
-    objectExtension.pp_getHierarchyBreadth = function pp_getHierarchyBreadth(this: Object3D,): Object3D[] {
+    objectExtension.pp_getHierarchyBreadth = function pp_getHierarchyBreadth(this: Readonly<Object3D>): Object3D[] {
         return ObjectUtils.getHierarchyBreadth(this);
     };
 
-    objectExtension.pp_getHierarchyDepth = function pp_getHierarchyDepth(this: Object3D,): Object3D[] {
+    objectExtension.pp_getHierarchyDepth = function pp_getHierarchyDepth(this: Readonly<Object3D>): Object3D[] {
         return ObjectUtils.getHierarchyDepth(this);
     };
 
-    objectExtension.pp_getDescendants = function pp_getDescendants(this: Object3D,): Object3D[] {
+    objectExtension.pp_getDescendants = function pp_getDescendants(this: Readonly<Object3D>): Object3D[] {
         return ObjectUtils.getDescendants(this);
     };
 
-    objectExtension.pp_getDescendantsBreadth = function pp_getDescendantsBreadth(this: Object3D,): Object3D[] {
+    objectExtension.pp_getDescendantsBreadth = function pp_getDescendantsBreadth(this: Readonly<Object3D>): Object3D[] {
         return ObjectUtils.getDescendantsBreadth(this);
     };
 
-    objectExtension.pp_getDescendantsDepth = function pp_getDescendantsDepth(this: Object3D,): Object3D[] {
+    objectExtension.pp_getDescendantsDepth = function pp_getDescendantsDepth(this: Readonly<Object3D>): Object3D[] {
         return ObjectUtils.getDescendantsDepth(this);
     };
 
-    objectExtension.pp_getChildren = function pp_getChildren(this: Object3D,): Object3D[] {
+    objectExtension.pp_getChildren = function pp_getChildren(this: Readonly<Object3D>): Object3D[] {
         return ObjectUtils.getChildren(this);
     };
 
-    objectExtension.pp_getSelf = function pp_getSelf(this: Object3D,): Object3D {
+    objectExtension.pp_getSelf = function pp_getSelf(this: Readonly<Object3D>): Object3D {
         return ObjectUtils.getSelf(this);
     };
 
     // Cauldron
 
-    objectExtension.pp_addObject = function pp_addObject(this: Object3D,): Object3D {
+    objectExtension.pp_addObject = function pp_addObject(this: Object3D): Object3D {
         return ObjectUtils.addObject(this);
     };
 
-    objectExtension.pp_getName = function pp_getName(this: Object3D,): string {
+    objectExtension.pp_getName = function pp_getName(this: Readonly<Object3D>): string {
         return ObjectUtils.getName(this);
     };
 
@@ -1452,67 +1452,67 @@ export function initObjectExtensionProtoype(): void {
         return ObjectUtils.setName(this, name);
     };
 
-    objectExtension.pp_getEngine = function pp_getEngine(this: Object3D,): WonderlandEngine {
+    objectExtension.pp_getEngine = function pp_getEngine(this: Readonly<Object3D>): WonderlandEngine {
         return ObjectUtils.getEngine(this);
     };
 
-    objectExtension.pp_getID = function pp_getID(this: Object3D,): number {
+    objectExtension.pp_getID = function pp_getID(this: Readonly<Object3D>): number {
         return ObjectUtils.getID(this);
     };
 
-    objectExtension.pp_markDirty = function pp_markDirty(this: Object3D,): Object3D {
+    objectExtension.pp_markDirty = function pp_markDirty(this: Object3D): Object3D {
         return ObjectUtils.markDirty(this);
     };
 
-    objectExtension.pp_isTransformChanged = function pp_isTransformChanged(this: Object3D,): boolean {
+    objectExtension.pp_isTransformChanged = function pp_isTransformChanged(this: Readonly<Object3D>): boolean {
         return ObjectUtils.isTransformChanged(this);
     };
 
-    objectExtension.pp_equals = function pp_equals(this: Object3D, otherObject: Object3D): boolean {
+    objectExtension.pp_equals = function pp_equals(this: Readonly<Object3D>, otherObject: Object3D): boolean {
         return ObjectUtils.equals(this, otherObject);
     };
 
-    objectExtension.pp_destroy = function pp_destroy(this: Object3D,): void {
+    objectExtension.pp_destroy = function pp_destroy(this: Object3D): void {
         return ObjectUtils.destroy(this);
     };
 
-    objectExtension.pp_reserveObjects = function pp_reserveObjects(this: Object3D, count: number): Object3D {
+    objectExtension.pp_reserveObjects = function pp_reserveObjects(this: Readonly<Object3D>, count: number): Object3D {
         return ObjectUtils.reserveObjects(this, count);
     };
 
-    objectExtension.pp_reserveObjectsSelf = function pp_reserveObjectsSelf(this: Object3D, count: number): Object3D {
+    objectExtension.pp_reserveObjectsSelf = function pp_reserveObjectsSelf(this: Readonly<Object3D>, count: number): Object3D {
         return ObjectUtils.reserveObjectsSelf(this, count);
     };
 
-    objectExtension.pp_reserveObjectsHierarchy = function pp_reserveObjectsHierarchy(this: Object3D, count: number): Object3D {
+    objectExtension.pp_reserveObjectsHierarchy = function pp_reserveObjectsHierarchy(this: Readonly<Object3D>, count: number): Object3D {
         return ObjectUtils.reserveObjectsHierarchy(this, count);
     };
 
-    objectExtension.pp_reserveObjectsDescendants = function pp_reserveObjectsDescendants(this: Object3D, count: number): Object3D {
+    objectExtension.pp_reserveObjectsDescendants = function pp_reserveObjectsDescendants(this: Readonly<Object3D>, count: number): Object3D {
         return ObjectUtils.reserveObjectsDescendants(this, count);
     };
 
-    objectExtension.pp_reserveObjectsChildren = function pp_reserveObjectsChildren(this: Object3D, count: number): Object3D {
+    objectExtension.pp_reserveObjectsChildren = function pp_reserveObjectsChildren(this: Readonly<Object3D>, count: number): Object3D {
         return ObjectUtils.reserveObjectsChildren(this, count);
     };
 
-    objectExtension.pp_getComponentsAmountMap = function pp_getComponentsAmountMap(this: Object3D, amountMap: Map<string, number> = new Map<string, number>()): Map<string, number> {
+    objectExtension.pp_getComponentsAmountMap = function pp_getComponentsAmountMap(this: Readonly<Object3D>, amountMap: Map<string, number> = new Map<string, number>()): Map<string, number> {
         return ObjectUtils.getComponentsAmountMap(this, amountMap);
     };
 
-    objectExtension.pp_getComponentsAmountMapSelf = function pp_getComponentsAmountMapSelf(this: Object3D, amountMap: Map<string, number> = new Map<string, number>()): Map<string, number> {
+    objectExtension.pp_getComponentsAmountMapSelf = function pp_getComponentsAmountMapSelf(this: Readonly<Object3D>, amountMap: Map<string, number> = new Map<string, number>()): Map<string, number> {
         return ObjectUtils.getComponentsAmountMapSelf(this, amountMap);
     };
 
-    objectExtension.pp_getComponentsAmountMapHierarchy = function pp_getComponentsAmountMapHierarchy(this: Object3D, amountMap: Map<string, number> = new Map<string, number>()): Map<string, number> {
+    objectExtension.pp_getComponentsAmountMapHierarchy = function pp_getComponentsAmountMapHierarchy(this: Readonly<Object3D>, amountMap: Map<string, number> = new Map<string, number>()): Map<string, number> {
         return ObjectUtils.getComponentsAmountMapHierarchy(this, amountMap);
     };
 
-    objectExtension.pp_getComponentsAmountMapDescendants = function pp_getComponentsAmountMapDescendants(this: Object3D, amountMap: Map<string, number> = new Map<string, number>()): Map<string, number> {
+    objectExtension.pp_getComponentsAmountMapDescendants = function pp_getComponentsAmountMapDescendants(this: Readonly<Object3D>, amountMap: Map<string, number> = new Map<string, number>()): Map<string, number> {
         return ObjectUtils.getComponentsAmountMapDescendants(this, amountMap);
     };
 
-    objectExtension.pp_getComponentsAmountMapChildren = function pp_getComponentsAmountMapChildren(this: Object3D, amountMap: Map<string, number> = new Map<string, number>()): Map<string, number> {
+    objectExtension.pp_getComponentsAmountMapChildren = function pp_getComponentsAmountMapChildren(this: Readonly<Object3D>, amountMap: Map<string, number> = new Map<string, number>()): Map<string, number> {
         return ObjectUtils.getComponentsAmountMapChildren(this, amountMap);
     };
 
