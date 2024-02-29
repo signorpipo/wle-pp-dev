@@ -554,8 +554,8 @@ export function setScale(object: Object3D, scale: number | Vector3) {
 export let setScaleWorld = function () {
     let vector = Vec3Utils.create();
     return function setScaleWorld(object: Object3D, scale: number | Vector3) {
-        if (isNaN(scale)) {
-            object.setScalingWorld(scale);
+        if (isNaN(scale as number)) {
+            object.setScalingWorld(scale as Vector3);
         } else {
             Vec3Utils.set(vector, scale);
             object.setScalingWorld(vector);
@@ -566,8 +566,8 @@ export let setScaleWorld = function () {
 export let setScaleLocal = function () {
     let vector = Vec3Utils.create();
     return function setScaleLocal(object: Object3D, scale: number | Vector3) {
-        if (isNaN(scale)) {
-            object.setScalingLocal(scale);
+        if (isNaN(scale as number)) {
+            object.setScalingLocal(scale as Vector3);
         } else {
             Vec3Utils.set(vector, scale);
             object.setScalingLocal(vector);
@@ -1386,11 +1386,11 @@ export let rotateAroundAxisObjectRadians = function () {
 export let scaleObject = function () {
     let vector = Vec3Utils.create();
     return function scaleObject(object: Object3D, scale: number | Vector3) {
-        if (isNaN(scale)) {
-            object.scale(scale);
+        if (isNaN(scale as number)) {
+            object.scaleLocal(scale as Vector3);
         } else {
             Vec3Utils.set(vector, scale);
-            object.scale(vector);
+            object.scaleLocal(vector);
         }
     };
 }();
@@ -1425,14 +1425,14 @@ export function lookTo(object: Object3D, direction: Vector3, up: Vector3) {
 
 export let lookToWorld = function () {
     let internalUp = Vec3Utils.create();
-    return function lookToWorld(object, direction: Vector3, up = ObjectUtils.getUpWorld(object: Object3D, internalUp)) {
+    return function lookToWorld(object: Object3D, direction: Vector3, up = ObjectUtils.getUpWorld(object: Object3D, internalUp)) {
         ObjectUtils.setForwardWorld(object, direction, up);
     };
 }();
 
 export let lookToLocal = function () {
     let internalUp = Vec3Utils.create();
-    return function lookToLocal(object, direction: Vector3, up = ObjectUtils.getUpLocal(object: Object3D, internalUp)) {
+    return function lookToLocal(object: Object3D, direction: Vector3, up = ObjectUtils.getUpLocal(object: Object3D, internalUp)) {
         ObjectUtils.setForwardLocal(object, direction, up);
     };
 }();
@@ -1445,7 +1445,7 @@ export let setParent = function () {
     let position = Vec3Utils.create();
     let rotation = QuatUtils.create();
     let scale = Vec3Utils.create();
-    return function setParent(object: Object3D, newParent, keepTransformWorld = true) {
+    return function setParent(object: Object3D, newParent: Object3D, keepTransformWorld: boolean = true): Object3D {
         if (!keepTransformWorld) {
             object.parent = newParent;
         } else {
@@ -1457,6 +1457,8 @@ export let setParent = function () {
             ObjectUtils.setRotationWorldQuat(object, rotation);
             ObjectUtils.setPositionWorld(object, position);
         }
+
+        return object;
     };
 }();
 
@@ -1468,7 +1470,7 @@ export function getParent(object: Object3D) {
 
 export let convertPositionObjectToWorld = function () {
     let matrix = Mat4Utils.create();
-    return function convertPositionObjectToWorld(object: Object3D, position: Vector3, resultPosition = Vec3Utils.create()) {
+    return function convertPositionObjectToWorld(object: Object3D, position: Vector3, resultPosition: Vector3 = Vec3Utils.create()) {
         ObjectUtils.getTransformWorldMatrix(object, matrix);
         Vec3Utils.transformMat4(position, matrix, resultPosition);
         return resultPosition;
@@ -1477,7 +1479,7 @@ export let convertPositionObjectToWorld = function () {
 
 export let convertDirectionObjectToWorld = function () {
     let rotation = QuatUtils.create();
-    return function convertDirectionObjectToWorld(object: Object3D, direction: Vector3, resultDirection = Vec3Utils.create()) {
+    return function convertDirectionObjectToWorld(object: Object3D, direction: Vector3, resultDirection: Vector3 = Vec3Utils.create()) {
         ObjectUtils.getRotationWorldQuat(object, rotation);
         Vec3Utils.transformQuat(direction, rotation, resultDirection);
         return resultDirection;
@@ -1486,7 +1488,7 @@ export let convertDirectionObjectToWorld = function () {
 
 export let convertPositionWorldToObject = function () {
     let matrix = Mat4Utils.create();
-    return function convertPositionWorldToObject(object: Object3D, position: Vector3, resultPosition = Vec3Utils.create()) {
+    return function convertPositionWorldToObject(object: Object3D, position: Vector3, resultPosition: Vector3 = Vec3Utils.create()) {
         ObjectUtils.getTransformWorldMatrix(object, matrix);
         Mat4Utils.invert(matrix, matrix);
         Vec3Utils.transformMat4(position, matrix, resultPosition);
@@ -1496,7 +1498,7 @@ export let convertPositionWorldToObject = function () {
 
 export let convertDirectionWorldToObject = function () {
     let rotation = QuatUtils.create();
-    return function convertDirectionWorldToObject(object: Object3D, direction: Vector3, resultDirection = Vec3Utils.create()) {
+    return function convertDirectionWorldToObject(object: Object3D, direction: Vector3, resultDirection: Vector3 = Vec3Utils.create()) {
         ObjectUtils.getRotationWorldQuat(object, rotation);
         QuatUtils.conjugate(rotation, rotation);
         Vec3Utils.transformQuat(direction, rotation, resultDirection);
@@ -1506,7 +1508,7 @@ export let convertDirectionWorldToObject = function () {
 
 // Convert Vector Local World
 
-export function convertPositionLocalToWorld(object: Object3D, position: Vector3, resultPosition = Vec3Utils.create()) {
+export function convertPositionLocalToWorld(object: Object3D, position: Vector3, resultPosition: Vector3 = Vec3Utils.create()) {
     if (ObjectUtils.getParent(object)) {
         ObjectUtils.convertPositionObjectToWorld(ObjectUtils.getParent(object), position, resultPosition);
     } else {
@@ -1515,7 +1517,7 @@ export function convertPositionLocalToWorld(object: Object3D, position: Vector3,
     return resultPosition;
 }
 
-export function convertDirectionLocalToWorld(object: Object3D, direction: Vector3, resultDirection = Vec3Utils.create()) {
+export function convertDirectionLocalToWorld(object: Object3D, direction: Vector3, resultDirection: Vector3 = Vec3Utils.create()) {
     if (ObjectUtils.getParent(object)) {
         ObjectUtils.convertDirectionObjectToWorld(ObjectUtils.getParent(object), direction, resultDirection);
     } else {
@@ -1524,7 +1526,7 @@ export function convertDirectionLocalToWorld(object: Object3D, direction: Vector
     return resultDirection;
 }
 
-export function convertPositionWorldToLocal(object: Object3D, position: Vector3, resultPosition = Vec3Utils.create()) {
+export function convertPositionWorldToLocal(object: Object3D, position: Vector3, resultPosition: Vector3 = Vec3Utils.create()) {
     if (ObjectUtils.getParent(object)) {
         ObjectUtils.convertPositionWorldToObject(ObjectUtils.getParent(object), position, resultPosition);
     } else {
@@ -1533,7 +1535,7 @@ export function convertPositionWorldToLocal(object: Object3D, position: Vector3,
     return resultPosition;
 }
 
-export function convertDirectionWorldToLocal(object: Object3D, direction: Vector3, resultDirection = Vec3Utils.create()) {
+export function convertDirectionWorldToLocal(object: Object3D, direction: Vector3, resultDirection: Vector3 = Vec3Utils.create()) {
     if (ObjectUtils.getParent(object)) {
         ObjectUtils.convertDirectionWorldToObject(ObjectUtils.getParent(object), direction, resultDirection);
     } else {
@@ -1546,25 +1548,25 @@ export function convertDirectionWorldToLocal(object: Object3D, direction: Vector
 
 // I need to use the converson to world and then local also use the parent scale that changes the position in local space
 
-export function convertPositionObjectToLocal(object: Object3D, position: Vector3, resultPosition = Vec3Utils.create()) {
+export function convertPositionObjectToLocal(object: Object3D, position: Vector3, resultPosition: Vector3 = Vec3Utils.create()) {
     ObjectUtils.convertPositionObjectToWorld(object, position, resultPosition);
     ObjectUtils.convertPositionWorldToLocal(object, resultPosition, resultPosition);
     return resultPosition;
 }
 
-export function convertDirectionObjectToLocal(object: Object3D, direction: Vector3, resultDirection = Vec3Utils.create()) {
+export function convertDirectionObjectToLocal(object: Object3D, direction: Vector3, resultDirection: Vector3 = Vec3Utils.create()) {
     ObjectUtils.convertDirectionObjectToWorld(object, direction, resultDirection);
     ObjectUtils.convertDirectionWorldToLocal(object, resultDirection, resultDirection);
     return resultDirection;
 }
 
-export function convertPositionLocalToObject(object: Object3D, position: Vector3, resultPosition = Vec3Utils.create()) {
+export function convertPositionLocalToObject(object: Object3D, position: Vector3, resultPosition: Vector3 = Vec3Utils.create()) {
     ObjectUtils.convertPositionLocalToWorld(object, position, resultPosition);
     ObjectUtils.convertPositionWorldToObject(object, resultPosition, resultPosition);
     return resultPosition;
 }
 
-export function convertDirectionLocalToObject(object: Object3D, direction: Vector3, resultDirection = Vec3Utils.create()) {
+export function convertDirectionLocalToObject(object: Object3D, direction: Vector3, resultDirection: Vector3 = Vec3Utils.create()) {
     ObjectUtils.convertDirectionLocalToWorld(object, direction, resultDirection);
     ObjectUtils.convertDirectionWorldToObject(object, resultDirection, resultDirection);
     return resultDirection;
@@ -1937,7 +1939,7 @@ export let clone = function () {
             clonedObject = object.clone(cloneParent);
 
             if (cloneParams.myDefaultComponentCloneAutoStartIfNotActive) {
-                let clonedComponents = clonedObject.pp_getComponents();
+                let clonedComponents = ObjectUtils.getComponents(clonedObject);
                 for (let clonedComponent of clonedComponents) {
 
                     // Trigger start, which otherwise would be called later, on first activation
