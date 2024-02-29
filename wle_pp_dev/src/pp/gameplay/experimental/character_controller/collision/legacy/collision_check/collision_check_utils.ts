@@ -15,4 +15,4 @@ export function generate360TeleportParamsFromMovementParams(movementParams: Read
 
 export const CollisionCheckUtils = {
     generate360TeleportParamsFromMovementParams
-};
+} as const;

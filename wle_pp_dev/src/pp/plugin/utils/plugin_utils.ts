@@ -63,4 +63,4 @@ export function injectProperties(fromReference: Record<string, any>, toReference
 
 export const PluginUtils = {
     injectProperties
-};
+} as const;

@@ -30,4 +30,4 @@ export const Globals = {
     ...ToolGlobals,
     ...ConsoleVRGlobals,
     ...EasyTuneGlobals
-};
+} as const;

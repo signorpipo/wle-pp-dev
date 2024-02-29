@@ -76,4 +76,4 @@ export const SaveUtils = {
     loadNumber,
     loadBool,
     loadObject
-};
+} as const;
