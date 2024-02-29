@@ -262,15 +262,15 @@ export function initObjectExtensionProtoype(): void {
 
     // Axes
 
-    objectExtension.pp_getAxes = function pp_getAxes(this: Readonly<Object3D>, axes: [Vector3, Vector3, Vector3] = [Vec3Utils.create(), Vec3Utils.create(), Vec3Utils.create()]): [Vector3, Vector3, Vector3] {
+    objectExtension.pp_getAxes = function pp_getAxes(this: Readonly<Object3D>, axes: Readonly<[Vector3, Vector3, Vector3]> = [Vec3Utils.create(), Vec3Utils.create(), Vec3Utils.create()]): [Vector3, Vector3, Vector3] {
         return ObjectUtils.getAxes(this, axes);
     };
 
-    objectExtension.pp_getAxesWorld = function pp_getAxesWorld(this: Readonly<Object3D>, axes: [Vector3, Vector3, Vector3] = [Vec3Utils.create(), Vec3Utils.create(), Vec3Utils.create()]): [Vector3, Vector3, Vector3] {
+    objectExtension.pp_getAxesWorld = function pp_getAxesWorld(this: Readonly<Object3D>, axes: Readonly<[Vector3, Vector3, Vector3]> = [Vec3Utils.create(), Vec3Utils.create(), Vec3Utils.create()]): [Vector3, Vector3, Vector3] {
         return ObjectUtils.getAxesWorld(this, axes);
     };
 
-    objectExtension.pp_getAxesLocal = function pp_getAxesLocal(this: Readonly<Object3D>, axes: [Vector3, Vector3, Vector3] = [Vec3Utils.create(), Vec3Utils.create(), Vec3Utils.create()]): [Vector3, Vector3, Vector3] {
+    objectExtension.pp_getAxesLocal = function pp_getAxesLocal(this: Readonly<Object3D>, axes: Readonly<[Vector3, Vector3, Vector3]> = [Vec3Utils.create(), Vec3Utils.create(), Vec3Utils.create()]): [Vector3, Vector3, Vector3] {
         return ObjectUtils.getAxesLocal(this, axes);
     };
 
@@ -1156,7 +1156,7 @@ export function initObjectExtensionProtoype(): void {
 
     // Component
 
-    objectExtension.pp_addComponent = function pp_addComponent<T extends Component>(this: Object3D, typeOrClass: string | ComponentConstructor<T>, paramsOrActive: Record<string, any> | boolean | null = null, active: boolean | null = null): T {
+    objectExtension.pp_addComponent = function pp_addComponent<T extends Component>(this: Object3D, typeOrClass: string | ComponentConstructor<T>, paramsOrActive: Record<string, any> | boolean | null = null, active: boolean | null = null): T | null {
         return ObjectUtils.addComponent(this, typeOrClass, paramsOrActive, active);
     };
 

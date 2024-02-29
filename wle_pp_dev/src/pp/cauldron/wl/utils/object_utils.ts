@@ -7,7 +7,7 @@ import { QuatUtils } from "../../js/utils/quat_utils.js";
 import { Vec3Utils } from "../../js/utils/vec3_utils.js";
 import { ComponentUtils, CustomCloneParams, DeepCloneParams } from "./component_utils.js";
 import { SceneUtils } from "./scene_utils.js";
-import { Component, ComponentConstructor, Object3D, Scene } from "@wonderlandengine/api";
+import { Component, type ComponentConstructor, Object3D, Scene } from "@wonderlandengine/api";
 import { type Matrix3, type Matrix4, type Quaternion, type Quaternion2, type Vector3 } from "../../../cauldron/js/array_type_definitions.js";
 
 export class CloneParams {
@@ -20,11 +20,11 @@ export class CloneParams {
 
     public myComponentsToIgnore: string[];
     public myComponentsToInclude: string[];
-    public myIgnoreComponentCallback = null;
+    public myIgnoreComponentCallback: ((component: Component) => boolean) | null = null;
 
-    public myDescendantsToIgnore: Object[];
-    public myDescendantsToInclude: Object[];
-    public myIgnoreDescendantCallback = null;
+    public myDescendantsToIgnore: Object3D[];
+    public myDescendantsToInclude: Object3D[];
+    public myIgnoreDescendantCallback: ((component: Object3D) => boolean) | null = null;
 
     public myUseDefaultComponentClone: boolean;
     public myUseDefaultComponentCloneAsFallback: boolean;
@@ -253,18 +253,18 @@ export function getTransformLocalQuat(object: Object3D, transform = Quat2Utils.c
 
 // Axes
 
-export function getAxes(object: Object3D, axes) {
+export function getAxes(object: Object3D, axes: [Vector3, Vector3, Vector3]): [Vector3, Vector3, Vector3] {
     return ObjectUtils.getAxesWorld(object, axes);
 }
 
-export function getAxesWorld(object: Object3D, axes = [Vec3Utils.create(), Vec3Utils.create(), Vec3Utils.create()]) {
+export function getAxesWorld(object: Object3D, axes: [Vector3, Vector3, Vector3] = [Vec3Utils.create(), Vec3Utils.create(), Vec3Utils.create()]): [Vector3, Vector3, Vector3] {
     ObjectUtils.getLeftWorld(object, axes[0]);
     ObjectUtils.getUpWorld(object, axes[1]);
     ObjectUtils.getForwardWorld(object, axes[2]);
     return axes;
 }
 
-export function getAxesLocal(object: Object3D, axes = [Vec3Utils.create(), Vec3Utils.create(), Vec3Utils.create()]) {
+export function getAxesLocal(object: Object3D, axes: [Vector3, Vector3, Vector3] = [Vec3Utils.create(), Vec3Utils.create(), Vec3Utils.create()]): [Vector3, Vector3, Vector3] {
     ObjectUtils.getLeftLocal(object, axes[0]);
     ObjectUtils.getUpLocal(object, axes[1]);
     ObjectUtils.getForwardLocal(object, axes[2]);
@@ -1425,14 +1425,14 @@ export function lookTo(object: Object3D, direction: Vector3, up: Vector3) {
 
 export const lookToWorld = function () {
     let internalUp = Vec3Utils.create();
-    return function lookToWorld(object: Object3D, direction: Vector3, up = ObjectUtils.getUpWorld(object: Object3D, internalUp)) {
+    return function lookToWorld(object: Object3D, direction: Vector3, up: Vector3 = ObjectUtils.getUpWorld(object, internalUp)) {
         ObjectUtils.setForwardWorld(object, direction, up);
     };
 }();
 
 export const lookToLocal = function () {
     let internalUp = Vec3Utils.create();
-    return function lookToLocal(object: Object3D, direction: Vector3, up = ObjectUtils.getUpLocal(object: Object3D, internalUp)) {
+    return function lookToLocal(object: Object3D, direction: Vector3, up: Vector3 = ObjectUtils.getUpLocal(object, internalUp)) {
         ObjectUtils.setForwardLocal(object, direction, up);
     };
 }();
@@ -1756,7 +1756,7 @@ export function convertTransformLocalToObjectQuat(object: Object3D, transform, r
 // Component
 
 export function addComponent<T extends Component>(object: Object3D, typeOrClass: string | ComponentConstructor<T>, paramsOrActive: Record<string, any> | boolean | null = null, active: boolean | null = null): T | null {
-    let params = undefined;
+    let params: Record<string, any> | undefined = undefined;
 
     if (typeof paramsOrActive == "boolean") {
         params = {};
