@@ -1,16 +1,16 @@
 import { JSUtils } from "../../cauldron/js/utils/js_utils.js";
 
-export function injectProperties(fromReference, toReference, enumerable = true, writable = true, configurable = true, keepOriginalDescriptorAttributes = true, bindThisAsFirstParam = false, prefix = null, functionNamesToExclude = []) {
-    let ownPropertyNames = Object.getOwnPropertyNames(fromReference);
-    for (let ownPropertyName of ownPropertyNames) {
+export function injectProperties(fromReference: Record<string, any>, toReference: object, enumerable: boolean = true, writable: boolean = true, configurable: boolean = true, keepOriginalDescriptorAttributes: boolean = true, bindThisAsFirstParam: boolean = false, prefix: string | null = null, functionNamesToExclude: Readonly<string[]> = []): void {
+    const ownPropertyNames = Object.getOwnPropertyNames(fromReference);
+    for (const ownPropertyName of ownPropertyNames) {
         if (functionNamesToExclude.includes(ownPropertyName)) continue;
 
-        let enumerableToUse = enumerable;
-        let writableToUse = writable;
-        let configurableToUse = configurable;
+        let enumerableToUse: boolean | undefined = enumerable;
+        let writableToUse: boolean | undefined = writable;
+        let configurableToUse: boolean | undefined = configurable;
 
         if (keepOriginalDescriptorAttributes) {
-            let originalDescriptor = Object.getOwnPropertyDescriptor(toReference, ownPropertyName);
+            const originalDescriptor = Object.getOwnPropertyDescriptor(toReference, ownPropertyName);
             if (originalDescriptor != null) {
                 enumerableToUse = originalDescriptor.enumerable;
                 writableToUse = originalDescriptor.writable;
@@ -27,16 +27,16 @@ export function injectProperties(fromReference, toReference, enumerable = true, 
             }
         }
 
-        let propertyDescriptor = Object.getOwnPropertyDescriptor(fromReference, ownPropertyName);
-        let useAccessors = propertyDescriptor != null && (propertyDescriptor.get != null || propertyDescriptor.set != null);
+        const propertyDescriptor = Object.getOwnPropertyDescriptor(fromReference, ownPropertyName);
+        const useAccessors = propertyDescriptor != null && (propertyDescriptor.get != null || propertyDescriptor.set != null);
 
         if (!useAccessors) {
             let adjustedProperyValue = fromReference[ownPropertyName];
 
             if (bindThisAsFirstParam && JSUtils.isFunction(adjustedProperyValue)) {
-                let originalFunction = fromReference[ownPropertyName];
-                adjustedProperyValue = function () {
-                    return originalFunction(this, ...arguments);
+                const originalFunction = fromReference[ownPropertyName];
+                adjustedProperyValue = function (this: any, ...args: any[]) {
+                    return originalFunction(this, ...args);
                 };
 
                 Object.defineProperty(adjustedProperyValue, "name", {
@@ -61,6 +61,6 @@ export function injectProperties(fromReference, toReference, enumerable = true, 
     }
 }
 
-export let PluginUtils = {
+export const PluginUtils = {
     injectProperties
 };
