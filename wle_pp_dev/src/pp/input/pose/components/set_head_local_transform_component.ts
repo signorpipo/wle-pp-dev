@@ -30,7 +30,7 @@ SetHeadLocalTransformComponent.prototype.onPoseUpdated = function () {
     const cameraNonXRPosition = vec3_create();
 
     const headPoseTransform = quat2_create();
-    return function onPoseUpdated(this: Readonly<SetHeadLocalTransformComponent>, dt: number, pose: Readonly<BasePose>): void {
+    return function onPoseUpdated(this: SetHeadLocalTransformComponent, dt: number, pose: Readonly<BasePose>): void {
         if (this.active) {
             if (!XRUtils.isSessionActive(this.engine)) {
                 const cameraNonXR = Globals.getPlayerObjects(this.engine).myCameraNonXR;
