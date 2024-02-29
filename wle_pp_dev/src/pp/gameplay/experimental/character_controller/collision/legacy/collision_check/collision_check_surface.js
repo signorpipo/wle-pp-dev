@@ -1,5 +1,6 @@
-import { Globals, RaycastHit } from "../../../../../../index.js";
+import { RaycastHit } from "../../../../../../cauldron/physics/physics_raycast_params.js";
 import { quat2_create, vec3_create } from "../../../../../../plugin/js/extensions/array_extension.js";
+import { Globals } from "../../../../../../pp/globals.js";
 import { CollisionCheckBase } from "./collision_check_base.js";
 
 export class CollisionCheckSurface extends CollisionCheckBase {

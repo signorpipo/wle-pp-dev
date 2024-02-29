@@ -1,5 +1,5 @@
 import { RaycastHit, RaycastParams, RaycastResults } from "../../../../../../cauldron/physics/physics_raycast_params.js";
-import { PhysicsUtils } from "../../../../../../index.js";
+import { PhysicsUtils } from "../../../../../../cauldron/physics/physics_utils.js";
 import { quat2_create, vec3_create, vec4_create } from "../../../../../../plugin/js/extensions/array_extension.js";
 import { Globals } from "../../../../../../pp/globals.js";
 import { CollisionRuntimeParams } from "./collision_params.js";

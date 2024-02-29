@@ -40,27 +40,18 @@ export function initMathExtensionStatic(): void {
     Object.defineProperty(mathExtension, "PP_EPSILON", {
         get(): number {
             return MathUtils.EPSILON;
-        },
-        set(value: number): void {
-            (MathUtils.EPSILON as any) = value;
         }
     });
 
     Object.defineProperty(mathExtension, "PP_EPSILON_SQUARED", {
         get(): number {
             return MathUtils.EPSILON_SQUARED;
-        },
-        set(value: number): void {
-            (MathUtils.EPSILON as any) = value;
         }
     });
 
     Object.defineProperty(mathExtension, "PP_EPSILON_DEGREES", {
         get(): number {
             return MathUtils.EPSILON_DEGREES;
-        },
-        set(value: number): void {
-            (MathUtils.EPSILON as any) = value;
         }
     });
 
