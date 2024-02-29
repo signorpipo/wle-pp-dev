@@ -52,7 +52,7 @@ export function loadBool(id: string, defaultValue: boolean | null = null): boole
     return defaultValue;
 }
 
-export function loadObject(id: string, defaultValue: object | null = null): object | null {
+export function loadObject(id: string, defaultValue: Readonly<object> | null = null): object | null {
     const item = SaveUtils.loadString(id);
 
     if (item != null) {

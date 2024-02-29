@@ -126,138 +126,138 @@ export function initObjectExtensionProtoype(): void {
 
     // Position
 
-    objectExtension.pp_getPosition = function pp_getPosition(position: Vector3 = Vec3Utils.create()): Vector3 {
-        return ObjectUtils.getPosition(this, position);
+    objectExtension.pp_getPosition = function pp_getPosition(outPosition: Vector3 = Vec3Utils.create()): Vector3 {
+        return ObjectUtils.getPosition(this, outPosition);
     };
 
-    objectExtension.pp_getPositionWorld = function pp_getPositionWorld(position: Vector3 = Vec3Utils.create()): Vector3 {
-        return ObjectUtils.getPositionWorld(this, position);
+    objectExtension.pp_getPositionWorld = function pp_getPositionWorld(outPosition: Vector3 = Vec3Utils.create()): Vector3 {
+        return ObjectUtils.getPositionWorld(this, outPosition);
     };
 
-    objectExtension.pp_getPositionLocal = function pp_getPositionLocal(position: Vector3 = Vec3Utils.create()): Vector3 {
-        return ObjectUtils.getPositionLocal(this, position);
+    objectExtension.pp_getPositionLocal = function pp_getPositionLocal(outPosition: Vector3 = Vec3Utils.create()): Vector3 {
+        return ObjectUtils.getPositionLocal(this, outPosition);
     };
 
     // Rotation
 
-    objectExtension.pp_getRotation = function pp_getRotation(rotation: Vector3 = Vec3Utils.create()): Vector3 {
-        return ObjectUtils.getRotation(this, rotation);
+    objectExtension.pp_getRotation = function pp_getRotation(outRotation: Vector3 = Vec3Utils.create()): Vector3 {
+        return ObjectUtils.getRotation(this, outRotation);
     };
 
-    objectExtension.pp_getRotationDegrees = function pp_getRotationDegrees(rotation: Vector3 = Vec3Utils.create()): Vector3 {
-        return ObjectUtils.getRotationDegrees(this, rotation);
+    objectExtension.pp_getRotationDegrees = function pp_getRotationDegrees(outRotation: Vector3 = Vec3Utils.create()): Vector3 {
+        return ObjectUtils.getRotationDegrees(this, outRotation);
     };
 
-    objectExtension.pp_getRotationRadians = function pp_getRotationRadians(rotation: Vector3 = Vec3Utils.create()): Vector3 {
-        return ObjectUtils.getRotationRadians(this, rotation);
+    objectExtension.pp_getRotationRadians = function pp_getRotationRadians(outRotation: Vector3 = Vec3Utils.create()): Vector3 {
+        return ObjectUtils.getRotationRadians(this, outRotation);
     };
 
-    objectExtension.pp_getRotationMatrix = function pp_getRotationMatrix(rotation: Matrix3 = Mat3Utils.create()): Matrix3 {
-        return ObjectUtils.getRotationMatrix(this, rotation);
+    objectExtension.pp_getRotationMatrix = function pp_getRotationMatrix(outRotation: Matrix3 = Mat3Utils.create()): Matrix3 {
+        return ObjectUtils.getRotationMatrix(this, outRotation);
     };
 
-    objectExtension.pp_getRotationQuat = function pp_getRotationQuat(rotation: Quaternion = QuatUtils.create()): Quaternion {
-        return ObjectUtils.getRotationQuat(this, rotation);
+    objectExtension.pp_getRotationQuat = function pp_getRotationQuat(outRotation: Quaternion = QuatUtils.create()): Quaternion {
+        return ObjectUtils.getRotationQuat(this, outRotation);
     };
 
     // Rotation World
 
-    objectExtension.pp_getRotationWorld = function pp_getRotationWorld(rotation: Vector3 = Vec3Utils.create()): Vector3 {
-        return ObjectUtils.getRotationWorld(this, rotation);
+    objectExtension.pp_getRotationWorld = function pp_getRotationWorld(outRotation: Vector3 = Vec3Utils.create()): Vector3 {
+        return ObjectUtils.getRotationWorld(this, outRotation);
     };
 
-    objectExtension.pp_getRotationWorldDegrees = function pp_getRotationWorldDegrees(rotation: Vector3 = Vec3Utils.create()): Vector3 {
-        return ObjectUtils.getRotationWorldDegrees(this, rotation);
+    objectExtension.pp_getRotationWorldDegrees = function pp_getRotationWorldDegrees(outRotation: Vector3 = Vec3Utils.create()): Vector3 {
+        return ObjectUtils.getRotationWorldDegrees(this, outRotation);
     };
 
-    objectExtension.pp_getRotationWorldRadians = function pp_getRotationWorldRadians(rotation: Vector3 = Vec3Utils.create()): Vector3 {
-        return ObjectUtils.getRotationWorldRadians(this, rotation);
+    objectExtension.pp_getRotationWorldRadians = function pp_getRotationWorldRadians(outRotation: Vector3 = Vec3Utils.create()): Vector3 {
+        return ObjectUtils.getRotationWorldRadians(this, outRotation);
     };
 
-    objectExtension.pp_getRotationWorldMatrix = function pp_getRotationWorldMatrix(rotation: Matrix3 = Mat3Utils.create()): Matrix3 {
-        return ObjectUtils.getRotationWorldMatrix(this, rotation);
+    objectExtension.pp_getRotationWorldMatrix = function pp_getRotationWorldMatrix(outRotation: Matrix3 = Mat3Utils.create()): Matrix3 {
+        return ObjectUtils.getRotationWorldMatrix(this, outRotation);
     };
 
-    objectExtension.pp_getRotationWorldQuat = function pp_getRotationWorldQuat(rotation: Quaternion = QuatUtils.create()): Quaternion {
-        return ObjectUtils.getRotationWorldQuat(this, rotation);
+    objectExtension.pp_getRotationWorldQuat = function pp_getRotationWorldQuat(outRotation: Quaternion = QuatUtils.create()): Quaternion {
+        return ObjectUtils.getRotationWorldQuat(this, outRotation);
     };
 
     // Rotation Local
 
-    objectExtension.pp_getRotationLocal = function pp_getRotationLocal(rotation: Vector3 = Vec3Utils.create()): Vector3 {
-        return ObjectUtils.getRotationLocal(this, rotation);
+    objectExtension.pp_getRotationLocal = function pp_getRotationLocal(outRotation: Vector3 = Vec3Utils.create()): Vector3 {
+        return ObjectUtils.getRotationLocal(this, outRotation);
     };
 
-    objectExtension.pp_getRotationLocalDegrees = function pp_getRotationLocalDegrees(rotation: Vector3 = Vec3Utils.create()): Vector3 {
-        return ObjectUtils.getRotationLocalDegrees(this, rotation);
+    objectExtension.pp_getRotationLocalDegrees = function pp_getRotationLocalDegrees(outRotation: Vector3 = Vec3Utils.create()): Vector3 {
+        return ObjectUtils.getRotationLocalDegrees(this, outRotation);
     };
 
-    objectExtension.pp_getRotationLocalRadians = function pp_getRotationLocalRadians(rotation: Vector3 = Vec3Utils.create()): Vector3 {
-        return ObjectUtils.getRotationLocalRadians(this, rotation);
+    objectExtension.pp_getRotationLocalRadians = function pp_getRotationLocalRadians(outRotation: Vector3 = Vec3Utils.create()): Vector3 {
+        return ObjectUtils.getRotationLocalRadians(this, outRotation);
     };
 
-    objectExtension.pp_getRotationLocalMatrix = function pp_getRotationLocalMatrix(rotation: Matrix3 = Mat3Utils.create()): Matrix3 {
-        return ObjectUtils.getRotationLocalMatrix(this, rotation);
+    objectExtension.pp_getRotationLocalMatrix = function pp_getRotationLocalMatrix(outRotation: Matrix3 = Mat3Utils.create()): Matrix3 {
+        return ObjectUtils.getRotationLocalMatrix(this, outRotation);
     };
 
-    objectExtension.pp_getRotationLocalQuat = function pp_getRotationLocalQuat(rotation: Quaternion = QuatUtils.create()): Quaternion {
-        return ObjectUtils.getRotationLocalQuat(this, rotation);
+    objectExtension.pp_getRotationLocalQuat = function pp_getRotationLocalQuat(outRotation: Quaternion = QuatUtils.create()): Quaternion {
+        return ObjectUtils.getRotationLocalQuat(this, outRotation);
     };
 
     // Scale
 
-    objectExtension.pp_getScale = function pp_getScale(scale: Vector3 = Vec3Utils.create()): Vector3 {
-        return ObjectUtils.getScale(this, scale);
+    objectExtension.pp_getScale = function pp_getScale(outScale: Vector3 = Vec3Utils.create()): Vector3 {
+        return ObjectUtils.getScale(this, outScale);
     };
 
-    objectExtension.pp_getScaleWorld = function pp_getScaleWorld(scale: Vector3 = Vec3Utils.create()): Vector3 {
-        return ObjectUtils.getScaleWorld(this, scale);
+    objectExtension.pp_getScaleWorld = function pp_getScaleWorld(outScale: Vector3 = Vec3Utils.create()): Vector3 {
+        return ObjectUtils.getScaleWorld(this, outScale);
     };
 
-    objectExtension.pp_getScaleLocal = function pp_getScaleLocal(scale: Vector3 = Vec3Utils.create()): Vector3 {
-        return ObjectUtils.getScaleLocal(this, scale);
+    objectExtension.pp_getScaleLocal = function pp_getScaleLocal(outScale: Vector3 = Vec3Utils.create()): Vector3 {
+        return ObjectUtils.getScaleLocal(this, outScale);
     };
 
     // Transform
 
-    objectExtension.pp_getTransform = function pp_getTransform(transform: Matrix4 = Mat4Utils.create()): Matrix4 {
-        return ObjectUtils.getTransform(this, transform);
+    objectExtension.pp_getTransform = function pp_getTransform(outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
+        return ObjectUtils.getTransform(this, outTransform);
     };
 
-    objectExtension.pp_getTransformMatrix = function pp_getTransformMatrix(transform: Matrix4 = Mat4Utils.create()): Matrix4 {
-        return ObjectUtils.getTransformMatrix(this, transform);
+    objectExtension.pp_getTransformMatrix = function pp_getTransformMatrix(outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
+        return ObjectUtils.getTransformMatrix(this, outTransform);
     };
 
-    objectExtension.pp_getTransformQuat = function pp_getTransformQuat(transform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
-        return ObjectUtils.getTransformQuat(this, transform);
+    objectExtension.pp_getTransformQuat = function pp_getTransformQuat(outTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
+        return ObjectUtils.getTransformQuat(this, outTransform);
     };
 
     // Transform World
 
-    objectExtension.pp_getTransformWorld = function pp_getTransformWorld(transform: Matrix4 = Mat4Utils.create()): Matrix4 {
-        return ObjectUtils.getTransformWorld(this, transform);
+    objectExtension.pp_getTransformWorld = function pp_getTransformWorld(outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
+        return ObjectUtils.getTransformWorld(this, outTransform);
     };
 
-    objectExtension.pp_getTransformWorldMatrix = function pp_getTransformWorldMatrix(transform: Matrix4 = Mat4Utils.create()): Matrix4 {
-        return ObjectUtils.getTransformWorldMatrix(this, transform);
+    objectExtension.pp_getTransformWorldMatrix = function pp_getTransformWorldMatrix(outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
+        return ObjectUtils.getTransformWorldMatrix(this, outTransform);
     };
 
-    objectExtension.pp_getTransformWorldQuat = function pp_getTransformWorldQuat(transform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
-        return ObjectUtils.getTransformWorldQuat(this, transform);
+    objectExtension.pp_getTransformWorldQuat = function pp_getTransformWorldQuat(outTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
+        return ObjectUtils.getTransformWorldQuat(this, outTransform);
     };
 
     // Transform Local
 
-    objectExtension.pp_getTransformLocal = function pp_getTransformLocal(transform: Matrix4 = Mat4Utils.create()): Matrix4 {
-        return ObjectUtils.getTransformLocal(this, transform);
+    objectExtension.pp_getTransformLocal = function pp_getTransformLocal(outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
+        return ObjectUtils.getTransformLocal(this, outTransform);
     };
 
-    objectExtension.pp_getTransformLocalMatrix = function pp_getTransformLocalMatrix(transform: Matrix4 = Mat4Utils.create()): Matrix4 {
-        return ObjectUtils.getTransformLocalMatrix(this, transform);
+    objectExtension.pp_getTransformLocalMatrix = function pp_getTransformLocalMatrix(outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
+        return ObjectUtils.getTransformLocalMatrix(this, outTransform);
     };
 
-    objectExtension.pp_getTransformLocalQuat = function pp_getTransformLocalQuat(transform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
-        return ObjectUtils.getTransformLocalQuat(this, transform);
+    objectExtension.pp_getTransformLocalQuat = function pp_getTransformLocalQuat(outTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
+        return ObjectUtils.getTransformLocalQuat(this, outTransform);
     };
 
     // Axes
@@ -1024,134 +1024,134 @@ export function initObjectExtensionProtoype(): void {
 
     // Convert Vector Object World
 
-    objectExtension.pp_convertPositionObjectToWorld = function pp_convertPositionObjectToWorld(position: Readonly<Vector3>, resultPosition: Vector3 = Vec3Utils.create()): Vector3 {
-        return ObjectUtils.convertPositionObjectToWorld(this, position, resultPosition);
+    objectExtension.pp_convertPositionObjectToWorld = function pp_convertPositionObjectToWorld(position: Readonly<Vector3>, outPosition: Vector3 = Vec3Utils.create()): Vector3 {
+        return ObjectUtils.convertPositionObjectToWorld(this, position, outPosition);
     };
 
-    objectExtension.pp_convertDirectionObjectToWorld = function pp_convertDirectionObjectToWorld(direction: Readonly<Vector3>, resultDirection: Vector3 = Vec3Utils.create()): Vector3 {
-        return ObjectUtils.convertDirectionObjectToWorld(this, direction, resultDirection);
+    objectExtension.pp_convertDirectionObjectToWorld = function pp_convertDirectionObjectToWorld(direction: Readonly<Vector3>, outDirection: Vector3 = Vec3Utils.create()): Vector3 {
+        return ObjectUtils.convertDirectionObjectToWorld(this, direction, outDirection);
     };
 
-    objectExtension.pp_convertPositionWorldToObject = function pp_convertPositionWorldToObject(position: Readonly<Vector3>, resultPosition: Vector3 = Vec3Utils.create()): Vector3 {
-        return ObjectUtils.convertPositionWorldToObject(this, position, resultPosition);
+    objectExtension.pp_convertPositionWorldToObject = function pp_convertPositionWorldToObject(position: Readonly<Vector3>, outPosition: Vector3 = Vec3Utils.create()): Vector3 {
+        return ObjectUtils.convertPositionWorldToObject(this, position, outPosition);
     };
 
-    objectExtension.pp_convertDirectionWorldToObject = function pp_convertDirectionWorldToObject(direction: Readonly<Vector3>, resultDirection: Vector3 = Vec3Utils.create()): Vector3 {
-        return ObjectUtils.convertDirectionWorldToObject(this, direction, resultDirection);
+    objectExtension.pp_convertDirectionWorldToObject = function pp_convertDirectionWorldToObject(direction: Readonly<Vector3>, outDirection: Vector3 = Vec3Utils.create()): Vector3 {
+        return ObjectUtils.convertDirectionWorldToObject(this, direction, outDirection);
     };
 
     // Convert Vector Local World
 
-    objectExtension.pp_convertPositionLocalToWorld = function pp_convertPositionLocalToWorld(position: Readonly<Vector3>, resultPosition: Vector3 = Vec3Utils.create()): Vector3 {
-        return ObjectUtils.convertPositionLocalToWorld(this, position, resultPosition);
+    objectExtension.pp_convertPositionLocalToWorld = function pp_convertPositionLocalToWorld(position: Readonly<Vector3>, outPosition: Vector3 = Vec3Utils.create()): Vector3 {
+        return ObjectUtils.convertPositionLocalToWorld(this, position, outPosition);
     };
 
-    objectExtension.pp_convertDirectionLocalToWorld = function pp_convertDirectionLocalToWorld(direction: Readonly<Vector3>, resultDirection: Vector3 = Vec3Utils.create()): Vector3 {
-        return ObjectUtils.convertDirectionLocalToWorld(this, direction, resultDirection);
+    objectExtension.pp_convertDirectionLocalToWorld = function pp_convertDirectionLocalToWorld(direction: Readonly<Vector3>, outDirection: Vector3 = Vec3Utils.create()): Vector3 {
+        return ObjectUtils.convertDirectionLocalToWorld(this, direction, outDirection);
     };
 
-    objectExtension.pp_convertPositionWorldToLocal = function pp_convertPositionWorldToLocal(position: Readonly<Vector3>, resultPosition: Vector3 = Vec3Utils.create()): Vector3 {
-        return ObjectUtils.convertPositionWorldToLocal(this, position, resultPosition);
+    objectExtension.pp_convertPositionWorldToLocal = function pp_convertPositionWorldToLocal(position: Readonly<Vector3>, outPosition: Vector3 = Vec3Utils.create()): Vector3 {
+        return ObjectUtils.convertPositionWorldToLocal(this, position, outPosition);
     };
 
-    objectExtension.pp_convertDirectionWorldToLocal = function pp_convertDirectionWorldToLocal(direction: Readonly<Vector3>, resultDirection: Vector3 = Vec3Utils.create()): Vector3 {
-        return ObjectUtils.convertDirectionWorldToLocal(this, direction, resultDirection);
+    objectExtension.pp_convertDirectionWorldToLocal = function pp_convertDirectionWorldToLocal(direction: Readonly<Vector3>, outDirection: Vector3 = Vec3Utils.create()): Vector3 {
+        return ObjectUtils.convertDirectionWorldToLocal(this, direction, outDirection);
     };
 
     // Convert Vector Local Object
 
-    objectExtension.pp_convertPositionObjectToLocal = function pp_convertPositionObjectToLocal(position: Readonly<Vector3>, resultPosition: Vector3 = Vec3Utils.create()): Vector3 {
-        return ObjectUtils.convertPositionObjectToLocal(this, position, resultPosition);
+    objectExtension.pp_convertPositionObjectToLocal = function pp_convertPositionObjectToLocal(position: Readonly<Vector3>, outPosition: Vector3 = Vec3Utils.create()): Vector3 {
+        return ObjectUtils.convertPositionObjectToLocal(this, position, outPosition);
     };
 
-    objectExtension.pp_convertDirectionObjectToLocal = function pp_convertDirectionObjectToLocal(direction: Readonly<Vector3>, resultDirection: Vector3 = Vec3Utils.create()): Vector3 {
-        return ObjectUtils.convertDirectionObjectToLocal(this, direction, resultDirection);
+    objectExtension.pp_convertDirectionObjectToLocal = function pp_convertDirectionObjectToLocal(direction: Readonly<Vector3>, outDirection: Vector3 = Vec3Utils.create()): Vector3 {
+        return ObjectUtils.convertDirectionObjectToLocal(this, direction, outDirection);
     };
 
-    objectExtension.pp_convertPositionLocalToObject = function pp_convertPositionLocalToObject(position: Readonly<Vector3>, resultPosition: Vector3 = Vec3Utils.create()): Vector3 {
-        return ObjectUtils.convertPositionLocalToObject(this, position, resultPosition);
+    objectExtension.pp_convertPositionLocalToObject = function pp_convertPositionLocalToObject(position: Readonly<Vector3>, outPosition: Vector3 = Vec3Utils.create()): Vector3 {
+        return ObjectUtils.convertPositionLocalToObject(this, position, outPosition);
     };
 
-    objectExtension.pp_convertDirectionLocalToObject = function pp_convertDirectionLocalToObject(direction: Readonly<Vector3>, resultDirection: Vector3 = Vec3Utils.create()): Vector3 {
-        return ObjectUtils.convertDirectionLocalToObject(this, direction, resultDirection);
+    objectExtension.pp_convertDirectionLocalToObject = function pp_convertDirectionLocalToObject(direction: Readonly<Vector3>, outDirection: Vector3 = Vec3Utils.create()): Vector3 {
+        return ObjectUtils.convertDirectionLocalToObject(this, direction, outDirection);
     };
 
     // Convert Transform Object World
 
-    objectExtension.pp_convertTransformObjectToWorld = function pp_convertTransformObjectToWorld(transform: Readonly<Matrix4>, resultTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
-        return ObjectUtils.convertTransformObjectToWorld(this, transform, resultTransform);
+    objectExtension.pp_convertTransformObjectToWorld = function pp_convertTransformObjectToWorld(transform: Readonly<Matrix4>, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
+        return ObjectUtils.convertTransformObjectToWorld(this, transform, outTransform);
     };
 
-    objectExtension.pp_convertTransformObjectToWorldMatrix = function pp_convertTransformObjectToWorldMatrix(transform: Readonly<Matrix4>, resultTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
-        return ObjectUtils.convertTransformObjectToWorldMatrix(this, transform, resultTransform);
+    objectExtension.pp_convertTransformObjectToWorldMatrix = function pp_convertTransformObjectToWorldMatrix(transform: Readonly<Matrix4>, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
+        return ObjectUtils.convertTransformObjectToWorldMatrix(this, transform, outTransform);
     };
 
-    objectExtension.pp_convertTransformObjectToWorldQuat = function pp_convertTransformObjectToWorldQuat(transform: Readonly<Quaternion2>, resultTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
-        return ObjectUtils.convertTransformObjectToWorldQuat(this, transform, resultTransform);
+    objectExtension.pp_convertTransformObjectToWorldQuat = function pp_convertTransformObjectToWorldQuat(transform: Readonly<Quaternion2>, outTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
+        return ObjectUtils.convertTransformObjectToWorldQuat(this, transform, outTransform);
     };
 
-    objectExtension.pp_convertTransformWorldToObject = function pp_convertTransformWorldToObject(transform: Readonly<Matrix4>, resultTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
-        return ObjectUtils.convertTransformWorldToObject(this, transform, resultTransform);
+    objectExtension.pp_convertTransformWorldToObject = function pp_convertTransformWorldToObject(transform: Readonly<Matrix4>, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
+        return ObjectUtils.convertTransformWorldToObject(this, transform, outTransform);
     };
 
-    objectExtension.pp_convertTransformWorldToObjectMatrix = function pp_convertTransformWorldToObjectMatrix(transform: Readonly<Matrix4>, resultTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
-        return ObjectUtils.convertTransformWorldToObjectMatrix(this, transform, resultTransform);
+    objectExtension.pp_convertTransformWorldToObjectMatrix = function pp_convertTransformWorldToObjectMatrix(transform: Readonly<Matrix4>, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
+        return ObjectUtils.convertTransformWorldToObjectMatrix(this, transform, outTransform);
     };
 
-    objectExtension.pp_convertTransformWorldToObjectQuat = function pp_convertTransformWorldToObjectQuat(transform: Readonly<Quaternion2>, resultTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
-        return ObjectUtils.convertTransformWorldToObjectQuat(this, transform, resultTransform);
+    objectExtension.pp_convertTransformWorldToObjectQuat = function pp_convertTransformWorldToObjectQuat(transform: Readonly<Quaternion2>, outTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
+        return ObjectUtils.convertTransformWorldToObjectQuat(this, transform, outTransform);
     };
 
     // Convert Transform Local World
 
-    objectExtension.pp_convertTransformLocalToWorld = function pp_convertTransformLocalToWorld(transform: Readonly<Matrix4>, resultTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
-        return ObjectUtils.convertTransformLocalToWorld(this, transform, resultTransform);
+    objectExtension.pp_convertTransformLocalToWorld = function pp_convertTransformLocalToWorld(transform: Readonly<Matrix4>, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
+        return ObjectUtils.convertTransformLocalToWorld(this, transform, outTransform);
     };
 
-    objectExtension.pp_convertTransformLocalToWorldMatrix = function pp_convertTransformLocalToWorldMatrix(transform: Readonly<Matrix4>, resultTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
-        return ObjectUtils.convertTransformLocalToWorldMatrix(this, transform, resultTransform);
+    objectExtension.pp_convertTransformLocalToWorldMatrix = function pp_convertTransformLocalToWorldMatrix(transform: Readonly<Matrix4>, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
+        return ObjectUtils.convertTransformLocalToWorldMatrix(this, transform, outTransform);
     };
 
-    objectExtension.pp_convertTransformLocalToWorldQuat = function pp_convertTransformLocalToWorldQuat(transform: Readonly<Quaternion2>, resultTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
-        return ObjectUtils.convertTransformLocalToWorldQuat(this, transform, resultTransform);
+    objectExtension.pp_convertTransformLocalToWorldQuat = function pp_convertTransformLocalToWorldQuat(transform: Readonly<Quaternion2>, outTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
+        return ObjectUtils.convertTransformLocalToWorldQuat(this, transform, outTransform);
     };
 
-    objectExtension.pp_convertTransformWorldToLocal = function pp_convertTransformWorldToLocal(transform: Readonly<Matrix4>, resultTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
-        return ObjectUtils.convertTransformWorldToLocal(this, transform, resultTransform);
+    objectExtension.pp_convertTransformWorldToLocal = function pp_convertTransformWorldToLocal(transform: Readonly<Matrix4>, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
+        return ObjectUtils.convertTransformWorldToLocal(this, transform, outTransform);
     };
 
-    objectExtension.pp_convertTransformWorldToLocalMatrix = function pp_convertTransformWorldToLocalMatrix(transform: Readonly<Matrix4>, resultTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
-        return ObjectUtils.convertTransformWorldToLocalMatrix(this, transform, resultTransform);
+    objectExtension.pp_convertTransformWorldToLocalMatrix = function pp_convertTransformWorldToLocalMatrix(transform: Readonly<Matrix4>, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
+        return ObjectUtils.convertTransformWorldToLocalMatrix(this, transform, outTransform);
     };
 
-    objectExtension.pp_convertTransformWorldToLocalQuat = function pp_convertTransformWorldToLocalQuat(transform: Readonly<Quaternion2>, resultTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
-        return ObjectUtils.convertTransformWorldToLocalQuat(this, transform, resultTransform);
+    objectExtension.pp_convertTransformWorldToLocalQuat = function pp_convertTransformWorldToLocalQuat(transform: Readonly<Quaternion2>, outTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
+        return ObjectUtils.convertTransformWorldToLocalQuat(this, transform, outTransform);
     };
 
     // Convert Transform Object Local
 
-    objectExtension.pp_convertTransformObjectToLocal = function pp_convertTransformObjectToLocal(transform: Readonly<Matrix4>, resultTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
-        return ObjectUtils.convertTransformObjectToLocal(this, transform, resultTransform);
+    objectExtension.pp_convertTransformObjectToLocal = function pp_convertTransformObjectToLocal(transform: Readonly<Matrix4>, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
+        return ObjectUtils.convertTransformObjectToLocal(this, transform, outTransform);
     };
 
-    objectExtension.pp_convertTransformObjectToLocalMatrix = function pp_convertTransformObjectToLocalMatrix(transform: Readonly<Matrix4>, resultTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
-        return ObjectUtils.convertTransformObjectToLocalMatrix(this, transform, resultTransform);
+    objectExtension.pp_convertTransformObjectToLocalMatrix = function pp_convertTransformObjectToLocalMatrix(transform: Readonly<Matrix4>, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
+        return ObjectUtils.convertTransformObjectToLocalMatrix(this, transform, outTransform);
     };
 
-    objectExtension.pp_convertTransformObjectToLocalQuat = function pp_convertTransformObjectToLocalQuat(transform: Readonly<Quaternion2>, resultTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
-        return ObjectUtils.convertTransformObjectToLocalQuat(this, transform, resultTransform);
+    objectExtension.pp_convertTransformObjectToLocalQuat = function pp_convertTransformObjectToLocalQuat(transform: Readonly<Quaternion2>, outTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
+        return ObjectUtils.convertTransformObjectToLocalQuat(this, transform, outTransform);
     };
 
-    objectExtension.pp_convertTransformLocalToObject = function pp_convertTransformLocalToObject(transform: Readonly<Matrix4>, resultTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
-        return ObjectUtils.convertTransformLocalToObject(this, transform, resultTransform);
+    objectExtension.pp_convertTransformLocalToObject = function pp_convertTransformLocalToObject(transform: Readonly<Matrix4>, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
+        return ObjectUtils.convertTransformLocalToObject(this, transform, outTransform);
     };
 
-    objectExtension.pp_convertTransformLocalToObjectMatrix = function pp_convertTransformLocalToObjectMatrix(transform: Readonly<Matrix4>, resultTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
-        return ObjectUtils.convertTransformLocalToObjectMatrix(this, transform, resultTransform);
+    objectExtension.pp_convertTransformLocalToObjectMatrix = function pp_convertTransformLocalToObjectMatrix(transform: Readonly<Matrix4>, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
+        return ObjectUtils.convertTransformLocalToObjectMatrix(this, transform, outTransform);
     };
 
-    objectExtension.pp_convertTransformLocalToObjectQuat = function pp_convertTransformLocalToObjectQuat(transform: Readonly<Quaternion2>, resultTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
-        return ObjectUtils.convertTransformLocalToObjectQuat(this, transform, resultTransform);
+    objectExtension.pp_convertTransformLocalToObjectQuat = function pp_convertTransformLocalToObjectQuat(transform: Readonly<Quaternion2>, outTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
+        return ObjectUtils.convertTransformLocalToObjectQuat(this, transform, outTransform);
     };
 
     // Component

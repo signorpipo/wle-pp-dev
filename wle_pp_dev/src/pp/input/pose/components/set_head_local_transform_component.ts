@@ -11,7 +11,7 @@ export class SetHeadLocalTransformComponent extends Component {
         Globals.getHeadPose(this.engine).registerPoseUpdatedEventListener(this, this.onPoseUpdated.bind(this));
     }
 
-    onPoseUpdated(dt: number, pose: BasePose): void {
+    onPoseUpdated(dt: number, pose: Readonly<BasePose>): void {
         // Implemented outside class definition
     }
 
@@ -30,7 +30,7 @@ SetHeadLocalTransformComponent.prototype.onPoseUpdated = function () {
     const cameraNonXRPosition = vec3_create();
 
     const headPoseTransform = quat2_create();
-    return function onPoseUpdated(this: SetHeadLocalTransformComponent, dt: number, pose: BasePose): void {
+    return function onPoseUpdated(this: Readonly<SetHeadLocalTransformComponent>, dt: number, pose: Readonly<BasePose>): void {
         if (this.active) {
             if (!XRUtils.isSessionActive(this.engine)) {
                 const cameraNonXR = Globals.getPlayerObjects(this.engine).myCameraNonXR;
