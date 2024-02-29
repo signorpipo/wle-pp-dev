@@ -1,32 +1,32 @@
 
 // #CREDITS https://easings.net
-export type EasingFunction = (value: number) => number;
-export const EasingFunction: Record<string, EasingFunction> = {
-    linear: valueToEase => valueToEase,
+export type EasingFunction = (valueToEase: number) => number;
+export const EasingFunction = {
+    linear: (valueToEase: number): number => valueToEase,
 
-    easeInVeryWeak: valueToEase => 1 - Math.cos((valueToEase * Math.PI) / 2),
-    easeInWeak: valueToEase => Math.pow(valueToEase, 2),
-    easeIn: valueToEase => Math.pow(valueToEase, 3),
-    easeInStrong: valueToEase => Math.pow(valueToEase, 4),
-    easeInVeryStrong: valueToEase => Math.pow(valueToEase, 5),
+    easeInVeryWeak: (valueToEase: number): number => 1 - Math.cos((valueToEase * Math.PI) / 2),
+    easeInWeak: (valueToEase: number): number => Math.pow(valueToEase, 2),
+    easeIn: (valueToEase: number): number => Math.pow(valueToEase, 3),
+    easeInStrong: (valueToEase: number): number => Math.pow(valueToEase, 4),
+    easeInVeryStrong: (valueToEase: number): number => Math.pow(valueToEase, 5),
 
-    easeOutVeryWeak: valueToEase => Math.sin((valueToEase * Math.PI) / 2),
-    easeOutWeak: valueToEase => 1 - Math.pow(1 - valueToEase, 2),
-    easeOut: valueToEase => 1 - Math.pow(1 - valueToEase, 3),
-    easeOutStrong: valueToEase => 1 - Math.pow(1 - valueToEase, 4),
-    easeOutVeryStrong: valueToEase => 1 - Math.pow(1 - valueToEase, 5),
+    easeOutVeryWeak: (valueToEase: number): number => Math.sin((valueToEase * Math.PI) / 2),
+    easeOutWeak: (valueToEase: number): number => 1 - Math.pow(1 - valueToEase, 2),
+    easeOut: (valueToEase: number): number => 1 - Math.pow(1 - valueToEase, 3),
+    easeOutStrong: (valueToEase: number): number => 1 - Math.pow(1 - valueToEase, 4),
+    easeOutVeryStrong: (valueToEase: number): number => 1 - Math.pow(1 - valueToEase, 5),
 
-    easeInOutVeryWeak: valueToEase => -(Math.cos(valueToEase * Math.PI) - 1) / 2,
-    easeInOutWeak: valueToEase => valueToEase < 0.5 ? 2 * Math.pow(valueToEase, 2) : 1 - Math.pow(-2 * valueToEase + 2, 2) / 2,
-    easeInOut: valueToEase => valueToEase < 0.5 ? 4 * Math.pow(valueToEase, 3) : 1 - Math.pow(-2 * valueToEase + 2, 3) / 2,
-    easeInOutStrong: valueToEase => valueToEase < 0.5 ? 8 * Math.pow(valueToEase, 4) : 1 - Math.pow(-2 * valueToEase + 2, 4) / 2,
-    easeInOutVeryStrong: valueToEase => valueToEase < 0.5 ? 16 * Math.pow(valueToEase, 5) : 1 - Math.pow(-2 * valueToEase + 2, 5) / 2
+    easeInOutVeryWeak: (valueToEase: number): number => -(Math.cos(valueToEase * Math.PI) - 1) / 2,
+    easeInOutWeak: (valueToEase: number): number => valueToEase < 0.5 ? 2 * Math.pow(valueToEase, 2) : 1 - Math.pow(-2 * valueToEase + 2, 2) / 2,
+    easeInOut: (valueToEase: number): number => valueToEase < 0.5 ? 4 * Math.pow(valueToEase, 3) : 1 - Math.pow(-2 * valueToEase + 2, 3) / 2,
+    easeInOutStrong: (valueToEase: number): number => valueToEase < 0.5 ? 8 * Math.pow(valueToEase, 4) : 1 - Math.pow(-2 * valueToEase + 2, 4) / 2,
+    easeInOutVeryStrong: (valueToEase: number): number => valueToEase < 0.5 ? 16 * Math.pow(valueToEase, 5) : 1 - Math.pow(-2 * valueToEase + 2, 5) / 2
 } as const;
 
-export type EasingSupportFunction = (value: number) => number;
-export const EasingSupportFunction: Record<string, EasingSupportFunction> = {
-    triangleWave: inputValue => (2 / Math.PI) * Math.asin(Math.sin((Math.PI / 2) * inputValue)),
-    positiveTriangleWave: inputValue => 1 - Math.abs((Math.abs(inputValue) % 2) - 1)
+export type EasingSupportFunction = (inputValue: number) => number;
+export const EasingSupportFunction = {
+    triangleWave: (inputValue: number): number => (2 / Math.PI) * Math.asin(Math.sin((Math.PI / 2) * inputValue)),
+    positiveTriangleWave: (inputValue: number): number => 1 - Math.abs((Math.abs(inputValue) % 2) - 1)
 } as const;
 
 export const EPSILON: number = 0.000001;
