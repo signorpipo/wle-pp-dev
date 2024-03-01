@@ -1950,15 +1950,15 @@ export const clone = function () {
                 }
             }
         } else if (ObjectUtils.isCloneable(object, cloneParams)) {
-            const objectsToCloneData = [];
+            const objectsToCloneData: [Object3D, Object3D][] = [];
             objectsToCloneData.push([cloneParent, object]);
 
             // Create the object hierarchy
-            const objectsToCloneComponentsData = [];
+            const objectsToCloneComponentsData: [Object3D, Object3D][] = [];
             while (objectsToCloneData.length > 0) {
                 const cloneData = objectsToCloneData.shift();
-                const parent = cloneData[0];
-                const objectToClone = cloneData[1];
+                const parent = cloneData![0];
+                const objectToClone = cloneData![1];
 
                 const currentClonedObject = (parent != null) ? ObjectUtils.addObject(parent) : SceneUtils.addObject(Globals.getScene(ObjectUtils.getEngine(object)));
                 ObjectUtils.setName(currentClonedObject, ObjectUtils.getName(objectToClone));
@@ -1995,11 +1995,11 @@ export const clone = function () {
             }
 
             // Get the components to clone
-            const componentsToCloneData = [];
+            const componentsToCloneData: [Component, Object3D][] = [];
             while (objectsToCloneComponentsData.length > 0) {
                 const cloneData = objectsToCloneComponentsData.shift();
-                const objectToClone = cloneData[0];
-                const currentClonedObject = cloneData[1];
+                const objectToClone = cloneData![0];
+                const currentClonedObject = cloneData![1];
 
                 const components = ObjectUtils.getComponentsSelf(objectToClone);
                 for (const component of components) {
@@ -2023,11 +2023,11 @@ export const clone = function () {
             }
 
             // Clone the components
-            const componentsToPostProcessData = [];
+            const componentsToPostProcessData: [Component, Component][] = [];
             while (componentsToCloneData.length > 0) {
                 const cloneData = componentsToCloneData.shift();
-                const componentToClone = cloneData[0];
-                const currentClonedObject = cloneData[1];
+                const componentToClone = cloneData![0];
+                const currentClonedObject = cloneData![1];
                 let clonedComponent = null;
 
                 if (!cloneParams.myUseDefaultComponentClone) {
@@ -2047,8 +2047,8 @@ export const clone = function () {
             // Can be useful if you have to get some data from other components in the hierarchy which have now been created
             while (componentsToPostProcessData.length > 0) {
                 const cloneData = componentsToPostProcessData.shift();
-                const componentToClone = cloneData[0];
-                const currentClonedComponent = cloneData[1];
+                const componentToClone = cloneData![0];
+                const currentClonedComponent = cloneData![1];
 
                 ComponentUtils.clonePostProcess(componentToClone, currentClonedComponent, cloneParams.myComponentDeepCloneParams, cloneParams.myComponentCustomCloneParams);
             }
@@ -2056,9 +2056,8 @@ export const clone = function () {
             clonedObject = object.clone(cloneParent);
 
             if (cloneParams.myDefaultComponentCloneAutoStartIfNotActive) {
-                const clonedComponents = clonedObject.pp_getComponents();
+                const clonedComponents = ObjectUtils.getComponents(clonedObject);
                 for (const clonedComponent of clonedComponents) {
-
                     // Trigger start, which otherwise would be called later, on first activation
                     if (cloneParams.myDefaultComponentCloneAutoStartIfNotActive && !clonedComponent.active) {
                         clonedComponent.active = true;
