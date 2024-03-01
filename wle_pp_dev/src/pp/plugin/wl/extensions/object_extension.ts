@@ -1018,7 +1018,7 @@ export function initObjectExtensionProtoype(): void {
         return ObjectUtils.setParent(this, newParent, keepTransformWorld);
     };
 
-    objectExtension.pp_getParent = function pp_getParent(this: Readonly<Object3D>): Object3D {
+    objectExtension.pp_getParent = function pp_getParent(this: Readonly<Object3D>): Object3D | null {
         return ObjectUtils.getParent(this);
     };
 
@@ -1342,7 +1342,7 @@ export function initObjectExtensionProtoype(): void {
         return ObjectUtils.getObjectByNameChildren(this, name, isRegex, index);
     };
 
-    objectExtension.pp_getObjectsByName = function pp_getObjectsByName(this: Readonly<Object3D>, name: string, isRegex: boolean = false): Object3D | null {
+    objectExtension.pp_getObjectsByName = function pp_getObjectsByName(this: Readonly<Object3D>, name: string, isRegex: boolean = false): Object3D[] {
         return ObjectUtils.getObjectsByName(this, name, isRegex);
     };
 
@@ -1468,8 +1468,8 @@ export function initObjectExtensionProtoype(): void {
         return ObjectUtils.isTransformChanged(this);
     };
 
-    objectExtension.pp_equals = function pp_equals(this: Readonly<Object3D>, otherObject: Object3D): boolean {
-        return ObjectUtils.equals(this, otherObject);
+    objectExtension.pp_equals = function pp_equals(this: Readonly<Object3D>, object: Readonly<Object3D>): boolean {
+        return ObjectUtils.equals(this, object);
     };
 
     objectExtension.pp_destroy = function pp_destroy(this: Object3D): void {
