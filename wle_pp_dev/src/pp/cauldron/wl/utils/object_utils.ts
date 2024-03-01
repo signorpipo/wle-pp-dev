@@ -577,39 +577,39 @@ export const setScaleLocal = function () {
 
 // Axes    
 
-export function setAxes(object: Object3D, left: Vector3, up: Vector3, forward: Vector3) {
+export function setAxes(object: Object3D, left: Vector3 | null, up: Vector3 | null, forward: Vector3 | null) {
     /*ObjectUtils.*/setAxesWorld(object, left, up, forward);
 }
 
-export function setAxesWorld(object: Object3D, left: Vector3, up: Vector3, forward: Vector3) {
+export function setAxesWorld(object: Object3D, left: Vector3 | null, up: Vector3 | null, forward: Vector3 | null) {
     if (forward != null) {
         /*ObjectUtils.*/setForwardWorld(object, forward, up, left);
     } else if (up != null) {
         /*ObjectUtils.*/setUpWorld(object, up, forward, left);
-    } else {
+    } else if (left != null) {
         /*ObjectUtils.*/setLeftWorld(object, left, up, forward);
     }
 }
 
-export function setAxesLocal(object: Object3D, left: Vector3, up: Vector3, forward: Vector3) {
+export function setAxesLocal(object: Object3D, left: Vector3 | null, up: Vector3 | null, forward: Vector3 | null) {
     if (forward != null) {
         /*ObjectUtils.*/setForwardLocal(object, forward, up, left);
     } else if (up != null) {
         /*ObjectUtils.*/setUpLocal(object, up, forward, left);
-    } else {
+    } else if (left != null) {
         /*ObjectUtils.*/setLeftLocal(object, left, up, forward);
     }
 }
 
 // Forward
 
-export function setForward(object: Object3D, forward: Vector3, up: Vector3, left: Vector3) {
+export function setForward(object: Object3D, forward: Vector3, up: Vector3 | null = null, left: Vector3 | null = null) {
     /*ObjectUtils.*/setForwardWorld(object, forward, up, left);
 }
 
 export const setForwardWorld = function () {
     const quat = QuatUtils.create();
-    return function setForwardWorld(object: Object3D, forward: Vector3, up = null, left = null) {
+    return function setForwardWorld(object: Object3D, forward: Vector3, up: Vector3 | null = null, left: Vector3 | null = null) {
         /*ObjectUtils.*/getRotationWorldQuat(object, quat);
         QuatUtils.setForward(quat, forward, up, left);
         /*ObjectUtils.*/setRotationWorldQuat(object, quat);
@@ -618,7 +618,7 @@ export const setForwardWorld = function () {
 
 export const setForwardLocal = function () {
     const quat = QuatUtils.create();
-    return function setForwardLocal(object: Object3D, forward: Vector3, up = null, left = null) {
+    return function setForwardLocal(object: Object3D, forward: Vector3, up: Vector3 | null = null, left: Vector3 | null = null) {
         /*ObjectUtils.*/getRotationLocalQuat(object, quat);
         QuatUtils.setForward(quat, forward, up, left);
         /*ObjectUtils.*/setRotationLocalQuat(object, quat);
@@ -627,13 +627,13 @@ export const setForwardLocal = function () {
 
 // Backward
 
-export function setBackward(object: Object3D, backward: Vector3, up: Vector3, left: Vector3) {
+export function setBackward(object: Object3D, backward: Vector3, up: Vector3 | null = null, left: Vector3 | null = null) {
     /*ObjectUtils.*/setBackwardWorld(object, backward, up, left);
 }
 
 export const setBackwardWorld = function () {
     const quat = QuatUtils.create();
-    return function setBackwardWorld(object: Object3D, backward: Vector3, up = null, left = null) {
+    return function setBackwardWorld(object: Object3D, backward: Vector3, up: Vector3 | null = null, left: Vector3 | null = null) {
         /*ObjectUtils.*/getRotationWorldQuat(object, quat);
         QuatUtils.setBackward(quat, backward, up, left);
         /*ObjectUtils.*/setRotationWorldQuat(object, quat);
@@ -642,7 +642,7 @@ export const setBackwardWorld = function () {
 
 export const setBackwardLocal = function () {
     const quat = QuatUtils.create();
-    return function setBackwardLocal(object: Object3D, backward: Vector3, up = null, left = null) {
+    return function setBackwardLocal(object: Object3D, backward: Vector3, up: Vector3 | null = null, left: Vector3 | null = null) {
         /*ObjectUtils.*/getRotationLocalQuat(object, quat);
         QuatUtils.setBackward(quat, backward, up, left);
         /*ObjectUtils.*/setRotationLocalQuat(object, quat);
@@ -651,13 +651,13 @@ export const setBackwardLocal = function () {
 
 // Up
 
-export function setUp(object: Object3D, up: Vector3, forward: Vector3, left: Vector3) {
+export function setUp(object: Object3D, up: Vector3, forward: Vector3 | null = null, left: Vector3 | null = null) {
     /*ObjectUtils.*/setUpWorld(object, up, forward, left);
 }
 
 export const setUpWorld = function () {
     const quat = QuatUtils.create();
-    return function setUpWorld(object: Object3D, up: Vector3, forward = null, left = null) {
+    return function setUpWorld(object: Object3D, up: Vector3, forward: Vector3 | null = null, left: Vector3 | null = null) {
         /*ObjectUtils.*/getRotationWorldQuat(object, quat);
         QuatUtils.setUp(quat, up, forward, left);
         /*ObjectUtils.*/setRotationWorldQuat(object, quat);
@@ -666,7 +666,7 @@ export const setUpWorld = function () {
 
 export const setUpLocal = function () {
     const quat = QuatUtils.create();
-    return function setUpLocal(object: Object3D, up: Vector3, forward = null, left = null) {
+    return function setUpLocal(object: Object3D, up: Vector3, forward: Vector3 | null = null, left: Vector3 | null = null) {
         /*ObjectUtils.*/getRotationLocalQuat(object, quat);
         QuatUtils.setUp(quat, up, forward, left);
         /*ObjectUtils.*/setRotationLocalQuat(object, quat);
@@ -675,13 +675,13 @@ export const setUpLocal = function () {
 
 // Down
 
-export function setDown(object: Object3D, down: Vector3, forward: Vector3, left: Vector3) {
+export function setDown(object: Object3D, down: Vector3, forward: Vector3 | null = null, left: Vector3 | null = null) {
     /*ObjectUtils.*/setDownWorld(object, down, forward, left);
 }
 
 export const setDownWorld = function () {
     const quat = QuatUtils.create();
-    return function setDownWorld(object: Object3D, down: Vector3, forward = null, left = null) {
+    return function setDownWorld(object: Object3D, down: Vector3, forward: Vector3 | null = null, left: Vector3 | null = null) {
         /*ObjectUtils.*/getRotationWorldQuat(object, quat);
         QuatUtils.setDown(quat, down, forward, left);
         /*ObjectUtils.*/setRotationWorldQuat(object, quat);
@@ -690,7 +690,7 @@ export const setDownWorld = function () {
 
 export const setDownLocal = function () {
     const quat = QuatUtils.create();
-    return function setDownLocal(object: Object3D, down: Vector3, forward = null, left = null) {
+    return function setDownLocal(object: Object3D, down: Vector3, forward: Vector3 | null = null, left: Vector3 | null = null) {
         /*ObjectUtils.*/getRotationLocalQuat(object, quat);
         QuatUtils.setDown(quat, down, forward, left);
         /*ObjectUtils.*/setRotationLocalQuat(object, quat);
@@ -699,13 +699,13 @@ export const setDownLocal = function () {
 
 // Left
 
-export function setLeft(object: Object3D, left: Vector3, up: Vector3, forward: Vector3) {
+export function setLeft(object: Object3D, left: Vector3, up: Vector3 | null = null, forward: Vector3 | null = null) {
     /*ObjectUtils.*/setLeftWorld(object, left, up, forward);
 }
 
 export const setLeftWorld = function () {
     const quat = QuatUtils.create();
-    return function setLeftWorld(object: Object3D, left: Vector3, up = null, forward = null) {
+    return function setLeftWorld(object: Object3D, left: Vector3, up: Vector3 | null = null, forward: Vector3 | null = null) {
         /*ObjectUtils.*/getRotationWorldQuat(object, quat);
         QuatUtils.setLeft(quat, left, up, forward);
         /*ObjectUtils.*/setRotationWorldQuat(object, quat);
@@ -714,7 +714,7 @@ export const setLeftWorld = function () {
 
 export const setLeftLocal = function () {
     const quat = QuatUtils.create();
-    return function setLeftLocal(object: Object3D, left: Vector3, up = null, forward = null) {
+    return function setLeftLocal(object: Object3D, left: Vector3, up: Vector3 | null = null, forward: Vector3 | null = null) {
         /*ObjectUtils.*/getRotationLocalQuat(object, quat);
         QuatUtils.setLeft(quat, left, up, forward);
         /*ObjectUtils.*/setRotationLocalQuat(object, quat);
@@ -723,13 +723,13 @@ export const setLeftLocal = function () {
 
 // Right
 
-export function setRight(object: Object3D, right: Vector3, up: Vector3, forward: Vector3) {
+export function setRight(object: Object3D, right: Vector3, up: Vector3 | null = null, forward: Vector3 | null = null) {
     /*ObjectUtils.*/setRightWorld(object, right, up, forward);
 }
 
 export const setRightWorld = function () {
     const quat = QuatUtils.create();
-    return function setRightWorld(object: Object3D, right: Vector3, up = null, forward = null) {
+    return function setRightWorld(object: Object3D, right: Vector3, up: Vector3 | null = null, forward: Vector3 | null = null) {
         /*ObjectUtils.*/getRotationWorldQuat(object, quat);
         QuatUtils.setRight(quat, right, up, forward);
         /*ObjectUtils.*/setRotationWorldQuat(object, quat);
@@ -738,7 +738,7 @@ export const setRightWorld = function () {
 
 export const setRightLocal = function () {
     const quat = QuatUtils.create();
-    return function setRightLocal(object: Object3D, right: Vector3, up = null, forward = null) {
+    return function setRightLocal(object: Object3D, right: Vector3, up: Vector3 | null = null, forward: Vector3 | null = null) {
         /*ObjectUtils.*/getRotationLocalQuat(object, quat);
         QuatUtils.setRight(quat, right, up, forward);
         /*ObjectUtils.*/setRotationLocalQuat(object, quat);
@@ -1235,9 +1235,9 @@ export const rotateAroundLocalDegrees = function () {
 export const rotateAroundLocalRadians = function () {
     const degreesRotation = Vec3Utils.create();
     return function rotateAroundLocalRadians(object: Object3D, rotation, origin: Vector3) {
-        = Vec3Utils.toDegrees(rotation, degreesRotation);
-    /*ObjectUtils.*/rotateAroundLocalDegrees(object, degreesRotation, origin);
-};
+        Vec3Utils.toDegrees(rotation, degreesRotation);
+        /*ObjectUtils.*/rotateAroundLocalDegrees(object, degreesRotation, origin);
+    };
 }();
 
 export const rotateAroundLocalMatrix = function () {
