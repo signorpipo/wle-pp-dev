@@ -1755,7 +1755,9 @@ export function convertTransformLocalToObjectQuat(object: Object3D, transform, r
 
 // Component
 
-export function addComponent<T extends Component>(object: Object3D, typeOrClass: string | ComponentConstructor<T>, paramsOrActive: Record<string, any> | boolean | null = null, active: boolean | null = null): T | null {
+export function addComponent<T extends Component>(object: Object3D, typeOrClass: string | ComponentConstructor<T>, paramsOrActive?: Record<string, any> | boolean | null, active?: boolean | null): T | null;
+export function addComponent(object: Object3D, typeOrClass: string | ComponentConstructor, paramsOrActive?: Record<string, any> | boolean | null, active?: boolean | null): Component | null;
+export function addComponent(object: Object3D, typeOrClass: string | ComponentConstructor, paramsOrActive: Record<string, any> | boolean | null = null, active: boolean | null = null): Component | null {
     let params: Record<string, any> | undefined = undefined;
 
     if (typeof paramsOrActive == "boolean") {
@@ -1775,15 +1777,17 @@ export function addComponent<T extends Component>(object: Object3D, typeOrClass:
         }
     }
 
-    return object.addComponent(typeOrClass, params);
+    return object.addComponent(typeOrClass as string, params);
 }
 
 export function getComponent<T extends Component>(object: Object3D, typeOrClass: string | ComponentConstructor<T>, index: number = 0): T | null {
     return /*ObjectUtils.*/getComponentHierarchy(object, typeOrClass, index);
 }
 
-export function getComponentSelf<T extends Component>(object: Object3D, typeOrClass: string | ComponentConstructor<T>, index: number = 0): T | null {
-    return object.getComponent(typeOrClass, index);
+export function getComponentSelf<T extends Component>(object: Object3D, typeOrClass: string | ComponentConstructor<T>, index?: number): T | null;
+export function getComponentSelf(object: Object3D, typeOrClass: string | ComponentConstructor, index?: number): Component | null;
+export function getComponentSelf(object: Object3D, typeOrClass: string | ComponentConstructor, index: number = 0): Component | null {
+    return object.getComponent(typeOrClass as string, index);
 }
 
 export function getComponentHierarchy<T extends Component>(object: Object3D, typeOrClass: string | ComponentConstructor<T>, index: number = 0): T | null {
@@ -1823,8 +1827,10 @@ export function getComponents<T extends Component>(object: Object3D, typeOrClass
     return /*ObjectUtils.*/getComponentsHierarchy(object, typeOrClass);
 }
 
-export function getComponentsSelf<T extends Component>(object: Object3D, typeOrClass: string | ComponentConstructor<T> | null = null): T[] {
-    return object.getComponents(typeOrClass);
+export function getComponentsSelf<T extends Component>(object: Object3D, typeOrClass?: string | ComponentConstructor<T> | null): T[];
+export function getComponentsSelf(object: Object3D, typeOrClass?: string | ComponentConstructor | null): Component[];
+export function getComponentsSelf(object: Object3D, typeOrClass: string | ComponentConstructor | null = null): Component[] {
+    return object.getComponents(typeOrClass as string);
 }
 
 export function getComponentsHierarchy<T extends Component>(object: Object3D, typeOrClass: string | ComponentConstructor<T> | null = null): T[] {
@@ -1950,7 +1956,7 @@ export const clone = function () {
                 }
             }
         } else if (/*ObjectUtils.*/isCloneable(object, cloneParams)) {
-            const objectsToCloneData: [Object3D, Object3D][] = [];
+            const objectsToCloneData: [Object3D | null, Object3D][] = [];
             objectsToCloneData.push([cloneParent, object]);
 
             // Create the object hierarchy
@@ -2078,11 +2084,11 @@ export function isCloneable(object: Object3D, cloneParams = new CloneParams()) {
 
     let cloneable = true;
 
-    const objectsToClone = [];
+    const objectsToClone: Object3D[] = [];
     objectsToClone.push(object);
 
     while (cloneable && objectsToClone.length > 0) {
-        const objectToClone = objectsToClone.shift();
+        const objectToClone = objectsToClone.shift()!;
 
         const components = /*ObjectUtils.*/getComponentsSelf(objectToClone);
         for (const component of components) {
@@ -2177,7 +2183,7 @@ export const toStringExtended = function () {
 
                 objectString = objectString.concat(tab, tab, startObject, newLine);
                 objectString = objectString.concat(tab, tab, tab, typeLabel, component.type, separator, newLine);
-                objectString = objectString.concat(tab, tab, tab, idLabel, component._id, separator, newLine);
+                objectString = objectString.concat(tab, tab, tab, idLabel, component._id.toString(), separator, newLine);
                 objectString = objectString.concat(tab, tab, endObject);
 
                 if (i != components.length - 1) {
@@ -2414,7 +2420,7 @@ export function getDescendants(object: Object3D) {
 }
 
 export function getDescendantsBreadth(object: Object3D): Object3D[] {
-    const descendants = [];
+    const descendants: Object3D[] = [];
 
     const descendantsQueue = /*ObjectUtils.*/getChildren(object);
 
@@ -2430,7 +2436,7 @@ export function getDescendantsBreadth(object: Object3D): Object3D[] {
 }
 
 export function getDescendantsDepth(object: Object3D): Object3D[] {
-    const descendants = [];
+    const descendants: Object3D[] = [];
 
     const children = /*ObjectUtils.*/getChildren(object);
 
@@ -2582,11 +2588,14 @@ export function getComponentsAmountMapChildren(object: Object3D, amountMap = new
 
 // GLOBALS
 
-export function getComponentObjects<T extends Component>(objects: Object3D[], typeOrClass: string | ComponentConstructor<T>, index: number = 0): T | null {
+export function getComponentObjects<T extends Component>(objects: Object3D[], typeOrClass: string | ComponentConstructor<T>, index?: number): T | null;
+export function getComponentObjects(objects: Object3D[], typeOrClass: string | ComponentConstructor, index?: number): Component | null;
+export function getComponentObjects(objects: Object3D[], typeOrClass: string | ComponentConstructor, index: number = 0): Component | null {
     let component = null;
 
     for (const object of objects) {
-        component = object.getComponent(typeOrClass, index);
+        component = object.getComponent(typeOrClass as string, index);
+
         if (component != null) {
             break;
         }
@@ -2595,11 +2604,14 @@ export function getComponentObjects<T extends Component>(objects: Object3D[], ty
     return component;
 }
 
-export function getComponentsObjects<T extends Component>(objects: Object3D[], typeOrClass: string | ComponentConstructor<T> | null = null): T[] {
-    const components = [];
+export function getComponentsObjects<T extends Component>(objects: Object3D[], typeOrClass?: string | ComponentConstructor<T> | null): T[];
+export function getComponentsObjects(objects: Object3D[], typeOrClass?: string | ComponentConstructor | null): Component[];
+export function getComponentsObjects(objects: Object3D[], typeOrClass: string | ComponentConstructor | null = null): Component[] {
+    const components: Component[] = [];
 
     for (const currentObject of objects) {
-        const currentObjectComponents = currentObject.getComponents(typeOrClass);
+        const currentObjectComponents = currentObject.getComponents(typeOrClass as string);
+
         for (let i = 0; i < currentObjectComponents.length; i++) {
             components.push(currentObjectComponents[i]);
         }
@@ -2634,7 +2646,7 @@ export function getObjectByNameObjects(objects: Object3D[], name: string, isRege
 }
 
 export function getObjectsByNameObjects(objects: Object3D[], name: string, isRegex: boolean = false) {
-    const objectsFound = [];
+    const objectsFound: Object3D[] = [];
 
     for (const currentObject of objects) {
         const objectName = /*ObjectUtils.*/getName(currentObject);
@@ -2665,7 +2677,7 @@ export function getObjectByIDObjects(objects: Object3D[], id: number, index: num
 }
 
 export function getObjectsByIDObjects(objects: Object3D[], id: number) {
-    const objectsFound = [];
+    const objectsFound: Object3D[] = [];
 
     for (const currentObject of objects) {
         if (/*ObjectUtils.*/getID(currentObject) == id) {
