@@ -1482,112 +1482,112 @@ export function getParent(object: Object3D): Object3D | null {
 
 export const convertPositionObjectToWorld = function () {
     const matrix = Mat4Utils.create();
-    return function convertPositionObjectToWorld(object: Object3D, position: Vector3, resultPosition: Vector3 = Vec3Utils.create()): Vector3 {
+    return function convertPositionObjectToWorld(object: Object3D, position: Vector3, outPosition: Vector3 = Vec3Utils.create()): Vector3 {
         /*ObjectUtils.*/getTransformWorldMatrix(object, matrix);
-        Vec3Utils.transformMat4(position, matrix, resultPosition);
-        return resultPosition;
+        Vec3Utils.transformMat4(position, matrix, outPosition);
+        return outPosition;
     };
 }();
 
 export const convertDirectionObjectToWorld = function () {
     const rotation = QuatUtils.create();
-    return function convertDirectionObjectToWorld(object: Object3D, direction: Vector3, resultDirection: Vector3 = Vec3Utils.create()): Vector3 {
+    return function convertDirectionObjectToWorld(object: Object3D, direction: Vector3, outDirection: Vector3 = Vec3Utils.create()): Vector3 {
         /*ObjectUtils.*/getRotationWorldQuat(object, rotation);
-        Vec3Utils.transformQuat(direction, rotation, resultDirection);
-        return resultDirection;
+        Vec3Utils.transformQuat(direction, rotation, outDirection);
+        return outDirection;
     };
 }();
 
 export const convertPositionWorldToObject = function () {
     const matrix = Mat4Utils.create();
-    return function convertPositionWorldToObject(object: Object3D, position: Vector3, resultPosition: Vector3 = Vec3Utils.create()): Vector3 {
+    return function convertPositionWorldToObject(object: Object3D, position: Vector3, outPosition: Vector3 = Vec3Utils.create()): Vector3 {
         /*ObjectUtils.*/getTransformWorldMatrix(object, matrix);
         Mat4Utils.invert(matrix, matrix);
-        Vec3Utils.transformMat4(position, matrix, resultPosition);
-        return resultPosition;
+        Vec3Utils.transformMat4(position, matrix, outPosition);
+        return outPosition;
     };
 }();
 
 export const convertDirectionWorldToObject = function () {
     const rotation = QuatUtils.create();
-    return function convertDirectionWorldToObject(object: Object3D, direction: Vector3, resultDirection: Vector3 = Vec3Utils.create()): Vector3 {
+    return function convertDirectionWorldToObject(object: Object3D, direction: Vector3, outDirection: Vector3 = Vec3Utils.create()): Vector3 {
         /*ObjectUtils.*/getRotationWorldQuat(object, rotation);
         QuatUtils.conjugate(rotation, rotation);
-        Vec3Utils.transformQuat(direction, rotation, resultDirection);
-        return resultDirection;
+        Vec3Utils.transformQuat(direction, rotation, outDirection);
+        return outDirection;
     };
 }();
 
 // Convert Vector Local World
 
-export function convertPositionLocalToWorld(object: Object3D, position: Vector3, resultPosition: Vector3 = Vec3Utils.create()): Vector3 {
+export function convertPositionLocalToWorld(object: Object3D, position: Vector3, outPosition: Vector3 = Vec3Utils.create()): Vector3 {
     if (/*ObjectUtils.*/getParent(object) != null) {
-        /*ObjectUtils.*/convertPositionObjectToWorld(/*ObjectUtils.*/getParent(object)!, position, resultPosition);
+        /*ObjectUtils.*/convertPositionObjectToWorld(/*ObjectUtils.*/getParent(object)!, position, outPosition);
     } else {
-        Vec3Utils.copy(position, resultPosition);
+        Vec3Utils.copy(position, outPosition);
     }
-    return resultPosition;
+    return outPosition;
 }
 
-export function convertDirectionLocalToWorld(object: Object3D, direction: Vector3, resultDirection: Vector3 = Vec3Utils.create()): Vector3 {
+export function convertDirectionLocalToWorld(object: Object3D, direction: Vector3, outDirection: Vector3 = Vec3Utils.create()): Vector3 {
     if (/*ObjectUtils.*/getParent(object) != null) {
-        /*ObjectUtils.*/convertDirectionObjectToWorld(/*ObjectUtils.*/getParent(object)!, direction, resultDirection);
+        /*ObjectUtils.*/convertDirectionObjectToWorld(/*ObjectUtils.*/getParent(object)!, direction, outDirection);
     } else {
-        Vec3Utils.copy(direction, resultDirection);
+        Vec3Utils.copy(direction, outDirection);
     }
-    return resultDirection;
+    return outDirection;
 }
 
-export function convertPositionWorldToLocal(object: Object3D, position: Vector3, resultPosition: Vector3 = Vec3Utils.create()): Vector3 {
+export function convertPositionWorldToLocal(object: Object3D, position: Vector3, outPosition: Vector3 = Vec3Utils.create()): Vector3 {
     if (/*ObjectUtils.*/getParent(object) != null) {
-        /*ObjectUtils.*/convertPositionWorldToObject(/*ObjectUtils.*/getParent(object)!, position, resultPosition);
+        /*ObjectUtils.*/convertPositionWorldToObject(/*ObjectUtils.*/getParent(object)!, position, outPosition);
     } else {
-        Vec3Utils.copy(position, resultPosition);
+        Vec3Utils.copy(position, outPosition);
     }
-    return resultPosition;
+    return outPosition;
 }
 
-export function convertDirectionWorldToLocal(object: Object3D, direction: Vector3, resultDirection: Vector3 = Vec3Utils.create()): Vector3 {
+export function convertDirectionWorldToLocal(object: Object3D, direction: Vector3, outDirection: Vector3 = Vec3Utils.create()): Vector3 {
     if (/*ObjectUtils.*/getParent(object) != null) {
-        /*ObjectUtils.*/convertDirectionWorldToObject(/*ObjectUtils.*/getParent(object)!, direction, resultDirection);
+        /*ObjectUtils.*/convertDirectionWorldToObject(/*ObjectUtils.*/getParent(object)!, direction, outDirection);
     } else {
-        Vec3Utils.copy(direction, resultDirection);
+        Vec3Utils.copy(direction, outDirection);
     }
-    return resultDirection;
+    return outDirection;
 }
 
 // Convert Vector Local Object
 
 // I need to use the converson to world and then local also use the parent scale that changes the position in local space
 
-export function convertPositionObjectToLocal(object: Object3D, position: Vector3, resultPosition: Vector3 = Vec3Utils.create()): Vector3 {
-    /*ObjectUtils.*/convertPositionObjectToWorld(object, position, resultPosition);
-    /*ObjectUtils.*/convertPositionWorldToLocal(object, resultPosition, resultPosition);
-    return resultPosition;
+export function convertPositionObjectToLocal(object: Object3D, position: Vector3, outPosition: Vector3 = Vec3Utils.create()): Vector3 {
+    /*ObjectUtils.*/convertPositionObjectToWorld(object, position, outPosition);
+    /*ObjectUtils.*/convertPositionWorldToLocal(object, outPosition, outPosition);
+    return outPosition;
 }
 
-export function convertDirectionObjectToLocal(object: Object3D, direction: Vector3, resultDirection: Vector3 = Vec3Utils.create()): Vector3 {
-    /*ObjectUtils.*/convertDirectionObjectToWorld(object, direction, resultDirection);
-    /*ObjectUtils.*/convertDirectionWorldToLocal(object, resultDirection, resultDirection);
-    return resultDirection;
+export function convertDirectionObjectToLocal(object: Object3D, direction: Vector3, outDirection: Vector3 = Vec3Utils.create()): Vector3 {
+    /*ObjectUtils.*/convertDirectionObjectToWorld(object, direction, outDirection);
+    /*ObjectUtils.*/convertDirectionWorldToLocal(object, outDirection, outDirection);
+    return outDirection;
 }
 
-export function convertPositionLocalToObject(object: Object3D, position: Vector3, resultPosition: Vector3 = Vec3Utils.create()): Vector3 {
-    /*ObjectUtils.*/convertPositionLocalToWorld(object, position, resultPosition);
-    /*ObjectUtils.*/convertPositionWorldToObject(object, resultPosition, resultPosition);
-    return resultPosition;
+export function convertPositionLocalToObject(object: Object3D, position: Vector3, outPosition: Vector3 = Vec3Utils.create()): Vector3 {
+    /*ObjectUtils.*/convertPositionLocalToWorld(object, position, outPosition);
+    /*ObjectUtils.*/convertPositionWorldToObject(object, outPosition, outPosition);
+    return outPosition;
 }
 
-export function convertDirectionLocalToObject(object: Object3D, direction: Vector3, resultDirection: Vector3 = Vec3Utils.create()): Vector3 {
-    /*ObjectUtils.*/convertDirectionLocalToWorld(object, direction, resultDirection);
-    /*ObjectUtils.*/convertDirectionWorldToObject(object, resultDirection, resultDirection);
-    return resultDirection;
+export function convertDirectionLocalToObject(object: Object3D, direction: Vector3, outDirection: Vector3 = Vec3Utils.create()): Vector3 {
+    /*ObjectUtils.*/convertDirectionLocalToWorld(object, direction, outDirection);
+    /*ObjectUtils.*/convertDirectionWorldToObject(object, outDirection, outDirection);
+    return outDirection;
 }
 
 // Convert Transform Object World
 
-export function convertTransformObjectToWorld(object: Object3D, transform: Matrix4, resultTransform: Matrix4): Matrix4 {
-    return /*ObjectUtils.*/convertTransformObjectToWorldMatrix(object, transform, resultTransform);
+export function convertTransformObjectToWorld(object: Object3D, transform: Matrix4, outTransform: Matrix4): Matrix4 {
+    return /*ObjectUtils.*/convertTransformObjectToWorldMatrix(object, transform, outTransform);
 }
 
 export const convertTransformObjectToWorldMatrix = function () {
@@ -1596,10 +1596,10 @@ export const convertTransformObjectToWorldMatrix = function () {
     const scale = Vec3Utils.create();
     const inverseScale = Vec3Utils.create();
     const one = Vec3Utils.create(1);
-    return function convertTransformObjectToWorldMatrix(object: Object3D, transform: Matrix4, resultTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
+    return function convertTransformObjectToWorldMatrix(object: Object3D, transform: Matrix4, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
         /*ObjectUtils.*/getTransformWorldMatrix(object, convertTransform);
         if (/*ObjectUtils.*/hasUniformScaleWorld(object)) {
-            Mat4Utils.mul(convertTransform, transform, resultTransform);
+            Mat4Utils.mul(convertTransform, transform, outTransform);
         } else {
             Vec3Utils.set(position, transform[12], transform[13], transform[14]);
             /*ObjectUtils.*/convertPositionObjectToWorld(object, position, position);
@@ -1608,33 +1608,33 @@ export const convertTransformObjectToWorldMatrix = function () {
             Vec3Utils.div(one, scale, inverseScale);
             Mat4Utils.scale(convertTransform, inverseScale, convertTransform);
 
-            Mat4Utils.mul(convertTransform, transform, resultTransform);
-            Mat4Utils.scale(resultTransform, scale, resultTransform);
+            Mat4Utils.mul(convertTransform, transform, outTransform);
+            Mat4Utils.scale(outTransform, scale, outTransform);
 
-            resultTransform[12] = position[0];
-            resultTransform[13] = position[1];
-            resultTransform[14] = position[2];
-            resultTransform[15] = 1;
+            outTransform[12] = position[0];
+            outTransform[13] = position[1];
+            outTransform[14] = position[2];
+            outTransform[15] = 1;
         }
-        return resultTransform;
+        return outTransform;
     };
 }();
 
 export const convertTransformObjectToWorldQuat = function () {
     const position = Vec3Utils.create();
     const rotation = QuatUtils.create();
-    return function convertTransformObjectToWorldQuat(object: Object3D, transform: Quaternion2, resultTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
+    return function convertTransformObjectToWorldQuat(object: Object3D, transform: Quaternion2, outTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
         /*ObjectUtils.*/getRotationWorldQuat(object, rotation);
         QuatUtils.mul(rotation, transform, rotation);
         Quat2Utils.getPosition(transform, position);
         /*ObjectUtils.*/convertPositionObjectToWorld(object, position, position);
-        Quat2Utils.setPositionRotationQuat(resultTransform, position, rotation);
-        return resultTransform;
+        Quat2Utils.setPositionRotationQuat(outTransform, position, rotation);
+        return outTransform;
     };
 }();
 
-export function convertTransformWorldToObject(object: Object3D, transform: Matrix4, resultTransform: Matrix4): Matrix4 {
-    return /*ObjectUtils.*/convertTransformWorldToObjectMatrix(object, transform, resultTransform);
+export function convertTransformWorldToObject(object: Object3D, transform: Matrix4, outTransform: Matrix4): Matrix4 {
+    return /*ObjectUtils.*/convertTransformWorldToObjectMatrix(object, transform, outTransform);
 }
 
 export const convertTransformWorldToObjectMatrix = function () {
@@ -1643,11 +1643,11 @@ export const convertTransformWorldToObjectMatrix = function () {
     const scale = Vec3Utils.create();
     const inverseScale = Vec3Utils.create();
     const one = Vec3Utils.create(1);
-    return function convertTransformWorldToObjectMatrix(object: Object3D, transform: Matrix4, resultTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
+    return function convertTransformWorldToObjectMatrix(object: Object3D, transform: Matrix4, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
         /*ObjectUtils.*/getTransformWorldMatrix(object, convertTransform);
         if (/*ObjectUtils.*/hasUniformScaleWorld(object)) {
             Mat4Utils.invert(convertTransform, convertTransform);
-            Mat4Utils.mul(convertTransform, transform, resultTransform);
+            Mat4Utils.mul(convertTransform, transform, outTransform);
         } else {
             Vec3Utils.set(position, transform[12], transform[13], transform[14]);
             /*ObjectUtils.*/convertPositionWorldToObject(object, position, position);
@@ -1657,112 +1657,112 @@ export const convertTransformWorldToObjectMatrix = function () {
             Mat4Utils.scale(convertTransform, inverseScale, convertTransform);
 
             Mat4Utils.invert(convertTransform, convertTransform);
-            Mat4Utils.mul(convertTransform, transform, resultTransform);
-            Mat4Utils.scale(resultTransform, inverseScale, resultTransform);
+            Mat4Utils.mul(convertTransform, transform, outTransform);
+            Mat4Utils.scale(outTransform, inverseScale, outTransform);
 
-            resultTransform[12] = position[0];
-            resultTransform[13] = position[1];
-            resultTransform[14] = position[2];
-            resultTransform[15] = 1;
+            outTransform[12] = position[0];
+            outTransform[13] = position[1];
+            outTransform[14] = position[2];
+            outTransform[15] = 1;
         }
-        return resultTransform;
+        return outTransform;
     };
 }();
 
 export const convertTransformWorldToObjectQuat = function () {
     const position = Vec3Utils.create();
     const rotation = QuatUtils.create();
-    return function convertTransformWorldToObjectQuat(object: Object3D, transform: Quaternion2, resultTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
+    return function convertTransformWorldToObjectQuat(object: Object3D, transform: Quaternion2, outTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
         /*ObjectUtils.*/getRotationWorldQuat(object, rotation);
         QuatUtils.conjugate(rotation, rotation);
         QuatUtils.mul(rotation, transform, rotation);
         Quat2Utils.getPosition(transform, position);
         /*ObjectUtils.*/convertPositionWorldToObject(object, position, position);
-        Quat2Utils.setPositionRotationQuat(resultTransform, position, rotation);
-        return resultTransform;
+        Quat2Utils.setPositionRotationQuat(outTransform, position, rotation);
+        return outTransform;
     };
 }();
 
 // Convert Transform Local World
 
-export function convertTransformLocalToWorld(object: Object3D, transform: Matrix4, resultTransform: Matrix4): Matrix4 {
-    return /*ObjectUtils.*/convertTransformLocalToWorldMatrix(object, transform, resultTransform);
+export function convertTransformLocalToWorld(object: Object3D, transform: Matrix4, outTransform: Matrix4): Matrix4 {
+    return /*ObjectUtils.*/convertTransformLocalToWorldMatrix(object, transform, outTransform);
 }
 
-export function convertTransformLocalToWorldMatrix(object: Object3D, transform: Matrix4, resultTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
+export function convertTransformLocalToWorldMatrix(object: Object3D, transform: Matrix4, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
     if (/*ObjectUtils.*/getParent(object) != null) {
-        /*ObjectUtils.*/convertTransformObjectToWorldMatrix(/*ObjectUtils.*/getParent(object)!, transform, resultTransform);
+        /*ObjectUtils.*/convertTransformObjectToWorldMatrix(/*ObjectUtils.*/getParent(object)!, transform, outTransform);
     } else {
-        Mat4Utils.copy(transform, resultTransform);
+        Mat4Utils.copy(transform, outTransform);
     }
-    return resultTransform;
+    return outTransform;
 }
 
-export function convertTransformLocalToWorldQuat(object: Object3D, transform: Quaternion2, resultTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
+export function convertTransformLocalToWorldQuat(object: Object3D, transform: Quaternion2, outTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
     if (/*ObjectUtils.*/getParent(object) != null) {
-        /*ObjectUtils.*/convertTransformObjectToWorldQuat(/*ObjectUtils.*/getParent(object)!, transform, resultTransform);
+        /*ObjectUtils.*/convertTransformObjectToWorldQuat(/*ObjectUtils.*/getParent(object)!, transform, outTransform);
     } else {
-        Quat2Utils.copy(transform, resultTransform);
+        Quat2Utils.copy(transform, outTransform);
     }
-    return resultTransform;
+    return outTransform;
 }
 
-export function convertTransformWorldToLocal(object: Object3D, transform: Matrix4, resultTransform: Matrix4): Matrix4 {
-    return /*ObjectUtils.*/convertTransformWorldToLocalMatrix(object, transform, resultTransform);
+export function convertTransformWorldToLocal(object: Object3D, transform: Matrix4, outTransform: Matrix4): Matrix4 {
+    return /*ObjectUtils.*/convertTransformWorldToLocalMatrix(object, transform, outTransform);
 }
 
-export function convertTransformWorldToLocalMatrix(object: Object3D, transform: Matrix4, resultTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
+export function convertTransformWorldToLocalMatrix(object: Object3D, transform: Matrix4, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
     if (/*ObjectUtils.*/getParent(object) != null) {
-        /*ObjectUtils.*/convertTransformWorldToObjectMatrix(/*ObjectUtils.*/getParent(object)!, transform, resultTransform);
+        /*ObjectUtils.*/convertTransformWorldToObjectMatrix(/*ObjectUtils.*/getParent(object)!, transform, outTransform);
     } else {
-        Mat4Utils.copy(transform, resultTransform);
+        Mat4Utils.copy(transform, outTransform);
     }
-    return resultTransform;
+    return outTransform;
 }
 
-export function convertTransformWorldToLocalQuat(object: Object3D, transform: Quaternion2, resultTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
+export function convertTransformWorldToLocalQuat(object: Object3D, transform: Quaternion2, outTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
     if (/*ObjectUtils.*/getParent(object) != null) {
-        /*ObjectUtils.*/convertTransformWorldToObjectQuat(/*ObjectUtils.*/getParent(object)!, transform, resultTransform);
+        /*ObjectUtils.*/convertTransformWorldToObjectQuat(/*ObjectUtils.*/getParent(object)!, transform, outTransform);
     } else {
-        Quat2Utils.copy(transform, resultTransform);
+        Quat2Utils.copy(transform, outTransform);
     }
-    return resultTransform;
+    return outTransform;
 }
 
 // Convert Transform Object Local
 
 // I need to use the converson to world and then local also use the parent scale that changes the position in local space
 
-export function convertTransformObjectToLocal(object: Object3D, transform: Matrix4, resultTransform: Matrix4): Matrix4 {
-    return /*ObjectUtils.*/convertTransformObjectToLocalMatrix(object, transform, resultTransform);
+export function convertTransformObjectToLocal(object: Object3D, transform: Matrix4, outTransform: Matrix4): Matrix4 {
+    return /*ObjectUtils.*/convertTransformObjectToLocalMatrix(object, transform, outTransform);
 }
 
-export function convertTransformObjectToLocalMatrix(object: Object3D, transform: Matrix4, resultTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
-    /*ObjectUtils.*/convertTransformObjectToWorldMatrix(object, transform, resultTransform);
-    /*ObjectUtils.*/convertTransformWorldToLocalMatrix(object, resultTransform, resultTransform);
-    return resultTransform;
+export function convertTransformObjectToLocalMatrix(object: Object3D, transform: Matrix4, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
+    /*ObjectUtils.*/convertTransformObjectToWorldMatrix(object, transform, outTransform);
+    /*ObjectUtils.*/convertTransformWorldToLocalMatrix(object, outTransform, outTransform);
+    return outTransform;
 }
 
-export function convertTransformObjectToLocalQuat(object: Object3D, transform: Quaternion2, resultTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
-    /*ObjectUtils.*/convertTransformObjectToWorldQuat(object, transform, resultTransform);
-    /*ObjectUtils.*/convertTransformWorldToLocalQuat(object, resultTransform, resultTransform);
-    return resultTransform;
+export function convertTransformObjectToLocalQuat(object: Object3D, transform: Quaternion2, outTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
+    /*ObjectUtils.*/convertTransformObjectToWorldQuat(object, transform, outTransform);
+    /*ObjectUtils.*/convertTransformWorldToLocalQuat(object, outTransform, outTransform);
+    return outTransform;
 }
 
-export function convertTransformLocalToObject(object: Object3D, transform: Matrix4, resultTransform: Matrix4): Matrix4 {
-    return /*ObjectUtils.*/convertTransformLocalToObjectMatrix(object, transform, resultTransform);
+export function convertTransformLocalToObject(object: Object3D, transform: Matrix4, outTransform: Matrix4): Matrix4 {
+    return /*ObjectUtils.*/convertTransformLocalToObjectMatrix(object, transform, outTransform);
 }
 
-export function convertTransformLocalToObjectMatrix(object: Object3D, transform: Matrix4, resultTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
-    /*ObjectUtils.*/convertTransformLocalToWorldMatrix(object, transform, resultTransform);
-    /*ObjectUtils.*/convertTransformWorldToObjectMatrix(object, resultTransform, resultTransform);
-    return resultTransform;
+export function convertTransformLocalToObjectMatrix(object: Object3D, transform: Matrix4, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
+    /*ObjectUtils.*/convertTransformLocalToWorldMatrix(object, transform, outTransform);
+    /*ObjectUtils.*/convertTransformWorldToObjectMatrix(object, outTransform, outTransform);
+    return outTransform;
 }
 
-export function convertTransformLocalToObjectQuat(object: Object3D, transform: Quaternion2, resultTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
-    /*ObjectUtils.*/convertTransformLocalToWorldQuat(object, transform, resultTransform);
-    /*ObjectUtils.*/convertTransformWorldToObjectQuat(object, resultTransform, resultTransform);
-    return resultTransform;
+export function convertTransformLocalToObjectQuat(object: Object3D, transform: Quaternion2, outTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
+    /*ObjectUtils.*/convertTransformLocalToWorldQuat(object, transform, outTransform);
+    /*ObjectUtils.*/convertTransformWorldToObjectQuat(object, outTransform, outTransform);
+    return outTransform;
 }
 
 // Component
