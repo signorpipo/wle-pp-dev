@@ -448,11 +448,11 @@ export function setPosition(object: Object3D, position: Vector3) {
 }
 
 export function setPositionWorld(object: Object3D, position: Vector3) {
-    object.setTranslationWorld(position);
+    object.setPositionWorld(position);
 }
 
 export function setPositionLocal(object: Object3D, position: Vector3) {
-    object.setTranslationLocal(position);
+    object.setPositionLocal(position);
 }
 
 // Rotation
@@ -912,7 +912,7 @@ export function translateWorld(object: Object3D, translation: Vector3) {
 }
 
 export function translateLocal(object: Object3D, translation: Vector3) {
-    object.translate(translation);
+    object.translateLocal(translation);
 }
 
 export function translateObject(object: Object3D, translation: Vector3) {
@@ -1509,8 +1509,8 @@ export const convertDirectionWorldToObject = function () {
 // Convert Vector Local World
 
 export function convertPositionLocalToWorld(object: Object3D, position: Vector3, resultPosition: Vector3 = Vec3Utils.create()) {
-    if (/*ObjectUtils.*/getParent(object)) {
-        /*ObjectUtils.*/convertPositionObjectToWorld(/*ObjectUtils.*/getParent(object), position, resultPosition);
+    if (/*ObjectUtils.*/getParent(object) != null) {
+        /*ObjectUtils.*/convertPositionObjectToWorld(/*ObjectUtils.*/getParent(object)!, position, resultPosition);
     } else {
         Vec3Utils.copy(position, resultPosition);
     }
@@ -1518,8 +1518,8 @@ export function convertPositionLocalToWorld(object: Object3D, position: Vector3,
 }
 
 export function convertDirectionLocalToWorld(object: Object3D, direction: Vector3, resultDirection: Vector3 = Vec3Utils.create()) {
-    if (/*ObjectUtils.*/getParent(object)) {
-        /*ObjectUtils.*/convertDirectionObjectToWorld(/*ObjectUtils.*/getParent(object), direction, resultDirection);
+    if (/*ObjectUtils.*/getParent(object) != null) {
+        /*ObjectUtils.*/convertDirectionObjectToWorld(/*ObjectUtils.*/getParent(object)!, direction, resultDirection);
     } else {
         Vec3Utils.copy(direction, resultDirection);
     }
@@ -1527,8 +1527,8 @@ export function convertDirectionLocalToWorld(object: Object3D, direction: Vector
 }
 
 export function convertPositionWorldToLocal(object: Object3D, position: Vector3, resultPosition: Vector3 = Vec3Utils.create()) {
-    if (/*ObjectUtils.*/getParent(object)) {
-        /*ObjectUtils.*/convertPositionWorldToObject(/*ObjectUtils.*/getParent(object), position, resultPosition);
+    if (/*ObjectUtils.*/getParent(object) != null) {
+        /*ObjectUtils.*/convertPositionWorldToObject(/*ObjectUtils.*/getParent(object)!, position, resultPosition);
     } else {
         Vec3Utils.copy(position, resultPosition);
     }
@@ -1536,8 +1536,8 @@ export function convertPositionWorldToLocal(object: Object3D, position: Vector3,
 }
 
 export function convertDirectionWorldToLocal(object: Object3D, direction: Vector3, resultDirection: Vector3 = Vec3Utils.create()) {
-    if (/*ObjectUtils.*/getParent(object)) {
-        /*ObjectUtils.*/convertDirectionWorldToObject(/*ObjectUtils.*/getParent(object), direction, resultDirection);
+    if (/*ObjectUtils.*/getParent(object) != null) {
+        /*ObjectUtils.*/convertDirectionWorldToObject(/*ObjectUtils.*/getParent(object)!, direction, resultDirection);
     } else {
         Vec3Utils.copy(direction, resultDirection);
     }
@@ -1678,8 +1678,8 @@ export function convertTransformLocalToWorld(object: Object3D, transform, result
 }
 
 export function convertTransformLocalToWorldMatrix(object: Object3D, transform, resultTransform = Mat4Utils.create()) {
-    if (/*ObjectUtils.*/getParent(object)) {
-        /*ObjectUtils.*/convertTransformObjectToWorldMatrix(/*ObjectUtils.*/getParent(object), transform, resultTransform);
+    if (/*ObjectUtils.*/getParent(object) != null) {
+        /*ObjectUtils.*/convertTransformObjectToWorldMatrix(/*ObjectUtils.*/getParent(object)!, transform, resultTransform);
     } else {
         Mat4Utils.copy(transform, resultTransform);
     }
@@ -1687,8 +1687,8 @@ export function convertTransformLocalToWorldMatrix(object: Object3D, transform, 
 }
 
 export function convertTransformLocalToWorldQuat(object: Object3D, transform, resultTransform = Quat2Utils.create()) {
-    if (/*ObjectUtils.*/getParent(object)) {
-        /*ObjectUtils.*/convertTransformObjectToWorldQuat(/*ObjectUtils.*/getParent(object), transform, resultTransform);
+    if (/*ObjectUtils.*/getParent(object) != null) {
+        /*ObjectUtils.*/convertTransformObjectToWorldQuat(/*ObjectUtils.*/getParent(object)!, transform, resultTransform);
     } else {
         Quat2Utils.copy(transform, resultTransform);
     }
@@ -1700,8 +1700,8 @@ export function convertTransformWorldToLocal(object: Object3D, transform, result
 }
 
 export function convertTransformWorldToLocalMatrix(object: Object3D, transform, resultTransform = Mat4Utils.create()) {
-    if (/*ObjectUtils.*/getParent(object)) {
-        /*ObjectUtils.*/convertTransformWorldToObjectMatrix(/*ObjectUtils.*/getParent(object), transform, resultTransform);
+    if (/*ObjectUtils.*/getParent(object) != null) {
+        /*ObjectUtils.*/convertTransformWorldToObjectMatrix(/*ObjectUtils.*/getParent(object)!, transform, resultTransform);
     } else {
         Mat4Utils.copy(transform, resultTransform);
     }
@@ -1709,8 +1709,8 @@ export function convertTransformWorldToLocalMatrix(object: Object3D, transform, 
 }
 
 export function convertTransformWorldToLocalQuat(object: Object3D, transform, resultTransform = Quat2Utils.create()) {
-    if (/*ObjectUtils.*/getParent(object)) {
-        /*ObjectUtils.*/convertTransformWorldToObjectQuat(/*ObjectUtils.*/getParent(object), transform, resultTransform);
+    if (/*ObjectUtils.*/getParent(object) != null) {
+        /*ObjectUtils.*/convertTransformWorldToObjectQuat(/*ObjectUtils.*/getParent(object)!, transform, resultTransform);
     } else {
         Quat2Utils.copy(transform, resultTransform);
     }
@@ -1819,43 +1819,43 @@ export function getComponentChildren<T extends Component>(object: Object3D, type
     return /*ObjectUtils.*/getComponentObjects(objects, typeOrClass, index);
 }
 
-export function getComponents<T extends Component>(object: Object3D, typeOrClass: string | ComponentConstructor<T>): T[] {
+export function getComponents<T extends Component>(object: Object3D, typeOrClass: string | ComponentConstructor<T> | null = null): T[] {
     return /*ObjectUtils.*/getComponentsHierarchy(object, typeOrClass);
 }
 
-export function getComponentsSelf<T extends Component>(object: Object3D, typeOrClass: string | ComponentConstructor<T>): T[] {
+export function getComponentsSelf<T extends Component>(object: Object3D, typeOrClass: string | ComponentConstructor<T> | null = null): T[] {
     return object.getComponents(typeOrClass);
 }
 
-export function getComponentsHierarchy<T extends Component>(object: Object3D, typeOrClass: string | ComponentConstructor<T>): T[] {
+export function getComponentsHierarchy<T extends Component>(object: Object3D, typeOrClass: string | ComponentConstructor<T> | null = null): T[] {
     return /*ObjectUtils.*/getComponentsHierarchyBreadth(object, typeOrClass);
 }
 
-export function getComponentsHierarchyBreadth<T extends Component>(object: Object3D, typeOrClass: string | ComponentConstructor<T>): T[] {
+export function getComponentsHierarchyBreadth<T extends Component>(object: Object3D, typeOrClass: string | ComponentConstructor<T> | null = null): T[] {
     const objects = /*ObjectUtils.*/getHierarchyBreadth(object);
     return /*ObjectUtils.*/getComponentsObjects(objects, typeOrClass);
 }
 
-export function getComponentsHierarchyDepth<T extends Component>(object: Object3D, typeOrClass: string | ComponentConstructor<T>): T[] {
+export function getComponentsHierarchyDepth<T extends Component>(object: Object3D, typeOrClass: string | ComponentConstructor<T> | null = null): T[] {
     const objects = /*ObjectUtils.*/getHierarchyDepth(object);
     return /*ObjectUtils.*/getComponentsObjects(objects, typeOrClass);
 }
 
-export function getComponentsDescendants<T extends Component>(object: Object3D, typeOrClass: string | ComponentConstructor<T>): T[] {
+export function getComponentsDescendants<T extends Component>(object: Object3D, typeOrClass: string | ComponentConstructor<T> | null = null): T[] {
     return /*ObjectUtils.*/getComponentsDescendantsBreadth(object, typeOrClass);
 }
 
-export function getComponentsDescendantsBreadth<T extends Component>(object: Object3D, typeOrClass: string | ComponentConstructor<T>): T[] {
+export function getComponentsDescendantsBreadth<T extends Component>(object: Object3D, typeOrClass: string | ComponentConstructor<T> | null = null): T[] {
     const objects = /*ObjectUtils.*/getDescendantsBreadth(object);
     return /*ObjectUtils.*/getComponentsObjects(objects, typeOrClass);
 }
 
-export function getComponentsDescendantsDepth<T extends Component>(object: Object3D, typeOrClass: string | ComponentConstructor<T>): T[] {
+export function getComponentsDescendantsDepth<T extends Component>(object: Object3D, typeOrClass: string | ComponentConstructor<T> | null = null): T[] {
     const objects = /*ObjectUtils.*/getDescendantsDepth(object);
     return /*ObjectUtils.*/getComponentsObjects(objects, typeOrClass);
 }
 
-export function getComponentsChildren<T extends Component>(object: Object3D, typeOrClass: string | ComponentConstructor<T>): T[] {
+export function getComponentsChildren<T extends Component>(object: Object3D, typeOrClass: string | ComponentConstructor<T> | null = null): T[] {
     const objects = /*ObjectUtils.*/getChildren(object);
     return /*ObjectUtils.*/getComponentsObjects(objects, typeOrClass);
 }
@@ -2157,9 +2157,9 @@ export const toStringExtended = function () {
         const name = /*ObjectUtils.*/getName(object);
 
         if (components.length > 0 || children.length > 0 || name.length > 0) {
-            objectString = objectString.concat(tab, idLabel, /*ObjectUtils.*/getID(object), separator, newLine);
+            objectString = objectString.concat(tab, idLabel, /*ObjectUtils.*/getID(object).toString(), separator, newLine);
         } else {
-            objectString = objectString.concat(tab, idLabel, /*ObjectUtils.*/getID(object), newLine);
+            objectString = objectString.concat(tab, idLabel, /*ObjectUtils.*/getID(object).toString(), newLine);
         }
 
         if (name.length > 0) {
@@ -2413,13 +2413,13 @@ export function getDescendants(object: Object3D) {
     return /*ObjectUtils.*/getDescendantsBreadth(object);
 }
 
-export function getDescendantsBreadth(object: Object3D) {
+export function getDescendantsBreadth(object: Object3D): Object3D[] {
     const descendants = [];
 
     const descendantsQueue = /*ObjectUtils.*/getChildren(object);
 
     while (descendantsQueue.length > 0) {
-        const descendant = descendantsQueue.shift();
+        const descendant = descendantsQueue.shift()!;
         descendants.push(descendant);
         for (const child of /*ObjectUtils.*/getChildren(descendant)) {
             descendantsQueue.push(child);
@@ -2429,7 +2429,7 @@ export function getDescendantsBreadth(object: Object3D) {
     return descendants;
 }
 
-export function getDescendantsDepth(object: Object3D) {
+export function getDescendantsDepth(object: Object3D): Object3D[] {
     const descendants = [];
 
     const children = /*ObjectUtils.*/getChildren(object);
@@ -2595,7 +2595,7 @@ export function getComponentObjects<T extends Component>(objects: Object3D[], ty
     return component;
 }
 
-export function getComponentsObjects<T extends Component>(objects: Object3D[], typeOrClass: string | ComponentConstructor<T>): T[] {
+export function getComponentsObjects<T extends Component>(objects: Object3D[], typeOrClass: string | ComponentConstructor<T> | null = null): T[] {
     const components = [];
 
     for (const currentObject of objects) {
