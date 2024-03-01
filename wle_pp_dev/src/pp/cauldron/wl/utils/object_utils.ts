@@ -1767,9 +1767,7 @@ export function convertTransformLocalToObjectQuat(object: Readonly<Object3D>, tr
 
 // Component
 
-export function addComponent<T extends Component>(object: Object3D, typeOrClass: string | ComponentConstructor<T>, paramsOrActive?: Record<string, any> | boolean | null, active?: boolean | null): T | null;
-export function addComponent(object: Object3D, typeOrClass: string | ComponentConstructor, paramsOrActive?: Record<string, any> | boolean | null, active?: boolean | null): Component | null;
-export function addComponent(object: Object3D, typeOrClass: string | ComponentConstructor, paramsOrActive: Record<string, any> | boolean | null = null, active: boolean | null = null): Component | null {
+export function addComponent<T extends Component>(object: Object3D, typeOrClass: string | ComponentConstructor<T>, paramsOrActive: Record<string, any> | boolean | null = null, active: boolean | null = null): T | null {
     let params: Record<string, any> | undefined = undefined;
 
     if (typeof paramsOrActive == "boolean") {
@@ -1789,17 +1787,15 @@ export function addComponent(object: Object3D, typeOrClass: string | ComponentCo
         }
     }
 
-    return object.addComponent(typeOrClass as string, params);
+    return object.addComponent(typeOrClass as ComponentConstructor<T>, params);
 }
 
 export function getComponent<T extends Component>(object: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T>, index: number = 0): T | null {
     return /*ObjectUtils.*/getComponentHierarchy(object, typeOrClass, index);
 }
 
-export function getComponentSelf<T extends Component>(object: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T>, index?: number): T | null;
-export function getComponentSelf(object: Readonly<Object3D>, typeOrClass: string | ComponentConstructor, index?: number): Component | null;
-export function getComponentSelf(object: Readonly<Object3D>, typeOrClass: string | ComponentConstructor, index: number = 0): Component | null {
-    return object.getComponent(typeOrClass as string, index);
+export function getComponentSelf<T extends Component>(object: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T>, index: number = 0): T | null {
+    return object.getComponent(typeOrClass as ComponentConstructor<T>, index);
 }
 
 export function getComponentHierarchy<T extends Component>(object: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T>, index: number = 0): T | null {
@@ -1839,10 +1835,8 @@ export function getComponents<T extends Component>(object: Readonly<Object3D>, t
     return /*ObjectUtils.*/getComponentsHierarchy(object, typeOrClass);
 }
 
-export function getComponentsSelf<T extends Component>(object: Readonly<Object3D>, typeOrClass?: string | ComponentConstructor<T> | null): T[];
-export function getComponentsSelf(object: Readonly<Object3D>, typeOrClass?: string | ComponentConstructor | null): Component[];
-export function getComponentsSelf(object: Readonly<Object3D>, typeOrClass: string | ComponentConstructor | null = null): Component[] {
-    return object.getComponents(typeOrClass as string);
+export function getComponentsSelf<T extends Component>(object: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T> | null = null): T[] {
+    return object.getComponents(typeOrClass as ComponentConstructor<T>);
 }
 
 export function getComponentsHierarchy<T extends Component>(object: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T> | null = null): T[] {
@@ -2621,13 +2615,11 @@ export function getComponentsAmountMapChildren(object: Readonly<Object3D>, amoun
 
 // GLOBALS
 
-export function getComponentObjects<T extends Component>(objects: Object3D[], typeOrClass: string | ComponentConstructor<T>, index?: number): T | null;
-export function getComponentObjects(objects: Object3D[], typeOrClass: string | ComponentConstructor, index?: number): Component | null;
-export function getComponentObjects(objects: Object3D[], typeOrClass: string | ComponentConstructor, index: number = 0): Component | null {
+export function getComponentObjects<T extends Component>(objects: Object3D[], typeOrClass: string | ComponentConstructor<T>, index: number = 0): T | null {
     let component = null;
 
     for (const object of objects) {
-        component = object.getComponent(typeOrClass as string, index);
+        component = object.getComponent(typeOrClass as ComponentConstructor<T>, index);
 
         if (component != null) {
             break;
@@ -2637,13 +2629,11 @@ export function getComponentObjects(objects: Object3D[], typeOrClass: string | C
     return component;
 }
 
-export function getComponentsObjects<T extends Component>(objects: Object3D[], typeOrClass?: string | ComponentConstructor<T> | null): T[];
-export function getComponentsObjects(objects: Object3D[], typeOrClass?: string | ComponentConstructor | null): Component[];
-export function getComponentsObjects(objects: Object3D[], typeOrClass: string | ComponentConstructor | null = null): Component[] {
-    const components: Component[] = [];
+export function getComponentsObjects<T extends Component>(objects: Object3D[], typeOrClass: string | ComponentConstructor<T> | null = null): T[] {
+    const components: T[] = [];
 
     for (const currentObject of objects) {
-        const currentObjectComponents = currentObject.getComponents(typeOrClass as string);
+        const currentObjectComponents = currentObject.getComponents(typeOrClass as ComponentConstructor<T>);
 
         for (let i = 0; i < currentObjectComponents.length; i++) {
             components.push(currentObjectComponents[i]);
