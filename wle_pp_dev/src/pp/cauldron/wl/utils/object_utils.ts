@@ -7,7 +7,7 @@ import { QuatUtils } from "../../js/utils/quat_utils.js";
 import { Vec3Utils } from "../../js/utils/vec3_utils.js";
 import { ComponentUtils, CustomCloneParams, DeepCloneParams } from "./component_utils.js";
 import { SceneUtils } from "./scene_utils.js";
-import { Component, type ComponentConstructor, Object3D, Scene } from "@wonderlandengine/api";
+import { Component, type ComponentConstructor, Object3D, Scene, WonderlandEngine } from "@wonderlandengine/api";
 import { type Matrix3, type Matrix4, type Quaternion, type Quaternion2, type Vector3 } from "../../../cauldron/js/array_type_definitions.js";
 
 export class CloneParams {
@@ -69,49 +69,49 @@ export class CloneParams {
 
 // Position
 
-export function getPosition(object: Object3D, position: Vector3) {
+export function getPosition(object: Object3D, position: Vector3): Vector3 {
     return /*ObjectUtils.*/getPositionWorld(object, position);
 }
 
-export function getPositionWorld(object: Object3D, position: Vector3 = Vec3Utils.create()) {
+export function getPositionWorld(object: Object3D, position: Vector3 = Vec3Utils.create()): Vector3 {
     object.getPositionWorld(position);
     return position;
 }
 
-export function getPositionLocal(object: Object3D, position: Vector3 = Vec3Utils.create()) {
+export function getPositionLocal(object: Object3D, position: Vector3 = Vec3Utils.create()): Vector3 {
     object.getPositionLocal(position);
     return position;
 }
 
 // Rotation
 
-export function getRotation(object: Object3D, rotation) {
+export function getRotation(object: Object3D, rotation): Vector3 {
     return /*ObjectUtils.*/getRotationWorld(object, rotation);
 }
 
-export function getRotationDegrees(object: Object3D, rotation) {
+export function getRotationDegrees(object: Object3D, rotation): Vector3 {
     return /*ObjectUtils.*/getRotationWorldDegrees(object, rotation);
 }
 
-export function getRotationRadians(object: Object3D, rotation) {
+export function getRotationRadians(object: Object3D, rotation): Vector3 {
     return /*ObjectUtils.*/getRotationWorldRadians(object, rotation);
 }
 
-export function getRotationMatrix(object: Object3D, rotation) {
+export function getRotationMatrix(object: Object3D, rotation): Matrix3 {
     return /*ObjectUtils.*/getRotationWorldMatrix(object, rotation);
 }
 
-export function getRotationQuat(object: Object3D, rotation) {
+export function getRotationQuat(object: Object3D, rotation): Quaternion {
     return /*ObjectUtils.*/getRotationWorldQuat(object, rotation);
 }
 
 // Rotation World
 
-export function getRotationWorld(object: Object3D, rotation) {
+export function getRotationWorld(object: Object3D, rotation): Vector3 {
     return /*ObjectUtils.*/getRotationWorldDegrees(object, rotation);
 }
 
-export function getRotationWorldDegrees(object: Object3D, rotation) {
+export function getRotationWorldDegrees(object: Object3D, rotation): Vector3 {
     rotation = /*ObjectUtils.*/getRotationWorldRadians(object, rotation);
     rotation = Vec3Utils.toDegrees(rotation, rotation);
     return rotation;
@@ -119,7 +119,7 @@ export function getRotationWorldDegrees(object: Object3D, rotation) {
 
 export const getRotationWorldRadians = function () {
     const quat = QuatUtils.create();
-    return function getRotationWorldRadians(object: Object3D, rotation = Vec3Utils.create()) {
+    return function getRotationWorldRadians(object: Object3D, rotation = Vec3Utils.create()): Vector3 {
         /*ObjectUtils.*/getRotationWorldQuat(object, quat);
         QuatUtils.toRadians(quat, rotation);
         return rotation;
@@ -128,25 +128,25 @@ export const getRotationWorldRadians = function () {
 
 export const getRotationWorldMatrix = function () {
     const quat = QuatUtils.create();
-    return function getRotationWorldMatrix(object: Object3D, rotation = Mat3Utils.create()) {
+    return function getRotationWorldMatrix(object: Object3D, rotation = Mat3Utils.create()): Matrix3 {
         /*ObjectUtils.*/getRotationWorldQuat(object, quat);
         QuatUtils.toMatrix(quat, rotation);
         return rotation;
     };
 }();
 
-export function getRotationWorldQuat(object: Object3D, rotation = QuatUtils.create()) {
+export function getRotationWorldQuat(object: Object3D, rotation = QuatUtils.create()): Quaternion {
     object.getRotationWorld(rotation);
     return rotation;
 }
 
 // Rotation Local
 
-export function getRotationLocal(object: Object3D, rotation) {
+export function getRotationLocal(object: Object3D, rotation): Vector3 {
     return /*ObjectUtils.*/getRotationLocalDegrees(object, rotation);
 }
 
-export function getRotationLocalDegrees(object: Object3D, rotation) {
+export function getRotationLocalDegrees(object: Object3D, rotation): Vector3 {
     rotation = /*ObjectUtils.*/getRotationLocalRadians(object, rotation);
     rotation = Vec3Utils.toDegrees(rotation, rotation);
     return rotation;
@@ -154,7 +154,7 @@ export function getRotationLocalDegrees(object: Object3D, rotation) {
 
 export const getRotationLocalRadians = function () {
     const quat = QuatUtils.create();
-    return function getRotationLocalRadians(object: Object3D, rotation = Vec3Utils.create()) {
+    return function getRotationLocalRadians(object: Object3D, rotation = Vec3Utils.create()): Vector3 {
         /*ObjectUtils.*/getRotationLocalQuat(object, quat);
         QuatUtils.toRadians(quat, rotation);
         return rotation;
@@ -163,58 +163,58 @@ export const getRotationLocalRadians = function () {
 
 export const getRotationLocalMatrix = function () {
     const quat = QuatUtils.create();
-    return function getRotationLocalMatrix(object: Object3D, rotation = Mat3Utils.create()) {
+    return function getRotationLocalMatrix(object: Object3D, rotation = Mat3Utils.create()): Matrix3 {
         /*ObjectUtils.*/getRotationLocalQuat(object, quat);
         QuatUtils.toMatrix(quat, rotation);
         return rotation;
     };
 }();
 
-export function getRotationLocalQuat(object: Object3D, rotation = QuatUtils.create()) {
+export function getRotationLocalQuat(object: Object3D, rotation = QuatUtils.create()): Quaternion {
     object.getRotationLocal(rotation);
     return rotation;
 }
 
 // Scale
 
-export function getScale(object: Object3D, scale: Vector3) {
+export function getScale(object: Object3D, scale: Vector3): Vector3 {
     return /*ObjectUtils.*/getScaleWorld(object, scale);
 }
 
-export function getScaleWorld(object: Object3D, scale: Vector3 = Vec3Utils.create()) {
+export function getScaleWorld(object: Object3D, scale: Vector3 = Vec3Utils.create()): Vector3 {
     object.getScalingWorld(scale);
     return scale;
 }
 
-export function getScaleLocal(object: Object3D, scale: Vector3 = Vec3Utils.create()) {
+export function getScaleLocal(object: Object3D, scale: Vector3 = Vec3Utils.create()): Vector3 {
     object.getScalingLocal(scale);
     return scale;
 }
 
 // Transform
 
-export function getTransform(object: Object3D, transform) {
+export function getTransform(object: Object3D, transform): Matrix4 {
     return /*ObjectUtils.*/getTransformWorld(object, transform);
 }
 
-export function getTransformMatrix(object: Object3D, transform) {
+export function getTransformMatrix(object: Object3D, transform): Matrix4 {
     return /*ObjectUtils.*/getTransformWorldMatrix(object, transform);
 }
 
-export function getTransformQuat(object: Object3D, transform) {
+export function getTransformQuat(object: Object3D, transform): Quaternion2 {
     return /*ObjectUtils.*/getTransformWorldQuat(object, transform);
 }
 
 // Transform World
 
-export function getTransformWorld(object: Object3D, transform) {
+export function getTransformWorld(object: Object3D, transform): Matrix4 {
     return /*ObjectUtils.*/getTransformWorldMatrix(object, transform);
 }
 
 export const getTransformWorldMatrix = function () {
     const transformQuat = Quat2Utils.create();
     const scale = Vec3Utils.create();
-    return function getTransformWorldMatrix(object: Object3D, transform = Mat4Utils.create()) {
+    return function getTransformWorldMatrix(object: Object3D, transform = Mat4Utils.create()): Matrix4 {
         /*ObjectUtils.*/getTransformWorldQuat(object, transformQuat);
         /*ObjectUtils.*/getScaleWorld(object, scale);
         Mat4Utils.fromQuat(transformQuat, transform);
@@ -223,21 +223,21 @@ export const getTransformWorldMatrix = function () {
     };
 }();
 
-export function getTransformWorldQuat(object: Object3D, transform = Quat2Utils.create()) {
+export function getTransformWorldQuat(object: Object3D, transform = Quat2Utils.create()): Quaternion2 {
     object.getTransformWorld(transform);
     return transform;
 }
 
 // Transform Local
 
-export function getTransformLocal(object: Object3D, transform) {
+export function getTransformLocal(object: Object3D, transform): Matrix4 {
     return /*ObjectUtils.*/getTransformLocalMatrix(object, transform);
 }
 
 export const getTransformLocalMatrix = function () {
     const transformQuat = Quat2Utils.create();
     const scale = Vec3Utils.create();
-    return function getTransformLocalMatrix(object: Object3D, transform = Mat4Utils.create()) {
+    return function getTransformLocalMatrix(object: Object3D, transform = Mat4Utils.create()): Matrix4 {
         /*ObjectUtils.*/getTransformLocalQuat(object, transformQuat);
         /*ObjectUtils.*/getScaleLocal(object, scale);
         Mat4Utils.fromQuat(transformQuat, transform);
@@ -246,7 +246,7 @@ export const getTransformLocalMatrix = function () {
     };
 }();
 
-export function getTransformLocalQuat(object: Object3D, transform = Quat2Utils.create()) {
+export function getTransformLocalQuat(object: Object3D, transform = Quat2Utils.create()): Quaternion2 {
     object.getTransformLocal(transform);
     return transform;
 }
@@ -273,13 +273,13 @@ export function getAxesLocal(object: Object3D, axes: [Vector3, Vector3, Vector3]
 
 // Forward
 
-export function getForward(object: Object3D, forward: Vector3) {
+export function getForward(object: Object3D, forward: Vector3): Vector3 {
     return /*ObjectUtils.*/getForwardWorld(object, forward);
 }
 
 export const getForwardWorld = function () {
     const rotation = Mat3Utils.create();
-    return function getForwardWorld(object: Object3D, forward = Vec3Utils.create()) {
+    return function getForwardWorld(object: Object3D, forward = Vec3Utils.create()): Vector3 {
         /*ObjectUtils.*/getRotationWorldMatrix(object, rotation);
         forward[0] = rotation[6];
         forward[1] = rotation[7];
@@ -290,7 +290,7 @@ export const getForwardWorld = function () {
 
 export const getForwardLocal = function () {
     const rotation = Mat3Utils.create();
-    return function getForwardLocal(object: Object3D, forward = Vec3Utils.create()) {
+    return function getForwardLocal(object: Object3D, forward = Vec3Utils.create()): Vector3 {
         /*ObjectUtils.*/getRotationLocalMatrix(object, rotation);
         forward[0] = rotation[6];
         forward[1] = rotation[7];
@@ -301,13 +301,13 @@ export const getForwardLocal = function () {
 
 // Backward
 
-export function getBackward(object: Object3D, backward: Vector3) {
+export function getBackward(object: Object3D, backward: Vector3): Vector3 {
     return /*ObjectUtils.*/getBackwardWorld(object, backward);
 }
 
 export const getBackwardWorld = function () {
     const rotation = Mat3Utils.create();
-    return function getBackwardWorld(object: Object3D, backward = Vec3Utils.create()) {
+    return function getBackwardWorld(object: Object3D, backward = Vec3Utils.create()): Vector3 {
         /*ObjectUtils.*/getRotationWorldMatrix(object, rotation);
         backward[0] = -rotation[6];
         backward[1] = -rotation[7];
@@ -318,7 +318,7 @@ export const getBackwardWorld = function () {
 
 export const getBackwardLocal = function () {
     const rotation = Mat3Utils.create();
-    return function getBackwardLocal(object: Object3D, backward = Vec3Utils.create()) {
+    return function getBackwardLocal(object: Object3D, backward = Vec3Utils.create()): Vector3 {
         /*ObjectUtils.*/getRotationLocalMatrix(object, rotation);
         backward[0] = -rotation[6];
         backward[1] = -rotation[7];
@@ -329,13 +329,13 @@ export const getBackwardLocal = function () {
 
 // Up
 
-export function getUp(object: Object3D, up: Vector3) {
+export function getUp(object: Object3D, up: Vector3): Vector3 {
     return /*ObjectUtils.*/getUpWorld(object, up);
 }
 
 export const getUpWorld = function () {
     const rotation = Mat3Utils.create();
-    return function getUpWorld(object: Object3D, up = Vec3Utils.create()) {
+    return function getUpWorld(object: Object3D, up = Vec3Utils.create()): Vector3 {
         /*ObjectUtils.*/getRotationWorldMatrix(object, rotation);
         up[0] = rotation[3];
         up[1] = rotation[4];
@@ -346,7 +346,7 @@ export const getUpWorld = function () {
 
 export const getUpLocal = function () {
     const rotation = Mat3Utils.create();
-    return function getUpLocal(object: Object3D, up = Vec3Utils.create()) {
+    return function getUpLocal(object: Object3D, up = Vec3Utils.create()): Vector3 {
         /*ObjectUtils.*/getRotationLocalMatrix(object, rotation);
         up[0] = rotation[3];
         up[1] = rotation[4];
@@ -357,13 +357,13 @@ export const getUpLocal = function () {
 
 // Down
 
-export function getDown(object: Object3D, down: Vector3) {
+export function getDown(object: Object3D, down: Vector3): Vector3 {
     return /*ObjectUtils.*/getDownWorld(object, down);
 }
 
 export const getDownWorld = function () {
     const rotation = Mat3Utils.create();
-    return function getDownWorld(object: Object3D, down = Vec3Utils.create()) {
+    return function getDownWorld(object: Object3D, down = Vec3Utils.create()): Vector3 {
         /*ObjectUtils.*/getRotationWorldMatrix(object, rotation);
         down[0] = -rotation[3];
         down[1] = -rotation[4];
@@ -374,7 +374,7 @@ export const getDownWorld = function () {
 
 export const getDownLocal = function () {
     const rotation = Mat3Utils.create();
-    return function getDownLocal(object: Object3D, down = Vec3Utils.create()) {
+    return function getDownLocal(object: Object3D, down = Vec3Utils.create()): Vector3 {
         /*ObjectUtils.*/getRotationLocalMatrix(object, rotation);
         down[0] = -rotation[3];
         down[1] = -rotation[4];
@@ -385,13 +385,13 @@ export const getDownLocal = function () {
 
 // Left
 
-export function getLeft(object: Object3D, left: Vector3) {
+export function getLeft(object: Object3D, left: Vector3): Vector3 {
     return /*ObjectUtils.*/getLeftWorld(object, left);
 }
 
 export const getLeftWorld = function () {
     const rotation = Mat3Utils.create();
-    return function getLeftWorld(object: Object3D, left = Vec3Utils.create()) {
+    return function getLeftWorld(object: Object3D, left = Vec3Utils.create()): Vector3 {
         /*ObjectUtils.*/getRotationWorldMatrix(object, rotation);
         left[0] = rotation[0];
         left[1] = rotation[1];
@@ -402,7 +402,7 @@ export const getLeftWorld = function () {
 
 export const getLeftLocal = function () {
     const rotation = Mat3Utils.create();
-    return function getLeftLocal(object: Object3D, left = Vec3Utils.create()) {
+    return function getLeftLocal(object: Object3D, left = Vec3Utils.create()): Vector3 {
         /*ObjectUtils.*/getRotationLocalMatrix(object, rotation);
         left[0] = rotation[0];
         left[1] = rotation[1];
@@ -413,13 +413,13 @@ export const getLeftLocal = function () {
 
 // Right
 
-export function getRight(object: Object3D, right: Vector3) {
+export function getRight(object: Object3D, right: Vector3): Vector3 {
     return /*ObjectUtils.*/getRightWorld(object, right);
 }
 
 export const getRightWorld = function () {
     const rotation = Mat3Utils.create();
-    return function getRightWorld(object: Object3D, right = Vec3Utils.create()) {
+    return function getRightWorld(object: Object3D, right = Vec3Utils.create()): Vector3 {
         /*ObjectUtils.*/getRotationWorldMatrix(object, rotation);
         right[0] = -rotation[0];
         right[1] = -rotation[1];
@@ -430,7 +430,7 @@ export const getRightWorld = function () {
 
 export const getRightLocal = function () {
     const rotation = Mat3Utils.create();
-    return function getRightLocal(object: Object3D, right = Vec3Utils.create()) {
+    return function getRightLocal(object: Object3D, right = Vec3Utils.create()): Vector3 {
         /*ObjectUtils.*/getRotationLocalMatrix(object, rotation);
         right[0] = -rotation[0];
         right[1] = -rotation[1];
@@ -443,49 +443,49 @@ export const getRightLocal = function () {
 
 // Position
 
-export function setPosition(object: Object3D, position: Vector3) {
+export function setPosition(object: Object3D, position: Vector3): Object3D {
     /*ObjectUtils.*/setPositionWorld(object, position);
 }
 
-export function setPositionWorld(object: Object3D, position: Vector3) {
+export function setPositionWorld(object: Object3D, position: Vector3): Object3D {
     object.setPositionWorld(position);
 }
 
-export function setPositionLocal(object: Object3D, position: Vector3) {
+export function setPositionLocal(object: Object3D, position: Vector3): Object3D {
     object.setPositionLocal(position);
 }
 
 // Rotation
 
-export function setRotation(object: Object3D, rotation) {
+export function setRotation(object: Object3D, rotation): Object3D {
     /*ObjectUtils.*/setRotationWorld(object, rotation);
 }
 
-export function setRotationDegrees(object: Object3D, rotation) {
+export function setRotationDegrees(object: Object3D, rotation): Object3D {
     /*ObjectUtils.*/setRotationWorldDegrees(object, rotation);
 }
 
-export function setRotationRadians(object: Object3D, rotation) {
+export function setRotationRadians(object: Object3D, rotation): Object3D {
     /*ObjectUtils.*/setRotationWorldRadians(object, rotation);
 }
 
-export function setRotationMatrix(object: Object3D, rotation) {
+export function setRotationMatrix(object: Object3D, rotation): Object3D {
     /*ObjectUtils.*/setRotationWorldMatrix(object, rotation);
 }
 
-export function setRotationQuat(object: Object3D, rotation) {
+export function setRotationQuat(object: Object3D, rotation): Object3D {
     /*ObjectUtils.*/setRotationWorldQuat(object, rotation);
 }
 
 // Rotation World
 
-export function setRotationWorld(object: Object3D, rotation) {
+export function setRotationWorld(object: Object3D, rotation): Object3D {
     /*ObjectUtils.*/setRotationWorldDegrees(object, rotation);
 }
 
 export const setRotationWorldDegrees = function () {
     const quat = QuatUtils.create();
-    return function setRotationWorldDegrees(object: Object3D, rotation) {
+    return function setRotationWorldDegrees(object: Object3D, rotation): Object3D {
         Vec3Utils.degreesToQuat(rotation, quat);
         /*ObjectUtils.*/setRotationWorldQuat(object, quat);
     };
@@ -493,7 +493,7 @@ export const setRotationWorldDegrees = function () {
 
 export const setRotationWorldRadians = function () {
     const degreesRotation = Vec3Utils.create();
-    return function setRotationWorldRadians(object: Object3D, rotation) {
+    return function setRotationWorldRadians(object: Object3D, rotation): Object3D {
         Vec3Utils.toDegrees(rotation, degreesRotation);
         /*ObjectUtils.*/setRotationWorldDegrees(object, degreesRotation);
     };
@@ -501,25 +501,25 @@ export const setRotationWorldRadians = function () {
 
 export const setRotationWorldMatrix = function () {
     const quat = QuatUtils.create();
-    return function setRotationWorldMatrix(object: Object3D, rotation) {
+    return function setRotationWorldMatrix(object: Object3D, rotation): Object3D {
         Mat3Utils.toQuat(rotation, quat);
         /*ObjectUtils.*/setRotationWorldQuat(object, quat);
     };
 }();
 
-export function setRotationWorldQuat(object: Object3D, rotation) {
+export function setRotationWorldQuat(object: Object3D, rotation): Object3D {
     object.setRotationWorld(rotation);
 }
 
 // Rotation Local
 
-export function setRotationLocal(object: Object3D, rotation) {
+export function setRotationLocal(object: Object3D, rotation): Object3D {
     /*ObjectUtils.*/setRotationLocalDegrees(object, rotation);
 }
 
 export const setRotationLocalDegrees = function () {
     const quat = QuatUtils.create();
-    return function setRotationLocalDegrees(object: Object3D, rotation) {
+    return function setRotationLocalDegrees(object: Object3D, rotation): Object3D {
         Vec3Utils.degreesToQuat(rotation, quat);
         /*ObjectUtils.*/setRotationLocalQuat(object, quat);
     };
@@ -527,7 +527,7 @@ export const setRotationLocalDegrees = function () {
 
 export const setRotationLocalRadians = function () {
     const degreesRotation = Vec3Utils.create();
-    return function setRotationLocalRadians(object: Object3D, rotation) {
+    return function setRotationLocalRadians(object: Object3D, rotation): Object3D {
         Vec3Utils.toDegrees(rotation, degreesRotation);
         /*ObjectUtils.*/setRotationLocalDegrees(object, degreesRotation);
     };
@@ -535,25 +535,25 @@ export const setRotationLocalRadians = function () {
 
 export const setRotationLocalMatrix = function () {
     const quat = QuatUtils.create();
-    return function setRotationLocalMatrix(object: Object3D, rotation) {
+    return function setRotationLocalMatrix(object: Object3D, rotation): Object3D {
         Mat3Utils.toQuat(rotation, quat);
         /*ObjectUtils.*/setRotationLocalQuat(object, quat);
     };
 }();
 
-export function setRotationLocalQuat(object: Object3D, rotation) {
+export function setRotationLocalQuat(object: Object3D, rotation): Object3D {
     object.setRotationLocal(rotation);
 }
 
 // Scale
 
-export function setScale(object: Object3D, scale: number | Vector3) {
+export function setScale(object: Object3D, scale: number | Vector3): Object3D {
     /*ObjectUtils.*/setScaleWorld(object, scale);
 }
 
 export const setScaleWorld = function () {
     const vector = Vec3Utils.create();
-    return function setScaleWorld(object: Object3D, scale: number | Vector3) {
+    return function setScaleWorld(object: Object3D, scale: number | Vector3): Object3D {
         if (isNaN(scale as number)) {
             object.setScalingWorld(scale as Vector3);
         } else {
@@ -565,7 +565,7 @@ export const setScaleWorld = function () {
 
 export const setScaleLocal = function () {
     const vector = Vec3Utils.create();
-    return function setScaleLocal(object: Object3D, scale: number | Vector3) {
+    return function setScaleLocal(object: Object3D, scale: number | Vector3): Object3D {
         if (isNaN(scale as number)) {
             object.setScalingLocal(scale as Vector3);
         } else {
@@ -577,11 +577,11 @@ export const setScaleLocal = function () {
 
 // Axes    
 
-export function setAxes(object: Object3D, left: Vector3 | null, up: Vector3 | null, forward: Vector3 | null) {
+export function setAxes(object: Object3D, left: Vector3 | null, up: Vector3 | null, forward: Vector3 | null): Object3D {
     /*ObjectUtils.*/setAxesWorld(object, left, up, forward);
 }
 
-export function setAxesWorld(object: Object3D, left: Vector3 | null, up: Vector3 | null, forward: Vector3 | null) {
+export function setAxesWorld(object: Object3D, left: Vector3 | null, up: Vector3 | null, forward: Vector3 | null): Object3D {
     if (forward != null) {
         /*ObjectUtils.*/setForwardWorld(object, forward, up, left);
     } else if (up != null) {
@@ -591,7 +591,7 @@ export function setAxesWorld(object: Object3D, left: Vector3 | null, up: Vector3
     }
 }
 
-export function setAxesLocal(object: Object3D, left: Vector3 | null, up: Vector3 | null, forward: Vector3 | null) {
+export function setAxesLocal(object: Object3D, left: Vector3 | null, up: Vector3 | null, forward: Vector3 | null): Object3D {
     if (forward != null) {
         /*ObjectUtils.*/setForwardLocal(object, forward, up, left);
     } else if (up != null) {
@@ -603,13 +603,13 @@ export function setAxesLocal(object: Object3D, left: Vector3 | null, up: Vector3
 
 // Forward
 
-export function setForward(object: Object3D, forward: Vector3, up: Vector3 | null = null, left: Vector3 | null = null) {
+export function setForward(object: Object3D, forward: Vector3, up: Vector3 | null = null, left: Vector3 | null = null): Object3D {
     /*ObjectUtils.*/setForwardWorld(object, forward, up, left);
 }
 
 export const setForwardWorld = function () {
     const quat = QuatUtils.create();
-    return function setForwardWorld(object: Object3D, forward: Vector3, up: Vector3 | null = null, left: Vector3 | null = null) {
+    return function setForwardWorld(object: Object3D, forward: Vector3, up: Vector3 | null = null, left: Vector3 | null = null): Object3D {
         /*ObjectUtils.*/getRotationWorldQuat(object, quat);
         QuatUtils.setForward(quat, forward, up, left);
         /*ObjectUtils.*/setRotationWorldQuat(object, quat);
@@ -618,7 +618,7 @@ export const setForwardWorld = function () {
 
 export const setForwardLocal = function () {
     const quat = QuatUtils.create();
-    return function setForwardLocal(object: Object3D, forward: Vector3, up: Vector3 | null = null, left: Vector3 | null = null) {
+    return function setForwardLocal(object: Object3D, forward: Vector3, up: Vector3 | null = null, left: Vector3 | null = null): Object3D {
         /*ObjectUtils.*/getRotationLocalQuat(object, quat);
         QuatUtils.setForward(quat, forward, up, left);
         /*ObjectUtils.*/setRotationLocalQuat(object, quat);
@@ -627,13 +627,13 @@ export const setForwardLocal = function () {
 
 // Backward
 
-export function setBackward(object: Object3D, backward: Vector3, up: Vector3 | null = null, left: Vector3 | null = null) {
+export function setBackward(object: Object3D, backward: Vector3, up: Vector3 | null = null, left: Vector3 | null = null): Object3D {
     /*ObjectUtils.*/setBackwardWorld(object, backward, up, left);
 }
 
 export const setBackwardWorld = function () {
     const quat = QuatUtils.create();
-    return function setBackwardWorld(object: Object3D, backward: Vector3, up: Vector3 | null = null, left: Vector3 | null = null) {
+    return function setBackwardWorld(object: Object3D, backward: Vector3, up: Vector3 | null = null, left: Vector3 | null = null): Object3D {
         /*ObjectUtils.*/getRotationWorldQuat(object, quat);
         QuatUtils.setBackward(quat, backward, up, left);
         /*ObjectUtils.*/setRotationWorldQuat(object, quat);
@@ -642,7 +642,7 @@ export const setBackwardWorld = function () {
 
 export const setBackwardLocal = function () {
     const quat = QuatUtils.create();
-    return function setBackwardLocal(object: Object3D, backward: Vector3, up: Vector3 | null = null, left: Vector3 | null = null) {
+    return function setBackwardLocal(object: Object3D, backward: Vector3, up: Vector3 | null = null, left: Vector3 | null = null): Object3D {
         /*ObjectUtils.*/getRotationLocalQuat(object, quat);
         QuatUtils.setBackward(quat, backward, up, left);
         /*ObjectUtils.*/setRotationLocalQuat(object, quat);
@@ -651,13 +651,13 @@ export const setBackwardLocal = function () {
 
 // Up
 
-export function setUp(object: Object3D, up: Vector3, forward: Vector3 | null = null, left: Vector3 | null = null) {
+export function setUp(object: Object3D, up: Vector3, forward: Vector3 | null = null, left: Vector3 | null = null): Object3D {
     /*ObjectUtils.*/setUpWorld(object, up, forward, left);
 }
 
 export const setUpWorld = function () {
     const quat = QuatUtils.create();
-    return function setUpWorld(object: Object3D, up: Vector3, forward: Vector3 | null = null, left: Vector3 | null = null) {
+    return function setUpWorld(object: Object3D, up: Vector3, forward: Vector3 | null = null, left: Vector3 | null = null): Object3D {
         /*ObjectUtils.*/getRotationWorldQuat(object, quat);
         QuatUtils.setUp(quat, up, forward, left);
         /*ObjectUtils.*/setRotationWorldQuat(object, quat);
@@ -666,7 +666,7 @@ export const setUpWorld = function () {
 
 export const setUpLocal = function () {
     const quat = QuatUtils.create();
-    return function setUpLocal(object: Object3D, up: Vector3, forward: Vector3 | null = null, left: Vector3 | null = null) {
+    return function setUpLocal(object: Object3D, up: Vector3, forward: Vector3 | null = null, left: Vector3 | null = null): Object3D {
         /*ObjectUtils.*/getRotationLocalQuat(object, quat);
         QuatUtils.setUp(quat, up, forward, left);
         /*ObjectUtils.*/setRotationLocalQuat(object, quat);
@@ -675,13 +675,13 @@ export const setUpLocal = function () {
 
 // Down
 
-export function setDown(object: Object3D, down: Vector3, forward: Vector3 | null = null, left: Vector3 | null = null) {
+export function setDown(object: Object3D, down: Vector3, forward: Vector3 | null = null, left: Vector3 | null = null): Object3D {
     /*ObjectUtils.*/setDownWorld(object, down, forward, left);
 }
 
 export const setDownWorld = function () {
     const quat = QuatUtils.create();
-    return function setDownWorld(object: Object3D, down: Vector3, forward: Vector3 | null = null, left: Vector3 | null = null) {
+    return function setDownWorld(object: Object3D, down: Vector3, forward: Vector3 | null = null, left: Vector3 | null = null): Object3D {
         /*ObjectUtils.*/getRotationWorldQuat(object, quat);
         QuatUtils.setDown(quat, down, forward, left);
         /*ObjectUtils.*/setRotationWorldQuat(object, quat);
@@ -690,7 +690,7 @@ export const setDownWorld = function () {
 
 export const setDownLocal = function () {
     const quat = QuatUtils.create();
-    return function setDownLocal(object: Object3D, down: Vector3, forward: Vector3 | null = null, left: Vector3 | null = null) {
+    return function setDownLocal(object: Object3D, down: Vector3, forward: Vector3 | null = null, left: Vector3 | null = null): Object3D {
         /*ObjectUtils.*/getRotationLocalQuat(object, quat);
         QuatUtils.setDown(quat, down, forward, left);
         /*ObjectUtils.*/setRotationLocalQuat(object, quat);
@@ -699,13 +699,13 @@ export const setDownLocal = function () {
 
 // Left
 
-export function setLeft(object: Object3D, left: Vector3, up: Vector3 | null = null, forward: Vector3 | null = null) {
+export function setLeft(object: Object3D, left: Vector3, up: Vector3 | null = null, forward: Vector3 | null = null): Object3D {
     /*ObjectUtils.*/setLeftWorld(object, left, up, forward);
 }
 
 export const setLeftWorld = function () {
     const quat = QuatUtils.create();
-    return function setLeftWorld(object: Object3D, left: Vector3, up: Vector3 | null = null, forward: Vector3 | null = null) {
+    return function setLeftWorld(object: Object3D, left: Vector3, up: Vector3 | null = null, forward: Vector3 | null = null): Object3D {
         /*ObjectUtils.*/getRotationWorldQuat(object, quat);
         QuatUtils.setLeft(quat, left, up, forward);
         /*ObjectUtils.*/setRotationWorldQuat(object, quat);
@@ -714,7 +714,7 @@ export const setLeftWorld = function () {
 
 export const setLeftLocal = function () {
     const quat = QuatUtils.create();
-    return function setLeftLocal(object: Object3D, left: Vector3, up: Vector3 | null = null, forward: Vector3 | null = null) {
+    return function setLeftLocal(object: Object3D, left: Vector3, up: Vector3 | null = null, forward: Vector3 | null = null): Object3D {
         /*ObjectUtils.*/getRotationLocalQuat(object, quat);
         QuatUtils.setLeft(quat, left, up, forward);
         /*ObjectUtils.*/setRotationLocalQuat(object, quat);
@@ -723,13 +723,13 @@ export const setLeftLocal = function () {
 
 // Right
 
-export function setRight(object: Object3D, right: Vector3, up: Vector3 | null = null, forward: Vector3 | null = null) {
+export function setRight(object: Object3D, right: Vector3, up: Vector3 | null = null, forward: Vector3 | null = null): Object3D {
     /*ObjectUtils.*/setRightWorld(object, right, up, forward);
 }
 
 export const setRightWorld = function () {
     const quat = QuatUtils.create();
-    return function setRightWorld(object: Object3D, right: Vector3, up: Vector3 | null = null, forward: Vector3 | null = null) {
+    return function setRightWorld(object: Object3D, right: Vector3, up: Vector3 | null = null, forward: Vector3 | null = null): Object3D {
         /*ObjectUtils.*/getRotationWorldQuat(object, quat);
         QuatUtils.setRight(quat, right, up, forward);
         /*ObjectUtils.*/setRotationWorldQuat(object, quat);
@@ -738,7 +738,7 @@ export const setRightWorld = function () {
 
 export const setRightLocal = function () {
     const quat = QuatUtils.create();
-    return function setRightLocal(object: Object3D, right: Vector3, up: Vector3 | null = null, forward: Vector3 | null = null) {
+    return function setRightLocal(object: Object3D, right: Vector3, up: Vector3 | null = null, forward: Vector3 | null = null): Object3D {
         /*ObjectUtils.*/getRotationLocalQuat(object, quat);
         QuatUtils.setRight(quat, right, up, forward);
         /*ObjectUtils.*/setRotationLocalQuat(object, quat);
@@ -747,21 +747,21 @@ export const setRightLocal = function () {
 
 // Transform
 
-export function setTransform(object: Object3D, transform) {
+export function setTransform(object: Object3D, transform): Object3D {
     /*ObjectUtils.*/setTransformWorld(object, transform);
 }
 
-export function setTransformMatrix(object: Object3D, transform) {
+export function setTransformMatrix(object: Object3D, transform): Object3D {
     /*ObjectUtils.*/setTransformWorldMatrix(object, transform);
 }
 
-export function setTransformQuat(object: Object3D, transform) {
+export function setTransformQuat(object: Object3D, transform): Object3D {
     /*ObjectUtils.*/setTransformWorldQuat(object, transform);
 }
 
 // Transform World
 
-export function setTransformWorld(object: Object3D, transform) {
+export function setTransformWorld(object: Object3D, transform): Object3D {
     return /*ObjectUtils.*/setTransformWorldMatrix(object, transform);
 }
 
@@ -772,7 +772,7 @@ export const setTransformWorldMatrix = function () {
     const transformMatrixNoScale = Mat4Utils.create();
     const inverseScale = Vec3Utils.create();
     const one = Vec3Utils.create(1);
-    return function setTransformWorldMatrix(object: Object3D, transform) {
+    return function setTransformWorldMatrix(object: Object3D, transform): Object3D {
         Mat4Utils.getPosition(transform, position);
         Mat4Utils.getScale(transform, scale);
         Vec3Utils.div(one, scale, inverseScale);
@@ -785,13 +785,13 @@ export const setTransformWorldMatrix = function () {
     };
 }();
 
-export function setTransformWorldQuat(object: Object3D, transform) {
+export function setTransformWorldQuat(object: Object3D, transform): Object3D {
     object.setTransformWorld(transform);
 }
 
 // Transform Local
 
-export function setTransformLocal(object: Object3D, transform) {
+export function setTransformLocal(object: Object3D, transform): Object3D {
     return /*ObjectUtils.*/setTransformLocalMatrix(object, transform);
 }
 
@@ -802,7 +802,7 @@ export const setTransformLocalMatrix = function () {
     const transformMatrixNoScale = Mat4Utils.create();
     const inverseScale = Vec3Utils.create();
     const one = Vec3Utils.create(1);
-    return function setTransformLocalMatrix(object: Object3D, transform) {
+    return function setTransformLocalMatrix(object: Object3D, transform): Object3D {
         Mat4Utils.getPosition(transform, position);
         Mat4Utils.getScale(transform, scale);
         Vec3Utils.div(one, scale, inverseScale);
@@ -815,7 +815,7 @@ export const setTransformLocalMatrix = function () {
     };
 }();
 
-export function setTransformLocalQuat(object: Object3D, transform) {
+export function setTransformLocalQuat(object: Object3D, transform): Object3D {
     object.setTransformLocal(transform);
 }
 
@@ -823,77 +823,77 @@ export function setTransformLocalQuat(object: Object3D, transform) {
 
 // Position
 
-export function resetPosition(object: Object3D) {
+export function resetPosition(object: Object3D): Object3D {
     /*ObjectUtils.*/resetPositionWorld(object);
 }
 
 export const resetPositionWorld = function () {
     const zero = Vec3Utils.create();
-    return function resetPositionWorld(object: Object3D) {
+    return function resetPositionWorld(object: Object3D): Object3D {
         /*ObjectUtils.*/setPositionWorld(object, zero);
     };
 }();
 
 export const resetPositionLocal = function () {
     const zero = Vec3Utils.create();
-    return function resetPositionLocal(object: Object3D) {
+    return function resetPositionLocal(object: Object3D): Object3D {
         /*ObjectUtils.*/setPositionLocal(object, zero);
     };
 }();
 
 // Rotation
 
-export function resetRotation(object: Object3D) {
+export function resetRotation(object: Object3D): Object3D {
     /*ObjectUtils.*/resetRotationWorld(object);
 }
 
 export const resetRotationWorld = function () {
     const identity = QuatUtils.create();
-    return function resetRotationWorld(object: Object3D) {
+    return function resetRotationWorld(object: Object3D): Object3D {
         /*ObjectUtils.*/setRotationWorldQuat(object, identity);
     };
 }();
 
 export const resetRotationLocal = function () {
     const identity = QuatUtils.create();
-    return function resetRotationLocal(object: Object3D) {
+    return function resetRotationLocal(object: Object3D): Object3D {
         /*ObjectUtils.*/setRotationLocalQuat(object, identity);
     };
 }();
 
 // Scale
 
-export function resetScale(object: Object3D) {
+export function resetScale(object: Object3D): Object3D {
     /*ObjectUtils.*/resetScaleWorld(object);
 }
 
 export const resetScaleWorld = function () {
     const one = Vec3Utils.create(1);
-    return function resetScaleWorld(object: Object3D) {
+    return function resetScaleWorld(object: Object3D): Object3D {
         /*ObjectUtils.*/setScaleWorld(object, one);
     };
 }();
 
 export const resetScaleLocal = function () {
     const one = Vec3Utils.create(1);
-    return function resetScaleLocal(object: Object3D) {
+    return function resetScaleLocal(object: Object3D): Object3D {
         /*ObjectUtils.*/setScaleLocal(object, one);
     };
 }();
 
 // Transform
 
-export function resetTransform(object: Object3D) {
+export function resetTransform(object: Object3D): Object3D {
     /*ObjectUtils.*/resetTransformWorld(object);
 }
 
-export function resetTransformWorld(object: Object3D) {
+export function resetTransformWorld(object: Object3D): Object3D {
     /*ObjectUtils.*/resetScaleWorld(object);
     /*ObjectUtils.*/resetRotationWorld(object);
     /*ObjectUtils.*/resetPositionWorld(object);
 }
 
-export function resetTransformLocal(object: Object3D) {
+export function resetTransformLocal(object: Object3D): Object3D {
     /*ObjectUtils.*/resetScaleLocal(object);
     /*ObjectUtils.*/resetRotationLocal(object);
     /*ObjectUtils.*/resetPositionLocal(object);
@@ -903,31 +903,31 @@ export function resetTransformLocal(object: Object3D) {
 
 // Translate
 
-export function translate(object: Object3D, translation: Vector3) {
+export function translate(object: Object3D, translation: Vector3): Object3D {
     /*ObjectUtils.*/translateWorld(object, translation);
 }
 
-export function translateWorld(object: Object3D, translation: Vector3) {
+export function translateWorld(object: Object3D, translation: Vector3): Object3D {
     object.translateWorld(translation);
 }
 
-export function translateLocal(object: Object3D, translation: Vector3) {
+export function translateLocal(object: Object3D, translation: Vector3): Object3D {
     object.translateLocal(translation);
 }
 
-export function translateObject(object: Object3D, translation: Vector3) {
+export function translateObject(object: Object3D, translation: Vector3): Object3D {
     object.translateObject(translation);
 }
 
 // Translate Axis
 
-export function translateAxis(object: Object3D, amount: number, direction: Vector3) {
+export function translateAxis(object: Object3D, amount: number, direction: Vector3): Object3D {
     /*ObjectUtils.*/translateAxisWorld(object, amount, direction);
 }
 
 export const translateAxisWorld = function () {
     const translation = Vec3Utils.create();
-    return function translateAxisWorld(object: Object3D, amount: number, direction: Vector3) {
+    return function translateAxisWorld(object: Object3D, amount: number, direction: Vector3): Object3D {
         Vec3Utils.scale(direction, amount, translation);
         /*ObjectUtils.*/translateWorld(object, translation);
     };
@@ -935,7 +935,7 @@ export const translateAxisWorld = function () {
 
 export const translateAxisLocal = function () {
     const translation = Vec3Utils.create();
-    return function translateAxisLocal(object: Object3D, amount: number, direction: Vector3) {
+    return function translateAxisLocal(object: Object3D, amount: number, direction: Vector3): Object3D {
         Vec3Utils.scale(direction, amount, translation);
         /*ObjectUtils.*/translateLocal(object, translation);
     };
@@ -943,7 +943,7 @@ export const translateAxisLocal = function () {
 
 export const translateAxisObject = function () {
     const translation = Vec3Utils.create();
-    return function translateAxisObject(object: Object3D, amount: number, direction: Vector3) {
+    return function translateAxisObject(object: Object3D, amount: number, direction: Vector3): Object3D {
         Vec3Utils.scale(direction, amount, translation);
         /*ObjectUtils.*/translateObject(object, translation);
     };
@@ -951,35 +951,35 @@ export const translateAxisObject = function () {
 
 // Rotate
 
-export function rotate(object: Object3D, rotation) {
+export function rotate(object: Object3D, rotation): Object3D {
     /*ObjectUtils.*/rotateWorld(object, rotation);
 }
 
-export function rotateDegrees(object: Object3D, rotation) {
+export function rotateDegrees(object: Object3D, rotation): Object3D {
     /*ObjectUtils.*/rotateWorldDegrees(object, rotation);
 }
 
-export function rotateRadians(object: Object3D, rotation) {
+export function rotateRadians(object: Object3D, rotation): Object3D {
     /*ObjectUtils.*/rotateWorldRadians(object, rotation);
 }
 
-export function rotateMatrix(object: Object3D, rotation) {
+export function rotateMatrix(object: Object3D, rotation): Object3D {
     /*ObjectUtils.*/rotateWorldMatrix(object, rotation);
 }
 
-export function rotateQuat(object: Object3D, rotation) {
+export function rotateQuat(object: Object3D, rotation): Object3D {
     /*ObjectUtils.*/rotateWorldQuat(object, rotation);
 }
 
 // Rotate World
 
-export function rotateWorld(object: Object3D, rotation) {
+export function rotateWorld(object: Object3D, rotation): Object3D {
     /*ObjectUtils.*/rotateWorldDegrees(object, rotation);
 }
 
 export const rotateWorldDegrees = function () {
     const rotationQuat = QuatUtils.create();
-    return function rotateWorldDegrees(object: Object3D, rotation) {
+    return function rotateWorldDegrees(object: Object3D, rotation): Object3D {
         Vec3Utils.degreesToQuat(rotation, rotationQuat);
         /*ObjectUtils.*/rotateWorldQuat(object, rotationQuat);
     };
@@ -987,7 +987,7 @@ export const rotateWorldDegrees = function () {
 
 export const rotateWorldRadians = function () {
     const degreesRotation = Vec3Utils.create();
-    return function rotateWorldRadians(object: Object3D, rotation) {
+    return function rotateWorldRadians(object: Object3D, rotation): Object3D {
         Vec3Utils.toDegrees(rotation, degreesRotation);
         /*ObjectUtils.*/rotateWorldDegrees(object, degreesRotation);
     };
@@ -995,7 +995,7 @@ export const rotateWorldRadians = function () {
 
 export const rotateWorldMatrix = function () {
     const rotationQuat = QuatUtils.create();
-    return function rotateWorldMatrix(object: Object3D, rotation) {
+    return function rotateWorldMatrix(object: Object3D, rotation): Object3D {
         Mat3Utils.toQuat(rotation, rotationQuat);
         QuatUtils.normalize(rotationQuat, rotationQuat);
         /*ObjectUtils.*/rotateWorldQuat(object, rotationQuat);
@@ -1004,7 +1004,7 @@ export const rotateWorldMatrix = function () {
 
 export const rotateWorldQuat = function () {
     const currentRotationQuat = QuatUtils.create();
-    return function rotateWorldQuat(object: Object3D, rotation) {
+    return function rotateWorldQuat(object: Object3D, rotation): Object3D {
         /*ObjectUtils.*/getRotationWorldQuat(object, currentRotationQuat);
         QuatUtils.mul(rotation, currentRotationQuat, currentRotationQuat);
         QuatUtils.normalize(currentRotationQuat, currentRotationQuat);
@@ -1014,13 +1014,13 @@ export const rotateWorldQuat = function () {
 
 // Rotate Local
 
-export function rotateLocal(object: Object3D, rotation) {
+export function rotateLocal(object: Object3D, rotation): Object3D {
     /*ObjectUtils.*/rotateLocalDegrees(object, rotation);
 }
 
 export const rotateLocalDegrees = function () {
     const rotationQuat = QuatUtils.create();
-    return function rotateLocalDegrees(object: Object3D, rotation) {
+    return function rotateLocalDegrees(object: Object3D, rotation): Object3D {
         Vec3Utils.degreesToQuat(rotation, rotationQuat);
         /*ObjectUtils.*/rotateLocalQuat(object, rotationQuat);
     };
@@ -1028,7 +1028,7 @@ export const rotateLocalDegrees = function () {
 
 export const rotateLocalRadians = function () {
     const degreesRotation = Vec3Utils.create();
-    return function rotateLocalRadians(object: Object3D, rotation) {
+    return function rotateLocalRadians(object: Object3D, rotation): Object3D {
         Vec3Utils.toDegrees(rotation, degreesRotation);
         /*ObjectUtils.*/rotateLocalDegrees(object, degreesRotation);
     };
@@ -1036,7 +1036,7 @@ export const rotateLocalRadians = function () {
 
 export const rotateLocalMatrix = function () {
     const rotationQuat = QuatUtils.create();
-    return function rotateLocalMatrix(object: Object3D, rotation) {
+    return function rotateLocalMatrix(object: Object3D, rotation): Object3D {
         Mat3Utils.toQuat(rotation, rotationQuat);
         QuatUtils.normalize(rotationQuat, rotationQuat);
         /*ObjectUtils.*/rotateLocalQuat(object, rotationQuat);
@@ -1045,7 +1045,7 @@ export const rotateLocalMatrix = function () {
 
 export const rotateLocalQuat = function () {
     const currentRotationQuat = QuatUtils.create();
-    return function rotateLocalQuat(object: Object3D, rotation) {
+    return function rotateLocalQuat(object: Object3D, rotation): Object3D {
         /*ObjectUtils.*/getRotationLocalQuat(object, currentRotationQuat);
         QuatUtils.mul(rotation, currentRotationQuat, currentRotationQuat);
         QuatUtils.normalize(currentRotationQuat, currentRotationQuat);
@@ -1055,13 +1055,13 @@ export const rotateLocalQuat = function () {
 
 // Rotate Object
 
-export function rotateObject(object: Object3D, rotation) {
+export function rotateObject(object: Object3D, rotation): Object3D {
     /*ObjectUtils.*/rotateObjectDegrees(object, rotation);
 }
 
 export const rotateObjectDegrees = function () {
     const rotationQuat = QuatUtils.create();
-    return function rotateObjectDegrees(object: Object3D, rotation) {
+    return function rotateObjectDegrees(object: Object3D, rotation): Object3D {
         Vec3Utils.degreesToQuat(rotation, rotationQuat);
         /*ObjectUtils.*/rotateObjectQuat(object, rotationQuat);
     };
@@ -1069,7 +1069,7 @@ export const rotateObjectDegrees = function () {
 
 export const rotateObjectRadians = function () {
     const degreesRotation = Vec3Utils.create();
-    return function rotateObjectRadians(object: Object3D, rotation) {
+    return function rotateObjectRadians(object: Object3D, rotation): Object3D {
         Vec3Utils.toDegrees(rotation, degreesRotation);
         /*ObjectUtils.*/rotateObjectDegrees(object, degreesRotation);
     };
@@ -1077,44 +1077,44 @@ export const rotateObjectRadians = function () {
 
 export const rotateObjectMatrix = function () {
     const rotationQuat = QuatUtils.create();
-    return function rotateObjectMatrix(object: Object3D, rotation) {
+    return function rotateObjectMatrix(object: Object3D, rotation): Object3D {
         Mat3Utils.toQuat(rotation, rotationQuat);
         QuatUtils.normalize(rotationQuat, rotationQuat);
         /*ObjectUtils.*/rotateObjectQuat(object, rotationQuat);
     };
 }();
 
-export function rotateObjectQuat(object: Object3D, rotation) {
+export function rotateObjectQuat(object: Object3D, rotation): Object3D {
     object.rotateObject(rotation);
 }
 
 // Rotate Axis
 
-export function rotateAxis(object: Object3D, angle: number, axis: Vector3) {
+export function rotateAxis(object: Object3D, angle: number, axis: Vector3): Object3D {
     /*ObjectUtils.*/rotateAxisWorld(object, angle, axis);
 }
 
-export function rotateAxisDegrees(object: Object3D, angle: number, axis: Vector3) {
+export function rotateAxisDegrees(object: Object3D, angle: number, axis: Vector3): Object3D {
     /*ObjectUtils.*/rotateAxisWorldDegrees(object, angle, axis);
 }
 
-export function rotateAxisRadians(object: Object3D, angle: number, axis: Vector3) {
+export function rotateAxisRadians(object: Object3D, angle: number, axis: Vector3): Object3D {
     /*ObjectUtils.*/rotateAxisWorldRadians(object, angle, axis);
 }
 
 // Rotate Axis World
 
-export function rotateAxisWorld(object: Object3D, angle: number, axis: Vector3) {
+export function rotateAxisWorld(object: Object3D, angle: number, axis: Vector3): Object3D {
     /*ObjectUtils.*/rotateAxisWorldDegrees(object, angle, axis);
 }
 
-export function rotateAxisWorldDegrees(object: Object3D, angle: number, axis: Vector3) {
+export function rotateAxisWorldDegrees(object: Object3D, angle: number, axis: Vector3): Object3D {
     /*ObjectUtils.*/rotateAxisWorldRadians(object, MathUtils.toRadians(angle), axis);
 }
 
 export const rotateAxisWorldRadians = function () {
     const rotation = QuatUtils.create();
-    return function rotateAxisWorldRadians(object: Object3D, angle: number, axis: Vector3) {
+    return function rotateAxisWorldRadians(object: Object3D, angle: number, axis: Vector3): Object3D {
         QuatUtils.fromAxisRadians(angle, axis, rotation);
         /*ObjectUtils.*/rotateWorldQuat(object, rotation);
     };
@@ -1122,17 +1122,17 @@ export const rotateAxisWorldRadians = function () {
 
 // Rotate Axis Local
 
-export function rotateAxisLocal(object: Object3D, angle: number, axis: Vector3) {
+export function rotateAxisLocal(object: Object3D, angle: number, axis: Vector3): Object3D {
     /*ObjectUtils.*/rotateAxisLocalDegrees(object, angle, axis);
 }
 
-export function rotateAxisLocalDegrees(object: Object3D, angle: number, axis: Vector3) {
+export function rotateAxisLocalDegrees(object: Object3D, angle: number, axis: Vector3): Object3D {
     /*ObjectUtils.*/rotateAxisLocalRadians(object, MathUtils.toRadians(angle), axis);
 }
 
 export const rotateAxisLocalRadians = function () {
     const rotation = QuatUtils.create();
-    return function rotateAxisLocalRadians(object: Object3D, angle: number, axis: Vector3) {
+    return function rotateAxisLocalRadians(object: Object3D, angle: number, axis: Vector3): Object3D {
         QuatUtils.fromAxisRadians(angle, axis, rotation);
         /*ObjectUtils.*/rotateLocalQuat(object, rotation);
     };
@@ -1140,17 +1140,17 @@ export const rotateAxisLocalRadians = function () {
 
 // Rotate Axis Object
 
-export function rotateAxisObject(object: Object3D, angle: number, axis: Vector3) {
+export function rotateAxisObject(object: Object3D, angle: number, axis: Vector3): Object3D {
     /*ObjectUtils.*/rotateAxisObjectDegrees(object, angle, axis);
 }
 
-export function rotateAxisObjectDegrees(object: Object3D, angle: number, axis: Vector3) {
+export function rotateAxisObjectDegrees(object: Object3D, angle: number, axis: Vector3): Object3D {
     /*ObjectUtils.*/rotateAxisObjectRadians(object, MathUtils.toRadians(angle), axis);
 }
 
 export const rotateAxisObjectRadians = function () {
     const rotation = QuatUtils.create();
-    return function rotateAxisObjectRadians(object: Object3D, angle: number, axis: Vector3) {
+    return function rotateAxisObjectRadians(object: Object3D, angle: number, axis: Vector3): Object3D {
         QuatUtils.fromAxisRadians(angle, axis, rotation);
         /*ObjectUtils.*/rotateObjectQuat(object, rotation);
     };
@@ -1158,35 +1158,35 @@ export const rotateAxisObjectRadians = function () {
 
 // Rotate Around
 
-export function rotateAround(object: Object3D, rotation, origin: Vector3) {
+export function rotateAround(object: Object3D, rotation, origin: Vector3): Object3D {
     /*ObjectUtils.*/rotateAroundWorld(object, rotation, origin);
 }
 
-export function rotateAroundDegrees(object: Object3D, rotation, origin: Vector3) {
+export function rotateAroundDegrees(object: Object3D, rotation, origin: Vector3): Object3D {
     /*ObjectUtils.*/rotateAroundWorldDegrees(object, rotation, origin);
 }
 
-export function rotateAroundRadians(object: Object3D, rotation, origin: Vector3) {
+export function rotateAroundRadians(object: Object3D, rotation, origin: Vector3): Object3D {
     /*ObjectUtils.*/rotateAroundWorldRadians(object, rotation, origin);
 }
 
-export function rotateAroundMatrix(object: Object3D, rotation, origin: Vector3) {
+export function rotateAroundMatrix(object: Object3D, rotation, origin: Vector3): Object3D {
     /*ObjectUtils.*/rotateAroundWorldMatrix(object, rotation, origin);
 }
 
-export function rotateAroundQuat(object: Object3D, rotation, origin: Vector3) {
+export function rotateAroundQuat(object: Object3D, rotation, origin: Vector3): Object3D {
     /*ObjectUtils.*/rotateAroundWorldQuat(object, rotation, origin);
 }
 
 // Rotate Around World
 
-export function rotateAroundWorld(object: Object3D, rotation, origin: Vector3) {
+export function rotateAroundWorld(object: Object3D, rotation, origin: Vector3): Object3D {
     /*ObjectUtils.*/rotateAroundWorldDegrees(object, rotation, origin);
 }
 
 export const rotateAroundWorldDegrees = function () {
     const rotationQuat = QuatUtils.create();
-    return function rotateAroundWorldDegrees(object: Object3D, rotation, origin: Vector3) {
+    return function rotateAroundWorldDegrees(object: Object3D, rotation, origin: Vector3): Object3D {
         Vec3Utils.degreesToQuat(rotation, rotationQuat);
         /*ObjectUtils.*/rotateAroundWorldQuat(object, rotationQuat, origin);
     };
@@ -1194,7 +1194,7 @@ export const rotateAroundWorldDegrees = function () {
 
 export const rotateAroundWorldRadians = function () {
     const degreesRotation = Vec3Utils.create();
-    return function rotateAroundWorldRadians(object: Object3D, rotation, origin: Vector3) {
+    return function rotateAroundWorldRadians(object: Object3D, rotation, origin: Vector3): Object3D {
         Vec3Utils.toDegrees(rotation, degreesRotation);
         /*ObjectUtils.*/rotateAroundWorldDegrees(object, degreesRotation, origin);
     };
@@ -1202,7 +1202,7 @@ export const rotateAroundWorldRadians = function () {
 
 export const rotateAroundWorldMatrix = function () {
     const rotationQuat = QuatUtils.create();
-    return function rotateAroundWorldMatrix(object: Object3D, rotation, origin: Vector3) {
+    return function rotateAroundWorldMatrix(object: Object3D, rotation, origin: Vector3): Object3D {
         Mat3Utils.toQuat(rotation, rotationQuat);
         QuatUtils.normalize(rotationQuat, rotationQuat);
         /*ObjectUtils.*/rotateAroundWorldQuat(object, rotationQuat, origin);
@@ -1211,7 +1211,7 @@ export const rotateAroundWorldMatrix = function () {
 
 export const rotateAroundWorldQuat = function () {
     const axis = Vec3Utils.create();
-    return function rotateAroundWorldQuat(object: Object3D, rotation, origin: Vector3) {
+    return function rotateAroundWorldQuat(object: Object3D, rotation, origin: Vector3): Object3D {
         QuatUtils.getAxis(rotation, axis);
         const angle = QuatUtils.getAngleRadians(rotation,);
         /*ObjectUtils.*/rotateAroundAxisWorldRadians(object, angle, axis, origin);
@@ -1220,13 +1220,13 @@ export const rotateAroundWorldQuat = function () {
 
 // Rotate Around Local
 
-export function rotateAroundLocal(object: Object3D, rotation, origin: Vector3) {
+export function rotateAroundLocal(object: Object3D, rotation, origin: Vector3): Object3D {
     /*ObjectUtils.*/rotateAroundLocalDegrees(object, rotation, origin);
 }
 
 export const rotateAroundLocalDegrees = function () {
     const rotationQuat = QuatUtils.create();
-    return function rotateAroundLocalDegrees(object: Object3D, rotation, origin: Vector3) {
+    return function rotateAroundLocalDegrees(object: Object3D, rotation, origin: Vector3): Object3D {
         Vec3Utils.degreesToQuat(rotation, rotationQuat);
         /*ObjectUtils.*/rotateAroundLocalQuat(object, rotationQuat, origin);
     };
@@ -1234,7 +1234,7 @@ export const rotateAroundLocalDegrees = function () {
 
 export const rotateAroundLocalRadians = function () {
     const degreesRotation = Vec3Utils.create();
-    return function rotateAroundLocalRadians(object: Object3D, rotation, origin: Vector3) {
+    return function rotateAroundLocalRadians(object: Object3D, rotation, origin: Vector3): Object3D {
         Vec3Utils.toDegrees(rotation, degreesRotation);
         /*ObjectUtils.*/rotateAroundLocalDegrees(object, degreesRotation, origin);
     };
@@ -1242,7 +1242,7 @@ export const rotateAroundLocalRadians = function () {
 
 export const rotateAroundLocalMatrix = function () {
     const rotationQuat = QuatUtils.create();
-    return function rotateAroundLocalMatrix(object: Object3D, rotation, origin: Vector3) {
+    return function rotateAroundLocalMatrix(object: Object3D, rotation, origin: Vector3): Object3D {
         Mat3Utils.toQuat(rotation, rotationQuat);
         QuatUtils.normalize(rotationQuat, rotationQuat);
         /*ObjectUtils.*/rotateAroundLocalQuat(object, rotationQuat, origin);
@@ -1251,7 +1251,7 @@ export const rotateAroundLocalMatrix = function () {
 
 export const rotateAroundLocalQuat = function () {
     const axis = Vec3Utils.create();
-    return function rotateAroundLocalQuat(object: Object3D, rotation, origin: Vector3) {
+    return function rotateAroundLocalQuat(object: Object3D, rotation, origin: Vector3): Object3D {
         QuatUtils.getAxis(rotation, axis);
         const angle = QuatUtils.getAngleRadians(rotation,);
         /*ObjectUtils.*/rotateAroundAxisLocalRadians(object, angle, axis, origin);
@@ -1260,13 +1260,13 @@ export const rotateAroundLocalQuat = function () {
 
 // Rotate Around Object
 
-export function rotateAroundObject(object: Object3D, rotation, origin: Vector3) {
+export function rotateAroundObject(object: Object3D, rotation, origin: Vector3): Object3D {
     /*ObjectUtils.*/rotateAroundObjectDegrees(object, rotation, origin);
 }
 
 export const rotateAroundObjectDegrees = function () {
     const rotationQuat = QuatUtils.create();
-    return function rotateAroundObjectDegrees(object: Object3D, rotation, origin: Vector3) {
+    return function rotateAroundObjectDegrees(object: Object3D, rotation, origin: Vector3): Object3D {
         Vec3Utils.degreesToQuat(rotation, rotationQuat);
         /*ObjectUtils.*/rotateAroundObjectQuat(object, rotationQuat, origin);
     };
@@ -1274,7 +1274,7 @@ export const rotateAroundObjectDegrees = function () {
 
 export const rotateAroundObjectRadians = function () {
     const degreesRotation = Vec3Utils.create();
-    return function rotateAroundObjectRadians(object: Object3D, rotation, origin: Vector3) {
+    return function rotateAroundObjectRadians(object: Object3D, rotation, origin: Vector3): Object3D {
         Vec3Utils.toDegrees(rotation, degreesRotation);
         /*ObjectUtils.*/rotateAroundObjectDegrees(object, degreesRotation, origin);
     };
@@ -1282,7 +1282,7 @@ export const rotateAroundObjectRadians = function () {
 
 export const rotateAroundObjectMatrix = function () {
     const rotationQuat = QuatUtils.create();
-    return function rotateAroundObjectMatrix(object: Object3D, rotation, origin: Vector3) {
+    return function rotateAroundObjectMatrix(object: Object3D, rotation, origin: Vector3): Object3D {
         Mat3Utils.toQuat(rotation, rotationQuat);
         QuatUtils.normalize(rotationQuat, rotationQuat);
         /*ObjectUtils.*/rotateAroundObjectQuat(object, rotationQuat, origin);
@@ -1291,7 +1291,7 @@ export const rotateAroundObjectMatrix = function () {
 
 export const rotateAroundObjectQuat = function () {
     const axis = Vec3Utils.create();
-    return function rotateAroundObjectQuat(object: Object3D, rotation, origin: Vector3) {
+    return function rotateAroundObjectQuat(object: Object3D, rotation, origin: Vector3): Object3D {
         QuatUtils.getAxis(rotation, axis);
         const angle = QuatUtils.getAngleRadians(rotation,);
         /*ObjectUtils.*/rotateAroundAxisObjectRadians(object, angle, axis, origin);
@@ -1300,25 +1300,25 @@ export const rotateAroundObjectQuat = function () {
 
 // Rotate Around Axis
 
-export function rotateAroundAxis(object: Object3D, angle: number, axis: Vector3, origin: Vector3) {
+export function rotateAroundAxis(object: Object3D, angle: number, axis: Vector3, origin: Vector3): Object3D {
     /*ObjectUtils.*/rotateAroundAxisWorld(object, angle, axis, origin);
 }
 
-export function rotateAroundAxisDegrees(object: Object3D, angle: number, axis: Vector3, origin: Vector3) {
+export function rotateAroundAxisDegrees(object: Object3D, angle: number, axis: Vector3, origin: Vector3): Object3D {
     /*ObjectUtils.*/rotateAroundAxisWorldDegrees(object, angle, axis, origin);
 }
 
-export function rotateAroundAxisRadians(object: Object3D, angle: number, axis: Vector3, origin: Vector3) {
+export function rotateAroundAxisRadians(object: Object3D, angle: number, axis: Vector3, origin: Vector3): Object3D {
     /*ObjectUtils.*/rotateAroundAxisWorldRadians(object, angle, axis, origin);
 }
 
 // Rotate Around Axis World
 
-export function rotateAroundAxisWorld(object: Object3D, angle: number, axis: Vector3, origin: Vector3) {
+export function rotateAroundAxisWorld(object: Object3D, angle: number, axis: Vector3, origin: Vector3): Object3D {
     /*ObjectUtils.*/rotateAroundAxisWorldDegrees(object, angle, axis, origin);
 }
 
-export function rotateAroundAxisWorldDegrees(object: Object3D, angle: number, axis: Vector3, origin: Vector3) {
+export function rotateAroundAxisWorldDegrees(object: Object3D, angle: number, axis: Vector3, origin: Vector3): Object3D {
     /*ObjectUtils.*/rotateAroundAxisWorldRadians(object, MathUtils.toRadians(angle), axis, origin);
 }
 
@@ -1327,7 +1327,7 @@ export const rotateAroundAxisWorldRadians = function () {
     const transformToRotateConjugate = Quat2Utils.create();
     const transformQuat = Quat2Utils.create();
     const defaultQuat = QuatUtils.create();
-    return function rotateAroundAxisWorldRadians(object: Object3D, angle: number, axis: Vector3, origin: Vector3) {
+    return function rotateAroundAxisWorldRadians(object: Object3D, angle: number, axis: Vector3, origin: Vector3): Object3D {
         Quat2Utils.setPositionRotationQuat(transformToRotate, origin, defaultQuat);
         /*ObjectUtils.*/getTransformWorldQuat(object, transformQuat);
         Quat2Utils.conjugate(transformToRotate, transformToRotateConjugate);
@@ -1340,18 +1340,18 @@ export const rotateAroundAxisWorldRadians = function () {
 
 // Rotate Around Axis Local
 
-export function rotateAroundAxisLocal(object: Object3D, angle: number, axis: Vector3, origin: Vector3) {
+export function rotateAroundAxisLocal(object: Object3D, angle: number, axis: Vector3, origin: Vector3): Object3D {
     /*ObjectUtils.*/rotateAroundAxisLocalDegrees(object, angle, axis, origin);
 }
 
-export function rotateAroundAxisLocalDegrees(object: Object3D, angle: number, axis: Vector3, origin: Vector3) {
+export function rotateAroundAxisLocalDegrees(object: Object3D, angle: number, axis: Vector3, origin: Vector3): Object3D {
     /*ObjectUtils.*/rotateAroundAxisLocalRadians(object, MathUtils.toRadians(angle), axis, origin);
 }
 
 export const rotateAroundAxisLocalRadians = function () {
     const convertedPosition = Vec3Utils.create();
     const convertedAxis = Vec3Utils.create();
-    return function rotateAroundAxisLocalRadians(object: Object3D, angle: number, axis: Vector3, origin: Vector3) {
+    return function rotateAroundAxisLocalRadians(object: Object3D, angle: number, axis: Vector3, origin: Vector3): Object3D {
         /*ObjectUtils.*/convertPositionLocalToWorld(object, origin, convertedPosition);
         /*ObjectUtils.*/convertDirectionLocalToWorld(object, axis, convertedAxis);
         /*ObjectUtils.*/rotateAroundAxisWorldRadians(object, angle, convertedAxis, convertedPosition);
@@ -1360,18 +1360,18 @@ export const rotateAroundAxisLocalRadians = function () {
 
 // Rotate Around Axis Object
 
-export function rotateAroundAxisObject(object: Object3D, angle: number, axis: Vector3, origin: Vector3) {
+export function rotateAroundAxisObject(object: Object3D, angle: number, axis: Vector3, origin: Vector3): Object3D {
     /*ObjectUtils.*/rotateAroundAxisObjectDegrees(object, angle, axis, origin);
 }
 
-export function rotateAroundAxisObjectDegrees(object: Object3D, angle: number, axis: Vector3, origin: Vector3) {
+export function rotateAroundAxisObjectDegrees(object: Object3D, angle: number, axis: Vector3, origin: Vector3): Object3D {
     /*ObjectUtils.*/rotateAroundAxisObjectRadians(object, MathUtils.toRadians(angle), axis, origin);
 }
 
 export const rotateAroundAxisObjectRadians = function () {
     const convertedPosition = Vec3Utils.create();
     const convertedAxis = Vec3Utils.create();
-    return function rotateAroundAxisObjectRadians(object: Object3D, angle: number, axis: Vector3, origin: Vector3) {
+    return function rotateAroundAxisObjectRadians(object: Object3D, angle: number, axis: Vector3, origin: Vector3): Object3D {
         /*ObjectUtils.*/convertPositionObjectToWorld(object, origin, convertedPosition);
         /*ObjectUtils.*/convertDirectionObjectToWorld(object, axis, convertedAxis);
         /*ObjectUtils.*/rotateAroundAxisWorldRadians(object, angle, convertedAxis, convertedPosition);
@@ -1385,7 +1385,7 @@ export const rotateAroundAxisObjectRadians = function () {
 
 export const scaleObject = function () {
     const vector = Vec3Utils.create();
-    return function scaleObject(object: Object3D, scale: number | Vector3) {
+    return function scaleObject(object: Object3D, scale: number | Vector3): Object3D {
         if (isNaN(scale as number)) {
             object.scaleLocal(scale as Vector3);
         } else {
@@ -1397,13 +1397,13 @@ export const scaleObject = function () {
 
 // Look At
 
-export function lookAt(object: Object3D, position: Vector3, up: Vector3) {
+export function lookAt(object: Object3D, position: Vector3, up: Vector3): Object3D {
     /*ObjectUtils.*/lookAtWorld(object, position, up);
 }
 
 export const lookAtWorld = function () {
     const direction = Vec3Utils.create();
-    return function lookAtWorld(object: Object3D, position: Vector3, up: Vector3) {
+    return function lookAtWorld(object: Object3D, position: Vector3, up: Vector3): Object3D {
         /*ObjectUtils.*/getPositionWorld(object, direction);
         Vec3Utils.sub(position, direction, direction);
         /*ObjectUtils.*/lookToWorld(object, direction, up);
@@ -1412,27 +1412,27 @@ export const lookAtWorld = function () {
 
 export const lookAtLocal = function () {
     const direction = Vec3Utils.create();
-    return function lookAtLocal(object: Object3D, position: Vector3, up: Vector3) {
+    return function lookAtLocal(object: Object3D, position: Vector3, up: Vector3): Object3D {
         /*ObjectUtils.*/getPositionLocal(object, direction);
         Vec3Utils.sub(position, direction, direction);
         /*ObjectUtils.*/lookToLocal(object, direction, up);
     };
 }();
 
-export function lookTo(object: Object3D, direction: Vector3, up: Vector3) {
+export function lookTo(object: Object3D, direction: Vector3, up: Vector3): Object3D {
     /*ObjectUtils.*/lookToWorld(object, direction, up);
 }
 
 export const lookToWorld = function () {
     const internalUp = Vec3Utils.create();
-    return function lookToWorld(object: Object3D, direction: Vector3, up: Vector3 = /*ObjectUtils.*/getUpWorld(object, internalUp)) {
+    return function lookToWorld(object: Object3D, direction: Vector3, up: Vector3 = /*ObjectUtils.*/getUpWorld(object, internalUp)): Object3D {
         /*ObjectUtils.*/setForwardWorld(object, direction, up);
     };
 }();
 
 export const lookToLocal = function () {
     const internalUp = Vec3Utils.create();
-    return function lookToLocal(object: Object3D, direction: Vector3, up: Vector3 = /*ObjectUtils.*/getUpLocal(object, internalUp)) {
+    return function lookToLocal(object: Object3D, direction: Vector3, up: Vector3 = /*ObjectUtils.*/getUpLocal(object, internalUp)): Object3D {
         /*ObjectUtils.*/setForwardLocal(object, direction, up);
     };
 }();
@@ -1462,7 +1462,7 @@ export const setParent = function () {
     };
 }();
 
-export function getParent(object: Object3D) {
+export function getParent(object: Object3D): Object3D {
     return object.parent;
 }
 
@@ -1470,7 +1470,7 @@ export function getParent(object: Object3D) {
 
 export const convertPositionObjectToWorld = function () {
     const matrix = Mat4Utils.create();
-    return function convertPositionObjectToWorld(object: Object3D, position: Vector3, resultPosition: Vector3 = Vec3Utils.create()) {
+    return function convertPositionObjectToWorld(object: Object3D, position: Vector3, resultPosition: Vector3 = Vec3Utils.create()): Vector3 {
         /*ObjectUtils.*/getTransformWorldMatrix(object, matrix);
         Vec3Utils.transformMat4(position, matrix, resultPosition);
         return resultPosition;
@@ -1479,7 +1479,7 @@ export const convertPositionObjectToWorld = function () {
 
 export const convertDirectionObjectToWorld = function () {
     const rotation = QuatUtils.create();
-    return function convertDirectionObjectToWorld(object: Object3D, direction: Vector3, resultDirection: Vector3 = Vec3Utils.create()) {
+    return function convertDirectionObjectToWorld(object: Object3D, direction: Vector3, resultDirection: Vector3 = Vec3Utils.create()): Vector3 {
         /*ObjectUtils.*/getRotationWorldQuat(object, rotation);
         Vec3Utils.transformQuat(direction, rotation, resultDirection);
         return resultDirection;
@@ -1488,7 +1488,7 @@ export const convertDirectionObjectToWorld = function () {
 
 export const convertPositionWorldToObject = function () {
     const matrix = Mat4Utils.create();
-    return function convertPositionWorldToObject(object: Object3D, position: Vector3, resultPosition: Vector3 = Vec3Utils.create()) {
+    return function convertPositionWorldToObject(object: Object3D, position: Vector3, resultPosition: Vector3 = Vec3Utils.create()): Vector3 {
         /*ObjectUtils.*/getTransformWorldMatrix(object, matrix);
         Mat4Utils.invert(matrix, matrix);
         Vec3Utils.transformMat4(position, matrix, resultPosition);
@@ -1498,7 +1498,7 @@ export const convertPositionWorldToObject = function () {
 
 export const convertDirectionWorldToObject = function () {
     const rotation = QuatUtils.create();
-    return function convertDirectionWorldToObject(object: Object3D, direction: Vector3, resultDirection: Vector3 = Vec3Utils.create()) {
+    return function convertDirectionWorldToObject(object: Object3D, direction: Vector3, resultDirection: Vector3 = Vec3Utils.create()): Vector3 {
         /*ObjectUtils.*/getRotationWorldQuat(object, rotation);
         QuatUtils.conjugate(rotation, rotation);
         Vec3Utils.transformQuat(direction, rotation, resultDirection);
@@ -1508,7 +1508,7 @@ export const convertDirectionWorldToObject = function () {
 
 // Convert Vector Local World
 
-export function convertPositionLocalToWorld(object: Object3D, position: Vector3, resultPosition: Vector3 = Vec3Utils.create()) {
+export function convertPositionLocalToWorld(object: Object3D, position: Vector3, resultPosition: Vector3 = Vec3Utils.create()): Vector3 {
     if (/*ObjectUtils.*/getParent(object) != null) {
         /*ObjectUtils.*/convertPositionObjectToWorld(/*ObjectUtils.*/getParent(object)!, position, resultPosition);
     } else {
@@ -1517,7 +1517,7 @@ export function convertPositionLocalToWorld(object: Object3D, position: Vector3,
     return resultPosition;
 }
 
-export function convertDirectionLocalToWorld(object: Object3D, direction: Vector3, resultDirection: Vector3 = Vec3Utils.create()) {
+export function convertDirectionLocalToWorld(object: Object3D, direction: Vector3, resultDirection: Vector3 = Vec3Utils.create()): Vector3 {
     if (/*ObjectUtils.*/getParent(object) != null) {
         /*ObjectUtils.*/convertDirectionObjectToWorld(/*ObjectUtils.*/getParent(object)!, direction, resultDirection);
     } else {
@@ -1526,7 +1526,7 @@ export function convertDirectionLocalToWorld(object: Object3D, direction: Vector
     return resultDirection;
 }
 
-export function convertPositionWorldToLocal(object: Object3D, position: Vector3, resultPosition: Vector3 = Vec3Utils.create()) {
+export function convertPositionWorldToLocal(object: Object3D, position: Vector3, resultPosition: Vector3 = Vec3Utils.create()): Vector3 {
     if (/*ObjectUtils.*/getParent(object) != null) {
         /*ObjectUtils.*/convertPositionWorldToObject(/*ObjectUtils.*/getParent(object)!, position, resultPosition);
     } else {
@@ -1535,7 +1535,7 @@ export function convertPositionWorldToLocal(object: Object3D, position: Vector3,
     return resultPosition;
 }
 
-export function convertDirectionWorldToLocal(object: Object3D, direction: Vector3, resultDirection: Vector3 = Vec3Utils.create()) {
+export function convertDirectionWorldToLocal(object: Object3D, direction: Vector3, resultDirection: Vector3 = Vec3Utils.create()): Vector3 {
     if (/*ObjectUtils.*/getParent(object) != null) {
         /*ObjectUtils.*/convertDirectionWorldToObject(/*ObjectUtils.*/getParent(object)!, direction, resultDirection);
     } else {
@@ -1548,25 +1548,25 @@ export function convertDirectionWorldToLocal(object: Object3D, direction: Vector
 
 // I need to use the converson to world and then local also use the parent scale that changes the position in local space
 
-export function convertPositionObjectToLocal(object: Object3D, position: Vector3, resultPosition: Vector3 = Vec3Utils.create()) {
+export function convertPositionObjectToLocal(object: Object3D, position: Vector3, resultPosition: Vector3 = Vec3Utils.create()): Vector3 {
     /*ObjectUtils.*/convertPositionObjectToWorld(object, position, resultPosition);
     /*ObjectUtils.*/convertPositionWorldToLocal(object, resultPosition, resultPosition);
     return resultPosition;
 }
 
-export function convertDirectionObjectToLocal(object: Object3D, direction: Vector3, resultDirection: Vector3 = Vec3Utils.create()) {
+export function convertDirectionObjectToLocal(object: Object3D, direction: Vector3, resultDirection: Vector3 = Vec3Utils.create()): Vector3 {
     /*ObjectUtils.*/convertDirectionObjectToWorld(object, direction, resultDirection);
     /*ObjectUtils.*/convertDirectionWorldToLocal(object, resultDirection, resultDirection);
     return resultDirection;
 }
 
-export function convertPositionLocalToObject(object: Object3D, position: Vector3, resultPosition: Vector3 = Vec3Utils.create()) {
+export function convertPositionLocalToObject(object: Object3D, position: Vector3, resultPosition: Vector3 = Vec3Utils.create()): Vector3 {
     /*ObjectUtils.*/convertPositionLocalToWorld(object, position, resultPosition);
     /*ObjectUtils.*/convertPositionWorldToObject(object, resultPosition, resultPosition);
     return resultPosition;
 }
 
-export function convertDirectionLocalToObject(object: Object3D, direction: Vector3, resultDirection: Vector3 = Vec3Utils.create()) {
+export function convertDirectionLocalToObject(object: Object3D, direction: Vector3, resultDirection: Vector3 = Vec3Utils.create()): Vector3 {
     /*ObjectUtils.*/convertDirectionLocalToWorld(object, direction, resultDirection);
     /*ObjectUtils.*/convertDirectionWorldToObject(object, resultDirection, resultDirection);
     return resultDirection;
@@ -1574,7 +1574,7 @@ export function convertDirectionLocalToObject(object: Object3D, direction: Vecto
 
 // Convert Transform Object World
 
-export function convertTransformObjectToWorld(object: Object3D, transform, resultTransform) {
+export function convertTransformObjectToWorld(object: Object3D, transform, resultTransform): Matrix4 {
     return /*ObjectUtils.*/convertTransformObjectToWorldMatrix(object, transform, resultTransform);
 }
 
@@ -1584,7 +1584,7 @@ export const convertTransformObjectToWorldMatrix = function () {
     const scale = Vec3Utils.create();
     const inverseScale = Vec3Utils.create();
     const one = Vec3Utils.create(1);
-    return function convertTransformObjectToWorldMatrix(object: Object3D, transform, resultTransform = Mat4Utils.create()) {
+    return function convertTransformObjectToWorldMatrix(object: Object3D, transform, resultTransform = Mat4Utils.create()): Matrix4 {
         /*ObjectUtils.*/getTransformWorldMatrix(object, convertTransform);
         if (/*ObjectUtils.*/hasUniformScaleWorld(object)) {
             Mat4Utils.mul(convertTransform, transform, resultTransform);
@@ -1611,7 +1611,7 @@ export const convertTransformObjectToWorldMatrix = function () {
 export const convertTransformObjectToWorldQuat = function () {
     const position = Vec3Utils.create();
     const rotation = QuatUtils.create();
-    return function convertTransformObjectToWorldQuat(object: Object3D, transform, resultTransform = Quat2Utils.create()) {
+    return function convertTransformObjectToWorldQuat(object: Object3D, transform, resultTransform = Quat2Utils.create()): Quaternion2 {
         /*ObjectUtils.*/getRotationWorldQuat(object, rotation);
         QuatUtils.mul(rotation, transform, rotation);
         Quat2Utils.getPosition(transform, position);
@@ -1621,7 +1621,7 @@ export const convertTransformObjectToWorldQuat = function () {
     };
 }();
 
-export function convertTransformWorldToObject(object: Object3D, transform, resultTransform) {
+export function convertTransformWorldToObject(object: Object3D, transform, resultTransform): Matrix4 {
     return /*ObjectUtils.*/convertTransformWorldToObjectMatrix(object, transform, resultTransform);
 }
 
@@ -1631,7 +1631,7 @@ export const convertTransformWorldToObjectMatrix = function () {
     const scale = Vec3Utils.create();
     const inverseScale = Vec3Utils.create();
     const one = Vec3Utils.create(1);
-    return function convertTransformWorldToObjectMatrix(object: Object3D, transform, resultTransform = Mat4Utils.create()) {
+    return function convertTransformWorldToObjectMatrix(object: Object3D, transform, resultTransform = Mat4Utils.create()): Matrix4 {
         /*ObjectUtils.*/getTransformWorldMatrix(object, convertTransform);
         if (/*ObjectUtils.*/hasUniformScaleWorld(object)) {
             Mat4Utils.invert(convertTransform, convertTransform);
@@ -1660,7 +1660,7 @@ export const convertTransformWorldToObjectMatrix = function () {
 export const convertTransformWorldToObjectQuat = function () {
     const position = Vec3Utils.create();
     const rotation = QuatUtils.create();
-    return function convertTransformWorldToObjectQuat(object: Object3D, transform, resultTransform = Quat2Utils.create()) {
+    return function convertTransformWorldToObjectQuat(object: Object3D, transform, resultTransform = Quat2Utils.create()): Quaternion2 {
         /*ObjectUtils.*/getRotationWorldQuat(object, rotation);
         QuatUtils.conjugate(rotation, rotation);
         QuatUtils.mul(rotation, transform, rotation);
@@ -1673,11 +1673,11 @@ export const convertTransformWorldToObjectQuat = function () {
 
 // Convert Transform Local World
 
-export function convertTransformLocalToWorld(object: Object3D, transform, resultTransform) {
+export function convertTransformLocalToWorld(object: Object3D, transform, resultTransform): Matrix4 {
     return /*ObjectUtils.*/convertTransformLocalToWorldMatrix(object, transform, resultTransform);
 }
 
-export function convertTransformLocalToWorldMatrix(object: Object3D, transform, resultTransform = Mat4Utils.create()) {
+export function convertTransformLocalToWorldMatrix(object: Object3D, transform, resultTransform = Mat4Utils.create()): Matrix4 {
     if (/*ObjectUtils.*/getParent(object) != null) {
         /*ObjectUtils.*/convertTransformObjectToWorldMatrix(/*ObjectUtils.*/getParent(object)!, transform, resultTransform);
     } else {
@@ -1686,7 +1686,7 @@ export function convertTransformLocalToWorldMatrix(object: Object3D, transform, 
     return resultTransform;
 }
 
-export function convertTransformLocalToWorldQuat(object: Object3D, transform, resultTransform = Quat2Utils.create()) {
+export function convertTransformLocalToWorldQuat(object: Object3D, transform, resultTransform = Quat2Utils.create()): Quaternion2 {
     if (/*ObjectUtils.*/getParent(object) != null) {
         /*ObjectUtils.*/convertTransformObjectToWorldQuat(/*ObjectUtils.*/getParent(object)!, transform, resultTransform);
     } else {
@@ -1695,11 +1695,11 @@ export function convertTransformLocalToWorldQuat(object: Object3D, transform, re
     return resultTransform;
 }
 
-export function convertTransformWorldToLocal(object: Object3D, transform, resultTransform) {
+export function convertTransformWorldToLocal(object: Object3D, transform, resultTransform): Matrix4 {
     return /*ObjectUtils.*/convertTransformWorldToLocalMatrix(object, transform, resultTransform);
 }
 
-export function convertTransformWorldToLocalMatrix(object: Object3D, transform, resultTransform = Mat4Utils.create()) {
+export function convertTransformWorldToLocalMatrix(object: Object3D, transform, resultTransform = Mat4Utils.create()): Matrix4 {
     if (/*ObjectUtils.*/getParent(object) != null) {
         /*ObjectUtils.*/convertTransformWorldToObjectMatrix(/*ObjectUtils.*/getParent(object)!, transform, resultTransform);
     } else {
@@ -1708,7 +1708,7 @@ export function convertTransformWorldToLocalMatrix(object: Object3D, transform, 
     return resultTransform;
 }
 
-export function convertTransformWorldToLocalQuat(object: Object3D, transform, resultTransform = Quat2Utils.create()) {
+export function convertTransformWorldToLocalQuat(object: Object3D, transform, resultTransform = Quat2Utils.create()): Quaternion2 {
     if (/*ObjectUtils.*/getParent(object) != null) {
         /*ObjectUtils.*/convertTransformWorldToObjectQuat(/*ObjectUtils.*/getParent(object)!, transform, resultTransform);
     } else {
@@ -1721,33 +1721,33 @@ export function convertTransformWorldToLocalQuat(object: Object3D, transform, re
 
 // I need to use the converson to world and then local also use the parent scale that changes the position in local space
 
-export function convertTransformObjectToLocal(object: Object3D, transform, resultTransform) {
+export function convertTransformObjectToLocal(object: Object3D, transform, resultTransform): Matrix4 {
     return /*ObjectUtils.*/convertTransformObjectToLocalMatrix(object, transform, resultTransform);
 }
 
-export function convertTransformObjectToLocalMatrix(object: Object3D, transform, resultTransform = Mat4Utils.create()) {
+export function convertTransformObjectToLocalMatrix(object: Object3D, transform, resultTransform = Mat4Utils.create()): Matrix4 {
     /*ObjectUtils.*/convertTransformObjectToWorldMatrix(object, transform, resultTransform);
     /*ObjectUtils.*/convertTransformWorldToLocalMatrix(object, resultTransform, resultTransform);
     return resultTransform;
 }
 
-export function convertTransformObjectToLocalQuat(object: Object3D, transform, resultTransform = Quat2Utils.create()) {
+export function convertTransformObjectToLocalQuat(object: Object3D, transform, resultTransform = Quat2Utils.create()): Quaternion2 {
     /*ObjectUtils.*/convertTransformObjectToWorldQuat(object, transform, resultTransform);
     /*ObjectUtils.*/convertTransformWorldToLocalQuat(object, resultTransform, resultTransform);
     return resultTransform;
 }
 
-export function convertTransformLocalToObject(object: Object3D, transform, resultTransform) {
+export function convertTransformLocalToObject(object: Object3D, transform, resultTransform): Matrix4 {
     return /*ObjectUtils.*/convertTransformLocalToObjectMatrix(object, transform, resultTransform);
 }
 
-export function convertTransformLocalToObjectMatrix(object: Object3D, transform, resultTransform = Mat4Utils.create()) {
+export function convertTransformLocalToObjectMatrix(object: Object3D, transform, resultTransform = Mat4Utils.create()): Matrix4 {
     /*ObjectUtils.*/convertTransformLocalToWorldMatrix(object, transform, resultTransform);
     /*ObjectUtils.*/convertTransformWorldToObjectMatrix(object, resultTransform, resultTransform);
     return resultTransform;
 }
 
-export function convertTransformLocalToObjectQuat(object: Object3D, transform, resultTransform = Quat2Utils.create()) {
+export function convertTransformLocalToObjectQuat(object: Object3D, transform, resultTransform = Quat2Utils.create()): Quaternion2 {
     /*ObjectUtils.*/convertTransformLocalToWorldQuat(object, transform, resultTransform);
     /*ObjectUtils.*/convertTransformWorldToObjectQuat(object, resultTransform, resultTransform);
     return resultTransform;
@@ -1868,56 +1868,56 @@ export function getComponentsChildren<T extends Component>(object: Object3D, typ
 
 // Active
 
-export function setActive(object: Object3D, active: boolean) {
+export function setActive(object: Object3D, active: boolean): Object3D {
     /*ObjectUtils.*/setActiveHierarchy(object, active);
 }
 
-export function setActiveSelf(object: Object3D, active: boolean) {
+export function setActiveSelf(object: Object3D, active: boolean): Object3D {
     object.active = active;
 }
 
-export function setActiveHierarchy(object: Object3D, active: boolean) {
+export function setActiveHierarchy(object: Object3D, active: boolean): Object3D {
     /*ObjectUtils.*/setActiveHierarchyBreadth(object, active);
 }
 
-export function setActiveHierarchyBreadth(object: Object3D, active: boolean) {
+export function setActiveHierarchyBreadth(object: Object3D, active: boolean): Object3D {
     const objects = /*ObjectUtils.*/getHierarchyBreadth(object);
     /*ObjectUtils.*/setActiveObjects(objects, active);
 }
 
-export function setActiveHierarchyDepth(object: Object3D, active: boolean) {
+export function setActiveHierarchyDepth(object: Object3D, active: boolean): Object3D {
     const objects = /*ObjectUtils.*/getHierarchyDepth(object);
     /*ObjectUtils.*/setActiveObjects(objects, active);
 }
 
-export function setActiveDescendants(object: Object3D, active: boolean) {
+export function setActiveDescendants(object: Object3D, active: boolean): Object3D {
     /*ObjectUtils.*/setActiveDescendantsBreadth(object, active);
 }
 
-export function setActiveDescendantsBreadth(object: Object3D, active: boolean) {
+export function setActiveDescendantsBreadth(object: Object3D, active: boolean): Object3D {
     const objects = /*ObjectUtils.*/getDescendantsBreadth(object);
     /*ObjectUtils.*/setActiveObjects(objects, active);
 }
 
-export function setActiveDescendantsDepth(object: Object3D, active: boolean) {
+export function setActiveDescendantsDepth(object: Object3D, active: boolean): Object3D {
     const objects = /*ObjectUtils.*/getDescendantsDepth(object);
     /*ObjectUtils.*/setActiveObjects(objects, active);
 }
 
-export function setActiveChildren(object: Object3D, active: boolean) {
+export function setActiveChildren(object: Object3D, active: boolean): Object3D {
     const objects = /*ObjectUtils.*/getChildren(object);
     /*ObjectUtils.*/setActiveObjects(objects, active);
 }
 
 // Uniform Scale
 
-export function hasUniformScale(object: Object3D) {
+export function hasUniformScale(object: Object3D): boolean {
     return /*ObjectUtils.*/hasUniformScaleWorld(object);
 }
 
 export const hasUniformScaleWorld = function () {
     const scale = Vec3Utils.create();
-    return function hasUniformScaleWorld(object: Object3D) {
+    return function hasUniformScaleWorld(object: Object3D): boolean {
         /*ObjectUtils.*/getScaleWorld(object, scale);
         return Math.abs(scale[0] - scale[1]) < MathUtils.EPSILON && Math.abs(scale[1] - scale[2]) < MathUtils.EPSILON && Math.abs(scale[0] - scale[2]) < MathUtils.EPSILON;
     };
@@ -1925,7 +1925,7 @@ export const hasUniformScaleWorld = function () {
 
 export const hasUniformScaleLocal = function () {
     const scale = Vec3Utils.create();
-    return function hasUniformScaleLocal(object: Object3D) {
+    return function hasUniformScaleLocal(object: Object3D): boolean {
         /*ObjectUtils.*/getScaleLocal(object, scale);
         return Math.abs(scale[0] - scale[1]) < MathUtils.EPSILON && Math.abs(scale[1] - scale[2]) < MathUtils.EPSILON && Math.abs(scale[0] - scale[2]) < MathUtils.EPSILON;
     };
@@ -1936,7 +1936,7 @@ export const hasUniformScaleLocal = function () {
 export const clone = function () {
     const scale = Vec3Utils.create();
     const transformQuat = Quat2Utils.create();
-    return function clone(object: Object3D, cloneParams = new CloneParams()) {
+    return function clone(object: Object3D, cloneParams = new CloneParams()): Object3D {
         let clonedObject = null;
 
         const cloneParent = cloneParams.myCloneParent === undefined ? /*ObjectUtils.*/getParent(object) : cloneParams.myCloneParent;
@@ -2077,7 +2077,7 @@ export const clone = function () {
     };
 }();
 
-export function isCloneable(object: Object3D, cloneParams = new CloneParams()) {
+export function isCloneable(object: Object3D, cloneParams = new CloneParams()): boolean {
     if (cloneParams.myIgnoreNonCloneable || cloneParams.myIgnoreComponents || cloneParams.myUseDefaultComponentClone || cloneParams.myUseDefaultComponentCloneAsFallback) {
         return true;
     }
@@ -2134,7 +2134,7 @@ export function isCloneable(object: Object3D, cloneParams = new CloneParams()) {
 
 // To String
 
-export function toString(object: Object3D) {
+export function toString(object: Object3D): string {
     return /*ObjectUtils.*/toStringCompact(object);
 }
 
@@ -2154,7 +2154,7 @@ export const toStringExtended = function () {
     const endChildren = endComponents;
     const separator = ",";
     const newLineTab = newLine.concat(tab, tab);
-    return function toStringExtended(object: Object3D) {
+    return function toStringExtended(object: Object3D): string {
         let objectString = "";
         objectString = objectString.concat(startObject, newLine);
 
@@ -2233,7 +2233,7 @@ export const toStringCompact = function () {
     const componentsLabel = "components: ";
     const separator = ", ";
     const newLineTab = newLine.concat(tab);
-    return function toStringCompact(object: Object3D) {
+    return function toStringCompact(object: Object3D): string {
         let objectString = "";
 
         const name = /*ObjectUtils.*/getName(object);
@@ -2280,126 +2280,126 @@ export const toStringCompact = function () {
 
 // Get Object By Name
 
-export function getObjectByName(object: Object3D, name: string, isRegex: boolean = false, index: number = 0) {
+export function getObjectByName(object: Object3D, name: string, isRegex: boolean = false, index: number = 0): Object3D {
     return /*ObjectUtils.*/getObjectByNameHierarchy(object, name, isRegex, index);
 }
 
-export function getObjectByNameHierarchy(object: Object3D, name: string, isRegex: boolean = false, index: number = 0) {
+export function getObjectByNameHierarchy(object: Object3D, name: string, isRegex: boolean = false, index: number = 0): Object3D {
     return /*ObjectUtils.*/getObjectByNameHierarchyBreadth(object, name, isRegex, index);
 }
 
-export function getObjectByNameHierarchyBreadth(object: Object3D, name: string, isRegex: boolean = false, index: number = 0) {
+export function getObjectByNameHierarchyBreadth(object: Object3D, name: string, isRegex: boolean = false, index: number = 0): Object3D {
     const objects = /*ObjectUtils.*/getHierarchyBreadth(object);
     return /*ObjectUtils.*/getObjectByNameObjects(objects, name, isRegex, index);
 }
 
-export function getObjectByNameHierarchyDepth(object: Object3D, name: string, isRegex: boolean = false, index: number = 0) {
+export function getObjectByNameHierarchyDepth(object: Object3D, name: string, isRegex: boolean = false, index: number = 0): Object3D {
     const objects = /*ObjectUtils.*/getHierarchyDepth(object);
     return /*ObjectUtils.*/getObjectByNameObjects(objects, name, isRegex, index);
 }
 
-export function getObjectByNameDescendants(object: Object3D, name: string, isRegex: boolean = false, index: number = 0) {
+export function getObjectByNameDescendants(object: Object3D, name: string, isRegex: boolean = false, index: number = 0): Object3D {
     return /*ObjectUtils.*/getObjectByNameDescendantsBreadth(object, name, isRegex, index);
 }
 
-export function getObjectByNameDescendantsBreadth(object: Object3D, name: string, isRegex: boolean = false, index: number = 0) {
+export function getObjectByNameDescendantsBreadth(object: Object3D, name: string, isRegex: boolean = false, index: number = 0): Object3D {
     const objects = /*ObjectUtils.*/getDescendantsBreadth(object);
     return /*ObjectUtils.*/getObjectByNameObjects(objects, name, isRegex, index);
 }
 
-export function getObjectByNameDescendantsDepth(object: Object3D, name: string, isRegex: boolean = false, index: number = 0) {
+export function getObjectByNameDescendantsDepth(object: Object3D, name: string, isRegex: boolean = false, index: number = 0): Object3D {
     const objects = /*ObjectUtils.*/getDescendantsDepth(object);
     return /*ObjectUtils.*/getObjectByNameObjects(objects, name, isRegex, index);
 }
 
-export function getObjectByNameChildren(object: Object3D, name: string, isRegex: boolean = false, index: number = 0) {
+export function getObjectByNameChildren(object: Object3D, name: string, isRegex: boolean = false, index: number = 0): Object3D {
     const objects = /*ObjectUtils.*/getChildren(object);
     return /*ObjectUtils.*/getObjectByNameObjects(objects, name, isRegex, index);
 }
 
-export function getObjectsByName(object: Object3D, name: string, isRegex: boolean = false) {
+export function getObjectsByName(object: Object3D, name: string, isRegex: boolean = false): Object3D {
     return /*ObjectUtils.*/getObjectsByNameHierarchy(object, name, isRegex);
 }
 
-export function getObjectsByNameHierarchy(object: Object3D, name: string, isRegex: boolean = false) {
+export function getObjectsByNameHierarchy(object: Object3D, name: string, isRegex: boolean = false): Object3D {
     return /*ObjectUtils.*/getObjectsByNameHierarchyBreadth(object, name, isRegex);
 }
 
-export function getObjectsByNameHierarchyBreadth(object: Object3D, name: string, isRegex: boolean = false) {
+export function getObjectsByNameHierarchyBreadth(object: Object3D, name: string, isRegex: boolean = false): Object3D {
     const objects = /*ObjectUtils.*/getHierarchyBreadth(object);
     return /*ObjectUtils.*/getObjectsByNameObjects(objects, name, isRegex);
 }
 
-export function getObjectsByNameHierarchyDepth(object: Object3D, name: string, isRegex: boolean = false) {
+export function getObjectsByNameHierarchyDepth(object: Object3D, name: string, isRegex: boolean = false): Object3D {
     const objects = /*ObjectUtils.*/getHierarchyDepth(object);
     return /*ObjectUtils.*/getObjectsByNameObjects(objects, name, isRegex);
 }
 
-export function getObjectsByNameDescendants(object: Object3D, name: string, isRegex: boolean = false) {
+export function getObjectsByNameDescendants(object: Object3D, name: string, isRegex: boolean = false): Object3D {
     return /*ObjectUtils.*/getObjectsByNameDescendantsBreadth(object, name, isRegex);
 }
 
-export function getObjectsByNameDescendantsBreadth(object: Object3D, name: string, isRegex: boolean = false) {
+export function getObjectsByNameDescendantsBreadth(object: Object3D, name: string, isRegex: boolean = false): Object3D {
     const objects = /*ObjectUtils.*/getDescendantsBreadth(object);
     return /*ObjectUtils.*/getObjectsByNameObjects(objects, name, isRegex);
 }
 
-export function getObjectsByNameDescendantsDepth(object: Object3D, name: string, isRegex: boolean = false) {
+export function getObjectsByNameDescendantsDepth(object: Object3D, name: string, isRegex: boolean = false): Object3D {
     const objects = /*ObjectUtils.*/getDescendantsDepth(object);
     return /*ObjectUtils.*/getObjectsByNameObjects(objects, name, isRegex);
 }
 
-export function getObjectsByNameChildren(object: Object3D, name: string, isRegex: boolean = false) {
+export function getObjectsByNameChildren(object: Object3D, name: string, isRegex: boolean = false): Object3D {
     const objects = /*ObjectUtils.*/getChildren(object);
     return /*ObjectUtils.*/getObjectsByNameObjects(objects, name, isRegex);
 }
 
 // Get Object By ID
 
-export function getObjectByID(object: Object3D, id: number) {
+export function getObjectByID(object: Object3D, id: number): Object3D {
     return /*ObjectUtils.*/getObjectByIDHierarchy(object, id);
 }
 
-export function getObjectByIDHierarchy(object: Object3D, id: number) {
+export function getObjectByIDHierarchy(object: Object3D, id: number): Object3D {
     return /*ObjectUtils.*/getObjectByIDHierarchyBreadth(object, id);
 }
 
-export function getObjectByIDHierarchyBreadth(object: Object3D, id: number) {
+export function getObjectByIDHierarchyBreadth(object: Object3D, id: number): Object3D {
     const objects = /*ObjectUtils.*/getHierarchyBreadth(object);
     return /*ObjectUtils.*/getObjectByIDObjects(objects, id);
 }
 
-export function getObjectByIDHierarchyDepth(object: Object3D, id: number) {
+export function getObjectByIDHierarchyDepth(object: Object3D, id: number): Object3D {
     const objects = /*ObjectUtils.*/getHierarchyDepth(object);
     return /*ObjectUtils.*/getObjectByIDObjects(objects, id);
 }
 
-export function getObjectByIDDescendants(object: Object3D, id: number) {
+export function getObjectByIDDescendants(object: Object3D, id: number): Object3D {
     return /*ObjectUtils.*/getObjectByIDDescendantsBreadth(object, id);
 }
 
-export function getObjectByIDDescendantsBreadth(object: Object3D, id: number) {
+export function getObjectByIDDescendantsBreadth(object: Object3D, id: number): Object3D {
     const objects = /*ObjectUtils.*/getDescendantsBreadth(object);
     return /*ObjectUtils.*/getObjectByIDObjects(objects, id);
 }
 
-export function getObjectByIDDescendantsDepth(object: Object3D, id: number) {
+export function getObjectByIDDescendantsDepth(object: Object3D, id: number): Object3D {
     const objects = /*ObjectUtils.*/getDescendantsDepth(object);
     return /*ObjectUtils.*/getObjectByIDObjects(objects, id);
 }
 
-export function getObjectByIDChildren(object: Object3D, id: number) {
+export function getObjectByIDChildren(object: Object3D, id: number): Object3D {
     const objects = /*ObjectUtils.*/getChildren(object);
     return /*ObjectUtils.*/getObjectByIDObjects(objects, id);
 }
 
 // Get Hierarchy
 
-export function getHierarchy(object: Object3D) {
+export function getHierarchy(object: Object3D): Object3D[] {
     return /*ObjectUtils.*/getHierarchyBreadth(object);
 }
 
-export function getHierarchyBreadth(object: Object3D) {
+export function getHierarchyBreadth(object: Object3D): Object3D[] {
     const hierarchy = /*ObjectUtils.*/getDescendantsBreadth(object);
 
     hierarchy.unshift(object);
@@ -2407,7 +2407,7 @@ export function getHierarchyBreadth(object: Object3D) {
     return hierarchy;
 }
 
-export function getHierarchyDepth(object: Object3D) {
+export function getHierarchyDepth(object: Object3D): Object3D[] {
     const hierarchy = /*ObjectUtils.*/getDescendantsDepth(object);
 
     hierarchy.unshift(object);
@@ -2415,7 +2415,7 @@ export function getHierarchyDepth(object: Object3D) {
     return hierarchy;
 }
 
-export function getDescendants(object: Object3D) {
+export function getDescendants(object: Object3D): Object3D[] {
     return /*ObjectUtils.*/getDescendantsBreadth(object);
 }
 
@@ -2452,49 +2452,49 @@ export function getDescendantsDepth(object: Object3D): Object3D[] {
     return descendants;
 }
 
-export function getChildren(object: Object3D) {
+export function getChildren(object: Object3D): Object3D[] {
     return object.children;
 }
 
-export function getSelf(object: Object3D) {
+export function getSelf(object: Object3D): Object3D {
     return object;
 }
 
 // Cauldron
 
-export function addObject(object: Object3D) {
+export function addObject(object: Object3D): Object3D {
     return Globals.getScene(/*ObjectUtils.*/getEngine(object)).addObject(object);
 }
 
-export function getName(object: Object3D) {
+export function getName(object: Object3D): string {
     return object.name;
 }
 
-export function setName(object: Object3D, name: string) {
+export function setName(object: Object3D, name: string): Object3D {
     object.name = name;
 }
 
-export function getEngine(object: Object3D) {
+export function getEngine(object: Object3D): WonderlandEngine {
     return object.engine;
 }
 
-export function getID(object: Object3D) {
+export function getID(object: Object3D): number {
     return object.objectId;
 }
 
-export function markDirty(object: Object3D) {
+export function markDirty(object: Object3D): Object3D {
     return object.setDirty();
 }
 
-export function isTransformChanged(object: Object3D) {
+export function isTransformChanged(object: Object3D): boolean {
     return object.changed;
 }
 
-export function equals(first: Object3D, second: Object3D) {
+export function equals(first: Object3D, second: Object3D): boolean {
     return first.equals(second);
 }
 
-export function destroy(object: Object3D) {
+export function destroy(object: Object3D): void {
     let destroyReturnValue = undefined;
 
     try {
@@ -2506,35 +2506,35 @@ export function destroy(object: Object3D) {
     return destroyReturnValue;
 }
 
-export function reserveObjects(object: Object3D, count: number) {
+export function reserveObjects(object: Object3D, count: number): Object3D {
     /*ObjectUtils.*/reserveObjectsHierarchy(object, count);
 }
 
-export function reserveObjectsSelf(object: Object3D, count: number) {
+export function reserveObjectsSelf(object: Object3D, count: number): Object3D {
     const componentsAmountMap = /*ObjectUtils.*/getComponentsAmountMapSelf(object);
     _reserveObjects(count, componentsAmountMap, Globals.getScene(/*ObjectUtils.*/getEngine(object)));
 }
 
-export function reserveObjectsHierarchy(object: Object3D, count: number) {
+export function reserveObjectsHierarchy(object: Object3D, count: number): Object3D {
     const componentsAmountMap = /*ObjectUtils.*/getComponentsAmountMapHierarchy(object);
     _reserveObjects(count, componentsAmountMap, Globals.getScene(/*ObjectUtils.*/getEngine(object)));
 }
 
-export function reserveObjectsDescendants(object: Object3D, count: number) {
+export function reserveObjectsDescendants(object: Object3D, count: number): Object3D {
     const componentsAmountMap = /*ObjectUtils.*/getComponentsAmountMapDescendants(object);
     _reserveObjects(count, componentsAmountMap, Globals.getScene(/*ObjectUtils.*/getEngine(object)));
 }
 
-export function reserveObjectsChildren(object: Object3D, count: number) {
+export function reserveObjectsChildren(object: Object3D, count: number): Object3D {
     const componentsAmountMap = /*ObjectUtils.*/getComponentsAmountMapChildren(object);
     _reserveObjects(count, componentsAmountMap, Globals.getScene(/*ObjectUtils.*/getEngine(object)));
 }
 
-export function getComponentsAmountMap(object: Object3D, amountMap = new Map()) {
+export function getComponentsAmountMap(object: Object3D, amountMap = new Map()): Map<string, number> {
     return /*ObjectUtils.*/getComponentsAmountMapHierarchy(object, amountMap);
 }
 
-export function getComponentsAmountMapSelf(object: Object3D, amountMap = new Map()) {
+export function getComponentsAmountMapSelf(object: Object3D, amountMap = new Map()): Map<string, number> {
     let objectsAmount = amountMap.get("object");
     if (objectsAmount == null) {
         objectsAmount = 0;
@@ -2556,7 +2556,7 @@ export function getComponentsAmountMapSelf(object: Object3D, amountMap = new Map
     return amountMap;
 }
 
-export function getComponentsAmountMapHierarchy(object: Object3D, amountMap = new Map()) {
+export function getComponentsAmountMapHierarchy(object: Object3D, amountMap = new Map()): Map<string, number> {
     const hierarchy = /*ObjectUtils.*/getHierarchy(object);
 
     for (const hierarchyObject of hierarchy) {
@@ -2566,7 +2566,7 @@ export function getComponentsAmountMapHierarchy(object: Object3D, amountMap = ne
     return amountMap;
 }
 
-export function getComponentsAmountMapDescendants(object: Object3D, amountMap = new Map()) {
+export function getComponentsAmountMapDescendants(object: Object3D, amountMap = new Map()): Map<string, number> {
     const descendants = /*ObjectUtils.*/getDescendants(object);
 
     for (const descendant of descendants) {
@@ -2576,7 +2576,7 @@ export function getComponentsAmountMapDescendants(object: Object3D, amountMap = 
     return amountMap;
 }
 
-export function getComponentsAmountMapChildren(object: Object3D, amountMap = new Map()) {
+export function getComponentsAmountMapChildren(object: Object3D, amountMap = new Map()): Map<string, number> {
     const children = /*ObjectUtils.*/getChildren(object);
 
     for (const child of children) {
@@ -2620,13 +2620,13 @@ export function getComponentsObjects(objects: Object3D[], typeOrClass: string | 
     return components;
 }
 
-export function setActiveObjects(objects: Object3D[], active: boolean) {
+export function setActiveObjects(objects: Object3D[], active: boolean): Object3D {
     for (const currentObject of objects) {
         currentObject.active = active;
     }
 }
 
-export function getObjectByNameObjects(objects: Object3D[], name: string, isRegex: boolean = false, index: number = 0) {
+export function getObjectByNameObjects(objects: Object3D[], name: string, isRegex: boolean = false, index: number = 0): Object3D {
     let objectFound = null;
 
     let currentIndex = index;
@@ -2645,7 +2645,7 @@ export function getObjectByNameObjects(objects: Object3D[], name: string, isRege
     return objectFound;
 }
 
-export function getObjectsByNameObjects(objects: Object3D[], name: string, isRegex: boolean = false) {
+export function getObjectsByNameObjects(objects: Object3D[], name: string, isRegex: boolean = false): Object3D[] {
     const objectsFound: Object3D[] = [];
 
     for (const currentObject of objects) {
@@ -2658,7 +2658,7 @@ export function getObjectsByNameObjects(objects: Object3D[], name: string, isReg
     return objectsFound;
 }
 
-export function getObjectByIDObjects(objects: Object3D[], id: number, index: number = 0) {
+export function getObjectByIDObjects(objects: Object3D[], id: number, index: number = 0): Object3D {
     let objectFound = null;
 
     let currentIndex = index;
@@ -2676,7 +2676,7 @@ export function getObjectByIDObjects(objects: Object3D[], id: number, index: num
     return objectFound;
 }
 
-export function getObjectsByIDObjects(objects: Object3D[], id: number) {
+export function getObjectsByIDObjects(objects: Object3D[], id: number): Object3D[] {
     const objectsFound: Object3D[] = [];
 
     for (const currentObject of objects) {
@@ -2688,7 +2688,7 @@ export function getObjectsByIDObjects(objects: Object3D[], id: number) {
     return objectsFound;
 }
 
-export function wrapObject(id: number, engine = Globals.getMainEngine()) {
+export function wrapObject(id: number, engine = Globals.getMainEngine()): Object3D {
     return engine.wrapObject(id);
 }
 
