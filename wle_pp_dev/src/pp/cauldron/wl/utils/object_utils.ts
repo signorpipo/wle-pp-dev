@@ -69,110 +69,110 @@ export class CloneParams {
 
 // Position
 
-export function getPosition(object: Object3D, position: Vector3): Vector3 {
-    return /*ObjectUtils.*/getPositionWorld(object, position);
+export function getPosition(object: Object3D, outPosition: Vector3): Vector3 {
+    return /*ObjectUtils.*/getPositionWorld(object, outPosition);
 }
 
-export function getPositionWorld(object: Object3D, position: Vector3 = Vec3Utils.create()): Vector3 {
-    object.getPositionWorld(position);
-    return position;
+export function getPositionWorld(object: Object3D, outPosition: Vector3 = Vec3Utils.create()): Vector3 {
+    object.getPositionWorld(outPosition);
+    return outPosition;
 }
 
-export function getPositionLocal(object: Object3D, position: Vector3 = Vec3Utils.create()): Vector3 {
-    object.getPositionLocal(position);
-    return position;
+export function getPositionLocal(object: Object3D, outPosition: Vector3 = Vec3Utils.create()): Vector3 {
+    object.getPositionLocal(outPosition);
+    return outPosition;
 }
 
 // Rotation
 
-export function getRotation(object: Object3D, rotation: Vector3): Vector3 {
-    return /*ObjectUtils.*/getRotationWorld(object, rotation);
+export function getRotation(object: Object3D, outRotation: Vector3): Vector3 {
+    return /*ObjectUtils.*/getRotationWorld(object, outRotation);
 }
 
-export function getRotationDegrees(object: Object3D, rotation: Vector3): Vector3 {
-    return /*ObjectUtils.*/getRotationWorldDegrees(object, rotation);
+export function getRotationDegrees(object: Object3D, outRotation: Vector3): Vector3 {
+    return /*ObjectUtils.*/getRotationWorldDegrees(object, outRotation);
 }
 
-export function getRotationRadians(object: Object3D, rotation: Vector3): Vector3 {
-    return /*ObjectUtils.*/getRotationWorldRadians(object, rotation);
+export function getRotationRadians(object: Object3D, outRotation: Vector3): Vector3 {
+    return /*ObjectUtils.*/getRotationWorldRadians(object, outRotation);
 }
 
-export function getRotationMatrix(object: Object3D, rotation: Matrix3): Matrix3 {
-    return /*ObjectUtils.*/getRotationWorldMatrix(object, rotation);
+export function getRotationMatrix(object: Object3D, outRotation: Matrix3): Matrix3 {
+    return /*ObjectUtils.*/getRotationWorldMatrix(object, outRotation);
 }
 
-export function getRotationQuat(object: Object3D, rotation: Quaternion): Quaternion {
-    return /*ObjectUtils.*/getRotationWorldQuat(object, rotation);
+export function getRotationQuat(object: Object3D, outRotation: Quaternion): Quaternion {
+    return /*ObjectUtils.*/getRotationWorldQuat(object, outRotation);
 }
 
 // Rotation World
 
-export function getRotationWorld(object: Object3D, rotation: Vector3): Vector3 {
-    return /*ObjectUtils.*/getRotationWorldDegrees(object, rotation);
+export function getRotationWorld(object: Object3D, outRotation: Vector3): Vector3 {
+    return /*ObjectUtils.*/getRotationWorldDegrees(object, outRotation);
 }
 
-export function getRotationWorldDegrees(object: Object3D, rotation: Vector3): Vector3 {
-    rotation = /*ObjectUtils.*/getRotationWorldRadians(object, rotation);
-    rotation = Vec3Utils.toDegrees(rotation, rotation);
-    return rotation;
+export function getRotationWorldDegrees(object: Object3D, outRotation: Vector3): Vector3 {
+    outRotation = /*ObjectUtils.*/getRotationWorldRadians(object, outRotation);
+    outRotation = Vec3Utils.toDegrees(outRotation, outRotation);
+    return outRotation;
 }
 
 export const getRotationWorldRadians = function () {
     const quat = QuatUtils.create();
-    return function getRotationWorldRadians(object: Object3D, rotation: Vector3 = Vec3Utils.create()): Vector3 {
+    return function getRotationWorldRadians(object: Object3D, outRotation: Vector3 = Vec3Utils.create()): Vector3 {
         /*ObjectUtils.*/getRotationWorldQuat(object, quat);
-        QuatUtils.toRadians(quat, rotation);
-        return rotation;
+        QuatUtils.toRadians(quat, outRotation);
+        return outRotation;
     };
 }();
 
 export const getRotationWorldMatrix = function () {
     const quat = QuatUtils.create();
-    return function getRotationWorldMatrix(object: Object3D, rotation: Vector3 = Mat3Utils.create()): Matrix3 {
+    return function getRotationWorldMatrix(object: Object3D, outRotation: Vector3 = Mat3Utils.create()): Matrix3 {
         /*ObjectUtils.*/getRotationWorldQuat(object, quat);
-        QuatUtils.toMatrix(quat, rotation);
-        return rotation;
+        QuatUtils.toMatrix(quat, outRotation);
+        return outRotation;
     };
 }();
 
-export function getRotationWorldQuat(object: Object3D, rotation: Vector3 = QuatUtils.create()): Quaternion {
-    object.getRotationWorld(rotation);
-    return rotation;
+export function getRotationWorldQuat(object: Object3D, outRotation: Vector3 = QuatUtils.create()): Quaternion {
+    object.getRotationWorld(outRotation);
+    return outRotation;
 }
 
 // Rotation Local
 
-export function getRotationLocal(object: Object3D, rotation: Vector3): Vector3 {
-    return /*ObjectUtils.*/getRotationLocalDegrees(object, rotation);
+export function getRotationLocal(object: Object3D, outRotation: Vector3): Vector3 {
+    return /*ObjectUtils.*/getRotationLocalDegrees(object, outRotation);
 }
 
-export function getRotationLocalDegrees(object: Object3D, rotation: Vector3): Vector3 {
-    rotation = /*ObjectUtils.*/getRotationLocalRadians(object, rotation);
-    rotation = Vec3Utils.toDegrees(rotation, rotation);
-    return rotation;
+export function getRotationLocalDegrees(object: Object3D, outRotation: Vector3): Vector3 {
+    outRotation = /*ObjectUtils.*/getRotationLocalRadians(object, outRotation);
+    outRotation = Vec3Utils.toDegrees(outRotation, outRotation);
+    return outRotation;
 }
 
 export const getRotationLocalRadians = function () {
     const quat = QuatUtils.create();
-    return function getRotationLocalRadians(object: Object3D, rotation: Vector3 = Vec3Utils.create()): Vector3 {
+    return function getRotationLocalRadians(object: Object3D, outRotation: Vector3 = Vec3Utils.create()): Vector3 {
         /*ObjectUtils.*/getRotationLocalQuat(object, quat);
-        QuatUtils.toRadians(quat, rotation);
-        return rotation;
+        QuatUtils.toRadians(quat, outRotation);
+        return outRotation;
     };
 }();
 
 export const getRotationLocalMatrix = function () {
     const quat = QuatUtils.create();
-    return function getRotationLocalMatrix(object: Object3D, rotation: Matrix3 = Mat3Utils.create()): Matrix3 {
+    return function getRotationLocalMatrix(object: Object3D, outRotation: Matrix3 = Mat3Utils.create()): Matrix3 {
         /*ObjectUtils.*/getRotationLocalQuat(object, quat);
-        QuatUtils.toMatrix(quat, rotation);
-        return rotation;
+        QuatUtils.toMatrix(quat, outRotation);
+        return outRotation;
     };
 }();
 
-export function getRotationLocalQuat(object: Object3D, rotation: Quaternion = QuatUtils.create()): Quaternion {
-    object.getRotationLocal(rotation);
-    return rotation;
+export function getRotationLocalQuat(object: Object3D, outRotation: Quaternion = QuatUtils.create()): Quaternion {
+    object.getRotationLocal(outRotation);
+    return outRotation;
 }
 
 // Scale
@@ -193,249 +193,249 @@ export function getScaleLocal(object: Object3D, scale: Vector3 = Vec3Utils.creat
 
 // Transform
 
-export function getTransform(object: Object3D, transform: Matrix4): Matrix4 {
-    return /*ObjectUtils.*/getTransformWorld(object, transform);
+export function getTransform(object: Object3D, outTransform: Matrix4): Matrix4 {
+    return /*ObjectUtils.*/getTransformWorld(object, outTransform);
 }
 
-export function getTransformMatrix(object: Object3D, transform: Matrix4): Matrix4 {
-    return /*ObjectUtils.*/getTransformWorldMatrix(object, transform);
+export function getTransformMatrix(object: Object3D, outTransform: Matrix4): Matrix4 {
+    return /*ObjectUtils.*/getTransformWorldMatrix(object, outTransform);
 }
 
-export function getTransformQuat(object: Object3D, transform: Quaternion2): Quaternion2 {
-    return /*ObjectUtils.*/getTransformWorldQuat(object, transform);
+export function getTransformQuat(object: Object3D, outTransform: Quaternion2): Quaternion2 {
+    return /*ObjectUtils.*/getTransformWorldQuat(object, outTransform);
 }
 
 // Transform World
 
-export function getTransformWorld(object: Object3D, transform: Matrix4): Matrix4 {
-    return /*ObjectUtils.*/getTransformWorldMatrix(object, transform);
+export function getTransformWorld(object: Object3D, outTransform: Matrix4): Matrix4 {
+    return /*ObjectUtils.*/getTransformWorldMatrix(object, outTransform);
 }
 
 export const getTransformWorldMatrix = function () {
     const transformQuat = Quat2Utils.create();
     const scale = Vec3Utils.create();
-    return function getTransformWorldMatrix(object: Object3D, transform: Matrix4 = Mat4Utils.create()): Matrix4 {
+    return function getTransformWorldMatrix(object: Object3D, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
         /*ObjectUtils.*/getTransformWorldQuat(object, transformQuat);
         /*ObjectUtils.*/getScaleWorld(object, scale);
-        Mat4Utils.fromQuat(transformQuat, transform);
-        Mat4Utils.scale(transform, scale, transform);
-        return transform;
+        Mat4Utils.fromQuat(transformQuat, outTransform);
+        Mat4Utils.scale(outTransform, scale, outTransform);
+        return outTransform;
     };
 }();
 
-export function getTransformWorldQuat(object: Object3D, transform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
-    object.getTransformWorld(transform);
-    return transform;
+export function getTransformWorldQuat(object: Object3D, outTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
+    object.getTransformWorld(outTransform);
+    return outTransform;
 }
 
 // Transform Local
 
-export function getTransformLocal(object: Object3D, transform: Matrix4): Matrix4 {
-    return /*ObjectUtils.*/getTransformLocalMatrix(object, transform);
+export function getTransformLocal(object: Object3D, outTransform: Matrix4): Matrix4 {
+    return /*ObjectUtils.*/getTransformLocalMatrix(object, outTransform);
 }
 
 export const getTransformLocalMatrix = function () {
     const transformQuat = Quat2Utils.create();
     const scale = Vec3Utils.create();
-    return function getTransformLocalMatrix(object: Object3D, transform: Matrix4 = Mat4Utils.create()): Matrix4 {
+    return function getTransformLocalMatrix(object: Object3D, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
         /*ObjectUtils.*/getTransformLocalQuat(object, transformQuat);
         /*ObjectUtils.*/getScaleLocal(object, scale);
-        Mat4Utils.fromQuat(transformQuat, transform);
-        Mat4Utils.scale(transform, scale, transform);
-        return transform;
+        Mat4Utils.fromQuat(transformQuat, outTransform);
+        Mat4Utils.scale(outTransform, scale, outTransform);
+        return outTransform;
     };
 }();
 
-export function getTransformLocalQuat(object: Object3D, transform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
-    object.getTransformLocal(transform);
-    return transform;
+export function getTransformLocalQuat(object: Object3D, outTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
+    object.getTransformLocal(outTransform);
+    return outTransform;
 }
 
 // Axes
 
-export function getAxes(object: Object3D, axes: [Vector3, Vector3, Vector3]): [Vector3, Vector3, Vector3] {
-    return /*ObjectUtils.*/getAxesWorld(object, axes);
+export function getAxes(object: Object3D, outAxes: [Vector3, Vector3, Vector3]): [Vector3, Vector3, Vector3] {
+    return /*ObjectUtils.*/getAxesWorld(object, outAxes);
 }
 
-export function getAxesWorld(object: Object3D, axes: [Vector3, Vector3, Vector3] = [Vec3Utils.create(), Vec3Utils.create(), Vec3Utils.create()]): [Vector3, Vector3, Vector3] {
-    /*ObjectUtils.*/getLeftWorld(object, axes[0]);
-    /*ObjectUtils.*/getUpWorld(object, axes[1]);
-    /*ObjectUtils.*/getForwardWorld(object, axes[2]);
-    return axes;
+export function getAxesWorld(object: Object3D, outAxes: [Vector3, Vector3, Vector3] = [Vec3Utils.create(), Vec3Utils.create(), Vec3Utils.create()]): [Vector3, Vector3, Vector3] {
+    /*ObjectUtils.*/getLeftWorld(object, outAxes[0]);
+    /*ObjectUtils.*/getUpWorld(object, outAxes[1]);
+    /*ObjectUtils.*/getForwardWorld(object, outAxes[2]);
+    return outAxes;
 }
 
-export function getAxesLocal(object: Object3D, axes: [Vector3, Vector3, Vector3] = [Vec3Utils.create(), Vec3Utils.create(), Vec3Utils.create()]): [Vector3, Vector3, Vector3] {
-    /*ObjectUtils.*/getLeftLocal(object, axes[0]);
-    /*ObjectUtils.*/getUpLocal(object, axes[1]);
-    /*ObjectUtils.*/getForwardLocal(object, axes[2]);
-    return axes;
+export function getAxesLocal(object: Object3D, outAxes: [Vector3, Vector3, Vector3] = [Vec3Utils.create(), Vec3Utils.create(), Vec3Utils.create()]): [Vector3, Vector3, Vector3] {
+    /*ObjectUtils.*/getLeftLocal(object, outAxes[0]);
+    /*ObjectUtils.*/getUpLocal(object, outAxes[1]);
+    /*ObjectUtils.*/getForwardLocal(object, outAxes[2]);
+    return outAxes;
 }
 
 // Forward
 
-export function getForward(object: Object3D, forward: Vector3): Vector3 {
-    return /*ObjectUtils.*/getForwardWorld(object, forward);
+export function getForward(object: Object3D, outForward: Vector3): Vector3 {
+    return /*ObjectUtils.*/getForwardWorld(object, outForward);
 }
 
 export const getForwardWorld = function () {
     const rotation = Mat3Utils.create();
-    return function getForwardWorld(object: Object3D, forward: Vector3 = Vec3Utils.create()): Vector3 {
+    return function getForwardWorld(object: Object3D, outForward: Vector3 = Vec3Utils.create()): Vector3 {
         /*ObjectUtils.*/getRotationWorldMatrix(object, rotation);
-        forward[0] = rotation[6];
-        forward[1] = rotation[7];
-        forward[2] = rotation[8];
-        return forward;
+        outForward[0] = rotation[6];
+        outForward[1] = rotation[7];
+        outForward[2] = rotation[8];
+        return outForward;
     };
 }();
 
 export const getForwardLocal = function () {
     const rotation = Mat3Utils.create();
-    return function getForwardLocal(object: Object3D, forward: Vector3 = Vec3Utils.create()): Vector3 {
+    return function getForwardLocal(object: Object3D, outForward: Vector3 = Vec3Utils.create()): Vector3 {
         /*ObjectUtils.*/getRotationLocalMatrix(object, rotation);
-        forward[0] = rotation[6];
-        forward[1] = rotation[7];
-        forward[2] = rotation[8];
-        return forward;
+        outForward[0] = rotation[6];
+        outForward[1] = rotation[7];
+        outForward[2] = rotation[8];
+        return outForward;
     };
 }();
 
 // Backward
 
-export function getBackward(object: Object3D, backward: Vector3): Vector3 {
-    return /*ObjectUtils.*/getBackwardWorld(object, backward);
+export function getBackward(object: Object3D, outBackward: Vector3): Vector3 {
+    return /*ObjectUtils.*/getBackwardWorld(object, outBackward);
 }
 
 export const getBackwardWorld = function () {
     const rotation = Mat3Utils.create();
-    return function getBackwardWorld(object: Object3D, backward: Vector3 = Vec3Utils.create()): Vector3 {
+    return function getBackwardWorld(object: Object3D, outBackward: Vector3 = Vec3Utils.create()): Vector3 {
         /*ObjectUtils.*/getRotationWorldMatrix(object, rotation);
-        backward[0] = -rotation[6];
-        backward[1] = -rotation[7];
-        backward[2] = -rotation[8];
-        return backward;
+        outBackward[0] = -rotation[6];
+        outBackward[1] = -rotation[7];
+        outBackward[2] = -rotation[8];
+        return outBackward;
     };
 }();
 
 export const getBackwardLocal = function () {
     const rotation = Mat3Utils.create();
-    return function getBackwardLocal(object: Object3D, backward: Vector3 = Vec3Utils.create()): Vector3 {
+    return function getBackwardLocal(object: Object3D, outBackward: Vector3 = Vec3Utils.create()): Vector3 {
         /*ObjectUtils.*/getRotationLocalMatrix(object, rotation);
-        backward[0] = -rotation[6];
-        backward[1] = -rotation[7];
-        backward[2] = -rotation[8];
-        return backward;
+        outBackward[0] = -rotation[6];
+        outBackward[1] = -rotation[7];
+        outBackward[2] = -rotation[8];
+        return outBackward;
     };
 }();
 
 // Up
 
-export function getUp(object: Object3D, up: Vector3): Vector3 {
-    return /*ObjectUtils.*/getUpWorld(object, up);
+export function getUp(object: Object3D, outUp: Vector3): Vector3 {
+    return /*ObjectUtils.*/getUpWorld(object, outUp);
 }
 
 export const getUpWorld = function () {
     const rotation = Mat3Utils.create();
-    return function getUpWorld(object: Object3D, up: Vector3 = Vec3Utils.create()): Vector3 {
+    return function getUpWorld(object: Object3D, outUp: Vector3 = Vec3Utils.create()): Vector3 {
         /*ObjectUtils.*/getRotationWorldMatrix(object, rotation);
-        up[0] = rotation[3];
-        up[1] = rotation[4];
-        up[2] = rotation[5];
-        return up;
+        outUp[0] = rotation[3];
+        outUp[1] = rotation[4];
+        outUp[2] = rotation[5];
+        return outUp;
     };
 }();
 
 export const getUpLocal = function () {
     const rotation = Mat3Utils.create();
-    return function getUpLocal(object: Object3D, up: Vector3 = Vec3Utils.create()): Vector3 {
+    return function getUpLocal(object: Object3D, outUp: Vector3 = Vec3Utils.create()): Vector3 {
         /*ObjectUtils.*/getRotationLocalMatrix(object, rotation);
-        up[0] = rotation[3];
-        up[1] = rotation[4];
-        up[2] = rotation[5];
-        return up;
+        outUp[0] = rotation[3];
+        outUp[1] = rotation[4];
+        outUp[2] = rotation[5];
+        return outUp;
     };
 }();
 
 // Down
 
-export function getDown(object: Object3D, down: Vector3): Vector3 {
-    return /*ObjectUtils.*/getDownWorld(object, down);
+export function getDown(object: Object3D, outDown: Vector3): Vector3 {
+    return /*ObjectUtils.*/getDownWorld(object, outDown);
 }
 
 export const getDownWorld = function () {
     const rotation = Mat3Utils.create();
-    return function getDownWorld(object: Object3D, down: Vector3 = Vec3Utils.create()): Vector3 {
+    return function getDownWorld(object: Object3D, outDown: Vector3 = Vec3Utils.create()): Vector3 {
         /*ObjectUtils.*/getRotationWorldMatrix(object, rotation);
-        down[0] = -rotation[3];
-        down[1] = -rotation[4];
-        down[2] = -rotation[5];
-        return down;
+        outDown[0] = -rotation[3];
+        outDown[1] = -rotation[4];
+        outDown[2] = -rotation[5];
+        return outDown;
     };
 }();
 
 export const getDownLocal = function () {
     const rotation = Mat3Utils.create();
-    return function getDownLocal(object: Object3D, down: Vector3 = Vec3Utils.create()): Vector3 {
+    return function getDownLocal(object: Object3D, outDown: Vector3 = Vec3Utils.create()): Vector3 {
         /*ObjectUtils.*/getRotationLocalMatrix(object, rotation);
-        down[0] = -rotation[3];
-        down[1] = -rotation[4];
-        down[2] = -rotation[5];
-        return down;
+        outDown[0] = -rotation[3];
+        outDown[1] = -rotation[4];
+        outDown[2] = -rotation[5];
+        return outDown;
     };
 }();
 
 // Left
 
-export function getLeft(object: Object3D, left: Vector3): Vector3 {
-    return /*ObjectUtils.*/getLeftWorld(object, left);
+export function getLeft(object: Object3D, outLeft: Vector3): Vector3 {
+    return /*ObjectUtils.*/getLeftWorld(object, outLeft);
 }
 
 export const getLeftWorld = function () {
     const rotation = Mat3Utils.create();
-    return function getLeftWorld(object: Object3D, left: Vector3 = Vec3Utils.create()): Vector3 {
+    return function getLeftWorld(object: Object3D, outLeft: Vector3 = Vec3Utils.create()): Vector3 {
         /*ObjectUtils.*/getRotationWorldMatrix(object, rotation);
-        left[0] = rotation[0];
-        left[1] = rotation[1];
-        left[2] = rotation[2];
-        return left;
+        outLeft[0] = rotation[0];
+        outLeft[1] = rotation[1];
+        outLeft[2] = rotation[2];
+        return outLeft;
     };
 }();
 
 export const getLeftLocal = function () {
     const rotation = Mat3Utils.create();
-    return function getLeftLocal(object: Object3D, left: Vector3 = Vec3Utils.create()): Vector3 {
+    return function getLeftLocal(object: Object3D, outLeft: Vector3 = Vec3Utils.create()): Vector3 {
         /*ObjectUtils.*/getRotationLocalMatrix(object, rotation);
-        left[0] = rotation[0];
-        left[1] = rotation[1];
-        left[2] = rotation[2];
-        return left;
+        outLeft[0] = rotation[0];
+        outLeft[1] = rotation[1];
+        outLeft[2] = rotation[2];
+        return outLeft;
     };
 }();
 
 // Right
 
-export function getRight(object: Object3D, right: Vector3): Vector3 {
-    return /*ObjectUtils.*/getRightWorld(object, right);
+export function getRight(object: Object3D, outRight: Vector3): Vector3 {
+    return /*ObjectUtils.*/getRightWorld(object, outRight);
 }
 
 export const getRightWorld = function () {
     const rotation = Mat3Utils.create();
-    return function getRightWorld(object: Object3D, right: Vector3 = Vec3Utils.create()): Vector3 {
+    return function getRightWorld(object: Object3D, outRight: Vector3 = Vec3Utils.create()): Vector3 {
         /*ObjectUtils.*/getRotationWorldMatrix(object, rotation);
-        right[0] = -rotation[0];
-        right[1] = -rotation[1];
-        right[2] = -rotation[2];
-        return right;
+        outRight[0] = -rotation[0];
+        outRight[1] = -rotation[1];
+        outRight[2] = -rotation[2];
+        return outRight;
     };
 }();
 
 export const getRightLocal = function () {
     const rotation = Mat3Utils.create();
-    return function getRightLocal(object: Object3D, right: Vector3 = Vec3Utils.create()): Vector3 {
+    return function getRightLocal(object: Object3D, outRight: Vector3 = Vec3Utils.create()): Vector3 {
         /*ObjectUtils.*/getRotationLocalMatrix(object, rotation);
-        right[0] = -rotation[0];
-        right[1] = -rotation[1];
-        right[2] = -rotation[2];
-        return right;
+        outRight[0] = -rotation[0];
+        outRight[1] = -rotation[1];
+        outRight[2] = -rotation[2];
+        return outRight;
     };
 }();
 

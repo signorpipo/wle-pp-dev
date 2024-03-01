@@ -262,100 +262,100 @@ export function initObjectExtensionProtoype(): void {
 
     // Axes
 
-    objectExtension.pp_getAxes = function pp_getAxes(this: Readonly<Object3D>, axes: Readonly<[Vector3, Vector3, Vector3]> = [Vec3Utils.create(), Vec3Utils.create(), Vec3Utils.create()]): [Vector3, Vector3, Vector3] {
-        return ObjectUtils.getAxes(this, axes);
+    objectExtension.pp_getAxes = function pp_getAxes(this: Readonly<Object3D>, outAxes: [Vector3, Vector3, Vector3] = [Vec3Utils.create(), Vec3Utils.create(), Vec3Utils.create()]): [Vector3, Vector3, Vector3] {
+        return ObjectUtils.getAxes(this, outAxes);
     };
 
-    objectExtension.pp_getAxesWorld = function pp_getAxesWorld(this: Readonly<Object3D>, axes: Readonly<[Vector3, Vector3, Vector3]> = [Vec3Utils.create(), Vec3Utils.create(), Vec3Utils.create()]): [Vector3, Vector3, Vector3] {
-        return ObjectUtils.getAxesWorld(this, axes);
+    objectExtension.pp_getAxesWorld = function pp_getAxesWorld(this: Readonly<Object3D>, outAxes: [Vector3, Vector3, Vector3] = [Vec3Utils.create(), Vec3Utils.create(), Vec3Utils.create()]): [Vector3, Vector3, Vector3] {
+        return ObjectUtils.getAxesWorld(this, outAxes);
     };
 
-    objectExtension.pp_getAxesLocal = function pp_getAxesLocal(this: Readonly<Object3D>, axes: Readonly<[Vector3, Vector3, Vector3]> = [Vec3Utils.create(), Vec3Utils.create(), Vec3Utils.create()]): [Vector3, Vector3, Vector3] {
-        return ObjectUtils.getAxesLocal(this, axes);
+    objectExtension.pp_getAxesLocal = function pp_getAxesLocal(this: Readonly<Object3D>, outAxes: [Vector3, Vector3, Vector3] = [Vec3Utils.create(), Vec3Utils.create(), Vec3Utils.create()]): [Vector3, Vector3, Vector3] {
+        return ObjectUtils.getAxesLocal(this, outAxes);
     };
 
     // Forward
 
-    objectExtension.pp_getForward = function pp_getForward(this: Readonly<Object3D>, forward: Vector3 = Vec3Utils.create()): Vector3 {
-        return ObjectUtils.getForward(this, forward);
+    objectExtension.pp_getForward = function pp_getForward(this: Readonly<Object3D>, outForward: Vector3 = Vec3Utils.create()): Vector3 {
+        return ObjectUtils.getForward(this, outForward);
     };
 
-    objectExtension.pp_getForwardWorld = function pp_getForwardWorld(this: Readonly<Object3D>, forward: Vector3 = Vec3Utils.create()): Vector3 {
-        return ObjectUtils.getForwardWorld(this, forward);
+    objectExtension.pp_getForwardWorld = function pp_getForwardWorld(this: Readonly<Object3D>, outForward: Vector3 = Vec3Utils.create()): Vector3 {
+        return ObjectUtils.getForwardWorld(this, outForward);
     };
 
-    objectExtension.pp_getForwardLocal = function pp_getForwardLocal(this: Readonly<Object3D>, forward: Vector3 = Vec3Utils.create()): Vector3 {
-        return ObjectUtils.getForwardLocal(this, forward);
+    objectExtension.pp_getForwardLocal = function pp_getForwardLocal(this: Readonly<Object3D>, outForward: Vector3 = Vec3Utils.create()): Vector3 {
+        return ObjectUtils.getForwardLocal(this, outForward);
     };
 
     // Backward
 
-    objectExtension.pp_getBackward = function pp_getBackward(this: Readonly<Object3D>, backward: Vector3 = Vec3Utils.create()): Vector3 {
-        return ObjectUtils.getBackward(this, backward);
+    objectExtension.pp_getBackward = function pp_getBackward(this: Readonly<Object3D>, outBackward: Vector3 = Vec3Utils.create()): Vector3 {
+        return ObjectUtils.getBackward(this, outBackward);
     };
 
-    objectExtension.pp_getBackwardWorld = function pp_getBackwardWorld(this: Readonly<Object3D>, backward: Vector3 = Vec3Utils.create()): Vector3 {
-        return ObjectUtils.getBackwardWorld(this, backward);
+    objectExtension.pp_getBackwardWorld = function pp_getBackwardWorld(this: Readonly<Object3D>, outBackward: Vector3 = Vec3Utils.create()): Vector3 {
+        return ObjectUtils.getBackwardWorld(this, outBackward);
     };
 
-    objectExtension.pp_getBackwardLocal = function pp_getBackwardLocal(this: Readonly<Object3D>, backward: Vector3 = Vec3Utils.create()): Vector3 {
-        return ObjectUtils.getBackwardLocal(this, backward);
+    objectExtension.pp_getBackwardLocal = function pp_getBackwardLocal(this: Readonly<Object3D>, outBackward: Vector3 = Vec3Utils.create()): Vector3 {
+        return ObjectUtils.getBackwardLocal(this, outBackward);
     };
 
     // Up
 
-    objectExtension.pp_getUp = function pp_getUp(this: Readonly<Object3D>, up: Vector3 = Vec3Utils.create()): Vector3 {
-        return ObjectUtils.getUp(this, up);
+    objectExtension.pp_getUp = function pp_getUp(this: Readonly<Object3D>, outUp: Vector3 = Vec3Utils.create()): Vector3 {
+        return ObjectUtils.getUp(this, outUp);
     };
 
-    objectExtension.pp_getUpWorld = function pp_getUpWorld(this: Readonly<Object3D>, up: Vector3 = Vec3Utils.create()): Vector3 {
-        return ObjectUtils.getUpWorld(this, up);
+    objectExtension.pp_getUpWorld = function pp_getUpWorld(this: Readonly<Object3D>, outUp: Vector3 = Vec3Utils.create()): Vector3 {
+        return ObjectUtils.getUpWorld(this, outUp);
     };
 
-    objectExtension.pp_getUpLocal = function pp_getUpLocal(this: Readonly<Object3D>, up: Vector3 = Vec3Utils.create()): Vector3 {
-        return ObjectUtils.getUpLocal(this, up);
+    objectExtension.pp_getUpLocal = function pp_getUpLocal(this: Readonly<Object3D>, outUp: Vector3 = Vec3Utils.create()): Vector3 {
+        return ObjectUtils.getUpLocal(this, outUp);
     };
 
     // Down
 
-    objectExtension.pp_getDown = function pp_getDown(this: Readonly<Object3D>, down: Vector3 = Vec3Utils.create()): Vector3 {
-        return ObjectUtils.getDown(this, down);
+    objectExtension.pp_getDown = function pp_getDown(this: Readonly<Object3D>, outDown: Vector3 = Vec3Utils.create()): Vector3 {
+        return ObjectUtils.getDown(this, outDown);
     };
 
-    objectExtension.pp_getDownWorld = function pp_getDownWorld(this: Readonly<Object3D>, down: Vector3 = Vec3Utils.create()): Vector3 {
-        return ObjectUtils.getDownWorld(this, down);
+    objectExtension.pp_getDownWorld = function pp_getDownWorld(this: Readonly<Object3D>, outDown: Vector3 = Vec3Utils.create()): Vector3 {
+        return ObjectUtils.getDownWorld(this, outDown);
     };
 
-    objectExtension.pp_getDownLocal = function pp_getDownLocal(this: Readonly<Object3D>, down: Vector3 = Vec3Utils.create()): Vector3 {
-        return ObjectUtils.getDownLocal(this, down);
+    objectExtension.pp_getDownLocal = function pp_getDownLocal(this: Readonly<Object3D>, outDown: Vector3 = Vec3Utils.create()): Vector3 {
+        return ObjectUtils.getDownLocal(this, outDown);
     };
 
     // Left
 
-    objectExtension.pp_getLeft = function pp_getLeft(this: Readonly<Object3D>, left: Vector3 = Vec3Utils.create()): Vector3 {
-        return ObjectUtils.getLeft(this, left);
+    objectExtension.pp_getLeft = function pp_getLeft(this: Readonly<Object3D>, outLeft: Vector3 = Vec3Utils.create()): Vector3 {
+        return ObjectUtils.getLeft(this, outLeft);
     };
 
-    objectExtension.pp_getLeftWorld = function pp_getLeftWorld(this: Readonly<Object3D>, left: Vector3 = Vec3Utils.create()): Vector3 {
-        return ObjectUtils.getLeftWorld(this, left);
+    objectExtension.pp_getLeftWorld = function pp_getLeftWorld(this: Readonly<Object3D>, outLeft: Vector3 = Vec3Utils.create()): Vector3 {
+        return ObjectUtils.getLeftWorld(this, outLeft);
     };
 
-    objectExtension.pp_getLeftLocal = function pp_getLeftLocal(this: Readonly<Object3D>, left: Vector3 = Vec3Utils.create()): Vector3 {
-        return ObjectUtils.getLeftLocal(this, left);
+    objectExtension.pp_getLeftLocal = function pp_getLeftLocal(this: Readonly<Object3D>, outLeft: Vector3 = Vec3Utils.create()): Vector3 {
+        return ObjectUtils.getLeftLocal(this, outLeft);
     };
 
     // Right
 
-    objectExtension.pp_getRight = function pp_getRight(this: Readonly<Object3D>, right: Vector3 = Vec3Utils.create()): Vector3 {
-        return ObjectUtils.getRight(this, right);
+    objectExtension.pp_getRight = function pp_getRight(this: Readonly<Object3D>, outRight: Vector3 = Vec3Utils.create()): Vector3 {
+        return ObjectUtils.getRight(this, outRight);
     };
 
-    objectExtension.pp_getRightWorld = function pp_getRightWorld(this: Readonly<Object3D>, right: Vector3 = Vec3Utils.create()): Vector3 {
-        return ObjectUtils.getRightWorld(this, right);
+    objectExtension.pp_getRightWorld = function pp_getRightWorld(this: Readonly<Object3D>, outRight: Vector3 = Vec3Utils.create()): Vector3 {
+        return ObjectUtils.getRightWorld(this, outRight);
     };
 
-    objectExtension.pp_getRightLocal = function pp_getRightLocal(this: Readonly<Object3D>, right: Vector3 = Vec3Utils.create()): Vector3 {
-        return ObjectUtils.getRightLocal(this, right);
+    objectExtension.pp_getRightLocal = function pp_getRightLocal(this: Readonly<Object3D>, outRight: Vector3 = Vec3Utils.create()): Vector3 {
+        return ObjectUtils.getRightLocal(this, outRight);
     };
 
     // SETTER
