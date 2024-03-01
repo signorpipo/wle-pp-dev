@@ -193,6 +193,12 @@ export function setAxes(quat, left, up, forward) {
 export let setForward = function () {
     let axes = [null, null, null];
     let priority = [2, 1, 0];
+
+    /**
+     * TS type inference helper
+     * 
+     * @param {any} up
+     */
     return function setForward(quat, forward, up = null, left = null) {
         axes[0] = left;
         axes[1] = up;
