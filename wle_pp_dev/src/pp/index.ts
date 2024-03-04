@@ -18,6 +18,7 @@ export { PluginUtils } from "./plugin/utils/plugin_utils.js";
 export * from "./plugin/js/init_js_plugins.js";
 export * from "./plugin/js/extensions/init_js_extentions.js";
 export * from "./plugin/js/extensions/array_extension.js";
+export * from "./plugin/js/extensions/array_extension_js.js";
 export * from "./plugin/js/extensions/math_extension.js";
 export * from "./plugin/js/extensions/math_type_extension.js";
 export * from "./plugin/js/extensions/number_extension.js";

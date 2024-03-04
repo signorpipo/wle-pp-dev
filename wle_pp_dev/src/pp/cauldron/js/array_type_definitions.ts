@@ -1,4 +1,7 @@
-import { type NumberArray } from "@wonderlandengine/api";
+export interface NumberArray {
+    length: number;
+    [n: number]: number;
+}
 
 export type Vector<__T extends number = number> = NumberArray;
 

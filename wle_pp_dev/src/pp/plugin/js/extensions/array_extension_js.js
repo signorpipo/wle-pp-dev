@@ -174,50 +174,6 @@ export function initArrayExtension() {
     initArrayExtensionProtoype();
 }
 
-export function vec2_create(x, y) {
-    return Vec2Utils.create(x, y);
-}
-
-export function vec3_create(x, y, z) {
-    return Vec3Utils.create(x, y, z);
-}
-
-export function vec4_create(x, y, z, w) {
-    return Vec4Utils.create(x, y, z, w);
-}
-
-export function quat_create(x, y, z, w) {
-    return QuatUtils.create(x, y, z, w);
-}
-
-export function quat2_create(x1, y1, z1, w1, x2, y2, z2, w2) {
-    return Quat2Utils.create(x1, y1, z1, w1, x2, y2, z2, w2);
-}
-
-export function mat3_create(
-    m00, m01, m02,
-    m10, m11, m12,
-    m20, m21, m22) {
-    return Mat3Utils.create(
-        m00, m01, m02,
-        m10, m11, m12,
-        m20, m21, m22
-    );
-}
-
-export function mat4_create(
-    m00, m01, m02, m03,
-    m10, m11, m12, m13,
-    m20, m21, m22, m23,
-    m30, m31, m32, m33) {
-    return Mat4Utils.create(
-        m00, m01, m02, m03,
-        m10, m11, m12, m13,
-        m20, m21, m22, m23,
-        m30, m31, m32, m33
-    );
-}
-
 export function initArrayExtensionProtoype() {
 
     // ARRAY

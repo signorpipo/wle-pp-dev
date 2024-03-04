@@ -1,5 +1,5 @@
 import { Component, Object3D, Scene, WonderlandEngine, type ComponentConstructor } from "@wonderlandengine/api";
-import { type Matrix3, type Matrix4, type Quaternion, type Quaternion2, type Vector3 } from "../../../cauldron/js/array_type_definitions.js";
+import { Matrix3, Matrix4, Quaternion, Quaternion2, Vector3 } from "../../../cauldron/js/array_type_definitions.js";
 import { Globals } from "../../../pp/globals.js";
 import { Mat3Utils } from "../../js/utils/mat3_utils.js";
 import { Mat4Utils } from "../../js/utils/mat4_utils.js";

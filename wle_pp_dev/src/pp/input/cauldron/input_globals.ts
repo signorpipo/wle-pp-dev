@@ -1,5 +1,8 @@
 import { WonderlandEngine } from "@wonderlandengine/api";
-import { GamepadsManager, HandPose, HeadPose, TrackedHandPose } from "../../index.js";
+import { GamepadsManager } from "../../input/gamepad/cauldron/gamepads_manager.js";
+import { HandPose } from "../../input/pose/hand_pose.js";
+import { HeadPose } from "../../input/pose/head_pose.js";
+import { TrackedHandPose } from "../../input/pose/tracked_hand_pose.js";
 import { Globals } from "../../pp/globals.js";
 import { InputManager } from "./input_manager.js";
 import { Handedness } from "./input_types.js";
