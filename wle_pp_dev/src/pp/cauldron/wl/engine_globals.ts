@@ -1,9 +1,10 @@
+import { Object3D, Physics, Scene, WASM, WonderlandEngine, XR } from "@wonderlandengine/api";
 import { SceneUtils } from "./utils/scene_utils.js";
 
-let _myMainEngine = null;
-let _myEngines = [];
+let _myMainEngine: WonderlandEngine | null = null;
+const _myEngines: WonderlandEngine[] = [];
 
-export function initEngine(engine) {
+export function initEngine(engine: WonderlandEngine): void {
     if (engine != null) {
         addEngine(engine);
         if (getMainEngine() == null) {
@@ -12,31 +13,31 @@ export function initEngine(engine) {
     }
 }
 
-export function getMainEngine() {
+export function getMainEngine(): WonderlandEngine | null {
     return _myMainEngine;
 }
 
-export function setMainEngine(engine) {
+export function setMainEngine(engine: WonderlandEngine): void {
     if (hasEngine(engine)) {
         _myMainEngine = engine;
     }
 }
 
-export function removeMainEngine() {
+export function removeMainEngine(): void {
     _myMainEngine = null;
 }
 
-export function getEngines() {
+export function getEngines(): WonderlandEngine[] {
     return _myEngines;
 }
 
-export function addEngine(engine) {
+export function addEngine(engine: WonderlandEngine): void {
     removeEngine(engine);
     _myEngines.push(engine);
 }
 
-export function removeEngine(engine) {
-    let index = _myEngines.indexOf(engine);
+export function removeEngine(engine: WonderlandEngine): void {
+    const index = _myEngines.indexOf(engine);
 
     if (index >= 0) {
         _myEngines.splice(index, 1);
@@ -47,11 +48,11 @@ export function removeEngine(engine) {
     }
 }
 
-export function hasEngine(engine) {
+export function hasEngine(engine: WonderlandEngine): boolean {
     return _myEngines.indexOf(engine) >= 0;
 }
 
-export function getScene(engine = getMainEngine()) {
+export function getScene(engine = getMainEngine()): Scene | null {
     let scene = null;
 
     if (engine != null) {
@@ -61,10 +62,10 @@ export function getScene(engine = getMainEngine()) {
     return scene;
 }
 
-export function getRoot(engine = getMainEngine()) {
+export function getRoot(engine: WonderlandEngine = getMainEngine()!): Object3D | null {
     let root = null;
 
-    let scene = getScene(engine);
+    const scene = getScene(engine);
     if (scene != null) {
         root = SceneUtils.getRoot(scene);
     }
@@ -72,7 +73,7 @@ export function getRoot(engine = getMainEngine()) {
     return root;
 }
 
-export function getPhysics(engine = getMainEngine()) {
+export function getPhysics(engine: WonderlandEngine = getMainEngine()!): Physics | null {
     let physics = null;
 
     if (engine != null) {
@@ -82,7 +83,7 @@ export function getPhysics(engine = getMainEngine()) {
     return physics;
 }
 
-export function getCanvas(engine = getMainEngine()) {
+export function getCanvas(engine: WonderlandEngine = getMainEngine()!): HTMLCanvasElement | null {
     let canvas = null;
 
     if (engine != null) {
@@ -92,7 +93,7 @@ export function getCanvas(engine = getMainEngine()) {
     return canvas;
 }
 
-export function getWASM(engine = getMainEngine()) {
+export function getWASM(engine: WonderlandEngine = getMainEngine()!): WASM | null {
     let wasm = null;
 
     if (engine != null) {
@@ -102,7 +103,7 @@ export function getWASM(engine = getMainEngine()) {
     return wasm;
 }
 
-export function getXR(engine = getMainEngine()) {
+export function getXR(engine: WonderlandEngine = getMainEngine()!): XR | null {
     let xr = null;
 
     if (engine != null) {
