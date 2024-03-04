@@ -52,7 +52,9 @@ export function hasEngine(engine: WonderlandEngine): boolean {
     return _myEngines.indexOf(engine) >= 0;
 }
 
-export function getScene(engine = getMainEngine()): Scene | null {
+export function getScene(engine: WonderlandEngine): Scene;
+export function getScene(engine?: WonderlandEngine | null): Scene | null;
+export function getScene(engine: WonderlandEngine | null = getMainEngine()): Scene | null {
     let scene = null;
 
     if (engine != null) {
@@ -62,7 +64,9 @@ export function getScene(engine = getMainEngine()): Scene | null {
     return scene;
 }
 
-export function getRoot(engine: WonderlandEngine = getMainEngine()!): Object3D | null {
+export function getRoot(engine: WonderlandEngine): Object3D;
+export function getRoot(engine?: WonderlandEngine | null): Object3D | null;
+export function getRoot(engine: WonderlandEngine | null = getMainEngine()): Object3D | null {
     let root = null;
 
     const scene = getScene(engine);
@@ -73,7 +77,9 @@ export function getRoot(engine: WonderlandEngine = getMainEngine()!): Object3D |
     return root;
 }
 
-export function getPhysics(engine: WonderlandEngine = getMainEngine()!): Physics | null {
+export function getPhysics(engine: WonderlandEngine): Physics;
+export function getPhysics(engine?: WonderlandEngine | null): Physics | null;
+export function getPhysics(engine: WonderlandEngine | null = getMainEngine()): Physics | null {
     let physics = null;
 
     if (engine != null) {
@@ -83,7 +89,9 @@ export function getPhysics(engine: WonderlandEngine = getMainEngine()!): Physics
     return physics;
 }
 
-export function getCanvas(engine: WonderlandEngine = getMainEngine()!): HTMLCanvasElement | null {
+export function getCanvas(engine: WonderlandEngine): HTMLCanvasElement;
+export function getCanvas(engine?: WonderlandEngine | null): HTMLCanvasElement | null;
+export function getCanvas(engine: WonderlandEngine | null = getMainEngine()): HTMLCanvasElement | null {
     let canvas = null;
 
     if (engine != null) {
@@ -93,7 +101,9 @@ export function getCanvas(engine: WonderlandEngine = getMainEngine()!): HTMLCanv
     return canvas;
 }
 
-export function getWASM(engine: WonderlandEngine = getMainEngine()!): WASM | null {
+export function getWASM(engine: WonderlandEngine): WASM;
+export function getWASM(engine?: WonderlandEngine | null): WASM | null;
+export function getWASM(engine: WonderlandEngine | null = getMainEngine()): WASM | null {
     let wasm = null;
 
     if (engine != null) {
@@ -103,7 +113,9 @@ export function getWASM(engine: WonderlandEngine = getMainEngine()!): WASM | nul
     return wasm;
 }
 
-export function getXR(engine: WonderlandEngine = getMainEngine()!): XR | null {
+export function getXR(engine: WonderlandEngine): XR;
+export function getXR(engine?: WonderlandEngine | null): XR | null;
+export function getXR(engine: WonderlandEngine | null = getMainEngine()): XR | null {
     let xr = null;
 
     if (engine != null) {

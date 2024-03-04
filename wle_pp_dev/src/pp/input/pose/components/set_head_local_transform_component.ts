@@ -33,7 +33,7 @@ SetHeadLocalTransformComponent.prototype.onPoseUpdated = function () {
     return function onPoseUpdated(this: SetHeadLocalTransformComponent, dt: number, pose: Readonly<BasePose>): void {
         if (this.active) {
             if (!XRUtils.isSessionActive(this.engine)) {
-                const cameraNonXR = Globals.getPlayerObjects(this.engine).myCameraNonXR;
+                const cameraNonXR = Globals.getPlayerObjects(this.engine)!.myCameraNonXR!;
 
                 cameraNonXR.pp_getRotationLocalQuat(cameraNonXRRotation);
                 if (Globals.isPoseForwardFixed(this.engine)) {

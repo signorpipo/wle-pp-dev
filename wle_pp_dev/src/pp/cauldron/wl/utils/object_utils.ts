@@ -2711,8 +2711,8 @@ export function getObjectsByIDObjects(objects: Object3D[], id: number): Object3D
     return objectsFound;
 }
 
-export function wrapObject(id: number, engine: WonderlandEngine = Globals.getMainEngine()): Object3D {
-    return engine.wrapObject(id);
+export function wrapObject(id: number, engine: WonderlandEngine | null = Globals.getMainEngine()): Object3D | null {
+    return engine != null ? engine.wrapObject(id) : null;
 }
 
 export const ObjectUtils = {

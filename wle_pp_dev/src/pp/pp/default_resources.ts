@@ -1,4 +1,9 @@
+import { Material, Mesh } from "@wonderlandengine/api";
+
 export class DefaultResources {
+
+    public myMeshes: DefaultResourcesMeshes;
+    public myMaterials: DefaultResourcesMaterials;
 
     constructor() {
         this.myMeshes = new DefaultResourcesMeshes();
@@ -7,6 +12,25 @@ export class DefaultResources {
 }
 
 export class DefaultResourcesMeshes {
+
+    public myPlane: Mesh | null;
+    public myCube: Mesh | null;
+    public mySphere: Mesh | null;
+    public myCone: Mesh | null;
+    public myCylinder: Mesh | null;
+    public myCircle: Mesh | null;
+
+    public myInvertedCube: Mesh | null;
+    public myInvertedSphere: Mesh | null;
+    public myInvertedCone: Mesh | null;
+    public myInvertedCylinder: Mesh | null;
+
+    public myDoubleSidedPlane: Mesh | null;
+    public myDoubleSidedCube: Mesh | null;
+    public myDoubleSidedSphere: Mesh | null;
+    public myDoubleSidedCone: Mesh | null;
+    public myDoubleSidedCylinder: Mesh | null;
+    public myDoubleSidedCircle: Mesh | null;
 
     constructor() {
         this.myPlane = null;
@@ -31,6 +55,11 @@ export class DefaultResourcesMeshes {
 }
 
 export class DefaultResourcesMaterials {
+
+    public myFlatOpaque: Material | null;
+    public myFlatTransparentNoDepth: Material | null;
+    public myPhongOpaque: Material | null;
+    public myText: Material | null;
 
     constructor() {
         this.myFlatOpaque = null;
