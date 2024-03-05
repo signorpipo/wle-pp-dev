@@ -8,7 +8,7 @@ export class SetHeadLocalTransformComponent extends Component {
     static override TypeName = "pp-set-head-local-transform";
 
     override start(): void {
-        Globals.getHeadPose(this.engine).registerPoseUpdatedEventListener(this, this.onPoseUpdated.bind(this));
+        Globals.getHeadPose(this.engine)!.registerPoseUpdatedEventListener(this, this.onPoseUpdated.bind(this));
     }
 
     onPoseUpdated(dt: number, pose: Readonly<BasePose>): void {

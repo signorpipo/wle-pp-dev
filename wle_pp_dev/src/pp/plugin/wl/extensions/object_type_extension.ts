@@ -104,10 +104,12 @@
         - pp_destroy
 */
 
-import { type NumberArray } from "@wonderlandengine/api";
+import { Component, type ComponentConstructor } from "@wonderlandengine/api";
+import { Vector3 } from "../../../cauldron/js/array_type_definitions.js";
 
 declare module "@wonderlandengine/api" {
     export interface Object3D {
-        pp_getPosition(position: NumberArray): NumberArray;
+        pp_getPosition(position: Vector3): Vector3;
+        pp_addComponent<T extends Component>(this: Object3D, typeOrClass: string | ComponentConstructor<T>, paramsOrActive?: Record<string, any> | boolean, active?: boolean): T | null;
     }
 }
