@@ -14,7 +14,7 @@ export function initEmitterModPrototype(): void {
 
         for (let i = 0; i < _transactions.length; i++) {
             const transaction = _transactions[i];
-            if (transaction.type === 1) {
+            if (transaction.type == 1) {
                 listeners.push(transaction.data);
             } else {
                 this.remove(transaction.data);

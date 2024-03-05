@@ -9,14 +9,14 @@ import { Vec3Utils, create as vec3_utils_create } from "./vec3_utils.js";
 
 export function create(x1, y1, z1, w1, x2, y2, z2, w2) {
     let out = gl_quat2.create();
-    if (x1 !== undefined) {
+    if (x1 != null) {
         set(out, x1, y1, z1, w1, x2, y2, z2, w2);
     }
     return out;
 }
 
 export function set(quat, x1, y1, z1, w1, x2, y2, z2, w2) {
-    if (y1 === undefined) {
+    if (y1 == null) {
         gl_quat2.set(quat, x1, x1, x1, x1, x1, x1, x1, x1);
     } else {
         gl_quat2.set(quat, x1, y1, z1, w1, x2, y2, z2, w2);

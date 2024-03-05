@@ -399,7 +399,7 @@ export class ConsoleVRWidget {
 
         if (item instanceof Error) {
             stringifiedItem = item.stack;
-        } else if (typeof item === "object") {
+        } else if (typeof item == "object") {
             let linesBetweenItems = 2;
 
             try {
@@ -408,7 +408,7 @@ export class ConsoleVRWidget {
                 let cache = new WeakSet();
 
                 stringifiedItem = JSON.stringify(item, function (key, value) {
-                    if (typeof value === "object" && value !== null) {
+                    if (value != null && typeof value == "object") {
                         if (cache.has(value)) {
                             return "<stringify error: object already stringified>"; // Try to avoid circular reference, a repeated object will be caught in this check too sadly
                         }

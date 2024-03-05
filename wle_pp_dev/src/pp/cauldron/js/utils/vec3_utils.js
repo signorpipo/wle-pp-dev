@@ -10,7 +10,7 @@ import { QuatUtils, create as quat_utils_create } from "./quat_utils.js";
 export function create(x, y, z) {
     let out = gl_vec3.create();
 
-    if (x !== undefined) {
+    if (x != null) {
         set(out, x, y, z);
     }
 
@@ -18,7 +18,7 @@ export function create(x, y, z) {
 }
 
 export function set(vector, x, y, z) {
-    if (y === undefined) {
+    if (y == null) {
         gl_vec3.set(vector, x, x, x);
     } else {
         gl_vec3.set(vector, x, y, z);

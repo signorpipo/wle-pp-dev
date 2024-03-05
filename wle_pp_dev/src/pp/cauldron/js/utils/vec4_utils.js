@@ -5,7 +5,7 @@ import { vec4 as gl_vec4 } from "gl-matrix";
 export function create(x, y, z, w) {
     let out = gl_vec4.create();
 
-    if (x !== undefined) {
+    if (x != null) {
         set(out, x, y, z, w);
     }
 
@@ -13,7 +13,7 @@ export function create(x, y, z, w) {
 }
 
 export function set(vector, x, y, z, w) {
-    if (y === undefined) {
+    if (y == null) {
         gl_vec4.set(vector, x, x, x, x);
     } else {
         gl_vec4.set(vector, x, y, z, w);

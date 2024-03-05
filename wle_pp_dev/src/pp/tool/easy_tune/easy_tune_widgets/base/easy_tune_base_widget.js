@@ -50,7 +50,7 @@ export class EasyTuneBaseWidget {
     setEasyTuneVariable(variable, appendToVariableName) {
         this._myVariable = variable;
 
-        if ((typeof appendToVariableName) !== "undefined") {
+        if (appendToVariableName != null) {
             this._myAppendToVariableName = appendToVariableName;
         } else {
             this._myAppendToVariableName = "";

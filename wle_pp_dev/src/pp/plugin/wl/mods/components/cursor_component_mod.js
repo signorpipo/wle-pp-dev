@@ -353,7 +353,7 @@ export function initCursorComponentModPrototype() {
     cursorComponentMod.onPointerDown = function onPointerDown(e) {
         if (this.active && !this._pointerLeaveToProcess) {
             // Don't care about secondary pointers or non-left clicks 
-            if ((this._pointerID != null && this._pointerID != e.pointerId) || e.button !== 0) return;
+            if ((this._pointerID != null && this._pointerID != e.pointerId) || e.button != 0) return;
 
             let bounds = Globals.getBody(this.engine).getBoundingClientRect();
             this._pp_updateMouseData(e, e.clientX, e.clientY, bounds.width, bounds.height, e.pointerId);
@@ -370,7 +370,7 @@ export function initCursorComponentModPrototype() {
     cursorComponentMod.onPointerUp = function onPointerUp(e) {
         if (this.active && !this._pointerLeaveToProcess) {
             // Don't care about secondary pointers or non-left clicks 
-            if ((this._pointerID != null && this._pointerID != e.pointerId) || e.button !== 0) return;
+            if ((this._pointerID != null && this._pointerID != e.pointerId) || e.button != 0) return;
 
             let bounds = Globals.getBody(this.engine).getBoundingClientRect();
             this._pp_updateMouseData(e, e.clientX, e.clientY, bounds.width, bounds.height, e.pointerId);
@@ -742,11 +742,11 @@ export function initCursorComponentModPrototype() {
     };
 
     cursorComponentMod._pp_isDownToProcess = function _pp_isDownToProcess() {
-        return this._isDown !== this._lastIsDown && this._isDown;
+        return this._isDown != this._lastIsDown && this._isDown;
     };
 
     cursorComponentMod._pp_isUpToProcess = function _pp_isUpToProcess() {
-        return this._isDown !== this._lastIsDown && !this._isDown;
+        return this._isDown != this._lastIsDown && !this._isDown;
     };
 
     cursorComponentMod._pp_isMoving = function () {
@@ -766,7 +766,7 @@ export function initCursorComponentModPrototype() {
 
     cursorComponentMod._pp_isAR = function _pp_isAR() {
         let firstInputSource = XRUtils.getSession(this.engine).inputSources[0];
-        return this.input != null && firstInputSource.handedness === "none" && firstInputSource.gamepad != null;
+        return this.input != null && firstInputSource.handedness == "none" && firstInputSource.gamepad != null;
     };
 
     cursorComponentMod._pp_updateCursorStyle = function _pp_updateCursorStyle() {

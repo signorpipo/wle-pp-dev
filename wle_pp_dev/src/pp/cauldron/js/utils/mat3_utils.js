@@ -10,7 +10,7 @@ export function create(
     m20, m21, m22) {
     let out = gl_mat3.create();
 
-    if (m00 !== undefined) {
+    if (m00 != null) {
         set(out,
             m00, m01, m02,
             m10, m11, m12,
@@ -24,7 +24,7 @@ export function set(matrix,
     m00, m01, m02,
     m10, m11, m12,
     m20, m21, m22) {
-    if (m01 === undefined) {
+    if (m01 == null) {
         gl_mat3.set(matrix,
             m00, m00, m00,
             m00, m00, m00,

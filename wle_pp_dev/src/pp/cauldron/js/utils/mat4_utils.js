@@ -13,7 +13,7 @@ export function create(
     m20, m21, m22, m23,
     m30, m31, m32, m33) {
     let out = gl_mat4.create();
-    if (m00 !== undefined) {
+    if (m00 != null) {
         set(
             out,
             m00, m01, m02, m03,
@@ -29,7 +29,7 @@ export function set(matrix,
     m10, m11, m12, m13,
     m20, m21, m22, m23,
     m30, m31, m32, m33) {
-    if (m01 === undefined) {
+    if (m01 == null) {
         gl_mat4.set(matrix,
             m00, m00, m00, m00,
             m00, m00, m00, m00,
