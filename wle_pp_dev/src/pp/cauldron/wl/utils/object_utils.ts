@@ -577,11 +577,11 @@ export const setScaleLocal = function () {
 
 // Axes    
 
-export function setAxes(object: Object3D, left: Vector3 | null, up: Vector3 | null, forward: Vector3 | null): Object3D {
+export function setAxes(object: Object3D, left?: Vector3, up?: Vector3, forward?: Vector3): Object3D {
     return /*ObjectUtils.*/setAxesWorld(object, left, up, forward);
 }
 
-export function setAxesWorld(object: Object3D, left: Vector3 | null, up: Vector3 | null, forward: Vector3 | null): Object3D {
+export function setAxesWorld(object: Object3D, left?: Vector3, up?: Vector3, forward?: Vector3): Object3D {
     if (forward != null) {
         return /*ObjectUtils.*/setForwardWorld(object, forward, up, left);
     } else if (up != null) {
@@ -593,7 +593,7 @@ export function setAxesWorld(object: Object3D, left: Vector3 | null, up: Vector3
     return object;
 }
 
-export function setAxesLocal(object: Object3D, left: Vector3 | null, up: Vector3 | null, forward: Vector3 | null): Object3D {
+export function setAxesLocal(object: Object3D, left?: Vector3, up?: Vector3, forward?: Vector3): Object3D {
     if (forward != null) {
         return /*ObjectUtils.*/setForwardLocal(object, forward, up, left);
     } else if (up != null) {
@@ -607,13 +607,13 @@ export function setAxesLocal(object: Object3D, left: Vector3 | null, up: Vector3
 
 // Forward
 
-export function setForward(object: Object3D, forward: Vector3, up: Vector3 | null = null, left: Vector3 | null = null): Object3D {
+export function setForward(object: Object3D, forward: Vector3, up?: Vector3, left?: Vector3): Object3D {
     return /*ObjectUtils.*/setForwardWorld(object, forward, up, left);
 }
 
 export const setForwardWorld = function () {
     const quat = QuatUtils.create();
-    return function setForwardWorld(object: Object3D, forward: Vector3, up: Vector3 | null = null, left: Vector3 | null = null): Object3D {
+    return function setForwardWorld(object: Object3D, forward: Vector3, up?: Vector3, left?: Vector3): Object3D {
         /*ObjectUtils.*/getRotationWorldQuat(object, quat);
         QuatUtils.setForward(quat, forward, up, left);
         return /*ObjectUtils.*/setRotationWorldQuat(object, quat);
@@ -622,7 +622,7 @@ export const setForwardWorld = function () {
 
 export const setForwardLocal = function () {
     const quat = QuatUtils.create();
-    return function setForwardLocal(object: Object3D, forward: Vector3, up: Vector3 | null = null, left: Vector3 | null = null): Object3D {
+    return function setForwardLocal(object: Object3D, forward: Vector3, up?: Vector3, left?: Vector3): Object3D {
         /*ObjectUtils.*/getRotationLocalQuat(object, quat);
         QuatUtils.setForward(quat, forward, up, left);
         return /*ObjectUtils.*/setRotationLocalQuat(object, quat);
@@ -631,13 +631,13 @@ export const setForwardLocal = function () {
 
 // Backward
 
-export function setBackward(object: Object3D, backward: Vector3, up: Vector3 | null = null, left: Vector3 | null = null): Object3D {
+export function setBackward(object: Object3D, backward: Vector3, up?: Vector3, left?: Vector3): Object3D {
     return /*ObjectUtils.*/setBackwardWorld(object, backward, up, left);
 }
 
 export const setBackwardWorld = function () {
     const quat = QuatUtils.create();
-    return function setBackwardWorld(object: Object3D, backward: Vector3, up: Vector3 | null = null, left: Vector3 | null = null): Object3D {
+    return function setBackwardWorld(object: Object3D, backward: Vector3, up?: Vector3, left?: Vector3): Object3D {
         /*ObjectUtils.*/getRotationWorldQuat(object, quat);
         QuatUtils.setBackward(quat, backward, up, left);
         return /*ObjectUtils.*/setRotationWorldQuat(object, quat);
@@ -646,7 +646,7 @@ export const setBackwardWorld = function () {
 
 export const setBackwardLocal = function () {
     const quat = QuatUtils.create();
-    return function setBackwardLocal(object: Object3D, backward: Vector3, up: Vector3 | null = null, left: Vector3 | null = null): Object3D {
+    return function setBackwardLocal(object: Object3D, backward: Vector3, up?: Vector3, left?: Vector3): Object3D {
         /*ObjectUtils.*/getRotationLocalQuat(object, quat);
         QuatUtils.setBackward(quat, backward, up, left);
         return /*ObjectUtils.*/setRotationLocalQuat(object, quat);
@@ -655,13 +655,13 @@ export const setBackwardLocal = function () {
 
 // Up
 
-export function setUp(object: Object3D, up: Vector3, forward: Vector3 | null = null, left: Vector3 | null = null): Object3D {
+export function setUp(object: Object3D, up: Vector3, forward?: Vector3, left?: Vector3): Object3D {
     return /*ObjectUtils.*/setUpWorld(object, up, forward, left);
 }
 
 export const setUpWorld = function () {
     const quat = QuatUtils.create();
-    return function setUpWorld(object: Object3D, up: Vector3, forward: Vector3 | null = null, left: Vector3 | null = null): Object3D {
+    return function setUpWorld(object: Object3D, up: Vector3, forward?: Vector3, left?: Vector3): Object3D {
         /*ObjectUtils.*/getRotationWorldQuat(object, quat);
         QuatUtils.setUp(quat, up, forward, left);
         return /*ObjectUtils.*/setRotationWorldQuat(object, quat);
@@ -670,7 +670,7 @@ export const setUpWorld = function () {
 
 export const setUpLocal = function () {
     const quat = QuatUtils.create();
-    return function setUpLocal(object: Object3D, up: Vector3, forward: Vector3 | null = null, left: Vector3 | null = null): Object3D {
+    return function setUpLocal(object: Object3D, up: Vector3, forward?: Vector3, left?: Vector3): Object3D {
         /*ObjectUtils.*/getRotationLocalQuat(object, quat);
         QuatUtils.setUp(quat, up, forward, left);
         return /*ObjectUtils.*/setRotationLocalQuat(object, quat);
@@ -679,13 +679,13 @@ export const setUpLocal = function () {
 
 // Down
 
-export function setDown(object: Object3D, down: Vector3, forward: Vector3 | null = null, left: Vector3 | null = null): Object3D {
+export function setDown(object: Object3D, down: Vector3, forward?: Vector3, left?: Vector3): Object3D {
     return /*ObjectUtils.*/setDownWorld(object, down, forward, left);
 }
 
 export const setDownWorld = function () {
     const quat = QuatUtils.create();
-    return function setDownWorld(object: Object3D, down: Vector3, forward: Vector3 | null = null, left: Vector3 | null = null): Object3D {
+    return function setDownWorld(object: Object3D, down: Vector3, forward?: Vector3, left?: Vector3): Object3D {
         /*ObjectUtils.*/getRotationWorldQuat(object, quat);
         QuatUtils.setDown(quat, down, forward, left);
         return /*ObjectUtils.*/setRotationWorldQuat(object, quat);
@@ -694,7 +694,7 @@ export const setDownWorld = function () {
 
 export const setDownLocal = function () {
     const quat = QuatUtils.create();
-    return function setDownLocal(object: Object3D, down: Vector3, forward: Vector3 | null = null, left: Vector3 | null = null): Object3D {
+    return function setDownLocal(object: Object3D, down: Vector3, forward?: Vector3, left?: Vector3): Object3D {
         /*ObjectUtils.*/getRotationLocalQuat(object, quat);
         QuatUtils.setDown(quat, down, forward, left);
         return /*ObjectUtils.*/setRotationLocalQuat(object, quat);
@@ -703,13 +703,13 @@ export const setDownLocal = function () {
 
 // Left
 
-export function setLeft(object: Object3D, left: Vector3, up: Vector3 | null = null, forward: Vector3 | null = null): Object3D {
+export function setLeft(object: Object3D, left: Vector3, up?: Vector3, forward?: Vector3): Object3D {
     return /*ObjectUtils.*/setLeftWorld(object, left, up, forward);
 }
 
 export const setLeftWorld = function () {
     const quat = QuatUtils.create();
-    return function setLeftWorld(object: Object3D, left: Vector3, up: Vector3 | null = null, forward: Vector3 | null = null): Object3D {
+    return function setLeftWorld(object: Object3D, left: Vector3, up?: Vector3, forward?: Vector3): Object3D {
         /*ObjectUtils.*/getRotationWorldQuat(object, quat);
         QuatUtils.setLeft(quat, left, up, forward);
         return /*ObjectUtils.*/setRotationWorldQuat(object, quat);
@@ -718,7 +718,7 @@ export const setLeftWorld = function () {
 
 export const setLeftLocal = function () {
     const quat = QuatUtils.create();
-    return function setLeftLocal(object: Object3D, left: Vector3, up: Vector3 | null = null, forward: Vector3 | null = null): Object3D {
+    return function setLeftLocal(object: Object3D, left: Vector3, up?: Vector3, forward?: Vector3): Object3D {
         /*ObjectUtils.*/getRotationLocalQuat(object, quat);
         QuatUtils.setLeft(quat, left, up, forward);
         return /*ObjectUtils.*/setRotationLocalQuat(object, quat);
@@ -727,13 +727,13 @@ export const setLeftLocal = function () {
 
 // Right
 
-export function setRight(object: Object3D, right: Vector3, up: Vector3 | null = null, forward: Vector3 | null = null): Object3D {
+export function setRight(object: Object3D, right: Vector3, up?: Vector3, forward?: Vector3): Object3D {
     return /*ObjectUtils.*/setRightWorld(object, right, up, forward);
 }
 
 export const setRightWorld = function () {
     const quat = QuatUtils.create();
-    return function setRightWorld(object: Object3D, right: Vector3, up: Vector3 | null = null, forward: Vector3 | null = null): Object3D {
+    return function setRightWorld(object: Object3D, right: Vector3, up?: Vector3, forward?: Vector3): Object3D {
         /*ObjectUtils.*/getRotationWorldQuat(object, quat);
         QuatUtils.setRight(quat, right, up, forward);
         return /*ObjectUtils.*/setRotationWorldQuat(object, quat);
@@ -742,7 +742,7 @@ export const setRightWorld = function () {
 
 export const setRightLocal = function () {
     const quat = QuatUtils.create();
-    return function setRightLocal(object: Object3D, right: Vector3, up: Vector3 | null = null, forward: Vector3 | null = null): Object3D {
+    return function setRightLocal(object: Object3D, right: Vector3, up?: Vector3, forward?: Vector3): Object3D {
         /*ObjectUtils.*/getRotationLocalQuat(object, quat);
         QuatUtils.setRight(quat, right, up, forward);
         return /*ObjectUtils.*/setRotationLocalQuat(object, quat);
@@ -1767,7 +1767,7 @@ export function convertTransformLocalToObjectQuat(object: Readonly<Object3D>, tr
 
 // Component
 
-export function addComponent<T extends Component>(object: Object3D, typeOrClass: string | ComponentConstructor<T>, paramsOrActive: Record<string, any> | boolean | null = null, active: boolean | null = null): T | null {
+export function addComponent<T extends Component>(object: Object3D, typeOrClass: string | ComponentConstructor<T>, paramsOrActive?: Record<string, any> | boolean, active?: boolean): T | null {
     let params: Record<string, any> | undefined = undefined;
 
     if (typeof paramsOrActive == "boolean") {
@@ -1831,43 +1831,43 @@ export function getComponentChildren<T extends Component>(object: Readonly<Objec
     return /*ObjectUtils.*/getComponentObjects(objects, typeOrClass, index);
 }
 
-export function getComponents<T extends Component>(object: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T> | null = null): T[] {
+export function getComponents<T extends Component>(object: Readonly<Object3D>, typeOrClass?: string | ComponentConstructor<T>): T[] {
     return /*ObjectUtils.*/getComponentsHierarchy(object, typeOrClass);
 }
 
-export function getComponentsSelf<T extends Component>(object: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T> | null = null): T[] {
+export function getComponentsSelf<T extends Component>(object: Readonly<Object3D>, typeOrClass?: string | ComponentConstructor<T>): T[] {
     return object.getComponents(typeOrClass as ComponentConstructor<T>);
 }
 
-export function getComponentsHierarchy<T extends Component>(object: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T> | null = null): T[] {
+export function getComponentsHierarchy<T extends Component>(object: Readonly<Object3D>, typeOrClass?: string | ComponentConstructor<T>): T[] {
     return /*ObjectUtils.*/getComponentsHierarchyBreadth(object, typeOrClass);
 }
 
-export function getComponentsHierarchyBreadth<T extends Component>(object: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T> | null = null): T[] {
+export function getComponentsHierarchyBreadth<T extends Component>(object: Readonly<Object3D>, typeOrClass?: string | ComponentConstructor<T>): T[] {
     const objects = /*ObjectUtils.*/getHierarchyBreadth(object);
     return /*ObjectUtils.*/getComponentsObjects(objects, typeOrClass);
 }
 
-export function getComponentsHierarchyDepth<T extends Component>(object: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T> | null = null): T[] {
+export function getComponentsHierarchyDepth<T extends Component>(object: Readonly<Object3D>, typeOrClass?: string | ComponentConstructor<T>): T[] {
     const objects = /*ObjectUtils.*/getHierarchyDepth(object);
     return /*ObjectUtils.*/getComponentsObjects(objects, typeOrClass);
 }
 
-export function getComponentsDescendants<T extends Component>(object: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T> | null = null): T[] {
+export function getComponentsDescendants<T extends Component>(object: Readonly<Object3D>, typeOrClass?: string | ComponentConstructor<T>): T[] {
     return /*ObjectUtils.*/getComponentsDescendantsBreadth(object, typeOrClass);
 }
 
-export function getComponentsDescendantsBreadth<T extends Component>(object: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T> | null = null): T[] {
+export function getComponentsDescendantsBreadth<T extends Component>(object: Readonly<Object3D>, typeOrClass?: string | ComponentConstructor<T>): T[] {
     const objects = /*ObjectUtils.*/getDescendantsBreadth(object);
     return /*ObjectUtils.*/getComponentsObjects(objects, typeOrClass);
 }
 
-export function getComponentsDescendantsDepth<T extends Component>(object: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T> | null = null): T[] {
+export function getComponentsDescendantsDepth<T extends Component>(object: Readonly<Object3D>, typeOrClass?: string | ComponentConstructor<T>): T[] {
     const objects = /*ObjectUtils.*/getDescendantsDepth(object);
     return /*ObjectUtils.*/getComponentsObjects(objects, typeOrClass);
 }
 
-export function getComponentsChildren<T extends Component>(object: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T> | null = null): T[] {
+export function getComponentsChildren<T extends Component>(object: Readonly<Object3D>, typeOrClass?: string | ComponentConstructor<T>): T[] {
     const objects = /*ObjectUtils.*/getChildren(object);
     return /*ObjectUtils.*/getComponentsObjects(objects, typeOrClass);
 }
@@ -2629,7 +2629,7 @@ export function getComponentObjects<T extends Component>(objects: Object3D[], ty
     return component;
 }
 
-export function getComponentsObjects<T extends Component>(objects: Object3D[], typeOrClass: string | ComponentConstructor<T> | null = null): T[] {
+export function getComponentsObjects<T extends Component>(objects: Object3D[], typeOrClass?: string | ComponentConstructor<T>): T[] {
     const components: T[] = [];
 
     for (const currentObject of objects) {

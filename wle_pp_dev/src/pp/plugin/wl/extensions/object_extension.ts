@@ -456,99 +456,99 @@ export function initObjectExtensionProtoype(): void {
 
     // Axes    
 
-    objectExtension.pp_setAxes = function pp_setAxes(this: Object3D, left: Readonly<Vector3> | null = null, up: Readonly<Vector3> | null = null, forward: Readonly<Vector3> | null = null): Object3D {
+    objectExtension.pp_setAxes = function pp_setAxes(this: Object3D, left?: Readonly<Vector3>, up?: Readonly<Vector3>, forward?: Readonly<Vector3>): Object3D {
         return ObjectUtils.setAxes(this, left, up, forward);
     };
 
-    objectExtension.pp_setAxesWorld = function pp_setAxesWorld(this: Object3D, left: Readonly<Vector3> | null = null, up: Readonly<Vector3> | null = null, forward: Readonly<Vector3> | null = null): Object3D {
+    objectExtension.pp_setAxesWorld = function pp_setAxesWorld(this: Object3D, left?: Readonly<Vector3>, up?: Readonly<Vector3>, forward?: Readonly<Vector3>): Object3D {
         return ObjectUtils.setAxesWorld(this, left, up, forward);
     };
 
-    objectExtension.pp_setAxesLocal = function pp_setAxesLocal(this: Object3D, left: Readonly<Vector3> | null = null, up: Readonly<Vector3> | null = null, forward: Readonly<Vector3> | null = null): Object3D {
+    objectExtension.pp_setAxesLocal = function pp_setAxesLocal(this: Object3D, left?: Readonly<Vector3>, up?: Readonly<Vector3>, forward?: Readonly<Vector3>): Object3D {
         return ObjectUtils.setAxesLocal(this, left, up, forward);
     };
 
     // Forward
 
-    objectExtension.pp_setForward = function pp_setForward(this: Object3D, forward: Readonly<Vector3>, up: Readonly<Vector3> | null = null, left: Readonly<Vector3> | null = null): Object3D {
+    objectExtension.pp_setForward = function pp_setForward(this: Object3D, forward: Readonly<Vector3>, up?: Readonly<Vector3>, left?: Readonly<Vector3>): Object3D {
         return ObjectUtils.setForward(this, forward, up, left);
     };
 
-    objectExtension.pp_setForwardWorld = function pp_setForwardWorld(this: Object3D, forward: Readonly<Vector3>, up: Readonly<Vector3> | null = null, left: Readonly<Vector3> | null = null): Object3D {
+    objectExtension.pp_setForwardWorld = function pp_setForwardWorld(this: Object3D, forward: Readonly<Vector3>, up?: Readonly<Vector3>, left?: Readonly<Vector3>): Object3D {
         return ObjectUtils.setForwardWorld(this, forward, up, left);
     };
 
-    objectExtension.pp_setForwardLocal = function pp_setForwardLocal(this: Object3D, forward: Readonly<Vector3>, up: Readonly<Vector3> | null = null, left: Readonly<Vector3> | null = null): Object3D {
+    objectExtension.pp_setForwardLocal = function pp_setForwardLocal(this: Object3D, forward: Readonly<Vector3>, up?: Readonly<Vector3>, left?: Readonly<Vector3>): Object3D {
         return ObjectUtils.setForwardLocal(this, forward, up, left);
     };
 
     // Backward
 
-    objectExtension.pp_setBackward = function pp_setBackward(this: Object3D, backward: Readonly<Vector3>, up: Readonly<Vector3> | null = null, left: Readonly<Vector3> | null = null): Object3D {
+    objectExtension.pp_setBackward = function pp_setBackward(this: Object3D, backward: Readonly<Vector3>, up?: Readonly<Vector3>, left?: Readonly<Vector3>): Object3D {
         return ObjectUtils.setBackward(this, backward, up, left);
     };
 
-    objectExtension.pp_setBackwardWorld = function pp_setBackwardWorld(this: Object3D, backward: Readonly<Vector3>, up: Readonly<Vector3> | null = null, left: Readonly<Vector3> | null = null): Object3D {
+    objectExtension.pp_setBackwardWorld = function pp_setBackwardWorld(this: Object3D, backward: Readonly<Vector3>, up?: Readonly<Vector3>, left?: Readonly<Vector3>): Object3D {
         return ObjectUtils.setBackwardWorld(this, backward, up, left);
     };
 
-    objectExtension.pp_setBackwardLocal = function pp_setBackwardLocal(this: Object3D, backward: Readonly<Vector3>, up: Readonly<Vector3> | null = null, left: Readonly<Vector3> | null = null): Object3D {
+    objectExtension.pp_setBackwardLocal = function pp_setBackwardLocal(this: Object3D, backward: Readonly<Vector3>, up?: Readonly<Vector3>, left?: Readonly<Vector3>): Object3D {
         return ObjectUtils.setBackwardLocal(this, backward, up, left);
     };
 
     // Up
 
-    objectExtension.pp_setUp = function pp_setUp(this: Object3D, up: Readonly<Vector3>, forward: Readonly<Vector3> | null = null, left: Readonly<Vector3> | null = null): Object3D {
+    objectExtension.pp_setUp = function pp_setUp(this: Object3D, up: Readonly<Vector3>, forward?: Readonly<Vector3>, left?: Readonly<Vector3>): Object3D {
         return ObjectUtils.setUp(this, up, forward, left);
     };
 
-    objectExtension.pp_setUpWorld = function pp_setUpWorld(this: Object3D, up: Readonly<Vector3>, forward: Readonly<Vector3> | null = null, left: Readonly<Vector3> | null = null): Object3D {
+    objectExtension.pp_setUpWorld = function pp_setUpWorld(this: Object3D, up: Readonly<Vector3>, forward?: Readonly<Vector3>, left?: Readonly<Vector3>): Object3D {
         return ObjectUtils.setUpWorld(this, up, forward, left);
     };
 
-    objectExtension.pp_setUpLocal = function pp_setUpLocal(this: Object3D, up: Readonly<Vector3>, forward: Readonly<Vector3> | null = null, left: Readonly<Vector3> | null = null): Object3D {
+    objectExtension.pp_setUpLocal = function pp_setUpLocal(this: Object3D, up: Readonly<Vector3>, forward?: Readonly<Vector3>, left?: Readonly<Vector3>): Object3D {
         return ObjectUtils.setUpLocal(this, up, forward, left);
     };
 
     // Down
 
-    objectExtension.pp_setDown = function pp_setDown(this: Object3D, down: Readonly<Vector3>, forward: Readonly<Vector3> | null = null, left: Readonly<Vector3> | null = null): Object3D {
+    objectExtension.pp_setDown = function pp_setDown(this: Object3D, down: Readonly<Vector3>, forward?: Readonly<Vector3>, left?: Readonly<Vector3>): Object3D {
         return ObjectUtils.setDown(this, down, forward, left);
     };
 
-    objectExtension.pp_setDownWorld = function pp_setDownWorld(this: Object3D, down: Readonly<Vector3>, forward: Readonly<Vector3> | null = null, left: Readonly<Vector3> | null = null): Object3D {
+    objectExtension.pp_setDownWorld = function pp_setDownWorld(this: Object3D, down: Readonly<Vector3>, forward?: Readonly<Vector3>, left?: Readonly<Vector3>): Object3D {
         return ObjectUtils.setDownWorld(this, down, forward, left);
     };
 
-    objectExtension.pp_setDownLocal = function pp_setDownLocal(this: Object3D, down: Readonly<Vector3>, forward: Readonly<Vector3> | null = null, left: Readonly<Vector3> | null = null): Object3D {
+    objectExtension.pp_setDownLocal = function pp_setDownLocal(this: Object3D, down: Readonly<Vector3>, forward?: Readonly<Vector3>, left?: Readonly<Vector3>): Object3D {
         return ObjectUtils.setDownLocal(this, down, forward, left);
     };
 
     // Left
 
-    objectExtension.pp_setLeft = function pp_setLeft(this: Object3D, left: Readonly<Vector3>, up: Readonly<Vector3> | null = null, forward: Readonly<Vector3> | null = null): Object3D {
+    objectExtension.pp_setLeft = function pp_setLeft(this: Object3D, left: Readonly<Vector3>, up?: Readonly<Vector3>, forward?: Readonly<Vector3>): Object3D {
         return ObjectUtils.setLeft(this, left, up, forward);
     };
 
-    objectExtension.pp_setLeftWorld = function pp_setLeftWorld(this: Object3D, left: Readonly<Vector3>, up: Readonly<Vector3> | null = null, forward: Readonly<Vector3> | null = null): Object3D {
+    objectExtension.pp_setLeftWorld = function pp_setLeftWorld(this: Object3D, left: Readonly<Vector3>, up?: Readonly<Vector3>, forward?: Readonly<Vector3>): Object3D {
         return ObjectUtils.setLeftWorld(this, left, up, forward);
     };
 
-    objectExtension.pp_setLeftLocal = function pp_setLeftLocal(this: Object3D, left: Readonly<Vector3>, up: Readonly<Vector3> | null = null, forward: Readonly<Vector3> | null = null): Object3D {
+    objectExtension.pp_setLeftLocal = function pp_setLeftLocal(this: Object3D, left: Readonly<Vector3>, up?: Readonly<Vector3>, forward?: Readonly<Vector3>): Object3D {
         return ObjectUtils.setLeftLocal(this, left, up, forward);
     };
 
     // Right
 
-    objectExtension.pp_setRight = function pp_setRight(this: Object3D, right: Readonly<Vector3>, up: Readonly<Vector3> | null = null, forward: Readonly<Vector3> | null = null): Object3D {
+    objectExtension.pp_setRight = function pp_setRight(this: Object3D, right: Readonly<Vector3>, up?: Readonly<Vector3>, forward?: Readonly<Vector3>): Object3D {
         return ObjectUtils.setRight(this, right, up, forward);
     };
 
-    objectExtension.pp_setRightWorld = function pp_setRightWorld(this: Object3D, right: Readonly<Vector3>, up: Readonly<Vector3> | null = null, forward: Readonly<Vector3> | null = null): Object3D {
+    objectExtension.pp_setRightWorld = function pp_setRightWorld(this: Object3D, right: Readonly<Vector3>, up?: Readonly<Vector3>, forward?: Readonly<Vector3>): Object3D {
         return ObjectUtils.setRightWorld(this, right, up, forward);
     };
 
-    objectExtension.pp_setRightLocal = function pp_setRightLocal(this: Object3D, right: Readonly<Vector3>, up: Readonly<Vector3> | null = null, forward: Readonly<Vector3> | null = null): Object3D {
+    objectExtension.pp_setRightLocal = function pp_setRightLocal(this: Object3D, right: Readonly<Vector3>, up?: Readonly<Vector3>, forward?: Readonly<Vector3>): Object3D {
         return ObjectUtils.setRightLocal(this, right, up, forward);
     };
 
@@ -1156,7 +1156,7 @@ export function initObjectExtensionProtoype(): void {
 
     // Component
 
-    objectExtension.pp_addComponent = function pp_addComponent<T extends Component>(this: Object3D, typeOrClass: string | ComponentConstructor<T>, paramsOrActive: Record<string, any> | boolean | null = null, active: boolean | null = null): T | null {
+    objectExtension.pp_addComponent = function pp_addComponent<T extends Component>(this: Object3D, typeOrClass: string | ComponentConstructor<T>, paramsOrActive?: Record<string, any> | boolean, active?: boolean): T | null {
         return ObjectUtils.addComponent(this, typeOrClass, paramsOrActive, active);
     };
 
@@ -1196,39 +1196,39 @@ export function initObjectExtensionProtoype(): void {
         return ObjectUtils.getComponentChildren(this, typeOrClass, index);
     };
 
-    objectExtension.pp_getComponents = function pp_getComponents<T extends Component>(this: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T> | null = null): T[] {
+    objectExtension.pp_getComponents = function pp_getComponents<T extends Component>(this: Readonly<Object3D>, typeOrClass?: string | ComponentConstructor<T>): T[] {
         return ObjectUtils.getComponents(this, typeOrClass);
     };
 
-    objectExtension.pp_getComponentsSelf = function pp_getComponentsSelf<T extends Component>(this: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T> | null = null): T[] {
+    objectExtension.pp_getComponentsSelf = function pp_getComponentsSelf<T extends Component>(this: Readonly<Object3D>, typeOrClass?: string | ComponentConstructor<T>): T[] {
         return ObjectUtils.getComponentsSelf(this, typeOrClass);
     };
 
-    objectExtension.pp_getComponentsHierarchy = function pp_getComponentsHierarchy<T extends Component>(this: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T> | null = null): T[] {
+    objectExtension.pp_getComponentsHierarchy = function pp_getComponentsHierarchy<T extends Component>(this: Readonly<Object3D>, typeOrClass?: string | ComponentConstructor<T>): T[] {
         return ObjectUtils.getComponentsHierarchy(this, typeOrClass);
     };
 
-    objectExtension.pp_getComponentsHierarchyBreadth = function pp_getComponentsHierarchyBreadth<T extends Component>(this: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T> | null = null): T[] {
+    objectExtension.pp_getComponentsHierarchyBreadth = function pp_getComponentsHierarchyBreadth<T extends Component>(this: Readonly<Object3D>, typeOrClass?: string | ComponentConstructor<T>): T[] {
         return ObjectUtils.getComponentsHierarchyBreadth(this, typeOrClass);
     };
 
-    objectExtension.pp_getComponentsHierarchyDepth = function pp_getComponentsHierarchyDepth<T extends Component>(this: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T> | null = null): T[] {
+    objectExtension.pp_getComponentsHierarchyDepth = function pp_getComponentsHierarchyDepth<T extends Component>(this: Readonly<Object3D>, typeOrClass?: string | ComponentConstructor<T>): T[] {
         return ObjectUtils.getComponentsHierarchyDepth(this, typeOrClass);
     };
 
-    objectExtension.pp_getComponentsDescendants = function pp_getComponentsDescendants<T extends Component>(this: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T> | null = null): T[] {
+    objectExtension.pp_getComponentsDescendants = function pp_getComponentsDescendants<T extends Component>(this: Readonly<Object3D>, typeOrClass?: string | ComponentConstructor<T>): T[] {
         return ObjectUtils.getComponentsDescendants(this, typeOrClass);
     };
 
-    objectExtension.pp_getComponentsDescendantsBreadth = function pp_getComponentsDescendantsBreadth<T extends Component>(this: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T> | null = null): T[] {
+    objectExtension.pp_getComponentsDescendantsBreadth = function pp_getComponentsDescendantsBreadth<T extends Component>(this: Readonly<Object3D>, typeOrClass?: string | ComponentConstructor<T>): T[] {
         return ObjectUtils.getComponentsDescendantsBreadth(this, typeOrClass);
     };
 
-    objectExtension.pp_getComponentsDescendantsDepth = function pp_getComponentsDescendantsDepth<T extends Component>(this: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T> | null = null): T[] {
+    objectExtension.pp_getComponentsDescendantsDepth = function pp_getComponentsDescendantsDepth<T extends Component>(this: Readonly<Object3D>, typeOrClass?: string | ComponentConstructor<T>): T[] {
         return ObjectUtils.getComponentsDescendantsDepth(this, typeOrClass);
     };
 
-    objectExtension.pp_getComponentsChildren = function pp_getComponentsChildren<T extends Component>(this: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T> | null = null): T[] {
+    objectExtension.pp_getComponentsChildren = function pp_getComponentsChildren<T extends Component>(this: Readonly<Object3D>, typeOrClass?: string | ComponentConstructor<T>): T[] {
         return ObjectUtils.getComponentsChildren(this, typeOrClass);
     };
 
