@@ -1,6 +1,6 @@
 import { JSUtils } from "../../cauldron/js/utils/js_utils.js";
 
-export function injectProperties(fromReference: Record<string, any>, toReference: object, enumerable: boolean = true, writable: boolean = true, configurable: boolean = true, keepOriginalDescriptorAttributes: boolean = true, bindThisAsFirstParam: boolean = false, prefix: string | null = null, functionNamesToExclude: Readonly<string[]> = []): void {
+export function injectProperties(fromReference: Record<string, any>, toReference: object, enumerable: boolean = true, writable: boolean = true, configurable: boolean = true, keepOriginalDescriptorAttributes: boolean = true, bindThisAsFirstParam: boolean = false, prefix?: string, functionNamesToExclude: Readonly<string[]> = []): void {
     const ownPropertyNames = Object.getOwnPropertyNames(fromReference);
     for (const ownPropertyName of ownPropertyNames) {
         if (functionNamesToExclude.includes(ownPropertyName)) continue;
