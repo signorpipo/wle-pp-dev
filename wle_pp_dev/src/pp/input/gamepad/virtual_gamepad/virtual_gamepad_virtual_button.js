@@ -1,4 +1,3 @@
-import { Globals } from "../../../pp/globals.js";
 import { Handedness } from "../../cauldron/input_types.js";
 import { VirtualGamepadIcon } from "./virtual_gamepad_icon.js";
 

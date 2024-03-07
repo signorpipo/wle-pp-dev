@@ -1,6 +1,5 @@
 import { Component, Property } from "@wonderlandengine/api";
 import * as PPAPI from "../../index.js";
-import { Globals } from "../../pp/globals.js";
 
 export class AddPPToWindowComponent extends Component {
     static TypeName = "pp-add-pp-to-window";

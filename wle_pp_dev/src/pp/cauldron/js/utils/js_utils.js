@@ -1,4 +1,3 @@
-import { Globals } from "../../../pp/globals.js";
 import { ArrayUtils } from "./array_utils.js";
 
 export function getObjectPrototypes(object) {
