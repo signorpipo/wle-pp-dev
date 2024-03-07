@@ -1,5 +1,4 @@
-import { Component, WonderlandEngine, type ComponentProperty } from "@wonderlandengine/api";
-import { property } from "@wonderlandengine/api/decorators.js";
+import { Component, Property, WonderlandEngine, type ComponentProperty } from "@wonderlandengine/api";
 import { AudioManagerComponent } from "../../audio/components/audio_manager_component.js";
 import { AnalyticsManagerComponent } from "../../cauldron/cauldron/components/analytics_manager_component.js";
 import { SaveManagerComponent } from "../../cauldron/cauldron/components/save_manager_component.js";
@@ -23,6 +22,10 @@ const _myRegisteredEngines: WeakMap<Readonly<WonderlandEngine>, null> = new Weak
 export class PPGatewayComponent extends Component {
     static override TypeName = "pp-gateway";
     static override Properties = {
+        _myEnableDebug: Property.bool(true),
+        _myEnableTool: Property.bool(true),
+        _myAddPPToWindow: Property.bool(true),
+        _myAddWLToWindow: Property.bool(true),
         ...InputManagerComponent.Properties,
         ...AudioManagerComponent.Properties,
         ...VisualManagerComponent.Properties,
@@ -35,14 +38,10 @@ export class PPGatewayComponent extends Component {
         ...GetDefaultResourcesComponent.Properties
     };
 
-    @property.bool(true)
     private _myEnableDebug!: boolean;
-    @property.bool(true)
     private _myEnableTool!: boolean;
 
-    @property.bool(true)
     private _myAddPPToWindow!: boolean;
-    @property.bool(true)
     private _myAddWLToWindow!: boolean;
 
     private _myGetDefaultResourcesComponent!: GetDefaultResourcesComponent;
@@ -139,12 +138,15 @@ export class PPGatewayComponent extends Component {
 
     _getProperties(propertiesToGet: Record<string, ComponentProperty>): Record<string, any> {
         const properties: Record<string, any> = {};
-        const propertyNames = Object.getOwnPropertyNames(propertiesToGet);
 
-        for (const propertyName of propertyNames) {
-            const _this = (this as any);
-            if (_this[propertyName] != undefined) {
-                properties[propertyName] = _this[propertyName];
+        if (propertiesToGet != null) {
+            const propertyNames = Object.getOwnPropertyNames(propertiesToGet);
+
+            for (const propertyName of propertyNames) {
+                const _this = (this as any);
+                if (_this[propertyName] != undefined) {
+                    properties[propertyName] = _this[propertyName];
+                }
             }
         }
 

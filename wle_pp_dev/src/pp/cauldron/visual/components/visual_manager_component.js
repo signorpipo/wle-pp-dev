@@ -6,7 +6,6 @@ import { VisualResources } from "../visual_resources.js";
 
 export class VisualManagerComponent extends Component {
     static TypeName = "pp-visual-manager";
-    static Properties = {};
 
     init() {
         this._myVisualManager = null;
