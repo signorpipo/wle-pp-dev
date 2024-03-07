@@ -606,7 +606,7 @@ PlayerLocomotionTeleportDetectionState.prototype._isTeleportHitValid = function 
         if (hit.isValid() && !hit.myInsideCollision) {
             playerUp = this._myTeleportParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
 
-            // #WARN is hitValidEvenWhenNotConcordant needed or was it a debug that should be removed?
+            // #TODO is hitValidEvenWhenNotConcordant needed or was it a debug that should be removed?
             let hitValidEvenWhenNotConcordant = true;
             if (hit.myNormal.vec3_isConcordant(playerUp) || hitValidEvenWhenNotConcordant) {
                 // #TODO When the flags on the physx will be available just check that the hit object physx has the floor flag

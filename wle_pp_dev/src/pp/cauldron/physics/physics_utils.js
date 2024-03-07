@@ -33,7 +33,7 @@ export function setRaycastVisualDebugEnabled(visualDebugEnabled, physics = Globa
 }
 
 export let raycast = function () {
-    // #WARN These initializations assume that there can't be more than @maxHitCount hits within a single rayCast call
+    // These initializations assume that there can't be more than @maxHitCount hits within a single rayCast call
     // if the hitCount is greater, these arrays will be allocated again
     let maxHitCount = 20;
     let objects = new Array(maxHitCount);

@@ -401,7 +401,7 @@ export let Mat4Utils = {
 
 
 
-// #WARN This is used in place of the glMatrix one to avoid the array allocation
+// This is used in place of the glMatrix one to avoid the array allocation
 let _customGLMatrixGetRotation = function () {
     let scaling = vec3_utils_create();
     return function _customGLMatrixGetRotation(out, mat) {

@@ -370,7 +370,7 @@ export let Quat2Utils = {
 
 
 
-// #WARN This is used in place of the glMatrix one to avoid the array allocation
+// This is used in place of the glMatrix one to avoid the array allocation
 let _customGLMatrixFromQuat2 = function () {
     let translation = vec3_utils_create();
     return function _customGLMatrixFromQuat2(out, a) {
