@@ -494,10 +494,10 @@ declare module "@wonderlandengine/api" {
         pp_reserveObjectsDescendants(this: Readonly<Object3D>, count: number): Object3D;
         pp_reserveObjectsChildren(this: Readonly<Object3D>, count: number): Object3D;
 
-        pp_getComponentsAmountMap(this: Readonly<Object3D>, outAmountMap?: Map<string, number>): Map<string, number>;
-        pp_getComponentsAmountMapSelf(this: Readonly<Object3D>, outAmountMap?: Map<string, number>): Map<string, number>;
-        pp_getComponentsAmountMapHierarchy(this: Readonly<Object3D>, outAmountMap?: Map<string, number>): Map<string, number>;
-        pp_getComponentsAmountMapDescendants(this: Readonly<Object3D>, outAmountMap?: Map<string, number>): Map<string, number>;
-        pp_getComponentsAmountMapChildren(this: Readonly<Object3D>, outAmountMap?: Map<string, number>): Map<string, number>;
+        pp_getComponentsAmountMap(this: Readonly<Object3D>, outComponentsAmountMap?: Map<string, number>): Map<string, number>;
+        pp_getComponentsAmountMapSelf(this: Readonly<Object3D>, outComponentsAmountMap?: Map<string, number>): Map<string, number>;
+        pp_getComponentsAmountMapHierarchy(this: Readonly<Object3D>, outComponentsAmountMap?: Map<string, number>): Map<string, number>;
+        pp_getComponentsAmountMapDescendants(this: Readonly<Object3D>, outComponentsAmountMap?: Map<string, number>): Map<string, number>;
+        pp_getComponentsAmountMapChildren(this: Readonly<Object3D>, outComponentsAmountMap?: Map<string, number>): Map<string, number>;
     }
 }

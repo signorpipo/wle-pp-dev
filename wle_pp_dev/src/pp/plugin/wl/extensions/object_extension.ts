@@ -1496,24 +1496,24 @@ export function initObjectExtensionProtoype(): void {
         return ObjectUtils.reserveObjectsChildren(this, count);
     };
 
-    objectExtension.pp_getComponentsAmountMap = function pp_getComponentsAmountMap(this: Readonly<Object3D>, outAmountMap: Map<string, number> = new Map()): Map<string, number> {
-        return ObjectUtils.getComponentsAmountMap(this, outAmountMap);
+    objectExtension.pp_getComponentsAmountMap = function pp_getComponentsAmountMap(this: Readonly<Object3D>, outComponentsAmountMap: Map<string, number> = new Map()): Map<string, number> {
+        return ObjectUtils.getComponentsAmountMap(this, outComponentsAmountMap);
     };
 
-    objectExtension.pp_getComponentsAmountMapSelf = function pp_getComponentsAmountMapSelf(this: Readonly<Object3D>, outAmountMap: Map<string, number> = new Map()): Map<string, number> {
-        return ObjectUtils.getComponentsAmountMapSelf(this, outAmountMap);
+    objectExtension.pp_getComponentsAmountMapSelf = function pp_getComponentsAmountMapSelf(this: Readonly<Object3D>, outComponentsAmountMap: Map<string, number> = new Map()): Map<string, number> {
+        return ObjectUtils.getComponentsAmountMapSelf(this, outComponentsAmountMap);
     };
 
-    objectExtension.pp_getComponentsAmountMapHierarchy = function pp_getComponentsAmountMapHierarchy(this: Readonly<Object3D>, outAmountMap: Map<string, number> = new Map()): Map<string, number> {
-        return ObjectUtils.getComponentsAmountMapHierarchy(this, outAmountMap);
+    objectExtension.pp_getComponentsAmountMapHierarchy = function pp_getComponentsAmountMapHierarchy(this: Readonly<Object3D>, outComponentsAmountMap: Map<string, number> = new Map()): Map<string, number> {
+        return ObjectUtils.getComponentsAmountMapHierarchy(this, outComponentsAmountMap);
     };
 
-    objectExtension.pp_getComponentsAmountMapDescendants = function pp_getComponentsAmountMapDescendants(this: Readonly<Object3D>, outAmountMap: Map<string, number> = new Map()): Map<string, number> {
-        return ObjectUtils.getComponentsAmountMapDescendants(this, outAmountMap);
+    objectExtension.pp_getComponentsAmountMapDescendants = function pp_getComponentsAmountMapDescendants(this: Readonly<Object3D>, outComponentsAmountMap: Map<string, number> = new Map()): Map<string, number> {
+        return ObjectUtils.getComponentsAmountMapDescendants(this, outComponentsAmountMap);
     };
 
-    objectExtension.pp_getComponentsAmountMapChildren = function pp_getComponentsAmountMapChildren(this: Readonly<Object3D>, outAmountMap: Map<string, number> = new Map()): Map<string, number> {
-        return ObjectUtils.getComponentsAmountMapChildren(this, outAmountMap);
+    objectExtension.pp_getComponentsAmountMapChildren = function pp_getComponentsAmountMapChildren(this: Readonly<Object3D>, outComponentsAmountMap: Map<string, number> = new Map()): Map<string, number> {
+        return ObjectUtils.getComponentsAmountMapChildren(this, outComponentsAmountMap);
     };
 
 

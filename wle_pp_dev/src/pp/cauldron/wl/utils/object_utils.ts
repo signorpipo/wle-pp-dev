@@ -2566,60 +2566,60 @@ export function reserveObjectsChildren(object: Readonly<Object3D>, count: number
     return object as Object3D;
 }
 
-export function getComponentsAmountMap(object: Readonly<Object3D>, outAmountMap: Map<string, number> = new Map()): Map<string, number> {
-    return ObjectUtils.getComponentsAmountMapHierarchy(object, outAmountMap);
+export function getComponentsAmountMap(object: Readonly<Object3D>, outComponentsAmountMap: Map<string, number> = new Map()): Map<string, number> {
+    return ObjectUtils.getComponentsAmountMapHierarchy(object, outComponentsAmountMap);
 }
 
-export function getComponentsAmountMapSelf(object: Readonly<Object3D>, outAmountMap: Map<string, number> = new Map()): Map<string, number> {
-    let objectsAmount = outAmountMap.get("object");
+export function getComponentsAmountMapSelf(object: Readonly<Object3D>, outComponentsAmountMap: Map<string, number> = new Map()): Map<string, number> {
+    let objectsAmount = outComponentsAmountMap.get("object");
     if (objectsAmount == null) {
         objectsAmount = 0;
     }
     objectsAmount += 1;
-    outAmountMap.set("object", objectsAmount);
+    outComponentsAmountMap.set("object", objectsAmount);
 
     const components = ObjectUtils.getComponentsSelf(object);
     for (const component of components) {
         const type = component.type;
-        let typeAmount = outAmountMap.get(type);
+        let typeAmount = outComponentsAmountMap.get(type);
         if (typeAmount == null) {
             typeAmount = 0;
         }
         typeAmount += 1;
-        outAmountMap.set(type, typeAmount);
+        outComponentsAmountMap.set(type, typeAmount);
     }
 
-    return outAmountMap;
+    return outComponentsAmountMap;
 }
 
-export function getComponentsAmountMapHierarchy(object: Readonly<Object3D>, outAmountMap: Map<string, number> = new Map()): Map<string, number> {
+export function getComponentsAmountMapHierarchy(object: Readonly<Object3D>, outComponentsAmountMap: Map<string, number> = new Map()): Map<string, number> {
     const hierarchy = ObjectUtils.getHierarchy(object);
 
     for (const hierarchyObject of hierarchy) {
-        ObjectUtils.getComponentsAmountMapSelf(hierarchyObject, outAmountMap);
+        ObjectUtils.getComponentsAmountMapSelf(hierarchyObject, outComponentsAmountMap);
     }
 
-    return outAmountMap;
+    return outComponentsAmountMap;
 }
 
-export function getComponentsAmountMapDescendants(object: Readonly<Object3D>, outAmountMap: Map<string, number> = new Map()): Map<string, number> {
+export function getComponentsAmountMapDescendants(object: Readonly<Object3D>, outComponentsAmountMap: Map<string, number> = new Map()): Map<string, number> {
     const descendants = ObjectUtils.getDescendants(object);
 
     for (const descendant of descendants) {
-        ObjectUtils.getComponentsAmountMapSelf(descendant, outAmountMap);
+        ObjectUtils.getComponentsAmountMapSelf(descendant, outComponentsAmountMap);
     }
 
-    return outAmountMap;
+    return outComponentsAmountMap;
 }
 
-export function getComponentsAmountMapChildren(object: Readonly<Object3D>, outAmountMap: Map<string, number> = new Map()): Map<string, number> {
+export function getComponentsAmountMapChildren(object: Readonly<Object3D>, outComponentsAmountMap: Map<string, number> = new Map()): Map<string, number> {
     const children = ObjectUtils.getChildren(object);
 
     for (const child of children) {
-        ObjectUtils.getComponentsAmountMapSelf(child, outAmountMap);
+        ObjectUtils.getComponentsAmountMapSelf(child, outComponentsAmountMap);
     }
 
-    return outAmountMap;
+    return outComponentsAmountMap;
 }
 
 // GLOBALS
