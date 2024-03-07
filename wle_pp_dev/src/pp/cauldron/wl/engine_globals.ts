@@ -4,23 +4,16 @@ import { SceneUtils } from "./utils/scene_utils.js";
 let _myMainEngine: WonderlandEngine | null = null;
 const _myEngines: WonderlandEngine[] = [];
 
-export function initEngine(engine: WonderlandEngine): void {
-    if (engine != null) {
-        addEngine(engine);
-        if (getMainEngine() == null) {
-            setMainEngine(engine);
-        }
-    }
-}
-
 export function getMainEngine(): WonderlandEngine | null {
     return _myMainEngine;
 }
 
 export function setMainEngine(engine: WonderlandEngine): void {
-    if (hasEngine(engine)) {
-        _myMainEngine = engine;
+    if (!hasEngine(engine)) {
+        addEngine(engine);
     }
+
+    _myMainEngine = engine;
 }
 
 export function removeMainEngine(): void {
@@ -36,8 +29,8 @@ export function addEngine(engine: WonderlandEngine): void {
     _myEngines.push(engine);
 }
 
-export function removeEngine(engine: WonderlandEngine): void {
-    const index = _myEngines.indexOf(engine);
+export function removeEngine(engine: Readonly<WonderlandEngine>): void {
+    const index = _myEngines.indexOf(engine as WonderlandEngine);
 
     if (index >= 0) {
         _myEngines.splice(index, 1);
@@ -48,13 +41,13 @@ export function removeEngine(engine: WonderlandEngine): void {
     }
 }
 
-export function hasEngine(engine: WonderlandEngine): boolean {
-    return _myEngines.indexOf(engine) >= 0;
+export function hasEngine(engine: Readonly<WonderlandEngine>): boolean {
+    return _myEngines.indexOf(engine as WonderlandEngine) >= 0;
 }
 
-export function getScene(engine: WonderlandEngine): Scene;
-export function getScene(engine?: WonderlandEngine | null): Scene | null;
-export function getScene(engine: WonderlandEngine | null = getMainEngine()): Scene | null {
+export function getScene(engine: Readonly<WonderlandEngine>): Scene;
+export function getScene(engine?: Readonly<WonderlandEngine> | null): Scene | null;
+export function getScene(engine: Readonly<WonderlandEngine> | null = getMainEngine()): Scene | null {
     let scene = null;
 
     if (engine != null) {
@@ -64,9 +57,9 @@ export function getScene(engine: WonderlandEngine | null = getMainEngine()): Sce
     return scene;
 }
 
-export function getRoot(engine: WonderlandEngine): Object3D;
-export function getRoot(engine?: WonderlandEngine | null): Object3D | null;
-export function getRoot(engine: WonderlandEngine | null = getMainEngine()): Object3D | null {
+export function getRoot(engine: Readonly<WonderlandEngine>): Object3D;
+export function getRoot(engine?: Readonly<WonderlandEngine> | null): Object3D | null;
+export function getRoot(engine: Readonly<WonderlandEngine> | null = getMainEngine()): Object3D | null {
     let root = null;
 
     const scene = getScene(engine);
@@ -77,9 +70,9 @@ export function getRoot(engine: WonderlandEngine | null = getMainEngine()): Obje
     return root;
 }
 
-export function getPhysics(engine: WonderlandEngine): Physics;
-export function getPhysics(engine?: WonderlandEngine | null): Physics | null;
-export function getPhysics(engine: WonderlandEngine | null = getMainEngine()): Physics | null {
+export function getPhysics(engine: Readonly<WonderlandEngine>): Physics;
+export function getPhysics(engine?: Readonly<WonderlandEngine> | null): Physics | null;
+export function getPhysics(engine: Readonly<WonderlandEngine> | null = getMainEngine()): Physics | null {
     let physics = null;
 
     if (engine != null) {
@@ -89,9 +82,9 @@ export function getPhysics(engine: WonderlandEngine | null = getMainEngine()): P
     return physics;
 }
 
-export function getCanvas(engine: WonderlandEngine): HTMLCanvasElement;
-export function getCanvas(engine?: WonderlandEngine | null): HTMLCanvasElement | null;
-export function getCanvas(engine: WonderlandEngine | null = getMainEngine()): HTMLCanvasElement | null {
+export function getCanvas(engine: Readonly<WonderlandEngine>): HTMLCanvasElement;
+export function getCanvas(engine?: Readonly<WonderlandEngine> | null): HTMLCanvasElement | null;
+export function getCanvas(engine: Readonly<WonderlandEngine> | null = getMainEngine()): HTMLCanvasElement | null {
     let canvas = null;
 
     if (engine != null) {
@@ -101,9 +94,9 @@ export function getCanvas(engine: WonderlandEngine | null = getMainEngine()): HT
     return canvas;
 }
 
-export function getWASM(engine: WonderlandEngine): WASM;
-export function getWASM(engine?: WonderlandEngine | null): WASM | null;
-export function getWASM(engine: WonderlandEngine | null = getMainEngine()): WASM | null {
+export function getWASM(engine: Readonly<WonderlandEngine>): WASM;
+export function getWASM(engine?: Readonly<WonderlandEngine> | null): WASM | null;
+export function getWASM(engine: Readonly<WonderlandEngine> | null = getMainEngine()): WASM | null {
     let wasm = null;
 
     if (engine != null) {
@@ -113,9 +106,9 @@ export function getWASM(engine: WonderlandEngine | null = getMainEngine()): WASM
     return wasm;
 }
 
-export function getXR(engine: WonderlandEngine): XR;
-export function getXR(engine?: WonderlandEngine | null): XR | null;
-export function getXR(engine: WonderlandEngine | null = getMainEngine()): XR | null {
+export function getXR(engine: Readonly<WonderlandEngine>): XR;
+export function getXR(engine?: Readonly<WonderlandEngine> | null): XR | null;
+export function getXR(engine: Readonly<WonderlandEngine> | null = getMainEngine()): XR | null {
     let xr = null;
 
     if (engine != null) {

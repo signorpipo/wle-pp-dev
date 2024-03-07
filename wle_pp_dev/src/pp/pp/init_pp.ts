@@ -6,7 +6,7 @@ import { Globals } from "./globals.js";
 import { registerPPComponents } from "./register_pp_components.js";
 
 export function initPP(engine: WonderlandEngine): void {
-    Globals.initEngine(engine);
+    Globals.setMainEngine(engine);
 
     ComponentUtils.setDefaultWLComponentCloneCallbacks(engine);
 
