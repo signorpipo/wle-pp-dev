@@ -550,26 +550,38 @@ export function setScale(object: Object3D, scale: number | Vector3): Object3D {
 
 export const setScaleWorld = function () {
     const vector = Vec3Utils.create();
-    return function setScaleWorld(object: Object3D, scale: number | Vector3): Object3D {
+
+    function setScaleWorld(object: Object3D, uniformScale: number): Object3D;
+    function setScaleWorld(object: Object3D, scale: Vector3): Object3D;
+    function setScaleWorld(object: Object3D, scale: number | Vector3): Object3D;
+    function setScaleWorld(object: Object3D, scale: number | Vector3): Object3D {
         if (isNaN(scale as number)) {
             return object.setScalingWorld(scale as Vector3);
         } else {
             Vec3Utils.set(vector, scale);
             return object.setScalingWorld(vector);
         }
-    };
+    }
+
+    return setScaleWorld;
 }();
 
 export const setScaleLocal = function () {
     const vector = Vec3Utils.create();
-    return function setScaleLocal(object: Object3D, scale: number | Vector3): Object3D {
+
+    function setScaleLocal(object: Object3D, uniformScale: number): Object3D;
+    function setScaleLocal(object: Object3D, scale: Vector3): Object3D;
+    function setScaleLocal(object: Object3D, scale: number | Vector3): Object3D;
+    function setScaleLocal(object: Object3D, scale: number | Vector3): Object3D {
         if (isNaN(scale as number)) {
             return object.setScalingLocal(scale as Vector3);
         } else {
             Vec3Utils.set(vector, scale);
             return object.setScalingLocal(vector);
         }
-    };
+    }
+
+    return setScaleLocal;
 }();
 
 // Axes    
@@ -1448,33 +1460,6 @@ export const lookToLocal: (object: Object3D, direction: Vector3, up?: Vector3) =
 
 // EXTRA
 
-// Parent
-
-export const setParent = function () {
-    const position = Vec3Utils.create();
-    const rotation = QuatUtils.create();
-    const scale = Vec3Utils.create();
-    return function setParent(object: Object3D, newParent: Object3D, keepTransformWorld: boolean = true): Object3D {
-        if (!keepTransformWorld) {
-            object.parent = newParent;
-        } else {
-            ObjectUtils.getPositionWorld(object, position);
-            ObjectUtils.getRotationWorldQuat(object, rotation);
-            ObjectUtils.getScaleWorld(object, scale);
-            object.parent = newParent;
-            ObjectUtils.setScaleWorld(object, scale);
-            ObjectUtils.setRotationWorldQuat(object, rotation);
-            ObjectUtils.setPositionWorld(object, position);
-        }
-
-        return object;
-    };
-}();
-
-export function getParent(object: Readonly<Object3D>): Object3D | null {
-    return object.parent;
-}
-
 // Convert Vector Object World
 
 export const convertPositionObjectToWorld = function () {
@@ -1760,6 +1745,33 @@ export function convertTransformLocalToObjectQuat(object: Readonly<Object3D>, tr
     ObjectUtils.convertTransformLocalToWorldQuat(object, transform, outTransform);
     ObjectUtils.convertTransformWorldToObjectQuat(object, outTransform, outTransform);
     return outTransform;
+}
+
+// Parent
+
+export const setParent = function () {
+    const position = Vec3Utils.create();
+    const rotation = QuatUtils.create();
+    const scale = Vec3Utils.create();
+    return function setParent(object: Object3D, newParent: Object3D, keepTransformWorld: boolean = true): Object3D {
+        if (!keepTransformWorld) {
+            object.parent = newParent;
+        } else {
+            ObjectUtils.getPositionWorld(object, position);
+            ObjectUtils.getRotationWorldQuat(object, rotation);
+            ObjectUtils.getScaleWorld(object, scale);
+            object.parent = newParent;
+            ObjectUtils.setScaleWorld(object, scale);
+            ObjectUtils.setRotationWorldQuat(object, rotation);
+            ObjectUtils.setPositionWorld(object, position);
+        }
+
+        return object;
+    };
+}();
+
+export function getParent(object: Readonly<Object3D>): Object3D | null {
+    return object.parent;
 }
 
 // Component
@@ -2554,60 +2566,60 @@ export function reserveObjectsChildren(object: Readonly<Object3D>, count: number
     return object as Object3D;
 }
 
-export function getComponentsAmountMap(object: Readonly<Object3D>, amountMap: Map<string, number> = new Map()): Map<string, number> {
-    return ObjectUtils.getComponentsAmountMapHierarchy(object, amountMap);
+export function getComponentsAmountMap(object: Readonly<Object3D>, outAmountMap: Map<string, number> = new Map()): Map<string, number> {
+    return ObjectUtils.getComponentsAmountMapHierarchy(object, outAmountMap);
 }
 
-export function getComponentsAmountMapSelf(object: Readonly<Object3D>, amountMap: Map<string, number> = new Map()): Map<string, number> {
-    let objectsAmount = amountMap.get("object");
+export function getComponentsAmountMapSelf(object: Readonly<Object3D>, outAmountMap: Map<string, number> = new Map()): Map<string, number> {
+    let objectsAmount = outAmountMap.get("object");
     if (objectsAmount == null) {
         objectsAmount = 0;
     }
     objectsAmount += 1;
-    amountMap.set("object", objectsAmount);
+    outAmountMap.set("object", objectsAmount);
 
     const components = ObjectUtils.getComponentsSelf(object);
     for (const component of components) {
         const type = component.type;
-        let typeAmount = amountMap.get(type);
+        let typeAmount = outAmountMap.get(type);
         if (typeAmount == null) {
             typeAmount = 0;
         }
         typeAmount += 1;
-        amountMap.set(type, typeAmount);
+        outAmountMap.set(type, typeAmount);
     }
 
-    return amountMap;
+    return outAmountMap;
 }
 
-export function getComponentsAmountMapHierarchy(object: Readonly<Object3D>, amountMap: Map<string, number> = new Map()): Map<string, number> {
+export function getComponentsAmountMapHierarchy(object: Readonly<Object3D>, outAmountMap: Map<string, number> = new Map()): Map<string, number> {
     const hierarchy = ObjectUtils.getHierarchy(object);
 
     for (const hierarchyObject of hierarchy) {
-        ObjectUtils.getComponentsAmountMapSelf(hierarchyObject, amountMap);
+        ObjectUtils.getComponentsAmountMapSelf(hierarchyObject, outAmountMap);
     }
 
-    return amountMap;
+    return outAmountMap;
 }
 
-export function getComponentsAmountMapDescendants(object: Readonly<Object3D>, amountMap: Map<string, number> = new Map()): Map<string, number> {
+export function getComponentsAmountMapDescendants(object: Readonly<Object3D>, outAmountMap: Map<string, number> = new Map()): Map<string, number> {
     const descendants = ObjectUtils.getDescendants(object);
 
     for (const descendant of descendants) {
-        ObjectUtils.getComponentsAmountMapSelf(descendant, amountMap);
+        ObjectUtils.getComponentsAmountMapSelf(descendant, outAmountMap);
     }
 
-    return amountMap;
+    return outAmountMap;
 }
 
-export function getComponentsAmountMapChildren(object: Readonly<Object3D>, amountMap: Map<string, number> = new Map()): Map<string, number> {
+export function getComponentsAmountMapChildren(object: Readonly<Object3D>, outAmountMap: Map<string, number> = new Map()): Map<string, number> {
     const children = ObjectUtils.getChildren(object);
 
     for (const child of children) {
-        ObjectUtils.getComponentsAmountMapSelf(child, amountMap);
+        ObjectUtils.getComponentsAmountMapSelf(child, outAmountMap);
     }
 
-    return amountMap;
+    return outAmountMap;
 }
 
 // GLOBALS
@@ -2906,8 +2918,6 @@ export const ObjectUtils = {
     lookTo,
     lookToWorld,
     lookToLocal,
-    setParent,
-    getParent,
     convertPositionObjectToWorld,
     convertDirectionObjectToWorld,
     convertPositionWorldToObject,
@@ -2938,6 +2948,8 @@ export const ObjectUtils = {
     convertTransformLocalToObject,
     convertTransformLocalToObjectMatrix,
     convertTransformLocalToObjectQuat,
+    setParent,
+    getParent,
     addComponent,
     getComponent,
     getComponentSelf,
