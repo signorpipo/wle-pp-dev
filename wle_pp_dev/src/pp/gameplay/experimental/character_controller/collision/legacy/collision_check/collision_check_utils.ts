@@ -1,4 +1,4 @@
-import { vec3_create } from "../../../../../../plugin/js/extensions/vec_create_extension.js";
+import { vec3_create } from "../../../../../../plugin/js/extensions/array/vec_create_extension.js";
 import { CollisionCheckParams } from "./collision_params.js";
 
 export function generate360TeleportParamsFromMovementParams(movementParams: Readonly<CollisionCheckParams>, outTeleportParams = new CollisionCheckParams()): CollisionCheckParams {

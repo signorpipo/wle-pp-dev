@@ -1,5 +1,5 @@
 import { GamepadAxesID, GamepadButtonID } from "../../input/gamepad/gamepad_buttons.js";
-import { vec2_create } from "../../plugin/js/extensions/vec_create_extension.js";
+import { vec2_create } from "../../plugin/js/extensions/array/vec_create_extension.js";
 import { Globals } from "../../pp/globals.js";
 import { ToolHandedness } from "../cauldron/tool_types.js";
 import { WidgetFrame, WidgetParams } from "../widget_frame/widget_frame.js";

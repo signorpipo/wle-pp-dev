@@ -1,11 +1,11 @@
-import { Matrix3, Matrix4, Quaternion, Quaternion2, Vector2, Vector3, Vector4 } from "../../../cauldron/js/array_type_definitions.js";
-import { Mat3Utils } from "../../../cauldron/js/utils/mat3_utils.js";
-import { Mat4Utils } from "../../../cauldron/js/utils/mat4_utils.js";
-import { Quat2Utils } from "../../../cauldron/js/utils/quat2_utils.js";
-import { QuatUtils } from "../../../cauldron/js/utils/quat_utils.js";
-import { Vec2Utils } from "../../../cauldron/js/utils/vec2_utils.js";
-import { Vec3Utils } from "../../../cauldron/js/utils/vec3_utils.js";
-import { Vec4Utils } from "../../../cauldron/js/utils/vec4_utils.js";
+import { Matrix3, Matrix4, Quaternion, Quaternion2, Vector2, Vector3, Vector4 } from "../../../../cauldron/js/array_type_definitions.js";
+import { Mat3Utils } from "../../../../cauldron/js/utils/mat3_utils.js";
+import { Mat4Utils } from "../../../../cauldron/js/utils/mat4_utils.js";
+import { Quat2Utils } from "../../../../cauldron/js/utils/quat2_utils.js";
+import { QuatUtils } from "../../../../cauldron/js/utils/quat_utils.js";
+import { Vec2Utils } from "../../../../cauldron/js/utils/vec2_utils.js";
+import { Vec3Utils } from "../../../../cauldron/js/utils/vec3_utils.js";
+import { Vec4Utils } from "../../../../cauldron/js/utils/vec4_utils.js";
 
 export function vec2_create(): Vector2;
 export function vec2_create(uniformValue: number): Vector2;

@@ -1,6 +1,6 @@
 import { PhysicsLayerFlags } from "../../../../../../cauldron/physics/physics_layer_flags.js";
 import { RaycastHit } from "../../../../../../cauldron/physics/physics_raycast_params.js";
-import { quat_create, vec3_create } from "../../../../../../plugin/js/extensions/vec_create_extension.js";
+import { quat_create, vec3_create } from "../../../../../../plugin/js/extensions/array/vec_create_extension.js";
 
 export class CollisionCheckParams {
 

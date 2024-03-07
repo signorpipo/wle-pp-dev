@@ -2,7 +2,7 @@ import { VisualArrow, VisualArrowParams } from "../../../../../../cauldron/visua
 import { VisualLine, VisualLineParams } from "../../../../../../cauldron/visual/elements/visual_line.js";
 import { VisualPoint, VisualPointParams } from "../../../../../../cauldron/visual/elements/visual_point.js";
 import { VisualTorus, VisualTorusParams } from "../../../../../../cauldron/visual/elements/visual_torus.js";
-import { quat2_create, quat_create, vec3_create, vec4_create } from "../../../../../../plugin/js/extensions/vec_create_extension.js";
+import { quat2_create, quat_create, vec3_create, vec4_create } from "../../../../../../plugin/js/extensions/array/vec_create_extension.js";
 import { Globals } from "../../../../../../pp/globals.js";
 
 export class PlayerLocomotionTeleportDetectionVisualizerParams {

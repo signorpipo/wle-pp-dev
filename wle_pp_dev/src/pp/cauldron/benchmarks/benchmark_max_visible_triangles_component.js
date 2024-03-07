@@ -1,5 +1,5 @@
 import { Alignment, Component, Justification, MeshComponent, Property, TextComponent } from "@wonderlandengine/api";
-import { vec2_create, vec3_create, vec4_create } from "../../plugin/js/extensions/vec_create_extension.js";
+import { vec2_create, vec3_create, vec4_create } from "../../plugin/js/extensions/array/vec_create_extension.js";
 import { Globals } from "../../pp/globals.js";
 import { Timer } from "../cauldron/timer.js";
 import { ObjectPool, ObjectPoolParams } from "../object_pool/object_pool.js";

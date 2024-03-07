@@ -1,6 +1,6 @@
 import { Emitter } from "@wonderlandengine/api";
 import { XRUtils } from "../../cauldron/utils/xr_utils.js";
-import { mat4_create, quat2_create, quat_create, vec3_create } from "../../plugin/js/extensions/vec_create_extension.js";
+import { mat4_create, quat2_create, quat_create, vec3_create } from "../../plugin/js/extensions/array/vec_create_extension.js";
 import { Globals } from "../../pp/globals.js";
 
 export class BasePoseParams {

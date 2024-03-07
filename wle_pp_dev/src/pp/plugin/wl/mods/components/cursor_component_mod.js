@@ -4,7 +4,7 @@ import { XRUtils } from "../../../../cauldron/utils/xr_utils.js";
 import { Handedness } from "../../../../input/cauldron/input_types.js";
 import { InputUtils } from "../../../../input/cauldron/input_utils.js";
 import { Globals } from "../../../../pp/globals.js";
-import { mat4_create, quat2_create, vec3_create } from "../../../js/extensions/vec_create_extension.js";
+import { mat4_create, quat2_create, vec3_create } from "../../../js/extensions/array/vec_create_extension.js";
 import { PluginUtils } from "../../../utils/plugin_utils.js";
 
 export function initCursorComponentMod() {

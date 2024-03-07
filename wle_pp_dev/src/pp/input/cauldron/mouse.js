@@ -3,7 +3,7 @@ import { Timer } from "../../cauldron/cauldron/timer.js";
 import { RaycastResults } from "../../cauldron/physics/physics_raycast_params.js";
 import { PhysicsUtils } from "../../cauldron/physics/physics_utils.js";
 import { XRUtils } from "../../cauldron/utils/xr_utils.js";
-import { mat4_create, quat_create, vec2_create, vec3_create } from "../../plugin/js/extensions/vec_create_extension.js";
+import { mat4_create, quat_create, vec2_create, vec3_create } from "../../plugin/js/extensions/array/vec_create_extension.js";
 import { Globals } from "../../pp/globals.js";
 
 export let MouseButtonID = {

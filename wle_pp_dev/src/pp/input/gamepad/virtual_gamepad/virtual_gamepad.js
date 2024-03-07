@@ -1,6 +1,6 @@
 import { BrowserUtils } from "../../../cauldron/utils/browser_utils.js";
 import { XRUtils } from "../../../cauldron/utils/xr_utils.js";
-import { vec2_create } from "../../../plugin/js/extensions/vec_create_extension.js";
+import { vec2_create } from "../../../plugin/js/extensions/array/vec_create_extension.js";
 import { Handedness } from "../../cauldron/input_types.js";
 import { GamepadAxesID, GamepadButtonID } from "../gamepad_buttons.js";
 import { VirtualGamepadParams } from "./virtual_gamepad_params.js";

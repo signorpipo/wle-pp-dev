@@ -1,7 +1,7 @@
 import { MouseLookComponent } from "@wonderlandengine/components";
 import { Timer } from "../../../../cauldron/cauldron/timer.js";
 import { Globals } from "../../../../pp/globals.js";
-import { vec3_create } from "../../../js/extensions/vec_create_extension.js";
+import { vec3_create } from "../../../js/extensions/array/vec_create_extension.js";
 import { PluginUtils } from "../../../utils/plugin_utils.js";
 
 export function initMouseLookComponentMod() {

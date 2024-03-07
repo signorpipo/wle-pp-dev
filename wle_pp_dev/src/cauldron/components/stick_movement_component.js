@@ -7,7 +7,7 @@ import { Direction2DTo3DConverter, Direction2DTo3DConverterParams } from "../../
 import { CollisionCheckBridge } from "../../pp/gameplay/experimental/character_controller/collision/collision_check_bridge.js";
 import { CollisionCheckParams, CollisionRuntimeParams } from "../../pp/gameplay/experimental/character_controller/collision/legacy/collision_check/collision_params.js";
 import { GamepadAxesID, GamepadButtonID } from "../../pp/input/gamepad/gamepad_buttons.js";
-import { vec3_create } from "../../pp/plugin/js/extensions/vec_create_extension.js";
+import { vec3_create } from "../../pp/plugin/js/extensions/array/vec_create_extension.js";
 import { Globals } from "../../pp/pp/globals.js";
 
 export class StickMovementComponent extends Component {

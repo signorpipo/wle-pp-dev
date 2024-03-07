@@ -1,4 +1,4 @@
-import { vec3_create } from "../../plugin/js/extensions/vec_create_extension.js";
+import { vec3_create } from "../../plugin/js/extensions/array/vec_create_extension.js";
 import { Globals } from "../../pp/globals.js";
 import { RaycastHit, RaycastParams, RaycastResults } from "./physics_raycast_params.js";
 

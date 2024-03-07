@@ -1,4 +1,4 @@
-import { quat2_create, vec3_create } from "../../../../../../plugin/js/extensions/vec_create_extension.js";
+import { quat2_create, vec3_create } from "../../../../../../plugin/js/extensions/array/vec_create_extension.js";
 import { Globals } from "../../../../../../pp/globals.js";
 import { CollisionCheckVertical } from "./collision_check_vertical.js";
 import { CollisionRuntimeParams } from "./collision_params.js";
