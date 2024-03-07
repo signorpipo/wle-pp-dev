@@ -11,7 +11,7 @@ export class AddWLToWindowComponent extends Component {
 
     init() {
         if (this._myAdd) {
-            Globals.getWindow(this.engine).WL = {};
+            window.WL = {};
             this._addProperties(WLAPI);
             this._addProperties(WLComponents);
         }
@@ -21,12 +21,12 @@ export class AddWLToWindowComponent extends Component {
         let propertyNames = Object.getOwnPropertyNames(object);
         for (let propertyName of propertyNames) {
             if (object[propertyName] != undefined) {
-                Globals.getWindow(this.engine).WL[propertyName] = object[propertyName];
+                window.WL[propertyName] = object[propertyName];
             }
         }
     }
 
     onDestroy() {
-        Globals.getWindow(this.engine).WL = undefined;
+        window.WL = undefined;
     }
 }

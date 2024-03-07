@@ -10,7 +10,7 @@ export class AddPPToWindowComponent extends Component {
 
     init() {
         if (this._myAdd) {
-            Globals.getWindow(this.engine).PP = {};
+            window.PP = {};
             this._addProperties(PPAPI);
         }
     }
@@ -19,12 +19,12 @@ export class AddPPToWindowComponent extends Component {
         let propertyNames = Object.getOwnPropertyNames(object);
         for (let propertyName of propertyNames) {
             if (object[propertyName] != undefined) {
-                Globals.getWindow(this.engine).PP[propertyName] = object[propertyName];
+                window.PP[propertyName] = object[propertyName];
             }
         }
     }
 
     onDestroy() {
-        Globals.getWindow(this.engine).PP = undefined;
+        window.PP = undefined;
     }
 }

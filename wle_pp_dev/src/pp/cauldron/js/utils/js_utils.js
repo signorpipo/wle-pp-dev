@@ -125,7 +125,7 @@ export function getObjectPropertyOwnParents(object, propertyName) {
     return parents;
 }
 
-export function getObjectFromPath(path, pathStartObject = Globals.getWindow()) {
+export function getObjectFromPath(path, pathStartObject = window) {
     let object = null;
 
     let objectName = JSUtils.getObjectNameFromPath(path);
@@ -149,7 +149,7 @@ export function getObjectNameFromPath(path) {
     return objectName;
 }
 
-export function getObjectParentFromPath(path, pathStartObject = Globals.getWindow()) {
+export function getObjectParentFromPath(path, pathStartObject = window) {
     let pathSplit = path.split(".");
     let currentParent = pathStartObject;
     for (let i = 0; i < pathSplit.length - 1; i++) {

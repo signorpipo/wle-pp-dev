@@ -89,7 +89,7 @@ export class DebugFunctionsPerformanceAnalyzer extends DebugFunctionsOverwriter 
             myLastFunctionExecutionTime: 0,
             myOriginalFunctionOverheadExecutionTimes: []
         };
-        this._myTimeOfLastReset = Globals.getWindow(this._myParams.myEngine).performance.now();
+        this._myTimeOfLastReset = window.performance.now();
         this._myMaxTimeElapsedSinceLastReset = 0;
 
         let originalPush = Array.prototype["push"];
@@ -106,7 +106,7 @@ export class DebugFunctionsPerformanceAnalyzer extends DebugFunctionsOverwriter 
     }
 
     getTimeElapsedSinceLastReset() {
-        return Globals.getWindow(this._myParams.myEngine).performance.now() - this._myTimeOfLastReset - this._myExecutionTimes.myOverheadExecutionTimeSinceLastReset;
+        return window.performance.now() - this._myTimeOfLastReset - this._myExecutionTimes.myOverheadExecutionTimeSinceLastReset;
     }
 
     getMaxTimeElapsedSinceLastReset() {
@@ -124,7 +124,7 @@ export class DebugFunctionsPerformanceAnalyzer extends DebugFunctionsOverwriter 
 
         this._myExecutionTimes.myOverheadExecutionTimeSinceLastReset = 0;
 
-        this._myTimeOfLastReset = Globals.getWindow(this._myParams.myEngine).performance.now();
+        this._myTimeOfLastReset = window.performance.now();
     }
 
     resetMaxResults() {
@@ -227,7 +227,7 @@ export class DebugFunctionsPerformanceAnalyzer extends DebugFunctionsOverwriter 
 
     _updateDerivatesResults() {
         let timeElapsedSinceLastReset = this.getTimeElapsedSinceLastReset();
-        let beforeTime = Globals.getWindow(this._myParams.myEngine).performance.now();
+        let beforeTime = window.performance.now();
 
         for (let property of this._myFunctionPerformanceAnalysisResults.keys()) {
             let results = this._myFunctionPerformanceAnalysisResults.get(property);
@@ -251,11 +251,11 @@ export class DebugFunctionsPerformanceAnalyzer extends DebugFunctionsOverwriter 
             results.myTimeElapsedSinceLastReset = timeElapsedSinceLastReset;
         }
 
-        this._myExecutionTimes.myOverheadExecutionTimeSinceLastReset += Globals.getWindow(this._myParams.myEngine).performance.now() - beforeTime;
+        this._myExecutionTimes.myOverheadExecutionTimeSinceLastReset += window.performance.now() - beforeTime;
     }
 
     _updateMaxResults() {
-        let beforeTime = Globals.getWindow(this._myParams.myEngine).performance.now();
+        let beforeTime = window.performance.now();
 
         this._myMaxTimeElapsedSinceLastReset = Math.max(this._myMaxTimeElapsedSinceLastReset, this.getTimeElapsedSinceLastReset());
 
@@ -269,7 +269,7 @@ export class DebugFunctionsPerformanceAnalyzer extends DebugFunctionsOverwriter 
             }
         }
 
-        this._myExecutionTimes.myOverheadExecutionTimeSinceLastReset += Globals.getWindow(this._myParams.myEngine).performance.now() - beforeTime;
+        this._myExecutionTimes.myOverheadExecutionTimeSinceLastReset += window.performance.now() - beforeTime;
     }
 
     _getOverwrittenFunctionInternal(reference, propertyName, referencePath, isClass, isFunction, isConstructor) {
@@ -290,7 +290,7 @@ export class DebugFunctionsPerformanceAnalyzer extends DebugFunctionsOverwriter 
                 this._myFunctionPerformanceAnalysisResults.set(propertyID, analysisResults);
 
                 try {
-                    let window = Globals.getWindow(this._myParams.myEngine);
+                    let window = window;
 
                     let functionPerformanceAnalysisResults = this._myFunctionPerformanceAnalysisResults.get(propertyID);
                     let executionTimes = this._myExecutionTimes;

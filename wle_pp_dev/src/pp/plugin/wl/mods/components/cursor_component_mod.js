@@ -342,7 +342,7 @@ export function initCursorComponentModPrototype() {
             // Don't care about secondary pointers 
             if (this._pointerID != null && this._pointerID != e.pointerId) return;
 
-            let bounds = Globals.getBody(this.engine).getBoundingClientRect();
+            let bounds = document.body.getBoundingClientRect();
             this._pp_updateMouseData(e, e.clientX, e.clientY, bounds.width, bounds.height, e.pointerId);
         }
     };
@@ -355,7 +355,7 @@ export function initCursorComponentModPrototype() {
             // Don't care about secondary pointers or non-left clicks 
             if ((this._pointerID != null && this._pointerID != e.pointerId) || e.button != 0) return;
 
-            let bounds = Globals.getBody(this.engine).getBoundingClientRect();
+            let bounds = document.body.getBoundingClientRect();
             this._pp_updateMouseData(e, e.clientX, e.clientY, bounds.width, bounds.height, e.pointerId);
 
             this._isDown = true;
@@ -372,7 +372,7 @@ export function initCursorComponentModPrototype() {
             // Don't care about secondary pointers or non-left clicks 
             if ((this._pointerID != null && this._pointerID != e.pointerId) || e.button != 0) return;
 
-            let bounds = Globals.getBody(this.engine).getBoundingClientRect();
+            let bounds = document.body.getBoundingClientRect();
             this._pp_updateMouseData(e, e.clientX, e.clientY, bounds.width, bounds.height, e.pointerId);
 
             if (!this._isDownForUpWithDown) {
@@ -772,9 +772,9 @@ export function initCursorComponentModPrototype() {
     cursorComponentMod._pp_updateCursorStyle = function _pp_updateCursorStyle() {
         if (this.styleCursor) {
             if (this.hoveringObjectTarget != null && !this.hoveringObjectTarget.isSurface) {
-                Globals.getBody(this.engine).style.cursor = "pointer";
-            } else if (Globals.getBody(this.engine).style.cursor == "pointer") {
-                Globals.getBody(this.engine).style.cursor = "default";
+                document.body.style.cursor = "pointer";
+            } else if (document.body.style.cursor == "pointer") {
+                document.body.style.cursor = "default";
             }
         }
     };

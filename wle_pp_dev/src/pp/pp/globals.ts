@@ -1,7 +1,6 @@
 import * as AudioGlobals from "../audio/audio_globals.js";
 import * as AnalyticsGlobals from "../cauldron/cauldron/analytics_globals.js";
 import * as SaveGlobals from "../cauldron/cauldron/save_globals.js";
-import * as WindowGlobals from "../cauldron/cauldron/window_globals.js";
 import * as ObjectPoolManagerGlobals from "../cauldron/object_pool/object_pool_globals.js";
 import * as VisualGlobals from "../cauldron/visual/visual_globals.js";
 import * as EngineGlobals from "../cauldron/wl/engine_globals.js";
@@ -21,7 +20,6 @@ export const Globals = {
     ...AudioGlobals,
     ...VisualGlobals,
     ...DebugGlobals,
-    ...WindowGlobals,
     ...ObjectPoolManagerGlobals,
     ...CharacterCollisionSystemGlobals,
     ...InputGlobals,

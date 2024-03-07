@@ -275,8 +275,8 @@ export class DebugFunctionsOverwriter {
             referenceName = JSUtils.getObjectNameFromPath(path);
             referenceNameForFilter = JSUtils.getObjectNameFromPath(referencePath);
 
-            let reference = JSUtils.getObjectFromPath(path, Globals.getWindow(this._myParams.myEngine));
-            let referenceParent = JSUtils.getObjectParentFromPath(path, Globals.getWindow(this._myParams.myEngine));
+            let reference = JSUtils.getObjectFromPath(path, window);
+            let referenceParent = JSUtils.getObjectParentFromPath(path, window);
 
             if (reference != null) {
                 referenceAndParents.pp_pushUnique([reference, referenceParent, referenceName, referencePath, referenceNameForFilter], equalCallback);
