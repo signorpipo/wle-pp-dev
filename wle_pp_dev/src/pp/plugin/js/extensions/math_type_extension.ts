@@ -36,7 +36,7 @@ declare global {
 
         pp_clamp(value: number, start: number, end: number): number;
 
-        pp_sign(value: number, zeroSign: number): number;
+        pp_sign(value: number, zeroSign?: number): number;
 
         pp_toDegrees(angle: number): number;
         pp_toRadians(angle: number): number;
@@ -45,6 +45,7 @@ declare global {
 
         pp_mapToRange(value: number, originRangeStart: number, originRangeEnd: number, newRangeStart: number, newRangeEnd: number): number;
 
+        pp_random(): number;
         pp_random(start: number, end: number): number;
         pp_randomInt(start: number, end: number): number;
         pp_randomBool(): boolean;
@@ -53,8 +54,8 @@ declare global {
         pp_randomUUID(): string;
 
         pp_lerp(from: number, to: number, interpolationFactor: number): number;
-        pp_interpolate(from: number, to: number, interpolationFactor: number, easingFunction: EasingFunction): number;
-        pp_interpolatePeriodic(from: number, to: number, interpolationFactor: number, easingFunction: EasingFunction): number;
+        pp_interpolate(from: number, to: number, interpolationFactor: number, easingFunction?: EasingFunction): number;
+        pp_interpolatePeriodic(from: number, to: number, interpolationFactor: number, easingFunction?: EasingFunction): number;
 
         pp_angleDistance(from: number, to: number): number;
         pp_angleDistanceDegrees(from: number, to: number): number;
@@ -62,12 +63,12 @@ declare global {
         pp_angleDistanceSigned(from: number, to: number): number;
         pp_angleDistanceSignedDegrees(from: number, to: number): number;
         pp_angleDistanceSignedRadians(from: number, to: number): number;
-        pp_angleClamp(angle: number, usePositiveRange: boolean): number;
-        pp_angleClampDegrees(angle: number, usePositiveRange: boolean): number;
-        pp_angleClampRadians(angle: number, usePositiveRange: boolean): number;
+        pp_angleClamp(angle: number, usePositiveRange?: boolean): number;
+        pp_angleClampDegrees(angle: number, usePositiveRange?: boolean): number;
+        pp_angleClampRadians(angle: number, usePositiveRange?: boolean): number;
 
-        pp_isInsideAngleRange(angle: number, start: number, end: number, useShortestAngle: boolean): boolean;
-        pp_isInsideAngleRangeDegrees(angle: number, start: number, end: number, useShortestAngle: boolean): boolean;
-        pp_isInsideAngleRangeRadians(angle: number, start: number, end: number, useShortestAngle: boolean): boolean;
+        pp_isInsideAngleRange(angle: number, start: number, end: number, useShortestAngle?: boolean): boolean;
+        pp_isInsideAngleRangeDegrees(angle: number, start: number, end: number, useShortestAngle?: boolean): boolean;
+        pp_isInsideAngleRangeRadians(angle: number, start: number, end: number, useShortestAngle?: boolean): boolean;
     }
 }

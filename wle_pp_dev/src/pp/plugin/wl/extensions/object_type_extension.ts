@@ -105,11 +105,16 @@
 */
 
 import { Component, type ComponentConstructor } from "@wonderlandengine/api";
-import { Vector3 } from "../../../cauldron/js/array_type_definitions.js";
+import { Quaternion, Vector3 } from "../../../cauldron/js/array_type_definitions.js";
 
 declare module "@wonderlandengine/api" {
     export interface Object3D {
         pp_getPosition(position: Vector3): Vector3;
+        pp_getPositionLocal(this: Readonly<Object3D>, outPosition?: Vector3): Vector3;
+
+        pp_getRotationLocalQuat(this: Readonly<Object3D>, outRotation?: Quaternion): Quaternion;
+
+
         pp_addComponent<T extends Component>(this: Object3D, typeOrClass: string | ComponentConstructor<T>, paramsOrActive?: Record<string, any> | boolean, active?: boolean): T | null;
     }
 }
