@@ -1389,7 +1389,7 @@ export const rotateAroundAxisObjectRadians = function () {
 
 // Scale
 
-// For now it does not really make sense in WL to scale in world space or parent space
+// #TODO For now it does not really make sense in WL to scale in world space or parent space
 // so there is no scale default function
 
 export const scaleObject = function () {
@@ -1728,7 +1728,7 @@ export function convertTransformWorldToLocalQuat(object: Readonly<Object3D>, tra
 
 // Convert Transform Object Local
 
-// I need to use the converson to world and then local also use the parent scale that changes the position in local space
+// I need to use the conversion to world and then local to also use the parent scale that changes the position in local space
 
 export function convertTransformObjectToLocal(object: Readonly<Object3D>, transform: Matrix4, outTransform: Matrix4): Matrix4 {
     return /*ObjectUtils.*/convertTransformObjectToLocalMatrix(object, transform, outTransform);
