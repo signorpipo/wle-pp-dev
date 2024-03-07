@@ -1432,14 +1432,14 @@ export function lookTo(object: Object3D, direction: Vector3, up: Vector3): Objec
     return ObjectUtils.lookToWorld(object, direction, up);
 }
 
-export const lookToWorld = function () {
+export const lookToWorld: (object: Object3D, direction: Vector3, up?: Vector3) => Object3D = function () {
     const internalUp = Vec3Utils.create();
     return function lookToWorld(object: Object3D, direction: Vector3, up: Vector3 = ObjectUtils.getUpWorld(object, internalUp)): Object3D {
         return ObjectUtils.setForwardWorld(object, direction, up);
     };
 }();
 
-export const lookToLocal = function () {
+export const lookToLocal: (object: Object3D, direction: Vector3, up?: Vector3) => Object3D = function () {
     const internalUp = Vec3Utils.create();
     return function lookToLocal(object: Object3D, direction: Vector3, up: Vector3 = ObjectUtils.getUpLocal(object, internalUp)): Object3D {
         return ObjectUtils.setForwardLocal(object, direction, up);
