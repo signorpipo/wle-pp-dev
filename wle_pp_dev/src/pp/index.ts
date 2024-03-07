@@ -29,6 +29,7 @@ export * from "./plugin/wl/extensions/init_wl_extentions.js";
 export * from "./plugin/wl/extensions/object_extension.js";
 export * from "./plugin/wl/extensions/object_type_extension.js";
 export * from "./plugin/wl/extensions/scene_extension.js";
+export * from "./plugin/wl/extensions/scene_type_extension.js";
 export * from "./plugin/wl/mods/init_wl_mods.js";
 export * from "./plugin/wl/mods/components/init_component_mods.js";
 export * from "./plugin/wl/mods/components/cursor_component_mod.js";

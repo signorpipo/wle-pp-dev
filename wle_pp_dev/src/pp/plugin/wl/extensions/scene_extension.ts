@@ -23,7 +23,7 @@
         - pp_getComponentsAmountMap
 */
 
-import { Component, type ComponentConstructor, Object3D, Scene } from "@wonderlandengine/api";
+import { Component, Object3D, Scene, type ComponentConstructor } from "@wonderlandengine/api";
 import { SceneUtils } from "../../../cauldron/wl/utils/scene_utils.js";
 import { PluginUtils } from "../../utils/plugin_utils.js";
 
@@ -95,15 +95,15 @@ export function initSceneExtensionPrototype(): void {
         return SceneUtils.getObjectByNameDepth(this, name, isRegex, index);
     };
 
-    sceneExtension.pp_getObjectsByName = function pp_getObjectsByName(this: Readonly<Scene>, name: string, isRegex = false): Object3D[] {
+    sceneExtension.pp_getObjectsByName = function pp_getObjectsByName(this: Readonly<Scene>, name: string, isRegex: boolean = false): Object3D[] {
         return SceneUtils.getObjectsByName(this, name, isRegex);
     };
 
-    sceneExtension.pp_getObjectsByNameBreadth = function pp_getObjectsByNameBreadth(this: Readonly<Scene>, name: string, isRegex = false): Object3D[] {
+    sceneExtension.pp_getObjectsByNameBreadth = function pp_getObjectsByNameBreadth(this: Readonly<Scene>, name: string, isRegex: boolean = false): Object3D[] {
         return SceneUtils.getObjectsByNameBreadth(this, name, isRegex);
     };
 
-    sceneExtension.pp_getObjectsByNameDepth = function pp_getObjectsByNameDepth(this: Readonly<Scene>, name: string, isRegex = false): Object3D[] {
+    sceneExtension.pp_getObjectsByNameDepth = function pp_getObjectsByNameDepth(this: Readonly<Scene>, name: string, isRegex: boolean = false): Object3D[] {
         return SceneUtils.getObjectsByNameDepth(this, name, isRegex);
     };
 
