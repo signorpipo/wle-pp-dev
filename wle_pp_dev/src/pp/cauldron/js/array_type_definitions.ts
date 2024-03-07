@@ -1,17 +1,39 @@
-export interface NumberArray {
+export interface Vector2 {
     length: number;
     [n: number]: number;
 }
 
-export type Vector<__T extends number = number> = NumberArray;
+export interface Vector3 {
+    length: number;
+    [n: number]: number;
+}
 
-export type Vector2 = Vector<2>;
-export type Vector3 = Vector<3>;
-export type Vector4 = Vector<4>;
+export interface Vector4 {
+    length: number;
+    [n: number]: number;
+}
 
-export type Quaternion = Vector<4>;
-export type Quaternion2 = Vector<8>;
+export interface Quaternion {
+    length: number;
+    [n: number]: number;
+}
 
-export type Matrix2 = Vector<4>;
-export type Matrix3 = Vector<9>;
-export type Matrix4 = Vector<16>;
+export interface Quaternion2 {
+    length: number;
+    [n: number]: number;
+}
+
+export interface Matrix2 {
+    length: number;
+    [n: number]: number;
+}
+
+export interface Matrix3 {
+    length: number;
+    [n: number]: number;
+}
+
+export interface Matrix4 {
+    length: number;
+    [n: number]: number;
+}

@@ -39,11 +39,11 @@ SetHeadLocalTransformComponent.prototype.onPoseUpdated = function () {
                 if (Globals.isPoseForwardFixed(this.engine)) {
                     (cameraNonXRRotation as any).quat_rotateAxisRadians(Math.PI, (cameraNonXRRotation as any).quat_getUp(cameraNonXRUp), cameraNonXRRotation);
                 }
-                (this.object as any).pp_setPositionLocal(cameraNonXR.pp_getPositionLocal(cameraNonXRPosition));
-                (this.object as any).pp_setRotationLocalQuat(cameraNonXRRotation);
+                this.object.pp_setPositionLocal(cameraNonXR.pp_getPositionLocal(cameraNonXRPosition));
+                this.object.pp_setRotationLocalQuat(cameraNonXRRotation);
             } else {
                 if (pose.isValid()) {
-                    (this.object as any).pp_setTransformLocalQuat(pose.getTransformQuat(headPoseTransform, null));
+                    this.object.pp_setTransformLocalQuat(pose.getTransformQuat(headPoseTransform, null));
                 }
             }
         }
