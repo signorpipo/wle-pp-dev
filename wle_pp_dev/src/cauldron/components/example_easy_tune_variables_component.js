@@ -1,5 +1,5 @@
 import { Component } from "@wonderlandengine/api";
-import { mat4_create } from "../../pp/plugin/js/extensions/array_extension.js";
+import { mat4_create } from "../../pp/plugin/js/extensions/vec_create_extension.js";
 import { Globals } from "../../pp/pp/globals.js";
 import { EasyTuneBool, EasyTuneBoolArray, EasyTuneInt, EasyTuneIntArray, EasyTuneNumber, EasyTuneNumberArray, EasyTuneTransform } from "../../pp/tool/easy_tune/easy_tune_variable_types.js";
 

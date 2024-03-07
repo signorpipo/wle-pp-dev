@@ -26,6 +26,7 @@
 import { Component, Object3D, Scene, type ComponentConstructor } from "@wonderlandengine/api";
 import { SceneUtils } from "../../../cauldron/wl/utils/scene_utils.js";
 import { PluginUtils } from "../../utils/plugin_utils.js";
+import "./scene_type_extension.js";
 
 export function initSceneExtension(): void {
     initSceneExtensionPrototype();

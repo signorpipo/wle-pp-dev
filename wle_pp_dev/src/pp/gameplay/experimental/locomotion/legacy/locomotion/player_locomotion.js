@@ -7,7 +7,7 @@ import { Handedness } from "../../../../../input/cauldron/input_types.js";
 import { InputUtils } from "../../../../../input/cauldron/input_utils.js";
 import { GamepadUtils } from "../../../../../input/gamepad/cauldron/gamepad_utils.js";
 import { GamepadButtonID } from "../../../../../input/gamepad/gamepad_buttons.js";
-import { vec3_create } from "../../../../../plugin/js/extensions/array_extension.js";
+import { vec3_create } from "../../../../../plugin/js/extensions/vec_create_extension.js";
 import { Globals } from "../../../../../pp/globals.js";
 import { CharacterColliderSetupSimplifiedCreationParams, CharacterColliderSetupUtils } from "../../../character_controller/collision/character_collider_setup_utils.js";
 import { CollisionCheckBridge } from "../../../character_controller/collision/collision_check_bridge.js";

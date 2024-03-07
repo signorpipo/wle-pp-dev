@@ -28,6 +28,7 @@
 
 import { EasingFunction, MathUtils } from "../../../cauldron/js/utils/math_utils.js";
 import { PluginUtils } from "../../utils/plugin_utils.js";
+import "./math_type_extension.js";
 
 export function initMathExtension(): void {
     initMathExtensionStatic();

@@ -1,6 +1,6 @@
 import { FSM } from "../../../../../../cauldron/fsm/fsm.js";
 import { EasingFunction } from "../../../../../../cauldron/js/utils/math_utils.js";
-import { vec3_create } from "../../../../../../plugin/js/extensions/array_extension.js";
+import { vec3_create } from "../../../../../../plugin/js/extensions/vec_create_extension.js";
 import { PlayerLocomotionTeleportState } from "./player_locomotion_teleport_state.js";
 import { PlayerLocomotionTeleportTeleportBlinkState } from "./player_locomotion_teleport_teleport_blink_state.js";
 import { PlayerLocomotionTeleportTeleportShiftState } from "./player_locomotion_teleport_teleport_shift_state.js";

@@ -1,4 +1,4 @@
-import { quat_create, vec3_create } from "../../../../plugin/js/extensions/array_extension.js";
+import { quat_create, vec3_create } from "../../../../plugin/js/extensions/vec_create_extension.js";
 import { Globals } from "../../../../pp/globals.js";
 import { CharacterCollisionCheckType, CharacterCollisionResults } from "./character_collision_results.js";
 import { CollisionCheck } from "./legacy/collision_check/collision_check.js";

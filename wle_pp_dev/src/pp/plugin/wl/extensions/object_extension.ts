@@ -113,6 +113,7 @@ import { QuatUtils } from "../../../cauldron/js/utils/quat_utils.js";
 import { Vec3Utils } from "../../../cauldron/js/utils/vec3_utils.js";
 import { CloneParams, ObjectUtils } from "../../../cauldron/wl/utils/object_utils.js";
 import { PluginUtils } from "../../utils/plugin_utils.js";
+import "./object_type_extension.js";
 
 export function initObjectExtension(): void {
     initObjectExtensionProtoype();

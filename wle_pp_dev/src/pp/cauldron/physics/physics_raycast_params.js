@@ -11,7 +11,7 @@ raycastParams.myIgnoreHitsInsideCollision = false;
 let raycastResults = PhysicsUtils.raycast(raycastParams);
 */
 
-import { vec3_create } from "../../plugin/js/extensions/array_extension.js";
+import { vec3_create } from "../../plugin/js/extensions/vec_create_extension.js";
 import { Globals } from "../../pp/globals.js";
 import { PhysicsLayerFlags } from "./physics_layer_flags.js";
 

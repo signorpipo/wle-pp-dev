@@ -4,7 +4,7 @@ import { PhysicsLayerFlags } from "../../pp/cauldron/physics/physics_layer_flags
 import { ComponentUtils } from "../../pp/cauldron/wl/utils/component_utils.js";
 import { CollisionCheckBridge } from "../../pp/gameplay/experimental/character_controller/collision/collision_check_bridge.js";
 import { CollisionCheckParams, CollisionRuntimeParams } from "../../pp/gameplay/experimental/character_controller/collision/legacy/collision_check/collision_params.js";
-import { quat2_create, vec3_create } from "../../pp/plugin/js/extensions/array_extension.js";
+import { quat2_create, vec3_create } from "../../pp/plugin/js/extensions/vec_create_extension.js";
 
 export class AIMovementComponent extends Component {
     static TypeName = "ai-movement";

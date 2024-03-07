@@ -1,6 +1,7 @@
 import { Emitter } from "@wonderlandengine/api";
 import { CursorTarget } from "@wonderlandengine/components";
 import { PluginUtils } from "../../../utils/plugin_utils.js";
+import "./cursor_target_component_type_extension.js";
 
 export function initCursorTargetComponentMod(): void {
     initCursorTargetComponentModPrototype();
@@ -12,18 +13,17 @@ export function initCursorTargetComponentModPrototype(): void {
     // New Functions 
 
     cursorTargetComponentMod.init = function init(this: CursorTarget): void {
-        const _this = (this as any);
+        this.onSingleClick = new Emitter();
+        this.onDoubleClick = new Emitter();
+        this.onTripleClick = new Emitter();
 
-        _this.onSingleClick = new Emitter();
-        _this.onDoubleClick = new Emitter();
-        _this.onTripleClick = new Emitter();
+        this.onDownOnHover = new Emitter();
 
-        _this.onDownOnHover = new Emitter();
+        this.onUpWithDown = new Emitter();
+        this.onUpWithNoDown = new Emitter();
 
-        _this.onUpWithDown = new Emitter();
-        _this.onUpWithNoDown = new Emitter();
-
-        _this.isSurface = false; // Just a way to specify if this target is just used as a surface between buttons 
+        // Just a way to specify if this target is just used as a surface between buttons 
+        this.isSurface = false;
     };
 
     cursorTargetComponentMod.start = function start(): void { };

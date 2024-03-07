@@ -4,7 +4,7 @@ import { PhysicsCollisionCollector } from "../../cauldron/physics/physics_collis
 import { HandednessIndex } from "../../input/cauldron/input_types.js";
 import { InputUtils } from "../../input/cauldron/input_utils.js";
 import { GamepadButtonEvent, GamepadButtonID } from "../../input/gamepad/gamepad_buttons.js";
-import { vec3_create, vec4_create } from "../../plugin/js/extensions/array_extension.js";
+import { vec3_create, vec4_create } from "../../plugin/js/extensions/vec_create_extension.js";
 import { Globals } from "../../pp/globals.js";
 import { GrabbableComponent } from "./grabbable_component.js";
 

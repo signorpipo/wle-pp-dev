@@ -1,5 +1,6 @@
 import { WonderlandEngine } from "@wonderlandengine/api";
 import { PluginUtils } from "../../utils/plugin_utils.js";
+import "./number_type_extension.js";
 
 export function initNumberExtension(engine: Readonly<WonderlandEngine>): void {
     initNumberExtensionPrototype();

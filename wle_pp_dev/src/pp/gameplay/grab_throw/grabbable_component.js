@@ -1,6 +1,6 @@
 import { Component, Emitter, PhysXComponent, Property } from "@wonderlandengine/api";
 import { ComponentUtils } from "../../cauldron/wl/utils/component_utils.js";
-import { vec3_create } from "../../plugin/js/extensions/array_extension.js";
+import { vec3_create } from "../../plugin/js/extensions/vec_create_extension.js";
 import { Globals } from "../../pp/globals.js";
 
 export class GrabbableComponent extends Component {
