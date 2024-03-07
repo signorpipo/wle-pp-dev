@@ -1,67 +1,36 @@
 import { Object3D } from "@wonderlandengine/api";
+import { Handedness } from "../index.js";
 
 export class SceneObjects {
 
-    public myScene: Object3D | null;
+    public myScene: Object3D | null = null;
 
-    public myCauldron: Object3D | null;
-    public myDynamics: Object3D | null;
-    public myParticles: Object3D | null;
-    public myVisualElements: Object3D | null;
-    public myTools: Object3D | null;
+    public myCauldron: Object3D | null = null;
+    public myDynamics: Object3D | null = null;
+    public myParticles: Object3D | null = null;
+    public myVisualElements: Object3D | null = null;
+    public myTools: Object3D | null = null;
 
-    public myPlayerObjects: PlayerObjects;
-
-    constructor() {
-        this.myScene = null;
-
-        this.myCauldron = null;
-        this.myDynamics = null;
-        this.myParticles = null;
-        this.myVisualElements = null;
-        this.myTools = null;
-
-        this.myPlayerObjects = new PlayerObjects();
-    }
+    public myPlayerObjects: PlayerObjects = new PlayerObjects();
 }
 
 export class PlayerObjects {
 
-    public myPlayer: Object3D | null;
+    public myPlayer: Object3D | null = null;
 
-    public myCauldron: Object3D | null;
-    public myReferenceSpace: Object3D | null;
+    public myCauldron: Object3D | null = null;
+    public myReferenceSpace: Object3D | null = null;
 
-    public myCameraNonXR: Object3D | null;
+    public myCameraNonXR: Object3D | null = null;
 
-    public myEyes = [];
-    public myEyeLeft: Object3D | null;
-    public myEyeRight: Object3D | null;
+    public myEyes: Record<Handedness, Object3D | null> = { [Handedness.LEFT]: null, [Handedness.RIGHT]: null };
+    public myEyeLeft: Object3D | null = null;
+    public myEyeRight: Object3D | null = null;
 
-    public myHands = [];
-    public myHandLeft: Object3D | null;
-    public myHandRight: Object3D | null;
+    public myHands: Record<Handedness, Object3D | null> = { [Handedness.LEFT]: null, [Handedness.RIGHT]: null };
+    public myHandLeft: Object3D | null = null;
+    public myHandRight: Object3D | null = null;
 
-    public myHead: Object3D | null;
-    public myHeadDebugs: Object3D | null;
-
-    constructor() {
-        this.myPlayer = null;
-
-        this.myCauldron = null;
-        this.myReferenceSpace = null;
-
-        this.myCameraNonXR = null;
-
-        this.myEyes = [];
-        this.myEyeLeft = null;
-        this.myEyeRight = null;
-
-        this.myHands = [];
-        this.myHandLeft = null;
-        this.myHandRight = null;
-
-        this.myHead = null;
-        this.myHeadDebugs = null;
-    }
+    public myHead: Object3D | null = null;
+    public myHeadDebugs: Object3D | null = null;
 }

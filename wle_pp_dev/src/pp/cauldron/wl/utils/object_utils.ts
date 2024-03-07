@@ -12,57 +12,54 @@ import { SceneUtils } from "./scene_utils.js";
 
 export class CloneParams {
 
-    public myCloneParent: Object3D | null | undefined;
+    /** Defaults to the object to clone parent, null can be used to specify u want the scene root as the parent */
+    public myCloneParent: Object3D | null | undefined = undefined;
 
-    public myIgnoreNonCloneable: boolean;
-    public myIgnoreComponents: boolean;
-    public myIgnoreDescendants: boolean;
 
-    public myComponentsToIgnore: string[];
-    public myComponentsToInclude: string[];
+    /** Ignores components that are not clonable */
+    public myIgnoreNonCloneable: boolean = false;
+    /** All components are ignored, cloning only the object hierarchy */
+    public myIgnoreComponents: boolean = false;
+    /** Clones only the given object without the descendants */
+    public myIgnoreDescendants: boolean = false;
+
+
+    /** Ignores all component types in this list (example: `["mesh"]`), has lower priority over `myComponentsToInclude` */
+    public myComponentsToIgnore: string[] = [];
+    /** Clones only the component types in this list (example: `["mesh"]`), has higher priority over `myComponentsToIgnore`, if empty it's ignored */
+    public myComponentsToInclude: string[] = [];
+    /** Returns true if the component must be ignored. It's called after the previous filters */
     public myIgnoreComponentCallback: ((component: Component) => boolean) | null = null;
 
-    public myDescendantsToIgnore: Object3D[];
-    public myDescendantsToInclude: Object3D[];
+
+    /** Ignores all the objects in this list, has lower priority over `myDescendantsToInclude` */
+    public myDescendantsToIgnore: Object3D[] = [];
+    /** Clones only the objects in this list, has higher priority over `myDescendantsToIgnore`, if empty it's ignored */
+    public myDescendantsToInclude: Object3D[] = [];
+    /** Returns true if the object must be ignored. It's called after the previous filters */
     public myIgnoreDescendantCallback: ((component: Object3D) => boolean) | null = null;
 
-    public myUseDefaultComponentClone: boolean;
-    public myUseDefaultComponentCloneAsFallback: boolean;
-    public myDefaultComponentCloneAutoStartIfNotActive: boolean;
 
-    public myUseDefaultObjectClone: boolean;
-    public myUseDefaultObjectCloneAsFallback: boolean;
+    /** Uses the default component clone function */
+    public myUseDefaultComponentClone: boolean = false;
+    /** Uses the default component clone function only as fallback, that is if there is no custom component clone */
+    public myUseDefaultComponentCloneAsFallback: boolean = false;
+    /** Automatically starts the component even if it's cloned not activated, keeping it not active. This also triggers `onActivate` and `onDeactivate` once */
+    public myDefaultComponentCloneAutoStartIfNotActive: boolean = true;
 
-    public myComponentDeepCloneParams: DeepCloneParams;
 
-    public myComponentCustomCloneParams: CustomCloneParams;
+    /** Uses the default object clone function, ignoring all the other clone settings but `myCloneParent` and `myDefaultComponentCloneAutoStartIfNotActive` */
+    public myUseDefaultObjectClone: boolean = false;
+    /** Uses the default object clone function only as fallback, that is if the object is not PP cloneable */
+    public myUseDefaultObjectCloneAsFallback: boolean = false;
 
-    constructor() {
-        this.myCloneParent = undefined;  // Defaults to the object to clone parent, null can be used to specify u want the scene root as the parent
 
-        this.myIgnoreNonCloneable = false;      // Ignores components that are not clonable
-        this.myIgnoreComponents = false;        // All components are ignored, cloning only the object hierarchy
-        this.myIgnoreDescendants = false;       // Clones only the given object without the descendants
+    /** Used to specify if the object components must be deep cloned or not, you can also override the behavior for specific components and variables */
+    public myComponentDeepCloneParams: DeepCloneParams = new DeepCloneParams();
 
-        this.myComponentsToIgnore = [];         // Ignores all component types in this list (example: "mesh"), has lower priority over myComponentsToInclude
-        this.myComponentsToInclude = [];        // Clones only the component types in this list (example: "mesh"), has higher priority over myComponentsToIgnore, if empty it's ignored
-        this.myIgnoreComponentCallback = null;  // Signature: callback(component) returns true if the component must be ignored, it is called after the previous filters
 
-        this.myDescendantsToIgnore = [];        // Ignores all the objects in this list, has lower priority over myDescendantsToInclude
-        this.myDescendantsToInclude = [];       // Clones only the objects in this list, has higher priority over myDescendantsToIgnore, if empty it's ignored
-        this.myIgnoreDescendantCallback = null; // Signature: callback(object) returns true if the object must be ignored, it is called after the previous filters
-
-        this.myUseDefaultComponentClone = false;               // Use the default component clone function
-        this.myUseDefaultComponentCloneAsFallback = false;     // Use the default component clone function only as fallback, that is if there is no custom component clone
-        this.myDefaultComponentCloneAutoStartIfNotActive = true;
-
-        this.myUseDefaultObjectClone = false;               // Use the default object clone function, ignoring all the other clone settings but myCloneParent and myDefaultComponentCloneAutoStartIfNotActive
-        this.myUseDefaultObjectCloneAsFallback = false;     // Use the default object clone function only as fallback, that is if the object is not pp cloneable
-
-        this.myComponentDeepCloneParams = new DeepCloneParams();     // Used to specify if the object components must be deep cloned or not, you can also override the behavior for specific components and variables
-
-        this.myComponentCustomCloneParams = new CustomCloneParams(); // This class can be filled with whatever custom paramater the component clone functions could need
-    }
+    /** This class can be filled with whatever custom paramater the component clone functions could need */
+    public myComponentCustomCloneParams: CustomCloneParams = new CustomCloneParams();
 }
 
 // GETTER

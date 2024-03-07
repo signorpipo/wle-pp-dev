@@ -38,11 +38,9 @@ export class GetSceneObjectsComponent extends Component {
             this._mySceneObjects.myPlayerObjects.myHandLeft = this._myHandLeft;
             this._mySceneObjects.myPlayerObjects.myHandRight = this._myHandRight;
 
-            this._mySceneObjects.myPlayerObjects.myEyes = [];
             this._mySceneObjects.myPlayerObjects.myEyes[Handedness.LEFT] = this._myEyeLeft;
             this._mySceneObjects.myPlayerObjects.myEyes[Handedness.RIGHT] = this._myEyeRight;
 
-            this._mySceneObjects.myPlayerObjects.myHands = [];
             this._mySceneObjects.myPlayerObjects.myHands[Handedness.LEFT] = this._myHandLeft;
             this._mySceneObjects.myPlayerObjects.myHands[Handedness.RIGHT] = this._myHandRight;
 

@@ -2,69 +2,37 @@ import { Material, Mesh } from "@wonderlandengine/api";
 
 export class DefaultResources {
 
-    public myMeshes: DefaultResourcesMeshes;
-    public myMaterials: DefaultResourcesMaterials;
-
-    constructor() {
-        this.myMeshes = new DefaultResourcesMeshes();
-        this.myMaterials = new DefaultResourcesMaterials();
-    }
+    public myMeshes: DefaultResourcesMeshes = new DefaultResourcesMeshes();
+    public myMaterials: DefaultResourcesMaterials = new DefaultResourcesMaterials();
 }
 
 export class DefaultResourcesMeshes {
 
-    public myPlane: Mesh | null;
-    public myCube: Mesh | null;
-    public mySphere: Mesh | null;
-    public myCone: Mesh | null;
-    public myCylinder: Mesh | null;
-    public myCircle: Mesh | null;
+    public myPlane: Mesh | null = null;
+    public myCube: Mesh | null = null;
+    public mySphere: Mesh | null = null;
+    public myCone: Mesh | null = null;
+    public myCylinder: Mesh | null = null;
+    public myCircle: Mesh | null = null;
 
-    public myInvertedCube: Mesh | null;
-    public myInvertedSphere: Mesh | null;
-    public myInvertedCone: Mesh | null;
-    public myInvertedCylinder: Mesh | null;
+    public myInvertedCube: Mesh | null = null;
+    public myInvertedSphere: Mesh | null = null;
+    public myInvertedCone: Mesh | null = null;
+    public myInvertedCylinder: Mesh | null = null;
 
-    public myDoubleSidedPlane: Mesh | null;
-    public myDoubleSidedCube: Mesh | null;
-    public myDoubleSidedSphere: Mesh | null;
-    public myDoubleSidedCone: Mesh | null;
-    public myDoubleSidedCylinder: Mesh | null;
-    public myDoubleSidedCircle: Mesh | null;
-
-    constructor() {
-        this.myPlane = null;
-        this.myCube = null;
-        this.mySphere = null;
-        this.myCone = null;
-        this.myCylinder = null;
-        this.myCircle = null;
-
-        this.myInvertedCube = null;
-        this.myInvertedSphere = null;
-        this.myInvertedCone = null;
-        this.myInvertedCylinder = null;
-
-        this.myDoubleSidedPlane = null;
-        this.myDoubleSidedCube = null;
-        this.myDoubleSidedSphere = null;
-        this.myDoubleSidedCone = null;
-        this.myDoubleSidedCylinder = null;
-        this.myDoubleSidedCircle = null;
-    }
+    public myDoubleSidedPlane: Mesh | null = null;
+    public myDoubleSidedCube: Mesh | null = null;
+    public myDoubleSidedSphere: Mesh | null = null;
+    public myDoubleSidedCone: Mesh | null = null;
+    public myDoubleSidedCylinder: Mesh | null = null;
+    public myDoubleSidedCircle: Mesh | null = null;
 }
 
 export class DefaultResourcesMaterials {
 
-    public myFlatOpaque: Material | null;
-    public myFlatTransparentNoDepth: Material | null;
-    public myPhongOpaque: Material | null;
-    public myText: Material | null;
-
-    constructor() {
-        this.myFlatOpaque = null;
-        this.myFlatTransparentNoDepth = null; // For now the pipeline needs to be the last one to make this work properly
-        this.myPhongOpaque = null;
-        this.myText = null;
-    }
+    public myFlatOpaque: Material | null = null;
+    /** For now, the pipeline associated to this material needs to be the last one to make it work properly */
+    public myFlatTransparentNoDepth: Material | null = null;
+    public myPhongOpaque: Material | null = null;
+    public myText: Material | null = null;
 }
