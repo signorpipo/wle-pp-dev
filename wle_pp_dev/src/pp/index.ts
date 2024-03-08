@@ -18,25 +18,19 @@ export { PluginUtils } from "./plugin/utils/plugin_utils.js";
 export * from "./plugin/js/init_js_plugins.js";
 export * from "./plugin/js/extensions/init_js_extentions.js";
 export * from "./plugin/js/extensions/array/vec_create_extension.js";
-export * from "./plugin/js/extensions/array/array_extension_js.js";
 export * from "./plugin/js/extensions/array/array_extension.js";
-export * from "./plugin/js/extensions/array/array_type_extension.js";
+export * from "./plugin/js/extensions/array/array_extension_legacy.js";
 export * from "./plugin/js/extensions/math_extension.js";
-export * from "./plugin/js/extensions/math_type_extension.js";
 export * from "./plugin/js/extensions/number_extension.js";
-export * from "./plugin/js/extensions/number_type_extension.js";
 
 export * from "./plugin/wl/init_wl_plugins.js";
 export * from "./plugin/wl/extensions/init_wl_extentions.js";
 export * from "./plugin/wl/extensions/object_extension.js";
-export * from "./plugin/wl/extensions/object_type_extension.js";
 export * from "./plugin/wl/extensions/scene_extension.js";
-export * from "./plugin/wl/extensions/scene_type_extension.js";
 export * from "./plugin/wl/mods/init_wl_mods.js";
 export * from "./plugin/wl/mods/components/init_component_mods.js";
 export * from "./plugin/wl/mods/components/cursor_component_mod.js";
 export * from "./plugin/wl/mods/components/cursor_target_component_mod.js";
-export * from "./plugin/wl/mods/components/cursor_target_component_type_extension.js";
 export * from "./plugin/wl/mods/components/mouse_look_component_mod.js";
 
 //	AUDIO
