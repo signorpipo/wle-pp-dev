@@ -1,10 +1,14 @@
 import { TypedArray } from "../array_type_definitions.js";
 
-export function first<T>(array: T[]): T | undefined {
+export function first<T>(array: T[]): T | undefined;
+export function first<T extends TypedArray>(array: T): number | undefined;
+export function first<T>(array: T[] | TypedArray): T | number | undefined {
     return array.length > 0 ? array[0] : undefined;
 }
 
-export function last<T>(array: T[]): T | undefined {
+export function last<T>(array: T[]): T | undefined;
+export function last<T extends TypedArray>(array: T): number | undefined;
+export function last<T>(array: T[] | TypedArray): T | number | undefined {
     return array.length > 0 ? array[array.length - 1] : undefined;
 }
 
@@ -218,7 +222,7 @@ export function copy<T>(from: T[], to: T[], copyCallback?: (fromElement: T, toEl
 
 export function clone<T>(array: T[], cloneCallback?: (elementToClone: T) => T): T[];
 export function clone<T extends TypedArray>(array: T, cloneCallback?: (elementToClone: number) => number): T;
-export function clone<T = number>(array: T[] | TypedArray, cloneCallback?: (elementToClone: T | number) => T | number): T[] | TypedArray {
+export function clone<T>(array: T[] | TypedArray, cloneCallback?: (elementToClone: T | number) => T | number): T[] | TypedArray {
     if (cloneCallback == null) {
         return array.slice(0);
     }
@@ -269,7 +273,7 @@ export function clone<T = number>(array: T[] | TypedArray, cloneCallback?: (elem
 }
 export function equals<T>(array: T[], other: T[], elementsEqualCallback?: (arrayElement: T, otherElement: T) => boolean): boolean;
 export function equals<T extends TypedArray>(array: T, other: T, elementsEqualCallback?: (arrayElement: number, otherElement: number) => boolean): boolean;
-export function equals<T = number>(array: T[] | TypedArray, other: T[] | TypedArray, elementsEqualCallback?: (arrayElement: T | number, otherElement: T | number) => boolean): boolean {
+export function equals<T>(array: T[] | TypedArray, other: T[] | TypedArray, elementsEqualCallback?: (arrayElement: T | number, otherElement: T | number) => boolean): boolean {
     let equals = true;
 
     if (other != null && array.length == other.length) {
