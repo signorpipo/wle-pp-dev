@@ -105,7 +105,7 @@
 */
 
 import { Component, Object3D, WonderlandEngine, type ComponentConstructor } from "@wonderlandengine/api";
-import { Matrix3, Matrix4, Quaternion, Quaternion2, Vector3 } from "../../../cauldron/js/array_type_definitions.js";
+import { Matrix3, Matrix4, Quaternion, Quaternion2, Vector3 } from "../../../cauldron/js/vec_type_definitions.js";
 import { Mat3Utils } from "../../../cauldron/js/utils/mat3_utils.js";
 import { Mat4Utils } from "../../../cauldron/js/utils/mat4_utils.js";
 import { Quat2Utils } from "../../../cauldron/js/utils/quat2_utils.js";

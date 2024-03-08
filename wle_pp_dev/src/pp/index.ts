@@ -66,6 +66,8 @@ export * from "./cauldron/fsm/state.js";
 export * from "./cauldron/fsm/transition.js";
 export * from "./cauldron/fsm/states/timer_state.js";
 
+export * from "./cauldron/js/array_type_definitions.js";
+export * from "./cauldron/js/vec_type_definitions.js";
 export { JSUtils } from "./cauldron/js/utils/js_utils.js";
 export { MathUtils, EasingFunction, EasingSupportFunction } from "./cauldron/js/utils/math_utils.js";
 export { ArrayUtils } from "./cauldron/js/utils/array_utils.js";

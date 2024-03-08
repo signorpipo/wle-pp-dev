@@ -1,15 +1,15 @@
 import { ArrayUtils } from "../../../../cauldron/js/utils/array_utils.js";
 import { PluginUtils } from "../../../utils/plugin_utils.js";
 
-export function initArrayExtension() {
+export function initArrayExtension(): void {
     initArrayExtensionProtoype();
 }
 
-export function initArrayExtensionProtoype() {
+export function initArrayExtensionProtoype(): void {
 
     // New Functions
 
-    let arrayExtension = {};
+    const arrayExtension: Record<string, any> = {};
 
     arrayExtension.pp_first = function pp_first() {
         return ArrayUtils.first(this);

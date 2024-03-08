@@ -1,5 +1,5 @@
 import { Component, Object3D, Scene, WonderlandEngine, type ComponentConstructor } from "@wonderlandengine/api";
-import { Matrix3, Matrix4, Quaternion, Quaternion2, Vector3 } from "../../../cauldron/js/array_type_definitions.js";
+import { Matrix3, Matrix4, Quaternion, Quaternion2, Vector3 } from "../../js/vec_type_definitions.js";
 import { Globals } from "../../../pp/globals.js";
 import { Mat3Utils } from "../../js/utils/mat3_utils.js";
 import { Mat4Utils } from "../../js/utils/mat4_utils.js";
@@ -553,7 +553,6 @@ export const setScaleWorld = function () {
 
     function setScaleWorld(object: Object3D, uniformScale: number): Object3D;
     function setScaleWorld(object: Object3D, scale: Vector3): Object3D;
-    function setScaleWorld(object: Object3D, scale: number | Vector3): Object3D;
     function setScaleWorld(object: Object3D, scale: number | Vector3): Object3D {
         if (isNaN(scale as number)) {
             return object.setScalingWorld(scale as Vector3);
@@ -571,7 +570,6 @@ export const setScaleLocal = function () {
 
     function setScaleLocal(object: Object3D, uniformScale: number): Object3D;
     function setScaleLocal(object: Object3D, scale: Vector3): Object3D;
-    function setScaleLocal(object: Object3D, scale: number | Vector3): Object3D;
     function setScaleLocal(object: Object3D, scale: number | Vector3): Object3D {
         if (isNaN(scale as number)) {
             return object.setScalingLocal(scale as Vector3);

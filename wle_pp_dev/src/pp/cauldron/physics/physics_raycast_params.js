@@ -198,7 +198,7 @@ export class RaycastHit {
 // IMPLEMENTATION
 
 RaycastResults.prototype.copy = function () {
-    let copyHitCallback = function (currentElement, elementToCopy) {
+    let copyHitCallback = function (elementToCopy, currentElement) {
         if (currentElement == null) {
             currentElement = new RaycastHit();
         }
