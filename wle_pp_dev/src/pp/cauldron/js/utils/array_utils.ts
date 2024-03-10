@@ -183,6 +183,12 @@ export function removeAllEqual<T>(array: T[], elementToRemove: T, elementsEqualC
     return ArrayUtils.removeAllIndexes(array, ArrayUtils.findAllIndexesEqual(array, elementToRemove, elementsEqualCallback));
 }
 
+export function clear<T>(array: T[]): T[] {
+    array.length = 0;
+
+    return array;
+}
+
 export function pushUnique<T>(array: T[], elementToAdd: T, elementsEqualCallback?: (elementToCheck: T, elementToAdd: T) => boolean): number {
     let length = array.length;
 
@@ -227,51 +233,15 @@ export function copy<T, U extends T[] | ReadonlyArray<T>>(from: ReadonlyArray<T>
 }
 
 export function clone<T, U extends ReadonlyArray<T>>(array: U, cloneCallback?: (elementToClone: T) => T): U {
-    if (cloneCallback == null) {
-        return array.slice(0) as U;
+    const clonedArray = array.slice(0) as U;
+
+    if (cloneCallback != null) {
+        for (let i = 0; i < array.length; i++) {
+            clonedArray[i] = cloneCallback(array[i]);
+        }
     }
 
-    let clone = null;
-    switch (array.constructor.name) {
-        case "Array":
-            clone = new Array(array.length);
-            break;
-        case "Uint8ClampedArray":
-            clone = new Uint8ClampedArray(array.length);
-            break;
-        case "Uint8Array":
-            clone = new Uint8Array(array.length);
-            break;
-        case "Uint16Array":
-            clone = new Uint16Array(array.length);
-            break;
-        case "Uint32Array":
-            clone = new Uint32Array(array.length);
-            break;
-        case "Int8Array":
-            clone = new Int8Array(array.length);
-            break;
-        case "Int16Array":
-            clone = new Int16Array(array.length);
-            break;
-        case "Int32Array":
-            clone = new Int32Array(array.length);
-            break;
-        case "Float32Array":
-            clone = new Float32Array(array.length);
-            break;
-        case "Float64Array":
-            clone = new Float64Array(array.length);
-            break;
-        default:
-            throw new Error("Array type not supported: " + array.constructor.name);
-    }
-
-    for (let i = 0; i < array.length; i++) {
-        clone[i] = cloneCallback(array[i]);
-    }
-
-    return clone as unknown as U;
+    return clonedArray;
 }
 
 export function equals<T>(array: ReadonlyArray<T>, other: ReadonlyArray<T>, elementsEqualCallback?: (arrayElement: T, otherElement: T) => boolean): boolean {
@@ -290,12 +260,6 @@ export function equals<T>(array: ReadonlyArray<T>, other: ReadonlyArray<T>, elem
     }
 
     return equals;
-}
-
-export function clear<T>(array: T[]): T[] {
-    array.length = 0;
-
-    return array;
 }
 
 export const ArrayUtils = {
@@ -317,12 +281,12 @@ export const ArrayUtils = {
     removeAll,
     removeEqual,
     removeAllEqual,
+    clear,
     pushUnique,
     unshiftUnique,
     copy,
     clone,
-    equals,
-    clear
+    equals
 } as const;
 
 
