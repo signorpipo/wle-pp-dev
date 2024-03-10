@@ -553,6 +553,7 @@ export const setScaleWorld = function () {
 
     function setScaleWorld(object: Object3D, scale: Vector3): Object3D;
     function setScaleWorld(object: Object3D, uniformScale: number): Object3D;
+    function setScaleWorld(object: Object3D, scale: number | Vector3): Object3D;
     function setScaleWorld(object: Object3D, scale: number | Vector3): Object3D {
         if (isNaN(scale as number)) {
             return object.setScalingWorld(scale as Vector3);
@@ -570,6 +571,7 @@ export const setScaleLocal = function () {
 
     function setScaleLocal(object: Object3D, scale: Vector3): Object3D;
     function setScaleLocal(object: Object3D, uniformScale: number): Object3D;
+    function setScaleLocal(object: Object3D, scale: number | Vector3): Object3D;
     function setScaleLocal(object: Object3D, scale: number | Vector3): Object3D {
         if (isNaN(scale as number)) {
             return object.setScalingLocal(scale as Vector3);

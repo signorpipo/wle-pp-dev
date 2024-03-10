@@ -1,29 +1,25 @@
-import { TypedArray } from "../array_type_definitions.js";
+import { ReadonlyArray } from "../array_type_definitions.js";
 
-export function first<T>(array: T[]): T | undefined;
-export function first<T extends TypedArray>(array: T): number | undefined;
-export function first<T>(array: T[] | TypedArray): T | number | undefined {
+export function first<T>(array: ReadonlyArray<T>): T | undefined {
     return array.length > 0 ? array[0] : undefined;
 }
 
-export function last<T>(array: T[]): T | undefined;
-export function last<T extends TypedArray>(array: T): number | undefined;
-export function last<T>(array: T[] | TypedArray): T | number | undefined {
+export function last<T>(array: ReadonlyArray<T>): T | undefined {
     return array.length > 0 ? array[array.length - 1] : undefined;
 }
 
-export function has<T>(array: T[], callback: (elementToCheck: T, elementIndex: number, array: T[]) => boolean): boolean {
+export function has<T>(array: ReadonlyArray<T>, callback: (elementToCheck: T, elementIndex: number) => boolean): boolean {
     return ArrayUtils.find(array, callback) != undefined;
 }
 
-export function hasEqual<T>(array: T[], elementToFind: T, elementsEqualCallback?: (elementToCheck: T, elementToFind: T) => boolean): boolean {
+export function hasEqual<T>(array: ReadonlyArray<T>, elementToFind: T, elementsEqualCallback?: (elementToCheck: T, elementToFind: T) => boolean): boolean {
     return ArrayUtils.findEqual(array, elementToFind, elementsEqualCallback) != undefined;
 }
 
-export function find<T>(array: T[], callback: (elementToCheck: T, elementIndex: number, array: T[]) => boolean): T | undefined {
+export function find<T>(array: ReadonlyArray<T>, callback: (elementToCheck: T, elementIndex: number) => boolean): T | undefined {
     let elementFound = undefined;
 
-    const index = array.findIndex(callback);
+    const index = ArrayUtils.findIndex(array, callback);
     if (index >= 0) {
         elementFound = array[index];
     }
@@ -31,22 +27,29 @@ export function find<T>(array: T[], callback: (elementToCheck: T, elementIndex: 
     return elementFound;
 }
 
-export function findIndex<T>(array: T[], callback: (elementToCheck: T, elementIndex: number, array: T[]) => boolean): number {
+export function findIndex<T>(array: ReadonlyArray<T>, callback: (elementToCheck: T, elementIndex: number) => boolean): number {
     return array.findIndex(callback);
 }
 
-export function findAll<T>(array: T[], callback: (elementToCheck: T, elementIndex: number, array: T[]) => boolean): T[] {
-    const elementsFound = array.filter(callback);
+export function findAll<T>(array: ReadonlyArray<T>, callback: (elementToCheck: T, elementIndex: number) => boolean): T[] {
+    const elementsFound = [];
+
+    for (let i = 0; i < array.length; i++) {
+        const element = array[i];
+        if (callback(element, i)) {
+            elementsFound.push(element);
+        }
+    }
 
     return elementsFound;
 }
 
-export function findAllIndexes<T>(array: T[], callback: (elementToCheck: T, elementIndex: number, array: T[]) => boolean): number[] {
+export function findAllIndexes<T>(array: ReadonlyArray<T>, callback: (elementToCheck: T, elementIndex: number) => boolean): number[] {
     const indexes = [];
 
     for (let i = 0; i < array.length; i++) {
         const element = array[i];
-        if (callback(element, i, array)) {
+        if (callback(element, i)) {
             indexes.push(i);
         }
     }
@@ -54,7 +57,7 @@ export function findAllIndexes<T>(array: T[], callback: (elementToCheck: T, elem
     return indexes;
 }
 
-export function findEqual<T>(array: T[], elementToFind: T, elementsEqualCallback?: (elementToCheck: T, elementToFind: T) => boolean): T | undefined {
+export function findEqual<T>(array: ReadonlyArray<T>, elementToFind: T, elementsEqualCallback?: (elementToCheck: T, elementToFind: T) => boolean): T | undefined {
     if (elementsEqualCallback == null) {
         const index = ArrayUtils.findIndexEqual(array, elementToFind);
         return index < 0 ? undefined : array[index];
@@ -72,12 +75,13 @@ export function findEqual<T>(array: T[], elementToFind: T, elementsEqualCallback
     return elementFound;
 }
 
-export function findAllEqual<T>(array: T[], elementToFind: T, elementsEqualCallback?: (elementToCheck: T, elementToFind: T) => boolean): T[] {
+export function findAllEqual<T>(array: ReadonlyArray<T>, elementToFind: T, elementsEqualCallback?: (elementToCheck: T, elementToFind: T) => boolean): T[] {
     if (elementsEqualCallback == null) {
         return _findAllEqualOptimized(array, elementToFind);
     }
 
     const elementsFound = [];
+
     for (let i = 0; i < array.length; i++) {
         const currentElement = array[i];
         if (elementsEqualCallback(currentElement, elementToFind)) {
@@ -88,7 +92,7 @@ export function findAllEqual<T>(array: T[], elementToFind: T, elementsEqualCallb
     return elementsFound;
 }
 
-export function findIndexEqual<T>(array: T[], elementToFind: T, elementsEqualCallback?: (elementToCheck: T, elementToFind: T) => boolean): number {
+export function findIndexEqual<T>(array: ReadonlyArray<T>, elementToFind: T, elementsEqualCallback?: (elementToCheck: T, elementToFind: T) => boolean): number {
     if (elementsEqualCallback == null) {
         return array.indexOf(elementToFind);
     }
@@ -105,7 +109,7 @@ export function findIndexEqual<T>(array: T[], elementToFind: T, elementsEqualCal
     return indexFound;
 }
 
-export function findAllIndexesEqual<T>(array: T[], elementToFind: T, elementsEqualCallback?: (elementToCheck: T, elementToFind: T) => boolean): number[] {
+export function findAllIndexesEqual<T>(array: ReadonlyArray<T>, elementToFind: T, elementsEqualCallback?: (elementToCheck: T, elementToFind: T) => boolean): number[] {
     if (elementsEqualCallback == null) {
         return _findAllIndexesEqualOptimized(array, elementToFind);
     }
@@ -146,7 +150,7 @@ export function removeAllIndexes<T>(array: T[], indexes: number[]): T[] {
     return elementsRemoved;
 }
 
-export function remove<T>(array: T[], callback: (elementToCheck: T, elementIndex: number, array: T[]) => boolean): T | undefined {
+export function remove<T>(array: T[], callback: (elementToCheck: T, elementIndex: number) => boolean): T | undefined {
     let elementRemoved = undefined;
 
     const index = array.findIndex(callback);
@@ -157,7 +161,7 @@ export function remove<T>(array: T[], callback: (elementToCheck: T, elementIndex
     return elementRemoved;
 }
 
-export function removeAll<T>(array: T[], callback: (elementToCheck: T, elementIndex: number, array: T[]) => boolean): T[] {
+export function removeAll<T>(array: T[], callback: (elementToCheck: T, elementIndex: number) => boolean): T[] {
     const elementsRemoved = [];
 
     let currentElement = undefined;
@@ -203,16 +207,18 @@ export function unshiftUnique<T>(array: T[], elementToAdd: T, elementsEqualCallb
     return length;
 }
 
-export function copy<T>(from: T[], to: T[], copyCallback?: (fromElement: T, toElement: T) => T): T[] {
-    while (to.length > from.length) {
-        to.pop();
+export function copy<T, U extends T[] | ReadonlyArray<T>>(from: ReadonlyArray<T>, to: U, copyCallback?: (fromElement: T, toElement: T) => T): U {
+    const _to = to as any;
+    if (_to.pop != null) {
+        while (to.length > from.length) {
+            _to.pop();
+        }
     }
 
     for (let i = 0; i < from.length; i++) {
         if (copyCallback == null) {
             to[i] = from[i];
         } else {
-            console.error("HEEEY");
             to[i] = copyCallback(from[i], to[i]);
         }
     }
@@ -220,11 +226,9 @@ export function copy<T>(from: T[], to: T[], copyCallback?: (fromElement: T, toEl
     return to;
 }
 
-export function clone<T>(array: T[], cloneCallback?: (elementToClone: T) => T): T[];
-export function clone<T extends TypedArray>(array: T, cloneCallback?: (elementToClone: number) => number): T;
-export function clone<T>(array: T[] | TypedArray, cloneCallback?: (elementToClone: T | number) => T | number): T[] | TypedArray {
+export function clone<T, U extends ReadonlyArray<T>>(array: U, cloneCallback?: (elementToClone: T) => T): U {
     if (cloneCallback == null) {
-        return array.slice(0);
+        return array.slice(0) as U;
     }
 
     let clone = null;
@@ -260,20 +264,17 @@ export function clone<T>(array: T[] | TypedArray, cloneCallback?: (elementToClon
             clone = new Float64Array(array.length);
             break;
         default:
-            clone = new Array(array.length);
-            console.error("Cloned array type not supported!");
-            break;
+            throw new Error("Array type not supported: " + array.constructor.name);
     }
 
     for (let i = 0; i < array.length; i++) {
         clone[i] = cloneCallback(array[i]);
     }
 
-    return clone;
+    return clone as unknown as U;
 }
-export function equals<T>(array: T[], other: T[], elementsEqualCallback?: (arrayElement: T, otherElement: T) => boolean): boolean;
-export function equals<T extends TypedArray>(array: T, other: T, elementsEqualCallback?: (arrayElement: number, otherElement: number) => boolean): boolean;
-export function equals<T>(array: T[] | TypedArray, other: T[] | TypedArray, elementsEqualCallback?: (arrayElement: T | number, otherElement: T | number) => boolean): boolean {
+
+export function equals<T>(array: ReadonlyArray<T>, other: ReadonlyArray<T>, elementsEqualCallback?: (arrayElement: T, otherElement: T) => boolean): boolean {
     let equals = true;
 
     if (other != null && array.length == other.length) {
@@ -326,10 +327,11 @@ export const ArrayUtils = {
 
 
 
-function _findAllEqualOptimized<T>(array: T[], elementToFind: T): T[] {
+function _findAllEqualOptimized<T>(array: ReadonlyArray<T>, elementToFind: T): T[] {
     // Adapted from: https:// stackoverflow.com/a/20798567
 
     const elementsFound = [];
+
     let index = -1;
     while ((index = array.indexOf(elementToFind, index + 1)) >= 0) {
         elementsFound.push(array[index]);
@@ -338,10 +340,11 @@ function _findAllEqualOptimized<T>(array: T[], elementToFind: T): T[] {
     return elementsFound;
 }
 
-function _findAllIndexesEqualOptimized<T>(array: T[], elementToFind: T): number[] {
+function _findAllIndexesEqualOptimized<T>(array: ReadonlyArray<T>, elementToFind: T): number[] {
     // Adapted from: https:// stackoverflow.com/a/20798567
 
     const elementsFound = [];
+
     let index = -1;
     while ((index = array.indexOf(elementToFind, index + 1)) >= 0) {
         elementsFound.push(index);

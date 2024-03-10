@@ -109,6 +109,8 @@ export function initArrayExtensionProtoype(): void {
 
 
 
+    // #TODO do not add some properties to the typed arrays since they are not valid on them
+
     const arrayPrototypesToExtend = [
         Array.prototype, Uint8ClampedArray.prototype, Uint8Array.prototype, Uint16Array.prototype, Uint32Array.prototype, Int8Array.prototype,
         Int16Array.prototype, Int32Array.prototype, Float32Array.prototype, Float64Array.prototype];
