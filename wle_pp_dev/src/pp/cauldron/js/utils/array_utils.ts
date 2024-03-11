@@ -1,4 +1,12 @@
-import { ReadonlyArray } from "../array_type_definitions.js";
+export interface ReadonlyArray<T> {
+    [n: number]: T;
+    length: number;
+
+    indexOf(searchElement: T, fromIndex?: number): number;
+    findIndex(predicate: (value: T, index: number, obj: ReadonlyArray<T>) => boolean, thisArg?: any): number;
+
+    slice(start?: number, end?: number): ReadonlyArray<T>;
+}
 
 export function first<T>(array: ReadonlyArray<T>): T | undefined {
     return array.length > 0 ? array[0] : undefined;
@@ -124,6 +132,17 @@ export function findAllIndexesEqual<T>(array: ReadonlyArray<T>, elementToFind: T
     return indexesFound;
 }
 
+export function remove<T>(array: T[], callback: (elementToCheck: T, elementIndex: number) => boolean): T | undefined {
+    let elementRemoved = undefined;
+
+    const index = array.findIndex(callback);
+    if (index >= 0) {
+        elementRemoved = ArrayUtils.removeIndex(array, index);
+    }
+
+    return elementRemoved;
+}
+
 export function removeIndex<T>(array: T[], index: number): T | undefined {
     let elementRemoved = undefined;
 
@@ -132,30 +151,6 @@ export function removeIndex<T>(array: T[], index: number): T | undefined {
         if (arrayRemoved.length == 1) {
             elementRemoved = arrayRemoved[0];
         }
-    }
-
-    return elementRemoved;
-}
-
-export function removeAllIndexes<T>(array: T[], indexes: number[]): T[] {
-    const elementsRemoved = [];
-
-    for (const index of indexes) {
-        const elementRemoved = ArrayUtils.removeIndex(array, index);
-        if (elementRemoved !== undefined) {
-            elementsRemoved.push(elementRemoved);
-        }
-    }
-
-    return elementsRemoved;
-}
-
-export function remove<T>(array: T[], callback: (elementToCheck: T, elementIndex: number) => boolean): T | undefined {
-    let elementRemoved = undefined;
-
-    const index = array.findIndex(callback);
-    if (index >= 0) {
-        elementRemoved = ArrayUtils.removeIndex(array, index);
     }
 
     return elementRemoved;
@@ -171,6 +166,19 @@ export function removeAll<T>(array: T[], callback: (elementToCheck: T, elementIn
             elementsRemoved.push(currentElement);
         }
     } while (currentElement !== undefined);
+
+    return elementsRemoved;
+}
+
+export function removeAllIndexes<T>(array: T[], indexes: number[]): T[] {
+    const elementsRemoved = [];
+
+    for (const index of indexes) {
+        const elementRemoved = ArrayUtils.removeIndex(array, index);
+        if (elementRemoved !== undefined) {
+            elementsRemoved.push(elementRemoved);
+        }
+    }
 
     return elementsRemoved;
 }
@@ -275,10 +283,10 @@ export const ArrayUtils = {
     findAllEqual,
     findIndexEqual,
     findAllIndexesEqual,
-    removeIndex,
-    removeAllIndexes,
     remove,
+    removeIndex,
     removeAll,
+    removeAllIndexes,
     removeEqual,
     removeAllEqual,
     clear,
