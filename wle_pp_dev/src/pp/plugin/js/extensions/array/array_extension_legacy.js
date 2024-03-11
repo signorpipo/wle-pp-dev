@@ -158,11 +158,11 @@ import { Vec4Utils } from "../../../../cauldron/js/utils/vec4_utils.js";
 import { VecUtils } from "../../../../cauldron/js/utils/vec_utils.js";
 import { PluginUtils } from "../../../utils/plugin_utils.js";
 
-export function initArrayExtensionJS() {
-    initArrayExtensionJSProtoype();
+export function initArrayExtensionLegacy() {
+    initArrayExtensionLegacyProtoype();
 }
 
-export function initArrayExtensionJSProtoype() {
+export function initArrayExtensionLegacyProtoype() {
 
     // VECTOR
 

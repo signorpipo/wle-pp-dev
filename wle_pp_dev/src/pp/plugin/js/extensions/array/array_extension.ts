@@ -1,7 +1,6 @@
-import { ArrayUtils, ReadonlyArray } from "../../../../cauldron/js/utils/array_utils.js";
+import { ArrayUtils, ArrayLike } from "../../../../cauldron/js/utils/array_utils.js";
 import { PluginUtils } from "../../../utils/plugin_utils.js";
 import "./array_type_extension.js";
-import "./readonly_array_type_extension.js";
 
 export function initArrayExtension(): void {
     initArrayExtensionProtoype();
@@ -13,51 +12,51 @@ export function initArrayExtensionProtoype(): void {
 
     const arrayExtension: Record<string, any> = {};
 
-    arrayExtension.pp_first = function pp_first<T>(this: ReadonlyArray<T>): T | undefined {
+    arrayExtension.pp_first = function pp_first<T>(this: Readonly<ArrayLike<T>>): T | undefined {
         return ArrayUtils.first(this);
     };
 
-    arrayExtension.pp_last = function pp_last<T>(this: ReadonlyArray<T>): T | undefined {
+    arrayExtension.pp_last = function pp_last<T>(this: Readonly<ArrayLike<T>>): T | undefined {
         return ArrayUtils.last(this);
     };
 
-    arrayExtension.pp_has = function pp_has<T>(this: ReadonlyArray<T>, callback: (elementToCheck: T, elementIndex: number) => boolean): boolean {
+    arrayExtension.pp_has = function pp_has<T>(this: Readonly<ArrayLike<T>>, callback: (elementToCheck: T, elementIndex: number) => boolean): boolean {
         return ArrayUtils.has(this, callback);
     };
 
-    arrayExtension.pp_hasEqual = function pp_hasEqual<T>(this: ReadonlyArray<T>, elementToFind: T, elementsEqualCallback?: (elementToCheck: T, elementToFind: T) => boolean): boolean {
+    arrayExtension.pp_hasEqual = function pp_hasEqual<T>(this: Readonly<ArrayLike<T>>, elementToFind: T, elementsEqualCallback?: (elementToCheck: T, elementToFind: T) => boolean): boolean {
         return ArrayUtils.hasEqual(this, elementToFind, elementsEqualCallback);
     };
 
-    arrayExtension.pp_find = function pp_find<T>(this: ReadonlyArray<T>, callback: (elementToCheck: T, elementIndex: number) => boolean): T | undefined {
+    arrayExtension.pp_find = function pp_find<T>(this: Readonly<ArrayLike<T>>, callback: (elementToCheck: T, elementIndex: number) => boolean): T | undefined {
         return ArrayUtils.find(this, callback);
     };
 
-    arrayExtension.pp_findIndex = function pp_findIndex<T>(this: ReadonlyArray<T>, callback: (elementToCheck: T, elementIndex: number) => boolean): number {
+    arrayExtension.pp_findIndex = function pp_findIndex<T>(this: Readonly<ArrayLike<T>>, callback: (elementToCheck: T, elementIndex: number) => boolean): number {
         return ArrayUtils.findIndex(this, callback);
     };
 
-    arrayExtension.pp_findAll = function pp_findAll<T>(this: ReadonlyArray<T>, callback: (elementToCheck: T, elementIndex: number) => boolean): T[] {
+    arrayExtension.pp_findAll = function pp_findAll<T>(this: Readonly<ArrayLike<T>>, callback: (elementToCheck: T, elementIndex: number) => boolean): T[] {
         return ArrayUtils.findAll(this, callback);
     };
 
-    arrayExtension.pp_findAllIndexes = function pp_findAllIndexes<T>(this: ReadonlyArray<T>, callback: (elementToCheck: T, elementIndex: number) => boolean): number[] {
+    arrayExtension.pp_findAllIndexes = function pp_findAllIndexes<T>(this: Readonly<ArrayLike<T>>, callback: (elementToCheck: T, elementIndex: number) => boolean): number[] {
         return ArrayUtils.findAllIndexes(this, callback);
     };
 
-    arrayExtension.pp_findEqual = function pp_findEqual<T>(this: ReadonlyArray<T>, elementToFind: T, elementsEqualCallback?: (elementToCheck: T, elementToFind: T) => boolean): T | undefined {
+    arrayExtension.pp_findEqual = function pp_findEqual<T>(this: Readonly<ArrayLike<T>>, elementToFind: T, elementsEqualCallback?: (elementToCheck: T, elementToFind: T) => boolean): T | undefined {
         return ArrayUtils.findEqual(this, elementToFind, elementsEqualCallback);
     };
 
-    arrayExtension.pp_findAllEqual = function pp_findAllEqual<T>(this: ReadonlyArray<T>, elementToFind: T, elementsEqualCallback?: (elementToCheck: T, elementToFind: T) => boolean): T[] {
+    arrayExtension.pp_findAllEqual = function pp_findAllEqual<T>(this: Readonly<ArrayLike<T>>, elementToFind: T, elementsEqualCallback?: (elementToCheck: T, elementToFind: T) => boolean): T[] {
         return ArrayUtils.findAllEqual(this, elementToFind, elementsEqualCallback);
     };
 
-    arrayExtension.pp_findIndexEqual = function pp_findIndexEqual<T>(this: ReadonlyArray<T>, elementToFind: T, elementsEqualCallback?: (elementToCheck: T, elementToFind: T) => boolean): number {
+    arrayExtension.pp_findIndexEqual = function pp_findIndexEqual<T>(this: Readonly<ArrayLike<T>>, elementToFind: T, elementsEqualCallback?: (elementToCheck: T, elementToFind: T) => boolean): number {
         return ArrayUtils.findIndexEqual(this, elementToFind, elementsEqualCallback);
     };
 
-    arrayExtension.pp_findAllIndexesEqual = function pp_findAllIndexesEqual<T>(this: ReadonlyArray<T>, elementToFind: T, elementsEqualCallback?: (elementToCheck: T, elementToFind: T) => boolean): number[] {
+    arrayExtension.pp_findAllIndexesEqual = function pp_findAllIndexesEqual<T>(this: Readonly<ArrayLike<T>>, elementToFind: T, elementsEqualCallback?: (elementToCheck: T, elementToFind: T) => boolean): number[] {
         return ArrayUtils.findAllIndexesEqual(this, elementToFind, elementsEqualCallback);
     };
 
@@ -97,15 +96,15 @@ export function initArrayExtensionProtoype(): void {
         return ArrayUtils.unshiftUnique(this, elementToAdd, elementsEqualCallback);
     };
 
-    arrayExtension.pp_copy = function pp_copy<T, U extends T[] | ReadonlyArray<T>>(this: U, array: ReadonlyArray<T>, copyCallback?: (arrayElement: T, thisElement: T) => T): U {
+    arrayExtension.pp_copy = function pp_copy<T, U extends ArrayLike<T>>(this: U, array: Readonly<U>, copyCallback?: (arrayElement: T, thisElement: T) => T): U {
         return ArrayUtils.copy(array, this, copyCallback);
     };
 
-    arrayExtension.pp_clone = function pp_clone<T, U extends ReadonlyArray<T>>(this: U, cloneCallback?: (elementToClone: T) => T): U {
+    arrayExtension.pp_clone = function pp_clone<T, U extends ArrayLike<T>>(this: Readonly<U>, cloneCallback?: (elementToClone: T) => T): U {
         return ArrayUtils.clone(this, cloneCallback);
     };
 
-    arrayExtension.pp_equals = function pp_equals<T>(this: ReadonlyArray<T>, array: ReadonlyArray<T>, elementsEqualCallback?: (thisElement: T, arrayElement: T) => boolean): boolean {
+    arrayExtension.pp_equals = function pp_equals<T>(this: Readonly<ArrayLike<T>>, array: Readonly<ArrayLike<T>>, elementsEqualCallback?: (thisElement: T, arrayElement: T) => boolean): boolean {
         return ArrayUtils.equals(this, array, elementsEqualCallback);
     };
 

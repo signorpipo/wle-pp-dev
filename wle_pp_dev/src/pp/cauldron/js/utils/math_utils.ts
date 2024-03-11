@@ -111,8 +111,8 @@ export function randomPick<T>(...args: T[]): T | null {
     let random: T | null = null;
 
     if (args.length > 0) {
-        if (args.length == 1 && (args[0] as Array<T>).length != null) {
-            const arrayArg0 = args[0] as Array<T>;
+        if (args.length == 1 && (args[0] as T[]).length != null) {
+            const arrayArg0 = args[0] as T[];
             if (arrayArg0.length > 0) {
                 const randomIndex = MathUtils.randomInt(0, arrayArg0.length - 1);
                 random = arrayArg0[randomIndex];

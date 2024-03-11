@@ -1,30 +1,30 @@
-export interface ReadonlyArray<T> {
+export interface ArrayLike<T> {
     [n: number]: T;
     length: number;
 
     indexOf(searchElement: T, fromIndex?: number): number;
-    findIndex(predicate: (value: T, index: number, obj: ReadonlyArray<T>) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: T, index: number, obj: ArrayLike<T>) => boolean, thisArg?: any): number;
 
-    slice(start?: number, end?: number): ReadonlyArray<T>;
+    slice(start?: number, end?: number): ArrayLike<T>;
 }
 
-export function first<T>(array: ReadonlyArray<T>): T | undefined {
+export function first<T>(array: Readonly<ArrayLike<T>>): T | undefined {
     return array.length > 0 ? array[0] : undefined;
 }
 
-export function last<T>(array: ReadonlyArray<T>): T | undefined {
+export function last<T>(array: Readonly<ArrayLike<T>>): T | undefined {
     return array.length > 0 ? array[array.length - 1] : undefined;
 }
 
-export function has<T>(array: ReadonlyArray<T>, callback: (elementToCheck: T, elementIndex: number) => boolean): boolean {
+export function has<T>(array: Readonly<ArrayLike<T>>, callback: (elementToCheck: T, elementIndex: number) => boolean): boolean {
     return ArrayUtils.find(array, callback) != undefined;
 }
 
-export function hasEqual<T>(array: ReadonlyArray<T>, elementToFind: T, elementsEqualCallback?: (elementToCheck: T, elementToFind: T) => boolean): boolean {
+export function hasEqual<T>(array: Readonly<ArrayLike<T>>, elementToFind: T, elementsEqualCallback?: (elementToCheck: T, elementToFind: T) => boolean): boolean {
     return ArrayUtils.findEqual(array, elementToFind, elementsEqualCallback) != undefined;
 }
 
-export function find<T>(array: ReadonlyArray<T>, callback: (elementToCheck: T, elementIndex: number) => boolean): T | undefined {
+export function find<T>(array: Readonly<ArrayLike<T>>, callback: (elementToCheck: T, elementIndex: number) => boolean): T | undefined {
     let elementFound = undefined;
 
     const index = ArrayUtils.findIndex(array, callback);
@@ -35,11 +35,11 @@ export function find<T>(array: ReadonlyArray<T>, callback: (elementToCheck: T, e
     return elementFound;
 }
 
-export function findIndex<T>(array: ReadonlyArray<T>, callback: (elementToCheck: T, elementIndex: number) => boolean): number {
+export function findIndex<T>(array: Readonly<ArrayLike<T>>, callback: (elementToCheck: T, elementIndex: number) => boolean): number {
     return array.findIndex(callback);
 }
 
-export function findAll<T>(array: ReadonlyArray<T>, callback: (elementToCheck: T, elementIndex: number) => boolean): T[] {
+export function findAll<T>(array: Readonly<ArrayLike<T>>, callback: (elementToCheck: T, elementIndex: number) => boolean): T[] {
     const elementsFound = [];
 
     for (let i = 0; i < array.length; i++) {
@@ -52,7 +52,7 @@ export function findAll<T>(array: ReadonlyArray<T>, callback: (elementToCheck: T
     return elementsFound;
 }
 
-export function findAllIndexes<T>(array: ReadonlyArray<T>, callback: (elementToCheck: T, elementIndex: number) => boolean): number[] {
+export function findAllIndexes<T>(array: Readonly<ArrayLike<T>>, callback: (elementToCheck: T, elementIndex: number) => boolean): number[] {
     const indexes = [];
 
     for (let i = 0; i < array.length; i++) {
@@ -65,7 +65,7 @@ export function findAllIndexes<T>(array: ReadonlyArray<T>, callback: (elementToC
     return indexes;
 }
 
-export function findEqual<T>(array: ReadonlyArray<T>, elementToFind: T, elementsEqualCallback?: (elementToCheck: T, elementToFind: T) => boolean): T | undefined {
+export function findEqual<T>(array: Readonly<ArrayLike<T>>, elementToFind: T, elementsEqualCallback?: (elementToCheck: T, elementToFind: T) => boolean): T | undefined {
     if (elementsEqualCallback == null) {
         const index = ArrayUtils.findIndexEqual(array, elementToFind);
         return index < 0 ? undefined : array[index];
@@ -83,7 +83,7 @@ export function findEqual<T>(array: ReadonlyArray<T>, elementToFind: T, elements
     return elementFound;
 }
 
-export function findAllEqual<T>(array: ReadonlyArray<T>, elementToFind: T, elementsEqualCallback?: (elementToCheck: T, elementToFind: T) => boolean): T[] {
+export function findAllEqual<T>(array: Readonly<ArrayLike<T>>, elementToFind: T, elementsEqualCallback?: (elementToCheck: T, elementToFind: T) => boolean): T[] {
     if (elementsEqualCallback == null) {
         return _findAllEqualOptimized(array, elementToFind);
     }
@@ -100,7 +100,7 @@ export function findAllEqual<T>(array: ReadonlyArray<T>, elementToFind: T, eleme
     return elementsFound;
 }
 
-export function findIndexEqual<T>(array: ReadonlyArray<T>, elementToFind: T, elementsEqualCallback?: (elementToCheck: T, elementToFind: T) => boolean): number {
+export function findIndexEqual<T>(array: Readonly<ArrayLike<T>>, elementToFind: T, elementsEqualCallback?: (elementToCheck: T, elementToFind: T) => boolean): number {
     if (elementsEqualCallback == null) {
         return array.indexOf(elementToFind);
     }
@@ -117,7 +117,7 @@ export function findIndexEqual<T>(array: ReadonlyArray<T>, elementToFind: T, ele
     return indexFound;
 }
 
-export function findAllIndexesEqual<T>(array: ReadonlyArray<T>, elementToFind: T, elementsEqualCallback?: (elementToCheck: T, elementToFind: T) => boolean): number[] {
+export function findAllIndexesEqual<T>(array: Readonly<ArrayLike<T>>, elementToFind: T, elementsEqualCallback?: (elementToCheck: T, elementToFind: T) => boolean): number[] {
     if (elementsEqualCallback == null) {
         return _findAllIndexesEqualOptimized(array, elementToFind);
     }
@@ -221,7 +221,7 @@ export function unshiftUnique<T>(array: T[], elementToAdd: T, elementsEqualCallb
     return length;
 }
 
-export function copy<T, U extends T[] | ReadonlyArray<T>>(from: ReadonlyArray<T>, to: U, copyCallback?: (fromElement: T, toElement: T) => T): U {
+export function copy<T, U extends ArrayLike<T>>(from: Readonly<U>, to: U, copyCallback?: (fromElement: T, toElement: T) => T): U {
     const _to = to as any;
     if (_to.pop != null) {
         while (to.length > from.length) {
@@ -240,7 +240,7 @@ export function copy<T, U extends T[] | ReadonlyArray<T>>(from: ReadonlyArray<T>
     return to;
 }
 
-export function clone<T, U extends ReadonlyArray<T>>(array: U, cloneCallback?: (elementToClone: T) => T): U {
+export function clone<T, U extends ArrayLike<T>>(array: Readonly<U>, cloneCallback?: (elementToClone: T) => T): U {
     const clonedArray = array.slice(0) as U;
 
     if (cloneCallback != null) {
@@ -252,7 +252,7 @@ export function clone<T, U extends ReadonlyArray<T>>(array: U, cloneCallback?: (
     return clonedArray;
 }
 
-export function equals<T>(array: ReadonlyArray<T>, other: ReadonlyArray<T>, elementsEqualCallback?: (arrayElement: T, otherElement: T) => boolean): boolean {
+export function equals<T>(array: Readonly<ArrayLike<T>>, other: Readonly<ArrayLike<T>>, elementsEqualCallback?: (arrayElement: T, otherElement: T) => boolean): boolean {
     let equals = true;
 
     if (other != null && array.length == other.length) {
@@ -299,7 +299,7 @@ export const ArrayUtils = {
 
 
 
-function _findAllEqualOptimized<T>(array: ReadonlyArray<T>, elementToFind: T): T[] {
+function _findAllEqualOptimized<T>(array: Readonly<ArrayLike<T>>, elementToFind: T): T[] {
     // Adapted from: https:// stackoverflow.com/a/20798567
 
     const elementsFound = [];
@@ -312,7 +312,7 @@ function _findAllEqualOptimized<T>(array: ReadonlyArray<T>, elementToFind: T): T
     return elementsFound;
 }
 
-function _findAllIndexesEqualOptimized<T>(array: ReadonlyArray<T>, elementToFind: T): number[] {
+function _findAllIndexesEqualOptimized<T>(array: Readonly<ArrayLike<T>>, elementToFind: T): number[] {
     // Adapted from: https:// stackoverflow.com/a/20798567
 
     const elementsFound = [];
