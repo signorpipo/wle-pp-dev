@@ -1,5 +1,5 @@
 import { ArrayUtils } from "./array_utils.js";
-import { MathUtils } from "./math_utils.js";
+import { MathUtils } from "../math_utils.js";
 
 export function zero(vector) {
     for (let i = 0; i < vector.length; i++) {

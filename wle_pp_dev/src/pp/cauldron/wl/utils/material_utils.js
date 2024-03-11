@@ -1,5 +1,5 @@
 import { MeshComponent } from "@wonderlandengine/api";
-import { vec4_create } from "../../plugin/js/extensions/array/vec_create_extension.js";
+import { vec4_create } from "../../../plugin/js/extensions/array/vec_create_extension.js";
 
 export let setAlpha = function () {
     let color = vec4_create();

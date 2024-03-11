@@ -1,4 +1,4 @@
-import { JSUtils } from "../../../cauldron/js/utils/js_utils.js";
+import { JSUtils } from "../../../cauldron/utils/js_utils.js";
 import { DebugFunctionsOverwriter, DebugFunctionsOverwriterParams } from "../debug_functions_overwriter.js";
 
 export class DebugFunctionsPerformanceAnalyzerParams extends DebugFunctionsOverwriterParams {

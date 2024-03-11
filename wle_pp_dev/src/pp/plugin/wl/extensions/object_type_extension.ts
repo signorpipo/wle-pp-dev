@@ -105,7 +105,7 @@
 */
 
 import { Component, WonderlandEngine, type ComponentConstructor } from "@wonderlandengine/api";
-import { Matrix3, Matrix4, Quaternion, Quaternion2, Vector3 } from "../../../cauldron/js/vec_type_definitions.js";
+import { Matrix3, Matrix4, Quaternion, Quaternion2, Vector3 } from "../../../cauldron/type_definitions/array_type_definitions.js";
 import { CloneParams } from "../../../index.js";
 
 declare module "@wonderlandengine/api" {

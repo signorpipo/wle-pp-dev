@@ -1,4 +1,4 @@
-import { ArrayUtils } from "./array_utils.js";
+import { ArrayUtils } from "./array/array_utils.js";
 
 export function getObjectPrototypes(object) {
     let prototypes = [];

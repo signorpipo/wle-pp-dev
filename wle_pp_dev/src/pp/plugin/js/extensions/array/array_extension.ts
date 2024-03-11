@@ -1,4 +1,4 @@
-import { ArrayUtils, ArrayLike } from "../../../../cauldron/js/utils/array_utils.js";
+import { ArrayUtils, ArrayLike } from "../../../../cauldron/utils/array/array_utils.js";
 import { PluginUtils } from "../../../utils/plugin_utils.js";
 import "./array_type_extension.js";
 

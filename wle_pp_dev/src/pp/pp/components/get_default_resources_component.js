@@ -1,5 +1,5 @@
 import { Component, Property } from "@wonderlandengine/api";
-import { MeshUtils } from "../../cauldron/utils/mesh_utils.js";
+import { MeshUtils } from "../../cauldron/wl/utils/mesh_utils.js";
 import { DefaultResources } from "../default_resources.js";
 import { Globals } from "../globals.js";
 

@@ -26,7 +26,7 @@
         - pp_isInsideAngleRange
 */
 
-import { EasingFunction } from "../../../cauldron/js/utils/math_utils.js";
+import { EasingFunction } from "../../../cauldron/utils/math_utils.js";
 
 declare global {
     export interface Math {
