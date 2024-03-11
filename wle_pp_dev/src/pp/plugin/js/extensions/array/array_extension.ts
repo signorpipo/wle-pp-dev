@@ -1,5 +1,7 @@
 import { ArrayUtils, ReadonlyArray } from "../../../../cauldron/js/utils/array_utils.js";
 import { PluginUtils } from "../../../utils/plugin_utils.js";
+import "./array_type_extension.js";
+import "./readonly_array_type_extension.js";
 
 export function initArrayExtension(): void {
     initArrayExtensionProtoype();
