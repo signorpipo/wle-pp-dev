@@ -213,7 +213,7 @@ export function unshiftUnique<T>(array: T[], elementToAdd: T, elementsEqualCallb
     return length;
 }
 
-export function copy<U extends ArrayLike<T>, T>(from: Readonly<ArrayLike<T>>, to: U, copyCallback?: (fromElement: T, toElement: T) => T): U {
+export function copy<S extends ArrayLike<T>, T>(from: Readonly<ArrayLike<T>>, to: S, copyCallback?: (fromElement: T, toElement: T) => T): S {
     const _to = to as any;
     if (_to.pop != null) {
         while (to.length > from.length) {
@@ -232,8 +232,8 @@ export function copy<U extends ArrayLike<T>, T>(from: Readonly<ArrayLike<T>>, to
     return to;
 }
 
-export function clone<U extends ArrayLike<T>, T>(array: Readonly<U>, cloneCallback?: (elementToClone: T) => T): U {
-    const clonedArray = array.slice(0) as U;
+export function clone<S extends ArrayLike<T>, T>(array: Readonly<S>, cloneCallback?: (elementToClone: T) => T): S {
+    const clonedArray = array.slice(0) as S;
 
     if (cloneCallback != null) {
         for (let i = 0; i < array.length; i++) {

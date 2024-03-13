@@ -98,11 +98,11 @@ export function initArrayExtensionProtoype(): void {
         return ArrayUtils.unshiftUnique(this, elementToAdd, elementsEqualCallback);
     };
 
-    arrayLikeExtension.pp_copy = function pp_copy<U extends ArrayLike<T>, T>(this: U, array: Readonly<ArrayLike<T>>, copyCallback?: (arrayElement: T, thisElement: T) => T): U {
+    arrayLikeExtension.pp_copy = function pp_copy<S extends ArrayLike<T>, T>(this: S, array: Readonly<ArrayLike<T>>, copyCallback?: (arrayElement: T, thisElement: T) => T): S {
         return ArrayUtils.copy(array, this, copyCallback);
     };
 
-    arrayLikeExtension.pp_clone = function pp_clone<U extends ArrayLike<T>, T>(this: Readonly<U>, cloneCallback?: (elementToClone: T) => T): U {
+    arrayLikeExtension.pp_clone = function pp_clone<S extends ArrayLike<T>, T>(this: Readonly<S>, cloneCallback?: (elementToClone: T) => T): S {
         return ArrayUtils.clone(this, cloneCallback);
     };
 
