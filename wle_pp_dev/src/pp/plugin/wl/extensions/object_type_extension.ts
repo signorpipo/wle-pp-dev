@@ -104,9 +104,9 @@
         - pp_destroy
 */
 
-import { Component, WonderlandEngine, type ComponentConstructor, Object3D } from "@wonderlandengine/api";
+import { Component, Object3D, WonderlandEngine, type ComponentConstructor } from "@wonderlandengine/api";
 import { Matrix3, Matrix4, Quaternion, Quaternion2, Vector3 } from "../../../cauldron/type_definitions/array_type_definitions.js";
-import { CloneParams } from "../../../index.js";
+import { CloneParams } from "../../../cauldron/wl/utils/object_utils.js";
 
 export interface Object3DExtension {
 

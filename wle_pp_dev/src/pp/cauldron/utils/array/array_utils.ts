@@ -1,12 +1,4 @@
-export interface ArrayLike<T> {
-    [n: number]: T;
-    length: number;
-
-    indexOf(searchElement: T, fromIndex?: number): number;
-    findIndex(predicate: (value: T, index: number, obj: ArrayLike<T>) => boolean, thisArg?: any): number;
-
-    slice(start?: number, end?: number): ArrayLike<T>;
-}
+import { ArrayLike } from "../../type_definitions/array_type_definitions.js";
 
 export function first<T>(array: Readonly<ArrayLike<T>>): T | undefined {
     return array.length > 0 ? array[0] : undefined;
