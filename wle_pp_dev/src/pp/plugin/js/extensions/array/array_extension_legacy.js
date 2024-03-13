@@ -149,13 +149,12 @@
 
 import { Mat3Utils } from "../../../../cauldron/utils/array/mat3_utils.js";
 import { Mat4Utils } from "../../../../cauldron/utils/array/mat4_utils.js";
-import { EasingFunction, MathUtils } from "../../../../cauldron/utils/math_utils.js";
 import { Quat2Utils } from "../../../../cauldron/utils/array/quat2_utils.js";
 import { QuatUtils } from "../../../../cauldron/utils/array/quat_utils.js";
 import { Vec2Utils } from "../../../../cauldron/utils/array/vec2_utils.js";
 import { Vec3Utils } from "../../../../cauldron/utils/array/vec3_utils.js";
 import { Vec4Utils } from "../../../../cauldron/utils/array/vec4_utils.js";
-import { VecUtils } from "../../../../cauldron/utils/array/vec_utils.js";
+import { EasingFunction, MathUtils } from "../../../../cauldron/utils/math_utils.js";
 import { PluginUtils } from "../../../utils/plugin_utils.js";
 
 export function initArrayExtensionLegacy() {
@@ -163,60 +162,6 @@ export function initArrayExtensionLegacy() {
 }
 
 export function initArrayExtensionLegacyProtoype() {
-
-    // VECTOR
-
-    // New Functions
-
-    let vecExtension = {};
-
-    vecExtension.vec_zero = function vec_zero() {
-        return VecUtils.zero(this);
-    };
-
-    vecExtension.vec_isZero = function vec_isZero(epsilon = 0) {
-        return VecUtils.isZero(this, epsilon);
-    };
-
-    vecExtension.vec_scale = function vec_scale(value, out = null) {
-        return VecUtils.scale(this, value, out);
-    };
-
-    vecExtension.vec_round = function vec_round(out = null) {
-        return VecUtils.round(this, out);
-    };
-
-    vecExtension.vec_floor = function vec_floor(out = null) {
-        return VecUtils.floor(this, out);
-    };
-
-    vecExtension.vec_ceil = function vec_ceil(out = null) {
-        return VecUtils.ceil(this, out);
-    };
-
-    vecExtension.vec_clamp = function vec_clamp(start, end, out = null) {
-        return VecUtils.clamp(this, start, end, out);
-    };
-
-    vecExtension.vec_equals = function vec_equals(vector, epsilon = 0) {
-        return VecUtils.equals(this, vector, epsilon);
-    };
-
-    vecExtension.vec_toString = function vec_toString(decimalPlaces = null) {
-        return VecUtils.toString(this, decimalPlaces);
-    };
-
-    vecExtension.vec_log = function vec_log(decimalPlaces = 4) {
-        return VecUtils.log(this, decimalPlaces);
-    };
-
-    vecExtension.vec_error = function vec_error(decimalPlaces = 4) {
-        return VecUtils.error(this, decimalPlaces);
-    };
-
-    vecExtension.vec_warn = function vec_warn(decimalPlaces = 4) {
-        return VecUtils.warn(this, decimalPlaces);
-    };
 
     // VECTOR 2
 
@@ -1409,8 +1354,6 @@ export function initArrayExtensionLegacyProtoype() {
         Int16Array.prototype, Int32Array.prototype, Float32Array.prototype, Float64Array.prototype];
 
     for (let arrayPrototypeToExtend of arrayPrototypesToExtend) {
-        PluginUtils.injectProperties(vecExtension, arrayPrototypeToExtend, false, true, true);
-
         PluginUtils.injectProperties(vec2Extension, arrayPrototypeToExtend, false, true, true);
         PluginUtils.injectProperties(vec3Extension, arrayPrototypeToExtend, false, true, true);
         PluginUtils.injectProperties(vec4Extension, arrayPrototypeToExtend, false, true, true);
