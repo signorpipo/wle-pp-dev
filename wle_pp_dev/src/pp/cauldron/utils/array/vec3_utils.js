@@ -1,7 +1,7 @@
 import { vec3 as gl_vec3 } from "gl-matrix";
+import { EasingFunction, MathUtils } from "../math_utils.js";
 import { Mat3Utils } from "./mat3_utils.js";
 import { Mat4Utils, create as mat4_utils_create } from "./mat4_utils.js";
-import { EasingFunction, MathUtils } from "../math_utils.js";
 import { Quat2Utils } from "./quat2_utils.js";
 import { QuatUtils, create as quat_utils_create } from "./quat_utils.js";
 

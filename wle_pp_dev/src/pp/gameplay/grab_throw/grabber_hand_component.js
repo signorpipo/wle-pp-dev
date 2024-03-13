@@ -1,6 +1,6 @@
 import { Component, Emitter, PhysXComponent, Property } from "@wonderlandengine/api";
-import { EasingFunction } from "../../cauldron/utils/math_utils.js";
 import { PhysicsCollisionCollector } from "../../cauldron/physics/physics_collision_collector.js";
+import { EasingFunction } from "../../cauldron/utils/math_utils.js";
 import { HandednessIndex } from "../../input/cauldron/input_types.js";
 import { InputUtils } from "../../input/cauldron/input_utils.js";
 import { GamepadButtonEvent, GamepadButtonID } from "../../input/gamepad/gamepad_buttons.js";

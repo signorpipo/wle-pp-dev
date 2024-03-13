@@ -1,12 +1,12 @@
 import { Component, Object3D, Scene, WonderlandEngine, type ComponentConstructor } from "@wonderlandengine/api";
-import { Matrix3, Matrix4, Quaternion, Quaternion2, Vector3 } from "../../type_definitions/array_type_definitions.js";
 import { Globals } from "../../../pp/globals.js";
+import { Matrix3, Matrix4, Quaternion, Quaternion2, Vector3 } from "../../type_definitions/array_type_definitions.js";
 import { Mat3Utils } from "../../utils/array/mat3_utils.js";
 import { Mat4Utils } from "../../utils/array/mat4_utils.js";
-import { MathUtils } from "../../utils/math_utils.js";
 import { Quat2Utils } from "../../utils/array/quat2_utils.js";
 import { QuatUtils } from "../../utils/array/quat_utils.js";
 import { Vec3Utils } from "../../utils/array/vec3_utils.js";
+import { MathUtils } from "../../utils/math_utils.js";
 import { ComponentUtils, CustomCloneParams, DeepCloneParams } from "./component_utils.js";
 import { SceneUtils } from "./scene_utils.js";
 

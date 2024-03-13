@@ -1,7 +1,7 @@
 import { Emitter, PhysXComponent } from "@wonderlandengine/api";
 import { FSM } from "../../../../../cauldron/fsm/fsm.js";
-import { EasingFunction } from "../../../../../cauldron/utils/math_utils.js";
 import { PhysicsLayerFlags } from "../../../../../cauldron/physics/physics_layer_flags.js";
+import { EasingFunction } from "../../../../../cauldron/utils/math_utils.js";
 import { XRUtils } from "../../../../../cauldron/utils/xr_utils.js";
 import { Handedness } from "../../../../../input/cauldron/input_types.js";
 import { InputUtils } from "../../../../../input/cauldron/input_utils.js";
