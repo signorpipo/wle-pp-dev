@@ -1,7 +1,8 @@
 import { ArrayUtils } from "./array_utils.js";
 import { MathUtils } from "../math_utils.js";
+import { Vector } from "../../type_definitions/array_type_definitions.js";
 
-export function zero(vector) {
+export function zero<T extends Vector>(vector: T): T {
     for (let i = 0; i < vector.length; i++) {
         vector[i] = 0;
     }
@@ -9,7 +10,7 @@ export function zero(vector) {
     return vector;
 }
 
-export function isZero(vector, epsilon = 0) {
+export function isZero(vector: Vector, epsilon = 0): boolean {
     let zero = true;
 
     for (let i = 0; i < vector.length && zero; i++) {
@@ -19,7 +20,7 @@ export function isZero(vector, epsilon = 0) {
     return zero;
 }
 
-export function scale(vector, value, out = null) {
+export function scale<T extends Vector>(vector: Vector, value: number, out?: T): T {
     out = _prepareOut(vector, out);
 
     for (let i = 0; i < out.length; i++) {
@@ -29,7 +30,7 @@ export function scale(vector, value, out = null) {
     return out;
 }
 
-export function round(vector, out = null) {
+export function round<T extends Vector>(vector: Vector, out?: T): T {
     out = _prepareOut(vector, out);
 
     for (let i = 0; i < out.length; i++) {
@@ -39,7 +40,7 @@ export function round(vector, out = null) {
     return out;
 }
 
-export function floor(vector, out = null) {
+export function floor<T extends Vector>(vector: Vector, out?: T): T {
     out = _prepareOut(vector, out);
 
     for (let i = 0; i < out.length; i++) {
@@ -49,7 +50,7 @@ export function floor(vector, out = null) {
     return out;
 }
 
-export function ceil(vector, out = null) {
+export function ceil<T extends Vector>(vector: Vector, out?: T): T {
     out = _prepareOut(vector, out);
 
     for (let i = 0; i < out.length; i++) {
@@ -59,13 +60,13 @@ export function ceil(vector, out = null) {
     return out;
 }
 
-export function clamp(vector, start, end, out = null) {
+export function clamp<T extends Vector>(vector: Vector, start: number, end: number, out?: T): T {
     out = _prepareOut(vector, out);
 
-    let fixedStart = (start != null) ? start : -Number.MAX_VALUE;
-    let fixedEnd = (end != null) ? end : Number.MAX_VALUE;
-    let min = Math.min(fixedStart, fixedEnd);
-    let max = Math.max(fixedStart, fixedEnd);
+    const fixedStart = (start != null) ? start : -Number.MAX_VALUE;
+    const fixedEnd = (end != null) ? end : Number.MAX_VALUE;
+    const min = Math.min(fixedStart, fixedEnd);
+    const max = Math.max(fixedStart, fixedEnd);
 
     for (let i = 0; i < out.length; i++) {
         out[i] = MathUtils.clamp(out[i], min, max);
@@ -74,7 +75,7 @@ export function clamp(vector, start, end, out = null) {
     return out;
 }
 
-export function equals(vector, other, epsilon = 0) {
+export function equals(vector: Vector, other: Vector, epsilon: number = 0): boolean {
     let equals = vector.length == other.length;
 
     for (let i = 0; i < vector.length && equals; i++) {
@@ -84,27 +85,27 @@ export function equals(vector, other, epsilon = 0) {
     return equals;
 }
 
-export function toString(vector, decimalPlaces = null) {
-    let message = _buildConsoleMessage(vector, decimalPlaces);
+export function toString(vector: Vector, decimalPlaces?: number): string {
+    const message = _buildConsoleMessage(vector, decimalPlaces);
     return message;
 }
 
-export function log(vector, decimalPlaces = 4) {
-    let message = _buildConsoleMessage(vector, decimalPlaces);
+export function log(vector: Vector, decimalPlaces: number = 4): void {
+    const message = _buildConsoleMessage(vector, decimalPlaces);
     console.log(message);
 }
 
-export function error(vector, decimalPlaces = 4) {
-    let message = _buildConsoleMessage(vector, decimalPlaces);
+export function error(vector: Vector, decimalPlaces: number = 4): void {
+    const message = _buildConsoleMessage(vector, decimalPlaces);
     console.error(message);
 }
 
-export function warn(vector, decimalPlaces = 4) {
-    let message = _buildConsoleMessage(vector, decimalPlaces);
+export function warn(vector: Vector, decimalPlaces: number = 4): void {
+    const message = _buildConsoleMessage(vector, decimalPlaces);
     console.warn(message);
 }
 
-export let VecUtils = {
+export const VecUtils = {
     zero,
     isZero,
     scale,
@@ -117,11 +118,11 @@ export let VecUtils = {
     log,
     error,
     warn
-};
+} as const;
 
 
 
-function _buildConsoleMessage(vector, decimalPlaces) {
+function _buildConsoleMessage(vector: Vector, decimalPlaces?: number): string {
     let message = "[";
 
     for (let i = 0; i < vector.length; i++) {
@@ -140,7 +141,7 @@ function _buildConsoleMessage(vector, decimalPlaces) {
     return message;
 }
 
-function _prepareOut(vector, out) {
+function _prepareOut<T extends Vector>(vector: Vector, out?: T): T {
     if (out == null) {
         out = ArrayUtils.clone(vector);
     } else if (out != vector) {
