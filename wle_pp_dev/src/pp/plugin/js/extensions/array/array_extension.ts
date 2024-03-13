@@ -1,4 +1,4 @@
-import { ArrayUtils, ArrayLike } from "../../../../cauldron/utils/array/array_utils.js";
+import { ArrayLike, ArrayUtils } from "../../../../cauldron/utils/array/array_utils.js";
 import { PluginUtils } from "../../../utils/plugin_utils.js";
 import "./array_type_extension.js";
 
@@ -97,11 +97,11 @@ export function initArrayExtensionProtoype(): void {
         return ArrayUtils.unshiftUnique(this, elementToAdd, elementsEqualCallback);
     };
 
-    arrayLikeExtension.pp_copy = function pp_copy<T, U extends ArrayLike<T>>(this: U, array: Readonly<U>, copyCallback?: (arrayElement: T, thisElement: T) => T): U {
+    arrayLikeExtension.pp_copy = function pp_copy<U extends ArrayLike<T>, T>(this: U, array: Readonly<ArrayLike<T>>, copyCallback?: (arrayElement: T, thisElement: T) => T): U {
         return ArrayUtils.copy(array, this, copyCallback);
     };
 
-    arrayLikeExtension.pp_clone = function pp_clone<T, U extends ArrayLike<T>>(this: Readonly<U>, cloneCallback?: (elementToClone: T) => T): U {
+    arrayLikeExtension.pp_clone = function pp_clone<U extends ArrayLike<T>, T>(this: Readonly<U>, cloneCallback?: (elementToClone: T) => T): U {
         return ArrayUtils.clone(this, cloneCallback);
     };
 
