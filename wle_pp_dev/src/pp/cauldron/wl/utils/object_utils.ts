@@ -66,49 +66,49 @@ export class CloneParams {
 
 // Position
 
-export function getPosition(object: Readonly<Object3D>, outPosition: Vector3): Vector3 {
+export function getPosition<T extends Vector3>(object: Readonly<Object3D>, outPosition: T): T {
     return ObjectUtils.getPositionWorld(object, outPosition);
 }
 
-export function getPositionWorld(object: Readonly<Object3D>, outPosition: Vector3 = Vec3Utils.create()): Vector3 {
+export function getPositionWorld<T extends Vector3>(object: Readonly<Object3D>, outPosition: T = Vec3Utils.create()): T {
     object.getPositionWorld(outPosition);
     return outPosition;
 }
 
-export function getPositionLocal(object: Readonly<Object3D>, outPosition: Vector3 = Vec3Utils.create()): Vector3 {
+export function getPositionLocal<T extends Vector3>(object: Readonly<Object3D>, outPosition: T = Vec3Utils.create()): T {
     object.getPositionLocal(outPosition);
     return outPosition;
 }
 
 // Rotation
 
-export function getRotation(object: Readonly<Object3D>, outRotation: Vector3): Vector3 {
+export function getRotation<T extends Vector3>(object: Readonly<Object3D>, outRotation: T): T {
     return ObjectUtils.getRotationWorld(object, outRotation);
 }
 
-export function getRotationDegrees(object: Readonly<Object3D>, outRotation: Vector3): Vector3 {
+export function getRotationDegrees<T extends Vector3>(object: Readonly<Object3D>, outRotation: T): T {
     return ObjectUtils.getRotationWorldDegrees(object, outRotation);
 }
 
-export function getRotationRadians(object: Readonly<Object3D>, outRotation: Vector3): Vector3 {
+export function getRotationRadians<T extends Vector3>(object: Readonly<Object3D>, outRotation: T): T {
     return ObjectUtils.getRotationWorldRadians(object, outRotation);
 }
 
-export function getRotationMatrix(object: Readonly<Object3D>, outRotation: Matrix3): Matrix3 {
+export function getRotationMatrix<T extends Matrix3>(object: Readonly<Object3D>, outRotation: T): T {
     return ObjectUtils.getRotationWorldMatrix(object, outRotation);
 }
 
-export function getRotationQuat(object: Readonly<Object3D>, outRotation: Quaternion): Quaternion {
+export function getRotationQuat<T extends Quaternion>(object: Readonly<Object3D>, outRotation: T): T {
     return ObjectUtils.getRotationWorldQuat(object, outRotation);
 }
 
 // Rotation World
 
-export function getRotationWorld(object: Readonly<Object3D>, outRotation: Vector3): Vector3 {
+export function getRotationWorld<T extends Vector3>(object: Readonly<Object3D>, outRotation: T): T {
     return ObjectUtils.getRotationWorldDegrees(object, outRotation);
 }
 
-export function getRotationWorldDegrees(object: Readonly<Object3D>, outRotation: Vector3): Vector3 {
+export function getRotationWorldDegrees<T extends Vector3>(object: Readonly<Object3D>, outRotation: T): T {
     outRotation = ObjectUtils.getRotationWorldRadians(object, outRotation);
     outRotation = Vec3Utils.toDegrees(outRotation, outRotation);
     return outRotation;
@@ -116,7 +116,7 @@ export function getRotationWorldDegrees(object: Readonly<Object3D>, outRotation:
 
 export const getRotationWorldRadians = function () {
     const quat = QuatUtils.create();
-    return function getRotationWorldRadians(object: Readonly<Object3D>, outRotation: Vector3 = Vec3Utils.create()): Vector3 {
+    return function getRotationWorldRadians<T extends Vector3>(object: Readonly<Object3D>, outRotation: T = Vec3Utils.create()): T {
         ObjectUtils.getRotationWorldQuat(object, quat);
         QuatUtils.toRadians(quat, outRotation);
         return outRotation;
@@ -125,25 +125,25 @@ export const getRotationWorldRadians = function () {
 
 export const getRotationWorldMatrix = function () {
     const quat = QuatUtils.create();
-    return function getRotationWorldMatrix(object: Readonly<Object3D>, outRotation: Matrix3 = Mat3Utils.create()): Matrix3 {
+    return function getRotationWorldMatrix<T extends Matrix3>(object: Readonly<Object3D>, outRotation: T = Mat3Utils.create()): T {
         ObjectUtils.getRotationWorldQuat(object, quat);
         QuatUtils.toMatrix(quat, outRotation);
         return outRotation;
     };
 }();
 
-export function getRotationWorldQuat(object: Readonly<Object3D>, outRotation: Quaternion = QuatUtils.create()): Quaternion {
+export function getRotationWorldQuat<T extends Quaternion>(object: Readonly<Object3D>, outRotation: T = QuatUtils.create()): T {
     object.getRotationWorld(outRotation);
     return outRotation;
 }
 
 // Rotation Local
 
-export function getRotationLocal(object: Readonly<Object3D>, outRotation: Vector3): Vector3 {
+export function getRotationLocal<T extends Vector3>(object: Readonly<Object3D>, outRotation: T): T {
     return ObjectUtils.getRotationLocalDegrees(object, outRotation);
 }
 
-export function getRotationLocalDegrees(object: Readonly<Object3D>, outRotation: Vector3): Vector3 {
+export function getRotationLocalDegrees<T extends Vector3>(object: Readonly<Object3D>, outRotation: T): T {
     outRotation = ObjectUtils.getRotationLocalRadians(object, outRotation);
     outRotation = Vec3Utils.toDegrees(outRotation, outRotation);
     return outRotation;
@@ -151,7 +151,7 @@ export function getRotationLocalDegrees(object: Readonly<Object3D>, outRotation:
 
 export const getRotationLocalRadians = function () {
     const quat = QuatUtils.create();
-    return function getRotationLocalRadians(object: Readonly<Object3D>, outRotation: Vector3 = Vec3Utils.create()): Vector3 {
+    return function getRotationLocalRadians<T extends Vector3>(object: Readonly<Object3D>, outRotation: T = Vec3Utils.create()): T {
         ObjectUtils.getRotationLocalQuat(object, quat);
         QuatUtils.toRadians(quat, outRotation);
         return outRotation;
@@ -160,58 +160,58 @@ export const getRotationLocalRadians = function () {
 
 export const getRotationLocalMatrix = function () {
     const quat = QuatUtils.create();
-    return function getRotationLocalMatrix(object: Readonly<Object3D>, outRotation: Matrix3 = Mat3Utils.create()): Matrix3 {
+    return function getRotationLocalMatrix<T extends Matrix3>(object: Readonly<Object3D>, outRotation: T = Mat3Utils.create()): T {
         ObjectUtils.getRotationLocalQuat(object, quat);
         QuatUtils.toMatrix(quat, outRotation);
         return outRotation;
     };
 }();
 
-export function getRotationLocalQuat(object: Readonly<Object3D>, outRotation: Quaternion = QuatUtils.create()): Quaternion {
+export function getRotationLocalQuat<T extends Quaternion>(object: Readonly<Object3D>, outRotation: T = QuatUtils.create()): T {
     object.getRotationLocal(outRotation);
     return outRotation;
 }
 
 // Scale
 
-export function getScale(object: Readonly<Object3D>, scale: Vector3): Vector3 {
-    return ObjectUtils.getScaleWorld(object, scale);
+export function getScale<T extends Vector3>(object: Readonly<Object3D>, outScale: T): T {
+    return ObjectUtils.getScaleWorld(object, outScale);
 }
 
-export function getScaleWorld(object: Readonly<Object3D>, scale: Vector3 = Vec3Utils.create()): Vector3 {
-    object.getScalingWorld(scale);
-    return scale;
+export function getScaleWorld<T extends Vector3>(object: Readonly<Object3D>, outScale: T = Vec3Utils.create()): T {
+    object.getScalingWorld(outScale);
+    return outScale;
 }
 
-export function getScaleLocal(object: Readonly<Object3D>, scale: Vector3 = Vec3Utils.create()): Vector3 {
-    object.getScalingLocal(scale);
-    return scale;
+export function getScaleLocal<T extends Vector3>(object: Readonly<Object3D>, outScale: T = Vec3Utils.create()): T {
+    object.getScalingLocal(outScale);
+    return outScale;
 }
 
 // Transform
 
-export function getTransform(object: Readonly<Object3D>, outTransform: Matrix4): Matrix4 {
+export function getTransform<T extends Matrix4>(object: Readonly<Object3D>, outTransform: T): T {
     return ObjectUtils.getTransformWorld(object, outTransform);
 }
 
-export function getTransformMatrix(object: Readonly<Object3D>, outTransform: Matrix4): Matrix4 {
+export function getTransformMatrix<T extends Matrix4>(object: Readonly<Object3D>, outTransform: T): T {
     return ObjectUtils.getTransformWorldMatrix(object, outTransform);
 }
 
-export function getTransformQuat(object: Readonly<Object3D>, outTransform: Quaternion2): Quaternion2 {
+export function getTransformQuat<T extends Quaternion2>(object: Readonly<Object3D>, outTransform: T): T {
     return ObjectUtils.getTransformWorldQuat(object, outTransform);
 }
 
 // Transform World
 
-export function getTransformWorld(object: Readonly<Object3D>, outTransform: Matrix4): Matrix4 {
+export function getTransformWorld<T extends Matrix4>(object: Readonly<Object3D>, outTransform: T): T {
     return ObjectUtils.getTransformWorldMatrix(object, outTransform);
 }
 
 export const getTransformWorldMatrix = function () {
     const transformQuat = Quat2Utils.create();
     const scale = Vec3Utils.create();
-    return function getTransformWorldMatrix(object: Readonly<Object3D>, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
+    return function getTransformWorldMatrix<T extends Matrix4>(object: Readonly<Object3D>, outTransform: T = Mat4Utils.create()): T {
         ObjectUtils.getTransformWorldQuat(object, transformQuat);
         ObjectUtils.getScaleWorld(object, scale);
         Mat4Utils.fromQuat(transformQuat, outTransform);
@@ -220,21 +220,21 @@ export const getTransformWorldMatrix = function () {
     };
 }();
 
-export function getTransformWorldQuat(object: Readonly<Object3D>, outTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
+export function getTransformWorldQuat<T extends Quaternion2>(object: Readonly<Object3D>, outTransform: T = Quat2Utils.create()): T {
     object.getTransformWorld(outTransform);
     return outTransform;
 }
 
 // Transform Local
 
-export function getTransformLocal(object: Readonly<Object3D>, outTransform: Matrix4): Matrix4 {
+export function getTransformLocal<T extends Matrix4>(object: Readonly<Object3D>, outTransform: T): T {
     return ObjectUtils.getTransformLocalMatrix(object, outTransform);
 }
 
 export const getTransformLocalMatrix = function () {
     const transformQuat = Quat2Utils.create();
     const scale = Vec3Utils.create();
-    return function getTransformLocalMatrix(object: Readonly<Object3D>, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
+    return function getTransformLocalMatrix<T extends Matrix4>(object: Readonly<Object3D>, outTransform: T = Mat4Utils.create()): T {
         ObjectUtils.getTransformLocalQuat(object, transformQuat);
         ObjectUtils.getScaleLocal(object, scale);
         Mat4Utils.fromQuat(transformQuat, outTransform);
@@ -243,7 +243,7 @@ export const getTransformLocalMatrix = function () {
     };
 }();
 
-export function getTransformLocalQuat(object: Readonly<Object3D>, outTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
+export function getTransformLocalQuat<T extends Quaternion2>(object: Readonly<Object3D>, outTransform: T = Quat2Utils.create()): T {
     object.getTransformLocal(outTransform);
     return outTransform;
 }
@@ -270,13 +270,13 @@ export function getAxesLocal(object: Readonly<Object3D>, outAxes: [Vector3, Vect
 
 // Forward
 
-export function getForward(object: Readonly<Object3D>, outForward: Vector3): Vector3 {
+export function getForward<T extends Vector3>(object: Readonly<Object3D>, outForward: T): T {
     return ObjectUtils.getForwardWorld(object, outForward);
 }
 
 export const getForwardWorld = function () {
     const rotation = Mat3Utils.create();
-    return function getForwardWorld(object: Readonly<Object3D>, outForward: Vector3 = Vec3Utils.create()): Vector3 {
+    return function getForwardWorld<T extends Vector3>(object: Readonly<Object3D>, outForward: T = Vec3Utils.create()): T {
         ObjectUtils.getRotationWorldMatrix(object, rotation);
         outForward[0] = rotation[6];
         outForward[1] = rotation[7];
@@ -287,7 +287,7 @@ export const getForwardWorld = function () {
 
 export const getForwardLocal = function () {
     const rotation = Mat3Utils.create();
-    return function getForwardLocal(object: Readonly<Object3D>, outForward: Vector3 = Vec3Utils.create()): Vector3 {
+    return function getForwardLocal<T extends Vector3>(object: Readonly<Object3D>, outForward: T = Vec3Utils.create()): T {
         ObjectUtils.getRotationLocalMatrix(object, rotation);
         outForward[0] = rotation[6];
         outForward[1] = rotation[7];
@@ -298,13 +298,13 @@ export const getForwardLocal = function () {
 
 // Backward
 
-export function getBackward(object: Readonly<Object3D>, outBackward: Vector3): Vector3 {
+export function getBackward<T extends Vector3>(object: Readonly<Object3D>, outBackward: T): T {
     return ObjectUtils.getBackwardWorld(object, outBackward);
 }
 
 export const getBackwardWorld = function () {
     const rotation = Mat3Utils.create();
-    return function getBackwardWorld(object: Readonly<Object3D>, outBackward: Vector3 = Vec3Utils.create()): Vector3 {
+    return function getBackwardWorld<T extends Vector3>(object: Readonly<Object3D>, outBackward: T = Vec3Utils.create()): T {
         ObjectUtils.getRotationWorldMatrix(object, rotation);
         outBackward[0] = -rotation[6];
         outBackward[1] = -rotation[7];
@@ -315,7 +315,7 @@ export const getBackwardWorld = function () {
 
 export const getBackwardLocal = function () {
     const rotation = Mat3Utils.create();
-    return function getBackwardLocal(object: Readonly<Object3D>, outBackward: Vector3 = Vec3Utils.create()): Vector3 {
+    return function getBackwardLocal<T extends Vector3>(object: Readonly<Object3D>, outBackward: T = Vec3Utils.create()): T {
         ObjectUtils.getRotationLocalMatrix(object, rotation);
         outBackward[0] = -rotation[6];
         outBackward[1] = -rotation[7];
@@ -326,13 +326,13 @@ export const getBackwardLocal = function () {
 
 // Up
 
-export function getUp(object: Readonly<Object3D>, outUp: Vector3): Vector3 {
+export function getUp<T extends Vector3>(object: Readonly<Object3D>, outUp: T): T {
     return ObjectUtils.getUpWorld(object, outUp);
 }
 
 export const getUpWorld = function () {
     const rotation = Mat3Utils.create();
-    return function getUpWorld(object: Readonly<Object3D>, outUp: Vector3 = Vec3Utils.create()): Vector3 {
+    return function getUpWorld<T extends Vector3>(object: Readonly<Object3D>, outUp: T = Vec3Utils.create()): T {
         ObjectUtils.getRotationWorldMatrix(object, rotation);
         outUp[0] = rotation[3];
         outUp[1] = rotation[4];
@@ -343,7 +343,7 @@ export const getUpWorld = function () {
 
 export const getUpLocal = function () {
     const rotation = Mat3Utils.create();
-    return function getUpLocal(object: Readonly<Object3D>, outUp: Vector3 = Vec3Utils.create()): Vector3 {
+    return function getUpLocal<T extends Vector3>(object: Readonly<Object3D>, outUp: T = Vec3Utils.create()): T {
         ObjectUtils.getRotationLocalMatrix(object, rotation);
         outUp[0] = rotation[3];
         outUp[1] = rotation[4];
@@ -354,13 +354,13 @@ export const getUpLocal = function () {
 
 // Down
 
-export function getDown(object: Readonly<Object3D>, outDown: Vector3): Vector3 {
+export function getDown<T extends Vector3>(object: Readonly<Object3D>, outDown: T): T {
     return ObjectUtils.getDownWorld(object, outDown);
 }
 
 export const getDownWorld = function () {
     const rotation = Mat3Utils.create();
-    return function getDownWorld(object: Readonly<Object3D>, outDown: Vector3 = Vec3Utils.create()): Vector3 {
+    return function getDownWorld<T extends Vector3>(object: Readonly<Object3D>, outDown: T = Vec3Utils.create()): T {
         ObjectUtils.getRotationWorldMatrix(object, rotation);
         outDown[0] = -rotation[3];
         outDown[1] = -rotation[4];
@@ -371,7 +371,7 @@ export const getDownWorld = function () {
 
 export const getDownLocal = function () {
     const rotation = Mat3Utils.create();
-    return function getDownLocal(object: Readonly<Object3D>, outDown: Vector3 = Vec3Utils.create()): Vector3 {
+    return function getDownLocal<T extends Vector3>(object: Readonly<Object3D>, outDown: T = Vec3Utils.create()): T {
         ObjectUtils.getRotationLocalMatrix(object, rotation);
         outDown[0] = -rotation[3];
         outDown[1] = -rotation[4];
@@ -382,13 +382,13 @@ export const getDownLocal = function () {
 
 // Left
 
-export function getLeft(object: Readonly<Object3D>, outLeft: Vector3): Vector3 {
+export function getLeft<T extends Vector3>(object: Readonly<Object3D>, outLeft: T): T {
     return ObjectUtils.getLeftWorld(object, outLeft);
 }
 
 export const getLeftWorld = function () {
     const rotation = Mat3Utils.create();
-    return function getLeftWorld(object: Readonly<Object3D>, outLeft: Vector3 = Vec3Utils.create()): Vector3 {
+    return function getLeftWorld<T extends Vector3>(object: Readonly<Object3D>, outLeft: T = Vec3Utils.create()): T {
         ObjectUtils.getRotationWorldMatrix(object, rotation);
         outLeft[0] = rotation[0];
         outLeft[1] = rotation[1];
@@ -399,7 +399,7 @@ export const getLeftWorld = function () {
 
 export const getLeftLocal = function () {
     const rotation = Mat3Utils.create();
-    return function getLeftLocal(object: Readonly<Object3D>, outLeft: Vector3 = Vec3Utils.create()): Vector3 {
+    return function getLeftLocal<T extends Vector3>(object: Readonly<Object3D>, outLeft: T = Vec3Utils.create()): T {
         ObjectUtils.getRotationLocalMatrix(object, rotation);
         outLeft[0] = rotation[0];
         outLeft[1] = rotation[1];
@@ -410,13 +410,13 @@ export const getLeftLocal = function () {
 
 // Right
 
-export function getRight(object: Readonly<Object3D>, outRight: Vector3): Vector3 {
+export function getRight<T extends Vector3>(object: Readonly<Object3D>, outRight: T): T {
     return ObjectUtils.getRightWorld(object, outRight);
 }
 
 export const getRightWorld = function () {
     const rotation = Mat3Utils.create();
-    return function getRightWorld(object: Readonly<Object3D>, outRight: Vector3 = Vec3Utils.create()): Vector3 {
+    return function getRightWorld<T extends Vector3>(object: Readonly<Object3D>, outRight: T = Vec3Utils.create()): T {
         ObjectUtils.getRotationWorldMatrix(object, rotation);
         outRight[0] = -rotation[0];
         outRight[1] = -rotation[1];
@@ -427,7 +427,7 @@ export const getRightWorld = function () {
 
 export const getRightLocal = function () {
     const rotation = Mat3Utils.create();
-    return function getRightLocal(object: Readonly<Object3D>, outRight: Vector3 = Vec3Utils.create()): Vector3 {
+    return function getRightLocal<T extends Vector3>(object: Readonly<Object3D>, outRight: T = Vec3Utils.create()): T {
         ObjectUtils.getRotationLocalMatrix(object, rotation);
         outRight[0] = -rotation[0];
         outRight[1] = -rotation[1];
@@ -1464,7 +1464,7 @@ export const lookToLocal: (object: Object3D, direction: Vector3, up?: Vector3) =
 
 export const convertPositionObjectToWorld = function () {
     const matrix = Mat4Utils.create();
-    return function convertPositionObjectToWorld(object: Readonly<Object3D>, position: Vector3, outPosition: Vector3 = Vec3Utils.create()): Vector3 {
+    return function convertPositionObjectToWorld<T extends Vector3>(object: Readonly<Object3D>, position: Vector3, outPosition: T = Vec3Utils.create()): T {
         ObjectUtils.getTransformWorldMatrix(object, matrix);
         Vec3Utils.transformMat4(position, matrix, outPosition);
         return outPosition;
@@ -1473,7 +1473,7 @@ export const convertPositionObjectToWorld = function () {
 
 export const convertDirectionObjectToWorld = function () {
     const rotation = QuatUtils.create();
-    return function convertDirectionObjectToWorld(object: Readonly<Object3D>, direction: Vector3, outDirection: Vector3 = Vec3Utils.create()): Vector3 {
+    return function convertDirectionObjectToWorld<T extends Vector3>(object: Readonly<Object3D>, direction: Vector3, outDirection: T = Vec3Utils.create()): T {
         ObjectUtils.getRotationWorldQuat(object, rotation);
         Vec3Utils.transformQuat(direction, rotation, outDirection);
         return outDirection;
@@ -1482,7 +1482,7 @@ export const convertDirectionObjectToWorld = function () {
 
 export const convertPositionWorldToObject = function () {
     const matrix = Mat4Utils.create();
-    return function convertPositionWorldToObject(object: Readonly<Object3D>, position: Vector3, outPosition: Vector3 = Vec3Utils.create()): Vector3 {
+    return function convertPositionWorldToObject<T extends Vector3>(object: Readonly<Object3D>, position: Vector3, outPosition: T = Vec3Utils.create()): T {
         ObjectUtils.getTransformWorldMatrix(object, matrix);
         Mat4Utils.invert(matrix, matrix);
         Vec3Utils.transformMat4(position, matrix, outPosition);
@@ -1492,7 +1492,7 @@ export const convertPositionWorldToObject = function () {
 
 export const convertDirectionWorldToObject = function () {
     const rotation = QuatUtils.create();
-    return function convertDirectionWorldToObject(object: Readonly<Object3D>, direction: Vector3, outDirection: Vector3 = Vec3Utils.create()): Vector3 {
+    return function convertDirectionWorldToObject<T extends Vector3>(object: Readonly<Object3D>, direction: Vector3, outDirection: T = Vec3Utils.create()): T {
         ObjectUtils.getRotationWorldQuat(object, rotation);
         QuatUtils.conjugate(rotation, rotation);
         Vec3Utils.transformQuat(direction, rotation, outDirection);
@@ -1502,7 +1502,7 @@ export const convertDirectionWorldToObject = function () {
 
 // Convert Vector Local World
 
-export function convertPositionLocalToWorld(object: Readonly<Object3D>, position: Vector3, outPosition: Vector3 = Vec3Utils.create()): Vector3 {
+export function convertPositionLocalToWorld<T extends Vector3>(object: Readonly<Object3D>, position: Vector3, outPosition: T = Vec3Utils.create()): T {
     if (ObjectUtils.getParent(object) != null) {
         ObjectUtils.convertPositionObjectToWorld(ObjectUtils.getParent(object)!, position, outPosition);
     } else {
@@ -1511,7 +1511,7 @@ export function convertPositionLocalToWorld(object: Readonly<Object3D>, position
     return outPosition;
 }
 
-export function convertDirectionLocalToWorld(object: Readonly<Object3D>, direction: Vector3, outDirection: Vector3 = Vec3Utils.create()): Vector3 {
+export function convertDirectionLocalToWorld<T extends Vector3>(object: Readonly<Object3D>, direction: Vector3, outDirection: T = Vec3Utils.create()): T {
     if (ObjectUtils.getParent(object) != null) {
         ObjectUtils.convertDirectionObjectToWorld(ObjectUtils.getParent(object)!, direction, outDirection);
     } else {
@@ -1520,7 +1520,7 @@ export function convertDirectionLocalToWorld(object: Readonly<Object3D>, directi
     return outDirection;
 }
 
-export function convertPositionWorldToLocal(object: Readonly<Object3D>, position: Vector3, outPosition: Vector3 = Vec3Utils.create()): Vector3 {
+export function convertPositionWorldToLocal<T extends Vector3>(object: Readonly<Object3D>, position: Vector3, outPosition: T = Vec3Utils.create()): T {
     if (ObjectUtils.getParent(object) != null) {
         ObjectUtils.convertPositionWorldToObject(ObjectUtils.getParent(object)!, position, outPosition);
     } else {
@@ -1529,7 +1529,7 @@ export function convertPositionWorldToLocal(object: Readonly<Object3D>, position
     return outPosition;
 }
 
-export function convertDirectionWorldToLocal(object: Readonly<Object3D>, direction: Vector3, outDirection: Vector3 = Vec3Utils.create()): Vector3 {
+export function convertDirectionWorldToLocal<T extends Vector3>(object: Readonly<Object3D>, direction: Vector3, outDirection: T = Vec3Utils.create()): T {
     if (ObjectUtils.getParent(object) != null) {
         ObjectUtils.convertDirectionWorldToObject(ObjectUtils.getParent(object)!, direction, outDirection);
     } else {
@@ -1542,25 +1542,25 @@ export function convertDirectionWorldToLocal(object: Readonly<Object3D>, directi
 
 // I need to use the converson to world and then local also use the parent scale that changes the position in local space
 
-export function convertPositionObjectToLocal(object: Readonly<Object3D>, position: Vector3, outPosition: Vector3 = Vec3Utils.create()): Vector3 {
+export function convertPositionObjectToLocal<T extends Vector3>(object: Readonly<Object3D>, position: Vector3, outPosition: T = Vec3Utils.create()): T {
     ObjectUtils.convertPositionObjectToWorld(object, position, outPosition);
     ObjectUtils.convertPositionWorldToLocal(object, outPosition, outPosition);
     return outPosition;
 }
 
-export function convertDirectionObjectToLocal(object: Readonly<Object3D>, direction: Vector3, outDirection: Vector3 = Vec3Utils.create()): Vector3 {
+export function convertDirectionObjectToLocal<T extends Vector3>(object: Readonly<Object3D>, direction: Vector3, outDirection: T = Vec3Utils.create()): T {
     ObjectUtils.convertDirectionObjectToWorld(object, direction, outDirection);
     ObjectUtils.convertDirectionWorldToLocal(object, outDirection, outDirection);
     return outDirection;
 }
 
-export function convertPositionLocalToObject(object: Readonly<Object3D>, position: Vector3, outPosition: Vector3 = Vec3Utils.create()): Vector3 {
+export function convertPositionLocalToObject<T extends Vector3>(object: Readonly<Object3D>, position: Vector3, outPosition: T = Vec3Utils.create()): T {
     ObjectUtils.convertPositionLocalToWorld(object, position, outPosition);
     ObjectUtils.convertPositionWorldToObject(object, outPosition, outPosition);
     return outPosition;
 }
 
-export function convertDirectionLocalToObject(object: Readonly<Object3D>, direction: Vector3, outDirection: Vector3 = Vec3Utils.create()): Vector3 {
+export function convertDirectionLocalToObject<T extends Vector3>(object: Readonly<Object3D>, direction: Vector3, outDirection: T = Vec3Utils.create()): T {
     ObjectUtils.convertDirectionLocalToWorld(object, direction, outDirection);
     ObjectUtils.convertDirectionWorldToObject(object, outDirection, outDirection);
     return outDirection;
@@ -1568,7 +1568,7 @@ export function convertDirectionLocalToObject(object: Readonly<Object3D>, direct
 
 // Convert Transform Object World
 
-export function convertTransformObjectToWorld(object: Readonly<Object3D>, transform: Matrix4, outTransform: Matrix4): Matrix4 {
+export function convertTransformObjectToWorld<T extends Matrix4>(object: Readonly<Object3D>, transform: Matrix4, outTransform: T): T {
     return ObjectUtils.convertTransformObjectToWorldMatrix(object, transform, outTransform);
 }
 
@@ -1578,7 +1578,7 @@ export const convertTransformObjectToWorldMatrix = function () {
     const scale = Vec3Utils.create();
     const inverseScale = Vec3Utils.create();
     const one = Vec3Utils.create(1);
-    return function convertTransformObjectToWorldMatrix(object: Readonly<Object3D>, transform: Matrix4, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
+    return function convertTransformObjectToWorldMatrix<T extends Matrix4>(object: Readonly<Object3D>, transform: Matrix4, outTransform: T = Mat4Utils.create()): T {
         ObjectUtils.getTransformWorldMatrix(object, convertTransform);
         if (ObjectUtils.hasUniformScaleWorld(object)) {
             Mat4Utils.mul(convertTransform, transform, outTransform);
@@ -1605,7 +1605,7 @@ export const convertTransformObjectToWorldMatrix = function () {
 export const convertTransformObjectToWorldQuat = function () {
     const position = Vec3Utils.create();
     const rotation = QuatUtils.create();
-    return function convertTransformObjectToWorldQuat(object: Readonly<Object3D>, transform: Quaternion2, outTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
+    return function convertTransformObjectToWorldQuat<T extends Quaternion2>(object: Readonly<Object3D>, transform: Quaternion2, outTransform: T = Quat2Utils.create()): T {
         ObjectUtils.getRotationWorldQuat(object, rotation);
         QuatUtils.mul(rotation, transform, rotation);
         Quat2Utils.getPosition(transform, position);
@@ -1615,7 +1615,7 @@ export const convertTransformObjectToWorldQuat = function () {
     };
 }();
 
-export function convertTransformWorldToObject(object: Readonly<Object3D>, transform: Matrix4, outTransform: Matrix4): Matrix4 {
+export function convertTransformWorldToObject<T extends Matrix4>(object: Readonly<Object3D>, transform: Matrix4, outTransform: T): T {
     return ObjectUtils.convertTransformWorldToObjectMatrix(object, transform, outTransform);
 }
 
@@ -1625,7 +1625,7 @@ export const convertTransformWorldToObjectMatrix = function () {
     const scale = Vec3Utils.create();
     const inverseScale = Vec3Utils.create();
     const one = Vec3Utils.create(1);
-    return function convertTransformWorldToObjectMatrix(object: Readonly<Object3D>, transform: Matrix4, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
+    return function convertTransformWorldToObjectMatrix<T extends Matrix4>(object: Readonly<Object3D>, transform: Matrix4, outTransform: T = Mat4Utils.create()): T {
         ObjectUtils.getTransformWorldMatrix(object, convertTransform);
         if (ObjectUtils.hasUniformScaleWorld(object)) {
             Mat4Utils.invert(convertTransform, convertTransform);
@@ -1654,7 +1654,7 @@ export const convertTransformWorldToObjectMatrix = function () {
 export const convertTransformWorldToObjectQuat = function () {
     const position = Vec3Utils.create();
     const rotation = QuatUtils.create();
-    return function convertTransformWorldToObjectQuat(object: Readonly<Object3D>, transform: Quaternion2, outTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
+    return function convertTransformWorldToObjectQuat<T extends Quaternion2>(object: Readonly<Object3D>, transform: Quaternion2, outTransform: T = Quat2Utils.create()): T {
         ObjectUtils.getRotationWorldQuat(object, rotation);
         QuatUtils.conjugate(rotation, rotation);
         QuatUtils.mul(rotation, transform, rotation);
@@ -1667,11 +1667,11 @@ export const convertTransformWorldToObjectQuat = function () {
 
 // Convert Transform Local World
 
-export function convertTransformLocalToWorld(object: Readonly<Object3D>, transform: Matrix4, outTransform: Matrix4): Matrix4 {
+export function convertTransformLocalToWorld<T extends Matrix4>(object: Readonly<Object3D>, transform: Matrix4, outTransform: T): T {
     return ObjectUtils.convertTransformLocalToWorldMatrix(object, transform, outTransform);
 }
 
-export function convertTransformLocalToWorldMatrix(object: Readonly<Object3D>, transform: Matrix4, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
+export function convertTransformLocalToWorldMatrix<T extends Matrix4>(object: Readonly<Object3D>, transform: Matrix4, outTransform: T = Mat4Utils.create()): T {
     if (ObjectUtils.getParent(object) != null) {
         ObjectUtils.convertTransformObjectToWorldMatrix(ObjectUtils.getParent(object)!, transform, outTransform);
     } else {
@@ -1680,7 +1680,7 @@ export function convertTransformLocalToWorldMatrix(object: Readonly<Object3D>, t
     return outTransform;
 }
 
-export function convertTransformLocalToWorldQuat(object: Readonly<Object3D>, transform: Quaternion2, outTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
+export function convertTransformLocalToWorldQuat<T extends Quaternion2>(object: Readonly<Object3D>, transform: Quaternion2, outTransform: T = Quat2Utils.create()): T {
     if (ObjectUtils.getParent(object) != null) {
         ObjectUtils.convertTransformObjectToWorldQuat(ObjectUtils.getParent(object)!, transform, outTransform);
     } else {
@@ -1689,11 +1689,11 @@ export function convertTransformLocalToWorldQuat(object: Readonly<Object3D>, tra
     return outTransform;
 }
 
-export function convertTransformWorldToLocal(object: Readonly<Object3D>, transform: Matrix4, outTransform: Matrix4): Matrix4 {
+export function convertTransformWorldToLocal<T extends Matrix4>(object: Readonly<Object3D>, transform: Matrix4, outTransform: T): T {
     return ObjectUtils.convertTransformWorldToLocalMatrix(object, transform, outTransform);
 }
 
-export function convertTransformWorldToLocalMatrix(object: Readonly<Object3D>, transform: Matrix4, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
+export function convertTransformWorldToLocalMatrix<T extends Matrix4>(object: Readonly<Object3D>, transform: Matrix4, outTransform: T = Mat4Utils.create()): T {
     if (ObjectUtils.getParent(object) != null) {
         ObjectUtils.convertTransformWorldToObjectMatrix(ObjectUtils.getParent(object)!, transform, outTransform);
     } else {
@@ -1702,7 +1702,7 @@ export function convertTransformWorldToLocalMatrix(object: Readonly<Object3D>, t
     return outTransform;
 }
 
-export function convertTransformWorldToLocalQuat(object: Readonly<Object3D>, transform: Quaternion2, outTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
+export function convertTransformWorldToLocalQuat<T extends Quaternion2>(object: Readonly<Object3D>, transform: Quaternion2, outTransform: T = Quat2Utils.create()): T {
     if (ObjectUtils.getParent(object) != null) {
         ObjectUtils.convertTransformWorldToObjectQuat(ObjectUtils.getParent(object)!, transform, outTransform);
     } else {
@@ -1715,33 +1715,33 @@ export function convertTransformWorldToLocalQuat(object: Readonly<Object3D>, tra
 
 // I need to use the conversion to world and then local to also use the parent scale that changes the position in local space
 
-export function convertTransformObjectToLocal(object: Readonly<Object3D>, transform: Matrix4, outTransform: Matrix4): Matrix4 {
+export function convertTransformObjectToLocal<T extends Matrix4>(object: Readonly<Object3D>, transform: Matrix4, outTransform: T): T {
     return ObjectUtils.convertTransformObjectToLocalMatrix(object, transform, outTransform);
 }
 
-export function convertTransformObjectToLocalMatrix(object: Readonly<Object3D>, transform: Matrix4, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
+export function convertTransformObjectToLocalMatrix<T extends Matrix4>(object: Readonly<Object3D>, transform: Matrix4, outTransform: T = Mat4Utils.create()): T {
     ObjectUtils.convertTransformObjectToWorldMatrix(object, transform, outTransform);
     ObjectUtils.convertTransformWorldToLocalMatrix(object, outTransform, outTransform);
     return outTransform;
 }
 
-export function convertTransformObjectToLocalQuat(object: Readonly<Object3D>, transform: Quaternion2, outTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
+export function convertTransformObjectToLocalQuat<T extends Quaternion2>(object: Readonly<Object3D>, transform: Quaternion2, outTransform: T = Quat2Utils.create()): T {
     ObjectUtils.convertTransformObjectToWorldQuat(object, transform, outTransform);
     ObjectUtils.convertTransformWorldToLocalQuat(object, outTransform, outTransform);
     return outTransform;
 }
 
-export function convertTransformLocalToObject(object: Readonly<Object3D>, transform: Matrix4, outTransform: Matrix4): Matrix4 {
+export function convertTransformLocalToObject<T extends Matrix4>(object: Readonly<Object3D>, transform: Matrix4, outTransform: T): T {
     return ObjectUtils.convertTransformLocalToObjectMatrix(object, transform, outTransform);
 }
 
-export function convertTransformLocalToObjectMatrix(object: Readonly<Object3D>, transform: Matrix4, outTransform: Matrix4 = Mat4Utils.create()): Matrix4 {
+export function convertTransformLocalToObjectMatrix<T extends Matrix4>(object: Readonly<Object3D>, transform: Matrix4, outTransform: T = Mat4Utils.create()): T {
     ObjectUtils.convertTransformLocalToWorldMatrix(object, transform, outTransform);
     ObjectUtils.convertTransformWorldToObjectMatrix(object, outTransform, outTransform);
     return outTransform;
 }
 
-export function convertTransformLocalToObjectQuat(object: Readonly<Object3D>, transform: Quaternion2, outTransform: Quaternion2 = Quat2Utils.create()): Quaternion2 {
+export function convertTransformLocalToObjectQuat<T extends Quaternion2>(object: Readonly<Object3D>, transform: Quaternion2, outTransform: T = Quat2Utils.create()): T {
     ObjectUtils.convertTransformLocalToWorldQuat(object, transform, outTransform);
     ObjectUtils.convertTransformWorldToObjectQuat(object, outTransform, outTransform);
     return outTransform;

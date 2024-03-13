@@ -4,6 +4,11 @@ import { Vec3Utils } from "./vec3_utils.js";
 
 // glMatrix Bridge
 
+/**
+ * TS type inference helper
+ * 
+ * @return {any}
+ */
 export function create(
     m00, m01, m02,
     m10, m11, m12,

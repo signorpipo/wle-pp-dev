@@ -110,71 +110,71 @@ import { CloneParams } from "../../../index.js";
 
 export interface Object3DExtension {
 
-    pp_getPosition(this: Readonly<Object3D>, outPosition?: Vector3): Vector3;
-    pp_getPositionWorld(this: Readonly<Object3D>, outPosition?: Vector3): Vector3;
-    pp_getPositionLocal(this: Readonly<Object3D>, outPosition?: Vector3): Vector3;
+    pp_getPosition<T extends Vector3>(this: Readonly<Object3D>, outPosition?: T): T;
+    pp_getPositionWorld<T extends Vector3>(this: Readonly<Object3D>, outPosition?: T): T;
+    pp_getPositionLocal<T extends Vector3>(this: Readonly<Object3D>, outPosition?: T): T;
 
-    pp_getRotation(this: Readonly<Object3D>, outRotation?: Vector3): Vector3;
-    pp_getRotationDegrees(this: Readonly<Object3D>, outRotation?: Vector3): Vector3;
-    pp_getRotationRadians(this: Readonly<Object3D>, outRotation?: Vector3): Vector3;
-    pp_getRotationMatrix(this: Readonly<Object3D>, outRotation?: Matrix3): Matrix3;
-    pp_getRotationQuat(this: Readonly<Object3D>, outRotation?: Quaternion): Quaternion;
+    pp_getRotation<T extends Vector3>(this: Readonly<Object3D>, outRotation?: T): T;
+    pp_getRotationDegrees<T extends Vector3>(this: Readonly<Object3D>, outRotation?: T): T;
+    pp_getRotationRadians<T extends Vector3>(this: Readonly<Object3D>, outRotation?: T): T;
+    pp_getRotationMatrix<T extends Matrix3>(this: Readonly<Object3D>, outRotation?: T): T;
+    pp_getRotationQuat<T extends Quaternion>(this: Readonly<Object3D>, outRotation?: T): T;
 
-    pp_getRotationWorld(this: Readonly<Object3D>, outRotation?: Vector3): Vector3;
-    pp_getRotationWorldDegrees(this: Readonly<Object3D>, outRotation?: Vector3): Vector3;
-    pp_getRotationWorldRadians(this: Readonly<Object3D>, outRotation?: Vector3): Vector3;
-    pp_getRotationWorldMatrix(this: Readonly<Object3D>, outRotation?: Matrix3): Matrix3;
-    pp_getRotationWorldQuat(this: Readonly<Object3D>, outRotation?: Quaternion): Quaternion;
+    pp_getRotationWorld<T extends Vector3>(this: Readonly<Object3D>, outRotation?: T): T;
+    pp_getRotationWorldDegrees<T extends Vector3>(this: Readonly<Object3D>, outRotation?: T): T;
+    pp_getRotationWorldRadians<T extends Vector3>(this: Readonly<Object3D>, outRotation?: T): T;
+    pp_getRotationWorldMatrix<T extends Matrix3>(this: Readonly<Object3D>, outRotation?: T): T;
+    pp_getRotationWorldQuat<T extends Quaternion>(this: Readonly<Object3D>, outRotation?: T): T;
 
-    pp_getRotationLocal(this: Readonly<Object3D>, outRotation?: Vector3): Vector3;
-    pp_getRotationLocalDegrees(this: Readonly<Object3D>, outRotation?: Vector3): Vector3;
-    pp_getRotationLocalRadians(this: Readonly<Object3D>, outRotation?: Vector3): Vector3;
-    pp_getRotationLocalMatrix(this: Readonly<Object3D>, outRotation?: Matrix3): Matrix3;
-    pp_getRotationLocalQuat(this: Readonly<Object3D>, outRotation?: Quaternion): Quaternion;
+    pp_getRotationLocal<T extends Vector3>(this: Readonly<Object3D>, outRotation?: T): T;
+    pp_getRotationLocalDegrees<T extends Vector3>(this: Readonly<Object3D>, outRotation?: T): T;
+    pp_getRotationLocalRadians<T extends Vector3>(this: Readonly<Object3D>, outRotation?: T): T;
+    pp_getRotationLocalMatrix<T extends Matrix3>(this: Readonly<Object3D>, outRotation?: T): T;
+    pp_getRotationLocalQuat<T extends Quaternion>(this: Readonly<Object3D>, outRotation?: T): T;
 
-    pp_getScale(this: Readonly<Object3D>, outScale?: Vector3): Vector3;
-    pp_getScaleWorld(this: Readonly<Object3D>, outScale?: Vector3): Vector3;
-    pp_getScaleLocal(this: Readonly<Object3D>, outScale?: Vector3): Vector3;
+    pp_getScale<T extends Vector3>(this: Readonly<Object3D>, outScale?: T): T;
+    pp_getScaleWorld<T extends Vector3>(this: Readonly<Object3D>, outScale?: T): T;
+    pp_getScaleLocal<T extends Vector3>(this: Readonly<Object3D>, outScale?: T): T;
 
-    pp_getTransform(this: Readonly<Object3D>, outTransform?: Matrix4): Matrix4;
-    pp_getTransformMatrix(this: Readonly<Object3D>, outTransform?: Matrix4): Matrix4;
-    pp_getTransformQuat(this: Readonly<Object3D>, outTransform?: Quaternion2): Quaternion2;
+    pp_getTransform<T extends Matrix4>(this: Readonly<Object3D>, outTransform?: T): T;
+    pp_getTransformMatrix<T extends Matrix4>(this: Readonly<Object3D>, outTransform?: T): T;
+    pp_getTransformQuat<T extends Quaternion2>(this: Readonly<Object3D>, outTransform?: T): T;
 
-    pp_getTransformWorld(this: Readonly<Object3D>, outTransform?: Matrix4): Matrix4;
-    pp_getTransformWorldMatrix(this: Readonly<Object3D>, outTransform?: Matrix4): Matrix4;
-    pp_getTransformWorldQuat(this: Readonly<Object3D>, outTransform?: Quaternion2): Quaternion2;
+    pp_getTransformWorld<T extends Matrix4>(this: Readonly<Object3D>, outTransform?: T): T;
+    pp_getTransformWorldMatrix<T extends Matrix4>(this: Readonly<Object3D>, outTransform?: T): T;
+    pp_getTransformWorldQuat<T extends Quaternion2>(this: Readonly<Object3D>, outTransform?: T): T;
 
-    pp_getTransformLocal(this: Readonly<Object3D>, outTransform?: Matrix4): Matrix4;
-    pp_getTransformLocalMatrix(this: Readonly<Object3D>, outTransform?: Matrix4): Matrix4;
-    pp_getTransformLocalQuat(this: Readonly<Object3D>, outTransform?: Quaternion2): Quaternion2;
+    pp_getTransformLocal<T extends Matrix4>(this: Readonly<Object3D>, outTransform?: T): T;
+    pp_getTransformLocalMatrix<T extends Matrix4>(this: Readonly<Object3D>, outTransform?: T): T;
+    pp_getTransformLocalQuat<T extends Quaternion2>(this: Readonly<Object3D>, outTransform?: T): T;
 
     pp_getAxes(this: Readonly<Object3D>, outAxes?: [Vector3, Vector3, Vector3]): [Vector3, Vector3, Vector3];
     pp_getAxesWorld(this: Readonly<Object3D>, outAxes?: [Vector3, Vector3, Vector3]): [Vector3, Vector3, Vector3];
     pp_getAxesLocal(this: Readonly<Object3D>, outAxes?: [Vector3, Vector3, Vector3]): [Vector3, Vector3, Vector3];
 
-    pp_getForward(this: Readonly<Object3D>, outForward?: Vector3): Vector3;
-    pp_getForwardWorld(this: Readonly<Object3D>, outForward?: Vector3): Vector3;
-    pp_getForwardLocal(this: Readonly<Object3D>, outForward?: Vector3): Vector3;
+    pp_getForward<T extends Vector3>(this: Readonly<Object3D>, outForward?: T): T;
+    pp_getForwardWorld<T extends Vector3>(this: Readonly<Object3D>, outForward?: T): T;
+    pp_getForwardLocal<T extends Vector3>(this: Readonly<Object3D>, outForward?: T): T;
 
-    pp_getBackward(this: Readonly<Object3D>, outBackward?: Vector3): Vector3;
-    pp_getBackwardWorld(this: Readonly<Object3D>, outBackward?: Vector3): Vector3;
-    pp_getBackwardLocal(this: Readonly<Object3D>, outBackward?: Vector3): Vector3;
+    pp_getBackward<T extends Vector3>(this: Readonly<Object3D>, outBackward?: T): T;
+    pp_getBackwardWorld<T extends Vector3>(this: Readonly<Object3D>, outBackward?: T): T;
+    pp_getBackwardLocal<T extends Vector3>(this: Readonly<Object3D>, outBackward?: T): T;
 
-    pp_getUp(this: Readonly<Object3D>, outUp?: Vector3): Vector3;
-    pp_getUpWorld(this: Readonly<Object3D>, outUp?: Vector3): Vector3;
-    pp_getUpLocal(this: Readonly<Object3D>, outUp?: Vector3): Vector3;
+    pp_getUp<T extends Vector3>(this: Readonly<Object3D>, outUp?: T): T;
+    pp_getUpWorld<T extends Vector3>(this: Readonly<Object3D>, outUp?: T): T;
+    pp_getUpLocal<T extends Vector3>(this: Readonly<Object3D>, outUp?: T): T;
 
-    pp_getDown(this: Readonly<Object3D>, outDown?: Vector3): Vector3;
-    pp_getDownWorld(this: Readonly<Object3D>, outDown?: Vector3): Vector3;
-    pp_getDownLocal(this: Readonly<Object3D>, outDown?: Vector3): Vector3;
+    pp_getDown<T extends Vector3>(this: Readonly<Object3D>, outDown?: T): T;
+    pp_getDownWorld<T extends Vector3>(this: Readonly<Object3D>, outDown?: T): T;
+    pp_getDownLocal<T extends Vector3>(this: Readonly<Object3D>, outDown?: T): T;
 
-    pp_getLeft(this: Readonly<Object3D>, outLeft?: Vector3): Vector3;
-    pp_getLeftWorld(this: Readonly<Object3D>, outLeft?: Vector3): Vector3;
-    pp_getLeftLocal(this: Readonly<Object3D>, outLeft?: Vector3): Vector3;
+    pp_getLeft<T extends Vector3>(this: Readonly<Object3D>, outLeft?: T): T;
+    pp_getLeftWorld<T extends Vector3>(this: Readonly<Object3D>, outLeft?: T): T;
+    pp_getLeftLocal<T extends Vector3>(this: Readonly<Object3D>, outLeft?: T): T;
 
-    pp_getRight(this: Readonly<Object3D>, outRight?: Vector3): Vector3;
-    pp_getRightWorld(this: Readonly<Object3D>, outRight?: Vector3): Vector3;
-    pp_getRightLocal(this: Readonly<Object3D>, outRight?: Vector3): Vector3;
+    pp_getRight<T extends Vector3>(this: Readonly<Object3D>, outRight?: T): T;
+    pp_getRightWorld<T extends Vector3>(this: Readonly<Object3D>, outRight?: T): T;
+    pp_getRightLocal<T extends Vector3>(this: Readonly<Object3D>, outRight?: T): T;
 
     pp_setPosition(this: Object3D, position: Readonly<Vector3>): this;
     pp_setPositionWorld(this: Object3D, position: Readonly<Vector3>): this;
@@ -362,41 +362,41 @@ export interface Object3DExtension {
     pp_lookToWorld(this: Object3D, direction: Readonly<Vector3>, up: Readonly<Vector3>): this;
     pp_lookToLocal(this: Object3D, direction: Readonly<Vector3>, up: Readonly<Vector3>): this;
 
-    pp_convertPositionObjectToWorld(this: Readonly<Object3D>, position: Readonly<Vector3>, outPosition?: Vector3): Vector3;
-    pp_convertDirectionObjectToWorld(this: Readonly<Object3D>, direction: Readonly<Vector3>, outDirection?: Vector3): Vector3;
-    pp_convertPositionWorldToObject(this: Readonly<Object3D>, position: Readonly<Vector3>, outPosition?: Vector3): Vector3;
-    pp_convertDirectionWorldToObject(this: Readonly<Object3D>, direction: Readonly<Vector3>, outDirection?: Vector3): Vector3;
+    pp_convertPositionObjectToWorld<T extends Vector3>(this: Readonly<Object3D>, position: Readonly<Vector3>, outPosition?: T): T;
+    pp_convertDirectionObjectToWorld<T extends Vector3>(this: Readonly<Object3D>, direction: Readonly<Vector3>, outDirection?: T): T;
+    pp_convertPositionWorldToObject<T extends Vector3>(this: Readonly<Object3D>, position: Readonly<Vector3>, outPosition?: T): T;
+    pp_convertDirectionWorldToObject<T extends Vector3>(this: Readonly<Object3D>, direction: Readonly<Vector3>, outDirection?: T): T;
 
-    pp_convertPositionLocalToWorld(this: Readonly<Object3D>, position: Readonly<Vector3>, outPosition?: Vector3): Vector3;
-    pp_convertDirectionLocalToWorld(this: Readonly<Object3D>, direction: Readonly<Vector3>, outDirection?: Vector3): Vector3;
-    pp_convertPositionWorldToLocal(this: Readonly<Object3D>, position: Readonly<Vector3>, outPosition?: Vector3): Vector3;
-    pp_convertDirectionWorldToLocal(this: Readonly<Object3D>, direction: Readonly<Vector3>, outDirection?: Vector3): Vector3;
+    pp_convertPositionLocalToWorld<T extends Vector3>(this: Readonly<Object3D>, position: Readonly<Vector3>, outPosition?: T): T;
+    pp_convertDirectionLocalToWorld<T extends Vector3>(this: Readonly<Object3D>, direction: Readonly<Vector3>, outDirection?: T): T;
+    pp_convertPositionWorldToLocal<T extends Vector3>(this: Readonly<Object3D>, position: Readonly<Vector3>, outPosition?: T): T;
+    pp_convertDirectionWorldToLocal<T extends Vector3>(this: Readonly<Object3D>, direction: Readonly<Vector3>, outDirection?: T): T;
 
-    pp_convertPositionObjectToLocal(this: Readonly<Object3D>, position: Readonly<Vector3>, outPosition?: Vector3): Vector3;
-    pp_convertDirectionObjectToLocal(this: Readonly<Object3D>, direction: Readonly<Vector3>, outDirection?: Vector3): Vector3;
-    pp_convertPositionLocalToObject(this: Readonly<Object3D>, position: Readonly<Vector3>, outPosition?: Vector3): Vector3;
-    pp_convertDirectionLocalToObject(this: Readonly<Object3D>, direction: Readonly<Vector3>, outDirection?: Vector3): Vector3;
+    pp_convertPositionObjectToLocal<T extends Vector3>(this: Readonly<Object3D>, position: Readonly<Vector3>, outPosition?: T): T;
+    pp_convertDirectionObjectToLocal<T extends Vector3>(this: Readonly<Object3D>, direction: Readonly<Vector3>, outDirection?: T): T;
+    pp_convertPositionLocalToObject<T extends Vector3>(this: Readonly<Object3D>, position: Readonly<Vector3>, outPosition?: T): T;
+    pp_convertDirectionLocalToObject<T extends Vector3>(this: Readonly<Object3D>, direction: Readonly<Vector3>, outDirection?: T): T;
 
-    pp_convertTransformObjectToWorld(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform?: Matrix4): Matrix4;
-    pp_convertTransformObjectToWorldMatrix(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform?: Matrix4): Matrix4;
-    pp_convertTransformObjectToWorldQuat(this: Readonly<Object3D>, transform: Readonly<Quaternion2>, outTransform?: Quaternion2): Quaternion2;
-    pp_convertTransformWorldToObject(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform?: Matrix4): Matrix4;
-    pp_convertTransformWorldToObjectMatrix(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform?: Matrix4): Matrix4;
-    pp_convertTransformWorldToObjectQuat(this: Readonly<Object3D>, transform: Readonly<Quaternion2>, outTransform?: Quaternion2): Quaternion2;
+    pp_convertTransformObjectToWorld<T extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform?: T): T;
+    pp_convertTransformObjectToWorldMatrix<T extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform?: T): T;
+    pp_convertTransformObjectToWorldQuat<T extends Quaternion2>(this: Readonly<Object3D>, transform: Readonly<Quaternion2>, outTransform?: T): T;
+    pp_convertTransformWorldToObject<T extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform?: T): T;
+    pp_convertTransformWorldToObjectMatrix<T extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform?: T): T;
+    pp_convertTransformWorldToObjectQuat<T extends Quaternion2>(this: Readonly<Object3D>, transform: Readonly<Quaternion2>, outTransform?: T): T;
 
-    pp_convertTransformLocalToWorld(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform?: Matrix4): Matrix4;
-    pp_convertTransformLocalToWorldMatrix(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform?: Matrix4): Matrix4;
-    pp_convertTransformLocalToWorldQuat(this: Readonly<Object3D>, transform: Readonly<Quaternion2>, outTransform?: Quaternion2): Quaternion2;
-    pp_convertTransformWorldToLocal(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform?: Matrix4): Matrix4;
-    pp_convertTransformWorldToLocalMatrix(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform?: Matrix4): Matrix4;
-    pp_convertTransformWorldToLocalQuat(this: Readonly<Object3D>, transform: Readonly<Quaternion2>, outTransform?: Quaternion2): Quaternion2;
+    pp_convertTransformLocalToWorld<T extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform?: T): T;
+    pp_convertTransformLocalToWorldMatrix<T extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform?: T): T;
+    pp_convertTransformLocalToWorldQuat<T extends Quaternion2>(this: Readonly<Object3D>, transform: Readonly<Quaternion2>, outTransform?: T): T;
+    pp_convertTransformWorldToLocal<T extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform?: T): T;
+    pp_convertTransformWorldToLocalMatrix<T extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform?: T): T;
+    pp_convertTransformWorldToLocalQuat<T extends Quaternion2>(this: Readonly<Object3D>, transform: Readonly<Quaternion2>, outTransform?: T): T;
 
-    pp_convertTransformObjectToLocal(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform?: Matrix4): Matrix4;
-    pp_convertTransformObjectToLocalMatrix(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform?: Matrix4): Matrix4;
-    pp_convertTransformObjectToLocalQuat(this: Readonly<Object3D>, transform: Readonly<Quaternion2>, outTransform?: Quaternion2): Quaternion2;
-    pp_convertTransformLocalToObject(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform?: Matrix4): Matrix4;
-    pp_convertTransformLocalToObjectMatrix(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform?: Matrix4): Matrix4;
-    pp_convertTransformLocalToObjectQuat(this: Readonly<Object3D>, transform: Readonly<Quaternion2>, outTransform?: Quaternion2): Quaternion2;
+    pp_convertTransformObjectToLocal<T extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform?: T): T;
+    pp_convertTransformObjectToLocalMatrix<T extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform?: T): T;
+    pp_convertTransformObjectToLocalQuat<T extends Quaternion2>(this: Readonly<Object3D>, transform: Readonly<Quaternion2>, outTransform?: T): T;
+    pp_convertTransformLocalToObject<T extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform?: T): T;
+    pp_convertTransformLocalToObjectMatrix<T extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform?: T): T;
+    pp_convertTransformLocalToObjectQuat<T extends Quaternion2>(this: Readonly<Object3D>, transform: Readonly<Quaternion2>, outTransform?: T): T;
 
     pp_setParent(this: Object3D, newParent: Object3D, keepTransformWorld?: boolean): this;
     pp_getParent(this: Readonly<Object3D>): Object3D | null;
