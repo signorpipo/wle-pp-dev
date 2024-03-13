@@ -199,11 +199,11 @@ export interface Object3DExtension {
     pp_setRotationLocalQuat(this: Object3D, rotation: Readonly<Quaternion>): this;
 
     pp_setScale(this: Object3D, scale: number | Vector3): this;
-    pp_setScaleWorld(this: Object3D, uniformScale: number): this;
     pp_setScaleWorld(this: Object3D, scale: Vector3): this;
+    pp_setScaleWorld(this: Object3D, uniformScale: number): this;
     pp_setScaleWorld(this: Object3D, scale: number | Vector3): this;
-    pp_setScaleLocal(this: Object3D, uniformScale: number): this;
     pp_setScaleLocal(this: Object3D, scale: Vector3): this;
+    pp_setScaleLocal(this: Object3D, uniformScale: number): this;
     pp_setScaleLocal(this: Object3D, scale: number | Vector3): this;
 
     pp_setAxes(this: Object3D, left?: Readonly<Vector3>, up?: Readonly<Vector3>, forward?: Readonly<Vector3>): this;
@@ -352,6 +352,8 @@ export interface Object3DExtension {
     pp_rotateAroundAxisObjectDegrees(this: Object3D, angle: number, axis: Readonly<Vector3>, origin: Readonly<Vector3>): this;
     pp_rotateAroundAxisObjectRadians(this: Object3D, angle: number, axis: Readonly<Vector3>, origin: Readonly<Vector3>): this;
 
+    pp_scaleObject(this: Object3D, scale: Vector3): this;
+    pp_scaleObject(this: Object3D, uniformScale: number): this;
     pp_scaleObject(this: Object3D, scale: number | Vector3): this;
 
     pp_lookAt(this: Object3D, position: Readonly<Vector3>, up: Readonly<Vector3>): this;

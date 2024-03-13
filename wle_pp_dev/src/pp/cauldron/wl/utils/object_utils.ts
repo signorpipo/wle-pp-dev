@@ -1406,14 +1406,20 @@ export const rotateAroundAxisObjectRadians = function () {
 
 export const scaleObject = function () {
     const vector = Vec3Utils.create();
-    return function scaleObject(object: Object3D, scale: number | Vector3): Object3D {
+
+    function scaleObject(object: Object3D, scale: Vector3): Object3D;
+    function scaleObject(object: Object3D, uniformScale: number): Object3D;
+    function scaleObject(object: Object3D, scale: number | Vector3): Object3D;
+    function scaleObject(object: Object3D, scale: number | Vector3): Object3D {
         if (isNaN(scale as number)) {
             return object.scaleLocal(scale as Vector3);
         } else {
             Vec3Utils.set(vector, scale);
             return object.scaleLocal(vector);
         }
-    };
+    }
+
+    return scaleObject;
 }();
 
 // Look At
