@@ -177,191 +177,191 @@ declare module "@wonderlandengine/api" {
         pp_getRightWorld(this: Readonly<Object3D>, outRight?: Vector3): Vector3;
         pp_getRightLocal(this: Readonly<Object3D>, outRight?: Vector3): Vector3;
 
-        pp_setPosition(this: Object3D, position: Readonly<Vector3>): Object3D;
-        pp_setPositionWorld(this: Object3D, position: Readonly<Vector3>): Object3D;
-        pp_setPositionLocal(this: Object3D, position: Readonly<Vector3>): Object3D;
+        pp_setPosition(this: Object3D, position: Readonly<Vector3>): this;
+        pp_setPositionWorld(this: Object3D, position: Readonly<Vector3>): this;
+        pp_setPositionLocal(this: Object3D, position: Readonly<Vector3>): this;
 
-        pp_setRotation(this: Object3D, rotation: Readonly<Vector3>): Object3D;
-        pp_setRotationDegrees(this: Object3D, rotation: Readonly<Vector3>): Object3D;
-        pp_setRotationRadians(this: Object3D, rotation: Readonly<Vector3>): Object3D;
-        pp_setRotationMatrix(this: Object3D, rotation: Readonly<Matrix3>): Object3D;
-        pp_setRotationQuat(this: Object3D, rotation: Readonly<Quaternion>): Object3D;
+        pp_setRotation(this: Object3D, rotation: Readonly<Vector3>): this;
+        pp_setRotationDegrees(this: Object3D, rotation: Readonly<Vector3>): this;
+        pp_setRotationRadians(this: Object3D, rotation: Readonly<Vector3>): this;
+        pp_setRotationMatrix(this: Object3D, rotation: Readonly<Matrix3>): this;
+        pp_setRotationQuat(this: Object3D, rotation: Readonly<Quaternion>): this;
 
-        pp_setRotationWorld(this: Object3D, rotation: Readonly<Vector3>): Object3D;
-        pp_setRotationWorldDegrees(this: Object3D, rotation: Readonly<Vector3>): Object3D;
-        pp_setRotationWorldRadians(this: Object3D, rotation: Readonly<Vector3>): Object3D;
-        pp_setRotationWorldMatrix(this: Object3D, rotation: Readonly<Matrix3>): Object3D;
-        pp_setRotationWorldQuat(this: Object3D, rotation: Readonly<Quaternion>): Object3D;
+        pp_setRotationWorld(this: Object3D, rotation: Readonly<Vector3>): this;
+        pp_setRotationWorldDegrees(this: Object3D, rotation: Readonly<Vector3>): this;
+        pp_setRotationWorldRadians(this: Object3D, rotation: Readonly<Vector3>): this;
+        pp_setRotationWorldMatrix(this: Object3D, rotation: Readonly<Matrix3>): this;
+        pp_setRotationWorldQuat(this: Object3D, rotation: Readonly<Quaternion>): this;
 
-        pp_setRotationLocal(this: Object3D, rotation: Readonly<Vector3>): Object3D;
-        pp_setRotationLocalDegrees(this: Object3D, rotation: Readonly<Vector3>): Object3D;
-        pp_setRotationLocalRadians(this: Object3D, rotation: Readonly<Vector3>): Object3D;
-        pp_setRotationLocalMatrix(this: Object3D, rotation: Readonly<Matrix3>): Object3D;
-        pp_setRotationLocalQuat(this: Object3D, rotation: Readonly<Quaternion>): Object3D;
+        pp_setRotationLocal(this: Object3D, rotation: Readonly<Vector3>): this;
+        pp_setRotationLocalDegrees(this: Object3D, rotation: Readonly<Vector3>): this;
+        pp_setRotationLocalRadians(this: Object3D, rotation: Readonly<Vector3>): this;
+        pp_setRotationLocalMatrix(this: Object3D, rotation: Readonly<Matrix3>): this;
+        pp_setRotationLocalQuat(this: Object3D, rotation: Readonly<Quaternion>): this;
 
-        pp_setScale(this: Object3D, scale: number | Vector3): Object3D;
-        pp_setScaleWorld(this: Object3D, uniformScale: number): Object3D;
-        pp_setScaleWorld(this: Object3D, scale: Vector3): Object3D;
-        pp_setScaleWorld(this: Object3D, scale: number | Vector3): Object3D;
-        pp_setScaleLocal(this: Object3D, uniformScale: number): Object3D;
-        pp_setScaleLocal(this: Object3D, scale: Vector3): Object3D;
-        pp_setScaleLocal(this: Object3D, scale: number | Vector3): Object3D;
+        pp_setScale(this: Object3D, scale: number | Vector3): this;
+        pp_setScaleWorld(this: Object3D, uniformScale: number): this;
+        pp_setScaleWorld(this: Object3D, scale: Vector3): this;
+        pp_setScaleWorld(this: Object3D, scale: number | Vector3): this;
+        pp_setScaleLocal(this: Object3D, uniformScale: number): this;
+        pp_setScaleLocal(this: Object3D, scale: Vector3): this;
+        pp_setScaleLocal(this: Object3D, scale: number | Vector3): this;
 
-        pp_setAxes(this: Object3D, left?: Readonly<Vector3>, up?: Readonly<Vector3>, forward?: Readonly<Vector3>): Object3D;
-        pp_setAxesWorld(this: Object3D, left?: Readonly<Vector3>, up?: Readonly<Vector3>, forward?: Readonly<Vector3>): Object3D;
-        pp_setAxesLocal(this: Object3D, left?: Readonly<Vector3>, up?: Readonly<Vector3>, forward?: Readonly<Vector3>): Object3D;
+        pp_setAxes(this: Object3D, left?: Readonly<Vector3>, up?: Readonly<Vector3>, forward?: Readonly<Vector3>): this;
+        pp_setAxesWorld(this: Object3D, left?: Readonly<Vector3>, up?: Readonly<Vector3>, forward?: Readonly<Vector3>): this;
+        pp_setAxesLocal(this: Object3D, left?: Readonly<Vector3>, up?: Readonly<Vector3>, forward?: Readonly<Vector3>): this;
 
-        pp_setForward(this: Object3D, forward: Readonly<Vector3>, up?: Readonly<Vector3>, left?: Readonly<Vector3>): Object3D;
-        pp_setForwardWorld(this: Object3D, forward: Readonly<Vector3>, up?: Readonly<Vector3>, left?: Readonly<Vector3>): Object3D;
-        pp_setForwardLocal(this: Object3D, forward: Readonly<Vector3>, up?: Readonly<Vector3>, left?: Readonly<Vector3>): Object3D;
+        pp_setForward(this: Object3D, forward: Readonly<Vector3>, up?: Readonly<Vector3>, left?: Readonly<Vector3>): this;
+        pp_setForwardWorld(this: Object3D, forward: Readonly<Vector3>, up?: Readonly<Vector3>, left?: Readonly<Vector3>): this;
+        pp_setForwardLocal(this: Object3D, forward: Readonly<Vector3>, up?: Readonly<Vector3>, left?: Readonly<Vector3>): this;
 
-        pp_setBackward(this: Object3D, backward: Readonly<Vector3>, up?: Readonly<Vector3>, left?: Readonly<Vector3>): Object3D;
-        pp_setBackwardWorld(this: Object3D, backward: Readonly<Vector3>, up?: Readonly<Vector3>, left?: Readonly<Vector3>): Object3D;
-        pp_setBackwardLocal(this: Object3D, backward: Readonly<Vector3>, up?: Readonly<Vector3>, left?: Readonly<Vector3>): Object3D;
+        pp_setBackward(this: Object3D, backward: Readonly<Vector3>, up?: Readonly<Vector3>, left?: Readonly<Vector3>): this;
+        pp_setBackwardWorld(this: Object3D, backward: Readonly<Vector3>, up?: Readonly<Vector3>, left?: Readonly<Vector3>): this;
+        pp_setBackwardLocal(this: Object3D, backward: Readonly<Vector3>, up?: Readonly<Vector3>, left?: Readonly<Vector3>): this;
 
-        pp_setUp(this: Object3D, up: Readonly<Vector3>, forward?: Readonly<Vector3>, left?: Readonly<Vector3>): Object3D;
-        pp_setUpWorld(this: Object3D, up: Readonly<Vector3>, forward?: Readonly<Vector3>, left?: Readonly<Vector3>): Object3D;
-        pp_setUpLocal(this: Object3D, up: Readonly<Vector3>, forward?: Readonly<Vector3>, left?: Readonly<Vector3>): Object3D;
+        pp_setUp(this: Object3D, up: Readonly<Vector3>, forward?: Readonly<Vector3>, left?: Readonly<Vector3>): this;
+        pp_setUpWorld(this: Object3D, up: Readonly<Vector3>, forward?: Readonly<Vector3>, left?: Readonly<Vector3>): this;
+        pp_setUpLocal(this: Object3D, up: Readonly<Vector3>, forward?: Readonly<Vector3>, left?: Readonly<Vector3>): this;
 
-        pp_setDown(this: Object3D, down: Readonly<Vector3>, forward?: Readonly<Vector3>, left?: Readonly<Vector3>): Object3D;
-        pp_setDownWorld(this: Object3D, down: Readonly<Vector3>, forward?: Readonly<Vector3>, left?: Readonly<Vector3>): Object3D;
-        pp_setDownLocal(this: Object3D, down: Readonly<Vector3>, forward?: Readonly<Vector3>, left?: Readonly<Vector3>): Object3D;
+        pp_setDown(this: Object3D, down: Readonly<Vector3>, forward?: Readonly<Vector3>, left?: Readonly<Vector3>): this;
+        pp_setDownWorld(this: Object3D, down: Readonly<Vector3>, forward?: Readonly<Vector3>, left?: Readonly<Vector3>): this;
+        pp_setDownLocal(this: Object3D, down: Readonly<Vector3>, forward?: Readonly<Vector3>, left?: Readonly<Vector3>): this;
 
-        pp_setLeft(this: Object3D, left: Readonly<Vector3>, up?: Readonly<Vector3>, forward?: Readonly<Vector3>): Object3D;
-        pp_setLeftWorld(this: Object3D, left: Readonly<Vector3>, up?: Readonly<Vector3>, forward?: Readonly<Vector3>): Object3D;
-        pp_setLeftLocal(this: Object3D, left: Readonly<Vector3>, up?: Readonly<Vector3>, forward?: Readonly<Vector3>): Object3D;
+        pp_setLeft(this: Object3D, left: Readonly<Vector3>, up?: Readonly<Vector3>, forward?: Readonly<Vector3>): this;
+        pp_setLeftWorld(this: Object3D, left: Readonly<Vector3>, up?: Readonly<Vector3>, forward?: Readonly<Vector3>): this;
+        pp_setLeftLocal(this: Object3D, left: Readonly<Vector3>, up?: Readonly<Vector3>, forward?: Readonly<Vector3>): this;
 
-        pp_setRight(this: Object3D, right: Readonly<Vector3>, up?: Readonly<Vector3>, forward?: Readonly<Vector3>): Object3D;
-        pp_setRightWorld(this: Object3D, right: Readonly<Vector3>, up?: Readonly<Vector3>, forward?: Readonly<Vector3>): Object3D;
-        pp_setRightLocal(this: Object3D, right: Readonly<Vector3>, up?: Readonly<Vector3>, forward?: Readonly<Vector3>): Object3D;
+        pp_setRight(this: Object3D, right: Readonly<Vector3>, up?: Readonly<Vector3>, forward?: Readonly<Vector3>): this;
+        pp_setRightWorld(this: Object3D, right: Readonly<Vector3>, up?: Readonly<Vector3>, forward?: Readonly<Vector3>): this;
+        pp_setRightLocal(this: Object3D, right: Readonly<Vector3>, up?: Readonly<Vector3>, forward?: Readonly<Vector3>): this;
 
-        pp_setTransform(this: Object3D, transform: Readonly<Matrix4>): Object3D;
-        pp_setTransformMatrix(this: Object3D, transform: Readonly<Matrix4>): Object3D;
-        pp_setTransformQuat(this: Object3D, transform: Readonly<Quaternion2>): Object3D;
+        pp_setTransform(this: Object3D, transform: Readonly<Matrix4>): this;
+        pp_setTransformMatrix(this: Object3D, transform: Readonly<Matrix4>): this;
+        pp_setTransformQuat(this: Object3D, transform: Readonly<Quaternion2>): this;
 
-        pp_setTransformWorld(this: Object3D, transform: Readonly<Matrix4>): Object3D;
-        pp_setTransformWorldMatrix(this: Object3D, transform: Readonly<Matrix4>): Object3D;
-        pp_setTransformWorldQuat(this: Object3D, transform: Readonly<Quaternion2>): Object3D;
+        pp_setTransformWorld(this: Object3D, transform: Readonly<Matrix4>): this;
+        pp_setTransformWorldMatrix(this: Object3D, transform: Readonly<Matrix4>): this;
+        pp_setTransformWorldQuat(this: Object3D, transform: Readonly<Quaternion2>): this;
 
-        pp_setTransformLocal(this: Object3D, transform: Readonly<Matrix4>): Object3D;
-        pp_setTransformLocalMatrix(this: Object3D, transform: Readonly<Matrix4>): Object3D;
-        pp_setTransformLocalQuat(this: Object3D, transform: Readonly<Quaternion2>): Object3D;
+        pp_setTransformLocal(this: Object3D, transform: Readonly<Matrix4>): this;
+        pp_setTransformLocalMatrix(this: Object3D, transform: Readonly<Matrix4>): this;
+        pp_setTransformLocalQuat(this: Object3D, transform: Readonly<Quaternion2>): this;
 
-        pp_resetPosition(this: Object3D): Object3D;
-        pp_resetPositionWorld(this: Object3D): Object3D;
-        pp_resetPositionLocal(this: Object3D): Object3D;
+        pp_resetPosition(this: Object3D): this;
+        pp_resetPositionWorld(this: Object3D): this;
+        pp_resetPositionLocal(this: Object3D): this;
 
-        pp_resetRotation(this: Object3D): Object3D;
-        pp_resetRotationWorld(this: Object3D): Object3D;
-        pp_resetRotationLocal(this: Object3D): Object3D;
+        pp_resetRotation(this: Object3D): this;
+        pp_resetRotationWorld(this: Object3D): this;
+        pp_resetRotationLocal(this: Object3D): this;
 
-        pp_resetScale(this: Object3D): Object3D;
-        pp_resetScaleWorld(this: Object3D): Object3D;
-        pp_resetScaleLocal(this: Object3D): Object3D;
+        pp_resetScale(this: Object3D): this;
+        pp_resetScaleWorld(this: Object3D): this;
+        pp_resetScaleLocal(this: Object3D): this;
 
-        pp_resetTransform(this: Object3D): Object3D;
-        pp_resetTransformWorld(this: Object3D): Object3D;
-        pp_resetTransformLocal(this: Object3D): Object3D;
+        pp_resetTransform(this: Object3D): this;
+        pp_resetTransformWorld(this: Object3D): this;
+        pp_resetTransformLocal(this: Object3D): this;
 
-        pp_translate(this: Object3D, translation: Readonly<Vector3>): Object3D;
-        pp_translateWorld(this: Object3D, translation: Readonly<Vector3>): Object3D;
-        pp_translateLocal(this: Object3D, translation: Readonly<Vector3>): Object3D;
-        pp_translateObject(this: Object3D, translation: Readonly<Vector3>): Object3D;
+        pp_translate(this: Object3D, translation: Readonly<Vector3>): this;
+        pp_translateWorld(this: Object3D, translation: Readonly<Vector3>): this;
+        pp_translateLocal(this: Object3D, translation: Readonly<Vector3>): this;
+        pp_translateObject(this: Object3D, translation: Readonly<Vector3>): this;
 
-        pp_translateAxis(this: Object3D, amount: number, direction: Readonly<Vector3>): Object3D;
-        pp_translateAxisWorld(this: Object3D, amount: number, direction: Readonly<Vector3>): Object3D;
-        pp_translateAxisLocal(this: Object3D, amount: number, direction: Readonly<Vector3>): Object3D;
-        pp_translateAxisObject(this: Object3D, amount: number, direction: Readonly<Vector3>): Object3D;
+        pp_translateAxis(this: Object3D, amount: number, direction: Readonly<Vector3>): this;
+        pp_translateAxisWorld(this: Object3D, amount: number, direction: Readonly<Vector3>): this;
+        pp_translateAxisLocal(this: Object3D, amount: number, direction: Readonly<Vector3>): this;
+        pp_translateAxisObject(this: Object3D, amount: number, direction: Readonly<Vector3>): this;
 
-        pp_rotate(this: Object3D, rotation: Readonly<Vector3>): Object3D;
-        pp_rotateDegrees(this: Object3D, rotation: Readonly<Vector3>): Object3D;
-        pp_rotateRadians(this: Object3D, rotation: Readonly<Vector3>): Object3D;
-        pp_rotateMatrix(this: Object3D, rotation: Readonly<Matrix3>): Object3D;
-        pp_rotateQuat(this: Object3D, rotation: Readonly<Quaternion>): Object3D;
+        pp_rotate(this: Object3D, rotation: Readonly<Vector3>): this;
+        pp_rotateDegrees(this: Object3D, rotation: Readonly<Vector3>): this;
+        pp_rotateRadians(this: Object3D, rotation: Readonly<Vector3>): this;
+        pp_rotateMatrix(this: Object3D, rotation: Readonly<Matrix3>): this;
+        pp_rotateQuat(this: Object3D, rotation: Readonly<Quaternion>): this;
 
-        pp_rotateWorld(this: Object3D, rotation: Readonly<Vector3>): Object3D;
-        pp_rotateWorldDegrees(this: Object3D, rotation: Readonly<Vector3>): Object3D;
-        pp_rotateWorldRadians(this: Object3D, rotation: Readonly<Vector3>): Object3D;
-        pp_rotateWorldMatrix(this: Object3D, rotation: Readonly<Matrix3>): Object3D;
-        pp_rotateWorldQuat(this: Object3D, rotation: Readonly<Quaternion>): Object3D;
+        pp_rotateWorld(this: Object3D, rotation: Readonly<Vector3>): this;
+        pp_rotateWorldDegrees(this: Object3D, rotation: Readonly<Vector3>): this;
+        pp_rotateWorldRadians(this: Object3D, rotation: Readonly<Vector3>): this;
+        pp_rotateWorldMatrix(this: Object3D, rotation: Readonly<Matrix3>): this;
+        pp_rotateWorldQuat(this: Object3D, rotation: Readonly<Quaternion>): this;
 
-        pp_rotateLocal(this: Object3D, rotation: Readonly<Vector3>): Object3D;
-        pp_rotateLocalDegrees(this: Object3D, rotation: Readonly<Vector3>): Object3D;
-        pp_rotateLocalRadians(this: Object3D, rotation: Readonly<Vector3>): Object3D;
-        pp_rotateLocalMatrix(this: Object3D, rotation: Readonly<Matrix3>): Object3D;
-        pp_rotateLocalQuat(this: Object3D, rotation: Readonly<Quaternion>): Object3D;
+        pp_rotateLocal(this: Object3D, rotation: Readonly<Vector3>): this;
+        pp_rotateLocalDegrees(this: Object3D, rotation: Readonly<Vector3>): this;
+        pp_rotateLocalRadians(this: Object3D, rotation: Readonly<Vector3>): this;
+        pp_rotateLocalMatrix(this: Object3D, rotation: Readonly<Matrix3>): this;
+        pp_rotateLocalQuat(this: Object3D, rotation: Readonly<Quaternion>): this;
 
-        pp_rotateObject(this: Object3D, rotation: Readonly<Vector3>): Object3D;
-        pp_rotateObjectDegrees(this: Object3D, rotation: Readonly<Vector3>): Object3D;
-        pp_rotateObjectRadians(this: Object3D, rotation: Readonly<Vector3>): Object3D;
-        pp_rotateObjectMatrix(this: Object3D, rotation: Readonly<Matrix3>): Object3D;
-        pp_rotateObjectQuat(this: Object3D, rotation: Readonly<Quaternion>): Object3D;
+        pp_rotateObject(this: Object3D, rotation: Readonly<Vector3>): this;
+        pp_rotateObjectDegrees(this: Object3D, rotation: Readonly<Vector3>): this;
+        pp_rotateObjectRadians(this: Object3D, rotation: Readonly<Vector3>): this;
+        pp_rotateObjectMatrix(this: Object3D, rotation: Readonly<Matrix3>): this;
+        pp_rotateObjectQuat(this: Object3D, rotation: Readonly<Quaternion>): this;
 
-        pp_rotateAxis(this: Object3D, angle: number, axis: Readonly<Vector3>): Object3D;
-        pp_rotateAxisDegrees(this: Object3D, angle: number, axis: Readonly<Vector3>): Object3D;
-        pp_rotateAxisRadians(this: Object3D, angle: number, axis: Readonly<Vector3>): Object3D;
+        pp_rotateAxis(this: Object3D, angle: number, axis: Readonly<Vector3>): this;
+        pp_rotateAxisDegrees(this: Object3D, angle: number, axis: Readonly<Vector3>): this;
+        pp_rotateAxisRadians(this: Object3D, angle: number, axis: Readonly<Vector3>): this;
 
-        pp_rotateAxisWorld(this: Object3D, angle: number, axis: Readonly<Vector3>): Object3D;
-        pp_rotateAxisWorldDegrees(this: Object3D, angle: number, axis: Readonly<Vector3>): Object3D;
-        pp_rotateAxisWorldRadians(this: Object3D, angle: number, axis: Readonly<Vector3>): Object3D;
+        pp_rotateAxisWorld(this: Object3D, angle: number, axis: Readonly<Vector3>): this;
+        pp_rotateAxisWorldDegrees(this: Object3D, angle: number, axis: Readonly<Vector3>): this;
+        pp_rotateAxisWorldRadians(this: Object3D, angle: number, axis: Readonly<Vector3>): this;
 
-        pp_rotateAxisLocal(this: Object3D, angle: number, axis: Readonly<Vector3>): Object3D;
-        pp_rotateAxisLocalDegrees(this: Object3D, angle: number, axis: Readonly<Vector3>): Object3D;
-        pp_rotateAxisLocalRadians(this: Object3D, angle: number, axis: Readonly<Vector3>): Object3D;
+        pp_rotateAxisLocal(this: Object3D, angle: number, axis: Readonly<Vector3>): this;
+        pp_rotateAxisLocalDegrees(this: Object3D, angle: number, axis: Readonly<Vector3>): this;
+        pp_rotateAxisLocalRadians(this: Object3D, angle: number, axis: Readonly<Vector3>): this;
 
-        pp_rotateAxisObject(this: Object3D, angle: number, axis: Readonly<Vector3>): Object3D;
-        pp_rotateAxisObjectDegrees(this: Object3D, angle: number, axis: Readonly<Vector3>): Object3D;
-        pp_rotateAxisObjectRadians(this: Object3D, angle: number, axis: Readonly<Vector3>): Object3D;
+        pp_rotateAxisObject(this: Object3D, angle: number, axis: Readonly<Vector3>): this;
+        pp_rotateAxisObjectDegrees(this: Object3D, angle: number, axis: Readonly<Vector3>): this;
+        pp_rotateAxisObjectRadians(this: Object3D, angle: number, axis: Readonly<Vector3>): this;
 
-        pp_rotateAround(this: Object3D, rotation: Readonly<Vector3>, origin: Readonly<Vector3>): Object3D;
-        pp_rotateAroundDegrees(this: Object3D, rotation: Readonly<Vector3>, origin: Readonly<Vector3>): Object3D;
-        pp_rotateAroundRadians(this: Object3D, rotation: Readonly<Vector3>, origin: Readonly<Vector3>): Object3D;
-        pp_rotateAroundMatrix(this: Object3D, rotation: Readonly<Matrix3>, origin: Readonly<Vector3>): Object3D;
-        pp_rotateAroundQuat(this: Object3D, rotation: Readonly<Quaternion>, origin: Readonly<Vector3>): Object3D;
+        pp_rotateAround(this: Object3D, rotation: Readonly<Vector3>, origin: Readonly<Vector3>): this;
+        pp_rotateAroundDegrees(this: Object3D, rotation: Readonly<Vector3>, origin: Readonly<Vector3>): this;
+        pp_rotateAroundRadians(this: Object3D, rotation: Readonly<Vector3>, origin: Readonly<Vector3>): this;
+        pp_rotateAroundMatrix(this: Object3D, rotation: Readonly<Matrix3>, origin: Readonly<Vector3>): this;
+        pp_rotateAroundQuat(this: Object3D, rotation: Readonly<Quaternion>, origin: Readonly<Vector3>): this;
 
-        pp_rotateAroundWorld(this: Object3D, rotation: Readonly<Vector3>, origin: Readonly<Vector3>): Object3D;
-        pp_rotateAroundWorldDegrees(this: Object3D, rotation: Readonly<Vector3>, origin: Readonly<Vector3>): Object3D;
-        pp_rotateAroundWorldRadians(this: Object3D, rotation: Readonly<Vector3>, origin: Readonly<Vector3>): Object3D;
-        pp_rotateAroundWorldMatrix(this: Object3D, rotation: Readonly<Matrix3>, origin: Readonly<Vector3>): Object3D;
-        pp_rotateAroundWorldQuat(this: Object3D, rotation: Readonly<Quaternion>, origin: Readonly<Vector3>): Object3D;
+        pp_rotateAroundWorld(this: Object3D, rotation: Readonly<Vector3>, origin: Readonly<Vector3>): this;
+        pp_rotateAroundWorldDegrees(this: Object3D, rotation: Readonly<Vector3>, origin: Readonly<Vector3>): this;
+        pp_rotateAroundWorldRadians(this: Object3D, rotation: Readonly<Vector3>, origin: Readonly<Vector3>): this;
+        pp_rotateAroundWorldMatrix(this: Object3D, rotation: Readonly<Matrix3>, origin: Readonly<Vector3>): this;
+        pp_rotateAroundWorldQuat(this: Object3D, rotation: Readonly<Quaternion>, origin: Readonly<Vector3>): this;
 
-        pp_rotateAroundLocal(this: Object3D, rotation: Readonly<Vector3>, origin: Readonly<Vector3>): Object3D;
-        pp_rotateAroundLocalDegrees(this: Object3D, rotation: Readonly<Vector3>, origin: Readonly<Vector3>): Object3D;
-        pp_rotateAroundLocalRadians(this: Object3D, rotation: Readonly<Vector3>, origin: Readonly<Vector3>): Object3D;
-        pp_rotateAroundLocalMatrix(this: Object3D, rotation: Readonly<Matrix3>, origin: Readonly<Vector3>): Object3D;
-        pp_rotateAroundLocalQuat(this: Object3D, rotation: Readonly<Quaternion>, origin: Readonly<Vector3>): Object3D;
+        pp_rotateAroundLocal(this: Object3D, rotation: Readonly<Vector3>, origin: Readonly<Vector3>): this;
+        pp_rotateAroundLocalDegrees(this: Object3D, rotation: Readonly<Vector3>, origin: Readonly<Vector3>): this;
+        pp_rotateAroundLocalRadians(this: Object3D, rotation: Readonly<Vector3>, origin: Readonly<Vector3>): this;
+        pp_rotateAroundLocalMatrix(this: Object3D, rotation: Readonly<Matrix3>, origin: Readonly<Vector3>): this;
+        pp_rotateAroundLocalQuat(this: Object3D, rotation: Readonly<Quaternion>, origin: Readonly<Vector3>): this;
 
-        pp_rotateAroundObject(this: Object3D, rotation: Readonly<Vector3>, origin: Readonly<Vector3>): Object3D;
-        pp_rotateAroundObjectDegrees(this: Object3D, rotation: Readonly<Vector3>, origin: Readonly<Vector3>): Object3D;
-        pp_rotateAroundObjectRadians(this: Object3D, rotation: Readonly<Vector3>, origin: Readonly<Vector3>): Object3D;
-        pp_rotateAroundObjectMatrix(this: Object3D, rotation: Readonly<Matrix3>, origin: Readonly<Vector3>): Object3D;
-        pp_rotateAroundObjectQuat(this: Object3D, rotation: Readonly<Quaternion>, origin: Readonly<Vector3>): Object3D;
+        pp_rotateAroundObject(this: Object3D, rotation: Readonly<Vector3>, origin: Readonly<Vector3>): this;
+        pp_rotateAroundObjectDegrees(this: Object3D, rotation: Readonly<Vector3>, origin: Readonly<Vector3>): this;
+        pp_rotateAroundObjectRadians(this: Object3D, rotation: Readonly<Vector3>, origin: Readonly<Vector3>): this;
+        pp_rotateAroundObjectMatrix(this: Object3D, rotation: Readonly<Matrix3>, origin: Readonly<Vector3>): this;
+        pp_rotateAroundObjectQuat(this: Object3D, rotation: Readonly<Quaternion>, origin: Readonly<Vector3>): this;
 
-        pp_rotateAroundAxis(this: Object3D, angle: number, axis: Readonly<Vector3>, origin: Readonly<Vector3>): Object3D;
-        pp_rotateAroundAxisDegrees(this: Object3D, angle: number, axis: Readonly<Vector3>, origin: Readonly<Vector3>): Object3D;
-        pp_rotateAroundAxisRadians(this: Object3D, angle: number, axis: Readonly<Vector3>, origin: Readonly<Vector3>): Object3D;
+        pp_rotateAroundAxis(this: Object3D, angle: number, axis: Readonly<Vector3>, origin: Readonly<Vector3>): this;
+        pp_rotateAroundAxisDegrees(this: Object3D, angle: number, axis: Readonly<Vector3>, origin: Readonly<Vector3>): this;
+        pp_rotateAroundAxisRadians(this: Object3D, angle: number, axis: Readonly<Vector3>, origin: Readonly<Vector3>): this;
 
-        pp_rotateAroundAxisWorld(this: Object3D, angle: number, axis: Readonly<Vector3>, origin: Readonly<Vector3>): Object3D;
-        pp_rotateAroundAxisWorldDegrees(this: Object3D, angle: number, axis: Readonly<Vector3>, origin: Readonly<Vector3>): Object3D;
-        pp_rotateAroundAxisWorldRadians(this: Object3D, angle: number, axis: Readonly<Vector3>, origin: Readonly<Vector3>): Object3D;
+        pp_rotateAroundAxisWorld(this: Object3D, angle: number, axis: Readonly<Vector3>, origin: Readonly<Vector3>): this;
+        pp_rotateAroundAxisWorldDegrees(this: Object3D, angle: number, axis: Readonly<Vector3>, origin: Readonly<Vector3>): this;
+        pp_rotateAroundAxisWorldRadians(this: Object3D, angle: number, axis: Readonly<Vector3>, origin: Readonly<Vector3>): this;
 
-        pp_rotateAroundAxisLocal(this: Object3D, angle: number, axis: Readonly<Vector3>, origin: Readonly<Vector3>): Object3D;
-        pp_rotateAroundAxisLocalDegrees(this: Object3D, angle: number, axis: Readonly<Vector3>, origin: Readonly<Vector3>): Object3D;
-        pp_rotateAroundAxisLocalRadians(this: Object3D, angle: number, axis: Readonly<Vector3>, origin: Readonly<Vector3>): Object3D;
+        pp_rotateAroundAxisLocal(this: Object3D, angle: number, axis: Readonly<Vector3>, origin: Readonly<Vector3>): this;
+        pp_rotateAroundAxisLocalDegrees(this: Object3D, angle: number, axis: Readonly<Vector3>, origin: Readonly<Vector3>): this;
+        pp_rotateAroundAxisLocalRadians(this: Object3D, angle: number, axis: Readonly<Vector3>, origin: Readonly<Vector3>): this;
 
-        pp_rotateAroundAxisObject(this: Object3D, angle: number, axis: Readonly<Vector3>, origin: Readonly<Vector3>): Object3D;
-        pp_rotateAroundAxisObjectDegrees(this: Object3D, angle: number, axis: Readonly<Vector3>, origin: Readonly<Vector3>): Object3D;
-        pp_rotateAroundAxisObjectRadians(this: Object3D, angle: number, axis: Readonly<Vector3>, origin: Readonly<Vector3>): Object3D;
+        pp_rotateAroundAxisObject(this: Object3D, angle: number, axis: Readonly<Vector3>, origin: Readonly<Vector3>): this;
+        pp_rotateAroundAxisObjectDegrees(this: Object3D, angle: number, axis: Readonly<Vector3>, origin: Readonly<Vector3>): this;
+        pp_rotateAroundAxisObjectRadians(this: Object3D, angle: number, axis: Readonly<Vector3>, origin: Readonly<Vector3>): this;
 
-        pp_scaleObject(this: Object3D, scale: number | Vector3): Object3D;
+        pp_scaleObject(this: Object3D, scale: number | Vector3): this;
 
-        pp_lookAt(this: Object3D, position: Readonly<Vector3>, up: Readonly<Vector3>): Object3D;
-        pp_lookAtWorld(this: Object3D, position: Readonly<Vector3>, up: Readonly<Vector3>): Object3D;
-        pp_lookAtLocal(this: Object3D, position: Readonly<Vector3>, up: Readonly<Vector3>): Object3D;
+        pp_lookAt(this: Object3D, position: Readonly<Vector3>, up: Readonly<Vector3>): this;
+        pp_lookAtWorld(this: Object3D, position: Readonly<Vector3>, up: Readonly<Vector3>): this;
+        pp_lookAtLocal(this: Object3D, position: Readonly<Vector3>, up: Readonly<Vector3>): this;
 
-        pp_lookTo(this: Object3D, direction: Readonly<Vector3>, up: Readonly<Vector3>): Object3D;
-        pp_lookToWorld(this: Object3D, direction: Readonly<Vector3>, up: Readonly<Vector3>): Object3D;
-        pp_lookToLocal(this: Object3D, direction: Readonly<Vector3>, up: Readonly<Vector3>): Object3D;
+        pp_lookTo(this: Object3D, direction: Readonly<Vector3>, up: Readonly<Vector3>): this;
+        pp_lookToWorld(this: Object3D, direction: Readonly<Vector3>, up: Readonly<Vector3>): this;
+        pp_lookToLocal(this: Object3D, direction: Readonly<Vector3>, up: Readonly<Vector3>): this;
 
         pp_convertPositionObjectToWorld(this: Readonly<Object3D>, position: Readonly<Vector3>, outPosition?: Vector3): Vector3;
         pp_convertDirectionObjectToWorld(this: Readonly<Object3D>, direction: Readonly<Vector3>, outDirection?: Vector3): Vector3;
@@ -399,7 +399,7 @@ declare module "@wonderlandengine/api" {
         pp_convertTransformLocalToObjectMatrix(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform?: Matrix4): Matrix4;
         pp_convertTransformLocalToObjectQuat(this: Readonly<Object3D>, transform: Readonly<Quaternion2>, outTransform?: Quaternion2): Quaternion2;
 
-        pp_setParent(this: Object3D, newParent: Object3D, keepTransformWorld?: boolean): Object3D;
+        pp_setParent(this: Object3D, newParent: Object3D, keepTransformWorld?: boolean): this;
         pp_getParent(this: Readonly<Object3D>): Object3D | null;
 
         pp_addComponent<T extends Component>(this: Object3D, typeOrClass: string | ComponentConstructor<T>, paramsOrActive?: Record<string, any> | boolean, active?: boolean): T | null;
@@ -423,15 +423,15 @@ declare module "@wonderlandengine/api" {
         pp_getComponentsDescendantsDepth<T extends Component>(this: Readonly<Object3D>, typeOrClass?: string | ComponentConstructor<T>): T[];
         pp_getComponentsChildren<T extends Component>(this: Readonly<Object3D>, typeOrClass?: string | ComponentConstructor<T>): T[];
 
-        pp_setActive(this: Object3D, active: boolean): Object3D;
-        pp_setActiveSelf(this: Object3D, active: boolean): Object3D;
-        pp_setActiveHierarchy(this: Object3D, active: boolean): Object3D;
-        pp_setActiveHierarchyBreadth(this: Object3D, active: boolean): Object3D;
-        pp_setActiveHierarchyDepth(this: Object3D, active: boolean): Object3D;
-        pp_setActiveDescendants(this: Object3D, active: boolean): Object3D;
-        pp_setActiveDescendantsBreadth(this: Object3D, active: boolean): Object3D;
-        pp_setActiveDescendantsDepth(this: Object3D, active: boolean): Object3D;
-        pp_setActiveChildren(this: Object3D, active: boolean): Object3D;
+        pp_setActive(this: Object3D, active: boolean): this;
+        pp_setActiveSelf(this: Object3D, active: boolean): this;
+        pp_setActiveHierarchy(this: Object3D, active: boolean): this;
+        pp_setActiveHierarchyBreadth(this: Object3D, active: boolean): this;
+        pp_setActiveHierarchyDepth(this: Object3D, active: boolean): this;
+        pp_setActiveDescendants(this: Object3D, active: boolean): this;
+        pp_setActiveDescendantsBreadth(this: Object3D, active: boolean): this;
+        pp_setActiveDescendantsDepth(this: Object3D, active: boolean): this;
+        pp_setActiveChildren(this: Object3D, active: boolean): this;
 
         pp_hasUniformScale(this: Readonly<Object3D>): boolean;
         pp_hasUniformScaleWorld(this: Readonly<Object3D>): boolean;
@@ -476,23 +476,23 @@ declare module "@wonderlandengine/api" {
         pp_getDescendantsBreadth(this: Readonly<Object3D>): Object3D[];
         pp_getDescendantsDepth(this: Readonly<Object3D>): Object3D[];
         pp_getChildren(this: Readonly<Object3D>): Object3D[];
-        pp_getSelf(this: Readonly<Object3D>): Object3D;
+        pp_getSelf(this: Readonly<Object3D>): this;
 
         pp_addObject(this: Object3D): Object3D;
         pp_getName(this: Readonly<Object3D>): string;
-        pp_setName(this: Object3D, name: string): Object3D;
+        pp_setName(this: Object3D, name: string): this;
         pp_getEngine(this: Readonly<Object3D>): WonderlandEngine;
         pp_getID(this: Readonly<Object3D>): number;
-        pp_markDirty(this: Object3D): Object3D;
+        pp_markDirty(this: Object3D): this;
         pp_isTransformChanged(this: Readonly<Object3D>): boolean;
         pp_equals(this: Readonly<Object3D>, object: Readonly<Object3D>): boolean;
         pp_destroy(this: Object3D): void;
 
-        pp_reserveObjects(this: Readonly<Object3D>, count: number): Object3D;
-        pp_reserveObjectsSelf(this: Readonly<Object3D>, count: number): Object3D;
-        pp_reserveObjectsHierarchy(this: Readonly<Object3D>, count: number): Object3D;
-        pp_reserveObjectsDescendants(this: Readonly<Object3D>, count: number): Object3D;
-        pp_reserveObjectsChildren(this: Readonly<Object3D>, count: number): Object3D;
+        pp_reserveObjects(this: Readonly<Object3D>, count: number): this;
+        pp_reserveObjectsSelf(this: Readonly<Object3D>, count: number): this;
+        pp_reserveObjectsHierarchy(this: Readonly<Object3D>, count: number): this;
+        pp_reserveObjectsDescendants(this: Readonly<Object3D>, count: number): this;
+        pp_reserveObjectsChildren(this: Readonly<Object3D>, count: number): this;
 
         pp_getComponentsAmountMap(this: Readonly<Object3D>, outComponentsAmountMap?: Map<string, number>): Map<string, number>;
         pp_getComponentsAmountMapSelf(this: Readonly<Object3D>, outComponentsAmountMap?: Map<string, number>): Map<string, number>;

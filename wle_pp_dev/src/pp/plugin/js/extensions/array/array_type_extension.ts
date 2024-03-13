@@ -24,7 +24,7 @@ declare global {
         pp_removeEqual(this: T[], elementToRemove: T, elementsEqualCallback?: (elementToCheck: T, elementToRemove: T) => boolean): T | undefined;
         pp_removeAllEqual(this: T[], elementToRemove: T, elementsEqualCallback?: (elementToCheck: T, elementToRemove: T) => boolean): T[];
 
-        pp_clear(this: T[]): T[];
+        pp_clear(this: T[]): this;
 
         pp_pushUnique(this: T[], elementToAdd: T, elementsEqualCallback?: (elementToCheck: T, elementToAdd: T) => boolean): number;
         pp_unshiftUnique(this: T[], elementToAdd: T, elementsEqualCallback?: (elementToCheck: T, elementToAdd: T) => boolean): number;
