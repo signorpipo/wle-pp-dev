@@ -125,14 +125,14 @@ export const getRotationWorldRadians = function () {
 
 export const getRotationWorldMatrix = function () {
     const quat = QuatUtils.create();
-    return function getRotationWorldMatrix(object: Readonly<Object3D>, outRotation: Vector3 = Mat3Utils.create()): Matrix3 {
+    return function getRotationWorldMatrix(object: Readonly<Object3D>, outRotation: Matrix3 = Mat3Utils.create()): Matrix3 {
         ObjectUtils.getRotationWorldQuat(object, quat);
         QuatUtils.toMatrix(quat, outRotation);
         return outRotation;
     };
 }();
 
-export function getRotationWorldQuat(object: Readonly<Object3D>, outRotation: Vector3 = QuatUtils.create()): Quaternion {
+export function getRotationWorldQuat(object: Readonly<Object3D>, outRotation: Quaternion = QuatUtils.create()): Quaternion {
     object.getRotationWorld(outRotation);
     return outRotation;
 }

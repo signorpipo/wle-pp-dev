@@ -109,12 +109,12 @@ export function initArrayExtensionProtoype(): void {
         return ArrayUtils.equals(this, array, elementsEqualCallback);
     };
 
-    const arrayPrototypesToExtend = [
+    const arrayLikePrototypesToExtend = [
         Array.prototype, Uint8ClampedArray.prototype, Uint8Array.prototype, Uint16Array.prototype, Uint32Array.prototype, Int8Array.prototype,
         Int16Array.prototype, Int32Array.prototype, Float32Array.prototype, Float64Array.prototype];
 
-    for (const arrayPrototypeToExtend of arrayPrototypesToExtend) {
-        PluginUtils.injectProperties(arrayLikeExtension, arrayPrototypeToExtend, false, true, true);
+    for (const arrayLikePrototypeToExtend of arrayLikePrototypesToExtend) {
+        PluginUtils.injectProperties(arrayLikeExtension, arrayLikePrototypeToExtend, false, true, true);
     }
 
     PluginUtils.injectProperties(arrayExtension, Array.prototype, false, true, true);
