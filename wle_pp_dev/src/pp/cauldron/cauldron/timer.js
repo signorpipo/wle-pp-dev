@@ -76,6 +76,10 @@ export class Timer {
         return this._myTimeLeft;
     }
 
+    setTimeLeft(timeLeft) {
+        this._myTimeLeft = Math.max(0, timeLeft);
+    }
+
     getPercentage() {
         let percentage = 1;
         if (this._myTimeLeft > 0 && this._myDuration > 0) {
