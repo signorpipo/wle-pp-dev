@@ -4,6 +4,7 @@ export interface NumberExtension {
 
 declare global {
     export interface Number extends NumberExtension {
-        get(): number;
+        /** Needed to make it easier to use plain numbers for parameters that also accept `NumberOverFactor` */
+        get(factor?: number): number;
     }
 }

@@ -10,8 +10,8 @@ export function initNumberExtensionPrototype(): void {
 
     const numberExtension: Record<string, any> = {};
 
-    // Mostly added to make it easier to use plain numbers in combo with NumberOverFactor
-    numberExtension.get = function get(this: number): number {
+    // Needed to make it easier to use plain numbers for parameters that also accept `NumberOverFactor`
+    numberExtension.get = function get(this: number, factor?: number): number {
         return this.valueOf();
     };
 
