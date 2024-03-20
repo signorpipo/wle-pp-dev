@@ -20,8 +20,8 @@ import { GetSceneObjectsComponent } from "./get_scene_objects_component.js";
 const _myRegisteredEngines: WeakMap<Readonly<WonderlandEngine>, null> = new WeakMap();
 
 export class PPGatewayComponent extends Component {
-    static override TypeName = "pp-gateway";
-    static override Properties = {
+    public static override TypeName = "pp-gateway";
+    public static override Properties = {
         _myEnableDebug: Property.bool(true),
         _myEnableTool: Property.bool(true),
         _myAddPPToWindow: Property.bool(true),
@@ -61,14 +61,14 @@ export class PPGatewayComponent extends Component {
     private _myAnalyticsManagerComponent!: AnalyticsManagerComponent;
     private _myDebugManagerComponent!: DebugManagerComponent;
 
-    static override onRegister(engine: WonderlandEngine): void {
+    public static override onRegister(engine: WonderlandEngine): void {
         if (!_myRegisteredEngines.has(engine)) {
             _myRegisteredEngines.set(engine, null);
             initPP(engine);
         }
     }
 
-    override init(): void {
+    public override init(): void {
         this._myGetDefaultResourcesComponent = this.object.pp_addComponent(GetDefaultResourcesComponent, this._getProperties(GetDefaultResourcesComponent.Properties), false)!;
         this._myGetSceneObjectsComponent = this.object.pp_addComponent(GetSceneObjectsComponent, this._getProperties(GetSceneObjectsComponent.Properties), false)!;
 
@@ -102,7 +102,7 @@ export class PPGatewayComponent extends Component {
         this._myDebugManagerComponent = this.object.pp_addComponent(DebugManagerComponent, this._getProperties(DebugManagerComponent.Properties), false)!;
     }
 
-    override start(): void {
+    public override start(): void {
         this._myGetDefaultResourcesComponent.active = true;
         this._myGetSceneObjectsComponent.active = true;
 
@@ -136,7 +136,7 @@ export class PPGatewayComponent extends Component {
         this._myDebugManagerComponent.active = true;
     }
 
-    _getProperties(propertiesToGet: Record<string, ComponentProperty>): Record<string, any> {
+    private _getProperties(propertiesToGet: Record<string, ComponentProperty>): Record<string, any> {
         const properties: Record<string, any> = {};
 
         if (propertiesToGet != null) {

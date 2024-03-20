@@ -5,17 +5,17 @@ import { Globals } from "../../../pp/globals.js";
 import { BasePose } from "../base_pose.js";
 
 export class SetHeadLocalTransformComponent extends Component {
-    static override TypeName = "pp-set-head-local-transform";
+    public static override TypeName = "pp-set-head-local-transform";
 
-    override start(): void {
+    public override start(): void {
         Globals.getHeadPose(this.engine)!.registerPoseUpdatedEventListener(this, this.onPoseUpdated.bind(this));
     }
 
-    onPoseUpdated(dt: number, pose: Readonly<BasePose>): void {
+    public onPoseUpdated(dt: number, pose: Readonly<BasePose>): void {
         // Implemented outside class definition
     }
 
-    override onDestroy(): void {
+    public override onDestroy(): void {
         Globals.getHeadPose(this.engine)?.unregisterPoseUpdatedEventListener(this);
     }
 }
