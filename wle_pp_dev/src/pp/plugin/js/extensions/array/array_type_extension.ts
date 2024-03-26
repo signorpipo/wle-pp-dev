@@ -38,80 +38,61 @@ export interface ArrayExtension<ArrayType, ArrayElementType> extends ArrayLikeEx
 }
 
 declare global {
-    export interface Array<T> extends ArrayExtension<Array<T>, T> {
-    }
+    export interface Array<T> extends ArrayExtension<Array<T>, T> { }
 }
 
 declare global {
-    export interface Uint8ClampedArray extends ArrayLikeExtension<Uint8ClampedArray, number> {
-    }
+    export interface Uint8ClampedArray extends ArrayLikeExtension<Uint8ClampedArray, number> { }
 }
 
 declare global {
-    export interface Uint8Array extends ArrayLikeExtension<Uint8Array, number> {
-    }
+    export interface Uint8Array extends ArrayLikeExtension<Uint8Array, number> { }
 }
 
 declare global {
-    export interface Uint16Array extends ArrayLikeExtension<Uint16Array, number> {
-    }
+    export interface Uint16Array extends ArrayLikeExtension<Uint16Array, number> { }
 }
 
 declare global {
-    export interface Uint32Array extends ArrayLikeExtension<Uint32Array, number> {
-    }
+    export interface Uint32Array extends ArrayLikeExtension<Uint32Array, number> { }
 }
 
 declare global {
-    export interface Int8Array extends ArrayLikeExtension<Int8Array, number> {
-    }
+    export interface Int8Array extends ArrayLikeExtension<Int8Array, number> { }
 }
 
 declare global {
-    export interface Int16Array extends ArrayLikeExtension<Int16Array, number> {
-    }
+    export interface Int16Array extends ArrayLikeExtension<Int16Array, number> { }
 }
 
 declare global {
-    export interface Int32Array extends ArrayLikeExtension<Int32Array, number> {
-    }
+    export interface Int32Array extends ArrayLikeExtension<Int32Array, number> { }
 }
 
 declare global {
-    export interface Float32Array extends ArrayLikeExtension<Float32Array, number> {
-    }
+    export interface Float32Array extends ArrayLikeExtension<Float32Array, number> { }
 }
 
 declare global {
-    export interface Float64Array extends ArrayLikeExtension<Float64Array, number> {
-    }
+    export interface Float64Array extends ArrayLikeExtension<Float64Array, number> { }
 }
 
 declare module "../../../../cauldron/type_definitions/array_type_definitions.js" {
-    export interface Vector extends ArrayLikeExtension<Vector, number> {
-    }
+    export interface Vector extends ArrayLikeExtension<Vector, number> { }
 
-    export interface Vector2 extends ArrayLikeExtension<Vector2, number> {
-    }
+    export interface Vector2 extends ArrayLikeExtension<Vector2, number> { }
 
-    export interface Vector3 extends ArrayLikeExtension<Vector3, number> {
-    }
+    export interface Vector3 extends ArrayLikeExtension<Vector3, number> { }
 
-    export interface Vector4 extends ArrayLikeExtension<Vector4, number> {
-    }
+    export interface Vector4 extends ArrayLikeExtension<Vector4, number> { }
 
-    export interface Quaternion extends ArrayLikeExtension<Quaternion, number> {
-    }
+    export interface Quaternion extends ArrayLikeExtension<Quaternion, number> { }
 
-    export interface Quaternion2 extends ArrayLikeExtension<Quaternion2, number> {
-    }
+    export interface Quaternion2 extends ArrayLikeExtension<Quaternion2, number> { }
 
-    export interface Matrix2 extends ArrayLikeExtension<Matrix2, number> {
-    }
+    export interface Matrix2 extends ArrayLikeExtension<Matrix2, number> { }
 
-    export interface Matrix3 extends ArrayLikeExtension<Matrix3, number> {
-    }
+    export interface Matrix3 extends ArrayLikeExtension<Matrix3, number> { }
 
-    export interface Matrix4 extends ArrayLikeExtension<Matrix4, number> {
-    }
+    export interface Matrix4 extends ArrayLikeExtension<Matrix4, number> { }
 }
