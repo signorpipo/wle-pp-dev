@@ -182,8 +182,6 @@ export interface BaseArrayLike<T> {
  *  of the `ArrayLike` class without also affecting the child classes like `Vector`*/
 export interface ArrayLike<T> extends BaseArrayLike<T> { }
 
-export type TypedArray = Uint8ClampedArray | Uint8Array | Uint16Array | Uint32Array | Int8Array | Int16Array | Int32Array | Float32Array | Float64Array;
-
 export interface Vector extends BaseArrayLike<number> { }
 
 export interface Vector2 extends BaseArrayLike<number> { }
