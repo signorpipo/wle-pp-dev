@@ -78,6 +78,8 @@ declare global {
 }
 
 declare module "../../../../cauldron/type_definitions/array_type_definitions.js" {
+    export interface ArrayLike<T> extends ArrayLikeExtension<ArrayLike<T>, T> { }
+
     export interface Vector extends ArrayLikeExtension<Vector, number> { }
 
     export interface Vector2 extends ArrayLikeExtension<Vector2, number> { }

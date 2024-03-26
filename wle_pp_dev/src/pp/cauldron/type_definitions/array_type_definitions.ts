@@ -1,5 +1,5 @@
-/** This is basically an intersection between Array and Float32Array, so that I can create methods that work with both more easily */
-export interface ArrayLike<T> {
+/** This is basically an intersection between `Array` and `Float32Array`, so that it's possible to create methods that work with both more easily */
+export interface BaseArrayLike<T> {
 
     [n: number]: T;
 
@@ -176,22 +176,28 @@ export interface ArrayLike<T> {
     reduceRight<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: ArrayLike<T>) => U, initialValue: U): U;
 }
 
+/** This is basically an intersection between `Array` and `Float32Array`, so that it's possible to create methods that work with both more easily
+ * 
+ *  The reason why a child class is created from `BaseArrayLike` instead of using it directly is to be able to create a type extension
+ *  of the `ArrayLike` class without also affecting the child classes like `Vector`*/
+export interface ArrayLike<T> extends BaseArrayLike<T> { }
+
 export type TypedArray = Uint8ClampedArray | Uint8Array | Uint16Array | Uint32Array | Int8Array | Int16Array | Int32Array | Float32Array | Float64Array;
 
-export interface Vector extends ArrayLike<number> { }
+export interface Vector extends BaseArrayLike<number> { }
 
-export interface Vector2 extends ArrayLike<number> { }
+export interface Vector2 extends BaseArrayLike<number> { }
 
-export interface Vector3 extends ArrayLike<number> { }
+export interface Vector3 extends BaseArrayLike<number> { }
 
-export interface Vector4 extends ArrayLike<number> { }
+export interface Vector4 extends BaseArrayLike<number> { }
 
-export interface Quaternion extends ArrayLike<number> { }
+export interface Quaternion extends BaseArrayLike<number> { }
 
-export interface Quaternion2 extends ArrayLike<number> { }
+export interface Quaternion2 extends BaseArrayLike<number> { }
 
-export interface Matrix2 extends ArrayLike<number> { }
+export interface Matrix2 extends BaseArrayLike<number> { }
 
-export interface Matrix3 extends ArrayLike<number> { }
+export interface Matrix3 extends BaseArrayLike<number> { }
 
-export interface Matrix4 extends ArrayLike<number> { }
+export interface Matrix4 extends BaseArrayLike<number> { }
