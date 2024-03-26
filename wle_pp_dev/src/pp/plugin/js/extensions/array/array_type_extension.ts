@@ -1,40 +1,40 @@
 export interface ArrayLikeExtension<ArrayType, ArrayElementType> {
-    pp_first(this: Readonly<ArrayType>): ArrayElementType | undefined;
-    pp_last(this: Readonly<ArrayType>): ArrayElementType | undefined;
+    pp_first<T extends ArrayType>(this: Readonly<T>): ArrayElementType | undefined;
+    pp_last<T extends ArrayType>(this: Readonly<T>): ArrayElementType | undefined;
 
-    pp_has(this: Readonly<ArrayType>, callback: (elementToCheck: ArrayElementType, elementIndex: number) => boolean): boolean;
-    pp_hasEqual(this: Readonly<ArrayType>, elementToFind: ArrayElementType, elementsEqualCallback?: (elementToCheck: ArrayElementType, elementToFind: ArrayElementType) => boolean): boolean;
+    pp_has<T extends ArrayType>(this: Readonly<T>, callback: (elementToCheck: ArrayElementType, elementIndex: number) => boolean): boolean;
+    pp_hasEqual<T extends ArrayType>(this: Readonly<T>, elementToFind: ArrayElementType, elementsEqualCallback?: (elementToCheck: ArrayElementType, elementToFind: ArrayElementType) => boolean): boolean;
 
-    pp_find(this: Readonly<ArrayType>, callback: (elementToCheck: ArrayElementType, elementIndex: number) => boolean): ArrayElementType | undefined;
-    pp_findIndex(this: Readonly<ArrayType>, callback: (elementToCheck: ArrayElementType, elementIndex: number) => boolean): number;
-    pp_findAll(this: Readonly<ArrayType>, callback: (elementToCheck: ArrayElementType, elementIndex: number) => boolean): ArrayElementType[];
-    pp_findAllIndexes(this: Readonly<ArrayType>, callback: (elementToCheck: ArrayElementType, elementIndex: number) => boolean): number[];
+    pp_find<T extends ArrayType>(this: Readonly<T>, callback: (elementToCheck: ArrayElementType, elementIndex: number) => boolean): ArrayElementType | undefined;
+    pp_findIndex<T extends ArrayType>(this: Readonly<T>, callback: (elementToCheck: ArrayElementType, elementIndex: number) => boolean): number;
+    pp_findAll<T extends ArrayType>(this: Readonly<T>, callback: (elementToCheck: ArrayElementType, elementIndex: number) => boolean): ArrayElementType[];
+    pp_findAllIndexes<T extends ArrayType>(this: Readonly<T>, callback: (elementToCheck: ArrayElementType, elementIndex: number) => boolean): number[];
 
-    pp_findEqual(this: Readonly<ArrayType>, elementToFind: ArrayElementType, elementsEqualCallback?: (elementToCheck: ArrayElementType, elementToFind: ArrayElementType) => boolean): ArrayElementType | undefined;
-    pp_findAllEqual(this: Readonly<ArrayType>, elementToFind: ArrayElementType, elementsEqualCallback?: (elementToCheck: ArrayElementType, elementToFind: ArrayElementType) => boolean): ArrayElementType[];
-    pp_findIndexEqual(this: Readonly<ArrayType>, elementToFind: ArrayElementType, elementsEqualCallback?: (elementToCheck: ArrayElementType, elementToFind: ArrayElementType) => boolean): number;
-    pp_findAllIndexesEqual(this: Readonly<ArrayType>, elementToFind: ArrayElementType, elementsEqualCallback?: (elementToCheck: ArrayElementType, elementToFind: ArrayElementType) => boolean): number[];
+    pp_findEqual<T extends ArrayType>(this: Readonly<T>, elementToFind: ArrayElementType, elementsEqualCallback?: (elementToCheck: ArrayElementType, elementToFind: ArrayElementType) => boolean): ArrayElementType | undefined;
+    pp_findAllEqual<T extends ArrayType>(this: Readonly<T>, elementToFind: ArrayElementType, elementsEqualCallback?: (elementToCheck: ArrayElementType, elementToFind: ArrayElementType) => boolean): ArrayElementType[];
+    pp_findIndexEqual<T extends ArrayType>(this: Readonly<T>, elementToFind: ArrayElementType, elementsEqualCallback?: (elementToCheck: ArrayElementType, elementToFind: ArrayElementType) => boolean): number;
+    pp_findAllIndexesEqual<T extends ArrayType>(this: Readonly<T>, elementToFind: ArrayElementType, elementsEqualCallback?: (elementToCheck: ArrayElementType, elementToFind: ArrayElementType) => boolean): number[];
 
-    pp_copy(this: ArrayType, array: Readonly<ArrayType>, copyCallback?: (arrayElement: ArrayElementType, thisElement: ArrayElementType) => ArrayElementType): ArrayType;
+    pp_copy<T extends ArrayType>(this: T, array: Readonly<ArrayLike<ArrayElementType>>, copyCallback?: (arrayElement: ArrayElementType, thisElement: ArrayElementType) => ArrayElementType): this;
 
-    pp_clone(this: Readonly<ArrayType>, cloneCallback?: (elementToClone: ArrayElementType) => ArrayElementType): ArrayType;
+    pp_clone<T extends ArrayType>(this: Readonly<T>, cloneCallback?: (elementToClone: ArrayElementType) => ArrayElementType): T;
 
-    pp_equals(this: Readonly<ArrayType>, array: Readonly<ArrayType>, elementsEqualCallback?: (thisElement: ArrayElementType, arrayElement: ArrayElementType) => boolean): boolean;
+    pp_equals<T extends ArrayType>(this: Readonly<T>, array: Readonly<ArrayLike<ArrayElementType>>, elementsEqualCallback?: (thisElement: ArrayElementType, arrayElement: ArrayElementType) => boolean): boolean;
 }
 
 export interface ArrayExtension<ArrayType, ArrayElementType> extends ArrayLikeExtension<ArrayType, ArrayElementType> {
-    pp_remove(this: ArrayType, callback: (elementToCheck: ArrayElementType, elementIndex: number) => boolean): ArrayElementType | undefined;
-    pp_removeIndex(this: ArrayType, index: number): ArrayElementType | undefined;
-    pp_removeAll(this: ArrayType, callback: (elementToCheck: ArrayElementType, elementIndex: number) => boolean): ArrayElementType[];
-    pp_removeAllIndexes(this: ArrayType, indexes: number[]): ArrayElementType[];
+    pp_remove<T extends ArrayType>(this: T, callback: (elementToCheck: ArrayElementType, elementIndex: number) => boolean): ArrayElementType | undefined;
+    pp_removeIndex<T extends ArrayType>(this: T, index: number): ArrayElementType | undefined;
+    pp_removeAll<T extends ArrayType>(this: T, callback: (elementToCheck: ArrayElementType, elementIndex: number) => boolean): ArrayElementType[];
+    pp_removeAllIndexes<T extends ArrayType>(this: T, indexes: number[]): ArrayElementType[];
 
-    pp_removeEqual(this: ArrayType, elementToRemove: ArrayElementType, elementsEqualCallback?: (elementToCheck: ArrayElementType, elementToRemove: ArrayElementType) => boolean): ArrayElementType | undefined;
-    pp_removeAllEqual(this: ArrayType, elementToRemove: ArrayElementType, elementsEqualCallback?: (elementToCheck: ArrayElementType, elementToRemove: ArrayElementType) => boolean): ArrayElementType[];
+    pp_removeEqual<T extends ArrayType>(this: T, elementToRemove: ArrayElementType, elementsEqualCallback?: (elementToCheck: ArrayElementType, elementToRemove: ArrayElementType) => boolean): ArrayElementType | undefined;
+    pp_removeAllEqual<T extends ArrayType>(this: T, elementToRemove: ArrayElementType, elementsEqualCallback?: (elementToCheck: ArrayElementType, elementToRemove: ArrayElementType) => boolean): ArrayElementType[];
 
-    pp_clear(this: ArrayType): this;
+    pp_clear<T extends ArrayType>(this: T): this;
 
-    pp_pushUnique(this: ArrayType, elementToAdd: ArrayElementType, elementsEqualCallback?: (elementToCheck: ArrayElementType, elementToAdd: ArrayElementType) => boolean): number;
-    pp_unshiftUnique(this: ArrayType, elementToAdd: ArrayElementType, elementsEqualCallback?: (elementToCheck: ArrayElementType, elementToAdd: ArrayElementType) => boolean): number;
+    pp_pushUnique<T extends ArrayType>(this: T, elementToAdd: ArrayElementType, elementsEqualCallback?: (elementToCheck: ArrayElementType, elementToAdd: ArrayElementType) => boolean): number;
+    pp_unshiftUnique<T extends ArrayType>(this: T, elementToAdd: ArrayElementType, elementsEqualCallback?: (elementToCheck: ArrayElementType, elementToAdd: ArrayElementType) => boolean): number;
 }
 
 declare global {
@@ -84,5 +84,34 @@ declare global {
 
 declare global {
     export interface Float64Array extends ArrayLikeExtension<Float64Array, number> {
+    }
+}
+
+declare module "../../../../cauldron/type_definitions/array_type_definitions.js" {
+    export interface Vector extends ArrayLikeExtension<Vector, number> {
+    }
+
+    export interface Vector2 extends ArrayLikeExtension<Vector2, number> {
+    }
+
+    export interface Vector3 extends ArrayLikeExtension<Vector3, number> {
+    }
+
+    export interface Vector4 extends ArrayLikeExtension<Vector4, number> {
+    }
+
+    export interface Quaternion extends ArrayLikeExtension<Quaternion, number> {
+    }
+
+    export interface Quaternion2 extends ArrayLikeExtension<Quaternion2, number> {
+    }
+
+    export interface Matrix2 extends ArrayLikeExtension<Matrix2, number> {
+    }
+
+    export interface Matrix3 extends ArrayLikeExtension<Matrix3, number> {
+    }
+
+    export interface Matrix4 extends ArrayLikeExtension<Matrix4, number> {
     }
 }
