@@ -143,7 +143,7 @@ function _buildConsoleMessage(vector: Vector, decimalPlaces?: number): string {
 
 function _prepareOut<T extends Vector>(vector: Vector, out?: T): T {
     if (out == null) {
-        out = ArrayUtils.clone(vector);
+        out = ArrayUtils.clone(vector) as T;
     } else if (out != vector) {
         ArrayUtils.copy(vector, out);
     }
