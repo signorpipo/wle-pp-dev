@@ -213,7 +213,7 @@ export function unshiftUnique<T>(array: T[], elementToAdd: T, elementsEqualCallb
     return length;
 }
 
-export function copy<S extends ArrayLike<T>, T>(from: Readonly<ArrayLike<T>>, to: S, copyCallback?: (fromElement: T, toElement: T) => T): S {
+export function copy<ArrayType extends ArrayLike<T>, T>(from: Readonly<ArrayLike<T>>, to: ArrayType, copyCallback?: (fromElement: T, toElement: T) => T): ArrayType {
     const _to = to as any;
     if (_to.pop != null) {
         while (to.length > from.length) {
@@ -232,8 +232,11 @@ export function copy<S extends ArrayLike<T>, T>(from: Readonly<ArrayLike<T>>, to
     return to;
 }
 
-export function clone<S extends ArrayLike<T>, T>(array: Readonly<S>, cloneCallback?: (elementToClone: T) => T): S {
-    const clonedArray = array.slice(0) as S;
+export function clone<T>(array: Readonly<T[]>, cloneCallback?: (elementToClone: T) => T): T[];
+export function clone<T extends ArrayLike<number>>(array: T, cloneCallback?: (elementToClone: number) => number): T;
+export function clone<ArrayType extends ArrayLike<T>, T>(array: Readonly<ArrayType>, cloneCallback?: (elementToClone: T) => T): ArrayType;
+export function clone<ArrayType extends ArrayLike<T>, T>(array: Readonly<ArrayType>, cloneCallback?: (elementToClone: T) => T): ArrayType {
+    const clonedArray = array.slice(0) as ArrayType;
 
     if (cloneCallback != null) {
         for (let i = 0; i < array.length; i++) {

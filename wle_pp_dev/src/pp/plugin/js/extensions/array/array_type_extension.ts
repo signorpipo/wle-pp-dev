@@ -15,8 +15,9 @@ export interface ArrayLikeExtension<ArrayType, ArrayElementType> {
     pp_findIndexEqual(this: Readonly<ArrayType>, elementToFind: ArrayElementType, elementsEqualCallback?: (elementToCheck: ArrayElementType, elementToFind: ArrayElementType) => boolean): number;
     pp_findAllIndexesEqual(this: Readonly<ArrayType>, elementToFind: ArrayElementType, elementsEqualCallback?: (elementToCheck: ArrayElementType, elementToFind: ArrayElementType) => boolean): number[];
 
-    pp_copy<T extends ArrayType>(this: T, array: Readonly<ArrayType>, copyCallback?: (arrayElement: ArrayElementType, thisElement: ArrayElementType) => ArrayElementType): T;
-    pp_clone<T extends ArrayType>(this: Readonly<T>, cloneCallback?: (elementToClone: ArrayElementType) => ArrayElementType): T;
+    pp_copy(this: ArrayType, array: Readonly<ArrayType>, copyCallback?: (arrayElement: ArrayElementType, thisElement: ArrayElementType) => ArrayElementType): ArrayType;
+
+    pp_clone(this: Readonly<ArrayType>, cloneCallback?: (elementToClone: ArrayElementType) => ArrayElementType): ArrayType;
 
     pp_equals(this: Readonly<ArrayType>, array: Readonly<ArrayType>, elementsEqualCallback?: (thisElement: ArrayElementType, arrayElement: ArrayElementType) => boolean): boolean;
 }
@@ -34,7 +35,6 @@ export interface ArrayExtension<ArrayType, ArrayElementType> extends ArrayLikeEx
 
     pp_pushUnique(this: ArrayType, elementToAdd: ArrayElementType, elementsEqualCallback?: (elementToCheck: ArrayElementType, elementToAdd: ArrayElementType) => boolean): number;
     pp_unshiftUnique(this: ArrayType, elementToAdd: ArrayElementType, elementsEqualCallback?: (elementToCheck: ArrayElementType, elementToAdd: ArrayElementType) => boolean): number;
-
 }
 
 declare global {
