@@ -52,7 +52,7 @@ export interface BaseArrayLike<T> {
      * Reverses the elements in an array in place.
      * This method mutates the array and returns a reference to the same array.
      */
-    reverse(): ArrayLike<T>;
+    reverse(): BaseArrayLike<T>;
 
     /**
      * Returns a copy of a section of an array.
@@ -63,7 +63,7 @@ export interface BaseArrayLike<T> {
      * @param end The end index of the specified portion of the array. This is exclusive of the element at the index 'end'.
      * If end is undefined, then the slice extends to the end of the array.
      */
-    slice(start?: number, end?: number): ArrayLike<T>;
+    slice(start?: number, end?: number): BaseArrayLike<T>;
 
     /**
      * Sorts an array in place.
@@ -99,7 +99,7 @@ export interface BaseArrayLike<T> {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    every(predicate: (value: T, index: number, array: ArrayLike<T>) => unknown, thisArg?: any): boolean;
+    every(predicate: (value: T, index: number, array: BaseArrayLike<T>) => unknown, thisArg?: any): boolean;
 
     /**
      * Determines whether the specified callback function returns true for any element of an array.
@@ -109,28 +109,28 @@ export interface BaseArrayLike<T> {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    some(predicate: (value: T, index: number, array: ArrayLike<T>) => unknown, thisArg?: any): boolean;
+    some(predicate: (value: T, index: number, array: BaseArrayLike<T>) => unknown, thisArg?: any): boolean;
 
     /**
      * Performs the specified action for each element in an array.
      * @param callbackfn  A function that accepts up to three arguments. forEach calls the callbackfn function one time for each element in the array.
      * @param thisArg  An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
      */
-    forEach(callbackfn: (value: T, index: number, array: ArrayLike<T>) => void, thisArg?: any): void;
+    forEach(callbackfn: (value: T, index: number, array: BaseArrayLike<T>) => void, thisArg?: any): void;
 
     /**
      * Calls a defined callback function on each element of an array, and returns an array that contains the results.
      * @param callbackfn A function that accepts up to three arguments. The map method calls the callbackfn function one time for each element in the array.
      * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
      */
-    map(callbackfn: (value: T, index: number, array: ArrayLike<T>) => T, thisArg?: any): ArrayLike<T>;
+    map(callbackfn: (value: T, index: number, array: BaseArrayLike<T>) => T, thisArg?: any): BaseArrayLike<T>;
 
     /**
      * Returns the elements of an array that meet the condition specified in a callback function.
      * @param predicate A function that accepts up to three arguments. The filter method calls the predicate function one time for each element in the array.
      * @param thisArg An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value.
      */
-    filter(predicate: (value: T, index: number, array: ArrayLike<T>) => unknown, thisArg?: any): ArrayLike<T>;
+    filter(predicate: (value: T, index: number, array: BaseArrayLike<T>) => unknown, thisArg?: any): BaseArrayLike<T>;
 
     /**
      * Returns the value of the first element in the array where predicate is true, and undefined
@@ -141,7 +141,7 @@ export interface BaseArrayLike<T> {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    find(predicate: (value: T, index: number, array: ArrayLike<T>) => boolean, thisArg?: any): T | undefined;
+    find(predicate: (value: T, index: number, array: BaseArrayLike<T>) => boolean, thisArg?: any): T | undefined;
 
     /**
      * Returns the index of the first element in the array where predicate is true, and -1
@@ -152,25 +152,25 @@ export interface BaseArrayLike<T> {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    findIndex(predicate: (value: T, index: number, array: ArrayLike<T>) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: T, index: number, array: BaseArrayLike<T>) => boolean, thisArg?: any): number;
 
     /**
      * Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
      * @param callbackfn A function that accepts up to four arguments. The reduce method calls the callbackfn function one time for each element in the array.
      * @param initialValue If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.
      */
-    reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: ArrayLike<T>) => T): T;
-    reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: ArrayLike<T>) => T, initialValue: T): T;
-    reduce<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: ArrayLike<T>) => U, initialValue: U): U;
+    reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: BaseArrayLike<T>) => T): T;
+    reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: BaseArrayLike<T>) => T, initialValue: T): T;
+    reduce<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: BaseArrayLike<T>) => U, initialValue: U): U;
 
     /**
      * Calls the specified callback function for all the elements in an array, in descending order. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
      * @param callbackfn A function that accepts up to four arguments. The reduceRight method calls the callbackfn function one time for each element in the array.
      * @param initialValue If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.
      */
-    reduceRight(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: ArrayLike<T>) => T): T;
-    reduceRight(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: ArrayLike<T>) => T, initialValue: T): T;
-    reduceRight<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: ArrayLike<T>) => U, initialValue: U): U;
+    reduceRight(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: BaseArrayLike<T>) => T): T;
+    reduceRight(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: BaseArrayLike<T>) => T, initialValue: T): T;
+    reduceRight<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: BaseArrayLike<T>) => U, initialValue: U): U;
 }
 
 /** This is basically an intersection between `Array` and `Float32Array`, so that it's possible to create methods that work with both more easily
