@@ -503,6 +503,5 @@ export interface Object3DExtension {
 }
 
 declare module "@wonderlandengine/api" {
-    export interface Object3D extends Object3DExtension {
-    }
+    export interface Object3D extends Object3DExtension { }
 }

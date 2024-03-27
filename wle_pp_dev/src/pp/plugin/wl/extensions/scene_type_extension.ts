@@ -60,6 +60,5 @@ export interface SceneExtension {
 }
 
 declare module "@wonderlandengine/api" {
-    export interface Scene extends SceneExtension {
-    }
+    export interface Scene extends SceneExtension { }
 }

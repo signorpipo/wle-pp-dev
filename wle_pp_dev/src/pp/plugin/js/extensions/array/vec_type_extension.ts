@@ -1,71 +1,80 @@
-import { Vector } from "../../../../index.js";
-
 export interface VectorExtension<VectorType> {
-    vec_zero(this: VectorType): this;
-    vec_isZero(this: VectorType, epsilon?: number): boolean;
+    vec_zero<T extends VectorType>(this: T): this;
+    vec_isZero<T extends VectorType>(this: Readonly<T>, epsilon?: number): boolean;
 
-    vec_scale<T extends Vector>(this: VectorType, value: number, out?: T): T;
+    vec_scale<T extends VectorType, S extends VectorType>(this: Readonly<T>, value: number, out?: S): S;
 
-    vec_round<T extends Vector>(this: VectorType, out?: T): T;
-    vec_floor<T extends Vector>(this: VectorType, out?: T): T;
-    vec_ceil<T extends Vector>(this: VectorType, out?: T): T;
-    vec_clamp<T extends Vector>(this: VectorType, start: number, end: number, out?: T): T;
+    vec_round<T extends VectorType, S extends VectorType>(this: Readonly<T>, out?: S): S;
+    vec_floor<T extends VectorType, S extends VectorType>(this: Readonly<T>, out?: S): S;
+    vec_ceil<T extends VectorType, S extends VectorType>(this: Readonly<T>, out?: S): S;
+    vec_clamp<T extends VectorType, S extends VectorType>(this: Readonly<T>, start: number, end: number, out?: S): S;
 
-    vec_equals(this: VectorType, vector: Vector, epsilon: number): boolean;
+    vec_equals<T extends VectorType>(this: Readonly<T>, vector: Readonly<VectorType>, epsilon: number): boolean;
 
-    vec_toString(this: VectorType, decimalPlaces?: number): string;
+    vec_toString<T extends VectorType>(this: Readonly<T>, decimalPlaces?: number): string;
 
-    vec_log(this: VectorType, decimalPlaces?: number): void;
-    vec_error(this: VectorType, decimalPlaces?: number): void;
-    vec_warn(this: VectorType, decimalPlaces?: number): void;
+    vec_log<T extends VectorType>(this: Readonly<T>, decimalPlaces?: number): this;
+    vec_error<T extends VectorType>(this: Readonly<T>, decimalPlaces?: number): this;
+    vec_warn<T extends VectorType>(this: Readonly<T>, decimalPlaces?: number): this;
 }
 
 declare global {
-    export interface Array<T> extends VectorExtension<Array<T>> {
-    }
+    export interface Array<T> extends VectorExtension<Array<T>> { }
 }
 
 declare global {
-    export interface Uint8ClampedArray extends VectorExtension<number> {
-    }
+    export interface Uint8ClampedArray extends VectorExtension<Uint8ClampedArray> { }
 }
 
 declare global {
-    export interface Uint8Array extends VectorExtension<number> {
-    }
+    export interface Uint8Array extends VectorExtension<Uint8Array> { }
 }
 
 declare global {
-    export interface Uint16Array extends VectorExtension<number> {
-    }
+    export interface Uint16Array extends VectorExtension<Uint16Array> { }
 }
 
 declare global {
-    export interface Uint32Array extends VectorExtension<number> {
-    }
+    export interface Uint32Array extends VectorExtension<Uint32Array> { }
 }
 
 declare global {
-    export interface Int8Array extends VectorExtension<number> {
-    }
+    export interface Int8Array extends VectorExtension<Int8Array> { }
 }
 
 declare global {
-    export interface Int16Array extends VectorExtension<number> {
-    }
+    export interface Int16Array extends VectorExtension<Int16Array> { }
 }
 
 declare global {
-    export interface Int32Array extends VectorExtension<number> {
-    }
+    export interface Int32Array extends VectorExtension<Int32Array> { }
 }
 
 declare global {
-    export interface Float32Array extends VectorExtension<number> {
-    }
+    export interface Float32Array extends VectorExtension<Float32Array> { }
 }
 
 declare global {
-    export interface Float64Array extends VectorExtension<number> {
-    }
+    export interface Float64Array extends VectorExtension<Float64Array> { }
+}
+
+declare module "../../../../cauldron/type_definitions/array_type_definitions.js" {
+
+    export interface Vector extends VectorExtension<Vector> { }
+
+    export interface Vector2 extends VectorExtension<Vector2> { }
+
+    export interface Vector3 extends VectorExtension<Vector3> { }
+
+    export interface Vector4 extends VectorExtension<Vector4> { }
+
+    export interface Quaternion extends VectorExtension<Quaternion> { }
+
+    export interface Quaternion2 extends VectorExtension<Quaternion2> { }
+
+    export interface Matrix2 extends VectorExtension<Matrix2> { }
+
+    export interface Matrix3 extends VectorExtension<Matrix3> { }
+
+    export interface Matrix4 extends VectorExtension<Matrix4> { }
 }

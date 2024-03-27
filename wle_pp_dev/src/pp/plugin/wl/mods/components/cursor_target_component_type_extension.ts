@@ -16,6 +16,5 @@ export interface CursorTargetExtension {
 }
 
 declare module "@wonderlandengine/components" {
-    export interface CursorTarget extends CursorTargetExtension {
-    }
+    export interface CursorTarget extends CursorTargetExtension { }
 }
