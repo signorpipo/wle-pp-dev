@@ -1,4 +1,3 @@
-export interface ArrayLikeExtension<ArrayType, ArrayElementType> {
 export interface ArrayLikeExtension<ArrayType extends ArrayLike<ArrayElementType>, ArrayElementType> {
     pp_first<T extends ArrayType>(this: Readonly<T>): ArrayElementType | undefined;
     pp_last<T extends ArrayType>(this: Readonly<T>): ArrayElementType | undefined;
