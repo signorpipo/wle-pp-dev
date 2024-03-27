@@ -13,7 +13,7 @@ export class GrabberHandComponent extends Component {
     static Properties = {
         _myHandedness: Property.enum(["Left", "Right"], "Left"),
         _myGrabButton: Property.enum(["Select", "Squeeze", "Both", "Both Exclusive"], "Squeeze"), // @"Both Exclusive" means u can use both buttons but you have to use the same button you grabbed with to throw
-        _mySnapOnPivot: Property.bool(false),
+        _mySnapGrabbableOnOrigin: Property.bool(false),
         _myMaxNumberOfObjects: Property.int(1), // How many objects you can grab at the same time
 
         // ADVANCED SETTINGS
@@ -178,7 +178,7 @@ export class GrabberHandComponent extends Component {
                     grabbableToGrab.grab(this.object);
                     grabbableToGrab.registerReleaseEventListener(this, this._onRelease.bind(this));
 
-                    if (this._mySnapOnPivot) {
+                    if (this._mySnapGrabbableOnOrigin) {
                         grabbableToGrab.object.pp_resetPositionLocal();
                     }
 
