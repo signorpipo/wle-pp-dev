@@ -1,15 +1,17 @@
-export interface VectorExtension<VectorType> {
+import { ArrayLike } from "../../../../cauldron/type_definitions/array_type_definitions.js";
+
+export interface VectorExtension<VectorType extends ArrayLike<number>> {
     vec_zero<T extends VectorType>(this: T): this;
     vec_isZero<T extends VectorType>(this: Readonly<T>, epsilon?: number): boolean;
 
-    vec_scale<T extends VectorType, S extends VectorType>(this: Readonly<T>, value: number, out?: S): S;
+    vec_scale<T extends VectorType, S extends ArrayLike<number> = VectorType>(this: Readonly<T>, value: number, out?: S): S;
 
-    vec_round<T extends VectorType, S extends VectorType>(this: Readonly<T>, out?: S): S;
-    vec_floor<T extends VectorType, S extends VectorType>(this: Readonly<T>, out?: S): S;
-    vec_ceil<T extends VectorType, S extends VectorType>(this: Readonly<T>, out?: S): S;
-    vec_clamp<T extends VectorType, S extends VectorType>(this: Readonly<T>, start: number, end: number, out?: S): S;
+    vec_round<T extends VectorType, S extends ArrayLike<number> = VectorType>(this: Readonly<T>, out?: S): S;
+    vec_floor<T extends VectorType, S extends ArrayLike<number> = VectorType>(this: Readonly<T>, out?: S): S;
+    vec_ceil<T extends VectorType, S extends ArrayLike<number> = VectorType>(this: Readonly<T>, out?: S): S;
+    vec_clamp<T extends VectorType, S extends ArrayLike<number> = VectorType>(this: Readonly<T>, start: number, end: number, out?: S): S;
 
-    vec_equals<T extends VectorType>(this: Readonly<T>, vector: Readonly<VectorType>, epsilon: number): boolean;
+    vec_equals<T extends VectorType>(this: Readonly<T>, vector: Readonly<ArrayLike<number>>, epsilon?: number): boolean;
 
     vec_toString<T extends VectorType>(this: Readonly<T>, decimalPlaces?: number): string;
 
@@ -19,7 +21,8 @@ export interface VectorExtension<VectorType> {
 }
 
 declare global {
-    export interface Array<T> extends VectorExtension<Array<T>> { }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    export interface Array<T> extends VectorExtension<Array<number>> { }
 }
 
 declare global {
@@ -59,6 +62,8 @@ declare global {
 }
 
 declare module "../../../../cauldron/type_definitions/array_type_definitions.js" {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    export interface ArrayLike<T> extends VectorExtension<ArrayLike<number>> { }
 
     export interface Vector extends VectorExtension<Vector> { }
 

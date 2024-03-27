@@ -1,4 +1,5 @@
 export interface ArrayLikeExtension<ArrayType, ArrayElementType> {
+export interface ArrayLikeExtension<ArrayType extends ArrayLike<ArrayElementType>, ArrayElementType> {
     pp_first<T extends ArrayType>(this: Readonly<T>): ArrayElementType | undefined;
     pp_last<T extends ArrayType>(this: Readonly<T>): ArrayElementType | undefined;
 
@@ -22,7 +23,7 @@ export interface ArrayLikeExtension<ArrayType, ArrayElementType> {
     pp_equals<T extends ArrayType>(this: Readonly<T>, array: Readonly<ArrayLike<ArrayElementType>>, elementsEqualCallback?: (thisElement: ArrayElementType, arrayElement: ArrayElementType) => boolean): boolean;
 }
 
-export interface ArrayExtension<ArrayType, ArrayElementType> extends ArrayLikeExtension<ArrayType, ArrayElementType> {
+export interface ArrayExtension<ArrayType extends ArrayLike<ArrayElementType>, ArrayElementType> extends ArrayLikeExtension<ArrayType, ArrayElementType> {
     pp_remove<T extends ArrayType>(this: T, callback: (elementToCheck: ArrayElementType, elementIndex: number) => boolean): ArrayElementType | undefined;
     pp_removeIndex<T extends ArrayType>(this: T, index: number): ArrayElementType | undefined;
     pp_removeAll<T extends ArrayType>(this: T, callback: (elementToCheck: ArrayElementType, elementIndex: number) => boolean): ArrayElementType[];
