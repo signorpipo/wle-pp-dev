@@ -11,41 +11,39 @@ export class SetHeadLocalTransformComponent extends Component {
         Globals.getHeadPose(this.engine)!.registerPoseUpdatedEventListener(this, this.onPoseUpdated.bind(this));
     }
 
+    private static readonly _onPoseUpdatedSV =
+        {
+            cameraNonXRRotation: quat_create(),
+            cameraNonXRUp: vec3_create(),
+            cameraNonXRPosition: vec3_create(),
+            headPoseTransform: quat2_create()
+        };
     public onPoseUpdated(dt: number, pose: Readonly<BasePose>): void {
-        // Implemented outside class definition
+        if (this.active) {
+            if (!XRUtils.isSessionActive(this.engine)) {
+                const cameraNonXR = Globals.getPlayerObjects(this.engine)!.myCameraNonXR!;
+
+                const cameraNonXRRotation = SetHeadLocalTransformComponent._onPoseUpdatedSV.cameraNonXRRotation;
+                cameraNonXR.pp_getRotationLocalQuat(cameraNonXRRotation);
+
+                if (Globals.isPoseForwardFixed(this.engine)) {
+                    const cameraNonXRUp = SetHeadLocalTransformComponent._onPoseUpdatedSV.cameraNonXRUp;
+                    (cameraNonXRRotation as any).quat_rotateAxisRadians(Math.PI, (cameraNonXRRotation as any).quat_getUp(cameraNonXRUp), cameraNonXRRotation);
+                }
+
+                const cameraNonXRPosition = SetHeadLocalTransformComponent._onPoseUpdatedSV.cameraNonXRPosition;
+                this.object.pp_setPositionLocal(cameraNonXR.pp_getPositionLocal(cameraNonXRPosition));
+                this.object.pp_setRotationLocalQuat(cameraNonXRRotation);
+            } else {
+                if (pose.isValid()) {
+                    const headPoseTransform = SetHeadLocalTransformComponent._onPoseUpdatedSV.headPoseTransform;
+                    this.object.pp_setTransformLocalQuat(pose.getTransformQuat(headPoseTransform, null));
+                }
+            }
+        }
     }
 
     public override onDestroy(): void {
         Globals.getHeadPose(this.engine)?.unregisterPoseUpdatedEventListener(this);
     }
 }
-
-
-
-// IMPLEMENTATION
-
-SetHeadLocalTransformComponent.prototype.onPoseUpdated = function () {
-    const cameraNonXRRotation = quat_create();
-    const cameraNonXRUp = vec3_create();
-    const cameraNonXRPosition = vec3_create();
-
-    const headPoseTransform = quat2_create();
-    return function onPoseUpdated(this: SetHeadLocalTransformComponent, dt: number, pose: Readonly<BasePose>): void {
-        if (this.active) {
-            if (!XRUtils.isSessionActive(this.engine)) {
-                const cameraNonXR = Globals.getPlayerObjects(this.engine)!.myCameraNonXR!;
-
-                cameraNonXR.pp_getRotationLocalQuat(cameraNonXRRotation);
-                if (Globals.isPoseForwardFixed(this.engine)) {
-                    (cameraNonXRRotation as any).quat_rotateAxisRadians(Math.PI, (cameraNonXRRotation as any).quat_getUp(cameraNonXRUp), cameraNonXRRotation);
-                }
-                this.object.pp_setPositionLocal(cameraNonXR.pp_getPositionLocal(cameraNonXRPosition));
-                this.object.pp_setRotationLocalQuat(cameraNonXRRotation);
-            } else {
-                if (pose.isValid()) {
-                    this.object.pp_setTransformLocalQuat(pose.getTransformQuat(headPoseTransform, null));
-                }
-            }
-        }
-    };
-}();
