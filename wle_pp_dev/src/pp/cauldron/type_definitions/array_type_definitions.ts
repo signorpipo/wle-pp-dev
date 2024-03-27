@@ -100,7 +100,6 @@ export interface BaseArrayLike<T> {
      * If thisArg is omitted, undefined is used as the this value.
      */
     every(predicate: (value: T, index: number, array: ArrayLike<T>) => unknown, thisArg?: any): boolean;
-    every<S extends T>(predicate: (value: T, index: number, array: ArrayLike<T>) => value is S, thisArg?: any): this is ArrayLike<S>;
 
     /**
      * Determines whether the specified callback function returns true for any element of an array.
@@ -125,7 +124,6 @@ export interface BaseArrayLike<T> {
      * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
      */
     map(callbackfn: (value: T, index: number, array: ArrayLike<T>) => T, thisArg?: any): ArrayLike<T>;
-    map<U>(callbackfn: (value: T, index: number, array: ArrayLike<T>) => U, thisArg?: any): ArrayLike<U>;
 
     /**
      * Returns the elements of an array that meet the condition specified in a callback function.
@@ -133,7 +131,6 @@ export interface BaseArrayLike<T> {
      * @param thisArg An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value.
      */
     filter(predicate: (value: T, index: number, array: ArrayLike<T>) => unknown, thisArg?: any): ArrayLike<T>;
-    filter<S extends T>(predicate: (value: T, index: number, array: ArrayLike<T>) => value is S, thisArg?: any): ArrayLike<S>;
 
     /**
      * Returns the value of the first element in the array where predicate is true, and undefined
