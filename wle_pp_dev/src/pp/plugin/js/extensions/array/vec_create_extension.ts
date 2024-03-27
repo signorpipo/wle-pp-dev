@@ -7,8 +7,6 @@ import { Vec2Utils } from "../../../../cauldron/utils/array/vec2_utils.js";
 import { Vec3Utils } from "../../../../cauldron/utils/array/vec3_utils.js";
 import { Vec4Utils } from "../../../../cauldron/utils/array/vec4_utils.js";
 
-// #TODO move these creation to their respective extension when done
-
 export function vec2_create(): Vector2;
 export function vec2_create(x: number, y: number): Vector2;
 export function vec2_create(uniformValue: number): Vector2;
