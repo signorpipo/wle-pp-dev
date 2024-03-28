@@ -1,4 +1,5 @@
-import { VecUtils, Vector } from "../../../../index.js";
+import { Vector } from "../../../../cauldron/type_definitions/array_type_definitions.js";
+import { VecUtils } from "../../../../cauldron/utils/array/vec_utils.js";
 import { PluginUtils } from "../../../utils/plugin_utils.js";
 import "./array_type_extension.js";
 
@@ -12,6 +13,10 @@ export function initVecExtensionProtoype(): void {
 
     vecExtension.vec_clone = function vec_clone<T extends Vector>(this: Readonly<T>): T {
         return VecUtils.clone<T>(this);
+    };
+
+    vecExtension.vec_equals = function vec_equals(this: Readonly<Vector>, vector: Readonly<Vector>, epsilon: number = 0): boolean {
+        return VecUtils.equals(this, vector, epsilon);
     };
 
     vecExtension.vec_zero = function vec_zero<T extends Vector>(this: T): T {
@@ -40,10 +45,6 @@ export function initVecExtensionProtoype(): void {
 
     vecExtension.vec_clamp = function vec_clamp<T extends Vector, S extends Vector>(this: Readonly<T>, start: number, end: number, out?: S): S {
         return VecUtils.clamp(this, start, end, out!);
-    };
-
-    vecExtension.vec_equals = function vec_equals(this: Readonly<Vector>, vector: Readonly<Vector>, epsilon: number = 0): boolean {
-        return VecUtils.equals(this, vector, epsilon);
     };
 
     vecExtension.vec_toString = function vec_toString(this: Readonly<Vector>, decimalPlaces: number = 4): string {

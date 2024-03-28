@@ -10,6 +10,16 @@ export function clone<T extends Vector>(vector: Readonly<T>): T {
     return vector.slice(0) as T;
 }
 
+export function equals(vector: Readonly<Vector>, other: Readonly<Vector>, epsilon: number = 0): boolean {
+    let equals = vector.length == other.length;
+
+    for (let i = 0; i < vector.length && equals; i++) {
+        equals = equals && (Math.abs(vector[i] - other[i]) <= epsilon);
+    }
+
+    return equals;
+}
+
 export function zero<T extends Vector>(vector: T): T {
     for (let i = 0; i < vector.length; i++) {
         vector[i] = 0;
@@ -83,16 +93,6 @@ export function clamp<T extends Vector, S extends Vector>(vector: Readonly<T>, s
     return out;
 }
 
-export function equals(vector: Readonly<Vector>, other: Readonly<Vector>, epsilon: number = 0): boolean {
-    let equals = vector.length == other.length;
-
-    for (let i = 0; i < vector.length && equals; i++) {
-        equals = equals && (Math.abs(vector[i] - other[i]) <= epsilon);
-    }
-
-    return equals;
-}
-
 export function toString(vector: Readonly<Vector>, decimalPlaces: number = 4): string {
     const message = _buildConsoleMessage(vector, decimalPlaces);
     return message;
@@ -121,6 +121,7 @@ export function warn(vector: Readonly<Vector>, decimalPlaces: number = 4): Vecto
 
 export const VecUtils = {
     clone,
+    equals,
     zero,
     isZero,
     scale,
@@ -128,7 +129,6 @@ export const VecUtils = {
     floor,
     ceil,
     clamp,
-    equals,
     toString,
     log,
     error,

@@ -3,6 +3,8 @@ import { Vector } from "../../../../cauldron/type_definitions/array_type_definit
 export interface VectorExtension<VectorType extends Vector> {
     vec_clone<T extends VectorType>(this: Readonly<T>): T;
 
+    vec_equals<T extends VectorType>(this: Readonly<T>, vector: Readonly<Vector>, epsilon?: number): boolean;
+
     vec_zero<T extends VectorType>(this: T): this;
     vec_isZero<T extends VectorType>(this: Readonly<T>, epsilon?: number): boolean;
 
@@ -22,8 +24,6 @@ export interface VectorExtension<VectorType extends Vector> {
     vec_clamp<T extends VectorType>(this: Readonly<T>, start: number, end: number): T;
     vec_clamp<T extends VectorType, S extends Vector>(this: Readonly<T>, start: number, end: number, out: S): S;
 
-
-    vec_equals<T extends VectorType>(this: Readonly<T>, vector: Readonly<Vector>, epsilon?: number): boolean;
 
     vec_toString<T extends VectorType>(this: Readonly<T>, decimalPlaces?: number): string;
 
