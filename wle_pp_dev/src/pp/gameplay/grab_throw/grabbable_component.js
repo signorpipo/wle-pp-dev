@@ -80,11 +80,7 @@ export class GrabbableComponent extends Component {
     }
 
     getLinearVelocity() {
-        let linearVelocity = vec3_create();
-
-        this._myPhysX.linearVelocity.vec3_clone(linearVelocity);
-
-        return linearVelocity;
+        return this._myPhysX.linearVelocity.vec3_clone();
     }
 
     getAngularVelocity() {
@@ -100,11 +96,7 @@ export class GrabbableComponent extends Component {
     }
 
     getAngularVelocityRadians() {
-        let angularVelocityRadians = vec3_create();
-
-        this._myPhysX.angularVelocity.vec3_clone(angularVelocityRadians);
-
-        return angularVelocityRadians;
+        return this._myPhysX.angularVelocity.vec3_clone();
     }
 
     isGrabbed() {
