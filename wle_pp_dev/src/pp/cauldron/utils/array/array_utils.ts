@@ -1,5 +1,59 @@
 import { ArrayLike } from "../../type_definitions/array_type_definitions.js";
 
+export function copy<ArrayType extends ArrayLike<T>, T>(from: Readonly<ArrayLike<T>>, to: ArrayType, copyCallback?: (fromElement: T, toElement: T) => T): ArrayType {
+    const _to = to as any;
+    if (_to.pop != null) {
+        while (to.length > from.length) {
+            _to.pop();
+        }
+    }
+
+    for (let i = 0; i < from.length; i++) {
+        if (copyCallback == null) {
+            to[i] = from[i];
+        } else {
+            to[i] = copyCallback(from[i], to[i]);
+        }
+    }
+
+    return to;
+}
+
+/** The overload where `ArrayType extends ArrayLike<number>` does also get `array` as `Readonly<ArrayType>`, but is not marked as such due to 
+ *  Typescript having issues with inferring the proper type of `ArrayType` when `Readonly` */
+export function clone<T>(array: Readonly<T[]>, cloneCallback?: (elementToClone: T) => T): T[];
+export function clone<ArrayType extends ArrayLike<number>>(array: ArrayType, cloneCallback?: (elementToClone: number) => number): ArrayType;
+export function clone<ArrayType extends ArrayLike<T>, T>(array: Readonly<ArrayType>, cloneCallback?: (elementToClone: T) => T): ArrayType;
+export function clone<ArrayType extends ArrayLike<T>, T>(array: Readonly<ArrayType>, cloneCallback?: (elementToClone: T) => T): ArrayType {
+    const clonedArray = array.slice(0) as ArrayType;
+
+    if (cloneCallback != null) {
+        for (let i = 0; i < array.length; i++) {
+            clonedArray[i] = cloneCallback(array[i]);
+        }
+    }
+
+    return clonedArray;
+}
+
+export function equals<T>(array: Readonly<ArrayLike<T>>, other: Readonly<ArrayLike<T>>, elementsEqualCallback?: (arrayElement: T, otherElement: T) => boolean): boolean {
+    let equals = true;
+
+    if (other != null && array.length == other.length) {
+        for (let i = 0; i < array.length; i++) {
+            if ((elementsEqualCallback != null && !elementsEqualCallback(array[i], other[i])) ||
+                (elementsEqualCallback == null && array[i] != other[i])) {
+                equals = false;
+                break;
+            }
+        }
+    } else {
+        equals = false;
+    }
+
+    return equals;
+}
+
 export function first<T>(array: Readonly<ArrayLike<T>>): T | undefined {
     return array.length > 0 ? array[0] : undefined;
 }
@@ -213,61 +267,10 @@ export function unshiftUnique<T>(array: T[], elementToAdd: T, elementsEqualCallb
     return length;
 }
 
-export function copy<ArrayType extends ArrayLike<T>, T>(from: Readonly<ArrayLike<T>>, to: ArrayType, copyCallback?: (fromElement: T, toElement: T) => T): ArrayType {
-    const _to = to as any;
-    if (_to.pop != null) {
-        while (to.length > from.length) {
-            _to.pop();
-        }
-    }
-
-    for (let i = 0; i < from.length; i++) {
-        if (copyCallback == null) {
-            to[i] = from[i];
-        } else {
-            to[i] = copyCallback(from[i], to[i]);
-        }
-    }
-
-    return to;
-}
-
-/** The overload where `ArrayType extends ArrayLike<number>` does also get `array` as `Readonly<ArrayType>`, but is not marked as such due to 
- *  Typescript having issues with inferring the proper type of `ArrayType` when `Readonly` */
-export function clone<T>(array: Readonly<T[]>, cloneCallback?: (elementToClone: T) => T): T[];
-export function clone<ArrayType extends ArrayLike<number>>(array: ArrayType, cloneCallback?: (elementToClone: number) => number): ArrayType;
-export function clone<ArrayType extends ArrayLike<T>, T>(array: Readonly<ArrayType>, cloneCallback?: (elementToClone: T) => T): ArrayType;
-export function clone<ArrayType extends ArrayLike<T>, T>(array: Readonly<ArrayType>, cloneCallback?: (elementToClone: T) => T): ArrayType {
-    const clonedArray = array.slice(0) as ArrayType;
-
-    if (cloneCallback != null) {
-        for (let i = 0; i < array.length; i++) {
-            clonedArray[i] = cloneCallback(array[i]);
-        }
-    }
-
-    return clonedArray;
-}
-
-export function equals<T>(array: Readonly<ArrayLike<T>>, other: Readonly<ArrayLike<T>>, elementsEqualCallback?: (arrayElement: T, otherElement: T) => boolean): boolean {
-    let equals = true;
-
-    if (other != null && array.length == other.length) {
-        for (let i = 0; i < array.length; i++) {
-            if ((elementsEqualCallback != null && !elementsEqualCallback(array[i], other[i])) ||
-                (elementsEqualCallback == null && array[i] != other[i])) {
-                equals = false;
-                break;
-            }
-        }
-    } else {
-        equals = false;
-    }
-
-    return equals;
-}
-
 export const ArrayUtils = {
+    copy,
+    clone,
+    equals,
     first,
     last,
     has,
@@ -288,10 +291,7 @@ export const ArrayUtils = {
     removeAllEqual,
     clear,
     pushUnique,
-    unshiftUnique,
-    copy,
-    clone,
-    equals
+    unshiftUnique
 } as const;
 
 

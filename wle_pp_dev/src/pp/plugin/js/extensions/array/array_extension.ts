@@ -4,15 +4,27 @@ import { PluginUtils } from "../../../utils/plugin_utils.js";
 import "./array_type_extension.js";
 
 export function initArrayExtension(): void {
+    initArrayLikeExtensionProtoype();
     initArrayExtensionProtoype();
 }
 
-export function initArrayExtensionProtoype(): void {
+export function initArrayLikeExtensionProtoype(): void {
 
     // New Functions
 
     const arrayLikeExtension: Record<string, any> = {};
-    const arrayExtension: Record<string, any> = {};
+
+    arrayLikeExtension.pp_copy = function pp_copy<ArrayType extends ArrayLike<T>, T>(this: ArrayType, array: Readonly<ArrayLike<T>>, copyCallback?: (arrayElement: T, thisElement: T) => T): ArrayType {
+        return ArrayUtils.copy(array, this, copyCallback);
+    };
+
+    arrayLikeExtension.pp_clone = function pp_clone<ArrayType extends ArrayLike<T>, T>(this: Readonly<ArrayType>, cloneCallback?: (elementToClone: T) => T): ArrayType {
+        return ArrayUtils.clone(this, cloneCallback);
+    };
+
+    arrayLikeExtension.pp_equals = function pp_equals<T>(this: Readonly<ArrayLike<T>>, array: Readonly<ArrayLike<T>>, elementsEqualCallback?: (thisElement: T, arrayElement: T) => boolean): boolean {
+        return ArrayUtils.equals(this, array, elementsEqualCallback);
+    };
 
     arrayLikeExtension.pp_first = function pp_first<T>(this: Readonly<ArrayLike<T>>): T | undefined {
         return ArrayUtils.first(this);
@@ -62,6 +74,21 @@ export function initArrayExtensionProtoype(): void {
         return ArrayUtils.findAllIndexesEqual(this, elementToFind, elementsEqualCallback);
     };
 
+    const arrayLikePrototypesToExtend = [
+        Array.prototype, Uint8ClampedArray.prototype, Uint8Array.prototype, Uint16Array.prototype, Uint32Array.prototype, Int8Array.prototype,
+        Int16Array.prototype, Int32Array.prototype, Float32Array.prototype, Float64Array.prototype];
+
+    for (const arrayLikePrototypeToExtend of arrayLikePrototypesToExtend) {
+        PluginUtils.injectProperties(arrayLikeExtension, arrayLikePrototypeToExtend, false, true, true);
+    }
+}
+
+export function initArrayExtensionProtoype(): void {
+
+    // New Functions
+
+    const arrayExtension: Record<string, any> = {};
+
     arrayExtension.pp_remove = function pp_remove<T>(this: T[], callback: (elementToCheck: T, elementIndex: number) => boolean): T | undefined {
         return ArrayUtils.remove(this, callback);
     };
@@ -97,26 +124,6 @@ export function initArrayExtensionProtoype(): void {
     arrayExtension.pp_unshiftUnique = function pp_unshiftUnique<T>(this: T[], elementToAdd: T, elementsEqualCallback?: (elementToCheck: T, elementToAdd: T) => boolean): number {
         return ArrayUtils.unshiftUnique(this, elementToAdd, elementsEqualCallback);
     };
-
-    arrayLikeExtension.pp_copy = function pp_copy<ArrayType extends ArrayLike<T>, T>(this: ArrayType, array: Readonly<ArrayLike<T>>, copyCallback?: (arrayElement: T, thisElement: T) => T): ArrayType {
-        return ArrayUtils.copy(array, this, copyCallback);
-    };
-
-    arrayLikeExtension.pp_clone = function pp_clone<ArrayType extends ArrayLike<T>, T>(this: Readonly<ArrayType>, cloneCallback?: (elementToClone: T) => T): ArrayType {
-        return ArrayUtils.clone(this, cloneCallback);
-    };
-
-    arrayLikeExtension.pp_equals = function pp_equals<T>(this: Readonly<ArrayLike<T>>, array: Readonly<ArrayLike<T>>, elementsEqualCallback?: (thisElement: T, arrayElement: T) => boolean): boolean {
-        return ArrayUtils.equals(this, array, elementsEqualCallback);
-    };
-
-    const arrayLikePrototypesToExtend = [
-        Array.prototype, Uint8ClampedArray.prototype, Uint8Array.prototype, Uint16Array.prototype, Uint32Array.prototype, Int8Array.prototype,
-        Int16Array.prototype, Int32Array.prototype, Float32Array.prototype, Float64Array.prototype];
-
-    for (const arrayLikePrototypeToExtend of arrayLikePrototypesToExtend) {
-        PluginUtils.injectProperties(arrayLikeExtension, arrayLikePrototypeToExtend, false, true, true);
-    }
 
     PluginUtils.injectProperties(arrayExtension, Array.prototype, false, true, true);
 }

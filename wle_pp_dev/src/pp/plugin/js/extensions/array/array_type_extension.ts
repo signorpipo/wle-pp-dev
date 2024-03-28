@@ -1,4 +1,9 @@
 export interface ArrayLikeExtension<ArrayType extends ArrayLike<ArrayElementType>, ArrayElementType> {
+    pp_copy<T extends ArrayType>(this: T, array: Readonly<ArrayLike<ArrayElementType>>, copyCallback?: (arrayElement: ArrayElementType, thisElement: ArrayElementType) => ArrayElementType): this;
+    pp_clone<T extends ArrayType>(this: Readonly<T>, cloneCallback?: (elementToClone: ArrayElementType) => ArrayElementType): T;
+
+    pp_equals<T extends ArrayType>(this: Readonly<T>, array: Readonly<ArrayLike<ArrayElementType>>, elementsEqualCallback?: (thisElement: ArrayElementType, arrayElement: ArrayElementType) => boolean): boolean;
+
     pp_first<T extends ArrayType>(this: Readonly<T>): ArrayElementType | undefined;
     pp_last<T extends ArrayType>(this: Readonly<T>): ArrayElementType | undefined;
 
@@ -14,12 +19,6 @@ export interface ArrayLikeExtension<ArrayType extends ArrayLike<ArrayElementType
     pp_findAllEqual<T extends ArrayType>(this: Readonly<T>, elementToFind: ArrayElementType, elementsEqualCallback?: (elementToCheck: ArrayElementType, elementToFind: ArrayElementType) => boolean): ArrayElementType[];
     pp_findIndexEqual<T extends ArrayType>(this: Readonly<T>, elementToFind: ArrayElementType, elementsEqualCallback?: (elementToCheck: ArrayElementType, elementToFind: ArrayElementType) => boolean): number;
     pp_findAllIndexesEqual<T extends ArrayType>(this: Readonly<T>, elementToFind: ArrayElementType, elementsEqualCallback?: (elementToCheck: ArrayElementType, elementToFind: ArrayElementType) => boolean): number[];
-
-    pp_copy<T extends ArrayType>(this: T, array: Readonly<ArrayLike<ArrayElementType>>, copyCallback?: (arrayElement: ArrayElementType, thisElement: ArrayElementType) => ArrayElementType): this;
-
-    pp_clone<T extends ArrayType>(this: Readonly<T>, cloneCallback?: (elementToClone: ArrayElementType) => ArrayElementType): T;
-
-    pp_equals<T extends ArrayType>(this: Readonly<T>, array: Readonly<ArrayLike<ArrayElementType>>, elementsEqualCallback?: (thisElement: ArrayElementType, arrayElement: ArrayElementType) => boolean): boolean;
 }
 
 export interface ArrayExtension<ArrayType extends ArrayLike<ArrayElementType>, ArrayElementType> extends ArrayLikeExtension<ArrayType, ArrayElementType> {
