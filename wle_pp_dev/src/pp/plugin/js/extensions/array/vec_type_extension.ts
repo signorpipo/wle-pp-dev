@@ -1,17 +1,29 @@
-import { ArrayLike } from "../../../../cauldron/type_definitions/array_type_definitions.js";
+import { Vector } from "../../../../cauldron/type_definitions/array_type_definitions.js";
 
-export interface VectorExtension<VectorType extends ArrayLike<number>> {
+export interface VectorExtension<VectorType extends Vector> {
+    vec_clone<T extends VectorType>(this: Readonly<T>): T;
+
     vec_zero<T extends VectorType>(this: T): this;
     vec_isZero<T extends VectorType>(this: Readonly<T>, epsilon?: number): boolean;
 
-    vec_scale<T extends VectorType, S extends ArrayLike<number> = VectorType>(this: Readonly<T>, value: number, out?: S): S;
+    vec_scale<T extends VectorType>(this: Readonly<T>, value: number): T;
+    vec_scale<T extends VectorType, S extends Vector>(this: Readonly<T>, value: number, out: S): S;
 
-    vec_round<T extends VectorType, S extends ArrayLike<number> = VectorType>(this: Readonly<T>, out?: S): S;
-    vec_floor<T extends VectorType, S extends ArrayLike<number> = VectorType>(this: Readonly<T>, out?: S): S;
-    vec_ceil<T extends VectorType, S extends ArrayLike<number> = VectorType>(this: Readonly<T>, out?: S): S;
-    vec_clamp<T extends VectorType, S extends ArrayLike<number> = VectorType>(this: Readonly<T>, start: number, end: number, out?: S): S;
 
-    vec_equals<T extends VectorType>(this: Readonly<T>, vector: Readonly<ArrayLike<number>>, epsilon?: number): boolean;
+    vec_round<T extends VectorType>(this: Readonly<T>): T;
+    vec_round<T extends VectorType, S extends Vector>(this: Readonly<T>, out: S): S;
+
+    vec_floor<T extends VectorType>(this: Readonly<T>): T;
+    vec_floor<T extends VectorType, S extends Vector>(this: Readonly<T>, out: S): S;
+
+    vec_ceil<T extends VectorType>(this: Readonly<T>): T;
+    vec_ceil<T extends VectorType, S extends Vector>(this: Readonly<T>, out: S): S;
+
+    vec_clamp<T extends VectorType>(this: Readonly<T>, start: number, end: number): T;
+    vec_clamp<T extends VectorType, S extends Vector>(this: Readonly<T>, start: number, end: number, out: S): S;
+
+
+    vec_equals<T extends VectorType>(this: Readonly<T>, vector: Readonly<Vector>, epsilon?: number): boolean;
 
     vec_toString<T extends VectorType>(this: Readonly<T>, decimalPlaces?: number): string;
 
