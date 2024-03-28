@@ -6,9 +6,8 @@ import { Vector2 } from "../../type_definitions/array_type_definitions.js";
 export function create(): Vector2;
 export function create(x: number, y: number): Vector2;
 export function create(uniformValue: number): Vector2;
-export function create<T extends Vector2>(x?: number, y?: number): T;
-export function create<T extends Vector2>(x?: number, y?: number): T {
-    const out = gl_vec2.create() as unknown as T;
+export function create(x?: number, y?: number): Vector2 {
+    const out = gl_vec2.create() as unknown as Vector2;
 
     if (x != null) {
         set(out, x, y);
@@ -31,7 +30,7 @@ export function length(vector: Readonly<Vector2>): number {
     return gl_vec2.length(vector as unknown as gl_vec2_type);
 }
 
-export function normalize<T extends Vector2>(vector: Vector2, out: T = create<T>()): T {
+export function normalize<T extends Vector2>(vector: T, out: T = clone(vector)): T {
     gl_vec2.normalize(out as unknown as gl_vec2_type, vector as unknown as gl_vec2_type);
     return out as T;
 }
