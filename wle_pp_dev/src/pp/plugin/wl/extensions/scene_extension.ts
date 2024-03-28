@@ -58,15 +58,15 @@ export function initSceneExtensionPrototype(): void {
 
     // Get Component    
 
-    sceneExtension.pp_getComponent = function pp_getComponent<T extends Component>(this: Readonly<Scene>, typeOrClass: string | ComponentConstructor<T>, index: number = 0): T | null {
+    sceneExtension.pp_getComponent = function pp_getComponent<T extends Component>(this: Readonly<Scene>, typeOrClass: string | ComponentConstructor<T>, index?: number): T | null {
         return SceneUtils.getComponent(this, typeOrClass, index);
     };
 
-    sceneExtension.pp_getComponentBreadth = function pp_getComponentBreadth<T extends Component>(this: Readonly<Scene>, typeOrClass: string | ComponentConstructor<T>, index: number = 0): T | null {
+    sceneExtension.pp_getComponentBreadth = function pp_getComponentBreadth<T extends Component>(this: Readonly<Scene>, typeOrClass: string | ComponentConstructor<T>, index?: number): T | null {
         return SceneUtils.getComponentBreadth(this, typeOrClass, index);
     };
 
-    sceneExtension.pp_getComponentDepth = function pp_getComponentDepth<T extends Component>(this: Readonly<Scene>, typeOrClass: string | ComponentConstructor<T>, index: number = 0): T | null {
+    sceneExtension.pp_getComponentDepth = function pp_getComponentDepth<T extends Component>(this: Readonly<Scene>, typeOrClass: string | ComponentConstructor<T>, index?: number): T | null {
         return SceneUtils.getComponentDepth(this, typeOrClass, index);
     };
 
@@ -84,27 +84,27 @@ export function initSceneExtensionPrototype(): void {
 
     // Get Object By Name
 
-    sceneExtension.pp_getObjectByName = function pp_getObjectByName(this: Readonly<Scene>, name: string, isRegex: boolean = false, index: number = 0): Object3D | null {
+    sceneExtension.pp_getObjectByName = function pp_getObjectByName(this: Readonly<Scene>, name: string, isRegex?: boolean, index?: number): Object3D | null {
         return SceneUtils.getObjectByName(this, name, isRegex, index);
     };
 
-    sceneExtension.pp_getObjectByNameBreadth = function pp_getObjectByNameBreadth(this: Readonly<Scene>, name: string, isRegex: boolean = false, index: number = 0): Object3D | null {
+    sceneExtension.pp_getObjectByNameBreadth = function pp_getObjectByNameBreadth(this: Readonly<Scene>, name: string, isRegex?: boolean, index?: number): Object3D | null {
         return SceneUtils.getObjectByNameBreadth(this, name, isRegex, index);
     };
 
-    sceneExtension.pp_getObjectByNameDepth = function pp_getObjectByNameDepth(this: Readonly<Scene>, name: string, isRegex: boolean = false, index: number = 0): Object3D | null {
+    sceneExtension.pp_getObjectByNameDepth = function pp_getObjectByNameDepth(this: Readonly<Scene>, name: string, isRegex?: boolean, index?: number): Object3D | null {
         return SceneUtils.getObjectByNameDepth(this, name, isRegex, index);
     };
 
-    sceneExtension.pp_getObjectsByName = function pp_getObjectsByName(this: Readonly<Scene>, name: string, isRegex: boolean = false): Object3D[] {
+    sceneExtension.pp_getObjectsByName = function pp_getObjectsByName(this: Readonly<Scene>, name: string, isRegex?: boolean): Object3D[] {
         return SceneUtils.getObjectsByName(this, name, isRegex);
     };
 
-    sceneExtension.pp_getObjectsByNameBreadth = function pp_getObjectsByNameBreadth(this: Readonly<Scene>, name: string, isRegex: boolean = false): Object3D[] {
+    sceneExtension.pp_getObjectsByNameBreadth = function pp_getObjectsByNameBreadth(this: Readonly<Scene>, name: string, isRegex?: boolean): Object3D[] {
         return SceneUtils.getObjectsByNameBreadth(this, name, isRegex);
     };
 
-    sceneExtension.pp_getObjectsByNameDepth = function pp_getObjectsByNameDepth(this: Readonly<Scene>, name: string, isRegex: boolean = false): Object3D[] {
+    sceneExtension.pp_getObjectsByNameDepth = function pp_getObjectsByNameDepth(this: Readonly<Scene>, name: string, isRegex?: boolean): Object3D[] {
         return SceneUtils.getObjectsByNameDepth(this, name, isRegex);
     };
 
@@ -138,7 +138,7 @@ export function initSceneExtensionPrototype(): void {
 
     // Cauldron
 
-    sceneExtension.pp_getComponentsAmountMap = function pp_getComponentsAmountMap(this: Readonly<Scene>, outComponentsAmountMap: Map<string, number> = new Map()): Map<string, number> {
+    sceneExtension.pp_getComponentsAmountMap = function pp_getComponentsAmountMap(this: Readonly<Scene>, outComponentsAmountMap?: Map<string, number>): Map<string, number> {
         return SceneUtils.getComponentsAmountMap(this, outComponentsAmountMap);
     };
 

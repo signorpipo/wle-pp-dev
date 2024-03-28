@@ -60,7 +60,7 @@ export function initMathExtensionStatic(): void {
         return MathUtils.clamp(value, start, end);
     };
 
-    mathExtension.pp_sign = function pp_sign(value: number, zeroSign: number = 1): number {
+    mathExtension.pp_sign = function pp_sign(value: number, zeroSign?: number): number {
         return MathUtils.sign(value, zeroSign);
     };
 
@@ -80,7 +80,7 @@ export function initMathExtensionStatic(): void {
         return MathUtils.mapToRange(value, originRangeStart, originRangeEnd, newRangeStart, newRangeEnd);
     };
 
-    mathExtension.pp_random = function pp_random(start: number = 0, end: number = 1): number {
+    mathExtension.pp_random = function pp_random(start?: number, end?: number): number {
         return MathUtils.random(start, end);
     };
 
@@ -108,11 +108,11 @@ export function initMathExtensionStatic(): void {
         return MathUtils.lerp(from, to, interpolationFactor);
     };
 
-    mathExtension.pp_interpolate = function pp_interpolate(from: number, to: number, interpolationFactor: number, easingFunction: EasingFunction = EasingFunction.linear): number {
+    mathExtension.pp_interpolate = function pp_interpolate(from: number, to: number, interpolationFactor: number, easingFunction?: EasingFunction): number {
         return MathUtils.interpolate(from, to, interpolationFactor, easingFunction);
     };
 
-    mathExtension.pp_interpolatePeriodic = function pp_interpolatePeriodic(from: number, to: number, interpolationFactor: number, easingFunction: EasingFunction = EasingFunction.linear): number {
+    mathExtension.pp_interpolatePeriodic = function pp_interpolatePeriodic(from: number, to: number, interpolationFactor: number, easingFunction?: EasingFunction): number {
         return MathUtils.interpolatePeriodic(from, to, interpolationFactor, easingFunction);
     };
 
@@ -140,27 +140,27 @@ export function initMathExtensionStatic(): void {
         return MathUtils.angleDistanceSignedRadians(from, to);
     };
 
-    mathExtension.pp_angleClamp = function pp_angleClamp(angle: number, usePositiveRange: boolean = false): number {
+    mathExtension.pp_angleClamp = function pp_angleClamp(angle: number, usePositiveRange?: boolean): number {
         return MathUtils.angleClamp(angle, usePositiveRange);
     };
 
-    mathExtension.pp_angleClampDegrees = function pp_angleClampDegrees(angle: number, usePositiveRange: boolean = false): number {
+    mathExtension.pp_angleClampDegrees = function pp_angleClampDegrees(angle: number, usePositiveRange?: boolean): number {
         return MathUtils.angleClampDegrees(angle, usePositiveRange);
     };
 
-    mathExtension.pp_angleClampRadians = function pp_angleClampRadians(angle: number, usePositiveRange: boolean = false): number {
+    mathExtension.pp_angleClampRadians = function pp_angleClampRadians(angle: number, usePositiveRange?: boolean): number {
         return MathUtils.angleClampRadians(angle, usePositiveRange);
     };
 
-    mathExtension.pp_isInsideAngleRange = function pp_isInsideAngleRange(angle: number, start: number, end: number, useShortestAngle: boolean = false): boolean {
+    mathExtension.pp_isInsideAngleRange = function pp_isInsideAngleRange(angle: number, start: number, end: number, useShortestAngle?: boolean): boolean {
         return MathUtils.isInsideAngleRange(angle, start, end, useShortestAngle);
     };
 
-    mathExtension.pp_isInsideAngleRangeDegrees = function pp_isInsideAngleRangeDegrees(angle: number, start: number, end: number, useShortestAngle: boolean = false): boolean {
+    mathExtension.pp_isInsideAngleRangeDegrees = function pp_isInsideAngleRangeDegrees(angle: number, start: number, end: number, useShortestAngle?: boolean): boolean {
         return MathUtils.isInsideAngleRangeDegrees(angle, start, end, useShortestAngle);
     };
 
-    mathExtension.pp_isInsideAngleRangeRadians = function pp_isInsideAngleRangeRadians(angle: number, start: number, end: number, useShortestAngle: boolean = false): boolean {
+    mathExtension.pp_isInsideAngleRangeRadians = function pp_isInsideAngleRangeRadians(angle: number, start: number, end: number, useShortestAngle?: boolean): boolean {
         return MathUtils.isInsideAngleRangeRadians(angle, start, end, useShortestAngle);
     };
 

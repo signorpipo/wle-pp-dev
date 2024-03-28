@@ -15,7 +15,7 @@ export function initVecExtensionProtoype(): void {
         return VecUtils.clone<T>(this);
     };
 
-    vecExtension.vec_equals = function vec_equals(this: Readonly<Vector>, vector: Readonly<Vector>, epsilon: number = 0): boolean {
+    vecExtension.vec_equals = function vec_equals(this: Readonly<Vector>, vector: Readonly<Vector>, epsilon?: number): boolean {
         return VecUtils.equals(this, vector, epsilon);
     };
 
@@ -23,7 +23,7 @@ export function initVecExtensionProtoype(): void {
         return VecUtils.zero(this);
     };
 
-    vecExtension.vec_isZero = function vec_isZero(this: Readonly<Vector>, epsilon: number = 0): boolean {
+    vecExtension.vec_isZero = function vec_isZero(this: Readonly<Vector>, epsilon?: number): boolean {
         return VecUtils.isZero(this, epsilon);
     };
 
@@ -47,19 +47,19 @@ export function initVecExtensionProtoype(): void {
         return VecUtils.clamp(this, start, end, out!);
     };
 
-    vecExtension.vec_toString = function vec_toString(this: Readonly<Vector>, decimalPlaces: number = 4): string {
+    vecExtension.vec_toString = function vec_toString(this: Readonly<Vector>, decimalPlaces?: number): string {
         return VecUtils.toString(this, decimalPlaces);
     };
 
-    vecExtension.vec_log = function vec_log(this: Readonly<Vector>, decimalPlaces: number = 4): Vector {
+    vecExtension.vec_log = function vec_log(this: Readonly<Vector>, decimalPlaces?: number): Vector {
         return VecUtils.log(this, decimalPlaces);
     };
 
-    vecExtension.vec_error = function vec_error(this: Readonly<Vector>, decimalPlaces: number = 4): Vector {
+    vecExtension.vec_error = function vec_error(this: Readonly<Vector>, decimalPlaces?: number): Vector {
         return VecUtils.error(this, decimalPlaces);
     };
 
-    vecExtension.vec_warn = function vec_warn(this: Readonly<Vector>, decimalPlaces: number = 4): Vector {
+    vecExtension.vec_warn = function vec_warn(this: Readonly<Vector>, decimalPlaces?: number): Vector {
         return VecUtils.warn(this, decimalPlaces);
     };
 
