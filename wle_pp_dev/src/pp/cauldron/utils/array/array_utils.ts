@@ -232,10 +232,10 @@ export function copy<ArrayType extends ArrayLike<T>, T>(from: Readonly<ArrayLike
     return to;
 }
 
-/** The overload where `T extends ArrayLike<number>` does also get `array` as `Readonly<T>`, but is not marked as such due to Typescript having issues
- *  with inferring the proper type of `T` when `Readonly` is used in that specific overload */
+/** The overload where `ArrayType extends ArrayLike<number>` does also get `array` as `Readonly<ArrayType>`, but is not marked as such due to 
+ *  Typescript having issues with inferring the proper type of `ArrayType` when `Readonly` */
 export function clone<T>(array: Readonly<T[]>, cloneCallback?: (elementToClone: T) => T): T[];
-export function clone<T extends ArrayLike<number>>(array: T, cloneCallback?: (elementToClone: number) => number): T;
+export function clone<ArrayType extends ArrayLike<number>>(array: ArrayType, cloneCallback?: (elementToClone: number) => number): ArrayType;
 export function clone<ArrayType extends ArrayLike<T>, T>(array: Readonly<ArrayType>, cloneCallback?: (elementToClone: T) => T): ArrayType;
 export function clone<ArrayType extends ArrayLike<T>, T>(array: Readonly<ArrayType>, cloneCallback?: (elementToClone: T) => T): ArrayType {
     const clonedArray = array.slice(0) as ArrayType;

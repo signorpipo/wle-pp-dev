@@ -11,7 +11,7 @@ export function vec2_create(): Vector2;
 export function vec2_create(x: number, y: number): Vector2;
 export function vec2_create(uniformValue: number): Vector2;
 export function vec2_create(x?: number, y?: number): Vector2 {
-    return Vec2Utils.create(x, y);
+    return Vec2Utils.create(x!, y!);
 }
 
 export function vec3_create(): Vector3;
