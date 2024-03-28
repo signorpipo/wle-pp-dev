@@ -2,8 +2,6 @@ import { mat3 as gl_mat3, quat as gl_quat } from "gl-matrix";
 import { QuatUtils, create as quat_utils_create } from "./quat_utils.js";
 import { Vec3Utils } from "./vec3_utils.js";
 
-// glMatrix Bridge
-
 /**
  * TS type inference helper
  * 
@@ -42,8 +40,6 @@ export function set(matrix,
     }
     return matrix;
 }
-
-// New Functions
 
 export let toDegrees = function () {
     let quat = quat_utils_create();

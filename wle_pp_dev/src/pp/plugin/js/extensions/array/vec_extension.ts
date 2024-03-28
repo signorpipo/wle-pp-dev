@@ -10,8 +10,6 @@ export function initVecExtensionProtoype(): void {
 
     const vecExtension: Record<string, any> = {};
 
-    // New Functions
-
     vecExtension.vec_clone = function vec_clone<T extends Vector>(this: Readonly<T>): T {
         return VecUtils.clone<T>(this);
     };

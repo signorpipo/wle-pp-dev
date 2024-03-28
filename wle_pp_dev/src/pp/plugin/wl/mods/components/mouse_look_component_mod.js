@@ -9,6 +9,7 @@ export function initMouseLookComponentMod() {
 }
 
 export function initMouseLookComponentModPrototype() {
+
     let mouseLookComponentMod = {};
 
     // Modified Functions

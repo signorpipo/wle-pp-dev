@@ -1,7 +1,5 @@
 import { vec4 as gl_vec4 } from "gl-matrix";
 
-// glMatrix Bridge
-
 export function create(x, y, z, w) {
     let out = gl_vec4.create();
 

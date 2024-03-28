@@ -5,8 +5,6 @@ import { Mat4Utils, create as mat4_utils_create } from "./mat4_utils.js";
 import { Quat2Utils } from "./quat2_utils.js";
 import { QuatUtils, create as quat_utils_create } from "./quat_utils.js";
 
-// glMatrix Bridge
-
 export function create(x, y, z) {
     let out = gl_vec3.create();
 
@@ -161,8 +159,6 @@ export function transformMat4(vector, mat4, out = Vec3Utils.create()) {
     gl_vec3.transformMat4(out, vector, mat4);
     return out;
 }
-
-// New Functions
 
 export function lengthSigned(vector, positiveDirection) {
     let signedLength = Vec3Utils.length(vector);

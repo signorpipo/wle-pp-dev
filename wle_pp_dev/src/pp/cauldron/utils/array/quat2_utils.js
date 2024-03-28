@@ -5,8 +5,6 @@ import { Mat4Utils } from "./mat4_utils.js";
 import { QuatUtils, create as quat_utils_create } from "./quat_utils.js";
 import { Vec3Utils, create as vec3_utils_create } from "./vec3_utils.js";
 
-// glMatrix Bridge
-
 export function create(x1, y1, z1, w1, x2, y2, z2, w2) {
     let out = gl_quat2.create();
     if (x1 != null) {
@@ -147,8 +145,6 @@ export function setPositionRotationQuat(quat, position, rotation) {
     gl_quat2.fromRotationTranslation(quat, rotation, position);
     return quat;
 }
-
-// New Functions
 
 export function isNormalized(quat, epsilon = MathUtils.EPSILON) {
     return Math.abs(Quat2Utils.lengthSquared(quat) - 1) < epsilon;

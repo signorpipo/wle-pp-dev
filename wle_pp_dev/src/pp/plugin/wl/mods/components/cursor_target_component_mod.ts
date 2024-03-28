@@ -8,6 +8,7 @@ export function initCursorTargetComponentMod(): void {
 }
 
 export function initCursorTargetComponentModPrototype(): void {
+
     const cursorTargetComponentMod: Record<string, any> = {};
 
     // New Functions 

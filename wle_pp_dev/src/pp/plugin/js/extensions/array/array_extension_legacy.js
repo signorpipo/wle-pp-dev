@@ -171,8 +171,6 @@ export function initArrayExtensionLegacyProtoype() {
         return Vec2Utils.set(this, x, y);
     };
 
-    // glMatrix Bridge
-
     vec2Extension.vec2_length = function vec2_length() {
         return Vec2Utils.length(this);
     };
@@ -193,8 +191,6 @@ export function initArrayExtensionLegacyProtoype() {
         return Vec2Utils.zero(this);
     };
 
-    // New Functions
-
     vec2Extension.vec2_isZero = function vec2_isZero(epsilon = 0) {
         return Vec2Utils.isZero(this, epsilon);
     };
@@ -202,8 +198,6 @@ export function initArrayExtensionLegacyProtoype() {
     // VECTOR 3
 
     let vec3Extension = {};
-
-    // glMatrix Bridge
 
     vec3Extension.vec3_set = function vec3_set(x, y, z) {
         return Vec3Utils.set(this, x, y, z);
@@ -299,8 +293,6 @@ export function initArrayExtensionLegacyProtoype() {
     vec3Extension.vec3_transformMat4 = function vec3_transformMat4(matrix, out = Vec3Utils.create()) {
         return Vec3Utils.transformMat4(this, matrix, out);
     };
-
-    // New Functions
 
     vec3Extension.vec3_lengthSigned = function vec3_lengthSigned(positiveDirection) {
         return Vec3Utils.lengthSigned(this, positiveDirection);
@@ -642,8 +634,6 @@ export function initArrayExtensionLegacyProtoype() {
 
     let vec4Extension = {};
 
-    // glMatrix Bridge
-
     vec4Extension.vec4_set = function vec4_set(x, y, z, w) {
         return Vec4Utils.set(this, x, y, z, w);
     };
@@ -659,8 +649,6 @@ export function initArrayExtensionLegacyProtoype() {
     // QUAT
 
     let quatExtension = {};
-
-    // glMatrix Bridge
 
     quatExtension.quat_set = function quat_set(x, y, z, w) {
         return QuatUtils.set(this, x, y, z, w);
@@ -809,8 +797,6 @@ export function initArrayExtensionLegacyProtoype() {
     quatExtension.quat_fromAxes = function quat_fromAxes(leftAxis, upAxis, forwardAxis) {
         return QuatUtils.fromAxes(leftAxis, upAxis, forwardAxis, this);
     };
-
-    // New Functions
 
     quatExtension.quat_fromRadians = function quat_fromRadians(radiansRotation) {
         return QuatUtils.fromRadians(radiansRotation, this);
@@ -968,8 +954,6 @@ export function initArrayExtensionLegacyProtoype() {
 
     let quat2Extension = {};
 
-    // glMatrix Bridge
-
     quat2Extension.quat2_set = function quat2_set(x1, y1, z1, w1, x2, y2, z2, w2) {
         return Quat2Utils.set(this, x1, y1, z1, w1, x2, y2, z2, w2);
     };
@@ -1049,8 +1033,6 @@ export function initArrayExtensionLegacyProtoype() {
     quat2Extension.quat2_setPositionRotationQuat = function quat2_setPositionRotationQuat(position, rotation) {
         return Quat2Utils.setPositionRotationQuat(this, position, rotation);
     };
-
-    // New Functions
 
     quat2Extension.quat2_isNormalized = function quat2_isNormalized(epsilon = MathUtils.EPSILON) {
         return Quat2Utils.isNormalized(this, epsilon);
@@ -1144,8 +1126,6 @@ export function initArrayExtensionLegacyProtoype() {
 
     let mat3Extension = {};
 
-    // glMatrix Bridge
-
     mat3Extension.mat3_set = function mat3_set(
         m00, m01, m02,
         m10, m11, m12,
@@ -1156,8 +1136,6 @@ export function initArrayExtensionLegacyProtoype() {
             m20, m21, m22
         );
     };
-
-    // New Functions
 
     mat3Extension.mat3_toDegrees = function mat3_toDegrees(out = Vec3Utils.create()) {
         return Mat3Utils.toDegrees(this, out);
@@ -1177,8 +1155,6 @@ export function initArrayExtensionLegacyProtoype() {
     // MATRIX 4
 
     let mat4Extension = {};
-
-    // glMatrix Bridge
 
     mat4Extension.mat4_set = function mat4_set(
         m00, m01, m02, m03,
@@ -1240,8 +1216,6 @@ export function initArrayExtensionLegacyProtoype() {
     mat4Extension.mat4_getScale = function mat4_getScale(out = Vec3Utils.create()) {
         return Mat4Utils.getScale(this, out);
     };
-
-    // New Functions
 
     mat4Extension.mat4_setPosition = function mat4_setPosition(position) {
         return Mat4Utils.setPosition(this, position);

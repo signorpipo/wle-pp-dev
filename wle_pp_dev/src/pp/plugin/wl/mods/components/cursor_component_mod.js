@@ -12,6 +12,7 @@ export function initCursorComponentMod() {
 }
 
 export function initCursorComponentModPrototype() {
+
     let cursorComponentMod = {};
 
     // Modified Functions

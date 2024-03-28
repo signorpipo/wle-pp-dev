@@ -10,8 +10,6 @@ export function initVec2ExtensionProtoype(): void {
 
     const vec2Extension: Record<string, any> = {};
 
-    // glMatrix Bridge
-
     vec2Extension.vec2_set = function vec2_set<T extends Vector2>(this: T, x: number, y?: number): T {
         return Vec2Utils.set(this, x, y!);
     };
@@ -35,8 +33,6 @@ export function initVec2ExtensionProtoype(): void {
     vec2Extension.vec2_zero = function vec2_zero<T extends Vector2>(this: T): T {
         return Vec2Utils.zero(this);
     };
-
-    // New Functions
 
     vec2Extension.vec2_isZero = function vec2_isZero(this: Readonly<Vector2>, epsilon?: number): boolean {
         return Vec2Utils.isZero(this, epsilon);

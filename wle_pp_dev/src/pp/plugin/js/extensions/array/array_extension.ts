@@ -12,8 +12,6 @@ export function initArrayLikeExtensionProtoypes(): void {
 
     const arrayLikeExtension: Record<string, any> = {};
 
-    // New Functions
-
     arrayLikeExtension.pp_copy = function pp_copy<ArrayType extends ArrayLike<T>, T>(this: ArrayType, array: Readonly<ArrayLike<T>>, copyCallback?: (arrayElement: T, thisElement: T) => T): ArrayType {
         return ArrayUtils.copy(array, this, copyCallback);
     };
@@ -84,8 +82,6 @@ export function initArrayLikeExtensionProtoypes(): void {
 }
 
 export function initArrayExtensionProtoype(): void {
-
-    // New Functions
 
     const arrayExtension: Record<string, any> = {};
 

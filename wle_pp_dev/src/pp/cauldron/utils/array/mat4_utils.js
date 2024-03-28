@@ -5,8 +5,6 @@ import { Quat2Utils } from "./quat2_utils.js";
 import { QuatUtils, create as quat_utils_create } from "./quat_utils.js";
 import { Vec3Utils, create as vec3_utils_create, set as vec3_utils_set } from "./vec3_utils.js";
 
-// glMatrix Bridge
-
 export function create(
     m00, m01, m02, m03,
     m10, m11, m12, m13,
@@ -121,8 +119,6 @@ export function getScale(matrix, out = Vec3Utils.create()) {
     gl_mat4.getScaling(out, matrix);
     return out;
 }
-
-// New Functions
 
 export function setPosition(matrix, position) {
     matrix[12] = position[0];

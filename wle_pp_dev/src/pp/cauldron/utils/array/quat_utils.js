@@ -3,9 +3,6 @@ import { EasingFunction, MathUtils } from "../math_utils.js";
 import { ArrayUtils } from "./array_utils.js";
 import { Mat3Utils, create as mat3_utils_create } from "./mat3_utils.js";
 import { Vec3Utils, create as vec3_utils_create } from "./vec3_utils.js";
-
-// glMatrix Bridge
-
 export function create(x, y, z, w) {
     let out = gl_quat.create();
 
@@ -351,8 +348,6 @@ export let fromAxes = function () {
         return Mat3Utils.toQuat(matrix, out);
     };
 }();
-
-// New Functions
 
 export let fromRadians = function () {
     let vector = vec3_utils_create();
