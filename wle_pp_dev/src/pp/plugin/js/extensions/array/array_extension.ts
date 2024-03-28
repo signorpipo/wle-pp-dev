@@ -4,15 +4,15 @@ import { PluginUtils } from "../../../utils/plugin_utils.js";
 import "./array_type_extension.js";
 
 export function initArrayExtension(): void {
-    initArrayLikeExtensionProtoype();
+    initArrayLikeExtensionProtoypes();
     initArrayExtensionProtoype();
 }
 
-export function initArrayLikeExtensionProtoype(): void {
-
-    // New Functions
+export function initArrayLikeExtensionProtoypes(): void {
 
     const arrayLikeExtension: Record<string, any> = {};
+
+    // New Functions
 
     arrayLikeExtension.pp_copy = function pp_copy<ArrayType extends ArrayLike<T>, T>(this: ArrayType, array: Readonly<ArrayLike<T>>, copyCallback?: (arrayElement: T, thisElement: T) => T): ArrayType {
         return ArrayUtils.copy(array, this, copyCallback);

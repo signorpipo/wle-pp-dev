@@ -10,12 +10,14 @@ export function create(x?: number, y?: number): Vector2 {
     const out = gl_vec2.create() as unknown as Vector2;
 
     if (x != null) {
-        set(out, x, y);
+        set(out, x, y!);
     }
 
     return out;
 }
 
+export function set<T extends Vector2>(vector: T, x: number, y: number): T;
+export function set<T extends Vector2>(vector: T, uniformValue: number): T;
 export function set<T extends Vector2>(vector: T, x: number, y?: number): T {
     if (y == null) {
         gl_vec2.set(vector as unknown as gl_vec2_type, x, x);
@@ -24,15 +26,6 @@ export function set<T extends Vector2>(vector: T, x: number, y?: number): T {
     }
 
     return vector;
-}
-
-export function length(vector: Readonly<Vector2>): number {
-    return gl_vec2.length(vector as unknown as gl_vec2_type);
-}
-
-export function normalize<T extends Vector2>(vector: T, out: T = clone(vector)): T {
-    gl_vec2.normalize(out as unknown as gl_vec2_type, vector as unknown as gl_vec2_type);
-    return out as T;
 }
 
 export function copy<T extends Vector2>(from: Readonly<Vector2>, to: T): T {
@@ -49,6 +42,17 @@ export function clone<T extends Vector2>(vector: Readonly<T>): T {
     return vector.slice(0) as T;
 }
 
+export function length(vector: Readonly<Vector2>): number {
+    return gl_vec2.length(vector as unknown as gl_vec2_type);
+}
+
+export function normalize<T extends Vector2>(vector: Readonly<T>): T;
+export function normalize<T extends Vector2, S extends Vector2>(vector: Readonly<T>, out: S): S;
+export function normalize<T extends Vector2, S extends Vector2>(vector: Readonly<T>, out: T | S = Vec2Utils.clone<T>(vector)): T | S {
+    gl_vec2.normalize(out as unknown as gl_vec2_type, vector as unknown as gl_vec2_type);
+    return out;
+}
+
 export function zero<T extends Vector2>(vector: T): T {
     gl_vec2.zero(vector as unknown as gl_vec2_type);
     return vector;
@@ -63,10 +67,10 @@ export function isZero(vector: Readonly<Vector2>, epsilon: number = 0): boolean 
 export const Vec2Utils = {
     create,
     set,
-    length,
-    normalize,
     copy,
     clone,
+    length,
+    normalize,
     zero,
     isZero
 } as const;

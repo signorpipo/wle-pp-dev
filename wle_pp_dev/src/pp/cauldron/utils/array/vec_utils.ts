@@ -1,6 +1,5 @@
 import { Vector } from "../../type_definitions/array_type_definitions.js";
 import { MathUtils } from "../math_utils.js";
-import { ArrayUtils } from "./array_utils.js";
 
 /** The overload where `T extends Vector` does also get `array` as `Readonly<T>`, but is not marked as such due to 
  *  Typescript having issues with inferring the proper type of `T` when `Readonly` is used */
