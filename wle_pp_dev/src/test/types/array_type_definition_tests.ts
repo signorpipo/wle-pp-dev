@@ -8,6 +8,7 @@ const arrayLikeFromArray: ArrayLike<number> = [0];
 const arrayLikeFromFloat32: ArrayLike<number> = new Float32Array(3);
 const vector3FromArray: Vector3 = [0];
 const vector3FromFloat32: Vector3 = new Float32Array(3);
+//const arrayFromVector3: number[] = vector3FromArray;
 
 arrayLikeFromArray.at(0);
 vector3FromArray.at(0);

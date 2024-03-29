@@ -289,8 +289,6 @@ export class DebugFunctionsPerformanceAnalyzer extends DebugFunctionsOverwriter 
                 this._myFunctionPerformanceAnalysisResults.set(propertyID, analysisResults);
 
                 try {
-                    let window = window;
-
                     let functionPerformanceAnalysisResults = this._myFunctionPerformanceAnalysisResults.get(propertyID);
                     let executionTimes = this._myExecutionTimes;
 
