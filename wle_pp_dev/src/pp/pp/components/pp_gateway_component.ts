@@ -22,8 +22,11 @@ import { GetSceneObjectsComponent } from "./get_scene_objects_component.js";
  * 
  *  This is only needed to make it so the import for the function is not removed, 
  *  since that import makes the type extensions added by the function available to the Typescript 
+ * 
+ *  #TODO enable this again as soon as it is possible for the wonderland engine to find components not specified in the index.js,
+ *  since that would make the extension be included just by using the library, and not only when this component is used
  */
-export { initPP } from "../init_pp.js";
+//export { initPP } from "../init_pp.js";
 
 const _myRegisteredEngines: WeakMap<Readonly<WonderlandEngine>, null> = new WeakMap();
 

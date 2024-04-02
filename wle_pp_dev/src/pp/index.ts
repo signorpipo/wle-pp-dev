@@ -6,7 +6,7 @@ export { Globals } from "./pp/globals.js";
 export * from "./pp/scene_objects.js";
 export * from "./pp/default_resources.js";
 
-export { PPGatewayComponent } from "./pp/components/pp_gateway_component.js";
+export * from "./pp/components/pp_gateway_component.js";
 export * from "./pp/components/get_scene_objects_component.js";
 export * from "./pp/components/get_default_resources_component.js";
 export * from "./pp/components/add_pp_to_window_component.js";
