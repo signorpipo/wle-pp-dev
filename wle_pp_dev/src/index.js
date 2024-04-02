@@ -45,6 +45,7 @@ import {VirtualGamepadComponent} from './pp/index.js';
 /* wle:auto-imports:end */
 
 import { loadRuntime } from '@wonderlandengine/api';
+import "./pp/plugin/add_type_extensions_to_typescript.js";
 
 /* wle:auto-constants:start */
 const Constants = {
