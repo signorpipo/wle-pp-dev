@@ -1,13 +1,14 @@
 import { Vector } from "../../../../cauldron/type_definitions/array_type_definitions.js";
 import { VecUtils } from "../../../../cauldron/utils/array/vec_utils.js";
 import { PluginUtils } from "../../../utils/plugin_utils.js";
-import "./array_type_extension.js";
+
+import "./vec_type_extension.js";
 
 export function initVecExtension(): void {
-    initVecExtensionProtoype();
+    _initVecExtensionProtoype();
 }
 
-export function initVecExtensionProtoype(): void {
+function _initVecExtensionProtoype(): void {
 
     const vecExtension: Record<string, any> = {};
 

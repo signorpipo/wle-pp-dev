@@ -17,6 +17,14 @@ import { AddPPToWindowComponent } from "./add_pp_to_window_component.js";
 import { GetDefaultResourcesComponent } from "./get_default_resources_component.js";
 import { GetSceneObjectsComponent } from "./get_scene_objects_component.js";
 
+/**
+ *  TS import preserver
+ * 
+ *  This is only needed to make it so the import for the function is not removed, 
+ *  since that import makes the type extensions added by the function available to the Typescript 
+ */
+export { initPP } from "../init_pp.js";
+
 const _myRegisteredEngines: WeakMap<Readonly<WonderlandEngine>, null> = new WeakMap();
 
 export class PPGatewayComponent extends Component {

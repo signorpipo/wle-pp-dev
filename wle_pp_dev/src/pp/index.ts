@@ -1,37 +1,19 @@
+/** PP Version 0.6.0 */
+
 //  PP
-export * from "./pp/init_pp.js";
 export * from "./pp/register_pp_components.js";
 export { Globals } from "./pp/globals.js";
 export * from "./pp/scene_objects.js";
 export * from "./pp/default_resources.js";
 
-export * from "./pp/components/pp_gateway_component.js";
+export { PPGatewayComponent } from "./pp/components/pp_gateway_component.js";
 export * from "./pp/components/get_scene_objects_component.js";
 export * from "./pp/components/get_default_resources_component.js";
 export * from "./pp/components/add_pp_to_window_component.js";
 
-//	PLUGIN
-export * from "./plugin/init_plugins.js";
-
 export { PluginUtils } from "./plugin/utils/plugin_utils.js";
 
-export * from "./plugin/js/init_js_plugins.js";
-export * from "./plugin/js/extensions/init_js_extentions.js";
 export * from "./plugin/js/extensions/array/vec_create_extension.js";
-export * from "./plugin/js/extensions/array/array_extension.js";
-export * from "./plugin/js/extensions/array/array_extension_legacy.js";
-export * from "./plugin/js/extensions/math_extension.js";
-export * from "./plugin/js/extensions/number_extension.js";
-
-export * from "./plugin/wl/init_wl_plugins.js";
-export * from "./plugin/wl/extensions/init_wl_extentions.js";
-export * from "./plugin/wl/extensions/object_extension.js";
-export * from "./plugin/wl/extensions/scene_extension.js";
-export * from "./plugin/wl/mods/init_wl_mods.js";
-export * from "./plugin/wl/mods/components/init_component_mods.js";
-export * from "./plugin/wl/mods/components/cursor_component_mod.js";
-export * from "./plugin/wl/mods/components/cursor_target_component_mod.js";
-export * from "./plugin/wl/mods/components/mouse_look_component_mod.js";
 
 //	AUDIO
 export * from "./audio/audio_manager.js";

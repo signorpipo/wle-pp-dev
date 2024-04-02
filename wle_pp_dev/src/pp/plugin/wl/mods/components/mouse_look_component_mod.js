@@ -5,10 +5,10 @@ import { vec3_create } from "../../../js/extensions/array/vec_create_extension.j
 import { PluginUtils } from "../../../utils/plugin_utils.js";
 
 export function initMouseLookComponentMod() {
-    initMouseLookComponentModPrototype();
+    _initMouseLookComponentModPrototype();
 }
 
-export function initMouseLookComponentModPrototype() {
+function _initMouseLookComponentModPrototype() {
 
     let mouseLookComponentMod = {};
 

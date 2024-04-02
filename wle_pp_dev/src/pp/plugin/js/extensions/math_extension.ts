@@ -28,13 +28,14 @@
 
 import { EasingFunction, MathUtils } from "../../../cauldron/utils/math_utils.js";
 import { PluginUtils } from "../../utils/plugin_utils.js";
+
 import "./math_type_extension.js";
 
 export function initMathExtension(): void {
-    initMathExtensionStatic();
+    _initMathExtensionInstance();
 }
 
-export function initMathExtensionStatic(): void {
+function _initMathExtensionInstance(): void {
 
     const mathExtension: Record<string, any> = {};
 

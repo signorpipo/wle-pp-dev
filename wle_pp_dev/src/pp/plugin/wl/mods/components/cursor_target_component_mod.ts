@@ -1,13 +1,14 @@
 import { Emitter } from "@wonderlandengine/api";
 import { CursorTarget } from "@wonderlandengine/components";
 import { PluginUtils } from "../../../utils/plugin_utils.js";
+
 import "./cursor_target_component_type_extension.js";
 
 export function initCursorTargetComponentMod(): void {
-    initCursorTargetComponentModPrototype();
+    _initCursorTargetComponentModPrototype();
 }
 
-export function initCursorTargetComponentModPrototype(): void {
+function _initCursorTargetComponentModPrototype(): void {
 
     const cursorTargetComponentMod: Record<string, any> = {};
 

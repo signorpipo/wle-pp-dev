@@ -2,10 +2,10 @@ import { Emitter } from "@wonderlandengine/api";
 import { PluginUtils } from "../../../utils/plugin_utils.js";
 
 export function initCauldronMods(): void {
-    initEmitterModPrototype();
+    _initEmitterModPrototype();
 }
 
-export function initEmitterModPrototype(): void {
+function _initEmitterModPrototype(): void {
     const emitterMod: Record<string, any> = {};
 
     emitterMod._flushTransactions = function _flushTransactions(this: Emitter): void {

@@ -1,12 +1,12 @@
 import { Physics, RayHit } from "@wonderlandengine/api";
 import { PluginUtils } from "../../utils/plugin_utils.js";
 
-export function initGetterExtensions() {
-    initPhysicsGetterExtensionPrototype();
-    initRayHitGetterExtensionPrototype();
+export function initCauldronExtensions() {
+    _initPhysicsExtensionPrototype();
+    _initRayHitExtensionPrototype();
 }
 
-export function initPhysicsGetterExtensionPrototype() {
+function _initPhysicsExtensionPrototype() {
 
     let extension = {};
 
@@ -17,7 +17,7 @@ export function initPhysicsGetterExtensionPrototype() {
     PluginUtils.injectProperties(extension, Physics.prototype, false, true, true);
 }
 
-export function initRayHitGetterExtensionPrototype() {
+function _initRayHitExtensionPrototype() {
 
     let extension = {};
 

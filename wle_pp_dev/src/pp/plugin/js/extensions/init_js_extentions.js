@@ -5,6 +5,18 @@ import { initVecExtension } from "./array/vec_extension.js";
 import { initMathExtension } from "./math_extension.js";
 import { initNumberExtension } from "./number_extension.js";
 
+/**
+ *  TS import preserver
+ * 
+ *  This is only needed to make it so the imports for the functions is not removed, 
+ *  since those imports make the type extensions added by the functions available to the Typescript 
+ */
+export { initArrayExtension } from "./array/array_extension.js";
+export { initVec2Extension } from "./array/vec2_extension.js";
+export { initVecExtension } from "./array/vec_extension.js";
+export { initMathExtension } from "./math_extension.js";
+export { initNumberExtension } from "./number_extension.js";
+
 export function initJSExtensions() {
     initMathExtension();
 

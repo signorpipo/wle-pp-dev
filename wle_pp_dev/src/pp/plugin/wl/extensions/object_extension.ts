@@ -108,13 +108,14 @@ import { Component, Object3D, WonderlandEngine, type ComponentConstructor } from
 import { Matrix3, Matrix4, Quaternion, Quaternion2, Vector3 } from "../../../cauldron/type_definitions/array_type_definitions.js";
 import { CloneParams, ObjectUtils } from "../../../cauldron/wl/utils/object_utils.js";
 import { PluginUtils } from "../../utils/plugin_utils.js";
+
 import "./object_type_extension.js";
 
 export function initObjectExtension(): void {
-    initObjectExtensionProtoype();
+    _initObjectExtensionProtoype();
 }
 
-export function initObjectExtensionProtoype(): void {
+function _initObjectExtensionProtoype(): void {
 
     const objectExtension: Record<string, any> = {};
 

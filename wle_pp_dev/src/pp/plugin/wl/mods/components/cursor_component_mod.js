@@ -8,10 +8,10 @@ import { mat4_create, quat2_create, vec3_create } from "../../../js/extensions/a
 import { PluginUtils } from "../../../utils/plugin_utils.js";
 
 export function initCursorComponentMod() {
-    initCursorComponentModPrototype();
+    _initCursorComponentModPrototype();
 }
 
-export function initCursorComponentModPrototype() {
+function _initCursorComponentModPrototype() {
 
     let cursorComponentMod = {};
 

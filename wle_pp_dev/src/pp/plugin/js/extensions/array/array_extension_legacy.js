@@ -158,10 +158,10 @@ import { EasingFunction, MathUtils } from "../../../../cauldron/utils/math_utils
 import { PluginUtils } from "../../../utils/plugin_utils.js";
 
 export function initArrayExtensionLegacy() {
-    initArrayExtensionLegacyProtoype();
+    _initArrayExtensionLegacyProtoype();
 }
 
-export function initArrayExtensionLegacyProtoype() {
+export function _initArrayExtensionLegacyProtoype() {
 
     // VECTOR 2
 
