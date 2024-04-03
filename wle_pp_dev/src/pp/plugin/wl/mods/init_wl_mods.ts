@@ -5,8 +5,8 @@ import { initComponentMods } from "./components/init_component_mods.js";
  * 
  *  This is only needed to make it so the import is not removed, since it makes the type extensions available to the Typescript 
  */
-export { initComponentMods } from "./components/init_component_mods.js";
+import "./components/init_component_mods.js";
 
-export function initWLMods() {
+export function initWLMods(): void {
     initComponentMods();
 }

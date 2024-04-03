@@ -10,13 +10,13 @@ import { initNumberExtension } from "./number_extension.js";
  * 
  *  This is only needed to make it so the import is not removed, since it makes the type extensions available to the Typescript 
  */
-export { initArrayExtension } from "./array/array_extension.js";
-export { initVec2Extension } from "./array/vec2_extension.js";
-export { initVecExtension } from "./array/vec_extension.js";
-export { initMathExtension } from "./math_extension.js";
-export { initNumberExtension } from "./number_extension.js";
+import "./array/array_extension.js";
+import "./array/vec2_extension.js";
+import "./array/vec_extension.js";
+import "./math_extension.js";
+import "./number_extension.js";
 
-export function initJSExtensions() {
+export function initJSExtensions(): void {
     initMathExtension();
 
     initArrayExtension();

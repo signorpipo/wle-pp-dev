@@ -7,11 +7,11 @@ import { initSceneExtension } from "./scene_extension.js";
  * 
  *  This is only needed to make it so the import is not removed, since it makes the type extensions available to the Typescript 
  */
-export { initCauldronExtensions } from "./cauldron_extensions.js";
-export { initObjectExtension } from "./object_extension.js";
-export { initSceneExtension } from "./scene_extension.js";
+import "./cauldron_extensions.js";
+import "./object_extension.js";
+import "./scene_extension.js";
 
-export function initWLExtensions() {
+export function initWLExtensions(): void {
     initObjectExtension();
     initSceneExtension();
     initCauldronExtensions();

@@ -10,7 +10,7 @@ import { registerPPComponents } from "./register_pp_components.js";
  * 
  *  This is only needed to make it so the import is not removed, since it makes the type extensions available to the Typescript 
  */
-export { initPlugins } from "../plugin/init_plugins.js";
+import "../plugin/init_plugins.js";
 
 export function initPP(engine: WonderlandEngine): void {
     Globals.setMainEngine(engine);

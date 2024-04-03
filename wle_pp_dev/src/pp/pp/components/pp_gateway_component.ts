@@ -17,15 +17,9 @@ import { AddPPToWindowComponent } from "./add_pp_to_window_component.js";
 import { GetDefaultResourcesComponent } from "./get_default_resources_component.js";
 import { GetSceneObjectsComponent } from "./get_scene_objects_component.js";
 
-/**
- *  TS import preserver
- * 
- *  This is only needed to make it so the import is not removed, since it makes the type extensions available to the Typescript 
- * 
- *  #TODO enable this again as soon as it is possible for the wonderland engine to find components not specified in the index.js,
- *  since that would make the extension be included just by using the library, and not only when this component is used
- */
-//export { initPP } from "../init_pp.js";
+// #TODO enable this again as soon as it is possible for the wonderland engine to find components not specified in the index.js,
+//since that would make the extension be included just by using the library, and not only when this component is used
+//import "../../plugin/add_type_extensions_to_typescript.js";
 
 const _myRegisteredEngines: WeakMap<Readonly<WonderlandEngine>, null> = new WeakMap();
 

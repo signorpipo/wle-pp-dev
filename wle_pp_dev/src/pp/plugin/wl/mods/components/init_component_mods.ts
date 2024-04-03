@@ -8,12 +8,12 @@ import { initMouseLookComponentMod } from "./mouse_look_component_mod.js";
  * 
  *  This is only needed to make it so the import is not removed, since it makes the type extensions available to the Typescript 
  */
-export { initCauldronMods } from "./cauldron_mods.js";
-export { initCursorComponentMod } from "./cursor_component_mod.js";
-export { initCursorTargetComponentMod } from "./cursor_target_component_mod.js";
-export { initMouseLookComponentMod } from "./mouse_look_component_mod.js";
+import "./cauldron_mods.js";
+import "./cursor_component_mod.js";
+import "./cursor_target_component_mod.js";
+import "./mouse_look_component_mod.js";
 
-export function initComponentMods() {
+export function initComponentMods(): void {
     initCursorComponentMod();
     initCursorTargetComponentMod();
     initMouseLookComponentMod();

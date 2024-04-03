@@ -6,10 +6,10 @@ import { initWLMods } from "./mods/init_wl_mods.js";
  * 
  *  This is only needed to make it so the import is not removed, since it makes the type extensions available to the Typescript 
  */
-export { initWLExtensions } from "./extensions/init_wl_extentions.js";
-export { initWLMods } from "./mods/init_wl_mods.js";
+import "./extensions/init_wl_extentions.js";
+import "./mods/init_wl_mods.js";
 
-export function initWLPlugins() {
+export function initWLPlugins(): void {
     initWLExtensions();
     initWLMods();
 }
