@@ -1,4 +1,8 @@
-/*
+/**
+ * Warning: this type extension is actually added at runtime only if you call `initMathExtension` in some way (`initPP` does it for you)
+ */
+
+/**
     How to use
 
     By default the rotations are in Degrees

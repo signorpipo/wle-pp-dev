@@ -1,3 +1,7 @@
+/**
+ * Warning: this type extension is actually added at runtime only if you call `initVec2Extension` in some way (`initPP` does it for you)
+ */
+
 import { Vector2 } from "../../../../cauldron/type_definitions/array_type_definitions.js";
 
 export interface Vector2Extension<VectorType extends Vector2> {

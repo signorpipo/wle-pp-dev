@@ -1,4 +1,8 @@
-/*
+/**
+ * Warning: this type extension is actually added at runtime only if you call `initSceneExtension` in some way (`initPP` does it for you)
+ */
+
+/**
     How to use
 
     On some of the functions u can specify if the algorithm should explore by Breadth/Depth, example:

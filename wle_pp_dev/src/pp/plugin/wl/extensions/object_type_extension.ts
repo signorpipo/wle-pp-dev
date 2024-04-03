@@ -1,4 +1,8 @@
-/*
+/**
+ * Warning: this type extension is actually added at runtime only if you call `initObjectExtension` in some way (`initPP` does it for you)
+ */
+
+/**
     How to use
 
     By default the functions work on World space, rotations are in Degrees and transforms are Matrix (and not Quat 2) 
