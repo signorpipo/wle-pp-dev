@@ -1,3 +1,8 @@
+/**
+ * Warning: these type extensions are actually added at runtime only if you call their respective 
+ * initialization function in some way (`initPP` does it for you)
+ */
+
 import "./js/extensions/array/array_type_extension.js";
 import "./js/extensions/array/vec2_type_extension.js";
 import "./js/extensions/array/vec_type_extension.js";
