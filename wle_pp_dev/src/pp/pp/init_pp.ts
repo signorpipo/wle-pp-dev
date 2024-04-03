@@ -8,8 +8,7 @@ import { registerPPComponents } from "./register_pp_components.js";
 /**
  *  TS import preserver
  * 
- *  This is only needed to make it so the import for the function is not removed, 
- *  since that import makes the type extensions added by the function available to the Typescript 
+ *  This is only needed to make it so the import is not removed, since it makes the type extensions available to the Typescript 
  */
 export { initPlugins } from "../plugin/init_plugins.js";
 
