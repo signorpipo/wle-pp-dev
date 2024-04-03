@@ -1,5 +1,6 @@
 /**
- * Warning: this type extension is actually added at runtime only if you call `initMathExtension` in some way (`initPP` does it for you)
+ * Warning: this type extension is actually added at runtime only if you call `initMathExtension`
+ *          the `initPP` function, which is automatically called by the `pp-gateway` component, does this for you
  */
 
 /**

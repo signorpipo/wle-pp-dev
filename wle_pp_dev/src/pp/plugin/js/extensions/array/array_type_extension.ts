@@ -1,5 +1,6 @@
 /**
- * Warning: this type extension is actually added at runtime only if you call `initArrayExtension` in some way (`initPP` does it for you)
+ * Warning: this type extension is actually added at runtime only if you call `initArrayExtension`
+ *          the `initPP` function, which is automatically called by the `pp-gateway` component, does this for you
  */
 
 export interface ArrayLikeExtension<ArrayType extends ArrayLike<ArrayElementType>, ArrayElementType> {

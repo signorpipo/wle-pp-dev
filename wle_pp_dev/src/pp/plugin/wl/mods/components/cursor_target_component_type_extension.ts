@@ -1,5 +1,6 @@
 /**
- * Warning: this type extension is actually added at runtime only if you call `initCursorTargetComponentMod` in some way (`initPP` does it for you)
+ * Warning: this type extension is actually added at runtime only if you call `initCursorTargetComponentMod`
+ *          the `initPP` function, which is automatically called by the `pp-gateway` component, does this for you
  */
 
 import { Emitter, Object3D } from "@wonderlandengine/api";

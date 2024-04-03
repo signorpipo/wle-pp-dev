@@ -1,6 +1,6 @@
 /**
- * Warning: these type extensions are actually added at runtime only if you call their respective 
- * initialization function in some way (`initPP` does it for you)
+ * Warning: these type extensions are actually added at runtime only if you call their respective initialization function
+ *          the `initPP` function, which is automatically called by the `pp-gateway` component, does this for you
  */
 
 import "./js/extensions/array/array_type_extension.js";
