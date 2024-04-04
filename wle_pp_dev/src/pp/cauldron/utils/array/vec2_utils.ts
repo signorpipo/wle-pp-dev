@@ -33,9 +33,9 @@ export function copy<T extends Vector2>(from: Readonly<Vector2>, to: T): T {
 
 /** The overload where `T extends Vector2` does also get `array` as `Readonly<T>`, but is not marked as such due to 
  *  Typescript having issues with inferring the proper type of `T` when `Readonly` is used */
+export function clone<T extends Vector2>(vector: Readonly<T>): T;
 export function clone(vector: Readonly<number[]>): number[];
 export function clone<T extends Vector2>(vector: T): T;
-export function clone<T extends Vector2>(vector: Readonly<T>): T;
 export function clone<T extends Vector2>(vector: Readonly<T>): T {
     return vector.slice(0) as T;
 }
