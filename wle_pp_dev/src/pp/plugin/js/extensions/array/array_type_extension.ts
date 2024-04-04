@@ -3,6 +3,8 @@
  *          the `initPP` function, which is automatically called by the `pp-gateway` component, does this for you
  */
 
+import { ArrayLike } from "../../../../cauldron/type_definitions/array_type_definitions.js";
+
 export interface ArrayLikeExtension<ArrayType extends ArrayLike<ArrayElementType>, ArrayElementType> {
     pp_copy<T extends ArrayType>(this: T, array: Readonly<ArrayLike<ArrayElementType>>, copyCallback?: (arrayElement: ArrayElementType, thisElement: ArrayElementType) => ArrayElementType): this;
     pp_clone<T extends ArrayType>(this: Readonly<T>, cloneCallback?: (elementToClone: ArrayElementType) => ArrayElementType): T;
