@@ -149,8 +149,8 @@ function _initObjectExtensionProtoype(): void {
         return ObjectUtils.getRotationRadians(this, outRotation);
     };
 
-    objectExtension.pp_getRotationMatrix = function pp_getRotationMatrix<T extends Matrix3>(this: Readonly<Object3D>, outRotation?: T): T {
-        return ObjectUtils.getRotationMatrix(this, outRotation);
+    objectExtension.pp_getRotationMatrix = function pp_getRotationMatrix<T extends Matrix3>(this: Readonly<Object3D>, outRotation?: Matrix3 | T): Matrix3 | T {
+        return ObjectUtils.getRotationMatrix(this, outRotation!);
     };
 
     objectExtension.pp_getRotationQuat = function pp_getRotationQuat<T extends Quaternion>(this: Readonly<Object3D>, outRotation?: T): T {

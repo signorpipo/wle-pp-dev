@@ -60,23 +60,36 @@ export interface Object3DExtension {
     pp_getPositionWorld<T extends Vector3>(this: Readonly<Object3D>, outPosition?: T): T;
     pp_getPositionLocal<T extends Vector3>(this: Readonly<Object3D>, outPosition?: T): T;
 
+
     pp_getRotation<T extends Vector3>(this: Readonly<Object3D>, outRotation?: T): T;
     pp_getRotationDegrees<T extends Vector3>(this: Readonly<Object3D>, outRotation?: T): T;
     pp_getRotationRadians<T extends Vector3>(this: Readonly<Object3D>, outRotation?: T): T;
-    pp_getRotationMatrix<T extends Matrix3>(this: Readonly<Object3D>, outRotation?: T): T;
+
+    pp_getRotationMatrix(this: Readonly<Object3D>): Matrix3;
+    pp_getRotationMatrix<T extends Matrix3>(this: Readonly<Object3D>, outRotation: T): T;
+
     pp_getRotationQuat<T extends Quaternion>(this: Readonly<Object3D>, outRotation?: T): T;
+
 
     pp_getRotationWorld<T extends Vector3>(this: Readonly<Object3D>, outRotation?: T): T;
     pp_getRotationWorldDegrees<T extends Vector3>(this: Readonly<Object3D>, outRotation?: T): T;
     pp_getRotationWorldRadians<T extends Vector3>(this: Readonly<Object3D>, outRotation?: T): T;
-    pp_getRotationWorldMatrix<T extends Matrix3>(this: Readonly<Object3D>, outRotation?: T): T;
+
+    pp_getRotationWorldMatrix(this: Readonly<Object3D>): Matrix3;
+    pp_getRotationWorldMatrix<T extends Matrix3>(this: Readonly<Object3D>, outRotation: T): T;
+
     pp_getRotationWorldQuat<T extends Quaternion>(this: Readonly<Object3D>, outRotation?: T): T;
+
 
     pp_getRotationLocal<T extends Vector3>(this: Readonly<Object3D>, outRotation?: T): T;
     pp_getRotationLocalDegrees<T extends Vector3>(this: Readonly<Object3D>, outRotation?: T): T;
     pp_getRotationLocalRadians<T extends Vector3>(this: Readonly<Object3D>, outRotation?: T): T;
-    pp_getRotationLocalMatrix<T extends Matrix3>(this: Readonly<Object3D>, outRotation?: T): T;
+
+    pp_getRotationLocalMatrix(this: Readonly<Object3D>): Matrix3;
+    pp_getRotationLocalMatrix<T extends Matrix3>(this: Readonly<Object3D>, outRotation: T): T;
+
     pp_getRotationLocalQuat<T extends Quaternion>(this: Readonly<Object3D>, outRotation?: T): T;
+
 
     pp_getScale<T extends Vector3>(this: Readonly<Object3D>, outScale?: T): T;
     pp_getScaleWorld<T extends Vector3>(this: Readonly<Object3D>, outScale?: T): T;

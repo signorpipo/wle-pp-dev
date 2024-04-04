@@ -94,7 +94,9 @@ export function getRotationRadians<T extends Vector3>(object: Readonly<Object3D>
     return ObjectUtils.getRotationWorldRadians(object, outRotation);
 }
 
-export function getRotationMatrix<T extends Matrix3>(object: Readonly<Object3D>, outRotation?: T): T {
+export function getRotationMatrix(object: Readonly<Object3D>): Matrix3;
+export function getRotationMatrix<T extends Matrix3>(object: Readonly<Object3D>, outRotation: T): T;
+export function getRotationMatrix<T extends Matrix3>(object: Readonly<Object3D>, outRotation?: Matrix3 | T): Matrix3 | T {
     return ObjectUtils.getRotationWorldMatrix(object, outRotation!);
 }
 
