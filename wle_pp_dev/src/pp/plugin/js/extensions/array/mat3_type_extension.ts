@@ -76,6 +76,18 @@ declare module "../../../../cauldron/type_definitions/array_type_definitions.js"
 
     export interface Vector extends Matrix3Extension<Vector> { }
 
+    export interface Vector2 extends Matrix3Extension<Vector2> { }
+
+    export interface Vector3 extends Matrix3Extension<Vector3> { }
+
+    export interface Vector4 extends Matrix3Extension<Vector4> { }
+
+    export interface Quaternion extends Matrix3Extension<Quaternion> { }
+
+    export interface Quaternion2 extends Matrix3Extension<Quaternion2> { }
+
+    export interface Matrix2 extends Matrix3Extension<Matrix2> { }
+
     export interface Matrix3 extends Matrix3Extension<Matrix3> { }
 
     export interface Matrix4 extends Matrix3Extension<Matrix4> { }
