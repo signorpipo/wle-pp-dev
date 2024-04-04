@@ -6,10 +6,10 @@
 import { Vector2 } from "../../../../cauldron/type_definitions/array_type_definitions.js";
 
 export interface Vector2Extension<VectorType extends Vector2> {
-    vec2_set<T extends VectorType>(this: T, x: number, y: number): T;
-    vec2_set<T extends VectorType>(this: T, uniformValue: number): T;
+    vec2_set<T extends VectorType>(this: T, x: number, y: number): this;
+    vec2_set<T extends VectorType>(this: T, uniformValue: number): this;
 
-    vec2_copy<T extends VectorType>(this: T, vector: Readonly<Vector2>): T;
+    vec2_copy<T extends VectorType>(this: T, vector: Readonly<Vector2>): this;
     vec2_clone<T extends VectorType>(this: Readonly<T>): T;
 
     vec2_length<T extends VectorType>(this: Readonly<T>): number;
@@ -17,7 +17,7 @@ export interface Vector2Extension<VectorType extends Vector2> {
     vec2_normalize<T extends VectorType>(this: Readonly<T>): T;
     vec2_normalize<T extends VectorType, S extends Vector2>(this: Readonly<T>, out: S): S;
 
-    vec2_zero<T extends VectorType>(this: T): T;
+    vec2_zero<T extends VectorType>(this: T): this;
     vec2_isZero<T extends VectorType>(this: Readonly<T>, epsilon?: number): boolean;
 }
 

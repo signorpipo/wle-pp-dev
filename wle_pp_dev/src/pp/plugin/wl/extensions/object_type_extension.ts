@@ -64,7 +64,6 @@ import { Matrix3, Matrix4, Quaternion, Quaternion2, Vector3 } from "../../../cau
 import { CloneParams } from "../../../cauldron/wl/utils/object_utils.js";
 
 export interface Object3DExtension {
-
     pp_getPosition<T extends Vector3>(this: Readonly<Object3D>, outPosition?: T): T;
     pp_getPositionWorld<T extends Vector3>(this: Readonly<Object3D>, outPosition?: T): T;
     pp_getPositionLocal<T extends Vector3>(this: Readonly<Object3D>, outPosition?: T): T;
