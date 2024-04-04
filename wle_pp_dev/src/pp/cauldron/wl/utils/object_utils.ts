@@ -95,7 +95,7 @@ export function getRotationRadians<T extends Vector3>(object: Readonly<Object3D>
 }
 
 export function getRotationMatrix<T extends Matrix3>(object: Readonly<Object3D>, outRotation?: T): T {
-    return ObjectUtils.getRotationWorldMatrix(object, outRotation);
+    return ObjectUtils.getRotationWorldMatrix(object, outRotation!);
 }
 
 export function getRotationQuat<T extends Quaternion>(object: Readonly<Object3D>, outRotation?: T): T {
@@ -125,11 +125,16 @@ export const getRotationWorldRadians = function () {
 
 export const getRotationWorldMatrix = function () {
     const quat = QuatUtils.create();
-    return function getRotationWorldMatrix<T extends Matrix3>(object: Readonly<Object3D>, outRotation: T = Mat3Utils.create()): T {
+
+    function getRotationWorldMatrix(object: Readonly<Object3D>): Matrix3;
+    function getRotationWorldMatrix<T extends Matrix3>(object: Readonly<Object3D>, outRotation: T): T;
+    function getRotationWorldMatrix<T extends Matrix3>(object: Readonly<Object3D>, outRotation: Matrix3 | T = Mat3Utils.create()): Matrix3 | T {
         ObjectUtils.getRotationWorldQuat(object, quat);
         QuatUtils.toMatrix(quat, outRotation);
         return outRotation;
-    };
+    }
+
+    return getRotationWorldMatrix;
 }();
 
 export function getRotationWorldQuat<T extends Quaternion>(object: Readonly<Object3D>, outRotation: T = QuatUtils.create()): T {
@@ -160,11 +165,16 @@ export const getRotationLocalRadians = function () {
 
 export const getRotationLocalMatrix = function () {
     const quat = QuatUtils.create();
-    return function getRotationLocalMatrix<T extends Matrix3>(object: Readonly<Object3D>, outRotation: T = Mat3Utils.create()): T {
+
+    function getRotationLocalMatrix(object: Readonly<Object3D>): Matrix3;
+    function getRotationLocalMatrix<T extends Matrix3>(object: Readonly<Object3D>, outRotation: T): T;
+    function getRotationLocalMatrix<T extends Matrix3>(object: Readonly<Object3D>, outRotation: Matrix3 | T = Mat3Utils.create()): Matrix3 | T {
         ObjectUtils.getRotationLocalQuat(object, quat);
         QuatUtils.toMatrix(quat, outRotation);
         return outRotation;
-    };
+    }
+
+    return getRotationLocalMatrix;
 }();
 
 export function getRotationLocalQuat<T extends Quaternion>(object: Readonly<Object3D>, outRotation: T = QuatUtils.create()): T {
