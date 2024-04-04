@@ -144,7 +144,8 @@ export interface Object3DExtension {
     pp_setRotationLocalMatrix(this: Object3D, rotation: Readonly<Matrix3>): this;
     pp_setRotationLocalQuat(this: Object3D, rotation: Readonly<Quaternion>): this;
 
-    pp_setScale(this: Object3D, scale: number | Vector3): this;
+    pp_setScale(this: Object3D, scale: Vector3): this;
+    pp_setScale(this: Object3D, uniformScale: number): this;
     pp_setScaleWorld(this: Object3D, scale: Vector3): this;
     pp_setScaleWorld(this: Object3D, uniformScale: number): this;
     pp_setScaleLocal(this: Object3D, scale: Vector3): this;

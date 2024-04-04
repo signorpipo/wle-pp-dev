@@ -171,8 +171,8 @@ function _initObjectExtensionProtoype(): void {
         return ObjectUtils.getRotationWorldRadians(this, outRotation);
     };
 
-    objectExtension.pp_getRotationWorldMatrix = function pp_getRotationWorldMatrix<T extends Matrix3>(this: Readonly<Object3D>, outRotation?: T): T {
-        return ObjectUtils.getRotationWorldMatrix(this, outRotation);
+    objectExtension.pp_getRotationWorldMatrix = function pp_getRotationWorldMatrix<T extends Matrix3>(this: Readonly<Object3D>, outRotation?: Matrix3 | T): Matrix3 | T {
+        return ObjectUtils.getRotationWorldMatrix(this, outRotation!);
     };
 
     objectExtension.pp_getRotationWorldQuat = function pp_getRotationWorldQuat<T extends Quaternion>(this: Readonly<Object3D>, outRotation?: T): T {
@@ -193,8 +193,8 @@ function _initObjectExtensionProtoype(): void {
         return ObjectUtils.getRotationLocalRadians(this, outRotation);
     };
 
-    objectExtension.pp_getRotationLocalMatrix = function pp_getRotationLocalMatrix<T extends Matrix3>(this: Readonly<Object3D>, outRotation?: T): T {
-        return ObjectUtils.getRotationLocalMatrix(this, outRotation);
+    objectExtension.pp_getRotationLocalMatrix = function pp_getRotationLocalMatrix<T extends Matrix3>(this: Readonly<Object3D>, outRotation?: Matrix3 | T): Matrix3 | T {
+        return ObjectUtils.getRotationLocalMatrix(this, outRotation!);
     };
 
     objectExtension.pp_getRotationLocalQuat = function pp_getRotationLocalQuat<T extends Quaternion>(this: Readonly<Object3D>, outRotation?: T): T {
@@ -439,15 +439,15 @@ function _initObjectExtensionProtoype(): void {
 
     // Scale
 
-    objectExtension.pp_setScale = function pp_setScale(this: Object3D, scale: number | Vector3): Object3D {
-        return ObjectUtils.setScale(this, scale);
+    objectExtension.pp_setScale = function pp_setScale(this: Object3D, scale: Vector3 | number): Object3D {
+        return ObjectUtils.setScale(this, scale as Vector3);
     };
 
-    objectExtension.pp_setScaleWorld = function pp_setScaleWorld(this: Object3D, scale: number | Vector3): Object3D {
+    objectExtension.pp_setScaleWorld = function pp_setScaleWorld(this: Object3D, scale: Vector3 | number): Object3D {
         return ObjectUtils.setScaleWorld(this, scale as Vector3);
     };
 
-    objectExtension.pp_setScaleLocal = function pp_setScaleLocal(this: Object3D, scale: number | Vector3): Object3D {
+    objectExtension.pp_setScaleLocal = function pp_setScaleLocal(this: Object3D, scale: Vector3 | number): Object3D {
         return ObjectUtils.setScaleLocal(this, scale as Vector3);
     };
 
@@ -977,7 +977,7 @@ function _initObjectExtensionProtoype(): void {
 
     // Scale
 
-    objectExtension.pp_scaleObject = function pp_scaleObject(this: Object3D, scale: number | Vector3): Object3D {
+    objectExtension.pp_scaleObject = function pp_scaleObject(this: Object3D, scale: Vector3 | number): Object3D {
         return ObjectUtils.scaleObject(this, scale as Vector3);
     };
 
