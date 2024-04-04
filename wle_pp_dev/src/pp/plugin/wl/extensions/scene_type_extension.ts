@@ -4,28 +4,13 @@
  */
 
 /**
-    How to use
-
-    On some of the functions u can specify if the algorithm should explore by Breadth/Depth, example:
-        - pp_getObjectByNameBreadth
-        - pp_getComponentsDepth
-    By default the functions explore by Breadth
-
-    List of functions:
-        - pp_getRoot
-        - pp_getObjects
-        
-        - pp_getComponent
-        - pp_getComponents
-        
-        - pp_getObjectByName
-        - pp_getObjectsByName
-        
-        - pp_getObjectByID
-        
-        - pp_toString / pp_toStringCompact / pp_toStringExtended
-
-        - pp_getComponentsAmountMap
+ *  How to use
+ * 
+ *  On some of the functions u can specify if the algorithm should explore by Breadth/Depth, example:
+ *      - pp_getObjectByNameBreadth
+ *      - pp_getComponentsDepth
+ * 
+ *  By default the functions explore by Breadth
 */
 
 import { Component, Object3D, Scene, type ComponentConstructor } from "@wonderlandengine/api";
