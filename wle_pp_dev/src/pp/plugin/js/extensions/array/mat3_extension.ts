@@ -22,6 +22,14 @@ function _initMat3ExtensionProtoype(): void {
         );
     };
 
+    mat3Extension.mat3_copy = function mat3_copy<T extends Matrix3>(this: T, vector: Readonly<Matrix3>): T {
+        return Mat3Utils.copy(vector, this);
+    };
+
+    mat3Extension.mat3_clone = function mat3_clone<T extends Matrix3>(this: Readonly<T>): T {
+        return Mat3Utils.clone<T>(this);
+    };
+
     mat3Extension.mat3_toDegrees = function mat3_toDegrees<T extends Matrix3, S extends Vector3>(this: Readonly<T>, out?: Vector3 | S): Vector3 | S {
         return Mat3Utils.toDegrees(this, out!);
     };

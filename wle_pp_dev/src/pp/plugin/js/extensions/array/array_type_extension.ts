@@ -26,7 +26,7 @@ export interface ArrayLikeExtension<ArrayType extends ArrayLike<ArrayElementType
     pp_findAllIndexesEqual<T extends ArrayType>(this: Readonly<T>, elementToFind: ArrayElementType, elementsEqualCallback?: (elementToCheck: ArrayElementType, elementToFind: ArrayElementType) => boolean): number[];
 }
 
-export interface ArrayExtension<ArrayType extends ArrayLike<ArrayElementType>, ArrayElementType> extends ArrayLikeExtension<ArrayType, ArrayElementType> {
+export interface ArrayExtension<ArrayType extends Array<ArrayElementType>, ArrayElementType> extends ArrayLikeExtension<ArrayType, ArrayElementType> {
     pp_remove<T extends ArrayType>(this: T, callback: (elementToCheck: ArrayElementType, elementIndex: number) => boolean): ArrayElementType | undefined;
     pp_removeIndex<T extends ArrayType>(this: T, index: number): ArrayElementType | undefined;
     pp_removeAll<T extends ArrayType>(this: T, callback: (elementToCheck: ArrayElementType, elementIndex: number) => boolean): ArrayElementType[];

@@ -5,28 +5,28 @@
 
 import { Matrix3, Quaternion, Vector3 } from "../../../../cauldron/type_definitions/array_type_definitions.js";
 
-export interface Matrix3Extension<VectorType extends Matrix3> {
-    mat3_set<T extends VectorType>(this: T,
+export interface Matrix3Extension<MatrixType extends Matrix3> {
+    mat3_set<T extends MatrixType>(this: T,
         m00: number, m01: number, m02: number,
         m10: number, m11: number, m12: number,
         m20: number, m21: number, m22: number): this;
-    mat3_set<T extends VectorType>(this: T, uniformValue: number): this;
+    mat3_set<T extends MatrixType>(this: T, uniformValue: number): this;
 
-    mat3_copy<T extends VectorType>(this: T, vector: Readonly<Matrix3>): this;
-    mat3_clone<T extends VectorType>(this: Readonly<T>): T;
-
-
-    mat3_toDegrees<T extends VectorType>(this: Readonly<T>): Vector3;
-    mat3_toDegrees<T extends VectorType, S extends Vector3>(this: Readonly<T>, out: S): S;
-
-    mat3_toRadians<T extends VectorType>(this: Readonly<T>): Vector3;
-    mat3_toRadians<T extends VectorType, S extends Vector3>(this: Readonly<T>, out: S): S;
-
-    mat3_toQuat<T extends VectorType>(this: Readonly<T>): Quaternion;
-    mat3_toQuat<T extends VectorType, S extends Quaternion>(this: Readonly<T>, out: S): S;
+    mat3_copy<T extends MatrixType>(this: T, vector: Readonly<Matrix3>): this;
+    mat3_clone<T extends MatrixType>(this: Readonly<T>): T;
 
 
-    mat3_fromAxes<T extends VectorType>(this: T, leftAxis: Readonly<Vector3>, upAxis: Readonly<Vector3>, forwardAxis: Readonly<Vector3>): this;
+    mat3_toDegrees<T extends MatrixType>(this: Readonly<T>): Vector3;
+    mat3_toDegrees<T extends MatrixType, S extends Vector3>(this: Readonly<T>, out: S): S;
+
+    mat3_toRadians<T extends MatrixType>(this: Readonly<T>): Vector3;
+    mat3_toRadians<T extends MatrixType, S extends Vector3>(this: Readonly<T>, out: S): S;
+
+    mat3_toQuat<T extends MatrixType>(this: Readonly<T>): Quaternion;
+    mat3_toQuat<T extends MatrixType, S extends Quaternion>(this: Readonly<T>, out: S): S;
+
+
+    mat3_fromAxes<T extends MatrixType>(this: T, leftAxis: Readonly<Vector3>, upAxis: Readonly<Vector3>, forwardAxis: Readonly<Vector3>): this;
 }
 
 declare global {

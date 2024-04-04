@@ -45,6 +45,20 @@ export function set<T extends Matrix3>(matrix: T,
     return matrix;
 }
 
+export function copy<T extends Matrix3>(from: Readonly<Matrix3>, to: T): T {
+    gl_mat3.copy(to as unknown as gl_mat3_type, from as unknown as gl_mat3_type);
+    return to;
+}
+
+/** The overload where `T extends Vector2` does also get `array` as `Readonly<T>`, but is not marked as such due to 
+ *  Typescript having issues with inferring the proper type of `T` when `Readonly` is used */
+export function clone<T extends Matrix3>(matrix: Readonly<T>): T;
+export function clone(matrix: Readonly<number[]>): number[];
+export function clone<T extends Matrix3>(matrix: T): T;
+export function clone<T extends Matrix3>(matrix: Readonly<T>): T {
+    return matrix.slice(0) as T;
+}
+
 export const toDegrees = function () {
     const quat = quat_utils_create();
 
@@ -93,6 +107,8 @@ export function fromAxes<T extends Matrix3>(leftAxis: Readonly<Vector3>, upAxis:
 export const Mat3Utils = {
     create,
     set,
+    copy,
+    clone,
     toDegrees,
     toRadians,
     toQuat,
