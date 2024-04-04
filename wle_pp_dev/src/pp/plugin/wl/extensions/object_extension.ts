@@ -1153,80 +1153,80 @@ function _initObjectExtensionProtoype(): void {
 
     // Component
 
-    objectExtension.pp_addComponent = function pp_addComponent<T extends Component>(this: Object3D, typeOrClass: string | ComponentConstructor<T>, paramsOrActive?: Record<string, any> | boolean, active?: boolean): T | null {
-        return ObjectUtils.addComponent(this, typeOrClass, paramsOrActive, active);
+    objectExtension.pp_addComponent = function pp_addComponent<T extends Component>(this: Object3D, classOrType: ComponentConstructor<T> | string, paramsOrActive?: Record<string, any> | boolean, active?: boolean): T | null {
+        return ObjectUtils.addComponent(this, classOrType, paramsOrActive, active);
     };
 
-    objectExtension.pp_getComponent = function pp_getComponent<T extends Component>(this: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T>, index?: number): T | null {
-        return ObjectUtils.getComponent(this, typeOrClass, index);
+    objectExtension.pp_getComponent = function pp_getComponent<T extends Component>(this: Readonly<Object3D>, classOrType: ComponentConstructor<T> | string, index?: number): T | null {
+        return ObjectUtils.getComponent(this, classOrType, index);
     };
 
-    objectExtension.pp_getComponentSelf = function pp_getComponentSelf<T extends Component>(this: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T>, index?: number): T | null {
-        return ObjectUtils.getComponentSelf(this, typeOrClass, index);
+    objectExtension.pp_getComponentSelf = function pp_getComponentSelf<T extends Component>(this: Readonly<Object3D>, classOrType: ComponentConstructor<T> | string, index?: number): T | null {
+        return ObjectUtils.getComponentSelf(this, classOrType, index);
     };
 
-    objectExtension.pp_getComponentHierarchy = function pp_getComponentHierarchy<T extends Component>(this: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T>, index?: number): T | null {
-        return ObjectUtils.getComponentHierarchy(this, typeOrClass, index);
+    objectExtension.pp_getComponentHierarchy = function pp_getComponentHierarchy<T extends Component>(this: Readonly<Object3D>, classOrType: ComponentConstructor<T> | string, index?: number): T | null {
+        return ObjectUtils.getComponentHierarchy(this, classOrType, index);
     };
 
-    objectExtension.pp_getComponentHierarchyBreadth = function pp_getComponentHierarchyBreadth<T extends Component>(this: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T>, index?: number): T | null {
-        return ObjectUtils.getComponentHierarchyBreadth(this, typeOrClass, index);
+    objectExtension.pp_getComponentHierarchyBreadth = function pp_getComponentHierarchyBreadth<T extends Component>(this: Readonly<Object3D>, classOrType: ComponentConstructor<T> | string, index?: number): T | null {
+        return ObjectUtils.getComponentHierarchyBreadth(this, classOrType, index);
     };
 
-    objectExtension.pp_getComponentHierarchyDepth = function pp_getComponentHierarchyDepth<T extends Component>(this: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T>, index?: number): T | null {
-        return ObjectUtils.getComponentHierarchyDepth(this, typeOrClass, index);
+    objectExtension.pp_getComponentHierarchyDepth = function pp_getComponentHierarchyDepth<T extends Component>(this: Readonly<Object3D>, classOrType: ComponentConstructor<T> | string, index?: number): T | null {
+        return ObjectUtils.getComponentHierarchyDepth(this, classOrType, index);
     };
 
-    objectExtension.pp_getComponentDescendants = function pp_getComponentDescendants<T extends Component>(this: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T>, index?: number): T | null {
-        return ObjectUtils.getComponentDescendants(this, typeOrClass, index);
+    objectExtension.pp_getComponentDescendants = function pp_getComponentDescendants<T extends Component>(this: Readonly<Object3D>, classOrType: ComponentConstructor<T> | string, index?: number): T | null {
+        return ObjectUtils.getComponentDescendants(this, classOrType, index);
     };
 
-    objectExtension.pp_getComponentDescendantsBreadth = function pp_getComponentDescendantsBreadth<T extends Component>(this: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T>, index?: number): T | null {
-        return ObjectUtils.getComponentDescendantsBreadth(this, typeOrClass, index);
+    objectExtension.pp_getComponentDescendantsBreadth = function pp_getComponentDescendantsBreadth<T extends Component>(this: Readonly<Object3D>, classOrType: ComponentConstructor<T> | string, index?: number): T | null {
+        return ObjectUtils.getComponentDescendantsBreadth(this, classOrType, index);
     };
 
-    objectExtension.pp_getComponentDescendantsDepth = function pp_getComponentDescendantsDepth<T extends Component>(this: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T>, index?: number): T | null {
-        return ObjectUtils.getComponentDescendantsDepth(this, typeOrClass, index);
+    objectExtension.pp_getComponentDescendantsDepth = function pp_getComponentDescendantsDepth<T extends Component>(this: Readonly<Object3D>, classOrType: ComponentConstructor<T> | string, index?: number): T | null {
+        return ObjectUtils.getComponentDescendantsDepth(this, classOrType, index);
     };
 
-    objectExtension.pp_getComponentChildren = function pp_getComponentChildren<T extends Component>(this: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T>, index?: number): T | null {
-        return ObjectUtils.getComponentChildren(this, typeOrClass, index);
+    objectExtension.pp_getComponentChildren = function pp_getComponentChildren<T extends Component>(this: Readonly<Object3D>, classOrType: ComponentConstructor<T> | string, index?: number): T | null {
+        return ObjectUtils.getComponentChildren(this, classOrType, index);
     };
 
-    objectExtension.pp_getComponents = function pp_getComponents<T extends Component>(this: Readonly<Object3D>, typeOrClass?: string | ComponentConstructor<T>): T[] {
-        return ObjectUtils.getComponents(this, typeOrClass);
+    objectExtension.pp_getComponents = function pp_getComponents<T extends Component>(this: Readonly<Object3D>, classOrType?: ComponentConstructor<T> | string): T[] {
+        return ObjectUtils.getComponents(this, classOrType);
     };
 
-    objectExtension.pp_getComponentsSelf = function pp_getComponentsSelf<T extends Component>(this: Readonly<Object3D>, typeOrClass?: string | ComponentConstructor<T>): T[] {
-        return ObjectUtils.getComponentsSelf(this, typeOrClass);
+    objectExtension.pp_getComponentsSelf = function pp_getComponentsSelf<T extends Component>(this: Readonly<Object3D>, classOrType?: ComponentConstructor<T> | string): T[] {
+        return ObjectUtils.getComponentsSelf(this, classOrType);
     };
 
-    objectExtension.pp_getComponentsHierarchy = function pp_getComponentsHierarchy<T extends Component>(this: Readonly<Object3D>, typeOrClass?: string | ComponentConstructor<T>): T[] {
-        return ObjectUtils.getComponentsHierarchy(this, typeOrClass);
+    objectExtension.pp_getComponentsHierarchy = function pp_getComponentsHierarchy<T extends Component>(this: Readonly<Object3D>, classOrType?: ComponentConstructor<T> | string): T[] {
+        return ObjectUtils.getComponentsHierarchy(this, classOrType);
     };
 
-    objectExtension.pp_getComponentsHierarchyBreadth = function pp_getComponentsHierarchyBreadth<T extends Component>(this: Readonly<Object3D>, typeOrClass?: string | ComponentConstructor<T>): T[] {
-        return ObjectUtils.getComponentsHierarchyBreadth(this, typeOrClass);
+    objectExtension.pp_getComponentsHierarchyBreadth = function pp_getComponentsHierarchyBreadth<T extends Component>(this: Readonly<Object3D>, classOrType?: ComponentConstructor<T> | string): T[] {
+        return ObjectUtils.getComponentsHierarchyBreadth(this, classOrType);
     };
 
-    objectExtension.pp_getComponentsHierarchyDepth = function pp_getComponentsHierarchyDepth<T extends Component>(this: Readonly<Object3D>, typeOrClass?: string | ComponentConstructor<T>): T[] {
-        return ObjectUtils.getComponentsHierarchyDepth(this, typeOrClass);
+    objectExtension.pp_getComponentsHierarchyDepth = function pp_getComponentsHierarchyDepth<T extends Component>(this: Readonly<Object3D>, classOrType?: ComponentConstructor<T> | string): T[] {
+        return ObjectUtils.getComponentsHierarchyDepth(this, classOrType);
     };
 
-    objectExtension.pp_getComponentsDescendants = function pp_getComponentsDescendants<T extends Component>(this: Readonly<Object3D>, typeOrClass?: string | ComponentConstructor<T>): T[] {
-        return ObjectUtils.getComponentsDescendants(this, typeOrClass);
+    objectExtension.pp_getComponentsDescendants = function pp_getComponentsDescendants<T extends Component>(this: Readonly<Object3D>, classOrType?: ComponentConstructor<T> | string): T[] {
+        return ObjectUtils.getComponentsDescendants(this, classOrType);
     };
 
-    objectExtension.pp_getComponentsDescendantsBreadth = function pp_getComponentsDescendantsBreadth<T extends Component>(this: Readonly<Object3D>, typeOrClass?: string | ComponentConstructor<T>): T[] {
-        return ObjectUtils.getComponentsDescendantsBreadth(this, typeOrClass);
+    objectExtension.pp_getComponentsDescendantsBreadth = function pp_getComponentsDescendantsBreadth<T extends Component>(this: Readonly<Object3D>, classOrType?: ComponentConstructor<T> | string): T[] {
+        return ObjectUtils.getComponentsDescendantsBreadth(this, classOrType);
     };
 
-    objectExtension.pp_getComponentsDescendantsDepth = function pp_getComponentsDescendantsDepth<T extends Component>(this: Readonly<Object3D>, typeOrClass?: string | ComponentConstructor<T>): T[] {
-        return ObjectUtils.getComponentsDescendantsDepth(this, typeOrClass);
+    objectExtension.pp_getComponentsDescendantsDepth = function pp_getComponentsDescendantsDepth<T extends Component>(this: Readonly<Object3D>, classOrType?: ComponentConstructor<T> | string): T[] {
+        return ObjectUtils.getComponentsDescendantsDepth(this, classOrType);
     };
 
-    objectExtension.pp_getComponentsChildren = function pp_getComponentsChildren<T extends Component>(this: Readonly<Object3D>, typeOrClass?: string | ComponentConstructor<T>): T[] {
-        return ObjectUtils.getComponentsChildren(this, typeOrClass);
+    objectExtension.pp_getComponentsChildren = function pp_getComponentsChildren<T extends Component>(this: Readonly<Object3D>, classOrType?: ComponentConstructor<T> | string): T[] {
+        return ObjectUtils.getComponentsChildren(this, classOrType);
     };
 
     // Active

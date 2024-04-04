@@ -360,26 +360,26 @@ export interface Object3DExtension {
     pp_setParent(this: Object3D, newParent: Object3D, keepTransformWorld?: boolean): this;
     pp_getParent(this: Readonly<Object3D>): Object3D | null;
 
-    pp_addComponent<T extends Component>(this: Object3D, typeOrClass: string | ComponentConstructor<T>, paramsOrActive?: Record<string, any> | boolean, active?: boolean): T | null;
+    pp_addComponent<T extends Component>(this: Object3D, classOrType: ComponentConstructor<T> | string, paramsOrActive?: Record<string, any> | boolean, active?: boolean): T | null;
 
-    pp_getComponent<T extends Component>(this: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T>, index?: number): T | null;
-    pp_getComponentSelf<T extends Component>(this: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T>, index?: number): T | null;
-    pp_getComponentHierarchy<T extends Component>(this: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T>, index?: number): T | null;
-    pp_getComponentHierarchyBreadth<T extends Component>(this: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T>, index?: number): T | null;
-    pp_getComponentHierarchyDepth<T extends Component>(this: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T>, index?: number): T | null;
-    pp_getComponentDescendants<T extends Component>(this: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T>, index?: number): T | null;
-    pp_getComponentDescendantsBreadth<T extends Component>(this: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T>, index?: number): T | null;
-    pp_getComponentDescendantsDepth<T extends Component>(this: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T>, index?: number): T | null;
-    pp_getComponentChildren<T extends Component>(this: Readonly<Object3D>, typeOrClass: string | ComponentConstructor<T>, index?: number): T | null;
-    pp_getComponents<T extends Component>(this: Readonly<Object3D>, typeOrClass?: string | ComponentConstructor<T>): T[];
-    pp_getComponentsSelf<T extends Component>(this: Readonly<Object3D>, typeOrClass?: string | ComponentConstructor<T>): T[];
-    pp_getComponentsHierarchy<T extends Component>(this: Readonly<Object3D>, typeOrClass?: string | ComponentConstructor<T>): T[];
-    pp_getComponentsHierarchyBreadth<T extends Component>(this: Readonly<Object3D>, typeOrClass?: string | ComponentConstructor<T>): T[];
-    pp_getComponentsHierarchyDepth<T extends Component>(this: Readonly<Object3D>, typeOrClass?: string | ComponentConstructor<T>): T[];
-    pp_getComponentsDescendants<T extends Component>(this: Readonly<Object3D>, typeOrClass?: string | ComponentConstructor<T>): T[];
-    pp_getComponentsDescendantsBreadth<T extends Component>(this: Readonly<Object3D>, typeOrClass?: string | ComponentConstructor<T>): T[];
-    pp_getComponentsDescendantsDepth<T extends Component>(this: Readonly<Object3D>, typeOrClass?: string | ComponentConstructor<T>): T[];
-    pp_getComponentsChildren<T extends Component>(this: Readonly<Object3D>, typeOrClass?: string | ComponentConstructor<T>): T[];
+    pp_getComponent<T extends Component>(this: Readonly<Object3D>, classOrType: ComponentConstructor<T> | string, index?: number): T | null;
+    pp_getComponentSelf<T extends Component>(this: Readonly<Object3D>, classOrType: ComponentConstructor<T> | string, index?: number): T | null;
+    pp_getComponentHierarchy<T extends Component>(this: Readonly<Object3D>, classOrType: ComponentConstructor<T> | string, index?: number): T | null;
+    pp_getComponentHierarchyBreadth<T extends Component>(this: Readonly<Object3D>, classOrType: ComponentConstructor<T> | string, index?: number): T | null;
+    pp_getComponentHierarchyDepth<T extends Component>(this: Readonly<Object3D>, classOrType: ComponentConstructor<T> | string, index?: number): T | null;
+    pp_getComponentDescendants<T extends Component>(this: Readonly<Object3D>, classOrType: ComponentConstructor<T> | string, index?: number): T | null;
+    pp_getComponentDescendantsBreadth<T extends Component>(this: Readonly<Object3D>, classOrType: ComponentConstructor<T> | string, index?: number): T | null;
+    pp_getComponentDescendantsDepth<T extends Component>(this: Readonly<Object3D>, classOrType: ComponentConstructor<T> | string, index?: number): T | null;
+    pp_getComponentChildren<T extends Component>(this: Readonly<Object3D>, classOrType: ComponentConstructor<T> | string, index?: number): T | null;
+    pp_getComponents<T extends Component>(this: Readonly<Object3D>, classOrType?: ComponentConstructor<T> | string): T[];
+    pp_getComponentsSelf<T extends Component>(this: Readonly<Object3D>, classOrType?: ComponentConstructor<T> | string): T[];
+    pp_getComponentsHierarchy<T extends Component>(this: Readonly<Object3D>, classOrType?: ComponentConstructor<T> | string): T[];
+    pp_getComponentsHierarchyBreadth<T extends Component>(this: Readonly<Object3D>, classOrType?: ComponentConstructor<T> | string): T[];
+    pp_getComponentsHierarchyDepth<T extends Component>(this: Readonly<Object3D>, classOrType?: ComponentConstructor<T> | string): T[];
+    pp_getComponentsDescendants<T extends Component>(this: Readonly<Object3D>, classOrType?: ComponentConstructor<T> | string): T[];
+    pp_getComponentsDescendantsBreadth<T extends Component>(this: Readonly<Object3D>, classOrType?: ComponentConstructor<T> | string): T[];
+    pp_getComponentsDescendantsDepth<T extends Component>(this: Readonly<Object3D>, classOrType?: ComponentConstructor<T> | string): T[];
+    pp_getComponentsChildren<T extends Component>(this: Readonly<Object3D>, classOrType?: ComponentConstructor<T> | string): T[];
 
     pp_setActive(this: Object3D, active: boolean): this;
     pp_setActiveSelf(this: Object3D, active: boolean): this;

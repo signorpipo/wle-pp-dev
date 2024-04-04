@@ -59,28 +59,28 @@ function _initSceneExtensionPrototype(): void {
 
     // Get Component    
 
-    sceneExtension.pp_getComponent = function pp_getComponent<T extends Component>(this: Readonly<Scene>, typeOrClass: string | ComponentConstructor<T>, index?: number): T | null {
-        return SceneUtils.getComponent(this, typeOrClass, index);
+    sceneExtension.pp_getComponent = function pp_getComponent<T extends Component>(this: Readonly<Scene>, classOrType: ComponentConstructor<T> | string, index?: number): T | null {
+        return SceneUtils.getComponent(this, classOrType, index);
     };
 
-    sceneExtension.pp_getComponentBreadth = function pp_getComponentBreadth<T extends Component>(this: Readonly<Scene>, typeOrClass: string | ComponentConstructor<T>, index?: number): T | null {
-        return SceneUtils.getComponentBreadth(this, typeOrClass, index);
+    sceneExtension.pp_getComponentBreadth = function pp_getComponentBreadth<T extends Component>(this: Readonly<Scene>, classOrType: ComponentConstructor<T> | string, index?: number): T | null {
+        return SceneUtils.getComponentBreadth(this, classOrType, index);
     };
 
-    sceneExtension.pp_getComponentDepth = function pp_getComponentDepth<T extends Component>(this: Readonly<Scene>, typeOrClass: string | ComponentConstructor<T>, index?: number): T | null {
-        return SceneUtils.getComponentDepth(this, typeOrClass, index);
+    sceneExtension.pp_getComponentDepth = function pp_getComponentDepth<T extends Component>(this: Readonly<Scene>, classOrType: ComponentConstructor<T> | string, index?: number): T | null {
+        return SceneUtils.getComponentDepth(this, classOrType, index);
     };
 
-    sceneExtension.pp_getComponents = function pp_getComponents<T extends Component>(this: Readonly<Scene>, typeOrClass: string | ComponentConstructor<T>): T[] {
-        return SceneUtils.getComponents(this, typeOrClass);
+    sceneExtension.pp_getComponents = function pp_getComponents<T extends Component>(this: Readonly<Scene>, classOrType: ComponentConstructor<T> | string): T[] {
+        return SceneUtils.getComponents(this, classOrType);
     };
 
-    sceneExtension.pp_getComponentsBreadth = function pp_getComponentsBreadth<T extends Component>(this: Readonly<Scene>, typeOrClass: string | ComponentConstructor<T>): T[] {
-        return SceneUtils.getComponentsBreadth(this, typeOrClass);
+    sceneExtension.pp_getComponentsBreadth = function pp_getComponentsBreadth<T extends Component>(this: Readonly<Scene>, classOrType: ComponentConstructor<T> | string): T[] {
+        return SceneUtils.getComponentsBreadth(this, classOrType);
     };
 
-    sceneExtension.pp_getComponentsDepth = function pp_getComponentsDepth<T extends Component>(this: Readonly<Scene>, typeOrClass: string | ComponentConstructor<T>): T[] {
-        return SceneUtils.getComponentsDepth(this, typeOrClass);
+    sceneExtension.pp_getComponentsDepth = function pp_getComponentsDepth<T extends Component>(this: Readonly<Scene>, classOrType: ComponentConstructor<T> | string): T[] {
+        return SceneUtils.getComponentsDepth(this, classOrType);
     };
 
     // Get Object By Name

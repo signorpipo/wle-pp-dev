@@ -39,12 +39,12 @@ export interface SceneExtension {
     pp_getObjectsBreadth(this: Readonly<Scene>): Object3D[];
     pp_getObjectsDepth(this: Readonly<Scene>): Object3D[];
 
-    pp_getComponent<T extends Component>(this: Readonly<Scene>, typeOrClass: string | ComponentConstructor<T>, index?: number): T | null;
-    pp_getComponentBreadth<T extends Component>(this: Readonly<Scene>, typeOrClass: string | ComponentConstructor<T>, index?: number): T | null;
-    pp_getComponentDepth<T extends Component>(this: Readonly<Scene>, typeOrClass: string | ComponentConstructor<T>, index?: number): T | null;
-    pp_getComponents<T extends Component>(this: Readonly<Scene>, typeOrClass: string | ComponentConstructor<T>): T[];
-    pp_getComponentsBreadth<T extends Component>(this: Readonly<Scene>, typeOrClass: string | ComponentConstructor<T>): T[];
-    pp_getComponentsDepth<T extends Component>(this: Readonly<Scene>, typeOrClass: string | ComponentConstructor<T>): T[];
+    pp_getComponent<T extends Component>(this: Readonly<Scene>, classOrType: ComponentConstructor<T> | string, index?: number): T | null;
+    pp_getComponentBreadth<T extends Component>(this: Readonly<Scene>, classOrType: ComponentConstructor<T> | string, index?: number): T | null;
+    pp_getComponentDepth<T extends Component>(this: Readonly<Scene>, classOrType: ComponentConstructor<T> | string, index?: number): T | null;
+    pp_getComponents<T extends Component>(this: Readonly<Scene>, classOrType: ComponentConstructor<T> | string): T[];
+    pp_getComponentsBreadth<T extends Component>(this: Readonly<Scene>, classOrType: ComponentConstructor<T> | string): T[];
+    pp_getComponentsDepth<T extends Component>(this: Readonly<Scene>, classOrType: ComponentConstructor<T> | string): T[];
 
     pp_getObjectByName(this: Readonly<Scene>, name: string, isRegex?: boolean, index?: number): Object3D | null;
     pp_getObjectByNameBreadth(this: Readonly<Scene>, name: string, isRegex?: boolean, index?: number): Object3D | null;

@@ -23,28 +23,28 @@ export function getObjectsDepth(scene: Readonly<Scene>): Object3D[] {
 
 // Get Component   
 
-export function getComponent<T extends Component>(scene: Readonly<Scene>, typeOrClass: string | ComponentConstructor<T>, index: number = 0): T | null {
-    return SceneUtils.getComponentBreadth(scene, typeOrClass, index);
+export function getComponent<T extends Component>(scene: Readonly<Scene>, classOrType: ComponentConstructor<T> | string, index: number = 0): T | null {
+    return SceneUtils.getComponentBreadth(scene, classOrType, index);
 }
 
-export function getComponentBreadth<T extends Component>(scene: Readonly<Scene>, typeOrClass: string | ComponentConstructor<T>, index: number = 0): T | null {
-    return ObjectUtils.getComponentHierarchyBreadth(SceneUtils.getRoot(scene), typeOrClass, index);
+export function getComponentBreadth<T extends Component>(scene: Readonly<Scene>, classOrType: ComponentConstructor<T> | string, index: number = 0): T | null {
+    return ObjectUtils.getComponentHierarchyBreadth(SceneUtils.getRoot(scene), classOrType, index);
 }
 
-export function getComponentDepth<T extends Component>(scene: Readonly<Scene>, typeOrClass: string | ComponentConstructor<T>, index: number = 0): T | null {
-    return ObjectUtils.getComponentHierarchyDepth(SceneUtils.getRoot(scene), typeOrClass, index);
+export function getComponentDepth<T extends Component>(scene: Readonly<Scene>, classOrType: ComponentConstructor<T> | string, index: number = 0): T | null {
+    return ObjectUtils.getComponentHierarchyDepth(SceneUtils.getRoot(scene), classOrType, index);
 }
 
-export function getComponents<T extends Component>(scene: Readonly<Scene>, typeOrClass: string | ComponentConstructor<T>): T[] {
-    return SceneUtils.getComponentsBreadth(scene, typeOrClass);
+export function getComponents<T extends Component>(scene: Readonly<Scene>, classOrType: ComponentConstructor<T> | string): T[] {
+    return SceneUtils.getComponentsBreadth(scene, classOrType);
 }
 
-export function getComponentsBreadth<T extends Component>(scene: Readonly<Scene>, typeOrClass: string | ComponentConstructor<T>): T[] {
-    return ObjectUtils.getComponentsHierarchyBreadth(SceneUtils.getRoot(scene), typeOrClass);
+export function getComponentsBreadth<T extends Component>(scene: Readonly<Scene>, classOrType: ComponentConstructor<T> | string): T[] {
+    return ObjectUtils.getComponentsHierarchyBreadth(SceneUtils.getRoot(scene), classOrType);
 }
 
-export function getComponentsDepth<T extends Component>(scene: Readonly<Scene>, typeOrClass: string | ComponentConstructor<T>): T[] {
-    return ObjectUtils.getComponentsHierarchyDepth(SceneUtils.getRoot(scene), typeOrClass);
+export function getComponentsDepth<T extends Component>(scene: Readonly<Scene>, classOrType: ComponentConstructor<T> | string): T[] {
+    return ObjectUtils.getComponentsHierarchyDepth(SceneUtils.getRoot(scene), classOrType);
 }
 
 // Get Object By Name
