@@ -147,10 +147,8 @@ export interface Object3DExtension {
     pp_setScale(this: Object3D, scale: number | Vector3): this;
     pp_setScaleWorld(this: Object3D, scale: Vector3): this;
     pp_setScaleWorld(this: Object3D, uniformScale: number): this;
-    pp_setScaleWorld(this: Object3D, scale: number | Vector3): this;
     pp_setScaleLocal(this: Object3D, scale: Vector3): this;
     pp_setScaleLocal(this: Object3D, uniformScale: number): this;
-    pp_setScaleLocal(this: Object3D, scale: number | Vector3): this;
 
     pp_setAxes(this: Object3D, left?: Readonly<Vector3>, up?: Readonly<Vector3>, forward?: Readonly<Vector3>): this;
     pp_setAxesWorld(this: Object3D, left?: Readonly<Vector3>, up?: Readonly<Vector3>, forward?: Readonly<Vector3>): this;
@@ -300,7 +298,6 @@ export interface Object3DExtension {
 
     pp_scaleObject(this: Object3D, scale: Vector3): this;
     pp_scaleObject(this: Object3D, uniformScale: number): this;
-    pp_scaleObject(this: Object3D, scale: number | Vector3): this;
 
     pp_lookAt(this: Object3D, position: Readonly<Vector3>, up: Readonly<Vector3>): this;
     pp_lookAtWorld(this: Object3D, position: Readonly<Vector3>, up: Readonly<Vector3>): this;

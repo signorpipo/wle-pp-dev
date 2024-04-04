@@ -444,11 +444,11 @@ function _initObjectExtensionProtoype(): void {
     };
 
     objectExtension.pp_setScaleWorld = function pp_setScaleWorld(this: Object3D, scale: number | Vector3): Object3D {
-        return ObjectUtils.setScaleWorld(this, scale);
+        return ObjectUtils.setScaleWorld(this, scale as Vector3);
     };
 
     objectExtension.pp_setScaleLocal = function pp_setScaleLocal(this: Object3D, scale: number | Vector3): Object3D {
-        return ObjectUtils.setScaleLocal(this, scale);
+        return ObjectUtils.setScaleLocal(this, scale as Vector3);
     };
 
     // Axes    
@@ -978,7 +978,7 @@ function _initObjectExtensionProtoype(): void {
     // Scale
 
     objectExtension.pp_scaleObject = function pp_scaleObject(this: Object3D, scale: number | Vector3): Object3D {
-        return ObjectUtils.scaleObject(this, scale);
+        return ObjectUtils.scaleObject(this, scale as Vector3);
     };
 
     // Look At

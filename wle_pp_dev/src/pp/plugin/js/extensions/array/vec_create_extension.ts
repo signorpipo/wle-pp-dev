@@ -53,9 +53,9 @@ export function mat3_create(
     m10?: number, m11?: number, m12?: number,
     m20?: number, m21?: number, m22?: number): Matrix3 {
     return Mat3Utils.create(
-        m00, m01, m02,
-        m10, m11, m12,
-        m20, m21, m22
+        m00!, m01!, m02!,
+        m10!, m11!, m12!,
+        m20!, m21!, m22!
     );
 }
 

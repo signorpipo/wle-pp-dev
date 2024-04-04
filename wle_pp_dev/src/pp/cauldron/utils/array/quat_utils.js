@@ -3,6 +3,12 @@ import { EasingFunction, MathUtils } from "../math_utils.js";
 import { ArrayUtils } from "./array_utils.js";
 import { Mat3Utils, create as mat3_utils_create } from "./mat3_utils.js";
 import { Vec3Utils, create as vec3_utils_create } from "./vec3_utils.js";
+
+/**
+ * TS type inference helper
+ * 
+ * @return {any}
+ */
 export function create(x, y, z, w) {
     let out = gl_quat.create();
 
