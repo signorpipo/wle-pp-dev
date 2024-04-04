@@ -1,6 +1,7 @@
 import { Vector2 } from "../../../../cauldron/type_definitions/array_type_definitions.js";
 import { Vec2Utils } from "../../../../cauldron/utils/array/vec2_utils.js";
 import { PluginUtils } from "../../../utils/plugin_utils.js";
+import { ArrayExtensionUtils } from "./array_extension_utils.js";
 
 import "./vec2_type_extension.js";
 
@@ -40,11 +41,7 @@ function _initVec2ExtensionProtoype(): void {
         return Vec2Utils.isZero(this, epsilon);
     };
 
-    const arrayLikePrototypesToExtend = [
-        Array.prototype, Uint8ClampedArray.prototype, Uint8Array.prototype, Uint16Array.prototype, Uint32Array.prototype, Int8Array.prototype,
-        Int16Array.prototype, Int32Array.prototype, Float32Array.prototype, Float64Array.prototype];
-
-    for (const arrayLikePrototypeToExtend of arrayLikePrototypesToExtend) {
-        PluginUtils.injectProperties(vec2Extension, arrayLikePrototypeToExtend, false, true, true);
+    for (const arrayLikeClassToExtend of ArrayExtensionUtils.ARRAY_LIKE_CLASSES) {
+        PluginUtils.injectProperties(vec2Extension, arrayLikeClassToExtend.prototype, false, true, true);
     }
 }

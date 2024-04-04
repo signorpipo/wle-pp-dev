@@ -1,6 +1,7 @@
 import { ArrayLike } from "../../../../cauldron/type_definitions/array_type_definitions.js";
 import { ArrayUtils } from "../../../../cauldron/utils/array/array_utils.js";
 import { PluginUtils } from "../../../utils/plugin_utils.js";
+import { ArrayExtensionUtils } from "./array_extension_utils.js";
 
 import "./array_type_extension.js";
 
@@ -73,12 +74,8 @@ function _initArrayLikeExtensionProtoypes(): void {
         return ArrayUtils.findAllIndexesEqual(this, elementToFind, elementsEqualCallback);
     };
 
-    const arrayLikePrototypesToExtend = [
-        Array.prototype, Uint8ClampedArray.prototype, Uint8Array.prototype, Uint16Array.prototype, Uint32Array.prototype, Int8Array.prototype,
-        Int16Array.prototype, Int32Array.prototype, Float32Array.prototype, Float64Array.prototype];
-
-    for (const arrayLikePrototypeToExtend of arrayLikePrototypesToExtend) {
-        PluginUtils.injectProperties(arrayLikeExtension, arrayLikePrototypeToExtend, false, true, true);
+    for (const arrayLikeClassToExtend of ArrayExtensionUtils.ARRAY_LIKE_CLASSES) {
+        PluginUtils.injectProperties(arrayLikeExtension, arrayLikeClassToExtend.prototype, false, true, true);
     }
 }
 

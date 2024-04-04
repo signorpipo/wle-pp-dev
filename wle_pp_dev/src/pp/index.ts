@@ -11,9 +11,11 @@ export * from "./pp/components/get_scene_objects_component.js";
 export * from "./pp/components/get_default_resources_component.js";
 export * from "./pp/components/add_pp_to_window_component.js";
 
+//	PLUGIN
 export { PluginUtils } from "./plugin/utils/plugin_utils.js";
 
 export * from "./plugin/js/extensions/array/vec_create_extension.js";
+export { ArrayExtensionUtils } from "./plugin/js/extensions/array/array_extension_utils.js";
 
 //	AUDIO
 export * from "./audio/audio_manager.js";

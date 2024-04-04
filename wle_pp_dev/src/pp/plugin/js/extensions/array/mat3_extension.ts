@@ -1,4 +1,4 @@
-import { Mat3Utils, Matrix3, Quaternion, Vector3 } from "../../../../index.js";
+import { ArrayExtensionUtils, Mat3Utils, Matrix3, Quaternion, Vector3 } from "../../../../index.js";
 import { PluginUtils } from "../../../utils/plugin_utils.js";
 
 import "./mat3_type_extension.js";
@@ -45,11 +45,7 @@ function _initMat3ExtensionProtoype(): void {
         return Mat3Utils.fromAxes(leftAxis, upAxis, forwardAxis, this);
     };
 
-    const arrayLikePrototypesToExtend = [
-        Array.prototype, Uint8ClampedArray.prototype, Uint8Array.prototype, Uint16Array.prototype, Uint32Array.prototype, Int8Array.prototype,
-        Int16Array.prototype, Int32Array.prototype, Float32Array.prototype, Float64Array.prototype];
-
-    for (const arrayLikePrototypeToExtend of arrayLikePrototypesToExtend) {
-        PluginUtils.injectProperties(mat3Extension, arrayLikePrototypeToExtend, false, true, true);
+    for (const arrayLikeClassToExtend of ArrayExtensionUtils.ARRAY_LIKE_CLASSES) {
+        PluginUtils.injectProperties(mat3Extension, arrayLikeClassToExtend.prototype, false, true, true);
     }
 }
