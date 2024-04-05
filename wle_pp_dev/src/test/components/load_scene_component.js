@@ -1,5 +1,5 @@
 import { Component } from "@wonderlandengine/api";
-import { GamepadButtonID, Globals } from "../../pp/index.js";
+import { GamepadButtonID, Globals } from "wle-pp";
 
 export class LoadSceneComponent extends Component {
     static TypeName = "load-scene";

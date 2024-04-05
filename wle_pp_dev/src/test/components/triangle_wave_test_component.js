@@ -1,5 +1,5 @@
 import { Component, Property } from "@wonderlandengine/api";
-import { EasingFunction, vec3_create } from "../../pp/index.js";
+import { EasingFunction, vec3_create } from "wle-pp";
 
 export class TriangleWaveTestComponent extends Component {
     static TypeName = "triangle-wave-test";

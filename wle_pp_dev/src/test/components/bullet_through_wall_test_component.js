@@ -1,6 +1,6 @@
 import { CollisionEventType, Component, Property, Shape } from "@wonderlandengine/api";
 import { Timer } from "../../pp/cauldron/cauldron/timer.js";
-import { vec3_create } from "../../pp/index.js";
+import { vec3_create } from "wle-pp";
 import { Globals } from "../../pp/pp/globals.js";
 
 export class BulletThroughWallTestComponent extends Component {
