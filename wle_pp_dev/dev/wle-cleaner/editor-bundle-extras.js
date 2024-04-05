@@ -3,8 +3,6 @@ const window = {
     location: {}
 };
 
-class URL { }
-
 const HowlerGlobal = {
     prototype: {}
 };
