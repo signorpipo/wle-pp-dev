@@ -8,6 +8,7 @@ enum ButtonBehaviorWhenNotAvailable {
     HIDE = "hide"
 }
 
+/** The buttons must first be enabled from the Wonderland Engine editor -> Project Settings / VR & AR */
 export class ShowXRButtonsComponent extends Component {
     public static override TypeName = "pp-show-xr-buttons";
 
