@@ -1,5 +1,5 @@
 import { WonderlandEngine } from "@wonderlandengine/api";
-import { Globals } from "./globals.js";
+import { Globals } from "../../../pp/globals.js";
 import { PlayerObjects, SceneObjects } from "./scene_objects.js";
 
 const _mySceneObjectsContainer: WeakMap<Readonly<WonderlandEngine>, SceneObjects> = new WeakMap();

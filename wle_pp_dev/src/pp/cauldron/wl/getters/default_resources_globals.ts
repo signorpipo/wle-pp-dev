@@ -1,6 +1,6 @@
 import { WonderlandEngine } from "@wonderlandengine/api";
 import { DefaultResources, DefaultResourcesMaterials, DefaultResourcesMeshes } from "./default_resources.js";
-import { Globals } from "./globals.js";
+import { Globals } from "../../../pp/globals.js";
 
 const _myDefaultResourcesContainer: WeakMap<Readonly<WonderlandEngine>, DefaultResources> = new WeakMap();
 

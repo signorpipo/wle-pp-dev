@@ -10,9 +10,9 @@ import * as InputGlobals from "../input/cauldron/input_globals.js";
 import * as ToolGlobals from "../tool/cauldron/tool_globals.js";
 import * as ConsoleVRGlobals from "../tool/console_vr/console_vr_globals.js";
 import * as EasyTuneGlobals from "../tool/easy_tune/easy_tune_globals.js";
-import * as DefaultResourcesGlobals from "./default_resources_globals.js";
-import * as SceneObjectsGlobals from "./scene_objects_globals.js";
-import * as RootGlobals from "./root_globals.js";
+import * as DefaultResourcesGlobals from "../cauldron/wl/getters/default_resources_globals.js";
+import * as SceneObjectsGlobals from "../cauldron/wl/getters/scene_objects_globals.js";
+import * as RootGlobals from "../cauldron/wl/getters/root_globals.js";
 
 export const Globals = {
     ...EngineGlobals,

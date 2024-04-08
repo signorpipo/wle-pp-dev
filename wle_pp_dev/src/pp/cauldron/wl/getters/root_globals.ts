@@ -1,6 +1,6 @@
 
 import { Object3D, WonderlandEngine } from "@wonderlandengine/api";
-import { Globals } from "../pp/globals.js";
+import { Globals } from "../../../pp/globals.js";
 
 const _myRoots: WeakMap<Readonly<WonderlandEngine>, Object3D> = new WeakMap();
 

@@ -3,13 +3,8 @@
 //  PP
 export * from "./pp/register_pp_components.js";
 export { Globals } from "./pp/globals.js";
-export * from "./pp/scene_objects.js";
-export * from "./pp/default_resources.js";
 
 export * from "./pp/components/pp_gateway_component.js";
-export * from "./pp/components/get_scene_objects_component.js";
-export * from "./pp/components/get_root_component.js";
-export * from "./pp/components/get_default_resources_component.js";
 export * from "./pp/components/add_pp_to_window_component.js";
 
 //	PLUGIN
@@ -105,6 +100,11 @@ export { DefaultWLComponentCloneCallbacks } from "./cauldron/wl/utils/default_wl
 export { MaterialUtils } from "./cauldron/wl/utils/material_utils.js";
 export { MeshUtils, MeshCreationVertexParams, MeshCreationTriangleParams, MeshCreationParams } from "./cauldron/wl/utils/mesh_utils.js";
 export { TextUtils } from "./cauldron/wl/utils/text_utils.js";
+export * from "./cauldron/wl/getters/scene_objects.js";
+export * from "./cauldron/wl/getters/default_resources.js";
+export * from "./cauldron/wl/getters/components/get_scene_objects_component.js";
+export * from "./cauldron/wl/getters/components/get_root_component.js";
+export * from "./cauldron/wl/getters/components/get_default_resources_component.js";
 
 //	DEBUG
 export * from "./debug/debug_manager.js";

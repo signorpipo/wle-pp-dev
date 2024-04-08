@@ -1,7 +1,7 @@
 import { Component, Object3D } from "@wonderlandengine/api";
 import { property } from "@wonderlandengine/api/decorators.js";
 import { ObjectUtils } from "wle-pp/cauldron/wl/utils/object_utils.js";
-import { Globals } from "../globals.js";
+import { Globals } from "../../../../pp/globals.js";
 
 export class GetRootComponent extends Component {
     public static override TypeName = "pp-get-root";

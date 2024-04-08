@@ -1,6 +1,6 @@
 import { Component, Property } from "@wonderlandengine/api";
-import { Handedness } from "../../input/cauldron/input_types.js";
-import { Globals } from "../globals.js";
+import { Handedness } from "../../../../input/cauldron/input_types.js";
+import { Globals } from "../../../../pp/globals.js";
 import { SceneObjects } from "../scene_objects.js";
 
 export class GetSceneObjectsComponent extends Component {
