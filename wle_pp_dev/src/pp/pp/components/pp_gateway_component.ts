@@ -15,6 +15,7 @@ import { InitEasyTuneVariablesComponent } from "../../tool/easy_tune/components/
 import { initPP } from "../init_pp.js";
 import { AddPPToWindowComponent } from "./add_pp_to_window_component.js";
 import { GetDefaultResourcesComponent } from "./get_default_resources_component.js";
+import { GetRootComponent } from "./get_root_component.js";
 import { GetSceneObjectsComponent } from "./get_scene_objects_component.js";
 
 // #TODO enable this again as soon as it is possible for the wonderland engine to find components not specified in the index.js,
@@ -38,6 +39,7 @@ export class PPGatewayComponent extends Component {
         ...SaveManagerComponent.Properties,
         ...AnalyticsManagerComponent.Properties,
         ...DebugManagerComponent.Properties,
+        ...GetRootComponent.Properties,
         ...GetSceneObjectsComponent.Properties,
         ...GetDefaultResourcesComponent.Properties
     };
@@ -49,6 +51,7 @@ export class PPGatewayComponent extends Component {
     private _myAddWLToWindow!: boolean;
 
     private _myGetDefaultResourcesComponent!: GetDefaultResourcesComponent;
+    private _myGetRootComponent!: GetRootComponent;
     private _myGetSceneObjectsComponent!: GetSceneObjectsComponent;
     private _myEnableDebugComponent!: EnableDebugComponent;
     private _myEnableToolComponent!: EnableToolComponent;
@@ -74,6 +77,7 @@ export class PPGatewayComponent extends Component {
 
     public override init(): void {
         this._myGetDefaultResourcesComponent = this.object.pp_addComponent(GetDefaultResourcesComponent, this._getProperties(GetDefaultResourcesComponent.Properties), false)!;
+        this._myGetRootComponent = this.object.pp_addComponent(GetRootComponent, this._getProperties(GetRootComponent.Properties), false)!;
         this._myGetSceneObjectsComponent = this.object.pp_addComponent(GetSceneObjectsComponent, this._getProperties(GetSceneObjectsComponent.Properties), false)!;
 
         if (this._myEnableDebug) {
@@ -108,6 +112,7 @@ export class PPGatewayComponent extends Component {
 
     public override start(): void {
         this._myGetDefaultResourcesComponent.active = true;
+        this._myGetRootComponent.active = true;
         this._myGetSceneObjectsComponent.active = true;
 
         if (this._myEnableDebugComponent != null) {

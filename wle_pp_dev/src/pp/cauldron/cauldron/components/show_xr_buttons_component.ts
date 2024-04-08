@@ -2,7 +2,7 @@ import { Component } from "@wonderlandengine/api";
 import { property } from "@wonderlandengine/api/decorators.js";
 import { XRUtils } from "../../utils/xr_utils.js";
 
-enum ButtonBehaviorWhenNotAvailable {
+enum _ButtonBehaviorWhenNotAvailable {
     NONE = "none",
     DISABLE = "disable",
     HIDE = "hide"
@@ -14,12 +14,12 @@ export class ShowXRButtonsComponent extends Component {
 
     @property.bool(true)
     private _myShowVRButton!: boolean;
-    @property.enum(Object.values(ButtonBehaviorWhenNotAvailable), ButtonBehaviorWhenNotAvailable.DISABLE)
+    @property.enum(Object.values(_ButtonBehaviorWhenNotAvailable), _ButtonBehaviorWhenNotAvailable.DISABLE)
     private _myVRButtonBehaviorWhenNotAvailable!: number;
 
     @property.bool(true)
     private _myShowARButton!: boolean;
-    @property.enum(Object.values(ButtonBehaviorWhenNotAvailable), ButtonBehaviorWhenNotAvailable.DISABLE)
+    @property.enum(Object.values(_ButtonBehaviorWhenNotAvailable), _ButtonBehaviorWhenNotAvailable.DISABLE)
     private _myARButtonBehaviorWhenNotAvailable!: number;
 
     private _myXRButtonsContainer: HTMLElement | null = null;
