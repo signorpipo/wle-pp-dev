@@ -9,7 +9,7 @@ export class FunComponent extends Component {
     private _myParticlesSpawner!: ParticlesSpawnerComponent;
 
     public override start(): void {
-        this._myParticlesSpawner = Globals.getScene(this.engine).pp_getComponent(ParticlesSpawnerComponent)!;
+        this._myParticlesSpawner = Globals.getRoot(this.engine)!.pp_getComponent(ParticlesSpawnerComponent)!;
     }
 
     public override update(dt: number): void {

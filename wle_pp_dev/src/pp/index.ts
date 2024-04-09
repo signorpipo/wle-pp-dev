@@ -93,7 +93,6 @@ export * from "./cauldron/visual/components/visual_manager_component.js";
 
 export * from "./cauldron/wl/register_wl_components.js";
 export * from "./cauldron/wl/components/add_wl_to_window_component.js";
-export { SceneUtils } from "./cauldron/wl/utils/scene_utils.js";
 export { ObjectUtils, CloneParams } from "./cauldron/wl/utils/object_utils.js";
 export { ComponentUtils, DeepCloneParams, CustomCloneParams } from "./cauldron/wl/utils/component_utils.js";
 export { DefaultWLComponentCloneCallbacks } from "./cauldron/wl/utils/default_wl_component_clone_callbacks.js";
