@@ -58,11 +58,6 @@ const RuntimeOptions = {
     physx: true,
     loader: false,
     xrFramebufferScaleFactor: 1,
-    xrOfferSession: {
-        mode: 'auto',
-        features: Constants.WebXRRequiredFeatures,
-        optionalFeatures: Constants.WebXROptionalFeatures,
-    },
     canvas: 'canvas',
 };
 /* wle:auto-constants:end */
