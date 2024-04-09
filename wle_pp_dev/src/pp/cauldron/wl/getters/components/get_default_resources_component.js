@@ -1,7 +1,7 @@
 import { Component, Property } from "@wonderlandengine/api";
+import { Globals } from "../../../../pp/globals.js";
 import { MeshUtils } from "../../utils/mesh_utils.js";
 import { DefaultResources } from "../default_resources.js";
-import { Globals } from "../../../../pp/globals.js";
 
 export class GetDefaultResourcesComponent extends Component {
     static TypeName = "pp-get-default-resources";
