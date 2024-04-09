@@ -3152,14 +3152,15 @@
                 "requiredFeatures": {
                     "local-floor": false,
                     "hand-tracking": false
-                }
+                },
+                "offerSession": false
             },
             "viewObject": "21",
             "pwa": {
                 "enable": true,
                 "customServiceWorker": true,
                 "customManifest": true,
-                "appIcon": "286"
+                "appIcon": "281"
             }
         },
         "scripting": {
@@ -3324,7 +3325,7 @@
         }
     },
     "textures": {
-        "287": {
+        "282": {
             "link": {
                 "name": "icon.png",
                 "file": "assets\\textures\\pp\\icon.png"
@@ -3332,13 +3333,13 @@
         }
     },
     "images": {
-        "286": {
+        "281": {
             "link": {
                 "name": "icon.png",
                 "file": "assets\\textures\\pp\\icon.png"
             },
-            "stream": false,
-            "compression": "none"
+            "compression": "none",
+            "stream": false
         }
     },
     "files": {
