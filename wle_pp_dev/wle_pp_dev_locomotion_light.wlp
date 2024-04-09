@@ -1,30 +1,30 @@
 {
     "objects": {
-        "18": {
+        "3971a890-928b-4e1f-874a-07ad80876850": {
             "name": "Scene",
             "components": [
                 {
                     "type": "pp-gateway",
                     "pp-gateway": {
-                        "_myScene": "18",
-                        "_myPlayer": "19",
-                        "_myReferenceSpace": "20",
-                        "_myCameraNonXR": "21",
-                        "_myEyeLeft": "26",
-                        "_myEyeRight": "27",
-                        "_myHandLeft": "791",
-                        "_myHandRight": "815",
-                        "_myHead": "25",
+                        "_myScene": "3971a890-928b-4e1f-874a-07ad80876850",
+                        "_myPlayer": "29c695c1-a068-4b55-b97e-1d7e2d46c61b",
+                        "_myReferenceSpace": "f3b168e9-678a-400c-9efb-6d0fcf38dedc",
+                        "_myCameraNonXR": "f1b4be91-eb84-47ec-96ef-e4910f6328a7",
+                        "_myEyeLeft": "0b6d50ea-8721-46d6-91f7-df17811486ca",
+                        "_myEyeRight": "70f65931-2273-475b-bceb-6485d42ce15e",
+                        "_myHandLeft": "fddc40cc-b738-4cf9-b124-847955afcebb",
+                        "_myHandRight": "9f3dcb5a-326d-497f-ad8e-519765665bd5",
+                        "_myHead": "15ae7ef6-e5c4-4f09-b0bf-9e7bb83a38fc",
                         "_myPlane": "p0",
                         "_myCube": "p1",
                         "_mySphere": "p2",
                         "_myCone": "p3",
                         "_myCylinder": "p4",
                         "_myCircle": "p5",
-                        "_myFlatOpaque": "779",
-                        "_myFlatTransparentNoDepth": "885",
-                        "_myPhongOpaque": "780",
-                        "_myText": "781"
+                        "_myFlatOpaque": "48430c0e-de51-45cd-a80a-51258930feaf",
+                        "_myFlatTransparentNoDepth": "2e34bd8e-b49a-46fc-bbf8-b234b2c87483",
+                        "_myPhongOpaque": "1118ba33-bf09-4499-875a-1c849ba11714",
+                        "_myText": "b142a837-a2c9-46cb-91c0-9e007e82684b"
                     }
                 },
                 {
@@ -36,9 +36,9 @@
                 }
             ]
         },
-        "19": {
+        "29c695c1-a068-4b55-b97e-1d7e2d46c61b": {
             "name": "Player",
-            "parent": "18",
+            "parent": "3971a890-928b-4e1f-874a-07ad80876850",
             "components": [
                 {
                     "type": "pp-player-locomotion",
@@ -50,9 +50,9 @@
                 }
             ]
         },
-        "20": {
+        "f3b168e9-678a-400c-9efb-6d0fcf38dedc": {
             "name": "Reference Space",
-            "parent": "19",
+            "parent": "29c695c1-a068-4b55-b97e-1d7e2d46c61b",
             "rotation": [
                 0.0,
                 1.0,
@@ -60,9 +60,9 @@
                 0.0
             ]
         },
-        "21": {
+        "f1b4be91-eb84-47ec-96ef-e4910f6328a7": {
             "name": "Camera Non XR",
-            "parent": "118",
+            "parent": "869b4ba3-8d52-44d8-adef-a8979c17d48d",
             "components": [
                 {
                     "type": "view"
@@ -73,40 +73,40 @@
                 }
             ]
         },
-        "22": {
+        "417a3c05-93de-4d1b-b3b9-d333246a4ba6": {
             "name": "Eyes",
-            "parent": "118"
+            "parent": "869b4ba3-8d52-44d8-adef-a8979c17d48d"
         },
-        "23": {
+        "cd442c0b-29b2-4216-baaf-b86ee41e7f80": {
             "name": "Hands Left",
-            "parent": "121",
+            "parent": "b6cdda6a-9f32-4725-8df5-9ff004a0d23e",
             "components": [
                 {
                     "type": "pp-switch-hand-object",
                     "pp-switch-hand-object": {
-                        "_myGamepad": "69",
-                        "_myTrackedHand": "788"
+                        "_myGamepad": "a5323fe3-5cfd-476f-b272-bb7432d20ade",
+                        "_myTrackedHand": "d017a2c0-d886-4c94-94eb-0f0612edf5af"
                     }
                 }
             ]
         },
-        "24": {
+        "e6ee89f5-8261-43bd-a140-5fc3068841bc": {
             "name": "Hand Right",
-            "parent": "121",
+            "parent": "b6cdda6a-9f32-4725-8df5-9ff004a0d23e",
             "components": [
                 {
                     "type": "pp-switch-hand-object",
                     "pp-switch-hand-object": {
-                        "_myGamepad": "801",
-                        "_myTrackedHand": "803",
+                        "_myGamepad": "1c3c8ff4-1ae0-472b-954a-b83777146c9b",
+                        "_myTrackedHand": "31504feb-edaf-446e-9b21-5090d3d61270",
                         "_myHandedness": "Right"
                     }
                 }
             ]
         },
-        "25": {
+        "15ae7ef6-e5c4-4f09-b0bf-9e7bb83a38fc": {
             "name": "Head",
-            "parent": "119",
+            "parent": "10cb7471-6b08-44c9-a57a-a293694b0b33",
             "components": [
                 {
                     "type": "pp-set-head-local-transform",
@@ -118,9 +118,9 @@
                 }
             ]
         },
-        "26": {
+        "0b6d50ea-8721-46d6-91f7-df17811486ca": {
             "name": "Eye Left",
-            "parent": "22",
+            "parent": "417a3c05-93de-4d1b-b3b9-d333246a4ba6",
             "components": [
                 {
                     "type": "view"
@@ -133,9 +133,9 @@
                 }
             ]
         },
-        "27": {
+        "70f65931-2273-475b-bceb-6485d42ce15e": {
             "name": "Eye Right",
-            "parent": "22",
+            "parent": "417a3c05-93de-4d1b-b3b9-d333246a4ba6",
             "components": [
                 {
                     "type": "view"
@@ -148,135 +148,135 @@
                 }
             ]
         },
-        "28": {
+        "1fea939f-629e-4f01-9fd7-88c54177717b": {
             "name": "Lights",
-            "parent": "156"
+            "parent": "f2142687-67a0-4a17-a30f-e19f9b464e4b"
         },
-        "52": {
+        "c2d3ede7-b536-4733-b2fd-59df14da13e2": {
             "link": {
                 "name": "Left_Body<Left_Quest_Controller",
                 "file": "assets\\models\\quest_controllers_credits_Jezza3D.fbx"
             },
-            "parent": "67"
+            "parent": "8629f551-055a-4b48-be26-da078fe80540"
         },
-        "53": {
+        "b88e5b2e-0418-481b-ade7-51007f1f92bb": {
             "link": {
                 "name": "Left_Bottom_Button<Left_Quest_Controller",
                 "file": "assets\\models\\quest_controllers_credits_Jezza3D.fbx"
             },
-            "parent": "67"
+            "parent": "8629f551-055a-4b48-be26-da078fe80540"
         },
-        "54": {
+        "81627929-dfd9-40bb-a1e3-ebf7bbac1920": {
             "link": {
                 "name": "Left_Option_Button<Left_Quest_Controller",
                 "file": "assets\\models\\quest_controllers_credits_Jezza3D.fbx"
             },
-            "parent": "67"
+            "parent": "8629f551-055a-4b48-be26-da078fe80540"
         },
-        "55": {
+        "81e9034c-70ab-4e56-af86-61af9820c3ce": {
             "link": {
                 "name": "Left_Select<Left_Quest_Controller",
                 "file": "assets\\models\\quest_controllers_credits_Jezza3D.fbx"
             },
-            "parent": "67"
+            "parent": "8629f551-055a-4b48-be26-da078fe80540"
         },
-        "56": {
+        "6671ba33-7769-483a-8ffd-d41794458d19": {
             "link": {
                 "name": "Left_Squeeze<Left_Quest_Controller",
                 "file": "assets\\models\\quest_controllers_credits_Jezza3D.fbx"
             },
-            "parent": "67"
+            "parent": "8629f551-055a-4b48-be26-da078fe80540"
         },
-        "57": {
+        "69c5c216-e0b5-464e-8aec-ec7e250a4f69": {
             "link": {
                 "name": "Left_Thumbstick<Left_Quest_Controller",
                 "file": "assets\\models\\quest_controllers_credits_Jezza3D.fbx"
             },
-            "parent": "67"
+            "parent": "8629f551-055a-4b48-be26-da078fe80540"
         },
-        "58": {
+        "3bf99876-0240-42e4-963a-8ffe8f0da1ed": {
             "link": {
                 "name": "Left_Top_Button<Left_Quest_Controller",
                 "file": "assets\\models\\quest_controllers_credits_Jezza3D.fbx"
             },
-            "parent": "67"
+            "parent": "8629f551-055a-4b48-be26-da078fe80540"
         },
-        "60": {
+        "e0e67842-a25a-4da2-81af-059fb74cc979": {
             "link": {
                 "name": "Right_Body<Right_Quest_Controller",
                 "file": "assets\\models\\quest_controllers_credits_Jezza3D.fbx"
             },
-            "parent": "68"
+            "parent": "f516e471-ac03-4fa2-8e46-13062d6a40f0"
         },
-        "61": {
+        "6ae6ee80-4cd8-45cb-98c1-db259502e17a": {
             "link": {
                 "name": "Right_Bottom_Button<Right_Quest_Controller",
                 "file": "assets\\models\\quest_controllers_credits_Jezza3D.fbx"
             },
-            "parent": "68"
+            "parent": "f516e471-ac03-4fa2-8e46-13062d6a40f0"
         },
-        "62": {
+        "742270b5-221b-4fc0-afc6-c8bd6028d52e": {
             "link": {
                 "name": "Right_Option_Button<Right_Quest_Controller",
                 "file": "assets\\models\\quest_controllers_credits_Jezza3D.fbx"
             },
-            "parent": "68"
+            "parent": "f516e471-ac03-4fa2-8e46-13062d6a40f0"
         },
-        "63": {
+        "75a94c97-84bb-477a-aefa-8866207d0cb2": {
             "link": {
                 "name": "Right_Select<Right_Quest_Controller",
                 "file": "assets\\models\\quest_controllers_credits_Jezza3D.fbx"
             },
-            "parent": "68",
+            "parent": "f516e471-ac03-4fa2-8e46-13062d6a40f0",
             "components": [
                 null
             ]
         },
-        "64": {
+        "51afbff3-ddcc-44f2-a750-51d20a28b7f8": {
             "link": {
                 "name": "Right_Squeeze<Right_Quest_Controller",
                 "file": "assets\\models\\quest_controllers_credits_Jezza3D.fbx"
             },
-            "parent": "68"
+            "parent": "f516e471-ac03-4fa2-8e46-13062d6a40f0"
         },
-        "65": {
+        "c387f377-b486-4ecc-a200-10a2640dfbb3": {
             "link": {
                 "name": "Right_Thumbstick<Right_Quest_Controller",
                 "file": "assets\\models\\quest_controllers_credits_Jezza3D.fbx"
             },
-            "parent": "68"
+            "parent": "f516e471-ac03-4fa2-8e46-13062d6a40f0"
         },
-        "66": {
+        "545a2c2b-c449-40d3-a713-0e6bf720c81c": {
             "link": {
                 "name": "Right_Top_Button<Right_Quest_Controller",
                 "file": "assets\\models\\quest_controllers_credits_Jezza3D.fbx"
             },
-            "parent": "68"
+            "parent": "f516e471-ac03-4fa2-8e46-13062d6a40f0"
         },
-        "67": {
+        "8629f551-055a-4b48-be26-da078fe80540": {
             "name": "Pivot",
-            "parent": "789"
+            "parent": "2cd3099f-d7d4-43bc-ab0d-dd83b309f582"
         },
-        "68": {
+        "f516e471-ac03-4fa2-8e46-13062d6a40f0": {
             "name": "Pivot",
-            "parent": "70"
+            "parent": "616b8090-ada1-4dc0-88ef-06d6d1ce7fbc"
         },
-        "69": {
+        "a5323fe3-5cfd-476f-b272-bb7432d20ade": {
             "name": "Gamepad Left",
-            "parent": "23",
+            "parent": "cd442c0b-29b2-4216-baaf-b86ee41e7f80",
             "components": [
                 {
                     "type": "pp-gamepad-control-scheme",
                     "pp-gamepad-control-scheme": {
-                        "_mySelect": "55",
-                        "_mySqueeze": "56",
-                        "_myThumbstick": "57",
-                        "_myBottomButton": "53",
-                        "_myTopButton": "58",
-                        "_myLineMaterial": "36",
+                        "_mySelect": "81e9034c-70ab-4e56-af86-61af9820c3ce",
+                        "_mySqueeze": "6671ba33-7769-483a-8ffd-d41794458d19",
+                        "_myThumbstick": "69c5c216-e0b5-464e-8aec-ec7e250a4f69",
+                        "_myBottomButton": "b88e5b2e-0418-481b-ade7-51007f1f92bb",
+                        "_myTopButton": "3bf99876-0240-42e4-963a-8ffe8f0da1ed",
+                        "_myLineMaterial": "67abc793-7be6-46f8-b425-daac725a1279",
                         "_myThumbstickText": "Press Twice: Change Teleport/Smooth",
                         "_myLineLengthMultiplier": 1.5,
-                        "_myTextMaterial": "786",
+                        "_myTextMaterial": "4480bd42-1e8f-4907-a276-0ea6772fde45",
                         "_myBottomButtonText": "Smooth: Fly Down",
                         "_myTopButtonText": "Smooth: Fly Up",
                         "_myShowOnStart": false
@@ -289,11 +289,11 @@
                 {
                     "type": "pp-gamepad-mesh-animator",
                     "pp-gamepad-mesh-animator": {
-                        "_mySelect": "55",
-                        "_mySqueeze": "56",
-                        "_myThumbstick": "57",
-                        "_myTopButton": "58",
-                        "_myBottomButton": "53",
+                        "_mySelect": "81e9034c-70ab-4e56-af86-61af9820c3ce",
+                        "_mySqueeze": "6671ba33-7769-483a-8ffd-d41794458d19",
+                        "_myThumbstick": "69c5c216-e0b5-464e-8aec-ec7e250a4f69",
+                        "_myTopButton": "3bf99876-0240-42e4-963a-8ffe8f0da1ed",
+                        "_myBottomButton": "b88e5b2e-0418-481b-ade7-51007f1f92bb",
                         "_myUsePressForSqueeze": true
                     }
                 }
@@ -304,11 +304,11 @@
                 0.0
             ]
         },
-        "70": {
+        "616b8090-ada1-4dc0-88ef-06d6d1ce7fbc": {
             "name": "Mesh",
-            "parent": "801"
+            "parent": "1c3c8ff4-1ae0-472b-954a-b83777146c9b"
         },
-        "71": {
+        "e65d1a64-5dfb-4539-8ef3-3781a7b9f77b": {
             "name": "Test",
             "parent": null,
             "components": [
@@ -328,21 +328,21 @@
                 0.0
             ]
         },
-        "118": {
+        "869b4ba3-8d52-44d8-adef-a8979c17d48d": {
             "name": "Cameras",
-            "parent": "20"
+            "parent": "f3b168e9-678a-400c-9efb-6d0fcf38dedc"
         },
-        "119": {
+        "10cb7471-6b08-44c9-a57a-a293694b0b33": {
             "name": "Heads",
-            "parent": "20"
+            "parent": "f3b168e9-678a-400c-9efb-6d0fcf38dedc"
         },
-        "121": {
+        "b6cdda6a-9f32-4725-8df5-9ff004a0d23e": {
             "name": "Hands",
-            "parent": "20"
+            "parent": "f3b168e9-678a-400c-9efb-6d0fcf38dedc"
         },
-        "156": {
+        "f2142687-67a0-4a17-a30f-e19f9b464e4b": {
             "name": "Playground",
-            "parent": "18",
+            "parent": "3971a890-928b-4e1f-874a-07ad80876850",
             "components": [
                 {
                     "type": "pp-set-active",
@@ -351,9 +351,9 @@
                 }
             ]
         },
-        "157": {
+        "58dc5ab9-fcf6-44f3-878a-22aa5ea1c961": {
             "name": "Floor",
-            "parent": "156",
+            "parent": "f2142687-67a0-4a17-a30f-e19f9b464e4b",
             "rotation": [
                 -0.7071068,
                 0.0,
@@ -361,15 +361,15 @@
                 0.7071067
             ]
         },
-        "158": {
+        "72f9e22b-4384-47fe-98c7-64ff2c952f36": {
             "name": "Mesh",
-            "parent": "157",
+            "parent": "58dc5ab9-fcf6-44f3-878a-22aa5ea1c961",
             "components": [
                 {
                     "type": "mesh",
                     "mesh": {
                         "mesh": "p0",
-                        "material": "92"
+                        "material": "6867e941-3a1c-435d-b49e-8ae06b5a64d2"
                     }
                 }
             ],
@@ -379,9 +379,9 @@
                 1.0
             ]
         },
-        "159": {
+        "0c2eb4aa-16e7-4331-8e33-aacb89c0d10c": {
             "name": "PhysX",
-            "parent": "157",
+            "parent": "58dc5ab9-fcf6-44f3-878a-22aa5ea1c961",
             "components": [
                 {
                     "type": "physx",
@@ -409,14 +409,14 @@
                 -1.000002
             ]
         },
-        "160": {
+        "98f7942d-896b-4313-b389-f50711077fee": {
             "name": "Reference",
-            "parent": "157",
+            "parent": "58dc5ab9-fcf6-44f3-878a-22aa5ea1c961",
             "components": [
                 {
                     "type": "mesh",
                     "mesh": {
-                        "material": "92",
+                        "material": "6867e941-3a1c-435d-b49e-8ae06b5a64d2",
                         "mesh": "p2"
                     }
                 }
@@ -427,17 +427,17 @@
                 0.1
             ]
         },
-        "161": {
+        "c5fb3b77-17cb-4b2a-a2f4-c65f9064294a": {
             "name": "Walls",
-            "parent": "156"
+            "parent": "f2142687-67a0-4a17-a30f-e19f9b464e4b"
         },
-        "162": {
+        "bd5572fc-3277-4b92-bb66-e0f94149c900": {
             "name": "Wall 1",
-            "parent": "161"
+            "parent": "c5fb3b77-17cb-4b2a-a2f4-c65f9064294a"
         },
-        "163": {
+        "f96fa6dc-edca-4caf-ae6c-fa62da654b51": {
             "name": "PhysX",
-            "parent": "162",
+            "parent": "bd5572fc-3277-4b92-bb66-e0f94149c900",
             "components": [
                 {
                     "type": "physx",
@@ -464,15 +464,15 @@
                 -13.0
             ]
         },
-        "164": {
+        "cc3acb20-eadb-4c20-94a3-aecd61bb123d": {
             "name": "Mesh",
-            "parent": "162",
+            "parent": "bd5572fc-3277-4b92-bb66-e0f94149c900",
             "components": [
                 {
                     "type": "mesh",
                     "mesh": {
                         "mesh": "p0",
-                        "material": "93"
+                        "material": "7b3f44c4-8c1a-44cd-8fab-87977a996a20"
                     }
                 }
             ],
@@ -487,14 +487,14 @@
                 1.0
             ]
         },
-        "165": {
+        "dbe62547-0cb0-48f6-ac15-a33a80c1e0f0": {
             "name": "Reference",
-            "parent": "162",
+            "parent": "bd5572fc-3277-4b92-bb66-e0f94149c900",
             "components": [
                 {
                     "type": "mesh",
                     "mesh": {
-                        "material": "92",
+                        "material": "6867e941-3a1c-435d-b49e-8ae06b5a64d2",
                         "mesh": "p1"
                     }
                 }
@@ -510,9 +510,9 @@
                 0.1
             ]
         },
-        "166": {
+        "0f7f25bc-7071-49d6-8d4f-6c48ab35d787": {
             "name": "Wall 2",
-            "parent": "161",
+            "parent": "c5fb3b77-17cb-4b2a-a2f4-c65f9064294a",
             "rotation": [
                 0.0,
                 0.7071068,
@@ -520,15 +520,15 @@
                 0.7071067
             ]
         },
-        "167": {
+        "db9e758f-a5e0-4b1a-a113-f4f6e8ebcaea": {
             "name": "Mesh",
-            "parent": "166",
+            "parent": "0f7f25bc-7071-49d6-8d4f-6c48ab35d787",
             "components": [
                 {
                     "type": "mesh",
                     "mesh": {
                         "mesh": "p0",
-                        "material": "93"
+                        "material": "7b3f44c4-8c1a-44cd-8fab-87977a996a20"
                     }
                 }
             ],
@@ -543,9 +543,9 @@
                 1.0
             ]
         },
-        "168": {
+        "c403f406-8f75-42bd-b2cf-78e69f9294a9": {
             "name": "PhysX",
-            "parent": "166",
+            "parent": "0f7f25bc-7071-49d6-8d4f-6c48ab35d787",
             "components": [
                 {
                     "type": "physx",
@@ -572,14 +572,14 @@
                 -13.0
             ]
         },
-        "169": {
+        "c90a624c-aba2-4a73-8cd4-b27f66d67c2f": {
             "name": "Reference",
-            "parent": "166",
+            "parent": "0f7f25bc-7071-49d6-8d4f-6c48ab35d787",
             "components": [
                 {
                     "type": "mesh",
                     "mesh": {
-                        "material": "92",
+                        "material": "6867e941-3a1c-435d-b49e-8ae06b5a64d2",
                         "mesh": "p1"
                     }
                 }
@@ -595,9 +595,9 @@
                 0.3
             ]
         },
-        "170": {
+        "909eca52-d45f-4487-8008-ba44bb86347f": {
             "name": "Wall 3",
-            "parent": "161",
+            "parent": "c5fb3b77-17cb-4b2a-a2f4-c65f9064294a",
             "rotation": [
                 0.0,
                 -0.7071068,
@@ -605,9 +605,9 @@
                 0.7071067
             ]
         },
-        "171": {
+        "0ef7c797-f965-41ce-bd01-a0a2b6a67899": {
             "name": "PhysX",
-            "parent": "170",
+            "parent": "909eca52-d45f-4487-8008-ba44bb86347f",
             "components": [
                 {
                     "type": "physx",
@@ -634,15 +634,15 @@
                 -13.0
             ]
         },
-        "172": {
+        "b4ad64ed-b844-473a-90ae-092968b71f07": {
             "name": "Mesh",
-            "parent": "170",
+            "parent": "909eca52-d45f-4487-8008-ba44bb86347f",
             "components": [
                 {
                     "type": "mesh",
                     "mesh": {
                         "mesh": "p0",
-                        "material": "93"
+                        "material": "7b3f44c4-8c1a-44cd-8fab-87977a996a20"
                     }
                 }
             ],
@@ -657,14 +657,14 @@
                 1.0
             ]
         },
-        "173": {
+        "bc59f9f5-5c9e-403e-8e06-dd8e332dd9d5": {
             "name": "Reference",
-            "parent": "170",
+            "parent": "909eca52-d45f-4487-8008-ba44bb86347f",
             "components": [
                 {
                     "type": "mesh",
                     "mesh": {
-                        "material": "92",
+                        "material": "6867e941-3a1c-435d-b49e-8ae06b5a64d2",
                         "mesh": "p1"
                     }
                 }
@@ -680,9 +680,9 @@
                 0.2
             ]
         },
-        "174": {
+        "60305a46-3a6e-452c-9b1a-01a3ef70f6d3": {
             "name": "Wall 4",
-            "parent": "161",
+            "parent": "c5fb3b77-17cb-4b2a-a2f4-c65f9064294a",
             "rotation": [
                 0.0,
                 1.0,
@@ -690,15 +690,15 @@
                 0.0
             ]
         },
-        "175": {
+        "cd250246-a154-4f9b-86a3-4fc68b336b67": {
             "name": "Mesh",
-            "parent": "174",
+            "parent": "60305a46-3a6e-452c-9b1a-01a3ef70f6d3",
             "components": [
                 {
                     "type": "mesh",
                     "mesh": {
                         "mesh": "p0",
-                        "material": "93"
+                        "material": "7b3f44c4-8c1a-44cd-8fab-87977a996a20"
                     }
                 }
             ],
@@ -713,9 +713,9 @@
                 1.0
             ]
         },
-        "176": {
+        "871b8dda-8d13-4f71-93ff-fbe10f379bba": {
             "name": "PhysX",
-            "parent": "174",
+            "parent": "60305a46-3a6e-452c-9b1a-01a3ef70f6d3",
             "components": [
                 {
                     "type": "physx",
@@ -742,14 +742,14 @@
                 -13.0
             ]
         },
-        "177": {
+        "997fbe3b-daff-4554-a14b-d0a2eb6d2d7e": {
             "name": "Reference",
-            "parent": "174",
+            "parent": "60305a46-3a6e-452c-9b1a-01a3ef70f6d3",
             "components": [
                 {
                     "type": "mesh",
                     "mesh": {
-                        "material": "92",
+                        "material": "6867e941-3a1c-435d-b49e-8ae06b5a64d2",
                         "mesh": "p1"
                     }
                 }
@@ -765,19 +765,19 @@
                 0.05
             ]
         },
-        "178": {
+        "40145bc4-414d-4bd7-9405-01333a41ffe6": {
             "name": "Obstacles",
-            "parent": "156"
+            "parent": "f2142687-67a0-4a17-a30f-e19f9b464e4b"
         },
-        "183": {
+        "8f25231d-8079-43bd-8378-529cd7dbc55a": {
             "name": "Obstacle 2",
-            "parent": "203",
+            "parent": "21027037-ea7a-483a-b5b5-1beff262c993",
             "components": [
                 {
                     "type": "mesh",
                     "mesh": {
                         "mesh": "p1",
-                        "material": "93"
+                        "material": "7b3f44c4-8c1a-44cd-8fab-87977a996a20"
                     }
                 },
                 {
@@ -806,9 +806,9 @@
                 4.5
             ]
         },
-        "187": {
+        "f4e0f3d1-8bf6-4a6f-bf79-2d60c644bf82": {
             "name": "Stairs",
-            "parent": "178",
+            "parent": "40145bc4-414d-4bd7-9405-01333a41ffe6",
             "translation": [
                 7.7057876,
                 0.0,
@@ -821,15 +821,15 @@
                 0.7069345
             ]
         },
-        "188": {
+        "47b606dc-95ef-4e9f-874e-ae891f5d466a": {
             "name": "Obstacle 1",
-            "parent": "189",
+            "parent": "73774979-f486-4809-b9dd-78b2c76d21f0",
             "components": [
                 {
                     "type": "mesh",
                     "mesh": {
                         "mesh": "p1",
-                        "material": "93"
+                        "material": "7b3f44c4-8c1a-44cd-8fab-87977a996a20"
                     }
                 },
                 {
@@ -858,42 +858,42 @@
                 0.2
             ]
         },
-        "189": {
+        "73774979-f486-4809-b9dd-78b2c76d21f0": {
             "name": "Step",
-            "parent": "187",
+            "parent": "f4e0f3d1-8bf6-4a6f-bf79-2d60c644bf82",
             "translation": [
                 -0.0011753,
                 0.1,
                 2.400032
             ]
         },
-        "203": {
+        "21027037-ea7a-483a-b5b5-1beff262c993": {
             "name": "Roof Zone",
-            "parent": "178",
+            "parent": "40145bc4-414d-4bd7-9405-01333a41ffe6",
             "translation": [
                 1.9522743,
                 0.0,
                 6.8818545
             ]
         },
-        "222": {
+        "a8830a5e-cfbd-4d4b-93fe-0968e6d3814e": {
             "name": "Poles",
-            "parent": "203",
+            "parent": "21027037-ea7a-483a-b5b5-1beff262c993",
             "translation": [
                 -0.0864067,
                 0.0,
                 1.2061828
             ]
         },
-        "223": {
+        "611c49f9-f56e-4907-9668-02f995bb4f6b": {
             "name": "Obstacle 2",
-            "parent": "222",
+            "parent": "a8830a5e-cfbd-4d4b-93fe-0968e6d3814e",
             "components": [
                 {
                     "type": "mesh",
                     "mesh": {
                         "mesh": "p1",
-                        "material": "93"
+                        "material": "7b3f44c4-8c1a-44cd-8fab-87977a996a20"
                     }
                 },
                 {
@@ -922,15 +922,15 @@
                 0.1
             ]
         },
-        "224": {
+        "7da66c11-1263-4464-bd98-02d9f708e0a9": {
             "name": "Obstacle 2",
-            "parent": "222",
+            "parent": "a8830a5e-cfbd-4d4b-93fe-0968e6d3814e",
             "components": [
                 {
                     "type": "mesh",
                     "mesh": {
                         "mesh": "p1",
-                        "material": "93"
+                        "material": "7b3f44c4-8c1a-44cd-8fab-87977a996a20"
                     }
                 },
                 {
@@ -959,15 +959,15 @@
                 0.1
             ]
         },
-        "225": {
+        "67661f0c-4acf-456d-89ba-bcf520c94dac": {
             "name": "Obstacle 2",
-            "parent": "222",
+            "parent": "a8830a5e-cfbd-4d4b-93fe-0968e6d3814e",
             "components": [
                 {
                     "type": "mesh",
                     "mesh": {
                         "mesh": "p1",
-                        "material": "93"
+                        "material": "7b3f44c4-8c1a-44cd-8fab-87977a996a20"
                     }
                 },
                 {
@@ -996,15 +996,15 @@
                 0.1
             ]
         },
-        "226": {
+        "efb9bdb7-6a11-4932-8a36-5b1a2660410d": {
             "name": "Obstacle 2",
-            "parent": "222",
+            "parent": "a8830a5e-cfbd-4d4b-93fe-0968e6d3814e",
             "components": [
                 {
                     "type": "mesh",
                     "mesh": {
                         "mesh": "p1",
-                        "material": "93"
+                        "material": "7b3f44c4-8c1a-44cd-8fab-87977a996a20"
                     }
                 },
                 {
@@ -1033,15 +1033,15 @@
                 0.1
             ]
         },
-        "227": {
+        "90a363dc-9718-4644-af4d-8ead0b094e25": {
             "name": "Obstacle 2",
-            "parent": "222",
+            "parent": "a8830a5e-cfbd-4d4b-93fe-0968e6d3814e",
             "components": [
                 {
                     "type": "mesh",
                     "mesh": {
                         "mesh": "p1",
-                        "material": "93"
+                        "material": "7b3f44c4-8c1a-44cd-8fab-87977a996a20"
                     }
                 },
                 {
@@ -1070,15 +1070,15 @@
                 0.1
             ]
         },
-        "228": {
+        "d42010e8-b5bb-47d5-83bb-917c6d623cc6": {
             "name": "Obstacle 2",
-            "parent": "222",
+            "parent": "a8830a5e-cfbd-4d4b-93fe-0968e6d3814e",
             "components": [
                 {
                     "type": "mesh",
                     "mesh": {
                         "mesh": "p1",
-                        "material": "93"
+                        "material": "7b3f44c4-8c1a-44cd-8fab-87977a996a20"
                     }
                 },
                 {
@@ -1107,15 +1107,15 @@
                 0.1
             ]
         },
-        "229": {
+        "cc277c5f-4fcb-4f51-9832-d1ff7c71542b": {
             "name": "Obstacle 2",
-            "parent": "222",
+            "parent": "a8830a5e-cfbd-4d4b-93fe-0968e6d3814e",
             "components": [
                 {
                     "type": "mesh",
                     "mesh": {
                         "mesh": "p1",
-                        "material": "93"
+                        "material": "7b3f44c4-8c1a-44cd-8fab-87977a996a20"
                     }
                 },
                 {
@@ -1144,15 +1144,15 @@
                 0.1
             ]
         },
-        "230": {
+        "3216d01a-d631-4dbf-bdbb-c3f990e3191e": {
             "name": "Obstacle 2",
-            "parent": "222",
+            "parent": "a8830a5e-cfbd-4d4b-93fe-0968e6d3814e",
             "components": [
                 {
                     "type": "mesh",
                     "mesh": {
                         "mesh": "p1",
-                        "material": "93"
+                        "material": "7b3f44c4-8c1a-44cd-8fab-87977a996a20"
                     }
                 },
                 {
@@ -1181,15 +1181,15 @@
                 0.1
             ]
         },
-        "231": {
+        "2617d5b9-e055-445f-9e70-568fa33e8af1": {
             "name": "Obstacle 2",
-            "parent": "222",
+            "parent": "a8830a5e-cfbd-4d4b-93fe-0968e6d3814e",
             "components": [
                 {
                     "type": "mesh",
                     "mesh": {
                         "mesh": "p1",
-                        "material": "93"
+                        "material": "7b3f44c4-8c1a-44cd-8fab-87977a996a20"
                     }
                 },
                 {
@@ -1218,15 +1218,15 @@
                 0.1
             ]
         },
-        "232": {
+        "319ca88b-5336-466c-9378-2b8baab34f1e": {
             "name": "Obstacle 2",
-            "parent": "222",
+            "parent": "a8830a5e-cfbd-4d4b-93fe-0968e6d3814e",
             "components": [
                 {
                     "type": "mesh",
                     "mesh": {
                         "mesh": "p1",
-                        "material": "93"
+                        "material": "7b3f44c4-8c1a-44cd-8fab-87977a996a20"
                     }
                 },
                 {
@@ -1255,15 +1255,15 @@
                 0.1
             ]
         },
-        "233": {
+        "7c0223aa-514c-462d-b918-1a2ac077496e": {
             "name": "Obstacle 2",
-            "parent": "222",
+            "parent": "a8830a5e-cfbd-4d4b-93fe-0968e6d3814e",
             "components": [
                 {
                     "type": "mesh",
                     "mesh": {
                         "mesh": "p1",
-                        "material": "93"
+                        "material": "7b3f44c4-8c1a-44cd-8fab-87977a996a20"
                     }
                 },
                 {
@@ -1292,15 +1292,15 @@
                 0.1
             ]
         },
-        "234": {
+        "1a319c6e-a5cf-4704-915c-73f77f245ad8": {
             "name": "Obstacle 2",
-            "parent": "222",
+            "parent": "a8830a5e-cfbd-4d4b-93fe-0968e6d3814e",
             "components": [
                 {
                     "type": "mesh",
                     "mesh": {
                         "mesh": "p1",
-                        "material": "93"
+                        "material": "7b3f44c4-8c1a-44cd-8fab-87977a996a20"
                     }
                 },
                 {
@@ -1329,15 +1329,15 @@
                 0.1
             ]
         },
-        "235": {
+        "6eb175ad-15a3-496a-90c1-4e2157a53a50": {
             "name": "Obstacle 2",
-            "parent": "222",
+            "parent": "a8830a5e-cfbd-4d4b-93fe-0968e6d3814e",
             "components": [
                 {
                     "type": "mesh",
                     "mesh": {
                         "mesh": "p1",
-                        "material": "93"
+                        "material": "7b3f44c4-8c1a-44cd-8fab-87977a996a20"
                     }
                 },
                 {
@@ -1366,15 +1366,15 @@
                 0.1
             ]
         },
-        "553": {
+        "a509dd63-ac0a-4ce4-9ac4-b5533bf00c15": {
             "name": "Feet",
-            "parent": "19",
+            "parent": "29c695c1-a068-4b55-b97e-1d7e2d46c61b",
             "components": [
                 {
                     "type": "mesh",
                     "mesh": {
                         "mesh": "p2",
-                        "material": "92"
+                        "material": "6867e941-3a1c-435d-b49e-8ae06b5a64d2"
                     },
                     "active": false
                 }
@@ -1385,24 +1385,24 @@
                 0.1
             ]
         },
-        "555": {
+        "92ce001f-0470-416a-90a0-78b17a78e913": {
             "name": "Step",
-            "parent": "187",
+            "parent": "f4e0f3d1-8bf6-4a6f-bf79-2d60c644bf82",
             "translation": [
                 -0.0013584,
                 0.0,
                 2.8001174
             ]
         },
-        "556": {
+        "56e933b0-15bd-44ec-9339-66b23bb8df66": {
             "name": "Obstacle 1",
-            "parent": "555",
+            "parent": "92ce001f-0470-416a-90a0-78b17a78e913",
             "components": [
                 {
                     "type": "mesh",
                     "mesh": {
                         "mesh": "p1",
-                        "material": "93"
+                        "material": "7b3f44c4-8c1a-44cd-8fab-87977a996a20"
                     }
                 },
                 {
@@ -1431,24 +1431,24 @@
                 0.1999997
             ]
         },
-        "557": {
+        "583bfee6-e626-4858-a7c7-334dfa1e69c8": {
             "name": "Step",
-            "parent": "187",
+            "parent": "f4e0f3d1-8bf6-4a6f-bf79-2d60c644bf82",
             "translation": [
                 -0.0009651,
                 0.2,
                 1.9999771
             ]
         },
-        "558": {
+        "15fb7783-b886-4ea6-ba41-79eb8294bbb0": {
             "name": "Obstacle 1",
-            "parent": "557",
+            "parent": "583bfee6-e626-4858-a7c7-334dfa1e69c8",
             "components": [
                 {
                     "type": "mesh",
                     "mesh": {
                         "mesh": "p1",
-                        "material": "93"
+                        "material": "7b3f44c4-8c1a-44cd-8fab-87977a996a20"
                     }
                 },
                 {
@@ -1477,24 +1477,24 @@
                 0.2
             ]
         },
-        "559": {
+        "7906398a-f86d-4005-ad92-b0a36c6b26cf": {
             "name": "Step",
-            "parent": "187",
+            "parent": "f4e0f3d1-8bf6-4a6f-bf79-2d60c644bf82",
             "translation": [
                 -0.0007739,
                 0.3,
                 1.5999679
             ]
         },
-        "560": {
+        "4a09bff6-487b-4cfe-8a67-723d9ebf23ab": {
             "name": "Obstacle 1",
-            "parent": "559",
+            "parent": "7906398a-f86d-4005-ad92-b0a36c6b26cf",
             "components": [
                 {
                     "type": "mesh",
                     "mesh": {
                         "mesh": "p1",
-                        "material": "93"
+                        "material": "7b3f44c4-8c1a-44cd-8fab-87977a996a20"
                     }
                 },
                 {
@@ -1523,24 +1523,24 @@
                 0.2
             ]
         },
-        "561": {
+        "8dd713e0-b521-430e-b977-ed93ec1cac1d": {
             "name": "Step",
-            "parent": "187",
+            "parent": "f4e0f3d1-8bf6-4a6f-bf79-2d60c644bf82",
             "translation": [
                 -0.0005792,
                 0.4,
                 1.2000044
             ]
         },
-        "562": {
+        "7a97aa94-9d0b-4ca1-b3e8-f2f850d55ca2": {
             "name": "Obstacle 1",
-            "parent": "561",
+            "parent": "8dd713e0-b521-430e-b977-ed93ec1cac1d",
             "components": [
                 {
                     "type": "mesh",
                     "mesh": {
                         "mesh": "p1",
-                        "material": "93"
+                        "material": "7b3f44c4-8c1a-44cd-8fab-87977a996a20"
                     }
                 },
                 {
@@ -1569,24 +1569,24 @@
                 0.2
             ]
         },
-        "563": {
+        "bbe1f823-52a6-4e87-a5b7-e9fa1d9c586b": {
             "name": "Step",
-            "parent": "187",
+            "parent": "f4e0f3d1-8bf6-4a6f-bf79-2d60c644bf82",
             "translation": [
                 -0.0003862,
                 0.5,
                 0.7999801
             ]
         },
-        "564": {
+        "ccfc67fd-35ae-4b2f-a323-f7f52c06e52c": {
             "name": "Obstacle 1",
-            "parent": "563",
+            "parent": "bbe1f823-52a6-4e87-a5b7-e9fa1d9c586b",
             "components": [
                 {
                     "type": "mesh",
                     "mesh": {
                         "mesh": "p1",
-                        "material": "93"
+                        "material": "7b3f44c4-8c1a-44cd-8fab-87977a996a20"
                     }
                 },
                 {
@@ -1615,24 +1615,24 @@
                 0.2
             ]
         },
-        "565": {
+        "fbd0dccb-ef03-4d80-b827-d8019f569237": {
             "name": "Step",
-            "parent": "187",
+            "parent": "f4e0f3d1-8bf6-4a6f-bf79-2d60c644bf82",
             "translation": [
                 -0.0001778,
                 0.6,
                 0.400032
             ]
         },
-        "566": {
+        "5496ad6f-af86-4dbc-b3e0-c81818f759d9": {
             "name": "Obstacle 1",
-            "parent": "565",
+            "parent": "fbd0dccb-ef03-4d80-b827-d8019f569237",
             "components": [
                 {
                     "type": "mesh",
                     "mesh": {
                         "mesh": "p1",
-                        "material": "93"
+                        "material": "7b3f44c4-8c1a-44cd-8fab-87977a996a20"
                     }
                 },
                 {
@@ -1661,24 +1661,24 @@
                 0.2
             ]
         },
-        "567": {
+        "a50fa53b-bacc-418e-b533-595956a1a41e": {
             "name": "Step",
-            "parent": "187",
+            "parent": "f4e0f3d1-8bf6-4a6f-bf79-2d60c644bf82",
             "translation": [
                 0.0,
                 0.7000001,
                 0.0
             ]
         },
-        "568": {
+        "50295491-698a-43d8-9471-c35231ba97bf": {
             "name": "Obstacle 1",
-            "parent": "567",
+            "parent": "a50fa53b-bacc-418e-b533-595956a1a41e",
             "components": [
                 {
                     "type": "mesh",
                     "mesh": {
                         "mesh": "p1",
-                        "material": "93"
+                        "material": "7b3f44c4-8c1a-44cd-8fab-87977a996a20"
                     }
                 },
                 {
@@ -1707,24 +1707,24 @@
                 0.2
             ]
         },
-        "569": {
+        "90d80875-bc8b-4429-ab19-345f8ea7e17f": {
             "name": "Step",
-            "parent": "187",
+            "parent": "f4e0f3d1-8bf6-4a6f-bf79-2d60c644bf82",
             "translation": [
                 0.0001887,
                 0.8,
                 -0.4000014
             ]
         },
-        "570": {
+        "4b073eb3-d970-4c98-a34c-14d327b3d738": {
             "name": "Obstacle 1",
-            "parent": "569",
+            "parent": "90d80875-bc8b-4429-ab19-345f8ea7e17f",
             "components": [
                 {
                     "type": "mesh",
                     "mesh": {
                         "mesh": "p1",
-                        "material": "93"
+                        "material": "7b3f44c4-8c1a-44cd-8fab-87977a996a20"
                     }
                 },
                 {
@@ -1753,24 +1753,24 @@
                 0.2
             ]
         },
-        "571": {
+        "46db8e46-2219-41fd-b55a-010cfef15fa4": {
             "name": "Step",
-            "parent": "187",
+            "parent": "f4e0f3d1-8bf6-4a6f-bf79-2d60c644bf82",
             "translation": [
                 0.0003991,
                 0.9000002,
                 -0.800041
             ]
         },
-        "572": {
+        "29fd2d5e-04a9-4280-b8de-d0495e50e6c2": {
             "name": "Obstacle 1",
-            "parent": "571",
+            "parent": "46db8e46-2219-41fd-b55a-010cfef15fa4",
             "components": [
                 {
                     "type": "mesh",
                     "mesh": {
                         "mesh": "p1",
-                        "material": "93"
+                        "material": "7b3f44c4-8c1a-44cd-8fab-87977a996a20"
                     }
                 },
                 {
@@ -1799,24 +1799,24 @@
                 0.2
             ]
         },
-        "573": {
+        "926f94cb-31dd-4d88-8774-5f7b7459e848": {
             "name": "Step",
-            "parent": "187",
+            "parent": "f4e0f3d1-8bf6-4a6f-bf79-2d60c644bf82",
             "translation": [
                 0.000594,
                 1.0,
                 -1.1999664
             ]
         },
-        "574": {
+        "241583dc-4e11-4b88-802d-4a56ed5ad531": {
             "name": "Obstacle 1",
-            "parent": "573",
+            "parent": "926f94cb-31dd-4d88-8774-5f7b7459e848",
             "components": [
                 {
                     "type": "mesh",
                     "mesh": {
                         "mesh": "p1",
-                        "material": "93"
+                        "material": "7b3f44c4-8c1a-44cd-8fab-87977a996a20"
                     }
                 },
                 {
@@ -1845,15 +1845,15 @@
                 0.2
             ]
         },
-        "575": {
+        "fb541418-71dd-4ab7-a264-908a54988ae8": {
             "name": "Obstacle 1",
-            "parent": "573",
+            "parent": "926f94cb-31dd-4d88-8774-5f7b7459e848",
             "components": [
                 {
                     "type": "mesh",
                     "mesh": {
                         "mesh": "p1",
-                        "material": "93"
+                        "material": "7b3f44c4-8c1a-44cd-8fab-87977a996a20"
                     }
                 },
                 {
@@ -1882,15 +1882,15 @@
                 0.1999979
             ]
         },
-        "576": {
+        "5b40eb3d-83c4-4550-94fe-ffa9483dfc97": {
             "name": "Obstacle 1",
-            "parent": "573",
+            "parent": "926f94cb-31dd-4d88-8774-5f7b7459e848",
             "components": [
                 {
                     "type": "mesh",
                     "mesh": {
                         "mesh": "p1",
-                        "material": "93"
+                        "material": "7b3f44c4-8c1a-44cd-8fab-87977a996a20"
                     }
                 },
                 {
@@ -1919,15 +1919,15 @@
                 0.1999969
             ]
         },
-        "577": {
+        "2a048ca2-79d5-4a18-9835-c52455748b22": {
             "name": "Obstacle 1",
-            "parent": "573",
+            "parent": "926f94cb-31dd-4d88-8774-5f7b7459e848",
             "components": [
                 {
                     "type": "mesh",
                     "mesh": {
                         "mesh": "p1",
-                        "material": "93"
+                        "material": "7b3f44c4-8c1a-44cd-8fab-87977a996a20"
                     }
                 },
                 {
@@ -1956,15 +1956,15 @@
                 0.1999966
             ]
         },
-        "578": {
+        "8bc73bd5-a114-41fd-b524-5349e35dd8bb": {
             "name": "Obstacle 1",
-            "parent": "573",
+            "parent": "926f94cb-31dd-4d88-8774-5f7b7459e848",
             "components": [
                 {
                     "type": "mesh",
                     "mesh": {
                         "mesh": "p1",
-                        "material": "93"
+                        "material": "7b3f44c4-8c1a-44cd-8fab-87977a996a20"
                     }
                 },
                 {
@@ -1993,9 +1993,9 @@
                 0.1999952
             ]
         },
-        "597": {
+        "b855554a-61a3-4b02-852d-7d0fb4d081e3": {
             "name": "HUD",
-            "parent": "19",
+            "parent": "29c695c1-a068-4b55-b97e-1d7e2d46c61b",
             "rotation": [
                 0.0,
                 1.0,
@@ -2003,9 +2003,9 @@
                 0.0
             ]
         },
-        "777": {
+        "01f99cd7-468c-4e06-bfaa-de37f1c423f3": {
             "name": "Light",
-            "parent": "28",
+            "parent": "1fea939f-629e-4f01-9fd7-88c54177717b",
             "components": [
                 {
                     "type": "light",
@@ -2034,15 +2034,15 @@
                 0.8346984
             ]
         },
-        "788": {
+        "d017a2c0-d886-4c94-94eb-0f0612edf5af": {
             "name": "Tracked Hand Left",
-            "parent": "23",
+            "parent": "cd442c0b-29b2-4216-baaf-b86ee41e7f80",
             "components": [
                 {
                     "type": "pp-tracked-hand-draw-all-joints",
                     "pp-tracked-hand-draw-all-joints": {
                         "_myJointMesh": "p1",
-                        "_myJointMaterial": "35"
+                        "_myJointMaterial": "9ce40067-76b0-47be-b6f9-f8329df554ec"
                     }
                 },
                 {
@@ -2053,13 +2053,13 @@
                 }
             ]
         },
-        "789": {
+        "2cd3099f-d7d4-43bc-ab0d-dd83b309f582": {
             "name": "Mesh",
-            "parent": "69"
+            "parent": "a5323fe3-5cfd-476f-b272-bb7432d20ade"
         },
-        "790": {
+        "e8cfab20-5c9b-4d37-8fc9-2ac753ae81a8": {
             "name": "Tool Hand Left",
-            "parent": "23",
+            "parent": "cd442c0b-29b2-4216-baaf-b86ee41e7f80",
             "components": [
                 {
                     "type": "pp-set-hand-local-transform",
@@ -2079,31 +2079,31 @@
                 }
             ]
         },
-        "791": {
+        "fddc40cc-b738-4cf9-b124-847955afcebb": {
             "name": "Hand Left",
-            "parent": "23",
+            "parent": "cd442c0b-29b2-4216-baaf-b86ee41e7f80",
             "components": [
                 {
                     "type": "pp-set-hand-local-transform"
                 }
             ]
         },
-        "801": {
+        "1c3c8ff4-1ae0-472b-954a-b83777146c9b": {
             "name": "Gamepad Right",
-            "parent": "24",
+            "parent": "e6ee89f5-8261-43bd-a140-5fc3068841bc",
             "components": [
                 {
                     "type": "pp-gamepad-control-scheme",
                     "pp-gamepad-control-scheme": {
-                        "_mySelect": "63",
-                        "_mySqueeze": "64",
-                        "_myThumbstick": "65",
-                        "_myBottomButton": "61",
-                        "_myTopButton": "66",
-                        "_myLineMaterial": "36",
+                        "_mySelect": "75a94c97-84bb-477a-aefa-8866207d0cb2",
+                        "_mySqueeze": "51afbff3-ddcc-44f2-a750-51d20a28b7f8",
+                        "_myThumbstick": "c387f377-b486-4ecc-a200-10a2640dfbb3",
+                        "_myBottomButton": "6ae6ee80-4cd8-45cb-98c1-db259502e17a",
+                        "_myTopButton": "545a2c2b-c449-40d3-a713-0e6bf720c81c",
+                        "_myLineMaterial": "67abc793-7be6-46f8-b425-daac725a1279",
                         "_myThumbstickText": "Snap Turn",
                         "_myLineLengthMultiplier": 1.5,
-                        "_myTextMaterial": "786",
+                        "_myTextMaterial": "4480bd42-1e8f-4907-a276-0ea6772fde45",
                         "_myHandedness": "Right",
                         "_myShowOnStart": false
                     }
@@ -2117,11 +2117,11 @@
                 {
                     "type": "pp-gamepad-mesh-animator",
                     "pp-gamepad-mesh-animator": {
-                        "_mySelect": "63",
-                        "_mySqueeze": "64",
-                        "_myThumbstick": "65",
-                        "_myTopButton": "66",
-                        "_myBottomButton": "61",
+                        "_mySelect": "75a94c97-84bb-477a-aefa-8866207d0cb2",
+                        "_mySqueeze": "51afbff3-ddcc-44f2-a750-51d20a28b7f8",
+                        "_myThumbstick": "c387f377-b486-4ecc-a200-10a2640dfbb3",
+                        "_myTopButton": "545a2c2b-c449-40d3-a713-0e6bf720c81c",
+                        "_myBottomButton": "6ae6ee80-4cd8-45cb-98c1-db259502e17a",
                         "_myUsePressForSqueeze": true,
                         "_myHandedness": "Right"
                     }
@@ -2133,9 +2133,9 @@
                 0.0
             ]
         },
-        "802": {
+        "caec935f-3a39-4f07-bb37-d39100252480": {
             "name": "Tool Hand Right",
-            "parent": "24",
+            "parent": "e6ee89f5-8261-43bd-a140-5fc3068841bc",
             "components": [
                 {
                     "type": "pp-set-hand-local-transform",
@@ -2151,15 +2151,15 @@
                 }
             ]
         },
-        "803": {
+        "31504feb-edaf-446e-9b21-5090d3d61270": {
             "name": "Tracked Hand Right",
-            "parent": "24",
+            "parent": "e6ee89f5-8261-43bd-a140-5fc3068841bc",
             "components": [
                 {
                     "type": "pp-tracked-hand-draw-all-joints",
                     "pp-tracked-hand-draw-all-joints": {
                         "_myJointMesh": "p1",
-                        "_myJointMaterial": "35",
+                        "_myJointMaterial": "9ce40067-76b0-47be-b6f9-f8329df554ec",
                         "_myHandedness": "Right"
                     }
                 },
@@ -2171,9 +2171,9 @@
                 }
             ]
         },
-        "815": {
+        "9f3dcb5a-326d-497f-ad8e-519765665bd5": {
             "name": "Hand Right",
-            "parent": "24",
+            "parent": "e6ee89f5-8261-43bd-a140-5fc3068841bc",
             "components": [
                 {
                     "type": "pp-set-hand-local-transform",
@@ -2183,14 +2183,14 @@
                 }
             ]
         },
-        "816": {
+        "491be1a8-3b61-4c08-bdbc-da65b7b03634": {
             "name": "Skinned Tracked Hand Left",
-            "parent": "23",
+            "parent": "cd442c0b-29b2-4216-baaf-b86ee41e7f80",
             "components": [
                 {
                     "type": "pp-tracked-hand-draw-skin",
                     "pp-tracked-hand-draw-skin": {
-                        "_myHandSkin": "820"
+                        "_myHandSkin": "4784ec60-42b9-4876-bf29-38db5fc9abb2"
                     }
                 },
                 {
@@ -2201,14 +2201,14 @@
                 }
             ]
         },
-        "817": {
+        "37d454e6-09ec-41da-8cf9-9b38525179d7": {
             "name": "Skinned Tracked Hand Right",
-            "parent": "24",
+            "parent": "e6ee89f5-8261-43bd-a140-5fc3068841bc",
             "components": [
                 {
                     "type": "pp-tracked-hand-draw-skin",
                     "pp-tracked-hand-draw-skin": {
-                        "_myHandSkin": "853",
+                        "_myHandSkin": "0dde100a-01c0-4963-b1d7-dbe56139af4a",
                         "_myHandedness": "Right"
                     }
                 },
@@ -2220,491 +2220,491 @@
                 }
             ]
         },
-        "821": {
+        "39ebedcc-c207-485a-9b1f-114f8c9978a9": {
             "link": {
                 "name": "Armature",
                 "file": "assets\\models\\tracked_hand_left.glb"
             },
-            "parent": "816"
+            "parent": "491be1a8-3b61-4c08-bdbc-da65b7b03634"
         },
-        "822": {
+        "bdfda210-986b-4c05-9f30-7255c3d1d975": {
             "link": {
                 "name": "l_handMeshNode<Armature",
                 "file": "assets\\models\\tracked_hand_left.glb"
             },
-            "parent": "821",
+            "parent": "39ebedcc-c207-485a-9b1f-114f8c9978a9",
             "components": [
                 {
                     "mesh": {
-                        "skin": "820"
+                        "skin": "4784ec60-42b9-4876-bf29-38db5fc9abb2"
                     }
                 }
             ]
         },
-        "823": {
+        "1925ae31-d831-4b98-9470-743622074a20": {
             "link": {
                 "name": "xr_standard_trigger_pressed_max<Armature",
                 "file": "assets\\models\\tracked_hand_left.glb"
             },
-            "parent": "821"
+            "parent": "39ebedcc-c207-485a-9b1f-114f8c9978a9"
         },
-        "824": {
+        "bced8f92-63a0-4025-91d6-a5b9e27ea4f6": {
             "link": {
                 "name": "xr_standard_trigger_pressed_min<Armature",
                 "file": "assets\\models\\tracked_hand_left.glb"
             },
-            "parent": "821"
+            "parent": "39ebedcc-c207-485a-9b1f-114f8c9978a9"
         },
-        "825": {
+        "d0c6a544-d28d-4da7-af26-8576dbec2ef0": {
             "link": {
                 "name": "xr_standard_trigger_pressed_value<Armature",
                 "file": "assets\\models\\tracked_hand_left.glb"
             },
-            "parent": "821"
+            "parent": "39ebedcc-c207-485a-9b1f-114f8c9978a9"
         },
-        "826": {
+        "0520d806-4d5a-41a2-b698-4c1b6abe3f34": {
             "link": {
                 "name": "pinky-finger-tip<Armature",
                 "file": "assets\\models\\tracked_hand_left.glb"
             },
-            "parent": "821",
-            "skin": "820"
+            "parent": "39ebedcc-c207-485a-9b1f-114f8c9978a9",
+            "skin": "4784ec60-42b9-4876-bf29-38db5fc9abb2"
         },
-        "827": {
+        "a8a3cc78-f5a0-4113-ac63-c05c199994db": {
             "link": {
                 "name": "pinky-finger-phalanx-distal<Armature",
                 "file": "assets\\models\\tracked_hand_left.glb"
             },
-            "parent": "821",
-            "skin": "820"
+            "parent": "39ebedcc-c207-485a-9b1f-114f8c9978a9",
+            "skin": "4784ec60-42b9-4876-bf29-38db5fc9abb2"
         },
-        "828": {
+        "c80a5997-ea35-4f32-a951-1181ce6c4175": {
             "link": {
                 "name": "pinky-finger-phalanx-intermediate<Armature",
                 "file": "assets\\models\\tracked_hand_left.glb"
             },
-            "parent": "821",
-            "skin": "820"
+            "parent": "39ebedcc-c207-485a-9b1f-114f8c9978a9",
+            "skin": "4784ec60-42b9-4876-bf29-38db5fc9abb2"
         },
-        "829": {
+        "8a35c341-2b50-42d5-8dd7-a07704320562": {
             "link": {
                 "name": "pinky-finger-phalanx-proximal<Armature",
                 "file": "assets\\models\\tracked_hand_left.glb"
             },
-            "parent": "821",
-            "skin": "820"
+            "parent": "39ebedcc-c207-485a-9b1f-114f8c9978a9",
+            "skin": "4784ec60-42b9-4876-bf29-38db5fc9abb2"
         },
-        "830": {
+        "e512a604-290f-4131-bf17-6f47fa0e0cba": {
             "link": {
                 "name": "pinky-finger-metacarpal<Armature",
                 "file": "assets\\models\\tracked_hand_left.glb"
             },
-            "parent": "821",
-            "skin": "820"
+            "parent": "39ebedcc-c207-485a-9b1f-114f8c9978a9",
+            "skin": "4784ec60-42b9-4876-bf29-38db5fc9abb2"
         },
-        "831": {
+        "1198bf1d-e18b-497b-bb0b-b686fb822162": {
             "link": {
                 "name": "ring-finger-tip<Armature",
                 "file": "assets\\models\\tracked_hand_left.glb"
             },
-            "parent": "821",
-            "skin": "820"
+            "parent": "39ebedcc-c207-485a-9b1f-114f8c9978a9",
+            "skin": "4784ec60-42b9-4876-bf29-38db5fc9abb2"
         },
-        "832": {
+        "01056837-2471-4251-8554-8e25dbfa9b7c": {
             "link": {
                 "name": "ring-finger-phalanx-distal<Armature",
                 "file": "assets\\models\\tracked_hand_left.glb"
             },
-            "parent": "821",
-            "skin": "820"
+            "parent": "39ebedcc-c207-485a-9b1f-114f8c9978a9",
+            "skin": "4784ec60-42b9-4876-bf29-38db5fc9abb2"
         },
-        "833": {
+        "2078594d-b090-43b0-b0ee-9e0b49c5b5be": {
             "link": {
                 "name": "ring-finger-phalanx-intermediate<Armature",
                 "file": "assets\\models\\tracked_hand_left.glb"
             },
-            "parent": "821",
-            "skin": "820"
+            "parent": "39ebedcc-c207-485a-9b1f-114f8c9978a9",
+            "skin": "4784ec60-42b9-4876-bf29-38db5fc9abb2"
         },
-        "834": {
+        "4e0d27a6-7a86-4b61-b1c6-fc8c2ecaa4a0": {
             "link": {
                 "name": "ring-finger-phalanx-proximal<Armature",
                 "file": "assets\\models\\tracked_hand_left.glb"
             },
-            "parent": "821",
-            "skin": "820"
+            "parent": "39ebedcc-c207-485a-9b1f-114f8c9978a9",
+            "skin": "4784ec60-42b9-4876-bf29-38db5fc9abb2"
         },
-        "835": {
+        "8d056b67-a929-4c16-ba21-8547c6875182": {
             "link": {
                 "name": "ring-finger-metacarpal<Armature",
                 "file": "assets\\models\\tracked_hand_left.glb"
             },
-            "parent": "821",
-            "skin": "820"
+            "parent": "39ebedcc-c207-485a-9b1f-114f8c9978a9",
+            "skin": "4784ec60-42b9-4876-bf29-38db5fc9abb2"
         },
-        "836": {
+        "8418c1e3-14e4-4332-b04c-f4b8da97e309": {
             "link": {
                 "name": "middle-finger-tip<Armature",
                 "file": "assets\\models\\tracked_hand_left.glb"
             },
-            "parent": "821",
-            "skin": "820"
+            "parent": "39ebedcc-c207-485a-9b1f-114f8c9978a9",
+            "skin": "4784ec60-42b9-4876-bf29-38db5fc9abb2"
         },
-        "837": {
+        "2ecb1869-61d5-4174-a5e5-246976d2d167": {
             "link": {
                 "name": "middle-finger-phalanx-distal<Armature",
                 "file": "assets\\models\\tracked_hand_left.glb"
             },
-            "parent": "821",
-            "skin": "820"
+            "parent": "39ebedcc-c207-485a-9b1f-114f8c9978a9",
+            "skin": "4784ec60-42b9-4876-bf29-38db5fc9abb2"
         },
-        "838": {
+        "202fee98-b652-4adf-80c5-25007cb5ac11": {
             "link": {
                 "name": "middle-finger-phalanx-intermediate<Armature",
                 "file": "assets\\models\\tracked_hand_left.glb"
             },
-            "parent": "821",
-            "skin": "820"
+            "parent": "39ebedcc-c207-485a-9b1f-114f8c9978a9",
+            "skin": "4784ec60-42b9-4876-bf29-38db5fc9abb2"
         },
-        "839": {
+        "43a90dec-3dd2-40da-8ce0-dcc37d2f6ff7": {
             "link": {
                 "name": "middle-finger-phalanx-proximal<Armature",
                 "file": "assets\\models\\tracked_hand_left.glb"
             },
-            "parent": "821",
-            "skin": "820"
+            "parent": "39ebedcc-c207-485a-9b1f-114f8c9978a9",
+            "skin": "4784ec60-42b9-4876-bf29-38db5fc9abb2"
         },
-        "840": {
+        "bfeab219-743a-4504-91eb-018de06542d5": {
             "link": {
                 "name": "middle-finger-metacarpal<Armature",
                 "file": "assets\\models\\tracked_hand_left.glb"
             },
-            "parent": "821",
-            "skin": "820"
+            "parent": "39ebedcc-c207-485a-9b1f-114f8c9978a9",
+            "skin": "4784ec60-42b9-4876-bf29-38db5fc9abb2"
         },
-        "841": {
+        "044cc3c3-a018-4f81-a27c-8f49200c8893": {
             "link": {
                 "name": "index-finger-tip<Armature",
                 "file": "assets\\models\\tracked_hand_left.glb"
             },
-            "parent": "821",
-            "skin": "820"
+            "parent": "39ebedcc-c207-485a-9b1f-114f8c9978a9",
+            "skin": "4784ec60-42b9-4876-bf29-38db5fc9abb2"
         },
-        "842": {
+        "83352199-d620-4614-b5ce-98aaf20914ff": {
             "link": {
                 "name": "index-finger-phalanx-distal<Armature",
                 "file": "assets\\models\\tracked_hand_left.glb"
             },
-            "parent": "821",
-            "skin": "820"
+            "parent": "39ebedcc-c207-485a-9b1f-114f8c9978a9",
+            "skin": "4784ec60-42b9-4876-bf29-38db5fc9abb2"
         },
-        "843": {
+        "4a4e867b-ef9b-4076-a609-de302b940c6c": {
             "link": {
                 "name": "index-finger-phalanx-intermediate<Armature",
                 "file": "assets\\models\\tracked_hand_left.glb"
             },
-            "parent": "821",
-            "skin": "820"
+            "parent": "39ebedcc-c207-485a-9b1f-114f8c9978a9",
+            "skin": "4784ec60-42b9-4876-bf29-38db5fc9abb2"
         },
-        "844": {
+        "feed1b96-5cfd-443b-a47e-4b28e2e46527": {
             "link": {
                 "name": "index-finger-phalanx-proximal<Armature",
                 "file": "assets\\models\\tracked_hand_left.glb"
             },
-            "parent": "821",
-            "skin": "820"
+            "parent": "39ebedcc-c207-485a-9b1f-114f8c9978a9",
+            "skin": "4784ec60-42b9-4876-bf29-38db5fc9abb2"
         },
-        "845": {
+        "4124ea8d-c567-4861-b9d9-d789c3715367": {
             "link": {
                 "name": "index-finger-metacarpal<Armature",
                 "file": "assets\\models\\tracked_hand_left.glb"
             },
-            "parent": "821",
-            "skin": "820"
+            "parent": "39ebedcc-c207-485a-9b1f-114f8c9978a9",
+            "skin": "4784ec60-42b9-4876-bf29-38db5fc9abb2"
         },
-        "846": {
+        "dac93120-3131-46e9-a185-020e4ec3b648": {
             "link": {
                 "name": "thumb-tip<Armature",
                 "file": "assets\\models\\tracked_hand_left.glb"
             },
-            "parent": "821",
-            "skin": "820"
+            "parent": "39ebedcc-c207-485a-9b1f-114f8c9978a9",
+            "skin": "4784ec60-42b9-4876-bf29-38db5fc9abb2"
         },
-        "847": {
+        "b0a3670f-28e2-4271-804e-f099e083356f": {
             "link": {
                 "name": "thumb-phalanx-distal<Armature",
                 "file": "assets\\models\\tracked_hand_left.glb"
             },
-            "parent": "821",
-            "skin": "820"
+            "parent": "39ebedcc-c207-485a-9b1f-114f8c9978a9",
+            "skin": "4784ec60-42b9-4876-bf29-38db5fc9abb2"
         },
-        "848": {
+        "3fa2a872-cd7a-459c-8024-a207d8dfb984": {
             "link": {
                 "name": "thumb-phalanx-proximal<Armature",
                 "file": "assets\\models\\tracked_hand_left.glb"
             },
-            "parent": "821",
-            "skin": "820"
+            "parent": "39ebedcc-c207-485a-9b1f-114f8c9978a9",
+            "skin": "4784ec60-42b9-4876-bf29-38db5fc9abb2"
         },
-        "849": {
+        "3e995f53-cc0b-4ad8-a98d-ef3666ae98e7": {
             "link": {
                 "name": "thumb-metacarpal<Armature",
                 "file": "assets\\models\\tracked_hand_left.glb"
             },
-            "parent": "821",
-            "skin": "820"
+            "parent": "39ebedcc-c207-485a-9b1f-114f8c9978a9",
+            "skin": "4784ec60-42b9-4876-bf29-38db5fc9abb2"
         },
-        "850": {
+        "040a9710-1191-430d-a55f-d7bb936fc503": {
             "link": {
                 "name": "wrist<Armature",
                 "file": "assets\\models\\tracked_hand_left.glb"
             },
-            "parent": "821",
-            "skin": "820"
+            "parent": "39ebedcc-c207-485a-9b1f-114f8c9978a9",
+            "skin": "4784ec60-42b9-4876-bf29-38db5fc9abb2"
         },
-        "854": {
+        "fbbdcabd-9ac4-4949-81ba-6dacb01124ce": {
             "link": {
                 "name": "Armature",
                 "file": "assets\\models\\tracked_hand_right.glb"
             },
-            "parent": "817"
+            "parent": "37d454e6-09ec-41da-8cf9-9b38525179d7"
         },
-        "855": {
+        "d4868093-4917-4e32-8403-7dad6320e871": {
             "link": {
                 "name": "r_handMeshNode<Armature",
                 "file": "assets\\models\\tracked_hand_right.glb"
             },
-            "parent": "854",
+            "parent": "fbbdcabd-9ac4-4949-81ba-6dacb01124ce",
             "components": [
                 {
                     "mesh": {
-                        "skin": "853"
+                        "skin": "0dde100a-01c0-4963-b1d7-dbe56139af4a"
                     }
                 }
             ]
         },
-        "856": {
+        "1335c3a0-48d6-4eb5-82c4-32eca6da3784": {
             "link": {
                 "name": "wrist<Armature",
                 "file": "assets\\models\\tracked_hand_right.glb"
             },
-            "parent": "854",
-            "skin": "853"
+            "parent": "fbbdcabd-9ac4-4949-81ba-6dacb01124ce",
+            "skin": "0dde100a-01c0-4963-b1d7-dbe56139af4a"
         },
-        "857": {
+        "4c714253-4b8a-4ec9-8473-1b4b47462ec8": {
             "link": {
                 "name": "thumb-metacarpal<Armature",
                 "file": "assets\\models\\tracked_hand_right.glb"
             },
-            "parent": "854",
-            "skin": "853"
+            "parent": "fbbdcabd-9ac4-4949-81ba-6dacb01124ce",
+            "skin": "0dde100a-01c0-4963-b1d7-dbe56139af4a"
         },
-        "858": {
+        "492ba82d-64ce-4bb9-9bb7-2a36383bb33f": {
             "link": {
                 "name": "thumb-phalanx-proximal<Armature",
                 "file": "assets\\models\\tracked_hand_right.glb"
             },
-            "parent": "854",
-            "skin": "853"
+            "parent": "fbbdcabd-9ac4-4949-81ba-6dacb01124ce",
+            "skin": "0dde100a-01c0-4963-b1d7-dbe56139af4a"
         },
-        "859": {
+        "9443af33-f059-4b20-8998-ba89f4bbc4bc": {
             "link": {
                 "name": "thumb-phalanx-distal<Armature",
                 "file": "assets\\models\\tracked_hand_right.glb"
             },
-            "parent": "854",
-            "skin": "853"
+            "parent": "fbbdcabd-9ac4-4949-81ba-6dacb01124ce",
+            "skin": "0dde100a-01c0-4963-b1d7-dbe56139af4a"
         },
-        "860": {
+        "d95a6d18-af33-4d1d-807e-41656edbb3e2": {
             "link": {
                 "name": "thumb-tip<Armature",
                 "file": "assets\\models\\tracked_hand_right.glb"
             },
-            "parent": "854",
-            "skin": "853"
+            "parent": "fbbdcabd-9ac4-4949-81ba-6dacb01124ce",
+            "skin": "0dde100a-01c0-4963-b1d7-dbe56139af4a"
         },
-        "861": {
+        "2ca5aed7-5d81-41ab-9109-6f1fe0b02396": {
             "link": {
                 "name": "index-finger-metacarpal<Armature",
                 "file": "assets\\models\\tracked_hand_right.glb"
             },
-            "parent": "854",
-            "skin": "853"
+            "parent": "fbbdcabd-9ac4-4949-81ba-6dacb01124ce",
+            "skin": "0dde100a-01c0-4963-b1d7-dbe56139af4a"
         },
-        "862": {
+        "c1cb81f8-ff30-4df1-9c89-fb6728dc6f31": {
             "link": {
                 "name": "index-finger-phalanx-proximal<Armature",
                 "file": "assets\\models\\tracked_hand_right.glb"
             },
-            "parent": "854",
-            "skin": "853"
+            "parent": "fbbdcabd-9ac4-4949-81ba-6dacb01124ce",
+            "skin": "0dde100a-01c0-4963-b1d7-dbe56139af4a"
         },
-        "863": {
+        "68da0702-23c0-4584-99a0-7891a4624603": {
             "link": {
                 "name": "index-finger-phalanx-intermediate<Armature",
                 "file": "assets\\models\\tracked_hand_right.glb"
             },
-            "parent": "854",
-            "skin": "853"
+            "parent": "fbbdcabd-9ac4-4949-81ba-6dacb01124ce",
+            "skin": "0dde100a-01c0-4963-b1d7-dbe56139af4a"
         },
-        "864": {
+        "2e59b7f5-11db-4fd5-b8d3-d5efee6f77c7": {
             "link": {
                 "name": "index-finger-phalanx-distal<Armature",
                 "file": "assets\\models\\tracked_hand_right.glb"
             },
-            "parent": "854",
-            "skin": "853"
+            "parent": "fbbdcabd-9ac4-4949-81ba-6dacb01124ce",
+            "skin": "0dde100a-01c0-4963-b1d7-dbe56139af4a"
         },
-        "865": {
+        "3d389bed-9834-40f4-ab7e-31af42d0a0a7": {
             "link": {
                 "name": "index-finger-tip<Armature",
                 "file": "assets\\models\\tracked_hand_right.glb"
             },
-            "parent": "854",
-            "skin": "853"
+            "parent": "fbbdcabd-9ac4-4949-81ba-6dacb01124ce",
+            "skin": "0dde100a-01c0-4963-b1d7-dbe56139af4a"
         },
-        "866": {
+        "90a26da6-e878-45ae-b1f8-42c08add3b58": {
             "link": {
                 "name": "middle-finger-metacarpal<Armature",
                 "file": "assets\\models\\tracked_hand_right.glb"
             },
-            "parent": "854",
-            "skin": "853"
+            "parent": "fbbdcabd-9ac4-4949-81ba-6dacb01124ce",
+            "skin": "0dde100a-01c0-4963-b1d7-dbe56139af4a"
         },
-        "867": {
+        "3f9b03ef-37fe-440e-acce-8e5baa7341e3": {
             "link": {
                 "name": "middle-finger-phalanx-proximal<Armature",
                 "file": "assets\\models\\tracked_hand_right.glb"
             },
-            "parent": "854",
-            "skin": "853"
+            "parent": "fbbdcabd-9ac4-4949-81ba-6dacb01124ce",
+            "skin": "0dde100a-01c0-4963-b1d7-dbe56139af4a"
         },
-        "868": {
+        "5abb6ea6-de98-44b8-ae9d-bed84b5d842f": {
             "link": {
                 "name": "middle-finger-phalanx-intermediate<Armature",
                 "file": "assets\\models\\tracked_hand_right.glb"
             },
-            "parent": "854",
-            "skin": "853"
+            "parent": "fbbdcabd-9ac4-4949-81ba-6dacb01124ce",
+            "skin": "0dde100a-01c0-4963-b1d7-dbe56139af4a"
         },
-        "869": {
+        "be73cfc0-27e3-4b46-9b82-2335d36acd40": {
             "link": {
                 "name": "middle-finger-phalanx-distal<Armature",
                 "file": "assets\\models\\tracked_hand_right.glb"
             },
-            "parent": "854",
-            "skin": "853"
+            "parent": "fbbdcabd-9ac4-4949-81ba-6dacb01124ce",
+            "skin": "0dde100a-01c0-4963-b1d7-dbe56139af4a"
         },
-        "870": {
+        "3d172286-6e6a-4a85-81f3-9edc92234619": {
             "link": {
                 "name": "middle-finger-tip<Armature",
                 "file": "assets\\models\\tracked_hand_right.glb"
             },
-            "parent": "854",
-            "skin": "853"
+            "parent": "fbbdcabd-9ac4-4949-81ba-6dacb01124ce",
+            "skin": "0dde100a-01c0-4963-b1d7-dbe56139af4a"
         },
-        "871": {
+        "069a05b3-51d1-460d-b708-5551f3add7d2": {
             "link": {
                 "name": "ring-finger-metacarpal<Armature",
                 "file": "assets\\models\\tracked_hand_right.glb"
             },
-            "parent": "854",
-            "skin": "853"
+            "parent": "fbbdcabd-9ac4-4949-81ba-6dacb01124ce",
+            "skin": "0dde100a-01c0-4963-b1d7-dbe56139af4a"
         },
-        "872": {
+        "1dc9c66d-f6f9-4d25-b403-522949dfa201": {
             "link": {
                 "name": "ring-finger-phalanx-proximal<Armature",
                 "file": "assets\\models\\tracked_hand_right.glb"
             },
-            "parent": "854",
-            "skin": "853"
+            "parent": "fbbdcabd-9ac4-4949-81ba-6dacb01124ce",
+            "skin": "0dde100a-01c0-4963-b1d7-dbe56139af4a"
         },
-        "873": {
+        "5b229e2d-b575-446b-9635-2e105478acdf": {
             "link": {
                 "name": "ring-finger-phalanx-intermediate<Armature",
                 "file": "assets\\models\\tracked_hand_right.glb"
             },
-            "parent": "854",
-            "skin": "853"
+            "parent": "fbbdcabd-9ac4-4949-81ba-6dacb01124ce",
+            "skin": "0dde100a-01c0-4963-b1d7-dbe56139af4a"
         },
-        "874": {
+        "a5e409f2-229b-4299-b24f-6d5b5d4ab939": {
             "link": {
                 "name": "ring-finger-phalanx-distal<Armature",
                 "file": "assets\\models\\tracked_hand_right.glb"
             },
-            "parent": "854",
-            "skin": "853"
+            "parent": "fbbdcabd-9ac4-4949-81ba-6dacb01124ce",
+            "skin": "0dde100a-01c0-4963-b1d7-dbe56139af4a"
         },
-        "875": {
+        "e17f7873-a53b-43b0-88d9-44f9e9ab35dc": {
             "link": {
                 "name": "ring-finger-tip<Armature",
                 "file": "assets\\models\\tracked_hand_right.glb"
             },
-            "parent": "854",
-            "skin": "853"
+            "parent": "fbbdcabd-9ac4-4949-81ba-6dacb01124ce",
+            "skin": "0dde100a-01c0-4963-b1d7-dbe56139af4a"
         },
-        "876": {
+        "3824f0ff-66e6-484c-9f2e-c7c8753c09ca": {
             "link": {
                 "name": "pinky-finger-metacarpal<Armature",
                 "file": "assets\\models\\tracked_hand_right.glb"
             },
-            "parent": "854",
-            "skin": "853"
+            "parent": "fbbdcabd-9ac4-4949-81ba-6dacb01124ce",
+            "skin": "0dde100a-01c0-4963-b1d7-dbe56139af4a"
         },
-        "877": {
+        "a0b7ef59-7a34-45e0-81e3-79c938fa581d": {
             "link": {
                 "name": "pinky-finger-phalanx-proximal<Armature",
                 "file": "assets\\models\\tracked_hand_right.glb"
             },
-            "parent": "854",
-            "skin": "853"
+            "parent": "fbbdcabd-9ac4-4949-81ba-6dacb01124ce",
+            "skin": "0dde100a-01c0-4963-b1d7-dbe56139af4a"
         },
-        "878": {
+        "d5ee1038-f881-48e7-99fd-691352ad3aa1": {
             "link": {
                 "name": "pinky-finger-phalanx-intermediate<Armature",
                 "file": "assets\\models\\tracked_hand_right.glb"
             },
-            "parent": "854",
-            "skin": "853"
+            "parent": "fbbdcabd-9ac4-4949-81ba-6dacb01124ce",
+            "skin": "0dde100a-01c0-4963-b1d7-dbe56139af4a"
         },
-        "879": {
+        "b04211e6-44b5-43a2-9bc8-0a26f8036ab7": {
             "link": {
                 "name": "pinky-finger-phalanx-distal<Armature",
                 "file": "assets\\models\\tracked_hand_right.glb"
             },
-            "parent": "854",
-            "skin": "853"
+            "parent": "fbbdcabd-9ac4-4949-81ba-6dacb01124ce",
+            "skin": "0dde100a-01c0-4963-b1d7-dbe56139af4a"
         },
-        "880": {
+        "bd414fb1-1b7d-4752-b95d-d0b08d863cad": {
             "link": {
                 "name": "pinky-finger-tip<Armature",
                 "file": "assets\\models\\tracked_hand_right.glb"
             },
-            "parent": "854",
-            "skin": "853"
+            "parent": "fbbdcabd-9ac4-4949-81ba-6dacb01124ce",
+            "skin": "0dde100a-01c0-4963-b1d7-dbe56139af4a"
         },
-        "890": {
+        "7a147819-c428-45f0-a144-df8c539f5ebf": {
             "name": "Kit",
-            "parent": "18",
+            "parent": "3971a890-928b-4e1f-874a-07ad80876850",
             "translation": [
                 0.0,
                 -10.0,
                 0.0
             ]
         },
-        "891": {
+        "8b7dd394-6329-4461-b278-a14f6fc4c8b0": {
             "name": "Teleport Position Indicator",
-            "parent": "890"
+            "parent": "7a147819-c428-45f0-a144-df8c539f5ebf"
         },
-        "892": {
+        "ddc55988-9d88-4380-9f4a-210981afb037": {
             "name": "Mesh",
-            "parent": "891",
+            "parent": "8b7dd394-6329-4461-b278-a14f6fc4c8b0",
             "components": [
                 {
                     "type": "mesh",
                     "mesh": {
-                        "mesh": "81",
-                        "material": "35"
+                        "mesh": "f63a74f4-007e-4b08-a355-39a6feaf4833",
+                        "material": "9ce40067-76b0-47be-b6f9-f8329df554ec"
                     }
                 }
             ],
@@ -2719,12 +2719,12 @@
                 0.002
             ]
         },
-        "895": {
+        "87700b63-70c8-407c-8ac9-6e0870d4bb56": {
             "link": {
                 "name": "Left_Select<Left_Quest_Controller",
                 "file": "assets\\models\\quest_controllers_credits_Jezza3D.fbx"
             },
-            "parent": "791",
+            "parent": "fddc40cc-b738-4cf9-b124-847955afcebb",
             "name": "Teleport Parable Start Reference Object",
             "components": [
                 {
@@ -2748,9 +2748,9 @@
                 1.0
             ]
         },
-        "900": {
+        "20e4af2e-cecd-4439-b0f5-9a7b5e07fa31": {
             "name": "FPS",
-            "parent": "597",
+            "parent": "b855554a-61a3-4b02-852d-7d0fb4d081e3",
             "components": [
                 {
                     "type": "pp-show-fps",
@@ -2766,9 +2766,9 @@
                 0.0
             ]
         },
-        "901": {
+        "b239855f-6f7d-4d3d-8b5e-c15c90858be7": {
             "name": "Virtual Gamepad",
-            "parent": "597",
+            "parent": "b855554a-61a3-4b02-852d-7d0fb4d081e3",
             "components": [
                 {
                     "type": "pp-virtual-gamepad",
@@ -2778,15 +2778,15 @@
                 }
             ]
         },
-        "902": {
+        "7acd3797-0397-45fd-886e-af8d56034ca8": {
             "name": "Wall",
-            "parent": "178",
+            "parent": "40145bc4-414d-4bd7-9405-01333a41ffe6",
             "components": [
                 {
                     "type": "mesh",
                     "mesh": {
                         "mesh": "p1",
-                        "material": "93"
+                        "material": "7b3f44c4-8c1a-44cd-8fab-87977a996a20"
                     }
                 },
                 {
@@ -2815,15 +2815,15 @@
                 1.0
             ]
         },
-        "903": {
+        "0c3b2712-eb26-4fee-94f4-a8aa47e5a4d3": {
             "name": "Wall",
-            "parent": "178",
+            "parent": "40145bc4-414d-4bd7-9405-01333a41ffe6",
             "components": [
                 {
                     "type": "mesh",
                     "mesh": {
                         "mesh": "p1",
-                        "material": "93"
+                        "material": "7b3f44c4-8c1a-44cd-8fab-87977a996a20"
                     }
                 },
                 {
@@ -2847,15 +2847,15 @@
                 0.0
             ]
         },
-        "904": {
+        "c18998e5-eae2-4a1b-83a6-e887397510b8": {
             "name": "Wall",
-            "parent": "178",
+            "parent": "40145bc4-414d-4bd7-9405-01333a41ffe6",
             "components": [
                 {
                     "type": "mesh",
                     "mesh": {
                         "mesh": "p1",
-                        "material": "93"
+                        "material": "7b3f44c4-8c1a-44cd-8fab-87977a996a20"
                     }
                 },
                 {
@@ -2879,15 +2879,15 @@
                 -3.0
             ]
         },
-        "905": {
+        "ec3310a8-7d0e-4219-8daa-dec7b13bbfbe": {
             "name": "Wall",
-            "parent": "178",
+            "parent": "40145bc4-414d-4bd7-9405-01333a41ffe6",
             "components": [
                 {
                     "type": "mesh",
                     "mesh": {
                         "mesh": "p1",
-                        "material": "93"
+                        "material": "7b3f44c4-8c1a-44cd-8fab-87977a996a20"
                     }
                 },
                 {
@@ -2911,15 +2911,15 @@
                 -4.0
             ]
         },
-        "906": {
+        "99100aa5-80e0-4005-8ae1-29c67dd3eff9": {
             "name": "Wall",
-            "parent": "178",
+            "parent": "40145bc4-414d-4bd7-9405-01333a41ffe6",
             "components": [
                 {
                     "type": "mesh",
                     "mesh": {
                         "mesh": "p1",
-                        "material": "93"
+                        "material": "7b3f44c4-8c1a-44cd-8fab-87977a996a20"
                     }
                 },
                 {
@@ -2954,15 +2954,15 @@
                 1.0
             ]
         },
-        "907": {
+        "b7c39a09-c8fc-4324-85f9-4e3ef9bb2046": {
             "name": "Wall",
-            "parent": "178",
+            "parent": "40145bc4-414d-4bd7-9405-01333a41ffe6",
             "components": [
                 {
                     "type": "mesh",
                     "mesh": {
                         "mesh": "p1",
-                        "material": "93"
+                        "material": "7b3f44c4-8c1a-44cd-8fab-87977a996a20"
                     }
                 },
                 {
@@ -2997,15 +2997,15 @@
                 1.0
             ]
         },
-        "908": {
+        "dcba28fc-68b9-4573-832f-afcb4b8cc737": {
             "name": "Wall",
-            "parent": "178",
+            "parent": "40145bc4-414d-4bd7-9405-01333a41ffe6",
             "components": [
                 {
                     "type": "mesh",
                     "mesh": {
                         "mesh": "p1",
-                        "material": "93"
+                        "material": "7b3f44c4-8c1a-44cd-8fab-87977a996a20"
                     }
                 },
                 {
@@ -3040,15 +3040,15 @@
                 1.0
             ]
         },
-        "909": {
+        "ea061775-40c2-4892-9e4b-bc01bcbd840b": {
             "name": "Wall",
-            "parent": "178",
+            "parent": "40145bc4-414d-4bd7-9405-01333a41ffe6",
             "components": [
                 {
                     "type": "mesh",
                     "mesh": {
                         "mesh": "p1",
-                        "material": "93"
+                        "material": "7b3f44c4-8c1a-44cd-8fab-87977a996a20"
                     }
                 },
                 {
@@ -3083,15 +3083,15 @@
                 1.0
             ]
         },
-        "911": {
+        "fe2f12ce-acd0-4c3e-997b-8b6f31289ba3": {
             "name": "Obstacle 2",
-            "parent": "203",
+            "parent": "21027037-ea7a-483a-b5b5-1beff262c993",
             "components": [
                 {
                     "type": "mesh",
                     "mesh": {
                         "mesh": "p1",
-                        "material": "93"
+                        "material": "7b3f44c4-8c1a-44cd-8fab-87977a996a20"
                     }
                 },
                 {
@@ -3120,15 +3120,15 @@
                 4.5
             ]
         },
-        "912": {
+        "3c838432-5529-43ff-9cd6-7a60ced06620": {
             "name": "Obstacle 2",
-            "parent": "203",
+            "parent": "21027037-ea7a-483a-b5b5-1beff262c993",
             "components": [
                 {
                     "type": "mesh",
                     "mesh": {
                         "mesh": "p1",
-                        "material": "93"
+                        "material": "7b3f44c4-8c1a-44cd-8fab-87977a996a20"
                     }
                 },
                 {
@@ -3157,15 +3157,15 @@
                 0.5
             ]
         },
-        "913": {
+        "e88cf150-264d-4858-b594-8fd90ea871d6": {
             "name": "test",
-            "parent": "71",
+            "parent": "e65d1a64-5dfb-4539-8ef3-3781a7b9f77b",
             "components": [
                 {
                     "type": "mesh",
                     "mesh": {
                         "mesh": "p1",
-                        "material": "93"
+                        "material": "7b3f44c4-8c1a-44cd-8fab-87977a996a20"
                     }
                 },
                 {
@@ -3202,15 +3202,15 @@
                 1.0
             ]
         },
-        "914": {
+        "73d1adf9-f4e0-4b89-8706-2f8154a937cf": {
             "name": "Wall",
-            "parent": "178",
+            "parent": "40145bc4-414d-4bd7-9405-01333a41ffe6",
             "components": [
                 {
                     "type": "mesh",
                     "mesh": {
                         "mesh": "p1",
-                        "material": "93"
+                        "material": "7b3f44c4-8c1a-44cd-8fab-87977a996a20"
                     }
                 },
                 {
@@ -3245,16 +3245,16 @@
                 1.0
             ]
         },
-        "915": {
+        "d78917b5-e620-4863-8cd8-d309f76b67dd": {
             "name": "Pulse Test",
             "components": [
                 {
                     "type": "pulse-on-button"
                 }
             ],
-            "parent": "71"
+            "parent": "e65d1a64-5dfb-4539-8ef3-3781a7b9f77b"
         },
-        "916": {
+        "b3544646-a029-4ca9-96c8-6a4df4ea0016": {
             "name": "MoveStaticColliderTest",
             "translation": [
                 0.0,
@@ -3266,7 +3266,7 @@
                     "type": "mesh",
                     "mesh": {
                         "mesh": "p1",
-                        "material": "498"
+                        "material": "86929f5f-e7e9-46b6-8db8-31f492caa62e"
                     }
                 },
                 {
@@ -3288,22 +3288,22 @@
                     "type": "move-static-collider"
                 }
             ],
-            "parent": "71",
+            "parent": "e65d1a64-5dfb-4539-8ef3-3781a7b9f77b",
             "scaling": [
                 0.3,
                 0.3,
                 0.3
             ]
         },
-        "917": {
+        "be8d7f06-2074-4f91-8c06-cd3fc4e77dc8": {
             "name": "Wall",
-            "parent": "178",
+            "parent": "40145bc4-414d-4bd7-9405-01333a41ffe6",
             "components": [
                 {
                     "type": "mesh",
                     "mesh": {
                         "mesh": "p1",
-                        "material": "93"
+                        "material": "7b3f44c4-8c1a-44cd-8fab-87977a996a20"
                     }
                 },
                 {
@@ -3338,7 +3338,7 @@
                 1.0
             ]
         },
-        "918": {
+        "a95ed91f-6462-47fb-95d5-1d4721b766ed": {
             "name": "PhysX to Clone",
             "components": [
                 {
@@ -3353,7 +3353,7 @@
                     "type": "mesh",
                     "mesh": {
                         "mesh": "p2",
-                        "material": "35"
+                        "material": "9ce40067-76b0-47be-b6f9-f8329df554ec"
                     }
                 }
             ],
@@ -3367,11 +3367,11 @@
                 0.25,
                 0.25
             ],
-            "parent": "921"
+            "parent": "188014aa-569b-4085-802d-db7eac773391"
         },
-        "919": {
+        "01978715-93b8-4881-ad90-f435ed32bb75": {
             "name": "Cloned PhysX",
-            "parent": "921",
+            "parent": "188014aa-569b-4085-802d-db7eac773391",
             "translation": [
                 0.0,
                 -10000.0,
@@ -3381,14 +3381,14 @@
                 {
                     "type": "clone-object",
                     "clone-object": {
-                        "_myToClone": "918"
+                        "_myToClone": "a95ed91f-6462-47fb-95d5-1d4721b766ed"
                     }
                 }
             ]
         },
-        "920": {
+        "96f5ef4d-7e92-4b09-95c3-43920ff6f14d": {
             "name": "Big Cube PhysX",
-            "parent": "921",
+            "parent": "188014aa-569b-4085-802d-db7eac773391",
             "translation": [
                 -0.3772123,
                 -9996.2226562,
@@ -3411,18 +3411,18 @@
                 }
             ]
         },
-        "921": {
+        "188014aa-569b-4085-802d-db7eac773391": {
             "name": "PhysX Clone Test",
-            "parent": "71",
+            "parent": "e65d1a64-5dfb-4539-8ef3-3781a7b9f77b",
             "translation": [
                 0.0,
                 -10000.0,
                 0.0
             ]
         },
-        "923": {
+        "7ac0cf73-b840-46fb-bf29-a28a9648f110": {
             "name": "Light",
-            "parent": "28",
+            "parent": "1fea939f-629e-4f01-9fd7-88c54177717b",
             "components": [
                 {
                     "type": "light",
@@ -3489,109 +3489,109 @@
                 "file": "default"
             }
         },
-        "37": {
+        "e6359825-69eb-4131-95cb-bd58411f0ca8": {
             "link": {
                 "name": "Mesh",
                 "file": "assets\\models\\quest_controllers_credits_Jezza3D.fbx"
             }
         },
-        "38": {
+        "bc4be1d0-bfe3-4173-9e68-7957ee200fdc": {
             "link": {
                 "name": "Mesh.002",
                 "file": "assets\\models\\quest_controllers_credits_Jezza3D.fbx"
             }
         },
-        "39": {
+        "8a72f509-2b90-41b5-a25b-492f5317489c": {
             "link": {
                 "name": "Mesh.003",
                 "file": "assets\\models\\quest_controllers_credits_Jezza3D.fbx"
             }
         },
-        "40": {
+        "dd060aac-2eb0-4130-a721-d276274dbd9f": {
             "link": {
                 "name": "Mesh.005",
                 "file": "assets\\models\\quest_controllers_credits_Jezza3D.fbx"
             }
         },
-        "41": {
+        "b4114ebe-2e36-4e3f-b433-3337f558e61e": {
             "link": {
                 "name": "Mesh.006",
                 "file": "assets\\models\\quest_controllers_credits_Jezza3D.fbx"
             }
         },
-        "42": {
+        "bb68f32c-0e41-4157-b1eb-d633b065ada2": {
             "link": {
                 "name": "Mesh.004",
                 "file": "assets\\models\\quest_controllers_credits_Jezza3D.fbx"
             }
         },
-        "43": {
+        "345d73db-9c51-4de8-9040-d3686c023b01": {
             "link": {
                 "name": "Mesh.001",
                 "file": "assets\\models\\quest_controllers_credits_Jezza3D.fbx"
             }
         },
-        "44": {
+        "f574e8bf-4476-42f3-a1bd-0bb2081899c3": {
             "link": {
                 "name": "Mesh.007",
                 "file": "assets\\models\\quest_controllers_credits_Jezza3D.fbx"
             }
         },
-        "45": {
+        "90c2b50d-c2b0-4791-95f0-253787f91e63": {
             "link": {
                 "name": "Mesh.009",
                 "file": "assets\\models\\quest_controllers_credits_Jezza3D.fbx"
             }
         },
-        "46": {
+        "ff38cb74-3c8c-4337-b4b1-0da5d9b28c53": {
             "link": {
                 "name": "Mesh.010",
                 "file": "assets\\models\\quest_controllers_credits_Jezza3D.fbx"
             }
         },
-        "47": {
+        "80b42643-7d74-4b98-b10a-97be29558843": {
             "link": {
                 "name": "Mesh.012",
                 "file": "assets\\models\\quest_controllers_credits_Jezza3D.fbx"
             }
         },
-        "48": {
+        "23d80a2c-894e-437e-9ee2-2399da142678": {
             "link": {
                 "name": "Mesh.013",
                 "file": "assets\\models\\quest_controllers_credits_Jezza3D.fbx"
             }
         },
-        "49": {
+        "d45d3cb9-866b-4b5d-acef-22d632bfc589": {
             "link": {
                 "name": "Mesh.011",
                 "file": "assets\\models\\quest_controllers_credits_Jezza3D.fbx"
             }
         },
-        "50": {
+        "ec2a287d-3fcf-4819-929f-cb8856889d58": {
             "link": {
                 "name": "Mesh.008",
                 "file": "assets\\models\\quest_controllers_credits_Jezza3D.fbx"
             }
         },
-        "81": {
+        "f63a74f4-007e-4b08-a355-39a6feaf4833": {
             "link": {
                 "name": "Suzanne",
                 "file": "assets\\models\\suzanne.fbx"
             }
         },
-        "84": {
+        "a818173f-c3bf-4ebb-a9a6-903a83e8124b": {
             "link": {
                 "name": "Cube",
                 "file": "assets\\models\\cube.fbx"
             }
         },
-        "819": {
+        "e87de9e6-f907-4273-a408-98615aa5d6be": {
             "link": {
                 "name": "Mesh",
                 "file": "assets\\models\\tracked_hand_left.glb"
             }
         },
-        "852": {
+        "3e3a3466-894f-4872-8950-f2fbd571d5fd": {
             "link": {
                 "name": "Mesh.001",
                 "file": "assets\\models\\tracked_hand_right.glb"
@@ -3621,29 +3621,29 @@
                 "file": "default"
             },
             "Text": {
-                "font": "899"
+                "font": "57bce576-15a4-4513-b149-36989a11158f"
             }
         },
-        "31": {
+        "4246a55c-b37b-4bf2-921a-35004f39c3f5": {
             "name": "Debug Flat",
-            "pipeline": "7"
+            "pipeline": "b7b75cde-c5c6-4e9c-9506-324e34d371b4"
         },
-        "32": {
+        "e16be01f-adb0-4d25-9cff-171ccee5d44b": {
             "name": "Tool Flat",
-            "pipeline": "7"
+            "pipeline": "b7b75cde-c5c6-4e9c-9506-324e34d371b4"
         },
-        "33": {
+        "40bf7fc1-d565-4321-b1d8-012412470a02": {
             "link": {
                 "name": "DefaultFontMaterial",
                 "file": "default"
             },
             "name": "Tool Font",
-            "pipeline": "765",
+            "pipeline": "18674708-968c-4449-8f25-9fc86917dc13",
             "Text": {
-                "font": "899"
+                "font": "57bce576-15a4-4513-b149-36989a11158f"
             }
         },
-        "35": {
+        "9ce40067-76b0-47be-b6f9-f8329df554ec": {
             "link": {
                 "name": "Lambert_Body",
                 "file": "assets\\models\\quest_controllers_credits_Jezza3D.fbx"
@@ -3670,7 +3670,7 @@
                 ]
             }
         },
-        "36": {
+        "67abc793-7be6-46f8-b425-daac725a1279": {
             "link": {
                 "name": "Lambert_Button",
                 "file": "assets\\models\\quest_controllers_credits_Jezza3D.fbx"
@@ -3697,7 +3697,7 @@
                 ]
             }
         },
-        "80": {
+        "53c4e041-1f35-40d8-a259-e37a91bac65b": {
             "link": {
                 "name": "DefaultMaterial",
                 "file": "assets\\models\\suzanne.fbx"
@@ -3711,7 +3711,7 @@
                 ]
             }
         },
-        "83": {
+        "59f73df6-b852-46c2-a89b-d6fd6a957703": {
             "link": {
                 "name": "Material",
                 "file": "assets\\models\\cube.fbx"
@@ -3725,7 +3725,7 @@
                 ]
             }
         },
-        "92": {
+        "6867e941-3a1c-435d-b49e-8ae06b5a64d2": {
             "name": "Floor",
             "Phong": {
                 "ambientColor": [
@@ -3748,7 +3748,7 @@
                 ]
             }
         },
-        "93": {
+        "7b3f44c4-8c1a-44cd-8fab-87977a996a20": {
             "name": "Wall",
             "Phong": {
                 "ambientColor": [
@@ -3771,7 +3771,7 @@
                 ]
             }
         },
-        "498": {
+        "86929f5f-e7e9-46b6-8db8-31f492caa62e": {
             "name": "Special",
             "Phong": {
                 "ambientColor": [
@@ -3794,7 +3794,7 @@
                 ]
             }
         },
-        "596": {
+        "8352b20e-5b72-4391-9163-ce6ef4ce2d40": {
             "link": {
                 "name": "DefaultFontMaterial",
                 "file": "default"
@@ -3807,16 +3807,16 @@
                 ]
             },
             "Text": {
-                "font": "899"
+                "font": "57bce576-15a4-4513-b149-36989a11158f"
             }
         },
-        "779": {
+        "48430c0e-de51-45cd-a80a-51258930feaf": {
             "name": "Flat Opaque",
-            "pipeline": "7"
+            "pipeline": "b7b75cde-c5c6-4e9c-9506-324e34d371b4"
         },
-        "780": {
+        "1118ba33-bf09-4499-875a-1c849ba11714": {
             "name": "Phong Opaque",
-            "pipeline": "13",
+            "pipeline": "d2471b57-d6e1-4c4a-9eb4-aeb8de14e8da",
             "Phong": {
                 "ambientColor": [
                     0.05,
@@ -3832,9 +3832,9 @@
                 ]
             }
         },
-        "781": {
+        "b142a837-a2c9-46cb-91c0-9e007e82684b": {
             "name": "Text",
-            "pipeline": "765",
+            "pipeline": "18674708-968c-4449-8f25-9fc86917dc13",
             "Phong": {
                 "ambientColor": [
                     0.0,
@@ -3850,12 +3850,12 @@
                 ]
             },
             "Text": {
-                "font": "899"
+                "font": "57bce576-15a4-4513-b149-36989a11158f"
             }
         },
-        "786": {
+        "4480bd42-1e8f-4907-a276-0ea6772fde45": {
             "name": "Scheme Text",
-            "pipeline": "765",
+            "pipeline": "18674708-968c-4449-8f25-9fc86917dc13",
             "Phong": {
                 "ambientColor": [
                     0.0,
@@ -3877,10 +3877,10 @@
                     0.8784313,
                     1.0
                 ],
-                "font": "899"
+                "font": "57bce576-15a4-4513-b149-36989a11158f"
             }
         },
-        "818": {
+        "e5827441-a66c-4a1d-bb66-b1c5bd13deac": {
             "link": {
                 "name": "Default_Material",
                 "file": "assets\\models\\tracked_hand_left.glb"
@@ -3894,7 +3894,7 @@
                 ]
             }
         },
-        "851": {
+        "cbd1c598-94fd-4d27-a846-70b3e83b33bc": {
             "link": {
                 "name": "lambert2",
                 "file": "assets\\models\\tracked_hand_right.glb"
@@ -3908,13 +3908,13 @@
                 ]
             }
         },
-        "885": {
+        "2e34bd8e-b49a-46fc-bbf8-b234b2c87483": {
             "link": {
                 "name": "lambert2",
                 "file": "assets\\models\\tracked_hand_right.glb"
             },
             "name": "Flat Transparent No Depth",
-            "pipeline": "884",
+            "pipeline": "5ec49786-6807-4f9c-b837-ee6d9b916080",
             "Flat": {
                 "color": [
                     0.5019608,
@@ -3924,7 +3924,7 @@
                 ]
             }
         },
-        "888": {
+        "e917d0c0-5aed-49c6-a434-fe44ebd9747b": {
             "link": {
                 "name": "Lambert_Body",
                 "file": "assets\\models\\quest_controllers_credits_Jezza3D.fbx"
@@ -3950,431 +3950,431 @@
                     1.0
                 ]
             },
-            "pipeline": "13"
+            "pipeline": "d2471b57-d6e1-4c4a-9eb4-aeb8de14e8da"
         }
     },
     "shaders": {
-        "1": {
+        "ee80c79f-233d-45a5-9c8c-c29edca18ec2": {
             "link": {
                 "name": "Depth.frag",
                 "file": "default"
             }
         },
-        "3": {
+        "21dba6a7-6ace-449a-89ca-823ee0657909": {
             "link": {
                 "name": "DistanceFieldVector.frag",
                 "file": "default"
             }
         },
-        "5": {
+        "97d09f6f-bfc2-4c95-8e69-e7b73eaf65a2": {
             "link": {
                 "name": "Dynamic.vert",
                 "file": "default"
             }
         },
-        "6": {
+        "87835070-3b6d-4ffb-b66a-d4168d21baa6": {
             "link": {
                 "name": "Flat.frag",
                 "file": "default"
             }
         },
-        "9": {
+        "2b4f16ac-6a3a-4c0c-a4fa-8abc93161921": {
             "link": {
                 "name": "MeshVisualizer.frag",
                 "file": "default"
             }
         },
-        "11": {
+        "7086c8a7-a1eb-470b-a58f-dd4f7b32193b": {
             "link": {
                 "name": "Skinning.vert",
                 "file": "default"
             }
         },
-        "12": {
+        "89d78730-0cdc-40f3-be19-fdff488b860f": {
             "link": {
                 "name": "Phong.frag",
                 "file": "default"
             }
         },
-        "15": {
+        "a6a16181-32a7-4f9b-8ccf-0e66461ca104": {
             "link": {
                 "name": "Particle.frag",
                 "file": "default"
             }
         },
-        "520": {
+        "e28dd61f-4def-41c0-88a3-39e31506653b": {
             "link": {
                 "name": "TileFeedback.frag",
                 "file": "default"
             }
         },
-        "521": {
+        "d4f74fe3-65bb-404d-8105-8db180a28b37": {
             "link": {
                 "name": "Physical.frag",
                 "file": "default"
             }
         },
-        "524": {
+        "6046b864-3f21-4176-8495-77ffdd393018": {
             "link": {
                 "name": "Depth.frag",
                 "file": "default"
             }
         },
-        "525": {
+        "019897d4-7a15-462a-80fe-9779384ce9b0": {
             "link": {
                 "name": "DistanceFieldVector.frag",
                 "file": "default"
             }
         },
-        "526": {
+        "b7fc2453-89ab-41cc-9ebf-bb5fefd0c9c7": {
             "link": {
                 "name": "Dynamic.vert",
                 "file": "default"
             }
         },
-        "527": {
+        "94a3081c-e66b-4651-9862-db83b847c884": {
             "link": {
                 "name": "Flat.frag",
                 "file": "default"
             }
         },
-        "528": {
+        "6d39c453-c35e-41b4-8c59-0bd955c1765a": {
             "link": {
                 "name": "MeshVisualizer.frag",
                 "file": "default"
             }
         },
-        "529": {
+        "843d97ff-0a34-449c-9e17-1870d7252fbe": {
             "link": {
                 "name": "Skinning.vert",
                 "file": "default"
             }
         },
-        "530": {
+        "1fcec766-dbe9-47a6-aa19-9e19ec5d6e31": {
             "link": {
                 "name": "Phong.frag",
                 "file": "default"
             }
         },
-        "531": {
+        "5c385975-9fef-4497-9505-296653a6c891": {
             "link": {
                 "name": "Particle.frag",
                 "file": "default"
             }
         },
-        "532": {
+        "1dbc4f61-75c0-4353-b062-392631841714": {
             "link": {
                 "name": "Depth.frag",
                 "file": "default"
             }
         },
-        "533": {
+        "0fb6aea1-37fb-4eb4-9b86-1a5b25ae3df9": {
             "link": {
                 "name": "DistanceFieldVector.frag",
                 "file": "default"
             }
         },
-        "534": {
+        "54d88b7c-8f12-420b-a2cd-23f19f2f340e": {
             "link": {
                 "name": "Dynamic.vert",
                 "file": "default"
             }
         },
-        "535": {
+        "4b8bb6de-f59d-4ed6-a18f-c7aadf1e84e3": {
             "link": {
                 "name": "Flat.frag",
                 "file": "default"
             }
         },
-        "536": {
+        "a834ec7d-c068-4589-83fd-36ea346013ef": {
             "link": {
                 "name": "MeshVisualizer.frag",
                 "file": "default"
             }
         },
-        "537": {
+        "faa7934d-d3bf-4e4b-bd6e-3708119fbd6e": {
             "link": {
                 "name": "Skinning.vert",
                 "file": "default"
             }
         },
-        "538": {
+        "d7363bee-c147-4499-8ba5-cc09e53bccbd": {
             "link": {
                 "name": "Phong.frag",
                 "file": "default"
             }
         },
-        "539": {
+        "a00f1eb3-9a6b-4420-8a40-3cbabbb1f9e9": {
             "link": {
                 "name": "Particle.frag",
                 "file": "default"
             }
         },
-        "742": {
+        "873a0631-0aa0-4aa2-849a-25aa6d993cf3": {
             "link": {
                 "name": "Depth.frag",
                 "file": "default"
             }
         },
-        "743": {
+        "c108ccd8-f1ff-4f09-8d1e-3529b4239a69": {
             "link": {
                 "name": "DistanceFieldVector.frag",
                 "file": "default"
             }
         },
-        "744": {
+        "fff4721e-de25-464d-9a8b-935d6227e174": {
             "link": {
                 "name": "Dynamic.vert",
                 "file": "default"
             }
         },
-        "745": {
+        "503533ee-997b-4c6d-9df3-f4d107badd7c": {
             "link": {
                 "name": "Flat.frag",
                 "file": "default"
             }
         },
-        "746": {
+        "f2e7b3ac-1ac3-48fd-913f-d6a71b901b47": {
             "link": {
                 "name": "MeshVisualizer.frag",
                 "file": "default"
             }
         },
-        "747": {
+        "85a7a9bf-16c9-439a-9b34-612acce04a64": {
             "link": {
                 "name": "Skinning.vert",
                 "file": "default"
             }
         },
-        "748": {
+        "ad7fddc9-7a78-46dc-804e-78ad1ecd2341": {
             "link": {
                 "name": "Phong.frag",
                 "file": "default"
             }
         },
-        "749": {
+        "ede91b25-c9fd-4b93-93d1-cac057202a2e": {
             "link": {
                 "name": "Particle.frag",
                 "file": "default"
             }
         },
-        "750": {
+        "02e8a77d-c47e-41b4-91ee-62e0aa67932f": {
             "link": {
                 "name": "Depth.frag",
                 "file": "default"
             }
         },
-        "751": {
+        "82b521e6-1f08-4fc0-96f0-d4749aad2ced": {
             "link": {
                 "name": "DistanceFieldVector.frag",
                 "file": "default"
             }
         },
-        "752": {
+        "22f5e1ae-f913-4edd-b931-8161c6f3e237": {
             "link": {
                 "name": "Dynamic.vert",
                 "file": "default"
             }
         },
-        "753": {
+        "fb0b8713-9c1f-4de7-acf4-748322cbbcde": {
             "link": {
                 "name": "Flat.frag",
                 "file": "default"
             }
         },
-        "754": {
+        "094cd726-64c8-4a77-b6d2-0be9c8d54f37": {
             "link": {
                 "name": "MeshVisualizer.frag",
                 "file": "default"
             }
         },
-        "755": {
+        "4dcdf4fe-ce8d-4d2a-8d91-7d8ea9dd7257": {
             "link": {
                 "name": "Skinning.vert",
                 "file": "default"
             }
         },
-        "756": {
+        "97d84135-32b7-4df2-ae5b-5d24cfca7ff3": {
             "link": {
                 "name": "Phong.frag",
                 "file": "default"
             }
         },
-        "757": {
+        "35cd37fc-0220-4d97-8b06-2c514341ef14": {
             "link": {
                 "name": "Particle.frag",
                 "file": "default"
             }
         },
-        "762": {
+        "e9ecdf0f-8d2c-4115-ac6a-6b755a2920c7": {
             "link": {
                 "name": "Sky.frag",
                 "file": "default"
             }
         },
-        "763": {
+        "9a107427-6072-4681-a58d-825c23eebd9b": {
             "link": {
                 "name": "FullScreenTriangle.vert",
                 "file": "default"
             }
         },
-        "764": {
+        "1d260f1f-338d-453b-8bdb-9986da316c65": {
             "link": {
                 "name": "Text.frag",
                 "file": "default"
             }
         },
-        "766": {
+        "af7f0dd2-f1c9-4334-a725-1127860cdf59": {
             "link": {
                 "name": "Text.vert",
                 "file": "default"
             }
         },
-        "768": {
+        "dd11648c-ea93-44b6-8652-b630a7640436": {
             "link": {
                 "name": "Depth.frag",
                 "file": "default"
             }
         },
-        "769": {
+        "6acc6013-2a79-420c-8252-2d8d1687c594": {
             "link": {
                 "name": "DistanceFieldVector.frag",
                 "file": "default"
             }
         },
-        "770": {
+        "2965cc29-d7f9-4607-bf30-768a5f2c5a17": {
             "link": {
                 "name": "Dynamic.vert",
                 "file": "default"
             }
         },
-        "771": {
+        "fb8150d9-0a43-4ef9-98aa-7e38fc6cf4a9": {
             "link": {
                 "name": "Flat.frag",
                 "file": "default"
             }
         },
-        "772": {
+        "429916a4-ef54-427f-bd70-ce407c2e3c53": {
             "link": {
                 "name": "MeshVisualizer.frag",
                 "file": "default"
             }
         },
-        "773": {
+        "fd3f83cf-9768-453a-983d-a396381c4bb3": {
             "link": {
                 "name": "Skinning.vert",
                 "file": "default"
             }
         },
-        "774": {
+        "30b53e72-0093-43fb-b198-88ad06908a36": {
             "link": {
                 "name": "Phong.frag",
                 "file": "default"
             }
         },
-        "775": {
+        "da08c248-36a6-4441-9296-6a6a7a21afd7": {
             "link": {
                 "name": "Particle.frag",
                 "file": "default"
             }
         },
-        "782": {
+        "737ec566-8ad3-4c42-a122-f0a03e6d4d46": {
             "link": {
                 "name": "Background.frag",
                 "file": "default"
             }
         },
-        "783": {
+        "a47cb6d1-2525-4d63-b793-728f8b5b5890": {
             "link": {
                 "name": "FullScreenTriangle.vert",
                 "file": "default"
             }
         },
-        "924": {
+        "d41bfcc4-338a-4ec6-9306-cc76864a33e7": {
             "link": {
                 "name": "lib\\Color.glsl",
                 "file": "default"
             }
         },
-        "925": {
+        "c9b2de41-c05d-4d83-bc9e-2e07130133ac": {
             "link": {
                 "name": "lib\\Compatibility.frag",
                 "file": "default"
             }
         },
-        "926": {
+        "1e0d0b35-6aa6-4c41-b53b-a4add7374776": {
             "link": {
                 "name": "lib\\CoordinateSystems.glsl",
                 "file": "default"
             }
         },
-        "927": {
+        "8e7fb6f4-ba20-4d8f-ae71-d657de069df7": {
             "link": {
                 "name": "lib\\GI.frag",
                 "file": "default"
             }
         },
-        "928": {
+        "916f40cb-2f39-4d79-abf2-45fc3905add2": {
             "link": {
                 "name": "lib\\Inputs.frag",
                 "file": "default"
             }
         },
-        "929": {
+        "1459ab8f-bc91-4f6d-9a63-c0d6d5e189a4": {
             "link": {
                 "name": "lib\\Lights.frag",
                 "file": "default"
             }
         },
-        "930": {
+        "cef060e3-b9c3-4855-8628-d69efd338af7": {
             "link": {
                 "name": "lib\\Materials.frag",
                 "file": "default"
             }
         },
-        "931": {
+        "b1829e94-b12f-4efa-aca4-1d22f2b038ac": {
             "link": {
                 "name": "lib\\Math.glsl",
                 "file": "default"
             }
         },
-        "932": {
+        "f5955467-ff89-49b1-a396-6953b277c178": {
             "link": {
                 "name": "lib\\Packing.frag",
                 "file": "default"
             }
         },
-        "933": {
+        "83a54426-d2e3-47d4-afaf-5204d090de2e": {
             "link": {
                 "name": "lib\\Quaternion.glsl",
                 "file": "default"
             }
         },
-        "934": {
+        "0bc16ed3-90a6-44b3-bacb-1f6238e5672a": {
             "link": {
                 "name": "lib\\Slug.frag",
                 "file": "default"
             }
         },
-        "935": {
+        "b2a7714c-fa72-48f8-aee9-2c94a88eb19d": {
             "link": {
                 "name": "lib\\Slug.vert",
                 "file": "default"
             }
         },
-        "936": {
+        "6b9b8763-f43e-406c-b897-4476a193d254": {
             "link": {
                 "name": "lib\\Surface.frag",
                 "file": "default"
             }
         },
-        "937": {
+        "18b3085d-c7cb-4473-bf2d-895b608b00e7": {
             "link": {
                 "name": "lib\\Textures.frag",
                 "file": "default"
             }
         },
-        "939": {
+        "8b9ff570-3aae-4ed9-a1e0-5c07ce4ac6ef": {
             "link": {
                 "name": "lib\\Uniforms.glsl",
                 "file": "default"
@@ -4383,94 +4383,94 @@
     },
     "animations": {},
     "skins": {
-        "820": {
+        "4784ec60-42b9-4876-bf29-38db5fc9abb2": {
             "link": {
                 "name": "Armature",
                 "file": "assets\\models\\tracked_hand_left.glb"
             },
             "joints": [
-                "826",
-                "827",
-                "828",
-                "829",
-                "830",
-                "831",
-                "832",
-                "833",
-                "834",
-                "835",
-                "836",
-                "837",
-                "838",
-                "839",
-                "840",
-                "841",
-                "842",
-                "843",
-                "844",
-                "845",
-                "846",
-                "847",
-                "848",
-                "849",
-                "850"
+                "0520d806-4d5a-41a2-b698-4c1b6abe3f34",
+                "a8a3cc78-f5a0-4113-ac63-c05c199994db",
+                "c80a5997-ea35-4f32-a951-1181ce6c4175",
+                "8a35c341-2b50-42d5-8dd7-a07704320562",
+                "e512a604-290f-4131-bf17-6f47fa0e0cba",
+                "1198bf1d-e18b-497b-bb0b-b686fb822162",
+                "01056837-2471-4251-8554-8e25dbfa9b7c",
+                "2078594d-b090-43b0-b0ee-9e0b49c5b5be",
+                "4e0d27a6-7a86-4b61-b1c6-fc8c2ecaa4a0",
+                "8d056b67-a929-4c16-ba21-8547c6875182",
+                "8418c1e3-14e4-4332-b04c-f4b8da97e309",
+                "2ecb1869-61d5-4174-a5e5-246976d2d167",
+                "202fee98-b652-4adf-80c5-25007cb5ac11",
+                "43a90dec-3dd2-40da-8ce0-dcc37d2f6ff7",
+                "bfeab219-743a-4504-91eb-018de06542d5",
+                "044cc3c3-a018-4f81-a27c-8f49200c8893",
+                "83352199-d620-4614-b5ce-98aaf20914ff",
+                "4a4e867b-ef9b-4076-a609-de302b940c6c",
+                "feed1b96-5cfd-443b-a47e-4b28e2e46527",
+                "4124ea8d-c567-4861-b9d9-d789c3715367",
+                "dac93120-3131-46e9-a185-020e4ec3b648",
+                "b0a3670f-28e2-4271-804e-f099e083356f",
+                "3fa2a872-cd7a-459c-8024-a207d8dfb984",
+                "3e995f53-cc0b-4ad8-a98d-ef3666ae98e7",
+                "040a9710-1191-430d-a55f-d7bb936fc503"
             ]
         },
-        "853": {
+        "0dde100a-01c0-4963-b1d7-dbe56139af4a": {
             "link": {
                 "name": "Armature",
                 "file": "assets\\models\\tracked_hand_right.glb"
             },
             "joints": [
-                "856",
-                "857",
-                "858",
-                "859",
-                "860",
-                "861",
-                "862",
-                "863",
-                "864",
-                "865",
-                "866",
-                "867",
-                "868",
-                "869",
-                "870",
-                "871",
-                "872",
-                "873",
-                "874",
-                "875",
-                "876",
-                "877",
-                "878",
-                "879",
-                "880"
+                "1335c3a0-48d6-4eb5-82c4-32eca6da3784",
+                "4c714253-4b8a-4ec9-8473-1b4b47462ec8",
+                "492ba82d-64ce-4bb9-9bb7-2a36383bb33f",
+                "9443af33-f059-4b20-8998-ba89f4bbc4bc",
+                "d95a6d18-af33-4d1d-807e-41656edbb3e2",
+                "2ca5aed7-5d81-41ab-9109-6f1fe0b02396",
+                "c1cb81f8-ff30-4df1-9c89-fb6728dc6f31",
+                "68da0702-23c0-4584-99a0-7891a4624603",
+                "2e59b7f5-11db-4fd5-b8d3-d5efee6f77c7",
+                "3d389bed-9834-40f4-ab7e-31af42d0a0a7",
+                "90a26da6-e878-45ae-b1f8-42c08add3b58",
+                "3f9b03ef-37fe-440e-acce-8e5baa7341e3",
+                "5abb6ea6-de98-44b8-ae9d-bed84b5d842f",
+                "be73cfc0-27e3-4b46-9b82-2335d36acd40",
+                "3d172286-6e6a-4a85-81f3-9edc92234619",
+                "069a05b3-51d1-460d-b708-5551f3add7d2",
+                "1dc9c66d-f6f9-4d25-b403-522949dfa201",
+                "5b229e2d-b575-446b-9635-2e105478acdf",
+                "a5e409f2-229b-4299-b24f-6d5b5d4ab939",
+                "e17f7873-a53b-43b0-88d9-44f9e9ab35dc",
+                "3824f0ff-66e6-484c-9f2e-c7c8753c09ca",
+                "a0b7ef59-7a34-45e0-81e3-79c938fa581d",
+                "d5ee1038-f881-48e7-99fd-691352ad3aa1",
+                "b04211e6-44b5-43a2-9bc8-0a26f8036ab7",
+                "bd414fb1-1b7d-4752-b95d-d0b08d863cad"
             ]
         }
     },
     "pipelines": {
-        "2": {
+        "5321f5cb-5ff6-4791-870e-84239b04c3b8": {
             "link": {
                 "name": "Depth",
                 "file": "default"
             }
         },
-        "4": {
+        "7849c334-73bc-477d-b302-94ea2cc24a0c": {
             "link": {
                 "name": "DistanceFieldVector",
                 "file": "default"
             },
             "sampleAlphaToCoverage": true
         },
-        "7": {
+        "b7b75cde-c5c6-4e9c-9506-324e34d371b4": {
             "link": {
                 "name": "Flat Opaque",
                 "file": "default"
             }
         },
-        "8": {
+        "e2d925f8-e6e3-44a4-a7d0-ca547d6223f3": {
             "link": {
                 "name": "Flat Opaque Textured",
                 "file": "default"
@@ -4479,13 +4479,13 @@
                 "ALPHA_MASKED": true
             }
         },
-        "10": {
+        "6aab8e93-480c-4011-b7f3-71f5219020a7": {
             "link": {
                 "name": "MeshVisualizer",
                 "file": "default"
             }
         },
-        "13": {
+        "d2471b57-d6e1-4c4a-9eb4-aeb8de14e8da": {
             "link": {
                 "name": "Phong Opaque",
                 "file": "default"
@@ -4495,7 +4495,7 @@
                 "DEPRECATED_LIGHT_ATTENUATION": true
             }
         },
-        "14": {
+        "ca812e98-bc42-4bf7-add8-9541e0df24d2": {
             "link": {
                 "name": "Phong Opaque Textured",
                 "file": "default"
@@ -4505,7 +4505,7 @@
                 "DEPRECATED_LIGHT_ATTENUATION": true
             }
         },
-        "16": {
+        "9c584698-b5da-4c42-a69e-a9b38d0f61b0": {
             "link": {
                 "name": "Foliage",
                 "file": "default"
@@ -4514,19 +4514,19 @@
                 "DEPRECATED_LIGHT_ATTENUATION": true
             }
         },
-        "17": {
+        "ecfeddfa-eb19-4234-90db-3db70f8f4771": {
             "link": {
                 "name": "Particle",
                 "file": "default"
             }
         },
-        "522": {
+        "c2e6524d-a111-4a03-a227-7636694d2155": {
             "link": {
                 "name": "Physical Opaque",
                 "file": "default"
             }
         },
-        "523": {
+        "2b90e050-f66f-47f8-b785-ecf171b5ed23": {
             "link": {
                 "name": "Physical Opaque Textured",
                 "file": "default"
@@ -4535,7 +4535,7 @@
                 "ALPHA_MASKED": true
             }
         },
-        "579": {
+        "63b34a7b-1a2f-4ff3-9ee7-6b766319d904": {
             "link": {
                 "name": "Flat Opaque",
                 "file": "default"
@@ -4544,19 +4544,19 @@
             "depthTest": true,
             "depthFunction": "always"
         },
-        "765": {
+        "18674708-968c-4449-8f25-9fc86917dc13": {
             "link": {
                 "name": "Text",
                 "file": "default"
             }
         },
-        "767": {
+        "4ab502a7-e4f9-4841-8f0b-b281e90e5669": {
             "link": {
                 "name": "Sky",
                 "file": "default"
             }
         },
-        "889": {
+        "669653ac-d813-46f9-99a6-fde8e845c058": {
             "link": {
                 "name": "Phong Opaque",
                 "file": "default"
@@ -4567,7 +4567,7 @@
             },
             "name": "Phong Opaque 2"
         },
-        "897": {
+        "6117cbdb-f66a-4351-8248-e5b8ff511d3a": {
             "link": {
                 "name": "Phong Normalmapped",
                 "file": "default"
@@ -4576,7 +4576,7 @@
                 "DEPRECATED_LIGHT_ATTENUATION": true
             }
         },
-        "898": {
+        "24332e14-07df-4003-bf0e-0944ae1f6095": {
             "link": {
                 "name": "Phong Lightmapped",
                 "file": "default"
@@ -4585,13 +4585,13 @@
                 "DEPRECATED_LIGHT_ATTENUATION": true
             }
         },
-        "938": {
+        "993d3ee6-5f45-4e40-98ee-5f558d77df72": {
             "link": {
                 "name": "TileFeedback",
                 "file": "default"
             }
         },
-        "884": {
+        "5ec49786-6807-4f9c-b837-ee6d9b916080": {
             "link": {
                 "name": "Flat Opaque Textured",
                 "file": "default"
@@ -4624,7 +4624,7 @@
             ],
             "sky": {
                 "enabled": false,
-                "material": "35"
+                "material": "9ce40067-76b0-47be-b6f9-f8329df554ec"
             },
             "useMultiDraw": false,
             "usePreZ": false,
@@ -4660,14 +4660,15 @@
             "entryPoint": "src/index.js"
         },
         "vr": {
-            "leftEyeObject": "26",
-            "rightEyeObject": "27"
+            "leftEyeObject": "0b6d50ea-8721-46d6-91f7-df17811486ca",
+            "rightEyeObject": "70f65931-2273-475b-bceb-6485d42ce15e"
         },
         "editor": {
             "camera": {
                 "near": 0.0099999,
                 "far": 10000.0
-            }
+            },
+            "ids": "uuid"
         },
         "physx": {
             "enable": true,
@@ -4684,29 +4685,29 @@
         }
     },
     "files": {
-        "940": {
+        "5c8fa53b-a716-45d4-8033-f8f11e03fa3e": {
             "fileName": "assets/models/quest_controllers_credits_Jezza3D.fbx",
             "importerName": "AssimpImporter"
         },
-        "941": {
+        "c27e1ec9-2ed1-4bf6-b814-bc9560e303d3": {
             "fileName": "assets/models/suzanne.fbx",
             "importerName": "AssimpImporter"
         },
-        "942": {
+        "8496a848-a400-40ac-98e6-bdc631b9e354": {
             "fileName": "assets/models/cube.fbx",
             "importerName": "AssimpImporter"
         },
-        "943": {
+        "c4acec9f-d8d1-4b84-898b-d29c39d786a1": {
             "fileName": "assets/models/tracked_hand_left.glb",
             "importerName": ""
         },
-        "944": {
+        "c3d3b491-b3cb-4658-ab3b-30f126bc628a": {
             "fileName": "assets/models/tracked_hand_right.glb",
             "importerName": ""
         }
     },
     "fonts": {
-        "899": {
+        "57bce576-15a4-4513-b149-36989a11158f": {
             "link": {
                 "name": "DejaVuSans.ttf",
                 "file": "default"
