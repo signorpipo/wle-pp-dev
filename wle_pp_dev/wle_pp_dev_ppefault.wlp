@@ -26,6 +26,9 @@
                         "_myText": "110",
                         "_myScene": "18"
                     }
+                },
+                {
+                    "type": "pp-show-xr-buttons"
                 }
             ]
         },
@@ -207,6 +210,12 @@
                 -0.1,
                 0.0,
                 0.0
+            ],
+            "rotation": [
+                0.0,
+                1.0,
+                0.0,
+                0.0
             ]
         },
         "104": {
@@ -268,6 +277,12 @@
             ],
             "translation": [
                 0.1,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                1.0,
                 0.0,
                 0.0
             ]
@@ -901,7 +916,8 @@
                 1,
                 1,
                 6
-            ]
+            ],
+            "customIndexHtml": true
         },
         "rendering": {
             "clearColor": [
@@ -916,9 +932,16 @@
             "webxr": {
                 "optionalFeatures": {
                     "hand-tracking": true
-                }
+                },
+                "offerSession": false
             },
-            "viewObject": "21"
+            "viewObject": "21",
+            "pwa": {
+                "appIcon": "165",
+                "enable": true,
+                "customServiceWorker": true,
+                "customManifest": true
+            }
         },
         "scripting": {
             "sourcePaths": [
@@ -1078,12 +1101,32 @@
             "blendDestAlpha": "one"
         }
     },
-    "textures": {},
-    "images": {},
+    "textures": {
+        "166": {
+            "link": {
+                "name": "icon.png",
+                "file": "assets\\textures\\pp\\icon.png"
+            }
+        }
+    },
+    "images": {
+        "165": {
+            "link": {
+                "name": "icon.png",
+                "file": "assets\\textures\\pp\\icon.png"
+            },
+            "compression": "none",
+            "stream": false
+        }
+    },
     "files": {
         "164": {
             "fileName": "assets/models/pp/meta_quest_1_gamepads_credits_Jezza3D.fbx",
             "importerName": "AssimpImporter"
+        },
+        "167": {
+            "fileName": "assets/textures/pp/icon.png",
+            "importerName": ""
         }
     },
     "fonts": {
