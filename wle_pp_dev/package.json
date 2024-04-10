@@ -5,7 +5,6 @@
     "description": "So many edge cases",
     "license": "ISC",
     "type": "module",
-    "wonderlandengine": {},
     "dependencies": {
         "@wonderlandengine/api": "^1.1.5",
         "@wonderlandengine/components": "^1.1.2",
