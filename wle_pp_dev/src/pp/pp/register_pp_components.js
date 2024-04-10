@@ -68,5 +68,6 @@ export function registerPPComponents(engine) {
         TrackedHandDrawJointComponent,
         TrackedHandDrawSkinComponent,
         VirtualGamepadComponent,
-        VisualManagerComponent);
+        VisualManagerComponent
+    );
 }
