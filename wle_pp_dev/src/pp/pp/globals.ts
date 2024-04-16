@@ -5,7 +5,6 @@ import * as ObjectPoolManagerGlobals from "../cauldron/object_pool/object_pool_g
 import * as VisualGlobals from "../cauldron/visual/visual_globals.js";
 import * as EngineGlobals from "../cauldron/wl/engine_globals.js";
 import * as DefaultResourcesGlobals from "../cauldron/wl/getters/default_resources_globals.js";
-import * as RootGlobals from "../cauldron/wl/getters/root_globals.js";
 import * as SceneObjectsGlobals from "../cauldron/wl/getters/scene_objects_globals.js";
 import * as DebugGlobals from "../debug/debug_globals.js";
 import * as CharacterCollisionSystemGlobals from "../gameplay/experimental/character_controller/collision/character_collision_system_globals.js";
@@ -16,7 +15,6 @@ import * as EasyTuneGlobals from "../tool/easy_tune/easy_tune_globals.js";
 
 export const Globals = {
     ...EngineGlobals,
-    ...RootGlobals,
     ...SceneObjectsGlobals,
     ...DefaultResourcesGlobals,
     ...AudioGlobals,

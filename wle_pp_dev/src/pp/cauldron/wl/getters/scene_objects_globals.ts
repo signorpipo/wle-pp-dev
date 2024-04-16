@@ -1,4 +1,4 @@
-import { WonderlandEngine } from "@wonderlandengine/api";
+import { Object3D, WonderlandEngine } from "@wonderlandengine/api";
 import { Globals } from "../../../pp/globals.js";
 import { PlayerObjects, SceneObjects } from "./scene_objects.js";
 
@@ -32,6 +32,16 @@ export function getPlayerObjects(engine: Readonly<WonderlandEngine> | null = Glo
 
     if (sceneObjects != null) {
         return sceneObjects.myPlayerObjects;
+    }
+
+    return null;
+}
+
+export function getRoot(engine: Readonly<WonderlandEngine> | null = Globals.getMainEngine()): Object3D | null {
+    const sceneObjects = getSceneObjects(engine);
+
+    if (sceneObjects != null) {
+        return sceneObjects.myRoot;
     }
 
     return null;

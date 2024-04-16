@@ -6,7 +6,6 @@ import { ObjectPoolManagerComponent } from "../../cauldron/object_pool/component
 import { VisualManagerComponent } from "../../cauldron/visual/components/visual_manager_component.js";
 import { AddWLToWindowComponent } from "../../cauldron/wl/components/add_wl_to_window_component.js";
 import { GetDefaultResourcesComponent } from "../../cauldron/wl/getters/components/get_default_resources_component.js";
-import { GetRootComponent } from "../../cauldron/wl/getters/components/get_root_component.js";
 import { GetSceneObjectsComponent } from "../../cauldron/wl/getters/components/get_scene_objects_component.js";
 import { DebugManagerComponent } from "../../debug/components/debug_manager_component.js";
 import { EnableDebugComponent } from "../../debug/components/enable_debug_component.js";
@@ -39,7 +38,6 @@ export class PPGatewayComponent extends Component {
         ...SaveManagerComponent.Properties,
         ...AnalyticsManagerComponent.Properties,
         ...DebugManagerComponent.Properties,
-        ...GetRootComponent.Properties,
         ...GetSceneObjectsComponent.Properties,
         ...GetDefaultResourcesComponent.Properties
     };
@@ -51,7 +49,6 @@ export class PPGatewayComponent extends Component {
     private _myAddWLToWindow!: boolean;
 
     private _myGetDefaultResourcesComponent!: GetDefaultResourcesComponent;
-    private _myGetRootComponent!: GetRootComponent;
     private _myGetSceneObjectsComponent!: GetSceneObjectsComponent;
     private _myEnableDebugComponent!: EnableDebugComponent;
     private _myEnableToolComponent!: EnableToolComponent;
@@ -77,7 +74,6 @@ export class PPGatewayComponent extends Component {
 
     public override init(): void {
         this._myGetDefaultResourcesComponent = this.object.pp_addComponent(GetDefaultResourcesComponent, this._getProperties(GetDefaultResourcesComponent.Properties), false)!;
-        this._myGetRootComponent = this.object.pp_addComponent(GetRootComponent, this._getProperties(GetRootComponent.Properties), false)!;
         this._myGetSceneObjectsComponent = this.object.pp_addComponent(GetSceneObjectsComponent, this._getProperties(GetSceneObjectsComponent.Properties), false)!;
 
         if (this._myEnableDebug) {
@@ -112,7 +108,6 @@ export class PPGatewayComponent extends Component {
 
     public override start(): void {
         this._myGetDefaultResourcesComponent.active = true;
-        this._myGetRootComponent.active = true;
         this._myGetSceneObjectsComponent.active = true;
 
         if (this._myEnableDebugComponent != null) {

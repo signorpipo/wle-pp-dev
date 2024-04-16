@@ -3,6 +3,8 @@ import { Handedness } from "../../../input/cauldron/input_types.js";
 
 export class SceneObjects {
 
+    public myRoot: Object3D | null = null;
+
     public myScene: Object3D | null = null;
 
     public myCauldron: Object3D | null = null;

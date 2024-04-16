@@ -102,7 +102,6 @@ export { TextUtils } from "./cauldron/wl/utils/text_utils.js";
 export * from "./cauldron/wl/getters/scene_objects.js";
 export * from "./cauldron/wl/getters/default_resources.js";
 export * from "./cauldron/wl/getters/components/get_scene_objects_component.js";
-export * from "./cauldron/wl/getters/components/get_root_component.js";
 export * from "./cauldron/wl/getters/components/get_default_resources_component.js";
 
 //	DEBUG
