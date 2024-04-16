@@ -27,6 +27,26 @@ export function hasSceneObjects(engine: Readonly<WonderlandEngine> | null = Glob
     return engine != null ? _mySceneObjectsContainer.has(engine) : false;
 }
 
+export function getRootObject(engine: Readonly<WonderlandEngine> | null = Globals.getMainEngine()): Object3D | null {
+    const sceneObjects = getSceneObjects(engine);
+
+    if (sceneObjects != null) {
+        return sceneObjects.myRoot;
+    }
+
+    return null;
+}
+
+export function getSceneObject(engine: Readonly<WonderlandEngine> | null = Globals.getMainEngine()): Object3D | null {
+    const sceneObjects = getSceneObjects(engine);
+
+    if (sceneObjects != null) {
+        return sceneObjects.myScene;
+    }
+
+    return null;
+}
+
 export function getPlayerObjects(engine: Readonly<WonderlandEngine> | null = Globals.getMainEngine()): PlayerObjects | null {
     const sceneObjects = getSceneObjects(engine);
 
@@ -37,11 +57,21 @@ export function getPlayerObjects(engine: Readonly<WonderlandEngine> | null = Glo
     return null;
 }
 
-export function getRoot(engine: Readonly<WonderlandEngine> | null = Globals.getMainEngine()): Object3D | null {
+export function getPlayerObject(engine: Readonly<WonderlandEngine> | null = Globals.getMainEngine()): Object3D | null {
     const sceneObjects = getSceneObjects(engine);
 
     if (sceneObjects != null) {
-        return sceneObjects.myRoot;
+        return sceneObjects.myPlayerObjects.myPlayer;
+    }
+
+    return null;
+}
+
+export function getHeadObject(engine: Readonly<WonderlandEngine> | null = Globals.getMainEngine()): Object3D | null {
+    const sceneObjects = getSceneObjects(engine);
+
+    if (sceneObjects != null) {
+        return sceneObjects.myPlayerObjects.myHead;
     }
 
     return null;

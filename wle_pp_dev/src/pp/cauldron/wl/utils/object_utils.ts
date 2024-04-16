@@ -2008,7 +2008,7 @@ export const clone = function () {
                 const parent = cloneData![0];
                 const objectToClone = cloneData![1];
 
-                const currentClonedObject = (parent != null) ? ObjectUtils.addObject(parent) : ObjectUtils.addObject(Globals.getRoot(ObjectUtils.getEngine(object))!);
+                const currentClonedObject = (parent != null) ? ObjectUtils.addObject(parent) : ObjectUtils.addObject(Globals.getRootObject(ObjectUtils.getEngine(object))!);
                 ObjectUtils.setName(currentClonedObject, ObjectUtils.getName(objectToClone));
 
                 ObjectUtils.setScaleLocal(currentClonedObject, ObjectUtils.getScaleLocal(objectToClone, scale));
