@@ -1,28 +1,40 @@
+import { Vector3 } from "wle-pp/cauldron/type_definitions/array_type_definitions.js";
+
 export class AudioSetup {
 
-    constructor(audioFilePath = null) {
-        this.myAudioFilePath = audioFilePath;
+    public myAudioFilePath: string | null = null;
 
-        this.myLoop = false;
-        this.myAutoPlay = false;
+    public myLoop: boolean = false;
+    public myAutoPlay: boolean = false;
 
-        this.myVolume = 1.0;
-        this._myRate = 1.0; // From 0.5 to 4.0
+    public myVolume: number = 1.0;
 
-        this.myPool = 5;
-        this.myPreload = true;
+    /** From `0.5` to `4.0` */
+    public _myRate: number = 1.0;
 
-        this.myPreventPlayWhenAudioContextNotRunning = false;
+    public myPool: number = 5;
+    public myPreload: boolean = true;
 
-        // Spatial Params
+    public myPreventPlayWhenAudioContextNotRunning: boolean = false;
 
-        this.myPosition = null;
-        this.mySpatial = true;
-        this.myReferenceDistance = Number.MAX_VALUE; // At this distance (and closer) the volume is not reduced
+    // Spatial Params
+
+    public myPosition: Vector3 | null = null;
+    public mySpatial: boolean = true;
+
+    /** At this distance (and closer) the volume is not reduced */
+    public myReferenceDistance: number = Number.MAX_VALUE;
+
+    // End Spatial Params
+
+    constructor(audioFilePath?: string) {
+        if (audioFilePath != null) {
+            this.myAudioFilePath = audioFilePath;
+        }
     }
 
-    clone() {
-        let audioSetup = new AudioSetup();
+    clone(): AudioSetup {
+        const audioSetup = new AudioSetup();
 
         audioSetup.myAudioFilePath = this.myAudioFilePath;
 
@@ -52,11 +64,11 @@ export class AudioSetup {
         return audioSetup;
     }
 
-    get myPitch() {
+    get myPitch(): number {
         return this._myRate;
     }
 
-    get myRate() {
+    get myRate(): number {
         return this._myRate;
     }
 
