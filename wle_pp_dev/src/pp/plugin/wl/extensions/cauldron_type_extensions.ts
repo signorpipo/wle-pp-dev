@@ -1,5 +1,5 @@
 import { Object3D, Physics, RayHit, WonderlandEngine } from "@wonderlandengine/api";
-import { ArrayLike, Vector, Vector3 } from "../../../cauldron/type_definitions/array_type_definitions.js";
+import { Vector, Vector3 } from "../../../cauldron/type_definitions/array_type_definitions.js";
 
 export interface PhysicsExtension {
     pp_getEngine(this: Readonly<Physics>): WonderlandEngine;
@@ -21,8 +21,6 @@ export interface RayHitExtension {
 }
 
 declare module "@wonderlandengine/api" {
-    export interface NumberArray extends ArrayLike<number> { }
-
     export interface Physics extends PhysicsExtension { }
 
     export interface RayHit extends RayHitExtension { }
