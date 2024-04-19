@@ -1,6 +1,6 @@
 /**
- * Warning: this type extension is actually added at runtime only if you call `initArrayExtension`
- *          the `initPP` function, which is automatically called by the `pp-gateway` component, does this for you
+ * #WARN this type extension is actually added at runtime only if you call `initArrayExtension`
+ * The `initPP` function, which is automatically called by the `pp-gateway` component, does this for you
  */
 
 import { ArrayLike } from "../../../../cauldron/type_definitions/array_type_definitions.js";

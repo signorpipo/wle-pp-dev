@@ -1,6 +1,6 @@
 /**
- * Warning: this type extension is actually added at runtime only if you call `initVecExtension`
- *          the `initPP` function, which is automatically called by the `pp-gateway` component, does this for you
+ * #WARN this type extension is actually added at runtime only if you call `initVecExtension`
+ * The `initPP` function, which is automatically called by the `pp-gateway` component, does this for you
  */
 
 import { Vector } from "../../../../cauldron/type_definitions/array_type_definitions.js";
