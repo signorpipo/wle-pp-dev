@@ -32,7 +32,7 @@ export interface ArrayExtension<ArrayType extends Array<ArrayElementType>, Array
     pp_remove<T extends ArrayType>(this: T, callback: (elementToCheck: ArrayElementType, elementIndex: number) => boolean): ArrayElementType | undefined;
     pp_removeIndex<T extends ArrayType>(this: T, index: number): ArrayElementType | undefined;
     pp_removeAll<T extends ArrayType>(this: T, callback: (elementToCheck: ArrayElementType, elementIndex: number) => boolean): ArrayElementType[];
-    pp_removeAllIndexes<T extends ArrayType>(this: T, indexes: number[]): ArrayElementType[];
+    pp_removeAllIndexes<T extends ArrayType>(this: T, indexes: ArrayLike<number>): ArrayElementType[];
 
     pp_removeEqual<T extends ArrayType>(this: T, elementToRemove: ArrayElementType, elementsEqualCallback?: (elementToCheck: ArrayElementType, elementToRemove: ArrayElementType) => boolean): ArrayElementType | undefined;
     pp_removeAllEqual<T extends ArrayType>(this: T, elementToRemove: ArrayElementType, elementsEqualCallback?: (elementToCheck: ArrayElementType, elementToRemove: ArrayElementType) => boolean): ArrayElementType[];

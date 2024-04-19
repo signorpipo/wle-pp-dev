@@ -12,6 +12,7 @@ import "./js/extensions/math_type_extension.js";
 import "./js/extensions/number_type_extension.js";
 
 import "./wl/extensions/object_type_extension.js";
+import "./wl/extensions/cauldron_type_extensions.js";
 
 import "./wl/mods/components/cursor_target_component_type_extension.js";
 
