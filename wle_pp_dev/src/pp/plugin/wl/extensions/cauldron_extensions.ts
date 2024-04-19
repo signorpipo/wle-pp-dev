@@ -1,6 +1,7 @@
 import { Object3D, Physics, RayHit, WonderlandEngine } from "@wonderlandengine/api";
 import { Vector, Vector3 } from "../../../cauldron/type_definitions/array_type_definitions.js";
 import { Vec3Utils } from "../../../cauldron/utils/array/vec3_utils.js";
+import { VecUtils } from "../../../cauldron/utils/array/vec_utils.js";
 import { PluginUtils } from "../../utils/plugin_utils.js";
 
 import "./cauldron_type_extensions.js";
@@ -59,7 +60,7 @@ function _initRayHitExtensionPrototype(): void {
         return out;
     };
 
-    rayHitExtension.pp_getDistances = function pp_getDistances<T extends Vector>(this: Readonly<RayHit>, out: Vector | T = new Float32Array(this.hitCount)): Vector | T {
+    rayHitExtension.pp_getDistances = function pp_getDistances<T extends Vector>(this: Readonly<RayHit>, out: Vector | T = VecUtils.create(this.hitCount)): Vector | T {
         const wasm = this.pp_getEngine().wasm;
         const ptr = (this as unknown as { _ptr: number })._ptr;
         const alignedPtr = (ptr + 48 * 2) / 4; // Align F32
