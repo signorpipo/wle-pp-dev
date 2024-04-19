@@ -1,5 +1,5 @@
 /**
- * #WARN this type extension is actually added at runtime only if you call `initNumberExtension`
+ * #WARN this type extension is actually added at runtime only if you call `initNumberExtension`  
  * The `initPP` function, which is automatically called by the `pp-gateway` component, does this for you
  */
 

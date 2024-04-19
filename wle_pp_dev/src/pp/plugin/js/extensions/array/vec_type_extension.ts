@@ -1,5 +1,5 @@
 /**
- * #WARN this type extension is actually added at runtime only if you call `initVecExtension`
+ * #WARN this type extension is actually added at runtime only if you call `initVecExtension`  
  * The `initPP` function, which is automatically called by the `pp-gateway` component, does this for you
  */
 

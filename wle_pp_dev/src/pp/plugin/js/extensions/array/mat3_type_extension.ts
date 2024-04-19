@@ -1,5 +1,5 @@
 /**
- * #WARN this type extension is actually added at runtime only if you call `initMat3Extension`
+ * #WARN this type extension is actually added at runtime only if you call `initMat3Extension`  
  * The `initPP` function, which is automatically called by the `pp-gateway` component, does this for you
  */
 

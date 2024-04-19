@@ -1,5 +1,5 @@
 /**
- * #WARN this type extension is actually added at runtime only if you call `initMathExtension`
+ * #WARN this type extension is actually added at runtime only if you call `initMathExtension`  
  * The `initPP` function, which is automatically called by the `pp-gateway` component, does this for you
  */
 
@@ -8,8 +8,8 @@
  * 
  *  By default the rotations are in Degrees
  * 
- *  For rotations u can add a suffix like Degrees/Radians to use a specific version, example:
- *      - pp_angleDistanceSignedDegrees
+ *  For rotations u can add a suffix like Degrees/Radians to use a specific version, example:  
+ *      - pp_angleDistanceSignedDegrees  
  *      - pp_isInsideAngleRangeRadians
 */
 
