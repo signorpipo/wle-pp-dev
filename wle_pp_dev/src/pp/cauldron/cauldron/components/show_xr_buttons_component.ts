@@ -163,7 +163,7 @@ export class ShowXRButtonsComponent extends Component {
 
     private _onXRSessionEnd(): void {
         if (this._myXRButtonsContainer != null && (this._myShowVRButton || this._myShowARButton)) {
-            this._myXRButtonsContainer.style.removeProperty("display");
+            this._myXRButtonsContainer.style.setProperty("display", "flex");
         }
     }
 }
