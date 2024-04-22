@@ -67,7 +67,7 @@ export function getPlayerObject(engine: Readonly<WonderlandEngine> | null = Glob
     return null;
 }
 
-export function getHeadObject(engine: Readonly<WonderlandEngine> | null = Globals.getMainEngine()): Object3D | null {
+export function getPlayerHeadObject(engine: Readonly<WonderlandEngine> | null = Globals.getMainEngine()): Object3D | null {
     const sceneObjects = getSceneObjects(engine);
 
     if (sceneObjects != null) {

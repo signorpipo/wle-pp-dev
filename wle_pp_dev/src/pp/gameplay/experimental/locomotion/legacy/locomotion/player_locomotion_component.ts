@@ -1,73 +1,163 @@
-import { Component, Property } from "@wonderlandengine/api";
+import { Component, Material, Object3D, Property } from "@wonderlandengine/api";
+import { property } from "@wonderlandengine/api/decorators.js";
 import { Timer } from "../../../../../cauldron/cauldron/timer.js";
 import { PhysicsLayerFlags } from "../../../../../cauldron/physics/physics_layer_flags.js";
 import { PhysicsUtils } from "../../../../../cauldron/physics/physics_utils.js";
 import { InputUtils } from "../../../../../input/cauldron/input_utils.js";
+import { BasePose } from "../../../../../input/pose/base_pose.js";
 import { Globals } from "../../../../../pp/globals.js";
 import { PlayerLocomotion, PlayerLocomotionParams } from "./player_locomotion.js";
 
 export class PlayerLocomotionComponent extends Component {
-    static TypeName = "pp-player-locomotion";
+    public static override TypeName = "pp-player-locomotion";
+
+
+    @property.enum(["Smooth", "Teleport"], "Smooth")
+    private _myDefaultLocomotionType!: number;
+
+    @property.bool(true)
+    private _myAlwaysSmoothForNonVR!: boolean;
+
+    /** Double press main hand thumbstick (default: left) to switch */
+    @property.bool(true)
+    private _mySwitchLocomotionTypeShortcutEnabled!: boolean;
+
+    @property.string("0, 0, 0, 0, 0, 0, 0, 0")
+    private _myPhysicsBlockLayerFlags!: string;
+
+    @property.float(1.70)
+    private _myDefaultHeight!: number;
+
+    @property.float(0.3)
+    private _myCharacterRadius!: number;
+
+    @property.float(2)
+    private _myMaxSpeed!: number;
+
+    @property.float(100)
+    private _myMaxRotationSpeed!: number;
+
+    @property.float(-20)
+    private _myGravityAcceleration!: number;
+
+    @property.float(-15)
+    private _myMaxGravitySpeed!: number;
+
+    @property.float(1)
+    private _mySpeedSlowDownPercentageOnWallSlid!: number;
+
+    @property.bool(true)
+    private _myIsSnapTurn!: boolean;
+
+    @property.bool(true)
+    private _mySnapTurnOnlyVR!: boolean;
+
+    @property.float(30)
+    private _mySnapTurnAngle!: number;
+
+    @property.float(0)
+    private _mySnapTurnSpeedDegrees!: number;
+
+
+
+    @property.bool(false)
+    private _myFlyEnabled!: boolean;
+
+    @property.bool(false)
+    private _myStartFlying!: boolean;
+
+    @property.bool(true)
+    private _myFlyWithButtonsEnabled!: boolean;
+
+    @property.bool(true)
+    private _myFlyWithViewAngleEnabled!: boolean;
+
+    @property.float(30)
+    private _myMinAngleToFlyUpNonVR!: number;
+
+    @property.float(50)
+    private _myMinAngleToFlyDownNonVR!: number;
+
+    @property.float(60)
+    private _myMinAngleToFlyUpVR!: number;
+
+    @property.float(1)
+    private _myMinAngleToFlyDownVR!: number;
+
+    @property.float(60)
+    private _myMinAngleToFlyRight!: number;
+
+
+    @property.enum(["Left", "Right"], "Left")
+    private _myMainHand!: number;
+
+    @property.bool(true)
+    private _myDirectionInvertForwardWhenUpsideDown!: boolean;
+
+    @property.enum(["Head", "Hand", "Custom Object"], "Head")
+    private _myVRDirectionReferenceType!: number;
+
+    @property.object()
+    private _myVRDirectionReferenceObject!: Object3D;
+
+
+    @property.enum(["Instant", "Blink", "Shift"], "Shift")
+    private _myTeleportType!: number;
+
+    @property.float(3)
+    private _myTeleportMaxDistance!: number;
+
+    @property.float(1.25)
+    private _myTeleportMaxHeightDifference!: number;
+
+    @property.bool(false)
+    private _myTeleportRotationOnUpEnabled!: boolean;
+
+    @property.material()
+    private _myTeleportValidMaterial!: Material;
+
+    @property.material()
+    private _myTeleportInvalidMaterial!: Material;
+
+    @property.object()
+    private _myTeleportPositionObject!: Object3D;
+
+    @property.bool(true)
+    private _myTeleportPositionObjectRotateWithHead!: boolean;
+
+    @property.object()
+    private _myTeleportParableStartReferenceObject!: Object3D;
+
+
+    @property.bool(true)
+    private _myResetRealOnStart!: boolean;
+
+    /**
+     * #WARN With `_myResetRealOnStartFramesAmount` at `1` it can happen that you enter the session like 1 frame before the game load
+     * and the head pose might have not been properly initialized yet in the WebXR API, so the reset real will not happen has expected  
+     * Since this is a sort of edge case (either u enter after the load, or you were already in for more than 2-3 frames), and that
+     * setting this to more than `1` can cause a visible (even if very short) stutter after the load (due to resetting the head multiple times),
+     * it's better to keep this value at `1`  
+     * A possible effect of the edge case is the view being obscured on start because it thinks you are colliding
+     * 
+     * A value of `3` will make u sure that the head pose will be initialized and the reset real will happen as expected in any case  
+     * For example, if u have a total fade at start and nothing can be seen aside the clear color for at least, let's say, 10 frames, 
+     * you can set this to `3` safely, since there will be no visible stutter to be seen (beside the clear color)
+     */
+    @property.int(1)
+    private _myResetRealOnStartFramesAmount!: number;
+
+    /** Can fix some head through floor issues, when you can move your head completely to the other side of the floor  
+        If the floors are thick enough that this can't happen, you can leave this to false  */
+    @property.bool(true)
+    private _myResetHeadToFeetInsteadOfReal!: boolean;
+
+    @property.float(0.25)
+    private _myResetHeadToRealMinDistance!: number;
+
+
+
     static Properties = {
-        _myDefaultLocomotionType: Property.enum(["Smooth", "Teleport"], "Smooth"),
-        _myAlwaysSmoothForNonVR: Property.bool(true),
-        _mySwitchLocomotionTypeShortcutEnabled: Property.bool(true), // Double press main hand (default left) thumbstick to switch
-        _myPhysicsBlockLayerFlags: Property.string("0, 0, 0, 0, 0, 0, 0, 0"),
-        _myDefaultHeight: Property.float(1.70),
-        _myCharacterRadius: Property.float(0.3),
-        _myMaxSpeed: Property.float(2),
-        _myMaxRotationSpeed: Property.float(100),
-        _myGravityAcceleration: Property.float(-20),
-        _myMaxGravitySpeed: Property.float(-15),
-        _mySpeedSlowDownPercentageOnWallSlid: Property.float(1),
-        _myIsSnapTurn: Property.bool(true),
-        _mySnapTurnOnlyVR: Property.bool(true),
-        _mySnapTurnAngle: Property.float(30),
-        _mySnapTurnSpeedDegrees: Property.float(0),
-
-        _myFlyEnabled: Property.bool(false),
-        _myStartFlying: Property.bool(false),
-        _myFlyWithButtonsEnabled: Property.bool(true),
-        _myFlyWithViewAngleEnabled: Property.bool(true),
-        _myMinAngleToFlyUpNonVR: Property.float(30),
-        _myMinAngleToFlyDownNonVR: Property.float(50),
-        _myMinAngleToFlyUpVR: Property.float(60),
-        _myMinAngleToFlyDownVR: Property.float(1),
-        _myMinAngleToFlyRight: Property.float(60),
-
-        _myMainHand: Property.enum(["Left", "Right"], "Left"),
-        _myDirectionInvertForwardWhenUpsideDown: Property.bool(true),
-        _myVRDirectionReferenceType: Property.enum(["Head", "Hand", "Custom Object"], "Head"),
-        _myVRDirectionReferenceObject: Property.object(),
-
-        _myTeleportType: Property.enum(["Instant", "Blink", "Shift"], "Shift"),
-        _myTeleportMaxDistance: Property.float(3),
-        _myTeleportMaxHeightDifference: Property.float(1.25),
-        _myTeleportRotationOnUpEnabled: Property.bool(false),
-        _myTeleportValidMaterial: Property.material(),
-        _myTeleportInvalidMaterial: Property.material(),
-        _myTeleportPositionObject: Property.object(),
-        _myTeleportPositionObjectRotateWithHead: Property.bool(true),
-        _myTeleportParableStartReferenceObject: Property.object(),
-
-        _myResetRealOnStart: Property.bool(true),
-
-        // #WARN With @myResetRealOnStartFramesAmount at 1 it can happen that you enter the session like 1 frame before the game load
-        // and the head pose might have not been properly initialized yet in the WebXR API, so the reset real will not happen has expected
-        // Since this is a sort of edge case (either u enter after the load, or you were already in for more than 2-3 frames), and that
-        // setting this to more than 1 can cause a visible (even if very short) stutter after the load (due to resetting the head multiple times),
-        // it's better to keep this value at 1
-        // A possible effect of the edge case is the view being obscured on start because it thinks you are colliding
-        //
-        // A value of 3 will make u sure that the head pose will be initialized and the reset real will happen as expected in any case
-        // For example, if u have a total fade at start and nothing can be seen aside the clear color for at least, let's say, 10 frames, 
-        // you can set this to 3 safely, since there will be no visible stutter to be seen (beside the clear color)
-        _myResetRealOnStartFramesAmount: Property.int(1),
-
-        // Can fix some head through floor issues, when you can move your head completely to the other side of the floor
-        // If the floors are thick enough that this can't happen, you can leave this to false
-        _myResetHeadToFeetInsteadOfReal: Property.bool(true),
-        _myResetHeadToRealMinDistance: Property.float(0.25),
 
         // these 2 flags works 100% properly only if both true or false
         _mySyncWithRealWorldPositionOnlyIfValid: Property.bool(true),   // valid means the real player has not moved inside walls
@@ -103,8 +193,8 @@ export class PlayerLocomotionComponent extends Component {
         _myPerformanceLogEnabled: Property.bool(false)
     };
 
-    start() {
-        let params = new PlayerLocomotionParams(this.engine);
+    public override start(): void {
+        const params = new PlayerLocomotionParams(this.engine);
 
         params.myDefaultLocomotionType = this._myDefaultLocomotionType;
         params.myAlwaysSmoothForNonVR = this._myAlwaysSmoothForNonVR;
@@ -136,7 +226,7 @@ export class PlayerLocomotionComponent extends Component {
         params.myMinAngleToFlyDownVR = this._myMinAngleToFlyDownVR;
         params.myMinAngleToFlyRight = this._myMinAngleToFlyRight;
 
-        params.myMainHand = InputUtils.getHandednessByIndex(this._myMainHand);
+        params.myMainHand = InputUtils.getHandednessByIndex(this._myMainHand)!;
 
         params.myDirectionInvertForwardWhenUpsideDown = this._myDirectionInvertForwardWhenUpsideDown;
         params.myVRDirectionReferenceType = this._myVRDirectionReferenceType;
@@ -198,10 +288,10 @@ export class PlayerLocomotionComponent extends Component {
         this._myDebugPerformanceLogTotalTime = 0;
         this._myDebugPerformanceLogFrameCount = 0;
 
-        Globals.getHeadPose(this.engine).registerPostPoseUpdatedEventEventListener(this, this.onPostPoseUpdatedEvent.bind(this));
+        Globals.getHeadPose(this.engine)!.registerPostPoseUpdatedEventEventListener(this, this.onPostPoseUpdatedEvent.bind(this));
     }
 
-    onPostPoseUpdatedEvent(dt, pose, manualUpdate) {
+    public onPostPoseUpdatedEvent(dt: number, pose: Readonly<BasePose>, manualUpdate: boolean): void {
         if (manualUpdate) return;
 
         let startTime = 0;
@@ -227,7 +317,7 @@ export class PlayerLocomotionComponent extends Component {
         this._myPlayerLocomotion.update(dt);
 
         if (this._myPerformanceLogEnabled && Globals.isDebugEnabled(this.engine)) {
-            let endTime = window.performance.now();
+            const endTime = window.performance.now();
             this._myDebugPerformanceLogTotalTime += endTime - startTime;
             this._myDebugPerformanceLogFrameCount++;
 
@@ -235,7 +325,7 @@ export class PlayerLocomotionComponent extends Component {
             if (this._myDebugPerformanceLogTimer.isDone()) {
                 this._myDebugPerformanceLogTimer.start();
 
-                let averageTime = this._myDebugPerformanceLogTotalTime / this._myDebugPerformanceLogFrameCount;
+                const averageTime = this._myDebugPerformanceLogTotalTime / this._myDebugPerformanceLogFrameCount;
 
                 console.log("Locomotion ms: " + averageTime.toFixed(3));
 
@@ -254,26 +344,26 @@ export class PlayerLocomotionComponent extends Component {
         }
     }
 
-    getPlayerLocomotion() {
+    public getPlayerLocomotion(): PlayerLocomotion {
         return this._myPlayerLocomotion;
     }
 
-    onActivate() {
+    public override onActivate(): void {
         if (this._myPlayerLocomotion != null) {
             this._myPlayerLocomotion.setActive(true);
         }
     }
 
-    onDeactivate() {
+    public override onDeactivate(): void {
         if (this._myPlayerLocomotion != null) {
             this._myPlayerLocomotion.setActive(false);
         }
     }
 
-    _getPhysicsBlockLayersFlags() {
-        let physicsFlags = new PhysicsLayerFlags();
+    private _getPhysicsBlockLayersFlags(): PhysicsLayerFlags {
+        const physicsFlags = new PhysicsLayerFlags();
 
-        let flags = [...this._myPhysicsBlockLayerFlags.split(",")];
+        const flags = [...this._myPhysicsBlockLayerFlags.split(",")];
         for (let i = 0; i < flags.length; i++) {
             physicsFlags.setFlagActive(i, flags[i].trim() == "1");
         }
@@ -281,7 +371,7 @@ export class PlayerLocomotionComponent extends Component {
         return physicsFlags;
     }
 
-    onDestroy() {
+    public override onDestroy(): void {
         this._myPlayerLocomotion?.destroy();
     }
 }
