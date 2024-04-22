@@ -1,4 +1,5 @@
 import { Emitter, Material, Object3D, PhysXComponent, WonderlandEngine } from "@wonderlandengine/api";
+import { Gamepad } from "wle-pp/input/gamepad/gamepad.js";
 import { FSM } from "../../../../../cauldron/fsm/fsm.js";
 import { PhysicsLayerFlags } from "../../../../../cauldron/physics/physics_layer_flags.js";
 import { EasingFunction, MathUtils } from "../../../../../cauldron/utils/math_utils.js";
@@ -188,6 +189,8 @@ export class PlayerLocomotion {
     private _myPlayerLocomotionSmooth: PlayerLocomotionSmooth;
     private _myPlayerLocomotionTeleport: PlayerLocomotionTeleport;
     private _myPlayerObscureManager: PlayerObscureManager;
+
+    private _myLocomotionMovementFSM = new FSM();
 
     private _mySwitchToTeleportOnEnterSession: boolean = false;
 
@@ -495,18 +498,18 @@ export class PlayerLocomotion {
 
         this._myStarted = true;
 
-        let currentActive = this._myActive;
+        const currentActive = this._myActive;
         this._myActive = !this._myActive;
         this.setActive(currentActive);
     }
 
-    // #WARN Only a few params are actually used by this class after the setup phase, like @myCollisionCheckDisabled
-    // Params like @myMaxSpeed must be edited directly on the PlayerLocomotionSmooth object
-    getParams() {
+    /** #WARN Only a few params are actually used by this class after the setup phase, like @myCollisionCheckDisabled
+        Params like @myMaxSpeed must be edited directly on the PlayerLocomotionSmooth object*/
+    public getParams(): PlayerLocomotionParams {
         return this._myParams;
     }
 
-    setActive(active) {
+    public setActive(active: boolean): void {
         if (this._myActive != active) {
             this._myActive = active;
 
@@ -527,11 +530,11 @@ export class PlayerLocomotion {
         }
     }
 
-    isStarted() {
+    public isStarted(): boolean {
         return this._myStarted;
     }
 
-    canStop() {
+    public canStop(): boolean {
         let canStop = false;
 
         if (this._myLocomotionMovementFSM.isInState("smooth") && this._myPlayerLocomotionSmooth.canStop()) {
@@ -543,7 +546,7 @@ export class PlayerLocomotion {
         return canStop;
     }
 
-    update(dt) {
+    public update(dt: number): void {
         this._myPreUpdateEmitter.notify(dt, this);
 
         let collisionCheckEnabledBackup = false;
@@ -631,7 +634,7 @@ export class PlayerLocomotion {
         this._myPostUpdateEmitter.notify(dt, this);
     }
 
-    setIdle(idle) {
+    public setIdle(idle: boolean): void {
         this._myIdle = idle;
 
         if (idle) {
@@ -641,47 +644,47 @@ export class PlayerLocomotion {
         }
     }
 
-    getPlayerLocomotionSmooth() {
+    public getPlayerLocomotionSmooth(): PlayerLocomotionSmooth {
         return this._myPlayerLocomotionSmooth;
     }
 
-    getPlayerLocomotionTeleport() {
+    public getPlayerLocomotionTeleport(): PlayerLocomotionTeleport {
         return this._myPlayerLocomotionTeleport;
     }
 
-    getPlayerTransformManager() {
+    public getPlayerTransformManager(): PlayerTransformManager {
         return this._myPlayerTransformManager;
     }
 
-    getPlayerLocomotionRotate() {
+    public getPlayerLocomotionRotate(): PlayerLocomotionRotate {
         return this._myPlayerLocomotionRotate;
     }
 
-    getPlayerHeadManager() {
+    public getPlayerHeadManager(): PlayerHeadManager {
         return this._myPlayerHeadManager;
     }
 
-    getPlayerObscureManager() {
+    public getPlayerObscureManager(): PlayerObscureManager {
         return this._myPlayerObscureManager;
     }
 
-    registerPreUpdateCallback(id, callback) {
+    public registerPreUpdateCallback(id: any, callback: (dt: number, playerLocomotion: PlayerLocomotion) => void): void {
         this._myPreUpdateEmitter.add(callback, { id: id });
     }
 
-    unregisterPreUpdateCallback(id) {
+    public unregisterPreUpdateCallback(id: any): void {
         this._myPreUpdateEmitter.remove(id);
     }
 
-    registerPostUpdateCallback(id, callback) {
+    public registerPostUpdateCallback(id: any, callback: (dt: number, playerLocomotion: PlayerLocomotion) => void): void {
         this._myPostUpdateEmitter.add(callback, { id: id });
     }
 
-    unregisterPostUpdateCallback(id) {
+    public unregisterPostUpdateCallback(id: any): void {
         this._myPostUpdateEmitter.remove(id);
     }
 
-    _updateCollisionHeight() {
+    private _updateCollisionHeight(): void {
         this._myCollisionCheckParamsMovement.myHeight = this._myPlayerHeadManager.getHeightHead();
         if (this._myCollisionCheckParamsMovement.myHeight <= 0.000001) {
             this._myCollisionCheckParamsMovement.myHeight = 0;
@@ -689,8 +692,8 @@ export class PlayerLocomotion {
         this._myCollisionCheckParamsTeleport.myHeight = this._myCollisionCheckParamsMovement.myHeight;
     }
 
-    _setupCollisionCheckParamsMovement() {
-        let simplifiedParams = new CharacterColliderSetupSimplifiedCreationParams();
+    private _setupCollisionCheckParamsMovement(): void {
+        const simplifiedParams = new CharacterColliderSetupSimplifiedCreationParams();
 
         simplifiedParams.myHeight = this._myParams.myDefaultHeight;
         simplifiedParams.myRadius = this._myParams.myCharacterRadius;
@@ -715,8 +718,8 @@ export class PlayerLocomotion {
         simplifiedParams.myShouldNotFallFromEdges = this._myParams.myColliderPreventFallingFromEdges;
 
         simplifiedParams.myHorizontalCheckBlockLayerFlags.copy(this._myParams.myPhysicsBlockLayerFlags);
-        let physXComponents = Globals.getPlayerObjects(this._myParams.myEngine).myPlayer.pp_getComponents(PhysXComponent);
-        for (let physXComponent of physXComponents) {
+        const physXComponents = Globals.getPlayerObjects(this._myParams.myEngine)!.myPlayer!.pp_getComponents(PhysXComponent);
+        for (const physXComponent of physXComponents) {
             simplifiedParams.myHorizontalCheckObjectsToIgnore.pp_pushUnique(physXComponent.object, (first, second) => first.pp_equals(second));
         }
         simplifiedParams.myVerticalCheckBlockLayerFlags.copy(simplifiedParams.myHorizontalCheckBlockLayerFlags);
@@ -725,12 +728,12 @@ export class PlayerLocomotion {
         simplifiedParams.myHorizontalCheckDebugEnabled = this._myParams.myDebugHorizontalEnabled && Globals.isDebugEnabled(this._myParams.myEngine);
         simplifiedParams.myVerticalCheckDebugEnabled = this._myParams.myDebugVerticalEnabled && Globals.isDebugEnabled(this._myParams.myEngine);
 
-        let colliderSetup = CharacterColliderSetupUtils.createSimplified(simplifiedParams);
+        const colliderSetup = CharacterColliderSetupUtils.createSimplified(simplifiedParams);
 
-        this._myCollisionCheckParamsMovement = CollisionCheckBridge.convertCharacterColliderSetupToCollisionCheckParams(colliderSetup, this._myCollisionCheckParamsMovement, this._myParams.myEngine);
+        this._myCollisionCheckParamsMovement = CollisionCheckBridge.convertCharacterColliderSetupToCollisionCheckParams(colliderSetup, this._myCollisionCheckParamsMovement);
     }
 
-    _setupCollisionCheckParamsTeleport() {
+    private _setupCollisionCheckParamsTeleport(): void {
         CollisionCheckUtils.generate360TeleportParamsFromMovementParams(this._myCollisionCheckParamsMovement, this._myCollisionCheckParamsTeleport);
 
         // Increased so to let teleport on steep slopes from above (from below is fixed through detection myGroundAngleToIgnoreUpward)
@@ -775,76 +778,75 @@ export class PlayerLocomotion {
         //this._myCollisionCheckParamsTeleport.myDebugEnabled = true;
     }
 
-    _fixAlmostUp() {
+    private _fixAlmostUp(): void {
         // Get rotation on y and adjust if it's slightly tilted when it's almsot 0,1,0
 
-        let defaultUp = vec3_create(0, 1, 0);
-        let angleWithDefaultUp = Globals.getPlayerObjects(this._myParams.myEngine).myPlayer.pp_getUp().vec3_angle(defaultUp);
+        const defaultUp = vec3_create(0, 1, 0);
+        const angleWithDefaultUp = (Globals.getPlayerObjects(this._myParams.myEngine)!.myPlayer!.pp_getUp() as any).vec3_angle(defaultUp);
         if (angleWithDefaultUp < 1) {
-            let forward = Globals.getPlayerObjects(this._myParams.myEngine).myPlayer.pp_getForward();
-            let flatForward = forward.vec3_clone();
+            const forward = Globals.getPlayerObjects(this._myParams.myEngine)!.myPlayer!.pp_getForward();
+            const flatForward = (forward as any).vec3_clone();
             flatForward[1] = 0;
 
-            let defaultForward = vec3_create(0, 0, 1);
-            let angleWithDefaultForward = defaultForward.vec3_angleSigned(flatForward, defaultUp);
+            const defaultForward = vec3_create(0, 0, 1);
+            const angleWithDefaultForward = (defaultForward as any).vec3_angleSigned(flatForward, defaultUp);
 
-            Globals.getPlayerObjects(this._myParams.myEngine).myPlayer.pp_resetRotation();
-            Globals.getPlayerObjects(this._myParams.myEngine).myPlayer.pp_rotateAxis(angleWithDefaultForward, defaultUp);
+            Globals.getPlayerObjects(this._myParams.myEngine)!.myPlayer!.pp_resetRotation();
+            Globals.getPlayerObjects(this._myParams.myEngine)!.myPlayer!.pp_rotateAxis(angleWithDefaultForward, defaultUp);
         }
     }
 
-    _setupLocomotionMovementFSM() {
-        this._myLocomotionMovementFSM = new FSM();
+    private _setupLocomotionMovementFSM(): void {
         //this._myLocomotionMovementFSM.setLogEnabled(true, "Locomotion Movement");
 
         this._myLocomotionMovementFSM.addState("init");
-        this._myLocomotionMovementFSM.addState("smooth", (dt) => this._myPlayerLocomotionSmooth.update(dt));
-        this._myLocomotionMovementFSM.addState("teleport", (dt) => this._myPlayerLocomotionTeleport.update(dt));
+        this._myLocomotionMovementFSM.addState("smooth", (dt: number) => this._myPlayerLocomotionSmooth.update(dt));
+        this._myLocomotionMovementFSM.addState("teleport", (dt: number) => this._myPlayerLocomotionTeleport.update(dt));
         this._myLocomotionMovementFSM.addState("idleSmooth");
         this._myLocomotionMovementFSM.addState("idleTeleport");
 
-        this._myLocomotionMovementFSM.addTransition("init", "smooth", "startSmooth", function () {
+        this._myLocomotionMovementFSM.addTransition("init", "smooth", "startSmooth", function (this: PlayerLocomotion) {
             this._myPlayerLocomotionSmooth.start();
         }.bind(this));
 
-        this._myLocomotionMovementFSM.addTransition("init", "teleport", "startTeleport", function () {
+        this._myLocomotionMovementFSM.addTransition("init", "teleport", "startTeleport", function (this: PlayerLocomotion) {
             this._myPlayerLocomotionSmooth.start();
         }.bind(this));
 
-        this._myLocomotionMovementFSM.addTransition("smooth", "teleport", "next", function () {
+        this._myLocomotionMovementFSM.addTransition("smooth", "teleport", "next", function (this: PlayerLocomotion) {
             this._myPlayerLocomotionSmooth.stop();
             this._myPlayerLocomotionTeleport.start();
         }.bind(this));
 
-        this._myLocomotionMovementFSM.addTransition("teleport", "smooth", "next", function () {
+        this._myLocomotionMovementFSM.addTransition("teleport", "smooth", "next", function (this: PlayerLocomotion) {
             this._myPlayerLocomotionTeleport.stop();
             this._myPlayerLocomotionSmooth.start();
         }.bind(this));
 
-        this._myLocomotionMovementFSM.addTransition("smooth", "idleSmooth", "idle", function () {
+        this._myLocomotionMovementFSM.addTransition("smooth", "idleSmooth", "idle", function (this: PlayerLocomotion) {
             this._myPlayerLocomotionSmooth.stop();
         }.bind(this));
 
-        this._myLocomotionMovementFSM.addTransition("teleport", "idleTeleport", "idle", function () {
+        this._myLocomotionMovementFSM.addTransition("teleport", "idleTeleport", "idle", function (this: PlayerLocomotion) {
             this._myPlayerLocomotionTeleport.stop();
         }.bind(this));
 
-        this._myLocomotionMovementFSM.addTransition("idleSmooth", "smooth", "resume", function () {
+        this._myLocomotionMovementFSM.addTransition("idleSmooth", "smooth", "resume", function (this: PlayerLocomotion) {
             this._myPlayerLocomotionSmooth.start();
         }.bind(this));
 
-        this._myLocomotionMovementFSM.addTransition("idleTeleport", "teleport", "resume", function () {
+        this._myLocomotionMovementFSM.addTransition("idleTeleport", "teleport", "resume", function (this: PlayerLocomotion) {
             this._myPlayerLocomotionTeleport.start();
         }.bind(this));
 
         this._myLocomotionMovementFSM.init("init");
     }
 
-    _getMainHandGamepad() {
-        return Globals.getGamepads(this._myParams.myEngine)[this._myParams.myMainHand];
+    private _getMainHandGamepad(): Gamepad {
+        return Globals.getGamepads(this._myParams.myEngine)![this._myParams.myMainHand];
     }
 
-    destroy() {
+    public destroy(): void {
         this._myDestroyed = true;
 
         this._myPlayerHeadManager.destroy();
@@ -854,7 +856,7 @@ export class PlayerLocomotion {
         this._myPlayerLocomotionTeleport.destroy();
     }
 
-    isDestroyed() {
+    public isDestroyed(): boolean {
         return this._myDestroyed;
     }
 }
