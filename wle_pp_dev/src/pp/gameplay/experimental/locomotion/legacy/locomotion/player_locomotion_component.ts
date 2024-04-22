@@ -156,42 +156,102 @@ export class PlayerLocomotionComponent extends Component {
     private _myResetHeadToRealMinDistance!: number;
 
 
+    /** Valid means, for example, that the real player has not moved inside a wall by moving in the real space.
+        Works 100% properly only if it has the same value as `_myViewOcclusionInsideWallsEnabled` (both true or false)  */
+    @property.bool(true)
+    private _mySyncWithRealWorldPositionOnlyIfValid!: boolean;
 
-    static Properties = {
+    /** Works 100% properly only if it has the same value as `_mySyncWithRealWorldPositionOnlyIfValid` (both true or false)  */
+    @property.bool(true)
+    private _myViewOcclusionInsideWallsEnabled!: boolean;
 
-        // these 2 flags works 100% properly only if both true or false
-        _mySyncWithRealWorldPositionOnlyIfValid: Property.bool(true),   // valid means the real player has not moved inside walls
-        _myViewOcclusionInsideWallsEnabled: Property.bool(true),
 
-        _mySyncNonVRHeightWithVROnExitSession: Property.bool(false),
-        _mySyncNonVRVerticalAngleWithVROnExitSession: Property.bool(false),
+    @property.bool(false)
+    private _mySyncNonVRHeightWithVROnExitSession!: boolean;
 
-        _mySyncHeadWithRealAfterLocomotionUpdateIfNeeded: Property.bool(true),
+    @property.bool(false)
+    private _mySyncNonVRVerticalAngleWithVROnExitSession!: boolean;
 
-        _myColliderAccuracy: Property.enum(["Very Low", "Low", "Medium", "High", "Very High"], "High"),
-        _myColliderCheckOnlyFeet: Property.bool(false),
-        _myColliderSlideAlongWall: Property.bool(true),
-        _myColliderMaxWalkableGroundAngle: Property.float(30),
-        _myColliderSnapOnGround: Property.bool(true),
-        _myColliderMaxDistanceToSnapOnGround: Property.float(0.1),
-        _myColliderMaxWalkableGroundStepHeight: Property.float(0.1),
-        _myColliderPreventFallingFromEdges: Property.bool(false),
 
-        _myDebugFlyShortcutEnabled: Property.bool(false),               // main hand (default left) select + thumbstick press, auto switch to smooth
-        _myDebugFlyMaxSpeedMultiplier: Property.float(5),
-        _myMoveThroughCollisionShortcutEnabled: Property.bool(false),   // main hand (default left) thumbstick pressed while moving
-        _myMoveHeadShortcutEnabled: Property.bool(false),               // non main hand (default right) thumbstick pressed while moving
-        _myTripleSpeedShortcutEnabled: Property.bool(false),            // main hand (default left) select pressed while moving
+    @property.bool(true)
+    private _mySyncHeadWithRealAfterLocomotionUpdateIfNeeded!: boolean;
 
-        _myDebugHorizontalEnabled: Property.bool(false),
-        _myDebugVerticalEnabled: Property.bool(false),
 
-        _myCollisionCheckDisabled: Property.bool(false),
+    @property.enum(["Very Low", "Low", "Medium", "High", "Very High"], "High")
+    private _myColliderAccuracy!: number;
 
-        _myRaycastCountLogEnabled: Property.bool(false),
-        _myRaycastVisualDebugEnabled: Property.bool(false),
-        _myPerformanceLogEnabled: Property.bool(false)
-    };
+    @property.bool(false)
+    private _myColliderCheckOnlyFeet!: boolean;
+
+    @property.bool(true)
+    private _myColliderSlideAlongWall!: boolean;
+
+    @property.float(30)
+    private _myColliderMaxWalkableGroundAngle!: number;
+
+    @property.bool(true)
+    private _myColliderSnapOnGround!: boolean;
+
+    @property.float(0.1)
+    private _myColliderMaxDistanceToSnapOnGround!: number;
+
+    @property.float(0.1)
+    private _myColliderMaxWalkableGroundStepHeight!: number;
+
+    @property.bool(false)
+    private _myColliderPreventFallingFromEdges!: boolean;
+
+
+    /** Main hand (default: left) select + thumbstick press, auto switch to smooth */
+    @property.bool(false)
+    private _myDebugFlyShortcutEnabled!: boolean;
+
+    @property.float(5)
+    private _myDebugFlyMaxSpeedMultiplier!: number;
+
+    /** Main hand (default: left) thumbstick pressed while moving */
+    @property.bool(false)
+    private _myMoveThroughCollisionShortcutEnabled!: boolean;
+
+    /** Not main hand (default: right) thumbstick pressed while moving */
+    @property.bool(false)
+    private _myMoveHeadShortcutEnabled!: boolean;
+
+    /** Main hand (default: left) select pressed while moving */
+    @property.bool(false)
+    private _myTripleSpeedShortcutEnabled!: boolean;
+
+
+    @property.bool(false)
+    private _myDebugHorizontalEnabled!: boolean;
+
+    @property.bool(false)
+    private _myDebugVerticalEnabled!: boolean;
+
+
+    @property.bool(false)
+    private _myCollisionCheckDisabled!: boolean;
+
+
+    @property.bool(false)
+    private _myRaycastCountLogEnabled!: boolean;
+
+    @property.bool(false)
+    private _myRaycastVisualDebugEnabled!: boolean;
+
+    @property.bool(false)
+    private _myPerformanceLogEnabled!: boolean;
+
+
+    private _myPlayerLocomotion!: PlayerLocomotion;
+
+    private _myLocomotionStarted: boolean = false;
+    private _myResetReal: boolean = true;
+
+    private _myDebugPerformanceLogTimer: Timer = new Timer(0.5);
+    private _myDebugPerformanceLogTotalTime: number = 0;
+    private _myDebugPerformanceLogFrameCount: number = 0;
+
 
     public override start(): void {
         const params = new PlayerLocomotionParams(this.engine);
