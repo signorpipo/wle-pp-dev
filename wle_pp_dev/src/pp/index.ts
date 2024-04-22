@@ -158,7 +158,7 @@ export * from "./gameplay/experimental/locomotion/legacy/locomotion/player_locom
 export * from "./gameplay/experimental/locomotion/legacy/locomotion/player_locomotion_smooth.js";
 export * from "./gameplay/experimental/locomotion/legacy/locomotion/player_obscure_manager.js";
 export * from "./gameplay/experimental/locomotion/legacy/locomotion/player_locomotion.js";
-export * from "./gameplay/experimental/locomotion/legacy/locomotion/player_locomotion_component.js";
+export * from "./gameplay/experimental/locomotion/legacy/locomotion/components/player_locomotion_component.js";
 
 export * from "./gameplay/experimental/locomotion/legacy/locomotion/teleport/player_locomotion_teleport_parable.js";
 export * from "./gameplay/experimental/locomotion/legacy/locomotion/teleport/player_locomotion_teleport_state.js";

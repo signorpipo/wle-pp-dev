@@ -26,7 +26,7 @@ import {SFXOnCollisionComponent} from './playground/components/sfx_on_collision_
 import {SFXOnGrabThrowComponent} from './playground/components/sfx_on_grab_throw_component.js';
 import {TargetHitCheckComponent} from './playground/components/target_hit_check_component.js';
 import {WaveMovementComponent} from './playground/components/wave_movement_component.js';
-import {PlayerLocomotionComponent} from './pp/gameplay/experimental/locomotion/legacy/locomotion/player_locomotion_component.js';
+import {PlayerLocomotionComponent} from './pp/gameplay/experimental/locomotion/legacy/locomotion/components/player_locomotion_component.js';
 import {ConsoleVRToolComponent} from './pp/index.js';
 import {EasyTuneToolComponent} from './pp/index.js';
 import {GamepadMeshAnimatorComponent} from './pp/index.js';

@@ -1,12 +1,12 @@
 import { Component, Material, Object3D, Property } from "@wonderlandengine/api";
 import { property } from "@wonderlandengine/api/decorators.js";
-import { Timer } from "../../../../../cauldron/cauldron/timer.js";
-import { PhysicsLayerFlags } from "../../../../../cauldron/physics/physics_layer_flags.js";
-import { PhysicsUtils } from "../../../../../cauldron/physics/physics_utils.js";
-import { InputUtils } from "../../../../../input/cauldron/input_utils.js";
-import { BasePose } from "../../../../../input/pose/base_pose.js";
-import { Globals } from "../../../../../pp/globals.js";
-import { PlayerLocomotion, PlayerLocomotionParams } from "./player_locomotion.js";
+import { Timer } from "../../../../../../cauldron/cauldron/timer.js";
+import { PhysicsLayerFlags } from "../../../../../../cauldron/physics/physics_layer_flags.js";
+import { PhysicsUtils } from "../../../../../../cauldron/physics/physics_utils.js";
+import { InputUtils } from "../../../../../../input/cauldron/input_utils.js";
+import { BasePose } from "../../../../../../input/pose/base_pose.js";
+import { Globals } from "../../../../../../pp/globals.js";
+import { PlayerLocomotion, PlayerLocomotionParams } from "../player_locomotion.js";
 
 export class PlayerLocomotionComponent extends Component {
     public static override TypeName = "pp-player-locomotion";
@@ -340,13 +340,6 @@ export class PlayerLocomotionComponent extends Component {
         params.myPhysicsBlockLayerFlags.copy(this._getPhysicsBlockLayersFlags());
 
         this._myPlayerLocomotion = new PlayerLocomotion(params);
-
-        this._myLocomotionStarted = false;
-        this._myResetReal = true;
-
-        this._myDebugPerformanceLogTimer = new Timer(0.5);
-        this._myDebugPerformanceLogTotalTime = 0;
-        this._myDebugPerformanceLogFrameCount = 0;
 
         Globals.getHeadPose(this.engine)!.registerPostPoseUpdatedEventEventListener(this, this.onPostPoseUpdatedEvent.bind(this));
     }
