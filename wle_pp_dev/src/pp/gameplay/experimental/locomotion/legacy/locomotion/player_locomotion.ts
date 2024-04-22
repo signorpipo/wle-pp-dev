@@ -1,7 +1,7 @@
-import { Emitter, PhysXComponent } from "@wonderlandengine/api";
+import { Emitter, Material, Object3D, PhysXComponent, WonderlandEngine } from "@wonderlandengine/api";
 import { FSM } from "../../../../../cauldron/fsm/fsm.js";
 import { PhysicsLayerFlags } from "../../../../../cauldron/physics/physics_layer_flags.js";
-import { EasingFunction } from "../../../../../cauldron/utils/math_utils.js";
+import { EasingFunction, MathUtils } from "../../../../../cauldron/utils/math_utils.js";
 import { XRUtils } from "../../../../../cauldron/utils/xr_utils.js";
 import { Handedness } from "../../../../../input/cauldron/input_types.js";
 import { InputUtils } from "../../../../../input/cauldron/input_utils.js";
@@ -9,7 +9,7 @@ import { GamepadUtils } from "../../../../../input/gamepad/cauldron/gamepad_util
 import { GamepadButtonID } from "../../../../../input/gamepad/gamepad_buttons.js";
 import { vec3_create } from "../../../../../plugin/js/extensions/array/vec_create_extension.js";
 import { Globals } from "../../../../../pp/globals.js";
-import { CharacterColliderSetupSimplifiedCreationParams, CharacterColliderSetupUtils } from "../../../character_controller/collision/character_collider_setup_utils.js";
+import { CharacterColliderSetupSimplifiedCreationAccuracyLevel, CharacterColliderSetupSimplifiedCreationParams, CharacterColliderSetupUtils } from "../../../character_controller/collision/character_collider_setup_utils.js";
 import { CollisionCheckBridge } from "../../../character_controller/collision/collision_check_bridge.js";
 import { CollisionCheckUtils } from "../../../character_controller/collision/legacy/collision_check/collision_check_utils.js";
 import { CollisionCheckParams, CollisionRuntimeParams } from "../../../character_controller/collision/legacy/collision_check/collision_params.js";
@@ -22,143 +22,197 @@ import { PlayerTransformManager, PlayerTransformManagerParams, PlayerTransformMa
 import { PlayerLocomotionTeleport, PlayerLocomotionTeleportParams } from "./teleport/player_locomotion_teleport.js";
 import { PlayerLocomotionTeleportTeleportType } from "./teleport/player_locomotion_teleport_teleport_state.js";
 
-export let PlayerLocomotionDirectionReferenceType = {
-    HEAD: 0,
-    HAND: 1,
-    CUSTOM_OBJECT: 2,
-};
+export enum PlayerLocomotionDirectionReferenceType {
+    HEAD = 0,
+    HAND = 1,
+    CUSTOM_OBJECT = 2
+}
 
-export let PlayerLocomotionType = {
-    SMOOTH: 0,
-    TELEPORT: 1
-};
+export enum PlayerLocomotionType {
+    SMOOTH = 0,
+    TELEPORT = 1
+}
 
 export class PlayerLocomotionParams {
 
-    constructor(engine = Globals.getMainEngine()) {
-        this.myDefaultLocomotionType = PlayerLocomotionType.SMOOTH;
-        this.myAlwaysSmoothForNonVR = true;
-        this.mySwitchLocomotionTypeShortcutEnabled = true; // Double press main hand (default left) thumbstick to switch
+    public myDefaultLocomotionType: number = PlayerLocomotionType.SMOOTH;
+    public myAlwaysSmoothForNonVR: boolean = true;
 
-        this.myDefaultHeight = 0;
+    /** Double press main hand thumbstick (default: left) to switch */
+    public mySwitchLocomotionTypeShortcutEnabled: boolean = true;
 
-        this.myMaxSpeed = 0;
-        this.myMaxRotationSpeed = 0;
+    public myPhysicsBlockLayerFlags: PhysicsLayerFlags = new PhysicsLayerFlags();
 
-        this.myGravityAcceleration = 0;
-        this.myMaxGravitySpeed = 0;
 
-        this.myCharacterRadius = 0;
+    public myDefaultHeight: number = 0;
+    public myCharacterRadius: number = 0;
+    public myForeheadExtraHeight: number = 0;
 
-        this.mySpeedSlowDownPercentageOnWallSlid = 1;
 
-        this.myIsSnapTurn = false;
-        this.mySnapTurnOnlyVR = false;
-        this.mySnapTurnAngle = 0;
-        this.mySnapTurnSpeedDegrees = 0;
+    public myMaxSpeed: number = 0;
+    public myMaxRotationSpeed: number = 0;
+    public mySpeedSlowDownPercentageOnWallSlid: number = 1;
 
-        this.myFlyEnabled = false;
-        this.myStartFlying = false;
-        this.myFlyWithButtonsEnabled = false;
-        this.myFlyWithViewAngleEnabled = false;
-        this.myMinAngleToFlyUpNonVR = 0;
-        this.myMinAngleToFlyDownNonVR = 0;
-        this.myMinAngleToFlyUpVR = 0;
-        this.myMinAngleToFlyDownVR = 0;
-        this.myMinAngleToFlyRight = 0;
 
-        this.myMainHand = Handedness.LEFT;
+    public myGravityAcceleration: number = 0;
+    public myMaxGravitySpeed: number = 0;
 
-        this.myDirectionInvertForwardWhenUpsideDown = true;
-        this.myVRDirectionReferenceType = PlayerLocomotionDirectionReferenceType.HEAD;
-        this.myVRDirectionReferenceObject = null;
 
-        this.myForeheadExtraHeight = 0;
+    public myIsSnapTurn: boolean = false;
+    public mySnapTurnOnlyVR: boolean = false;
+    public mySnapTurnAngle: number = 0;
+    public mySnapTurnSpeedDegrees: number = 0;
 
-        this.myTeleportType = PlayerLocomotionTeleportTeleportType.INSTANT;
-        this.myTeleportMaxDistance = 0;
-        this.myTeleportMaxHeightDifference = 0;
-        this.myTeleportRotationOnUpEnabled = null;
-        this.myTeleportValidMaterial = null;
-        this.myTeleportInvalidMaterial = null;
-        this.myTeleportPositionObject = null;
-        this.myTeleportPositionObjectRotateWithHead = null;
-        this.myTeleportParableStartReferenceObject = null;
 
-        this.myResetRealOnStart = true;
+    public myFlyEnabled: boolean = false;
+    public myStartFlying: boolean = false;
+    public myFlyWithButtonsEnabled: boolean = false;
+    public myFlyWithViewAngleEnabled: boolean = false;
+    public myMinAngleToFlyUpNonVR: number = 0;
+    public myMinAngleToFlyDownNonVR: number = 0;
+    public myMinAngleToFlyUpVR: number = 0;
+    public myMinAngleToFlyDownVR: number = 0;
+    public myMinAngleToFlyRight: number = 0;
 
-        // #WARN With @myResetRealOnStartFramesAmount at 1 it can happen that you enter the session like 1 frame before the game load
-        // and the head pose might have not been properly initialized yet in the WebXR API, so the reset real will not happen has expected
-        // Since this is a sort of edge case (either u enter after the load, or you were already in for more than 2-3 frames), and that
-        // setting this to more than 1 can cause a visible (even if very short) stutter after the load (due to resetting the head multiple times),
-        // it's better to keep this value at 1
-        // A possible effect of the edge case is the view being obscured on start because it thinks you are colliding
-        //
-        // A value of 3 will make u sure that the head pose will be initialized and the reset real will happen as expected in any case
-        // For example, if u have a total fade at start and nothing can be seen aside the clear color for at least, let's say, 10 frames, 
-        // you can set this to 3 safely, since there will be no visible stutter to be seen (beside the clear color)
-        this.myResetRealOnStartFramesAmount = 1;
 
-        // Can fix some head through floor issues, when you can move your head completely to the other side of the floor
-        // If the floors are thick enough that this can't happen, you can leave this to false
-        this.myResetHeadToFeetInsteadOfReal = false;
-        this.myResetHeadToRealMinDistance = 0;
+    public myMainHand: Handedness = Handedness.LEFT;
+    public myDirectionInvertForwardWhenUpsideDown: boolean = true;
+    public myVRDirectionReferenceType: PlayerLocomotionDirectionReferenceType = PlayerLocomotionDirectionReferenceType.HEAD;
+    public myVRDirectionReferenceObject: Object3D | null = null;
 
-        // these 2 flags works 100% properly only if both true or false
-        this.mySyncWithRealWorldPositionOnlyIfValid = true;     // valid means the real player has not moved inside walls
-        this.myViewOcclusionInsideWallsEnabled = true;
 
-        this.mySyncNonVRHeightWithVROnExitSession = false;
-        this.mySyncNonVRVerticalAngleWithVROnExitSession = false;
+    public myTeleportType: number = PlayerLocomotionTeleportTeleportType.INSTANT;
+    public myTeleportMaxDistance: number = 0;
+    public myTeleportMaxHeightDifference: number = 0;
+    public myTeleportRotationOnUpEnabled: boolean = false;
+    public myTeleportValidMaterial: Material | null = null;
+    public myTeleportInvalidMaterial: Material | null = null;
+    public myTeleportPositionObject: Object3D | null = null;
+    public myTeleportPositionObjectRotateWithHead: boolean = false;
+    public myTeleportParableStartReferenceObject: Object3D | null = null;
 
-        this.mySyncHeadWithRealAfterLocomotionUpdateIfNeeded = false;
 
-        this.myColliderAccuracy = null;
-        this.myColliderCheckOnlyFeet = false;
-        this.myColliderSlideAlongWall = false;
-        this.myColliderMaxWalkableGroundAngle = 0;
-        this.myColliderSnapOnGround = false;
-        this.myColliderMaxDistanceToSnapOnGround = 0;
-        this.myColliderMaxWalkableGroundStepHeight = 0;
-        this.myColliderPreventFallingFromEdges = false;
+    public myResetRealOnStart: boolean = true;
 
-        this.myDebugFlyShortcutEnabled = false;             // main hand (default left) select + thumbstick press, auto switch to smooth
-        this.myDebugFlyMaxSpeedMultiplier = 5;
-        this.myMoveThroughCollisionShortcutEnabled = false; // main hand (default left) thumbstick pressed while moving
-        this.myMoveHeadShortcutEnabled = false;             // non main hand (default right) thumbstick pressed while moving
-        this.myTripleSpeedShortcutEnabled = false;          // main hand (default left) select pressed while moving
+    /**
+     * #WARN With `_myResetRealOnStartFramesAmount` at `1` it can happen that you enter the session like 1 frame before the game load
+     * and the head pose might have not been properly initialized yet in the WebXR API, so the reset real will not happen has expected  
+     * Since this is a sort of edge case (either u enter after the load, or you were already in for more than 2-3 frames), and that
+     * setting this to more than `1` can cause a visible (even if very short) stutter after the load (due to resetting the head multiple times),
+     * it's better to keep this value at `1`  
+     * A possible effect of the edge case is the view being obscured on start because it thinks you are colliding
+     * 
+     * A value of `3` will make u sure that the head pose will be initialized and the reset real will happen as expected in any case  
+     * For example, if u have a total fade at start and nothing can be seen aside the clear color for at least, let's say, 10 frames, 
+     * you can set this to `3` safely, since there will be no visible stutter to be seen (beside the clear color)
+     */
+    public myResetRealOnStartFramesAmount: number = 1;
 
-        this.myDebugHorizontalEnabled = false;
-        this.myDebugVerticalEnabled = false;
+    /** Can fix some head through floor issues, when you can move your head completely to the other side of the floor  
+        If the floors are thick enough that this can't happen, you can leave this to false  */
+    public myResetHeadToFeetInsteadOfReal: boolean = false;
 
-        this.myCollisionCheckDisabled = false;
+    public myResetHeadToRealMinDistance: number = 0;
 
-        this.myPhysicsBlockLayerFlags = new PhysicsLayerFlags();
 
+    /** Valid means, for example, that the real player has not moved inside a wall by moving in the real space.
+        Works 100% properly only if it has the same value as `_myViewOcclusionInsideWallsEnabled` (both true or false)  */
+    public mySyncWithRealWorldPositionOnlyIfValid: boolean = true;
+
+    /** Works 100% properly only if it has the same value as `_mySyncWithRealWorldPositionOnlyIfValid` (both true or false)  */
+    public myViewOcclusionInsideWallsEnabled: boolean = true;
+
+
+    public mySyncNonVRHeightWithVROnExitSession: boolean = false;
+    public mySyncNonVRVerticalAngleWithVROnExitSession: boolean = false;
+
+
+    public mySyncHeadWithRealAfterLocomotionUpdateIfNeeded: boolean = false;
+
+
+    public myColliderAccuracy: number = CharacterColliderSetupSimplifiedCreationAccuracyLevel.VERY_LOW;
+    public myColliderCheckOnlyFeet: boolean = false;
+    public myColliderSlideAlongWall: boolean = false;
+    public myColliderMaxWalkableGroundAngle: number = 0;
+    public myColliderSnapOnGround: boolean = false;
+    public myColliderMaxDistanceToSnapOnGround: number = 0;
+    public myColliderMaxWalkableGroundStepHeight: number = 0;
+    public myColliderPreventFallingFromEdges: boolean = false;
+
+
+    /** Main hand (default: left) select + thumbstick press, auto switch to smooth */
+    public myDebugFlyShortcutEnabled: boolean = false;
+
+    public myDebugFlyMaxSpeedMultiplier: number = 5;
+
+    /** Main hand (default: left) thumbstick pressed while moving */
+    public myMoveThroughCollisionShortcutEnabled: boolean = false;
+
+    /** Not main hand (default: right) thumbstick pressed while moving */
+    public myMoveHeadShortcutEnabled: boolean = false;
+
+    /** Main hand (default: left) select pressed while moving */
+    public myTripleSpeedShortcutEnabled: boolean = false;
+
+
+    public myDebugHorizontalEnabled: boolean = false;
+    public myDebugVerticalEnabled: boolean = false;
+
+    public myCollisionCheckDisabled: boolean = false;
+
+    public myEngine: WonderlandEngine;
+
+
+    constructor(engine: WonderlandEngine = Globals.getMainEngine()!) {
         this.myEngine = engine;
     }
 }
+
 
 // #TODO Add lerped snap on vertical over like half a second to avoid the "snap effect"
 // This could be done by detatching the actual vertical position of the player from the collision real one when a snap is detected above a certain threshold
 // with a timer, after which the vertical position is just copied, while during the detatching is lerped toward the collision vertical one
 export class PlayerLocomotion {
 
-    constructor(params) {
+    private _myParams: PlayerLocomotionParams;
+
+    private _myCollisionCheckParamsMovement: CollisionCheckParams = new CollisionCheckParams();
+    private _myCollisionCheckParamsTeleport: CollisionCheckParams = new CollisionCheckParams();
+
+    private _myCollisionRuntimeParams = new CollisionRuntimeParams();
+    private _myMovementRuntimeParams = new PlayerLocomotionMovementRuntimeParams();
+
+    private _myPlayerHeadManager: PlayerHeadManager;
+    private _myPlayerTransformManager: PlayerTransformManager;
+    private _myPlayerLocomotionRotate: PlayerLocomotionRotate;
+    private _myPlayerLocomotionSmooth: PlayerLocomotionSmooth;
+    private _myPlayerLocomotionTeleport: PlayerLocomotionTeleport;
+    private _myPlayerObscureManager: PlayerObscureManager;
+
+    private _mySwitchToTeleportOnEnterSession: boolean = false;
+
+    private _myActive: boolean = false;
+    private _myStarted: boolean = false;
+    private _myIdle: boolean = false;
+
+    private _myResetRealOnStartCounter: number = 0;
+
+    private _myPreUpdateEmitter: Emitter<[number, PlayerLocomotion]> = new Emitter();
+    private _myPostUpdateEmitter: Emitter<[number, PlayerLocomotion]> = new Emitter();
+
+    private _myDestroyed: boolean = false;
+
+    constructor(params: PlayerLocomotionParams) {
         this._myParams = params;
 
-        this._myCollisionCheckParamsMovement = new CollisionCheckParams();
         this._setupCollisionCheckParamsMovement();
-        this._myCollisionCheckParamsTeleport = null;
         this._setupCollisionCheckParamsTeleport();
 
-        this._myCollisionRuntimeParams = new CollisionRuntimeParams();
-        this._myMovementRuntimeParams = new PlayerLocomotionMovementRuntimeParams();
         this._myMovementRuntimeParams.myIsFlying = this._myParams.myStartFlying;
         this._myMovementRuntimeParams.myCollisionRuntimeParams = this._myCollisionRuntimeParams;
 
         {
-            let params = new PlayerHeadManagerParams(this._myParams.myEngine);
+            const params = new PlayerHeadManagerParams(this._myParams.myEngine);
 
             params.mySessionChangeResyncEnabled = true;
 
@@ -186,7 +240,7 @@ export class PlayerLocomotion {
         }
 
         {
-            let params = new PlayerTransformManagerParams(this._myParams.myEngine);
+            const params = new PlayerTransformManagerParams(this._myParams.myEngine);
 
             params.myPlayerHeadManager = this._myPlayerHeadManager;
 
@@ -198,12 +252,10 @@ export class PlayerLocomotion {
             params.myHeadCollisionBlockLayerFlags.copy(params.myMovementCollisionCheckParams.myHorizontalBlockLayerFlags);
             params.myHeadCollisionBlockLayerFlags.add(params.myMovementCollisionCheckParams.myVerticalBlockLayerFlags);
             params.myHeadCollisionObjectsToIgnore.pp_copy(params.myMovementCollisionCheckParams.myHorizontalObjectsToIgnore);
-            let objectsEqualCallback = (first, second) => first.pp_equals(second);
-            for (let objectToIgnore of params.myMovementCollisionCheckParams.myVerticalObjectsToIgnore) {
+            const objectsEqualCallback = (first: Object3D, second: Object3D): boolean => first.pp_equals(second);
+            for (const objectToIgnore of params.myMovementCollisionCheckParams.myVerticalObjectsToIgnore) {
                 params.myHeadCollisionObjectsToIgnore.pp_pushUnique(objectToIgnore, objectsEqualCallback);
             }
-
-            params.myCollisionRuntimeParams = this._myCollisionRuntimeParams;
 
             params.myHeadRadius = 0.2;
 
@@ -269,7 +321,7 @@ export class PlayerLocomotion {
         }
 
         {
-            let params = new PlayerLocomotionRotateParams(this._myParams.myEngine);
+            const params = new PlayerLocomotionRotateParams(this._myParams.myEngine);
 
             params.myPlayerHeadManager = this._myPlayerHeadManager;
             params.myPlayerTransformManager = this._myPlayerTransformManager;
@@ -279,7 +331,7 @@ export class PlayerLocomotion {
             params.mySnapTurnOnlyVR = this._myParams.mySnapTurnOnlyVR;
             params.mySnapTurnAngle = this._myParams.mySnapTurnAngle;
 
-            if (this._myParams.mySnapTurnSpeedDegrees > Math.PP_EPSILON) {
+            if (this._myParams.mySnapTurnSpeedDegrees > MathUtils.EPSILON) {
                 params.mySmoothSnapEnabled = true;
                 params.mySmoothSnapSpeedDegrees = this._myParams.mySnapTurnSpeedDegrees;
             } else {
@@ -293,14 +345,14 @@ export class PlayerLocomotion {
             params.myClampVerticalAngle = true;
             params.myMaxVerticalAngle = 89;
 
-            this._myPlayerLocomotionRotate = new PlayerLocomotionRotate(params);
+            params.myHandedness = InputUtils.getOppositeHandedness(this._myParams.myMainHand)!;
 
-            params.myHandedness = InputUtils.getOppositeHandedness(this._myParams.myMainHand);
+            this._myPlayerLocomotionRotate = new PlayerLocomotionRotate(params);
         }
 
         {
             {
-                let params = new PlayerLocomotionSmoothParams(this._myParams.myEngine);
+                const params = new PlayerLocomotionSmoothParams(this._myParams.myEngine);
 
                 params.myPlayerHeadManager = this._myPlayerHeadManager;
                 params.myPlayerTransformManager = this._myPlayerTransformManager;
@@ -339,7 +391,7 @@ export class PlayerLocomotion {
             }
 
             {
-                let params = new PlayerLocomotionTeleportParams(this._myParams.myEngine);
+                const params = new PlayerLocomotionTeleportParams(this._myParams.myEngine);
 
                 params.myPlayerHeadManager = this._myPlayerHeadManager;
                 params.myPlayerTransformManager = this._myPlayerTransformManager;
@@ -388,7 +440,7 @@ export class PlayerLocomotion {
             }
 
             {
-                let params = new PlayerObscureManagerParams(this._myParams.myEngine);
+                const params = new PlayerObscureManagerParams(this._myParams.myEngine);
 
                 params.myPlayerTransformManager = this._myPlayerTransformManager;
                 params.myPlayerLocomotionTeleport = this._myPlayerLocomotionTeleport;
@@ -422,22 +474,10 @@ export class PlayerLocomotion {
 
         this._setupLocomotionMovementFSM();
 
-        this._mySwitchToTeleportOnEnterSession = false;
-
-        this._myIdle = false;
-
-        this._myActive = true;
-        this._myStarted = false;
-
         this._myResetRealOnStartCounter = this._myParams.myResetRealOnStartFramesAmount;
-
-        this._myPreUpdateEmitter = new Emitter();     // Signature: callback(dt, playerLocomotion)
-        this._myPostUpdateEmitter = new Emitter();     // Signature: callback(dt, playerLocomotion)
-
-        this._myDestroyed = false;
     }
 
-    start() {
+    public start(): void {
         this._fixAlmostUp();
 
         this._myPlayerHeadManager.start();
@@ -691,7 +731,7 @@ export class PlayerLocomotion {
     }
 
     _setupCollisionCheckParamsTeleport() {
-        this._myCollisionCheckParamsTeleport = CollisionCheckUtils.generate360TeleportParamsFromMovementParams(this._myCollisionCheckParamsMovement);
+        CollisionCheckUtils.generate360TeleportParamsFromMovementParams(this._myCollisionCheckParamsMovement, this._myCollisionCheckParamsTeleport);
 
         // Increased so to let teleport on steep slopes from above (from below is fixed through detection myGroundAngleToIgnoreUpward)
         this._myCollisionCheckParamsTeleport.myGroundAngleToIgnore = 61;
@@ -702,14 +742,14 @@ export class PlayerLocomotion {
         this._myCollisionCheckParamsTeleport.myExtraTeleportCheckCallback = function (
             offsetTeleportPosition, endPosition, feetPosition, transformUp, transformForward, height,
             collisionCheckParams, prevCollisionRuntimeParams, collisionRuntimeParams, newFeetPosition
- 
+     
         ) {
             let isTeleportingUpward = endPosition.vec3_isFartherAlongAxis(feetPosition, transformUp);
             if (isTeleportingUpward) {
                 collisionRuntimeParams.myTeleportCanceled = collisionRuntimeParams.myGroundAngle > 30 + 0.0001;
                 console.error(collisionRuntimeParams.myTeleportCanceled);
             }
- 
+     
             return newFeetPosition;
         }*/
 

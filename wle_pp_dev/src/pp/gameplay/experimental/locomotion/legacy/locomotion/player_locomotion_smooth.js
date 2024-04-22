@@ -34,6 +34,7 @@ export class PlayerLocomotionSmoothParams {
         this.myGravityAcceleration = 0;
         this.myMaxGravitySpeed = 0;
 
+        this.myDirectionInvertForwardWhenUpsideDown = true;
         this.myVRDirectionReferenceType = PlayerLocomotionDirectionReferenceType.HEAD;
         this.myVRDirectionReferenceObject = null;
 

@@ -12,6 +12,7 @@ export class PlayerLocomotionComponent extends Component {
     public static override TypeName = "pp-player-locomotion";
 
 
+
     @property.enum(["Smooth", "Teleport"], "Smooth")
     private _myDefaultLocomotionType!: number;
 
@@ -25,11 +26,14 @@ export class PlayerLocomotionComponent extends Component {
     @property.string("0, 0, 0, 0, 0, 0, 0, 0")
     private _myPhysicsBlockLayerFlags!: string;
 
+
     @property.float(1.70)
     private _myDefaultHeight!: number;
 
     @property.float(0.3)
     private _myCharacterRadius!: number;
+
+
 
     @property.float(2)
     private _myMaxSpeed!: number;
@@ -37,14 +41,18 @@ export class PlayerLocomotionComponent extends Component {
     @property.float(100)
     private _myMaxRotationSpeed!: number;
 
+    @property.float(1)
+    private _mySpeedSlowDownPercentageOnWallSlid!: number;
+
+
+
     @property.float(-20)
     private _myGravityAcceleration!: number;
 
     @property.float(-15)
     private _myMaxGravitySpeed!: number;
 
-    @property.float(1)
-    private _mySpeedSlowDownPercentageOnWallSlid!: number;
+
 
     @property.bool(true)
     private _myIsSnapTurn!: boolean;
@@ -88,6 +96,7 @@ export class PlayerLocomotionComponent extends Component {
     private _myMinAngleToFlyRight!: number;
 
 
+
     @property.enum(["Left", "Right"], "Left")
     private _myMainHand!: number;
 
@@ -99,6 +108,7 @@ export class PlayerLocomotionComponent extends Component {
 
     @property.object()
     private _myVRDirectionReferenceObject!: Object3D;
+
 
 
     @property.enum(["Instant", "Blink", "Shift"], "Shift")
@@ -129,6 +139,7 @@ export class PlayerLocomotionComponent extends Component {
     private _myTeleportParableStartReferenceObject!: Object3D;
 
 
+
     @property.bool(true)
     private _myResetRealOnStart!: boolean;
 
@@ -156,6 +167,7 @@ export class PlayerLocomotionComponent extends Component {
     private _myResetHeadToRealMinDistance!: number;
 
 
+
     /** Valid means, for example, that the real player has not moved inside a wall by moving in the real space.
         Works 100% properly only if it has the same value as `_myViewOcclusionInsideWallsEnabled` (both true or false)  */
     @property.bool(true)
@@ -166,6 +178,7 @@ export class PlayerLocomotionComponent extends Component {
     private _myViewOcclusionInsideWallsEnabled!: boolean;
 
 
+
     @property.bool(false)
     private _mySyncNonVRHeightWithVROnExitSession!: boolean;
 
@@ -173,8 +186,10 @@ export class PlayerLocomotionComponent extends Component {
     private _mySyncNonVRVerticalAngleWithVROnExitSession!: boolean;
 
 
+
     @property.bool(true)
     private _mySyncHeadWithRealAfterLocomotionUpdateIfNeeded!: boolean;
+
 
 
     @property.enum(["Very Low", "Low", "Medium", "High", "Very High"], "High")
@@ -202,6 +217,7 @@ export class PlayerLocomotionComponent extends Component {
     private _myColliderPreventFallingFromEdges!: boolean;
 
 
+
     /** Main hand (default: left) select + thumbstick press, auto switch to smooth */
     @property.bool(false)
     private _myDebugFlyShortcutEnabled!: boolean;
@@ -222,6 +238,7 @@ export class PlayerLocomotionComponent extends Component {
     private _myTripleSpeedShortcutEnabled!: boolean;
 
 
+
     @property.bool(false)
     private _myDebugHorizontalEnabled!: boolean;
 
@@ -229,8 +246,10 @@ export class PlayerLocomotionComponent extends Component {
     private _myDebugVerticalEnabled!: boolean;
 
 
+
     @property.bool(false)
     private _myCollisionCheckDisabled!: boolean;
+
 
 
     @property.bool(false)
@@ -243,10 +262,10 @@ export class PlayerLocomotionComponent extends Component {
     private _myPerformanceLogEnabled!: boolean;
 
 
+
     private _myPlayerLocomotion!: PlayerLocomotion;
 
     private _myLocomotionStarted: boolean = false;
-    private _myResetReal: boolean = true;
 
     private _myDebugPerformanceLogTimer: Timer = new Timer(0.5);
     private _myDebugPerformanceLogTotalTime: number = 0;
