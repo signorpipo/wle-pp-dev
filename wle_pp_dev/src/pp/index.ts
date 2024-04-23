@@ -101,6 +101,7 @@ export * from "./cauldron/wl/getters/scene_objects.js";
 export * from "./cauldron/wl/getters/default_resources.js";
 export * from "./cauldron/wl/getters/components/get_scene_objects_component.js";
 export * from "./cauldron/wl/getters/components/get_default_resources_component.js";
+export * from "./cauldron/wl/type_definitions/material_type_definitions.js";
 
 //	DEBUG
 export * from "./debug/debug_manager.js";
