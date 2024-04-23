@@ -6,9 +6,9 @@ import { TimerState } from "../../pp/cauldron/fsm/states/timer_state.js";
 export class MovingPhysXTestComponent extends Component {
     static TypeName = "moving-physx-test";
     static Properties = {
-        _myPhysXType: Property.enum(['static', 'kinematic'], 'static'),
-        _myFrameType: Property.enum(['single_frame', 'multiple_frames'], 'single_frame'),
-        _myForceType: Property.enum(['force', 'linearVelocity'], 'force'),
+        _myPhysXType: Property.enum(["static", "kinematic"], "static"),
+        _myFrameType: Property.enum(["single_frame", "multiple_frames"], "single_frame"),
+        _myForceType: Property.enum(["force", "linearVelocity"], "force")
     };
 
     start() {

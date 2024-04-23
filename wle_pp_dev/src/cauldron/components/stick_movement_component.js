@@ -21,7 +21,7 @@ export class StickMovementComponent extends Component {
         _myMinAngleToFlyUpHand: Property.float(60),
         _myMinAngleToFlyDownHand: Property.float(1),
         _myMinAngleToFlyRight: Property.float(30),
-        _myDirectionReference: Property.enum(['head', 'hand left', 'hand right'], 'hand left')
+        _myDirectionReference: Property.enum(["head", "hand left", "hand right"], "hand left")
 
     };
 

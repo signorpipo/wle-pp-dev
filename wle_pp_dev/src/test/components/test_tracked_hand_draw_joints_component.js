@@ -7,7 +7,7 @@ import { HandPose } from "../../pp/input/pose/hand_pose.js";
 export class TestTrackedHandDrawJointsComponent extends Component {
     static TypeName = "test-tracked-hand-draw-joints";
     static Properties = {
-        _myHandedness: Property.enum(['left', 'right'], 'left'),
+        _myHandedness: Property.enum(["left", "right"], "left"),
         _myJointMesh: Property.mesh(),
         _myJointMaterial: Property.material()
     };

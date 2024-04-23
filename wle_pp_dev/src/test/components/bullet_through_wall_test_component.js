@@ -7,14 +7,14 @@ export class BulletThroughWallTestComponent extends Component {
     static TypeName = "bullet-through-wall-test";
     static Properties = {
         _myBulletSize: Property.float(0.1),
-        _myBulletShape: Property.enum(['box', 'sphere'], 'box'),
+        _myBulletShape: Property.enum(["box", "sphere"], "box"),
         _myBulletStartSpeed: Property.float(20),
         _myBulletSpeedMultiplier: Property.float(1.25),
         _myWallSize: Property.float(10.0),
         _myWallStartThickness: Property.float(0.1),
         _myWallThicknessMultiplier: Property.float(2),
         _myWallDistance: Property.float(20.0),
-        _myWallStatic: Property.bool(true),
+        _myWallStatic: Property.bool(true)
     };
 
     start() {
