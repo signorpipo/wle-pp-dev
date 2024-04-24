@@ -1,5 +1,4 @@
 import { Emitter, Material, Object3D, PhysXComponent, WonderlandEngine } from "@wonderlandengine/api";
-import { Gamepad } from "wle-pp/input/gamepad/gamepad.js";
 import { FSM } from "../../../../../cauldron/fsm/fsm.js";
 import { PhysicsLayerFlags } from "../../../../../cauldron/physics/physics_layer_flags.js";
 import { EasingFunction, MathUtils } from "../../../../../cauldron/utils/math_utils.js";
@@ -7,6 +6,7 @@ import { XRUtils } from "../../../../../cauldron/utils/xr_utils.js";
 import { Handedness } from "../../../../../input/cauldron/input_types.js";
 import { InputUtils } from "../../../../../input/cauldron/input_utils.js";
 import { GamepadUtils } from "../../../../../input/gamepad/cauldron/gamepad_utils.js";
+import { Gamepad } from "../../../../../input/gamepad/gamepad.js";
 import { GamepadButtonID } from "../../../../../input/gamepad/gamepad_buttons.js";
 import { vec3_create } from "../../../../../plugin/js/extensions/array/vec_create_extension.js";
 import { Globals } from "../../../../../pp/globals.js";

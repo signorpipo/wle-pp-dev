@@ -1,6 +1,6 @@
 import { Material, MeshComponent, Object3D, TextComponent } from "@wonderlandengine/api";
-import { Vector4 } from "wle-pp/cauldron/type_definitions/array_type_definitions.js";
 import { vec4_create } from "../../../plugin/js/extensions/array/vec_create_extension.js";
+import { Vector4 } from "../../type_definitions/array_type_definitions.js";
 import { FlatMaterial, PhongMaterial } from "../type_definitions/material_type_definitions.js";
 
 export const setAlpha = function () {
