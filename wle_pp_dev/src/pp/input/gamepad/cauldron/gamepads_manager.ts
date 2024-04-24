@@ -4,7 +4,7 @@ import { UniversalGamepad } from "../universal_gamepad.js";
 
 export class GamepadsManager {
 
-    private _myGamepads: Record<Handedness, Gamepad>;
+    private readonly _myGamepads: Record<Handedness, Gamepad>;
 
     private _myDestroyed: boolean = false;
 

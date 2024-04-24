@@ -14,134 +14,134 @@ export class PlayerLocomotionComponent extends Component {
 
 
     @property.enum(["Smooth", "Teleport"], "Smooth")
-    private _myDefaultLocomotionType!: number;
+    private readonly _myDefaultLocomotionType!: number;
 
     @property.bool(true)
-    private _myAlwaysSmoothForNonVR!: boolean;
+    private readonly _myAlwaysSmoothForNonVR!: boolean;
 
     /** Double press main hand thumbstick (default: left) to switch */
     @property.bool(true)
-    private _mySwitchLocomotionTypeShortcutEnabled!: boolean;
+    private readonly _mySwitchLocomotionTypeShortcutEnabled!: boolean;
 
     @property.string("0, 0, 0, 0, 0, 0, 0, 0")
-    private _myPhysicsBlockLayerFlags!: string;
+    private readonly _myPhysicsBlockLayerFlags!: string;
 
 
     @property.float(1.70)
-    private _myDefaultHeight!: number;
+    private readonly _myDefaultHeight!: number;
 
     @property.float(0.3)
-    private _myCharacterRadius!: number;
+    private readonly _myCharacterRadius!: number;
 
 
 
     @property.float(2)
-    private _myMaxSpeed!: number;
+    private readonly _myMaxSpeed!: number;
 
     @property.float(100)
-    private _myMaxRotationSpeed!: number;
+    private readonly _myMaxRotationSpeed!: number;
 
     @property.float(1)
-    private _mySpeedSlowDownPercentageOnWallSlid!: number;
+    private readonly _mySpeedSlowDownPercentageOnWallSlid!: number;
 
 
 
     @property.float(-20)
-    private _myGravityAcceleration!: number;
+    private readonly _myGravityAcceleration!: number;
 
     @property.float(-15)
-    private _myMaxGravitySpeed!: number;
+    private readonly _myMaxGravitySpeed!: number;
 
 
 
     @property.bool(true)
-    private _myIsSnapTurn!: boolean;
+    private readonly _myIsSnapTurn!: boolean;
 
     @property.bool(true)
-    private _mySnapTurnOnlyVR!: boolean;
+    private readonly _mySnapTurnOnlyVR!: boolean;
 
     @property.float(30)
-    private _mySnapTurnAngle!: number;
+    private readonly _mySnapTurnAngle!: number;
 
     @property.float(0)
-    private _mySnapTurnSpeedDegrees!: number;
+    private readonly _mySnapTurnSpeedDegrees!: number;
 
 
 
     @property.bool(false)
-    private _myFlyEnabled!: boolean;
+    private readonly _myFlyEnabled!: boolean;
 
     @property.bool(false)
-    private _myStartFlying!: boolean;
+    private readonly _myStartFlying!: boolean;
 
     @property.bool(true)
-    private _myFlyWithButtonsEnabled!: boolean;
+    private readonly _myFlyWithButtonsEnabled!: boolean;
 
     @property.bool(true)
-    private _myFlyWithViewAngleEnabled!: boolean;
+    private readonly _myFlyWithViewAngleEnabled!: boolean;
 
     @property.float(30)
-    private _myMinAngleToFlyUpNonVR!: number;
+    private readonly _myMinAngleToFlyUpNonVR!: number;
 
     @property.float(50)
-    private _myMinAngleToFlyDownNonVR!: number;
+    private readonly _myMinAngleToFlyDownNonVR!: number;
 
     @property.float(60)
-    private _myMinAngleToFlyUpVR!: number;
+    private readonly _myMinAngleToFlyUpVR!: number;
 
     @property.float(1)
-    private _myMinAngleToFlyDownVR!: number;
+    private readonly _myMinAngleToFlyDownVR!: number;
 
     @property.float(60)
-    private _myMinAngleToFlyRight!: number;
+    private readonly _myMinAngleToFlyRight!: number;
 
 
 
     @property.enum(["Left", "Right"], "Left")
-    private _myMainHand!: number;
+    private readonly _myMainHand!: number;
 
     @property.bool(true)
-    private _myDirectionInvertForwardWhenUpsideDown!: boolean;
+    private readonly _myDirectionInvertForwardWhenUpsideDown!: boolean;
 
     @property.enum(["Head", "Hand", "Custom Object"], "Head")
-    private _myVRDirectionReferenceType!: number;
+    private readonly _myVRDirectionReferenceType!: number;
 
     @property.object()
-    private _myVRDirectionReferenceObject!: Object3D;
+    private readonly _myVRDirectionReferenceObject!: Readonly<Object3D>;
 
 
 
     @property.enum(["Instant", "Blink", "Shift"], "Shift")
-    private _myTeleportType!: number;
+    private readonly _myTeleportType!: number;
 
     @property.float(3)
-    private _myTeleportMaxDistance!: number;
+    private readonly _myTeleportMaxDistance!: number;
 
     @property.float(1.25)
-    private _myTeleportMaxHeightDifference!: number;
+    private readonly _myTeleportMaxHeightDifference!: number;
 
     @property.bool(false)
-    private _myTeleportRotationOnUpEnabled!: boolean;
+    private readonly _myTeleportRotationOnUpEnabled!: boolean;
 
     @property.material()
-    private _myTeleportValidMaterial!: Material;
+    private readonly _myTeleportValidMaterial!: Readonly<Material>;
 
     @property.material()
-    private _myTeleportInvalidMaterial!: Material;
+    private readonly _myTeleportInvalidMaterial!: Readonly<Material>;
 
     @property.object()
-    private _myTeleportPositionObject!: Object3D;
+    private readonly _myTeleportPositionObject!: Readonly<Object3D>;
 
     @property.bool(true)
-    private _myTeleportPositionObjectRotateWithHead!: boolean;
+    private readonly _myTeleportPositionObjectRotateWithHead!: boolean;
 
     @property.object()
-    private _myTeleportParableStartReferenceObject!: Object3D;
+    private readonly _myTeleportParableStartReferenceObject!: Readonly<Object3D>;
 
 
 
     @property.bool(true)
-    private _myResetRealOnStart!: boolean;
+    private readonly _myResetRealOnStart!: boolean;
 
     /**
      * #WARN With `_myResetRealOnStartFramesAmount` at `1` it can happen that you enter the session like 1 frame before the game load
@@ -156,120 +156,121 @@ export class PlayerLocomotionComponent extends Component {
      * you can set this to `3` safely, since there will be no visible stutter to be seen (beside the clear color)
      */
     @property.int(1)
-    private _myResetRealOnStartFramesAmount!: number;
+    private readonly _myResetRealOnStartFramesAmount!: number;
 
     /** Can fix some head through floor issues, when you can move your head completely to the other side of the floor  
         If the floors are thick enough that this can't happen, you can leave this to false  */
     @property.bool(true)
-    private _myResetHeadToFeetInsteadOfReal!: boolean;
+    private readonly _myResetHeadToFeetInsteadOfReal!: boolean;
 
     @property.float(0.25)
-    private _myResetHeadToRealMinDistance!: number;
+    private readonly _myResetHeadToRealMinDistance!: number;
 
 
 
     /** Valid means, for example, that the real player has not moved inside a wall by moving in the real space.
         Works 100% properly only if it has the same value as `_myViewOcclusionInsideWallsEnabled` (both true or false)  */
     @property.bool(true)
-    private _mySyncWithRealWorldPositionOnlyIfValid!: boolean;
+    private readonly _mySyncWithRealWorldPositionOnlyIfValid!: boolean;
 
     /** Works 100% properly only if it has the same value as `_mySyncWithRealWorldPositionOnlyIfValid` (both true or false)  */
     @property.bool(true)
-    private _myViewOcclusionInsideWallsEnabled!: boolean;
+    private readonly _myViewOcclusionInsideWallsEnabled!: boolean;
 
 
 
     @property.bool(false)
-    private _mySyncNonVRHeightWithVROnExitSession!: boolean;
+    private readonly _mySyncNonVRHeightWithVROnExitSession!: boolean;
 
     @property.bool(false)
-    private _mySyncNonVRVerticalAngleWithVROnExitSession!: boolean;
+    private readonly _mySyncNonVRVerticalAngleWithVROnExitSession!: boolean;
 
 
 
     @property.bool(true)
-    private _mySyncHeadWithRealAfterLocomotionUpdateIfNeeded!: boolean;
+    private readonly _mySyncHeadWithRealAfterLocomotionUpdateIfNeeded!: boolean;
 
 
 
     @property.enum(["Very Low", "Low", "Medium", "High", "Very High"], "High")
-    private _myColliderAccuracy!: number;
+    private readonly _myColliderAccuracy!: number;
 
     @property.bool(false)
-    private _myColliderCheckOnlyFeet!: boolean;
+    private readonly _myColliderCheckOnlyFeet!: boolean;
 
     @property.bool(true)
-    private _myColliderSlideAlongWall!: boolean;
+    private readonly _myColliderSlideAlongWall!: boolean;
 
     @property.float(30)
-    private _myColliderMaxWalkableGroundAngle!: number;
+    private readonly _myColliderMaxWalkableGroundAngle!: number;
 
     @property.bool(true)
-    private _myColliderSnapOnGround!: boolean;
+    private readonly _myColliderSnapOnGround!: boolean;
 
     @property.float(0.1)
-    private _myColliderMaxDistanceToSnapOnGround!: number;
+    private readonly _myColliderMaxDistanceToSnapOnGround!: number;
 
     @property.float(0.1)
-    private _myColliderMaxWalkableGroundStepHeight!: number;
+    private readonly _myColliderMaxWalkableGroundStepHeight!: number;
 
     @property.bool(false)
-    private _myColliderPreventFallingFromEdges!: boolean;
+    private readonly _myColliderPreventFallingFromEdges!: boolean;
 
 
 
     /** Main hand (default: left) select + thumbstick press, auto switch to smooth */
     @property.bool(false)
-    private _myDebugFlyShortcutEnabled!: boolean;
+    private readonly _myDebugFlyShortcutEnabled!: boolean;
 
     @property.float(5)
-    private _myDebugFlyMaxSpeedMultiplier!: number;
+    private readonly _myDebugFlyMaxSpeedMultiplier!: number;
 
     /** Main hand (default: left) thumbstick pressed while moving */
     @property.bool(false)
-    private _myMoveThroughCollisionShortcutEnabled!: boolean;
+    private readonly _myMoveThroughCollisionShortcutEnabled!: boolean;
 
     /** Not main hand (default: right) thumbstick pressed while moving */
     @property.bool(false)
-    private _myMoveHeadShortcutEnabled!: boolean;
+    private readonly _myMoveHeadShortcutEnabled!: boolean;
 
     /** Main hand (default: left) select pressed while moving */
     @property.bool(false)
-    private _myTripleSpeedShortcutEnabled!: boolean;
+    private readonly _myTripleSpeedShortcutEnabled!: boolean;
 
 
 
     @property.bool(false)
-    private _myDebugHorizontalEnabled!: boolean;
+    private readonly _myDebugHorizontalEnabled!: boolean;
 
     @property.bool(false)
-    private _myDebugVerticalEnabled!: boolean;
-
-
-
-    @property.bool(false)
-    private _myCollisionCheckDisabled!: boolean;
+    private readonly _myDebugVerticalEnabled!: boolean;
 
 
 
     @property.bool(false)
-    private _myRaycastCountLogEnabled!: boolean;
+    private readonly _myCollisionCheckDisabled!: boolean;
+
+
 
     @property.bool(false)
-    private _myRaycastVisualDebugEnabled!: boolean;
+    private readonly _myRaycastCountLogEnabled!: boolean;
 
     @property.bool(false)
-    private _myPerformanceLogEnabled!: boolean;
+    private readonly _myRaycastVisualDebugEnabled!: boolean;
+
+    @property.bool(false)
+    private readonly _myPerformanceLogEnabled!: boolean;
 
 
 
-    private _myPlayerLocomotion!: PlayerLocomotion;
+    private readonly _myPlayerLocomotion!: PlayerLocomotion;
 
     private _myLocomotionStarted: boolean = false;
 
-    private _myDebugPerformanceLogTimer: Timer = new Timer(0.5);
+    private readonly _myDebugPerformanceLogTimer: Timer = new Timer(0.5);
     private _myDebugPerformanceLogTotalTime: number = 0;
     private _myDebugPerformanceLogFrameCount: number = 0;
+
 
 
     public override start(): void {
@@ -358,7 +359,7 @@ export class PlayerLocomotionComponent extends Component {
 
         params.myPhysicsBlockLayerFlags.copy(this._getPhysicsBlockLayersFlags());
 
-        this._myPlayerLocomotion = new PlayerLocomotion(params);
+        (this._myPlayerLocomotion as PlayerLocomotion) = new PlayerLocomotion(params);
 
         Globals.getHeadPose(this.engine)!.registerPostPoseUpdatedEventEventListener(this, this.onPostPoseUpdatedEvent.bind(this));
     }

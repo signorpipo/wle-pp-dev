@@ -42,7 +42,7 @@ export class PlayerLocomotionParams {
     /** Double press main hand thumbstick (default: left) to switch */
     public mySwitchLocomotionTypeShortcutEnabled: boolean = true;
 
-    public myPhysicsBlockLayerFlags: PhysicsLayerFlags = new PhysicsLayerFlags();
+    public myPhysicsBlockLayerFlags: Readonly<PhysicsLayerFlags> = new PhysicsLayerFlags();
 
 
     public myDefaultHeight: number = 0;
@@ -79,18 +79,18 @@ export class PlayerLocomotionParams {
     public myMainHand: Handedness = Handedness.LEFT;
     public myDirectionInvertForwardWhenUpsideDown: boolean = true;
     public myVRDirectionReferenceType: PlayerLocomotionDirectionReferenceType = PlayerLocomotionDirectionReferenceType.HEAD;
-    public myVRDirectionReferenceObject: Object3D | null = null;
+    public myVRDirectionReferenceObject: Readonly<Object3D> | null = null;
 
 
     public myTeleportType: number = PlayerLocomotionTeleportTeleportType.INSTANT;
     public myTeleportMaxDistance: number = 0;
     public myTeleportMaxHeightDifference: number = 0;
     public myTeleportRotationOnUpEnabled: boolean = false;
-    public myTeleportValidMaterial: Material | null = null;
-    public myTeleportInvalidMaterial: Material | null = null;
-    public myTeleportPositionObject: Object3D | null = null;
+    public myTeleportValidMaterial: Readonly<Material> | null = null;
+    public myTeleportInvalidMaterial: Readonly<Material> | null = null;
+    public myTeleportPositionObject: Readonly<Object3D> | null = null;
     public myTeleportPositionObjectRotateWithHead: boolean = false;
-    public myTeleportParableStartReferenceObject: Object3D | null = null;
+    public myTeleportParableStartReferenceObject: Readonly<Object3D> | null = null;
 
 
     public myResetRealOnStart: boolean = true;
@@ -161,10 +161,10 @@ export class PlayerLocomotionParams {
 
     public myCollisionCheckDisabled: boolean = false;
 
-    public myEngine: WonderlandEngine;
+    public myEngine: Readonly<WonderlandEngine>;
 
 
-    constructor(engine: WonderlandEngine = Globals.getMainEngine()!) {
+    constructor(engine: Readonly<WonderlandEngine> = Globals.getMainEngine()!) {
         this.myEngine = engine;
     }
 }
@@ -175,22 +175,22 @@ export class PlayerLocomotionParams {
 // with a timer, after which the vertical position is just copied, while during the detatching is lerped toward the collision vertical one
 export class PlayerLocomotion {
 
-    private _myParams: PlayerLocomotionParams;
+    private readonly _myParams: PlayerLocomotionParams;
 
-    private _myCollisionCheckParamsMovement: CollisionCheckParams = new CollisionCheckParams();
-    private _myCollisionCheckParamsTeleport: CollisionCheckParams = new CollisionCheckParams();
+    private readonly _myCollisionCheckParamsMovement: CollisionCheckParams = new CollisionCheckParams();
+    private readonly _myCollisionCheckParamsTeleport: CollisionCheckParams = new CollisionCheckParams();
 
-    private _myCollisionRuntimeParams = new CollisionRuntimeParams();
-    private _myMovementRuntimeParams = new PlayerLocomotionMovementRuntimeParams();
+    private readonly _myCollisionRuntimeParams = new CollisionRuntimeParams();
+    private readonly _myMovementRuntimeParams = new PlayerLocomotionMovementRuntimeParams();
 
-    private _myPlayerHeadManager: PlayerHeadManager;
-    private _myPlayerTransformManager: PlayerTransformManager;
-    private _myPlayerLocomotionRotate: PlayerLocomotionRotate;
-    private _myPlayerLocomotionSmooth: PlayerLocomotionSmooth;
-    private _myPlayerLocomotionTeleport: PlayerLocomotionTeleport;
-    private _myPlayerObscureManager: PlayerObscureManager;
+    private readonly _myPlayerHeadManager: PlayerHeadManager;
+    private readonly _myPlayerTransformManager: PlayerTransformManager;
+    private readonly _myPlayerLocomotionRotate: PlayerLocomotionRotate;
+    private readonly _myPlayerLocomotionSmooth: PlayerLocomotionSmooth;
+    private readonly _myPlayerLocomotionTeleport: PlayerLocomotionTeleport;
+    private readonly _myPlayerObscureManager: PlayerObscureManager;
 
-    private _myLocomotionMovementFSM = new FSM();
+    private readonly _myLocomotionMovementFSM: FSM = new FSM();
 
     private _mySwitchToTeleportOnEnterSession: boolean = false;
 
@@ -200,8 +200,8 @@ export class PlayerLocomotion {
 
     private _myResetRealOnStartCounter: number = 0;
 
-    private _myPreUpdateEmitter: Emitter<[number, PlayerLocomotion]> = new Emitter();
-    private _myPostUpdateEmitter: Emitter<[number, PlayerLocomotion]> = new Emitter();
+    private readonly _myPreUpdateEmitter: Emitter<[number, PlayerLocomotion]> = new Emitter();
+    private readonly _myPostUpdateEmitter: Emitter<[number, PlayerLocomotion]> = new Emitter();
 
     private _myDestroyed: boolean = false;
 
@@ -215,7 +215,7 @@ export class PlayerLocomotion {
         this._myMovementRuntimeParams.myCollisionRuntimeParams = this._myCollisionRuntimeParams;
 
         {
-            const params = new PlayerHeadManagerParams(this._myParams.myEngine);
+            const params = new PlayerHeadManagerParams(this._myParams.myEngine as any);
 
             params.mySessionChangeResyncEnabled = true;
 
@@ -243,7 +243,7 @@ export class PlayerLocomotion {
         }
 
         {
-            const params = new PlayerTransformManagerParams(this._myParams.myEngine);
+            const params = new PlayerTransformManagerParams(this._myParams.myEngine as any);
 
             params.myPlayerHeadManager = this._myPlayerHeadManager;
 
@@ -324,7 +324,7 @@ export class PlayerLocomotion {
         }
 
         {
-            const params = new PlayerLocomotionRotateParams(this._myParams.myEngine);
+            const params = new PlayerLocomotionRotateParams(this._myParams.myEngine as any);
 
             params.myPlayerHeadManager = this._myPlayerHeadManager;
             params.myPlayerTransformManager = this._myPlayerTransformManager;
@@ -355,12 +355,10 @@ export class PlayerLocomotion {
 
         {
             {
-                const params = new PlayerLocomotionSmoothParams(this._myParams.myEngine);
+                const params = new PlayerLocomotionSmoothParams(this._myParams.myEngine as any);
 
                 params.myPlayerHeadManager = this._myPlayerHeadManager;
                 params.myPlayerTransformManager = this._myPlayerTransformManager;
-
-                params.myCollisionCheckParams = this._myCollisionCheckParamsMovement;
 
                 params.myHandedness = this._myParams.myMainHand;
 
@@ -394,7 +392,7 @@ export class PlayerLocomotion {
             }
 
             {
-                const params = new PlayerLocomotionTeleportParams(this._myParams.myEngine);
+                const params = new PlayerLocomotionTeleportParams(this._myParams.myEngine as any);
 
                 params.myPlayerHeadManager = this._myPlayerHeadManager;
                 params.myPlayerTransformManager = this._myPlayerTransformManager;
@@ -443,7 +441,7 @@ export class PlayerLocomotion {
             }
 
             {
-                const params = new PlayerObscureManagerParams(this._myParams.myEngine);
+                const params = new PlayerObscureManagerParams(this._myParams.myEngine as any);
 
                 params.myPlayerTransformManager = this._myPlayerTransformManager;
                 params.myPlayerLocomotionTeleport = this._myPlayerLocomotionTeleport;
@@ -668,19 +666,19 @@ export class PlayerLocomotion {
         return this._myPlayerObscureManager;
     }
 
-    public registerPreUpdateCallback(id: any, callback: (dt: number, playerLocomotion: PlayerLocomotion) => void): void {
+    public registerPreUpdateCallback(id: Readonly<any>, callback: (dt: number, playerLocomotion: PlayerLocomotion) => void): void {
         this._myPreUpdateEmitter.add(callback, { id: id });
     }
 
-    public unregisterPreUpdateCallback(id: any): void {
+    public unregisterPreUpdateCallback(id: Readonly<any>): void {
         this._myPreUpdateEmitter.remove(id);
     }
 
-    public registerPostUpdateCallback(id: any, callback: (dt: number, playerLocomotion: PlayerLocomotion) => void): void {
+    public registerPostUpdateCallback(id: Readonly<any>, callback: (dt: number, playerLocomotion: PlayerLocomotion) => void): void {
         this._myPostUpdateEmitter.add(callback, { id: id });
     }
 
-    public unregisterPostUpdateCallback(id: any): void {
+    public unregisterPostUpdateCallback(id: Readonly<any>): void {
         this._myPostUpdateEmitter.remove(id);
     }
 
@@ -730,7 +728,7 @@ export class PlayerLocomotion {
 
         const colliderSetup = CharacterColliderSetupUtils.createSimplified(simplifiedParams);
 
-        this._myCollisionCheckParamsMovement = CollisionCheckBridge.convertCharacterColliderSetupToCollisionCheckParams(colliderSetup, this._myCollisionCheckParamsMovement);
+        CollisionCheckBridge.convertCharacterColliderSetupToCollisionCheckParams(colliderSetup, this._myCollisionCheckParamsMovement);
     }
 
     private _setupCollisionCheckParamsTeleport(): void {

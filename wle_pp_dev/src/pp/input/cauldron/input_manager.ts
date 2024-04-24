@@ -11,36 +11,36 @@ import { Mouse } from "./mouse.js";
 
 export class InputManager {
 
-    private _myMouse: Mouse;
-    private _myKeyboard: Keyboard;
+    private readonly _myMouse: Mouse;
+    private readonly _myKeyboard: Keyboard;
 
-    private _myHeadPose: HeadPose;
+    private readonly _myHeadPose: HeadPose;
 
-    private _myHandPoses: Record<Handedness, HandPose>;
+    private readonly _myHandPoses: Record<Handedness, HandPose>;
 
-    private _myTrackedHandPoses: Record<Handedness, TrackedHandPose>;
+    private readonly _myTrackedHandPoses: Record<Handedness, TrackedHandPose>;
 
-    private _myGamepadsManager: GamepadsManager = new GamepadsManager();
+    private readonly _myGamepadsManager: GamepadsManager = new GamepadsManager();
 
     private _myStarted: boolean = false;
 
     private _myTrackedHandPosesEnabled: boolean = true;
     private _myTrackedHandPosesStarted: boolean = false;
 
-    private _myPreUpdateEmitter: Emitter<[number, InputManager]> = new Emitter();
-    private _myPostUpdateEmitter: Emitter<[number, InputManager]> = new Emitter();
+    private readonly _myPreUpdateEmitter: Emitter<[number, InputManager]> = new Emitter();
+    private readonly _myPostUpdateEmitter: Emitter<[number, InputManager]> = new Emitter();
 
-    private _myEngine: WonderlandEngine;
+    private readonly _myEngine: Readonly<WonderlandEngine>;
 
     private _myDestroyed: boolean = false;
 
-    constructor(engine: WonderlandEngine = Globals.getMainEngine()!) {
+    constructor(engine: Readonly<WonderlandEngine> = Globals.getMainEngine()!) {
         this._myEngine = engine;
 
-        this._myMouse = new Mouse(this._myEngine);
-        this._myKeyboard = new Keyboard(this._myEngine);
+        this._myMouse = new Mouse(this._myEngine as any);
+        this._myKeyboard = new Keyboard(this._myEngine as any);
 
-        this._myHeadPose = new HeadPose(new BasePoseParams(this._myEngine));
+        this._myHeadPose = new HeadPose(new BasePoseParams(this._myEngine as any));
         this._myHeadPose.setReferenceObject(Globals.getPlayerObjects(this._myEngine)!.myReferenceSpace);
         this._myHeadPose.setForwardFixed(Globals.isPoseForwardFixed(this._myEngine));
 
@@ -54,8 +54,8 @@ export class InputManager {
         this._myHandPoses[Handedness.RIGHT].setForwardFixed(Globals.isPoseForwardFixed(this._myEngine));
 
         this._myTrackedHandPoses = {
-            [Handedness.LEFT]: new TrackedHandPose(Handedness.LEFT, new TrackedHandPoseParams(true, this._myEngine)),
-            [Handedness.RIGHT]: new TrackedHandPose(Handedness.RIGHT, new TrackedHandPoseParams(true, this._myEngine))
+            [Handedness.LEFT]: new TrackedHandPose(Handedness.LEFT, new TrackedHandPoseParams(true, this._myEngine as any)),
+            [Handedness.RIGHT]: new TrackedHandPose(Handedness.RIGHT, new TrackedHandPoseParams(true, this._myEngine as any))
         };
         this._myTrackedHandPoses[Handedness.LEFT].setReferenceObject(Globals.getPlayerObjects(this._myEngine)!.myReferenceSpace);
         this._myTrackedHandPoses[Handedness.RIGHT].setReferenceObject(Globals.getPlayerObjects(this._myEngine)!.myReferenceSpace);
