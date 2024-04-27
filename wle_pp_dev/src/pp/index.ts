@@ -124,8 +124,8 @@ export * from "./debug/debug_functions_overwriter/debug_functions_performance_an
 //	GAMEPLAY
 
 //    CAULDRON
-export * from "./gameplay/cauldron/cauldron/direction_2D_to_3D_converter.js";
-export * from "./gameplay/cauldron/cauldron/number_over_factor.js";
+export * from "./gameplay/cauldron/direction_2D_to_3D_converter.js";
+export * from "./gameplay/cauldron/number_over_factor.js";
 
 //    GRAB & THROW
 export * from "./gameplay/grab_throw/grabbable_component.js";

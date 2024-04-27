@@ -1,4 +1,4 @@
-import { EasingFunction } from "../../../cauldron/utils/math_utils.js";
+import { EasingFunction } from "../../cauldron/utils/math_utils.js";
 
 export type RoundingFunction = (numberToRound: number, fromNumber: number, toNumber: number) => number;
 

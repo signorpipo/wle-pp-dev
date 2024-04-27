@@ -3,7 +3,7 @@ import { Timer } from "../../pp/cauldron/cauldron/timer.js";
 import { PhysicsLayerFlags } from "../../pp/cauldron/physics/physics_layer_flags.js";
 import { XRUtils } from "../../pp/cauldron/utils/xr_utils.js";
 import { ComponentUtils } from "../../pp/cauldron/wl/utils/component_utils.js";
-import { Direction2DTo3DConverter, Direction2DTo3DConverterParams } from "../../pp/gameplay/cauldron/cauldron/direction_2D_to_3D_converter.js";
+import { Direction2DTo3DConverter, Direction2DTo3DConverterParams } from "../../pp/gameplay/cauldron/direction_2D_to_3D_converter.js";
 import { CollisionCheckBridge } from "../../pp/gameplay/experimental/character_controller/collision/collision_check_bridge.js";
 import { CollisionCheckParams, CollisionRuntimeParams } from "../../pp/gameplay/experimental/character_controller/collision/legacy/collision_check/collision_params.js";
 import { GamepadAxesID, GamepadButtonID } from "../../pp/input/gamepad/gamepad_buttons.js";
