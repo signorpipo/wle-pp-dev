@@ -3402,7 +3402,7 @@
         "scripting": {
             "sourcePaths": [
                 "src",
-                "src/pp/index.js",
+                "src/pp/index.ts",
                 "src/playground/components",
                 "src/cauldron/components",
                 "src/test/components"

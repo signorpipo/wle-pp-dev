@@ -11487,7 +11487,7 @@
         "scripting": {
             "sourcePaths": [
                 "src",
-                "src/pp/index.js",
+                "src/pp/index.ts",
                 "src/cauldron/components",
                 "src/test/components"
             ],
