@@ -87,7 +87,7 @@
                         "cursorObject": null,
                         "styleCursor": true,
                         "rayCastMode": "physx",
-                        "maxDistance": 1.0
+                        "maxDistance": 1.5
                     }
                 }
             ]
