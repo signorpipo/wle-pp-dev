@@ -76,6 +76,19 @@
                 },
                 {
                     "type": "mouse-look"
+                },
+                {
+                    "type": "cursor",
+                    "cursor": {
+                        "collisionGroup": 3,
+                        "cursorRayObject": null,
+                        "cursorRayScalingAxis": "none",
+                        "handedness": "none",
+                        "cursorObject": null,
+                        "styleCursor": true,
+                        "rayCastMode": "physx",
+                        "maxDistance": 1.0
+                    }
                 }
             ]
         },
@@ -222,7 +235,23 @@
         },
         "32423927-72cb-41bf-a0ab-7bba6e6eb1da": {
             "name": "Hands",
-            "parent": "5503f8af-6bfc-4d97-b2cc-3e4d8fd44d09"
+            "parent": "5503f8af-6bfc-4d97-b2cc-3e4d8fd44d09",
+            "rotation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "scaling": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "translation": [
+                0.0,
+                0.0,
+                0.0
+            ]
         },
         "f0cbb5f3-92cc-4f20-941c-2e7a438f166c": {
             "name": "Hand Left",
@@ -2437,10 +2466,51 @@
         "9393f21e-a533-43af-a1e1-3082d450d663": {
             "name": "Button",
             "parent": "f68ba5d1-6bb3-4f72-b630-a0f3254198ac",
+            "components": [
+                {
+                    "type": "pp-cursor-button"
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "groups": 8,
+                        "block": 0,
+                        "kinematic": true,
+                        "gravity": false,
+                        "trigger": true,
+                        "allowSimulation": false,
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                0.5,
+                                0.2,
+                                0.025
+                            ]
+                        }
+                    }
+                },
+                {
+                    "type": "pp-adjust-hierarchy-physx-scale"
+                },
+                {
+                    "type": "cursor-target"
+                }
+            ],
+            "rotation": [
+                -7.450580596923828e-8,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "scaling": [
+                1.0,
+                1.0,
+                1.0
+            ],
             "translation": [
                 0.0,
-                0.425,
-                0.0
+                0.4250001,
+                -0.0000031
             ]
         },
         "cf67092e-ed8b-4cac-9311-feec1395b8e6": {
@@ -2722,6 +2792,115 @@
                 0.075,
                 0.0249993,
                 0.025
+            ]
+        },
+        "0ec54f31-8d6e-466c-ad61-6b5d8fe48472": {
+            "name": "Cursor",
+            "parent": "f0cbb5f3-92cc-4f20-941c-2e7a438f166c",
+            "translation": [
+                -0.109961,
+                -0.0240263,
+                -0.0500779
+            ],
+            "rotation": [
+                2.279547572925367e-7,
+                0.9642675,
+                -0.2649303,
+                -3.5521475183486473e-7
+            ],
+            "scaling": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "8f116677-15c2-4d71-a7dc-90239c83ece8": {
+            "name": "Pivot",
+            "parent": "0ec54f31-8d6e-466c-ad61-6b5d8fe48472",
+            "translation": [
+                0.0,
+                0.0,
+                0.025
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "scaling": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "a996a68e-edfd-4e57-9c6e-0be385176804": {
+            "name": "Cursor Component",
+            "parent": "8f116677-15c2-4d71-a7dc-90239c83ece8",
+            "components": [
+                {
+                    "type": "cursor",
+                    "cursor": {
+                        "collisionGroup": 4,
+                        "cursorRayObject": null,
+                        "cursorRayScalingAxis": "none",
+                        "handedness": "left",
+                        "cursorObject": "97387186-889f-4768-81e0-fe144b612a2d",
+                        "styleCursor": false,
+                        "rayCastMode": "physx",
+                        "maxDistance": 1.0
+                    }
+                }
+            ],
+            "rotation": [
+                -0.7071068,
+                0.0,
+                0.0,
+                0.7071068
+            ]
+        },
+        "97387186-889f-4768-81e0-fe144b612a2d": {
+            "name": "Cursor Pointer",
+            "parent": "8f116677-15c2-4d71-a7dc-90239c83ece8",
+            "scaling": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ]
+        },
+        "64e23a69-8155-4b95-abd9-0cc9d7b1b753": {
+            "name": "Mesh",
+            "parent": "97387186-889f-4768-81e0-fe144b612a2d",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "90348bdc-8768-4244-9398-b89361708289"
+                    }
+                }
+            ],
+            "rotation": [
+                0.3535535,
+                0.3535534,
+                0.1464466,
+                0.8535533
+            ],
+            "translation": [
+                -0.0000467,
+                0.0000305,
+                0.0
+            ],
+            "scaling": [
+                0.0049999,
+                0.0049999,
+                0.0049999
             ]
         }
     },
@@ -3430,7 +3609,7 @@
                 "0": "Player",
                 "1": "Solid",
                 "2": "Interactable",
-                "3": "Group 3",
+                "3": "UI",
                 "4": "Group 4",
                 "5": "Group 5",
                 "6": "Group 6",

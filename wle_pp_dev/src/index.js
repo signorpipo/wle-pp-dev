@@ -12,6 +12,8 @@
  */
 
 /* wle:auto-imports:start */
+import {Cursor} from '@wonderlandengine/components';
+import {CursorTarget} from '@wonderlandengine/components';
 import {MouseLookComponent} from '@wonderlandengine/components';
 import {FadeViewComponent} from './playground/components/fade_view_component.js';
 import {FunComponent} from './playground/components/fun_component.js';
@@ -26,7 +28,9 @@ import {SFXOnCollisionComponent} from './playground/components/sfx_on_collision_
 import {SFXOnGrabThrowComponent} from './playground/components/sfx_on_grab_throw_component.js';
 import {TargetHitCheckComponent} from './playground/components/target_hit_check_component.js';
 import {WaveMovementComponent} from './playground/components/wave_movement_component.js';
+import {AdjustHierarchyPhysXScaleComponent} from './pp/index.js';
 import {ConsoleVRToolComponent} from './pp/index.js';
+import {CursorButtonComponent} from './pp/index.js';
 import {EasyTuneToolComponent} from './pp/index.js';
 import {GamepadMeshAnimatorComponent} from './pp/index.js';
 import {GrabbableComponent} from './pp/index.js';
@@ -98,6 +102,8 @@ if (document.readyState === 'loading') {
 }
 
 /* wle:auto-register:start */
+engine.registerComponent(Cursor);
+engine.registerComponent(CursorTarget);
 engine.registerComponent(MouseLookComponent);
 engine.registerComponent(FadeViewComponent);
 engine.registerComponent(FunComponent);
@@ -112,7 +118,9 @@ engine.registerComponent(SFXOnCollisionComponent);
 engine.registerComponent(SFXOnGrabThrowComponent);
 engine.registerComponent(TargetHitCheckComponent);
 engine.registerComponent(WaveMovementComponent);
+engine.registerComponent(AdjustHierarchyPhysXScaleComponent);
 engine.registerComponent(ConsoleVRToolComponent);
+engine.registerComponent(CursorButtonComponent);
 engine.registerComponent(EasyTuneToolComponent);
 engine.registerComponent(GamepadMeshAnimatorComponent);
 engine.registerComponent(GrabbableComponent);
