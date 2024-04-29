@@ -2039,9 +2039,9 @@
                 0.0
             ],
             "scaling": [
-                0.2000112,
                 0.2,
-                0.2000001
+                0.2,
+                0.2
             ],
             "translation": [
                 0.0,
@@ -2510,6 +2510,30 @@
                 0.0,
                 1.3999999,
                 0.0
+            ],
+            "components": [
+                {
+                    "type": "physx",
+                    "physx": {
+                        "groups": 8,
+                        "block": 0,
+                        "kinematic": true,
+                        "gravity": false,
+                        "trigger": true,
+                        "allowSimulation": false,
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                2.0,
+                                0.55,
+                                0.0099999
+                            ]
+                        }
+                    }
+                },
+                {
+                    "type": "pp-adjust-hierarchy-physx-scale"
+                }
             ]
         },
         "9393f21e-a533-43af-a1e1-3082d450d663": {
