@@ -1,16 +1,30 @@
-import { Component } from "@wonderlandengine/api";
+import { Component, Object3D } from "@wonderlandengine/api";
 import { property } from "@wonderlandengine/api/decorators.js";
-import { CursorTarget } from "@wonderlandengine/components";
+import { Cursor, CursorTarget } from "@wonderlandengine/components";
 import { Timer } from "wle-pp/cauldron/cauldron/timer.js";
 import { Vector3 } from "wle-pp/cauldron/type_definitions/array_type_definitions.js";
 import { EasingFunction, MathUtils } from "wle-pp/cauldron/utils/math_utils.js";
+import { InputUtils } from "wle-pp/input/cauldron/input_utils.js";
 import { vec3_create } from "wle-pp/plugin/js/extensions/array/vec_create_extension.js";
+import { Globals } from "wle-pp/pp/globals.js";
 
 export class CursorButtonComponent extends Component {
     public static override TypeName = "pp-cursor-button";
 
-    @property.bool(true)
-    private _myScaleOnInteract!: boolean;
+    @property.float(0.075)
+    private _myScaleOffsetOnHover!: number;
+
+    @property.float(-0.075)
+    private _myScaleOffsetOnDown!: number;
+
+    @property.float(0.1)
+    private _myPulseIntensityOnHover!: number;
+
+    @property.float(0)
+    private _myPulseIntensityOnDown!: number;
+
+    @property.float(0.1)
+    private _myPulseIntensityOnUp!: number;
 
     private readonly _myCursorTarget!: CursorTarget;
 
@@ -44,35 +58,56 @@ export class CursorButtonComponent extends Component {
         }
     }
 
-    private _onHover(): void {
-        if (this._myScaleOnInteract) {
+    private _onHover(objectHovered: Object3D, cursorComponent: Cursor): void {
+        if (this._myScaleOffsetOnHover != 0) {
             this._myScaleStartValue = this.object.pp_getScaleLocal()[0];
-            this._myScaleTargetValue = 1.075;
+            this._myScaleTargetValue = 1 + this._myScaleOffsetOnHover;
             this._myScaleDurationTimer.start();
+        }
+
+        if (this._myPulseIntensityOnHover != 0) {
+            const handedness = InputUtils.getHandednessByString(cursorComponent.handedness as string);
+            if (handedness != null) {
+                Globals.getGamepads()![handedness].pulse(this._myPulseIntensityOnHover, 0.085);
+            }
         }
     }
 
-    private _onUnhover(): void {
-        if (this._myScaleOnInteract) {
+    private _onUnhover(objectHovered: Object3D, cursorComponent: Cursor): void {
+        if (this._myScaleOffsetOnHover != 0 || this._myScaleOffsetOnDown != 0) {
             this._myScaleStartValue = this.object.pp_getScaleLocal()[0];
             this._myScaleTargetValue = 1;
             this._myScaleDurationTimer.start();
         }
     }
 
-    private _onDown(): void {
-        if (this._myScaleOnInteract) {
+    private _onDown(objectHovered: Object3D, cursorComponent: Cursor): void {
+        if (this._myScaleOffsetOnDown != 0) {
             this._myScaleStartValue = this.object.pp_getScaleLocal()[0];
-            this._myScaleTargetValue = 0.925;
+            this._myScaleTargetValue = 1 + this._myScaleOffsetOnDown;
             this._myScaleDurationTimer.start();
+        }
+
+        if (this._myPulseIntensityOnDown != 0) {
+            const handedness = InputUtils.getHandednessByString(cursorComponent.handedness as string);
+            if (handedness != null) {
+                Globals.getGamepads()![handedness].pulse(this._myPulseIntensityOnDown, 0.085);
+            }
         }
     }
 
-    private onUpWithDown(): void {
-        if (this._myScaleOnInteract) {
+    private onUpWithDown(objectHovered: Object3D, cursorComponent: Cursor): void {
+        if (this._myScaleOffsetOnHover != 0) {
             this._myScaleStartValue = this.object.pp_getScaleLocal()[0];
-            this._myScaleTargetValue = 1.075;
+            this._myScaleTargetValue = 1 + this._myScaleOffsetOnHover;
             this._myScaleDurationTimer.start();
+        }
+
+        if (this._myPulseIntensityOnUp != 0) {
+            const handedness = InputUtils.getHandednessByString(cursorComponent.handedness as string);
+            if (handedness != null) {
+                Globals.getGamepads()![handedness].pulse(this._myPulseIntensityOnUp, 0.085);
+            }
         }
     }
 
