@@ -53,8 +53,8 @@
             ],
             "translation": [
                 0.0,
-                0.0,
-                -8.0
+                1.1130816,
+                -0.3482559
             ]
         },
         "5503f8af-6bfc-4d97-b2cc-3e4d8fd44d09": {
@@ -85,7 +85,6 @@
                         "cursorRayScalingAxis": "none",
                         "handedness": "none",
                         "cursorObject": null,
-                        "styleCursor": true,
                         "rayCastMode": "physx",
                         "maxDistance": 1.5
                     }
@@ -235,23 +234,7 @@
         },
         "32423927-72cb-41bf-a0ab-7bba6e6eb1da": {
             "name": "Hands",
-            "parent": "5503f8af-6bfc-4d97-b2cc-3e4d8fd44d09",
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                1.0,
-                1.0,
-                1.0
-            ],
-            "translation": [
-                0.0,
-                0.0,
-                0.0
-            ]
+            "parent": "5503f8af-6bfc-4d97-b2cc-3e4d8fd44d09"
         },
         "f0cbb5f3-92cc-4f20-941c-2e7a438f166c": {
             "name": "Hand Left",
@@ -260,6 +243,17 @@
                 {
                     "type": "pp-set-hand-local-transform"
                 }
+            ],
+            "translation": [
+                -0.1,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                1.0,
+                0.0,
+                0.0
             ]
         },
         "21e6e4ba-b097-4abb-97b4-a7d82fb86986": {
@@ -312,6 +306,17 @@
                         "_myHandedness": "Left"
                     }
                 }
+            ],
+            "translation": [
+                -0.1,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                1.0,
+                0.0,
+                0.0
             ]
         },
         "00bc279b-2a05-400e-8c6f-738f7627c931": {
@@ -325,6 +330,17 @@
                         "_myJointMaterial": "6c7363ad-f7ee-465b-9031-541e40292fff"
                     }
                 }
+            ],
+            "translation": [
+                -0.1,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                1.0,
+                0.0,
+                0.0
             ]
         },
         "ead4fe79-25ef-49b0-8feb-c0487bc6378f": {
@@ -372,6 +388,17 @@
                         "_myHandedness": "Right"
                     }
                 }
+            ],
+            "translation": [
+                0.1,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                1.0,
+                0.0,
+                0.0
             ]
         },
         "836077c0-3e6f-447e-ba52-d9e52b9cd182": {
@@ -386,6 +413,17 @@
                         "_myHandedness": "Right"
                     }
                 }
+            ],
+            "translation": [
+                0.1,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                1.0,
+                0.0,
+                0.0
             ]
         },
         "16decf90-6c33-450d-bd58-e1ba25943627": {
@@ -404,6 +442,17 @@
                         "_myHandedness": "Right"
                     }
                 }
+            ],
+            "translation": [
+                0.1,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                1.0,
+                0.0,
+                0.0
             ]
         },
         "cdac6dc4-9811-44ff-af5d-b1048e3055c0": {
@@ -1381,16 +1430,11 @@
         "d299a8fa-0a3b-424f-9932-0bb22d4a1b8c": {
             "name": "Grabber",
             "parent": "f0cbb5f3-92cc-4f20-941c-2e7a438f166c",
-            "translation": [
-                0.0,
-                -0.0367964,
-                0.0715703
-            ],
             "rotation": [
-                0.2649303,
+                0.258819,
                 0.0,
                 0.0,
-                0.9642675
+                0.9659258
             ],
             "components": [
                 {
@@ -1413,21 +1457,21 @@
                         "_myMaxNumberOfObjects": 9999
                     }
                 }
+            ],
+            "translation": [
+                0.009961,
+                -0.0367996,
+                0.0715687
             ]
         },
         "afe97702-6055-4861-b4ce-9a75e0bac39a": {
             "name": "Grabber",
             "parent": "f51fe37d-3aea-4317-af6b-e76b64a41b54",
-            "translation": [
-                0.0,
-                -0.0367964,
-                0.0715704
-            ],
             "rotation": [
-                0.2649303,
+                0.258819,
                 0.0,
                 0.0,
-                0.9642675
+                0.9659258
             ],
             "components": [
                 {
@@ -1451,6 +1495,11 @@
                         "_myHandedness": "Right"
                     }
                 }
+            ],
+            "translation": [
+                -0.009961,
+                -0.0365258,
+                0.0717282
             ]
         },
         "77886081-ef34-42db-a661-373faee1eef3": {
@@ -2484,7 +2533,7 @@
                             "extents": [
                                 0.5,
                                 0.2,
-                                0.025
+                                0.0099999
                             ]
                         }
                     }
@@ -2496,21 +2545,10 @@
                     "type": "cursor-target"
                 }
             ],
-            "rotation": [
-                -7.450580596923828e-8,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                1.0,
-                1.0,
-                1.0
-            ],
             "translation": [
                 0.0,
                 0.4250001,
-                -0.0000031
+                0.0
             ]
         },
         "cf67092e-ed8b-4cac-9311-feec1395b8e6": {
@@ -2797,21 +2835,16 @@
         "0ec54f31-8d6e-466c-ad61-6b5d8fe48472": {
             "name": "Cursor",
             "parent": "f0cbb5f3-92cc-4f20-941c-2e7a438f166c",
-            "translation": [
-                -0.109961,
-                -0.0240263,
-                -0.0500779
-            ],
             "rotation": [
-                2.279547572925367e-7,
-                0.9642675,
-                -0.2649303,
-                -3.5521475183486473e-7
+                0.258819,
+                0.0,
+                0.0,
+                0.9659258
             ],
-            "scaling": [
-                1.0,
-                1.0,
-                1.0
+            "translation": [
+                0.009961,
+                -0.0240265,
+                0.0500781
             ]
         },
         "8f116677-15c2-4d71-a7dc-90239c83ece8": {
@@ -2821,17 +2854,6 @@
                 0.0,
                 0.0,
                 0.025
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                1.0,
-                1.0,
-                1.0
             ]
         },
         "a996a68e-edfd-4e57-9c6e-0be385176804": {
@@ -2841,7 +2863,7 @@
                 {
                     "type": "cursor",
                     "cursor": {
-                        "collisionGroup": 4,
+                        "collisionGroup": 3,
                         "cursorRayObject": null,
                         "cursorRayScalingAxis": "none",
                         "handedness": "left",
@@ -2851,28 +2873,11 @@
                         "maxDistance": 1.0
                     }
                 }
-            ],
-            "rotation": [
-                -0.7071068,
-                0.0,
-                0.0,
-                0.7071068
             ]
         },
         "97387186-889f-4768-81e0-fe144b612a2d": {
             "name": "Cursor Pointer",
-            "parent": "8f116677-15c2-4d71-a7dc-90239c83ece8",
-            "scaling": [
-                1.0,
-                1.0,
-                1.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ]
+            "parent": "8f116677-15c2-4d71-a7dc-90239c83ece8"
         },
         "64e23a69-8155-4b95-abd9-0cc9d7b1b753": {
             "name": "Mesh",
@@ -2881,26 +2886,80 @@
                 {
                     "type": "mesh",
                     "mesh": {
-                        "mesh": "p1",
+                        "mesh": "p2",
                         "material": "90348bdc-8768-4244-9398-b89361708289"
                     }
                 }
             ],
-            "rotation": [
-                0.3535535,
-                0.3535534,
-                0.1464466,
-                0.8535533
-            ],
+            "scaling": [
+                0.0074999,
+                0.007,
+                0.007
+            ]
+        },
+        "b99ae9d4-2bdb-45ff-8ec9-bd933e26ef99": {
+            "name": "Cursor",
+            "parent": "f51fe37d-3aea-4317-af6b-e76b64a41b54",
             "translation": [
-                -0.0000467,
-                0.0000305,
-                0.0
+                -0.009961,
+                -0.0240257,
+                0.0500776
+            ],
+            "rotation": [
+                0.258819,
+                0.0,
+                0.0,
+                0.9659258
+            ]
+        },
+        "fb19b61a-e8c6-4c8c-b084-55caf6d216b7": {
+            "name": "Pivot",
+            "parent": "b99ae9d4-2bdb-45ff-8ec9-bd933e26ef99",
+            "translation": [
+                0.0,
+                0.0,
+                0.025
+            ]
+        },
+        "ed5bfd91-1d04-46e4-b3f9-d148282993c4": {
+            "name": "Cursor Pointer",
+            "parent": "fb19b61a-e8c6-4c8c-b084-55caf6d216b7"
+        },
+        "001b6842-6e26-4180-9942-a286b38aaea1": {
+            "name": "Mesh",
+            "parent": "ed5bfd91-1d04-46e4-b3f9-d148282993c4",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p2",
+                        "material": "90348bdc-8768-4244-9398-b89361708289"
+                    }
+                }
             ],
             "scaling": [
-                0.0049999,
-                0.0049999,
-                0.0049999
+                0.0074999,
+                0.007,
+                0.007
+            ]
+        },
+        "b46bf737-7c47-4c50-8070-2b1ce50e7a39": {
+            "name": "Cursor Component",
+            "parent": "fb19b61a-e8c6-4c8c-b084-55caf6d216b7",
+            "components": [
+                {
+                    "type": "cursor",
+                    "cursor": {
+                        "collisionGroup": 3,
+                        "cursorRayObject": null,
+                        "cursorRayScalingAxis": "none",
+                        "handedness": "right",
+                        "cursorObject": "ed5bfd91-1d04-46e4-b3f9-d148282993c4",
+                        "styleCursor": false,
+                        "rayCastMode": "physx",
+                        "maxDistance": 1.0
+                    }
+                }
             ]
         }
     },
