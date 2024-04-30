@@ -2541,7 +2541,12 @@
             "parent": "f68ba5d1-6bb3-4f72-b630-a0f3254198ac",
             "components": [
                 {
-                    "type": "pp-cursor-button"
+                    "type": "pp-cursor-button",
+                    "pp-cursor-button": {
+                        "_mySFXOnUp": "assets\\audio\\sfx\\playground\\grab.mp3",
+                        "_mySFXOnDown": "assets\\audio\\sfx\\playground\\throw.mp3",
+                        "_myColorBrigthnessOffsetOnHover": 0.0
+                    }
                 },
                 {
                     "type": "physx",

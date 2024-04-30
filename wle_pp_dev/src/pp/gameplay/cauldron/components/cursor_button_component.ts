@@ -1,6 +1,8 @@
 import { Component, MeshComponent, Object3D, TextComponent } from "@wonderlandengine/api";
 import { property } from "@wonderlandengine/api/decorators.js";
 import { Cursor, CursorTarget } from "@wonderlandengine/components";
+import { AudioPlayer } from "wle-pp/audio/audio_player.js";
+import { AudioSetup } from "wle-pp/audio/audio_setup.js";
 import { Timer } from "wle-pp/cauldron/cauldron/timer.js";
 import { Vector3, Vector4 } from "wle-pp/cauldron/type_definitions/array_type_definitions.js";
 import { ColorUtils } from "wle-pp/cauldron/utils/color_utils.js";
@@ -28,11 +30,31 @@ export class CursorButtonComponent extends Component {
     @property.float(0.1)
     private _myPulseIntensityOnUp!: number;
 
+    @property.float(0)
+    private _myPulseIntensityOnUnhover!: number;
+
     @property.float(-0.1)
     private _myColorBrigthnessOffsetOnHover!: number;
 
     @property.float(0)
     private _myColorBrigthnessOffsetOnDown!: number;
+
+    @property.bool(true)
+    private _myUseSpatialAudio!: boolean;
+
+    @property.string("")
+    private _mySFXOnHover!: string;
+
+    @property.string("")
+    private _mySFXOnDown!: string;
+
+    @property.string("")
+    private _mySFXOnUp!: string;
+
+    @property.string("")
+    private _mySFXOnUnhover!: string;
+
+    private readonly _myCursorButtonComponentID: string = "cursor_button_component" + MathUtils.randomUUID();
 
     private readonly _myCursorTarget!: CursorTarget;
 
@@ -49,13 +71,18 @@ export class CursorButtonComponent extends Component {
     private _myFlatMaterialOriginalColors: [FlatMaterial, Vector4][] = [];
     private _myPhongMaterialOriginalColors: [PhongMaterial, Vector4][] = [];
 
+    private _myOnHoverAudioPlayer: AudioPlayer | null = null;
+    private _myOnDownAudioPlayer: AudioPlayer | null = null;
+    private _myOnUpAudioPlayer: AudioPlayer | null = null;
+    private _myOnUnhoverAudioPlayer: AudioPlayer | null = null;
+
     public override start(): void {
         (this._myCursorTarget as CursorTarget) = this.object.pp_getComponent(CursorTarget)!;
 
         this._myCursorTarget.onHover.add(this._onHover.bind(this));
-        this._myCursorTarget.onUnhover.add(this._onUnhover.bind(this));
         this._myCursorTarget.onDown.add(this._onDown.bind(this));
         this._myCursorTarget.onUpWithDown.add(this.onUpWithDown.bind(this));
+        this._myCursorTarget.onUnhover.add(this._onUnhover.bind(this));
 
         this.object.pp_getScaleLocal(this._myOriginalScaleLocal);
 
@@ -82,6 +109,47 @@ export class CursorButtonComponent extends Component {
             if (flatMaterial.color != null) {
                 this._myFlatMaterialOriginalColors.push([flatMaterial, flatMaterial.color.vec4_clone()]);
             }
+        }
+
+        const audioManager = Globals.getAudioManager(this.engine);
+        if (this._mySFXOnHover.length > 0) {
+            const audioSetup = new AudioSetup(this._mySFXOnHover);
+            audioSetup.mySpatial = this._myUseSpatialAudio;
+
+            const audioID = this._myCursorButtonComponentID + "_on_hover";
+            audioManager.addAudioSetup(audioID, audioSetup);
+
+            this._myOnHoverAudioPlayer = audioManager.createAudioPlayer(audioID);
+        }
+
+        if (this._mySFXOnDown.length > 0) {
+            const audioSetup = new AudioSetup(this._mySFXOnDown);
+            audioSetup.mySpatial = this._myUseSpatialAudio;
+
+            const audioID = this._myCursorButtonComponentID + "_on_down";
+            audioManager.addAudioSetup(audioID, audioSetup);
+
+            this._myOnDownAudioPlayer = audioManager.createAudioPlayer(audioID);
+        }
+
+        if (this._mySFXOnUp.length > 0) {
+            const audioSetup = new AudioSetup(this._mySFXOnUp);
+            audioSetup.mySpatial = this._myUseSpatialAudio;
+
+            const audioID = this._myCursorButtonComponentID + "_on_up";
+            audioManager.addAudioSetup(audioID, audioSetup);
+
+            this._myOnUpAudioPlayer = audioManager.createAudioPlayer(audioID);
+        }
+
+        if (this._mySFXOnUnhover.length > 0) {
+            const audioSetup = new AudioSetup(this._mySFXOnUnhover);
+            audioSetup.mySpatial = this._myUseSpatialAudio;
+
+            const audioID = this._myCursorButtonComponentID + "_on_unhover";
+            audioManager.addAudioSetup(audioID, audioSetup);
+
+            this._myOnUnhoverAudioPlayer = audioManager.createAudioPlayer(audioID);
         }
     }
 
@@ -141,20 +209,10 @@ export class CursorButtonComponent extends Component {
             this._myColorBrightnessOffsetTargetValue = this._myColorBrigthnessOffsetOnHover;
             this._myColorBrightnessChangeTimer.start();
         }
-    }
 
-    private _onUnhover(objectHovered: Object3D, cursorComponent: Cursor): void {
-        if (this._myScaleOffsetOnHover != 0 || this._myScaleOffsetOnDown != 0) {
-            this._myScaleStartValue = this.object.pp_getScaleLocal()[0];
-            this._myScaleTargetValue = 1;
-            this._myScaleChangeTimer.start();
-        }
-
-
-        if (this._myColorBrigthnessOffsetOnHover != 0 || this._myColorBrigthnessOffsetOnDown != 0) {
-            this._myColorBrightnessOffsetStartValue = this._myColorBrightnessOffsetCurrentValue;
-            this._myColorBrightnessOffsetTargetValue = 0;
-            this._myColorBrightnessChangeTimer.start();
+        if (this._myOnHoverAudioPlayer != null) {
+            this._myOnHoverAudioPlayer.setPosition(this.object.pp_getPosition());
+            this._myOnHoverAudioPlayer.play();
         }
     }
 
@@ -177,6 +235,11 @@ export class CursorButtonComponent extends Component {
             this._myColorBrightnessOffsetTargetValue = this._myColorBrigthnessOffsetOnDown;
             this._myColorBrightnessChangeTimer.start();
         }
+
+        if (this._myOnDownAudioPlayer != null) {
+            this._myOnDownAudioPlayer.setPosition(this.object.pp_getPosition());
+            this._myOnDownAudioPlayer.play();
+        }
     }
 
     private onUpWithDown(objectHovered: Object3D, cursorComponent: Cursor): void {
@@ -198,6 +261,36 @@ export class CursorButtonComponent extends Component {
             this._myColorBrightnessOffsetTargetValue = this._myColorBrigthnessOffsetOnHover;
             this._myColorBrightnessChangeTimer.start();
         }
+
+        if (this._myOnUpAudioPlayer != null) {
+            this._myOnUpAudioPlayer.setPosition(this.object.pp_getPosition());
+            this._myOnUpAudioPlayer.play();
+        }
     }
 
+    private _onUnhover(objectHovered: Object3D, cursorComponent: Cursor): void {
+        if (this._myScaleOffsetOnHover != 0 || this._myScaleOffsetOnDown != 0) {
+            this._myScaleStartValue = this.object.pp_getScaleLocal()[0];
+            this._myScaleTargetValue = 1;
+            this._myScaleChangeTimer.start();
+        }
+
+        if (this._myPulseIntensityOnUnhover != 0) {
+            const handedness = InputUtils.getHandednessByString(cursorComponent.handedness as string);
+            if (handedness != null) {
+                Globals.getGamepads()![handedness].pulse(this._myPulseIntensityOnUnhover, 0.085);
+            }
+        }
+
+        if (this._myColorBrigthnessOffsetOnHover != 0 || this._myColorBrigthnessOffsetOnDown != 0) {
+            this._myColorBrightnessOffsetStartValue = this._myColorBrightnessOffsetCurrentValue;
+            this._myColorBrightnessOffsetTargetValue = 0;
+            this._myColorBrightnessChangeTimer.start();
+        }
+
+        if (this._myOnUnhoverAudioPlayer != null) {
+            this._myOnUnhoverAudioPlayer.setPosition(this.object.pp_getPosition());
+            this._myOnUnhoverAudioPlayer.play();
+        }
+    }
 }
