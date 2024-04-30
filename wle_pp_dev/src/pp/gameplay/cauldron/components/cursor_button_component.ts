@@ -1,9 +1,11 @@
-import { Component, Object3D } from "@wonderlandengine/api";
+import { Component, Material, MeshComponent, Object3D, TextComponent } from "@wonderlandengine/api";
 import { property } from "@wonderlandengine/api/decorators.js";
 import { Cursor, CursorTarget } from "@wonderlandengine/components";
 import { Timer } from "wle-pp/cauldron/cauldron/timer.js";
-import { Vector3 } from "wle-pp/cauldron/type_definitions/array_type_definitions.js";
+import { Vector3, Vector4 } from "wle-pp/cauldron/type_definitions/array_type_definitions.js";
+import { ColorUtils } from "wle-pp/cauldron/utils/color_utils.js";
 import { EasingFunction, MathUtils } from "wle-pp/cauldron/utils/math_utils.js";
+import { FlatMaterial, PhongMaterial } from "wle-pp/cauldron/wl/type_definitions/material_type_definitions.js";
 import { InputUtils } from "wle-pp/input/cauldron/input_utils.js";
 import { vec3_create } from "wle-pp/plugin/js/extensions/array/vec_create_extension.js";
 import { Globals } from "wle-pp/pp/globals.js";
@@ -26,12 +28,21 @@ export class CursorButtonComponent extends Component {
     @property.float(0.1)
     private _myPulseIntensityOnUp!: number;
 
+    @property.float(-0.1)
+    private _myColorBrigthnessOffsetOnHover!: number;
+
+    @property.float(0)
+    private _myColorBrigthnessOffsetOnDown!: number;
+
     private readonly _myCursorTarget!: CursorTarget;
 
     private readonly _myOriginalScaleLocal: Vector3 = vec3_create();
     private readonly _myScaleDurationTimer: Timer = new Timer(0.25, false);
     private _myScaleStartValue: number = 1;
     private _myScaleTargetValue: number = 1;
+
+    private _myFlatMaterialOriginalColors: [FlatMaterial, Vector4][] = [];
+    private _myPhongMaterialOriginalColors: [PhongMaterial, Vector4][] = [];
 
     public override start(): void {
         (this._myCursorTarget as CursorTarget) = this.object.pp_getComponent(CursorTarget)!;
@@ -42,6 +53,31 @@ export class CursorButtonComponent extends Component {
         this._myCursorTarget.onUpWithDown.add(this.onUpWithDown.bind(this));
 
         this.object.pp_getScaleLocal(this._myOriginalScaleLocal);
+
+        const meshComponents = this.object.pp_getComponents(MeshComponent);
+        for (const meshComponent of meshComponents) {
+            meshComponent.material = meshComponent.material?.clone();
+
+            const phongMaterial = meshComponent.material as PhongMaterial;
+            if (phongMaterial.diffuseColor != null) {
+                this._myPhongMaterialOriginalColors.push([phongMaterial, phongMaterial.diffuseColor.vec4_clone()]);
+            } else {
+                const flatMaterial = meshComponent.material as FlatMaterial;
+                if (flatMaterial.color != null) {
+                    this._myFlatMaterialOriginalColors.push([flatMaterial, flatMaterial.color.vec4_clone()]);
+                }
+            }
+        }
+
+        const textComponents = this.object.pp_getComponents(TextComponent);
+        for (const textComponent of textComponents) {
+            textComponent.material = textComponent.material?.clone();
+
+            const flatMaterial = textComponent.material as FlatMaterial;
+            if (flatMaterial.color != null) {
+                this._myFlatMaterialOriginalColors.push([flatMaterial, flatMaterial.color.vec4_clone()]);
+            }
+        }
     }
 
     private static readonly _updateSV =
@@ -59,7 +95,7 @@ export class CursorButtonComponent extends Component {
     }
 
     private _onHover(objectHovered: Object3D, cursorComponent: Cursor): void {
-        if (this._myScaleOffsetOnHover != 0) {
+        if (this._myScaleOffsetOnHover != 0 || this._myScaleOffsetOnDown != 0) {
             this._myScaleStartValue = this.object.pp_getScaleLocal()[0];
             this._myScaleTargetValue = 1 + this._myScaleOffsetOnHover;
             this._myScaleDurationTimer.start();
@@ -71,6 +107,20 @@ export class CursorButtonComponent extends Component {
                 Globals.getGamepads()![handedness].pulse(this._myPulseIntensityOnHover, 0.085);
             }
         }
+
+        if (this._myColorBrigthnessOffsetOnHover != 0 || this._myColorBrigthnessOffsetOnDown != 0) {
+            for (const [material, originalColor] of this._myPhongMaterialOriginalColors) {
+                const hsvColor = ColorUtils.rgbToHSV(originalColor);
+                hsvColor[2] = MathUtils.clamp(hsvColor[2] + this._myColorBrigthnessOffsetOnHover, 0, 1);
+                material.diffuseColor = ColorUtils.hsvToRGB(hsvColor);
+            }
+
+            for (const [material, originalColor] of this._myFlatMaterialOriginalColors) {
+                const hsvColor = ColorUtils.rgbToHSV(originalColor);
+                hsvColor[2] = MathUtils.clamp(hsvColor[2] + this._myColorBrigthnessOffsetOnHover, 0, 1);
+                material.color = ColorUtils.hsvToRGB(hsvColor);
+            }
+        }
     }
 
     private _onUnhover(objectHovered: Object3D, cursorComponent: Cursor): void {
@@ -79,10 +129,20 @@ export class CursorButtonComponent extends Component {
             this._myScaleTargetValue = 1;
             this._myScaleDurationTimer.start();
         }
+
+
+        if (this._myColorBrigthnessOffsetOnHover != 0 || this._myColorBrigthnessOffsetOnDown != 0) {
+            for (const [material, originalColor] of this._myPhongMaterialOriginalColors) {
+                material.diffuseColor = originalColor;
+            }
+            for (const [material, originalColor] of this._myFlatMaterialOriginalColors) {
+                material.color = originalColor;
+            }
+        }
     }
 
     private _onDown(objectHovered: Object3D, cursorComponent: Cursor): void {
-        if (this._myScaleOffsetOnDown != 0) {
+        if (this._myScaleOffsetOnHover != 0 || this._myScaleOffsetOnDown != 0) {
             this._myScaleStartValue = this.object.pp_getScaleLocal()[0];
             this._myScaleTargetValue = 1 + this._myScaleOffsetOnDown;
             this._myScaleDurationTimer.start();
@@ -94,10 +154,24 @@ export class CursorButtonComponent extends Component {
                 Globals.getGamepads()![handedness].pulse(this._myPulseIntensityOnDown, 0.085);
             }
         }
+
+        if (this._myColorBrigthnessOffsetOnHover != 0 || this._myColorBrigthnessOffsetOnDown != 0) {
+            for (const [material, originalColor] of this._myPhongMaterialOriginalColors) {
+                const hsvColor = ColorUtils.rgbToHSV(originalColor);
+                hsvColor[2] = MathUtils.clamp(hsvColor[2] + this._myColorBrigthnessOffsetOnDown, 0, 1);
+                material.diffuseColor = ColorUtils.hsvToRGB(hsvColor);
+            }
+
+            for (const [material, originalColor] of this._myFlatMaterialOriginalColors) {
+                const hsvColor = ColorUtils.rgbToHSV(originalColor);
+                hsvColor[2] = MathUtils.clamp(hsvColor[2] + this._myColorBrigthnessOffsetOnDown, 0, 1);
+                material.color = ColorUtils.hsvToRGB(hsvColor);
+            }
+        }
     }
 
     private onUpWithDown(objectHovered: Object3D, cursorComponent: Cursor): void {
-        if (this._myScaleOffsetOnHover != 0) {
+        if (this._myScaleOffsetOnHover != 0 || this._myScaleOffsetOnDown != 0) {
             this._myScaleStartValue = this.object.pp_getScaleLocal()[0];
             this._myScaleTargetValue = 1 + this._myScaleOffsetOnHover;
             this._myScaleDurationTimer.start();
@@ -107,6 +181,20 @@ export class CursorButtonComponent extends Component {
             const handedness = InputUtils.getHandednessByString(cursorComponent.handedness as string);
             if (handedness != null) {
                 Globals.getGamepads()![handedness].pulse(this._myPulseIntensityOnUp, 0.085);
+            }
+        }
+
+        if (this._myColorBrigthnessOffsetOnHover != 0 || this._myColorBrigthnessOffsetOnDown != 0) {
+            for (const [material, originalColor] of this._myPhongMaterialOriginalColors) {
+                const hsvColor = ColorUtils.rgbToHSV(originalColor);
+                hsvColor[2] = MathUtils.clamp(hsvColor[2] + this._myColorBrigthnessOffsetOnHover, 0, 1);
+                material.diffuseColor = ColorUtils.hsvToRGB(hsvColor);
+            }
+
+            for (const [material, originalColor] of this._myFlatMaterialOriginalColors) {
+                const hsvColor = ColorUtils.rgbToHSV(originalColor);
+                hsvColor[2] = MathUtils.clamp(hsvColor[2] + this._myColorBrigthnessOffsetOnHover, 0, 1);
+                material.color = ColorUtils.hsvToRGB(hsvColor);
             }
         }
     }
