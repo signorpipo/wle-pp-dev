@@ -37,9 +37,14 @@ export class CursorButtonComponent extends Component {
     private readonly _myCursorTarget!: CursorTarget;
 
     private readonly _myOriginalScaleLocal: Vector3 = vec3_create();
-    private readonly _myScaleDurationTimer: Timer = new Timer(0.25, false);
+    private readonly _myScaleChangeTimer: Timer = new Timer(0.25, false);
     private _myScaleStartValue: number = 1;
     private _myScaleTargetValue: number = 1;
+
+    private _myColorBrightnessOffsetStartValue: number = 0;
+    private _myColorBrightnessOffsetCurrentValue: number = 0;
+    private _myColorBrightnessOffsetTargetValue: number = 0;
+    private readonly _myColorBrightnessChangeTimer: Timer = new Timer(0.25, false);
 
     private _myFlatMaterialOriginalColors: [FlatMaterial, Vector4][] = [];
     private _myPhongMaterialOriginalColors: [PhongMaterial, Vector4][] = [];
@@ -85,12 +90,30 @@ export class CursorButtonComponent extends Component {
             buttonScale: vec3_create(),
         };
     public override update(dt: number): void {
-        if (this._myScaleDurationTimer.isRunning()) {
-            this._myScaleDurationTimer.update(dt);
+        if (this._myScaleChangeTimer.isRunning()) {
+            this._myScaleChangeTimer.update(dt);
 
-            const currentScale = MathUtils.interpolate(this._myScaleStartValue, this._myScaleTargetValue, this._myScaleDurationTimer.getPercentage(), EasingFunction.easeInOut);
+            const currentScale = MathUtils.interpolate(this._myScaleStartValue, this._myScaleTargetValue, this._myScaleChangeTimer.getPercentage(), EasingFunction.easeInOut);
             const buttonScale = CursorButtonComponent._updateSV.buttonScale;
             this.object.pp_setScaleLocal((this._myOriginalScaleLocal as any).vec3_scale(currentScale, buttonScale));
+        }
+
+        if (this._myColorBrightnessChangeTimer.isRunning()) {
+            this._myColorBrightnessChangeTimer.update(dt);
+
+            this._myColorBrightnessOffsetCurrentValue = MathUtils.interpolate(this._myColorBrightnessOffsetStartValue, this._myColorBrightnessOffsetTargetValue, this._myColorBrightnessChangeTimer.getPercentage(), EasingFunction.easeInOut);
+
+            for (const [material, originalColor] of this._myPhongMaterialOriginalColors) {
+                const hsvColor = ColorUtils.rgbToHSV(originalColor);
+                hsvColor[2] = MathUtils.clamp(hsvColor[2] + this._myColorBrightnessOffsetCurrentValue, 0, 1);
+                material.diffuseColor = ColorUtils.hsvToRGB(hsvColor);
+            }
+
+            for (const [material, originalColor] of this._myFlatMaterialOriginalColors) {
+                const hsvColor = ColorUtils.rgbToHSV(originalColor);
+                hsvColor[2] = MathUtils.clamp(hsvColor[2] + this._myColorBrightnessOffsetCurrentValue, 0, 1);
+                material.color = ColorUtils.hsvToRGB(hsvColor);
+            }
         }
     }
 
@@ -98,7 +121,7 @@ export class CursorButtonComponent extends Component {
         if (this._myScaleOffsetOnHover != 0 || this._myScaleOffsetOnDown != 0) {
             this._myScaleStartValue = this.object.pp_getScaleLocal()[0];
             this._myScaleTargetValue = 1 + this._myScaleOffsetOnHover;
-            this._myScaleDurationTimer.start();
+            this._myScaleChangeTimer.start();
         }
 
         if (this._myPulseIntensityOnHover != 0) {
@@ -109,17 +132,9 @@ export class CursorButtonComponent extends Component {
         }
 
         if (this._myColorBrigthnessOffsetOnHover != 0 || this._myColorBrigthnessOffsetOnDown != 0) {
-            for (const [material, originalColor] of this._myPhongMaterialOriginalColors) {
-                const hsvColor = ColorUtils.rgbToHSV(originalColor);
-                hsvColor[2] = MathUtils.clamp(hsvColor[2] + this._myColorBrigthnessOffsetOnHover, 0, 1);
-                material.diffuseColor = ColorUtils.hsvToRGB(hsvColor);
-            }
-
-            for (const [material, originalColor] of this._myFlatMaterialOriginalColors) {
-                const hsvColor = ColorUtils.rgbToHSV(originalColor);
-                hsvColor[2] = MathUtils.clamp(hsvColor[2] + this._myColorBrigthnessOffsetOnHover, 0, 1);
-                material.color = ColorUtils.hsvToRGB(hsvColor);
-            }
+            this._myColorBrightnessOffsetStartValue = this._myColorBrightnessOffsetCurrentValue;
+            this._myColorBrightnessOffsetTargetValue = this._myColorBrigthnessOffsetOnHover;
+            this._myColorBrightnessChangeTimer.start();
         }
     }
 
@@ -127,17 +142,14 @@ export class CursorButtonComponent extends Component {
         if (this._myScaleOffsetOnHover != 0 || this._myScaleOffsetOnDown != 0) {
             this._myScaleStartValue = this.object.pp_getScaleLocal()[0];
             this._myScaleTargetValue = 1;
-            this._myScaleDurationTimer.start();
+            this._myScaleChangeTimer.start();
         }
 
 
         if (this._myColorBrigthnessOffsetOnHover != 0 || this._myColorBrigthnessOffsetOnDown != 0) {
-            for (const [material, originalColor] of this._myPhongMaterialOriginalColors) {
-                material.diffuseColor = originalColor;
-            }
-            for (const [material, originalColor] of this._myFlatMaterialOriginalColors) {
-                material.color = originalColor;
-            }
+            this._myColorBrightnessOffsetStartValue = this._myColorBrightnessOffsetCurrentValue;
+            this._myColorBrightnessOffsetTargetValue = 0;
+            this._myColorBrightnessChangeTimer.start();
         }
     }
 
@@ -145,7 +157,7 @@ export class CursorButtonComponent extends Component {
         if (this._myScaleOffsetOnHover != 0 || this._myScaleOffsetOnDown != 0) {
             this._myScaleStartValue = this.object.pp_getScaleLocal()[0];
             this._myScaleTargetValue = 1 + this._myScaleOffsetOnDown;
-            this._myScaleDurationTimer.start();
+            this._myScaleChangeTimer.start();
         }
 
         if (this._myPulseIntensityOnDown != 0) {
@@ -156,17 +168,9 @@ export class CursorButtonComponent extends Component {
         }
 
         if (this._myColorBrigthnessOffsetOnHover != 0 || this._myColorBrigthnessOffsetOnDown != 0) {
-            for (const [material, originalColor] of this._myPhongMaterialOriginalColors) {
-                const hsvColor = ColorUtils.rgbToHSV(originalColor);
-                hsvColor[2] = MathUtils.clamp(hsvColor[2] + this._myColorBrigthnessOffsetOnDown, 0, 1);
-                material.diffuseColor = ColorUtils.hsvToRGB(hsvColor);
-            }
-
-            for (const [material, originalColor] of this._myFlatMaterialOriginalColors) {
-                const hsvColor = ColorUtils.rgbToHSV(originalColor);
-                hsvColor[2] = MathUtils.clamp(hsvColor[2] + this._myColorBrigthnessOffsetOnDown, 0, 1);
-                material.color = ColorUtils.hsvToRGB(hsvColor);
-            }
+            this._myColorBrightnessOffsetStartValue = this._myColorBrightnessOffsetCurrentValue;
+            this._myColorBrightnessOffsetTargetValue = this._myColorBrigthnessOffsetOnDown;
+            this._myColorBrightnessChangeTimer.start();
         }
     }
 
@@ -174,7 +178,7 @@ export class CursorButtonComponent extends Component {
         if (this._myScaleOffsetOnHover != 0 || this._myScaleOffsetOnDown != 0) {
             this._myScaleStartValue = this.object.pp_getScaleLocal()[0];
             this._myScaleTargetValue = 1 + this._myScaleOffsetOnHover;
-            this._myScaleDurationTimer.start();
+            this._myScaleChangeTimer.start();
         }
 
         if (this._myPulseIntensityOnUp != 0) {
@@ -185,17 +189,9 @@ export class CursorButtonComponent extends Component {
         }
 
         if (this._myColorBrigthnessOffsetOnHover != 0 || this._myColorBrigthnessOffsetOnDown != 0) {
-            for (const [material, originalColor] of this._myPhongMaterialOriginalColors) {
-                const hsvColor = ColorUtils.rgbToHSV(originalColor);
-                hsvColor[2] = MathUtils.clamp(hsvColor[2] + this._myColorBrigthnessOffsetOnHover, 0, 1);
-                material.diffuseColor = ColorUtils.hsvToRGB(hsvColor);
-            }
-
-            for (const [material, originalColor] of this._myFlatMaterialOriginalColors) {
-                const hsvColor = ColorUtils.rgbToHSV(originalColor);
-                hsvColor[2] = MathUtils.clamp(hsvColor[2] + this._myColorBrigthnessOffsetOnHover, 0, 1);
-                material.color = ColorUtils.hsvToRGB(hsvColor);
-            }
+            this._myColorBrightnessOffsetStartValue = this._myColorBrightnessOffsetCurrentValue;
+            this._myColorBrightnessOffsetTargetValue = this._myColorBrigthnessOffsetOnHover;
+            this._myColorBrightnessChangeTimer.start();
         }
     }
 
