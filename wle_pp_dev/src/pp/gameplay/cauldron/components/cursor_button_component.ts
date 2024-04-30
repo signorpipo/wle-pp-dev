@@ -1,4 +1,4 @@
-import { Component, Material, MeshComponent, Object3D, TextComponent } from "@wonderlandengine/api";
+import { Component, MeshComponent, Object3D, TextComponent } from "@wonderlandengine/api";
 import { property } from "@wonderlandengine/api/decorators.js";
 import { Cursor, CursorTarget } from "@wonderlandengine/components";
 import { Timer } from "wle-pp/cauldron/cauldron/timer.js";
@@ -7,7 +7,7 @@ import { ColorUtils } from "wle-pp/cauldron/utils/color_utils.js";
 import { EasingFunction, MathUtils } from "wle-pp/cauldron/utils/math_utils.js";
 import { FlatMaterial, PhongMaterial } from "wle-pp/cauldron/wl/type_definitions/material_type_definitions.js";
 import { InputUtils } from "wle-pp/input/cauldron/input_utils.js";
-import { vec3_create } from "wle-pp/plugin/js/extensions/array/vec_create_extension.js";
+import { vec3_create, vec4_create } from "wle-pp/plugin/js/extensions/array/vec_create_extension.js";
 import { Globals } from "wle-pp/pp/globals.js";
 
 export class CursorButtonComponent extends Component {
@@ -88,6 +88,8 @@ export class CursorButtonComponent extends Component {
     private static readonly _updateSV =
         {
             buttonScale: vec3_create(),
+            hsvColor: vec4_create(),
+            rgbColor: vec4_create()
         };
     public override update(dt: number): void {
         if (this._myScaleChangeTimer.isRunning()) {
@@ -103,16 +105,19 @@ export class CursorButtonComponent extends Component {
 
             this._myColorBrightnessOffsetCurrentValue = MathUtils.interpolate(this._myColorBrightnessOffsetStartValue, this._myColorBrightnessOffsetTargetValue, this._myColorBrightnessChangeTimer.getPercentage(), EasingFunction.easeInOut);
 
+            const hsvColor = CursorButtonComponent._updateSV.hsvColor;
+            const rgbColor = CursorButtonComponent._updateSV.rgbColor;
+
             for (const [material, originalColor] of this._myPhongMaterialOriginalColors) {
-                const hsvColor = ColorUtils.rgbToHSV(originalColor);
+                ColorUtils.rgbToHSV(originalColor, hsvColor);
                 hsvColor[2] = MathUtils.clamp(hsvColor[2] + this._myColorBrightnessOffsetCurrentValue, 0, 1);
-                material.diffuseColor = ColorUtils.hsvToRGB(hsvColor);
+                material.diffuseColor = ColorUtils.hsvToRGB(hsvColor, rgbColor);
             }
 
             for (const [material, originalColor] of this._myFlatMaterialOriginalColors) {
-                const hsvColor = ColorUtils.rgbToHSV(originalColor);
+                ColorUtils.rgbToHSV(originalColor, hsvColor);
                 hsvColor[2] = MathUtils.clamp(hsvColor[2] + this._myColorBrightnessOffsetCurrentValue, 0, 1);
-                material.color = ColorUtils.hsvToRGB(hsvColor);
+                material.color = ColorUtils.hsvToRGB(hsvColor, rgbColor);
             }
         }
     }
