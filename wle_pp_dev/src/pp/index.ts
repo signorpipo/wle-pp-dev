@@ -125,7 +125,7 @@ export * from "./debug/debug_functions_overwriter/debug_functions_performance_an
 
 //    CAULDRON
 export * from "./gameplay/cauldron/direction_2D_to_3D_converter.js";
-export * from "./gameplay/cauldron/number_over_factor.js";
+export { NumberOverFactor, IntOverFactor, NumberRangeOverFactor, IntRangeOverFactor } from "./gameplay/cauldron/number_over_factor.js";
 
 export * from "./gameplay/cauldron/components/cursor_button_component.js";
 
