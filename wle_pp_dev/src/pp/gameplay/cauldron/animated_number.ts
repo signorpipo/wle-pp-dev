@@ -17,18 +17,6 @@ export class AnimatedNumberParams {
     */
     public myReferenceTargetValue: number | null = null;
 
-    /**
-     * When a new target is specified, normally the animation is restarted  
-     * If this value is set to `true` it will instead keep the same percentage
-     * 
-     * This means that, if the animation is at 90% and you set a new target value, to reach that target value  
-     * you only have to do 10% of the animation time required to reach it
-     * 
-     * This can make the value reach the target very fast even if the values are very far (imagine the scenario where the target is updated at 99%)  
-     * but has the advantage of keeping the smoothness of the transition since the animation curve (defined by the easing) is preserved till the end
-     */
-    public myKeepAnimationPercentageOnNewTarget: boolean = false;
-
     /** `Math.round` / `Math.floor` / `Math.ceil` can be used */
     public myRoundingFunction: ((valueToRound: number) => number) | null = null;
 }
@@ -71,9 +59,7 @@ export class AnimatedNumber {
         if (this._myParams.myReferenceTargetValue == null) {
             this._myStartValue = this._myCurrentValue;
 
-            if (!this._myAnimationTimer.isRunning() || !this._myParams.myKeepAnimationPercentageOnNewTarget) {
-                this._myAnimationTimer.start();
-            }
+            this._myAnimationTimer.start();
         } else {
             const distanceFromInitialToReference = Math.abs(this._myParams.myReferenceTargetValue - this._myParams.myInitialValue);
             const distanceFromCurrentToTarget = Math.abs(this._myTargetValue - this._myCurrentValue);
@@ -82,13 +68,7 @@ export class AnimatedNumber {
 
             this._myStartValue = this._myCurrentValue;
 
-            if (!this._myAnimationTimer.isRunning() || !this._myParams.myKeepAnimationPercentageOnNewTarget) {
-                this._myAnimationTimer.start(secondsToReachTarget);
-            } else {
-                const currentPercentage = this._myAnimationTimer.getPercentage();
-                this._myAnimationTimer.start(secondsToReachTarget);
-                this._myAnimationTimer.setPercentage(currentPercentage);
-            }
+            this._myAnimationTimer.start(secondsToReachTarget);
         }
     }
 
