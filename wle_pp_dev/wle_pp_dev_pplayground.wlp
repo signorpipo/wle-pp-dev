@@ -2547,7 +2547,8 @@
                         "_mySFXOnDown": "assets\\audio\\sfx\\playground\\throw.mp3",
                         "_myButtonActionsHandlerComponentName": "toggle-how-to-text, switch-button-text",
                         "_myColorBrigthnessOffsetOnHover": 0.0,
-                        "_myButtonActionsHandlerNames": "toggle-how-to-text, switch-button-text"
+                        "_myButtonActionsHandlerNames": "toggle-how-to-text, switch-button-text",
+                        "_myColorBrigthnessOffsetOnUp": 0.0
                     }
                 },
                 {

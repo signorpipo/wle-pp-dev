@@ -34,6 +34,9 @@ export class CursorButtonComponent extends Component {
     @property.float(-0.075)
     private _myScaleOffsetOnDown!: number;
 
+    @property.float(0.075)
+    private _myScaleOffsetOnUp!: number;
+
     @property.float(0.1)
     private _myPulseIntensityOnHover!: number;
 
@@ -51,6 +54,9 @@ export class CursorButtonComponent extends Component {
 
     @property.float(0)
     private _myColorBrigthnessOffsetOnDown!: number;
+
+    @property.float(-0.1)
+    private _myColorBrigthnessOffsetOnUp!: number;
 
     @property.bool(true)
     private _myUseSpatialAudio!: boolean;
@@ -177,7 +183,7 @@ export class CursorButtonComponent extends Component {
             return;
         }
 
-        if (this._myScaleOffsetOnHover != 0 || this._myScaleOffsetOnDown != 0) {
+        if (this._myScaleOffsetOnHover != 0 || this._myScaleOffsetOnDown != 0 || this._myScaleOffsetOnUp != 0) {
             this._myAnimatedScale.updateTargetValue(1 + this._myScaleOffsetOnHover);
         }
 
@@ -188,7 +194,7 @@ export class CursorButtonComponent extends Component {
             }
         }
 
-        if (this._myColorBrigthnessOffsetOnHover != 0 || this._myColorBrigthnessOffsetOnDown != 0) {
+        if (this._myColorBrigthnessOffsetOnHover != 0 || this._myColorBrigthnessOffsetOnDown != 0 || this._myColorBrigthnessOffsetOnUp != 0) {
             this._myAnimatedColorBrightnessOffset.updateTargetValue(this._myColorBrigthnessOffsetOnHover);
         }
 
@@ -210,7 +216,7 @@ export class CursorButtonComponent extends Component {
             return;
         }
 
-        if (this._myScaleOffsetOnHover != 0 || this._myScaleOffsetOnDown != 0) {
+        if (this._myScaleOffsetOnHover != 0 || this._myScaleOffsetOnDown != 0 || this._myScaleOffsetOnUp != 0) {
             this._myAnimatedScale.updateTargetValue(1 + this._myScaleOffsetOnDown);
         }
 
@@ -221,7 +227,7 @@ export class CursorButtonComponent extends Component {
             }
         }
 
-        if (this._myColorBrigthnessOffsetOnHover != 0 || this._myColorBrigthnessOffsetOnDown != 0) {
+        if (this._myColorBrigthnessOffsetOnHover != 0 || this._myColorBrigthnessOffsetOnDown != 0 || this._myColorBrigthnessOffsetOnUp != 0) {
             this._myAnimatedColorBrightnessOffset.updateTargetValue(this._myColorBrigthnessOffsetOnDown);
         }
 
@@ -243,8 +249,8 @@ export class CursorButtonComponent extends Component {
             return;
         }
 
-        if (this._myScaleOffsetOnHover != 0 || this._myScaleOffsetOnDown != 0) {
-            this._myAnimatedScale.updateTargetValue(1 + this._myScaleOffsetOnHover);
+        if (this._myScaleOffsetOnHover != 0 || this._myScaleOffsetOnDown != 0 || this._myScaleOffsetOnUp != 0) {
+            this._myAnimatedScale.updateTargetValue(1 + this._myScaleOffsetOnUp);
         }
 
         if (this._myPulseIntensityOnUp != 0) {
@@ -254,8 +260,8 @@ export class CursorButtonComponent extends Component {
             }
         }
 
-        if (this._myColorBrigthnessOffsetOnHover != 0 || this._myColorBrigthnessOffsetOnDown != 0) {
-            this._myAnimatedColorBrightnessOffset.updateTargetValue(this._myColorBrigthnessOffsetOnHover);
+        if (this._myColorBrigthnessOffsetOnHover != 0 || this._myColorBrigthnessOffsetOnDown != 0 || this._myColorBrigthnessOffsetOnUp != 0) {
+            this._myAnimatedColorBrightnessOffset.updateTargetValue(this._myColorBrigthnessOffsetOnUp);
         }
 
         if (this._myOnUpAudioPlayer != null) {
@@ -276,7 +282,7 @@ export class CursorButtonComponent extends Component {
             return;
         }
 
-        if (this._myScaleOffsetOnHover != 0 || this._myScaleOffsetOnDown != 0) {
+        if (this._myScaleOffsetOnHover != 0 || this._myScaleOffsetOnDown != 0 || this._myScaleOffsetOnUp != 0) {
             this._myAnimatedScale.updateTargetValue(1);
         }
 
@@ -287,7 +293,7 @@ export class CursorButtonComponent extends Component {
             }
         }
 
-        if (this._myColorBrigthnessOffsetOnHover != 0 || this._myColorBrigthnessOffsetOnDown != 0) {
+        if (this._myColorBrigthnessOffsetOnHover != 0 || this._myColorBrigthnessOffsetOnDown != 0 || this._myColorBrigthnessOffsetOnUp != 0) {
             this._myAnimatedColorBrightnessOffset.updateTargetValue(0);
         }
 
