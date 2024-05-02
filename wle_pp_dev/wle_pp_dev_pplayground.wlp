@@ -2545,7 +2545,6 @@
                     "pp-cursor-button": {
                         "_mySFXOnUp": "assets\\audio\\sfx\\playground\\grab.mp3",
                         "_mySFXOnDown": "assets\\audio\\sfx\\playground\\throw.mp3",
-                        "_myButtonActionsHandlerComponentName": "toggle-how-to-text, switch-button-text",
                         "_myColorBrigthnessOffsetOnHover": 0.0,
                         "_myButtonActionsHandlerNames": "toggle-how-to-text, switch-button-text",
                         "_myColorBrigthnessOffsetOnUp": 0.0
@@ -2871,8 +2870,8 @@
             ]
         },
         "0ec54f31-8d6e-466c-ad61-6b5d8fe48472": {
-            "name": "Cursor",
-            "parent": "f0cbb5f3-92cc-4f20-941c-2e7a438f166c",
+            "name": "Default Cursor",
+            "parent": "4470cf2d-650d-4c38-be1b-2434a74c4ff1",
             "rotation": [
                 0.258819,
                 0.0,
@@ -2881,8 +2880,8 @@
             ],
             "translation": [
                 0.009961,
-                -0.0240265,
-                0.0500781
+                -0.0240263,
+                0.050078
             ]
         },
         "8f116677-15c2-4d71-a7dc-90239c83ece8": {
@@ -2936,12 +2935,12 @@
             ]
         },
         "b99ae9d4-2bdb-45ff-8ec9-bd933e26ef99": {
-            "name": "Cursor",
-            "parent": "f51fe37d-3aea-4317-af6b-e76b64a41b54",
+            "name": "Default Cursor",
+            "parent": "58ca914f-fc95-4265-8c31-4b3ca58859f4",
             "translation": [
                 -0.009961,
-                -0.0240257,
-                0.0500776
+                -0.0240255,
+                0.0500775
             ],
             "rotation": [
                 0.258819,
@@ -2999,6 +2998,41 @@
                     }
                 }
             ]
+        },
+        "af1d4177-40e8-454c-a24a-93da1f68a80b": {
+            "name": "Finger Cursor",
+            "parent": "58ca914f-fc95-4265-8c31-4b3ca58859f4",
+            "components": [
+                {
+                    "type": "pp-finger-cursor",
+                    "pp-finger-cursor": {
+                        "_myCollisionGroup": 3,
+                        "_myHandedness": "Right",
+                        "_myDefaultCursorObject": "b99ae9d4-2bdb-45ff-8ec9-bd933e26ef99"
+                    }
+                }
+            ]
+        },
+        "58ca914f-fc95-4265-8c31-4b3ca58859f4": {
+            "name": "Cursors",
+            "parent": "f51fe37d-3aea-4317-af6b-e76b64a41b54"
+        },
+        "833e4681-737c-43da-bf86-c01c56017931": {
+            "name": "Finger Cursor",
+            "parent": "4470cf2d-650d-4c38-be1b-2434a74c4ff1",
+            "components": [
+                {
+                    "type": "pp-finger-cursor",
+                    "pp-finger-cursor": {
+                        "_myCollisionGroup": 3,
+                        "_myDefaultCursorObject": "0ec54f31-8d6e-466c-ad61-6b5d8fe48472"
+                    }
+                }
+            ]
+        },
+        "4470cf2d-650d-4c38-be1b-2434a74c4ff1": {
+            "name": "Cursors",
+            "parent": "f0cbb5f3-92cc-4f20-941c-2e7a438f166c"
         }
     },
     "meshes": {

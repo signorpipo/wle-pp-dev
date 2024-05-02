@@ -1,5 +1,5 @@
 import { Collider, CollisionComponent, Component, Property } from "@wonderlandengine/api";
-import { CursorTarget } from "@wonderlandengine/components";
+import { Cursor, CursorTarget } from "@wonderlandengine/components";
 import { XRUtils } from "../../../cauldron/utils/xr_utils.js";
 import { vec3_create } from "../../../plugin/js/extensions/array/vec_create_extension.js";
 import { Globals } from "../../../pp/globals.js";
@@ -13,7 +13,9 @@ export class FingerCursorComponent extends Component {
         _myMultipleClicksEnabled: Property.bool(true),
         _myCollisionGroup: Property.int(1),
         _myCollisionSize: Property.float(0.0125),
-        _myCursorObject: Property.object(null)
+        _myCursorObject: Property.object(null),
+        _myAutoDisableDefaultCursorOnTrackedHandDetected: Property.bool(true),
+        _myDefaultCursorObject: Property.object()
     };
 
     init() {
@@ -40,6 +42,15 @@ export class FingerCursorComponent extends Component {
         this._myCollisionComponent.collider = Collider.Sphere;
         this._myCollisionComponent.group = 1 << this._myCollisionGroup;
         this._myCollisionComponent.extents = vec3_create(this._myCollisionSize, this._myCollisionSize, this._myCollisionSize);
+
+        if (this._myAutoDisableDefaultCursorOnTrackedHandDetected) {
+            let defaultCursorObject = this.object;
+            if (this._myDefaultCursorObject != null) {
+                defaultCursorObject = this._myDefaultCursorObject;
+            }
+
+            this._myDefaultCursorComponent = defaultCursorObject.pp_getComponent(Cursor);
+        }
     }
 
     update(dt) {
@@ -131,9 +142,19 @@ export class FingerCursorComponent extends Component {
     }
 
     _updateHand() {
-        this._myHandInputSource = InputUtils.getInputSource(this._myHandednessType, InputSourceType.TRACKED_HAND, this.engine);
+        const newHandInputSource = InputUtils.getInputSource(this._myHandednessType, InputSourceType.TRACKED_HAND, this.engine);
 
-        if (this._myHandInputSource) {
+        if (newHandInputSource != null && this._myHandInputSource == null) {
+            if (this._myDefaultCursorComponent != null) {
+                this._myDefaultCursorComponent.active = false;
+            }
+        } else if (newHandInputSource == null && this._myHandInputSource != null) {
+            if (this._myDefaultCursorComponent != null) {
+                this._myDefaultCursorComponent.active = true;
+            }
+        }
+
+        if (this._myHandInputSource != null) {
             let tip = null;
 
             try {
