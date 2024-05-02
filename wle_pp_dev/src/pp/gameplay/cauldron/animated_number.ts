@@ -65,7 +65,7 @@ export class AnimatedNumber {
         return this._myCurrentValue;
     }
 
-    public setTargetValue(targetValue: number): void {
+    public updateTargetValue(targetValue: number): void {
         this._myTargetValue = targetValue;
 
         if (this._myParams.myReferenceTargetValue == null) {
