@@ -2545,7 +2545,9 @@
                     "pp-cursor-button": {
                         "_mySFXOnUp": "assets\\audio\\sfx\\playground\\grab.mp3",
                         "_mySFXOnDown": "assets\\audio\\sfx\\playground\\throw.mp3",
-                        "_myColorBrigthnessOffsetOnHover": 0.0
+                        "_myButtonActionsHandlerComponentName": "toggle-how-to-text, switch-button-text",
+                        "_myColorBrigthnessOffsetOnHover": 0.0,
+                        "_myButtonActionsHandlerNames": "toggle-how-to-text, switch-button-text"
                     }
                 },
                 {
@@ -2572,6 +2574,12 @@
                 },
                 {
                     "type": "cursor-target"
+                },
+                {
+                    "type": "toggle-how-to-text",
+                    "toggle-how-to-text": {
+                        "_myTextObject": "dedccf60-b6af-4d9c-b0ca-e0800988138a"
+                    }
                 }
             ],
             "translation": [

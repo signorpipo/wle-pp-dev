@@ -1,4 +1,4 @@
-import { Component, Object3D } from "@wonderlandengine/api";
+import { Component, Object3D, TextComponent } from "@wonderlandengine/api";
 import { property } from "@wonderlandengine/api/decorators.js";
 import { Cursor } from "@wonderlandengine/components";
 import { CursorButtonActionsHandler, CursorButtonComponent } from "wle-pp";
@@ -14,11 +14,37 @@ export class ToggleHowToTextComponent extends Component implements CursorButtonA
 
     private _myTextVisible: boolean = true;
 
+    public override init(): void {
+        // Just to show how to use the cursor button handler from the class
+        const textComponents = this.object.pp_getComponents(TextComponent);
+        let visible = true;
+        const switchButtonTextHandler = {
+            onUp: function (): boolean {
+                let textToSet = "Show";
+                if (visible) {
+                    visible = false;
+                } else {
+                    visible = true;
+                    textToSet = "Hide";
+                }
+
+                for (const textComponent of textComponents) {
+                    textComponent.text = textToSet;
+                }
+
+                return false;
+            }
+        };
+
+        CursorButtonComponent.addButtonActionHandler("switch-button-text", switchButtonTextHandler);
+    }
+
     public override start(): void {
         const animatedScaleParams = new AnimatedNumberParams();
         animatedScaleParams.myInitialValue = 1;
         animatedScaleParams.myAnimationSeconds = 0.5;
         (this._myAnimatedScale as AnimatedNumber) = new AnimatedNumber(animatedScaleParams);
+
     }
 
     public override update(dt: number): void {
