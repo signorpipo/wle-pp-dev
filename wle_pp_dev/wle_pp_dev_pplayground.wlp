@@ -2522,11 +2522,11 @@
                     "type": "physx",
                     "physx": {
                         "groups": 8,
-                        "block": 0,
+                        "block": 8,
                         "kinematic": true,
                         "gravity": false,
-                        "trigger": true,
-                        "allowSimulation": false,
+                        "trigger": false,
+                        "allowSimulation": true,
                         "shape": "box",
                         "box": {
                             "extents": [
@@ -2560,11 +2560,11 @@
                     "type": "physx",
                     "physx": {
                         "groups": 8,
-                        "block": 0,
+                        "block": 8,
                         "kinematic": true,
                         "gravity": false,
-                        "trigger": true,
-                        "allowSimulation": false,
+                        "trigger": false,
+                        "allowSimulation": true,
                         "shape": "box",
                         "box": {
                             "extents": [
@@ -3014,7 +3014,9 @@
                     "pp-finger-cursor": {
                         "_myCollisionGroup": 3,
                         "_myHandedness": "Right",
-                        "_myDefaultCursorObject": "b99ae9d4-2bdb-45ff-8ec9-bd933e26ef99"
+                        "_myDefaultCursorObject": "b99ae9d4-2bdb-45ff-8ec9-bd933e26ef99",
+                        "_myCursorObject": "ed5bfd91-1d04-46e4-b3f9-d148282993c4",
+                        "_myCollisionFlags": "0, 0, 0, 1, 0, 0, 0, 0"
                     }
                 }
             ]
@@ -3031,7 +3033,8 @@
                     "type": "pp-finger-cursor",
                     "pp-finger-cursor": {
                         "_myCollisionGroup": 3,
-                        "_myDefaultCursorObject": "0ec54f31-8d6e-466c-ad61-6b5d8fe48472"
+                        "_myDefaultCursorObject": "0ec54f31-8d6e-466c-ad61-6b5d8fe48472",
+                        "_myCollisionFlags": "0, 0, 0, 1, 0, 0, 0, 0"
                     }
                 }
             ]

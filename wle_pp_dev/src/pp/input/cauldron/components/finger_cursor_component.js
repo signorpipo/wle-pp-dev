@@ -1,5 +1,7 @@
-import { Collider, CollisionComponent, Component, Property } from "@wonderlandengine/api";
+import { Collider, CollisionComponent, Component, PhysXComponent, Property, Shape } from "@wonderlandengine/api";
 import { Cursor, CursorTarget } from "@wonderlandengine/components";
+import { PhysicsCollisionCollector } from "wle-pp/cauldron/physics/physics_collision_collector.js";
+import { PhysicsLayerFlags } from "wle-pp/cauldron/physics/physics_layer_flags.js";
 import { XRUtils } from "../../../cauldron/utils/xr_utils.js";
 import { vec3_create } from "../../../plugin/js/extensions/array/vec_create_extension.js";
 import { Globals } from "../../../pp/globals.js";
@@ -11,9 +13,10 @@ export class FingerCursorComponent extends Component {
     static Properties = {
         _myHandedness: Property.enum(["Left", "Right"], "Left"),
         _myMultipleClicksEnabled: Property.bool(true),
-        _myCollisionGroup: Property.int(1),
+        _myCollisionMode: Property.enum(["PhysX", "Collision"], "PhysX"),
+        _myCollisionFlags: Property.string("0, 0, 0, 0, 0, 0, 0, 0"),
         _myCollisionSize: Property.float(0.0125),
-        _myCursorObject: Property.object(null),
+        _myCursorPointerObject: Property.object(null),
         _myAutoDisableDefaultCursorOnTrackedHandDetected: Property.bool(true),
         _myDefaultCursorObject: Property.object()
     };
@@ -32,16 +35,33 @@ export class FingerCursorComponent extends Component {
     start() {
         this._myCursorParentObject = this.object.pp_addObject();
 
-        if (this._myCursorObject == null) {
-            this._myCursorObject = this._myCursorParentObject.pp_addObject();
+        if (this._myCursorPointerObject == null) {
+            this._myCursorPointerObject = this._myCursorParentObject.pp_addObject();
         } else {
-            this._myCursorObject.pp_setParent(this._myCursorParentObject);
+            this._myCursorPointerObject.pp_setParent(this._myCursorParentObject);
         }
 
-        this._myCollisionComponent = this._myCursorObject.pp_addComponent(CollisionComponent);
-        this._myCollisionComponent.collider = Collider.Sphere;
-        this._myCollisionComponent.group = 1 << this._myCollisionGroup;
-        this._myCollisionComponent.extents = vec3_create(this._myCollisionSize, this._myCollisionSize, this._myCollisionSize);
+        const physicsFlags = new PhysicsLayerFlags();
+        const flags = [...this._myCollisionFlags.split(",")];
+        for (let i = 0; i < flags.length; i++) {
+            physicsFlags.setFlagActive(i, flags[i].trim() == "1");
+        }
+
+        if (this._myCollisionMode == 0) {
+            this._myCollisionComponent = this._myCursorPointerObject.pp_addComponent(PhysXComponent, {
+                "shape": Shape.Sphere,
+                "extents": vec3_create(this._myCollisionSize, this._myCollisionSize, this._myCollisionSize),
+                "kinematic": true,
+                "groupsMask": physicsFlags.getMask()
+            });
+
+            this._myPhysicsCollisionCollector = new PhysicsCollisionCollector(this._myCollisionComponent, true);
+        } else if (this._myCollisionMode == 1) {
+            this._myCollisionComponent = this._myCursorPointerObject.pp_addComponent(CollisionComponent);
+            this._myCollisionComponent.collider = Collider.Sphere;
+            this._myCollisionComponent.extents = vec3_create(this._myCollisionSize, this._myCollisionSize, this._myCollisionSize);
+            this._myCollisionComponent.group = physicsFlags.getMask();
+        }
 
         if (this._myAutoDisableDefaultCursorOnTrackedHandDetected) {
             let defaultCursorObject = this.object;
@@ -65,31 +85,55 @@ export class FingerCursorComponent extends Component {
         this._myCursorParentObject.pp_setTransformQuat(Globals.getPlayerObjects(this.engine).myReferenceSpace.pp_getTransformQuat());
         this._updateHand();
 
-        if (this._myHandInputSource) {
-            let overlaps = this._myCollisionComponent.queryOverlaps();
-            let overlapTarget = null;
-            for (let i = 0; i < overlaps.length; ++i) {
-                let collision = overlaps[i];
-                if (collision.group & this._myCollisionComponent.group) {
-                    let object = collision.object;
-                    let target = object.pp_getComponent(CursorTarget);
-                    if (target && (overlapTarget == null || !target.isSurface)) {
-                        overlapTarget = target;
+        if (this._myHandInputSource != null) {
+            if (this._myCollisionMode == 1) {
+                const collisions = this._myCollisionComponent.queryOverlaps();
+                let collisionTarget = null;
+                for (let i = 0; i < collisions.length; ++i) {
+                    const collision = collisions[i];
+                    if (collision.group & this._myCollisionComponent.group) {
+                        const object = collision.object;
+                        const target = object.pp_getComponent(CursorTarget);
+                        if (target && (collisionTarget == null || !target.isSurface)) {
+                            collisionTarget = target;
+                            if (!target.isSurface) {
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if (collisionTarget == null) {
+                    this._targetTouchEnd();
+                } else if (!collisionTarget.equals(this._myLastTarget)) {
+                    this._targetTouchEnd();
+
+                    this._myLastTarget = collisionTarget;
+
+                    this._targetTouchStart();
+                }
+            } else {
+                const collisions = this._myPhysicsCollisionCollector.getCollisions();
+                let collisionTarget = null;
+                for (const collision of collisions) {
+                    const target = collision.pp_getComponent(CursorTarget);
+                    if (target && (collisionTarget == null || !target.isSurface)) {
+                        collisionTarget = target;
                         if (!target.isSurface) {
                             break;
                         }
                     }
                 }
-            }
 
-            if (!overlapTarget) {
-                this._targetTouchEnd();
-            } else if (!overlapTarget.equals(this._myLastTarget)) {
-                this._targetTouchEnd();
+                if (collisionTarget == null) {
+                    this._targetTouchEnd();
+                } else if (!collisionTarget.equals(this._myLastTarget)) {
+                    this._targetTouchEnd();
 
-                this._myLastTarget = overlapTarget;
+                    this._myLastTarget = collisionTarget;
 
-                this._targetTouchStart();
+                    this._targetTouchStart();
+                }
             }
         } else {
             this._targetTouchEnd();
@@ -154,6 +198,8 @@ export class FingerCursorComponent extends Component {
             }
         }
 
+        this._myHandInputSource = newHandInputSource;
+
         if (this._myHandInputSource != null) {
             let tip = null;
 
@@ -164,13 +210,13 @@ export class FingerCursorComponent extends Component {
             }
 
             if (tip) {
-                this._myCursorObject.pp_setRotationLocalQuat([
+                this._myCursorPointerObject.pp_setRotationLocalQuat([
                     tip.transform.orientation.x,
                     tip.transform.orientation.y,
                     tip.transform.orientation.z,
                     tip.transform.orientation.w]);
 
-                this._myCursorObject.pp_setPositionLocal([
+                this._myCursorPointerObject.pp_setPositionLocal([
                     tip.transform.position.x,
                     tip.transform.position.y,
                     tip.transform.position.z]);
