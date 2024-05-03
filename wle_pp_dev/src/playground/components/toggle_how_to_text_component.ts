@@ -1,7 +1,7 @@
-import { Component, Object3D, TextComponent } from "@wonderlandengine/api";
+import { Component, Object3D, PhysXComponent, TextComponent } from "@wonderlandengine/api";
 import { property } from "@wonderlandengine/api/decorators.js";
 import { Cursor } from "@wonderlandengine/components";
-import { CursorButtonActionsHandler, CursorButtonComponent } from "wle-pp";
+import { CursorButtonActionsHandler, CursorButtonComponent, Vector3, vec3_create } from "wle-pp";
 import { AnimatedNumber, AnimatedNumberParams } from "wle-pp/gameplay/cauldron/animated_number.js";
 
 export class ToggleHowToTextComponent extends Component implements CursorButtonActionsHandler {
@@ -12,9 +12,14 @@ export class ToggleHowToTextComponent extends Component implements CursorButtonA
 
     private readonly _myAnimatedScale!: AnimatedNumber;
 
+    private _myTextObjectInitialPositionLocal!: Vector3;
+    private _myTextPhysXComponent!: PhysXComponent;
     private _myTextVisible: boolean = true;
 
     public override init(): void {
+        this._myTextObjectInitialPositionLocal = this._myTextObject.pp_getPositionLocal();
+        this._myTextPhysXComponent = this._myTextObject.pp_getComponent(PhysXComponent)!;
+
         // Just to show how to use the cursor button handler from the class
         const textComponents = this.object.pp_getComponents(TextComponent);
         let visible = true;
@@ -53,6 +58,12 @@ export class ToggleHowToTextComponent extends Component implements CursorButtonA
 
             this._myTextObject.pp_resetScaleLocal();
             this._myTextObject.pp_scaleObject(this._myAnimatedScale.getCurrentValue());
+
+            if (this._myAnimatedScale.isDone()) {
+                if (!this._myTextVisible) {
+                    this._myTextObject.pp_translate(vec3_create(0, -100000, 0));
+                }
+            }
         }
     }
 
@@ -63,7 +74,10 @@ export class ToggleHowToTextComponent extends Component implements CursorButtonA
             this._myAnimatedScale.updateTargetValue(0);
         }
 
+        this._myTextObject.pp_setPositionLocal(this._myTextObjectInitialPositionLocal);
+
         this._myTextVisible = !this._myTextVisible;
+        this._myTextPhysXComponent.active = this._myTextVisible;
 
         return false;
     }

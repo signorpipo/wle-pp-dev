@@ -29,7 +29,7 @@ import {SFXOnGrabThrowComponent} from './playground/components/sfx_on_grab_throw
 import {TargetHitCheckComponent} from './playground/components/target_hit_check_component.js';
 import {ToggleHowToTextComponent} from './playground/components/toggle_how_to_text_component.js';
 import {WaveMovementComponent} from './playground/components/wave_movement_component.js';
-import {ResetLocalTransform} from './pp/cauldron/cauldron/components/reset_local_transform.js';
+import {ResetLocalTransformComponent} from './pp/cauldron/cauldron/components/reset_local_transform_component.js';
 import {AdjustHierarchyPhysXScaleComponent} from './pp/index.js';
 import {ConsoleVRToolComponent} from './pp/index.js';
 import {CursorButtonComponent} from './pp/index.js';
@@ -122,7 +122,7 @@ engine.registerComponent(SFXOnGrabThrowComponent);
 engine.registerComponent(TargetHitCheckComponent);
 engine.registerComponent(ToggleHowToTextComponent);
 engine.registerComponent(WaveMovementComponent);
-engine.registerComponent(ResetLocalTransform);
+engine.registerComponent(ResetLocalTransformComponent);
 engine.registerComponent(AdjustHierarchyPhysXScaleComponent);
 engine.registerComponent(ConsoleVRToolComponent);
 engine.registerComponent(CursorButtonComponent);

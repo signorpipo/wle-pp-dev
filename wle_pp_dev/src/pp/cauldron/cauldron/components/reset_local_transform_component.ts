@@ -2,7 +2,7 @@ import { Component, Object3D } from "@wonderlandengine/api";
 import { property } from "@wonderlandengine/api/decorators.js";
 import { XRUtils } from "../../utils/xr_utils.js";
 
-export class ResetLocalTransform extends Component {
+export class ResetLocalTransformComponent extends Component {
     public static override TypeName = "pp-reset-local-transform";
 
     @property.bool(true)
