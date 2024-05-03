@@ -110,7 +110,7 @@ export class ToolCursorComponent extends Component {
             this._myFingerCursorObject = this._myToolCursorObject.pp_addObject();
             this._myFingerCursorComponent = this._myFingerCursorObject.pp_addComponent(FingerCursorComponent, {
                 "_myHandedness": this._myHandedness,
-                "_myAutoDisableDefaultCursorOnTrackedHandDetected": false,
+                "_myDisableDefaultCursorOnTrackedHandDetected": false,
                 "_myMultipleClicksEnabled": true,
                 "_myCollisionMode": 1,
                 "_myCollisionFlags": collisionFlags,

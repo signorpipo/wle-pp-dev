@@ -17,7 +17,7 @@ export class FingerCursorComponent extends Component {
         _myCollisionFlags: Property.string("0, 0, 0, 0, 0, 0, 0, 0"),
         _myCollisionSize: Property.float(0.0125),
         _myCursorPointerObject: Property.object(null),
-        _myAutoDisableDefaultCursorOnTrackedHandDetected: Property.bool(true),
+        _myDisableDefaultCursorOnTrackedHandDetected: Property.bool(true),
         _myDefaultCursorObject: Property.object()
     };
 
@@ -63,7 +63,7 @@ export class FingerCursorComponent extends Component {
             this._myCollisionComponent.group = physicsFlags.getMask();
         }
 
-        if (this._myAutoDisableDefaultCursorOnTrackedHandDetected) {
+        if (this._myDisableDefaultCursorOnTrackedHandDetected) {
             let defaultCursorObject = this.object;
             if (this._myDefaultCursorObject != null) {
                 defaultCursorObject = this._myDefaultCursorObject;
