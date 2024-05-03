@@ -146,7 +146,7 @@ export class FingerCursorComponent extends Component {
     }
 
     _targetTouchEnd() {
-        if (this._myLastTarget) {
+        if (this._myLastTarget != null) {
             this._myLastTarget.onClick.notify(this._myLastTarget.object, this);
 
             if (this._myMultipleClicksEnabled && this._myTripleClickTimer > 0 && this._myMultipleClickObject && this._myMultipleClickObject.pp_equals(this._myLastTarget.object)) {
@@ -180,6 +180,8 @@ export class FingerCursorComponent extends Component {
     }
 
     onDeactivate() {
+        this._targetTouchEnd();
+
         if (this._myCursorParentObject != null) {
             this._myCursorParentObject.pp_setActive(false);
         }
@@ -191,9 +193,13 @@ export class FingerCursorComponent extends Component {
         if (newHandInputSource != null && this._myHandInputSource == null) {
             if (this._myDefaultCursorComponent != null) {
                 this._myDefaultCursorComponent.active = false;
+                this._myCursorParentObject.pp_setActive(true);
             }
         } else if (newHandInputSource == null && this._myHandInputSource != null) {
             if (this._myDefaultCursorComponent != null) {
+                this._targetTouchEnd();
+
+                this._myCursorParentObject.pp_setActive(false);
                 this._myDefaultCursorComponent.active = true;
             }
         }
