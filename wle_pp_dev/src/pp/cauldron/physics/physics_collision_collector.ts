@@ -199,13 +199,13 @@ export class PhysicsCollisionCollector {
             });
 
             for (let i = indexesToRemove.length - 1; i >= 0; i--) {
-                this._myCollisionsEndedToProcess.pp_removeIndex(i);
-                this._myCollisionObjectsEndedToProcess.pp_removeIndex(i);
+                this._myCollisionsEndedToProcess.pp_removeIndex(indexesToRemove[i]);
+                this._myCollisionObjectsEndedToProcess.pp_removeIndex(indexesToRemove[i]);
             }
         }
 
         if (this._myLogEnabled) {
-            console.log("Collision Start -", this._myCollisions.length);
+            console.log("Collision Start - Object ID: " + physXComponent.object.pp_getID());
         }
 
         this._myCollisionStartEmitter.notify(this._myPhysXComponent, physXComponent, type);
@@ -222,7 +222,7 @@ export class PhysicsCollisionCollector {
             }
 
             if (!componentFound) {
-                console.error("Collision End on object not collected");
+                console.error("Collision End on physX component not collected - Object ID: " + physXComponent.object.pp_getID());
             }
         }
 
@@ -231,8 +231,8 @@ export class PhysicsCollisionCollector {
         });
 
         for (let i = indexesToRemove.length - 1; i >= 0; i--) {
-            this._myCollisions.pp_removeIndex(i);
-            this._myCollisionObjects.pp_removeIndex(i);
+            this._myCollisions.pp_removeIndex(indexesToRemove[i]);
+            this._myCollisionObjects.pp_removeIndex(indexesToRemove[i]);
         }
 
         if (this._myUpdateActive) {
@@ -244,13 +244,13 @@ export class PhysicsCollisionCollector {
             });
 
             for (let i = indexesToRemove.length - 1; i >= 0; i--) {
-                this._myCollisionsStartedToProcess.pp_removeIndex(i);
-                this._myCollisionObjectsStartedToProcess.pp_removeIndex(i);
+                this._myCollisionsStartedToProcess.pp_removeIndex(indexesToRemove[i]);
+                this._myCollisionObjectsStartedToProcess.pp_removeIndex(indexesToRemove[i]);
             }
         }
 
         if (this._myLogEnabled) {
-            console.log("Collision End -", this._myCollisions.length);
+            console.log("Collision End - Object ID: " + physXComponent.object.pp_getID());
         }
 
         this._myCollisionEndEmitter.notify(this._myPhysXComponent, physXComponent, type);
@@ -274,10 +274,14 @@ export class PhysicsCollisionCollector {
             if (collisionsToEndIndexes.length > 0) {
                 const physXComponentsToEnd: PhysXComponent[] = [];
                 for (let i = 0; i < collisionsToEndIndexes.length; i++) {
-                    physXComponentsToEnd.push(this._myCollisions[i]);
+                    physXComponentsToEnd.push(this._myCollisions[collisionsToEndIndexes[i]]);
                 }
 
                 for (const physXComponentToEnd of physXComponentsToEnd) {
+                    if (this._myLogEnabled) {
+                        console.log("Trigger Desync Fix - Object ID: " + physXComponentToEnd.object.pp_getID());
+                    }
+
                     this._onCollisionEnd(CollisionEventType.TriggerTouchLost, physXComponentToEnd);
                 }
             }
