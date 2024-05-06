@@ -150,7 +150,7 @@ export class GrabberHandComponent extends Component {
 
             let collisions = this._myCollisionsCollector.getCollisions();
             for (let i = 0; i < collisions.length; i++) {
-                let grabbable = collisions[i].pp_getComponent(GrabbableComponent);
+                let grabbable = collisions[i].object.pp_getComponent(GrabbableComponent);
                 if (grabbable && grabbable.active) {
                     grabbablesToGrab.push(grabbable);
                 }

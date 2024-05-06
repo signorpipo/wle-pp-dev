@@ -116,7 +116,7 @@ export class FingerCursorComponent extends Component {
                 const collisions = this._myPhysicsCollisionCollector.getCollisions();
                 let collisionTarget = null;
                 for (const collision of collisions) {
-                    const target = collision.pp_getComponent(CursorTarget);
+                    const target = collision.object.pp_getComponent(CursorTarget);
                     if (target && (collisionTarget == null || !target.isSurface)) {
                         collisionTarget = target;
                         if (!target.isSurface) {

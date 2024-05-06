@@ -25,8 +25,8 @@ export class TargetHitCheckComponent extends Component {
 
         let collisionsStart = this._myCollisionsCollector.getCollisionsStarted();
         for (let collisionStart of collisionsStart) {
-            if (collisionStart.pp_getComponent(GrabbableComponent) != null) {
-                this._strike(collisionStart);
+            if (collisionStart.object.pp_getComponent(GrabbableComponent) != null) {
+                this._strike(collisionStart.object);
             }
         }
     }
