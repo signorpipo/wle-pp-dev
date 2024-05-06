@@ -220,7 +220,7 @@ export class PlayerLocomotion {
             params.mySessionChangeResyncEnabled = true;
 
             params.myBlurEndResyncEnabled = true;
-            params.myBlurEndResyncRotation = true;
+            params.myBlurEndResyncRotation = false;
 
             params.myEnterSessionResyncHeight = false;
             params.myExitSessionResyncHeight = this._myParams.mySyncNonVRHeightWithVROnExitSession;
@@ -296,6 +296,7 @@ export class PlayerLocomotion {
 
             params.myResetToValidOnEnterSession = true;
             params.myResetToValidOnExitSession = true;
+            params.myResetToValidOnSessionBlurEnd = true;
 
             params.myAlwaysResetRealPositionNonVR = true;
             params.myAlwaysResetRealRotationNonVR = true;

@@ -144,6 +144,7 @@ export class PlayerTransformManagerParams {
 
         this.myResetToValidOnEnterSession = false;
         this.myResetToValidOnExitSession = false;
+        this.myResetToValidOnSessionBlurEnd = false;
 
         this.myAlwaysResetRealPositionNonVR = false;
         this.myAlwaysResetRealRotationNonVR = false;
@@ -176,6 +177,7 @@ export class PlayerTransformManagerParams {
     destroy() {
         this._myDestroyed = true;
 
+        XRUtils.getSession(this._myParams.myEngine)?.removeEventListener("visibilitychange", this._myVisibilityChangeEventListener);
         XRUtils.unregisterSessionStartEndEventListeners(this, this._myParams.myEngine);
     }
 
@@ -223,6 +225,8 @@ export class PlayerTransformManager {
         this._myResetRealOnHeadSynced = false;
 
         this._myResetHeadToFeetOnNextUpdateValidToReal = false;
+
+        this._myVisibilityChangeEventListener = null;
 
         this._myActive = true;
         this._myDestroyed = false;
@@ -664,6 +668,16 @@ export class PlayerTransformManager {
                 }
             }
         }
+
+        this._myVisibilityChangeEventListener = function (event) {
+            if (event.session.visibilityState == "visible") {
+                if (this._myParams.myResetToValidOnSessionBlurEnd) {
+                    this._myResetRealOnHeadSynced = true;
+                }
+            }
+        }.bind(this);
+
+        session.addEventListener("visibilitychange", this._myVisibilityChangeEventListener);
     }
 
     _onXRSessionEnd() {
@@ -672,6 +686,8 @@ export class PlayerTransformManager {
                 this._myResetRealOnHeadSynced = true;
             }
         }
+
+        this._myVisibilityChangeEventListener = null;
     }
 
     _updatePositionsValid(dt) {
