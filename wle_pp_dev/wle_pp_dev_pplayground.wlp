@@ -1612,8 +1612,8 @@
                     }
                 },
                 {
-                    "type": "scale-on-spawn",
-                    "scale-on-spawn": {
+                    "type": "pp-scale-on-spawn",
+                    "pp-scale-on-spawn": {
                         "_myScaleDuration": 0.5
                     }
                 },
@@ -1649,8 +1649,8 @@
                     }
                 },
                 {
-                    "type": "scale-on-spawn",
-                    "scale-on-spawn": {
+                    "type": "pp-scale-on-spawn",
+                    "pp-scale-on-spawn": {
                         "_myScaleDuration": 0.5
                     }
                 },
@@ -1698,8 +1698,8 @@
                     }
                 },
                 {
-                    "type": "scale-on-spawn",
-                    "scale-on-spawn": {
+                    "type": "pp-scale-on-spawn",
+                    "pp-scale-on-spawn": {
                         "_myScaleDuration": 0.5
                     }
                 },
@@ -1742,8 +1742,8 @@
                     }
                 },
                 {
-                    "type": "scale-on-spawn",
-                    "scale-on-spawn": {
+                    "type": "pp-scale-on-spawn",
+                    "pp-scale-on-spawn": {
                         "_myScaleDuration": 0.5
                     }
                 },
@@ -1795,8 +1795,8 @@
                     }
                 },
                 {
-                    "type": "scale-on-spawn",
-                    "scale-on-spawn": {
+                    "type": "pp-scale-on-spawn",
+                    "pp-scale-on-spawn": {
                         "_myScaleDuration": 0.5
                     }
                 },
@@ -1848,8 +1848,8 @@
                     }
                 },
                 {
-                    "type": "scale-on-spawn",
-                    "scale-on-spawn": {
+                    "type": "pp-scale-on-spawn",
+                    "pp-scale-on-spawn": {
                         "_myScaleDuration": 0.5
                     }
                 },
@@ -1971,8 +1971,8 @@
                     }
                 },
                 {
-                    "type": "scale-on-spawn",
-                    "scale-on-spawn": {
+                    "type": "pp-scale-on-spawn",
+                    "pp-scale-on-spawn": {
                         "_myScaleDuration": 0.5
                     }
                 },

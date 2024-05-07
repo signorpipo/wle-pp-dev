@@ -141,6 +141,9 @@ export * from "./gameplay/cauldron/cauldron/animated_number.js";
 
 export * from "./gameplay/cauldron/cauldron/components/cursor_button_component.js";
 
+//          ROUGH
+export * from "./gameplay/cauldron/rough/components/scale_on_spawn_component.js";
+
 //    GRAB & THROW
 export * from "./gameplay/grab_throw/grabbable_component.js";
 export * from "./gameplay/grab_throw/grabber_hand_component.js";

@@ -1,8 +1,11 @@
 import { Component, Property } from "@wonderlandengine/api";
-import { ComponentUtils, EasingFunction, Timer, vec3_create } from "wle-pp";
+import { Timer } from "../../../../cauldron/cauldron/timer.js";
+import { EasingFunction, MathUtils } from "../../../../cauldron/utils/math_utils.js";
+import { ComponentUtils } from "../../../../cauldron/wl/utils/component_utils.js";
+import { vec3_create } from "../../../../plugin/js/extensions/array/vec_create_extension.js";
 
 export class ScaleOnSpawnComponent extends Component {
-    static TypeName = "scale-on-spawn";
+    static TypeName = "pp-scale-on-spawn";
     static Properties = {
         _myStartDelay: Property.float(0.0),
         _myScaleDuration: Property.float(0.0)
@@ -13,7 +16,7 @@ export class ScaleOnSpawnComponent extends Component {
     }
 
     start() {
-        this.object.pp_setScale(Math.PP_EPSILON);
+        this.object.pp_setScale(MathUtils.EPSILON);
 
         this._myDelayTimer = new Timer(this._myStartDelay);
         this._myScaleDurationTimer = new Timer(this._myScaleDuration);
