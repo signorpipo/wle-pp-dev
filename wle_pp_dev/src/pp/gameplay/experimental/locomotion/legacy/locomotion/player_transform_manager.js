@@ -228,7 +228,13 @@ export class PlayerTransformManager {
 
         this._myResetHeadToFeetOnNextUpdateValidToReal = false;
 
+        /**
+         * TS type inference helper
+         * 
+         * @type {any}
+         */
         this._myVisibilityChangeEventListener = null;
+
         this._mySessionHasBeenHidden = false;
 
         this._myActive = true;
