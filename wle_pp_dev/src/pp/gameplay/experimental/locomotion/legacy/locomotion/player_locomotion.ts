@@ -453,7 +453,7 @@ export class PlayerLocomotion {
                 params.myObscureMaterial = null;
                 params.myObscureRadius = 0.5;
 
-                params.myObscureFadeOutSeconds = 0;
+                params.myObscureFadeOutSeconds = 0.1;
                 params.myObscureFadeInSeconds = 0.25;
 
                 params.myObscureFadeEasingFunction = EasingFunction.linear;
