@@ -296,7 +296,7 @@ export class PlayerLocomotion {
 
             params.myResetToValidOnEnterSession = true;
             params.myResetToValidOnExitSession = true;
-            params.myResetToValidOnSessionBlurEnd = true;
+            params.myResetToValidOnSessionHiddenEnd = true;
 
             params.myAlwaysResetRealPositionNonVR = true;
             params.myAlwaysResetRealRotationNonVR = true;

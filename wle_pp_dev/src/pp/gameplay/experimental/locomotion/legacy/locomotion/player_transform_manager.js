@@ -144,7 +144,7 @@ export class PlayerTransformManagerParams {
 
         this.myResetToValidOnEnterSession = false;
         this.myResetToValidOnExitSession = false;
-        this.myResetToValidOnSessionBlurEnd = false;
+        this.myResetToValidOnSessionHiddenEnd = false;
 
         this.myAlwaysResetRealPositionNonVR = false;
         this.myAlwaysResetRealRotationNonVR = false;
@@ -227,6 +227,7 @@ export class PlayerTransformManager {
         this._myResetHeadToFeetOnNextUpdateValidToReal = false;
 
         this._myVisibilityChangeEventListener = null;
+        this._mySessionHasBeenHidden = false;
 
         this._myActive = true;
         this._myDestroyed = false;
@@ -670,8 +671,12 @@ export class PlayerTransformManager {
         }
 
         this._myVisibilityChangeEventListener = function (event) {
-            if (event.session.visibilityState == "visible") {
-                if (this._myParams.myResetToValidOnSessionBlurEnd) {
+            if (event.session.visibilityState == "hidden") {
+                this._mySessionHasBeenHidden = true;
+            } else if (this._mySessionHasBeenHidden) {
+                this._mySessionHasBeenHidden = false;
+
+                if (this._myParams.myResetToValidOnSessionHiddenEnd) {
                     this._myResetRealOnHeadSynced = true;
                 }
             }
