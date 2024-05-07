@@ -1,5 +1,5 @@
-import { Timer } from "wle-pp/cauldron/cauldron/timer.js";
-import { EasingFunction, MathUtils } from "wle-pp/cauldron/utils/math_utils.js";
+import { Timer } from "../../../cauldron/cauldron/timer.js";
+import { EasingFunction, MathUtils } from "../../../cauldron/utils/math_utils.js";
 
 export class AnimatedNumberParams {
     public myInitialValue: number = 0;

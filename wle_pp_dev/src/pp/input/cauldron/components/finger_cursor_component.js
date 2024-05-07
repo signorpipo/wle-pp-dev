@@ -1,7 +1,7 @@
 import { Collider, CollisionComponent, Component, PhysXComponent, Property, Shape } from "@wonderlandengine/api";
 import { Cursor, CursorTarget } from "@wonderlandengine/components";
-import { PhysicsCollisionCollector } from "wle-pp/cauldron/physics/physics_collision_collector.js";
-import { PhysicsLayerFlags } from "wle-pp/cauldron/physics/physics_layer_flags.js";
+import { PhysicsCollisionCollector } from "../../../cauldron/physics/physics_collision_collector.js";
+import { PhysicsLayerFlags } from "../../../cauldron/physics/physics_layer_flags.js";
 import { XRUtils } from "../../../cauldron/utils/xr_utils.js";
 import { vec3_create } from "../../../plugin/js/extensions/array/vec_create_extension.js";
 import { Globals } from "../../../pp/globals.js";

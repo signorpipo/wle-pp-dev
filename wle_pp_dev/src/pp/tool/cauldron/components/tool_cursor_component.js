@@ -1,6 +1,6 @@
 import { Component, MeshComponent, Property, ViewComponent } from "@wonderlandengine/api";
 import { Cursor, CursorTarget } from "@wonderlandengine/components";
-import { PhysicsUtils } from "wle-pp/cauldron/physics/physics_utils.js";
+import { PhysicsUtils } from "../../../cauldron/physics/physics_utils.js";
 import { XRUtils } from "../../../cauldron/utils/xr_utils.js";
 import { FingerCursorComponent } from "../../../input/cauldron/components/finger_cursor_component.js";
 import { InputUtils } from "../../../input/cauldron/input_utils.js";

@@ -1,15 +1,15 @@
 import { Component, MeshComponent, Object3D, TextComponent } from "@wonderlandengine/api";
 import { property } from "@wonderlandengine/api/decorators.js";
 import { Cursor, CursorTarget } from "@wonderlandengine/components";
-import { AudioPlayer } from "wle-pp/audio/audio_player.js";
-import { AudioSetup } from "wle-pp/audio/audio_setup.js";
-import { Vector3, Vector4 } from "wle-pp/cauldron/type_definitions/array_type_definitions.js";
-import { ColorUtils } from "wle-pp/cauldron/utils/color_utils.js";
-import { MathUtils } from "wle-pp/cauldron/utils/math_utils.js";
-import { FlatMaterial, PhongMaterial } from "wle-pp/cauldron/wl/type_definitions/material_type_definitions.js";
-import { InputUtils } from "wle-pp/input/cauldron/input_utils.js";
-import { vec3_create, vec4_create } from "wle-pp/plugin/js/extensions/array/vec_create_extension.js";
-import { Globals } from "wle-pp/pp/globals.js";
+import { AudioPlayer } from "../../../../audio/audio_player.js";
+import { AudioSetup } from "../../../../audio/audio_setup.js";
+import { Vector3, Vector4 } from "../../../../cauldron/type_definitions/array_type_definitions.js";
+import { ColorUtils } from "../../../../cauldron/utils/color_utils.js";
+import { MathUtils } from "../../../../cauldron/utils/math_utils.js";
+import { FlatMaterial, PhongMaterial } from "../../../../cauldron/wl/type_definitions/material_type_definitions.js";
+import { InputUtils } from "../../../../input/cauldron/input_utils.js";
+import { vec3_create, vec4_create } from "../../../../plugin/js/extensions/array/vec_create_extension.js";
+import { Globals } from "../../../../pp/globals.js";
 import { AnimatedNumber, AnimatedNumberParams } from "../animated_number.js";
 
 /** You can return `true` to prevent the default behavior of the cursor button to be performed after the action has been handled */
