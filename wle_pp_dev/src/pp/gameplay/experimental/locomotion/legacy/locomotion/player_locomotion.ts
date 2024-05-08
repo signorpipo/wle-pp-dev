@@ -667,19 +667,19 @@ export class PlayerLocomotion {
         return this._myPlayerObscureManager;
     }
 
-    public registerPreUpdateCallback(id: Readonly<any>, callback: (dt: number, playerLocomotion: PlayerLocomotion) => void): void {
+    public registerPreUpdateCallback(id: any, callback: (dt: number, playerLocomotion: PlayerLocomotion) => void): void {
         this._myPreUpdateEmitter.add(callback, { id: id });
     }
 
-    public unregisterPreUpdateCallback(id: Readonly<any>): void {
+    public unregisterPreUpdateCallback(id: any): void {
         this._myPreUpdateEmitter.remove(id);
     }
 
-    public registerPostUpdateCallback(id: Readonly<any>, callback: (dt: number, playerLocomotion: PlayerLocomotion) => void): void {
+    public registerPostUpdateCallback(id: any, callback: (dt: number, playerLocomotion: PlayerLocomotion) => void): void {
         this._myPostUpdateEmitter.add(callback, { id: id });
     }
 
-    public unregisterPostUpdateCallback(id: Readonly<any>): void {
+    public unregisterPostUpdateCallback(id: any): void {
         this._myPostUpdateEmitter.remove(id);
     }
 
