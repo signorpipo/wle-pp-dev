@@ -24,7 +24,8 @@
                         "_myFlatTransparentNoDepth": "f791ea4a-29da-46c4-80a2-09027d17fa30",
                         "_myPhongOpaque": "e972069e-66ee-4d9c-959d-8a78d9ddb9f9",
                         "_myText": "04b7f97e-2921-4f88-91f3-20e62ec5c355",
-                        "_myScene": "ea2d149d-d18c-4968-afde-0b9c1f7ecd3f"
+                        "_myScene": "ea2d149d-d18c-4968-afde-0b9c1f7ecd3f",
+                        "_myRoot": "ea2d149d-d18c-4968-afde-0b9c1f7ecd3f"
                     }
                 },
                 {
@@ -185,6 +186,17 @@
                 {
                     "type": "pp-set-hand-local-transform"
                 }
+            ],
+            "translation": [
+                -0.1,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                1.0,
+                0.0,
+                0.0
             ]
         },
         "21e6e4ba-b097-4abb-97b4-a7d82fb86986": {
@@ -237,6 +249,17 @@
                         "_myHandedness": "Left"
                     }
                 }
+            ],
+            "translation": [
+                -0.1,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                1.0,
+                0.0,
+                0.0
             ]
         },
         "00bc279b-2a05-400e-8c6f-738f7627c931": {
@@ -249,7 +272,21 @@
                         "_myJointMesh": "p1",
                         "_myJointMaterial": "f9c59c9d-4599-40d6-abdb-8caadc0bee21"
                     }
+                },
+                {
+                    "type": "pp-reset-local-transform"
                 }
+            ],
+            "translation": [
+                -0.1,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                1.0,
+                0.0,
+                0.0
             ]
         },
         "ead4fe79-25ef-49b0-8feb-c0487bc6378f": {
@@ -297,6 +334,17 @@
                         "_myHandedness": "Right"
                     }
                 }
+            ],
+            "rotation": [
+                0.0,
+                1.0,
+                0.0,
+                0.0
+            ],
+            "translation": [
+                0.1,
+                0.0,
+                0.0
             ]
         },
         "836077c0-3e6f-447e-ba52-d9e52b9cd182": {
@@ -310,7 +358,21 @@
                         "_myJointMaterial": "f9c59c9d-4599-40d6-abdb-8caadc0bee21",
                         "_myHandedness": "Right"
                     }
+                },
+                {
+                    "type": "pp-reset-local-transform"
                 }
+            ],
+            "rotation": [
+                0.0,
+                1.0,
+                0.0,
+                0.0
+            ],
+            "translation": [
+                0.1,
+                0.0,
+                0.0
             ]
         },
         "16decf90-6c33-450d-bd58-e1ba25943627": {
@@ -329,6 +391,17 @@
                         "_myHandedness": "Right"
                     }
                 }
+            ],
+            "rotation": [
+                0.0,
+                1.0,
+                0.0,
+                0.0
+            ],
+            "translation": [
+                0.1,
+                0.0,
+                0.0
             ]
         },
         "cdac6dc4-9811-44ff-af5d-b1048e3055c0": {
