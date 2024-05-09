@@ -1,7 +1,7 @@
 import { Component, Property } from "@wonderlandengine/api";
 import { Timer } from "../../pp/cauldron/cauldron/timer.js";
 import { FSM } from "../../pp/cauldron/fsm/fsm.js";
-import { TimerState } from "../../pp/cauldron/fsm/states/timer_state.js";
+import { TimerState } from "../../pp/cauldron/fsm/states/condition_states/timer_state.js";
 
 export class MovingPhysXTestComponent extends Component {
     static TypeName = "moving-physx-test";
