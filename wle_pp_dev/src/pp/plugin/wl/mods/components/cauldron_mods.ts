@@ -6,7 +6,7 @@ export function initCauldronMods(): void {
 }
 
 function _initEmitterModPrototype(): void {
-    const emitterMod: Record<string, any> = {};
+    const emitterMod: Record<string, unknown> = {};
 
     emitterMod._flushTransactions = function _flushTransactions(this: Emitter): void {
         const listeners = this._listeners;

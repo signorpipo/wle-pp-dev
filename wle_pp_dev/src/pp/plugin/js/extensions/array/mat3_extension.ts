@@ -11,7 +11,7 @@ export function initMat3Extension(): void {
 
 function _initMat3ExtensionProtoype(): void {
 
-    const mat3Extension: Record<string, any> = {};
+    const mat3Extension: Record<string, unknown> = {};
 
     mat3Extension.mat3_set = function mat3_set<T extends Matrix3>(this: T,
         m00: number, m01?: number, m02?: number,

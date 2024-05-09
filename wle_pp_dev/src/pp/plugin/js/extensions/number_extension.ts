@@ -8,7 +8,7 @@ export function initNumberExtension(): void {
 
 function _initNumberExtensionPrototype(): void {
 
-    const numberExtension: Record<string, any> = {};
+    const numberExtension: Record<string, unknown> = {};
 
     // Needed to make it easier to use plain numbers for parameters that also accept `NumberOverFactor`
     numberExtension.get = function get(this: number, factor?: number): number {

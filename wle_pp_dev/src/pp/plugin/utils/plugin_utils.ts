@@ -1,6 +1,6 @@
 import { JSUtils } from "../../cauldron/utils/js_utils.js";
 
-export function injectProperties(fromReference: Record<string, any>, toReference: object, enumerable: boolean = true, writable: boolean = true, configurable: boolean = true, keepOriginalDescriptorAttributes: boolean = true, bindThisAsFirstParam: boolean = false, prefix?: string, functionNamesToExclude: Readonly<string[]> = []): void {
+export function injectProperties(fromReference: Record<string, unknown>, toReference: object, enumerable: boolean = true, writable: boolean = true, configurable: boolean = true, keepOriginalDescriptorAttributes: boolean = true, bindThisAsFirstParam: boolean = false, prefix?: string, functionNamesToExclude: Readonly<string[]> = []): void {
     const ownPropertyNames = Object.getOwnPropertyNames(fromReference);
     for (const ownPropertyName of ownPropertyNames) {
         if (functionNamesToExclude.includes(ownPropertyName)) continue;
@@ -34,8 +34,8 @@ export function injectProperties(fromReference: Record<string, any>, toReference
             let adjustedProperyValue = fromReference[ownPropertyName];
 
             if (bindThisAsFirstParam && JSUtils.isFunction(adjustedProperyValue)) {
-                const originalFunction = fromReference[ownPropertyName];
-                adjustedProperyValue = function (this: any, ...args: any[]) {
+                const originalFunction = fromReference[ownPropertyName] as (this: unknown, ...args: unknown[]) => unknown;
+                adjustedProperyValue = function (this: unknown, ...args: unknown[]) {
                     return originalFunction(this, ...args);
                 };
 

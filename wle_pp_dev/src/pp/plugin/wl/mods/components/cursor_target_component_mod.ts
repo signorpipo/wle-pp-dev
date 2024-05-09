@@ -10,7 +10,7 @@ export function initCursorTargetComponentMod(): void {
 
 function _initCursorTargetComponentModPrototype(): void {
 
-    const cursorTargetComponentMod: Record<string, any> = {};
+    const cursorTargetComponentMod: Record<string, unknown> = {};
 
     // New Functions 
 

@@ -11,7 +11,7 @@ export function initObjectExtension(): void {
 
 function _initObjectExtensionProtoype(): void {
 
-    const objectExtension: Record<string, any> = {};
+    const objectExtension: Record<string, unknown> = {};
 
     // GETTER
 
@@ -1047,7 +1047,7 @@ function _initObjectExtensionProtoype(): void {
 
     // Component
 
-    objectExtension.pp_addComponent = function pp_addComponent<T extends Component>(this: Object3D, classOrType: ComponentConstructor<T> | string, paramsOrActive?: Record<string, any> | boolean, active?: boolean): T | null {
+    objectExtension.pp_addComponent = function pp_addComponent<T extends Component>(this: Object3D, classOrType: ComponentConstructor<T> | string, paramsOrActive?: Record<string, unknown> | boolean, active?: boolean): T | null {
         return ObjectUtils.addComponent(this, classOrType, paramsOrActive, active);
     };
 

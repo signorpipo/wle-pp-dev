@@ -13,7 +13,7 @@ export function initCauldronExtensions(): void {
 
 function _initPhysicsExtensionPrototype(): void {
 
-    const physicsExtension: Record<string, any> = {};
+    const physicsExtension: Record<string, unknown> = {};
 
     physicsExtension.pp_getEngine = function pp_getEngine(this: Readonly<Physics>): WonderlandEngine {
         return (this as unknown as { _engine: WonderlandEngine })._engine;
@@ -24,7 +24,7 @@ function _initPhysicsExtensionPrototype(): void {
 
 function _initRayHitExtensionPrototype(): void {
 
-    const rayHitExtension: Record<string, any> = {};
+    const rayHitExtension: Record<string, unknown> = {};
 
     rayHitExtension.pp_getEngine = function pp_getEngine(this: Readonly<Physics>): WonderlandEngine {
         return (this as unknown as { _engine: WonderlandEngine })._engine;

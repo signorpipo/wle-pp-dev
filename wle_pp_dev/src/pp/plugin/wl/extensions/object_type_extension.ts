@@ -368,7 +368,7 @@ export interface Object3DExtension {
     pp_setParent(this: Object3D, newParent: Object3D, keepTransformWorld?: boolean): this;
     pp_getParent(this: Readonly<Object3D>): Object3D | null;
 
-    pp_addComponent<T extends Component>(this: Object3D, classOrType: ComponentConstructor<T> | string, paramsOrActive?: Record<string, any> | boolean, active?: boolean): T | null;
+    pp_addComponent<T extends Component>(this: Object3D, classOrType: ComponentConstructor<T> | string, paramsOrActive?: Record<string, unknown> | boolean, active?: boolean): T | null;
 
     pp_getComponent<T extends Component>(this: Readonly<Object3D>, classOrType: ComponentConstructor<T> | string, index?: number): T | null;
     pp_getComponentSelf<T extends Component>(this: Readonly<Object3D>, classOrType: ComponentConstructor<T> | string, index?: number): T | null;

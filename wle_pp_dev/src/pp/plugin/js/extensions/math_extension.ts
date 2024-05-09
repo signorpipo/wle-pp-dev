@@ -9,7 +9,7 @@ export function initMathExtension(): void {
 
 function _initMathExtensionInstance(): void {
 
-    const mathExtension: Record<string, any> = {};
+    const mathExtension: Record<string, unknown> = {};
 
     Object.defineProperty(mathExtension, "PP_EPSILON", {
         get(): number {

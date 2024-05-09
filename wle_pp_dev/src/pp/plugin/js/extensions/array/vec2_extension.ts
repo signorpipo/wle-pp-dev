@@ -11,7 +11,7 @@ export function initVec2Extension(): void {
 
 function _initVec2ExtensionProtoype(): void {
 
-    const vec2Extension: Record<string, any> = {};
+    const vec2Extension: Record<string, unknown> = {};
 
     vec2Extension.vec2_set = function vec2_set<T extends Vector2>(this: T, x: number, y?: number): T {
         return Vec2Utils.set(this, x, y!);

@@ -1792,8 +1792,8 @@ export function getParent(object: Readonly<Object3D>): Object3D | null {
 
 // Component
 
-export function addComponent<T extends Component>(object: Object3D, classOrType: ComponentConstructor<T> | string, paramsOrActive?: Record<string, any> | boolean, active?: boolean): T | null {
-    let params: Record<string, any> | undefined = undefined;
+export function addComponent<T extends Component>(object: Object3D, classOrType: ComponentConstructor<T> | string, paramsOrActive?: Record<string, unknown> | boolean, active?: boolean): T | null {
+    let params: Record<string, unknown> | undefined = undefined;
 
     if (typeof paramsOrActive == "boolean") {
         params = {};

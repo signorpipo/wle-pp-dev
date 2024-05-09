@@ -12,7 +12,7 @@ export function initArrayExtension(): void {
 
 function _initArrayLikeExtensionProtoypes(): void {
 
-    const arrayLikeExtension: Record<string, any> = {};
+    const arrayLikeExtension: Record<string, unknown> = {};
 
     arrayLikeExtension.pp_copy = function pp_copy<ArrayType extends ArrayLike<T>, T>(this: ArrayType, array: Readonly<ArrayLike<T>>, copyCallback?: (arrayElement: T, thisElement: T) => T): ArrayType {
         return ArrayUtils.copy(array, this, copyCallback);
@@ -81,7 +81,7 @@ function _initArrayLikeExtensionProtoypes(): void {
 
 function _initArrayExtensionProtoype(): void {
 
-    const arrayExtension: Record<string, any> = {};
+    const arrayExtension: Record<string, unknown> = {};
 
     arrayExtension.pp_remove = function pp_remove<T>(this: T[], callback: (elementToCheck: T, elementIndex: number) => boolean): T | undefined {
         return ArrayUtils.remove(this, callback);
