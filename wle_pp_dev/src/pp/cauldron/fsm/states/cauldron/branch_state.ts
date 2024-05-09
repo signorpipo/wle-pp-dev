@@ -31,13 +31,13 @@ export class BranchState implements State {
         }
     }
 
-    public start(fsm: FSM, transition: Readonly<TransitionData>, branchCallback?: () => unknown | [unknown, unknown[]]): void {
+    public start(fsm: FSM, transitionData: Readonly<TransitionData>, branchCallback?: () => unknown | [unknown, unknown[]]): void {
         if (branchCallback != null) {
             this._myBranchCallback = branchCallback;
         }
     }
 
-    public init(fsm: FSM, state: StateData, branchCallback?: () => boolean): void {
+    public init(fsm: FSM, stateData: StateData, branchCallback?: () => boolean): void {
         if (branchCallback != null) {
             this._myBranchCallback = branchCallback;
         }

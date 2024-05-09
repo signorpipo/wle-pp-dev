@@ -1,8 +1,9 @@
 import { Timer } from "../../../cauldron/timer.js";
 import { FSM, StateData, TransitionData } from "../../fsm.js";
+import { State } from "../../state.js";
 import { BaseConditionState } from "./base_condition_state.js";
 
-export class TimerState extends BaseConditionState {
+export class TimerState extends BaseConditionState implements State {
 
     private readonly _myTimer: Timer;
 
@@ -30,15 +31,15 @@ export class TimerState extends BaseConditionState {
         super._update(dt, fsm);
     }
 
-    start(fsm: FSM, transition: Readonly<TransitionData>, duration?: number, transitionToPerformOnEnd?: unknown, ...transitionArgs: unknown[]): void {
+    start(fsm: FSM, transitionData: Readonly<TransitionData>, duration?: number, transitionToPerformOnEnd?: unknown, ...transitionArgs: unknown[]): void {
         this._myTimer.start(duration);
 
-        super._start(fsm, transition, undefined, transitionToPerformOnEnd, ...transitionArgs);
+        super._start(fsm, transitionData, undefined, transitionToPerformOnEnd, ...transitionArgs);
     }
 
-    init(fsm: FSM, state: StateData, duration?: number, transitionToPerformOnEnd?: unknown, ...transitionArgs: unknown[]): void {
+    init(fsm: FSM, stateData: StateData, duration?: number, transitionToPerformOnEnd?: unknown, ...transitionArgs: unknown[]): void {
         this._myTimer.start(duration);
 
-        super._init(fsm, state, undefined, transitionToPerformOnEnd, ...transitionArgs);
+        super._init(fsm, stateData, undefined, transitionToPerformOnEnd, ...transitionArgs);
     }
 }

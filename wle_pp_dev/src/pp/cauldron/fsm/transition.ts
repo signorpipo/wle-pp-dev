@@ -6,15 +6,18 @@ import { FSM, StateData, TransitionData } from "./fsm.js";
  * 
  * If you don't specify some functions the fsm will just skip them
  * 
- * The `initState` param is of type `StateData` and can be used to retrieve the `stateID` and other data  
- * The param `transition` is of type `TransitionData` and can be used to retrieve the `transitionID` and other data
+ * The `initStateData` param is of type `StateData` and can be used to retrieve the `stateID` and other data  
+ * The param `transitionData` is of type `TransitionData` and can be used to retrieve the `transitionID` and other data
  */
 export interface Transition {
 
     /** Called if this is used as an init transition for the fsm */
-    performInit?(fsm: FSM, initState: Readonly<StateData>, ...args: unknown[]): void;
+    performInit?(fsm: FSM, initStateData: Readonly<StateData>, ...args: unknown[]): void;
 
     /** Called when performing a transition
-        You can find the from and to states inside the `transition` param*/
-    perform?(fsm: FSM, transition: Readonly<TransitionData>, ...args: unknown[]): void;
+        You can find the from and to states inside the `transitionData` param*/
+    perform?(fsm: FSM, transitionData: Readonly<TransitionData>, ...args: unknown[]): void;
+
+    /** Used when the FSM is deep cloned */
+    clone?(): void;
 }
