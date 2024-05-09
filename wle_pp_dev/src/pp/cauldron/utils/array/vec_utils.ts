@@ -42,7 +42,7 @@ export function set<T extends Vector>(vector: T, firstValue: number, ...remainin
 }
 
 /** The overload where `T extends Vector` does also get `array` as `Readonly<T>`, but is not marked as such due to 
- *  Typescript having issues with inferring the proper type of `T` when `Readonly` is used */
+    Typescript having issues with inferring the proper type of `T` when `Readonly` is used */
 export function clone<T extends Vector>(vector: Readonly<T>): T;
 export function clone(vector: Readonly<number[]>): number[];
 export function clone<T extends Vector>(vector: T): T;

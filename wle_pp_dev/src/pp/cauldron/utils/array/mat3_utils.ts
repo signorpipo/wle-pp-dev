@@ -51,7 +51,7 @@ export function copy<T extends Matrix3>(from: Readonly<Matrix3>, to: T): T {
 }
 
 /** The overload where `T extends Vector2` does also get `array` as `Readonly<T>`, but is not marked as such due to 
- *  Typescript having issues with inferring the proper type of `T` when `Readonly` is used */
+    Typescript having issues with inferring the proper type of `T` when `Readonly` is used */
 export function clone<T extends Matrix3>(matrix: Readonly<T>): T;
 export function clone(matrix: Readonly<number[]>): number[];
 export function clone<T extends Matrix3>(matrix: T): T;

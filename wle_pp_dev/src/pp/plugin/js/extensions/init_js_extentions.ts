@@ -7,9 +7,9 @@ import { initMathExtension } from "./math_extension.js";
 import { initNumberExtension } from "./number_extension.js";
 
 /**
- *  TS import preserver
+ * TS import preserver
  * 
- *  This is only needed to make it so the import is not removed, since it makes the type extensions available to the Typescript 
+ * This is only needed to make it so the import is not removed, since it makes the type extensions available to the Typescript 
  */
 import "./array/array_extension.js";
 import "./array/mat3_extension.js";
