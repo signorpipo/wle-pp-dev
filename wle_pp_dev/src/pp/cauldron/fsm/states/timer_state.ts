@@ -1,35 +1,39 @@
 import { Timer } from "../../cauldron/timer.js";
+import { FSM, StateData, TransitionData } from "../fsm.js";
 import { State } from "../state.js";
 
-export class TimerState extends State {
+export class TimerState implements State {
 
-    constructor(duration = 0, transitionToPerformOnEnd = null, ...transitionArgs) {
-        super();
+    private readonly _myTimer: Timer;
 
+    private _myTransitionToPerformOnEnd: unknown;
+    private _myTransitionArgs: unknown[];
+
+    constructor(duration: number = 0, transitionToPerformOnEnd: unknown, ...transitionArgs: unknown[]) {
         this._myTransitionToPerformOnEnd = transitionToPerformOnEnd;
         this._myTransitionArgs = transitionArgs;
 
         this._myTimer = new Timer(duration, false);
     }
 
-    setDuration(duration) {
+    setDuration(duration: number): void {
         this._myTimer.setDuration(duration);
     }
 
-    setTransitionToPerformOnEnd(transitionToPerformOnEnd, ...transitionArgs) {
+    setTransitionToPerformOnEnd(transitionToPerformOnEnd: unknown, ...transitionArgs: unknown[]): void {
         this._myTransitionToPerformOnEnd = transitionToPerformOnEnd;
         this._myTransitionArgs = transitionArgs;
     }
 
-    onEnd(callback, id = null) {
-        this._myTimer.onEnd(callback, id);
+    onEnd(listener: () => void, id?: unknown): void {
+        this._myTimer.onEnd(listener, id);
     }
 
-    unregisterOnEnd(id = null) {
+    unregisterOnEnd(id?: unknown): void {
         this._myTimer.unregisterOnEnd(id);
     }
 
-    update(dt, fsm) {
+    update(dt: number, fsm: FSM): void {
         this._myTimer.update(dt);
         if (this._myTimer.isDone()) {
             if (this._myTransitionToPerformOnEnd != null) {
@@ -38,15 +42,16 @@ export class TimerState extends State {
         }
     }
 
-    start(fsm, transition, duration = null, transitionToPerformOnEnd = null, ...transitionArgs) {
+    start(fsm: FSM, transition: Readonly<TransitionData>, duration?: number, transitionToPerformOnEnd?: unknown, ...transitionArgs: unknown[]): void {
         this._myTimer.start(duration);
+
         if (transitionToPerformOnEnd != null) {
             this._myTransitionToPerformOnEnd = transitionToPerformOnEnd;
             this._myTransitionArgs = transitionArgs;
         }
     }
 
-    init(fsm, state, duration = null, transitionToPerformOnEnd = null, ...transitionArgs) {
+    init(fsm: FSM, state: StateData, duration?: number, transitionToPerformOnEnd?: unknown, ...transitionArgs: unknown[]): void {
         this._myTimer.start(duration);
         if (transitionToPerformOnEnd != null) {
             this._myTransitionToPerformOnEnd = transitionToPerformOnEnd;
