@@ -17,8 +17,8 @@ export class StateData {
 export class TransitionData {
     public myID: unknown;
 
-    public myFromState: Readonly<StateData>;
-    public myToState: Readonly<StateData>;
+    public myFromStateData: Readonly<StateData>;
+    public myToStateData: Readonly<StateData>;
 
     public myTransition: Transition;
 
@@ -26,8 +26,8 @@ export class TransitionData {
 
     constructor(transitionID: unknown, fromStateData: Readonly<StateData>, toStateData: Readonly<StateData>, transition: Transition, skipStateFunction: SkipStateFunction) {
         this.myID = transitionID;
-        this.myFromState = fromStateData;
-        this.myToState = toStateData;
+        this.myFromStateData = fromStateData;
+        this.myToStateData = toStateData;
         this.myTransition = transition;
         this.mySkipStateFunction = skipStateFunction;
     }
@@ -347,7 +347,7 @@ export class FSM {
 
         const transitionsDataToState = [];
         for (const transitionData of transitionsDataFromState.values()) {
-            if (transitionData.myToState.myID == toStateID) {
+            if (transitionData.myToStateData.myID == toStateID) {
                 transitionsDataToState.push(transitionData);
             }
         }
@@ -363,7 +363,7 @@ export class FSM {
             for (const transitionsDataFromState of this._myTransitionsData.values()) {
                 const toDelete = [];
                 for (const [transitionID, transitionData] of transitionsDataFromState.entries()) {
-                    if (transitionData.myToState.myID == stateID) {
+                    if (transitionData.myToStateData.myID == stateID) {
                         toDelete.push(transitionID);
                     }
                 }
@@ -477,8 +477,8 @@ export class FSM {
             for (const transitonData of transitionsDataFromState.values()) {
                 let clonedTransitionData = null;
 
-                const fromState = cloneFSM.getStateData(transitonData.myFromState.myID)!;
-                const toState = cloneFSM.getStateData(transitonData.myToState.myID)!;
+                const fromState = cloneFSM.getStateData(transitonData.myFromStateData.myID)!;
+                const toState = cloneFSM.getStateData(transitonData.myToStateData.myID)!;
 
                 if (deepClone) {
                     clonedTransitionData = new TransitionData(transitonData.myID, fromState, toState, transitonData.myTransition.clone!(), transitonData.mySkipStateFunction);
@@ -628,7 +628,7 @@ export class FSM {
                 this._myCurrentlyPerformedTransitionData = transitionDataToPerform;
 
                 const fromStateData = this._myCurrentStateData;
-                const toStateData = this._myStatesData.get(transitionDataToPerform.myToState.myID)!;
+                const toStateData = this._myStatesData.get(transitionDataToPerform.myToStateData.myID)!;
 
                 if (this._myLogEnabled) {
                     const consoleArguments = [this._myLogFSMName, "- From:", fromStateData.myID, "- To:", toStateData.myID, "- With:", transitionID];
@@ -652,7 +652,7 @@ export class FSM {
                     toStateData.myState.start(this, transitionDataToPerform, ...args);
                 }
 
-                this._myCurrentStateData = transitionDataToPerform.myToState;
+                this._myCurrentStateData = transitionDataToPerform.myToStateData;
 
                 this._myTransitionEmitter.notify(this, fromStateData, toStateData, transitionDataToPerform, performMode, ...args);
 
