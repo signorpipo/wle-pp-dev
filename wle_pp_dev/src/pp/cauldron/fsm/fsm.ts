@@ -6,11 +6,11 @@ import { Transition } from "./transition.js";
 
 export class StateData {
     public myID: unknown;
-    public myObject: State;
+    public myState: State;
 
     constructor(stateID: unknown, stateObject: State) {
         this.myID = stateID;
-        this.myObject = stateObject;
+        this.myState = stateObject;
     }
 }
 
@@ -20,7 +20,7 @@ export class TransitionData {
     public myFromState: Readonly<StateData>;
     public myToState: Readonly<StateData>;
 
-    public myObject: Transition;
+    public myTransition: Transition;
 
     public mySkipStateFunction: SkipStateFunction;
 
@@ -28,18 +28,18 @@ export class TransitionData {
         this.myID = transitionID;
         this.myFromState = fromStateData;
         this.myToState = toStateData;
-        this.myObject = transitionObject;
+        this.myTransition = transitionObject;
         this.mySkipStateFunction = skipStateFunction;
     }
 }
 
 export class PendingPerform {
     public myID: unknown;
-    public myArgs: unknown[];
+    public myTransitionArgs: unknown[];
 
     constructor(transitionID: unknown, ...args: unknown[]) {
         this.myID = transitionID;
-        this.myArgs = args;
+        this.myTransitionArgs = args;
     }
 }
 
@@ -101,7 +101,7 @@ export class FSM {
             stateObject = {};
 
             if (typeof state == "function") {
-                stateObject.update = function update(dt: number, fsm: FSM, ...args: unknown[]) { return state(dt, fsm, ...args); };
+                stateObject.update = function update(dt: number, fsm: FSM, ...args: unknown[]): void { return state(dt, fsm, ...args); };
             }
 
             stateObject.clone = function clone() {
@@ -125,7 +125,7 @@ export class FSM {
             transitionObject = {};
 
             if (typeof transition == "function") {
-                transitionObject.perform = function perform(fsm: FSM, transitionData: Readonly<TransitionData>, ...args: unknown[]) { return transition(fsm, transitionData, ...args); };
+                transitionObject.perform = function perform(fsm: FSM, transitionData: Readonly<TransitionData>, ...args: unknown[]): void { return transition(fsm, transitionData, ...args); };
             }
 
             transitionObject.clone = function clone() {
@@ -160,7 +160,7 @@ export class FSM {
             initTransitionObject = {};
 
             if (typeof initTransition == "function") {
-                initTransitionObject.performInit = function performInit(fsm: FSM, transitionData: Readonly<TransitionData>, ...args: unknown[]) { return initTransition(fsm, transitionData, ...args); };
+                initTransitionObject.performInit = function performInit(fsm: FSM, initStateData: Readonly<StateData>, ...args: unknown[]): void { return initTransition(fsm, initStateData, ...args); };
             }
         } else {
             initTransitionObject = initTransition;
@@ -175,8 +175,8 @@ export class FSM {
 
             if (initTransitionObject && initTransitionObject.performInit) {
                 initTransitionObject.performInit(this, initStateData, ...args);
-            } else if (initStateData.myObject && initStateData.myObject.init) {
-                initStateData.myObject.init(this, initStateData, ...args);
+            } else if (initStateData.myState && initStateData.myState.init) {
+                initStateData.myState.init(this, initStateData, ...args);
             }
 
             this._myCurrentStateData = initStateData;
@@ -197,14 +197,14 @@ export class FSM {
     public update(dt: number, ...args: unknown[]): void {
         if (this._myPendingPerforms.length > 0) {
             for (let i = 0; i < this._myPendingPerforms.length; i++) {
-                this._perform(this._myPendingPerforms[i].myID, PerformMode.DELAYED, ...this._myPendingPerforms[i].myArgs);
+                this._perform(this._myPendingPerforms[i].myID, PerformMode.DELAYED, ...this._myPendingPerforms[i].myTransitionArgs);
             }
 
             this._myPendingPerforms.pp_clear();
         }
 
-        if (this._myCurrentStateData && this._myCurrentStateData.myObject && this._myCurrentStateData.myObject.update) {
-            this._myCurrentStateData.myObject.update(dt, this, ...args);
+        if (this._myCurrentStateData && this._myCurrentStateData.myState && this._myCurrentStateData.myState.update) {
+            this._myCurrentStateData.myState.update(dt, this, ...args);
         }
     }
 
@@ -462,9 +462,9 @@ export class FSM {
             let stateData = null;
 
             if (deepClone) {
-                stateData = new StateData(entry[1].myID, entry[1].myObject.clone!());
+                stateData = new StateData(entry[1].myID, entry[1].myState.clone!());
             } else {
-                stateData = new StateData(entry[1].myID, entry[1].myObject);
+                stateData = new StateData(entry[1].myID, entry[1].myState);
             }
 
             cloneFSM._myStates.set(stateData.myID, stateData);
@@ -481,9 +481,9 @@ export class FSM {
                 const toState = cloneFSM.getState(transitonEntry[1].myToState.myID)!;
 
                 if (deepClone) {
-                    transitionData = new TransitionData(transitonEntry[1].myID, fromState, toState, transitonEntry[1].myObject.clone!(), transitonEntry[1].mySkipStateFunction);
+                    transitionData = new TransitionData(transitonEntry[1].myID, fromState, toState, transitonEntry[1].myTransition.clone!(), transitonEntry[1].mySkipStateFunction);
                 } else {
-                    transitionData = new TransitionData(transitonEntry[1].myID, fromState, toState, transitonEntry[1].myObject, transitonEntry[1].mySkipStateFunction);
+                    transitionData = new TransitionData(transitonEntry[1].myID, fromState, toState, transitonEntry[1].myTransition, transitonEntry[1].mySkipStateFunction);
                 }
 
                 transitionsFromState.set(transitionData.myID, transitionData);
@@ -505,12 +505,12 @@ export class FSM {
         let deepCloneable = true;
 
         for (const entry of this._myStates.entries()) {
-            deepCloneable = deepCloneable && entry[1].myObject.clone != null;
+            deepCloneable = deepCloneable && entry[1].myState.clone != null;
         }
 
         for (const entry of this._myTransitions.entries()) {
             for (const transitonEntry of entry[1].entries()) {
-                deepCloneable = deepCloneable && transitonEntry[1].myObject.clone != null;
+                deepCloneable = deepCloneable && transitonEntry[1].myTransition.clone != null;
             }
         }
 
@@ -639,17 +639,17 @@ export class FSM {
                 }
 
                 if (transitionToPerform.mySkipStateFunction != SkipStateFunction.END && transitionToPerform.mySkipStateFunction != SkipStateFunction.BOTH &&
-                    fromState.myObject && fromState.myObject.end) {
-                    fromState.myObject.end(this, transitionToPerform, ...args);
+                    fromState.myState && fromState.myState.end) {
+                    fromState.myState.end(this, transitionToPerform, ...args);
                 }
 
-                if (transitionToPerform.myObject && transitionToPerform.myObject.perform) {
-                    transitionToPerform.myObject.perform(this, transitionToPerform, ...args);
+                if (transitionToPerform.myTransition && transitionToPerform.myTransition.perform) {
+                    transitionToPerform.myTransition.perform(this, transitionToPerform, ...args);
                 }
 
                 if (transitionToPerform.mySkipStateFunction != SkipStateFunction.START && transitionToPerform.mySkipStateFunction != SkipStateFunction.BOTH &&
-                    toState.myObject && toState.myObject.start) {
-                    toState.myObject.start(this, transitionToPerform, ...args);
+                    toState.myState && toState.myState.start) {
+                    toState.myState.start(this, transitionToPerform, ...args);
                 }
 
                 this._myCurrentStateData = transitionToPerform.myToState;
