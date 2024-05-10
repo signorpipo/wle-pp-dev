@@ -5,7 +5,6 @@ import { State } from "./state.js";
 import { Transition } from "./transition.js";
 
 export class StateData {
-
     public myID: unknown;
     public myObject: State;
 
@@ -16,7 +15,6 @@ export class StateData {
 }
 
 export class TransitionData {
-
     public myID: unknown;
 
     public myFromState: Readonly<StateData>;
@@ -32,6 +30,16 @@ export class TransitionData {
         this.myToState = toStateData;
         this.myObject = transitionObject;
         this.mySkipStateFunction = skipStateFunction;
+    }
+}
+
+export class PendingPerform {
+    public myID: unknown;
+    public myArgs: unknown[];
+
+    constructor(transitionID: unknown, ...args: unknown[]) {
+        this.myID = transitionID;
+        this.myArgs = args;
     }
 }
 
@@ -65,8 +73,8 @@ export class FSM {
 
     private _myCurrentStateData: Readonly<StateData> | null = null;
 
-    private _myStates: Map<unknown, Readonly<StateData>> = new Map();
-    private _myTransitions: Map<unknown, Map<unknown, Readonly<TransitionData>>> = new Map();
+    private readonly _myStates: Map<unknown, Readonly<StateData>> = new Map();
+    private readonly _myTransitions: Map<unknown, Map<unknown, Readonly<TransitionData>>> = new Map();
 
     private _myLogEnabled: boolean = false;
     private _myLogShowDelayedInfo: boolean = false;
@@ -74,22 +82,22 @@ export class FSM {
 
     private _myPerformMode: PerformMode;
     private _myPerformDelayedMode: PerformDelayedMode;
-    private _myPendingPerforms = [];
-    private _myCurrentlyPerformedTransition = null;
+    private readonly _myPendingPerforms: PendingPerform[] = [];
+    private _myCurrentlyPerformedTransition: Readonly<TransitionData> | null = null;
 
-    private _myInitEmitter: Emitter<[FSM, Readonly<StateData>, Transition, unknown[]]> = new Emitter();             // Signature: listener(fsm, initStateData, initTransitionObject, ...args)
-    private _myInitIDEmitters = new Map();
-    private _myTransitionEmitter: Emitter<[FSM, Readonly<StateData>, Readonly<StateData>, Readonly<TransitionData>, PerformMode, unknown[]]> = new Emitter();
-    private _myTransitionIDEmitters: [unknown, unknown, unknown, Emitter<[FSM, Readonly<StateData>, Readonly<StateData>, Readonly<TransitionData>, PerformMode, unknown[]]>][] = [];
+    private readonly _myInitEmitter: Emitter<[FSM, Readonly<StateData>, Transition, unknown[]]> = new Emitter();
+    private readonly _myInitIDEmitters: Map<unknown, Emitter<[FSM, Readonly<StateData>, Transition, unknown[]]>> = new Map();
+    private readonly _myTransitionEmitter: Emitter<[FSM, Readonly<StateData>, Readonly<StateData>, Readonly<TransitionData>, PerformMode, unknown[]]> = new Emitter();
+    private readonly _myTransitionIDEmitters: [unknown, unknown, unknown, Emitter<[FSM, Readonly<StateData>, Readonly<StateData>, Readonly<TransitionData>, PerformMode, unknown[]]>][] = [];
 
     constructor(performMode = PerformMode.IMMEDIATE, performDelayedMode = PerformDelayedMode.QUEUE) {
         this._myPerformMode = performMode;
         this._myPerformDelayedMode = performDelayedMode;
     }
 
-    public addState(stateID: unknown, state: State | ((dt: number, fsm: FSM, ...args: unknown[]) => void) | null = null): void {
+    public addState(stateID: unknown, state?: State | ((dt: number, fsm: FSM, ...args: unknown[]) => void)): void {
         let stateObject: State | null = null;
-        if (!state || typeof state == "function") {
+        if (state == null || typeof state == "function") {
             stateObject = {};
 
             if (typeof state == "function") {
@@ -111,9 +119,9 @@ export class FSM {
         this._myTransitions.set(stateID, new Map());
     }
 
-    public addTransition(fromStateID: unknown, toStateID: unknown, transitionID: unknown, transition: Transition | ((fsm: FSM, transitionData: Readonly<TransitionData>, ...args: unknown[]) => void) | null = null, skipStateFunction: SkipStateFunction = SkipStateFunction.NONE): void {
+    public addTransition(fromStateID: unknown, toStateID: unknown, transitionID: unknown, transition?: Transition | ((fsm: FSM, transitionData: Readonly<TransitionData>, ...args: unknown[]) => void), skipStateFunction: SkipStateFunction = SkipStateFunction.NONE): void {
         let transitionObject: Transition | null = null;
-        if (!transition || typeof transition == "function") {
+        if (transition == null || typeof transition == "function") {
             transitionObject = {};
 
             if (typeof transition == "function") {
@@ -146,15 +154,20 @@ export class FSM {
         }
     }
 
-    public init(initStateID, initTransition = null, ...args): void {
-        let initTransitionObject = initTransition;
-        if (initTransition && typeof initTransition == "function") {
+    public init(initStateID: unknown, initTransition?: Transition | ((fsm: FSM, initStateData: Readonly<StateData>, ...args: unknown[]) => void), ...args: unknown[]): void {
+        let initTransitionObject: Transition | null = null;
+        if (initTransition == null || typeof initTransition == "function") {
             initTransitionObject = {};
-            initTransitionObject.performInit = initTransition;
+
+            if (typeof initTransition == "function") {
+                initTransitionObject.performInit = function performInit(fsm: FSM, transitionData: Readonly<TransitionData>, ...args: unknown[]) { return initTransition(fsm, transitionData, ...args); };
+            }
+        } else {
+            initTransitionObject = initTransition;
         }
 
         if (this.hasState(initStateID)) {
-            let initStateData = this._myStates.get(initStateID);
+            const initStateData = this._myStates.get(initStateID)!;
 
             if (this._myLogEnabled) {
                 console.log(this._myLogFSMName, "- Init:", initStateID);
@@ -168,12 +181,12 @@ export class FSM {
 
             this._myCurrentStateData = initStateData;
 
-            this._myInitEmitter.notify(this, initStateData, initTransitionObject, ...args);
+            this._myInitEmitter.notify(this, initStateData, ...args);
 
             if (this._myInitIDEmitters.size > 0) {
-                let emitter = this._myInitIDEmitters.get(initStateID);
+                const emitter = this._myInitIDEmitters.get(initStateID);
                 if (emitter != null) {
-                    emitter.notify(this, initStateData, initTransitionObject, ...args);
+                    emitter.notify(this, initStateData, ...args);
                 }
             }
         } else if (this._myLogEnabled) {
@@ -181,12 +194,13 @@ export class FSM {
         }
     }
 
-    public update(dt, ...args) {
+    public update(dt: number, ...args: unknown[]): void {
         if (this._myPendingPerforms.length > 0) {
             for (let i = 0; i < this._myPendingPerforms.length; i++) {
                 this._perform(this._myPendingPerforms[i].myID, PerformMode.DELAYED, ...this._myPendingPerforms[i].myArgs);
             }
-            this._myPendingPerforms = [];
+
+            this._myPendingPerforms.pp_clear();
         }
 
         if (this._myCurrentStateData && this._myCurrentStateData.myObject && this._myCurrentStateData.myObject.update) {
@@ -194,7 +208,7 @@ export class FSM {
         }
     }
 
-    public perform(transitionID, ...args) {
+    public perform(transitionID: unknown, ...args: unknown[]): void {
         if (this._myPerformMode == PerformMode.DELAYED) {
             this.performDelayed(transitionID, ...args);
         } else {
@@ -202,23 +216,23 @@ export class FSM {
         }
     }
 
-    public performDelayed(transitionID, ...args) {
+    public performDelayed(transitionID: unknown, ...args: unknown[]): boolean {
         let performDelayed = false;
 
         switch (this._myPerformDelayedMode) {
             case PerformDelayedMode.QUEUE:
-                this._myPendingPerforms.push(new _PendingPerform(transitionID, ...args));
+                this._myPendingPerforms.push(new PendingPerform(transitionID, ...args));
                 performDelayed = true;
                 break;
             case PerformDelayedMode.KEEP_FIRST:
                 if (!this.hasPendingPerforms()) {
-                    this._myPendingPerforms.push(new _PendingPerform(transitionID, ...args));
+                    this._myPendingPerforms.push(new PendingPerform(transitionID, ...args));
                     performDelayed = true;
                 }
                 break;
             case PerformDelayedMode.KEEP_LAST:
                 this.resetPendingPerforms();
-                this._myPendingPerforms.push(new _PendingPerform(transitionID, ...args));
+                this._myPendingPerforms.push(new PendingPerform(transitionID, ...args));
                 performDelayed = true;
                 break;
         }
@@ -226,72 +240,89 @@ export class FSM {
         return performDelayed;
     }
 
-    public performImmediate(transitionID, ...args) {
+    public performImmediate(transitionID: unknown, ...args: unknown[]): boolean {
         return this._perform(transitionID, PerformMode.IMMEDIATE, ...args);
     }
 
-    public canPerform(transitionID) {
+    public canPerform(transitionID: unknown): boolean {
+        if (this._myCurrentStateData == null) {
+            return false;
+        }
+
         return this.hasTransitionFromState(this._myCurrentStateData.myID, transitionID);
     }
 
-    public canGoTo(stateID, transitionID = null) {
+    public canGoTo(stateID: unknown, transitionID?: unknown): boolean {
+        if (this._myCurrentStateData == null) {
+            return false;
+        }
+
         return this.hasTransitionFromStateToState(this._myCurrentStateData.myID, stateID, transitionID);
     }
 
-    public isInState(stateID) {
+    public isInState(stateID: unknown): boolean {
         return this._myCurrentStateData != null && this._myCurrentStateData.myID == stateID;
     }
 
-    public isPerformingTransition() {
+    public isPerformingTransition(): boolean {
         return this._myCurrentlyPerformedTransition != null;
     }
 
-    public getCurrentlyPerformedTransition() {
+    public getCurrentlyPerformingTransition(): TransitionData | null {
         return this._myCurrentlyPerformedTransition;
     }
 
-    public hasBeenInit() {
+    public hasBeenInit(): boolean {
         return this._myCurrentStateData != null;
     }
 
-    public reset() {
+    public reset(): void {
         this.resetState();
         this.resetPendingPerforms();
     }
 
-    public resetState() {
+    public resetState(): void {
         this._myCurrentStateData = null;
     }
 
-    public resetPendingPerforms() {
-        this._myPendingPerforms = [];
+    public resetPendingPerforms(): void {
+        this._myPendingPerforms.pp_clear();
     }
 
-    public getCurrentState() {
+    public getCurrentState(): StateData | null {
         return this._myCurrentStateData;
     }
 
-    public getCurrentTransitions() {
+    public getCurrentTransitions(): TransitionData[] {
+        if (this._myCurrentStateData == null) {
+            return [];
+        }
+
         return this.getTransitionsFromState(this._myCurrentStateData.myID);
     }
 
-    public getCurrentTransitionsToState(stateID) {
+    public getCurrentTransitionsToState(stateID: unknown): TransitionData[] {
+        if (this._myCurrentStateData == null) {
+            return [];
+        }
+
         return this.getTransitionsFromStateToState(this._myCurrentStateData.myID, stateID);
     }
 
-    public getState(stateID) {
-        return this._myStates.get(stateID);
+    public getState(stateID: unknown): StateData | null {
+        const stateData = this._myStates.get(stateID);
+        return stateData != null ? stateData : null;
     }
 
-    public getStates() {
-        return this._myStates.values();
+    public getStates(): StateData[] {
+        return Array.from(this._myStates.values());
     }
 
-    public getTransitions() {
-        let transitions = [];
+    public getTransitions(): TransitionData[] {
+        const transitions = [];
 
-        for (let transitionsFromState of this._myTransitions.values()) {
-            for (let transitionData of transitionsFromState.values()) {
+        for (const transitionsFromState of this._myTransitions.values()) {
+            for (const transitionData of transitionsFromState.values()) {
                 transitions.push(transitionData);
             }
         }
@@ -299,16 +330,23 @@ export class FSM {
         return transitions;
     }
 
-    public getTransitionsFromState(fromStateID) {
-        let transitionsFromState = this._getTransitionsFromState(fromStateID);
+    public getTransitionsFromState(fromStateID: unknown): TransitionData[] {
+        const transitionsFromState = this._getTransitionsFromState(fromStateID);
+        if (transitionsFromState == null) {
+            return [];
+        }
+
         return Array.from(transitionsFromState.values());
     }
 
-    public getTransitionsFromStateToState(fromStateID, toStateID) {
-        let transitionsFromState = this._getTransitionsFromState(fromStateID);
+    public getTransitionsFromStateToState(fromStateID: unknown, toStateID: unknown): TransitionData[] {
+        const transitionsFromState = this._getTransitionsFromState(fromStateID);
+        if (transitionsFromState == null) {
+            return [];
+        }
 
-        let transitionsToState = [];
-        for (let transitionData of transitionsFromState.values()) {
+        const transitionsToState = [];
+        for (const transitionData of transitionsFromState.values()) {
             if (transitionData.myToState.myID == toStateID) {
                 transitionsToState.push(transitionData);
             }
@@ -317,31 +355,32 @@ export class FSM {
         return transitionsToState;
     }
 
-    public removeState(stateID) {
+    public removeState(stateID: unknown): boolean {
         if (this.hasState(stateID)) {
             this._myStates.delete(stateID);
             this._myTransitions.delete(stateID);
 
-            for (let transitionsFromState of this._myTransitions.values()) {
-                let toDelete = [];
-                for (let [transitionID, transitionData] of transitionsFromState.entries()) {
+            for (const transitionsFromState of this._myTransitions.values()) {
+                const toDelete = [];
+                for (const [transitionID, transitionData] of transitionsFromState.entries()) {
                     if (transitionData.myToState.myID == stateID) {
                         toDelete.push(transitionID);
                     }
                 }
 
-                for (let transitionID of toDelete) {
+                for (const transitionID of toDelete) {
                     transitionsFromState.delete(transitionID);
                 }
             }
 
             return true;
         }
+
         return false;
     }
 
-    public removeTransitionFromState(fromStateID, transitionID) {
-        let fromTransitions = this._getTransitionsFromState(fromStateID);
+    public removeTransitionFromState(fromStateID: unknown, transitionID: unknown): boolean {
+        const fromTransitions = this._getTransitionsFromState(fromStateID);
         if (fromTransitions) {
             return fromTransitions.delete(transitionID);
         }
@@ -349,26 +388,26 @@ export class FSM {
         return false;
     }
 
-    public asState(stateID) {
+    public hasState(stateID: unknown): boolean {
         return this._myStates.has(stateID);
     }
 
-    public hasTransitionFromState(fromStateID, transitionID) {
-        let transitions = this.getTransitionsFromState(fromStateID);
+    public hasTransitionFromState(fromStateID: unknown, transitionID: unknown): boolean {
+        const transitions = this.getTransitionsFromState(fromStateID);
 
-        let transitionIndex = transitions.findIndex(function (transition) {
+        const transitionIndex = transitions.findIndex(function (transition) {
             return transition.myID == transitionID;
         });
 
         return transitionIndex >= 0;
     }
 
-    public hasTransitionFromStateToState(fromStateID, toStateID, transitionID = null) {
-        let transitions = this.getTransitionsFromStateToState(fromStateID, toStateID);
+    public hasTransitionFromStateToState(fromStateID: unknown, toStateID: unknown, transitionID?: unknown): boolean {
+        const transitions = this.getTransitionsFromStateToState(fromStateID, toStateID);
 
         let hasTransition = false;
         if (transitionID) {
-            let transitionIndex = transitions.findIndex(function (transition) {
+            const transitionIndex = transitions.findIndex(function (transition) {
                 return transition.myID == transitionID;
             });
 
@@ -380,36 +419,36 @@ export class FSM {
         return hasTransition;
     }
 
-    public setPerformMode(performMode) {
+    public setPerformMode(performMode: PerformMode): void {
         this._myPerformMode = performMode;
     }
 
-    public getPerformMode() {
+    public getPerformMode(): PerformMode {
         return this._myPerformMode;
     }
 
-    public setPerformDelayedMode(performDelayedMode) {
+    public setPerformDelayedMode(performDelayedMode: PerformDelayedMode): void {
         this._myPerformDelayedMode = performDelayedMode;
     }
 
-    public getPerformDelayedMode() {
+    public getPerformDelayedMode(): PerformDelayedMode {
         return this._myPerformDelayedMode;
     }
 
-    public hasPendingPerforms() {
+    public hasPendingPerforms(): boolean {
         return this._myPendingPerforms.length > 0;
     }
 
-    public getPendingPerforms() {
-        return this._myPendingPerforms.pp_clone();
+    public getPendingPerforms(): Readonly<PendingPerform[]> {
+        return this._myPendingPerforms;
     }
 
-    public clone(deepClone = false) {
+    public clone(deepClone: boolean = false): FSM | null {
         if (!this.isCloneable(deepClone)) {
             return null;
         }
 
-        let cloneFSM = new FSM();
+        const cloneFSM = new FSM();
 
         cloneFSM._myLogEnabled = this._myLogEnabled;
         cloneFSM._myLogShowDelayedInfo = this._myLogShowDelayedInfo;
@@ -417,13 +456,13 @@ export class FSM {
 
         cloneFSM._myPerformMode = this._myPerformMode;
         cloneFSM._myPerformDelayedMode = this._myPerformDelayedMode;
-        cloneFSM._myPendingPerforms = this._myPendingPerforms.pp_clone();
+        (cloneFSM._myPendingPerforms as PendingPerform[]) = this._myPendingPerforms.pp_clone();
 
-        for (let entry of this._myStates.entries()) {
+        for (const entry of this._myStates.entries()) {
             let stateData = null;
 
             if (deepClone) {
-                stateData = new StateData(entry[1].myID, entry[1].myObject.clone());
+                stateData = new StateData(entry[1].myID, entry[1].myObject.clone!());
             } else {
                 stateData = new StateData(entry[1].myID, entry[1].myObject);
             }
@@ -431,18 +470,18 @@ export class FSM {
             cloneFSM._myStates.set(stateData.myID, stateData);
         }
 
-        for (let entry of this._myTransitions.entries()) {
-            let transitionsFromState = new Map();
+        for (const entry of this._myTransitions.entries()) {
+            const transitionsFromState = new Map();
             cloneFSM._myTransitions.set(entry[0], transitionsFromState);
 
-            for (let transitonEntry of entry[1].entries()) {
+            for (const transitonEntry of entry[1].entries()) {
                 let transitionData = null;
 
-                let fromState = cloneFSM.getState(transitonEntry[1].myFromState.myID);
-                let toState = cloneFSM.getState(transitonEntry[1].myToState.myID);
+                const fromState = cloneFSM.getState(transitonEntry[1].myFromState.myID)!;
+                const toState = cloneFSM.getState(transitonEntry[1].myToState.myID)!;
 
                 if (deepClone) {
-                    transitionData = new TransitionData(transitonEntry[1].myID, fromState, toState, transitonEntry[1].myObject.clone(), transitonEntry[1].mySkipStateFunction);
+                    transitionData = new TransitionData(transitonEntry[1].myID, fromState, toState, transitonEntry[1].myObject.clone!(), transitonEntry[1].mySkipStateFunction);
                 } else {
                     transitionData = new TransitionData(transitonEntry[1].myID, fromState, toState, transitonEntry[1].myObject, transitonEntry[1].mySkipStateFunction);
                 }
@@ -458,19 +497,19 @@ export class FSM {
         return cloneFSM;
     }
 
-    public isCloneable(deepClone = false) {
+    public isCloneable(deepClone: boolean = false): boolean {
         if (!deepClone) {
             return true;
         }
 
         let deepCloneable = true;
 
-        for (let entry of this._myStates.entries()) {
+        for (const entry of this._myStates.entries()) {
             deepCloneable = deepCloneable && entry[1].myObject.clone != null;
         }
 
-        for (let entry of this._myTransitions.entries()) {
-            for (let transitonEntry of entry[1].entries()) {
+        for (const entry of this._myTransitions.entries()) {
+            for (const transitonEntry of entry[1].entries()) {
                 deepCloneable = deepCloneable && transitonEntry[1].myObject.clone != null;
             }
         }
@@ -478,34 +517,34 @@ export class FSM {
         return deepCloneable;
     }
 
-    public setLogEnabled(active, fsmName = null, showDelayedInfo = false) {
+    public setLogEnabled(active: boolean, fsmName?: string, showDelayedInfo: boolean = false): void {
         this._myLogEnabled = active;
         this._myLogShowDelayedInfo = showDelayedInfo;
-        if (fsmName) {
+        if (fsmName != null) {
             this._myLogFSMName = "FSM: ".concat(fsmName);
         }
     }
 
-    public registerInitEventListener(listenerID, listener) {
+    public registerInitEventListener(listenerID: unknown, listener: (fsm: FSM, initStateData: Readonly<StateData>, ...args: unknown[]) => void): void {
         this._myInitEmitter.add(listener, { id: listenerID });
     }
 
-    public unregisterInitEventListener(listenerID) {
+    public unregisterInitEventListener(listenerID: unknown): void {
         this._myInitEmitter.remove(listenerID);
     }
 
-    public registerInitIDEventListener(initStateID, listenerID, listener) {
+    public registerInitIDEventListener(initStateID: unknown, listenerID: unknown, listener: (fsm: FSM, initStateData: Readonly<StateData>, ...args: unknown[]) => void): void {
         let initStateIDEmitter = this._myInitIDEmitters.get(initStateID);
         if (initStateIDEmitter == null) {
             this._myInitIDEmitters.set(initStateID, new Emitter());
             initStateIDEmitter = this._myInitIDEmitters.get(initStateID);
         }
 
-        initStateIDEmitter.add(listener, { id: listenerID });
+        initStateIDEmitter!.add(listener, { id: listenerID });
     }
 
-    public unregisterInitIDEventListener(initStateID, listenerID) {
-        let initStateIDEmitter = this._myInitIDEmitters.get(initStateID);
+    public unregisterInitIDEventListener(initStateID: unknown, listenerID: unknown): void {
+        const initStateIDEmitter = this._myInitIDEmitters.get(initStateID);
         if (initStateIDEmitter != null) {
             initStateIDEmitter.remove(listenerID);
 
@@ -568,14 +607,14 @@ export class FSM {
         }
     }
 
-    private _perform(transitionID, performMode, ...args): boolean {
+    private _perform(transitionID: unknown, performMode: PerformMode, ...args: unknown[]): boolean {
         if (this.isPerformingTransition()) {
-            let currentlyPerformedTransition = this.getCurrentlyPerformedTransition();
-            let consoleArguments = [this._myLogFSMName, "- Trying to perform:", transitionID];
+            const currentlyPerformingTransition = this.getCurrentlyPerformingTransition()!;
+            const consoleArguments = [this._myLogFSMName, "- Trying to perform:", transitionID];
             if (this._myLogShowDelayedInfo) {
                 consoleArguments.push(performMode == PerformMode.DELAYED ? "- Delayed" : "- Immediate");
             }
-            consoleArguments.push("- But another transition is currently being performed -", currentlyPerformedTransition.myID);
+            consoleArguments.push("- But another transition is currently being performed -", currentlyPerformingTransition.myID);
             console.warn(...consoleArguments);
 
             return false;
@@ -583,16 +622,16 @@ export class FSM {
 
         if (this._myCurrentStateData) {
             if (this.canPerform(transitionID)) {
-                let transitions = this._myTransitions.get(this._myCurrentStateData.myID);
-                let transitionToPerform = transitions.get(transitionID);
+                const transitions = this._myTransitions.get(this._myCurrentStateData.myID)!;
+                const transitionToPerform = transitions.get(transitionID)!;
 
                 this._myCurrentlyPerformedTransition = transitionToPerform;
 
-                let fromState = this._myCurrentStateData;
-                let toState = this._myStates.get(transitionToPerform.myToState.myID);
+                const fromState = this._myCurrentStateData;
+                const toState = this._myStates.get(transitionToPerform.myToState.myID)!;
 
                 if (this._myLogEnabled) {
-                    let consoleArguments = [this._myLogFSMName, "- From:", fromState.myID, "- To:", toState.myID, "- With:", transitionID];
+                    const consoleArguments = [this._myLogFSMName, "- From:", fromState.myID, "- To:", toState.myID, "- With:", transitionID];
                     if (this._myLogShowDelayedInfo) {
                         consoleArguments.push(performMode == PerformMode.DELAYED ? "- Delayed" : "- Immediate");
                     }
@@ -618,8 +657,8 @@ export class FSM {
                 this._myTransitionEmitter.notify(this, fromState, toState, transitionToPerform, performMode, ...args);
 
                 if (this._myTransitionIDEmitters.length > 0) {
-                    let internalTransitionIDEmitters = [];
-                    for (let value of this._myTransitionIDEmitters) {
+                    const internalTransitionIDEmitters = [];
+                    for (const value of this._myTransitionIDEmitters) {
                         if ((value[0] == null || value[0] == fromState.myID) &&
                             (value[1] == null || value[1] == toState.myID) &&
                             (value[2] == null || value[2] == transitionToPerform.myID)) {
@@ -627,7 +666,7 @@ export class FSM {
                         }
                     }
 
-                    for (let emitter of internalTransitionIDEmitters) {
+                    for (const emitter of internalTransitionIDEmitters) {
                         emitter.notify(this, fromState, toState, transitionToPerform, performMode, ...args);
                     }
                 }
@@ -636,14 +675,14 @@ export class FSM {
 
                 return true;
             } else if (this._myLogEnabled) {
-                let consoleArguments = [this._myLogFSMName, "- No Transition:", transitionID, "- From:", this._myCurrentStateData.myID];
+                const consoleArguments = [this._myLogFSMName, "- No Transition:", transitionID, "- From:", this._myCurrentStateData.myID];
                 if (this._myLogShowDelayedInfo) {
                     consoleArguments.push(performMode == PerformMode.DELAYED ? "- Delayed" : "- Immediate");
                 }
                 console.warn(...consoleArguments);
             }
         } else if (this._myLogEnabled) {
-            let consoleArguments = [this._myLogFSMName, "- FSM not initialized yet"];
+            const consoleArguments = [this._myLogFSMName, "- FSM not initialized yet"];
             if (this._myLogShowDelayedInfo) {
                 consoleArguments.push(performMode == PerformMode.DELAYED ? "- Delayed" : "- Immediate");
             }
@@ -656,16 +695,5 @@ export class FSM {
     private _getTransitionsFromState(fromStateID: unknown): Map<unknown, Readonly<TransitionData>> | null {
         const transitions = this._myTransitions.get(fromStateID);
         return transitions != null ? transitions : null;
-    }
-}
-
-class _PendingPerform {
-
-    public myID: unknown;
-    public myArgs: unknown[];
-
-    constructor(transitionID: unknown, ...args: unknown[]) {
-        this.myID = transitionID;
-        this.myArgs = args;
     }
 }

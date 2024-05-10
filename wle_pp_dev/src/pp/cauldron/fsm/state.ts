@@ -28,5 +28,5 @@ export interface State {
     end?(fsm: FSM, transitionData: Readonly<TransitionData>, ...args: unknown[]): void;
 
     /** Used when the FSM is deep cloned */
-    clone?(): void;
+    clone?(): State;
 }
