@@ -8,9 +8,9 @@ export class StateData {
     public myID: unknown;
     public myState: State;
 
-    constructor(stateID: unknown, stateObject: State) {
+    constructor(stateID: unknown, state: State) {
         this.myID = stateID;
-        this.myState = stateObject;
+        this.myState = state;
     }
 }
 
@@ -24,11 +24,11 @@ export class TransitionData {
 
     public mySkipStateFunction: SkipStateFunction;
 
-    constructor(transitionID: unknown, fromStateData: Readonly<StateData>, toStateData: Readonly<StateData>, transitionObject: Transition, skipStateFunction: SkipStateFunction) {
+    constructor(transitionID: unknown, fromStateData: Readonly<StateData>, toStateData: Readonly<StateData>, transition: Transition, skipStateFunction: SkipStateFunction) {
         this.myID = transitionID;
         this.myFromState = fromStateData;
         this.myToState = toStateData;
-        this.myTransition = transitionObject;
+        this.myTransition = transition;
         this.mySkipStateFunction = skipStateFunction;
     }
 }
@@ -62,19 +62,19 @@ export enum SkipStateFunction {
 }
 
 /**
-    You can also use plain functions for state/transition if u want to do something simple and quick
-
-    Signatures:
-        function stateUpdate(dt, fsm)
-        function init(fsm, initStateData)
-        function transition(fsm, transitionData)
+ * You can also use plain functions for state/transition if u want to do something simple and quick
+ * 
+ * Signatures:
+ *     function stateUpdate(dt, fsm)
+ *     function init(fsm, initStateData)
+ *     function transition(fsm, transitionData)
 */
 export class FSM {
 
     private _myCurrentStateData: Readonly<StateData> | null = null;
 
-    private readonly _myStates: Map<unknown, Readonly<StateData>> = new Map();
-    private readonly _myTransitions: Map<unknown, Map<unknown, Readonly<TransitionData>>> = new Map();
+    private readonly _myStatesData: Map<unknown, Readonly<StateData>> = new Map();
+    private readonly _myTransitionsData: Map<unknown, Map<unknown, Readonly<TransitionData>>> = new Map();
 
     private _myLogEnabled: boolean = false;
     private _myLogShowDelayedInfo: boolean = false;
@@ -83,7 +83,7 @@ export class FSM {
     private _myPerformMode: PerformMode;
     private _myPerformDelayedMode: PerformDelayedMode;
     private readonly _myPendingPerforms: PendingPerform[] = [];
-    private _myCurrentlyPerformedTransition: Readonly<TransitionData> | null = null;
+    private _myCurrentlyPerformedTransitionData: Readonly<TransitionData> | null = null;
 
     private readonly _myInitEmitter: Emitter<[FSM, Readonly<StateData>, Transition, unknown[]]> = new Emitter();
     private readonly _myInitIDEmitters: Map<unknown, Emitter<[FSM, Readonly<StateData>, Transition, unknown[]]>> = new Map();
@@ -96,53 +96,53 @@ export class FSM {
     }
 
     public addState(stateID: unknown, state?: State | ((dt: number, fsm: FSM, ...args: unknown[]) => void)): void {
-        let stateObject: State | null = null;
+        let adjustedState: State | null = null;
         if (state == null || typeof state == "function") {
-            stateObject = {};
+            adjustedState = {};
 
             if (typeof state == "function") {
-                stateObject.update = function update(dt: number, fsm: FSM, ...args: unknown[]): void { return state(dt, fsm, ...args); };
+                adjustedState.update = function update(dt: number, fsm: FSM, ...args: unknown[]): void { return state(dt, fsm, ...args); };
             }
 
-            stateObject.clone = function clone() {
-                const cloneObject: State = {};
-                cloneObject.update = this.update;
-                cloneObject.clone = this.clone;
-                return cloneObject;
+            adjustedState.clone = function clone() {
+                const clonedState: State = {};
+                clonedState.update = this.update;
+                clonedState.clone = this.clone;
+                return clonedState;
             };
         } else {
-            stateObject = state;
+            adjustedState = state;
         }
 
-        const stateData = new StateData(stateID, stateObject);
-        this._myStates.set(stateID, stateData);
-        this._myTransitions.set(stateID, new Map());
+        const stateData = new StateData(stateID, adjustedState);
+        this._myStatesData.set(stateID, stateData);
+        this._myTransitionsData.set(stateID, new Map());
     }
 
     public addTransition(fromStateID: unknown, toStateID: unknown, transitionID: unknown, transition?: Transition | ((fsm: FSM, transitionData: Readonly<TransitionData>, ...args: unknown[]) => void), skipStateFunction: SkipStateFunction = SkipStateFunction.NONE): void {
-        let transitionObject: Transition | null = null;
+        let adjustedTransition: Transition | null = null;
         if (transition == null || typeof transition == "function") {
-            transitionObject = {};
+            adjustedTransition = {};
 
             if (typeof transition == "function") {
-                transitionObject.perform = function perform(fsm: FSM, transitionData: Readonly<TransitionData>, ...args: unknown[]): void { return transition(fsm, transitionData, ...args); };
+                adjustedTransition.perform = function perform(fsm: FSM, transitionData: Readonly<TransitionData>, ...args: unknown[]): void { return transition(fsm, transitionData, ...args); };
             }
 
-            transitionObject.clone = function clone() {
-                const cloneObject: Transition = {};
-                cloneObject.perform = this.perform;
-                cloneObject.clone = this.clone;
-                return cloneObject;
+            adjustedTransition.clone = function clone() {
+                const clonedTransition: Transition = {};
+                clonedTransition.perform = this.perform;
+                clonedTransition.clone = this.clone;
+                return clonedTransition;
             };
         } else {
-            transitionObject = transition;
+            adjustedTransition = transition;
         }
 
         if (this.hasState(fromStateID) && this.hasState(toStateID)) {
-            const transitionsFromState = this._getTransitionsFromState(fromStateID)!;
+            const transitionsDataFromState = this._getTransitionsDataFromState(fromStateID)!;
 
-            const transitionData = new TransitionData(transitionID, this.getState(fromStateID)!, this.getState(toStateID)!, transitionObject, skipStateFunction);
-            transitionsFromState.set(transitionID, transitionData);
+            const transitionData = new TransitionData(transitionID, this.getStateData(fromStateID)!, this.getStateData(toStateID)!, adjustedTransition, skipStateFunction);
+            transitionsDataFromState.set(transitionID, transitionData);
         } else {
             if (!this.hasState(fromStateID) && !this.hasState(toStateID)) {
                 console.error("Can't add transition:", transitionID, "- from state not found:", fromStateID, "- to state not found:", toStateID);
@@ -155,26 +155,26 @@ export class FSM {
     }
 
     public init(initStateID: unknown, initTransition?: Transition | ((fsm: FSM, initStateData: Readonly<StateData>, ...args: unknown[]) => void), ...args: unknown[]): void {
-        let initTransitionObject: Transition | null = null;
+        let adjustedInitTransition: Transition | null = null;
         if (initTransition == null || typeof initTransition == "function") {
-            initTransitionObject = {};
+            adjustedInitTransition = {};
 
             if (typeof initTransition == "function") {
-                initTransitionObject.performInit = function performInit(fsm: FSM, initStateData: Readonly<StateData>, ...args: unknown[]): void { return initTransition(fsm, initStateData, ...args); };
+                adjustedInitTransition.performInit = function performInit(fsm: FSM, initStateData: Readonly<StateData>, ...args: unknown[]): void { return initTransition(fsm, initStateData, ...args); };
             }
         } else {
-            initTransitionObject = initTransition;
+            adjustedInitTransition = initTransition;
         }
 
         if (this.hasState(initStateID)) {
-            const initStateData = this._myStates.get(initStateID)!;
+            const initStateData = this._myStatesData.get(initStateID)!;
 
             if (this._myLogEnabled) {
                 console.log(this._myLogFSMName, "- Init:", initStateID);
             }
 
-            if (initTransitionObject && initTransitionObject.performInit) {
-                initTransitionObject.performInit(this, initStateData, ...args);
+            if (adjustedInitTransition && adjustedInitTransition.performInit) {
+                adjustedInitTransition.performInit(this, initStateData, ...args);
             } else if (initStateData.myState && initStateData.myState.init) {
                 initStateData.myState.init(this, initStateData, ...args);
             }
@@ -265,11 +265,11 @@ export class FSM {
     }
 
     public isPerformingTransition(): boolean {
-        return this._myCurrentlyPerformedTransition != null;
+        return this._myCurrentlyPerformedTransitionData != null;
     }
 
-    public getCurrentlyPerformingTransition(): TransitionData | null {
-        return this._myCurrentlyPerformedTransition;
+    public getCurrentlyPerformingTransitionData(): TransitionData | null {
+        return this._myCurrentlyPerformedTransitionData;
     }
 
     public hasBeenInit(): boolean {
@@ -277,11 +277,11 @@ export class FSM {
     }
 
     public reset(): void {
-        this.resetState();
+        this.resetCurrentState();
         this.resetPendingPerforms();
     }
 
-    public resetState(): void {
+    public resetCurrentState(): void {
         this._myCurrentStateData = null;
     }
 
@@ -289,87 +289,87 @@ export class FSM {
         this._myPendingPerforms.pp_clear();
     }
 
-    public getCurrentState(): StateData | null {
+    public getCurrentStateData(): StateData | null {
         return this._myCurrentStateData;
     }
 
-    public getCurrentTransitions(): TransitionData[] {
+    public getCurrentTransitionsData(): TransitionData[] {
         if (this._myCurrentStateData == null) {
             return [];
         }
 
-        return this.getTransitionsFromState(this._myCurrentStateData.myID);
+        return this.getTransitionsDataFromState(this._myCurrentStateData.myID);
     }
 
-    public getCurrentTransitionsToState(stateID: unknown): TransitionData[] {
+    public getCurrentTransitionsDataToState(stateID: unknown): TransitionData[] {
         if (this._myCurrentStateData == null) {
             return [];
         }
 
-        return this.getTransitionsFromStateToState(this._myCurrentStateData.myID, stateID);
+        return this.getTransitionsDataFromStateToState(this._myCurrentStateData.myID, stateID);
     }
 
-    public getState(stateID: unknown): StateData | null {
-        const stateData = this._myStates.get(stateID);
+    public getStateData(stateID: unknown): StateData | null {
+        const stateData = this._myStatesData.get(stateID);
         return stateData != null ? stateData : null;
     }
 
-    public getStates(): StateData[] {
-        return Array.from(this._myStates.values());
+    public getStatesData(): StateData[] {
+        return Array.from(this._myStatesData.values());
     }
 
-    public getTransitions(): TransitionData[] {
-        const transitions = [];
+    public getTransitionsData(): TransitionData[] {
+        const transitionsData = [];
 
-        for (const transitionsFromState of this._myTransitions.values()) {
-            for (const transitionData of transitionsFromState.values()) {
-                transitions.push(transitionData);
+        for (const transitionsDataFromState of this._myTransitionsData.values()) {
+            for (const transitionData of transitionsDataFromState.values()) {
+                transitionsData.push(transitionData);
             }
         }
 
-        return transitions;
+        return transitionsData;
     }
 
-    public getTransitionsFromState(fromStateID: unknown): TransitionData[] {
-        const transitionsFromState = this._getTransitionsFromState(fromStateID);
-        if (transitionsFromState == null) {
+    public getTransitionsDataFromState(fromStateID: unknown): TransitionData[] {
+        const transitionsDataFromState = this._getTransitionsDataFromState(fromStateID);
+        if (transitionsDataFromState == null) {
             return [];
         }
 
-        return Array.from(transitionsFromState.values());
+        return Array.from(transitionsDataFromState.values());
     }
 
-    public getTransitionsFromStateToState(fromStateID: unknown, toStateID: unknown): TransitionData[] {
-        const transitionsFromState = this._getTransitionsFromState(fromStateID);
-        if (transitionsFromState == null) {
+    public getTransitionsDataFromStateToState(fromStateID: unknown, toStateID: unknown): TransitionData[] {
+        const transitionsDataFromState = this._getTransitionsDataFromState(fromStateID);
+        if (transitionsDataFromState == null) {
             return [];
         }
 
-        const transitionsToState = [];
-        for (const transitionData of transitionsFromState.values()) {
+        const transitionsDataToState = [];
+        for (const transitionData of transitionsDataFromState.values()) {
             if (transitionData.myToState.myID == toStateID) {
-                transitionsToState.push(transitionData);
+                transitionsDataToState.push(transitionData);
             }
         }
 
-        return transitionsToState;
+        return transitionsDataToState;
     }
 
     public removeState(stateID: unknown): boolean {
         if (this.hasState(stateID)) {
-            this._myStates.delete(stateID);
-            this._myTransitions.delete(stateID);
+            this._myStatesData.delete(stateID);
+            this._myTransitionsData.delete(stateID);
 
-            for (const transitionsFromState of this._myTransitions.values()) {
+            for (const transitionsDataFromState of this._myTransitionsData.values()) {
                 const toDelete = [];
-                for (const [transitionID, transitionData] of transitionsFromState.entries()) {
+                for (const [transitionID, transitionData] of transitionsDataFromState.entries()) {
                     if (transitionData.myToState.myID == stateID) {
                         toDelete.push(transitionID);
                     }
                 }
 
                 for (const transitionID of toDelete) {
-                    transitionsFromState.delete(transitionID);
+                    transitionsDataFromState.delete(transitionID);
                 }
             }
 
@@ -380,22 +380,22 @@ export class FSM {
     }
 
     public removeTransitionFromState(fromStateID: unknown, transitionID: unknown): boolean {
-        const fromTransitions = this._getTransitionsFromState(fromStateID);
-        if (fromTransitions) {
-            return fromTransitions.delete(transitionID);
+        const transitionsDataFromState = this._getTransitionsDataFromState(fromStateID);
+        if (transitionsDataFromState != null) {
+            return transitionsDataFromState.delete(transitionID);
         }
 
         return false;
     }
 
     public hasState(stateID: unknown): boolean {
-        return this._myStates.has(stateID);
+        return this._myStatesData.has(stateID);
     }
 
     public hasTransitionFromState(fromStateID: unknown, transitionID: unknown): boolean {
-        const transitions = this.getTransitionsFromState(fromStateID);
+        const transitionsData = this.getTransitionsDataFromState(fromStateID);
 
-        const transitionIndex = transitions.findIndex(function (transition) {
+        const transitionIndex = transitionsData.findIndex(function (transition) {
             return transition.myID == transitionID;
         });
 
@@ -403,17 +403,17 @@ export class FSM {
     }
 
     public hasTransitionFromStateToState(fromStateID: unknown, toStateID: unknown, transitionID?: unknown): boolean {
-        const transitions = this.getTransitionsFromStateToState(fromStateID, toStateID);
+        const transitionsData = this.getTransitionsDataFromStateToState(fromStateID, toStateID);
 
         let hasTransition = false;
-        if (transitionID) {
-            const transitionIndex = transitions.findIndex(function (transition) {
+        if (transitionID != null) {
+            const transitionIndex = transitionsData.findIndex(function (transition) {
                 return transition.myID == transitionID;
             });
 
             hasTransition = transitionIndex >= 0;
         } else {
-            hasTransition = transitions.length > 0;
+            hasTransition = transitionsData.length > 0;
         }
 
         return hasTransition;
@@ -458,40 +458,40 @@ export class FSM {
         cloneFSM._myPerformDelayedMode = this._myPerformDelayedMode;
         (cloneFSM._myPendingPerforms as PendingPerform[]) = this._myPendingPerforms.pp_clone();
 
-        for (const entry of this._myStates.entries()) {
-            let stateData = null;
+        for (const stateData of this._myStatesData.values()) {
+            let clonedStateData = null;
 
             if (deepClone) {
-                stateData = new StateData(entry[1].myID, entry[1].myState.clone!());
+                clonedStateData = new StateData(stateData.myID, stateData.myState.clone!());
             } else {
-                stateData = new StateData(entry[1].myID, entry[1].myState);
+                clonedStateData = new StateData(stateData.myID, stateData.myState);
             }
 
-            cloneFSM._myStates.set(stateData.myID, stateData);
+            cloneFSM._myStatesData.set(clonedStateData.myID, clonedStateData);
         }
 
-        for (const entry of this._myTransitions.entries()) {
-            const transitionsFromState = new Map();
-            cloneFSM._myTransitions.set(entry[0], transitionsFromState);
+        for (const [stateID, transitionsDataFromState] of this._myTransitionsData.entries()) {
+            const clonedTransitionsDataFromState = new Map();
+            cloneFSM._myTransitionsData.set(stateID, clonedTransitionsDataFromState);
 
-            for (const transitonEntry of entry[1].entries()) {
-                let transitionData = null;
+            for (const transitonData of transitionsDataFromState.values()) {
+                let clonedTransitionData = null;
 
-                const fromState = cloneFSM.getState(transitonEntry[1].myFromState.myID)!;
-                const toState = cloneFSM.getState(transitonEntry[1].myToState.myID)!;
+                const fromState = cloneFSM.getStateData(transitonData.myFromState.myID)!;
+                const toState = cloneFSM.getStateData(transitonData.myToState.myID)!;
 
                 if (deepClone) {
-                    transitionData = new TransitionData(transitonEntry[1].myID, fromState, toState, transitonEntry[1].myTransition.clone!(), transitonEntry[1].mySkipStateFunction);
+                    clonedTransitionData = new TransitionData(transitonData.myID, fromState, toState, transitonData.myTransition.clone!(), transitonData.mySkipStateFunction);
                 } else {
-                    transitionData = new TransitionData(transitonEntry[1].myID, fromState, toState, transitonEntry[1].myTransition, transitonEntry[1].mySkipStateFunction);
+                    clonedTransitionData = new TransitionData(transitonData.myID, fromState, toState, transitonData.myTransition, transitonData.mySkipStateFunction);
                 }
 
-                transitionsFromState.set(transitionData.myID, transitionData);
+                clonedTransitionsDataFromState.set(clonedTransitionData.myID, clonedTransitionData);
             }
         }
 
-        if (this._myCurrentStateData) {
-            cloneFSM._myCurrentStateData = cloneFSM.getState(this._myCurrentStateData.myID);
+        if (this._myCurrentStateData != null) {
+            cloneFSM._myCurrentStateData = cloneFSM.getStateData(this._myCurrentStateData.myID);
         }
 
         return cloneFSM;
@@ -504,13 +504,13 @@ export class FSM {
 
         let deepCloneable = true;
 
-        for (const entry of this._myStates.entries()) {
-            deepCloneable = deepCloneable && entry[1].myState.clone != null;
+        for (const stateData of this._myStatesData.values()) {
+            deepCloneable = deepCloneable && stateData.myState.clone != null;
         }
 
-        for (const entry of this._myTransitions.entries()) {
-            for (const transitonEntry of entry[1].entries()) {
-                deepCloneable = deepCloneable && transitonEntry[1].myTransition.clone != null;
+        for (const transitionsData of this._myTransitionsData.values()) {
+            for (const transitionsDataFromState of transitionsData.values()) {
+                deepCloneable = deepCloneable && transitionsDataFromState.myTransition.clone != null;
             }
         }
 
@@ -609,12 +609,12 @@ export class FSM {
 
     private _perform(transitionID: unknown, performMode: PerformMode, ...args: unknown[]): boolean {
         if (this.isPerformingTransition()) {
-            const currentlyPerformingTransition = this.getCurrentlyPerformingTransition()!;
+            const currentlyPerformingTransitionData = this.getCurrentlyPerformingTransitionData()!;
             const consoleArguments = [this._myLogFSMName, "- Trying to perform:", transitionID];
             if (this._myLogShowDelayedInfo) {
                 consoleArguments.push(performMode == PerformMode.DELAYED ? "- Delayed" : "- Immediate");
             }
-            consoleArguments.push("- But another transition is currently being performed -", currentlyPerformingTransition.myID);
+            consoleArguments.push("- But another transition is currently being performed -", currentlyPerformingTransitionData.myID);
             console.warn(...consoleArguments);
 
             return false;
@@ -622,56 +622,56 @@ export class FSM {
 
         if (this._myCurrentStateData) {
             if (this.canPerform(transitionID)) {
-                const transitions = this._myTransitions.get(this._myCurrentStateData.myID)!;
-                const transitionToPerform = transitions.get(transitionID)!;
+                const transitionsData = this._myTransitionsData.get(this._myCurrentStateData.myID)!;
+                const transitionDataToPerform = transitionsData.get(transitionID)!;
 
-                this._myCurrentlyPerformedTransition = transitionToPerform;
+                this._myCurrentlyPerformedTransitionData = transitionDataToPerform;
 
-                const fromState = this._myCurrentStateData;
-                const toState = this._myStates.get(transitionToPerform.myToState.myID)!;
+                const fromStateData = this._myCurrentStateData;
+                const toStateData = this._myStatesData.get(transitionDataToPerform.myToState.myID)!;
 
                 if (this._myLogEnabled) {
-                    const consoleArguments = [this._myLogFSMName, "- From:", fromState.myID, "- To:", toState.myID, "- With:", transitionID];
+                    const consoleArguments = [this._myLogFSMName, "- From:", fromStateData.myID, "- To:", toStateData.myID, "- With:", transitionID];
                     if (this._myLogShowDelayedInfo) {
                         consoleArguments.push(performMode == PerformMode.DELAYED ? "- Delayed" : "- Immediate");
                     }
                     console.log(...consoleArguments);
                 }
 
-                if (transitionToPerform.mySkipStateFunction != SkipStateFunction.END && transitionToPerform.mySkipStateFunction != SkipStateFunction.BOTH &&
-                    fromState.myState && fromState.myState.end) {
-                    fromState.myState.end(this, transitionToPerform, ...args);
+                if (transitionDataToPerform.mySkipStateFunction != SkipStateFunction.END && transitionDataToPerform.mySkipStateFunction != SkipStateFunction.BOTH &&
+                    fromStateData.myState && fromStateData.myState.end) {
+                    fromStateData.myState.end(this, transitionDataToPerform, ...args);
                 }
 
-                if (transitionToPerform.myTransition && transitionToPerform.myTransition.perform) {
-                    transitionToPerform.myTransition.perform(this, transitionToPerform, ...args);
+                if (transitionDataToPerform.myTransition && transitionDataToPerform.myTransition.perform) {
+                    transitionDataToPerform.myTransition.perform(this, transitionDataToPerform, ...args);
                 }
 
-                if (transitionToPerform.mySkipStateFunction != SkipStateFunction.START && transitionToPerform.mySkipStateFunction != SkipStateFunction.BOTH &&
-                    toState.myState && toState.myState.start) {
-                    toState.myState.start(this, transitionToPerform, ...args);
+                if (transitionDataToPerform.mySkipStateFunction != SkipStateFunction.START && transitionDataToPerform.mySkipStateFunction != SkipStateFunction.BOTH &&
+                    toStateData.myState && toStateData.myState.start) {
+                    toStateData.myState.start(this, transitionDataToPerform, ...args);
                 }
 
-                this._myCurrentStateData = transitionToPerform.myToState;
+                this._myCurrentStateData = transitionDataToPerform.myToState;
 
-                this._myTransitionEmitter.notify(this, fromState, toState, transitionToPerform, performMode, ...args);
+                this._myTransitionEmitter.notify(this, fromStateData, toStateData, transitionDataToPerform, performMode, ...args);
 
                 if (this._myTransitionIDEmitters.length > 0) {
                     const internalTransitionIDEmitters = [];
                     for (const value of this._myTransitionIDEmitters) {
-                        if ((value[0] == null || value[0] == fromState.myID) &&
-                            (value[1] == null || value[1] == toState.myID) &&
-                            (value[2] == null || value[2] == transitionToPerform.myID)) {
+                        if ((value[0] == null || value[0] == fromStateData.myID) &&
+                            (value[1] == null || value[1] == toStateData.myID) &&
+                            (value[2] == null || value[2] == transitionDataToPerform.myID)) {
                             internalTransitionIDEmitters.push(value[3]);
                         }
                     }
 
                     for (const emitter of internalTransitionIDEmitters) {
-                        emitter.notify(this, fromState, toState, transitionToPerform, performMode, ...args);
+                        emitter.notify(this, fromStateData, toStateData, transitionDataToPerform, performMode, ...args);
                     }
                 }
 
-                this._myCurrentlyPerformedTransition = null;
+                this._myCurrentlyPerformedTransitionData = null;
 
                 return true;
             } else if (this._myLogEnabled) {
@@ -692,8 +692,8 @@ export class FSM {
         return false;
     }
 
-    private _getTransitionsFromState(fromStateID: unknown): Map<unknown, Readonly<TransitionData>> | null {
-        const transitions = this._myTransitions.get(fromStateID);
-        return transitions != null ? transitions : null;
+    private _getTransitionsDataFromState(fromStateID: unknown): Map<unknown, Readonly<TransitionData>> | null {
+        const transitionsData = this._myTransitionsData.get(fromStateID);
+        return transitionsData != null ? transitionsData : null;
     }
 }
