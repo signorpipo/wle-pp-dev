@@ -85,10 +85,10 @@ export class FSM {
     private readonly _myPendingPerforms: PendingPerform[] = [];
     private _myCurrentlyPerformedTransitionData: Readonly<TransitionData> | null = null;
 
-    private readonly _myInitEmitter: Emitter<[FSM, Readonly<StateData>, Transition, unknown[]]> = new Emitter();
-    private readonly _myInitIDEmitters: Map<unknown, Emitter<[FSM, Readonly<StateData>, Transition, unknown[]]>> = new Map();
-    private readonly _myTransitionEmitter: Emitter<[FSM, Readonly<StateData>, Readonly<StateData>, Readonly<TransitionData>, PerformMode, unknown[]]> = new Emitter();
-    private readonly _myTransitionIDEmitters: [unknown, unknown, unknown, Emitter<[FSM, Readonly<StateData>, Readonly<StateData>, Readonly<TransitionData>, PerformMode, unknown[]]>][] = [];
+    private readonly _myInitEmitter: Emitter<[FSM, Readonly<StateData>, unknown[]]> = new Emitter();
+    private readonly _myInitIDEmitters: Map<unknown, Emitter<[FSM, Readonly<StateData>, unknown[]]>> = new Map();
+    private readonly _myTransitionEmitter: Emitter<[FSM, Readonly<TransitionData>, PerformMode, unknown[]]> = new Emitter();
+    private readonly _myTransitionIDEmitters: [unknown, unknown, unknown, Emitter<[FSM, Readonly<TransitionData>, PerformMode, unknown[]]>][] = [];
 
     constructor(performMode = PerformMode.IMMEDIATE, performDelayedMode = PerformDelayedMode.QUEUE) {
         this._myPerformMode = performMode;
@@ -554,7 +554,7 @@ export class FSM {
         }
     }
 
-    public registerTransitionEventListener(listenerID: unknown, listener: (fsm: FSM, fromStateData: Readonly<StateData>, toStateData: Readonly<StateData>, transitionData: Readonly<TransitionData>, performMode: PerformMode, ...args: unknown[]) => void): void {
+    public registerTransitionEventListener(listenerID: unknown, listener: (fsm: FSM, transitionData: Readonly<TransitionData>, performMode: PerformMode, ...args: unknown[]) => void): void {
         this._myTransitionEmitter.add(listener, { id: listenerID });
     }
 
@@ -564,8 +564,8 @@ export class FSM {
 
     /** The fsm IDs can be `null`, that means that the listener is called whenever only the valid IDs match
         This let you register to all the transitions with a specific ID and from of a specific state but to every state (`toStateID == null`) */
-    public registerTransitionIDEventListener(fromStateID: unknown, toStateID: unknown, transitionID: unknown, listenerID: unknown, listener: (fsm: FSM, fromStateData: Readonly<StateData>, toStateData: Readonly<StateData>, transitionData: Readonly<TransitionData>, performMode: PerformMode, ...args: unknown[]) => void): void {
-        let internalTransitionIDEmitter: Emitter<[FSM, Readonly<StateData>, Readonly<StateData>, Readonly<TransitionData>, PerformMode, unknown[]]> | null = null;
+    public registerTransitionIDEventListener(fromStateID: unknown, toStateID: unknown, transitionID: unknown, listenerID: unknown, listener: (fsm: FSM, transitionData: Readonly<TransitionData>, performMode: PerformMode, ...args: unknown[]) => void): void {
+        let internalTransitionIDEmitter: Emitter<[FSM, Readonly<TransitionData>, PerformMode, unknown[]]> | null = null;
         for (const value of this._myTransitionIDEmitters) {
             if (value[0] == fromStateID && value[1] == toStateID && value[2] == transitionID) {
                 internalTransitionIDEmitter = value[3];
@@ -574,7 +574,7 @@ export class FSM {
         }
 
         if (internalTransitionIDEmitter == null) {
-            const transitionIDEmitter: [unknown, unknown, unknown, Emitter<[FSM, Readonly<StateData>, Readonly<StateData>, Readonly<TransitionData>, PerformMode, unknown[]]>] = [
+            const transitionIDEmitter: [unknown, unknown, unknown, Emitter<[FSM, Readonly<TransitionData>, PerformMode, unknown[]]>] = [
                 fromStateID,
                 toStateID,
                 transitionID,
@@ -590,7 +590,7 @@ export class FSM {
     }
 
     public unregisterTransitionIDEventListener(fromStateID: unknown, toStateID: unknown, transitionID: unknown, listenerID: unknown): void {
-        let internalTransitionIDEmitter: Emitter<[FSM, Readonly<StateData>, Readonly<StateData>, Readonly<TransitionData>, PerformMode, unknown[]]> | null = null;
+        let internalTransitionIDEmitter: Emitter<[FSM, Readonly<TransitionData>, PerformMode, unknown[]]> | null = null;
         for (const value of this._myTransitionIDEmitters) {
             if (value[0] == fromStateID && value[1] == toStateID && value[2] == transitionID) {
                 internalTransitionIDEmitter = value[3];
@@ -654,7 +654,7 @@ export class FSM {
 
                 this._myCurrentStateData = transitionDataToPerform.myToStateData;
 
-                this._myTransitionEmitter.notify(this, fromStateData, toStateData, transitionDataToPerform, performMode, ...args);
+                this._myTransitionEmitter.notify(this, transitionDataToPerform, performMode, ...args);
 
                 if (this._myTransitionIDEmitters.length > 0) {
                     const internalTransitionIDEmitters = [];
@@ -667,7 +667,7 @@ export class FSM {
                     }
 
                     for (const emitter of internalTransitionIDEmitters) {
-                        emitter.notify(this, fromStateData, toStateData, transitionDataToPerform, performMode, ...args);
+                        emitter.notify(this, transitionDataToPerform, performMode, ...args);
                     }
                 }
 
