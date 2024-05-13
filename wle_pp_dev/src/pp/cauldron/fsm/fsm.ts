@@ -65,8 +65,8 @@ export enum SkipStateFunction {
  * You can also use plain functions for state/transition if u want to do something simple and quick
  * 
  * Signatures:
- *     function stateUpdate(dt, fsm)
- *     function init(fsm, initStateData)
+ *     function stateUpdate(dt, fsm, stateData)
+ *     function init(fsm, stateData)
  *     function transition(fsm, transitionData)
 */
 export class FSM {
@@ -154,43 +154,43 @@ export class FSM {
         }
     }
 
-    public init(initStateID: unknown, initTransition?: Transition | ((fsm: FSM, initStateData: Readonly<StateData>, ...args: unknown[]) => void), ...args: unknown[]): void {
+    public init(stateID: unknown, initTransition?: Transition | ((fsm: FSM, stateData: Readonly<StateData>, ...args: unknown[]) => void), ...args: unknown[]): void {
         let adjustedInitTransition: Transition | null = null;
         if (initTransition == null || typeof initTransition == "function") {
             adjustedInitTransition = {};
 
             if (typeof initTransition == "function") {
-                adjustedInitTransition.performInit = function performInit(fsm: FSM, initStateData: Readonly<StateData>, ...args: unknown[]): void { return initTransition(fsm, initStateData, ...args); };
+                adjustedInitTransition.performInit = function performInit(fsm: FSM, stateData: Readonly<StateData>, ...args: unknown[]): void { return initTransition(fsm, stateData, ...args); };
             }
         } else {
             adjustedInitTransition = initTransition;
         }
 
-        if (this.hasState(initStateID)) {
-            const initStateData = this._myStatesData.get(initStateID)!;
+        if (this.hasState(stateID)) {
+            const stateData = this._myStatesData.get(stateID)!;
 
             if (this._myLogEnabled) {
-                console.log(this._myLogFSMName, "- Init:", initStateID);
+                console.log(this._myLogFSMName, "- Init:", stateID);
             }
 
             if (adjustedInitTransition != null && adjustedInitTransition.performInit != null) {
-                adjustedInitTransition.performInit(this, initStateData, ...args);
-            } else if (initStateData.myState != null && initStateData.myState.init != null) {
-                initStateData.myState.init(this, initStateData, ...args);
+                adjustedInitTransition.performInit(this, stateData, ...args);
+            } else if (stateData.myState != null && stateData.myState.init != null) {
+                stateData.myState.init(this, stateData, ...args);
             }
 
-            this._myCurrentStateData = initStateData;
+            this._myCurrentStateData = stateData;
 
-            this._myInitEmitter.notify(this, initStateData, ...args);
+            this._myInitEmitter.notify(this, stateData, ...args);
 
             if (this._myInitIDEmitters.size > 0) {
-                const emitter = this._myInitIDEmitters.get(initStateID);
+                const emitter = this._myInitIDEmitters.get(stateID);
                 if (emitter != null) {
-                    emitter.notify(this, initStateData, ...args);
+                    emitter.notify(this, stateData, ...args);
                 }
             }
         } else if (this._myLogEnabled) {
-            console.warn(this._myLogFSMName, "- Init state not found:", initStateID);
+            console.warn(this._myLogFSMName, "- Init state not found:", stateID);
         }
     }
 
@@ -525,7 +525,7 @@ export class FSM {
         }
     }
 
-    public registerInitEventListener(listenerID: unknown, listener: (fsm: FSM, initStateData: Readonly<StateData>, ...args: unknown[]) => void): void {
+    public registerInitEventListener(listenerID: unknown, listener: (fsm: FSM, stateData: Readonly<StateData>, ...args: unknown[]) => void): void {
         this._myInitEmitter.add(listener, { id: listenerID });
     }
 
@@ -533,23 +533,23 @@ export class FSM {
         this._myInitEmitter.remove(listenerID);
     }
 
-    public registerInitIDEventListener(initStateID: unknown, listenerID: unknown, listener: (fsm: FSM, initStateData: Readonly<StateData>, ...args: unknown[]) => void): void {
-        let initStateIDEmitter = this._myInitIDEmitters.get(initStateID);
-        if (initStateIDEmitter == null) {
-            this._myInitIDEmitters.set(initStateID, new Emitter());
-            initStateIDEmitter = this._myInitIDEmitters.get(initStateID);
+    public registerInitIDEventListener(stateID: unknown, listenerID: unknown, listener: (fsm: FSM, stateData: Readonly<StateData>, ...args: unknown[]) => void): void {
+        let stateIDEmitter = this._myInitIDEmitters.get(stateID);
+        if (stateIDEmitter == null) {
+            this._myInitIDEmitters.set(stateID, new Emitter());
+            stateIDEmitter = this._myInitIDEmitters.get(stateID);
         }
 
-        initStateIDEmitter!.add(listener, { id: listenerID });
+        stateIDEmitter!.add(listener, { id: listenerID });
     }
 
-    public unregisterInitIDEventListener(initStateID: unknown, listenerID: unknown): void {
-        const initStateIDEmitter = this._myInitIDEmitters.get(initStateID);
-        if (initStateIDEmitter != null) {
-            initStateIDEmitter.remove(listenerID);
+    public unregisterInitIDEventListener(stateID: unknown, listenerID: unknown): void {
+        const stateIDEmitter = this._myInitIDEmitters.get(stateID);
+        if (stateIDEmitter != null) {
+            stateIDEmitter.remove(listenerID);
 
-            if (initStateIDEmitter.isEmpty) {
-                this._myInitIDEmitters.delete(initStateID);
+            if (stateIDEmitter.isEmpty) {
+                this._myInitIDEmitters.delete(stateID);
             }
         }
     }
