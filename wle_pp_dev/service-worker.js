@@ -79,6 +79,8 @@ let _myResourceURLsToPrecache = [
     "icon168.png",
     "icon192.png",
     "icon512.png",
+    "pwa/screenshots/pp/desktop_screenshot.png",
+    "pwa/screenshots/pp/mobile_screenshot.png",
     _myAppName + "-bundle.js",
     "WonderlandRuntime-LoadingScreen.bin",
     //"WonderlandRuntime-physx.wasm",
