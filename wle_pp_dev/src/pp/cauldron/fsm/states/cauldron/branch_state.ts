@@ -37,7 +37,7 @@ export class BranchState implements State {
         }
     }
 
-    public init(fsm: FSM, stateData: StateData, branchCallback?: () => boolean): void {
+    public init(fsm: FSM, stateData: Readonly<StateData>, branchCallback?: () => boolean): void {
         if (branchCallback != null) {
             this._myBranchCallback = branchCallback;
         }

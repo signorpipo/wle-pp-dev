@@ -268,7 +268,7 @@ export class FSM {
         return this._myCurrentlyPerformedTransitionData != null;
     }
 
-    public getCurrentlyPerformingTransitionData(): TransitionData | null {
+    public getCurrentlyPerformingTransitionData(): Readonly<TransitionData> | null {
         return this._myCurrentlyPerformedTransitionData;
     }
 
@@ -289,11 +289,11 @@ export class FSM {
         this._myPendingPerforms.pp_clear();
     }
 
-    public getCurrentStateData(): StateData | null {
+    public getCurrentStateData(): Readonly<StateData> | null {
         return this._myCurrentStateData;
     }
 
-    public getCurrentTransitionsData(): TransitionData[] {
+    public getCurrentTransitionsData(): Readonly<TransitionData>[] {
         if (this._myCurrentStateData == null) {
             return [];
         }
@@ -301,7 +301,7 @@ export class FSM {
         return this.getTransitionsDataFromState(this._myCurrentStateData.myID);
     }
 
-    public getCurrentTransitionsDataToState(stateID: unknown): TransitionData[] {
+    public getCurrentTransitionsDataToState(stateID: unknown): Readonly<TransitionData>[] {
         if (this._myCurrentStateData == null) {
             return [];
         }
@@ -309,16 +309,16 @@ export class FSM {
         return this.getTransitionsDataFromStateToState(this._myCurrentStateData.myID, stateID);
     }
 
-    public getStateData(stateID: unknown): StateData | null {
+    public getStateData(stateID: unknown): Readonly<StateData> | null {
         const stateData = this._myStatesData.get(stateID);
         return stateData != null ? stateData : null;
     }
 
-    public getStatesData(): StateData[] {
+    public getStatesData(): Readonly<StateData>[] {
         return Array.from(this._myStatesData.values());
     }
 
-    public getTransitionsData(): TransitionData[] {
+    public getTransitionsData(): Readonly<TransitionData>[] {
         const transitionsData = [];
 
         for (const transitionsDataFromState of this._myTransitionsData.values()) {
@@ -330,7 +330,7 @@ export class FSM {
         return transitionsData;
     }
 
-    public getTransitionsDataFromState(fromStateID: unknown): TransitionData[] {
+    public getTransitionsDataFromState(fromStateID: unknown): Readonly<TransitionData>[] {
         const transitionsDataFromState = this._getTransitionsDataFromState(fromStateID);
         if (transitionsDataFromState == null) {
             return [];
@@ -339,7 +339,7 @@ export class FSM {
         return Array.from(transitionsDataFromState.values());
     }
 
-    public getTransitionsDataFromStateToState(fromStateID: unknown, toStateID: unknown): TransitionData[] {
+    public getTransitionsDataFromStateToState(fromStateID: unknown, toStateID: unknown): Readonly<TransitionData>[] {
         const transitionsDataFromState = this._getTransitionsDataFromState(fromStateID);
         if (transitionsDataFromState == null) {
             return [];

@@ -42,7 +42,7 @@ export abstract class BaseConditionState {
         }
     }
 
-    protected _init(fsm: FSM, stateData: StateData, conditionCallback?: () => boolean, transitionToPerformOnEnd?: unknown, ...transitionArgs: unknown[]): void {
+    protected _init(fsm: FSM, stateData: Readonly<StateData>, conditionCallback?: () => boolean, transitionToPerformOnEnd?: unknown, ...transitionArgs: unknown[]): void {
         if (conditionCallback != null) {
             this._myConditionCallback = conditionCallback;
         }

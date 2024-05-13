@@ -37,7 +37,7 @@ export class TimerState extends BaseConditionState implements State {
         super._start(fsm, transitionData, undefined, transitionToPerformOnEnd, ...transitionArgs);
     }
 
-    init(fsm: FSM, stateData: StateData, duration?: number, transitionToPerformOnEnd?: unknown, ...transitionArgs: unknown[]): void {
+    init(fsm: FSM, stateData: Readonly<StateData>, duration?: number, transitionToPerformOnEnd?: unknown, ...transitionArgs: unknown[]): void {
         this._myTimer.start(duration);
 
         super._init(fsm, stateData, undefined, transitionToPerformOnEnd, ...transitionArgs);

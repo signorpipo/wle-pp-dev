@@ -20,7 +20,7 @@ export class ConditionState extends BaseConditionState implements State {
         this._start(fsm, transitionData, conditionCallback, transitionToPerformOnEnd, ...transitionArgs);
     }
 
-    public init(fsm: FSM, stateData: StateData, conditionCallback?: () => boolean, transitionToPerformOnEnd?: unknown, ...transitionArgs: unknown[]): void {
+    public init(fsm: FSM, stateData: Readonly<StateData>, conditionCallback?: () => boolean, transitionToPerformOnEnd?: unknown, ...transitionArgs: unknown[]): void {
         this._init(fsm, stateData, conditionCallback, transitionToPerformOnEnd, ...transitionArgs);
     }
 }
