@@ -11,12 +11,10 @@ import { FSM, StateData, TransitionData } from "./fsm.js";
  */
 export interface State {
 
-    /** Called every frame if this is the current state  
-        You can retrieve this state data by calling `fsm.getCurrentStateData()` */
-    update?(dt: number, fsm: FSM, ...args: unknown[]): void;
+    /** Called every frame if this is the current state */
+    update?(dt: number, fsm: FSM, stateData: Readonly<StateData>, ...args: unknown[]): void;
 
-    /** Called when the fsm is started with this init state if no init transition object is specified or it does not have a `performInit` function  
-        Since the state is set as the current one after the `init`, you can't use `fsm.getCurrentStateData()` to get it, so it is forwarded as a param */
+    /** Called when the fsm is started with this init state if no init transition object is specified or it does not have a `performInit` function */
     init?(fsm: FSM, stateData: Readonly<StateData>, ...args: unknown[]): void;
 
     /** Called when entering this state if no transition object is specified or it does not have a perform function  

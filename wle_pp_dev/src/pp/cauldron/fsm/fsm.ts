@@ -95,13 +95,13 @@ export class FSM {
         this._myPerformDelayedMode = performDelayedMode;
     }
 
-    public addState(stateID: unknown, state?: State | ((dt: number, fsm: FSM, ...args: unknown[]) => void)): void {
+    public addState(stateID: unknown, state?: State | ((dt: number, fsm: FSM, stateData: Readonly<StateData>, ...args: unknown[]) => void)): void {
         let adjustedState: State | null = null;
         if (state == null || typeof state == "function") {
             adjustedState = {};
 
             if (typeof state == "function") {
-                adjustedState.update = function update(dt: number, fsm: FSM, ...args: unknown[]): void { return state(dt, fsm, ...args); };
+                adjustedState.update = function update(dt: number, fsm: FSM, stateData: Readonly<StateData>, ...args: unknown[]): void { return state(dt, fsm, stateData, ...args); };
             }
 
             adjustedState.clone = function clone() {
@@ -173,9 +173,9 @@ export class FSM {
                 console.log(this._myLogFSMName, "- Init:", initStateID);
             }
 
-            if (adjustedInitTransition && adjustedInitTransition.performInit) {
+            if (adjustedInitTransition != null && adjustedInitTransition.performInit != null) {
                 adjustedInitTransition.performInit(this, initStateData, ...args);
-            } else if (initStateData.myState && initStateData.myState.init) {
+            } else if (initStateData.myState != null && initStateData.myState.init != null) {
                 initStateData.myState.init(this, initStateData, ...args);
             }
 
@@ -203,8 +203,8 @@ export class FSM {
             this._myPendingPerforms.pp_clear();
         }
 
-        if (this._myCurrentStateData && this._myCurrentStateData.myState && this._myCurrentStateData.myState.update) {
-            this._myCurrentStateData.myState.update(dt, this, ...args);
+        if (this._myCurrentStateData != null && this._myCurrentStateData.myState != null && this._myCurrentStateData.myState.update != null) {
+            this._myCurrentStateData.myState.update(dt, this, this._myCurrentStateData, ...args);
         }
     }
 
@@ -620,7 +620,7 @@ export class FSM {
             return false;
         }
 
-        if (this._myCurrentStateData) {
+        if (this._myCurrentStateData != null) {
             if (this.canPerform(transitionID)) {
                 const transitionsData = this._myTransitionsData.get(this._myCurrentStateData.myID)!;
                 const transitionDataToPerform = transitionsData.get(transitionID)!;
@@ -639,16 +639,16 @@ export class FSM {
                 }
 
                 if (transitionDataToPerform.mySkipStateFunction != SkipStateFunction.END && transitionDataToPerform.mySkipStateFunction != SkipStateFunction.BOTH &&
-                    fromStateData.myState && fromStateData.myState.end) {
+                    fromStateData.myState != null && fromStateData.myState.end != null) {
                     fromStateData.myState.end(this, transitionDataToPerform, ...args);
                 }
 
-                if (transitionDataToPerform.myTransition && transitionDataToPerform.myTransition.perform) {
+                if (transitionDataToPerform.myTransition != null && transitionDataToPerform.myTransition.perform != null) {
                     transitionDataToPerform.myTransition.perform(this, transitionDataToPerform, ...args);
                 }
 
                 if (transitionDataToPerform.mySkipStateFunction != SkipStateFunction.START && transitionDataToPerform.mySkipStateFunction != SkipStateFunction.BOTH &&
-                    toStateData.myState && toStateData.myState.start) {
+                    toStateData.myState != null && toStateData.myState.start != null) {
                     toStateData.myState.start(this, transitionDataToPerform, ...args);
                 }
 
