@@ -22,7 +22,7 @@ function _initVec2ExtensionProtoype(): void {
     };
 
     vec2Extension.vec2_clone = function vec2_clone<T extends Vector2>(this: Readonly<T>): T {
-        return Vec2Utils.clone<T>(this);
+        return Vec2Utils.clone(this);
     };
 
     vec2Extension.vec2_length = function vec2_length(this: Readonly<Vector2>): number {

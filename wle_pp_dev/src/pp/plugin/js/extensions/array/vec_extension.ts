@@ -18,7 +18,7 @@ function _initVecExtensionProtoype(): void {
     };
 
     vecExtension.vec_clone = function vec_clone<T extends Vector>(this: Readonly<T>): T {
-        return VecUtils.clone<T>(this);
+        return VecUtils.clone(this);
     };
 
     vecExtension.vec_equals = function vec_equals(this: Readonly<Vector>, vector: Readonly<Vector>, epsilon?: number): boolean {

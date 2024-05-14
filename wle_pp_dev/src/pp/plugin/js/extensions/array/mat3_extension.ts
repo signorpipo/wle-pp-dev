@@ -29,7 +29,7 @@ function _initMat3ExtensionProtoype(): void {
     };
 
     mat3Extension.mat3_clone = function mat3_clone<T extends Matrix3>(this: Readonly<T>): T {
-        return Mat3Utils.clone<T>(this);
+        return Mat3Utils.clone(this);
     };
 
     mat3Extension.mat3_toDegrees = function mat3_toDegrees<T extends Matrix3, S extends Vector3>(this: Readonly<T>, out?: Vector3 | S): Vector3 | S {

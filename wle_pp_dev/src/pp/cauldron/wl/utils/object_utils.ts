@@ -201,12 +201,16 @@ export function getScaleLocal<T extends Vector3>(object: Readonly<Object3D>, out
 
 // Transform
 
-export function getTransform<T extends Matrix4>(object: Readonly<Object3D>, outTransform?: T): T {
-    return ObjectUtils.getTransformWorld(object, outTransform);
+export function getTransform(object: Readonly<Object3D>): Matrix4;
+export function getTransform<T extends Matrix4>(object: Readonly<Object3D>, outTransform: T): T;
+export function getTransform<T extends Matrix4>(object: Readonly<Object3D>, outTransform?: Matrix4 | T): Matrix4 | T {
+    return ObjectUtils.getTransformWorld(object, outTransform!);
 }
 
-export function getTransformMatrix<T extends Matrix4>(object: Readonly<Object3D>, outTransform?: T): T {
-    return ObjectUtils.getTransformWorldMatrix(object, outTransform);
+export function getTransformMatrix(object: Readonly<Object3D>): Matrix4;
+export function getTransformMatrix<T extends Matrix4>(object: Readonly<Object3D>, outTransform: T): T;
+export function getTransformMatrix<T extends Matrix4>(object: Readonly<Object3D>, outTransform?: Matrix4 | T): Matrix4 | T {
+    return ObjectUtils.getTransformWorldMatrix(object, outTransform!);
 }
 
 export function getTransformQuat<T extends Quaternion2>(object: Readonly<Object3D>, outTransform?: T): T {
@@ -215,20 +219,27 @@ export function getTransformQuat<T extends Quaternion2>(object: Readonly<Object3
 
 // Transform World
 
-export function getTransformWorld<T extends Matrix4>(object: Readonly<Object3D>, outTransform?: T): T {
-    return ObjectUtils.getTransformWorldMatrix(object, outTransform);
+export function getTransformWorld(object: Readonly<Object3D>): Matrix4;
+export function getTransformWorld<T extends Matrix4>(object: Readonly<Object3D>, outTransform: T): T;
+export function getTransformWorld<T extends Matrix4>(object: Readonly<Object3D>, outTransform?: Matrix4 | T): Matrix4 | T {
+    return ObjectUtils.getTransformWorldMatrix(object, outTransform!);
 }
 
 export const getTransformWorldMatrix = function () {
     const transformQuat = Quat2Utils.create();
     const scale = Vec3Utils.create();
-    return function getTransformWorldMatrix<T extends Matrix4>(object: Readonly<Object3D>, outTransform: T = Mat4Utils.create()): T {
+
+    function getTransformWorldMatrix(object: Readonly<Object3D>): Matrix4;
+    function getTransformWorldMatrix<T extends Matrix4>(object: Readonly<Object3D>, outTransform: T): T;
+    function getTransformWorldMatrix<T extends Matrix4>(object: Readonly<Object3D>, outTransform: Matrix4 | T = Mat4Utils.create()): Matrix4 | T {
         ObjectUtils.getTransformWorldQuat(object, transformQuat);
         ObjectUtils.getScaleWorld(object, scale);
         Mat4Utils.fromQuat(transformQuat, outTransform);
         Mat4Utils.scale(outTransform, scale, outTransform);
         return outTransform;
-    };
+    }
+
+    return getTransformWorldMatrix;
 }();
 
 export function getTransformWorldQuat<T extends Quaternion2>(object: Readonly<Object3D>, outTransform: T = Quat2Utils.create()): T {
@@ -238,20 +249,27 @@ export function getTransformWorldQuat<T extends Quaternion2>(object: Readonly<Ob
 
 // Transform Local
 
-export function getTransformLocal<T extends Matrix4>(object: Readonly<Object3D>, outTransform?: T): T {
-    return ObjectUtils.getTransformLocalMatrix(object, outTransform);
+export function getTransformLocal(object: Readonly<Object3D>): Matrix4;
+export function getTransformLocal<T extends Matrix4>(object: Readonly<Object3D>, outTransform: T): T;
+export function getTransformLocal<T extends Matrix4>(object: Readonly<Object3D>, outTransform?: Matrix4 | T): Matrix4 | T {
+    return ObjectUtils.getTransformLocalMatrix(object, outTransform!);
 }
 
 export const getTransformLocalMatrix = function () {
     const transformQuat = Quat2Utils.create();
     const scale = Vec3Utils.create();
-    return function getTransformLocalMatrix<T extends Matrix4>(object: Readonly<Object3D>, outTransform: T = Mat4Utils.create()): T {
+
+    function getTransformLocalMatrix(object: Readonly<Object3D>): Matrix4;
+    function getTransformLocalMatrix<T extends Matrix4>(object: Readonly<Object3D>, outTransform: T): T;
+    function getTransformLocalMatrix<T extends Matrix4>(object: Readonly<Object3D>, outTransform: Matrix4 | T = Mat4Utils.create()): Matrix4 | T {
         ObjectUtils.getTransformLocalQuat(object, transformQuat);
         ObjectUtils.getScaleLocal(object, scale);
         Mat4Utils.fromQuat(transformQuat, outTransform);
         Mat4Utils.scale(outTransform, scale, outTransform);
         return outTransform;
-    };
+    }
+
+    return getTransformLocalMatrix;
 }();
 
 export function getTransformLocalQuat<T extends Quaternion2>(object: Readonly<Object3D>, outTransform: T = Quat2Utils.create()): T {
@@ -1584,8 +1602,10 @@ export function convertDirectionLocalToObject<T extends Vector3>(object: Readonl
 
 // Convert Transform Object World
 
-export function convertTransformObjectToWorld<T extends Matrix4>(object: Readonly<Object3D>, transform: Matrix4, outTransform?: T): T {
-    return ObjectUtils.convertTransformObjectToWorldMatrix(object, transform, outTransform);
+export function convertTransformObjectToWorld(object: Readonly<Object3D>, transform: Matrix4): Matrix4;
+export function convertTransformObjectToWorld<T extends Matrix4>(object: Readonly<Object3D>, transform: Matrix4, outTransform: T): T;
+export function convertTransformObjectToWorld<T extends Matrix4>(object: Readonly<Object3D>, transform: Matrix4, outTransform?: Matrix4 | T): Matrix4 | T {
+    return ObjectUtils.convertTransformObjectToWorldMatrix(object, transform, outTransform!);
 }
 
 export const convertTransformObjectToWorldMatrix = function () {
@@ -1594,7 +1614,10 @@ export const convertTransformObjectToWorldMatrix = function () {
     const scale = Vec3Utils.create();
     const inverseScale = Vec3Utils.create();
     const one = Vec3Utils.create(1);
-    return function convertTransformObjectToWorldMatrix<T extends Matrix4>(object: Readonly<Object3D>, transform: Matrix4, outTransform: T = Mat4Utils.create()): T {
+
+    function convertTransformObjectToWorldMatrix(object: Readonly<Object3D>, transform: Matrix4): Matrix4;
+    function convertTransformObjectToWorldMatrix<T extends Matrix4>(object: Readonly<Object3D>, transform: Matrix4, outTransform: T): T;
+    function convertTransformObjectToWorldMatrix<T extends Matrix4>(object: Readonly<Object3D>, transform: Matrix4, outTransform: Matrix4 | T = Mat4Utils.create()): Matrix4 | T {
         ObjectUtils.getTransformWorldMatrix(object, convertTransform);
         if (ObjectUtils.hasUniformScaleWorld(object)) {
             Mat4Utils.mul(convertTransform, transform, outTransform);
@@ -1615,7 +1638,9 @@ export const convertTransformObjectToWorldMatrix = function () {
             outTransform[15] = 1;
         }
         return outTransform;
-    };
+    }
+
+    return convertTransformObjectToWorldMatrix;
 }();
 
 export const convertTransformObjectToWorldQuat = function () {
@@ -1631,8 +1656,10 @@ export const convertTransformObjectToWorldQuat = function () {
     };
 }();
 
-export function convertTransformWorldToObject<T extends Matrix4>(object: Readonly<Object3D>, transform: Matrix4, outTransform?: T): T {
-    return ObjectUtils.convertTransformWorldToObjectMatrix(object, transform, outTransform);
+export function convertTransformWorldToObject(object: Readonly<Object3D>, transform: Matrix4): Matrix4;
+export function convertTransformWorldToObject<T extends Matrix4>(object: Readonly<Object3D>, transform: Matrix4, outTransform: T): T;
+export function convertTransformWorldToObject<T extends Matrix4>(object: Readonly<Object3D>, transform: Matrix4, outTransform?: Matrix4 | T): Matrix4 | T {
+    return ObjectUtils.convertTransformWorldToObjectMatrix(object, transform, outTransform!);
 }
 
 export const convertTransformWorldToObjectMatrix = function () {
@@ -1641,7 +1668,10 @@ export const convertTransformWorldToObjectMatrix = function () {
     const scale = Vec3Utils.create();
     const inverseScale = Vec3Utils.create();
     const one = Vec3Utils.create(1);
-    return function convertTransformWorldToObjectMatrix<T extends Matrix4>(object: Readonly<Object3D>, transform: Matrix4, outTransform: T = Mat4Utils.create()): T {
+
+    function convertTransformWorldToObjectMatrix(object: Readonly<Object3D>, transform: Matrix4): Matrix4;
+    function convertTransformWorldToObjectMatrix<T extends Matrix4>(object: Readonly<Object3D>, transform: Matrix4, outTransform: T): T;
+    function convertTransformWorldToObjectMatrix<T extends Matrix4>(object: Readonly<Object3D>, transform: Matrix4, outTransform: Matrix4 | T = Mat4Utils.create()): Matrix4 | T {
         ObjectUtils.getTransformWorldMatrix(object, convertTransform);
         if (ObjectUtils.hasUniformScaleWorld(object)) {
             Mat4Utils.invert(convertTransform, convertTransform);
@@ -1664,7 +1694,9 @@ export const convertTransformWorldToObjectMatrix = function () {
             outTransform[15] = 1;
         }
         return outTransform;
-    };
+    }
+
+    return convertTransformWorldToObjectMatrix;
 }();
 
 export const convertTransformWorldToObjectQuat = function () {
@@ -1683,17 +1715,21 @@ export const convertTransformWorldToObjectQuat = function () {
 
 // Convert Transform Local World
 
-export function convertTransformLocalToWorld<T extends Matrix4>(object: Readonly<Object3D>, transform: Matrix4, outTransform?: T): T {
-    return ObjectUtils.convertTransformLocalToWorldMatrix(object, transform, outTransform);
+export function convertTransformLocalToWorld(object: Readonly<Object3D>, transform: Matrix4): Matrix4;
+export function convertTransformLocalToWorld<T extends Matrix4>(object: Readonly<Object3D>, transform: Matrix4, outTransform: T): T;
+export function convertTransformLocalToWorld<T extends Matrix4>(object: Readonly<Object3D>, transform: Matrix4, outTransform?: Matrix4 | T): Matrix4 | T {
+    return ObjectUtils.convertTransformLocalToWorldMatrix(object, transform, outTransform!);
 }
 
-export function convertTransformLocalToWorldMatrix<T extends Matrix4>(object: Readonly<Object3D>, transform: Matrix4, outTransform: T = Mat4Utils.create()): T {
+export function convertTransformLocalToWorldMatrix(object: Readonly<Object3D>, transform: Matrix4): Matrix4;
+export function convertTransformLocalToWorldMatrix<T extends Matrix4>(object: Readonly<Object3D>, transform: Matrix4, outTransform: T): T;
+export function convertTransformLocalToWorldMatrix<T extends Matrix4>(object: Readonly<Object3D>, transform: Matrix4, outTransform?: Matrix4 | T): Matrix4 | T {
     if (ObjectUtils.getParent(object) != null) {
-        ObjectUtils.convertTransformObjectToWorldMatrix(ObjectUtils.getParent(object)!, transform, outTransform);
+        ObjectUtils.convertTransformObjectToWorldMatrix(ObjectUtils.getParent(object)!, transform, outTransform!);
     } else {
-        Mat4Utils.copy(transform, outTransform);
+        Mat4Utils.copy(transform, outTransform!);
     }
-    return outTransform;
+    return outTransform!;
 }
 
 export function convertTransformLocalToWorldQuat<T extends Quaternion2>(object: Readonly<Object3D>, transform: Quaternion2, outTransform: T = Quat2Utils.create()): T {
@@ -1705,17 +1741,21 @@ export function convertTransformLocalToWorldQuat<T extends Quaternion2>(object: 
     return outTransform;
 }
 
-export function convertTransformWorldToLocal<T extends Matrix4>(object: Readonly<Object3D>, transform: Matrix4, outTransform?: T): T {
-    return ObjectUtils.convertTransformWorldToLocalMatrix(object, transform, outTransform);
+export function convertTransformWorldToLocal(object: Readonly<Object3D>, transform: Matrix4): Matrix4;
+export function convertTransformWorldToLocal<T extends Matrix4>(object: Readonly<Object3D>, transform: Matrix4, outTransform: T): T;
+export function convertTransformWorldToLocal<T extends Matrix4>(object: Readonly<Object3D>, transform: Matrix4, outTransform?: Matrix4 | T): Matrix4 | T {
+    return ObjectUtils.convertTransformWorldToLocalMatrix(object, transform, outTransform!);
 }
 
-export function convertTransformWorldToLocalMatrix<T extends Matrix4>(object: Readonly<Object3D>, transform: Matrix4, outTransform: T = Mat4Utils.create()): T {
+export function convertTransformWorldToLocalMatrix(object: Readonly<Object3D>, transform: Matrix4): Matrix4;
+export function convertTransformWorldToLocalMatrix<T extends Matrix4>(object: Readonly<Object3D>, transform: Matrix4, outTransform: T): T;
+export function convertTransformWorldToLocalMatrix<T extends Matrix4>(object: Readonly<Object3D>, transform: Matrix4, outTransform?: Matrix4 | T): Matrix4 | T {
     if (ObjectUtils.getParent(object) != null) {
-        ObjectUtils.convertTransformWorldToObjectMatrix(ObjectUtils.getParent(object)!, transform, outTransform);
+        ObjectUtils.convertTransformWorldToObjectMatrix(ObjectUtils.getParent(object)!, transform, outTransform!);
     } else {
-        Mat4Utils.copy(transform, outTransform);
+        Mat4Utils.copy(transform, outTransform!);
     }
-    return outTransform;
+    return outTransform!;
 }
 
 export function convertTransformWorldToLocalQuat<T extends Quaternion2>(object: Readonly<Object3D>, transform: Quaternion2, outTransform: T = Quat2Utils.create()): T {
@@ -1731,14 +1771,18 @@ export function convertTransformWorldToLocalQuat<T extends Quaternion2>(object: 
 
 // I need to use the conversion to world and then local to also use the parent scale that changes the position in local space
 
-export function convertTransformObjectToLocal<T extends Matrix4>(object: Readonly<Object3D>, transform: Matrix4, outTransform?: T): T {
-    return ObjectUtils.convertTransformObjectToLocalMatrix(object, transform, outTransform);
+export function convertTransformObjectToLocal(object: Readonly<Object3D>, transform: Matrix4): Matrix4;
+export function convertTransformObjectToLocal<T extends Matrix4>(object: Readonly<Object3D>, transform: Matrix4, outTransform: T): T;
+export function convertTransformObjectToLocal<T extends Matrix4>(object: Readonly<Object3D>, transform: Matrix4, outTransform?: Matrix4 | T): Matrix4 | T {
+    return ObjectUtils.convertTransformObjectToLocalMatrix(object, transform, outTransform!);
 }
 
-export function convertTransformObjectToLocalMatrix<T extends Matrix4>(object: Readonly<Object3D>, transform: Matrix4, outTransform: T = Mat4Utils.create()): T {
-    ObjectUtils.convertTransformObjectToWorldMatrix(object, transform, outTransform);
-    ObjectUtils.convertTransformWorldToLocalMatrix(object, outTransform, outTransform);
-    return outTransform;
+export function convertTransformObjectToLocalMatrix(object: Readonly<Object3D>, transform: Matrix4): Matrix4;
+export function convertTransformObjectToLocalMatrix<T extends Matrix4>(object: Readonly<Object3D>, transform: Matrix4, outTransform: T): T;
+export function convertTransformObjectToLocalMatrix<T extends Matrix4>(object: Readonly<Object3D>, transform: Matrix4, outTransform?: Matrix4 | T): Matrix4 | T {
+    ObjectUtils.convertTransformObjectToWorldMatrix(object, transform, outTransform!);
+    ObjectUtils.convertTransformWorldToLocalMatrix(object, outTransform!, outTransform!);
+    return outTransform!;
 }
 
 export function convertTransformObjectToLocalQuat<T extends Quaternion2>(object: Readonly<Object3D>, transform: Quaternion2, outTransform: T = Quat2Utils.create()): T {
@@ -1747,14 +1791,18 @@ export function convertTransformObjectToLocalQuat<T extends Quaternion2>(object:
     return outTransform;
 }
 
-export function convertTransformLocalToObject<T extends Matrix4>(object: Readonly<Object3D>, transform: Matrix4, outTransform?: T): T {
-    return ObjectUtils.convertTransformLocalToObjectMatrix(object, transform, outTransform);
+export function convertTransformLocalToObject(object: Readonly<Object3D>, transform: Matrix4): Matrix4;
+export function convertTransformLocalToObject<T extends Matrix4>(object: Readonly<Object3D>, transform: Matrix4, outTransform: T): T;
+export function convertTransformLocalToObject<T extends Matrix4>(object: Readonly<Object3D>, transform: Matrix4, outTransform?: Matrix4 | T): Matrix4 | T {
+    return ObjectUtils.convertTransformLocalToObjectMatrix(object, transform, outTransform!);
 }
 
-export function convertTransformLocalToObjectMatrix<T extends Matrix4>(object: Readonly<Object3D>, transform: Matrix4, outTransform: T = Mat4Utils.create()): T {
-    ObjectUtils.convertTransformLocalToWorldMatrix(object, transform, outTransform);
-    ObjectUtils.convertTransformWorldToObjectMatrix(object, outTransform, outTransform);
-    return outTransform;
+export function convertTransformLocalToObjectMatrix(object: Readonly<Object3D>, transform: Matrix4): Matrix4;
+export function convertTransformLocalToObjectMatrix<T extends Matrix4>(object: Readonly<Object3D>, transform: Matrix4, outTransform: T): T;
+export function convertTransformLocalToObjectMatrix<T extends Matrix4>(object: Readonly<Object3D>, transform: Matrix4, outTransform?: Matrix4 | T): Matrix4 | T {
+    ObjectUtils.convertTransformLocalToWorldMatrix(object, transform, outTransform!);
+    ObjectUtils.convertTransformWorldToObjectMatrix(object, outTransform!, outTransform!);
+    return outTransform!;
 }
 
 export function convertTransformLocalToObjectQuat<T extends Quaternion2>(object: Readonly<Object3D>, transform: Quaternion2, outTransform: T = Quat2Utils.create()): T {

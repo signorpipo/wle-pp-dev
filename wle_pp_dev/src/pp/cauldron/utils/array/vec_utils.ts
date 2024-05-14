@@ -80,7 +80,7 @@ export function isZero(vector: Readonly<Vector>, epsilon = 0): boolean {
 
 export function scale<T extends Vector>(vector: Readonly<T>, value: number): T;
 export function scale<T extends Vector>(vector: Readonly<Vector>, value: number, out: T): T;
-export function scale<T extends Vector, S extends Vector>(vector: Readonly<T>, value: number, out: T | S = VecUtils.clone<T>(vector)): T | S {
+export function scale<T extends Vector, S extends Vector>(vector: Readonly<T>, value: number, out: T | S = VecUtils.clone(vector)): T | S {
     for (let i = 0; i < vector.length; i++) {
         out[i] = vector[i] * value;
     }
@@ -90,7 +90,7 @@ export function scale<T extends Vector, S extends Vector>(vector: Readonly<T>, v
 
 export function round<T extends Vector>(vector: Readonly<T>): T;
 export function round<T extends Vector>(vector: Readonly<Vector>, out: T): T;
-export function round<T extends Vector, S extends Vector>(vector: Readonly<T>, out: T | S = VecUtils.clone<T>(vector)): T | S {
+export function round<T extends Vector, S extends Vector>(vector: Readonly<T>, out: T | S = VecUtils.clone(vector)): T | S {
     for (let i = 0; i < vector.length; i++) {
         out[i] = Math.round(vector[i]);
     }
@@ -100,7 +100,7 @@ export function round<T extends Vector, S extends Vector>(vector: Readonly<T>, o
 
 export function floor<T extends Vector>(vector: Readonly<T>): T;
 export function floor<T extends Vector>(vector: Readonly<Vector>, out: T): T;
-export function floor<T extends Vector, S extends Vector>(vector: Readonly<T>, out: T | S = VecUtils.clone<T>(vector)): T | S {
+export function floor<T extends Vector, S extends Vector>(vector: Readonly<T>, out: T | S = VecUtils.clone(vector)): T | S {
     for (let i = 0; i < vector.length; i++) {
         out[i] = Math.floor(vector[i]);
     }
@@ -110,7 +110,7 @@ export function floor<T extends Vector, S extends Vector>(vector: Readonly<T>, o
 
 export function ceil<T extends Vector>(vector: Readonly<T>): T;
 export function ceil<T extends Vector>(vector: Readonly<Vector>, out: T): T;
-export function ceil<T extends Vector, S extends Vector>(vector: Readonly<T>, out: T | S = VecUtils.clone<T>(vector)): T | S {
+export function ceil<T extends Vector, S extends Vector>(vector: Readonly<T>, out: T | S = VecUtils.clone(vector)): T | S {
     for (let i = 0; i < vector.length; i++) {
         out[i] = Math.ceil(vector[i]);
     }
@@ -120,7 +120,7 @@ export function ceil<T extends Vector, S extends Vector>(vector: Readonly<T>, ou
 
 export function clamp<T extends Vector>(vector: Readonly<T>, start: number, end: number): T;
 export function clamp<T extends Vector>(vector: Readonly<Vector>, start: number, end: number, out: T): T;
-export function clamp<T extends Vector, S extends Vector>(vector: Readonly<T>, start: number, end: number, out: T | S = VecUtils.clone<T>(vector)): T | S {
+export function clamp<T extends Vector, S extends Vector>(vector: Readonly<T>, start: number, end: number, out: T | S = VecUtils.clone(vector)): T | S {
     const fixedStart = (start != null) ? start : -Number.MAX_VALUE;
     const fixedEnd = (end != null) ? end : Number.MAX_VALUE;
     const min = Math.min(fixedStart, fixedEnd);

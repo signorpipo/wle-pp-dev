@@ -22,7 +22,7 @@ function _initVec4ExtensionProtoype(): void {
     };
 
     vec4Extension.vec2_clone = function vec2_clone<T extends Vector4>(this: Readonly<T>): T {
-        return Vec4Utils.clone<T>(this);
+        return Vec4Utils.clone(this);
     };
 
     for (const arrayLikeClassToExtend of ArrayExtensionUtils.ARRAY_LIKE_CLASSES) {
