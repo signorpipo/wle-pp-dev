@@ -14,7 +14,7 @@ export function create(
     const out = gl_mat3.create() as unknown as Matrix3;
 
     if (m00 != null) {
-        set(out,
+        Mat3Utils.set(out,
             m00, m01!, m02!,
             m10!, m11!, m12!,
             m20!, m21!, m22!);

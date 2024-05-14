@@ -8,7 +8,7 @@ export function create(x?: number, y?: number): Vector2 {
     const out = gl_vec2.create() as unknown as Vector2;
 
     if (x != null) {
-        set(out, x, y!);
+        Vec2Utils.set(out, x, y!);
     }
 
     return out;

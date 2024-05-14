@@ -152,7 +152,6 @@ import { Mat4Utils } from "../../../../cauldron/utils/array/mat4_utils.js";
 import { Quat2Utils } from "../../../../cauldron/utils/array/quat2_utils.js";
 import { QuatUtils } from "../../../../cauldron/utils/array/quat_utils.js";
 import { Vec3Utils } from "../../../../cauldron/utils/array/vec3_utils.js";
-import { Vec4Utils } from "../../../../cauldron/utils/array/vec4_utils.js";
 import { EasingFunction, MathUtils } from "../../../../cauldron/utils/math_utils.js";
 import { PluginUtils } from "../../../utils/plugin_utils.js";
 
@@ -595,22 +594,6 @@ export function _initArrayExtensionLegacyProtoype() {
 
     vec3Extension.vec3_perpendicularRandom = function vec3_perpendicularRandom(out = Vec3Utils.create()) {
         return Vec3Utils.perpendicularRandom(this, out);
-    };
-
-    // VECTOR 4
-
-    let vec4Extension = {};
-
-    vec4Extension.vec4_set = function vec4_set(x, y, z, w) {
-        return Vec4Utils.set(this, x, y, z, w);
-    };
-
-    vec4Extension.vec4_copy = function vec4_copy(vector) {
-        return Vec4Utils.copy(vector, this);
-    };
-
-    vec4Extension.vec4_clone = function vec4_clone(out = Vec4Utils.create()) {
-        return Vec4Utils.clone(this, out);
     };
 
     // QUAT
@@ -1266,7 +1249,6 @@ export function _initArrayExtensionLegacyProtoype() {
 
     for (let arrayPrototypeToExtend of arrayPrototypesToExtend) {
         PluginUtils.injectProperties(vec3Extension, arrayPrototypeToExtend, false, true, true);
-        PluginUtils.injectProperties(vec4Extension, arrayPrototypeToExtend, false, true, true);
 
         PluginUtils.injectProperties(quatExtension, arrayPrototypeToExtend, false, true, true);
         PluginUtils.injectProperties(quat2Extension, arrayPrototypeToExtend, false, true, true);

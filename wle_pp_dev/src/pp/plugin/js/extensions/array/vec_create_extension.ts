@@ -32,7 +32,7 @@ export function vec4_create(): Vector4;
 export function vec4_create(x: number, y: number, z: number, w: number): Vector4;
 export function vec4_create(uniformValue: number): Vector4;
 export function vec4_create(x?: number, y?: number, z?: number, w?: number): Vector4 {
-    return Vec4Utils.create(x, y, z, w);
+    return Vec4Utils.create(x!, y!, z!, w!);
 }
 
 export function quat_create(): Quaternion;
