@@ -45,7 +45,7 @@ export function length(vector: Readonly<Vector2>): number {
 }
 
 export function normalize<T extends Vector2>(vector: Readonly<T>): T;
-export function normalize<T extends Vector2, S extends Vector2>(vector: Readonly<T>, out: S): S;
+export function normalize<T extends Vector2>(vector: Readonly<Vector2>, out: T): T;
 export function normalize<T extends Vector2, S extends Vector2>(vector: Readonly<T>, out: T | S = Vec2Utils.clone<T>(vector)): T | S {
     gl_vec2.normalize(out as unknown as gl_vec2_type, vector as unknown as gl_vec2_type);
     return out;

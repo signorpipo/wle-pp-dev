@@ -3,7 +3,7 @@ import { Vec4Utils } from "./array/vec4_utils.js";
 
 /** `rgb` is in the `[0, 1]` space, alpha is not changed  */
 export function rgbToHSV<T extends Vector4>(rgb: Readonly<T>): T;
-export function rgbToHSV<T extends Vector4, S extends Vector4>(rgb: Readonly<T>, out: S): S;
+export function rgbToHSV<T extends Vector4>(rgb: Readonly<Vector4>, out: T): T;
 export function rgbToHSV<T extends Vector4, S extends Vector4>(rgb: Readonly<T>, out: T | S = Vec4Utils.clone(rgb) as any): T | S {
     const r = rgb[0];
     const g = rgb[1];
@@ -43,7 +43,7 @@ export function rgbToHSV<T extends Vector4, S extends Vector4>(rgb: Readonly<T>,
 
 /** alpha is not changed */
 export function hsvToRGB<T extends Vector4>(hsv: Readonly<T>): T;
-export function hsvToRGB<T extends Vector4, S extends Vector4>(hsv: Readonly<T>, out: S): S;
+export function hsvToRGB<T extends Vector4>(hsv: Readonly<Vector4>, out: T): T;
 export function hsvToRGB<T extends Vector4, S extends Vector4>(hsv: Readonly<T>, out: T | S = Vec4Utils.clone(hsv) as any): T | S {
     const h = hsv[0];
     const s = hsv[1];
@@ -101,7 +101,7 @@ export function hsvToRGB<T extends Vector4, S extends Vector4>(hsv: Readonly<T>,
 }
 
 export function colorNormalizedToInt<T extends Vector4>(color: Readonly<T>): T;
-export function colorNormalizedToInt<T extends Vector4, S extends Vector4>(color: Readonly<T>, out: S): S;
+export function colorNormalizedToInt<T extends Vector4>(color: Readonly<Vector4>, out: T): T;
 export function colorNormalizedToInt<T extends Vector4, S extends Vector4>(color: Readonly<T>, out: T | S = Vec4Utils.clone(color) as any): T | S {
     for (let i = 0; i < out.length; i++) {
         out[i] = Math.round(color[i] * 255);
@@ -112,7 +112,7 @@ export function colorNormalizedToInt<T extends Vector4, S extends Vector4>(color
 }
 
 export function colorIntToNormalized<T extends Vector4>(color: Readonly<T>): T;
-export function colorIntToNormalized<T extends Vector4, S extends Vector4>(color: Readonly<T>, out: S): S;
+export function colorIntToNormalized<T extends Vector4>(color: Readonly<Vector4>, out: T): T;
 export function colorIntToNormalized<T extends Vector4, S extends Vector4>(color: Readonly<T>, out: T | S = Vec4Utils.clone(color) as any): T | S {
     for (let i = 0; i < out.length; i++) {
         out[i] = color[i] / 255;

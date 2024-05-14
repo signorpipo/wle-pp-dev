@@ -3,6 +3,10 @@
  * The `initPP` function, which is automatically called by the `pp-gateway` component, does this for you
  */
 
+import { Component, Object3D, WonderlandEngine, type ComponentConstructor } from "@wonderlandengine/api";
+import { Matrix3, Matrix4, Quaternion, Quaternion2, Vector3 } from "../../../cauldron/type_definitions/array_type_definitions.js";
+import { CloneParams } from "../../../cauldron/wl/utils/object_utils.js";
+
 /**
  * How to use
  * 
@@ -58,11 +62,6 @@
  * If a method require an engine parameter, u can always avoid specifying it and it will by default use the current main engine  
  * If a method require a scene parameter, u can always avoid specifying it and it will by default use the scene from the current main engine
  */
-
-import { Component, Object3D, WonderlandEngine, type ComponentConstructor } from "@wonderlandengine/api";
-import { Matrix3, Matrix4, Quaternion, Quaternion2, Vector3 } from "../../../cauldron/type_definitions/array_type_definitions.js";
-import { CloneParams } from "../../../cauldron/wl/utils/object_utils.js";
-
 export interface Object3DExtension {
     pp_getPosition<T extends Vector3>(this: Readonly<Object3D>, outPosition?: T): T;
     pp_getPositionWorld<T extends Vector3>(this: Readonly<Object3D>, outPosition?: T): T;
