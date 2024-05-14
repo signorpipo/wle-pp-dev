@@ -95,13 +95,35 @@ export class FSM {
         this._myPerformDelayedMode = performDelayedMode;
     }
 
-    public addState(stateID: unknown, state?: State | ((dt: number, fsm: FSM, stateData: Readonly<StateData>, ...args: unknown[]) => void)): void {
+    public addState(stateID: unknown, state?: State): void;
+    public addState(stateID: unknown,
+        stateUpdateCallback?: ((dt: number, fsm: FSM, stateData: Readonly<StateData>, ...args: unknown[]) => void),
+        stateStartCallback?: ((fsm: FSM, transitionData: Readonly<TransitionData>, ...args: unknown[]) => void),
+        stateEndCallback?: ((fsm: FSM, transitionData: Readonly<TransitionData>, ...args: unknown[]) => void),
+        stateInitCallback?: ((fsm: FSM, stateData: Readonly<StateData>, ...args: unknown[]) => void)): void;
+    public addState(stateID: unknown,
+        state?: State | ((dt: number, fsm: FSM, stateData: Readonly<StateData>, ...args: unknown[]) => void),
+        stateStartCallback?: ((fsm: FSM, transitionData: Readonly<TransitionData>, ...args: unknown[]) => void),
+        stateEndCallback?: ((fsm: FSM, transitionData: Readonly<TransitionData>, ...args: unknown[]) => void),
+        stateInitCallback?: ((fsm: FSM, stateData: Readonly<StateData>, ...args: unknown[]) => void)): void {
         let adjustedState: State | null = null;
         if (state == null || typeof state == "function") {
             adjustedState = {};
 
-            if (typeof state == "function") {
+            if (state != null) {
                 adjustedState.update = function update(dt: number, fsm: FSM, stateData: Readonly<StateData>, ...args: unknown[]): void { return state(dt, fsm, stateData, ...args); };
+            }
+
+            if (stateStartCallback != null) {
+                adjustedState.start = function start(fsm: FSM, transitionData: Readonly<TransitionData>, ...args: unknown[]): void { return stateStartCallback(fsm, transitionData, ...args); };
+            }
+
+            if (stateEndCallback != null) {
+                adjustedState.end = function end(fsm: FSM, transitionData: Readonly<TransitionData>, ...args: unknown[]): void { return stateEndCallback(fsm, transitionData, ...args); };
+            }
+
+            if (stateInitCallback != null) {
+                adjustedState.init = function init(fsm: FSM, stateData: Readonly<StateData>, ...args: unknown[]): void { return stateInitCallback(fsm, stateData, ...args); };
             }
 
             adjustedState.clone = function clone() {
@@ -119,12 +141,14 @@ export class FSM {
         this._myTransitionsData.set(stateID, new Map());
     }
 
+    public addTransition(fromStateID: unknown, toStateID: unknown, transitionID: unknown, transition?: Transition, skipStateFunction?: SkipStateFunction): void;
+    public addTransition(fromStateID: unknown, toStateID: unknown, transitionID: unknown, transitionPerformCallback?: ((fsm: FSM, transitionData: Readonly<TransitionData>, ...args: unknown[]) => void), skipStateFunction?: SkipStateFunction): void;
     public addTransition(fromStateID: unknown, toStateID: unknown, transitionID: unknown, transition?: Transition | ((fsm: FSM, transitionData: Readonly<TransitionData>, ...args: unknown[]) => void), skipStateFunction: SkipStateFunction = SkipStateFunction.NONE): void {
         let adjustedTransition: Transition | null = null;
         if (transition == null || typeof transition == "function") {
             adjustedTransition = {};
 
-            if (typeof transition == "function") {
+            if (transition != null) {
                 adjustedTransition.perform = function perform(fsm: FSM, transitionData: Readonly<TransitionData>, ...args: unknown[]): void { return transition(fsm, transitionData, ...args); };
             }
 
@@ -154,16 +178,18 @@ export class FSM {
         }
     }
 
-    public init(stateID: unknown, initTransition?: Transition | ((fsm: FSM, stateData: Readonly<StateData>, ...args: unknown[]) => void), ...args: unknown[]): void {
+    public init(stateID: unknown, transition?: Transition): void;
+    public init(stateID: unknown, transitionPerformInitCallback?: ((fsm: FSM, stateData: Readonly<StateData>, ...args: unknown[]) => void), ...args: unknown[]): void;
+    public init(stateID: unknown, transition?: Transition | ((fsm: FSM, stateData: Readonly<StateData>, ...args: unknown[]) => void), ...args: unknown[]): void {
         let adjustedInitTransition: Transition | null = null;
-        if (initTransition == null || typeof initTransition == "function") {
+        if (transition == null || typeof transition == "function") {
             adjustedInitTransition = {};
 
-            if (typeof initTransition == "function") {
-                adjustedInitTransition.performInit = function performInit(fsm: FSM, stateData: Readonly<StateData>, ...args: unknown[]): void { return initTransition(fsm, stateData, ...args); };
+            if (transition != null) {
+                adjustedInitTransition.performInit = function performInit(fsm: FSM, stateData: Readonly<StateData>, ...args: unknown[]): void { return transition(fsm, stateData, ...args); };
             }
         } else {
-            adjustedInitTransition = initTransition;
+            adjustedInitTransition = transition;
         }
 
         if (this.hasState(stateID)) {
