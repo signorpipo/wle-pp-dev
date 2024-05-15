@@ -34,23 +34,23 @@ function _initVecExtensionProtoype(): void {
             return VecUtils.isZero(this, epsilon);
         },
 
-        vec_scale: function vec_scale<T extends Vector, S extends Vector>(this: Readonly<T>, value: number, out?: S): S {
+        vec_scale: function vec_scale<T extends Vector, U extends Vector>(this: Readonly<T>, value: number, out?: U): U {
             return VecUtils.scale(this, value, out!);
         },
 
-        vec_round: function vec_round<T extends Vector, S extends Vector>(this: Readonly<T>, out?: S): S {
+        vec_round: function vec_round<T extends Vector, U extends Vector>(this: Readonly<T>, out?: U): U {
             return VecUtils.round(this, out!);
         },
 
-        vec_floor: function vec_floor<T extends Vector, S extends Vector>(this: Readonly<T>, out?: S): S {
+        vec_floor: function vec_floor<T extends Vector, U extends Vector>(this: Readonly<T>, out?: U): U {
             return VecUtils.floor(this, out!);
         },
 
-        vec_ceil: function vec_ceil<T extends Vector, S extends Vector>(this: Readonly<T>, out?: S): S {
+        vec_ceil: function vec_ceil<T extends Vector, U extends Vector>(this: Readonly<T>, out?: U): U {
             return VecUtils.ceil(this, out!);
         },
 
-        vec_clamp: function vec_clamp<T extends Vector, S extends Vector>(this: Readonly<T>, start: number, end: number, out?: S): S {
+        vec_clamp: function vec_clamp<T extends Vector, U extends Vector>(this: Readonly<T>, start: number, end: number, out?: U): U {
             return VecUtils.clamp(this, start, end, out!);
         },
 

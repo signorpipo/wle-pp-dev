@@ -30,7 +30,7 @@ function _initVec2ExtensionProtoype(): void {
             return Vec2Utils.length(this);
         },
 
-        vec2_normalize: function vec2_normalize<T extends Vector2, S extends Vector2>(this: Readonly<T>, out?: S): S {
+        vec2_normalize: function vec2_normalize<T extends Vector2, U extends Vector2>(this: Readonly<T>, out?: U): U {
             return Vec2Utils.normalize(this, out!);
         },
 

@@ -81,21 +81,21 @@ export function identity<T extends Matrix4>(matrix: T): T {
 
 export function invert<T extends Matrix4>(matrix: Readonly<T>): T;
 export function invert<T extends Matrix4>(matrix: Readonly<Matrix4>, out: T): T;
-export function invert<T extends Matrix4, S extends Matrix4>(matrix: Readonly<T>, out: T | S = Mat4Utils.clone(matrix)): T | S {
+export function invert<T extends Matrix4, U extends Matrix4>(matrix: Readonly<T>, out: T | U = Mat4Utils.clone(matrix)): T | U {
     gl_mat4.invert(out as unknown as gl_mat4_type, matrix as unknown as gl_mat4_type);
     return out;
 }
 
 export function mul<T extends Matrix4>(first: Readonly<T>, second: Readonly<Matrix4>): T;
 export function mul<T extends Matrix4>(first: Readonly<Matrix4>, second: Readonly<Matrix4>, out: T): T;
-export function mul<T extends Matrix4, S extends Matrix4>(first: Readonly<T>, second: Readonly<Matrix4>, out: T | S = Mat4Utils.clone(first)): T | S {
+export function mul<T extends Matrix4, U extends Matrix4>(first: Readonly<T>, second: Readonly<Matrix4>, out: T | U = Mat4Utils.clone(first)): T | U {
     gl_mat4.mul(out as unknown as gl_mat4_type, first as unknown as gl_mat4_type, second as unknown as gl_mat4_type);
     return out;
 }
 
 export function scale<T extends Matrix4>(matrix: Readonly<T>, vector: Readonly<Vector3>): T;
 export function scale<T extends Matrix4>(matrix: Readonly<Matrix4>, vector: Readonly<Vector3>, out: T): T;
-export function scale<T extends Matrix4, S extends Matrix4>(matrix: Readonly<T>, vector: Readonly<Vector3>, out: T | S = Mat4Utils.clone(matrix)): T | S {
+export function scale<T extends Matrix4, U extends Matrix4>(matrix: Readonly<T>, vector: Readonly<Vector3>, out: T | U = Mat4Utils.clone(matrix)): T | U {
     gl_mat4.scale(out as unknown as gl_mat4_type, matrix as unknown as gl_mat4_type, vector as unknown as gl_vec3_type);
     return out;
 }
@@ -337,7 +337,7 @@ export const toWorld = function () {
 
     function toWorld<T extends Matrix4>(matrix: Readonly<T>, parentTransformMatrix: Readonly<Matrix4>): T;
     function toWorld<T extends Matrix4>(matrix: Readonly<Matrix4>, parentTransformMatrix: Readonly<Matrix4>, out: T): T;
-    function toWorld<T extends Matrix4, S extends Matrix4>(matrix: Readonly<T>, parentTransformMatrix: Readonly<Matrix4>, out: T | S = Mat4Utils.clone(matrix)): T | S {
+    function toWorld<T extends Matrix4, U extends Matrix4>(matrix: Readonly<T>, parentTransformMatrix: Readonly<Matrix4>, out: T | U = Mat4Utils.clone(matrix)): T | U {
         if (Mat4Utils.hasUniformScale(parentTransformMatrix)) {
             Mat4Utils.mul(parentTransformMatrix, matrix, out);
         } else {
@@ -372,7 +372,7 @@ export const toLocal = function () {
 
     function toLocal<T extends Matrix4>(matrix: Readonly<T>, parentTransformMatrix: Readonly<Matrix4>): T;
     function toLocal<T extends Matrix4>(matrix: Readonly<Matrix4>, parentTransformMatrix: Readonly<Matrix4>, out: T): T;
-    function toLocal<T extends Matrix4, S extends Matrix4>(matrix: Readonly<T>, parentTransformMatrix: Readonly<Matrix4>, out: T | S = Mat4Utils.clone(matrix)): T | S {
+    function toLocal<T extends Matrix4, U extends Matrix4>(matrix: Readonly<T>, parentTransformMatrix: Readonly<Matrix4>, out: T | U = Mat4Utils.clone(matrix)): T | U {
         if (Mat4Utils.hasUniformScale(parentTransformMatrix)) {
             Mat4Utils.invert(parentTransformMatrix, convertTransform);
             Mat4Utils.mul(convertTransform, matrix, out);

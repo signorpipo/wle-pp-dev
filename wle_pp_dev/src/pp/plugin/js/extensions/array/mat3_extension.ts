@@ -33,15 +33,15 @@ function _initMat3ExtensionProtoype(): void {
             return Mat3Utils.clone(this);
         },
 
-        mat3_toDegrees: function mat3_toDegrees<T extends Matrix3, S extends Vector3>(this: Readonly<T>, out?: Vector3 | S): Vector3 | S {
+        mat3_toDegrees: function mat3_toDegrees<T extends Matrix3, U extends Vector3>(this: Readonly<T>, out?: Vector3 | U): Vector3 | U {
             return Mat3Utils.toDegrees(this, out!);
         },
 
-        mat3_toRadians: function mat3_toRadians<T extends Matrix3, S extends Vector3>(this: Readonly<T>, out?: Vector3 | S): Vector3 | S {
+        mat3_toRadians: function mat3_toRadians<T extends Matrix3, U extends Vector3>(this: Readonly<T>, out?: Vector3 | U): Vector3 | U {
             return Mat3Utils.toRadians(this, out!);
         },
 
-        mat3_toQuat: function mat3_toQuat<T extends Matrix3, S extends Quaternion>(this: Readonly<T>, out?: Quaternion | S): Quaternion | S {
+        mat3_toQuat: function mat3_toQuat<T extends Matrix3, U extends Quaternion>(this: Readonly<T>, out?: Quaternion | U): Quaternion | U {
             return Mat3Utils.toQuat(this, out!);
         },
 
