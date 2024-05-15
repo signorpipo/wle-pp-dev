@@ -11,12 +11,12 @@ import { FSM, StateData, TransitionData } from "./fsm.js";
  */
 export interface Transition {
 
-    /** Called if this is used as an init transition for the fsm */
-    performInit?(fsm: FSM, stateData: Readonly<StateData>, ...args: unknown[]): void;
-
     /** Called when performing a transition
         You can find the from and to states inside the `transitionData` param*/
     perform?(fsm: FSM, transitionData: Readonly<TransitionData>, ...args: unknown[]): void;
+
+    /** Called if this is used as an init transition for the fsm */
+    performInit?(fsm: FSM, stateData: Readonly<StateData>, ...args: unknown[]): void;
 
     /** Used when the FSM is deep cloned */
     clone?(): Transition;
