@@ -1,7 +1,8 @@
 import { JSUtils } from "../../cauldron/utils/js_utils.js";
 
-export function injectProperties(fromReference: Record<string, unknown>, toReference: object, enumerable: boolean = true, writable: boolean = true, configurable: boolean = true, keepOriginalDescriptorAttributes: boolean = true, bindThisAsFirstParam: boolean = false, prefix?: string, functionNamesToExclude: Readonly<string[]> = []): void {
+export function injectOwnProperties<T>(fromReference: T, toReference: object, enumerable: boolean = true, writable: boolean = true, configurable: boolean = true, keepOriginalDescriptorAttributes: boolean = true, bindThisAsFirstParam: boolean = false, prefix?: string, functionNamesToExclude: Readonly<string[]> = []): void {
     const ownPropertyNames = Object.getOwnPropertyNames(fromReference);
+    const fromReferenceAsRecord = fromReference as Record<string, unknown>;
     for (const ownPropertyName of ownPropertyNames) {
         if (functionNamesToExclude.includes(ownPropertyName)) continue;
 
@@ -31,10 +32,10 @@ export function injectProperties(fromReference: Record<string, unknown>, toRefer
         const useAccessors = propertyDescriptor != null && (propertyDescriptor.get != null || propertyDescriptor.set != null);
 
         if (!useAccessors) {
-            let adjustedProperyValue = fromReference[ownPropertyName];
+            let adjustedProperyValue = fromReferenceAsRecord[ownPropertyName];
 
             if (bindThisAsFirstParam && JSUtils.isFunction(adjustedProperyValue)) {
-                const originalFunction = fromReference[ownPropertyName] as (this: unknown, ...args: unknown[]) => unknown;
+                const originalFunction = fromReferenceAsRecord[ownPropertyName] as (this: unknown, ...args: unknown[]) => unknown;
                 adjustedProperyValue = function (this: unknown, ...args: unknown[]) {
                     return originalFunction(this, ...args);
                 };
@@ -62,5 +63,5 @@ export function injectProperties(fromReference: Record<string, unknown>, toRefer
 }
 
 export const PluginUtils = {
-    injectProperties
+    injectOwnProperties
 } as const;

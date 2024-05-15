@@ -788,5 +788,5 @@ function _initCursorComponentModPrototype() {
 
 
 
-    PluginUtils.injectProperties(cursorComponentMod, Cursor.prototype, false, true, true);
+    PluginUtils.injectOwnProperties(cursorComponentMod, Cursor.prototype, false, true, true);
 }

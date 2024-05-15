@@ -1248,11 +1248,11 @@ export function _initArrayExtensionLegacyProtoype() {
         Int16Array.prototype, Int32Array.prototype, Float32Array.prototype, Float64Array.prototype];
 
     for (let arrayPrototypeToExtend of arrayPrototypesToExtend) {
-        PluginUtils.injectProperties(vec3Extension, arrayPrototypeToExtend, false, true, true);
+        PluginUtils.injectOwnProperties(vec3Extension, arrayPrototypeToExtend, false, true, true);
 
-        PluginUtils.injectProperties(quatExtension, arrayPrototypeToExtend, false, true, true);
-        PluginUtils.injectProperties(quat2Extension, arrayPrototypeToExtend, false, true, true);
+        PluginUtils.injectOwnProperties(quatExtension, arrayPrototypeToExtend, false, true, true);
+        PluginUtils.injectOwnProperties(quat2Extension, arrayPrototypeToExtend, false, true, true);
 
-        PluginUtils.injectProperties(mat4Extension, arrayPrototypeToExtend, false, true, true);
+        PluginUtils.injectOwnProperties(mat4Extension, arrayPrototypeToExtend, false, true, true);
     }
 }
