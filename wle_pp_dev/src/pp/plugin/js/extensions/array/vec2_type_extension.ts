@@ -66,6 +66,9 @@ declare module "../../../../cauldron/type_definitions/array_type_definitions.js"
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     interface ArrayLike<T> extends Vector2Extension<ArrayLike<number>> { }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    interface MutableArrayLike<T> extends Vector2Extension<MutableArrayLike<number>> { }
+
     interface Vector extends Vector2Extension<Vector> { }
 
     interface Vector2 extends Vector2Extension<Vector2> { }

@@ -1,5 +1,5 @@
 import { type NumberArray } from "@wonderlandengine/api";
-import { ArrayLike, Vector3 } from "../../pp/cauldron/type_definitions/array_type_definitions.js";
+import { ArrayLike, MutableArrayLike, Vector3 } from "../../pp/cauldron/type_definitions/array_type_definitions.js";
 
 function __test(): void {
     const numberArray = [0];
@@ -7,6 +7,7 @@ function __test(): void {
     const float32 = new Float32Array(3);
 
     const arrayLikeFromArray: ArrayLike<number> = [0];
+    const mutableArrayLikeFromArray: MutableArrayLike<number> = [0];
     const arrayLikeFromFloat32: ArrayLike<number> = new Float32Array(3);
     const vector3FromArray: Vector3 = [0];
     const vector3FromFloat32: Vector3 = new Float32Array(3);
@@ -15,6 +16,7 @@ function __test(): void {
 
     arrayLikeFromArray.at(0);
     vector3FromArray.at(0);
+    mutableArrayLikeFromArray.at(0);
 
     arrayLikeFromArray.indexOf(0);
     vector3FromArray.indexOf(0);
@@ -27,6 +29,7 @@ function __test(): void {
     vector3FromArray.pp_equals(arrayLikeFromArray);
     vector3FromArray.pp_equals(vector3FromArray);
     vector3FromArray.pp_equals(vector3FromFloat32);
+    vector3FromArray.pp_equals(mutableArrayLikeFromArray);
 
     // vector3FromArray.pp_equals(stringArray);
 
@@ -36,10 +39,13 @@ function __test(): void {
     vector3FromArray.vec_equals(arrayLikeFromArray);
     vector3FromArray.vec_equals(vector3FromArray);
     vector3FromArray.vec_equals(vector3FromFloat32);
+    vector3FromArray.vec_equals(mutableArrayLikeFromArray);
 
     // vector3FromArray.vec_equals(stringArray);
 
     numberArrayFromVector3.vec_clone();
+
+    mutableArrayLikeFromArray.push(1);
 
     stringArray.length;
 }
