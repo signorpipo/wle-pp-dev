@@ -21,7 +21,10 @@ function __test(): void {
     arrayLikeFromArray.indexOf(0);
     vector3FromArray.indexOf(0);
 
+    numberArray.pp_first();
     vector3FromArray.pp_first();
+    arrayLikeFromFloat32.pp_first();
+    numberArrayFromVector3.pp_first();
 
     vector3FromArray.pp_equals(numberArray);
     vector3FromArray.pp_equals(float32);

@@ -119,13 +119,6 @@ export interface BaseArrayLike<T> {
     forEach(callbackfn: (value: T, index: number, array: BaseArrayLike<T>) => void, thisArg?: any): void;
 
     /**
-     * Calls a defined callback function on each element of an array, and returns an array that contains the results.
-     * @param callbackfn A function that accepts up to three arguments. The map method calls the callbackfn function one time for each element in the array.
-     * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
-     */
-    map(callbackfn: (value: T, index: number, array: BaseArrayLike<T>) => T, thisArg?: any): BaseArrayLike<T>;
-
-    /**
      * Returns the elements of an array that meet the condition specified in a callback function.
      * @param predicate A function that accepts up to three arguments. The filter method calls the predicate function one time for each element in the array.
      * @param thisArg An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value.
@@ -214,8 +207,8 @@ export interface BaseDynamicArrayLike<T> extends BaseArrayLike<T> {
      * This method returns a new array without modifying any existing arrays.
      * @param items Additional arrays and/or items to add to the end of the array.
      */
-    concat(...items: ConcatArray<T>[]): T[];
-    concat(...items: (T | ConcatArray<T>)[]): T[];
+    concat(...items: ConcatArray<T>[]): BaseDynamicArrayLike<T>;
+    concat(...items: (T | ConcatArray<T>)[]): BaseDynamicArrayLike<T>;
 
     /**
      * Removes the first element from an array and returns it.
@@ -229,8 +222,8 @@ export interface BaseDynamicArrayLike<T> extends BaseArrayLike<T> {
      * @param deleteCount The number of elements to remove.
      * @returns An array containing the elements that were deleted.
      */
-    splice(start: number, deleteCount?: number): T[];
-    splice(start: number, deleteCount: number, ...items: T[]): T[];
+    splice(start: number, deleteCount?: number): BaseDynamicArrayLike<T>;
+    splice(start: number, deleteCount: number, ...items: T[]): BaseDynamicArrayLike<T>;
 
     /**
      * Inserts new elements at the start of an array, and returns the new length of the array.
