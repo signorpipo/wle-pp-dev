@@ -195,7 +195,7 @@ export interface BaseArrayLike<T> {
 }
 
 /** This is basically the `Array` class, but this way it's possible to use this instead and feel more generic */
-export interface BaseMutableArrayLike<T> extends BaseArrayLike<T> {
+export interface BaseDynamicArrayLike<T> extends BaseArrayLike<T> {
 
     /**
      * Removes the last element from an array and returns it.
@@ -250,10 +250,10 @@ export interface ArrayLike<T> extends BaseArrayLike<T> { }
 /** 
  * This is basically the `Array` class
  * 
- * The reason why a child class is created from `BaseMutableArrayLike` instead of using it directly is to be able to create a type extension
- * of the `MutableArrayLike` class without also affecting the child classes (even though there is none for now)
+ * The reason why a child class is created from `BaseDynamicArrayLike` instead of using it directly is to be able to create a type extension
+ * of the `DynamicArrayLike` class without also affecting the child classes (even though there is none for now)
  */
-export interface MutableArrayLike<T> extends BaseMutableArrayLike<T> { }
+export interface DynamicArrayLike<T> extends BaseDynamicArrayLike<T> { }
 
 export interface Vector extends BaseArrayLike<number> { }
 

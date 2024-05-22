@@ -1,14 +1,14 @@
-import { ArrayLike, MutableArrayLike } from "../../../../cauldron/type_definitions/array_type_definitions.js";
+import { ArrayLike, DynamicArrayLike } from "../../../../cauldron/type_definitions/array_type_definitions.js";
 import { ArrayUtils } from "../../../../cauldron/utils/array/array_utils.js";
 import { PluginUtils } from "../../../utils/plugin_utils.js";
 import { ArrayExtensionUtils } from "./array_extension_utils.js";
-import { ArrayLikeExtension, MutableArrayLikeOwnExtension } from "./array_type_extension.js";
+import { ArrayLikeExtension, DynamicArrayLikeOwnExtension } from "./array_type_extension.js";
 
 import "./array_type_extension.js";
 
 export function initArrayExtension(): void {
     _initArrayLikeExtensionProtoypes();
-    _initMutableArrayOwnExtensionProtoype();
+    _initDynamicArrayOwnExtensionProtoype();
 }
 
 function _initArrayLikeExtensionProtoypes(): void {
@@ -81,50 +81,50 @@ function _initArrayLikeExtensionProtoypes(): void {
     }
 }
 
-function _initMutableArrayOwnExtensionProtoype(): void {
+function _initDynamicArrayOwnExtensionProtoype(): void {
 
-    const mutableArrayOwnExtension: MutableArrayLikeOwnExtension<Array<any>, any> = {
+    const dynamicArrayOwnExtension: DynamicArrayLikeOwnExtension<Array<any>, any> = {
 
-        pp_remove: function pp_remove<T>(this: MutableArrayLike<T>, callback: (elementToCheck: T, elementIndex: number) => boolean): T | undefined {
+        pp_remove: function pp_remove<T>(this: DynamicArrayLike<T>, callback: (elementToCheck: T, elementIndex: number) => boolean): T | undefined {
             return ArrayUtils.remove(this, callback);
         },
 
-        pp_removeIndex: function pp_removeIndex<T>(this: MutableArrayLike<T>, index: number): T | undefined {
+        pp_removeIndex: function pp_removeIndex<T>(this: DynamicArrayLike<T>, index: number): T | undefined {
             return ArrayUtils.removeIndex(this, index);
         },
 
-        pp_removeAll: function pp_removeAll<T>(this: MutableArrayLike<T>, callback: (elementToCheck: T, elementIndex: number) => boolean): T[] {
+        pp_removeAll: function pp_removeAll<T>(this: DynamicArrayLike<T>, callback: (elementToCheck: T, elementIndex: number) => boolean): T[] {
             return ArrayUtils.removeAll(this, callback);
         },
 
-        pp_removeAllIndexes: function pp_removeAllIndexes<T>(this: MutableArrayLike<T>, indexes: ArrayLike<number>): T[] {
+        pp_removeAllIndexes: function pp_removeAllIndexes<T>(this: DynamicArrayLike<T>, indexes: ArrayLike<number>): T[] {
             return ArrayUtils.removeAllIndexes(this, indexes);
         },
 
-        pp_removeEqual: function pp_removeEqual<T>(this: MutableArrayLike<T>, elementToRemove: T, elementsEqualCallback?: (elementToCheck: T, elementToRemove: T) => boolean): T | undefined {
+        pp_removeEqual: function pp_removeEqual<T>(this: DynamicArrayLike<T>, elementToRemove: T, elementsEqualCallback?: (elementToCheck: T, elementToRemove: T) => boolean): T | undefined {
             return ArrayUtils.removeEqual(this, elementToRemove, elementsEqualCallback);
         },
 
-        pp_removeAllEqual: function pp_removeAllEqual<T>(this: MutableArrayLike<T>, elementToRemove: T, elementsEqualCallback?: (elementToCheck: T, elementToRemove: T) => boolean): T[] {
+        pp_removeAllEqual: function pp_removeAllEqual<T>(this: DynamicArrayLike<T>, elementToRemove: T, elementsEqualCallback?: (elementToCheck: T, elementToRemove: T) => boolean): T[] {
             return ArrayUtils.removeAllEqual(this, elementToRemove, elementsEqualCallback);
         },
 
-        pp_clear: function pp_clear<ArrayType extends MutableArrayLike<T>, T>(this: ArrayType): ArrayType {
+        pp_clear: function pp_clear<ArrayType extends DynamicArrayLike<T>, T>(this: ArrayType): ArrayType {
             return ArrayUtils.clear(this);
         },
 
-        pp_pushUnique: function pp_pushUnique<T>(this: MutableArrayLike<T>, elementToAdd: T, elementsEqualCallback?: (elementToCheck: T, elementToAdd: T) => boolean): number {
+        pp_pushUnique: function pp_pushUnique<T>(this: DynamicArrayLike<T>, elementToAdd: T, elementsEqualCallback?: (elementToCheck: T, elementToAdd: T) => boolean): number {
             return ArrayUtils.pushUnique(this, elementToAdd, elementsEqualCallback);
         },
 
-        pp_unshiftUnique: function pp_unshiftUnique<T>(this: MutableArrayLike<T>, elementToAdd: T, elementsEqualCallback?: (elementToCheck: T, elementToAdd: T) => boolean): number {
+        pp_unshiftUnique: function pp_unshiftUnique<T>(this: DynamicArrayLike<T>, elementToAdd: T, elementsEqualCallback?: (elementToCheck: T, elementToAdd: T) => boolean): number {
             return ArrayUtils.unshiftUnique(this, elementToAdd, elementsEqualCallback);
         }
     };
 
 
 
-    for (const mutableArrayLikeClassToExtend of ArrayExtensionUtils.MUTABLE_ARRAY_LIKE_CLASSES) {
-        PluginUtils.injectOwnProperties(mutableArrayOwnExtension, mutableArrayLikeClassToExtend.prototype, false, true, true);
+    for (const dynamicArrayLikeClassToExtend of ArrayExtensionUtils.MUTABLE_ARRAY_LIKE_CLASSES) {
+        PluginUtils.injectOwnProperties(dynamicArrayOwnExtension, dynamicArrayLikeClassToExtend.prototype, false, true, true);
     }
 }
