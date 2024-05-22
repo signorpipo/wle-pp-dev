@@ -1,4 +1,7 @@
-/** This is basically an intersection between `Array` and `Float32Array`, so that it's possible to create methods that work with both more easily */
+/** This is basically an intersection between `Array` and `Float32Array`, so that it's possible to create methods that work with both more easily
+     
+    The return type `this`, usually used when the same object is returned, is used here sometimes when a new array is returned instead,  
+    since there was no other easy way to get the same return type instead of the generic `BaseArrayLike<T>`*/
 export interface BaseArrayLike<T> {
 
     [n: number]: T;
@@ -52,7 +55,7 @@ export interface BaseArrayLike<T> {
      * Reverses the elements in an array in place.
      * This method mutates the array and returns a reference to the same array.
      */
-    reverse(): BaseArrayLike<T>;
+    reverse(): this;
 
     /**
      * Returns a copy of a section of an array.
@@ -63,7 +66,7 @@ export interface BaseArrayLike<T> {
      * @param end The end index of the specified portion of the array. This is exclusive of the element at the index 'end'.
      * If end is undefined, then the slice extends to the end of the array.
      */
-    slice(start?: number, end?: number): BaseArrayLike<T>;
+    slice(start?: number, end?: number): this;
 
     /**
      * Sorts an array in place.
@@ -123,7 +126,7 @@ export interface BaseArrayLike<T> {
      * @param predicate A function that accepts up to three arguments. The filter method calls the predicate function one time for each element in the array.
      * @param thisArg An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value.
      */
-    filter(predicate: (value: T, index: number, array: BaseArrayLike<T>) => unknown, thisArg?: any): BaseArrayLike<T>;
+    filter(predicate: (value: T, index: number, array: BaseArrayLike<T>) => unknown, thisArg?: any): this;
 
     /**
      * Returns the value of the first element in the array where predicate is true, and undefined
@@ -207,8 +210,8 @@ export interface BaseDynamicArrayLike<T> extends BaseArrayLike<T> {
      * This method returns a new array without modifying any existing arrays.
      * @param items Additional arrays and/or items to add to the end of the array.
      */
-    concat(...items: ConcatArray<T>[]): BaseDynamicArrayLike<T>;
-    concat(...items: (T | ConcatArray<T>)[]): BaseDynamicArrayLike<T>;
+    concat(...items: ConcatArray<T>[]): this;
+    concat(...items: (T | ConcatArray<T>)[]): this;
 
     /**
      * Removes the first element from an array and returns it.
@@ -222,8 +225,8 @@ export interface BaseDynamicArrayLike<T> extends BaseArrayLike<T> {
      * @param deleteCount The number of elements to remove.
      * @returns An array containing the elements that were deleted.
      */
-    splice(start: number, deleteCount?: number): BaseDynamicArrayLike<T>;
-    splice(start: number, deleteCount: number, ...items: T[]): BaseDynamicArrayLike<T>;
+    splice(start: number, deleteCount?: number): this;
+    splice(start: number, deleteCount: number, ...items: T[]): this;
 
     /**
      * Inserts new elements at the start of an array, and returns the new length of the array.
