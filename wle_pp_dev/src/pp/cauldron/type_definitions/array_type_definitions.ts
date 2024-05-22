@@ -1,7 +1,9 @@
-/** This is basically an intersection between `Array` and `Float32Array`, so that it's possible to create methods that work with both more easily
-     
-    The return type `this`, usually used when the same object is returned, is used here sometimes when a new array is returned instead,  
-    since there was no other easy way to get the same return type instead of the generic `BaseArrayLike<T>`*/
+/** 
+ * This is basically an intersection between `Array` and `Float32Array`, so that it's possible to create methods that work with both more easily
+ *  
+ * The return type `this`, usually used when the same object is returned, is used here sometimes when a new array is returned instead,  
+ * since there was no other easy way to get the same return type instead of the generic `BaseArrayLike<T>
+ */
 export interface BaseArrayLike<T> {
 
     [n: number]: T;
