@@ -1,7 +1,9 @@
+import { WonderlandEngine } from "@wonderlandengine/api";
 import { Globals } from "../../pp/globals.js";
 import { Timer } from "../cauldron/timer.js";
 import { ObjectPool, ObjectPoolParams } from "../object_pool/object_pool.js";
 import { VisualArrow, VisualArrowParams } from "./elements/visual_arrow.js";
+import { VisualElement, VisualElementParams } from "./elements/visual_element.js";
 import { VisualElementType } from "./elements/visual_element_types.js";
 import { VisualLine, VisualLineParams } from "./elements/visual_line.js";
 import { VisualMesh, VisualMeshParams } from "./elements/visual_mesh.js";
@@ -13,47 +15,51 @@ import { VisualTransform, VisualTransformParams } from "./elements/visual_transf
 
 export class VisualManager {
 
-    constructor(engine = Globals.getMainEngine()) {
+    private readonly _myVisualElementPrototypeCreationCallbacks = new Map();
+
+    private readonly _myVisualElementsTypeMap: Map<VisualElementType, Map<unknown, [VisualElement, Timer]>> = new Map();
+    private _myVisualElementLastID: number = 0;
+    private readonly _myVisualElementsToShow: VisualElement[] = [];
+
+    private _myActive: boolean = true;
+
+    private readonly _myObjectPoolManagerPrefix: string;
+    private readonly _myTypePoolIDs: Map<VisualElementType, string> = new Map();
+
+    private readonly _myEngine: Readonly<WonderlandEngine>;
+
+    private _myDestroyed: boolean = false;
+
+    constructor(engine: Readonly<WonderlandEngine> = Globals.getMainEngine()!) {
         this._myEngine = engine;
 
-        this._myVisualElementPrototypeCreationCallbacks = new Map();
-
-        this._myVisualElementsTypeMap = new Map();
-        this._myVisualElementLastID = 0;
-        this._myVisualElementsToShow = [];
-
-        this._myActive = true;
-
-        this._myDestroyed = false;
-
         this._myObjectPoolManagerPrefix = this._getClassName() + "_" + Math.pp_randomUUID() + "_visual_element_type_";
-        this._myTypePoolIDs = new Map();
 
         this._addStandardVisualElementTypes();
     }
 
-    setActive(active) {
+    public setActive(active: boolean): void {
         if (this._myActive != active) {
             this._myActive = active;
         }
     }
 
-    isActive() {
+    public isActive(): boolean {
         return this._myActive;
     }
 
-    start() {
+    public start(): void {
 
     }
 
-    update(dt) {
+    public update(dt: number): void {
         if (this._myActive) {
             this._updateDraw(dt);
         }
     }
 
-    // lifetimeSeconds can be null, in that case the element will be drawn until cleared
-    draw(visualElementParams, lifetimeSeconds = 0, idToReuse = null) {
+    /** `lifetimeSeconds` can be `null`, in that case the element will be drawn until cleared */
+    public draw(visualElementParams: VisualElementParams, lifetimeSeconds: number = 0, idToReuse?: unknown): unknown | null {
         if (!this._myActive) {
             return null;
         }
@@ -62,9 +68,9 @@ export class VisualManager {
         let idReused = false;
         if (idToReuse != null) {
             if (this._myVisualElementsTypeMap.has(visualElementParams.myType)) {
-                let visualElements = this._myVisualElementsTypeMap.get(visualElementParams.myType);
+                const visualElements = this._myVisualElementsTypeMap.get(visualElementParams.myType)!;
                 if (visualElements.has(idToReuse)) {
-                    visualElement = visualElements.get(idToReuse)[0];
+                    visualElement = visualElements.get(idToReuse)![0];
                     visualElement.copyParams(visualElementParams);
                     visualElement.setVisible(false);
                     idReused = true;
@@ -84,7 +90,7 @@ export class VisualManager {
         if (!this._myVisualElementsTypeMap.has(visualElementParams.myType)) {
             this._myVisualElementsTypeMap.set(visualElementParams.myType, new Map());
         }
-        let visualElements = this._myVisualElementsTypeMap.get(visualElementParams.myType);
+        const visualElements = this._myVisualElementsTypeMap.get(visualElementParams.myType)!;
 
         let elementID = null;
         if (!idReused) {
@@ -94,7 +100,7 @@ export class VisualManager {
             visualElements.set(elementID, [visualElement, new Timer(lifetimeSeconds, lifetimeSeconds != null)]);
         } else {
             elementID = idToReuse;
-            let visualElementPair = visualElements.get(elementID);
+            const visualElementPair = visualElements.get(elementID)!;
             visualElementPair[0] = visualElement;
             visualElementPair[1].reset(lifetimeSeconds);
             if (lifetimeSeconds != null) {
@@ -107,12 +113,12 @@ export class VisualManager {
         return elementID;
     }
 
-    getVisualElement(elementID) {
+    public getVisualElement(elementID: unknown): VisualElement | null {
         let visualElement = null;
 
-        for (let visualElements of this._myVisualElementsTypeMap.values()) {
+        for (const visualElements of this._myVisualElementsTypeMap.values()) {
             if (visualElements.has(elementID)) {
-                let visualElementPair = visualElements.get(elementID);
+                const visualElementPair = visualElements.get(elementID)!;
                 visualElement = visualElementPair[0];
                 break;
             }
@@ -121,14 +127,15 @@ export class VisualManager {
         return visualElement;
     }
 
-    getVisualElementParams(elementID) {
-        return this.getVisualElement(elementID).getParams();
+    public getVisualElementParams(elementID: unknown): VisualElementParams | null {
+        const visualElement = this.getVisualElement(elementID);
+        return visualElement != null ? visualElement.getParams() : null;
     }
 
-    getVisualElementID(visualElement) {
+    public getVisualElementID(visualElement: Readonly<VisualElement>): unknown {
         let elementID = null;
-        for (let currentVisualElements of this._myVisualElementsTypeMap.values()) {
-            for (let [currentElementID, currentVisualElement] of currentVisualElements.entries()) {
+        for (const currentVisualElements of this._myVisualElementsTypeMap.values()) {
+            for (const [currentElementID, currentVisualElement] of currentVisualElements.entries()) {
                 if (currentVisualElement[0] == visualElement) {
                     elementID = currentElementID;
                     break;
@@ -143,21 +150,21 @@ export class VisualManager {
         return elementID;
     }
 
-    clearVisualElement(elementID = null) {
+    public clearVisualElement(elementID?: unknown): void {
         if (elementID == null) {
-            for (let visualElements of this._myVisualElementsTypeMap.values()) {
-                for (let visualElement of visualElements.values()) {
+            for (const visualElements of this._myVisualElementsTypeMap.values()) {
+                for (const visualElement of visualElements.values()) {
                     this._releaseElement(visualElement[0]);
                 }
             }
 
-            this._myVisualElementsToShow = [];
-            this._myVisualElementsTypeMap = new Map();
+            this._myVisualElementsToShow.pp_clear();
+            this._myVisualElementsTypeMap.clear();
             this._myVisualElementLastID = 0;
         } else {
-            for (let visualElements of this._myVisualElementsTypeMap.values()) {
+            for (const visualElements of this._myVisualElementsTypeMap.values()) {
                 if (visualElements.has(elementID)) {
-                    let visualElementPair = visualElements.get(elementID);
+                    const visualElementPair = visualElements.get(elementID)!;
                     this._releaseElement(visualElementPair[0]);
                     visualElements.delete(elementID);
 
@@ -168,37 +175,37 @@ export class VisualManager {
         }
     }
 
-    allocateVisualElementType(visualElementType, amount) {
-        if (!Globals.getObjectPoolManager(this._myEngine).hasPool(this._getTypePoolID(visualElementType))) {
+    public allocateVisualElementType(visualElementType: VisualElementType, amount: number): void {
+        if (!Globals.getObjectPoolManager(this._myEngine)!.hasPool(this._getTypePoolID(visualElementType))) {
             this._addVisualElementTypeToPool(visualElementType);
         }
 
-        let pool = Globals.getObjectPoolManager(this._myEngine).getPool(this._getTypePoolID(visualElementType));
+        const pool = Globals.getObjectPoolManager(this._myEngine)!.getPool(this._getTypePoolID(visualElementType));
 
-        let difference = pool.getAvailableSize() - amount;
+        const difference = pool.getAvailableSize() - amount;
         if (difference < 0) {
             pool.increase(-difference);
         }
     }
 
-    addVisualElementType(visualElementType, visuaElementPrototypeCreationCallback) {
+    public addVisualElementType(visualElementType: VisualElementType, visuaElementPrototypeCreationCallback): void {
         this._myVisualElementPrototypeCreationCallbacks.set(visualElementType, visuaElementPrototypeCreationCallback);
     }
 
-    removeVisualElementType(visualElementType) {
+    public removeVisualElementType(visualElementType: VisualElementType): void {
         this._myVisualElementPrototypeCreationCallbacks.delete(visualElementType);
     }
 
-    _updateDraw(dt) {
-        for (let visualElement of this._myVisualElementsToShow) {
+    private _updateDraw(dt: number): void {
+        for (const visualElement of this._myVisualElementsToShow) {
             visualElement.setVisible(true);
         }
         this._myVisualElementsToShow.pp_clear();
 
-        for (let visualElements of this._myVisualElementsTypeMap.values()) {
-            let idsToRemove = [];
-            for (let visualElementsEntry of visualElements.entries()) {
-                let visualElement = visualElementsEntry[1];
+        for (const visualElements of this._myVisualElementsTypeMap.values()) {
+            const idsToRemove = [];
+            for (const visualElementsEntry of visualElements.entries()) {
+                const visualElement = visualElementsEntry[1];
                 if (visualElement[1].isDone()) {
                     this._releaseElement(visualElement[0]);
                     idsToRemove.push(visualElementsEntry[0]);
@@ -208,20 +215,20 @@ export class VisualManager {
                 }
             }
 
-            for (let id of idsToRemove) {
+            for (const id of idsToRemove) {
                 visualElements.delete(id);
             }
         }
     }
 
-    _getVisualElementFromPool(params) {
+    private _getVisualElementFromPool(params: VisualElementParams): VisualElement | null {
         let element = null;
 
-        if (!Globals.getObjectPoolManager(this._myEngine).hasPool(this._getTypePoolID(params.myType))) {
+        if (!Globals.getObjectPoolManager(this._myEngine)!.hasPool(this._getTypePoolID(params.myType))) {
             this._addVisualElementTypeToPool(params.myType);
         }
 
-        element = Globals.getObjectPoolManager(this._myEngine).get(this._getTypePoolID(params.myType));
+        element = Globals.getObjectPoolManager(this._myEngine)!.get(this._getTypePoolID(params.myType));
 
         if (element != null) {
             element.copyParams(params);
@@ -230,31 +237,31 @@ export class VisualManager {
         return element;
     }
 
-    _addVisualElementTypeToPool(type) {
-        let objectPoolParams = new ObjectPoolParams();
+    private _addVisualElementTypeToPool(visualElementType: VisualElementType): void {
+        const objectPoolParams = new ObjectPoolParams();
         objectPoolParams.myInitialPoolSize = 10;
         objectPoolParams.myAmountToAddWhenEmpty = 0;
         objectPoolParams.myPercentageToAddWhenEmpty = 0.5;
-        objectPoolParams.mySetActiveCallback = function (object, active) {
-            object.setVisible(active);
+        objectPoolParams.mySetActiveCallback = function (visualElement: VisualElement, active: boolean): void {
+            visualElement.setVisible(active);
         };
 
         let visualElementPrototype = null;
-        if (this._myVisualElementPrototypeCreationCallbacks.has(type)) {
-            visualElementPrototype = this._myVisualElementPrototypeCreationCallbacks.get(type)();
+        if (this._myVisualElementPrototypeCreationCallbacks.has(visualElementType)) {
+            visualElementPrototype = this._myVisualElementPrototypeCreationCallbacks.get(visualElementType)();
         }
 
         if (visualElementPrototype != null) {
             visualElementPrototype.setVisible(false);
             visualElementPrototype.setAutoRefresh(true);
 
-            Globals.getObjectPoolManager(this._myEngine).addPool(this._getTypePoolID(type), new ObjectPool(visualElementPrototype, objectPoolParams));
+            Globals.getObjectPoolManager(this._myEngine)!.addPool(this._getTypePoolID(visualElementType), new ObjectPool(visualElementPrototype, objectPoolParams));
         } else {
             console.error("Visual element type not supported");
         }
     }
 
-    _addStandardVisualElementTypes() {
+    private _addStandardVisualElementTypes(): void {
         this.addVisualElementType(VisualElementType.LINE, () => new VisualLine(new VisualLineParams(this._myEngine)));
         this.addVisualElementType(VisualElementType.MESH, () => new VisualMesh(new VisualMeshParams(this._myEngine)));
         this.addVisualElementType(VisualElementType.POINT, () => new VisualPoint(new VisualPointParams(this._myEngine)));
@@ -265,40 +272,40 @@ export class VisualManager {
         this.addVisualElementType(VisualElementType.TORUS, () => new VisualTorus(new VisualTorusParams(this._myEngine)));
     }
 
-    _getTypePoolID(type) {
-        let typePoolID = this._myTypePoolIDs.get(type);
+    private _getTypePoolID(visualElementType: VisualElementType): string {
+        let typePoolID = this._myTypePoolIDs.get(visualElementType);
 
         if (typePoolID == null) {
-            typePoolID = this._myObjectPoolManagerPrefix + type;
-            this._myTypePoolIDs.set(type, typePoolID);
+            typePoolID = this._myObjectPoolManagerPrefix + visualElementType;
+            this._myTypePoolIDs.set(visualElementType, typePoolID);
         }
 
         return typePoolID;
     }
 
-    _releaseElement(visualElement) {
-        let defaultElementsParent = Globals.getSceneObjects(this._myEngine).myVisualElements;
+    private _releaseElement(visualElement: VisualElement): void {
+        const defaultElementsParent = Globals.getSceneObjects(this._myEngine)!.myVisualElements;
         if (visualElement.getParams().myParent != defaultElementsParent) {
             visualElement.getParams().myParent = defaultElementsParent;
             visualElement.forceRefresh(); // just used to trigger the parent change, I'm lazy
         }
 
-        Globals.getObjectPoolManager(this._myEngine).release(this._getTypePoolID(visualElement.getParams().myType), visualElement);
+        Globals.getObjectPoolManager(this._myEngine)!.release(this._getTypePoolID(visualElement.getParams().myType), visualElement);
     }
 
-    _getClassName() {
+    private _getClassName(): string {
         return "visual_manager";
     }
 
-    destroy() {
+    public destroy(): void {
         this._myDestroyed = true;
 
-        for (let poolID of this._myTypePoolIDs.values()) {
+        for (const poolID of this._myTypePoolIDs.values()) {
             Globals.getObjectPoolManager(this._myEngine)?.destroyPool(poolID);
         }
     }
 
-    isDestroyed() {
+    public isDestroyed(): boolean {
         return this._myDestroyed;
     }
 }

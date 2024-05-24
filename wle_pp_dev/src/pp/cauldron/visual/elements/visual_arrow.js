@@ -15,12 +15,15 @@ let visualArrow = new VisualArrow(visualParams);
 import { MeshComponent } from "@wonderlandengine/api";
 import { vec3_create } from "../../../plugin/js/extensions/array/vec_create_extension.js";
 import { Globals } from "../../../pp/globals.js";
+import { VisualElement, VisualElementParams } from "./visual_element.js";
 import { VisualElementType } from "./visual_element_types.js";
 import { VisualLine, VisualLineParams } from "./visual_line.js";
 
-export class VisualArrowParams {
+export class VisualArrowParams extends VisualElementParams {
 
     constructor(engine = Globals.getMainEngine()) {
+        super();
+
         this.myStart = vec3_create();
         this.myDirection = vec3_create(0, 0, 1);
         this.myLength = 0;
@@ -58,9 +61,11 @@ export class VisualArrowParams {
     }
 }
 
-export class VisualArrow {
+export class VisualArrow extends VisualElement {
 
     constructor(params = new VisualArrowParams()) {
+        super();
+
         this._myParams = params;
 
         this._myVisible = false;

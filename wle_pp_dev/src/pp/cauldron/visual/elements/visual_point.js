@@ -15,10 +15,13 @@ import { MeshComponent } from "@wonderlandengine/api";
 import { vec3_create } from "../../../plugin/js/extensions/array/vec_create_extension.js";
 import { Globals } from "../../../pp/globals.js";
 import { VisualElementType } from "./visual_element_types.js";
+import { VisualElement, VisualElementParams } from "./visual_element.js";
 
-export class VisualPointParams {
+export class VisualPointParams extends VisualElementParams {
 
     constructor(engine = Globals.getMainEngine()) {
+        super();
+
         this.myPosition = vec3_create();
         this.myRadius = 0.005;
 
@@ -38,9 +41,11 @@ export class VisualPointParams {
     }
 }
 
-export class VisualPoint {
+export class VisualPoint extends VisualElement {
 
     constructor(params = new VisualPointParams()) {
+        super();
+
         this._myParams = params;
 
         this._myVisible = false;

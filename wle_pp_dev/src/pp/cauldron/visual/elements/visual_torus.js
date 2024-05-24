@@ -15,12 +15,15 @@ let visualTorus = new VisualTorus(visualParams);
 
 import { mat4_create, vec3_create } from "../../../plugin/js/extensions/array/vec_create_extension.js";
 import { Globals } from "../../../pp/globals.js";
+import { VisualElement, VisualElementParams } from "./visual_element.js";
 import { VisualElementType } from "./visual_element_types.js";
 import { VisualLine, VisualLineParams } from "./visual_line.js";
 
-export class VisualTorusParams {
+export class VisualTorusParams extends VisualElementParams {
 
     constructor(engine = Globals.getMainEngine()) {
+        super();
+
         this.myTransform = mat4_create();
         this.myRadius = 0;
 
@@ -43,9 +46,11 @@ export class VisualTorusParams {
     }
 }
 
-export class VisualTorus {
+export class VisualTorus extends VisualElement {
 
     constructor(params = new VisualTorusParams()) {
+        super();
+
         this._myParams = params;
 
         this._myVisible = false;

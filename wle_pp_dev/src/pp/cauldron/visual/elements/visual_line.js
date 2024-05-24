@@ -16,10 +16,13 @@ import { MeshComponent } from "@wonderlandengine/api";
 import { vec3_create } from "../../../plugin/js/extensions/array/vec_create_extension.js";
 import { Globals } from "../../../pp/globals.js";
 import { VisualElementType } from "./visual_element_types.js";
+import { VisualElement, VisualElementParams } from "./visual_element.js";
 
-export class VisualLineParams {
+export class VisualLineParams extends VisualElementParams {
 
     constructor(engine = Globals.getMainEngine()) {
+        super();
+
         this.myStart = vec3_create();
         this.myDirection = vec3_create(0, 0, 1);
         this.myLength = 0;
@@ -51,9 +54,11 @@ export class VisualLineParams {
     }
 }
 
-export class VisualLine {
+export class VisualLine extends VisualElement {
 
     constructor(params = new VisualLineParams()) {
+        super();
+
         this._myParams = params;
 
         this._myVisible = false;

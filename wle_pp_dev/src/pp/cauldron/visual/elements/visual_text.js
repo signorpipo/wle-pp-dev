@@ -15,10 +15,13 @@ import { Alignment, Justification, TextComponent } from "@wonderlandengine/api";
 import { mat4_create, vec3_create } from "../../../plugin/js/extensions/array/vec_create_extension.js";
 import { Globals } from "../../../pp/globals.js";
 import { VisualElementType } from "./visual_element_types.js";
+import { VisualElement, VisualElementParams } from "./visual_element.js";
 
-export class VisualTextParams {
+export class VisualTextParams extends VisualElementParams {
 
     constructor(engine = Globals.getMainEngine()) {
+        super();
+
         this.myText = "";
         this.myAlignment = Alignment.Center;
         this.myJustification = Justification.Middle;
@@ -42,9 +45,11 @@ export class VisualTextParams {
     }
 }
 
-export class VisualText {
+export class VisualText extends VisualElement {
 
     constructor(params = new VisualTextParams()) {
+        super();
+
         this._myParams = params;
 
         this._myVisible = false;

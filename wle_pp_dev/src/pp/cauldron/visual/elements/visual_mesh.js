@@ -15,10 +15,13 @@ import { MeshComponent } from "@wonderlandengine/api";
 import { mat4_create } from "../../../plugin/js/extensions/array/vec_create_extension.js";
 import { Globals } from "../../../pp/globals.js";
 import { VisualElementType } from "./visual_element_types.js";
+import { VisualElement, VisualElementParams } from "./visual_element.js";
 
-export class VisualMeshParams {
+export class VisualMeshParams extends VisualElementParams {
 
     constructor(engine = Globals.getMainEngine()) {
+        super();
+
         this.myTransform = mat4_create();
 
         this.myMesh = null;
@@ -35,9 +38,11 @@ export class VisualMeshParams {
     }
 }
 
-export class VisualMesh {
+export class VisualMesh extends VisualElement {
 
     constructor(params = new VisualMeshParams()) {
+        super();
+
         this._myParams = params;
 
         this._myVisible = false;

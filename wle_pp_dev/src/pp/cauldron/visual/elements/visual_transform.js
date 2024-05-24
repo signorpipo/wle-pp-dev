@@ -12,11 +12,14 @@ let visualTransform = new VisualTransform(visualParams);
 import { mat4_create, vec3_create } from "../../../plugin/js/extensions/array/vec_create_extension.js";
 import { Globals } from "../../../pp/globals.js";
 import { VisualArrow, VisualArrowParams } from "./visual_arrow.js";
+import { VisualElement, VisualElementParams } from "./visual_element.js";
 import { VisualElementType } from "./visual_element_types.js";
 
-export class VisualTransformParams {
+export class VisualTransformParams extends VisualElementParams {
 
     constructor(engine = Globals.getMainEngine()) {
+        super();
+
         this.myTransform = mat4_create();
         this.myLength = 0.2;
         this.myThickness = 0.005;
@@ -36,9 +39,11 @@ export class VisualTransformParams {
     }
 }
 
-export class VisualTransform {
+export class VisualTransform extends VisualElement {
 
     constructor(params = new VisualTransformParams()) {
+        super();
+
         this._myParams = params;
 
         this._myVisible = false;

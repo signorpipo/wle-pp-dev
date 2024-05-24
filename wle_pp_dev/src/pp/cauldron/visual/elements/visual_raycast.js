@@ -11,11 +11,14 @@ let visualRaycast = new VisualRaycast(visualParams);
 import { Globals } from "../../../pp/globals.js";
 import { RaycastResults } from "../../physics/physics_raycast_params.js";
 import { VisualArrow, VisualArrowParams } from "./visual_arrow.js";
+import { VisualElement, VisualElementParams } from "./visual_element.js";
 import { VisualElementType } from "./visual_element_types.js";
 
-export class VisualRaycastParams {
+export class VisualRaycastParams extends VisualElementParams {
 
     constructor(engine = Globals.getMainEngine()) {
+        super();
+
         this._myRaycastResults = new RaycastResults();
 
         this.myHitNormalLength = 0.2;
@@ -45,9 +48,11 @@ export class VisualRaycastParams {
     }
 }
 
-export class VisualRaycast {
+export class VisualRaycast extends VisualElement {
 
     constructor(params = new VisualRaycastParams()) {
+        super();
+
         this._myParams = params;
 
         this._myVisible = false;
