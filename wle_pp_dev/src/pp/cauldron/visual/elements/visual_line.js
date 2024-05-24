@@ -79,6 +79,10 @@ export class VisualLine extends AbstractVisualElement {
         this._prepare();
     }
 
+    _visibleChanged() {
+        this._myLineParentObject.pp_setActive(this._myVisible);
+    }
+
     _build() {
         this._myLineParentObject = Globals.getSceneObjects(this._myParams.myParent.pp_getEngine()).myVisualElements.pp_addObject();
         this._myLineObject = this._myLineParentObject.pp_addObject();

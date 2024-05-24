@@ -105,6 +105,10 @@ export class VisualRaycast extends AbstractVisualElement {
         }
     }
 
+    _build() {
+
+    }
+
     _refresh() {
         for (let visualRaycastHit of this._myVisualRaycastHitList) {
             visualRaycastHit.setVisible(false);

@@ -95,6 +95,10 @@ export class VisualArrow extends AbstractVisualElement {
         this._myArrowParentObject.pp_setActive(this._myVisible);
     }
 
+    _updateHook(dt) {
+        this._myVisualLine.update(dt);
+    }
+
     _build() {
         this._myArrowParentObject = Globals.getSceneObjects(this._myParams.myParent.pp_getEngine()).myVisualElements.pp_addObject();
         this._myArrowObject = this._myArrowParentObject.pp_addObject();
