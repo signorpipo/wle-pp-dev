@@ -15,7 +15,7 @@ import { VisualTransform, VisualTransformParams } from "./elements/visual_transf
 
 export class VisualManager {
 
-    private readonly _myVisualElementPrototypeCreationCallbacks = new Map();
+    private readonly _myVisualElementPrototypeCreationCallbacks: Map<VisualElementType, () => VisualElement> = new Map();
 
     private readonly _myVisualElementsTypeMap: Map<VisualElementType, Map<unknown, [VisualElement, Timer]>> = new Map();
     private _myVisualElementLastID: number = 0;
@@ -188,7 +188,7 @@ export class VisualManager {
         }
     }
 
-    public addVisualElementType(visualElementType: VisualElementType, visuaElementPrototypeCreationCallback): void {
+    public addVisualElementType(visualElementType: VisualElementType, visuaElementPrototypeCreationCallback: () => VisualElement): void {
         this._myVisualElementPrototypeCreationCallbacks.set(visualElementType, visuaElementPrototypeCreationCallback);
     }
 
@@ -248,7 +248,7 @@ export class VisualManager {
 
         let visualElementPrototype = null;
         if (this._myVisualElementPrototypeCreationCallbacks.has(visualElementType)) {
-            visualElementPrototype = this._myVisualElementPrototypeCreationCallbacks.get(visualElementType)();
+            visualElementPrototype = this._myVisualElementPrototypeCreationCallbacks.get(visualElementType)!();
         }
 
         if (visualElementPrototype != null) {
@@ -284,7 +284,7 @@ export class VisualManager {
     }
 
     private _releaseElement(visualElement: VisualElement): void {
-        const defaultElementsParent = Globals.getSceneObjects(this._myEngine)!.myVisualElements;
+        const defaultElementsParent = Globals.getSceneObjects(this._myEngine)!.myVisualElements!;
         if (visualElement.getParams().myParent != defaultElementsParent) {
             visualElement.getParams().myParent = defaultElementsParent;
             visualElement.forceRefresh(); // just used to trigger the parent change, I'm lazy

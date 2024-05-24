@@ -5,35 +5,22 @@ import { Globals } from "../../../pp/globals.js";
 import { AbstractVisualElement, AbstractVisualElementParams } from "./visual_element.js";
 import { VisualElementType } from "./visual_element_types.js";
 
-/**
- * Example:
- * 
- * ```js  
- * const visualParams = new VisualMeshParams();
- * visualParams.myTransform = transform;
- * visualParams.myMesh = myDefaultResources.myMeshes.mySphere;
- * visualParams.myMaterial = myDefaultResources.myMaterials.myFlatOpaque.clone();
- * visualParams.myMaterial.color = vec4_create(1, 1, 1, 1);
- * 
- * const visualMesh = new VisualMesh(visualParams);
- * 
- * // OR
- * 
- * Globals.getVisualManager().draw(visualParams);
- * ```
- */
 export class VisualMeshParams extends AbstractVisualElementParams<VisualMeshParams> {
 
     public readonly myType: VisualElementType = VisualElementType.MESH;
 
-    public myTransform: Readonly<Matrix4> = mat4_create();
-
-    public myMesh: Mesh | null = null;
-    public myMaterial: Material | null = null;
-
+    public myTransform: Matrix4 = mat4_create();
     public myLocal: boolean = false;
 
-    public copy(other: Readonly<VisualMeshParams>): void {
+
+    /** `null` means it will default to `Globals.getDefaultMeshes().mySphere` */
+    public myMesh: Mesh | null = null;
+
+    /** `null` means it will default to `Globals.getVisualResources().myDefaultMaterials.myMesh` */
+    public myMaterial: Material | null = null;
+
+
+    protected _copyHook(other: Readonly<VisualMeshParams>): void {
         this.myTransform.pp_copy(other.myTransform);
 
         if (other.myMesh != null) {
@@ -48,7 +35,6 @@ export class VisualMeshParams extends AbstractVisualElementParams<VisualMeshPara
             this.myMaterial = null;
         }
 
-        this.myParent = other.myParent;
         this.myLocal = other.myLocal;
     }
 
@@ -57,13 +43,41 @@ export class VisualMeshParams extends AbstractVisualElementParams<VisualMeshPara
     }
 }
 
+/**
+ * Example:
+ * 
+ * ```js  
+ * const visualParams = new VisualMeshParams();
+ * visualParams.myTransform = transform;
+ * visualParams.myMesh = Globals.getDefaultMeshes().mySphere;
+ * visualParams.myMaterial = Globals.getDefaultMaterials().myFlatOpaque.clone();
+ * visualParams.myMaterial.color = vec4_create(1, 1, 1, 1);
+ * 
+ * const visualMesh = new VisualMesh(visualParams);
+ * 
+ * // OR
+ * 
+ * Globals.getVisualManager().draw(visualParams);
+ * ```
+ */
 export class VisualMesh extends AbstractVisualElement<VisualMesh, VisualMeshParams> {
 
     private readonly _myMeshObject!: Object3D;
     private readonly _myMeshComponent!: MeshComponent;
 
-    protected _visibleChanged(): void {
+    constructor(params: VisualMeshParams = new VisualMeshParams()) {
+        super(params);
+        this._prepare();
+    }
+
+    protected override _visibleChanged(): void {
         this._myMeshObject.pp_setActive(this._myVisible);
+    }
+
+    protected _build(): void {
+        (this._myMeshObject as Object3D) = Globals.getSceneObjects(this._myParams.myParent.pp_getEngine())!.myVisualElements!.pp_addObject();
+
+        (this._myMeshComponent as MeshComponent) = this._myMeshObject.pp_addComponent(MeshComponent)!;
     }
 
     protected _refresh(): void {
@@ -88,17 +102,11 @@ export class VisualMesh extends AbstractVisualElement<VisualMesh, VisualMeshPara
         }
     }
 
-    protected _build(): void {
-        (this._myMeshObject as Object3D) = Globals.getSceneObjects(this._myParams.myParent.pp_getEngine())!.myVisualElements!.pp_addObject();
-
-        (this._myMeshComponent as MeshComponent) = this._myMeshObject.pp_addComponent(MeshComponent)!;
-    }
-
     protected _new(params: VisualMeshParams): VisualMesh {
         return new VisualMesh(params);
     }
 
-    protected _destroyHook(): void {
+    protected override _destroyHook(): void {
         this._myMeshObject.pp_destroy();
     }
 }

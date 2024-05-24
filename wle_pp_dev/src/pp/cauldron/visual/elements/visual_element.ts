@@ -1,9 +1,11 @@
-import { Object3D } from "@wonderlandengine/api";
+import { Object3D, WonderlandEngine } from "@wonderlandengine/api";
 import { Globals } from "wle-pp/pp/globals.js";
 import { VisualElementType } from "./visual_element_types.js";
 
 export interface VisualElementParams {
     myType: VisualElementType;
+
+    /** If not specified it will default to `Globals.getSceneObjects().myVisualElements` */
     myParent: Object3D;
 
     copy(other: Readonly<VisualElementParams>): void;
@@ -15,11 +17,17 @@ export abstract class AbstractVisualElementParams<T extends AbstractVisualElemen
 
     public myParent: Object3D;
 
-    constructor(engine = Globals.getMainEngine()) {
+    constructor(engine: Readonly<WonderlandEngine> = Globals.getMainEngine()!) {
         this.myParent = Globals.getSceneObjects(engine)!.myVisualElements!;
     }
 
-    public abstract copy(other: Readonly<T>): void;
+    public copy(other: Readonly<VisualElementParams>): void {
+        if (other.myType != this.myType) return;
+
+        this.myParent = other.myParent;
+
+        this._copyHook(other as Readonly<T>);
+    }
 
     public clone(): T {
         const clonedParams = this._new();
@@ -27,6 +35,7 @@ export abstract class AbstractVisualElementParams<T extends AbstractVisualElemen
         return clonedParams;
     }
 
+    protected abstract _copyHook(other: Readonly<T>): void;
     protected abstract _new(): T;
 }
 
@@ -58,11 +67,6 @@ export abstract class AbstractVisualElement<VisualElementType extends AbstractVi
 
     constructor(params: VisualElementParamsType) {
         this._myParams = params;
-
-        this._build();
-        this.forceRefresh();
-
-        this.setVisible(true);
     }
 
     public update(dt: number): void {
@@ -97,8 +101,10 @@ export abstract class AbstractVisualElement<VisualElementType extends AbstractVi
         return this._myParams;
     }
 
-    public setParams(params: VisualElementParamsType): void {
-        this._myParams = params;
+    public setParams(params: VisualElementParams): void {
+        if (params.myType != this._myParams.myType) return;
+
+        this._myParams = params as VisualElementParamsType;
         this._markDirty();
     }
 
@@ -106,7 +112,9 @@ export abstract class AbstractVisualElement<VisualElementType extends AbstractVi
         this._markDirty();
     }
 
-    public copyParams(params: VisualElementParamsType): void {
+    public copyParams(params: VisualElementParams): void {
+        if (params.myType != this._myParams.myType) return;
+
         this._myParams.copy(params);
         this._markDirty();
     }
@@ -130,13 +138,24 @@ export abstract class AbstractVisualElement<VisualElementType extends AbstractVi
         return clone;
     }
 
-    protected abstract _visibleChanged(): void;
+    protected _prepare(): void {
+        this._build();
+        this.forceRefresh();
+
+        this.setVisible(true);
+    }
+
+    protected _updateHook(dt: number): void { }
+
+    protected _visibleChanged(): void { }
+
     protected abstract _build(): void;
     protected abstract _refresh(): void;
+    protected _forceRefreshHook(dt: number): void { }
 
     protected abstract _new(params: VisualElementParamsType): VisualElementType;
 
-    protected abstract _destroyHook(): void;
+    protected _destroyHook(): void { }
 
     public destroy(): void {
         this._myDestroyed = true;
