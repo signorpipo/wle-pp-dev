@@ -4,6 +4,7 @@
  */
 
 import "./js/extensions/array/array_type_extension.js";
+import "./js/extensions/array/mat4_type_extension.js";
 import "./js/extensions/array/vec2_type_extension.js";
 import "./js/extensions/array/vec_type_extension.js";
 
