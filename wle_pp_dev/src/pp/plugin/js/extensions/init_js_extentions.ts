@@ -6,6 +6,7 @@ import { initVec4Extension } from "./array/vec4_extension.js";
 import { initVecExtension } from "./array/vec_extension.js";
 import { initMathExtension } from "./math_extension.js";
 import { initNumberExtension } from "./number_extension.js";
+import { initMat4Extension } from "./array/mat4_extension.js";
 
 /**
  * TS import preserver
@@ -14,6 +15,7 @@ import { initNumberExtension } from "./number_extension.js";
  */
 import "./array/array_extension.js";
 import "./array/mat3_extension.js";
+import "./array/mat4_extension.js";
 import "./array/vec2_extension.js";
 import "./array/vec4_extension.js";
 import "./array/vec_extension.js";
@@ -28,6 +30,7 @@ export function initJSExtensions(): void {
     initVec2Extension();
     initVec4Extension();
     initMat3Extension();
+    initMat4Extension();
     initArrayExtensionLegacy();
 
     initNumberExtension();
