@@ -71,7 +71,7 @@ export class VisualManager {
                 const visualElements = this._myVisualElementsTypeMap.get(visualElementParams.myType)!;
                 if (visualElements.has(idToReuse)) {
                     visualElement = visualElements.get(idToReuse)![0];
-                    visualElement.copyParams(visualElementParams);
+                    visualElement.copyParamsGeneric(visualElementParams);
                     visualElement.setVisible(false);
                     idReused = true;
                 }
@@ -129,7 +129,7 @@ export class VisualManager {
 
     public getVisualElementParams(elementID: unknown): VisualElementParams | null {
         const visualElement = this.getVisualElement(elementID);
-        return visualElement != null ? visualElement.getParams() : null;
+        return visualElement != null ? visualElement.getParamsGeneric() : null;
     }
 
     public getVisualElementID(visualElement: Readonly<VisualElement>): unknown {
@@ -231,7 +231,7 @@ export class VisualManager {
         element = Globals.getObjectPoolManager(this._myEngine)!.get(this._getTypePoolID(params.myType));
 
         if (element != null) {
-            element.copyParams(params);
+            element.copyParamsGeneric(params);
         }
 
         return element;
@@ -285,12 +285,12 @@ export class VisualManager {
 
     private _releaseElement(visualElement: VisualElement): void {
         const defaultElementsParent = Globals.getSceneObjects(this._myEngine)!.myVisualElements!;
-        if (visualElement.getParams().myParent != defaultElementsParent) {
-            visualElement.getParams().myParent = defaultElementsParent;
+        if (visualElement.getParamsGeneric().myParent != defaultElementsParent) {
+            visualElement.getParamsGeneric().myParent = defaultElementsParent;
             visualElement.forceRefresh(); // just used to trigger the parent change, I'm lazy
         }
 
-        Globals.getObjectPoolManager(this._myEngine)!.release(this._getTypePoolID(visualElement.getParams().myType), visualElement);
+        Globals.getObjectPoolManager(this._myEngine)!.release(this._getTypePoolID(visualElement.getParamsGeneric().myType), visualElement);
     }
 
     private _getClassName(): string {
