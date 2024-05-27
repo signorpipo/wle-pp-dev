@@ -42,7 +42,7 @@ export function clonePhysX(componentToClone, targetObject, deepCloneParams = new
     return clonedComponent;
 }
 
-export let DefaultWLComponentCloneCallbacks = {
+export let WLComponentDefaultCloneCallbacks = {
     cloneMesh,
     cloneCollision,
     cloneText,

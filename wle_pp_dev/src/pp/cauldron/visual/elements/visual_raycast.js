@@ -2,7 +2,7 @@ import { Globals } from "../../../pp/globals.js";
 import { RaycastResults } from "../../physics/physics_raycast_params.js";
 import { VisualArrow, VisualArrowParams } from "./visual_arrow.js";
 import { AbstractVisualElement, AbstractVisualElementParams } from "./visual_element.js";
-import { VisualElementType } from "./visual_element_types.js";
+import { VisualElementDefaultType } from "./visual_element_types.js";
 
 export class VisualRaycastParams extends AbstractVisualElementParams {
 
@@ -26,7 +26,7 @@ export class VisualRaycastParams extends AbstractVisualElementParams {
 
         this.myLocal = false;
 
-        this.myType = VisualElementType.RAYCAST;
+        this.myType = VisualElementDefaultType.RAYCAST;
     }
 
     get myRaycastResults() {

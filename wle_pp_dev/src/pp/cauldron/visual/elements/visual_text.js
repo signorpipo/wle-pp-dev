@@ -2,7 +2,7 @@ import { Alignment, Justification, TextComponent } from "@wonderlandengine/api";
 import { mat4_create, vec3_create } from "../../../plugin/js/extensions/array/vec_create_extension.js";
 import { Globals } from "../../../pp/globals.js";
 import { AbstractVisualElement, AbstractVisualElementParams } from "./visual_element.js";
-import { VisualElementType } from "./visual_element_types.js";
+import { VisualElementDefaultType } from "./visual_element_types.js";
 
 export class VisualTextParams extends AbstractVisualElementParams {
 
@@ -28,7 +28,7 @@ export class VisualTextParams extends AbstractVisualElementParams {
 
         this.myLookAtObject = null;
 
-        this.myType = VisualElementType.TEXT;
+        this.myType = VisualElementDefaultType.TEXT;
     }
 
     _copyHook(other) {

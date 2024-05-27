@@ -1,7 +1,7 @@
 import { AnimationComponent, CollisionComponent, InputComponent, LightComponent, MeshComponent, PhysXComponent, TextComponent, ViewComponent } from "@wonderlandengine/api";
 import { ARCamera8thwall, Anchor, Cursor, CursorTarget, DebugObject, DeviceOrientationLook, FingerCursor, FixedFoveation, HandTracking, HitTestLocation, HowlerAudioListener, HowlerAudioSource, ImageTexture, MouseLookComponent, PlaneDetection, PlayerHeight, TargetFramerate, TeleportComponent, Trail, TwoJointIkSolver, VideoTexture, VrModeActiveSwitch, Vrm, WasdControlsComponent } from "@wonderlandengine/components";
 import { Globals } from "../../../pp/globals.js";
-import { DefaultWLComponentCloneCallbacks } from "./default_wl_component_clone_callbacks.js";
+import { WLComponentDefaultCloneCallbacks } from "./wl_component_default_clone_callbacks.js";
 import { ObjectUtils } from "./object_utils.js";
 
 let _myCloneCallbacks = new WeakMap();                 // Signature: callback(componentToClone, targetObject, useDefaultCloneAsFallback, deeCloneParams, customCloneParams)
@@ -355,16 +355,16 @@ export function getDefaultWLComponentCloneCallback(classOrType) {
 
     switch (type) {
         case MeshComponent.TypeName:
-            callback = DefaultWLComponentCloneCallbacks.cloneMesh;
+            callback = WLComponentDefaultCloneCallbacks.cloneMesh;
             break;
         case CollisionComponent.TypeName:
-            callback = DefaultWLComponentCloneCallbacks.cloneCollision;
+            callback = WLComponentDefaultCloneCallbacks.cloneCollision;
             break;
         case TextComponent.TypeName:
-            callback = DefaultWLComponentCloneCallbacks.cloneText;
+            callback = WLComponentDefaultCloneCallbacks.cloneText;
             break;
         case PhysXComponent.TypeName:
-            callback = DefaultWLComponentCloneCallbacks.clonePhysX;
+            callback = WLComponentDefaultCloneCallbacks.clonePhysX;
             break;
         default:
             callback = null;
@@ -379,7 +379,7 @@ export function hasDefaultWLComponentCloneCallback(classOrType) {
 }
 
 
-export function setDefaultWLComponentCloneCallbacks(engine = Globals.getMainEngine()) {
+export function setWLComponentDefaultCloneCallbacks(engine = Globals.getMainEngine()) {
     for (let nativeType of ComponentUtils.getWLNativeComponentTypes()) {
         let cloneCallback = ComponentUtils.getDefaultWLComponentCloneCallback(nativeType);
         if (cloneCallback != null) {
@@ -395,7 +395,7 @@ export function setDefaultWLComponentCloneCallbacks(engine = Globals.getMainEngi
     }
 }
 
-export function removeDefaultWLComponentCloneCallbacks(engine = Globals.getMainEngine()) {
+export function removeWLComponentDefaultCloneCallbacks(engine = Globals.getMainEngine()) {
     for (let nativeType of ComponentUtils.getWLNativeComponentTypes()) {
         let cloneCallback = ComponentUtils.getDefaultWLComponentCloneCallback(nativeType);
         if (cloneCallback != null) {
@@ -448,8 +448,8 @@ export let ComponentUtils = {
     getClonePostProcessCallback,
     hasClonePostProcessCallback,
 
-    setDefaultWLComponentCloneCallbacks,
-    removeDefaultWLComponentCloneCallbacks,
+    setWLComponentDefaultCloneCallbacks,
+    removeWLComponentDefaultCloneCallbacks,
     getDefaultWLComponentCloneCallback,
     hasDefaultWLComponentCloneCallback
 };

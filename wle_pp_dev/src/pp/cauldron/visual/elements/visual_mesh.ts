@@ -3,11 +3,11 @@ import { Matrix4 } from "wle-pp/cauldron/type_definitions/array_type_definitions
 import { mat4_create } from "../../../plugin/js/extensions/array/vec_create_extension.js";
 import { Globals } from "../../../pp/globals.js";
 import { AbstractVisualElement, AbstractVisualElementParams } from "./visual_element.js";
-import { VisualElementType } from "./visual_element_types.js";
+import { VisualElementDefaultType } from "./visual_element_types.js";
 
 export class VisualMeshParams extends AbstractVisualElementParams<VisualMeshParams> {
 
-    public readonly myType: VisualElementType = VisualElementType.MESH;
+    public readonly myType: unknown | VisualElementDefaultType = VisualElementDefaultType.MESH;
 
     public myTransform: Matrix4 = mat4_create();
     public myLocal: boolean = false;

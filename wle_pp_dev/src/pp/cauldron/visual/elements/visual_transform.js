@@ -2,7 +2,7 @@ import { mat4_create, vec3_create } from "../../../plugin/js/extensions/array/ve
 import { Globals } from "../../../pp/globals.js";
 import { VisualArrow, VisualArrowParams } from "./visual_arrow.js";
 import { AbstractVisualElement, AbstractVisualElementParams } from "./visual_element.js";
-import { VisualElementType } from "./visual_element_types.js";
+import { VisualElementDefaultType } from "./visual_element_types.js";
 
 export class VisualTransformParams extends AbstractVisualElementParams {
 
@@ -24,7 +24,7 @@ export class VisualTransformParams extends AbstractVisualElementParams {
 
         this.myLocal = false;
 
-        this.myType = VisualElementType.TRANSFORM;
+        this.myType = VisualElementDefaultType.TRANSFORM;
     }
 
     _copyHook(other) {

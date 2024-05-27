@@ -1,9 +1,9 @@
 import { Object3D, WonderlandEngine } from "@wonderlandengine/api";
-import { Globals } from "wle-pp/pp/globals.js";
-import { VisualElementType } from "./visual_element_types.js";
+import { Globals } from "../../../pp/globals.js";
+import { VisualElementDefaultType } from "./visual_element_types.js";
 
 export interface VisualElementParams {
-    myType: VisualElementType;
+    myType: unknown | VisualElementDefaultType;
 
     /** If not specified it will default to `Globals.getSceneObjects().myVisualElements` */
     myParent: Object3D;
@@ -13,7 +13,7 @@ export interface VisualElementParams {
 }
 
 export abstract class AbstractVisualElementParams<T extends AbstractVisualElementParams<T>> implements VisualElementParams {
-    public abstract myType: VisualElementType;
+    public abstract myType: unknown | VisualElementDefaultType;
 
     public myParent: Object3D;
 

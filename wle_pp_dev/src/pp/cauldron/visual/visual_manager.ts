@@ -4,7 +4,7 @@ import { Timer } from "../cauldron/timer.js";
 import { ObjectPool, ObjectPoolParams } from "../object_pool/object_pool.js";
 import { VisualArrow, VisualArrowParams } from "./elements/visual_arrow.js";
 import { VisualElement, VisualElementParams } from "./elements/visual_element.js";
-import { VisualElementType } from "./elements/visual_element_types.js";
+import { VisualElementDefaultType } from "./elements/visual_element_types.js";
 import { VisualLine, VisualLineParams } from "./elements/visual_line.js";
 import { VisualMesh, VisualMeshParams } from "./elements/visual_mesh.js";
 import { VisualPoint, VisualPointParams } from "./elements/visual_point.js";
@@ -15,16 +15,16 @@ import { VisualTransform, VisualTransformParams } from "./elements/visual_transf
 
 export class VisualManager {
 
-    private readonly _myVisualElementPrototypeCreationCallbacks: Map<VisualElementType, () => VisualElement> = new Map();
+    private readonly _myVisualElementPrototypeCreationCallbacks: Map<unknown | VisualElementDefaultType, () => VisualElement> = new Map();
 
-    private readonly _myVisualElementsTypeMap: Map<VisualElementType, Map<unknown, [VisualElement, Timer]>> = new Map();
+    private readonly _myVisualElementsTypeMap: Map<unknown | VisualElementDefaultType, Map<unknown, [VisualElement, Timer]>> = new Map();
     private _myVisualElementLastID: number = 0;
     private readonly _myVisualElementsToShow: VisualElement[] = [];
 
     private _myActive: boolean = true;
 
     private readonly _myObjectPoolManagerPrefix: string;
-    private readonly _myTypePoolIDs: Map<VisualElementType, string> = new Map();
+    private readonly _myTypePoolIDs: Map<unknown | VisualElementDefaultType, string> = new Map();
 
     private readonly _myEngine: Readonly<WonderlandEngine>;
 
@@ -35,7 +35,7 @@ export class VisualManager {
 
         this._myObjectPoolManagerPrefix = this._getClassName() + "_" + Math.pp_randomUUID() + "_visual_element_type_";
 
-        this._addStandardVisualElementTypes();
+        this._addDefaultVisualElementTypes();
     }
 
     public setActive(active: boolean): void {
@@ -175,7 +175,7 @@ export class VisualManager {
         }
     }
 
-    public allocateVisualElementType(visualElementType: VisualElementType, amount: number): void {
+    public allocateVisualElementType(visualElementType: unknown | VisualElementDefaultType, amount: number): void {
         if (!Globals.getObjectPoolManager(this._myEngine)!.hasPool(this._getTypePoolID(visualElementType))) {
             this._addVisualElementTypeToPool(visualElementType);
         }
@@ -188,11 +188,11 @@ export class VisualManager {
         }
     }
 
-    public addVisualElementType(visualElementType: VisualElementType, visuaElementPrototypeCreationCallback: () => VisualElement): void {
+    public addVisualElementType(visualElementType: unknown | VisualElementDefaultType, visuaElementPrototypeCreationCallback: () => VisualElement): void {
         this._myVisualElementPrototypeCreationCallbacks.set(visualElementType, visuaElementPrototypeCreationCallback);
     }
 
-    public removeVisualElementType(visualElementType: VisualElementType): void {
+    public removeVisualElementType(visualElementType: unknown | VisualElementDefaultType): void {
         this._myVisualElementPrototypeCreationCallbacks.delete(visualElementType);
     }
 
@@ -237,7 +237,7 @@ export class VisualManager {
         return element;
     }
 
-    private _addVisualElementTypeToPool(visualElementType: VisualElementType): void {
+    private _addVisualElementTypeToPool(visualElementType: unknown | VisualElementDefaultType): void {
         const objectPoolParams = new ObjectPoolParams();
         objectPoolParams.myInitialPoolSize = 10;
         objectPoolParams.myAmountToAddWhenEmpty = 0;
@@ -257,22 +257,22 @@ export class VisualManager {
 
             Globals.getObjectPoolManager(this._myEngine)!.addPool(this._getTypePoolID(visualElementType), new ObjectPool(visualElementPrototype, objectPoolParams));
         } else {
-            console.error("Visual element type not supported");
+            console.error("Visual element type not supported: " + visualElementType);
         }
     }
 
-    private _addStandardVisualElementTypes(): void {
-        this.addVisualElementType(VisualElementType.LINE, () => new VisualLine(new VisualLineParams(this._myEngine)));
-        this.addVisualElementType(VisualElementType.MESH, () => new VisualMesh(new VisualMeshParams(this._myEngine)));
-        this.addVisualElementType(VisualElementType.POINT, () => new VisualPoint(new VisualPointParams(this._myEngine)));
-        this.addVisualElementType(VisualElementType.ARROW, () => new VisualArrow(new VisualArrowParams(this._myEngine)));
-        this.addVisualElementType(VisualElementType.TEXT, () => new VisualText(new VisualTextParams(this._myEngine)));
-        this.addVisualElementType(VisualElementType.TRANSFORM, () => new VisualTransform(new VisualTransformParams(this._myEngine)));
-        this.addVisualElementType(VisualElementType.RAYCAST, () => new VisualRaycast(new VisualRaycastParams(this._myEngine)));
-        this.addVisualElementType(VisualElementType.TORUS, () => new VisualTorus(new VisualTorusParams(this._myEngine)));
+    private _addDefaultVisualElementTypes(): void {
+        this.addVisualElementType(VisualElementDefaultType.LINE, () => new VisualLine(new VisualLineParams(this._myEngine)));
+        this.addVisualElementType(VisualElementDefaultType.MESH, () => new VisualMesh(new VisualMeshParams(this._myEngine)));
+        this.addVisualElementType(VisualElementDefaultType.POINT, () => new VisualPoint(new VisualPointParams(this._myEngine)));
+        this.addVisualElementType(VisualElementDefaultType.ARROW, () => new VisualArrow(new VisualArrowParams(this._myEngine)));
+        this.addVisualElementType(VisualElementDefaultType.TEXT, () => new VisualText(new VisualTextParams(this._myEngine)));
+        this.addVisualElementType(VisualElementDefaultType.TRANSFORM, () => new VisualTransform(new VisualTransformParams(this._myEngine)));
+        this.addVisualElementType(VisualElementDefaultType.RAYCAST, () => new VisualRaycast(new VisualRaycastParams(this._myEngine)));
+        this.addVisualElementType(VisualElementDefaultType.TORUS, () => new VisualTorus(new VisualTorusParams(this._myEngine)));
     }
 
-    private _getTypePoolID(visualElementType: VisualElementType): string {
+    private _getTypePoolID(visualElementType: unknown | VisualElementDefaultType): string {
         let typePoolID = this._myTypePoolIDs.get(visualElementType);
 
         if (typePoolID == null) {

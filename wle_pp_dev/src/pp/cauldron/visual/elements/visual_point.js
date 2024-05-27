@@ -2,7 +2,7 @@ import { MeshComponent } from "@wonderlandengine/api";
 import { vec3_create } from "../../../plugin/js/extensions/array/vec_create_extension.js";
 import { Globals } from "../../../pp/globals.js";
 import { AbstractVisualElement, AbstractVisualElementParams } from "./visual_element.js";
-import { VisualElementType } from "./visual_element_types.js";
+import { VisualElementDefaultType } from "./visual_element_types.js";
 
 export class VisualPointParams extends AbstractVisualElementParams {
 
@@ -24,7 +24,7 @@ export class VisualPointParams extends AbstractVisualElementParams {
 
         this.myLocal = false;
 
-        this.myType = VisualElementType.POINT;
+        this.myType = VisualElementDefaultType.POINT;
     }
 
     _copyHook(other) {
