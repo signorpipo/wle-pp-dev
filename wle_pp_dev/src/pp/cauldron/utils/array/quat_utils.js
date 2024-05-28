@@ -632,7 +632,7 @@ export function slerp(from, to, interpolationFactor, out = QuatUtils.create()) {
     return out;
 }
 
-export function sinterpolate(from, to, interpolationFactor, easingFunction = EasingFunction.linear, out = QuatUtils.create()) {
+export function interpolateSpherical(from, to, interpolationFactor, easingFunction = EasingFunction.linear, out = QuatUtils.create()) {
     let lerpFactor = easingFunction(interpolationFactor);
     return QuatUtils.slerp(from, to, lerpFactor, out);
 }
@@ -713,7 +713,7 @@ export let QuatUtils = {
     lerp,
     interpolate,
     slerp,
-    sinterpolate
+    interpolateSpherical
 };
 
 

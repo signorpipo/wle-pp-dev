@@ -110,7 +110,7 @@
  *         ○ quat_fromRadians      / quat_fromDegrees      / quat_fromAxis / quat_fromAxes
  *         - quat_toRadians        / quat_toDegrees        / quat_toMatrix
  *         - quat_addRotation      / quat_subRotation
- *         - quat_lerp             / quat_interpolate      / quat_slerp    / quat_sinterpolate
+ *         - quat_lerp             / quat_interpolate      / quat_slerp    / quat_interpolateSpherical
  * 
  *     QUAT 2:
  *         ○ quat2_set             / quat2_copy        / quat2_identity
@@ -125,7 +125,7 @@
  *         - quat2_rotateAxis  
  *         - quat2_toMatrix
  *         ○ quat2_fromMatrix
- *         - quat2_lerp        / quat2_interpolate / quat2_slerp    / quat2_sinterpolate
+ *         - quat2_lerp        / quat2_interpolate / quat2_slerp    / quat2_interpolateSpherical
  * 
  *     MATRIX 3:
  *         ○ mat3_set
@@ -896,8 +896,8 @@ export function _initArrayExtensionLegacyProtoype() {
         return QuatUtils.slerp(this, to, interpolationFactor, out);
     };
 
-    quatExtension.quat_sinterpolate = function quat_sinterpolate(to, interpolationFactor, easingFunction = EasingFunction.linear, out = QuatUtils.create()) {
-        return QuatUtils.sinterpolate(this, to, interpolationFactor, easingFunction, out);
+    quatExtension.quat_interpolateSpherical = function quat_interpolateSpherical(to, interpolationFactor, easingFunction = EasingFunction.linear, out = QuatUtils.create()) {
+        return QuatUtils.interpolateSpherical(this, to, interpolationFactor, easingFunction, out);
     };
 
     // QUAT 2
@@ -1068,8 +1068,8 @@ export function _initArrayExtensionLegacyProtoype() {
         return Quat2Utils.slerp(this, to, interpolationFactor, out);
     };
 
-    quat2Extension.quat2_sinterpolate = function quat2_sinterpolate(to, interpolationFactor, easingFunction = EasingFunction.linear, out = Quat2Utils.create()) {
-        return Quat2Utils.sinterpolate(this, to, interpolationFactor, easingFunction, out);
+    quat2Extension.quat2_interpolateSpherical = function quat2_interpolateSpherical(to, interpolationFactor, easingFunction = EasingFunction.linear, out = Quat2Utils.create()) {
+        return Quat2Utils.interpolateSpherical(this, to, interpolationFactor, easingFunction, out);
     };
 
 
