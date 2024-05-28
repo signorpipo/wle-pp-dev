@@ -112,44 +112,44 @@ function _initObjectExtensionProtoype(): void {
 
         // Transform
 
-        pp_getTransform: function pp_getTransform<T extends Matrix4>(this: Readonly<Object3D>, outTransform?: T): T {
+        pp_getTransform: function pp_getTransform<T extends Matrix4>(this: Readonly<Object3D>, outTransform?: Matrix4 | T): Matrix4 | T {
             return ObjectUtils.getTransform(this, outTransform!);
         },
 
-        pp_getTransformMatrix: function pp_getTransformMatrix<T extends Matrix4>(this: Readonly<Object3D>, outTransform?: T): T {
+        pp_getTransformMatrix: function pp_getTransformMatrix<T extends Matrix4>(this: Readonly<Object3D>, outTransform?: Matrix4 | T): Matrix4 | T {
             return ObjectUtils.getTransformMatrix(this, outTransform!);
         },
 
-        pp_getTransformQuat: function pp_getTransformQuat<T extends Quaternion2>(this: Readonly<Object3D>, outTransform?: T): T {
-            return ObjectUtils.getTransformQuat(this, outTransform);
+        pp_getTransformQuat: function pp_getTransformQuat<T extends Quaternion2>(this: Readonly<Object3D>, outTransform?: Quaternion2 | T): Quaternion2 | T {
+            return ObjectUtils.getTransformQuat(this, outTransform!);
         },
 
         // Transform World
 
-        pp_getTransformWorld: function pp_getTransformWorld<T extends Matrix4>(this: Readonly<Object3D>, outTransform?: T): T {
+        pp_getTransformWorld: function pp_getTransformWorld<T extends Matrix4>(this: Readonly<Object3D>, outTransform?: Matrix4 | T): Matrix4 | T {
             return ObjectUtils.getTransformWorld(this, outTransform!);
         },
 
-        pp_getTransformWorldMatrix: function pp_getTransformWorldMatrix<T extends Matrix4>(this: Readonly<Object3D>, outTransform?: T): T {
+        pp_getTransformWorldMatrix: function pp_getTransformWorldMatrix<T extends Matrix4>(this: Readonly<Object3D>, outTransform?: Matrix4 | T): Matrix4 | T {
             return ObjectUtils.getTransformWorldMatrix(this, outTransform!);
         },
 
-        pp_getTransformWorldQuat: function pp_getTransformWorldQuat<T extends Quaternion2>(this: Readonly<Object3D>, outTransform?: T): T {
-            return ObjectUtils.getTransformWorldQuat(this, outTransform);
+        pp_getTransformWorldQuat: function pp_getTransformWorldQuat<T extends Quaternion2>(this: Readonly<Object3D>, outTransform?: Quaternion2 | T): Quaternion2 | T {
+            return ObjectUtils.getTransformWorldQuat(this, outTransform!);
         },
 
         // Transform Local
 
-        pp_getTransformLocal: function pp_getTransformLocal<T extends Matrix4>(this: Readonly<Object3D>, outTransform?: T): T {
+        pp_getTransformLocal: function pp_getTransformLocal<T extends Matrix4>(this: Readonly<Object3D>, outTransform?: Matrix4 | T): Matrix4 | T {
             return ObjectUtils.getTransformLocal(this, outTransform!);
         },
 
-        pp_getTransformLocalMatrix: function pp_getTransformLocalMatrix<T extends Matrix4>(this: Readonly<Object3D>, outTransform?: T): T {
+        pp_getTransformLocalMatrix: function pp_getTransformLocalMatrix<T extends Matrix4>(this: Readonly<Object3D>, outTransform?: Matrix4 | T): Matrix4 | T {
             return ObjectUtils.getTransformLocalMatrix(this, outTransform!);
         },
 
-        pp_getTransformLocalQuat: function pp_getTransformLocalQuat<T extends Quaternion2>(this: Readonly<Object3D>, outTransform?: T): T {
-            return ObjectUtils.getTransformLocalQuat(this, outTransform);
+        pp_getTransformLocalQuat: function pp_getTransformLocalQuat<T extends Quaternion2>(this: Readonly<Object3D>, outTransform?: Quaternion2 | T): Quaternion2 | T {
+            return ObjectUtils.getTransformLocalQuat(this, outTransform!);
         },
 
         // Axes
@@ -960,80 +960,80 @@ function _initObjectExtensionProtoype(): void {
 
         // Convert Transform Object World
 
-        pp_convertTransformObjectToWorld: function pp_convertTransformObjectToWorld<T extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform?: T): T {
+        pp_convertTransformObjectToWorld: function pp_convertTransformObjectToWorld<T extends Matrix4, U extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<T>, outTransform?: T | U): T | U {
             return ObjectUtils.convertTransformObjectToWorld(this, transform, outTransform!);
         },
 
-        pp_convertTransformObjectToWorldMatrix: function pp_convertTransformObjectToWorldMatrix<T extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform?: T): T {
+        pp_convertTransformObjectToWorldMatrix: function pp_convertTransformObjectToWorldMatrix<T extends Matrix4, U extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<T>, outTransform?: T | U): T | U {
             return ObjectUtils.convertTransformObjectToWorldMatrix(this, transform, outTransform!);
         },
 
-        pp_convertTransformObjectToWorldQuat: function pp_convertTransformObjectToWorldQuat<T extends Quaternion2>(this: Readonly<Object3D>, transform: Readonly<Quaternion2>, outTransform?: T): T {
-            return ObjectUtils.convertTransformObjectToWorldQuat(this, transform, outTransform);
+        pp_convertTransformObjectToWorldQuat: function pp_convertTransformObjectToWorldQuat<T extends Quaternion2, U extends Quaternion2>(this: Readonly<Object3D>, transform: Readonly<T>, outTransform?: T | U): T | U {
+            return ObjectUtils.convertTransformObjectToWorldQuat(this, transform, outTransform!);
         },
 
-        pp_convertTransformWorldToObject: function pp_convertTransformWorldToObject<T extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform?: T): T {
+        pp_convertTransformWorldToObject: function pp_convertTransformWorldToObject<T extends Matrix4, U extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<T>, outTransform?: T | U): T | U {
             return ObjectUtils.convertTransformWorldToObject(this, transform, outTransform!);
         },
 
-        pp_convertTransformWorldToObjectMatrix: function pp_convertTransformWorldToObjectMatrix<T extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform?: T): T {
+        pp_convertTransformWorldToObjectMatrix: function pp_convertTransformWorldToObjectMatrix<T extends Matrix4, U extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<T>, outTransform?: T | U): T | U {
             return ObjectUtils.convertTransformWorldToObjectMatrix(this, transform, outTransform!);
         },
 
-        pp_convertTransformWorldToObjectQuat: function pp_convertTransformWorldToObjectQuat<T extends Quaternion2>(this: Readonly<Object3D>, transform: Readonly<Quaternion2>, outTransform?: T): T {
-            return ObjectUtils.convertTransformWorldToObjectQuat(this, transform, outTransform);
+        pp_convertTransformWorldToObjectQuat: function pp_convertTransformWorldToObjectQuat<T extends Quaternion2, U extends Quaternion2>(this: Readonly<Object3D>, transform: Readonly<T>, outTransform?: T | U): T | U {
+            return ObjectUtils.convertTransformWorldToObjectQuat(this, transform, outTransform!);
         },
 
         // Convert Transform Local World
 
-        pp_convertTransformLocalToWorld: function pp_convertTransformLocalToWorld<T extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform?: T): T {
+        pp_convertTransformLocalToWorld: function pp_convertTransformLocalToWorld<T extends Matrix4, U extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<T>, outTransform?: T | U): T | U {
             return ObjectUtils.convertTransformLocalToWorld(this, transform, outTransform!);
         },
 
-        pp_convertTransformLocalToWorldMatrix: function pp_convertTransformLocalToWorldMatrix<T extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform?: T): T {
+        pp_convertTransformLocalToWorldMatrix: function pp_convertTransformLocalToWorldMatrix<T extends Matrix4, U extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<T>, outTransform?: T | U): T | U {
             return ObjectUtils.convertTransformLocalToWorldMatrix(this, transform, outTransform!);
         },
 
-        pp_convertTransformLocalToWorldQuat: function pp_convertTransformLocalToWorldQuat<T extends Quaternion2>(this: Readonly<Object3D>, transform: Readonly<Quaternion2>, outTransform?: T): T {
-            return ObjectUtils.convertTransformLocalToWorldQuat(this, transform, outTransform);
+        pp_convertTransformLocalToWorldQuat: function pp_convertTransformLocalToWorldQuat<T extends Quaternion2, U extends Quaternion2>(this: Readonly<Object3D>, transform: Readonly<T>, outTransform?: T | U): T | U {
+            return ObjectUtils.convertTransformLocalToWorldQuat(this, transform, outTransform!);
         },
 
-        pp_convertTransformWorldToLocal: function pp_convertTransformWorldToLocal<T extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform?: T): T {
+        pp_convertTransformWorldToLocal: function pp_convertTransformWorldToLocal<T extends Matrix4, U extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<T>, outTransform?: T | U): T | U {
             return ObjectUtils.convertTransformWorldToLocal(this, transform, outTransform!);
         },
 
-        pp_convertTransformWorldToLocalMatrix: function pp_convertTransformWorldToLocalMatrix<T extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform?: T): T {
+        pp_convertTransformWorldToLocalMatrix: function pp_convertTransformWorldToLocalMatrix<T extends Matrix4, U extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<T>, outTransform?: T | U): T | U {
             return ObjectUtils.convertTransformWorldToLocalMatrix(this, transform, outTransform!);
         },
 
-        pp_convertTransformWorldToLocalQuat: function pp_convertTransformWorldToLocalQuat<T extends Quaternion2>(this: Readonly<Object3D>, transform: Readonly<Quaternion2>, outTransform?: T): T {
-            return ObjectUtils.convertTransformWorldToLocalQuat(this, transform, outTransform);
+        pp_convertTransformWorldToLocalQuat: function pp_convertTransformWorldToLocalQuat<T extends Quaternion2, U extends Quaternion2>(this: Readonly<Object3D>, transform: Readonly<T>, outTransform?: T | U): T | U {
+            return ObjectUtils.convertTransformWorldToLocalQuat(this, transform, outTransform!);
         },
 
         // Convert Transform Object Local
 
-        pp_convertTransformObjectToLocal: function pp_convertTransformObjectToLocal<T extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform?: T): T {
+        pp_convertTransformObjectToLocal: function pp_convertTransformObjectToLocal<T extends Matrix4, U extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<T>, outTransform?: T | U): T | U {
             return ObjectUtils.convertTransformObjectToLocal(this, transform, outTransform!);
         },
 
-        pp_convertTransformObjectToLocalMatrix: function pp_convertTransformObjectToLocalMatrix<T extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform?: T): T {
+        pp_convertTransformObjectToLocalMatrix: function pp_convertTransformObjectToLocalMatrix<T extends Matrix4, U extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<T>, outTransform?: T | U): T | U {
             return ObjectUtils.convertTransformObjectToLocalMatrix(this, transform, outTransform!);
         },
 
-        pp_convertTransformObjectToLocalQuat: function pp_convertTransformObjectToLocalQuat<T extends Quaternion2>(this: Readonly<Object3D>, transform: Readonly<Quaternion2>, outTransform?: T): T {
-            return ObjectUtils.convertTransformObjectToLocalQuat(this, transform, outTransform);
+        pp_convertTransformObjectToLocalQuat: function pp_convertTransformObjectToLocalQuat<T extends Quaternion2, U extends Quaternion2>(this: Readonly<Object3D>, transform: Readonly<T>, outTransform?: T | U): T | U {
+            return ObjectUtils.convertTransformObjectToLocalQuat(this, transform, outTransform!);
         },
 
-        pp_convertTransformLocalToObject: function pp_convertTransformLocalToObject<T extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform?: T): T {
+        pp_convertTransformLocalToObject: function pp_convertTransformLocalToObject<T extends Matrix4, U extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<T>, outTransform?: T | U): T | U {
             return ObjectUtils.convertTransformLocalToObject(this, transform, outTransform!);
         },
 
-        pp_convertTransformLocalToObjectMatrix: function pp_convertTransformLocalToObjectMatrix<T extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform?: T): T {
+        pp_convertTransformLocalToObjectMatrix: function pp_convertTransformLocalToObjectMatrix<T extends Matrix4, U extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<T>, outTransform?: T | U): T | U {
             return ObjectUtils.convertTransformLocalToObjectMatrix(this, transform, outTransform!);
         },
 
-        pp_convertTransformLocalToObjectQuat: function pp_convertTransformLocalToObjectQuat<T extends Quaternion2>(this: Readonly<Object3D>, transform: Readonly<Quaternion2>, outTransform?: T): T {
-            return ObjectUtils.convertTransformLocalToObjectQuat(this, transform, outTransform);
+        pp_convertTransformLocalToObjectQuat: function pp_convertTransformLocalToObjectQuat<T extends Quaternion2, U extends Quaternion2>(this: Readonly<Object3D>, transform: Readonly<T>, outTransform?: T | U): T | U {
+            return ObjectUtils.convertTransformLocalToObjectQuat(this, transform, outTransform!);
         },
 
         // Parent

@@ -114,7 +114,8 @@ export interface Object3DExtension {
     pp_getTransformMatrix(this: Readonly<Object3D>): Matrix4;
     pp_getTransformMatrix<T extends Matrix4>(this: Readonly<Object3D>, outTransform: T): T;
 
-    pp_getTransformQuat<T extends Quaternion2>(this: Readonly<Object3D>, outTransform?: T): T;
+    pp_getTransformQuat(this: Readonly<Object3D>): Quaternion2;
+    pp_getTransformQuat<T extends Quaternion2>(this: Readonly<Object3D>, outTransform: T): T;
 
 
 
@@ -124,7 +125,8 @@ export interface Object3DExtension {
     pp_getTransformWorldMatrix(this: Readonly<Object3D>): Matrix4;
     pp_getTransformWorldMatrix<T extends Matrix4>(this: Readonly<Object3D>, outTransform: T): T;
 
-    pp_getTransformWorldQuat<T extends Quaternion2>(this: Readonly<Object3D>, outTransform?: T): T;
+    pp_getTransformWorldQuat(this: Readonly<Object3D>): Quaternion2;
+    pp_getTransformWorldQuat<T extends Quaternion2>(this: Readonly<Object3D>, outTransform: T): T;
 
 
 
@@ -134,7 +136,8 @@ export interface Object3DExtension {
     pp_getTransformLocalMatrix(this: Readonly<Object3D>): Matrix4;
     pp_getTransformLocalMatrix<T extends Matrix4>(this: Readonly<Object3D>, outTransform: T): T;
 
-    pp_getTransformLocalQuat<T extends Quaternion2>(this: Readonly<Object3D>, outTransform?: T): T;
+    pp_getTransformLocalQuat(this: Readonly<Object3D>): Quaternion2;
+    pp_getTransformLocalQuat<T extends Quaternion2>(this: Readonly<Object3D>, outTransform: T): T;
 
 
 
@@ -369,57 +372,63 @@ export interface Object3DExtension {
 
 
 
-    pp_convertTransformObjectToWorld(this: Readonly<Object3D>, transform: Readonly<Matrix4>): Matrix4;
+    pp_convertTransformObjectToWorld<T extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<T>): T;
     pp_convertTransformObjectToWorld<T extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform: T): T;
 
-    pp_convertTransformObjectToWorldMatrix(this: Readonly<Object3D>, transform: Readonly<Matrix4>): Matrix4;
+    pp_convertTransformObjectToWorldMatrix<T extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<T>): T;
     pp_convertTransformObjectToWorldMatrix<T extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform: T): T;
 
-    pp_convertTransformObjectToWorldQuat<T extends Quaternion2>(this: Readonly<Object3D>, transform: Readonly<Quaternion2>, outTransform?: T): T;
+    pp_convertTransformObjectToWorldQuat<T extends Quaternion2>(this: Readonly<Object3D>, transform: Readonly<T>): T;
+    pp_convertTransformObjectToWorldQuat<T extends Quaternion2>(this: Readonly<Object3D>, transform: Readonly<Quaternion2>, outTransform: T): T;
 
-    pp_convertTransformWorldToObject(this: Readonly<Object3D>, transform: Readonly<Matrix4>): Matrix4;
+    pp_convertTransformWorldToObject<T extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<T>): T;
     pp_convertTransformWorldToObject<T extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform: T): T;
 
-    pp_convertTransformWorldToObjectMatrix(this: Readonly<Object3D>, transform: Readonly<Matrix4>): Matrix4;
+    pp_convertTransformWorldToObjectMatrix<T extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<T>): T;
     pp_convertTransformWorldToObjectMatrix<T extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform: T): T;
 
-    pp_convertTransformWorldToObjectQuat<T extends Quaternion2>(this: Readonly<Object3D>, transform: Readonly<Quaternion2>, outTransform?: T): T;
+    pp_convertTransformWorldToObjectQuat<T extends Quaternion2>(this: Readonly<Object3D>, transform: Readonly<T>): T;
+    pp_convertTransformWorldToObjectQuat<T extends Quaternion2>(this: Readonly<Object3D>, transform: Readonly<Quaternion2>, outTransform: T): T;
 
 
 
-    pp_convertTransformLocalToWorld(this: Readonly<Object3D>, transform: Readonly<Matrix4>): Matrix4;
+    pp_convertTransformLocalToWorld<T extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<T>): T;
     pp_convertTransformLocalToWorld<T extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform: T): T;
 
-    pp_convertTransformLocalToWorldMatrix(this: Readonly<Object3D>, transform: Readonly<Matrix4>): Matrix4;
+    pp_convertTransformLocalToWorldMatrix<T extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<T>): T;
     pp_convertTransformLocalToWorldMatrix<T extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform: T): T;
 
-    pp_convertTransformLocalToWorldQuat<T extends Quaternion2>(this: Readonly<Object3D>, transform: Readonly<Quaternion2>, outTransform?: T): T;
+    pp_convertTransformLocalToWorldQuat<T extends Quaternion2>(this: Readonly<Object3D>, transform: Readonly<T>): T;
+    pp_convertTransformLocalToWorldQuat<T extends Quaternion2>(this: Readonly<Object3D>, transform: Readonly<Quaternion2>, outTransform: T): T;
 
-    pp_convertTransformWorldToLocal(this: Readonly<Object3D>, transform: Readonly<Matrix4>,): Matrix4;
+    pp_convertTransformWorldToLocal<T extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<T>): T;
     pp_convertTransformWorldToLocal<T extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform: T): T;
 
-    pp_convertTransformWorldToLocalMatrix(this: Readonly<Object3D>, transform: Readonly<Matrix4>): Matrix4;
+    pp_convertTransformWorldToLocalMatrix<T extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<T>): T;
     pp_convertTransformWorldToLocalMatrix<T extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform: T): T;
 
-    pp_convertTransformWorldToLocalQuat<T extends Quaternion2>(this: Readonly<Object3D>, transform: Readonly<Quaternion2>, outTransform?: T): T;
+    pp_convertTransformWorldToLocalQuat<T extends Quaternion2>(this: Readonly<Object3D>, transform: Readonly<T>): T;
+    pp_convertTransformWorldToLocalQuat<T extends Quaternion2>(this: Readonly<Object3D>, transform: Readonly<Quaternion2>, outTransform: T): T;
 
 
 
-    pp_convertTransformObjectToLocal(this: Readonly<Object3D>, transform: Readonly<Matrix4>): Matrix4;
+    pp_convertTransformObjectToLocal<T extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<T>): T;
     pp_convertTransformObjectToLocal<T extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform: T): T;
 
-    pp_convertTransformObjectToLocalMatrix(this: Readonly<Object3D>, transform: Readonly<Matrix4>): Matrix4;
+    pp_convertTransformObjectToLocalMatrix<T extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<T>): T;
     pp_convertTransformObjectToLocalMatrix<T extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform: T): T;
 
-    pp_convertTransformObjectToLocalQuat<T extends Quaternion2>(this: Readonly<Object3D>, transform: Readonly<Quaternion2>, outTransform?: T): T;
+    pp_convertTransformObjectToLocalQuat<T extends Quaternion2>(this: Readonly<Object3D>, transform: Readonly<T>): T;
+    pp_convertTransformObjectToLocalQuat<T extends Quaternion2>(this: Readonly<Object3D>, transform: Readonly<Quaternion2>, outTransform: T): T;
 
-    pp_convertTransformLocalToObject(this: Readonly<Object3D>, transform: Readonly<Matrix4>): Matrix4;
+    pp_convertTransformLocalToObject<T extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<T>): T;
     pp_convertTransformLocalToObject<T extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform: T): T;
 
-    pp_convertTransformLocalToObjectMatrix(this: Readonly<Object3D>, transform: Readonly<Matrix4>): Matrix4;
+    pp_convertTransformLocalToObjectMatrix<T extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<T>): T;
     pp_convertTransformLocalToObjectMatrix<T extends Matrix4>(this: Readonly<Object3D>, transform: Readonly<Matrix4>, outTransform: T): T;
 
-    pp_convertTransformLocalToObjectQuat<T extends Quaternion2>(this: Readonly<Object3D>, transform: Readonly<Quaternion2>, outTransform?: T): T;
+    pp_convertTransformLocalToObjectQuat<T extends Quaternion2>(this: Readonly<Object3D>, transform: Readonly<T>): T;
+    pp_convertTransformLocalToObjectQuat<T extends Quaternion2>(this: Readonly<Object3D>, transform: Readonly<Quaternion2>, outTransform: T): T;
 
 
 
