@@ -467,7 +467,7 @@ export const Quat2Utils = {
     toLocal,
     toMatrix,
     fromMatrix
-};
+} as const;
 
 
 /** This is used in place of the glMatrix one to avoid the array allocation */

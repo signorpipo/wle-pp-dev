@@ -8,12 +8,12 @@ import { Matrix4, Quaternion, Quaternion2, Vector3 } from "../../../../cauldron/
 
 export interface Quaternion2Extension<QuaternionType extends Quaternion2> {
 
-    quat2_set<T extends QuaternionType>(this: T, x1: number, y1: number, z1: number, w1: number, x2: number, y2: number, z2: number, w2: number): T;
-    quat2_set<T extends QuaternionType>(this: T, uniformValue: number): T;
+    quat2_set<T extends QuaternionType>(this: T, x1: number, y1: number, z1: number, w1: number, x2: number, y2: number, z2: number, w2: number): this;
+    quat2_set<T extends QuaternionType>(this: T, uniformValue: number): this;
 
 
 
-    quat2_copy<T extends QuaternionType>(this: T, quat: Readonly<Quaternion2>): T;
+    quat2_copy<T extends QuaternionType>(this: T, quat: Readonly<Quaternion2>): this;
     quat2_clone<T extends QuaternionType>(this: Readonly<T>): T;
 
 
@@ -28,7 +28,7 @@ export interface Quaternion2Extension<QuaternionType extends Quaternion2> {
 
 
 
-    quat2_identity<T extends QuaternionType>(this: T): T;
+    quat2_identity<T extends QuaternionType>(this: T): this;
 
 
     quat2_mul<T extends QuaternionType>(this: Readonly<T>, quat: Readonly<Quaternion2>): T;
@@ -75,19 +75,19 @@ export interface Quaternion2Extension<QuaternionType extends Quaternion2> {
 
 
 
-    quat2_setPosition<T extends QuaternionType>(this: T, position: Readonly<Vector3>): T;
+    quat2_setPosition<T extends QuaternionType>(this: T, position: Readonly<Vector3>): this;
 
 
-    quat2_setRotation<T extends QuaternionType>(this: T, rotation: Readonly<Vector3>): T;
-    quat2_setRotationDegrees<T extends QuaternionType>(this: T, rotation: Readonly<Vector3>): T;
-    quat2_setRotationRadians<T extends QuaternionType>(this: T, rotation: Readonly<Vector3>): T;
-    quat2_setRotationQuat<T extends QuaternionType>(this: T, rotation: Readonly<Quaternion>): T;
+    quat2_setRotation<T extends QuaternionType>(this: T, rotation: Readonly<Vector3>): this;
+    quat2_setRotationDegrees<T extends QuaternionType>(this: T, rotation: Readonly<Vector3>): this;
+    quat2_setRotationRadians<T extends QuaternionType>(this: T, rotation: Readonly<Vector3>): this;
+    quat2_setRotationQuat<T extends QuaternionType>(this: T, rotation: Readonly<Quaternion>): this;
 
 
-    quat2_setPositionRotation<T extends QuaternionType>(this: T, position: Readonly<Vector3>, rotation: Readonly<Vector3>): T;
-    quat2_setPositionRotationDegrees<T extends QuaternionType>(this: T, position: Readonly<Vector3>, rotation: Readonly<Vector3>): T;
-    quat2_setPositionRotationRadians<T extends QuaternionType>(this: T, position: Readonly<Vector3>, rotation: Readonly<Vector3>): T;
-    quat2_setPositionRotationQuat<T extends QuaternionType>(this: T, position: Readonly<Vector3>, rotation: Readonly<Quaternion>): T;
+    quat2_setPositionRotation<T extends QuaternionType>(this: T, position: Readonly<Vector3>, rotation: Readonly<Vector3>): this;
+    quat2_setPositionRotationDegrees<T extends QuaternionType>(this: T, position: Readonly<Vector3>, rotation: Readonly<Vector3>): this;
+    quat2_setPositionRotationRadians<T extends QuaternionType>(this: T, position: Readonly<Vector3>, rotation: Readonly<Vector3>): this;
+    quat2_setPositionRotationQuat<T extends QuaternionType>(this: T, position: Readonly<Vector3>, rotation: Readonly<Quaternion>): this;
 
 
 
@@ -135,7 +135,7 @@ export interface Quaternion2Extension<QuaternionType extends Quaternion2> {
     quat2_toMatrix<T extends QuaternionType>(this: Readonly<T>): Matrix4;
     quat2_toMatrix<T extends QuaternionType, U extends Matrix4>(this: Readonly<T>, out: U): U;
 
-    quat2_fromMatrix<T extends QuaternionType>(this: T, matrix: Readonly<Matrix4>): T;
+    quat2_fromMatrix<T extends QuaternionType>(this: T, matrix: Readonly<Matrix4>): this;
 }
 
 declare global {

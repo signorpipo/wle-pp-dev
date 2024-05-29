@@ -11,17 +11,17 @@ export interface Matrix4Extension<MatrixType extends Matrix4> {
         m00: number, m01: number, m02: number, m03: number,
         m10: number, m11: number, m12: number, m13: number,
         m20: number, m21: number, m22: number, m23: number,
-        m30: number, m31: number, m32: number, m33: number): T;
-    mat4_set<T extends MatrixType>(this: T, uniformValue: number): T;
+        m30: number, m31: number, m32: number, m33: number): this;
+    mat4_set<T extends MatrixType>(this: T, uniformValue: number): this;
 
 
 
-    mat4_copy<T extends MatrixType>(this: T, matrix: Readonly<Matrix4>): T;
+    mat4_copy<T extends MatrixType>(this: T, matrix: Readonly<Matrix4>): this;
     mat4_clone<T extends MatrixType>(this: Readonly<T>): T;
 
 
 
-    mat4_identity<T extends MatrixType>(this: T): T;
+    mat4_identity<T extends MatrixType>(this: T): this;
 
     mat4_invert<T extends MatrixType>(this: Readonly<T>): T;
     mat4_invert<T extends MatrixType, U extends Matrix4>(this: Readonly<T>, out: U): U;
@@ -56,24 +56,24 @@ export interface Matrix4Extension<MatrixType extends Matrix4> {
 
 
 
-    mat4_setPosition<T extends MatrixType>(this: T, position: Readonly<Vector3>): T;
+    mat4_setPosition<T extends MatrixType>(this: T, position: Readonly<Vector3>): this;
 
-    mat4_setRotation<T extends MatrixType>(this: T, rotation: Readonly<Vector3>): T;
-    mat4_setRotationDegrees<T extends MatrixType>(this: T, rotation: Readonly<Vector3>): T;
-    mat4_setRotationRadians<T extends MatrixType>(this: T, rotation: Readonly<Vector3>): T;
-    mat4_setRotationQuat<T extends MatrixType>(this: T, rotation: Readonly<Quaternion>): T;
+    mat4_setRotation<T extends MatrixType>(this: T, rotation: Readonly<Vector3>): this;
+    mat4_setRotationDegrees<T extends MatrixType>(this: T, rotation: Readonly<Vector3>): this;
+    mat4_setRotationRadians<T extends MatrixType>(this: T, rotation: Readonly<Vector3>): this;
+    mat4_setRotationQuat<T extends MatrixType>(this: T, rotation: Readonly<Quaternion>): this;
 
-    mat4_setScale<T extends MatrixType>(this: T, scale: Readonly<Vector3>): T;
+    mat4_setScale<T extends MatrixType>(this: T, scale: Readonly<Vector3>): this;
 
-    mat4_setPositionRotationScale<T extends MatrixType>(this: T, position: Readonly<Vector3>, rotation: Readonly<Vector3>, scale: Readonly<Vector3>): T;
-    mat4_setPositionRotationDegreesScale<T extends MatrixType>(this: T, position: Readonly<Vector3>, rotation: Readonly<Vector3>, scale: Readonly<Vector3>): T;
-    mat4_setPositionRotationRadiansScale<T extends MatrixType>(this: T, position: Readonly<Vector3>, rotation: Readonly<Vector3>, scale: Readonly<Vector3>): T;
-    mat4_setPositionRotationQuatScale<T extends MatrixType>(this: T, position: Readonly<Vector3>, rotation: Readonly<Quaternion>, scale: Readonly<Vector3>): T;
+    mat4_setPositionRotationScale<T extends MatrixType>(this: T, position: Readonly<Vector3>, rotation: Readonly<Vector3>, scale: Readonly<Vector3>): this;
+    mat4_setPositionRotationDegreesScale<T extends MatrixType>(this: T, position: Readonly<Vector3>, rotation: Readonly<Vector3>, scale: Readonly<Vector3>): this;
+    mat4_setPositionRotationRadiansScale<T extends MatrixType>(this: T, position: Readonly<Vector3>, rotation: Readonly<Vector3>, scale: Readonly<Vector3>): this;
+    mat4_setPositionRotationQuatScale<T extends MatrixType>(this: T, position: Readonly<Vector3>, rotation: Readonly<Quaternion>, scale: Readonly<Vector3>): this;
 
-    mat4_setPositionRotation<T extends MatrixType>(this: T, position: Readonly<Vector3>, rotation: Readonly<Vector3>): T;
-    mat4_setPositionRotationDegrees<T extends MatrixType>(this: T, position: Readonly<Vector3>, rotation: Readonly<Vector3>): T;
-    mat4_setPositionRotationRadians<T extends MatrixType>(this: T, position: Readonly<Vector3>, rotation: Readonly<Vector3>): T;
-    mat4_setPositionRotationQuat<T extends MatrixType>(this: T, position: Readonly<Vector3>, rotation: Readonly<Quaternion>): T;
+    mat4_setPositionRotation<T extends MatrixType>(this: T, position: Readonly<Vector3>, rotation: Readonly<Vector3>): this;
+    mat4_setPositionRotationDegrees<T extends MatrixType>(this: T, position: Readonly<Vector3>, rotation: Readonly<Vector3>): this;
+    mat4_setPositionRotationRadians<T extends MatrixType>(this: T, position: Readonly<Vector3>, rotation: Readonly<Vector3>): this;
+    mat4_setPositionRotationQuat<T extends MatrixType>(this: T, position: Readonly<Vector3>, rotation: Readonly<Quaternion>): this;
 
 
 
@@ -115,7 +115,7 @@ export interface Matrix4Extension<MatrixType extends Matrix4> {
     mat4_toQuat<T extends MatrixType>(this: Readonly<T>): Quaternion2;
     mat4_toQuat<T extends MatrixType, U extends Quaternion2>(this: Readonly<T>, out: U): U;
 
-    mat4_fromQuat<T extends MatrixType>(this: T, quat: Readonly<Quaternion2>): T;
+    mat4_fromQuat<T extends MatrixType>(this: T, quat: Readonly<Quaternion2>): this;
 }
 
 declare global {
