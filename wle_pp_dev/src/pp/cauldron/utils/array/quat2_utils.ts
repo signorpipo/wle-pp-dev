@@ -44,15 +44,34 @@ export function clone<T extends Quaternion2>(quat: Readonly<T>): T {
     return quat.slice(0) as T;
 }
 
-export function identity<T extends Quaternion2>(quat: T): T {
-    gl_quat2.identity(quat as unknown as gl_quat2_type);
-    return quat;
+export function isNormalized(quat: Readonly<Quaternion2>, epsilon: number = MathUtils.EPSILON): boolean {
+    return Math.abs(Quat2Utils.lengthSquared(quat) - 1) < epsilon;
 }
 
 export function normalize<T extends Quaternion2>(quat: Readonly<T>): T;
 export function normalize<T extends Quaternion2>(quat: Readonly<Quaternion2>, out: T): T;
 export function normalize<T extends Quaternion2, U extends Quaternion2>(quat: Readonly<T>, out: T | U = Quat2Utils.clone(quat)): T | U {
     gl_quat2.normalize(out as unknown as gl_quat2_type, quat as unknown as gl_quat2_type);
+    return out;
+}
+
+export function length(quat: Readonly<Quaternion2>): number {
+    return gl_quat2.length(quat as unknown as gl_vec4_type);
+}
+
+export function lengthSquared(quat: Readonly<Quaternion2>): number {
+    return gl_quat2.squaredLength(quat as unknown as gl_vec4_type);
+}
+
+export function identity<T extends Quaternion2>(quat: T): T {
+    gl_quat2.identity(quat as unknown as gl_quat2_type);
+    return quat;
+}
+
+export function mul<T extends Quaternion2>(first: Readonly<T>, second: Readonly<Quaternion2>): T;
+export function mul<T extends Quaternion2>(first: Readonly<Quaternion2>, second: Readonly<Quaternion2>, out: T): T;
+export function mul<T extends Quaternion2, U extends Quaternion2>(first: Readonly<T>, second: Readonly<Quaternion2>, out: T | U = Quat2Utils.clone(first)): T | U {
+    gl_quat2.mul(out as unknown as gl_quat2_type, first as unknown as gl_quat2_type, second as unknown as gl_quat2_type);
     return out;
 }
 
@@ -68,6 +87,70 @@ export function conjugate<T extends Quaternion2>(quat: Readonly<Quaternion2>, ou
 export function conjugate<T extends Quaternion2, U extends Quaternion2>(quat: Readonly<T>, out: T | U = Quat2Utils.clone(quat)): T | U {
     gl_quat2.conjugate(out as unknown as gl_quat2_type, quat as unknown as gl_quat2_type);
     return out;
+}
+
+export function lerp<T extends Quaternion2>(from: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number): T;
+export function lerp<T extends Quaternion2>(from: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number, out: T): T;
+export function lerp<T extends Quaternion2, U extends Quaternion2>(from: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number, out: T | U = Quat2Utils.clone(from)): T | U {
+    if (interpolationFactor <= 0) {
+        Quat2Utils.copy(from, out);
+        return out;
+    } else if (interpolationFactor >= 1) {
+        Quat2Utils.copy(to, out);
+        return out;
+    }
+
+    gl_quat2.lerp(out as unknown as gl_quat2_type, from as unknown as gl_quat2_type, to as unknown as gl_quat2_type, interpolationFactor);
+    return out;
+}
+
+export function interpolate<T extends Quaternion2>(from: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number, easingFunction: EasingFunction): T;
+export function interpolate<T extends Quaternion2>(from: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number, easingFunction: EasingFunction, out: T): T;
+export function interpolate<T extends Quaternion2, U extends Quaternion2>(from: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number, easingFunction: EasingFunction = EasingFunction.linear, out: T | U = Quat2Utils.clone(from)): T | U {
+    const lerpFactor = easingFunction(interpolationFactor);
+    return Quat2Utils.lerp(from, to, lerpFactor, out);
+}
+
+export const slerp: <T extends Quaternion2, U extends Quaternion2>(from: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number, out?: T | U) => T | U = function () {
+    const fromPosition = vec3_utils_create();
+    const toPosition = vec3_utils_create();
+    const interpolatedPosition = vec3_utils_create();
+    const fromRotationQuat = quat_utils_create();
+    const toRotationQuat = quat_utils_create();
+    const interpolatedRotationQuat = quat_utils_create();
+
+    function slerp<T extends Quaternion2>(from: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number): T;
+    function slerp<T extends Quaternion2>(from: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number, out: T): T;
+    function slerp<T extends Quaternion2, U extends Quaternion2>(from: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number, out: T | U = Quat2Utils.clone(from)): T | U {
+        if (interpolationFactor <= 0) {
+            Quat2Utils.copy(from, out);
+            return out;
+        } else if (interpolationFactor >= 1) {
+            Quat2Utils.copy(to, out);
+            return out;
+        }
+
+        Quat2Utils.getPosition(from, fromPosition);
+        Quat2Utils.getPosition(to, toPosition);
+
+        Quat2Utils.getRotationQuat(from, fromRotationQuat);
+        Quat2Utils.getRotationQuat(to, toRotationQuat);
+
+        Vec3Utils.lerp(fromPosition, toPosition, interpolationFactor, interpolatedPosition);
+        QuatUtils.slerp(fromRotationQuat, toRotationQuat, interpolationFactor, interpolatedRotationQuat);
+
+        Quat2Utils.setPositionRotationQuat(out, interpolatedPosition, interpolatedRotationQuat);
+        return out;
+    }
+
+    return slerp;
+}();
+
+export function interpolateSpherical<T extends Quaternion2>(from: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number, easingFunction: EasingFunction): T;
+export function interpolateSpherical<T extends Quaternion2>(from: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number, easingFunction: EasingFunction, out: T): T;
+export function interpolateSpherical<T extends Quaternion2, U extends Quaternion2>(from: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number, easingFunction: EasingFunction = EasingFunction.linear, out: T | U = Quat2Utils.clone(from)): T | U {
+    const lerpFactor = easingFunction(interpolationFactor);
+    return Quat2Utils.slerp(from, to, lerpFactor, out);
 }
 
 export function getPosition(quat: Readonly<Quaternion2>): Vector3;
@@ -185,25 +268,6 @@ export function setPositionRotationQuat<T extends Quaternion2>(quat: T, position
     return quat;
 }
 
-export function isNormalized(quat: Readonly<Quaternion2>, epsilon: number = MathUtils.EPSILON): boolean {
-    return Math.abs(Quat2Utils.lengthSquared(quat) - 1) < epsilon;
-}
-
-export function length(quat: Readonly<Quaternion2>): number {
-    return gl_quat2.length(quat as unknown as gl_vec4_type);
-}
-
-export function lengthSquared(quat: Readonly<Quaternion2>): number {
-    return gl_quat2.squaredLength(quat as unknown as gl_vec4_type);
-}
-
-export function mul<T extends Quaternion2>(first: Readonly<T>, second: Readonly<Quaternion2>): T;
-export function mul<T extends Quaternion2>(first: Readonly<Quaternion2>, second: Readonly<Quaternion2>, out: T): T;
-export function mul<T extends Quaternion2, U extends Quaternion2>(first: Readonly<T>, second: Readonly<Quaternion2>, out: T | U = Quat2Utils.clone(first)): T | U {
-    gl_quat2.mul(out as unknown as gl_quat2_type, first as unknown as gl_quat2_type, second as unknown as gl_quat2_type);
-    return out;
-}
-
 export function getAxes(quat: Readonly<Quaternion2>): [Vector3, Vector3, Vector3];
 export function getAxes<T extends Vector3, U extends Vector3, V extends Vector3>(quat: Readonly<Quaternion2>, out: [T, U, V]): [T, U, V];
 export function getAxes<T extends Vector3, U extends Vector3, V extends Vector3>(quat: Readonly<Quaternion2>, out: [Vector3, Vector3, Vector3] | [T, U, V] = [Vec3Utils.create(), Vec3Utils.create(), Vec3Utils.create()]): [Vector3, Vector3, Vector3] | [T, U, V] {
@@ -285,27 +349,6 @@ export function getDown<T extends Vector3>(quat: Readonly<Quaternion2>, out?: Ve
     return out;
 }
 
-export function toWorld<T extends Quaternion2>(quat: Readonly<T>, parentTransformQuat: Readonly<Quaternion2>): T;
-export function toWorld<T extends Quaternion2>(quat: Readonly<Quaternion2>, parentTransformQuat: Readonly<Quaternion2>, out: T): T;
-export function toWorld<T extends Quaternion2, U extends Quaternion2>(quat: Readonly<T>, parentTransformQuat: Readonly<Quaternion2>, out: T | U = Quat2Utils.clone(quat)): T | U {
-    Quat2Utils.mul(parentTransformQuat, quat, out);
-    return out;
-}
-
-export const toLocal: <T extends Quaternion2, U extends Quaternion2 > (quat: Readonly<T>, parentTransformQuat: Readonly<Quaternion2>, out?: T | U) => T | U = function () {
-    const invertQuat = create();
-
-    function toLocal<T extends Quaternion2>(quat: Readonly<T>, parentTransformQuat: Readonly<Quaternion2>): T;
-    function toLocal<T extends Quaternion2>(quat: Readonly<Quaternion2>, parentTransformQuat: Readonly<Quaternion2>, out: T): T;
-    function toLocal<T extends Quaternion2, U extends Quaternion2>(quat: Readonly<T>, parentTransformQuat: Readonly<Quaternion2>, out: T | U = Quat2Utils.clone(quat)): T | U {
-        Quat2Utils.conjugate(parentTransformQuat, invertQuat);
-        Quat2Utils.mul(invertQuat, quat, out);
-        return out;
-    }
-
-    return toLocal;
-}();
-
 export function rotateAxis<T extends Quaternion2>(quat: Readonly<T>, angle: number, axis: Readonly<Vector3>): T;
 export function rotateAxis<T extends Quaternion2>(quat: Readonly<Quaternion2>, angle: number, axis: Readonly<Vector3>, out: T): T;
 export function rotateAxis<T extends Quaternion2, U extends Quaternion2>(quat: Readonly<T>, angle: number, axis: Readonly<Vector3>, out?: T | U): T | U {
@@ -335,6 +378,27 @@ export const rotateAxisRadians: <T extends Quaternion2, U extends Quaternion2>(q
 }();
 
 
+export function toWorld<T extends Quaternion2>(quat: Readonly<T>, parentTransformQuat: Readonly<Quaternion2>): T;
+export function toWorld<T extends Quaternion2>(quat: Readonly<Quaternion2>, parentTransformQuat: Readonly<Quaternion2>, out: T): T;
+export function toWorld<T extends Quaternion2, U extends Quaternion2>(quat: Readonly<T>, parentTransformQuat: Readonly<Quaternion2>, out: T | U = Quat2Utils.clone(quat)): T | U {
+    Quat2Utils.mul(parentTransformQuat, quat, out);
+    return out;
+}
+
+export const toLocal: <T extends Quaternion2, U extends Quaternion2 > (quat: Readonly<T>, parentTransformQuat: Readonly<Quaternion2>, out?: T | U) => T | U = function () {
+    const invertQuat = create();
+
+    function toLocal<T extends Quaternion2>(quat: Readonly<T>, parentTransformQuat: Readonly<Quaternion2>): T;
+    function toLocal<T extends Quaternion2>(quat: Readonly<Quaternion2>, parentTransformQuat: Readonly<Quaternion2>, out: T): T;
+    function toLocal<T extends Quaternion2, U extends Quaternion2>(quat: Readonly<T>, parentTransformQuat: Readonly<Quaternion2>, out: T | U = Quat2Utils.clone(quat)): T | U {
+        Quat2Utils.conjugate(parentTransformQuat, invertQuat);
+        Quat2Utils.mul(invertQuat, quat, out);
+        return out;
+    }
+
+    return toLocal;
+}();
+
 export function toMatrix(quat: Readonly<Quaternion2>): Matrix4;
 export function toMatrix<T extends Matrix4>(quat: Readonly<Quaternion2>, out: T): T;
 export function toMatrix<T extends Matrix4>(quat: Readonly<Quaternion2>, out: Matrix4 | T = Mat4Utils.create()): Matrix4 | T {
@@ -349,80 +413,23 @@ export function fromMatrix<T extends Quaternion2>(matrix: Readonly<Matrix4>, out
     return out;
 }
 
-export function lerp<T extends Quaternion2>(from: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number): T;
-export function lerp<T extends Quaternion2>(from: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number, out: T): T;
-export function lerp<T extends Quaternion2, U extends Quaternion2>(from: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number, out: T | U = Quat2Utils.clone(from)): T | U {
-    if (interpolationFactor <= 0) {
-        Quat2Utils.copy(from, out);
-        return out;
-    } else if (interpolationFactor >= 1) {
-        Quat2Utils.copy(to, out);
-        return out;
-    }
-
-    gl_quat2.lerp(out as unknown as gl_quat2_type, from as unknown as gl_quat2_type, to as unknown as gl_quat2_type, interpolationFactor);
-    return out;
-}
-
-
-export function interpolate<T extends Quaternion2>(from: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number, easingFunction: EasingFunction): T;
-export function interpolate<T extends Quaternion2>(from: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number, easingFunction: EasingFunction, out: T): T;
-export function interpolate<T extends Quaternion2, U extends Quaternion2>(from: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number, easingFunction: EasingFunction = EasingFunction.linear, out: T | U = Quat2Utils.clone(from)): T | U {
-    const lerpFactor = easingFunction(interpolationFactor);
-    return Quat2Utils.lerp(from, to, lerpFactor, out);
-}
-
-export const slerp: <T extends Quaternion2, U extends Quaternion2>(from: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number, out?: T | U) => T | U = function () {
-    const fromPosition = vec3_utils_create();
-    const toPosition = vec3_utils_create();
-    const interpolatedPosition = vec3_utils_create();
-    const fromRotationQuat = quat_utils_create();
-    const toRotationQuat = quat_utils_create();
-    const interpolatedRotationQuat = quat_utils_create();
-
-    function slerp<T extends Quaternion2>(from: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number): T;
-    function slerp<T extends Quaternion2>(from: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number, out: T): T;
-    function slerp<T extends Quaternion2, U extends Quaternion2>(from: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number, out: T | U = Quat2Utils.clone(from)): T | U {
-        if (interpolationFactor <= 0) {
-            Quat2Utils.copy(from, out);
-            return out;
-        } else if (interpolationFactor >= 1) {
-            Quat2Utils.copy(to, out);
-            return out;
-        }
-
-        Quat2Utils.getPosition(from, fromPosition);
-        Quat2Utils.getPosition(to, toPosition);
-
-        Quat2Utils.getRotationQuat(from, fromRotationQuat);
-        Quat2Utils.getRotationQuat(to, toRotationQuat);
-
-        Vec3Utils.lerp(fromPosition, toPosition, interpolationFactor, interpolatedPosition);
-        QuatUtils.slerp(fromRotationQuat, toRotationQuat, interpolationFactor, interpolatedRotationQuat);
-
-        Quat2Utils.setPositionRotationQuat(out, interpolatedPosition, interpolatedRotationQuat);
-        return out;
-    }
-
-    return slerp;
-}();
-
-export function interpolateSpherical<T extends Quaternion2>(from: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number, easingFunction: EasingFunction): T;
-export function interpolateSpherical<T extends Quaternion2>(from: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number, easingFunction: EasingFunction, out: T): T;
-export function interpolateSpherical<T extends Quaternion2, U extends Quaternion2>(from: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number, easingFunction: EasingFunction = EasingFunction.linear, out: T | U = Quat2Utils.clone(from)): T | U {
-    const lerpFactor = easingFunction(interpolationFactor);
-    return Quat2Utils.slerp(from, to, lerpFactor, out);
-}
-
 export const Quat2Utils = {
     create,
     set,
     copy,
     clone,
-    identity,
+    isNormalized,
     normalize,
+    length,
+    lengthSquared,
+    identity,
+    mul,
     invert,
     conjugate,
+    lerp,
+    interpolate,
+    slerp,
+    interpolateSpherical,
     getPosition,
     getRotation,
     getRotationDegrees,
@@ -437,10 +444,6 @@ export const Quat2Utils = {
     setPositionRotationDegrees,
     setPositionRotationRadians,
     setPositionRotationQuat,
-    isNormalized,
-    length,
-    lengthSquared,
-    mul,
     getAxes,
     getForward,
     getBackward,
@@ -448,17 +451,13 @@ export const Quat2Utils = {
     getRight,
     getUp,
     getDown,
-    toWorld,
-    toLocal,
     rotateAxis,
     rotateAxisDegrees,
     rotateAxisRadians,
+    toWorld,
+    toLocal,
     toMatrix,
-    fromMatrix,
-    lerp,
-    interpolate,
-    slerp,
-    interpolateSpherical
+    fromMatrix
 };
 
 

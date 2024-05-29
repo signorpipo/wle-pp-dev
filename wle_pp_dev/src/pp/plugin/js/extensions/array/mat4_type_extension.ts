@@ -3,7 +3,7 @@
  * The `initPP` function, which is automatically called by the `pp-gateway` component, does this for you
  */
 
-import { Matrix4, Quaternion, Vector3 } from "../../../../cauldron/type_definitions/array_type_definitions.js";
+import { Matrix4, Quaternion, Quaternion2, Vector3 } from "../../../../cauldron/type_definitions/array_type_definitions.js";
 
 export interface Matrix4Extension<MatrixType extends Matrix4> {
 
@@ -78,7 +78,7 @@ export interface Matrix4Extension<MatrixType extends Matrix4> {
 
 
     mat4_getAxes<T extends MatrixType>(this: Readonly<T>): [Vector3, Vector3, Vector3];
-    mat4_getAxes<T extends Vector3, U extends Vector3, V extends Vector3>(this: Readonly<T>, out: [T, U, V]): [T, U, V];
+    mat4_getAxes<T extends MatrixType, U extends Vector3, V extends Vector3, W extends Vector3>(this: Readonly<T>, out: [U, V, W]): [U, V, W];
 
     mat4_getForward<T extends MatrixType>(this: Readonly<T>): Vector3;
     mat4_getForward<T extends MatrixType, U extends Vector3>(this: Readonly<T>, out: U): U;
@@ -100,6 +100,10 @@ export interface Matrix4Extension<MatrixType extends Matrix4> {
 
 
 
+    mat4_hasUniformScale<T extends MatrixType>(this: Readonly<T>): boolean;
+
+
+
     mat4_toWorld<T extends MatrixType>(this: Readonly<T>, parentTransformMatrix: Readonly<Matrix4>): T;
     mat4_toWorld<T extends MatrixType, U extends Matrix4>(this: Readonly<T>, parentTransformMatrix: Readonly<Matrix4>, out: U): U;
 
@@ -108,14 +112,10 @@ export interface Matrix4Extension<MatrixType extends Matrix4> {
 
 
 
-    mat4_hasUniformScale<T extends MatrixType>(this: Readonly<T>): boolean;
+    mat4_toQuat<T extends MatrixType>(this: Readonly<T>): Quaternion2;
+    mat4_toQuat<T extends MatrixType, U extends Quaternion2>(this: Readonly<T>, out: U): U;
 
-
-
-    mat4_toQuat<T extends MatrixType>(this: Readonly<T>): Quaternion;
-    mat4_toQuat<T extends MatrixType, U extends Quaternion>(this: Readonly<T>, out: U): U;
-
-    mat4_fromQuat<T extends MatrixType>(this: T, quat: Readonly<Quaternion>): T;
+    mat4_fromQuat<T extends MatrixType>(this: T, quat: Readonly<Quaternion2>): T;
 }
 
 declare global {

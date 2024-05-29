@@ -327,6 +327,14 @@ export function getDown<T extends Vector3>(matrix: Readonly<Matrix4>, out?: Vect
     return out;
 }
 
+export const hasUniformScale = function () {
+    const scale = vec3_utils_create();
+    return function hasUniformScale(matrix: Readonly<Matrix4>): boolean {
+        Mat4Utils.getScale(matrix, scale);
+        return Math.abs(scale[0] - scale[1]) < MathUtils.EPSILON && Math.abs(scale[1] - scale[2]) < MathUtils.EPSILON && Math.abs(scale[0] - scale[2]) < MathUtils.EPSILON;
+    };
+}();
+
 export const toWorld = function () {
     const convertTransform = create();
     const position = vec3_utils_create();
@@ -399,14 +407,6 @@ export const toLocal = function () {
     return toLocal;
 }();
 
-export const hasUniformScale = function () {
-    const scale = vec3_utils_create();
-    return function hasUniformScale(matrix: Readonly<Matrix4>): boolean {
-        Mat4Utils.getScale(matrix, scale);
-        return Math.abs(scale[0] - scale[1]) < MathUtils.EPSILON && Math.abs(scale[1] - scale[2]) < MathUtils.EPSILON && Math.abs(scale[0] - scale[2]) < MathUtils.EPSILON;
-    };
-}();
-
 export const toQuat = function () {
     const position = vec3_utils_create();
     const rotation = quat_utils_create();
@@ -466,9 +466,9 @@ export const Mat4Utils = {
     getRight,
     getUp,
     getDown,
+    hasUniformScale,
     toWorld,
     toLocal,
-    hasUniformScale,
     toQuat,
     fromQuat
 } as const;

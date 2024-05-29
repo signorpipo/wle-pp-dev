@@ -1,4 +1,4 @@
-import { Matrix4, Quaternion, Vector3 } from "wle-pp/cauldron/type_definitions/array_type_definitions.js";
+import { Matrix4, Quaternion, Quaternion2, Vector3 } from "wle-pp/cauldron/type_definitions/array_type_definitions.js";
 import { Mat4Utils } from "wle-pp/cauldron/utils/array/mat4_utils.js";
 import { PluginUtils } from "../../../utils/plugin_utils.js";
 import { ArrayExtensionUtils } from "./array_extension_utils.js";
@@ -159,6 +159,10 @@ function _initMat4ExtensionProtoype(): void {
             return Mat4Utils.getDown(this, out!);
         },
 
+        mat4_hasUniformScale(this: Readonly<Matrix4>): boolean {
+            return Mat4Utils.hasUniformScale(this);
+        },
+
         mat4_toWorld<T extends Matrix4, U extends Matrix4>(this: Readonly<T>, parentTransformMatrix: Readonly<Matrix4>, out?: T | U): T | U {
             return Mat4Utils.toWorld(this, out!);
         },
@@ -167,15 +171,11 @@ function _initMat4ExtensionProtoype(): void {
             return Mat4Utils.toLocal(this, out!);
         },
 
-        mat4_hasUniformScale(this: Readonly<Matrix4>): boolean {
-            return Mat4Utils.hasUniformScale(this);
-        },
-
-        mat4_toQuat<T extends Quaternion>(this: Readonly<Matrix4>, out?: Quaternion | T): Quaternion | T {
+        mat4_toQuat<T extends Quaternion2>(this: Readonly<Matrix4>, out?: Quaternion2 | T): Quaternion2 | T {
             return Mat4Utils.toQuat(this, out!);
         },
 
-        mat4_fromQuat<T extends Matrix4>(this: T, quat: Readonly<Quaternion>): T {
+        mat4_fromQuat<T extends Matrix4>(this: T, quat: Readonly<Quaternion2>): T {
             return Mat4Utils.fromQuat(quat, this);
         }
     };
