@@ -104,14 +104,17 @@ export function lerp<T extends Quaternion2, U extends Quaternion2>(from: Readonl
     return out;
 }
 
-export function interpolate<T extends Quaternion2>(from: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number, easingFunction: EasingFunction): T;
+export function interpolate<T extends Quaternion2>(from: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number, easingFunction?: EasingFunction): T;
 export function interpolate<T extends Quaternion2>(from: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number, easingFunction: EasingFunction, out: T): T;
 export function interpolate<T extends Quaternion2, U extends Quaternion2>(from: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number, easingFunction: EasingFunction = EasingFunction.linear, out: T | U = Quat2Utils.clone(from)): T | U {
     const lerpFactor = easingFunction(interpolationFactor);
     return Quat2Utils.lerp(from, to, lerpFactor, out);
 }
 
-export const slerp: <T extends Quaternion2, U extends Quaternion2>(from: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number, out?: T | U) => T | U = function () {
+export const slerp: {
+    <T extends Quaternion2>(from: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number): T;
+    <T extends Quaternion2>(from: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number, out: T): T;
+} = function () {
     const fromPosition = vec3_utils_create();
     const toPosition = vec3_utils_create();
     const interpolatedPosition = vec3_utils_create();
@@ -146,7 +149,7 @@ export const slerp: <T extends Quaternion2, U extends Quaternion2>(from: Readonl
     return slerp;
 }();
 
-export function interpolateSpherical<T extends Quaternion2>(from: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number, easingFunction: EasingFunction): T;
+export function interpolateSpherical<T extends Quaternion2>(from: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number, easingFunction?: EasingFunction): T;
 export function interpolateSpherical<T extends Quaternion2>(from: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number, easingFunction: EasingFunction, out: T): T;
 export function interpolateSpherical<T extends Quaternion2, U extends Quaternion2>(from: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number, easingFunction: EasingFunction = EasingFunction.linear, out: T | U = Quat2Utils.clone(from)): T | U {
     const lerpFactor = easingFunction(interpolationFactor);
@@ -361,7 +364,10 @@ export function rotateAxisDegrees<T extends Quaternion2, U extends Quaternion2>(
     return Quat2Utils.rotateAxisRadians(quat, MathUtils.toRadians(angle), axis, out);
 }
 
-export const rotateAxisRadians: <T extends Quaternion2, U extends Quaternion2>(quat: Readonly<T>, angle: number, axis: Readonly<Vector3>, out?: T | U) => T | U = function () {
+export const rotateAxisRadians: {
+    <T extends Quaternion2>(quat: Readonly<T>, angle: number, axis: Readonly<Vector3>): T;
+    <T extends Quaternion2>(quat: Readonly<Quaternion2>, angle: number, axis: Readonly<Vector3>, out: T): T;
+} = function () {
     const rotationQuat = quat_utils_create();
 
     function rotateAxisRadians<T extends Quaternion2>(quat: Readonly<T>, angle: number, axis: Readonly<Vector3>): T;
@@ -385,7 +391,10 @@ export function toWorld<T extends Quaternion2, U extends Quaternion2>(quat: Read
     return out;
 }
 
-export const toLocal: <T extends Quaternion2, U extends Quaternion2 > (quat: Readonly<T>, parentTransformQuat: Readonly<Quaternion2>, out?: T | U) => T | U = function () {
+export const toLocal: {
+    <T extends Quaternion2>(quat: Readonly<T>, parentTransformQuat: Readonly<Quaternion2>): T;
+    <T extends Quaternion2>(quat: Readonly<Quaternion2>, parentTransformQuat: Readonly<Quaternion2>, out: T): T;
+} = function () {
     const invertQuat = create();
 
     function toLocal<T extends Quaternion2>(quat: Readonly<T>, parentTransformQuat: Readonly<Quaternion2>): T;
@@ -459,7 +468,6 @@ export const Quat2Utils = {
     toMatrix,
     fromMatrix
 };
-
 
 
 /** This is used in place of the glMatrix one to avoid the array allocation */
