@@ -3,8 +3,8 @@
  * The `initPP` function, which is automatically called by the `pp-gateway` component, does this for you
  */
 
-import { EasingFunction, EasingFunction } from "wle-pp/cauldron/utils/math_utils.js";
-import { Matrix4, Quaternion, Quaternion2, Quaternion2, Vector3 } from "../../../../cauldron/type_definitions/array_type_definitions.js";
+import { EasingFunction } from "wle-pp/cauldron/utils/math_utils.js";
+import { Matrix4, Quaternion, Quaternion2, Vector3 } from "../../../../cauldron/type_definitions/array_type_definitions.js";
 
 export interface Quaternion2Extension<QuaternionType extends Quaternion2> {
 

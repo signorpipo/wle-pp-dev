@@ -148,8 +148,6 @@
  */
 
 import { Mat3Utils } from "../../../../cauldron/utils/array/mat3_utils.js";
-import { Mat4Utils } from "../../../../cauldron/utils/array/mat4_utils.js";
-import { Quat2Utils } from "../../../../cauldron/utils/array/quat2_utils.js";
 import { QuatUtils } from "../../../../cauldron/utils/array/quat_utils.js";
 import { Vec3Utils } from "../../../../cauldron/utils/array/vec3_utils.js";
 import { EasingFunction, MathUtils } from "../../../../cauldron/utils/math_utils.js";

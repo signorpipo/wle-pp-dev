@@ -99,8 +99,10 @@ export function getRotationMatrix<T extends Matrix3>(object: Readonly<Object3D>,
     return ObjectUtils.getRotationWorldMatrix(object, outRotation!);
 }
 
-export function getRotationQuat<T extends Quaternion>(object: Readonly<Object3D>, outRotation?: T): T {
-    return ObjectUtils.getRotationWorldQuat(object, outRotation);
+export function getRotationQuat(object: Readonly<Object3D>): Quaternion;
+export function getRotationQuat<T extends Quaternion>(object: Readonly<Object3D>, outRotation: T): T;
+export function getRotationQuat<T extends Quaternion>(object: Readonly<Object3D>, outRotation?: Quaternion | T): Quaternion | T {
+    return ObjectUtils.getRotationWorldQuat(object, outRotation!);
 }
 
 // Rotation World
@@ -138,7 +140,9 @@ export const getRotationWorldMatrix = function () {
     return getRotationWorldMatrix;
 }();
 
-export function getRotationWorldQuat<T extends Quaternion>(object: Readonly<Object3D>, outRotation: T = QuatUtils.create()): T {
+export function getRotationWorldQuat(object: Readonly<Object3D>): Quaternion;
+export function getRotationWorldQuat<T extends Quaternion>(object: Readonly<Object3D>, outRotation: T): T;
+export function getRotationWorldQuat<T extends Quaternion>(object: Readonly<Object3D>, outRotation: Quaternion | T = QuatUtils.create()): Quaternion | T {
     object.getRotationWorld(outRotation);
     return outRotation;
 }
@@ -178,7 +182,9 @@ export const getRotationLocalMatrix = function () {
     return getRotationLocalMatrix;
 }();
 
-export function getRotationLocalQuat<T extends Quaternion>(object: Readonly<Object3D>, outRotation: T = QuatUtils.create()): T {
+export function getRotationLocalQuat(object: Readonly<Object3D>): Quaternion;
+export function getRotationLocalQuat<T extends Quaternion>(object: Readonly<Object3D>, outRotation: T): T;
+export function getRotationLocalQuat<T extends Quaternion>(object: Readonly<Object3D>, outRotation: Quaternion | T = QuatUtils.create()): Quaternion | T {
     object.getRotationLocal(outRotation);
     return outRotation;
 }

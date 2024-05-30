@@ -48,8 +48,8 @@ function _initObjectExtensionProtoype(): void {
             return ObjectUtils.getRotationMatrix(this, outRotation!);
         },
 
-        pp_getRotationQuat: function pp_getRotationQuat<T extends Quaternion>(this: Readonly<Object3D>, outRotation?: T): T {
-            return ObjectUtils.getRotationQuat(this, outRotation);
+        pp_getRotationQuat: function pp_getRotationQuat<T extends Quaternion>(this: Readonly<Object3D>, outRotation?: Quaternion | T): Quaternion | T {
+            return ObjectUtils.getRotationQuat(this, outRotation!);
         },
 
         // Rotation World
@@ -70,8 +70,8 @@ function _initObjectExtensionProtoype(): void {
             return ObjectUtils.getRotationWorldMatrix(this, outRotation!);
         },
 
-        pp_getRotationWorldQuat: function pp_getRotationWorldQuat<T extends Quaternion>(this: Readonly<Object3D>, outRotation?: T): T {
-            return ObjectUtils.getRotationWorldQuat(this, outRotation);
+        pp_getRotationWorldQuat: function pp_getRotationWorldQuat<T extends Quaternion>(this: Readonly<Object3D>, outRotation?: Quaternion | T): Quaternion | T {
+            return ObjectUtils.getRotationWorldQuat(this, outRotation!);
         },
 
         // Rotation Local
@@ -92,8 +92,8 @@ function _initObjectExtensionProtoype(): void {
             return ObjectUtils.getRotationLocalMatrix(this, outRotation!);
         },
 
-        pp_getRotationLocalQuat: function pp_getRotationLocalQuat<T extends Quaternion>(this: Readonly<Object3D>, outRotation?: T): T {
-            return ObjectUtils.getRotationLocalQuat(this, outRotation);
+        pp_getRotationLocalQuat: function pp_getRotationLocalQuat<T extends Quaternion>(this: Readonly<Object3D>, outRotation?: Quaternion | T): Quaternion | T {
+            return ObjectUtils.getRotationLocalQuat(this, outRotation!);
         },
 
         // Scale
