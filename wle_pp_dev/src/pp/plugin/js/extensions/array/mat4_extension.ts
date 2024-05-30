@@ -1,5 +1,5 @@
-import { Matrix4, Quaternion, Quaternion2, Vector3 } from "wle-pp/cauldron/type_definitions/array_type_definitions.js";
-import { Mat4Utils } from "wle-pp/cauldron/utils/array/mat4_utils.js";
+import { Matrix4, Quaternion, Quaternion2, Vector3 } from "../../../../cauldron/type_definitions/array_type_definitions.js";
+import { Mat4Utils } from "../../../../cauldron/utils/array/mat4_utils.js";
 import { PluginUtils } from "../../../utils/plugin_utils.js";
 import { ArrayExtensionUtils } from "./array_extension_utils.js";
 import { Matrix4Extension } from "./mat4_type_extension.js";

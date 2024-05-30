@@ -1,6 +1,6 @@
 import { type NumberArray } from "@wonderlandengine/api";
-import { first } from "wle-pp/cauldron/utils/array/array_utils.js";
 import { ArrayLike, DynamicArrayLike, Vector3 } from "../../pp/cauldron/type_definitions/array_type_definitions.js";
+import { first } from "../../pp/cauldron/utils/array/array_utils.js";
 
 function __test(): void {
     const numberArray = [0];

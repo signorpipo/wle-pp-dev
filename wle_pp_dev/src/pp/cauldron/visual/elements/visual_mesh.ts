@@ -1,5 +1,5 @@
 import { Material, Mesh, MeshComponent, Object3D } from "@wonderlandengine/api";
-import { Matrix4 } from "wle-pp/cauldron/type_definitions/array_type_definitions.js";
+import { Matrix4 } from "../../../cauldron/type_definitions/array_type_definitions.js";
 import { mat4_create } from "../../../plugin/js/extensions/array/vec_create_extension.js";
 import { Globals } from "../../../pp/globals.js";
 import { AbstractVisualElement, AbstractVisualElementParams } from "./visual_element.js";
