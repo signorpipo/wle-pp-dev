@@ -90,7 +90,7 @@ export function conjugate<T extends Quaternion2, U extends Quaternion2>(quat: Re
 }
 
 export function lerp<T extends Quaternion2>(from: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number): T;
-export function lerp<T extends Quaternion2>(from: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number, out: T): T;
+export function lerp<T extends Quaternion2>(from: Readonly<Quaternion2>, to: Readonly<Quaternion2>, interpolationFactor: number, out: T): T;
 export function lerp<T extends Quaternion2, U extends Quaternion2>(from: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number, out: T | U = Quat2Utils.clone(from)): T | U {
     if (interpolationFactor <= 0) {
         Quat2Utils.copy(from, out);
@@ -105,7 +105,7 @@ export function lerp<T extends Quaternion2, U extends Quaternion2>(from: Readonl
 }
 
 export function interpolate<T extends Quaternion2>(from: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number, easingFunction?: EasingFunction): T;
-export function interpolate<T extends Quaternion2>(from: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number, easingFunction: EasingFunction, out: T): T;
+export function interpolate<T extends Quaternion2>(from: Readonly<Quaternion2>, to: Readonly<Quaternion2>, interpolationFactor: number, easingFunction: EasingFunction, out: T): T;
 export function interpolate<T extends Quaternion2, U extends Quaternion2>(from: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number, easingFunction: EasingFunction = EasingFunction.linear, out: T | U = Quat2Utils.clone(from)): T | U {
     const lerpFactor = easingFunction(interpolationFactor);
     return Quat2Utils.lerp(from, to, lerpFactor, out);
@@ -113,7 +113,7 @@ export function interpolate<T extends Quaternion2, U extends Quaternion2>(from: 
 
 export const slerp: {
     <T extends Quaternion2>(from: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number): T;
-    <T extends Quaternion2>(from: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number, out: T): T;
+    <T extends Quaternion2>(from: Readonly<Quaternion2>, to: Readonly<Quaternion2>, interpolationFactor: number, out: T): T;
 } = function () {
     const fromPosition = vec3_utils_create();
     const toPosition = vec3_utils_create();
@@ -123,7 +123,7 @@ export const slerp: {
     const interpolatedRotationQuat = quat_utils_create();
 
     function slerp<T extends Quaternion2>(from: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number): T;
-    function slerp<T extends Quaternion2>(from: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number, out: T): T;
+    function slerp<T extends Quaternion2>(from: Readonly<Quaternion2>, to: Readonly<Quaternion2>, interpolationFactor: number, out: T): T;
     function slerp<T extends Quaternion2, U extends Quaternion2>(from: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number, out: T | U = Quat2Utils.clone(from)): T | U {
         if (interpolationFactor <= 0) {
             Quat2Utils.copy(from, out);
@@ -150,7 +150,7 @@ export const slerp: {
 }();
 
 export function interpolateSpherical<T extends Quaternion2>(from: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number, easingFunction?: EasingFunction): T;
-export function interpolateSpherical<T extends Quaternion2>(from: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number, easingFunction: EasingFunction, out: T): T;
+export function interpolateSpherical<T extends Quaternion2>(from: Readonly<Quaternion2>, to: Readonly<Quaternion2>, interpolationFactor: number, easingFunction: EasingFunction, out: T): T;
 export function interpolateSpherical<T extends Quaternion2, U extends Quaternion2>(from: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number, easingFunction: EasingFunction = EasingFunction.linear, out: T | U = Quat2Utils.clone(from)): T | U {
     const lerpFactor = easingFunction(interpolationFactor);
     return Quat2Utils.slerp(from, to, lerpFactor, out);

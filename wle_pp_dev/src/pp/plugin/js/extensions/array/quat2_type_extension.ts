@@ -3,8 +3,8 @@
  * The `initPP` function, which is automatically called by the `pp-gateway` component, does this for you
  */
 
-import { EasingFunction } from "wle-pp/cauldron/utils/math_utils.js";
-import { Matrix4, Quaternion, Quaternion2, Vector3 } from "../../../../cauldron/type_definitions/array_type_definitions.js";
+import { EasingFunction, EasingFunction } from "wle-pp/cauldron/utils/math_utils.js";
+import { Matrix4, Quaternion, Quaternion2, Quaternion2, Vector3 } from "../../../../cauldron/type_definitions/array_type_definitions.js";
 
 export interface Quaternion2Extension<QuaternionType extends Quaternion2> {
 
@@ -32,7 +32,7 @@ export interface Quaternion2Extension<QuaternionType extends Quaternion2> {
 
 
     quat2_mul<T extends QuaternionType>(this: Readonly<T>, quat: Readonly<Quaternion2>): T;
-    quat2_mul<T extends QuaternionType>(this: Readonly<Quaternion2>, quat: Readonly<Quaternion2>, out: T): T;
+    quat2_mul<T extends QuaternionType, U extends Quaternion2>(this: Readonly<T>, quat: Readonly<Quaternion2>, out: U): U;
 
 
     quat2_invert<T extends QuaternionType>(this: Readonly<T>): T;
@@ -44,16 +44,16 @@ export interface Quaternion2Extension<QuaternionType extends Quaternion2> {
 
 
     quat2_lerp<T extends QuaternionType>(this: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number): T;
-    quat2_lerp<T extends QuaternionType>(this: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number, out: T): T;
+    quat2_lerp<T extends QuaternionType, U extends Quaternion2>(this: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number, out: U): U;
 
     quat2_interpolate<T extends QuaternionType>(this: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number, easingFunction?: EasingFunction): T;
-    quat2_interpolate<T extends QuaternionType>(this: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number, easingFunction: EasingFunction, out: T): T;
+    quat2_interpolate<T extends QuaternionType, U extends Quaternion2>(this: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number, easingFunction: EasingFunction, out: U): U;
 
     quat2_slerp<T extends QuaternionType>(this: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number): T;
-    quat2_slerp<T extends QuaternionType>(this: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number, out: T): T;
+    quat2_slerp<T extends QuaternionType, U extends Quaternion2>(this: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number, out: U): U;
 
     quat2_interpolateSpherical<T extends QuaternionType>(this: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number, easingFunction?: EasingFunction): T;
-    quat2_interpolateSpherical<T extends QuaternionType>(this: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number, easingFunction: EasingFunction, out: T): T;
+    quat2_interpolateSpherical<T extends QuaternionType, U extends Quaternion2>(this: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number, easingFunction: EasingFunction, out: U): U;
 
 
 
