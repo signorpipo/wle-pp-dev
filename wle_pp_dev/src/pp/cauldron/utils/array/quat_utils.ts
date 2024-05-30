@@ -133,22 +133,6 @@ export function interpolateSpherical<T extends Quaternion, U extends Quaternion>
     return QuatUtils.slerp(from, to, lerpFactor, out);
 }
 
-export const getAxis = function () {
-    const zero = vec3_utils_create(0, 0, 0);
-
-    function getAxis(quat: Readonly<Quaternion>): Vector3;
-    function getAxis<T extends Vector3>(quat: Readonly<Quaternion>, out: T): T;
-    function getAxis<T extends Vector3>(quat: Readonly<Quaternion>, out: Vector3 | T = Vec3Utils.create()): Vector3 | T {
-        const angle = gl_quat.getAxisAngle(out as unknown as gl_vec3_type, quat as unknown as gl_quat_type);
-        if (angle <= MathUtils.EPSILON) {
-            Vec3Utils.copy(zero, out);
-        }
-        return out;
-    }
-
-    return getAxis;
-}();
-
 export function getAngle(quat: Readonly<Quaternion>): number {
     return QuatUtils.getAngleDegrees(quat);
 }
@@ -165,6 +149,23 @@ export const getAngleRadians = function () {
         return angle;
     };
 }();
+
+export const getAxis = function () {
+    const zero = vec3_utils_create(0, 0, 0);
+
+    function getAxis(quat: Readonly<Quaternion>): Vector3;
+    function getAxis<T extends Vector3>(quat: Readonly<Quaternion>, out: T): T;
+    function getAxis<T extends Vector3>(quat: Readonly<Quaternion>, out: Vector3 | T = Vec3Utils.create()): Vector3 | T {
+        const angle = gl_quat.getAxisAngle(out as unknown as gl_vec3_type, quat as unknown as gl_quat_type);
+        if (angle <= MathUtils.EPSILON) {
+            Vec3Utils.copy(zero, out);
+        }
+        return out;
+    }
+
+    return getAxis;
+}();
+
 
 export function getAxisScaled(quat: Readonly<Quaternion>): Vector3;
 export function getAxisScaled<T extends Vector3>(quat: Readonly<Quaternion>, out: T): T;
@@ -435,6 +436,29 @@ export const toLocal: {
     return toLocal;
 }();
 
+export function fromDegrees(rotation: Readonly<Vector3>): Quaternion;
+export function fromDegrees<T extends Quaternion>(rotation: Readonly<Vector3>, out: T): T;
+export function fromDegrees<T extends Quaternion>(rotation: Readonly<Vector3>, out: Quaternion | T = QuatUtils.create()): Quaternion | T {
+    gl_quat.fromEuler(out as unknown as gl_quat_type, rotation[0], rotation[1], rotation[2]);
+    return out;
+}
+
+export const fromRadians: {
+    (rotation: Readonly<Vector3>): Quaternion;
+    <T extends Quaternion>(rotation: Readonly<Vector3>, out: T): T;
+} = function () {
+    const vector = vec3_utils_create();
+
+    function fromRadians(rotation: Readonly<Vector3>): Quaternion;
+    function fromRadians<T extends Quaternion>(rotation: Readonly<Vector3>, out: T): T;
+    function fromRadians<T extends Quaternion>(rotation: Readonly<Vector3>, out: Quaternion | T = QuatUtils.create()): Quaternion | T {
+        Vec3Utils.toDegrees(rotation, vector);
+        return QuatUtils.fromDegrees(vector, out);
+    }
+
+    return fromRadians;
+}();
+
 export function fromAxis(angle: number, axis: Readonly<Vector3>): Quaternion;
 export function fromAxis<T extends Quaternion>(angle: number, axis: Readonly<Vector3>, out: T): T;
 export function fromAxis<T extends Quaternion>(angle: number, axis: Readonly<Vector3>, out: Quaternion | T = QuatUtils.create()): Quaternion | T {
@@ -471,26 +495,11 @@ export const fromAxes: {
     return fromAxes;
 }();
 
-export const fromRadians: {
-    (rotation: Readonly<Vector3>): Quaternion;
-    <T extends Quaternion>(rotation: Readonly<Vector3>, out: T): T;
-} = function () {
-    const vector = vec3_utils_create();
-
-    function fromRadians(rotation: Readonly<Vector3>): Quaternion;
-    function fromRadians<T extends Quaternion>(rotation: Readonly<Vector3>, out: T): T;
-    function fromRadians<T extends Quaternion>(rotation: Readonly<Vector3>, out: Quaternion | T = QuatUtils.create()): Quaternion | T {
-        Vec3Utils.toDegrees(rotation, vector);
-        return QuatUtils.fromDegrees(vector, out);
-    }
-
-    return fromRadians;
-}();
-
-export function fromDegrees(rotation: Readonly<Vector3>): Quaternion;
-export function fromDegrees<T extends Quaternion>(rotation: Readonly<Vector3>, out: T): T;
-export function fromDegrees<T extends Quaternion>(rotation: Readonly<Vector3>, out: Quaternion | T = QuatUtils.create()): Quaternion | T {
-    gl_quat.fromEuler(out as unknown as gl_quat_type, rotation[0], rotation[1], rotation[2]);
+export function toDegrees(quat: Readonly<Quaternion>): Vector3;
+export function toDegrees<T extends Vector3>(quat: Readonly<Quaternion>, out: T): T;
+export function toDegrees<T extends Vector3>(quat: Readonly<Quaternion>, out: Vector3 | T = Vec3Utils.create()): Vector3 | T {
+    QuatUtils.toRadians(quat, out);
+    Vec3Utils.toDegrees(out, out);
     return out;
 }
 
@@ -519,11 +528,10 @@ export const toRadians = function () {
     return toRadians;
 }();
 
-export function toDegrees(quat: Readonly<Quaternion>): Vector3;
-export function toDegrees<T extends Vector3>(quat: Readonly<Quaternion>, out: T): T;
-export function toDegrees<T extends Vector3>(quat: Readonly<Quaternion>, out: Vector3 | T = Vec3Utils.create()): Vector3 | T {
-    QuatUtils.toRadians(quat, out);
-    Vec3Utils.toDegrees(out, out);
+export function toMatrix(quat: Readonly<Quaternion>): Matrix3;
+export function toMatrix<T extends Matrix3>(quat: Readonly<Quaternion>, out: T): T;
+export function toMatrix<T extends Matrix3>(quat: Readonly<Quaternion>, out: Matrix3 | T = Mat3Utils.create()): Matrix3 | T {
+    gl_mat3.fromQuat(out as unknown as gl_mat3_type, quat as unknown as gl_quat_type);
     return out;
 }
 
@@ -773,13 +781,6 @@ export function fromTwistSwing<T extends Quaternion, U extends Quaternion>(twist
     return QuatUtils.addRotationQuat(twist, swing, out);
 }
 
-export function toMatrix(quat: Readonly<Quaternion>): Matrix3;
-export function toMatrix<T extends Matrix3>(quat: Readonly<Quaternion>, out: T): T;
-export function toMatrix<T extends Matrix3>(quat: Readonly<Quaternion>, out: Matrix3 | T = Mat3Utils.create()): Matrix3 | T {
-    gl_mat3.fromQuat(out as unknown as gl_mat3_type, quat as unknown as gl_quat_type);
-    return out;
-}
-
 export function rotate<T extends Quaternion>(first: Readonly<T>, second: Readonly<Quaternion>): T;
 export function rotate<T extends Quaternion>(first: Readonly<Quaternion>, second: Readonly<Quaternion>, out: T): T;
 export function rotate<T extends Quaternion, U extends Quaternion>(first: Readonly<T>, second: Readonly<Quaternion>, out?: T | U): T | U {
@@ -853,10 +854,10 @@ export const QuatUtils = {
     interpolate,
     slerp,
     interpolateSpherical,
-    getAxis,
     getAngle,
     getAngleDegrees,
     getAngleRadians,
+    getAxis,
     getAxisScaled,
     getAxisScaledDegrees,
     getAxisScaledRadians,
@@ -876,14 +877,15 @@ export const QuatUtils = {
     setRight,
     toWorld,
     toLocal,
+    fromDegrees,
+    fromRadians,
     fromAxis,
     fromAxisDegrees,
     fromAxisRadians,
     fromAxes,
-    fromRadians,
-    fromDegrees,
-    toRadians,
     toDegrees,
+    toRadians,
+    toMatrix,
     addRotation,
     addRotationDegrees,
     addRotationRadians,
@@ -905,7 +907,6 @@ export const QuatUtils = {
     getSwingFromTwist,
     getTwistFromSwing,
     fromTwistSwing,
-    toMatrix,
     rotate,
     rotateDegrees,
     rotateRadians,
