@@ -805,7 +805,7 @@ export function rotateQuat<T extends Quaternion, U extends Quaternion>(first: Re
 }
 
 export function rotateAxis<T extends Quaternion>(quat: T, angle: number, axis: Readonly<Vector3>): T;
-export function rotateAxis<T extends Quaternion>(quat: Quaternion, angle: number, axis: Readonly<Vector3>, ou?: T): T;
+export function rotateAxis<T extends Quaternion>(quat: Quaternion, angle: number, axis: Readonly<Vector3>, out?: T): T;
 export function rotateAxis<T extends Quaternion, U extends Quaternion>(quat: T, angle: number, axis: Readonly<Vector3>, out?: T | U): T | U {
     return QuatUtils.rotateAxisDegrees(quat, angle, axis, out);
 }
@@ -814,7 +814,7 @@ export const rotateAxisDegrees = function () {
     const secondQuat = create();
 
     function rotateAxisDegrees<T extends Quaternion>(quat: T, angle: number, axis: Readonly<Vector3>): T;
-    function rotateAxisDegrees<T extends Quaternion>(quat: Quaternion, angle: number, axis: Readonly<Vector3>, ou?: T): T;
+    function rotateAxisDegrees<T extends Quaternion>(quat: Quaternion, angle: number, axis: Readonly<Vector3>, out?: T): T;
     function rotateAxisDegrees<T extends Quaternion, U extends Quaternion>(quat: T, angle: number, axis: Readonly<Vector3>, out?: T | U): T | U {
         QuatUtils.fromAxisDegrees(angle, axis, secondQuat);
         return QuatUtils.rotateQuat(quat, secondQuat, out!);
@@ -827,7 +827,7 @@ export const rotateAxisRadians = function () {
     const secondQuat = create();
 
     function rotateAxisRadians<T extends Quaternion>(quat: T, angle: number, axis: Readonly<Vector3>): T;
-    function rotateAxisRadians<T extends Quaternion>(quat: Quaternion, angle: number, axis: Readonly<Vector3>, ou?: T): T;
+    function rotateAxisRadians<T extends Quaternion>(quat: Quaternion, angle: number, axis: Readonly<Vector3>, out?: T): T;
     function rotateAxisRadians<T extends Quaternion, U extends Quaternion>(quat: T, angle: number, axis: Readonly<Vector3>, out?: T | U): T | U {
         QuatUtils.fromAxisRadians(angle, axis, secondQuat);
         return QuatUtils.rotateQuat(quat, secondQuat, out!);
