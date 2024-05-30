@@ -1,5 +1,5 @@
-import { mat3 as gl_mat3, quat as gl_quat, type quat as gl_quat_type } from "gl-matrix";
-import { Quaternion, Vector3 } from "wle-pp/cauldron/type_definitions/array_type_definitions.js";
+import { mat3 as gl_mat3, quat as gl_quat, type mat3 as gl_mat3_type, type quat as gl_quat_type, type vec3 as gl_vec3_type } from "gl-matrix";
+import { Matrix3, Quaternion, Vector3 } from "wle-pp/cauldron/type_definitions/array_type_definitions.js";
 import { EasingFunction, MathUtils } from "../math_utils.js";
 import { ArrayUtils } from "./array_utils.js";
 import { Mat3Utils, create as mat3_utils_create } from "./mat3_utils.js";
@@ -45,47 +45,85 @@ export function clone<T extends Quaternion>(quat: Readonly<T>): T {
     return quat.slice(0) as T;
 }
 
-export function isNormalized(quat: Readonly<Quaternion>, epsilon = MathUtils.EPSILON) {
+export function isNormalized(quat: Readonly<Quaternion>, epsilon = MathUtils.EPSILON): boolean {
     return Math.abs(QuatUtils.lengthSquared(quat) - 1) < epsilon;
 }
 
-export function normalize(quat, out = QuatUtils.create()) {
-    gl_quat.normalize(out, quat);
+export function normalize<T extends Quaternion, U extends Quaternion>(quat: Readonly<T>, out: T | U = QuatUtils.clone(quat)): T | U {
+    gl_quat.normalize(out as unknown as gl_quat_type, quat as unknown as gl_quat_type);
     return out;
 }
 
-export function identity(quat) {
-    gl_quat.identity(quat);
+export function length(quat: Readonly<Quaternion>): number {
+    return gl_quat.length(quat as unknown as gl_quat_type);
+}
+
+export function lengthSquared(quat: Readonly<Quaternion>): number {
+    return gl_quat.squaredLength(quat as unknown as gl_quat_type);
+}
+
+export function identity<T extends Quaternion>(quat: Readonly<T>): T {
+    gl_quat.identity(quat as unknown as gl_quat_type);
     return quat;
 }
 
-export function length(quat: Readonly<Quaternion>) {
-    return gl_quat.length(quat);
-}
-
-export function lengthSquared(quat: Readonly<Quaternion>) {
-    return gl_quat.squaredLength(quat);
-}
-
-export function invert(quat, out = QuatUtils.create()) {
-    gl_quat.invert(out, quat);
+export function mul<T extends Quaternion>(first: Readonly<T>, second: Readonly<Quaternion>): T;
+export function mul<T extends Quaternion>(first: Readonly<Quaternion>, second: Readonly<Quaternion>, out: T): T;
+export function mul<T extends Quaternion, U extends Quaternion>(first: Readonly<T>, second: Readonly<Quaternion>, out: T | U = QuatUtils.clone(first)): T | U {
+    gl_quat.mul(out as unknown as gl_quat_type, first as unknown as gl_quat_type, second as unknown as gl_quat_type);
     return out;
 }
 
-export function conjugate(quat, out = QuatUtils.create()) {
-    gl_quat.conjugate(out, quat);
+export function invert<T extends Quaternion, U extends Quaternion>(quat: Readonly<T>, out: T | U = QuatUtils.clone(quat)): T | U {
+    gl_quat.invert(out as unknown as gl_quat_type, quat as unknown as gl_quat_type);
     return out;
 }
 
-export function mul(first, second, out = QuatUtils.create()) {
-    gl_quat.mul(out, first, second);
+export function conjugate<T extends Quaternion, U extends Quaternion>(quat: Readonly<T>, out: T | U = QuatUtils.clone(quat)): T | U {
+    gl_quat.conjugate(out as unknown as gl_quat_type, quat as unknown as gl_quat_type);
     return out;
+}
+
+export function lerp<T extends Quaternion, U extends Quaternion>(from: Readonly<T>, to: Readonly<Quaternion>, interpolationFactor: number, out: T | U = QuatUtils.clone(from)): T | U {
+    if (interpolationFactor <= 0) {
+        QuatUtils.copy(from, out);
+        return out;
+    } else if (interpolationFactor >= 1) {
+        QuatUtils.copy(to, out);
+        return out;
+    }
+
+    gl_quat.lerp(out as unknown as gl_quat_type, from as unknown as gl_quat_type, to as unknown as gl_quat_type, interpolationFactor);
+    return out;
+}
+
+export function interpolate<T extends Quaternion, U extends Quaternion>(from: Readonly<T>, to: Readonly<Quaternion>, interpolationFactor: number, easingFunction: EasingFunction = EasingFunction.linear, out: T | U = QuatUtils.clone(from)): T | U {
+    const lerpFactor = easingFunction(interpolationFactor);
+    return QuatUtils.lerp(from, to, lerpFactor, out);
+}
+
+export function slerp<T extends Quaternion, U extends Quaternion>(from: Readonly<T>, to: Readonly<Quaternion>, interpolationFactor: number, out: T | U = QuatUtils.clone(from)): T | U {
+    if (interpolationFactor <= 0) {
+        QuatUtils.copy(from, out);
+        return out;
+    } else if (interpolationFactor >= 1) {
+        QuatUtils.copy(to, out);
+        return out;
+    }
+
+    gl_quat.slerp(out as unknown as gl_quat_type, from as unknown as gl_quat_type, to as unknown as gl_quat_type, interpolationFactor);
+    return out;
+}
+
+export function interpolateSpherical<T extends Quaternion, U extends Quaternion>(from: Readonly<T>, to: Readonly<Quaternion>, interpolationFactor: number, easingFunction: EasingFunction = EasingFunction.linear, out: T | U = QuatUtils.clone(from)): T | U {
+    const lerpFactor = easingFunction(interpolationFactor);
+    return QuatUtils.slerp(from, to, lerpFactor, out);
 }
 
 export const getAxis = function () {
     const zero = vec3_utils_create(0, 0, 0);
-    return function getAxis(quat: Readonly<Quaternion>, out = Vec3Utils.create()) {
-        const angle = gl_quat.getAxisAngle(out, quat);
+    return function getAxis<T extends Vector3>(quat: Readonly<Quaternion>, out: Vector3 | T = Vec3Utils.create()): Vector3 | T {
+        const angle = gl_quat.getAxisAngle(out as unknown as gl_vec3_type, quat as unknown as gl_quat_type);
         if (angle <= MathUtils.EPSILON) {
             Vec3Utils.copy(zero, out);
         }
@@ -93,28 +131,28 @@ export const getAxis = function () {
     };
 }();
 
-export function getAngle(quat: Readonly<Quaternion>) {
+export function getAngle(quat: Readonly<Quaternion>): number {
     return QuatUtils.getAngleDegrees(quat);
 }
 
-export function getAngleDegrees(quat: Readonly<Quaternion>) {
+export function getAngleDegrees(quat: Readonly<Quaternion>): number {
     const angle = QuatUtils.getAngleRadians(quat);
     return MathUtils.toDegrees(angle);
 }
 
 export const getAngleRadians = function () {
     const vector = vec3_utils_create();
-    return function getAngleRadians(quat: Readonly<Quaternion>) {
-        const angle = gl_quat.getAxisAngle(vector, quat);
+    return function getAngleRadians(quat: Readonly<Quaternion>): number {
+        const angle = gl_quat.getAxisAngle(vector, quat as unknown as gl_quat_type);
         return angle;
     };
 }();
 
-export function getAxisScaled(quat: Readonly<Quaternion>, out = Vec3Utils.create()) {
+export function getAxisScaled<T extends Vector3>(quat: Readonly<Quaternion>, out: Vector3 | T = Vec3Utils.create()): Vector3 | T {
     return QuatUtils.getAxisScaledDegrees(quat, out);
 }
 
-export function getAxisScaledDegrees(quat: Readonly<Quaternion>, out = Vec3Utils.create()) {
+export function getAxisScaledDegrees<T extends Vector3>(quat: Readonly<Quaternion>, out: Vector3 | T = Vec3Utils.create()): Vector3 | T {
     QuatUtils.getAxis(quat, out);
     const angle = QuatUtils.getAngleDegrees(quat);
     Vec3Utils.scale(out, angle, out);
@@ -123,7 +161,7 @@ export function getAxisScaledDegrees(quat: Readonly<Quaternion>, out = Vec3Utils
 
 export const getAxisScaledRadians = function () {
     const zero = vec3_utils_create(0, 0, 0);
-    return function getAxisScaledRadians(quat: Readonly<Quaternion>, out = Vec3Utils.create()) {
+    return function getAxisScaledRadians<T extends Vector3>(quat: Readonly<Quaternion>, out: Vector3 | T = Vec3Utils.create()): Vector3 | T {
         QuatUtils.getAxis(quat, out);
         const angle = QuatUtils.getAngleRadians(quat);
         if (angle <= MathUtils.EPSILON) {
@@ -135,7 +173,7 @@ export const getAxisScaledRadians = function () {
     };
 }();
 
-export function getAxes(quat: Readonly<Quaternion>, out = [Vec3Utils.create(), Vec3Utils.create(), Vec3Utils.create()]) {
+export function getAxes<T extends Vector3, U extends Vector3, V extends Vector3>(quat: Readonly<Quaternion>, out: [Vector3, Vector3, Vector3] | [T, U, V] = [Vec3Utils.create(), Vec3Utils.create(), Vec3Utils.create()]): [Vector3, Vector3, Vector3] | [T, U, V] {
     QuatUtils.getLeft(quat, out[0]);
     QuatUtils.getUp(quat, out[1]);
     QuatUtils.getForward(quat, out[2]);
@@ -144,7 +182,7 @@ export function getAxes(quat: Readonly<Quaternion>, out = [Vec3Utils.create(), V
 
 export const getForward = function () {
     const rotationMatrix = mat3_utils_create();
-    return function getForward(quat: Readonly<Quaternion>, out = Vec3Utils.create()) {
+    return function getForward<T extends Vector3>(quat: Readonly<Quaternion>, out: Vector3 | T = Vec3Utils.create()): Vector3 | T {
         QuatUtils.toMatrix(quat, rotationMatrix);
 
         Vec3Utils.set(out, rotationMatrix[6], rotationMatrix[7], rotationMatrix[8]);
@@ -153,15 +191,15 @@ export const getForward = function () {
     };
 }();
 
-export function getBackward(quat: Readonly<Quaternion>, out) {
+export function getBackward<T extends Vector3>(quat: Readonly<Quaternion>, out?: Vector3 | T): Vector3 | T {
     out = QuatUtils.getForward(quat, out);
     Vec3Utils.negate(out, out);
-    return out;
+    return out!;
 }
 
 export const getLeft = function () {
     const rotationMatrix = mat3_utils_create();
-    return function getLeft(quat: Readonly<Quaternion>, out = Vec3Utils.create()) {
+    return function getLeft<T extends Vector3>(quat: Readonly<Quaternion>, out: Vector3 | T = Vec3Utils.create()): Vector3 | T {
         QuatUtils.toMatrix(quat, rotationMatrix);
 
         Vec3Utils.set(out, rotationMatrix[0], rotationMatrix[1], rotationMatrix[2]);
@@ -170,15 +208,15 @@ export const getLeft = function () {
     };
 }();
 
-export function getRight(quat: Readonly<Quaternion>, out) {
+export function getRight<T extends Vector3>(quat: Readonly<Quaternion>, out?: Vector3 | T): Vector3 | T {
     out = QuatUtils.getLeft(quat, out);
     Vec3Utils.negate(out, out);
-    return out;
+    return out!;
 }
 
 export const getUp = function () {
     const rotationMatrix = mat3_utils_create();
-    return function getUp(quat: Readonly<Quaternion>, out = Vec3Utils.create()) {
+    return function getUp<T extends Vector3>(quat: Readonly<Quaternion>, out: Vector3 | T = Vec3Utils.create()): Vector3 | T {
         QuatUtils.toMatrix(quat, rotationMatrix);
 
         Vec3Utils.set(out, rotationMatrix[3], rotationMatrix[4], rotationMatrix[5]);
@@ -187,13 +225,13 @@ export const getUp = function () {
     };
 }();
 
-export function getDown(quat: Readonly<Quaternion>, out) {
+export function getDown<T extends Vector3>(quat: Readonly<Quaternion>, out?: Vector3 | T): Vector3 | T {
     out = QuatUtils.getUp(quat, out);
     Vec3Utils.negate(out, out);
-    return out;
+    return out!;
 }
 
-export function setAxes(quat, left, up, forward) {
+export function setAxes<T extends Quaternion>(quat: T, left: Readonly<Vector3>, up: Readonly<Vector3>, forward: Readonly<Vector3>): T {
     if (forward != null) {
         return QuatUtils.setForward(quat, forward, up, left);
     } else if (up != null) {
@@ -204,18 +242,11 @@ export function setAxes(quat, left, up, forward) {
 }
 
 export const setForward = function () {
-    const axes = [null, null, null];
+    const axes: [Readonly<Vector3> | null, Readonly<Vector3> | null, Readonly<Vector3> | null] = [null, null, null];
     const priority = [2, 1, 0];
-
-    /**
-     * TS type inference helper
-     * 
-     * @param {any} up
-     * @param {any} left
-     */
-    return function setForward(quat, forward, up = null, left = null) {
-        axes[0] = left;
-        axes[1] = up;
+    return function setForward<T extends Quaternion>(quat: T, forward: Readonly<Vector3>, up?: Readonly<Vector3>, left?: Readonly<Vector3>): T {
+        axes[0] = left!;
+        axes[1] = up!;
         axes[2] = forward;
 
         _setAxes(quat, axes, priority);
@@ -231,13 +262,13 @@ export const setForward = function () {
 export const setBackward = function () {
     const forward = vec3_utils_create();
 
-    const axes = [null, null, null];
+    const axes: [Readonly<Vector3> | null, Readonly<Vector3> | null, Readonly<Vector3> | null] = [null, null, null];
     const priority = [2, 1, 0];
-    return function setBackward(quat, backward, up = null, left = null) {
+    return function setBackward<T extends Quaternion>(quat: T, backward: Readonly<Vector3>, up?: Readonly<Vector3>, left?: Readonly<Vector3>): T {
         Vec3Utils.negate(backward, forward);
 
-        axes[0] = left;
-        axes[1] = up;
+        axes[0] = left || null;
+        axes[1] = up || null;
         axes[2] = forward;
 
         _setAxes(quat, axes, priority);
@@ -251,12 +282,12 @@ export const setBackward = function () {
 }();
 
 export const setUp = function () {
-    const axes = [null, null, null];
+    const axes: [Readonly<Vector3> | null, Readonly<Vector3> | null, Readonly<Vector3> | null] = [null, null, null];
     const priority = [1, 2, 0];
-    return function setUp(quat, up, forward = null, left = null) {
-        axes[0] = left;
+    return function setUp<T extends Quaternion>(quat: T, up: Readonly<Vector3>, forward?: Readonly<Vector3>, left?: Readonly<Vector3>): T {
+        axes[0] = left || null;
         axes[1] = up;
-        axes[2] = forward;
+        axes[2] = forward || null;
 
         _setAxes(quat, axes, priority);
 
@@ -271,14 +302,14 @@ export const setUp = function () {
 export const setDown = function () {
     const up = vec3_utils_create();
 
-    const axes = [null, null, null];
+    const axes: [Readonly<Vector3> | null, Readonly<Vector3> | null, Readonly<Vector3> | null] = [null, null, null];
     const priority = [1, 2, 0];
-    return function setDown(quat, down, forward = null, left = null) {
+    return function setDown<T extends Quaternion>(quat: T, down: Readonly<Vector3>, forward?: Readonly<Vector3>, left?: Readonly<Vector3>): T {
         Vec3Utils.negate(down, up);
 
-        axes[0] = left;
+        axes[0] = left || null;
         axes[1] = up;
-        axes[2] = forward;
+        axes[2] = forward || null;
 
         _setAxes(quat, axes, priority);
 
@@ -291,12 +322,12 @@ export const setDown = function () {
 }();
 
 export const setLeft = function () {
-    const axes = [null, null, null];
+    const axes: [Readonly<Vector3> | null, Readonly<Vector3> | null, Readonly<Vector3> | null] = [null, null, null];
     const priority = [0, 1, 2];
-    return function setLeft(quat, left, up = null, forward = null) {
+    return function setLeft<T extends Quaternion>(quat: T, left: Readonly<Vector3>, up?: Readonly<Vector3>, forward?: Readonly<Vector3>): T {
         axes[0] = left;
-        axes[1] = up;
-        axes[2] = forward;
+        axes[1] = up || null;
+        axes[2] = forward || null;
 
         _setAxes(quat, axes, priority);
 
@@ -311,20 +342,14 @@ export const setLeft = function () {
 export const setRight = function () {
     const left = vec3_utils_create();
 
-    const axes = [null, null, null];
+    const axes: [Readonly<Vector3> | null, Readonly<Vector3> | null, Readonly<Vector3> | null] = [null, null, null];
     const priority = [0, 1, 2];
-
-    /**
-     * TS type inference helper
-     * 
-     * @param {any} up
-     */
-    return function setRight(quat, right, up = null, forward = null) {
+    return function setRight<T extends Quaternion>(quat: T, right: Readonly<Vector3>, up?: Readonly<Vector3>, forward?: Readonly<Vector3>): T {
         Vec3Utils.negate(right, left);
 
         axes[0] = left;
-        axes[1] = up;
-        axes[2] = forward;
+        axes[1] = up || null;
+        axes[2] = forward || null;
 
         _setAxes(quat, axes, priority);
 
@@ -336,58 +361,85 @@ export const setRight = function () {
     };
 }();
 
-export function toWorld(quat, parentQuat, out = QuatUtils.create()) {
-    QuatUtils.mul(parentQuat, quat, out);
+export function toWorld<T extends Quaternion, U extends Quaternion>(quat: Readonly<T>, parentRotationQuat: Readonly<Quaternion>, out: T | U = QuatUtils.clone(quat)): T | U {
+    QuatUtils.mul(parentRotationQuat, quat, out);
     return out;
 }
 
-export const toLocal = function () {
+export const toLocal: {
+    <T extends Quaternion>(quat: Readonly<T>, parentRotationQuat: Readonly<Quaternion>): T;
+    <T extends Quaternion>(quat: Readonly<Quaternion>, parentRotationQuat: Readonly<Quaternion>, out: T): T;
+} = function () {
     const invertQuat = create();
-    return function toLocal(quat, parentQuat, out = QuatUtils.create()) {
-        QuatUtils.conjugate(parentQuat, invertQuat);
+
+    function toLocal<T extends Quaternion>(quat: Readonly<T>, parentRotationQuat: Readonly<Quaternion>): T;
+    function toLocal<T extends Quaternion>(quat: Readonly<Quaternion>, parentRotationQuat: Readonly<Quaternion>, out: T): T;
+    function toLocal<T extends Quaternion, U extends Quaternion>(quat: Readonly<T>, parentRotationQuat: Readonly<Quaternion>, out: T | U = QuatUtils.clone(quat)): T | U {
+        QuatUtils.conjugate(parentRotationQuat, invertQuat);
         QuatUtils.mul(invertQuat, quat, out);
         return out;
-    };
+    }
+
+    return toLocal;
 }();
 
-export function fromAxis(angle, axis, out = QuatUtils.create()) {
+export function fromAxis<T extends Quaternion>(angle: number, axis: Readonly<Vector3>, out: Quaternion | T = QuatUtils.create()): Quaternion | T {
     return QuatUtils.fromAxisDegrees(angle, axis, out);
 }
 
-export function fromAxisDegrees(angle, axis, out = QuatUtils.create()) {
+export function fromAxisDegrees<T extends Quaternion>(angle: number, axis: Readonly<Vector3>, out: Quaternion | T = QuatUtils.create()): Quaternion | T {
     QuatUtils.fromAxisRadians(MathUtils.toRadians(angle), axis, out);
     return out;
 }
 
-export function fromAxisRadians(angle, axis, out = QuatUtils.create()) {
-    gl_quat.setAxisAngle(out, axis, angle);
+export function fromAxisRadians<T extends Quaternion>(angle: number, axis: Readonly<Vector3>, out: Quaternion | T = QuatUtils.create()): Quaternion | T {
+    gl_quat.setAxisAngle(out as unknown as gl_quat_type, axis as unknown as gl_vec3_type, angle);
     return out;
 }
 
-export const fromAxes = function () {
+export const fromAxes: {
+    (leftAxis: Readonly<Vector3>, upAxis: Readonly<Vector3>, forwardAxis: Readonly<Vector3>): Quaternion;
+    <T extends Quaternion>(leftAxis: Readonly<Vector3>, upAxis: Readonly<Vector3>, forwardAxis: Readonly<Vector3>, out: T): T;
+} = function () {
     const matrix = mat3_utils_create();
-    return function fromAxes(leftAxis, upAxis, forwardAxis, out = QuatUtils.create()) {
+
+    function fromAxes(leftAxis: Readonly<Vector3>, upAxis: Readonly<Vector3>, forwardAxis: Readonly<Vector3>): Quaternion;
+    function fromAxes<T extends Quaternion>(leftAxis: Readonly<Vector3>, upAxis: Readonly<Vector3>, forwardAxis: Readonly<Vector3>, out: T): T;
+    function fromAxes<T extends Quaternion>(leftAxis: Readonly<Vector3>, upAxis: Readonly<Vector3>, forwardAxis: Readonly<Vector3>, out: Quaternion | T = QuatUtils.create()): Quaternion | T {
         Mat3Utils.fromAxes(leftAxis, upAxis, forwardAxis, matrix);
         return Mat3Utils.toQuat(matrix, out);
-    };
+    }
+
+    return fromAxes;
 }();
 
-export const fromRadians = function () {
+export const fromRadians: {
+    (radiansRotation: Readonly<Vector3>): Quaternion;
+    <T extends Quaternion>(radiansRotation: Readonly<Vector3>, out: T): T;
+} = function () {
     const vector = vec3_utils_create();
-    return function fromRadians(radiansRotation, out = QuatUtils.create()) {
+
+    function fromRadians(radiansRotation: Readonly<Vector3>): Quaternion;
+    function fromRadians<T extends Quaternion>(radiansRotation: Readonly<Vector3>, out: T): T;
+    function fromRadians<T extends Quaternion>(radiansRotation: Readonly<Vector3>, out: Quaternion | T = QuatUtils.create()): Quaternion | T {
         Vec3Utils.toDegrees(radiansRotation, vector);
         return QuatUtils.fromDegrees(vector, out);
-    };
+    }
+
+    return fromRadians;
 }();
 
-export function fromDegrees(degreesRotation, out = QuatUtils.create()) {
-    gl_quat.fromEuler(out, degreesRotation[0], degreesRotation[1], degreesRotation[2]);
+export function fromDegrees<T extends Quaternion>(degreesRotation: Readonly<Vector3>, out: Quaternion | T = QuatUtils.create()): Quaternion | T {
+    gl_quat.fromEuler(out as unknown as gl_quat_type, degreesRotation[0], degreesRotation[1], degreesRotation[2]);
     return out;
 }
 
 export const toRadians = function () {
     const matrix = mat3_utils_create();
-    return function toRadians(quat: Readonly<Quaternion>, out = Vec3Utils.create()) {
+
+    function toRadians(quat: Readonly<Quaternion>): Vector3;
+    function toRadians<T extends Vector3>(quat: Readonly<Quaternion>, out: T): T;
+    function toRadians<T extends Vector3>(quat: Readonly<Quaternion>, out: Vector3 | T = Vec3Utils.create()): Vector3 | T {
         QuatUtils.toMatrix(quat, matrix);
 
         // Rotation order is ZYX 
@@ -402,22 +454,26 @@ export const toRadians = function () {
         }
 
         return out;
-    };
+    }
+
+    return toRadians;
 }();
 
-export function toDegrees(quat: Readonly<Quaternion>, out = Vec3Utils.create()) {
+export function toDegrees(quat: Readonly<Quaternion>): Vector3;
+export function toDegrees<T extends Vector3>(quat: Readonly<Quaternion>, out: T): T;
+export function toDegrees<T extends Vector3>(quat: Readonly<Quaternion>, out: Vector3 | T = Vec3Utils.create()): Vector3 | T {
     QuatUtils.toRadians(quat, out);
     Vec3Utils.toDegrees(out, out);
     return out;
 }
 
-export function addRotation(first, second, out) {
+export function addRotation<T extends Quaternion, U extends Quaternion>(first: Readonly<T>, second: Readonly<Quaternion>, out?: T | U): T | U {
     return QuatUtils.addRotationDegrees(first, second, out);
 }
 
 export const addRotationDegrees = function () {
     const secondQuat = create();
-    return function addRotationDegrees(first, second, out) {
+    return function addRotationDegrees<T extends Quaternion, U extends Quaternion>(first: Readonly<T>, second: Readonly<Quaternion>, out?: T | U): T | U {
         Vec3Utils.degreesToQuat(second, secondQuat);
         return QuatUtils.addRotationQuat(first, secondQuat, out);
     };
@@ -425,53 +481,61 @@ export const addRotationDegrees = function () {
 
 export const addRotationRadians = function () {
     const secondQuat = create();
-    return function addRotationRadians(first, second, out) {
+    return function addRotationRadians<T extends Quaternion, U extends Quaternion>(first: Readonly<T>, second: Readonly<Quaternion>, out?: T | U): T | U {
         Vec3Utils.radiansToQuat(second, secondQuat);
         return QuatUtils.addRotationQuat(first, secondQuat, out);
     };
 }();
 
-export function addRotationQuat(first, second, out = QuatUtils.create()) {
+export function addRotationQuat<T extends Quaternion, U extends Quaternion>(first: Readonly<T>, second: Readonly<Quaternion>, out: T | U = QuatUtils.clone(first)): T | U {
     QuatUtils.mul(second, first, out);
     return out;
 }
 
-export function subRotation(first, second, out) {
+export function subRotation<T extends Quaternion, U extends Quaternion>(first: Readonly<T>, second: Readonly<Quaternion>, out?: T | U): T | U {
     return QuatUtils.subRotationDegrees(first, second, out);
 }
 
 export const subRotationDegrees = function () {
     const secondQuat = create();
-    return function subRotationDegrees(first, second, out) {
+    return function subRotationDegrees<T extends Quaternion, U extends Quaternion>(first: Readonly<T>, second: Readonly<Quaternion>, out?: T | U): T | U {
         Vec3Utils.degreesToQuat(second, secondQuat);
-        return QuatUtils.subRotationQuat(first, secondQuat, out);
+        return QuatUtils.subRotationQuat(first, secondQuat, out!);
     };
 }();
 
 export const subRotationRadians = function () {
     const secondQuat = create();
-    return function subRotationRadians(first, second, out) {
+    return function subRotationRadians<T extends Quaternion, U extends Quaternion>(first: Readonly<T>, second: Readonly<Quaternion>, out?: T | U): T | U {
         Vec3Utils.radiansToQuat(second, secondQuat);
-        return QuatUtils.subRotationQuat(first, secondQuat, out);
+        return QuatUtils.subRotationQuat(first, secondQuat, out!);
     };
 }();
 
-export const subRotationQuat = function () {
+export const subRotationQuat: {
+    <T extends Quaternion>(first: Readonly<T>, second: Readonly<Quaternion>): T;
+    <T extends Quaternion>(first: Readonly<Quaternion>, second: Readonly<Quaternion>, out: T): T;
+} = function () {
     const inverse = create();
-    return function subRotationQuat(first, second, out = QuatUtils.create()) {
+
+    function subRotationQuat<T extends Quaternion>(first: Readonly<T>, second: Readonly<Quaternion>): T;
+    function subRotationQuat<T extends Quaternion>(first: Readonly<Quaternion>, second: Readonly<Quaternion>, out: T): T;
+    function subRotationQuat<T extends Quaternion, U extends Quaternion>(first: Readonly<T>, second: Readonly<Quaternion>, out: T | U = QuatUtils.clone(first)): T | U {
         QuatUtils.invert(second, inverse);
         QuatUtils.mul(first, inverse, out);
         return out;
-    };
+    }
+
+    return subRotationQuat;
 }();
 
-export function rotationTo(from, to, out) {
+export function rotationTo<T extends Quaternion, U extends Quaternion>(from: Readonly<T>, to: Readonly<Quaternion>, out?: T | U): T | U {
     return QuatUtils.rotationToDegrees(from, to, out);
 }
 
 export const rotationToDegrees = function () {
     const toQuat = create();
-    return function rotationToDegrees(from, to, out) {
+    return function rotationToDegrees<T extends Quaternion, U extends Quaternion>(from: Readonly<T>, to: Readonly<Quaternion>, out?: T | U): T | U {
         Vec3Utils.degreesToQuat(to, toQuat);
         return QuatUtils.rotationToQuat(from, toQuat, out);
     };
@@ -479,23 +543,24 @@ export const rotationToDegrees = function () {
 
 export const rotationToRadians = function () {
     const toQuat = create();
-    return function rotationToRadians(from, to, out) {
+    return function rotationToRadians<T extends Quaternion, U extends Quaternion>(from: Readonly<T>, to: Readonly<Quaternion>, out?: T | U): T | U {
         Vec3Utils.radiansToQuat(to, toQuat);
         return QuatUtils.rotationToQuat(from, toQuat, out);
     };
 }();
 
-export function rotationToQuat(from, to, out) {
-    return QuatUtils.normalize(QuatUtils.subRotationQuat(to, from, out), out);
+export function rotationToQuat<T extends Quaternion, U extends Quaternion>(from: Readonly<T>, to: Readonly<Quaternion>, out?: T | U): T | U {
+    return QuatUtils.normalize(QuatUtils.subRotationQuat(to, from, out!), out);
 }
 
-export function rotationAroundAxis(quat: Readonly<Quaternion>, axis, out) {
+
+export function rotationAroundAxis<T extends Vector3, U extends Vector3>(quat: Readonly<Quaternion>, axis: Readonly<T>, out?: T | U): T | U {
     return QuatUtils.rotationAroundAxisDegrees(quat, axis, out);
 }
 
 export const rotationAroundAxisDegrees = function () {
     const rotationAroundQuat = create();
-    return function rotationAroundAxisDegrees(quat: Readonly<Quaternion>, axis, out = Vec3Utils.create()) {
+    return function rotationAroundAxisDegrees<T extends Vector3, U extends Vector3>(quat: Readonly<Quaternion>, axis: Readonly<T>, out: T | U = Vec3Utils.clone(axis)): T | U {
         QuatUtils.rotationAroundAxisQuat(quat, axis, rotationAroundQuat);
         return QuatUtils.toDegrees(rotationAroundQuat, out);
     };
@@ -503,21 +568,27 @@ export const rotationAroundAxisDegrees = function () {
 
 export const rotationAroundAxisRadians = function () {
     const rotationAroundQuat = create();
-    return function rotationAroundAxisRadians(quat: Readonly<Quaternion>, axis, out = Vec3Utils.create()) {
+    return function rotationAroundAxisRadians<T extends Vector3, U extends Vector3>(quat: Readonly<Quaternion>, axis: Readonly<T>, out: T | U = Vec3Utils.clone(axis)): T | U {
         QuatUtils.rotationAroundAxisQuat(quat, axis, rotationAroundQuat);
         return QuatUtils.toRadians(rotationAroundQuat, out);
     };
 }();
 
-export function rotationAroundAxisQuat(quat, axis, out = QuatUtils.create()) {
+export function rotationAroundAxisQuat<T extends Quaternion, U extends Quaternion>(quat: Readonly<T>, axis: Readonly<Vector3>, out: T | U = QuatUtils.clone(quat)): T | U {
     return QuatUtils.getTwist(quat, axis, out);
 }
 
-export const getTwist = function () {
+export const getTwist: {
+    <T extends Quaternion>(quat: Readonly<T>, axis: Readonly<Vector3>): T;
+    <T extends Quaternion>(quat: Readonly<Quaternion>, axis: Readonly<Vector3>, out: T): T;
+} = function () {
     const rotationAxis = vec3_utils_create();
     const projection = vec3_utils_create();
     const rotationAlongAxis = create();
-    return function getTwist(quat, axis, out = QuatUtils.create()) {
+
+    function getTwist<T extends Quaternion>(quat: Readonly<T>, axis: Readonly<Vector3>): T;
+    function getTwist<T extends Quaternion>(quat: Readonly<Quaternion>, axis: Readonly<Vector3>, out: T): T;
+    function getTwist<T extends Quaternion, U extends Quaternion>(quat: Readonly<T>, axis: Readonly<Vector3>, out: T | U = QuatUtils.clone(quat)): T | U {
         rotationAxis[0] = quat[0];
         rotationAxis[1] = quat[1];
         rotationAxis[2] = quat[2];
@@ -537,63 +608,81 @@ export const getTwist = function () {
         }
 
         return QuatUtils.copy(rotationAlongAxis, out);
-    };
+    }
+
+    return getTwist;
 }();
 
-export const getSwing = function () {
+export const getSwing: {
+    <T extends Quaternion>(quat: Readonly<T>, axis: Readonly<Vector3>): T;
+    <T extends Quaternion>(quat: Readonly<Quaternion>, axis: Readonly<Vector3>, out: T): T;
+} = function () {
     const twist = create();
-    return function getSwing(quat, axis, out = QuatUtils.create()) {
+
+    function getSwing<T extends Quaternion>(quat: Readonly<T>, axis: Readonly<Vector3>): T;
+    function getSwing<T extends Quaternion>(quat: Readonly<Quaternion>, axis: Readonly<Vector3>, out: T): T;
+    function getSwing<T extends Quaternion, U extends Quaternion>(quat: Readonly<T>, axis: Readonly<Vector3>, out: T | U = QuatUtils.clone(quat)): T | U {
         QuatUtils.getTwist(quat, axis, twist);
         QuatUtils.getSwingFromTwist(quat, twist, out);
         return out;
-    };
+    }
+
+    return getSwing;
 }();
 
-export function getSwingFromTwist(quat, twist, out = QuatUtils.create()) {
+export function getSwingFromTwist<T extends Quaternion, U extends Quaternion>(quat: Readonly<T>, twist: Readonly<Quaternion>, out: T | U = QuatUtils.clone(quat)): T | U {
     return QuatUtils.subRotationQuat(quat, twist, out);
 }
 
-export const getTwistFromSwing = function () {
+export const getTwistFromSwing: {
+    <T extends Quaternion>(quat: Readonly<T>, swing: Readonly<Quaternion>): T;
+    <T extends Quaternion>(quat: Readonly<Quaternion>, swing: Readonly<Quaternion>, out: T): T;
+} = function () {
     const inverse = create();
-    return function getTwistFromSwing(quat, swing, out = QuatUtils.create()) {
+
+    function getTwistFromSwing<T extends Quaternion>(quat: Readonly<T>, swing: Readonly<Quaternion>): T;
+    function getTwistFromSwing<T extends Quaternion>(quat: Readonly<Quaternion>, swing: Readonly<Quaternion>, out: T): T;
+    function getTwistFromSwing<T extends Quaternion, U extends Quaternion>(quat: Readonly<T>, swing: Readonly<Quaternion>, out: T | U = QuatUtils.clone(quat)): T | U {
         QuatUtils.conjugate(swing, inverse);
         QuatUtils.addRotationQuat(quat, inverse, out);
         return out;
-    };
+    }
+
+    return getTwistFromSwing;
 }();
 
-export function fromTwistSwing(twist, swing, out = QuatUtils.create()) {
+export function fromTwistSwing<T extends Quaternion, U extends Quaternion>(twist: Readonly<T>, swing: Readonly<Quaternion>, out: T | U = QuatUtils.clone(twist)): T | U {
     return QuatUtils.addRotationQuat(twist, swing, out);
 }
 
-export function toMatrix(quat: Readonly<Quaternion>, out = Mat3Utils.create()) {
-    gl_mat3.fromQuat(out, quat);
+export function toMatrix<T extends Matrix3>(quat: Readonly<Quaternion>, out: Matrix3 | T = Mat3Utils.create()): Matrix3 | T {
+    gl_mat3.fromQuat(out as unknown as gl_mat3_type, quat as unknown as gl_quat_type);
     return out;
 }
 
-export function rotate(first, second, out) {
+export function rotate<T extends Quaternion, U extends Quaternion>(first: Readonly<T>, second: Readonly<Quaternion>, out?: T | U): T | U {
     return QuatUtils.rotateDegrees(first, second, out);
 }
 
-export function rotateDegrees(first, second, out) {
+export function rotateDegrees<T extends Quaternion, U extends Quaternion>(first: Readonly<T>, second: Readonly<Quaternion>, out?: T | U): T | U {
     return QuatUtils.addRotationDegrees(first, second, out);
 }
 
-export function rotateRadians(first, second, out) {
+export function rotateRadians<T extends Quaternion, U extends Quaternion>(first: Readonly<T>, second: Readonly<Quaternion>, out?: T | U): T | U {
     return QuatUtils.addRotationRadians(first, second, out);
 }
 
-export function rotateQuat(first, second, out) {
+export function rotateQuat<T extends Quaternion, U extends Quaternion>(first: Readonly<T>, second: Readonly<Quaternion>, out?: T | U): T | U {
     return QuatUtils.addRotationQuat(first, second, out);
 }
 
-export function rotateAxis(quat, angle, axis, out) {
+export function rotateAxis<T extends Quaternion, U extends Quaternion>(quat: T, angle: number, axis: Readonly<Vector3>, out?: T | U): T | U {
     return QuatUtils.rotateAxisDegrees(quat, angle, axis, out);
 }
 
 export const rotateAxisDegrees = function () {
     const secondQuat = create();
-    return function rotateAxisDegrees(quat, angle, axis, out) {
+    return function rotateAxisDegrees<T extends Quaternion, U extends Quaternion>(quat: T, angle: number, axis: Readonly<Vector3>, out?: T | U): T | U {
         QuatUtils.fromAxisDegrees(angle, axis, secondQuat);
         return QuatUtils.rotateQuat(quat, secondQuat, out);
     };
@@ -601,47 +690,11 @@ export const rotateAxisDegrees = function () {
 
 export const rotateAxisRadians = function () {
     const secondQuat = create();
-    return function rotateAxisRadians(quat, angle, axis, out) {
+    return function rotateAxisRadians<T extends Quaternion, U extends Quaternion>(quat: T, angle: number, axis: Readonly<Vector3>, out?: T | U): T | U {
         QuatUtils.fromAxisRadians(angle, axis, secondQuat);
         return QuatUtils.rotateQuat(quat, secondQuat, out);
     };
 }();
-
-export function lerp(from, to, interpolationFactor, out = QuatUtils.create()) {
-    if (interpolationFactor <= 0) {
-        QuatUtils.copy(from, out);
-        return out;
-    } else if (interpolationFactor >= 1) {
-        QuatUtils.copy(to, out);
-        return out;
-    }
-
-    gl_quat.lerp(out, from, to, interpolationFactor);
-    return out;
-}
-
-export function interpolate(from, to, interpolationFactor, easingFunction = EasingFunction.linear, out = QuatUtils.create()) {
-    const lerpFactor = easingFunction(interpolationFactor);
-    return QuatUtils.lerp(from, to, lerpFactor, out);
-}
-
-export function slerp(from, to, interpolationFactor, out = QuatUtils.create()) {
-    if (interpolationFactor <= 0) {
-        QuatUtils.copy(from, out);
-        return out;
-    } else if (interpolationFactor >= 1) {
-        QuatUtils.copy(to, out);
-        return out;
-    }
-
-    gl_quat.slerp(out, from, to, interpolationFactor);
-    return out;
-}
-
-export function interpolateSpherical(from, to, interpolationFactor, easingFunction = EasingFunction.linear, out = QuatUtils.create()) {
-    const lerpFactor = easingFunction(interpolationFactor);
-    return QuatUtils.slerp(from, to, lerpFactor, out);
-}
 
 export const QuatUtils = {
     create,
@@ -650,12 +703,16 @@ export const QuatUtils = {
     clone,
     isNormalized,
     normalize,
-    identity,
     length,
     lengthSquared,
+    identity,
+    mul,
     invert,
     conjugate,
-    mul,
+    lerp,
+    interpolate,
+    slerp,
+    interpolateSpherical,
     getAxis,
     getAngle,
     getAngleDegrees,
@@ -715,11 +772,7 @@ export const QuatUtils = {
     rotateQuat,
     rotateAxis,
     rotateAxisDegrees,
-    rotateAxisRadians,
-    lerp,
-    interpolate,
-    slerp,
-    interpolateSpherical
+    rotateAxisRadians
 } as const;
 
 
@@ -742,7 +795,7 @@ const _setAxes = function () {
     const rotationAxis = vec3_utils_create();
     const rotationMat = mat3_utils_create();
     const rotationQuat = create();
-    return function _setAxes(quat: Quaternion, axes: Readonly<[Readonly<Vector3>, Readonly<Vector3>, Readonly<Vector3>]>, priority: Readonly<Vector3>): Quaternion {
+    return function _setAxes(quat: Quaternion, axes: Readonly<[Readonly<Vector3> | null, Readonly<Vector3> | null, Readonly<Vector3> | null]>, priority: Readonly<Vector3>): Quaternion {
         const firstAxis = axes[priority[0]];
         const secondAxis = axes[priority[1]];
         const thirdAxis = axes[priority[2]];
