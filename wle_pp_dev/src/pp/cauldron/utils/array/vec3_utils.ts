@@ -2,7 +2,7 @@ import { vec3 as gl_vec3, quat, type mat3 as gl_mat3_type, type mat4 as gl_mat4_
 import { Matrix3, Matrix4, Quaternion, Vector3 } from "wle-pp/cauldron/type_definitions/array_type_definitions.js";
 import { EasingFunction, MathUtils } from "../math_utils.js";
 import { Mat3Utils } from "./mat3_utils.js";
-import { Mat4Utils, create as mat4_utils_create, scale } from "./mat4_utils.js";
+import { Mat4Utils, create as mat4_utils_create } from "./mat4_utils.js";
 import { Quat2Utils } from "./quat2_utils.js";
 import { QuatUtils, create as quat_utils_create } from "./quat_utils.js";
 
@@ -13,7 +13,7 @@ export function create(x?: number, y?: number, z?: number): Vector3 {
     const out = gl_vec3.create() as unknown as Vector3;
 
     if (x != null) {
-        Vec3Utils.set(out, x, y, z);
+        Vec3Utils.set(out, x, y!, z!);
     }
 
     return out;
@@ -121,7 +121,7 @@ export function div<T extends Vector3, U extends Vector3>(first: Readonly<T>, se
     return out;
 }
 
-export function scalee<T extends Vector3, U extends Vector3>(vector: Readonly<T>, value: number, out: T | U = Vec3Utils.clone(vector)): T | U {
+export function scale<T extends Vector3, U extends Vector3>(vector: Readonly<T>, value: number, out: T | U = Vec3Utils.clone(vector)): T | U {
     gl_vec3.scale(out as unknown as gl_vec3_type, vector as unknown as gl_vec3_type, value);
     return out;
 }
@@ -134,6 +134,8 @@ export function negate<T extends Vector3, U extends Vector3>(vector: Readonly<T>
     return out;
 }
 
+export function cross<T extends Vector3>(first: Readonly<T>, second: Readonly<Vector3>): T;
+export function cross<T extends Vector3>(first: Readonly<Vector3>, second: Readonly<Vector3>, out: T): T;
 export function cross<T extends Vector3, U extends Vector3>(first: Readonly<T>, second: Readonly<Vector3>, out: T | U = Vec3Utils.clone(first)): T | U {
     gl_vec3.cross(out as unknown as gl_vec3_type, first as unknown as gl_vec3_type, second as unknown as gl_vec3_type);
     return out;
@@ -474,14 +476,14 @@ export function rotate<T extends Vector3, U extends Vector3>(vector: Readonly<T>
 export const rotateDegrees = function () {
     const zero = create();
     return function rotateDegrees<T extends Vector3, U extends Vector3>(vector: Readonly<T>, rotation: Readonly<Vector3>, out?: T | U): T | U {
-        return Vec3Utils.rotateAroundDegrees(vector, rotation, zero, out);
+        return Vec3Utils.rotateAroundDegrees(vector, rotation, zero, out!);
     };
 }();
 
 export const rotateRadians = function () {
     const zero = create();
     return function rotateRadians<T extends Vector3, U extends Vector3>(vector: Readonly<T>, rotation: Readonly<Vector3>, out?: T | U): T | U {
-        return Vec3Utils.rotateAroundRadians(vector, rotation, zero, out);
+        return Vec3Utils.rotateAroundRadians(vector, rotation, zero, out!);
     };
 }();
 
@@ -506,12 +508,12 @@ export const rotateAxisDegrees = function () {
 export const rotateAxisRadians = function () {
     const zero = create();
     return function rotateAxisRadians<T extends Vector3, U extends Vector3>(vector: Readonly<T>, angle: number, axis: Readonly<Vector3>, out?: T | U): T | U {
-        return Vec3Utils.rotateAroundAxisRadians(vector, angle, axis, zero, out);
+        return Vec3Utils.rotateAroundAxisRadians(vector, angle, axis, zero, out!);
     };
 }();
 
 export function rotateAround<T extends Vector3, U extends Vector3>(vector: Readonly<T>, rotation: Readonly<Vector3>, origin: Readonly<Vector3>, out?: T | U): T | U {
-    return Vec3Utils.rotateAroundDegrees(vector, rotation, origin, out);
+    return Vec3Utils.rotateAroundDegrees(vector, rotation, origin, out!);
 }
 
 export const rotateAroundDegrees = function () {
@@ -552,7 +554,7 @@ export function rotateAroundAxis<T extends Vector3, U extends Vector3>(vector: R
 }
 
 export function rotateAroundAxisDegrees<T extends Vector3, U extends Vector3>(vector: Readonly<T>, angle: number, axis: Readonly<Vector3>, origin: Readonly<Vector3>, out?: T | U): T | U {
-    return Vec3Utils.rotateAroundAxisRadians(vector, MathUtils.toRadians(angle), axis, origin, out);
+    return Vec3Utils.rotateAroundAxisRadians(vector, MathUtils.toRadians(angle), axis, origin, out!);
 }
 export const rotateAroundAxisRadians = function () {
     const quat = quat_utils_create();
@@ -572,7 +574,7 @@ export function convertPositionToWorld<T extends Vector3, U extends Vector3>(vec
 }
 
 export function convertPositionToLocal<T extends Vector3, U extends Vector3>(vector: Readonly<T>, parentTransform: Readonly<Matrix4>, out?: T | U): T | U {
-    return Vec3Utils.convertPositionToLocalMatrix(vector, parentTransform, out);
+    return Vec3Utils.convertPositionToLocalMatrix(vector, parentTransform, out!);
 }
 
 export function convertPositionToWorldMatrix<T extends Vector3, U extends Vector3>(vector: Readonly<T>, parentTransform: Readonly<Matrix4>, out: T | U = Vec3Utils.clone(vector)): T | U {
@@ -633,11 +635,11 @@ export const convertPositionToLocalQuat = function () {
 }();
 
 export function convertDirectionToWorld<T extends Vector3, U extends Vector3>(vector: Readonly<T>, parentTransform: Readonly<Matrix4>, out?: T | U): T | U {
-    return Vec3Utils.convertDirectionToWorldMatrix(vector, parentTransform, out);
+    return Vec3Utils.convertDirectionToWorldMatrix(vector, parentTransform, out!);
 }
 
 export function convertDirectionToLocal<T extends Vector3, U extends Vector3>(vector: Readonly<T>, parentTransform: Readonly<Matrix4>, out?: T | U): T | U {
-    return Vec3Utils.convertDirectionToLocalMatrix(vector, parentTransform, out);
+    return Vec3Utils.convertDirectionToLocalMatrix(vector, parentTransform, out!);
 }
 
 export const convertDirectionToWorldMatrix = function () {
@@ -704,19 +706,19 @@ export function addRotation<T extends Vector3, U extends Vector3>(vector: Readon
 }
 
 export function addRotationDegrees<T extends Vector3, U extends Vector3>(vector: Readonly<T>, rotation: Readonly<Vector3>, out?: T | U): T | U {
-    return Vec3Utils.degreesAddRotationDegrees(vector, rotation, out);
+    return Vec3Utils.degreesAddRotationDegrees(vector, rotation, out!);
 }
 
 export function addRotationRadians<T extends Vector3, U extends Vector3>(vector: Readonly<T>, rotation: Readonly<Vector3>, out?: T | U): T | U {
-    return Vec3Utils.degreesAddRotationRadians(vector, rotation, out);
+    return Vec3Utils.degreesAddRotationRadians(vector, rotation, out!);
 }
 
 export function addRotationQuat<T extends Vector3, U extends Vector3>(vector: Readonly<T>, rotation: Readonly<Vector3>, out?: T | U): T | U {
-    return Vec3Utils.degreesAddRotationQuat(vector, rotation, out);
+    return Vec3Utils.degreesAddRotationQuat(vector, rotation, out!);
 }
 
 export function degreesAddRotation<T extends Vector3, U extends Vector3>(vector: Readonly<T>, rotation: Readonly<Vector3>, out?: T | U): T | U {
-    return Vec3Utils.degreesAddRotationDegrees(vector, rotation, out);
+    return Vec3Utils.degreesAddRotationDegrees(vector, rotation, out!);
 }
 
 export const degreesAddRotationDegrees = function () {
@@ -759,7 +761,7 @@ export const degreesAddRotationQuat = function () {
 }();
 
 export function radiansAddRotation<T extends Vector3, U extends Vector3>(vector: Readonly<T>, rotation: Readonly<Vector3>, out?: T | U): T | U {
-    return Vec3Utils.radiansAddRotationDegrees(vector, rotation, out);
+    return Vec3Utils.radiansAddRotationDegrees(vector, rotation, out!);
 }
 
 export const radiansAddRotationDegrees = function () {
@@ -822,7 +824,7 @@ export const radiansToMatrix = function () {
 }();
 
 export function rotationTo<T extends Vector3, U extends Vector3>(from: Readonly<T>, to: Readonly<Vector3>, out?: T | U): T | U {
-    return Vec3Utils.rotationToDegrees(from, to, out);
+    return Vec3Utils.rotationToDegrees(from, to, out!);
 }
 
 export const rotationToDegrees = function () {
@@ -871,7 +873,7 @@ export const rotationToQuat = function () {
 }();
 
 export function rotationToPivoted<T extends Vector3, U extends Vector3>(from: Readonly<T>, to: Readonly<Vector3>, pivotAxis: Readonly<Vector3>, out?: T | U): T | U {
-    return Vec3Utils.rotationToPivotedDegrees(from, to, pivotAxis, out);
+    return Vec3Utils.rotationToPivotedDegrees(from, to, pivotAxis, out!);
 }
 
 export const rotationToPivotedDegrees = function () {
