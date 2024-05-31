@@ -124,7 +124,7 @@ export interface QuaternionExtension<QuaternionType extends Quaternion> {
     quat_fromAxisDegrees<T extends QuaternionType>(this: T, angle: number, axis: Readonly<Vector3>): this;
     quat_fromAxisRadians<T extends QuaternionType>(this: T, angle: number, axis: Readonly<Vector3>): this;
 
-    quat_fromAxes<T extends QuaternionType>(this: T, leftAxis: Readonly<Vector3>, upAxis: Readonly<Vector3>, forwardAxis: Readonly<Vector3>): this;
+    quat_fromAxes<T extends QuaternionType>(this: T, left: Readonly<Vector3>, up: Readonly<Vector3>, forward: Readonly<Vector3>): this;
 
 
 

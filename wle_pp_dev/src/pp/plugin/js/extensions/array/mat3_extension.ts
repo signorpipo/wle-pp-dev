@@ -45,8 +45,8 @@ function _initMat3ExtensionProtoype(): void {
             return Mat3Utils.toQuat(this, out!);
         },
 
-        mat3_fromAxes: function mat3_fromAxes<T extends Matrix3>(this: T, leftAxis: Readonly<Vector3>, upAxis: Readonly<Vector3>, forwardAxis: Readonly<Vector3>): T {
-            return Mat3Utils.fromAxes(leftAxis, upAxis, forwardAxis, this);
+        mat3_fromAxes: function mat3_fromAxes<T extends Matrix3>(this: T, left: Readonly<Vector3>, up: Readonly<Vector3>, forward: Readonly<Vector3>): T {
+            return Mat3Utils.fromAxes(left, up, forward, this);
         }
     };
 

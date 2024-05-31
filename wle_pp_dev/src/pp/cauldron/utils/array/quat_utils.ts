@@ -480,15 +480,15 @@ export function fromAxisRadians<T extends Quaternion>(angle: number, axis: Reado
 }
 
 export const fromAxes: {
-    (leftAxis: Readonly<Vector3>, upAxis: Readonly<Vector3>, forwardAxis: Readonly<Vector3>): Quaternion;
-    <T extends Quaternion>(leftAxis: Readonly<Vector3>, upAxis: Readonly<Vector3>, forwardAxis: Readonly<Vector3>, out: T): T;
+    (left: Readonly<Vector3>, up: Readonly<Vector3>, forward: Readonly<Vector3>): Quaternion;
+    <T extends Quaternion>(left: Readonly<Vector3>, up: Readonly<Vector3>, forward: Readonly<Vector3>, out: T): T;
 } = function () {
     const matrix = mat3_utils_create();
 
-    function fromAxes(leftAxis: Readonly<Vector3>, upAxis: Readonly<Vector3>, forwardAxis: Readonly<Vector3>): Quaternion;
-    function fromAxes<T extends Quaternion>(leftAxis: Readonly<Vector3>, upAxis: Readonly<Vector3>, forwardAxis: Readonly<Vector3>, out: T): T;
-    function fromAxes<T extends Quaternion>(leftAxis: Readonly<Vector3>, upAxis: Readonly<Vector3>, forwardAxis: Readonly<Vector3>, out: Quaternion | T = QuatUtils.create()): Quaternion | T {
-        Mat3Utils.fromAxes(leftAxis, upAxis, forwardAxis, matrix);
+    function fromAxes(left: Readonly<Vector3>, up: Readonly<Vector3>, forward: Readonly<Vector3>): Quaternion;
+    function fromAxes<T extends Quaternion>(left: Readonly<Vector3>, up: Readonly<Vector3>, forward: Readonly<Vector3>, out: T): T;
+    function fromAxes<T extends Quaternion>(left: Readonly<Vector3>, up: Readonly<Vector3>, forward: Readonly<Vector3>, out: Quaternion | T = QuatUtils.create()): Quaternion | T {
+        Mat3Utils.fromAxes(left, up, forward, matrix);
         return Mat3Utils.toQuat(matrix, out);
     }
 

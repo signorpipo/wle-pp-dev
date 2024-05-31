@@ -26,7 +26,7 @@ export interface Matrix3Extension<MatrixType extends Matrix3> {
     mat3_toQuat<T extends MatrixType, U extends Quaternion>(this: Readonly<T>, out: U): U;
 
 
-    mat3_fromAxes<T extends MatrixType>(this: T, leftAxis: Readonly<Vector3>, upAxis: Readonly<Vector3>, forwardAxis: Readonly<Vector3>): this;
+    mat3_fromAxes<T extends MatrixType>(this: T, left: Readonly<Vector3>, up: Readonly<Vector3>, forward: Readonly<Vector3>): this;
 }
 
 declare global {
