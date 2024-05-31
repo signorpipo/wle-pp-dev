@@ -44,7 +44,7 @@ export interface QuaternionExtension<QuaternionType extends Quaternion> {
 
 
     quat_lerp<T extends QuaternionType>(this: Readonly<T>, to: Readonly<Quaternion>, interpolationFactor: number): T;
-    quat_lerp<T extends QuaternionType, U extends Quaternion>(from: Readonly<T>, to: Readonly<Quaternion>, interpolationFactor: number, out: U): U;
+    quat_lerp<T extends QuaternionType, U extends Quaternion>(this: Readonly<T>, to: Readonly<Quaternion>, interpolationFactor: number, out: U): U;
 
     quat_interpolate<T extends QuaternionType>(this: Readonly<T>, to: Readonly<Quaternion>, interpolationFactor: number, easingFunction?: EasingFunction): T;
     quat_interpolate<T extends QuaternionType, U extends Quaternion>(this: Readonly<T>, to: Readonly<Quaternion>, interpolationFactor: number, easingFunction: EasingFunction, out: U): U;

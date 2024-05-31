@@ -44,11 +44,11 @@ function _initMat4ExtensionProtoype(): void {
         },
 
         mat4_mul<T extends Matrix4, U extends Matrix4>(this: Readonly<T>, matrix: Readonly<Matrix4>, out?: T | U): T | U {
-            return Mat4Utils.mul(this, out!);
+            return Mat4Utils.mul(this, matrix, out!);
         },
 
         mat4_scale<T extends Matrix4, U extends Matrix4>(this: Readonly<T>, vector: Readonly<Vector3>, out?: T | U): T | U {
-            return Mat4Utils.scale(this, out!);
+            return Mat4Utils.scale(this, vector, out!);
         },
 
         mat4_getPosition<T extends Vector3>(this: Readonly<Matrix4>, out?: Vector3): Vector3 | T {
@@ -164,11 +164,11 @@ function _initMat4ExtensionProtoype(): void {
         },
 
         mat4_toWorld<T extends Matrix4, U extends Matrix4>(this: Readonly<T>, parentTransformMatrix: Readonly<Matrix4>, out?: T | U): T | U {
-            return Mat4Utils.toWorld(this, out!);
+            return Mat4Utils.toWorld(this, parentTransformMatrix, out!);
         },
 
         mat4_toLocal<T extends Matrix4, U extends Matrix4>(this: Readonly<T>, parentTransformMatrix: Readonly<Matrix4>, out?: T | U): T | U {
-            return Mat4Utils.toLocal(this, out!);
+            return Mat4Utils.toLocal(this, parentTransformMatrix, out!);
         },
 
         mat4_toQuat<T extends Quaternion2>(this: Readonly<Matrix4>, out?: Quaternion2 | T): Quaternion2 | T {
