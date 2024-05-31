@@ -45,7 +45,7 @@ export function clone<T extends Vector3>(vector: Readonly<T>): T {
     return vector.slice(0) as T;
 }
 
-export function isNormalized(vector, epsilon = MathUtils.EPSILON) {
+export function isNormalized(vector, epsilon: number = MathUtils.EPSILON): boolean {
     return Math.abs(Vec3Utils.lengthSquared(vector) - 1) < epsilon;
 }
 
@@ -54,7 +54,7 @@ export function normalize(vector, out = Vec3Utils.create()) {
     return out;
 }
 
-export function isZero(vector, epsilon = 0) {
+export function isZero(vector, epsilon: number = 0): boolean {
     return Vec3Utils.lengthSquared(vector) <= (epsilon * epsilon);
 }
 
@@ -63,15 +63,15 @@ export function zero(vector) {
     return vector;
 }
 
-export function length(vector) {
+export function length(vector): number {
     return gl_vec3.length(vector);
 }
 
-export function lengthSquared(vector) {
+export function lengthSquared(vector): number {
     return gl_vec3.squaredLength(vector);
 }
 
-export function lengthSigned(vector, positiveDirection) {
+export function lengthSigned(vector, positiveDirection): number {
     const signedLength = Vec3Utils.length(vector);
     if (!Vec3Utils.isConcordant(vector, positiveDirection)) {
         signedLength *= -1;
@@ -80,15 +80,15 @@ export function lengthSigned(vector, positiveDirection) {
     return signedLength;
 }
 
-export function distance(first, second) {
+export function distance(first, second): number {
     return gl_vec3.dist(first, second);
 }
 
-export function distanceSquared(first, second) {
+export function distanceSquared(first, second): number {
     return gl_vec3.squaredDistance(first, second);
 }
 
-export function equals(first, second, epsilon = 0) {
+export function equals(first, second, epsilon: number = 0): boolean {
     const equals = first.length == second.length;
 
     if (equals) {
@@ -157,15 +157,15 @@ export function interpolate(from, to, interpolationFactor, easingFunction = Easi
     return Vec3Utils.lerp(from, to, lerpFactor, out);
 }
 
-export function angle(first, second) {
+export function angle(first, second): number {
     return Vec3Utils.angleDegrees(first, second);
 }
 
-export function angleDegrees(first, second) {
+export function angleDegrees(first, second): number {
     return MathUtils.toDegrees(Vec3Utils.angleRadians(first, second));
 }
 
-export function angleRadians(first, second) {
+export function angleRadians(first, second): number {
     const firstX = first[0];
     const firstY = first[1];
     const firstZ = first[2];
@@ -179,7 +179,7 @@ export function angleRadians(first, second) {
 
     const lengthSquared = firstLengthSquared * secondLengthSquared;
 
-    const angle = 0;
+    let angle = 0;
     if (lengthSquared > MathUtils.EPSILON_SQUARED) {
         const length = Math.sqrt(lengthSquared);
 
@@ -190,17 +190,17 @@ export function angleRadians(first, second) {
     return angle;
 }
 
-export function angleSigned(first, second, referenceAxis) {
+export function angleSigned(first, second, referenceAxis): number {
     return Vec3Utils.angleSignedDegrees(first, second, referenceAxis);
 }
 
-export function angleSignedDegrees(first, second, referenceAxis) {
+export function angleSignedDegrees(first, second, referenceAxis): number {
     return MathUtils.toDegrees(Vec3Utils.angleSignedRadians(first, second, referenceAxis));
 }
 
 export const angleSignedRadians = function () {
     const crossAxis = create();
-    return function angleSignedRadians(first, second, referenceAxis) {
+    return function angleSignedRadians(first, second, referenceAxis): number {
         Vec3Utils.cross(first, second, crossAxis);
         const angle = Vec3Utils.angleRadians(first, second);
         if (!Vec3Utils.isConcordant(crossAxis, referenceAxis)) {
@@ -211,18 +211,18 @@ export const angleSignedRadians = function () {
     };
 }();
 
-export function anglePivoted(first, second, referenceAxis) {
+export function anglePivoted(first, second, referenceAxis): number {
     return Vec3Utils.anglePivotedDegrees(first, second, referenceAxis);
 }
 
-export function anglePivotedDegrees(first, second, referenceAxis) {
+export function anglePivotedDegrees(first, second, referenceAxis): number {
     return MathUtils.toDegrees(Vec3Utils.anglePivotedRadians(first, second, referenceAxis));
 }
 
 export const anglePivotedRadians = function () {
     const flatFirst = create();
     const flatSecond = create();
-    return function anglePivotedRadians(first, second, referenceAxis) {
+    return function anglePivotedRadians(first, second, referenceAxis): number {
         Vec3Utils.removeComponentAlongAxis(first, referenceAxis, flatFirst);
         Vec3Utils.removeComponentAlongAxis(second, referenceAxis, flatSecond);
 
@@ -230,15 +230,15 @@ export const anglePivotedRadians = function () {
     };
 }();
 
-export function anglePivotedSigned(first, second, referenceAxis) {
+export function anglePivotedSigned(first, second, referenceAxis): number {
     return Vec3Utils.anglePivotedSignedDegrees(first, second, referenceAxis);
 }
 
-export function anglePivotedSignedDegrees(first, second, referenceAxis) {
+export function anglePivotedSignedDegrees(first, second, referenceAxis): number {
     return MathUtils.toDegrees(Vec3Utils.anglePivotedSignedRadians(first, second, referenceAxis));
 }
 
-export const anglePivotedSignedRadians = function () {
+export const anglePivotedSignedRadians = function (): number {
     const flatFirst = create();
     const flatSecond = create();
     return function anglePivotedSignedRadians(first, second, referenceAxis) {
@@ -288,12 +288,12 @@ export function degreesToQuat(vector, out = QuatUtils.create()) {
     return out;
 }
 
-export function valueAlongAxis(vector, axis) {
+export function valueAlongAxis(vector, axis): number {
     const valueAlongAxis = Vec3Utils.dot(vector, axis);
     return valueAlongAxis;
 }
 
-export const valueAlongPlane = function () {
+export const valueAlongPlane = function (): number {
     const componentAlong = create();
     return function valueAlongPlane(vector, planeNormal) {
         Vec3Utils.removeComponentAlongAxis(vector, planeNormal, componentAlong);
@@ -329,22 +329,22 @@ export const copyComponentAlongAxis = function () {
     };
 }();
 
-export function isConcordant(first, second) {
+export function isConcordant(first, second): boolean {
     return Vec3Utils.dot(first, second) >= 0;
 }
 
-export function isFartherAlongAxis(first, second, axis) {
+export function isFartherAlongAxis(first, second, axis): boolean {
     return Vec3Utils.valueAlongAxis(first, axis) > Vec3Utils.valueAlongAxis(second, axis);
 }
 
-export function isToTheRight(first, second, referenceAxis) {
+export function isToTheRight(first, second, referenceAxis): boolean {
     return Vec3Utils.signTo(first, second, referenceAxis) >= 0;
 }
 
 export const signTo = function () {
     const componentAlongThis = create();
     const componentAlongVector = create();
-    return function signTo(first, second, referenceAxis, zeroSign = 1) {
+    return function signTo(first, second, referenceAxis, zeroSign: number = 1): number {
         Vec3Utils.removeComponentAlongAxis(first, referenceAxis, componentAlongThis);
         Vec3Utils.removeComponentAlongAxis(second, referenceAxis, componentAlongVector);
 
@@ -438,12 +438,12 @@ export const projectOnPlaneAlongAxis = function () {
     };
 }();
 
-export function isOnAxis(vector, axis) {
+export function isOnAxis(vector, axis): boolean {
     const angleResult = Vec3Utils.angle(vector, axis);
     return Math.abs(angleResult) < MathUtils.EPSILON_DEGREES || Math.abs(angleResult - 180) < MathUtils.EPSILON_DEGREES;
 }
 
-export function isOnPlane(vector, planeNormal) {
+export function isOnPlane(vector, planeNormal): boolean {
     const angleResult = Vec3Utils.angle(vector, planeNormal);
     return Math.abs(angleResult - 90) < MathUtils.EPSILON_DEGREES;
 }
