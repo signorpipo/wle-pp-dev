@@ -111,10 +111,7 @@ export function interpolate<T extends Quaternion2, U extends Quaternion2>(from: 
     return Quat2Utils.lerp(from, to, lerpFactor, out);
 }
 
-export const slerp: {
-    <T extends Quaternion2>(from: Readonly<T>, to: Readonly<Quaternion2>, interpolationFactor: number): T;
-    <T extends Quaternion2>(from: Readonly<Quaternion2>, to: Readonly<Quaternion2>, interpolationFactor: number, out: T): T;
-} = function () {
+export const slerp = function () {
     const fromPosition = vec3_utils_create();
     const toPosition = vec3_utils_create();
     const interpolatedPosition = vec3_utils_create();
@@ -364,10 +361,7 @@ export function rotateAxisDegrees<T extends Quaternion2, U extends Quaternion2>(
     return Quat2Utils.rotateAxisRadians(quat, MathUtils.toRadians(angle), axis, out);
 }
 
-export const rotateAxisRadians: {
-    <T extends Quaternion2>(quat: Readonly<T>, angle: number, axis: Readonly<Vector3>): T;
-    <T extends Quaternion2>(quat: Readonly<Quaternion2>, angle: number, axis: Readonly<Vector3>, out: T): T;
-} = function () {
+export const rotateAxisRadians = function () {
     const rotationQuat = quat_utils_create();
 
     function rotateAxisRadians<T extends Quaternion2>(quat: Readonly<T>, angle: number, axis: Readonly<Vector3>): T;
@@ -391,10 +385,7 @@ export function toWorld<T extends Quaternion2, U extends Quaternion2>(quat: Read
     return out;
 }
 
-export const toLocal: {
-    <T extends Quaternion2>(quat: Readonly<T>, parentTransformQuat: Readonly<Quaternion2>): T;
-    <T extends Quaternion2>(quat: Readonly<Quaternion2>, parentTransformQuat: Readonly<Quaternion2>, out: T): T;
-} = function () {
+export const toLocal = function () {
     const invertQuat = create();
 
     function toLocal<T extends Quaternion2>(quat: Readonly<T>, parentTransformQuat: Readonly<Quaternion2>): T;
@@ -496,7 +487,7 @@ const _customGLMatrixFromQuat2 = function () {
             translation[2] = (az * bw + aw * bz + ax * by - ay * bx) * 2;
         }
 
-        gl_mat4.fromRotationTranslation(out as unknown as gl_mat4_type, quat, translation);
+        gl_mat4.fromRotationTranslation(out as unknown as gl_mat4_type, quat, translation as unknown as gl_vec3_type);
 
         return out;
     };
