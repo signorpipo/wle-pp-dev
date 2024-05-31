@@ -1,5 +1,5 @@
-import { vec3 as gl_vec3, quat, type vec3 as gl_vec3_type } from "gl-matrix";
-import { Vector3 } from "wle-pp/cauldron/type_definitions/array_type_definitions.js";
+import { vec3 as gl_vec3, quat, type mat3 as gl_mat3_type, type mat4 as gl_mat4_type, type quat as gl_quat_type, type vec3 as gl_vec3_type } from "gl-matrix";
+import { Matrix3, Matrix4, Quaternion, Vector3 } from "wle-pp/cauldron/type_definitions/array_type_definitions.js";
 import { EasingFunction, MathUtils } from "../math_utils.js";
 import { Mat3Utils } from "./mat3_utils.js";
 import { Mat4Utils, create as mat4_utils_create, scale } from "./mat4_utils.js";
@@ -58,7 +58,7 @@ export function isZero(vector: Readonly<Vector3>, epsilon: number = 0): boolean 
     return Vec3Utils.lengthSquared(vector) <= (epsilon * epsilon);
 }
 
-export function zero<T extends Vector3>(vector: Readonly<T>): T {
+export function zero<T extends Vector3>(vector: T): T {
     gl_vec3.zero(vector as unknown as gl_vec3_type);
     return vector;
 }
@@ -190,19 +190,19 @@ export function angleRadians(first: Readonly<Vector3>, second: Readonly<Vector3>
     return angle;
 }
 
-export function angleSigned(first, second, referenceAxis): number {
+export function angleSigned(first: Readonly<Vector3>, second: Readonly<Vector3>, referenceAxis: Readonly<Vector3>): number {
     return Vec3Utils.angleSignedDegrees(first, second, referenceAxis);
 }
 
-export function angleSignedDegrees(first, second, referenceAxis): number {
+export function angleSignedDegrees(first: Readonly<Vector3>, second: Readonly<Vector3>, referenceAxis: Readonly<Vector3>): number {
     return MathUtils.toDegrees(Vec3Utils.angleSignedRadians(first, second, referenceAxis));
 }
 
 export const angleSignedRadians = function () {
     const crossAxis = create();
-    return function angleSignedRadians(first, second, referenceAxis): number {
+    return function angleSignedRadians(first: Readonly<Vector3>, second: Readonly<Vector3>, referenceAxis: Readonly<Vector3>): number {
         Vec3Utils.cross(first, second, crossAxis);
-        const angle = Vec3Utils.angleRadians(first, second);
+        let angle = Vec3Utils.angleRadians(first, second);
         if (!Vec3Utils.isConcordant(crossAxis, referenceAxis)) {
             angle = -angle;
         }
@@ -211,18 +211,18 @@ export const angleSignedRadians = function () {
     };
 }();
 
-export function anglePivoted(first, second, referenceAxis): number {
+export function anglePivoted(first: Readonly<Vector3>, second: Readonly<Vector3>, referenceAxis: Readonly<Vector3>): number {
     return Vec3Utils.anglePivotedDegrees(first, second, referenceAxis);
 }
 
-export function anglePivotedDegrees(first, second, referenceAxis): number {
+export function anglePivotedDegrees(first: Readonly<Vector3>, second: Readonly<Vector3>, referenceAxis: Readonly<Vector3>): number {
     return MathUtils.toDegrees(Vec3Utils.anglePivotedRadians(first, second, referenceAxis));
 }
 
 export const anglePivotedRadians = function () {
     const flatFirst = create();
     const flatSecond = create();
-    return function anglePivotedRadians(first, second, referenceAxis): number {
+    return function anglePivotedRadians(first: Readonly<Vector3>, second: Readonly<Vector3>, referenceAxis: Readonly<Vector3>): number {
         Vec3Utils.removeComponentAlongAxis(first, referenceAxis, flatFirst);
         Vec3Utils.removeComponentAlongAxis(second, referenceAxis, flatSecond);
 
@@ -230,18 +230,18 @@ export const anglePivotedRadians = function () {
     };
 }();
 
-export function anglePivotedSigned(first, second, referenceAxis): number {
+export function anglePivotedSigned(first: Readonly<Vector3>, second: Readonly<Vector3>, referenceAxis: Readonly<Vector3>): number {
     return Vec3Utils.anglePivotedSignedDegrees(first, second, referenceAxis);
 }
 
-export function anglePivotedSignedDegrees(first, second, referenceAxis): number {
+export function anglePivotedSignedDegrees(first: Readonly<Vector3>, second: Readonly<Vector3>, referenceAxis: Readonly<Vector3>): number {
     return MathUtils.toDegrees(Vec3Utils.anglePivotedSignedRadians(first, second, referenceAxis));
 }
 
-export const anglePivotedSignedRadians = function (): number {
+export const anglePivotedSignedRadians = function () {
     const flatFirst = create();
     const flatSecond = create();
-    return function anglePivotedSignedRadians(first, second, referenceAxis) {
+    return function anglePivotedSignedRadians(first: Readonly<Vector3>, second: Readonly<Vector3>, referenceAxis: Readonly<Vector3>): number {
         Vec3Utils.removeComponentAlongAxis(first, referenceAxis, flatFirst);
         Vec3Utils.removeComponentAlongAxis(second, referenceAxis, flatSecond);
 
@@ -249,18 +249,18 @@ export const anglePivotedSignedRadians = function (): number {
     };
 }();
 
-export function transformQuat(vector, quat, out = Vec3Utils.create()) {
-    gl_vec3.transformQuat(out, vector, quat);
+export function transformQuat<T extends Vector3, U extends Vector3>(vector: Readonly<T>, quat: Readonly<Quaternion>, out: T | U = Vec3Utils.clone(vector)): T | U {
+    gl_vec3.transformQuat(out as unknown as gl_vec3_type, vector as unknown as gl_vec3_type, quat as unknown as gl_quat_type);
     return out;
 }
 
-export function transformMat3(vector, matrix, out = Vec3Utils.create()) {
-    gl_vec3.transformMat3(out, vector, matrix);
+export function transformMat3<T extends Vector3, U extends Vector3>(vector: Readonly<T>, matrix: Readonly<Matrix3>, out: T | U = Vec3Utils.clone(vector)): T | U {
+    gl_vec3.transformMat3(out as unknown as gl_vec3_type, vector as unknown as gl_vec3_type, matrix as unknown as gl_mat3_type);
     return out;
 }
 
-export function transformMat4(vector, mat4, out = Vec3Utils.create()) {
-    gl_vec3.transformMat4(out, vector, mat4);
+export function transformMat4<T extends Vector3, U extends Vector3>(vector: Readonly<T>, matrix: Readonly<Matrix4>, out: T | U = Vec3Utils.clone(vector)): T | U {
+    gl_vec3.transformMat4(out as unknown as gl_vec3_type, vector as unknown as gl_vec3_type, matrix as unknown as gl_mat4_type);
     return out;
 }
 
@@ -274,34 +274,34 @@ export function toDegrees<T extends Vector3, U extends Vector3>(vector: Readonly
     return out;
 }
 
-export function toQuat(vector: Readonly<Vector3>, out) {
+export function toQuat<T extends Quaternion>(vector: Readonly<Vector3>, out: Quaternion | T = QuatUtils.create()): Quaternion | T {
     return Vec3Utils.degreesToQuat(vector, out);
 }
 
-export function radiansToQuat(vector: Readonly<Vector3>, out = QuatUtils.create()) {
+export function radiansToQuat<T extends Quaternion>(vector: Readonly<Vector3>, out: Quaternion | T = QuatUtils.create()): Quaternion | T {
     QuatUtils.fromRadians(vector, out);
     return out;
 }
 
-export function degreesToQuat(vector: Readonly<Vector3>, out = QuatUtils.create()) {
+export function degreesToQuat<T extends Quaternion>(vector: Readonly<Vector3>, out: Quaternion | T = QuatUtils.create()): Quaternion | T {
     QuatUtils.fromDegrees(vector, out);
     return out;
 }
 
-export function valueAlongAxis(vector: Readonly<Vector3>, axis): number {
+export function valueAlongAxis(vector: Readonly<Vector3>, axis: Readonly<Vector3>): number {
     const valueAlongAxis = Vec3Utils.dot(vector, axis);
     return valueAlongAxis;
 }
 
-export const valueAlongPlane = function (): number {
+export const valueAlongPlane = function () {
     const componentAlong = create();
-    return function valueAlongPlane(vector: Readonly<Vector3>, planeNormal) {
+    return function valueAlongPlane(vector: Readonly<Vector3>, planeNormal: Readonly<Vector3>): number {
         Vec3Utils.removeComponentAlongAxis(vector, planeNormal, componentAlong);
         return Vec3Utils.length(componentAlong);
     };
 }();
 
-export function componentAlongAxis(vector, axis, out = Vec3Utils.create()) {
+export function componentAlongAxis<T extends Vector3, U extends Vector3>(vector: Readonly<T>, axis: Readonly<Vector3>, out: T | U = Vec3Utils.clone(vector)): T | U {
     const valueAlongAxis = Vec3Utils.valueAlongAxis(vector, axis);
 
     Vec3Utils.copy(axis, out);
@@ -311,7 +311,7 @@ export function componentAlongAxis(vector, axis, out = Vec3Utils.create()) {
 
 export const removeComponentAlongAxis = function () {
     const componentAlong = create();
-    return function removeComponentAlongAxis(vector, axis, out = Vec3Utils.create()) {
+    return function removeComponentAlongAxis<T extends Vector3, U extends Vector3>(vector: Readonly<T>, axis: Readonly<Vector3>, out: T | U = Vec3Utils.clone(vector)): T | U {
         Vec3Utils.componentAlongAxis(vector, axis, componentAlong);
         Vec3Utils.sub(vector, componentAlong, out);
         return out;
@@ -320,7 +320,7 @@ export const removeComponentAlongAxis = function () {
 
 export const copyComponentAlongAxis = function () {
     const componentAlong = create();
-    return function copyComponentAlongAxis(from, to, axis, out = Vec3Utils.create()) {
+    return function copyComponentAlongAxis<T extends Vector3, U extends Vector3>(from: Readonly<T>, to: Readonly<Vector3>, axis: Readonly<Vector3>, out: T | U = Vec3Utils.clone(from)): T | U {
         Vec3Utils.removeComponentAlongAxis(to, axis, out);
         Vec3Utils.componentAlongAxis(from, axis, componentAlong);
         Vec3Utils.add(out, componentAlong, out);
@@ -333,18 +333,18 @@ export function isConcordant(first: Readonly<Vector3>, second: Readonly<Vector3>
     return Vec3Utils.dot(first, second) >= 0;
 }
 
-export function isFartherAlongAxis(first, second, axis): boolean {
+export function isFartherAlongAxis(first: Readonly<Vector3>, second: Readonly<Vector3>, axis: Readonly<Vector3>): boolean {
     return Vec3Utils.valueAlongAxis(first, axis) > Vec3Utils.valueAlongAxis(second, axis);
 }
 
-export function isToTheRight(first, second, referenceAxis): boolean {
+export function isToTheRight(first: Readonly<Vector3>, second: Readonly<Vector3>, referenceAxis: Readonly<Vector3>): boolean {
     return Vec3Utils.signTo(first, second, referenceAxis) >= 0;
 }
 
 export const signTo = function () {
     const componentAlongThis = create();
     const componentAlongVector = create();
-    return function signTo(first, second, referenceAxis, zeroSign: number = 1): number {
+    return function signTo(first: Readonly<Vector3>, second: Readonly<Vector3>, referenceAxis: Readonly<Vector3>, zeroSign: number = 1): number {
         Vec3Utils.removeComponentAlongAxis(first, referenceAxis, componentAlongThis);
         Vec3Utils.removeComponentAlongAxis(second, referenceAxis, componentAlongVector);
 
@@ -353,7 +353,7 @@ export const signTo = function () {
     };
 }();
 
-export function projectOnAxis(vector, axis, out = Vec3Utils.create()) {
+export function projectOnAxis<T extends Vector3, U extends Vector3>(vector: Readonly<T>, axis: Readonly<Vector3>, out: T | U = Vec3Utils.clone(vector)): T | U {
     Vec3Utils.componentAlongAxis(vector, axis, out);
     return out;
 }
@@ -363,8 +363,7 @@ export const projectOnAxisAlongAxis = function () {
     const up = create();
     const vectorProjectedToAxis = create();
     const fixedProjectAlongAxis = create();
-    return function projectOnAxisAlongAxis(vector, axis, projectAlongAxis, out = Vec3Utils.create()) {
-
+    return function projectOnAxisAlongAxis<T extends Vector3, U extends Vector3>(vector: Readonly<T>, axis: Readonly<Vector3>, projectAlongAxis: Readonly<Vector3>, out: T | U = Vec3Utils.clone(vector)): T | U {
         if (Vec3Utils.isOnAxis(vector, axis) || Vec3Utils.isOnAxis(projectAlongAxis, axis)) {
             Vec3Utils.copy(vector, out);
         } else {
@@ -401,7 +400,7 @@ export const projectOnAxisAlongAxis = function () {
     };
 }();
 
-export function projectOnPlane(vector, planeNormal, out = Vec3Utils.create()) {
+export function projectOnPlane<T extends Vector3, U extends Vector3>(vector: Readonly<T>, planeNormal: Readonly<Vector3>, out: T | U = Vec3Utils.clone(vector)): T | U {
     Vec3Utils.removeComponentAlongAxis(vector, planeNormal, out);
     return out;
 }
@@ -410,7 +409,7 @@ export function projectOnPlane(vector, planeNormal, out = Vec3Utils.create()) {
 export const projectOnPlaneAlongAxis = function () {
     const vectorProjectedToPlane = create();
     const fixedProjectAlongAxis = create();
-    return function projectOnPlaneAlongAxis(vector, planeNormal, projectAlongAxis, out = Vec3Utils.create()) {
+    return function projectOnPlaneAlongAxis<T extends Vector3, U extends Vector3>(vector: Readonly<T>, planeNormal: Readonly<Vector3>, projectAlongAxis: Readonly<Vector3>, out: T | U = Vec3Utils.clone(vector)): T | U {
         if (Vec3Utils.isOnPlane(vector, planeNormal) || Vec3Utils.isOnPlane(projectAlongAxis, planeNormal)) {
             Vec3Utils.copy(vector, out);
         } else {
@@ -438,66 +437,66 @@ export const projectOnPlaneAlongAxis = function () {
     };
 }();
 
-export function isOnAxis(vector: Readonly<Vector3>, axis): boolean {
+export function isOnAxis(vector: Readonly<Vector3>, axis: Readonly<Vector3>): boolean {
     const angleResult = Vec3Utils.angle(vector, axis);
     return Math.abs(angleResult) < MathUtils.EPSILON_DEGREES || Math.abs(angleResult - 180) < MathUtils.EPSILON_DEGREES;
 }
 
-export function isOnPlane(vector: Readonly<Vector3>, planeNormal): boolean {
+export function isOnPlane(vector: Readonly<Vector3>, planeNormal: Readonly<Vector3>): boolean {
     const angleResult = Vec3Utils.angle(vector, planeNormal);
     return Math.abs(angleResult - 90) < MathUtils.EPSILON_DEGREES;
 }
 
-export function rotate(vector, rotation, out) {
+export function rotate<T extends Vector3, U extends Vector3>(vector: Readonly<T>, rotation: Readonly<Vector3>, out?: T | U): T | U {
     return Vec3Utils.rotateDegrees(vector, rotation, out);
 }
 
 export const rotateDegrees = function () {
     const zero = create();
-    return function rotateDegrees(vector, rotation, out) {
+    return function rotateDegrees<T extends Vector3, U extends Vector3>(vector: Readonly<T>, rotation: Readonly<Vector3>, out?: T | U): T | U {
         return Vec3Utils.rotateAroundDegrees(vector, rotation, zero, out);
     };
 }();
 
 export const rotateRadians = function () {
     const zero = create();
-    return function rotateRadians(vector, rotation, out) {
+    return function rotateRadians<T extends Vector3, U extends Vector3>(vector: Readonly<T>, rotation: Readonly<Vector3>, out?: T | U): T | U {
         return Vec3Utils.rotateAroundRadians(vector, rotation, zero, out);
     };
 }();
 
 export const rotateQuat = function () {
     const zero = create();
-    return function rotateQuat(vector, rotation, out) {
+    return function rotateQuat<T extends Vector3, U extends Vector3>(vector: Readonly<T>, rotation: Readonly<Vector3>, out?: T | U): T | U {
         return Vec3Utils.rotateAroundQuat(vector, rotation, zero, out);
     };
 }();
 
-export function rotateAxis(vector, angle, axis, out) {
+export function rotateAxis<T extends Vector3, U extends Vector3>(vector: Readonly<T>, angle: number, axis: Readonly<Vector3>, out?: T | U): T | U {
     return Vec3Utils.rotateAxisDegrees(vector, angle, axis, out);
 }
 
 export const rotateAxisDegrees = function () {
     const zero = create();
-    return function rotateAxisDegrees(vector, angle, axis, out) {
+    return function rotateAxisDegrees<T extends Vector3, U extends Vector3>(vector: Readonly<T>, angle: number, axis: Readonly<Vector3>, out?: T | U): T | U {
         return Vec3Utils.rotateAroundAxisDegrees(vector, angle, axis, zero, out);
     };
 }();
 
 export const rotateAxisRadians = function () {
     const zero = create();
-    return function rotateAxisRadians(vector, angle, axis, out) {
+    return function rotateAxisRadians<T extends Vector3, U extends Vector3>(vector: Readonly<T>, angle: number, axis: Readonly<Vector3>, out?: T | U): T | U {
         return Vec3Utils.rotateAroundAxisRadians(vector, angle, axis, zero, out);
     };
 }();
 
-export function rotateAround(vector, rotation, origin, out) {
+export function rotateAround<T extends Vector3, U extends Vector3>(vector: Readonly<T>, rotation: Readonly<Vector3>, origin: Readonly<Vector3>, out?: T | U): T | U {
     return Vec3Utils.rotateAroundDegrees(vector, rotation, origin, out);
 }
 
 export const rotateAroundDegrees = function () {
     const quat = quat_utils_create();
-    return function rotateAroundDegrees(vector, rotation, origin, out = Vec3Utils.create()) {
+    return function rotateAroundDegrees<T extends Vector3, U extends Vector3>(vector: Readonly<T>, rotation: Readonly<Vector3>, origin: Readonly<Vector3>, out: T | U = Vec3Utils.clone(vector)): T | U {
         Vec3Utils.degreesToQuat(rotation, quat);
         return Vec3Utils.rotateAroundQuat(vector, quat, origin, out);
     };
@@ -505,51 +504,50 @@ export const rotateAroundDegrees = function () {
 
 export const rotateAroundRadians = function () {
     const quat = quat_utils_create();
-    return function rotateAroundRadians(vector, rotation, origin, out = Vec3Utils.create()) {
+    return function rotateAroundRadians<T extends Vector3, U extends Vector3>(vector: Readonly<T>, rotation: Readonly<Vector3>, origin: Readonly<Vector3>, out: T | U = Vec3Utils.clone(vector)): T | U {
         Vec3Utils.radiansToQuat(rotation, quat);
         return Vec3Utils.rotateAroundQuat(vector, quat, origin, out);
     };
 }();
 
-export function rotateAroundQuat(vector, rotation, origin, out = Vec3Utils.create()) {
+export function rotateAroundQuat<T extends Vector3, U extends Vector3>(vector: Readonly<T>, rotation: Readonly<Vector3>, origin: Readonly<Vector3>, out: T | U = Vec3Utils.clone(vector)): T | U {
     Vec3Utils.sub(vector, origin, out);
     Vec3Utils.transformQuat(out, rotation, out);
     Vec3Utils.add(out, origin, out);
     return out;
 }
 
-export function rotateAroundAxis(vector, angle, axis, origin, out) {
+export function rotateAroundAxis<T extends Vector3, U extends Vector3>(vector: Readonly<T>, angle: number, axis: Readonly<Vector3>, origin: Readonly<Vector3>, out?: T | U): T | U {
     return Vec3Utils.rotateAroundAxisDegrees(vector, angle, axis, origin, out);
 }
 
-export function rotateAroundAxisDegrees(vector, angle, axis, origin, out) {
+export function rotateAroundAxisDegrees<T extends Vector3, U extends Vector3>(vector: Readonly<T>, angle: number, axis: Readonly<Vector3>, origin: Readonly<Vector3>, out?: T | U): T | U {
     return Vec3Utils.rotateAroundAxisRadians(vector, MathUtils.toRadians(angle), axis, origin, out);
 }
-
 export const rotateAroundAxisRadians = function () {
     const quat = quat_utils_create();
-    return function rotateAroundAxisRadians(vector, angle, axis, origin, out = Vec3Utils.create()) {
+    return function rotateAroundAxisRadians<T extends Vector3, U extends Vector3>(vector: Readonly<T>, angle: number, axis: Readonly<Vector3>, origin: Readonly<Vector3>, out: T | U = Vec3Utils.clone(vector)): T | U {
         QuatUtils.fromAxisRadians(angle, axis, quat);
         return Vec3Utils.rotateAroundQuat(vector, quat, origin, out);
     };
 }();
 
-export function convertPositionToWorld(vector, parentTransform, out) {
+export function convertPositionToWorld<T extends Vector3, U extends Vector3>(vector: Readonly<T>, parentTransform: Readonly<Matrix4>, out?: T | U): T | U {
     return Vec3Utils.convertPositionToWorldMatrix(vector, parentTransform, out);
 }
 
-export function convertPositionToLocal(vector, parentTransform, out) {
+export function convertPositionToLocal<T extends Vector3, U extends Vector3>(vector: Readonly<T>, parentTransform: Readonly<Matrix4>, out?: T | U): T | U {
     return Vec3Utils.convertPositionToLocalMatrix(vector, parentTransform, out);
 }
 
-export function convertPositionToWorldMatrix(vector, parentTransform, out = Vec3Utils.create()) {
+export function convertPositionToWorldMatrix<T extends Vector3, U extends Vector3>(vector: Readonly<T>, parentTransform: Readonly<Matrix4>, out: T | U = Vec3Utils.clone(vector)): T | U {
     Vec3Utils.transformMat4(vector, parentTransform, out);
     return out;
 }
 
 export const convertPositionToLocalMatrix = function () {
     const inverse = mat4_utils_create();
-    return function convertPositionToLocalMatrix(vector, parentTransform, out = Vec3Utils.create()) {
+    return function convertPositionToLocalMatrix<T extends Vector3, U extends Vector3>(vector: Readonly<T>, parentTransform: Readonly<Matrix4>, out: T | U = Vec3Utils.clone(vector)): T | U {
         Mat4Utils.invert(parentTransform, inverse);
         Vec3Utils.transformMat4(vector, inverse, out);
         return out;
@@ -562,7 +560,7 @@ export const convertPositionToWorldQuat = function () {
     const rotation = quat_utils_create();
     const one = create();
     set(one, 1, 1, 1);
-    return function convertPositionToWorldQuat(vector, parentTransform, out = Vec3Utils.create()) {
+    return function convertPositionToWorldQuat<T extends Vector3, U extends Vector3>(vector: Readonly<T>, parentTransform: Readonly<Matrix4>, out: T | U = Vec3Utils.clone(vector)): T | U {
         Quat2Utils.getPosition(parentTransform, position);
         Quat2Utils.getRotationQuat(parentTransform, rotation);
         Mat4Utils.setPositionRotationQuatScale(parentTransformMatrix, position, rotation, one);
@@ -576,7 +574,7 @@ export const convertPositionToLocalQuat = function () {
     const rotation = quat_utils_create();
     const one = create();
     set(one, 1, 1, 1);
-    return function convertPositionToLocalQuat(vector, parentTransform, out = Vec3Utils.create()) {
+    return function convertPositionToLocalQuat<T extends Vector3, U extends Vector3>(vector: Readonly<T>, parentTransform: Readonly<Matrix4>, out: T | U = Vec3Utils.clone(vector)): T | U {
         Quat2Utils.getPosition(parentTransform, position);
         Quat2Utils.getRotationQuat(parentTransform, rotation);
         Mat4Utils.setPositionRotationQuatScale(parentTransformMatrix, position, rotation, one);
@@ -584,17 +582,17 @@ export const convertPositionToLocalQuat = function () {
     };
 }();
 
-export function convertDirectionToWorld(vector, parentTransform, out) {
+export function convertDirectionToWorld<T extends Vector3, U extends Vector3>(vector: Readonly<T>, parentTransform: Readonly<Matrix4>, out?: T | U): T | U {
     return Vec3Utils.convertDirectionToWorldMatrix(vector, parentTransform, out);
 }
 
-export function convertDirectionToLocal(vector, parentTransform, out) {
+export function convertDirectionToLocal<T extends Vector3, U extends Vector3>(vector: Readonly<T>, parentTransform: Readonly<Matrix4>, out?: T | U): T | U {
     return Vec3Utils.convertDirectionToLocalMatrix(vector, parentTransform, out);
 }
 
 export const convertDirectionToWorldMatrix = function () {
     const rotation = quat_utils_create();
-    return function convertDirectionToWorldMatrix(vector, parentTransform, out = Vec3Utils.create()) {
+    return function convertDirectionToWorldMatrix<T extends Vector3, U extends Vector3>(vector: Readonly<T>, parentTransform: Readonly<Matrix4>, out: T | U = Vec3Utils.clone(vector)): T | U {
         Mat4Utils.getRotationQuat(parentTransform, rotation);
         Vec3Utils.transformQuat(vector, rotation, out);
         return out;
@@ -603,7 +601,7 @@ export const convertDirectionToWorldMatrix = function () {
 
 export const convertDirectionToLocalMatrix = function () {
     const rotation = quat_utils_create();
-    return function convertDirectionToLocalMatrix(vector, parentTransform, out = Vec3Utils.create()) {
+    return function convertDirectionToLocalMatrix<T extends Vector3, U extends Vector3>(vector: Readonly<T>, parentTransform: Readonly<Matrix4>, out: T | U = Vec3Utils.clone(vector)): T | U {
         Mat4Utils.getRotationQuat(parentTransform, rotation);
         QuatUtils.conjugate(rotation, rotation);
         Vec3Utils.transformQuat(vector, rotation, out);
@@ -614,7 +612,7 @@ export const convertDirectionToLocalMatrix = function () {
 
 export const convertDirectionToWorldQuat = function () {
     const rotation = quat_utils_create();
-    return function convertDirectionToWorldQuat(vector, parentTransform, out = Vec3Utils.create()) {
+    return function convertDirectionToWorldQuat<T extends Vector3, U extends Vector3>(vector: Readonly<T>, parentTransform: Readonly<Matrix4>, out: T | U = Vec3Utils.clone(vector)): T | U {
         Quat2Utils.getRotationQuat(parentTransform, rotation);
         Vec3Utils.transformQuat(vector, rotation, out);
         return out;
@@ -623,7 +621,7 @@ export const convertDirectionToWorldQuat = function () {
 
 export const convertDirectionToLocalQuat = function () {
     const rotation = quat_utils_create();
-    return function convertDirectionToLocalQuat(vector, parentTransform, out = Vec3Utils.create()) {
+    return function convertDirectionToLocalQuat<T extends Vector3, U extends Vector3>(vector: Readonly<T>, parentTransform: Readonly<Matrix4>, out: T | U = Vec3Utils.clone(vector)): T | U {
         Quat2Utils.getRotationQuat(parentTransform, rotation);
         QuatUtils.conjugate(rotation, rotation);
         Vec3Utils.transformQuat(vector, rotation, out);
@@ -631,29 +629,29 @@ export const convertDirectionToLocalQuat = function () {
     };
 }();
 
-export function addRotation(vector, rotation, out) {
+export function addRotation<T extends Vector3, U extends Vector3>(vector: Readonly<T>, rotation: Readonly<Vector3>, out?: T | U): T | U {
     return Vec3Utils.degreesAddRotation(vector, rotation, out);
 }
 
-export function addRotationDegrees(vector, rotation, out) {
+export function addRotationDegrees<T extends Vector3, U extends Vector3>(vector: Readonly<T>, rotation: Readonly<Vector3>, out?: T | U): T | U {
     return Vec3Utils.degreesAddRotationDegrees(vector, rotation, out);
 }
 
-export function addRotationRadians(vector, rotation, out) {
+export function addRotationRadians<T extends Vector3, U extends Vector3>(vector: Readonly<T>, rotation: Readonly<Vector3>, out?: T | U): T | U {
     return Vec3Utils.degreesAddRotationRadians(vector, rotation, out);
 }
 
-export function addRotationQuat(vector, rotation, out) {
+export function addRotationQuat<T extends Vector3, U extends Vector3>(vector: Readonly<T>, rotation: Readonly<Vector3>, out?: T | U): T | U {
     return Vec3Utils.degreesAddRotationQuat(vector, rotation, out);
 }
 
-export function degreesAddRotation(vector, rotation, out) {
+export function degreesAddRotation<T extends Vector3, U extends Vector3>(vector: Readonly<T>, rotation: Readonly<Vector3>, out?: T | U): T | U {
     return Vec3Utils.degreesAddRotationDegrees(vector, rotation, out);
 }
 
 export const degreesAddRotationDegrees = function () {
     const quat = quat_utils_create();
-    return function degreesAddRotationDegrees(vector, rotation, out = Vec3Utils.create()) {
+    return function degreesAddRotationDegrees<T extends Vector3, U extends Vector3>(vector: Readonly<T>, rotation: Readonly<Vector3>, out: T | U = Vec3Utils.clone(vector)): T | U {
         Vec3Utils.degreesToQuat(vector, quat);
         return QuatUtils.toDegrees(QuatUtils.addRotationDegrees(quat, rotation, quat), out);
     };
@@ -661,7 +659,7 @@ export const degreesAddRotationDegrees = function () {
 
 export const degreesAddRotationRadians = function () {
     const quat = quat_utils_create();
-    return function degreesAddRotationRadians(vector, rotation, out = Vec3Utils.create()) {
+    return function degreesAddRotationRadians<T extends Vector3, U extends Vector3>(vector: Readonly<T>, rotation: Readonly<Vector3>, out: T | U = Vec3Utils.clone(vector)): T | U {
         Vec3Utils.degreesToQuat(vector, quat);
         return QuatUtils.toDegrees(QuatUtils.addRotationRadians(quat, rotation, quat), out);
     };
@@ -669,19 +667,19 @@ export const degreesAddRotationRadians = function () {
 
 export const degreesAddRotationQuat = function () {
     const quat = quat_utils_create();
-    return function degreesAddRotationQuat(vector, rotation, out = Vec3Utils.create()) {
+    return function degreesAddRotationQuat<T extends Vector3, U extends Vector3>(vector: Readonly<T>, rotation: Readonly<Vector3>, out: T | U = Vec3Utils.clone(vector)): T | U {
         Vec3Utils.degreesToQuat(vector, quat);
         return QuatUtils.toDegrees(QuatUtils.addRotationQuat(quat, rotation, quat), out);
     };
 }();
 
-export function radiansAddRotation(vector, rotation, out) {
+export function radiansAddRotation<T extends Vector3, U extends Vector3>(vector: Readonly<T>, rotation: Readonly<Vector3>, out?: T | U): T | U {
     return Vec3Utils.radiansAddRotationDegrees(vector, rotation, out);
 }
 
 export const radiansAddRotationDegrees = function () {
     const quat = quat_utils_create();
-    return function radiansAddRotationDegrees(vector, rotation, out = Vec3Utils.create()) {
+    return function radiansAddRotationDegrees<T extends Vector3, U extends Vector3>(vector: Readonly<T>, rotation: Readonly<Vector3>, out: T | U = Vec3Utils.clone(vector)): T | U {
         Vec3Utils.radiansToQuat(vector, quat);
         return QuatUtils.toRadians(QuatUtils.addRotationDegrees(quat, rotation, quat), out);
     };
@@ -689,7 +687,7 @@ export const radiansAddRotationDegrees = function () {
 
 export const radiansAddRotationRadians = function () {
     const quat = quat_utils_create();
-    return function radiansAddRotationRadians(vector, rotation, out = Vec3Utils.create()) {
+    return function radiansAddRotationRadians<T extends Vector3, U extends Vector3>(vector: Readonly<T>, rotation: Readonly<Vector3>, out: T | U = Vec3Utils.clone(vector)): T | U {
         Vec3Utils.radiansToQuat(vector, quat);
         return QuatUtils.toRadians(QuatUtils.addRotationRadians(quat, rotation, quat), out);
     };
@@ -697,19 +695,18 @@ export const radiansAddRotationRadians = function () {
 
 export const radiansAddRotationQuat = function () {
     const quat = quat_utils_create();
-    return function radiansAddRotationQuat(vector, rotation, out = Vec3Utils.create()) {
+    return function radiansAddRotationQuat<T extends Vector3, U extends Vector3>(vector: Readonly<T>, rotation: Readonly<Vector3>, out: T | U = Vec3Utils.clone(vector)): T | U {
         Vec3Utils.radiansToQuat(vector, quat);
         return QuatUtils.toRadians(QuatUtils.addRotationQuat(quat, rotation, quat), out);
     };
 }();
-
-export function toMatrix(vector: Readonly<Vector3>, out = Mat3Utils.create()) {
+export function toMatrix<T extends Matrix3>(vector: Readonly<Vector3>, out: Matrix3 | T = Mat3Utils.create()): Matrix3 | T {
     return Vec3Utils.degreesToMatrix(vector, out);
 }
 
 export const degreesToMatrix = function () {
     const quat = quat_utils_create();
-    return function degreesToMatrix(vector: Readonly<Vector3>, out = Mat3Utils.create()) {
+    return function degreesToMatrix<T extends Matrix3>(vector: Readonly<Vector3>, out: Matrix3 | T = Mat3Utils.create()): Matrix3 | T {
         Vec3Utils.degreesToQuat(vector, quat);
         return QuatUtils.toMatrix(quat, out);
     };
@@ -717,19 +714,19 @@ export const degreesToMatrix = function () {
 
 export const radiansToMatrix = function () {
     const quat = quat_utils_create();
-    return function radiansToMatrix(vector: Readonly<Vector3>, out = Mat3Utils.create()) {
+    return function radiansToMatrix<T extends Matrix3>(vector: Readonly<Vector3>, out: Matrix3 | T = Mat3Utils.create()): Matrix3 | T {
         Vec3Utils.radiansToQuat(vector, quat);
         return QuatUtils.toMatrix(quat, out);
     };
 }();
 
-export function rotationTo(from, to, out) {
+export function rotationTo<T extends Vector3, U extends Vector3>(from: Readonly<T>, to: Readonly<Vector3>, out?: T | U): T | U {
     return Vec3Utils.rotationToDegrees(from, to, out);
 }
 
 export const rotationToDegrees = function () {
     const rotationQuat = quat_utils_create();
-    return function rotationToDegrees(from, to, out = Vec3Utils.create()) {
+    return function rotationToDegrees<T extends Vector3, U extends Vector3>(from: Readonly<T>, to: Readonly<Vector3>, out: T | U = Vec3Utils.clone(from)): T | U {
         Vec3Utils.rotationToQuat(from, to, rotationQuat);
         QuatUtils.toDegrees(rotationQuat, out);
         return out;
@@ -738,7 +735,7 @@ export const rotationToDegrees = function () {
 
 export const rotationToRadians = function () {
     const rotationQuat = quat_utils_create();
-    return function rotationToRadians(from, to, out = Vec3Utils.create()) {
+    return function rotationToRadians<T extends Vector3, U extends Vector3>(from: Readonly<T>, to: Readonly<Vector3>, out: T | U = Vec3Utils.clone(from)): T | U {
         Vec3Utils.rotationToQuat(from, to, rotationQuat);
         QuatUtils.toRadians(rotationQuat, out);
         return out;
@@ -747,7 +744,7 @@ export const rotationToRadians = function () {
 
 export const rotationToQuat = function () {
     const rotationAxis = create();
-    return function rotationToQuat(from, to, out = QuatUtils.create()) {
+    return function rotationToQuat<T extends Quaternion>(from: Readonly<T>, to: Readonly<T>, out: Quaternion | T = QuatUtils.create()): Quaternion | T {
         Vec3Utils.cross(from, to, rotationAxis);
         Vec3Utils.normalize(rotationAxis, rotationAxis);
 
@@ -762,13 +759,13 @@ export const rotationToQuat = function () {
     };
 }();
 
-export function rotationToPivoted(from, to, pivotAxis, out) {
+export function rotationToPivoted<T extends Vector3, U extends Vector3>(from: Readonly<T>, to: Readonly<Vector3>, pivotAxis: Readonly<Vector3>, out?: T | U): T | U {
     return Vec3Utils.rotationToPivotedDegrees(from, to, pivotAxis, out);
 }
 
 export const rotationToPivotedDegrees = function () {
     const rotationQuat = quat_utils_create();
-    return function rotationToPivotedDegrees(from, to, pivotAxis, out = Vec3Utils.create()) {
+    return function rotationToPivotedDegrees<T extends Vector3, U extends Vector3>(from: Readonly<T>, to: Readonly<Vector3>, pivotAxis: Readonly<Vector3>, out: T | U = Vec3Utils.clone(from)): T | U {
         Vec3Utils.rotationToPivotedQuat(from, to, pivotAxis, rotationQuat);
         QuatUtils.toDegrees(rotationQuat, out);
         return out;
@@ -777,7 +774,7 @@ export const rotationToPivotedDegrees = function () {
 
 export const rotationToPivotedRadians = function () {
     const rotationQuat = quat_utils_create();
-    return function rotationToPivotedRadians(from, to, pivotAxis, out = Vec3Utils.create()) {
+    return function rotationToPivotedRadians<T extends Vector3, U extends Vector3>(from: Readonly<T>, to: Readonly<Vector3>, pivotAxis: Readonly<Vector3>, out: T | U = Vec3Utils.clone(from)): T | U {
         Vec3Utils.rotationToPivotedQuat(from, to, pivotAxis, rotationQuat);
         QuatUtils.toRadians(rotationQuat, out);
         return out;
@@ -788,7 +785,7 @@ export const rotationToPivotedQuat = function () {
     const fromFlat = create();
     const toFlat = create();
     const rotationAxis = create();
-    return function rotationToPivotedQuat(from, to, pivotAxis, out = QuatUtils.create()) {
+    return function rotationToPivotedQuat<T extends Quaternion>(from: Readonly<T>, to: Readonly<T>, pivotAxis: Readonly<Vector3>, out: Quaternion | T = QuatUtils.create()): Quaternion | T {
         Vec3Utils.removeComponentAlongAxis(from, pivotAxis, fromFlat);
         Vec3Utils.removeComponentAlongAxis(to, pivotAxis, toFlat);
 
@@ -815,7 +812,7 @@ export const perpendicularRandom = function () {
 
         Vec3Utils.copy(vector, notVector);
 
-        const zeroAmount = false;
+        let zeroAmount = 0;
         for (let i = 0; i < 3; i++) {
             if (vector[i] == 0) {
                 zeroAmount++;

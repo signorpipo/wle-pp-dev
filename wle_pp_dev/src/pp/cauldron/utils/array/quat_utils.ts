@@ -63,7 +63,7 @@ export function lengthSquared(quat: Readonly<Quaternion>): number {
     return gl_quat.squaredLength(quat as unknown as gl_quat_type);
 }
 
-export function identity<T extends Quaternion>(quat: Readonly<T>): T {
+export function identity<T extends Quaternion>(quat: T): T {
     gl_quat.identity(quat as unknown as gl_quat_type);
     return quat;
 }
@@ -805,18 +805,18 @@ export function rotateQuat<T extends Quaternion, U extends Quaternion>(first: Re
     return QuatUtils.addRotationQuat(first, second, out!);
 }
 
-export function rotateAxis<T extends Quaternion>(quat: T, angle: number, axis: Readonly<Vector3>): T;
-export function rotateAxis<T extends Quaternion>(quat: Quaternion, angle: number, axis: Readonly<Vector3>, out?: T): T;
-export function rotateAxis<T extends Quaternion, U extends Quaternion>(quat: T, angle: number, axis: Readonly<Vector3>, out?: T | U): T | U {
+export function rotateAxis<T extends Quaternion>(quat: Readonly<T>, angle: number, axis: Readonly<Vector3>): T;
+export function rotateAxis<T extends Quaternion>(quat: Readonly<Quaternion>, angle: number, axis: Readonly<Vector3>, out?: T): T;
+export function rotateAxis<T extends Quaternion, U extends Quaternion>(quat: Readonly<T>, angle: number, axis: Readonly<Vector3>, out?: T | U): T | U {
     return QuatUtils.rotateAxisDegrees(quat, angle, axis, out);
 }
 
 export const rotateAxisDegrees = function () {
     const secondQuat = create();
 
-    function rotateAxisDegrees<T extends Quaternion>(quat: T, angle: number, axis: Readonly<Vector3>): T;
-    function rotateAxisDegrees<T extends Quaternion>(quat: Quaternion, angle: number, axis: Readonly<Vector3>, out?: T): T;
-    function rotateAxisDegrees<T extends Quaternion, U extends Quaternion>(quat: T, angle: number, axis: Readonly<Vector3>, out?: T | U): T | U {
+    function rotateAxisDegrees<T extends Quaternion>(quat: Readonly<T>, angle: number, axis: Readonly<Vector3>): T;
+    function rotateAxisDegrees<T extends Quaternion>(quat: Readonly<Quaternion>, angle: number, axis: Readonly<Vector3>, out?: T): T;
+    function rotateAxisDegrees<T extends Quaternion, U extends Quaternion>(quat: Readonly<T>, angle: number, axis: Readonly<Vector3>, out?: T | U): T | U {
         QuatUtils.fromAxisDegrees(angle, axis, secondQuat);
         return QuatUtils.rotateQuat(quat, secondQuat, out!);
     }
@@ -827,9 +827,9 @@ export const rotateAxisDegrees = function () {
 export const rotateAxisRadians = function () {
     const secondQuat = create();
 
-    function rotateAxisRadians<T extends Quaternion>(quat: T, angle: number, axis: Readonly<Vector3>): T;
-    function rotateAxisRadians<T extends Quaternion>(quat: Quaternion, angle: number, axis: Readonly<Vector3>, out?: T): T;
-    function rotateAxisRadians<T extends Quaternion, U extends Quaternion>(quat: T, angle: number, axis: Readonly<Vector3>, out?: T | U): T | U {
+    function rotateAxisRadians<T extends Quaternion>(quat: Readonly<T>, angle: number, axis: Readonly<Vector3>): T;
+    function rotateAxisRadians<T extends Quaternion>(quat: Readonly<Quaternion>, angle: number, axis: Readonly<Vector3>, out?: T): T;
+    function rotateAxisRadians<T extends Quaternion, U extends Quaternion>(quat: Readonly<T>, angle: number, axis: Readonly<Vector3>, out?: T | U): T | U {
         QuatUtils.fromAxisRadians(angle, axis, secondQuat);
         return QuatUtils.rotateQuat(quat, secondQuat, out!);
     }

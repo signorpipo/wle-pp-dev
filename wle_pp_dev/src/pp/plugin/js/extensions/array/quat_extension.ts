@@ -43,7 +43,7 @@ function _initQuatExtensionProtoype(): void {
             return QuatUtils.lengthSquared(this);
         },
 
-        quat_identity<T extends Quaternion>(this: Readonly<T>): T {
+        quat_identity<T extends Quaternion>(this: T): T {
             return QuatUtils.identity(this);
         },
 
@@ -302,15 +302,15 @@ function _initQuatExtensionProtoype(): void {
             return QuatUtils.rotateQuat(this, quat, out!);
         },
 
-        quat_rotateAxis<T extends Quaternion, U extends Quaternion>(this: T, angle: number, axis: Readonly<Vector3>, out?: T | U): T | U {
+        quat_rotateAxis<T extends Quaternion, U extends Quaternion>(this: Readonly<T>, angle: number, axis: Readonly<Vector3>, out?: T | U): T | U {
             return QuatUtils.rotateAxis(this, angle, axis, out!);
         },
 
-        quat_rotateAxisDegrees<T extends Quaternion, U extends Quaternion>(this: T, angle: number, axis: Readonly<Vector3>, out?: T | U): T | U {
+        quat_rotateAxisDegrees<T extends Quaternion, U extends Quaternion>(this: Readonly<T>, angle: number, axis: Readonly<Vector3>, out?: T | U): T | U {
             return QuatUtils.rotateAxisDegrees(this, angle, axis, out!);
         },
 
-        quat_rotateAxisRadians<T extends Quaternion, U extends Quaternion>(this: T, angle: number, axis: Readonly<Vector3>, out?: T | U): T | U {
+        quat_rotateAxisRadians<T extends Quaternion, U extends Quaternion>(this: Readonly<T>, angle: number, axis: Readonly<Vector3>, out?: T | U): T | U {
             return QuatUtils.rotateAxisRadians(this, angle, axis, out!);
         }
     };

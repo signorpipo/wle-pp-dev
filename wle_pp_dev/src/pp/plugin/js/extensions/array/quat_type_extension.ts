@@ -28,7 +28,7 @@ export interface QuaternionExtension<QuaternionType extends Quaternion> {
 
 
 
-    quat_identity<T extends QuaternionType>(this: Readonly<T>): this;
+    quat_identity<T extends QuaternionType>(this: T): this;
 
 
     quat_mul<T extends QuaternionType>(this: Readonly<T>, quat: Readonly<Quaternion>): T;
@@ -224,14 +224,14 @@ export interface QuaternionExtension<QuaternionType extends Quaternion> {
 
 
 
-    quat_rotateAxis<T extends QuaternionType>(this: T, angle: number, axis: Readonly<Vector3>): T;
-    quat_rotateAxis<T extends QuaternionType, U extends Quaternion>(this: T, angle: number, axis: Readonly<Vector3>, out?: U): U;
+    quat_rotateAxis<T extends QuaternionType>(this: Readonly<T>, angle: number, axis: Readonly<Vector3>): T;
+    quat_rotateAxis<T extends QuaternionType, U extends Quaternion>(this: Readonly<T>, angle: number, axis: Readonly<Vector3>, out?: U): U;
 
-    quat_rotateAxisDegrees<T extends QuaternionType>(this: T, angle: number, axis: Readonly<Vector3>): T;
-    quat_rotateAxisDegrees<T extends QuaternionType, U extends Quaternion>(this: T, angle: number, axis: Readonly<Vector3>, out?: U): U;
+    quat_rotateAxisDegrees<T extends QuaternionType>(this: Readonly<T>, angle: number, axis: Readonly<Vector3>): T;
+    quat_rotateAxisDegrees<T extends QuaternionType, U extends Quaternion>(this: Readonly<T>, angle: number, axis: Readonly<Vector3>, out?: U): U;
 
-    quat_rotateAxisRadians<T extends QuaternionType>(this: T, angle: number, axis: Readonly<Vector3>): T;
-    quat_rotateAxisRadians<T extends QuaternionType, U extends Quaternion>(this: T, angle: number, axis: Readonly<Vector3>, out?: U): U;
+    quat_rotateAxisRadians<T extends QuaternionType>(this: Readonly<T>, angle: number, axis: Readonly<Vector3>): T;
+    quat_rotateAxisRadians<T extends QuaternionType, U extends Quaternion>(this: Readonly<T>, angle: number, axis: Readonly<Vector3>, out?: U): U;
 }
 
 declare global {
