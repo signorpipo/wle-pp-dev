@@ -2,7 +2,7 @@ import { vec3 as gl_vec3, quat, type vec3 as gl_vec3_type } from "gl-matrix";
 import { Vector3 } from "wle-pp/cauldron/type_definitions/array_type_definitions.js";
 import { EasingFunction, MathUtils } from "../math_utils.js";
 import { Mat3Utils } from "./mat3_utils.js";
-import { Mat4Utils, create as mat4_utils_create } from "./mat4_utils.js";
+import { Mat4Utils, create as mat4_utils_create, scale } from "./mat4_utils.js";
 import { Quat2Utils } from "./quat2_utils.js";
 import { QuatUtils, create as quat_utils_create } from "./quat_utils.js";
 
@@ -45,34 +45,34 @@ export function clone<T extends Vector3>(vector: Readonly<T>): T {
     return vector.slice(0) as T;
 }
 
-export function isNormalized(vector, epsilon: number = MathUtils.EPSILON): boolean {
+export function isNormalized(vector: Readonly<Vector3>, epsilon: number = MathUtils.EPSILON): boolean {
     return Math.abs(Vec3Utils.lengthSquared(vector) - 1) < epsilon;
 }
 
-export function normalize(vector, out = Vec3Utils.create()) {
-    gl_vec3.normalize(out, vector);
+export function normalize<T extends Vector3, U extends Vector3>(vector: Readonly<T>, out: T | U = Vec3Utils.clone(vector)): T | U {
+    gl_vec3.normalize(out as unknown as gl_vec3_type, vector as unknown as gl_vec3_type);
     return out;
 }
 
-export function isZero(vector, epsilon: number = 0): boolean {
+export function isZero(vector: Readonly<Vector3>, epsilon: number = 0): boolean {
     return Vec3Utils.lengthSquared(vector) <= (epsilon * epsilon);
 }
 
-export function zero(vector) {
-    gl_vec3.zero(vector);
+export function zero<T extends Vector3>(vector: Readonly<T>): T {
+    gl_vec3.zero(vector as unknown as gl_vec3_type);
     return vector;
 }
 
-export function length(vector): number {
-    return gl_vec3.length(vector);
+export function length(vector: Readonly<Vector3>): number {
+    return gl_vec3.length(vector as unknown as gl_vec3_type);
 }
 
-export function lengthSquared(vector): number {
-    return gl_vec3.squaredLength(vector);
+export function lengthSquared(vector: Readonly<Vector3>): number {
+    return gl_vec3.squaredLength(vector as unknown as gl_vec3_type);
 }
 
-export function lengthSigned(vector, positiveDirection): number {
-    const signedLength = Vec3Utils.length(vector);
+export function lengthSigned(vector: Readonly<Vector3>, positiveDirection: Readonly<Vector3>): number {
+    let signedLength = Vec3Utils.length(vector);
     if (!Vec3Utils.isConcordant(vector, positiveDirection)) {
         signedLength *= -1;
     }
@@ -80,16 +80,16 @@ export function lengthSigned(vector, positiveDirection): number {
     return signedLength;
 }
 
-export function distance(first, second): number {
-    return gl_vec3.dist(first, second);
+export function distance(first: Readonly<Vector3>, second: Readonly<Vector3>): number {
+    return gl_vec3.dist(first as unknown as gl_vec3_type, second as unknown as gl_vec3_type);
 }
 
-export function distanceSquared(first, second): number {
-    return gl_vec3.squaredDistance(first, second);
+export function distanceSquared(first: Readonly<Vector3>, second: Readonly<Vector3>): number {
+    return gl_vec3.squaredDistance(first as unknown as gl_vec3_type, second as unknown as gl_vec3_type);
 }
 
-export function equals(first, second, epsilon: number = 0): boolean {
-    const equals = first.length == second.length;
+export function equals(first: Readonly<Vector3>, second: Readonly<Vector3>, epsilon: number = 0): boolean {
+    let equals = first.length == second.length;
 
     if (equals) {
         equals &&= (Math.abs(first[0] - second[0]) <= epsilon);
@@ -100,46 +100,46 @@ export function equals(first, second, epsilon: number = 0): boolean {
     return equals;
 }
 
-export function add(first, second, out = Vec3Utils.create()) {
-    gl_vec3.add(out, first, second);
+export function add<T extends Vector3, U extends Vector3>(first: Readonly<T>, second: Readonly<Vector3>, out: T | U = Vec3Utils.clone(first)): T | U {
+    gl_vec3.add(out as unknown as gl_vec3_type, first as unknown as gl_vec3_type, second as unknown as gl_vec3_type);
     return out;
 }
 
-export function sub(first, second, out = Vec3Utils.create()) {
-    gl_vec3.sub(out, first, second);
+export function sub<T extends Vector3, U extends Vector3>(first: Readonly<T>, second: Readonly<Vector3>, out: T | U = Vec3Utils.clone(first)): T | U {
+    gl_vec3.sub(out as unknown as gl_vec3_type, first as unknown as gl_vec3_type, second as unknown as gl_vec3_type);
     return out;
 }
 
-export function mul(first, second, out = Vec3Utils.create()) {
-    gl_vec3.mul(out, first, second);
+export function mul<T extends Vector3, U extends Vector3>(first: Readonly<T>, second: Readonly<Vector3>, out: T | U = Vec3Utils.clone(first)): T | U {
+    gl_vec3.mul(out as unknown as gl_vec3_type, first as unknown as gl_vec3_type, second as unknown as gl_vec3_type);
     return out;
 }
 
-export function div(first, second, out = Vec3Utils.create()) {
-    gl_vec3.div(out, first, second);
+
+export function div<T extends Vector3, U extends Vector3>(first: Readonly<T>, second: Readonly<Vector3>, out: T | U = Vec3Utils.clone(first)): T | U {
+    gl_vec3.div(out as unknown as gl_vec3_type, first as unknown as gl_vec3_type, second as unknown as gl_vec3_type);
     return out;
 }
 
-export function scale(vector, value, out = Vec3Utils.create()) {
-    gl_vec3.scale(out, vector, value);
+export function scalee<T extends Vector3, U extends Vector3>(vector: Readonly<T>, value: number, out: T | U = Vec3Utils.clone(vector)): T | U {
+    gl_vec3.scale(out as unknown as gl_vec3_type, vector as unknown as gl_vec3_type, value);
+    return out;
+}
+export function dot(first: Readonly<Vector3>, second: Readonly<Vector3>): number {
+    return gl_vec3.dot(first as unknown as gl_vec3_type, second as unknown as gl_vec3_type);
+}
+
+export function negate<T extends Vector3, U extends Vector3>(vector: Readonly<T>, out: T | U = Vec3Utils.clone(vector)): T | U {
+    gl_vec3.negate(out as unknown as gl_vec3_type, vector as unknown as gl_vec3_type);
     return out;
 }
 
-export function dot(first, second) {
-    return gl_vec3.dot(first, second);
-}
-
-export function negate(vector, out = Vec3Utils.create()) {
-    gl_vec3.negate(out, vector);
+export function cross<T extends Vector3, U extends Vector3>(first: Readonly<T>, second: Readonly<Vector3>, out: T | U = Vec3Utils.clone(first)): T | U {
+    gl_vec3.cross(out as unknown as gl_vec3_type, first as unknown as gl_vec3_type, second as unknown as gl_vec3_type);
     return out;
 }
 
-export function cross(first, second, out = Vec3Utils.create()) {
-    gl_vec3.cross(out, first, second);
-    return out;
-}
-
-export function lerp(from, to, interpolationFactor, out = Vec3Utils.create()) {
+export function lerp<T extends Vector3, U extends Vector3>(from: Readonly<T>, to: Readonly<Vector3>, interpolationFactor: number, out: T | U = Vec3Utils.clone(from)): T | U {
     if (interpolationFactor <= 0) {
         Vec3Utils.copy(from, out);
         return out;
@@ -148,24 +148,24 @@ export function lerp(from, to, interpolationFactor, out = Vec3Utils.create()) {
         return out;
     }
 
-    gl_vec3.lerp(out, from, to, interpolationFactor);
+    gl_vec3.lerp(out as unknown as gl_vec3_type, from as unknown as gl_vec3_type, to as unknown as gl_vec3_type, interpolationFactor);
     return out;
 }
 
-export function interpolate(from, to, interpolationFactor, easingFunction = EasingFunction.linear, out = Vec3Utils.create()) {
+export function interpolate<T extends Vector3, U extends Vector3>(from: Readonly<T>, to: Readonly<Vector3>, interpolationFactor: number, easingFunction: EasingFunction = EasingFunction.linear, out: T | U = Vec3Utils.clone(from)): T | U {
     const lerpFactor = easingFunction(interpolationFactor);
     return Vec3Utils.lerp(from, to, lerpFactor, out);
 }
 
-export function angle(first, second): number {
+export function angle(first: Readonly<Vector3>, second: Readonly<Vector3>): number {
     return Vec3Utils.angleDegrees(first, second);
 }
 
-export function angleDegrees(first, second): number {
+export function angleDegrees(first: Readonly<Vector3>, second: Readonly<Vector3>): number {
     return MathUtils.toDegrees(Vec3Utils.angleRadians(first, second));
 }
 
-export function angleRadians(first, second): number {
+export function angleRadians(first: Readonly<Vector3>, second: Readonly<Vector3>): number {
     const firstX = first[0];
     const firstY = first[1];
     const firstZ = first[2];
@@ -264,38 +264,38 @@ export function transformMat4(vector, mat4, out = Vec3Utils.create()) {
     return out;
 }
 
-export function toRadians(vector, out = Vec3Utils.create()) {
+export function toRadians<T extends Vector3, U extends Vector3>(vector: Readonly<T>, out: T | U = Vec3Utils.clone(vector)): T | U {
     Vec3Utils.set(out, MathUtils.toRadians(vector[0]), MathUtils.toRadians(vector[1]), MathUtils.toRadians(vector[2]));
     return out;
 }
 
-export function toDegrees(vector, out = Vec3Utils.create()) {
+export function toDegrees<T extends Vector3, U extends Vector3>(vector: Readonly<T>, out: T | U = Vec3Utils.clone(vector)): T | U {
     Vec3Utils.set(out, MathUtils.toDegrees(vector[0]), MathUtils.toDegrees(vector[1]), MathUtils.toDegrees(vector[2]));
     return out;
 }
 
-export function toQuat(vector, out) {
+export function toQuat(vector: Readonly<Vector3>, out) {
     return Vec3Utils.degreesToQuat(vector, out);
 }
 
-export function radiansToQuat(vector, out = QuatUtils.create()) {
+export function radiansToQuat(vector: Readonly<Vector3>, out = QuatUtils.create()) {
     QuatUtils.fromRadians(vector, out);
     return out;
 }
 
-export function degreesToQuat(vector, out = QuatUtils.create()) {
+export function degreesToQuat(vector: Readonly<Vector3>, out = QuatUtils.create()) {
     QuatUtils.fromDegrees(vector, out);
     return out;
 }
 
-export function valueAlongAxis(vector, axis): number {
+export function valueAlongAxis(vector: Readonly<Vector3>, axis): number {
     const valueAlongAxis = Vec3Utils.dot(vector, axis);
     return valueAlongAxis;
 }
 
 export const valueAlongPlane = function (): number {
     const componentAlong = create();
-    return function valueAlongPlane(vector, planeNormal) {
+    return function valueAlongPlane(vector: Readonly<Vector3>, planeNormal) {
         Vec3Utils.removeComponentAlongAxis(vector, planeNormal, componentAlong);
         return Vec3Utils.length(componentAlong);
     };
@@ -329,7 +329,7 @@ export const copyComponentAlongAxis = function () {
     };
 }();
 
-export function isConcordant(first, second): boolean {
+export function isConcordant(first: Readonly<Vector3>, second: Readonly<Vector3>): boolean {
     return Vec3Utils.dot(first, second) >= 0;
 }
 
@@ -438,12 +438,12 @@ export const projectOnPlaneAlongAxis = function () {
     };
 }();
 
-export function isOnAxis(vector, axis): boolean {
+export function isOnAxis(vector: Readonly<Vector3>, axis): boolean {
     const angleResult = Vec3Utils.angle(vector, axis);
     return Math.abs(angleResult) < MathUtils.EPSILON_DEGREES || Math.abs(angleResult - 180) < MathUtils.EPSILON_DEGREES;
 }
 
-export function isOnPlane(vector, planeNormal): boolean {
+export function isOnPlane(vector: Readonly<Vector3>, planeNormal): boolean {
     const angleResult = Vec3Utils.angle(vector, planeNormal);
     return Math.abs(angleResult - 90) < MathUtils.EPSILON_DEGREES;
 }
@@ -703,13 +703,13 @@ export const radiansAddRotationQuat = function () {
     };
 }();
 
-export function toMatrix(vector, out = Mat3Utils.create()) {
+export function toMatrix(vector: Readonly<Vector3>, out = Mat3Utils.create()) {
     return Vec3Utils.degreesToMatrix(vector, out);
 }
 
 export const degreesToMatrix = function () {
     const quat = quat_utils_create();
-    return function degreesToMatrix(vector, out = Mat3Utils.create()) {
+    return function degreesToMatrix(vector: Readonly<Vector3>, out = Mat3Utils.create()) {
         Vec3Utils.degreesToQuat(vector, quat);
         return QuatUtils.toMatrix(quat, out);
     };
@@ -717,7 +717,7 @@ export const degreesToMatrix = function () {
 
 export const radiansToMatrix = function () {
     const quat = quat_utils_create();
-    return function radiansToMatrix(vector, out = Mat3Utils.create()) {
+    return function radiansToMatrix(vector: Readonly<Vector3>, out = Mat3Utils.create()) {
         Vec3Utils.radiansToQuat(vector, quat);
         return QuatUtils.toMatrix(quat, out);
     };
@@ -808,7 +808,7 @@ export const rotationToPivotedQuat = function () {
 
 export const perpendicularRandom = function () {
     const notVector = create();
-    return function perpendicularRandom(vector, out = Vec3Utils.create()) {
+    return function perpendicularRandom<T extends Vector3, U extends Vector3>(vector: Readonly<T>, out: T | U = Vec3Utils.clone(vector)): T | U {
         if (Vec3Utils.isZero(vector)) {
             return Vec3Utils.zero(out);
         }
