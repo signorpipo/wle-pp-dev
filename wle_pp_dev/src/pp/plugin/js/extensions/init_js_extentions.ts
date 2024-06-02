@@ -1,5 +1,4 @@
 import { initArrayExtension } from "./array/array_extension.js";
-import { initArrayExtensionLegacy } from "./array/array_extension_legacy.js";
 import { initMat3Extension } from "./array/mat3_extension.js";
 import { initMat4Extension } from "./array/mat4_extension.js";
 import { initQuat2Extension } from "./array/quat2_extension.js";
@@ -40,7 +39,6 @@ export function initJSExtensions(): void {
     initQuat2Extension();
     initMat3Extension();
     initMat4Extension();
-    initArrayExtensionLegacy();
 
     initNumberExtension();
 }
