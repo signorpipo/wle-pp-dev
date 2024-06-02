@@ -1623,16 +1623,16 @@ export const convertDirectionObjectToWorld = function () {
 export const convertPositionWorldToObject = function () {
     const matrix = Mat4Utils.create();
 
-    function convertPositionObjectToWorld(object: Readonly<Object3D>, position: Readonly<Vector3>): Vector3;
-    function convertPositionObjectToWorld<T extends Vector3>(object: Readonly<Object3D>, position: Readonly<Vector3>, outPosition: T): T;
-    function convertPositionObjectToWorld<T extends Vector3>(object: Readonly<Object3D>, position: Readonly<Vector3>, outPosition: Vector3 | T = Vec3Utils.create()): Vector3 | T {
+    function convertPositionWorldToObject(object: Readonly<Object3D>, position: Readonly<Vector3>): Vector3;
+    function convertPositionWorldToObject<T extends Vector3>(object: Readonly<Object3D>, position: Readonly<Vector3>, outPosition: T): T;
+    function convertPositionWorldToObject<T extends Vector3>(object: Readonly<Object3D>, position: Readonly<Vector3>, outPosition: Vector3 | T = Vec3Utils.create()): Vector3 | T {
         ObjectUtils.getTransformWorldMatrix(object, matrix);
         Mat4Utils.invert(matrix, matrix);
         Vec3Utils.transformMat4(position, matrix, outPosition);
         return outPosition;
     }
 
-    return convertPositionObjectToWorld;
+    return convertPositionWorldToObject;
 }();
 
 export const convertDirectionWorldToObject = function () {

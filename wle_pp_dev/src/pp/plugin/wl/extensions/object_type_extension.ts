@@ -447,8 +447,8 @@ export interface Object3DExtension {
     pp_convertDirectionObjectToWorld(this: Readonly<Object3D>, direction: Readonly<Vector3>): Vector3;
     pp_convertDirectionObjectToWorld<T extends Vector3>(this: Readonly<Object3D>, direction: Readonly<Vector3>, outDirection: T): T;
 
-    pp_convertPositionObjectToWorld(this: Readonly<Object3D>, position: Readonly<Vector3>): Vector3;
-    pp_convertPositionObjectToWorld<T extends Vector3>(this: Readonly<Object3D>, position: Readonly<Vector3>, outPosition: T): T;
+    pp_convertPositionWorldToObject(this: Readonly<Object3D>, position: Readonly<Vector3>): Vector3;
+    pp_convertPositionWorldToObject<T extends Vector3>(this: Readonly<Object3D>, position: Readonly<Vector3>, outPosition: T): T;
 
     pp_convertDirectionWorldToObject(this: Readonly<Object3D>, direction: Readonly<Vector3>): Vector3;
     pp_convertDirectionWorldToObject<T extends Vector3>(this: Readonly<Object3D>, direction: Readonly<Vector3>, outDirection: T): T;
