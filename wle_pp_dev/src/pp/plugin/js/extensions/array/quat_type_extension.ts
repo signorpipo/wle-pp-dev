@@ -139,41 +139,41 @@ export interface QuaternionExtension<QuaternionType extends Quaternion> {
 
 
 
-    quat_addRotation<T extends QuaternionType>(this: Readonly<T>, quat: Readonly<Quaternion>): T;
-    quat_addRotation<T extends QuaternionType, U extends Quaternion>(this: Readonly<T>, quat: Readonly<Quaternion>, out: U): U;
+    quat_addRotation<T extends QuaternionType>(this: Readonly<T>, rotation: Readonly<Vector3>): T;
+    quat_addRotation<T extends QuaternionType, U extends Quaternion>(this: Readonly<T>, rotation: Readonly<Vector3>, out: U): U;
 
-    quat_addRotationDegrees<T extends QuaternionType>(this: Readonly<T>, quat: Readonly<Quaternion>): T;
-    quat_addRotationDegrees<T extends QuaternionType, U extends Quaternion>(this: Readonly<T>, quat: Readonly<Quaternion>, out: U): U;
+    quat_addRotationDegrees<T extends QuaternionType>(this: Readonly<T>, rotation: Readonly<Vector3>): T;
+    quat_addRotationDegrees<T extends QuaternionType, U extends Quaternion>(this: Readonly<T>, rotation: Readonly<Vector3>, out: U): U;
 
-    quat_addRotationRadians<T extends QuaternionType>(this: Readonly<T>, quat: Readonly<Quaternion>): T;
-    quat_addRotationRadians<T extends QuaternionType, U extends Quaternion>(this: Readonly<T>, quat: Readonly<Quaternion>, out: U): U;
+    quat_addRotationRadians<T extends QuaternionType>(this: Readonly<T>, rotation: Readonly<Vector3>): T;
+    quat_addRotationRadians<T extends QuaternionType, U extends Quaternion>(this: Readonly<T>, rotation: Readonly<Vector3>, out: U): U;
 
-    quat_addRotationQuat<T extends QuaternionType>(this: Readonly<T>, quat: Readonly<Quaternion>): T;
-    quat_addRotationQuat<T extends QuaternionType, U extends Quaternion>(this: Readonly<T>, quat: Readonly<Quaternion>, out: U): U;
-
-
-    quat_subRotation<T extends QuaternionType>(this: Readonly<T>, quat: Readonly<Quaternion>): T;
-    quat_subRotation<T extends QuaternionType, U extends Quaternion>(this: Readonly<T>, quat: Readonly<Quaternion>, out: U): U;
-
-    quat_subRotationDegrees<T extends QuaternionType>(this: Readonly<T>, quat: Readonly<Quaternion>): T;
-    quat_subRotationDegrees<T extends QuaternionType, U extends Quaternion>(this: Readonly<T>, quat: Readonly<Quaternion>, out: U): U;
-
-    quat_subRotationRadians<T extends QuaternionType>(this: Readonly<T>, quat: Readonly<Quaternion>): T;
-    quat_subRotationRadians<T extends QuaternionType, U extends Quaternion>(this: Readonly<T>, quat: Readonly<Quaternion>, out: U): U;
-
-    quat_subRotationQuat<T extends QuaternionType>(this: Readonly<T>, quat: Readonly<Quaternion>): T;
-    quat_subRotationQuat<T extends QuaternionType, U extends Quaternion>(this: Readonly<T>, quat: Readonly<Quaternion>, out: U): U;
+    quat_addRotationQuat<T extends QuaternionType>(this: Readonly<T>, rotation: Readonly<Quaternion>): T;
+    quat_addRotationQuat<T extends QuaternionType, U extends Quaternion>(this: Readonly<T>, rotation: Readonly<Quaternion>, out: U): U;
 
 
+    quat_subRotation<T extends QuaternionType>(this: Readonly<T>, rotation: Readonly<Vector3>): T;
+    quat_subRotation<T extends QuaternionType, U extends Quaternion>(this: Readonly<T>, rotation: Readonly<Vector3>, out: U): U;
 
-    quat_rotationTo<T extends QuaternionType>(this: Readonly<T>, to: Readonly<Quaternion>): T;
-    quat_rotationTo<T extends QuaternionType, U extends Quaternion>(this: Readonly<T>, to: Readonly<Quaternion>, out: U): U;
+    quat_subRotationDegrees<T extends QuaternionType>(this: Readonly<T>, rotation: Readonly<Vector3>): T;
+    quat_subRotationDegrees<T extends QuaternionType, U extends Quaternion>(this: Readonly<T>, rotation: Readonly<Vector3>, out: U): U;
 
-    quat_rotationToDegrees<T extends QuaternionType>(this: Readonly<T>, to: Readonly<Quaternion>): T;
-    quat_rotationToDegrees<T extends QuaternionType, U extends Quaternion>(this: Readonly<T>, to: Readonly<Quaternion>, out: U): U;
+    quat_subRotationRadians<T extends QuaternionType>(this: Readonly<T>, rotation: Readonly<Vector3>): T;
+    quat_subRotationRadians<T extends QuaternionType, U extends Quaternion>(this: Readonly<T>, rotation: Readonly<Vector3>, out: U): U;
 
-    quat_rotationToRadians<T extends QuaternionType>(this: Readonly<T>, to: Readonly<Quaternion>): T;
-    quat_rotationToRadians<T extends QuaternionType, U extends Quaternion>(this: Readonly<T>, to: Readonly<Quaternion>, out: U): U;
+    quat_subRotationQuat<T extends QuaternionType>(this: Readonly<T>, rotation: Readonly<Quaternion>): T;
+    quat_subRotationQuat<T extends QuaternionType, U extends Quaternion>(this: Readonly<T>, rotation: Readonly<Quaternion>, out: U): U;
+
+
+
+    quat_rotationTo<T extends QuaternionType>(this: Readonly<T>, to: Readonly<Vector3>): T;
+    quat_rotationTo<T extends QuaternionType, U extends Quaternion>(this: Readonly<T>, to: Readonly<Vector3>, out: U): U;
+
+    quat_rotationToDegrees<T extends QuaternionType>(this: Readonly<T>, to: Readonly<Vector3>): T;
+    quat_rotationToDegrees<T extends QuaternionType, U extends Quaternion>(this: Readonly<T>, to: Readonly<Vector3>, out: U): U;
+
+    quat_rotationToRadians<T extends QuaternionType>(this: Readonly<T>, to: Readonly<Vector3>): T;
+    quat_rotationToRadians<T extends QuaternionType, U extends Quaternion>(this: Readonly<T>, to: Readonly<Vector3>, out: U): U;
 
     quat_rotationToQuat<T extends QuaternionType>(this: Readonly<T>, to: Readonly<Quaternion>): T;
     quat_rotationToQuat<T extends QuaternionType, U extends Quaternion>(this: Readonly<T>, to: Readonly<Quaternion>, out: U): U;
@@ -210,17 +210,17 @@ export interface QuaternionExtension<QuaternionType extends Quaternion> {
 
 
 
-    quat_rotate<T extends QuaternionType>(this: Readonly<T>, quat: Readonly<Quaternion>): T;
-    quat_rotate<T extends QuaternionType, U extends Quaternion>(this: Readonly<T>, quat: Readonly<Quaternion>, out: U): U;
+    quat_rotate<T extends QuaternionType>(this: Readonly<T>, rotation: Readonly<Vector3>): T;
+    quat_rotate<T extends QuaternionType, U extends Quaternion>(this: Readonly<T>, rotation: Readonly<Vector3>, out: U): U;
 
-    quat_rotateDegrees<T extends QuaternionType>(this: Readonly<T>, quat: Readonly<Quaternion>): T;
-    quat_rotateDegrees<T extends QuaternionType, U extends Quaternion>(this: Readonly<T>, quat: Readonly<Quaternion>, out: U): U;
+    quat_rotateDegrees<T extends QuaternionType>(this: Readonly<T>, rotation: Readonly<Vector3>): T;
+    quat_rotateDegrees<T extends QuaternionType, U extends Quaternion>(this: Readonly<T>, rotation: Readonly<Vector3>, out: U): U;
 
-    quat_rotateRadians<T extends QuaternionType>(this: Readonly<T>, quat: Readonly<Quaternion>): T;
-    quat_rotateRadians<T extends QuaternionType, U extends Quaternion>(this: Readonly<T>, quat: Readonly<Quaternion>, out: U): U;
+    quat_rotateRadians<T extends QuaternionType>(this: Readonly<T>, rotation: Readonly<Vector3>): T;
+    quat_rotateRadians<T extends QuaternionType, U extends Quaternion>(this: Readonly<T>, rotation: Readonly<Vector3>, out: U): U;
 
-    quat_rotateQuat<T extends QuaternionType>(this: Readonly<T>, quat: Readonly<Quaternion>): T;
-    quat_rotateQuat<T extends QuaternionType, U extends Quaternion>(this: Readonly<T>, quat: Readonly<Quaternion>, out: U): U;
+    quat_rotateQuat<T extends QuaternionType>(this: Readonly<T>, rotation: Readonly<Quaternion>): T;
+    quat_rotateQuat<T extends QuaternionType, U extends Quaternion>(this: Readonly<T>, rotation: Readonly<Quaternion>, out: U): U;
 
 
 

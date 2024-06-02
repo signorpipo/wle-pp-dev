@@ -202,47 +202,47 @@ function _initQuatExtensionProtoype(): void {
             return QuatUtils.toMatrix(this, out!);
         },
 
-        quat_addRotation<T extends Quaternion, U extends Quaternion>(this: Readonly<T>, quat: Readonly<Quaternion>, out?: T | U): T | U {
-            return QuatUtils.addRotation(this, quat, out!);
+        quat_addRotation<T extends Quaternion, U extends Quaternion>(this: Readonly<T>, rotation: Readonly<Vector3>, out?: T | U): T | U {
+            return QuatUtils.addRotation(this, rotation, out!);
         },
 
-        quat_addRotationDegrees<T extends Quaternion, U extends Quaternion>(this: Readonly<T>, quat: Readonly<Quaternion>, out?: T | U): T | U {
-            return QuatUtils.addRotationDegrees(this, quat, out!);
+        quat_addRotationDegrees<T extends Quaternion, U extends Quaternion>(this: Readonly<T>, rotation: Readonly<Vector3>, out?: T | U): T | U {
+            return QuatUtils.addRotationDegrees(this, rotation, out!);
         },
 
-        quat_addRotationRadians<T extends Quaternion, U extends Quaternion>(this: Readonly<T>, quat: Readonly<Quaternion>, out?: T | U): T | U {
-            return QuatUtils.addRotationRadians(this, quat, out!);
+        quat_addRotationRadians<T extends Quaternion, U extends Quaternion>(this: Readonly<T>, rotation: Readonly<Vector3>, out?: T | U): T | U {
+            return QuatUtils.addRotationRadians(this, rotation, out!);
         },
 
-        quat_addRotationQuat<T extends Quaternion, U extends Quaternion>(this: Readonly<T>, quat: Readonly<Quaternion>, out?: T | U): T | U {
-            return QuatUtils.addRotationQuat(this, quat, out!);
+        quat_addRotationQuat<T extends Quaternion, U extends Quaternion>(this: Readonly<T>, rotation: Readonly<Quaternion>, out?: T | U): T | U {
+            return QuatUtils.addRotationQuat(this, rotation, out!);
         },
 
-        quat_subRotation<T extends Quaternion, U extends Quaternion>(this: Readonly<T>, quat: Readonly<Quaternion>, out?: T | U): T | U {
-            return QuatUtils.subRotation(this, quat, out!);
+        quat_subRotation<T extends Quaternion, U extends Quaternion>(this: Readonly<T>, rotation: Readonly<Vector3>, out?: T | U): T | U {
+            return QuatUtils.subRotation(this, rotation, out!);
         },
 
-        quat_subRotationDegrees<T extends Quaternion, U extends Quaternion>(this: Readonly<T>, quat: Readonly<Quaternion>, out?: T | U): T | U {
-            return QuatUtils.subRotationDegrees(this, quat, out!);
+        quat_subRotationDegrees<T extends Quaternion, U extends Quaternion>(this: Readonly<T>, rotation: Readonly<Vector3>, out?: T | U): T | U {
+            return QuatUtils.subRotationDegrees(this, rotation, out!);
         },
 
-        quat_subRotationRadians<T extends Quaternion, U extends Quaternion>(this: Readonly<T>, quat: Readonly<Quaternion>, out?: T | U): T | U {
-            return QuatUtils.subRotationRadians(this, quat, out!);
+        quat_subRotationRadians<T extends Quaternion, U extends Quaternion>(this: Readonly<T>, rotation: Readonly<Vector3>, out?: T | U): T | U {
+            return QuatUtils.subRotationRadians(this, rotation, out!);
         },
 
-        quat_subRotationQuat<T extends Quaternion, U extends Quaternion>(this: Readonly<T>, quat: Readonly<Quaternion>, out?: T | U): T | U {
-            return QuatUtils.subRotationQuat(this, quat, out!);
+        quat_subRotationQuat<T extends Quaternion, U extends Quaternion>(this: Readonly<T>, rotation: Readonly<Quaternion>, out?: T | U): T | U {
+            return QuatUtils.subRotationQuat(this, rotation, out!);
         },
 
-        quat_rotationTo<T extends Quaternion, U extends Quaternion>(this: Readonly<T>, to: Readonly<Quaternion>, out?: T | U): T | U {
+        quat_rotationTo<T extends Quaternion, U extends Quaternion>(this: Readonly<T>, to: Readonly<Vector3>, out?: T | U): T | U {
             return QuatUtils.rotationTo(this, to, out!);
         },
 
-        quat_rotationToDegrees<T extends Quaternion, U extends Quaternion>(this: Readonly<T>, to: Readonly<Quaternion>, out?: T | U): T | U {
+        quat_rotationToDegrees<T extends Quaternion, U extends Quaternion>(this: Readonly<T>, to: Readonly<Vector3>, out?: T | U): T | U {
             return QuatUtils.rotationToDegrees(this, to, out!);
         },
 
-        quat_rotationToRadians<T extends Quaternion, U extends Quaternion>(this: Readonly<T>, to: Readonly<Quaternion>, out?: T | U): T | U {
+        quat_rotationToRadians<T extends Quaternion, U extends Quaternion>(this: Readonly<T>, to: Readonly<Vector3>, out?: T | U): T | U {
             return QuatUtils.rotationToRadians(this, to, out!);
         },
 
@@ -286,20 +286,20 @@ function _initQuatExtensionProtoype(): void {
             return QuatUtils.fromTwistSwing(twist, swing, this);
         },
 
-        quat_rotate<T extends Quaternion, U extends Quaternion>(this: Readonly<T>, quat: Readonly<Quaternion>, out?: T | U): T | U {
-            return QuatUtils.rotate(this, quat, out!);
+        quat_rotate<T extends Quaternion, U extends Quaternion>(this: Readonly<T>, rotation: Readonly<Vector3>, out?: T | U): T | U {
+            return QuatUtils.rotate(this, rotation, out!);
         },
 
-        quat_rotateDegrees<T extends Quaternion, U extends Quaternion>(this: Readonly<T>, quat: Readonly<Quaternion>, out?: T | U): T | U {
-            return QuatUtils.rotateDegrees(this, quat, out!);
+        quat_rotateDegrees<T extends Quaternion, U extends Quaternion>(this: Readonly<T>, rotation: Readonly<Vector3>, out?: T | U): T | U {
+            return QuatUtils.rotateDegrees(this, rotation, out!);
         },
 
-        quat_rotateRadians<T extends Quaternion, U extends Quaternion>(this: Readonly<T>, quat: Readonly<Quaternion>, out?: T | U): T | U {
-            return QuatUtils.rotateRadians(this, quat, out!);
+        quat_rotateRadians<T extends Quaternion, U extends Quaternion>(this: Readonly<T>, rotation: Readonly<Vector3>, out?: T | U): T | U {
+            return QuatUtils.rotateRadians(this, rotation, out!);
         },
 
-        quat_rotateQuat<T extends Quaternion, U extends Quaternion>(this: Readonly<T>, quat: Readonly<Quaternion>, out?: T | U): T | U {
-            return QuatUtils.rotateQuat(this, quat, out!);
+        quat_rotateQuat<T extends Quaternion, U extends Quaternion>(this: Readonly<T>, rotation: Readonly<Vector3>, out?: T | U): T | U {
+            return QuatUtils.rotateQuat(this, rotation, out!);
         },
 
         quat_rotateAxis<T extends Quaternion, U extends Quaternion>(this: Readonly<T>, angle: number, axis: Readonly<Vector3>, out?: T | U): T | U {
