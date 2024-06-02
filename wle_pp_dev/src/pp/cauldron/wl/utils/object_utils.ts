@@ -171,15 +171,15 @@ export function getRotationLocalDegrees<T extends Vector3>(object: Readonly<Obje
 export const getRotationLocalRadians = function () {
     const quat = QuatUtils.create();
 
-    function getRotationLocalQuat(object: Readonly<Object3D>): Vector3;
-    function getRotationLocalQuat<T extends Vector3>(object: Readonly<Object3D>, outRotation: T): T;
-    function getRotationLocalQuat<T extends Vector3>(object: Readonly<Object3D>, outRotation: Vector3 | T = Vec3Utils.create()): Vector3 | T {
+    function getRotationLocalRadians(object: Readonly<Object3D>): Vector3;
+    function getRotationLocalRadians<T extends Vector3>(object: Readonly<Object3D>, outRotation: T): T;
+    function getRotationLocalRadians<T extends Vector3>(object: Readonly<Object3D>, outRotation: Vector3 | T = Vec3Utils.create()): Vector3 | T {
         ObjectUtils.getRotationLocalQuat(object, quat);
         QuatUtils.toRadians(quat, outRotation);
         return outRotation;
     }
 
-    return getRotationLocalQuat;
+    return getRotationLocalRadians;
 }();
 
 export const getRotationLocalMatrix = function () {

@@ -86,7 +86,6 @@ export interface Object3DExtension {
 
 
     pp_getRotationWorld<T extends Vector3>(this: Readonly<Object3D>, outRotation?: T): T;
-
     pp_getRotationWorldDegrees<T extends Vector3>(this: Readonly<Object3D>, outRotation?: T): T;
 
     pp_getRotationWorldRadians(this: Readonly<Object3D>): Vector3;
@@ -102,11 +101,8 @@ export interface Object3DExtension {
     pp_getRotationLocal<T extends Vector3>(this: Readonly<Object3D>, outRotation?: T): T;
     pp_getRotationLocalDegrees<T extends Vector3>(this: Readonly<Object3D>, outRotation?: T): T;
 
-    pp_getRotationLocalQuat(this: Readonly<Object3D>): Vector3;
-    pp_getRotationLocalQuat<T extends Vector3>(this: Readonly<Object3D>, outRotation: T): T;
-
-    pp_getRotationLocalQuat(this: Readonly<Object3D>): Vector3;
-    pp_getRotationLocalQuat<T extends Vector3>(this: Readonly<Object3D>, outRotation: T): T;
+    pp_getRotationLocalRadians(this: Readonly<Object3D>): Vector3;
+    pp_getRotationLocalRadians<T extends Vector3>(this: Readonly<Object3D>, outRotation: T): T;
 
     pp_getRotationLocalMatrix(this: Readonly<Object3D>): Matrix3;
     pp_getRotationLocalMatrix<T extends Matrix3>(this: Readonly<Object3D>, outRotation: T): T;
