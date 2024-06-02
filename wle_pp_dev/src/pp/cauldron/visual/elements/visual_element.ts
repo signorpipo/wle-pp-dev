@@ -38,7 +38,7 @@ export abstract class AbstractVisualElementParams<T extends AbstractVisualElemen
             throw new Error("Trying to copy from params with a different type - From Type: " + other.myType + " - To Type: " + this.myType);
         }
 
-        this.copy(other as unknown as Readonly<T>);
+        this.copy(other as Readonly<T>);
     }
 
     public cloneGeneric(): VisualElementParams {
