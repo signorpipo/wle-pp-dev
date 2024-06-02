@@ -88,7 +88,9 @@ export function mapToRange(value: number, originRangeStart: number, originRangeE
 
 /** Range is `[start, end)` */
 export function random(start: number = 0, end: number = 1): number {
-    return Math.random() * (end - start) + start;
+    const min = Math.min(start, end);
+    const max = Math.max(start, end);
+    return Math.random() * (max - min) + min;
 }
 
 /** Range is `[start, end]` */

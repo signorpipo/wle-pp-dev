@@ -46,6 +46,7 @@ export interface MathExtension {
 
     /** You give it a list of parameters and returns a random one */
     pp_randomPick<T>(array: T[]): T | null;
+    pp_randomPick<T>(...args: T[]): T | null;
 
     pp_randomUUID(): string;
 

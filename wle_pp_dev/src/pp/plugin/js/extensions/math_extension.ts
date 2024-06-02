@@ -64,8 +64,8 @@ function _initMathExtensionInstance(): void {
             return MathUtils.randomSign();
         },
 
-        pp_randomPick<T>(array: T[]): T | null {
-            return MathUtils.randomPick(array);
+        pp_randomPick<T>(...args: T[]): T | null {
+            return MathUtils.randomPick(...args);
         },
 
         pp_randomUUID(): string {
