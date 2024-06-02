@@ -1,4 +1,4 @@
-import { vec3 as gl_vec3, quat, type mat3 as gl_mat3_type, type mat4 as gl_mat4_type, type quat as gl_quat_type, type vec3 as gl_vec3_type } from "gl-matrix";
+import { vec3 as gl_vec3, type mat3 as gl_mat3_type, type mat4 as gl_mat4_type, type quat as gl_quat_type, type vec3 as gl_vec3_type } from "gl-matrix";
 import { Matrix3, Matrix4, Quaternion, Vector3 } from "wle-pp/cauldron/type_definitions/array_type_definitions.js";
 import { EasingFunction, MathUtils } from "../math_utils.js";
 import { Mat3Utils } from "./mat3_utils.js";
@@ -23,9 +23,9 @@ export function set<T extends Vector3>(vector: T, x: number, y: number, z: numbe
 export function set<T extends Vector3>(vector: T, uniformValue: number): T;
 export function set<T extends Vector3>(vector: T, x: number, y?: number, z?: number): T {
     if (y == null) {
-        gl_vec3.set(quat as unknown as gl_vec3_type, x, x, x);
+        gl_vec3.set(vector as unknown as gl_vec3_type, x, x, x);
     } else {
-        gl_vec3.set(quat as unknown as gl_vec3_type, x, y, z!);
+        gl_vec3.set(vector as unknown as gl_vec3_type, x, y, z!);
     }
 
     return vector;
