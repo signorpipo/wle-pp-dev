@@ -8,8 +8,8 @@ import { Matrix3, Matrix4, Quaternion, Vector3 } from "../../../../cauldron/type
 
 export interface Vector3Extension<VectorType extends Vector3> {
 
-    vec3_set<T extends VectorType>(this: T, x: number, y: number, z: number): T;
-    vec3_set<T extends VectorType>(this: T, uniformValue: number): T;
+    vec3_set<T extends VectorType>(this: T, x: number, y: number, z: number): this;
+    vec3_set<T extends VectorType>(this: T, uniformValue: number): this;
 
 
 
@@ -25,7 +25,7 @@ export interface Vector3Extension<VectorType extends Vector3> {
 
     vec3_isZero<T extends VectorType>(this: Readonly<T>, epsilon?: number): boolean;
 
-    vec3_zero<T extends VectorType>(this: T): T;
+    vec3_zero<T extends VectorType>(this: T): this;
 
     vec3_length<T extends VectorType>(this: Readonly<T>): number;
     vec3_lengthSquared<T extends VectorType>(this: Readonly<T>): number;

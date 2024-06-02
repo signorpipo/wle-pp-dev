@@ -309,18 +309,24 @@ export function getTransformLocalQuat<T extends Quaternion2>(object: Readonly<Ob
 
 // Axes
 
-export function getAxes(object: Readonly<Object3D>, outAxes?: [Vector3, Vector3, Vector3]): [Vector3, Vector3, Vector3] {
+export function getAxes(object: Readonly<Object3D>): [Vector3, Vector3, Vector3];
+export function getAxes<T extends Vector3, U extends Vector3, V extends Vector3>(object: Readonly<Object3D>, outAxes: [T, U, V]): [T, U, V];
+export function getAxes<T extends Vector3, U extends Vector3, V extends Vector3>(object: Readonly<Object3D>, outAxes: [Vector3, Vector3, Vector3] | [T, U, V] = [Vec3Utils.create(), Vec3Utils.create(), Vec3Utils.create()]): [Vector3, Vector3, Vector3] | [T, U, V] {
     return ObjectUtils.getAxesWorld(object, outAxes);
 }
 
-export function getAxesWorld(object: Readonly<Object3D>, outAxes: [Vector3, Vector3, Vector3] = [Vec3Utils.create(), Vec3Utils.create(), Vec3Utils.create()]): [Vector3, Vector3, Vector3] {
+export function getAxesWorld(object: Readonly<Object3D>): [Vector3, Vector3, Vector3];
+export function getAxesWorld<T extends Vector3, U extends Vector3, V extends Vector3>(object: Readonly<Object3D>, outAxes: [T, U, V]): [T, U, V];
+export function getAxesWorld<T extends Vector3, U extends Vector3, V extends Vector3>(object: Readonly<Object3D>, outAxes: [Vector3, Vector3, Vector3] | [T, U, V] = [Vec3Utils.create(), Vec3Utils.create(), Vec3Utils.create()]): [Vector3, Vector3, Vector3] | [T, U, V] {
     ObjectUtils.getLeftWorld(object, outAxes[0]);
     ObjectUtils.getUpWorld(object, outAxes[1]);
     ObjectUtils.getForwardWorld(object, outAxes[2]);
     return outAxes;
 }
 
-export function getAxesLocal(object: Readonly<Object3D>, outAxes: [Vector3, Vector3, Vector3] = [Vec3Utils.create(), Vec3Utils.create(), Vec3Utils.create()]): [Vector3, Vector3, Vector3] {
+export function getAxesLocal(object: Readonly<Object3D>): [Vector3, Vector3, Vector3];
+export function getAxesLocal<T extends Vector3, U extends Vector3, V extends Vector3>(object: Readonly<Object3D>, outAxes: [T, U, V]): [T, U, V];
+export function getAxesLocal<T extends Vector3, U extends Vector3, V extends Vector3>(object: Readonly<Object3D>, outAxes: [Vector3, Vector3, Vector3] | [T, U, V] = [Vec3Utils.create(), Vec3Utils.create(), Vec3Utils.create()]): [Vector3, Vector3, Vector3] | [T, U, V] {
     ObjectUtils.getLeftLocal(object, outAxes[0]);
     ObjectUtils.getUpLocal(object, outAxes[1]);
     ObjectUtils.getForwardLocal(object, outAxes[2]);
