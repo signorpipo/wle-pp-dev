@@ -1,10 +1,9 @@
+import { ArrayLike, DynamicArrayLike } from "../../../../cauldron/type_definitions/array_type_definitions.js";
+
 /**
  * #WARN this type extension is actually added at runtime only if you call `initArrayExtension`  
  * The `initPP` function, which is automatically called by the `pp-gateway` component, does this for you
  */
-
-import { ArrayLike, DynamicArrayLike } from "../../../../cauldron/type_definitions/array_type_definitions.js";
-
 export interface ArrayLikeExtension<ArrayType extends ArrayLike<ArrayElementType>, ArrayElementType> {
     pp_copy<T extends ArrayType>(this: T, array: Readonly<ArrayLike<ArrayElementType>>, copyCallback?: (arrayElement: ArrayElementType, thisElement: ArrayElementType) => ArrayElementType): this;
     pp_clone<T extends ArrayType>(this: Readonly<T>, cloneCallback?: (elementToClone: ArrayElementType) => ArrayElementType): T;

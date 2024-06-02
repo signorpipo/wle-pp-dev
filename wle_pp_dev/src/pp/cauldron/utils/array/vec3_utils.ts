@@ -1097,6 +1097,36 @@ export const radiansToMatrix = function () {
     return radiansToMatrix;
 }();
 
+/**
+ * How to use
+ * 
+ * By default rotations are in `Degrees` and transforms are `Matrix4` (and not `Quat2`)  
+ * For functions that work with rotations, `Matrix` means `Matrix3` and `Quat` means `Quat`  
+ * For functions that work with transforms, `Matrix` means `Matrix4` and `Quat` means `Quat2`
+ * 
+ * For rotations u can add a suffix like `Degrees`/`Radians`/`Quat`/`Matrix` to use a specific version, example:  
+ *     - `angleDegrees`  
+ *     - `rotateQuat`
+ *     
+ * For transform u can add a suffix like `Quat`/`Matrix` to use a specific version, example:  
+ *     - convertPositionToWorldMatrix  
+ *     - convertDirectionToWorldQuat
+ * 
+ * Some functions let u add a prefix to specify if the vector represent a rotation in `Degrees` or `Radians`, where `Degrees` is the default:  
+ *     - toQuat  
+ *     - degreesToQuat  
+ *     - radiansToQuat  
+ *     - degreesAddRotation
+ * 
+ * Rotation operations return a rotation of the same kind of the starting variable:  
+ *     - degreesAddRotationQuat     -> returns a rotation in `Degrees`  
+ *     - radiansAddRotationDegrees  -> returns a rotation in `Radians`
+ * 
+ * The functions leave u the choice of forwarding an out parameter or just get the return value, example:  
+ *     - `let negate = Vec3Utils.negate(vector)`  
+ *     - `Vec3Utils.negate(vector, negate)`  
+ *     - the out parameter is always the last one
+ */
 export const Vec3Utils = {
     create,
     set,

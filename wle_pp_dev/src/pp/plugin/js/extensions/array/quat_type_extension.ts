@@ -1,11 +1,27 @@
+import { Matrix3, Quaternion, Vector3 } from "../../../../cauldron/type_definitions/array_type_definitions.js";
+import { EasingFunction } from "../../../../cauldron/utils/math_utils.js";
+
 /**
  * #WARN this type extension is actually added at runtime only if you call `initQuatExtension`  
  * The `initPP` function, which is automatically called by the `pp-gateway` component, does this for you
+ * 
+ * -
+ * 
+ * How to use
+ * 
+ * By default rotations are in `Degrees` and transforms are `Matrix4` (and not `Quat2`)  
+ * For functions that work with rotations, `Matrix` means `Matrix3` and `Quat` means `Quat`  
+ * For functions that work with transforms, `Matrix` means `Matrix4` and `Quat` means `Quat2`
+ * 
+ * For rotations u can add a suffix like `Degrees`/`Radians`/`Quat`/`Matrix` to use a specific version, example:  
+ *     - `quat_getAngleRadians`  
+ *     - `quat_addRotationQuat`
+ * 
+ * The functions leave u the choice of forwarding an out parameter or just get the return value, example:  
+ *     - `let forward = this.quat_getForward()`  
+ *     - `this.quat_getForward(forward)`  
+ *     - the out parameter is always the last one
  */
-
-import { EasingFunction } from "../../../../cauldron/utils/math_utils.js";
-import { Matrix3, Quaternion, Vector3 } from "../../../../cauldron/type_definitions/array_type_definitions.js";
-
 export interface QuaternionExtension<QuaternionType extends Quaternion> {
 
     quat_set<T extends QuaternionType>(this: T, x: number, y: number, z: number, w: number): this;

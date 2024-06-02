@@ -275,6 +275,15 @@ export function isInsideAngleRangeRadians(angle: number, start: number, end: num
     return MathUtils.isInsideAngleRangeDegrees(MathUtils.toDegrees(angle), MathUtils.toDegrees(start), MathUtils.toDegrees(end), useShortestAngle);
 }
 
+/**
+ * How to use
+ * 
+ * By default the rotations are in `Degrees`
+ * 
+ * For rotations u can add a suffix like `Degrees`/`Radians` to use a specific version, example:  
+ *     - `angleDistanceSignedDegrees`  
+ *     - `isInsideAngleRangeRadians`
+ */
 export const MathUtils = {
     EPSILON,
     EPSILON_SQUARED,

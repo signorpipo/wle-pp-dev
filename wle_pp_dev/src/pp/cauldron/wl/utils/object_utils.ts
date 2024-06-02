@@ -2942,6 +2942,60 @@ export function wrapObject(id: number, engine: Readonly<WonderlandEngine> | null
     return engine != null ? engine.wrapObject(id) : null;
 }
 
+/**
+ * How to use
+ * 
+ * By default the functions work on `World` space, rotations are in `Degrees` and transforms are `Matrix4` (and not `Quat2`)  
+ * For functions that work with rotations, `Matrix` means `Matrix3` and `Quat` means `Quat`  
+ * For functions that work with transforms, `Matrix` means `Matrix4` and `Quat` means `Quat2`
+ * 
+ * 
+ * You can add a suffix like `World`/`Local`/`Object` at the end of some functions to specify the space, example:  
+ *     - `getPositionLocal` to get the position in local space (parent space)  
+ *     - `translateObject` to translate in object space
+ * 
+ * 
+ * For rotations u can add a suffix like `Degrees`/`Radians`/`Quat`/`Matrix` to use a specific version, example:  
+ *     - `getRotationDegrees`  
+ *     - `setRotationLocalMatrix`  
+ *     - `rotateWorldQuat`
+ *     
+ * 
+ * For transform u can add a suffix like `Quat`/`Matrix` to use a specific version, example:  
+ *     - `getTransformQuat`  
+ *     - `setTransformWorldMatrix`
+ *     
+ * 
+ * Some functions let you specify if u want them to work on the `Hierarchy`/`Descendants`/`Children`/`Self` where:  
+ *     - `Self`: the current object only  
+ *     - `Children`: direct children of the object  
+ *     - `Descendants`: all the children of the object, including child of child and so on  
+ *     - `Hierarchy`: `Descendants` plus the current object
+ * 
+ * Examples:  
+ *     - `getComponent`  
+ *     - `getComponentHierarchy`  
+ *     - `getComponentsAmountMapDescendants`  
+ *     - `setActiveChildren`  
+ *     - `setActiveSelf`
+ * 
+ * By default the functions work on the `Hierarchy`
+ * 
+ * On some of the functions where u can specify `Hierarchy`/`Descendants` u can also specify if the algorithm should explore by `Breadth`/`Depth`, example:  
+ *     - `getComponentHierarchyBreadth`  
+ *     - `setActiveDescendantsDepth`
+ * 
+ * By default the functions explore by `Breadth`
+ * 
+ * The functions leave u the choice of forwarding an out parameter or just get the return value, example:  
+ *     - `let position = ObjectUtils.getPosition(object)`  
+ *     - `ObjectUtils.getPosition(object, position)`  
+ *     - the out parameter is always the last one
+ * 
+ * 
+ * If a method require an engine parameter, u can always avoid specifying it and it will by default use the current main engine  
+ * If a method require a scene parameter, u can always avoid specifying it and it will by default use the scene from the current main engine
+ */
 export const ObjectUtils = {
     getPosition,
     getPositionWorld,

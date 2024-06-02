@@ -1,10 +1,26 @@
+import { Matrix4, Quaternion, Quaternion2, Vector3 } from "../../../../cauldron/type_definitions/array_type_definitions.js";
+
 /**
  * #WARN this type extension is actually added at runtime only if you call `initMat4Extension`  
  * The `initPP` function, which is automatically called by the `pp-gateway` component, does this for you
+ * 
+ * -
+ * 
+ * How to use
+ * 
+ * By default rotations are in `Degrees` and transforms are `Matrix4` (and not `Quat2`)  
+ * For functions that work with rotations, `Matrix` means `Matrix3` and `Quat` means `Quat`  
+ * For functions that work with transforms, `Matrix` means `Matrix4` and `Quat` means `Quat2`
+ * 
+ * For rotations u can add a suffix like `Degrees`/`Radians`/`Quat`/`Matrix` to use a specific version, example:  
+ *     - `mat4_getRotationRadians`  
+ *     - `mat4_setRotationQuat`
+ * 
+ * The functions leave u the choice of forwarding an out parameter or just get the return value, example:  
+ *     - `let position = this.mat4_getPosition()`  
+ *     - `this.mat4_getPosition(position)`  
+ *     - the out parameter is always the last one
  */
-
-import { Matrix4, Quaternion, Quaternion2, Vector3 } from "../../../../cauldron/type_definitions/array_type_definitions.js";
-
 export interface Matrix4Extension<MatrixType extends Matrix4> {
 
     mat4_set<T extends MatrixType>(this: T,

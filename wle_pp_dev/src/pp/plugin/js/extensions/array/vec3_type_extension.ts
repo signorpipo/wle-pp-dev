@@ -1,11 +1,41 @@
-/**
- * #WARN this type extension is actually added at runtime only if you call `initVec3Extension`  
- * The `initPP` function, which is automatically called by the `pp-gateway` component, does this for you
- */
-
 import { EasingFunction } from "wle-pp/cauldron/utils/math_utils.js";
 import { Matrix3, Matrix4, Quaternion, Vector3 } from "../../../../cauldron/type_definitions/array_type_definitions.js";
 
+/**
+ * #WARN this type extension is actually added at runtime only if you call `initVec3Extension`  
+ * The `initPP` function, which is automatically called by the `pp-gateway` component, does this for you
+ * 
+ * -
+ * 
+ * How to use
+ * 
+ * By default rotations are in `Degrees` and transforms are `Matrix4` (and not `Quat2`)  
+ * For functions that work with rotations, `Matrix` means `Matrix3` and `Quat` means `Quat`  
+ * For functions that work with transforms, `Matrix` means `Matrix4` and `Quat` means `Quat2`
+ * 
+ * For rotations u can add a suffix like `Degrees`/`Radians`/`Quat`/`Matrix` to use a specific version, example:  
+ *     - `vec3_angleDegrees`  
+ *     - `vec3_rotateQuat`
+ *     
+ * For transform u can add a suffix like `Quat`/`Matrix` to use a specific version, example:  
+ *     - vec3_convertPositionToWorldMatrix  
+ *     - vec3_convertDirectionToWorldQuat
+ * 
+ * Some functions let u add a prefix to specify if the vector represent a rotation in `Degrees` or `Radians`, where `Degrees` is the default:  
+ *     - vec3_toQuat  
+ *     - vec3_degreesToQuat  
+ *     - vec3_radiansToQuat  
+ *     - vec3_degreesAddRotation
+ * 
+ * Rotation operations return a rotation of the same kind of the starting variable:  
+ *     - vec3_degreesAddRotationQuat     -> returns a rotation in `Degrees`  
+ *     - vec3_radiansAddRotationDegrees  -> returns a rotation in `Radians`
+ * 
+ * The functions leave u the choice of forwarding an out parameter or just get the return value, example:  
+ *     - `let vector = this.vec3_negate()`  
+ *     - `this.vec3_negate(vector)`  
+ *     - the out parameter is always the last one
+ */
 export interface Vector3Extension<VectorType extends Vector3> {
 
     vec3_set<T extends VectorType>(this: T, x: number, y: number, z: number): this;

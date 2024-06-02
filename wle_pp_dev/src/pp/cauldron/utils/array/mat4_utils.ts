@@ -430,6 +430,22 @@ export function fromQuat<T extends Matrix4>(quat: Readonly<Quaternion2>, out: Ma
     return out;
 }
 
+/**
+ * How to use
+ * 
+ * By default rotations are in `Degrees` and transforms are `Matrix4` (and not `Quat2`)  
+ * For functions that work with rotations, `Matrix` means `Matrix3` and `Quat` means `Quat`  
+ * For functions that work with transforms, `Matrix` means `Matrix4` and `Quat` means `Quat2`
+ * 
+ * For rotations u can add a suffix like `Degrees`/`Radians`/`Quat`/`Matrix` to use a specific version, example:  
+ *     - `getRotationRadians`  
+ *     - `setRotationQuat`
+ * 
+ * The functions leave u the choice of forwarding an out parameter or just get the return value, example:  
+ *     - `let position = Mat4Utils.getPosition(matrix)`  
+ *     - `Mat4Utils.getPosition(matrix, position)`  
+ *     - the out parameter is always the last one
+ */
 export const Mat4Utils = {
     create,
     set,
