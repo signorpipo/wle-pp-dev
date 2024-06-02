@@ -1,10 +1,9 @@
+import { Matrix3, Quaternion, Vector3 } from "../../../../cauldron/type_definitions/array_type_definitions.js";
+
 /**
  * #WARN this type extension is actually added at runtime only if you call `initMat3Extension`  
  * The `initPP` function, which is automatically called by the `pp-gateway` component, does this for you
  */
-
-import { Matrix3, Quaternion, Vector3 } from "../../../../cauldron/type_definitions/array_type_definitions.js";
-
 export interface Matrix3Extension<MatrixType extends Matrix3> {
     mat3_set<T extends MatrixType>(this: T,
         m00: number, m01: number, m02: number,

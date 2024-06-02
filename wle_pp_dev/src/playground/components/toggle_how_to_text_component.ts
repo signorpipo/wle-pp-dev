@@ -23,7 +23,7 @@ export class ToggleHowToTextComponent extends Component implements CursorButtonA
         const textComponents = this.object.pp_getComponents(TextComponent);
         let visible = true;
         const switchButtonTextHandler = {
-            onUp: function (): boolean {
+            onUp(): boolean {
                 let textToSet = "Show";
                 if (visible) {
                     visible = false;

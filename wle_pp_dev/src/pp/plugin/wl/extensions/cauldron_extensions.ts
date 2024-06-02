@@ -15,7 +15,7 @@ export function initCauldronExtensions(): void {
 function _initPhysicsExtensionPrototype(): void {
 
     const physicsExtension: PhysicsExtension = {
-        pp_getEngine: function pp_getEngine(this: Readonly<Physics>): WonderlandEngine {
+        pp_getEngine(this: Readonly<Physics>): WonderlandEngine {
             return (this as unknown as { _engine: WonderlandEngine })._engine;
         }
     };
