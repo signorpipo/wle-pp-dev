@@ -137,15 +137,16 @@ export function scale<T extends Vector3, U extends Vector3>(vector: Readonly<T>,
     gl_vec3.scale(out as unknown as gl_vec3_type, vector as unknown as gl_vec3_type, value);
     return out;
 }
-export function dot(first: Readonly<Vector3>, second: Readonly<Vector3>): number {
-    return gl_vec3.dot(first as unknown as gl_vec3_type, second as unknown as gl_vec3_type);
-}
 
 export function negate<T extends Vector3>(vector: Readonly<T>): T;
 export function negate<T extends Vector3>(vector: Readonly<Vector3>, out: T): T;
 export function negate<T extends Vector3, U extends Vector3>(vector: Readonly<T>, out: T | U = Vec3Utils.clone(vector)): T | U {
     gl_vec3.negate(out as unknown as gl_vec3_type, vector as unknown as gl_vec3_type);
     return out;
+}
+
+export function dot(first: Readonly<Vector3>, second: Readonly<Vector3>): number {
+    return gl_vec3.dot(first as unknown as gl_vec3_type, second as unknown as gl_vec3_type);
 }
 
 export function cross<T extends Vector3>(first: Readonly<T>, second: Readonly<Vector3>): T;
@@ -288,72 +289,6 @@ export const anglePivotedSignedRadians = function () {
 
         return Vec3Utils.angleSignedRadians(flatFirst, flatSecond, referenceAxis);
     };
-}();
-
-export function toRadians<T extends Vector3>(vector: Readonly<T>): T;
-export function toRadians<T extends Vector3>(vector: Readonly<Vector3>, out: T): T;
-export function toRadians<T extends Vector3, U extends Vector3>(vector: Readonly<T>, out: T | U = Vec3Utils.clone(vector)): T | U {
-    Vec3Utils.set(out, MathUtils.toRadians(vector[0]), MathUtils.toRadians(vector[1]), MathUtils.toRadians(vector[2]));
-    return out;
-}
-
-export function toDegrees<T extends Vector3>(vector: Readonly<T>): T;
-export function toDegrees<T extends Vector3>(vector: Readonly<Vector3>, out: T): T;
-export function toDegrees<T extends Vector3, U extends Vector3>(vector: Readonly<T>, out: T | U = Vec3Utils.clone(vector)): T | U {
-    Vec3Utils.set(out, MathUtils.toDegrees(vector[0]), MathUtils.toDegrees(vector[1]), MathUtils.toDegrees(vector[2]));
-    return out;
-}
-
-export function toQuat(vector: Readonly<Vector3>): Quaternion;
-export function toQuat<T extends Quaternion>(vector: Readonly<Vector3>, out: T): T;
-export function toQuat<T extends Quaternion>(vector: Readonly<Vector3>, out: Quaternion | T = QuatUtils.create()): Quaternion | T {
-    return Vec3Utils.degreesToQuat(vector, out);
-}
-
-export function radiansToQuat(vector: Readonly<Vector3>): Quaternion;
-export function radiansToQuat<T extends Quaternion>(vector: Readonly<Vector3>, out: T): T;
-export function radiansToQuat<T extends Quaternion>(vector: Readonly<Vector3>, out: Quaternion | T = QuatUtils.create()): Quaternion | T {
-    QuatUtils.fromRadians(vector, out);
-    return out;
-}
-
-export function degreesToQuat(vector: Readonly<Vector3>): Quaternion;
-export function degreesToQuat<T extends Quaternion>(vector: Readonly<Vector3>, out: T): T;
-export function degreesToQuat<T extends Quaternion>(vector: Readonly<Vector3>, out: Quaternion | T = QuatUtils.create()): Quaternion | T {
-    QuatUtils.fromDegrees(vector, out);
-    return out;
-}
-
-export function toMatrix(vector: Readonly<Vector3>): Matrix3;
-export function toMatrix<T extends Matrix3>(vector: Readonly<Vector3>, out: T): T;
-export function toMatrix<T extends Matrix3>(vector: Readonly<Vector3>, out: Matrix3 | T = Mat3Utils.create()): Matrix3 | T {
-    return Vec3Utils.degreesToMatrix(vector, out);
-}
-
-export const degreesToMatrix = function () {
-    const quat = quat_utils_create();
-
-    function degreesToMatrix(vector: Readonly<Vector3>): Matrix3;
-    function degreesToMatrix<T extends Matrix3>(vector: Readonly<Vector3>, out: T): T;
-    function degreesToMatrix<T extends Matrix3>(vector: Readonly<Vector3>, out: Matrix3 | T = Mat3Utils.create()): Matrix3 | T {
-        Vec3Utils.degreesToQuat(vector, quat);
-        return QuatUtils.toMatrix(quat, out);
-    }
-
-    return degreesToMatrix;
-}();
-
-export const radiansToMatrix = function () {
-    const quat = quat_utils_create();
-
-    function radiansToMatrix(vector: Readonly<Vector3>): Matrix3;
-    function radiansToMatrix<T extends Matrix3>(vector: Readonly<Vector3>, out: T): T;
-    function radiansToMatrix<T extends Matrix3>(vector: Readonly<Vector3>, out: Matrix3 | T = Mat3Utils.create()): Matrix3 | T {
-        Vec3Utils.radiansToQuat(vector, quat);
-        return QuatUtils.toMatrix(quat, out);
-    }
-
-    return radiansToMatrix;
 }();
 
 export function valueAlongAxis(vector: Readonly<Vector3>, axis: Readonly<Vector3>): number {
@@ -1096,6 +1031,72 @@ export const convertDirectionToLocalQuat = function () {
     return convertDirectionToLocalQuat;
 }();
 
+export function toRadians<T extends Vector3>(vector: Readonly<T>): T;
+export function toRadians<T extends Vector3>(vector: Readonly<Vector3>, out: T): T;
+export function toRadians<T extends Vector3, U extends Vector3>(vector: Readonly<T>, out: T | U = Vec3Utils.clone(vector)): T | U {
+    Vec3Utils.set(out, MathUtils.toRadians(vector[0]), MathUtils.toRadians(vector[1]), MathUtils.toRadians(vector[2]));
+    return out;
+}
+
+export function toDegrees<T extends Vector3>(vector: Readonly<T>): T;
+export function toDegrees<T extends Vector3>(vector: Readonly<Vector3>, out: T): T;
+export function toDegrees<T extends Vector3, U extends Vector3>(vector: Readonly<T>, out: T | U = Vec3Utils.clone(vector)): T | U {
+    Vec3Utils.set(out, MathUtils.toDegrees(vector[0]), MathUtils.toDegrees(vector[1]), MathUtils.toDegrees(vector[2]));
+    return out;
+}
+
+export function toQuat(vector: Readonly<Vector3>): Quaternion;
+export function toQuat<T extends Quaternion>(vector: Readonly<Vector3>, out: T): T;
+export function toQuat<T extends Quaternion>(vector: Readonly<Vector3>, out: Quaternion | T = QuatUtils.create()): Quaternion | T {
+    return Vec3Utils.degreesToQuat(vector, out);
+}
+
+export function radiansToQuat(vector: Readonly<Vector3>): Quaternion;
+export function radiansToQuat<T extends Quaternion>(vector: Readonly<Vector3>, out: T): T;
+export function radiansToQuat<T extends Quaternion>(vector: Readonly<Vector3>, out: Quaternion | T = QuatUtils.create()): Quaternion | T {
+    QuatUtils.fromRadians(vector, out);
+    return out;
+}
+
+export function degreesToQuat(vector: Readonly<Vector3>): Quaternion;
+export function degreesToQuat<T extends Quaternion>(vector: Readonly<Vector3>, out: T): T;
+export function degreesToQuat<T extends Quaternion>(vector: Readonly<Vector3>, out: Quaternion | T = QuatUtils.create()): Quaternion | T {
+    QuatUtils.fromDegrees(vector, out);
+    return out;
+}
+
+export function toMatrix(vector: Readonly<Vector3>): Matrix3;
+export function toMatrix<T extends Matrix3>(vector: Readonly<Vector3>, out: T): T;
+export function toMatrix<T extends Matrix3>(vector: Readonly<Vector3>, out: Matrix3 | T = Mat3Utils.create()): Matrix3 | T {
+    return Vec3Utils.degreesToMatrix(vector, out);
+}
+
+export const degreesToMatrix = function () {
+    const quat = quat_utils_create();
+
+    function degreesToMatrix(vector: Readonly<Vector3>): Matrix3;
+    function degreesToMatrix<T extends Matrix3>(vector: Readonly<Vector3>, out: T): T;
+    function degreesToMatrix<T extends Matrix3>(vector: Readonly<Vector3>, out: Matrix3 | T = Mat3Utils.create()): Matrix3 | T {
+        Vec3Utils.degreesToQuat(vector, quat);
+        return QuatUtils.toMatrix(quat, out);
+    }
+
+    return degreesToMatrix;
+}();
+
+export const radiansToMatrix = function () {
+    const quat = quat_utils_create();
+
+    function radiansToMatrix(vector: Readonly<Vector3>): Matrix3;
+    function radiansToMatrix<T extends Matrix3>(vector: Readonly<Vector3>, out: T): T;
+    function radiansToMatrix<T extends Matrix3>(vector: Readonly<Vector3>, out: Matrix3 | T = Mat3Utils.create()): Matrix3 | T {
+        Vec3Utils.radiansToQuat(vector, quat);
+        return QuatUtils.toMatrix(quat, out);
+    }
+
+    return radiansToMatrix;
+}();
+
 export const Vec3Utils = {
     create,
     set,
@@ -1116,8 +1117,8 @@ export const Vec3Utils = {
     mul,
     div,
     scale,
-    dot,
     negate,
+    dot,
     cross,
     transformQuat,
     transformMat3,
@@ -1136,14 +1137,6 @@ export const Vec3Utils = {
     anglePivotedSigned,
     anglePivotedSignedDegrees,
     anglePivotedSignedRadians,
-    toRadians,
-    toDegrees,
-    toQuat,
-    radiansToQuat,
-    degreesToQuat,
-    toMatrix,
-    degreesToMatrix,
-    radiansToMatrix,
     valueAlongAxis,
     valueAlongPlane,
     componentAlongAxis,
@@ -1205,5 +1198,13 @@ export const Vec3Utils = {
     convertDirectionToWorldMatrix,
     convertDirectionToLocalMatrix,
     convertDirectionToWorldQuat,
-    convertDirectionToLocalQuat
+    convertDirectionToLocalQuat,
+    toRadians,
+    toDegrees,
+    toQuat,
+    radiansToQuat,
+    degreesToQuat,
+    toMatrix,
+    degreesToMatrix,
+    radiansToMatrix,
 } as const;

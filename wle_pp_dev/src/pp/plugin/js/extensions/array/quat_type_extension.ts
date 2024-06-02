@@ -117,28 +117,6 @@ export interface QuaternionExtension<QuaternionType extends Quaternion> {
 
 
 
-    quat_fromDegrees<T extends QuaternionType>(this: T, rotation: Readonly<Vector3>): this;
-    quat_fromRadians<T extends QuaternionType>(this: T, rotation: Readonly<Vector3>): this;
-
-    quat_fromAxis<T extends QuaternionType>(this: T, angle: number, axis: Readonly<Vector3>): this;
-    quat_fromAxisDegrees<T extends QuaternionType>(this: T, angle: number, axis: Readonly<Vector3>): this;
-    quat_fromAxisRadians<T extends QuaternionType>(this: T, angle: number, axis: Readonly<Vector3>): this;
-
-    quat_fromAxes<T extends QuaternionType>(this: T, left: Readonly<Vector3>, up: Readonly<Vector3>, forward: Readonly<Vector3>): this;
-
-
-
-    quat_toDegrees<T extends QuaternionType>(this: Readonly<T>): Vector3;
-    quat_toDegrees<T extends QuaternionType, U extends Vector3>(this: Readonly<T>, out: U): U;
-
-    quat_toRadians<T extends QuaternionType>(this: Readonly<T>): Vector3;
-    quat_toRadians<T extends QuaternionType, U extends Vector3>(this: Readonly<T>, out: U): U;
-
-    quat_toMatrix<T extends QuaternionType>(this: Readonly<T>): Matrix3;
-    quat_toMatrix<T extends QuaternionType, U extends Matrix3>(this: Readonly<T>, out: U): U;
-
-
-
     quat_addRotation<T extends QuaternionType>(this: Readonly<T>, rotation: Readonly<Vector3>): T;
     quat_addRotation<T extends QuaternionType, U extends Quaternion>(this: Readonly<T>, rotation: Readonly<Vector3>, out: U): U;
 
@@ -232,6 +210,28 @@ export interface QuaternionExtension<QuaternionType extends Quaternion> {
 
     quat_rotateAxisRadians<T extends QuaternionType>(this: Readonly<T>, angle: number, axis: Readonly<Vector3>): T;
     quat_rotateAxisRadians<T extends QuaternionType, U extends Quaternion>(this: Readonly<T>, angle: number, axis: Readonly<Vector3>, out?: U): U;
+
+
+
+    quat_fromDegrees<T extends QuaternionType>(this: T, rotation: Readonly<Vector3>): this;
+    quat_fromRadians<T extends QuaternionType>(this: T, rotation: Readonly<Vector3>): this;
+
+    quat_fromAxis<T extends QuaternionType>(this: T, angle: number, axis: Readonly<Vector3>): this;
+    quat_fromAxisDegrees<T extends QuaternionType>(this: T, angle: number, axis: Readonly<Vector3>): this;
+    quat_fromAxisRadians<T extends QuaternionType>(this: T, angle: number, axis: Readonly<Vector3>): this;
+
+    quat_fromAxes<T extends QuaternionType>(this: T, left: Readonly<Vector3>, up: Readonly<Vector3>, forward: Readonly<Vector3>): this;
+
+
+
+    quat_toDegrees<T extends QuaternionType>(this: Readonly<T>): Vector3;
+    quat_toDegrees<T extends QuaternionType, U extends Vector3>(this: Readonly<T>, out: U): U;
+
+    quat_toRadians<T extends QuaternionType>(this: Readonly<T>): Vector3;
+    quat_toRadians<T extends QuaternionType, U extends Vector3>(this: Readonly<T>, out: U): U;
+
+    quat_toMatrix<T extends QuaternionType>(this: Readonly<T>): Matrix3;
+    quat_toMatrix<T extends QuaternionType, U extends Matrix3>(this: Readonly<T>, out: U): U;
 }
 
 declare global {

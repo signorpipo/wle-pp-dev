@@ -7,12 +7,15 @@ import { EasingFunction } from "wle-pp/cauldron/utils/math_utils.js";
 import { Matrix3, Matrix4, Quaternion, Vector3 } from "../../../../cauldron/type_definitions/array_type_definitions.js";
 
 export interface Vector3Extension<VectorType extends Vector3> {
+
     vec3_set<T extends VectorType>(this: T, x: number, y: number, z: number): T;
     vec3_set<T extends VectorType>(this: T, uniformValue: number): T;
 
 
+
     vec3_copy<T extends VectorType>(this: T, vector: Readonly<Vector3>): this;
     vec3_clone<T extends VectorType>(this: Readonly<T>): T;
+
 
 
     vec3_isNormalized<T extends VectorType>(this: Readonly<T>, epsilon?: number): boolean;
@@ -24,17 +27,13 @@ export interface Vector3Extension<VectorType extends Vector3> {
 
     vec3_zero<T extends VectorType>(this: T): T;
 
-
     vec3_length<T extends VectorType>(this: Readonly<T>): number;
-
-
     vec3_lengthSquared<T extends VectorType>(this: Readonly<T>): number;
-
     vec3_lengthSigned<T extends VectorType>(this: Readonly<T>, positiveDirection: Readonly<Vector3>): number;
 
     vec3_distance<T extends VectorType>(this: Readonly<T>, vector: Readonly<Vector3>): number;
-
     vec3_distanceSquared<T extends VectorType>(this: Readonly<T>, vector: Readonly<Vector3>): number;
+
 
 
     vec3_equals<T extends VectorType>(this: Readonly<T>, vector: Readonly<Vector3>, epsilon?: number): boolean;
@@ -55,13 +54,16 @@ export interface Vector3Extension<VectorType extends Vector3> {
     vec3_scale<T extends VectorType>(this: Readonly<T>, value: number): T;
     vec3_scale<T extends VectorType, U extends Vector3>(this: Readonly<T>, value: number, out: U): U;
 
-    vec3_dot<T extends VectorType>(this: Readonly<T>, vector: Readonly<Vector3>): number;
 
     vec3_negate<T extends VectorType>(this: Readonly<T>): T;
     vec3_negate<T extends VectorType, U extends Vector3>(this: Readonly<T>, out: U): U;
 
+
+    vec3_dot<T extends VectorType>(this: Readonly<T>, vector: Readonly<Vector3>): number;
+
     vec3_cross<T extends VectorType>(this: Readonly<T>, vector: Readonly<Vector3>): T;
     vec3_cross<T extends VectorType, U extends Vector3>(this: Readonly<T>, vector: Readonly<Vector3>, out: U): U;
+
 
     vec3_transformQuat<T extends VectorType>(this: Readonly<T>, quat: Readonly<Quaternion>): T;
     vec3_transformQuat<T extends VectorType, U extends Vector3>(this: Readonly<T>, quat: Readonly<Quaternion>, out: U): U;
@@ -72,68 +74,32 @@ export interface Vector3Extension<VectorType extends Vector3> {
     vec3_transformMat4<T extends VectorType>(this: Readonly<T>, matrix: Readonly<Matrix4>): T;
     vec3_transformMat4<T extends VectorType, U extends Vector3>(this: Readonly<T>, matrix: Readonly<Matrix4>, out: U): U;
 
+
     vec3_lerp<T extends VectorType>(this: Readonly<T>, to: Readonly<Vector3>, interpolationFactor: number): T;
     vec3_lerp<T extends VectorType, U extends Vector3>(this: Readonly<T>, to: Readonly<Vector3>, interpolationFactor: number, out: U): U;
-
 
     vec3_interpolate<T extends VectorType>(this: Readonly<T>, to: Readonly<Vector3>, interpolationFactor: number, easingFunction?: EasingFunction): T;
     vec3_interpolate<T extends VectorType, U extends Vector3>(this: Readonly<T>, to: Readonly<Vector3>, interpolationFactor: number, easingFunction: EasingFunction, out: U): U;
 
+
+
     vec3_angle<T extends VectorType>(this: Readonly<T>, vector: Readonly<Vector3>): number;
-
-
     vec3_angleDegrees<T extends VectorType>(this: Readonly<T>, vector: Readonly<Vector3>): number;
-
     vec3_angleRadians<T extends VectorType>(this: Readonly<T>, vector: Readonly<Vector3>): number;
 
-
     vec3_angleSigned<T extends VectorType>(this: Readonly<T>, vector: Readonly<Vector3>, referenceAxis: Readonly<Vector3>): number;
-
     vec3_angleSignedDegrees<T extends VectorType>(this: Readonly<T>, vector: Readonly<Vector3>, referenceAxis: Readonly<Vector3>): number;
-
     vec3_angleSignedRadians<T extends VectorType>(this: Readonly<T>, vector: Readonly<Vector3>, referenceAxis: Readonly<Vector3>): number;
 
     vec3_anglePivoted<T extends VectorType>(this: Readonly<T>, vector: Readonly<Vector3>, referenceAxis: Readonly<Vector3>): number;
-
     vec3_anglePivotedDegrees<T extends VectorType>(this: Readonly<T>, vector: Readonly<Vector3>, referenceAxis: Readonly<Vector3>): number;
-
     vec3_anglePivotedRadians<T extends VectorType>(this: Readonly<T>, vector: Readonly<Vector3>, referenceAxis: Readonly<Vector3>): number;
 
-
     vec3_anglePivotedSigned<T extends VectorType>(this: Readonly<T>, vector: Readonly<Vector3>, referenceAxis: Readonly<Vector3>): number;
-
     vec3_anglePivotedSignedDegrees<T extends VectorType>(this: Readonly<T>, vector: Readonly<Vector3>, referenceAxis: Readonly<Vector3>): number;
-
     vec3_anglePivotedSignedRadians<T extends VectorType>(this: Readonly<T>, vector: Readonly<Vector3>, referenceAxis: Readonly<Vector3>): number;
 
 
-    vec3_toRadians<T extends VectorType>(this: Readonly<T>): T;
-    vec3_toRadians<T extends VectorType, U extends Vector3>(this: Readonly<T>, out: U): U;
-
-
-    vec3_toDegrees<T extends VectorType>(this: Readonly<T>): T;
-    vec3_toDegrees<T extends VectorType, U extends Vector3>(this: Readonly<T>, out: U): U;
-
-    vec3_toQuat<T extends VectorType>(this: Readonly<T>): Quaternion;
-    vec3_toQuat<T extends VectorType, U extends Quaternion>(this: Readonly<T>, out: U): U;
-
-    vec3_radiansToQuat<T extends VectorType>(this: Readonly<T>): Quaternion;
-    vec3_radiansToQuat<T extends VectorType, U extends Quaternion>(this: Readonly<T>, out: U): U;
-
-
-    vec3_degreesToQuat<T extends VectorType>(this: Readonly<T>): Quaternion;
-    vec3_degreesToQuat<T extends VectorType, U extends Quaternion>(this: Readonly<T>, out: U): U;
-
-
-    vec3_toMatrix<T extends VectorType>(this: Readonly<T>): Matrix3;
-    vec3_toMatrix<T extends VectorType, U extends Matrix3>(this: Readonly<T>, out: U): U;
-
-
-    vec3_degreesToMatrix<T extends VectorType>(this: Readonly<T>): Matrix3;
-    vec3_degreesToMatrix<T extends VectorType, U extends Matrix3>(this: Readonly<T>, out: U): U;
-
-    vec3_radiansToMatrix<T extends VectorType>(this: Readonly<T>): Matrix3;
-    vec3_radiansToMatrix<T extends VectorType, U extends Matrix3>(this: Readonly<T>, out: U): U;
 
     vec3_valueAlongAxis<T extends VectorType>(this: Readonly<T>, axis: Readonly<Vector3>): number;
 
@@ -148,7 +114,6 @@ export interface Vector3Extension<VectorType extends Vector3> {
     vec3_copyComponentAlongAxis<T extends VectorType>(this: Readonly<T>, vector: Readonly<Vector3>, axis: Readonly<Vector3>): T;
     vec3_copyComponentAlongAxis<T extends VectorType, U extends Vector3>(this: Readonly<T>, vector: Readonly<Vector3>, axis: Readonly<Vector3>, out: U): U;
 
-
     vec3_isConcordant<T extends VectorType>(this: Readonly<T>, vector: Readonly<Vector3>): boolean;
 
     vec3_isFartherAlongAxis<T extends VectorType>(this: Readonly<T>, vector: Readonly<Vector3>, axis: Readonly<Vector3>): boolean;
@@ -158,17 +123,15 @@ export interface Vector3Extension<VectorType extends Vector3> {
     vec3_signTo<T extends VectorType>(this: Readonly<T>, vector: Readonly<Vector3>, referenceAxis: Readonly<Vector3>, zeroSign?: number): number;
 
 
+
     vec3_projectOnAxis<T extends VectorType>(this: Readonly<T>, axis: Readonly<Vector3>): T;
     vec3_projectOnAxis<T extends VectorType, U extends Vector3>(this: Readonly<T>, axis: Readonly<Vector3>, out: U): U;
-
 
     vec3_projectOnAxisAlongAxis<T extends VectorType>(this: Readonly<T>, axis: Readonly<Vector3>, projectAlongAxis: Readonly<Vector3>): T;
     vec3_projectOnAxisAlongAxis<T extends VectorType, U extends Vector3>(this: Readonly<T>, axis: Readonly<Vector3>, projectAlongAxis: Readonly<Vector3>, out: U): U;
 
-
     vec3_projectOnPlane<T extends VectorType>(this: Readonly<T>, planeNormal: Readonly<Vector3>): T;
     vec3_projectOnPlane<T extends VectorType, U extends Vector3>(this: Readonly<T>, planeNormal: Readonly<Vector3>, out: U): U;
-
 
     vec3_projectOnPlaneAlongAxis<T extends VectorType>(this: Readonly<T>, planeNormal: Readonly<Vector3>, projectAlongAxis: Readonly<Vector3>): T;
     vec3_projectOnPlaneAlongAxis<T extends VectorType, U extends Vector3>(this: Readonly<T>, planeNormal: Readonly<Vector3>, projectAlongAxis: Readonly<Vector3>, out: U): U;
@@ -177,14 +140,13 @@ export interface Vector3Extension<VectorType extends Vector3> {
 
     vec3_isOnPlane<T extends VectorType>(this: Readonly<T>, planeNormal: Readonly<Vector3>): boolean;
 
-
     vec3_perpendicularAny<T extends VectorType>(this: Readonly<T>): T;
     vec3_perpendicularAny<T extends VectorType, U extends Vector3>(this: Readonly<T>, out: U): U;
 
 
+
     vec3_rotate<T extends VectorType>(this: Readonly<T>, rotation: Readonly<Vector3>): T;
     vec3_rotate<T extends VectorType, U extends Vector3>(this: Readonly<T>, rotation: Readonly<Vector3>, out: U): U;
-
 
     vec3_rotateDegrees<T extends VectorType>(this: Readonly<T>, rotation: Readonly<Vector3>): T;
     vec3_rotateDegrees<T extends VectorType, U extends Vector3>(this: Readonly<T>, rotation: Readonly<Vector3>, out: U): U;
@@ -218,16 +180,17 @@ export interface Vector3Extension<VectorType extends Vector3> {
     vec3_rotateAroundQuat<T extends VectorType>(this: Readonly<T>, rotation: Readonly<Quaternion>, origin: Readonly<Vector3>): T;
     vec3_rotateAroundQuat<T extends VectorType, U extends Vector3>(this: Readonly<T>, rotation: Readonly<Quaternion>, origin: Readonly<Vector3>, out: U): U;
 
+
     vec3_rotateAroundAxis<T extends VectorType>(this: Readonly<T>, angle: number, axis: Readonly<Vector3>, origin: Readonly<Vector3>): T;
     vec3_rotateAroundAxis<T extends VectorType, U extends Vector3>(this: Readonly<T>, angle: number, axis: Readonly<Vector3>, origin: Readonly<Vector3>, out: U): U;
-
 
     vec3_rotateAroundAxisDegrees<T extends VectorType>(this: Readonly<T>, angle: number, axis: Readonly<Vector3>, origin: Readonly<Vector3>): T;
     vec3_rotateAroundAxisDegrees<T extends VectorType, U extends Vector3>(this: Readonly<T>, angle: number, axis: Readonly<Vector3>, origin: Readonly<Vector3>, out: U): U;
 
-
     vec3_rotateAroundAxisRadians<T extends VectorType>(this: Readonly<T>, angle: number, axis: Readonly<Vector3>, origin: Readonly<Vector3>): T;
     vec3_rotateAroundAxisRadians<T extends VectorType, U extends Vector3>(this: Readonly<T>, angle: number, axis: Readonly<Vector3>, origin: Readonly<Vector3>, out: U): U;
+
+
 
     vec3_addRotation<T extends VectorType>(this: Readonly<T>, rotation: Readonly<Vector3>): T;
     vec3_addRotation<T extends VectorType, U extends Vector3>(this: Readonly<T>, rotation: Readonly<Vector3>, out: U): U;
@@ -247,41 +210,34 @@ export interface Vector3Extension<VectorType extends Vector3> {
     vec3_degreesAddRotationDegrees<T extends VectorType>(this: Readonly<T>, rotation: Readonly<Vector3>, out: T): T;
     vec3_degreesAddRotationDegrees<T extends VectorType, U extends Vector3>(this: Readonly<T>, rotation: Readonly<Vector3>, out: U): U;
 
-
     vec3_degreesAddRotationRadians<T extends VectorType>(this: Readonly<T>, rotation: Readonly<Vector3>, out: T): T;
     vec3_degreesAddRotationRadians<T extends VectorType, U extends Vector3>(this: Readonly<T>, rotation: Readonly<Vector3>, out: U): U;
-
 
     vec3_degreesAddRotationQuat<T extends VectorType>(this: Readonly<T>, rotation: Readonly<Quaternion>, out: T): T;
     vec3_degreesAddRotationQuat<T extends VectorType, U extends Vector3>(this: Readonly<T>, rotation: Readonly<Quaternion>, out: U): U;
 
-
     vec3_radiansAddRotation<T extends VectorType>(this: Readonly<T>, rotation: Readonly<Vector3>): T;
     vec3_radiansAddRotation<T extends VectorType, U extends Vector3>(this: Readonly<T>, rotation: Readonly<Vector3>, out: U): U;
-
 
     vec3_radiansAddRotationDegrees<T extends VectorType>(this: Readonly<T>, rotation: Readonly<Vector3>, out: T): T;
     vec3_radiansAddRotationDegrees<T extends VectorType, U extends Vector3>(this: Readonly<T>, rotation: Readonly<Vector3>, out: U): U;
 
-
     vec3_radiansAddRotationRadians<T extends VectorType>(this: Readonly<T>, rotation: Readonly<Vector3>, out: T): T;
     vec3_radiansAddRotationRadians<T extends VectorType, U extends Vector3>(this: Readonly<T>, rotation: Readonly<Vector3>, out: U): U;
-
 
     vec3_radiansAddRotationQuat<T extends VectorType>(this: Readonly<T>, rotation: Readonly<Quaternion>, out: T): T;
     vec3_radiansAddRotationQuat<T extends VectorType, U extends Vector3>(this: Readonly<T>, rotation: Readonly<Quaternion>, out: U): U;
 
+
+
     vec3_rotationTo<T extends VectorType>(this: Readonly<T>, to: Readonly<Vector3>): T;
     vec3_rotationTo<T extends VectorType, U extends Vector3>(this: Readonly<T>, to: Readonly<Vector3>, out: U): U;
-
 
     vec3_rotationToDegrees<T extends VectorType>(this: Readonly<T>, to: Readonly<Vector3>): T;
     vec3_rotationToDegrees<T extends VectorType, U extends Vector3>(this: Readonly<T>, to: Readonly<Vector3>, out: U): U;
 
-
     vec3_rotationToRadians<T extends VectorType>(this: Readonly<T>, to: Readonly<Vector3>): T;
     vec3_rotationToRadians<T extends VectorType, U extends Vector3>(this: Readonly<T>, to: Readonly<Vector3>, out: U): U;
-
 
     vec3_rotationToQuat<T extends VectorType>(this: Readonly<T>, to: Readonly<Vector3>): Quaternion;
     vec3_rotationToQuat<T extends VectorType, U extends Quaternion>(this: Readonly<T>, to: Readonly<Vector3>, out: U): U;
@@ -290,16 +246,16 @@ export interface Vector3Extension<VectorType extends Vector3> {
     vec3_rotationToPivoted<T extends VectorType>(this: Readonly<T>, to: Readonly<Vector3>, pivotAxis: Readonly<Vector3>): T;
     vec3_rotationToPivoted<T extends VectorType, U extends Vector3>(this: Readonly<T>, to: Readonly<Vector3>, pivotAxis: Readonly<Vector3>, out: U): U;
 
-
     vec3_rotationToPivotedDegrees<T extends VectorType>(this: Readonly<T>, to: Readonly<Vector3>, pivotAxis: Readonly<Vector3>): T;
     vec3_rotationToPivotedDegrees<T extends VectorType, U extends Vector3>(this: Readonly<T>, to: Readonly<Vector3>, pivotAxis: Readonly<Vector3>, out: U): U;
 
     vec3_rotationToPivotedRadians<T extends VectorType>(this: Readonly<T>, to: Readonly<Vector3>, pivotAxis: Readonly<Vector3>): T;
     vec3_rotationToPivotedRadians<T extends VectorType, U extends Vector3>(this: Readonly<T>, to: Readonly<Vector3>, pivotAxis: Readonly<Vector3>, out: U): U;
 
-
     vec3_rotationToPivotedQuat<T extends VectorType>(this: Readonly<T>, to: Readonly<Vector3>, pivotAxis: Readonly<Vector3>): Quaternion;
     vec3_rotationToPivotedQuat<T extends VectorType, U extends Quaternion>(this: Readonly<T>, to: Readonly<Vector3>, pivotAxis: Readonly<Vector3>, out: U): U;
+
+
 
     vec3_convertPositionToWorld<T extends VectorType>(this: Readonly<T>, parentTransform: Readonly<Matrix4>): T;
     vec3_convertPositionToWorld<T extends VectorType, U extends Vector3>(this: Readonly<T>, parentTransform: Readonly<Matrix4>, out: U): U;
@@ -307,9 +263,9 @@ export interface Vector3Extension<VectorType extends Vector3> {
     vec3_convertPositionToLocal<T extends VectorType>(this: Readonly<T>, parentTransform: Readonly<Matrix4>): T;
     vec3_convertPositionToLocal<T extends VectorType, U extends Vector3>(this: Readonly<T>, parentTransform: Readonly<Matrix4>, out: U): U;
 
+
     vec3_convertPositionToWorldMatrix<T extends VectorType>(this: Readonly<T>, parentTransform: Readonly<Matrix4>): T;
     vec3_convertPositionToWorldMatrix<T extends VectorType, U extends Vector3>(this: Readonly<T>, parentTransform: Readonly<Matrix4>, out: U): U;
-
 
     vec3_convertPositionToLocalMatrix<T extends VectorType>(this: Readonly<T>, parentTransform: Readonly<Matrix4>): T;
     vec3_convertPositionToLocalMatrix<T extends VectorType, U extends Vector3>(this: Readonly<T>, parentTransform: Readonly<Matrix4>, out: U): U;
@@ -318,14 +274,12 @@ export interface Vector3Extension<VectorType extends Vector3> {
     vec3_convertPositionToWorldQuat<T extends VectorType>(this: Readonly<T>, parentTransform: Readonly<Quaternion>): T;
     vec3_convertPositionToWorldQuat<T extends VectorType, U extends Vector3>(this: Readonly<T>, parentTransform: Readonly<Quaternion>, out: U): U;
 
-
     vec3_convertPositionToLocalQuat<T extends VectorType>(this: Readonly<T>, parentTransform: Readonly<Quaternion>): T;
     vec3_convertPositionToLocalQuat<T extends VectorType, U extends Vector3>(this: Readonly<T>, parentTransform: Readonly<Quaternion>, out: U): U;
 
 
     vec3_convertDirectionToWorld<T extends VectorType>(this: Readonly<T>, parentTransform: Readonly<Matrix4>): T;
     vec3_convertDirectionToWorld<T extends VectorType, U extends Vector3>(this: Readonly<T>, parentTransform: Readonly<Matrix4>, out: U): U;
-
 
     vec3_convertDirectionToLocal<T extends VectorType>(this: Readonly<T>, parentTransform: Readonly<Matrix4>): T;
     vec3_convertDirectionToLocal<T extends VectorType, U extends Vector3>(this: Readonly<T>, parentTransform: Readonly<Matrix4>, out: U): U;
@@ -334,7 +288,6 @@ export interface Vector3Extension<VectorType extends Vector3> {
     vec3_convertDirectionToWorldMatrix<T extends VectorType>(this: Readonly<T>, parentTransform: Readonly<Matrix4>): T;
     vec3_convertDirectionToWorldMatrix<T extends VectorType, U extends Vector3>(this: Readonly<T>, parentTransform: Readonly<Matrix4>, out: U): U;
 
-
     vec3_convertDirectionToLocalMatrix<T extends VectorType>(this: Readonly<T>, parentTransform: Readonly<Matrix4>): T;
     vec3_convertDirectionToLocalMatrix<T extends VectorType, U extends Vector3>(this: Readonly<T>, parentTransform: Readonly<Matrix4>, out: U): U;
 
@@ -342,9 +295,36 @@ export interface Vector3Extension<VectorType extends Vector3> {
     vec3_convertDirectionToWorldQuat<T extends VectorType>(this: Readonly<T>, parentTransform: Readonly<Quaternion>): T;
     vec3_convertDirectionToWorldQuat<T extends VectorType, U extends Vector3>(this: Readonly<T>, parentTransform: Readonly<Quaternion>, out: U): U;
 
-
     vec3_convertDirectionToLocalQuat<T extends VectorType>(this: Readonly<T>, parentTransform: Readonly<Quaternion>): T;
     vec3_convertDirectionToLocalQuat<T extends VectorType, U extends Vector3>(this: Readonly<T>, parentTransform: Readonly<Quaternion>, out: U): U;
+
+
+
+    vec3_toRadians<T extends VectorType>(this: Readonly<T>): T;
+    vec3_toRadians<T extends VectorType, U extends Vector3>(this: Readonly<T>, out: U): U;
+
+    vec3_toDegrees<T extends VectorType>(this: Readonly<T>): T;
+    vec3_toDegrees<T extends VectorType, U extends Vector3>(this: Readonly<T>, out: U): U;
+
+
+    vec3_toQuat<T extends VectorType>(this: Readonly<T>): Quaternion;
+    vec3_toQuat<T extends VectorType, U extends Quaternion>(this: Readonly<T>, out: U): U;
+
+    vec3_radiansToQuat<T extends VectorType>(this: Readonly<T>): Quaternion;
+    vec3_radiansToQuat<T extends VectorType, U extends Quaternion>(this: Readonly<T>, out: U): U;
+
+    vec3_degreesToQuat<T extends VectorType>(this: Readonly<T>): Quaternion;
+    vec3_degreesToQuat<T extends VectorType, U extends Quaternion>(this: Readonly<T>, out: U): U;
+
+
+    vec3_toMatrix<T extends VectorType>(this: Readonly<T>): Matrix3;
+    vec3_toMatrix<T extends VectorType, U extends Matrix3>(this: Readonly<T>, out: U): U;
+
+    vec3_degreesToMatrix<T extends VectorType>(this: Readonly<T>): Matrix3;
+    vec3_degreesToMatrix<T extends VectorType, U extends Matrix3>(this: Readonly<T>, out: U): U;
+
+    vec3_radiansToMatrix<T extends VectorType>(this: Readonly<T>): Matrix3;
+    vec3_radiansToMatrix<T extends VectorType, U extends Matrix3>(this: Readonly<T>, out: U): U;
 }
 
 declare global {

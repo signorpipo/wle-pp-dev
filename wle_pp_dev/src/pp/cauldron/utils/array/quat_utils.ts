@@ -856,15 +856,6 @@ export const QuatUtils = {
     setRight,
     toWorld,
     toLocal,
-    fromDegrees,
-    fromRadians,
-    fromAxis,
-    fromAxisDegrees,
-    fromAxisRadians,
-    fromAxes,
-    toDegrees,
-    toRadians,
-    toMatrix,
     addRotation,
     addRotationDegrees,
     addRotationRadians,
@@ -892,7 +883,16 @@ export const QuatUtils = {
     rotateQuat,
     rotateAxis,
     rotateAxisDegrees,
-    rotateAxisRadians
+    rotateAxisRadians,
+    fromDegrees,
+    fromRadians,
+    fromAxis,
+    fromAxisDegrees,
+    fromAxisRadians,
+    fromAxes,
+    toDegrees,
+    toRadians,
+    toMatrix
 } as const;
 
 
