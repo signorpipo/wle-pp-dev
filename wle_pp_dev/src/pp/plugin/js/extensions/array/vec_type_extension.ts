@@ -1,10 +1,9 @@
+import { Vector } from "../../../../cauldron/type_definitions/array_type_definitions.js";
+
 /**
  * #WARN this type extension is actually added at runtime only if you call `initVecExtension`  
  * The `initPP` function, which is automatically called by the `pp-gateway` component, does this for you
  */
-
-import { Vector } from "../../../../cauldron/type_definitions/array_type_definitions.js";
-
 export interface VectorExtension<VectorType extends Vector> {
     vec_set<T extends VectorType>(this: T, uniformValue: number): this;
     vec_set<T extends VectorType>(this: T, firstValue: number, ...remainingValues: number[]): this;
