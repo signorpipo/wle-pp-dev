@@ -14,7 +14,7 @@ function _initObjectExtensionProtoype(): void {
 
     const objectExtension: Object3DExtension = {
         pp_getPosition<T extends Vector3>(this: Readonly<Object3D>, outPosition?: T): T {
-            return ObjectUtils.getPosition(this, outPosition);
+            return ObjectUtils.getPosition(this, outPosition!);
         },
 
         pp_getPositionWorld<T extends Vector3>(this: Readonly<Object3D>, outPosition?: Vector3 | T): Vector3 | T {
@@ -26,15 +26,15 @@ function _initObjectExtensionProtoype(): void {
         },
 
         pp_getRotation<T extends Vector3>(this: Readonly<Object3D>, outRotation?: T): T {
-            return ObjectUtils.getRotation(this, outRotation);
+            return ObjectUtils.getRotation(this, outRotation!);
         },
 
         pp_getRotationDegrees<T extends Vector3>(this: Readonly<Object3D>, outRotation?: T): T {
-            return ObjectUtils.getRotationDegrees(this, outRotation);
+            return ObjectUtils.getRotationDegrees(this, outRotation!);
         },
 
         pp_getRotationRadians<T extends Vector3>(this: Readonly<Object3D>, outRotation?: T): T {
-            return ObjectUtils.getRotationRadians(this, outRotation);
+            return ObjectUtils.getRotationRadians(this, outRotation!);
         },
 
         pp_getRotationMatrix<T extends Matrix3>(this: Readonly<Object3D>, outRotation?: Matrix3 | T): Matrix3 | T {
@@ -46,11 +46,11 @@ function _initObjectExtensionProtoype(): void {
         },
 
         pp_getRotationWorld<T extends Vector3>(this: Readonly<Object3D>, outRotation?: T): T {
-            return ObjectUtils.getRotationWorld(this, outRotation);
+            return ObjectUtils.getRotationWorld(this, outRotation!);
         },
 
         pp_getRotationWorldDegrees<T extends Vector3>(this: Readonly<Object3D>, outRotation?: T): T {
-            return ObjectUtils.getRotationWorldDegrees(this, outRotation);
+            return ObjectUtils.getRotationWorldDegrees(this, outRotation!);
         },
 
         pp_getRotationWorldRadians<T extends Vector3>(this: Readonly<Object3D>, outRotation?: Vector3 | T): Vector3 | T {
@@ -66,11 +66,11 @@ function _initObjectExtensionProtoype(): void {
         },
 
         pp_getRotationLocal<T extends Vector3>(this: Readonly<Object3D>, outRotation?: T): T {
-            return ObjectUtils.getRotationLocal(this, outRotation);
+            return ObjectUtils.getRotationLocal(this, outRotation!);
         },
 
         pp_getRotationLocalDegrees<T extends Vector3>(this: Readonly<Object3D>, outRotation?: T): T {
-            return ObjectUtils.getRotationLocalDegrees(this, outRotation);
+            return ObjectUtils.getRotationLocalDegrees(this, outRotation!);
         },
 
         pp_getRotationLocalRadians<T extends Vector3>(this: Readonly<Object3D>, outRotation?: Vector3 | T): Vector3 | T {
@@ -86,7 +86,7 @@ function _initObjectExtensionProtoype(): void {
         },
 
         pp_getScale<T extends Vector3>(this: Readonly<Object3D>, outScale?: T): T {
-            return ObjectUtils.getScale(this, outScale);
+            return ObjectUtils.getScale(this, outScale!);
         },
 
         pp_getScaleWorld<T extends Vector3>(this: Readonly<Object3D>, outScale?: Vector3 | T): Vector3 | T {
@@ -146,7 +146,7 @@ function _initObjectExtensionProtoype(): void {
         },
 
         pp_getForward<T extends Vector3>(this: Readonly<Object3D>, outForward?: T): T {
-            return ObjectUtils.getForward(this, outForward);
+            return ObjectUtils.getForward(this, outForward!);
         },
 
         pp_getForwardWorld<T extends Vector3>(this: Readonly<Object3D>, outForward?: Vector3 | T): Vector3 | T {
@@ -158,7 +158,7 @@ function _initObjectExtensionProtoype(): void {
         },
 
         pp_getBackward<T extends Vector3>(this: Readonly<Object3D>, outBackward?: T): T {
-            return ObjectUtils.getBackward(this, outBackward);
+            return ObjectUtils.getBackward(this, outBackward!);
         },
 
         pp_getBackwardWorld<T extends Vector3>(this: Readonly<Object3D>, outBackward?: Vector3 | T): Vector3 | T {
@@ -170,7 +170,7 @@ function _initObjectExtensionProtoype(): void {
         },
 
         pp_getUp<T extends Vector3>(this: Readonly<Object3D>, outUp?: T): T {
-            return ObjectUtils.getUp(this, outUp);
+            return ObjectUtils.getUp(this, outUp!);
         },
 
         pp_getUpWorld<T extends Vector3>(this: Readonly<Object3D>, outUp?: Vector3 | T): Vector3 | T {
@@ -182,7 +182,7 @@ function _initObjectExtensionProtoype(): void {
         },
 
         pp_getDown<T extends Vector3>(this: Readonly<Object3D>, outDown?: T): T {
-            return ObjectUtils.getDown(this, outDown);
+            return ObjectUtils.getDown(this, outDown!);
         },
 
         pp_getDownWorld<T extends Vector3>(this: Readonly<Object3D>, outDown?: Vector3 | T): Vector3 | T {
@@ -194,7 +194,7 @@ function _initObjectExtensionProtoype(): void {
         },
 
         pp_getLeft<T extends Vector3>(this: Readonly<Object3D>, outLeft?: T): T {
-            return ObjectUtils.getLeft(this, outLeft);
+            return ObjectUtils.getLeft(this, outLeft!);
         },
 
         pp_getLeftWorld<T extends Vector3>(this: Readonly<Object3D>, outLeft?: Vector3 | T): Vector3 | T {
@@ -206,7 +206,7 @@ function _initObjectExtensionProtoype(): void {
         },
 
         pp_getRight<T extends Vector3>(this: Readonly<Object3D>, outRight?: T): T {
-            return ObjectUtils.getRight(this, outRight);
+            return ObjectUtils.getRight(this, outRight!);
         },
 
         pp_getRightWorld<T extends Vector3>(this: Readonly<Object3D>, outRight?: Vector3 | T): Vector3 | T {
@@ -1242,23 +1242,23 @@ function _initObjectExtensionProtoype(): void {
         },
 
         pp_getComponentsAmountMap(this: Readonly<Object3D>, outComponentsAmountMap?: Map<string, number>): Map<string, number> {
-            return ObjectUtils.getComponentsAmountMap(this, outComponentsAmountMap);
+            return ObjectUtils.getComponentsAmountMap(this, outComponentsAmountMap!);
         },
 
         pp_getComponentsAmountMapSelf(this: Readonly<Object3D>, outComponentsAmountMap?: Map<string, number>): Map<string, number> {
-            return ObjectUtils.getComponentsAmountMapSelf(this, outComponentsAmountMap);
+            return ObjectUtils.getComponentsAmountMapSelf(this, outComponentsAmountMap!);
         },
 
         pp_getComponentsAmountMapHierarchy(this: Readonly<Object3D>, outComponentsAmountMap?: Map<string, number>): Map<string, number> {
-            return ObjectUtils.getComponentsAmountMapHierarchy(this, outComponentsAmountMap);
+            return ObjectUtils.getComponentsAmountMapHierarchy(this, outComponentsAmountMap!);
         },
 
         pp_getComponentsAmountMapDescendants(this: Readonly<Object3D>, outComponentsAmountMap?: Map<string, number>): Map<string, number> {
-            return ObjectUtils.getComponentsAmountMapDescendants(this, outComponentsAmountMap);
+            return ObjectUtils.getComponentsAmountMapDescendants(this, outComponentsAmountMap!);
         },
 
         pp_getComponentsAmountMapChildren(this: Readonly<Object3D>, outComponentsAmountMap?: Map<string, number>): Map<string, number> {
-            return ObjectUtils.getComponentsAmountMapChildren(this, outComponentsAmountMap);
+            return ObjectUtils.getComponentsAmountMapChildren(this, outComponentsAmountMap!);
         }
     };
 

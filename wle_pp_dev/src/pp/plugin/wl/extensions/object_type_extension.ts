@@ -63,7 +63,8 @@ import { CloneParams } from "../../../cauldron/wl/utils/object_utils.js";
  */
 export interface Object3DExtension {
 
-    pp_getPosition<T extends Vector3>(this: Readonly<Object3D>, outPosition?: T): T;
+    pp_getPosition(this: Readonly<Object3D>): Vector3;
+    pp_getPosition<T extends Vector3>(this: Readonly<Object3D>, outPosition: T): T;
 
     pp_getPositionWorld(this: Readonly<Object3D>): Vector3;
     pp_getPositionWorld<T extends Vector3>(this: Readonly<Object3D>, outPosition: T): T;
@@ -73,9 +74,15 @@ export interface Object3DExtension {
 
 
 
-    pp_getRotation<T extends Vector3>(this: Readonly<Object3D>, outRotation?: T): T;
-    pp_getRotationDegrees<T extends Vector3>(this: Readonly<Object3D>, outRotation?: T): T;
-    pp_getRotationRadians<T extends Vector3>(this: Readonly<Object3D>, outRotation?: T): T;
+    pp_getRotation(this: Readonly<Object3D>): Vector3;
+    pp_getRotation<T extends Vector3>(this: Readonly<Object3D>, outRotation: T): T;
+
+    pp_getRotationDegrees(this: Readonly<Object3D>): Vector3;
+    pp_getRotationDegrees<T extends Vector3>(this: Readonly<Object3D>, outRotation: T): T;
+
+    pp_getRotationRadians(this: Readonly<Object3D>): Vector3;
+    pp_getRotationRadians<T extends Vector3>(this: Readonly<Object3D>, outRotation: T): T;
+
 
     pp_getRotationMatrix(this: Readonly<Object3D>): Matrix3;
     pp_getRotationMatrix<T extends Matrix3>(this: Readonly<Object3D>, outRotation: T): T;
@@ -84,8 +91,11 @@ export interface Object3DExtension {
     pp_getRotationQuat<T extends Quaternion>(this: Readonly<Object3D>, outRotation: T): T;
 
 
-    pp_getRotationWorld<T extends Vector3>(this: Readonly<Object3D>, outRotation?: T): T;
-    pp_getRotationWorldDegrees<T extends Vector3>(this: Readonly<Object3D>, outRotation?: T): T;
+    pp_getRotationWorld(this: Readonly<Object3D>): Vector3;
+    pp_getRotationWorld<T extends Vector3>(this: Readonly<Object3D>, outRotation: T): T;
+
+    pp_getRotationWorldDegrees(this: Readonly<Object3D>): Vector3;
+    pp_getRotationWorldDegrees<T extends Vector3>(this: Readonly<Object3D>, outRotation: T): T;
 
     pp_getRotationWorldRadians(this: Readonly<Object3D>): Vector3;
     pp_getRotationWorldRadians<T extends Vector3>(this: Readonly<Object3D>, outRotation: T): T;
@@ -97,8 +107,11 @@ export interface Object3DExtension {
     pp_getRotationWorldQuat<T extends Quaternion>(this: Readonly<Object3D>, outRotation: T): T;
 
 
-    pp_getRotationLocal<T extends Vector3>(this: Readonly<Object3D>, outRotation?: T): T;
-    pp_getRotationLocalDegrees<T extends Vector3>(this: Readonly<Object3D>, outRotation?: T): T;
+    pp_getRotationLocal(this: Readonly<Object3D>): Vector3;
+    pp_getRotationLocal<T extends Vector3>(this: Readonly<Object3D>, outRotation: T): T;
+
+    pp_getRotationLocalDegrees(this: Readonly<Object3D>): Vector3;
+    pp_getRotationLocalDegrees<T extends Vector3>(this: Readonly<Object3D>, outRotation: T): T;
 
     pp_getRotationLocalRadians(this: Readonly<Object3D>): Vector3;
     pp_getRotationLocalRadians<T extends Vector3>(this: Readonly<Object3D>, outRotation: T): T;
@@ -111,7 +124,8 @@ export interface Object3DExtension {
 
 
 
-    pp_getScale<T extends Vector3>(this: Readonly<Object3D>, outScale?: T): T;
+    pp_getScale(this: Readonly<Object3D>): Vector3;
+    pp_getScale<T extends Vector3>(this: Readonly<Object3D>, outScale: T): T;
 
     pp_getScaleWorld(this: Readonly<Object3D>): Vector3;
     pp_getScaleWorld<T extends Vector3>(this: Readonly<Object3D>, outScale: T): T;
@@ -162,7 +176,8 @@ export interface Object3DExtension {
     pp_getAxesLocal<T extends Vector3, U extends Vector3, V extends Vector3>(this: Readonly<Object3D>, outAxes: [T, U, V]): [T, U, V];
 
 
-    pp_getForward<T extends Vector3>(this: Readonly<Object3D>, outForward?: T): T;
+    pp_getForward(this: Readonly<Object3D>): Vector3;
+    pp_getForward<T extends Vector3>(this: Readonly<Object3D>, outForward: T): T;
 
     pp_getForwardWorld(this: Readonly<Object3D>): Vector3;
     pp_getForwardWorld<T extends Vector3>(this: Readonly<Object3D>, outForward: T): T;
@@ -170,8 +185,8 @@ export interface Object3DExtension {
     pp_getForwardLocal(this: Readonly<Object3D>): Vector3;
     pp_getForwardLocal<T extends Vector3>(this: Readonly<Object3D>, outForward: T): T;
 
-
-    pp_getBackward<T extends Vector3>(this: Readonly<Object3D>, outBackward?: T): T;
+    pp_getBackward(this: Readonly<Object3D>): Vector3;
+    pp_getBackward<T extends Vector3>(this: Readonly<Object3D>, outBackward: T): T;
 
     pp_getBackwardWorld(this: Readonly<Object3D>): Vector3;
     pp_getBackwardWorld<T extends Vector3>(this: Readonly<Object3D>, outBackward: T): T;
@@ -180,7 +195,8 @@ export interface Object3DExtension {
     pp_getBackwardLocal<T extends Vector3>(this: Readonly<Object3D>, outBackward: T): T;
 
 
-    pp_getUp<T extends Vector3>(this: Readonly<Object3D>, outUp?: T): T;
+    pp_getUp(this: Readonly<Object3D>): Vector3;
+    pp_getUp<T extends Vector3>(this: Readonly<Object3D>, outUp: T): T;
 
     pp_getUpWorld(this: Readonly<Object3D>): Vector3;
     pp_getUpWorld<T extends Vector3>(this: Readonly<Object3D>, outUp: T): T;
@@ -189,7 +205,8 @@ export interface Object3DExtension {
     pp_getUpLocal<T extends Vector3>(this: Readonly<Object3D>, outUp: T): T;
 
 
-    pp_getDown<T extends Vector3>(this: Readonly<Object3D>, outDown?: T): T;
+    pp_getDown(this: Readonly<Object3D>): Vector3;
+    pp_getDown<T extends Vector3>(this: Readonly<Object3D>, outDown: T): T;
 
     pp_getDownWorld(this: Readonly<Object3D>): Vector3;
     pp_getDownWorld<T extends Vector3>(this: Readonly<Object3D>, outDown: T): T;
@@ -198,7 +215,8 @@ export interface Object3DExtension {
     pp_getDownLocal<T extends Vector3>(this: Readonly<Object3D>, outDown: T): T;
 
 
-    pp_getLeft<T extends Vector3>(this: Readonly<Object3D>, outLeft?: T): T;
+    pp_getLeft(this: Readonly<Object3D>): Vector3;
+    pp_getLeft<T extends Vector3>(this: Readonly<Object3D>, outLeft: T): T;
 
     pp_getLeftWorld(this: Readonly<Object3D>): Vector3;
     pp_getLeftWorld<T extends Vector3>(this: Readonly<Object3D>, outLeft: T): T;
@@ -207,7 +225,8 @@ export interface Object3DExtension {
     pp_getLeftLocal<T extends Vector3>(this: Readonly<Object3D>, outLeft: T): T;
 
 
-    pp_getRight<T extends Vector3>(this: Readonly<Object3D>, outRight?: T): T;
+    pp_getRight(this: Readonly<Object3D>): Vector3;
+    pp_getRight<T extends Vector3>(this: Readonly<Object3D>, outRight: T): T;
 
     pp_getRightWorld(this: Readonly<Object3D>): Vector3;
     pp_getRightWorld<T extends Vector3>(this: Readonly<Object3D>, outRight: T): T;
@@ -669,11 +688,20 @@ export interface Object3DExtension {
 
 
 
-    pp_getComponentsAmountMap(this: Readonly<Object3D>, outComponentsAmountMap?: Map<string, number>): Map<string, number>;
-    pp_getComponentsAmountMapSelf(this: Readonly<Object3D>, outComponentsAmountMap?: Map<string, number>): Map<string, number>;
-    pp_getComponentsAmountMapHierarchy(this: Readonly<Object3D>, outComponentsAmountMap?: Map<string, number>): Map<string, number>;
-    pp_getComponentsAmountMapDescendants(this: Readonly<Object3D>, outComponentsAmountMap?: Map<string, number>): Map<string, number>;
-    pp_getComponentsAmountMapChildren(this: Readonly<Object3D>, outComponentsAmountMap?: Map<string, number>): Map<string, number>;
+    pp_getComponentsAmountMap(this: Readonly<Object3D>): Map<string, number>;
+    pp_getComponentsAmountMap(this: Readonly<Object3D>, outComponentsAmountMap: Map<string, number>): Map<string, number>;
+
+    pp_getComponentsAmountMapSelf(this: Readonly<Object3D>): Map<string, number>;
+    pp_getComponentsAmountMapSelf(this: Readonly<Object3D>, outComponentsAmountMap: Map<string, number>): Map<string, number>;
+
+    pp_getComponentsAmountMapHierarchy(this: Readonly<Object3D>): Map<string, number>;
+    pp_getComponentsAmountMapHierarchy(this: Readonly<Object3D>, outComponentsAmountMap: Map<string, number>): Map<string, number>;
+
+    pp_getComponentsAmountMapDescendants(this: Readonly<Object3D>): Map<string, number>;
+    pp_getComponentsAmountMapDescendants(this: Readonly<Object3D>, outComponentsAmountMap: Map<string, number>): Map<string, number>;
+
+    pp_getComponentsAmountMapChildren(this: Readonly<Object3D>): Map<string, number>;
+    pp_getComponentsAmountMapChildren(this: Readonly<Object3D>, outComponentsAmountMap: Map<string, number>): Map<string, number>;
 }
 
 declare module "@wonderlandengine/api" {

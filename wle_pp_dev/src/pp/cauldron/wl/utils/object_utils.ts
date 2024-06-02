@@ -65,6 +65,8 @@ export class CloneParams {
 
 // Position
 
+export function getPosition(object: Readonly<Object3D>): Vector3;
+export function getPosition<T extends Vector3>(object: Readonly<Object3D>, outPosition: T): T;
 export function getPosition<T extends Vector3>(object: Readonly<Object3D>, outPosition?: T): T {
     return ObjectUtils.getPositionWorld(object, outPosition!);
 }
@@ -85,14 +87,20 @@ export function getPositionLocal<T extends Vector3>(object: Readonly<Object3D>, 
 
 // Rotation
 
+export function getRotation(object: Readonly<Object3D>): Vector3;
+export function getRotation<T extends Vector3>(object: Readonly<Object3D>, outRotation: T): T;
 export function getRotation<T extends Vector3>(object: Readonly<Object3D>, outRotation?: T): T {
-    return ObjectUtils.getRotationWorld(object, outRotation);
+    return ObjectUtils.getRotationWorld(object, outRotation!);
 }
 
+export function getRotationDegrees(object: Readonly<Object3D>): Vector3;
+export function getRotationDegrees<T extends Vector3>(object: Readonly<Object3D>, outRotation: T): T;
 export function getRotationDegrees<T extends Vector3>(object: Readonly<Object3D>, outRotation?: T): T {
-    return ObjectUtils.getRotationWorldDegrees(object, outRotation);
+    return ObjectUtils.getRotationWorldDegrees(object, outRotation!);
 }
 
+export function getRotationRadians(object: Readonly<Object3D>): Vector3;
+export function getRotationRadians<T extends Vector3>(object: Readonly<Object3D>, outRotation: T): T;
 export function getRotationRadians<T extends Vector3>(object: Readonly<Object3D>, outRotation?: T): T {
     return ObjectUtils.getRotationWorldRadians(object, outRotation!);
 }
@@ -111,10 +119,14 @@ export function getRotationQuat<T extends Quaternion>(object: Readonly<Object3D>
 
 // Rotation World
 
+export function getRotationWorld(object: Readonly<Object3D>): Vector3;
+export function getRotationWorld<T extends Vector3>(object: Readonly<Object3D>, outRotation: T): T;
 export function getRotationWorld<T extends Vector3>(object: Readonly<Object3D>, outRotation?: T): T {
-    return ObjectUtils.getRotationWorldDegrees(object, outRotation);
+    return ObjectUtils.getRotationWorldDegrees(object, outRotation!);
 }
 
+export function getRotationWorldDegrees(object: Readonly<Object3D>): Vector3;
+export function getRotationWorldDegrees<T extends Vector3>(object: Readonly<Object3D>, outRotation: T): T;
 export function getRotationWorldDegrees<T extends Vector3>(object: Readonly<Object3D>, outRotation?: T): T {
     outRotation = ObjectUtils.getRotationWorldRadians(object, outRotation!);
     Vec3Utils.toDegrees(outRotation, outRotation);
@@ -158,10 +170,14 @@ export function getRotationWorldQuat<T extends Quaternion>(object: Readonly<Obje
 
 // Rotation Local
 
+export function getRotationLocal(object: Readonly<Object3D>): Vector3;
+export function getRotationLocal<T extends Vector3>(object: Readonly<Object3D>, outRotation: T): T;
 export function getRotationLocal<T extends Vector3>(object: Readonly<Object3D>, outRotation?: T): T {
-    return ObjectUtils.getRotationLocalDegrees(object, outRotation);
+    return ObjectUtils.getRotationLocalDegrees(object, outRotation!);
 }
 
+export function getRotationLocalDegrees(object: Readonly<Object3D>): Vector3;
+export function getRotationLocalDegrees<T extends Vector3>(object: Readonly<Object3D>, outRotation: T): T;
 export function getRotationLocalDegrees<T extends Vector3>(object: Readonly<Object3D>, outRotation?: T): T {
     outRotation = ObjectUtils.getRotationLocalRadians(object, outRotation!);
     Vec3Utils.toDegrees(outRotation, outRotation);
@@ -205,6 +221,8 @@ export function getRotationLocalQuat<T extends Quaternion>(object: Readonly<Obje
 
 // Scale
 
+export function getScale(object: Readonly<Object3D>): Vector3;
+export function getScale<T extends Vector3>(object: Readonly<Object3D>, outScale: T): T;
 export function getScale<T extends Vector3>(object: Readonly<Object3D>, outScale?: T): T {
     return ObjectUtils.getScaleWorld(object, outScale!);
 }
@@ -335,6 +353,8 @@ export function getAxesLocal<T extends Vector3, U extends Vector3, V extends Vec
 
 // Forward
 
+export function getForward(object: Readonly<Object3D>): Vector3;
+export function getForward<T extends Vector3>(object: Readonly<Object3D>, outForward: T): T;
 export function getForward<T extends Vector3>(object: Readonly<Object3D>, outForward?: T): T {
     return ObjectUtils.getForwardWorld(object, outForward!);
 }
@@ -373,6 +393,8 @@ export const getForwardLocal = function () {
 
 // Backward
 
+export function getBackward(object: Readonly<Object3D>): Vector3;
+export function getBackward<T extends Vector3>(object: Readonly<Object3D>, outBackward: T): T;
 export function getBackward<T extends Vector3>(object: Readonly<Object3D>, outBackward?: T): T {
     return ObjectUtils.getBackwardWorld(object, outBackward!);
 }
@@ -411,6 +433,8 @@ export const getBackwardLocal = function () {
 
 // Up
 
+export function getUp(object: Readonly<Object3D>): Vector3;
+export function getUp<T extends Vector3>(object: Readonly<Object3D>, outUp: T): T;
 export function getUp<T extends Vector3>(object: Readonly<Object3D>, outUp?: T): T {
     return ObjectUtils.getUpWorld(object, outUp!);
 }
@@ -449,6 +473,8 @@ export const getUpLocal = function () {
 
 // Down
 
+export function getDown(object: Readonly<Object3D>): Vector3;
+export function getDown<T extends Vector3>(object: Readonly<Object3D>, outDown: T): T;
 export function getDown<T extends Vector3>(object: Readonly<Object3D>, outDown?: T): T {
     return ObjectUtils.getDownWorld(object, outDown!);
 }
@@ -487,6 +513,8 @@ export const getDownLocal = function () {
 
 // Left
 
+export function getLeft(object: Readonly<Object3D>): Vector3;
+export function getLeft<T extends Vector3>(object: Readonly<Object3D>, outLeft: T): T;
 export function getLeft<T extends Vector3>(object: Readonly<Object3D>, outLeft?: T): T {
     return ObjectUtils.getLeftWorld(object, outLeft!);
 }
@@ -525,6 +553,8 @@ export const getLeftLocal = function () {
 
 // Right
 
+export function getRight(object: Readonly<Object3D>): Vector3;
+export function getRight<T extends Vector3>(object: Readonly<Object3D>, outRight: T): T;
 export function getRight<T extends Vector3>(object: Readonly<Object3D>, outRight?: T): T {
     return ObjectUtils.getRightWorld(object, outRight!);
 }
@@ -2784,10 +2814,14 @@ export function reserveObjectsChildren(object: Readonly<Object3D>, count: number
     return object as Object3D;
 }
 
+export function getComponentsAmountMap(object: Readonly<Object3D>): Map<string, number>;
+export function getComponentsAmountMap(object: Readonly<Object3D>, outComponentsAmountMap: Map<string, number>): Map<string, number>;
 export function getComponentsAmountMap(object: Readonly<Object3D>, outComponentsAmountMap: Map<string, number> = new Map()): Map<string, number> {
     return ObjectUtils.getComponentsAmountMapHierarchy(object, outComponentsAmountMap);
 }
 
+export function getComponentsAmountMapSelf(object: Readonly<Object3D>): Map<string, number>;
+export function getComponentsAmountMapSelf(object: Readonly<Object3D>, outComponentsAmountMap: Map<string, number>): Map<string, number>;
 export function getComponentsAmountMapSelf(object: Readonly<Object3D>, outComponentsAmountMap: Map<string, number> = new Map()): Map<string, number> {
     let objectsAmount = outComponentsAmountMap.get("object");
     if (objectsAmount == null) {
@@ -2810,6 +2844,8 @@ export function getComponentsAmountMapSelf(object: Readonly<Object3D>, outCompon
     return outComponentsAmountMap;
 }
 
+export function getComponentsAmountMapHierarchy(object: Readonly<Object3D>): Map<string, number>;
+export function getComponentsAmountMapHierarchy(object: Readonly<Object3D>, outComponentsAmountMap: Map<string, number>): Map<string, number>;
 export function getComponentsAmountMapHierarchy(object: Readonly<Object3D>, outComponentsAmountMap: Map<string, number> = new Map()): Map<string, number> {
     const hierarchy = ObjectUtils.getHierarchy(object);
 
@@ -2820,6 +2856,8 @@ export function getComponentsAmountMapHierarchy(object: Readonly<Object3D>, outC
     return outComponentsAmountMap;
 }
 
+export function getComponentsAmountMapDescendants(object: Readonly<Object3D>): Map<string, number>;
+export function getComponentsAmountMapDescendants(object: Readonly<Object3D>, outComponentsAmountMap: Map<string, number>): Map<string, number>;
 export function getComponentsAmountMapDescendants(object: Readonly<Object3D>, outComponentsAmountMap: Map<string, number> = new Map()): Map<string, number> {
     const descendants = ObjectUtils.getDescendants(object);
 
@@ -2830,6 +2868,8 @@ export function getComponentsAmountMapDescendants(object: Readonly<Object3D>, ou
     return outComponentsAmountMap;
 }
 
+export function getComponentsAmountMapChildren(object: Readonly<Object3D>): Map<string, number>;
+export function getComponentsAmountMapChildren(object: Readonly<Object3D>, outComponentsAmountMap: Map<string, number>): Map<string, number>;
 export function getComponentsAmountMapChildren(object: Readonly<Object3D>, outComponentsAmountMap: Map<string, number> = new Map()): Map<string, number> {
     const children = ObjectUtils.getChildren(object);
 
