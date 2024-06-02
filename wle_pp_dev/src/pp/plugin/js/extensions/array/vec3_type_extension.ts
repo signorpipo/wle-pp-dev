@@ -1,5 +1,5 @@
-import { EasingFunction } from "wle-pp/cauldron/utils/math_utils.js";
 import { Matrix3, Matrix4, Quaternion, Vector3 } from "../../../../cauldron/type_definitions/array_type_definitions.js";
+import { EasingFunction } from "../../../../cauldron/utils/math_utils.js";
 
 /**
  * #WARN this type extension is actually added at runtime only if you call `initVec3Extension`  
