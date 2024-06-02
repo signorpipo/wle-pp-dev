@@ -25,7 +25,7 @@ export function vec3_create(): Vector3;
 export function vec3_create(x: number, y: number, z: number): Vector3;
 export function vec3_create(uniformValue: number): Vector3;
 export function vec3_create(x?: number, y?: number, z?: number): Vector3 {
-    return Vec3Utils.create(x, y, z);
+    return Vec3Utils.create(x!, y!, z!);
 }
 
 export function vec4_create(): Vector4;
