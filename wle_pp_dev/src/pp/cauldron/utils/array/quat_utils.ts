@@ -145,7 +145,7 @@ export function getAngleDegrees(quat: Readonly<Quaternion>): number {
 export const getAngleRadians = function () {
     const vector = vec3_utils_create();
     return function getAngleRadians(quat: Readonly<Quaternion>): number {
-        const angle = gl_quat.getAxisAngle(vector, quat as unknown as gl_quat_type);
+        const angle = gl_quat.getAxisAngle(vector as unknown as gl_vec3_type, quat as unknown as gl_quat_type);
         return angle;
     };
 }();
@@ -956,7 +956,7 @@ const _setAxes = function () {
 
             const fixSignMap = fixedAxesFixSignMap[priority[0]];
 
-            Vec3Utils.cross(firstAxis, crossAxis, fixedAxes[thirdAxisIndex]);
+            Vec3Utils.cross(firstAxis, crossAxis!, fixedAxes[thirdAxisIndex]);
             Vec3Utils.scale(fixedAxes[thirdAxisIndex], fixSignMap[priority[thirdAxisIndex]], fixedAxes[thirdAxisIndex]);
 
             Vec3Utils.cross(firstAxis, fixedAxes[thirdAxisIndex], fixedAxes[secondAxisIndex]);
