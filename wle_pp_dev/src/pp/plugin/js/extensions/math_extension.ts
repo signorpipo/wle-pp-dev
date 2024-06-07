@@ -49,7 +49,7 @@ function _initMathExtensionInstance(): void {
         },
 
         pp_random(start?: number, end?: number): number {
-            return MathUtils.random(start, end);
+            return MathUtils.random(start!, end!);
         },
 
         pp_randomInt(start: number, end: number): number {

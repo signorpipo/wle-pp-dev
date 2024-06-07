@@ -33,8 +33,10 @@ export interface MathExtension {
 
 
 
+    /** Range is `[0, 1)` */
+    pp_random(): number;
     /** Range is `[start, end)` */
-    pp_random(start?: number, end?: number): number;
+    pp_random(start: number, end: number): number;
 
     /** Range is `[start, end]` */
     pp_randomInt(start: number, end: number): number;

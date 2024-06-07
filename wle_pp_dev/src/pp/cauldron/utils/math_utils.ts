@@ -86,11 +86,12 @@ export function mapToRange(value: number, originRangeStart: number, originRangeE
     return clampedNewValue;
 }
 
+/** Range is `[0, 1)` */
+export function random(): number;
 /** Range is `[start, end)` */
+export function random(start: number, end: number): number;
 export function random(start: number = 0, end: number = 1): number {
-    const min = Math.min(start, end);
-    const max = Math.max(start, end);
-    return Math.random() * (max - min) + min;
+    return Math.random() * (end - start) + start;
 }
 
 /** Range is `[start, end]` */
