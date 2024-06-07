@@ -1,6 +1,6 @@
-import { Vec3Utils } from "wle-pp/cauldron/utils/array/vec3_utils.js";
-import { EasingFunction } from "wle-pp/cauldron/utils/math_utils.js";
 import { Matrix3, Matrix4, Quaternion, Vector3 } from "../../../../cauldron/type_definitions/array_type_definitions.js";
+import { Vec3Utils } from "../../../../cauldron/utils/array/vec3_utils.js";
+import { EasingFunction } from "../../../../cauldron/utils/math_utils.js";
 import { PluginUtils } from "../../../utils/plugin_utils.js";
 import { ArrayExtensionUtils } from "./array_extension_utils.js";
 import { Vector3Extension } from "./vec3_type_extension.js";

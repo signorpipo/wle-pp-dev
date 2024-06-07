@@ -1,5 +1,5 @@
 import { vec3 as gl_vec3, type mat3 as gl_mat3_type, type mat4 as gl_mat4_type, type quat as gl_quat_type, type vec3 as gl_vec3_type } from "gl-matrix";
-import { Matrix3, Matrix4, Quaternion, Vector3 } from "wle-pp/cauldron/type_definitions/array_type_definitions.js";
+import { Matrix3, Matrix4, Quaternion, Vector3 } from "../../../cauldron/type_definitions/array_type_definitions.js";
 import { EasingFunction, MathUtils } from "../math_utils.js";
 import { Mat3Utils } from "./mat3_utils.js";
 import { Mat4Utils, create as mat4_utils_create } from "./mat4_utils.js";
