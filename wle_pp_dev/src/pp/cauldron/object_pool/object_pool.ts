@@ -1,14 +1,14 @@
 export interface PoolObject<PoolObjectType, PoolObjectCloneParamsType = unknown> {
-    setActive?(active: boolean): void;
-    equals?(object: PoolObjectType): boolean;
+    setActive(active: boolean): void;
+    equals(object: PoolObjectType): boolean;
 
-    cloneObject?(cloneParams?: Readonly<PoolObjectCloneParamsType>): PoolObjectType | null;
+    cloneObject(cloneParams?: Readonly<PoolObjectCloneParamsType>): PoolObjectType | null;
 
-    reserveObjects?(size: number): void;
-    destroy?(): void;
+    reserveObjects(size: number): void;
+    destroy(): void;
 }
 
-export class ObjectPoolParams<PoolObjectType extends PoolObject<PoolObjectType, PoolObjectCloneParamsType>, PoolObjectCloneParamsType = unknown> {
+export class ObjectPoolParams<PoolObjectType extends (Partial<PoolObject<PoolObjectType, PoolObjectCloneParamsType>> & object), PoolObjectCloneParamsType = unknown> {
 
     public myInitialPoolSize: number = 0;
 
@@ -37,7 +37,7 @@ export class ObjectPoolParams<PoolObjectType extends PoolObject<PoolObjectType, 
     public myLogEnabled: boolean = false;
 }
 
-export class ObjectPool<PoolObjectType extends PoolObject<PoolObjectType, PoolObjectCloneParamsType>, PoolObjectCloneParamsType = unknown> {
+export class ObjectPool<PoolObjectType extends (Partial<PoolObject<PoolObjectType, PoolObjectCloneParamsType>> & object), PoolObjectCloneParamsType = unknown> {
 
     private readonly _myObjectPrototype: Readonly<PoolObjectType>;
     private readonly _myObjectPoolParams: Readonly<ObjectPoolParams<PoolObjectType, PoolObjectCloneParamsType>>;

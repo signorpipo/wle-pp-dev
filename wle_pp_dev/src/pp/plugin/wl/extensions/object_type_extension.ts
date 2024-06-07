@@ -710,10 +710,10 @@ declare module "@wonderlandengine/api" {
 
 declare module "../../../cauldron/object_pool/object_pool.js" {
     interface PoolObject<PoolObjectType, PoolObjectCloneParamsType = unknown> {
-        pp_setActive?(active: boolean): void;
-        pp_equals?(object: Readonly<PoolObjectType>): boolean;
-        pp_clone?(cloneParams?: PoolObjectCloneParamsType): PoolObjectType | null;
-        pp_reserveObjects?(size: number): void;
-        pp_destroy?(): void;
+        pp_setActive(active: boolean): void;
+        pp_equals(object: Readonly<PoolObjectType>): boolean;
+        pp_clone(cloneParams?: PoolObjectCloneParamsType): PoolObjectType | null;
+        pp_reserveObjects(size: number): void;
+        pp_destroy(): void;
     }
 }

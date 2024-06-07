@@ -238,7 +238,7 @@ export class VisualManager {
     }
 
     private _addVisualElementTypeToPool(visualElementType: unknown | VisualElementDefaultType): void {
-        const objectPoolParams = new ObjectPoolParams();
+        const objectPoolParams = new ObjectPoolParams<VisualElement>();
         objectPoolParams.myInitialPoolSize = 10;
         objectPoolParams.myAmountToAddWhenEmpty = 0;
         objectPoolParams.myPercentageToAddWhenEmpty = 0.5;
