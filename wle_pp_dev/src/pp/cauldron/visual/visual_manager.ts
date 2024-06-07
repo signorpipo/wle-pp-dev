@@ -180,7 +180,7 @@ export class VisualManager {
             this._addVisualElementTypeToPool(visualElementType);
         }
 
-        const pool = Globals.getObjectPoolManager(this._myEngine)!.getPool(this._getTypePoolID(visualElementType));
+        const pool = Globals.getObjectPoolManager(this._myEngine)!.getPool(this._getTypePoolID(visualElementType))!;
 
         const difference = pool.getAvailableSize() - amount;
         if (difference < 0) {
@@ -228,7 +228,7 @@ export class VisualManager {
             this._addVisualElementTypeToPool(params.myType);
         }
 
-        element = Globals.getObjectPoolManager(this._myEngine)!.get(this._getTypePoolID(params.myType));
+        element = Globals.getObjectPoolManager(this._myEngine)!.get<VisualElement>(this._getTypePoolID(params.myType));
 
         if (element != null) {
             element.copyParamsGeneric(params);

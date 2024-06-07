@@ -707,13 +707,3 @@ export interface Object3DExtension {
 declare module "@wonderlandengine/api" {
     interface Object3D extends Object3DExtension { }
 }
-
-declare module "../../../cauldron/object_pool/object_pool.js" {
-    interface PoolObject<PoolObjectType, PoolObjectCloneParamsType = unknown> {
-        pp_setActive(active: boolean): void;
-        pp_equals(object: Readonly<PoolObjectType>): boolean;
-        pp_clone(cloneParams?: PoolObjectCloneParamsType): PoolObjectType | null;
-        pp_reserveObjects(size: number): void;
-        pp_destroy(): void;
-    }
-}
