@@ -7,7 +7,7 @@ import { WLComponentDefaultCloneCallbacks } from "./wl_component_default_clone_c
 let _myCloneCallbacks = new WeakMap();                 // Signature: callback(componentToClone, targetObject, useDefaultCloneAsFallback, deeCloneParams, customCloneParams)
 let _myClonePostProcessCallbacks = new WeakMap();      // Signature: callback(componentToClone, clonedComponent, deeCloneParams, customCloneParams)
 
-export class DeepCloneParams {
+export class ComponentDeepCloneParams {
 
     constructor() {
         this._myDeepCloneComponents = false;
@@ -63,7 +63,7 @@ export class DeepCloneParams {
     }
 }
 
-export class CustomCloneParams {
+export class ComponentCustomCloneParams {
 
     constructor() {
         this._myParams = new Map();

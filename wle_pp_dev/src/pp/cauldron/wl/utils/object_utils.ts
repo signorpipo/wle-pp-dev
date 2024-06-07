@@ -7,9 +7,9 @@ import { Quat2Utils } from "../../utils/array/quat2_utils.js";
 import { QuatUtils } from "../../utils/array/quat_utils.js";
 import { Vec3Utils } from "../../utils/array/vec3_utils.js";
 import { MathUtils } from "../../utils/math_utils.js";
-import { ComponentUtils, CustomCloneParams, DeepCloneParams } from "./component_utils.js";
+import { ComponentCustomCloneParams, ComponentDeepCloneParams, ComponentUtils } from "./component_utils.js";
 
-export class CloneParams {
+export class ObjectCloneParams {
 
     /** Defaults to the object to clone parent, null can be used to specify u want the scene root as the parent */
     public myCloneParent: Object3D | null | undefined = undefined;
@@ -54,11 +54,11 @@ export class CloneParams {
 
 
     /** Used to specify if the object components must be deep cloned or not, you can also override the behavior for specific components and variables */
-    public myComponentDeepCloneParams: DeepCloneParams = new DeepCloneParams();
+    public myComponentDeepCloneParams: ComponentDeepCloneParams = new ComponentDeepCloneParams();
 
 
     /** This class can be filled with whatever custom paramater the component clone functions could need */
-    public myComponentCustomCloneParams: CustomCloneParams = new CustomCloneParams();
+    public myComponentCustomCloneParams: ComponentCustomCloneParams = new ComponentCustomCloneParams();
 }
 
 // GETTER
@@ -2210,7 +2210,7 @@ export const hasUniformScaleLocal = function () {
 export const clone = function () {
     const scale = Vec3Utils.create();
     const transformQuat = Quat2Utils.create();
-    return function clone(object: Readonly<Object3D>, cloneParams: Readonly<CloneParams> = new CloneParams()): Object3D | null {
+    return function clone(object: Readonly<Object3D>, cloneParams: Readonly<ObjectCloneParams> = new ObjectCloneParams()): Object3D | null {
         let clonedObject = null;
 
         const cloneParent = cloneParams.myCloneParent === undefined ? ObjectUtils.getParent(object) : cloneParams.myCloneParent;
@@ -2351,7 +2351,7 @@ export const clone = function () {
     };
 }();
 
-export function isCloneable(object: Readonly<Object3D>, cloneParams: Readonly<CloneParams> = new CloneParams()): boolean {
+export function isCloneable(object: Readonly<Object3D>, cloneParams: Readonly<ObjectCloneParams> = new ObjectCloneParams()): boolean {
     if (cloneParams.myIgnoreNonCloneable || cloneParams.myIgnoreComponents || cloneParams.myUseDefaultComponentClone || cloneParams.myUseDefaultComponentCloneAsFallback) {
         return true;
     }

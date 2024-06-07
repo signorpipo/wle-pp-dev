@@ -1,6 +1,6 @@
 import { Component, Object3D, WonderlandEngine, type ComponentConstructor } from "@wonderlandengine/api";
 import { Matrix3, Matrix4, Quaternion, Quaternion2, Vector3 } from "../../../cauldron/type_definitions/array_type_definitions.js";
-import { CloneParams } from "../../../cauldron/wl/utils/object_utils.js";
+import { ObjectCloneParams } from "../../../cauldron/wl/utils/object_utils.js";
 
 /**
  * #WARN this type extension is actually added at runtime only if you call `initObjectExtension`  
@@ -604,9 +604,9 @@ export interface Object3DExtension {
 
 
 
-    pp_clone(this: Readonly<Object3D>, cloneParams?: Readonly<CloneParams>): Object3D | null;
+    pp_clone(this: Readonly<Object3D>, cloneParams?: Readonly<ObjectCloneParams>): Object3D | null;
 
-    pp_isCloneable(this: Readonly<Object3D>, cloneParams?: Readonly<CloneParams>): boolean;
+    pp_isCloneable(this: Readonly<Object3D>, cloneParams?: Readonly<ObjectCloneParams>): boolean;
 
 
 

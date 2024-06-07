@@ -1,6 +1,6 @@
 import { Component, Object3D, WonderlandEngine, type ComponentConstructor } from "@wonderlandengine/api";
 import { Matrix3, Matrix4, Quaternion, Quaternion2, Vector3 } from "../../../cauldron/type_definitions/array_type_definitions.js";
-import { CloneParams, ObjectUtils } from "../../../cauldron/wl/utils/object_utils.js";
+import { ObjectCloneParams, ObjectUtils } from "../../../cauldron/wl/utils/object_utils.js";
 import { PluginUtils } from "../../utils/plugin_utils.js";
 import { Object3DExtension } from "./object_type_extension.js";
 
@@ -1037,11 +1037,11 @@ function _initObjectExtensionProtoype(): void {
             return ObjectUtils.hasUniformScaleLocal(this);
         },
 
-        pp_clone(this: Readonly<Object3D>, cloneParams?: Readonly<CloneParams>): Object3D | null {
+        pp_clone(this: Readonly<Object3D>, cloneParams?: Readonly<ObjectCloneParams>): Object3D | null {
             return ObjectUtils.clone(this, cloneParams);
         },
 
-        pp_isCloneable(this: Readonly<Object3D>, cloneParams?: Readonly<CloneParams>): boolean {
+        pp_isCloneable(this: Readonly<Object3D>, cloneParams?: Readonly<ObjectCloneParams>): boolean {
             return ObjectUtils.isCloneable(this, cloneParams);
         },
 
