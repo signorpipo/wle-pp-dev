@@ -1,5 +1,5 @@
 import { Component, MeshComponent, Property } from "@wonderlandengine/api";
-import { ObjectCloneParams, Globals, ObjectPool, ObjectPoolParams } from "wle-pp";
+import { Globals, ObjectCloneParams, ObjectPool, ObjectPoolParams } from "wle-pp";
 import { ParticleComponent } from "./particle_component.js";
 
 export class ParticlesSpawnerComponent extends Component {
