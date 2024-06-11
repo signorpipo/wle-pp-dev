@@ -7,7 +7,7 @@ export class ToggleHowToTextComponent extends Component implements CursorButtonA
     public static override TypeName = "toggle-how-to-text";
 
     @property.object()
-    private _myTextObject!: Object3D;
+    private readonly _myTextObject!: Object3D;
 
     private readonly _myAnimatedScale!: AnimatedNumber;
 
