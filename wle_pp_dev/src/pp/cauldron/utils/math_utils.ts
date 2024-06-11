@@ -35,7 +35,7 @@ export const EPSILON: number = 0.000001;
 export const EPSILON_SQUARED: number = EPSILON * EPSILON;
 export const EPSILON_DEGREES: number = 0.00001;
 
-export function clamp(value: number, start: number, end: number): number {
+export function clamp(value: number, start: number | null, end: number | null): number {
     const fixedStart = (start != null) ? start : -Number.MAX_VALUE;
     const fixedEnd = (end != null) ? end : Number.MAX_VALUE;
 

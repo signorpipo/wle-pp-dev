@@ -15,9 +15,9 @@ export class RaycastParams {
     public myObjectsToIgnore: Readonly<Object3D>[] = [];
     public myIgnoreHitsInsideCollision: boolean = false;
 
-    public myPhysics: Physics;
+    public readonly myPhysics: Readonly<Physics>;
 
-    constructor(physics = Globals.getPhysics()!) {
+    constructor(physics: Readonly<Physics> = Globals.getPhysics()!) {
         this.myPhysics = physics;
     }
 
@@ -31,7 +31,7 @@ export class RaycastParams {
         this.myObjectsToIgnore.pp_copy(other.myObjectsToIgnore);
         this.myIgnoreHitsInsideCollision = other.myIgnoreHitsInsideCollision;
 
-        this.myPhysics = other.myPhysics;
+        (this.myPhysics as Readonly<Physics>) = other.myPhysics;
     }
 
     public reset(): void {
