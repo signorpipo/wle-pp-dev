@@ -17,6 +17,9 @@ export class FingerCursorComponent extends Component {
     @property.enum(["Left", "Right"], "Left")
     private readonly _myHandedness!: number;
 
+    @property.enum(["Thumb", "Index", "Middle", "Ring", "Pinky"], "Index")
+    private readonly _myFinger!: number;
+
     @property.bool(true)
     private readonly _myMultipleClicksEnabled!: boolean;
 
@@ -39,6 +42,7 @@ export class FingerCursorComponent extends Component {
     private readonly _myDefaultCursorObject!: Readonly<Object3D>;
 
     private readonly _myHandednessType!: Handedness;
+    private readonly _myFingerJointID!: TrackedHandJointID;
     private _myLastTarget: CursorTarget | null = null;
     private _myDefaultCursorComponent: Cursor | null = null;
     private _myHandInputSource: Readonly<XRInputSource> | null = null;
@@ -57,6 +61,24 @@ export class FingerCursorComponent extends Component {
 
     public override init(): void {
         (this._myHandednessType as Handedness) = InputUtils.getHandednessByIndex(this._myHandedness)!;
+
+        switch (this._myFinger) {
+            case 0:
+                (this._myFingerJointID as TrackedHandJointID) = TrackedHandJointID.THUMB_TIP;
+                break;
+            case 1:
+                (this._myFingerJointID as TrackedHandJointID) = TrackedHandJointID.INDEX_FINGER_TIP;
+                break;
+            case 2:
+                (this._myFingerJointID as TrackedHandJointID) = TrackedHandJointID.MIDDLE_FINGER_TIP;
+                break;
+            case 3:
+                (this._myFingerJointID as TrackedHandJointID) = TrackedHandJointID.RING_FINGER_TIP;
+                break;
+            case 4:
+                (this._myFingerJointID as TrackedHandJointID) = TrackedHandJointID.PINKY_FINGER_TIP;
+                break;
+        }
 
         const fakeCursor = {
             handedness: this._myHandednessType,
@@ -248,7 +270,7 @@ export class FingerCursorComponent extends Component {
             try {
                 const xrFrame = XRUtils.getFrame(this.engine)!;
                 if (xrFrame.getJointPose != null) {
-                    tip = xrFrame.getJointPose(this._myHandInputSource.hand!.get(TrackedHandJointID.INDEX_FINGER_TIP)!, XRUtils.getReferenceSpace(this.engine)!) ?? null;
+                    tip = xrFrame.getJointPose(this._myHandInputSource.hand!.get(this._myFingerJointID)!, XRUtils.getReferenceSpace(this.engine)!) ?? null;
                 }
             } catch (error) {
                 // Do nothing
