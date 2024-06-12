@@ -67,7 +67,7 @@ export class PlayerTransformManagerParams {
 
     public myHeadRadius: number = 0;
     public readonly myHeadCollisionBlockLayerFlags: PhysicsLayerFlags = new PhysicsLayerFlags();
-    public myHeadCollisionObjectsToIgnore = [];
+    public myHeadCollisionObjectsToIgnore: Readonly<Object3D>[] = [];
 
     /**
      * Can be used if when resetting to feet there might be dynamic objects which you would like to exclude for this reset check,  
@@ -270,7 +270,7 @@ export class PlayerTransformManager {
     public start(): void {
         this.resetToReal(true);
 
-        XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this), true, true, this._myParams.myEngine as any);
+        XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this), true, true, this._myParams.myEngine);
     }
 
     public getParams(): PlayerTransformManagerParams {
@@ -294,7 +294,7 @@ export class PlayerTransformManager {
         if (this._myResetRealOnHeadSynced) {
             if (this.getPlayerHeadManager().isSynced()) {
                 this._myResetRealOnHeadSynced = false;
-                if (XRUtils.isSessionActive(this._myParams.myEngine as any)) {
+                if (XRUtils.isSessionActive(this._myParams.myEngine)) {
                     this.resetReal(
                         !this._myParams.myNeverResetRealPositionVR,
                         !this._myParams.myNeverResetRealRotationVR,
@@ -354,7 +354,7 @@ export class PlayerTransformManager {
         // This make reset happens even for gravity, maybe u should do it manually
         if (this._myParams.myResetRealOnMove) {
             if (!this.isSynced()) {
-                if (XRUtils.isSessionActive(this._myParams.myEngine as any)) {
+                if (XRUtils.isSessionActive(this._myParams.myEngine)) {
                     this.resetReal(
                         !this._myParams.myNeverResetRealPositionVR,
                         !this._myParams.myNeverResetRealRotationVR,
@@ -440,7 +440,7 @@ export class PlayerTransformManager {
 
         if (this._myParams.myResetRealOnTeleport) {
             if (!this.isSynced()) {
-                if (XRUtils.isSessionActive(this._myParams.myEngine as any)) {
+                if (XRUtils.isSessionActive(this._myParams.myEngine)) {
                     this.resetReal(
                         !this._myParams.myNeverResetRealPositionVR,
                         !this._myParams.myNeverResetRealRotationVR,
@@ -1477,10 +1477,10 @@ export class PlayerTransformManager {
         this._myDestroyed = true;
 
         if (this._myVisibilityChangeEventListener != null) {
-            XRUtils.getSession(this._myParams.myEngine as any)!.removeEventListener("visibilitychange", this._myVisibilityChangeEventListener);
+            XRUtils.getSession(this._myParams.myEngine)!.removeEventListener("visibilitychange", this._myVisibilityChangeEventListener);
         }
 
-        XRUtils.unregisterSessionStartEndEventListeners(this, this._myParams.myEngine as any);
+        XRUtils.unregisterSessionStartEndEventListeners(this, this._myParams.myEngine);
     }
 
     public isDestroyed(): boolean {
