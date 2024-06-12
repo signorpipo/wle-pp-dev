@@ -1,5 +1,5 @@
-import { WonderlandEngine } from "@wonderlandengine/api";
-import { Quaternion, Quaternion, Quaternion2, Vector3 } from "wle-pp/cauldron/type_definitions/array_type_definitions.js";
+import { Object3D, WonderlandEngine } from "@wonderlandengine/api";
+import { Quaternion, Quaternion2, Vector3 } from "wle-pp/cauldron/type_definitions/array_type_definitions.js";
 import { PhysicsLayerFlags } from "../../../../../cauldron/physics/physics_layer_flags.js";
 import { XRUtils } from "../../../../../cauldron/utils/xr_utils.js";
 import { quat2_create, quat_create, vec3_create, vec4_create } from "../../../../../plugin/js/extensions/array/vec_create_extension.js";
@@ -8,10 +8,6 @@ import { CollisionCheckBridge } from "../../../character_controller/collision/co
 import { CollisionCheckUtils } from "../../../character_controller/collision/legacy/collision_check/collision_check_utils.js";
 import { CollisionCheckParams, CollisionRuntimeParams } from "../../../character_controller/collision/legacy/collision_check/collision_params.js";
 import { PlayerHeadManager } from "./player_head_manager.js";
-import { setRotationQuat, getPosition, getRotationQuat } from "wle-pp/cauldron/utils/array/quat2_utils.js";
-import { transformQuat, rotateQuat } from "wle-pp/cauldron/utils/array/vec3_utils.js";
-import { getTransformQuat, resetPosition, resetRotation, destroy } from "wle-pp/cauldron/wl/utils/object_utils.js";
-import { getPlayerHeadManager } from "../../player_locomotion_globals.js";
 
 export enum PlayerTransformManagerSyncFlag {
     BODY_COLLIDING = 0,
@@ -217,6 +213,7 @@ export class PlayerTransformManagerParams {
     }
 }
 
+// #TODO Sliding info, surface info, update
 export class PlayerTransformManager {
 
     private _myParams: PlayerTransformManagerParams;
@@ -273,10 +270,10 @@ export class PlayerTransformManager {
     public start(): void {
         this.resetToReal(true);
 
-        XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this), true, true, this._myParams.myEngine);
+        XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this), true, true, this._myParams.myEngine as any);
     }
 
-    public getParams() {
+    public getParams(): PlayerTransformManagerParams {
         return this._myParams;
     }
 
@@ -333,7 +330,7 @@ export class PlayerTransformManager {
             transformQuat: quat2_create(),
             fixedMovement: vec3_create()
         };
-    public move(movement: Readonly<Vector3>, outCollisionRuntimeParams?: CollisionRuntimeParams, forceMove: boolean = false): void {
+    public move(movement: Readonly<Vector3>, outCollisionRuntimeParams: CollisionRuntimeParams | null = null, forceMove: boolean = false): void {
         const transformQuat = PlayerTransformManager._moveSV.transformQuat;
         this.getTransformQuat(transformQuat);
 
@@ -380,55 +377,140 @@ export class PlayerTransformManager {
         {
             teleportTransformQuat: quat2_create()
         };
-    public teleportPosition(position: Vector3, outCollisionRuntimeParams?: CollisionRuntimeParams, forceTeleport: boolean = false): void {
+    public teleportPosition(teleportPosition: Readonly<Vector3>, outCollisionRuntimeParams: CollisionRuntimeParams | null = null, forceTeleport: boolean = false): void {
         const teleportTransformQuat = PlayerTransformManager._teleportPositionSV.teleportTransformQuat;
         this.getTransformQuat(teleportTransformQuat);
-        teleportTransformQuat.quat2_setPosition(position);
+        teleportTransformQuat.quat2_setPosition(teleportPosition);
         this.teleportTransformQuat(teleportTransformQuat, outCollisionRuntimeParams, forceTeleport);
     }
-
 
     private static readonly _teleportPositionRotationQuatSV =
         {
             teleportTransformQuat: quat2_create()
         };
-    public teleportPositionRotationQuat(position: Vector3, rotationQuat: Quaternion, outCollisionRuntimeParams?: CollisionRuntimeParams, forceTeleport: boolean = false): void {
+    public teleportPositionRotationQuat(teleportPosition: Readonly<Vector3>, rotationQuat: Quaternion, outCollisionRuntimeParams: CollisionRuntimeParams | null = null, forceTeleport: boolean = false): void {
         const teleportTransformQuat = PlayerTransformManager._teleportPositionRotationQuatSV.teleportTransformQuat;
         this.getTransformQuat(teleportTransformQuat);
-        teleportTransformQuat.quat2_setPositionRotationQuat(position, rotationQuat);
+        teleportTransformQuat.quat2_setPositionRotationQuat(teleportPosition, rotationQuat);
         this.teleportTransformQuat(teleportTransformQuat, outCollisionRuntimeParams, forceTeleport);
     }
 
-    public teleportTransformQuat(transformQuat, outCollisionRuntimeParams = null, forceTeleport = false): void {
-        // Collision check and teleport, if force teleport teleport in any case
+    private static readonly _teleportTransformQuatSV =
+        {
+            currentPosition: vec3_create(),
+            teleportPositionVec: vec3_create(),
+            teleportRotation: quat_create(),
+            rotatedTransformQuat: quat2_create(),
+            fixedMovement: vec3_create()
+        };
+    public teleportTransformQuat(teleportTransformQuat: Readonly<Quaternion2>, outCollisionRuntimeParams: CollisionRuntimeParams | null = null, forceTeleport: boolean = false): void {
+        const currentPosition = PlayerTransformManager._teleportTransformQuatSV.currentPosition;
+        const teleportPositionVec = PlayerTransformManager._teleportTransformQuatSV.teleportPositionVec;
+        const teleportRotation = PlayerTransformManager._teleportTransformQuatSV.teleportRotation;
+        const rotatedTransformQuat = PlayerTransformManager._teleportTransformQuatSV.rotatedTransformQuat;
+        this.getPosition(currentPosition);
+        teleportTransformQuat.quat2_getPosition(teleportPositionVec);
+        teleportTransformQuat.quat2_getRotationQuat(teleportRotation);
+        rotatedTransformQuat.quat2_setPositionRotationQuat(currentPosition, teleportRotation);
 
-        // Implemented outside class definition
+        CollisionCheckBridge.getCollisionCheck(this._myParams.myEngine as any).teleport(teleportPositionVec, rotatedTransformQuat, this._myParams.myTeleportCollisionCheckParams, this._myCollisionRuntimeParams);
+        if (outCollisionRuntimeParams != null) {
+            outCollisionRuntimeParams.copy(this._myCollisionRuntimeParams);
+        }
+
+        const fixedMovement = PlayerTransformManager._teleportTransformQuatSV.fixedMovement;
+        fixedMovement.vec3_zero();
+        if (!forceTeleport) {
+            if (!this._myCollisionRuntimeParams.myTeleportCanceled) {
+                this._myCollisionRuntimeParams.myFixedTeleportPosition.vec3_sub(currentPosition, fixedMovement);
+            }
+        } else {
+            teleportPositionVec.vec3_sub(currentPosition, fixedMovement);
+        }
+
+        if (!this._myCollisionRuntimeParams.myTeleportCanceled || forceTeleport) {
+            this._myValidRotationQuat.quat_copy(teleportRotation);
+            this.getPlayerHeadManager().setRotationFeetQuat(teleportRotation);
+        }
+
+        if (!fixedMovement.vec3_isZero(0.00001)) {
+            this._myValidPosition.vec3_add(fixedMovement, this._myValidPosition);
+            this.getPlayerHeadManager().moveFeet(fixedMovement);
+        }
+
+        if (this._myParams.myResetRealOnTeleport) {
+            if (!this.isSynced()) {
+                if (XRUtils.isSessionActive(this._myParams.myEngine as any)) {
+                    this.resetReal(
+                        !this._myParams.myNeverResetRealPositionVR,
+                        !this._myParams.myNeverResetRealRotationVR,
+                        !this._myParams.myNeverResetRealHeightVR,
+                        true);
+                } else {
+                    this.resetReal(
+                        !this._myParams.myNeverResetRealPositionNonVR,
+                        !this._myParams.myNeverResetRealRotationNonVR,
+                        !this._myParams.myNeverResetRealHeightNonVR,
+                        true);
+                }
+            }
+        }
+
+        // #TODO Add teleport callback
     }
 
-    // Quick way to force teleport to a position and reset the real to this
-    public forceTeleportAndReset(position, rotationQuat): void {
-        this.teleportPositionRotationQuat(position, rotationQuat, null, true);
+    /** Quick way to force teleport to a position and reset the real to this */
+    public forceTeleportAndReset(teleportPosition: Readonly<Vector3>, teleportRotationQuat: Readonly<Quaternion>): void {
+        this.teleportPositionRotationQuat(teleportPosition, teleportRotationQuat, null, true);
 
         this.resetReal(true, true, undefined, undefined, undefined, true);
     }
 
-    public rotateQuat(rotationQuat): void {
-        // Implemented outside class definition
+    public rotateQuat(rotationQuat: Readonly<Quaternion>): void {
+        this._myValidRotationQuat.quat_rotateQuat(rotationQuat, this._myValidRotationQuat);
+        this.getPlayerHeadManager().rotateFeetQuat(rotationQuat);
     }
 
-    public setRotationQuat(rotationQuat): void {
-        // Implemented outside class definition
+    private static readonly _setRotationQuatSV =
+        {
+            rotationToPerform: quat_create()
+        };
+    public setRotationQuat(rotationQuat: Readonly<Quaternion>): void {
+        const rotationToPerform = PlayerTransformManager._setRotationQuatSV.rotationToPerform;
+        this._myValidRotationQuat.quat_rotationToQuat(rotationQuat, rotationToPerform);
+        this.rotateQuat(rotationToPerform);
     }
 
-    public setHeight(height, forceSet = false): void {
-        // Implemented outside class definition
+    private static readonly _setHeightSV =
+        {
+            transformQuat: quat_create()
+        };
+    public setHeight(height: number, forceSet: boolean = false): void {
+        const fixedHeight = Math.pp_clamp(height, this._myParams.myMinHeight, this._myParams.myMaxHeight);
+        const previousHeight = this.getHeight();
+
+        this._myValidHeight = fixedHeight;
+        this._updateCollisionHeight();
+
+        const transformQuat = PlayerTransformManager._setHeightSV.transformQuat;
+        this.getTransformQuat(transformQuat);
+
+        CollisionCheckBridge.getCollisionCheck(this._myParams.myEngine as any).positionCheck(true, transformQuat, this._myParams.myMovementCollisionCheckParams, this._myCollisionRuntimeParams);
+
+        if (this._myCollisionRuntimeParams.myIsPositionOk || forceSet) {
+            this.getPlayerHeadManager().setHeightHead(this.getHeight(), true);
+        } else {
+            this._myValidHeight = previousHeight;
+        }
+
+        this._updateCollisionHeight();
     }
 
-    public getPlayer() {
+    public getPlayer(): Object3D {
         return this._myParams.myPlayerHeadManager.getPlayer();
     }
 
-    public getHead() {
+    public getHead(): Object3D {
         return this._myParams.myPlayerHeadManager.getHead();
     }
 
@@ -452,7 +534,7 @@ export class PlayerTransformManager {
         return outTransformQuat.quat2_setPositionRotationQuat(this.getPositionHead(this._myValidPositionHead), this.getRotationQuat(this._myValidRotationQuat));
     }
 
-    public getHeight() {
+    public getHeight(): number {
         return this._myValidHeight;
     }
 
@@ -476,15 +558,15 @@ export class PlayerTransformManager {
         return this.getPlayerHeadManager().getTransformHeadQuat(outTransformQuat);
     }
 
-    public getHeightReal() {
+    public getHeightReal(): number {
         return this._myParams.myPlayerHeadManager.getHeightHead();
     }
 
-    public isSynced(syncFlagMap: Map<PlayerTransformManagerSyncFlag, boolean> | null = null) {
-        let isBodyColliding = this.isBodyColliding() && (syncFlagMap == null || syncFlagMap.get(PlayerTransformManagerSyncFlag.BODY_COLLIDING));
-        let isHeadColliding = this.isHeadColliding() && (syncFlagMap == null || syncFlagMap.get(PlayerTransformManagerSyncFlag.HEAD_COLLIDING));
-        let isFar = this.isFar() && (syncFlagMap == null || syncFlagMap.get(PlayerTransformManagerSyncFlag.FAR));
-        let isFloating = this.isFloating() && (syncFlagMap == null || syncFlagMap.get(PlayerTransformManagerSyncFlag.FLOATING));
+    public isSynced(syncFlagMap: Map<PlayerTransformManagerSyncFlag, boolean> | null = null): boolean {
+        const isBodyColliding = this.isBodyColliding() && (syncFlagMap == null || syncFlagMap.get(PlayerTransformManagerSyncFlag.BODY_COLLIDING));
+        const isHeadColliding = this.isHeadColliding() && (syncFlagMap == null || syncFlagMap.get(PlayerTransformManagerSyncFlag.HEAD_COLLIDING));
+        const isFar = this.isFar() && (syncFlagMap == null || syncFlagMap.get(PlayerTransformManagerSyncFlag.FAR));
+        const isFloating = this.isFloating() && (syncFlagMap == null || syncFlagMap.get(PlayerTransformManagerSyncFlag.FLOATING));
         return !isBodyColliding && !isHeadColliding && !isFar && !isFloating;
     }
 
@@ -560,7 +642,7 @@ export class PlayerTransformManager {
 
     public resetToReal(resetToPlayerInsteadOfHead = false, updateValidToReal = false): void {
         if (resetToPlayerInsteadOfHead) {
-            this.getPlayerHeadManager().getPlayer()!.pp_getPosition(this._myValidPosition);
+            this.getPlayerHeadManager().getPlayer().pp_getPosition(this._myValidPosition);
         } else {
             this.getPositionReal(this._myValidPosition);
         }
@@ -574,7 +656,7 @@ export class PlayerTransformManager {
         }
 
         if (resetToPlayerInsteadOfHead) {
-            this.getPlayerHeadManager().getPlayer()!.pp_getRotationQuat(this._myValidRotationQuat);
+            this.getPlayerHeadManager().getPlayer().pp_getRotationQuat(this._myValidRotationQuat);
         } else {
             this.getRotationRealQuat(this._myValidRotationQuat);
         }
@@ -596,31 +678,45 @@ export class PlayerTransformManager {
         }
     }
 
+    private static readonly _resetHeadToFeetSV =
+        {
+            transformQuat: quat2_create(),
+            headUp: vec3_create()
+        };
     public resetHeadToFeet(): void {
-        // Implemented outside class definition
+        this.getPosition(this._myValidPositionHead);
+
+        const transformQuat = PlayerTransformManager._resetHeadToFeetSV.transformQuat;
+        const headUp = PlayerTransformManager._resetHeadToFeetSV.headUp;
+        this.getTransformHeadQuat(transformQuat);
+        transformQuat.quat2_getUp(headUp);
+        this._myValidPositionHead.vec3_add(headUp.vec3_scale(this._myHeadCollisionCheckParams.myHeight / 2 + 0.00001 + this._myParams.myResetHeadToFeetUpOffset, headUp), this._myValidPositionHead);
+        this._myValidPositionHeadBackupForResetToFeet.vec3_copy(this._myValidPositionHead);
+
+        this._myResetHeadToFeetDirty = true;
     }
 
-    public isBodyColliding() {
+    public isBodyColliding(): boolean {
         return this._myIsBodyColliding;
     }
 
-    public isHeadColliding() {
+    public isHeadColliding(): boolean {
         return this._myIsHeadColliding;
     }
 
-    public isFloating() {
+    public isFloating(): boolean {
         return this.isLeaning() || this.isHopping();
     }
 
-    public isLeaning() {
+    public isLeaning(): boolean {
         return this._myIsLeaning;
     }
 
-    public isHopping() {
+    public isHopping(): boolean {
         return this._myIsHopping;
     }
 
-    public isFar() {
+    public isFar(): boolean {
         return this._myIsFar;
     }
 
@@ -629,7 +725,7 @@ export class PlayerTransformManager {
             position: vec3_create(),
             realPosition: vec3_create()
         };
-    public getDistanceToReal() {
+    public getDistanceToReal(): number {
         const realPosition = PlayerTransformManager._getDistanceToRealSV.realPosition;
         const position = PlayerTransformManager._getDistanceToRealSV.position;
 
@@ -642,7 +738,7 @@ export class PlayerTransformManager {
             position: vec3_create(),
             realPosition: vec3_create()
         };
-    public getDistanceToRealHead() {
+    public getDistanceToRealHead(): number {
         const realPosition = PlayerTransformManager._getDistanceToRealSV.realPosition;
         const position = PlayerTransformManager._getDistanceToRealSV.position;
 
@@ -650,19 +746,19 @@ export class PlayerTransformManager {
         return realPosition.vec3_distance(this.getPositionHead(position));
     }
 
-    public getPlayerHeadManager() {
+    public getPlayerHeadManager(): PlayerHeadManager {
         return this._myParams.myPlayerHeadManager;
     }
 
-    public getMovementCollisionCheckParams() {
+    public getMovementCollisionCheckParams(): CollisionCheckParams {
         return this._myParams.myMovementCollisionCheckParams;
     }
 
-    public getTeleportCollisionCheckParams() {
-        return this._myParams.myTeleportCollisionCheckParams;
+    public getTeleportCollisionCheckParams(): CollisionCheckParams {
+        return this._myParams.myTeleportCollisionCheckParams!;
     }
 
-    public collisionCheckParamsUpdated() {
+    public collisionCheckParamsUpdated(): void {
         if (this._myParams.myTeleportCollisionCheckParamsCopyFromMovement) {
             this._generateTeleportParamsFromMovementParams();
         }
@@ -670,33 +766,33 @@ export class PlayerTransformManager {
         this._generateRealMovementParamsFromMovementParams();
     }
 
-    public isPositionValid() {
-        return this._myIsPositionValid;
-    }
-
-    public isPositionHeadValid() {
-        return this._myIsPositionHeadValid;
-    }
-
-    public isPositionRealValid() {
-        return this._myIsRealPositionValid;
-    }
-
-    public isPositionHeadRealValid() {
-        return this._myIsRealPositionHeadValid;
-    }
-
-    public getCollisionRuntimeParams() {
+    public getCollisionRuntimeParams(): CollisionRuntimeParams {
         return this._myCollisionRuntimeParams;
     }
 
-    public getRealCollisionRuntimeParams() {
+    public getRealCollisionRuntimeParams(): CollisionRuntimeParams {
         return this._myRealCollisionRuntimeParams;
     }
 
+    public isPositionValid(): boolean {
+        return this._myIsPositionValid;
+    }
+
+    public isPositionHeadValid(): boolean {
+        return this._myIsPositionHeadValid;
+    }
+
+    public isPositionRealValid(): boolean {
+        return this._myIsRealPositionValid;
+    }
+
+    public isPositionHeadRealValid(): boolean {
+        return this._myIsRealPositionHeadValid;
+    }
+
     private _updateCollisionHeight(): void {
-        let validHeight = this.getHeight();
-        let realHeight = Math.pp_clamp(this.getHeightReal(), this._myParams.myMinHeight, this._myParams.myMaxHeight);
+        const validHeight = this.getHeight();
+        const realHeight = Math.pp_clamp(this.getHeightReal(), this._myParams.myMinHeight, this._myParams.myMaxHeight);
 
         this._myParams.myMovementCollisionCheckParams.myHeight = validHeight;
         this._myParams.myTeleportCollisionCheckParams!.myHeight = validHeight;
@@ -879,7 +975,6 @@ export class PlayerTransformManager {
 
         this._myVisibilityChangeEventListener = null;
     }
-
 
     private static readonly _updatePositionsValidSV =
         {
@@ -1392,121 +1487,3 @@ export class PlayerTransformManager {
         return this._myDestroyed;
     }
 }
-
-
-
-// IMPLEMENTATION
-
-PlayerTransformManager.prototype.teleportTransformQuat = function () {
-    let currentPosition = vec3_create();
-    let teleportPositionVec = vec3_create();
-    let teleportRotation = quat_create();
-    let rotatedTransformQuat = quat2_create();
-    let fixedMovement = vec3_create();
-    return function teleportTransformQuat(teleportTransformQuat, outCollisionRuntimeParams = null, forceTeleport = false) {
-        currentPosition = this.getPosition(currentPosition);
-        teleportPositionVec = teleportTransformQuat.quat2_getPosition(teleportPositionVec);
-        teleportRotation = teleportTransformQuat.quat2_getRotationQuat(teleportRotation);
-
-        rotatedTransformQuat.quat2_setPositionRotationQuat(currentPosition, teleportRotation);
-
-        CollisionCheckBridge.getCollisionCheck(this._myParams.myEngine).teleport(teleportPositionVec, rotatedTransformQuat, this._myParams.myTeleportCollisionCheckParams, this._myCollisionRuntimeParams);
-        if (outCollisionRuntimeParams != null) {
-            outCollisionRuntimeParams.copy(this._myCollisionRuntimeParams);
-        }
-
-        fixedMovement.vec3_zero();
-        if (!forceTeleport) {
-            if (!this._myCollisionRuntimeParams.myTeleportCanceled) {
-                fixedMovement = this._myCollisionRuntimeParams.myFixedTeleportPosition.vec3_sub(currentPosition, fixedMovement);
-            }
-        } else {
-            fixedMovement = teleportPositionVec.vec3_sub(currentPosition, fixedMovement);
-        }
-
-        if (!this._myCollisionRuntimeParams.myTeleportCanceled || forceTeleport) {
-            this._myValidRotationQuat.quat_copy(teleportRotation);
-            this.getPlayerHeadManager().setRotationFeetQuat(teleportRotation);
-        }
-
-        if (!fixedMovement.vec3_isZero(0.00001)) {
-            this._myValidPosition.vec3_add(fixedMovement, this._myValidPosition);
-            this.getPlayerHeadManager().moveFeet(fixedMovement);
-        }
-
-        if (this._myParams.myResetRealOnTeleport) {
-            if (!this.isSynced()) {
-                if (XRUtils.isSessionActive(this._myParams.myEngine)) {
-                    this.resetReal(
-                        !this._myParams.myNeverResetRealPositionVR,
-                        !this._myParams.myNeverResetRealRotationVR,
-                        !this._myParams.myNeverResetRealHeightVR,
-                        true);
-                } else {
-                    this.resetReal(
-                        !this._myParams.myNeverResetRealPositionNonVR,
-                        !this._myParams.myNeverResetRealRotationNonVR,
-                        !this._myParams.myNeverResetRealHeightNonVR,
-                        true);
-                }
-            }
-        }
-
-        // #TODO Add teleport callback
-    };
-}();
-
-PlayerTransformManager.prototype.rotateQuat = function () {
-    return function rotateQuat(rotationQuat) {
-        this._myValidRotationQuat.quat_rotateQuat(rotationQuat, this._myValidRotationQuat);
-        this.getPlayerHeadManager().rotateFeetQuat(rotationQuat);
-    };
-}();
-
-PlayerTransformManager.prototype.setRotationQuat = function () {
-    let rotationToPerform = quat_create();
-    return function setRotationQuat(rotationQuat) {
-        rotationToPerform = this._myValidRotationQuat.quat_rotationToQuat(rotationQuat, rotationToPerform);
-        this.rotateQuat(rotationToPerform);
-    };
-}();
-
-PlayerTransformManager.prototype.setHeight = function () {
-    let transformQuat = quat2_create();
-    return function setHeight(height, forceSet = false) {
-        let fixedHeight = Math.pp_clamp(height, this._myParams.myMinHeight, this._myParams.myMaxHeight);
-        let previousHeight = this.getHeight();
-
-        this._myValidHeight = fixedHeight;
-        this._updateCollisionHeight();
-
-        transformQuat = this.getTransformQuat(transformQuat);
-
-        CollisionCheckBridge.getCollisionCheck(this._myParams.myEngine).positionCheck(true, transformQuat, this._myParams.myMovementCollisionCheckParams, this._myCollisionRuntimeParams);
-
-        if (this._myCollisionRuntimeParams.myIsPositionOk || forceSet) {
-            this.getPlayerHeadManager().setHeightHead(this.getHeight(), true);
-        } else {
-            this._myValidHeight = previousHeight;
-        }
-
-        this._updateCollisionHeight();
-    };
-}();
-
-PlayerTransformManager.prototype.resetHeadToFeet = function () {
-    let transformQuat = quat2_create();
-    let headUp = vec3_create();
-    return function resetHeadToFeet() {
-        this._myValidPositionHead = this.getPosition(this._myValidPositionHead);
-
-        transformQuat = this.getTransformHeadQuat(transformQuat);
-        headUp = transformQuat.quat2_getUp(headUp);
-        this._myValidPositionHead.vec3_add(headUp.vec3_scale(this._myHeadCollisionCheckParams.myHeight / 2 + 0.00001 + this._myParams.myResetHeadToFeetUpOffset, headUp), this._myValidPositionHead);
-        this._myValidPositionHeadBackupForResetToFeet.vec3_copy(this._myValidPositionHead);
-
-        this._myResetHeadToFeetDirty = true;
-    };
-}();
-
-// #TODO Sliding info, surface info, update
