@@ -1,100 +1,125 @@
+import { Object3D, WonderlandEngine } from "@wonderlandengine/api";
 import { Timer } from "../../../../../cauldron/cauldron/timer.js";
+import { Quaternion, Quaternion2, Vector3 } from "../../../../../cauldron/type_definitions/array_type_definitions.js";
 import { Quat2Utils } from "../../../../../cauldron/utils/array/quat2_utils.js";
 import { XRUtils } from "../../../../../cauldron/utils/xr_utils.js";
 import { mat4_create, quat2_create, quat_create, vec3_create, vec4_create } from "../../../../../plugin/js/extensions/array/vec_create_extension.js";
 import { Globals } from "../../../../../pp/globals.js";
 
-export let NonVRReferenceSpaceMode = {
-    NO_FLOOR: 0,
-    FLOOR: 1,
-    NO_FLOOR_THEN_KEEP_VR: 2,
-    FLOOR_THEN_KEEP_VR: 3
-};
+export enum NonVRReferenceSpaceMode {
+    NO_FLOOR = 0,
+    FLOOR = 1,
+    NO_FLOOR_THEN_KEEP_VR = 2,
+    FLOOR_THEN_KEEP_VR = 3
+}
 
 export class PlayerHeadManagerParams {
 
-    constructor(engine = Globals.getMainEngine()) {
-        this.mySessionChangeResyncEnabled = false;
+    public mySessionChangeResyncEnabled: boolean = false;
 
-        this.myBlurEndResyncEnabled = false;
-        this.myBlurEndResyncRotation = false;
+    public myBlurEndResyncEnabled: boolean = false;
+    public myBlurEndResyncRotation: boolean = false;
 
-        this.myResetTransformOnViewResetEnabled = true;
+    public myResetTransformOnViewResetEnabled: boolean = true;
 
-        this.myNextEnterSessionResyncHeight = false;
-        this.myEnterSessionResyncHeight = false;
+    public myNextEnterSessionResyncHeight: boolean = false;
+    public myEnterSessionResyncHeight: boolean = false;
 
-        this.myExitSessionResyncHeight = false;
-        this.myExitSessionResyncVerticalAngle = false;
-        this.myExitSessionRemoveRightTilt = false; // For now right tilt is removed even if this setting is false, if the vertical angle has to be adjusted
-        this.myExitSessionAdjustMaxVerticalAngle = false;
-        this.myExitSessionMaxVerticalAngle = 0;
-        this.myExitSessionResetNonVRTransformLocal = true;
 
-        this.myNonVRFloorBasedMode = NonVRReferenceSpaceMode.FLOOR_THEN_KEEP_VR;
 
-        this.myDefaultHeightNonVR = 0;
-        this.myDefaultHeightVRWithoutFloor = 0;
-        this.myDefaultHeightVRWithFloor = null; // null means just keep the detected one
-        this.myForeheadExtraHeight = 0;
-        // Can be used to always add a bit of height, for example to compensate the fact
-        // that the default height is actually the eye height and you may want to also add a forehead offset
+    public myExitSessionResyncHeight: boolean = false;
+    public myExitSessionResyncVerticalAngle: boolean = false;
 
-        this.myFeetRotationKeepUp = true;
+    /** For now right tilt is removed even if this setting is `false`, if the vertical angle has to be adjusted */
+    public myExitSessionRemoveRightTilt: boolean = false;
 
+    public myExitSessionAdjustMaxVerticalAngle: boolean = false;
+    public myExitSessionMaxVerticalAngle: number = 0;
+    public myExitSessionResetNonVRTransformLocal: boolean = true;
+
+
+
+    public myNonVRFloorBasedMode: NonVRReferenceSpaceMode = NonVRReferenceSpaceMode.FLOOR_THEN_KEEP_VR;
+
+
+
+    public myDefaultHeightNonVR: number = 0;
+    public myDefaultHeightVRWithoutFloor: number = 0;
+
+    /** `null` means just keep the detected one */
+    public myDefaultHeightVRWithFloor: number | null = null;
+
+    /** Can be used to always add a bit of height, for example to compensate the fact  
+        that the default height is actually the eye height and you may want to also add a forehead offset */
+    public myForeheadExtraHeight: number = 0;
+
+
+
+    public myFeetRotationKeepUp: boolean = true;
+
+    public myDebugEnabled: boolean = false;
+
+    public readonly myEngine: Readonly<WonderlandEngine>;
+
+    constructor(engine: Readonly<WonderlandEngine> = Globals.getMainEngine()!) {
         this.myEngine = engine;
-
-        this.myDebugEnabled = false;
     }
 }
 
-// Could be intended as the generic player body manager (maybe with hands and stuff also)
+// #TODO Could be seen as the generic player body manager (maybe with hands and stuff also)
 export class PlayerHeadManager {
+    private readonly _myParams: PlayerHeadManagerParams;
 
-    constructor(params = new PlayerHeadManagerParams()) {
+    private _myCurrentHead: Object3D;
+    private readonly _myCurrentHeadTransformLocalQuat: Quaternion2 = quat2_create();
+
+
+    private _mySessionChangeResyncHeadTransform: Readonly<Quaternion2> | null = null;
+
+    /** Needed because VR head takes some frames to get the tracked position */
+    private _myDelaySessionChangeResyncCounter: number = 0;
+
+
+    private _myBlurRecoverHeadTransform: Readonly<Quaternion2> | null = null;
+    private _myDelayBlurEndResyncCounter: number = 0;
+    private readonly _myDelayBlurEndResyncTimer = new Timer(5, false);
+
+    private _myVisibilityHidden: boolean = false;
+
+    private _mySessionActive: boolean = false;
+    private _mySessionBlurred: boolean = false;
+
+    private _myIsSyncedDelayCounter: number = 0;
+
+    private _myViewResetThisFrame: boolean = false;
+    private _myViewResetEventListener = null;
+
+    private _myHeightNonVR: number = 0;
+    private _myHeightNonVROnEnterSession: number = 0;
+    private _myHeightVRWithoutFloor: number | null = null;
+    private _myHeightVRWithFloor: number | null = null;
+    private _myHeightOffsetWithFloor: number = 0;
+    private _myHeightOffsetWithoutFloor: number = 0;
+    private _myNextEnterSessionSetHeightVRWithFloor: boolean = false;
+    private _myNextEnterSessionSetHeightVRWithoutFloor: boolean = false;
+    private _myDelayNextEnterSessionSetHeightVRCounter: number = 0;
+
+    private _myLastReferenceSpaceIsFloorBased: boolean | null = null;
+
+    private _myActive: boolean = true;
+
+    private _myDestroyed: boolean = false;
+
+    private static _myResyncCounterFrames = 3;
+    private static _myIsSyncedDelayCounterFrames = 1;
+
+    constructor(params: PlayerHeadManagerParams = new PlayerHeadManagerParams()) {
         this._myParams = params;
 
-        this._myCurrentHead = Globals.getPlayerObjects(this._myParams.myEngine).myHead;
-
-        this._mySessionChangeResyncHeadTransform = null;
-        this._myBlurRecoverHeadTransform = null;
-        this._myCurrentHeadTransformLocalQuat = quat2_create();
-
-        this._myDelaySessionChangeResyncCounter = 0; // Needed because VR head takes some frames to get the tracked position
-        this._myDelayBlurEndResyncCounter = 0;
-        this._myDelayBlurEndResyncTimer = new Timer(5, false);
-        this._myVisibilityHidden = false;
-
-        this._mySessionActive = false;
-        this._mySessionBlurred = false;
-
-        this._myIsSyncedDelayCounter = 0;
-
-        this._myViewResetThisFrame = false;
-        this._myViewResetEventListener = null;
-
-        this._myHeightNonVR = 0;
-        this._myHeightNonVROnEnterSession = 0;
-        this._myHeightVRWithoutFloor = null;
-        this._myHeightVRWithFloor = null;
-        this._myHeightOffsetWithFloor = 0;
-        this._myHeightOffsetWithoutFloor = 0;
-        this._myNextEnterSessionSetHeightVRWithFloor = false;
-        this._myNextEnterSessionSetHeightVRWithoutFloor = false;
-        this._myDelayNextEnterSessionSetHeightVRCounter = 0;
-
-        this._myLastReferenceSpaceIsFloorBased = null;
-
-        this._myActive = true;
-        this._myDestroyed = false;
-
-        // Config
-
-        this._myResyncCounterFrames = 3;
-        this._myIsSyncedDelayCounterFrames = 1;
+        this._myCurrentHead = Globals.getPlayerObjects(this._myParams.myEngine)!.myHead!;
     }
 
-    start() {
+    public start(): void {
         this._setHeightHeadNonVR(this._myParams.myDefaultHeightNonVR);
         this._setHeightHeadVRWithoutFloor(this._myParams.myDefaultHeightVRWithoutFloor);
         this._setHeightHeadVRWithFloor(this._myParams.myDefaultHeightVRWithFloor);
@@ -106,67 +131,67 @@ export class PlayerHeadManager {
         XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this), true, true, this._myParams.myEngine);
     }
 
-    setActive(active) {
+    public setActive(active: boolean): void {
         this._myActive = active;
     }
 
-    getParams() {
+    public getParams(): PlayerHeadManagerParams {
         return this._myParams;
     }
 
-    getPlayer() {
-        return Globals.getPlayerObjects(this._myParams.myEngine).myPlayer;
+    public getPlayer(): Object3D {
+        return Globals.getPlayerObjects(this._myParams.myEngine)!.myPlayer!;
     }
 
-    getHead() {
+    public getHead(): Object3D {
         return this._myCurrentHead;
     }
 
-    getHeightHead() {
+    public getHeightHead(): number {
         return this.getHeightEyes() + this._myParams.myForeheadExtraHeight;
     }
 
-    getHeightEyes() {
+    public getHeightEyes(): number {
         // Implemented outside class definition
     }
 
-    getTransformFeetQuat(outTransformFeetQuat = quat2_create()) {
+    public getTransformFeetQuat(outTransformFeetQuat: Quaternion2 = quat2_create()): Quaternion2 {
         // Implemented outside class definition
     }
 
-    getTransformHeadQuat(outTransformFeetQuat = quat2_create()) {
+    public getTransformHeadQuat(outTransformFeetQuat: Quaternion2 = quat2_create()): Quaternion2 {
         return this.getHead().pp_getTransformQuat(outTransformFeetQuat);
     }
 
-    getPositionFeet(outPositionFeet = vec3_create()) {
+    public getPositionFeet(outPositionFeet: Vector3 = vec3_create()): Vector3 {
         // Implemented outside class definition
     }
 
-    getPositionHead(outPositionHead = vec3_create()) {
+    public getPositionHead(outPositionHead: Vector3 = vec3_create()): Vector3 {
         return this._myCurrentHead.pp_getPosition(outPositionHead);
     }
 
-    getRotationFeetQuat(outRotationFeetQuat = quat_create()) {
+    public getRotationFeetQuat(outRotationFeetQuat: Quaternion = quat_create()): Quaternion {
         // Implemented outside class definition
     }
 
-    getRotationHeadQuat(outRotationHeadQuat = quat_create()) {
+    public getRotationHeadQuat(outRotationHeadQuat: Quaternion = quat_create()): Quaternion {
         return this.getHead().pp_getRotationQuat(outRotationHeadQuat);
     }
 
-    isSynced(ignoreSessionBlurredState = false) {
+    public isSynced(ignoreSessionBlurredState: boolean = false): boolean {
         return this._myIsSyncedDelayCounter == 0 && this._myDelaySessionChangeResyncCounter == 0 && this._myDelayNextEnterSessionSetHeightVRCounter == 0 && this._myDelayBlurEndResyncCounter == 0 && !this._myDelayBlurEndResyncTimer.isRunning() && (ignoreSessionBlurredState || !this._mySessionBlurred);
     }
 
-    setHeightHead(height, setOnlyForActiveOne = true) {
+    public setHeightHead(height: number, setOnlyForActiveOne: boolean = true): void {
         this._setHeightHead(height, height, height, setOnlyForActiveOne);
     }
 
-    resetHeightHeadToDefault(resetOnlyForActiveOne = true) {
+    public resetHeightHeadToDefault(resetOnlyForActiveOne: boolean = true): void {
         this._setHeightHead(this._myHeightNonVR, this._myHeightVRWithoutFloor, this._myHeightVRWithFloor, resetOnlyForActiveOne);
     }
 
-    setHeightHeadNonVR(height) {
+    public setHeightHeadNonVR(height: number): void {
         this._setHeightHeadNonVR(height);
 
         if (!this._mySessionActive) {
@@ -175,7 +200,7 @@ export class PlayerHeadManager {
         }
     }
 
-    setHeightHeadVRWithoutFloor(height) {
+    public setHeightHeadVRWithoutFloor(height: number): void {
         this._setHeightHeadVRWithoutFloor(height);
 
         if (this._mySessionActive) {
@@ -183,11 +208,11 @@ export class PlayerHeadManager {
         }
     }
 
-    resetHeightHeadVRWithFloor() {
+    public resetHeightHeadVRWithFloor(): void {
         this.setHeightHeadVRWithFloor(null);
     }
 
-    setHeightHeadVRWithFloor(height = null) {
+    public setHeightHeadVRWithFloor(height = null): void {
         this._setHeightHeadVRWithFloor(height);
 
         if (this._mySessionActive) {
@@ -195,83 +220,85 @@ export class PlayerHeadManager {
         }
     }
 
-    getDefaultHeightHeadNonVR() {
+    public getDefaultHeightHeadNonVR(): number {
         return this._myHeightNonVR;
     }
 
-    getDefaultHeightHeadVRWithoutFloor() {
+    public getDefaultHeightHeadVRWithoutFloor(): number | null {
         return this._myHeightVRWithoutFloor;
     }
 
-    getDefaultHeightHeadVRWithFloor() {
+    public getDefaultHeightHeadVRWithFloor(): number | null {
         return this._myHeightVRWithFloor;
     }
 
-    moveFeet(movement) {
+    public moveFeet(movement: Readonly<Vector3>): void {
         // Implemented outside class definition
     }
 
-    moveHead(movement) {
+    public moveHead(movement: Readonly<Vector3>): void {
         this.moveFeet(movement);
     }
 
-    teleportPositionHead(teleportPosition) {
+    public teleportPositionHead(teleportPosition: void): void {
         // Implemented outside class definition
     }
 
-    teleportPositionFeet(teleportPosition) {
+    public teleportPositionFeet(teleportPosition: void): void {
         // Implemented outside class definition
     }
 
-    teleportPlayerToHeadTransformQuat(headTransformQuat) {
+    public teleportPlayerToHeadTransformQuat(headTransformQuat: Readonly<Quaternion2>): void {
         // Implemented outside class definition
     }
 
-    rotateFeetQuat(rotationQuat, keepUpOverride = null) {
+    public rotateFeetQuat(rotationQuat: Readonly<Quaternion>, keepUpOverride: boolean | null = null): void {
         // Implemented outside class definition 
     }
 
-    rotateHeadQuat(rotationQuat) {
+    public rotateHeadQuat(rotationQuat: Readonly<Quaternion>): void {
         // #TODO Rotate feet with this and then rotate head freely if possible
         // Implemented outside class definition 
     }
 
-    canRotateFeet() {
+    public canRotateFeet(): boolean {
         return true;
     }
 
-    canRotateHead() {
+    public canRotateHead(): boolean {
         return !this._mySessionActive;
     }
 
-    setRotationFeetQuat(rotationQuat, keepUpOverride = null) {
+    public setRotationFeetQuat(rotationQuat: Readonly<Quaternion>, keepUpOverride: boolean | null = null): void {
         // Implemented outside class definition 
     }
 
-    setRotationHeadQuat() {
+    public setRotationHeadQuat(): void {
         // Implemented outside class definition 
     }
 
-    lookAtFeet(position, up = null, keepUpOverride = null) {
+    public lookAtFeet(position: Readonly<Vector3>, up?: Readonly<Vector3>, keepUpOverride: boolean | null = null): void {
         // Implemented outside class definition 
     }
 
-    lookToFeet(direction, up = null, keepUpOverride = null) {
+    public lookToFeet(direction: Readonly<Vector3>, up?: Readonly<Vector3>, keepUpOverride: boolean | null = null): void {
         // Implemented outside class definition 
     }
 
-    lookAtHead(position, up = null) {
+    public lookAtHead(position: Readonly<Vector3>, up?: Readonly<Vector3>): void {
+        // Implemented outside class definition 
     }
 
-    lookToHead(direction, up = null) {
+    public lookToHead(direction: Readonly<Vector3>, up?: Readonly<Vector3>): void {
+        // Implemented outside class definition 
     }
 
-    resetCameraNonXR() {
-        Globals.getPlayerObjects(this._myParams.myEngine).myCameraNonXR.pp_resetTransformLocal();
+    public resetCameraNonXR(): void {
+        Globals.getPlayerObjects(this._myParams.myEngine)!.myCameraNonXR!.pp_resetTransformLocal();
         this._setCameraNonXRHeight(this._myHeightNonVR);
     }
 
-    update(dt) {
+    public update(dt: number): void {
         this._myViewResetThisFrame = false;
 
         if (this._myIsSyncedDelayCounter != 0) {
@@ -283,7 +310,7 @@ export class PlayerHeadManager {
             this._myDelaySessionChangeResyncCounter--;
             if (this._myDelaySessionChangeResyncCounter == 0) {
                 this._sessionChangeResync();
-                this._myIsSyncedDelayCounter = this._myIsSyncedDelayCounterFrames;
+                this._myIsSyncedDelayCounter = PlayerHeadManager._myIsSyncedDelayCounterFrames;
             }
         }
 
@@ -291,7 +318,7 @@ export class PlayerHeadManager {
             this._myDelayBlurEndResyncCounter--;
             if (this._myDelayBlurEndResyncCounter == 0) {
                 this._blurEndResync();
-                this._myIsSyncedDelayCounter = this._myIsSyncedDelayCounterFrames;
+                this._myIsSyncedDelayCounter = PlayerHeadManager._myIsSyncedDelayCounterFrames;
             }
         }
 
@@ -303,7 +330,7 @@ export class PlayerHeadManager {
                 this._myDelayBlurEndResyncTimer.update(dt);
                 if (this._myDelayBlurEndResyncTimer.isDone()) {
                     this._blurEndResync();
-                    this._myIsSyncedDelayCounter = this._myIsSyncedDelayCounterFrames;
+                    this._myIsSyncedDelayCounter = PlayerHeadManager._myIsSyncedDelayCounterFrames;
                 }
             }
         }
@@ -312,12 +339,12 @@ export class PlayerHeadManager {
             this._myDelayNextEnterSessionSetHeightVRCounter--;
             if (this._myDelayNextEnterSessionSetHeightVRCounter == 0) {
                 if (this._mySessionActive) {
-                    let isFloor = XRUtils.isReferenceSpaceFloorBased(this._myParams.myEngine);
+                    const isFloor = XRUtils.isReferenceSpaceFloorBased(this._myParams.myEngine);
                     if (isFloor && this._myNextEnterSessionSetHeightVRWithFloor) {
-                        let currentHeadPosition = this._myCurrentHead.pp_getPosition();
+                        const currentHeadPosition = this._myCurrentHead.pp_getPosition();
 
-                        let floorHeight = this._myHeightVRWithFloor - this._myParams.myForeheadExtraHeight;
-                        let currentHeadHeight = this._getPositionEyesHeight(currentHeadPosition);
+                        const floorHeight = this._myHeightVRWithFloor! - this._myParams.myForeheadExtraHeight;
+                        const currentHeadHeight = this._getPositionEyesHeight(currentHeadPosition);
 
                         this._myHeightOffsetWithFloor = this._myHeightOffsetWithFloor + (floorHeight - currentHeadHeight);
 
@@ -325,10 +352,10 @@ export class PlayerHeadManager {
 
                         this._myNextEnterSessionSetHeightVRWithFloor = false;
                     } else if (!isFloor && this._myNextEnterSessionSetHeightVRWithoutFloor) {
-                        let currentHeadPosition = this._myCurrentHead.pp_getPosition();
+                        const currentHeadPosition = this._myCurrentHead.pp_getPosition();
 
-                        let floorHeight = this._myHeightVRWithoutFloor - this._myParams.myForeheadExtraHeight;
-                        let currentHeadHeight = this._getPositionEyesHeight(currentHeadPosition);
+                        const floorHeight = this._myHeightVRWithoutFloor! - this._myParams.myForeheadExtraHeight;
+                        const currentHeadHeight = this._getPositionEyesHeight(currentHeadPosition);
 
                         this._myHeightOffsetWithoutFloor = this._myHeightOffsetWithoutFloor + (floorHeight - currentHeadHeight);
 
@@ -349,7 +376,7 @@ export class PlayerHeadManager {
         }
     }
 
-    _setHeightHead(heightNonVR, heightVRWithoutFloor, heightVRWithFloor, setOnlyForActiveOne = true) {
+    private _setHeightHead(heightNonVR: number, heightVRWithoutFloor: number | null, heightVRWithFloor: number | null, setOnlyForActiveOne: boolean = true): void {
         if (!setOnlyForActiveOne || !this._mySessionActive) {
             this._setHeightHeadNonVR(heightNonVR);
         }
@@ -366,12 +393,12 @@ export class PlayerHeadManager {
         }
     }
 
-    _setHeightHeadNonVR(height) {
+    private _setHeightHeadNonVR(height: number): void {
         this._myHeightNonVR = height;
         this._myHeightNonVROnEnterSession = height;
     }
 
-    _setHeightHeadVRWithoutFloor(heightWithoutFloor) {
+    private _setHeightHeadVRWithoutFloor(heightWithoutFloor: number | null): void {
         if (heightWithoutFloor != null) {
             this._myHeightVRWithoutFloor = heightWithoutFloor;
             this._myNextEnterSessionSetHeightVRWithoutFloor = false;
@@ -387,7 +414,7 @@ export class PlayerHeadManager {
         }
     }
 
-    _setHeightHeadVRWithFloor(heightWithFloor) {
+    private _setHeightHeadVRWithFloor(heightWithFloor: number | null): void {
         if (heightWithFloor != null) {
             this._myHeightVRWithFloor = heightWithFloor;
             this._myNextEnterSessionSetHeightVRWithFloor = false;
@@ -403,77 +430,77 @@ export class PlayerHeadManager {
         }
     }
 
-    _shouldNonVRUseVRWithFloor() {
+    private _shouldNonVRUseVRWithFloor(): boolean {
         return (this._myLastReferenceSpaceIsFloorBased == null && this._myParams.myNonVRFloorBasedMode == NonVRReferenceSpaceMode.FLOOR_THEN_KEEP_VR) ||
             (this._myLastReferenceSpaceIsFloorBased != null && this._myLastReferenceSpaceIsFloorBased &&
                 (this._myParams.myNonVRFloorBasedMode == NonVRReferenceSpaceMode.NO_FLOOR_THEN_KEEP_VR || this._myParams.myNonVRFloorBasedMode == NonVRReferenceSpaceMode.FLOOR_THEN_KEEP_VR));
     }
 
-    _shouldNonVRUseVRWithoutFloor() {
+    private _shouldNonVRUseVRWithoutFloor(): boolean {
         return (this._myLastReferenceSpaceIsFloorBased == null && this._myParams.myNonVRFloorBasedMode == NonVRReferenceSpaceMode.NO_FLOOR_THEN_KEEP_VR) ||
             (this._myLastReferenceSpaceIsFloorBased != null && !this._myLastReferenceSpaceIsFloorBased &&
                 (this._myParams.myNonVRFloorBasedMode == NonVRReferenceSpaceMode.NO_FLOOR_THEN_KEEP_VR || this._myParams.myNonVRFloorBasedMode == NonVRReferenceSpaceMode.FLOOR_THEN_KEEP_VR));
     }
 
-    _setCameraNonXRHeight(height) {
+    private _setCameraNonXRHeight(height: number): void {
         // Implemented outside class definition
     }
 
-    _debugUpdate(dt) {
-        Globals.getDebugVisualManager(this._myParams.myEngine).drawLineEnd(0, this.getPositionFeet(), this.getPositionHead(), vec4_create(1, 0, 0, 1), 0.01);
+    private _getPositionEyesHeight(position: Readonly<Vector3>): number {
+        // Implemented outside class definition
+    }
+
+    private _onXRSessionStart(manualCall: boolean, session: XRSession): void {
+        // Implemented outside class definition
+    }
+
+    private _onXRSessionEnd(): void {
+        // Implemented outside class definition
+    }
+
+    private _onXRSessionBlurStart(session: XRSession): void {
+        // Implemented outside class definition
+    }
+
+    private _onXRSessionBlurEnd(session: XRSession): void {
+        // Implemented outside class definition
+    }
+
+    private _onViewReset(): void {
+        // Implemented outside class definition
+    }
+
+    private _blurEndResync(): void {
+        // Implemented outside class definition
+    }
+
+    private _sessionChangeResync(): void {
+        // Implemented outside class definition
+    }
+
+    private _setReferenceSpaceHeightOffset(offset: Readonly<Vector3>, amountToRemove: number): void {
+        // Implemented outside class definition
+    }
+
+    private _updateHeightOffset(): void {
+        // Implemented outside class definition
+    }
+
+    private _getHeadTransformFromLocal(transformLocal) {
+        // Implemented outside class definition
+    }
+
+    private _resyncHeadRotationForward(resyncHeadRotation) {
+        // Implemented outside class definition
+    }
+
+    private _debugUpdate(dt: number): void {
+        Globals.getDebugVisualManager(this._myParams.myEngine)!.drawLineEnd(0, this.getPositionFeet(), this.getPositionHead(), vec4_create(1, 0, 0, 1), 0.01);
 
         console.error(this.getHeightEyes());
     }
 
-    _getPositionEyesHeight(position) {
-        // Implemented outside class definition
-    }
-
-    _onXRSessionStart(manualCall, session) {
-        // Implemented outside class definition
-    }
-
-    _onXRSessionEnd(session) {
-        // Implemented outside class definition
-    }
-
-    _onXRSessionBlurStart(session) {
-        // Implemented outside class definition
-    }
-
-    _onXRSessionBlurEnd(session) {
-        // Implemented outside class definition
-    }
-
-    _onViewReset() {
-        // Implemented outside class definition
-    }
-
-    _blurEndResync() {
-        // Implemented outside class definition
-    }
-
-    _sessionChangeResync() {
-        // Implemented outside class definition
-    }
-
-    _setReferenceSpaceHeightOffset(offset, amountToRemove) {
-        // Implemented outside class definition
-    }
-
-    _updateHeightOffset() {
-        // Implemented outside class definition
-    }
-
-    _getHeadTransformFromLocal(transformLocal) {
-        // Implemented outside class definition
-    }
-
-    _resyncHeadRotationForward(resyncHeadRotation) {
-        // Implemented outside class definition
-    }
-
-    destroy() {
+    public destroy(): void {
         this._myDestroyed = true;
 
         XRUtils.getReferenceSpace(this._myParams.myEngine)?.removeEventListener?.("reset", this._myViewResetEventListener);
@@ -481,7 +508,7 @@ export class PlayerHeadManager {
         XRUtils.unregisterSessionStartEndEventListeners(this, this._myParams.myEngine);
     }
 
-    isDestroyed() {
+    public isDestroyed(): boolean {
         return this._myDestroyed;
     }
 }

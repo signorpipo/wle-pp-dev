@@ -1,5 +1,5 @@
 import { Object3D, WonderlandEngine } from "@wonderlandengine/api";
-import { Quaternion, Quaternion2, Vector3 } from "wle-pp/cauldron/type_definitions/array_type_definitions.js";
+import { Quaternion, Quaternion2, Vector3 } from "../../../../../cauldron/type_definitions/array_type_definitions.js";
 import { PhysicsLayerFlags } from "../../../../../cauldron/physics/physics_layer_flags.js";
 import { XRUtils } from "../../../../../cauldron/utils/xr_utils.js";
 import { quat2_create, quat_create, vec3_create, vec4_create } from "../../../../../plugin/js/extensions/array/vec_create_extension.js";
@@ -216,7 +216,7 @@ export class PlayerTransformManagerParams {
 // #TODO Sliding info, surface info, update
 export class PlayerTransformManager {
 
-    private _myParams: PlayerTransformManagerParams;
+    private readonly _myParams: PlayerTransformManagerParams;
 
     private readonly _myRealMovementCollisionCheckParams!: CollisionCheckParams;
     private readonly _myHeadCollisionCheckParams !: CollisionCheckParams;
