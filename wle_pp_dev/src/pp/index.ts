@@ -197,6 +197,7 @@ export * from "./input/cauldron/keyboard.js";
 export * from "./input/cauldron/mouse.js";
 export * from "./input/cauldron/input_manager.js";
 
+export * from "./input/cauldron/components/overlap_cursor_component.js";
 export * from "./input/cauldron/components/finger_cursor_component.js";
 export * from "./input/cauldron/components/input_manager_component.js";
 export * from "./input/cauldron/components/switch_hand_object_component.js";

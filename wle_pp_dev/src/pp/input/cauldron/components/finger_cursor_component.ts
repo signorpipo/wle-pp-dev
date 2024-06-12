@@ -45,14 +45,15 @@ export class FingerCursorComponent extends Component {
 
     private readonly _myCursorParentObject!: Object3D;
     private readonly _myActualCursorParentObject!: Object3D;
-    private readonly _myPhysicsCollisionCollector: PhysicsCollisionCollector | null = null;
-    private readonly _myCollisionComponent: CollisionComponent | null = null;
+    private _myPhysicsCollisionCollector: PhysicsCollisionCollector | null = null;
+    private _myCollisionComponent: CollisionComponent | null = null;
     private readonly _myFakeCursor!: Cursor;
 
     private _myDoubleClickTimer: number = 0;
     private _myTripleClickTimer: number = 0;
     private _myMultipleClickObject: Readonly<Object3D> | null = null;
-    private _myMultipleClickDelay: number = 0.3;
+
+    private static _myMultipleClickDelay: number = 0.3;
 
     public override init(): void {
         (this._myHandednessType as Handedness) = InputUtils.getHandednessByIndex(this._myHandedness)!;
@@ -90,9 +91,9 @@ export class FingerCursorComponent extends Component {
                 "groupsMask": physicsFlags.getMask()
             })!;
 
-            (this._myPhysicsCollisionCollector as PhysicsCollisionCollector) = new PhysicsCollisionCollector(physxComponent, true);
+            this._myPhysicsCollisionCollector = new PhysicsCollisionCollector(physxComponent, true);
         } else if (this._myCollisionMode == 1) {
-            (this._myCollisionComponent as CollisionComponent) = this._myActualCursorParentObject.pp_addComponent(CollisionComponent)!;
+            this._myCollisionComponent = this._myActualCursorParentObject.pp_addComponent(CollisionComponent)!;
             this._myCollisionComponent!.collider = Collider.Sphere;
             this._myCollisionComponent!.extents = vec3_create(this._myCollisionSize, this._myCollisionSize, this._myCollisionSize);
             this._myCollisionComponent!.group = physicsFlags.getMask();
@@ -203,13 +204,13 @@ export class FingerCursorComponent extends Component {
             } else if (this._myMultipleClicksEnabled && this._myDoubleClickTimer > 0 && this._myMultipleClickObject && this._myMultipleClickObject.pp_equals(this._myLastTarget.object)) {
                 this._myLastTarget.onDoubleClick.notify(this._myLastTarget.object, this._myFakeCursor);
 
-                this._myTripleClickTimer = this._myMultipleClickDelay;
+                this._myTripleClickTimer = FingerCursorComponent._myMultipleClickDelay;
                 this._myDoubleClickTimer = 0;
             } else {
                 this._myLastTarget.onSingleClick.notify(this._myLastTarget.object, this._myFakeCursor);
 
                 this._myTripleClickTimer = 0;
-                this._myDoubleClickTimer = this._myMultipleClickDelay;
+                this._myDoubleClickTimer = FingerCursorComponent._myMultipleClickDelay;
                 this._myMultipleClickObject = this._myLastTarget.object;
             }
 
