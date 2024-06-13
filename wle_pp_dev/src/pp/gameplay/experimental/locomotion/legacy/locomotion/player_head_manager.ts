@@ -169,15 +169,19 @@ export class PlayerHeadManager {
             feetPosition: vec3_create(),
             feetRotationQuat: quat_create()
         };
-    public getTransformFeetQuat(outTransformFeetQuat: Quaternion2 = quat2_create()): Quaternion2 {
+    public getTransformFeetQuat(): Quaternion2;
+    public getTransformFeetQuat<T extends Quaternion2>(outTransformQuat: T): T;
+    public getTransformFeetQuat<T extends Quaternion2>(outTransformQuat: Quaternion2 | T = quat2_create()): Quaternion2 | T {
         const feetPosition = PlayerHeadManager._getTransformFeetQuatSV.feetPosition;
         const feetRotationQuat = PlayerHeadManager._getTransformFeetQuatSV.feetRotationQuat;
-        outTransformFeetQuat.quat2_setPositionRotationQuat(this.getPositionFeet(feetPosition), this.getRotationFeetQuat(feetRotationQuat));
-        return outTransformFeetQuat;
+        outTransformQuat.quat2_setPositionRotationQuat(this.getPositionFeet(feetPosition), this.getRotationFeetQuat(feetRotationQuat));
+        return outTransformQuat;
     }
 
-    public getTransformHeadQuat(outTransformFeetQuat: Quaternion2 = quat2_create()): Quaternion2 {
-        return this.getHead().pp_getTransformQuat(outTransformFeetQuat);
+    public getTransformHeadQuat(): Quaternion2;
+    public getTransformHeadQuat<T extends Quaternion2>(outTransformQuat: T): T;
+    public getTransformHeadQuat<T extends Quaternion2>(outTransformQuat: Quaternion2 | T = quat2_create()): Quaternion2 | T {
+        return this.getHead().pp_getTransformQuat(outTransformQuat);
     }
 
     private static readonly _getPositionFeetSV =
@@ -185,20 +189,24 @@ export class PlayerHeadManager {
             headPosition: vec3_create(),
             playerUp: vec3_create()
         };
-    public getPositionFeet(outPositionFeet: Vector3 = vec3_create()): Vector3 {
+    public getPositionFeet(): Vector3;
+    public getPositionFeet<T extends Vector3>(outPosition: T): T;
+    public getPositionFeet<T extends Vector3>(outPosition: Vector3 | T = vec3_create()): Vector3 | T {
         const headPosition = PlayerHeadManager._getPositionFeetSV.headPosition;
         this._myCurrentHead.pp_getPosition(headPosition);
         const headHeight = this._getPositionEyesHeight(headPosition);
 
         const playerUp = PlayerHeadManager._getPositionFeetSV.playerUp;
         this.getPlayer().pp_getUp(playerUp);
-        outPositionFeet = headPosition.vec3_sub(playerUp.vec3_scale(headHeight, outPositionFeet), outPositionFeet);
+        outPosition = headPosition.vec3_sub(playerUp.vec3_scale(headHeight, outPosition), outPosition);
 
-        return outPositionFeet;
+        return outPosition;
     }
 
-    public getPositionHead(outPositionHead: Vector3 = vec3_create()): Vector3 {
-        return this._myCurrentHead.pp_getPosition(outPositionHead);
+    public getPositionHead(): Vector3;
+    public getPositionHead<T extends Vector3>(outPosition: T): T;
+    public getPositionHead<T extends Vector3>(outPosition: Vector3 | T = vec3_create()): Vector3 | T {
+        return this._myCurrentHead.pp_getPosition(outPosition);
     }
 
     private static readonly _getRotationFeetQuatSV =
@@ -206,7 +214,9 @@ export class PlayerHeadManager {
             playerUp: vec3_create(),
             headForward: vec3_create()
         };
-    public getRotationFeetQuat(outRotationFeetQuat: Quaternion = quat_create()): Quaternion {
+    public getRotationFeetQuat(): Quaternion;
+    public getRotationFeetQuat<T extends Quaternion>(outRotationQuat: T): T;
+    public getRotationFeetQuat<T extends Quaternion>(outRotationQuat: Quaternion | T = quat_create()): Quaternion | T {
         const playerUp = PlayerHeadManager._getRotationFeetQuatSV.playerUp;
         const headForward = PlayerHeadManager._getRotationFeetQuatSV.headForward;
         this.getPlayer().pp_getUp(playerUp);
@@ -224,12 +234,14 @@ export class PlayerHeadManager {
         headForward.vec3_removeComponentAlongAxis(playerUp, headForward);
         headForward.vec3_normalize(headForward);
 
-        outRotationFeetQuat.quat_setUp(playerUp, headForward);
-        return outRotationFeetQuat;
+        outRotationQuat.quat_setUp(playerUp, headForward);
+        return outRotationQuat;
     }
 
-    public getRotationHeadQuat(outRotationHeadQuat: Quaternion = quat_create()): Quaternion {
-        return this.getHead().pp_getRotationQuat(outRotationHeadQuat);
+    public getRotationHeadQuat(): Quaternion;
+    public getRotationHeadQuat<T extends Quaternion>(outRotationQuat: T): T;
+    public getRotationHeadQuat<T extends Quaternion>(outRotationQuat: Quaternion | T = quat_create()): Quaternion | T {
+        return this.getHead().pp_getRotationQuat(outRotationQuat);
     }
 
     public isSynced(ignoreSessionBlurredState: boolean = false): boolean {

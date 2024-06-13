@@ -1,6 +1,6 @@
 import { Object3D, WonderlandEngine } from "@wonderlandengine/api";
-import { Quaternion, Quaternion2, Vector3 } from "../../../../../cauldron/type_definitions/array_type_definitions.js";
 import { PhysicsLayerFlags } from "../../../../../cauldron/physics/physics_layer_flags.js";
+import { Quaternion, Quaternion2, Vector3 } from "../../../../../cauldron/type_definitions/array_type_definitions.js";
 import { XRUtils } from "../../../../../cauldron/utils/xr_utils.js";
 import { quat2_create, quat_create, vec3_create, vec4_create } from "../../../../../plugin/js/extensions/array/vec_create_extension.js";
 import { Globals } from "../../../../../pp/globals.js";
@@ -514,23 +514,33 @@ export class PlayerTransformManager {
         return this._myParams.myPlayerHeadManager.getHead();
     }
 
-    public getTransformQuat(outTransformQuat: Quaternion2 = quat2_create()): Quaternion2 {
+    public getTransformQuat(): Quaternion2;
+    public getTransformQuat<T extends Quaternion2>(outTransformQuat: T): T;
+    public getTransformQuat<T extends Quaternion2>(outTransformQuat: Quaternion2 | T = quat2_create()): Quaternion2 | T {
         return outTransformQuat.quat2_setPositionRotationQuat(this.getPosition(this._myValidPosition), this.getRotationQuat(this._myValidRotationQuat));
     }
 
-    public getPosition(outPosition: Vector3 = vec3_create()): Vector3 {
+    public getPosition(): Vector3;
+    public getPosition<T extends Vector3>(outPosition: T): T;
+    public getPosition<T extends Vector3>(outPosition: Vector3 | T = vec3_create()): Vector3 | T {
         return outPosition.vec3_copy(this._myValidPosition);
     }
 
-    public getRotationQuat(outRotation: Quaternion2 = quat_create()): Quaternion {
-        return outRotation.quat_copy(this._myValidRotationQuat);
+    public getRotationQuat(): Quaternion;
+    public getRotationQuat<T extends Quaternion>(outRotationQuat: T): T;
+    public getRotationQuat<T extends Quaternion>(outRotationQuat: Quaternion | T = quat_create()): Quaternion | T {
+        return outRotationQuat.quat_copy(this._myValidRotationQuat);
     }
 
-    public getPositionHead(outPosition: Vector3 = vec3_create()): Vector3 {
+    public getPositionHead(): Vector3;
+    public getPositionHead<T extends Vector3>(outPosition: T): T;
+    public getPositionHead<T extends Vector3>(outPosition: Vector3 | T = vec3_create()): Vector3 | T {
         return outPosition.vec3_copy(this._myValidPositionHead);
     }
 
-    public getTransformHeadQuat(outTransformQuat: Quaternion2 = quat2_create()): Quaternion2 {
+    public getTransformHeadQuat(): Quaternion2;
+    public getTransformHeadQuat<T extends Quaternion2>(outTransformQuat: T): T;
+    public getTransformHeadQuat<T extends Quaternion2>(outTransformQuat: Quaternion2 | T = quat2_create()): Quaternion2 | T {
         return outTransformQuat.quat2_setPositionRotationQuat(this.getPositionHead(this._myValidPositionHead), this.getRotationQuat(this._myValidRotationQuat));
     }
 
@@ -542,19 +552,27 @@ export class PlayerTransformManager {
         return this.getPlayerHeadManager().getTransformFeetQuat(outTransformQuat);
     }
 
-    public getPositionReal(outPosition: Vector3 = vec3_create()): Vector3 {
+    public getPositionReal(): Vector3;
+    public getPositionReal<T extends Vector3>(outPosition: T): T;
+    public getPositionReal<T extends Vector3>(outPosition: Vector3 | T = vec3_create()): Vector3 | T {
         return this.getPlayerHeadManager().getPositionFeet(outPosition);
     }
 
-    public getRotationRealQuat(outRotation: Quaternion = quat_create()): Quaternion {
-        return this.getPlayerHeadManager().getRotationFeetQuat(outRotation);
+    public getRotationRealQuat(): Quaternion;
+    public getRotationRealQuat<T extends Quaternion>(outRotationQuat: T): T;
+    public getRotationRealQuat<T extends Quaternion>(outRotationQuat: Quaternion | T = quat_create()): Quaternion | T {
+        return this.getPlayerHeadManager().getRotationFeetQuat(outRotationQuat);
     }
 
-    public getPositionHeadReal(outPosition: Vector3 = vec3_create()): Vector3 {
+    public getPositionHeadReal(): Vector3;
+    public getPositionHeadReal<T extends Vector3>(outPosition: T): T;
+    public getPositionHeadReal<T extends Vector3>(outPosition: Vector3 | T = vec3_create()): Vector3 | T {
         return this.getPlayerHeadManager().getPositionHead(outPosition);
     }
 
-    public getTransformHeadRealQuat(outTransformQuat: Quaternion2 = quat2_create()): Quaternion2 {
+    public getTransformHeadRealQuat(): Quaternion2;
+    public getTransformHeadRealQuat<T extends Quaternion2>(outTransformQuat: T): T;
+    public getTransformHeadRealQuat<T extends Quaternion2>(outTransformQuat: Quaternion2 | T = quat2_create()): Quaternion2 | T {
         return this.getPlayerHeadManager().getTransformHeadQuat(outTransformQuat);
     }
 
