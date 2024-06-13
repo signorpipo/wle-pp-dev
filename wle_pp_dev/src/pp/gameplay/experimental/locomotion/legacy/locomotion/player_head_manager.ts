@@ -1,12 +1,10 @@
 import { Object3D, WonderlandEngine } from "@wonderlandengine/api";
 import { Timer } from "../../../../../cauldron/cauldron/timer.js";
-import { Quaternion, Quaternion2, Vector3, Vector3 } from "../../../../../cauldron/type_definitions/array_type_definitions.js";
+import { Quaternion, Quaternion2, Vector3 } from "../../../../../cauldron/type_definitions/array_type_definitions.js";
 import { Quat2Utils } from "../../../../../cauldron/utils/array/quat2_utils.js";
 import { XRUtils } from "../../../../../cauldron/utils/xr_utils.js";
 import { mat4_create, quat2_create, quat_create, vec3_create, vec4_create } from "../../../../../plugin/js/extensions/array/vec_create_extension.js";
 import { Globals } from "../../../../../pp/globals.js";
-import { PlayerHeadManager, PlayerHeadManager } from "wle-pp";
-import { destroy } from "wle-pp/cauldron/wl/utils/object_utils.js";
 
 export enum NonVRReferenceSpaceMode {
     NO_FLOOR = 0,
@@ -689,11 +687,26 @@ export class PlayerHeadManager {
 
     private static readonly _setCameraNonXRHeightSV =
         {
-            direction: vec3_create(),
-            feetPosition: vec3_create()
+            cameraNonVRPosition: vec3_create(),
+            cameraNonVRPositionLocalToPlayer: vec3_create(),
+            adjustedCameraNonVRPosition: vec3_create(),
+            playerTranform: mat4_create()
         };
     private _setCameraNonXRHeight(height: number): void {
-        // Implemented outside class definition
+        const eyeHeight = height - this._myParams.myForeheadExtraHeight;
+
+        const cameraNonVRPosition = PlayerHeadManager._setCameraNonXRHeightSV.cameraNonVRPosition;
+        const cameraNonVRPositionLocalToPlayer = PlayerHeadManager._setCameraNonXRHeightSV.cameraNonVRPositionLocalToPlayer;
+        const adjustedCameraNonVRPosition = PlayerHeadManager._setCameraNonXRHeightSV.adjustedCameraNonVRPosition;
+        const playerTranform = PlayerHeadManager._setCameraNonXRHeightSV.playerTranform;
+
+        Globals.getPlayerObjects(this._myParams.myEngine)!.myCameraNonXR!.pp_getPosition(cameraNonVRPosition);
+
+        cameraNonVRPosition.vec3_convertPositionToLocal(this.getPlayer().pp_getTransform(playerTranform), cameraNonVRPositionLocalToPlayer);
+        cameraNonVRPositionLocalToPlayer.vec3_set(cameraNonVRPositionLocalToPlayer[0], eyeHeight, cameraNonVRPositionLocalToPlayer[2]);
+        cameraNonVRPositionLocalToPlayer.vec3_convertPositionToWorld(this.getPlayer().pp_getTransform(playerTranform), adjustedCameraNonVRPosition);
+
+        Globals.getPlayerObjects(this._myParams.myEngine)!.myCameraNonXR!.pp_setPosition(adjustedCameraNonVRPosition);
     }
 
     private static readonly _getPositionEyesHeightSV =
@@ -708,7 +721,7 @@ export class PlayerHeadManager {
         this.getPlayer().pp_getPosition(playerPosition);
         this.getPlayer().pp_getUp(playerUp);
 
-        const heightVector = PlayerHeadManager._getPositionEyesHeightSV.playerheightVectorosition;
+        const heightVector = PlayerHeadManager._getPositionEyesHeightSV.heightVector;
         position.vec3_sub(playerPosition, heightVector).vec3_componentAlongAxis(playerUp, heightVector);
         let height = heightVector.vec3_length();
         if (!playerUp.vec3_isConcordant(heightVector)) {
@@ -1106,102 +1119,27 @@ export class PlayerHeadManager {
 
     private static readonly _setReferenceSpaceHeightOffsetSV =
         {
-            direction: vec3_create(),
-            feetPosition: vec3_create()
+            referenceSpacePosition: vec3_create(),
+            referenceSpacePositionLocalToPlayer: vec3_create(),
+            adjustedReferenceSpacePosition: vec3_create(),
+            playerTransform: mat4_create()
         };
-    private _setReferenceSpaceHeightOffset(offset: Readonly<Vector3>, amountToRemove: number): void {
-        // Implemented outside class definition
-    }
+    private _setReferenceSpaceHeightOffset(offset: number, amountToRemove: number): void {
+        if (offset != null) {
+            const referenceSpacePosition = PlayerHeadManager._setReferenceSpaceHeightOffsetSV.referenceSpacePosition;
+            const referenceSpacePositionLocalToPlayer = PlayerHeadManager._setReferenceSpaceHeightOffsetSV.referenceSpacePositionLocalToPlayer;
+            const playerTransform = PlayerHeadManager._setReferenceSpaceHeightOffsetSV.playerTransform;
+            Globals.getPlayerObjects(this._myParams.myEngine)!.myReferenceSpace!.pp_getPosition(referenceSpacePosition);
+            referenceSpacePosition.vec3_convertPositionToLocal(this.getPlayer().pp_getTransform(playerTransform), referenceSpacePositionLocalToPlayer);
+            referenceSpacePositionLocalToPlayer.vec3_set(referenceSpacePositionLocalToPlayer[0], offset - amountToRemove, referenceSpacePositionLocalToPlayer[2]);
 
-    private static readonly _updateHeightOffsetSV =
-        {
-            direction: vec3_create(),
-            feetPosition: vec3_create()
-        };
-    private _updateHeightOffset(): void {
-        // Implemented outside class definition
-    }
-
-    private static readonly _getHeadTransformFromLocalSV =
-        {
-            direction: vec3_create(),
-            feetPosition: vec3_create()
-        };
-    private _getHeadTransformFromLocal(transformLocal: Readonly<Quaternion2>): Quaternion2 {
-        // Implemented outside class definition
-    }
-
-    private static readonly _resyncHeadRotationForwardSV =
-        {
-            direction: vec3_create(),
-            feetPosition: vec3_create()
-        };
-    private _resyncHeadRotationForward(resyncHeadRotation) {
-        // Implemented outside class definition
-    }
-
-    private _debugUpdate(dt: number): void {
-        Globals.getDebugVisualManager(this._myParams.myEngine)!.drawLineEnd(0, this.getPositionFeet(), this.getPositionHead(), vec4_create(1, 0, 0, 1), 0.01);
-
-        console.error(this.getHeightEyes());
-    }
-
-    public destroy(): void {
-        this._myDestroyed = true;
-
-        XRUtils.getReferenceSpace(this._myParams.myEngine)?.removeEventListener?.("reset", this._myViewResetEventListener);
-        XRUtils.getSession(this._myParams.myEngine)?.removeEventListener("visibilitychange", this._myVisibilityChangeEventListener);
-        XRUtils.unregisterSessionStartEndEventListeners(this, this._myParams.myEngine);
-    }
-
-    public isDestroyed(): boolean {
-        return this._myDestroyed;
-    }
-}
-
-
-
-// IMPLEMENTATION
-
-PlayerHeadManager.prototype._resyncHeadRotationForward = function () {
-    let playerUp = vec3_create();
-    let resyncHeadForward = vec3_create();
-    let resyncHeadUp = vec3_create();
-    let fixedResyncHeadRotation = quat_create();
-    return function _resyncHeadRotationForward(resyncHeadRotation) {
-        playerUp = this.getPlayer().pp_getUp(playerUp);
-        resyncHeadForward = resyncHeadRotation.quat_getForward(resyncHeadForward);
-        resyncHeadUp = resyncHeadRotation.quat_getUp(resyncHeadUp);
-        fixedResyncHeadRotation.quat_copy(resyncHeadRotation);
-        fixedResyncHeadRotation.quat_setUp(playerUp, resyncHeadForward);
-
-        if (!resyncHeadUp.vec3_isConcordant(playerUp)) {
-            // If it was upside down, it's like it has to rotate the neck back up,so the forward is actually on the opposite side
-            fixedResyncHeadRotation.quat_rotateAxis(180, playerUp, fixedResyncHeadRotation);
+            const adjustedReferenceSpacePosition = PlayerHeadManager._setReferenceSpaceHeightOffsetSV.adjustedReferenceSpacePosition;
+            referenceSpacePositionLocalToPlayer.vec3_convertPositionToWorld(this.getPlayer().pp_getTransform(playerTransform), adjustedReferenceSpacePosition);
+            Globals.getPlayerObjects(this._myParams.myEngine)!.myReferenceSpace!.pp_setPosition(adjustedReferenceSpacePosition);
         }
+    }
 
-        this.setRotationFeetQuat(fixedResyncHeadRotation);
-        return;
-    };
-}();
-
-PlayerHeadManager.prototype._setCameraNonXRHeight = function () {
-    let cameraNonVRPosition = vec3_create();
-    let cameraNonVRPositionLocalToPlayer = vec3_create();
-    let adjustedCameraNonVRPosition = vec3_create();
-    let playerTranform = mat4_create();
-    return function _setCameraNonXRHeight(height) {
-        let eyeHeight = height - this._myParams.myForeheadExtraHeight;
-        cameraNonVRPosition = Globals.getPlayerObjects(this._myParams.myEngine).myCameraNonXR.pp_getPosition(cameraNonVRPosition);
-        cameraNonVRPositionLocalToPlayer = cameraNonVRPosition.vec3_convertPositionToLocal(this.getPlayer().pp_getTransform(playerTranform), cameraNonVRPositionLocalToPlayer);
-        cameraNonVRPositionLocalToPlayer.vec3_set(cameraNonVRPositionLocalToPlayer[0], eyeHeight, cameraNonVRPositionLocalToPlayer[2]);
-        adjustedCameraNonVRPosition = cameraNonVRPositionLocalToPlayer.vec3_convertPositionToWorld(this.getPlayer().pp_getTransform(playerTranform), adjustedCameraNonVRPosition);
-        Globals.getPlayerObjects(this._myParams.myEngine).myCameraNonXR.pp_setPosition(adjustedCameraNonVRPosition);
-    };
-}();
-
-PlayerHeadManager.prototype._updateHeightOffset = function () {
-    return function _updateHeightOffset() {
+    private _updateHeightOffset(): void {
         if (this._mySessionActive) {
             if (XRUtils.isReferenceSpaceFloorBased(this._myParams.myEngine)) {
                 this._setReferenceSpaceHeightOffset(this._myHeightOffsetWithFloor, 0);
@@ -1219,27 +1157,59 @@ PlayerHeadManager.prototype._updateHeightOffset = function () {
                 this._setReferenceSpaceHeightOffset(this._myHeightNonVR, this._myParams.myForeheadExtraHeight);
             }
         }
-    };
-}();
+    }
 
-PlayerHeadManager.prototype._setReferenceSpaceHeightOffset = function () {
-    let referenceSpacePosition = vec3_create();
-    let referenceSpacePositionLocalToPlayer = vec3_create();
-    let adjustedReferenceSpacePosition = vec3_create();
-    let playerTranform = mat4_create();
-    return function _setReferenceSpaceHeightOffset(offset, amountToRemove) {
-        if (offset != null) {
-            referenceSpacePosition = Globals.getPlayerObjects(this._myParams.myEngine).myReferenceSpace.pp_getPosition(referenceSpacePosition);
-            referenceSpacePositionLocalToPlayer = referenceSpacePosition.vec3_convertPositionToLocal(this.getPlayer().pp_getTransform(playerTranform), referenceSpacePositionLocalToPlayer);
-            referenceSpacePositionLocalToPlayer.vec3_set(referenceSpacePositionLocalToPlayer[0], offset - amountToRemove, referenceSpacePositionLocalToPlayer[2]);
-            adjustedReferenceSpacePosition = referenceSpacePositionLocalToPlayer.vec3_convertPositionToWorld(this.getPlayer().pp_getTransform(playerTranform), adjustedReferenceSpacePosition);
-            Globals.getPlayerObjects(this._myParams.myEngine).myReferenceSpace.pp_setPosition(adjustedReferenceSpacePosition);
-        }
-    };
-}();
-
-PlayerHeadManager.prototype._getHeadTransformFromLocal = function () {
-    return function _getHeadTransformFromLocal(transformLocal) {
+    private static readonly _getHeadTransformFromLocalSV =
+        {
+            direction: vec3_create(),
+            feetPosition: vec3_create()
+        };
+    private _getHeadTransformFromLocal(transformLocal: Readonly<Quaternion2>): Quaternion2 {
         return this._myCurrentHead.pp_convertTransformLocalToWorldQuat(transformLocal);
-    };
-}();
+    }
+
+    private static readonly _resyncHeadRotationForwardSV =
+        {
+            playerUp: vec3_create(),
+            resyncHeadForward: vec3_create(),
+            resyncHeadUp: vec3_create(),
+            fixedResyncHeadRotation: quat_create()
+        };
+    private _resyncHeadRotationForward(resyncHeadRotation: Readonly<Quaternion>): void {
+        const playerUp = PlayerHeadManager._resyncHeadRotationForwardSV.playerUp;
+        const resyncHeadForward = PlayerHeadManager._resyncHeadRotationForwardSV.resyncHeadForward;
+        const resyncHeadUp = PlayerHeadManager._resyncHeadRotationForwardSV.resyncHeadUp;
+        this.getPlayer().pp_getUp(playerUp);
+        resyncHeadRotation.quat_getForward(resyncHeadForward);
+        resyncHeadRotation.quat_getUp(resyncHeadUp);
+
+        const fixedResyncHeadRotation = PlayerHeadManager._resyncHeadRotationForwardSV.fixedResyncHeadRotation;
+        fixedResyncHeadRotation.quat_copy(resyncHeadRotation);
+        fixedResyncHeadRotation.quat_setUp(playerUp, resyncHeadForward);
+
+        if (!resyncHeadUp.vec3_isConcordant(playerUp)) {
+            // If it was upside down, it's like it has to rotate the neck back up,so the forward is actually on the opposite side
+            fixedResyncHeadRotation.quat_rotateAxis(180, playerUp, fixedResyncHeadRotation);
+        }
+
+        this.setRotationFeetQuat(fixedResyncHeadRotation);
+    }
+
+    private _debugUpdate(dt: number): void {
+        Globals.getDebugVisualManager(this._myParams.myEngine)!.drawLineEnd(0, this.getPositionFeet(), this.getPositionHead(), vec4_create(1, 0, 0, 1), 0.01);
+
+        console.error(this.getHeightEyes());
+    }
+
+    public destroy(): void {
+        this._myDestroyed = true;
+
+        XRUtils.getReferenceSpace(this._myParams.myEngine)!.removeEventListener("reset", this._myViewResetEventListener!);
+        XRUtils.getSession(this._myParams.myEngine)!.removeEventListener("visibilitychange", this._myVisibilityChangeEventListener!);
+        XRUtils.unregisterSessionStartEndEventListeners(this, this._myParams.myEngine);
+    }
+
+    public isDestroyed(): boolean {
+        return this._myDestroyed;
+    }
+}
