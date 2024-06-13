@@ -78,7 +78,7 @@ export { Mat3Utils } from "./cauldron/utils/array/mat3_utils.js";
 export { Mat4Utils } from "./cauldron/utils/array/mat4_utils.js";
 
 export { JSUtils } from "./cauldron/utils/js_utils.js";
-export { MathUtils, EasingFunction, EasingSupportFunction } from "./cauldron/utils/math_utils.js";
+export { MathUtils, EasingFunction, EasingFunctionName, WaveFunction } from "./cauldron/utils/math_utils.js";
 
 //    PHYSICS
 export { PhysicsUtils } from "./cauldron/physics/physics_utils.js";

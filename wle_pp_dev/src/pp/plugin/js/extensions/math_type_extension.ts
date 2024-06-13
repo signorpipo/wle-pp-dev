@@ -1,4 +1,4 @@
-import { EasingFunction } from "../../../cauldron/utils/math_utils.js";
+import { EasingFunction, EasingFunctionName } from "../../../cauldron/utils/math_utils.js";
 
 /**
  * #WARN this type extension is actually added at runtime only if you call `initMathExtension`  
@@ -63,6 +63,9 @@ export interface MathExtension {
     /** `[from, to]` range is mapped to an `interpolationFactor` in the range `[0, 1]`  
         `interpolationFactor` can go outside the `[0, 1]` range, periodically repeating the interpolation in the given range */
     pp_interpolatePeriodic(from: number, to: number, interpolationFactor: number, easingFunction?: EasingFunction): number;
+
+    pp_getEasingFunctionByName(easingFunctionName: EasingFunctionName): EasingFunction;
+    pp_getEasingFunctionNameByIndex(index: number): EasingFunctionName | null;
 
 
 
