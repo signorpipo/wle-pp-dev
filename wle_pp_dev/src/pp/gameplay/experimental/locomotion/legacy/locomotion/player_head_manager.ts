@@ -1086,7 +1086,7 @@ export class PlayerHeadManager {
                     fixedHeadUp.vec3_cross(fixedHeadRight, fixedHeadForward);
                     fixedHeadForward.vec3_normalize(fixedHeadForward);
 
-                    const fixedHeadRotation = PlayerHeadManager._sessionChangeResyncSV.fixedHeadUp;
+                    const fixedHeadRotation = PlayerHeadManager._sessionChangeResyncSV.fixedHeadRotation;
                     const fixedHeadLeft = PlayerHeadManager._sessionChangeResyncSV.fixedHeadLeft;
                     fixedHeadRotation.quat_fromAxes(fixedHeadRight.vec3_negate(fixedHeadLeft), fixedHeadUp, fixedHeadForward);
                     resyncHeadRotation.quat_copy(fixedHeadRotation);
