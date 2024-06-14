@@ -68,6 +68,7 @@ export class PlayerHeadManagerParams {
 
 // #TODO Could be seen as the generic player body manager (maybe with hands and stuff also)
 export class PlayerHeadManager {
+    
     private readonly _myParams: PlayerHeadManagerParams;
 
     private _myCurrentHead: Object3D;

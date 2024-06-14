@@ -17,6 +17,7 @@ export enum PlayerTransformManagerSyncFlag {
 }
 
 export class PlayerTransformManagerParams {
+
     public myPlayerHeadManager!: PlayerHeadManager;
 
     public myMovementCollisionCheckParams!: CollisionCheckParams;
