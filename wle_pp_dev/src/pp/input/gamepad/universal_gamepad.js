@@ -1,4 +1,4 @@
-import { Gamepad } from "./gamepad.js";
+import { Gamepad, GamepadRawAxesData, GamepadRawButtonData } from "./gamepad.js";
 
 export class UniversalGamepad extends Gamepad {
 
@@ -11,8 +11,8 @@ export class UniversalGamepad extends Gamepad {
         this._myStarted = false;
 
         // Support Variables
-        this._myButtonData = this._createButtonData();
-        this._myAxesData = this._createAxesData();
+        this._myButtonData = new GamepadRawButtonData();
+        this._myAxesData = new GamepadRawAxesData();
         this._myHapticActuators = [];
     }
 
@@ -91,9 +91,7 @@ export class UniversalGamepad extends Gamepad {
     }
 
     _getButtonData(buttonID) {
-        this._myButtonData.myPressed = false;
-        this._myButtonData.myTouched = false;
-        this._myButtonData.myValue = 0;
+        this._myButtonData.reset();
 
         for (let i = 0; i < this._myGamepadCoresIDs.length; i++) {
             let id = this._myGamepadCoresIDs[i];
@@ -112,7 +110,7 @@ export class UniversalGamepad extends Gamepad {
     }
 
     _getAxesData(axesID) {
-        this._myAxesData.vec2_zero();
+        this._myAxesData.reset();
 
         for (let i = 0; i < this._myGamepadCoresIDs.length; i++) {
             let id = this._myGamepadCoresIDs[i];
@@ -120,12 +118,12 @@ export class UniversalGamepad extends Gamepad {
             if (core.isGamepadCoreActive()) {
                 let coreAxesData = core.getAxesData(axesID);
 
-                if (Math.abs(coreAxesData[0]) > Math.abs(this._myAxesData[0])) {
-                    this._myAxesData[0] = coreAxesData[0];
+                if (Math.abs(coreAxesData.myAxes[0]) > Math.abs(this._myAxesData.myAxes[0])) {
+                    this._myAxesData.myAxes[0] = coreAxesData.myAxes[0];
                 }
 
-                if (Math.abs(coreAxesData[1]) > Math.abs(this._myAxesData[1])) {
-                    this._myAxesData[1] = coreAxesData[1];
+                if (Math.abs(coreAxesData.myAxes[1]) > Math.abs(this._myAxesData.myAxes[1])) {
+                    this._myAxesData.myAxes[1] = coreAxesData.myAxes[1];
                 }
             }
         }

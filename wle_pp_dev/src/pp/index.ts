@@ -206,7 +206,7 @@ export * from "./input/cauldron/components/tracked_hand_draw_all_joints_componen
 export * from "./input/cauldron/components/tracked_hand_draw_skin_component.js";
 
 export * from "./input/gamepad/gamepad_buttons.js";
-export * from "./input/gamepad/gamepad.js";
+export { Gamepad } from "./input/gamepad/gamepad.js";
 export * from "./input/gamepad/universal_gamepad.js";
 export * from "./input/gamepad/cauldron/gamepad_mesh_animator_component.js";
 export * from "./input/gamepad/cauldron/gamepads_manager.js";
