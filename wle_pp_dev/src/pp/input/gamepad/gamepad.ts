@@ -439,15 +439,17 @@ export abstract class Gamepad {
                         const hapticActuator = hapticActuators[i];
 
                         // Duration is managed by this class
-                        const hapticActuatorWithPulse = hapticActuator as unknown as { pulse(value: number, duration: number): Promise<boolean> };
-                        hapticActuatorWithPulse.pulse(this._myPulseInfo.myIntensity, Math.max(250, this._myPulseInfo.myDuration * 1000));
+                        hapticActuator.playEffect("dual-rumble", {
+                            startDelay: 0,
+                            duration: Math.max(250, this._myPulseInfo.myDuration * 1000),
+                            weakMagnitude: this._myPulseInfo.myIntensity,
+                            strongMagnitude: this._myPulseInfo.myIntensity
+                        });
                     }
                     this._myPulseInfo.myDevicePulsing = true;
                 } else if (this._myPulseInfo.myDevicePulsing) {
                     for (let i = 0; i < hapticActuators.length; i++) {
                         const hapticActuator = hapticActuators[i];
-                        const hapticActuatorWithPulse = hapticActuator as unknown as { pulse(value: number, duration: number): Promise<boolean> };
-                        hapticActuatorWithPulse.pulse(0, 1);
 
                         try {
                             if (hapticActuator.reset != null) {
