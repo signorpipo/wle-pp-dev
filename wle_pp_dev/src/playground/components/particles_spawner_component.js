@@ -21,8 +21,6 @@ export class ParticlesSpawnerComponent extends Component {
         poolParams.myAmountToAddWhenEmpty = 1;
         poolParams.myPercentageToAddWhenEmpty = 1;
 
-        poolParams.myOptimizeObjectsAllocation = true;    // If true it will pre-allocate the memory before adding new objects to the pool
-
         let cloneParams = new ObjectCloneParams();
         cloneParams.myComponentsToInclude.push(MeshComponent.TypeName);
 

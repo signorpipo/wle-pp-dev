@@ -209,7 +209,7 @@ export class ObjectPool<PoolObjectType, PoolObjectCloneParamsType = unknown> imp
             clone = this._myObjectPoolParams.myCloneCallback(object, cloneParams);
         } else if (this._myIsObject3D && this._myIsObject3DCloneParams) {
             const object3DPrototype = this._myObjectPrototype as unknown as Object3D;
-            ObjectUtils.clone(object3DPrototype, cloneParams as unknown as ObjectCloneParams);
+            clone = ObjectUtils.clone(object3DPrototype, cloneParams as unknown as ObjectCloneParams) as PoolObjectType;
         } else {
             console.error("No way have been provided to clone the object");
         }
@@ -240,7 +240,7 @@ export class ObjectPool<PoolObjectType, PoolObjectCloneParamsType = unknown> imp
         } else if (this._myIsObject3D) {
             const firstObject3D = this._myObjectPrototype as unknown as Object3D;
             const secondObject3D = this._myObjectPrototype as unknown as Object3D;
-            ObjectUtils.equals(firstObject3D, secondObject3D);
+            equals = ObjectUtils.equals(firstObject3D, secondObject3D);
         } else {
             equals = first == second;
         }
