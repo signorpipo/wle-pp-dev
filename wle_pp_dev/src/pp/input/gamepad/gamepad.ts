@@ -1,5 +1,5 @@
 import { Emitter } from "@wonderlandengine/api";
-import { Vector2 } from "wle-pp/cauldron/type_definitions/array_type_definitions.js";
+import { Vector2 } from "../../cauldron/type_definitions/array_type_definitions.js";
 import { vec2_create } from "../../plugin/js/extensions/array/vec_create_extension.js";
 import { Handedness } from "../cauldron/input_types.js";
 import { HandPose } from "../pose/hand_pose.js";
