@@ -31,6 +31,7 @@ export abstract class Gamepad {
 
     private readonly _myHandedness: Handedness;
 
+    // Switched to `object` instead of `Map` for memory optimization reasons since iterating allocates a lot
     private readonly _myButtonInfos: Partial<Record<GamepadButtonID, GamepadButtonInfo>> = {};
     private readonly _myButtonInfosIDs: GamepadButtonID[] = [];
 
@@ -43,6 +44,7 @@ export abstract class Gamepad {
 
     private readonly _myPulseInfo: GamepadPulseInfo = new GamepadPulseInfo();
 
+    // Config
     private _myMultiplePressMaxDelay: number = 0.4;
     private _myMultipleTouchMaxDelay: number = 0.4;
 
@@ -154,32 +156,32 @@ export abstract class Gamepad {
         return null;
     }
 
-    public _startHook(): void {
+    protected _startHook(): void {
 
     }
 
-    public _preUpdate(dt: number): void {
+    protected _preUpdate(dt: number): void {
 
     }
 
-    public _postUpdate(dt: number): void {
+    protected _postUpdate(dt: number): void {
 
     }
 
-    private _getButtonData(buttonID: GamepadButtonID): Readonly<GamepadRawButtonData> {
+    protected _getButtonData(buttonID: GamepadButtonID): Readonly<GamepadRawButtonData> {
         return new GamepadRawButtonData();
     }
 
-    private _getAxesData(axesID: GamepadAxesID): Readonly<GamepadRawAxesData> {
+    protected _getAxesData(axesID: GamepadAxesID): Readonly<GamepadRawAxesData> {
         return new GamepadRawAxesData();
     }
 
-    private _getHapticActuators(): GamepadHapticActuator[] {
+    protected _getHapticActuators(): GamepadHapticActuator[] {
         const hapticActuator: GamepadHapticActuator[] = [];
         return hapticActuator;
     }
 
-    private _destroyHook(): void {
+    protected _destroyHook(): void {
 
     }
 
