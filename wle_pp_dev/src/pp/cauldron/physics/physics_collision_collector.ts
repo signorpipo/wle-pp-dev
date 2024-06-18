@@ -122,7 +122,7 @@ export class PhysicsCollisionCollector {
         }
     }
 
-    /** Set to `true` only if u are going to actually update this object and don't want to
+    /** Set to `true` only if u are going to actually update this object and don't want to  
         lose any collision start or end events prior to updating the first time after activation,  
         since on update this flag is automatically set to `true` */
     public setUpdateActive(active: boolean): void {
