@@ -141,9 +141,10 @@ export class OverlapCursorComponent extends Component {
     }
 
     private _targetOverlapStart(): void {
-        if (this._myCollisionSizeMultiplierOnOverlap != 1) {
+        if (this._myCollisionSizeMultiplierOnOverlap != 1 && !this._myLastTarget!.isSurface) {
             if (this._myPhysXComponent != null) {
                 this._myPhysXComponent.extents = this._myPhysXComponentExtents.vec3_scale(this._myCollisionSizeMultiplierOnOverlap);
+
                 this._myPhysXComponent.active = false;
                 this._myPhysXComponent.active = true;
             }
@@ -158,19 +159,20 @@ export class OverlapCursorComponent extends Component {
     }
 
     private _targetOverlapEnd(): void {
-        if (this._myCollisionSizeMultiplierOnOverlap != 1) {
-            if (this._myPhysXComponent != null) {
-                this._myPhysXComponent.extents = this._myPhysXComponentExtents;
-                this._myPhysXComponent.active = false;
-                this._myPhysXComponent.active = true;
-            }
-
-            if (this._myCollisionComponent != null) {
-                this._myCollisionComponent.extents = this._myCollisionComponentExtents;
-            }
-        }
-
         if (this._myLastTarget != null) {
+            if (this._myCollisionSizeMultiplierOnOverlap != 1) {
+                if (this._myPhysXComponent != null) {
+                    this._myPhysXComponent.extents = this._myPhysXComponentExtents;
+
+                    this._myPhysXComponent.active = false;
+                    this._myPhysXComponent.active = true;
+                }
+
+                if (this._myCollisionComponent != null) {
+                    this._myCollisionComponent.extents = this._myCollisionComponentExtents;
+                }
+            }
+
             this._myLastTarget.onClick.notify(this._myLastTarget.object, this._myFakeCursor);
 
             if (this._myTripleClickTimer > 0 && this._myMultipleClickObject && this._myMultipleClickObject.pp_equals(this._myLastTarget.object)) {

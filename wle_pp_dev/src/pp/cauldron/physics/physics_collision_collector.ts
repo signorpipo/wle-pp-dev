@@ -74,7 +74,7 @@ export class PhysicsCollisionCollector {
             this._myCollisionObjectsStarted.pp_clear();
             this._myCollisionsEnded.pp_clear();
             this._myCollisionObjectsEnded.pp_clear();
-            this._myUpdateActive = false;
+
             this._myCollisionsStartedToProcess.pp_clear();
             this._myCollisionObjectsStartedToProcess.pp_clear();
             this._myCollisionsEndedToProcess.pp_clear();
@@ -279,22 +279,33 @@ export class PhysicsCollisionCollector {
         if (this._myTriggerDesyncFixDelay.isDone()) {
             this._myTriggerDesyncFixDelay.start();
 
-            const findAllCallback = PhysicsCollisionCollector._triggerDesyncFixSV.findAllCallback;
-            const collisionsToEndIndexes = this._myCollisionObjects.pp_findAllIndexes(findAllCallback);
+            if (this._myCollisionObjects.length > 0) {
+                const findAllCallback = PhysicsCollisionCollector._triggerDesyncFixSV.findAllCallback;
+                let collisionsToEndIndexes = null;
 
-            if (collisionsToEndIndexes.length > 0) {
-                const physXComponentsToEnd: PhysXComponent[] = [];
-                for (let i = 0; i < collisionsToEndIndexes.length; i++) {
-                    physXComponentsToEnd.push(this._myCollisions[collisionsToEndIndexes[i]]);
+                if (!this._myPhysXComponent.active) {
+                    collisionsToEndIndexes = [];
+                    for (let i = 0; i < this._myCollisionObjects.length; i++) {
+                        collisionsToEndIndexes.push(i);
+                    }
+                } else {
+                    collisionsToEndIndexes = this._myCollisionObjects.pp_findAllIndexes(findAllCallback);
                 }
 
-                for (const physXComponentToEnd of physXComponentsToEnd) {
-                    if (this._myLogEnabled) {
-                        console.log("Trigger Desync Fix - Object ID: " + physXComponentToEnd.object.pp_getID());
+                if (collisionsToEndIndexes.length > 0) {
+                    const physXComponentsToEnd: PhysXComponent[] = [];
+                    for (let i = 0; i < collisionsToEndIndexes.length; i++) {
+                        physXComponentsToEnd.push(this._myCollisions[collisionsToEndIndexes[i]]);
                     }
 
-                    if (this._onCollisionEnd(CollisionEventType.TriggerTouchLost, physXComponentToEnd)) {
-                        this._myCollisionEmitter.notify(this._myPhysXComponent, physXComponentToEnd, CollisionEventType.TriggerTouchLost);
+                    for (const physXComponentToEnd of physXComponentsToEnd) {
+                        if (this._myLogEnabled) {
+                            console.log("Trigger Desync Fix - Object ID: " + physXComponentToEnd.object.pp_getID());
+                        }
+
+                        if (this._onCollisionEnd(CollisionEventType.TriggerTouchLost, physXComponentToEnd)) {
+                            this._myCollisionEmitter.notify(this._myPhysXComponent, physXComponentToEnd, CollisionEventType.TriggerTouchLost);
+                        }
                     }
                 }
             }
