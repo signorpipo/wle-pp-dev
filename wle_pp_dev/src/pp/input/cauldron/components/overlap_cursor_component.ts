@@ -1,20 +1,33 @@
 import { CollisionComponent, Component, Object3D, PhysXComponent } from "@wonderlandengine/api";
-import { property } from "@wonderlandengine/api/decorators.js";
 import { Cursor, CursorTarget } from "@wonderlandengine/components";
 import { PhysicsCollisionCollector } from "../../../cauldron/physics/physics_collision_collector.js";
+import { property } from "@wonderlandengine/api/decorators.js";
+import { vec3_create } from "wle-pp/plugin/js/extensions/array/vec_create_extension.js";
+import { Vector3 } from "wle-pp/cauldron/type_definitions/array_type_definitions.js";
 
 /** #WARN This class is not actually a `Cursor`, but since it triggers `CursorTarget` emitters, it needs to forward a `Cursor` to them  
     As of now, this class forward a fake cursor as `Cursor`, which is a plain object with just the info usually need, like the `handedness` value */
 export class OverlapCursorComponent extends Component {
     static override TypeName = "pp-overlap-cursor";
 
-    @property.bool(true)
-    private readonly _myMultipleClicksEnabled!: boolean;
+    /** 
+     * This is useful if you want to avoid the cursor entering and exiting the target when very close to the target,  
+     * due to it flickering between inside and outside.  
+     * You can scale the collision up a bit so that it needs to move a bit outside to actually exit, so that it will not collide 
+     *  
+     * #WARN When using a `PhysXComponent` sadly this require to active and deactivate it to update the extents, which triggers a collision end and a start  
+     * This is not an issue for the cursor, but if you use the same `PhysXComponent` for other queries, you might have issues due to this 
+     */
+    @property.float(1)
+    private readonly _myCollisionSizeMultiplierOnOverlap!: number;
 
     private _myLastTarget: CursorTarget | null = null;
 
+    private _myPhysXComponent: PhysXComponent | null = null;
     private _myPhysicsCollisionCollector: PhysicsCollisionCollector | null = null;
+    private readonly _myPhysXComponentExtents: Vector3 = vec3_create();
     private _myCollisionComponent: CollisionComponent | null = null;
+    private readonly _myCollisionComponentExtents: Vector3 = vec3_create();
     private readonly _myFakeCursor!: Cursor;
 
     private _myDoubleClickTimer: number = 0;
@@ -34,12 +47,17 @@ export class OverlapCursorComponent extends Component {
     }
 
     public override start(): void {
-        const physxComponent = this.object.pp_getComponent(PhysXComponent);
-        if (physxComponent != null) {
-            this._myPhysicsCollisionCollector = new PhysicsCollisionCollector(physxComponent, true);
+        this._myPhysXComponent = this.object.pp_getComponent(PhysXComponent);
+        if (this._myPhysXComponent != null) {
+            this._myPhysicsCollisionCollector = new PhysicsCollisionCollector(this._myPhysXComponent, true);
+
+            this._myPhysXComponentExtents.vec3_copy(this._myPhysXComponent.extents);
         }
 
         this._myCollisionComponent = this.object.pp_getComponent(CollisionComponent);
+        if (this._myCollisionComponent != null) {
+            this._myCollisionComponentExtents.vec3_copy(this._myCollisionComponent.extents);
+        }
     }
 
     public override update(dt: number): void {
@@ -68,13 +86,13 @@ export class OverlapCursorComponent extends Component {
             }
 
             if (collisionTarget == null) {
-                this._targetTouchEnd();
+                this._targetOverlapEnd();
             } else if (!collisionTarget.equals(this._myLastTarget)) {
-                this._targetTouchEnd();
+                this._targetOverlapEnd();
 
                 this._myLastTarget = collisionTarget;
 
-                this._targetTouchStart();
+                this._targetOverlapStart();
             }
         }
 
@@ -91,35 +109,59 @@ export class OverlapCursorComponent extends Component {
             }
 
             if (collisionTarget == null) {
-                this._targetTouchEnd();
+                this._targetOverlapEnd();
             } else if (!collisionTarget.equals(this._myLastTarget)) {
-                this._targetTouchEnd();
+                this._targetOverlapEnd();
 
                 this._myLastTarget = collisionTarget;
 
-                this._targetTouchStart();
+                this._targetOverlapStart();
             }
         }
     }
 
     public override onDeactivate(): void {
-        this._targetTouchEnd();
+        this._targetOverlapEnd();
     }
 
-    private _targetTouchStart(): void {
+    private _targetOverlapStart(): void {
+        if (this._myCollisionSizeMultiplierOnOverlap != 1) {
+            if (this._myPhysXComponent != null) {
+                this._myPhysXComponent.extents = this._myPhysXComponentExtents.vec3_scale(this._myCollisionSizeMultiplierOnOverlap);
+                this._myPhysXComponent.active = false;
+                this._myPhysXComponent.active = true;
+            }
+
+            if (this._myCollisionComponent != null) {
+                this._myCollisionComponent.extents = this._myCollisionComponentExtents.vec3_scale(this._myCollisionSizeMultiplierOnOverlap);
+            }
+        }
+
         this._myLastTarget!.onHover.notify(this._myLastTarget!.object, this._myFakeCursor);
         this._myLastTarget!.onDown.notify(this._myLastTarget!.object, this._myFakeCursor);
     }
 
-    private _targetTouchEnd(): void {
+    private _targetOverlapEnd(): void {
+        if (this._myCollisionSizeMultiplierOnOverlap != 1) {
+            if (this._myPhysXComponent != null) {
+                this._myPhysXComponent.extents = this._myPhysXComponentExtents;
+                this._myPhysXComponent.active = false;
+                this._myPhysXComponent.active = true;
+            }
+
+            if (this._myCollisionComponent != null) {
+                this._myCollisionComponent.extents = this._myCollisionComponentExtents;
+            }
+        }
+
         if (this._myLastTarget != null) {
             this._myLastTarget.onClick.notify(this._myLastTarget.object, this._myFakeCursor);
 
-            if (this._myMultipleClicksEnabled && this._myTripleClickTimer > 0 && this._myMultipleClickObject && this._myMultipleClickObject.pp_equals(this._myLastTarget.object)) {
+            if (this._myTripleClickTimer > 0 && this._myMultipleClickObject && this._myMultipleClickObject.pp_equals(this._myLastTarget.object)) {
                 this._myLastTarget.onTripleClick.notify(this._myLastTarget.object, this._myFakeCursor);
 
                 this._myTripleClickTimer = 0;
-            } else if (this._myMultipleClicksEnabled && this._myDoubleClickTimer > 0 && this._myMultipleClickObject && this._myMultipleClickObject.pp_equals(this._myLastTarget.object)) {
+            } else if (this._myDoubleClickTimer > 0 && this._myMultipleClickObject && this._myMultipleClickObject.pp_equals(this._myLastTarget.object)) {
                 this._myLastTarget.onDoubleClick.notify(this._myLastTarget.object, this._myFakeCursor);
 
                 this._myTripleClickTimer = OverlapCursorComponent._myMultipleClickDelay;
