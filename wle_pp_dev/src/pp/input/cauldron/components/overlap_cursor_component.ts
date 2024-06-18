@@ -33,11 +33,19 @@ export class OverlapCursorComponent extends Component {
     private readonly _myCollisionComponentExtents: Vector3 = vec3_create();
     private readonly _myFakeCursor!: Cursor;
 
+    private readonly _myInvalidOverlapCursorTargets: CursorTarget[] = [];
+
     private _myDoubleClickTimer: number = 0;
     private _myTripleClickTimer: number = 0;
     private _myMultipleClickObject: Readonly<Object3D> | null = null;
 
     private static _myMultipleClickDelay: number = 0.3;
+
+    private static _SV = {
+        componentEqualCallback(first: CursorTarget, second: CursorTarget): boolean {
+            return first.equals(second);
+        }
+    };
 
     public override init(): void {
 
@@ -52,7 +60,7 @@ export class OverlapCursorComponent extends Component {
     public override start(): void {
         this._myPhysXComponent = this.object.pp_getComponent(PhysXComponent);
         if (this._myPhysXComponent != null) {
-            this._myPhysicsCollisionCollector = new PhysicsCollisionCollector(this._myPhysXComponent, true);
+            this._myPhysicsCollisionCollector = new PhysicsCollisionCollector(this._myPhysXComponent);
 
             this._myPhysXComponentExtents.vec3_copy(this._myPhysXComponent.extents);
         }
@@ -72,69 +80,64 @@ export class OverlapCursorComponent extends Component {
             this._myTripleClickTimer -= dt;
         }
 
+        let bestCursorTarget = null;
+        const processedCursorTargets: CursorTarget[] = [];
+
         if (this._myCollisionComponent != null) {
             const collisions = this._myCollisionComponent!.queryOverlaps();
-            let collisionTarget = null;
-            for (let i = 0; i < collisions.length; ++i) {
-                const collision = collisions[i];
+            for (const collision of collisions) {
                 if (collision.group & this._myCollisionComponent!.group) {
-                    const object = collision.object;
-                    const target = object.pp_getComponent(CursorTarget);
+                    const target = collision.object.pp_getComponent(CursorTarget);
                     if (target != null) {
-                        if (target.equals(this._myLastTarget)) {
-                            collisionTarget = target;
-                            break;
-                        } else if (collisionTarget == null || (!target.isSurface && collisionTarget.isSurface)) {
-                            if (this._isOverlapAngleValid(this._myCollisionComponent.object, target.object)) {
-                                collisionTarget = target;
-                            }
-                        }
+                        processedCursorTargets.push(target);
+                        bestCursorTarget = this._pickBestCursorTarget(bestCursorTarget, target, this._myCollisionComponent.object);
                     }
                 }
-            }
-
-            if (collisionTarget == null) {
-                this._targetOverlapEnd();
-            } else if (!collisionTarget.equals(this._myLastTarget)) {
-                this._targetOverlapEnd();
-
-                this._myLastTarget = collisionTarget;
-
-                this._targetOverlapStart();
             }
         }
 
         if (this._myPhysicsCollisionCollector != null) {
-            const collisions = this._myPhysicsCollisionCollector!.getCollisions();
-            let collisionTarget: CursorTarget | null = null;
+            this._myPhysicsCollisionCollector.update(dt);
+            const collisions = this._myPhysicsCollisionCollector.getCollisions();
             for (const collision of collisions) {
                 const target = collision.object.pp_getComponent(CursorTarget);
                 if (target != null) {
-                    if (target.equals(this._myLastTarget)) {
-                        collisionTarget = target;
-                        break;
-                    } else if (collisionTarget == null || (!target.isSurface && collisionTarget.isSurface)) {
-                        if (this._isOverlapAngleValid(this._myPhysXComponent!.object, target.object)) {
-                            collisionTarget = target;
-                        }
-                    }
+                    processedCursorTargets.push(target);
+                    bestCursorTarget = this._pickBestCursorTarget(bestCursorTarget, target, this._myPhysXComponent!.object);
                 }
             }
+        }
 
-            if (collisionTarget == null) {
-                this._targetOverlapEnd();
-            } else if (!collisionTarget.equals(this._myLastTarget)) {
-                this._targetOverlapEnd();
+        if (this._myInvalidOverlapCursorTargets.length > 0 && processedCursorTargets.length > 0) {
+            const componentEqualCallback = OverlapCursorComponent._SV.componentEqualCallback;
+            this._myInvalidOverlapCursorTargets.pp_removeAll((elementToCheck) => {
+                return !processedCursorTargets.pp_hasEqual(elementToCheck, componentEqualCallback);
+            });
+        }
 
-                this._myLastTarget = collisionTarget;
+        if (bestCursorTarget == null) {
+            this._targetOverlapEnd();
+        } else if (!bestCursorTarget.equals(this._myLastTarget)) {
+            this._targetOverlapEnd();
 
-                this._targetOverlapStart();
-            }
+            this._myLastTarget = bestCursorTarget;
+
+            this._targetOverlapStart();
+        }
+    }
+
+    public override onActivate(): void {
+        if (this._myPhysicsCollisionCollector != null) {
+            this._myPhysicsCollisionCollector.setActive(true);
         }
     }
 
     public override onDeactivate(): void {
         this._targetOverlapEnd();
+
+        if (this._myPhysicsCollisionCollector != null) {
+            this._myPhysicsCollisionCollector.setActive(false);
+        }
     }
 
     private _targetOverlapStart(): void {
@@ -194,6 +197,29 @@ export class OverlapCursorComponent extends Component {
 
             this._myLastTarget = null;
         }
+    }
+
+    private _pickBestCursorTarget(currentBestCursorTarget: CursorTarget | null, cursorTarget: CursorTarget, cursorObject: Readonly<Object3D>): CursorTarget | null {
+        let bestCursorTarget = currentBestCursorTarget;
+
+        const componentEqualCallback = OverlapCursorComponent._SV.componentEqualCallback;
+        if (!this._myInvalidOverlapCursorTargets.pp_hasEqual(cursorTarget, componentEqualCallback)) {
+            const isAngleValid = this._isOverlapAngleValid(cursorObject, cursorTarget.object);
+
+            if (isAngleValid) {
+                if (cursorTarget.equals(this._myLastTarget)) {
+                    bestCursorTarget = cursorTarget;
+                } else if (bestCursorTarget == null || (!cursorTarget.isSurface && bestCursorTarget.isSurface)) {
+                    if (this._isOverlapAngleValid(cursorObject, cursorTarget.object)) {
+                        bestCursorTarget = cursorTarget;
+                    }
+                }
+            } else {
+                this._myInvalidOverlapCursorTargets.push(cursorTarget);
+            }
+        }
+
+        return bestCursorTarget;
     }
 
     private static _isOverlapAngleValidSV =

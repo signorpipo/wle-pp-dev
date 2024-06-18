@@ -4,7 +4,6 @@ import { Timer } from "../cauldron/timer.js";
 export class PhysicsCollisionCollector {
 
     private readonly _myPhysXComponent: PhysXComponent;
-    private readonly _myIsTrigger: boolean;
 
     private _myActive: boolean = false;
 
@@ -38,10 +37,8 @@ export class PhysicsCollisionCollector {
 
 
 
-    constructor(physXComponent: PhysXComponent, isTrigger: boolean = false) {
+    constructor(physXComponent: PhysXComponent) {
         this._myPhysXComponent = physXComponent;
-
-        this._myIsTrigger = isTrigger;
 
         this.setActive(true);
     }
@@ -92,12 +89,7 @@ export class PhysicsCollisionCollector {
         }
     }
 
-    // Set to true only if u are going to actually update this object and don't want to lose any collision start/end events prior to updating the first time after activation
-    public setUpdateActive(active: boolean): void {
-        this._myUpdateActive = active;
-    }
-
-    // Update is not mandatory, use it only if u want to access collisions start and end
+    /** `update` is not mandatory, use it only if u want to access collisions start and end or if the phsyX is a trigger */
     public update(dt: number): void {
         if (!this._myActive) {
             return;
@@ -125,9 +117,16 @@ export class PhysicsCollisionCollector {
         this._myCollisionObjectsEndedToProcess.pp_clear();
         this._myCollisionObjectsEnded = prevCollisionObjectsEndToProcess;
 
-        if (this._myIsTrigger) {
+        if (this._myPhysXComponent.trigger) {
             this._triggerDesyncFix(dt);
         }
+    }
+
+    /** Set to `true` only if u are going to actually update this object and don't want to
+        lose any collision start or end events prior to updating the first time after activation,  
+        since on update this flag is automatically set to `true` */
+    public setUpdateActive(active: boolean): void {
+        this._myUpdateActive = active;
     }
 
     public isLogEnabled(): boolean {
@@ -177,10 +176,6 @@ export class PhysicsCollisionCollector {
     }
 
     private _onCollisionStart(type: CollisionEventType, physXComponent: PhysXComponent): boolean {
-        if (this._myLogEnabled) {
-            console.error("strt");
-        }
-
         let componentFound = false;
         for (const physXComponentToCheck of this._myCollisions) {
             if (physXComponentToCheck.equals(physXComponent)) {
@@ -224,10 +219,6 @@ export class PhysicsCollisionCollector {
     }
 
     private _onCollisionEnd(type: CollisionEventType, physXComponent: PhysXComponent): boolean {
-        if (this._myLogEnabled) {
-            console.error("END");
-        }
-
         let componentFound = false;
         for (const physXComponentToCheck of this._myCollisions) {
             if (physXComponentToCheck.equals(physXComponent)) {
