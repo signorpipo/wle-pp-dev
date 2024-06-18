@@ -47,6 +47,7 @@ export class FingerCursorComponent extends Component {
     private readonly _myFingerJointID!: TrackedHandJointID;
     private _myDefaultCursorComponent: Cursor | null = null;
     private _myHandInputSource: Readonly<XRInputSource> | null = null;
+    private _myForceRefreshActiveCursor: boolean = true;
 
     private readonly _myCursorParentObject!: Object3D;
     private readonly _myActualCursorParentObject!: Object3D;
@@ -119,6 +120,8 @@ export class FingerCursorComponent extends Component {
             _myCollisionSizeMultiplierOnOverlap: this._myCollisionSizeMultiplierOnOverlap,
             _myValidOverlapAngleFromTargetForward: this._myValidOverlapAngleFromTargetForward,
         })!;
+
+        this._myCursorParentObject.pp_setActive(false);
     }
 
     public override update(dt: number): void {
@@ -127,7 +130,7 @@ export class FingerCursorComponent extends Component {
     }
 
     public override onActivate(): void {
-        this._myCursorParentObject.pp_setActive(true);
+        this._myForceRefreshActiveCursor = true;
     }
 
     public override onDeactivate(): void {
@@ -139,16 +142,16 @@ export class FingerCursorComponent extends Component {
     private _updateHand(): void {
         const newHandInputSource = InputUtils.getInputSource(this._myHandednessType, InputSourceType.TRACKED_HAND, this.engine);
 
-        if (newHandInputSource != null && this._myHandInputSource == null) {
+        if (newHandInputSource != null && (this._myHandInputSource == null || this._myForceRefreshActiveCursor)) {
             if (this._myDefaultCursorComponent != null) {
                 this._myDefaultCursorComponent.active = false;
-
-                this._myCursorParentObject.pp_setActive(true);
             }
-        } else if (newHandInputSource == null && this._myHandInputSource != null) {
-            if (this._myDefaultCursorComponent != null) {
-                this._myCursorParentObject.pp_setActive(false);
 
+            this._myCursorParentObject.pp_setActive(true);
+        } else if (newHandInputSource == null && (this._myHandInputSource != null || this._myForceRefreshActiveCursor)) {
+            this._myCursorParentObject.pp_setActive(false);
+
+            if (this._myDefaultCursorComponent != null) {
                 this._myDefaultCursorComponent.active = true;
             }
         }
