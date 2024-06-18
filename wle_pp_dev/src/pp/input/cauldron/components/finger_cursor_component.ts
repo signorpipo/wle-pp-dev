@@ -110,6 +110,7 @@ export class FingerCursorComponent extends Component {
                 "shape": Shape.Sphere,
                 "extents": vec3_create(this._myCollisionSize, this._myCollisionSize, this._myCollisionSize),
                 "kinematic": true,
+                "trigger": true,
                 "groupsMask": physicsFlags.getMask()
             })!;
 
@@ -152,10 +153,9 @@ export class FingerCursorComponent extends Component {
                     if (collision.group & this._myCollisionComponent!.group) {
                         const object = collision.object;
                         const target = object.pp_getComponent(CursorTarget);
-                        if (target && (collisionTarget == null || !target.isSurface)) {
-                            collisionTarget = target;
-                            if (!target.isSurface) {
-                                break;
+                        if (target != null) {
+                            if (collisionTarget == null || (!target.isSurface && collisionTarget.isSurface) || target.equals(this._myLastTarget)) {
+                                collisionTarget = target;
                             }
                         }
                     }
@@ -175,10 +175,9 @@ export class FingerCursorComponent extends Component {
                 let collisionTarget = null;
                 for (const collision of collisions) {
                     const target = collision.object.pp_getComponent(CursorTarget);
-                    if (target && (collisionTarget == null || !target.isSurface)) {
-                        collisionTarget = target;
-                        if (!target.isSurface) {
-                            break;
+                    if (target != null) {
+                        if (collisionTarget == null || (!target.isSurface && collisionTarget.isSurface) || target.equals(this._myLastTarget)) {
+                            collisionTarget = target;
                         }
                     }
                 }
