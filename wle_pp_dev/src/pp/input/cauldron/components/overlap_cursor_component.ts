@@ -1,9 +1,9 @@
 import { CollisionComponent, Component, Object3D, PhysXComponent } from "@wonderlandengine/api";
-import { Cursor, CursorTarget } from "@wonderlandengine/components";
-import { PhysicsCollisionCollector } from "../../../cauldron/physics/physics_collision_collector.js";
 import { property } from "@wonderlandengine/api/decorators.js";
-import { vec3_create } from "wle-pp/plugin/js/extensions/array/vec_create_extension.js";
+import { Cursor, CursorTarget } from "@wonderlandengine/components";
 import { Vector3 } from "wle-pp/cauldron/type_definitions/array_type_definitions.js";
+import { vec3_create } from "wle-pp/plugin/js/extensions/array/vec_create_extension.js";
+import { PhysicsCollisionCollector } from "../../../cauldron/physics/physics_collision_collector.js";
 
 /** #WARN This class is not actually a `Cursor`, but since it triggers `CursorTarget` emitters, it needs to forward a `Cursor` to them  
     As of now, this class forward a fake cursor as `Cursor`, which is a plain object with just the info usually need, like the `handedness` value */
@@ -20,6 +20,9 @@ export class OverlapCursorComponent extends Component {
      */
     @property.float(1)
     private readonly _myCollisionSizeMultiplierOnOverlap!: number;
+
+    @property.float(180)
+    private readonly _myValidOverlapAngleFromTargetForward!: number;
 
     private _myLastTarget: CursorTarget | null = null;
 
@@ -78,8 +81,13 @@ export class OverlapCursorComponent extends Component {
                     const object = collision.object;
                     const target = object.pp_getComponent(CursorTarget);
                     if (target != null) {
-                        if (collisionTarget == null || (!target.isSurface && collisionTarget.isSurface) || target.equals(this._myLastTarget)) {
+                        if (target.equals(this._myLastTarget)) {
                             collisionTarget = target;
+                            break;
+                        } else if (collisionTarget == null || (!target.isSurface && collisionTarget.isSurface)) {
+                            if (this._isOverlapAngleValid(this._myCollisionComponent.object, target.object)) {
+                                collisionTarget = target;
+                            }
                         }
                     }
                 }
@@ -98,12 +106,17 @@ export class OverlapCursorComponent extends Component {
 
         if (this._myPhysicsCollisionCollector != null) {
             const collisions = this._myPhysicsCollisionCollector!.getCollisions();
-            let collisionTarget = null;
+            let collisionTarget: CursorTarget | null = null;
             for (const collision of collisions) {
                 const target = collision.object.pp_getComponent(CursorTarget);
                 if (target != null) {
-                    if (collisionTarget == null || (!target.isSurface && collisionTarget.isSurface) || target.equals(this._myLastTarget)) {
+                    if (target.equals(this._myLastTarget)) {
                         collisionTarget = target;
+                        break;
+                    } else if (collisionTarget == null || (!target.isSurface && collisionTarget.isSurface)) {
+                        if (this._isOverlapAngleValid(this._myPhysXComponent!.object, target.object)) {
+                            collisionTarget = target;
+                        }
                     }
                 }
             }
@@ -181,5 +194,32 @@ export class OverlapCursorComponent extends Component {
 
             this._myLastTarget = null;
         }
+    }
+
+    private static _isOverlapAngleValidSV =
+        {
+            cursorPosition: vec3_create(),
+            targetPosition: vec3_create(),
+            targetForward: vec3_create(),
+            directionToCursor: vec3_create()
+        };
+    private _isOverlapAngleValid(cursorObject: Readonly<Object3D>, targetObject: Readonly<Object3D>): boolean {
+        if (this._myValidOverlapAngleFromTargetForward == 180) {
+            return true;
+        }
+
+        const cursorPosition = OverlapCursorComponent._isOverlapAngleValidSV.cursorPosition;
+        const targetPosition = OverlapCursorComponent._isOverlapAngleValidSV.targetPosition;
+        const targetForward = OverlapCursorComponent._isOverlapAngleValidSV.targetForward;
+        cursorObject.pp_getPosition(cursorPosition);
+        targetObject.pp_getPosition(targetPosition);
+        targetObject.pp_getForward(targetForward);
+
+        const directionToCursor = OverlapCursorComponent._isOverlapAngleValidSV.directionToCursor;
+        cursorPosition.vec3_sub(targetPosition, directionToCursor).vec3_normalize(directionToCursor);
+
+        const overlapAngle = directionToCursor.vec3_angle(targetForward);
+
+        return overlapAngle <= this._myValidOverlapAngleFromTargetForward;
     }
 }

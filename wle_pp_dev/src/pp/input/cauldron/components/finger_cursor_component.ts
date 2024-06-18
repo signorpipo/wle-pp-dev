@@ -31,6 +31,9 @@ export class FingerCursorComponent extends Component {
     @property.float(1.25)
     private readonly _myCollisionSizeMultiplierOnOverlap!: number;
 
+    @property.float(80)
+    private readonly _myValidOverlapAngleFromTargetForward!: number;
+
     @property.object()
     private readonly _myCursorPointerObject!: Object3D;
 
@@ -113,7 +116,8 @@ export class FingerCursorComponent extends Component {
         }
 
         (this._myOverlapCursorComponent as OverlapCursorComponent) = this._myActualCursorParentObject.pp_addComponent(OverlapCursorComponent, {
-            _myCollisionSizeMultiplierOnOverlap: this._myCollisionSizeMultiplierOnOverlap
+            _myCollisionSizeMultiplierOnOverlap: this._myCollisionSizeMultiplierOnOverlap,
+            _myValidOverlapAngleFromTargetForward: this._myValidOverlapAngleFromTargetForward,
         })!;
     }
 
