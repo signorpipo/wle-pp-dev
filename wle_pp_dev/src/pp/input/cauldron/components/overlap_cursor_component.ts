@@ -108,7 +108,7 @@ export class OverlapCursorComponent extends Component {
             }
         }
 
-        if (this._myInvalidOverlapCursorTargets.length > 0 && processedCursorTargets.length > 0) {
+        if (this._myInvalidOverlapCursorTargets.length > 0) {
             const componentEqualCallback = OverlapCursorComponent._SV.componentEqualCallback;
             this._myInvalidOverlapCursorTargets.pp_removeAll((elementToCheck) => {
                 return !processedCursorTargets.pp_hasEqual(elementToCheck, componentEqualCallback);
@@ -204,20 +204,20 @@ export class OverlapCursorComponent extends Component {
     private _pickBestCursorTarget(currentBestCursorTarget: CursorTarget | null, cursorTarget: CursorTarget, cursorObject: Readonly<Object3D>): CursorTarget | null {
         let bestCursorTarget = currentBestCursorTarget;
 
-        const componentEqualCallback = OverlapCursorComponent._SV.componentEqualCallback;
-        if (!this._myInvalidOverlapCursorTargets.pp_hasEqual(cursorTarget, componentEqualCallback)) {
-            const isAngleValid = this._isOverlapAngleValid(cursorObject, cursorTarget.object);
+        if (cursorTarget.equals(this._myLastTarget)) {
+            bestCursorTarget = cursorTarget;
+        } else {
+            const componentEqualCallback = OverlapCursorComponent._SV.componentEqualCallback;
+            if (!this._myInvalidOverlapCursorTargets.pp_hasEqual(cursorTarget, componentEqualCallback)) {
+                const isAngleValid = this._isOverlapAngleValid(cursorObject, cursorTarget.object);
 
-            if (isAngleValid) {
-                if (cursorTarget.equals(this._myLastTarget)) {
-                    bestCursorTarget = cursorTarget;
-                } else if (bestCursorTarget == null || (!cursorTarget.isSurface && bestCursorTarget.isSurface)) {
-                    if (this._isOverlapAngleValid(cursorObject, cursorTarget.object)) {
+                if (isAngleValid) {
+                    if (bestCursorTarget == null || (!cursorTarget.isSurface && bestCursorTarget.isSurface)) {
                         bestCursorTarget = cursorTarget;
                     }
+                } else {
+                    this._myInvalidOverlapCursorTargets.push(cursorTarget);
                 }
-            } else {
-                this._myInvalidOverlapCursorTargets.push(cursorTarget);
             }
         }
 
