@@ -37,6 +37,11 @@ export class EasyObjectTuner {
         if (this._mySetAsWidgetCurrentVariable) {
             EasyTuneUtils.setWidgetCurrentVariable(this._myEasyTuneVariableName, this._myEngine);
         }
+
+        if (this._myEasyObject != null) {
+            let value = this._getObjectValue(this._myEasyObject);
+            Globals.getEasyTuneVariables(this._myEngine).set(this._myEasyTuneVariableName, value, true);
+        }
     }
 
     update(dt) {
@@ -47,7 +52,7 @@ export class EasyObjectTuner {
 
             if (this._myPrevEasyObject != this._myEasyObject) {
                 this._myPrevEasyObject = this._myEasyObject;
-                if (this._myEasyObject) {
+                if (this._myEasyObject != null) {
                     let value = this._getObjectValue(this._myEasyObject);
                     Globals.getEasyTuneVariables(this._myEngine).set(this._myEasyTuneVariableName, value, true);
                 } else {
@@ -56,7 +61,7 @@ export class EasyObjectTuner {
                 }
             }
 
-            if (this._myEasyObject) {
+            if (this._myEasyObject != null) {
                 this._updateObjectValue(this._myEasyObject, Globals.getEasyTuneVariables(this._myEngine).get(this._myEasyTuneVariableName));
             }
         }
