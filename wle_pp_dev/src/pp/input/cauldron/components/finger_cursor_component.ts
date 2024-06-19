@@ -31,7 +31,7 @@ export class FingerCursorComponent extends Component {
     @property.float(1.25)
     private readonly _myCollisionSizeMultiplierOnOverlap!: number;
 
-    @property.float(80)
+    @property.float(90)
     private readonly _myValidOverlapAngleFromTargetForward!: number;
 
     @property.object()

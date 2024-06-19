@@ -33,6 +33,7 @@ export class OverlapCursorComponent extends Component {
     private readonly _myCollisionComponentExtents: Vector3 = vec3_create();
     private readonly _myFakeCursor!: Cursor;
 
+    private readonly _myCursorPositionHistory: Vector3[] = [];
     private readonly _myInvalidOverlapCursorTargets: CursorTarget[] = [];
 
     private _myDoubleClickTimer: number = 0;
@@ -48,13 +49,16 @@ export class OverlapCursorComponent extends Component {
     };
 
     public override init(): void {
-
         const fakeCursor = {
             handedness: 3,
             object: this.object
         };
 
         (this._myFakeCursor as Cursor) = fakeCursor as unknown as Cursor;
+
+        for (let i = 0; i < 5; i++) {
+            this._myCursorPositionHistory.push(vec3_create());
+        }
     }
 
     public override start(): void {
@@ -80,6 +84,11 @@ export class OverlapCursorComponent extends Component {
             this._myTripleClickTimer -= dt;
         }
 
+        for (let i = this._myCursorPositionHistory.length - 1; i > 0; i--) {
+            this._myCursorPositionHistory[i].vec3_copy(this._myCursorPositionHistory[i - 1]);
+        }
+        this.object.pp_getPosition(this._myCursorPositionHistory[0]);
+
         let bestCursorTarget = null;
         const processedCursorTargets: CursorTarget[] = [];
 
@@ -90,7 +99,7 @@ export class OverlapCursorComponent extends Component {
                     const target = collision.object.pp_getComponent(CursorTarget);
                     if (target != null) {
                         processedCursorTargets.push(target);
-                        bestCursorTarget = this._pickBestCursorTarget(bestCursorTarget, target, this._myCollisionComponent.object);
+                        bestCursorTarget = this._pickBestCursorTarget(bestCursorTarget, target);
                     }
                 }
             }
@@ -103,7 +112,7 @@ export class OverlapCursorComponent extends Component {
                 const target = collision.object.pp_getComponent(CursorTarget);
                 if (target != null) {
                     processedCursorTargets.push(target);
-                    bestCursorTarget = this._pickBestCursorTarget(bestCursorTarget, target, this._myPhysXComponent!.object);
+                    bestCursorTarget = this._pickBestCursorTarget(bestCursorTarget, target);
                 }
             }
         }
@@ -201,7 +210,7 @@ export class OverlapCursorComponent extends Component {
         }
     }
 
-    private _pickBestCursorTarget(currentBestCursorTarget: CursorTarget | null, cursorTarget: CursorTarget, cursorObject: Readonly<Object3D>): CursorTarget | null {
+    private _pickBestCursorTarget(currentBestCursorTarget: CursorTarget | null, cursorTarget: CursorTarget): CursorTarget | null {
         let bestCursorTarget = currentBestCursorTarget;
 
         if (cursorTarget.equals(this._myLastTarget)) {
@@ -209,7 +218,7 @@ export class OverlapCursorComponent extends Component {
         } else {
             const componentEqualCallback = OverlapCursorComponent._SV.componentEqualCallback;
             if (!this._myInvalidOverlapCursorTargets.pp_hasEqual(cursorTarget, componentEqualCallback)) {
-                const isAngleValid = this._isOverlapAngleValid(cursorObject, cursorTarget.object);
+                const isAngleValid = this._isOverlapAngleValid(cursorTarget.object);
 
                 if (isAngleValid) {
                     if (bestCursorTarget == null || (!cursorTarget.isSurface && bestCursorTarget.isSurface)) {
@@ -231,20 +240,18 @@ export class OverlapCursorComponent extends Component {
             targetForward: vec3_create(),
             directionToCursor: vec3_create()
         };
-    private _isOverlapAngleValid(cursorObject: Readonly<Object3D>, targetObject: Readonly<Object3D>): boolean {
+    private _isOverlapAngleValid(targetObject: Readonly<Object3D>): boolean {
         if (this._myValidOverlapAngleFromTargetForward == 180) {
             return true;
         }
 
-        const cursorPosition = OverlapCursorComponent._isOverlapAngleValidSV.cursorPosition;
         const targetPosition = OverlapCursorComponent._isOverlapAngleValidSV.targetPosition;
         const targetForward = OverlapCursorComponent._isOverlapAngleValidSV.targetForward;
-        cursorObject.pp_getPosition(cursorPosition);
         targetObject.pp_getPosition(targetPosition);
         targetObject.pp_getForward(targetForward);
 
         const directionToCursor = OverlapCursorComponent._isOverlapAngleValidSV.directionToCursor;
-        cursorPosition.vec3_sub(targetPosition, directionToCursor).vec3_normalize(directionToCursor);
+        this._myCursorPositionHistory.pp_last()!.vec3_sub(targetPosition, directionToCursor).vec3_normalize(directionToCursor);
 
         const overlapAngle = directionToCursor.vec3_angle(targetForward);
 
