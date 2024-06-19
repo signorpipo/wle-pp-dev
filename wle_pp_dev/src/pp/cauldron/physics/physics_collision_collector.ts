@@ -28,14 +28,13 @@ export class PhysicsCollisionCollector {
     private _myCollisionObjectsEndedToProcess: Object3D[] = [];
 
     private _myUpdateActive: boolean = false;
+    private _myCollisionStartEndProcessingActive: boolean = true;
 
     private readonly _myTriggerDesyncFixDelay: Timer = new Timer(0.1);
 
     private _myLogEnabled: boolean = false;
 
     private _myDestroyed: boolean = false;
-
-
 
     constructor(physXComponent: PhysXComponent) {
         this._myPhysXComponent = physXComponent;
@@ -97,25 +96,27 @@ export class PhysicsCollisionCollector {
 
         this._myUpdateActive = true;
 
-        const prevCollisionsStartToProcess = this._myCollisionsStartedToProcess;
-        this._myCollisionsStartedToProcess = this._myCollisionsStarted;
-        this._myCollisionsStartedToProcess.pp_clear();
-        this._myCollisionsStarted = prevCollisionsStartToProcess;
+        if (this._myCollisionStartEndProcessingActive) {
+            const prevCollisionsStartToProcess = this._myCollisionsStartedToProcess;
+            this._myCollisionsStartedToProcess = this._myCollisionsStarted;
+            this._myCollisionsStartedToProcess.pp_clear();
+            this._myCollisionsStarted = prevCollisionsStartToProcess;
 
-        const prevCollisionObjectsStartToProcess = this._myCollisionObjectsStartedToProcess;
-        this._myCollisionObjectsStartedToProcess = this._myCollisionObjectsStarted;
-        this._myCollisionObjectsStartedToProcess.pp_clear();
-        this._myCollisionObjectsStarted = prevCollisionObjectsStartToProcess;
+            const prevCollisionObjectsStartToProcess = this._myCollisionObjectsStartedToProcess;
+            this._myCollisionObjectsStartedToProcess = this._myCollisionObjectsStarted;
+            this._myCollisionObjectsStartedToProcess.pp_clear();
+            this._myCollisionObjectsStarted = prevCollisionObjectsStartToProcess;
 
-        const prevCollisionsEndToProcess = this._myCollisionsEndedToProcess;
-        this._myCollisionsEndedToProcess = this._myCollisionsEnded;
-        this._myCollisionsEndedToProcess.pp_clear();
-        this._myCollisionsEnded = prevCollisionsEndToProcess;
+            const prevCollisionsEndToProcess = this._myCollisionsEndedToProcess;
+            this._myCollisionsEndedToProcess = this._myCollisionsEnded;
+            this._myCollisionsEndedToProcess.pp_clear();
+            this._myCollisionsEnded = prevCollisionsEndToProcess;
 
-        const prevCollisionObjectsEndToProcess = this._myCollisionObjectsEndedToProcess;
-        this._myCollisionObjectsEndedToProcess = this._myCollisionObjectsEnded;
-        this._myCollisionObjectsEndedToProcess.pp_clear();
-        this._myCollisionObjectsEnded = prevCollisionObjectsEndToProcess;
+            const prevCollisionObjectsEndToProcess = this._myCollisionObjectsEndedToProcess;
+            this._myCollisionObjectsEndedToProcess = this._myCollisionObjectsEnded;
+            this._myCollisionObjectsEndedToProcess.pp_clear();
+            this._myCollisionObjectsEnded = prevCollisionObjectsEndToProcess;
+        }
 
         if (this._myPhysXComponent.trigger) {
             this._triggerDesyncFix(dt);
@@ -127,6 +128,12 @@ export class PhysicsCollisionCollector {
         since on update this flag is automatically set to `true` */
     public setUpdateActive(active: boolean): void {
         this._myUpdateActive = active;
+    }
+
+    /** If this is set to `false` you won't be able to get the collision that just started or ended, but just the current colliding ones  
+        Keep in mind that you also need to update the collector for this to work */
+    public setCollisionStartEndProcessingActive(active: boolean): void {
+        this._myCollisionStartEndProcessingActive = active;
     }
 
     public isLogEnabled(): boolean {
@@ -192,7 +199,7 @@ export class PhysicsCollisionCollector {
             this._myCollisions.push(physXComponent);
             this._myCollisionObjects.push(physXComponent.object);
 
-            if (this._myUpdateActive) {
+            if (this._myUpdateActive && this._myCollisionStartEndProcessingActive) {
                 this._myCollisionsStartedToProcess.push(physXComponent);
                 this._myCollisionObjectsStartedToProcess.push(physXComponent.object);
 
@@ -241,7 +248,7 @@ export class PhysicsCollisionCollector {
                 this._myCollisionObjects.pp_removeIndex(indexesToRemove[i]);
             }
 
-            if (this._myUpdateActive) {
+            if (this._myUpdateActive && this._myCollisionStartEndProcessingActive) {
                 this._myCollisionsEndedToProcess.push(physXComponent);
                 this._myCollisionObjectsEndedToProcess.push(physXComponent.object);
 
