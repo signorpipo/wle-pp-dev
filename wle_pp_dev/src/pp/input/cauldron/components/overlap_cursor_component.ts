@@ -1,9 +1,9 @@
 import { CollisionComponent, Component, Object3D, PhysXComponent } from "@wonderlandengine/api";
 import { property } from "@wonderlandengine/api/decorators.js";
 import { Cursor, CursorTarget } from "@wonderlandengine/components";
-import { Vector3 } from "wle-pp/cauldron/type_definitions/array_type_definitions.js";
-import { vec3_create } from "wle-pp/plugin/js/extensions/array/vec_create_extension.js";
 import { PhysicsCollisionCollector } from "../../../cauldron/physics/physics_collision_collector.js";
+import { Vector3 } from "../../../cauldron/type_definitions/array_type_definitions.js";
+import { vec3_create } from "../../../plugin/js/extensions/array/vec_create_extension.js";
 
 /** #WARN This class is not actually a `Cursor`, but since it triggers `CursorTarget` emitters, it needs to forward a `Cursor` to them  
     As of now, this class forward a fake cursor as `Cursor`, which is a plain object with just the info usually need, like the `handedness` value */
