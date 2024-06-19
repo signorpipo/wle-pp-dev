@@ -169,16 +169,18 @@ export class PhysicsCollisionCollector {
     }
 
     private _onCollision(type: CollisionEventType, physXComponent: PhysXComponent): void {
-        let collisionValid = false;
-
-        if (type == CollisionEventType.Touch || type == CollisionEventType.TriggerTouch) {
-            collisionValid = this._onCollisionStart(type, physXComponent);
-        } else if (type == CollisionEventType.TouchLost || type == CollisionEventType.TriggerTouchLost) {
-            collisionValid = this._onCollisionEnd(type, physXComponent);
-        }
+        let collisionValid = this._areLayerFlagsMatching(physXComponent);
 
         if (collisionValid) {
-            this._myCollisionEmitter.notify(this._myPhysXComponent, physXComponent, type);
+            if (type == CollisionEventType.Touch || type == CollisionEventType.TriggerTouch) {
+                collisionValid = this._onCollisionStart(type, physXComponent);
+            } else if (type == CollisionEventType.TouchLost || type == CollisionEventType.TriggerTouchLost) {
+                collisionValid = this._onCollisionEnd(type, physXComponent);
+            }
+
+            if (collisionValid) {
+                this._myCollisionEmitter.notify(this._myPhysXComponent, physXComponent, type);
+            }
         }
     }
 
@@ -272,6 +274,14 @@ export class PhysicsCollisionCollector {
         } else {
             return false;
         }
+    }
+
+    private _areLayerFlagsMatching(physXComponent: PhysXComponent): boolean {
+        if (!this._myPhysXComponent.trigger) {
+            return true;
+        }
+
+        return (this._myPhysXComponent.groupsMask & physXComponent.groupsMask) > 0;
     }
 
     private static readonly _triggerDesyncFixSV =
