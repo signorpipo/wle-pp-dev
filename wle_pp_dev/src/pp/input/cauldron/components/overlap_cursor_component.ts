@@ -154,7 +154,9 @@ export class OverlapCursorComponent extends Component {
             if (this._myPhysXComponent != null) {
                 this._myPhysXComponent.extents = this._myPhysXComponentExtents.vec3_scale(this._myCollisionSizeMultiplierOnOverlap);
 
+                this._myPhysicsCollisionCollector!.setActive(false);
                 this._myPhysXComponent.active = false;
+                this._myPhysicsCollisionCollector!.setActive(true);
                 this._myPhysXComponent.active = true;
             }
 
@@ -173,7 +175,9 @@ export class OverlapCursorComponent extends Component {
                 if (this._myPhysXComponent != null) {
                     this._myPhysXComponent.extents = this._myPhysXComponentExtents;
 
+                    this._myPhysicsCollisionCollector!.setActive(false);
                     this._myPhysXComponent.active = false;
+                    this._myPhysicsCollisionCollector!.setActive(true);
                     this._myPhysXComponent.active = true;
                 }
 
