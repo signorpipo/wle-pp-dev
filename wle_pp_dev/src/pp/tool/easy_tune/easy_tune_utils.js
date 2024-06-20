@@ -40,12 +40,6 @@ export function importVariables(fileURL = null, resetVariablesDefaultValueOnImpo
 
                     console.log("Easy Tune Variables Imported from: clipboard");
                     console.log(clipboard);
-                }, function () {
-                    if (onFailureCallback != null) {
-                        onFailureCallback();
-                    }
-
-                    console.error("An error occurred while importing the easy tune variables from: clipboard");
                 }
             ).catch(function (reason) {
                 if (onFailureCallback != null) {
@@ -74,16 +68,15 @@ export function importVariables(fileURL = null, resetVariablesDefaultValueOnImpo
 
                             console.log("Easy Tune Variables Imported from:", replacedFileURL);
                             console.log(text);
-                        },
-                        function (response) {
-                            if (onFailureCallback != null) {
-                                onFailureCallback();
-                            }
-
-                            console.error("An error occurred while importing the easy tune variables from:", replacedFileURL);
-                            console.error(response);
                         }
-                    );
+                    ).catch(function (reason) {
+                        if (onFailureCallback != null) {
+                            onFailureCallback();
+                        }
+
+                        console.error("An error occurred while importing the easy tune variables from:", replacedFileURL);
+                        console.error(reason);
+                    });
                 } else {
                     if (onFailureCallback != null) {
                         onFailureCallback();
@@ -92,14 +85,6 @@ export function importVariables(fileURL = null, resetVariablesDefaultValueOnImpo
                     console.error("An error occurred while importing the easy tune variables from:", replacedFileURL);
                     console.error(response);
                 }
-            },
-            function (response) {
-                if (onFailureCallback != null) {
-                    onFailureCallback();
-                }
-
-                console.error("An error occurred while importing the easy tune variables from:", replacedFileURL);
-                console.error(response);
             }
         ).catch(function (reason) {
             if (onFailureCallback != null) {
@@ -116,8 +101,72 @@ export function importVariables(fileURL = null, resetVariablesDefaultValueOnImpo
 
 // fileURL can contain parameters inside brackets, like {param}
 // Those parameters will be replaced with the same one on the current page url, like www.currentpage.com/?param=2
-export function exportVariables(fileURL = null, onSuccessCallback = null, onFailureCallback = null, engine = Globals.getMainEngine()) {
+export function getImportVariablesJSON(fileURL = null, onSuccessCallback = null, onFailureCallback = null, engine = Globals.getMainEngine()) {
+    if (fileURL == null || fileURL.length == 0) {
+        if (navigator.clipboard) {
+            navigator.clipboard.readText().then(
+                function (clipboard) {
+                    if (onSuccessCallback != null) {
+                        onSuccessCallback(clipboard);
+                    }
+                }
+            ).catch(function (reason) {
+                if (onFailureCallback != null) {
+                    onFailureCallback();
+                }
+            });
+        }
+    } else {
+        let replacedFileURL = _importExportVariablesReplaceFileURLParams(fileURL, engine);
+
+        fetch(replacedFileURL).then(
+            function (response) {
+                if (response.ok) {
+                    response.text().then(
+                        function (text) {
+                            if (onSuccessCallback != null) {
+                                onSuccessCallback(text);
+                            }
+                        }
+                    ).catch(function (reason) {
+                        if (onFailureCallback != null) {
+                            onFailureCallback();
+                        }
+                    });
+                } else {
+                    if (onFailureCallback != null) {
+                        onFailureCallback();
+                    }
+                }
+            }
+        ).catch(function (reason) {
+            if (onFailureCallback != null) {
+                onFailureCallback();
+            }
+        });
+    }
+}
+
+// fileURL can contain parameters inside brackets, like {param}
+// Those parameters will be replaced with the same one on the current page url, like www.currentpage.com/?param=2
+export function exportVariables(fileURL = null, variablesToKeep = null, onSuccessCallback = null, onFailureCallback = null, engine = Globals.getMainEngine()) {
     let jsonVariables = Globals.getEasyTuneVariables(engine).toJSON();
+
+    // Useful if some variables are not in the json export and therefore would not be there anymore
+    if (variablesToKeep != null) {
+        try {
+            const variablesToExport = JSON.parse(jsonVariables);
+            for (const variableName in variablesToKeep) {
+                if (!(variableName in variablesToExport)) {
+                    variablesToExport[variableName] = variablesToKeep[variableName];
+                }
+            }
+
+            jsonVariables = JSON.stringify(variablesToExport);
+        } catch (error) {
+            // Do nothing
+        }
+    }
 
     if (fileURL == null || fileURL.length == 0) {
         if (navigator.clipboard) {
@@ -267,6 +316,7 @@ export let EasyTuneUtils = {
     setWidgetCurrentVariable,
     refreshWidget,
     importVariables,
+    getImportVariablesJSON,
     exportVariables,
     setAutoImportEnabledDefaultValue,
     setManualImportEnabledDefaultValue,

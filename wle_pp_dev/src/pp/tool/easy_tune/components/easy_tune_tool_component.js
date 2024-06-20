@@ -16,7 +16,8 @@ export class EasyTuneToolComponent extends Component {
         _myVariablesImportURL: Property.string(""),   // The URL can contain parameters inside brackets, like {param}
         _myVariablesExportURL: Property.string(""),   // Those parameters will be replaced with the same one on the current page url, like www.currentpage.com/?param=2
         _myImportVariablesOnStart: Property.bool(false),
-        _myResetVariablesDefaultValueOnImport: Property.bool(false)
+        _myResetVariablesDefaultValueOnImport: Property.bool(false),
+        _myKeepImportVariablesOnExport: Property.bool(true)
     };
 
     init() {
@@ -55,7 +56,22 @@ export class EasyTuneToolComponent extends Component {
                 EasyTuneUtils.importVariables(this._myVariablesImportURL, this._myResetVariablesDefaultValueOnImport, true, onSuccessCallback, onFailureCallback, this.engine);
             }.bind(this);
             params.myVariablesExportCallback = function (onSuccessCallback, onFailureCallback) {
-                EasyTuneUtils.exportVariables(this._myVariablesExportURL, onSuccessCallback, onFailureCallback, this.engine);
+                if (this._myKeepImportVariablesOnExport) {
+                    EasyTuneUtils.getImportVariablesJSON(this._myVariablesImportURL, (variablesToKeepJSON) => {
+                        let variablesToKeep = null;
+                        try {
+                            variablesToKeep = JSON.parse(variablesToKeepJSON);
+                        } catch (error) {
+                            // Do nothing
+                        }
+
+                        EasyTuneUtils.exportVariables(this._myVariablesExportURL, variablesToKeep, onSuccessCallback, onFailureCallback, this.engine);
+                    }, () => {
+                        EasyTuneUtils.exportVariables(this._myVariablesExportURL, undefined, onSuccessCallback, onFailureCallback, this.engine);
+                    }, this.engine);
+                } else {
+                    EasyTuneUtils.exportVariables(this._myVariablesExportURL, this._myKeepImportVariablesOnExport, onSuccessCallback, onFailureCallback, this.engine);
+                }
             }.bind(this);
 
             this._myWidget.start(this.object, params, Globals.getEasyTuneVariables(this.engine));
