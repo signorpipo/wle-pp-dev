@@ -26,6 +26,10 @@ export class EasyLightAttenuation extends EasyObjectTuner {
         return 0;
     }
 
+    _areValueEqual(first, second) {
+        return first == second;
+    }
+
     _updateObjectValue(object, value) {
         let attenuation = value;
 

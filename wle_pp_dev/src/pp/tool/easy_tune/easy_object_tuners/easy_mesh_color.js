@@ -65,6 +65,10 @@ export class EasyMeshColor extends EasyObjectTuner {
         return vec4_create();
     }
 
+    _areValueEqual(first, second) {
+        return first.vec_equals(second);
+    }
+
     _updateObjectValue(object, value) {
         let color = value;
 

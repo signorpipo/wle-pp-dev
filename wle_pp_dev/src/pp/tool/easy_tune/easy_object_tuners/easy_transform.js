@@ -26,6 +26,10 @@ export class EasyTransform extends EasyObjectTuner {
         return mat4_create();
     }
 
+    _areValueEqual(first, second) {
+        return first.vec_equals(second);
+    }
+
     _updateObjectValue(object, value) {
         if (this._myLocal) {
             object.pp_setTransformLocal(value);

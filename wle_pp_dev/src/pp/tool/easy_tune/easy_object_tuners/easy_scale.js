@@ -26,6 +26,10 @@ export class EasyScale extends EasyObjectTuner {
         return vec3_create(1, 1, 1);
     }
 
+    _areValueEqual(first, second) {
+        return first.vec3_equal(second);
+    }
+
     _updateObjectValue(object, value) {
         if (this._myLocal) {
             object.pp_setScaleLocal(value);

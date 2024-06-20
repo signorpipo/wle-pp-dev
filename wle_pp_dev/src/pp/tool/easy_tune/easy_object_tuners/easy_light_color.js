@@ -50,6 +50,10 @@ export class EasyLightColor extends EasyObjectTuner {
         return vec3_create();
     }
 
+    _areValueEqual(first, second) {
+        return first.vec3_equal(second);
+    }
+
     _updateObjectValue(object, value) {
         let color = value;
 
