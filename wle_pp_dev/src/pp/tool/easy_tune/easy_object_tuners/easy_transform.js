@@ -4,10 +4,13 @@ import { EasyObjectTuner } from "./easy_object_tuner.js";
 
 export class EasyTransform extends EasyObjectTuner {
 
-    constructor(local, scaleAsOne, object, variableName, setAsWidgetCurrentVariable, useTuneTarget, engine) {
+    constructor(local, scaleAsOne, positionStepPerSecond, rotationStepPerSecond, scaleStepPerSecond, object, variableName, setAsWidgetCurrentVariable, useTuneTarget, engine) {
         super(object, variableName, setAsWidgetCurrentVariable, useTuneTarget, engine);
         this._myLocal = local;
         this._myScaleAsOne = scaleAsOne;
+        this._myPositionStepPerSecond = positionStepPerSecond;
+        this._myRotationStepPerSecond = rotationStepPerSecond;
+        this._myScaleStepPerSecond = scaleStepPerSecond;
     }
 
     _getVariableNamePrefix() {
@@ -15,7 +18,7 @@ export class EasyTransform extends EasyObjectTuner {
     }
 
     _createEasyTuneVariable(variableName) {
-        return new EasyTuneTransform(variableName, this._getDefaultValue(), null, true, this._myScaleAsOne, 3, undefined, undefined, undefined, undefined, this._myEngine);
+        return new EasyTuneTransform(variableName, this._getDefaultValue(), null, true, this._myScaleAsOne, 3, this._myPositionStepPerSecond, this._myRotationStepPerSecond, this._myScaleStepPerSecond, undefined, this._myEngine);
     }
 
     _getObjectValue(object) {

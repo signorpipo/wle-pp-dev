@@ -10,14 +10,17 @@ export class EasyTransformComponent extends Component {
         _mySetAsWidgetCurrentVariable: Property.bool(false),
         _myUseTuneTarget: Property.bool(false),
         _myLocal: Property.bool(true),
-        _myScaleAsOne: Property.bool(true) // Edit all scale values together
+        _myScaleAsOne: Property.bool(true), // Edit all scale values together
+        _myPositionStepPerSecond: Property.float(1),
+        _myRotationStepPerSecond: Property.float(50),
+        _myScaleStepPerSecond: Property.float(1)
     };
 
     init() {
         this._myEasyObjectTuner = null;
 
         if (Globals.isToolEnabled(this.engine)) {
-            this._myEasyObjectTuner = new EasyTransform(this._myLocal, this._myScaleAsOne, this.object, this._myVariableName, this._mySetAsWidgetCurrentVariable, this._myUseTuneTarget);
+            this._myEasyObjectTuner = new EasyTransform(this._myLocal, this._myScaleAsOne, this._myPositionStepPerSecond, this._myRotationStepPerSecond, this._myScaleStepPerSecond, this.object, this._myVariableName, this._mySetAsWidgetCurrentVariable, this._myUseTuneTarget);
         }
     }
 

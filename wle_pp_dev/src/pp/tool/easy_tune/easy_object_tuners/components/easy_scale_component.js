@@ -9,14 +9,15 @@ export class EasyScaleComponent extends Component {
         _mySetAsWidgetCurrentVariable: Property.bool(false),
         _myUseTuneTarget: Property.bool(false),
         _myLocal: Property.bool(false),
-        _myScaleAsOne: Property.bool(true) // Edit all scale values together
+        _myScaleAsOne: Property.bool(true), // Edit all scale values together
+        _myStepPerSecond: Property.float(1)
     };
 
     init() {
         this._myEasyObjectTuner = null;
 
         if (Globals.isToolEnabled(this.engine)) {
-            this._myEasyObjectTuner = new EasyScale(this._myLocal, this._myScaleAsOne, this.object, this._myVariableName, this._mySetAsWidgetCurrentVariable, this._myUseTuneTarget);
+            this._myEasyObjectTuner = new EasyScale(this._myLocal, this._myScaleAsOne, this._myStepPerSecond, this.object, this._myVariableName, this._mySetAsWidgetCurrentVariable, this._myUseTuneTarget);
         }
     }
 
