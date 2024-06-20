@@ -227,6 +227,10 @@ export class EasyTuneNumberArray extends EasyTuneVariableArray {
         this._clampValue(false);
     }
 
+    toJSON() {
+        return this.getValue().vec_toString();
+    }
+
     _clampValue(resetDefaultValue) {
         let clampedValue = this._myValue.vec_clamp(this._myMin, this._myMax);
 
@@ -267,6 +271,10 @@ export class EasyTuneNumber extends EasyTuneNumberArray {
     setDefaultValue(value) {
         this._myTempDefaultValue[0] = value;
         return super.setDefaultValue(this._myTempValue);
+    }
+
+    toJSON() {
+        return JSON.stringify(this.getValue());
     }
 }
 
@@ -400,10 +408,6 @@ export class EasyTuneTransform extends EasyTuneVariable {
         this._myDefaultScale = value.mat4_getScale();
 
         return this;
-    }
-
-    fromJSON(valueJSON, resetDefaultValue = false) {
-        this.setValue(JSON.parse(valueJSON), resetDefaultValue);
     }
 
     toJSON() {
