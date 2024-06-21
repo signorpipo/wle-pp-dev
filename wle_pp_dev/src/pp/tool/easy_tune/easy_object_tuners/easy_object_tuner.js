@@ -31,6 +31,10 @@ export class EasyObjectTuner {
         this._myEngine = engine;
     }
 
+    getEasyTuneVariable() {
+        return Globals.getEasyTuneVariables(this._myEngine).getEasyTuneVariable(this._myEasyTuneVariableName);
+    }
+
     start() {
         let easyTuneVariable = this._createEasyTuneVariable(this._myEasyTuneVariableName);
 

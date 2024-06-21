@@ -37,6 +37,10 @@ export class EasyMeshColorComponent extends Component {
         }
     }
 
+    getEasyObjectTuner() {
+        return this._myEasyObjectTuner;
+    }
+
     pp_clone(targetObject) {
         let clonedComponent = ComponentUtils.cloneDefault(this, targetObject);
 

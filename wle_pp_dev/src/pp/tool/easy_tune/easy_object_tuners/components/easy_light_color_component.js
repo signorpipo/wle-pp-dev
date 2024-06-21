@@ -34,4 +34,8 @@ export class EasyLightColorComponent extends Component {
             }
         }
     }
+
+    getEasyObjectTuner() {
+        return this._myEasyObjectTuner;
+    }
 }

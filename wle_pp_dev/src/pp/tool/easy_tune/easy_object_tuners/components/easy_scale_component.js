@@ -36,4 +36,8 @@ export class EasyScaleComponent extends Component {
             }
         }
     }
+
+    getEasyObjectTuner() {
+        return this._myEasyObjectTuner;
+    }
 }

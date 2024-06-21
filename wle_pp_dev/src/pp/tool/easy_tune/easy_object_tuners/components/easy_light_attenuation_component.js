@@ -33,4 +33,8 @@ export class EasyLightAttenuationComponent extends Component {
             }
         }
     }
+
+    getEasyObjectTuner() {
+        return this._myEasyObjectTuner;
+    }
 }

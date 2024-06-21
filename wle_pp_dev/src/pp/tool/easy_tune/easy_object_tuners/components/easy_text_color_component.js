@@ -35,4 +35,8 @@ export class EasyTextColorComponent extends Component {
             }
         }
     }
+
+    getEasyObjectTuner() {
+        return this._myEasyObjectTuner;
+    }
 }
