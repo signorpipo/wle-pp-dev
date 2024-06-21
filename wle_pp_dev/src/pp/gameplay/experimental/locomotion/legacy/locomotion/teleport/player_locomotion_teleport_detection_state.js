@@ -1,3 +1,4 @@
+import { PhysXComponent } from "@wonderlandengine/api";
 import { PhysicsLayerFlags } from "../../../../../../cauldron/physics/physics_layer_flags.js";
 import { RaycastParams, RaycastResults } from "../../../../../../cauldron/physics/physics_raycast_params.js";
 import { PhysicsUtils } from "../../../../../../cauldron/physics/physics_utils.js";
@@ -593,11 +594,7 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportRotationVR = fun
 }();
 
 PlayerLocomotionTeleportDetectionState.prototype._isTeleportHitValid = function () {
-    let raycastParams = new RaycastParams();
-    let raycastResult = new RaycastResults();
-
     let playerUp = vec3_create();
-    let objectsEqualCallback = (first, second) => first.pp_equals(second);
     return function _isTeleportHitValid(hit, rotationOnUp, checkTeleportCollisionRuntimeParams) {
         let isValid = false;
 
@@ -609,30 +606,9 @@ PlayerLocomotionTeleportDetectionState.prototype._isTeleportHitValid = function 
             // #TODO is hitValidEvenWhenNotConcordant needed or was it a debug that should be removed?
             let hitValidEvenWhenNotConcordant = true;
             if (hit.myNormal.vec3_isConcordant(playerUp) || hitValidEvenWhenNotConcordant) {
-                // #TODO When the flags on the physx will be available just check that the hit object physx has the floor flag
-
-                raycastParams.myIgnoreHitsInsideCollision = true;
-                raycastParams.myBlockLayerFlags.setMask(this._myTeleportParams.myDetectionParams.myTeleportFloorLayerFlags.getMask());
-                raycastParams.myPhysics = Globals.getPhysics(this._myTeleportParams.myEngine);
-
-                raycastParams.myObjectsToIgnore.pp_copy(this._myTeleportParams.myCollisionCheckParams.myHorizontalObjectsToIgnore);
-                for (let objectToIgnore of this._myTeleportParams.myCollisionCheckParams.myVerticalObjectsToIgnore) {
-                    raycastParams.myObjectsToIgnore.pp_pushUnique(objectToIgnore, objectsEqualCallback);
-                }
-
-                let distanceToCheck = 0.01;
-                raycastParams.myOrigin = hit.myPosition.vec3_add(hit.myNormal.vec3_scale(distanceToCheck, raycastParams.myOrigin), raycastParams.myOrigin);
-                raycastParams.myDirection = hit.myNormal.vec3_negate(raycastParams.myDirection);
-                raycastParams.myDistance = distanceToCheck * 1.25;
-                raycastParams.myDirection.vec3_normalize(raycastParams.myDirection);
-
-                raycastResult = PhysicsUtils.raycast(raycastParams, raycastResult);
-
-                if (raycastResult.isColliding()) {
-                    let floorHit = raycastResult.myHits.pp_first();
-                    if (floorHit.myObject.pp_equals(hit.myObject)) {
-                        isValid = this._isTeleportPositionValid(hit.myPosition, rotationOnUp, checkTeleportCollisionRuntimeParams);
-                    }
+                const physxComponent = hit.myObject.pp_getComponentSelf(PhysXComponent);
+                if (physxComponent.groupsMask & this._myTeleportParams.myDetectionParams.myTeleportFloorLayerFlags.getMask()) {
+                    isValid = this._isTeleportPositionValid(hit.myPosition, rotationOnUp, checkTeleportCollisionRuntimeParams);
                 }
             }
         }

@@ -85,6 +85,7 @@ export class PlayerLocomotionParams {
     public myTeleportType: number = PlayerLocomotionTeleportTeleportType.INSTANT;
     public myTeleportMaxDistance: number = 0;
     public myTeleportMaxHeightDifference: number = 0;
+    public myTeleportFloorLayerFlags: Readonly<PhysicsLayerFlags> = new PhysicsLayerFlags();
     public myTeleportRotationOnUpEnabled: boolean = false;
     public myTeleportValidMaterial: Readonly<Material> | null = null;
     public myTeleportInvalidMaterial: Readonly<Material> | null = null;
@@ -409,7 +410,7 @@ export class PlayerLocomotion {
                 params.myDetectionParams.myMustBeOnGround = true;
 
                 params.myDetectionParams.myTeleportBlockLayerFlags.copy(this._myParams.myPhysicsBlockLayerFlags);
-                params.myDetectionParams.myTeleportFloorLayerFlags.copy(this._myParams.myPhysicsBlockLayerFlags);
+                params.myDetectionParams.myTeleportFloorLayerFlags.copy(this._myParams.myTeleportFloorLayerFlags);
 
                 params.myDetectionParams.myTeleportFeetPositionMustBeVisible = false;
                 params.myDetectionParams.myTeleportHeadPositionMustBeVisible = false;

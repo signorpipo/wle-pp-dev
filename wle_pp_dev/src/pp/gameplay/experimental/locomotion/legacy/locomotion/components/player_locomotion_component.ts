@@ -120,6 +120,9 @@ export class PlayerLocomotionComponent extends Component {
     @property.float(1.25)
     private readonly _myTeleportMaxHeightDifference!: number;
 
+    @property.string("")
+    private readonly _myTeleportFloorLayerFlags!: string;
+
     @property.bool(false)
     private readonly _myTeleportRotationOnUpEnabled!: boolean;
 
@@ -362,6 +365,7 @@ export class PlayerLocomotionComponent extends Component {
         params.myCollisionCheckDisabled = this._myCollisionCheckDisabled;
 
         params.myPhysicsBlockLayerFlags.copy(this._getPhysicsBlockLayersFlags());
+        params.myTeleportFloorLayerFlags.copy(this._getTeleportFloorLayersFlags());
 
         (this._myPlayerLocomotion as PlayerLocomotion) = new PlayerLocomotion(params);
 
@@ -441,6 +445,21 @@ export class PlayerLocomotionComponent extends Component {
         const physicsFlags = new PhysicsLayerFlags();
 
         const flags = [...this._myPhysicsBlockLayerFlags.split(",")];
+        for (let i = 0; i < flags.length; i++) {
+            physicsFlags.setFlagActive(i, flags[i].trim() == "1");
+        }
+
+        return physicsFlags;
+    }
+
+    private _getTeleportFloorLayersFlags(): PhysicsLayerFlags {
+        if (this._myTeleportFloorLayerFlags.length == 0) {
+            return this._getPhysicsBlockLayersFlags();
+        }
+
+        const physicsFlags = new PhysicsLayerFlags();
+
+        const flags = [...this._myTeleportFloorLayerFlags.split(",")];
         for (let i = 0; i < flags.length; i++) {
             physicsFlags.setFlagActive(i, flags[i].trim() == "1");
         }
