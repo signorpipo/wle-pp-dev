@@ -1,38 +1,39 @@
+import { Object3D, Physics } from "@wonderlandengine/api";
 import { vec3_create } from "../../plugin/js/extensions/array/vec_create_extension.js";
 import { Globals } from "../../pp/globals.js";
 import { RaycastHit, RaycastParams, RaycastResults } from "./physics_raycast_params.js";
 
 let _myLayerFlagsNames = ["0", "1", "2", "3", "4", "5", "6", "7"];
 
-let _myRaycastCount = new WeakMap();
-let _myRaycastVisualDebugEnabled = new WeakMap();
+const _myRaycastCount: WeakMap<Readonly<Physics>, number> = new WeakMap();
+const _myRaycastVisualDebugEnabled: WeakMap<Readonly<Physics>, boolean> = new WeakMap();
 
-export function setLayerFlagsNames(layerFlagsNames) {
+export function setLayerFlagsNames(layerFlagsNames: string[]): void {
     _myLayerFlagsNames = layerFlagsNames;
 }
 
-export function getLayerFlagsNames() {
+export function getLayerFlagsNames(): string[] {
     return _myLayerFlagsNames;
 }
 
-export function getRaycastCount(physics = Globals.getPhysics()) {
-    let raycastCount = _myRaycastCount.get(physics);
+export function getRaycastCount(physics: Readonly<Physics> = Globals.getPhysics()!): number {
+    const raycastCount = _myRaycastCount.get(physics);
     return raycastCount != null ? raycastCount : 0;
 }
 
-export function resetRaycastCount(physics = Globals.getPhysics()) {
+export function resetRaycastCount(physics: Readonly<Physics> = Globals.getPhysics()!): void {
     _myRaycastCount.set(physics, 0);
 }
 
-export function isRaycastVisualDebugEnabled(physics = Globals.getPhysics()) {
-    return _myRaycastVisualDebugEnabled.get(physics);
+export function isRaycastVisualDebugEnabled(physics: Readonly<Physics> = Globals.getPhysics()!): boolean {
+    return _myRaycastVisualDebugEnabled.get(physics) || false;
 }
 
-export function setRaycastVisualDebugEnabled(visualDebugEnabled, physics = Globals.getPhysics()) {
+export function setRaycastVisualDebugEnabled(visualDebugEnabled: boolean, physics: Readonly<Physics> = Globals.getPhysics()!): void {
     _myRaycastVisualDebugEnabled.set(physics, visualDebugEnabled);
 }
 
-export let raycast = function () {
+export const raycast = function () {
     // These initializations assume that there can't be more than @maxHitCount hits within a single rayCast call
     // if the hitCount is greater, these arrays will be allocated again
     let maxHitCount = 20;
@@ -41,11 +42,11 @@ export let raycast = function () {
     let locations = Array.from({ length: maxHitCount }, () => new Float32Array(3));
     let normals = Array.from({ length: maxHitCount }, () => new Float32Array(3));
 
-    let insideCheckSubVector = vec3_create();
-    let invertedRaycastDirection = vec3_create();
-    let objectsEqualCallback = (first, second) => first.pp_equals(second);
-    return function raycast(raycastParams, raycastResults = new RaycastResults()) {
-        let internalRaycastResults = raycastParams.myPhysics.rayCast(raycastParams.myOrigin, raycastParams.myDirection, raycastParams.myBlockLayerFlags.getMask(), raycastParams.myDistance);
+    const insideCheckSubVector = vec3_create();
+    const invertedRaycastDirection = vec3_create();
+    const objectsEqualCallback = (first: Readonly<Object3D>, second: Readonly<Object3D>): boolean => first.pp_equals(second);
+    return function raycast(raycastParams: Readonly<RaycastParams>, raycastResults: RaycastResults = new RaycastResults()): RaycastResults {
+        const internalRaycastResults = raycastParams.myPhysics.rayCast(raycastParams.myOrigin, raycastParams.myDirection, raycastParams.myBlockLayerFlags.getMask(), raycastParams.myDistance);
 
         if (raycastResults.myRaycastParams == null) {
             raycastResults.myRaycastParams = new RaycastParams(raycastParams.myPhysics);
@@ -56,7 +57,7 @@ export let raycast = function () {
         let currentValidHitIndex = 0;
         let validHitsCount = 0;
 
-        let hitCount = internalRaycastResults.hitCount;
+        const hitCount = internalRaycastResults.hitCount;
         if (hitCount != 0) {
             if (hitCount > maxHitCount) {
                 console.warn("Raycast hitcount is more than the expected one: " + hitCount + " - Allocation of needed resources performed");
@@ -73,7 +74,7 @@ export let raycast = function () {
             let locationsAlreadyGet = false;
             let normalsAlreadyGet = false;
 
-            invertedRaycastDirection = raycastParams.myDirection.vec3_negate(invertedRaycastDirection);
+            raycastParams.myDirection.vec3_negate(invertedRaycastDirection);
 
             for (let i = 0; i < hitCount; i++) {
                 if (raycastParams.myObjectsToIgnore.length != 0) {
@@ -112,13 +113,14 @@ export let raycast = function () {
                 }
 
                 if (!raycastParams.myIgnoreHitsInsideCollision || !hitInsideCollision) {
-                    let hit = null;
+                    let hit: RaycastHit | null = null;
 
+                    const _raycastResultsUnusedHits = (raycastResults as unknown as { _myUnusedHits: RaycastHit[] | null })._myUnusedHits;
                     if (currentValidHitIndex < raycastResults.myHits.length) {
                         hit = raycastResults.myHits[currentValidHitIndex];
-                    } else if (raycastResults._myUnusedHits != null && raycastResults._myUnusedHits.length > 0) {
-                        hit = raycastResults._myUnusedHits.pop();
-                        raycastResults.myHits.push(hit);
+                    } else if (_raycastResultsUnusedHits != null && _raycastResultsUnusedHits.length > 0) {
+                        hit = _raycastResultsUnusedHits.pop()!;
+                        raycastResults.myHits.push(hit!);
                     } else {
                         hit = new RaycastHit();
                         raycastResults.myHits.push(hit);
@@ -139,11 +141,11 @@ export let raycast = function () {
                         internalRaycastResults.pp_getNormals(normals);
                     }
 
-                    hit.myPosition.vec3_copy(locations[i]);
-                    hit.myNormal.vec3_copy(normals[i]);
-                    hit.myDistance = distances[i];
-                    hit.myObject = objects[i];
-                    hit.myInsideCollision = hitInsideCollision;
+                    hit!.myPosition.vec3_copy(locations[i]);
+                    hit!.myNormal.vec3_copy(normals[i]);
+                    hit!.myDistance = distances[i];
+                    hit!.myObject = objects[i];
+                    hit!.myInsideCollision = hitInsideCollision;
 
                     validHitsCount++;
                     currentValidHitIndex++;
@@ -152,19 +154,22 @@ export let raycast = function () {
         }
 
         if (raycastResults.myHits.length > validHitsCount) {
-            if (raycastResults._myUnusedHits == null) {
-                raycastResults._myUnusedHits = [];
+            let _raycastResultsUnusedHits = (raycastResults as unknown as { _myUnusedHits: RaycastHit[] | null })._myUnusedHits;
+            if (_raycastResultsUnusedHits == null) {
+                _raycastResultsUnusedHits = [];
+                (raycastResults as unknown as { _myUnusedHits: RaycastHit[] | null })._myUnusedHits = _raycastResultsUnusedHits;
+
             }
 
-            let hitsToRemove = raycastResults.myHits.length - validHitsCount;
+            const hitsToRemove = raycastResults.myHits.length - validHitsCount;
             for (let i = 0; i < hitsToRemove; i++) {
-                raycastResults._myUnusedHits.push(raycastResults.myHits.pop());
+                _raycastResultsUnusedHits!.push(raycastResults.myHits.pop()!);
             }
         }
 
         if (Globals.isDebugEnabled(raycastParams.myPhysics.pp_getEngine())) {
             if (PhysicsUtils.isRaycastVisualDebugEnabled(raycastParams.myPhysics)) {
-                Globals.getDebugVisualManager(raycastParams.myPhysics.pp_getEngine()).drawRaycast(0, raycastResults);
+                Globals.getDebugVisualManager(raycastParams.myPhysics.pp_getEngine())!.drawRaycast(0, raycastResults);
             }
 
             _increaseRaycastCount(raycastParams.myPhysics);
@@ -174,7 +179,7 @@ export let raycast = function () {
     };
 }();
 
-export let PhysicsUtils = {
+export const PhysicsUtils = {
     setLayerFlagsNames,
     getLayerFlagsNames,
     getRaycastCount,
@@ -182,12 +187,12 @@ export let PhysicsUtils = {
     isRaycastVisualDebugEnabled,
     setRaycastVisualDebugEnabled,
     raycast
-};
+} as const;
 
 
 
-function _increaseRaycastCount(physics = Globals.getPhysics()) {
-    let raycastCount = _myRaycastCount.get(physics);
+function _increaseRaycastCount(physics: Readonly<Physics> = Globals.getPhysics()!): void {
+    const raycastCount = _myRaycastCount.get(physics);
 
     if (raycastCount == null) {
         _myRaycastCount.set(physics, 1);

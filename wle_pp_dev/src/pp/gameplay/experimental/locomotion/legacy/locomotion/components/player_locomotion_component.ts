@@ -388,12 +388,12 @@ export class PlayerLocomotionComponent extends Component {
 
         let raycastVisualDebugEnabledBackup = false;
         if (this._myRaycastVisualDebugEnabled && Globals.isDebugEnabled(this.engine)) {
-            raycastVisualDebugEnabledBackup = PhysicsUtils.isRaycastVisualDebugEnabled(this.engine.physics);
-            PhysicsUtils.setRaycastVisualDebugEnabled(true, this.engine.physics);
+            raycastVisualDebugEnabledBackup = PhysicsUtils.isRaycastVisualDebugEnabled(this.engine.physics!);
+            PhysicsUtils.setRaycastVisualDebugEnabled(true, this.engine.physics!);
         }
 
         if (this._myRaycastCountLogEnabled && Globals.isDebugEnabled(this.engine)) {
-            PhysicsUtils.resetRaycastCount(this.engine.physics);
+            PhysicsUtils.resetRaycastCount(this.engine.physics!);
         }
 
         if (!this._myLocomotionStarted) {
@@ -422,12 +422,12 @@ export class PlayerLocomotionComponent extends Component {
         }
 
         if (this._myRaycastVisualDebugEnabled && Globals.isDebugEnabled(this.engine)) {
-            PhysicsUtils.setRaycastVisualDebugEnabled(raycastVisualDebugEnabledBackup, this.engine.physics);
+            PhysicsUtils.setRaycastVisualDebugEnabled(raycastVisualDebugEnabledBackup, this.engine.physics!);
         }
 
         if (this._myRaycastCountLogEnabled && Globals.isDebugEnabled(this.engine)) {
-            console.log("Raycast count: " + PhysicsUtils.getRaycastCount(this.engine.physics));
-            PhysicsUtils.resetRaycastCount(this.engine.physics);
+            console.log("Raycast count: " + PhysicsUtils.getRaycastCount(this.engine.physics!));
+            PhysicsUtils.resetRaycastCount(this.engine.physics!);
         }
     }
 

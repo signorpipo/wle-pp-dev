@@ -10,12 +10,12 @@ export class RaycastParams {
     public myDirection: Vector3 = vec3_create();
     public myDistance: number = 0;
 
-    public myBlockLayerFlags: PhysicsLayerFlags = new PhysicsLayerFlags();
+    public myBlockLayerFlags: Readonly<PhysicsLayerFlags> = new PhysicsLayerFlags();
 
     public myObjectsToIgnore: Readonly<Object3D>[] = [];
     public myIgnoreHitsInsideCollision: boolean = false;
 
-    public readonly myPhysics: Readonly<Physics>;
+    public myPhysics: Readonly<Physics>;
 
     constructor(physics: Readonly<Physics> = Globals.getPhysics()!) {
         this.myPhysics = physics;
@@ -48,10 +48,10 @@ export class RaycastParams {
 
 export class RaycastResults {
 
-    public myRaycastParams: RaycastParams | null = null;
-    public readonly myHits: Readonly<RaycastHit>[] = [];
+    public myRaycastParams: Readonly<RaycastParams> | null = null;
+    public myHits: Readonly<RaycastHit>[] = [];
 
-    private _myUnusedHits: Readonly<RaycastHit>[] | null = null;
+    private _myUnusedHits: RaycastHit[] | null = null;
 
     public isColliding(ignoreHitsInsideCollision = false): boolean {
         return ignoreHitsInsideCollision ? this.getFirstHitOutsideCollision() != null : this.myHits.length > 0;
