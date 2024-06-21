@@ -123,7 +123,7 @@ export class PlayerLocomotionParams {
 
     /** Works 100% properly only if it has the same value as `_mySyncWithRealWorldPositionOnlyIfValid` (both true or false)  */
     public myViewOcclusionInsideWallsEnabled: boolean = true;
-
+    public myViewOcclusionLayerFlags: Readonly<PhysicsLayerFlags> = new PhysicsLayerFlags();
 
     public mySyncNonVRHeightWithVROnExitSession: boolean = false;
     public mySyncNonVRVerticalAngleWithVROnExitSession: boolean = false;
@@ -253,8 +253,7 @@ export class PlayerLocomotion {
             params.myTeleportCollisionCheckParamsCopyFromMovement = true;
             params.myTeleportCollisionCheckParamsCheck360 = true;
 
-            params.myHeadCollisionBlockLayerFlags.copy(params.myMovementCollisionCheckParams.myHorizontalBlockLayerFlags);
-            params.myHeadCollisionBlockLayerFlags.add(params.myMovementCollisionCheckParams.myVerticalBlockLayerFlags);
+            params.myHeadCollisionBlockLayerFlags.copy(this._myParams.myViewOcclusionLayerFlags);
             params.myHeadCollisionObjectsToIgnore.pp_copy(params.myMovementCollisionCheckParams.myHorizontalObjectsToIgnore as any);
             const objectsEqualCallback = (first: Readonly<Object3D>, second: Readonly<Object3D>): boolean => first.pp_equals(second);
             for (const objectToIgnore of params.myMovementCollisionCheckParams.myVerticalObjectsToIgnore) {

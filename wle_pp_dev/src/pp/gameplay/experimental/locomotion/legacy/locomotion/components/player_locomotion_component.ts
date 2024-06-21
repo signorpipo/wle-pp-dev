@@ -120,6 +120,7 @@ export class PlayerLocomotionComponent extends Component {
     @property.float(1.25)
     private readonly _myTeleportMaxHeightDifference!: number;
 
+    /** If empty use {@link _myPhysicsBlockLayerFlags} */
     @property.string("")
     private readonly _myTeleportFloorLayerFlags!: string;
 
@@ -179,6 +180,10 @@ export class PlayerLocomotionComponent extends Component {
     /** Works 100% properly only if it has the same value as `_mySyncWithRealWorldPositionOnlyIfValid` (both true or false)  */
     @property.bool(true)
     private readonly _myViewOcclusionInsideWallsEnabled!: boolean;
+
+    /** If empty use {@link _myPhysicsBlockLayerFlags} */
+    @property.string("")
+    private readonly _myViewOcclusionLayerFlags!: string;
 
 
 
@@ -366,6 +371,7 @@ export class PlayerLocomotionComponent extends Component {
 
         params.myPhysicsBlockLayerFlags.copy(this._getPhysicsBlockLayersFlags());
         params.myTeleportFloorLayerFlags.copy(this._getTeleportFloorLayersFlags());
+        params.myViewOcclusionLayerFlags.copy(this._getViewOcclusionLayersFlags());
 
         (this._myPlayerLocomotion as PlayerLocomotion) = new PlayerLocomotion(params);
 
@@ -442,14 +448,7 @@ export class PlayerLocomotionComponent extends Component {
     }
 
     private _getPhysicsBlockLayersFlags(): PhysicsLayerFlags {
-        const physicsFlags = new PhysicsLayerFlags();
-
-        const flags = [...this._myPhysicsBlockLayerFlags.split(",")];
-        for (let i = 0; i < flags.length; i++) {
-            physicsFlags.setFlagActive(i, flags[i].trim() == "1");
-        }
-
-        return physicsFlags;
+        return this._convertStringToLayerFlags(this._myPhysicsBlockLayerFlags);
     }
 
     private _getTeleportFloorLayersFlags(): PhysicsLayerFlags {
@@ -457,9 +456,21 @@ export class PlayerLocomotionComponent extends Component {
             return this._getPhysicsBlockLayersFlags();
         }
 
+        return this._convertStringToLayerFlags(this._myTeleportFloorLayerFlags);
+    }
+
+    private _getViewOcclusionLayersFlags(): PhysicsLayerFlags {
+        if (this._myViewOcclusionLayerFlags.length == 0) {
+            return this._getPhysicsBlockLayersFlags();
+        }
+
+        return this._convertStringToLayerFlags(this._myViewOcclusionLayerFlags);
+    }
+
+    private _convertStringToLayerFlags(string: string): PhysicsLayerFlags {
         const physicsFlags = new PhysicsLayerFlags();
 
-        const flags = [...this._myTeleportFloorLayerFlags.split(",")];
+        const flags = [...string.split(",")];
         for (let i = 0; i < flags.length; i++) {
             physicsFlags.setFlagActive(i, flags[i].trim() == "1");
         }
