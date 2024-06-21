@@ -17,7 +17,7 @@ export class RaycastParams {
     public myDistance: number = 0;
 
     public myBlockLayerFlags: Readonly<PhysicsLayerFlags> = new PhysicsLayerFlags();
-    public myBlockColliderType: RaycastBlockColliderType = RaycastBlockColliderType.BOTH;
+    public myBlockColliderType: RaycastBlockColliderType = RaycastBlockColliderType.NORMAL;
 
     public myObjectsToIgnore: Readonly<Object3D>[] = [];
     public myIgnoreHitsInsideCollision: boolean = false;

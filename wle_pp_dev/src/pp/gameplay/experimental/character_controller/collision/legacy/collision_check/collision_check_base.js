@@ -1,4 +1,4 @@
-import { RaycastHit, RaycastParams, RaycastResults } from "../../../../../../cauldron/physics/physics_raycast_params.js";
+import { RaycastBlockColliderType, RaycastHit, RaycastParams, RaycastResults } from "../../../../../../cauldron/physics/physics_raycast_params.js";
 import { PhysicsUtils } from "../../../../../../cauldron/physics/physics_utils.js";
 import { quat2_create, vec3_create, vec4_create } from "../../../../../../plugin/js/extensions/array/vec_create_extension.js";
 import { Globals } from "../../../../../../pp/globals.js";
@@ -128,6 +128,8 @@ CollisionCheckBase.prototype._raycastAndDebug = function () {
         }
 
         this._myRaycastParams.myIgnoreHitsInsideCollision = ignoreHitsInsideCollision;
+
+        this._myRaycastParams.myBlockColliderType = RaycastBlockColliderType.NORMAL;
 
         let raycastResult = null;
 

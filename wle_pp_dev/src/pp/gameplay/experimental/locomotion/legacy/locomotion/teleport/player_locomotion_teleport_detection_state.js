@@ -1,6 +1,6 @@
 import { PhysXComponent } from "@wonderlandengine/api";
 import { PhysicsLayerFlags } from "../../../../../../cauldron/physics/physics_layer_flags.js";
-import { RaycastParams, RaycastResults } from "../../../../../../cauldron/physics/physics_raycast_params.js";
+import { RaycastBlockColliderType, RaycastParams, RaycastResults } from "../../../../../../cauldron/physics/physics_raycast_params.js";
 import { PhysicsUtils } from "../../../../../../cauldron/physics/physics_utils.js";
 import { XRUtils } from "../../../../../../cauldron/utils/xr_utils.js";
 import { MouseButtonID } from "../../../../../../input/cauldron/mouse.js";
@@ -286,6 +286,7 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable 
 
         raycastParams.myIgnoreHitsInsideCollision = true;
         raycastParams.myBlockLayerFlags.setMask(this._myTeleportParams.myDetectionParams.myTeleportBlockLayerFlags.getMask());
+        raycastParams.myBlockColliderType = RaycastBlockColliderType.NORMAL;
         raycastParams.myPhysics = Globals.getPhysics(this._myTeleportParams.myEngine);
 
         raycastParams.myObjectsToIgnore.pp_copy(this._myTeleportParams.myCollisionCheckParams.myHorizontalObjectsToIgnore);
@@ -775,6 +776,7 @@ PlayerLocomotionTeleportDetectionState.prototype._isPositionVisible = function (
             }
 
             raycastParams.myIgnoreHitsInsideCollision = true;
+            raycastParams.myBlockColliderType = RaycastBlockColliderType.NORMAL;
 
             raycastResult = PhysicsUtils.raycast(raycastParams, raycastResult);
 
