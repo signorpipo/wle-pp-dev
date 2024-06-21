@@ -4,6 +4,12 @@ import { Globals } from "../../pp/globals.js";
 import { Vector3 } from "../type_definitions/array_type_definitions.js";
 import { PhysicsLayerFlags } from "./physics_layer_flags.js";
 
+export enum RaycastBlockColliderType {
+    NORMAL,
+    TRIGGER,
+    BOTH
+}
+
 export class RaycastParams {
 
     public myOrigin: Vector3 = vec3_create();
@@ -11,6 +17,7 @@ export class RaycastParams {
     public myDistance: number = 0;
 
     public myBlockLayerFlags: Readonly<PhysicsLayerFlags> = new PhysicsLayerFlags();
+    public myBlockColliderType: RaycastBlockColliderType = RaycastBlockColliderType.BOTH;
 
     public myObjectsToIgnore: Readonly<Object3D>[] = [];
     public myIgnoreHitsInsideCollision: boolean = false;

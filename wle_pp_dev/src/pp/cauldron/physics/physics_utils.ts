@@ -1,7 +1,7 @@
-import { Object3D, Physics } from "@wonderlandengine/api";
+import { Object3D, PhysXComponent, Physics } from "@wonderlandengine/api";
 import { vec3_create } from "../../plugin/js/extensions/array/vec_create_extension.js";
 import { Globals } from "../../pp/globals.js";
-import { RaycastHit, RaycastParams, RaycastResults } from "./physics_raycast_params.js";
+import { RaycastBlockColliderType, RaycastHit, RaycastParams, RaycastResults } from "./physics_raycast_params.js";
 
 let _myLayerFlagsNames = ["0", "1", "2", "3", "4", "5", "6", "7"];
 
@@ -36,11 +36,11 @@ export function setRaycastVisualDebugEnabled(visualDebugEnabled: boolean, physic
 export const raycast = function () {
     // These initializations assume that there can't be more than @maxHitCount hits within a single rayCast call
     // if the hitCount is greater, these arrays will be allocated again
-    let maxHitCount = 20;
-    let objects = new Array(maxHitCount);
-    let distances = new Float32Array(maxHitCount);
-    let locations = Array.from({ length: maxHitCount }, () => new Float32Array(3));
-    let normals = Array.from({ length: maxHitCount }, () => new Float32Array(3));
+    let maxHitCount: number = 20;
+    let objects: Object3D[] = new Array(maxHitCount);
+    let distances: Float32Array = new Float32Array(maxHitCount);
+    let locations: Float32Array[] = Array.from({ length: maxHitCount }, () => new Float32Array(3));
+    let normals: Float32Array[] = Array.from({ length: maxHitCount }, () => new Float32Array(3));
 
     const insideCheckSubVector = vec3_create();
     const invertedRaycastDirection = vec3_create();
@@ -93,77 +93,87 @@ export const raycast = function () {
                     internalRaycastResults.pp_getDistances(distances);
                 }
 
-                let hitInsideCollision = distances[i] == 0;
-                if (hitInsideCollision) {
-                    if (!locationsAlreadyGet) {
-                        locationsAlreadyGet = true;
-                        internalRaycastResults.pp_getLocations(locations);
+                let colliderTypeValid = true;
+                if (raycastParams.myBlockColliderType != RaycastBlockColliderType.BOTH) {
+                    colliderTypeValid = false;
+
+                    const physXComponent = objects[i].pp_getComponentSelf(PhysXComponent)!;
+                    colliderTypeValid = (physXComponent.trigger && raycastParams.myBlockColliderType == RaycastBlockColliderType.TRIGGER) || (!physXComponent.trigger && raycastParams.myBlockColliderType == RaycastBlockColliderType.NORMAL);
+                }
+
+                if (colliderTypeValid) {
+                    let hitInsideCollision = distances[i] == 0;
+                    if (hitInsideCollision) {
+                        if (!locationsAlreadyGet) {
+                            locationsAlreadyGet = true;
+                            internalRaycastResults.pp_getLocations(locations);
+                        }
+
+                        hitInsideCollision &&= raycastParams.myOrigin.vec3_sub(locations[i], insideCheckSubVector).vec3_isZero(Math.PP_EPSILON);
+
+                        if (hitInsideCollision) {
+                            if (!normalsAlreadyGet) {
+                                normalsAlreadyGet = true;
+                                internalRaycastResults.pp_getNormals(normals);
+                            }
+
+                            hitInsideCollision &&= invertedRaycastDirection.vec3_equals(normals[i], Math.PP_EPSILON_DEGREES);
+                        }
                     }
 
-                    hitInsideCollision &&= raycastParams.myOrigin.vec3_sub(locations[i], insideCheckSubVector).vec3_isZero(Math.PP_EPSILON);
+                    if ((!raycastParams.myIgnoreHitsInsideCollision || !hitInsideCollision)) {
+                        let hit: RaycastHit | null = null;
 
-                    if (hitInsideCollision) {
+                        const raycastResultsUnusedHits = (raycastResults as unknown as { _myUnusedHits: RaycastHit[] | null })._myUnusedHits;
+                        if (currentValidHitIndex < raycastResults.myHits.length) {
+                            hit = raycastResults.myHits[currentValidHitIndex];
+                        } else if (raycastResultsUnusedHits != null && raycastResultsUnusedHits.length > 0) {
+                            hit = raycastResultsUnusedHits.pop()!;
+                            raycastResults.myHits.push(hit!);
+                        } else {
+                            hit = new RaycastHit();
+                            raycastResults.myHits.push(hit);
+                        }
+
+                        if (!objectsAlreadyGet) {
+                            objectsAlreadyGet = true;
+                            internalRaycastResults.pp_getObjects(objects);
+                        }
+
+                        if (!locationsAlreadyGet) {
+                            locationsAlreadyGet = true;
+                            internalRaycastResults.pp_getLocations(locations);
+                        }
+
                         if (!normalsAlreadyGet) {
                             normalsAlreadyGet = true;
                             internalRaycastResults.pp_getNormals(normals);
                         }
 
-                        hitInsideCollision &&= invertedRaycastDirection.vec3_equals(normals[i], Math.PP_EPSILON_DEGREES);
+                        hit!.myPosition.vec3_copy(locations[i]);
+                        hit!.myNormal.vec3_copy(normals[i]);
+                        hit!.myDistance = distances[i];
+                        hit!.myObject = objects[i];
+                        hit!.myInsideCollision = hitInsideCollision;
+
+                        validHitsCount++;
+                        currentValidHitIndex++;
                     }
-                }
-
-                if (!raycastParams.myIgnoreHitsInsideCollision || !hitInsideCollision) {
-                    let hit: RaycastHit | null = null;
-
-                    const _raycastResultsUnusedHits = (raycastResults as unknown as { _myUnusedHits: RaycastHit[] | null })._myUnusedHits;
-                    if (currentValidHitIndex < raycastResults.myHits.length) {
-                        hit = raycastResults.myHits[currentValidHitIndex];
-                    } else if (_raycastResultsUnusedHits != null && _raycastResultsUnusedHits.length > 0) {
-                        hit = _raycastResultsUnusedHits.pop()!;
-                        raycastResults.myHits.push(hit!);
-                    } else {
-                        hit = new RaycastHit();
-                        raycastResults.myHits.push(hit);
-                    }
-
-                    if (!objectsAlreadyGet) {
-                        objectsAlreadyGet = true;
-                        internalRaycastResults.pp_getObjects(objects);
-                    }
-
-                    if (!locationsAlreadyGet) {
-                        locationsAlreadyGet = true;
-                        internalRaycastResults.pp_getLocations(locations);
-                    }
-
-                    if (!normalsAlreadyGet) {
-                        normalsAlreadyGet = true;
-                        internalRaycastResults.pp_getNormals(normals);
-                    }
-
-                    hit!.myPosition.vec3_copy(locations[i]);
-                    hit!.myNormal.vec3_copy(normals[i]);
-                    hit!.myDistance = distances[i];
-                    hit!.myObject = objects[i];
-                    hit!.myInsideCollision = hitInsideCollision;
-
-                    validHitsCount++;
-                    currentValidHitIndex++;
                 }
             }
         }
 
         if (raycastResults.myHits.length > validHitsCount) {
-            let _raycastResultsUnusedHits = (raycastResults as unknown as { _myUnusedHits: RaycastHit[] | null })._myUnusedHits;
-            if (_raycastResultsUnusedHits == null) {
-                _raycastResultsUnusedHits = [];
-                (raycastResults as unknown as { _myUnusedHits: RaycastHit[] | null })._myUnusedHits = _raycastResultsUnusedHits;
+            let raycastResultsUnusedHits = (raycastResults as unknown as { _myUnusedHits: RaycastHit[] | null })._myUnusedHits;
+            if (raycastResultsUnusedHits == null) {
+                raycastResultsUnusedHits = [];
+                (raycastResults as unknown as { _myUnusedHits: RaycastHit[] | null })._myUnusedHits = raycastResultsUnusedHits;
 
             }
 
             const hitsToRemove = raycastResults.myHits.length - validHitsCount;
             for (let i = 0; i < hitsToRemove; i++) {
-                _raycastResultsUnusedHits!.push(raycastResults.myHits.pop()!);
+                raycastResultsUnusedHits!.push(raycastResults.myHits.pop()!);
             }
         }
 
