@@ -16,7 +16,7 @@ export class EasyTuneVariables {
 
     get(variableName) {
         let variable = this._myVariables.get(variableName);
-        if (variable) {
+        if (variable != null) {
             return variable.getValue();
         }
 
@@ -25,7 +25,7 @@ export class EasyTuneVariables {
 
     set(variableName, value, resetDefaultValue = false) {
         let variable = this._myVariables.get(variableName);
-        if (variable) {
+        if (variable != null) {
             variable.setValue(value, resetDefaultValue);
         }
     }
@@ -40,7 +40,7 @@ export class EasyTuneVariables {
 
     isWidgetCurrentVariable(variableName) {
         let variable = this._myVariables.get(variableName);
-        if (variable) {
+        if (variable != null) {
             return variable.isWidgetCurrentVariable();
         }
 
@@ -57,6 +57,15 @@ export class EasyTuneVariables {
 
     getEasyTuneVariablesNames() {
         return Array.from(this._myVariables.keys());
+    }
+
+    changeEasyTuneVariableName(oldName, newName) {
+        let variable = this._myVariables.get(oldName);
+        if (variable != null) {
+            this._myVariables.delete(oldName);
+            this._myVariables.set(newName, variable);
+            variable.setName(newName);
+        }
     }
 
     fromJSON(json, resetDefaultValue = false, manualImport = false) {

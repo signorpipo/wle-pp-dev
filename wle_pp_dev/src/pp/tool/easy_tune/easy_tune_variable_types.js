@@ -59,6 +59,15 @@ export class EasyTuneVariable {
         return this._myName;
     }
 
+    setName(name) {
+        if (this._myName != name) {
+            this._myName = name;
+            EasyTuneUtils.refreshWidget(this._myEngine);
+        }
+
+        return this;
+    }
+
     getType() {
         return this._myType;
     }
