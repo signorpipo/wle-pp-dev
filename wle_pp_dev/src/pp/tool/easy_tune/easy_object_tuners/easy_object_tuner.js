@@ -18,13 +18,15 @@ export class EasyObjectTuner {
         if (variableName == "") {
             let objectName = easyObject.pp_getName();
             if (objectName != "") {
-                this._myEasyTuneVariableName = variableNamePrefix.concat(objectName);
+                this._myInitialEasyTuneVariableName = variableNamePrefix.concat(objectName);
             } else {
-                this._myEasyTuneVariableName = variableNamePrefix.concat(easyObject.pp_getID());
+                this._myInitialEasyTuneVariableName = variableNamePrefix.concat(easyObject.pp_getID());
             }
         } else {
-            this._myEasyTuneVariableName = variableName;
+            this._myInitialEasyTuneVariableName = variableName;
         }
+
+        this._myEasyTuneVariable = null;
 
         this._myManualVariableUpdate = false;
 
@@ -32,15 +34,15 @@ export class EasyObjectTuner {
     }
 
     getEasyTuneVariable() {
-        return Globals.getEasyTuneVariables(this._myEngine).getEasyTuneVariable(this._myEasyTuneVariableName);
+        return this._myEasyTuneVariable;
     }
 
     start() {
-        let easyTuneVariable = this._createEasyTuneVariable(this._myEasyTuneVariableName);
+        this._myEasyTuneVariable = this._createEasyTuneVariable(this._myInitialEasyTuneVariableName);
+        Globals.getEasyTuneVariables(this._myEngine).add(this._myEasyTuneVariable);
 
-        Globals.getEasyTuneVariables(this._myEngine).add(easyTuneVariable);
         if (this._mySetAsWidgetCurrentVariable) {
-            EasyTuneUtils.setWidgetCurrentVariable(this._myEasyTuneVariableName, this._myEngine);
+            EasyTuneUtils.setWidgetCurrentVariable(this._myInitialEasyTuneVariableName, this._myEngine);
         }
 
         let easyObject = this._myObject;
@@ -51,10 +53,10 @@ export class EasyObjectTuner {
 
         if (easyObject != null) {
             let value = this._getObjectValue(easyObject);
-            Globals.getEasyTuneVariables(this._myEngine).set(this._myEasyTuneVariableName, value, true);
+            this._myEasyTuneVariable.setValue(value, true);
         }
 
-        easyTuneVariable.registerValueChangedEventListener(this, function (newValue) {
+        this._myEasyTuneVariable.registerValueChangedEventListener(this, function (newValue) {
             if (this._myManualVariableUpdate) return;
 
             let easyObject = this._myObject;
@@ -82,11 +84,10 @@ export class EasyObjectTuner {
         }
 
         if (value != null) {
-            const easyTuneVariables = Globals.getEasyTuneVariables(this._myEngine);
-            const currentValue = easyTuneVariables.get(this._myEasyTuneVariableName);
+            const currentValue = this._myEasyTuneVariable.getValue();
             if (!this._areValueEqual(currentValue, value)) {
                 this._myManualVariableUpdate = true;
-                easyTuneVariables.set(this._myEasyTuneVariableName, value, this._myPrevEasyObject != easyObject);
+                this._myEasyTuneVariable.setValue(value, this._myPrevEasyObject != easyObject);
                 this._myPrevEasyObject = easyObject;
 
                 this._myManualVariableUpdate = false;
