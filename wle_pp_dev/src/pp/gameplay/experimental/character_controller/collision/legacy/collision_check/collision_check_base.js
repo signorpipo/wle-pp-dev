@@ -129,7 +129,9 @@ CollisionCheckBase.prototype._raycastAndDebug = function () {
 
         this._myRaycastParams.myIgnoreHitsInsideCollision = ignoreHitsInsideCollision;
 
-        this._myRaycastParams.myBlockColliderType = RaycastBlockColliderType.NORMAL;
+        // #TODO it should just hit NORMAL colliders, but for perf reasons since I need to get the component from the object it's better to keep it like this 
+        // When changing this to NORMAL, do also remember to update the other place like player teleport where BOTH is also used to NORMAL
+        this._myRaycastParams.myBlockColliderType = RaycastBlockColliderType.BOTH;
 
         let raycastResult = null;
 

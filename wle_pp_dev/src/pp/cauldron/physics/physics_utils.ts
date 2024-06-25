@@ -97,6 +97,11 @@ export const raycast = function () {
                 if (raycastParams.myBlockColliderType != RaycastBlockColliderType.BOTH) {
                     colliderTypeValid = false;
 
+                    if (!objectsAlreadyGet) {
+                        objectsAlreadyGet = true;
+                        internalRaycastResults.pp_getObjects(objects);
+                    }
+
                     const physXComponent = objects[i].pp_getComponentSelf(PhysXComponent)!;
                     colliderTypeValid = (physXComponent.trigger && raycastParams.myBlockColliderType == RaycastBlockColliderType.TRIGGER) || (!physXComponent.trigger && raycastParams.myBlockColliderType == RaycastBlockColliderType.NORMAL);
                 }

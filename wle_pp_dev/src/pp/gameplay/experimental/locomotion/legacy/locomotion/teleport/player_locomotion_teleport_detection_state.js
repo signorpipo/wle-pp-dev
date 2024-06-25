@@ -286,7 +286,7 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable 
 
         raycastParams.myIgnoreHitsInsideCollision = true;
         raycastParams.myBlockLayerFlags.setMask(this._myTeleportParams.myDetectionParams.myTeleportBlockLayerFlags.getMask());
-        raycastParams.myBlockColliderType = RaycastBlockColliderType.NORMAL;
+        raycastParams.myBlockColliderType = RaycastBlockColliderType.BOTH;
         raycastParams.myPhysics = Globals.getPhysics(this._myTeleportParams.myEngine);
 
         raycastParams.myObjectsToIgnore.pp_copy(this._myTeleportParams.myCollisionCheckParams.myHorizontalObjectsToIgnore);
@@ -776,7 +776,7 @@ PlayerLocomotionTeleportDetectionState.prototype._isPositionVisible = function (
             }
 
             raycastParams.myIgnoreHitsInsideCollision = true;
-            raycastParams.myBlockColliderType = RaycastBlockColliderType.NORMAL;
+            raycastParams.myBlockColliderType = RaycastBlockColliderType.BOTH;
 
             raycastResult = PhysicsUtils.raycast(raycastParams, raycastResult);
 
