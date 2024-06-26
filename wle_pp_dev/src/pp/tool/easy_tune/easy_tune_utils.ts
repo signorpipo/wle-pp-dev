@@ -174,7 +174,7 @@ export function exportVariablesByName(variableNamesToExport: string[], fileURL: 
     const easyTuneVariables = Globals.getEasyTuneVariables(engine)!;
     for (const variableName of variableNamesToExport) {
         const variable = easyTuneVariables.getEasyTuneVariable(variableName);
-        if (variable.isExportEnabled()) {
+        if (variable != null && variable.isExportEnabled()) {
             objectJSON[variable.getName()] = variable.toJSON();
         }
     }
