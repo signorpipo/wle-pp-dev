@@ -14,9 +14,9 @@
 // but for now do not delete them
 
 import { Emitter, WonderlandEngine } from "@wonderlandengine/api";
-import { ArrayLike, Matrix4 } from "wle-pp/cauldron/type_definitions/array_type_definitions.js";
-import { MathUtils } from "wle-pp/cauldron/utils/math_utils.js";
-import { mat4_create } from "../../plugin/js/extensions/array/vec_create_extension.js";
+import { ArrayLike, Matrix4, Vector3 } from "../../cauldron/type_definitions/array_type_definitions.js";
+import { MathUtils } from "../../cauldron/utils/math_utils.js";
+import { mat4_create, vec3_create } from "../../plugin/js/extensions/array/vec_create_extension.js";
 import { Globals } from "../../pp/globals.js";
 import { EasyTuneUtils } from "./easy_tune_utils.js";
 
@@ -216,7 +216,7 @@ export abstract class EasyTuneVariableTyped<T> extends EasyTuneVariable {
         return this.getValue();
     }
 
-    public override setValue(value: T, resetDefaultValue?: boolean): this {
+    public override setValue(value: Readonly<T>, resetDefaultValue?: boolean): this {
         return this.setValue(value, resetDefaultValue);
     }
 
@@ -224,7 +224,7 @@ export abstract class EasyTuneVariableTyped<T> extends EasyTuneVariable {
         return this.getDefaultValue();
     }
 
-    public override setDefaultValue(value: T): this {
+    public override setDefaultValue(value: Readonly<T>): this {
         return this.setDefaultValue(value);
     }
 
@@ -247,11 +247,11 @@ export abstract class EasyTuneVariableArray<ArrayType extends ArrayLike<ArrayEle
         this.setValue(value, true);
     }
 
-    public override setValue(value: ArrayType, resetDefaultValue: boolean = false): this {
+    public override setValue(value: Readonly<ArrayType>, resetDefaultValue: boolean = false): this {
         const valueChanged = this._myValue != null && !this._myValue.pp_equals(value);
 
         if (this._myValue == null) {
-            this._myValue = value.pp_clone() as ArrayType;
+            this._myValue = value.pp_clone();
         } else {
             this._myValue.pp_copy(value);
         }
@@ -269,9 +269,9 @@ export abstract class EasyTuneVariableArray<ArrayType extends ArrayLike<ArrayEle
         return this;
     }
 
-    public override setDefaultValue(value: ArrayType): this {
+    public override setDefaultValue(value: Readonly<ArrayType>): this {
         if (this._myDefaultValue == null) {
-            this._myDefaultValue = value.pp_clone() as ArrayType;
+            this._myDefaultValue = value.pp_clone();
         } else {
             this._myDefaultValue.pp_copy(value);
         }
@@ -295,7 +295,7 @@ export class EasyTuneNumberArray extends EasyTuneVariableArray<ArrayLike<number>
 
     private _myEditAllValuesTogether: boolean;
 
-    constructor(name: string, value: ArrayLike<number>, onValueChangedEventListener?: (value: unknown, easyTuneVariable: EasyTuneVariable) => void, showOnWidget?: boolean, decimalPlaces: number = 3, stepPerSecond: number = 1, min: number = -Number.MAX_VALUE, max: number = Number.MAX_VALUE, editAllValuesTogether: boolean = false, extraParams?: Readonly<EasyTuneVariableExtraParams>, engine?: Readonly<WonderlandEngine>) {
+    constructor(name: string, value: Readonly<ArrayLike<number>>, onValueChangedEventListener?: (value: unknown, easyTuneVariable: EasyTuneVariable) => void, showOnWidget?: boolean, decimalPlaces: number = 3, stepPerSecond: number = 1, min: number = -Number.MAX_VALUE, max: number = Number.MAX_VALUE, editAllValuesTogether: boolean = false, extraParams?: Readonly<EasyTuneVariableExtraParams>, engine?: Readonly<WonderlandEngine>) {
         super(EasyTuneVariableType.NUMBER, name, value, onValueChangedEventListener, showOnWidget, extraParams, engine);
 
         this._myDecimalPlaces = decimalPlaces;
@@ -344,7 +344,7 @@ export class EasyTuneNumberArray extends EasyTuneVariableArray<ArrayLike<number>
 
 export class EasyTuneIntArray extends EasyTuneNumberArray {
 
-    constructor(name: string, value: number[], onValueChangedEventListener?: (value: unknown, easyTuneVariable: EasyTuneVariable) => void, showOnWidget?: boolean, stepPerSecond?: number, min: number = -Number.MAX_VALUE, max: number = Number.MAX_VALUE, editAllValuesTogether?: boolean, extraParams?: Readonly<EasyTuneVariableExtraParams>, engine?: Readonly<WonderlandEngine>) {
+    constructor(name: string, value: Readonly<ArrayLike<number>>, onValueChangedEventListener?: (value: unknown, easyTuneVariable: EasyTuneVariable) => void, showOnWidget?: boolean, stepPerSecond?: number, min: number = -Number.MAX_VALUE, max: number = Number.MAX_VALUE, editAllValuesTogether?: boolean, extraParams?: Readonly<EasyTuneVariableExtraParams>, engine?: Readonly<WonderlandEngine>) {
         const roundedValue = value.pp_clone();
 
         for (let i = 0; i < value.length; i++) {
@@ -425,9 +425,9 @@ export class EasyTuneInt extends EasyTuneNumber {
 
 // BOOL
 
-export class EasyTuneBoolArray extends EasyTuneVariableArray<boolean[], boolean> {
+export class EasyTuneBoolArray extends EasyTuneVariableArray<ArrayLike<boolean>, boolean> {
 
-    constructor(name: string, value: boolean[], onValueChangedEventListener?: (value: unknown, easyTuneVariable: EasyTuneVariable) => void, showOnWidget?: boolean, extraParams?: Readonly<EasyTuneVariableExtraParams>, engine?: Readonly<WonderlandEngine>) {
+    constructor(name: string, value: Readonly<ArrayLike<boolean>>, onValueChangedEventListener?: (value: unknown, easyTuneVariable: EasyTuneVariable) => void, showOnWidget?: boolean, extraParams?: Readonly<EasyTuneVariableExtraParams>, engine?: Readonly<WonderlandEngine>) {
         super(EasyTuneVariableType.BOOL, name, value, onValueChangedEventListener, showOnWidget, extraParams, engine);
     }
 }
@@ -447,15 +447,39 @@ export class EasyTuneBool extends EasyTuneVariableTyped<boolean> {
 // EASY TUNE EASY TRANSFORM
 
 export class EasyTuneTransform extends EasyTuneVariableTyped<Matrix4> {
+    protected override _myValue: Matrix4 = mat4_create();
+    protected override _myDefaultValue: Matrix4 = mat4_create();
 
-    constructor(name: string, value: boolean[], onValueChangedEventListener?: (value: unknown, easyTuneVariable: EasyTuneVariable) => void, showOnWidget?: boolean, scaleAsOne: boolean = true, decimalPlaces: number = 3, positionStepPerSecond: number = 1, rotationStepPerSecond: number = 50, scaleStepPerSecond: number = 1, extraParams?: Readonly<EasyTuneVariableExtraParams>, engine?: Readonly<WonderlandEngine>) {
+    private _myDecimalPlaces: number;
+
+    private readonly _myPosition: Vector3 = vec3_create();
+    private readonly _myRotation: Vector3 = vec3_create();
+    private readonly _myScale: Vector3 = vec3_create();
+
+    private _myScaleAsOne: boolean;
+
+    private _myPositionStepPerSecond: number;
+    private _myRotationStepPerSecond: number;
+    private _myScaleStepPerSecond: number;
+
+    private readonly _myDefaultPosition: Vector3 = vec3_create();
+    private readonly _myDefaultRotation: Vector3 = vec3_create();
+    private readonly _myDefaultScale: Vector3 = vec3_create();
+
+    private _myDefaultPositionStepPerSecond: number;
+    private _myDefaultRotationStepPerSecond: number;
+    private _myDefaultScaleStepPerSecond: number;
+
+    constructor(name: string, value: Readonly<Matrix4>, onValueChangedEventListener?: (value: unknown, easyTuneVariable: EasyTuneVariable) => void, showOnWidget?: boolean, scaleAsOne: boolean = true, decimalPlaces: number = 3, positionStepPerSecond: number = 1, rotationStepPerSecond: number = 50, scaleStepPerSecond: number = 1, extraParams?: Readonly<EasyTuneVariableExtraParams>, engine?: Readonly<WonderlandEngine>) {
         super(EasyTuneVariableType.TRANSFORM, name, onValueChangedEventListener, showOnWidget, extraParams, engine);
 
         this._myDecimalPlaces = decimalPlaces;
 
-        this._myPosition = value.mat4_getPosition();
-        this._myRotation = value.mat4_getRotationDegrees();
-        this._myScale = value.mat4_getScale();
+        this._myValue.mat4_copy(value);
+
+        this._myValue.mat4_getPosition(this._myPosition);
+        this._myValue.mat4_getRotationDegrees(this._myRotation);
+        this._myValue.mat4_getScale(this._myScale);
 
         const decimalPlacesMultiplier = Math.pow(10, this._myDecimalPlaces);
         for (let i = 0; i < 3; i++) {
@@ -468,38 +492,35 @@ export class EasyTuneTransform extends EasyTuneVariableTyped<Matrix4> {
         this._myRotationStepPerSecond = rotationStepPerSecond;
         this._myScaleStepPerSecond = scaleStepPerSecond;
 
-        this._myDefaultPosition = this._myPosition.vec3_clone();
-        this._myDefaultRotation = this._myRotation.vec3_clone();
-        this._myDefaultScale = this._myScale.vec3_clone();
+        this._myDefaultValue.mat4_copy(this._myValue);
+
+        this._myDefaultValue.mat4_getPosition(this._myDefaultPosition);
+        this._myDefaultValue.mat4_getRotationDegrees(this._myDefaultRotation);
+        this._myDefaultValue.mat4_getScale(this._myDefaultScale);
 
         this._myDefaultPositionStepPerSecond = this._myPositionStepPerSecond;
         this._myDefaultRotationStepPerSecond = this._myRotationStepPerSecond;
         this._myDefaultScaleStepPerSecond = this._myScaleStepPerSecond;
-
-        this._myTransform = mat4_create();
-        this._myTransform.mat4_setPositionRotationDegreesScale(this._myPosition, this._myRotation, this._myScale);
-
-        this._myTempTransform = mat4_create();
     }
 
-    public override getValue(): Readonly<Matrix4> {
-        this._myTransform.mat4_setPositionRotationDegreesScale(this._myPosition, this._myRotation, this._myScale);
-        return this._myTransform;
-    }
+    private static readonly _setValueSV =
+        {
+            oldValue: mat4_create()
+        };
+    public override setValue(value: Readonly<Matrix4>, resetDefaultValue = false): this {
+        const oldValue = EasyTuneTransform._setValueSV.oldValue;
+        oldValue.mat4_copy(this._myValue);
 
-    setValue(value, resetDefaultValue = false) {
-        this._myTempTransform.mat4_setPositionRotationDegreesScale(this._myPosition, this._myRotation, this._myScale);
+        this._myValue.mat4_copy(value);
 
-        value.mat4_getPosition(this._myPosition);
-        value.mat4_getRotationDegrees(this._myRotation);
-        value.mat4_getScale(this._myScale);
+        this._myValue.mat4_getPosition(this._myPosition);
+        this._myValue.mat4_getRotationDegrees(this._myRotation);
+        this._myValue.mat4_getScale(this._myScale);
 
-        this._myTransform.mat4_setPositionRotationDegreesScale(this._myPosition, this._myRotation, this._myScale);
-
-        let valueChanged = !this._myTempTransform.pp_equals(this._myTransform);
+        const valueChanged = !oldValue.pp_equals(this._myValue);
 
         if (resetDefaultValue) {
-            EasyTuneTransform.prototype.setDefaultValue.call(this, value);
+            this.setDefaultValue(value);
         }
 
         EasyTuneUtils.refreshWidget(this._myEngine);
@@ -511,15 +532,17 @@ export class EasyTuneTransform extends EasyTuneVariableTyped<Matrix4> {
         return this;
     }
 
-    setDefaultValue(value) {
-        this._myDefaultPosition = value.mat4_getPosition();
-        this._myDefaultRotation = value.mat4_getRotationDegrees();
-        this._myDefaultScale = value.mat4_getScale();
+    public override setDefaultValue(value: Readonly<Matrix4>): this {
+        this._myDefaultValue.mat4_copy(value);
+
+        this._myDefaultValue.mat4_getPosition(this._myDefaultPosition);
+        this._myDefaultValue.mat4_getRotationDegrees(this._myDefaultRotation);
+        this._myDefaultValue.mat4_getScale(this._myDefaultScale);
 
         return this;
     }
 
-    toJSON() {
+    public override toJSON(): string {
         return this.getValue().vec_toString();
     }
 }

@@ -1,6 +1,6 @@
 import { Component } from "@wonderlandengine/api";
 import { property } from "@wonderlandengine/api/decorators.js";
-import { GamepadButtonID } from "wle-pp/input/gamepad/gamepad_buttons.js";
+import { GamepadButtonID } from "../../../input/gamepad/gamepad_buttons.js";
 import { Globals } from "../../../pp/globals.js";
 import { EasyTuneUtils } from "../easy_tune_utils.js";
 import { EasyTuneWidget, EasyTuneWidgetParams } from "../easy_tune_widgets/easy_tune_widget.js";

@@ -14,16 +14,16 @@ export class EasyTuneVariables {
         this._myVariables.delete(variableName);
     }
 
-    public get(variableName: string) {
+    public get<ValueType>(variableName: string): ValueType | null {
         const variable = this._myVariables.get(variableName);
         if (variable != null) {
-            return variable.getValue();
+            return variable.getValue() as ValueType;
         }
 
         return null;
     }
 
-    public set(variableName: string, value, resetDefaultValue: boolean = false): void {
+    public set<ValueType>(variableName: string, value: ValueType, resetDefaultValue: boolean = false): void {
         const variable = this._myVariables.get(variableName);
         if (variable != null) {
             variable.setValue(value, resetDefaultValue);
@@ -47,8 +47,8 @@ export class EasyTuneVariables {
         return false;
     }
 
-    public getEasyTuneVariable(variableName: string): EasyTuneVariable | null {
-        return this._myVariables.get(variableName) ?? null;
+    public getEasyTuneVariable<EasyTuneVariableType extends EasyTuneVariable>(variableName: string): EasyTuneVariableType | null {
+        return this._myVariables.get(variableName) as EasyTuneVariableType ?? null;
     }
 
     public getEasyTuneVariablesList(): EasyTuneVariable[] {
@@ -94,8 +94,8 @@ export class EasyTuneVariables {
         return JSON.stringify(objectJSON);
     }
 
-    public registerValueChangedEventListener(variableName: string, id: unknown, callback: (value, easyTuneVariable: EasyTuneVariable) => void): void {
-        this._myVariables.get(variableName)!.registerValueChangedEventListener(id, callback);
+    public registerValueChangedEventListener<ValueType, EasyTuneVariableType extends EasyTuneVariable>(variableName: string, id: unknown, callback: (value: ValueType, easyTuneVariable: EasyTuneVariableType) => void): void {
+        this._myVariables.get(variableName)!.registerValueChangedEventListener(id, callback as (value: unknown, easyTuneVariable: EasyTuneVariable) => void);
     }
 
     public unregisterValueChangedEventListener(variableName: string, id: unknown): void {
