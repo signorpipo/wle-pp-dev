@@ -14,7 +14,7 @@ export class EasyTuneVariables {
         this._myVariables.delete(variableName);
     }
 
-    public get<ValueType>(variableName: string): ValueType | null {
+    public get<ValueType>(variableName: string): Readonly<ValueType> | null {
         const variable = this._myVariables.get(variableName);
         if (variable != null) {
             return variable.getValue() as ValueType;
@@ -23,7 +23,7 @@ export class EasyTuneVariables {
         return null;
     }
 
-    public set<ValueType>(variableName: string, value: ValueType, resetDefaultValue: boolean = false): void {
+    public set<ValueType>(variableName: string, value: Readonly<ValueType>, resetDefaultValue: boolean = false): void {
         const variable = this._myVariables.get(variableName);
         if (variable != null) {
             variable.setValue(value, resetDefaultValue);

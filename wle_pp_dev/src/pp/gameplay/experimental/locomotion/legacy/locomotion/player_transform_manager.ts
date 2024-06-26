@@ -487,7 +487,7 @@ export class PlayerTransformManager {
             transformQuat: quat_create()
         };
     public setHeight(height: number, forceSet: boolean = false): void {
-        const fixedHeight = Math.pp_clamp(height, this._myParams.myMinHeight, this._myParams.myMaxHeight);
+        const fixedHeight = Math.pp_clamp(height, this._myParams.myMinHeight ?? undefined, this._myParams.myMaxHeight ?? undefined);
         const previousHeight = this.getHeight();
 
         this._myValidHeight = fixedHeight;
@@ -680,7 +680,7 @@ export class PlayerTransformManager {
             this.getRotationRealQuat(this._myValidRotationQuat);
         }
 
-        this._myValidHeight = Math.pp_clamp(this.getHeightReal(), this._myParams.myMinHeight, this._myParams.myMaxHeight);
+        this._myValidHeight = Math.pp_clamp(this.getHeightReal(), this._myParams.myMinHeight ?? undefined, this._myParams.myMaxHeight ?? undefined);
 
         if (updateValidToReal) {
             this._updateValidToReal(0);
@@ -811,7 +811,7 @@ export class PlayerTransformManager {
 
     private _updateCollisionHeight(): void {
         const validHeight = this.getHeight();
-        const realHeight = Math.pp_clamp(this.getHeightReal(), this._myParams.myMinHeight, this._myParams.myMaxHeight);
+        const realHeight = Math.pp_clamp(this.getHeightReal(), this._myParams.myMinHeight ?? undefined, this._myParams.myMaxHeight ?? undefined);
 
         this._myParams.myMovementCollisionCheckParams.myHeight = validHeight;
         this._myParams.myTeleportCollisionCheckParams!.myHeight = validHeight;
@@ -1144,8 +1144,8 @@ export class PlayerTransformManager {
             CollisionCheckBridge.getCollisionCheck(this._myParams.myEngine as any).move(movementToCheck, transformQuat, this._myRealMovementCollisionCheckParams, collisionRuntimeParams);
 
             if (!collisionRuntimeParams.myHorizontalMovementCanceled && !collisionRuntimeParams.myVerticalMovementCanceled) {
-                if (Math.pp_clamp(this._myRealMovementCollisionCheckParams.myHeight, this._myParams.myIsBodyCollidingWhenHeightBelowValue,
-                    this._myParams.myIsBodyCollidingWhenHeightAboveValue) != this._myRealMovementCollisionCheckParams.myHeight) {
+                if (Math.pp_clamp(this._myRealMovementCollisionCheckParams.myHeight, this._myParams.myIsBodyCollidingWhenHeightBelowValue ?? undefined,
+                    this._myParams.myIsBodyCollidingWhenHeightAboveValue ?? undefined) != this._myRealMovementCollisionCheckParams.myHeight) {
                     this._myIsBodyColliding = true;
                 } else {
                     if (this._myParams.myIsBodyCollidingExtraCheckCallback != null && this._myParams.myIsBodyCollidingExtraCheckCallback(this)) {
@@ -1197,7 +1197,7 @@ export class PlayerTransformManager {
                         const movementLength = movementToCheck.vec3_length();
                         const equalStepLength = movementLength / maxSteps;
 
-                        const stepLength = Math.pp_clamp(equalStepLength, minLength, maxLength);
+                        const stepLength = Math.pp_clamp(equalStepLength, minLength ?? undefined, maxLength ?? undefined);
                         if (stepLength != equalStepLength) {
                             movementStepAmount = Math.ceil(movementLength / stepLength);
                             movementStep.vec3_normalize(movementStep).vec3_scale(stepLength, movementStep);

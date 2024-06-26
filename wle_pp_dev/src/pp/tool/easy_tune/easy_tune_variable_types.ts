@@ -213,27 +213,27 @@ export abstract class EasyTuneVariableTyped<T> extends EasyTuneVariable {
     }
 
     public override getValue(): Readonly<T> {
-        return this.getValue();
+        return super.getValue() as T;
     }
 
     public override setValue(value: Readonly<T>, resetDefaultValue?: boolean): this {
-        return this.setValue(value, resetDefaultValue);
+        return super.setValue(value, resetDefaultValue);
     }
 
     public override getDefaultValue(): Readonly<T> {
-        return this.getDefaultValue();
+        return super.getDefaultValue() as T;
     }
 
     public override setDefaultValue(value: Readonly<T>): this {
-        return this.setDefaultValue(value);
+        return super.setDefaultValue(value);
     }
 
     public override registerValueChangedEventListener(id: unknown, listener: (value: T, easyTuneVariable: EasyTuneVariable) => void): this {
-        return this.registerValueChangedEventListener(id, listener);
+        return super.registerValueChangedEventListener(id, listener as (value: unknown, easyTuneVariable: EasyTuneVariable) => void);
     }
 
     public override unregisterValueChangedEventListener(id: unknown): this {
-        return this.unregisterValueChangedEventListener(id);
+        return super.unregisterValueChangedEventListener(id);
     }
 }
 
