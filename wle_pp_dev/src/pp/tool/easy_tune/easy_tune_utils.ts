@@ -1,36 +1,39 @@
+import { WonderlandEngine } from "@wonderlandengine/api";
 import { Globals } from "../../pp/globals.js";
 
-let _mySetWidgetCurrentVariableCallbacks = new WeakMap();    // Signature: callback(variableName)
-let _myRefreshWidgetCallbacks = new WeakMap();               // Signature: callback()
+const _mySetWidgetCurrentVariableCallbacks: WeakMap<Readonly<WonderlandEngine>, Map<unknown, (variableName: string) => void>> = new WeakMap();
+const _myRefreshWidgetCallbacks: WeakMap<Readonly<WonderlandEngine>, Map<unknown, () => void>> = new WeakMap();
 
-let _myAutoImportEnabledDefaultValues = new WeakMap();
-let _myManualImportEnabledDefaultValues = new WeakMap();
-let _myExportEnabledDefaultValues = new WeakMap();
+const _myAutoImportEnabledDefaultValues: WeakMap<Readonly<WonderlandEngine>, boolean> = new WeakMap();
+const _myManualImportEnabledDefaultValues: WeakMap<Readonly<WonderlandEngine>, boolean> = new WeakMap();
+const _myExportEnabledDefaultValues: WeakMap<Readonly<WonderlandEngine>, boolean> = new WeakMap();
 
-export function setWidgetCurrentVariable(variableName, engine = Globals.getMainEngine()) {
+export function setWidgetCurrentVariable(variableName: string, engine: Readonly<WonderlandEngine> = Globals.getMainEngine()!): void {
     if (_mySetWidgetCurrentVariableCallbacks.has(engine)) {
-        for (let callback of _mySetWidgetCurrentVariableCallbacks.get(engine).values()) {
+        for (const callback of _mySetWidgetCurrentVariableCallbacks.get(engine)!.values()) {
             callback(variableName);
         }
     }
 }
 
-export function refreshWidget(engine = Globals.getMainEngine()) {
+export function refreshWidget(engine: Readonly<WonderlandEngine> = Globals.getMainEngine()!): void {
     if (_myRefreshWidgetCallbacks.has(engine)) {
-        for (let callback of _myRefreshWidgetCallbacks.get(engine).values()) {
+        for (const callback of _myRefreshWidgetCallbacks.get(engine)!.values()) {
             callback();
         }
     }
 }
 
-// fileURL can contain parameters inside brackets, like {param}
-// Those parameters will be replaced with the same one on the current page url, like www.currentpage.com/?param=2
-export function importVariables(fileURL = null, resetVariablesDefaultValueOnImport = false, manualImport = false, onSuccessCallback = null, onFailureCallback = null, engine = Globals.getMainEngine()) {
+/**
+ *  @param fileURL Can contain parameters inside brackets, like `my-url.com/{param}`, which be replaced with the same one on the current page url, like `www.currentpage.com/?param=2`  
+ *                 If `null` or empty, it will import from the clipboard
+ */
+export function importVariables(fileURL: string | null = null, resetVariablesDefaultValueOnImport: boolean = false, manualImport: boolean = false, onSuccessCallback?: () => void, onFailureCallback?: () => void, engine: Readonly<WonderlandEngine> = Globals.getMainEngine()!): void {
     if (fileURL == null || fileURL.length == 0) {
         if (navigator.clipboard) {
             navigator.clipboard.readText().then(
                 function (clipboard) {
-                    Globals.getEasyTuneVariables(engine).fromJSON(clipboard, resetVariablesDefaultValueOnImport, manualImport);
+                    Globals.getEasyTuneVariables(engine)!.fromJSON(clipboard, resetVariablesDefaultValueOnImport, manualImport);
 
                     EasyTuneUtils.refreshWidget(engine);
 
@@ -51,14 +54,14 @@ export function importVariables(fileURL = null, resetVariablesDefaultValueOnImpo
             });
         }
     } else {
-        let replacedFileURL = _importExportVariablesReplaceFileURLParams(fileURL, engine);
+        const replacedFileURL = _importExportVariablesReplaceFileURLParams(fileURL);
 
         fetch(replacedFileURL).then(
             function (response) {
                 if (response.ok) {
                     response.text().then(
                         function (text) {
-                            Globals.getEasyTuneVariables(engine).fromJSON(text, resetVariablesDefaultValueOnImport, manualImport);
+                            Globals.getEasyTuneVariables(engine)!.fromJSON(text, resetVariablesDefaultValueOnImport, manualImport);
 
                             EasyTuneUtils.refreshWidget(engine);
 
@@ -99,9 +102,12 @@ export function importVariables(fileURL = null, resetVariablesDefaultValueOnImpo
     EasyTuneUtils.refreshWidget(engine);
 }
 
-// fileURL can contain parameters inside brackets, like {param}
-// Those parameters will be replaced with the same one on the current page url, like www.currentpage.com/?param=2
-export function getImportVariablesJSON(fileURL = null, onSuccessCallback = null, onFailureCallback = null, engine = Globals.getMainEngine()) {
+
+/**
+ *  @param fileURL Can contain parameters inside brackets, like `my-url.com/{param}`, which be replaced with the same one on the current page url, like `www.currentpage.com/?param=2`  
+ *                 If `null` or empty, it will import from the clipboard
+ */
+export function getImportVariablesJSON(fileURL: string | null = null, onSuccessCallback?: (variablesJSON: string) => void, onFailureCallback?: () => void, engine: Readonly<WonderlandEngine> = Globals.getMainEngine()!): void {
     if (fileURL == null || fileURL.length == 0) {
         if (navigator.clipboard) {
             navigator.clipboard.readText().then(
@@ -117,7 +123,7 @@ export function getImportVariablesJSON(fileURL = null, onSuccessCallback = null,
             });
         }
     } else {
-        let replacedFileURL = _importExportVariablesReplaceFileURLParams(fileURL, engine);
+        const replacedFileURL = _importExportVariablesReplaceFileURLParams(fileURL);
 
         fetch(replacedFileURL).then(
             function (response) {
@@ -147,19 +153,25 @@ export function getImportVariablesJSON(fileURL = null, onSuccessCallback = null,
     }
 }
 
-// fileURL can contain parameters inside brackets, like {param}
-// Those parameters will be replaced with the same one on the current page url, like www.currentpage.com/?param=2
-export function exportVariables(fileURL = null, variablesToKeep = null, onSuccessCallback = null, onFailureCallback = null, engine = Globals.getMainEngine()) {
-    const variablesJSONToExport = Globals.getEasyTuneVariables(engine).toJSON();
+
+/**
+ *  @param fileURL Can contain parameters inside brackets, like `my-url.com/{param}`, which be replaced with the same one on the current page url, like `www.currentpage.com/?param=2`  
+ *                 If `null` or empty, it will import from the clipboard
+ */
+export function exportVariables(fileURL: string | null = null, variablesToKeep?: Record<string, unknown>, onSuccessCallback?: () => void, onFailureCallback?: () => void, engine: Readonly<WonderlandEngine> = Globals.getMainEngine()!): void {
+    const variablesJSONToExport = Globals.getEasyTuneVariables(engine)!.toJSON();
     EasyTuneUtils.exportVariablesJSON(variablesJSONToExport, fileURL, variablesToKeep, onSuccessCallback, onFailureCallback, engine);
 }
 
-// fileURL can contain parameters inside brackets, like {param}
-// Those parameters will be replaced with the same one on the current page url, like www.currentpage.com/?param=2
-export function exportVariablesByName(variableNamesToExport, fileURL = null, variablesToKeep = null, onSuccessCallback = null, onFailureCallback = null, engine = Globals.getMainEngine()) {
-    let objectJSON = {};
 
-    const easyTuneVariables = Globals.getEasyTuneVariables(engine);
+/**
+ *  @param fileURL Can contain parameters inside brackets, like `my-url.com/{param}`, which be replaced with the same one on the current page url, like `www.currentpage.com/?param=2`  
+ *                 If `null` or empty, it will import from the clipboard
+ */
+export function exportVariablesByName(variableNamesToExport: string[], fileURL: string | null = null, variablesToKeep?: Record<string, unknown>, onSuccessCallback?: () => void, onFailureCallback?: () => void, engine: Readonly<WonderlandEngine> = Globals.getMainEngine()!): void {
+    const objectJSON: Record<string, unknown> = {};
+
+    const easyTuneVariables = Globals.getEasyTuneVariables(engine)!;
     for (const variableName of variableNamesToExport) {
         const variable = easyTuneVariables.getEasyTuneVariable(variableName);
         if (variable.isExportEnabled()) {
@@ -171,9 +183,12 @@ export function exportVariablesByName(variableNamesToExport, fileURL = null, var
     EasyTuneUtils.exportVariablesJSON(variablesJSONToExport, fileURL, variablesToKeep, onSuccessCallback, onFailureCallback, engine);
 }
 
-// fileURL can contain parameters inside brackets, like {param}
-// Those parameters will be replaced with the same one on the current page url, like www.currentpage.com/?param=2
-export function exportVariablesJSON(variablesJSONToExport, fileURL = null, variablesToKeep = null, onSuccessCallback = null, onFailureCallback = null, engine = Globals.getMainEngine()) {
+
+/**
+ *  @param fileURL Can contain parameters inside brackets, like `my-url.com/{param}`, which be replaced with the same one on the current page url, like `www.currentpage.com/?param=2`  
+ *                 If `null` or empty, it will import from the clipboard
+ */
+export function exportVariablesJSON(variablesJSONToExport: string, fileURL: string | null = null, variablesToKeep?: Record<string, unknown>, onSuccessCallback?: () => void, onFailureCallback?: () => void, engine: Readonly<WonderlandEngine> = Globals.getMainEngine()!): void {
     // Useful if some variables are not in the json export and therefore would not be there anymore
     if (variablesToKeep != null) {
         try {
@@ -218,7 +233,7 @@ export function exportVariablesJSON(variablesJSONToExport, fileURL = null, varia
             });
         }
     } else {
-        let replacedFileURL = _importExportVariablesReplaceFileURLParams(fileURL, engine);
+        const replacedFileURL = _importExportVariablesReplaceFileURLParams(fileURL);
 
         fetch(replacedFileURL, {
             headers: {
@@ -264,83 +279,86 @@ export function exportVariablesJSON(variablesJSONToExport, fileURL = null, varia
     }
 }
 
-// fileURL can contain parameters inside brackets, like {param}
-// Those parameters will be replaced with the same one on the current page url, like www.currentpage.com/?param=2
-export function clearExportedVariables(fileURL = null, onSuccessCallback = null, onFailureCallback = null, engine = Globals.getMainEngine()) {
-    EasyTuneUtils.exportVariablesJSON("", fileURL, null, onSuccessCallback, onFailureCallback, engine);
+
+/**
+ *  @param fileURL Can contain parameters inside brackets, like `my-url.com/{param}`, which be replaced with the same one on the current page url, like `www.currentpage.com/?param=2`  
+ *                 If `null` or empty, it will import from the clipboard
+ */
+export function clearExportedVariables(fileURL: string | null = null, onSuccessCallback?: () => void, onFailureCallback?: () => void, engine: Readonly<WonderlandEngine> = Globals.getMainEngine()!): void {
+    EasyTuneUtils.exportVariablesJSON("", fileURL, undefined, onSuccessCallback, onFailureCallback, engine);
 }
 
-export function setAutoImportEnabledDefaultValue(defaultValue, engine = Globals.getMainEngine()) {
+export function setAutoImportEnabledDefaultValue(defaultValue: boolean, engine: Readonly<WonderlandEngine> = Globals.getMainEngine()!): void {
     _myAutoImportEnabledDefaultValues.set(engine, defaultValue);
 }
 
-export function setManualImportEnabledDefaultValue(defaultValue, engine = Globals.getMainEngine()) {
+export function setManualImportEnabledDefaultValue(defaultValue: boolean, engine: Readonly<WonderlandEngine> = Globals.getMainEngine()!): void {
     _myManualImportEnabledDefaultValues.set(engine, defaultValue);
 }
 
-export function setExportEnabledDefaultValue(defaultValue, engine = Globals.getMainEngine()) {
+export function setExportEnabledDefaultValue(defaultValue: boolean, engine: Readonly<WonderlandEngine> = Globals.getMainEngine()!): void {
     _myExportEnabledDefaultValues.set(engine, defaultValue);
 }
 
-export function getAutoImportEnabledDefaultValue(engine = Globals.getMainEngine()) {
+export function getAutoImportEnabledDefaultValue(engine: Readonly<WonderlandEngine> = Globals.getMainEngine()!): boolean {
     let defaultValue = true;
 
     if (_myAutoImportEnabledDefaultValues.has(engine)) {
-        defaultValue = _myAutoImportEnabledDefaultValues.get(engine);
+        defaultValue = _myAutoImportEnabledDefaultValues.get(engine) ?? false;
     }
 
     return defaultValue;
 }
 
-export function getManualImportEnabledDefaultValue(engine = Globals.getMainEngine()) {
+export function getManualImportEnabledDefaultValue(engine: Readonly<WonderlandEngine> = Globals.getMainEngine()!): boolean {
     let defaultValue = true;
 
     if (_myManualImportEnabledDefaultValues.has(engine)) {
-        defaultValue = _myManualImportEnabledDefaultValues.get(engine);
+        defaultValue = _myManualImportEnabledDefaultValues.get(engine) ?? false;
     }
 
     return defaultValue;
 }
 
-export function getExportEnabledDefaultValue(engine = Globals.getMainEngine()) {
+export function getExportEnabledDefaultValue(engine: Readonly<WonderlandEngine> = Globals.getMainEngine()!): boolean {
     let defaultValue = true;
 
     if (_myExportEnabledDefaultValues.has(engine)) {
-        defaultValue = _myExportEnabledDefaultValues.get(engine);
+        defaultValue = _myExportEnabledDefaultValues.get(engine) ?? false;
     }
 
     return defaultValue;
 }
 
-export function addSetWidgetCurrentVariableCallback(id, callback, engine = Globals.getMainEngine()) {
+export function addSetWidgetCurrentVariableCallback(id: unknown, callback: (variableName: string) => void, engine: Readonly<WonderlandEngine> = Globals.getMainEngine()!): void {
     if (!_mySetWidgetCurrentVariableCallbacks.has(engine)) {
         _mySetWidgetCurrentVariableCallbacks.set(engine, new Map());
     }
 
-    _mySetWidgetCurrentVariableCallbacks.get(engine).set(id, callback);
+    _mySetWidgetCurrentVariableCallbacks.get(engine)!.set(id, callback);
 }
 
-export function removeSetWidgetCurrentVariableCallback(id, engine = Globals.getMainEngine()) {
+export function removeSetWidgetCurrentVariableCallback(id: unknown, engine: Readonly<WonderlandEngine> = Globals.getMainEngine()!): void {
     if (_mySetWidgetCurrentVariableCallbacks.has(engine)) {
-        _mySetWidgetCurrentVariableCallbacks.get(engine).delete(id);
+        _mySetWidgetCurrentVariableCallbacks.get(engine)!.delete(id);
     }
 }
 
-export function addRefreshWidgetCallback(id, callback, engine = Globals.getMainEngine()) {
+export function addRefreshWidgetCallback(id: unknown, callback: () => void, engine: Readonly<WonderlandEngine> = Globals.getMainEngine()!): void {
     if (!_myRefreshWidgetCallbacks.has(engine)) {
         _myRefreshWidgetCallbacks.set(engine, new Map());
     }
 
-    _myRefreshWidgetCallbacks.get(engine).set(id, callback);
+    _myRefreshWidgetCallbacks.get(engine)!.set(id, callback);
 }
 
-export function removeRefreshWidgetCallback(id, engine = Globals.getMainEngine()) {
+export function removeRefreshWidgetCallback(id: unknown, engine: Readonly<WonderlandEngine> = Globals.getMainEngine()!): void {
     if (_myRefreshWidgetCallbacks.has(engine)) {
-        _myRefreshWidgetCallbacks.get(engine).delete(id);
+        _myRefreshWidgetCallbacks.get(engine)!.delete(id);
     }
 }
 
-export let EasyTuneUtils = {
+export const EasyTuneUtils = {
     setWidgetCurrentVariable,
     refreshWidget,
     importVariables,
@@ -359,14 +377,14 @@ export let EasyTuneUtils = {
     removeSetWidgetCurrentVariableCallback,
     addRefreshWidgetCallback,
     removeRefreshWidgetCallback
-};
+} as const;
 
 
 
-let _importExportVariablesReplaceFileURLParams = function () {
-    let matchEasyTuneURLParamsRegex = new RegExp("\\{.+?\\}", "g");
-    return function _importExportVariablesReplaceFileURLParams(fileURL, engine = Globals.getMainEngine()) {
-        let params = fileURL.match(matchEasyTuneURLParamsRegex);
+const _importExportVariablesReplaceFileURLParams = function () {
+    const matchEasyTuneURLParamsRegex = new RegExp("\\{.+?\\}", "g");
+    return function _importExportVariablesReplaceFileURLParams(fileURL: string) {
+        const params = fileURL.match(matchEasyTuneURLParamsRegex);
 
         if (params == null || params.length == 0) {
             return fileURL;
@@ -377,12 +395,13 @@ let _importExportVariablesReplaceFileURLParams = function () {
             params[i] = params[i].replace("}", "");
         }
 
-        let urlSearchParams = new URL(document.location).searchParams;
+        const urlQuery = window.location.search;
+        const urlSearchParams = new URLSearchParams(urlQuery);
 
         let replacedFileURL = fileURL;
 
-        for (let param of params) {
-            let searchParamValue = urlSearchParams.get(param);
+        for (const param of params) {
+            const searchParamValue = urlSearchParams.get(param);
             if (searchParamValue != null) {
                 replacedFileURL = replacedFileURL.replace("{" + param + "}", searchParamValue);
             }

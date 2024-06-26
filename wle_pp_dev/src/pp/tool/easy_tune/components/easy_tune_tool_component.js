@@ -1,10 +1,9 @@
 import { Component, Property } from "@wonderlandengine/api";
+import { GamepadButtonID } from "wle-pp/input/gamepad/gamepad_buttons.js";
 import { Globals } from "../../../pp/globals.js";
 import { EasyTuneUtils } from "../easy_tune_utils.js";
 import { EasyTuneWidget, EasyTuneWidgetParams } from "../easy_tune_widgets/easy_tune_widget.js";
 import { InitEasyTuneVariablesComponent } from "./init_easy_tune_variables_component.js";
-import { GamepadUtils } from "wle-pp/input/gamepad/cauldron/gamepad_utils.js";
-import { GamepadButtonID } from "wle-pp/input/gamepad/gamepad_buttons.js";
 
 export class EasyTuneToolComponent extends Component {
     static TypeName = "pp-easy-tune-tool";
