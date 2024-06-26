@@ -84,10 +84,10 @@ export class EasyTuneToolComponent extends Component {
             params.myTextMaterial = Globals.getDefaultMaterials(this.engine)!.myText!.clone();
 
             params.myShowVariablesImportExportButtons = this._myShowVariablesImportExportButtons;
-            params.myVariablesImportCallback = function (this: EasyTuneToolComponent, onSuccessCallback?: () => void, onFailureCallback?: () => void) {
+            params.myVariablesImportCallback = function (this: EasyTuneToolComponent, onSuccessCallback: (() => void) | null = null, onFailureCallback: (() => void) | null = null) {
                 EasyTuneUtils.importVariables(this._myVariablesImportURL, this._myResetVariablesDefaultValueOnImport, true, onSuccessCallback, onFailureCallback, this.engine);
             }.bind(this);
-            params.myVariablesExportCallback = function (this: EasyTuneToolComponent, onSuccessCallback?: () => void, onFailureCallback?: () => void) {
+            params.myVariablesExportCallback = function (this: EasyTuneToolComponent, onSuccessCallback: (() => void) | null = null, onFailureCallback: (() => void) | null = null) {
                 if (Globals.getLeftGamepad()!.getButtonInfo(GamepadButtonID.SQUEEZE).isPressed() &&
                     Globals.getLeftGamepad()!.getButtonInfo(GamepadButtonID.TOP_BUTTON).isPressed() &&
                     Globals.getLeftGamepad()!.getButtonInfo(GamepadButtonID.BOTTOM_BUTTON).isPressed()) {

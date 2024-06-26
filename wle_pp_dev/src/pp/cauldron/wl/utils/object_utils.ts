@@ -2552,6 +2552,48 @@ export const toStringCompact = function () {
     };
 }();
 
+export function log(object: Readonly<Object3D>): Object3D {
+    return ObjectUtils.logCompact(object);
+}
+
+export function logExtended(object: Readonly<Object3D>): Object3D {
+    console.log(ObjectUtils.toStringExtended(object));
+    return object as Object3D;
+}
+
+export function logCompact(object: Readonly<Object3D>): Object3D {
+    console.log(ObjectUtils.toStringCompact(object));
+    return object as Object3D;
+}
+
+export function warn(object: Readonly<Object3D>): Object3D {
+    return ObjectUtils.warnCompact(object);
+}
+
+export function warnExtended(object: Readonly<Object3D>): Object3D {
+    console.warn(ObjectUtils.toStringExtended(object));
+    return object as Object3D;
+}
+
+export function warnCompact(object: Readonly<Object3D>): Object3D {
+    console.warn(ObjectUtils.toStringCompact(object));
+    return object as Object3D;
+}
+
+export function error(object: Readonly<Object3D>): Object3D {
+    return ObjectUtils.errorCompact(object);
+}
+
+export function errorExtended(object: Readonly<Object3D>): Object3D {
+    console.error(ObjectUtils.toStringExtended(object));
+    return object as Object3D;
+}
+
+export function errorCompact(object: Readonly<Object3D>): Object3D {
+    console.error(ObjectUtils.toStringCompact(object));
+    return object as Object3D;
+}
+
 // Get Object By Name
 
 export function getObjectByName(object: Readonly<Object3D>, name: string, isRegex: boolean = false, index: number = 0): Object3D | null {
@@ -3298,6 +3340,15 @@ export const ObjectUtils = {
     toString,
     toStringExtended,
     toStringCompact,
+    log,
+    logExtended,
+    logCompact,
+    warn,
+    warnExtended,
+    warnCompact,
+    error,
+    errorExtended,
+    errorCompact,
     getObjectByName,
     getObjectByNameHierarchy,
     getObjectByNameHierarchyBreadth,

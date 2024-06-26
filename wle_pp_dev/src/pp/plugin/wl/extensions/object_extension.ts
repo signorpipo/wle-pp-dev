@@ -1057,6 +1057,42 @@ function _initObjectExtensionProtoype(): void {
             return ObjectUtils.toStringCompact(this);
         },
 
+        pp_log(this: Readonly<Object3D>): Object3D {
+            return ObjectUtils.log(this);
+        },
+
+        pp_logExtended(this: Readonly<Object3D>): Object3D {
+            return ObjectUtils.logExtended(this);
+        },
+
+        pp_logCompact(this: Readonly<Object3D>): Object3D {
+            return ObjectUtils.logCompact(this);
+        },
+
+        pp_warn(this: Readonly<Object3D>): Object3D {
+            return ObjectUtils.warn(this);
+        },
+
+        pp_warnExtended(this: Readonly<Object3D>): Object3D {
+            return ObjectUtils.warnExtended(this);
+        },
+
+        pp_warnCompact(this: Readonly<Object3D>): Object3D {
+            return ObjectUtils.warnCompact(this);
+        },
+
+        pp_error(this: Readonly<Object3D>): Object3D {
+            return ObjectUtils.error(this);
+        },
+
+        pp_errorExtended(this: Readonly<Object3D>): Object3D {
+            return ObjectUtils.errorExtended(this);
+        },
+
+        pp_errorCompact(this: Readonly<Object3D>): Object3D {
+            return ObjectUtils.errorCompact(this);
+        },
+
         pp_getObjectByName(this: Readonly<Object3D>, name: string, isRegex?: boolean, index?: number): Object3D | null {
             return ObjectUtils.getObjectByName(this, name, isRegex, index);
         },

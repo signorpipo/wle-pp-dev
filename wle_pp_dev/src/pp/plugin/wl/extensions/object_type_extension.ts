@@ -614,6 +614,18 @@ export interface Object3DExtension {
     pp_toStringExtended(this: Readonly<Object3D>): string;
     pp_toStringCompact(this: Readonly<Object3D>): string;
 
+    pp_log(this: Readonly<Object3D>): Object3D;
+    pp_logExtended(this: Readonly<Object3D>): Object3D;
+    pp_logCompact(this: Readonly<Object3D>): Object3D;
+
+    pp_warn(this: Readonly<Object3D>): Object3D;
+    pp_warnExtended(this: Readonly<Object3D>): Object3D;
+    pp_warnCompact(this: Readonly<Object3D>): Object3D;
+
+    pp_error(this: Readonly<Object3D>): Object3D;
+    pp_errorExtended(this: Readonly<Object3D>): Object3D;
+    pp_errorCompact(this: Readonly<Object3D>): Object3D;
+
 
 
     pp_getObjectByName(this: Readonly<Object3D>, name: string, isRegex?: boolean, index?: number): Object3D | null;

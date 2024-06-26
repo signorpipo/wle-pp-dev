@@ -7,12 +7,12 @@ export class ExampleEasyTuneVariablesComponent extends Component {
     public static override TypeName = "example-easy-tune-variables";
 
     public override start(): void {
-        Globals.getEasyTuneVariables(this.engine)!.add(new EasyTuneNumber("Float", 1.00, undefined, true, 3, 0.1));
-        Globals.getEasyTuneVariables(this.engine)!.add(new EasyTuneNumberArray("Float Array", [1.00, 2.00, 3.00], undefined, true, 3, 0.1));
-        Globals.getEasyTuneVariables(this.engine)!.add(new EasyTuneInt("Int", 1, undefined, true, 1));
-        Globals.getEasyTuneVariables(this.engine)!.add(new EasyTuneIntArray("Int Array", [1, 2, 3], undefined, true, 1));
-        Globals.getEasyTuneVariables(this.engine)!.add(new EasyTuneBool("Bool", false, undefined, true));
-        Globals.getEasyTuneVariables(this.engine)!.add(new EasyTuneBoolArray("Bool Array", [false, true, false], undefined, true));
-        Globals.getEasyTuneVariables(this.engine)!.add(new EasyTuneTransform("Transform", mat4_create(), undefined, true, true, 3));
+        Globals.getEasyTuneVariables(this.engine)!.add(new EasyTuneNumber("Float", 1.00, null, true, 3, 0.1));
+        Globals.getEasyTuneVariables(this.engine)!.add(new EasyTuneNumberArray("Float Array", [1.00, 2.00, 3.00], null, true, 3, 0.1));
+        Globals.getEasyTuneVariables(this.engine)!.add(new EasyTuneInt("Int", 1, null, true, 1));
+        Globals.getEasyTuneVariables(this.engine)!.add(new EasyTuneIntArray("Int Array", [1, 2, 3], null, true, 1));
+        Globals.getEasyTuneVariables(this.engine)!.add(new EasyTuneBool("Bool", false, null, true));
+        Globals.getEasyTuneVariables(this.engine)!.add(new EasyTuneBoolArray("Bool Array", [false, true, false], null, true));
+        Globals.getEasyTuneVariables(this.engine)!.add(new EasyTuneTransform("Transform", mat4_create(), null, true, true, 3));
     }
 }
