@@ -1,4 +1,5 @@
-import { Component, Property } from "@wonderlandengine/api";
+import { Component } from "@wonderlandengine/api";
+import { property } from "@wonderlandengine/api/decorators.js";
 import { GamepadButtonID } from "wle-pp/input/gamepad/gamepad_buttons.js";
 import { Globals } from "../../../pp/globals.js";
 import { EasyTuneUtils } from "../easy_tune_utils.js";
@@ -6,60 +7,90 @@ import { EasyTuneWidget, EasyTuneWidgetParams } from "../easy_tune_widgets/easy_
 import { InitEasyTuneVariablesComponent } from "./init_easy_tune_variables_component.js";
 
 export class EasyTuneToolComponent extends Component {
-    static TypeName = "pp-easy-tune-tool";
-    static Properties = {
-        _myHandedness: Property.enum(["None", "Left", "Right"], "None"),
-        _myShowOnStart: Property.bool(false),
-        _myShowVisibilityButton: Property.bool(false),
-        _myGamepadScrollVariableEnabled: Property.bool(true),
+    public static override TypeName = "pp-easy-tune-tool";
 
-        _myShowVariablesImportExportButtons: Property.bool(false),
-        _myVariablesImportURL: Property.string(""),   // The URL can contain parameters inside brackets, like {param}
-        _myVariablesExportURL: Property.string(""),   // Those parameters will be replaced with the same one on the current page url, like www.currentpage.com/?param=2
-        _myImportVariablesOnStart: Property.bool(false),
-        _myResetVariablesDefaultValueOnImport: Property.bool(false),
-        _myKeepImportVariablesOnExport: Property.bool(true)
-    };
+    @property.enum(["None", "Left", "Right"], "None")
+    private readonly _myHandedness!: number;
 
-    init() {
+    @property.bool(false)
+    private readonly _myShowOnStart!: boolean;
+
+    @property.bool(false)
+    private readonly _myShowVisibilityButton!: boolean;
+
+    @property.bool(true)
+    private readonly _myGamepadScrollVariableEnabled!: boolean;
+
+
+    @property.bool(false)
+    private readonly _myShowVariablesImportExportButtons!: boolean;
+
+
+
+    /**
+     *  Can contain parameters inside brackets, like `my-url.com/{param}`,  
+     *  which will be replaced with the same one on the current page url, like `www.currentpage.com/?param=2`   
+     *  If empty, it will import from the clipboard
+     */
+    @property.string("")
+    private readonly _myVariablesImportURL!: string;
+
+    /**
+     *  Can contain parameters inside brackets, like `my-url.com/{param}`,  
+     *  which will be replaced with the same one on the current page url, like `www.currentpage.com/?param=2`   
+     *  If empty, it will import from the clipboard
+     */
+    @property.string("")
+    private readonly _myVariablesExportURL!: string;
+
+    @property.bool(false)
+    private readonly _myImportVariablesOnStart!: boolean;
+
+    @property.bool(false)
+    private readonly _myResetVariablesDefaultValueOnImport!: boolean;
+
+    @property.bool(true)
+    private readonly _myKeepImportVariablesOnExport!: boolean;
+
+    private readonly _myWidget!: EasyTuneWidget;
+
+    private _myStarted: boolean = false;
+    private _myFirstUpdate: boolean = true;
+    private _myWidgetVisibleBackup: boolean | null = null;
+
+    public override init(): void {
         // #TODO this should check for tool enabled but it might not have been initialized yet, not way to specify component order
         // It can't be moved to start either, because other components might call setWidgetCurrentVariable or refreshWidget during start, 
         // so it needs to be initialized before that
 
         this.object.pp_addComponent(InitEasyTuneVariablesComponent);
 
-        this._myWidget = new EasyTuneWidget(this.engine);
+        (this._myWidget as EasyTuneWidget) = new EasyTuneWidget(this.engine);
 
-        EasyTuneUtils.addSetWidgetCurrentVariableCallback(this, function (variableName) {
-            this._myWidget.setCurrentVariable(variableName);
-        }.bind(this), this.engine);
+        EasyTuneUtils.addSetWidgetCurrentVariableCallback(this, (variableName: string) => { this._myWidget.setCurrentVariable(variableName); }, this.engine);
 
-        EasyTuneUtils.addRefreshWidgetCallback(this, function () {
-            this._myWidget.refresh();
-        }.bind(this), this.engine);
-
-        this._myStarted = false;
+        EasyTuneUtils.addRefreshWidgetCallback(this, () => { this._myWidget.refresh(); }, this.engine);
     }
 
-    start() {
+    public override start(): void {
         if (Globals.isToolEnabled(this.engine)) {
-            let params = new EasyTuneWidgetParams();
+            const params = new EasyTuneWidgetParams();
             params.myHandedness = [null, "left", "right"][this._myHandedness];
             params.myShowOnStart = this._myShowOnStart;
             params.myShowVisibilityButton = this._myShowVisibilityButton;
             params.myShowAdditionalButtons = true;
             params.myGamepadScrollVariableEnabled = this._myGamepadScrollVariableEnabled;
-            params.myPlaneMaterial = Globals.getDefaultMaterials(this.engine).myFlatOpaque.clone();
-            params.myTextMaterial = Globals.getDefaultMaterials(this.engine).myText.clone();
+            params.myPlaneMaterial = Globals.getDefaultMaterials(this.engine)!.myFlatOpaque!.clone();
+            params.myTextMaterial = Globals.getDefaultMaterials(this.engine)!.myText!.clone();
 
             params.myShowVariablesImportExportButtons = this._myShowVariablesImportExportButtons;
-            params.myVariablesImportCallback = function (onSuccessCallback, onFailureCallback) {
+            params.myVariablesImportCallback = function (this: EasyTuneToolComponent, onSuccessCallback?: () => void, onFailureCallback?: () => void) {
                 EasyTuneUtils.importVariables(this._myVariablesImportURL, this._myResetVariablesDefaultValueOnImport, true, onSuccessCallback, onFailureCallback, this.engine);
             }.bind(this);
-            params.myVariablesExportCallback = function (onSuccessCallback, onFailureCallback) {
-                if (Globals.getLeftGamepad().getButtonInfo(GamepadButtonID.SQUEEZE).isPressed() &&
-                    Globals.getLeftGamepad().getButtonInfo(GamepadButtonID.TOP_BUTTON).isPressed() &&
-                    Globals.getLeftGamepad().getButtonInfo(GamepadButtonID.BOTTOM_BUTTON).isPressed()) {
+            params.myVariablesExportCallback = function (this: EasyTuneToolComponent, onSuccessCallback?: () => void, onFailureCallback?: () => void) {
+                if (Globals.getLeftGamepad()!.getButtonInfo(GamepadButtonID.SQUEEZE).isPressed() &&
+                    Globals.getLeftGamepad()!.getButtonInfo(GamepadButtonID.TOP_BUTTON).isPressed() &&
+                    Globals.getLeftGamepad()!.getButtonInfo(GamepadButtonID.BOTTOM_BUTTON).isPressed()) {
 
                     EasyTuneUtils.clearExportedVariables(this._myVariablesExportURL, onSuccessCallback, onFailureCallback, this.engine);
                 } else if (this._myKeepImportVariablesOnExport) {
@@ -76,7 +107,7 @@ export class EasyTuneToolComponent extends Component {
                         EasyTuneUtils.exportVariables(this._myVariablesExportURL, undefined, onSuccessCallback, onFailureCallback, this.engine);
                     }, this.engine);
                 } else {
-                    EasyTuneUtils.exportVariables(this._myVariablesExportURL, this._myKeepImportVariablesOnExport, onSuccessCallback, onFailureCallback, this.engine);
+                    EasyTuneUtils.exportVariables(this._myVariablesExportURL, undefined, onSuccessCallback, onFailureCallback, this.engine);
                 }
             }.bind(this);
 
@@ -89,7 +120,7 @@ export class EasyTuneToolComponent extends Component {
         }
     }
 
-    update(dt) {
+    public override update(dt: number): void {
         if (Globals.isToolEnabled(this.engine)) {
             if (this._myStarted) {
                 if (this._myFirstUpdate) {
@@ -119,7 +150,7 @@ export class EasyTuneToolComponent extends Component {
         }
     }
 
-    onDeactivate() {
+    public overrideonDeactivate(): void {
         if (this._myStarted) {
             if (this._myWidgetVisibleBackup == null) {
                 this._myWidgetVisibleBackup = this._myWidget.isVisible();
@@ -131,7 +162,7 @@ export class EasyTuneToolComponent extends Component {
         }
     }
 
-    onDestroy() {
+    public override onDestroy(): void {
         this._myWidget.destroy();
 
         EasyTuneUtils.removeSetWidgetCurrentVariableCallback(this, this.engine);

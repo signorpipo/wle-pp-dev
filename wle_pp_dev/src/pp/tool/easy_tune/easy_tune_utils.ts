@@ -25,7 +25,7 @@ export function refreshWidget(engine: Readonly<WonderlandEngine> = Globals.getMa
 }
 
 /**
- *  @param fileURL Can contain parameters inside brackets, like `my-url.com/{param}`, which be replaced with the same one on the current page url, like `www.currentpage.com/?param=2`  
+ *  @param fileURL Can contain parameters inside brackets, like `my-url.com/{param}`, which will be replaced with the same one on the current page url, like `www.currentpage.com/?param=2`  
  *                 If `null` or empty, it will import from the clipboard
  */
 export function importVariables(fileURL: string | null = null, resetVariablesDefaultValueOnImport: boolean = false, manualImport: boolean = false, onSuccessCallback?: () => void, onFailureCallback?: () => void, engine: Readonly<WonderlandEngine> = Globals.getMainEngine()!): void {
@@ -104,7 +104,7 @@ export function importVariables(fileURL: string | null = null, resetVariablesDef
 
 
 /**
- *  @param fileURL Can contain parameters inside brackets, like `my-url.com/{param}`, which be replaced with the same one on the current page url, like `www.currentpage.com/?param=2`  
+ *  @param fileURL Can contain parameters inside brackets, like `my-url.com/{param}`, which will be replaced with the same one on the current page url, like `www.currentpage.com/?param=2`  
  *                 If `null` or empty, it will import from the clipboard
  */
 export function getImportVariablesJSON(fileURL: string | null = null, onSuccessCallback?: (variablesJSON: string) => void, onFailureCallback?: () => void, engine: Readonly<WonderlandEngine> = Globals.getMainEngine()!): void {
@@ -155,7 +155,7 @@ export function getImportVariablesJSON(fileURL: string | null = null, onSuccessC
 
 
 /**
- *  @param fileURL Can contain parameters inside brackets, like `my-url.com/{param}`, which be replaced with the same one on the current page url, like `www.currentpage.com/?param=2`  
+ *  @param fileURL Can contain parameters inside brackets, like `my-url.com/{param}`, which will be replaced with the same one on the current page url, like `www.currentpage.com/?param=2`  
  *                 If `null` or empty, it will import from the clipboard
  */
 export function exportVariables(fileURL: string | null = null, variablesToKeep?: Record<string, unknown>, onSuccessCallback?: () => void, onFailureCallback?: () => void, engine: Readonly<WonderlandEngine> = Globals.getMainEngine()!): void {
@@ -165,7 +165,7 @@ export function exportVariables(fileURL: string | null = null, variablesToKeep?:
 
 
 /**
- *  @param fileURL Can contain parameters inside brackets, like `my-url.com/{param}`, which be replaced with the same one on the current page url, like `www.currentpage.com/?param=2`  
+ *  @param fileURL Can contain parameters inside brackets, like `my-url.com/{param}`, which will be replaced with the same one on the current page url, like `www.currentpage.com/?param=2`  
  *                 If `null` or empty, it will import from the clipboard
  */
 export function exportVariablesByName(variableNamesToExport: string[], fileURL: string | null = null, variablesToKeep?: Record<string, unknown>, onSuccessCallback?: () => void, onFailureCallback?: () => void, engine: Readonly<WonderlandEngine> = Globals.getMainEngine()!): void {
@@ -185,7 +185,7 @@ export function exportVariablesByName(variableNamesToExport: string[], fileURL: 
 
 
 /**
- *  @param fileURL Can contain parameters inside brackets, like `my-url.com/{param}`, which be replaced with the same one on the current page url, like `www.currentpage.com/?param=2`  
+ *  @param fileURL Can contain parameters inside brackets, like `my-url.com/{param}`, which will be replaced with the same one on the current page url, like `www.currentpage.com/?param=2`  
  *                 If `null` or empty, it will import from the clipboard
  */
 export function exportVariablesJSON(variablesJSONToExport: string, fileURL: string | null = null, variablesToKeep?: Record<string, unknown>, onSuccessCallback?: () => void, onFailureCallback?: () => void, engine: Readonly<WonderlandEngine> = Globals.getMainEngine()!): void {
@@ -281,7 +281,7 @@ export function exportVariablesJSON(variablesJSONToExport: string, fileURL: stri
 
 
 /**
- *  @param fileURL Can contain parameters inside brackets, like `my-url.com/{param}`, which be replaced with the same one on the current page url, like `www.currentpage.com/?param=2`  
+ *  @param fileURL Can contain parameters inside brackets, like `my-url.com/{param}`, which will be replaced with the same one on the current page url, like `www.currentpage.com/?param=2`  
  *                 If `null` or empty, it will import from the clipboard
  */
 export function clearExportedVariables(fileURL: string | null = null, onSuccessCallback?: () => void, onFailureCallback?: () => void, engine: Readonly<WonderlandEngine> = Globals.getMainEngine()!): void {
