@@ -148,6 +148,14 @@ export class EasyTuneVariable {
         return this;
     }
 
+    setEasyTuneVariableExtraParams(extraParams) {
+        this.setAutoImportEnabled(extraParams.myAutoImportEnabled);
+        this.setManualImportEnabled(extraParams.myManualImportEnabled);
+        this.setExportEnabled(extraParams.myExportEnabled);
+
+        return this;
+    }
+
     fromJSON(valueJSON, resetDefaultValue = false) {
         this.setValue(JSON.parse(valueJSON), resetDefaultValue);
     }
