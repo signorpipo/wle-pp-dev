@@ -150,19 +150,41 @@ export function getImportVariablesJSON(fileURL = null, onSuccessCallback = null,
 // fileURL can contain parameters inside brackets, like {param}
 // Those parameters will be replaced with the same one on the current page url, like www.currentpage.com/?param=2
 export function exportVariables(fileURL = null, variablesToKeep = null, onSuccessCallback = null, onFailureCallback = null, engine = Globals.getMainEngine()) {
-    let jsonVariables = Globals.getEasyTuneVariables(engine).toJSON();
+    const variablesJSONToExport = Globals.getEasyTuneVariables(engine).toJSON();
+    EasyTuneUtils.exportVariablesByJSON(variablesJSONToExport, fileURL, variablesToKeep, onSuccessCallback, onFailureCallback, engine);
+}
 
+// fileURL can contain parameters inside brackets, like {param}
+// Those parameters will be replaced with the same one on the current page url, like www.currentpage.com/?param=2
+export function exportVariablesByName(variableNamesToExport, fileURL = null, variablesToKeep = null, onSuccessCallback = null, onFailureCallback = null, engine = Globals.getMainEngine()) {
+    let objectJSON = {};
+
+    const easyTuneVariables = Globals.getEasyTuneVariables(engine);
+    for (const variableName of variableNamesToExport) {
+        const variable = easyTuneVariables.getEasyTuneVariable(variableName);
+        if (variable.isExportEnabled()) {
+            objectJSON[variable.getName()] = variable.toJSON();
+        }
+    }
+
+    const variablesJSONToExport = JSON.stringify(objectJSON);
+    EasyTuneUtils.exportVariablesByJSON(variablesJSONToExport, fileURL, variablesToKeep, onSuccessCallback, onFailureCallback, engine);
+}
+
+// fileURL can contain parameters inside brackets, like {param}
+// Those parameters will be replaced with the same one on the current page url, like www.currentpage.com/?param=2
+export function exportVariablesByJSON(variablesJSONToExport, fileURL = null, variablesToKeep = null, onSuccessCallback = null, onFailureCallback = null, engine = Globals.getMainEngine()) {
     // Useful if some variables are not in the json export and therefore would not be there anymore
     if (variablesToKeep != null) {
         try {
-            const variablesToExport = JSON.parse(jsonVariables);
+            const variablesToExport = JSON.parse(variablesJSONToExport);
             for (const variableName in variablesToKeep) {
                 if (!(variableName in variablesToExport)) {
                     variablesToExport[variableName] = variablesToKeep[variableName];
                 }
             }
 
-            jsonVariables = JSON.stringify(variablesToExport);
+            variablesJSONToExport = JSON.stringify(variablesToExport);
         } catch (error) {
             // Do nothing
         }
@@ -170,14 +192,14 @@ export function exportVariables(fileURL = null, variablesToKeep = null, onSucces
 
     if (fileURL == null || fileURL.length == 0) {
         if (navigator.clipboard) {
-            navigator.clipboard.writeText(jsonVariables).then(
+            navigator.clipboard.writeText(variablesJSONToExport).then(
                 function () {
                     if (onSuccessCallback != null) {
                         onSuccessCallback();
                     }
 
                     console.log("Easy Tune Variables Exported to: clipboard");
-                    console.log(jsonVariables);
+                    console.log(variablesJSONToExport);
                 },
                 function () {
                     if (onFailureCallback != null) {
@@ -204,7 +226,7 @@ export function exportVariables(fileURL = null, variablesToKeep = null, onSucces
                 "Content-Type": "application/json"
             },
             method: "POST",
-            body: jsonVariables
+            body: variablesJSONToExport
         }).then(
             function (response) {
                 if (response.ok) {
@@ -213,7 +235,7 @@ export function exportVariables(fileURL = null, variablesToKeep = null, onSucces
                     }
 
                     console.log("Easy Tune Variables Exported to:", replacedFileURL);
-                    console.log(jsonVariables);
+                    console.log(variablesJSONToExport);
                 } else {
                     if (onFailureCallback != null) {
                         onFailureCallback();
@@ -240,6 +262,12 @@ export function exportVariables(fileURL = null, variablesToKeep = null, onSucces
             console.error(reason);
         });
     }
+}
+
+// fileURL can contain parameters inside brackets, like {param}
+// Those parameters will be replaced with the same one on the current page url, like www.currentpage.com/?param=2
+export function clearExportedVariables(fileURL = null, onSuccessCallback = null, onFailureCallback = null, engine = Globals.getMainEngine()) {
+    EasyTuneUtils.exportVariablesByJSON("", fileURL, null, onSuccessCallback, onFailureCallback, engine);
 }
 
 export function setAutoImportEnabledDefaultValue(defaultValue, engine = Globals.getMainEngine()) {
@@ -318,6 +346,9 @@ export let EasyTuneUtils = {
     importVariables,
     getImportVariablesJSON,
     exportVariables,
+    exportVariablesByName,
+    exportVariablesByJSON,
+    clearExportedVariables,
     setAutoImportEnabledDefaultValue,
     setManualImportEnabledDefaultValue,
     setExportEnabledDefaultValue,

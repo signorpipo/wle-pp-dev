@@ -3,6 +3,8 @@ import { Globals } from "../../../pp/globals.js";
 import { EasyTuneUtils } from "../easy_tune_utils.js";
 import { EasyTuneWidget, EasyTuneWidgetParams } from "../easy_tune_widgets/easy_tune_widget.js";
 import { InitEasyTuneVariablesComponent } from "./init_easy_tune_variables_component.js";
+import { GamepadUtils } from "wle-pp/input/gamepad/cauldron/gamepad_utils.js";
+import { GamepadButtonID } from "wle-pp/input/gamepad/gamepad_buttons.js";
 
 export class EasyTuneToolComponent extends Component {
     static TypeName = "pp-easy-tune-tool";
@@ -56,7 +58,12 @@ export class EasyTuneToolComponent extends Component {
                 EasyTuneUtils.importVariables(this._myVariablesImportURL, this._myResetVariablesDefaultValueOnImport, true, onSuccessCallback, onFailureCallback, this.engine);
             }.bind(this);
             params.myVariablesExportCallback = function (onSuccessCallback, onFailureCallback) {
-                if (this._myKeepImportVariablesOnExport) {
+                if (Globals.getLeftGamepad().getButtonInfo(GamepadButtonID.SQUEEZE).isPressed() &&
+                    Globals.getLeftGamepad().getButtonInfo(GamepadButtonID.TOP_BUTTON).isPressed() &&
+                    Globals.getLeftGamepad().getButtonInfo(GamepadButtonID.BOTTOM_BUTTON).isPressed()) {
+
+                    EasyTuneUtils.clearExportedVariables(this._myVariablesExportURL, onSuccessCallback, onFailureCallback, this.engine);
+                } else if (this._myKeepImportVariablesOnExport) {
                     EasyTuneUtils.getImportVariablesJSON(this._myVariablesImportURL, (variablesToKeepJSON) => {
                         let variablesToKeep = null;
                         try {
