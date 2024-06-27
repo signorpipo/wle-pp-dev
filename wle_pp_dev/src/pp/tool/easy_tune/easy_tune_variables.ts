@@ -1,4 +1,4 @@
-import { EasyTuneVariable } from "./easy_tune_variable_types.js";
+import { EasyTuneVariable, EasyTuneVariableTyped } from "./easy_tune_variable_types.js";
 
 export class EasyTuneVariables {
 
@@ -94,7 +94,7 @@ export class EasyTuneVariables {
         return JSON.stringify(objectJSON);
     }
 
-    public registerValueChangedEventListener<ValueType, EasyTuneVariableType extends EasyTuneVariable>(variableName: string, id: unknown, callback: (value: ValueType, easyTuneVariable: EasyTuneVariableType) => void): void {
+    public registerValueChangedEventListener<ValueType, EasyTuneVariableType extends EasyTuneVariableTyped<ValueType>>(variableName: string, id: unknown, callback: (value: ValueType, easyTuneVariable: EasyTuneVariableType) => void): void {
         this._myVariables.get(variableName)!.registerValueChangedEventListener(id, callback as (value: unknown, easyTuneVariable: EasyTuneVariable) => void);
     }
 
