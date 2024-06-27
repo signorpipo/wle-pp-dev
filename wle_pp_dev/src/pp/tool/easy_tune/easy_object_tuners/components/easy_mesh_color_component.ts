@@ -1,9 +1,9 @@
 import { Component, Object3D } from "@wonderlandengine/api";
 import { property } from "@wonderlandengine/api/decorators.js";
+import { ColorModel } from "../../../../cauldron/utils/color_utils.js";
 import { ComponentUtils } from "../../../../cauldron/wl/utils/component_utils.js";
 import { Globals } from "../../../../pp/globals.js";
 import { EasyMeshColor } from "../easy_mesh_color.js";
-import { ColorModel } from "../../../../cauldron/utils/color_utils.js";
 
 export class EasyMeshColorComponent extends Component {
     public static override  TypeName = "pp-easy-mesh-color";
