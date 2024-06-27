@@ -1,5 +1,5 @@
 import { LightComponent, Object3D, WonderlandEngine } from "@wonderlandengine/api";
-import { Vector4 } from "../../../cauldron/type_definitions/array_type_definitions.js";
+import { Vector3 } from "../../../cauldron/type_definitions/array_type_definitions.js";
 import { ColorModel, ColorUtils } from "../../../cauldron/utils/color_utils.js";
 import { GamepadButtonID } from "../../../input/gamepad/gamepad_buttons.js";
 import { vec3_create } from "../../../plugin/js/extensions/array/vec_create_extension.js";
@@ -7,7 +7,7 @@ import { Globals } from "../../../pp/globals.js";
 import { EasyTuneIntArray } from "../easy_tune_variable_types.js";
 import { EasyObjectTuner } from "./easy_object_tuner.js";
 
-export class EasyLightColor extends EasyObjectTuner<Vector4, EasyTuneIntArray> {
+export class EasyLightColor extends EasyObjectTuner<Vector3, EasyTuneIntArray> {
 
     private _myColorModel: ColorModel;
 
@@ -33,7 +33,7 @@ export class EasyLightColor extends EasyObjectTuner<Vector4, EasyTuneIntArray> {
         return new EasyTuneIntArray(variableName, this._getDefaultValue(), null, true, 100, 0, 255, false, undefined, this._myEngine);
     }
 
-    protected override _getObjectValue(object: Readonly<Object3D>): Readonly<Vector4> {
+    protected override _getObjectValue(object: Readonly<Object3D>): Readonly<Vector3> {
         let color = null;
 
         const lightColor = this._getLightColor(object);
@@ -50,15 +50,15 @@ export class EasyLightColor extends EasyObjectTuner<Vector4, EasyTuneIntArray> {
         return color;
     }
 
-    protected override _getDefaultValue(): Readonly<Vector4> {
+    protected override _getDefaultValue(): Readonly<Vector3> {
         return vec3_create();
     }
 
-    protected override _areValueEqual(first: Readonly<Vector4>, second: Readonly<Vector4>): boolean {
+    protected override _areValueEqual(first: Readonly<Vector3>, second: Readonly<Vector3>): boolean {
         return first.vec_equals(second);
     }
 
-    protected override _updateObjectValue(object: Object3D, value: Readonly<Vector4>): void {
+    protected override _updateObjectValue(object: Object3D, value: Readonly<Vector3>): void {
         let color = value;
 
         if (this._myColorModel == 0) {
@@ -84,7 +84,7 @@ export class EasyLightColor extends EasyObjectTuner<Vector4, EasyTuneIntArray> {
         }
     }
 
-    private _getLightColor(object: Readonly<Object3D>): Readonly<Vector4> | null {
+    private _getLightColor(object: Readonly<Object3D>): Readonly<Vector3> | null {
         let color = null;
 
         const light = object.pp_getComponent(LightComponent);
