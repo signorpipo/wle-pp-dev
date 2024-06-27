@@ -61,7 +61,7 @@ export * from "./cauldron/object_pool/components/object_pool_manager_component.j
 export * from "./cauldron/type_definitions/array_type_definitions.js";
 
 //    UTILS
-export { ColorUtils } from "./cauldron/utils/color_utils.js";
+export { ColorUtils, ColorModel } from "./cauldron/utils/color_utils.js";
 export { SaveUtils } from "./cauldron/utils/save_utils.js";
 export { XRUtils } from "./cauldron/utils/xr_utils.js";
 export { BrowserUtils } from "./cauldron/utils/browser_utils.js";

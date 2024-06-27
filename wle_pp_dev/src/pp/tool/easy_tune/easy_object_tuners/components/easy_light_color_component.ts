@@ -1,11 +1,13 @@
 import { Component, Object3D } from "@wonderlandengine/api";
 import { property } from "@wonderlandengine/api/decorators.js";
+import { ColorModel } from "wle-pp/cauldron/utils/color_utils.js";
 import { ComponentUtils } from "../../../../cauldron/wl/utils/component_utils.js";
 import { Globals } from "../../../../pp/globals.js";
-import { EasyTransform } from "../easy_transform.js";
+import { EasyLightColor } from "../easy_light_color.js";
+import { EasyTransformComponent } from "./easy_transform_component.js";
 
-export class EasyTransformComponent extends Component {
-    public static override  TypeName = "pp-easy-transform";
+export class EasyLightColorComponent extends Component {
+    public static override  TypeName = "pp-easy-light-color";
 
     @property.string("")
     private readonly _myVariableName!: string;
@@ -18,31 +20,18 @@ export class EasyTransformComponent extends Component {
 
 
 
-    @property.bool(true)
-    private readonly _myLocal!: boolean;
-
-    /** Edit all scale values together */
-    @property.bool(true)
-    private readonly _myScaleAsOne!: boolean;
-
-    @property.float(1)
-    private readonly _myPositionStepPerSecond!: number;
-
-    @property.float(50)
-    private readonly _myRotationStepPerSecond!: number;
-
-    @property.float(1)
-    private readonly _myScaleStepPerSecond!: number;
+    @property.enum([ColorModel[ColorModel.RGB], ColorModel[ColorModel.HSV]], ColorModel[ColorModel.HSV])
+    private readonly _myColorModel!: number;
 
 
 
-    private _myEasyObjectTuner: EasyTransform | null = null;
+    private _myEasyObjectTuner: EasyLightColor | null = null;
 
     public override init(): void {
         this._myEasyObjectTuner = null;
 
         if (Globals.isToolEnabled(this.engine)) {
-            this._myEasyObjectTuner = new EasyTransform(this._myLocal, this._myScaleAsOne, this._myPositionStepPerSecond, this._myRotationStepPerSecond, this._myScaleStepPerSecond, this.object, this._myVariableName, this._mySetAsWidgetCurrentVariable, this._myUseTuneTarget, this.engine);
+            this._myEasyObjectTuner = new EasyLightColor(this._myColorModel, this.object, this._myVariableName, this._mySetAsWidgetCurrentVariable, this._myUseTuneTarget, this.engine);
         }
     }
 
@@ -62,7 +51,7 @@ export class EasyTransformComponent extends Component {
         }
     }
 
-    public getEasyObjectTuner(): EasyTransform | null {
+    public getEasyObjectTuner(): EasyLightColor | null {
         return this._myEasyObjectTuner;
     }
 
