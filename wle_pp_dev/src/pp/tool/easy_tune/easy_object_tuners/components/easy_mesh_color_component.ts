@@ -1,12 +1,12 @@
 import { Component, Object3D } from "@wonderlandengine/api";
 import { property } from "@wonderlandengine/api/decorators.js";
-import { ColorModel } from "wle-pp/cauldron/utils/color_utils.js";
 import { ComponentUtils } from "../../../../cauldron/wl/utils/component_utils.js";
 import { Globals } from "../../../../pp/globals.js";
-import { EasyLightColor } from "../easy_light_color.js";
+import { EasyMeshColor } from "../easy_mesh_color.js";
+import { ColorModel } from "wle-pp/cauldron/utils/color_utils.js";
 
-export class EasyLightColorComponent extends Component {
-    public static override  TypeName = "pp-easy-light-color";
+export class EasyMeshColorComponent extends Component {
+    public static override  TypeName = "pp-easy-mesh-color";
 
     @property.string("")
     private readonly _myVariableName!: string;
@@ -22,15 +22,18 @@ export class EasyLightColorComponent extends Component {
     @property.enum([ColorModel[ColorModel.RGB], ColorModel[ColorModel.HSV]], ColorModel[ColorModel.HSV])
     private readonly _myColorModel!: number;
 
+    @property.enum(["Color", "Diffuse Color", "Ambient Color", "Specular Color", "Emissive Color", "Fog Color"], "Color")
+    private readonly _myColorType!: number;
 
 
-    private _myEasyObjectTuner: EasyLightColor | null = null;
+
+    private _myEasyObjectTuner: EasyMeshColor | null = null;
 
     public override init(): void {
         this._myEasyObjectTuner = null;
 
         if (Globals.isToolEnabled(this.engine)) {
-            this._myEasyObjectTuner = new EasyLightColor(this._myColorModel, this.object, this._myVariableName, this._mySetAsWidgetCurrentVariable, this._myUseTuneTarget, this.engine);
+            this._myEasyObjectTuner = new EasyMeshColor(this._myColorModel, this._myColorType, this.object, this._myVariableName, this._mySetAsWidgetCurrentVariable, this._myUseTuneTarget, this.engine);
         }
     }
 
@@ -50,11 +53,11 @@ export class EasyLightColorComponent extends Component {
         }
     }
 
-    public getEasyObjectTuner(): EasyLightColor | null {
+    public getEasyObjectTuner(): EasyMeshColor | null {
         return this._myEasyObjectTuner;
     }
 
-    public pp_clone(targetObject: Object3D): EasyLightColorComponent | null {
+    public pp_clone(targetObject: Object3D): EasyMeshColorComponent | null {
         const clonedComponent = ComponentUtils.cloneDefault(this, targetObject);
         return clonedComponent as any;
     }
