@@ -1,6 +1,6 @@
 import { Component, Object3D } from "@wonderlandengine/api";
 import { property } from "@wonderlandengine/api/decorators.js";
-import { ComponentUtils } from "wle-pp/cauldron/wl/utils/component_utils.js";
+import { ComponentUtils } from "../../../../cauldron/wl/utils/component_utils.js";
 import { Globals } from "../../../../pp/globals.js";
 import { EasyScale } from "../easy_scale.js";
 

@@ -1,7 +1,7 @@
 import { Component, Object3D } from "@wonderlandengine/api";
 import { property } from "@wonderlandengine/api/decorators.js";
-import { ColorModel } from "wle-pp/cauldron/utils/color_utils.js";
-import { ComponentUtils } from "wle-pp/cauldron/wl/utils/component_utils.js";
+import { ColorModel } from "../../../../cauldron/utils/color_utils.js";
+import { ComponentUtils } from "../../../../cauldron/wl/utils/component_utils.js";
 import { Globals } from "../../../../pp/globals.js";
 import { EasyTextColor } from "../easy_text_color.js";
 

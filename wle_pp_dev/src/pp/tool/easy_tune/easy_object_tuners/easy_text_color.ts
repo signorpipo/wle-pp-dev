@@ -1,5 +1,5 @@
 import { Material, Object3D, TextComponent, WonderlandEngine } from "@wonderlandengine/api";
-import { Vector4 } from "wle-pp/cauldron/type_definitions/array_type_definitions.js";
+import { Vector4 } from "../../../cauldron/type_definitions/array_type_definitions.js";
 import { ColorModel, ColorUtils } from "../../../cauldron/utils/color_utils.js";
 import { GamepadButtonID } from "../../../input/gamepad/gamepad_buttons.js";
 import { vec4_create } from "../../../plugin/js/extensions/array/vec_create_extension.js";
