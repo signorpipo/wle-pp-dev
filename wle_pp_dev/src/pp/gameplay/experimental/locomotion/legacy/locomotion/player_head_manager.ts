@@ -253,10 +253,6 @@ export class PlayerHeadManager {
         this._setHeightHead(height, height, height, setOnlyForActiveOne);
     }
 
-    public resetHeightHeadToDefault(resetOnlyForActiveOne: boolean = true): void {
-        this._setHeightHead(this._myHeightNonVR, this._myHeightVRWithoutFloor, this._myHeightVRWithFloor, resetOnlyForActiveOne);
-    }
-
     public setHeightHeadNonVR(height: number): void {
         this._setHeightHeadNonVR(height);
 
@@ -274,16 +270,20 @@ export class PlayerHeadManager {
         }
     }
 
-    public resetHeightHeadVRWithFloor(): void {
-        this.setHeightHeadVRWithFloor(null);
-    }
-
     public setHeightHeadVRWithFloor(height = null): void {
         this._setHeightHeadVRWithFloor(height);
 
         if (this._mySessionActive) {
             this._updateHeightOffset();
         }
+    }
+
+    public resetHeightHeadToDefault(resetOnlyForActiveOne: boolean = true): void {
+        this._setHeightHead(this._myHeightNonVR, this._myHeightVRWithoutFloor, this._myHeightVRWithFloor, resetOnlyForActiveOne);
+    }
+
+    public resetHeightHeadVRWithFloor(): void {
+        this.setHeightHeadVRWithFloor(null);
     }
 
     public getDefaultHeightHeadNonVR(): number {
@@ -296,6 +296,42 @@ export class PlayerHeadManager {
 
     public getDefaultHeightHeadVRWithFloor(): number | null {
         return this._myHeightVRWithFloor;
+    }
+
+    public getForeheadExtraHeight(): number {
+        return this._myParams.myForeheadExtraHeight;
+    }
+
+    public setForeheadExtraHeight(foreheadExtraHeight: number, keepSameHeight: boolean = false, keepSameHeightOnlyForActiveOne: boolean = true): void {
+        this._myParams.myForeheadExtraHeight = foreheadExtraHeight;
+
+        if (keepSameHeight && (!keepSameHeightOnlyForActiveOne || !this._mySessionActive)) {
+            this._setHeightHeadNonVR(this._myHeightNonVR);
+        } else {
+            this._myHeightNonVR = Math.max(this._myHeightNonVR + (foreheadExtraHeight - this._myParams.myForeheadExtraHeight), this._myParams.myForeheadExtraHeight);
+            this._myHeightNonVROnEnterSession = Math.max(this._myHeightNonVROnEnterSession + (foreheadExtraHeight - this._myParams.myForeheadExtraHeight), this._myParams.myForeheadExtraHeight);
+        }
+
+        if (keepSameHeight && (!keepSameHeightOnlyForActiveOne || this._mySessionActive)) {
+            this._setHeightHeadVRWithoutFloor(this._myHeightVRWithoutFloor);
+            this._setHeightHeadVRWithFloor(this._myHeightVRWithFloor);
+        } else {
+            if (this._myHeightVRWithoutFloor != null) {
+                this._myHeightVRWithoutFloor = Math.max(this._myHeightVRWithoutFloor + (foreheadExtraHeight - this._myParams.myForeheadExtraHeight), this._myParams.myForeheadExtraHeight);
+            }
+
+            if (this._myHeightVRWithFloor != null) {
+                this._myHeightVRWithFloor = Math.max(this._myHeightVRWithFloor + (foreheadExtraHeight - this._myParams.myForeheadExtraHeight), this._myParams.myForeheadExtraHeight);
+            }
+        }
+
+        if (keepSameHeight) {
+            this._updateHeightOffset();
+
+            if (!this._mySessionActive) {
+                this._setCameraNonXRHeight(this._myHeightNonVR);
+            }
+        }
     }
 
     public moveFeet(movement: Readonly<Vector3>): void {
@@ -600,9 +636,9 @@ export class PlayerHeadManager {
                         const currentHeadPosition = this._myCurrentHead.pp_getPosition();
 
                         const floorHeight = this._myHeightVRWithFloor! - this._myParams.myForeheadExtraHeight;
-                        const currentHeadHeight = this._getPositionEyesHeight(currentHeadPosition);
+                        const currentEyeHeight = this._getPositionEyesHeight(currentHeadPosition);
 
-                        this._myHeightOffsetWithFloor = this._myHeightOffsetWithFloor + (floorHeight - currentHeadHeight);
+                        this._myHeightOffsetWithFloor = this._myHeightOffsetWithFloor + (floorHeight - currentEyeHeight);
 
                         this._updateHeightOffset();
 
@@ -611,9 +647,9 @@ export class PlayerHeadManager {
                         const currentHeadPosition = this._myCurrentHead.pp_getPosition();
 
                         const floorHeight = this._myHeightVRWithoutFloor! - this._myParams.myForeheadExtraHeight;
-                        const currentHeadHeight = this._getPositionEyesHeight(currentHeadPosition);
+                        const currentEyeHeight = this._getPositionEyesHeight(currentHeadPosition);
 
-                        this._myHeightOffsetWithoutFloor = this._myHeightOffsetWithoutFloor + (floorHeight - currentHeadHeight);
+                        this._myHeightOffsetWithoutFloor = this._myHeightOffsetWithoutFloor + (floorHeight - currentEyeHeight);
 
                         this._updateHeightOffset();
 
@@ -650,17 +686,17 @@ export class PlayerHeadManager {
     }
 
     private _setHeightHeadNonVR(height: number): void {
-        this._myHeightNonVR = height;
-        this._myHeightNonVROnEnterSession = height;
+        this._myHeightNonVR = Math.max(height, this._myParams.myForeheadExtraHeight);
+        this._myHeightNonVROnEnterSession = this._myHeightNonVR;
     }
 
     private _setHeightHeadVRWithoutFloor(heightWithoutFloor: number | null): void {
         if (heightWithoutFloor != null) {
-            this._myHeightVRWithoutFloor = heightWithoutFloor;
+            this._myHeightVRWithoutFloor = Math.max(heightWithoutFloor, this._myParams.myForeheadExtraHeight);
             this._myNextEnterSessionSetHeightVRWithoutFloor = false;
 
             if (this._mySessionActive) {
-                this._myHeightOffsetWithoutFloor = this._myHeightOffsetWithoutFloor + (heightWithoutFloor - this.getHeightHead());
+                this._myHeightOffsetWithoutFloor = this._myHeightOffsetWithoutFloor + (this._myHeightVRWithoutFloor - this.getHeightHead());
             } else {
                 this._myNextEnterSessionSetHeightVRWithoutFloor = true;
             }
@@ -672,11 +708,11 @@ export class PlayerHeadManager {
 
     private _setHeightHeadVRWithFloor(heightWithFloor: number | null): void {
         if (heightWithFloor != null) {
-            this._myHeightVRWithFloor = heightWithFloor;
+            this._myHeightVRWithFloor = Math.max(heightWithFloor, this._myParams.myForeheadExtraHeight);
             this._myNextEnterSessionSetHeightVRWithFloor = false;
 
             if (this._mySessionActive) {
-                this._myHeightOffsetWithFloor = this._myHeightOffsetWithFloor + (heightWithFloor - this.getHeightHead());
+                this._myHeightOffsetWithFloor = this._myHeightOffsetWithFloor + (this._myHeightVRWithFloor - this.getHeightHead());
             } else {
                 this._myNextEnterSessionSetHeightVRWithFloor = true;
             }
