@@ -269,7 +269,7 @@ export class PlayerTransformManager {
     }
 
     public start(): void {
-        this.resetToReal(true);
+        this.resetToReal(true, true, true, true, false, true);
 
         XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this), true, true, this._myParams.myEngine);
     }
@@ -659,28 +659,36 @@ export class PlayerTransformManager {
         }
     }
 
-    public resetToReal(resetToPlayerInsteadOfHead = false, updateValidToReal = false): void {
-        if (resetToPlayerInsteadOfHead) {
-            this.getPlayerHeadManager().getPlayer().pp_getPosition(this._myValidPosition);
-        } else {
-            this.getPositionReal(this._myValidPosition);
+    public resetToReal(resetPosition = true, resetRotation = true, resetHeight = true, resetPositionHead = true, updateValidToReal = false, resetToPlayerInsteadOfHead = false): void {
+        if (resetPosition) {
+            if (resetToPlayerInsteadOfHead) {
+                this.getPlayerHeadManager().getPlayer().pp_getPosition(this._myValidPosition);
+            } else {
+                this.getPositionReal(this._myValidPosition);
+            }
         }
 
-        if (!this._myParams.myAlwaysSyncPositionWithReal) {
-            this.getPositionHeadReal(this._myValidPositionHead);
-            this._myValidPositionHeadBackupForResetToFeet.vec3_copy(this._myValidPositionHead);
+        if (resetPositionHead) {
+            if (!this._myParams.myAlwaysSyncPositionWithReal) {
+                this.getPositionHeadReal(this._myValidPositionHead);
+                this._myValidPositionHeadBackupForResetToFeet.vec3_copy(this._myValidPositionHead);
 
-            this._myResetHeadToFeetOnNextUpdateValidToReal = false;
-            this._myResetHeadToFeetDirty = false;
+                this._myResetHeadToFeetOnNextUpdateValidToReal = false;
+                this._myResetHeadToFeetDirty = false;
+            }
         }
 
-        if (resetToPlayerInsteadOfHead) {
-            this.getPlayerHeadManager().getPlayer().pp_getRotationQuat(this._myValidRotationQuat);
-        } else {
-            this.getRotationRealQuat(this._myValidRotationQuat);
+        if (resetRotation) {
+            if (resetToPlayerInsteadOfHead) {
+                this.getPlayerHeadManager().getPlayer().pp_getRotationQuat(this._myValidRotationQuat);
+            } else {
+                this.getRotationRealQuat(this._myValidRotationQuat);
+            }
         }
 
-        this._myValidHeight = Math.pp_clamp(this.getHeightReal(), this._myParams.myMinHeight ?? undefined, this._myParams.myMaxHeight ?? undefined);
+        if (resetHeight) {
+            this._myValidHeight = Math.pp_clamp(this.getHeightReal(), this._myParams.myMinHeight ?? undefined, this._myParams.myMaxHeight ?? undefined);
+        }
 
         if (updateValidToReal) {
             this._updateValidToReal(0);
