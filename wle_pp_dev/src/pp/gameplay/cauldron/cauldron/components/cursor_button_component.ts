@@ -1,6 +1,8 @@
 import { Component, MeshComponent, Object3D, TextComponent } from "@wonderlandengine/api";
 import { property } from "@wonderlandengine/api/decorators.js";
 import { Cursor, CursorTarget } from "@wonderlandengine/components";
+import { Timer } from "wle-pp/cauldron/cauldron/timer.js";
+import { FSM, TransitionData } from "wle-pp/cauldron/fsm/fsm.js";
 import { AudioPlayer } from "../../../../audio/audio_player.js";
 import { AudioSetup } from "../../../../audio/audio_setup.js";
 import { Vector3, Vector4 } from "../../../../cauldron/type_definitions/array_type_definitions.js";
@@ -27,6 +29,10 @@ export class CursorButtonComponent extends Component {
         or the name of an handler added through `CursorButtonComponent.addButtonActionHandler` */
     @property.string("")
     private readonly _myButtonActionsHandlerNames!: string;
+
+    /** Even if the buttons is barely touched, it will still play the down animation for this amount */
+    @property.float(0.5)
+    private readonly _myMinDownSecond!: number;
 
     @property.float(0.075)
     private readonly _myScaleOffsetOnHover!: number;
@@ -79,6 +85,11 @@ export class CursorButtonComponent extends Component {
 
     private readonly _myButtonActionsHandlers: Map<unknown, CursorButtonActionsHandler> = new Map();
 
+    private readonly _myFSM: FSM = new FSM();
+    private readonly _myDownMinTimer: Timer = new Timer(0);
+    private _myTransitionToApplyOnDownTimeout: string | null = null;
+    private _myCursorComponentToForwardOnDownTimeout: Cursor | null = null;
+
     private readonly _myOriginalScaleLocal: Vector3 = vec3_create();
     private readonly _myAnimatedScale!: AnimatedNumber;
 
@@ -125,10 +136,10 @@ export class CursorButtonComponent extends Component {
     public override start(): void {
         (this._myCursorTarget as CursorTarget) = this.object.pp_getComponent(CursorTarget)!;
 
+        this._myCursorTarget.onUnhover.add(this._onUnhover.bind(this));
         this._myCursorTarget.onHover.add(this._onHover.bind(this));
         this._myCursorTarget.onDown.add(this._onDown.bind(this));
         this._myCursorTarget.onUpWithDown.add(this.onUpWithDown.bind(this));
-        this._myCursorTarget.onUnhover.add(this._onUnhover.bind(this));
 
         const buttonActionsHandlerNames = [...this._myButtonActionsHandlerNames.split(",")];
         for (let i = 0; i < buttonActionsHandlerNames.length; i++) {
@@ -148,6 +159,26 @@ export class CursorButtonComponent extends Component {
         }
 
         this._setupVisualsAndSFXs();
+
+        this._myDownMinTimer.reset(this._myMinDownSecond);
+
+        this._myFSM.setLogEnabled(true, "Cursor Button");
+
+        this._myFSM.addState("unhover", { start: this._onUnhoverStart.bind(this) });
+        this._myFSM.addState("hover", { start: this._onHoverStart.bind(this) });
+        this._myFSM.addState("down", { start: this._onDownStart.bind(this), update: this._onDownUpdate.bind(this) });
+        this._myFSM.addState("up_with_down", { start: this.onUpWithDownStart.bind(this) });
+
+        this._myFSM.addTransition("unhover", "hover", "hover");
+        this._myFSM.addTransition("hover", "down", "down");
+        this._myFSM.addTransition("down", "up_with_down", "up_with_down");
+        this._myFSM.addTransition("up_with_down", "unhover", "unhover");
+        this._myFSM.addTransition("up_with_down", "down", "down");
+
+        this._myFSM.addTransition("hover", "unhover", "unhover");
+        this._myFSM.addTransition("down", "unhover", "unhover");
+
+        this._myFSM.init("unhover");
     }
 
     private static readonly _updateSV =
@@ -157,6 +188,8 @@ export class CursorButtonComponent extends Component {
             rgbColor: vec4_create()
         };
     public override update(dt: number): void {
+        this._myFSM.update(dt);
+
         if (!this._myAnimatedScale.isDone()) {
             this._myAnimatedScale.update(dt);
 
@@ -186,7 +219,74 @@ export class CursorButtonComponent extends Component {
         }
     }
 
+    private _onUnhover(targetObject: Object3D, cursorComponent: Cursor): void {
+        if (this._myFSM.isInState("down") && !this._myDownMinTimer.isDone()) {
+            this._myCursorComponentToForwardOnDownTimeout = cursorComponent;
+            this._myTransitionToApplyOnDownTimeout = "unhover";
+        } else {
+            this._myFSM.perform("unhover", cursorComponent);
+        }
+    }
+
     private _onHover(targetObject: Object3D, cursorComponent: Cursor): void {
+        if (this._myFSM.isInState("down") && !this._myDownMinTimer.isDone()) {
+            this._myCursorComponentToForwardOnDownTimeout = cursorComponent;
+            this._myTransitionToApplyOnDownTimeout = "hover";
+        } else {
+            this._myFSM.perform("hover", cursorComponent);
+        }
+    }
+
+    private _onDown(targetObject: Object3D, cursorComponent: Cursor): void {
+        this._myTransitionToApplyOnDownTimeout = null;
+        this._myCursorComponentToForwardOnDownTimeout = null;
+        this._myFSM.perform("down", cursorComponent);
+    }
+
+    private onUpWithDown(targetObject: Object3D, cursorComponent: Cursor): void {
+        if (this._myFSM.isInState("down") && !this._myDownMinTimer.isDone()) {
+            this._myCursorComponentToForwardOnDownTimeout = cursorComponent;
+            this._myTransitionToApplyOnDownTimeout = "up_with_down";
+        } else {
+            this._myFSM.perform("up_with_down", cursorComponent);
+        }
+    }
+
+    private _onUnhoverStart(fsm: FSM, transitionData: Readonly<TransitionData>, cursorComponent: Cursor): void {
+        let skipDefault = false;
+        for (const buttonActionsHandler of this._myButtonActionsHandlers.values()) {
+            if (buttonActionsHandler.onUnhover != null) {
+                skipDefault ||= buttonActionsHandler.onUnhover(this, cursorComponent);
+            }
+        }
+
+        if (skipDefault) {
+            return;
+        }
+
+        if (this._myScaleOffsetOnHover != 0 || this._myScaleOffsetOnDown != 0 || this._myScaleOffsetOnUp != 0) {
+            this._myAnimatedScale.updateTargetValue(1);
+        }
+
+        if (this._myPulseIntensityOnUnhover != 0) {
+            const handedness = InputUtils.getHandednessByString(cursorComponent.handedness as string);
+            if (handedness != null) {
+                Globals.getGamepads()![handedness].pulse(this._myPulseIntensityOnUnhover, 0.085);
+            }
+        }
+
+        if (this._myColorBrigthnessOffsetOnHover != 0 || this._myColorBrigthnessOffsetOnDown != 0 || this._myColorBrigthnessOffsetOnUp != 0) {
+            this._myAnimatedColorBrightnessOffset.updateTargetValue(0);
+        }
+
+        if (this._myOnUnhoverAudioPlayer != null) {
+            this._myOnUnhoverAudioPlayer.setPosition(this.object.pp_getPosition());
+            this._myOnUnhoverAudioPlayer.play();
+        }
+    }
+
+
+    private _onHoverStart(fsm: FSM, transitionData: Readonly<TransitionData>, cursorComponent: Cursor): void {
         let skipDefault = false;
         for (const buttonActionsHandler of this._myButtonActionsHandlers.values()) {
             if (buttonActionsHandler.onHover != null) {
@@ -219,7 +319,10 @@ export class CursorButtonComponent extends Component {
         }
     }
 
-    private _onDown(targetObject: Object3D, cursorComponent: Cursor): void {
+    private _onDownStart(fsm: FSM, transitionData: Readonly<TransitionData>, cursorComponent: Cursor): void {
+        this._myDownMinTimer.start();
+        this._myDownMinTimer.update(0); // Instantly end the timer if the duration is 0
+
         let skipDefault = false;
         for (const buttonActionsHandler of this._myButtonActionsHandlers.values()) {
             if (buttonActionsHandler.onDown != null) {
@@ -252,7 +355,17 @@ export class CursorButtonComponent extends Component {
         }
     }
 
-    private onUpWithDown(targetObject: Object3D, cursorComponent: Cursor): void {
+    private _onDownUpdate(dt: number): void {
+        if (this._myDownMinTimer.isRunning()) {
+            this._myDownMinTimer.update(dt);
+            if (this._myDownMinTimer.isDone() && this._myTransitionToApplyOnDownTimeout) {
+                this._myFSM.perform(this._myTransitionToApplyOnDownTimeout, this._myCursorComponentToForwardOnDownTimeout);
+                this._myTransitionToApplyOnDownTimeout = null;
+            }
+        }
+    }
+
+    private onUpWithDownStart(fsm: FSM, transitionData: Readonly<TransitionData>, cursorComponent: Cursor): void {
         let skipDefault = false;
         for (const buttonActionsHandler of this._myButtonActionsHandlers.values()) {
             if (buttonActionsHandler.onUp != null) {
@@ -282,39 +395,6 @@ export class CursorButtonComponent extends Component {
         if (this._myOnUpAudioPlayer != null) {
             this._myOnUpAudioPlayer.setPosition(this.object.pp_getPosition());
             this._myOnUpAudioPlayer.play();
-        }
-    }
-
-    private _onUnhover(targetObject: Object3D, cursorComponent: Cursor): void {
-        let skipDefault = false;
-        for (const buttonActionsHandler of this._myButtonActionsHandlers.values()) {
-            if (buttonActionsHandler.onUnhover != null) {
-                skipDefault ||= buttonActionsHandler.onUnhover(this, cursorComponent);
-            }
-        }
-
-        if (skipDefault) {
-            return;
-        }
-
-        if (this._myScaleOffsetOnHover != 0 || this._myScaleOffsetOnDown != 0 || this._myScaleOffsetOnUp != 0) {
-            this._myAnimatedScale.updateTargetValue(1);
-        }
-
-        if (this._myPulseIntensityOnUnhover != 0) {
-            const handedness = InputUtils.getHandednessByString(cursorComponent.handedness as string);
-            if (handedness != null) {
-                Globals.getGamepads()![handedness].pulse(this._myPulseIntensityOnUnhover, 0.085);
-            }
-        }
-
-        if (this._myColorBrigthnessOffsetOnHover != 0 || this._myColorBrigthnessOffsetOnDown != 0 || this._myColorBrigthnessOffsetOnUp != 0) {
-            this._myAnimatedColorBrightnessOffset.updateTargetValue(0);
-        }
-
-        if (this._myOnUnhoverAudioPlayer != null) {
-            this._myOnUnhoverAudioPlayer.setPosition(this.object.pp_getPosition());
-            this._myOnUnhoverAudioPlayer.play();
         }
     }
 
