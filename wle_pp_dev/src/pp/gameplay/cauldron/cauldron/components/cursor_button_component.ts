@@ -87,8 +87,9 @@ export class CursorButtonComponent extends Component {
 
     private readonly _myFSM: FSM = new FSM();
     private readonly _myDownMinTimer: Timer = new Timer(0);
-    private _myTransitionToApplyOnDownTimeout: string | null = null;
-    private _myCursorComponentToForwardOnDownTimeout: Cursor | null = null;
+
+    private readonly _myTransitionQueueToApplyOnDownTimeout: [string, Cursor][] = [];
+    private _myApplyQueuedTransitions: boolean = false;
 
     private readonly _myOriginalScaleLocal: Vector3 = vec3_create();
     private readonly _myAnimatedScale!: AnimatedNumber;
@@ -167,11 +168,11 @@ export class CursorButtonComponent extends Component {
         this._myFSM.addState("unhover", { start: this._onUnhoverStart.bind(this) });
         this._myFSM.addState("hover", { start: this._onHoverStart.bind(this) });
         this._myFSM.addState("down", { start: this._onDownStart.bind(this), update: this._onDownUpdate.bind(this) });
-        this._myFSM.addState("up_with_down", { start: this.onUpWithDownStart.bind(this) });
+        this._myFSM.addState("up_with_down", { start: this._onUpWithDownStart.bind(this) });
 
         this._myFSM.addTransition("unhover", "hover", "hover");
         this._myFSM.addTransition("hover", "down", "down");
-        this._myFSM.addTransition("down", "up_with_down", "up_with_down");
+        this._myFSM.addTransition("down", "up_with_down", "up_with_down", this._onUpWithDownStart.bind(this));
         this._myFSM.addTransition("up_with_down", "unhover", "unhover");
         this._myFSM.addTransition("up_with_down", "down", "down");
 
@@ -189,6 +190,19 @@ export class CursorButtonComponent extends Component {
         };
     public override update(dt: number): void {
         this._myFSM.update(dt);
+
+        if (this._myApplyQueuedTransitions) {
+            this._myApplyQueuedTransitions = false;
+
+            while (this._myTransitionQueueToApplyOnDownTimeout.length > 0) {
+                const transitionToApply = this._myTransitionQueueToApplyOnDownTimeout.shift()!;
+                this._myFSM.perform(transitionToApply[0], transitionToApply[1]);
+
+                if (this._myDownMinTimer.isRunning()) {
+                    break;
+                }
+            }
+        }
 
         if (!this._myAnimatedScale.isDone()) {
             this._myAnimatedScale.update(dt);
@@ -221,8 +235,7 @@ export class CursorButtonComponent extends Component {
 
     private _onUnhover(targetObject: Object3D, cursorComponent: Cursor): void {
         if (this._myFSM.isInState("down") && !this._myDownMinTimer.isDone()) {
-            this._myCursorComponentToForwardOnDownTimeout = cursorComponent;
-            this._myTransitionToApplyOnDownTimeout = "unhover";
+            this._myTransitionQueueToApplyOnDownTimeout.push(["unhover", cursorComponent]);
         } else {
             this._myFSM.perform("unhover", cursorComponent);
         }
@@ -230,23 +243,23 @@ export class CursorButtonComponent extends Component {
 
     private _onHover(targetObject: Object3D, cursorComponent: Cursor): void {
         if (this._myFSM.isInState("down") && !this._myDownMinTimer.isDone()) {
-            this._myCursorComponentToForwardOnDownTimeout = cursorComponent;
-            this._myTransitionToApplyOnDownTimeout = "hover";
+            this._myTransitionQueueToApplyOnDownTimeout.push(["hover", cursorComponent]);
         } else {
             this._myFSM.perform("hover", cursorComponent);
         }
     }
 
     private _onDown(targetObject: Object3D, cursorComponent: Cursor): void {
-        this._myTransitionToApplyOnDownTimeout = null;
-        this._myCursorComponentToForwardOnDownTimeout = null;
-        this._myFSM.perform("down", cursorComponent);
+        if (this._myFSM.isInState("down") && !this._myDownMinTimer.isDone()) {
+            this._myTransitionQueueToApplyOnDownTimeout.push(["down", cursorComponent]);
+        } else {
+            this._myFSM.perform("down", cursorComponent);
+        }
     }
 
     private onUpWithDown(targetObject: Object3D, cursorComponent: Cursor): void {
         if (this._myFSM.isInState("down") && !this._myDownMinTimer.isDone()) {
-            this._myCursorComponentToForwardOnDownTimeout = cursorComponent;
-            this._myTransitionToApplyOnDownTimeout = "up_with_down";
+            this._myTransitionQueueToApplyOnDownTimeout.push(["up_with_down", cursorComponent]);
         } else {
             this._myFSM.perform("up_with_down", cursorComponent);
         }
@@ -358,14 +371,13 @@ export class CursorButtonComponent extends Component {
     private _onDownUpdate(dt: number): void {
         if (this._myDownMinTimer.isRunning()) {
             this._myDownMinTimer.update(dt);
-            if (this._myDownMinTimer.isDone() && this._myTransitionToApplyOnDownTimeout) {
-                this._myFSM.perform(this._myTransitionToApplyOnDownTimeout, this._myCursorComponentToForwardOnDownTimeout);
-                this._myTransitionToApplyOnDownTimeout = null;
+            if (this._myDownMinTimer.isDone()) {
+                this._myApplyQueuedTransitions = true;
             }
         }
     }
 
-    private onUpWithDownStart(fsm: FSM, transitionData: Readonly<TransitionData>, cursorComponent: Cursor): void {
+    private _onUpWithDownStart(fsm: FSM, transitionData: Readonly<TransitionData>, cursorComponent: Cursor): void {
         let skipDefault = false;
         for (const buttonActionsHandler of this._myButtonActionsHandlers.values()) {
             if (buttonActionsHandler.onUp != null) {
