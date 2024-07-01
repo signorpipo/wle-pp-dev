@@ -28,12 +28,12 @@ export function refreshWidget(engine: Readonly<WonderlandEngine> = Globals.getMa
  *  @param fileURL Can contain parameters inside brackets, like `my-url.com/{param}`, which will be replaced with the same one on the current page url, like `www.currentpage.com/?param=2`  
  *                 If `null` or empty, it will import from the clipboard
  */
-export function importVariables(fileURL: string | null = null, resetVariablesDefaultValueOnImport: boolean = false, manualImport: boolean = false, onSuccessCallback?: () => void, onFailureCallback?: () => void, engine: Readonly<WonderlandEngine> = Globals.getMainEngine()!): void {
+export function importVariables(fileURL: string | null = null, resetVariablesDefaultValueOnImport: boolean = false, skipValueChangedNotifyOnImport: boolean = false, manualImport: boolean = false, onSuccessCallback?: () => void, onFailureCallback?: () => void, engine: Readonly<WonderlandEngine> = Globals.getMainEngine()!): void {
     if (fileURL == null || fileURL.length == 0) {
         if (navigator.clipboard) {
             navigator.clipboard.readText().then(
                 function (clipboard) {
-                    Globals.getEasyTuneVariables(engine)!.fromJSON(clipboard, resetVariablesDefaultValueOnImport, manualImport);
+                    Globals.getEasyTuneVariables(engine)!.fromJSON(clipboard, resetVariablesDefaultValueOnImport, skipValueChangedNotifyOnImport, manualImport);
 
                     EasyTuneUtils.refreshWidget(engine);
 
@@ -61,7 +61,7 @@ export function importVariables(fileURL: string | null = null, resetVariablesDef
                 if (response.ok) {
                     response.text().then(
                         function (text) {
-                            Globals.getEasyTuneVariables(engine)!.fromJSON(text, resetVariablesDefaultValueOnImport, manualImport);
+                            Globals.getEasyTuneVariables(engine)!.fromJSON(text, resetVariablesDefaultValueOnImport, skipValueChangedNotifyOnImport, manualImport);
 
                             EasyTuneUtils.refreshWidget(engine);
 

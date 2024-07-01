@@ -23,10 +23,10 @@ export class EasyTuneVariables {
         return null;
     }
 
-    public set<ValueType>(variableName: string, value: Readonly<ValueType>, resetDefaultValue: boolean = false): void {
+    public set<ValueType>(variableName: string, value: Readonly<ValueType>, resetDefaultValue: boolean = false, skipValueChangedNotify: boolean = false): void {
         const variable = this._myVariables.get(variableName);
         if (variable != null) {
-            variable.setValue(value, resetDefaultValue);
+            variable.setValue(value, resetDefaultValue, skipValueChangedNotify);
         }
     }
 
@@ -68,7 +68,7 @@ export class EasyTuneVariables {
         }
     }
 
-    public fromJSON(json: string, resetDefaultValue: boolean = false, manualImport: boolean = false): void {
+    public fromJSON(json: string, resetDefaultValue: boolean = false, skipValueChangedNotify: boolean = false, manualImport: boolean = false): void {
         const objectJSON = JSON.parse(json);
 
         for (const variable of this._myVariables.values()) {
@@ -76,7 +76,7 @@ export class EasyTuneVariables {
                 const variableName = variable.getName();
                 if (Object.hasOwn(objectJSON, variableName)) {
                     const variableValueJSON = objectJSON[variableName];
-                    variable.fromJSON(variableValueJSON, resetDefaultValue);
+                    variable.fromJSON(variableValueJSON, resetDefaultValue, skipValueChangedNotify);
                 }
             }
         }

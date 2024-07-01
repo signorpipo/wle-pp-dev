@@ -109,8 +109,8 @@ export abstract class EasyTuneVariable {
         return this._myValue;
     }
 
-    public setValue(value: unknown, resetDefaultValue: boolean = false): this {
-        const valueChanged = this._myValue != value;
+    public setValue(value: unknown, resetDefaultValue: boolean = false, skipValueChangedNotify: boolean = false): this {
+        const valueChanged = this._myValue != null && this._myValue != value;
 
         this._myValue = value;
 
@@ -120,7 +120,7 @@ export abstract class EasyTuneVariable {
 
         EasyTuneUtils.refreshWidget(this._myEngine);
 
-        if (valueChanged) {
+        if (valueChanged && !skipValueChangedNotify) {
             this._notifyValueChanged();
         }
 
@@ -180,8 +180,8 @@ export abstract class EasyTuneVariable {
         return this;
     }
 
-    public fromJSON(valueJSON: string, resetDefaultValue: boolean = false): this {
-        this.setValue(JSON.parse(valueJSON), resetDefaultValue);
+    public fromJSON(valueJSON: string, resetDefaultValue: boolean = false, skipValueChangedNotify: boolean = false): this {
+        this.setValue(JSON.parse(valueJSON), resetDefaultValue, skipValueChangedNotify);
         return this;
     }
 
@@ -216,8 +216,8 @@ export abstract class EasyTuneVariableTyped<T> extends EasyTuneVariable {
         return super.getValue() as T;
     }
 
-    public override setValue(value: Readonly<T>, resetDefaultValue?: boolean): this {
-        return super.setValue(value, resetDefaultValue);
+    public override setValue(value: Readonly<T>, resetDefaultValue?: boolean, skipValueChangedNotify?: boolean): this {
+        return super.setValue(value, resetDefaultValue, skipValueChangedNotify);
     }
 
     public override getDefaultValue(): Readonly<T> {
@@ -244,10 +244,10 @@ export abstract class EasyTuneVariableArray<ArrayType extends ArrayLike<ArrayEle
     constructor(type: EasyTuneVariableType, name: string, value: ArrayType, onValueChangedEventListener?: ((value: unknown, easyTuneVariable: EasyTuneVariable) => void) | null, showOnWidget?: boolean, extraParams?: Readonly<EasyTuneVariableExtraParams>, engine?: Readonly<WonderlandEngine>) {
         super(type, name, onValueChangedEventListener, showOnWidget, extraParams, engine);
 
-        this.setValue(value, true);
+        this.setValue(value, true, true);
     }
 
-    public override setValue(value: Readonly<ArrayType>, resetDefaultValue: boolean = false): this {
+    public override setValue(value: Readonly<ArrayType>, resetDefaultValue: boolean = false, skipValueChangedNotify: boolean = false): this {
         const valueChanged = this._myValue != null && !this._myValue.pp_equals(value);
 
         if (this._myValue == null) {
@@ -262,7 +262,7 @@ export abstract class EasyTuneVariableArray<ArrayType extends ArrayLike<ArrayEle
 
         EasyTuneUtils.refreshWidget(this._myEngine);
 
-        if (valueChanged) {
+        if (valueChanged && !skipValueChangedNotify) {
             this._notifyValueChanged();
         }
 
@@ -308,7 +308,7 @@ export class EasyTuneNumberArray extends EasyTuneVariableArray<ArrayLike<number>
 
         this._myEditAllValuesTogether = editAllValuesTogether;
 
-        this._clampValue(true);
+        this._clampValue(true, true);
     }
 
     public setMax(max: number): this {
@@ -327,7 +327,7 @@ export class EasyTuneNumberArray extends EasyTuneVariableArray<ArrayLike<number>
         return this.getValue().vec_toString();
     }
 
-    private _clampValue(resetDefaultValue: boolean): void {
+    private _clampValue(resetDefaultValue: boolean, skipValueChangedNotify: boolean = false): void {
         const clampedValue = this._myValue.vec_clamp(this._myMin, this._myMax);
 
         if (!resetDefaultValue) {
@@ -338,7 +338,7 @@ export class EasyTuneNumberArray extends EasyTuneVariableArray<ArrayLike<number>
             }
         }
 
-        this.setValue(clampedValue, resetDefaultValue);
+        this.setValue(clampedValue, resetDefaultValue, skipValueChangedNotify);
     }
 }
 
@@ -371,7 +371,7 @@ export class EasyTuneNumber extends EasyTuneVariableTyped<number> {
     constructor(name: string, value: number, onValueChangedEventListener?: ((value: unknown, easyTuneVariable: EasyTuneVariable) => void) | null, showOnWidget?: boolean, decimalPlaces: number = 3, stepPerSecond: number = 1, min: number = -Number.MAX_VALUE, max: number = Number.MAX_VALUE, extraParams?: Readonly<EasyTuneVariableExtraParams>, engine?: Readonly<WonderlandEngine>) {
         super(EasyTuneVariableType.NUMBER, name, onValueChangedEventListener, showOnWidget, extraParams, engine);
 
-        this.setValue(value, true);
+        this.setValue(value, true, true);
 
         this._myDecimalPlaces = decimalPlaces;
         this._myStepPerSecond = stepPerSecond;
@@ -381,7 +381,7 @@ export class EasyTuneNumber extends EasyTuneVariableTyped<number> {
         this._myMin = min;
         this._myMax = max;
 
-        this._clampValue(true);
+        this._clampValue(true, true);
     }
 
     public setMax(max: number): this {
@@ -400,7 +400,7 @@ export class EasyTuneNumber extends EasyTuneVariableTyped<number> {
         return JSON.stringify(this.getValue());
     }
 
-    private _clampValue(resetDefaultValue: boolean): void {
+    private _clampValue(resetDefaultValue: boolean, skipValueChangedNotify: boolean = false): void {
         const clampedValue = MathUtils.clamp(this._myValue, this._myMin, this._myMax);
 
         if (!resetDefaultValue) {
@@ -412,7 +412,7 @@ export class EasyTuneNumber extends EasyTuneVariableTyped<number> {
             }
         }
 
-        this.setValue(clampedValue, resetDefaultValue);
+        this.setValue(clampedValue, resetDefaultValue, skipValueChangedNotify);
     }
 }
 
@@ -440,7 +440,7 @@ export class EasyTuneBool extends EasyTuneVariableTyped<boolean> {
     constructor(name: string, value: boolean, onValueChangedEventListener?: ((value: unknown, easyTuneVariable: EasyTuneVariable) => void) | null, showOnWidget?: boolean, extraParams?: Readonly<EasyTuneVariableExtraParams>, engine?: Readonly<WonderlandEngine>) {
         super(EasyTuneVariableType.BOOL, name, onValueChangedEventListener, showOnWidget, extraParams, engine);
 
-        this.setValue(value, true);
+        this.setValue(value, true, true);
     }
 }
 
@@ -475,28 +475,25 @@ export class EasyTuneTransform extends EasyTuneVariableTyped<Matrix4> {
 
         this._myDecimalPlaces = decimalPlaces;
 
-        this._myValue.mat4_copy(value);
+        this.setValue(value, true, true);
 
-        this._myValue.mat4_getPosition(this._myPosition);
-        this._myValue.mat4_getRotationDegrees(this._myRotation);
-        this._myValue.mat4_getScale(this._myScale);
-
+        // To avoid having a 0 scale that can mess up the transform
         const decimalPlacesMultiplier = Math.pow(10, this._myDecimalPlaces);
         for (let i = 0; i < 3; i++) {
             this._myScale[i] = Math.max(this._myScale[i], 1 / decimalPlacesMultiplier);
         }
+
+        this._myValue.mat4_setPosition(this._myPosition);
+        this._myValue.mat4_setRotationDegrees(this._myRotation);
+        this._myValue.mat4_setScale(this._myScale);
+
+        this.setValue(this._myValue, true, true);
 
         this._myScaleAsOne = scaleAsOne;
 
         this._myPositionStepPerSecond = positionStepPerSecond;
         this._myRotationStepPerSecond = rotationStepPerSecond;
         this._myScaleStepPerSecond = scaleStepPerSecond;
-
-        this._myDefaultValue.mat4_copy(this._myValue);
-
-        this._myDefaultValue.mat4_getPosition(this._myDefaultPosition);
-        this._myDefaultValue.mat4_getRotationDegrees(this._myDefaultRotation);
-        this._myDefaultValue.mat4_getScale(this._myDefaultScale);
 
         this._myDefaultPositionStepPerSecond = this._myPositionStepPerSecond;
         this._myDefaultRotationStepPerSecond = this._myRotationStepPerSecond;
@@ -507,7 +504,7 @@ export class EasyTuneTransform extends EasyTuneVariableTyped<Matrix4> {
         {
             oldValue: mat4_create()
         };
-    public override setValue(value: Readonly<Matrix4>, resetDefaultValue = false): this {
+    public override setValue(value: Readonly<Matrix4>, resetDefaultValue = false, skipValueChangedNotify: boolean = false): this {
         const oldValue = EasyTuneTransform._setValueSV.oldValue;
         oldValue.mat4_copy(this._myValue);
 
@@ -525,7 +522,7 @@ export class EasyTuneTransform extends EasyTuneVariableTyped<Matrix4> {
 
         EasyTuneUtils.refreshWidget(this._myEngine);
 
-        if (valueChanged) {
+        if (valueChanged && !skipValueChangedNotify) {
             this._notifyValueChanged();
         }
 

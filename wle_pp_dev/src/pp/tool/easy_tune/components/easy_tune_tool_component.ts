@@ -85,7 +85,7 @@ export class EasyTuneToolComponent extends Component {
 
             params.myShowVariablesImportExportButtons = this._myShowVariablesImportExportButtons;
             params.myVariablesImportCallback = function (this: EasyTuneToolComponent, onSuccessCallback?: () => void, onFailureCallback?: () => void) {
-                EasyTuneUtils.importVariables(this._myVariablesImportURL, this._myResetVariablesDefaultValueOnImport, true, onSuccessCallback, onFailureCallback, this.engine);
+                EasyTuneUtils.importVariables(this._myVariablesImportURL, this._myResetVariablesDefaultValueOnImport, false, true, onSuccessCallback, onFailureCallback, this.engine);
             }.bind(this);
             params.myVariablesExportCallback = function (this: EasyTuneToolComponent, onSuccessCallback?: () => void, onFailureCallback?: () => void) {
                 if (Globals.getLeftGamepad()!.getButtonInfo(GamepadButtonID.SQUEEZE).isPressed() &&
@@ -126,7 +126,7 @@ export class EasyTuneToolComponent extends Component {
                 if (this._myFirstUpdate) {
                     this._myFirstUpdate = false;
                     if (this._myImportVariablesOnStart) {
-                        EasyTuneUtils.importVariables(this._myVariablesImportURL, this._myResetVariablesDefaultValueOnImport, false, undefined, undefined, this.engine);
+                        EasyTuneUtils.importVariables(this._myVariablesImportURL, this._myResetVariablesDefaultValueOnImport, false, false, undefined, undefined, this.engine);
                     }
                 }
 
