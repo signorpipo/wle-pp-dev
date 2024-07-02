@@ -60,11 +60,19 @@ export class EasyTuneVariables {
     }
 
     public changeEasyTuneVariableName(oldName: string, newName: string): void {
-        const variable = this._myVariables.get(oldName);
-        if (variable != null) {
-            this._myVariables.delete(oldName);
-            this._myVariables.set(newName, variable);
-            variable.setName(newName);
+        const variableToChange = this._myVariables.get(oldName);
+        if (variableToChange != null) {
+            const oldVariables = new Map(this._myVariables);
+            this._myVariables.clear();
+            for (const [name, variable] of oldVariables) {
+                if (name != oldName) {
+                    this._myVariables.set(name, variable);
+                } else {
+                    this._myVariables.set(newName, variable);
+                }
+            }
+
+            variableToChange.setName(newName);
         }
     }
 
