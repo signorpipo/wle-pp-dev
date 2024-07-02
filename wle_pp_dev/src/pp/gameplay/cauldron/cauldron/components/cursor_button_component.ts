@@ -30,10 +30,6 @@ export class CursorButtonComponent extends Component {
     @property.string("")
     private readonly _myButtonActionsHandlerNames!: string;
 
-    /** Even if the buttons is barely touched, it will still play the down animation for this amount */
-    @property.float(0.5)
-    private readonly _myMinDownSecond!: number;
-
     @property.float(0.075)
     private readonly _myScaleOffsetOnHover!: number;
 
@@ -79,6 +75,22 @@ export class CursorButtonComponent extends Component {
     @property.string("")
     private readonly _mySFXOnUnhover!: string;
 
+    /** Even if you barely interact with the button, it will keep staying in this state for the specified amount */
+    @property.float(0)
+    private readonly _myMinHoverSecond!: number;
+
+    /** Even if you barely interact with the button, it will keep staying in this state for the specified amount */
+    @property.float(0.15)
+    private readonly _myMinDownSecond!: number;
+
+    /** Even if you barely interact with the button, it will keep staying in this state for the specified amount */
+    @property.float(0)
+    private readonly _myMinUpSecond!: number;
+
+    /** Even if you barely interact with the button, it will keep staying in this state for the specified amount */
+    @property.float(0)
+    private readonly _myMinUnhoverSecond!: number;
+
     private readonly _myCursorButtonComponentID: string = "cursor_button_component" + MathUtils.randomUUID();
 
     private readonly _myCursorTarget!: CursorTarget;
@@ -86,9 +98,9 @@ export class CursorButtonComponent extends Component {
     private readonly _myButtonActionsHandlers: Map<unknown, CursorButtonActionsHandler> = new Map();
 
     private readonly _myFSM: FSM = new FSM();
-    private readonly _myDownMinTimer: Timer = new Timer(0);
+    private readonly _myKeepCurrentStateTimer: Timer = new Timer(0);
 
-    private readonly _myTransitionQueueToApplyOnDownTimeout: [string, Cursor][] = [];
+    private readonly _myTransitionQueue: [string, Cursor][] = [];
     private _myApplyQueuedTransitions: boolean = false;
 
     private readonly _myOriginalScaleLocal: Vector3 = vec3_create();
@@ -161,18 +173,18 @@ export class CursorButtonComponent extends Component {
 
         this._setupVisualsAndSFXs();
 
-        this._myDownMinTimer.reset(this._myMinDownSecond);
+        this._myKeepCurrentStateTimer.end();
 
-        this._myFSM.setLogEnabled(true, "Cursor Button");
+        this._myFSM.setLogEnabled(false, "Cursor Button");
 
         this._myFSM.addState("unhover", { start: this._onUnhoverStart.bind(this) });
         this._myFSM.addState("hover", { start: this._onHoverStart.bind(this) });
-        this._myFSM.addState("down", { start: this._onDownStart.bind(this), update: this._onDownUpdate.bind(this) });
+        this._myFSM.addState("down", { start: this._onDownStart.bind(this) });
         this._myFSM.addState("up_with_down", { start: this._onUpWithDownStart.bind(this) });
 
         this._myFSM.addTransition("unhover", "hover", "hover");
         this._myFSM.addTransition("hover", "down", "down");
-        this._myFSM.addTransition("down", "up_with_down", "up_with_down", this._onUpWithDownStart.bind(this));
+        this._myFSM.addTransition("down", "up_with_down", "up_with_down");
         this._myFSM.addTransition("up_with_down", "unhover", "unhover");
         this._myFSM.addTransition("up_with_down", "down", "down");
 
@@ -191,14 +203,21 @@ export class CursorButtonComponent extends Component {
     public override update(dt: number): void {
         this._myFSM.update(dt);
 
+        if (this._myKeepCurrentStateTimer.isRunning()) {
+            this._myKeepCurrentStateTimer.update(dt);
+            if (this._myKeepCurrentStateTimer.isDone()) {
+                this._myApplyQueuedTransitions = true;
+            }
+        }
+
         if (this._myApplyQueuedTransitions) {
             this._myApplyQueuedTransitions = false;
 
-            while (this._myTransitionQueueToApplyOnDownTimeout.length > 0) {
-                const transitionToApply = this._myTransitionQueueToApplyOnDownTimeout.shift()!;
+            while (this._myTransitionQueue.length > 0) {
+                const transitionToApply = this._myTransitionQueue.shift()!;
                 this._myFSM.perform(transitionToApply[0], transitionToApply[1]);
 
-                if (this._myDownMinTimer.isRunning()) {
+                if (this._myKeepCurrentStateTimer.isRunning()) {
                     break;
                 }
             }
@@ -234,38 +253,41 @@ export class CursorButtonComponent extends Component {
     }
 
     private _onUnhover(targetObject: Object3D, cursorComponent: Cursor): void {
-        if (this._myFSM.isInState("down") && !this._myDownMinTimer.isDone()) {
-            this._myTransitionQueueToApplyOnDownTimeout.push(["unhover", cursorComponent]);
+        if (!this._myKeepCurrentStateTimer.isDone()) {
+            this._myTransitionQueue.push(["unhover", cursorComponent]);
         } else {
             this._myFSM.perform("unhover", cursorComponent);
         }
     }
 
     private _onHover(targetObject: Object3D, cursorComponent: Cursor): void {
-        if (this._myFSM.isInState("down") && !this._myDownMinTimer.isDone()) {
-            this._myTransitionQueueToApplyOnDownTimeout.push(["hover", cursorComponent]);
+        if (!this._myKeepCurrentStateTimer.isDone()) {
+            this._myTransitionQueue.push(["hover", cursorComponent]);
         } else {
             this._myFSM.perform("hover", cursorComponent);
         }
     }
 
     private _onDown(targetObject: Object3D, cursorComponent: Cursor): void {
-        if (this._myFSM.isInState("down") && !this._myDownMinTimer.isDone()) {
-            this._myTransitionQueueToApplyOnDownTimeout.push(["down", cursorComponent]);
+        if (!this._myKeepCurrentStateTimer.isDone()) {
+            this._myTransitionQueue.push(["down", cursorComponent]);
         } else {
             this._myFSM.perform("down", cursorComponent);
         }
     }
 
     private onUpWithDown(targetObject: Object3D, cursorComponent: Cursor): void {
-        if (this._myFSM.isInState("down") && !this._myDownMinTimer.isDone()) {
-            this._myTransitionQueueToApplyOnDownTimeout.push(["up_with_down", cursorComponent]);
+        if (!this._myKeepCurrentStateTimer.isDone()) {
+            this._myTransitionQueue.push(["up_with_down", cursorComponent]);
         } else {
             this._myFSM.perform("up_with_down", cursorComponent);
         }
     }
 
     private _onUnhoverStart(fsm: FSM, transitionData: Readonly<TransitionData>, cursorComponent: Cursor): void {
+        this._myKeepCurrentStateTimer.start(this._myMinUnhoverSecond);
+        this._myKeepCurrentStateTimer.update(0); // Instantly end the timer if the duration is 0
+
         let skipDefault = false;
         for (const buttonActionsHandler of this._myButtonActionsHandlers.values()) {
             if (buttonActionsHandler.onUnhover != null) {
@@ -300,6 +322,9 @@ export class CursorButtonComponent extends Component {
 
 
     private _onHoverStart(fsm: FSM, transitionData: Readonly<TransitionData>, cursorComponent: Cursor): void {
+        this._myKeepCurrentStateTimer.start(this._myMinHoverSecond);
+        this._myKeepCurrentStateTimer.update(0); // Instantly end the timer if the duration is 0
+
         let skipDefault = false;
         for (const buttonActionsHandler of this._myButtonActionsHandlers.values()) {
             if (buttonActionsHandler.onHover != null) {
@@ -333,8 +358,8 @@ export class CursorButtonComponent extends Component {
     }
 
     private _onDownStart(fsm: FSM, transitionData: Readonly<TransitionData>, cursorComponent: Cursor): void {
-        this._myDownMinTimer.start();
-        this._myDownMinTimer.update(0); // Instantly end the timer if the duration is 0
+        this._myKeepCurrentStateTimer.start(this._myMinDownSecond);
+        this._myKeepCurrentStateTimer.update(0); // Instantly end the timer if the duration is 0
 
         let skipDefault = false;
         for (const buttonActionsHandler of this._myButtonActionsHandlers.values()) {
@@ -368,16 +393,10 @@ export class CursorButtonComponent extends Component {
         }
     }
 
-    private _onDownUpdate(dt: number): void {
-        if (this._myDownMinTimer.isRunning()) {
-            this._myDownMinTimer.update(dt);
-            if (this._myDownMinTimer.isDone()) {
-                this._myApplyQueuedTransitions = true;
-            }
-        }
-    }
-
     private _onUpWithDownStart(fsm: FSM, transitionData: Readonly<TransitionData>, cursorComponent: Cursor): void {
+        this._myKeepCurrentStateTimer.start(this._myMinUpSecond);
+        this._myKeepCurrentStateTimer.update(0); // Instantly end the timer if the duration is 0
+
         let skipDefault = false;
         for (const buttonActionsHandler of this._myButtonActionsHandlers.values()) {
             if (buttonActionsHandler.onUp != null) {
