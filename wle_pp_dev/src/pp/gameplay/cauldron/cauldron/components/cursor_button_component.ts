@@ -16,7 +16,15 @@ import { AnimatedNumber, AnimatedNumberParams } from "../animated_number.js";
 
 /** You can return `true` to prevent the default behavior of the cursor button to be performed after the action has been handled */
 export interface CursorButtonActionsHandler {
-    onHover?(cursorButtonComponent: CursorButtonComponent, cursorComponent: Cursor): boolean;
+
+    /**
+     * @param isHoverFromDown `true` in the special case the button is pressed, another cursor enter the button, and the first cursor unhover
+     *                        without releasing down.  
+     *                        In this special case the button should go back to hover, but you might just want to do limited logic based on the fact  
+     *                        that is not hovering from unhover but it's a special case
+     */
+    onHover?(cursorButtonComponent: CursorButtonComponent, cursorComponent: Cursor, isHoverFromDown: boolean): boolean;
+
     onDown?(cursorButtonComponent: CursorButtonComponent, cursorComponent: Cursor): boolean;
     onUp?(cursorButtonComponent: CursorButtonComponent, cursorComponent: Cursor): boolean;
     onUnhover?(cursorButtonComponent: CursorButtonComponent, cursorComponent: Cursor): boolean;
@@ -103,6 +111,9 @@ export class CursorButtonComponent extends Component {
     private readonly _myTransitionQueue: [string, Cursor][] = [];
     private _myApplyQueuedTransitions: boolean = false;
 
+    private _myInteractingCursors: Cursor[] = [];
+    private _myDownCursor: Cursor | null = null;
+
     private readonly _myOriginalScaleLocal: Vector3 = vec3_create();
     private readonly _myAnimatedScale!: AnimatedNumber;
 
@@ -178,13 +189,14 @@ export class CursorButtonComponent extends Component {
         this._myFSM.setLogEnabled(false, "Cursor Button");
 
         this._myFSM.addState("unhover", { start: this._onUnhoverStart.bind(this) });
-        this._myFSM.addState("hover", { start: this._onHoverStart.bind(this) });
+        this._myFSM.addState("hover");
         this._myFSM.addState("down", { start: this._onDownStart.bind(this) });
         this._myFSM.addState("up_with_down", { start: this._onUpWithDownStart.bind(this) });
 
-        this._myFSM.addTransition("unhover", "hover", "hover");
+        this._myFSM.addTransition("unhover", "hover", "hover", this._onHoverStart.bind(this, false));
         this._myFSM.addTransition("hover", "down", "down");
         this._myFSM.addTransition("down", "up_with_down", "up_with_down");
+        this._myFSM.addTransition("down", "hover", "restore_hover", this._onHoverStart.bind(this, true));
         this._myFSM.addTransition("up_with_down", "unhover", "unhover");
         this._myFSM.addTransition("up_with_down", "down", "down");
 
@@ -253,14 +265,45 @@ export class CursorButtonComponent extends Component {
     }
 
     private _onUnhover(targetObject: Object3D, cursorComponent: Cursor): void {
-        if (!this._myKeepCurrentStateTimer.isDone()) {
-            this._myTransitionQueue.push(["unhover", cursorComponent]);
+        const removedCursor = this._myInteractingCursors.pp_removeEqual(cursorComponent);
+
+        if (this._myDownCursor == cursorComponent) {
+            this._myDownCursor = null;
+
+            if (this._myInteractingCursors.length > 0) {
+                if (!this._myKeepCurrentStateTimer.isDone()) {
+                    this._myTransitionQueue.push(["restore_hover", cursorComponent]);
+                } else {
+                    this._myFSM.perform("restore_hover", cursorComponent);
+                }
+            } else {
+                if (!this._myKeepCurrentStateTimer.isDone()) {
+                    this._myTransitionQueue.push(["unhover", cursorComponent]);
+                } else {
+                    this._myFSM.perform("unhover", cursorComponent);
+                }
+            }
         } else {
-            this._myFSM.perform("unhover", cursorComponent);
+            if (this._myInteractingCursors.length > 0 || removedCursor == null) {
+                // Still a cursor hovering
+                return;
+            }
+
+            if (!this._myKeepCurrentStateTimer.isDone()) {
+                this._myTransitionQueue.push(["unhover", cursorComponent]);
+            } else {
+                this._myFSM.perform("unhover", cursorComponent);
+            }
         }
     }
 
     private _onHover(targetObject: Object3D, cursorComponent: Cursor): void {
+        this._myInteractingCursors.pp_pushUnique(cursorComponent);
+        if (this._myInteractingCursors.length > 1) {
+            // Already hovering
+            return;
+        }
+
         if (!this._myKeepCurrentStateTimer.isDone()) {
             this._myTransitionQueue.push(["hover", cursorComponent]);
         } else {
@@ -269,6 +312,13 @@ export class CursorButtonComponent extends Component {
     }
 
     private _onDown(targetObject: Object3D, cursorComponent: Cursor): void {
+        if (this._myDownCursor != null) {
+            // Already down
+            return;
+        }
+
+        this._myDownCursor = cursorComponent;
+
         if (!this._myKeepCurrentStateTimer.isDone()) {
             this._myTransitionQueue.push(["down", cursorComponent]);
         } else {
@@ -277,6 +327,13 @@ export class CursorButtonComponent extends Component {
     }
 
     private onUpWithDown(targetObject: Object3D, cursorComponent: Cursor): void {
+        if (this._myDownCursor != cursorComponent) {
+            // Not the cursor who is pressing currently
+            return;
+        }
+
+        this._myDownCursor = null;
+
         if (!this._myKeepCurrentStateTimer.isDone()) {
             this._myTransitionQueue.push(["up_with_down", cursorComponent]);
         } else {
@@ -321,14 +378,14 @@ export class CursorButtonComponent extends Component {
     }
 
 
-    private _onHoverStart(fsm: FSM, transitionData: Readonly<TransitionData>, cursorComponent: Cursor): void {
+    private _onHoverStart(isHoverFromDown: boolean, fsm: FSM, transitionData: Readonly<TransitionData>, cursorComponent: Cursor): void {
         this._myKeepCurrentStateTimer.start(this._myMinHoverSecond);
         this._myKeepCurrentStateTimer.update(0); // Instantly end the timer if the duration is 0
 
         let skipDefault = false;
         for (const buttonActionsHandler of this._myButtonActionsHandlers.values()) {
             if (buttonActionsHandler.onHover != null) {
-                skipDefault ||= buttonActionsHandler.onHover(this, cursorComponent);
+                skipDefault ||= buttonActionsHandler.onHover(this, cursorComponent, isHoverFromDown);
             }
         }
 
