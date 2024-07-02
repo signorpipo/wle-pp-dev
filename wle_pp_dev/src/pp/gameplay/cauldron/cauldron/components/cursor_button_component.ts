@@ -18,16 +18,37 @@ import { AnimatedNumber, AnimatedNumberParams } from "../animated_number.js";
 export interface CursorButtonActionsHandler {
 
     /**
+     * @param isSecondaryCursor `true` if the event is triggered but this is not the main cursor, which means the button is not actually changing the state  
+     *                          so you might want to perform limited logic, like only making the gamepad pulse and  
+     *                          play a sound to give the cursor feel but without changing the button state
+     * 
      * @param isHoverFromDown `true` in the special case the button is pressed, another cursor enter the button, and the first cursor unhover
      *                        without releasing down.  
-     *                        In this special case the button should go back to hover, but you might just want to do limited logic based on the fact  
+     *                        In this special case the button should go back to hover, but you might just want to perform limited logic based on the fact  
      *                        that is not hovering from unhover but it's a special case
      */
-    onHover?(cursorButtonComponent: CursorButtonComponent, cursorComponent: Cursor, isHoverFromDown: boolean): boolean;
+    onHover?(cursorButtonComponent: CursorButtonComponent, cursorComponent: Cursor, isSecondaryCursor: boolean, isHoverFromDown: boolean): boolean;
 
-    onDown?(cursorButtonComponent: CursorButtonComponent, cursorComponent: Cursor): boolean;
-    onUp?(cursorButtonComponent: CursorButtonComponent, cursorComponent: Cursor): boolean;
-    onUnhover?(cursorButtonComponent: CursorButtonComponent, cursorComponent: Cursor): boolean;
+    /**
+     * @param isSecondaryCursor `true` if the event is triggered but this is not the main cursor, which means the button is not actually changing the state  
+     *                          so you might want to perform limited logic, like only making the gamepad pulse and  
+     *                          play a sound to give the cursor feel but without changing the button state
+     */
+    onDown?(cursorButtonComponent: CursorButtonComponent, cursorComponent: Cursor, isSecondaryCursor: boolean): boolean;
+
+    /**
+     * @param isSecondaryCursor `true` if the event is triggered but this is not the main cursor, which means the button is not actually changing the state  
+     *                          so you might want to perform limited logic, like only making the gamepad pulse and  
+     *                          play a sound to give the cursor feel but without changing the button state
+     */
+    onUp?(cursorButtonComponent: CursorButtonComponent, cursorComponent: Cursor, isSecondaryCursor: boolean): boolean;
+
+    /**
+     * @param isSecondaryCursor `true` if the event is triggered but this is not the main cursor, which means the button is not actually changing the state  
+     *                          so you might want to perform limited logic, like only making the gamepad pulse and  
+     *                          play a sound to give the cursor feel but without changing the button state
+     */
+    onUnhover?(cursorButtonComponent: CursorButtonComponent, cursorComponent: Cursor, isSecondaryCursor: boolean): boolean;
 }
 
 export class CursorButtonComponent extends Component {
@@ -108,7 +129,7 @@ export class CursorButtonComponent extends Component {
     private readonly _myFSM: FSM = new FSM();
     private readonly _myKeepCurrentStateTimer: Timer = new Timer(0);
 
-    private readonly _myTransitionQueue: [string, Cursor][] = [];
+    private readonly _myTransitionQueue: [string, Cursor, boolean, boolean | null][] = [];
     private _myApplyQueuedTransitions: boolean = false;
 
     private _myInteractingCursors: Cursor[] = [];
@@ -186,17 +207,17 @@ export class CursorButtonComponent extends Component {
 
         this._myKeepCurrentStateTimer.end();
 
-        this._myFSM.setLogEnabled(false, "Cursor Button");
+        this._myFSM.setLogEnabled(true, "Cursor Button");
 
         this._myFSM.addState("unhover", { start: this._onUnhoverStart.bind(this) });
-        this._myFSM.addState("hover");
+        this._myFSM.addState("hover", { start: this._onHoverStart.bind(this) });
         this._myFSM.addState("down", { start: this._onDownStart.bind(this) });
         this._myFSM.addState("up_with_down", { start: this._onUpWithDownStart.bind(this) });
 
-        this._myFSM.addTransition("unhover", "hover", "hover", this._onHoverStart.bind(this, false));
+        this._myFSM.addTransition("unhover", "hover", "hover");
         this._myFSM.addTransition("hover", "down", "down");
         this._myFSM.addTransition("down", "up_with_down", "up_with_down");
-        this._myFSM.addTransition("down", "hover", "restore_hover", this._onHoverStart.bind(this, true));
+        this._myFSM.addTransition("down", "hover", "hover");
         this._myFSM.addTransition("up_with_down", "unhover", "unhover");
         this._myFSM.addTransition("up_with_down", "down", "down");
 
@@ -227,7 +248,11 @@ export class CursorButtonComponent extends Component {
 
             while (this._myTransitionQueue.length > 0) {
                 const transitionToApply = this._myTransitionQueue.shift()!;
-                this._myFSM.perform(transitionToApply[0], transitionToApply[1]);
+                if (transitionToApply[3] != null) {
+                    this._myFSM.perform(transitionToApply[0], transitionToApply[1], transitionToApply[2], transitionToApply[3]);
+                } else {
+                    this._myFSM.perform(transitionToApply[0], transitionToApply[1], transitionToApply[2]);
+                }
 
                 if (this._myKeepCurrentStateTimer.isRunning()) {
                     break;
@@ -265,90 +290,95 @@ export class CursorButtonComponent extends Component {
     }
 
     private _onUnhover(targetObject: Object3D, cursorComponent: Cursor): void {
-        const removedCursor = this._myInteractingCursors.pp_removeEqual(cursorComponent);
+        this._myInteractingCursors.pp_removeEqual(cursorComponent);
 
         if (this._myDownCursor == cursorComponent) {
             this._myDownCursor = null;
 
             if (this._myInteractingCursors.length > 0) {
                 if (!this._myKeepCurrentStateTimer.isDone()) {
-                    this._myTransitionQueue.push(["restore_hover", cursorComponent]);
+                    this._myTransitionQueue.push(["hover", cursorComponent, false, true]);
                 } else {
-                    this._myFSM.perform("restore_hover", cursorComponent);
+                    this._myFSM.perform("hover", cursorComponent, false, true);
                 }
             } else {
                 if (!this._myKeepCurrentStateTimer.isDone()) {
-                    this._myTransitionQueue.push(["unhover", cursorComponent]);
+                    this._myTransitionQueue.push(["unhover", cursorComponent, false, null]);
                 } else {
-                    this._myFSM.perform("unhover", cursorComponent);
+                    this._myFSM.perform("unhover", cursorComponent, false);
                 }
             }
         } else {
-            if (this._myInteractingCursors.length > 0 || removedCursor == null) {
-                // Still a cursor hovering
-                return;
-            }
+            const isSecondaryCursor = this._myInteractingCursors.length > 0;
 
-            if (!this._myKeepCurrentStateTimer.isDone()) {
-                this._myTransitionQueue.push(["unhover", cursorComponent]);
+            if (!isSecondaryCursor) {
+                if (!this._myKeepCurrentStateTimer.isDone()) {
+                    this._myTransitionQueue.push(["unhover", cursorComponent, false, null]);
+                } else {
+                    this._myFSM.perform("unhover", cursorComponent, false);
+                }
             } else {
-                this._myFSM.perform("unhover", cursorComponent);
+                this._onUnhoverStart(null, null, cursorComponent, true);
             }
         }
     }
 
     private _onHover(targetObject: Object3D, cursorComponent: Cursor): void {
-        this._myInteractingCursors.pp_pushUnique(cursorComponent);
-        if (this._myInteractingCursors.length > 1) {
-            // Already hovering
-            return;
-        }
+        const isSecondaryCursor = this._myInteractingCursors.length > 0;
 
-        if (!this._myKeepCurrentStateTimer.isDone()) {
-            this._myTransitionQueue.push(["hover", cursorComponent]);
+        this._myInteractingCursors.pp_pushUnique(cursorComponent);
+
+        if (!isSecondaryCursor) {
+            if (!this._myKeepCurrentStateTimer.isDone()) {
+                this._myTransitionQueue.push(["hover", cursorComponent, false, false]);
+            } else {
+                this._myFSM.perform("hover", cursorComponent, false, false);
+            }
         } else {
-            this._myFSM.perform("hover", cursorComponent);
+            this._onHoverStart(null, null, cursorComponent, true, false);
         }
     }
 
     private _onDown(targetObject: Object3D, cursorComponent: Cursor): void {
-        if (this._myDownCursor != null) {
-            // Already down
-            return;
-        }
+        const isSecondaryCursor = this._myDownCursor != null;
 
-        this._myDownCursor = cursorComponent;
+        if (!isSecondaryCursor) {
+            this._myDownCursor = cursorComponent;
 
-        if (!this._myKeepCurrentStateTimer.isDone()) {
-            this._myTransitionQueue.push(["down", cursorComponent]);
+            if (!this._myKeepCurrentStateTimer.isDone()) {
+                this._myTransitionQueue.push(["down", cursorComponent, false, null]);
+            } else {
+                this._myFSM.perform("down", cursorComponent, false);
+            }
         } else {
-            this._myFSM.perform("down", cursorComponent);
+            this._onDownStart(null, null, cursorComponent, true);
         }
     }
 
     private onUpWithDown(targetObject: Object3D, cursorComponent: Cursor): void {
-        if (this._myDownCursor != cursorComponent) {
-            // Not the cursor who is pressing currently
-            return;
-        }
+        const isSecondaryCursor = this._myDownCursor != cursorComponent;
 
-        this._myDownCursor = null;
+        if (!isSecondaryCursor) {
+            this._myDownCursor = null;
 
-        if (!this._myKeepCurrentStateTimer.isDone()) {
-            this._myTransitionQueue.push(["up_with_down", cursorComponent]);
+            if (!this._myKeepCurrentStateTimer.isDone()) {
+                this._myTransitionQueue.push(["up_with_down", cursorComponent, false, null]);
+            } else {
+                this._myFSM.perform("up_with_down", cursorComponent, false);
+            }
         } else {
-            this._myFSM.perform("up_with_down", cursorComponent);
+            this._onUpWithDownStart(null, null, cursorComponent, true);
         }
     }
 
-    private _onUnhoverStart(fsm: FSM, transitionData: Readonly<TransitionData>, cursorComponent: Cursor): void {
+    private _onUnhoverStart(fsm: FSM | null, transitionData: Readonly<TransitionData> | null, cursorComponent: Cursor, isSecondaryCursor: boolean): void {
         this._myKeepCurrentStateTimer.start(this._myMinUnhoverSecond);
         this._myKeepCurrentStateTimer.update(0); // Instantly end the timer if the duration is 0
 
         let skipDefault = false;
         for (const buttonActionsHandler of this._myButtonActionsHandlers.values()) {
             if (buttonActionsHandler.onUnhover != null) {
-                skipDefault ||= buttonActionsHandler.onUnhover(this, cursorComponent);
+                skipDefault ||= buttonActionsHandler.onUnhover(this, cursorComponent, isSecondaryCursor);
             }
         }
 
@@ -356,8 +386,10 @@ export class CursorButtonComponent extends Component {
             return;
         }
 
-        if (this._myScaleOffsetOnHover != 0 || this._myScaleOffsetOnDown != 0 || this._myScaleOffsetOnUp != 0) {
-            this._myAnimatedScale.updateTargetValue(1);
+        if (!isSecondaryCursor) {
+            if (this._myScaleOffsetOnHover != 0 || this._myScaleOffsetOnDown != 0 || this._myScaleOffsetOnUp != 0) {
+                this._myAnimatedScale.updateTargetValue(1);
+            }
         }
 
         if (this._myPulseIntensityOnUnhover != 0) {
@@ -367,8 +399,10 @@ export class CursorButtonComponent extends Component {
             }
         }
 
-        if (this._myColorBrigthnessOffsetOnHover != 0 || this._myColorBrigthnessOffsetOnDown != 0 || this._myColorBrigthnessOffsetOnUp != 0) {
-            this._myAnimatedColorBrightnessOffset.updateTargetValue(0);
+        if (!isSecondaryCursor) {
+            if (this._myColorBrigthnessOffsetOnHover != 0 || this._myColorBrigthnessOffsetOnDown != 0 || this._myColorBrigthnessOffsetOnUp != 0) {
+                this._myAnimatedColorBrightnessOffset.updateTargetValue(0);
+            }
         }
 
         if (this._myOnUnhoverAudioPlayer != null) {
@@ -378,14 +412,16 @@ export class CursorButtonComponent extends Component {
     }
 
 
-    private _onHoverStart(isHoverFromDown: boolean, fsm: FSM, transitionData: Readonly<TransitionData>, cursorComponent: Cursor): void {
-        this._myKeepCurrentStateTimer.start(this._myMinHoverSecond);
-        this._myKeepCurrentStateTimer.update(0); // Instantly end the timer if the duration is 0
+    private _onHoverStart(fsm: FSM | null, transitionData: Readonly<TransitionData> | null, cursorComponent: Cursor, isSecondaryCursor: boolean, isHoverFromDown: boolean): void {
+        if (!isSecondaryCursor) {
+            this._myKeepCurrentStateTimer.start(this._myMinHoverSecond);
+            this._myKeepCurrentStateTimer.update(0); // Instantly end the timer if the duration is 0
+        }
 
         let skipDefault = false;
         for (const buttonActionsHandler of this._myButtonActionsHandlers.values()) {
             if (buttonActionsHandler.onHover != null) {
-                skipDefault ||= buttonActionsHandler.onHover(this, cursorComponent, isHoverFromDown);
+                skipDefault ||= buttonActionsHandler.onHover(this, cursorComponent, isSecondaryCursor, isHoverFromDown);
             }
         }
 
@@ -393,8 +429,10 @@ export class CursorButtonComponent extends Component {
             return;
         }
 
-        if (this._myScaleOffsetOnHover != 0 || this._myScaleOffsetOnDown != 0 || this._myScaleOffsetOnUp != 0) {
-            this._myAnimatedScale.updateTargetValue(1 + this._myScaleOffsetOnHover);
+        if (!isSecondaryCursor) {
+            if (this._myScaleOffsetOnHover != 0 || this._myScaleOffsetOnDown != 0 || this._myScaleOffsetOnUp != 0) {
+                this._myAnimatedScale.updateTargetValue(1 + this._myScaleOffsetOnHover);
+            }
         }
 
         if (this._myPulseIntensityOnHover != 0) {
@@ -404,8 +442,10 @@ export class CursorButtonComponent extends Component {
             }
         }
 
-        if (this._myColorBrigthnessOffsetOnHover != 0 || this._myColorBrigthnessOffsetOnDown != 0 || this._myColorBrigthnessOffsetOnUp != 0) {
-            this._myAnimatedColorBrightnessOffset.updateTargetValue(this._myColorBrigthnessOffsetOnHover);
+        if (!isSecondaryCursor) {
+            if (this._myColorBrigthnessOffsetOnHover != 0 || this._myColorBrigthnessOffsetOnDown != 0 || this._myColorBrigthnessOffsetOnUp != 0) {
+                this._myAnimatedColorBrightnessOffset.updateTargetValue(this._myColorBrigthnessOffsetOnHover);
+            }
         }
 
         if (this._myOnHoverAudioPlayer != null) {
@@ -414,14 +454,14 @@ export class CursorButtonComponent extends Component {
         }
     }
 
-    private _onDownStart(fsm: FSM, transitionData: Readonly<TransitionData>, cursorComponent: Cursor): void {
+    private _onDownStart(fsm: FSM | null, transitionData: Readonly<TransitionData> | null, cursorComponent: Cursor, isSecondaryCursor: boolean): void {
         this._myKeepCurrentStateTimer.start(this._myMinDownSecond);
         this._myKeepCurrentStateTimer.update(0); // Instantly end the timer if the duration is 0
 
         let skipDefault = false;
         for (const buttonActionsHandler of this._myButtonActionsHandlers.values()) {
             if (buttonActionsHandler.onDown != null) {
-                skipDefault ||= buttonActionsHandler.onDown(this, cursorComponent);
+                skipDefault ||= buttonActionsHandler.onDown(this, cursorComponent, isSecondaryCursor);
             }
         }
 
@@ -429,8 +469,10 @@ export class CursorButtonComponent extends Component {
             return;
         }
 
-        if (this._myScaleOffsetOnHover != 0 || this._myScaleOffsetOnDown != 0 || this._myScaleOffsetOnUp != 0) {
-            this._myAnimatedScale.updateTargetValue(1 + this._myScaleOffsetOnDown);
+        if (!isSecondaryCursor) {
+            if (this._myScaleOffsetOnHover != 0 || this._myScaleOffsetOnDown != 0 || this._myScaleOffsetOnUp != 0) {
+                this._myAnimatedScale.updateTargetValue(1 + this._myScaleOffsetOnDown);
+            }
         }
 
         if (this._myPulseIntensityOnDown != 0) {
@@ -440,8 +482,10 @@ export class CursorButtonComponent extends Component {
             }
         }
 
-        if (this._myColorBrigthnessOffsetOnHover != 0 || this._myColorBrigthnessOffsetOnDown != 0 || this._myColorBrigthnessOffsetOnUp != 0) {
-            this._myAnimatedColorBrightnessOffset.updateTargetValue(this._myColorBrigthnessOffsetOnDown);
+        if (!isSecondaryCursor) {
+            if (this._myColorBrigthnessOffsetOnHover != 0 || this._myColorBrigthnessOffsetOnDown != 0 || this._myColorBrigthnessOffsetOnUp != 0) {
+                this._myAnimatedColorBrightnessOffset.updateTargetValue(this._myColorBrigthnessOffsetOnDown);
+            }
         }
 
         if (this._myOnDownAudioPlayer != null) {
@@ -450,14 +494,14 @@ export class CursorButtonComponent extends Component {
         }
     }
 
-    private _onUpWithDownStart(fsm: FSM, transitionData: Readonly<TransitionData>, cursorComponent: Cursor): void {
+    private _onUpWithDownStart(fsm: FSM | null, transitionData: Readonly<TransitionData> | null, cursorComponent: Cursor, isSecondaryCursor: boolean): void {
         this._myKeepCurrentStateTimer.start(this._myMinUpSecond);
         this._myKeepCurrentStateTimer.update(0); // Instantly end the timer if the duration is 0
 
         let skipDefault = false;
         for (const buttonActionsHandler of this._myButtonActionsHandlers.values()) {
             if (buttonActionsHandler.onUp != null) {
-                skipDefault ||= buttonActionsHandler.onUp(this, cursorComponent);
+                skipDefault ||= buttonActionsHandler.onUp(this, cursorComponent, isSecondaryCursor);
             }
         }
 
@@ -465,8 +509,10 @@ export class CursorButtonComponent extends Component {
             return;
         }
 
-        if (this._myScaleOffsetOnHover != 0 || this._myScaleOffsetOnDown != 0 || this._myScaleOffsetOnUp != 0) {
-            this._myAnimatedScale.updateTargetValue(1 + this._myScaleOffsetOnUp);
+        if (!isSecondaryCursor) {
+            if (this._myScaleOffsetOnHover != 0 || this._myScaleOffsetOnDown != 0 || this._myScaleOffsetOnUp != 0) {
+                this._myAnimatedScale.updateTargetValue(1 + this._myScaleOffsetOnUp);
+            }
         }
 
         if (this._myPulseIntensityOnUp != 0) {
@@ -476,8 +522,10 @@ export class CursorButtonComponent extends Component {
             }
         }
 
-        if (this._myColorBrigthnessOffsetOnHover != 0 || this._myColorBrigthnessOffsetOnDown != 0 || this._myColorBrigthnessOffsetOnUp != 0) {
-            this._myAnimatedColorBrightnessOffset.updateTargetValue(this._myColorBrigthnessOffsetOnUp);
+        if (!isSecondaryCursor) {
+            if (this._myColorBrigthnessOffsetOnHover != 0 || this._myColorBrigthnessOffsetOnDown != 0 || this._myColorBrigthnessOffsetOnUp != 0) {
+                this._myAnimatedColorBrightnessOffset.updateTargetValue(this._myColorBrigthnessOffsetOnUp);
+            }
         }
 
         if (this._myOnUpAudioPlayer != null) {
