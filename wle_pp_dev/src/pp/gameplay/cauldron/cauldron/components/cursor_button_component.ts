@@ -131,6 +131,8 @@ export class CursorButtonComponent extends Component {
     private readonly _myMinUnhoverSecond!: number;
 
 
+    @property.bool(false)
+    private readonly _myUpWithSecondaryCursorIsMain!: number;
 
     @property.bool(true)
     private readonly _myPerformDefaultSecondaryCursorFeedbackOnHover!: number;
@@ -159,7 +161,7 @@ export class CursorButtonComponent extends Component {
     private _myApplyQueuedTransitions: boolean = false;
 
     private _myInteractingCursors: Cursor[] = [];
-    private _myDownCursor: Cursor | null = null;
+    private _myDownCursors: Cursor[] = [];
 
     private readonly _myOriginalScaleLocal: Vector3 = vec3_create();
     private readonly _myAnimatedScale!: AnimatedNumber;
@@ -318,9 +320,11 @@ export class CursorButtonComponent extends Component {
     private _onUnhover(targetObject: Object3D, cursorComponent: Cursor): void {
         this._myInteractingCursors.pp_removeEqual(cursorComponent);
 
-        if (this._myDownCursor == cursorComponent) {
-            this._myDownCursor = null;
+        const isMainDown = this._myDownCursors.length > 0 && this._myDownCursors[0] == cursorComponent;
 
+        this._myDownCursors.pp_removeEqual(cursorComponent);
+
+        if (isMainDown && (!this._myUpWithSecondaryCursorIsMain || this._myDownCursors.length == 0)) {
             if (this._myInteractingCursors.length > 0) {
                 if (!this._myKeepCurrentStateTimer.isDone()) {
                     this._myTransitionQueue.push(["hover", cursorComponent, false, true]);
@@ -366,11 +370,11 @@ export class CursorButtonComponent extends Component {
     }
 
     private _onDown(targetObject: Object3D, cursorComponent: Cursor): void {
-        const isSecondaryCursor = this._myDownCursor != null;
+        const isSecondaryCursor = this._myDownCursors.length > 0 && !this._myUpWithSecondaryCursorIsMain;
+
+        this._myDownCursors.pp_pushUnique(cursorComponent);
 
         if (!isSecondaryCursor) {
-            this._myDownCursor = cursorComponent;
-
             if (!this._myKeepCurrentStateTimer.isDone()) {
                 this._myTransitionQueue.push(["down", cursorComponent, false, null]);
             } else {
@@ -382,11 +386,11 @@ export class CursorButtonComponent extends Component {
     }
 
     private onUpWithDown(targetObject: Object3D, cursorComponent: Cursor): void {
-        const isSecondaryCursor = this._myDownCursor != cursorComponent;
+        const isSecondaryCursor = this._myDownCursors.length > 0 && this._myDownCursors[0] != cursorComponent && !this._myUpWithSecondaryCursorIsMain;
+
+        this._myDownCursors.pp_removeEqual(cursorComponent);
 
         if (!isSecondaryCursor) {
-            this._myDownCursor = null;
-
             if (!this._myKeepCurrentStateTimer.isDone()) {
                 this._myTransitionQueue.push(["up_with_down", cursorComponent, false, null]);
             } else {
