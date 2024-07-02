@@ -59,6 +59,8 @@ export class CursorButtonComponent extends Component {
     @property.string("")
     private readonly _myButtonActionsHandlerNames!: string;
 
+
+
     @property.float(0.075)
     private readonly _myScaleOffsetOnHover!: number;
 
@@ -67,6 +69,8 @@ export class CursorButtonComponent extends Component {
 
     @property.float(0.075)
     private readonly _myScaleOffsetOnUp!: number;
+
+
 
     @property.float(0.1)
     private readonly _myPulseIntensityOnHover!: number;
@@ -80,6 +84,8 @@ export class CursorButtonComponent extends Component {
     @property.float(0)
     private readonly _myPulseIntensityOnUnhover!: number;
 
+
+
     @property.float(-0.1)
     private readonly _myColorBrigthnessOffsetOnHover!: number;
 
@@ -88,6 +94,8 @@ export class CursorButtonComponent extends Component {
 
     @property.float(-0.1)
     private readonly _myColorBrigthnessOffsetOnUp!: number;
+
+
 
     @property.bool(true)
     private readonly _myUseSpatialAudio!: boolean;
@@ -104,6 +112,8 @@ export class CursorButtonComponent extends Component {
     @property.string("")
     private readonly _mySFXOnUnhover!: string;
 
+
+
     /** Even if you barely interact with the button, it will keep staying in this state for the specified amount */
     @property.float(0)
     private readonly _myMinHoverSecond!: number;
@@ -119,6 +129,22 @@ export class CursorButtonComponent extends Component {
     /** Even if you barely interact with the button, it will keep staying in this state for the specified amount */
     @property.float(0)
     private readonly _myMinUnhoverSecond!: number;
+
+
+
+    @property.bool(true)
+    private readonly _myPerformDefaultSecondaryCursorFeedbackOnHover!: number;
+
+    @property.bool(true)
+    private readonly _myPerformDefaultSecondaryCursorFeedbackOnDown!: number;
+
+    @property.bool(true)
+    private readonly _myPerformDefaultSecondaryCursorFeedbackOnUp!: number;
+
+    @property.bool(true)
+    private readonly _myPerformDefaultSecondaryCursorFeedbackOnUnhover!: number;
+
+
 
     private readonly _myCursorButtonComponentID: string = "cursor_button_component" + MathUtils.randomUUID();
 
@@ -392,10 +418,12 @@ export class CursorButtonComponent extends Component {
             }
         }
 
-        if (this._myPulseIntensityOnUnhover != 0) {
-            const handedness = InputUtils.getHandednessByString(cursorComponent.handedness as string);
-            if (handedness != null) {
-                Globals.getGamepads()![handedness].pulse(this._myPulseIntensityOnUnhover, 0.085);
+        if (!isSecondaryCursor || this._myPerformDefaultSecondaryCursorFeedbackOnUnhover) {
+            if (this._myPulseIntensityOnUnhover != 0) {
+                const handedness = InputUtils.getHandednessByString(cursorComponent.handedness as string);
+                if (handedness != null) {
+                    Globals.getGamepads()![handedness].pulse(this._myPulseIntensityOnUnhover, 0.085);
+                }
             }
         }
 
@@ -405,9 +433,11 @@ export class CursorButtonComponent extends Component {
             }
         }
 
-        if (this._myOnUnhoverAudioPlayer != null) {
-            this._myOnUnhoverAudioPlayer.setPosition(this.object.pp_getPosition());
-            this._myOnUnhoverAudioPlayer.play();
+        if (!isSecondaryCursor || this._myPerformDefaultSecondaryCursorFeedbackOnUnhover) {
+            if (this._myOnUnhoverAudioPlayer != null) {
+                this._myOnUnhoverAudioPlayer.setPosition(this.object.pp_getPosition());
+                this._myOnUnhoverAudioPlayer.play();
+            }
         }
     }
 
@@ -435,10 +465,12 @@ export class CursorButtonComponent extends Component {
             }
         }
 
-        if (this._myPulseIntensityOnHover != 0) {
-            const handedness = InputUtils.getHandednessByString(cursorComponent.handedness as string);
-            if (handedness != null) {
-                Globals.getGamepads()![handedness].pulse(this._myPulseIntensityOnHover, 0.085);
+        if (!isSecondaryCursor || this._myPerformDefaultSecondaryCursorFeedbackOnHover) {
+            if (this._myPulseIntensityOnHover != 0) {
+                const handedness = InputUtils.getHandednessByString(cursorComponent.handedness as string);
+                if (handedness != null) {
+                    Globals.getGamepads()![handedness].pulse(this._myPulseIntensityOnHover, 0.085);
+                }
             }
         }
 
@@ -448,9 +480,11 @@ export class CursorButtonComponent extends Component {
             }
         }
 
-        if (this._myOnHoverAudioPlayer != null) {
-            this._myOnHoverAudioPlayer.setPosition(this.object.pp_getPosition());
-            this._myOnHoverAudioPlayer.play();
+        if (!isSecondaryCursor || this._myPerformDefaultSecondaryCursorFeedbackOnHover) {
+            if (this._myOnHoverAudioPlayer != null) {
+                this._myOnHoverAudioPlayer.setPosition(this.object.pp_getPosition());
+                this._myOnHoverAudioPlayer.play();
+            }
         }
     }
 
@@ -475,10 +509,12 @@ export class CursorButtonComponent extends Component {
             }
         }
 
-        if (this._myPulseIntensityOnDown != 0) {
-            const handedness = InputUtils.getHandednessByString(cursorComponent.handedness as string);
-            if (handedness != null) {
-                Globals.getGamepads()![handedness].pulse(this._myPulseIntensityOnDown, 0.085);
+        if (!isSecondaryCursor || this._myPerformDefaultSecondaryCursorFeedbackOnDown) {
+            if (this._myPulseIntensityOnDown != 0) {
+                const handedness = InputUtils.getHandednessByString(cursorComponent.handedness as string);
+                if (handedness != null) {
+                    Globals.getGamepads()![handedness].pulse(this._myPulseIntensityOnDown, 0.085);
+                }
             }
         }
 
@@ -488,9 +524,11 @@ export class CursorButtonComponent extends Component {
             }
         }
 
-        if (this._myOnDownAudioPlayer != null) {
-            this._myOnDownAudioPlayer.setPosition(this.object.pp_getPosition());
-            this._myOnDownAudioPlayer.play();
+        if (!isSecondaryCursor || this._myPerformDefaultSecondaryCursorFeedbackOnDown) {
+            if (this._myOnDownAudioPlayer != null) {
+                this._myOnDownAudioPlayer.setPosition(this.object.pp_getPosition());
+                this._myOnDownAudioPlayer.play();
+            }
         }
     }
 
@@ -515,10 +553,12 @@ export class CursorButtonComponent extends Component {
             }
         }
 
-        if (this._myPulseIntensityOnUp != 0) {
-            const handedness = InputUtils.getHandednessByString(cursorComponent.handedness as string);
-            if (handedness != null) {
-                Globals.getGamepads()![handedness].pulse(this._myPulseIntensityOnUp, 0.085);
+        if (!isSecondaryCursor || this._myPerformDefaultSecondaryCursorFeedbackOnUp) {
+            if (this._myPulseIntensityOnUp != 0) {
+                const handedness = InputUtils.getHandednessByString(cursorComponent.handedness as string);
+                if (handedness != null) {
+                    Globals.getGamepads()![handedness].pulse(this._myPulseIntensityOnUp, 0.085);
+                }
             }
         }
 
@@ -528,9 +568,11 @@ export class CursorButtonComponent extends Component {
             }
         }
 
-        if (this._myOnUpAudioPlayer != null) {
-            this._myOnUpAudioPlayer.setPosition(this.object.pp_getPosition());
-            this._myOnUpAudioPlayer.play();
+        if (!isSecondaryCursor || this._myPerformDefaultSecondaryCursorFeedbackOnUp) {
+            if (this._myOnUpAudioPlayer != null) {
+                this._myOnUpAudioPlayer.setPosition(this.object.pp_getPosition());
+                this._myOnUpAudioPlayer.play();
+            }
         }
     }
 
