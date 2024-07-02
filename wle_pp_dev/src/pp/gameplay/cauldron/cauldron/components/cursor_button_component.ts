@@ -157,7 +157,7 @@ export class CursorButtonComponent extends Component {
     private readonly _myFSM: FSM = new FSM();
     private readonly _myKeepCurrentStateTimer: Timer = new Timer(0);
 
-    private readonly _myTransitionQueue: [string, Cursor, boolean, boolean | null][] = [];
+    private readonly _myTransitionQueue: [string, Cursor, boolean, boolean | null, () => void][] = [];
     private _myApplyQueuedTransitions: boolean = false;
 
     private _myHoverCursors: Cursor[] = [];
@@ -235,7 +235,7 @@ export class CursorButtonComponent extends Component {
 
         this._myKeepCurrentStateTimer.end();
 
-        this._myFSM.setLogEnabled(true, "Cursor Button");
+        this._myFSM.setLogEnabled(false, "Cursor Button");
 
         this._myFSM.addState("unhover", { start: this._onUnhoverStart.bind(this) });
         this._myFSM.addState("hover", { start: this._onHoverStart.bind(this) });
@@ -276,10 +276,15 @@ export class CursorButtonComponent extends Component {
 
             while (this._myTransitionQueue.length > 0) {
                 const transitionToApply = this._myTransitionQueue.shift()!;
-                if (transitionToApply[3] != null) {
-                    this._myFSM.perform(transitionToApply[0], transitionToApply[1], transitionToApply[2], transitionToApply[3]);
+
+                if (this._myFSM.canPerform(transitionToApply[0])) {
+                    if (transitionToApply[3] != null) {
+                        this._myFSM.perform(transitionToApply[0], transitionToApply[1], transitionToApply[2], transitionToApply[3]);
+                    } else {
+                        this._myFSM.perform(transitionToApply[0], transitionToApply[1], transitionToApply[2]);
+                    }
                 } else {
-                    this._myFSM.perform(transitionToApply[0], transitionToApply[1], transitionToApply[2]);
+                    transitionToApply[4]();
                 }
 
                 if (this._myKeepCurrentStateTimer.isRunning()) {
@@ -327,15 +332,19 @@ export class CursorButtonComponent extends Component {
         if (isMainDown && (!this._myUpWithSecondaryCursorIsMain || this._myDownCursors.length == 0)) {
             if (this._myHoverCursors.length > 0) {
                 if (!this._myKeepCurrentStateTimer.isDone()) {
-                    this._myTransitionQueue.push(["hover", cursorComponent, false, true]);
-                } else {
+                    this._myTransitionQueue.push(["hover", cursorComponent, false, true, this._onHoverStart.bind(this, null, null, cursorComponent, true, true)]);
+                } else if (this._myFSM.canPerform("hover")) {
                     this._myFSM.perform("hover", cursorComponent, false, true);
+                } else {
+                    this._onHoverStart(null, null, cursorComponent, true, true);
                 }
             } else {
                 if (!this._myKeepCurrentStateTimer.isDone()) {
-                    this._myTransitionQueue.push(["unhover", cursorComponent, false, null]);
-                } else {
+                    this._myTransitionQueue.push(["unhover", cursorComponent, false, null, this._onUnhoverStart.bind(this, null, null, cursorComponent, true)]);
+                } else if (this._myFSM.canPerform("unhover")) {
                     this._myFSM.perform("unhover", cursorComponent, false);
+                } else {
+                    this._onUnhoverStart(null, null, cursorComponent, true);
                 }
             }
         } else {
@@ -343,9 +352,11 @@ export class CursorButtonComponent extends Component {
 
             if (!isSecondaryCursor) {
                 if (!this._myKeepCurrentStateTimer.isDone()) {
-                    this._myTransitionQueue.push(["unhover", cursorComponent, false, null]);
-                } else {
+                    this._myTransitionQueue.push(["unhover", cursorComponent, false, null, this._onUnhoverStart.bind(this, null, null, cursorComponent, true)]);
+                } else if (this._myFSM.canPerform("unhover")) {
                     this._myFSM.perform("unhover", cursorComponent, false);
+                } else {
+                    this._onUnhoverStart(null, null, cursorComponent, true);
                 }
             } else {
                 this._onUnhoverStart(null, null, cursorComponent, true);
@@ -360,9 +371,11 @@ export class CursorButtonComponent extends Component {
 
         if (!isSecondaryCursor) {
             if (!this._myKeepCurrentStateTimer.isDone()) {
-                this._myTransitionQueue.push(["hover", cursorComponent, false, false]);
-            } else {
+                this._myTransitionQueue.push(["hover", cursorComponent, false, false, this._onHoverStart.bind(this, null, null, cursorComponent, true, false)]);
+            } else if (this._myFSM.canPerform("hover")) {
                 this._myFSM.perform("hover", cursorComponent, false, false);
+            } else {
+                this._onHoverStart(null, null, cursorComponent, true, false);
             }
         } else {
             this._onHoverStart(null, null, cursorComponent, true, false);
@@ -376,9 +389,11 @@ export class CursorButtonComponent extends Component {
 
         if (!isSecondaryCursor) {
             if (!this._myKeepCurrentStateTimer.isDone()) {
-                this._myTransitionQueue.push(["down", cursorComponent, false, null]);
-            } else {
+                this._myTransitionQueue.push(["down", cursorComponent, false, null, this._onDownStart.bind(this, null, null, cursorComponent, true)]);
+            } else if (this._myFSM.canPerform("down")) {
                 this._myFSM.perform("down", cursorComponent, false);
+            } else {
+                this._onDownStart(null, null, cursorComponent, true);
             }
         } else {
             this._onDownStart(null, null, cursorComponent, true);
@@ -392,9 +407,11 @@ export class CursorButtonComponent extends Component {
 
         if (!isSecondaryCursor) {
             if (!this._myKeepCurrentStateTimer.isDone()) {
-                this._myTransitionQueue.push(["up_with_down", cursorComponent, false, null]);
-            } else {
+                this._myTransitionQueue.push(["up_with_down", cursorComponent, false, null, this._onUpWithDownStart.bind(this, null, null, cursorComponent, true)]);
+            } else if (this._myFSM.canPerform("up_with_down")) {
                 this._myFSM.perform("up_with_down", cursorComponent, false);
+            } else {
+                this._onUpWithDownStart(null, null, cursorComponent, true);
             }
         } else {
             this._onUpWithDownStart(null, null, cursorComponent, true);
