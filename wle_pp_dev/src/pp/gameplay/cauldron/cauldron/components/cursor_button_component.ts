@@ -160,7 +160,7 @@ export class CursorButtonComponent extends Component {
     private readonly _myTransitionQueue: [string, Cursor, boolean, boolean | null][] = [];
     private _myApplyQueuedTransitions: boolean = false;
 
-    private _myInteractingCursors: Cursor[] = [];
+    private _myHoverCursors: Cursor[] = [];
     private _myDownCursors: Cursor[] = [];
 
     private readonly _myOriginalScaleLocal: Vector3 = vec3_create();
@@ -318,14 +318,14 @@ export class CursorButtonComponent extends Component {
     }
 
     private _onUnhover(targetObject: Object3D, cursorComponent: Cursor): void {
-        this._myInteractingCursors.pp_removeEqual(cursorComponent);
+        this._myHoverCursors.pp_removeEqual(cursorComponent);
 
         const isMainDown = this._myDownCursors.length > 0 && this._myDownCursors[0] == cursorComponent;
 
         this._myDownCursors.pp_removeEqual(cursorComponent);
 
         if (isMainDown && (!this._myUpWithSecondaryCursorIsMain || this._myDownCursors.length == 0)) {
-            if (this._myInteractingCursors.length > 0) {
+            if (this._myHoverCursors.length > 0) {
                 if (!this._myKeepCurrentStateTimer.isDone()) {
                     this._myTransitionQueue.push(["hover", cursorComponent, false, true]);
                 } else {
@@ -339,7 +339,7 @@ export class CursorButtonComponent extends Component {
                 }
             }
         } else {
-            const isSecondaryCursor = this._myInteractingCursors.length > 0;
+            const isSecondaryCursor = this._myHoverCursors.length > 0;
 
             if (!isSecondaryCursor) {
                 if (!this._myKeepCurrentStateTimer.isDone()) {
@@ -354,9 +354,9 @@ export class CursorButtonComponent extends Component {
     }
 
     private _onHover(targetObject: Object3D, cursorComponent: Cursor): void {
-        const isSecondaryCursor = this._myInteractingCursors.length > 0;
+        const isSecondaryCursor = this._myHoverCursors.length > 0;
 
-        this._myInteractingCursors.pp_pushUnique(cursorComponent);
+        this._myHoverCursors.pp_pushUnique(cursorComponent);
 
         if (!isSecondaryCursor) {
             if (!this._myKeepCurrentStateTimer.isDone()) {
