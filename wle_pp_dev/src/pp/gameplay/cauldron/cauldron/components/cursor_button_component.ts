@@ -147,10 +147,10 @@ export class CursorButtonComponent extends Component {
 
 
     @property.bool(false)
-    private readonly _myUpCursorIsMainOnlyIfLastDown!: number;
+    private readonly _myUpCursorIsMainOnlyIfLastDown!: boolean;
 
     @property.bool(false)
-    private readonly _myUpWithSecondaryCursorIsMain!: number;
+    private readonly _myUpWithSecondaryCursorIsMain!: boolean;
 
 
 
@@ -343,36 +343,14 @@ export class CursorButtonComponent extends Component {
             if (this._myHoverCursors.length > 0) {
                 this._myMainDownCursor = null;
 
-                if (!this._myKeepCurrentStateTimer.isDone()) {
-                    this._addToTransitionQueue(["hover", cursorComponent, false, true, this._onHoverStart.bind(this, null, null, cursorComponent, true, true)]);
-                } else if (this._myFSM.canPerform("hover")) {
-                    this._myFSM.perform("hover", cursorComponent, false, true);
-                } else {
-                    this._onHoverStart(null, null, cursorComponent, true, true);
-                }
+                this._addToTransitionQueue("hover", cursorComponent, false, true, this._onHoverStart.bind(this, null, null, cursorComponent, true, true));
             } else {
-                if (!this._myKeepCurrentStateTimer.isDone()) {
-                    this._addToTransitionQueue(["unhover", cursorComponent, false, null, this._onUnhoverStart.bind(this, null, null, cursorComponent, true)]);
-                } else if (this._myFSM.canPerform("unhover")) {
-                    this._myFSM.perform("unhover", cursorComponent, false);
-                } else {
-                    this._onUnhoverStart(null, null, cursorComponent, true);
-                }
+                this._addToTransitionQueue("unhover", cursorComponent, false, null, this._onUnhoverStart.bind(this, null, null, cursorComponent, true));
             }
         } else {
             const isSecondaryCursor = this._myHoverCursors.length > 0;
 
-            if (!isSecondaryCursor) {
-                if (!this._myKeepCurrentStateTimer.isDone()) {
-                    this._addToTransitionQueue(["unhover", cursorComponent, false, null, this._onUnhoverStart.bind(this, null, null, cursorComponent, true)]);
-                } else if (this._myFSM.canPerform("unhover")) {
-                    this._myFSM.perform("unhover", cursorComponent, false);
-                } else {
-                    this._onUnhoverStart(null, null, cursorComponent, true);
-                }
-            } else {
-                this._onUnhoverStart(null, null, cursorComponent, true);
-            }
+            this._addToTransitionQueue("unhover", cursorComponent, isSecondaryCursor, null, this._onUnhoverStart.bind(this, null, null, cursorComponent, true));
         }
     }
 
@@ -381,17 +359,7 @@ export class CursorButtonComponent extends Component {
 
         this._myHoverCursors.pp_pushUnique(cursorComponent);
 
-        if (!isSecondaryCursor) {
-            if (!this._myKeepCurrentStateTimer.isDone()) {
-                this._addToTransitionQueue(["hover", cursorComponent, false, false, this._onHoverStart.bind(this, null, null, cursorComponent, true, false)]);
-            } else if (this._myFSM.canPerform("hover")) {
-                this._myFSM.perform("hover", cursorComponent, false, false);
-            } else {
-                this._onHoverStart(null, null, cursorComponent, true, false);
-            }
-        } else {
-            this._onHoverStart(null, null, cursorComponent, true, false);
-        }
+        this._addToTransitionQueue("hover", cursorComponent, isSecondaryCursor, false, this._onHoverStart.bind(this, null, null, cursorComponent, true, false));
     }
 
     private _onDown(targetObject: Object3D, cursorComponent: Cursor): void {
@@ -403,17 +371,7 @@ export class CursorButtonComponent extends Component {
 
         this._myDownCursors.pp_pushUnique(cursorComponent);
 
-        if (!isSecondaryCursor) {
-            if (!this._myKeepCurrentStateTimer.isDone()) {
-                this._addToTransitionQueue(["down", cursorComponent, false, null, this._onDownStart.bind(this, null, null, cursorComponent, true)]);
-            } else if (this._myFSM.canPerform("down")) {
-                this._myFSM.perform("down", cursorComponent, false);
-            } else {
-                this._onDownStart(null, null, cursorComponent, true);
-            }
-        } else {
-            this._onDownStart(null, null, cursorComponent, true);
-        }
+        this._addToTransitionQueue("down", cursorComponent, isSecondaryCursor, null, this._onDownStart.bind(this, null, null, cursorComponent, true));
     }
 
     private onUpWithDown(targetObject: Object3D, cursorComponent: Cursor): void {
@@ -425,28 +383,28 @@ export class CursorButtonComponent extends Component {
             this._myMainDownCursor = null;
         }
 
-        if (!isSecondaryCursor) {
-            if (!this._myKeepCurrentStateTimer.isDone()) {
-                this._addToTransitionQueue(["up_with_down", cursorComponent, false, null, this._onUpWithDownStart.bind(this, null, null, cursorComponent, true)]);
-            } else if (this._myFSM.canPerform("up_with_down")) {
-                this._myFSM.perform("up_with_down", cursorComponent, false);
-            } else {
-                this._onUpWithDownStart(null, null, cursorComponent, true);
-            }
-        } else {
-            this._onUpWithDownStart(null, null, cursorComponent, true);
-        }
+        this._addToTransitionQueue("up_with_down", cursorComponent, isSecondaryCursor, null, this._onUpWithDownStart.bind(this, null, null, cursorComponent, true));
     }
 
-    private _addToTransitionQueue(transitionToQueue: [string, Cursor, boolean, boolean | null, () => void]): void {
-        const index = this._myTransitionQueue.pp_findIndex((elementToCheck: [string, Cursor, boolean, boolean | null, () => void]) => {
-            return elementToCheck[0] == transitionToQueue[0] && elementToCheck[1] == transitionToQueue[1] && elementToCheck[2] == transitionToQueue[2] && elementToCheck[3] == transitionToQueue[3];
-        });
+    private _addToTransitionQueue(transitionToPerform: string, cursorComponent: Cursor, isSecondaryCursor: boolean, isHoverFromDown: boolean | null, startCallback: () => void): void {
+        if (!isSecondaryCursor) {
+            if (!this._myKeepCurrentStateTimer.isDone()) {
+                const index = this._myTransitionQueue.pp_findIndex((elementToCheck: [string, Cursor, boolean, boolean | null, () => void]) => {
+                    return elementToCheck[0] == transitionToPerform && elementToCheck[1] == cursorComponent && elementToCheck[2] == isSecondaryCursor && elementToCheck[3] == isHoverFromDown;
+                });
 
-        if (index == -1) {
-            this._myTransitionQueue.push(transitionToQueue);
+                if (index == -1) {
+                    this._myTransitionQueue.push([transitionToPerform, cursorComponent, isSecondaryCursor, isHoverFromDown, startCallback]);
+                } else {
+                    this._myTransitionQueue.splice(index + 1);
+                }
+            } else if (this._myFSM.canPerform(transitionToPerform)) {
+                this._myFSM.perform(transitionToPerform, cursorComponent, isSecondaryCursor, isHoverFromDown);
+            } else {
+                startCallback();
+            }
         } else {
-            this._myTransitionQueue.splice(index + 1);
+            startCallback();
         }
     }
 
