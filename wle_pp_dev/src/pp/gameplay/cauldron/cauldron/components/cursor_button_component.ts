@@ -131,8 +131,6 @@ export class CursorButtonComponent extends Component {
     private readonly _myMinUnhoverSecond!: number;
 
 
-    @property.bool(false)
-    private readonly _myUpWithSecondaryCursorIsMain!: number;
 
     @property.bool(true)
     private readonly _myPerformDefaultSecondaryCursorFeedbackOnHover!: number;
@@ -145,6 +143,11 @@ export class CursorButtonComponent extends Component {
 
     @property.bool(true)
     private readonly _myPerformDefaultSecondaryCursorFeedbackOnUnhover!: number;
+
+
+
+    @property.bool(false)
+    private readonly _myUpWithSecondaryCursorIsMain!: number;
 
 
 
@@ -383,7 +386,7 @@ export class CursorButtonComponent extends Component {
     }
 
     private _onDown(targetObject: Object3D, cursorComponent: Cursor): void {
-        const isSecondaryCursor = this._myDownCursors.length > 0 && !this._myUpWithSecondaryCursorIsMain;
+        const isSecondaryCursor = this._myDownCursors.length > 0;
 
         this._myDownCursors.pp_pushUnique(cursorComponent);
 
@@ -403,7 +406,7 @@ export class CursorButtonComponent extends Component {
     private onUpWithDown(targetObject: Object3D, cursorComponent: Cursor): void {
         const isSecondaryCursor = this._myDownCursors.length > 0 && this._myDownCursors[0] != cursorComponent && !this._myUpWithSecondaryCursorIsMain;
 
-        this._myDownCursors.pp_removeEqual(cursorComponent);
+        this._myDownCursors.pp_clear();
 
         if (!isSecondaryCursor) {
             if (!this._myKeepCurrentStateTimer.isDone()) {
