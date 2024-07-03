@@ -147,6 +147,9 @@ export class CursorButtonComponent extends Component {
 
 
     @property.bool(false)
+    private readonly _myUpCursorIsMainOnlyIfLastDown!: number;
+
+    @property.bool(false)
     private readonly _myUpWithSecondaryCursorIsMain!: number;
 
 
@@ -328,12 +331,15 @@ export class CursorButtonComponent extends Component {
 
     private _onUnhover(targetObject: Object3D, cursorComponent: Cursor): void {
         this._myHoverCursors.pp_removeEqual(cursorComponent);
+        const cursorWasDown = this._myDownCursors.pp_removeEqual(cursorComponent);
 
-        const isMainDown = this._myMainDownCursor == cursorComponent;
+        const isMainDown = (this._myDownCursors.length == 0 && cursorWasDown) || (this._myMainDownCursor == cursorComponent && !this._myUpCursorIsMainOnlyIfLastDown && !this._myUpWithSecondaryCursorIsMain);
 
-        this._myDownCursors.pp_removeEqual(cursorComponent);
+        if (this._myMainDownCursor == cursorComponent) {
+            this._myMainDownCursor = null;
+        }
 
-        if (isMainDown && (!this._myUpWithSecondaryCursorIsMain || this._myDownCursors.length == 0)) {
+        if (isMainDown) {
             if (this._myHoverCursors.length > 0) {
                 this._myMainDownCursor = null;
 
@@ -411,13 +417,15 @@ export class CursorButtonComponent extends Component {
     }
 
     private onUpWithDown(targetObject: Object3D, cursorComponent: Cursor): void {
-        const isSecondaryCursor = this._myMainDownCursor != cursorComponent && !this._myUpWithSecondaryCursorIsMain;
+        const isSecondaryCursor = ((this._myMainDownCursor != null && this._myMainDownCursor != cursorComponent) || (this._myUpCursorIsMainOnlyIfLastDown && this._myDownCursors.length > 1)) && !this._myUpWithSecondaryCursorIsMain;
 
         this._myDownCursors.pp_removeEqual(cursorComponent);
 
-        if (!isSecondaryCursor) {
+        if (!isSecondaryCursor || this._myMainDownCursor == cursorComponent) {
             this._myMainDownCursor = null;
+        }
 
+        if (!isSecondaryCursor) {
             if (!this._myKeepCurrentStateTimer.isDone()) {
                 this._addToTransitionQueue(["up_with_down", cursorComponent, false, null, this._onUpWithDownStart.bind(this, null, null, cursorComponent, true)]);
             } else if (this._myFSM.canPerform("up_with_down")) {
