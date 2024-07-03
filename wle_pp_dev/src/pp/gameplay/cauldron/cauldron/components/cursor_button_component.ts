@@ -164,6 +164,7 @@ export class CursorButtonComponent extends Component {
     private _myApplyQueuedTransitions: boolean = false;
 
     private _myHoverCursors: Cursor[] = [];
+    private _myMainDownCursor: Cursor | null = null;
     private _myDownCursors: Cursor[] = [];
 
     private readonly _myOriginalScaleLocal: Vector3 = vec3_create();
@@ -328,12 +329,14 @@ export class CursorButtonComponent extends Component {
     private _onUnhover(targetObject: Object3D, cursorComponent: Cursor): void {
         this._myHoverCursors.pp_removeEqual(cursorComponent);
 
-        const isMainDown = this._myDownCursors.length > 0 && this._myDownCursors[0] == cursorComponent;
+        const isMainDown = this._myMainDownCursor == cursorComponent;
 
         this._myDownCursors.pp_removeEqual(cursorComponent);
 
         if (isMainDown && (!this._myUpWithSecondaryCursorIsMain || this._myDownCursors.length == 0)) {
             if (this._myHoverCursors.length > 0) {
+                this._myMainDownCursor = null;
+
                 if (!this._myKeepCurrentStateTimer.isDone()) {
                     this._myTransitionQueue.push(["hover", cursorComponent, false, true, this._onHoverStart.bind(this, null, null, cursorComponent, true, true)]);
                 } else if (this._myFSM.canPerform("hover")) {
@@ -386,7 +389,11 @@ export class CursorButtonComponent extends Component {
     }
 
     private _onDown(targetObject: Object3D, cursorComponent: Cursor): void {
-        const isSecondaryCursor = this._myDownCursors.length > 0;
+        const isSecondaryCursor = this._myMainDownCursor != null && this._myMainDownCursor != cursorComponent;
+
+        if (this._myMainDownCursor == null) {
+            this._myMainDownCursor = cursorComponent;
+        }
 
         this._myDownCursors.pp_pushUnique(cursorComponent);
 
@@ -404,11 +411,13 @@ export class CursorButtonComponent extends Component {
     }
 
     private onUpWithDown(targetObject: Object3D, cursorComponent: Cursor): void {
-        const isSecondaryCursor = this._myDownCursors.length > 0 && this._myDownCursors[0] != cursorComponent && !this._myUpWithSecondaryCursorIsMain;
+        const isSecondaryCursor = this._myMainDownCursor != cursorComponent && !this._myUpWithSecondaryCursorIsMain;
 
-        this._myDownCursors.pp_clear();
+        this._myDownCursors.pp_removeEqual(cursorComponent);
 
         if (!isSecondaryCursor) {
+            this._myMainDownCursor = null;
+
             if (!this._myKeepCurrentStateTimer.isDone()) {
                 this._myTransitionQueue.push(["up_with_down", cursorComponent, false, null, this._onUpWithDownStart.bind(this, null, null, cursorComponent, true)]);
             } else if (this._myFSM.canPerform("up_with_down")) {
@@ -422,8 +431,10 @@ export class CursorButtonComponent extends Component {
     }
 
     private _onUnhoverStart(fsm: FSM | null, transitionData: Readonly<TransitionData> | null, cursorComponent: Cursor, isSecondaryCursor: boolean): void {
-        this._myKeepCurrentStateTimer.start(this._myMinUnhoverSecond);
-        this._myKeepCurrentStateTimer.update(0); // Instantly end the timer if the duration is 0
+        if (!isSecondaryCursor) {
+            this._myKeepCurrentStateTimer.start(this._myMinUnhoverSecond);
+            this._myKeepCurrentStateTimer.update(0); // Instantly end the timer if the duration is 0
+        }
 
         let skipDefault = false;
         for (const buttonActionsHandler of this._myButtonActionsHandlers.values()) {
@@ -513,8 +524,10 @@ export class CursorButtonComponent extends Component {
     }
 
     private _onDownStart(fsm: FSM | null, transitionData: Readonly<TransitionData> | null, cursorComponent: Cursor, isSecondaryCursor: boolean): void {
-        this._myKeepCurrentStateTimer.start(this._myMinDownSecond);
-        this._myKeepCurrentStateTimer.update(0); // Instantly end the timer if the duration is 0
+        if (!isSecondaryCursor) {
+            this._myKeepCurrentStateTimer.start(this._myMinDownSecond);
+            this._myKeepCurrentStateTimer.update(0); // Instantly end the timer if the duration is 0
+        }
 
         let skipDefault = false;
         for (const buttonActionsHandler of this._myButtonActionsHandlers.values()) {
@@ -557,8 +570,10 @@ export class CursorButtonComponent extends Component {
     }
 
     private _onUpWithDownStart(fsm: FSM | null, transitionData: Readonly<TransitionData> | null, cursorComponent: Cursor, isSecondaryCursor: boolean): void {
-        this._myKeepCurrentStateTimer.start(this._myMinUpSecond);
-        this._myKeepCurrentStateTimer.update(0); // Instantly end the timer if the duration is 0
+        if (!isSecondaryCursor) {
+            this._myKeepCurrentStateTimer.start(this._myMinUpSecond);
+            this._myKeepCurrentStateTimer.update(0); // Instantly end the timer if the duration is 0
+        }
 
         let skipDefault = false;
         for (const buttonActionsHandler of this._myButtonActionsHandlers.values()) {
