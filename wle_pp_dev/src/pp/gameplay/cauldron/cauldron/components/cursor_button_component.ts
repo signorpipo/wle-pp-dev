@@ -344,6 +344,10 @@ export class CursorButtonComponent extends Component {
                 this._addToTransitionQueue("unhover", cursorComponent, false, null, this._onUnhoverStart.bind(this, null, null, cursorComponent, true));
             }
         } else {
+            if (this._myMainDownCursor == cursorComponent) {
+                this._myMainDownCursor = this._myDownCursors[0];
+            }
+
             const isSecondaryCursor = this._myHoverCursors.length > 0;
 
             this._addToTransitionQueue("unhover", cursorComponent, isSecondaryCursor, null, this._onUnhoverStart.bind(this, null, null, cursorComponent, true));
@@ -379,6 +383,8 @@ export class CursorButtonComponent extends Component {
 
         if (!isSecondaryCursor) {
             this._myMainDownCursor = null;
+        } else if (this._myMainDownCursor == cursorComponent) {
+            this._myMainDownCursor = this._myDownCursors[0];
         }
 
         this._addToTransitionQueue("up_with_down", cursorComponent, isSecondaryCursor, null, this._onUpWithDownStart.bind(this, null, null, cursorComponent, true));
