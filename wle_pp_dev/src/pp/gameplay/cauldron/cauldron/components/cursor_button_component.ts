@@ -333,16 +333,12 @@ export class CursorButtonComponent extends Component {
         this._myHoverCursors.pp_removeEqual(cursorComponent);
         const cursorWasDown = this._myDownCursors.pp_removeEqual(cursorComponent);
 
-        const isMainDown = (this._myDownCursors.length == 0 && cursorWasDown) || (this._myMainDownCursor == cursorComponent && !this._myUpCursorIsMainOnlyIfLastDown && !this._myUpWithSecondaryCursorIsMain);
+        const isMainCursorDown = (this._myDownCursors.length == 0 && cursorWasDown) || (this._myMainDownCursor == cursorComponent && !this._myUpCursorIsMainOnlyIfLastDown && !this._myUpWithSecondaryCursorIsMain);
 
-        if (this._myMainDownCursor == cursorComponent) {
+        if (isMainCursorDown) {
             this._myMainDownCursor = null;
-        }
 
-        if (isMainDown) {
             if (this._myHoverCursors.length > 0) {
-                this._myMainDownCursor = null;
-
                 this._addToTransitionQueue("hover", cursorComponent, false, true, this._onHoverStart.bind(this, null, null, cursorComponent, true, true));
             } else {
                 this._addToTransitionQueue("unhover", cursorComponent, false, null, this._onUnhoverStart.bind(this, null, null, cursorComponent, true));
@@ -375,11 +371,13 @@ export class CursorButtonComponent extends Component {
     }
 
     private onUpWithDown(targetObject: Object3D, cursorComponent: Cursor): void {
-        const isSecondaryCursor = ((this._myMainDownCursor != null && this._myMainDownCursor != cursorComponent) || (this._myUpCursorIsMainOnlyIfLastDown && this._myDownCursors.length > 1)) && !this._myUpWithSecondaryCursorIsMain;
-
         this._myDownCursors.pp_removeEqual(cursorComponent);
 
-        if (!isSecondaryCursor || this._myMainDownCursor == cursorComponent) {
+        const isSecondaryCursor = !this._myUpWithSecondaryCursorIsMain && (
+            (!this._myUpCursorIsMainOnlyIfLastDown && this._myMainDownCursor != cursorComponent) ||
+            (this._myUpCursorIsMainOnlyIfLastDown && this._myDownCursors.length > 0));
+
+        if (!isSecondaryCursor) {
             this._myMainDownCursor = null;
         }
 
