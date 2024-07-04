@@ -131,6 +131,10 @@ export abstract class EasyTuneVariable {
         return this._myDefaultValue;
     }
 
+    public isValueEqual(otherValue: unknown): boolean {
+        return this._myValue == otherValue;
+    }
+
     public setDefaultValue(value: unknown): this {
         this._myDefaultValue = value;
         return this;
@@ -218,6 +222,10 @@ export abstract class EasyTuneVariableTyped<T> extends EasyTuneVariable {
 
     public override setValue(value: Readonly<T>, resetDefaultValue?: boolean, skipValueChangedNotify?: boolean): this {
         return super.setValue(value, resetDefaultValue, skipValueChangedNotify);
+    }
+
+    public override isValueEqual(otherValue: Readonly<T>): boolean {
+        return this._myValue == otherValue;
     }
 
     public override getDefaultValue(): Readonly<T> {
@@ -311,6 +319,10 @@ export class EasyTuneNumberArray extends EasyTuneVariableArray<ArrayLike<number>
         this._clampValue(true, true);
     }
 
+    public override isValueEqual(otherValue: Readonly<ArrayLike<number>>, epsilon: number = MathUtils.EPSILON): boolean {
+        return this._myValue.vec_equals(otherValue, epsilon);
+    }
+
     public setMax(max: number): this {
         this._myMax = max;
         this._clampValue(false);
@@ -332,10 +344,7 @@ export class EasyTuneNumberArray extends EasyTuneVariableArray<ArrayLike<number>
 
         if (!resetDefaultValue) {
             const clampedDefaultValue = this.getDefaultValue().vec_clamp(this._myMin, this._myMax);
-            const defaultValueChanged = !clampedDefaultValue.vec_equals(this.getDefaultValue(), 0.00001);
-            if (defaultValueChanged) {
-                this.setDefaultValue(clampedDefaultValue);
-            }
+            this.setDefaultValue(clampedDefaultValue);
         }
 
         this.setValue(clampedValue, resetDefaultValue, skipValueChangedNotify);
@@ -384,6 +393,10 @@ export class EasyTuneNumber extends EasyTuneVariableTyped<number> {
         this._clampValue(true, true);
     }
 
+    public override isValueEqual(otherValue: Readonly<number>, epsilon: number = MathUtils.EPSILON): boolean {
+        return Math.abs(this._myValue - otherValue) < epsilon;
+    }
+
     public setMax(max: number): this {
         this._myMax = max;
         this._clampValue(false);
@@ -404,12 +417,8 @@ export class EasyTuneNumber extends EasyTuneVariableTyped<number> {
         const clampedValue = MathUtils.clamp(this._myValue, this._myMin, this._myMax);
 
         if (!resetDefaultValue) {
-            const currentDefaultValue = this.getDefaultValue();
-            const clampedDefaultValue = MathUtils.clamp(currentDefaultValue, this._myMin, this._myMax);
-            const defaultValueChanged = Math.abs(clampedDefaultValue - currentDefaultValue) > MathUtils.EPSILON;
-            if (defaultValueChanged) {
-                this.setDefaultValue(clampedDefaultValue);
-            }
+            const clampedDefaultValue = MathUtils.clamp(this.getDefaultValue(), this._myMin, this._myMax);
+            this.setDefaultValue(clampedDefaultValue);
         }
 
         this.setValue(clampedValue, resetDefaultValue, skipValueChangedNotify);
@@ -527,6 +536,10 @@ export class EasyTuneTransform extends EasyTuneVariableTyped<Matrix4> {
         }
 
         return this;
+    }
+
+    public override isValueEqual(otherValue: Readonly<Matrix4>, epsilon: number = MathUtils.EPSILON): boolean {
+        return this._myValue.vec_equals(otherValue, epsilon);
     }
 
     public override setDefaultValue(value: Readonly<Matrix4>): this {

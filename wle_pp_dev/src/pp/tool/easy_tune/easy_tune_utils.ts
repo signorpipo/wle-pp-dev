@@ -158,8 +158,8 @@ export function getImportVariablesJSON(fileURL: string | null = null, onSuccessC
  *  @param fileURL Can contain parameters inside brackets, like `my-url.com/{param}`, which will be replaced with the same one on the current page url, like `www.currentpage.com/?param=2`  
  *                 If `null` or empty, it will import from the clipboard
  */
-export function exportVariables(fileURL: string | null = null, variablesToKeep?: Record<string, unknown>, onSuccessCallback?: () => void, onFailureCallback?: () => void, engine: Readonly<WonderlandEngine> = Globals.getMainEngine()!): void {
-    const variablesJSONToExport = Globals.getEasyTuneVariables(engine)!.toJSON();
+export function exportVariables(fileURL: string | null = null, excludeVariablesWithValueAsDefault: boolean, variablesToKeep?: Record<string, unknown>, onSuccessCallback?: () => void, onFailureCallback?: () => void, engine: Readonly<WonderlandEngine> = Globals.getMainEngine()!): void {
+    const variablesJSONToExport = Globals.getEasyTuneVariables(engine)!.toJSON(excludeVariablesWithValueAsDefault);
     EasyTuneUtils.exportVariablesJSON(variablesJSONToExport, fileURL, variablesToKeep, onSuccessCallback, onFailureCallback, engine);
 }
 
@@ -168,14 +168,16 @@ export function exportVariables(fileURL: string | null = null, variablesToKeep?:
  *  @param fileURL Can contain parameters inside brackets, like `my-url.com/{param}`, which will be replaced with the same one on the current page url, like `www.currentpage.com/?param=2`  
  *                 If `null` or empty, it will import from the clipboard
  */
-export function exportVariablesByName(variableNamesToExport: string[], fileURL: string | null = null, variablesToKeep?: Record<string, unknown>, onSuccessCallback?: () => void, onFailureCallback?: () => void, engine: Readonly<WonderlandEngine> = Globals.getMainEngine()!): void {
+export function exportVariablesByName(variableNamesToExport: string[], fileURL: string | null = null, excludeVariablesWithValueAsDefault: boolean, variablesToKeep?: Record<string, unknown>, onSuccessCallback?: () => void, onFailureCallback?: () => void, engine: Readonly<WonderlandEngine> = Globals.getMainEngine()!): void {
     const objectJSON: Record<string, unknown> = {};
 
     const easyTuneVariables = Globals.getEasyTuneVariables(engine)!;
     for (const variableName of variableNamesToExport) {
         const variable = easyTuneVariables.getEasyTuneVariable(variableName);
         if (variable != null && variable.isExportEnabled()) {
-            objectJSON[variable.getName()] = variable.toJSON();
+            if (!excludeVariablesWithValueAsDefault || !variable.isValueEqual(variable.getDefaultValue())) {
+                objectJSON[variable.getName()] = variable.toJSON();
+            }
         }
     }
 

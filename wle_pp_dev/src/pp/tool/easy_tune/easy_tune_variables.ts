@@ -90,12 +90,14 @@ export class EasyTuneVariables {
         }
     }
 
-    public toJSON(): string {
+    public toJSON(excludeVariablesWithValueAsDefault: boolean = false): string {
         const objectJSON: Record<string, string> = {};
 
         for (const variable of this._myVariables.values()) {
             if (variable.isExportEnabled()) {
-                objectJSON[variable.getName()] = variable.toJSON();
+                if (!excludeVariablesWithValueAsDefault || !variable.isValueEqual(variable.getDefaultValue())) {
+                    objectJSON[variable.getName()] = variable.toJSON();
+                }
             }
         }
 

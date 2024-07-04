@@ -52,6 +52,9 @@ export class EasyTuneToolComponent extends Component {
     @property.bool(true)
     private readonly _myKeepImportVariablesOnExport!: boolean;
 
+    @property.bool(true)
+    private readonly _myAvoidExportingVariablesWithValueAsDefault!: boolean;
+
     private readonly _myWidget!: EasyTuneWidget;
 
     private _myStarted: boolean = false;
@@ -102,12 +105,12 @@ export class EasyTuneToolComponent extends Component {
                             // Do nothing
                         }
 
-                        EasyTuneUtils.exportVariables(this._myVariablesExportURL, variablesToKeep, onSuccessCallback, onFailureCallback, this.engine);
+                        EasyTuneUtils.exportVariables(this._myVariablesExportURL, this._myAvoidExportingVariablesWithValueAsDefault, variablesToKeep, onSuccessCallback, onFailureCallback, this.engine);
                     }, () => {
-                        EasyTuneUtils.exportVariables(this._myVariablesExportURL, undefined, onSuccessCallback, onFailureCallback, this.engine);
+                        EasyTuneUtils.exportVariables(this._myVariablesExportURL, this._myAvoidExportingVariablesWithValueAsDefault, undefined, onSuccessCallback, onFailureCallback, this.engine);
                     }, this.engine);
                 } else {
-                    EasyTuneUtils.exportVariables(this._myVariablesExportURL, undefined, onSuccessCallback, onFailureCallback, this.engine);
+                    EasyTuneUtils.exportVariables(this._myVariablesExportURL, this._myAvoidExportingVariablesWithValueAsDefault, undefined, onSuccessCallback, onFailureCallback, this.engine);
                 }
             }.bind(this);
 
