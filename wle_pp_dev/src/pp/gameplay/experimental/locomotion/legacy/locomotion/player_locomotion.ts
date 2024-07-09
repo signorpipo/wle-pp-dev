@@ -546,6 +546,8 @@ export class PlayerLocomotion {
     }
 
     public update(dt: number): void {
+        if (!this._myActive) return;
+
         this._myPreUpdateEmitter.notify(dt, this);
 
         let collisionCheckEnabledBackup = false;

@@ -374,8 +374,6 @@ export class PlayerLocomotionComponent extends Component {
         params.myViewOcclusionLayerFlags.copy(this._getViewOcclusionLayersFlags());
 
         (this._myPlayerLocomotion as PlayerLocomotion) = new PlayerLocomotion(params);
-
-        Globals.getHeadPose(this.engine)!.registerPostPoseUpdatedEventEventListener(this, this.onPostPoseUpdatedEvent.bind(this));
     }
 
     public onPostPoseUpdatedEvent(dt: number, pose: Readonly<BasePose>, manualUpdate: boolean): void {
@@ -438,12 +436,16 @@ export class PlayerLocomotionComponent extends Component {
     public override onActivate(): void {
         if (this._myPlayerLocomotion != null) {
             this._myPlayerLocomotion.setActive(true);
+
+            Globals.getHeadPose(this.engine)!.registerPostPoseUpdatedEventEventListener(this, this.onPostPoseUpdatedEvent.bind(this));
         }
     }
 
     public override onDeactivate(): void {
         if (this._myPlayerLocomotion != null) {
             this._myPlayerLocomotion.setActive(false);
+
+            Globals.getHeadPose(this.engine)!.unregisterPostPoseUpdatedEventEventListener(this);
         }
     }
 

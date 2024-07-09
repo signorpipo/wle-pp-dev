@@ -134,6 +134,10 @@ export class PlayerHeadManager {
     }
 
     public setActive(active: boolean): void {
+        if (active != this._myActive) {
+            this.cancelSync();
+        }
+
         this._myActive = active;
     }
 
@@ -590,7 +594,25 @@ export class PlayerHeadManager {
         this._setCameraNonXRHeight(this._myHeightNonVR);
     }
 
+    public cancelSync(): void {
+        this._myIsSyncedDelayCounter = 0;
+        this._myDelaySessionChangeResyncCounter = 0;
+        this._myDelayBlurEndResyncCounter = 0;
+        this._myDelayBlurEndResyncTimer.reset();
+
+        this._mySessionChangeResyncHeadTransform = null;
+        this._myBlurRecoverHeadTransform = null;
+    }
+
+    public cancelNextEnterSessionSetHeight(): void {
+        this._myDelayNextEnterSessionSetHeightVRCounter--;
+        this._myNextEnterSessionSetHeightVRWithFloor = false;
+        this._myNextEnterSessionSetHeightVRWithoutFloor = false;
+    }
+
     public update(dt: number): void {
+        if (!this._myActive) return;
+
         this._myViewResetThisFrame = false;
 
         if (this._myIsSyncedDelayCounter != 0) {
@@ -831,8 +853,13 @@ export class PlayerHeadManager {
             this._mySessionChangeResyncHeadTransform = null;
         }
 
-        if (this._myNextEnterSessionSetHeightVRWithFloor || this._myNextEnterSessionSetHeightVRWithoutFloor) {
-            this._myDelayNextEnterSessionSetHeightVRCounter = PlayerHeadManager._myResyncCounterFrames;
+        if (this._myActive) {
+            if (this._myNextEnterSessionSetHeightVRWithFloor || this._myNextEnterSessionSetHeightVRWithoutFloor) {
+                this._myDelayNextEnterSessionSetHeightVRCounter = PlayerHeadManager._myResyncCounterFrames;
+            }
+        } else {
+            this._myNextEnterSessionSetHeightVRWithFloor = false;
+            this._myNextEnterSessionSetHeightVRWithoutFloor = false;
         }
 
         this._mySessionActive = true;

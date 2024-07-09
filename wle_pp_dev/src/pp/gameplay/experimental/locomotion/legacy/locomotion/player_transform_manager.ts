@@ -290,6 +290,8 @@ export class PlayerTransformManager {
     // che servono per far slidare bene anche dopo, magari un flag per dire non aggiornare le cose relative al movimento orizzontale
     // o un move check solo verticale
     public update(dt: number): void {
+        if (!this._myActive) return;
+
         // #TODO This should update ground and ceiling info but not sliding info    
 
         if (this._myResetRealOnHeadSynced) {
