@@ -761,19 +761,19 @@ function _initObjectExtensionProtoype(): void {
             return ObjectUtils.scaleObject(this, scale as Vector3);
         },
 
-        pp_lookAt(this: Object3D, position: Readonly<Vector3>, up: Readonly<Vector3>): Object3D {
+        pp_lookAt(this: Object3D, position: Readonly<Vector3>, up?: Readonly<Vector3>): Object3D {
             return ObjectUtils.lookAt(this, position, up);
         },
 
-        pp_lookAtWorld(this: Object3D, position: Readonly<Vector3>, up: Readonly<Vector3>): Object3D {
+        pp_lookAtWorld(this: Object3D, position: Readonly<Vector3>, up?: Readonly<Vector3>): Object3D {
             return ObjectUtils.lookAtWorld(this, position, up);
         },
 
-        pp_lookAtLocal(this: Object3D, position: Readonly<Vector3>, up: Readonly<Vector3>): Object3D {
+        pp_lookAtLocal(this: Object3D, position: Readonly<Vector3>, up?: Readonly<Vector3>): Object3D {
             return ObjectUtils.lookAtLocal(this, position, up);
         },
 
-        pp_lookTo(this: Object3D, direction: Readonly<Vector3>, up: Readonly<Vector3>): Object3D {
+        pp_lookTo(this: Object3D, direction: Readonly<Vector3>, up?: Readonly<Vector3>): Object3D {
             return ObjectUtils.lookTo(this, direction, up);
         },
 

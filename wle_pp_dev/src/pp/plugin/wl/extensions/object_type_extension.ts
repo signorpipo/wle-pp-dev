@@ -449,11 +449,11 @@ export interface Object3DExtension {
 
 
 
-    pp_lookAt(this: Object3D, position: Readonly<Vector3>, up: Readonly<Vector3>): this;
-    pp_lookAtWorld(this: Object3D, position: Readonly<Vector3>, up: Readonly<Vector3>): this;
-    pp_lookAtLocal(this: Object3D, position: Readonly<Vector3>, up: Readonly<Vector3>): this;
+    pp_lookAt(this: Object3D, position: Readonly<Vector3>, up?: Readonly<Vector3>): this;
+    pp_lookAtWorld(this: Object3D, position: Readonly<Vector3>, up?: Readonly<Vector3>): this;
+    pp_lookAtLocal(this: Object3D, position: Readonly<Vector3>, up?: Readonly<Vector3>): this;
 
-    pp_lookTo(this: Object3D, direction: Readonly<Vector3>, up: Readonly<Vector3>): this;
+    pp_lookTo(this: Object3D, direction: Readonly<Vector3>, up?: Readonly<Vector3>): this;
     pp_lookToWorld(this: Object3D, direction: Readonly<Vector3>, up?: Readonly<Vector3>): this;
     pp_lookToLocal(this: Object3D, direction: Readonly<Vector3>, up?: Readonly<Vector3>): this;
 

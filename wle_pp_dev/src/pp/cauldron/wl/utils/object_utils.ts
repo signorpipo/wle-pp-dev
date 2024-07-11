@@ -1578,13 +1578,13 @@ export const scaleObject = function () {
 
 // Look At
 
-export function lookAt(object: Object3D, position: Readonly<Vector3>, up: Readonly<Vector3>): Object3D {
+export function lookAt(object: Object3D, position: Readonly<Vector3>, up?: Readonly<Vector3>): Object3D {
     return ObjectUtils.lookAtWorld(object, position, up);
 }
 
 export const lookAtWorld = function () {
     const direction = Vec3Utils.create();
-    return function lookAtWorld(object: Object3D, position: Readonly<Vector3>, up: Readonly<Vector3>): Object3D {
+    return function lookAtWorld(object: Object3D, position: Readonly<Vector3>, up?: Readonly<Vector3>): Object3D {
         ObjectUtils.getPositionWorld(object, direction);
         Vec3Utils.sub(position, direction, direction);
         return ObjectUtils.lookToWorld(object, direction, up);
@@ -1593,14 +1593,14 @@ export const lookAtWorld = function () {
 
 export const lookAtLocal = function () {
     const direction = Vec3Utils.create();
-    return function lookAtLocal(object: Object3D, position: Readonly<Vector3>, up: Readonly<Vector3>): Object3D {
+    return function lookAtLocal(object: Object3D, position: Readonly<Vector3>, up?: Readonly<Vector3>): Object3D {
         ObjectUtils.getPositionLocal(object, direction);
         Vec3Utils.sub(position, direction, direction);
         return ObjectUtils.lookToLocal(object, direction, up);
     };
 }();
 
-export function lookTo(object: Object3D, direction: Readonly<Vector3>, up: Readonly<Vector3>): Object3D {
+export function lookTo(object: Object3D, direction: Readonly<Vector3>, up?: Readonly<Vector3>): Object3D {
     return ObjectUtils.lookToWorld(object, direction, up);
 }
 
