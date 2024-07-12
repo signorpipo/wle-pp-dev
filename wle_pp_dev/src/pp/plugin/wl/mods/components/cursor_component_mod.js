@@ -349,8 +349,8 @@ function _initCursorComponentModPrototype() {
             // Don't care about secondary pointers 
             if (this._pointerID != null && this._pointerID != e.pointerId && !this.isHeadset) return;
 
-            let bounds = document.body.getBoundingClientRect();
-            this._pp_updateMouseData(e, e.clientX, e.clientY, bounds.width, bounds.height, e.pointerId);
+            let screenSize = Globals.getMouse().getScreenSize();
+            this._pp_updateMouseData(e, e.clientX, e.clientY, screenSize[0], screenSize[1], e.pointerId);
         }
     };
 
@@ -362,8 +362,8 @@ function _initCursorComponentModPrototype() {
             // Don't care about secondary pointers or non-left clicks 
             if ((this._pointerID != null && this._pointerID != e.pointerId && !this.isHeadset) || e.button != 0) return;
 
-            let bounds = document.body.getBoundingClientRect();
-            this._pp_updateMouseData(e, e.clientX, e.clientY, bounds.width, bounds.height, e.pointerId);
+            let screenSize = Globals.getMouse().getScreenSize();
+            this._pp_updateMouseData(e, e.clientX, e.clientY, screenSize[0], screenSize[1], e.pointerId);
 
             this._isDown = true;
             this._isRealDown = true;
@@ -379,8 +379,8 @@ function _initCursorComponentModPrototype() {
             // Don't care about secondary pointers or non-left clicks 
             if ((this._pointerID != null && this._pointerID != e.pointerId && !this.isHeadset) || e.button != 0) return;
 
-            let bounds = document.body.getBoundingClientRect();
-            this._pp_updateMouseData(e, e.clientX, e.clientY, bounds.width, bounds.height, e.pointerId);
+            let screenSize = Globals.getMouse().getScreenSize();
+            this._pp_updateMouseData(e, e.clientX, e.clientY, screenSize[0], screenSize[1], e.pointerId);
 
             if (!this._isDownForUpWithDown) {
                 this._isUpWithNoDown = true;
