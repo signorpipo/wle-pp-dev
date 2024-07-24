@@ -8,13 +8,13 @@ export class ClearConsoleComponent extends Component {
     @property.enum(["Init", "Start", "Update", "Enter XR", "Exit XR"], "Init")
     private _myWhen!: number;
 
-    @property.bool(false)
+    @property.bool(true)
     private _myFirstTimeOnly!: boolean;
 
     private _myFirstTimeDone: boolean = false;
 
     public override init(): void {
-        if (this.active && this._myWhen == 0) {
+        if (this._myWhen == 0) {
             this._clearConsole();
         }
     }
