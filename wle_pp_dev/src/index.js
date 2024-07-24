@@ -69,8 +69,8 @@ const RuntimeOptions = {
 };
 /* wle:auto-constants:end */
 
-const disableLogs = true;
-if(disableLogs){
+const disableEngineLogs = true;
+if (disableEngineLogs) {
     RuntimeOptions.logs = [LogLevel.Error];
 }
 
