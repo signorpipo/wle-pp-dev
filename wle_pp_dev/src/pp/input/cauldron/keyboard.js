@@ -219,6 +219,8 @@ export class Keyboard {
     }
 
     _keyDown(event) {
+        if (event.repeat) return;
+
         this._keyPressedChanged(event.key, true);
         if (event.key != event.code) {
             this._keyPressedChanged(event.code, true);
@@ -236,12 +238,14 @@ export class Keyboard {
         if (this._myKeyInfos[keyID] != null) {
             let keyInfo = this._myKeyInfos[keyID];
 
-            if (pressed) {
-                keyInfo.myPressed = true;
-                keyInfo.myPressStartToProcess = true;
-            } else {
-                keyInfo.myPressed = false;
-                keyInfo.myPressEndToProcess = true;
+            if (pressed != keyInfo.myPressed) {
+                if (pressed) {
+                    keyInfo.myPressed = true;
+                    keyInfo.myPressStartToProcess = true;
+                } else {
+                    keyInfo.myPressed = false;
+                    keyInfo.myPressEndToProcess = true;
+                }
             }
         }
     }
