@@ -40,7 +40,6 @@ export * from "./cauldron/cauldron/components/clear_console_on_xr_session_start_
 export * from "./cauldron/cauldron/components/reset_local_transform_component.js";
 export * from "./cauldron/cauldron/components/save_manager_component.js";
 export * from "./cauldron/cauldron/components/set_active_component.js";
-export * from "./cauldron/cauldron/components/show_fps_component.js";
 export * from "./cauldron/cauldron/components/show_xr_buttons_component.js";
 
 //    FSM
@@ -124,6 +123,7 @@ export * from "./debug/debug_visual_manager.js";
 export * from "./debug/components/debug_transform_component.js";
 export * from "./debug/components/debug_manager_component.js";
 export * from "./debug/components/enable_debug_component.js";
+export * from "./debug/components/show_fps_component.js";
 
 export * from "./debug/debug_functions_overwriter/debug_functions_overwriter.js";
 export * from "./debug/debug_functions_overwriter/debug_functions_performance_analyzer/debug_functions_performance_analyzer.js";
