@@ -9,6 +9,7 @@ import { InputManager } from "./input_manager.js";
 import { Handedness } from "./input_types.js";
 import { Keyboard } from "./keyboard.js";
 import { Mouse } from "./mouse.js";
+import { HandRayPose } from "../pose/hand_ray_pose.js";
 
 const _myInputManagers: WeakMap<Readonly<WonderlandEngine>, InputManager> = new WeakMap();
 const _myPoseForwardFixeds: WeakMap<Readonly<WonderlandEngine>, boolean> = new WeakMap();
@@ -155,6 +156,46 @@ export function getRightHandPose(engine: Readonly<WonderlandEngine> | null = Glo
 
     if (inputManager != null) {
         return inputManager.getRightHandPose();
+    }
+
+    return null;
+}
+
+export function getHandRayPose(handedness: Handedness, engine: Readonly<WonderlandEngine> | null = Globals.getMainEngine()): HandRayPose | null {
+    const inputManager = getInputManager(engine);
+
+    if (inputManager != null) {
+        return inputManager.getHandRayPose(handedness);
+    }
+
+    return null;
+}
+
+export function getHandRayPoses(engine: Readonly<WonderlandEngine> | null = Globals.getMainEngine()): Record<Handedness, HandRayPose> | null {
+    const inputManager = getInputManager(engine);
+
+    if (inputManager != null) {
+        return inputManager.getHandRayPoses();
+    }
+
+    return null;
+}
+
+export function getLeftHandRayPose(engine: Readonly<WonderlandEngine> | null = Globals.getMainEngine()): HandRayPose | null {
+    const inputManager = getInputManager(engine);
+
+    if (inputManager != null) {
+        return inputManager.getLeftHandRayPose();
+    }
+
+    return null;
+}
+
+export function getRightHandRayPose(engine: Readonly<WonderlandEngine> | null = Globals.getMainEngine()): HandRayPose | null {
+    const inputManager = getInputManager(engine);
+
+    if (inputManager != null) {
+        return inputManager.getRightHandRayPose();
     }
 
     return null;

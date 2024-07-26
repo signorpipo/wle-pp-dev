@@ -227,12 +227,14 @@ export * from "./input/gamepad/virtual_gamepad/virtual_gamepad_icon.js";
 
 export * from "./input/pose/base_pose.js";
 export * from "./input/pose/hand_pose.js";
+export * from "./input/pose/hand_ray_pose.js";
 export * from "./input/pose/head_pose.js";
 export * from "./input/pose/tracked_hand_joint_pose.js";
 export * from "./input/pose/tracked_hand_pose.js";
 
 export * from "./input/pose/components/set_player_height_component.js";
 export * from "./input/pose/components/set_hand_local_transform_component.js";
+export * from "./input/pose/components/set_hand_ray_local_transform_component.js";
 export * from "./input/pose/components/set_head_local_transform_component.js";
 export * from "./input/pose/components/set_tracked_hand_joint_local_transform_component.js";
 export * from "./input/pose/components/copy_hand_transform_component.js";
