@@ -29,8 +29,8 @@ export function getAllocationFunction(): () => Matrix3 {
 }
 
 /** Specify the function that will be used to allocate the matrix when calling the {@link create} function */
-export function setAllocationFunction(createFunction: () => Matrix3): void {
-    setMatrix3AllocationFunction(createFunction);
+export function setAllocationFunction(allocationFunction: () => Matrix3): void {
+    setMatrix3AllocationFunction(allocationFunction);
 }
 
 export function set<T extends Matrix3>(matrix: T, m00: number, m01: number, m02: number, m10: number, m11: number, m12: number, m20: number, m21: number, m22: number): T;

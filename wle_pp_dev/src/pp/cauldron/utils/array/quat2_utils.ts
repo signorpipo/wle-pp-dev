@@ -24,8 +24,8 @@ export function getAllocationFunction(): () => Quaternion2 {
 }
 
 /** Specify the function that will be used to allocate the quaternion when calling the {@link create} function */
-export function setAllocationFunction(createFunction: () => Quaternion2): void {
-    setQuaternion2AllocationFunction(createFunction);
+export function setAllocationFunction(allocationFunction: () => Quaternion2): void {
+    setQuaternion2AllocationFunction(allocationFunction);
 }
 
 export function set<T extends Quaternion2>(quat: T, x1: number, y1: number, z1: number, w1: number, x2: number, y2: number, z2: number, w2: number): T;

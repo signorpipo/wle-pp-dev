@@ -38,8 +38,8 @@ export function getAllocationFunction(): () => Matrix4 {
 }
 
 /** Specify the function that will be used to allocate the matrix when calling the {@link create} function */
-export function setAllocationFunction(createFunction: () => Matrix4): void {
-    setMatrix4AllocationFunction(createFunction);
+export function setAllocationFunction(allocationFunction: () => Matrix4): void {
+    setMatrix4AllocationFunction(allocationFunction);
 }
 
 export function set<T extends Matrix4>(matrix: T,

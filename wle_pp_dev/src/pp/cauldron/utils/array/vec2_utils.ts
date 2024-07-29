@@ -21,8 +21,8 @@ export function getAllocationFunction(): () => Vector2 {
 }
 
 /** Specify the function that will be used to allocate the vector when calling the {@link create} function */
-export function setAllocationFunction(createFunction: () => Vector2): void {
-    setVector2AllocationFunction(createFunction);
+export function setAllocationFunction(allocationFunction: () => Vector2): void {
+    setVector2AllocationFunction(allocationFunction);
 }
 
 export function set<T extends Vector2>(vector: T, x: number, y: number): T;
