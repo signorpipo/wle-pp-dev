@@ -40,6 +40,7 @@ export * from "./cauldron/cauldron/components/clear_console_component.js";
 export * from "./cauldron/cauldron/components/reset_local_transform_component.js";
 export * from "./cauldron/cauldron/components/save_manager_component.js";
 export * from "./cauldron/cauldron/components/set_active_component.js";
+export * from "./cauldron/cauldron/components/set_engine_log_level_component.js";
 export * from "./cauldron/cauldron/components/show_xr_buttons_component.js";
 
 //    FSM
