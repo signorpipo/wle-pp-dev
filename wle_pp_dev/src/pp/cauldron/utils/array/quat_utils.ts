@@ -4,13 +4,13 @@ import { EasingFunction, MathUtils } from "../math_utils.js";
 import { ArrayUtils } from "./array_utils.js";
 import { Mat3Utils, create as mat3_utils_create } from "./mat3_utils.js";
 import { Vec3Utils, create as vec3_utils_create } from "./vec3_utils.js";
-import { getQuaternionCreateFunction, setQuaternionCreateFunction } from "./vec_create_functions.js";
+import { getQuaternionAllocationFunction, setQuaternionAllocationFunction } from "./vec_allocation_functions.js";
 
 export function create(): Quaternion;
 export function create(x: number, y: number, z: number, w: number): Quaternion;
 export function create(uniformValue: number): Quaternion;
 export function create(x?: number, y?: number, z?: number, w?: number): Quaternion {
-    const out = getCreateFunction()();
+    const out = getAllocationFunction()();
 
     if (x != null) {
         QuatUtils.set(out, x, y!, z!, w!);
@@ -19,13 +19,13 @@ export function create(x?: number, y?: number, z?: number, w?: number): Quaterni
     return out;
 }
 
-export function getCreateFunction(): () => Quaternion {
-    return getQuaternionCreateFunction();
+export function getAllocationFunction(): () => Quaternion {
+    return getQuaternionAllocationFunction();
 }
 
-/** Specify the function that will be used when calling the {@link create} function */
-export function setCreateFunction(createFunction: () => Quaternion): void {
-    setQuaternionCreateFunction(createFunction);
+/** Specify the function that will be used to allocate the quaternion when calling the {@link create} function */
+export function setAllocationFunction(createFunction: () => Quaternion): void {
+    setQuaternionAllocationFunction(createFunction);
 }
 
 export function set<T extends Quaternion>(quat: T, x: number, y: number, z: number, w: number): T;
@@ -844,8 +844,8 @@ export const rotateAxisRadians = function () {
  */
 export const QuatUtils = {
     create,
-    getCreateFunction,
-    setCreateFunction,
+    getAllocationFunction,
+    setAllocationFunction,
     set,
     copy,
     clone,

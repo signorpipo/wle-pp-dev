@@ -5,7 +5,7 @@ import { MathUtils } from "../math_utils.js";
 import { Quat2Utils } from "./quat2_utils.js";
 import { QuatUtils, create as quat_utils_create } from "./quat_utils.js";
 import { Vec3Utils, create as vec3_utils_create, set as vec3_utils_set } from "./vec3_utils.js";
-import { getMatrix4CreateFunction, setMatrix4CreateFunction } from "./vec_create_functions.js";
+import { getMatrix4AllocationFunction, setMatrix4AllocationFunction } from "./vec_allocation_functions.js";
 
 export function create(): Matrix4;
 export function create(
@@ -19,7 +19,7 @@ export function create(
     m10?: number, m11?: number, m12?: number, m13?: number,
     m20?: number, m21?: number, m22?: number, m23?: number,
     m30?: number, m31?: number, m32?: number, m33?: number): Matrix4 {
-    const out = getCreateFunction()();
+    const out = getAllocationFunction()();
 
     if (m00 != null) {
         Mat4Utils.set(
@@ -33,13 +33,13 @@ export function create(
     return out;
 }
 
-export function getCreateFunction(): () => Matrix4 {
-    return getMatrix4CreateFunction();
+export function getAllocationFunction(): () => Matrix4 {
+    return getMatrix4AllocationFunction();
 }
 
-/** Specify the function that will be used when calling the {@link create} function */
-export function setCreateFunction(createFunction: () => Matrix4): void {
-    setMatrix4CreateFunction(createFunction);
+/** Specify the function that will be used to allocate the matrix when calling the {@link create} function */
+export function setAllocationFunction(createFunction: () => Matrix4): void {
+    setMatrix4AllocationFunction(createFunction);
 }
 
 export function set<T extends Matrix4>(matrix: T,
@@ -458,8 +458,8 @@ export function fromQuat<T extends Matrix4>(quat: Readonly<Quaternion2>, out: Ma
  */
 export const Mat4Utils = {
     create,
-    getCreateFunction,
-    setCreateFunction,
+    getAllocationFunction,
+    setAllocationFunction,
     set,
     copy,
     clone,

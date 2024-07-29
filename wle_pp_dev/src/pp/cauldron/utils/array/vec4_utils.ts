@@ -1,13 +1,13 @@
 import { vec4 as gl_vec4, type vec4 as gl_vec4_type } from "gl-matrix";
 import { Vector4 } from "../../type_definitions/array_type_definitions.js";
 import { EasingFunction } from "../math_utils.js";
-import { getVector4CreateFunction, setVector4CreateFunction } from "./vec_create_functions.js";
+import { getVector4AllocationFunction, setVector4AllocationFunction } from "./vec_allocation_functions.js";
 
 export function create(): Vector4;
 export function create(x: number, y: number, z: number, w: number): Vector4;
 export function create(uniformValue: number): Vector4;
 export function create(x?: number, y?: number, z?: number, w?: number): Vector4 {
-    const out = getCreateFunction()();
+    const out = getAllocationFunction()();
 
     if (x != null) {
         Vec4Utils.set(out, x, y!, z!, w!);
@@ -16,13 +16,13 @@ export function create(x?: number, y?: number, z?: number, w?: number): Vector4 
     return out;
 }
 
-export function getCreateFunction(): () => Vector4 {
-    return getVector4CreateFunction();
+export function getAllocationFunction(): () => Vector4 {
+    return getVector4AllocationFunction();
 }
 
-/** Specify the function that will be used when calling the {@link create} function */
-export function setCreateFunction(createFunction: () => Vector4): void {
-    setVector4CreateFunction(createFunction);
+/** Specify the function that will be used to allocate the vector when calling the {@link create} function */
+export function setAllocationFunction(createFunction: () => Vector4): void {
+    setVector4AllocationFunction(createFunction);
 }
 
 export function set<T extends Vector4>(vector: T, x: number, y: number, z: number, w: number): T;
@@ -75,8 +75,8 @@ export function interpolate<T extends Vector4, U extends Vector4>(from: Readonly
 
 export const Vec4Utils = {
     create,
-    getCreateFunction,
-    setCreateFunction,
+    getAllocationFunction,
+    setAllocationFunction,
     set,
     copy,
     clone,

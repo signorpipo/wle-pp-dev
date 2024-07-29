@@ -2,7 +2,7 @@ import { mat3 as gl_mat3, quat as gl_quat, type mat3 as gl_mat3_type, type quat 
 import { Matrix3, Quaternion, Vector3 } from "../../type_definitions/array_type_definitions.js";
 import { QuatUtils, create as quat_utils_create } from "./quat_utils.js";
 import { Vec3Utils } from "./vec3_utils.js";
-import { getMatrix3CreateFunction, setMatrix3CreateFunction } from "./vec_create_functions.js";
+import { getMatrix3AllocationFunction, setMatrix3AllocationFunction } from "./vec_allocation_functions.js";
 
 export function create(): Matrix3;
 export function create(m00: number, m01: number, m02: number, m10: number, m11: number, m12: number, m20: number, m21: number, m22: number): Matrix3;
@@ -12,7 +12,7 @@ export function create(
     m10?: number, m11?: number, m12?: number,
     m20?: number, m21?: number, m22?: number): Matrix3 {
 
-    const out = getCreateFunction()();
+    const out = getAllocationFunction()();
 
     if (m00 != null) {
         Mat3Utils.set(out,
@@ -24,13 +24,13 @@ export function create(
     return out;
 }
 
-export function getCreateFunction(): () => Matrix3 {
-    return getMatrix3CreateFunction();
+export function getAllocationFunction(): () => Matrix3 {
+    return getMatrix3AllocationFunction();
 }
 
-/** Specify the function that will be used when calling the {@link create} function */
-export function setCreateFunction(createFunction: () => Matrix3): void {
-    setMatrix3CreateFunction(createFunction);
+/** Specify the function that will be used to allocate the matrix when calling the {@link create} function */
+export function setAllocationFunction(createFunction: () => Matrix3): void {
+    setMatrix3AllocationFunction(createFunction);
 }
 
 export function set<T extends Matrix3>(matrix: T, m00: number, m01: number, m02: number, m10: number, m11: number, m12: number, m20: number, m21: number, m22: number): T;
@@ -116,8 +116,8 @@ export function fromAxes<T extends Matrix3>(left: Readonly<Vector3>, up: Readonl
 
 export const Mat3Utils = {
     create,
-    getCreateFunction,
-    setCreateFunction,
+    getAllocationFunction,
+    setAllocationFunction,
     set,
     copy,
     clone,
