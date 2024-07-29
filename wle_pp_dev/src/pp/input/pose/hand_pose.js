@@ -109,7 +109,7 @@ export class HandPose extends BasePose {
                         this._myInputSource = inputSource;
                         this._myTrackedHand = InputUtils.getInputSourceType(this._myInputSource) == InputSourceType.TRACKED_HAND;
 
-                        if (this._mySwitchToTrackedHandDelay > 0 && currentInputSourceType != InputSourceType.TRACKED_HAND && inputSourceType == InputSourceType.TRACKED_HAND) {
+                        if (this._mySwitchToTrackedHandDelay > 0 && currentInputSourceType == InputSourceType.GAMEPAD && inputSourceType == InputSourceType.TRACKED_HAND) {
                             extraSourcesCheckForGamepad = true;
                         }
 
