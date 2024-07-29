@@ -1,6 +1,7 @@
 import { vec3 as gl_vec3, type mat3 as gl_mat3_type, type mat4 as gl_mat4_type, type quat as gl_quat_type, type vec3 as gl_vec3_type } from "gl-matrix";
 import { Matrix3, Matrix4, Quaternion, Vector3 } from "../../../cauldron/type_definitions/array_type_definitions.js";
 import { EasingFunction, MathUtils } from "../math_utils.js";
+import { getVector3CreateFunction, setVector3CreateFunction } from "./vec_create_functions.js";
 import { Mat3Utils } from "./mat3_utils.js";
 import { Mat4Utils, create as mat4_utils_create } from "./mat4_utils.js";
 import { Quat2Utils } from "./quat2_utils.js";
@@ -10,13 +11,22 @@ export function create(): Vector3;
 export function create(x: number, y: number, z: number): Vector3;
 export function create(uniformValue: number): Vector3;
 export function create(x?: number, y?: number, z?: number): Vector3 {
-    const out = gl_vec3.create() as unknown as Vector3;
+    const out = getCreateFunction()();
 
     if (x != null) {
         Vec3Utils.set(out, x, y!, z!);
     }
 
     return out;
+}
+
+export function getCreateFunction(): () => Vector3 {
+    return getVector3CreateFunction();
+}
+
+/** Specify the function that will be used when calling the {@link create} function */
+export function setCreateFunction(createFunction: () => Vector3): void {
+    setVector3CreateFunction(createFunction);
 }
 
 export function set<T extends Vector3>(vector: T, x: number, y: number, z: number): T;
@@ -1129,6 +1139,8 @@ export const radiansToMatrix = function () {
  */
 export const Vec3Utils = {
     create,
+    getCreateFunction,
+    setCreateFunction,
     set,
     copy,
     clone,
@@ -1236,5 +1248,5 @@ export const Vec3Utils = {
     degreesToQuat,
     toMatrix,
     degreesToMatrix,
-    radiansToMatrix,
+    radiansToMatrix
 } as const;
