@@ -1,6 +1,6 @@
 import { Component } from "@wonderlandengine/api";
 import { property } from "@wonderlandengine/api/decorators.js";
-import { XRUtils } from "wle-pp/cauldron/utils/xr_utils.js";
+import { XRUtils } from "../../../cauldron/utils/xr_utils.js";
 
 export class ClearConsoleComponent extends Component {
     public static override TypeName = "pp-clear-console";

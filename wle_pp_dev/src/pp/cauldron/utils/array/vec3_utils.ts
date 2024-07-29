@@ -1,11 +1,11 @@
 import { vec3 as gl_vec3, type mat3 as gl_mat3_type, type mat4 as gl_mat4_type, type quat as gl_quat_type, type vec3 as gl_vec3_type } from "gl-matrix";
 import { Matrix3, Matrix4, Quaternion, Vector3 } from "../../../cauldron/type_definitions/array_type_definitions.js";
 import { EasingFunction, MathUtils } from "../math_utils.js";
-import { getVector3AllocationFunction, setVector3AllocationFunction } from "./vec_allocation_functions.js";
 import { Mat3Utils } from "./mat3_utils.js";
 import { Mat4Utils, create as mat4_utils_create } from "./mat4_utils.js";
 import { Quat2Utils } from "./quat2_utils.js";
 import { QuatUtils, create as quat_utils_create } from "./quat_utils.js";
+import { getVector3AllocationFunction, setVector3AllocationFunction } from "./vec_allocation_functions.js";
 
 export function create(): Vector3;
 export function create(x: number, y: number, z: number): Vector3;

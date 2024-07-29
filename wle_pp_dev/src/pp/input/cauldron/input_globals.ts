@@ -5,11 +5,11 @@ import { HeadPose } from "../../input/pose/head_pose.js";
 import { TrackedHandPose } from "../../input/pose/tracked_hand_pose.js";
 import { Globals } from "../../pp/globals.js";
 import { Gamepad } from "../gamepad/gamepad.js";
+import { HandRayPose } from "../pose/hand_ray_pose.js";
 import { InputManager } from "./input_manager.js";
 import { Handedness } from "./input_types.js";
 import { Keyboard } from "./keyboard.js";
 import { Mouse } from "./mouse.js";
-import { HandRayPose } from "../pose/hand_ray_pose.js";
 
 const _myInputManagers: WeakMap<Readonly<WonderlandEngine>, InputManager> = new WeakMap();
 const _myPoseForwardFixeds: WeakMap<Readonly<WonderlandEngine>, boolean> = new WeakMap();
