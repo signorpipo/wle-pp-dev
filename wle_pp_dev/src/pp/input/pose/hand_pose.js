@@ -10,7 +10,10 @@ export class HandPoseParams extends BasePoseParams {
     constructor(engine) {
         super(engine);
 
+        // This can be used to make it so that when you put down the gamepads and tracked hands would be picked,
+        // the gamepads will still being used (if they exists) for a bit more before switching to hands (if they are still the best option)
         this.mySwitchToTrackedHandDelay = 0;
+
         this.myFixTrackedHandRotation = true;
     }
 }
