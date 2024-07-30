@@ -1,9 +1,9 @@
 import { Component, Property } from "@wonderlandengine/api";
 import { Globals } from "../../../pp/globals.js";
 import { Handedness } from "../../cauldron/input_types.js";
-import { GamepadButtonID } from "../gamepad_buttons.js";
+import { GamepadAxesID, GamepadButtonID } from "../gamepad_buttons.js";
 import { VirtualGamepadGamepadCore } from "../gamepad_cores/virtual_gamepad_gamepad_core.js";
-import { VirtualGamepad } from "./virtual_gamepad.js";
+import { VirtualGamepad, VirtualGamepadAxesID, VirtualGamepadButtonID } from "./virtual_gamepad.js";
 import { VirtualGamepadParams } from "./virtual_gamepad_params.js";
 
 export class VirtualGamepadComponent extends Component {
@@ -26,55 +26,55 @@ export class VirtualGamepadComponent extends Component {
         _myLabelFontWeight: Property.string("bold"),
         _myImagePressedBrightness: Property.float(0.5),
 
-        _myLeftSelectButtonVisible: Property.bool(true),
-        _myLeftSelectButtonOrderIndex: Property.int(1),
-        _myLeftSelectButtonIconType: Property.enum(["None", "Label", "Image", "Dot", "Circle", "Square", "Ring", "Frame"], "Frame"),
-        _myLeftSelectButtonIconLabelOrImageUrl: Property.string(""),
+        _myLeftFrameButtonVisible: Property.bool(true),
+        _myLeftFrameButtonOrderIndex: Property.int(1),
+        _myLeftFrameButtonIconType: Property.enum(["None", "Label", "Image", "Dot", "Circle", "Square", "Ring", "Frame"], "Frame"),
+        _myLeftFrameButtonIconLabelOrImageUrl: Property.string(""),
 
-        _myLeftSqueezeButtonVisible: Property.bool(true),
-        _myLeftSqueezeButtonOrderIndex: Property.int(0),
-        _myLeftSqueezeButtonIconType: Property.enum(["None", "Label", "Image", "Dot", "Circle", "Square", "Ring", "Frame"], "Square"),
-        _myLeftSqueezeButtonIconLabelOrImageUrl: Property.string(""),
+        _myLeftSquareButtonVisible: Property.bool(true),
+        _myLeftSquareButtonOrderIndex: Property.int(0),
+        _myLeftSquareButtonIconType: Property.enum(["None", "Label", "Image", "Dot", "Circle", "Square", "Ring", "Frame"], "Square"),
+        _myLeftSquareButtonIconLabelOrImageUrl: Property.string(""),
 
-        _myLeftThumbstickButtonVisible: Property.bool(true),
-        _myLeftThumbstickButtonOrderIndex: Property.int(4),
-        _myLeftThumbstickButtonIconType: Property.enum(["None", "Label", "Image", "Dot", "Circle", "Square", "Ring", "Frame"], "Dot"),
-        _myLeftThumbstickButtonIconLabelOrImageUrl: Property.string(""),
+        _myLeftCircleButtonVisible: Property.bool(true),
+        _myLeftCircleButtonOrderIndex: Property.int(2),
+        _myLeftCircleButtonIconType: Property.enum(["None", "Label", "Image", "Dot", "Circle", "Square", "Ring", "Frame"], "Circle"),
+        _myLeftCircleButtonIconLabelOrImageUrl: Property.string(""),
 
-        _myLeftTopButtonVisible: Property.bool(true),
-        _myLeftTopButtonOrderIndex: Property.int(2),
-        _myLeftTopButtonIconType: Property.enum(["None", "Label", "Image", "Dot", "Circle", "Square", "Ring", "Frame"], "Circle"),
-        _myLeftTopButtonIconLabelOrImageUrl: Property.string(""),
+        _myLeftRingButtonVisible: Property.bool(true),
+        _myLeftRingButtonOrderIndex: Property.int(3),
+        _myLeftRingButtonIconType: Property.enum(["None", "Label", "Image", "Dot", "Circle", "Square", "Ring", "Frame"], "Ring"),
+        _myLeftRingButtonIconLabelOrImageUrl: Property.string(""),
 
-        _myLeftBottomButtonVisible: Property.bool(true),
-        _myLeftBottomButtonOrderIndex: Property.int(3),
-        _myLeftBottomButtonIconType: Property.enum(["None", "Label", "Image", "Dot", "Circle", "Square", "Ring", "Frame"], "Ring"),
-        _myLeftBottomButtonIconLabelOrImageUrl: Property.string(""),
+        _myLeftDotButtonVisible: Property.bool(true),
+        _myLeftDotButtonOrderIndex: Property.int(4),
+        _myLeftDotButtonIconType: Property.enum(["None", "Label", "Image", "Dot", "Circle", "Square", "Ring", "Frame"], "Dot"),
+        _myLeftDotButtonIconLabelOrImageUrl: Property.string(""),
 
-        _myRightSelectButtonVisible: Property.bool(true),
-        _myRightSelectButtonOrderIndex: Property.int(1),
-        _myRightSelectButtonIconType: Property.enum(["None", "Label", "Image", "Dot", "Circle", "Square", "Ring", "Frame"], "Frame"),
-        _myRightSelectButtonIconLabelOrImageUrl: Property.string(""),
+        _myRightFrameButtonVisible: Property.bool(true),
+        _myRightFrameButtonOrderIndex: Property.int(1),
+        _myRightFrameButtonIconType: Property.enum(["None", "Label", "Image", "Dot", "Circle", "Square", "Ring", "Frame"], "Frame"),
+        _myRightFrameButtonIconLabelOrImageUrl: Property.string(""),
 
-        _myRightSqueezeButtonVisible: Property.bool(true),
-        _myRightSqueezeButtonOrderIndex: Property.int(0),
-        _myRightSqueezeButtonIconType: Property.enum(["None", "Label", "Image", "Dot", "Circle", "Square", "Ring", "Frame"], "Square"),
-        _myRightSqueezeButtonIconLabelOrImageUrl: Property.string(""),
+        _myRightSquareButtonVisible: Property.bool(true),
+        _myRightSquareButtonOrderIndex: Property.int(0),
+        _myRightSquareButtonIconType: Property.enum(["None", "Label", "Image", "Dot", "Circle", "Square", "Ring", "Frame"], "Square"),
+        _myRightSquareButtonIconLabelOrImageUrl: Property.string(""),
 
-        _myRightThumbstickButtonVisible: Property.bool(true),
-        _myRightThumbstickButtonOrderIndex: Property.int(4),
-        _myRightThumbstickButtonIconType: Property.enum(["None", "Label", "Image", "Dot", "Circle", "Square", "Ring", "Frame"], "Dot"),
-        _myRightThumbstickButtonIconLabelOrImageUrl: Property.string(""),
+        _myRightCircleButtonVisible: Property.bool(true),
+        _myRightCircleButtonOrderIndex: Property.int(2),
+        _myRightCircleButtonIconType: Property.enum(["None", "Label", "Image", "Dot", "Circle", "Square", "Ring", "Frame"], "Circle"),
+        _myRightCircleButtonIconLabelOrImageUrl: Property.string(""),
 
-        _myRightTopButtonVisible: Property.bool(true),
-        _myRightTopButtonOrderIndex: Property.int(2),
-        _myRightTopButtonIconType: Property.enum(["None", "Label", "Image", "Dot", "Circle", "Square", "Ring", "Frame"], "Circle"),
-        _myRightTopButtonIconLabelOrImageUrl: Property.string(""),
+        _myRightRingButtonVisible: Property.bool(true),
+        _myRightRingButtonOrderIndex: Property.int(3),
+        _myRightRingButtonIconType: Property.enum(["None", "Label", "Image", "Dot", "Circle", "Square", "Ring", "Frame"], "Ring"),
+        _myRightRingButtonIconLabelOrImageUrl: Property.string(""),
 
-        _myRightBottomButtonVisible: Property.bool(true),
-        _myRightBottomButtonOrderIndex: Property.int(3),
-        _myRightBottomButtonIconType: Property.enum(["None", "Label", "Image", "Dot", "Circle", "Square", "Ring", "Frame"], "Ring"),
-        _myRightBottomButtonIconLabelOrImageUrl: Property.string("")
+        _myRightDotButtonVisible: Property.bool(true),
+        _myRightDotButtonOrderIndex: Property.int(4),
+        _myRightDotButtonIconType: Property.enum(["None", "Label", "Image", "Dot", "Circle", "Square", "Ring", "Frame"], "Dot"),
+        _myRightDotButtonIconLabelOrImageUrl: Property.string("")
     };
 
     start() {
@@ -135,8 +135,20 @@ export class VirtualGamepadComponent extends Component {
             this._myFirstUpdate = false;
 
             if (this._myAddToUniversalGamepad) {
-                this._myLeftVirtualGamepadGamepadCore = new VirtualGamepadGamepadCore(this._myVirtualGamepad, Globals.getLeftGamepad(this.engine).getGamepadCore("pp_left_xr_gamepad").getHandPose());
-                this._myRightVirtualGamepadGamepadCore = new VirtualGamepadGamepadCore(this._myVirtualGamepad, Globals.getRightGamepad(this.engine).getGamepadCore("pp_right_xr_gamepad").getHandPose());
+                const gamepadToVirtualGamepadButtonIDMap = new Map();
+                gamepadToVirtualGamepadButtonIDMap.set(GamepadButtonID.SELECT, VirtualGamepadButtonID.FRAME);
+                gamepadToVirtualGamepadButtonIDMap.set(GamepadButtonID.SQUEEZE, VirtualGamepadButtonID.SQUARE);
+                gamepadToVirtualGamepadButtonIDMap.set(GamepadButtonID.TOP_BUTTON, VirtualGamepadButtonID.CIRCLE);
+                gamepadToVirtualGamepadButtonIDMap.set(GamepadButtonID.BOTTOM_BUTTON, VirtualGamepadButtonID.RING);
+                gamepadToVirtualGamepadButtonIDMap.set(GamepadButtonID.THUMBSTICK, VirtualGamepadButtonID.DOT);
+
+                const gamepadToVirtualGamepadAxesIDMap = new Map();
+                gamepadToVirtualGamepadAxesIDMap.set(GamepadAxesID.THUMBSTICK, VirtualGamepadAxesID.THUMBSTICK);
+
+                const leftHandPose = Globals.getLeftGamepad(this.engine).getGamepadCore("pp_left_xr_gamepad").getHandPose();
+                const rightHandPose = Globals.getRightGamepad(this.engine).getGamepadCore("pp_right_xr_gamepad").getHandPose();
+                this._myLeftVirtualGamepadGamepadCore = new VirtualGamepadGamepadCore(this._myVirtualGamepad, leftHandPose, gamepadToVirtualGamepadButtonIDMap, gamepadToVirtualGamepadAxesIDMap);
+                this._myRightVirtualGamepadGamepadCore = new VirtualGamepadGamepadCore(this._myVirtualGamepad, rightHandPose, gamepadToVirtualGamepadButtonIDMap, gamepadToVirtualGamepadAxesIDMap);
 
                 Globals.getLeftGamepad(this.engine).addGamepadCore("pp_left_virtual_gamepad", this._myLeftVirtualGamepadGamepadCore);
                 Globals.getRightGamepad(this.engine).addGamepadCore("pp_right_virtual_gamepad", this._myRightVirtualGamepadGamepadCore);
@@ -151,152 +163,152 @@ export class VirtualGamepadComponent extends Component {
         params.myButtonsOrder[Handedness.RIGHT] = [null, null, null, null, null];
 
         {
-            let buttonParams = params.myButtonParams[Handedness.LEFT][GamepadButtonID.SELECT];
-            buttonParams.myIconParams.myIconType = this._myLeftSelectButtonIconType;
-            buttonParams.myIconParams.myLabel = this._myLeftSelectButtonIconLabelOrImageUrl;
-            buttonParams.myIconParams.myImageURL = this._myLeftSelectButtonIconLabelOrImageUrl;
+            let buttonParams = params.myButtonParams[Handedness.LEFT][VirtualGamepadButtonID.FRAME];
+            buttonParams.myIconParams.myIconType = this._myLeftFrameButtonIconType;
+            buttonParams.myIconParams.myLabel = this._myLeftFrameButtonIconLabelOrImageUrl;
+            buttonParams.myIconParams.myImageURL = this._myLeftFrameButtonIconLabelOrImageUrl;
             buttonParams.myIconParams.myLabelFontSize = this._myLabelFontSize;
             buttonParams.myIconParams.myLabelFontFamily = this._myLabelFontFamily;
             buttonParams.myIconParams.myLabelFontWeight = this._myLabelFontWeight;
             buttonParams.myIconParams.myImagePressedBrightness = this._myImagePressedBrightness;
 
-            if (this._myLeftSelectButtonVisible) {
-                params.myButtonsOrder[Handedness.LEFT][this._myLeftSelectButtonOrderIndex] = [Handedness.LEFT, GamepadButtonID.SELECT];
+            if (this._myLeftFrameButtonVisible) {
+                params.myButtonsOrder[Handedness.LEFT][this._myLeftFrameButtonOrderIndex] = [Handedness.LEFT, VirtualGamepadButtonID.FRAME];
             }
         }
 
         {
-            let buttonParams = params.myButtonParams[Handedness.LEFT][GamepadButtonID.SQUEEZE];
-            buttonParams.myIconParams.myIconType = this._myLeftSqueezeButtonIconType;
-            buttonParams.myIconParams.myLabel = this._myLeftSqueezeButtonIconLabelOrImageUrl;
-            buttonParams.myIconParams.myImageURL = this._myLeftSqueezeButtonIconLabelOrImageUrl;
+            let buttonParams = params.myButtonParams[Handedness.LEFT][VirtualGamepadButtonID.SQUARE];
+            buttonParams.myIconParams.myIconType = this._myLeftSquareButtonIconType;
+            buttonParams.myIconParams.myLabel = this._myLeftSquareButtonIconLabelOrImageUrl;
+            buttonParams.myIconParams.myImageURL = this._myLeftSquareButtonIconLabelOrImageUrl;
             buttonParams.myIconParams.myLabelFontSize = this._myLabelFontSize;
             buttonParams.myIconParams.myLabelFontFamily = this._myLabelFontFamily;
             buttonParams.myIconParams.myLabelFontWeight = this._myLabelFontWeight;
             buttonParams.myIconParams.myImagePressedBrightness = this._myImagePressedBrightness;
 
-            if (this._myLeftSqueezeButtonVisible) {
-                params.myButtonsOrder[Handedness.LEFT][this._myLeftSqueezeButtonOrderIndex] = [Handedness.LEFT, GamepadButtonID.SQUEEZE];
+            if (this._myLeftSquareButtonVisible) {
+                params.myButtonsOrder[Handedness.LEFT][this._myLeftSquareButtonOrderIndex] = [Handedness.LEFT, VirtualGamepadButtonID.SQUARE];
             }
         }
 
         {
-            let buttonParams = params.myButtonParams[Handedness.LEFT][GamepadButtonID.THUMBSTICK];
-            buttonParams.myIconParams.myIconType = this._myLeftThumbstickButtonIconType;
-            buttonParams.myIconParams.myLabel = this._myLeftThumbstickButtonIconLabelOrImageUrl;
-            buttonParams.myIconParams.myImageURL = this._myLeftThumbstickButtonIconLabelOrImageUrl;
+            let buttonParams = params.myButtonParams[Handedness.LEFT][VirtualGamepadButtonID.DOT];
+            buttonParams.myIconParams.myIconType = this._myLeftDotButtonIconType;
+            buttonParams.myIconParams.myLabel = this._myLeftDotButtonIconLabelOrImageUrl;
+            buttonParams.myIconParams.myImageURL = this._myLeftDotButtonIconLabelOrImageUrl;
             buttonParams.myIconParams.myLabelFontSize = this._myLabelFontSize;
             buttonParams.myIconParams.myLabelFontFamily = this._myLabelFontFamily;
             buttonParams.myIconParams.myLabelFontWeight = this._myLabelFontWeight;
             buttonParams.myIconParams.myImagePressedBrightness = this._myImagePressedBrightness;
 
-            if (this._myLeftThumbstickButtonVisible) {
-                params.myButtonsOrder[Handedness.LEFT][this._myLeftThumbstickButtonOrderIndex] = [Handedness.LEFT, GamepadButtonID.THUMBSTICK];
+            if (this._myLeftDotButtonVisible) {
+                params.myButtonsOrder[Handedness.LEFT][this._myLeftDotButtonOrderIndex] = [Handedness.LEFT, VirtualGamepadButtonID.DOT];
             }
         }
 
         {
-            let buttonParams = params.myButtonParams[Handedness.LEFT][GamepadButtonID.TOP_BUTTON];
-            buttonParams.myIconParams.myIconType = this._myLeftTopButtonIconType;
-            buttonParams.myIconParams.myLabel = this._myLeftTopButtonIconLabelOrImageUrl;
-            buttonParams.myIconParams.myImageURL = this._myLeftTopButtonIconLabelOrImageUrl;
+            let buttonParams = params.myButtonParams[Handedness.LEFT][VirtualGamepadButtonID.CIRCLE];
+            buttonParams.myIconParams.myIconType = this._myLeftCircleButtonIconType;
+            buttonParams.myIconParams.myLabel = this._myLeftCircleButtonIconLabelOrImageUrl;
+            buttonParams.myIconParams.myImageURL = this._myLeftCircleButtonIconLabelOrImageUrl;
             buttonParams.myIconParams.myLabelFontSize = this._myLabelFontSize;
             buttonParams.myIconParams.myLabelFontFamily = this._myLabelFontFamily;
             buttonParams.myIconParams.myLabelFontWeight = this._myLabelFontWeight;
             buttonParams.myIconParams.myImagePressedBrightness = this._myImagePressedBrightness;
 
-            if (this._myLeftTopButtonVisible) {
-                params.myButtonsOrder[Handedness.LEFT][this._myLeftTopButtonOrderIndex] = [Handedness.LEFT, GamepadButtonID.TOP_BUTTON];
+            if (this._myLeftCircleButtonVisible) {
+                params.myButtonsOrder[Handedness.LEFT][this._myLeftCircleButtonOrderIndex] = [Handedness.LEFT, VirtualGamepadButtonID.CIRCLE];
             }
         }
 
         {
-            let buttonParams = params.myButtonParams[Handedness.LEFT][GamepadButtonID.BOTTOM_BUTTON];
-            buttonParams.myIconParams.myIconType = this._myLeftBottomButtonIconType;
-            buttonParams.myIconParams.myLabel = this._myLeftBottomButtonIconLabelOrImageUrl;
-            buttonParams.myIconParams.myImageURL = this._myLeftBottomButtonIconLabelOrImageUrl;
+            let buttonParams = params.myButtonParams[Handedness.LEFT][VirtualGamepadButtonID.RING];
+            buttonParams.myIconParams.myIconType = this._myLeftRingButtonIconType;
+            buttonParams.myIconParams.myLabel = this._myLeftRingButtonIconLabelOrImageUrl;
+            buttonParams.myIconParams.myImageURL = this._myLeftRingButtonIconLabelOrImageUrl;
             buttonParams.myIconParams.myLabelFontSize = this._myLabelFontSize;
             buttonParams.myIconParams.myLabelFontFamily = this._myLabelFontFamily;
             buttonParams.myIconParams.myLabelFontWeight = this._myLabelFontWeight;
             buttonParams.myIconParams.myImagePressedBrightness = this._myImagePressedBrightness;
 
-            if (this._myLeftBottomButtonVisible) {
-                params.myButtonsOrder[Handedness.LEFT][this._myLeftBottomButtonOrderIndex] = [Handedness.LEFT, GamepadButtonID.BOTTOM_BUTTON];
+            if (this._myLeftRingButtonVisible) {
+                params.myButtonsOrder[Handedness.LEFT][this._myLeftRingButtonOrderIndex] = [Handedness.LEFT, VirtualGamepadButtonID.RING];
             }
         }
 
         {
-            let buttonParams = params.myButtonParams[Handedness.RIGHT][GamepadButtonID.SELECT];
-            buttonParams.myIconParams.myIconType = this._myRightSelectButtonIconType;
-            buttonParams.myIconParams.myLabel = this._myRightSelectButtonIconLabelOrImageUrl;
-            buttonParams.myIconParams.myImageURL = this._myRightSelectButtonIconLabelOrImageUrl;
+            let buttonParams = params.myButtonParams[Handedness.RIGHT][VirtualGamepadButtonID.FRAME];
+            buttonParams.myIconParams.myIconType = this._myRightFrameButtonIconType;
+            buttonParams.myIconParams.myLabel = this._myRightFrameButtonIconLabelOrImageUrl;
+            buttonParams.myIconParams.myImageURL = this._myRightFrameButtonIconLabelOrImageUrl;
             buttonParams.myIconParams.myLabelFontSize = this._myLabelFontSize;
             buttonParams.myIconParams.myLabelFontFamily = this._myLabelFontFamily;
             buttonParams.myIconParams.myLabelFontWeight = this._myLabelFontWeight;
             buttonParams.myIconParams.myImagePressedBrightness = this._myImagePressedBrightness;
 
-            if (this._myRightSelectButtonVisible) {
-                params.myButtonsOrder[Handedness.RIGHT][this._myRightSelectButtonOrderIndex] = [Handedness.RIGHT, GamepadButtonID.SELECT];
+            if (this._myRightFrameButtonVisible) {
+                params.myButtonsOrder[Handedness.RIGHT][this._myRightFrameButtonOrderIndex] = [Handedness.RIGHT, VirtualGamepadButtonID.FRAME];
             }
         }
 
         {
-            let buttonParams = params.myButtonParams[Handedness.RIGHT][GamepadButtonID.SQUEEZE];
-            buttonParams.myIconParams.myIconType = this._myRightSqueezeButtonIconType;
-            buttonParams.myIconParams.myLabel = this._myRightSqueezeButtonIconLabelOrImageUrl;
-            buttonParams.myIconParams.myImageURL = this._myRightSqueezeButtonIconLabelOrImageUrl;
+            let buttonParams = params.myButtonParams[Handedness.RIGHT][VirtualGamepadButtonID.SQUARE];
+            buttonParams.myIconParams.myIconType = this._myRightSquareButtonIconType;
+            buttonParams.myIconParams.myLabel = this._myRightSquareButtonIconLabelOrImageUrl;
+            buttonParams.myIconParams.myImageURL = this._myRightSquareButtonIconLabelOrImageUrl;
             buttonParams.myIconParams.myLabelFontSize = this._myLabelFontSize;
             buttonParams.myIconParams.myLabelFontFamily = this._myLabelFontFamily;
             buttonParams.myIconParams.myLabelFontWeight = this._myLabelFontWeight;
             buttonParams.myIconParams.myImagePressedBrightness = this._myImagePressedBrightness;
 
-            if (this._myRightSqueezeButtonVisible) {
-                params.myButtonsOrder[Handedness.RIGHT][this._myRightSqueezeButtonOrderIndex] = [Handedness.RIGHT, GamepadButtonID.SQUEEZE];
+            if (this._myRightSquareButtonVisible) {
+                params.myButtonsOrder[Handedness.RIGHT][this._myRightSquareButtonOrderIndex] = [Handedness.RIGHT, VirtualGamepadButtonID.SQUARE];
             }
         }
 
         {
-            let buttonParams = params.myButtonParams[Handedness.RIGHT][GamepadButtonID.THUMBSTICK];
-            buttonParams.myIconParams.myIconType = this._myRightThumbstickButtonIconType;
-            buttonParams.myIconParams.myLabel = this._myRightThumbstickButtonIconLabelOrImageUrl;
-            buttonParams.myIconParams.myImageURL = this._myRightThumbstickButtonIconLabelOrImageUrl;
+            let buttonParams = params.myButtonParams[Handedness.RIGHT][VirtualGamepadButtonID.DOT];
+            buttonParams.myIconParams.myIconType = this._myRightDotButtonIconType;
+            buttonParams.myIconParams.myLabel = this._myRightDotButtonIconLabelOrImageUrl;
+            buttonParams.myIconParams.myImageURL = this._myRightDotButtonIconLabelOrImageUrl;
             buttonParams.myIconParams.myLabelFontSize = this._myLabelFontSize;
             buttonParams.myIconParams.myLabelFontFamily = this._myLabelFontFamily;
             buttonParams.myIconParams.myLabelFontWeight = this._myLabelFontWeight;
             buttonParams.myIconParams.myImagePressedBrightness = this._myImagePressedBrightness;
 
-            if (this._myRightThumbstickButtonVisible) {
-                params.myButtonsOrder[Handedness.RIGHT][this._myRightThumbstickButtonOrderIndex] = [Handedness.RIGHT, GamepadButtonID.THUMBSTICK];
+            if (this._myRightDotButtonVisible) {
+                params.myButtonsOrder[Handedness.RIGHT][this._myRightDotButtonOrderIndex] = [Handedness.RIGHT, VirtualGamepadButtonID.DOT];
             }
         }
 
         {
-            let buttonParams = params.myButtonParams[Handedness.RIGHT][GamepadButtonID.TOP_BUTTON];
-            buttonParams.myIconParams.myIconType = this._myRightTopButtonIconType;
-            buttonParams.myIconParams.myLabel = this._myRightTopButtonIconLabelOrImageUrl;
-            buttonParams.myIconParams.myImageURL = this._myRightTopButtonIconLabelOrImageUrl;
+            let buttonParams = params.myButtonParams[Handedness.RIGHT][VirtualGamepadButtonID.CIRCLE];
+            buttonParams.myIconParams.myIconType = this._myRightCircleButtonIconType;
+            buttonParams.myIconParams.myLabel = this._myRightCircleButtonIconLabelOrImageUrl;
+            buttonParams.myIconParams.myImageURL = this._myRightCircleButtonIconLabelOrImageUrl;
             buttonParams.myIconParams.myLabelFontSize = this._myLabelFontSize;
             buttonParams.myIconParams.myLabelFontFamily = this._myLabelFontFamily;
             buttonParams.myIconParams.myLabelFontWeight = this._myLabelFontWeight;
             buttonParams.myIconParams.myImagePressedBrightness = this._myImagePressedBrightness;
 
-            if (this._myRightTopButtonVisible) {
-                params.myButtonsOrder[Handedness.RIGHT][this._myRightTopButtonOrderIndex] = [Handedness.RIGHT, GamepadButtonID.TOP_BUTTON];
+            if (this._myRightCircleButtonVisible) {
+                params.myButtonsOrder[Handedness.RIGHT][this._myRightCircleButtonOrderIndex] = [Handedness.RIGHT, VirtualGamepadButtonID.CIRCLE];
             }
         }
 
         {
-            let buttonParams = params.myButtonParams[Handedness.RIGHT][GamepadButtonID.BOTTOM_BUTTON];
-            buttonParams.myIconParams.myIconType = this._myRightBottomButtonIconType;
-            buttonParams.myIconParams.myLabel = this._myRightBottomButtonIconLabelOrImageUrl;
-            buttonParams.myIconParams.myImageURL = this._myRightBottomButtonIconLabelOrImageUrl;
+            let buttonParams = params.myButtonParams[Handedness.RIGHT][VirtualGamepadButtonID.RING];
+            buttonParams.myIconParams.myIconType = this._myRightRingButtonIconType;
+            buttonParams.myIconParams.myLabel = this._myRightRingButtonIconLabelOrImageUrl;
+            buttonParams.myIconParams.myImageURL = this._myRightRingButtonIconLabelOrImageUrl;
             buttonParams.myIconParams.myLabelFontSize = this._myLabelFontSize;
             buttonParams.myIconParams.myLabelFontFamily = this._myLabelFontFamily;
             buttonParams.myIconParams.myLabelFontWeight = this._myLabelFontWeight;
             buttonParams.myIconParams.myImagePressedBrightness = this._myImagePressedBrightness;
 
-            if (this._myRightBottomButtonVisible) {
-                params.myButtonsOrder[Handedness.RIGHT][this._myRightBottomButtonOrderIndex] = [Handedness.RIGHT, GamepadButtonID.BOTTOM_BUTTON];
+            if (this._myRightRingButtonVisible) {
+                params.myButtonsOrder[Handedness.RIGHT][this._myRightRingButtonOrderIndex] = [Handedness.RIGHT, VirtualGamepadButtonID.RING];
             }
         }
     }

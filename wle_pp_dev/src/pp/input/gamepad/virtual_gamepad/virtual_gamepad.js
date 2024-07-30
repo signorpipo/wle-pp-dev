@@ -2,10 +2,21 @@ import { BrowserUtils } from "../../../cauldron/utils/browser_utils.js";
 import { XRUtils } from "../../../cauldron/utils/xr_utils.js";
 import { vec2_create } from "../../../plugin/js/extensions/array/vec_create_extension.js";
 import { Handedness } from "../../cauldron/input_types.js";
-import { GamepadAxesID, GamepadButtonID } from "../gamepad_buttons.js";
 import { VirtualGamepadParams } from "./virtual_gamepad_params.js";
 import { VirtualGamepadVirtualButton } from "./virtual_gamepad_virtual_button.js";
 import { VirtualGamepadVirtualThumbstick } from "./virtual_gamepad_virtual_thumbstick.js";
+
+export let VirtualGamepadButtonID = {
+    SQUARE: 0,
+    FRAME: 1,
+    CIRCLE: 2,
+    RING: 3,
+    DOT: 4
+};
+
+export let VirtualGamepadAxesID = {
+    THUMBSTICK: 0
+};
 
 export class VirtualGamepad {
 
@@ -19,25 +30,25 @@ export class VirtualGamepad {
         this._myVirtualGamepadVirtualButtons[Handedness.LEFT] = [];
         this._myVirtualGamepadVirtualButtons[Handedness.RIGHT] = [];
 
-        this._myVirtualGamepadVirtualButtons[Handedness.LEFT][GamepadButtonID.SELECT] = null;
-        this._myVirtualGamepadVirtualButtons[Handedness.LEFT][GamepadButtonID.SQUEEZE] = null;
-        this._myVirtualGamepadVirtualButtons[Handedness.LEFT][GamepadButtonID.THUMBSTICK] = null;
-        this._myVirtualGamepadVirtualButtons[Handedness.LEFT][GamepadButtonID.TOP_BUTTON] = null;
-        this._myVirtualGamepadVirtualButtons[Handedness.LEFT][GamepadButtonID.BOTTOM_BUTTON] = null;
+        this._myVirtualGamepadVirtualButtons[Handedness.LEFT][VirtualGamepadButtonID.FRAME] = null;
+        this._myVirtualGamepadVirtualButtons[Handedness.LEFT][VirtualGamepadButtonID.SQUARE] = null;
+        this._myVirtualGamepadVirtualButtons[Handedness.LEFT][VirtualGamepadButtonID.DOT] = null;
+        this._myVirtualGamepadVirtualButtons[Handedness.LEFT][VirtualGamepadButtonID.CIRCLE] = null;
+        this._myVirtualGamepadVirtualButtons[Handedness.LEFT][VirtualGamepadButtonID.RING] = null;
 
-        this._myVirtualGamepadVirtualButtons[Handedness.RIGHT][GamepadButtonID.SELECT] = null;
-        this._myVirtualGamepadVirtualButtons[Handedness.RIGHT][GamepadButtonID.SQUEEZE] = null;
-        this._myVirtualGamepadVirtualButtons[Handedness.RIGHT][GamepadButtonID.THUMBSTICK] = null;
-        this._myVirtualGamepadVirtualButtons[Handedness.RIGHT][GamepadButtonID.TOP_BUTTON] = null;
-        this._myVirtualGamepadVirtualButtons[Handedness.RIGHT][GamepadButtonID.BOTTOM_BUTTON] = null;
+        this._myVirtualGamepadVirtualButtons[Handedness.RIGHT][VirtualGamepadButtonID.FRAME] = null;
+        this._myVirtualGamepadVirtualButtons[Handedness.RIGHT][VirtualGamepadButtonID.SQUARE] = null;
+        this._myVirtualGamepadVirtualButtons[Handedness.RIGHT][VirtualGamepadButtonID.DOT] = null;
+        this._myVirtualGamepadVirtualButtons[Handedness.RIGHT][VirtualGamepadButtonID.CIRCLE] = null;
+        this._myVirtualGamepadVirtualButtons[Handedness.RIGHT][VirtualGamepadButtonID.RING] = null;
 
         this._myButtonsAmount = this._myVirtualGamepadVirtualButtons[Handedness.LEFT].length;
 
         this._myVirtualGamepadVirtualThumbsticks = [];
         this._myVirtualGamepadVirtualThumbsticks[Handedness.LEFT] = [];
         this._myVirtualGamepadVirtualThumbsticks[Handedness.RIGHT] = [];
-        this._myVirtualGamepadVirtualThumbsticks[Handedness.LEFT][GamepadAxesID.THUMBSTICK] = null;
-        this._myVirtualGamepadVirtualThumbsticks[Handedness.RIGHT][GamepadAxesID.THUMBSTICK] = null;
+        this._myVirtualGamepadVirtualThumbsticks[Handedness.LEFT][VirtualGamepadAxesID.THUMBSTICK] = null;
+        this._myVirtualGamepadVirtualThumbsticks[Handedness.RIGHT][VirtualGamepadAxesID.THUMBSTICK] = null;
 
         this._myGestureStartEventListener = null;
 
@@ -60,8 +71,8 @@ export class VirtualGamepad {
                 }
 
                 for (let handedness in this._myVirtualGamepadVirtualButtons) {
-                    for (let gamepadButtonID in this._myVirtualGamepadVirtualButtons[handedness]) {
-                        let button = this._myVirtualGamepadVirtualButtons[handedness][gamepadButtonID];
+                    for (let virtualGamepadButtonID in this._myVirtualGamepadVirtualButtons[handedness]) {
+                        let button = this._myVirtualGamepadVirtualButtons[handedness][virtualGamepadButtonID];
                         if (button != null) {
                             button.setActive(this._myVisible);
                         }
@@ -80,10 +91,10 @@ export class VirtualGamepad {
         }
     }
 
-    isButtonPressed(handedness, gamepadButtonID) {
+    isButtonPressed(handedness, virtualGamepadButtonID) {
         if (!this._myVisible) return false;
 
-        let button = this._myVirtualGamepadVirtualButtons[handedness][gamepadButtonID];
+        let button = this._myVirtualGamepadVirtualButtons[handedness][virtualGamepadButtonID];
         if (button != null) {
             return button.isPressed();
         }
@@ -127,8 +138,8 @@ export class VirtualGamepad {
 
         if (this._myVisible) {
             for (let handedness in this._myVirtualGamepadVirtualButtons) {
-                for (let gamepadButtonID in this._myVirtualGamepadVirtualButtons[handedness]) {
-                    let button = this._myVirtualGamepadVirtualButtons[handedness][gamepadButtonID];
+                for (let virtualGamepadButtonID in this._myVirtualGamepadVirtualButtons[handedness]) {
+                    let button = this._myVirtualGamepadVirtualButtons[handedness][virtualGamepadButtonID];
                     if (button != null) {
                         button.update(dt);
                     }
@@ -166,14 +177,14 @@ export class VirtualGamepad {
         for (let i = 0; i < buttonsAmount; i++) {
             if (this._myParams.myButtonsOrder[Handedness.LEFT][i] != null) {
                 let gamepadButtonHandedness = this._myParams.myButtonsOrder[Handedness.LEFT][i][0];
-                let gamepadButtonID = this._myParams.myButtonsOrder[Handedness.LEFT][i][1];
-                this._buildButton(leftDiv, Handedness.LEFT, i, gamepadButtonHandedness, gamepadButtonID);
+                let virtualGamepadButtonID = this._myParams.myButtonsOrder[Handedness.LEFT][i][1];
+                this._buildButton(leftDiv, Handedness.LEFT, i, gamepadButtonHandedness, virtualGamepadButtonID);
             }
 
             if (this._myParams.myButtonsOrder[Handedness.RIGHT][i] != null) {
                 let gamepadButtonHandedness = this._myParams.myButtonsOrder[Handedness.RIGHT][i][0];
-                let gamepadButtonID = this._myParams.myButtonsOrder[Handedness.RIGHT][i][1];
-                this._buildButton(rightDiv, Handedness.RIGHT, i, gamepadButtonHandedness, gamepadButtonID);
+                let virtualGamepadButtonID = this._myParams.myButtonsOrder[Handedness.RIGHT][i][1];
+                this._buildButton(rightDiv, Handedness.RIGHT, i, gamepadButtonHandedness, virtualGamepadButtonID);
             }
         }
 
@@ -207,9 +218,9 @@ export class VirtualGamepad {
         document.addEventListener("gesturestart", this._myGestureStartEventListener);
     }
 
-    _buildButton(buttonElementParent, virtualButtonHandedness, virtualButtonIndex, gamepadButtonHandedness, gamepadButtonID) {
-        let virtualGamepadVirtualButton = new VirtualGamepadVirtualButton(buttonElementParent, this._myParams, virtualButtonHandedness, virtualButtonIndex, gamepadButtonHandedness, gamepadButtonID);
-        this._myVirtualGamepadVirtualButtons[gamepadButtonHandedness][gamepadButtonID] = virtualGamepadVirtualButton;
+    _buildButton(buttonElementParent, virtualButtonHandedness, virtualButtonIndex, gamepadButtonHandedness, virtualGamepadButtonID) {
+        let virtualGamepadVirtualButton = new VirtualGamepadVirtualButton(buttonElementParent, this._myParams, virtualButtonHandedness, virtualButtonIndex, gamepadButtonHandedness, virtualGamepadButtonID);
+        this._myVirtualGamepadVirtualButtons[gamepadButtonHandedness][virtualGamepadButtonID] = virtualGamepadVirtualButton;
     }
 
     _buildThumbstick(thumbstickElementParent, virtualThumbstickHandedness, gamepadThumbstickHandedness, gamepadAxesID) {
@@ -225,8 +236,8 @@ export class VirtualGamepad {
         let anyElementPressed = false;
 
         for (let handedness in this._myVirtualGamepadVirtualButtons) {
-            for (let gamepadButtonID in this._myVirtualGamepadVirtualButtons[handedness]) {
-                let button = this._myVirtualGamepadVirtualButtons[handedness][gamepadButtonID];
+            for (let virtualGamepadButtonID in this._myVirtualGamepadVirtualButtons[handedness]) {
+                let button = this._myVirtualGamepadVirtualButtons[handedness][virtualGamepadButtonID];
                 if (button != null && button.isPressed()) {
                     anyElementPressed = true;
                     break;
@@ -251,8 +262,8 @@ export class VirtualGamepad {
 
     _setMouseHoverEnabled(hoverActive) {
         for (let handedness in this._myVirtualGamepadVirtualButtons) {
-            for (let gamepadButtonID in this._myVirtualGamepadVirtualButtons[handedness]) {
-                let button = this._myVirtualGamepadVirtualButtons[handedness][gamepadButtonID];
+            for (let virtualGamepadButtonID in this._myVirtualGamepadVirtualButtons[handedness]) {
+                let button = this._myVirtualGamepadVirtualButtons[handedness][virtualGamepadButtonID];
                 if (button != null) {
                     button.setMouseHoverEnabled(hoverActive);
                 }
@@ -275,8 +286,8 @@ export class VirtualGamepad {
         document.removeEventListener("gesturestart", this._myGestureStartEventListener);
 
         for (let handedness in this._myVirtualGamepadVirtualButtons) {
-            for (let gamepadButtonID in this._myVirtualGamepadVirtualButtons[handedness]) {
-                let button = this._myVirtualGamepadVirtualButtons[handedness][gamepadButtonID];
+            for (let virtualGamepadButtonID in this._myVirtualGamepadVirtualButtons[handedness]) {
+                let button = this._myVirtualGamepadVirtualButtons[handedness][virtualGamepadButtonID];
                 if (button != null) {
                     button.destroy();
                 }

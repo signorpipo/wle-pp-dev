@@ -1,6 +1,6 @@
 import { Globals } from "../../../pp/globals.js";
 import { Handedness } from "../../cauldron/input_types.js";
-import { GamepadAxesID, GamepadButtonID } from "../gamepad_buttons.js";
+import { VirtualGamepadAxesID, VirtualGamepadButtonID } from "./virtual_gamepad.js";
 import { VirtualGamepadIconParams, VirtualGamepadIconType } from "./virtual_gamepad_icon.js";
 
 export class VirtualGamepadButtonParams {
@@ -49,23 +49,23 @@ export class VirtualGamepadParams {
         this.myButtonParams[Handedness.LEFT] = [];
         this.myButtonParams[Handedness.RIGHT] = [];
 
-        this.myButtonParams[Handedness.LEFT][GamepadButtonID.SELECT] = new VirtualGamepadButtonParams();
-        this.myButtonParams[Handedness.LEFT][GamepadButtonID.SQUEEZE] = new VirtualGamepadButtonParams();
-        this.myButtonParams[Handedness.LEFT][GamepadButtonID.THUMBSTICK] = new VirtualGamepadButtonParams();
-        this.myButtonParams[Handedness.LEFT][GamepadButtonID.TOP_BUTTON] = new VirtualGamepadButtonParams();
-        this.myButtonParams[Handedness.LEFT][GamepadButtonID.BOTTOM_BUTTON] = new VirtualGamepadButtonParams();
+        this.myButtonParams[Handedness.LEFT][VirtualGamepadButtonID.FRAME] = new VirtualGamepadButtonParams();
+        this.myButtonParams[Handedness.LEFT][VirtualGamepadButtonID.SQUARE] = new VirtualGamepadButtonParams();
+        this.myButtonParams[Handedness.LEFT][VirtualGamepadButtonID.DOT] = new VirtualGamepadButtonParams();
+        this.myButtonParams[Handedness.LEFT][VirtualGamepadButtonID.CIRCLE] = new VirtualGamepadButtonParams();
+        this.myButtonParams[Handedness.LEFT][VirtualGamepadButtonID.RING] = new VirtualGamepadButtonParams();
 
-        this.myButtonParams[Handedness.RIGHT][GamepadButtonID.SELECT] = new VirtualGamepadButtonParams();
-        this.myButtonParams[Handedness.RIGHT][GamepadButtonID.SQUEEZE] = new VirtualGamepadButtonParams();
-        this.myButtonParams[Handedness.RIGHT][GamepadButtonID.THUMBSTICK] = new VirtualGamepadButtonParams();
-        this.myButtonParams[Handedness.RIGHT][GamepadButtonID.TOP_BUTTON] = new VirtualGamepadButtonParams();
-        this.myButtonParams[Handedness.RIGHT][GamepadButtonID.BOTTOM_BUTTON] = new VirtualGamepadButtonParams();
+        this.myButtonParams[Handedness.RIGHT][VirtualGamepadButtonID.FRAME] = new VirtualGamepadButtonParams();
+        this.myButtonParams[Handedness.RIGHT][VirtualGamepadButtonID.SQUARE] = new VirtualGamepadButtonParams();
+        this.myButtonParams[Handedness.RIGHT][VirtualGamepadButtonID.DOT] = new VirtualGamepadButtonParams();
+        this.myButtonParams[Handedness.RIGHT][VirtualGamepadButtonID.CIRCLE] = new VirtualGamepadButtonParams();
+        this.myButtonParams[Handedness.RIGHT][VirtualGamepadButtonID.RING] = new VirtualGamepadButtonParams();
 
         this.myThumbstickParams = [];
         this.myThumbstickParams[Handedness.LEFT] = [];
         this.myThumbstickParams[Handedness.RIGHT] = [];
-        this.myThumbstickParams[Handedness.LEFT][GamepadAxesID.THUMBSTICK] = new VirtualGamepadThumbstickParams();
-        this.myThumbstickParams[Handedness.RIGHT][GamepadAxesID.THUMBSTICK] = new VirtualGamepadThumbstickParams();
+        this.myThumbstickParams[Handedness.LEFT][VirtualGamepadAxesID.THUMBSTICK] = new VirtualGamepadThumbstickParams();
+        this.myThumbstickParams[Handedness.RIGHT][VirtualGamepadAxesID.THUMBSTICK] = new VirtualGamepadThumbstickParams();
 
         this.myButtonsOrder = [];
         this.myButtonsOrder[Handedness.LEFT] = [null, null, null, null, null];
@@ -126,20 +126,20 @@ export class VirtualGamepadParams {
             }
         }
 
-        this.myButtonParams[Handedness.LEFT][GamepadButtonID.SQUEEZE].myIconParams.myIconType = VirtualGamepadIconType.SQUARE;
-        this.myButtonParams[Handedness.RIGHT][GamepadButtonID.SQUEEZE].myIconParams.myIconType = VirtualGamepadIconType.SQUARE;
+        this.myButtonParams[Handedness.LEFT][VirtualGamepadButtonID.SQUARE].myIconParams.myIconType = VirtualGamepadIconType.SQUARE;
+        this.myButtonParams[Handedness.RIGHT][VirtualGamepadButtonID.SQUARE].myIconParams.myIconType = VirtualGamepadIconType.SQUARE;
 
-        this.myButtonParams[Handedness.LEFT][GamepadButtonID.SELECT].myIconParams.myIconType = VirtualGamepadIconType.FRAME;
-        this.myButtonParams[Handedness.RIGHT][GamepadButtonID.SELECT].myIconParams.myIconType = VirtualGamepadIconType.FRAME;
+        this.myButtonParams[Handedness.LEFT][VirtualGamepadButtonID.FRAME].myIconParams.myIconType = VirtualGamepadIconType.FRAME;
+        this.myButtonParams[Handedness.RIGHT][VirtualGamepadButtonID.FRAME].myIconParams.myIconType = VirtualGamepadIconType.FRAME;
 
-        this.myButtonParams[Handedness.LEFT][GamepadButtonID.TOP_BUTTON].myIconParams.myIconType = VirtualGamepadIconType.CIRCLE;
-        this.myButtonParams[Handedness.RIGHT][GamepadButtonID.TOP_BUTTON].myIconParams.myIconType = VirtualGamepadIconType.CIRCLE;
+        this.myButtonParams[Handedness.LEFT][VirtualGamepadButtonID.CIRCLE].myIconParams.myIconType = VirtualGamepadIconType.CIRCLE;
+        this.myButtonParams[Handedness.RIGHT][VirtualGamepadButtonID.CIRCLE].myIconParams.myIconType = VirtualGamepadIconType.CIRCLE;
 
-        this.myButtonParams[Handedness.LEFT][GamepadButtonID.BOTTOM_BUTTON].myIconParams.myIconType = VirtualGamepadIconType.RING;
-        this.myButtonParams[Handedness.RIGHT][GamepadButtonID.BOTTOM_BUTTON].myIconParams.myIconType = VirtualGamepadIconType.RING;
+        this.myButtonParams[Handedness.LEFT][VirtualGamepadButtonID.RING].myIconParams.myIconType = VirtualGamepadIconType.RING;
+        this.myButtonParams[Handedness.RIGHT][VirtualGamepadButtonID.RING].myIconParams.myIconType = VirtualGamepadIconType.RING;
 
-        this.myButtonParams[Handedness.LEFT][GamepadButtonID.THUMBSTICK].myIconParams.myIconType = VirtualGamepadIconType.DOT;
-        this.myButtonParams[Handedness.RIGHT][GamepadButtonID.THUMBSTICK].myIconParams.myIconType = VirtualGamepadIconType.DOT;
+        this.myButtonParams[Handedness.LEFT][VirtualGamepadButtonID.DOT].myIconParams.myIconType = VirtualGamepadIconType.DOT;
+        this.myButtonParams[Handedness.RIGHT][VirtualGamepadButtonID.DOT].myIconParams.myIconType = VirtualGamepadIconType.DOT;
 
         for (let handedness in this.myThumbstickParams) {
             for (let gamepadAxesID in this.myThumbstickParams[handedness]) {
@@ -157,20 +157,20 @@ export class VirtualGamepadParams {
 
         // Orders
 
-        this.myButtonsOrder[Handedness.LEFT][0] = [Handedness.LEFT, GamepadButtonID.SQUEEZE];
-        this.myButtonsOrder[Handedness.LEFT][1] = [Handedness.LEFT, GamepadButtonID.SELECT];
-        this.myButtonsOrder[Handedness.LEFT][2] = [Handedness.LEFT, GamepadButtonID.TOP_BUTTON];
-        this.myButtonsOrder[Handedness.LEFT][3] = [Handedness.LEFT, GamepadButtonID.BOTTOM_BUTTON];
-        this.myButtonsOrder[Handedness.LEFT][4] = [Handedness.LEFT, GamepadButtonID.THUMBSTICK];
+        this.myButtonsOrder[Handedness.LEFT][0] = [Handedness.LEFT, VirtualGamepadButtonID.SQUARE];
+        this.myButtonsOrder[Handedness.LEFT][1] = [Handedness.LEFT, VirtualGamepadButtonID.FRAME];
+        this.myButtonsOrder[Handedness.LEFT][2] = [Handedness.LEFT, VirtualGamepadButtonID.CIRCLE];
+        this.myButtonsOrder[Handedness.LEFT][3] = [Handedness.LEFT, VirtualGamepadButtonID.RING];
+        this.myButtonsOrder[Handedness.LEFT][4] = [Handedness.LEFT, VirtualGamepadButtonID.DOT];
 
-        this.myButtonsOrder[Handedness.RIGHT][0] = [Handedness.RIGHT, GamepadButtonID.SQUEEZE];
-        this.myButtonsOrder[Handedness.RIGHT][1] = [Handedness.RIGHT, GamepadButtonID.SELECT];
-        this.myButtonsOrder[Handedness.RIGHT][2] = [Handedness.RIGHT, GamepadButtonID.TOP_BUTTON];
-        this.myButtonsOrder[Handedness.RIGHT][3] = [Handedness.RIGHT, GamepadButtonID.BOTTOM_BUTTON];
-        this.myButtonsOrder[Handedness.RIGHT][4] = [Handedness.RIGHT, GamepadButtonID.THUMBSTICK];
+        this.myButtonsOrder[Handedness.RIGHT][0] = [Handedness.RIGHT, VirtualGamepadButtonID.SQUARE];
+        this.myButtonsOrder[Handedness.RIGHT][1] = [Handedness.RIGHT, VirtualGamepadButtonID.FRAME];
+        this.myButtonsOrder[Handedness.RIGHT][2] = [Handedness.RIGHT, VirtualGamepadButtonID.CIRCLE];
+        this.myButtonsOrder[Handedness.RIGHT][3] = [Handedness.RIGHT, VirtualGamepadButtonID.RING];
+        this.myButtonsOrder[Handedness.RIGHT][4] = [Handedness.RIGHT, VirtualGamepadButtonID.DOT];
 
-        this.myThumbsticksOrder[Handedness.LEFT][0] = [Handedness.LEFT, GamepadAxesID.THUMBSTICK];
-        this.myThumbsticksOrder[Handedness.RIGHT][0] = [Handedness.RIGHT, GamepadAxesID.THUMBSTICK];
+        this.myThumbsticksOrder[Handedness.LEFT][0] = [Handedness.LEFT, VirtualGamepadAxesID.THUMBSTICK];
+        this.myThumbsticksOrder[Handedness.RIGHT][0] = [Handedness.RIGHT, VirtualGamepadAxesID.THUMBSTICK];
 
         // Sizes
 
