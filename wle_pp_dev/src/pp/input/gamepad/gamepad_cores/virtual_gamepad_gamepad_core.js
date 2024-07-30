@@ -21,7 +21,7 @@ export class VirtualGamepadGamepadCore extends GamepadCore {
 
         this.myGamepadToVirtualGamepadAxesIDMap = new Map();
         if (gamepadToVirtualGamepadAxesIDMap == null) {
-            this.myGamepadToVirtualGamepadAxesIDMap.set(GamepadAxesID.THUMBSTICK, VirtualGamepadAxesID.THUMBSTICK);
+            this.myGamepadToVirtualGamepadAxesIDMap.set(GamepadAxesID.THUMBSTICK, VirtualGamepadAxesID.FIRST_AXES);
         } else {
             this.myGamepadToVirtualGamepadAxesIDMap = gamepadToVirtualGamepadAxesIDMap;
         }

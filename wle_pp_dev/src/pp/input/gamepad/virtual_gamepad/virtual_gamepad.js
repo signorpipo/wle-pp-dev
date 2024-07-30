@@ -15,7 +15,7 @@ export let VirtualGamepadButtonID = {
 };
 
 export let VirtualGamepadAxesID = {
-    THUMBSTICK: 0
+    FIRST_AXES: 0
 };
 
 export class VirtualGamepad {
@@ -47,8 +47,8 @@ export class VirtualGamepad {
         this._myVirtualGamepadVirtualThumbsticks = [];
         this._myVirtualGamepadVirtualThumbsticks[Handedness.LEFT] = [];
         this._myVirtualGamepadVirtualThumbsticks[Handedness.RIGHT] = [];
-        this._myVirtualGamepadVirtualThumbsticks[Handedness.LEFT][VirtualGamepadAxesID.THUMBSTICK] = null;
-        this._myVirtualGamepadVirtualThumbsticks[Handedness.RIGHT][VirtualGamepadAxesID.THUMBSTICK] = null;
+        this._myVirtualGamepadVirtualThumbsticks[Handedness.LEFT][VirtualGamepadAxesID.FIRST_AXES] = null;
+        this._myVirtualGamepadVirtualThumbsticks[Handedness.RIGHT][VirtualGamepadAxesID.FIRST_AXES] = null;
 
         this._myGestureStartEventListener = null;
 

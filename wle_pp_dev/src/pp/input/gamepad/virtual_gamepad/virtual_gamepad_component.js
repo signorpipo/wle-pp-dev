@@ -150,7 +150,7 @@ export class VirtualGamepadComponent extends Component {
                 rightGamepadToVirtualGamepadButtonIDMap.set(this._gamepadPropertyButtonIDToEnum(this._myRightDotButtonGamepadButtonID), VirtualGamepadButtonID.FIFTH_BUTTON);
 
                 const gamepadToVirtualGamepadAxesIDMap = new Map();
-                gamepadToVirtualGamepadAxesIDMap.set(GamepadAxesID.THUMBSTICK, VirtualGamepadAxesID.THUMBSTICK);
+                gamepadToVirtualGamepadAxesIDMap.set(GamepadAxesID.THUMBSTICK, VirtualGamepadAxesID.FIRST_AXES);
 
                 const leftHandPose = Globals.getLeftGamepad(this.engine).getGamepadCore("pp_left_xr_gamepad").getHandPose();
                 const rightHandPose = Globals.getRightGamepad(this.engine).getGamepadCore("pp_right_xr_gamepad").getHandPose();

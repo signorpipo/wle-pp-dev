@@ -64,8 +64,8 @@ export class VirtualGamepadParams {
         this.myThumbstickParams = [];
         this.myThumbstickParams[Handedness.LEFT] = [];
         this.myThumbstickParams[Handedness.RIGHT] = [];
-        this.myThumbstickParams[Handedness.LEFT][VirtualGamepadAxesID.THUMBSTICK] = new VirtualGamepadThumbstickParams();
-        this.myThumbstickParams[Handedness.RIGHT][VirtualGamepadAxesID.THUMBSTICK] = new VirtualGamepadThumbstickParams();
+        this.myThumbstickParams[Handedness.LEFT][VirtualGamepadAxesID.FIRST_AXES] = new VirtualGamepadThumbstickParams();
+        this.myThumbstickParams[Handedness.RIGHT][VirtualGamepadAxesID.FIRST_AXES] = new VirtualGamepadThumbstickParams();
 
         this.myButtonsEnabled = [];
         this.myButtonsEnabled[Handedness.LEFT] = [];
@@ -87,8 +87,8 @@ export class VirtualGamepadParams {
         this.myThumbsticksEnabled[Handedness.LEFT] = [];
         this.myThumbsticksEnabled[Handedness.RIGHT] = [];
 
-        this.myThumbsticksEnabled[Handedness.LEFT][VirtualGamepadAxesID.THUMBSTICK] = false;
-        this.myThumbsticksEnabled[Handedness.RIGHT][VirtualGamepadAxesID.THUMBSTICK] = false;
+        this.myThumbsticksEnabled[Handedness.LEFT][VirtualGamepadAxesID.FIRST_AXES] = false;
+        this.myThumbsticksEnabled[Handedness.RIGHT][VirtualGamepadAxesID.FIRST_AXES] = false;
 
         // Even More Advanced Params
 
@@ -184,8 +184,8 @@ export class VirtualGamepadParams {
         this.myButtonsEnabled[Handedness.RIGHT][VirtualGamepadButtonID.FOURTH_BUTTON] = true;
         this.myButtonsEnabled[Handedness.RIGHT][VirtualGamepadButtonID.FIFTH_BUTTON] = true;
 
-        this.myThumbsticksEnabled[Handedness.LEFT][VirtualGamepadAxesID.THUMBSTICK] = true;
-        this.myThumbsticksEnabled[Handedness.RIGHT][VirtualGamepadAxesID.THUMBSTICK] = true;
+        this.myThumbsticksEnabled[Handedness.LEFT][VirtualGamepadAxesID.FIRST_AXES] = true;
+        this.myThumbsticksEnabled[Handedness.RIGHT][VirtualGamepadAxesID.FIRST_AXES] = true;
 
         // Sizes
 
