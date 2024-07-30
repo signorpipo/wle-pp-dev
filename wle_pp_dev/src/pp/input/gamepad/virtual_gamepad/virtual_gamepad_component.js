@@ -26,52 +26,62 @@ export class VirtualGamepadComponent extends Component {
         _myLabelFontWeight: Property.string("bold"),
         _myImagePressedBrightness: Property.float(0.5),
 
-        _myLeftFrameButtonVisible: Property.bool(true),
-        _myLeftFrameButtonOrderIndex: Property.int(1),
-        _myLeftFrameButtonIconType: Property.enum(["None", "Label", "Image", "Dot", "Circle", "Square", "Ring", "Frame"], "Frame"),
-        _myLeftFrameButtonIconLabelOrImageUrl: Property.string(""),
-
         _myLeftSquareButtonVisible: Property.bool(true),
+        _myLeftSquareButtonGamepadButtonID: Property.enum(["Select", "Squeeze", "Thumbstick", "Top Button", "Bottom Button", "Left Button", "Right Button", "Menu", "Touchpad", "Thumb Rest"], "Squeeze"),
         _myLeftSquareButtonOrderIndex: Property.int(0),
         _myLeftSquareButtonIconType: Property.enum(["None", "Label", "Image", "Dot", "Circle", "Square", "Ring", "Frame"], "Square"),
         _myLeftSquareButtonIconLabelOrImageUrl: Property.string(""),
 
+        _myLeftFrameButtonVisible: Property.bool(true),
+        _myLeftFrameButtonGamepadButtonID: Property.enum(["Select", "Squeeze", "Thumbstick", "Top Button", "Bottom Button", "Left Button", "Right Button", "Menu", "Touchpad", "Thumb Rest"], "Select"),
+        _myLeftFrameButtonOrderIndex: Property.int(1),
+        _myLeftFrameButtonIconType: Property.enum(["None", "Label", "Image", "Dot", "Circle", "Square", "Ring", "Frame"], "Frame"),
+        _myLeftFrameButtonIconLabelOrImageUrl: Property.string(""),
+
         _myLeftCircleButtonVisible: Property.bool(true),
+        _myLeftCircleButtonGamepadButtonID: Property.enum(["Select", "Squeeze", "Thumbstick", "Top Button", "Bottom Button", "Left Button", "Right Button", "Menu", "Touchpad", "Thumb Rest"], "Top Button"),
         _myLeftCircleButtonOrderIndex: Property.int(2),
         _myLeftCircleButtonIconType: Property.enum(["None", "Label", "Image", "Dot", "Circle", "Square", "Ring", "Frame"], "Circle"),
         _myLeftCircleButtonIconLabelOrImageUrl: Property.string(""),
 
         _myLeftRingButtonVisible: Property.bool(true),
+        _myLeftRingButtonGamepadButtonID: Property.enum(["Select", "Squeeze", "Thumbstick", "Top Button", "Bottom Button", "Left Button", "Right Button", "Menu", "Touchpad", "Thumb Rest"], "Bottom Button"),
         _myLeftRingButtonOrderIndex: Property.int(3),
         _myLeftRingButtonIconType: Property.enum(["None", "Label", "Image", "Dot", "Circle", "Square", "Ring", "Frame"], "Ring"),
         _myLeftRingButtonIconLabelOrImageUrl: Property.string(""),
 
         _myLeftDotButtonVisible: Property.bool(true),
+        _myLeftDotButtonGamepadButtonID: Property.enum(["Select", "Squeeze", "Thumbstick", "Top Button", "Bottom Button", "Left Button", "Right Button", "Menu", "Touchpad", "Thumb Rest"], "Thumbstick"),
         _myLeftDotButtonOrderIndex: Property.int(4),
         _myLeftDotButtonIconType: Property.enum(["None", "Label", "Image", "Dot", "Circle", "Square", "Ring", "Frame"], "Dot"),
         _myLeftDotButtonIconLabelOrImageUrl: Property.string(""),
 
-        _myRightFrameButtonVisible: Property.bool(true),
-        _myRightFrameButtonOrderIndex: Property.int(1),
-        _myRightFrameButtonIconType: Property.enum(["None", "Label", "Image", "Dot", "Circle", "Square", "Ring", "Frame"], "Frame"),
-        _myRightFrameButtonIconLabelOrImageUrl: Property.string(""),
-
         _myRightSquareButtonVisible: Property.bool(true),
+        _myRightSquareButtonGamepadButtonID: Property.enum(["Select", "Squeeze", "Thumbstick", "Top Button", "Bottom Button", "Left Button", "Right Button", "Menu", "Touchpad", "Thumb Rest"], "Squeeze"),
         _myRightSquareButtonOrderIndex: Property.int(0),
         _myRightSquareButtonIconType: Property.enum(["None", "Label", "Image", "Dot", "Circle", "Square", "Ring", "Frame"], "Square"),
         _myRightSquareButtonIconLabelOrImageUrl: Property.string(""),
 
+        _myRightFrameButtonVisible: Property.bool(true),
+        _myRightFrameButtonGamepadButtonID: Property.enum(["Select", "Squeeze", "Thumbstick", "Top Button", "Bottom Button", "Left Button", "Right Button", "Menu", "Touchpad", "Thumb Rest"], "Select"),
+        _myRightFrameButtonOrderIndex: Property.int(1),
+        _myRightFrameButtonIconType: Property.enum(["None", "Label", "Image", "Dot", "Circle", "Square", "Ring", "Frame"], "Frame"),
+        _myRightFrameButtonIconLabelOrImageUrl: Property.string(""),
+
         _myRightCircleButtonVisible: Property.bool(true),
+        _myRightCircleButtonGamepadButtonID: Property.enum(["Select", "Squeeze", "Thumbstick", "Top Button", "Bottom Button", "Left Button", "Right Button", "Menu", "Touchpad", "Thumb Rest"], "Top Button"),
         _myRightCircleButtonOrderIndex: Property.int(2),
         _myRightCircleButtonIconType: Property.enum(["None", "Label", "Image", "Dot", "Circle", "Square", "Ring", "Frame"], "Circle"),
         _myRightCircleButtonIconLabelOrImageUrl: Property.string(""),
 
         _myRightRingButtonVisible: Property.bool(true),
+        _myRightRingButtonGamepadButtonID: Property.enum(["Select", "Squeeze", "Thumbstick", "Top Button", "Bottom Button", "Left Button", "Right Button", "Menu", "Touchpad", "Thumb Rest"], "Bottom Button"),
         _myRightRingButtonOrderIndex: Property.int(3),
         _myRightRingButtonIconType: Property.enum(["None", "Label", "Image", "Dot", "Circle", "Square", "Ring", "Frame"], "Ring"),
         _myRightRingButtonIconLabelOrImageUrl: Property.string(""),
 
         _myRightDotButtonVisible: Property.bool(true),
+        _myRightDotButtonGamepadButtonID: Property.enum(["Select", "Squeeze", "Thumbstick", "Top Button", "Bottom Button", "Left Button", "Right Button", "Menu", "Touchpad", "Thumb Rest"], "Thumbstick"),
         _myRightDotButtonOrderIndex: Property.int(4),
         _myRightDotButtonIconType: Property.enum(["None", "Label", "Image", "Dot", "Circle", "Square", "Ring", "Frame"], "Dot"),
         _myRightDotButtonIconLabelOrImageUrl: Property.string("")
@@ -135,20 +145,27 @@ export class VirtualGamepadComponent extends Component {
             this._myFirstUpdate = false;
 
             if (this._myAddToUniversalGamepad) {
-                const gamepadToVirtualGamepadButtonIDMap = new Map();
-                gamepadToVirtualGamepadButtonIDMap.set(GamepadButtonID.SELECT, VirtualGamepadButtonID.FRAME);
-                gamepadToVirtualGamepadButtonIDMap.set(GamepadButtonID.SQUEEZE, VirtualGamepadButtonID.SQUARE);
-                gamepadToVirtualGamepadButtonIDMap.set(GamepadButtonID.TOP_BUTTON, VirtualGamepadButtonID.CIRCLE);
-                gamepadToVirtualGamepadButtonIDMap.set(GamepadButtonID.BOTTOM_BUTTON, VirtualGamepadButtonID.RING);
-                gamepadToVirtualGamepadButtonIDMap.set(GamepadButtonID.THUMBSTICK, VirtualGamepadButtonID.DOT);
+                const leftGamepadToVirtualGamepadButtonIDMap = new Map();
+                leftGamepadToVirtualGamepadButtonIDMap.set(this._gamepadPropertyButtonIDToEnum(this._myLeftSquareButtonGamepadButtonID), VirtualGamepadButtonID.SQUARE);
+                leftGamepadToVirtualGamepadButtonIDMap.set(this._gamepadPropertyButtonIDToEnum(this._myLeftFrameButtonGamepadButtonID), VirtualGamepadButtonID.FRAME);
+                leftGamepadToVirtualGamepadButtonIDMap.set(this._gamepadPropertyButtonIDToEnum(this._myLeftCircleButtonGamepadButtonID), VirtualGamepadButtonID.CIRCLE);
+                leftGamepadToVirtualGamepadButtonIDMap.set(this._gamepadPropertyButtonIDToEnum(this._myLeftRingButtonGamepadButtonID), VirtualGamepadButtonID.RING);
+                leftGamepadToVirtualGamepadButtonIDMap.set(this._gamepadPropertyButtonIDToEnum(this._myLeftDotButtonGamepadButtonID), VirtualGamepadButtonID.DOT);
+
+                const rightGamepadToVirtualGamepadButtonIDMap = new Map();
+                rightGamepadToVirtualGamepadButtonIDMap.set(this._gamepadPropertyButtonIDToEnum(this._myRightSquareButtonGamepadButtonID), VirtualGamepadButtonID.SQUARE);
+                rightGamepadToVirtualGamepadButtonIDMap.set(this._gamepadPropertyButtonIDToEnum(this._myRightFrameButtonGamepadButtonID), VirtualGamepadButtonID.FRAME);
+                rightGamepadToVirtualGamepadButtonIDMap.set(this._gamepadPropertyButtonIDToEnum(this._myRightCircleButtonGamepadButtonID), VirtualGamepadButtonID.CIRCLE);
+                rightGamepadToVirtualGamepadButtonIDMap.set(this._gamepadPropertyButtonIDToEnum(this._myRightRingButtonGamepadButtonID), VirtualGamepadButtonID.RING);
+                rightGamepadToVirtualGamepadButtonIDMap.set(this._gamepadPropertyButtonIDToEnum(this._myRightDotButtonGamepadButtonID), VirtualGamepadButtonID.DOT);
 
                 const gamepadToVirtualGamepadAxesIDMap = new Map();
                 gamepadToVirtualGamepadAxesIDMap.set(GamepadAxesID.THUMBSTICK, VirtualGamepadAxesID.THUMBSTICK);
 
                 const leftHandPose = Globals.getLeftGamepad(this.engine).getGamepadCore("pp_left_xr_gamepad").getHandPose();
                 const rightHandPose = Globals.getRightGamepad(this.engine).getGamepadCore("pp_right_xr_gamepad").getHandPose();
-                this._myLeftVirtualGamepadGamepadCore = new VirtualGamepadGamepadCore(this._myVirtualGamepad, leftHandPose, gamepadToVirtualGamepadButtonIDMap, gamepadToVirtualGamepadAxesIDMap);
-                this._myRightVirtualGamepadGamepadCore = new VirtualGamepadGamepadCore(this._myVirtualGamepad, rightHandPose, gamepadToVirtualGamepadButtonIDMap, gamepadToVirtualGamepadAxesIDMap);
+                this._myLeftVirtualGamepadGamepadCore = new VirtualGamepadGamepadCore(this._myVirtualGamepad, leftHandPose, leftGamepadToVirtualGamepadButtonIDMap, gamepadToVirtualGamepadAxesIDMap);
+                this._myRightVirtualGamepadGamepadCore = new VirtualGamepadGamepadCore(this._myVirtualGamepad, rightHandPose, rightGamepadToVirtualGamepadButtonIDMap, gamepadToVirtualGamepadAxesIDMap);
 
                 Globals.getLeftGamepad(this.engine).addGamepadCore("pp_left_virtual_gamepad", this._myLeftVirtualGamepadGamepadCore);
                 Globals.getRightGamepad(this.engine).addGamepadCore("pp_right_virtual_gamepad", this._myRightVirtualGamepadGamepadCore);
@@ -311,6 +328,45 @@ export class VirtualGamepadComponent extends Component {
                 params.myButtonsOrder[Handedness.RIGHT][this._myRightRingButtonOrderIndex] = [Handedness.RIGHT, VirtualGamepadButtonID.RING];
             }
         }
+    }
+
+    _gamepadPropertyButtonIDToEnum(propertyButtonID) {
+        let buttonID = null;
+
+        switch (propertyButtonID) {
+            case 0:
+                buttonID = GamepadButtonID.SELECT;
+                break;
+            case 1:
+                buttonID = GamepadButtonID.SQUEEZE;
+                break;
+            case 2:
+                buttonID = GamepadButtonID.THUMBSTICK;
+                break;
+            case 3:
+                buttonID = GamepadButtonID.TOP_BUTTON;
+                break;
+            case 4:
+                buttonID = GamepadButtonID.BOTTOM_BUTTON;
+                break;
+            case 5:
+                buttonID = GamepadButtonID.LEFT_BUTTON;
+                break;
+            case 6:
+                buttonID = GamepadButtonID.RIGHT_BUTTON;
+                break;
+            case 7:
+                buttonID = GamepadButtonID.MENU;
+                break;
+            case 8:
+                buttonID = GamepadButtonID.TOUCHPAD;
+                break;
+            case 9:
+                buttonID = GamepadButtonID.THUMB_REST;
+                break;
+        }
+
+        return buttonID;
     }
 
     onDestroy() {
