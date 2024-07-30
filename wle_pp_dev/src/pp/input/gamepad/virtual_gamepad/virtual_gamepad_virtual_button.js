@@ -131,7 +131,7 @@ export class VirtualGamepadVirtualButton {
 
         let minSizeMultiplier = Math.max(1, this._myVirtualGamepadParams.myMinSizeMultiplier / this._myVirtualGamepadParams.myInterfaceScale);
 
-        let buttonsAmount = this._myVirtualGamepadParams.myButtonsOrder[Handedness.LEFT].length;
+        let buttonsAmount = this._myVirtualGamepadParams.myButtonsEnabled[Handedness.LEFT].length;
 
         let angleStep = (buttonRingEndAngle - buttonRingStartAngle) / (buttonsAmount - 1);
 
