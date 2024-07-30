@@ -1,4 +1,5 @@
 import { Component, Property } from "@wonderlandengine/api";
+import { InputUtils } from "wle-pp/input/cauldron/input_utils.js";
 import { Globals } from "../../../pp/globals.js";
 import { Handedness } from "../../cauldron/input_types.js";
 import { GamepadAxesID, GamepadButtonID } from "../gamepad_buttons.js";
@@ -28,53 +29,69 @@ export class VirtualGamepadComponent extends Component {
 
         _myLeftFirstButtonVisible: Property.bool(true),
         _myLeftFirstButtonGamepadButtonID: Property.enum(["Select", "Squeeze", "Thumbstick", "Top Button", "Bottom Button", "Left Button", "Right Button", "Menu", "Touchpad", "Thumb Rest"], "Squeeze"),
+        _myLeftFirstButtonGamepadHandedness: Property.enum(["Left", "Right"], "Left"),
         _myLeftFirstButtonIconType: Property.enum(["None", "Label", "Image", "Dot", "Circle", "Square", "Ring", "Frame"], "Square"),
         _myLeftFirstButtonIconLabelOrImageUrl: Property.string(""),
 
         _myLeftSecondButtonVisible: Property.bool(true),
         _myLeftSecondButtonGamepadButtonID: Property.enum(["Select", "Squeeze", "Thumbstick", "Top Button", "Bottom Button", "Left Button", "Right Button", "Menu", "Touchpad", "Thumb Rest"], "Select"),
+        _myLeftSecondButtonGamepadHandedness: Property.enum(["Left", "Right"], "Left"),
         _myLeftSecondButtonIconType: Property.enum(["None", "Label", "Image", "Dot", "Circle", "Square", "Ring", "Frame"], "Frame"),
         _myLeftSecondButtonIconLabelOrImageUrl: Property.string(""),
 
         _myLeftThirdButtonVisible: Property.bool(true),
         _myLeftThirdButtonGamepadButtonID: Property.enum(["Select", "Squeeze", "Thumbstick", "Top Button", "Bottom Button", "Left Button", "Right Button", "Menu", "Touchpad", "Thumb Rest"], "Top Button"),
+        _myLeftThirdButtonGamepadHandedness: Property.enum(["Left", "Right"], "Left"),
         _myLeftThirdButtonIconType: Property.enum(["None", "Label", "Image", "Dot", "Circle", "Square", "Ring", "Frame"], "Circle"),
         _myLeftThirdButtonIconLabelOrImageUrl: Property.string(""),
 
         _myLeftFourthButtonVisible: Property.bool(true),
         _myLeftFourthButtonGamepadButtonID: Property.enum(["Select", "Squeeze", "Thumbstick", "Top Button", "Bottom Button", "Left Button", "Right Button", "Menu", "Touchpad", "Thumb Rest"], "Bottom Button"),
+        _myLeftFourthButtonGamepadHandedness: Property.enum(["Left", "Right"], "Left"),
         _myLeftFourthButtonIconType: Property.enum(["None", "Label", "Image", "Dot", "Circle", "Square", "Ring", "Frame"], "Ring"),
         _myLeftFourthButtonIconLabelOrImageUrl: Property.string(""),
 
-        _myLeftDotButtonVisible: Property.bool(true),
-        _myLeftDotButtonGamepadButtonID: Property.enum(["Select", "Squeeze", "Thumbstick", "Top Button", "Bottom Button", "Left Button", "Right Button", "Menu", "Touchpad", "Thumb Rest"], "Thumbstick"),
-        _myLeftDotButtonIconType: Property.enum(["None", "Label", "Image", "Dot", "Circle", "Square", "Ring", "Frame"], "Dot"),
-        _myLeftDotButtonIconLabelOrImageUrl: Property.string(""),
+        _myLeftFifthButtonVisible: Property.bool(true),
+        _myLeftFifthButtonGamepadButtonID: Property.enum(["Select", "Squeeze", "Thumbstick", "Top Button", "Bottom Button", "Left Button", "Right Button", "Menu", "Touchpad", "Thumb Rest"], "Thumbstick"),
+        _myLeftFifthButtonGamepadHandedness: Property.enum(["Left", "Right"], "Left"),
+        _myLeftFifthButtonIconType: Property.enum(["None", "Label", "Image", "Dot", "Circle", "Square", "Ring", "Frame"], "Dot"),
+        _myLeftFifthButtonIconLabelOrImageUrl: Property.string(""),
+
+        _myLeftThumbstickVisible: Property.bool(true),
+        _myLeftThumbstickGamepadHandedness: Property.enum(["Left", "Right"], "Left"),
 
         _myRightFirstButtonVisible: Property.bool(true),
         _myRightFirstButtonGamepadButtonID: Property.enum(["Select", "Squeeze", "Thumbstick", "Top Button", "Bottom Button", "Left Button", "Right Button", "Menu", "Touchpad", "Thumb Rest"], "Squeeze"),
+        _myRightFirstButtonGamepadHandedness: Property.enum(["Left", "Right"], "Right"),
         _myRightFirstButtonIconType: Property.enum(["None", "Label", "Image", "Dot", "Circle", "Square", "Ring", "Frame"], "Square"),
         _myRightFirstButtonIconLabelOrImageUrl: Property.string(""),
 
         _myRightSecondButtonVisible: Property.bool(true),
         _myRightSecondButtonGamepadButtonID: Property.enum(["Select", "Squeeze", "Thumbstick", "Top Button", "Bottom Button", "Left Button", "Right Button", "Menu", "Touchpad", "Thumb Rest"], "Select"),
+        _myRightSecondButtonGamepadHandedness: Property.enum(["Left", "Right"], "Right"),
         _myRightSecondButtonIconType: Property.enum(["None", "Label", "Image", "Dot", "Circle", "Square", "Ring", "Frame"], "Frame"),
         _myRightSecondButtonIconLabelOrImageUrl: Property.string(""),
 
         _myRightThirdButtonVisible: Property.bool(true),
         _myRightThirdButtonGamepadButtonID: Property.enum(["Select", "Squeeze", "Thumbstick", "Top Button", "Bottom Button", "Left Button", "Right Button", "Menu", "Touchpad", "Thumb Rest"], "Top Button"),
+        _myRightThirdButtonGamepadHandedness: Property.enum(["Left", "Right"], "Right"),
         _myRightThirdButtonIconType: Property.enum(["None", "Label", "Image", "Dot", "Circle", "Square", "Ring", "Frame"], "Circle"),
         _myRightThirdButtonIconLabelOrImageUrl: Property.string(""),
 
         _myRightFourthButtonVisible: Property.bool(true),
         _myRightFourthButtonGamepadButtonID: Property.enum(["Select", "Squeeze", "Thumbstick", "Top Button", "Bottom Button", "Left Button", "Right Button", "Menu", "Touchpad", "Thumb Rest"], "Bottom Button"),
+        _myRightFourthButtonGamepadHandedness: Property.enum(["Left", "Right"], "Right"),
         _myRightFourthButtonIconType: Property.enum(["None", "Label", "Image", "Dot", "Circle", "Square", "Ring", "Frame"], "Ring"),
         _myRightFourthButtonIconLabelOrImageUrl: Property.string(""),
 
-        _myRightDotButtonVisible: Property.bool(true),
-        _myRightDotButtonGamepadButtonID: Property.enum(["Select", "Squeeze", "Thumbstick", "Top Button", "Bottom Button", "Left Button", "Right Button", "Menu", "Touchpad", "Thumb Rest"], "Thumbstick"),
-        _myRightDotButtonIconType: Property.enum(["None", "Label", "Image", "Dot", "Circle", "Square", "Ring", "Frame"], "Dot"),
-        _myRightDotButtonIconLabelOrImageUrl: Property.string("")
+        _myRightFifthButtonVisible: Property.bool(true),
+        _myRightFifthButtonGamepadButtonID: Property.enum(["Select", "Squeeze", "Thumbstick", "Top Button", "Bottom Button", "Left Button", "Right Button", "Menu", "Touchpad", "Thumb Rest"], "Thumbstick"),
+        _myRightFifthButtonGamepadHandedness: Property.enum(["Left", "Right"], "Right"),
+        _myRightFifthButtonIconType: Property.enum(["None", "Label", "Image", "Dot", "Circle", "Square", "Ring", "Frame"], "Dot"),
+        _myRightFifthButtonIconLabelOrImageUrl: Property.string(""),
+
+        _myRightThumbstickVisible: Property.bool(true),
+        _myRightThumbstickGamepadHandedness: Property.enum(["Left", "Right"], "Right")
     };
 
     start() {
@@ -135,30 +152,7 @@ export class VirtualGamepadComponent extends Component {
             this._myFirstUpdate = false;
 
             if (this._myAddToUniversalGamepad) {
-                const leftGamepadToVirtualGamepadButtonIDMap = new Map();
-                leftGamepadToVirtualGamepadButtonIDMap.set(this._gamepadPropertyButtonIDToEnum(this._myLeftFirstButtonGamepadButtonID), VirtualGamepadButtonID.FIRST_BUTTON);
-                leftGamepadToVirtualGamepadButtonIDMap.set(this._gamepadPropertyButtonIDToEnum(this._myLeftSecondButtonGamepadButtonID), VirtualGamepadButtonID.SECOND_BUTTON);
-                leftGamepadToVirtualGamepadButtonIDMap.set(this._gamepadPropertyButtonIDToEnum(this._myLeftThirdButtonGamepadButtonID), VirtualGamepadButtonID.THIRD_BUTTON);
-                leftGamepadToVirtualGamepadButtonIDMap.set(this._gamepadPropertyButtonIDToEnum(this._myLeftFourthButtonGamepadButtonID), VirtualGamepadButtonID.FOURTH_BUTTON);
-                leftGamepadToVirtualGamepadButtonIDMap.set(this._gamepadPropertyButtonIDToEnum(this._myLeftDotButtonGamepadButtonID), VirtualGamepadButtonID.FIFTH_BUTTON);
-
-                const rightGamepadToVirtualGamepadButtonIDMap = new Map();
-                rightGamepadToVirtualGamepadButtonIDMap.set(this._gamepadPropertyButtonIDToEnum(this._myRightFirstButtonGamepadButtonID), VirtualGamepadButtonID.FIRST_BUTTON);
-                rightGamepadToVirtualGamepadButtonIDMap.set(this._gamepadPropertyButtonIDToEnum(this._myRightSecondButtonGamepadButtonID), VirtualGamepadButtonID.SECOND_BUTTON);
-                rightGamepadToVirtualGamepadButtonIDMap.set(this._gamepadPropertyButtonIDToEnum(this._myRightThirdButtonGamepadButtonID), VirtualGamepadButtonID.THIRD_BUTTON);
-                rightGamepadToVirtualGamepadButtonIDMap.set(this._gamepadPropertyButtonIDToEnum(this._myRightFourthButtonGamepadButtonID), VirtualGamepadButtonID.FOURTH_BUTTON);
-                rightGamepadToVirtualGamepadButtonIDMap.set(this._gamepadPropertyButtonIDToEnum(this._myRightDotButtonGamepadButtonID), VirtualGamepadButtonID.FIFTH_BUTTON);
-
-                const gamepadToVirtualGamepadAxesIDMap = new Map();
-                gamepadToVirtualGamepadAxesIDMap.set(GamepadAxesID.THUMBSTICK, VirtualGamepadAxesID.FIRST_AXES);
-
-                const leftHandPose = Globals.getLeftGamepad(this.engine).getGamepadCore("pp_left_xr_gamepad").getHandPose();
-                const rightHandPose = Globals.getRightGamepad(this.engine).getGamepadCore("pp_right_xr_gamepad").getHandPose();
-                this._myLeftVirtualGamepadGamepadCore = new VirtualGamepadGamepadCore(this._myVirtualGamepad, leftHandPose, leftGamepadToVirtualGamepadButtonIDMap, gamepadToVirtualGamepadAxesIDMap);
-                this._myRightVirtualGamepadGamepadCore = new VirtualGamepadGamepadCore(this._myVirtualGamepad, rightHandPose, rightGamepadToVirtualGamepadButtonIDMap, gamepadToVirtualGamepadAxesIDMap);
-
-                Globals.getLeftGamepad(this.engine).addGamepadCore("pp_left_virtual_gamepad", this._myLeftVirtualGamepadGamepadCore);
-                Globals.getRightGamepad(this.engine).addGamepadCore("pp_right_virtual_gamepad", this._myRightVirtualGamepadGamepadCore);
+                this._addToUniversalGamepad();
             }
         }
 
@@ -194,15 +188,15 @@ export class VirtualGamepadComponent extends Component {
 
         {
             let buttonParams = params.myButtonParams[Handedness.LEFT][VirtualGamepadButtonID.FIFTH_BUTTON];
-            buttonParams.myIconParams.myIconType = this._myLeftDotButtonIconType;
-            buttonParams.myIconParams.myLabel = this._myLeftDotButtonIconLabelOrImageUrl;
-            buttonParams.myIconParams.myImageURL = this._myLeftDotButtonIconLabelOrImageUrl;
+            buttonParams.myIconParams.myIconType = this._myLeftFifthButtonIconType;
+            buttonParams.myIconParams.myLabel = this._myLeftFifthButtonIconLabelOrImageUrl;
+            buttonParams.myIconParams.myImageURL = this._myLeftFifthButtonIconLabelOrImageUrl;
             buttonParams.myIconParams.myLabelFontSize = this._myLabelFontSize;
             buttonParams.myIconParams.myLabelFontFamily = this._myLabelFontFamily;
             buttonParams.myIconParams.myLabelFontWeight = this._myLabelFontWeight;
             buttonParams.myIconParams.myImagePressedBrightness = this._myImagePressedBrightness;
 
-            params.myButtonsEnabled[Handedness.LEFT][VirtualGamepadButtonID.FIFTH_BUTTON] = this._myLeftDotButtonVisible;
+            params.myButtonsEnabled[Handedness.LEFT][VirtualGamepadButtonID.FIFTH_BUTTON] = this._myLeftFifthButtonVisible;
         }
 
         {
@@ -259,15 +253,15 @@ export class VirtualGamepadComponent extends Component {
 
         {
             let buttonParams = params.myButtonParams[Handedness.RIGHT][VirtualGamepadButtonID.FIFTH_BUTTON];
-            buttonParams.myIconParams.myIconType = this._myRightDotButtonIconType;
-            buttonParams.myIconParams.myLabel = this._myRightDotButtonIconLabelOrImageUrl;
-            buttonParams.myIconParams.myImageURL = this._myRightDotButtonIconLabelOrImageUrl;
+            buttonParams.myIconParams.myIconType = this._myRightFifthButtonIconType;
+            buttonParams.myIconParams.myLabel = this._myRightFifthButtonIconLabelOrImageUrl;
+            buttonParams.myIconParams.myImageURL = this._myRightFifthButtonIconLabelOrImageUrl;
             buttonParams.myIconParams.myLabelFontSize = this._myLabelFontSize;
             buttonParams.myIconParams.myLabelFontFamily = this._myLabelFontFamily;
             buttonParams.myIconParams.myLabelFontWeight = this._myLabelFontWeight;
             buttonParams.myIconParams.myImagePressedBrightness = this._myImagePressedBrightness;
 
-            params.myButtonsEnabled[Handedness.RIGHT][VirtualGamepadButtonID.FIFTH_BUTTON] = this._myRightDotButtonVisible;
+            params.myButtonsEnabled[Handedness.RIGHT][VirtualGamepadButtonID.FIFTH_BUTTON] = this._myRightFifthButtonVisible;
         }
 
         {
@@ -295,6 +289,122 @@ export class VirtualGamepadComponent extends Component {
 
             params.myButtonsEnabled[Handedness.RIGHT][VirtualGamepadButtonID.FOURTH_BUTTON] = this._myRightFourthButtonVisible;
         }
+
+        params.myThumbsticksEnabled[Handedness.LEFT][VirtualGamepadAxesID.FIRST_AXES] = this._myLeftThumbstickVisible;
+        params.myThumbsticksEnabled[Handedness.RIGHT][VirtualGamepadAxesID.FIRST_AXES] = this._myRightThumbstickVisible;
+    }
+
+    _addToUniversalGamepad() {
+        const leftGamepadToVirtualGamepadButtonIDMap = new Map();
+        const rightGamepadToVirtualGamepadButtonIDMap = new Map();
+
+        if (this._myLeftFirstButtonVisible) {
+            if (InputUtils.getHandednessByIndex(this._myLeftFirstButtonGamepadHandedness) == Handedness.LEFT) {
+                leftGamepadToVirtualGamepadButtonIDMap.set(this._gamepadPropertyButtonIDToEnum(this._myLeftFirstButtonGamepadButtonID), [Handedness.LEFT, VirtualGamepadButtonID.FIRST_BUTTON]);
+            } else {
+                rightGamepadToVirtualGamepadButtonIDMap.set(this._gamepadPropertyButtonIDToEnum(this._myLeftFirstButtonGamepadButtonID), [Handedness.LEFT, VirtualGamepadButtonID.FIRST_BUTTON]);
+            }
+        }
+
+        if (this._myLeftSecondButtonVisible) {
+            if (InputUtils.getHandednessByIndex(this._myLeftSecondButtonGamepadHandedness) == Handedness.LEFT) {
+                leftGamepadToVirtualGamepadButtonIDMap.set(this._gamepadPropertyButtonIDToEnum(this._myLeftSecondButtonGamepadButtonID), [Handedness.LEFT, VirtualGamepadButtonID.SECOND_BUTTON]);
+            } else {
+                rightGamepadToVirtualGamepadButtonIDMap.set(this._gamepadPropertyButtonIDToEnum(this._myLeftSecondButtonGamepadButtonID), [Handedness.LEFT, VirtualGamepadButtonID.SECOND_BUTTON]);
+            }
+        }
+
+        if (this._myLeftThirdButtonVisible) {
+            if (InputUtils.getHandednessByIndex(this._myLeftThirdButtonGamepadHandedness) == Handedness.LEFT) {
+                leftGamepadToVirtualGamepadButtonIDMap.set(this._gamepadPropertyButtonIDToEnum(this._myLeftThirdButtonGamepadButtonID), [Handedness.LEFT, VirtualGamepadButtonID.THIRD_BUTTON]);
+            } else {
+                rightGamepadToVirtualGamepadButtonIDMap.set(this._gamepadPropertyButtonIDToEnum(this._myLeftThirdButtonGamepadButtonID), [Handedness.LEFT, VirtualGamepadButtonID.THIRD_BUTTON]);
+            }
+        }
+
+        if (this._myLeftForthButtonVisible) {
+            if (InputUtils.getHandednessByIndex(this._myLeftForthButtonGamepadHandedness) == Handedness.LEFT) {
+                leftGamepadToVirtualGamepadButtonIDMap.set(this._gamepadPropertyButtonIDToEnum(this._myLeftForthButtonGamepadButtonID), [Handedness.LEFT, VirtualGamepadButtonID.FOURTH_BUTTON]);
+            } else {
+                rightGamepadToVirtualGamepadButtonIDMap.set(this._gamepadPropertyButtonIDToEnum(this._myLeftForthButtonGamepadButtonID), [Handedness.LEFT, VirtualGamepadButtonID.FOURTH_BUTTON]);
+            }
+        }
+
+        if (this._myLeftFifthButtonVisible) {
+            if (InputUtils.getHandednessByIndex(this._myLeftFifthButtonGamepadHandedness) == Handedness.LEFT) {
+                leftGamepadToVirtualGamepadButtonIDMap.set(this._gamepadPropertyButtonIDToEnum(this._myLeftFifthButtonGamepadButtonID), [Handedness.LEFT, VirtualGamepadButtonID.FIFTH_BUTTON]);
+            } else {
+                rightGamepadToVirtualGamepadButtonIDMap.set(this._gamepadPropertyButtonIDToEnum(this._myLeftFifthButtonGamepadButtonID), [Handedness.LEFT, VirtualGamepadButtonID.FIFTH_BUTTON]);
+            }
+        }
+
+        if (this._myRightFirstButtonVisible) {
+            if (InputUtils.getHandednessByIndex(this._myRightFirstButtonGamepadHandedness) == Handedness.LEFT) {
+                leftGamepadToVirtualGamepadButtonIDMap.set(this._gamepadPropertyButtonIDToEnum(this._myRightFirstButtonGamepadButtonID), [Handedness.RIGHT, VirtualGamepadButtonID.FIRST_BUTTON]);
+            } else {
+                rightGamepadToVirtualGamepadButtonIDMap.set(this._gamepadPropertyButtonIDToEnum(this._myRightFirstButtonGamepadButtonID), [Handedness.RIGHT, VirtualGamepadButtonID.FIRST_BUTTON]);
+            }
+        }
+
+        if (this._myRightSecondButtonVisible) {
+            if (InputUtils.getHandednessByIndex(this._myRightSecondButtonGamepadHandedness) == Handedness.LEFT) {
+                leftGamepadToVirtualGamepadButtonIDMap.set(this._gamepadPropertyButtonIDToEnum(this._myRightSecondButtonGamepadButtonID), [Handedness.RIGHT, VirtualGamepadButtonID.SECOND_BUTTON]);
+            } else {
+                rightGamepadToVirtualGamepadButtonIDMap.set(this._gamepadPropertyButtonIDToEnum(this._myRightSecondButtonGamepadButtonID), [Handedness.RIGHT, VirtualGamepadButtonID.SECOND_BUTTON]);
+            }
+        }
+
+        if (this._myRightThirdButtonVisible) {
+            if (InputUtils.getHandednessByIndex(this._myRightThirdButtonGamepadHandedness) == Handedness.LEFT) {
+                leftGamepadToVirtualGamepadButtonIDMap.set(this._gamepadPropertyButtonIDToEnum(this._myRightThirdButtonGamepadButtonID), [Handedness.RIGHT, VirtualGamepadButtonID.THIRD_BUTTON]);
+            } else {
+                rightGamepadToVirtualGamepadButtonIDMap.set(this._gamepadPropertyButtonIDToEnum(this._myRightThirdButtonGamepadButtonID), [Handedness.RIGHT, VirtualGamepadButtonID.THIRD_BUTTON]);
+            }
+        }
+
+        if (this._myRightForthButtonVisible) {
+            if (InputUtils.getHandednessByIndex(this._myRightForthButtonGamepadHandedness) == Handedness.LEFT) {
+                leftGamepadToVirtualGamepadButtonIDMap.set(this._gamepadPropertyButtonIDToEnum(this._myRightForthButtonGamepadButtonID), [Handedness.RIGHT, VirtualGamepadButtonID.FOURTH_BUTTON]);
+            } else {
+                rightGamepadToVirtualGamepadButtonIDMap.set(this._gamepadPropertyButtonIDToEnum(this._myRightForthButtonGamepadButtonID), [Handedness.RIGHT, VirtualGamepadButtonID.FOURTH_BUTTON]);
+            }
+        }
+
+        if (this._myRightFifthButtonVisible) {
+            if (InputUtils.getHandednessByIndex(this._myRightFifthButtonGamepadHandedness) == Handedness.LEFT) {
+                leftGamepadToVirtualGamepadButtonIDMap.set(this._gamepadPropertyButtonIDToEnum(this._myRightFifthButtonGamepadButtonID), [Handedness.RIGHT, VirtualGamepadButtonID.FIFTH_BUTTON]);
+            } else {
+                rightGamepadToVirtualGamepadButtonIDMap.set(this._gamepadPropertyButtonIDToEnum(this._myRightFifthButtonGamepadButtonID), [Handedness.RIGHT, VirtualGamepadButtonID.FIFTH_BUTTON]);
+            }
+        }
+
+        const leftGamepadToVirtualGamepadAxesIDMap = new Map();
+        const rightGamepadToVirtualGamepadAxesIDMap = new Map();
+
+        if (this._myLeftThumbstickVisible) {
+            if (InputUtils.getHandednessByIndex(this._myLeftThumbstickGamepadHandedness) == Handedness.LEFT) {
+                leftGamepadToVirtualGamepadAxesIDMap.set(GamepadAxesID.THUMBSTICK, [Handedness.LEFT, VirtualGamepadAxesID.FIRST_AXES]);
+            } else {
+                rightGamepadToVirtualGamepadAxesIDMap.set(GamepadAxesID.THUMBSTICK, [Handedness.LEFT, VirtualGamepadAxesID.FIRST_AXES]);
+            }
+        }
+
+        if (this._myRightThumbstickVisible) {
+            if (InputUtils.getHandednessByIndex(this._myRightThumbstickGamepadHandedness) == Handedness.LEFT) {
+                leftGamepadToVirtualGamepadAxesIDMap.set(GamepadAxesID.THUMBSTICK, [Handedness.RIGHT, VirtualGamepadAxesID.FIRST_AXES]);
+            } else {
+                rightGamepadToVirtualGamepadAxesIDMap.set(GamepadAxesID.THUMBSTICK, [Handedness.RIGHT, VirtualGamepadAxesID.FIRST_AXES]);
+            }
+        }
+
+        const leftHandPose = Globals.getLeftGamepad(this.engine).getGamepadCore("pp_left_xr_gamepad").getHandPose();
+        const rightHandPose = Globals.getRightGamepad(this.engine).getGamepadCore("pp_right_xr_gamepad").getHandPose();
+        this._myLeftVirtualGamepadGamepadCore = new VirtualGamepadGamepadCore(this._myVirtualGamepad, leftHandPose, leftGamepadToVirtualGamepadButtonIDMap, leftGamepadToVirtualGamepadAxesIDMap);
+        this._myRightVirtualGamepadGamepadCore = new VirtualGamepadGamepadCore(this._myVirtualGamepad, rightHandPose, rightGamepadToVirtualGamepadButtonIDMap, rightGamepadToVirtualGamepadAxesIDMap);
+
+        Globals.getLeftGamepad(this.engine).addGamepadCore("pp_left_virtual_gamepad", this._myLeftVirtualGamepadGamepadCore);
+        Globals.getRightGamepad(this.engine).addGamepadCore("pp_right_virtual_gamepad", this._myRightVirtualGamepadGamepadCore);
+
     }
 
     _gamepadPropertyButtonIDToEnum(propertyButtonID) {

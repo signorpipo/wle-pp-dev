@@ -10,18 +10,18 @@ export class VirtualGamepadGamepadCore extends GamepadCore {
 
         this.myGamepadToVirtualGamepadButtonIDMap = new Map();
         if (gamepadToVirtualGamepadButtonIDMap == null) {
-            this.myGamepadToVirtualGamepadButtonIDMap.set(GamepadButtonID.SELECT, VirtualGamepadButtonID.SECOND_BUTTON);
-            this.myGamepadToVirtualGamepadButtonIDMap.set(GamepadButtonID.SQUEEZE, VirtualGamepadButtonID.FIRST_BUTTON);
-            this.myGamepadToVirtualGamepadButtonIDMap.set(GamepadButtonID.TOP_BUTTON, VirtualGamepadButtonID.THIRD_BUTTON);
-            this.myGamepadToVirtualGamepadButtonIDMap.set(GamepadButtonID.BOTTOM_BUTTON, VirtualGamepadButtonID.FOURTH_BUTTON);
-            this.myGamepadToVirtualGamepadButtonIDMap.set(GamepadButtonID.THUMBSTICK, VirtualGamepadButtonID.FIFTH_BUTTON);
+            this.myGamepadToVirtualGamepadButtonIDMap.set(GamepadButtonID.SQUEEZE, [this.getHandedness(), VirtualGamepadButtonID.FIRST_BUTTON]);
+            this.myGamepadToVirtualGamepadButtonIDMap.set(GamepadButtonID.SELECT, [this.getHandedness(), VirtualGamepadButtonID.SECOND_BUTTON]);
+            this.myGamepadToVirtualGamepadButtonIDMap.set(GamepadButtonID.TOP_BUTTON, [this.getHandedness(), VirtualGamepadButtonID.THIRD_BUTTON]);
+            this.myGamepadToVirtualGamepadButtonIDMap.set(GamepadButtonID.BOTTOM_BUTTON, [this.getHandedness(), VirtualGamepadButtonID.FOURTH_BUTTON]);
+            this.myGamepadToVirtualGamepadButtonIDMap.set(GamepadButtonID.THUMBSTICK, [this.getHandedness(), VirtualGamepadButtonID.FIFTH_BUTTON]);
         } else {
             this.myGamepadToVirtualGamepadButtonIDMap = gamepadToVirtualGamepadButtonIDMap;
         }
 
         this.myGamepadToVirtualGamepadAxesIDMap = new Map();
         if (gamepadToVirtualGamepadAxesIDMap == null) {
-            this.myGamepadToVirtualGamepadAxesIDMap.set(GamepadAxesID.THUMBSTICK, VirtualGamepadAxesID.FIRST_AXES);
+            this.myGamepadToVirtualGamepadAxesIDMap.set(GamepadAxesID.THUMBSTICK, [this.getHandedness(), VirtualGamepadAxesID.FIRST_AXES]);
         } else {
             this.myGamepadToVirtualGamepadAxesIDMap = gamepadToVirtualGamepadAxesIDMap;
         }
@@ -42,8 +42,8 @@ export class VirtualGamepadGamepadCore extends GamepadCore {
         this._myButtonData.reset();
 
         if (this.isGamepadCoreActive()) {
-            const virtualGamepadButtonID = this.myGamepadToVirtualGamepadButtonIDMap.get(buttonID);
-            if (virtualGamepadButtonID != null && this._myVirtualGamepad.isButtonPressed(this.getHandedness(), virtualGamepadButtonID)) {
+            const virtualGamepadButtonInfo = this.myGamepadToVirtualGamepadButtonIDMap.get(buttonID);
+            if (virtualGamepadButtonInfo != null && this._myVirtualGamepad.isButtonPressed(virtualGamepadButtonInfo[0], virtualGamepadButtonInfo[1])) {
                 this._myButtonData.myPressed = true;
                 this._myButtonData.myTouched = true;
                 this._myButtonData.myValue = 1;
@@ -57,9 +57,9 @@ export class VirtualGamepadGamepadCore extends GamepadCore {
         this._myAxesData.reset();
 
         if (this.isGamepadCoreActive()) {
-            const virtualGamepadAxesID = this.myGamepadToVirtualGamepadAxesIDMap.get(axesID);
-            if (virtualGamepadAxesID != null) {
-                this._myVirtualGamepad.getAxes(this.getHandedness(), virtualGamepadAxesID, this._myAxesData.myAxes);
+            const virtualGamepadAxesInfo = this.myGamepadToVirtualGamepadAxesIDMap.get(axesID);
+            if (virtualGamepadAxesInfo != null) {
+                this._myVirtualGamepad.getAxes(virtualGamepadAxesInfo[0], virtualGamepadAxesInfo[1], this._myAxesData.myAxes);
             }
         }
 
