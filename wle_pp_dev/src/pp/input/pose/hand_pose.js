@@ -34,10 +34,13 @@ export class HandPose extends BasePose {
 
         this._mySwitchToTrackedHandDelay = handPoseParams.mySwitchToTrackedHandDelay;
         this._mySwitchToTrackedHandTimer = new Timer(this._mySwitchToTrackedHandDelay, false);
+        this._myDisableSwitchToTrackedHandDelaySessionChangeFrameCounter = 0;
+        this._myDisableSwitchToTrackedHandDelaySessionChangeTimer = new Timer(1, false);
 
         this._myTrackedHand = false;
 
         this._myInputSourcesChangeEventListener = null;
+        this._myVisibilityChangeEventListener = null;
     }
 
     getHandedness() {
@@ -108,11 +111,21 @@ export class HandPose extends BasePose {
                 }
             }
         }
+
+        if (this._myDisableSwitchToTrackedHandDelaySessionChangeFrameCounter > 0) {
+            this._myDisableSwitchToTrackedHandDelaySessionChangeFrameCounter--;
+        } else {
+            this._myDisableSwitchToTrackedHandDelaySessionChangeTimer.update(dt);
+        }
     }
 
     _onXRSessionStartHook(manualCall, session) {
+        this._myDisableSwitchToTrackedHandDelaySessionChangeFrameCounter = 10;
+        this._myDisableSwitchToTrackedHandDelaySessionChangeTimer.start();
+
         this._myInputSourcesChangeEventListener = () => {
-            if (this._mySwitchToTrackedHandDelay > 0 && session.trackedSources != null) {
+            if (this._mySwitchToTrackedHandDelay > 0 && session.trackedSources != null &&
+                this._myDisableSwitchToTrackedHandDelaySessionChangeFrameCounter == 0 && !this._myDisableSwitchToTrackedHandDelaySessionChangeTimer.isRunning()) {
                 const currentInputSourceType = this._myRealInputSource != null ? InputUtils.getInputSourceType(this._myRealInputSource) : null;
                 if (currentInputSourceType == InputSourceType.GAMEPAD) {
                     this._myGamepadWasUsedFrameCounter = 3;
@@ -187,6 +200,22 @@ export class HandPose extends BasePose {
         this._myInputSourcesChangeEventListener();
 
         session.addEventListener("inputsourceschange", this._myInputSourcesChangeEventListener);
+
+        this._myVisibilityChangeEventListener = () => {
+            this._myGamepadWasUsedFrameCounter = 0;
+            this._myLastGamepadInputSource = null;
+
+            this._myInputSourceChangeDirty = false;
+
+            this._mySwitchToTrackedHandTimer.reset();
+
+            this._myRealInputSource = null;
+
+            this._myDisableSwitchToTrackedHandDelaySessionChangeFrameCounter = 10;
+            this._myDisableSwitchToTrackedHandDelaySessionChangeTimer.start();
+        };
+
+        session.addEventListener("visibilitychange", this._myVisibilityChangeEventListener);
     }
 
     _onXRSessionEndHook() {
@@ -200,12 +229,16 @@ export class HandPose extends BasePose {
         this._myInputSourceChangeDirty = false;
 
         this._mySwitchToTrackedHandTimer.reset();
+        this._myDisableSwitchToTrackedHandDelaySessionChangeFrameCounter = 0;
+        this._myDisableSwitchToTrackedHandDelaySessionChangeTimer.reset();
 
         this._myInputSourcesChangeEventListener = null;
+        this._myVisibilityChangeEventListener = null;
     }
 
     _destroyHook() {
         XRUtils.getSession(this.getEngine())?.removeEventListener("inputsourceschange", this._myInputSourcesChangeEventListener);
+        XRUtils.getSession(this.getEngine())?.removeEventListener("visibilitychange", this._myVisibilityChangeEventListener);
     }
 }
 
