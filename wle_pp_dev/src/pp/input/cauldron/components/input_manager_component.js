@@ -25,6 +25,8 @@ export class InputManagerComponent extends Component {
             this._myInputManager.setTrackedHandPosesEnabled(this._myEnableTrackedHandPoses);
             this._myInputManager.getLeftHandPose().setSwitchToTrackedHandDelay(this._mySwitchToTrackedHandDelay);
             this._myInputManager.getRightHandPose().setSwitchToTrackedHandDelay(this._mySwitchToTrackedHandDelay);
+            this._myInputManager.getLeftHandRayPose().setSwitchToTrackedHandDelay(this._mySwitchToTrackedHandDelay);
+            this._myInputManager.getRightHandRayPose().setSwitchToTrackedHandDelay(this._mySwitchToTrackedHandDelay);
 
             Globals.setInputManager(this._myInputManager, this.engine);
         }
