@@ -70,12 +70,7 @@ export class GrabberHandComponent extends Component {
     update(dt) {
         this._myCollisionsCollector.update(dt);
 
-        const currentInputSource = this._myGamepad.getHandPose().getInputSource();
-
-        let currentInputSourceType = null;
-        if (currentInputSource != null) {
-            currentInputSourceType = InputUtils.getInputSourceType(currentInputSource);
-        }
+        const currentInputSourceType = this._myGamepad.getHandPose(this.engine).getInputSourceType();
 
         if (this._myPrevInputSourceType != currentInputSourceType) {
             this.throw();

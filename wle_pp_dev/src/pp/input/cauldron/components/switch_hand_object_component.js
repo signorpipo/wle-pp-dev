@@ -1,5 +1,6 @@
 import { Component, Property } from "@wonderlandengine/api";
 import { XRUtils } from "../../../cauldron/utils/xr_utils.js";
+import { Globals } from "../../../pp/globals.js";
 import { InputSourceType } from "../input_types.js";
 import { InputUtils } from "../input_utils.js";
 
@@ -37,7 +38,7 @@ export class SwitchHandObjectComponent extends Component {
                 this._myTrackedHand.pp_setActive(false);
             }
         } else {
-            let inputSourceType = InputUtils.getInputSourceTypeByHandedness(this._myHandednessType, this.engine);
+            let inputSourceType = Globals.getHandPoses(this.engine)[this._myHandednessType].getInputSourceType();
             if (this._myCurrentInputSourceType != inputSourceType) {
                 this._myCurrentInputSourceType = inputSourceType;
 

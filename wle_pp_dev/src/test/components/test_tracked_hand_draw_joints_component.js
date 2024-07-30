@@ -1,4 +1,5 @@
 import { Component, Property } from "@wonderlandengine/api";
+import { Globals } from "wle-pp";
 import { XRUtils } from "../../pp/cauldron/utils/xr_utils.js";
 import { Handedness, InputSourceType } from "../../pp/input/cauldron/input_types.js";
 import { InputUtils } from "../../pp/input/cauldron/input_utils.js";
@@ -28,7 +29,12 @@ export class TestTrackedHandDrawJointsComponent extends Component {
 
     update(dt) {
         this._myHandPose.update(dt);
-        let handInputSource = InputUtils.getInputSource(this._myHandednessType, InputSourceType.TRACKED_HAND);
+        let handInputSource = null;
+
+        const handPose = Globals.getHandPoses(this.engine)[this._myHandednessType];
+        if (handPose.getInputSourceType() == InputSourceType.TRACKED_HAND) {
+            handInputSource = handPose.getInputSource();
+        }
 
         if (handInputSource) {
             let xrFrame = XRUtils.getFrame(this.engine);
