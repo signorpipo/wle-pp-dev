@@ -13,10 +13,10 @@ export class SetHandRayLocalTransformComponent extends Component {
     start() {
         this._myHandednessType = InputUtils.getHandednessByIndex(this._myHandedness);
 
-        Globals.getHandRayPose(this._myHandednessType, this.engine).registerPoseUpdatedEventListener(this, this.onPoseUpdated.bind(this));
+        Globals.getHandRayPose(this._myHandednessType, this.engine).registerPoseUpdatedEventListener(this, this._onPoseUpdated.bind(this));
     }
 
-    onPoseUpdated(dt, pose) {
+    _onPoseUpdated(dt, pose) {
         // Implemented outside class definition
     }
 
@@ -29,9 +29,9 @@ export class SetHandRayLocalTransformComponent extends Component {
 
 // IMPLEMENTATION
 
-SetHandRayLocalTransformComponent.prototype.onPoseUpdated = function () {
+SetHandRayLocalTransformComponent.prototype._onPoseUpdated = function () {
     let handPoseTransform = quat2_create();
-    return function onPoseUpdated(dt, pose) {
+    return function _onPoseUpdated(dt, pose) {
         if (this.active) {
             if (XRUtils.isSessionActive(this.engine)) {
                 if (pose.isValid()) {
