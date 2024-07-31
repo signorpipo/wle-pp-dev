@@ -170,7 +170,7 @@ export class VirtualGamepadParams {
             }
         }
 
-        // Visibility
+        // Enabled
 
         this.myButtonsEnabled[Handedness.LEFT][VirtualGamepadButtonID.FIRST_BUTTON] = true;
         this.myButtonsEnabled[Handedness.LEFT][VirtualGamepadButtonID.SECOND_BUTTON] = true;
