@@ -76,6 +76,7 @@ export { QuatUtils } from "./cauldron/utils/array/quat_utils.js";
 export { Quat2Utils } from "./cauldron/utils/array/quat2_utils.js";
 export { Mat3Utils } from "./cauldron/utils/array/mat3_utils.js";
 export { Mat4Utils } from "./cauldron/utils/array/mat4_utils.js";
+export { VecAllocationUtils } from "./cauldron/utils/array/vec_allocation_utils.js";
 
 export { JSUtils } from "./cauldron/utils/js_utils.js";
 export { MathUtils, EasingFunction, EasingFunctionName, WaveFunction } from "./cauldron/utils/math_utils.js";

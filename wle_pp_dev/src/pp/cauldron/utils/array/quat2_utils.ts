@@ -5,7 +5,7 @@ import { create as mat3_utils_create } from "./mat3_utils.js";
 import { Mat4Utils } from "./mat4_utils.js";
 import { QuatUtils, create as quat_utils_create } from "./quat_utils.js";
 import { Vec3Utils, create as vec3_utils_create } from "./vec3_utils.js";
-import { getQuaternion2AllocationFunction, setQuaternion2AllocationFunction } from "./vec_allocation_functions.js";
+import { getQuaternion2AllocationFunction, setQuaternion2AllocationFunction } from "./vec_allocation_utils.js";
 
 export function create(): Quaternion2;
 export function create(x1: number, y1: number, z1: number, w1: number, x2: number, y2: number, z2: number, w2: number): Quaternion2;

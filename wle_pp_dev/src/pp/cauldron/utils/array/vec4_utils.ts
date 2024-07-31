@@ -1,7 +1,7 @@
 import { vec4 as gl_vec4, type vec4 as gl_vec4_type } from "gl-matrix";
 import { Vector4 } from "../../type_definitions/array_type_definitions.js";
 import { EasingFunction } from "../math_utils.js";
-import { getVector4AllocationFunction, setVector4AllocationFunction } from "./vec_allocation_functions.js";
+import { getVector4AllocationFunction, setVector4AllocationFunction } from "./vec_allocation_utils.js";
 
 export function create(): Vector4;
 export function create(x: number, y: number, z: number, w: number): Vector4;

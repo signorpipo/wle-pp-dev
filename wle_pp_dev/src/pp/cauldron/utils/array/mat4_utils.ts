@@ -5,7 +5,7 @@ import { MathUtils } from "../math_utils.js";
 import { Quat2Utils } from "./quat2_utils.js";
 import { QuatUtils, create as quat_utils_create } from "./quat_utils.js";
 import { Vec3Utils, create as vec3_utils_create, set as vec3_utils_set } from "./vec3_utils.js";
-import { getMatrix4AllocationFunction, setMatrix4AllocationFunction } from "./vec_allocation_functions.js";
+import { getMatrix4AllocationFunction, setMatrix4AllocationFunction } from "./vec_allocation_utils.js";
 
 export function create(): Matrix4;
 export function create(

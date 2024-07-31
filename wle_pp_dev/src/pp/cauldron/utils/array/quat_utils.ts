@@ -4,7 +4,7 @@ import { EasingFunction, MathUtils } from "../math_utils.js";
 import { ArrayUtils } from "./array_utils.js";
 import { Mat3Utils, create as mat3_utils_create } from "./mat3_utils.js";
 import { Vec3Utils, create as vec3_utils_create } from "./vec3_utils.js";
-import { getQuaternionAllocationFunction, setQuaternionAllocationFunction } from "./vec_allocation_functions.js";
+import { getQuaternionAllocationFunction, setQuaternionAllocationFunction } from "./vec_allocation_utils.js";
 
 export function create(): Quaternion;
 export function create(x: number, y: number, z: number, w: number): Quaternion;

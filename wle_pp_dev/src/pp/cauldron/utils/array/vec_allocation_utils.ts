@@ -94,3 +94,24 @@ export function setMatrix4AllocationFunction(allocationFunction: () => Matrix4):
 export function getMatrix4AllocationFunction(): () => Matrix4 {
     return _myMatrix4AllocationFunction;
 }
+
+
+
+export const VecAllocationUtils = {
+    setVectorAllocationFunction,
+    getVectorAllocationFunction,
+    setVector2AllocationFunction,
+    getVector2AllocationFunction,
+    setVector3AllocationFunction,
+    getVector3AllocationFunction,
+    setVector4AllocationFunction,
+    getVector4AllocationFunction,
+    setQuaternionAllocationFunction,
+    getQuaternionAllocationFunction,
+    setQuaternion2AllocationFunction,
+    getQuaternion2AllocationFunction,
+    setMatrix3AllocationFunction,
+    getMatrix3AllocationFunction,
+    setMatrix4AllocationFunction,
+    getMatrix4AllocationFunction
+} as const;

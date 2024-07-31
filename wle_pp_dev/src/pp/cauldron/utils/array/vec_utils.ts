@@ -1,6 +1,6 @@
 import { Vector } from "../../type_definitions/array_type_definitions.js";
 import { EasingFunction, MathUtils } from "../math_utils.js";
-import { getVectorAllocationFunction, setVectorAllocationFunction } from "./vec_allocation_functions.js";
+import { getVectorAllocationFunction, setVectorAllocationFunction } from "./vec_allocation_utils.js";
 
 export function create(length: number): Vector;
 export function create(firstValue: number, ...remainingValues: number[]): Vector;

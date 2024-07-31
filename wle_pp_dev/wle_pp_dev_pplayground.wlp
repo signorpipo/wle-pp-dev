@@ -48,7 +48,8 @@
                         "_myTeleportValidMaterial": "90348bdc-8768-4244-9398-b89361708289",
                         "_myTeleportInvalidMaterial": "6c7363ad-f7ee-465b-9031-541e40292fff",
                         "_myAlwaysSmoothForNonVR": false,
-                        "_myMoveThroughCollisionShortcutEnabled": true
+                        "_myMoveThroughCollisionShortcutEnabled": true,
+                        "_myFlyEnabled": true
                     }
                 }
             ],

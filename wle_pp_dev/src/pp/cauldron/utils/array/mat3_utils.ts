@@ -2,7 +2,7 @@ import { mat3 as gl_mat3, quat as gl_quat, type mat3 as gl_mat3_type, type quat 
 import { Matrix3, Quaternion, Vector3 } from "../../type_definitions/array_type_definitions.js";
 import { QuatUtils, create as quat_utils_create } from "./quat_utils.js";
 import { Vec3Utils } from "./vec3_utils.js";
-import { getMatrix3AllocationFunction, setMatrix3AllocationFunction } from "./vec_allocation_functions.js";
+import { getMatrix3AllocationFunction, setMatrix3AllocationFunction } from "./vec_allocation_utils.js";
 
 export function create(): Matrix3;
 export function create(m00: number, m01: number, m02: number, m10: number, m11: number, m12: number, m20: number, m21: number, m22: number): Matrix3;
