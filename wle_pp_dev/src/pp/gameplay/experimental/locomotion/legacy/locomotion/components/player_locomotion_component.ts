@@ -172,12 +172,10 @@ export class PlayerLocomotionComponent extends Component {
 
 
 
-    /** Valid means, for example, that the real player has not moved inside a wall by moving in the real space.
-        Works 100% properly only if it has the same value as `_myViewOcclusionInsideWallsEnabled` (both true or false)  */
+    /** Valid means, for example, that the real player has not moved inside a wall by moving in the real space */
     @property.bool(true)
     private readonly _mySyncWithRealWorldPositionOnlyIfValid!: boolean;
 
-    /** Works 100% properly only if it has the same value as `_mySyncWithRealWorldPositionOnlyIfValid` (both true or false)  */
     @property.bool(true)
     private readonly _myViewOcclusionInsideWallsEnabled!: boolean;
 

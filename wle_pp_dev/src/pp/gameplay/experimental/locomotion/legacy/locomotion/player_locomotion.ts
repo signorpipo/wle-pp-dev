@@ -117,11 +117,9 @@ export class PlayerLocomotionParams {
     public myResetHeadToRealMinDistance: number = 0;
 
 
-    /** Valid means, for example, that the real player has not moved inside a wall by moving in the real space.
-        Works 100% properly only if it has the same value as `_myViewOcclusionInsideWallsEnabled` (both true or false)  */
+    /** Valid means, for example, that the real player has not moved inside a wall by moving in the real space */
     public mySyncWithRealWorldPositionOnlyIfValid: boolean = true;
 
-    /** Works 100% properly only if it has the same value as `_mySyncWithRealWorldPositionOnlyIfValid` (both true or false)  */
     public myViewOcclusionInsideWallsEnabled: boolean = true;
     public myViewOcclusionLayerFlags: Readonly<PhysicsLayerFlags> = new PhysicsLayerFlags();
 
@@ -262,16 +260,21 @@ export class PlayerLocomotion {
 
             params.myHeadRadius = 0.2;
 
-            params.myAlwaysSyncPositionWithReal = !this._myParams.mySyncWithRealWorldPositionOnlyIfValid;
-            params.myAlwaysSyncHeadPositionWithReal = false;
-
-            if (!this._myParams.myViewOcclusionInsideWallsEnabled && !this._myParams.mySyncWithRealWorldPositionOnlyIfValid) {
+            if (!this._myParams.mySyncWithRealWorldPositionOnlyIfValid) {
                 params.mySyncEnabledFlagMap.set(PlayerTransformManagerSyncFlag.BODY_COLLIDING, false);
-                params.mySyncEnabledFlagMap.set(PlayerTransformManagerSyncFlag.HEAD_COLLIDING, false);
                 params.mySyncEnabledFlagMap.set(PlayerTransformManagerSyncFlag.FAR, false);
                 params.mySyncEnabledFlagMap.set(PlayerTransformManagerSyncFlag.FLOATING, false);
 
-                params.myAlwaysSyncHeadPositionWithReal = !this._myParams.mySyncWithRealWorldPositionOnlyIfValid;
+                params.myAlwaysSyncPositionWithReal = true;
+            }
+
+            if (!this._myParams.myViewOcclusionInsideWallsEnabled) {
+                params.mySyncEnabledFlagMap.set(PlayerTransformManagerSyncFlag.HEAD_COLLIDING, false);
+
+                params.myAlwaysSyncHeadPositionWithReal = true;
+
+                params.myUpdatePositionHeadValid = false;
+                params.myUpdateRealPositionHeadValid = false;
             }
 
             params.myMaxDistanceFromRealToSyncEnabled = true;
