@@ -380,22 +380,22 @@ export class PlayerTransformManager {
         {
             teleportTransformQuat: quat2_create()
         };
-    public teleportPosition(teleportPosition: Readonly<Vector3>, outCollisionRuntimeParams: CollisionRuntimeParams | null = null, forceTeleport: boolean = false): void {
+    public teleportPosition(teleportPosition: Readonly<Vector3>, outCollisionRuntimeParams: CollisionRuntimeParams | null = null, forceTeleport: boolean = false, forceTeleportSkipCollisionCheck: boolean = false): void {
         const teleportTransformQuat = PlayerTransformManager._teleportPositionSV.teleportTransformQuat;
         this.getTransformQuat(teleportTransformQuat);
         teleportTransformQuat.quat2_setPosition(teleportPosition);
-        this.teleportTransformQuat(teleportTransformQuat, outCollisionRuntimeParams, forceTeleport);
+        this.teleportTransformQuat(teleportTransformQuat, outCollisionRuntimeParams, forceTeleport, forceTeleportSkipCollisionCheck);
     }
 
     private static readonly _teleportPositionRotationQuatSV =
         {
             teleportTransformQuat: quat2_create()
         };
-    public teleportPositionRotationQuat(teleportPosition: Readonly<Vector3>, rotationQuat: Quaternion, outCollisionRuntimeParams: CollisionRuntimeParams | null = null, forceTeleport: boolean = false): void {
+    public teleportPositionRotationQuat(teleportPosition: Readonly<Vector3>, rotationQuat: Quaternion, outCollisionRuntimeParams: CollisionRuntimeParams | null = null, forceTeleport: boolean = false, forceTeleportSkipCollisionCheck: boolean = false): void {
         const teleportTransformQuat = PlayerTransformManager._teleportPositionRotationQuatSV.teleportTransformQuat;
         this.getTransformQuat(teleportTransformQuat);
         teleportTransformQuat.quat2_setPositionRotationQuat(teleportPosition, rotationQuat);
-        this.teleportTransformQuat(teleportTransformQuat, outCollisionRuntimeParams, forceTeleport);
+        this.teleportTransformQuat(teleportTransformQuat, outCollisionRuntimeParams, forceTeleport, forceTeleportSkipCollisionCheck);
     }
 
     private static readonly _teleportTransformQuatSV =
@@ -406,7 +406,7 @@ export class PlayerTransformManager {
             rotatedTransformQuat: quat2_create(),
             fixedMovement: vec3_create()
         };
-    public teleportTransformQuat(teleportTransformQuat: Readonly<Quaternion2>, outCollisionRuntimeParams: CollisionRuntimeParams | null = null, forceTeleport: boolean = false): void {
+    public teleportTransformQuat(teleportTransformQuat: Readonly<Quaternion2>, outCollisionRuntimeParams: CollisionRuntimeParams | null = null, forceTeleport: boolean = false, forceTeleportSkipCollisionCheck: boolean = false): void {
         const currentPosition = PlayerTransformManager._teleportTransformQuatSV.currentPosition;
         const teleportPositionVec = PlayerTransformManager._teleportTransformQuatSV.teleportPositionVec;
         const teleportRotation = PlayerTransformManager._teleportTransformQuatSV.teleportRotation;
@@ -416,7 +416,10 @@ export class PlayerTransformManager {
         teleportTransformQuat.quat2_getRotationQuat(teleportRotation);
         rotatedTransformQuat.quat2_setPositionRotationQuat(currentPosition, teleportRotation);
 
-        CollisionCheckBridge.getCollisionCheck(this._myParams.myEngine as any).teleport(teleportPositionVec, rotatedTransformQuat, this._myParams.myTeleportCollisionCheckParams, this._myCollisionRuntimeParams);
+        if (!forceTeleport || !forceTeleportSkipCollisionCheck) {
+            CollisionCheckBridge.getCollisionCheck(this._myParams.myEngine as any).teleport(teleportPositionVec, rotatedTransformQuat, this._myParams.myTeleportCollisionCheckParams, this._myCollisionRuntimeParams);
+        }
+
         if (outCollisionRuntimeParams != null) {
             outCollisionRuntimeParams.copy(this._myCollisionRuntimeParams);
         }
@@ -463,8 +466,8 @@ export class PlayerTransformManager {
     }
 
     /** Quick way to force teleport to a position and reset the real to this */
-    public forceTeleportAndReset(teleportPosition: Readonly<Vector3>, teleportRotationQuat: Readonly<Quaternion>): void {
-        this.teleportPositionRotationQuat(teleportPosition, teleportRotationQuat, null, true);
+    public forceTeleportAndReset(teleportPosition: Readonly<Vector3>, teleportRotationQuat: Readonly<Quaternion>, forceTeleportSkipCollisionCheck: boolean = false): void {
+        this.teleportPositionRotationQuat(teleportPosition, teleportRotationQuat, null, true, forceTeleportSkipCollisionCheck);
 
         this.resetReal(true, true, undefined, undefined, undefined, true);
     }
