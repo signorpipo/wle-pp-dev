@@ -70,12 +70,7 @@ export class XRGamepadCore extends GamepadCore {
                     button = this._myGamepad.buttons[3];
                     break;
                 case GamepadButtonID.TOP_BUTTON:
-                    if (this._myGamepad.buttons.length >= 6) {
-                        button = this._myGamepad.buttons[5];
-                    } else if (this._myGamepad.buttons.length >= 3) {
-                        // This way if you are using a basic touch gamepad, top button will work anyway
-                        button = this._myGamepad.buttons[2];
-                    }
+                    button = this._myGamepad.buttons[5];
                     break;
                 case GamepadButtonID.BOTTOM_BUTTON:
                     button = this._myGamepad.buttons[4];
@@ -87,8 +82,14 @@ export class XRGamepadCore extends GamepadCore {
                     button = null;
                     break;
                 case GamepadButtonID.MENU:
-                    button = this._myGamepad.buttons[7];
-                    break;
+                    {
+                        const inputSourceProfiles = this._myInputSource.profiles;
+                        if (inputSourceProfiles.includes("oculus-touch-v3")) {
+                            button = this._myGamepad.buttons[this._myGamepad.buttons.length - 1];
+                        }
+
+                        break;
+                    }
                 case GamepadButtonID.TOUCHPAD:
                     button = this._myGamepad.buttons[2];
                     break;
