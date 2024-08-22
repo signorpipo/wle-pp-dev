@@ -57,7 +57,7 @@ export class TrackedHandPose {
     }
 
     getEngine() {
-        this._myEngine;
+        return this._myEngine;
     }
 
     getHandedness() {

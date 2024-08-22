@@ -166,7 +166,7 @@ export class PlayerObscureManager {
     }
 
     getCurrentObscureLevel() {
-        this._myCurrentObscureLevel;
+        return this._myCurrentObscureLevel;
     }
 
     overrideObscureLevel(obscureLevel, instantFade = false) {

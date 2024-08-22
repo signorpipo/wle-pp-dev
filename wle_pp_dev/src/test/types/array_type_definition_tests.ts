@@ -55,5 +55,5 @@ function __test(): void {
 
     dynamicArrayLikeFromArray.push(1);
 
-    stringArray.length;
+    const __stringArrayLength = stringArray.length;
 }
