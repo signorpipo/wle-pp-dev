@@ -83,16 +83,16 @@ export class PlayerLocomotionComponent extends Component {
     @property.float(30)
     private readonly _myMinAngleToFlyUpNonVR!: number;
 
-    @property.float(50)
+    @property.float(40)
     private readonly _myMinAngleToFlyDownNonVR!: number;
 
-    @property.float(60)
+    @property.float(30)
     private readonly _myMinAngleToFlyUpVR!: number;
 
-    @property.float(1)
+    @property.float(40)
     private readonly _myMinAngleToFlyDownVR!: number;
 
-    @property.float(60)
+    @property.float(90)
     private readonly _myMinAngleToFlyRight!: number;
 
 
