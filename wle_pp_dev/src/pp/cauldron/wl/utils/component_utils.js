@@ -179,7 +179,11 @@ export function isRegistered(classOrType, engine = Globals.getMainEngine()) {
     return ComponentUtils.getClassFromType(type, engine) != null;
 }
 
-export function getJavascriptComponentInstances(engine = Globals.getMainEngine()) {
+export function getJavascriptComponentInstances(currentSceneOnly = true, engine = Globals.getMainEngine()) {
+    if (currentSceneOnly) {
+        return Globals.getScene(engine)._jsComponents;
+    }
+
     return Globals.getWASM(engine)._components;
 }
 
