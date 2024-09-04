@@ -44,7 +44,7 @@ export const raycast = function () {
 
     const insideCheckSubVector = vec3_create();
     const invertedRaycastDirection = vec3_create();
-    const objectsEqualCallback = (first: Readonly<Object3D>, second: Readonly<Object3D>): boolean => first.pp_equals(second);
+    const objectsEqualCallback = (first: Readonly<Object3D>, second: Readonly<Object3D>): boolean => first == second;
     return function raycast(raycastParams: Readonly<RaycastParams>, raycastResults: RaycastResults = new RaycastResults()): RaycastResults {
         const internalRaycastResults = raycastParams.myPhysics.rayCast(raycastParams.myOrigin, raycastParams.myDirection, raycastParams.myBlockLayerFlags.getMask(), raycastParams.myDistance);
 

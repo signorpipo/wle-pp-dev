@@ -686,8 +686,6 @@ export interface Object3DExtension {
 
     pp_isTransformChanged(this: Readonly<Object3D>): boolean;
 
-    pp_equals(this: Readonly<Object3D>, object: Readonly<Object3D>): boolean;
-
     pp_destroy(this: Object3D): void;
 
 

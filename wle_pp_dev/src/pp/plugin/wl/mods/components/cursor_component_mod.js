@@ -428,7 +428,7 @@ function _initCursorComponentModPrototype() {
     cursorComponentMod._pp_hoverBehaviour = function _pp_hoverBehaviour(hitObject, hitLocation, hitTestResults, originalEvent = null, forceUnhover = false) {
         if (!forceUnhover && hitObject != null) {
             let hoveringObjectChanged = false;
-            if (this.hoveringObject == null || !this.hoveringObject.pp_equals(hitObject)) {
+            if (this.hoveringObject == null || this.hoveringObject != hitObject) {
                 // Unhover previous, if exists 
                 if (this.hoveringObject != null) {
                     if (!this.hoveringReality) {
@@ -502,7 +502,7 @@ function _initCursorComponentModPrototype() {
                 }
 
                 // Multiple Clicks 
-                if (this._tripleClickTimer > 0 && this._multipleClickObject && this._multipleClickObject.pp_equals(this.hoveringObject)) {
+                if (this._tripleClickTimer > 0 && this._multipleClickObject && this._multipleClickObject == this.hoveringObject) {
                     if (!this.hoveringReality) {
                         if (this.hoveringObjectTarget) this.hoveringObjectTarget.onTripleClick.notify(this.hoveringObject, this, originalEvent);
                         this.globalTarget.onTripleClick.notify(this.hoveringObject, this, originalEvent);
@@ -511,7 +511,7 @@ function _initCursorComponentModPrototype() {
                     }
 
                     this._tripleClickTimer = 0;
-                } else if (this._doubleClickTimer > 0 && this._multipleClickObject && this._multipleClickObject.pp_equals(this.hoveringObject)) {
+                } else if (this._doubleClickTimer > 0 && this._multipleClickObject && this._multipleClickObject == this.hoveringObject) {
                     if (!this.hoveringReality) {
                         if (this.hoveringObjectTarget) this.hoveringObjectTarget.onDoubleClick.notify(this.hoveringObject, this, originalEvent);
                         this.globalTarget.onDoubleClick.notify(this.hoveringObject, this, originalEvent);

@@ -273,7 +273,7 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable 
 
     let teleportCollisionRuntimeParams = new CollisionRuntimeParams();
 
-    let objectsEqualCallback = (first, second) => first.pp_equals(second);
+    let objectsEqualCallback = (first, second) => first == second;
     return function _detectTeleportPositionParable(startPosition, direction, up) {
         this._myDetectionRuntimeParams.myParable.setStartPosition(startPosition);
         this._myDetectionRuntimeParams.myParable.setForward(direction);
@@ -736,7 +736,7 @@ PlayerLocomotionTeleportDetectionState.prototype._isPositionVisible = function (
     let raycastParams = new RaycastParams();
     let raycastResult = new RaycastResults();
 
-    let objectsEqualCallback = (first, second) => first.pp_equals(second);
+    let objectsEqualCallback = (first, second) => first == second;
     return function _isPositionVisible(position) {
         let isVisible = true;
 

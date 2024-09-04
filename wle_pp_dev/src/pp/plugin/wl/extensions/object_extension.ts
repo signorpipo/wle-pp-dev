@@ -1249,10 +1249,6 @@ function _initObjectExtensionProtoype(): void {
             return ObjectUtils.isTransformChanged(this);
         },
 
-        pp_equals(this: Readonly<Object3D>, object: Readonly<Object3D>): boolean {
-            return ObjectUtils.equals(this, object);
-        },
-
         pp_destroy(this: Object3D): void {
             return ObjectUtils.destroy(this);
         },

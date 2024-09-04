@@ -44,7 +44,7 @@ export class OverlapCursorComponent extends Component {
 
     private static _SV = {
         componentEqualCallback(first: CursorTarget, second: CursorTarget): boolean {
-            return first.equals(second);
+            return first == second;
         }
     };
 
@@ -126,7 +126,7 @@ export class OverlapCursorComponent extends Component {
 
         if (bestCursorTarget == null) {
             this._targetOverlapEnd();
-        } else if (!bestCursorTarget.equals(this._myLastTarget)) {
+        } else if (bestCursorTarget != this._myLastTarget) {
             this._targetOverlapEnd();
 
             this._myLastTarget = bestCursorTarget;
@@ -188,11 +188,11 @@ export class OverlapCursorComponent extends Component {
 
             this._myLastTarget.onClick.notify(this._myLastTarget.object, this._myFakeCursor);
 
-            if (this._myTripleClickTimer > 0 && this._myMultipleClickObject && this._myMultipleClickObject.pp_equals(this._myLastTarget.object)) {
+            if (this._myTripleClickTimer > 0 && this._myMultipleClickObject && this._myMultipleClickObject == this._myLastTarget.object) {
                 this._myLastTarget.onTripleClick.notify(this._myLastTarget.object, this._myFakeCursor);
 
                 this._myTripleClickTimer = 0;
-            } else if (this._myDoubleClickTimer > 0 && this._myMultipleClickObject && this._myMultipleClickObject.pp_equals(this._myLastTarget.object)) {
+            } else if (this._myDoubleClickTimer > 0 && this._myMultipleClickObject && this._myMultipleClickObject == this._myLastTarget.object) {
                 this._myLastTarget.onDoubleClick.notify(this._myLastTarget.object, this._myFakeCursor);
 
                 this._myTripleClickTimer = OverlapCursorComponent._myMultipleClickDelay;
@@ -217,7 +217,7 @@ export class OverlapCursorComponent extends Component {
     private _pickBestCursorTarget(currentBestCursorTarget: CursorTarget | null, cursorTarget: CursorTarget): CursorTarget | null {
         let bestCursorTarget = currentBestCursorTarget;
 
-        if (cursorTarget.equals(this._myLastTarget)) {
+        if (cursorTarget == this._myLastTarget) {
             bestCursorTarget = cursorTarget;
         } else {
             const componentEqualCallback = OverlapCursorComponent._SV.componentEqualCallback;
