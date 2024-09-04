@@ -84,7 +84,7 @@ export class XRGamepadCore extends GamepadCore {
                 case GamepadButtonID.MENU:
                     {
                         const inputSourceProfiles = this._myInputSource.profiles;
-                        if (inputSourceProfiles.includes("oculus-touch-v3")) {
+                        if (inputSourceProfiles.includes("oculus-touch-v3") || inputSourceProfiles.includes("meta-quest-touch-pro")) {
                             button = this._myGamepad.buttons[this._myGamepad.buttons.length - 1];
                         }
 
