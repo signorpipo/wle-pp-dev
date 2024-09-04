@@ -3450,6 +3450,18 @@
                 "name": "lib\\Uniforms.glsl",
                 "file": "default"
             }
+        },
+        "9ded86d1-5b9c-44ad-8458-fbc625d841a4": {
+            "link": {
+                "name": "lib\\MorphTargets.glsl",
+                "file": "default"
+            }
+        },
+        "6ece0074-6003-4107-8484-30cd6eed4181": {
+            "link": {
+                "name": "lib\\PhysicalBSDF.glsl",
+                "file": "default"
+            }
         }
     },
     "settings": {
@@ -3457,8 +3469,8 @@
             "name": "wle-pp-dev-pplayground",
             "version": [
                 1,
-                1,
-                6
+                2,
+                2
             ],
             "customIndexHtml": true
         },
@@ -3468,7 +3480,10 @@
                 1.0,
                 0.8705882,
                 1.0
-            ]
+            ],
+            "hdr": {
+                "exposure": 1.5
+            }
         },
         "runtime": {
             "xrButtonColor": "white",
@@ -3698,5 +3713,6 @@
             "outlineSize": 0.075
         }
     },
-    "languages": {}
+    "languages": {},
+    "morphTargets": {}
 }
