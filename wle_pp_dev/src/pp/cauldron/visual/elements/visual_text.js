@@ -1,4 +1,4 @@
-import { Alignment, Justification, TextComponent } from "@wonderlandengine/api";
+import { Alignment, TextComponent, VerticalAlignment } from "@wonderlandengine/api";
 import { mat4_create, vec3_create } from "../../../plugin/js/extensions/array/vec_create_extension.js";
 import { Globals } from "../../../pp/globals.js";
 import { AbstractVisualElement, AbstractVisualElementParams } from "./visual_element.js";
@@ -16,7 +16,7 @@ export class VisualTextParams extends AbstractVisualElementParams {
 
         this.myText = "";
         this.myAlignment = Alignment.Center;
-        this.myJustification = Justification.Middle;
+        this.myVerticalAlignment = VerticalAlignment.Middle;
 
         this.myTransform = mat4_create();
 
@@ -98,7 +98,7 @@ export class VisualText extends AbstractVisualElement {
 VisualTextParams.prototype._copyHook = function _copyHook(other) {
     this.myText = other.myText;
     this.myAlignment = other.myAlignment;
-    this.myJustification = other.myJustification;
+    this.myVerticalAlignment = other.myVerticalAlignment;
 
     this.myTransform.mat4_copy(other.myTransform);
 
@@ -155,7 +155,7 @@ VisualText.prototype._refresh = function () {
 
         this._myTextComponent.text = this._myParams.myText;
         this._myTextComponent.alignment = this._myParams.myAlignment;
-        this._myTextComponent.justification = this._myParams.myJustification;
+        this._myTextComponent.verticalAlignment = this._myParams.myVerticalAlignment;
 
         this._myDirty = false;
     };
