@@ -22,9 +22,6 @@ module.exports = {
     rules: {
         "semi": "error",
         "no-unused-vars": "off",
-        "import/extensions": ["error", "always"],
-        "import/no-unresolved": "off",
-        "import/no-duplicates": "off",
         "@typescript-eslint/no-unused-vars": ["error", { "args": "none", "varsIgnorePattern": "^__", "caughtErrors": "none" }],
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/no-empty-object-type": "off"
