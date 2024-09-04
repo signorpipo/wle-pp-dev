@@ -366,7 +366,7 @@ export class PlayerObscureManager {
             this._myObscureMaterial.color = vec4_create(0, 0, 0, 1);
         }
 
-        this._myObscureParentObject = Globals.getPlayerObjects(this._myParams.myEngine).myCauldron.pp_addObject();
+        this._myObscureParentObject = Globals.getPlayerObjects(this._myParams.myEngine).myCauldron.pp_addChild();
 
         let obscureVisualParams = new VisualMeshParams(this._myParams.myEngine);
         obscureVisualParams.myMesh = Globals.getDefaultMeshes(this._myParams.myEngine).myInvertedSphere;

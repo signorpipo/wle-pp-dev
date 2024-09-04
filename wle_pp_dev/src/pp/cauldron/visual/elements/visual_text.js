@@ -74,7 +74,7 @@ export class VisualText extends AbstractVisualElement {
     }
 
     _build() {
-        this._myTextObject = Globals.getSceneObjects(this._myParams.myParent.pp_getEngine()).myVisualElements.pp_addObject();
+        this._myTextObject = Globals.getSceneObjects(this._myParams.myParent.pp_getEngine()).myVisualElements.pp_addChild();
         this._myTextComponent = this._myTextObject.pp_addComponent(TextComponent);
     }
 

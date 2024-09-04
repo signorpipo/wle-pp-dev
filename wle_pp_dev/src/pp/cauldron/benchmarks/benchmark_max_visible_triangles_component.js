@@ -269,21 +269,21 @@ export class BenchmarkMaxVisibleTrianglesComponent extends Component {
 
         let parent = this.object;
         if (this._myDisplayInFrontOfPlayer) {
-            parent = Globals.getPlayerObjects(this.engine).myHead.pp_addObject();
+            parent = Globals.getPlayerObjects(this.engine).myHead.pp_addChild();
             parent.pp_rotateAxis(180, vec3_create(0, 1, 0));
             parent.pp_translateLocal(vec3_create(0, 0, this._myDisplayInFrontOfPlayerDistance));
         }
 
-        this._myTrianglesObject = parent.pp_addObject();
+        this._myTrianglesObject = parent.pp_addChild();
 
-        this._myBackgroundObject = this._myTrianglesObject.pp_addObject();
+        this._myBackgroundObject = this._myTrianglesObject.pp_addChild();
         {
             let meshComponent = this._myBackgroundObject.pp_addComponent(MeshComponent);
             meshComponent.mesh = MeshUtils.createPlane(this.engine);
             meshComponent.material = this._myBackgroundMaterial.clone();
         }
 
-        this._myPlaneObject = this._myTrianglesObject.pp_addObject();
+        this._myPlaneObject = this._myTrianglesObject.pp_addChild();
         {
             let meshComponent = this._myPlaneObject.pp_addComponent(MeshComponent);
             meshComponent.mesh = this._createPlaneMesh(this._myPlaneTriangles);
@@ -320,10 +320,10 @@ export class BenchmarkMaxVisibleTrianglesComponent extends Component {
         this._myStartTimer = new Timer(2);
         this._mySessionStarted = false;
 
-        this._myTextsObject = this._myTrianglesObject.pp_addObject();
+        this._myTextsObject = this._myTrianglesObject.pp_addChild();
         //this._myTextsObject.pp_addComponent(EasyTransformComponent);
 
-        this._myTriangleTextObject = this._myTextsObject.pp_addObject();
+        this._myTriangleTextObject = this._myTextsObject.pp_addChild();
         //this._myTriangleTextObject.pp_addComponent(EasyTransformComponent, { _myLocal: true });
 
         this._myTriangleTextComponent = this._myTriangleTextObject.pp_addComponent(TextComponent);
@@ -335,7 +335,7 @@ export class BenchmarkMaxVisibleTrianglesComponent extends Component {
         this._myTriangleTextComponent.text = " ";
         //this._myTriangleTextComponent.text = "Triangles: 9999999";
 
-        this._myPlaneTextObject = this._myTextsObject.pp_addObject();
+        this._myPlaneTextObject = this._myTextsObject.pp_addChild();
 
         this._myPlaneTextComponent = this._myPlaneTextObject.pp_addComponent(TextComponent);
         //this._myPlaneTextObject.pp_addComponent(EasyTransformComponent, { _myLocal: true });
@@ -347,7 +347,7 @@ export class BenchmarkMaxVisibleTrianglesComponent extends Component {
         this._myPlaneTextComponent.text = " ";
         //this._myPlaneTextComponent.text = "Planes: 9999999";
 
-        this._myFPSTextObject = this._myTextsObject.pp_addObject();
+        this._myFPSTextObject = this._myTextsObject.pp_addChild();
 
         this._myFPSTextComponent = this._myFPSTextObject.pp_addComponent(TextComponent);
         //this._myFPSTextObject.pp_addComponent(EasyTransformComponent, { _myLocal: true });
@@ -359,7 +359,7 @@ export class BenchmarkMaxVisibleTrianglesComponent extends Component {
         this._myFPSTextComponent.text = " ";
         //this._myFPSTextComponent.text = "FPS: 99.99";
 
-        this._myDoneTextObject = this._myTrianglesObject.pp_addObject();
+        this._myDoneTextObject = this._myTrianglesObject.pp_addChild();
 
         this._myDoneTextComponent = this._myDoneTextObject.pp_addComponent(TextComponent);
         //this._myDoneTextObject.pp_addComponent(EasyTransformComponent, { _myLocal: true });

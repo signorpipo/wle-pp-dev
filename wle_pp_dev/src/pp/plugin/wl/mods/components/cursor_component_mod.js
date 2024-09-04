@@ -118,7 +118,7 @@ function _initCursorComponentModPrototype() {
         this._setCursorVisibility(false);
 
         if (this.useWebXRHitTest) {
-            this._hitTestObject = this.object.pp_addObject();
+            this._hitTestObject = this.object.pp_addChild();
             this._hitTestLocation = this.hitTestObject.pp_addComponent(HitTestLocation, { scaleObject: false, });
         }
 

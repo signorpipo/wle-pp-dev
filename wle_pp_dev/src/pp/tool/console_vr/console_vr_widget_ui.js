@@ -35,7 +35,7 @@ export class ConsoleVRWidgetUI {
 
     // Skeleton
     _createSkeleton() {
-        this.myPivotObject = this._myParentObject.pp_addObject();
+        this.myPivotObject = this._myParentObject.pp_addChild();
 
         this._createMessagesSkeleton();
         this._createButtonsSkeleton();
@@ -43,22 +43,22 @@ export class ConsoleVRWidgetUI {
     }
 
     _createMessagesSkeleton() {
-        this.myMessagesPanel = this.myPivotObject.pp_addObject();
-        this.myMessagesBackground = this.myMessagesPanel.pp_addObject();
-        this.myMessagesTextsPanel = this.myMessagesPanel.pp_addObject();
+        this.myMessagesPanel = this.myPivotObject.pp_addChild();
+        this.myMessagesBackground = this.myMessagesPanel.pp_addChild();
+        this.myMessagesTextsPanel = this.myMessagesPanel.pp_addChild();
 
         this.myMessagesTexts = [];
         for (let key in ConsoleVRWidgetMessageType) {
-            this.myMessagesTexts[ConsoleVRWidgetMessageType[key]] = this.myMessagesTextsPanel.pp_addObject();
+            this.myMessagesTexts[ConsoleVRWidgetMessageType[key]] = this.myMessagesTextsPanel.pp_addChild();
         }
 
-        this.myNotifyIconPanel = this.myMessagesPanel.pp_addObject();
-        this.myNotifyIconBackground = this.myNotifyIconPanel.pp_addObject();
-        this.myNotifyIconCursorTarget = this.myNotifyIconPanel.pp_addObject();
+        this.myNotifyIconPanel = this.myMessagesPanel.pp_addChild();
+        this.myNotifyIconBackground = this.myNotifyIconPanel.pp_addChild();
+        this.myNotifyIconCursorTarget = this.myNotifyIconPanel.pp_addChild();
     }
 
     _createButtonsSkeleton() {
-        this.myButtonsPanel = this.myPivotObject.pp_addObject();
+        this.myButtonsPanel = this.myPivotObject.pp_addChild();
 
         this.myFilterButtonsPanels = [];
         this.myFilterButtonsBackgrounds = [];
@@ -66,30 +66,30 @@ export class ConsoleVRWidgetUI {
         this.myFilterButtonsCursorTargets = [];
 
         for (let key in ConsoleVRWidgetMessageType) {
-            this.myFilterButtonsPanels[ConsoleVRWidgetMessageType[key]] = this.myButtonsPanel.pp_addObject();
-            this.myFilterButtonsBackgrounds[ConsoleVRWidgetMessageType[key]] = this.myFilterButtonsPanels[ConsoleVRWidgetMessageType[key]].pp_addObject();
-            this.myFilterButtonsTexts[ConsoleVRWidgetMessageType[key]] = this.myFilterButtonsPanels[ConsoleVRWidgetMessageType[key]].pp_addObject();
-            this.myFilterButtonsCursorTargets[ConsoleVRWidgetMessageType[key]] = this.myFilterButtonsPanels[ConsoleVRWidgetMessageType[key]].pp_addObject();
+            this.myFilterButtonsPanels[ConsoleVRWidgetMessageType[key]] = this.myButtonsPanel.pp_addChild();
+            this.myFilterButtonsBackgrounds[ConsoleVRWidgetMessageType[key]] = this.myFilterButtonsPanels[ConsoleVRWidgetMessageType[key]].pp_addChild();
+            this.myFilterButtonsTexts[ConsoleVRWidgetMessageType[key]] = this.myFilterButtonsPanels[ConsoleVRWidgetMessageType[key]].pp_addChild();
+            this.myFilterButtonsCursorTargets[ConsoleVRWidgetMessageType[key]] = this.myFilterButtonsPanels[ConsoleVRWidgetMessageType[key]].pp_addChild();
         }
 
-        this.myClearButtonPanel = this.myButtonsPanel.pp_addObject();
-        this.myClearButtonBackground = this.myClearButtonPanel.pp_addObject();
-        this.myClearButtonText = this.myClearButtonPanel.pp_addObject();
-        this.myClearButtonCursorTarget = this.myClearButtonPanel.pp_addObject();
+        this.myClearButtonPanel = this.myButtonsPanel.pp_addChild();
+        this.myClearButtonBackground = this.myClearButtonPanel.pp_addChild();
+        this.myClearButtonText = this.myClearButtonPanel.pp_addChild();
+        this.myClearButtonCursorTarget = this.myClearButtonPanel.pp_addChild();
 
-        this.myUpButtonPanel = this.myButtonsPanel.pp_addObject();
-        this.myUpButtonBackground = this.myUpButtonPanel.pp_addObject();
-        this.myUpButtonText = this.myUpButtonPanel.pp_addObject();
-        this.myUpButtonCursorTarget = this.myUpButtonPanel.pp_addObject();
+        this.myUpButtonPanel = this.myButtonsPanel.pp_addChild();
+        this.myUpButtonBackground = this.myUpButtonPanel.pp_addChild();
+        this.myUpButtonText = this.myUpButtonPanel.pp_addChild();
+        this.myUpButtonCursorTarget = this.myUpButtonPanel.pp_addChild();
 
-        this.myDownButtonPanel = this.myButtonsPanel.pp_addObject();
-        this.myDownButtonBackground = this.myDownButtonPanel.pp_addObject();
-        this.myDownButtonText = this.myDownButtonPanel.pp_addObject();
-        this.myDownButtonCursorTarget = this.myDownButtonPanel.pp_addObject();
+        this.myDownButtonPanel = this.myButtonsPanel.pp_addChild();
+        this.myDownButtonBackground = this.myDownButtonPanel.pp_addChild();
+        this.myDownButtonText = this.myDownButtonPanel.pp_addChild();
+        this.myDownButtonCursorTarget = this.myDownButtonPanel.pp_addChild();
     }
 
     _createPointerSkeleton() {
-        this.myPointerCursorTarget = this.myPivotObject.pp_addObject();
+        this.myPointerCursorTarget = this.myPivotObject.pp_addChild();
     }
 
     // Transforms

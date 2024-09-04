@@ -75,7 +75,7 @@ export class VisualMesh extends AbstractVisualElement<VisualMesh, VisualMeshPara
     }
 
     protected _build(): void {
-        (this._myMeshObject as Object3D) = Globals.getSceneObjects(this._myParams.myParent.pp_getEngine())!.myVisualElements!.pp_addObject();
+        (this._myMeshObject as Object3D) = Globals.getSceneObjects(this._myParams.myParent.pp_getEngine())!.myVisualElements!.pp_addChild();
 
         (this._myMeshComponent as MeshComponent) = this._myMeshObject.pp_addComponent(MeshComponent)!;
     }

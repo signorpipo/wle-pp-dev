@@ -230,7 +230,7 @@ PlayerLocomotionTeleportDetectionVisualizer.prototype._setupVisuals = function (
             this._myValidVisualVerticalArrow = new VisualArrow(visualParams);
         }
 
-        this._myVisualTeleportPositionObject = Globals.getPlayerObjects(this._myTeleportParams.myEngine).myCauldron.pp_addObject();
+        this._myVisualTeleportPositionObject = Globals.getPlayerObjects(this._myTeleportParams.myEngine).myCauldron.pp_addChild();
 
         //Globals.getEasyTuneVariables(this._myTeleportParams.myEngine).add(new EasyTuneNumber("Teleport Torus Radius", 0.175, 0.1, 3, undefined, undefined, undefined, this._myTeleportParams.myEngine));
         //Globals.getEasyTuneVariables(this._myTeleportParams.myEngine).add(new EasyTuneInt("Teleport Torus Segments", 24, 1, undefined, undefined, undefined, this._myTeleportParams.myEngine));

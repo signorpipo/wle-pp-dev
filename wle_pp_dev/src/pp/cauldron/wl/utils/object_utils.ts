@@ -2240,7 +2240,7 @@ export const clone = function () {
                 const parent = cloneData![0];
                 const objectToClone = cloneData![1];
 
-                const currentClonedObject = (parent != null) ? ObjectUtils.addObject(parent) : ObjectUtils.addObject(Globals.getRootObject(ObjectUtils.getEngine(object))!);
+                const currentClonedObject = (parent != null) ? ObjectUtils.addChild(parent) : ObjectUtils.addChild(Globals.getRootObject(ObjectUtils.getEngine(object))!);
                 ObjectUtils.setName(currentClonedObject, ObjectUtils.getName(objectToClone));
 
                 ObjectUtils.setScaleLocal(currentClonedObject, ObjectUtils.getScaleLocal(objectToClone, scale));
@@ -2778,8 +2778,8 @@ export function getSelf(object: Readonly<Object3D>): Object3D {
 
 // Cauldron
 
-export function addObject(parent: Object3D): Object3D {
-    return Globals.getScene(ObjectUtils.getEngine(parent)).addObject(parent);
+export function addChild(object: Object3D): Object3D {
+    return Globals.getScene(ObjectUtils.getEngine(object)).addObject(object);
 }
 
 export function getName(object: Readonly<Object3D>): string {
@@ -3377,7 +3377,7 @@ export const ObjectUtils = {
     getDescendantsDepth,
     getChildren,
     getSelf,
-    addObject,
+    addChild,
     getName,
     setName,
     getEngine,

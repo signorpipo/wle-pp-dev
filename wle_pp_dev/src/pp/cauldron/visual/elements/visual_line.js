@@ -84,8 +84,8 @@ export class VisualLine extends AbstractVisualElement {
     }
 
     _build() {
-        this._myLineParentObject = Globals.getSceneObjects(this._myParams.myParent.pp_getEngine()).myVisualElements.pp_addObject();
-        this._myLineObject = this._myLineParentObject.pp_addObject();
+        this._myLineParentObject = Globals.getSceneObjects(this._myParams.myParent.pp_getEngine()).myVisualElements.pp_addChild();
+        this._myLineObject = this._myLineParentObject.pp_addChild();
 
         this._myLineMeshComponent = this._myLineObject.pp_addComponent(MeshComponent);
     }

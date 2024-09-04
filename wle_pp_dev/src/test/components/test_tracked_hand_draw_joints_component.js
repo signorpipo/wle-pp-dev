@@ -103,10 +103,10 @@ export class TestTrackedHandDrawJointsComponent extends Component {
     }
 
     _buildTrackedHandHierarchy() {
-        this._myTrackedHandObject = this.object.pp_addObject();
-        this._myTrackedHandObject2 = this.object.pp_addObject();
-        this._myTrackedHandObject3 = this.object.pp_addObject();
-        this._myTrackedHandObjectMesh = this._myTrackedHandObject.pp_addObject();
+        this._myTrackedHandObject = this.object.pp_addChild();
+        this._myTrackedHandObject2 = this.object.pp_addChild();
+        this._myTrackedHandObject3 = this.object.pp_addChild();
+        this._myTrackedHandObjectMesh = this._myTrackedHandObject.pp_addChild();
 
         //let child = this.object.pp_getChildren()[0];
         //child.pp_setParent(this._myTrackedHandObject, false);

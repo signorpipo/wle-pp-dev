@@ -33,9 +33,9 @@ export class ToolCursorComponent extends Component {
 
     start() {
         if (Globals.isToolEnabled(this.engine)) {
-            this._myToolCursorObject = this.object.pp_addObject();
+            this._myToolCursorObject = this.object.pp_addChild();
 
-            this._myCursorObjectXR = this._myToolCursorObject.pp_addObject();
+            this._myCursorObjectXR = this._myToolCursorObject.pp_addChild();
 
             if (this._myApplyDefaultCursorOffset) {
                 this._myCursorObjectXR.pp_setPositionLocal(this._myCursorPositionDefaultOffset);
@@ -43,7 +43,7 @@ export class ToolCursorComponent extends Component {
             }
 
             {
-                this._myCursorMeshobject = this._myCursorObjectXR.pp_addObject();
+                this._myCursorMeshobject = this._myCursorObjectXR.pp_addChild();
                 this._myCursorMeshobject.pp_setScale(this._myCursorMeshScale);
 
                 let cursorMeshComponent = this._myCursorMeshobject.pp_addComponent(MeshComponent);
@@ -64,7 +64,7 @@ export class ToolCursorComponent extends Component {
                 }
             }
 
-            this._myCursorObjectNonXR = this._myToolCursorObject.pp_addObject();
+            this._myCursorObjectNonXR = this._myToolCursorObject.pp_addChild();
 
             {
                 this._myCursorComponentNonXR = this._myCursorObjectNonXR.pp_addComponent(Cursor, {
@@ -84,7 +84,7 @@ export class ToolCursorComponent extends Component {
             let fingerCollisionSize = 0.0125;
 
             if (this._myShowFingerCursor) {
-                fingerCursorMeshObject = this._myToolCursorObject.pp_addObject();
+                fingerCursorMeshObject = this._myToolCursorObject.pp_addChild();
 
                 let meshComponent = fingerCursorMeshObject.pp_addComponent(MeshComponent);
                 meshComponent.mesh = Globals.getDefaultMeshes(this.engine).mySphere;
@@ -107,7 +107,7 @@ export class ToolCursorComponent extends Component {
                 }
             }
 
-            this._myFingerCursorObject = this._myToolCursorObject.pp_addObject();
+            this._myFingerCursorObject = this._myToolCursorObject.pp_addChild();
             this._myFingerCursorComponent = this._myFingerCursorObject.pp_addComponent(FingerCursorComponent, {
                 "_myHandedness": this._myHandedness,
                 "_myDisableDefaultCursorOnTrackedHandDetected": false,

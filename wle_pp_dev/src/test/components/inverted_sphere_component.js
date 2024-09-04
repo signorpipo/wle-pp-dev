@@ -8,7 +8,7 @@ export class InvertedSphereComponent extends Component {
     static Properties = {};
 
     start() {
-        this._myInvertedSphereObject = this.object.pp_addObject();
+        this._myInvertedSphereObject = this.object.pp_addChild();
 
         let invertedSphere = MeshUtils.invert(Globals.getDefaultResources(this.engine).myMeshes.mySphere);
 

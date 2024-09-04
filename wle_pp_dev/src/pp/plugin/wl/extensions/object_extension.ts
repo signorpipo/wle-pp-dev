@@ -1221,8 +1221,8 @@ function _initObjectExtensionProtoype(): void {
             return ObjectUtils.getSelf(this);
         },
 
-        pp_addObject(this: Object3D): Object3D {
-            return ObjectUtils.addObject(this);
+        pp_addChild(this: Object3D): Object3D {
+            return ObjectUtils.addChild(this);
         },
 
         pp_getName(this: Readonly<Object3D>): string {

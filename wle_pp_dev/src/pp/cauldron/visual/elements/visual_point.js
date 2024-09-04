@@ -70,7 +70,7 @@ export class VisualPoint extends AbstractVisualElement {
     }
 
     _build() {
-        this._myPointObject = Globals.getSceneObjects(this._myParams.myParent.pp_getEngine()).myVisualElements.pp_addObject();
+        this._myPointObject = Globals.getSceneObjects(this._myParams.myParent.pp_getEngine()).myVisualElements.pp_addChild();
 
         this._myPointMeshComponent = this._myPointObject.pp_addComponent(MeshComponent);
     }

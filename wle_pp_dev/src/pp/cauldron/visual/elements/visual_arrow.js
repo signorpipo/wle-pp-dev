@@ -100,8 +100,8 @@ export class VisualArrow extends AbstractVisualElement {
     }
 
     _build() {
-        this._myArrowParentObject = Globals.getSceneObjects(this._myParams.myParent.pp_getEngine()).myVisualElements.pp_addObject();
-        this._myArrowObject = this._myArrowParentObject.pp_addObject();
+        this._myArrowParentObject = Globals.getSceneObjects(this._myParams.myParent.pp_getEngine()).myVisualElements.pp_addChild();
+        this._myArrowObject = this._myArrowParentObject.pp_addChild();
 
         this._myArrowMeshComponent = this._myArrowObject.pp_addComponent(MeshComponent);
     }

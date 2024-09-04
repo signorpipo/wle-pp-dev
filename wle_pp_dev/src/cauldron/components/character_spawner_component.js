@@ -13,7 +13,7 @@ export class CharacterSpawnerComponent extends Component {
     };
 
     start() {
-        this._myRootObject = this.object.pp_addObject();
+        this._myRootObject = this.object.pp_addChild();
 
         for (let i = 0; i < this._myAmount; i++) {
             let spawnTall = Math.pp_randomBool();

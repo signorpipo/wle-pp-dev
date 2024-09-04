@@ -76,10 +76,10 @@ export class FingerCursorComponent extends Component {
     }
 
     public override start(): void {
-        (this._myCursorParentObject as Object3D) = this.object.pp_addObject();
+        (this._myCursorParentObject as Object3D) = this.object.pp_addChild();
 
         if (this._myCursorPointerObject == null) {
-            (this._myActualCursorParentObject as Object3D) = this._myCursorParentObject.pp_addObject();
+            (this._myActualCursorParentObject as Object3D) = this._myCursorParentObject.pp_addChild();
         } else {
             (this._myActualCursorParentObject as Object3D) = this._myCursorPointerObject;
         }

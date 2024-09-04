@@ -97,28 +97,28 @@ export class WidgetFrameUI {
 
     // Skeleton
     _createSkeleton() {
-        this.myFixForwardObject = this._myParentObject.pp_addObject();
+        this.myFixForwardObject = this._myParentObject.pp_addChild();
 
         if (Globals.isPoseForwardFixed(this._myEngine)) {
             this.myFixForwardObject.pp_rotateObject(vec3_create(0, 180, 0));
         }
 
-        this.myPivotObject = this.myFixForwardObject.pp_addObject();
-        this.myWidgetObject = this.myPivotObject.pp_addObject();
+        this.myPivotObject = this.myFixForwardObject.pp_addChild();
+        this.myWidgetObject = this.myPivotObject.pp_addChild();
 
-        this.myVisibilityButtonPanel = this.myPivotObject.pp_addObject();
-        this.myVisibilityButtonBackground = this.myVisibilityButtonPanel.pp_addObject();
-        this.myVisibilityButtonText = this.myVisibilityButtonPanel.pp_addObject();
-        this.myVisibilityButtonCursorTarget = this.myVisibilityButtonPanel.pp_addObject();
+        this.myVisibilityButtonPanel = this.myPivotObject.pp_addChild();
+        this.myVisibilityButtonBackground = this.myVisibilityButtonPanel.pp_addChild();
+        this.myVisibilityButtonText = this.myVisibilityButtonPanel.pp_addChild();
+        this.myVisibilityButtonCursorTarget = this.myVisibilityButtonPanel.pp_addChild();
 
-        this.myFlagsButtonPanel = this.myPivotObject.pp_addObject();
+        this.myFlagsButtonPanel = this.myPivotObject.pp_addChild();
 
-        this.myPinButtonPanel = this.myFlagsButtonPanel.pp_addObject();
-        this.myPinButtonBackground = this.myPinButtonPanel.pp_addObject();
-        this.myPinButtonText = this.myPinButtonPanel.pp_addObject();
-        this.myPinButtonCursorTarget = this.myPinButtonPanel.pp_addObject();
+        this.myPinButtonPanel = this.myFlagsButtonPanel.pp_addChild();
+        this.myPinButtonBackground = this.myPinButtonPanel.pp_addChild();
+        this.myPinButtonText = this.myPinButtonPanel.pp_addChild();
+        this.myPinButtonCursorTarget = this.myPinButtonPanel.pp_addChild();
 
-        this.myNonXRParentObject = Globals.getPlayerObjects(this._myEngine).myCameraNonXR.pp_addObject();
+        this.myNonXRParentObject = Globals.getPlayerObjects(this._myEngine).myCameraNonXR.pp_addChild();
         this.myNonXRParentObject.pp_translateLocal(vec3_create(0, 0, -this._myConfig._myPivotObjectDistanceFromHeadNonXR));
         this.myNonXRParentObject.pp_lookToLocal(vec3_create(0, 0, 1), vec3_create(0, 1, 0));
 

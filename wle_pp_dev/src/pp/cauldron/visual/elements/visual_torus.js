@@ -93,7 +93,7 @@ export class VisualTorus extends AbstractVisualElement {
     }
 
     _build() {
-        this._myTorusParentObject = Globals.getSceneObjects(this._myParams.myParent.pp_getEngine()).myVisualElements.pp_addObject();
+        this._myTorusParentObject = Globals.getSceneObjects(this._myParams.myParent.pp_getEngine()).myVisualElements.pp_addChild();
 
         this._fillSegmentList();
     }
