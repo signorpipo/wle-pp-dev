@@ -13,18 +13,15 @@ module.exports = {
     globals: {
     },
     plugins: [
-        "deprecation",
         "@typescript-eslint/eslint-plugin"
     ],
     extends: [
         "eslint:recommended",
-        "plugin:import/recommended",
         "plugin:@typescript-eslint/recommended"
     ],
     rules: {
         "semi": "error",
         "no-unused-vars": "off",
-        "deprecation/deprecation": "error",
         "import/extensions": ["error", "always"],
         "import/no-unresolved": "off",
         "import/no-duplicates": "off",
