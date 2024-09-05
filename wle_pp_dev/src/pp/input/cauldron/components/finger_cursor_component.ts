@@ -11,7 +11,7 @@ import { OverlapCursorComponent } from "./overlap_cursor_component.js";
 
 /** #WARN This class is actually adding an `OverlapCursorComponent` so use that if you want to interact with the cursor */
 export class FingerCursorComponent extends Component {
-    static override TypeName = "pp-finger-cursor";
+    public static override TypeName = "pp-finger-cursor";
 
     @property.enum(["Left", "Right"], "Left")
     private readonly _myHandedness!: number;

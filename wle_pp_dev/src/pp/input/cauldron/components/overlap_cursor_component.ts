@@ -8,7 +8,7 @@ import { vec3_create } from "../../../plugin/js/extensions/array/vec_create_exte
 /** #WARN This class is not actually a `Cursor`, but since it triggers `CursorTarget` emitters, it needs to forward a `Cursor` to them  
     As of now, this class forward a fake cursor as `Cursor`, which is a plain object with just the info usually need, like the `handedness` value */
 export class OverlapCursorComponent extends Component {
-    static override TypeName = "pp-overlap-cursor";
+    public static override TypeName = "pp-overlap-cursor";
 
     /** 
      * This is useful if you want to avoid the cursor entering and exiting the target when very close to the target,  

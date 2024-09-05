@@ -33,7 +33,7 @@ export class AudioSetup {
         }
     }
 
-    clone(): AudioSetup {
+    public clone(): AudioSetup {
         const audioSetup = new AudioSetup();
 
         audioSetup.myAudioFilePath = this.myAudioFilePath;

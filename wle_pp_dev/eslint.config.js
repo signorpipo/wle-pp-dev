@@ -23,7 +23,8 @@ export default [
     },
     {
         rules: {
-            "@typescript-eslint/explicit-function-return-type": ["error", { "allowExpressions": true }]
+            "@typescript-eslint/explicit-function-return-type": ["error", { "allowExpressions": true }],
+            "@typescript-eslint/explicit-member-accessibility": ["error", { "overrides": { "constructors": "no-public", "accessors": "no-public" } }]
         },
         files: [
             "**/*.ts"
