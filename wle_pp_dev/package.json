@@ -12,7 +12,7 @@
         "howler": "^2.2.4"
     },
     "devDependencies": {
-        "eslint": "^9.9.1",
+        "eslint": "^9.10.0",
         "globals": "^15.9.0",
         "typescript": "^5.5.4",
         "typescript-eslint": "^8.4.0"
