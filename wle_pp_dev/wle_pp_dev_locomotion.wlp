@@ -11218,6 +11218,18 @@
                 "name": "lib\\Uniforms.glsl",
                 "file": "default"
             }
+        },
+        "df7054c8-968f-48be-9980-b703f59cb344": {
+            "link": {
+                "name": "lib\\MorphTargets.glsl",
+                "file": "default"
+            }
+        },
+        "a8ee974a-5f79-4ff3-b827-9a48815d28a2": {
+            "link": {
+                "name": "lib\\PhysicalBSDF.glsl",
+                "file": "default"
+            }
         }
     },
     "animations": {},
@@ -11450,8 +11462,8 @@
             "name": "wle-pp-dev-locomotion",
             "version": [
                 1,
-                1,
-                6
+                2,
+                3
             ]
         },
         "rendering": {
@@ -11467,7 +11479,10 @@
             },
             "useMultiDraw": false,
             "usePreZ": false,
-            "useFrustumCulling": false
+            "useFrustumCulling": false,
+            "hdr": {
+                "exposure": 1.5
+            }
         },
         "runtime": {
             "xrButtonColor": "black",
@@ -11552,5 +11567,6 @@
             }
         }
     },
-    "languages": {}
+    "languages": {},
+    "morphTargets": {}
 }
