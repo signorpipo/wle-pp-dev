@@ -59,9 +59,6 @@ export class ToolCursorComponent extends Component {
                 });
 
                 this._myCursorComponentXR.rayCastMode = 0; // Collision
-                if (this._myPulseOnHover) {
-                    this._myCursorComponentXR.globalTarget.onHover.add(this._pulseOnHover.bind(this), { id: this });
-                }
             }
 
             this._myCursorObjectNonXR = this._myToolCursorObject.pp_addChild();
@@ -74,9 +71,6 @@ export class ToolCursorComponent extends Component {
                 });
 
                 this._myCursorComponentNonXR.rayCastMode = 0; // Collision
-                if (this._myPulseOnHover) {
-                    this._myCursorComponentNonXR.globalTarget.onHover.add(this._pulseOnHover.bind(this), { id: this });
-                }
                 this._myCursorComponentNonXR.pp_setViewComponent(Globals.getPlayerObjects(this.engine).myCameraNonXR.pp_getComponent(ViewComponent));
             }
 
@@ -162,7 +156,14 @@ export class ToolCursorComponent extends Component {
         }
     }
 
-    onDestroy() {
+    onActivate() {
+        if (this._myStarted && this._myPulseOnHover) {
+            this._myCursorComponentXR.globalTarget.onHover.add(this._pulseOnHover.bind(this), { id: this });
+            this._myCursorComponentNonXR.globalTarget.onHover.add(this._pulseOnHover.bind(this), { id: this });
+        }
+    }
+
+    onDeactivate() {
         if (this._myStarted) {
             this._myCursorComponentXR.globalTarget.onHover.remove(this);
             this._myCursorComponentNonXR.globalTarget.onHover.remove(this);

@@ -165,7 +165,6 @@ export class EasyTuneToolComponent extends Component {
             }
         }
 
-
         EasyTuneUtils.removeSetWidgetCurrentVariableCallback(this, this.engine);
         EasyTuneUtils.removeRefreshWidgetCallback(this, this.engine);
     }

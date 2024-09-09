@@ -36,6 +36,12 @@ export class DebugTransformComponent extends Component {
         }
     }
 
+    onDeactivate() {
+        if (this._myStarted) {
+            this._myDebugVisualTransform.setVisible(false);
+        }
+    }
+
     onDestroy() {
         if (this._myStarted) {
             this._myDebugVisualTransform.destroy();

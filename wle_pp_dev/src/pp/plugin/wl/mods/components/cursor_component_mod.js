@@ -34,7 +34,7 @@ function _initCursorComponentModPrototype() {
         this._multipleClickObject = null;
         this._multipleClickDelay = 0.3;
 
-        this._onDestroyCallbacks = [];
+        this._onDeactivateCallbacks = [];
 
         this._prevHitLocationLocalToTarget = vec3_create();
 
@@ -70,6 +70,7 @@ function _initCursorComponentModPrototype() {
         this._tempVec = vec3_create();
 
         this._viewComponent = null;
+        this._viewComponentBackup = null;
 
         this._cursorRayOrigin = vec3_create();
         this._cursorRayScale = vec3_create();
@@ -101,11 +102,7 @@ function _initCursorComponentModPrototype() {
         }
 
         this.pp_setViewComponent(this.object.pp_getComponent(ViewComponent));
-
-        XRUtils.registerSessionStartEventListener(this, this.setupVREvents.bind(this), true, false, this.engine);
-        this._onDestroyCallbacks.push(() => {
-            XRUtils.unregisterSessionStartEventListener(this, this.engine);
-        });
+        this._viewComponentBackup = null;
 
         if (this.cursorRayObject) {
             this.cursorRayObject.pp_setActive(false);
@@ -220,6 +217,20 @@ function _initCursorComponentModPrototype() {
 
         this._isDownForUpWithDown = false;
         this._isUpWithNoDown = false;
+
+        if (this._viewComponent == null) {
+            if (this._viewComponentBackup != null) {
+                this.pp_setViewComponent(this._viewComponentBackup);
+            } else {
+                this.pp_setViewComponent(this.object.pp_getComponent(ViewComponent));
+                this._viewComponentBackup = null;
+            }
+        }
+
+        XRUtils.registerSessionStartEventListener(this, this.setupVREvents.bind(this), true, false, this.engine);
+        this._onDeactivateCallbacks.push(() => {
+            XRUtils.unregisterSessionStartEventListener(this, this.engine);
+        });
     };
 
     cursorComponentMod.onDeactivate = function onDeactivate() {
@@ -258,15 +269,19 @@ function _initCursorComponentModPrototype() {
 
         this._pointerLeaveToProcess = false;
         this._pointerLeaveMouseEvent = null;
+
+        for (let callback of this._onDeactivateCallbacks) {
+            callback();
+        }
+
+        this._onDeactivateCallbacks = [];
+
+        this._viewComponent = null;
     };
 
     cursorComponentMod.onDestroy = function onDestroy() {
         if (this._hitTestObject != null) {
             this._hitTestObject.pp_destroy();
-        }
-
-        for (let callback of this._onDestroyCallbacks) {
-            callback();
         }
     };
 
@@ -292,7 +307,7 @@ function _initCursorComponentModPrototype() {
         let onSelectEnd = this.onSelectEnd.bind(this);
         session.addEventListener("selectend", onSelectEnd);
 
-        this._onDestroyCallbacks.push(() => {
+        this._onDeactivateCallbacks.push(() => {
             if (!XRUtils.isSessionActive(this.engine)) return;
 
             let session = XRUtils.getSession(this.engine);
@@ -444,6 +459,9 @@ function _initCursorComponentModPrototype() {
                 // Hover new object 
                 this.hoveringObject = hitObject;
                 this.hoveringObjectTarget = this.hoveringObject.pp_getComponent(CursorTarget);
+                if (this.hoveringObjectTarget != null && !this.hoveringObjectTarget.active) {
+                    this.hoveringObjectTarget = null;
+                }
 
                 if (!this.hoveringReality) {
                     if (this.hoveringObjectTarget) this.hoveringObjectTarget.onHover.notify(this.hoveringObject, this, originalEvent);
@@ -704,7 +722,7 @@ function _initCursorComponentModPrototype() {
                 let onViewportResize = this._onViewportResize.bind(this);
                 this.engine.onResize.add(onViewportResize);
 
-                this._onDestroyCallbacks.push(() => {
+                this._onDeactivateCallbacks.push(() => {
                     Globals.getCanvas(this.engine).removeEventListener("click", onClick);
                     Globals.getCanvas(this.engine).removeEventListener("pointerdown", onPointerDown);
                     Globals.getCanvas(this.engine).removeEventListener("pointermove", onPointerMove);
@@ -719,6 +737,8 @@ function _initCursorComponentModPrototype() {
                 });
             }
         }
+
+        this._viewComponentBackup = this._viewComponent;
     };
 
     cursorComponentMod._pp_onPointerLeave = function _pp_onPointerLeave(e) {

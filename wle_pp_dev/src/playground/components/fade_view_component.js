@@ -53,6 +53,14 @@ export class FadeViewComponent extends Component {
         }
     }
 
+    onActivate() {
+        this._myFadeVisual.setVisible(true);
+    }
+
+    onDeactivate() {
+        this._myFadeVisual.setVisible(false);
+    }
+
     onDestroy() {
         this._myFadeVisual.destroy();
     }

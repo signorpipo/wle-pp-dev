@@ -49,6 +49,8 @@ export class ConsoleVRToolComponent extends Component {
                 }
 
                 this._myWidget.update(dt);
+
+                this._myWidget.setActive(true);
             }
         } else if (this._myStarted) {
             if (this._myWidgetVisibleBackup == null) {
@@ -58,6 +60,8 @@ export class ConsoleVRToolComponent extends Component {
             if (this._myWidget.isVisible()) {
                 this._myWidget.setVisible(false);
             }
+
+            this._myWidget.setActive(false);
         }
     }
 
@@ -70,6 +74,8 @@ export class ConsoleVRToolComponent extends Component {
             if (this._myWidget.isVisible()) {
                 this._myWidget.setVisible(false);
             }
+
+            this._myWidget.setActive(false);
         }
     }
 
