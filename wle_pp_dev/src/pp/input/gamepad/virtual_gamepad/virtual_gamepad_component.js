@@ -446,6 +446,10 @@ export class VirtualGamepadComponent extends Component {
         return buttonID;
     }
 
+    onDeactivate() {
+        this._myVirtualGamepad.setVisible(false);
+    }
+
     onDestroy() {
         Globals.getLeftGamepad(this.engine)?.removeGamepadCore("pp_left_virtual_gamepad");
         Globals.getRightGamepad(this.engine)?.removeGamepadCore("pp_right_virtual_gamepad");

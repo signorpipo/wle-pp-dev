@@ -508,6 +508,10 @@ export class BenchmarkMaxVisibleTrianglesComponent extends Component {
         return mesh;
     }
 
+    onDeactivate() {
+        Globals.getObjectPoolManager(this.engine)?.releaseAll(this._myPoolID);
+    }
+
     onDestroy() {
         Globals.getObjectPoolManager(this.engine)?.destroyPool(this._myPoolID);
     }
