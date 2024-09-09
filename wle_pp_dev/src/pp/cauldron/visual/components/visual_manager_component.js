@@ -55,15 +55,29 @@ export class VisualManagerComponent extends Component {
         }
     }
 
-    onDestroy() {
+    onActivate() {
+        if (this._myVisualManager != null) {
+            Globals.setVisualManager(this._myVisualManager, this.engine);
+        }
+
+        if (this._myVisualResources != null) {
+            Globals.setVisualResources(this._myVisualResources, this.engine);
+        }
+    }
+
+    onDeactivate() {
         if (this._myVisualManager != null && Globals.getVisualManager(this.engine) == this._myVisualManager) {
             Globals.removeVisualManager(this.engine);
-
-            this._myVisualManager.destroy();
         }
 
         if (this._myVisualResources != null && Globals.getVisualResources(this.engine) == this._myVisualResources) {
             Globals.removeVisualResources(this.engine);
+        }
+    }
+
+    onDestroy() {
+        if (this._myVisualManager != null) {
+            this._myVisualManager.destroy();
         }
     }
 }

@@ -26,7 +26,13 @@ export class SaveManagerComponent extends Component {
         }
     }
 
-    onDestroy() {
+    onActivate() {
+        if (this._mySaveManager != null) {
+            Globals.setSaveManager(this._mySaveManager, this.engine);
+        }
+    }
+
+    onDeactivate() {
         if (this._mySaveManager != null && Globals.getSaveManager(this.engine) == this._mySaveManager) {
             Globals.removeSaveManager(this.engine);
         }

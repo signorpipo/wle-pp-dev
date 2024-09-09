@@ -18,7 +18,13 @@ export class EnableToolComponent extends Component {
         }
     }
 
-    onDestroy() {
+    onActivate() {
+        if (this._myToolEnabled != null) {
+            Globals.setToolEnabled(this._myToolEnabled, this.engine);
+        }
+    }
+
+    onDeactivate() {
         if (this._myToolEnabled != null && Globals.isToolEnabled(this.engine) == this._myToolEnabled) {
             Globals.removeToolEnabled(this.engine);
         }

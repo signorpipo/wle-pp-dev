@@ -22,7 +22,13 @@ export class CharacterCollisionSystemComponent extends Component {
         }
     }
 
-    onDestroy() {
+    onActivate() {
+        if (this._myCharacterCollisionSystem != null) {
+            Globals.setCharacterCollisionSystem(this._myCharacterCollisionSystem, this.engine);
+        }
+    }
+
+    onDeactivate() {
         if (this._myCharacterCollisionSystem != null && Globals.getCharacterCollisionSystem(this.engine) == this._myCharacterCollisionSystem) {
             Globals.removeCharacterCollisionSystem(this.engine);
         }
