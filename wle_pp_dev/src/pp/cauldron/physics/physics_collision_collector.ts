@@ -81,7 +81,7 @@ export class PhysicsCollisionCollector {
 
             if (this._myActive) {
                 this._myCollisionCallbackID = this._myPhysXComponent.onCollision(this._onCollision.bind(this));
-            } else if (this._myCollisionCallbackID != null) {
+            } else if (this._myCollisionCallbackID != null && !this._myPhysXComponent.isDestroyed) {
                 this._myPhysXComponent.removeCollisionCallback(this._myCollisionCallbackID);
                 this._myCollisionCallbackID = null;
             }

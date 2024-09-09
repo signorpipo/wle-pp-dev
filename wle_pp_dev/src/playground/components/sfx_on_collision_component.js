@@ -49,6 +49,14 @@ export class SFXOnCollisionComponent extends Component {
         clonedComponent.start();
     }
 
+    onActivate() {
+        this._myCollisionsCollector.setActive(true);
+    }
+
+    onDeactivate() {
+        this._myCollisionsCollector.setActive(false);
+    }
+
     onDestroy() {
         this._myCollisionsCollector.destroy();
     }

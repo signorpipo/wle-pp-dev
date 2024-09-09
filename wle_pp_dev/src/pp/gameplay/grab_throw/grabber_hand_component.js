@@ -131,8 +131,14 @@ export class GrabberHandComponent extends Component {
         this._myThrowEmitter.remove(id);
     }
 
+    onActivate() {
+        this._myCollisionsCollector.setActive(true);
+    }
+
     onDeactivate() {
         this.throw();
+
+        this._myCollisionsCollector.setActive(false);
     }
 
     _grab(grabButton) {
@@ -334,6 +340,10 @@ export class GrabberHandComponent extends Component {
         let found = this._myGrabbables.pp_find(element => element.getGrabbable() == grabbable);
         return found != null;
     }
+
+    onDestroy() {
+        this._myCollisionsCollector.destroy();
+    }
 }
 
 class _GrabberHandComponentGrabbableData {
@@ -375,9 +385,5 @@ class _GrabberHandComponentGrabbableData {
             this._myAngularVelocityHistory.unshift(this._myGrabbable.getAngularVelocityRadians());
             this._myAngularVelocityHistory.pop();
         }
-    }
-
-    onDestroy() {
-        this._myCollisionsCollector.destroy();
     }
 }

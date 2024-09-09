@@ -39,6 +39,14 @@ export class TargetHitCheckComponent extends Component {
         this._myParticlesSpawner.spawn(strikeSource.pp_getPosition());
     }
 
+    onActivate() {
+        this._myCollisionsCollector.setActive(true);
+    }
+
+    onDeactivate() {
+        this._myCollisionsCollector.setActive(false);
+    }
+
     onDestroy() {
         this._myCollisionsCollector.destroy();
     }

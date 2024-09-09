@@ -313,6 +313,46 @@ export class BenchmarkMaxPhysXComponent extends Component {
         }
     }
 
+    onActivate() {
+        if (this._myStaticPhysXCollectors != null) {
+            for (let collector of this._myStaticPhysXCollectors) {
+                collector.setActive(true);
+            }
+        }
+
+        if (this._myDynamicPhysXCollectors != null) {
+            for (let collector of this._myDynamicPhysXCollectors) {
+                collector.setActive(true);
+            }
+        }
+
+        if (this._myKinematicPhysXCollectors != null) {
+            for (let collector of this._myKinematicPhysXCollectors) {
+                collector.setActive(true);
+            }
+        }
+    }
+
+    onDeactivate() {
+        if (this._myStaticPhysXCollectors != null) {
+            for (let collector of this._myStaticPhysXCollectors) {
+                collector.setActive(false);
+            }
+        }
+
+        if (this._myDynamicPhysXCollectors != null) {
+            for (let collector of this._myDynamicPhysXCollectors) {
+                collector.setActive(false);
+            }
+        }
+
+        if (this._myKinematicPhysXCollectors != null) {
+            for (let collector of this._myKinematicPhysXCollectors) {
+                collector.setActive(false);
+            }
+        }
+    }
+
     onDestroy() {
         if (this._myStaticPhysXCollectors != null) {
             for (let collector of this._myStaticPhysXCollectors) {
