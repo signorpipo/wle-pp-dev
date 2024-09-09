@@ -69,10 +69,6 @@ export class EasyTuneToolComponent extends Component {
         this.object.pp_addComponent(InitEasyTuneVariablesComponent);
 
         (this._myWidget as EasyTuneWidget) = new EasyTuneWidget(this.engine);
-
-        EasyTuneUtils.addSetWidgetCurrentVariableCallback(this, (variableName: string) => { this._myWidget.setCurrentVariable(variableName); }, this.engine);
-
-        EasyTuneUtils.addRefreshWidgetCallback(this, () => { this._myWidget.refresh(); }, this.engine);
     }
 
     public override start(): void {
@@ -153,6 +149,11 @@ export class EasyTuneToolComponent extends Component {
         }
     }
 
+    public override onActivate(): void {
+        EasyTuneUtils.addSetWidgetCurrentVariableCallback(this, (variableName: string) => { this._myWidget.setCurrentVariable(variableName); }, this.engine);
+        EasyTuneUtils.addRefreshWidgetCallback(this, () => { this._myWidget.refresh(); }, this.engine);
+    }
+
     public override onDeactivate(): void {
         if (this._myStarted) {
             if (this._myWidgetVisibleBackup == null) {
@@ -163,12 +164,13 @@ export class EasyTuneToolComponent extends Component {
                 this._myWidget.setVisible(false);
             }
         }
+
+
+        EasyTuneUtils.removeSetWidgetCurrentVariableCallback(this, this.engine);
+        EasyTuneUtils.removeRefreshWidgetCallback(this, this.engine);
     }
 
     public override onDestroy(): void {
         this._myWidget.destroy();
-
-        EasyTuneUtils.removeSetWidgetCurrentVariableCallback(this, this.engine);
-        EasyTuneUtils.removeRefreshWidgetCallback(this, this.engine);
     }
 }

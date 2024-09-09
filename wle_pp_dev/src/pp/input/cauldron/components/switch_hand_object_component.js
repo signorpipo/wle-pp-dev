@@ -18,12 +18,6 @@ export class SwitchHandObjectComponent extends Component {
         this._myFirstUpdate = true;
 
         this._myCurrentInputSourceType = null;
-
-        Globals.getHandPose(this._myHandednessType, this.engine).registerPoseUpdatedEventListener(this, this._onPoseUpdated.bind(this));
-    }
-
-    onActivate() {
-        this._myFirstUpdate = true;
     }
 
     _start() {
@@ -80,7 +74,13 @@ export class SwitchHandObjectComponent extends Component {
         }
     }
 
-    onDestroy() {
+    onActivate() {
+        Globals.getHandPose(this._myHandednessType, this.engine).registerPoseUpdatedEventListener(this, this._onPoseUpdated.bind(this));
+
+        this._myFirstUpdate = true;
+    }
+
+    onDeactivate() {
         Globals.getHandPose(this._myHandednessType, this.engine)?.unregisterPoseUpdatedEventListener(this);
     }
 }

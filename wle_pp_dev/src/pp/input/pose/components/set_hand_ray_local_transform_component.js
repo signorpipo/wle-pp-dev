@@ -12,15 +12,17 @@ export class SetHandRayLocalTransformComponent extends Component {
 
     start() {
         this._myHandednessType = InputUtils.getHandednessByIndex(this._myHandedness);
-
-        Globals.getHandRayPose(this._myHandednessType, this.engine).registerPoseUpdatedEventListener(this, this._onPoseUpdated.bind(this));
     }
 
     _onPoseUpdated(dt, pose) {
         // Implemented outside class definition
     }
 
-    onDestroy() {
+    onActivate() {
+        Globals.getHandRayPose(this._myHandednessType, this.engine).registerPoseUpdatedEventListener(this, this._onPoseUpdated.bind(this));
+    }
+
+    onDeactivate() {
         Globals.getHandRayPose(this._myHandednessType, this.engine)?.unregisterPoseUpdatedEventListener(this);
     }
 }
