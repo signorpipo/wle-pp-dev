@@ -57,6 +57,8 @@ export class VisualManagerComponent extends Component {
 
     onActivate() {
         if (this._myVisualManager != null) {
+            this._myVisualManager.setActive(true);
+
             Globals.setVisualManager(this._myVisualManager, this.engine);
         }
 
@@ -66,8 +68,12 @@ export class VisualManagerComponent extends Component {
     }
 
     onDeactivate() {
-        if (this._myVisualManager != null && Globals.getVisualManager(this.engine) == this._myVisualManager) {
-            Globals.removeVisualManager(this.engine);
+        if (this._myVisualManager != null) {
+            this._myVisualManager.setActive(false);
+
+            if (Globals.getVisualManager(this.engine) == this._myVisualManager) {
+                Globals.removeVisualManager(this.engine);
+            }
         }
 
         if (this._myVisualResources != null && Globals.getVisualResources(this.engine) == this._myVisualResources) {

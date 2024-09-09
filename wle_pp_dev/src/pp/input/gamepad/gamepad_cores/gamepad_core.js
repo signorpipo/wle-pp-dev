@@ -7,7 +7,19 @@ export class GamepadCore {
 
         this._myManagingHandPose = false;
 
+        this._myActive = true;
+
         this._myDestroyed = false;
+    }
+
+    setActive(active) {
+        this._setActiveHook(active);
+
+        this._myActive = active;
+    }
+
+    isActive() {
+        return this._myActive;
     }
 
     getHandedness() {
@@ -40,9 +52,14 @@ export class GamepadCore {
         }
 
         this._startHook();
+
+        this._myActive = false;
+        this.setActive(true);
     }
 
     preUpdate(dt) {
+        if (!this._myActive) return;
+
         if (this.getHandPose() && this.isManagingHandPose()) {
             this.getHandPose().update(dt);
         }
@@ -51,6 +68,8 @@ export class GamepadCore {
     }
 
     postUpdate(dt) {
+        if (!this._myActive) return;
+
         this._postUpdateHook(dt);
     }
 
@@ -68,6 +87,10 @@ export class GamepadCore {
     }
 
     // Hooks
+
+    _setActiveHook(active) {
+
+    }
 
     _startHook() {
 

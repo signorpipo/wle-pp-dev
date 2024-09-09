@@ -44,6 +44,8 @@ export abstract class Gamepad {
 
     private readonly _myPulseInfo: GamepadPulseInfo = new GamepadPulseInfo();
 
+    private _myActive: boolean = true;
+
     // Config
     private _myMultiplePressMaxDelay: number = 0.4;
     private _myMultipleTouchMaxDelay: number = 0.4;
@@ -86,6 +88,16 @@ export abstract class Gamepad {
                 this._myAxesEmitters[gamepadAxesID]![gamepadAxesEvent] = new Emitter();
             }
         }
+    }
+
+    public setActive(active: boolean): void {
+        this._setActiveHook(active);
+
+        this._myActive = active;
+    }
+
+    public isActive(): boolean {
+        return this._myActive;
     }
 
     public getHandedness(): Handedness {
@@ -156,6 +168,10 @@ export abstract class Gamepad {
         return null;
     }
 
+    protected _setActiveHook(active: boolean): void {
+
+    }
+
     protected _startHook(): void {
 
     }
@@ -192,6 +208,8 @@ export abstract class Gamepad {
     }
 
     public update(dt: number): void {
+        if (!this._myActive) return;
+
         this._preUpdate(dt);
 
         this._preUpdateButtonInfos();

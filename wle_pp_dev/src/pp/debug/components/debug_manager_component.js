@@ -30,13 +30,19 @@ export class DebugManagerComponent extends Component {
 
     onActivate() {
         if (this._myDebugManager != null) {
+            this._myDebugManager.setActive(true);
+
             Globals.setDebugManager(this._myDebugManager, this.engine);
         }
     }
 
     onDeactivate() {
-        if (this._myDebugManager != null && Globals.getDebugManager(this.engine) == this._myDebugManager) {
-            Globals.removeDebugManager(this.engine);
+        if (this._myDebugManager != null) {
+            this._myDebugManager.setActive(false);
+
+            if (Globals.getDebugManager(this.engine) == this._myDebugManager) {
+                Globals.removeDebugManager(this.engine);
+            }
         }
     }
 

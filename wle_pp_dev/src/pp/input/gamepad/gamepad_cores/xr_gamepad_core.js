@@ -33,8 +33,24 @@ export class XRGamepadCore extends GamepadCore {
         return this._myXRSessionActive && this._myGamepad != null && (this._myGamepad.connected == null || this._myGamepad.connected);
     }
 
-    _startHook() {
-        XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this), true, false, this.getEngine());
+    _setActiveHook(active) {
+        if (this.isActive() != active) {
+            if (active) {
+                XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this), true, false, this.getEngine());
+            } else {
+                XRUtils.getSession(this.getEngine())?.removeEventListener("selectstart", this._mySelectStartEventListener);
+                XRUtils.getSession(this.getEngine())?.removeEventListener("selectend", this._mySelectEndEventListener);
+                XRUtils.getSession(this.getEngine())?.removeEventListener("squeezestart", this._mySqueezeStartEventListener);
+                XRUtils.getSession(this.getEngine())?.removeEventListener("squeezeend", this._mySqueezeEndEventListener);
+
+                XRUtils.unregisterSessionStartEndEventListeners(this, this.getEngine());
+
+                this._mySelectStartEventListener = null;
+                this._mySelectEndEventListener = null;
+                this._mySqueezeStartEventListener = null;
+                this._mySqueezeEndEventListener = null;
+            }
+        }
     }
 
     _preUpdateHook(dt) {

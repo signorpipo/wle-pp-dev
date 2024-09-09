@@ -119,6 +119,15 @@ export class HandPose extends BasePose {
         }
     }
 
+    _setActiveHook(active) {
+        if (this.isActive() != active) {
+            if (!active) {
+                XRUtils.getSession(this.getEngine())?.removeEventListener("inputsourceschange", this._myInputSourcesChangeEventListener);
+                XRUtils.getSession(this.getEngine())?.removeEventListener("visibilitychange", this._myVisibilityChangeEventListener);
+            }
+        }
+    }
+
     _onXRSessionStartHook(manualCall, session) {
         this._myDisableSwitchToTrackedHandDelaySessionChangeFrameCounter = 10;
         this._myDisableSwitchToTrackedHandDelaySessionChangeTimer.start();
@@ -234,11 +243,6 @@ export class HandPose extends BasePose {
 
         this._myInputSourcesChangeEventListener = null;
         this._myVisibilityChangeEventListener = null;
-    }
-
-    _destroyHook() {
-        XRUtils.getSession(this.getEngine())?.removeEventListener("inputsourceschange", this._myInputSourcesChangeEventListener);
-        XRUtils.getSession(this.getEngine())?.removeEventListener("visibilitychange", this._myVisibilityChangeEventListener);
     }
 }
 

@@ -69,6 +69,14 @@ export class UniversalGamepad extends Gamepad {
         return handPose;
     }
 
+    protected override _setActiveHook(active: boolean): void {
+        for (let i = 0; i < this._myGamepadCoresIDs.length; i++) {
+            const id = this._myGamepadCoresIDs[i];
+            const core = this._myGamepadCores[id];
+            core.setActive(active);
+        }
+    }
+
     protected override _startHook(): void {
         for (let i = 0; i < this._myGamepadCoresIDs.length; i++) {
             const id = this._myGamepadCoresIDs[i];

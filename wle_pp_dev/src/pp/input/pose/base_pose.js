@@ -37,6 +37,8 @@ export class BasePose {
         this._myLinearVelocity = vec3_create();
         this._myAngularVelocityRadians = vec3_create();
 
+        this._myActive = true;
+
         this._myValid = false;
         this._myLinearVelocityEmulated = true;
         this._myAngularVelocityEmulated = true;
@@ -52,6 +54,27 @@ export class BasePose {
 
     getEngine() {
         return this._myEngine;
+    }
+
+    setActive(active) {
+        if (this._myActive != active) {
+            if (active) {
+                XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this), true, true, this._myEngine);
+            } else {
+                XRUtils.getReferenceSpace(this._myEngine)?.removeEventListener?.("reset", this._myViewResetEventListener);
+                this._myViewResetEventListener = null;
+
+                XRUtils.unregisterSessionStartEndEventListeners(this, this._myEngine);
+            }
+        }
+
+        this._setActiveHook(active);
+
+        this._myActive = active;
+    }
+
+    isActive() {
+        return this._myActive;
     }
 
     // If the reference object is set, the transform will be converted using it as a parent,
@@ -183,10 +206,13 @@ export class BasePose {
     }
 
     start() {
-        XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this), true, true, this._myEngine);
+        this._myActive = false;
+        this.setActive(true);
     }
 
     update(dt) {
+        if (!this._myActive) return;
+
         this._update(dt, true, false);
     }
 
@@ -217,6 +243,10 @@ export class BasePose {
     }
 
     _onViewResetHook() {
+
+    }
+
+    _setActiveHook(active) {
 
     }
 
@@ -368,10 +398,11 @@ export class BasePose {
     destroy() {
         this._myDestroyed = true;
 
-        this._destroyHook();
+        if (this._myActive) {
+            this.setActive(false);
+        }
 
-        XRUtils.getReferenceSpace(this._myEngine)?.removeEventListener?.("reset", this._myViewResetEventListener);
-        XRUtils.unregisterSessionStartEndEventListeners(this, this._myEngine);
+        this._destroyHook();
     }
 
     isDestroyed() {

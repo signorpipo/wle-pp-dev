@@ -90,6 +90,8 @@ export class InputManagerComponent extends Component {
 
     onActivate() {
         if (this._myInputManager != null) {
+            this._myInputManager.setActive(true);
+
             Globals.setInputManager(this._myInputManager, this.engine);
         }
 
@@ -99,8 +101,12 @@ export class InputManagerComponent extends Component {
     }
 
     onDeactivate() {
-        if (this._myInputManager != null && Globals.getInputManager(this.engine) == this._myInputManager) {
-            Globals.removeInputManager(this.engine);
+        if (this._myInputManager != null) {
+            this._myInputManager.setActive(false);
+
+            if (Globals.getInputManager(this.engine) == this._myInputManager) {
+                Globals.removeInputManager(this.engine);
+            }
         }
 
         if (this._myPoseForwardFixedGlobal != null && Globals.isPoseForwardFixed(this.engine) == this._myPoseForwardFixedGlobal) {

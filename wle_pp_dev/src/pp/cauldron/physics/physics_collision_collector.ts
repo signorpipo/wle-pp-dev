@@ -332,9 +332,8 @@ export class PhysicsCollisionCollector {
     public destroy(): void {
         this._myDestroyed = true;
 
-        if (this._myCollisionCallbackID != null && !this._myPhysXComponent.isDestroyed) {
-            this._myPhysXComponent.removeCollisionCallback(this._myCollisionCallbackID);
-            this._myCollisionCallbackID = null;
+        if (this._myActive) {
+            this.setActive(false);
         }
     }
 

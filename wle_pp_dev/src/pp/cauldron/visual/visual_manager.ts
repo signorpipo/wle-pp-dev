@@ -41,6 +41,10 @@ export class VisualManager {
     public setActive(active: boolean): void {
         if (this._myActive != active) {
             this._myActive = active;
+
+            if (!this._myActive) {
+                this.clearAllVisualElements();
+            }
         }
     }
 
@@ -152,27 +156,27 @@ export class VisualManager {
         return elementID;
     }
 
-    public clearVisualElement(elementID?: unknown): void {
-        if (elementID == null) {
-            for (const visualElements of this._myVisualElementsTypeMap.values()) {
-                for (const visualElement of visualElements.values()) {
-                    this._releaseElement(visualElement[0]);
-                }
+    public clearAllVisualElements(): void {
+        for (const visualElements of this._myVisualElementsTypeMap.values()) {
+            for (const visualElement of visualElements.values()) {
+                this._releaseElement(visualElement[0]);
             }
+        }
 
-            this._myVisualElementsToShow.pp_clear();
-            this._myVisualElementsTypeMap.clear();
-            this._myVisualElementLastID = 0;
-        } else {
-            for (const visualElements of this._myVisualElementsTypeMap.values()) {
-                if (visualElements.has(elementID)) {
-                    const visualElementPair = visualElements.get(elementID)!;
-                    this._releaseElement(visualElementPair[0]);
-                    visualElements.delete(elementID);
+        this._myVisualElementsToShow.pp_clear();
+        this._myVisualElementsTypeMap.clear();
+        this._myVisualElementLastID = 0;
+    }
 
-                    this._myVisualElementsToShow.pp_removeEqual(visualElementPair[0]);
-                    break;
-                }
+    public clearVisualElement(elementID: unknown): void {
+        for (const visualElements of this._myVisualElementsTypeMap.values()) {
+            if (visualElements.has(elementID)) {
+                const visualElementPair = visualElements.get(elementID)!;
+                this._releaseElement(visualElementPair[0]);
+                visualElements.delete(elementID);
+
+                this._myVisualElementsToShow.pp_removeEqual(visualElementPair[0]);
+                break;
             }
         }
     }
