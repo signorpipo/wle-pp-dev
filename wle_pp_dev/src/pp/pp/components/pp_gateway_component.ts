@@ -81,7 +81,7 @@ export class PPGatewayComponent extends Component {
 
     public override init(): void {
         if (this._myClearConsoleOnInit) {
-            this._myClearConsoleComponent = this.object.pp_addComponent(ClearConsoleComponent);
+            this._myClearConsoleComponent = this.object.pp_addComponent(ClearConsoleComponent, false);
         }
 
         (this._myGetDefaultResourcesComponent as GetDefaultResourcesComponent) = this.object.pp_addComponent(GetDefaultResourcesComponent, this._getProperties(GetDefaultResourcesComponent.Properties), false)!;
@@ -118,6 +118,10 @@ export class PPGatewayComponent extends Component {
     }
 
     public override start(): void {
+        if (this._myClearConsoleComponent != null) {
+            this._myClearConsoleComponent.active = true;
+        }
+
         this._myGetDefaultResourcesComponent.active = true;
         this._myGetSceneObjectsComponent.active = true;
 
