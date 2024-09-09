@@ -23,14 +23,6 @@ export class SetActiveComponent extends Component {
         this._myFirstUpdate = true;
         this._myFirstXRStart = true;
         this._myFirstXREnd = true;
-
-        if (this._mySetActiveWhen == 3 || this._mySetActiveWhen == 5) {
-            XRUtils.registerSessionStartEventListener(this, this._onXRSessionStart.bind(this), true, true, this.engine);
-        }
-
-        if (this._mySetActiveWhen == 4 || this._mySetActiveWhen == 6) {
-            XRUtils.registerSessionEndEventListener(this, this._onXRSessionEnd.bind(this), this.engine);
-        }
     }
 
     update(dt) {
@@ -69,7 +61,17 @@ export class SetActiveComponent extends Component {
         }
     }
 
-    onDestroy() {
+    onActivate() {
+        if (this._mySetActiveWhen == 3 || this._mySetActiveWhen == 5) {
+            XRUtils.registerSessionStartEventListener(this, this._onXRSessionStart.bind(this), true, true, this.engine);
+        }
+
+        if (this._mySetActiveWhen == 4 || this._mySetActiveWhen == 6) {
+            XRUtils.registerSessionEndEventListener(this, this._onXRSessionEnd.bind(this), this.engine);
+        }
+    }
+
+    onDeactivate() {
         XRUtils.unregisterSessionStartEndEventListeners(this, this.engine);
     }
 }

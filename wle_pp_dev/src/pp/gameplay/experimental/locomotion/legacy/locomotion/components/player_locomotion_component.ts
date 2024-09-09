@@ -279,99 +279,100 @@ export class PlayerLocomotionComponent extends Component {
 
 
 
-    public override init(): void {
-        Globals.setPlayerLocomotionComponent(this, this.engine);
-    }
-
     public override start(): void {
-        const params = new PlayerLocomotionParams(this.engine);
+        // Prevents double global from same engine
+        if (!Globals.hasPlayerLocomotion(this.engine)) {
+            const params = new PlayerLocomotionParams(this.engine);
 
-        params.myDefaultLocomotionType = this._myDefaultLocomotionType;
-        params.myAlwaysSmoothForNonVR = this._myAlwaysSmoothForNonVR;
-        params.mySwitchLocomotionTypeShortcutEnabled = this._mySwitchLocomotionTypeShortcutEnabled;
+            params.myDefaultLocomotionType = this._myDefaultLocomotionType;
+            params.myAlwaysSmoothForNonVR = this._myAlwaysSmoothForNonVR;
+            params.mySwitchLocomotionTypeShortcutEnabled = this._mySwitchLocomotionTypeShortcutEnabled;
 
-        params.myDefaultHeight = this._myDefaultHeight;
+            params.myDefaultHeight = this._myDefaultHeight;
 
-        params.myMaxSpeed = this._myMaxSpeed;
-        params.myMaxRotationSpeed = this._myMaxRotationSpeed;
-        params.myGravityAcceleration = this._myGravityAcceleration;
-        params.myMaxGravitySpeed = this._myMaxGravitySpeed;
+            params.myMaxSpeed = this._myMaxSpeed;
+            params.myMaxRotationSpeed = this._myMaxRotationSpeed;
+            params.myGravityAcceleration = this._myGravityAcceleration;
+            params.myMaxGravitySpeed = this._myMaxGravitySpeed;
 
-        params.myCharacterRadius = this._myCharacterRadius;
+            params.myCharacterRadius = this._myCharacterRadius;
 
-        params.mySpeedSlowDownPercentageOnWallSlid = this._mySpeedSlowDownPercentageOnWallSlid;
+            params.mySpeedSlowDownPercentageOnWallSlid = this._mySpeedSlowDownPercentageOnWallSlid;
 
-        params.myIsSnapTurn = this._myIsSnapTurn;
-        params.mySnapTurnOnlyVR = this._mySnapTurnOnlyVR;
-        params.mySnapTurnAngle = this._mySnapTurnAngle;
-        params.mySnapTurnSpeedDegrees = this._mySnapTurnSpeedDegrees;
+            params.myIsSnapTurn = this._myIsSnapTurn;
+            params.mySnapTurnOnlyVR = this._mySnapTurnOnlyVR;
+            params.mySnapTurnAngle = this._mySnapTurnAngle;
+            params.mySnapTurnSpeedDegrees = this._mySnapTurnSpeedDegrees;
 
-        params.myFlyEnabled = this._myFlyEnabled;
-        params.myStartFlying = this._myStartFlying;
-        params.myFlyWithButtonsEnabled = this._myFlyWithButtonsEnabled;
-        params.myFlyWithViewAngleEnabled = this._myFlyWithViewAngleEnabled;
-        params.myMinAngleToFlyUpNonVR = this._myMinAngleToFlyUpNonVR;
-        params.myMinAngleToFlyDownNonVR = this._myMinAngleToFlyDownNonVR;
-        params.myMinAngleToFlyUpVR = this._myMinAngleToFlyUpVR;
-        params.myMinAngleToFlyDownVR = this._myMinAngleToFlyDownVR;
-        params.myMinAngleToFlyRight = this._myMinAngleToFlyRight;
+            params.myFlyEnabled = this._myFlyEnabled;
+            params.myStartFlying = this._myStartFlying;
+            params.myFlyWithButtonsEnabled = this._myFlyWithButtonsEnabled;
+            params.myFlyWithViewAngleEnabled = this._myFlyWithViewAngleEnabled;
+            params.myMinAngleToFlyUpNonVR = this._myMinAngleToFlyUpNonVR;
+            params.myMinAngleToFlyDownNonVR = this._myMinAngleToFlyDownNonVR;
+            params.myMinAngleToFlyUpVR = this._myMinAngleToFlyUpVR;
+            params.myMinAngleToFlyDownVR = this._myMinAngleToFlyDownVR;
+            params.myMinAngleToFlyRight = this._myMinAngleToFlyRight;
 
-        params.myMainHand = InputUtils.getHandednessByIndex(this._myMainHand)!;
+            params.myMainHand = InputUtils.getHandednessByIndex(this._myMainHand)!;
 
-        params.myDirectionInvertForwardWhenUpsideDown = this._myDirectionInvertForwardWhenUpsideDown;
-        params.myVRDirectionReferenceType = this._myVRDirectionReferenceType;
-        params.myVRDirectionReferenceObject = this._myVRDirectionReferenceObject;
+            params.myDirectionInvertForwardWhenUpsideDown = this._myDirectionInvertForwardWhenUpsideDown;
+            params.myVRDirectionReferenceType = this._myVRDirectionReferenceType;
+            params.myVRDirectionReferenceObject = this._myVRDirectionReferenceObject;
 
-        params.myForeheadExtraHeight = 0.1;
+            params.myForeheadExtraHeight = 0.1;
 
-        params.myTeleportType = this._myTeleportType;
-        params.myTeleportMaxDistance = this._myTeleportMaxDistance;
-        params.myTeleportMaxHeightDifference = this._myTeleportMaxHeightDifference;
-        params.myTeleportRotationOnUpEnabled = this._myTeleportRotationOnUpEnabled;
-        params.myTeleportValidMaterial = this._myTeleportValidMaterial;
-        params.myTeleportInvalidMaterial = this._myTeleportInvalidMaterial;
-        params.myTeleportPositionObject = this._myTeleportPositionObject;
-        params.myTeleportPositionObjectRotateWithHead = this._myTeleportPositionObjectRotateWithHead;
-        params.myTeleportParableStartReferenceObject = this._myTeleportParableStartReferenceObject;
+            params.myTeleportType = this._myTeleportType;
+            params.myTeleportMaxDistance = this._myTeleportMaxDistance;
+            params.myTeleportMaxHeightDifference = this._myTeleportMaxHeightDifference;
+            params.myTeleportRotationOnUpEnabled = this._myTeleportRotationOnUpEnabled;
+            params.myTeleportValidMaterial = this._myTeleportValidMaterial;
+            params.myTeleportInvalidMaterial = this._myTeleportInvalidMaterial;
+            params.myTeleportPositionObject = this._myTeleportPositionObject;
+            params.myTeleportPositionObjectRotateWithHead = this._myTeleportPositionObjectRotateWithHead;
+            params.myTeleportParableStartReferenceObject = this._myTeleportParableStartReferenceObject;
 
-        params.myResetRealOnStart = this._myResetRealOnStart;
-        params.myResetRealOnStartFramesAmount = this._myResetRealOnStartFramesAmount;
-        params.myResetHeadToFeetInsteadOfReal = this._myResetHeadToFeetInsteadOfReal;
-        params.myResetHeadToRealMinDistance = this._myResetHeadToRealMinDistance;
+            params.myResetRealOnStart = this._myResetRealOnStart;
+            params.myResetRealOnStartFramesAmount = this._myResetRealOnStartFramesAmount;
+            params.myResetHeadToFeetInsteadOfReal = this._myResetHeadToFeetInsteadOfReal;
+            params.myResetHeadToRealMinDistance = this._myResetHeadToRealMinDistance;
 
-        params.mySyncWithRealWorldPositionOnlyIfValid = this._mySyncWithRealWorldPositionOnlyIfValid;
-        params.myViewOcclusionInsideWallsEnabled = this._myViewOcclusionInsideWallsEnabled;
+            params.mySyncWithRealWorldPositionOnlyIfValid = this._mySyncWithRealWorldPositionOnlyIfValid;
+            params.myViewOcclusionInsideWallsEnabled = this._myViewOcclusionInsideWallsEnabled;
 
-        params.mySyncNonVRHeightWithVROnExitSession = this._mySyncNonVRHeightWithVROnExitSession;
-        params.mySyncNonVRVerticalAngleWithVROnExitSession = this._mySyncNonVRVerticalAngleWithVROnExitSession;
+            params.mySyncNonVRHeightWithVROnExitSession = this._mySyncNonVRHeightWithVROnExitSession;
+            params.mySyncNonVRVerticalAngleWithVROnExitSession = this._mySyncNonVRVerticalAngleWithVROnExitSession;
 
-        params.mySyncHeadWithRealAfterLocomotionUpdateIfNeeded = this._mySyncHeadWithRealAfterLocomotionUpdateIfNeeded;
+            params.mySyncHeadWithRealAfterLocomotionUpdateIfNeeded = this._mySyncHeadWithRealAfterLocomotionUpdateIfNeeded;
 
-        params.myColliderAccuracy = this._myColliderAccuracy;
-        params.myColliderCheckOnlyFeet = this._myColliderCheckOnlyFeet;
-        params.myColliderSlideAlongWall = this._myColliderSlideAlongWall;
-        params.myColliderMaxWalkableGroundAngle = this._myColliderMaxWalkableGroundAngle;
-        params.myColliderSnapOnGround = this._myColliderSnapOnGround;
-        params.myColliderMaxDistanceToSnapOnGround = this._myColliderMaxDistanceToSnapOnGround;
-        params.myColliderMaxWalkableGroundStepHeight = this._myColliderMaxWalkableGroundStepHeight;
-        params.myColliderPreventFallingFromEdges = this._myColliderPreventFallingFromEdges;
+            params.myColliderAccuracy = this._myColliderAccuracy;
+            params.myColliderCheckOnlyFeet = this._myColliderCheckOnlyFeet;
+            params.myColliderSlideAlongWall = this._myColliderSlideAlongWall;
+            params.myColliderMaxWalkableGroundAngle = this._myColliderMaxWalkableGroundAngle;
+            params.myColliderSnapOnGround = this._myColliderSnapOnGround;
+            params.myColliderMaxDistanceToSnapOnGround = this._myColliderMaxDistanceToSnapOnGround;
+            params.myColliderMaxWalkableGroundStepHeight = this._myColliderMaxWalkableGroundStepHeight;
+            params.myColliderPreventFallingFromEdges = this._myColliderPreventFallingFromEdges;
 
-        params.myDebugFlyShortcutEnabled = this._myDebugFlyShortcutEnabled;
-        params.myDebugFlyMaxSpeedMultiplier = this._myDebugFlyMaxSpeedMultiplier;
-        params.myMoveThroughCollisionShortcutEnabled = this._myMoveThroughCollisionShortcutEnabled;
-        params.myMoveHeadShortcutEnabled = this._myMoveHeadShortcutEnabled;
-        params.myTripleSpeedShortcutEnabled = this._myTripleSpeedShortcutEnabled;
+            params.myDebugFlyShortcutEnabled = this._myDebugFlyShortcutEnabled;
+            params.myDebugFlyMaxSpeedMultiplier = this._myDebugFlyMaxSpeedMultiplier;
+            params.myMoveThroughCollisionShortcutEnabled = this._myMoveThroughCollisionShortcutEnabled;
+            params.myMoveHeadShortcutEnabled = this._myMoveHeadShortcutEnabled;
+            params.myTripleSpeedShortcutEnabled = this._myTripleSpeedShortcutEnabled;
 
-        params.myDebugHorizontalEnabled = this._myDebugHorizontalEnabled;
-        params.myDebugVerticalEnabled = this._myDebugVerticalEnabled;
+            params.myDebugHorizontalEnabled = this._myDebugHorizontalEnabled;
+            params.myDebugVerticalEnabled = this._myDebugVerticalEnabled;
 
-        params.myCollisionCheckDisabled = this._myCollisionCheckDisabled;
+            params.myCollisionCheckDisabled = this._myCollisionCheckDisabled;
 
-        params.myPhysicsBlockLayerFlags.copy(this._getPhysicsBlockLayersFlags());
-        params.myTeleportFloorLayerFlags.copy(this._getTeleportFloorLayersFlags());
-        params.myViewOcclusionLayerFlags.copy(this._getViewOcclusionLayersFlags());
+            params.myPhysicsBlockLayerFlags.copy(this._getPhysicsBlockLayersFlags());
+            params.myTeleportFloorLayerFlags.copy(this._getTeleportFloorLayersFlags());
+            params.myViewOcclusionLayerFlags.copy(this._getViewOcclusionLayersFlags());
 
-        (this._myPlayerLocomotion as PlayerLocomotion) = new PlayerLocomotion(params);
+            (this._myPlayerLocomotion as PlayerLocomotion) = new PlayerLocomotion(params);
+
+            Globals.setPlayerLocomotion(this._myPlayerLocomotion, this.engine);
+        }
     }
 
     public onPostPoseUpdatedEvent(dt: number, pose: Readonly<BasePose>, manualUpdate: boolean): void {
@@ -433,8 +434,9 @@ export class PlayerLocomotionComponent extends Component {
 
     public override onActivate(): void {
         if (this._myPlayerLocomotion != null) {
-            this._myPlayerLocomotion.setActive(true);
+            Globals.setPlayerLocomotion(this._myPlayerLocomotion, this.engine);
 
+            this._myPlayerLocomotion.setActive(true);
             Globals.getHeadPose(this.engine)!.registerPostPoseUpdatedEventEventListener(this, this.onPostPoseUpdatedEvent.bind(this));
         }
     }
@@ -444,6 +446,10 @@ export class PlayerLocomotionComponent extends Component {
             this._myPlayerLocomotion.setActive(false);
 
             Globals.getHeadPose(this.engine)!.unregisterPostPoseUpdatedEventEventListener(this);
+
+            if (Globals.getPlayerLocomotion(this.engine) == this._myPlayerLocomotion) {
+                Globals.removePlayerLocomotion(this.engine);
+            }
         }
     }
 
@@ -479,10 +485,8 @@ export class PlayerLocomotionComponent extends Component {
     }
 
     public override onDestroy(): void {
-        this._myPlayerLocomotion?.destroy();
-
-        if (Globals.getPlayerLocomotionComponent(this.engine) == this) {
-            Globals.removePlayerLocomotionComponent(this.engine);
+        if (this._myPlayerLocomotion != null) {
+            this._myPlayerLocomotion.destroy();
         }
     }
 }

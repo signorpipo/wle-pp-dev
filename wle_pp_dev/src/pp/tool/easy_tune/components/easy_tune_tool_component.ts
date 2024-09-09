@@ -153,7 +153,7 @@ export class EasyTuneToolComponent extends Component {
         }
     }
 
-    public overrideonDeactivate(): void {
+    public override onDeactivate(): void {
         if (this._myStarted) {
             if (this._myWidgetVisibleBackup == null) {
                 this._myWidgetVisibleBackup = this._myWidget.isVisible();

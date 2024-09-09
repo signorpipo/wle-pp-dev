@@ -8,11 +8,6 @@ export class SFXOnGrabThrowComponent extends Component {
     start() {
         this._myGrabbers = Globals.getRootObject(this.engine).pp_getComponents(GrabberHandComponent);
 
-        for (let grabber of this._myGrabbers) {
-            grabber.registerGrabEventListener(this, this._onGrab.bind(this));
-            grabber.registerThrowEventListener(this, this._onThrow.bind(this));
-        }
-
         this._myStarted = false;
     }
 
@@ -51,10 +46,19 @@ export class SFXOnGrabThrowComponent extends Component {
         }
     }
 
-    onDestroy() {
+    onActivate() {
         for (let grabber of this._myGrabbers) {
-            grabber.unregisterGrabEventListener(this);
-            grabber.unregisterThrowEventListener(this);
+            grabber.registerGrabEventListener(this, this._onGrab.bind(this));
+            grabber.registerThrowEventListener(this, this._onThrow.bind(this));
+        }
+    }
+
+    onDeactivate() {
+        for (let grabber of this._myGrabbers) {
+            if (!grabber.isDestroyed) {
+                grabber.unregisterGrabEventListener(this);
+                grabber.unregisterThrowEventListener(this);
+            }
         }
     }
 }
