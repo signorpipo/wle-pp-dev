@@ -75,8 +75,7 @@ if (disableEngineLogs) {
 }
 
 const engine = await loadRuntime(Constants.RuntimeBaseName, RuntimeOptions);
-
-engine.onSceneLoaded.once(() => {
+engine.onLoadingScreenEnd.once(() => {
     const el = document.getElementById('version');
     if (el) setTimeout(() => el.remove(), 2000);
 });
@@ -150,11 +149,16 @@ engine.registerComponent(TrackedHandDrawAllJointsComponent);
 engine.registerComponent(VirtualGamepadComponent);
 /* wle:auto-register:end */
 
-const loadDelaySeconds = 0;
-if (loadDelaySeconds > 0) {
-    setTimeout(() => engine.scene.load(`${Constants.ProjectName}.bin`), loadDelaySeconds * 1000);
-} else {
-    engine.scene.load(`${Constants.ProjectName}.bin`);
+try {
+    const loadDelaySeconds = 0;
+    if (loadDelaySeconds > 0) {
+        await new Promise((resolve) => setTimeout(resolve, loadDelaySeconds * 1000));
+    }
+
+    await engine.loadMainScene(`${Constants.ProjectName}.bin`);
+} catch (e) {
+    console.error(e);
+    window.alert(`Failed to load ${Constants.ProjectName}.bin:`, e);
 }
 
 /* wle:auto-benchmark:start */
