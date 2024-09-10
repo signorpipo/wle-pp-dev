@@ -11510,7 +11510,7 @@
                 "/js/lib/"
             ],
             "bundlingType": "esbuild",
-            "entryPoint": "src/index.js"
+            "entryPoint": "src/index.ts"
         },
         "vr": {
             "leftEyeObject": "a5f3a9f5-4ba2-43fe-9982-17d436de4c7c",

@@ -28,7 +28,6 @@ import {SFXOnGrabThrowComponent} from './playground/components/sfx_on_grab_throw
 import {TargetHitCheckComponent} from './playground/components/target_hit_check_component.js';
 import {ToggleHowToTextComponent} from './playground/components/toggle_how_to_text_component.js';
 import {WaveMovementComponent} from './playground/components/wave_movement_component.js';
-import {GrabberHandComponent} from './pp/gameplay/grab_throw/grabber_hand_component.js';
 import {AdjustHierarchyPhysXScaleComponent} from './pp/index.js';
 import {ConsoleVRToolComponent} from './pp/index.js';
 import {CursorButtonComponent} from './pp/index.js';
@@ -36,6 +35,7 @@ import {EasyTuneToolComponent} from './pp/index.js';
 import {FingerCursorComponent} from './pp/index.js';
 import {GamepadMeshAnimatorComponent} from './pp/index.js';
 import {GrabbableComponent} from './pp/index.js';
+import {GrabberHandComponent} from './pp/index.js';
 import {MuteEverythingComponent} from './pp/index.js';
 import {PPGatewayComponent} from './pp/index.js';
 import {PlayerLocomotionComponent} from './pp/index.js';
@@ -52,7 +52,7 @@ import {TrackedHandDrawAllJointsComponent} from './pp/index.js';
 import {VirtualGamepadComponent} from './pp/index.js';
 /* wle:auto-imports:end */
 
-import { loadRuntime, LogLevel } from '@wonderlandengine/api';
+import { loadRuntime, LoadRuntimeOptions, LogLevel } from '@wonderlandengine/api';
 
 /* wle:auto-constants:start */
 const Constants = {
@@ -71,7 +71,7 @@ const RuntimeOptions = {
 
 const disableEngineLogs = true;
 if (disableEngineLogs) {
-    RuntimeOptions.logs = [LogLevel.Error];
+    (RuntimeOptions as LoadRuntimeOptions).logs = [LogLevel.Error];
 }
 
 const engine = await loadRuntime(Constants.RuntimeBaseName, RuntimeOptions);
@@ -82,22 +82,22 @@ engine.onLoadingScreenEnd.once(() => {
 
 /* WebXR setup. */
 
-function requestSession(mode) {
+function requestSession(mode: XRSessionMode): void {
     engine
         .requestXRSession(mode, Constants.WebXRRequiredFeatures, Constants.WebXROptionalFeatures)
         .catch((e) => console.error(e));
 }
 
-function setupButtonsXR() {
+function setupButtonsXR(): void {
     /* Setup AR / VR buttons */
     const arButton = document.getElementById('ar-button');
     if (arButton) {
-        arButton.dataset.supported = engine.arSupported;
+        arButton.dataset.supported = engine.arSupported as unknown as string;
         arButton.addEventListener('click', () => requestSession('immersive-ar'));
     }
     const vrButton = document.getElementById('vr-button');
     if (vrButton) {
-        vrButton.dataset.supported = engine.vrSupported;
+        vrButton.dataset.supported = engine.vrSupported as unknown as string;
         vrButton.addEventListener('click', () => requestSession('immersive-vr'));
     }
 }
@@ -125,7 +125,6 @@ engine.registerComponent(SFXOnGrabThrowComponent);
 engine.registerComponent(TargetHitCheckComponent);
 engine.registerComponent(ToggleHowToTextComponent);
 engine.registerComponent(WaveMovementComponent);
-engine.registerComponent(GrabberHandComponent);
 engine.registerComponent(AdjustHierarchyPhysXScaleComponent);
 engine.registerComponent(ConsoleVRToolComponent);
 engine.registerComponent(CursorButtonComponent);
@@ -133,6 +132,7 @@ engine.registerComponent(EasyTuneToolComponent);
 engine.registerComponent(FingerCursorComponent);
 engine.registerComponent(GamepadMeshAnimatorComponent);
 engine.registerComponent(GrabbableComponent);
+engine.registerComponent(GrabberHandComponent);
 engine.registerComponent(MuteEverythingComponent);
 engine.registerComponent(PPGatewayComponent);
 engine.registerComponent(PlayerLocomotionComponent);
