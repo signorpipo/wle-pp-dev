@@ -54,6 +54,9 @@ export class GrabberHandComponent extends Component {
         this._myThrowEmitter = new Emitter();     // Signature: listener(grabber, grabbable)
 
         this._myDebugEnabled = false;
+
+        // Support Variables
+        this._myVec3Zero = vec3_create();
     }
 
     start() {
@@ -70,7 +73,10 @@ export class GrabberHandComponent extends Component {
     update(dt) {
         this._myCollisionsCollector.update(dt);
 
-        const currentInputSourceType = this._myGamepad.getHandPose().getInputSourceType();
+        let currentInputSourceType = null;
+        if (this._myGamepad.getHandPose() != null) {
+            currentInputSourceType = this._myGamepad.getHandPose().getInputSourceType();
+        }
 
         if (this._myPrevInputSourceType != currentInputSourceType) {
             this.throw();
@@ -239,6 +245,12 @@ export class GrabberHandComponent extends Component {
 
     _updateLinearVelocityHistory() {
         let handPose = this._myGamepad.getHandPose();
+        if (handPose != null) {
+            this._myHandLinearVelocityHistory.unshift(handPose.getLinearVelocity());
+        } else {
+            this._myHandLinearVelocityHistory.unshift(this._myVec3Zero);
+        }
+
         this._myHandLinearVelocityHistory.unshift(handPose.getLinearVelocity());
         this._myHandLinearVelocityHistory.pop();
 
@@ -249,7 +261,12 @@ export class GrabberHandComponent extends Component {
 
     _updateAngularVelocityHistory() {
         let handPose = this._myGamepad.getHandPose();
-        this._myHandAngularVelocityHistory.unshift(handPose.getAngularVelocityRadians());
+        if (handPose != null) {
+            this._myHandAngularVelocityHistory.unshift(handPose.getAngularVelocityRadians());
+        } else {
+            this._myHandAngularVelocityHistory.unshift(this._myVec3Zero);
+        }
+
         this._myHandAngularVelocityHistory.pop();
 
         for (let grabbable of this._myGrabbables) {
@@ -307,7 +324,7 @@ export class GrabberHandComponent extends Component {
         speed = Math.pp_clamp(speed * this._myThrowAngularVelocityMultiplier, 0, this._myThrowMaxAngularSpeedRadians);
 
         // Direction
-        let direction = angularVelocity;
+        let direction = angularVelocity.vec3_clone();
         direction.vec3_normalize(direction);
 
         direction.vec3_scale(speed, direction);

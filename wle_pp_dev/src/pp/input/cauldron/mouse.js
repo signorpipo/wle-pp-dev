@@ -102,6 +102,28 @@ export class Mouse {
                 this._myMiddleButtonScrollActive = !this._myMiddleButtonScrollActive;
                 this.setMiddleButtonScrollActive(!this._myMiddleButtonScrollActive);
             } else {
+                for (let i = 0; i < this._myButtonInfosIDs.length; i++) {
+                    let id = this._myButtonInfosIDs[i];
+                    let buttonInfo = this._myButtonInfos[id];
+                    buttonInfo.myPressed = false;
+                    buttonInfo.myPressStart = false;
+                    buttonInfo.myPressEnd = false;
+                    buttonInfo.myPressStartToProcess = false;
+                    buttonInfo.myPressEndToProcess = false;
+                }
+
+                this._myInternalMousePosition.vec2_zero();
+
+                this._myScreenSize.vec2_zero();
+
+                this._myResetMovingTimer.reset();
+                this._myMoving = false;
+
+                this._myInsideView = false;
+                this._myValid = false;
+
+                this._myPointerID = null;
+                this._myLastValidPointerEvent = null;
 
                 document.body.removeEventListener("pointermove", this._myPointerMoveEventListener);
                 document.body.removeEventListener("pointerdown", this._myPointerDownEventListener);

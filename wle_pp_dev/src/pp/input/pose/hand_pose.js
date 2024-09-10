@@ -122,6 +122,18 @@ export class HandPose extends BasePose {
     _setActiveHook(active) {
         if (this.isActive() != active) {
             if (!active) {
+                this._myInputSource = null;
+                this._myLastGamepadInputSource = null;
+                this._myRealInputSource = null;
+                this._myGamepadWasUsedFrameCounter = 0;
+                this._myInputSourceChangeDirty = false;
+
+                this._mySwitchToTrackedHandTimer.reset();
+                this._myDisableSwitchToTrackedHandDelaySessionChangeFrameCounter = 0;
+                this._myDisableSwitchToTrackedHandDelaySessionChangeTimer.reset();
+
+                this._myTrackedHand = false;
+
                 XRUtils.getSession(this.getEngine())?.removeEventListener("inputsourceschange", this._myInputSourcesChangeEventListener);
                 XRUtils.getSession(this.getEngine())?.removeEventListener("visibilitychange", this._myVisibilityChangeEventListener);
             }

@@ -93,7 +93,23 @@ export abstract class Gamepad {
     public setActive(active: boolean): void {
         this._setActiveHook(active);
 
-        this._myActive = active;
+        if (this._myActive != active) {
+            this._myActive = active;
+
+            if (!this._myActive) {
+                for (let i = 0; i < this._myButtonInfosIDs.length; i++) {
+                    const id = this._myButtonInfosIDs[i];
+                    const info = this._myButtonInfos[id]!;
+                    info.reset();
+                }
+
+                for (let i = 0; i < this._myAxesInfosIDs.length; i++) {
+                    const id = this._myAxesInfosIDs[i];
+                    const info = this._myAxesInfos[id]!;
+                    info.reset();
+                }
+            }
+        }
     }
 
     public isActive(): boolean {

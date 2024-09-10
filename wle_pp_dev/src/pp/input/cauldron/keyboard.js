@@ -165,6 +165,16 @@ export class Keyboard {
                 this._myOnKeyUpEventListener = this._keyUp.bind(this);
                 window.addEventListener("keyup", this._myOnKeyUpEventListener);
             } else {
+                for (let i = 0; i < this._myKeyInfosIDs.length; i++) {
+                    let id = this._myKeyInfosIDs[i];
+                    let keyInfo = this._myKeyInfos[id];
+                    keyInfo.myPressed = false;
+                    keyInfo.myPressStart = false;
+                    keyInfo.myPressEnd = false;
+                    keyInfo.myPressStartToProcess = false;
+                    keyInfo.myPressEndToProcess = false;
+                }
+
                 window.removeEventListener("keydown", this._myOnKeyDownEventListener);
                 window.removeEventListener("keyup", this._myOnKeyUpEventListener);
 

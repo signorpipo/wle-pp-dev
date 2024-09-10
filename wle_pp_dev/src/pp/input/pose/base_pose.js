@@ -29,7 +29,7 @@ export class BasePose {
         this._myEngine = basePoseParams.myEngine;
 
         this._myPosition = vec3_create();
-        this._myRotationQuat = quat2_create();
+        this._myRotationQuat = quat_create();
 
         this._myPrevPosition = vec3_create();
         this._myPrevRotationQuat = quat_create();
@@ -61,6 +61,20 @@ export class BasePose {
             if (active) {
                 XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this), true, true, this._myEngine);
             } else {
+                this._myPosition.vec3_zero();
+                this._myRotationQuat.quat_identity();
+
+                this._myPrevPosition.vec3_zero();
+                this._myPrevRotationQuat.quat_identity();
+
+                this._myLinearVelocity.vec3_zero();
+                this._myAngularVelocityRadians.vec3_zero();
+
+                this._myValid = false;
+
+                this._myLinearVelocityEmulated = true;
+                this._myAngularVelocityEmulated = true;
+
                 XRUtils.getReferenceSpace(this._myEngine)?.removeEventListener?.("reset", this._myViewResetEventListener);
                 this._myViewResetEventListener = null;
 
