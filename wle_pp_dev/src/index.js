@@ -149,16 +149,16 @@ engine.registerComponent(TrackedHandDrawAllJointsComponent);
 engine.registerComponent(VirtualGamepadComponent);
 /* wle:auto-register:end */
 
-try {
-    const loadDelaySeconds = 0;
-    if (loadDelaySeconds > 0) {
-        await new Promise((resolve) => setTimeout(resolve, loadDelaySeconds * 1000));
-    }
+const sceneLoadDelaySeconds = 0;
+if (sceneLoadDelaySeconds > 0) {
+    await new Promise((resolve) => setTimeout(resolve, sceneLoadDelaySeconds * 1000));
+}
 
+try {
     await engine.loadMainScene(`${Constants.ProjectName}.bin`);
-} catch (e) {
-    console.error(e);
-    window.alert(`Failed to load ${Constants.ProjectName}.bin:`, e);
+} catch (error) {
+    console.error(error);
+    window.alert(`Failed to load ${Constants.ProjectName}.bin: ` + error);
 }
 
 /* wle:auto-benchmark:start */
