@@ -5,7 +5,6 @@ import { Globals } from "../../pp/pp/globals.js";
 
 export class RaycastTestComponent extends Component {
     static TypeName = "raycast-test";
-    static Properties = {};
 
     start() {
         this._myTimer = new Timer(0);

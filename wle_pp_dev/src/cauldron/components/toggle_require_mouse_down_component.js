@@ -3,7 +3,6 @@ import { Timer } from "../../pp/cauldron/cauldron/timer.js";
 
 export class ToggleRequireMouseDownComponent extends Component {
     static TypeName = "toggle-require-mouse-down";
-    static Properties = {};
 
     start() {
         this._myTimer = new Timer(3);

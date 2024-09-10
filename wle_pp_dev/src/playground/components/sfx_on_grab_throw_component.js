@@ -3,7 +3,6 @@ import { Globals, GrabberHandComponent } from "wle-pp";
 
 export class SFXOnGrabThrowComponent extends Component {
     static TypeName = "sfx-on-grab-throw";
-    static Properties = {};
 
     start() {
         this._myGrabbers = Globals.getRootObject(this.engine).pp_getComponents(GrabberHandComponent);

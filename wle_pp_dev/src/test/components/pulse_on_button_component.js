@@ -4,7 +4,6 @@ import { Globals } from "../../pp/pp/globals.js";
 
 export class PulseOnButtonComponent extends Component {
     static TypeName = "pulse-on-button";
-    static Properties = {};
 
     update(dt) {
         if (Globals.getLeftGamepad(this.engine).getButtonInfo(GamepadButtonID.SQUEEZE).isPressEnd()) {

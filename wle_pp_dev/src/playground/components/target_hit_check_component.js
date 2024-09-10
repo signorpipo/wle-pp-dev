@@ -4,7 +4,6 @@ import { ParticlesSpawnerComponent } from "./particles_spawner_component.js";
 
 export class TargetHitCheckComponent extends Component {
     static TypeName = "target-hit-check";
-    static Properties = {};
 
     start() {
         this._myTrigger = this.object.pp_getComponent(PhysXComponent);

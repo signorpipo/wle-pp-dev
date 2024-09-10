@@ -5,7 +5,6 @@ import { Globals } from "../../pp/pp/globals.js";
 
 export class MouseRaycastTestComponent extends Component {
     static TypeName = "mouse-raycast-test";
-    static Properties = {};
 
     start() {
         this._myTimer = new Timer(0);

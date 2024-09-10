@@ -5,7 +5,6 @@ import { Globals } from "../../pp/pp/globals.js";
 
 export class ShowMeshedLineComponent extends Component {
     static TypeName = "show-meshed-line";
-    static Properties = {};
 
     start() {
         let visualParams = new VisualLineParams();

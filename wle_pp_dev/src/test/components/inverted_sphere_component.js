@@ -5,7 +5,6 @@ import { Globals } from "../../pp/pp/globals.js";
 
 export class InvertedSphereComponent extends Component {
     static TypeName = "inverted-sphere";
-    static Properties = {};
 
     start() {
         this._myInvertedSphereObject = this.object.pp_addChild();

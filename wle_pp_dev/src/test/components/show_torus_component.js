@@ -6,7 +6,6 @@ import { EasyTuneInt, EasyTuneNumber } from "../../pp/tool/easy_tune/easy_tune_v
 
 export class ShowTorusComponent extends Component {
     static TypeName = "show-torus";
-    static Properties = {};
 
     start() {
         Globals.getEasyTuneVariables(this.engine).add(new EasyTuneNumber("Torus Radius", 0.25, null, true, 3, 0.1));
