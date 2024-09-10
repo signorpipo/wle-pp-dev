@@ -129,23 +129,11 @@ export class EasyTuneToolComponent extends Component {
                     }
                 }
 
-                if (this._myWidgetVisibleBackup != null) {
-                    this._myWidget.setVisible(false);
-                    this._myWidget.setVisible(this._myWidgetVisibleBackup);
-
-                    this._myWidgetVisibleBackup = null;
-                }
-
+                this._myWidget.setActive(true);
                 this._myWidget.update(dt);
             }
         } else if (this._myStarted) {
-            if (this._myWidgetVisibleBackup == null) {
-                this._myWidgetVisibleBackup = this._myWidget.isVisible();
-            }
-
-            if (this._myWidget.isVisible()) {
-                this._myWidget.setVisible(false);
-            }
+            this._myWidget.setActive(false);
         }
     }
 
@@ -156,13 +144,7 @@ export class EasyTuneToolComponent extends Component {
 
     public override onDeactivate(): void {
         if (this._myStarted) {
-            if (this._myWidgetVisibleBackup == null) {
-                this._myWidgetVisibleBackup = this._myWidget.isVisible();
-            }
-
-            if (this._myWidget.isVisible()) {
-                this._myWidget.setVisible(false);
-            }
+            this._myWidget.setActive(false);
         }
 
         EasyTuneUtils.removeSetWidgetCurrentVariableCallback(this, this.engine);

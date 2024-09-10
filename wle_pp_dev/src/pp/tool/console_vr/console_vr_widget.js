@@ -106,6 +106,7 @@ export class ConsoleVRWidget {
 
         this._myStarted = false;
         this._myActive = true;
+        this._myVisibleBackup = null;
 
         this._myDestroyed = false;
     }
@@ -156,12 +157,31 @@ export class ConsoleVRWidget {
         this._updateGamepadsExtraActions(dt);
     }
 
+    isActive() {
+        return this._myActive;
+    }
+
     setActive(active) {
-        if (this._myActive == active) return;
+        if (this._myActive == active || !this._myStarted) return;
 
         this._myActive = active;
 
-        if (!this._myStarted) return;
+        if (this._myActive) {
+            if (this._myVisibleBackup != null) {
+                this.setVisible(false);
+                this.setVisible(this._myVisibleBackup);
+
+                this._myVisibleBackup = null;
+            }
+        } else {
+            if (this._myVisibleBackup == null) {
+                this._myVisibleBackup = this.isVisible();
+            }
+
+            if (this.isVisible()) {
+                this.setVisible(false);
+            }
+        }
 
         if (active) {
             if (this._myParams.myResetToConsoleOriginalFunctionsOnDeactivate || this._myParams.myResetToOverwrittenConsoleFunctionsOnDeactivate) {

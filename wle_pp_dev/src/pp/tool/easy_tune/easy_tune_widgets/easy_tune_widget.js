@@ -32,6 +32,9 @@ export class EasyTuneWidget {
         this._myStarted = false;
         this._myStartVariable = null;
 
+        this._myActive = true;
+        this._myVisibleBackup = null;
+
         this._myWidgetFrame = new WidgetFrame("E", 1, engine);
         this._myWidgetFrame.registerWidgetVisibleChangedEventListener(this, this._widgetVisibleChanged.bind(this));
 
@@ -147,6 +150,33 @@ export class EasyTuneWidget {
         this._updateGamepadWidgetVisibility();
 
         this._updateWidgetCurrentVariable();
+    }
+
+    isActive() {
+        return this._myActive;
+    }
+
+    setActive(active) {
+        if (this._myActive == active || !this._myStarted) return;
+
+        this._myActive = active;
+
+        if (this._myActive) {
+            if (this._myVisibleBackup != null) {
+                this.setVisible(false);
+                this.setVisible(this._myVisibleBackup);
+
+                this._myVisibleBackup = null;
+            }
+        } else {
+            if (this._myVisibleBackup == null) {
+                this._myVisibleBackup = this.isVisible();
+            }
+
+            if (this.isVisible()) {
+                this.setVisible(false);
+            }
+        }
     }
 
     _initializeWidgets() {
