@@ -24,7 +24,15 @@ export class ObjectPoolManagerComponent extends Component {
 
     onDeactivate() {
         if (this._myObjectPoolManager != null && Globals.getObjectPoolManager(this.engine) == this._myObjectPoolManager) {
+            this._myObjectPoolManager.releaseAll();
+
             Globals.removeObjectPoolManager(this.engine);
+        }
+    }
+
+    onDestroy() {
+        if (this._myObjectPoolManager != null) {
+            this._myObjectPoolManager.destroy();
         }
     }
 }
