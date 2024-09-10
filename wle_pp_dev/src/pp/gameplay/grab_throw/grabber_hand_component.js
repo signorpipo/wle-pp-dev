@@ -54,9 +54,6 @@ export class GrabberHandComponent extends Component {
         this._myThrowEmitter = new Emitter();     // Signature: listener(grabber, grabbable)
 
         this._myDebugEnabled = false;
-
-        // Support Variables
-        this._myVec3Zero = vec3_create();
     }
 
     start() {
@@ -99,10 +96,8 @@ export class GrabberHandComponent extends Component {
             }
         }
 
-        if (this._myGrabbables.length > 0) {
-            this._updateLinearVelocityHistory();
-            this._updateAngularVelocityHistory();
-        }
+        this._updateLinearVelocityHistory();
+        this._updateAngularVelocityHistory();
     }
 
     grab(grabButton = null) {
@@ -143,6 +138,12 @@ export class GrabberHandComponent extends Component {
 
     onDeactivate() {
         this.throw();
+
+        this._myHandLinearVelocityHistory = new Array(this._myLinearVelocityHistorySize);
+        this._myHandLinearVelocityHistory.fill(vec3_create());
+
+        this._myHandAngularVelocityHistory = new Array(this._myAngularVelocityHistorySize);
+        this._myHandAngularVelocityHistory.fill(vec3_create());
 
         this._myCollisionsCollector.setActive(false);
     }
@@ -248,7 +249,7 @@ export class GrabberHandComponent extends Component {
         if (handPose != null) {
             this._myHandLinearVelocityHistory.unshift(handPose.getLinearVelocity());
         } else {
-            this._myHandLinearVelocityHistory.unshift(this._myVec3Zero);
+            this._myHandLinearVelocityHistory.unshift(vec3_create());
         }
 
         this._myHandLinearVelocityHistory.unshift(handPose.getLinearVelocity());
@@ -264,7 +265,7 @@ export class GrabberHandComponent extends Component {
         if (handPose != null) {
             this._myHandAngularVelocityHistory.unshift(handPose.getAngularVelocityRadians());
         } else {
-            this._myHandAngularVelocityHistory.unshift(this._myVec3Zero);
+            this._myHandAngularVelocityHistory.unshift(vec3_create());
         }
 
         this._myHandAngularVelocityHistory.pop();
