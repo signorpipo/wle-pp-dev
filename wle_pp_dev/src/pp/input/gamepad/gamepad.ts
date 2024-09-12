@@ -97,6 +97,20 @@ export abstract class Gamepad {
             this._myActive = active;
 
             if (!this._myActive) {
+
+                // Quick way to trigger callbacks
+                this._preUpdateButtonInfos();
+                this._updateButtonInfos();
+                this._postUpdateButtonInfos(0);
+
+                this._preUpdateAxesInfos();
+                this._updateAxesInfos();
+                this._postUpdateAxesInfos();
+
+                this.stopPulse();
+                this._updatePulse(0);
+
+                // Reset buttons
                 for (let i = 0; i < this._myButtonInfosIDs.length; i++) {
                     const id = this._myButtonInfosIDs[i];
                     const info = this._myButtonInfos[id]!;

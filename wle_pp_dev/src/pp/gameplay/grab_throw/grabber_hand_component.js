@@ -252,7 +252,6 @@ export class GrabberHandComponent extends Component {
             this._myHandLinearVelocityHistory.unshift(vec3_create());
         }
 
-        this._myHandLinearVelocityHistory.unshift(handPose.getLinearVelocity());
         this._myHandLinearVelocityHistory.pop();
 
         for (let grabbable of this._myGrabbables) {
