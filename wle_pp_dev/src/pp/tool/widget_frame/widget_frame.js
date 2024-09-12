@@ -29,7 +29,7 @@ export class WidgetFrame {
         this._myWidgetVisibleChangedEmitter = new Emitter();      // Signature: listener(widgetVisible)
         this._myPinChangedEmitter = new Emitter();                // Signature: listener(pinned)
 
-        this._myDestroyed = true;
+        this._myDestroyed = false;
     }
 
     getWidgetObject() {
@@ -168,8 +168,14 @@ export class WidgetFrame {
         }
     }
 
+    setActive(active) {
+        this._myUI.setActive(active);
+    }
+
     destroy() {
         this._myDestroyed = true;
+
+        this.setActive(false);
 
         if (this._myUI != null) {
             this._myUI.destroy();

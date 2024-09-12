@@ -113,6 +113,8 @@ export class GamepadCore {
     destroy() {
         this._myDestroyed = true;
 
+        this.setActive(false);
+
         this._destroyHook();
 
         if (this.isManagingHandPose()) {

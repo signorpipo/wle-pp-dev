@@ -43,6 +43,8 @@ export class DebugManager {
     destroy() {
         this._myDestroyed = true;
 
+        this.setActive(false);
+
         this._myDebugVisualManager.destroy();
     }
 

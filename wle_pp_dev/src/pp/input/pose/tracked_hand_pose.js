@@ -145,9 +145,7 @@ export class TrackedHandPose {
     destroy() {
         this._myDestroyed = true;
 
-        if (this._myActive) {
-            this.setActive(false);
-        }
+        this.setActive(false);
 
         for (let jointPose of this._myTrackedHandJointPoses) {
             jointPose.destroy();

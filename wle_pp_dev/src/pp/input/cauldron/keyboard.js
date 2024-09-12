@@ -292,9 +292,7 @@ export class Keyboard {
     destroy() {
         this._myDestroyed = true;
 
-        if (this._myActive) {
-            this.setActive(false);
-        }
+        this.setActive(false);
     }
 
     isDestroyed() {

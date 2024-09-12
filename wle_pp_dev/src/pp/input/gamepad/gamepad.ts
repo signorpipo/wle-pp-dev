@@ -530,6 +530,8 @@ export abstract class Gamepad {
     public destroy(): void {
         this._myDestroyed = true;
 
+        this.setActive(false);
+
         this._destroyHook();
     }
 

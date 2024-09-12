@@ -10,6 +10,7 @@ export class ConsoleVRWidgetUI {
     constructor(engine = Globals.getMainEngine()) {
         this._myEngine = engine;
 
+        this._myActive = false;
         this._myDestroyed = false;
     }
 
@@ -26,7 +27,7 @@ export class ConsoleVRWidgetUI {
 
         this._setTransformForNonXR();
 
-        XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this), true, false, this._myEngine);
+        this.setActive(true);
     }
 
     setVisible(visible) {
@@ -354,10 +355,22 @@ export class ConsoleVRWidgetUI {
         this.myNotifyIconPanel.pp_setPositionLocal(this._myConfig.myNotifyIconPanelPositions[ToolHandedness.NONE]);
     }
 
+    setActive(active) {
+        if (this._myActive != active) {
+            this._myActive = active;
+
+            if (this._myActive) {
+                XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this), true, false, this._myEngine);
+            } else {
+                XRUtils.unregisterSessionStartEndEventListeners(this, this._myEngine);
+            }
+        }
+    }
+
     destroy() {
         this._myDestroyed = true;
 
-        XRUtils.unregisterSessionStartEndEventListeners(this, this._myEngine);
+        this.setActive(false);
     }
 
     isDestroyed() {

@@ -332,9 +332,7 @@ export class PhysicsCollisionCollector {
     public destroy(): void {
         this._myDestroyed = true;
 
-        if (this._myActive) {
-            this.setActive(false);
-        }
+        this.setActive(false);
     }
 
     public isDestroyed(): boolean {

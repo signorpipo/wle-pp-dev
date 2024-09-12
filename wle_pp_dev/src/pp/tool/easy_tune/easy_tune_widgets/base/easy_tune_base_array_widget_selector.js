@@ -24,6 +24,7 @@ export class EasyTuneBaseArrayWidgetSelector {
 
         this._myEngine = engine;
 
+        this._myActive = true;
         this._myDestroyed = false;
     }
 
@@ -163,6 +164,7 @@ export class EasyTuneBaseArrayWidgetSelector {
         this._myWidgets.get(arraySize).start(this._myParentObject, this._myEasyTuneParams);
         this._myWidgets.get(arraySize).setVisible(false);
         this._myWidgets.get(arraySize).registerScrollVariableRequestEventListener(this, this._scrollVariableRequest.bind(this));
+        this._myWidgets.get(arraySize).setActive(this._myActive);
     }
 
     _sizeChangedCheck() {
@@ -180,8 +182,17 @@ export class EasyTuneBaseArrayWidgetSelector {
         return null;
     }
 
+    setActive(active) {
+        this._myActive = active;
+        for (let widget of this._myWidgets.values()) {
+            widget.setActive(active);
+        }
+    }
+
     destroy() {
         this._myDestroyed = true;
+
+        this.setActive(false);
 
         for (let widget of this._myWidgets.values()) {
             widget.destroy();

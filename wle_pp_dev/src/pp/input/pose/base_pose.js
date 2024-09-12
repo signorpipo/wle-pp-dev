@@ -412,9 +412,7 @@ export class BasePose {
     destroy() {
         this._myDestroyed = true;
 
-        if (this._myActive) {
-            this.setActive(false);
-        }
+        this.setActive(false);
 
         this._destroyHook();
     }

@@ -81,7 +81,11 @@ export class EasyTuneWidget {
     }
 
     setVisible(visible) {
-        this._myWidgetFrame.setVisible(visible);
+        if (this._myActive) {
+            this._myWidgetFrame.setVisible(visible);
+        } else {
+            this._myVisibleBackup = visible;
+        }
     }
 
     isVisible() {
@@ -123,6 +127,8 @@ export class EasyTuneWidget {
     }
 
     update(dt) {
+        if (!this._myActive) return;
+
         this._myWidgetFrame.update(dt);
 
         if (this.getValidEasyTuneVariablesLength() != this._myEasyTuneLastSize || this._myDirty) {
@@ -157,24 +163,31 @@ export class EasyTuneWidget {
     }
 
     setActive(active) {
-        if (this._myActive == active || !this._myStarted) return;
+        if (!this._myStarted) return;
 
-        this._myActive = active;
+        for (let widget of this._myWidgets) {
+            widget.setActive(active);
+        }
+        this._myWidgetFrame.setActive(active);
 
-        if (this._myActive) {
-            if (this._myVisibleBackup != null) {
-                this.setVisible(false);
-                this.setVisible(this._myVisibleBackup);
+        if (this._myActive != active) {
+            if (active) {
+                this._myActive = active;
+                if (this._myVisibleBackup != null) {
+                    this.setVisible(false);
+                    this.setVisible(this._myVisibleBackup);
 
-                this._myVisibleBackup = null;
-            }
-        } else {
-            if (this._myVisibleBackup == null) {
-                this._myVisibleBackup = this.isVisible();
-            }
+                    this._myVisibleBackup = null;
+                }
+            } else {
+                if (this._myVisibleBackup == null) {
+                    this._myVisibleBackup = this.isVisible();
+                }
 
-            if (this.isVisible()) {
-                this.setVisible(false);
+                if (this.isVisible()) {
+                    this.setVisible(false);
+                }
+                this._myActive = active;
             }
         }
     }
@@ -190,11 +203,9 @@ export class EasyTuneWidget {
         this._myWidgets[EasyTuneVariableType.TRANSFORM] = new EasyTuneTransformWidget(widgetParams, this._myGamepad, this._myEngine);
 
         for (let widget of this._myWidgets) {
-            if (widget != null) {
-                widget.start(this._myWidgetFrame.getWidgetObject(), this._myParams);
-                widget.setVisible(false);
-                widget.registerScrollVariableRequestEventListener(this, this._scrollVariable.bind(this));
-            }
+            widget.start(this._myWidgetFrame.getWidgetObject(), this._myParams);
+            widget.setVisible(false);
+            widget.registerScrollVariableRequestEventListener(this, this._scrollVariable.bind(this));
         }
 
         this._selectCurrentWidget();
@@ -267,9 +278,7 @@ export class EasyTuneWidget {
 
     _widgetVisibleChanged(visible) {
         for (let widget of this._myWidgets) {
-            if (widget != null) {
-                widget.setVisible(false);
-            }
+            widget.setVisible(false);
         }
 
         if (this._myCurrentWidget) {
@@ -385,6 +394,8 @@ export class EasyTuneWidget {
 
     destroy() {
         this._myDestroyed = true;
+
+        this.setActive(false);
 
         for (let widget of this._myWidgets) {
             widget.destroy();

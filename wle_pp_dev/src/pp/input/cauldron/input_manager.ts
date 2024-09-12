@@ -289,9 +289,7 @@ export class InputManager {
     public destroy(): void {
         this._myDestroyed = true;
 
-        if (this._myActive) {
-            this.setActive(false);
-        }
+        this.setActive(false);
 
         this._myMouse.destroy();
         this._myKeyboard.destroy();

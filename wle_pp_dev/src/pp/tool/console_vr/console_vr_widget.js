@@ -112,7 +112,11 @@ export class ConsoleVRWidget {
     }
 
     setVisible(visible) {
-        this._myWidgetFrame.setVisible(visible);
+        if (this._myActive) {
+            this._myWidgetFrame.setVisible(visible);
+        } else {
+            this._myVisibleBackup = visible;
+        }
     }
 
     isVisible() {
@@ -139,6 +143,8 @@ export class ConsoleVRWidget {
     }
 
     update(dt) {
+        if (!this._myActive) return;
+
         if (this._myConsolePrintAddMessageEnabledReset) {
             this._myConsolePrintAddMessageEnabledReset = false;
             this._myConsolePrintAddMessageEnabled = true;
@@ -162,72 +168,77 @@ export class ConsoleVRWidget {
     }
 
     setActive(active) {
-        if (this._myActive == active || !this._myStarted) return;
+        if (!this._myStarted) return;
 
-        this._myActive = active;
+        this._myUI.setActive(active);
+        this._myWidgetFrame.setActive(active);
 
-        if (this._myActive) {
-            if (this._myVisibleBackup != null) {
-                this.setVisible(false);
-                this.setVisible(this._myVisibleBackup);
+        if (this._myActive != active) {
+            if (active) {
+                this._myActive = active;
+                if (this._myVisibleBackup != null) {
+                    this.setVisible(false);
+                    this.setVisible(this._myVisibleBackup);
 
-                this._myVisibleBackup = null;
-            }
-        } else {
-            if (this._myVisibleBackup == null) {
-                this._myVisibleBackup = this.isVisible();
-            }
-
-            if (this.isVisible()) {
-                this.setVisible(false);
-            }
-        }
-
-        if (active) {
-            if (this._myParams.myResetToConsoleOriginalFunctionsOnDeactivate || this._myParams.myResetToOverwrittenConsoleFunctionsOnDeactivate) {
-                this._overrideConsolesFunctions();
-            } else {
-                if (this._myParams.myOverrideBrowserConsoleFunctions != OverrideBrowserConsoleFunctions.NONE) {
-                    window.addEventListener("error", this._myErrorEventListener);
-                    window.addEventListener("unhandledrejection", this._myUnhandledRejectionEventListener);
+                    this._myVisibleBackup = null;
                 }
+            } else {
+                if (this._myVisibleBackup == null) {
+                    this._myVisibleBackup = this.isVisible();
+                }
+
+                if (this.isVisible()) {
+                    this.setVisible(false);
+                }
+                this._myActive = active;
             }
-        } else {
-            window.removeEventListener("error", this._myErrorEventListener);
-            window.removeEventListener("unhandledrejection", this._myUnhandledRejectionEventListener);
 
-            if (this._myParams.myResetToConsoleOriginalFunctionsOnDeactivate) {
-                console.log = ConsoleOriginalFunctions.getLog(this._myEngine);
-                console.error = ConsoleOriginalFunctions.getError(this._myEngine);
-                console.warn = ConsoleOriginalFunctions.getWarn(this._myEngine);
-                console.info = ConsoleOriginalFunctions.getInfo(this._myEngine);
-                console.debug = ConsoleOriginalFunctions.getDebug(this._myEngine);
-                console.assert = ConsoleOriginalFunctions.getAssert(this._myEngine);
-                console.clear = ConsoleOriginalFunctions.getClear(this._myEngine);
+            if (active) {
+                if (this._myParams.myResetToConsoleOriginalFunctionsOnDeactivate || this._myParams.myResetToOverwrittenConsoleFunctionsOnDeactivate) {
+                    this._overrideConsolesFunctions();
+                } else {
+                    if (this._myParams.myOverrideBrowserConsoleFunctions != OverrideBrowserConsoleFunctions.NONE) {
+                        window.addEventListener("error", this._myErrorEventListener);
+                        window.addEventListener("unhandledrejection", this._myUnhandledRejectionEventListener);
+                    }
+                }
+            } else {
+                window.removeEventListener("error", this._myErrorEventListener);
+                window.removeEventListener("unhandledrejection", this._myUnhandledRejectionEventListener);
 
-                Globals.getConsoleVR(this._myEngine).log = ConsoleVR.myOriginalLog;
-                Globals.getConsoleVR(this._myEngine).error = ConsoleVR.myOriginalError;
-                Globals.getConsoleVR(this._myEngine).warn = ConsoleVR.myOriginalWarn;
-                Globals.getConsoleVR(this._myEngine).info = ConsoleVR.myOriginalInfo;
-                Globals.getConsoleVR(this._myEngine).debug = ConsoleVR.myOriginalDebug;
-                Globals.getConsoleVR(this._myEngine).assert = ConsoleVR.myOriginalAssert;
-                Globals.getConsoleVR(this._myEngine).clear = ConsoleVR.myOriginalClear;
-            } else if (this._myParams.myResetToOverwrittenConsoleFunctionsOnDeactivate) {
-                console.log = this._myOldBrowserConsole[ConsoleVRWidgetConsoleFunction.LOG];
-                console.error = this._myOldBrowserConsole[ConsoleVRWidgetConsoleFunction.ERROR];
-                console.warn = this._myOldBrowserConsole[ConsoleVRWidgetConsoleFunction.WARN];
-                console.info = this._myOldBrowserConsole[ConsoleVRWidgetConsoleFunction.INFO];
-                console.debug = this._myOldBrowserConsole[ConsoleVRWidgetConsoleFunction.DEBUG];
-                console.assert = this._myOldBrowserConsole[ConsoleVRWidgetConsoleFunction.ASSERT];
-                console.clear = this._myOldBrowserConsoleClear;
+                if (this._myParams.myResetToConsoleOriginalFunctionsOnDeactivate) {
+                    console.log = ConsoleOriginalFunctions.getLog(this._myEngine);
+                    console.error = ConsoleOriginalFunctions.getError(this._myEngine);
+                    console.warn = ConsoleOriginalFunctions.getWarn(this._myEngine);
+                    console.info = ConsoleOriginalFunctions.getInfo(this._myEngine);
+                    console.debug = ConsoleOriginalFunctions.getDebug(this._myEngine);
+                    console.assert = ConsoleOriginalFunctions.getAssert(this._myEngine);
+                    console.clear = ConsoleOriginalFunctions.getClear(this._myEngine);
 
-                Globals.getConsoleVR(this._myEngine).log = this._myOldBrowserConsole[ConsoleVRWidgetConsoleFunction.LOG];
-                Globals.getConsoleVR(this._myEngine).error = this._myOldBrowserConsole[ConsoleVRWidgetConsoleFunction.ERROR];
-                Globals.getConsoleVR(this._myEngine).warn = this._myOldBrowserConsole[ConsoleVRWidgetConsoleFunction.WARN];
-                Globals.getConsoleVR(this._myEngine).info = this._myOldBrowserConsole[ConsoleVRWidgetConsoleFunction.INFO];
-                Globals.getConsoleVR(this._myEngine).debug = this._myOldBrowserConsole[ConsoleVRWidgetConsoleFunction.DEBUG];
-                Globals.getConsoleVR(this._myEngine).assert = this._myOldBrowserConsole[ConsoleVRWidgetConsoleFunction.ASSERT];
-                Globals.getConsoleVR(this._myEngine).clear = this._myOldConsoleVRClear;
+                    Globals.getConsoleVR(this._myEngine).log = ConsoleVR.myOriginalLog;
+                    Globals.getConsoleVR(this._myEngine).error = ConsoleVR.myOriginalError;
+                    Globals.getConsoleVR(this._myEngine).warn = ConsoleVR.myOriginalWarn;
+                    Globals.getConsoleVR(this._myEngine).info = ConsoleVR.myOriginalInfo;
+                    Globals.getConsoleVR(this._myEngine).debug = ConsoleVR.myOriginalDebug;
+                    Globals.getConsoleVR(this._myEngine).assert = ConsoleVR.myOriginalAssert;
+                    Globals.getConsoleVR(this._myEngine).clear = ConsoleVR.myOriginalClear;
+                } else if (this._myParams.myResetToOverwrittenConsoleFunctionsOnDeactivate) {
+                    console.log = this._myOldBrowserConsole[ConsoleVRWidgetConsoleFunction.LOG];
+                    console.error = this._myOldBrowserConsole[ConsoleVRWidgetConsoleFunction.ERROR];
+                    console.warn = this._myOldBrowserConsole[ConsoleVRWidgetConsoleFunction.WARN];
+                    console.info = this._myOldBrowserConsole[ConsoleVRWidgetConsoleFunction.INFO];
+                    console.debug = this._myOldBrowserConsole[ConsoleVRWidgetConsoleFunction.DEBUG];
+                    console.assert = this._myOldBrowserConsole[ConsoleVRWidgetConsoleFunction.ASSERT];
+                    console.clear = this._myOldBrowserConsoleClear;
+
+                    Globals.getConsoleVR(this._myEngine).log = this._myOldBrowserConsole[ConsoleVRWidgetConsoleFunction.LOG];
+                    Globals.getConsoleVR(this._myEngine).error = this._myOldBrowserConsole[ConsoleVRWidgetConsoleFunction.ERROR];
+                    Globals.getConsoleVR(this._myEngine).warn = this._myOldBrowserConsole[ConsoleVRWidgetConsoleFunction.WARN];
+                    Globals.getConsoleVR(this._myEngine).info = this._myOldBrowserConsole[ConsoleVRWidgetConsoleFunction.INFO];
+                    Globals.getConsoleVR(this._myEngine).debug = this._myOldBrowserConsole[ConsoleVRWidgetConsoleFunction.DEBUG];
+                    Globals.getConsoleVR(this._myEngine).assert = this._myOldBrowserConsole[ConsoleVRWidgetConsoleFunction.ASSERT];
+                    Globals.getConsoleVR(this._myEngine).clear = this._myOldConsoleVRClear;
+                }
             }
         }
     }

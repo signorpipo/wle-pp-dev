@@ -82,9 +82,7 @@ export class GamepadsManager {
     public destroy(): void {
         this._myDestroyed = true;
 
-        if (this._myActive) {
-            this.setActive(false);
-        }
+        this.setActive(false);
 
         for (const rawHandedness in this._myUniversalGamepads) {
             const handedness = rawHandedness as Handedness;

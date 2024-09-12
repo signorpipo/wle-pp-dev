@@ -312,6 +312,8 @@ export class VisualManager {
     public destroy(): void {
         this._myDestroyed = true;
 
+        this.setActive(false);
+
         for (const poolID of this._myTypePoolIDs.values()) {
             Globals.getObjectPoolManager(this._myEngine)?.destroyPool(poolID);
         }

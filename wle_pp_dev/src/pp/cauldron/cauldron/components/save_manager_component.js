@@ -28,13 +28,25 @@ export class SaveManagerComponent extends Component {
 
     onActivate() {
         if (this._mySaveManager != null) {
+            this._mySaveManager.setActive(true);
+
             Globals.setSaveManager(this._mySaveManager, this.engine);
         }
     }
 
     onDeactivate() {
-        if (this._mySaveManager != null && Globals.getSaveManager(this.engine) == this._mySaveManager) {
-            Globals.removeSaveManager(this.engine);
+        if (this._mySaveManager != null) {
+            this._mySaveManager.setActive(false);
+
+            if (Globals.getSaveManager(this.engine) == this._mySaveManager) {
+                Globals.removeSaveManager(this.engine);
+            }
+        }
+    }
+
+    onDestroy() {
+        if (this._mySaveManager != null) {
+            this._mySaveManager.destroy();
         }
     }
 }

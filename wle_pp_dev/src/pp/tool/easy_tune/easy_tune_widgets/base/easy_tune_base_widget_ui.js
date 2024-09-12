@@ -9,6 +9,7 @@ export class EasyTuneBaseWidgetUI {
     constructor(engine = Globals.getMainEngine()) {
         this._myEngine = engine;
 
+        this._myActive = false;
         this._myDestroyed = false;
     }
 
@@ -29,7 +30,7 @@ export class EasyTuneBaseWidgetUI {
 
         this._setTransformForNonXR();
 
-        XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this), true, false, this._myEngine);
+        this.setActive(true);
     }
 
     setVisible(visible) {
@@ -286,10 +287,22 @@ export class EasyTuneBaseWidgetUI {
         this.myPivotObject.pp_setPositionLocal(this._myConfig.myPivotObjectPositions[ToolHandedness.NONE]);
     }
 
+    setActive(active) {
+        if (this._myActive != active) {
+            this._myActive = active;
+
+            if (this._myActive) {
+                XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this), true, false, this._myEngine);
+            } else {
+                XRUtils.unregisterSessionStartEndEventListeners(this, this._myEngine);
+            }
+        }
+    }
+
     destroy() {
         this._myDestroyed = true;
 
-        XRUtils.unregisterSessionStartEndEventListeners(this, this._myEngine);
+        this.setActive(false);
     }
 
     isDestroyed() {

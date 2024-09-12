@@ -18,6 +18,7 @@ export class WidgetFrameUI {
 
         this._myEngine = engine;
 
+        this._myActive = false;
         this._myDestroyed = false;
     }
 
@@ -33,7 +34,7 @@ export class WidgetFrameUI {
 
         this._setTransformForNonXR();
 
-        XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this), true, false, this._myEngine);
+        this.setActive(true);
     }
 
     setWidgetVisible(visible) {
@@ -225,10 +226,22 @@ export class WidgetFrameUI {
         }
     }
 
+    setActive(active) {
+        if (this._myActive != active) {
+            this._myActive = active;
+
+            if (this._myActive) {
+                XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this), true, false, this._myEngine);
+            } else {
+                XRUtils.unregisterSessionStartEndEventListeners(this, this._myEngine);
+            }
+        }
+    }
+
     destroy() {
         this._myDestroyed = true;
 
-        XRUtils.unregisterSessionStartEndEventListeners(this, this._myEngine);
+        this.setActive(false);
     }
 
     isDestroyed() {

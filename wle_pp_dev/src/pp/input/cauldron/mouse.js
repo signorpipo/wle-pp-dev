@@ -561,9 +561,7 @@ export class Mouse {
     destroy() {
         this._myDestroyed = true;
 
-        if (this._myActive) {
-            this.setActive(false);
-        }
+        this.setActive(false);
     }
 
     isDestroyed() {

@@ -300,8 +300,14 @@ export class EasyTuneBaseWidget {
         }
     }
 
+    setActive(active) {
+        this._myUI.setActive(active);
+    }
+
     destroy() {
         this._myDestroyed = true;
+
+        this.setActive(false);
 
         if (this._myUI != null) {
             this._myUI.destroy();
