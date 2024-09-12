@@ -64,19 +64,7 @@ export class VirtualGamepad {
         if (this._myVisible != visible) {
             this._myVisible = visible;
 
-            if (this._myVisible) {
-                document.addEventListener("gesturestart", this._myGestureStartEventListener);
-            } else {
-                document.removeEventListener("gesturestart", this._myGestureStartEventListener);
-            }
-
             if (this._myVirtualGamepadContainer != null) {
-                if (this._myVisible) {
-                    this._myVirtualGamepadContainer.style.display = "block";
-                } else {
-                    this._myVirtualGamepadContainer.style.display = "none";
-                }
-
                 for (let handedness in this._myVirtualGamepadVirtualButtons) {
                     for (let virtualGamepadButtonID in this._myVirtualGamepadVirtualButtons[handedness]) {
                         let button = this._myVirtualGamepadVirtualButtons[handedness][virtualGamepadButtonID];
@@ -94,6 +82,18 @@ export class VirtualGamepad {
                         }
                     }
                 }
+
+                if (this._myVisible) {
+                    document.body.appendChild(this._myVirtualGamepadContainer);
+                } else {
+                    this._myVirtualGamepadContainer?.remove();
+                }
+            }
+
+            if (this._myVisible) {
+                document.addEventListener("gesturestart", this._myGestureStartEventListener);
+            } else {
+                document.removeEventListener("gesturestart", this._myGestureStartEventListener);
             }
         }
     }
@@ -310,8 +310,6 @@ export class VirtualGamepad {
                 }
             }
         }
-
-        this._myVirtualGamepadContainer.remove();
     }
 
     isDestroyed() {
