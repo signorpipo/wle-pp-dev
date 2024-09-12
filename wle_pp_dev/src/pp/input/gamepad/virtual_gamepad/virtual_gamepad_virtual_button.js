@@ -45,11 +45,31 @@ export class VirtualGamepadVirtualButton {
 
     setActive(active) {
         if (this._myActive != active) {
+            this._myActive = active;
+
             this.reset();
             this._myButtonIcon.reset();
-        }
 
-        this._myActive = active;
+            if (this._myActive) {
+                this._myButtonDetectionElement.addEventListener("pointerdown", this._myPointerDownEventListener);
+                document.body.addEventListener("pointerup", this._myPointerUpEventListener);
+
+                if (this._myVirtualGamepadParams.myReleaseOnPointerLeave) {
+                    document.body.addEventListener("pointerleave", this._myPointerLeaveEventListener);
+                }
+
+                this._myButtonDetectionElement.addEventListener("mouseenter", this._myMouseEnterEventListener);
+                this._myButtonDetectionElement.addEventListener("mouseleave", this._myMouseLeaveEventListener);
+            } else {
+                this._myButtonDetectionElement.removeEventListener("pointerdown", this._myPointerDownEventListener);
+
+                document.body.removeEventListener("pointerup", this._myPointerUpEventListener);
+                document.body.removeEventListener("pointerleave", this._myPointerLeaveEventListener);
+
+                this._myButtonDetectionElement.removeEventListener("mouseenter", this._myMouseEnterEventListener);
+                this._myButtonDetectionElement.removeEventListener("mouseleave", this._myMouseLeaveEventListener);
+            }
+        }
     }
 
     setMouseHoverEnabled(hoverActive) {
@@ -205,13 +225,7 @@ export class VirtualGamepadVirtualButton {
     destroy() {
         this._myDestroyed = true;
 
-        this._myButtonDetectionElement.removeEventListener("pointerdown", this._myPointerDownEventListener);
-
-        document.body.removeEventListener("pointerup", this._myPointerUpEventListener);
-        document.body.removeEventListener("pointerleave", this._myPointerLeaveEventListener);
-
-        this._myButtonDetectionElement.removeEventListener("mouseenter", this._myMouseEnterEventListener);
-        this._myButtonDetectionElement.removeEventListener("mouseleave", this._myMouseLeaveEventListener);
+        this.setActive(false);
 
         this._myButtonIcon.destroy();
 

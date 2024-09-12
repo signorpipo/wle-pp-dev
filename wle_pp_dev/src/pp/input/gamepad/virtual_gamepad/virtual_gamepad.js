@@ -24,6 +24,7 @@ export class VirtualGamepad {
         this._myParams = params;
 
         this._myVisible = true;
+
         this._myVirtualGamepadContainer = null;
 
         this._myVirtualGamepadVirtualButtons = [];
@@ -62,6 +63,12 @@ export class VirtualGamepad {
     setVisible(visible) {
         if (this._myVisible != visible) {
             this._myVisible = visible;
+
+            if (this._myVisible) {
+                document.addEventListener("gesturestart", this._myGestureStartEventListener);
+            } else {
+                document.removeEventListener("gesturestart", this._myGestureStartEventListener);
+            }
 
             if (this._myVirtualGamepadContainer != null) {
                 if (this._myVisible) {
@@ -284,7 +291,7 @@ export class VirtualGamepad {
     destroy() {
         this._myDestroyed = true;
 
-        document.removeEventListener("gesturestart", this._myGestureStartEventListener);
+        this.setVisible(false);
 
         for (let handedness in this._myVirtualGamepadVirtualButtons) {
             for (let virtualGamepadButtonID in this._myVirtualGamepadVirtualButtons[handedness]) {

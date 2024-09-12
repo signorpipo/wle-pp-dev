@@ -446,17 +446,26 @@ export class VirtualGamepadComponent extends Component {
         return buttonID;
     }
 
+    onActivate() {
+        if (!this._myFirstUpdate && this._myAddToUniversalGamepad) {
+            Globals.getLeftGamepad(this.engine).addGamepadCore("pp_left_virtual_gamepad", this._myLeftVirtualGamepadGamepadCore);
+            Globals.getRightGamepad(this.engine).addGamepadCore("pp_right_virtual_gamepad", this._myRightVirtualGamepadGamepadCore);
+        }
+    }
+
     onDeactivate() {
-        this._myVirtualGamepad.setVisible(false);
+        this._myVirtualGamepad?.setVisible(false);
+
+        if (!this._myFirstUpdate && this._myAddToUniversalGamepad) {
+            Globals.getLeftGamepad(this.engine)?.removeGamepadCore("pp_left_virtual_gamepad");
+            Globals.getRightGamepad(this.engine)?.removeGamepadCore("pp_right_virtual_gamepad");
+        }
     }
 
     onDestroy() {
-        Globals.getLeftGamepad(this.engine)?.removeGamepadCore("pp_left_virtual_gamepad");
-        Globals.getRightGamepad(this.engine)?.removeGamepadCore("pp_right_virtual_gamepad");
+        this._myLeftVirtualGamepadGamepadCore?.destroy();
+        this._myRightVirtualGamepadGamepadCore?.destroy();
 
-        this._myLeftVirtualGamepadGamepadCore.destroy();
-        this._myRightVirtualGamepadGamepadCore.destroy();
-
-        this._myVirtualGamepad.destroy();
+        this._myVirtualGamepad?.destroy();
     }
 }
