@@ -85,7 +85,7 @@ export class ShowXRButtonsComponent extends Component {
                     }
 
                     if (!this._myVRButtonUsabilityUpdated) {
-                        if (XRUtils.isVRSupported()) {
+                        if (XRUtils.isVRSupported(this.engine)) {
                             this._myVRButton.style.setProperty("opacity", "1");
                             this._myVRButton.style.setProperty("pointer-events", "all");
 
@@ -122,7 +122,7 @@ export class ShowXRButtonsComponent extends Component {
                     }
 
                     if (!this._myARButtonUsabilityUpdated) {
-                        if (XRUtils.isARSupported()) {
+                        if (XRUtils.isARSupported(this.engine)) {
                             this._myARButton.style.setProperty("opacity", "1");
                             this._myARButton.style.setProperty("pointer-events", "all");
 

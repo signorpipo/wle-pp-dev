@@ -39,7 +39,7 @@ export class SwitchHandObjectComponent extends Component {
                 this._start();
             }
 
-            if (this._myDisableHandsWhenNonXR && !XRUtils.isSessionActive()) {
+            if (this._myDisableHandsWhenNonXR && !XRUtils.isSessionActive(this.engine)) {
                 if (this._myCurrentInputSourceType != null) {
                     this._myCurrentInputSourceType = null;
 

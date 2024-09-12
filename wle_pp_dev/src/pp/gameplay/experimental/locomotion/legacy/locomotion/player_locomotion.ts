@@ -577,7 +577,7 @@ export class PlayerLocomotion {
             this._myPlayerTransformManager.update(dt);
 
             if (!this._myPlayerLocomotionSmooth.isDebugFlyEnabled() || !Globals.isDebugEnabled(this._myParams.myEngine)) {
-                if (!this._myParams.myAlwaysSmoothForNonVR || XRUtils.isSessionActive()) {
+                if (!this._myParams.myAlwaysSmoothForNonVR || XRUtils.isSessionActive(this._myParams.myEngine)) {
                     if (this._myParams.mySwitchLocomotionTypeShortcutEnabled &&
                         this._getMainHandGamepad().getButtonInfo(GamepadButtonID.THUMBSTICK).isPressEnd(2)) {
                         if (this._myLocomotionMovementFSM.isInState("smooth") && this._myPlayerLocomotionSmooth.canStop()) {
@@ -588,12 +588,12 @@ export class PlayerLocomotion {
                     }
                 }
 
-                if (this._myParams.myAlwaysSmoothForNonVR && !XRUtils.isSessionActive()) {
+                if (this._myParams.myAlwaysSmoothForNonVR && !XRUtils.isSessionActive(this._myParams.myEngine)) {
                     if (this._myLocomotionMovementFSM.isInState("teleport") && this._myPlayerLocomotionTeleport.canStop()) {
                         this._mySwitchToTeleportOnEnterSession = true;
                         this._myLocomotionMovementFSM.perform("next");
                     }
-                } else if (this._mySwitchToTeleportOnEnterSession && XRUtils.isSessionActive()) {
+                } else if (this._mySwitchToTeleportOnEnterSession && XRUtils.isSessionActive(this._myParams.myEngine)) {
                     if (this._myLocomotionMovementFSM.isInState("smooth") && this._myPlayerLocomotionSmooth.canStop()) {
                         this._mySwitchToTeleportOnEnterSession = false;
                         this._myLocomotionMovementFSM.perform("next");
