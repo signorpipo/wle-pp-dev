@@ -51,8 +51,6 @@ export class StickMovementComponent extends Component {
         this._myDirectionReferenceObject = Globals.getPlayerObjects(this.engine).myHead;
         this._mySessionActive = false;
 
-        XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this), false, false, this.engine);
-
         this._myStickIdleTimer = new Timer(0.25, false);
         this._myIsFlying = false;
 
@@ -267,6 +265,14 @@ export class StickMovementComponent extends Component {
         this._myCollisionCheckParams.myCeilingPopOutExtraDistance = 0.1;
 
         this._myCollisionCheckParams.myDebugActive = false;
+    }
+
+    onActivate() {
+        XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this), false, false, this.engine);
+    }
+
+    onDeactivate() {
+        XRUtils.unregisterSessionStartEndEventListeners(this, this.engine);
     }
 
     _onXRSessionStart() {

@@ -24,13 +24,6 @@ export class GamepadMeshAnimatorComponent extends Component {
     };
 
     start() {
-        let gamepad = null;
-        if (this._myHandedness == HandednessIndex.LEFT) {
-            gamepad = Globals.getLeftGamepad(this.engine);
-        } else {
-            gamepad = Globals.getRightGamepad(this.engine);
-        }
-
         if (this._mySelect != null) {
             this._mySelectOriginalRotation = this._mySelect.pp_getRotationLocalQuat();
             this._mySelectOriginalLeft = this._mySelect.pp_getLeftLocal();
@@ -59,6 +52,15 @@ export class GamepadMeshAnimatorComponent extends Component {
         if (this._myBottomButton != null) {
             this._myBottomButtonOriginalPosition = this._myBottomButton.pp_getPositionLocal();
             this._myBottomButtonOriginalUp = this._myBottomButton.pp_getUpLocal();
+        }
+    }
+
+    onActivate() {
+        let gamepad = null;
+        if (this._myHandedness == HandednessIndex.LEFT) {
+            gamepad = Globals.getLeftGamepad(this.engine);
+        } else {
+            gamepad = Globals.getRightGamepad(this.engine);
         }
 
         // PRESSED
@@ -90,6 +92,46 @@ export class GamepadMeshAnimatorComponent extends Component {
         // AXES CHANGED
         if (this._myThumbstick != null) {
             gamepad.registerAxesEventListener(GamepadAxesID.THUMBSTICK, GamepadAxesEvent.AXES_CHANGED, this, this._thumbstickValueChanged.bind(this));
+        }
+    }
+
+    onDeactivate() {
+        let gamepad = null;
+        if (this._myHandedness == HandednessIndex.LEFT) {
+            gamepad = Globals.getLeftGamepad(this.engine);
+        } else {
+            gamepad = Globals.getRightGamepad(this.engine);
+        }
+
+        // PRESSED
+        if (this._myThumbstick != null) {
+            gamepad.unregisterButtonEventListener(GamepadButtonID.THUMBSTICK, GamepadButtonEvent.PRESS_START, this);
+            gamepad.unregisterButtonEventListener(GamepadButtonID.THUMBSTICK, GamepadButtonEvent.PRESS_END, this);
+        }
+
+        if (this._myTopButton != null) {
+            gamepad.unregisterButtonEventListener(GamepadButtonID.TOP_BUTTON, GamepadButtonEvent.PRESS_START, this);
+            gamepad.unregisterButtonEventListener(GamepadButtonID.TOP_BUTTON, GamepadButtonEvent.PRESS_END, this);
+        }
+
+        if (this._myBottomButton != null) {
+
+            gamepad.unregisterButtonEventListener(GamepadButtonID.BOTTOM_BUTTON, GamepadButtonEvent.PRESS_START, this);
+            gamepad.unregisterButtonEventListener(GamepadButtonID.BOTTOM_BUTTON, GamepadButtonEvent.PRESS_END, this);
+        }
+
+        // VALUE CHANGED
+        if (this._mySelect != null) {
+            gamepad.unregisterButtonEventListener(GamepadButtonID.SELECT, GamepadButtonEvent.VALUE_CHANGED, this);
+        }
+
+        if (this._mySqueeze != null) {
+            gamepad.unregisterButtonEventListener(GamepadButtonID.SQUEEZE, GamepadButtonEvent.VALUE_CHANGED, this);
+        }
+
+        // AXES CHANGED
+        if (this._myThumbstick != null) {
+            gamepad.unregisterAxesEventListener(GamepadAxesID.THUMBSTICK, GamepadAxesEvent.AXES_CHANGED, this);
         }
     }
 

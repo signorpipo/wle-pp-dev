@@ -250,13 +250,4 @@ export class XRGamepadCore extends GamepadCore {
             this._mySqueezePressed = false;
         }
     }
-
-    _destroyHook() {
-        XRUtils.getSession(this.getEngine())?.removeEventListener("selectstart", this._mySelectStartEventListener);
-        XRUtils.getSession(this.getEngine())?.removeEventListener("selectend", this._mySelectEndEventListener);
-        XRUtils.getSession(this.getEngine())?.removeEventListener("squeezestart", this._mySqueezeStartEventListener);
-        XRUtils.getSession(this.getEngine())?.removeEventListener("squeezeend", this._mySqueezeEndEventListener);
-
-        XRUtils.unregisterSessionStartEndEventListeners(this, this.getEngine());
-    }
 }
