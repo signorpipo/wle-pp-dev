@@ -154,7 +154,8 @@ VisualTorus.prototype._refresh = function () {
     return function _refresh() {
         this._fillSegmentList();
 
-        for (let visualSegment of this._myVisualSegmentList) {
+        for (let i = this._myParams.mySegmentsAmount; i < this._myVisualSegmentList.length; i++) {
+            let visualSegment = this._myVisualSegmentList[i];
             visualSegment.setVisible(false);
         }
 
