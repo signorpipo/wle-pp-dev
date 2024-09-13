@@ -23,9 +23,17 @@ export class SetActiveComponent extends Component {
         this._myFirstUpdate = true;
         this._myFirstXRStart = true;
         this._myFirstXREnd = true;
+
+        this._myActivateOnNextUpdate = false;
     }
 
     update(dt) {
+        if (this._myActivateOnNextUpdate) {
+            this._onActivate();
+
+            this._myActivateOnNextUpdate = false;
+        }
+
         if (this._mySetActiveWhen == 2 && this._myFirstUpdate) {
             this._setActive();
         }
@@ -61,7 +69,12 @@ export class SetActiveComponent extends Component {
         }
     }
 
+
     onActivate() {
+        this._myActivateOnNextUpdate = true;
+    }
+
+    _onActivate() {
         if (this._mySetActiveWhen == 3 || this._mySetActiveWhen == 5) {
             XRUtils.registerSessionStartEventListener(this, this._onXRSessionStart.bind(this), true, true, this.engine);
         }

@@ -53,9 +53,23 @@ export class GamepadMeshAnimatorComponent extends Component {
             this._myBottomButtonOriginalPosition = this._myBottomButton.pp_getPositionLocal();
             this._myBottomButtonOriginalUp = this._myBottomButton.pp_getUpLocal();
         }
+
+        this._myActivateOnNextUpdate = true;
+    }
+
+    update(dt) {
+        if (this._myActivateOnNextUpdate) {
+            this._onActivate();
+
+            this._myActivateOnNextUpdate = false;
+        }
     }
 
     onActivate() {
+        this._myActivateOnNextUpdate = true;
+    }
+
+    _onActivate() {
         let gamepad = null;
         if (this._myHandedness == HandednessIndex.LEFT) {
             gamepad = Globals.getLeftGamepad(this.engine);

@@ -145,9 +145,17 @@ export class VirtualGamepadComponent extends Component {
 
         this._myLeftVirtualGamepadGamepadCore = null;
         this._myRightVirtualGamepadGamepadCore = null;
+
+        this._myActivateOnNextUpdate = false;
     }
 
     update(dt) {
+        if (this._myActivateOnNextUpdate) {
+            this._onActivate();
+
+            this._myActivateOnNextUpdate = false;
+        }
+
         if (this._myFirstUpdate) {
             this._myFirstUpdate = false;
 
@@ -447,6 +455,10 @@ export class VirtualGamepadComponent extends Component {
     }
 
     onActivate() {
+        this._myActivateOnNextUpdate = true;
+    }
+
+    _onActivate() {
         if (!this._myFirstUpdate && this._myAddToUniversalGamepad) {
             Globals.getLeftGamepad(this.engine).addGamepadCore("pp_left_virtual_gamepad", this._myLeftVirtualGamepadGamepadCore);
             Globals.getRightGamepad(this.engine).addGamepadCore("pp_right_virtual_gamepad", this._myRightVirtualGamepadGamepadCore);

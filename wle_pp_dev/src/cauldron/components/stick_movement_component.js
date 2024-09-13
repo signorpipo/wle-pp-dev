@@ -57,9 +57,17 @@ export class StickMovementComponent extends Component {
         this._myFirstTime = true;
 
         this._myInitialHeight = 0;
+
+        this._myActivateOnNextUpdate = false;
     }
 
     update(dt) {
+        if (this._myActivateOnNextUpdate) {
+            this._onActivate();
+
+            this._myActivateOnNextUpdate = false;
+        }
+
         if (dt > 0.25) {
             dt = 0.25;
         }
@@ -268,11 +276,15 @@ export class StickMovementComponent extends Component {
     }
 
     onActivate() {
-        XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this), false, false, this.engine);
+        this._myActivateOnNextUpdate = true;
     }
 
     onDeactivate() {
         XRUtils.unregisterSessionStartEndEventListeners(this, this.engine);
+    }
+
+    _onActivate() {
+        XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this), false, false, this.engine);
     }
 
     _onXRSessionStart() {

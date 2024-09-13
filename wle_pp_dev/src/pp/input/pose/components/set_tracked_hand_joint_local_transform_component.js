@@ -24,6 +24,16 @@ export class SetTrackedHandJointLocalTransformComponent extends Component {
     start() {
         this._myHandednessType = InputUtils.getHandednessByIndex(this._myHandedness);
         this._myJointIDType = InputUtils.getJointIDByIndex(this._myJointID);
+
+        this._myActivateOnNextUpdate = false;
+    }
+
+    update(dt) {
+        if (this._myActivateOnNextUpdate) {
+            this._onActivate();
+
+            this._myActivateOnNextUpdate = false;
+        }
     }
 
     _onPoseUpdated(dt, pose) {
@@ -31,6 +41,10 @@ export class SetTrackedHandJointLocalTransformComponent extends Component {
     }
 
     onActivate() {
+        this._myActivateOnNextUpdate = true;
+    }
+
+    _onActivate() {
         Globals.getTrackedHandPose(this._myHandednessType, this.engine).getJointPose(this._myJointIDType).registerPoseUpdatedEventListener(this, this._onPoseUpdated.bind(this));
     }
 

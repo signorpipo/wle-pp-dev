@@ -271,7 +271,7 @@ export class PlayerLocomotionComponent extends Component {
 
     private readonly _myPlayerLocomotion!: PlayerLocomotion;
 
-    private _myLocomotionStarted: boolean = false;
+    private _myActivateOnNextUpdate: boolean = false;
 
     private readonly _myDebugPerformanceLogTimer: Timer = new Timer(0.5);
     private _myDebugPerformanceLogTotalTime: number = 0;
@@ -375,6 +375,14 @@ export class PlayerLocomotionComponent extends Component {
         }
     }
 
+    public override update(dt: number): void {
+        if (this._myActivateOnNextUpdate) {
+            this._onActivate();
+
+            this._myActivateOnNextUpdate = false;
+        }
+    }
+
     public onPostPoseUpdatedEvent(dt: number, pose: Readonly<BasePose>, manualUpdate: boolean): void {
         if (manualUpdate) return;
 
@@ -393,8 +401,7 @@ export class PlayerLocomotionComponent extends Component {
             PhysicsUtils.resetRaycastCount(this.engine.physics!);
         }
 
-        if (!this._myLocomotionStarted) {
-            this._myLocomotionStarted = true;
+        if (!this._myPlayerLocomotion.isStarted()) {
             this._myPlayerLocomotion.start();
         }
 
@@ -437,7 +444,8 @@ export class PlayerLocomotionComponent extends Component {
             Globals.setPlayerLocomotion(this._myPlayerLocomotion, this.engine);
 
             this._myPlayerLocomotion.setActive(true);
-            Globals.getHeadPose(this.engine)!.registerPostPoseUpdatedEventEventListener(this, this.onPostPoseUpdatedEvent.bind(this));
+
+            this._myActivateOnNextUpdate = true;
         }
     }
 
@@ -450,6 +458,12 @@ export class PlayerLocomotionComponent extends Component {
             if (Globals.getPlayerLocomotion(this.engine) == this._myPlayerLocomotion) {
                 Globals.removePlayerLocomotion(this.engine);
             }
+        }
+    }
+
+    private _onActivate(): void {
+        if (this._myPlayerLocomotion != null) {
+            Globals.getHeadPose(this.engine)!.registerPostPoseUpdatedEventEventListener(this, this.onPostPoseUpdatedEvent.bind(this));
         }
     }
 

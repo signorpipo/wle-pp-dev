@@ -7,6 +7,16 @@ import { BasePose } from "../base_pose.js";
 export class SetHeadLocalTransformComponent extends Component {
     public static override TypeName = "pp-set-head-local-transform";
 
+    private _myActivateOnNextUpdate: boolean = false;
+
+    public override update(dt: number): void {
+        if (this._myActivateOnNextUpdate) {
+            this._onActivate();
+
+            this._myActivateOnNextUpdate = false;
+        }
+    }
+
     private static readonly _onPoseUpdatedSV =
         {
             cameraNonXRRotation: quat_create(),
@@ -40,6 +50,10 @@ export class SetHeadLocalTransformComponent extends Component {
     }
 
     public override onActivate(): void {
+        this._myActivateOnNextUpdate = true;
+    }
+
+    private _onActivate(): void {
         Globals.getHeadPose(this.engine)!.registerPoseUpdatedEventListener(this, this._onPoseUpdated.bind(this));
     }
 

@@ -12,6 +12,16 @@ export class SetHandRayLocalTransformComponent extends Component {
 
     start() {
         this._myHandednessType = InputUtils.getHandednessByIndex(this._myHandedness);
+
+        this._myActivateOnNextUpdate = false;
+    }
+
+    update(dt) {
+        if (this._myActivateOnNextUpdate) {
+            this._onActivate();
+
+            this._myActivateOnNextUpdate = false;
+        }
     }
 
     _onPoseUpdated(dt, pose) {
@@ -19,6 +29,10 @@ export class SetHandRayLocalTransformComponent extends Component {
     }
 
     onActivate() {
+        this._myActivateOnNextUpdate = true;
+    }
+
+    _onActivate() {
         Globals.getHandRayPose(this._myHandednessType, this.engine).registerPoseUpdatedEventListener(this, this._onPoseUpdated.bind(this));
     }
 
