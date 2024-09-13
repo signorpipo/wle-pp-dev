@@ -96,9 +96,28 @@ export class PlayerObscureManager {
 
         this._myFSM.perform("end");
 
-        XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this), false, false, this._myParams.myEngine);
+        this._myActive = false;
+        this.setActive(true);
 
         this._myDestroyed = false;
+    }
+
+    setActive(active) {
+        if (this._myActive != active) {
+            this._myActive = active;
+
+            if (this._myActive) {
+                XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this), false, false, this._myParams.myEngine);
+            } else {
+                XRUtils.unregisterSessionStartEndEventListeners(this, this._myParams.myEngine);
+
+                this._setObscureLevel(0);
+            }
+        }
+    }
+
+    isActive() {
+        return this._myActive;
     }
 
     start() {
@@ -114,6 +133,8 @@ export class PlayerObscureManager {
     }
 
     update(dt) {
+        if (!this._myActive) return;
+
         if (!this._myParams.myPlayerLocomotionTeleport.isTeleporting()) {
             if (this._myParams.myDisableObscureWhileTeleportingDuration != null) {
                 this._myDisableObscureWhileTeleportingTimer.start();
@@ -170,6 +191,8 @@ export class PlayerObscureManager {
     }
 
     overrideObscureLevel(obscureLevel, instantFade = false) {
+        if (!this._myActive) return;
+
         this._myObscureLevelOverride = obscureLevel;
 
         if (instantFade && this.isStarted()) {

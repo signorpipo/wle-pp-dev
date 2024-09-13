@@ -15,6 +15,8 @@ export class PlayerLocomotionMovement {
 
     constructor(locomotionRuntimeParams) {
         this._myLocomotionRuntimeParams = locomotionRuntimeParams;
+
+        this._myActive = false;
     }
 
     getRuntimeParams() {
@@ -27,6 +29,14 @@ export class PlayerLocomotionMovement {
 
     stop() {
 
+    }
+
+    setActive(active) {
+        this._myActive = active;
+    }
+
+    isActive() {
+        return this._myActive;
     }
 
     canStop() {

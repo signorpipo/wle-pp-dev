@@ -130,15 +130,26 @@ export class PlayerHeadManager {
 
         this._setCameraNonXRHeight(this._myHeightNonVR);
 
-        XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this), true, true, this._myParams.myEngine);
+        this._myActive = false;
+        this.setActive(true);
     }
 
     public setActive(active: boolean): void {
-        if (active != this._myActive) {
+        if (this._myActive != active) {
+            this._myActive = active;
+
+            if (this._myActive) {
+                XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this), true, true, this._myParams.myEngine);
+            } else {
+                XRUtils.getReferenceSpace(this._myParams.myEngine)?.removeEventListener?.("reset", this._myViewResetEventListener!);
+                XRUtils.getSession(this._myParams.myEngine)?.removeEventListener?.("visibilitychange", this._myVisibilityChangeEventListener!);
+                XRUtils.unregisterSessionStartEndEventListeners(this, this._myParams.myEngine);
+
+                this._onXRSessionEnd();
+            }
+
             this.cancelSync();
         }
-
-        this._myActive = active;
     }
 
     public getParams(): PlayerHeadManagerParams {
@@ -1275,9 +1286,7 @@ export class PlayerHeadManager {
     public destroy(): void {
         this._myDestroyed = true;
 
-        XRUtils.getReferenceSpace(this._myParams.myEngine)?.removeEventListener("reset", this._myViewResetEventListener!);
-        XRUtils.getSession(this._myParams.myEngine)?.removeEventListener("visibilitychange", this._myVisibilityChangeEventListener!);
-        XRUtils.unregisterSessionStartEndEventListeners(this, this._myParams.myEngine);
+        this.setActive(false);
     }
 
     public isDestroyed(): boolean {

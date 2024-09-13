@@ -271,7 +271,8 @@ export class PlayerTransformManager {
     public start(): void {
         this.resetToReal(true, true, true, true, false, true);
 
-        XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this), true, true, this._myParams.myEngine);
+        this._myActive = false;
+        this.setActive(true);
     }
 
     public getParams(): PlayerTransformManagerParams {
@@ -279,7 +280,19 @@ export class PlayerTransformManager {
     }
 
     public setActive(active: boolean): void {
-        this._myActive = active;
+        if (this._myActive != active) {
+            this._myActive = active;
+
+            if (this._myActive) {
+                XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this), true, true, this._myParams.myEngine);
+            } else {
+                if (this._myVisibilityChangeEventListener != null) {
+                    XRUtils.getSession(this._myParams.myEngine)?.removeEventListener("visibilitychange", this._myVisibilityChangeEventListener);
+                }
+
+                XRUtils.unregisterSessionStartEndEventListeners(this, this._myParams.myEngine);
+            }
+        }
     }
 
     // #TODO update should be before to check the new valid transform and if the head new transform is fine
@@ -1508,11 +1521,7 @@ export class PlayerTransformManager {
     public destroy(): void {
         this._myDestroyed = true;
 
-        if (this._myVisibilityChangeEventListener != null) {
-            XRUtils.getSession(this._myParams.myEngine)?.removeEventListener("visibilitychange", this._myVisibilityChangeEventListener);
-        }
-
-        XRUtils.unregisterSessionStartEndEventListeners(this, this._myParams.myEngine);
+        this.setActive(false);
     }
 
     public isDestroyed(): boolean {

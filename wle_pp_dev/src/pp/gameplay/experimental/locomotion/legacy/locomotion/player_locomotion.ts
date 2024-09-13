@@ -526,10 +526,13 @@ export class PlayerLocomotion {
                     this._myPlayerObscureManager.stop();
                 }
             }
-
-            this._myPlayerHeadManager.setActive(this._myActive);
-            this._myPlayerTransformManager.setActive(this._myActive);
         }
+
+        this._myPlayerHeadManager.setActive(this._myActive);
+        this._myPlayerTransformManager.setActive(this._myActive);
+        this._myPlayerObscureManager.setActive(this._myActive);
+        this._myPlayerLocomotionSmooth.setActive(this._myActive);
+        this._myPlayerLocomotionTeleport.setActive(this._myActive);
     }
 
     public isStarted(): boolean {

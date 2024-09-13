@@ -87,12 +87,24 @@ export class PlayerLocomotionSmooth extends PlayerLocomotionMovement {
 
         this._myDestroyed = false;
 
-        XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this), true, false, this._myParams.myEngine);
+        this.setActive(true);
     }
 
     start() {
         this._myCurrentSpeed = 0;
         this._myLastHorizontalMovement.vec3_zero();
+    }
+
+    setActive(active) {
+        if (this.isActive() != active) {
+            if (active) {
+                XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this), true, false, this._myParams.myEngine);
+            } else {
+                XRUtils.unregisterSessionStartEndEventListeners(this, this._myParams.myEngine);
+            }
+        }
+
+        super.setActive(active);
     }
 
     getParams() {
@@ -137,7 +149,7 @@ export class PlayerLocomotionSmooth extends PlayerLocomotionMovement {
     destroy() {
         this._myDestroyed = true;
 
-        XRUtils.unregisterSessionStartEndEventListeners(this, this._myParams.myEngine);
+        this.setActive(false);
     }
 
     isDestroyed() {
@@ -159,6 +171,8 @@ PlayerLocomotionSmooth.prototype.update = function () {
 
     let directionReferenceTransformQuat = quat2_create();
     return function update(dt) {
+        if (!this.isActive()) return;
+
         let debugFlyEnabled = this._myDebugFlyEnabled && Globals.isDebugEnabled(this._myParams.myEngine);
 
         this._myCurrentSpeed = 0;
