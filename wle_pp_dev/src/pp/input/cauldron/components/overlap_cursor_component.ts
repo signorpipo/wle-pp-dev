@@ -40,7 +40,7 @@ export class OverlapCursorComponent extends Component {
     private _myTripleClickTimer: number = 0;
     private _myMultipleClickObject: Readonly<Object3D> | null = null;
 
-    private static _myMultipleClickDelay: number = 0.3;
+    private static readonly _myMultipleClickDelay: number = 0.3;
 
     private static _SV = {
         componentEqualCallback(first: CursorTarget, second: CursorTarget): boolean {

@@ -112,8 +112,8 @@ export class PlayerHeadManager {
 
     private _myDestroyed: boolean = false;
 
-    private static _myResyncCounterFrames = 3;
-    private static _myIsSyncedDelayCounterFrames = 1;
+    private static readonly _myResyncCounterFrames = 3;
+    private static readonly _myIsSyncedDelayCounterFrames = 1;
 
     constructor(params: PlayerHeadManagerParams = new PlayerHeadManagerParams()) {
         this._myParams = params;
