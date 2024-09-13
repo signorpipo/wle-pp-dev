@@ -400,7 +400,7 @@ export class ConsoleVRWidget {
 
     _consolePrint(consoleFunction, sender, ...args) {
         if (!this._myActive && sender == ConsoleVRWidgetSender.CONSOLE_VR) {
-            this._onDeactivateFix();
+            this._deactivateFix();
         }
 
         switch (sender) {
@@ -1002,7 +1002,7 @@ export class ConsoleVRWidget {
         }
     }
 
-    _onDeactivateFix() {
+    _deactivateFix() {
         if (this._myParams.myResetToConsoleOriginalFunctionsOnDeactivate || this._myParams.myResetToOverwrittenConsoleFunctionsOnDeactivate) {
             if (this._myParams.myResetToConsoleOriginalFunctionsOnDeactivate) {
                 Globals.getConsoleVR(this._myEngine).log = ConsoleVR.myOriginalLog;

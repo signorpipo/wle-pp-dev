@@ -25,26 +25,29 @@ export class SetHeadLocalTransformComponent extends Component {
             headPoseTransform: quat2_create()
         };
     private _onPoseUpdated(dt: number, pose: Readonly<BasePose>): void {
-        if (this.active) {
-            if (!XRUtils.isSessionActive(this.engine)) {
-                const cameraNonXR = Globals.getPlayerObjects(this.engine)!.myCameraNonXR!;
+        if (!this.active) {
+            this.onDeactivate();
+            return;
+        }
 
-                const cameraNonXRRotation = SetHeadLocalTransformComponent._onPoseUpdatedSV.cameraNonXRRotation;
-                cameraNonXR.pp_getRotationLocalQuat(cameraNonXRRotation);
+        if (!XRUtils.isSessionActive(this.engine)) {
+            const cameraNonXR = Globals.getPlayerObjects(this.engine)!.myCameraNonXR!;
 
-                if (Globals.isPoseForwardFixed(this.engine)) {
-                    const cameraNonXRUp = SetHeadLocalTransformComponent._onPoseUpdatedSV.cameraNonXRUp;
-                    cameraNonXRRotation.quat_rotateAxisRadians(Math.PI, cameraNonXRRotation.quat_getUp(cameraNonXRUp), cameraNonXRRotation);
-                }
+            const cameraNonXRRotation = SetHeadLocalTransformComponent._onPoseUpdatedSV.cameraNonXRRotation;
+            cameraNonXR.pp_getRotationLocalQuat(cameraNonXRRotation);
 
-                const cameraNonXRPosition = SetHeadLocalTransformComponent._onPoseUpdatedSV.cameraNonXRPosition;
-                this.object.pp_setPositionLocal(cameraNonXR.pp_getPositionLocal(cameraNonXRPosition));
-                this.object.pp_setRotationLocalQuat(cameraNonXRRotation);
-            } else {
-                if (pose.isValid()) {
-                    const headPoseTransform = SetHeadLocalTransformComponent._onPoseUpdatedSV.headPoseTransform;
-                    this.object.pp_setTransformLocalQuat(pose.getTransformQuat(headPoseTransform, null));
-                }
+            if (Globals.isPoseForwardFixed(this.engine)) {
+                const cameraNonXRUp = SetHeadLocalTransformComponent._onPoseUpdatedSV.cameraNonXRUp;
+                cameraNonXRRotation.quat_rotateAxisRadians(Math.PI, cameraNonXRRotation.quat_getUp(cameraNonXRUp), cameraNonXRRotation);
+            }
+
+            const cameraNonXRPosition = SetHeadLocalTransformComponent._onPoseUpdatedSV.cameraNonXRPosition;
+            this.object.pp_setPositionLocal(cameraNonXR.pp_getPositionLocal(cameraNonXRPosition));
+            this.object.pp_setRotationLocalQuat(cameraNonXRRotation);
+        } else {
+            if (pose.isValid()) {
+                const headPoseTransform = SetHeadLocalTransformComponent._onPoseUpdatedSV.headPoseTransform;
+                this.object.pp_setTransformLocalQuat(pose.getTransformQuat(headPoseTransform, null));
             }
         }
     }

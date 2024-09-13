@@ -460,6 +460,9 @@ export class VirtualGamepadComponent extends Component {
 
     _onActivate() {
         if (!this._myFirstUpdate && this._myAddToUniversalGamepad) {
+            Globals.getLeftGamepad(this.engine).removeGamepadCore("pp_left_virtual_gamepad");
+            Globals.getRightGamepad(this.engine).removeGamepadCore("pp_right_virtual_gamepad");
+
             Globals.getLeftGamepad(this.engine).addGamepadCore("pp_left_virtual_gamepad", this._myLeftVirtualGamepadGamepadCore);
             Globals.getRightGamepad(this.engine).addGamepadCore("pp_right_virtual_gamepad", this._myRightVirtualGamepadGamepadCore);
         }
