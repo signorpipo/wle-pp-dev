@@ -42,7 +42,7 @@ export class ToggleHowToTextComponent extends Component implements CursorButtonA
             }
         };
 
-        CursorButtonComponent.addButtonActionHandler("switch-button-text", switchButtonTextHandler);
+        CursorButtonComponent.addButtonActionHandler("switch-button-text", switchButtonTextHandler, this.engine);
     }
 
     public override start(): void {

@@ -1235,11 +1235,6 @@ export class PlayerHeadManager {
         }
     }
 
-    private static readonly _getHeadTransformFromLocalSV =
-        {
-            direction: vec3_create(),
-            feetPosition: vec3_create()
-        };
     private _getHeadTransformFromLocal(transformLocal: Readonly<Quaternion2>): Quaternion2 {
         return this._myCurrentHead.pp_convertTransformLocalToWorldQuat(transformLocal);
     }

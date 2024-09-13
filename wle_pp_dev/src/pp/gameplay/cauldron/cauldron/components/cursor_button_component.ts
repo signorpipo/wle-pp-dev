@@ -1,4 +1,4 @@
-import { Component, MeshComponent, Object3D, TextComponent } from "@wonderlandengine/api";
+import { Component, MeshComponent, Object3D, TextComponent, WonderlandEngine } from "@wonderlandengine/api";
 import { property } from "@wonderlandengine/api/decorators.js";
 import { Cursor, CursorTarget } from "@wonderlandengine/components";
 import { AudioPlayer } from "../../../../audio/audio_player.js";
@@ -183,19 +183,25 @@ export class CursorButtonComponent extends Component {
     private _myOnUpAudioPlayer: AudioPlayer | null = null;
     private _myOnUnhoverAudioPlayer: AudioPlayer | null = null;
 
-    private static _myCursorButtonActionHandlers: Map<string, CursorButtonActionsHandler> = new Map();
+    private static readonly _myCursorButtonActionHandlers: Map<Readonly<WonderlandEngine>, Map<string, CursorButtonActionsHandler>> = new Map();
 
     /** Used to add handlers for every cursor buttons that can be indexes with a string */
-    public static addButtonActionHandler(id: string, buttonActionHandler: Readonly<CursorButtonActionsHandler>): void {
-        CursorButtonComponent._myCursorButtonActionHandlers.set(id, buttonActionHandler);
+    public static addButtonActionHandler(id: string, buttonActionHandler: Readonly<CursorButtonActionsHandler>, engine = Globals.getMainEngine()!): void {
+        if (!CursorButtonComponent._myCursorButtonActionHandlers.has(engine)) {
+            CursorButtonComponent._myCursorButtonActionHandlers.set(engine, new Map());
+        }
+
+        CursorButtonComponent._myCursorButtonActionHandlers.get(engine)!.set(id, buttonActionHandler);
     }
 
-    public static removeButtonActionHandler(id: string): void {
-        CursorButtonComponent._myCursorButtonActionHandlers.delete(id);
+    public static removeButtonActionHandler(id: string, engine = Globals.getMainEngine()!): void {
+        if (CursorButtonComponent._myCursorButtonActionHandlers.has(engine)) {
+            CursorButtonComponent._myCursorButtonActionHandlers.get(engine)!.delete(id);
+        }
     }
 
-    public static getButtonActionHandler(id: string): CursorButtonActionsHandler | null {
-        const buttonActionHandler = CursorButtonComponent._myCursorButtonActionHandlers.get(id);
+    public static getButtonActionHandler(id: string, engine = Globals.getMainEngine()!): CursorButtonActionsHandler | null {
+        const buttonActionHandler = CursorButtonComponent._myCursorButtonActionHandlers.get(engine)?.get(id);
         return buttonActionHandler != null ? buttonActionHandler : null;
     }
 
@@ -231,7 +237,7 @@ export class CursorButtonComponent extends Component {
             if (buttonActionHandlerComponent != null) {
                 this._myButtonActionsHandlers.set(buttonActionsHandlerName, buttonActionHandlerComponent);
             } else {
-                const buttonActionHandlerStatic = CursorButtonComponent.getButtonActionHandler(buttonActionsHandlerName);
+                const buttonActionHandlerStatic = CursorButtonComponent.getButtonActionHandler(buttonActionsHandlerName, this.engine);
                 if (buttonActionHandlerStatic != null) {
                     this._myButtonActionsHandlers.set(buttonActionsHandlerName, buttonActionHandlerStatic);
                 }
