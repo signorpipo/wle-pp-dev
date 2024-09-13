@@ -3,7 +3,7 @@ import { property } from "@wonderlandengine/api/decorators.js";
 import { Cursor } from "@wonderlandengine/components";
 import { PhysicsLayerFlags } from "../../../cauldron/physics/physics_layer_flags.js";
 import { XRUtils } from "../../../cauldron/utils/xr_utils.js";
-import { vec3_create } from "../../../plugin/js/extensions/array/vec_create_extension.js";
+import { quat2_create, vec3_create } from "../../../plugin/js/extensions/array/vec_create_extension.js";
 import { Globals } from "../../../pp/globals.js";
 import { Handedness, InputSourceType, TrackedHandJointID } from "../input_types.js";
 import { InputUtils } from "../input_utils.js";
@@ -124,8 +124,13 @@ export class FingerCursorComponent extends Component {
         this._myCursorParentObject.pp_setActive(false);
     }
 
+    private static readonly _updateSV =
+        {
+            transformQuat: quat2_create()
+        };
     public override update(dt: number): void {
-        this._myCursorParentObject.pp_setTransformQuat(Globals.getPlayerObjects(this.engine)!.myReferenceSpace!.pp_getTransformQuat());
+        const transformQuat = FingerCursorComponent._updateSV.transformQuat;
+        this._myCursorParentObject.pp_setTransformQuat(Globals.getPlayerObjects(this.engine)!.myReferenceSpace!.pp_getTransformQuat(transformQuat));
         this._updateHand();
     }
 

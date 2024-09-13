@@ -245,14 +245,15 @@ export class GrabberHandComponent extends Component {
     }
 
     _updateLinearVelocityHistory() {
+        const velocityToReuse = this._myHandLinearVelocityHistory.pop();
+
         let handPose = this._myGamepad.getHandPose();
         if (handPose != null) {
-            this._myHandLinearVelocityHistory.unshift(handPose.getLinearVelocity());
+            this._myHandLinearVelocityHistory.unshift(handPose.getLinearVelocity(velocityToReuse));
         } else {
-            this._myHandLinearVelocityHistory.unshift(vec3_create());
+            velocityToReuse.vec3_zero();
+            this._myHandLinearVelocityHistory.unshift(velocityToReuse);
         }
-
-        this._myHandLinearVelocityHistory.pop();
 
         for (let grabbable of this._myGrabbables) {
             grabbable.updateLinearVelocityHistory();
@@ -260,14 +261,15 @@ export class GrabberHandComponent extends Component {
     }
 
     _updateAngularVelocityHistory() {
+        const velocityToReuse = this._myHandAngularVelocityHistory.pop();
+
         let handPose = this._myGamepad.getHandPose();
         if (handPose != null) {
-            this._myHandAngularVelocityHistory.unshift(handPose.getAngularVelocityRadians());
+            this._myHandAngularVelocityHistory.unshift(handPose.getAngularVelocityRadians(velocityToReuse));
         } else {
-            this._myHandAngularVelocityHistory.unshift(vec3_create());
+            velocityToReuse.vec3_zero();
+            this._myHandAngularVelocityHistory.unshift(velocityToReuse);
         }
-
-        this._myHandAngularVelocityHistory.pop();
 
         for (let grabbable of this._myGrabbables) {
             grabbable.updateAngularVelocityHistory();
