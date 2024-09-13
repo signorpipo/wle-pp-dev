@@ -258,7 +258,7 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable 
     let prevParablePosition = vec3_create();
     let parableFinalPosition = vec3_create();
 
-    let raycastParams = new RaycastParams();
+    let raycastParams = null;
     let raycastResult = new RaycastResults();
 
     let parableHitPosition = vec3_create();
@@ -283,6 +283,10 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable 
         let positionFlatDistance = 0;
         let positionParableDistance = 0;
         prevParablePosition = this._myDetectionRuntimeParams.myParable.getPosition(currentPositionIndex - 1, prevParablePosition);
+
+        if (raycastParams == null) {
+            raycastParams = new RaycastParams(this._myTeleportParams.myEngine);
+        }
 
         raycastParams.myIgnoreHitsInsideCollision = true;
         raycastParams.myBlockLayerFlags.setMask(this._myTeleportParams.myDetectionParams.myTeleportBlockLayerFlags.getMask());
@@ -733,7 +737,7 @@ PlayerLocomotionTeleportDetectionState.prototype._isPositionVisible = function (
     let fixedUp = vec3_create();
     let raycastEndPosition = vec3_create();
 
-    let raycastParams = new RaycastParams();
+    let raycastParams = null;
     let raycastResult = new RaycastResults();
 
     let objectsEqualCallback = (first, second) => first == second;
@@ -761,6 +765,10 @@ PlayerLocomotionTeleportDetectionState.prototype._isPositionVisible = function (
         let checkPositions = this._getVisibilityCheckPositions(headPosition, fixedUp, fixedForward);
 
         let distance = headPosition.vec3_distance(position);
+
+        if (raycastParams == null) {
+            raycastParams = new RaycastParams(this._myTeleportParams.myEngine);
+        }
 
         for (let checkPosition of checkPositions) {
             raycastParams.myOrigin.vec3_copy(checkPosition);
