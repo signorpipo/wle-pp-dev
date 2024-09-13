@@ -384,6 +384,11 @@ export class PlayerLocomotionComponent extends Component {
     }
 
     public onPostPoseUpdatedEvent(dt: number, pose: Readonly<BasePose>, manualUpdate: boolean): void {
+        if (!this.active) {
+            Globals.getHeadPose(this.engine)?.unregisterPostPoseUpdatedEventEventListener(this);
+            return;
+        }
+
         if (manualUpdate) return;
 
         let startTime = 0;
@@ -453,7 +458,7 @@ export class PlayerLocomotionComponent extends Component {
         if (this._myPlayerLocomotion != null) {
             this._myPlayerLocomotion.setActive(false);
 
-            Globals.getHeadPose(this.engine)!.unregisterPostPoseUpdatedEventEventListener(this);
+            Globals.getHeadPose(this.engine)?.unregisterPostPoseUpdatedEventEventListener(this);
 
             if (Globals.getPlayerLocomotion(this.engine) == this._myPlayerLocomotion) {
                 Globals.removePlayerLocomotion(this.engine);

@@ -215,13 +215,15 @@ export class ConsoleVRWidget {
                     console.assert = ConsoleOriginalFunctions.getAssert(this._myEngine);
                     console.clear = ConsoleOriginalFunctions.getClear(this._myEngine);
 
-                    Globals.getConsoleVR(this._myEngine).log = ConsoleVR.myOriginalLog;
-                    Globals.getConsoleVR(this._myEngine).error = ConsoleVR.myOriginalError;
-                    Globals.getConsoleVR(this._myEngine).warn = ConsoleVR.myOriginalWarn;
-                    Globals.getConsoleVR(this._myEngine).info = ConsoleVR.myOriginalInfo;
-                    Globals.getConsoleVR(this._myEngine).debug = ConsoleVR.myOriginalDebug;
-                    Globals.getConsoleVR(this._myEngine).assert = ConsoleVR.myOriginalAssert;
-                    Globals.getConsoleVR(this._myEngine).clear = ConsoleVR.myOriginalClear;
+                    if (Globals.getConsoleVR(this._myEngine) != null) {
+                        Globals.getConsoleVR(this._myEngine).log = ConsoleVR.myOriginalLog;
+                        Globals.getConsoleVR(this._myEngine).error = ConsoleVR.myOriginalError;
+                        Globals.getConsoleVR(this._myEngine).warn = ConsoleVR.myOriginalWarn;
+                        Globals.getConsoleVR(this._myEngine).info = ConsoleVR.myOriginalInfo;
+                        Globals.getConsoleVR(this._myEngine).debug = ConsoleVR.myOriginalDebug;
+                        Globals.getConsoleVR(this._myEngine).assert = ConsoleVR.myOriginalAssert;
+                        Globals.getConsoleVR(this._myEngine).clear = ConsoleVR.myOriginalClear;
+                    }
                 } else if (this._myParams.myResetToOverwrittenConsoleFunctionsOnDeactivate) {
                     console.log = this._myOldBrowserConsole[ConsoleVRWidgetConsoleFunction.LOG];
                     console.error = this._myOldBrowserConsole[ConsoleVRWidgetConsoleFunction.ERROR];
@@ -231,13 +233,15 @@ export class ConsoleVRWidget {
                     console.assert = this._myOldBrowserConsole[ConsoleVRWidgetConsoleFunction.ASSERT];
                     console.clear = this._myOldBrowserConsoleClear;
 
-                    Globals.getConsoleVR(this._myEngine).log = this._myOldBrowserConsole[ConsoleVRWidgetConsoleFunction.LOG];
-                    Globals.getConsoleVR(this._myEngine).error = this._myOldBrowserConsole[ConsoleVRWidgetConsoleFunction.ERROR];
-                    Globals.getConsoleVR(this._myEngine).warn = this._myOldBrowserConsole[ConsoleVRWidgetConsoleFunction.WARN];
-                    Globals.getConsoleVR(this._myEngine).info = this._myOldBrowserConsole[ConsoleVRWidgetConsoleFunction.INFO];
-                    Globals.getConsoleVR(this._myEngine).debug = this._myOldBrowserConsole[ConsoleVRWidgetConsoleFunction.DEBUG];
-                    Globals.getConsoleVR(this._myEngine).assert = this._myOldBrowserConsole[ConsoleVRWidgetConsoleFunction.ASSERT];
-                    Globals.getConsoleVR(this._myEngine).clear = this._myOldConsoleVRClear;
+                    if (Globals.getConsoleVR(this._myEngine) != null) {
+                        Globals.getConsoleVR(this._myEngine).log = this._myOldConsoleVR[ConsoleVRWidgetConsoleFunction.LOG];
+                        Globals.getConsoleVR(this._myEngine).error = this._myOldConsoleVR[ConsoleVRWidgetConsoleFunction.ERROR];
+                        Globals.getConsoleVR(this._myEngine).warn = this._myOldConsoleVR[ConsoleVRWidgetConsoleFunction.WARN];
+                        Globals.getConsoleVR(this._myEngine).info = this._myOldConsoleVR[ConsoleVRWidgetConsoleFunction.INFO];
+                        Globals.getConsoleVR(this._myEngine).debug = this._myOldConsoleVR[ConsoleVRWidgetConsoleFunction.DEBUG];
+                        Globals.getConsoleVR(this._myEngine).assert = this._myOldConsoleVR[ConsoleVRWidgetConsoleFunction.ASSERT];
+                        Globals.getConsoleVR(this._myEngine).clear = this._myOldConsoleVRClear;
+                    }
                 }
             }
         }
@@ -395,6 +399,10 @@ export class ConsoleVRWidget {
     }
 
     _consolePrint(consoleFunction, sender, ...args) {
+        if (!this._myActive && sender == ConsoleVRWidgetSender.CONSOLE_VR) {
+            this._onDeactivateFix();
+        }
+
         switch (sender) {
             case ConsoleVRWidgetSender.BROWSER_CONSOLE:
                 this._myOldBrowserConsole[consoleFunction].apply(console, args);
@@ -407,7 +415,7 @@ export class ConsoleVRWidget {
                 break;
         }
 
-        if (this._myConsolePrintAddMessageEnabled && (consoleFunction != ConsoleVRWidgetConsoleFunction.ASSERT || (args.length > 0 && !args[0]))) {
+        if (this._myActive && this._myConsolePrintAddMessageEnabled && (consoleFunction != ConsoleVRWidgetConsoleFunction.ASSERT || (args.length > 0 && !args[0]))) {
             this._myTextDirty = true;
             this._pulseGamepad();
 
@@ -991,6 +999,36 @@ export class ConsoleVRWidget {
             return stringifiedArray;
         } else {
             return value;
+        }
+    }
+
+    _onDeactivateFix() {
+        if (this._myParams.myResetToConsoleOriginalFunctionsOnDeactivate || this._myParams.myResetToOverwrittenConsoleFunctionsOnDeactivate) {
+            if (this._myParams.myResetToConsoleOriginalFunctionsOnDeactivate) {
+                Globals.getConsoleVR(this._myEngine).log = ConsoleVR.myOriginalLog;
+                Globals.getConsoleVR(this._myEngine).error = ConsoleVR.myOriginalError;
+                Globals.getConsoleVR(this._myEngine).warn = ConsoleVR.myOriginalWarn;
+                Globals.getConsoleVR(this._myEngine).info = ConsoleVR.myOriginalInfo;
+                Globals.getConsoleVR(this._myEngine).debug = ConsoleVR.myOriginalDebug;
+                Globals.getConsoleVR(this._myEngine).assert = ConsoleVR.myOriginalAssert;
+                Globals.getConsoleVR(this._myEngine).clear = ConsoleVR.myOriginalClear;
+            } else if (this._myParams.myResetToOverwrittenConsoleFunctionsOnDeactivate) {
+                Globals.getConsoleVR(this._myEngine).log = this._myOldConsoleVR[ConsoleVRWidgetConsoleFunction.LOG];
+                Globals.getConsoleVR(this._myEngine).error = this._myOldConsoleVR[ConsoleVRWidgetConsoleFunction.ERROR];
+                Globals.getConsoleVR(this._myEngine).warn = this._myOldConsoleVR[ConsoleVRWidgetConsoleFunction.WARN];
+                Globals.getConsoleVR(this._myEngine).info = this._myOldConsoleVR[ConsoleVRWidgetConsoleFunction.INFO];
+                Globals.getConsoleVR(this._myEngine).debug = this._myOldConsoleVR[ConsoleVRWidgetConsoleFunction.DEBUG];
+                Globals.getConsoleVR(this._myEngine).assert = this._myOldConsoleVR[ConsoleVRWidgetConsoleFunction.ASSERT];
+                Globals.getConsoleVR(this._myEngine).clear = this._myOldConsoleVRClear;
+            }
+
+            this._myOldConsoleVR[ConsoleVRWidgetConsoleFunction.LOG] = Globals.getConsoleVR(this._myEngine).log;
+            this._myOldConsoleVR[ConsoleVRWidgetConsoleFunction.ERROR] = Globals.getConsoleVR(this._myEngine).error;
+            this._myOldConsoleVR[ConsoleVRWidgetConsoleFunction.WARN] = Globals.getConsoleVR(this._myEngine).warn;
+            this._myOldConsoleVR[ConsoleVRWidgetConsoleFunction.INFO] = Globals.getConsoleVR(this._myEngine).info;
+            this._myOldConsoleVR[ConsoleVRWidgetConsoleFunction.DEBUG] = Globals.getConsoleVR(this._myEngine).debug;
+            this._myOldConsoleVR[ConsoleVRWidgetConsoleFunction.ASSERT] = Globals.getConsoleVR(this._myEngine).assert;
+            this._myOldConsoleVRClear = Globals.getConsoleVR(this._myEngine).clear;
         }
     }
 
