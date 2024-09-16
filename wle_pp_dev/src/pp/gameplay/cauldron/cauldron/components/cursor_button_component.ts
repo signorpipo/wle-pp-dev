@@ -437,7 +437,7 @@ export class CursorButtonComponent extends Component {
 
         if (!isSecondaryCursor) {
             if (this._myScaleOffsetOnHover != 0 || this._myScaleOffsetOnDown != 0 || this._myScaleOffsetOnUp != 0) {
-                this._myAnimatedScale.updateTargetValue(1);
+                this._myAnimatedScale.setTargetValue(1);
             }
         }
 
@@ -452,7 +452,7 @@ export class CursorButtonComponent extends Component {
 
         if (!isSecondaryCursor) {
             if (this._myColorBrigthnessOffsetOnHover != 0 || this._myColorBrigthnessOffsetOnDown != 0 || this._myColorBrigthnessOffsetOnUp != 0) {
-                this._myAnimatedColorBrightnessOffset.updateTargetValue(0);
+                this._myAnimatedColorBrightnessOffset.setTargetValue(0);
             }
         }
 
@@ -484,7 +484,7 @@ export class CursorButtonComponent extends Component {
 
         if (!isSecondaryCursor) {
             if (this._myScaleOffsetOnHover != 0 || this._myScaleOffsetOnDown != 0 || this._myScaleOffsetOnUp != 0) {
-                this._myAnimatedScale.updateTargetValue(1 + this._myScaleOffsetOnHover);
+                this._myAnimatedScale.setTargetValue(1 + this._myScaleOffsetOnHover);
             }
         }
 
@@ -499,7 +499,7 @@ export class CursorButtonComponent extends Component {
 
         if (!isSecondaryCursor) {
             if (this._myColorBrigthnessOffsetOnHover != 0 || this._myColorBrigthnessOffsetOnDown != 0 || this._myColorBrigthnessOffsetOnUp != 0) {
-                this._myAnimatedColorBrightnessOffset.updateTargetValue(this._myColorBrigthnessOffsetOnHover);
+                this._myAnimatedColorBrightnessOffset.setTargetValue(this._myColorBrigthnessOffsetOnHover);
             }
         }
 
@@ -530,7 +530,7 @@ export class CursorButtonComponent extends Component {
 
         if (!isSecondaryCursor) {
             if (this._myScaleOffsetOnHover != 0 || this._myScaleOffsetOnDown != 0 || this._myScaleOffsetOnUp != 0) {
-                this._myAnimatedScale.updateTargetValue(1 + this._myScaleOffsetOnDown);
+                this._myAnimatedScale.setTargetValue(1 + this._myScaleOffsetOnDown);
             }
         }
 
@@ -545,7 +545,7 @@ export class CursorButtonComponent extends Component {
 
         if (!isSecondaryCursor) {
             if (this._myColorBrigthnessOffsetOnHover != 0 || this._myColorBrigthnessOffsetOnDown != 0 || this._myColorBrigthnessOffsetOnUp != 0) {
-                this._myAnimatedColorBrightnessOffset.updateTargetValue(this._myColorBrigthnessOffsetOnDown);
+                this._myAnimatedColorBrightnessOffset.setTargetValue(this._myColorBrigthnessOffsetOnDown);
             }
         }
 
@@ -576,7 +576,7 @@ export class CursorButtonComponent extends Component {
 
         if (!isSecondaryCursor) {
             if (this._myScaleOffsetOnHover != 0 || this._myScaleOffsetOnDown != 0 || this._myScaleOffsetOnUp != 0) {
-                this._myAnimatedScale.updateTargetValue(1 + this._myScaleOffsetOnUp);
+                this._myAnimatedScale.setTargetValue(1 + this._myScaleOffsetOnUp);
             }
         }
 
@@ -591,7 +591,7 @@ export class CursorButtonComponent extends Component {
 
         if (!isSecondaryCursor) {
             if (this._myColorBrigthnessOffsetOnHover != 0 || this._myColorBrigthnessOffsetOnDown != 0 || this._myColorBrigthnessOffsetOnUp != 0) {
-                this._myAnimatedColorBrightnessOffset.updateTargetValue(this._myColorBrigthnessOffsetOnUp);
+                this._myAnimatedColorBrightnessOffset.setTargetValue(this._myColorBrigthnessOffsetOnUp);
             }
         }
 

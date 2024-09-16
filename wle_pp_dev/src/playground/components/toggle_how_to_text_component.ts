@@ -72,9 +72,9 @@ export class ToggleHowToTextComponent extends Component implements CursorButtonA
         if (isSecondaryCursor) return false;
 
         if (!this._myTextVisible) {
-            this._myAnimatedScale.updateTargetValue(1);
+            this._myAnimatedScale.setTargetValue(1);
         } else {
-            this._myAnimatedScale.updateTargetValue(0);
+            this._myAnimatedScale.setTargetValue(0);
         }
 
         this._myTextObject.pp_setPositionLocal(this._myTextObjectInitialPositionLocal);
