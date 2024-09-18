@@ -51,7 +51,8 @@ export class OverlapCursorComponent extends Component {
     public override init(): void {
         const fakeCursor = {
             handedness: 3,
-            object: this.object
+            object: this.object,
+            cursorPos: vec3_create()
         };
 
         (this._myFakeCursor as Cursor) = fakeCursor as unknown as Cursor;
@@ -88,6 +89,7 @@ export class OverlapCursorComponent extends Component {
             this._myCursorPositionHistory[i].vec3_copy(this._myCursorPositionHistory[i - 1]);
         }
         this.object.pp_getPosition(this._myCursorPositionHistory[0]);
+        this._myFakeCursor.cursorPos.vec3_copy(this._myCursorPositionHistory[0]);
 
         let bestCursorTarget = null;
         const processedCursorTargets: CursorTarget[] = [];
