@@ -107,9 +107,8 @@ export abstract class AbstractVisualElement<VisualElementType extends AbstractVi
     }
 
     public forceRefresh(): void {
-        this._refresh();
-
-        this._forceRefreshHook();
+        this._myDirty = true;
+        this.refresh();
     }
 
     public setAutoRefresh(autoRefresh: boolean): void {
@@ -186,7 +185,6 @@ export abstract class AbstractVisualElement<VisualElementType extends AbstractVi
 
     protected abstract _build(): void;
     protected abstract _refresh(): void;
-    protected _forceRefreshHook(): void { }
 
     protected abstract _new(params: VisualElementParamsType): VisualElementType;
 

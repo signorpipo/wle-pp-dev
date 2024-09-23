@@ -86,12 +86,6 @@ export class VisualTransform extends AbstractVisualElement {
         // Implemented outside class definition
     }
 
-    _forceRefreshHook() {
-        this._myVisualRight.forceRefresh();
-        this._myVisualUp.forceRefresh();
-        this._myVisualForward.forceRefresh();
-    }
-
     _new(params) {
         return new VisualTransform(params);
     }

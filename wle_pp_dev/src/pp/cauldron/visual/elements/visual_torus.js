@@ -116,15 +116,6 @@ export class VisualTorus extends AbstractVisualElement {
         // Implemented outside class definition
     }
 
-    _forceRefreshHook() {
-        let segmentToRefresh = Math.min(this._myParams.mySegmentsAmount, this._myVisualSegmentList.length);
-
-        for (let i = 0; i < segmentToRefresh; i++) {
-            let visualSegment = this._myVisualSegmentList[i];
-            visualSegment.forceRefresh();
-        }
-    }
-
     _new(params) {
         return new VisualTorus(params);
     }

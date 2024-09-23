@@ -196,20 +196,6 @@ export class VisualRaycast extends AbstractVisualElement {
         }
     }
 
-
-    _forceRefreshHook() {
-        this._myVisualRaycast.forceRefresh();
-
-        if (this._myParams.myRaycastResults.myHits.length > 0) {
-            let hitsToRefresh = Math.min(this._myParams.myRaycastResults.myHits.length, this._myVisualRaycastHitList.length);
-
-            for (let i = 0; i < hitsToRefresh; i++) {
-                let visualRaycastHit = this._myVisualRaycastHitList[i];
-                visualRaycastHit.forceRefresh();
-            }
-        }
-    }
-
     _new(params) {
         return new VisualRaycast(params);
     }
