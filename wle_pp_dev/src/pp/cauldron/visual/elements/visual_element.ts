@@ -10,6 +10,8 @@ export interface VisualElementParams {
 
     copyGeneric(other: Readonly<VisualElementParams>): void;
     cloneGeneric(): VisualElementParams;
+
+    equalsGeneric(other: Readonly<VisualElementParams>): boolean;
 }
 
 export abstract class AbstractVisualElementParams<T extends AbstractVisualElementParams<T>> implements VisualElementParams {
@@ -33,6 +35,12 @@ export abstract class AbstractVisualElementParams<T extends AbstractVisualElemen
         return clonedParams;
     }
 
+    public equals(other: Readonly<T>): boolean {
+        if (this.myParent != other.myParent) return false;
+
+        return this._equalsHook(other);
+    }
+
     public copyGeneric(other: Readonly<VisualElementParams>): void {
         if (other.myType != this.myType) {
             throw new Error("Trying to copy from params with a different type - From Type: " + other.myType + " - To Type: " + this.myType);
@@ -45,8 +53,14 @@ export abstract class AbstractVisualElementParams<T extends AbstractVisualElemen
         return this.clone();
     }
 
+    public equalsGeneric(other: Readonly<VisualElementParams>): boolean {
+        return this.equals(other as Readonly<T>);
+    }
+
     protected abstract _copyHook(other: Readonly<T>): void;
     protected abstract _new(): T;
+
+    protected abstract _equalsHook(other: Readonly<T>): boolean;
 }
 
 export interface VisualElement {
@@ -55,7 +69,6 @@ export interface VisualElement {
     setVisible(visible: boolean): void;
 
     refresh(): void;
-    forceRefresh(): void;
     setAutoRefresh(autoRefresh: boolean): void;
 
     getParamsGeneric(): VisualElementParams;
@@ -104,11 +117,6 @@ export abstract class AbstractVisualElement<VisualElementType extends AbstractVi
 
     public refresh(): void {
         this.update(0);
-    }
-
-    public forceRefresh(): void {
-        this._myDirty = true;
-        this.refresh();
     }
 
     public setAutoRefresh(autoRefresh: boolean): void {
@@ -174,7 +182,9 @@ export abstract class AbstractVisualElement<VisualElementType extends AbstractVi
 
     protected _prepare(): void {
         this._build();
-        this.forceRefresh();
+
+        this._myDirty = true;
+        this.refresh();
 
         this.setVisible(true);
     }

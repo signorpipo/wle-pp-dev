@@ -299,7 +299,8 @@ export class VisualManager {
         const defaultElementsParent = Globals.getSceneObjects(this._myEngine)!.myVisualElements!;
         if (visualElement.getParamsGeneric().myParent != defaultElementsParent) {
             visualElement.getParamsGeneric().myParent = defaultElementsParent;
-            visualElement.forceRefresh(); // just used to trigger the parent change, I'm lazy
+            visualElement.paramsUpdated();
+            visualElement.refresh(); // just used to trigger the parent change, I'm lazy
         }
 
         Globals.getObjectPoolManager(this._myEngine)!.release(this._getTypePoolID(visualElement.getParamsGeneric().myType), visualElement);
