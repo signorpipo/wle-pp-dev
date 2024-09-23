@@ -8,6 +8,7 @@ export class GamepadCore {
         this._myManagingHandPose = false;
 
         this._myActive = true;
+        this._myStarted = false;
 
         this._myDestroyed = false;
     }
@@ -47,6 +48,10 @@ export class GamepadCore {
     }
 
     start() {
+        if (this._myStarted) return;
+
+        this._myStarted = true;
+
         if (this.getHandPose() && this.isManagingHandPose()) {
             this.getHandPose().start();
         }
@@ -111,6 +116,8 @@ export class GamepadCore {
     // Hooks end
 
     destroy() {
+        if (this._myDestroyed) return;
+
         this._myDestroyed = true;
 
         this.setActive(false);

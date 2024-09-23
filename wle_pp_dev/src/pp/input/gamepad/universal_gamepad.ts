@@ -25,8 +25,10 @@ export class UniversalGamepad extends Gamepad {
         if (gamepadCore.getHandedness() == this.getHandedness()) {
             this._myGamepadCores[id] = gamepadCore;
             this._myGamepadCoresIDs.push(id);
+
             if (this._myStarted) {
                 gamepadCore.start();
+                gamepadCore.setActive(this.isActive());
             }
         }
     }
@@ -82,6 +84,7 @@ export class UniversalGamepad extends Gamepad {
             const id = this._myGamepadCoresIDs[i];
             const core = this._myGamepadCores[id];
             core.start();
+            core.setActive(this.isActive());
         }
 
         this._myStarted = true;
