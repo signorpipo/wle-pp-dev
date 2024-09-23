@@ -493,33 +493,33 @@ PlayerLocomotionTeleportDetectionVisualizer.prototype._showTeleportParablePositi
             this._myVisualTeleportPositionObject.pp_setTransformQuat(currentVisualTeleportTransformQuat);
         }
 
-        {
-            let visualParams = this._myValidVisualTeleportPositionTorus.getParams();
-            visualParams.myRadius = 0.175;
-            visualParams.mySegmentsAmount = 24;
-            visualParams.mySegmentThickness = 0.02;
-
-            //visualParams.myRadius = Globals.getEasyTuneVariables(this._myTeleportParams.myEngine).get("Teleport Torus Radius");
-            //visualParams.mySegmentsAmount = Globals.getEasyTuneVariables(this._myTeleportParams.myEngine).get("Teleport Torus Segments");
-            //visualParams.mySegmentThickness = Globals.getEasyTuneVariables(this._myTeleportParams.myEngine).get("Teleport Torus Thickness");
-
-            this._myValidVisualTeleportPositionTorus.paramsUpdated();
-        }
-
-        {
-            let visualParams = this._myValidVisualTeleportPositionTorusInner.getParams();
-            visualParams.myRadius = 0.04;
-            visualParams.mySegmentsAmount = 24;
-            visualParams.mySegmentThickness = 0.02;
-
-            //visualParams.myRadius = Globals.getEasyTuneVariables(this._myTeleportParams.myEngine).get("Teleport Torus Inner Radius");
-            //visualParams.mySegmentsAmount = Globals.getEasyTuneVariables(this._myTeleportParams.myEngine).get("Teleport Torus Segments");
-            //visualParams.mySegmentThickness = Globals.getEasyTuneVariables(this._myTeleportParams.myEngine).get("Teleport Torus Thickness");
-
-            this._myValidVisualTeleportPositionTorusInner.paramsUpdated();
-        }
-
         if (this._myTeleportParams.myVisualizerParams.myTeleportPositionObject == null) {
+            {
+                let visualParams = this._myValidVisualTeleportPositionTorus.getParams();
+                visualParams.myRadius = 0.175;
+                visualParams.mySegmentsAmount = 24;
+                visualParams.mySegmentThickness = 0.02;
+
+                //visualParams.myRadius = Globals.getEasyTuneVariables(this._myTeleportParams.myEngine).get("Teleport Torus Radius");
+                //visualParams.mySegmentsAmount = Globals.getEasyTuneVariables(this._myTeleportParams.myEngine).get("Teleport Torus Segments");
+                //visualParams.mySegmentThickness = Globals.getEasyTuneVariables(this._myTeleportParams.myEngine).get("Teleport Torus Thickness");
+
+                this._myValidVisualTeleportPositionTorus.paramsUpdated();
+            }
+
+            {
+                let visualParams = this._myValidVisualTeleportPositionTorusInner.getParams();
+                visualParams.myRadius = 0.04;
+                visualParams.mySegmentsAmount = 24;
+                visualParams.mySegmentThickness = 0.02;
+
+                //visualParams.myRadius = Globals.getEasyTuneVariables(this._myTeleportParams.myEngine).get("Teleport Torus Inner Radius");
+                //visualParams.mySegmentsAmount = Globals.getEasyTuneVariables(this._myTeleportParams.myEngine).get("Teleport Torus Segments");
+                //visualParams.mySegmentThickness = Globals.getEasyTuneVariables(this._myTeleportParams.myEngine).get("Teleport Torus Thickness");
+
+                this._myValidVisualTeleportPositionTorusInner.paramsUpdated();
+            }
+
             this._myValidVisualTeleportPositionTorus.setVisible(true);
             this._myValidVisualTeleportPositionTorusInner.setVisible(true);
         } else {
