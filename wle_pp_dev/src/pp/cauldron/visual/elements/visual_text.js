@@ -38,6 +38,17 @@ export class VisualTextParams extends AbstractVisualElementParams {
     _new() {
         return new VisualTextParams();
     }
+
+    _equalsHook(other) {
+        return this.myText == other.myText &&
+            this.myAlignment == other.myAlignment &&
+            this.myVerticalAlignment == other.myVerticalAlignment &&
+            this.myMaterial == other.myMaterial &&
+            this.myLookAtObject == other.myLookAtObject &&
+            this.myLocal == other.myLocal &&
+            (this.myColor == other.myColor || (this.myColor != null && other.myColor != null && this.myColor.vec_equals(other.myColor))) &&
+            this.myTransform.vec_equals(other.myTransform);
+    }
 }
 
 /**

@@ -36,6 +36,8 @@ export abstract class AbstractVisualElementParams<T extends AbstractVisualElemen
     }
 
     public equals(other: Readonly<T>): boolean {
+        if (this as unknown as T == other) return true;
+
         if (this.myParent != other.myParent) return false;
 
         return this._equalsHook(other);
@@ -93,8 +95,11 @@ export abstract class AbstractVisualElement<VisualElementType extends AbstractVi
 
     protected _myDestroyed: boolean = false;
 
+    private _myPrevParams: VisualElementParamsType;
+
     constructor(params: VisualElementParamsType) {
         this._myParams = params;
+        this._myPrevParams = this._myParams.clone();
     }
 
     public update(dt: number): void {
@@ -129,12 +134,12 @@ export abstract class AbstractVisualElement<VisualElementType extends AbstractVi
 
     public setParams(params: VisualElementParamsType): void {
         this._myParams = params;
-        this._markDirty();
+        this.paramsUpdated();
     }
 
     public copyParams(params: VisualElementParamsType): void {
         this._myParams.copy(params);
-        this._markDirty();
+        this.paramsUpdated();
     }
 
     public getParamsGeneric(): VisualElementParams {
@@ -158,7 +163,10 @@ export abstract class AbstractVisualElement<VisualElementType extends AbstractVi
     }
 
     public paramsUpdated(): void {
-        this._markDirty();
+        if (!this._myParams.equals(this._myPrevParams)) {
+            this._myPrevParams.copy(this._myParams);
+            this._markDirty();
+        }
     }
 
     private _markDirty(): void {

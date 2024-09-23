@@ -46,6 +46,17 @@ export class VisualLineParams extends AbstractVisualElementParams {
     _new() {
         return new VisualLineParams();
     }
+
+    _equalsHook(other) {
+        return this.myThickness == other.myThickness &&
+            this.myLength == other.myLength &&
+            this.myMesh == other.myMesh &&
+            this.myMaterial == other.myMaterial &&
+            this.myLocal == other.myLocal &&
+            (this.myColor == other.myColor || (this.myColor != null && other.myColor != null && this.myColor.vec_equals(other.myColor))) &&
+            this.myStart.vec3_equals(other.myStart) &&
+            this.myDirection.vec3_equals(other.myDirection);
+    }
 }
 
 /**

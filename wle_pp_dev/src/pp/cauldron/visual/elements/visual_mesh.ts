@@ -41,6 +41,13 @@ export class VisualMeshParams extends AbstractVisualElementParams<VisualMeshPara
     protected _new(): VisualMeshParams {
         return new VisualMeshParams();
     }
+
+    protected _equalsHook(other: Readonly<VisualMeshParams>): boolean {
+        return this.myMesh == other.myMesh &&
+            this.myMaterial == other.myMaterial &&
+            this.myLocal == other.myLocal &&
+            this.myTransform.vec_equals(other.myTransform);
+    }
 }
 
 /**

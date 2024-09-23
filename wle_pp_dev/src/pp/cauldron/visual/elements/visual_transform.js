@@ -34,6 +34,16 @@ export class VisualTransformParams extends AbstractVisualElementParams {
     _new() {
         return new VisualTransformParams();
     }
+
+    _equalsHook(other) {
+        return this.myThickness == other.myThickness &&
+            this.myLength == other.myLength &&
+            this.myForwardMaterial == other.myForwardMaterial &&
+            this.myUpMaterial == other.myUpMaterial &&
+            this.myRightMaterial == other.myRightMaterial &&
+            this.myLocal == other.myLocal &&
+            this.myTransform.vec_equals(other.myTransform);
+    }
 }
 
 /**

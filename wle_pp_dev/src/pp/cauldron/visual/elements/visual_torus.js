@@ -37,6 +37,17 @@ export class VisualTorusParams extends AbstractVisualElementParams {
     _new() {
         return new VisualTorusParams();
     }
+
+    _equalsHook(other) {
+        return this.myRadius == other.myRadius &&
+            this.mySegmentsAmount == other.mySegmentsAmount &&
+            this.mySegmentThickness == other.mySegmentThickness &&
+            this.mySegmentMesh == other.mySegmentMesh &&
+            this.myMaterial == other.myMaterial &&
+            this.myLocal == other.myLocal &&
+            (this.myColor == other.myColor || (this.myColor != null && other.myColor != null && this.myColor.vec_equals(other.myColor))) &&
+            this.myTransform.vec_equals(other.myTransform);
+    }
 }
 
 /**

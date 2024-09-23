@@ -53,6 +53,21 @@ export class VisualArrowParams extends AbstractVisualElementParams {
     _new() {
         return new VisualArrowParams();
     }
+
+    _equalsHook(other) {
+        return this.myThickness == other.myThickness &&
+            this.myLength == other.myLength &&
+            this.myLineMesh == other.myLineMesh &&
+            this.myArrowMesh == other.myArrowMesh &&
+            this.myMaterial == other.myMaterial &&
+            this.myLocal == other.myLocal &&
+            this.myArrowThickness == other.myArrowThickness &&
+            this.myArrowLength == other.myArrowLength &&
+            this.myShareArrowLengthWithLineWhenArrowLongerThanLength == other.myShareArrowLengthWithLineWhenArrowLongerThanLength &&
+            (this.myColor == other.myColor || (this.myColor != null && other.myColor != null && this.myColor.vec_equals(other.myColor))) &&
+            this.myStart.vec3_equals(other.myStart) &&
+            this.myDirection.vec3_equals(other.myDirection);
+    }
 }
 
 /**

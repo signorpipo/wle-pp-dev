@@ -44,6 +44,16 @@ export class VisualRaycastParams extends AbstractVisualElementParams {
     _new() {
         return new VisualRaycastParams();
     }
+
+    _equalsHook(other) {
+        return this.myHitNormalLength == other.myHitNormalLength &&
+            this.myThickness == other.myThickness &&
+            this.myShowOnlyFirstHit == other.myShowOnlyFirstHit &&
+            this.myRayMaterial == other.myRayMaterial &&
+            this.myHitNormalMaterial == other.myHitNormalMaterial &&
+            this.myLocal == other.myLocal &&
+            this._myRaycastResults.equals(other._myRaycastResults);
+    }
 }
 
 /**

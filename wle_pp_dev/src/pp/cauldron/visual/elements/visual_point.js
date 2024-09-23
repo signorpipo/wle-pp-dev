@@ -34,6 +34,15 @@ export class VisualPointParams extends AbstractVisualElementParams {
     _new() {
         return new VisualPointParams();
     }
+
+    _equalsHook(other) {
+        return this.myRadius == other.myRadius &&
+            this.myMesh == other.myMesh &&
+            this.myMaterial == other.myMaterial &&
+            this.myLocal == other.myLocal &&
+            (this.myColor == other.myColor || (this.myColor != null && other.myColor != null && this.myColor.vec_equals(other.myColor))) &&
+            this.myPosition.vec3_equals(other.myPosition);
+    }
 }
 
 /**
