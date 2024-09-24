@@ -92,11 +92,6 @@ export class VisualPoint extends AbstractVisualElement {
         return new VisualPoint(params);
     }
 
-    _syncPrevParams() {
-        this._myPrevParams.copy(this._myParams);
-        this._myPrevParams.myMaterial = this._myParams.myMaterial;
-    }
-
     _destroyHook() {
         this._myPointObject.pp_destroy();
     }

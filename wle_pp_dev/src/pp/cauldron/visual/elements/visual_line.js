@@ -109,11 +109,6 @@ export class VisualLine extends AbstractVisualElement {
         return new VisualLine(params);
     }
 
-    _syncPrevParams() {
-        this._myPrevParams.copy(this._myParams);
-        this._myPrevParams.myMaterial = this._myParams.myMaterial;
-    }
-
     _destroyHook() {
         this._myLineParentObject.pp_destroy();
     }
@@ -183,7 +178,6 @@ VisualLineParams.prototype._copyHook = function _copyHook(other, deepCopy) {
     this.myThickness = other.myThickness;
 
     this.myMesh = other.myMesh;
-
 
     if (other.myMaterial != null && deepCopy) {
         this.myMaterial = other.myMaterial.clone();

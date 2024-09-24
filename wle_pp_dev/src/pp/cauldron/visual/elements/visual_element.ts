@@ -187,7 +187,7 @@ export abstract class AbstractVisualElement<VisualElementType extends AbstractVi
     }
 
     protected _prepare(): void {
-        this._syncPrevParams();
+        this._myPrevParams.copy(this._myParams, false);
 
         this._build();
 
@@ -198,7 +198,7 @@ export abstract class AbstractVisualElement<VisualElementType extends AbstractVi
     }
 
     private _refresh(): void {
-        this._syncPrevParams();
+        this._myPrevParams.copy(this._myParams, false);
 
         this._refreshHook();
     }
@@ -211,8 +211,6 @@ export abstract class AbstractVisualElement<VisualElementType extends AbstractVi
     protected abstract _refreshHook(): void;
 
     protected abstract _new(params: VisualElementParamsType): VisualElementType;
-
-    protected abstract _syncPrevParams(): void;
 
     protected _destroyHook(): void { }
 

@@ -129,11 +129,6 @@ export class VisualArrow extends AbstractVisualElement {
         return new VisualArrow(params);
     }
 
-    _syncPrevParams() {
-        this._myPrevParams.copy(this._myParams);
-        this._myPrevParams.myMaterial = this._myParams.myMaterial;
-    }
-
     _destroyHook() {
         this._myVisualLine.destroy();
         this._myArrowParentObject.pp_destroy();

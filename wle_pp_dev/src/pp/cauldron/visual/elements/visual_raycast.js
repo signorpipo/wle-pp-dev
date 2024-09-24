@@ -210,12 +210,6 @@ export class VisualRaycast extends AbstractVisualElement {
         return new VisualRaycast(params);
     }
 
-    _syncPrevParams() {
-        this._myPrevParams.copy(this._myParams);
-        this._myPrevParams.myRayMaterial = this._myParams.myRayMaterial;
-        this._myPrevParams.myHitNormalMaterial = this._myParams.myHitNormalMaterial;
-    }
-
     _addVisualRaycastHit() {
         let visualRaycastHit = new VisualArrow(new VisualArrowParams(this._myParams.myParent.pp_getEngine()));
 
