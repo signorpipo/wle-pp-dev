@@ -84,7 +84,7 @@ export class VisualPoint extends AbstractVisualElement {
         this._myPointMeshComponent = this._myPointObject.pp_addComponent(MeshComponent);
     }
 
-    _refresh() {
+    _refreshHook() {
         // Implemented outside class definition
     }
 
@@ -106,9 +106,9 @@ export class VisualPoint extends AbstractVisualElement {
 
 // IMPLEMENTATION
 
-VisualPoint.prototype._refresh = function () {
+VisualPoint.prototype._refreshHook = function () {
     let rotation = vec3_create(0, 0, 0);
-    return function _refresh() {
+    return function _refreshHook() {
         this._myPointObject.pp_setParent(this._myParams.myParent, false);
 
         if (this._myParams.myLocal) {

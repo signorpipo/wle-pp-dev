@@ -89,7 +89,7 @@ export class VisualText extends AbstractVisualElement {
         this._myTextComponent = this._myTextObject.pp_addComponent(TextComponent);
     }
 
-    _refresh() {
+    _refreshHook() {
         // Implemented outside class definition
     }
 
@@ -139,9 +139,9 @@ VisualTextParams.prototype._copyHook = function _copyHook(other) {
     this.myLookAtObject = other.myLookAtObject;
 };
 
-VisualText.prototype._refresh = function () {
+VisualText.prototype._refreshHook = function () {
     let lookAtPosition = vec3_create();
-    return function _refresh() {
+    return function _refreshHook() {
         this._myTextObject.pp_setParent(this._myParams.myParent, false);
 
         if (this._myParams.myLocal) {

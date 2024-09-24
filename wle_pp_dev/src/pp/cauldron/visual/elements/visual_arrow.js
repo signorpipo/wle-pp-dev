@@ -121,7 +121,7 @@ export class VisualArrow extends AbstractVisualElement {
         this._myArrowMeshComponent = this._myArrowObject.pp_addComponent(MeshComponent);
     }
 
-    _refresh() {
+    _refreshHook() {
         // Implemented outside class definition
     }
 
@@ -144,13 +144,13 @@ export class VisualArrow extends AbstractVisualElement {
 
 // IMPLEMENTATION
 
-VisualArrow.prototype._refresh = function () {
+VisualArrow.prototype._refreshHook = function () {
     let arrowPosition = vec3_create();
     let parentTranslate = vec3_create();
     let arrowScale = vec3_create();
 
     let forward = vec3_create(0, 1, 0);
-    return function _refresh() {
+    return function _refreshHook() {
         this._myArrowParentObject.pp_setParent(this._myParams.myParent, false);
 
         let arrowThickness = (this._myParams.myArrowThickness != null) ? this._myParams.myArrowThickness : this._myParams.myThickness * 1.5;

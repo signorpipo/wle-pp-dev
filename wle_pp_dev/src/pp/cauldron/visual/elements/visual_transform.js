@@ -92,7 +92,7 @@ export class VisualTransform extends AbstractVisualElement {
 
     }
 
-    _refresh() {
+    _refreshHook() {
         // Implemented outside class definition
     }
 
@@ -118,11 +118,11 @@ export class VisualTransform extends AbstractVisualElement {
 
 // IMPLEMENTATION
 
-VisualTransform.prototype._refresh = function () {
+VisualTransform.prototype._refreshHook = function () {
     let axes = [vec3_create(), vec3_create(), vec3_create()];
     let scale = vec3_create();
     let position = vec3_create();
-    return function _refresh() {
+    return function _refreshHook() {
         axes = this._myParams.myTransform.mat4_getAxes(axes);
         scale = this._myParams.myTransform.mat4_getScale(scale);
         let maxValue = 0;

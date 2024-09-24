@@ -101,7 +101,7 @@ export class VisualLine extends AbstractVisualElement {
         this._myLineMeshComponent = this._myLineObject.pp_addComponent(MeshComponent);
     }
 
-    _refresh() {
+    _refreshHook() {
         // Implemented outside class definition
     }
 
@@ -123,12 +123,12 @@ export class VisualLine extends AbstractVisualElement {
 
 // IMPLEMENTATION
 
-VisualLine.prototype._refresh = function () {
+VisualLine.prototype._refreshHook = function () {
     let scaleLine = vec3_create();
     let translateLine = vec3_create();
 
     let forward = vec3_create(0, 1, 0);
-    return function _refresh() {
+    return function _refreshHook() {
         this._myLineParentObject.pp_setParent(this._myParams.myParent, false);
 
         if (this._myParams.myLocal) {

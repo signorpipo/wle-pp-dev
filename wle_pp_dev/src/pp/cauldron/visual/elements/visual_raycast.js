@@ -119,7 +119,7 @@ export class VisualRaycast extends AbstractVisualElement {
 
     }
 
-    _refresh() {
+    _refreshHook() {
         for (let visualRaycastHit of this._myVisualRaycastHitList) {
             visualRaycastHit.setVisible(false);
         }

@@ -163,7 +163,6 @@ export abstract class AbstractVisualElement<VisualElementType extends AbstractVi
 
     public paramsUpdated(): void {
         if (!this._myParams.equals(this._myPrevParams)) {
-            this._syncPrevParams();
             this._markDirty();
         }
     }
@@ -198,12 +197,18 @@ export abstract class AbstractVisualElement<VisualElementType extends AbstractVi
         this.setVisible(true);
     }
 
+    private _refresh(): void {
+        this._syncPrevParams();
+
+        this._refreshHook();
+    }
+
     protected _updateHook(dt: number): void { }
 
     protected _visibleChanged(): void { }
 
     protected abstract _build(): void;
-    protected abstract _refresh(): void;
+    protected abstract _refreshHook(): void;
 
     protected abstract _new(params: VisualElementParamsType): VisualElementType;
 

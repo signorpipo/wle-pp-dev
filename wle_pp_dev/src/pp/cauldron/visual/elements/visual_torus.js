@@ -123,7 +123,7 @@ export class VisualTorus extends AbstractVisualElement {
         }
     }
 
-    _refresh() {
+    _refreshHook() {
         // Implemented outside class definition
     }
 
@@ -148,7 +148,7 @@ export class VisualTorus extends AbstractVisualElement {
 
 // IMPLEMENTATION
 
-VisualTorus.prototype._refresh = function () {
+VisualTorus.prototype._refreshHook = function () {
     let segmentStart = vec3_create();
     let segmentEnd = vec3_create();
 
@@ -158,7 +158,7 @@ VisualTorus.prototype._refresh = function () {
     let fixedSegmentEnd = vec3_create();
 
     let up = vec3_create(0, 1, 0);
-    return function _refresh() {
+    return function _refreshHook() {
         this._fillSegmentList();
 
         for (let i = this._myParams.mySegmentsAmount; i < this._myVisualSegmentList.length; i++) {

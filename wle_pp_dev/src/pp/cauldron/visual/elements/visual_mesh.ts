@@ -87,7 +87,7 @@ export class VisualMesh extends AbstractVisualElement<VisualMesh, VisualMeshPara
         (this._myMeshComponent as MeshComponent) = this._myMeshObject.pp_addComponent(MeshComponent)!;
     }
 
-    protected _refresh(): void {
+    protected _refreshHook(): void {
         this._myMeshObject.pp_setParent(this._myParams.myParent, false);
 
         if (this._myParams.myLocal) {
