@@ -2809,15 +2809,7 @@ export function isTransformChanged(object: Readonly<Object3D>): boolean {
 }
 
 export function destroy(object: Object3D): void {
-    let destroyReturnValue = undefined;
-
-    try {
-        destroyReturnValue = object.destroy();
-    } catch (error) {
-        // Do nothing
-    }
-
-    return destroyReturnValue;
+    object.destroy();
 }
 
 export function reserveObjects(object: Readonly<Object3D>, count: number): Object3D {
