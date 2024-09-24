@@ -97,6 +97,11 @@ export class VisualText extends AbstractVisualElement {
         return new VisualText(params);
     }
 
+    _syncPrevParams() {
+        this._myPrevParams.copy(this._myParams);
+        this._myPrevParams.myMaterial = this._myParams.myMaterial;
+    }
+
     _destroyHook() {
         this._myTextObject.pp_destroy();
     }

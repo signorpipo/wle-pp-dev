@@ -87,6 +87,7 @@ export interface VisualElement {
 export abstract class AbstractVisualElement<VisualElementType extends AbstractVisualElement<VisualElementType, VisualElementParamsType>, VisualElementParamsType extends AbstractVisualElementParams<VisualElementParamsType>> implements VisualElement {
 
     protected _myParams: VisualElementParamsType;
+    protected _myPrevParams: VisualElementParamsType;
 
     protected _myVisible: boolean = false;
     protected _myAutoRefresh: boolean = true;
@@ -94,8 +95,6 @@ export abstract class AbstractVisualElement<VisualElementType extends AbstractVi
     protected _myDirty: boolean = false;
 
     protected _myDestroyed: boolean = false;
-
-    private _myPrevParams: VisualElementParamsType;
 
     constructor(params: VisualElementParamsType) {
         this._myParams = params;
@@ -164,7 +163,7 @@ export abstract class AbstractVisualElement<VisualElementType extends AbstractVi
 
     public paramsUpdated(): void {
         if (!this._myParams.equals(this._myPrevParams)) {
-            this._myPrevParams.copy(this._myParams);
+            this._syncPrevParams();
             this._markDirty();
         }
     }
@@ -189,6 +188,8 @@ export abstract class AbstractVisualElement<VisualElementType extends AbstractVi
     }
 
     protected _prepare(): void {
+        this._syncPrevParams();
+
         this._build();
 
         this._myDirty = true;
@@ -205,6 +206,8 @@ export abstract class AbstractVisualElement<VisualElementType extends AbstractVi
     protected abstract _refresh(): void;
 
     protected abstract _new(params: VisualElementParamsType): VisualElementType;
+
+    protected abstract _syncPrevParams(): void;
 
     protected _destroyHook(): void { }
 

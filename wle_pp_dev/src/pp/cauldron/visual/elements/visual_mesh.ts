@@ -113,6 +113,11 @@ export class VisualMesh extends AbstractVisualElement<VisualMesh, VisualMeshPara
         return new VisualMesh(params);
     }
 
+    protected _syncPrevParams(): void {
+        this._myPrevParams.copy(this._myParams);
+        this._myPrevParams.myMaterial = this._myParams.myMaterial;
+    }
+
     protected override _destroyHook(): void {
         this._myMeshObject.pp_destroy();
     }

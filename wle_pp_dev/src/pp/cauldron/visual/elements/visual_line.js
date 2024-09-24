@@ -109,6 +109,11 @@ export class VisualLine extends AbstractVisualElement {
         return new VisualLine(params);
     }
 
+    _syncPrevParams() {
+        this._myPrevParams.copy(this._myParams);
+        this._myPrevParams.myMaterial = this._myParams.myMaterial;
+    }
+
     _destroyHook() {
         this._myLineParentObject.pp_destroy();
     }

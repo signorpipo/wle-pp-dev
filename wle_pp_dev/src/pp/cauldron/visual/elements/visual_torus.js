@@ -131,6 +131,11 @@ export class VisualTorus extends AbstractVisualElement {
         return new VisualTorus(params);
     }
 
+    _syncPrevParams() {
+        this._myPrevParams.copy(this._myParams);
+        this._myPrevParams.myMaterial = this._myParams.myMaterial;
+    }
+
     _destroyHook() {
         for (let visualSegment of this._myVisualSegmentList) {
             visualSegment.destroy();

@@ -100,6 +100,13 @@ export class VisualTransform extends AbstractVisualElement {
         return new VisualTransform(params);
     }
 
+    _syncPrevParams() {
+        this._myPrevParams.copy(this._myParams);
+        this._myPrevParams.myForwardMaterial = this._myParams.myForwardMaterial;
+        this._myPrevParams.myUpMaterial = this._myParams.myUpMaterial;
+        this._myPrevParams.myRightMaterial = this._myParams.myRightMaterial;
+    }
+
     _destroyHook() {
         this._myVisualRight.destroy();
         this._myVisualUp.destroy();
