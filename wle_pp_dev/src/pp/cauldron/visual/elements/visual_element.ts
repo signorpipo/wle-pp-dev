@@ -8,8 +8,8 @@ export interface VisualElementParams {
     /** If not specified it will default to `Globals.getSceneObjects().myVisualElements` */
     myParent: Object3D;
 
-    copyGeneric(other: Readonly<VisualElementParams>): void;
-    cloneGeneric(): VisualElementParams;
+    copyGeneric(other: Readonly<VisualElementParams>, deepCopy: boolean): void;
+    cloneGeneric(deepClone: boolean): VisualElementParams;
 
     equalsGeneric(other: Readonly<VisualElementParams>): boolean;
 }
@@ -23,15 +23,15 @@ export abstract class AbstractVisualElementParams<T extends AbstractVisualElemen
         this.myParent = Globals.getSceneObjects(engine)!.myVisualElements!;
     }
 
-    public copy(other: Readonly<T>): void {
+    public copy(other: Readonly<T>, deepCopy: boolean = true): void {
         this.myParent = other.myParent;
 
-        this._copyHook(other);
+        this._copyHook(other, deepCopy);
     }
 
-    public clone(): T {
+    public clone(deepClone: boolean = true): T {
         const clonedParams = this._new();
-        clonedParams.copyGeneric(this);
+        clonedParams.copyGeneric(this, deepClone);
         return clonedParams;
     }
 
@@ -43,23 +43,23 @@ export abstract class AbstractVisualElementParams<T extends AbstractVisualElemen
         return this._equalsHook(other);
     }
 
-    public copyGeneric(other: Readonly<VisualElementParams>): void {
+    public copyGeneric(other: Readonly<VisualElementParams>, deepCopy: boolean = true): void {
         if (other.myType != this.myType) {
             throw new Error("Trying to copy from params with a different type - From Type: " + other.myType + " - To Type: " + this.myType);
         }
 
-        this.copy(other as Readonly<T>);
+        this.copy(other as Readonly<T>, deepCopy);
     }
 
-    public cloneGeneric(): VisualElementParams {
-        return this.clone();
+    public cloneGeneric(deepClone: boolean = true): VisualElementParams {
+        return this.clone(deepClone);
     }
 
     public equalsGeneric(other: Readonly<VisualElementParams>): boolean {
         return this.equals(other as Readonly<T>);
     }
 
-    protected abstract _copyHook(other: Readonly<T>): void;
+    protected abstract _copyHook(other: Readonly<T>, deepCopy: boolean): void;
     protected abstract _new(): T;
 
     protected abstract _equalsHook(other: Readonly<T>): boolean;

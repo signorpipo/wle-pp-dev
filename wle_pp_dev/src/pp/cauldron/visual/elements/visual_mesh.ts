@@ -20,7 +20,7 @@ export class VisualMeshParams extends AbstractVisualElementParams<VisualMeshPara
     public myMaterial: Material | null = null;
 
 
-    protected _copyHook(other: Readonly<VisualMeshParams>): void {
+    protected _copyHook(other: Readonly<VisualMeshParams>, deepCopy: boolean): void {
         this.myTransform.pp_copy(other.myTransform);
 
         if (other.myMesh != null) {
@@ -29,10 +29,10 @@ export class VisualMeshParams extends AbstractVisualElementParams<VisualMeshPara
             this.myMesh = null;
         }
 
-        if (other.myMaterial != null) {
+        if (other.myMaterial != null && deepCopy) {
             this.myMaterial = other.myMaterial.clone();
         } else {
-            this.myMaterial = null;
+            this.myMaterial = other.myMaterial;
         }
 
         this.myLocal = other.myLocal;

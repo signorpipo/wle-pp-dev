@@ -39,7 +39,7 @@ export class VisualLineParams extends AbstractVisualElementParams {
         return this;
     }
 
-    _copyHook(other) {
+    _copyHook(other, deepCopy) {
         // Implemented outside class definition
     }
 
@@ -176,7 +176,7 @@ VisualLine.prototype._refreshHook = function () {
     };
 }();
 
-VisualLineParams.prototype._copyHook = function _copyHook(other) {
+VisualLineParams.prototype._copyHook = function _copyHook(other, deepCopy) {
     this.myStart.vec3_copy(other.myStart);
     this.myDirection.vec3_copy(other.myDirection);
     this.myLength = other.myLength;
@@ -184,10 +184,11 @@ VisualLineParams.prototype._copyHook = function _copyHook(other) {
 
     this.myMesh = other.myMesh;
 
-    if (other.myMaterial != null) {
+
+    if (other.myMaterial != null && deepCopy) {
         this.myMaterial = other.myMaterial.clone();
     } else {
-        this.myMaterial = null;
+        this.myMaterial = other.myMaterial;
     }
 
     if (other.myColor != null) {

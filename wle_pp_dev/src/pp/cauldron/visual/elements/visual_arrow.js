@@ -46,7 +46,7 @@ export class VisualArrowParams extends AbstractVisualElementParams {
         return this;
     }
 
-    _copyHook(other) {
+    _copyHook(other, deepCopy) {
         // Implemented outside class definition
     }
 
@@ -222,7 +222,7 @@ VisualArrow.prototype._refreshHook = function () {
     };
 }();
 
-VisualArrowParams.prototype._copyHook = function _copyHook(other) {
+VisualArrowParams.prototype._copyHook = function _copyHook(other, deepCopy) {
     this.myStart.vec3_copy(other.myStart);
     this.myDirection.vec3_copy(other.myDirection);
     this.myLength = other.myLength;
@@ -236,10 +236,10 @@ VisualArrowParams.prototype._copyHook = function _copyHook(other) {
     this.myArrowMesh = other.myArrowMesh;
     this.myLineMesh = other.myLineMesh;
 
-    if (other.myMaterial != null) {
+    if (other.myMaterial != null && deepCopy) {
         this.myMaterial = other.myMaterial.clone();
     } else {
-        this.myMaterial = null;
+        this.myMaterial = other.myMaterial;
     }
 
     if (other.myColor != null) {

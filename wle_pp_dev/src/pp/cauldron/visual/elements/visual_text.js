@@ -31,7 +31,7 @@ export class VisualTextParams extends AbstractVisualElementParams {
         this.myType = VisualElementDefaultType.TEXT;
     }
 
-    _copyHook(other) {
+    _copyHook(other, deepCopy) {
         // Implemented outside class definition
     }
 
@@ -111,17 +111,17 @@ export class VisualText extends AbstractVisualElement {
 
 // IMPLEMENTATION
 
-VisualTextParams.prototype._copyHook = function _copyHook(other) {
+VisualTextParams.prototype._copyHook = function _copyHook(other, deepCopy) {
     this.myText = other.myText;
     this.myAlignment = other.myAlignment;
     this.myVerticalAlignment = other.myVerticalAlignment;
 
     this.myTransform.mat4_copy(other.myTransform);
 
-    if (other.myMaterial != null) {
+    if (other.myMaterial != null && deepCopy) {
         this.myMaterial = other.myMaterial.clone();
     } else {
-        this.myMaterial = null;
+        this.myMaterial = other.myMaterial;
     }
 
     if (other.myColor != null) {

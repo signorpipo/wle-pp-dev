@@ -27,7 +27,7 @@ export class VisualTransformParams extends AbstractVisualElementParams {
         this.myType = VisualElementDefaultType.TRANSFORM;
     }
 
-    _copyHook(other) {
+    _copyHook(other, deepCopy) {
         // Implemented outside class definition
     }
 
@@ -201,27 +201,27 @@ VisualTransform.prototype._refreshHook = function () {
     };
 }();
 
-VisualTransformParams.prototype._copyHook = function _copyHook(other) {
+VisualTransformParams.prototype._copyHook = function _copyHook(other, deepCopy) {
     this.myTransform.mat4_copy(other.myTransform);
     this.myLength = other.myLength;
     this.myThickness = other.myThickness;
 
-    if (other.myRightMaterial != null) {
+    if (other.myRightMaterial != null && deepCopy) {
         this.myRightMaterial = other.myRightMaterial.clone();
     } else {
-        this.myRightMaterial = null;
+        this.myRightMaterial = other.myRightMaterial;
     }
 
-    if (other.myUpMaterial != null) {
+    if (other.myUpMaterial != null && deepCopy) {
         this.myUpMaterial = other.myUpMaterial.clone();
     } else {
-        this.myUpMaterial = null;
+        this.myUpMaterial = other.myUpMaterial;
     }
 
-    if (other.myForwardMaterial != null) {
+    if (other.myForwardMaterial != null && deepCopy) {
         this.myForwardMaterial = other.myForwardMaterial.clone();
     } else {
-        this.myForwardMaterial = null;
+        this.myForwardMaterial = other.myForwardMaterial;
     }
 
     this.myLocal = other.myLocal;

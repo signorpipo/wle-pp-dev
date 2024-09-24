@@ -30,7 +30,7 @@ export class VisualTorusParams extends AbstractVisualElementParams {
         this.myType = VisualElementDefaultType.TORUS;
     }
 
-    _copyHook(other) {
+    _copyHook(other, deepCopy) {
         // Implemented outside class definition
     }
 
@@ -217,7 +217,7 @@ VisualTorus.prototype._refreshHook = function () {
     };
 }();
 
-VisualTorusParams.prototype._copyHook = function _copyHook(other) {
+VisualTorusParams.prototype._copyHook = function _copyHook(other, deepCopy) {
     this.myRadius = other.myRadius;
     this.mySegmentsAmount = other.mySegmentsAmount;
     this.mySegmentThickness = other.mySegmentThickness;
@@ -226,10 +226,10 @@ VisualTorusParams.prototype._copyHook = function _copyHook(other) {
 
     this.mySegmentMesh = other.mySegmentMesh;
 
-    if (other.myMaterial != null) {
+    if (other.myMaterial != null && deepCopy) {
         this.myMaterial = other.myMaterial.clone();
     } else {
-        this.myMaterial = null;
+        this.myMaterial = other.myMaterial;
     }
 
     if (other.myColor != null) {

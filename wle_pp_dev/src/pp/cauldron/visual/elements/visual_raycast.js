@@ -37,7 +37,7 @@ export class VisualRaycastParams extends AbstractVisualElementParams {
         this._myRaycastResults.copy(result);
     }
 
-    _copyHook(other) {
+    _copyHook(other, deepCopy) {
         // Implemented outside class definition
     }
 
@@ -237,22 +237,22 @@ export class VisualRaycast extends AbstractVisualElement {
 
 // IMPLEMENTATION
 
-VisualRaycastParams.prototype._copyHook = function _copyHook(other) {
+VisualRaycastParams.prototype._copyHook = function _copyHook(other, deepCopy) {
     this.myRaycastResults = other.myRaycastResults;
     this.myHitNormalLength = other.myHitNormalLength;
     this.myThickness = other.myThickness;
     this.myShowOnlyFirstHit = other.myShowOnlyFirstHit;
 
-    if (other.myRayMaterial != null) {
+    if (other.myRayMaterial != null && deepCopy) {
         this.myRayMaterial = other.myRayMaterial.clone();
     } else {
-        this.myRayMaterial = null;
+        this.myRayMaterial = other.myRayMaterial;
     }
 
-    if (other.myHitNormalMaterial != null) {
-        this.myHitNormalMaterial = other.myHitNormalMaterial.clone();
+    if (other.myHitNormalMaterial != null && deepCopy) {
+        this.myHitNormalMaterial = other.myForwardMaterial.clone();
     } else {
-        this.myHitNormalMaterial = null;
+        this.myHitNormalMaterial = other.myHitNormalMaterial;
     }
 
     this.myParent = other.myParent;

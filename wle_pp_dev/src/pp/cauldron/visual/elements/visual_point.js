@@ -27,7 +27,7 @@ export class VisualPointParams extends AbstractVisualElementParams {
         this.myType = VisualElementDefaultType.POINT;
     }
 
-    _copyHook(other) {
+    _copyHook(other, deepCopy) {
         // Implemented outside class definition
     }
 
@@ -143,16 +143,16 @@ VisualPoint.prototype._refreshHook = function () {
     };
 }();
 
-VisualPointParams.prototype._copyHook = function _copyHook(other) {
+VisualPointParams.prototype._copyHook = function _copyHook(other, deepCopy) {
     this.myPosition.vec3_copy(other.myPosition);
     this.myRadius = other.myRadius;
 
     this.myMesh = other.myMesh;
 
-    if (other.myMaterial != null) {
+    if (other.myMaterial != null && deepCopy) {
         this.myMaterial = other.myMaterial.clone();
     } else {
-        this.myMaterial = null;
+        this.myMaterial = other.myMaterial;
     }
 
     if (other.myColor != null) {
