@@ -60,7 +60,8 @@ export interface CursorButtonActionsHandler {
      */
     onUnhover?(cursorButtonComponent: CursorButtonComponent, cursorComponent: Cursor, isSecondaryCursor: boolean): boolean;
 
-    /** Used to instantly reset to a complete unhover state, used for example when the button is deactivated */
+    /** Used to instantly reset to a complete unhover state, used for example when the button is deactivated 
+        Usually, if something is done {@link onUnhover}, it should also be done here, unless it's animation/feedback related */
     onInstantUnhover?(cursorButtonComponent: CursorButtonComponent): boolean;
 }
 
