@@ -4,7 +4,7 @@ import { Cursor, CursorTarget } from "@wonderlandengine/components";
 import { AudioPlayer } from "../../../../audio/audio_player.js";
 import { AudioSetup } from "../../../../audio/audio_setup.js";
 import { Timer } from "../../../../cauldron/cauldron/timer.js";
-import { FSM, TransitionData } from "../../../../cauldron/fsm/fsm.js";
+import { FSM, SkipStateFunction, TransitionData } from "../../../../cauldron/fsm/fsm.js";
 import { Vector3, Vector4 } from "../../../../cauldron/type_definitions/array_type_definitions.js";
 import { ColorUtils } from "../../../../cauldron/utils/color_utils.js";
 import { MathUtils } from "../../../../cauldron/utils/math_utils.js";
@@ -14,8 +14,18 @@ import { vec3_create, vec4_create } from "../../../../plugin/js/extensions/array
 import { Globals } from "../../../../pp/globals.js";
 import { AnimatedNumber, AnimatedNumberParams } from "../animated_number.js";
 
+/** {@link CursorButtonState.UP} is fundamentally a {@link CursorButtonState.HOVER} but after the button has been pressed */
+enum CursorButtonState {
+    UNHOVER,
+    HOVER,
+    DOWN,
+    UP
+}
+
 /** You can return `true` to prevent the default behavior of the cursor button to be performed after the action has been handled */
 export interface CursorButtonActionsHandler {
+
+    onUpdate?(dt: number, cursorButtonComponent: CursorButtonComponent, cursorState: CursorButtonState): boolean;
 
     /**
      * @param isSecondaryCursor `true` if the event is triggered but this is not the main cursor, which means the button is not actually changing the state  
@@ -49,6 +59,9 @@ export interface CursorButtonActionsHandler {
      *                          play a sound to give the cursor feel but without changing the button state
      */
     onUnhover?(cursorButtonComponent: CursorButtonComponent, cursorComponent: Cursor, isSecondaryCursor: boolean): boolean;
+
+    /** Used to instantly reset to a complete unhover state, used for example when the button is deactivated */
+    onInstantUnhover?(cursorButtonComponent: CursorButtonComponent): boolean;
 }
 
 export class CursorButtonComponent extends Component {
@@ -219,13 +232,34 @@ export class CursorButtonComponent extends Component {
         return buttonActionHandler != null ? buttonActionHandler : null;
     }
 
+    public override onActivate(): void {
+        this._myCursorTarget.onUnhover.add(this._onUnhover.bind(this), { id: this });
+        this._myCursorTarget.onHover.add(this._onHover.bind(this), { id: this });
+        this._myCursorTarget.onDown.add(this._onDown.bind(this), { id: this });
+        this._myCursorTarget.onUpWithDown.add(this.onUpWithDown.bind(this), { id: this });
+    }
+
+    public override onDeactivate(): void {
+        if (this._myCursorTarget != null) {
+            this._myCursorTarget.onUnhover.remove(this);
+            this._myCursorTarget.onHover.remove(this);
+            this._myCursorTarget.onDown.remove(this);
+            this._myCursorTarget.onUpWithDown.remove(this);
+
+            this._myKeepCurrentStateTimer.end();
+            this._myTransitionQueue.pp_clear();
+            this._myApplyQueuedTransitions = false;
+
+            this._myHoverCursors.pp_clear();
+            this._myMainDownCursor = null;
+            this._myDownCursors.pp_clear();
+
+            this._myFSM.perform("instant_unhover");
+        }
+    }
+
     public override start(): void {
         (this._myCursorTarget as CursorTarget) = this.object.pp_getComponent(CursorTarget)!;
-
-        this._myCursorTarget.onUnhover.add(this._onUnhover.bind(this));
-        this._myCursorTarget.onHover.add(this._onHover.bind(this));
-        this._myCursorTarget.onDown.add(this._onDown.bind(this));
-        this._myCursorTarget.onUpWithDown.add(this.onUpWithDown.bind(this));
 
         const buttonActionsHandlerNames = [...this._myButtonActionsHandlerNames.split(",")];
         for (let i = 0; i < buttonActionsHandlerNames.length; i++) {
@@ -264,6 +298,11 @@ export class CursorButtonComponent extends Component {
 
         this._myFSM.addTransition("hover", "unhover", "unhover");
         this._myFSM.addTransition("down", "unhover", "unhover");
+
+        this._myFSM.addTransition("hover", "unhover", "instant_unhover", this._onInstantUnhover.bind(this), SkipStateFunction.BOTH);
+        this._myFSM.addTransition("up_with_down", "unhover", "instant_unhover", this._onInstantUnhover.bind(this), SkipStateFunction.BOTH);
+        this._myFSM.addTransition("down", "unhover", "instant_unhover", this._onInstantUnhover.bind(this), SkipStateFunction.BOTH);
+        this._myFSM.addTransition("unhover", "unhover", "instant_unhover", this._onInstantUnhover.bind(this), SkipStateFunction.BOTH);
 
         this._myFSM.init("unhover");
     }
@@ -306,33 +345,64 @@ export class CursorButtonComponent extends Component {
             }
         }
 
-        if (!this._myAnimatedScale.isDone()) {
-            this._myAnimatedScale.update(dt);
-
-            const buttonScale = CursorButtonComponent._updateSV.buttonScale;
-            this.object.pp_setScaleLocal(this._myOriginalScaleLocal.vec3_scale(this._myAnimatedScale.getCurrentValue(), buttonScale));
-        }
-
-        if (!this._myAnimatedColorBrightnessOffset.isDone()) {
-            this._myAnimatedColorBrightnessOffset.update(dt);
-
-            const colorBrightnessOffsetCurrentValue = this._myAnimatedColorBrightnessOffset.getCurrentValue();
-
-            const hsvColor = CursorButtonComponent._updateSV.hsvColor;
-            const rgbColor = CursorButtonComponent._updateSV.rgbColor;
-
-            for (const [material, originalColor] of this._myPhongMaterialOriginalColors) {
-                ColorUtils.rgbToHSV(originalColor, hsvColor);
-                hsvColor[2] = MathUtils.clamp(hsvColor[2] + colorBrightnessOffsetCurrentValue, 0, 1);
-                material.diffuseColor = ColorUtils.hsvToRGB(hsvColor, rgbColor);
-            }
-
-            for (const [material, originalColor] of this._myFlatMaterialOriginalColors) {
-                ColorUtils.rgbToHSV(originalColor, hsvColor);
-                hsvColor[2] = MathUtils.clamp(hsvColor[2] + colorBrightnessOffsetCurrentValue, 0, 1);
-                material.color = ColorUtils.hsvToRGB(hsvColor, rgbColor);
+        let skipDefault = false;
+        for (const buttonActionsHandler of this._myButtonActionsHandlers.values()) {
+            if (buttonActionsHandler.onUpdate != null) {
+                skipDefault ||= buttonActionsHandler.onUpdate(dt, this, this.getCurrentState());
             }
         }
+
+        if (!skipDefault) {
+            if (!this._myAnimatedScale.isDone()) {
+                this._myAnimatedScale.update(dt);
+
+                const buttonScale = CursorButtonComponent._updateSV.buttonScale;
+                this.object.pp_setScaleLocal(this._myOriginalScaleLocal.vec3_scale(this._myAnimatedScale.getCurrentValue(), buttonScale));
+            }
+
+            if (!this._myAnimatedColorBrightnessOffset.isDone()) {
+                this._myAnimatedColorBrightnessOffset.update(dt);
+
+                const colorBrightnessOffsetCurrentValue = this._myAnimatedColorBrightnessOffset.getCurrentValue();
+
+                const hsvColor = CursorButtonComponent._updateSV.hsvColor;
+                const rgbColor = CursorButtonComponent._updateSV.rgbColor;
+
+                for (const [material, originalColor] of this._myPhongMaterialOriginalColors) {
+                    ColorUtils.rgbToHSV(originalColor, hsvColor);
+                    hsvColor[2] = MathUtils.clamp(hsvColor[2] + colorBrightnessOffsetCurrentValue, 0, 1);
+                    material.diffuseColor = ColorUtils.hsvToRGB(hsvColor, rgbColor);
+                }
+
+                for (const [material, originalColor] of this._myFlatMaterialOriginalColors) {
+                    ColorUtils.rgbToHSV(originalColor, hsvColor);
+                    hsvColor[2] = MathUtils.clamp(hsvColor[2] + colorBrightnessOffsetCurrentValue, 0, 1);
+                    material.color = ColorUtils.hsvToRGB(hsvColor, rgbColor);
+                }
+            }
+        }
+    }
+
+    public getCurrentState(): CursorButtonState {
+        let currentState = CursorButtonState.UNHOVER;
+
+        const currentFSMState = this._myFSM.getCurrentStateData()!.myID;
+        switch (currentFSMState) {
+            case "unhover":
+                currentState = CursorButtonState.UNHOVER;
+                break;
+            case "hover":
+                currentState = CursorButtonState.HOVER;
+                break;
+            case "down":
+                currentState = CursorButtonState.DOWN;
+                break;
+            case "up_with_down":
+                currentState = CursorButtonState.UP;
+                break;
+        }
+
+        return currentState;
     }
 
     private _onUnhover(targetObject: Object3D, cursorComponent: Cursor): void {
@@ -418,6 +488,45 @@ export class CursorButtonComponent extends Component {
         }
     }
 
+    private _onInstantUnhover(fsm: FSM | null, transitionData: Readonly<TransitionData> | null): void {
+        let skipDefault = false;
+        for (const buttonActionsHandler of this._myButtonActionsHandlers.values()) {
+            if (buttonActionsHandler.onInstantUnhover != null) {
+                skipDefault ||= buttonActionsHandler.onInstantUnhover(this);
+            }
+        }
+
+        if (skipDefault) {
+            return;
+        }
+
+        {
+            this._myAnimatedScale.setTargetValue(1);
+            this._myAnimatedScale.end();
+
+            this.object.pp_setScaleLocal(this._myOriginalScaleLocal.vec3_scale(this._myAnimatedScale.getCurrentValue()));
+        }
+
+        {
+            this._myAnimatedColorBrightnessOffset.setTargetValue(0);
+            this._myAnimatedColorBrightnessOffset.end();
+
+            const colorBrightnessOffsetCurrentValue = this._myAnimatedColorBrightnessOffset.getCurrentValue();
+
+            for (const [material, originalColor] of this._myPhongMaterialOriginalColors) {
+                const hsvColor = ColorUtils.rgbToHSV(originalColor);
+                hsvColor[2] = MathUtils.clamp(hsvColor[2] + colorBrightnessOffsetCurrentValue, 0, 1);
+                material.diffuseColor = ColorUtils.hsvToRGB(hsvColor);
+            }
+
+            for (const [material, originalColor] of this._myFlatMaterialOriginalColors) {
+                const hsvColor = ColorUtils.rgbToHSV(originalColor);
+                hsvColor[2] = MathUtils.clamp(hsvColor[2] + colorBrightnessOffsetCurrentValue, 0, 1);
+                material.color = ColorUtils.hsvToRGB(hsvColor);
+            }
+        }
+    }
+
     private _onUnhoverStart(fsm: FSM | null, transitionData: Readonly<TransitionData> | null, cursorComponent: Cursor, isSecondaryCursor: boolean): void {
         if (!isSecondaryCursor) {
             this._myKeepCurrentStateTimer.start(this._myMinUnhoverSecond);
@@ -463,7 +572,6 @@ export class CursorButtonComponent extends Component {
             }
         }
     }
-
 
     private _onHoverStart(fsm: FSM | null, transitionData: Readonly<TransitionData> | null, cursorComponent: Cursor, isSecondaryCursor: boolean, isHoverFromDown: boolean): void {
         if (!isSecondaryCursor) {

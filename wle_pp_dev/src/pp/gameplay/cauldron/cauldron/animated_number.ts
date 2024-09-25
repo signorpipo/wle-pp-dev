@@ -106,6 +106,11 @@ export class AnimatedNumber {
         }
     }
 
+    public end(): void {
+        this._myAnimationTimer.end();
+        this._myCurrentValue = MathUtils.interpolate(this._myStartValue, this._myTargetValue!, 1, this._myEasingFunction);
+    }
+
     public isDone(): boolean {
         return this._myAnimationTimer.isDone();
     }
