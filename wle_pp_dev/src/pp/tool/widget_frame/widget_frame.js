@@ -29,6 +29,8 @@ export class WidgetFrame {
         this._myWidgetVisibleChangedEmitter = new Emitter();      // Signature: listener(widgetVisible)
         this._myPinChangedEmitter = new Emitter();                // Signature: listener(pinned)
 
+        this._myUnhoverCallbacks = [];
+
         this._myDestroyed = false;
     }
 
@@ -89,19 +91,29 @@ export class WidgetFrame {
     _addListeners() {
         let ui = this._myUI;
 
+        this._myUnhoverCallbacks = [];
+
         ui.myPinButtonCursorTargetComponent.onClick.add(this._togglePin.bind(this, true));
         ui.myPinButtonCursorTargetComponent.onHover.add(this._genericHover.bind(this, ui.myPinButtonBackgroundComponent.material));
         ui.myPinButtonCursorTargetComponent.onUnhover.add(this._pinUnhover.bind(this, ui.myPinButtonBackgroundComponent.material));
 
+        this._myUnhoverCallbacks.push(this._pinUnhover.bind(this, ui.myPinButtonBackgroundComponent.material));
+
         ui.myVisibilityButtonCursorTargetComponent.onClick.add(this._toggleVisibility.bind(this, true, true));
         ui.myVisibilityButtonCursorTargetComponent.onHover.add(this._genericHover.bind(this, ui.myVisibilityButtonBackgroundComponent.material));
         ui.myVisibilityButtonCursorTargetComponent.onUnhover.add(this._visibilityUnhover.bind(this, ui.myVisibilityButtonBackgroundComponent.material));
+
+        this._myUnhoverCallbacks.push(this._visibilityUnhover.bind(this, ui.myVisibilityButtonBackgroundComponent.material));
     }
 
     _toggleVisibility(isButton, notify) {
         this._myWidgetVisible = !this._myWidgetVisible;
 
         this._myUI.setWidgetVisible(this._myWidgetVisible);
+
+        for (const unhoverCallback of this._myUnhoverCallbacks) {
+            unhoverCallback();
+        }
 
         let textMaterial = this._myUI.myVisibilityButtonTextComponent.material;
         let backgroundMaterial = this._myUI.myVisibilityButtonBackgroundComponent.material;
