@@ -108,6 +108,8 @@ export class ConsoleVRWidget {
         this._myActive = true;
         this._myVisibleBackup = null;
 
+        this._myUnhoverCallbacks = [];
+
         this._myDestroyed = false;
     }
 
@@ -676,59 +678,71 @@ export class ConsoleVRWidget {
             let backgroundMaterial = ui.myFilterButtonsBackgroundComponents[ConsoleVRWidgetMessageType[key]].material;
             let textMaterial = ui.myFilterButtonsTextComponents[ConsoleVRWidgetMessageType[key]].material;
 
-            cursorTarget.onSingleClick.add(this._toggleFilter.bind(this, ConsoleVRWidgetMessageType[key], textMaterial));
-            cursorTarget.onDoubleClick.add(this._filterAllButOne.bind(this, ConsoleVRWidgetMessageType[key], textMaterial));
-            cursorTarget.onTripleClick.add(this._resetFilters.bind(this, ConsoleVRWidgetMessageType[key]));
-            cursorTarget.onHover.add(this._filterHover.bind(this, ConsoleVRWidgetMessageType[key], backgroundMaterial));
-            cursorTarget.onUnhover.add(this._filterUnhover.bind(this, ConsoleVRWidgetMessageType[key], backgroundMaterial));
+            cursorTarget.onSingleClick.add(this._toggleFilter.bind(this, ConsoleVRWidgetMessageType[key], textMaterial), { id: this });
+            cursorTarget.onDoubleClick.add(this._filterAllButOne.bind(this, ConsoleVRWidgetMessageType[key], textMaterial), { id: this });
+            cursorTarget.onTripleClick.add(this._resetFilters.bind(this, ConsoleVRWidgetMessageType[key]), { id: this });
+            cursorTarget.onHover.add(this._filterHover.bind(this, ConsoleVRWidgetMessageType[key], backgroundMaterial), { id: this });
+            cursorTarget.onUnhover.add(this._filterUnhover.bind(this, ConsoleVRWidgetMessageType[key], backgroundMaterial), { id: this });
+
+            this._myUnhoverCallbacks.push(this._filterUnhover.bind(this, ConsoleVRWidgetMessageType[key], backgroundMaterial));
         }
 
         {
             let cursorTarget = ui.myClearButtonCursorTargetComponent;
             let backgroundMaterial = ui.myClearButtonBackgroundComponent.material;
 
-            cursorTarget.onClick.add(this._clearConsole.bind(this, false, null));
-            cursorTarget.onHover.add(this._genericHover.bind(this, backgroundMaterial));
-            cursorTarget.onUnhover.add(this._genericUnhover.bind(this, backgroundMaterial));
+            cursorTarget.onClick.add(this._clearConsole.bind(this, false, null), { id: this });
+            cursorTarget.onHover.add(this._genericHover.bind(this, backgroundMaterial), { id: this });
+            cursorTarget.onUnhover.add(this._genericUnhover.bind(this, backgroundMaterial), { id: this });
+
+            this._myUnhoverCallbacks.push(this._genericUnhover.bind(this, backgroundMaterial));
         }
 
         {
             let cursorTarget = ui.myUpButtonCursorTargetComponent;
             let backgroundMaterial = ui.myUpButtonBackgroundComponent.material;
 
-            cursorTarget.onDoubleClick.add(this._instantScrollUp.bind(this, true));
-            cursorTarget.onDown.add(this._setScrollUp.bind(this, true));
-            cursorTarget.onDownOnHover.add(this._setScrollUp.bind(this, true));
-            cursorTarget.onUp.add(this._setScrollUp.bind(this, false));
-            cursorTarget.onUnhover.add(this._setScrollUp.bind(this, false));
-            cursorTarget.onHover.add(this._genericHover.bind(this, backgroundMaterial));
-            cursorTarget.onUnhover.add(this._genericUnhover.bind(this, backgroundMaterial));
+            cursorTarget.onDoubleClick.add(this._instantScrollUp.bind(this, true), { id: this });
+            cursorTarget.onDown.add(this._setScrollUp.bind(this, true), { id: this });
+            cursorTarget.onDownOnHover.add(this._setScrollUp.bind(this, true), { id: this });
+            cursorTarget.onUp.add(this._setScrollUp.bind(this, false), { id: this });
+            cursorTarget.onUnhover.add(this._setScrollUp.bind(this, false), { id: this });
+            cursorTarget.onHover.add(this._genericHover.bind(this, backgroundMaterial), { id: this });
+            cursorTarget.onUnhover.add(this._genericUnhover.bind(this, backgroundMaterial), { id: this });
+
+            this._myUnhoverCallbacks.push(this._genericUnhover.bind(this, backgroundMaterial));
         }
 
         {
             let cursorTarget = ui.myDownButtonCursorTargetComponent;
             let backgroundMaterial = ui.myDownButtonBackgroundComponent.material;
 
-            cursorTarget.onDoubleClick.add(this._instantScrollDown.bind(this));
-            cursorTarget.onDown.add(this._setScrollDown.bind(this, true));
-            cursorTarget.onDownOnHover.add(this._setScrollDown.bind(this, true));
-            cursorTarget.onUp.add(this._setScrollDown.bind(this, false));
-            cursorTarget.onUnhover.add(this._setScrollDown.bind(this, false));
-            cursorTarget.onHover.add(this._genericHover.bind(this, backgroundMaterial));
-            cursorTarget.onUnhover.add(this._genericUnhover.bind(this, backgroundMaterial));
+            cursorTarget.onDoubleClick.add(this._instantScrollDown.bind(this), { id: this });
+            cursorTarget.onDown.add(this._setScrollDown.bind(this, true), { id: this });
+            cursorTarget.onDownOnHover.add(this._setScrollDown.bind(this, true), { id: this });
+            cursorTarget.onUp.add(this._setScrollDown.bind(this, false), { id: this });
+            cursorTarget.onUnhover.add(this._setScrollDown.bind(this, false), { id: this });
+            cursorTarget.onHover.add(this._genericHover.bind(this, backgroundMaterial), { id: this });
+            cursorTarget.onUnhover.add(this._genericUnhover.bind(this, backgroundMaterial), { id: this });
+
+            this._myUnhoverCallbacks.push(this._genericUnhover.bind(this, backgroundMaterial));
         }
 
         {
             let cursorTarget = ui.myNotifyIconCursorTargetComponent;
             let backgroundMaterial = ui.myNotifyIconBackgroundComponent.material;
 
-            cursorTarget.onClick.add(this._instantScrollDown.bind(this));
-            cursorTarget.onHover.add(this._genericHover.bind(this, backgroundMaterial));
-            cursorTarget.onUnhover.add(this._notifyIconUnhover.bind(this));
+            cursorTarget.onClick.add(this._instantScrollDown.bind(this), { id: this });
+            cursorTarget.onHover.add(this._genericHover.bind(this, backgroundMaterial), { id: this });
+            cursorTarget.onUnhover.add(this._notifyIconUnhover.bind(this), { id: this });
+
+            this._myUnhoverCallbacks.push(this._notifyIconUnhover.bind(this));
         }
 
-        ui.myPointerCursorTargetComponent.onHover.add(this._setGamepadScrollEnabled.bind(this, true));
-        ui.myPointerCursorTargetComponent.onUnhover.add(this._setGamepadScrollEnabled.bind(this, false));
+        ui.myPointerCursorTargetComponent.onHover.add(this._setGamepadScrollEnabled.bind(this, true), { id: this });
+        ui.myPointerCursorTargetComponent.onUnhover.add(this._setGamepadScrollEnabled.bind(this, false), { id: this });
+
+        this._myUnhoverCallbacks.push(this._setGamepadScrollEnabled.bind(this, false));
     }
 
     _resetFilters(messageType) {
@@ -892,6 +906,11 @@ export class ConsoleVRWidget {
 
     _widgetVisibleChanged(visible) {
         this._myUI.setVisible(visible);
+
+        for (const unhoverCallback of this._myUnhoverCallbacks) {
+            unhoverCallback();
+        }
+
         if (visible) {
             this._updateAllTexts();
         }
