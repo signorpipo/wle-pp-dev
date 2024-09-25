@@ -447,7 +447,7 @@ function _initCursorComponentModPrototype() {
                 // Unhover previous, if exists 
                 if (this.hoveringObject != null) {
                     if (!this.hoveringReality) {
-                        if (this.hoveringObjectTarget && !this.hoveringObjectTarget.isDestroyed) this.hoveringObjectTarget.onUnhover.notify(this.hoveringObject, this, originalEvent);
+                        if (this.hoveringObjectTarget && !this.hoveringObjectTarget.isDestroyed && this.hoveringObjectTarget.active) this.hoveringObjectTarget.onUnhover.notify(this.hoveringObject, this, originalEvent);
                         this.globalTarget.onUnhover.notify(this.hoveringObject, this, originalEvent);
                     } else {
                         this.hitTestTarget.onUnhover.notify(null, this, originalEvent);
@@ -583,7 +583,7 @@ function _initCursorComponentModPrototype() {
             this._prevHitLocationLocalToTarget = this.hoveringObject.pp_convertPositionWorldToLocal(hitLocation, this._prevHitLocationLocalToTarget);
         } else if (this.hoveringObject != null && (forceUnhover || hitObject == null)) {
             if (!this.hoveringReality) {
-                if (this.hoveringObjectTarget && !this.hoveringObjectTarget.isDestroyed) this.hoveringObjectTarget.onUnhover.notify(this.hoveringObject, this, originalEvent);
+                if (this.hoveringObjectTarget && !this.hoveringObjectTarget.isDestroyed && this.hoveringObjectTarget.active) this.hoveringObjectTarget.onUnhover.notify(this.hoveringObject, this, originalEvent);
                 this.globalTarget.onUnhover.notify(this.hoveringObject, this, originalEvent);
             } else {
                 this.hitTestTarget.onUnhover.notify(null, this, originalEvent);
