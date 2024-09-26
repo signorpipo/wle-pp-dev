@@ -458,7 +458,7 @@ function _initCursorComponentModPrototype() {
 
                 // Hover new object 
                 this.hoveringObject = hitObject;
-                this.hoveringObjectTarget = this.hoveringObject.pp_getComponent(CursorTarget);
+                this.hoveringObjectTarget = this.hoveringObject.pp_getComponentSelf(CursorTarget);
                 if (this.hoveringObjectTarget != null && !this.hoveringObjectTarget.active) {
                     this.hoveringObjectTarget = null;
                 }
@@ -665,6 +665,15 @@ function _initCursorComponentModPrototype() {
         let xrFrame = XRUtils.getFrame(this.engine);
         if (this.hoveringReality && xrFrame != null) {
             this._hitObjectData[2] = this._hitTestLocation.getHitTestResults(xrFrame)[0];
+        }
+
+        if (this._hitObjectData[0] != null) {
+            const cursorTarget = this._hitObjectData[0].pp_getComponentSelf(CursorTarget);
+            if (cursorTarget == null || !cursorTarget.active) {
+                this._hitObjectData[0] = null;
+                this._hitObjectData[1] = null;
+                this._hitObjectData[2] = null;
+            }
         }
 
         return this._hitObjectData;
