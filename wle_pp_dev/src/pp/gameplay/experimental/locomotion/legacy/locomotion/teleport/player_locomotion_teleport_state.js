@@ -128,7 +128,6 @@ PlayerLocomotionTeleportState.prototype._teleportToPosition = function () {
     let feetTransformQuat = quat2_create();
     let newFeetTransformQuat = quat2_create();
     let newFeetRotationQuat = quat_create();
-    let teleportRotation = quat_create();
     return function _teleportToPosition(teleportPosition, rotationOnUp, collisionRuntimeParams, forceTeleport = false) {
         this._myTeleportAsMovementFailed = false;
 
@@ -142,17 +141,6 @@ PlayerLocomotionTeleportState.prototype._teleportToPosition = function () {
 
         newFeetTransformQuat.quat2_setPositionRotationQuat(teleportPosition, newFeetRotationQuat);
 
-        if (Globals.getGamepads(this._myTeleportParams.myEngine)[InputUtils.getOppositeHandedness(this._myTeleportParams.myHandedness)].getButtonInfo(GamepadButtonID.BOTTOM_BUTTON).isPressed()) {
-            CollisionCheckBridge.getCollisionCheck(this._myTeleportParams.myEngine).positionCheck(true, newFeetTransformQuat, this._myTeleportParams.myCollisionCheckParams, collisionRuntimeParams);
-
-            this._myTeleportParams.myPlayerHeadManager.teleportPositionFeet(teleportPosition);
-            if (rotationOnUp != 0) {
-                teleportRotation.quat_fromAxis(rotationOnUp, playerUp);
-                this._myTeleportParams.myPlayerHeadManager.rotateFeetQuat(teleportRotation);
-            }
-        } else {
-            // Should teleport then rotate
-            this._myTeleportParams.myPlayerTransformManager.teleportTransformQuat(newFeetTransformQuat, forceTeleport, undefined, collisionRuntimeParams);
-        }
+        this._myTeleportParams.myPlayerTransformManager.teleportTransformQuat(newFeetTransformQuat, forceTeleport, undefined, collisionRuntimeParams);
     };
 }();
