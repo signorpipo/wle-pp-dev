@@ -3,9 +3,8 @@ import { XRUtils } from "../../../../../../cauldron/utils/xr_utils.js";
 import { Handedness } from "../../../../../../input/cauldron/input_types.js";
 import { MouseButtonID } from "../../../../../../input/cauldron/mouse.js";
 import { GamepadAxesID } from "../../../../../../input/gamepad/gamepad_buttons.js";
-import { quat2_create, vec3_create } from "../../../../../../plugin/js/extensions/array/vec_create_extension.js";
+import { vec3_create } from "../../../../../../plugin/js/extensions/array/vec_create_extension.js";
 import { Globals } from "../../../../../../pp/globals.js";
-import { CollisionCheckBridge } from "../../../../character_controller/collision/collision_check_bridge.js";
 import { PlayerLocomotionMovement } from "../player_locomotion_movement.js";
 import { PlayerLocomotionTeleportDetectionParams, PlayerLocomotionTeleportDetectionState } from "./player_locomotion_teleport_detection_state.js";
 import { PlayerLocomotionTeleportDetectionVisualizerParams } from "./player_locomotion_teleport_detection_visualizer.js";
@@ -189,7 +188,6 @@ export class PlayerLocomotionTeleport extends PlayerLocomotionMovement {
 PlayerLocomotionTeleport.prototype._applyGravity = function () {
     let playerUp = vec3_create();
     let gravityMovement = vec3_create();
-    let feetTransformQuat = quat2_create();
     return function _applyGravity(dt) {
         // If gravity is zero it's still important to move to remain snapped and gather proper surface data even when not teleporting
 
@@ -208,11 +206,7 @@ PlayerLocomotionTeleport.prototype._applyGravity = function () {
             this._myLocomotionRuntimeParams.myGravitySpeed = 0;
         }
 
-        feetTransformQuat = this._myTeleportParams.myPlayerHeadManager.getTransformFeetQuat(feetTransformQuat);
-        CollisionCheckBridge.getCollisionCheck(this._myTeleportParams.myEngine).move(gravityMovement, feetTransformQuat, this._myTeleportParams.myCollisionCheckParams, this._myLocomotionRuntimeParams.myCollisionRuntimeParams);
-        if (!this._myLocomotionRuntimeParams.myCollisionRuntimeParams.myVerticalMovementCanceled) {
-            this._myTeleportParams.myPlayerHeadManager.teleportPositionFeet(this._myLocomotionRuntimeParams.myCollisionRuntimeParams.myNewPosition);
-        }
+        this._myTeleportParams.myPlayerTransformManager.move(gravityMovement, false, this._myLocomotionRuntimeParams.myCollisionRuntimeParams);
 
         if (this._myLocomotionRuntimeParams.myGravitySpeed > 0 && this._myLocomotionRuntimeParams.myCollisionRuntimeParams.myIsOnCeiling ||
             this._myLocomotionRuntimeParams.myGravitySpeed < 0 && this._myLocomotionRuntimeParams.myCollisionRuntimeParams.myIsOnGround) {

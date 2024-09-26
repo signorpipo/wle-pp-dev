@@ -167,7 +167,6 @@ PlayerLocomotionSmooth.prototype.update = function () {
     let direction = vec3_create();
     let directionOnUp = vec3_create();
     let verticalMovement = vec3_create();
-    let feetTransformQuat = quat2_create();
 
     let directionReferenceTransformQuat = quat2_create();
     return function update(dt) {
@@ -281,8 +280,6 @@ PlayerLocomotionSmooth.prototype.update = function () {
             } else {
                 this._myLocomotionRuntimeParams.myGravitySpeed = 0;
             }
-
-            feetTransformQuat = this._myParams.myPlayerTransformManager.getTransformQuat(feetTransformQuat);
 
             this._myParams.myPlayerTransformManager.move(headMovement, false, this._myLocomotionRuntimeParams.myCollisionRuntimeParams);
             if (isManuallyMoving) {
