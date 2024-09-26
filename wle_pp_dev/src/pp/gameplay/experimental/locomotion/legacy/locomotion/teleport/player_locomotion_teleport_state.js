@@ -152,7 +152,7 @@ PlayerLocomotionTeleportState.prototype._teleportToPosition = function () {
             }
         } else {
             // Should teleport then rotate
-            this._myTeleportParams.myPlayerTransformManager.teleportTransformQuat(newFeetTransformQuat, collisionRuntimeParams, forceTeleport);
+            this._myTeleportParams.myPlayerTransformManager.teleportTransformQuat(newFeetTransformQuat, forceTeleport, undefined, collisionRuntimeParams);
         }
     };
 }();
