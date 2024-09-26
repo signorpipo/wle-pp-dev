@@ -233,7 +233,7 @@ export class EasyTuneWidget {
         this._myCurrentWidget.setEasyTuneVariable(this._myCurrentVariable, this._createIndexString());
         this._myCurrentWidget.getWidget().syncWidget(prevWidget);
 
-        if (prevWidget != null) {
+        if (prevWidget != null && this._myCurrentWidget.getWidget() != prevWidget) {
             prevWidget.setVisible(false);
         }
 
