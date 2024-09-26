@@ -21,7 +21,7 @@ export class TeleportOnTrackedHandsComponent extends Component {
                 if (!this._myUsingTrackedHands) {
                     this._myUsingTrackedHands = true;
 
-                    Globals.getPlayerLocomotion()!.getPlayerTransformManager().teleportTransformQuat(this._myTeleportTargetObject.pp_getTransformQuat(), true);
+                    Globals.getPlayerLocomotion()!.getPlayerTransformManager().forceTeleportAndReset(this._myTeleportTargetObject.pp_getPosition(), this._myTeleportTargetObject.pp_getRotationQuat());
                 }
             } else {
                 this._myUsingTrackedHands = false;
