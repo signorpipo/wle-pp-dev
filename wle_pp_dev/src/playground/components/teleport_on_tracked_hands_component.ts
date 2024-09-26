@@ -9,9 +9,14 @@ export class TeleportOnTrackedHandsComponent extends Component {
     private _myTeleportTargetObject!: Object3D;
 
     private _myUsingTrackedHands: boolean = false;
+    private _myDelayFrameCountdown: number = 3;
 
     public override update(dt: number): void {
-        if (XRUtils.isSessionActive()) {
+        if (this._myDelayFrameCountdown > 0) {
+            this._myDelayFrameCountdown--;
+        }
+
+        if (XRUtils.isSessionActive() && Globals.getPlayerLocomotion()!.getPlayerHeadManager().isSynced() && this._myDelayFrameCountdown == 0) {
             if (Globals.getLeftHandPose()!.getInputSourceType() == InputSourceType.TRACKED_HAND || Globals.getRightHandPose()!.getInputSourceType() == InputSourceType.TRACKED_HAND) {
                 if (!this._myUsingTrackedHands) {
                     this._myUsingTrackedHands = true;
@@ -33,6 +38,8 @@ export class TeleportOnTrackedHandsComponent extends Component {
     }
 
     private _onXRSessionStart(): void {
+        this._myDelayFrameCountdown = 3;
+
         this._myUsingTrackedHands = false;
     }
 }
