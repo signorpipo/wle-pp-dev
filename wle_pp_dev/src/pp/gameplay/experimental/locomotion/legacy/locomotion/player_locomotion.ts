@@ -12,7 +12,6 @@ import { vec3_create } from "../../../../../plugin/js/extensions/array/vec_creat
 import { Globals } from "../../../../../pp/globals.js";
 import { CharacterColliderSetupSimplifiedCreationAccuracyLevel, CharacterColliderSetupSimplifiedCreationParams, CharacterColliderSetupUtils } from "../../../character_controller/collision/character_collider_setup_utils.js";
 import { CollisionCheckBridge } from "../../../character_controller/collision/collision_check_bridge.js";
-import { CollisionCheckUtils } from "../../../character_controller/collision/legacy/collision_check/collision_check_utils.js";
 import { CollisionCheckParams, CollisionRuntimeParams } from "../../../character_controller/collision/legacy/collision_check/collision_params.js";
 import { NonVRReferenceSpaceMode, PlayerHeadManager, PlayerHeadManagerParams } from "./player_head_manager.js";
 import { PlayerLocomotionMovementRuntimeParams } from "./player_locomotion_movement.js";
@@ -177,12 +176,6 @@ export class PlayerLocomotion {
 
     private readonly _myParams: PlayerLocomotionParams;
 
-    private readonly _myCollisionCheckParamsMovement: CollisionCheckParams = new CollisionCheckParams();
-    private readonly _myCollisionCheckParamsTeleport: CollisionCheckParams = new CollisionCheckParams();
-
-    private readonly _myCollisionRuntimeParams = new CollisionRuntimeParams();
-    private readonly _myMovementRuntimeParams = new PlayerLocomotionMovementRuntimeParams();
-
     private readonly _myPlayerHeadManager: PlayerHeadManager;
     private readonly _myPlayerTransformManager: PlayerTransformManager;
     private readonly _myPlayerLocomotionRotate: PlayerLocomotionRotate;
@@ -208,11 +201,11 @@ export class PlayerLocomotion {
     constructor(params: PlayerLocomotionParams) {
         this._myParams = params;
 
-        this._setupCollisionCheckParamsMovement();
-        this._setupCollisionCheckParamsTeleport();
+        const collisionCheckParamsMovement = this._setupCollisionCheckParamsMovement();
 
-        this._myMovementRuntimeParams.myIsFlying = this._myParams.myStartFlying;
-        this._myMovementRuntimeParams.myCollisionRuntimeParams = this._myCollisionRuntimeParams;
+        const movementRuntimeParams = new PlayerLocomotionMovementRuntimeParams();
+        movementRuntimeParams.myIsFlying = this._myParams.myStartFlying;
+        movementRuntimeParams.myCollisionRuntimeParams = new CollisionRuntimeParams();
 
         {
             const params = new PlayerHeadManagerParams(this._myParams.myEngine as any);
@@ -247,7 +240,7 @@ export class PlayerLocomotion {
 
             params.myPlayerHeadManager = this._myPlayerHeadManager;
 
-            params.myMovementCollisionCheckParams = this._myCollisionCheckParamsMovement;
+            params.myMovementCollisionCheckParams = collisionCheckParamsMovement;
             params.myTeleportCollisionCheckParams = null;
             params.myTeleportCollisionCheckParamsCopyFromMovement = true;
             params.myTeleportCollisionCheckParamsCheck360 = true;
@@ -287,8 +280,8 @@ export class PlayerLocomotion {
             params.myIsFloatingValidIfVerticalMovementAndSteepGround = false;
             params.myIsFloatingValidIfRealOnGround = false;
             params.myFloatingSplitCheckEnabled = true;
-            params.myFloatingSplitCheckMinLength = this._myCollisionCheckParamsMovement.myFeetRadius * 1.5;
-            params.myFloatingSplitCheckMaxLength = this._myCollisionCheckParamsMovement.myFeetRadius * 1.5;
+            params.myFloatingSplitCheckMinLength = collisionCheckParamsMovement.myFeetRadius * 1.5;
+            params.myFloatingSplitCheckMaxLength = collisionCheckParamsMovement.myFeetRadius * 1.5;
             params.myFloatingSplitCheckMaxSteps = 3;
             params.myRealMovementAllowVerticalAdjustments = false;
 
@@ -395,7 +388,7 @@ export class PlayerLocomotion {
                 params.myMoveHeadShortcutEnabled = this._myParams.myMoveHeadShortcutEnabled;
                 params.myTripleSpeedShortcutEnabled = this._myParams.myTripleSpeedShortcutEnabled;
 
-                this._myPlayerLocomotionSmooth = new PlayerLocomotionSmooth(params, this._myMovementRuntimeParams);
+                this._myPlayerLocomotionSmooth = new PlayerLocomotionSmooth(params, movementRuntimeParams);
             }
 
             {
@@ -404,13 +397,11 @@ export class PlayerLocomotion {
                 params.myPlayerHeadManager = this._myPlayerHeadManager;
                 params.myPlayerTransformManager = this._myPlayerTransformManager;
 
-                params.myCollisionCheckParams = this._myCollisionCheckParamsTeleport;
-
                 params.myHandedness = this._myParams.myMainHand;
 
                 params.myDetectionParams.myMaxDistance = this._myParams.myTeleportMaxDistance;
                 params.myDetectionParams.myMaxHeightDifference = this._myParams.myTeleportMaxHeightDifference;
-                params.myDetectionParams.myGroundAngleToIgnoreUpward = this._myCollisionCheckParamsMovement.myGroundAngleToIgnore;
+                params.myDetectionParams.myGroundAngleToIgnoreUpward = collisionCheckParamsMovement.myGroundAngleToIgnore;
                 params.myDetectionParams.myRotationOnUpEnabled = this._myParams.myTeleportRotationOnUpEnabled;
                 params.myDetectionParams.myMustBeOnGround = true;
 
@@ -444,7 +435,7 @@ export class PlayerLocomotion {
                 params.myDebugShowEnabled = true;
                 params.myDebugVisibilityEnabled = false;
 
-                this._myPlayerLocomotionTeleport = new PlayerLocomotionTeleport(params, this._myMovementRuntimeParams);
+                this._myPlayerLocomotionTeleport = new PlayerLocomotionTeleport(params, movementRuntimeParams);
             }
 
             {
@@ -575,10 +566,6 @@ export class PlayerLocomotion {
 
             this._myPlayerTransformManager.resetReal(true, true, undefined, undefined, undefined, true);
             this._myPlayerTransformManager.update(dt);
-
-            if (this._myPlayerHeadManager.isSynced()) {
-                this._updateCollisionHeight();
-            }
         } else {
             this._myPlayerTransformManager.update(dt);
 
@@ -621,8 +608,6 @@ export class PlayerLocomotion {
             }
 
             if (this._myPlayerHeadManager.isSynced()) {
-                this._updateCollisionHeight();
-
                 if (!this._myIdle) {
                     this._myPlayerLocomotionRotate.update(dt);
                     this._myLocomotionMovementFSM.update(dt);
@@ -694,15 +679,7 @@ export class PlayerLocomotion {
         this._myPostUpdateEmitter.remove(id);
     }
 
-    private _updateCollisionHeight(): void {
-        this._myCollisionCheckParamsMovement.myHeight = this._myPlayerHeadManager.getHeightHead();
-        if (this._myCollisionCheckParamsMovement.myHeight <= 0.000001) {
-            this._myCollisionCheckParamsMovement.myHeight = 0;
-        }
-        this._myCollisionCheckParamsTeleport.myHeight = this._myCollisionCheckParamsMovement.myHeight;
-    }
-
-    private _setupCollisionCheckParamsMovement(): void {
+    private _setupCollisionCheckParamsMovement(): CollisionCheckParams {
         const simplifiedParams = new CharacterColliderSetupSimplifiedCreationParams();
 
         simplifiedParams.myHeight = this._myParams.myDefaultHeight;
@@ -740,52 +717,7 @@ export class PlayerLocomotion {
 
         const colliderSetup = CharacterColliderSetupUtils.createSimplified(simplifiedParams);
 
-        CollisionCheckBridge.convertCharacterColliderSetupToCollisionCheckParams(colliderSetup, this._myCollisionCheckParamsMovement);
-    }
-
-    private _setupCollisionCheckParamsTeleport(): void {
-        CollisionCheckUtils.generate360TeleportParamsFromMovementParams(this._myCollisionCheckParamsMovement, this._myCollisionCheckParamsTeleport);
-
-        // Increased so to let teleport on steep slopes from above (from below is fixed through detection myGroundAngleToIgnoreUpward)
-        this._myCollisionCheckParamsTeleport.myGroundAngleToIgnore = 61;
-        this._myCollisionCheckParamsTeleport.myTeleportMustBeOnIgnorableGroundAngle = true;
-        this._myCollisionCheckParamsTeleport.myTeleportMustBeOnGround = true;
-
-        /*
-        this._myCollisionCheckParamsTeleport.myExtraTeleportCheckCallback = function (
-            offsetTeleportPosition, endPosition, feetPosition, transformUp, transformForward, height,
-            collisionCheckParams, prevCollisionRuntimeParams, collisionRuntimeParams, newFeetPosition
-     
-        ) {
-            let isTeleportingUpward = endPosition.vec3_isFartherAlongAxis(feetPosition, transformUp);
-            if (isTeleportingUpward) {
-                collisionRuntimeParams.myTeleportCanceled = collisionRuntimeParams.myGroundAngle > 30 + 0.0001;
-                console.error(collisionRuntimeParams.myTeleportCanceled);
-            }
-     
-            return newFeetPosition;
-        }*/
-
-        // This is needed for when u want to perform the teleport as a movement
-        // Maybe this should be another set of collsion check params copied from the smooth ones?
-        // When you teleport as move, u check with the teleport for the position, and this other params for the move, so that u can use a smaller
-        // cone, and sliding if desired
-        // If nothing is specified it's copied from the teleport and if greater than 90 cone is tuned down, and also the below settings are applied
-
-        // You could also do this if u want to perform the teleport as movement, instead of using the smooth
-        // but this will make even the final teleport check be halved
-        //this._myCollisionCheckParamsTeleport.myHalfConeAngle = 90;
-        //this._myCollisionCheckParamsTeleport.myHalfConeSliceAmount = 3;
-        //this._myCollisionCheckParamsTeleport.myCheckHorizontalFixedForwardEnabled = false;
-        //this._myCollisionCheckParamsTeleport.mySplitMovementEnabled = true;
-        //this._myCollisionCheckParamsTeleport.mySplitMovementMaxLengthEnabled = true;
-        //this._myCollisionCheckParamsTeleport.mySplitMovementMaxLength = this._myCollisionCheckParamsTeleport.myRadius * 0.75;
-        //this._myCollisionCheckParamsTeleport.mySplitMovementMinLengthEnabled = true;
-        //this._myCollisionCheckParamsTeleport.mySplitMovementMinLength = params.mySplitMovementMaxLength;
-        //this._myCollisionCheckParamsTeleport.mySplitMovementStopWhenHorizontalMovementCanceled = true;
-        //this._myCollisionCheckParamsTeleport.mySplitMovementStopWhenVerticalMovementCanceled = true;
-
-        //this._myCollisionCheckParamsTeleport.myDebugEnabled = true;
+        return CollisionCheckBridge.convertCharacterColliderSetupToCollisionCheckParams(colliderSetup);
     }
 
     private _fixAlmostUp(): void {

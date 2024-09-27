@@ -69,8 +69,8 @@ export class PlayerLocomotionTeleportDetectionRuntimeParams {
 
 export class PlayerLocomotionTeleportDetectionState extends PlayerLocomotionTeleportState {
 
-    constructor(teleportParams, teleportRuntimeParams, locomotionRuntimeParams) {
-        super(teleportParams, teleportRuntimeParams, locomotionRuntimeParams);
+    constructor(teleportParams, teleportRuntimeParams, locomotionRuntimeParams, movementCollisionCheckParams, teleportCollisionCheckParams) {
+        super(teleportParams, teleportRuntimeParams, locomotionRuntimeParams, movementCollisionCheckParams, teleportCollisionCheckParams);
 
         this._myDetectionRuntimeParams = new PlayerLocomotionTeleportDetectionRuntimeParams();
 
@@ -293,8 +293,8 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable 
         raycastParams.myBlockColliderType = RaycastBlockColliderType.BOTH;
         raycastParams.myPhysics = Globals.getPhysics(this._myTeleportParams.myEngine);
 
-        raycastParams.myObjectsToIgnore.pp_copy(this._myTeleportParams.myCollisionCheckParams.myHorizontalObjectsToIgnore);
-        for (let objectToIgnore of this._myTeleportParams.myCollisionCheckParams.myVerticalObjectsToIgnore) {
+        raycastParams.myObjectsToIgnore.pp_copy(this._myTeleportCollisionCheckParams.myHorizontalObjectsToIgnore);
+        for (let objectToIgnore of this._myTeleportCollisionCheckParams.myVerticalObjectsToIgnore) {
             raycastParams.myObjectsToIgnore.pp_pushUnique(objectToIgnore, objectsEqualCallback);
         }
 
@@ -388,7 +388,7 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable 
                             if (!flatTeleportHorizontalHitNormal.vec3_isZero(0.00001)) {
                                 flatTeleportHorizontalHitNormal.vec3_normalize(flatTeleportHorizontalHitNormal);
 
-                                let backwardStep = this._myTeleportParams.myCollisionCheckParams.myRadius * 1.1;
+                                let backwardStep = this._myTeleportCollisionCheckParams.myRadius * 1.1;
                                 raycastParams.myOrigin = verticalHitOrigin.vec3_add(flatTeleportHorizontalHitNormal.vec3_scale(backwardStep, raycastParams.myOrigin), raycastParams.myOrigin);
                                 raycastParams.myDirection.vec3_copy(verticalHitDirection);
                                 raycastParams.myDistance = bottomCheckMaxLength;
@@ -419,7 +419,7 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable 
                             if (!flatParableHitNormal.vec3_isZero(0.00001)) {
                                 flatParableHitNormal.vec3_normalize(flatParableHitNormal);
 
-                                let backwardStep = this._myTeleportParams.myCollisionCheckParams.myRadius * 1.1;
+                                let backwardStep = this._myTeleportCollisionCheckParams.myRadius * 1.1;
                                 raycastParams.myOrigin = verticalHitOrigin.vec3_add(flatParableHitNormal.vec3_scale(backwardStep, raycastParams.myOrigin), raycastParams.myOrigin);
                                 raycastParams.myDirection.vec3_copy(verticalHitDirection);
                                 raycastParams.myDistance = bottomCheckMaxLength;
@@ -451,7 +451,7 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable 
                             if (!flatParableDirectionNegate.vec3_isZero(0.00001)) {
                                 flatParableDirectionNegate.vec3_normalize(flatParableDirectionNegate);
 
-                                let backwardStep = this._myTeleportParams.myCollisionCheckParams.myRadius * 1.1;
+                                let backwardStep = this._myTeleportCollisionCheckParams.myRadius * 1.1;
                                 raycastParams.myOrigin = verticalHitOrigin.vec3_add(flatParableDirectionNegate.vec3_scale(backwardStep, raycastParams.myOrigin), raycastParams.myOrigin);
                                 raycastParams.myDirection.vec3_copy(verticalHitDirection);
                                 raycastParams.myDistance = bottomCheckMaxLength;
@@ -519,7 +519,7 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable 
                     if (!flatTeleportHorizontalHitNormal.vec3_isZero(0.00001)) {
                         flatTeleportHorizontalHitNormal.vec3_normalize(flatTeleportHorizontalHitNormal);
 
-                        let backwardStep = this._myTeleportParams.myCollisionCheckParams.myRadius * 1.1;
+                        let backwardStep = this._myTeleportCollisionCheckParams.myRadius * 1.1;
                         raycastParams.myOrigin = verticalHitOrigin.vec3_add(flatTeleportHorizontalHitNormal.vec3_scale(backwardStep, raycastParams.myOrigin), raycastParams.myOrigin);
                         raycastParams.myDirection.vec3_copy(verticalHitDirection);
                         raycastParams.myDistance = bottomCheckMaxLength;
@@ -549,7 +549,7 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable 
                     if (!flatParableDirectionNegate.vec3_isZero(0.00001)) {
                         flatParableDirectionNegate.vec3_normalize(flatParableDirectionNegate);
 
-                        let backwardStep = this._myTeleportParams.myCollisionCheckParams.myRadius * 1.1;
+                        let backwardStep = this._myTeleportCollisionCheckParams.myRadius * 1.1;
                         raycastParams.myOrigin = verticalHitOrigin.vec3_add(flatParableDirectionNegate.vec3_scale(backwardStep, raycastParams.myOrigin), raycastParams.myOrigin);
                         raycastParams.myDirection.vec3_copy(verticalHitDirection);
                         raycastParams.myDistance = bottomCheckMaxLength;
@@ -778,8 +778,8 @@ PlayerLocomotionTeleportDetectionState.prototype._isPositionVisible = function (
 
             raycastParams.myBlockLayerFlags.setMask(this._myTeleportParams.myDetectionParams.myVisibilityBlockLayerFlags.getMask());
 
-            raycastParams.myObjectsToIgnore.pp_copy(this._myTeleportParams.myCollisionCheckParams.myHorizontalObjectsToIgnore);
-            for (let objectToIgnore of this._myTeleportParams.myCollisionCheckParams.myVerticalObjectsToIgnore) {
+            raycastParams.myObjectsToIgnore.pp_copy(this._myTeleportCollisionCheckParams.myHorizontalObjectsToIgnore);
+            for (let objectToIgnore of this._myTeleportCollisionCheckParams.myVerticalObjectsToIgnore) {
                 raycastParams.myObjectsToIgnore.pp_pushUnique(objectToIgnore, objectsEqualCallback);
             }
 

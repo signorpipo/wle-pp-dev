@@ -4,11 +4,14 @@ import { CollisionRuntimeParams } from "../../../../character_controller/collisi
 
 export class PlayerLocomotionTeleportState {
 
-    constructor(teleportParams, teleportRuntimeParams, locomotionRuntimeParams) {
+    constructor(teleportParams, teleportRuntimeParams, locomotionRuntimeParams, movementCollisionCheckParams, teleportCollisionCheckParams) {
         this._myLocomotionRuntimeParams = locomotionRuntimeParams;
 
         this._myTeleportParams = teleportParams;
         this._myTeleportRuntimeParams = teleportRuntimeParams;
+
+        this._myMovementCollisionCheckParams = movementCollisionCheckParams;
+        this._myTeleportCollisionCheckParams = teleportCollisionCheckParams;
 
         this._myTeleportAsMovementFailed = false;
     }
@@ -32,7 +35,7 @@ export class PlayerLocomotionTeleportState {
 
 PlayerLocomotionTeleportState.prototype._checkTeleport = function () {
     return function _checkTeleport(teleportPosition, feetTransformQuat, collisionRuntimeParams, checkTeleportCollisionRuntimeParams = null) {
-        CollisionCheckBridge.getCollisionCheck(this._myTeleportParams.myEngine).teleport(teleportPosition, feetTransformQuat, this._myTeleportParams.myCollisionCheckParams, collisionRuntimeParams);
+        CollisionCheckBridge.getCollisionCheck(this._myTeleportParams.myEngine).teleport(teleportPosition, feetTransformQuat, this._myTeleportCollisionCheckParams, collisionRuntimeParams);
         if (checkTeleportCollisionRuntimeParams != null) {
             checkTeleportCollisionRuntimeParams.copy(collisionRuntimeParams);
         }
@@ -94,7 +97,7 @@ PlayerLocomotionTeleportState.prototype._checkTeleportAsMovement = function () {
                 }
 
                 movementFeetTransformQuat.quat2_setPositionRotationQuat(currentFeetPosition, feetRotationQuat);
-                CollisionCheckBridge.getCollisionCheck(this._myTeleportParams.myEngine).move(teleportMovement, movementFeetTransformQuat, this._myTeleportParams.myCollisionCheckParams, checkTeleportMovementCollisionRuntimeParams);
+                CollisionCheckBridge.getCollisionCheck(this._myTeleportParams.myEngine).move(teleportMovement, movementFeetTransformQuat, this._myMovementCollisionCheckParams, checkTeleportMovementCollisionRuntimeParams);
 
                 if (!checkTeleportMovementCollisionRuntimeParams.myHorizontalMovementCanceled && !checkTeleportMovementCollisionRuntimeParams.myVerticalMovementCanceled) {
                     movementToTeleportPosition = fixedTeleportPosition.vec3_sub(checkTeleportMovementCollisionRuntimeParams.myNewPosition, movementToTeleportPosition);

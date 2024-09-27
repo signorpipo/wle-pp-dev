@@ -1,3 +1,4 @@
+import { CollisionCheckParams } from "wle-pp/gameplay/experimental/character_controller/collision/legacy/collision_check/collision_params.js";
 import { FSM } from "../../../../../../cauldron/fsm/fsm.js";
 import { XRUtils } from "../../../../../../cauldron/utils/xr_utils.js";
 import { Handedness } from "../../../../../../input/cauldron/input_types.js";
@@ -15,8 +16,6 @@ export class PlayerLocomotionTeleportParams {
     constructor(engine = Globals.getMainEngine()) {
         this.myPlayerHeadManager = null;
         this.myPlayerTransformManager = null;
-
-        this.myCollisionCheckParams = null;
 
         this.myDetectionParams = new PlayerLocomotionTeleportDetectionParams();
         this.myVisualizerParams = new PlayerLocomotionTeleportDetectionVisualizerParams();
@@ -66,10 +65,13 @@ export class PlayerLocomotionTeleport extends PlayerLocomotionMovement {
         this._myTeleportParams = teleportParams;
         this._myTeleportRuntimeParams = new PlayerLocomotionTeleportRuntimeParams();
 
+        this._myMovementCollisionCheckParams = new CollisionCheckParams();
+        this._myTeleportCollisionCheckParams = new CollisionCheckParams();
+
         this._myStickIdleCharge = true;
 
-        this._myDetectionState = new PlayerLocomotionTeleportDetectionState(this._myTeleportParams, this._myTeleportRuntimeParams, this._myLocomotionRuntimeParams);
-        this._myTeleportState = new PlayerLocomotionTeleportTeleportState(this._myTeleportParams, this._myTeleportRuntimeParams, this._myLocomotionRuntimeParams);
+        this._myDetectionState = new PlayerLocomotionTeleportDetectionState(this._myTeleportParams, this._myTeleportRuntimeParams, this._myLocomotionRuntimeParams, this._myMovementCollisionCheckParams, this._myTeleportCollisionCheckParams);
+        this._myTeleportState = new PlayerLocomotionTeleportTeleportState(this._myTeleportParams, this._myTeleportRuntimeParams, this._myLocomotionRuntimeParams, this._myMovementCollisionCheckParams, this._myTeleportCollisionCheckParams);
 
         this._myFSM = new FSM();
         //this._myFSM.setLogEnabled(true, "Locomotion Teleport");
@@ -124,6 +126,8 @@ export class PlayerLocomotionTeleport extends PlayerLocomotionMovement {
     update(dt) {
         if (!this.isActive()) return;
 
+        this._prepareCollisionCheckParams();
+
         this._myLocomotionRuntimeParams.myTeleportJustPerformed = false;
 
         this._myFSM.update(dt);
@@ -167,6 +171,59 @@ export class PlayerLocomotionTeleport extends PlayerLocomotionMovement {
 
     _completeTeleport() {
         this._myTeleportState.completeTeleport();
+    }
+
+    _prepareCollisionCheckParams() {
+        this._myMovementCollisionCheckParams.copy(this._myTeleportParams.myPlayerTransformManager.getMovementCollisionCheckParams());
+
+        this._myTeleportCollisionCheckParams.copy(this._myTeleportParams.myPlayerTransformManager.getTeleportCollisionCheckParams());
+
+        // Increased so to let teleport on steep slopes from above (from below is fixed through detection myGroundAngleToIgnoreUpward)
+        this._myTeleportCollisionCheckParams.myGroundAngleToIgnore = Math.max(61, this._myTeleportCollisionCheckParams.myGroundAngleToIgnore);
+        this._myTeleportCollisionCheckParams.myTeleportMustBeOnIgnorableGroundAngle = true;
+        this._myTeleportCollisionCheckParams.myTeleportMustBeOnGround = true;
+
+        /*
+        this._myTeleportCollisionCheckParams.myExtraTeleportCheckCallback = function (
+            offsetTeleportPosition, endPosition, feetPosition, transformUp, transformForward, height,
+            collisionCheckParams, prevCollisionRuntimeParams, collisionRuntimeParams, newFeetPosition
+
+        ) {
+            let isTeleportingUpward = endPosition.vec3_isFartherAlongAxis(feetPosition, transformUp);
+            if (isTeleportingUpward) {
+                collisionRuntimeParams.myTeleportCanceled = collisionRuntimeParams.myGroundAngle > 30 + 0.0001;
+                console.error(collisionRuntimeParams.myTeleportCanceled);
+            }
+
+            return newFeetPosition;
+        }
+        */
+
+        /*
+         * This is needed for when u want to perform the teleport as a movement
+         * Maybe this should be another set of collsion check params copied from the smooth ones?
+         * When you teleport as move, u check with the teleport for the position, and this other params for the move, so that u can use a smaller
+         * cone, and sliding if desired
+         * If nothing is specified it's copied from the teleport and if greater than 90 cone is tuned down, and also the below settings are applied
+
+         * You could also do this if u want to perform the teleport as movement, instead of using the smooth
+         * but this will make even the final teleport check be halved
+         */
+
+        /*
+        this._myTeleportCollisionCheckParams.myHalfConeAngle = 90;
+        this._myTeleportCollisionCheckParams.myHalfConeSliceAmount = 3;
+        this._myTeleportCollisionCheckParams.myCheckHorizontalFixedForwardEnabled = false;
+        this._myTeleportCollisionCheckParams.mySplitMovementEnabled = true;
+        this._myTeleportCollisionCheckParams.mySplitMovementMaxLengthEnabled = true;
+        this._myTeleportCollisionCheckParams.mySplitMovementMaxLength = this._myTeleportCollisionCheckParams.myRadius * 0.75;
+        this._myTeleportCollisionCheckParams.mySplitMovementMinLengthEnabled = true;
+        this._myTeleportCollisionCheckParams.mySplitMovementMinLength = params.mySplitMovementMaxLength;
+        this._myTeleportCollisionCheckParams.mySplitMovementStopWhenHorizontalMovementCanceled = true;
+        this._myTeleportCollisionCheckParams.mySplitMovementStopWhenVerticalMovementCanceled = true;
+
+        this._myTeleportCollisionCheckParams.myDebugEnabled = true;
+        */
     }
 
     destroy() {

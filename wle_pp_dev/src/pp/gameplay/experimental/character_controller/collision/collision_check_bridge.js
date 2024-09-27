@@ -97,7 +97,7 @@ export let updateCeilingInfo = function () {
     };
 }();
 
-export function convertCharacterCollisionResultsToCollisionRuntimeParams(characterCollisionResults, outCollisionRuntimeParams) {
+export function convertCharacterCollisionResultsToCollisionRuntimeParams(characterCollisionResults, outCollisionRuntimeParams = new CollisionRuntimeParams()) {
     outCollisionRuntimeParams.reset();
 
     characterCollisionResults.myTransformResults.myInitialTransformQuat.quat2_getPosition(outCollisionRuntimeParams.myOriginalPosition);
@@ -200,7 +200,7 @@ export function convertCharacterCollisionResultsToCollisionRuntimeParams(charact
 
 export let convertCollisionRuntimeParamsToCharacterCollisionResults = function () {
     let rotationQuat = quat_create();
-    return function convertCollisionRuntimeParamsToCharacterCollisionResults(collisionRuntimeParams, currentTransformQuat, outCharacterCollisionResults) {
+    return function convertCollisionRuntimeParamsToCharacterCollisionResults(collisionRuntimeParams, currentTransformQuat, outCharacterCollisionResults = new CharacterCollisionResults()) {
         outCharacterCollisionResults.reset();
 
         if (collisionRuntimeParams.myIsMove) {
@@ -314,7 +314,7 @@ export let convertCollisionRuntimeParamsToCharacterCollisionResults = function (
 }();
 
 export let convertCharacterColliderSetupToCollisionCheckParams = function () {
-    return function convertCharacterColliderSetupToCollisionCheckParams(characterColliderSetup, outCollisionCheckParams) {
+    return function convertCharacterColliderSetupToCollisionCheckParams(characterColliderSetup, outCollisionCheckParams = new CollisionCheckParams()) {
         outCollisionCheckParams.myHeight = characterColliderSetup.myHeight;
 
         outCollisionCheckParams.myRadius = characterColliderSetup.myHorizontalCheckParams.myHorizontalCheckConeRadius;
