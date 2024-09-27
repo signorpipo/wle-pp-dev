@@ -17,11 +17,14 @@ export class PlayerLocomotionTeleportDetectionParams {
     constructor() {
         this.myMaxDistance = 0;
         this.myMaxHeightDifference = 0;
-        this.myGroundAngleToIgnoreUpward = 0;
+
         // This can be used to make it so the teleport position is valid on a steeper angle when going downward by setting the higher value on the collision params
         // and then use this to specify that when going upward u want it to be less, basically to be able to teleprot down a cliff even on a steep ground
         // that would not let you go up
+        this.myGroundAngleToIgnoreUpward = 0;
+
         this.myMustBeOnGround = false;
+        this.myMustBeOnIgnorableGroundAngle = false;
 
         this.myTeleportBlockLayerFlags = new PhysicsLayerFlags();
         this.myTeleportFloorLayerFlags = new PhysicsLayerFlags();
@@ -661,8 +664,10 @@ PlayerLocomotionTeleportDetectionState.prototype._isTeleportPositionValid = func
                     teleportCheckValid = true;
                 }
 
-                if (teleportCheckValid && (!this._myTeleportParams.myDetectionParams.myMustBeOnGround || teleportCheckCollisionRuntimeParams.myIsOnGround)) {
-
+                if (teleportCheckValid &&
+                    (!this._myTeleportParams.myDetectionParams.myMustBeOnGround || teleportCheckCollisionRuntimeParams.myIsOnGround) &&
+                    (!this._myTeleportParams.myDetectionParams.myMustBeOnIgnorableGroundAngle ||
+                        (teleportCheckCollisionRuntimeParams.myGroundAngle < this._myTeleportCollisionCheckParams.myGroundAngleToIgnore + 0.0001))) {
                     let groundAngleValid = true;
                     let isTeleportingUpward = teleportCheckCollisionRuntimeParams.myNewPosition.vec3_isFartherAlongAxis(feetPosition, playerUp);
                     if (isTeleportingUpward) {

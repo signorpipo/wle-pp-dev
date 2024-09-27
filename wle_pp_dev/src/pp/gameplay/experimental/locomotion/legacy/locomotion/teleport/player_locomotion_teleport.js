@@ -180,8 +180,6 @@ export class PlayerLocomotionTeleport extends PlayerLocomotionMovement {
 
         // Increased so to let teleport on steep slopes from above (from below is fixed through detection myGroundAngleToIgnoreUpward)
         this._myTeleportCollisionCheckParams.myGroundAngleToIgnore = Math.max(61, this._myTeleportCollisionCheckParams.myGroundAngleToIgnore);
-        this._myTeleportCollisionCheckParams.myTeleportMustBeOnIgnorableGroundAngle = true;
-        this._myTeleportCollisionCheckParams.myTeleportMustBeOnGround = true;
 
         /*
         this._myTeleportCollisionCheckParams.myExtraTeleportCheckCallback = function (

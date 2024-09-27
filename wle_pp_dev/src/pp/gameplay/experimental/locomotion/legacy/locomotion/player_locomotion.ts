@@ -404,6 +404,7 @@ export class PlayerLocomotion {
                 params.myDetectionParams.myGroundAngleToIgnoreUpward = collisionCheckParamsMovement.myGroundAngleToIgnore;
                 params.myDetectionParams.myRotationOnUpEnabled = this._myParams.myTeleportRotationOnUpEnabled;
                 params.myDetectionParams.myMustBeOnGround = true;
+                params.myDetectionParams.myMustBeOnIgnorableGroundAngle = true;
 
                 params.myDetectionParams.myTeleportBlockLayerFlags.copy(this._myParams.myPhysicsBlockLayerFlags);
                 params.myDetectionParams.myTeleportFloorLayerFlags.copy(this._myParams.myTeleportFloorLayerFlags);
