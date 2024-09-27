@@ -225,6 +225,9 @@ export class PlayerLocomotionComponent extends Component {
     @property.bool(false)
     private readonly _myColliderPreventFallingFromEdges!: boolean;
 
+    @property.int(-1)
+    private readonly _myColliderMaxMovementSteps!: number;
+
 
 
     /** Main hand (default: left) select + thumbstick press, auto switch to smooth */
@@ -357,6 +360,7 @@ export class PlayerLocomotionComponent extends Component {
             params.myColliderMaxDistanceToSnapOnGround = this._myColliderMaxDistanceToSnapOnGround;
             params.myColliderMaxWalkableGroundStepHeight = this._myColliderMaxWalkableGroundStepHeight;
             params.myColliderPreventFallingFromEdges = this._myColliderPreventFallingFromEdges;
+            params.myColliderMaxMovementSteps = this._myColliderMaxMovementSteps > 0 ? this._myColliderMaxMovementSteps : null;
 
             params.myDebugFlyShortcutEnabled = this._myDebugFlyShortcutEnabled;
             params.myDebugFlyMaxSpeedMultiplier = this._myDebugFlyMaxSpeedMultiplier;

@@ -138,6 +138,8 @@ export class PlayerLocomotionParams {
     public myColliderMaxDistanceToSnapOnGround: number = 0;
     public myColliderMaxWalkableGroundStepHeight: number = 0;
     public myColliderPreventFallingFromEdges: boolean = false;
+    public myColliderMaxMovementSteps: number | null = null;
+
 
 
     /** Main hand (default: left) select + thumbstick press, auto switch to smooth */
@@ -692,8 +694,6 @@ export class PlayerLocomotion {
 
         simplifiedParams.myCheckOnlyFeet = this._myParams.myColliderCheckOnlyFeet;
 
-        simplifiedParams.myMaxSpeed = this._myParams.myMaxSpeed;
-
         simplifiedParams.myCanFly = this._myParams.myFlyEnabled;
 
         simplifiedParams.myShouldSlideAlongWall = this._myParams.myColliderSlideAlongWall;
@@ -704,6 +704,7 @@ export class PlayerLocomotion {
         simplifiedParams.myMaxDistanceToSnapOnGround = this._myParams.myColliderMaxDistanceToSnapOnGround;
         simplifiedParams.myMaxWalkableGroundStepHeight = this._myParams.myColliderMaxWalkableGroundStepHeight;
         simplifiedParams.myShouldNotFallFromEdges = this._myParams.myColliderPreventFallingFromEdges;
+        simplifiedParams.myMaxMovementSteps = this._myParams.myColliderMaxMovementSteps;
 
         simplifiedParams.myHorizontalCheckBlockLayerFlags.copy(this._myParams.myPhysicsBlockLayerFlags);
         const physXComponents = Globals.getPlayerObjects(this._myParams.myEngine)!.myPlayer!.pp_getComponents(PhysXComponent);

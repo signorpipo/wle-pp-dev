@@ -803,6 +803,10 @@ export class PlayerTransformManager {
         return this._myParams.myTeleportCollisionCheckParams!;
     }
 
+    public getHeadCollisionCheckParams(): CollisionCheckParams {
+        return this._myHeadCollisionCheckParams!;
+    }
+
     public collisionCheckParamsUpdated(): void {
         if (this._myParams.myTeleportCollisionCheckParamsCopyFromMovement) {
             this._generateTeleportParamsFromMovementParams();
