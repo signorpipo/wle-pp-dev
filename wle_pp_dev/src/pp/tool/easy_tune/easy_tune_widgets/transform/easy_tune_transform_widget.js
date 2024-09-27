@@ -61,9 +61,29 @@ export class EasyTuneTransformWidget extends EasyTuneBaseWidget {
 
     _setEasyTuneVariableHook() {
         if (this._myVariable != null) {
+            if (this._myValueEditIndex >= 0 && this._myValueEditIndex < 3) {
+                switch (this._myComponentIndex) {
+                    case 0:
+                        this._myValueRealValue = this._myVariable._myPosition[this._myValueEditIndex];
+                        this._myComponentStepValue = this._myVariable._myPositionStepPerSecond;
+                        break;
+                    case 1:
+                        this._myValueRealValue = this._myVariable._myRotation[this._myValueEditIndex];
+                        this._myComponentStepValue = this._myVariable._myRotationStepPerSecond;
+                        break;
+                    case 2:
+                        this._myValueRealValue = this._myVariable._myScale[this._myValueEditIndex];
+                        this._myComponentStepValue = this._myVariable._myScaleStepPerSecond;
+                        break;
+                }
+            }
+
             this._myTempPositionValue.pp_copy(this._myVariable._myPosition);
             this._myTempRotationValue.pp_copy(this._myVariable._myRotation);
             this._myTempScaleValue.pp_copy(this._myVariable._myScale);
+
+            this._myStepMultiplierValue = 0;
+            this._myStepFastEdit = false;
         }
     }
 

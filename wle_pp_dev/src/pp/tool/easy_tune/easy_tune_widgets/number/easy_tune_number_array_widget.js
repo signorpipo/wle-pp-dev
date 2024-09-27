@@ -52,7 +52,16 @@ export class EasyTuneNumberArrayWidget extends EasyTuneBaseWidget {
 
     _setEasyTuneVariableHook() {
         if (this._myVariable != null) {
+            if (this._myValueEditIndex >= 0 && this._myValueEditIndex < this._getVariableValue().length) {
+                this._myValueRealValue = this._getVariableValue()[this._myValueEditIndex];
+            } else {
+                this._myValueRealValue = 0;
+            }
+
             this._myTempValue.pp_copy(this._getVariableValue());
+
+            this._myStepMultiplierValue = 0;
+            this._myStepFastEdit = false;
         }
     }
 
