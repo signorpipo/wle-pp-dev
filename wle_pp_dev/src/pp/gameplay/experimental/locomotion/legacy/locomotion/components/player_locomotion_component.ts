@@ -30,6 +30,9 @@ export class PlayerLocomotionComponent extends Component {
     @property.float(1.70)
     private readonly _myDefaultHeight!: number;
 
+    @property.float(0.50)
+    private readonly _myMinHeight!: number;
+
     @property.float(0.3)
     private readonly _myCharacterRadius!: number;
 
@@ -289,6 +292,7 @@ export class PlayerLocomotionComponent extends Component {
             params.mySwitchLocomotionTypeShortcutEnabled = this._mySwitchLocomotionTypeShortcutEnabled;
 
             params.myDefaultHeight = this._myDefaultHeight;
+            params.myMinHeight = this._myMinHeight;
 
             params.myMaxSpeed = this._myMaxSpeed;
             params.myMaxRotationSpeed = this._myMaxRotationSpeed;

@@ -46,6 +46,7 @@ export class PlayerLocomotionParams {
 
 
     public myDefaultHeight: number = 0;
+    public myMinHeight: number = 0;
     public myCharacterRadius: number = 0;
     public myForeheadExtraHeight: number = 0;
 
@@ -293,6 +294,8 @@ export class PlayerLocomotion {
 
             params.myUpdateRealPositionValid = false;
             params.myUpdatePositionValid = false;
+
+            params.myMinHeight = this._myParams.myMinHeight;
 
             params.myIsBodyCollidingWhenHeightBelowValue = null;
             params.myIsBodyCollidingWhenHeightAboveValue = null;
