@@ -133,6 +133,7 @@ export function createSimplified(simplifiedCreationParams, outCharacterColliderS
         outCharacterColliderSetup.myDebugParams.myVisualDebugEnabled = true;
         outCharacterColliderSetup.myDebugParams.myVisualDebugHorizontalMovementCheckEnabled = true;
         outCharacterColliderSetup.myDebugParams.myVisualDebugHorizontalPositionCheckEnabled = true;
+        outCharacterColliderSetup.myDebugParams.myVisualDebugSlideEnabled = true;
     }
 
     if (simplifiedCreationParams.myVerticalCheckDebugEnabled) {
