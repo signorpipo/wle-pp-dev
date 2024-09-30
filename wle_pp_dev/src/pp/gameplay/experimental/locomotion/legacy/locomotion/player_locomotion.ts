@@ -358,7 +358,6 @@ export class PlayerLocomotion {
             {
                 const params = new PlayerLocomotionSmoothParams(this._myParams.myEngine as any);
 
-                params.myPlayerHeadManager = this._myPlayerHeadManager;
                 params.myPlayerTransformManager = this._myPlayerTransformManager;
 
                 params.myHandedness = this._myParams.myMainHand;

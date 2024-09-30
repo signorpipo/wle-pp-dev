@@ -3,7 +3,7 @@ import { XRUtils } from "../../../../../cauldron/utils/xr_utils.js";
 import { Handedness } from "../../../../../input/cauldron/input_types.js";
 import { InputUtils } from "../../../../../input/cauldron/input_utils.js";
 import { GamepadAxesID, GamepadButtonID } from "../../../../../input/gamepad/gamepad_buttons.js";
-import { quat2_create, vec3_create } from "../../../../../plugin/js/extensions/array/vec_create_extension.js";
+import { quat2_create, quat_create, vec3_create } from "../../../../../plugin/js/extensions/array/vec_create_extension.js";
 import { Globals } from "../../../../../pp/globals.js";
 import { Direction2DTo3DConverter, Direction2DTo3DConverterParams } from "../../../../cauldron/cauldron/direction_2D_to_3D_converter.js";
 import { PlayerLocomotionDirectionReferenceType } from "./player_locomotion.js";
@@ -12,7 +12,6 @@ import { PlayerLocomotionMovement } from "./player_locomotion_movement.js";
 export class PlayerLocomotionSmoothParams {
 
     constructor(engine = Globals.getMainEngine()) {
-        this.myPlayerHeadManager = null;
         this.myPlayerTransformManager = null;
 
         this.myMaxSpeed = 0;
@@ -162,6 +161,7 @@ export class PlayerLocomotionSmooth extends PlayerLocomotionMovement {
 // IMPLEMENTATION
 
 PlayerLocomotionSmooth.prototype.update = function () {
+    let playerRotationQuat = quat_create();
     let playerUp = vec3_create();
     let headMovement = vec3_create();
     let direction = vec3_create();
@@ -177,7 +177,7 @@ PlayerLocomotionSmooth.prototype.update = function () {
         this._myCurrentSpeed = 0;
         this._myLastHorizontalMovement.vec3_zero();
 
-        playerUp = this._myParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
+        playerUp = this._myParams.myPlayerTransformManager.getRotationQuat(playerRotationQuat).quat_getUp(playerUp);
 
         headMovement.vec3_zero();
 
