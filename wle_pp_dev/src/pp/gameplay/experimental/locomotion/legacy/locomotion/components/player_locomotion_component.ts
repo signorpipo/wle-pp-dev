@@ -225,7 +225,7 @@ export class PlayerLocomotionComponent extends Component {
     @property.bool(false)
     private readonly _myColliderPreventFallingFromEdges!: boolean;
 
-    @property.int(-1)
+    @property.int(3)
     private readonly _myColliderMaxMovementSteps!: number;
 
 

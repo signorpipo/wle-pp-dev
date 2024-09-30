@@ -139,7 +139,7 @@ CollisionCheckMove.prototype._move = function () {
             fixedMovementStep = this._moveStep(currentMovementStep, newFeetPosition, transformUp, transformForward, height, true, collisionCheckParams, collisionRuntimeParams, fixedMovementStep);
             fixedMovement.vec3_add(fixedMovementStep, fixedMovement);
 
-            movementChecked = movementChecked.vec3_add(movementStep, movementChecked);
+            movementChecked = movementChecked.vec3_add(currentMovementStep, movementChecked);
 
             stepsPerformed = i + 1;
 
