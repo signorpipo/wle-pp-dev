@@ -263,6 +263,8 @@ export class CollisionCheckParams {
     }
 
     copy(other) {
+        if (this == other) return;
+
         this.mySplitMovementEnabled = other.mySplitMovementEnabled;
         this.mySplitMovementMaxLength = other.mySplitMovementMaxLength;
         this.mySplitMovementMaxLengthEnabled = other.mySplitMovementMaxLengthEnabled;
@@ -682,6 +684,8 @@ export class CollisionRuntimeParams {
     }
 
     copy(other) {
+        if (this == other) return;
+
         this.myOriginalPosition.vec3_copy(other.myOriginalPosition);
         this.myNewPosition.vec3_copy(other.myNewPosition);
 

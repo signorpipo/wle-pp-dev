@@ -343,14 +343,11 @@ export class PlayerTransformManager {
     // Also teleport, should get the difference from previous and move the player object, this will keep the relative position head-to-valid
     private static readonly _moveSV =
         {
-            transformQuat: quat2_create(),
             fixedMovement: vec3_create()
         };
     public move(movement: Readonly<Vector3>, forceMove: boolean = false, outCollisionRuntimeParams: CollisionRuntimeParams | null = null): void {
-        const transformQuat = PlayerTransformManager._moveSV.transformQuat;
-        this.getTransformQuat(transformQuat);
+        this.checkMovement(movement, this._myCollisionRuntimeParams);
 
-        CollisionCheckBridge.getCollisionCheck(this._myParams.myEngine as any).move(movement, transformQuat, this._myParams.myMovementCollisionCheckParams, this._myCollisionRuntimeParams);
         if (outCollisionRuntimeParams != null) {
             outCollisionRuntimeParams.copy(this._myCollisionRuntimeParams);
         }
@@ -389,6 +386,20 @@ export class PlayerTransformManager {
         // #TODO Add move callback
     }
 
+    private static readonly _checkMovementSV =
+        {
+            transformQuat: quat2_create()
+        };
+    public checkMovement(movement: Readonly<Vector3>, outCollisionRuntimeParams: CollisionRuntimeParams = new CollisionRuntimeParams()): CollisionRuntimeParams {
+        const transformQuat = PlayerTransformManager._checkMovementSV.transformQuat;
+        this.getTransformQuat(transformQuat);
+
+        outCollisionRuntimeParams.copy(this._myCollisionRuntimeParams);
+        CollisionCheckBridge.getCollisionCheck(this._myParams.myEngine as any).move(movement, transformQuat, this._myParams.myMovementCollisionCheckParams, outCollisionRuntimeParams);
+
+        return outCollisionRuntimeParams;
+    }
+
     private static readonly _teleportPositionSV =
         {
             teleportTransformQuat: quat2_create()
@@ -416,26 +427,23 @@ export class PlayerTransformManager {
             currentPosition: vec3_create(),
             teleportPositionVec: vec3_create(),
             teleportRotation: quat_create(),
-            rotatedTransformQuat: quat2_create(),
             fixedMovement: vec3_create()
         };
     public teleportTransformQuat(teleportTransformQuat: Readonly<Quaternion2>, forceTeleport: boolean = false, forceTeleportSkipCollisionCheck: boolean = false, outCollisionRuntimeParams: CollisionRuntimeParams | null = null): void {
-        const currentPosition = PlayerTransformManager._teleportTransformQuatSV.currentPosition;
-        const teleportPositionVec = PlayerTransformManager._teleportTransformQuatSV.teleportPositionVec;
-        const teleportRotation = PlayerTransformManager._teleportTransformQuatSV.teleportRotation;
-        const rotatedTransformQuat = PlayerTransformManager._teleportTransformQuatSV.rotatedTransformQuat;
-        this.getPosition(currentPosition);
-        teleportTransformQuat.quat2_getPosition(teleportPositionVec);
-        teleportTransformQuat.quat2_getRotationQuat(teleportRotation);
-        rotatedTransformQuat.quat2_setPositionRotationQuat(currentPosition, teleportRotation);
-
         if (!forceTeleport || !forceTeleportSkipCollisionCheck) {
-            CollisionCheckBridge.getCollisionCheck(this._myParams.myEngine as any).teleport(teleportPositionVec, rotatedTransformQuat, this._myParams.myTeleportCollisionCheckParams, this._myCollisionRuntimeParams);
+            this.checkTeleportToTransformQuat(teleportTransformQuat, this._myCollisionRuntimeParams);
         }
 
         if (outCollisionRuntimeParams != null) {
             outCollisionRuntimeParams.copy(this._myCollisionRuntimeParams);
         }
+
+        const currentPosition = PlayerTransformManager._teleportTransformQuatSV.currentPosition;
+        const teleportPositionVec = PlayerTransformManager._teleportTransformQuatSV.teleportPositionVec;
+        const teleportRotation = PlayerTransformManager._teleportTransformQuatSV.teleportRotation;
+        this.getPosition(currentPosition);
+        teleportTransformQuat.quat2_getPosition(teleportPositionVec);
+        teleportTransformQuat.quat2_getRotationQuat(teleportRotation);
 
         const fixedMovement = PlayerTransformManager._teleportTransformQuatSV.fixedMovement;
         fixedMovement.vec3_zero();
@@ -476,6 +484,37 @@ export class PlayerTransformManager {
         }
 
         // #TODO Add teleport callback
+    }
+
+    private static readonly _checkTeleportToTransformQuatSV =
+        {
+            currentPosition: vec3_create(),
+            teleportPositionVec: vec3_create(),
+            teleportRotation: quat_create(),
+            rotatedTransformQuat: quat2_create()
+        };
+    public checkTeleportToTransformQuat(teleportTransformQuat: Readonly<Quaternion2>, outCollisionRuntimeParams: CollisionRuntimeParams = new CollisionRuntimeParams()): CollisionRuntimeParams {
+        const currentPosition = PlayerTransformManager._checkTeleportToTransformQuatSV.currentPosition;
+        const teleportPositionVec = PlayerTransformManager._checkTeleportToTransformQuatSV.teleportPositionVec;
+        const teleportRotation = PlayerTransformManager._checkTeleportToTransformQuatSV.teleportRotation;
+        const rotatedTransformQuat = PlayerTransformManager._checkTeleportToTransformQuatSV.rotatedTransformQuat;
+        this.getPosition(currentPosition);
+        teleportTransformQuat.quat2_getPosition(teleportPositionVec);
+        teleportTransformQuat.quat2_getRotationQuat(teleportRotation);
+        rotatedTransformQuat.quat2_setPositionRotationQuat(currentPosition, teleportRotation);
+
+        outCollisionRuntimeParams.copy(this._myCollisionRuntimeParams);
+        CollisionCheckBridge.getCollisionCheck(this._myParams.myEngine as any).teleport(teleportPositionVec, rotatedTransformQuat, this._myParams.myTeleportCollisionCheckParams, outCollisionRuntimeParams);
+
+        return outCollisionRuntimeParams;
+    }
+
+    public checkTransformQuat(transformQuat: Readonly<Quaternion2>, outCollisionRuntimeParams: CollisionRuntimeParams = new CollisionRuntimeParams()): CollisionRuntimeParams {
+        outCollisionRuntimeParams.copy(this._myCollisionRuntimeParams);
+
+        CollisionCheckBridge.getCollisionCheck(this._myParams.myEngine as any).positionCheck(true, transformQuat, this._myParams.myMovementCollisionCheckParams, outCollisionRuntimeParams);
+
+        return outCollisionRuntimeParams;
     }
 
     /** Quick way to force teleport to a position and reset the real to this */
