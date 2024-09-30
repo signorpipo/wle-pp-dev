@@ -652,7 +652,7 @@ PlayerLocomotionTeleportDetectionState.prototype._isTeleportPositionValid = func
 
             if (differenceOnUp < this._myTeleportParams.myDetectionParams.myMaxHeightDifference + 0.00001) {
                 let teleportCheckValid = false;
-                teleportCheckCollisionRuntimeParams.copy(this._myLocomotionRuntimeParams.myCollisionRuntimeParams);
+                teleportCheckCollisionRuntimeParams.copy(this._myTeleportParams.myPlayerTransformManager.getCollisionRuntimeParams());
 
                 if (!this._myTeleportParams.myPerformTeleportAsMovement) {
                     this._checkTeleport(teleportPosition, feetTransformQuat, teleportCheckCollisionRuntimeParams, checkTeleportCollisionRuntimeParams);

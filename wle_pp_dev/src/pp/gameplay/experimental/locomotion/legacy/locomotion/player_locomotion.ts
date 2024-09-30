@@ -12,7 +12,7 @@ import { vec3_create } from "../../../../../plugin/js/extensions/array/vec_creat
 import { Globals } from "../../../../../pp/globals.js";
 import { CharacterColliderSetupSimplifiedCreationAccuracyLevel, CharacterColliderSetupSimplifiedCreationParams, CharacterColliderSetupUtils } from "../../../character_controller/collision/character_collider_setup_utils.js";
 import { CollisionCheckBridge } from "../../../character_controller/collision/collision_check_bridge.js";
-import { CollisionCheckParams, CollisionRuntimeParams } from "../../../character_controller/collision/legacy/collision_check/collision_params.js";
+import { CollisionCheckParams } from "../../../character_controller/collision/legacy/collision_check/collision_params.js";
 import { NonVRReferenceSpaceMode, PlayerHeadManager, PlayerHeadManagerParams } from "./player_head_manager.js";
 import { PlayerLocomotionMovementRuntimeParams } from "./player_locomotion_movement.js";
 import { PlayerLocomotionRotate, PlayerLocomotionRotateParams } from "./player_locomotion_rotate.js";
@@ -207,7 +207,6 @@ export class PlayerLocomotion {
 
         const movementRuntimeParams = new PlayerLocomotionMovementRuntimeParams();
         movementRuntimeParams.myIsFlying = this._myParams.myStartFlying;
-        movementRuntimeParams.myCollisionRuntimeParams = new CollisionRuntimeParams();
 
         {
             const params = new PlayerHeadManagerParams(this._myParams.myEngine as any);

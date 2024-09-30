@@ -201,6 +201,8 @@ PlayerLocomotionSmooth.prototype.update = function () {
             maxSpeed = this._myParams.myMaxSpeed;
         }
 
+        const collisionRuntimeParams = this._myParams.myPlayerTransformManager.getCollisionRuntimeParams();
+
         if (!axes.vec2_isZero()) {
             this._myStickIdleTimer.start();
 
@@ -215,10 +217,10 @@ PlayerLocomotionSmooth.prototype.update = function () {
                 let movementIntensity = axes.vec2_length();
                 this._myCurrentSpeed = Math.pp_lerp(0, maxSpeed, movementIntensity);
 
-                if (this._myLocomotionRuntimeParams.myCollisionRuntimeParams.myIsSliding && this._myParams.mySpeedSlowDownPercentageOnWallSlid != 1) {
+                if (collisionRuntimeParams.myIsSliding && this._myParams.mySpeedSlowDownPercentageOnWallSlid != 1) {
                     let slowPercentage = this._myParams.mySpeedSlowDownPercentageOnWallSlid;
 
-                    let slidStrength = Math.pp_mapToRange(Math.abs(this._myLocomotionRuntimeParams.myCollisionRuntimeParams.mySlidingMovementAngle), 0, 90, 0, 1);
+                    let slidStrength = Math.pp_mapToRange(Math.abs(collisionRuntimeParams.mySlidingMovementAngle), 0, 90, 0, 1);
                     slowPercentage = Math.pp_lerp(1, slowPercentage, slidStrength);
 
                     this._myCurrentSpeed = this._myCurrentSpeed * slowPercentage;
@@ -263,7 +265,7 @@ PlayerLocomotionSmooth.prototype.update = function () {
         } else if ((this._myParams.myMoveThroughCollisionShortcutEnabled && Globals.isDebugEnabled(this._myParams.myEngine) &&
             Globals.getGamepads(this._myParams.myEngine)[this._myParams.myHandedness].getButtonInfo(GamepadButtonID.THUMBSTICK).isPressed())
             || debugFlyEnabled) {
-            this._myParams.myPlayerTransformManager.move(headMovement, true, this._myLocomotionRuntimeParams.myCollisionRuntimeParams);
+            this._myParams.myPlayerTransformManager.move(headMovement, true);
             if (isManuallyMoving) {
                 this._myParams.myPlayerTransformManager.resetReal();
             }
@@ -281,23 +283,23 @@ PlayerLocomotionSmooth.prototype.update = function () {
                 this._myLocomotionRuntimeParams.myGravitySpeed = 0;
             }
 
-            this._myParams.myPlayerTransformManager.move(headMovement, false, this._myLocomotionRuntimeParams.myCollisionRuntimeParams);
+            this._myParams.myPlayerTransformManager.move(headMovement, false);
             if (isManuallyMoving) {
                 this._myParams.myPlayerTransformManager.resetReal();
 
-                this._myLocomotionRuntimeParams.myCollisionRuntimeParams.myFixedMovement.vec3_removeComponentAlongAxis(
-                    this._myLocomotionRuntimeParams.myCollisionRuntimeParams.myOriginalUp,
+                collisionRuntimeParams.myFixedMovement.vec3_removeComponentAlongAxis(
+                    collisionRuntimeParams.myOriginalUp,
                     this._myLastHorizontalMovement
                 );
             }
 
-            if (this._myLocomotionRuntimeParams.myGravitySpeed > 0 && this._myLocomotionRuntimeParams.myCollisionRuntimeParams.myIsOnCeiling ||
-                this._myLocomotionRuntimeParams.myGravitySpeed < 0 && this._myLocomotionRuntimeParams.myCollisionRuntimeParams.myIsOnGround) {
+            if (this._myLocomotionRuntimeParams.myGravitySpeed > 0 && collisionRuntimeParams.myIsOnCeiling ||
+                this._myLocomotionRuntimeParams.myGravitySpeed < 0 && collisionRuntimeParams.myIsOnGround) {
                 this._myLocomotionRuntimeParams.myGravitySpeed = 0;
             }
         }
 
-        if (this._myLocomotionRuntimeParams.myCollisionRuntimeParams.myIsOnGround) {
+        if (collisionRuntimeParams.myIsOnGround) {
             this._myLocomotionRuntimeParams.myIsFlying = false;
             this._myCurrentDirectionConverter.resetFly();
         }

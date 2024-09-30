@@ -128,7 +128,7 @@ PlayerLocomotionTeleportState.prototype._teleportToPosition = function () {
     let feetTransformQuat = quat2_create();
     let newFeetTransformQuat = quat2_create();
     let newFeetRotationQuat = quat_create();
-    return function _teleportToPosition(teleportPosition, rotationOnUp, collisionRuntimeParams, forceTeleport = false) {
+    return function _teleportToPosition(teleportPosition, rotationOnUp, forceTeleport = false) {
         this._myTeleportAsMovementFailed = false;
 
         playerUp = this._myTeleportParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
@@ -141,6 +141,6 @@ PlayerLocomotionTeleportState.prototype._teleportToPosition = function () {
 
         newFeetTransformQuat.quat2_setPositionRotationQuat(teleportPosition, newFeetRotationQuat);
 
-        this._myTeleportParams.myPlayerTransformManager.teleportTransformQuat(newFeetTransformQuat, forceTeleport, undefined, collisionRuntimeParams);
+        this._myTeleportParams.myPlayerTransformManager.teleportTransformQuat(newFeetTransformQuat, forceTeleport, undefined);
     };
 }();

@@ -502,7 +502,8 @@ export class PlayerTransformManager {
 
     private static readonly _setHeightSV =
         {
-            transformQuat: quat_create()
+            transformQuat: quat_create(),
+            collisionRuntimeParams: new CollisionRuntimeParams()
         };
     public setHeight(height: number, forceSet: boolean = false): void {
         const fixedHeight = Math.pp_clamp(height, this._myParams.myMinHeight ?? undefined, this._myParams.myMaxHeight ?? undefined);
@@ -514,9 +515,11 @@ export class PlayerTransformManager {
         const transformQuat = PlayerTransformManager._setHeightSV.transformQuat;
         this.getTransformQuat(transformQuat);
 
-        CollisionCheckBridge.getCollisionCheck(this._myParams.myEngine as any).positionCheck(true, transformQuat, this._myParams.myMovementCollisionCheckParams, this._myCollisionRuntimeParams);
+        const collisionRuntimeParams = PlayerTransformManager._setHeightSV.collisionRuntimeParams;
+        collisionRuntimeParams.copy(this._myCollisionRuntimeParams);
+        CollisionCheckBridge.getCollisionCheck(this._myParams.myEngine as any).positionCheck(true, transformQuat, this._myParams.myMovementCollisionCheckParams, collisionRuntimeParams);
 
-        if (this._myCollisionRuntimeParams.myIsPositionOk || forceSet) {
+        if (collisionRuntimeParams.myIsPositionOk || forceSet) {
             this.getPlayerHeadManager().setHeightHead(this.getHeight(), true);
         } else {
             this._myValidHeight = previousHeight;
@@ -807,7 +810,15 @@ export class PlayerTransformManager {
         return this._myHeadCollisionCheckParams!;
     }
 
-    public collisionCheckParamsUpdated(): void {
+    /**
+     * This should be used anytime the movement `CollisionCheckParams` are updated,
+     * so that the other `CollisionCheckParams` are synced with that (if needed)
+     * 
+     * The head `CollisionCheckParams` are another set of params which are not synced automatically
+     * If you want to apply some changes made to the movement params to the head ones too, for example
+     * a new object to ignore, you need to also manually update them
+     */
+    public movementCollisionCheckParamsUpdated(): void {
         if (this._myParams.myTeleportCollisionCheckParamsCopyFromMovement) {
             this._generateTeleportParamsFromMovementParams();
         }

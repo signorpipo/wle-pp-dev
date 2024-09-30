@@ -101,11 +101,11 @@ export class PlayerLocomotionTeleportTeleportState extends PlayerLocomotionTelep
 
     completeTeleport() {
         this._myFSM.perform("stop");
-        this._teleportToPosition(this._myTeleportRuntimeParams.myTeleportPosition, this._myTeleportRuntimeParams.myTeleportRotationOnUp, this._myLocomotionRuntimeParams.myCollisionRuntimeParams);
+        this._teleportToPosition(this._myTeleportRuntimeParams.myTeleportPosition, this._myTeleportRuntimeParams.myTeleportRotationOnUp);
     }
 
     _instantUpdate(dt, fsm) {
-        this._teleportToPosition(this._myTeleportRuntimeParams.myTeleportPosition, this._myTeleportRuntimeParams.myTeleportRotationOnUp, this._myLocomotionRuntimeParams.myCollisionRuntimeParams);
+        this._teleportToPosition(this._myTeleportRuntimeParams.myTeleportPosition, this._myTeleportRuntimeParams.myTeleportRotationOnUp);
         this._myLocomotionRuntimeParams.myTeleportJustPerformed = true;
         fsm.perform("done");
     }

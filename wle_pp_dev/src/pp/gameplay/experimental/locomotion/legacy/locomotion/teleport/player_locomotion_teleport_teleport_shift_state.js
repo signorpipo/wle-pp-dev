@@ -95,7 +95,7 @@ export class PlayerLocomotionTeleportTeleportShiftState extends PlayerLocomotion
         this._myTeleportParams.myPlayerTransformManager.getParams().mySyncPositionDisabled = false;
         this._myLocomotionRuntimeParams.myIsTeleporting = false;
         this._myLocomotionRuntimeParams.myTeleportJustPerformed = true;
-        this._teleportToPosition(this._myTeleportRuntimeParams.myTeleportPosition, this._myStartRotationOnUp - this._myCurrentRotationOnUp, this._myLocomotionRuntimeParams.myCollisionRuntimeParams);
+        this._teleportToPosition(this._myTeleportRuntimeParams.myTeleportPosition, this._myStartRotationOnUp - this._myCurrentRotationOnUp);
     }
 
     _shiftingUpdate(dt, fsm) {
@@ -143,7 +143,7 @@ PlayerLocomotionTeleportTeleportShiftState.prototype._shiftingUpdate = function 
                 this._myCurrentRotationOnUp = newCurrentRotationOnUp;
             }
 
-            this._teleportToPosition(newFeetPosition, rotationOnUp, this._myLocomotionRuntimeParams.myCollisionRuntimeParams, true);
+            this._teleportToPosition(newFeetPosition, rotationOnUp, true);
         }
     };
 }();

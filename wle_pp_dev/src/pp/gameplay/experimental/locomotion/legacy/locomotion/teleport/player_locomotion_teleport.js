@@ -136,7 +136,7 @@ export class PlayerLocomotionTeleport extends PlayerLocomotionMovement {
             this._applyGravity(dt);
         }
 
-        if (this._myLocomotionRuntimeParams.myCollisionRuntimeParams.myIsOnGround) {
+        if (this._myTeleportParams.myPlayerTransformManager.getCollisionRuntimeParams().myIsOnGround) {
             this._myLocomotionRuntimeParams.myIsFlying = false;
         }
     }
@@ -261,10 +261,11 @@ PlayerLocomotionTeleport.prototype._applyGravity = function () {
             this._myLocomotionRuntimeParams.myGravitySpeed = 0;
         }
 
-        this._myTeleportParams.myPlayerTransformManager.move(gravityMovement, false, this._myLocomotionRuntimeParams.myCollisionRuntimeParams);
+        this._myTeleportParams.myPlayerTransformManager.move(gravityMovement, false);
 
-        if (this._myLocomotionRuntimeParams.myGravitySpeed > 0 && this._myLocomotionRuntimeParams.myCollisionRuntimeParams.myIsOnCeiling ||
-            this._myLocomotionRuntimeParams.myGravitySpeed < 0 && this._myLocomotionRuntimeParams.myCollisionRuntimeParams.myIsOnGround) {
+        const collisionRuntimeParams = this._myTeleportParams.myPlayerTransformManager.getCollisionRuntimeParams();
+        if (this._myLocomotionRuntimeParams.myGravitySpeed > 0 && collisionRuntimeParams.myIsOnCeiling ||
+            this._myLocomotionRuntimeParams.myGravitySpeed < 0 && collisionRuntimeParams.myIsOnGround) {
             this._myLocomotionRuntimeParams.myGravitySpeed = 0;
         }
     };
