@@ -4,7 +4,7 @@ import { XRUtils } from "../../../../../../cauldron/utils/xr_utils.js";
 import { Handedness } from "../../../../../../input/cauldron/input_types.js";
 import { MouseButtonID } from "../../../../../../input/cauldron/mouse.js";
 import { GamepadAxesID } from "../../../../../../input/gamepad/gamepad_buttons.js";
-import { vec3_create } from "../../../../../../plugin/js/extensions/array/vec_create_extension.js";
+import { quat_create, vec3_create } from "../../../../../../plugin/js/extensions/array/vec_create_extension.js";
 import { Globals } from "../../../../../../pp/globals.js";
 import { PlayerLocomotionMovement } from "../player_locomotion_movement.js";
 import { PlayerLocomotionTeleportDetectionParams, PlayerLocomotionTeleportDetectionState } from "./player_locomotion_teleport_detection_state.js";
@@ -14,7 +14,6 @@ import { PlayerLocomotionTeleportTeleportParams, PlayerLocomotionTeleportTelepor
 export class PlayerLocomotionTeleportParams {
 
     constructor(engine = Globals.getMainEngine()) {
-        this.myPlayerHeadManager = null;
         this.myPlayerTransformManager = null;
 
         this.myDetectionParams = new PlayerLocomotionTeleportDetectionParams();
@@ -241,12 +240,13 @@ export class PlayerLocomotionTeleport extends PlayerLocomotionMovement {
 // IMPLEMENTATION
 
 PlayerLocomotionTeleport.prototype._applyGravity = function () {
+    let playerRotationQuat = quat_create();
     let playerUp = vec3_create();
     let gravityMovement = vec3_create();
     return function _applyGravity(dt) {
         // If gravity is zero it's still important to move to remain snapped and gather proper surface data even when not teleporting
 
-        playerUp = this._myTeleportParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
+        playerUp = this._myTeleportParams.myPlayerTransformManager.getRotationQuat(playerRotationQuat).quat_getUp(playerUp);
 
         gravityMovement.vec3_zero();
         if (!this._myLocomotionRuntimeParams.myIsFlying && !this._myLocomotionRuntimeParams.myIsTeleporting) {

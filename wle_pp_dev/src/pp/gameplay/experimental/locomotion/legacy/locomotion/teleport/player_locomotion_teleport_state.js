@@ -113,17 +113,15 @@ PlayerLocomotionTeleportState.prototype._checkTeleportAsMovement = function () {
 
 PlayerLocomotionTeleportState.prototype._teleportToPosition = function () {
     let playerUp = vec3_create();
-    let feetTransformQuat = quat2_create();
     let newFeetTransformQuat = quat2_create();
     let newFeetRotationQuat = quat_create();
     return function _teleportToPosition(teleportPosition, rotationOnUp, forceTeleport = false) {
         this._myTeleportAsMovementFailed = false;
 
-        playerUp = this._myTeleportParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
+        this._myTeleportParams.myPlayerTransformManager.getRotationRealQuat(newFeetRotationQuat);
 
-        feetTransformQuat = this._myTeleportParams.myPlayerHeadManager.getTransformFeetQuat(feetTransformQuat);
-        newFeetRotationQuat = feetTransformQuat.quat2_getRotationQuat(newFeetRotationQuat);
         if (rotationOnUp != 0) {
+            newFeetRotationQuat.quat_getUp(playerUp);
             newFeetRotationQuat = newFeetRotationQuat.quat_rotateAxis(rotationOnUp, playerUp, newFeetRotationQuat);
         }
 

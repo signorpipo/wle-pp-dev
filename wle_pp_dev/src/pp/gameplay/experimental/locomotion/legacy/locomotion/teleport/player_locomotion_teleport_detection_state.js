@@ -200,12 +200,13 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionNonVR = 
     let mousePosition = vec3_create();
     let mouseDirection = vec3_create();
 
+    let playerRotationQuat = quat_create();
     let playerUp = vec3_create();
     return function _detectTeleportPositionNonVR(dt) {
         this._myDetectionRuntimeParams.myTeleportPositionValid = false;
         this._myDetectionRuntimeParams.myTeleportDetectionValid = true;
 
-        playerUp = this._myTeleportParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
+        playerUp = this._myTeleportParams.myPlayerTransformManager.getRotationRealQuat(playerRotationQuat).quat_getUp(playerUp);
 
         Globals.getMouse(this._myTeleportParams.myEngine).getOriginWorld(mousePosition);
         Globals.getMouse(this._myTeleportParams.myEngine).getDirectionWorld(mouseDirection);
@@ -221,6 +222,7 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionVR = fun
     let teleportStartPosition = vec3_create();
     let teleportDirection = vec3_create();
 
+    let playerRotationQuat = quat_create();
     let playerUp = vec3_create();
     let playerUpNegate = vec3_create();
     return function _detectTeleportPositionVR(dt) {
@@ -241,7 +243,7 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionVR = fun
         teleportStartPosition = teleportStartTransformWorld.quat2_getPosition(teleportStartPosition);
         teleportDirection = teleportStartTransformWorld.quat2_getForward(teleportDirection);
 
-        playerUp = this._myTeleportParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
+        playerUp = this._myTeleportParams.myPlayerTransformManager.getRotationRealQuat(playerRotationQuat).quat_getUp(playerUp);
         playerUpNegate = playerUp.vec3_negate(playerUpNegate);
 
         if (teleportDirection.vec3_angle(playerUp) >= this._myTeleportParams.myDetectionParams.myParableForwardMinAngleToBeValidUp &&
@@ -602,6 +604,7 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportRotationVR = fun
 }();
 
 PlayerLocomotionTeleportDetectionState.prototype._isTeleportHitValid = function () {
+    let playerRotationQuat = quat_create();
     let playerUp = vec3_create();
     return function _isTeleportHitValid(hit, rotationOnUp, checkTeleportCollisionRuntimeParams) {
         let isValid = false;
@@ -609,7 +612,7 @@ PlayerLocomotionTeleportDetectionState.prototype._isTeleportHitValid = function 
         this._myTeleportAsMovementFailed = false;
 
         if (hit.isValid() && !hit.myInsideCollision) {
-            playerUp = this._myTeleportParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
+            playerUp = this._myTeleportParams.myPlayerTransformManager.getRotationRealQuat(playerRotationQuat).quat_getUp(playerUp);
 
             // #TODO is hitValidEvenWhenNotConcordant needed or was it a debug that should be removed?
             let hitValidEvenWhenNotConcordant = true;
@@ -637,7 +640,7 @@ PlayerLocomotionTeleportDetectionState.prototype._isTeleportPositionValid = func
         let positionVisible = this._isTeleportPositionVisible(teleportPosition);
 
         if (positionVisible) {
-            this._myTeleportParams.myPlayerTransformManager.getRotationQuat(teleportRotationQuat);
+            this._myTeleportParams.myPlayerTransformManager.getRotationRealQuat(teleportRotationQuat);
             teleportRotationQuat.quat_getUp(playerUp);
             if (rotationOnUp != 0) {
                 teleportRotationQuat.quat_rotateAxis(rotationOnUp, playerUp, teleportRotationQuat);
@@ -681,6 +684,7 @@ PlayerLocomotionTeleportDetectionState.prototype._isTeleportPositionValid = func
 }();
 
 PlayerLocomotionTeleportDetectionState.prototype._isTeleportPositionVisible = function () {
+    let playerRotationQuat = quat_create();
     let playerUp = vec3_create();
 
     let offsetFeetTeleportPosition = vec3_create();
@@ -692,13 +696,13 @@ PlayerLocomotionTeleportDetectionState.prototype._isTeleportPositionVisible = fu
             this._myTeleportParams.myDetectionParams.myTeleportHeadPositionMustBeVisible ||
             this._myTeleportParams.myDetectionParams.myTeleportHeadOrFeetPositionMustBeVisible) {
 
-            playerUp = this._myTeleportParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
+            playerUp = this._myTeleportParams.myPlayerTransformManager.getRotationRealQuat(playerRotationQuat).quat_getUp(playerUp);
             let isHeadVisible = false;
             let isFeetVisible = false;
 
             if (this._myTeleportParams.myDetectionParams.myTeleportHeadOrFeetPositionMustBeVisible ||
                 this._myTeleportParams.myDetectionParams.myTeleportHeadPositionMustBeVisible) {
-                let headheight = this._myTeleportParams.myPlayerHeadManager.getHeightHead();
+                let headheight = this._myTeleportParams.myPlayerTransformManager.getHeightReal();
                 headTeleportPosition = teleportPosition.vec3_add(playerUp.vec3_scale(headheight, headTeleportPosition), headTeleportPosition);
                 isHeadVisible = this._isPositionVisible(headTeleportPosition);
             } else {
@@ -725,7 +729,6 @@ PlayerLocomotionTeleportDetectionState.prototype._isTeleportPositionVisible = fu
 }();
 
 PlayerLocomotionTeleportDetectionState.prototype._isPositionVisible = function () {
-    let playerUp = vec3_create();
     let standardUp = vec3_create(0, 1, 0);
     let standardUpNegated = vec3_create(0, -1, 0);
     let standardForward = vec3_create(0, 0, 1);
@@ -744,10 +747,7 @@ PlayerLocomotionTeleportDetectionState.prototype._isPositionVisible = function (
     return function _isPositionVisible(position) {
         let isVisible = true;
 
-        playerUp = this._myTeleportParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
-
-        let currentHead = this._myTeleportParams.myPlayerHeadManager.getHead();
-        headPosition = currentHead.pp_getPosition(headPosition);
+        this._myTeleportParams.myPlayerTransformManager.getPositionHeadReal(headPosition);
         direction = position.vec3_sub(headPosition, direction).vec3_normalize(direction);
 
         referenceUp.vec3_copy(standardUp);

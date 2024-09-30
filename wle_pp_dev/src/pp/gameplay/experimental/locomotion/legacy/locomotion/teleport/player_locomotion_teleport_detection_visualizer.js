@@ -303,6 +303,7 @@ PlayerLocomotionTeleportDetectionVisualizer.prototype._showTeleportParable = fun
     let currentPosition = vec3_create();
     let nextPosition = vec3_create();
 
+    let playerRotationQuat = quat_create();
     let playerUp = vec3_create();
     let upDifference = vec3_create();
     return function _showTeleportParable(dt) {
@@ -364,7 +365,7 @@ PlayerLocomotionTeleportDetectionVisualizer.prototype._showTeleportParable = fun
         unusedVisualPoint.setVisible(false);
 
         if (this._myDetectionRuntimeParams.myTeleportPositionValid) {
-            playerUp = this._myTeleportParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
+            playerUp = this._myTeleportParams.myPlayerTransformManager.getRotationRealQuat(playerRotationQuat).quat_getUp(playerUp);
 
             upDifference = nextPosition.vec3_sub(this._myTeleportRuntimeParams.myTeleportPosition, upDifference).vec3_componentAlongAxis(playerUp, upDifference);
             let upDistance = upDifference.vec3_length();
@@ -407,7 +408,6 @@ PlayerLocomotionTeleportDetectionVisualizer.prototype._showTeleportParable = fun
 
 PlayerLocomotionTeleportDetectionVisualizer.prototype._showTeleportParablePosition = function () {
     let playerUp = vec3_create();
-    let feetTransformQuat = quat2_create();
     let feetRotationQuat = quat_create();
 
     let parableFirstPosition = vec3_create();
@@ -424,9 +424,8 @@ PlayerLocomotionTeleportDetectionVisualizer.prototype._showTeleportParablePositi
     let differenceRotationQuat = quat_create();
 
     return function _showTeleportParablePosition(dt) {
-        playerUp = this._myTeleportParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
-        feetTransformQuat = this._myTeleportParams.myPlayerHeadManager.getTransformFeetQuat(feetTransformQuat);
-        feetRotationQuat = feetTransformQuat.quat2_getRotationQuat(feetRotationQuat);
+        this._myTeleportParams.myPlayerTransformManager.getRotationRealQuat(feetRotationQuat);
+        feetRotationQuat.quat_getUp(playerUp);
         feetRotationQuat = feetRotationQuat.quat_rotateAxis(this._myTeleportRuntimeParams.myTeleportRotationOnUp, playerUp, feetRotationQuat);
 
         visualPosition = this._myTeleportRuntimeParams.myTeleportPosition.vec3_add(playerUp.vec3_scale(this._myTeleportParams.myVisualizerParams.myTeleportParablePositionUpOffset, visualPosition), visualPosition);

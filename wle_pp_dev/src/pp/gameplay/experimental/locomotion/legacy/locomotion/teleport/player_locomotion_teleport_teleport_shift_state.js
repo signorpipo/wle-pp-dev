@@ -62,7 +62,7 @@ export class PlayerLocomotionTeleportTeleportShiftState extends PlayerLocomotion
         this._myTeleportParams.myPlayerTransformManager.getParams().mySyncPositionDisabled = true;
 
         this._myLocomotionRuntimeParams.myIsTeleporting = true;
-        this._myFeetStartPosition = this._myTeleportParams.myPlayerHeadManager.getPositionFeet(this._myFeetStartPosition);
+        this._myFeetStartPosition = this._myTeleportParams.myPlayerTransformManager.getPositionReal(this._myFeetStartPosition);
 
         this._myShiftMovementTimer.start(this._myTeleportParams.myTeleportParams.myShiftMovementSeconds);
 
