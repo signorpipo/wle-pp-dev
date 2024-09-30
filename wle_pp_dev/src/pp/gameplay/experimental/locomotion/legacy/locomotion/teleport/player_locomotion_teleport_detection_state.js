@@ -627,8 +627,7 @@ PlayerLocomotionTeleportDetectionState.prototype._isTeleportHitValid = function 
 
 PlayerLocomotionTeleportDetectionState.prototype._isTeleportPositionValid = function () {
     let playerUp = vec3_create();
-    let feetTransformQuat = quat2_create();
-    let feetRotationQuat = quat_create();
+    let teleportRotationQuat = quat_create();
     let feetPosition = vec3_create();
     let differenceOnUpVector = vec3_create();
     let teleportCheckCollisionRuntimeParams = new CollisionRuntimeParams();
@@ -638,14 +637,10 @@ PlayerLocomotionTeleportDetectionState.prototype._isTeleportPositionValid = func
         let positionVisible = this._isTeleportPositionVisible(teleportPosition);
 
         if (positionVisible) {
-            playerUp = this._myTeleportParams.myPlayerHeadManager.getPlayer().pp_getUp(playerUp);
-
-            feetTransformQuat = this._myTeleportParams.myPlayerHeadManager.getTransformFeetQuat(feetTransformQuat);
-            feetPosition = feetTransformQuat.quat2_getPosition(feetPosition);
+            this._myTeleportParams.myPlayerTransformManager.getRotationQuat(teleportRotationQuat);
+            teleportRotationQuat.quat_getUp(playerUp);
             if (rotationOnUp != 0) {
-                feetRotationQuat = feetTransformQuat.quat2_getRotationQuat(feetRotationQuat);
-                feetRotationQuat = feetRotationQuat.quat_rotateAxis(rotationOnUp, playerUp, feetRotationQuat);
-                feetTransformQuat.quat2_setPositionRotationQuat(feetPosition, feetRotationQuat);
+                teleportRotationQuat.quat_rotateAxis(rotationOnUp, playerUp, teleportRotationQuat);
             }
 
             let differenceOnUp = teleportPosition.vec3_sub(feetPosition, differenceOnUpVector).vec3_componentAlongAxis(playerUp, differenceOnUpVector).vec3_length();
@@ -655,9 +650,9 @@ PlayerLocomotionTeleportDetectionState.prototype._isTeleportPositionValid = func
                 teleportCheckCollisionRuntimeParams.copy(this._myTeleportParams.myPlayerTransformManager.getCollisionRuntimeParams());
 
                 if (!this._myTeleportParams.myPerformTeleportAsMovement) {
-                    this._checkTeleport(teleportPosition, feetTransformQuat, teleportCheckCollisionRuntimeParams, checkTeleportCollisionRuntimeParams);
+                    this._checkTeleport(teleportPosition, teleportRotationQuat, teleportCheckCollisionRuntimeParams, checkTeleportCollisionRuntimeParams);
                 } else {
-                    this._checkTeleportAsMovement(teleportPosition, feetTransformQuat, teleportCheckCollisionRuntimeParams, checkTeleportCollisionRuntimeParams);
+                    this._checkTeleportAsMovement(teleportPosition, teleportRotationQuat, teleportCheckCollisionRuntimeParams, checkTeleportCollisionRuntimeParams);
                 }
 
                 if (!teleportCheckCollisionRuntimeParams.myTeleportCanceled) {

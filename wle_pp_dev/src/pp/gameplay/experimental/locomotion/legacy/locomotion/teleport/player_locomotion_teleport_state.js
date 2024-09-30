@@ -34,11 +34,10 @@ export class PlayerLocomotionTeleportState {
 
 PlayerLocomotionTeleportState.prototype._checkTeleport = function () {
     let teleportTransformQuat = quat2_create();
-    return function _checkTeleport(teleportPosition, feetTransformQuat, collisionRuntimeParams, checkTeleportCollisionRuntimeParams = null) {
-        teleportTransformQuat.quat2_copy(feetTransformQuat);
-        teleportTransformQuat.quat2_setPosition(teleportPosition);
+    return function _checkTeleport(teleportPosition, teleportRotationQuat, collisionRuntimeParams, checkTeleportCollisionRuntimeParams = null) {
+        teleportTransformQuat.quat2_setPositionRotationQuat(teleportPosition, teleportRotationQuat);
 
-        this._myTeleportParams.myPlayerTransformManager.checkTeleportToTransformQuat(teleportTransformQuat, feetTransformQuat, undefined, collisionRuntimeParams);
+        this._myTeleportParams.myPlayerTransformManager.checkTeleportToTransformQuat(teleportTransformQuat, undefined, this._myTeleportCollisionCheckParams, collisionRuntimeParams);
 
         if (checkTeleportCollisionRuntimeParams != null) {
             checkTeleportCollisionRuntimeParams.copy(collisionRuntimeParams);
@@ -49,11 +48,7 @@ PlayerLocomotionTeleportState.prototype._checkTeleport = function () {
 PlayerLocomotionTeleportState.prototype._checkTeleportAsMovement = function () {
     let checkTeleportMovementCollisionRuntimeParams = new CollisionRuntimeParams();
     let feetRotationQuat = quat_create();
-    let feetPosition = vec3_create();
-    let feetUp = vec3_create();
-    let teleportFeetForward = vec3_create();
-    let teleportFeetRotationQuat = quat_create();
-    let teleportFeetTransformQuat = quat2_create();
+    let playerUp = vec3_create();
 
     let currentFeetPosition = vec3_create();
     let fixedTeleportPosition = vec3_create();
@@ -62,47 +57,35 @@ PlayerLocomotionTeleportState.prototype._checkTeleportAsMovement = function () {
     let extraVerticalMovement = vec3_create();
     let movementToTeleportPosition = vec3_create();
     let movementFeetTransformQuat = quat2_create();
-    return function _checkTeleportAsMovement(teleportPosition, feetTransformQuat, collisionRuntimeParams, checkTeleportCollisionRuntimeParams) {
-        feetPosition = feetTransformQuat.quat2_getPosition(feetPosition);
-        feetRotationQuat = feetTransformQuat.quat2_getRotationQuat(feetRotationQuat);
+    return function _checkTeleportAsMovement(teleportPosition, teleportRotationQuat, collisionRuntimeParams, checkTeleportCollisionRuntimeParams) {
+        checkTeleportMovementCollisionRuntimeParams.copy(collisionRuntimeParams);
 
-        // First try a normal teleport
-        feetUp = feetRotationQuat.quat_getUp(feetUp);
-        teleportFeetForward = teleportPosition.vec3_sub(feetPosition, teleportFeetForward).vec3_removeComponentAlongAxis(feetUp, teleportFeetForward);
-        teleportFeetForward.vec3_normalize(teleportFeetForward);
-        if (teleportFeetForward.vec3_isZero(0.00001)) {
-            teleportFeetForward = feetRotationQuat.quat_getForward(teleportFeetForward);
-        }
-
-        teleportFeetRotationQuat.quat_setUp(feetUp, teleportFeetForward);
-        teleportFeetTransformQuat.quat2_setPositionRotationQuat(feetPosition, teleportFeetRotationQuat);
-
-        this._checkTeleport(teleportPosition, teleportFeetTransformQuat, collisionRuntimeParams, checkTeleportCollisionRuntimeParams);
+        this._checkTeleport(teleportPosition, teleportRotationQuat, collisionRuntimeParams, checkTeleportCollisionRuntimeParams);
 
         // If teleport is ok then we can check movement knowing we have to move toward the teleported position (which has also snapped/fixed the position)
         if (!collisionRuntimeParams.myTeleportCanceled) {
             let teleportMovementValid = false;
 
-            checkTeleportMovementCollisionRuntimeParams.copy(collisionRuntimeParams);
             fixedTeleportPosition.vec3_copy(collisionRuntimeParams.myNewPosition);
-            currentFeetPosition.vec3_copy(feetPosition);
+            this._myTeleportParams.myPlayerTransformManager.getPosition(currentFeetPosition);
+
             for (let i = 0; i < this._myTeleportParams.myTeleportAsMovementMaxSteps; i++) {
                 teleportMovement = fixedTeleportPosition.vec3_sub(currentFeetPosition, teleportMovement);
 
                 if (this._myTeleportParams.myTeleportAsMovementRemoveVerticalMovement) {
-                    teleportMovement = teleportMovement.vec3_removeComponentAlongAxis(feetUp, teleportMovement);
+                    teleportMovement = teleportMovement.vec3_removeComponentAlongAxis(playerUp, teleportMovement);
                 }
 
                 if (this._myTeleportParams.myTeleportAsMovementExtraVerticalMovementPerMeter != 0) {
                     let meters = teleportMovement.vec3_length();
                     let extraVerticalMovementValue = meters * this._myTeleportParams.myTeleportAsMovementExtraVerticalMovementPerMeter;
-                    extraVerticalMovement = feetUp.vec3_scale(extraVerticalMovementValue, extraVerticalMovement);
+                    extraVerticalMovement = playerUp.vec3_scale(extraVerticalMovementValue, extraVerticalMovement);
                     teleportMovement = teleportMovement.vec3_add(extraVerticalMovement, teleportMovement);
                 }
 
                 movementFeetTransformQuat.quat2_setPositionRotationQuat(currentFeetPosition, feetRotationQuat);
 
-                this._myTeleportParams.myPlayerTransformManager.checkMovement(teleportMovement, movementFeetTransformQuat, undefined, checkTeleportMovementCollisionRuntimeParams);
+                this._myTeleportParams.myPlayerTransformManager.checkMovement(teleportMovement, movementFeetTransformQuat, this._myTeleportCollisionCheckParams, checkTeleportMovementCollisionRuntimeParams);
 
                 if (!checkTeleportMovementCollisionRuntimeParams.myHorizontalMovementCanceled && !checkTeleportMovementCollisionRuntimeParams.myVerticalMovementCanceled) {
                     movementToTeleportPosition = fixedTeleportPosition.vec3_sub(checkTeleportMovementCollisionRuntimeParams.myNewPosition, movementToTeleportPosition);
