@@ -729,11 +729,15 @@ PlayerLocomotionTeleportDetectionState.prototype._isTeleportPositionVisible = fu
 }();
 
 PlayerLocomotionTeleportDetectionState.prototype._isPositionVisible = function () {
+    let playerRotationQuat = quat_create();
+    let playerUp = vec3_create();
+    let playerPosition = vec3_create();
+    let headPosition = vec3_create();
+
     let standardUp = vec3_create(0, 1, 0);
     let standardUpNegated = vec3_create(0, -1, 0);
     let standardForward = vec3_create(0, 0, 1);
     let referenceUp = vec3_create();
-    let headPosition = vec3_create();
     let direction = vec3_create();
     let fixedRight = vec3_create();
     let fixedForward = vec3_create();
@@ -747,7 +751,11 @@ PlayerLocomotionTeleportDetectionState.prototype._isPositionVisible = function (
     return function _isPositionVisible(position) {
         let isVisible = true;
 
-        this._myTeleportParams.myPlayerTransformManager.getPositionHeadReal(headPosition);
+        playerUp = this._myTeleportParams.myPlayerTransformManager.getRotationQuat(playerRotationQuat).quat_getUp(playerUp);
+        this._myTeleportParams.myPlayerTransformManager.getPosition(playerPosition);
+        let headheight = this._myTeleportParams.myPlayerTransformManager.getHeight();
+        playerPosition.vec3_add(playerUp.vec3_scale(headheight, headPosition), headPosition);
+
         direction = position.vec3_sub(headPosition, direction).vec3_normalize(direction);
 
         referenceUp.vec3_copy(standardUp);
