@@ -16,11 +16,11 @@ export class PlayerLocomotionTeleportTeleportParams {
     constructor() {
         this.myTeleportType = PlayerLocomotionTeleportTeleportType.SHIFT;
 
-        this.myBlinkFadeOutSeconds = 0.1;
-        this.myBlinkFadeInSeconds = 0.1;
+        this.myBlinkFadeOutSeconds = 0.2;
+        this.myBlinkFadeInSeconds = 0.2;
         this.myBlinkWaitSeconds = 0.1;
         this.myBlinkSphereColor = vec3_create();
-        this.myBlinkSphereScale = 0.1;
+        this.myBlinkSphereScale = 0.5;
 
         this.myShiftMovementSeconds = 0.15;
         this.myShiftMovementSecondsMultiplierOverDistanceFunction = null;
