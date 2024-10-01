@@ -327,7 +327,6 @@ export class PlayerLocomotion {
         {
             const params = new PlayerLocomotionRotateParams(this._myParams.myEngine as any);
 
-            params.myPlayerHeadManager = this._myPlayerHeadManager;
             params.myPlayerTransformManager = this._myPlayerTransformManager;
 
             params.myMaxRotationSpeed = this._myParams.myMaxRotationSpeed;
