@@ -27,6 +27,8 @@ export class PlayerObscureManagerParams {
 
         this.myObscureFadeEasingFunction = EasingFunction.linear;
 
+        this.myObscureIfPositionHeadNotValid = false;
+
         this.myDistanceToStartObscureWhenHeadColliding = 0;
         this.myDistanceToStartObscureWhenBodyColliding = 0;
         this.myDistanceToStartObscureWhenFloating = 0;
@@ -325,12 +327,15 @@ export class PlayerObscureManager {
                 // For example if u stand up and go with the head in the ceiling and reset by moving
                 // Add a setting for this though, since someone could prefer being able to see in this case,
                 // so to be able to know where to move (since it might be resetting to this invalid position)
-                if (this._myParams.myPlayerTransformManager.isHeadColliding() || !this._myParams.myPlayerTransformManager.isPositionHeadValid()) {
+                if (!this._myParams.myPlayerTransformManager.isPositionHeadValid() && this._myParams.myObscureIfPositionHeadNotValid) {
+                    let targetObscureLevel = this._myParams.myObscureLevelRelativeDistanceEasingFunction(1);
+                    this._myTargetObscureLevel = Math.max(this._myTargetObscureLevel, targetObscureLevel);
+                } else if (this._myParams.myPlayerTransformManager.isHeadColliding()) {
                     let distance = this._myParams.myPlayerTransformManager.getDistanceToRealHead();
                     let relativeDistance = distance - this._myParams.myDistanceToStartObscureWhenHeadColliding;
                     if (relativeDistance >= 0) {
                         let relativeDistancePercentage = Math.pp_clamp(relativeDistance / this._myParams.myRelativeDistanceToMaxObscureWhenHeadColliding, 0, 1);
-                        if (isNaN(relativeDistancePercentage) || !this._myParams.myPlayerTransformManager.isPositionHeadValid()) {
+                        if (isNaN(relativeDistancePercentage)) {
                             relativeDistancePercentage = 1;
                         }
                         let targetObscureLevel = this._myParams.myObscureLevelRelativeDistanceEasingFunction(relativeDistancePercentage);

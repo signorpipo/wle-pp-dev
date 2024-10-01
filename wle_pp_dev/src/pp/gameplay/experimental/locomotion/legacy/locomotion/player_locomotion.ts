@@ -415,6 +415,13 @@ export class PlayerLocomotion {
 
                 params.myDetectionParams.myVisibilityBlockLayerFlags.copy(params.myDetectionParams.myTeleportBlockLayerFlags);
 
+                params.myDetectionParams.myPlayerTransformManagerMustBeSyncedFlagMap.set(PlayerTransformManagerSyncFlag.HEAD_COLLIDING, false);
+
+                params.myDetectionParams.myPositionRealMaxDistance = 0.4;
+                params.myDetectionParams.myPositionHeadRealMaxDistance = 0.03;
+
+                params.myDetectionParams.myPositionHeadMustBeValid = true;
+
                 params.myTeleportParams.myTeleportType = this._myParams.myTeleportType;
 
                 params.myVisualizerParams.myTeleportPositionObject = this._myParams.myTeleportPositionObject;
@@ -454,6 +461,8 @@ export class PlayerLocomotion {
 
                 params.myObscureFadeEasingFunction = EasingFunction.linear;
                 params.myObscureLevelRelativeDistanceEasingFunction = EasingFunction.linear;
+
+                params.myObscureIfPositionHeadNotValid = true;
 
                 params.myDistanceToStartObscureWhenBodyColliding = 0.75;
                 params.myDistanceToStartObscureWhenHeadColliding = 0;

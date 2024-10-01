@@ -8,6 +8,7 @@ import { GamepadAxesID, GamepadButtonID } from "../../../../../../input/gamepad/
 import { quat2_create, quat_create, vec3_create, vec4_create } from "../../../../../../plugin/js/extensions/array/vec_create_extension.js";
 import { Globals } from "../../../../../../pp/globals.js";
 import { CollisionRuntimeParams } from "../../../../character_controller/collision/legacy/collision_check/collision_params.js";
+import { PlayerTransformManagerSyncFlag } from "../player_transform_manager.js";
 import { PlayerLocomotionTeleportDetectionVisualizer } from "./player_locomotion_teleport_detection_visualizer.js";
 import { PlayerLocomotionTeleportParable } from "./player_locomotion_teleport_parable.js";
 import { PlayerLocomotionTeleportState } from "./player_locomotion_teleport_state.js";
@@ -56,6 +57,17 @@ export class PlayerLocomotionTeleportDetectionParams {
         this.myVisibilityCheckCircumferenceStepAmount = 1;
         this.myVisibilityCheckCircumferenceRotationPerStep = 30;
         this.myVisibilityBlockLayerFlags = new PhysicsLayerFlags();
+
+        this.myPlayerTransformManagerMustBeSyncedFlagMap = new Map();
+        this.myPlayerTransformManagerMustBeSyncedFlagMap.set(PlayerTransformManagerSyncFlag.BODY_COLLIDING, false);
+        this.myPlayerTransformManagerMustBeSyncedFlagMap.set(PlayerTransformManagerSyncFlag.HEAD_COLLIDING, false);
+        this.myPlayerTransformManagerMustBeSyncedFlagMap.set(PlayerTransformManagerSyncFlag.FAR, false);
+        this.myPlayerTransformManagerMustBeSyncedFlagMap.set(PlayerTransformManagerSyncFlag.FLOATING, false);
+
+        this.myPositionRealMaxDistance = null;
+        this.myPositionHeadRealMaxDistance = null;
+
+        this.myPositionHeadMustBeValid = false;
     }
 }
 
@@ -166,6 +178,18 @@ export class PlayerLocomotionTeleportDetectionState extends PlayerLocomotionTele
             this._myTeleportRuntimeParams.myTeleportRotationOnUp = 0;
             this._myTeleportRotationOnUpNext = 0;
             this._detectTeleportPositionNonVR();
+        }
+
+        if (!this._myTeleportParams.myPlayerTransformManager.isSynced(this._myTeleportParams.myDetectionParams.myPlayerTransformManagerMustBeSyncedFlagMap)) {
+            this._myDetectionRuntimeParams.myTeleportPositionValid = false;
+        } else if (this._myTeleportParams.myDetectionParams.myPositionRealMaxDistance != null && this._myTeleportParams.myPlayerTransformManager.isBodyColliding() &&
+            this._myTeleportParams.myPlayerTransformManager.getDistanceToReal() > this._myTeleportParams.myDetectionParams.myPositionRealMaxDistance) {
+            this._myDetectionRuntimeParams.myTeleportPositionValid = false;
+        } else if (this._myTeleportParams.myDetectionParams.myPositionHeadRealMaxDistance != null && this._myTeleportParams.myPlayerTransformManager.isHeadColliding() &&
+            this._myTeleportParams.myPlayerTransformManager.getDistanceToRealHead() > this._myTeleportParams.myDetectionParams.myPositionHeadRealMaxDistance) {
+            this._myDetectionRuntimeParams.myTeleportPositionValid = false;
+        } else if (!this._myTeleportParams.myPlayerTransformManager.isPositionHeadValid() && this._myTeleportParams.myDetectionParams.myPositionHeadMustBeValid) {
+            this._myDetectionRuntimeParams.myTeleportPositionValid = false;
         }
     }
 
