@@ -362,7 +362,7 @@ export class BasePose {
             this._postUpdate(dt, updateVelocity, manualUpdate, null);
         }
 
-        // This is now a pre update event, it's a pre pose updated, which can be used to guarantee a bit of order if you want something
+        // This is not a pre update event, it's a pre pose updated, which can be used to guarantee a bit of order if you want something
         // to update before the stuff that updates on pose updated
         this._myPrePoseUpdatedEventEmitter.notify(dt, this, manualUpdate);
         this._myPoseUpdatedEmitter.notify(dt, this, manualUpdate);
