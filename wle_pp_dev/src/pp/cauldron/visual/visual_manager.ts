@@ -1,4 +1,4 @@
-import { WonderlandEngine } from "@wonderlandengine/api";
+import { Object3D, WonderlandEngine } from "@wonderlandengine/api";
 import { Globals } from "../../pp/globals.js";
 import { Timer } from "../cauldron/timer.js";
 import { ObjectPool, ObjectPoolParams } from "../object_pool/object_pool.js";
@@ -21,6 +21,7 @@ export class VisualManager {
     private _myVisualElementLastID: number = 0;
     private readonly _myVisualElementsToShow: VisualElement[] = [];
 
+    private _myVisualElementsParent: Object3D | null = null;
     private _myActive: boolean = true;
 
     private readonly _myObjectPoolManagerPrefix: string;
@@ -44,27 +45,33 @@ export class VisualManager {
 
             if (!this._myActive) {
                 this.clearAllVisualElements();
+            } else {
+                this._myVisualElementsParent = Globals.getSceneObjects(this._myEngine)?.myVisualElements ?? null;
             }
         }
     }
 
     public isActive(): boolean {
-        return this._myActive;
+        return this._myActive && this._myVisualElementsParent != null;
     }
 
     public start(): void {
-
+        if (this._myActive) {
+            this._myVisualElementsParent = Globals.getSceneObjects(this._myEngine)?.myVisualElements ?? null;
+        }
     }
 
     public update(dt: number): void {
         if (this._myActive) {
+            this._myVisualElementsParent = Globals.getSceneObjects(this._myEngine)?.myVisualElements ?? null;
+
             this._updateDraw(dt);
         }
     }
 
     /** `lifetimeSeconds` can be `null`, in that case the element will be drawn until cleared */
     public draw(visualElementParams: VisualElementParams, lifetimeSeconds: number | null = 0, idToReuse?: unknown): unknown | null {
-        if (!this._myActive) {
+        if (!this.isActive()) {
             return null;
         }
 
@@ -157,6 +164,8 @@ export class VisualManager {
     }
 
     public clearAllVisualElements(): void {
+        if (!this.isActive()) return;
+
         for (const visualElements of this._myVisualElementsTypeMap.values()) {
             for (const visualElement of visualElements.values()) {
                 this._releaseElement(visualElement[0]);
@@ -169,6 +178,8 @@ export class VisualManager {
     }
 
     public clearVisualElement(elementID: unknown): void {
+        if (!this.isActive()) return;
+
         for (const visualElements of this._myVisualElementsTypeMap.values()) {
             if (visualElements.has(elementID)) {
                 const visualElementPair = visualElements.get(elementID)!;
@@ -182,6 +193,8 @@ export class VisualManager {
     }
 
     public allocateVisualElementType(visualElementType: unknown | VisualElementDefaultType, amount: number): void {
+        if (!this.isActive()) return;
+
         if (!Globals.getObjectPoolManager(this._myEngine)!.hasPool(this._getTypePoolID(visualElementType))) {
             this._addVisualElementTypeToPool(visualElementType);
         }
@@ -296,14 +309,15 @@ export class VisualManager {
     }
 
     private _releaseElement(visualElement: VisualElement): void {
-        const defaultElementsParent = Globals.getSceneObjects(this._myEngine)!.myVisualElements!;
-        if (visualElement.getParamsGeneric().myParent != defaultElementsParent) {
-            visualElement.getParamsGeneric().myParent = defaultElementsParent;
-            visualElement.paramsUpdated();
-            visualElement.refresh(); // just used to trigger the parent change, I'm lazy
+        if (this._myVisualElementsParent != null) {
+            if (visualElement.getParamsGeneric().myParent != this._myVisualElementsParent) {
+                visualElement.getParamsGeneric().myParent = this._myVisualElementsParent;
+                visualElement.paramsUpdated();
+                visualElement.refresh(); // just used to trigger the parent change, I'm lazy
+            }
         }
 
-        Globals.getObjectPoolManager(this._myEngine)!.release(this._getTypePoolID(visualElement.getParamsGeneric().myType), visualElement);
+        Globals.getObjectPoolManager(this._myEngine)?.release(this._getTypePoolID(visualElement.getParamsGeneric().myType), visualElement);
     }
 
     private _getClassName(): string {

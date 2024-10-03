@@ -37,6 +37,10 @@ export class GrabbableComponent extends Component {
         this._mySceneParent = Globals.getSceneObjects(this.engine)?.myDynamics ?? null;
     }
 
+    onActivate() {
+        this._mySceneParent = Globals.getSceneObjects(this.engine)?.myDynamics ?? null;
+    }
+
     onDeactivate() {
         this.release();
     }
