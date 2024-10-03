@@ -31,11 +31,12 @@ export class BenchmarkMaxPhysXComponent extends Component {
     };
 
     start() {
-        this._myValid = false;
+        this._myActive = false;
 
-        if (!Globals.isDebugEnabled(this.engine)) return;
+        if (Globals.isDebugEnabled(this.engine)) {
+            this._myActive = true;
+        }
 
-        this._myValid = true;
         this._myStarted = false;
         this._myPreStartTimer = new Timer(1);
     }
@@ -78,7 +79,7 @@ export class BenchmarkMaxPhysXComponent extends Component {
     }
 
     update(dt) {
-        if (!this._myValid) return;
+        if (!this._myActive || !Globals.isDebugEnabled(this.engine)) return;
 
         if (!this._myStarted) {
             this._myPreStartTimer.update(dt);

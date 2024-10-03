@@ -7,10 +7,12 @@ export class DebugManagerComponent extends Component {
 
     init() {
         this._myDebugManager = null;
+        this._myCurrentActive = false;
 
         // Prevents double global from same engine
         if (!Globals.hasDebugManager(this.engine)) {
             this._myDebugManager = new DebugManager(this.engine);
+            this._myDebugManager.setActive(this._myCurrentActive);
 
             Globals.setDebugManager(this._myDebugManager, this.engine);
         }
@@ -24,14 +26,17 @@ export class DebugManagerComponent extends Component {
 
     update(dt) {
         if (this._myDebugManager != null) {
+            if (this._myCurrentActive != Globals.isDebugEnabled(this._myEngine)) {
+                this._myCurrentActive = Globals.isDebugEnabled(this._myEngine);
+                this._myDebugManager.setActive(this._myCurrentActive);
+            }
+
             this._myDebugManager.update(dt);
         }
     }
 
     onActivate() {
         if (this._myDebugManager != null) {
-            this._myDebugManager.setActive(true);
-
             Globals.setDebugManager(this._myDebugManager, this.engine);
         }
     }

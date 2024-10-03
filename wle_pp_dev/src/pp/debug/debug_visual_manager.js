@@ -31,6 +31,11 @@ export class DebugVisualManager extends VisualManager {
         this._myDefaultUITextScreenPosition = vec3_create(1, 1, 1);
     }
 
+    setActive(active) {
+        active = active && Globals.isDebugEnabled(this._myEngine);
+        super.setActive(active);
+    }
+
     drawLine(lifetimeSeconds, start, direction, length, color = this._myDefaultColor, thickness = this._myDefaultLineThickness) {
         let elementID = null;
 

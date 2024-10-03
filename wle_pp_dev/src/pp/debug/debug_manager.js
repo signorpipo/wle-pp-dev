@@ -5,6 +5,7 @@ export class DebugManager {
 
     constructor(engine = Globals.getMainEngine()) {
         this._myEngine = engine;
+
         this._myDebugVisualManager = new DebugVisualManager(this._myEngine);
 
         this._myActive = true;
@@ -22,18 +23,17 @@ export class DebugManager {
     update(dt) {
         if (!this._myActive) return;
 
-        this._myDebugVisualManager.setActive(Globals.isDebugEnabled(this._myEngine));
         this._myDebugVisualManager.update(dt);
     }
 
     setActive(active) {
+        active = active && Globals.isDebugEnabled(this._myEngine);
+
         if (this._myActive != active) {
             this._myActive = active;
         }
 
-        if (!active) {
-            this._myDebugVisualManager.setActive(false);
-        }
+        this._myDebugVisualManager.setActive(active);
     }
 
     isActive() {
