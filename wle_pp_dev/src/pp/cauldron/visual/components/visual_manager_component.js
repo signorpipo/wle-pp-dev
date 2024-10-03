@@ -56,13 +56,13 @@ export class VisualManagerComponent extends Component {
     }
 
     onActivate() {
-        if (this._myVisualManager != null) {
+        if (this._myVisualManager != null && !Globals.hasVisualManager(this.engine)) {
             this._myVisualManager.setActive(true);
 
             Globals.setVisualManager(this._myVisualManager, this.engine);
         }
 
-        if (this._myVisualResources != null) {
+        if (this._myVisualResources != null && !Globals.hasVisualResources(this.engine)) {
             Globals.setVisualResources(this._myVisualResources, this.engine);
         }
     }

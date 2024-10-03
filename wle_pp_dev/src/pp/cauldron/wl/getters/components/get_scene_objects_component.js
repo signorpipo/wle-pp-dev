@@ -75,7 +75,7 @@ export class GetSceneObjectsComponent extends Component {
     }
 
     onActivate() {
-        if (this._mySceneObjects != null) {
+        if (this._mySceneObjects != null && !Globals.hasSceneObjects(this.engine)) {
             Globals.setSceneObjects(this._mySceneObjects, this.engine);
         }
     }

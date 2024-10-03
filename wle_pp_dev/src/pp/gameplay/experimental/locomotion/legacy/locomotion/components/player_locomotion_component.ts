@@ -453,11 +453,12 @@ export class PlayerLocomotionComponent extends Component {
     }
 
     public override onActivate(): void {
-        if (this._myPlayerLocomotion != null) {
-            Globals.setPlayerLocomotion(this._myPlayerLocomotion, this.engine);
+        if (this._myPlayerLocomotion != null && (!Globals.hasPlayerLocomotion(this.engine) || Globals.getPlayerLocomotion(this.engine) == this._myPlayerLocomotion)) {
+            if (!Globals.hasPlayerLocomotion(this.engine)) {
+                Globals.setPlayerLocomotion(this._myPlayerLocomotion, this.engine);
+            }
 
             this._myPlayerLocomotion.setActive(true);
-
             this._myActivateOnNextUpdate = true;
         }
     }
@@ -475,7 +476,7 @@ export class PlayerLocomotionComponent extends Component {
     }
 
     private _onActivate(): void {
-        if (this._myPlayerLocomotion != null) {
+        if (this._myPlayerLocomotion != null && Globals.getPlayerLocomotion(this.engine) == this._myPlayerLocomotion) {
             Globals.getHeadPose(this.engine)!.registerPostPoseUpdatedEventEventListener(this, this.onPostPoseUpdatedEvent.bind(this));
         }
     }

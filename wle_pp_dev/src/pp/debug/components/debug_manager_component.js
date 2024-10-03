@@ -40,7 +40,7 @@ export class DebugManagerComponent extends Component {
                 this._myDebugManager.setActive(this._myCurrentDebugEnabled);
 
                 if (this._myCurrentDebugEnabled) {
-                    if (Globals.getDebugManager(this.engine) == null) {
+                    if (!Globals.hasDebugManager(this.engine)) {
                         Globals.setDebugManager(this._myDebugManager, this.engine);
                     }
                 } else {
@@ -57,10 +57,8 @@ export class DebugManagerComponent extends Component {
     }
 
     onActivate() {
-        if (this._myDebugManager != null) {
-            if (Globals.getDebugManager(this.engine) == null) {
-                Globals.setDebugManager(this._myDebugManager, this.engine);
-            }
+        if (this._myDebugManager != null && !Globals.hasDebugManager(this.engine)) {
+            Globals.setDebugManager(this._myDebugManager, this.engine);
         }
     }
 

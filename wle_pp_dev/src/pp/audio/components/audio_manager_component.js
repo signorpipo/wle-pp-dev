@@ -25,7 +25,7 @@ export class AudioManagerComponent extends Component {
     }
 
     onActivate() {
-        if (this._myAudioManager != null) {
+        if (this._myAudioManager != null && !Globals.hasAudioManager(this.engine)) {
             Globals.setAudioManager(this._myAudioManager, this.engine);
         }
     }

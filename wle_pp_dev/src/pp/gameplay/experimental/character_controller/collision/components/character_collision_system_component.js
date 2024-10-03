@@ -23,7 +23,7 @@ export class CharacterCollisionSystemComponent extends Component {
     }
 
     onActivate() {
-        if (this._myCharacterCollisionSystem != null) {
+        if (this._myCharacterCollisionSystem != null && !Globals.hasCharacterCollisionSystem(this.engine)) {
             Globals.setCharacterCollisionSystem(this._myCharacterCollisionSystem, this.engine);
         }
     }

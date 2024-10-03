@@ -32,7 +32,7 @@ export class AnalyticsManagerComponent extends Component {
     }
 
     onActivate() {
-        if (this._myAnalyticsManager != null) {
+        if (this._myAnalyticsManager != null && !Globals.hasAnalyticsManager(this.engine)) {
             Globals.setAnalyticsManager(this._myAnalyticsManager, this.engine);
         }
     }

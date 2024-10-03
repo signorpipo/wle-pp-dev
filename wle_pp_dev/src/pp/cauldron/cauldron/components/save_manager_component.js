@@ -27,7 +27,7 @@ export class SaveManagerComponent extends Component {
     }
 
     onActivate() {
-        if (this._mySaveManager != null) {
+        if (this._mySaveManager != null && !Globals.hasSaveManager(this.engine)) {
             this._mySaveManager.setActive(true);
 
             Globals.setSaveManager(this._mySaveManager, this.engine);

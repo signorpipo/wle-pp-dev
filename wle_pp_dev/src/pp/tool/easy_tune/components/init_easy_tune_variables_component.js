@@ -22,7 +22,7 @@ export class InitEasyTuneVariablesComponent extends Component {
     }
 
     onActivate() {
-        if (this._myEasyTuneVariables != null) {
+        if (this._myEasyTuneVariables != null && !Globals.hasEasyTuneVariables(this.engine)) {
             Globals.setEasyTuneVariables(this._myEasyTuneVariables, this.engine);
         }
     }

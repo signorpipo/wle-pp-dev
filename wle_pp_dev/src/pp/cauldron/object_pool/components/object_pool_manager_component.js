@@ -17,7 +17,7 @@ export class ObjectPoolManagerComponent extends Component {
     }
 
     onActivate() {
-        if (this._myObjectPoolManager != null) {
+        if (this._myObjectPoolManager != null && !Globals.hasObjectPoolManager(this.engine)) {
             Globals.setObjectPoolManager(this._myObjectPoolManager, this.engine);
         }
     }

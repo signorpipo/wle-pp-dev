@@ -19,7 +19,7 @@ export class EnableToolComponent extends Component {
     }
 
     onActivate() {
-        if (this._myToolEnabled != null) {
+        if (this._myToolEnabled != null && !Globals.hasToolEnabled(this.engine)) {
             Globals.setToolEnabled(this._myToolEnabled, this.engine);
         }
     }

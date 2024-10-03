@@ -65,7 +65,7 @@ export class GetDefaultResourcesComponent extends Component {
     }
 
     onActivate() {
-        if (this._myDefaultResources != null) {
+        if (this._myDefaultResources != null && !Globals.hasDefaultResources(this.engine)) {
             Globals.setDefaultResources(this._myDefaultResources, this.engine);
         }
     }
