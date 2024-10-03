@@ -719,8 +719,8 @@ export class PlayerLocomotion {
         simplifiedParams.myVerticalCheckBlockLayerFlags.copy(simplifiedParams.myHorizontalCheckBlockLayerFlags);
         simplifiedParams.myVerticalCheckObjectsToIgnore.pp_copy(simplifiedParams.myHorizontalCheckObjectsToIgnore);
 
-        simplifiedParams.myHorizontalCheckDebugEnabled = this._myParams.myDebugHorizontalEnabled && Globals.isDebugEnabled(this._myParams.myEngine);
-        simplifiedParams.myVerticalCheckDebugEnabled = this._myParams.myDebugVerticalEnabled && Globals.isDebugEnabled(this._myParams.myEngine);
+        simplifiedParams.myHorizontalCheckDebugEnabled = this._myParams.myDebugHorizontalEnabled;
+        simplifiedParams.myVerticalCheckDebugEnabled = this._myParams.myDebugVerticalEnabled;
 
         const colliderSetup = CharacterColliderSetupUtils.createSimplified(simplifiedParams);
 
