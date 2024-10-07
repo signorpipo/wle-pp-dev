@@ -90,6 +90,8 @@ CollisionCheckMove.prototype._move = function () {
         let movementStepAmount = 1;
         movementStep.vec3_copy(movement);
 
+        let lastStepLongerThanMaxLength = false;
+
         if (!movement.vec3_isZero(0.00001) && collisionCheckParams.mySplitMovementEnabled) {
             let minLength = collisionCheckParams.mySplitMovementMinLengthEnabled ? collisionCheckParams.mySplitMovementMinLength : null;
             let maxLength = collisionCheckParams.mySplitMovementMaxLengthEnabled && collisionCheckParams.mySplitMovementMaxLength > 0 ? collisionCheckParams.mySplitMovementMaxLength : null;
@@ -104,6 +106,10 @@ CollisionCheckMove.prototype._move = function () {
                 movementStep = movementStep.vec3_normalize(movementStep).vec3_scale(stepLength, movementStep);
 
                 if (collisionCheckParams.mySplitMovementMaxStepsEnabled) {
+                    if (movementStepAmount > maxSteps) {
+                        lastStepLongerThanMaxLength = true;
+                    }
+
                     movementStepAmount = Math.min(movementStepAmount, maxSteps);
                 }
             } else {
@@ -127,11 +133,22 @@ CollisionCheckMove.prototype._move = function () {
 
         let stepsPerformed = 0;
         let splitMovementStop = false;
+        let splitMovementLastStepLongerThanMaxLength = false;
+        let splitMovementReduced = false;
+
         for (let i = 0; i < movementStepAmount; i++) {
             if (movementStepAmount == 1 || i != movementStepAmount - 1) {
                 currentMovementStep.vec3_copy(movementStep);
             } else {
-                currentMovementStep = movement.vec3_sub(movementChecked, currentMovementStep);
+                if (collisionCheckParams.mySplitMovementMaxLengthLastStepCanBeLonger || !lastStepLongerThanMaxLength) {
+                    splitMovementLastStepLongerThanMaxLength = lastStepLongerThanMaxLength;
+
+                    currentMovementStep = movement.vec3_sub(movementChecked, currentMovementStep);
+                } else {
+                    splitMovementReduced = true;
+
+                    currentMovementStep.vec3_copy(movementStep);
+                }
             }
 
             newFeetPosition = feetPosition.vec3_add(fixedMovement, newFeetPosition);
@@ -170,6 +187,8 @@ CollisionCheckMove.prototype._move = function () {
         collisionRuntimeParams.mySplitMovementSteps = movementStepAmount;
         collisionRuntimeParams.mySplitMovementStepsPerformed = stepsPerformed;
         collisionRuntimeParams.mySplitMovementStop = splitMovementStop;
+        collisionRuntimeParams.mySplitMovementLastStepLongerThanMaxLength = splitMovementLastStepLongerThanMaxLength;
+        collisionRuntimeParams.mySplitMovementReduced = splitMovementReduced;
         collisionRuntimeParams.mySplitMovementMovementChecked.vec3_copy(movementChecked);
 
         collisionRuntimeParams.myOriginalUp = transformQuat.quat2_getUp(collisionRuntimeParams.myOriginalUp);

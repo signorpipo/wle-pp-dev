@@ -292,6 +292,7 @@ export class CharacterColliderSplitMovementParams {
         this.mySplitMovementMaxSteps = null;
         this.mySplitMovementMaxStepLength = null;
         this.mySplitMovementMinStepLength = null;
+        this.mySplitMovementLastStepCanBeLongerThanMaxStepLength = false;
 
         this.mySplitMovementStopOnHorizontalMovementFailed = false;
         this.mySplitMovementStopOnVerticalMovementFailed = false;
@@ -561,6 +562,7 @@ CharacterColliderSplitMovementParams.prototype.copy = function copy(other) {
     this.mySplitMovementMaxSteps = other.mySplitMovementMaxSteps;
     this.mySplitMovementMaxStepLength = other.mySplitMovementMaxStepLength;
     this.mySplitMovementMinStepLength = other.mySplitMovementMinStepLength;
+    this.mySplitMovementLastStepCanBeLongerThanMaxStepLength = other.mySplitMovementLastStepCanBeLongerThanMaxStepLength;
 
     this.mySplitMovementStopOnHorizontalMovementFailed = other.mySplitMovementStopOnHorizontalMovementFailed;
     this.mySplitMovementStopOnVerticalMovementFailed = other.mySplitMovementStopOnVerticalMovementFailed;

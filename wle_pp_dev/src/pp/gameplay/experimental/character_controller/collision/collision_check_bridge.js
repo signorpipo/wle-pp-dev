@@ -193,6 +193,8 @@ export function convertCharacterCollisionResultsToCollisionRuntimeParams(charact
     outCollisionRuntimeParams.mySplitMovementSteps = characterCollisionResults.mySplitMovementResults.myStepsToPerform;
     outCollisionRuntimeParams.mySplitMovementStepsPerformed = characterCollisionResults.mySplitMovementResults.myStepsPerformed;
     outCollisionRuntimeParams.mySplitMovementStop = characterCollisionResults.mySplitMovementResults.myMovementInterrupted;
+    outCollisionRuntimeParams.mySplitMovementReduced = characterCollisionResults.mySplitMovementResults.myMovementReduced;
+    outCollisionRuntimeParams.mySplitMovementLastStepLongerThanMaxLength = characterCollisionResults.mySplitMovementResults.myLastStepLongerThanMaxStepLength;
     outCollisionRuntimeParams.mySplitMovementMovementChecked.vec3_copy(characterCollisionResults.mySplitMovementResults.myMovementChecked);
 
     return outCollisionRuntimeParams;
@@ -290,6 +292,8 @@ export let convertCollisionRuntimeParamsToCharacterCollisionResults = function (
         outCharacterCollisionResults.mySplitMovementResults.myStepsToPerform = collisionRuntimeParams.mySplitMovementSteps;
         outCharacterCollisionResults.mySplitMovementResults.myStepsPerformed = collisionRuntimeParams.mySplitMovementStepsPerformed;
         outCharacterCollisionResults.mySplitMovementResults.myMovementInterrupted = collisionRuntimeParams.mySplitMovementStop;
+        outCharacterCollisionResults.mySplitMovementResults.myMovementReduced = collisionRuntimeParams.mySplitMovementReduced;
+        outCharacterCollisionResults.mySplitMovementResults.myLastStepLongerThanMaxStepLength = collisionRuntimeParams.mySplitMovementLastStepLongerThanMaxLength;
         outCharacterCollisionResults.mySplitMovementResults.myMovementChecked.vec3_copy(collisionRuntimeParams.mySplitMovementMovementChecked);
 
         outCharacterCollisionResults.myInternalResults.myLastRelevantInitialHorizontalMovement.vec3_copy(collisionRuntimeParams.myLastValidOriginalHorizontalMovement);
@@ -508,6 +512,7 @@ export let convertCharacterColliderSetupToCollisionCheckParams = function () {
         outCollisionCheckParams.mySplitMovementEnabled = characterColliderSetup.mySplitMovementParams.mySplitMovementEnabled;
         outCollisionCheckParams.mySplitMovementMaxLength = characterColliderSetup.mySplitMovementParams.mySplitMovementMaxStepLength == null ? 0 : characterColliderSetup.mySplitMovementParams.mySplitMovementMaxStepLength;
         outCollisionCheckParams.mySplitMovementMaxLengthEnabled = characterColliderSetup.mySplitMovementParams.mySplitMovementMaxStepLength != null;
+        outCollisionCheckParams.mySplitMovementMaxLengthLastStepCanBeLonger = characterColliderSetup.mySplitMovementParams.mySplitMovementLastStepCanBeLongerThanMaxStepLength;
         outCollisionCheckParams.mySplitMovementMaxSteps = characterColliderSetup.mySplitMovementParams.mySplitMovementMaxSteps == null ? 0 : characterColliderSetup.mySplitMovementParams.mySplitMovementMaxSteps;
         outCollisionCheckParams.mySplitMovementMaxStepsEnabled = characterColliderSetup.mySplitMovementParams.mySplitMovementMaxSteps != null;
         outCollisionCheckParams.mySplitMovementMinLength = characterColliderSetup.mySplitMovementParams.mySplitMovementMinStepLength == null ? 0 : characterColliderSetup.mySplitMovementParams.mySplitMovementMinStepLength;

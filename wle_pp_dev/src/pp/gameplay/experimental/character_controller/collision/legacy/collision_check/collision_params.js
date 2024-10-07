@@ -8,6 +8,7 @@ export class CollisionCheckParams {
         this.mySplitMovementEnabled = false;
         this.mySplitMovementMaxLength = 0;
         this.mySplitMovementMaxLengthEnabled = false;
+        this.mySplitMovementMaxLengthLastStepCanBeLonger = false;
         this.mySplitMovementMaxSteps = 0;
         this.mySplitMovementMaxStepsEnabled = false;
         this.mySplitMovementMinLength = 0;
@@ -268,6 +269,7 @@ export class CollisionCheckParams {
         this.mySplitMovementEnabled = other.mySplitMovementEnabled;
         this.mySplitMovementMaxLength = other.mySplitMovementMaxLength;
         this.mySplitMovementMaxLengthEnabled = other.mySplitMovementMaxLengthEnabled;
+        this.mySplitMovementMaxLengthLastStepCanBeLonger = other.mySplitMovementMaxLengthLastStepCanBeLonger;
         this.mySplitMovementMaxSteps = other.mySplitMovementMaxSteps;
         this.mySplitMovementMaxStepsEnabled = other.mySplitMovementMaxStepsEnabled;
         this.mySplitMovementMinLength = other.mySplitMovementMinLength;
@@ -576,6 +578,8 @@ export class CollisionRuntimeParams {
         this.mySplitMovementSteps = 0;
         this.mySplitMovementStepsPerformed = 0;
         this.mySplitMovementStop = false;
+        this.mySplitMovementLastStepLongerThanMaxLength = false;
+        this.mySplitMovementReduced = false;
         this.mySplitMovementMovementChecked = vec3_create();
 
         this.myRealIsOnGround = false;
@@ -677,6 +681,8 @@ export class CollisionRuntimeParams {
         this.mySplitMovementSteps = 0;
         this.mySplitMovementStepsPerformed = 0;
         this.mySplitMovementStop = false;
+        this.mySplitMovementLastStepLongerThanMaxLength = false;
+        this.mySplitMovementReduced = false;
         this.mySplitMovementMovementChecked.vec3_zero();
 
         this.myRealIsOnGround = false;
@@ -778,6 +784,8 @@ export class CollisionRuntimeParams {
         this.mySplitMovementSteps = other.mySplitMovementSteps;
         this.mySplitMovementStepsPerformed = other.mySplitMovementStepsPerformed;
         this.mySplitMovementStop = other.mySplitMovementStop;
+        this.mySplitMovementLastStepLongerThanMaxLength = other.mySplitMovementLastStepLongerThanMaxLength;
+        this.mySplitMovementReduced = other.mySplitMovementReduced;
         this.mySplitMovementMovementChecked.vec3_copy(other.mySplitMovementMovementChecked);
 
         this.myRealIsOnGround = other.myRealIsOnGround;
