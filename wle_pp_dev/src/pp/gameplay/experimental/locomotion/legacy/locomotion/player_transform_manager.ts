@@ -405,7 +405,7 @@ export class PlayerTransformManager {
             outCollisionRuntimeParams.copy(this._myCollisionRuntimeParams);
         }
 
-        CollisionCheckBridge.getCollisionCheck(this._myParams.myEngine as any).move(movement, currentTransformQuat, this._myParams.myMovementCollisionCheckParams, outCollisionRuntimeParams);
+        CollisionCheckBridge.getCollisionCheck(this._myParams.myEngine as any).move(movement, currentTransformQuat, collisionCheckParams, outCollisionRuntimeParams);
 
         return outCollisionRuntimeParams;
     }

@@ -85,7 +85,7 @@ PlayerLocomotionTeleportState.prototype._checkTeleportAsMovement = function () {
 
                 movementFeetTransformQuat.quat2_setPositionRotationQuat(currentFeetPosition, feetRotationQuat);
 
-                this._myTeleportParams.myPlayerTransformManager.checkMovement(teleportMovement, movementFeetTransformQuat, this._myTeleportCollisionCheckParams, checkTeleportMovementCollisionRuntimeParams);
+                this._myTeleportParams.myPlayerTransformManager.checkMovement(teleportMovement, movementFeetTransformQuat, this._myMovementCollisionCheckParams, checkTeleportMovementCollisionRuntimeParams);
 
                 if (!checkTeleportMovementCollisionRuntimeParams.myHorizontalMovementCanceled && !checkTeleportMovementCollisionRuntimeParams.myVerticalMovementCanceled) {
                     movementToTeleportPosition = fixedTeleportPosition.vec3_sub(checkTeleportMovementCollisionRuntimeParams.myNewPosition, movementToTeleportPosition);

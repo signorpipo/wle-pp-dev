@@ -177,6 +177,9 @@ export class PlayerLocomotionTeleport extends PlayerLocomotionMovement {
 
         this._myTeleportCollisionCheckParams.copy(this._myTeleportParams.myPlayerTransformManager.getTeleportCollisionCheckParams());
 
+        // This is used for the perform teleport as movement, so it needs to be able to do as many steps needed based on teleport distance
+        this._myMovementCollisionCheckParams.mySplitMovementMaxSteps = 0;
+
         // Increased so to let teleport on steep slopes from above (from below is fixed through detection myGroundAngleToIgnoreUpward)
         this._myTeleportCollisionCheckParams.myGroundAngleToIgnore = Math.max(61, this._myTeleportCollisionCheckParams.myGroundAngleToIgnore);
 
