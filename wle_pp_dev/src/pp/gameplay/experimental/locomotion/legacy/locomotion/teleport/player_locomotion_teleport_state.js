@@ -10,7 +10,6 @@ export class PlayerLocomotionTeleportState {
         this._myTeleportRuntimeParams = teleportRuntimeParams;
 
         this._myMovementCollisionCheckParams = movementCollisionCheckParams;
-        this._myTeleportCollisionCheckParams = teleportCollisionCheckParams;
 
         this._myTeleportAsMovementFailed = false;
     }
@@ -37,7 +36,7 @@ PlayerLocomotionTeleportState.prototype._checkTeleport = function () {
     return function _checkTeleport(teleportPosition, teleportRotationQuat, collisionRuntimeParams, checkTeleportCollisionRuntimeParams = null) {
         teleportTransformQuat.quat2_setPositionRotationQuat(teleportPosition, teleportRotationQuat);
 
-        this._myTeleportParams.myPlayerTransformManager.checkTeleportToTransformQuat(teleportTransformQuat, undefined, this._myTeleportCollisionCheckParams, collisionRuntimeParams);
+        this._myTeleportParams.myPlayerTransformManager.checkTeleportToTransformQuat(teleportTransformQuat, undefined, undefined, collisionRuntimeParams);
 
         if (checkTeleportCollisionRuntimeParams != null) {
             checkTeleportCollisionRuntimeParams.copy(collisionRuntimeParams);

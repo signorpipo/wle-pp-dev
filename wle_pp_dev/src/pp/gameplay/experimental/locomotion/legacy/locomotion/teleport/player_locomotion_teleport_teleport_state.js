@@ -39,8 +39,8 @@ export class PlayerLocomotionTeleportTeleportParams {
 
 export class PlayerLocomotionTeleportTeleportState extends PlayerLocomotionTeleportState {
 
-    constructor(teleportParams, teleportRuntimeParams, locomotionRuntimeParams) {
-        super(teleportParams, teleportRuntimeParams, locomotionRuntimeParams);
+    constructor(teleportParams, teleportRuntimeParams, locomotionRuntimeParams, movementCollisionCheckParams) {
+        super(teleportParams, teleportRuntimeParams, locomotionRuntimeParams, movementCollisionCheckParams);
 
         this._myFSM = new FSM();
         //this._myFSM.setLogEnabled(true, "Locomotion Teleport Teleport");

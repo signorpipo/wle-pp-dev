@@ -65,12 +65,11 @@ export class PlayerLocomotionTeleport extends PlayerLocomotionMovement {
         this._myTeleportRuntimeParams = new PlayerLocomotionTeleportRuntimeParams();
 
         this._myMovementCollisionCheckParams = new CollisionCheckParams();
-        this._myTeleportCollisionCheckParams = new CollisionCheckParams();
 
         this._myStickIdleCharge = true;
 
-        this._myDetectionState = new PlayerLocomotionTeleportDetectionState(this._myTeleportParams, this._myTeleportRuntimeParams, this._myLocomotionRuntimeParams, this._myMovementCollisionCheckParams, this._myTeleportCollisionCheckParams);
-        this._myTeleportState = new PlayerLocomotionTeleportTeleportState(this._myTeleportParams, this._myTeleportRuntimeParams, this._myLocomotionRuntimeParams, this._myMovementCollisionCheckParams, this._myTeleportCollisionCheckParams);
+        this._myDetectionState = new PlayerLocomotionTeleportDetectionState(this._myTeleportParams, this._myTeleportRuntimeParams, this._myLocomotionRuntimeParams, this._myMovementCollisionCheckParams);
+        this._myTeleportState = new PlayerLocomotionTeleportTeleportState(this._myTeleportParams, this._myTeleportRuntimeParams, this._myLocomotionRuntimeParams, this._myMovementCollisionCheckParams);
 
         this._myFSM = new FSM();
         //this._myFSM.setLogEnabled(true, "Locomotion Teleport");
@@ -175,10 +174,10 @@ export class PlayerLocomotionTeleport extends PlayerLocomotionMovement {
     _prepareCollisionCheckParams() {
         this._myMovementCollisionCheckParams.copy(this._myTeleportParams.myPlayerTransformManager.getMovementCollisionCheckParams());
 
-        this._myTeleportCollisionCheckParams.copy(this._myTeleportParams.myPlayerTransformManager.getTeleportCollisionCheckParams());
-
         // This is used for the perform teleport as movement, so it needs to be able to do as many steps needed based on teleport distance
         this._myMovementCollisionCheckParams.mySplitMovementMaxSteps = 0;
+
+        //this._myTeleportCollisionCheckParams.copy(this._myTeleportParams.myPlayerTransformManager.getTeleportCollisionCheckParams());
 
         // Increased so to let teleport on steep slopes from above (from below is fixed through detection myGroundAngleToIgnoreUpward)
         // this._myTeleportCollisionCheckParams.myGroundAngleToIgnore = Math.max(61, this._myTeleportCollisionCheckParams.myGroundAngleToIgnore);
