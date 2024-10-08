@@ -8,6 +8,7 @@ import { CollisionCheckBridge } from "../../../character_controller/collision/co
 import { CollisionCheckUtils } from "../../../character_controller/collision/legacy/collision_check/collision_check_utils.js";
 import { CollisionCheckParams, CollisionRuntimeParams } from "../../../character_controller/collision/legacy/collision_check/collision_params.js";
 import { PlayerHeadManager } from "./player_head_manager.js";
+import { PlayerLocomotionTeleport } from "./teleport/player_locomotion_teleport.js";
 
 export enum PlayerTransformManagerSyncFlag {
     BODY_COLLIDING = 0,
@@ -226,6 +227,8 @@ export class PlayerTransformManager {
 
     private readonly _myCollisionRuntimeParams = new CollisionRuntimeParams();
     private readonly _myRealCollisionRuntimeParams = new CollisionRuntimeParams();
+
+    private _myPlayerLocomotionTeleport: PlayerLocomotionTeleport | null = null;
 
     private readonly _myValidPosition: Vector3 = vec3_create();
     private readonly _myValidRotationQuat: Quaternion = quat_create();
@@ -922,6 +925,10 @@ export class PlayerTransformManager {
         return this._myIsRealPositionHeadValid;
     }
 
+    public setPlayerLocomotionTeleport(playerLocomotionTeleport: PlayerLocomotionTeleport | null): void {
+        this._myPlayerLocomotionTeleport = playerLocomotionTeleport;
+    }
+
     private _updateCollisionHeight(): void {
         const validHeight = this.getHeight();
         const realHeight = Math.pp_clamp(this.getHeightReal(), this._myParams.myMinHeight ?? undefined, this._myParams.myMaxHeight ?? undefined);
@@ -1418,7 +1425,8 @@ export class PlayerTransformManager {
         }
 
         if (isHeadSynced) {
-            if ((this.isSynced(this._myParams.mySyncPositionFlagMap) || this._myParams.myAlwaysSyncPositionWithReal) && !this._myParams.mySyncPositionDisabled) {
+            if ((this.isSynced(this._myParams.mySyncPositionFlagMap) || this._myParams.myAlwaysSyncPositionWithReal) && !this._myParams.mySyncPositionDisabled &&
+                (this._myPlayerLocomotionTeleport == null || !this._myPlayerLocomotionTeleport.isTeleporting())) {
                 this._myValidPosition.vec3_copy(newPosition);
                 // Reset real position since the new position might be influenced by the snap?
             }

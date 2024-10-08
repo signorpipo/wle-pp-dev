@@ -446,6 +446,8 @@ export class PlayerLocomotion {
                 this._myPlayerLocomotionTeleport = new PlayerLocomotionTeleport(params, movementRuntimeParams);
             }
 
+            this._myPlayerTransformManager.setPlayerLocomotionTeleport(this._myPlayerLocomotionTeleport);
+
             {
                 const params = new PlayerObscureManagerParams(this._myParams.myEngine as any);
 
