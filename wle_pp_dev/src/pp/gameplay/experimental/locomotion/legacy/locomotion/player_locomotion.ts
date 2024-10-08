@@ -134,6 +134,7 @@ export class PlayerLocomotionParams {
     public myColliderCheckOnlyFeet: boolean = false;
     public myColliderSlideAlongWall: boolean = false;
     public myColliderMaxWalkableGroundAngle: number = 0;
+    public myColliderMaxTeleportableGroundAngle: number | null = null;
     public myColliderSnapOnGround: boolean = false;
     public myColliderMaxDistanceToSnapOnGround: number = 0;
     public myColliderMaxWalkableGroundStepHeight: number = 0;
@@ -245,6 +246,7 @@ export class PlayerLocomotion {
             params.myTeleportCollisionCheckParams = null;
             params.myTeleportCollisionCheckParamsCopyFromMovement = true;
             params.myTeleportCollisionCheckParamsCheck360 = true;
+            params.myTeleportCollisionCheckParamsGroundAngleToIgnore = this._myParams.myColliderMaxTeleportableGroundAngle;
 
             params.myHeadCollisionBlockLayerFlags.copy(this._myParams.myViewOcclusionLayerFlags);
             params.myHeadCollisionObjectsToIgnore.pp_copy(params.myMovementCollisionCheckParams.myHorizontalObjectsToIgnore as any);

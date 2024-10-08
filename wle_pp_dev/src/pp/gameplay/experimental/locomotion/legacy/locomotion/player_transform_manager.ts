@@ -26,6 +26,8 @@ export class PlayerTransformManagerParams {
     public myTeleportCollisionCheckParams: CollisionCheckParams | null = null;
     public myTeleportCollisionCheckParamsCopyFromMovement: boolean = false;
     public myTeleportCollisionCheckParamsCheck360: boolean = false;
+    public myTeleportCollisionCheckParamsGroundAngleToIgnore: number | null = null;
+
 
     public myAlwaysSyncPositionWithReal: boolean = false;
     public myAlwaysSyncHeadPositionWithReal: boolean = false;
@@ -1017,6 +1019,10 @@ export class PlayerTransformManager {
             this._myParams.myTeleportCollisionCheckParams = CollisionCheckUtils.generate360TeleportParamsFromMovementParams(this._myParams.myMovementCollisionCheckParams, this._myParams.myTeleportCollisionCheckParams);
         } else {
             this._myParams.myTeleportCollisionCheckParams.copy(this._myParams.myMovementCollisionCheckParams);
+        }
+
+        if (this._myParams.myTeleportCollisionCheckParamsGroundAngleToIgnore != null) {
+            this._myParams.myTeleportCollisionCheckParams.myGroundAngleToIgnore = this._myParams.myTeleportCollisionCheckParamsGroundAngleToIgnore;
         }
     }
 

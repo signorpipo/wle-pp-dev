@@ -213,6 +213,23 @@ export class PlayerLocomotionComponent extends Component {
     @property.float(30)
     private readonly _myColliderMaxWalkableGroundAngle!: number;
 
+    /** 
+     * This is useful if you want the locomotion teleport feature to be able to go downhill
+     * on surfaces steeper than {@link _myColliderMaxWalkableGroundAngle}
+     * 
+     * By default the locomotion teleport can't go up on surfaces steeper than {@link _myColliderMaxWalkableGroundAngle} anyway,
+     * no matter, the value of {@link _myColliderMaxTeleportableGroundAngle}
+     * 
+     * If you set this to a value bigger than {@link _myColliderMaxWalkableGroundAngle} you will be able to teleport in any case on steeper surfaces,
+     * so be careful if you want that, even though usually it's safe, since teleport positions, aside from the locomotion teleport ones, are predefined and
+     * safe positions
+     * 
+     * The idea is that with the locomotion smooth you can always go downhill but might no be able to climb back up due to the surface beeing steep,
+     * this sort of replicates that for the locomotion, letting you teleport down on steep surfaces but not up
+     */
+    @property.float(-1)
+    private readonly _myColliderMaxTeleportableGroundAngle!: number;
+
     @property.bool(true)
     private readonly _myColliderSnapOnGround!: boolean;
 
@@ -356,6 +373,7 @@ export class PlayerLocomotionComponent extends Component {
             params.myColliderCheckOnlyFeet = this._myColliderCheckOnlyFeet;
             params.myColliderSlideAlongWall = this._myColliderSlideAlongWall;
             params.myColliderMaxWalkableGroundAngle = this._myColliderMaxWalkableGroundAngle;
+            params.myColliderMaxTeleportableGroundAngle = this._myColliderMaxTeleportableGroundAngle < 0 ? null : this._myColliderMaxTeleportableGroundAngle;
             params.myColliderSnapOnGround = this._myColliderSnapOnGround;
             params.myColliderMaxDistanceToSnapOnGround = this._myColliderMaxDistanceToSnapOnGround;
             params.myColliderMaxWalkableGroundStepHeight = this._myColliderMaxWalkableGroundStepHeight;
