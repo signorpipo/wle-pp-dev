@@ -35,6 +35,8 @@ export class PlayerLocomotionTeleportTeleportShiftState extends PlayerLocomotion
         this._myCurrentRotationOnUp = 0;
         this._myStartRotationOnUp = 0;
 
+        this._mySyncPositionDisabledBackup = null;
+
         //Globals.getEasyTuneVariables(this._myTeleportParams.myEngine).add(new EasyTuneNumber("Shift Movement Seconds", this._myTeleportParams.myTeleportParams.myShiftMovementSeconds, 0.5, 3, 0, undefined, undefined, this._myTeleportParams.myEngine));
         //Globals.getEasyTuneVariables(this._myTeleportParams.myEngine).add(new EasyTuneNumber("Shift Rotate Seconds", this._myTeleportParams.myTeleportParams.myShiftRotateSeconds, 0.5, 3, 0, undefined, undefined, this._myTeleportParams.myEngine));
         //Globals.getEasyTuneVariables(this._myTeleportParams.myEngine).add(new EasyTuneNumber("Shift Rotate Start Percentage", this._myTeleportParams.myTeleportParams.myShiftRotateStartAfterMovementPercentage, 0.5, 3, 0, 1, undefined, this._myTeleportParams.myEngine));
@@ -59,6 +61,7 @@ export class PlayerLocomotionTeleportTeleportShiftState extends PlayerLocomotion
     }
 
     _startShifting() {
+        this._mySyncPositionDisabledBackup = this._myTeleportParams.myPlayerTransformManager.getParams().mySyncPositionDisabled;
         this._myTeleportParams.myPlayerTransformManager.getParams().mySyncPositionDisabled = true;
 
         this._myLocomotionRuntimeParams.myIsTeleporting = true;
@@ -92,7 +95,11 @@ export class PlayerLocomotionTeleportTeleportShiftState extends PlayerLocomotion
     }
 
     _teleport() {
-        this._myTeleportParams.myPlayerTransformManager.getParams().mySyncPositionDisabled = false;
+        if (this._mySyncPositionDisabledBackup != null && this._myTeleportParams.myPlayerTransformManager.getParams().mySyncPositionDisabled) {
+            this._myTeleportParams.myPlayerTransformManager.getParams().mySyncPositionDisabled = this._mySyncPositionDisabledBackup;
+        }
+        this._mySyncPositionDisabledBackup = null;
+
         this._myLocomotionRuntimeParams.myIsTeleporting = false;
         this._myLocomotionRuntimeParams.myTeleportJustPerformed = true;
         this._teleportToPosition(this._myTeleportRuntimeParams.myTeleportPosition, this._myStartRotationOnUp - this._myCurrentRotationOnUp);
