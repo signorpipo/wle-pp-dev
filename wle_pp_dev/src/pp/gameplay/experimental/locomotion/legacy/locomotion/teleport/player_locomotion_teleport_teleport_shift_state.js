@@ -1,6 +1,6 @@
 import { Timer } from "../../../../../../cauldron/cauldron/timer.js";
 import { FSM } from "../../../../../../cauldron/fsm/fsm.js";
-import { vec3_create } from "../../../../../../plugin/js/extensions/array/vec_create_extension.js";
+import { quat_create, vec3_create } from "../../../../../../plugin/js/extensions/array/vec_create_extension.js";
 import { PlayerLocomotionTeleportState } from "./player_locomotion_teleport_state.js";
 
 export class PlayerLocomotionTeleportTeleportShiftState extends PlayerLocomotionTeleportState {
@@ -110,6 +110,9 @@ export class PlayerLocomotionTeleportTeleportShiftState extends PlayerLocomotion
 PlayerLocomotionTeleportTeleportShiftState.prototype._shiftingUpdate = function () {
     let movementToTeleportFeet = vec3_create();
     let newFeetPosition = vec3_create();
+
+    let playerUp = vec3_create();
+    let newFeetRotationQuat = quat_create();
     return function _shiftingUpdate(dt, fsm) {
         this._myShiftMovementTimer.update(dt);
         this._myShiftRotateTimer.update(dt);
@@ -143,7 +146,15 @@ PlayerLocomotionTeleportTeleportShiftState.prototype._shiftingUpdate = function 
                 this._myCurrentRotationOnUp = newCurrentRotationOnUp;
             }
 
-            this._teleportToPosition(newFeetPosition, rotationOnUp, true);
+            this._myTeleportParams.myPlayerTransformManager.getRotationRealQuat(newFeetRotationQuat);
+            if (rotationOnUp != 0) {
+                newFeetRotationQuat.quat_getUp(playerUp);
+                newFeetRotationQuat = newFeetRotationQuat.quat_rotateAxis(rotationOnUp, playerUp, newFeetRotationQuat);
+            }
+
+            let playerHeadManager = this._myTeleportParams.myPlayerTransformManager.getPlayerHeadManager();
+            playerHeadManager.setRotationFeetQuat(newFeetRotationQuat);
+            playerHeadManager.teleportPositionFeet(newFeetPosition);
         }
     };
 }();

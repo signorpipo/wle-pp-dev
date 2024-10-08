@@ -114,7 +114,7 @@ PlayerLocomotionTeleportState.prototype._teleportToPosition = function () {
     let playerUp = vec3_create();
     let newFeetTransformQuat = quat2_create();
     let newFeetRotationQuat = quat_create();
-    return function _teleportToPosition(teleportPosition, rotationOnUp, forceTeleport = false) {
+    return function _teleportToPosition(teleportPosition, rotationOnUp) {
         this._myTeleportAsMovementFailed = false;
 
         this._myTeleportParams.myPlayerTransformManager.getRotationRealQuat(newFeetRotationQuat);
@@ -126,6 +126,6 @@ PlayerLocomotionTeleportState.prototype._teleportToPosition = function () {
 
         newFeetTransformQuat.quat2_setPositionRotationQuat(teleportPosition, newFeetRotationQuat);
 
-        this._myTeleportParams.myPlayerTransformManager.teleportTransformQuat(newFeetTransformQuat, forceTeleport, undefined);
+        this._myTeleportParams.myPlayerTransformManager.teleportTransformQuat(newFeetTransformQuat);
     };
 }();
