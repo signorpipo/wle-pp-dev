@@ -670,6 +670,7 @@ PlayerLocomotionTeleportDetectionState.prototype._isTeleportPositionValid = func
                 teleportRotationQuat.quat_rotateAxis(rotationOnUp, playerUp, teleportRotationQuat);
             }
 
+            this._myTeleportParams.myPlayerTransformManager.getPosition(feetPosition);
             let differenceOnUp = teleportPosition.vec3_sub(feetPosition, differenceOnUpVector).vec3_componentAlongAxis(playerUp, differenceOnUpVector).vec3_length();
 
             if (differenceOnUp < this._myTeleportParams.myDetectionParams.myMaxHeightDifference + 0.00001) {
