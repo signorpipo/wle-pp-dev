@@ -103,6 +103,8 @@ export class PlayerLocomotionTeleportTeleportShiftState extends PlayerLocomotion
         this._myLocomotionRuntimeParams.myIsTeleporting = false;
         this._myLocomotionRuntimeParams.myTeleportJustPerformed = true;
         this._teleportToPosition(this._myTeleportRuntimeParams.myTeleportPosition, this._myStartRotationOnUp - this._myCurrentRotationOnUp);
+
+        this._myTeleportParams.myPlayerTransformManager.resetReal();
     }
 
     _shiftingUpdate(dt, fsm) {
