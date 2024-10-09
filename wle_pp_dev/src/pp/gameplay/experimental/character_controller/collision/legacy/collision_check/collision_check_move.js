@@ -93,8 +93,8 @@ CollisionCheckMove.prototype._move = function () {
         let lastStepLongerThanMaxLength = false;
 
         if (!movement.vec3_isZero(0.00001) && collisionCheckParams.mySplitMovementEnabled) {
-            let minLength = collisionCheckParams.mySplitMovementMinLengthEnabled ? collisionCheckParams.mySplitMovementMinLength : null;
-            let maxLength = collisionCheckParams.mySplitMovementMaxLengthEnabled && collisionCheckParams.mySplitMovementMaxLength > 0 ? collisionCheckParams.mySplitMovementMaxLength : null;
+            let minLength = collisionCheckParams.mySplitMovementMinLengthEnabled ? collisionCheckParams.mySplitMovementMinLength : undefined;
+            let maxLength = collisionCheckParams.mySplitMovementMaxLengthEnabled && collisionCheckParams.mySplitMovementMaxLength > 0 ? collisionCheckParams.mySplitMovementMaxLength : undefined;
             let maxSteps = collisionCheckParams.mySplitMovementMaxStepsEnabled && collisionCheckParams.mySplitMovementMaxSteps > 0 ? collisionCheckParams.mySplitMovementMaxSteps : 1;
 
             let movementLength = movement.vec3_length();
@@ -105,7 +105,7 @@ CollisionCheckMove.prototype._move = function () {
                 movementStepAmount = Math.ceil(movementLength / stepLength);
                 movementStep = movementStep.vec3_normalize(movementStep).vec3_scale(stepLength, movementStep);
 
-                if (collisionCheckParams.mySplitMovementMaxStepsEnabled) {
+                if (collisionCheckParams.mySplitMovementMaxStepsEnabled && (collisionCheckParams.mySplitMovementMaxLengthLastStepCanBeLonger || !collisionCheckParams._myInternalSplitMovementMaxStepsDisabledForTeleport)) {
                     if (movementStepAmount > maxSteps) {
                         lastStepLongerThanMaxLength = true;
                     }

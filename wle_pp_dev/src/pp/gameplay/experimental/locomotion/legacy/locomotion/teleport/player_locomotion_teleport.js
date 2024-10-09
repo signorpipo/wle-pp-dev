@@ -174,10 +174,8 @@ export class PlayerLocomotionTeleport extends PlayerLocomotionMovement {
     _prepareCollisionCheckParams() {
         this._myMovementCollisionCheckParams.copy(this._myTeleportParams.myPlayerTransformManager.getMovementCollisionCheckParams());
 
-        if (this._myMovementCollisionCheckParams.mySplitMovementEnabled && this._myMovementCollisionCheckParams.mySplitMovementMaxLengthEnabled) {
-            // This is used for the perform teleport as movement, so it needs to be able to do as many steps needed based on teleport distance
-            this._myMovementCollisionCheckParams.mySplitMovementMaxStepsEnabled = false;
-        }
+        // This is used for the perform teleport as movement, so it needs to be able to do as many steps needed based on teleport distance
+        this._myMovementCollisionCheckParams._myInternalSplitMovementMaxStepsDisabledForTeleport = true;
 
         //this._myTeleportCollisionCheckParams.copy(this._myTeleportParams.myPlayerTransformManager.getTeleportCollisionCheckParams());
 

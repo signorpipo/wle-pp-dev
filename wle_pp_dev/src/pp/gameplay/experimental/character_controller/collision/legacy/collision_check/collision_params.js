@@ -261,6 +261,10 @@ export class CollisionCheckParams {
         this.myDebugCeilingInfoEnabled = false;
         this.myDebugRuntimeParamsEnabled = false;
         this.myDebugMovementEnabled = false;
+
+        /** Internal Flags */
+
+        this._myInternalSplitMovementMaxStepsDisabledForTeleport = false; // Specifically used by the teleport to avoid issues with the perform teleport as movement feature
     }
 
     copy(other) {
@@ -479,6 +483,8 @@ export class CollisionCheckParams {
         this.myDebugCeilingInfoEnabled = other.myDebugCeilingInfoEnabled;
         this.myDebugRuntimeParamsEnabled = other.myDebugRuntimeParamsEnabled;
         this.myDebugMovementEnabled = other.myDebugMovementEnabled;
+
+        this._myInternalSplitMovementMaxStepsDisabledForTeleport = other._myInternalSplitMovementMaxStepsDisabledForTeleport;
     }
 }
 
