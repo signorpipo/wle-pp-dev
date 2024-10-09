@@ -2495,7 +2495,7 @@
         },
         "cd3479ea-bbed-4628-830b-7e6b02a8e348": {
             "name": "Small AI Playground",
-            "parent": "afa026ad-d1bc-4de2-8c10-118fe1e2c3a0",
+            "parent": null,
             "components": [
                 {
                     "type": "pp-set-active",
@@ -2517,6 +2517,12 @@
                 0.1,
                 0.1,
                 0.1
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
             ]
         },
         "863908de-b9e4-417f-ab2a-b26c672fc121": {
