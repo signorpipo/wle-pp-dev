@@ -33,6 +33,12 @@
                 },
                 {
                     "type": "example-easy-tune-variables"
+                },
+                {
+                    "type": "target-framerate",
+                    "target-framerate": {
+                        "framerate": 60.0
+                    }
                 }
             ]
         },
@@ -2502,7 +2508,7 @@
                     "pp-set-active": {
                         "_myActive": false
                     },
-                    "active": false
+                    "active": true
                 },
                 {
                     "type": "pp-adjust-hierarchy-physx-scale"
@@ -11527,7 +11533,8 @@
                 "near": 0.0099999,
                 "far": 10000.0
             },
-            "ids": "uuid"
+            "ids": "uuid",
+            "serverPort": 8081
         },
         "physx": {
             "enable": true,
