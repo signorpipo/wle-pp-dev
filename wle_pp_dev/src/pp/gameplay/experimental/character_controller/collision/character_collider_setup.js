@@ -297,6 +297,8 @@ export class CharacterColliderSplitMovementParams {
         this.mySplitMovementStopOnHorizontalMovementFailed = false;
         this.mySplitMovementStopOnVerticalMovementFailed = false;
 
+        this.mySplitMovementStopAndFailIfMovementWouldBeReduced = false;
+
         /*
         this will not be available until the bridge is removed with a new implementation that directly use the collider and results
         
@@ -566,6 +568,8 @@ CharacterColliderSplitMovementParams.prototype.copy = function copy(other) {
 
     this.mySplitMovementStopOnHorizontalMovementFailed = other.mySplitMovementStopOnHorizontalMovementFailed;
     this.mySplitMovementStopOnVerticalMovementFailed = other.mySplitMovementStopOnVerticalMovementFailed;
+
+    this.mySplitMovementStopAndFailIfMovementWouldBeReduced = other.mySplitMovementStopAndFailIfMovementWouldBeReduced;
 
     /*
     this.mySplitMovementStopOnCallback = other.mySplitMovementStopOnCallback;

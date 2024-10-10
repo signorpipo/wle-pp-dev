@@ -17,6 +17,7 @@ export class CollisionCheckParams {
         this.mySplitMovementStopWhenVerticalMovementCanceled = false;
         this.mySplitMovementStopCallback = null;                        // Signature: callback(collisionRuntimeParams)
         this.mySplitMovementStopReturnPrevious = false;
+        this.mySplitMovementStopAndFailIfMovementWouldBeReduced = false;
 
         this.myRadius = 0;
         this.myDistanceFromFeetToIgnore = 0;
@@ -264,7 +265,7 @@ export class CollisionCheckParams {
 
         /** Internal Flags */
 
-        this._myInternalSplitMovementMaxStepsDisabledForTeleport = false; // Specifically used by the teleport to avoid issues with the perform teleport as movement feature
+        this._myInternalSplitMovementMaxStepsDisabled = false; // Specifically used when the movement should be tested completely and not stop on max steps
     }
 
     copy(other) {
@@ -282,6 +283,7 @@ export class CollisionCheckParams {
         this.mySplitMovementStopWhenVerticalMovementCanceled = other.mySplitMovementStopWhenVerticalMovementCanceled;
         this.mySplitMovementStopCallback = other.mySplitMovementStopCallback;
         this.mySplitMovementStopReturnPrevious = other.mySplitMovementStopReturnPrevious;
+        this.mySplitMovementStopAndFailIfMovementWouldBeReduced = other.mySplitMovementStopAndFailIfMovementWouldBeReduced;
 
         this.myRadius = other.myRadius;
         this.myDistanceFromFeetToIgnore = other.myDistanceFromFeetToIgnore;
@@ -484,7 +486,7 @@ export class CollisionCheckParams {
         this.myDebugRuntimeParamsEnabled = other.myDebugRuntimeParamsEnabled;
         this.myDebugMovementEnabled = other.myDebugMovementEnabled;
 
-        this._myInternalSplitMovementMaxStepsDisabledForTeleport = other._myInternalSplitMovementMaxStepsDisabledForTeleport;
+        this._myInternalSplitMovementMaxStepsDisabled = other._myInternalSplitMovementMaxStepsDisabled;
     }
 }
 

@@ -105,7 +105,7 @@ CollisionCheckMove.prototype._move = function () {
                 movementStepAmount = Math.ceil(movementLength / stepLength);
                 movementStep = movementStep.vec3_normalize(movementStep).vec3_scale(stepLength, movementStep);
 
-                if (collisionCheckParams.mySplitMovementMaxStepsEnabled && (collisionCheckParams.mySplitMovementMaxLengthLastStepCanBeLonger || !collisionCheckParams._myInternalSplitMovementMaxStepsDisabledForTeleport)) {
+                if (collisionCheckParams.mySplitMovementMaxStepsEnabled && (collisionCheckParams.mySplitMovementMaxLengthLastStepCanBeLonger || !collisionCheckParams._myInternalSplitMovementMaxStepsDisabled)) {
                     if (movementStepAmount > maxSteps) {
                         lastStepLongerThanMaxLength = true;
                     }
@@ -136,50 +136,60 @@ CollisionCheckMove.prototype._move = function () {
         let splitMovementLastStepLongerThanMaxLength = false;
         let splitMovementReduced = false;
 
-        for (let i = 0; i < movementStepAmount; i++) {
-            if (movementStepAmount == 1 || i != movementStepAmount - 1) {
-                currentMovementStep.vec3_copy(movementStep);
-            } else {
-                if (collisionCheckParams.mySplitMovementMaxLengthLastStepCanBeLonger || !lastStepLongerThanMaxLength) {
-                    splitMovementLastStepLongerThanMaxLength = lastStepLongerThanMaxLength;
+        if (collisionCheckParams.mySplitMovementStopAndFailIfMovementWouldBeReduced && (!collisionCheckParams.mySplitMovementMaxLengthLastStepCanBeLonger && lastStepLongerThanMaxLength)) {
+            fixedMovement.vec3_zero();
+            this._moveStep(fixedMovement, feetPosition, transformUp, transformForward, height, true, collisionCheckParams, collisionRuntimeParams, fixedMovementStep);
 
-                    currentMovementStep = movement.vec3_sub(movementChecked, currentMovementStep);
-                } else {
-                    splitMovementReduced = true;
+            collisionRuntimeParams.myHorizontalMovementCanceled = true;
+            collisionRuntimeParams.myVerticalMovementCanceled = true;
 
+            splitMovementStop = true;
+        } else {
+            for (let i = 0; i < movementStepAmount; i++) {
+                if (movementStepAmount == 1 || i != movementStepAmount - 1) {
                     currentMovementStep.vec3_copy(movementStep);
-                }
-            }
+                } else {
+                    if (collisionCheckParams.mySplitMovementMaxLengthLastStepCanBeLonger || !lastStepLongerThanMaxLength) {
+                        splitMovementLastStepLongerThanMaxLength = lastStepLongerThanMaxLength;
 
-            newFeetPosition = feetPosition.vec3_add(fixedMovement, newFeetPosition);
-            fixedMovementStep.vec3_zero();
-            fixedMovementStep = this._moveStep(currentMovementStep, newFeetPosition, transformUp, transformForward, height, true, collisionCheckParams, collisionRuntimeParams, fixedMovementStep);
-            fixedMovement.vec3_add(fixedMovementStep, fixedMovement);
+                        currentMovementStep = movement.vec3_sub(movementChecked, currentMovementStep);
+                    } else {
+                        splitMovementReduced = true;
 
-            movementChecked = movementChecked.vec3_add(currentMovementStep, movementChecked);
-
-            stepsPerformed = i + 1;
-
-            if ((collisionRuntimeParams.myHorizontalMovementCanceled && collisionRuntimeParams.myVerticalMovementCanceled) ||
-                (collisionRuntimeParams.myHorizontalMovementCanceled &&
-                    (collisionCheckParams.mySplitMovementStopWhenHorizontalMovementCanceled || (verticalMovement.vec3_isZero() && fixedMovementStep.vec3_isZero()))) ||
-                (collisionRuntimeParams.myVerticalMovementCanceled &&
-                    (collisionCheckParams.mySplitMovementStopWhenVerticalMovementCanceled || (horizontalMovement.vec3_isZero() && fixedMovementStep.vec3_isZero()))) ||
-                (collisionCheckParams.mySplitMovementStopCallback != null && collisionCheckParams.mySplitMovementStopCallback(collisionRuntimeParams))) {
-                if (collisionCheckParams.mySplitMovementStopReturnPrevious) {
-                    collisionRuntimeParams.copy(previousCollisionRuntimeParams);
-                    fixedMovement.vec3_copy(previousFixedMovement);
-                    movementChecked.vec3_copy(previousMovementChecked);
-                    stepsPerformed -= 1;
+                        currentMovementStep.vec3_copy(movementStep);
+                    }
                 }
 
-                splitMovementStop = true;
-                break;
-            }
+                newFeetPosition = feetPosition.vec3_add(fixedMovement, newFeetPosition);
+                fixedMovementStep.vec3_zero();
+                fixedMovementStep = this._moveStep(currentMovementStep, newFeetPosition, transformUp, transformForward, height, true, collisionCheckParams, collisionRuntimeParams, fixedMovementStep);
+                fixedMovement.vec3_add(fixedMovementStep, fixedMovement);
 
-            previousCollisionRuntimeParams.copy(collisionRuntimeParams);
-            previousFixedMovement.vec3_copy(fixedMovement);
-            previousMovementChecked.vec3_copy(movementChecked);
+                movementChecked = movementChecked.vec3_add(currentMovementStep, movementChecked);
+
+                stepsPerformed = i + 1;
+
+                if ((collisionRuntimeParams.myHorizontalMovementCanceled && collisionRuntimeParams.myVerticalMovementCanceled) ||
+                    (collisionRuntimeParams.myHorizontalMovementCanceled &&
+                        (collisionCheckParams.mySplitMovementStopWhenHorizontalMovementCanceled || (verticalMovement.vec3_isZero() && fixedMovementStep.vec3_isZero()))) ||
+                    (collisionRuntimeParams.myVerticalMovementCanceled &&
+                        (collisionCheckParams.mySplitMovementStopWhenVerticalMovementCanceled || (horizontalMovement.vec3_isZero() && fixedMovementStep.vec3_isZero()))) ||
+                    (collisionCheckParams.mySplitMovementStopCallback != null && collisionCheckParams.mySplitMovementStopCallback(collisionRuntimeParams))) {
+                    if (collisionCheckParams.mySplitMovementStopReturnPrevious) {
+                        collisionRuntimeParams.copy(previousCollisionRuntimeParams);
+                        fixedMovement.vec3_copy(previousFixedMovement);
+                        movementChecked.vec3_copy(previousMovementChecked);
+                        stepsPerformed -= 1;
+                    }
+
+                    splitMovementStop = true;
+                    break;
+                }
+
+                previousCollisionRuntimeParams.copy(collisionRuntimeParams);
+                previousFixedMovement.vec3_copy(fixedMovement);
+                previousMovementChecked.vec3_copy(movementChecked);
+            }
         }
 
         //fixedMovement.vec3_zero();

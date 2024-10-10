@@ -717,10 +717,6 @@ export class PlayerTransformManager {
             playerHeadManager.setHeightHead(this.getHeight(), true);
         }
 
-        if (updateValidToReal) {
-            this._updateValidToReal(0);
-        }
-
         if (resetHeadToReal) {
             const positionHeadReal = PlayerTransformManager._resetRealSV.positionHeadReal;
             this.getPositionHeadReal(positionHeadReal);
@@ -738,6 +734,10 @@ export class PlayerTransformManager {
                     this.resetHeadToReal();
                 }
             }
+        }
+
+        if (updateValidToReal) {
+            this._updateValidToReal(0);
         }
     }
 
@@ -953,9 +953,10 @@ export class PlayerTransformManager {
         params.mySplitMovementMinLengthEnabled = true;
         params.mySplitMovementMinLength = params.mySplitMovementMaxLength;
         params.mySplitMovementMaxStepsEnabled = true;
-        params.mySplitMovementMaxSteps = 3;
+        params.mySplitMovementMaxSteps = Math.ceil(4 / params.mySplitMovementMaxLength);
         params.mySplitMovementStopWhenHorizontalMovementCanceled = true;
         params.mySplitMovementStopWhenVerticalMovementCanceled = true;
+        params.mySplitMovementStopAndFailIfMovementWouldBeReduced = true;
 
         params.myHorizontalMovementCheckEnabled = true;
         params.myHorizontalMovementRadialStepAmount = 1;
@@ -1004,6 +1005,20 @@ export class PlayerTransformManager {
         params.myVerticalBlockLayerFlags.copy(this._myParams.myHeadCollisionBlockLayerFlags);
         params.myVerticalObjectsToIgnore.pp_copy(this._myParams.myHeadCollisionObjectsToIgnore);
 
+        params.mySlidingEnabled = false;
+
+        params.mySnapOnGroundEnabled = false;
+        params.mySnapOnCeilingEnabled = false;
+        params.myGroundPopOutEnabled = false;
+        params.myCeilingPopOutEnabled = false;
+        params.myAdjustVerticalMovementWithGroundAngleDownhill = false;
+        params.myAdjustVerticalMovementWithGroundAngleUphill = false;
+        params.myAdjustVerticalMovementWithCeilingAngleDownhill = false;
+        params.myAdjustVerticalMovementWithCeilingAngleUphill = false;
+        params.myAdjustHorizontalMovementWithGroundAngleDownhill = false;
+        params.myAdjustHorizontalMovementWithCeilingAngleDownhill = false;
+        params.myVerticalMovementReduceEnabled = false;
+
         params.myDebugEnabled = false;
 
         params.myDebugHorizontalMovementEnabled = false;
@@ -1041,15 +1056,9 @@ export class PlayerTransformManager {
         const params = this._myRealMovementCollisionCheckParams;
         params.copy(this._myParams.myMovementCollisionCheckParams);
 
-        params.mySplitMovementEnabled = true;
-        params.mySplitMovementMaxLengthEnabled = true;
-        params.mySplitMovementMaxLength = params.myRadius * 0.75;
-        params.mySplitMovementMinLengthEnabled = true;
-        params.mySplitMovementMinLength = params.mySplitMovementMaxLength;
-        params.mySplitMovementMaxStepsEnabled = true;
-        params.mySplitMovementMaxSteps = 3;
         params.mySplitMovementStopWhenHorizontalMovementCanceled = true;
         params.mySplitMovementStopWhenVerticalMovementCanceled = true;
+        params.mySplitMovementStopAndFailIfMovementWouldBeReduced = true;
 
         params.mySlidingEnabled = false;
 
