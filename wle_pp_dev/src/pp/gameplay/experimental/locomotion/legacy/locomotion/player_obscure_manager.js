@@ -42,7 +42,7 @@ export class PlayerObscureManagerParams {
         this.myObscureLevelRelativeDistanceEasingFunction = EasingFunction.linear;
 
         this.myDisableObscureWhileTeleporting = true;
-        this.myDisableObscureWhileTeleportingDuration = 0.5;
+        this.myDisableObscureWhileTeleportingDuration = null;
 
         this.myEngine = engine;
     }
