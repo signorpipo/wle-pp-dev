@@ -33,17 +33,21 @@ export class PlayerTransformManagerParams {
     public myAlwaysSyncPositionWithReal: boolean = false;
     public myAlwaysSyncHeadPositionWithReal: boolean = false;
 
+    /**
+     * If the real position is far, body will be considered colliding  
+     * If the body is colliding, the floating check is skipped
+     */
     public readonly mySyncEnabledFlagMap: Map<PlayerTransformManagerSyncFlag, boolean> = new Map();
     public readonly mySyncPositionFlagMap: Map<PlayerTransformManagerSyncFlag, boolean> = new Map();
     public readonly mySyncPositionHeadFlagMap: Map<PlayerTransformManagerSyncFlag, boolean> = new Map();
     public readonly mySyncRotationFlagMap: Map<PlayerTransformManagerSyncFlag, boolean> = new Map();
     public readonly mySyncHeightFlagMap: Map<PlayerTransformManagerSyncFlag, boolean> = new Map();
 
+
+
     /** Used to make the character fall if it's leaning too much */
     public myIsLeaningValidAboveDistance: boolean = false;
     public myLeaningValidDistance: number = 0;
-
-
 
     /** Settings for both hop and lean */
 
@@ -63,10 +67,17 @@ export class PlayerTransformManagerParams {
 
     public myMaxDistanceFromRealToSyncEnabled: boolean = false;
 
-    /** Max distance to resync valid with head, if you head is further do not resync */
+    /**
+     * Max distance to resync valid with real  
+     * If your real position is farther the body will be considered as colliding
+     */
     public myMaxDistanceFromRealToSync: number = 0;
 
-
+    /**
+     * Max distance to resync valid head with real head  
+     * If you real head is farther the head will be considered as colliding
+     */
+    public myMaxDistanceFromHeadRealToSync: number = 0;
 
     public myHeadRadius: number = 0;
     public readonly myHeadCollisionBlockLayerFlags: PhysicsLayerFlags = new PhysicsLayerFlags();
@@ -1263,16 +1274,20 @@ export class PlayerTransformManager {
             }
         }
 
-        // Body Colliding
         const collisionRuntimeParams = PlayerTransformManager._updateValidToRealSV.collisionRuntimeParams;
-        collisionRuntimeParams.copy(this._myCollisionRuntimeParams);
-        collisionRuntimeParams.myIsOnGround = true; // #TODO Temp as long as surface infos are not actually updated
-
         const transformQuat = PlayerTransformManager._updateValidToRealSV.transformQuat;
         const newPosition = PlayerTransformManager._updateValidToRealSV.newPosition;
         this.getTransformQuat(transformQuat);
         newPosition.vec3_copy(this._myValidPosition);
-        if (this._myParams.mySyncEnabledFlagMap.get(PlayerTransformManagerSyncFlag.BODY_COLLIDING)) {
+
+        // Body Colliding
+        if (!this._myIsFar && this._myParams.mySyncEnabledFlagMap.get(PlayerTransformManagerSyncFlag.BODY_COLLIDING)) {
+            collisionRuntimeParams.copy(this._myCollisionRuntimeParams);
+
+            // #TODO Temp as long as surface infos are not updated every time the position changes
+            // This is needed to understand if snapping should occur (and possibly other stuff I can't remember)
+            CollisionCheckBridge.getCollisionCheck(this._myParams.myEngine as any).updateSurfaceInfo(transformQuat, this._myParams.myMovementCollisionCheckParams, collisionRuntimeParams);
+
             CollisionCheckBridge.getCollisionCheck(this._myParams.myEngine as any).move(movementToCheck, transformQuat, this._myRealMovementCollisionCheckParams, collisionRuntimeParams);
 
             if (!collisionRuntimeParams.myHorizontalMovementCanceled && !collisionRuntimeParams.myVerticalMovementCanceled) {
@@ -1290,6 +1305,8 @@ export class PlayerTransformManager {
             } else {
                 this._myIsBodyColliding = true;
             }
+        } else if (this._myIsFar) {
+            this._myIsBodyColliding = true;
         }
 
         if (this._myParams.myAlwaysSyncPositionWithReal) {
@@ -1297,14 +1314,7 @@ export class PlayerTransformManager {
         }
 
         // Floating 
-        if (this._myParams.mySyncEnabledFlagMap.get(PlayerTransformManagerSyncFlag.FLOATING)) {
-
-            if (!this._myIsBodyColliding) {
-                newPosition.vec3_sub(position, movementToCheck);
-            } else {
-                positionReal.vec3_sub(position, movementToCheck);
-            }
-
+        if (!this._myIsBodyColliding && this._myParams.mySyncEnabledFlagMap.get(PlayerTransformManagerSyncFlag.FLOATING)) {
             collisionRuntimeParams.copy(this._myCollisionRuntimeParams);
             const floatingTransformQuat = PlayerTransformManager._updateValidToRealSV.floatingTransformQuat;
             floatingTransformQuat.quat2_setPositionRotationQuat(this._myValidPosition, this._myValidRotationQuat);

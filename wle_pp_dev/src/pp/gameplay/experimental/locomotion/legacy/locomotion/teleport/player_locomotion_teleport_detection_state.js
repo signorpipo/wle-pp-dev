@@ -182,10 +182,10 @@ export class PlayerLocomotionTeleportDetectionState extends PlayerLocomotionTele
 
         if (!this._myTeleportParams.myPlayerTransformManager.isSynced(this._myTeleportParams.myDetectionParams.myPlayerTransformManagerMustBeSyncedFlagMap)) {
             this._myDetectionRuntimeParams.myTeleportPositionValid = false;
-        } else if (this._myTeleportParams.myDetectionParams.myPositionRealMaxDistance != null && this._myTeleportParams.myPlayerTransformManager.isBodyColliding() &&
+        } else if (this._myTeleportParams.myDetectionParams.myPositionRealMaxDistance != null &&
             this._myTeleportParams.myPlayerTransformManager.getDistanceToReal() > this._myTeleportParams.myDetectionParams.myPositionRealMaxDistance) {
             this._myDetectionRuntimeParams.myTeleportPositionValid = false;
-        } else if (this._myTeleportParams.myDetectionParams.myPositionHeadRealMaxDistance != null && this._myTeleportParams.myPlayerTransformManager.isHeadColliding() &&
+        } else if (this._myTeleportParams.myDetectionParams.myPositionHeadRealMaxDistance != null &&
             this._myTeleportParams.myPlayerTransformManager.getDistanceToRealHead() > this._myTeleportParams.myDetectionParams.myPositionHeadRealMaxDistance) {
             this._myDetectionRuntimeParams.myTeleportPositionValid = false;
         } else if (!this._myTeleportParams.myPlayerTransformManager.isPositionHeadValid() && this._myTeleportParams.myDetectionParams.myPositionHeadMustBeValid) {
