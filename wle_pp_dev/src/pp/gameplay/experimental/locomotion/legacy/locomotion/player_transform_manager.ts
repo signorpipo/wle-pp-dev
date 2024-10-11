@@ -79,6 +79,8 @@ export class PlayerTransformManagerParams {
      */
     public myMaxDistanceFromHeadRealToSync: number = 0;
 
+
+
     public myHeadRadius: number = 0;
     public readonly myHeadCollisionBlockLayerFlags: PhysicsLayerFlags = new PhysicsLayerFlags();
     public myHeadCollisionObjectsToIgnore: Readonly<Object3D>[] = [];
@@ -966,7 +968,7 @@ export class PlayerTransformManager {
         params.mySplitMovementMaxSteps = Math.ceil(4 / params.mySplitMovementMaxLength);
         params.mySplitMovementStopWhenHorizontalMovementCanceled = true;
         params.mySplitMovementStopWhenVerticalMovementCanceled = true;
-        params.mySplitMovementStopAndFailIfMovementWouldBeReduced = true;
+        params._myInternalSplitMovementMaxStepsDisabled = true;
 
         params.myHorizontalMovementCheckEnabled = true;
         params.myHorizontalMovementRadialStepAmount = 1;
@@ -1068,7 +1070,7 @@ export class PlayerTransformManager {
 
         params.mySplitMovementStopWhenHorizontalMovementCanceled = true;
         params.mySplitMovementStopWhenVerticalMovementCanceled = true;
-        params.mySplitMovementStopAndFailIfMovementWouldBeReduced = true;
+        params._myInternalSplitMovementMaxStepsDisabled = true;
 
         params.mySlidingEnabled = false;
 
