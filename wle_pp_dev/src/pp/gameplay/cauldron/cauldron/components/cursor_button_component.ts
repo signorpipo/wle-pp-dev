@@ -117,6 +117,9 @@ export class CursorButtonComponent extends Component {
     @property.bool(true)
     private readonly _myUseSpatialAudio!: boolean;
 
+    @property.float(1.5)
+    private readonly _mySpatialAudioReferenceDistance!: number;
+
     @property.string("")
     private readonly _mySFXOnHover!: string;
 
@@ -757,6 +760,7 @@ export class CursorButtonComponent extends Component {
         if (this._mySFXOnHover.length > 0) {
             const audioSetup = new AudioSetup(this._mySFXOnHover);
             audioSetup.mySpatial = this._myUseSpatialAudio;
+            audioSetup.myReferenceDistance = this._mySpatialAudioReferenceDistance;
 
             const audioID = this._myCursorButtonComponentID + "_on_hover";
             audioManager.addAudioSetup(audioID, audioSetup);
@@ -767,6 +771,7 @@ export class CursorButtonComponent extends Component {
         if (this._mySFXOnDown.length > 0) {
             const audioSetup = new AudioSetup(this._mySFXOnDown);
             audioSetup.mySpatial = this._myUseSpatialAudio;
+            audioSetup.myReferenceDistance = this._mySpatialAudioReferenceDistance;
 
             const audioID = this._myCursorButtonComponentID + "_on_down";
             audioManager.addAudioSetup(audioID, audioSetup);
@@ -777,6 +782,7 @@ export class CursorButtonComponent extends Component {
         if (this._mySFXOnUp.length > 0) {
             const audioSetup = new AudioSetup(this._mySFXOnUp);
             audioSetup.mySpatial = this._myUseSpatialAudio;
+            audioSetup.myReferenceDistance = this._mySpatialAudioReferenceDistance;
 
             const audioID = this._myCursorButtonComponentID + "_on_up";
             audioManager.addAudioSetup(audioID, audioSetup);
@@ -787,6 +793,7 @@ export class CursorButtonComponent extends Component {
         if (this._mySFXOnUnhover.length > 0) {
             const audioSetup = new AudioSetup(this._mySFXOnUnhover);
             audioSetup.mySpatial = this._myUseSpatialAudio;
+            audioSetup.myReferenceDistance = this._mySpatialAudioReferenceDistance;
 
             const audioID = this._myCursorButtonComponentID + "_on_unhover";
             audioManager.addAudioSetup(audioID, audioSetup);
