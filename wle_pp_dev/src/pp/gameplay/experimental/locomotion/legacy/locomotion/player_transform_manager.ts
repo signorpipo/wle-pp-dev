@@ -56,7 +56,6 @@ export class PlayerTransformManagerParams {
     public myFloatingSplitCheckEnabled: boolean = false;
     public myFloatingSplitCheckMinLength: number | null = null;
     public myFloatingSplitCheckMaxLength: number | null = null;
-    public myFloatingSplitCheckMaxSteps: number | null = null;
     public myFloatingSplitCheckStepEqualLength: boolean = false;
     public myFloatingSplitCheckStepEqualLengthMinLength: number = 0;
 
@@ -1325,23 +1324,12 @@ export class PlayerTransformManager {
                     if (!movementToCheck.vec3_isZero(0.00001) && this._myParams.myFloatingSplitCheckEnabled) {
                         const minLength = this._myParams.myFloatingSplitCheckMinLength;
                         const maxLength = this._myParams.myFloatingSplitCheckMaxLength;
-                        const maxSteps = this._myParams.myFloatingSplitCheckMaxSteps != null ? this._myParams.myFloatingSplitCheckMaxSteps : 1;
 
                         const movementLength = movementToCheck.vec3_length();
-                        const equalStepLength = movementLength / maxSteps;
+                        const stepLength = Math.pp_clamp(movementLength, minLength ?? undefined, maxLength ?? undefined);
 
-                        const stepLength = Math.pp_clamp(equalStepLength, minLength ?? undefined, maxLength ?? undefined);
-                        if (stepLength != equalStepLength) {
-                            movementStepAmount = Math.ceil(movementLength / stepLength);
-                            movementStep.vec3_normalize(movementStep).vec3_scale(stepLength, movementStep);
-
-                            if (this._myParams.myFloatingSplitCheckMaxSteps != null) {
-                                movementStepAmount = Math.min(movementStepAmount, maxSteps);
-                            }
-                        } else {
-                            movementStepAmount = maxSteps;
-                            movementStep.vec3_normalize(movementStep).vec3_scale(equalStepLength, movementStep);
-                        }
+                        movementStepAmount = Math.ceil(movementLength / stepLength);
+                        movementStep.vec3_normalize(movementStep).vec3_scale(stepLength, movementStep);
 
                         movementStepAmount = Math.max(1, movementStepAmount);
 
