@@ -1588,8 +1588,7 @@ export class PlayerTransformManager {
                         const headUpValue = position.vec3_valueAlongAxis(bodyUp);
                         const headRealUpValue = positionReal.vec3_valueAlongAxis(bodyUp);
 
-                        const epsilon = this._myHeadCollisionCheckParams.myRadius;
-                        const isHeadBetweenBodyAndHeadReal = headRealUpValue >= headUpValue && headRealUpValue >= bodyUpValue && headUpValue >= (bodyUpValue - epsilon);
+                        const isHeadBetweenBodyAndHeadReal = headRealUpValue >= headUpValue && headRealUpValue >= bodyUpValue && headUpValue >= (bodyUpValue - 0.0001);
 
                         if (!isHeadBetweenBodyAndHeadReal) {
                             // It's not a movement to get from feet to head, because the valid head is not between the feet and the real head
