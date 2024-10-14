@@ -73,9 +73,12 @@ export class PlayerTransformManagerParams {
      */
     public myMaxDistanceFromRealToSync: number = 0;
 
+    public myMaxDistanceFromHeadRealToSyncEnabled: boolean = false;
     /**
      * Max distance to resync valid head with real head  
      * If you real head is farther the head will be considered as colliding
+     * Vertically, the max distance can be higher if the current height is higher
+     * Since the ehad might have been reset to feet
      */
     public myMaxDistanceFromHeadRealToSync: number = 0;
 
@@ -964,11 +967,8 @@ export class PlayerTransformManager {
         params.mySplitMovementMaxLength = params.myRadius * 0.75;
         params.mySplitMovementMinLengthEnabled = true;
         params.mySplitMovementMinLength = params.mySplitMovementMaxLength;
-        params.mySplitMovementMaxStepsEnabled = true;
-        params.mySplitMovementMaxSteps = Math.ceil(4 / params.mySplitMovementMaxLength);
         params.mySplitMovementStopWhenHorizontalMovementCanceled = true;
         params.mySplitMovementStopWhenVerticalMovementCanceled = true;
-        params._myInternalSplitMovementMaxStepsDisabled = true;
 
         params.myHorizontalMovementCheckEnabled = true;
         params.myHorizontalMovementRadialStepAmount = 1;
@@ -1091,6 +1091,7 @@ export class PlayerTransformManager {
         //params.myHorizontalMovementGroundAngleIgnoreHeight = 0.1 * 3;
         //params.myHorizontalMovementCeilingAngleIgnoreHeight = 0.1 * 3;
 
+        // I'm not really sure why this was needed, maybe for the floating check?
         params.myIsOnGroundIfInsideHit = true;
 
         params.myDebugEnabled = false;
@@ -1456,10 +1457,16 @@ export class PlayerTransformManager {
     private static readonly _updateValidHeadToRealHeadSV =
         {
             movementToCheck: vec3_create(),
+            horizontalMovementToCheck: vec3_create(),
+            verticalMovementToCheck: vec3_create(),
             position: vec3_create(),
             positionReal: vec3_create(),
             transformQuat: quat2_create(),
             collisionRuntimeParams: new CollisionRuntimeParams(),
+
+            bodyRotationQuat: quat_create(),
+            bodyUp: vec3_create(),
+            bodyPosition: vec3_create(),
 
             newPositionHead: vec3_create(),
 
@@ -1557,7 +1564,52 @@ export class PlayerTransformManager {
             const transformQuat = PlayerTransformManager._updateValidHeadToRealHeadSV.transformQuat;
             this.getTransformHeadQuat(transformQuat); // Get eyes transform
             newPositionHead.vec3_copy(this._myValidPositionHead);
-            if (this._myParams.mySyncEnabledFlagMap.get(PlayerTransformManagerSyncFlag.HEAD_COLLIDING)) {
+
+            let isHeadFar = false;
+            if (this._myParams.myMaxDistanceFromHeadRealToSyncEnabled) {
+                isHeadFar = movementToCheck.vec3_length() > this._myParams.myMaxDistanceFromHeadRealToSync;
+                if (isHeadFar) {
+                    const horizontalMovementToCheck = PlayerTransformManager._updateValidHeadToRealHeadSV.horizontalMovementToCheck;
+                    const verticalMovementToCheck = PlayerTransformManager._updateValidHeadToRealHeadSV.verticalMovementToCheck;
+                    const bodyRotationQuat = PlayerTransformManager._updateValidHeadToRealHeadSV.bodyRotationQuat;
+                    const bodyUp = PlayerTransformManager._updateValidHeadToRealHeadSV.bodyUp;
+
+                    this.getRotationQuat(bodyRotationQuat);
+                    bodyRotationQuat.quat_getUp(bodyUp);
+                    movementToCheck.vec3_componentAlongAxis(bodyUp, verticalMovementToCheck);
+                    movementToCheck.vec3_sub(verticalMovementToCheck, horizontalMovementToCheck);
+
+                    isHeadFar = horizontalMovementToCheck.vec3_length() > this._myParams.myMaxDistanceFromHeadRealToSync;
+                    if (!isHeadFar) {
+                        const bodyPosition = PlayerTransformManager._updateValidHeadToRealHeadSV.bodyPosition;
+                        this.getPosition(bodyPosition);
+
+                        const bodyUpValue = bodyPosition.vec3_valueAlongAxis(bodyUp);
+                        const headUpValue = position.vec3_valueAlongAxis(bodyUp);
+                        const headRealUpValue = positionReal.vec3_valueAlongAxis(bodyUp);
+
+                        const epsilon = this._myHeadCollisionCheckParams.myRadius;
+                        const isHeadBetweenBodyAndHeadReal = headRealUpValue >= headUpValue && headRealUpValue >= bodyUpValue && headUpValue >= (bodyUpValue - epsilon);
+
+                        if (!isHeadBetweenBodyAndHeadReal) {
+                            // It's not a movement to get from feet to head, because the valid head is not between the feet and the real head
+                            isHeadFar = true;
+                        } else {
+                            const heightToCheck = this.getPlayerHeadManager().getHeightEyes() + this._myHeadCollisionCheckParams.myRadius;
+                            const isHeadRealBelowHeight = (headRealUpValue - bodyUpValue) <= heightToCheck;
+
+                            if (!isHeadRealBelowHeight) {
+                                // It's not a movement to get from feet to head, because the real head is actually higher
+                                isHeadFar = true;
+                            } else {
+                                isHeadFar = false;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (!isHeadFar && this._myParams.mySyncEnabledFlagMap.get(PlayerTransformManagerSyncFlag.HEAD_COLLIDING)) {
                 CollisionCheckBridge.getCollisionCheck(this._myParams.myEngine as any).move(movementToCheck, transformQuat, this._myHeadCollisionCheckParams, collisionRuntimeParams);
 
                 if (!collisionRuntimeParams.myHorizontalMovementCanceled && !collisionRuntimeParams.myVerticalMovementCanceled) {
@@ -1572,6 +1624,8 @@ export class PlayerTransformManager {
                 } else {
                     this._myIsHeadColliding = true;
                 }
+            } else if (isHeadFar) {
+                this._myIsHeadColliding = true;
             }
 
             firstHeadCollidingCheckDone = true;
