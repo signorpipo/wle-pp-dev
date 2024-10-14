@@ -173,6 +173,9 @@ export class PlayerLocomotionComponent extends Component {
     @property.float(0.25)
     private readonly _myResetHeadToRealMinDistance!: number;
 
+    @property.int(-1)
+    private readonly _myMaxHeadToRealHeadSteps!: number;
+
 
 
     /** Valid means, for example, that the real player has not moved inside a wall by moving in the real space */
@@ -360,6 +363,7 @@ export class PlayerLocomotionComponent extends Component {
             params.myResetRealOnStartFramesAmount = this._myResetRealOnStartFramesAmount;
             params.myResetHeadToFeetInsteadOfReal = this._myResetHeadToFeetInsteadOfReal;
             params.myResetHeadToRealMinDistance = this._myResetHeadToRealMinDistance;
+            params.myMaxHeadToRealHeadSteps = this._myMaxHeadToRealHeadSteps > 0 ? this._myMaxHeadToRealHeadSteps : null;
 
             params.mySyncWithRealWorldPositionOnlyIfValid = this._mySyncWithRealWorldPositionOnlyIfValid;
             params.myViewOcclusionInsideWallsEnabled = this._myViewOcclusionInsideWallsEnabled;

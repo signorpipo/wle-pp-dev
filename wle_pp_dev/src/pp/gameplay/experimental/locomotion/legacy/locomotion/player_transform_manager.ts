@@ -84,8 +84,8 @@ export class PlayerTransformManagerParams {
     public myMaxDistanceFromHeadRealToSync: number = 0;
 
     /**
-     * If this is enabled, the head will only do this max amount of steps to reach the real head, and the last step
-     * will be longer to complete the whole movement  
+     * If this is enabled, the head will do this max amount of steps to reach the real head, but every step might be longer
+     * than the safe max step  
      * This means that the movement to reach the real head might not be as precise and can allow clipping through objects,
      * but it will be more performant
      * 
@@ -976,18 +976,19 @@ export class PlayerTransformManager {
         params.myDistanceFromHeadToIgnore = 0;
 
         params.mySplitMovementEnabled = true;
-        params.mySplitMovementMaxLengthEnabled = true;
-        params.mySplitMovementMaxLength = params.myRadius * 0.75;
         params.mySplitMovementMinLengthEnabled = true;
-        params.mySplitMovementMinLength = params.mySplitMovementMaxLength;
-        params.mySplitMovementStopWhenHorizontalMovementCanceled = true;
-        params.mySplitMovementStopWhenVerticalMovementCanceled = true;
+        params.mySplitMovementMinLength = params.myRadius * 0.75;
 
         if (this._myParams.myMaxHeadToRealHeadSteps != null) {
             params.mySplitMovementMaxStepsEnabled = true;
             params.mySplitMovementMaxSteps = this._myParams.myMaxHeadToRealHeadSteps;
-            params.mySplitMovementMaxLengthLastStepCanBeLonger = true;
+        } else {
+            params.mySplitMovementMaxLengthEnabled = true;
+            params.mySplitMovementMaxLength = params.mySplitMovementMinLength;
         }
+
+        params.mySplitMovementStopWhenHorizontalMovementCanceled = true;
+        params.mySplitMovementStopWhenVerticalMovementCanceled = true;
 
         params.myHorizontalMovementCheckEnabled = true;
         params.myHorizontalMovementRadialStepAmount = 1;

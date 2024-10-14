@@ -116,6 +116,8 @@ export class PlayerLocomotionParams {
 
     public myResetHeadToRealMinDistance: number = 0;
 
+    public myMaxHeadToRealHeadSteps: number | null = null;
+
 
     /** Valid means, for example, that the real player has not moved inside a wall by moving in the real space */
     public mySyncWithRealWorldPositionOnlyIfValid: boolean = true;
@@ -317,6 +319,7 @@ export class PlayerLocomotion {
 
             params.myResetHeadToFeetInsteadOfRealOnlyIfRealNotReachable = this._myParams.myResetHeadToFeetInsteadOfReal;
             params.myResetHeadToRealMinDistance = this._myParams.myResetHeadToRealMinDistance;
+            params.myMaxHeadToRealHeadSteps = this._myParams.myMaxHeadToRealHeadSteps;
 
             params.myNeverResetRealPositionVR = false;
             params.myNeverResetRealRotationVR = false;
