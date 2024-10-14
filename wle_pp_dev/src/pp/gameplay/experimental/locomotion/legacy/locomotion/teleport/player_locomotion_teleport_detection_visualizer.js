@@ -368,7 +368,7 @@ PlayerLocomotionTeleportDetectionVisualizer.prototype._showTeleportParable = fun
             playerUp = this._myTeleportParams.myPlayerTransformManager.getRotationRealQuat(playerRotationQuat).quat_getUp(playerUp);
 
             upDifference = nextPosition.vec3_sub(this._myTeleportRuntimeParams.myTeleportPosition, upDifference).vec3_componentAlongAxis(playerUp, upDifference);
-            let upDistance = upDifference.vec3_length();
+            let upDistance = upDifference.vec3_valueAlongAxis(playerUp);
             if (upDistance >= this._myTeleportParams.myVisualizerParams.myTeleportParableMinVerticalDistanceToShowVerticalLine) {
                 let lineLength = Math.min(upDistance - this._myTeleportParams.myVisualizerParams.myTeleportParableMinVerticalDistanceToShowVerticalLine, this._myTeleportParams.myVisualizerParams.myTeleportParableShowVerticalLineMaxLength);
 

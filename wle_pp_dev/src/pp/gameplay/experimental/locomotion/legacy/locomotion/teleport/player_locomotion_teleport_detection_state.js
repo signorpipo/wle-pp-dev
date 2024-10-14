@@ -13,6 +13,12 @@ import { PlayerLocomotionTeleportDetectionVisualizer } from "./player_locomotion
 import { PlayerLocomotionTeleportParable } from "./player_locomotion_teleport_parable.js";
 import { PlayerLocomotionTeleportState } from "./player_locomotion_teleport_state.js";
 
+let PlayerLocomotionTeleportDetectionTeleportHitValidResult = {
+    VALID: 0,
+    INVALID: 1,
+    TOO_HIGH: 2
+};
+
 export class PlayerLocomotionTeleportDetectionParams {
 
     constructor() {
@@ -379,7 +385,7 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable 
                 this._myDetectionRuntimeParams.myParableDistance = hitParableDistance;
 
                 teleportCollisionRuntimeParams.reset();
-                this._myDetectionRuntimeParams.myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRuntimeParams.myTeleportRotationOnUp, teleportCollisionRuntimeParams);
+                this._myDetectionRuntimeParams.myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRuntimeParams.myTeleportRotationOnUp, teleportCollisionRuntimeParams) == PlayerLocomotionTeleportDetectionTeleportHitValidResult.VALID;
 
                 this._myTeleportRuntimeParams.myTeleportPosition.vec3_copy(teleportCollisionRuntimeParams.myNewPosition);
                 this._myDetectionRuntimeParams.myTeleportSurfaceNormal.vec3_copy(teleportCollisionRuntimeParams.myGroundNormal);
@@ -405,107 +411,112 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable 
                         let hit = raycastResult.myHits.pp_first();
 
                         teleportCollisionRuntimeParams.reset();
-                        this._myDetectionRuntimeParams.myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRuntimeParams.myTeleportRotationOnUp, teleportCollisionRuntimeParams);
+                        let teleportHitValidResult = this._isTeleportHitValid(hit, this._myTeleportRuntimeParams.myTeleportRotationOnUp, teleportCollisionRuntimeParams);
+                        this._myDetectionRuntimeParams.myTeleportPositionValid = teleportHitValidResult == PlayerLocomotionTeleportDetectionTeleportHitValidResult.VALID;
 
                         this._myTeleportRuntimeParams.myTeleportPosition.vec3_copy(teleportCollisionRuntimeParams.myNewPosition);
                         this._myDetectionRuntimeParams.myTeleportSurfaceNormal.vec3_copy(teleportCollisionRuntimeParams.myGroundNormal);
 
-                        if (!this._myDetectionRuntimeParams.myTeleportPositionValid &&
-                            !this._myTeleportAsMovementFailed &&
-                            teleportCollisionRuntimeParams.myTeleportCanceled &&
-                            teleportCollisionRuntimeParams.myIsCollidingHorizontally) {
-                            flatTeleportHorizontalHitNormal = teleportCollisionRuntimeParams.myHorizontalCollisionHit.myNormal.vec3_removeComponentAlongAxis(up, flatTeleportHorizontalHitNormal);
+                        let teleportPositionIsTooHigh = teleportHitValidResult == PlayerLocomotionTeleportDetectionTeleportHitValidResult.TOO_HIGH;
 
-                            if (!flatTeleportHorizontalHitNormal.vec3_isZero(0.00001)) {
-                                flatTeleportHorizontalHitNormal.vec3_normalize(flatTeleportHorizontalHitNormal);
+                        if (!teleportPositionIsTooHigh) {
+                            if (!this._myDetectionRuntimeParams.myTeleportPositionValid &&
+                                !this._myTeleportAsMovementFailed &&
+                                teleportCollisionRuntimeParams.myTeleportCanceled &&
+                                teleportCollisionRuntimeParams.myIsCollidingHorizontally) {
+                                flatTeleportHorizontalHitNormal = teleportCollisionRuntimeParams.myHorizontalCollisionHit.myNormal.vec3_removeComponentAlongAxis(up, flatTeleportHorizontalHitNormal);
 
-                                let backwardStep = teleportCollisionCheckParams.myRadius * 1.1;
-                                raycastParams.myOrigin = verticalHitOrigin.vec3_add(flatTeleportHorizontalHitNormal.vec3_scale(backwardStep, raycastParams.myOrigin), raycastParams.myOrigin);
-                                raycastParams.myDirection.vec3_copy(verticalHitDirection);
-                                raycastParams.myDistance = bottomCheckMaxLength;
+                                if (!flatTeleportHorizontalHitNormal.vec3_isZero(0.00001)) {
+                                    flatTeleportHorizontalHitNormal.vec3_normalize(flatTeleportHorizontalHitNormal);
 
-                                raycastResult = PhysicsUtils.raycast(raycastParams, raycastResult);
+                                    let backwardStep = teleportCollisionCheckParams.myRadius * 1.1;
+                                    raycastParams.myOrigin = verticalHitOrigin.vec3_add(flatTeleportHorizontalHitNormal.vec3_scale(backwardStep, raycastParams.myOrigin), raycastParams.myOrigin);
+                                    raycastParams.myDirection.vec3_copy(verticalHitDirection);
+                                    raycastParams.myDistance = bottomCheckMaxLength;
 
-                                if (this._myTeleportParams.myDebugEnabled && this._myTeleportParams.myDebugDetectEnabled && Globals.isDebugEnabled(this._myTeleportParams.myEngine)) {
-                                    Globals.getDebugVisualManager(this._myTeleportParams.myEngine).drawPoint(0, raycastParams.myOrigin, vec4_create(0, 0, 0, 1), 0.03);
-                                    Globals.getDebugVisualManager(this._myTeleportParams.myEngine).drawRaycast(0, raycastResult);
+                                    raycastResult = PhysicsUtils.raycast(raycastParams, raycastResult);
+
+                                    if (this._myTeleportParams.myDebugEnabled && this._myTeleportParams.myDebugDetectEnabled && Globals.isDebugEnabled(this._myTeleportParams.myEngine)) {
+                                        Globals.getDebugVisualManager(this._myTeleportParams.myEngine).drawPoint(0, raycastParams.myOrigin, vec4_create(0, 0, 0, 1), 0.03);
+                                        Globals.getDebugVisualManager(this._myTeleportParams.myEngine).drawRaycast(0, raycastResult);
+                                    }
+
+                                    if (raycastResult.isColliding()) {
+                                        let hit = raycastResult.myHits.pp_first();
+
+                                        teleportCollisionRuntimeParams.reset();
+                                        this._myDetectionRuntimeParams.myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRuntimeParams.myTeleportRotationOnUp, teleportCollisionRuntimeParams) == PlayerLocomotionTeleportDetectionTeleportHitValidResult.VALID;
+
+                                        this._myTeleportRuntimeParams.myTeleportPosition.vec3_copy(teleportCollisionRuntimeParams.myNewPosition);
+                                        this._myDetectionRuntimeParams.myTeleportSurfaceNormal.vec3_copy(teleportCollisionRuntimeParams.myGroundNormal);
+                                    }
                                 }
-
-                                if (raycastResult.isColliding()) {
-                                    let hit = raycastResult.myHits.pp_first();
-
-                                    teleportCollisionRuntimeParams.reset();
-                                    this._myDetectionRuntimeParams.myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRuntimeParams.myTeleportRotationOnUp, teleportCollisionRuntimeParams);
-
-                                    this._myTeleportRuntimeParams.myTeleportPosition.vec3_copy(teleportCollisionRuntimeParams.myNewPosition);
-                                    this._myDetectionRuntimeParams.myTeleportSurfaceNormal.vec3_copy(teleportCollisionRuntimeParams.myGroundNormal);
-                                }
+                            } else {
+                                //console.error("2", this._myDetectionRuntimeParams.myTeleportPositionValid, this._myTeleportAsMovementFailed);
                             }
-                        } else {
-                            //console.error("2", this._myDetectionRuntimeParams.myTeleportPositionValid, this._myTeleportAsMovementFailed);
-                        }
 
-                        if (!this._myDetectionRuntimeParams.myTeleportPositionValid && !this._myTeleportAsMovementFailed) {
-                            flatParableHitNormal = parableHitNormal.vec3_removeComponentAlongAxis(up, flatParableHitNormal);
-                            if (!flatParableHitNormal.vec3_isZero(0.00001)) {
-                                flatParableHitNormal.vec3_normalize(flatParableHitNormal);
+                            if (!this._myDetectionRuntimeParams.myTeleportPositionValid && !this._myTeleportAsMovementFailed) {
+                                flatParableHitNormal = parableHitNormal.vec3_removeComponentAlongAxis(up, flatParableHitNormal);
+                                if (!flatParableHitNormal.vec3_isZero(0.00001)) {
+                                    flatParableHitNormal.vec3_normalize(flatParableHitNormal);
 
-                                let backwardStep = teleportCollisionCheckParams.myRadius * 1.1;
-                                raycastParams.myOrigin = verticalHitOrigin.vec3_add(flatParableHitNormal.vec3_scale(backwardStep, raycastParams.myOrigin), raycastParams.myOrigin);
-                                raycastParams.myDirection.vec3_copy(verticalHitDirection);
-                                raycastParams.myDistance = bottomCheckMaxLength;
+                                    let backwardStep = teleportCollisionCheckParams.myRadius * 1.1;
+                                    raycastParams.myOrigin = verticalHitOrigin.vec3_add(flatParableHitNormal.vec3_scale(backwardStep, raycastParams.myOrigin), raycastParams.myOrigin);
+                                    raycastParams.myDirection.vec3_copy(verticalHitDirection);
+                                    raycastParams.myDistance = bottomCheckMaxLength;
 
-                                raycastResult = PhysicsUtils.raycast(raycastParams, raycastResult);
+                                    raycastResult = PhysicsUtils.raycast(raycastParams, raycastResult);
 
-                                if (this._myTeleportParams.myDebugEnabled && this._myTeleportParams.myDebugDetectEnabled && Globals.isDebugEnabled(this._myTeleportParams.myEngine)) {
-                                    Globals.getDebugVisualManager(this._myTeleportParams.myEngine).drawPoint(0, raycastParams.myOrigin, vec4_create(0, 0, 0, 1), 0.03);
-                                    Globals.getDebugVisualManager(this._myTeleportParams.myEngine).drawRaycast(0, raycastResult);
+                                    if (this._myTeleportParams.myDebugEnabled && this._myTeleportParams.myDebugDetectEnabled && Globals.isDebugEnabled(this._myTeleportParams.myEngine)) {
+                                        Globals.getDebugVisualManager(this._myTeleportParams.myEngine).drawPoint(0, raycastParams.myOrigin, vec4_create(0, 0, 0, 1), 0.03);
+                                        Globals.getDebugVisualManager(this._myTeleportParams.myEngine).drawRaycast(0, raycastResult);
+                                    }
+
+                                    if (raycastResult.isColliding()) {
+                                        let hit = raycastResult.myHits.pp_first();
+
+                                        teleportCollisionRuntimeParams.reset();
+                                        this._myDetectionRuntimeParams.myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRuntimeParams.myTeleportRotationOnUp, teleportCollisionRuntimeParams) == PlayerLocomotionTeleportDetectionTeleportHitValidResult.VALID;
+
+                                        this._myTeleportRuntimeParams.myTeleportPosition.vec3_copy(teleportCollisionRuntimeParams.myNewPosition);
+                                        this._myDetectionRuntimeParams.myTeleportSurfaceNormal.vec3_copy(teleportCollisionRuntimeParams.myGroundNormal);
+                                    }
                                 }
-
-                                if (raycastResult.isColliding()) {
-                                    let hit = raycastResult.myHits.pp_first();
-
-                                    teleportCollisionRuntimeParams.reset();
-                                    this._myDetectionRuntimeParams.myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRuntimeParams.myTeleportRotationOnUp, teleportCollisionRuntimeParams);
-
-                                    this._myTeleportRuntimeParams.myTeleportPosition.vec3_copy(teleportCollisionRuntimeParams.myNewPosition);
-                                    this._myDetectionRuntimeParams.myTeleportSurfaceNormal.vec3_copy(teleportCollisionRuntimeParams.myGroundNormal);
-                                }
+                            } else {
+                                //console.error("3", this._myDetectionRuntimeParams.myTeleportPositionValid, this._myTeleportAsMovementFailed);
                             }
-                        } else {
-                            //console.error("3", this._myDetectionRuntimeParams.myTeleportPositionValid, this._myTeleportAsMovementFailed);
-                        }
 
-                        if (!this._myDetectionRuntimeParams.myTeleportPositionValid && !this._myTeleportAsMovementFailed) {
-                            flatParableDirectionNegate = direction.vec3_negate(flatParableDirectionNegate).vec3_removeComponentAlongAxis(up, flatParableDirectionNegate).vec3_normalize(flatParableDirectionNegate);
+                            if (!this._myDetectionRuntimeParams.myTeleportPositionValid && !this._myTeleportAsMovementFailed) {
+                                flatParableDirectionNegate = direction.vec3_negate(flatParableDirectionNegate).vec3_removeComponentAlongAxis(up, flatParableDirectionNegate).vec3_normalize(flatParableDirectionNegate);
 
-                            if (!flatParableDirectionNegate.vec3_isZero(0.00001)) {
-                                flatParableDirectionNegate.vec3_normalize(flatParableDirectionNegate);
+                                if (!flatParableDirectionNegate.vec3_isZero(0.00001)) {
+                                    flatParableDirectionNegate.vec3_normalize(flatParableDirectionNegate);
 
-                                let backwardStep = teleportCollisionCheckParams.myRadius * 1.1;
-                                raycastParams.myOrigin = verticalHitOrigin.vec3_add(flatParableDirectionNegate.vec3_scale(backwardStep, raycastParams.myOrigin), raycastParams.myOrigin);
-                                raycastParams.myDirection.vec3_copy(verticalHitDirection);
-                                raycastParams.myDistance = bottomCheckMaxLength;
+                                    let backwardStep = teleportCollisionCheckParams.myRadius * 1.1;
+                                    raycastParams.myOrigin = verticalHitOrigin.vec3_add(flatParableDirectionNegate.vec3_scale(backwardStep, raycastParams.myOrigin), raycastParams.myOrigin);
+                                    raycastParams.myDirection.vec3_copy(verticalHitDirection);
+                                    raycastParams.myDistance = bottomCheckMaxLength;
 
-                                raycastResult = PhysicsUtils.raycast(raycastParams, raycastResult);
+                                    raycastResult = PhysicsUtils.raycast(raycastParams, raycastResult);
 
-                                if (this._myTeleportParams.myDebugEnabled && this._myTeleportParams.myDebugDetectEnabled && Globals.isDebugEnabled(this._myTeleportParams.myEngine)) {
-                                    Globals.getDebugVisualManager(this._myTeleportParams.myEngine).drawPoint(0, raycastParams.myOrigin, vec4_create(0, 0, 0, 1), 0.03);
-                                    Globals.getDebugVisualManager(this._myTeleportParams.myEngine).drawRaycast(0, raycastResult);
+                                    if (this._myTeleportParams.myDebugEnabled && this._myTeleportParams.myDebugDetectEnabled && Globals.isDebugEnabled(this._myTeleportParams.myEngine)) {
+                                        Globals.getDebugVisualManager(this._myTeleportParams.myEngine).drawPoint(0, raycastParams.myOrigin, vec4_create(0, 0, 0, 1), 0.03);
+                                        Globals.getDebugVisualManager(this._myTeleportParams.myEngine).drawRaycast(0, raycastResult);
+                                    }
+
+                                    if (raycastResult.isColliding()) {
+                                        let hit = raycastResult.myHits.pp_first();
+
+                                        teleportCollisionRuntimeParams.reset();
+                                        this._myDetectionRuntimeParams.myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRuntimeParams.myTeleportRotationOnUp, teleportCollisionRuntimeParams) == PlayerLocomotionTeleportDetectionTeleportHitValidResult.VALID;
+
+                                        this._myTeleportRuntimeParams.myTeleportPosition.vec3_copy(teleportCollisionRuntimeParams.myNewPosition);
+                                        this._myDetectionRuntimeParams.myTeleportSurfaceNormal.vec3_copy(teleportCollisionRuntimeParams.myGroundNormal);
+                                    }
                                 }
-
-                                if (raycastResult.isColliding()) {
-                                    let hit = raycastResult.myHits.pp_first();
-
-                                    teleportCollisionRuntimeParams.reset();
-                                    this._myDetectionRuntimeParams.myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRuntimeParams.myTeleportRotationOnUp, teleportCollisionRuntimeParams);
-
-                                    this._myTeleportRuntimeParams.myTeleportPosition.vec3_copy(teleportCollisionRuntimeParams.myNewPosition);
-                                    this._myDetectionRuntimeParams.myTeleportSurfaceNormal.vec3_copy(teleportCollisionRuntimeParams.myGroundNormal);
-                                }
+                            } else {
+                                //console.error("4", this._myDetectionRuntimeParams.myTeleportPositionValid, this._myTeleportAsMovementFailed);
                             }
-                        } else {
-                            //console.error("4", this._myDetectionRuntimeParams.myTeleportPositionValid, this._myTeleportAsMovementFailed);
                         }
                     }
                 } else {
@@ -536,70 +547,75 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable 
                 let hit = raycastResult.myHits.pp_first();
 
                 teleportCollisionRuntimeParams.reset();
-                this._myDetectionRuntimeParams.myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRuntimeParams.myTeleportRotationOnUp, teleportCollisionRuntimeParams);
+                let teleportHitValidResult = this._isTeleportHitValid(hit, this._myTeleportRuntimeParams.myTeleportRotationOnUp, teleportCollisionRuntimeParams);
+                this._myDetectionRuntimeParams.myTeleportPositionValid = teleportHitValidResult == PlayerLocomotionTeleportDetectionTeleportHitValidResult.VALID;
 
                 this._myTeleportRuntimeParams.myTeleportPosition.vec3_copy(teleportCollisionRuntimeParams.myNewPosition);
                 this._myDetectionRuntimeParams.myTeleportSurfaceNormal.vec3_copy(teleportCollisionRuntimeParams.myGroundNormal);
 
-                if (!this._myDetectionRuntimeParams.myTeleportPositionValid &&
-                    !this._myTeleportAsMovementFailed &&
-                    teleportCollisionRuntimeParams.myTeleportCanceled &&
-                    teleportCollisionRuntimeParams.myIsCollidingHorizontally) {
-                    flatTeleportHorizontalHitNormal = teleportCollisionRuntimeParams.myHorizontalCollisionHit.myNormal.vec3_removeComponentAlongAxis(up, flatTeleportHorizontalHitNormal);
+                let teleportPositionIsTooHigh = teleportHitValidResult == PlayerLocomotionTeleportDetectionTeleportHitValidResult.TOO_HIGH;
 
-                    if (!flatTeleportHorizontalHitNormal.vec3_isZero(0.00001)) {
-                        flatTeleportHorizontalHitNormal.vec3_normalize(flatTeleportHorizontalHitNormal);
+                if (!teleportPositionIsTooHigh) {
+                    if (!this._myDetectionRuntimeParams.myTeleportPositionValid &&
+                        !this._myTeleportAsMovementFailed &&
+                        teleportCollisionRuntimeParams.myTeleportCanceled &&
+                        teleportCollisionRuntimeParams.myIsCollidingHorizontally) {
+                        flatTeleportHorizontalHitNormal = teleportCollisionRuntimeParams.myHorizontalCollisionHit.myNormal.vec3_removeComponentAlongAxis(up, flatTeleportHorizontalHitNormal);
 
-                        let backwardStep = teleportCollisionCheckParams.myRadius * 1.1;
-                        raycastParams.myOrigin = verticalHitOrigin.vec3_add(flatTeleportHorizontalHitNormal.vec3_scale(backwardStep, raycastParams.myOrigin), raycastParams.myOrigin);
-                        raycastParams.myDirection.vec3_copy(verticalHitDirection);
-                        raycastParams.myDistance = bottomCheckMaxLength;
+                        if (!flatTeleportHorizontalHitNormal.vec3_isZero(0.00001)) {
+                            flatTeleportHorizontalHitNormal.vec3_normalize(flatTeleportHorizontalHitNormal);
 
-                        raycastResult = PhysicsUtils.raycast(raycastParams, raycastResult);
+                            let backwardStep = teleportCollisionCheckParams.myRadius * 1.1;
+                            raycastParams.myOrigin = verticalHitOrigin.vec3_add(flatTeleportHorizontalHitNormal.vec3_scale(backwardStep, raycastParams.myOrigin), raycastParams.myOrigin);
+                            raycastParams.myDirection.vec3_copy(verticalHitDirection);
+                            raycastParams.myDistance = bottomCheckMaxLength;
 
-                        if (this._myTeleportParams.myDebugEnabled && this._myTeleportParams.myDebugDetectEnabled && Globals.isDebugEnabled(this._myTeleportParams.myEngine)) {
-                            Globals.getDebugVisualManager(this._myTeleportParams.myEngine).drawPoint(0, raycastParams.myOrigin, vec4_create(0, 0, 0, 1), 0.03);
-                            Globals.getDebugVisualManager(this._myTeleportParams.myEngine).drawRaycast(0, raycastResult);
-                        }
+                            raycastResult = PhysicsUtils.raycast(raycastParams, raycastResult);
 
-                        if (raycastResult.isColliding()) {
-                            let hit = raycastResult.myHits.pp_first();
+                            if (this._myTeleportParams.myDebugEnabled && this._myTeleportParams.myDebugDetectEnabled && Globals.isDebugEnabled(this._myTeleportParams.myEngine)) {
+                                Globals.getDebugVisualManager(this._myTeleportParams.myEngine).drawPoint(0, raycastParams.myOrigin, vec4_create(0, 0, 0, 1), 0.03);
+                                Globals.getDebugVisualManager(this._myTeleportParams.myEngine).drawRaycast(0, raycastResult);
+                            }
 
-                            teleportCollisionRuntimeParams.reset();
-                            this._myDetectionRuntimeParams.myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRuntimeParams.myTeleportRotationOnUp, teleportCollisionRuntimeParams);
+                            if (raycastResult.isColliding()) {
+                                let hit = raycastResult.myHits.pp_first();
 
-                            this._myTeleportRuntimeParams.myTeleportPosition.vec3_copy(teleportCollisionRuntimeParams.myNewPosition);
-                            this._myDetectionRuntimeParams.myTeleportSurfaceNormal.vec3_copy(teleportCollisionRuntimeParams.myGroundNormal);
+                                teleportCollisionRuntimeParams.reset();
+                                this._myDetectionRuntimeParams.myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRuntimeParams.myTeleportRotationOnUp, teleportCollisionRuntimeParams) == PlayerLocomotionTeleportDetectionTeleportHitValidResult.VALID;
+
+                                this._myTeleportRuntimeParams.myTeleportPosition.vec3_copy(teleportCollisionRuntimeParams.myNewPosition);
+                                this._myDetectionRuntimeParams.myTeleportSurfaceNormal.vec3_copy(teleportCollisionRuntimeParams.myGroundNormal);
+                            }
                         }
                     }
-                }
 
-                if (!this._myDetectionRuntimeParams.myTeleportPositionValid && !this._myTeleportAsMovementFailed) {
-                    flatParableDirectionNegate = direction.vec3_negate(flatParableDirectionNegate).vec3_removeComponentAlongAxis(up, flatParableDirectionNegate).vec3_normalize(flatParableDirectionNegate);
+                    if (!this._myDetectionRuntimeParams.myTeleportPositionValid && !this._myTeleportAsMovementFailed) {
+                        flatParableDirectionNegate = direction.vec3_negate(flatParableDirectionNegate).vec3_removeComponentAlongAxis(up, flatParableDirectionNegate).vec3_normalize(flatParableDirectionNegate);
 
-                    if (!flatParableDirectionNegate.vec3_isZero(0.00001)) {
-                        flatParableDirectionNegate.vec3_normalize(flatParableDirectionNegate);
+                        if (!flatParableDirectionNegate.vec3_isZero(0.00001)) {
+                            flatParableDirectionNegate.vec3_normalize(flatParableDirectionNegate);
 
-                        let backwardStep = teleportCollisionCheckParams.myRadius * 1.1;
-                        raycastParams.myOrigin = verticalHitOrigin.vec3_add(flatParableDirectionNegate.vec3_scale(backwardStep, raycastParams.myOrigin), raycastParams.myOrigin);
-                        raycastParams.myDirection.vec3_copy(verticalHitDirection);
-                        raycastParams.myDistance = bottomCheckMaxLength;
+                            let backwardStep = teleportCollisionCheckParams.myRadius * 1.1;
+                            raycastParams.myOrigin = verticalHitOrigin.vec3_add(flatParableDirectionNegate.vec3_scale(backwardStep, raycastParams.myOrigin), raycastParams.myOrigin);
+                            raycastParams.myDirection.vec3_copy(verticalHitDirection);
+                            raycastParams.myDistance = bottomCheckMaxLength;
 
-                        raycastResult = PhysicsUtils.raycast(raycastParams, raycastResult);
+                            raycastResult = PhysicsUtils.raycast(raycastParams, raycastResult);
 
-                        if (this._myTeleportParams.myDebugEnabled && this._myTeleportParams.myDebugDetectEnabled && Globals.isDebugEnabled(this._myTeleportParams.myEngine)) {
-                            Globals.getDebugVisualManager(this._myTeleportParams.myEngine).drawPoint(0, raycastParams.myOrigin, vec4_create(0, 0, 0, 1), 0.03);
-                            Globals.getDebugVisualManager(this._myTeleportParams.myEngine).drawRaycast(0, raycastResult);
-                        }
+                            if (this._myTeleportParams.myDebugEnabled && this._myTeleportParams.myDebugDetectEnabled && Globals.isDebugEnabled(this._myTeleportParams.myEngine)) {
+                                Globals.getDebugVisualManager(this._myTeleportParams.myEngine).drawPoint(0, raycastParams.myOrigin, vec4_create(0, 0, 0, 1), 0.03);
+                                Globals.getDebugVisualManager(this._myTeleportParams.myEngine).drawRaycast(0, raycastResult);
+                            }
 
-                        if (raycastResult.isColliding()) {
-                            let hit = raycastResult.myHits.pp_first();
+                            if (raycastResult.isColliding()) {
+                                let hit = raycastResult.myHits.pp_first();
 
-                            teleportCollisionRuntimeParams.reset();
-                            this._myDetectionRuntimeParams.myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRuntimeParams.myTeleportRotationOnUp, teleportCollisionRuntimeParams);
+                                teleportCollisionRuntimeParams.reset();
+                                this._myDetectionRuntimeParams.myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRuntimeParams.myTeleportRotationOnUp, teleportCollisionRuntimeParams) == PlayerLocomotionTeleportDetectionTeleportHitValidResult.VALID;
 
-                            this._myTeleportRuntimeParams.myTeleportPosition.vec3_copy(teleportCollisionRuntimeParams.myNewPosition);
-                            this._myDetectionRuntimeParams.myTeleportSurfaceNormal.vec3_copy(teleportCollisionRuntimeParams.myGroundNormal);
+                                this._myTeleportRuntimeParams.myTeleportPosition.vec3_copy(teleportCollisionRuntimeParams.myNewPosition);
+                                this._myDetectionRuntimeParams.myTeleportSurfaceNormal.vec3_copy(teleportCollisionRuntimeParams.myGroundNormal);
+                            }
                         }
                     }
                 }
@@ -633,7 +649,7 @@ PlayerLocomotionTeleportDetectionState.prototype._isTeleportHitValid = function 
     let playerRotationQuat = quat_create();
     let playerUp = vec3_create();
     return function _isTeleportHitValid(hit, rotationOnUp, checkTeleportCollisionRuntimeParams) {
-        let isValid = false;
+        let isValid = PlayerLocomotionTeleportDetectionTeleportHitValidResult.INVALID;
 
         this._myTeleportAsMovementFailed = false;
 
@@ -661,7 +677,7 @@ PlayerLocomotionTeleportDetectionState.prototype._isTeleportPositionValid = func
     let differenceOnUpVector = vec3_create();
     let teleportCheckCollisionRuntimeParams = new CollisionRuntimeParams();
     return function _isTeleportPositionValid(teleportPosition, rotationOnUp, checkTeleportCollisionRuntimeParams) {
-        let isValid = false;
+        let isValid = PlayerLocomotionTeleportDetectionTeleportHitValidResult.INVALID;
 
         let positionVisible = this._isTeleportPositionVisible(teleportPosition);
 
@@ -701,9 +717,11 @@ PlayerLocomotionTeleportDetectionState.prototype._isTeleportPositionValid = func
                     }
 
                     if (groundAngleValid) {
-                        isValid = true;
+                        isValid = PlayerLocomotionTeleportDetectionTeleportHitValidResult.VALID;
                     }
                 }
+            } else {
+                isValid = PlayerLocomotionTeleportDetectionTeleportHitValidResult.TOO_HIGH;
             }
         }
 
