@@ -74,13 +74,26 @@ export class PlayerTransformManagerParams {
     public myMaxDistanceFromRealToSync: number = 0;
 
     public myMaxDistanceFromHeadRealToSyncEnabled: boolean = false;
+
     /**
      * Max distance to resync valid head with real head  
      * If you real head is farther the head will be considered as colliding
      * Vertically, the max distance can be higher if the current height is higher
-     * Since the ehad might have been reset to feet
+     * Since the head might have been reset to feet
      */
     public myMaxDistanceFromHeadRealToSync: number = 0;
+
+    /**
+     * If this is enabled, the head will only do this max amount of steps to reach the real head, and the last step
+     * will be longer to complete the whole movement  
+     * This means that the movement to reach the real head might not be as precise and can allow clipping through objects,
+     * but it will be more performant
+     * 
+     * Even though the max distance from the head can be already used to limit the amount of steps, when the head is reset
+     * to feet, it's allowed to perform the whole height movement, even if above the max distance  
+     * If this adjustment movement is too heavy, this can limit it, even though might cause the valid head to move to invalid places
+     */
+    public myMaxHeadToRealHeadSteps: number | null = null;
 
 
 
@@ -969,6 +982,12 @@ export class PlayerTransformManager {
         params.mySplitMovementMinLength = params.mySplitMovementMaxLength;
         params.mySplitMovementStopWhenHorizontalMovementCanceled = true;
         params.mySplitMovementStopWhenVerticalMovementCanceled = true;
+
+        if (this._myParams.myMaxHeadToRealHeadSteps != null) {
+            params.mySplitMovementMaxStepsEnabled = true;
+            params.mySplitMovementMaxSteps = this._myParams.myMaxHeadToRealHeadSteps;
+            params.mySplitMovementMaxLengthLastStepCanBeLonger = true;
+        }
 
         params.myHorizontalMovementCheckEnabled = true;
         params.myHorizontalMovementRadialStepAmount = 1;
