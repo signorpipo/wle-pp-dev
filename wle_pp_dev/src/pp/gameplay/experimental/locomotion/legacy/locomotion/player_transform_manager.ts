@@ -976,15 +976,15 @@ export class PlayerTransformManager {
         params.myDistanceFromHeadToIgnore = 0;
 
         params.mySplitMovementEnabled = true;
+        params.mySplitMovementMaxLengthEnabled = true;
+        params.mySplitMovementMaxLength = params.myRadius * 0.75;
         params.mySplitMovementMinLengthEnabled = true;
-        params.mySplitMovementMinLength = params.myRadius * 0.75;
+        params.mySplitMovementMinLength = params.mySplitMovementMaxLength;
 
         if (this._myParams.myMaxHeadToRealHeadSteps != null) {
             params.mySplitMovementMaxStepsEnabled = true;
             params.mySplitMovementMaxSteps = this._myParams.myMaxHeadToRealHeadSteps;
-        } else {
-            params.mySplitMovementMaxLengthEnabled = true;
-            params.mySplitMovementMaxLength = params.mySplitMovementMinLength;
+            params.mySplitMovementMaxLengthLastStepCanBeLonger = true;
         }
 
         params.mySplitMovementStopWhenHorizontalMovementCanceled = true;
