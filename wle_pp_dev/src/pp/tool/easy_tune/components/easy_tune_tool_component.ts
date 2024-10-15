@@ -59,7 +59,6 @@ export class EasyTuneToolComponent extends Component {
 
     private _myStarted: boolean = false;
     private _myFirstUpdate: boolean = true;
-    private _myWidgetVisibleBackup: boolean | null = null;
 
     public override init(): void {
         // #TODO this should check for tool enabled but it might not have been initialized yet, not way to specify component order
@@ -87,9 +86,11 @@ export class EasyTuneToolComponent extends Component {
                 EasyTuneUtils.importVariables(this._myVariablesImportURL, this._myResetVariablesDefaultValueOnImport, false, true, onSuccessCallback, onFailureCallback, this.engine);
             }.bind(this);
             params.myVariablesExportCallback = function (this: EasyTuneToolComponent, onSuccessCallback?: () => void, onFailureCallback?: () => void) {
-                if (Globals.getLeftGamepad()!.getButtonInfo(GamepadButtonID.SQUEEZE).isPressed() &&
+                if (Globals.getLeftGamepad()!.getButtonInfo(GamepadButtonID.SELECT).isPressed() &&
+                    Globals.getLeftGamepad()!.getButtonInfo(GamepadButtonID.SQUEEZE).isPressed() &&
                     Globals.getLeftGamepad()!.getButtonInfo(GamepadButtonID.TOP_BUTTON).isPressed() &&
-                    Globals.getLeftGamepad()!.getButtonInfo(GamepadButtonID.BOTTOM_BUTTON).isPressed()) {
+                    Globals.getLeftGamepad()!.getButtonInfo(GamepadButtonID.BOTTOM_BUTTON).isPressed() &&
+                    Globals.getLeftGamepad()!.getButtonInfo(GamepadButtonID.THUMBSTICK).isPressed()) {
 
                     EasyTuneUtils.clearExportedVariables(this._myVariablesExportURL, onSuccessCallback, onFailureCallback, this.engine);
                 } else if (this._myKeepImportVariablesOnExport) {
@@ -111,8 +112,6 @@ export class EasyTuneToolComponent extends Component {
             }.bind(this);
 
             this._myWidget.start(this.object, params, Globals.getEasyTuneVariables(this.engine));
-
-            this._myWidgetVisibleBackup = null;
 
             this._myStarted = true;
             this._myFirstUpdate = true;

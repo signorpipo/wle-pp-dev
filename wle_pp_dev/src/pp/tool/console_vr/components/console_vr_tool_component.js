@@ -32,8 +32,6 @@ export class ConsoleVRToolComponent extends Component {
 
             this._myWidget.start(this.object, params);
 
-            this._myWidgetVisibleBackup = null;
-
             this._myStarted = true;
         }
     }
