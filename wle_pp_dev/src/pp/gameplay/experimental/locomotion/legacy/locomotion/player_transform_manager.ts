@@ -1,4 +1,5 @@
 import { Object3D, WonderlandEngine } from "@wonderlandengine/api";
+import { RaycastBlockColliderType } from "wle-pp/cauldron/physics/physics_raycast_params.js";
 import { PhysicsLayerFlags } from "../../../../../cauldron/physics/physics_layer_flags.js";
 import { Quaternion, Quaternion2, Vector3 } from "../../../../../cauldron/type_definitions/array_type_definitions.js";
 import { XRUtils } from "../../../../../cauldron/utils/xr_utils.js";
@@ -100,6 +101,7 @@ export class PlayerTransformManagerParams {
     public myHeadRadius: number = 0;
     public readonly myHeadCollisionBlockLayerFlags: PhysicsLayerFlags = new PhysicsLayerFlags();
     public myHeadCollisionObjectsToIgnore: Readonly<Object3D>[] = [];
+    public myHeadCollisionBlockColliderType: RaycastBlockColliderType = RaycastBlockColliderType.BOTH;
 
     /**
      * Can be used if when resetting to feet there might be dynamic objects which you would like to exclude for this reset check,  
@@ -1042,8 +1044,10 @@ export class PlayerTransformManager {
 
         params.myHorizontalBlockLayerFlags.copy(this._myParams.myHeadCollisionBlockLayerFlags);
         params.myHorizontalObjectsToIgnore.pp_copy(this._myParams.myHeadCollisionObjectsToIgnore);
+        params.myHorizontalBlockColliderType = this._myParams.myHeadCollisionBlockColliderType;
         params.myVerticalBlockLayerFlags.copy(this._myParams.myHeadCollisionBlockLayerFlags);
         params.myVerticalObjectsToIgnore.pp_copy(this._myParams.myHeadCollisionObjectsToIgnore);
+        params.myVerticalBlockColliderType = this._myParams.myHeadCollisionBlockColliderType;
 
         params.mySlidingEnabled = false;
 
