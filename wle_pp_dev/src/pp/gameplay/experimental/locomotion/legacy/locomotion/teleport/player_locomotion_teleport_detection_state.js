@@ -34,7 +34,9 @@ export class PlayerLocomotionTeleportDetectionParams {
         this.myMustBeOnIgnorableGroundAngle = false;
 
         this.myTeleportBlockLayerFlags = new PhysicsLayerFlags();
+        this.myTeleportBlockColliderType = RaycastBlockColliderType.BOTH;
         this.myTeleportFloorLayerFlags = new PhysicsLayerFlags();
+        this.myTeleportFloorBlockColliderType = RaycastBlockColliderType.BOTH;
 
         this.myParableForwardMinAngleToBeValidUp = 30;
         this.myParableForwardMinAngleToBeValidDown = 0;
@@ -63,6 +65,7 @@ export class PlayerLocomotionTeleportDetectionParams {
         this.myVisibilityCheckCircumferenceStepAmount = 1;
         this.myVisibilityCheckCircumferenceRotationPerStep = 30;
         this.myVisibilityBlockLayerFlags = new PhysicsLayerFlags();
+        this.myVisibilityBlockColliderType = RaycastBlockColliderType.BOTH;
 
         this.myPlayerTransformManagerMustBeSyncedFlagMap = new Map();
         this.myPlayerTransformManagerMustBeSyncedFlagMap.set(PlayerTransformManagerSyncFlag.BODY_COLLIDING, false);
@@ -330,7 +333,7 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable 
 
         raycastParams.myIgnoreHitsInsideCollision = true;
         raycastParams.myBlockLayerFlags.setMask(this._myTeleportParams.myDetectionParams.myTeleportBlockLayerFlags.getMask());
-        raycastParams.myBlockColliderType = RaycastBlockColliderType.BOTH;
+        raycastParams.myBlockColliderType = this._myTeleportParams.myDetectionParams.myTeleportBlockColliderType;
         raycastParams.myPhysics = Globals.getPhysics(this._myTeleportParams.myEngine);
 
         raycastParams.myObjectsToIgnore.pp_copy(teleportCollisionCheckParams.myHorizontalObjectsToIgnore);
@@ -663,7 +666,11 @@ PlayerLocomotionTeleportDetectionState.prototype._isTeleportHitValid = function 
             let hitValidEvenWhenNotConcordant = true;
             if (hit.myNormal.vec3_isConcordant(playerUp) || hitValidEvenWhenNotConcordant) {
                 const physxComponent = hit.myObject.pp_getComponentSelf(PhysXComponent);
-                if (physxComponent.groupsMask & this._myTeleportParams.myDetectionParams.myTeleportFloorLayerFlags.getMask()) {
+                if (physxComponent.groupsMask & this._myTeleportParams.myDetectionParams.myTeleportFloorLayerFlags.getMask() &&
+                    (this._myTeleportParams.myDetectionParams.myTeleportFloorBlockColliderType == RaycastBlockColliderType.BOTH ||
+                        (this._myTeleportParams.myDetectionParams.myTeleportFloorBlockColliderType == RaycastBlockColliderType.TRIGGER && physxComponent.trigger) ||
+                        (this._myTeleportParams.myDetectionParams.myTeleportFloorBlockColliderType == RaycastBlockColliderType.NORMAL && !physxComponent.trigger)
+                    )) {
                     isValid = this._isTeleportPositionValid(hit.myPosition, rotationOnUp, checkTeleportCollisionRuntimeParams);
                 }
             }
@@ -835,6 +842,7 @@ PlayerLocomotionTeleportDetectionState.prototype._isPositionVisible = function (
             raycastParams.myPhysics = Globals.getPhysics(this._myTeleportParams.myEngine);
 
             raycastParams.myBlockLayerFlags.setMask(this._myTeleportParams.myDetectionParams.myVisibilityBlockLayerFlags.getMask());
+            raycastParams.myBlockColliderType = this._myTeleportParams.myDetectionParams.myVisibilityBlockColliderType;
 
             raycastParams.myObjectsToIgnore.pp_copy(teleportCollisionCheckParams.myHorizontalObjectsToIgnore);
             for (let objectToIgnore of teleportCollisionCheckParams.myVerticalObjectsToIgnore) {
@@ -842,7 +850,6 @@ PlayerLocomotionTeleportDetectionState.prototype._isPositionVisible = function (
             }
 
             raycastParams.myIgnoreHitsInsideCollision = true;
-            raycastParams.myBlockColliderType = RaycastBlockColliderType.BOTH;
 
             raycastResult = PhysicsUtils.raycast(raycastParams, raycastResult);
 

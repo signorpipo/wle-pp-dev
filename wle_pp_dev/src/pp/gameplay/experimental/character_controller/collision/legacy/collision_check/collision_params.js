@@ -1,5 +1,5 @@
 import { PhysicsLayerFlags } from "../../../../../../cauldron/physics/physics_layer_flags.js";
-import { RaycastHit } from "../../../../../../cauldron/physics/physics_raycast_params.js";
+import { RaycastBlockColliderType, RaycastHit } from "../../../../../../cauldron/physics/physics_raycast_params.js";
 import { quat_create, vec3_create } from "../../../../../../plugin/js/extensions/array/vec_create_extension.js";
 
 export class CollisionCheckParams {
@@ -244,8 +244,16 @@ export class CollisionCheckParams {
         this.myHorizontalBlockLayerFlags = new PhysicsLayerFlags();
         this.myHorizontalObjectsToIgnore = [];
 
+        // #TODO it should just hit NORMAL colliders, but for perf reasons since I need to get the component from the object it's better to keep it like this
+        // When changing this to NORMAL, do also remember to update the other place like player teleport where BOTH is also used to NORMAL
+        this.myHorizontalBlockColliderType = RaycastBlockColliderType.BOTH;
+
         this.myVerticalBlockLayerFlags = new PhysicsLayerFlags();
         this.myVerticalObjectsToIgnore = [];
+
+        // #TODO it should just hit NORMAL colliders, but for perf reasons since I need to get the component from the object it's better to keep it like this
+        // When changing this to NORMAL, do also remember to update the other place like player teleport where BOTH is also used to NORMAL
+        this.myVerticalBlockColliderType = RaycastBlockColliderType.BOTH;
 
         this.myExtraMovementCheckCallback = null;              // Signature: callback(startMovement, endMovement, currentPosition, currentTransformUp, currentTransformForward, currentHeight, collisionCheckParams, prevCollisionRuntimeParams, outCollisionRuntimeParams, outFixedMovement) -> outFixedMovement
         this.myExtraTeleportCheckCallback = null;              // Signature: callback(collisionRuntimeParams) -> bool
@@ -466,9 +474,11 @@ export class CollisionCheckParams {
 
         this.myHorizontalBlockLayerFlags.copy(other.myHorizontalBlockLayerFlags);
         this.myHorizontalObjectsToIgnore.pp_copy(other.myHorizontalObjectsToIgnore);
+        this.myHorizontalBlockColliderType = other.myHorizontalBlockColliderType;
 
         this.myVerticalBlockLayerFlags.copy(other.myVerticalBlockLayerFlags);
         this.myVerticalObjectsToIgnore.pp_copy(other.myVerticalObjectsToIgnore);
+        this.myVerticalBlockColliderType = other.myVerticalBlockColliderType;
 
         this.myExtraMovementCheckCallback = other.myExtraMovementCheckCallback;
         this.myExtraTeleportCheckCallback = other.myExtraTeleportCheckCallback;

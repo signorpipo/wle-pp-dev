@@ -421,6 +421,8 @@ export let convertCharacterColliderSetupToCollisionCheckParams = function () {
         outCollisionCheckParams.myVerticalBlockLayerFlags.copy(characterColliderSetup.myVerticalCheckParams.myVerticalCheckBlockLayerFlags);
         outCollisionCheckParams.myHorizontalObjectsToIgnore.pp_copy(characterColliderSetup.myHorizontalCheckParams.myHorizontalCheckObjectsToIgnore);
         outCollisionCheckParams.myVerticalObjectsToIgnore.pp_copy(characterColliderSetup.myVerticalCheckParams.myVerticalCheckObjectsToIgnore);
+        outCollisionCheckParams.myHorizontalBlockColliderType = characterColliderSetup.myHorizontalCheckParams.myHorizontalBlockColliderType;
+        outCollisionCheckParams.myVerticalBlockColliderType = characterColliderSetup.myVerticalCheckParams.myVerticalBlockColliderType;
 
         outCollisionCheckParams.mySnapOnGroundEnabled = characterColliderSetup.myGroundParams.mySurfaceSnapEnabled;
         outCollisionCheckParams.mySnapOnGroundExtraDistance = characterColliderSetup.myGroundParams.mySurfaceSnapMaxDistance;
