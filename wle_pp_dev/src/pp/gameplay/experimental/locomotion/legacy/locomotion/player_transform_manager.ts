@@ -379,6 +379,10 @@ export class PlayerTransformManager {
             fixedMovement: vec3_create()
         };
     public move(movement: Readonly<Vector3>, forceMove: boolean = false, outCollisionRuntimeParams: CollisionRuntimeParams | null = null): void {
+        if (this._myPlayerLocomotionTeleport != null) {
+            this._myPlayerLocomotionTeleport.cancelTeleport();
+        }
+
         this.checkMovement(movement, undefined, undefined, this._myCollisionRuntimeParams);
 
         if (outCollisionRuntimeParams != null) {
@@ -473,6 +477,10 @@ export class PlayerTransformManager {
             fixedMovement: vec3_create()
         };
     public teleportTransformQuat(teleportTransformQuat: Readonly<Quaternion2>, forceTeleport: boolean = false, forceTeleportSkipCollisionCheck: boolean = false, outCollisionRuntimeParams: CollisionRuntimeParams | null = null): void {
+        if (this._myPlayerLocomotionTeleport != null) {
+            this._myPlayerLocomotionTeleport.cancelTeleport();
+        }
+
         if (!forceTeleport || !forceTeleportSkipCollisionCheck) {
             this.checkTeleportToTransformQuat(teleportTransformQuat, undefined, undefined, this._myCollisionRuntimeParams);
         }

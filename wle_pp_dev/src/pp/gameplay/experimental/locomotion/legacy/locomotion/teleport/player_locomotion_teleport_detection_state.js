@@ -109,8 +109,11 @@ export class PlayerLocomotionTeleportDetectionState extends PlayerLocomotionTele
 
     start() {
         this._myLocomotionRuntimeParams.myIsTeleportDetecting = true;
+
         this._myTeleportRuntimeParams.myTeleportRotationOnUp = 0;
         this._myTeleportRotationOnUpNext = 0;
+
+        this._myDetectionRuntimeParams.myTeleportPositionValid = false;
 
         this._myDetectionRuntimeParams.myParable.setSpeed(this._myTeleportParams.myDetectionParams.myTeleportParableSpeed);
         this._myDetectionRuntimeParams.myParable.setGravity(this._myTeleportParams.myDetectionParams.myTeleportParableGravity);

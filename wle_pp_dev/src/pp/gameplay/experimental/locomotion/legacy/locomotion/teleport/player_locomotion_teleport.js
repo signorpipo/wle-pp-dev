@@ -1,5 +1,5 @@
 import { CollisionCheckParams } from "wle-pp/gameplay/experimental/character_controller/collision/legacy/collision_check/collision_params.js";
-import { FSM } from "../../../../../../cauldron/fsm/fsm.js";
+import { FSM, SkipStateFunction } from "../../../../../../cauldron/fsm/fsm.js";
 import { XRUtils } from "../../../../../../cauldron/utils/xr_utils.js";
 import { Handedness } from "../../../../../../input/cauldron/input_types.js";
 import { MouseButtonID } from "../../../../../../input/cauldron/mouse.js";
@@ -83,16 +83,20 @@ export class PlayerLocomotionTeleport extends PlayerLocomotionMovement {
 
         this._myFSM.addTransition("idle", "detect", "detect");
         this._myFSM.addTransition("detect", "teleport", "teleport");
-        this._myFSM.addTransition("detect", "idle", "cancel");
         this._myFSM.addTransition("teleport", "idle", "done");
 
         this._myFSM.addTransition("idle", "idle", "stop");
         this._myFSM.addTransition("detect", "idle", "stop");
         this._myFSM.addTransition("teleport", "idle", "stop", this._completeTeleport.bind(this));
 
+        this._myFSM.addTransition("idle", "idle", "cancel");
+        this._myFSM.addTransition("detect", "idle", "cancel");
+        this._myFSM.addTransition("teleport", "idle", "cancel", this._cancelTeleport.bind(this), SkipStateFunction.END);
+
         this._myFSM.init("init");
         this._myFSM.perform("start");
 
+        this._myIsUpdating = false;
         this._myDestroyed = false;
 
         this.setActive(true);
@@ -103,6 +107,12 @@ export class PlayerLocomotionTeleport extends PlayerLocomotionMovement {
 
     stop() {
         this._myFSM.perform("stop");
+    }
+
+    cancelTeleport() {
+        if (!this._myIsUpdating && this._myFSM.isInState("teleport")) {
+            this._myFSM.perform("cancel");
+        }
     }
 
     canStop() {
@@ -124,6 +134,8 @@ export class PlayerLocomotionTeleport extends PlayerLocomotionMovement {
     update(dt) {
         if (!this.isActive()) return;
 
+        this._myIsUpdating = true;
+
         this._prepareCollisionCheckParams();
 
         this._myLocomotionRuntimeParams.myTeleportJustPerformed = false;
@@ -137,6 +149,8 @@ export class PlayerLocomotionTeleport extends PlayerLocomotionMovement {
         if (this._myTeleportParams.myPlayerTransformManager.getCollisionRuntimeParams().myIsOnGround) {
             this._myLocomotionRuntimeParams.myIsFlying = false;
         }
+
+        this._myIsUpdating = false;
     }
 
     _idleUpdate(dt) {
@@ -169,6 +183,14 @@ export class PlayerLocomotionTeleport extends PlayerLocomotionMovement {
 
     _completeTeleport() {
         this._myTeleportState.completeTeleport();
+    }
+
+    _cancelDetection() {
+        this._myDetectionState.cancel();
+    }
+
+    _cancelTeleport() {
+        this._myTeleportState.cancelTeleport();
     }
 
     _prepareCollisionCheckParams() {

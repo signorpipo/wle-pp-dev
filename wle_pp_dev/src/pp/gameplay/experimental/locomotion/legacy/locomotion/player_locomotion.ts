@@ -763,11 +763,13 @@ export class PlayerLocomotion {
         this._myLocomotionMovementFSM.addState("idleTeleport");
 
         this._myLocomotionMovementFSM.addTransition("init", "smooth", "startSmooth", function (this: PlayerLocomotion) {
+            this._myPlayerLocomotionTeleport.stop();
             this._myPlayerLocomotionSmooth.start();
         }.bind(this));
 
         this._myLocomotionMovementFSM.addTransition("init", "teleport", "startTeleport", function (this: PlayerLocomotion) {
-            this._myPlayerLocomotionSmooth.start();
+            this._myPlayerLocomotionSmooth.stop();
+            this._myPlayerLocomotionTeleport.start();
         }.bind(this));
 
         this._myLocomotionMovementFSM.addTransition("smooth", "teleport", "next", function (this: PlayerLocomotion) {

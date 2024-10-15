@@ -13,7 +13,6 @@ export class PlayerLocomotionTeleportTeleportShiftState extends PlayerLocomotion
 
         this._myFSM.addState("init");
         this._myFSM.addState("idle");
-
         this._myFSM.addState("shifting", this._shiftingUpdate.bind(this));
 
         this._myFSM.addTransition("init", "idle", "start");
@@ -23,6 +22,9 @@ export class PlayerLocomotionTeleportTeleportShiftState extends PlayerLocomotion
 
         this._myFSM.addTransition("idle", "idle", "stop");
         this._myFSM.addTransition("shifting", "idle", "stop", this._stop.bind(this));
+
+        this._myFSM.addTransition("idle", "idle", "cancel");
+        this._myFSM.addTransition("shifting", "idle", "cancel", this._cancel.bind(this));
 
         this._myFSM.init("init");
         this._myFSM.perform("start");
@@ -58,6 +60,10 @@ export class PlayerLocomotionTeleportTeleportShiftState extends PlayerLocomotion
         this._myFSM.update(dt);
     }
 
+    cancelTeleport() {
+        this._myFSM.perform("cancel");
+    }
+
     _startShifting() {
         this._myLocomotionRuntimeParams.myIsTeleporting = true;
         this._myFeetStartPosition = this._myTeleportParams.myPlayerTransformManager.getPositionReal(this._myFeetStartPosition);
@@ -78,6 +84,10 @@ export class PlayerLocomotionTeleportTeleportShiftState extends PlayerLocomotion
 
         this._myStartRotationOnUp = this._myTeleportRuntimeParams.myTeleportRotationOnUp;
         this._myCurrentRotationOnUp = 0;
+    }
+
+    _cancel() {
+        this._myLocomotionRuntimeParams.myIsTeleporting = false;
     }
 
     _stop() {

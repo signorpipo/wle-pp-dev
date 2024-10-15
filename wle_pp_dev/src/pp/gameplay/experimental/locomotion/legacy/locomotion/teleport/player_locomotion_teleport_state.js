@@ -14,6 +14,10 @@ export class PlayerLocomotionTeleportState {
         this._myTeleportAsMovementFailed = false;
     }
 
+    cancelTeleport() {
+
+    }
+
     _checkTeleport(teleportPosition, feetTransformQuat, collisionRuntimeParams, checkTeleportCollisionRuntimeParams = null) {
         // Implemented outside class definition
     }
