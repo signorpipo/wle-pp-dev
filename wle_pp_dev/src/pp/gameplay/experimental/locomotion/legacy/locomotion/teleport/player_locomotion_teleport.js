@@ -1,4 +1,3 @@
-import { CollisionCheckParams } from "wle-pp/gameplay/experimental/character_controller/collision/legacy/collision_check/collision_params.js";
 import { FSM, SkipStateFunction } from "../../../../../../cauldron/fsm/fsm.js";
 import { XRUtils } from "../../../../../../cauldron/utils/xr_utils.js";
 import { Handedness } from "../../../../../../input/cauldron/input_types.js";
@@ -6,6 +5,7 @@ import { MouseButtonID } from "../../../../../../input/cauldron/mouse.js";
 import { GamepadAxesID } from "../../../../../../input/gamepad/gamepad_buttons.js";
 import { quat_create, vec3_create } from "../../../../../../plugin/js/extensions/array/vec_create_extension.js";
 import { Globals } from "../../../../../../pp/globals.js";
+import { CollisionCheckParams } from "../../../../character_controller/collision/legacy/collision_check/collision_params.js";
 import { PlayerLocomotionMovement } from "../player_locomotion_movement.js";
 import { PlayerLocomotionTeleportDetectionParams, PlayerLocomotionTeleportDetectionState } from "./player_locomotion_teleport_detection_state.js";
 import { PlayerLocomotionTeleportDetectionVisualizerParams } from "./player_locomotion_teleport_detection_visualizer.js";

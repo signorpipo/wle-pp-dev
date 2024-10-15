@@ -1,6 +1,6 @@
 import { Object3D, WonderlandEngine } from "@wonderlandengine/api";
-import { RaycastBlockColliderType } from "wle-pp/cauldron/physics/physics_raycast_params.js";
 import { PhysicsLayerFlags } from "../../../../../cauldron/physics/physics_layer_flags.js";
+import { RaycastBlockColliderType } from "../../../../../cauldron/physics/physics_raycast_params.js";
 import { Quaternion, Quaternion2, Vector3 } from "../../../../../cauldron/type_definitions/array_type_definitions.js";
 import { XRUtils } from "../../../../../cauldron/utils/xr_utils.js";
 import { quat2_create, quat_create, vec3_create, vec4_create } from "../../../../../plugin/js/extensions/array/vec_create_extension.js";

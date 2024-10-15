@@ -1,5 +1,5 @@
 import { Component, Property } from "@wonderlandengine/api";
-import { InputUtils } from "wle-pp/input/cauldron/input_utils.js";
+import { InputUtils } from "../../../input/cauldron/input_utils.js";
 import { Globals } from "../../../pp/globals.js";
 import { Handedness } from "../../cauldron/input_types.js";
 import { GamepadAxesID, GamepadButtonID } from "../gamepad_buttons.js";

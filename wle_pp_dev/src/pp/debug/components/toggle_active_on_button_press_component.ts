@@ -1,9 +1,9 @@
 import { Component } from "@wonderlandengine/api";
 import { property } from "@wonderlandengine/api/decorators.js";
-import { Handedness } from "wle-pp/input/cauldron/input_types.js";
-import { InputUtils } from "wle-pp/input/cauldron/input_utils.js";
-import { GamepadButtonID } from "wle-pp/input/gamepad/gamepad_buttons.js";
-import { Globals } from "wle-pp/pp/globals.js";
+import { Handedness } from "../../input/cauldron/input_types.js";
+import { InputUtils } from "../../input/cauldron/input_utils.js";
+import { GamepadButtonID } from "../../input/gamepad/gamepad_buttons.js";
+import { Globals } from "../../pp/globals.js";
 
 export class ToggleActiveOnButtonPressComponent extends Component {
     public static override  TypeName = "toggle-active-on-button-press";

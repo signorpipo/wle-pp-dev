@@ -1,5 +1,5 @@
-import { RaycastBlockColliderType } from "wle-pp/cauldron/physics/physics_raycast_params.js";
 import { PhysicsLayerFlags } from "../../../../cauldron/physics/physics_layer_flags.js";
+import { RaycastBlockColliderType } from "../../../../cauldron/physics/physics_raycast_params.js";
 import { quat_create, vec3_create } from "../../../../plugin/js/extensions/array/vec_create_extension.js";
 
 export class CharacterColliderSetup {
