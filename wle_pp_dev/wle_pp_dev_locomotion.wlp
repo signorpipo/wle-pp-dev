@@ -2507,8 +2507,7 @@
                     "type": "pp-set-active",
                     "pp-set-active": {
                         "_myActive": false
-                    },
-                    "active": true
+                    }
                 },
                 {
                     "type": "pp-adjust-hierarchy-physx-scale"
@@ -2523,12 +2522,6 @@
                 0.1,
                 0.1,
                 0.1
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
             ]
         },
         "863908de-b9e4-417f-ab2a-b26c672fc121": {
