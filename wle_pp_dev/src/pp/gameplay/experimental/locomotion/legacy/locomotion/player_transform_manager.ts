@@ -1274,6 +1274,8 @@ export class PlayerTransformManager {
             transformQuat: quat2_create(),
             collisionRuntimeParams: new CollisionRuntimeParams(),
 
+            newValidMovementDirection: vec3_create(),
+            newValidVerticalMovementDirection: vec3_create(),
             newPosition: vec3_create(),
             movementStep: vec3_create(),
             currentMovementStep: vec3_create(),
@@ -1299,9 +1301,6 @@ export class PlayerTransformManager {
         const positionReal = PlayerTransformManager._updateValidToRealSV.positionReal;
         const movementToCheck = PlayerTransformManager._updateValidToRealSV.movementToCheck;
         this.getPositionReal(positionReal).vec3_sub(this.getPosition(position), movementToCheck);
-        if (isHeadSynced && movementToCheck.vec3_length() > 0.0001) {
-            movementToCheck.vec3_normalize(this._myLastValidMovementDirection);
-        }
 
         // Far
         if (this._myParams.mySyncEnabledFlagMap.get(PlayerTransformManagerSyncFlag.FAR)) {
@@ -1479,6 +1478,13 @@ export class PlayerTransformManager {
         if (isHeadSynced) {
             if ((this.isSynced(this._myParams.mySyncPositionFlagMap) || this._myParams.myAlwaysSyncPositionWithReal) && !this._myParams.mySyncPositionDisabled &&
                 (this._myPlayerLocomotionTeleport == null || !this._myPlayerLocomotionTeleport.isTeleporting())) {
+                const newValidMovementDirection = PlayerTransformManager._updateValidToRealSV.newValidMovementDirection;
+                const newValidVerticalMovementDirection = PlayerTransformManager._updateValidToRealSV.newValidVerticalMovementDirection;
+                newPosition.vec3_sub(this._myValidPosition, newValidMovementDirection);
+                if (newValidMovementDirection.vec3_removeComponentAlongAxis(transformUp, newValidVerticalMovementDirection).vec3_length() > 0.0001) {
+                    newValidMovementDirection.vec3_normalize(this._myLastValidMovementDirection);
+                }
+
                 this._myValidPosition.vec3_copy(newPosition);
                 // Reset real position since the new position might be influenced by the snap?
                 // But this would be motion sickening, since you will move up and down while looking around
