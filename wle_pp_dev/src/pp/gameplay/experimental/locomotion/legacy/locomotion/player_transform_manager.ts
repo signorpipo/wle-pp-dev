@@ -1124,6 +1124,7 @@ export class PlayerTransformManager {
         //params.myHorizontalMovementCeilingAngleIgnoreHeight = 0.1 * 3;
 
         // I'm not really sure why this was needed, maybe for the floating check?
+        // Not sure if this has some bad side effect, like allowing the movement to real when it shouldn't
         params.myIsOnGroundIfInsideHit = true;
 
         params.myDebugEnabled = false;
