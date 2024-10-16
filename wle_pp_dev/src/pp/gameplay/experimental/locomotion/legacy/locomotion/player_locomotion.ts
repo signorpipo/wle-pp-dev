@@ -289,7 +289,9 @@ export class PlayerLocomotion {
             params.myFloatingSplitCheckEnabled = true;
             params.myFloatingSplitCheckMinLength = collisionCheckParamsMovement.myFeetRadius * 1.5;
             params.myFloatingSplitCheckMaxLength = params.myFloatingSplitCheckMinLength;
-            params.myRealMovementAllowVerticalAdjustments = false;
+
+            params.myRealMovementAllowVerticalAdjustments = true;
+            params.myIgnoreUpwardMovementToRealIfValidOnGround = true;
 
             params.myUpdateRealPositionValid = false;
             params.myUpdatePositionValid = false;

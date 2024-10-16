@@ -34,6 +34,8 @@ export class PlayerTransformManagerParams {
     public myAlwaysSyncPositionWithReal: boolean = false;
     public myAlwaysSyncHeadPositionWithReal: boolean = false;
 
+    public myIgnoreUpwardMovementToRealIfValidOnGround: boolean = false;
+
     /**
      * If the real position is far, body will be considered colliding  
      * If the body is colliding, the floating check is skipped
@@ -1313,8 +1315,10 @@ export class PlayerTransformManager {
         const collisionRuntimeParams = PlayerTransformManager._updateValidToRealSV.collisionRuntimeParams;
         const transformQuat = PlayerTransformManager._updateValidToRealSV.transformQuat;
         const newPosition = PlayerTransformManager._updateValidToRealSV.newPosition;
+        const transformUp = PlayerTransformManager._updateValidToRealSV.transformUp;
         this.getTransformQuat(transformQuat);
         newPosition.vec3_copy(this._myValidPosition);
+        transformQuat.quat2_getUp(transformUp);
 
         // Body Colliding
         if (!this._myIsFar && this._myParams.mySyncEnabledFlagMap.get(PlayerTransformManagerSyncFlag.BODY_COLLIDING)) {
@@ -1323,6 +1327,13 @@ export class PlayerTransformManager {
             // #TODO Temp as long as surface infos are not updated every time the position changes
             // This is needed to understand if snapping should occur (and possibly other stuff I can't remember)
             CollisionCheckBridge.getCollisionCheck(this._myParams.myEngine as any).updateSurfaceInfo(transformQuat, this._myParams.myMovementCollisionCheckParams, collisionRuntimeParams);
+
+            if (collisionRuntimeParams.myIsOnGround && this._myParams.myIgnoreUpwardMovementToRealIfValidOnGround) {
+                const valueAlongUp = movementToCheck.vec3_valueAlongAxis(transformUp);
+                if (valueAlongUp >= 0) {
+                    movementToCheck.vec3_removeComponentAlongAxis(transformUp, movementToCheck);
+                }
+            }
 
             CollisionCheckBridge.getCollisionCheck(this._myParams.myEngine as any).move(movementToCheck, transformQuat, this._myRealMovementCollisionCheckParams, collisionRuntimeParams);
 
@@ -1358,9 +1369,7 @@ export class PlayerTransformManager {
             // #TODO Utilizzare on ground del body gia calcolato, ma ora non c'è quindi va bene così
 
             if (collisionRuntimeParams.myIsOnGround) {
-                const transformUp = PlayerTransformManager._updateValidToRealSV.transformUp;
                 const verticalMovement = PlayerTransformManager._updateValidToRealSV.verticalMovement;
-                transformQuat.quat2_getUp(transformUp);
                 movementToCheck.vec3_componentAlongAxis(transformUp, verticalMovement);
                 const isVertical = !verticalMovement.vec3_isZero(0.00001);
                 if (!isVertical || !this._myParams.myIsFloatingValidIfVerticalMovement) {
@@ -1472,6 +1481,7 @@ export class PlayerTransformManager {
                 (this._myPlayerLocomotionTeleport == null || !this._myPlayerLocomotionTeleport.isTeleporting())) {
                 this._myValidPosition.vec3_copy(newPosition);
                 // Reset real position since the new position might be influenced by the snap?
+                // But this would be motion sickening, since you will move up and down while looking around
             }
 
             if (this.isSynced(this._myParams.mySyncRotationFlagMap)) {
