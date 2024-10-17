@@ -123,6 +123,7 @@ export class PlayerLocomotionParams {
     public mySyncWithRealWorldPositionOnlyIfValid: boolean = true;
 
     public mySnapRealPositionToGround: boolean = false;
+    public myPreventRealFromColliding: boolean = false;
 
     public myViewOcclusionInsideWallsEnabled: boolean = true;
     public myViewOcclusionLayerFlags: Readonly<PhysicsLayerFlags> = new PhysicsLayerFlags();
@@ -279,6 +280,7 @@ export class PlayerLocomotion {
             }
 
             params.myApplyRealToValidAdjustmentsToRealPositionToo = this._myParams.mySnapRealPositionToGround;
+            params.myPreventRealFromColliding = this._myParams.myPreventRealFromColliding;
 
             params.myMaxDistanceFromRealToSyncEnabled = true;
             params.myMaxDistanceFromRealToSync = 0.5;

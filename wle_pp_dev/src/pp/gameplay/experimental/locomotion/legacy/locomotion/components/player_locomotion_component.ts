@@ -185,6 +185,9 @@ export class PlayerLocomotionComponent extends Component {
     @property.bool(false)
     private readonly _mySnapRealPositionToGround!: boolean;
 
+    @property.bool(false)
+    private readonly _myPreventRealFromColliding!: boolean;
+
     @property.bool(true)
     private readonly _myViewOcclusionInsideWallsEnabled!: boolean;
 
@@ -370,6 +373,7 @@ export class PlayerLocomotionComponent extends Component {
 
             params.mySyncWithRealWorldPositionOnlyIfValid = this._mySyncWithRealWorldPositionOnlyIfValid;
             params.mySnapRealPositionToGround = this._mySnapRealPositionToGround;
+            params.myPreventRealFromColliding = this._myPreventRealFromColliding;
             params.myViewOcclusionInsideWallsEnabled = this._myViewOcclusionInsideWallsEnabled;
 
             params.mySyncNonVRHeightWithVROnExitSession = this._mySyncNonVRHeightWithVROnExitSession;

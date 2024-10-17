@@ -39,6 +39,8 @@ export class PlayerTransformManagerParams {
      */
     public myApplyRealToValidAdjustmentsToRealPositionToo: boolean = false;
 
+    public myPreventRealFromColliding: boolean = false;
+
     public myAlwaysSyncPositionWithReal: boolean = false;
     public myAlwaysSyncHeadPositionWithReal: boolean = false;
 
@@ -1533,6 +1535,10 @@ export class PlayerTransformManager {
             if (this.isSynced(this._myParams.mySyncHeightFlagMap)) {
                 this._myValidHeight = this._myRealMovementCollisionCheckParams.myHeight;
                 this._updateCollisionHeight();
+            }
+
+            if (this._myParams.myPreventRealFromColliding) {
+                this.resetReal(true, false, false, false, false, false);
             }
         }
 
