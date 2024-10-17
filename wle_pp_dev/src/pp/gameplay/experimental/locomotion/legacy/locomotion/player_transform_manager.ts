@@ -39,6 +39,10 @@ export class PlayerTransformManagerParams {
      */
     public myApplyRealToValidAdjustmentsToRealPositionToo: boolean = false;
 
+    /**
+     * Does not prevent (for now at least) from colliding if you stand up and your head goes inside the ceiling, in that case the height
+     * is not adjusted to prevent that and the view will be occluded
+     */
     public myPreventRealFromColliding: boolean = false;
 
     public myAlwaysSyncPositionWithReal: boolean = false;
@@ -1159,10 +1163,6 @@ export class PlayerTransformManager {
         //params.myHorizontalMovementGroundAngleIgnoreHeight = 0.1 * 3;
         //params.myHorizontalMovementCeilingAngleIgnoreHeight = 0.1 * 3;
 
-        // I'm not really sure why this was needed, maybe for the floating check?
-        // Not sure if this has some bad side effect, like allowing the movement to real when it shouldn't
-        params.myIsOnGroundIfInsideHit = true;
-
         params.myDebugEnabled = false;
 
         params.myDebugHorizontalMovementEnabled = false;
@@ -1440,6 +1440,15 @@ export class PlayerTransformManager {
                     let isLastOnGround = false;
                     let isOneOnSteepGround = false;
 
+                    const isOnGroundIfInsideHitBackup = this._myRealMovementCollisionCheckParams.myIsOnGroundIfInsideHit;
+
+                    // Previously this was always apply to real, but I think it was needed just for the floating check
+                    // If it seems there are errors due to this, move back to have this always enabled
+                    //
+                    // If the position check was used, this would probably not be needed because snap could happen, but since it's more performance heavy
+                    // just the surface check is done
+                    this._myRealMovementCollisionCheckParams.myIsOnGroundIfInsideHit = true;
+
                     const currentMovementStep = PlayerTransformManager._updateValidToRealSV.currentMovementStep;
                     for (let i = 0; i < movementStepAmount; i++) {
                         if (movementStepAmount == 1 || i != movementStepAmount - 1) {
@@ -1470,6 +1479,8 @@ export class PlayerTransformManager {
                             }
                         }
                     }
+
+                    this._myRealMovementCollisionCheckParams.myIsOnGroundIfInsideHit = isOnGroundIfInsideHitBackup;
 
                     const isFloatingOnSteepGroundFail = isOneOnSteepGround && isOnValidGroundAngle &&
                         !this._myParams.myIsFloatingValidIfSteepGround && (!isVertical || !this._myParams.myIsFloatingValidIfVerticalMovementAndSteepGround);
