@@ -380,7 +380,10 @@ export class PlayerTransformManager {
     // Also teleport, should get the difference from previous and move the player object, this will keep the relative position head-to-valid
     private static readonly _moveSV =
         {
-            fixedMovement: vec3_create()
+            fixedMovement: vec3_create(),
+            transformQuat: quat2_create(),
+            transformUp: vec3_create(),
+            fixedVerticalMovement: vec3_create()
         };
     public move(movement: Readonly<Vector3>, forceMove: boolean = false, outCollisionRuntimeParams: CollisionRuntimeParams | null = null): void {
         if (this._myPlayerLocomotionTeleport != null) {
@@ -403,6 +406,15 @@ export class PlayerTransformManager {
         if (!fixedMovement.vec3_isZero(0.00001)) {
             this._myValidPosition.vec3_add(fixedMovement, this._myValidPosition);
             this.getPlayerHeadManager().moveFeet(fixedMovement);
+
+            const fixedVerticalMovement = PlayerTransformManager._moveSV.fixedVerticalMovement;
+            const transformQuat = PlayerTransformManager._moveSV.transformQuat;
+            const transformUp = PlayerTransformManager._moveSV.transformUp;
+            this.getTransformQuat(transformQuat);
+            transformQuat.quat2_getUp(transformUp);
+            if (fixedMovement.vec3_removeComponentAlongAxis(transformUp, fixedVerticalMovement).vec3_length() > 0.0001) {
+                fixedMovement.vec3_normalize(this._myLastValidMovementDirection);
+            }
         }
 
         // This make reset happens even for gravity, maybe u should do it manually
@@ -478,7 +490,10 @@ export class PlayerTransformManager {
             currentPosition: vec3_create(),
             teleportPosition: vec3_create(),
             teleportRotation: quat_create(),
-            fixedMovement: vec3_create()
+            fixedMovement: vec3_create(),
+            transformQuat: quat2_create(),
+            transformUp: vec3_create(),
+            flatTeleportForward: vec3_create()
         };
     public teleportTransformQuat(teleportTransformQuat: Readonly<Quaternion2>, forceTeleport: boolean = false, forceTeleportSkipCollisionCheck: boolean = false, outCollisionRuntimeParams: CollisionRuntimeParams | null = null): void {
         if (this._myPlayerLocomotionTeleport != null) {
@@ -518,6 +533,15 @@ export class PlayerTransformManager {
         if (!fixedMovement.vec3_isZero(0.00001)) {
             this._myValidPosition.vec3_add(fixedMovement, this._myValidPosition);
             this.getPlayerHeadManager().moveFeet(fixedMovement);
+
+            const transformQuat = PlayerTransformManager._teleportTransformQuatSV.transformQuat;
+            const transformUp = PlayerTransformManager._teleportTransformQuatSV.transformUp;
+            const flatTeleportForward = PlayerTransformManager._teleportTransformQuatSV.flatTeleportForward;
+            this.getTransformQuat(transformQuat);
+            transformQuat.quat2_getUp(transformUp);
+            if (this._myCollisionRuntimeParams.myTeleportForward.vec3_removeComponentAlongAxis(transformUp, flatTeleportForward).vec3_length() > 0.0001) {
+                flatTeleportForward.vec3_normalize(this._myLastValidMovementDirection);
+            }
         }
 
         if (this._myParams.myResetRealOnTeleport) {
