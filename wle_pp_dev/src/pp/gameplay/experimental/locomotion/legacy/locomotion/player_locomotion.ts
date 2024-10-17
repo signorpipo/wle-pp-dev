@@ -122,6 +122,8 @@ export class PlayerLocomotionParams {
     /** Valid means, for example, that the real player has not moved inside a wall by moving in the real space */
     public mySyncWithRealWorldPositionOnlyIfValid: boolean = true;
 
+    public mySnapRealPositionToGround: boolean = false;
+
     public myViewOcclusionInsideWallsEnabled: boolean = true;
     public myViewOcclusionLayerFlags: Readonly<PhysicsLayerFlags> = new PhysicsLayerFlags();
 
@@ -275,6 +277,8 @@ export class PlayerLocomotion {
                 params.myUpdatePositionHeadValid = false;
                 params.myUpdateRealPositionHeadValid = false;
             }
+
+            params.myApplyRealToValidAdjustmentsToRealPositionToo = this._myParams.mySnapRealPositionToGround;
 
             params.myMaxDistanceFromRealToSyncEnabled = true;
             params.myMaxDistanceFromRealToSync = 0.5;

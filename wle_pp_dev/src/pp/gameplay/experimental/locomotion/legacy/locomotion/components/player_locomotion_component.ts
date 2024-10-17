@@ -182,6 +182,9 @@ export class PlayerLocomotionComponent extends Component {
     @property.bool(true)
     private readonly _mySyncWithRealWorldPositionOnlyIfValid!: boolean;
 
+    @property.bool(false)
+    private readonly _mySnapRealPositionToGround!: boolean;
+
     @property.bool(true)
     private readonly _myViewOcclusionInsideWallsEnabled!: boolean;
 
@@ -366,6 +369,7 @@ export class PlayerLocomotionComponent extends Component {
             params.myMaxHeadToRealHeadSteps = this._myMaxHeadToRealHeadSteps > 0 ? this._myMaxHeadToRealHeadSteps : null;
 
             params.mySyncWithRealWorldPositionOnlyIfValid = this._mySyncWithRealWorldPositionOnlyIfValid;
+            params.mySnapRealPositionToGround = this._mySnapRealPositionToGround;
             params.myViewOcclusionInsideWallsEnabled = this._myViewOcclusionInsideWallsEnabled;
 
             params.mySyncNonVRHeightWithVROnExitSession = this._mySyncNonVRHeightWithVROnExitSession;

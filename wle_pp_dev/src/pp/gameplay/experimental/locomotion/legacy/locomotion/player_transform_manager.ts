@@ -31,6 +31,14 @@ export class PlayerTransformManagerParams {
     public myTeleportCollisionCheckParamsGroundAngleToIgnore: number | null = null;
 
 
+
+    /** 
+     * This make it so if the valid position after syncing with real has some snapping, the real position too will also adjust to it  
+     * For example, with this off, if you move in real life over ramps the real life height will not change to avoid motion sickness,
+     * but if you prefer to also go up and down, you need to enable this
+     */
+    public myApplyRealToValidAdjustmentsToRealPositionToo: boolean = false;
+
     public myAlwaysSyncPositionWithReal: boolean = false;
     public myAlwaysSyncHeadPositionWithReal: boolean = false;
 
@@ -1511,8 +1519,11 @@ export class PlayerTransformManager {
                 }
 
                 this._myValidPosition.vec3_copy(newPosition);
-                // Reset real position since the new position might be influenced by the snap?
-                // But this would be motion sickening, since you will move up and down while looking around
+
+                // This might cause motion sickness
+                if (this._myParams.myApplyRealToValidAdjustmentsToRealPositionToo) {
+                    this.resetReal(true, false, false, false, false, false);
+                }
             }
 
             if (this.isSynced(this._myParams.mySyncRotationFlagMap)) {
