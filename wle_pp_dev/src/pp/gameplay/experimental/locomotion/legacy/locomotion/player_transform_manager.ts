@@ -68,6 +68,10 @@ export class PlayerTransformManagerParams {
 
     /** Settings for both hop and lean */
 
+    /**
+     * With {@link myRealMovementAllowVerticalAdjustments} enabled these "ValidIfVerticalMovement" flags does not work properly,
+     * since the adjustments can add vertical movement just due to snaps
+     */
     public myIsFloatingValidIfVerticalMovement: boolean = false;
     public myIsFloatingValidIfVerticalMovementAndRealOnGround: boolean = false; // #TODO This is more an override
     public myIsFloatingValidIfRealOnGround: boolean = false;
