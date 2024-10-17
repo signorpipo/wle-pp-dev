@@ -1340,7 +1340,7 @@ export class PlayerTransformManager {
         const newPosition = PlayerTransformManager._updateValidToRealSV.newPosition;
         const transformUp = PlayerTransformManager._updateValidToRealSV.transformUp;
         this.getTransformQuat(transformQuat);
-        newPosition.vec3_copy(this._myValidPosition);
+        newPosition.vec3_copy(positionReal);
         transformQuat.quat2_getUp(transformUp);
 
         // Body Colliding
@@ -1370,6 +1370,7 @@ export class PlayerTransformManager {
                     } else {
                         this._myIsBodyColliding = false;
                         newPosition.vec3_copy(collisionRuntimeParams.myNewPosition);
+                        movementToCheck.vec3_copy(collisionRuntimeParams.myFixedMovement);
                     }
                 }
             } else {
