@@ -103,7 +103,7 @@ export abstract class EasyObjectTuner<ValueType, EasyTuneVariableType extends Ea
     }
 
     public update(dt: number): void {
-        if (this._myEasyTuneVariable == null) return;
+        if (this._myEasyTuneVariable == null || !this._myActive || !this.canUpdate()) return;
 
         let easyObject: Object3D | null = this._myObject;
         if (this._myUseTuneTarget) {
@@ -127,6 +127,10 @@ export abstract class EasyObjectTuner<ValueType, EasyTuneVariableType extends Ea
                 this._myManualVariableUpdate = false;
             }
         }
+    }
+
+    protected canUpdate(): boolean {
+        return true;
     }
 
     protected abstract _getVariableNamePrefix(): string;

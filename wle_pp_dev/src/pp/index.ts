@@ -276,6 +276,7 @@ export * from "./tool/easy_tune/easy_object_tuners/easy_light_color.js";
 export * from "./tool/easy_tune/easy_object_tuners/easy_mesh_color.js";
 export * from "./tool/easy_tune/easy_object_tuners/easy_scale.js";
 export * from "./tool/easy_tune/easy_object_tuners/easy_transform.js";
+export * from "./tool/easy_tune/easy_object_tuners/easy_active.js";
 export * from "./tool/easy_tune/easy_object_tuners/easy_text_color.js";
 export * from "./tool/easy_tune/easy_object_tuners/components/easy_light_attenuation_component.js";
 export * from "./tool/easy_tune/easy_object_tuners/components/easy_light_color_component.js";
@@ -285,6 +286,7 @@ export * from "./tool/easy_tune/easy_object_tuners/components/easy_set_tune_targ
 export * from "./tool/easy_tune/easy_object_tuners/components/easy_set_tune_target_grab_component.js";
 export * from "./tool/easy_tune/easy_object_tuners/components/easy_text_color_component.js";
 export * from "./tool/easy_tune/easy_object_tuners/components/easy_transform_component.js";
+export * from "./tool/easy_tune/easy_object_tuners/components/easy_active_component.js";
 
 export * from "./tool/easy_tune/easy_tune_widgets/easy_tune_widget.js";
 export * from "./tool/easy_tune/easy_tune_widgets/easy_tune_widget_config.js";

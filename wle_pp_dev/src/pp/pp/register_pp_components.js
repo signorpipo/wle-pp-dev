@@ -1,3 +1,4 @@
+import { EasyActiveComponent } from "wle-pp/tool/easy_tune/easy_object_tuners/components/easy_active_component.js";
 import { AddPPToWindowComponent, AddWLToWindowComponent, AdjustHierarchyPhysXScaleComponent, AnalyticsManagerComponent, AudioManagerComponent, BenchmarkMaxPhysXComponent, BenchmarkMaxVisibleTrianglesComponent, CADisplayLeaderboardComponent, CharacterCollisionSystemComponent, ClearConsoleComponent, ConsoleVRToolComponent, CopyHandTransformComponent, CopyHeadTransformComponent, CopyPlayerTransformComponent, CopyReferenceSpaceTransformComponent, DebugArrayFunctionsPerformanceAnalyzerComponent, DebugFunctionsPerformanceAnalyzerComponent, DebugManagerComponent, DebugPPArrayCreationPerformanceAnalyzerComponent, DebugPPFunctionsPerformanceAnalyzerComponent, DebugTransformComponent, DebugWLComponentsFunctionsPerformanceAnalyzerComponent, DebugWLFunctionsPerformanceAnalyzerComponent, EasyLightAttenuationComponent, EasyLightColorComponent, EasyMeshColorComponent, EasyScaleComponent, EasySetTuneTargeetGrabComponent, EasySetTuneTargetChildNumberComponent, EasyTextColorComponent, EasyTransformComponent, EasyTuneImportVariablesComponent, EasyTuneToolComponent, EnableDebugComponent, EnableToolComponent, FingerCursorComponent, GamepadControlSchemeComponent, GamepadMeshAnimatorComponent, GetDefaultResourcesComponent, GetSceneObjectsComponent, GrabbableComponent, GrabberHandComponent, InitConsoleVRComponent, InitEasyTuneVariablesComponent, InputManagerComponent, MuteEverythingComponent, ObjectPoolManagerComponent, OverlapCursorComponent, PPGatewayComponent, PlayerLocomotionComponent, SaveManagerComponent, ScaleOnSpawnComponent, SetActiveComponent, SetEngineLogLevelComponent, SetHandLocalTransformComponent, SetHandRayLocalTransformComponent, SetHeadLocalTransformComponent, SetPlayerHeightComponent, SetTrackedHandJointLocalTransformComponent, ShowFPSComponent, ShowXRButtonsComponent, SpatialAudioListenerComponent, SwitchHandObjectComponent, ToggleActiveOnButtonPressComponent, ToolCursorComponent, TrackedHandDrawAllJointsComponent, TrackedHandDrawJointComponent, TrackedHandDrawSkinComponent, VirtualGamepadComponent, VisualManagerComponent } from "../index.js";
 
 export function registerPPComponents(engine) {
@@ -35,6 +36,7 @@ export function registerPPComponents(engine) {
         EasyTransformComponent,
         EasyTuneImportVariablesComponent,
         EasyTuneToolComponent,
+        EasyActiveComponent,
         EnableDebugComponent,
         EnableToolComponent,
         OverlapCursorComponent,
