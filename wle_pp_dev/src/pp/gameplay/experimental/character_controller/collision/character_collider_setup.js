@@ -299,6 +299,7 @@ export class CharacterColliderSplitMovementParams {
 
         this.mySplitMovementStopOnHorizontalMovementFailed = false;
         this.mySplitMovementStopOnVerticalMovementFailed = false;
+        this.mySplitMovementStopOnVerticalMovementReduced = false;
 
         this.mySplitMovementStopAndFailIfMovementWouldBeReduced = false;
 
@@ -573,6 +574,7 @@ CharacterColliderSplitMovementParams.prototype.copy = function copy(other) {
 
     this.mySplitMovementStopOnHorizontalMovementFailed = other.mySplitMovementStopOnHorizontalMovementFailed;
     this.mySplitMovementStopOnVerticalMovementFailed = other.mySplitMovementStopOnVerticalMovementFailed;
+    this.mySplitMovementStopOnVerticalMovementReduced = other.mySplitMovementStopOnVerticalMovementReduced;
 
     this.mySplitMovementStopAndFailIfMovementWouldBeReduced = other.mySplitMovementStopAndFailIfMovementWouldBeReduced;
 

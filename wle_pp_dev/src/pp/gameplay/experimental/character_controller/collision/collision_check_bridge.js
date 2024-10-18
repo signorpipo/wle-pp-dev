@@ -522,6 +522,7 @@ export let convertCharacterColliderSetupToCollisionCheckParams = function () {
         outCollisionCheckParams.mySplitMovementStopWhenHorizontalMovementCanceled = characterColliderSetup.mySplitMovementParams.mySplitMovementStopOnHorizontalMovementFailed;
         outCollisionCheckParams.mySplitMovementStopAndFailIfMovementWouldBeReduced = characterColliderSetup.mySplitMovementParams.mySplitMovementStopAndFailIfMovementWouldBeReduced;
         outCollisionCheckParams.mySplitMovementStopWhenVerticalMovementCanceled = characterColliderSetup.mySplitMovementParams.mySplitMovementStopOnVerticalMovementFailed;
+        outCollisionCheckParams.mySplitMovementStopWhenVerticalMovementReduced = characterColliderSetup.mySplitMovementParams.mySplitMovementStopOnVerticalMovementReduced;
         outCollisionCheckParams.mySplitMovementStopCallback = null;
         outCollisionCheckParams.mySplitMovementStopReturnPrevious = characterColliderSetup.mySplitMovementParams.mySplitMovementStopReturnPreviousResults;
 

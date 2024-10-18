@@ -15,9 +15,10 @@ export class CollisionCheckParams {
         this.mySplitMovementMinLengthEnabled = false;
         this.mySplitMovementStopWhenHorizontalMovementCanceled = false;
         this.mySplitMovementStopWhenVerticalMovementCanceled = false;
+        this.mySplitMovementStopWhenVerticalMovementReduced = false;
         this.mySplitMovementStopCallback = null;                        // Signature: callback(collisionRuntimeParams)
         this.mySplitMovementStopReturnPrevious = false;
-        this.mySplitMovementStopAndFailIfMovementWouldBeReduced = false;
+        this.mySplitMovementStopAndFailIfMovementWouldBeReduced = false; // It means the overall movement would be reduced due to max steps for example
 
         this.myRadius = 0;
         this.myDistanceFromFeetToIgnore = 0;
@@ -289,6 +290,7 @@ export class CollisionCheckParams {
         this.mySplitMovementMinLengthEnabled = other.mySplitMovementMinLengthEnabled;
         this.mySplitMovementStopWhenHorizontalMovementCanceled = other.mySplitMovementStopWhenHorizontalMovementCanceled;
         this.mySplitMovementStopWhenVerticalMovementCanceled = other.mySplitMovementStopWhenVerticalMovementCanceled;
+        this.mySplitMovementStopWhenVerticalMovementReduced = other.mySplitMovementStopWhenVerticalMovementReduced;
         this.mySplitMovementStopCallback = other.mySplitMovementStopCallback;
         this.mySplitMovementStopReturnPrevious = other.mySplitMovementStopReturnPrevious;
         this.mySplitMovementStopAndFailIfMovementWouldBeReduced = other.mySplitMovementStopAndFailIfMovementWouldBeReduced;

@@ -1043,6 +1043,7 @@ export class PlayerTransformManager {
 
         params.mySplitMovementStopWhenHorizontalMovementCanceled = true;
         params.mySplitMovementStopWhenVerticalMovementCanceled = true;
+        params.mySplitMovementStopWhenVerticalMovementReduced = true;
 
         params.myHorizontalMovementCheckEnabled = true;
         params.myHorizontalMovementRadialStepAmount = 1;
