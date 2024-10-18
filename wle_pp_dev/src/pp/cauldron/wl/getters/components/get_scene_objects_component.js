@@ -54,27 +54,33 @@ export class GetSceneObjectsComponent extends Component {
                 this._mySceneObjects.myPlayerObjects.myReferenceSpace = this._mySceneObjects.myPlayerObjects.myPlayer;
             }
 
-            this._mySceneObjects.myCauldron = this._mySceneObjects.myScene.pp_addObject();
+            this._mySceneObjects.myCauldron = this._mySceneObjects.myScene.pp_addChild();
             this._mySceneObjects.myCauldron.pp_setName("Cauldron");
-            this._mySceneObjects.myDynamics = this._mySceneObjects.myScene.pp_addObject();
+            this._mySceneObjects.myDynamics = this._mySceneObjects.myScene.pp_addChild();
             this._mySceneObjects.myDynamics.pp_setName("Dynamics");
-            this._mySceneObjects.myParticles = this._mySceneObjects.myScene.pp_addObject();
+            this._mySceneObjects.myParticles = this._mySceneObjects.myScene.pp_addChild();
             this._mySceneObjects.myParticles.pp_setName("Particles");
-            this._mySceneObjects.myVisualElements = this._mySceneObjects.myScene.pp_addObject();
+            this._mySceneObjects.myVisualElements = this._mySceneObjects.myScene.pp_addChild();
             this._mySceneObjects.myVisualElements.pp_setName("Visual Elements");
-            this._mySceneObjects.myTools = this._mySceneObjects.myScene.pp_addObject();
+            this._mySceneObjects.myTools = this._mySceneObjects.myScene.pp_addChild();
             this._mySceneObjects.myTools.pp_setName("Tools");
 
-            this._mySceneObjects.myPlayerObjects.myCauldron = this._mySceneObjects.myPlayerObjects.myPlayer.pp_addObject();
+            this._mySceneObjects.myPlayerObjects.myCauldron = this._mySceneObjects.myPlayerObjects.myPlayer.pp_addChild();
             this._mySceneObjects.myPlayerObjects.myCauldron.pp_setName("Cauldron");
-            this._mySceneObjects.myPlayerObjects.myHeadDebugs = this._mySceneObjects.myPlayerObjects.myHead.pp_addObject();
+            this._mySceneObjects.myPlayerObjects.myHeadDebugs = this._mySceneObjects.myPlayerObjects.myHead.pp_addChild();
             this._mySceneObjects.myPlayerObjects.myHeadDebugs.pp_setName("Head Debugs");
 
             Globals.setSceneObjects(this._mySceneObjects, this.engine);
         }
     }
 
-    onDestroy() {
+    onActivate() {
+        if (this._mySceneObjects != null && !Globals.hasSceneObjects(this.engine)) {
+            Globals.setSceneObjects(this._mySceneObjects, this.engine);
+        }
+    }
+
+    onDeactivate() {
         if (this._mySceneObjects != null && Globals.getSceneObjects(this.engine) == this._mySceneObjects) {
             Globals.removeSceneObjects(this.engine);
         }

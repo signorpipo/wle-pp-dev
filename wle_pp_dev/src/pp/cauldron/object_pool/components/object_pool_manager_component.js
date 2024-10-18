@@ -16,9 +16,23 @@ export class ObjectPoolManagerComponent extends Component {
         }
     }
 
-    onDestroy() {
+    onActivate() {
+        if (this._myObjectPoolManager != null && !Globals.hasObjectPoolManager(this.engine)) {
+            Globals.setObjectPoolManager(this._myObjectPoolManager, this.engine);
+        }
+    }
+
+    onDeactivate() {
         if (this._myObjectPoolManager != null && Globals.getObjectPoolManager(this.engine) == this._myObjectPoolManager) {
+            this._myObjectPoolManager.releaseAll();
+
             Globals.removeObjectPoolManager(this.engine);
+        }
+    }
+
+    onDestroy() {
+        if (this._myObjectPoolManager != null) {
+            this._myObjectPoolManager.destroy();
         }
     }
 }

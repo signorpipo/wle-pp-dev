@@ -18,7 +18,13 @@ export class EnableDebugComponent extends Component {
         }
     }
 
-    onDestroy() {
+    onActivate() {
+        if (this._myDebugEnabled != null && !Globals.hasDebugEnabled(this.engine)) {
+            Globals.setDebugEnabled(this._myDebugEnabled, this.engine);
+        }
+    }
+
+    onDeactivate() {
         if (this._myDebugEnabled != null && Globals.isDebugEnabled(this.engine) == this._myDebugEnabled) {
             Globals.removeDebugEnabled(this.engine);
         }

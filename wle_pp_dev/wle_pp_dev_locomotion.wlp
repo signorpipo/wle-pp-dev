@@ -33,6 +33,12 @@
                 },
                 {
                     "type": "example-easy-tune-variables"
+                },
+                {
+                    "type": "target-framerate",
+                    "target-framerate": {
+                        "framerate": 60.0
+                    }
                 }
             ]
         },
@@ -2495,14 +2501,13 @@
         },
         "cd3479ea-bbed-4628-830b-7e6b02a8e348": {
             "name": "Small AI Playground",
-            "parent": "afa026ad-d1bc-4de2-8c10-118fe1e2c3a0",
+            "parent": null,
             "components": [
                 {
                     "type": "pp-set-active",
                     "pp-set-active": {
                         "_myActive": false
-                    },
-                    "active": false
+                    }
                 },
                 {
                     "type": "pp-adjust-hierarchy-physx-scale"
@@ -11218,6 +11223,18 @@
                 "name": "lib\\Uniforms.glsl",
                 "file": "default"
             }
+        },
+        "df7054c8-968f-48be-9980-b703f59cb344": {
+            "link": {
+                "name": "lib\\MorphTargets.glsl",
+                "file": "default"
+            }
+        },
+        "a8ee974a-5f79-4ff3-b827-9a48815d28a2": {
+            "link": {
+                "name": "lib\\PhysicalBSDF.glsl",
+                "file": "default"
+            }
         }
     },
     "animations": {},
@@ -11450,8 +11467,8 @@
             "name": "wle-pp-dev-locomotion",
             "version": [
                 1,
-                1,
-                6
+                2,
+                3
             ]
         },
         "rendering": {
@@ -11467,7 +11484,10 @@
             },
             "useMultiDraw": false,
             "usePreZ": false,
-            "useFrustumCulling": false
+            "useFrustumCulling": false,
+            "hdr": {
+                "exposure": 1.5
+            }
         },
         "runtime": {
             "xrButtonColor": "black",
@@ -11495,7 +11515,7 @@
                 "/js/lib/"
             ],
             "bundlingType": "esbuild",
-            "entryPoint": "src/index.js"
+            "entryPoint": "src/index.ts"
         },
         "vr": {
             "leftEyeObject": "a5f3a9f5-4ba2-43fe-9982-17d436de4c7c",
@@ -11506,7 +11526,8 @@
                 "near": 0.0099999,
                 "far": 10000.0
             },
-            "ids": "uuid"
+            "ids": "uuid",
+            "serverPort": 8081
         },
         "physx": {
             "enable": true,
@@ -11552,5 +11573,6 @@
             }
         }
     },
-    "languages": {}
+    "languages": {},
+    "morphTargets": {}
 }

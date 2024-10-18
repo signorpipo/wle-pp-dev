@@ -8,7 +8,6 @@ import { Vec3Utils } from "../../pp/cauldron/utils/array/vec3_utils.js";
 
 export class VecCreateCountComponent extends Component {
     static TypeName = "vec-create-count";
-    static Properties = {};
 
     init() {
         if (this.active) {

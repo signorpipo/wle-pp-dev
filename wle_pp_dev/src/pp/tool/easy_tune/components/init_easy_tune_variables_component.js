@@ -21,7 +21,13 @@ export class InitEasyTuneVariablesComponent extends Component {
         }
     }
 
-    onDestroy() {
+    onActivate() {
+        if (this._myEasyTuneVariables != null && !Globals.hasEasyTuneVariables(this.engine)) {
+            Globals.setEasyTuneVariables(this._myEasyTuneVariables, this.engine);
+        }
+    }
+
+    onDeactivate() {
         if (this._myEasyTuneVariables != null && Globals.getEasyTuneVariables(this.engine) == this._myEasyTuneVariables) {
             Globals.removeEasyTuneVariables(this.engine);
         }

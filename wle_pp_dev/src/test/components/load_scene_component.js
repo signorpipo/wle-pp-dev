@@ -3,7 +3,6 @@ import { GamepadButtonID, Globals } from "wle-pp";
 
 export class LoadSceneComponent extends Component {
     static TypeName = "load-scene";
-    static Properties = {};
 
     update(dt) {
         if (Globals.getLeftGamepad(this.engine).getButtonInfo(GamepadButtonID.SELECT).isPressEnd()) {

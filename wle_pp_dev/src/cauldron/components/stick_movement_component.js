@@ -51,17 +51,23 @@ export class StickMovementComponent extends Component {
         this._myDirectionReferenceObject = Globals.getPlayerObjects(this.engine).myHead;
         this._mySessionActive = false;
 
-        XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this), false, false, this.engine);
-
         this._myStickIdleTimer = new Timer(0.25, false);
         this._myIsFlying = false;
 
         this._myFirstTime = true;
 
         this._myInitialHeight = 0;
+
+        this._myActivateOnNextUpdate = false;
     }
 
     update(dt) {
+        if (this._myActivateOnNextUpdate) {
+            this._onActivate();
+
+            this._myActivateOnNextUpdate = false;
+        }
+
         if (dt > 0.25) {
             dt = 0.25;
         }
@@ -248,7 +254,7 @@ export class StickMovementComponent extends Component {
         this._myCollisionCheckParams.myHorizontalBlockLayerFlags.setAllFlagsActive(true);
         let physXComponents = this.object.pp_getComponentsHierarchy("physx");
         for (let physXComponent of physXComponents) {
-            this._myCollisionCheckParams.myHorizontalObjectsToIgnore.pp_pushUnique(physXComponent.object, (first, second) => first.pp_equals(second));
+            this._myCollisionCheckParams.myHorizontalObjectsToIgnore.pp_pushUnique(physXComponent.object, (first, second) => first = second);
         }
 
         this._myCollisionCheckParams.myVerticalBlockLayerFlags.copy(this._myCollisionCheckParams.myHorizontalBlockLayerFlags);
@@ -267,6 +273,18 @@ export class StickMovementComponent extends Component {
         this._myCollisionCheckParams.myCeilingPopOutExtraDistance = 0.1;
 
         this._myCollisionCheckParams.myDebugActive = false;
+    }
+
+    onActivate() {
+        this._myActivateOnNextUpdate = true;
+    }
+
+    onDeactivate() {
+        XRUtils.unregisterSessionStartEndEventListeners(this, this.engine);
+    }
+
+    _onActivate() {
+        XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this), false, false, this.engine);
     }
 
     _onXRSessionStart() {

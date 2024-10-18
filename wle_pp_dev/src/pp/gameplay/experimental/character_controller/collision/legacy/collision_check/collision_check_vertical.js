@@ -169,33 +169,31 @@ CollisionCheckVertical.prototype._verticalMovementAdjustment = function () {
                 if (isMovementDownward) {
                     outFixedMovement = furtherDirectionPosition.vec3_sub(feetPosition, outFixedMovement).vec3_componentAlongAxis(up, outFixedMovement);
 
-                    if (snapEnabled && outFixedMovement.vec3_isFartherAlongAxis(verticalMovement, upNegate)) {
-                        collisionRuntimeParams.myHasSnappedOnGround = true;
-                    } else if (popOutEnabled && outFixedMovement.vec3_isFartherAlongAxis(verticalMovement, up)) {
-                        if (!outFixedMovement.vec3_isZero(0.00001) &&
-                            (verticalMovement.vec3_isZero(0.00001) || !outFixedMovement.vec3_isConcordant(verticalMovement))) {
+                    if (!outFixedMovement.vec3_equals(verticalMovement, 0.00001)) {
+                        const outFixedMovementValueAlongUp = outFixedMovement.vec3_valueAlongAxis(up);
+                        const verticalMovementValueAlongUp = verticalMovement.vec3_valueAlongAxis(up);
+                        if (snapEnabled && outFixedMovementValueAlongUp < verticalMovementValueAlongUp) {
+                            collisionRuntimeParams.myHasSnappedOnGround = true;
+                        } else if (popOutEnabled && outFixedMovementValueAlongUp > 0.00001) {
                             collisionRuntimeParams.myHasPoppedOutGround = true;
-                        } else {
+                        } else if (outFixedMovementValueAlongUp > verticalMovementValueAlongUp) {
                             collisionRuntimeParams.myHasReducedVerticalMovement = true;
                         }
-                    } else {
-                        collisionRuntimeParams.myHasReducedVerticalMovement = true;
                     }
                 } else {
                     outFixedMovement = furtherDirectionPosition.vec3_sub(feetPosition.vec3_add(up.vec3_scale(height, outFixedMovement), outFixedMovement), outFixedMovement).
                         vec3_componentAlongAxis(up, outFixedMovement);
 
-                    if (snapEnabled && outFixedMovement.vec3_isFartherAlongAxis(verticalMovement, up)) {
-                        collisionRuntimeParams.myHasSnappedOnCeiling = true;
-                    } else if (popOutEnabled && outFixedMovement.vec3_isFartherAlongAxis(verticalMovement, upNegate)) {
-                        if (!outFixedMovement.vec3_isZero(0.00001) &&
-                            (verticalMovement.vec3_isZero(0.00001) || !outFixedMovement.vec3_isConcordant(verticalMovement))) {
+                    if (!outFixedMovement.vec3_equals(verticalMovement, 0.00001)) {
+                        const outFixedMovementValueAlongUp = outFixedMovement.vec3_valueAlongAxis(up);
+                        const verticalMovementValueAlongUp = verticalMovement.vec3_valueAlongAxis(up);
+                        if (snapEnabled && outFixedMovementValueAlongUp > verticalMovementValueAlongUp) {
+                            collisionRuntimeParams.myHasSnappedOnCeiling = true;
+                        } else if (popOutEnabled && outFixedMovementValueAlongUp < -0.00001) {
                             collisionRuntimeParams.myHasPoppedOutCeiling = true;
-                        } else {
+                        } else if (outFixedMovementValueAlongUp < verticalMovementValueAlongUp) {
                             collisionRuntimeParams.myHasReducedVerticalMovement = true;
                         }
-                    } else {
-                        collisionRuntimeParams.myHasReducedVerticalMovement = true;
                     }
                 }
 

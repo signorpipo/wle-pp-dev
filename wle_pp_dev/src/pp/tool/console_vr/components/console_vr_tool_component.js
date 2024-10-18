@@ -32,8 +32,6 @@ export class ConsoleVRToolComponent extends Component {
 
             this._myWidget.start(this.object, params);
 
-            this._myWidgetVisibleBackup = null;
-
             this._myStarted = true;
         }
     }
@@ -41,35 +39,17 @@ export class ConsoleVRToolComponent extends Component {
     update(dt) {
         if (Globals.isToolEnabled(this.engine)) {
             if (this._myStarted) {
-                if (this._myWidgetVisibleBackup != null) {
-                    this._myWidget.setVisible(false);
-                    this._myWidget.setVisible(this._myWidgetVisibleBackup);
-
-                    this._myWidgetVisibleBackup = null;
-                }
-
+                this._myWidget.setActive(true);
                 this._myWidget.update(dt);
             }
         } else if (this._myStarted) {
-            if (this._myWidgetVisibleBackup == null) {
-                this._myWidgetVisibleBackup = this._myWidget.isVisible();
-            }
-
-            if (this._myWidget.isVisible()) {
-                this._myWidget.setVisible(false);
-            }
+            this._myWidget.setActive(false);
         }
     }
 
     onDeactivate() {
         if (this._myStarted) {
-            if (this._myWidgetVisibleBackup == null) {
-                this._myWidgetVisibleBackup = this._myWidget.isVisible();
-            }
-
-            if (this._myWidget.isVisible()) {
-                this._myWidget.setVisible(false);
-            }
+            this._myWidget.setActive(false);
         }
     }
 

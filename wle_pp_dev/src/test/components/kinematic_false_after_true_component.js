@@ -4,7 +4,6 @@ import { Globals } from "../../pp/pp/globals.js";
 
 export class KinematicFalseAfterTrueComponent extends Component {
     static TypeName = "kinematic-false-after-true";
-    static Properties = {};
 
     start() {
         this._myPhysX = this.object.pp_getComponent(PhysXComponent);

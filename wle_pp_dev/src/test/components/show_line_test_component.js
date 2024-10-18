@@ -5,7 +5,6 @@ import { Globals } from "../../pp/pp/globals.js";
 
 export class ShowLineTestComponent extends Component {
     static TypeName = "show-line-test";
-    static Properties = {};
 
     update(dt) {
         let visualParams = new VisualLineParams();

@@ -21,7 +21,13 @@ export class InitConsoleVRComponent extends Component {
         }
     }
 
-    onDestroy() {
+    onActivate() {
+        if (this._myConsoleVR != null && !Globals.hasConsoleVR(this.engine)) {
+            Globals.setConsoleVR(this._myConsoleVR, this.engine);
+        }
+    }
+
+    onDeactivate() {
         if (this._myConsoleVR != null && Globals.getConsoleVR(this.engine) == this._myConsoleVR) {
             Globals.removeConsoleVR(this.engine);
         }

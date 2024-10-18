@@ -31,7 +31,13 @@ export class AnalyticsManagerComponent extends Component {
         }
     }
 
-    onDestroy() {
+    onActivate() {
+        if (this._myAnalyticsManager != null && !Globals.hasAnalyticsManager(this.engine)) {
+            Globals.setAnalyticsManager(this._myAnalyticsManager, this.engine);
+        }
+    }
+
+    onDeactivate() {
         if (this._myAnalyticsManager != null && Globals.getAnalyticsManager(this.engine) == this._myAnalyticsManager) {
             Globals.removeAnalyticsManager(this.engine);
         }

@@ -26,6 +26,7 @@ import {SetActiveOnMobileComponent} from './playground/components/set_active_on_
 import {SFXOnCollisionComponent} from './playground/components/sfx_on_collision_component.js';
 import {SFXOnGrabThrowComponent} from './playground/components/sfx_on_grab_throw_component.js';
 import {TargetHitCheckComponent} from './playground/components/target_hit_check_component.js';
+import {TeleportOnTrackedHandsComponent} from './playground/components/teleport_on_tracked_hands_component.js';
 import {ToggleHowToTextComponent} from './playground/components/toggle_how_to_text_component.js';
 import {WaveMovementComponent} from './playground/components/wave_movement_component.js';
 import {AdjustHierarchyPhysXScaleComponent} from './pp/index.js';
@@ -52,7 +53,7 @@ import {TrackedHandDrawAllJointsComponent} from './pp/index.js';
 import {VirtualGamepadComponent} from './pp/index.js';
 /* wle:auto-imports:end */
 
-import { loadRuntime, LogLevel } from '@wonderlandengine/api';
+import { loadRuntime, LoadRuntimeOptions, LogLevel } from '@wonderlandengine/api';
 
 /* wle:auto-constants:start */
 const Constants = {
@@ -71,34 +72,33 @@ const RuntimeOptions = {
 
 const disableEngineLogs = true;
 if (disableEngineLogs) {
-    RuntimeOptions.logs = [LogLevel.Error];
+    (RuntimeOptions as LoadRuntimeOptions).logs = [LogLevel.Error];
 }
 
 const engine = await loadRuntime(Constants.RuntimeBaseName, RuntimeOptions);
-
-engine.onSceneLoaded.once(() => {
+engine.onLoadingScreenEnd.once(() => {
     const el = document.getElementById('version');
     if (el) setTimeout(() => el.remove(), 2000);
 });
 
 /* WebXR setup. */
 
-function requestSession(mode) {
+function requestSession(mode: XRSessionMode): void {
     engine
         .requestXRSession(mode, Constants.WebXRRequiredFeatures, Constants.WebXROptionalFeatures)
         .catch((e) => console.error(e));
 }
 
-function setupButtonsXR() {
+function setupButtonsXR(): void {
     /* Setup AR / VR buttons */
     const arButton = document.getElementById('ar-button');
     if (arButton) {
-        arButton.dataset.supported = engine.arSupported;
+        arButton.dataset.supported = engine.arSupported as unknown as string;
         arButton.addEventListener('click', () => requestSession('immersive-ar'));
     }
     const vrButton = document.getElementById('vr-button');
     if (vrButton) {
-        vrButton.dataset.supported = engine.vrSupported;
+        vrButton.dataset.supported = engine.vrSupported as unknown as string;
         vrButton.addEventListener('click', () => requestSession('immersive-vr'));
     }
 }
@@ -124,6 +124,7 @@ engine.registerComponent(SetActiveOnMobileComponent);
 engine.registerComponent(SFXOnCollisionComponent);
 engine.registerComponent(SFXOnGrabThrowComponent);
 engine.registerComponent(TargetHitCheckComponent);
+engine.registerComponent(TeleportOnTrackedHandsComponent);
 engine.registerComponent(ToggleHowToTextComponent);
 engine.registerComponent(WaveMovementComponent);
 engine.registerComponent(AdjustHierarchyPhysXScaleComponent);
@@ -150,11 +151,16 @@ engine.registerComponent(TrackedHandDrawAllJointsComponent);
 engine.registerComponent(VirtualGamepadComponent);
 /* wle:auto-register:end */
 
-const loadDelaySeconds = 0;
-if (loadDelaySeconds > 0) {
-    setTimeout(() => engine.scene.load(`${Constants.ProjectName}.bin`), loadDelaySeconds * 1000);
-} else {
-    engine.scene.load(`${Constants.ProjectName}.bin`);
+const sceneLoadDelaySeconds = 0;
+if (sceneLoadDelaySeconds > 0) {
+    await new Promise((resolve) => setTimeout(resolve, sceneLoadDelaySeconds * 1000));
+}
+
+try {
+    await engine.loadMainScene(`${Constants.ProjectName}.bin`);
+} catch (error) {
+    console.error(error);
+    window.alert(`Failed to load ${Constants.ProjectName}.bin: ` + error);
 }
 
 /* wle:auto-benchmark:start */

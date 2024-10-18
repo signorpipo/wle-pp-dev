@@ -23,8 +23,14 @@ export class TestTrackedHandDrawJointsComponent extends Component {
 
         this._myHandPose.start();
         this._buildTrackedHandHierarchy();
+    }
 
+    onActivate() {
         XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this), false, false, this.engine);
+    }
+
+    onDeactivate() {
+        XRUtils.unregisterSessionStartEndEventListeners(this, this.engine);
     }
 
     update(dt) {
@@ -103,10 +109,10 @@ export class TestTrackedHandDrawJointsComponent extends Component {
     }
 
     _buildTrackedHandHierarchy() {
-        this._myTrackedHandObject = this.object.pp_addObject();
-        this._myTrackedHandObject2 = this.object.pp_addObject();
-        this._myTrackedHandObject3 = this.object.pp_addObject();
-        this._myTrackedHandObjectMesh = this._myTrackedHandObject.pp_addObject();
+        this._myTrackedHandObject = this.object.pp_addChild();
+        this._myTrackedHandObject2 = this.object.pp_addChild();
+        this._myTrackedHandObject3 = this.object.pp_addChild();
+        this._myTrackedHandObjectMesh = this._myTrackedHandObject.pp_addChild();
 
         //let child = this.object.pp_getChildren()[0];
         //child.pp_setParent(this._myTrackedHandObject, false);

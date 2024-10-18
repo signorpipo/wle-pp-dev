@@ -1,6 +1,6 @@
 import { Timer } from "../../../../../../cauldron/cauldron/timer.js";
 import { FSM } from "../../../../../../cauldron/fsm/fsm.js";
-import { vec3_create } from "../../../../../../plugin/js/extensions/array/vec_create_extension.js";
+import { quat_create, vec3_create } from "../../../../../../plugin/js/extensions/array/vec_create_extension.js";
 import { PlayerLocomotionTeleportState } from "./player_locomotion_teleport_state.js";
 
 export class PlayerLocomotionTeleportTeleportShiftState extends PlayerLocomotionTeleportState {
@@ -13,7 +13,6 @@ export class PlayerLocomotionTeleportTeleportShiftState extends PlayerLocomotion
 
         this._myFSM.addState("init");
         this._myFSM.addState("idle");
-
         this._myFSM.addState("shifting", this._shiftingUpdate.bind(this));
 
         this._myFSM.addTransition("init", "idle", "start");
@@ -23,6 +22,9 @@ export class PlayerLocomotionTeleportTeleportShiftState extends PlayerLocomotion
 
         this._myFSM.addTransition("idle", "idle", "stop");
         this._myFSM.addTransition("shifting", "idle", "stop", this._stop.bind(this));
+
+        this._myFSM.addTransition("idle", "idle", "cancel");
+        this._myFSM.addTransition("shifting", "idle", "cancel", this._cancel.bind(this));
 
         this._myFSM.init("init");
         this._myFSM.perform("start");
@@ -58,11 +60,13 @@ export class PlayerLocomotionTeleportTeleportShiftState extends PlayerLocomotion
         this._myFSM.update(dt);
     }
 
-    _startShifting() {
-        this._myTeleportParams.myPlayerTransformManager.getParams().mySyncPositionDisabled = true;
+    cancelTeleport() {
+        this._myFSM.perform("cancel");
+    }
 
+    _startShifting() {
         this._myLocomotionRuntimeParams.myIsTeleporting = true;
-        this._myFeetStartPosition = this._myTeleportParams.myPlayerHeadManager.getPositionFeet(this._myFeetStartPosition);
+        this._myFeetStartPosition = this._myTeleportParams.myPlayerTransformManager.getPositionReal(this._myFeetStartPosition);
 
         this._myShiftMovementTimer.start(this._myTeleportParams.myTeleportParams.myShiftMovementSeconds);
 
@@ -82,6 +86,10 @@ export class PlayerLocomotionTeleportTeleportShiftState extends PlayerLocomotion
         this._myCurrentRotationOnUp = 0;
     }
 
+    _cancel() {
+        this._myLocomotionRuntimeParams.myIsTeleporting = false;
+    }
+
     _stop() {
         this._teleport();
     }
@@ -92,10 +100,11 @@ export class PlayerLocomotionTeleportTeleportShiftState extends PlayerLocomotion
     }
 
     _teleport() {
-        this._myTeleportParams.myPlayerTransformManager.getParams().mySyncPositionDisabled = false;
         this._myLocomotionRuntimeParams.myIsTeleporting = false;
         this._myLocomotionRuntimeParams.myTeleportJustPerformed = true;
-        this._teleportToPosition(this._myTeleportRuntimeParams.myTeleportPosition, this._myStartRotationOnUp - this._myCurrentRotationOnUp, this._myLocomotionRuntimeParams.myCollisionRuntimeParams);
+        this._teleportToPosition(this._myTeleportRuntimeParams.myTeleportPosition, this._myStartRotationOnUp - this._myCurrentRotationOnUp);
+
+        this._myTeleportParams.myPlayerTransformManager.resetReal();
     }
 
     _shiftingUpdate(dt, fsm) {
@@ -110,6 +119,9 @@ export class PlayerLocomotionTeleportTeleportShiftState extends PlayerLocomotion
 PlayerLocomotionTeleportTeleportShiftState.prototype._shiftingUpdate = function () {
     let movementToTeleportFeet = vec3_create();
     let newFeetPosition = vec3_create();
+
+    let playerUp = vec3_create();
+    let newFeetRotationQuat = quat_create();
     return function _shiftingUpdate(dt, fsm) {
         this._myShiftMovementTimer.update(dt);
         this._myShiftRotateTimer.update(dt);
@@ -143,7 +155,15 @@ PlayerLocomotionTeleportTeleportShiftState.prototype._shiftingUpdate = function 
                 this._myCurrentRotationOnUp = newCurrentRotationOnUp;
             }
 
-            this._teleportToPosition(newFeetPosition, rotationOnUp, this._myLocomotionRuntimeParams.myCollisionRuntimeParams, true);
+            this._myTeleportParams.myPlayerTransformManager.getRotationRealQuat(newFeetRotationQuat);
+            if (rotationOnUp != 0) {
+                newFeetRotationQuat.quat_getUp(playerUp);
+                newFeetRotationQuat = newFeetRotationQuat.quat_rotateAxis(rotationOnUp, playerUp, newFeetRotationQuat);
+            }
+
+            let playerHeadManager = this._myTeleportParams.myPlayerTransformManager.getPlayerHeadManager();
+            playerHeadManager.setRotationFeetQuat(newFeetRotationQuat);
+            playerHeadManager.teleportPositionFeet(newFeetPosition);
         }
     };
 }();

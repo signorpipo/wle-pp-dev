@@ -16,7 +16,6 @@ let vec3_zeroTotal = 0;
 
 export class Vec3FunctionCountComponent extends Component {
     static TypeName = "vec3-function-count";
-    static Properties = {};
 
     start() {
         this.vec3_addTotal = 0;

@@ -88,15 +88,35 @@ export class InputManagerComponent extends Component {
         this._myInputManager.getGamepadsManager().getRightGamepad().addGamepadCore("pp_right_classic_gamepad", rightClassicGamepadCore);
     }
 
-    onDestroy() {
-        if (this._myInputManager != null && Globals.getInputManager(this.engine) == this._myInputManager) {
-            Globals.removeInputManager(this.engine);
+    onActivate() {
+        if (this._myInputManager != null && !Globals.hasInputManager(this.engine)) {
+            this._myInputManager.setActive(true);
 
-            this._myInputManager.destroy();
+            Globals.setInputManager(this._myInputManager, this.engine);
+        }
+
+        if (this._myPoseForwardFixedGlobal != null && !Globals.hasPoseForwardFixed(this.engine)) {
+            Globals.setPoseForwardFixed(this._myPoseForwardFixedGlobal, this.engine);
+        }
+    }
+
+    onDeactivate() {
+        if (this._myInputManager != null) {
+            this._myInputManager.setActive(false);
+
+            if (Globals.getInputManager(this.engine) == this._myInputManager) {
+                Globals.removeInputManager(this.engine);
+            }
         }
 
         if (this._myPoseForwardFixedGlobal != null && Globals.isPoseForwardFixed(this.engine) == this._myPoseForwardFixedGlobal) {
             Globals.removePoseForwardFixed(this.engine);
+        }
+    }
+
+    onDestroy() {
+        if (this._myInputManager != null) {
+            this._myInputManager.destroy();
         }
     }
 }

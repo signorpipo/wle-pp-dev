@@ -4,7 +4,6 @@ import { Timer } from "../../pp/cauldron/cauldron/timer.js";
 
 export class MoveStaticColliderComponent extends Component {
     static TypeName = "move-static-collider";
-    static Properties = {};
 
     start() {
         this._mySetStaticFalseTimer = new Timer(2);

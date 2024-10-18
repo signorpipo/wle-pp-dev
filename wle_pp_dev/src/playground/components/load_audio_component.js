@@ -3,7 +3,6 @@ import { AudioSetup, Globals } from "wle-pp";
 
 export class LoadAudioComponent extends Component {
     static TypeName = "load-audio";
-    static Properties = {};
 
     start() {
         this._loadAudio();
