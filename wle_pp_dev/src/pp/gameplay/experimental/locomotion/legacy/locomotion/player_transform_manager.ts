@@ -1669,7 +1669,7 @@ export class PlayerTransformManager {
 
             const transformQuat = PlayerTransformManager._updateValidHeadToRealHeadSV.transformQuat;
             this.getTransformHeadQuat(transformQuat); // Get eyes transform
-            newPositionHead.vec3_copy(this._myValidPositionHead);
+            newPositionHead.vec3_copy(positionReal);
 
             let isHeadFar = false;
             if (this._myParams.myMaxDistanceFromHeadRealToSyncEnabled) {
