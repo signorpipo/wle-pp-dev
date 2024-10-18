@@ -265,7 +265,7 @@ export class EasyTuneBaseWidgetUI {
 
     _setupTextComponent(textComponent) {
         textComponent.alignment = this._myConfig.myTextAlignment;
-        textComponent.verticalAlignment = this._myConfig.myTextVerticalAlignment;
+        textComponent.justification = this._myConfig.myTextJustification;
         textComponent.material = this._myParams.myTextMaterial.clone();
         textComponent.material.color = this._myConfig.myTextColor;
         textComponent.text = "";

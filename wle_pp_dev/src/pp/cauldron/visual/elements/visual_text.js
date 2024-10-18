@@ -1,4 +1,4 @@
-import { Alignment, TextComponent, VerticalAlignment } from "@wonderlandengine/api";
+import { Alignment, TextComponent, Justification } from "@wonderlandengine/api";
 import { mat4_create, vec3_create } from "../../../plugin/js/extensions/array/vec_create_extension.js";
 import { Globals } from "../../../pp/globals.js";
 import { AbstractVisualElement, AbstractVisualElementParams } from "./visual_element.js";
@@ -16,7 +16,7 @@ export class VisualTextParams extends AbstractVisualElementParams {
 
         this.myText = "";
         this.myAlignment = Alignment.Center;
-        this.myVerticalAlignment = VerticalAlignment.Middle;
+        this.myJustification = Justification.Middle;
 
         this.myTransform = mat4_create();
 
@@ -42,7 +42,7 @@ export class VisualTextParams extends AbstractVisualElementParams {
     _equalsHook(other) {
         return this.myText == other.myText &&
             this.myAlignment == other.myAlignment &&
-            this.myVerticalAlignment == other.myVerticalAlignment &&
+            this.myJustification == other.myJustification &&
             this.myMaterial == other.myMaterial &&
             this.myLookAtObject == other.myLookAtObject &&
             this.myLocal == other.myLocal &&
@@ -109,7 +109,7 @@ export class VisualText extends AbstractVisualElement {
 VisualTextParams.prototype._copyHook = function _copyHook(other, deepCopy) {
     this.myText = other.myText;
     this.myAlignment = other.myAlignment;
-    this.myVerticalAlignment = other.myVerticalAlignment;
+    this.myJustification = other.myJustification;
 
     this.myTransform.mat4_copy(other.myTransform);
 
@@ -166,7 +166,7 @@ VisualText.prototype._refreshHook = function () {
 
         this._myTextComponent.text = this._myParams.myText;
         this._myTextComponent.alignment = this._myParams.myAlignment;
-        this._myTextComponent.verticalAlignment = this._myParams.myVerticalAlignment;
+        this._myTextComponent.justification = this._myParams.myJustification;
 
         this._myDirty = false;
     };

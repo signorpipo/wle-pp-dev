@@ -191,7 +191,7 @@ export class ConsoleVRWidgetUI {
             let textComp = this.myMessagesTexts[ConsoleVRWidgetMessageType[key]].pp_addComponent(TextComponent);
 
             textComp.alignment = this._myConfig.myMessagesTextAlignment;
-            textComp.verticalAlignment = this._myConfig.myMessagesTextVerticalAlignment;
+            textComp.justification = this._myConfig.myMessagesTextJustification;
             textComp.material = this._myParams.myTextMaterial.clone();
             textComp.material.color = this._myConfig.myMessagesTextColors[ConsoleVRWidgetMessageType[key]];
             textComp.lineSpacing = 1.2;
@@ -333,7 +333,7 @@ export class ConsoleVRWidgetUI {
 
     _setupButtonTextComponent(textComponent) {
         textComponent.alignment = this._myConfig.myTextAlignment;
-        textComponent.verticalAlignment = this._myConfig.myTextVerticalAlignment;
+        textComponent.justification = this._myConfig.myTextJustification;
         textComponent.material = this._myParams.myTextMaterial.clone();
         textComponent.material.color = this._myConfig.myTextColor;
         textComponent.text = "";

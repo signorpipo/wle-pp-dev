@@ -157,7 +157,7 @@ if (sceneLoadDelaySeconds > 0) {
 }
 
 try {
-    await engine.loadMainScene(`${Constants.ProjectName}.bin`);
+    await engine.scene.load(`${Constants.ProjectName}.bin`);
 } catch (error) {
     console.error(error);
     window.alert(`Failed to load ${Constants.ProjectName}.bin: ` + error);

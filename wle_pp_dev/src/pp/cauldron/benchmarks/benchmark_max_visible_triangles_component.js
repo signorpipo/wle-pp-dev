@@ -1,4 +1,4 @@
-import { Alignment, Component, MeshComponent, Property, TextComponent, VerticalAlignment } from "@wonderlandengine/api";
+import { Alignment, Component, Justification, MeshComponent, Property, TextComponent } from "@wonderlandengine/api";
 import { vec2_create, vec3_create, vec4_create } from "../../plugin/js/extensions/array/vec_create_extension.js";
 import { Globals } from "../../pp/globals.js";
 import { Timer } from "../cauldron/timer.js";
@@ -113,7 +113,7 @@ export class BenchmarkMaxVisibleTrianglesComponent extends Component {
         this._myTriangleTextComponent = this._myTriangleTextObject.pp_addComponent(TextComponent);
 
         this._myTriangleTextComponent.alignment = Alignment.Left;
-        this._myTriangleTextComponent.verticalAlignment = VerticalAlignment.Line;
+        this._myTriangleTextComponent.justification = Justification.Line;
         this._myTriangleTextComponent.material = this._myTextMaterial.clone();
         this._myTriangleTextComponent.material.color = this._myNormalColor;
         this._myTriangleTextComponent.text = " ";
@@ -125,7 +125,7 @@ export class BenchmarkMaxVisibleTrianglesComponent extends Component {
         //this._myPlaneTextObject.pp_addComponent(EasyTransformComponent, { _myLocal: true });
 
         this._myPlaneTextComponent.alignment = Alignment.Left;
-        this._myPlaneTextComponent.verticalAlignment = VerticalAlignment.Line;
+        this._myPlaneTextComponent.justification = Justification.Line;
         this._myPlaneTextComponent.material = this._myTextMaterial.clone();
         this._myPlaneTextComponent.material.color = this._myNormalColor;
         this._myPlaneTextComponent.text = " ";
@@ -137,7 +137,7 @@ export class BenchmarkMaxVisibleTrianglesComponent extends Component {
         //this._myFPSTextObject.pp_addComponent(EasyTransformComponent, { _myLocal: true });
 
         this._myFPSTextComponent.alignment = Alignment.Left;
-        this._myFPSTextComponent.verticalAlignment = VerticalAlignment.Line;
+        this._myFPSTextComponent.justification = Justification.Line;
         this._myFPSTextComponent.material = this._myTextMaterial.clone();
         this._myFPSTextComponent.material.color = this._myNormalColor;
         this._myFPSTextComponent.text = " ";
@@ -149,7 +149,7 @@ export class BenchmarkMaxVisibleTrianglesComponent extends Component {
         //this._myDoneTextObject.pp_addComponent(EasyTransformComponent, { _myLocal: true });
 
         this._myDoneTextComponent.alignment = Alignment.Center;
-        this._myDoneTextComponent.verticalAlignment = VerticalAlignment.Line;
+        this._myDoneTextComponent.justification = Justification.Line;
         this._myDoneTextComponent.material = this._myTextMaterial.clone();
         this._myDoneTextComponent.material.color = this._myNormalColor;
         this._myDoneTextComponent.text = " ";

@@ -1,4 +1,4 @@
-import { Alignment, Component, MeshComponent, Property, TextComponent, VerticalAlignment } from "@wonderlandengine/api";
+import { Alignment, Component, MeshComponent, Property, TextComponent, Justification } from "@wonderlandengine/api";
 import { vec3_create } from "../../../plugin/js/extensions/array/vec_create_extension.js";
 import { Globals } from "../../../pp/globals.js";
 import { Handedness } from "../../cauldron/input_types.js";
@@ -225,7 +225,7 @@ export class GamepadControlSchemeComponent extends Component {
 
         let textComponent = textObject.pp_addComponent(TextComponent);
         textComponent.alignment = Alignment.Center;
-        textComponent.verticalAlignment = VerticalAlignment.Top;
+        textComponent.justification = Justification.Top;
         textComponent.material = this._myTextMaterialFinal;
 
         return textComponent;
