@@ -142,7 +142,7 @@ export class PlayerLocomotionTeleportTeleportBlinkState extends PlayerLocomotion
     _teleport() {
         this._myLocomotionRuntimeParams.myIsTeleporting = false;
         this._myLocomotionRuntimeParams.myTeleportJustPerformed = true;
-        this._teleportToPosition(this._myTeleportRuntimeParams.myTeleportPosition, this._myTeleportRuntimeParams.myTeleportRotationOnUp);
+        this._teleportToPosition(this._myTeleportRuntimeParams.myTeleportPosition, this._myTeleportRuntimeParams.myTeleportForward);
 
         this._myTeleportParams.myPlayerTransformManager.resetReal();
     }

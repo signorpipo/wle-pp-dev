@@ -26,10 +26,12 @@ export class PlayerLocomotionTeleportTeleportParams {
         this.myShiftMovementSecondsMultiplierOverDistanceFunction = null;
         this.myShiftMovementEasingFunction = EasingFunction.easeInOut;
 
-        this.myShiftRotateSeconds = 1;
+        this.myShiftRotateSeconds = 0.75;
         this.myShiftRotateSecondsMultiplierOverAngleFunction = null;
-        this.myShiftRotateEasingFunction = EasingFunction.easeOut;
+        this.myShiftRotateEasingFunction = EasingFunction.easeOutWeak;
         this.myShiftRotateStartAfterMovementPercentage = 0.7;
+        this.myShiftRotateMinAngleToRotate = 10;
+        this.myShiftRotateStopAngleThreshold = 0.25;
 
         this.myShiftRotateSecondsMultiplierOverAngleFunction = function (angle) {
             return EasingFunction.easeOut(angle / 180);
@@ -111,7 +113,7 @@ export class PlayerLocomotionTeleportTeleportState extends PlayerLocomotionTelep
 
     completeTeleport() {
         this._myFSM.perform("stop");
-        this._teleportToPosition(this._myTeleportRuntimeParams.myTeleportPosition, this._myTeleportRuntimeParams.myTeleportRotationOnUp);
+        this._teleportToPosition(this._myTeleportRuntimeParams.myTeleportPosition, this._myTeleportRuntimeParams.myTeleportForward);
     }
 
     _startInstantTeleport() {
@@ -119,7 +121,7 @@ export class PlayerLocomotionTeleportTeleportState extends PlayerLocomotionTelep
     }
 
     _instantUpdate(dt, fsm) {
-        this._teleportToPosition(this._myTeleportRuntimeParams.myTeleportPosition, this._myTeleportRuntimeParams.myTeleportRotationOnUp);
+        this._teleportToPosition(this._myTeleportRuntimeParams.myTeleportPosition, this._myTeleportRuntimeParams.myTeleportForward);
         this._myLocomotionRuntimeParams.myIsTeleporting = false;
         this._myLocomotionRuntimeParams.myTeleportJustPerformed = true;
         fsm.perform("done");

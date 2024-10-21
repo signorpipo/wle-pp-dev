@@ -34,8 +34,7 @@ export class PlayerLocomotionTeleportTeleportShiftState extends PlayerLocomotion
 
         this._myFeetStartPosition = vec3_create();
 
-        this._myCurrentRotationOnUp = 0;
-        this._myStartRotationOnUp = 0;
+        this._myStartForward = vec3_create();
 
         //Globals.getEasyTuneVariables(this._myTeleportParams.myEngine).add(new EasyTuneNumber("Shift Movement Seconds", this._myTeleportParams.myTeleportParams.myShiftMovementSeconds, 0.5, 3, 0, undefined, undefined, this._myTeleportParams.myEngine));
         //Globals.getEasyTuneVariables(this._myTeleportParams.myEngine).add(new EasyTuneNumber("Shift Rotate Seconds", this._myTeleportParams.myTeleportParams.myShiftRotateSeconds, 0.5, 3, 0, undefined, undefined, this._myTeleportParams.myEngine));
@@ -65,25 +64,7 @@ export class PlayerLocomotionTeleportTeleportShiftState extends PlayerLocomotion
     }
 
     _startShifting() {
-        this._myLocomotionRuntimeParams.myIsTeleporting = true;
-        this._myFeetStartPosition = this._myTeleportParams.myPlayerTransformManager.getPositionReal(this._myFeetStartPosition);
-
-        this._myShiftMovementTimer.start(this._myTeleportParams.myTeleportParams.myShiftMovementSeconds);
-
-        if (this._myTeleportParams.myTeleportParams.myShiftMovementSecondsMultiplierOverDistanceFunction) {
-            let distance = this._myTeleportRuntimeParams.myTeleportPosition.vec3_distance(this._myFeetStartPosition);
-            let multiplier = this._myTeleportParams.myTeleportParams.myShiftMovementSecondsMultiplierOverDistanceFunction(distance);
-            this._myShiftMovementTimer.start(this._myTeleportParams.myTeleportParams.myShiftMovementSeconds * multiplier);
-        }
-
-        this._myShiftRotateTimer.reset(this._myTeleportParams.myTeleportParams.myShiftRotateSeconds);
-        if (this._myTeleportParams.myTeleportParams.myShiftRotateSecondsMultiplierOverAngleFunction) {
-            let multiplier = this._myTeleportParams.myTeleportParams.myShiftRotateSecondsMultiplierOverAngleFunction(Math.abs(this._myTeleportRuntimeParams.myTeleportRotationOnUp));
-            this._myShiftRotateTimer.reset(this._myTeleportParams.myTeleportParams.myShiftRotateSeconds * multiplier);
-        }
-
-        this._myStartRotationOnUp = this._myTeleportRuntimeParams.myTeleportRotationOnUp;
-        this._myCurrentRotationOnUp = 0;
+        // Implemented outside class definition
     }
 
     _cancel() {
@@ -102,7 +83,7 @@ export class PlayerLocomotionTeleportTeleportShiftState extends PlayerLocomotion
     _teleport() {
         this._myLocomotionRuntimeParams.myIsTeleporting = false;
         this._myLocomotionRuntimeParams.myTeleportJustPerformed = true;
-        this._teleportToPosition(this._myTeleportRuntimeParams.myTeleportPosition, this._myStartRotationOnUp - this._myCurrentRotationOnUp);
+        this._teleportToPosition(this._myTeleportRuntimeParams.myTeleportPosition, this._myTeleportRuntimeParams.myTeleportForward);
 
         this._myTeleportParams.myPlayerTransformManager.resetReal();
     }
@@ -116,11 +97,36 @@ export class PlayerLocomotionTeleportTeleportShiftState extends PlayerLocomotion
 
 // IMPLEMENTATION
 
+
+PlayerLocomotionTeleportTeleportShiftState.prototype._startShifting = function () {
+    return function _startShifting(dt, fsm) {
+        this._myLocomotionRuntimeParams.myIsTeleporting = true;
+        this._myFeetStartPosition = this._myTeleportParams.myPlayerTransformManager.getPositionReal(this._myFeetStartPosition);
+
+        this._myShiftMovementTimer.start(this._myTeleportParams.myTeleportParams.myShiftMovementSeconds);
+
+        if (this._myTeleportParams.myTeleportParams.myShiftMovementSecondsMultiplierOverDistanceFunction) {
+            let distance = this._myTeleportRuntimeParams.myTeleportPosition.vec3_distance(this._myFeetStartPosition);
+            let multiplier = this._myTeleportParams.myTeleportParams.myShiftMovementSecondsMultiplierOverDistanceFunction(distance);
+            this._myShiftMovementTimer.start(this._myTeleportParams.myTeleportParams.myShiftMovementSeconds * multiplier);
+        }
+
+        this._myShiftRotateTimer.reset();
+    };
+}();
+
 PlayerLocomotionTeleportTeleportShiftState.prototype._shiftingUpdate = function () {
     let movementToTeleportFeet = vec3_create();
     let newFeetPosition = vec3_create();
 
     let playerUp = vec3_create();
+    let playerForward = vec3_create();
+    let flatTeleportForward = vec3_create();
+    let feetRotationQuat = quat_create();
+    let currentRotationQuat = quat_create();
+    let targetRotationQuat = quat_create();
+    let lerpedRotationQuat = quat_create();
+    let lerpedForward = vec3_create();
     let newFeetRotationQuat = quat_create();
     return function _shiftingUpdate(dt, fsm) {
         this._myShiftMovementTimer.update(dt);
@@ -136,6 +142,31 @@ PlayerLocomotionTeleportTeleportShiftState.prototype._shiftingUpdate = function 
                 let interpolationFactor = this._myTeleportParams.myTeleportParams.myShiftMovementEasingFunction(this._myShiftMovementTimer.getPercentage());
 
                 if (interpolationFactor >= this._myTeleportParams.myTeleportParams.myShiftRotateStartAfterMovementPercentage && !this._myShiftRotateTimer.isStarted()) {
+                    let angleToPerform = 0;
+                    if (!this._myTeleportRuntimeParams.myTeleportForward.vec3_isZero(0.00001)) {
+                        this._myTeleportParams.myPlayerTransformManager.getRotationRealQuat(feetRotationQuat);
+                        feetRotationQuat.quat_getUp(playerUp);
+                        feetRotationQuat.quat_getForward(playerForward);
+                        this._myTeleportRuntimeParams.myTeleportForward.vec3_removeComponentAlongAxis(playerUp, flatTeleportForward);
+
+                        if (!flatTeleportForward.vec3_isZero(0.00001)) {
+                            flatTeleportForward.vec3_normalize(flatTeleportForward);
+                            angleToPerform = flatTeleportForward.vec3_angle(playerForward);
+                        }
+
+                        this._myStartForward.vec3_copy(playerForward);
+                    }
+
+                    if (angleToPerform > this._myTeleportParams.myTeleportParams.myShiftRotateMinAngleToRotate) {
+                        this._myShiftRotateTimer.reset(this._myTeleportParams.myTeleportParams.myShiftRotateSeconds);
+                        if (this._myTeleportParams.myTeleportParams.myShiftRotateSecondsMultiplierOverAngleFunction) {
+                            let multiplier = this._myTeleportParams.myTeleportParams.myShiftRotateSecondsMultiplierOverAngleFunction(angleToPerform);
+                            this._myShiftRotateTimer.reset(this._myTeleportParams.myTeleportParams.myShiftRotateSeconds * multiplier);
+                        }
+                    } else {
+                        this._myShiftRotateTimer.reset(0);
+                    }
+
                     this._myShiftRotateTimer.start();
                     this._myShiftRotateTimer.update(dt);
                 }
@@ -145,20 +176,27 @@ PlayerLocomotionTeleportTeleportShiftState.prototype._shiftingUpdate = function 
                 newFeetPosition = this._myFeetStartPosition.vec3_add(movementToTeleportFeet, newFeetPosition);
             }
 
-            let rotationOnUp = 0;
-            if (this._myShiftRotateTimer.isRunning() || this._myShiftRotateTimer.isJustDone()) {
-                let interpolationFactor = this._myTeleportParams.myTeleportParams.myShiftRotateEasingFunction(this._myShiftRotateTimer.getPercentage());
-
-                let newCurrentRotationOnUp = this._myStartRotationOnUp * interpolationFactor;
-                rotationOnUp = newCurrentRotationOnUp - this._myCurrentRotationOnUp;
-
-                this._myCurrentRotationOnUp = newCurrentRotationOnUp;
-            }
-
             this._myTeleportParams.myPlayerTransformManager.getRotationRealQuat(newFeetRotationQuat);
-            if (rotationOnUp != 0) {
-                newFeetRotationQuat.quat_getUp(playerUp);
-                newFeetRotationQuat = newFeetRotationQuat.quat_rotateAxis(rotationOnUp, playerUp, newFeetRotationQuat);
+
+            if (!this._myTeleportRuntimeParams.myTeleportForward.vec3_isZero(0.00001)) {
+                if (this._myShiftRotateTimer.isRunning() || this._myShiftRotateTimer.isJustDone()) {
+                    let interpolationFactor = this._myTeleportParams.myTeleportParams.myShiftRotateEasingFunction(this._myShiftRotateTimer.getPercentage());
+
+                    newFeetRotationQuat.quat_getUp(playerUp);
+                    currentRotationQuat.quat_copy(newFeetRotationQuat);
+                    targetRotationQuat.quat_copy(newFeetRotationQuat);
+
+                    currentRotationQuat.quat_setUp(playerUp, this._myStartForward);
+                    targetRotationQuat.quat_setUp(playerUp, this._myTeleportRuntimeParams.myTeleportForward);
+
+                    currentRotationQuat.quat_slerp(targetRotationQuat, interpolationFactor, lerpedRotationQuat);
+
+                    newFeetRotationQuat.quat_setUp(playerUp, lerpedRotationQuat.quat_getForward(lerpedForward));
+
+                    if (lerpedForward.vec3_angle(this._myTeleportRuntimeParams.myTeleportForward) <= this._myTeleportParams.myTeleportParams.myShiftRotateStopAngleThreshold) {
+                        this._myShiftRotateTimer.end();
+                    }
+                }
             }
 
             let playerHeadManager = this._myTeleportParams.myPlayerTransformManager.getPlayerHeadManager();

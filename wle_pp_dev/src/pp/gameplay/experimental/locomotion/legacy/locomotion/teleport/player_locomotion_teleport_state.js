@@ -26,7 +26,7 @@ export class PlayerLocomotionTeleportState {
         // Implemented outside class definition
     }
 
-    _teleportToPosition(teleportPosition, rotationOnUp, collisionRuntimeParams, forceTeleport = false) {
+    _teleportToPosition(teleportPosition, teleportForward, collisionRuntimeParams, forceTeleport = false) {
         // Implemented outside class definition
     }
 }
@@ -118,14 +118,14 @@ PlayerLocomotionTeleportState.prototype._teleportToPosition = function () {
     let playerUp = vec3_create();
     let newFeetTransformQuat = quat2_create();
     let newFeetRotationQuat = quat_create();
-    return function _teleportToPosition(teleportPosition, rotationOnUp) {
+    return function _teleportToPosition(teleportPosition, teleportForward) {
         this._myTeleportAsMovementFailed = false;
 
         this._myTeleportParams.myPlayerTransformManager.getRotationRealQuat(newFeetRotationQuat);
 
-        if (rotationOnUp != 0) {
+        if (!teleportForward.vec3_isZero(0.00001)) {
             newFeetRotationQuat.quat_getUp(playerUp);
-            newFeetRotationQuat = newFeetRotationQuat.quat_rotateAxis(rotationOnUp, playerUp, newFeetRotationQuat);
+            newFeetRotationQuat.quat_setUp(playerUp, teleportForward);
         }
 
         newFeetTransformQuat.quat2_setPositionRotationQuat(teleportPosition, newFeetRotationQuat);
