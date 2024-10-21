@@ -52,7 +52,7 @@ export class PlayerLocomotionTeleportRuntimeParams {
 
     constructor() {
         this.myTeleportPosition = vec3_create();
-        this.myTeleportRotationOnUp = 0;
+        this.myTeleportForward = vec3_create(0, 0, 0);
     }
 }
 

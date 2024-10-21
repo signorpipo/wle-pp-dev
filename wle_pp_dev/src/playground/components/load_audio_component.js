@@ -15,7 +15,7 @@ export class LoadAudioComponent extends Component {
             let audioSetup = new AudioSetup("assets/audio/music/playground/playground_ambient.mp3");
             audioSetup.myLoop = true;
             audioSetup.mySpatial = false;
-            audioSetup.myVolume = 2;
+            audioSetup.myVolume = 1;
             manager.addAudioSetup("playground_ambient", audioSetup);
         }
 
@@ -30,7 +30,7 @@ export class LoadAudioComponent extends Component {
         {
             let audioSetup = new AudioSetup("assets/audio/sfx/playground/grab.mp3");
             audioSetup.myRate = 1;
-            audioSetup.myVolume = 1.5;
+            audioSetup.myVolume = 1;
             audioSetup.myReferenceDistance = 0.5;
             manager.addAudioSetup("grab", audioSetup);
         }
@@ -38,7 +38,7 @@ export class LoadAudioComponent extends Component {
         {
             let audioSetup = new AudioSetup("assets/audio/sfx/playground/throw.mp3");
             audioSetup.myRate = 1;
-            audioSetup.myVolume = 1.5;
+            audioSetup.myVolume = 1;
             audioSetup.myReferenceDistance = 0.5;
             manager.addAudioSetup("throw", audioSetup);
         }

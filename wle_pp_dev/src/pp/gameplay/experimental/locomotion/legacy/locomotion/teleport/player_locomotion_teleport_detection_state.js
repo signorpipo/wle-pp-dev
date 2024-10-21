@@ -100,7 +100,7 @@ export class PlayerLocomotionTeleportDetectionState extends PlayerLocomotionTele
 
         this._myVisualizer = new PlayerLocomotionTeleportDetectionVisualizer(this._myTeleportParams, this._myTeleportRuntimeParams, this._myDetectionRuntimeParams);
 
-        this._myTeleportRotationOnUpNext = 0;
+        this._myTeleportRotationOnUp = 0;
 
         //Globals.getEasyTuneVariables(this._myTeleportParams.myEngine).add(new EasyTuneNumber("Parable Steps", this._myTeleportParams.myDetectionParams.myTeleportParableStepLength, 1, 3, 0.01, undefined, undefined, this._myTeleportParams.myEngine));
         //Globals.getEasyTuneVariables(this._myTeleportParams.myEngine).add(new EasyTuneNumber("Parable Gravity", this._myTeleportParams.myDetectionParams.myTeleportParableGravity, 10, 3, undefined, undefined, undefined, this._myTeleportParams.myEngine));
@@ -113,8 +113,7 @@ export class PlayerLocomotionTeleportDetectionState extends PlayerLocomotionTele
     start() {
         this._myLocomotionRuntimeParams.myIsTeleportDetecting = true;
 
-        this._myTeleportRuntimeParams.myTeleportRotationOnUp = 0;
-        this._myTeleportRotationOnUpNext = 0;
+        this._myTeleportRotationOnUp = 0;
 
         this._myDetectionRuntimeParams.myTeleportPositionValid = false;
 
@@ -187,8 +186,8 @@ export class PlayerLocomotionTeleportDetectionState extends PlayerLocomotionTele
             this._detectTeleportRotationVR();
             this._detectTeleportPositionVR();
         } else {
-            this._myTeleportRuntimeParams.myTeleportRotationOnUp = 0;
-            this._myTeleportRotationOnUpNext = 0;
+            this._myTeleportRotationOnUp = 0;
+            this._myTeleportRuntimeParams.myTeleportForward.vec3_zero();
             this._detectTeleportPositionNonVR();
         }
 
@@ -205,11 +204,11 @@ export class PlayerLocomotionTeleportDetectionState extends PlayerLocomotionTele
         }
     }
 
-    _isTeleportPositionValid(teleportPosition, rotationOnUp, checkTeleportCollisionRuntimeParams) {
+    _isTeleportPositionValid(teleportPosition, teleportForward, checkTeleportCollisionRuntimeParams) {
         // Implemented outside class definition
     }
 
-    _isTeleportHitValid(hit, rotationOnUp, checkTeleportCollisionRuntimeParams) {
+    _isTeleportHitValid(hit, teleportForward, checkTeleportCollisionRuntimeParams) {
         // Implemented outside class definition
     }
 
@@ -391,7 +390,7 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable 
                 this._myDetectionRuntimeParams.myParableDistance = hitParableDistance;
 
                 teleportCollisionRuntimeParams.reset();
-                this._myDetectionRuntimeParams.myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRuntimeParams.myTeleportRotationOnUp, teleportCollisionRuntimeParams) == PlayerLocomotionTeleportDetectionTeleportHitValidResult.VALID;
+                this._myDetectionRuntimeParams.myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRuntimeParams.myTeleportForward, teleportCollisionRuntimeParams) == PlayerLocomotionTeleportDetectionTeleportHitValidResult.VALID;
 
                 this._myTeleportRuntimeParams.myTeleportPosition.vec3_copy(teleportCollisionRuntimeParams.myNewPosition);
                 this._myDetectionRuntimeParams.myTeleportSurfaceNormal.vec3_copy(teleportCollisionRuntimeParams.myGroundNormal);
@@ -417,7 +416,7 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable 
                         let hit = raycastResult.myHits.pp_first();
 
                         teleportCollisionRuntimeParams.reset();
-                        let teleportHitValidResult = this._isTeleportHitValid(hit, this._myTeleportRuntimeParams.myTeleportRotationOnUp, teleportCollisionRuntimeParams);
+                        let teleportHitValidResult = this._isTeleportHitValid(hit, this._myTeleportRuntimeParams.myTeleportForward, teleportCollisionRuntimeParams);
                         this._myDetectionRuntimeParams.myTeleportPositionValid = teleportHitValidResult == PlayerLocomotionTeleportDetectionTeleportHitValidResult.VALID;
 
                         this._myTeleportRuntimeParams.myTeleportPosition.vec3_copy(teleportCollisionRuntimeParams.myNewPosition);
@@ -451,7 +450,7 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable 
                                         let hit = raycastResult.myHits.pp_first();
 
                                         teleportCollisionRuntimeParams.reset();
-                                        this._myDetectionRuntimeParams.myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRuntimeParams.myTeleportRotationOnUp, teleportCollisionRuntimeParams) == PlayerLocomotionTeleportDetectionTeleportHitValidResult.VALID;
+                                        this._myDetectionRuntimeParams.myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRuntimeParams.myTeleportForward, teleportCollisionRuntimeParams) == PlayerLocomotionTeleportDetectionTeleportHitValidResult.VALID;
 
                                         this._myTeleportRuntimeParams.myTeleportPosition.vec3_copy(teleportCollisionRuntimeParams.myNewPosition);
                                         this._myDetectionRuntimeParams.myTeleportSurfaceNormal.vec3_copy(teleportCollisionRuntimeParams.myGroundNormal);
@@ -482,7 +481,7 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable 
                                         let hit = raycastResult.myHits.pp_first();
 
                                         teleportCollisionRuntimeParams.reset();
-                                        this._myDetectionRuntimeParams.myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRuntimeParams.myTeleportRotationOnUp, teleportCollisionRuntimeParams) == PlayerLocomotionTeleportDetectionTeleportHitValidResult.VALID;
+                                        this._myDetectionRuntimeParams.myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRuntimeParams.myTeleportForward, teleportCollisionRuntimeParams) == PlayerLocomotionTeleportDetectionTeleportHitValidResult.VALID;
 
                                         this._myTeleportRuntimeParams.myTeleportPosition.vec3_copy(teleportCollisionRuntimeParams.myNewPosition);
                                         this._myDetectionRuntimeParams.myTeleportSurfaceNormal.vec3_copy(teleportCollisionRuntimeParams.myGroundNormal);
@@ -514,7 +513,7 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable 
                                         let hit = raycastResult.myHits.pp_first();
 
                                         teleportCollisionRuntimeParams.reset();
-                                        this._myDetectionRuntimeParams.myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRuntimeParams.myTeleportRotationOnUp, teleportCollisionRuntimeParams) == PlayerLocomotionTeleportDetectionTeleportHitValidResult.VALID;
+                                        this._myDetectionRuntimeParams.myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRuntimeParams.myTeleportForward, teleportCollisionRuntimeParams) == PlayerLocomotionTeleportDetectionTeleportHitValidResult.VALID;
 
                                         this._myTeleportRuntimeParams.myTeleportPosition.vec3_copy(teleportCollisionRuntimeParams.myNewPosition);
                                         this._myDetectionRuntimeParams.myTeleportSurfaceNormal.vec3_copy(teleportCollisionRuntimeParams.myGroundNormal);
@@ -553,7 +552,7 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable 
                 let hit = raycastResult.myHits.pp_first();
 
                 teleportCollisionRuntimeParams.reset();
-                let teleportHitValidResult = this._isTeleportHitValid(hit, this._myTeleportRuntimeParams.myTeleportRotationOnUp, teleportCollisionRuntimeParams);
+                let teleportHitValidResult = this._isTeleportHitValid(hit, this._myTeleportRuntimeParams.myTeleportForward, teleportCollisionRuntimeParams);
                 this._myDetectionRuntimeParams.myTeleportPositionValid = teleportHitValidResult == PlayerLocomotionTeleportDetectionTeleportHitValidResult.VALID;
 
                 this._myTeleportRuntimeParams.myTeleportPosition.vec3_copy(teleportCollisionRuntimeParams.myNewPosition);
@@ -587,7 +586,7 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable 
                                 let hit = raycastResult.myHits.pp_first();
 
                                 teleportCollisionRuntimeParams.reset();
-                                this._myDetectionRuntimeParams.myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRuntimeParams.myTeleportRotationOnUp, teleportCollisionRuntimeParams) == PlayerLocomotionTeleportDetectionTeleportHitValidResult.VALID;
+                                this._myDetectionRuntimeParams.myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRuntimeParams.myTeleportForward, teleportCollisionRuntimeParams) == PlayerLocomotionTeleportDetectionTeleportHitValidResult.VALID;
 
                                 this._myTeleportRuntimeParams.myTeleportPosition.vec3_copy(teleportCollisionRuntimeParams.myNewPosition);
                                 this._myDetectionRuntimeParams.myTeleportSurfaceNormal.vec3_copy(teleportCollisionRuntimeParams.myGroundNormal);
@@ -617,7 +616,7 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable 
                                 let hit = raycastResult.myHits.pp_first();
 
                                 teleportCollisionRuntimeParams.reset();
-                                this._myDetectionRuntimeParams.myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRuntimeParams.myTeleportRotationOnUp, teleportCollisionRuntimeParams) == PlayerLocomotionTeleportDetectionTeleportHitValidResult.VALID;
+                                this._myDetectionRuntimeParams.myTeleportPositionValid = this._isTeleportHitValid(hit, this._myTeleportRuntimeParams.myTeleportForward, teleportCollisionRuntimeParams) == PlayerLocomotionTeleportDetectionTeleportHitValidResult.VALID;
 
                                 this._myTeleportRuntimeParams.myTeleportPosition.vec3_copy(teleportCollisionRuntimeParams.myNewPosition);
                                 this._myDetectionRuntimeParams.myTeleportSurfaceNormal.vec3_copy(teleportCollisionRuntimeParams.myGroundNormal);
@@ -634,19 +633,28 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportRotationVR = fun
     let axesVec3 = vec3_create();
     let axesForward = vec3_create(0, 0, 1);
     let axesUp = vec3_create(0, 1, 0);
+    let playerUp = vec3_create();
+    let teleportRotationQuat = quat_create();
     return function _detectTeleportRotationVR(dt) {
         let axes = Globals.getGamepads(this._myTeleportParams.myEngine)[this._myTeleportParams.myHandedness].getAxesInfo(GamepadAxesID.THUMBSTICK).getAxes();
 
         if (axes.vec2_length() > this._myTeleportParams.myDetectionParams.myRotationOnUpMinStickIntensity) {
-            this._myTeleportRuntimeParams.myTeleportRotationOnUp = this._myTeleportRotationOnUpNext;
+            this._myTeleportParams.myPlayerTransformManager.getRotationRealQuat(teleportRotationQuat);
+            teleportRotationQuat.quat_getUp(playerUp);
+            if (this._myTeleportRotationOnUp != 0) {
+                teleportRotationQuat.quat_rotateAxis(this._myTeleportRotationOnUp, playerUp, teleportRotationQuat);
+                teleportRotationQuat.quat2_getForward(this._myTeleportRuntimeParams.myTeleportForward);
+            } else {
+                this._myTeleportRuntimeParams.myTeleportForward.vec3_zero();
+            }
 
             axesVec3.vec3_set(axes[0], 0, axes[1]);
-            this._myTeleportRotationOnUpNext = axesVec3.vec3_angleSigned(axesForward, axesUp);
+            this._myTeleportRotationOnUp = axesVec3.vec3_angleSigned(axesForward, axesUp);
         }
 
         if (!this._myTeleportParams.myDetectionParams.myRotationOnUpEnabled) {
-            this._myTeleportRuntimeParams.myTeleportRotationOnUp = 0;
-            this._myTeleportRotationOnUpNext = 0;
+            this._myTeleportRotationOnUp = 0;
+            this._myTeleportRuntimeParams.myTeleportForward.vec3_zero();
         }
     };
 }();
@@ -654,7 +662,7 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportRotationVR = fun
 PlayerLocomotionTeleportDetectionState.prototype._isTeleportHitValid = function () {
     let playerRotationQuat = quat_create();
     let playerUp = vec3_create();
-    return function _isTeleportHitValid(hit, rotationOnUp, checkTeleportCollisionRuntimeParams) {
+    return function _isTeleportHitValid(hit, teleportForward, checkTeleportCollisionRuntimeParams) {
         let isValid = PlayerLocomotionTeleportDetectionTeleportHitValidResult.INVALID;
 
         this._myTeleportAsMovementFailed = false;
@@ -671,7 +679,7 @@ PlayerLocomotionTeleportDetectionState.prototype._isTeleportHitValid = function 
                         (this._myTeleportParams.myDetectionParams.myTeleportFloorBlockColliderType == RaycastBlockColliderType.TRIGGER && physxComponent.trigger) ||
                         (this._myTeleportParams.myDetectionParams.myTeleportFloorBlockColliderType == RaycastBlockColliderType.NORMAL && !physxComponent.trigger)
                     )) {
-                    isValid = this._isTeleportPositionValid(hit.myPosition, rotationOnUp, checkTeleportCollisionRuntimeParams);
+                    isValid = this._isTeleportPositionValid(hit.myPosition, teleportForward, checkTeleportCollisionRuntimeParams);
                 }
             }
         }
@@ -686,7 +694,7 @@ PlayerLocomotionTeleportDetectionState.prototype._isTeleportPositionValid = func
     let feetPosition = vec3_create();
     let differenceOnUpVector = vec3_create();
     let teleportCheckCollisionRuntimeParams = new CollisionRuntimeParams();
-    return function _isTeleportPositionValid(teleportPosition, rotationOnUp, checkTeleportCollisionRuntimeParams) {
+    return function _isTeleportPositionValid(teleportPosition, teleportForward, checkTeleportCollisionRuntimeParams) {
         let isValid = PlayerLocomotionTeleportDetectionTeleportHitValidResult.INVALID;
 
         let positionVisible = this._isTeleportPositionVisible(teleportPosition);
@@ -694,8 +702,9 @@ PlayerLocomotionTeleportDetectionState.prototype._isTeleportPositionValid = func
         if (positionVisible) {
             this._myTeleportParams.myPlayerTransformManager.getRotationRealQuat(teleportRotationQuat);
             teleportRotationQuat.quat_getUp(playerUp);
-            if (rotationOnUp != 0) {
-                teleportRotationQuat.quat_rotateAxis(rotationOnUp, playerUp, teleportRotationQuat);
+
+            if (!teleportForward.vec3_isZero(0.00001)) {
+                teleportRotationQuat.quat_setUp(playerUp, teleportForward);
             }
 
             this._myTeleportParams.myPlayerTransformManager.getPosition(feetPosition);

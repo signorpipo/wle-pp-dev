@@ -426,11 +426,14 @@ PlayerLocomotionTeleportDetectionVisualizer.prototype._showTeleportParablePositi
     return function _showTeleportParablePosition(dt) {
         this._myTeleportParams.myPlayerTransformManager.getRotationRealQuat(feetRotationQuat);
         feetRotationQuat.quat_getUp(playerUp);
-        feetRotationQuat = feetRotationQuat.quat_rotateAxis(this._myTeleportRuntimeParams.myTeleportRotationOnUp, playerUp, feetRotationQuat);
 
         visualPosition = this._myTeleportRuntimeParams.myTeleportPosition.vec3_add(playerUp.vec3_scale(this._myTeleportParams.myVisualizerParams.myTeleportParablePositionUpOffset, visualPosition), visualPosition);
 
-        visualForward = feetRotationQuat.quat_getForward(visualForward);
+        if (!this._myTeleportRuntimeParams.myTeleportForward.vec3_isZero(0.00001)) {
+            visualForward.vec3_copy(this._myTeleportRuntimeParams.myTeleportForward);
+        } else {
+            feetRotationQuat.quat_getForward(visualForward);
+        }
 
         if (!this._myTeleportParams.myVisualizerParams.myTeleportPositionObjectRotateWithHead) {
             parableFirstPosition = this._myDetectionRuntimeParams.myParable.getPosition(0, parableFirstPosition);
