@@ -2779,7 +2779,7 @@ export function getSelf(object: Readonly<Object3D>): Object3D {
 // Cauldron
 
 export function addChild(object: Object3D): Object3D {
-    return Globals.getScene(ObjectUtils.getEngine(object)).addObject(object);
+    return object.addChild();
 }
 
 export function getName(object: Readonly<Object3D>): string {
