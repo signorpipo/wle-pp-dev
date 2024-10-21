@@ -44,7 +44,7 @@ export class OverlapCursorComponent extends Component {
 
     private static _SV = {
         componentEqualCallback(first: CursorTarget, second: CursorTarget): boolean {
-            return first == second;
+            return first.equals(second);
         }
     };
 
@@ -128,7 +128,7 @@ export class OverlapCursorComponent extends Component {
 
         if (bestCursorTarget == null) {
             this._targetOverlapEnd();
-        } else if (bestCursorTarget != this._myLastTarget) {
+        } else if (!bestCursorTarget.equals(this._myLastTarget)) {
             this._targetOverlapEnd();
 
             this._myLastTarget = bestCursorTarget;
@@ -191,12 +191,12 @@ export class OverlapCursorComponent extends Component {
             if (!this._myLastTarget.isDestroyed && this._myLastTarget.active) {
                 this._myLastTarget.onClick.notify(this._myLastTarget.object, this._myFakeCursor);
 
-                if (this._myTripleClickTimer > 0 && this._myMultipleClickObject && this._myMultipleClickObject == this._myLastTarget.object) {
-                    this._myLastTarget.onTripleClick.notify(this._myLastTarget.object, this._myFakeCursor);
+            if (this._myTripleClickTimer > 0 && this._myMultipleClickObject && this._myMultipleClickObject.pp_equals(this._myLastTarget.object)) {
+                this._myLastTarget.onTripleClick.notify(this._myLastTarget.object, this._myFakeCursor);
 
-                    this._myTripleClickTimer = 0;
-                } else if (this._myDoubleClickTimer > 0 && this._myMultipleClickObject && this._myMultipleClickObject == this._myLastTarget.object) {
-                    this._myLastTarget.onDoubleClick.notify(this._myLastTarget.object, this._myFakeCursor);
+                this._myTripleClickTimer = 0;
+            } else if (this._myDoubleClickTimer > 0 && this._myMultipleClickObject && this._myMultipleClickObject.pp_equals(this._myLastTarget.object)) {
+                this._myLastTarget.onDoubleClick.notify(this._myLastTarget.object, this._myFakeCursor);
 
                     this._myTripleClickTimer = OverlapCursorComponent._myMultipleClickDelay;
                     this._myDoubleClickTimer = 0;
@@ -221,7 +221,7 @@ export class OverlapCursorComponent extends Component {
     private _pickBestCursorTarget(currentBestCursorTarget: CursorTarget | null, cursorTarget: CursorTarget): CursorTarget | null {
         let bestCursorTarget = currentBestCursorTarget;
 
-        if (cursorTarget == this._myLastTarget) {
+        if (cursorTarget.equals(this._myLastTarget)) {
             bestCursorTarget = cursorTarget;
         } else {
             const componentEqualCallback = OverlapCursorComponent._SV.componentEqualCallback;

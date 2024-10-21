@@ -2254,9 +2254,9 @@ export const clone = function () {
                     for (const child of ObjectUtils.getChildren(objectToClone)) {
                         let cloneDescendant = false;
                         if (cloneParams.myDescendantsToInclude.length > 0) {
-                            cloneDescendant = cloneParams.myDescendantsToInclude.find(descendantToInclude => descendantToInclude == child) != null;
+                            cloneDescendant = cloneParams.myDescendantsToInclude.find(descendantToInclude => ObjectUtils.equals(descendantToInclude, child)) != null;
                         } else {
-                            cloneDescendant = cloneParams.myDescendantsToIgnore.find(descendantToIgnore => descendantToIgnore == child) == null;
+                            cloneDescendant = cloneParams.myDescendantsToIgnore.find(descendantToIgnore => ObjectUtils.equals(descendantToIgnore, child)) == null;
                         }
 
                         if (cloneDescendant && cloneParams.myIgnoreDescendantCallback != null) {
@@ -2387,9 +2387,9 @@ export function isCloneable(object: Readonly<Object3D>, cloneParams: Readonly<Ob
             for (const child of ObjectUtils.getChildren(objectToClone)) {
                 let cloneDescendant = false;
                 if (cloneParams.myDescendantsToInclude.length > 0) {
-                    cloneDescendant = cloneParams.myDescendantsToInclude.find(descendantToInclude => descendantToInclude == child) != null;
+                    cloneDescendant = cloneParams.myDescendantsToInclude.find(descendantToInclude => ObjectUtils.equals(descendantToInclude, child)) != null;
                 } else {
-                    cloneDescendant = cloneParams.myDescendantsToIgnore.find(descendantToIgnore => descendantToIgnore == child) == null;
+                    cloneDescendant = cloneParams.myDescendantsToIgnore.find(descendantToIgnore => ObjectUtils.equals(descendantToIgnore, child)) == null;
                 }
 
                 if (cloneDescendant && cloneParams.myIgnoreDescendantCallback != null) {
@@ -2806,6 +2806,10 @@ export function markDirty(object: Object3D): Object3D {
 
 export function isTransformChanged(object: Readonly<Object3D>): boolean {
     return object.changed;
+}
+
+export function equals(first: Readonly<Object3D>, second: Readonly<Object3D>): boolean {
+    return first.equals(second as Object3D);
 }
 
 export function destroy(object: Object3D): void {
@@ -3376,6 +3380,7 @@ export const ObjectUtils = {
     getID,
     markDirty,
     isTransformChanged,
+    equals,
     destroy,
     reserveObjects,
     reserveObjectsSelf,

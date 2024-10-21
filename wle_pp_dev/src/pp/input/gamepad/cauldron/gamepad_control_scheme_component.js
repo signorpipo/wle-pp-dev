@@ -1,4 +1,4 @@
-import { Alignment, Component, MeshComponent, Property, TextComponent, Justification } from "@wonderlandengine/api";
+import { Alignment, Component, Justification, MeshComponent, Property, TextComponent } from "@wonderlandengine/api";
 import { vec3_create } from "../../../plugin/js/extensions/array/vec_create_extension.js";
 import { Globals } from "../../../pp/globals.js";
 import { Handedness } from "../../cauldron/input_types.js";

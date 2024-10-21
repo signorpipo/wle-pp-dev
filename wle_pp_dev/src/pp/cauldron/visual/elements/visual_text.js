@@ -1,4 +1,4 @@
-import { Alignment, TextComponent, Justification } from "@wonderlandengine/api";
+import { Alignment, Justification, TextComponent } from "@wonderlandengine/api";
 import { mat4_create, vec3_create } from "../../../plugin/js/extensions/array/vec_create_extension.js";
 import { Globals } from "../../../pp/globals.js";
 import { AbstractVisualElement, AbstractVisualElementParams } from "./visual_element.js";

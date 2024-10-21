@@ -127,7 +127,7 @@ export class AIMovementComponent extends Component {
         this._myCollisionCheckParams.myHorizontalBlockLayerFlags.setAllFlagsActive(true);
         let physXComponents = this.object.pp_getComponentsHierarchy("physx");
         for (let physXComponent of physXComponents) {
-            this._myCollisionCheckParams.myHorizontalObjectsToIgnore.pp_pushUnique(physXComponent.object, (first, second) => first == second);
+            this._myCollisionCheckParams.myHorizontalObjectsToIgnore.pp_pushUnique(physXComponent.object, (first, second) => first.pp_equals(second));
         }
 
         this._myCollisionCheckParams.myVerticalBlockLayerFlags.copy(this._myCollisionCheckParams.myHorizontalBlockLayerFlags);

@@ -1,4 +1,4 @@
-import { Alignment, Component, Property, Justification } from "@wonderlandengine/api";
+import { Alignment, Component, Justification, Property } from "@wonderlandengine/api";
 import { Timer } from "../../cauldron/cauldron/timer.js";
 import { vec3_create, vec4_create } from "../../plugin/js/extensions/array/vec_create_extension.js";
 import { Globals } from "../../pp/globals.js";
