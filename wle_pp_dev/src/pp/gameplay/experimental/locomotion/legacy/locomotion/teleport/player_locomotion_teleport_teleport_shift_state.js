@@ -157,13 +157,14 @@ PlayerLocomotionTeleportTeleportShiftState.prototype._shiftingUpdate = function 
                         this._myStartForward.vec3_copy(playerForward);
                     }
 
-                    if (angleToPerform > this._myTeleportParams.myTeleportParams.myShiftRotateMinAngleToRotate) {
+                    if (angleToPerform >= this._myTeleportParams.myTeleportParams.myShiftRotateMinAngleToRotate) {
                         this._myShiftRotateTimer.reset(this._myTeleportParams.myTeleportParams.myShiftRotateSeconds);
                         if (this._myTeleportParams.myTeleportParams.myShiftRotateSecondsMultiplierOverAngleFunction) {
                             let multiplier = this._myTeleportParams.myTeleportParams.myShiftRotateSecondsMultiplierOverAngleFunction(angleToPerform);
                             this._myShiftRotateTimer.reset(this._myTeleportParams.myTeleportParams.myShiftRotateSeconds * multiplier);
                         }
                     } else {
+                        this._myTeleportRuntimeParams.myTeleportForward.vec3_zero();
                         this._myShiftRotateTimer.reset(0);
                     }
 

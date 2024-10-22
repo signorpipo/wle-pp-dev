@@ -30,7 +30,7 @@ export class PlayerLocomotionTeleportTeleportParams {
         this.myShiftRotateSecondsMultiplierOverAngleFunction = null;
         this.myShiftRotateEasingFunction = EasingFunction.easeOutWeak;
         this.myShiftRotateStartAfterMovementPercentage = 0.7;
-        this.myShiftRotateMinAngleToRotate = 10;
+        this.myShiftRotateMinAngleToRotate = 25;
         this.myShiftRotateStopAngleThreshold = 0.25;
 
         this.myShiftRotateSecondsMultiplierOverAngleFunction = function (angle) {

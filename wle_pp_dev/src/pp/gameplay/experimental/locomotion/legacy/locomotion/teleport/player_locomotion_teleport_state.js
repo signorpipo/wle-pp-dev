@@ -18,11 +18,11 @@ export class PlayerLocomotionTeleportState {
 
     }
 
-    _checkTeleport(teleportPosition, feetTransformQuat, collisionRuntimeParams, checkTeleportCollisionRuntimeParams = null) {
+    _checkTeleport(teleportPosition, teleportRotationQuat, collisionRuntimeParams, checkTeleportCollisionRuntimeParams = null) {
         // Implemented outside class definition
     }
 
-    _checkTeleportAsMovement(teleportPosition, feetTransformQuat, collisionRuntimeParams, checkTeleportCollisionRuntimeParams) {
+    _checkTeleportAsMovement(teleportPosition, teleportRotationQuat, collisionRuntimeParams, checkTeleportCollisionRuntimeParams) {
         // Implemented outside class definition
     }
 

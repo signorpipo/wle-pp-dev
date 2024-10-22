@@ -127,7 +127,7 @@ export class PlayerLocomotionComponent extends Component {
     @property.string("")
     private readonly _myTeleportFloorLayerFlags!: string;
 
-    @property.bool(false)
+    @property.bool(true)
     private readonly _myTeleportRotationOnUpEnabled!: boolean;
 
     @property.material()
