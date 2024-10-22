@@ -86,6 +86,7 @@ export class PlayerLocomotionTeleportDetectionRuntimeParams {
         this.myTeleportDetectionValid = false;
         this.myTeleportPositionValid = false;
         this.myTeleportSurfaceNormal = vec3_create();
+        this.myTeleportForward = vec3_create();
 
         this.myParable = new PlayerLocomotionTeleportParable();
     }
@@ -100,7 +101,10 @@ export class PlayerLocomotionTeleportDetectionState extends PlayerLocomotionTele
 
         this._myVisualizer = new PlayerLocomotionTeleportDetectionVisualizer(this._myTeleportParams, this._myTeleportRuntimeParams, this._myDetectionRuntimeParams);
 
-        this._myTeleportRotationOnUp = 0;
+        this._myTeleportRotationOnUpQueue = [];
+        for (let i = 0; i < 3; i++) {
+            this._myTeleportRotationOnUpQueue.push(0);
+        }
 
         //Globals.getEasyTuneVariables(this._myTeleportParams.myEngine).add(new EasyTuneNumber("Parable Steps", this._myTeleportParams.myDetectionParams.myTeleportParableStepLength, 1, 3, 0.01, undefined, undefined, this._myTeleportParams.myEngine));
         //Globals.getEasyTuneVariables(this._myTeleportParams.myEngine).add(new EasyTuneNumber("Parable Gravity", this._myTeleportParams.myDetectionParams.myTeleportParableGravity, 10, 3, undefined, undefined, undefined, this._myTeleportParams.myEngine));
@@ -113,10 +117,16 @@ export class PlayerLocomotionTeleportDetectionState extends PlayerLocomotionTele
     start() {
         this._myLocomotionRuntimeParams.myIsTeleportDetecting = true;
 
-        this._myTeleportRotationOnUp = 0;
+        for (let i = 0; i < this._myTeleportRotationOnUpQueue.length; i++) {
+            this._myTeleportRotationOnUpQueue[i] = 0;
+        }
 
         this._myDetectionRuntimeParams.myTeleportPositionValid = false;
 
+        this._myTeleportRuntimeParams.myTeleportPosition.vec3_zero();
+        this._myTeleportRuntimeParams.myTeleportForward.vec3_zero();
+
+        this._myDetectionRuntimeParams.myTeleportForward.vec3_zero();
         this._myDetectionRuntimeParams.myParable.setSpeed(this._myTeleportParams.myDetectionParams.myTeleportParableSpeed);
         this._myDetectionRuntimeParams.myParable.setGravity(this._myTeleportParams.myDetectionParams.myTeleportParableGravity);
         this._myDetectionRuntimeParams.myParable.setStepLength(this._myTeleportParams.myDetectionParams.myTeleportParableStepLength);
@@ -186,8 +196,6 @@ export class PlayerLocomotionTeleportDetectionState extends PlayerLocomotionTele
             this._detectTeleportRotationVR();
             this._detectTeleportPositionVR();
         } else {
-            this._myTeleportRotationOnUp = 0;
-            this._myTeleportRuntimeParams.myTeleportForward.vec3_zero();
             this._detectTeleportPositionNonVR();
         }
 
@@ -289,6 +297,49 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionVR = fun
 
         if (this._myDetectionRuntimeParams.myTeleportDetectionValid) {
             this._detectTeleportPositionParable(teleportStartPosition, teleportDirection, playerUp);
+        }
+    };
+}();
+
+PlayerLocomotionTeleportDetectionState.prototype._detectTeleportRotationVR = function () {
+    let axesVec3 = vec3_create();
+    let axesForward = vec3_create(0, 0, 1);
+    let axesUp = vec3_create(0, 1, 0);
+    let playerUp = vec3_create();
+    let teleportRotationQuat = quat_create();
+    return function _detectTeleportRotationVR(dt) {
+        if (this._myTeleportParams.myDetectionParams.myRotationOnUpEnabled) {
+            let axes = Globals.getGamepads(this._myTeleportParams.myEngine)[this._myTeleportParams.myHandedness].getAxesInfo(GamepadAxesID.THUMBSTICK).getAxes();
+
+            if (axes.vec2_length() > this._myTeleportParams.myDetectionParams.myRotationOnUpMinStickIntensity) {
+                this._myTeleportParams.myPlayerTransformManager.getRotationRealQuat(teleportRotationQuat);
+                teleportRotationQuat.quat_getUp(playerUp);
+
+                if (this._myTeleportRotationOnUpQueue[0] != 0) {
+                    teleportRotationQuat.quat_rotateAxis(this._myTeleportRotationOnUpQueue[0], playerUp, teleportRotationQuat);
+                    teleportRotationQuat.quat2_getForward(this._myTeleportRuntimeParams.myTeleportForward);
+                } else {
+                    this._myTeleportRuntimeParams.myTeleportForward.vec3_zero();
+                }
+
+                axesVec3.vec3_set(axes[0], 0, axes[1]);
+                const currentRotationOnUp = axesVec3.vec3_angleSigned(axesForward, axesUp);
+
+                for (let i = 0; i < this._myTeleportRotationOnUpQueue.length - 1; i++) {
+                    this._myTeleportRotationOnUpQueue[i] = this._myTeleportRotationOnUpQueue[i + 1];
+                }
+
+                this._myTeleportRotationOnUpQueue[this._myTeleportRotationOnUpQueue.length - 1] = currentRotationOnUp;
+
+                if (currentRotationOnUp != 0) {
+                    this._myTeleportParams.myPlayerTransformManager.getRotationRealQuat(teleportRotationQuat);
+
+                    teleportRotationQuat.quat_rotateAxis(currentRotationOnUp, playerUp, teleportRotationQuat);
+                    teleportRotationQuat.quat2_getForward(this._myDetectionRuntimeParams.myTeleportForward);
+                } else {
+                    this._myDetectionRuntimeParams.myTeleportForward.vec3_zero();
+                }
+            }
         }
     };
 }();
@@ -625,36 +676,6 @@ PlayerLocomotionTeleportDetectionState.prototype._detectTeleportPositionParable 
                     }
                 }
             }
-        }
-    };
-}();
-
-PlayerLocomotionTeleportDetectionState.prototype._detectTeleportRotationVR = function () {
-    let axesVec3 = vec3_create();
-    let axesForward = vec3_create(0, 0, 1);
-    let axesUp = vec3_create(0, 1, 0);
-    let playerUp = vec3_create();
-    let teleportRotationQuat = quat_create();
-    return function _detectTeleportRotationVR(dt) {
-        let axes = Globals.getGamepads(this._myTeleportParams.myEngine)[this._myTeleportParams.myHandedness].getAxesInfo(GamepadAxesID.THUMBSTICK).getAxes();
-
-        if (axes.vec2_length() > this._myTeleportParams.myDetectionParams.myRotationOnUpMinStickIntensity) {
-            this._myTeleportParams.myPlayerTransformManager.getRotationRealQuat(teleportRotationQuat);
-            teleportRotationQuat.quat_getUp(playerUp);
-            if (this._myTeleportRotationOnUp != 0) {
-                teleportRotationQuat.quat_rotateAxis(this._myTeleportRotationOnUp, playerUp, teleportRotationQuat);
-                teleportRotationQuat.quat2_getForward(this._myTeleportRuntimeParams.myTeleportForward);
-            } else {
-                this._myTeleportRuntimeParams.myTeleportForward.vec3_zero();
-            }
-
-            axesVec3.vec3_set(axes[0], 0, axes[1]);
-            this._myTeleportRotationOnUp = axesVec3.vec3_angleSigned(axesForward, axesUp);
-        }
-
-        if (!this._myTeleportParams.myDetectionParams.myRotationOnUpEnabled) {
-            this._myTeleportRotationOnUp = 0;
-            this._myTeleportRuntimeParams.myTeleportForward.vec3_zero();
         }
     };
 }();

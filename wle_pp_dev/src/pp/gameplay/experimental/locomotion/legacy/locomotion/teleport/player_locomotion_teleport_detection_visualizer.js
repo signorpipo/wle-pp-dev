@@ -429,8 +429,8 @@ PlayerLocomotionTeleportDetectionVisualizer.prototype._showTeleportParablePositi
 
         visualPosition = this._myTeleportRuntimeParams.myTeleportPosition.vec3_add(playerUp.vec3_scale(this._myTeleportParams.myVisualizerParams.myTeleportParablePositionUpOffset, visualPosition), visualPosition);
 
-        if (!this._myTeleportRuntimeParams.myTeleportForward.vec3_isZero(0.00001)) {
-            visualForward.vec3_copy(this._myTeleportRuntimeParams.myTeleportForward);
+        if (!this._myDetectionRuntimeParams.myTeleportForward.vec3_isZero(0.00001)) {
+            visualForward.vec3_copy(this._myDetectionRuntimeParams.myTeleportForward);
         } else {
             feetRotationQuat.quat_getForward(visualForward);
         }
