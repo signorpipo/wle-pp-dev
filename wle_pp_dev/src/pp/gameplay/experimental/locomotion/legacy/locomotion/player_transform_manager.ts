@@ -86,6 +86,7 @@ export class PlayerTransformManagerParams {
     public myFloatingSplitCheckStepEqualLengthMinLength: number = 0;
 
 
+    public myExtraSafetyHeight: number = 0.1;
 
     public myMaxDistanceFromRealToSyncEnabled: boolean = false;
 
@@ -1025,10 +1026,10 @@ export class PlayerTransformManager {
     private _updateCollisionHeight(): void {
         const validHeight = this.getHeight();
 
-        this._myParams.myMovementCollisionCheckParams.myHeight = validHeight;
-        this._myParams.myTeleportCollisionCheckParams!.myHeight = validHeight;
+        this._myParams.myMovementCollisionCheckParams.myHeight = validHeight + this._myParams.myExtraSafetyHeight;
+        this._myParams.myTeleportCollisionCheckParams!.myHeight = validHeight + this._myParams.myExtraSafetyHeight;
 
-        this._myRealMovementCollisionCheckParams.myHeight = Math.max(this.getHeightReal(), this._myParams.myMinHeight ?? -Number.MAX_VALUE);
+        this._myRealMovementCollisionCheckParams.myHeight = Math.max(this.getHeightReal(), this._myParams.myMinHeight ?? -Number.MAX_VALUE) + this._myParams.myExtraSafetyHeight;
     }
 
     private _setupHeadCollisionCheckParams(): void {
@@ -1559,6 +1560,7 @@ export class PlayerTransformManager {
                 }
             }
 
+            // For now I've not found a valid reason not to always sync rotation, it shouldn't case any trouble even if the new direction collides a bit
             if (this.isSynced(this._myParams.mySyncRotationFlagMap)) {
                 this.getRotationRealQuat(this._myValidRotationQuat);
             }
@@ -1586,12 +1588,12 @@ export class PlayerTransformManager {
             const collisionRuntimeParams = PlayerTransformManager._updateValidToRealSV.collisionRuntimeParams;
             collisionRuntimeParams.copy(this._myCollisionRuntimeParams);
             const debugBackup = this._myParams.myMovementCollisionCheckParams.myDebugEnabled;
-            const debugHeight = this._myParams.myMovementCollisionCheckParams.myHeight;
-            this._myParams.myMovementCollisionCheckParams.myHeight = newHeight;
+            const heightBackup = this._myParams.myMovementCollisionCheckParams.myHeight;
+            this._myParams.myMovementCollisionCheckParams.myHeight = newHeight + this._myParams.myExtraSafetyHeight;
             this._myParams.myMovementCollisionCheckParams.myDebugEnabled = false;
             CollisionCheckBridge.getCollisionCheck(this._myParams.myEngine as any).positionCheck(true, transformQuat, this._myParams.myMovementCollisionCheckParams, collisionRuntimeParams);
             this._myParams.myMovementCollisionCheckParams.myDebugEnabled = debugBackup;
-            this._myParams.myMovementCollisionCheckParams.myHeight = debugHeight;
+            this._myParams.myMovementCollisionCheckParams.myHeight = heightBackup;
 
             this._myIsHeightColliding = !collisionRuntimeParams.myIsPositionOk;
         }

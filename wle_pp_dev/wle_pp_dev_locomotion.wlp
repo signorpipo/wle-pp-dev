@@ -11490,7 +11490,7 @@
             }
         },
         "runtime": {
-            "xrButtonColor": "black",
+            "xrButtonColor": "white",
             "webxr": {
                 "optionalFeatures": {
                     "hand-tracking": true,
