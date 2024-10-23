@@ -1013,12 +1013,11 @@ export class PlayerTransformManager {
 
     private _updateCollisionHeight(): void {
         const validHeight = this.getHeight();
-        const realHeight = Math.pp_clamp(this.getHeightReal(), this._myParams.myMinHeight ?? undefined, this._myParams.myMaxHeight ?? undefined);
 
         this._myParams.myMovementCollisionCheckParams.myHeight = validHeight;
         this._myParams.myTeleportCollisionCheckParams!.myHeight = validHeight;
 
-        this._myRealMovementCollisionCheckParams.myHeight = realHeight;
+        this._myRealMovementCollisionCheckParams.myHeight = Math.max(this.getHeightReal(), this._myParams.myMinHeight ?? -Number.MAX_VALUE);
     }
 
     private _setupHeadCollisionCheckParams(): void {
@@ -1360,26 +1359,26 @@ export class PlayerTransformManager {
 
         // Body Colliding
         if (!this._myIsFar && this._myParams.mySyncEnabledFlagMap.get(PlayerTransformManagerSyncFlag.BODY_COLLIDING)) {
-            collisionRuntimeParams.copy(this._myCollisionRuntimeParams);
+            const realHeight = this.getHeightReal();
+            if (Math.pp_clamp(realHeight, this._myParams.myIsBodyCollidingWhenHeightBelowValue ?? undefined, this._myParams.myIsBodyCollidingWhenHeightAboveValue ?? undefined) != realHeight) {
+                this._myIsBodyColliding = true;
+            } else {
+                collisionRuntimeParams.copy(this._myCollisionRuntimeParams);
 
-            // #TODO Temp as long as surface infos are not updated every time the position changes
-            // This is needed to understand if snapping should occur (and possibly other stuff I can't remember)
-            CollisionCheckBridge.getCollisionCheck(this._myParams.myEngine as any).updateSurfaceInfo(transformQuat, this._myParams.myMovementCollisionCheckParams, collisionRuntimeParams);
+                // #TODO Temp as long as surface infos are not updated every time the position changes
+                // This is needed to understand if snapping should occur (and possibly other stuff I can't remember)
+                CollisionCheckBridge.getCollisionCheck(this._myParams.myEngine as any).updateSurfaceInfo(transformQuat, this._myParams.myMovementCollisionCheckParams, collisionRuntimeParams);
 
-            if (collisionRuntimeParams.myIsOnGround && this._myParams.myIgnoreUpwardMovementToRealIfValidOnGround) {
-                const valueAlongUp = movementToCheck.vec3_valueAlongAxis(transformUp);
-                if (valueAlongUp >= 0) {
-                    movementToCheck.vec3_removeComponentAlongAxis(transformUp, movementToCheck);
+                if (collisionRuntimeParams.myIsOnGround && this._myParams.myIgnoreUpwardMovementToRealIfValidOnGround) {
+                    const valueAlongUp = movementToCheck.vec3_valueAlongAxis(transformUp);
+                    if (valueAlongUp >= 0) {
+                        movementToCheck.vec3_removeComponentAlongAxis(transformUp, movementToCheck);
+                    }
                 }
-            }
 
-            CollisionCheckBridge.getCollisionCheck(this._myParams.myEngine as any).move(movementToCheck, transformQuat, this._myRealMovementCollisionCheckParams, collisionRuntimeParams);
+                CollisionCheckBridge.getCollisionCheck(this._myParams.myEngine as any).move(movementToCheck, transformQuat, this._myRealMovementCollisionCheckParams, collisionRuntimeParams);
 
-            if (!collisionRuntimeParams.myHorizontalMovementCanceled && !collisionRuntimeParams.myVerticalMovementCanceled) {
-                if (Math.pp_clamp(this._myRealMovementCollisionCheckParams.myHeight, this._myParams.myIsBodyCollidingWhenHeightBelowValue ?? undefined,
-                    this._myParams.myIsBodyCollidingWhenHeightAboveValue ?? undefined) != this._myRealMovementCollisionCheckParams.myHeight) {
-                    this._myIsBodyColliding = true;
-                } else {
+                if (!collisionRuntimeParams.myHorizontalMovementCanceled && !collisionRuntimeParams.myVerticalMovementCanceled) {
                     if (this._myParams.myIsBodyCollidingExtraCheckCallback != null && this._myParams.myIsBodyCollidingExtraCheckCallback(this)) {
                         this._myIsBodyColliding = true;
                     } else {
@@ -1387,9 +1386,9 @@ export class PlayerTransformManager {
                         newPosition.vec3_copy(collisionRuntimeParams.myNewPosition);
                         movementToCheck.vec3_copy(collisionRuntimeParams.myFixedMovement);
                     }
+                } else {
+                    this._myIsBodyColliding = true;
                 }
-            } else {
-                this._myIsBodyColliding = true;
             }
         } else if (this._myIsFar) {
             this._myIsBodyColliding = true;
@@ -1549,7 +1548,7 @@ export class PlayerTransformManager {
             }
 
             if (this.isSynced(this._myParams.mySyncHeightFlagMap)) {
-                this._myValidHeight = this._myRealMovementCollisionCheckParams.myHeight;
+                this._myValidHeight = Math.pp_clamp(this.getHeightReal(), this._myParams.myMinHeight ?? undefined, this._myParams.myMaxHeight ?? undefined);
                 this._updateCollisionHeight();
             }
 
