@@ -142,6 +142,7 @@ export class PlayerTransformManagerParams {
     public myUseHighestHeightForMovementAndTeleport: boolean = true;
 
 
+
     /**
      * This make it so the head must be able to reach from the feet to the real head, sort of  
      * like you were teleported in a space squashed to your feet and then have to get up  
