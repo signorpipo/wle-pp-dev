@@ -671,6 +671,9 @@ export class PlayerTransformManager {
     private static readonly _setHeightSV =
         {
             transformQuat: quat_create(),
+            transformUp: vec3_create(),
+            rotationQuat: quat_create(),
+            horizontalDirection: vec3_create(),
             collisionRuntimeParams: new CollisionRuntimeParams()
         };
     public setHeight(height: number, forceSet: boolean = false): void {
@@ -681,11 +684,26 @@ export class PlayerTransformManager {
         this._updateCollisionHeight();
 
         const transformQuat = PlayerTransformManager._setHeightSV.transformQuat;
+        const transformUp = PlayerTransformManager._setHeightSV.transformUp;
+        const rotationQuat = PlayerTransformManager._setHeightSV.rotationQuat;
+        const horizontalDirection = PlayerTransformManager._setHeightSV.horizontalDirection;
         this.getTransformQuat(transformQuat);
+        transformQuat.quat2_getUp(transformUp);
+        transformQuat.quat2_getRotationQuat(rotationQuat);
+        this._myLastValidMovementDirection.vec3_removeComponentAlongAxis(transformUp, horizontalDirection);
+
+        if (!horizontalDirection.vec3_isZero(0.00001)) {
+            horizontalDirection.vec3_normalize(horizontalDirection);
+            rotationQuat.quat_setForward(horizontalDirection);
+            transformQuat.quat2_setRotationQuat(rotationQuat);
+        }
 
         const collisionRuntimeParams = PlayerTransformManager._setHeightSV.collisionRuntimeParams;
         collisionRuntimeParams.copy(this._myCollisionRuntimeParams);
+        const debugBackup = this._myParams.myMovementCollisionCheckParams.myDebugEnabled;
+        this._myParams.myMovementCollisionCheckParams.myDebugEnabled = false;
         CollisionCheckBridge.getCollisionCheck(this._myParams.myEngine as any).positionCheck(true, transformQuat, this._myParams.myMovementCollisionCheckParams, collisionRuntimeParams);
+        this._myParams.myMovementCollisionCheckParams.myDebugEnabled = debugBackup;
 
         if (collisionRuntimeParams.myIsPositionOk || forceSet) {
             this.getPlayerHeadManager().setHeightHead(this.getHeight(), true);
