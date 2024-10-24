@@ -21,6 +21,7 @@ export class PlayerLocomotionTeleportTeleportParams {
         this.myBlinkWaitSeconds = 0.1;
         this.myBlinkSphereColor = vec3_create();
         this.myBlinkSphereScale = 0.5;
+        this.myBlinkRotateMinAngleToRotate = 25;
 
         this.myShiftMovementSeconds = 0.15;
         this.myShiftMovementSecondsMultiplierOverDistanceFunction = null;
