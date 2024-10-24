@@ -1,6 +1,6 @@
 import { FSM, SkipStateFunction } from "../../../../../../cauldron/fsm/fsm.js";
 import { EasingFunction } from "../../../../../../cauldron/utils/math_utils.js";
-import { vec3_create } from "../../../../../../plugin/js/extensions/array/vec_create_extension.js";
+import { quat_create, vec3_create } from "../../../../../../plugin/js/extensions/array/vec_create_extension.js";
 import { PlayerLocomotionTeleportState } from "./player_locomotion_teleport_state.js";
 import { PlayerLocomotionTeleportTeleportBlinkState } from "./player_locomotion_teleport_teleport_blink_state.js";
 import { PlayerLocomotionTeleportTeleportShiftState } from "./player_locomotion_teleport_teleport_shift_state.js";
@@ -16,11 +16,14 @@ export class PlayerLocomotionTeleportTeleportParams {
     constructor() {
         this.myTeleportType = PlayerLocomotionTeleportTeleportType.SHIFT;
 
+        this.myInstantRotateMinAngleToRotate = 25;
+
         this.myBlinkFadeOutSeconds = 0.2;
         this.myBlinkFadeInSeconds = 0.2;
         this.myBlinkWaitSeconds = 0.1;
         this.myBlinkSphereColor = vec3_create();
         this.myBlinkSphereScale = 0.5;
+        this.myBlinkRotateMinAngleToRotate = 25;
 
         this.myShiftMovementSeconds = 0.15;
         this.myShiftMovementSecondsMultiplierOverDistanceFunction = null;
@@ -30,7 +33,7 @@ export class PlayerLocomotionTeleportTeleportParams {
         this.myShiftRotateSecondsMultiplierOverAngleFunction = null;
         this.myShiftRotateEasingFunction = EasingFunction.easeOutWeak;
         this.myShiftRotateStartAfterMovementPercentage = 0.7;
-        this.myShiftRotateMinAngleToRotate = 10;
+        this.myShiftRotateMinAngleToRotate = 25;
         this.myShiftRotateStopAngleThreshold = 0.25;
 
         this.myShiftRotateSecondsMultiplierOverAngleFunction = function (angle) {
@@ -41,8 +44,8 @@ export class PlayerLocomotionTeleportTeleportParams {
 
 export class PlayerLocomotionTeleportTeleportState extends PlayerLocomotionTeleportState {
 
-    constructor(teleportParams, teleportRuntimeParams, locomotionRuntimeParams, movementCollisionCheckParams) {
-        super(teleportParams, teleportRuntimeParams, locomotionRuntimeParams, movementCollisionCheckParams);
+    constructor(teleportParams, teleportRuntimeParams, locomotionRuntimeParams) {
+        super(teleportParams, teleportRuntimeParams, locomotionRuntimeParams);
 
         this._myFSM = new FSM();
         //this._myFSM.setLogEnabled(true, "Locomotion Teleport Teleport");
@@ -117,7 +120,7 @@ export class PlayerLocomotionTeleportTeleportState extends PlayerLocomotionTelep
     }
 
     _startInstantTeleport() {
-        this._myLocomotionRuntimeParams.myIsTeleporting = true;
+        // Implemented outside class definition
     }
 
     _instantUpdate(dt, fsm) {
@@ -149,3 +152,35 @@ export class PlayerLocomotionTeleportTeleportState extends PlayerLocomotionTelep
         this._myShiftState.cancelTeleport();
     }
 }
+
+
+
+// IMPLEMENTATION
+
+PlayerLocomotionTeleportTeleportState.prototype._startInstantTeleport = function () {
+    let playerUp = vec3_create();
+    let playerForward = vec3_create();
+    let flatTeleportForward = vec3_create();
+    let feetRotationQuat = quat_create();
+    return function _startInstantTeleport() {
+        if (!this._myTeleportRuntimeParams.myTeleportForward.vec3_isZero(0.00001)) {
+            let angleToPerform = 0;
+
+            this._myTeleportParams.myPlayerTransformManager.getRotationRealQuat(feetRotationQuat);
+            feetRotationQuat.quat_getUp(playerUp);
+            feetRotationQuat.quat_getForward(playerForward);
+            this._myTeleportRuntimeParams.myTeleportForward.vec3_removeComponentAlongAxis(playerUp, flatTeleportForward);
+
+            if (!flatTeleportForward.vec3_isZero(0.00001)) {
+                flatTeleportForward.vec3_normalize(flatTeleportForward);
+                angleToPerform = flatTeleportForward.vec3_angle(playerForward);
+            }
+
+            if (angleToPerform < this._myTeleportParams.myTeleportParams.myInstantRotateMinAngleToRotate) {
+                this._myTeleportRuntimeParams.myTeleportForward.vec3_zero();
+            }
+        }
+
+        this._myLocomotionRuntimeParams.myIsTeleporting = true;
+    };
+}();

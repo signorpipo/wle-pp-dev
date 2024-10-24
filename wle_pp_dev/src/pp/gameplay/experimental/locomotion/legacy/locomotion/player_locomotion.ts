@@ -122,6 +122,8 @@ export class PlayerLocomotionParams {
     /** Valid means, for example, that the real player has not moved inside a wall by moving in the real space */
     public mySyncWithRealWorldPositionOnlyIfValid: boolean = true;
 
+    public mySyncWithRealHeightOnlyIfValid: boolean = true;
+
     public mySnapRealPositionToGround: boolean = false;
     public myPreventRealFromColliding: boolean = false;
 
@@ -268,6 +270,10 @@ export class PlayerLocomotion {
                 params.mySyncEnabledFlagMap.set(PlayerTransformManagerSyncFlag.FLOATING, false);
 
                 params.myAlwaysSyncPositionWithReal = true;
+            }
+
+            if (!this._myParams.mySyncWithRealHeightOnlyIfValid) {
+                params.mySyncEnabledFlagMap.set(PlayerTransformManagerSyncFlag.HEIGHT_COLLIDING, false);
             }
 
             if (!this._myParams.myViewOcclusionInsideWallsEnabled) {

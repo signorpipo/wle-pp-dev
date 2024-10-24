@@ -2,7 +2,7 @@ import { MeshComponent } from "@wonderlandengine/api";
 import { Timer } from "../../../../../../cauldron/cauldron/timer.js";
 import { FSM } from "../../../../../../cauldron/fsm/fsm.js";
 import { TimerState } from "../../../../../../cauldron/fsm/states/condition_states/timer_state.js";
-import { vec4_create } from "../../../../../../plugin/js/extensions/array/vec_create_extension.js";
+import { quat_create, vec3_create, vec4_create } from "../../../../../../plugin/js/extensions/array/vec_create_extension.js";
 import { Globals } from "../../../../../../pp/globals.js";
 import { NumberOverFactor } from "../../../../../cauldron/cauldron/number_over_factor.js";
 import { PlayerLocomotionTeleportState } from "./player_locomotion_teleport_state.js";
@@ -89,12 +89,7 @@ export class PlayerLocomotionTeleportTeleportBlinkState extends PlayerLocomotion
     }
 
     _startFadeOut() {
-        this._myFadeOutTimer.start();
-        this._myBlinkSphereMaterialColor[3] = 0;
-        this._myBlinkSphereMeshComponent.material.color = this._myBlinkSphereMaterialColor;
-        this._myBlinkSphere.pp_setActive(true);
-
-        this._myLocomotionRuntimeParams.myIsTeleporting = true;
+        // Implemented outside class definition
     }
 
     _startFadeIn() {
@@ -154,3 +149,41 @@ export class PlayerLocomotionTeleportTeleportBlinkState extends PlayerLocomotion
         this._myBlinkSphere.pp_setParent(Globals.getPlayerObjects(this._myTeleportParams.myEngine).myCauldron, false);
     }
 }
+
+
+
+// IMPLEMENTATION
+
+PlayerLocomotionTeleportTeleportBlinkState.prototype._startFadeOut = function () {
+    let playerUp = vec3_create();
+    let playerForward = vec3_create();
+    let flatTeleportForward = vec3_create();
+    let feetRotationQuat = quat_create();
+    return function _startFadeOut() {
+        this._myFadeOutTimer.start();
+
+        this._myBlinkSphereMaterialColor[3] = 0;
+        this._myBlinkSphereMeshComponent.material.color = this._myBlinkSphereMaterialColor;
+        this._myBlinkSphere.pp_setActive(true);
+
+        if (!this._myTeleportRuntimeParams.myTeleportForward.vec3_isZero(0.00001)) {
+            let angleToPerform = 0;
+
+            this._myTeleportParams.myPlayerTransformManager.getRotationRealQuat(feetRotationQuat);
+            feetRotationQuat.quat_getUp(playerUp);
+            feetRotationQuat.quat_getForward(playerForward);
+            this._myTeleportRuntimeParams.myTeleportForward.vec3_removeComponentAlongAxis(playerUp, flatTeleportForward);
+
+            if (!flatTeleportForward.vec3_isZero(0.00001)) {
+                flatTeleportForward.vec3_normalize(flatTeleportForward);
+                angleToPerform = flatTeleportForward.vec3_angle(playerForward);
+            }
+
+            if (angleToPerform < this._myTeleportParams.myTeleportParams.myBlinkRotateMinAngleToRotate) {
+                this._myTeleportRuntimeParams.myTeleportForward.vec3_zero();
+            }
+        }
+
+        this._myLocomotionRuntimeParams.myIsTeleporting = true;
+    };
+}();

@@ -127,7 +127,7 @@ export class PlayerLocomotionComponent extends Component {
     @property.string("")
     private readonly _myTeleportFloorLayerFlags!: string;
 
-    @property.bool(false)
+    @property.bool(true)
     private readonly _myTeleportRotationOnUpEnabled!: boolean;
 
     @property.material()
@@ -181,6 +181,10 @@ export class PlayerLocomotionComponent extends Component {
     /** Valid means, for example, that the real player has not moved inside a wall by moving in the real space */
     @property.bool(true)
     private readonly _mySyncWithRealWorldPositionOnlyIfValid!: boolean;
+
+    /** Valid means, for example, that the real player has not moved inside a wall by moving in the real space */
+    @property.bool(true)
+    private readonly _mySyncWithRealHeightOnlyIfValid!: boolean;
 
     @property.bool(false)
     private readonly _mySnapRealPositionToGround!: boolean;
@@ -372,6 +376,7 @@ export class PlayerLocomotionComponent extends Component {
             params.myMaxHeadToRealHeadSteps = this._myMaxHeadToRealHeadSteps > 0 ? this._myMaxHeadToRealHeadSteps : null;
 
             params.mySyncWithRealWorldPositionOnlyIfValid = this._mySyncWithRealWorldPositionOnlyIfValid;
+            params.mySyncWithRealHeightOnlyIfValid = this._mySyncWithRealHeightOnlyIfValid;
             params.mySnapRealPositionToGround = this._mySnapRealPositionToGround;
             params.myPreventRealFromColliding = this._myPreventRealFromColliding;
             params.myViewOcclusionInsideWallsEnabled = this._myViewOcclusionInsideWallsEnabled;

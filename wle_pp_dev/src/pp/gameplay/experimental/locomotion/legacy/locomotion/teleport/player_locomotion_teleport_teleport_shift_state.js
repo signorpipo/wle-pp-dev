@@ -99,6 +99,10 @@ export class PlayerLocomotionTeleportTeleportShiftState extends PlayerLocomotion
 
 
 PlayerLocomotionTeleportTeleportShiftState.prototype._startShifting = function () {
+    let playerUp = vec3_create();
+    let playerForward = vec3_create();
+    let flatTeleportForward = vec3_create();
+    let feetRotationQuat = quat_create();
     return function _startShifting(dt, fsm) {
         this._myLocomotionRuntimeParams.myIsTeleporting = true;
         this._myFeetStartPosition = this._myTeleportParams.myPlayerTransformManager.getPositionReal(this._myFeetStartPosition);
@@ -109,6 +113,24 @@ PlayerLocomotionTeleportTeleportShiftState.prototype._startShifting = function (
             let distance = this._myTeleportRuntimeParams.myTeleportPosition.vec3_distance(this._myFeetStartPosition);
             let multiplier = this._myTeleportParams.myTeleportParams.myShiftMovementSecondsMultiplierOverDistanceFunction(distance);
             this._myShiftMovementTimer.start(this._myTeleportParams.myTeleportParams.myShiftMovementSeconds * multiplier);
+        }
+
+        if (!this._myTeleportRuntimeParams.myTeleportForward.vec3_isZero(0.00001)) {
+            let angleToPerform = 0;
+
+            this._myTeleportParams.myPlayerTransformManager.getRotationRealQuat(feetRotationQuat);
+            feetRotationQuat.quat_getUp(playerUp);
+            feetRotationQuat.quat_getForward(playerForward);
+            this._myTeleportRuntimeParams.myTeleportForward.vec3_removeComponentAlongAxis(playerUp, flatTeleportForward);
+
+            if (!flatTeleportForward.vec3_isZero(0.00001)) {
+                flatTeleportForward.vec3_normalize(flatTeleportForward);
+                angleToPerform = flatTeleportForward.vec3_angle(playerForward);
+            }
+
+            if (angleToPerform < this._myTeleportParams.myTeleportParams.myShiftRotateMinAngleToRotate) {
+                this._myTeleportRuntimeParams.myTeleportForward.vec3_zero();
+            }
         }
 
         this._myShiftRotateTimer.reset();
@@ -157,13 +179,14 @@ PlayerLocomotionTeleportTeleportShiftState.prototype._shiftingUpdate = function 
                         this._myStartForward.vec3_copy(playerForward);
                     }
 
-                    if (angleToPerform > this._myTeleportParams.myTeleportParams.myShiftRotateMinAngleToRotate) {
+                    if (angleToPerform > 0 && angleToPerform >= this._myTeleportParams.myTeleportParams.myShiftRotateMinAngleToRotate) {
                         this._myShiftRotateTimer.reset(this._myTeleportParams.myTeleportParams.myShiftRotateSeconds);
                         if (this._myTeleportParams.myTeleportParams.myShiftRotateSecondsMultiplierOverAngleFunction) {
                             let multiplier = this._myTeleportParams.myTeleportParams.myShiftRotateSecondsMultiplierOverAngleFunction(angleToPerform);
                             this._myShiftRotateTimer.reset(this._myTeleportParams.myTeleportParams.myShiftRotateSeconds * multiplier);
                         }
                     } else {
+                        this._myTeleportRuntimeParams.myTeleportForward.vec3_zero();
                         this._myShiftRotateTimer.reset(0);
                     }
 

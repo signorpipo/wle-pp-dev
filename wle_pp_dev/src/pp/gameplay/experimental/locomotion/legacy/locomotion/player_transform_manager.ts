@@ -15,7 +15,8 @@ export enum PlayerTransformManagerSyncFlag {
     BODY_COLLIDING = 0,
     HEAD_COLLIDING = 1,
     FAR = 2,
-    FLOATING = 3
+    FLOATING = 3,
+    HEIGHT_COLLIDING = 4
 }
 
 export class PlayerTransformManagerParams {
@@ -85,6 +86,7 @@ export class PlayerTransformManagerParams {
     public myFloatingSplitCheckStepEqualLengthMinLength: number = 0;
 
 
+    public myExtraSafetyHeight: number = 0.1;
 
     public myMaxDistanceFromRealToSyncEnabled: boolean = false;
 
@@ -134,6 +136,11 @@ export class PlayerTransformManagerParams {
 
     public myRotateOnlyIfSynced: boolean = false;
     public myResetRealResetRotationIfUpChanged: boolean = true;
+
+
+
+    public myUseHighestHeightForMovementAndTeleport: boolean = true;
+
 
 
     /**
@@ -244,26 +251,31 @@ export class PlayerTransformManagerParams {
         this.mySyncEnabledFlagMap.set(PlayerTransformManagerSyncFlag.HEAD_COLLIDING, true);
         this.mySyncEnabledFlagMap.set(PlayerTransformManagerSyncFlag.FAR, true);
         this.mySyncEnabledFlagMap.set(PlayerTransformManagerSyncFlag.FLOATING, true);
+        this.mySyncEnabledFlagMap.set(PlayerTransformManagerSyncFlag.HEIGHT_COLLIDING, true);
 
         this.mySyncPositionFlagMap.set(PlayerTransformManagerSyncFlag.BODY_COLLIDING, true);
         this.mySyncPositionFlagMap.set(PlayerTransformManagerSyncFlag.HEAD_COLLIDING, false);
         this.mySyncPositionFlagMap.set(PlayerTransformManagerSyncFlag.FAR, true);
         this.mySyncPositionFlagMap.set(PlayerTransformManagerSyncFlag.FLOATING, true);
+        this.mySyncPositionFlagMap.set(PlayerTransformManagerSyncFlag.HEIGHT_COLLIDING, false);
 
         this.mySyncPositionHeadFlagMap.set(PlayerTransformManagerSyncFlag.BODY_COLLIDING, false);
         this.mySyncPositionHeadFlagMap.set(PlayerTransformManagerSyncFlag.HEAD_COLLIDING, true);
         this.mySyncPositionHeadFlagMap.set(PlayerTransformManagerSyncFlag.FAR, false);
         this.mySyncPositionHeadFlagMap.set(PlayerTransformManagerSyncFlag.FLOATING, false);
+        this.mySyncPositionHeadFlagMap.set(PlayerTransformManagerSyncFlag.HEIGHT_COLLIDING, false);
 
         this.mySyncRotationFlagMap.set(PlayerTransformManagerSyncFlag.BODY_COLLIDING, false);
         this.mySyncRotationFlagMap.set(PlayerTransformManagerSyncFlag.HEAD_COLLIDING, false);
         this.mySyncRotationFlagMap.set(PlayerTransformManagerSyncFlag.FAR, false);
         this.mySyncRotationFlagMap.set(PlayerTransformManagerSyncFlag.FLOATING, false);
+        this.mySyncRotationFlagMap.set(PlayerTransformManagerSyncFlag.HEIGHT_COLLIDING, false);
 
         this.mySyncHeightFlagMap.set(PlayerTransformManagerSyncFlag.BODY_COLLIDING, false);
         this.mySyncHeightFlagMap.set(PlayerTransformManagerSyncFlag.HEAD_COLLIDING, false);
         this.mySyncHeightFlagMap.set(PlayerTransformManagerSyncFlag.FAR, false);
         this.mySyncHeightFlagMap.set(PlayerTransformManagerSyncFlag.FLOATING, false);
+        this.mySyncHeightFlagMap.set(PlayerTransformManagerSyncFlag.HEIGHT_COLLIDING, true);
     }
 }
 
@@ -276,7 +288,6 @@ export class PlayerTransformManager {
     private readonly _myHeadCollisionCheckParams !: CollisionCheckParams;
 
     private readonly _myCollisionRuntimeParams = new CollisionRuntimeParams();
-    private readonly _myRealCollisionRuntimeParams = new CollisionRuntimeParams();
 
     private _myPlayerLocomotionTeleport: PlayerLocomotionTeleport | null = null;
 
@@ -291,6 +302,7 @@ export class PlayerTransformManager {
     private _myIsLeaning: boolean = false;
     private _myIsHopping: boolean = false;
     private _myIsFar: boolean = false;
+    private _myIsHeightColliding: boolean = false;
 
     private readonly _myLastValidMovementDirection: Vector3 = vec3_create();
     private _myIsPositionValid: boolean = false;
@@ -386,6 +398,8 @@ export class PlayerTransformManager {
         this._updateValidToReal(dt);
         this._updatePositionsValid(dt);
 
+        this._updateCollisionHeight();
+
         if (this._myParams.myDebugEnabled && Globals.isDebugEnabled(this._myParams.myEngine)) {
             this._debugUpdate(dt);
         }
@@ -403,12 +417,12 @@ export class PlayerTransformManager {
             transformUp: vec3_create(),
             fixedVerticalMovement: vec3_create()
         };
-    public move(movement: Readonly<Vector3>, forceMove: boolean = false, outCollisionRuntimeParams: CollisionRuntimeParams | null = null): void {
+    public move(movement: Readonly<Vector3>, forceMove: boolean = false, useHighestHeight: boolean = this._myParams.myUseHighestHeightForMovementAndTeleport, outCollisionRuntimeParams: CollisionRuntimeParams | null = null): void {
         if (this._myPlayerLocomotionTeleport != null) {
             this._myPlayerLocomotionTeleport.cancelTeleport();
         }
 
-        this.checkMovement(movement, undefined, undefined, this._myCollisionRuntimeParams);
+        this.checkMovement(movement, undefined, undefined, useHighestHeight, this._myCollisionRuntimeParams);
 
         if (outCollisionRuntimeParams != null) {
             outCollisionRuntimeParams.copy(this._myCollisionRuntimeParams);
@@ -461,7 +475,9 @@ export class PlayerTransformManager {
         {
             currentTransformQuat: quat2_create()
         };
-    public checkMovement(movement: Readonly<Vector3>, currentTransformQuat?: Readonly<Quaternion2>, collisionCheckParams?: Readonly<CollisionCheckParams>, outCollisionRuntimeParams?: CollisionRuntimeParams): CollisionRuntimeParams {
+    public checkMovement(movement: Readonly<Vector3>, currentTransformQuat?: Readonly<Quaternion2>, collisionCheckParams?: Readonly<CollisionCheckParams>, useHighestHeight: boolean = this._myParams.myUseHighestHeightForMovementAndTeleport, outCollisionRuntimeParams?: CollisionRuntimeParams): CollisionRuntimeParams {
+        this._updateCollisionHeight(useHighestHeight);
+
         if (currentTransformQuat == null) {
             currentTransformQuat = PlayerTransformManager._checkMovementSV.currentTransformQuat;
             this.getTransformQuat(currentTransformQuat);
@@ -478,6 +494,8 @@ export class PlayerTransformManager {
 
         CollisionCheckBridge.getCollisionCheck(this._myParams.myEngine as any).move(movement, currentTransformQuat, collisionCheckParams, outCollisionRuntimeParams);
 
+        this._updateCollisionHeight();
+
         return outCollisionRuntimeParams;
     }
 
@@ -485,22 +503,22 @@ export class PlayerTransformManager {
         {
             teleportTransformQuat: quat2_create()
         };
-    public teleportPosition(teleportPosition: Readonly<Vector3>, forceTeleport: boolean = false, forceTeleportSkipCollisionCheck: boolean = false, outCollisionRuntimeParams: CollisionRuntimeParams | null = null): void {
+    public teleportPosition(teleportPosition: Readonly<Vector3>, forceTeleport: boolean = false, forceTeleportSkipCollisionCheck: boolean = false, useHighestHeight: boolean = this._myParams.myUseHighestHeightForMovementAndTeleport, outCollisionRuntimeParams: CollisionRuntimeParams | null = null): void {
         const teleportTransformQuat = PlayerTransformManager._teleportPositionSV.teleportTransformQuat;
         this.getTransformQuat(teleportTransformQuat);
         teleportTransformQuat.quat2_setPosition(teleportPosition);
-        this.teleportTransformQuat(teleportTransformQuat, forceTeleport, forceTeleportSkipCollisionCheck, outCollisionRuntimeParams);
+        this.teleportTransformQuat(teleportTransformQuat, forceTeleport, forceTeleportSkipCollisionCheck, useHighestHeight, outCollisionRuntimeParams);
     }
 
     private static readonly _teleportPositionRotationQuatSV =
         {
             teleportTransformQuat: quat2_create()
         };
-    public teleportPositionRotationQuat(teleportPosition: Readonly<Vector3>, rotationQuat: Quaternion, forceTeleport: boolean = false, forceTeleportSkipCollisionCheck: boolean = false, outCollisionRuntimeParams: CollisionRuntimeParams | null = null): void {
+    public teleportPositionRotationQuat(teleportPosition: Readonly<Vector3>, rotationQuat: Quaternion, forceTeleport: boolean = false, forceTeleportSkipCollisionCheck: boolean = false, useHighestHeight: boolean = this._myParams.myUseHighestHeightForMovementAndTeleport, outCollisionRuntimeParams: CollisionRuntimeParams | null = null): void {
         const teleportTransformQuat = PlayerTransformManager._teleportPositionRotationQuatSV.teleportTransformQuat;
         this.getTransformQuat(teleportTransformQuat);
         teleportTransformQuat.quat2_setPositionRotationQuat(teleportPosition, rotationQuat);
-        this.teleportTransformQuat(teleportTransformQuat, forceTeleport, forceTeleportSkipCollisionCheck, outCollisionRuntimeParams);
+        this.teleportTransformQuat(teleportTransformQuat, forceTeleport, forceTeleportSkipCollisionCheck, useHighestHeight, outCollisionRuntimeParams);
     }
 
     private static readonly _teleportTransformQuatSV =
@@ -513,13 +531,13 @@ export class PlayerTransformManager {
             transformUp: vec3_create(),
             flatTeleportForward: vec3_create()
         };
-    public teleportTransformQuat(teleportTransformQuat: Readonly<Quaternion2>, forceTeleport: boolean = false, forceTeleportSkipCollisionCheck: boolean = false, outCollisionRuntimeParams: CollisionRuntimeParams | null = null): void {
+    public teleportTransformQuat(teleportTransformQuat: Readonly<Quaternion2>, forceTeleport: boolean = false, forceTeleportSkipCollisionCheck: boolean = false, useHighestHeight: boolean = this._myParams.myUseHighestHeightForMovementAndTeleport, outCollisionRuntimeParams: CollisionRuntimeParams | null = null): void {
         if (this._myPlayerLocomotionTeleport != null) {
             this._myPlayerLocomotionTeleport.cancelTeleport();
         }
 
         if (!forceTeleport || !forceTeleportSkipCollisionCheck) {
-            this.checkTeleportToTransformQuat(teleportTransformQuat, undefined, undefined, this._myCollisionRuntimeParams);
+            this.checkTeleportToTransformQuat(teleportTransformQuat, undefined, undefined, useHighestHeight, this._myCollisionRuntimeParams);
         }
 
         if (outCollisionRuntimeParams != null) {
@@ -591,7 +609,9 @@ export class PlayerTransformManager {
             teleportRotation: quat_create(),
             rotatedTransformQuat: quat2_create()
         };
-    public checkTeleportToTransformQuat(teleportTransformQuat: Readonly<Quaternion2>, currentTransformQuat?: Readonly<Quaternion2>, collisionCheckParams?: Readonly<CollisionCheckParams>, outCollisionRuntimeParams?: CollisionRuntimeParams): CollisionRuntimeParams {
+    public checkTeleportToTransformQuat(teleportTransformQuat: Readonly<Quaternion2>, currentTransformQuat?: Readonly<Quaternion2>, collisionCheckParams?: Readonly<CollisionCheckParams>, useHighestHeight: boolean = this._myParams.myUseHighestHeightForMovementAndTeleport, outCollisionRuntimeParams?: CollisionRuntimeParams): CollisionRuntimeParams {
+        this._updateCollisionHeight(useHighestHeight);
+
         if (currentTransformQuat == null) {
             currentTransformQuat = PlayerTransformManager._checkTeleportToTransformQuatSV.currentTransformQuat;
             this.getTransformQuat(currentTransformQuat);
@@ -616,6 +636,8 @@ export class PlayerTransformManager {
         }
 
         CollisionCheckBridge.getCollisionCheck(this._myParams.myEngine as any).teleport(teleportPosition, rotatedTransformQuat, collisionCheckParams, outCollisionRuntimeParams);
+
+        this._updateCollisionHeight();
 
         return outCollisionRuntimeParams;
     }
@@ -660,6 +682,9 @@ export class PlayerTransformManager {
     private static readonly _setHeightSV =
         {
             transformQuat: quat_create(),
+            transformUp: vec3_create(),
+            rotationQuat: quat_create(),
+            horizontalDirection: vec3_create(),
             collisionRuntimeParams: new CollisionRuntimeParams()
         };
     public setHeight(height: number, forceSet: boolean = false): void {
@@ -670,11 +695,26 @@ export class PlayerTransformManager {
         this._updateCollisionHeight();
 
         const transformQuat = PlayerTransformManager._setHeightSV.transformQuat;
+        const transformUp = PlayerTransformManager._setHeightSV.transformUp;
+        const rotationQuat = PlayerTransformManager._setHeightSV.rotationQuat;
+        const horizontalDirection = PlayerTransformManager._setHeightSV.horizontalDirection;
         this.getTransformQuat(transformQuat);
+        transformQuat.quat2_getUp(transformUp);
+        transformQuat.quat2_getRotationQuat(rotationQuat);
+        this._myLastValidMovementDirection.vec3_removeComponentAlongAxis(transformUp, horizontalDirection);
+
+        if (!horizontalDirection.vec3_isZero(0.00001)) {
+            horizontalDirection.vec3_normalize(horizontalDirection);
+            rotationQuat.quat_setForward(horizontalDirection);
+            transformQuat.quat2_setRotationQuat(rotationQuat);
+        }
 
         const collisionRuntimeParams = PlayerTransformManager._setHeightSV.collisionRuntimeParams;
         collisionRuntimeParams.copy(this._myCollisionRuntimeParams);
+        const debugBackup = this._myParams.myMovementCollisionCheckParams.myDebugEnabled;
+        this._myParams.myMovementCollisionCheckParams.myDebugEnabled = false;
         CollisionCheckBridge.getCollisionCheck(this._myParams.myEngine as any).positionCheck(true, transformQuat, this._myParams.myMovementCollisionCheckParams, collisionRuntimeParams);
+        this._myParams.myMovementCollisionCheckParams.myDebugEnabled = debugBackup;
 
         if (collisionRuntimeParams.myIsPositionOk || forceSet) {
             this.getPlayerHeadManager().setHeightHead(this.getHeight(), true);
@@ -764,7 +804,8 @@ export class PlayerTransformManager {
         const isHeadColliding = this.isHeadColliding() && (syncFlagMap == null || syncFlagMap.get(PlayerTransformManagerSyncFlag.HEAD_COLLIDING));
         const isFar = this.isFar() && (syncFlagMap == null || syncFlagMap.get(PlayerTransformManagerSyncFlag.FAR));
         const isFloating = this.isFloating() && (syncFlagMap == null || syncFlagMap.get(PlayerTransformManagerSyncFlag.FLOATING));
-        return !isBodyColliding && !isHeadColliding && !isFar && !isFloating;
+        const isHeightColliding = this.isHeightColliding() && (syncFlagMap == null || syncFlagMap.get(PlayerTransformManagerSyncFlag.HEIGHT_COLLIDING));
+        return !isBodyColliding && !isHeadColliding && !isFar && !isFloating && !isHeightColliding;
     }
 
     private static readonly _resetRealSV =
@@ -925,6 +966,10 @@ export class PlayerTransformManager {
         return this._myIsFar;
     }
 
+    public isHeightColliding(): boolean {
+        return this._myIsHeightColliding;
+    }
+
     private static readonly _getDistanceToRealSV =
         {
             position: vec3_create(),
@@ -987,10 +1032,6 @@ export class PlayerTransformManager {
         return this._myCollisionRuntimeParams;
     }
 
-    public getRealCollisionRuntimeParams(): CollisionRuntimeParams {
-        return this._myRealCollisionRuntimeParams;
-    }
-
     public isPositionValid(): boolean {
         return this._myIsPositionValid;
     }
@@ -1011,14 +1052,16 @@ export class PlayerTransformManager {
         this._myPlayerLocomotionTeleport = playerLocomotionTeleport;
     }
 
-    private _updateCollisionHeight(): void {
+    private _updateCollisionHeight(useHighestHeight: boolean = false): void {
         const validHeight = this.getHeight();
-        const realHeight = Math.pp_clamp(this.getHeightReal(), this._myParams.myMinHeight ?? undefined, this._myParams.myMaxHeight ?? undefined);
+        const realHeight = this.getHeightReal();
 
-        this._myParams.myMovementCollisionCheckParams.myHeight = validHeight;
-        this._myParams.myTeleportCollisionCheckParams!.myHeight = validHeight;
+        const highestHeight = Math.max(validHeight, realHeight);
 
-        this._myRealMovementCollisionCheckParams.myHeight = realHeight;
+        this._myParams.myMovementCollisionCheckParams.myHeight = (useHighestHeight ? highestHeight : validHeight) + this._myParams.myExtraSafetyHeight;
+        this._myParams.myTeleportCollisionCheckParams!.myHeight = this._myParams.myMovementCollisionCheckParams.myHeight;
+
+        this._myRealMovementCollisionCheckParams.myHeight = Math.max(realHeight, this._myParams.myMinHeight ?? -Number.MAX_VALUE) + this._myParams.myExtraSafetyHeight;
     }
 
     private _setupHeadCollisionCheckParams(): void {
@@ -1225,6 +1268,8 @@ export class PlayerTransformManager {
             rotationQuat: quat_create()
         };
     private _updatePositionsValid(dt: number): void {
+        this._updateCollisionHeight();
+
         if (this._myParams.myUpdatePositionValid) {
             const transformQuat = PlayerTransformManager._updatePositionsValidSV.transformQuat;
             const transformUp = PlayerTransformManager._updatePositionsValidSV.transformUp;
@@ -1242,6 +1287,7 @@ export class PlayerTransformManager {
             }
 
             const collisionRuntimeParams = PlayerTransformManager._updatePositionsValidSV.collisionRuntimeParams;
+            collisionRuntimeParams.copy(this._myCollisionRuntimeParams);
             const debugBackup = this._myParams.myMovementCollisionCheckParams.myDebugEnabled;
             this._myParams.myMovementCollisionCheckParams.myDebugEnabled = false;
             CollisionCheckBridge.getCollisionCheck(this._myParams.myEngine as any).positionCheck(true, transformQuat, this._myParams.myMovementCollisionCheckParams, collisionRuntimeParams);
@@ -1256,6 +1302,7 @@ export class PlayerTransformManager {
             this.getTransformHeadQuat(transformQuat);
 
             const headCollisionRuntimeParams = PlayerTransformManager._updatePositionsValidSV.headCollisionRuntimeParams;
+            headCollisionRuntimeParams.reset();
             const debugBackup = this._myHeadCollisionCheckParams.myDebugEnabled;
             this._myHeadCollisionCheckParams.myDebugEnabled = false;
             CollisionCheckBridge.getCollisionCheck(this._myParams.myEngine as any).positionCheck(true, transformQuat, this._myHeadCollisionCheckParams, headCollisionRuntimeParams);
@@ -1281,10 +1328,12 @@ export class PlayerTransformManager {
                 transformQuat.quat2_setRotationQuat(rotationQuat);
             }
 
+            const collisionRuntimeParams = PlayerTransformManager._updatePositionsValidSV.collisionRuntimeParams;
+            collisionRuntimeParams.copy(this._myCollisionRuntimeParams);
             const debugBackup = this._myParams.myMovementCollisionCheckParams.myDebugEnabled;
             this._myParams.myMovementCollisionCheckParams.myDebugEnabled = false;
-            CollisionCheckBridge.getCollisionCheck(this._myParams.myEngine as any).positionCheck(true, transformQuat, this._myParams.myMovementCollisionCheckParams, this._myRealCollisionRuntimeParams);
-            this._myIsRealPositionValid = this._myRealCollisionRuntimeParams.myIsPositionOk;
+            CollisionCheckBridge.getCollisionCheck(this._myParams.myEngine as any).positionCheck(true, transformQuat, this._myParams.myMovementCollisionCheckParams, collisionRuntimeParams);
+            this._myIsRealPositionValid = collisionRuntimeParams.myIsPositionOk;
             this._myParams.myMovementCollisionCheckParams.myDebugEnabled = debugBackup;
         } else {
             this._myIsRealPositionValid = true;
@@ -1295,6 +1344,7 @@ export class PlayerTransformManager {
             this.getTransformHeadRealQuat(transformQuat);
 
             const headCollisionRuntimeParams = PlayerTransformManager._updatePositionsValidSV.headCollisionRuntimeParams;
+            headCollisionRuntimeParams.reset();
             const debugBackup = this._myHeadCollisionCheckParams.myDebugEnabled;
             this._myHeadCollisionCheckParams.myDebugEnabled = false;
             CollisionCheckBridge.getCollisionCheck(this._myParams.myEngine as any).positionCheck(true, transformQuat, this._myHeadCollisionCheckParams, headCollisionRuntimeParams);
@@ -1322,7 +1372,9 @@ export class PlayerTransformManager {
             verticalMovement: vec3_create(),
             movementChecked: vec3_create(),
             newFeetPosition: vec3_create(),
-            floatingTransformQuat: quat2_create()
+            floatingTransformQuat: quat2_create(),
+            rotationQuat: quat_create(),
+            horizontalDirection: vec3_create()
         };
     private _updateValidToReal(dt: number): void {
         // If the head is not synced, only do the check to see if head is colliding, but do not actually change the valid position
@@ -1330,17 +1382,12 @@ export class PlayerTransformManager {
 
         this._updateCollisionHeight();
 
-        this._myIsBodyColliding = false;
-        this._myIsHeadColliding = false;
-        this._myIsLeaning = false;
-        this._myIsHopping = false;
-        this._myIsFar = false;
-
         const position = PlayerTransformManager._updateValidToRealSV.position;
         const positionReal = PlayerTransformManager._updateValidToRealSV.positionReal;
         const movementToCheck = PlayerTransformManager._updateValidToRealSV.movementToCheck;
         this.getPositionReal(positionReal).vec3_sub(this.getPosition(position), movementToCheck);
 
+        this._myIsFar = false;
         // Far
         if (this._myParams.mySyncEnabledFlagMap.get(PlayerTransformManagerSyncFlag.FAR)) {
             if (this._myParams.myMaxDistanceFromRealToSyncEnabled && movementToCheck.vec3_length() > this._myParams.myMaxDistanceFromRealToSync) {
@@ -1358,28 +1405,29 @@ export class PlayerTransformManager {
         newPosition.vec3_copy(positionReal);
         transformQuat.quat2_getUp(transformUp);
 
+        this._myIsBodyColliding = false;
         // Body Colliding
         if (!this._myIsFar && this._myParams.mySyncEnabledFlagMap.get(PlayerTransformManagerSyncFlag.BODY_COLLIDING)) {
-            collisionRuntimeParams.copy(this._myCollisionRuntimeParams);
+            const realHeight = this.getHeightReal();
+            if (Math.pp_clamp(realHeight, this._myParams.myIsBodyCollidingWhenHeightBelowValue ?? undefined, this._myParams.myIsBodyCollidingWhenHeightAboveValue ?? undefined) != realHeight) {
+                this._myIsBodyColliding = true;
+            } else {
+                collisionRuntimeParams.copy(this._myCollisionRuntimeParams);
 
-            // #TODO Temp as long as surface infos are not updated every time the position changes
-            // This is needed to understand if snapping should occur (and possibly other stuff I can't remember)
-            CollisionCheckBridge.getCollisionCheck(this._myParams.myEngine as any).updateSurfaceInfo(transformQuat, this._myParams.myMovementCollisionCheckParams, collisionRuntimeParams);
+                // #TODO Temp as long as surface infos are not updated every time the position changes
+                // This is needed to understand if snapping should occur (and possibly other stuff I can't remember)
+                CollisionCheckBridge.getCollisionCheck(this._myParams.myEngine as any).updateSurfaceInfo(transformQuat, this._myParams.myMovementCollisionCheckParams, collisionRuntimeParams);
 
-            if (collisionRuntimeParams.myIsOnGround && this._myParams.myIgnoreUpwardMovementToRealIfValidOnGround) {
-                const valueAlongUp = movementToCheck.vec3_valueAlongAxis(transformUp);
-                if (valueAlongUp >= 0) {
-                    movementToCheck.vec3_removeComponentAlongAxis(transformUp, movementToCheck);
+                if (collisionRuntimeParams.myIsOnGround && this._myParams.myIgnoreUpwardMovementToRealIfValidOnGround) {
+                    const valueAlongUp = movementToCheck.vec3_valueAlongAxis(transformUp);
+                    if (valueAlongUp >= 0) {
+                        movementToCheck.vec3_removeComponentAlongAxis(transformUp, movementToCheck);
+                    }
                 }
-            }
 
-            CollisionCheckBridge.getCollisionCheck(this._myParams.myEngine as any).move(movementToCheck, transformQuat, this._myRealMovementCollisionCheckParams, collisionRuntimeParams);
+                CollisionCheckBridge.getCollisionCheck(this._myParams.myEngine as any).move(movementToCheck, transformQuat, this._myRealMovementCollisionCheckParams, collisionRuntimeParams);
 
-            if (!collisionRuntimeParams.myHorizontalMovementCanceled && !collisionRuntimeParams.myVerticalMovementCanceled) {
-                if (Math.pp_clamp(this._myRealMovementCollisionCheckParams.myHeight, this._myParams.myIsBodyCollidingWhenHeightBelowValue ?? undefined,
-                    this._myParams.myIsBodyCollidingWhenHeightAboveValue ?? undefined) != this._myRealMovementCollisionCheckParams.myHeight) {
-                    this._myIsBodyColliding = true;
-                } else {
+                if (!collisionRuntimeParams.myHorizontalMovementCanceled && !collisionRuntimeParams.myVerticalMovementCanceled) {
                     if (this._myParams.myIsBodyCollidingExtraCheckCallback != null && this._myParams.myIsBodyCollidingExtraCheckCallback(this)) {
                         this._myIsBodyColliding = true;
                     } else {
@@ -1387,9 +1435,9 @@ export class PlayerTransformManager {
                         newPosition.vec3_copy(collisionRuntimeParams.myNewPosition);
                         movementToCheck.vec3_copy(collisionRuntimeParams.myFixedMovement);
                     }
+                } else {
+                    this._myIsBodyColliding = true;
                 }
-            } else {
-                this._myIsBodyColliding = true;
             }
         } else if (this._myIsFar) {
             this._myIsBodyColliding = true;
@@ -1399,6 +1447,8 @@ export class PlayerTransformManager {
             newPosition.vec3_copy(positionReal);
         }
 
+        this._myIsLeaning = false;
+        this._myIsHopping = false;
         // Floating 
         if (!this._myIsBodyColliding && this._myParams.mySyncEnabledFlagMap.get(PlayerTransformManagerSyncFlag.FLOATING)) {
             collisionRuntimeParams.copy(this._myCollisionRuntimeParams);
@@ -1544,12 +1594,47 @@ export class PlayerTransformManager {
                 }
             }
 
+            // For now I've not found a valid reason not to always sync rotation, it shouldn't case any trouble even if the new direction collides a bit
             if (this.isSynced(this._myParams.mySyncRotationFlagMap)) {
                 this.getRotationRealQuat(this._myValidRotationQuat);
             }
+        }
 
+        const newHeight = Math.pp_clamp(this.getHeightReal(), this._myParams.myMinHeight ?? undefined, this._myParams.myMaxHeight ?? undefined);
+        this._myIsHeightColliding = false;
+        // Height Colliding 
+        if (this._myParams.mySyncEnabledFlagMap.get(PlayerTransformManagerSyncFlag.HEIGHT_COLLIDING)) {
+            const transformQuat = PlayerTransformManager._updateValidToRealSV.transformQuat;
+            const transformUp = PlayerTransformManager._updateValidToRealSV.transformUp;
+            const rotationQuat = PlayerTransformManager._updateValidToRealSV.rotationQuat;
+            const horizontalDirection = PlayerTransformManager._updateValidToRealSV.horizontalDirection;
+            this.getTransformQuat(transformQuat);
+            transformQuat.quat2_getUp(transformUp);
+            transformQuat.quat2_getRotationQuat(rotationQuat);
+            this._myLastValidMovementDirection.vec3_removeComponentAlongAxis(transformUp, horizontalDirection);
+
+            if (!horizontalDirection.vec3_isZero(0.00001)) {
+                horizontalDirection.vec3_normalize(horizontalDirection);
+                rotationQuat.quat_setForward(horizontalDirection);
+                transformQuat.quat2_setRotationQuat(rotationQuat);
+            }
+
+            const collisionRuntimeParams = PlayerTransformManager._updateValidToRealSV.collisionRuntimeParams;
+            collisionRuntimeParams.copy(this._myCollisionRuntimeParams);
+            const debugBackup = this._myParams.myMovementCollisionCheckParams.myDebugEnabled;
+            const heightBackup = this._myParams.myMovementCollisionCheckParams.myHeight;
+            this._myParams.myMovementCollisionCheckParams.myHeight = newHeight + this._myParams.myExtraSafetyHeight;
+            this._myParams.myMovementCollisionCheckParams.myDebugEnabled = false;
+            CollisionCheckBridge.getCollisionCheck(this._myParams.myEngine as any).positionCheck(true, transformQuat, this._myParams.myMovementCollisionCheckParams, collisionRuntimeParams);
+            this._myParams.myMovementCollisionCheckParams.myDebugEnabled = debugBackup;
+            this._myParams.myMovementCollisionCheckParams.myHeight = heightBackup;
+
+            this._myIsHeightColliding = !collisionRuntimeParams.myIsPositionOk;
+        }
+
+        if (isHeadSynced) {
             if (this.isSynced(this._myParams.mySyncHeightFlagMap)) {
-                this._myValidHeight = this._myRealMovementCollisionCheckParams.myHeight;
+                this._myValidHeight = newHeight;
                 this._updateCollisionHeight();
             }
 

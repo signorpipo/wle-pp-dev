@@ -3,13 +3,11 @@ import { CollisionRuntimeParams } from "../../../../character_controller/collisi
 
 export class PlayerLocomotionTeleportState {
 
-    constructor(teleportParams, teleportRuntimeParams, locomotionRuntimeParams, movementCollisionCheckParams, teleportCollisionCheckParams) {
+    constructor(teleportParams, teleportRuntimeParams, locomotionRuntimeParams) {
         this._myLocomotionRuntimeParams = locomotionRuntimeParams;
 
         this._myTeleportParams = teleportParams;
         this._myTeleportRuntimeParams = teleportRuntimeParams;
-
-        this._myMovementCollisionCheckParams = movementCollisionCheckParams;
 
         this._myTeleportAsMovementFailed = false;
     }
@@ -18,11 +16,11 @@ export class PlayerLocomotionTeleportState {
 
     }
 
-    _checkTeleport(teleportPosition, feetTransformQuat, collisionRuntimeParams, checkTeleportCollisionRuntimeParams = null) {
+    _checkTeleport(teleportPosition, teleportRotationQuat, collisionRuntimeParams, checkTeleportCollisionRuntimeParams = null) {
         // Implemented outside class definition
     }
 
-    _checkTeleportAsMovement(teleportPosition, feetTransformQuat, collisionRuntimeParams, checkTeleportCollisionRuntimeParams) {
+    _checkTeleportAsMovement(teleportPosition, teleportRotationQuat, collisionRuntimeParams, checkTeleportCollisionRuntimeParams) {
         // Implemented outside class definition
     }
 
@@ -40,7 +38,7 @@ PlayerLocomotionTeleportState.prototype._checkTeleport = function () {
     return function _checkTeleport(teleportPosition, teleportRotationQuat, collisionRuntimeParams, checkTeleportCollisionRuntimeParams = null) {
         teleportTransformQuat.quat2_setPositionRotationQuat(teleportPosition, teleportRotationQuat);
 
-        this._myTeleportParams.myPlayerTransformManager.checkTeleportToTransformQuat(teleportTransformQuat, undefined, undefined, collisionRuntimeParams);
+        this._myTeleportParams.myPlayerTransformManager.checkTeleportToTransformQuat(teleportTransformQuat, undefined, undefined, undefined, collisionRuntimeParams);
 
         if (checkTeleportCollisionRuntimeParams != null) {
             checkTeleportCollisionRuntimeParams.copy(collisionRuntimeParams);
@@ -88,7 +86,17 @@ PlayerLocomotionTeleportState.prototype._checkTeleportAsMovement = function () {
 
                 movementFeetTransformQuat.quat2_setPositionRotationQuat(currentFeetPosition, feetRotationQuat);
 
-                this._myTeleportParams.myPlayerTransformManager.checkMovement(teleportMovement, movementFeetTransformQuat, this._myMovementCollisionCheckParams, checkTeleportMovementCollisionRuntimeParams);
+                {
+                    const movementCollisionCheckParams = this._myTeleportParams.myPlayerTransformManager.getMovementCollisionCheckParams();
+                    const internalSplitMovementMaxStepsDisabledBackup = movementCollisionCheckParams._myInternalSplitMovementMaxStepsDisabled;
+
+                    // This is used for the perform teleport as movement, so it needs to be able to do as many steps needed based on teleport distance
+                    movementCollisionCheckParams._myInternalSplitMovementMaxStepsDisabled = true;
+
+                    this._myTeleportParams.myPlayerTransformManager.checkMovement(teleportMovement, movementFeetTransformQuat, undefined, undefined, checkTeleportMovementCollisionRuntimeParams);
+
+                    movementCollisionCheckParams._myInternalSplitMovementMaxStepsDisabled = internalSplitMovementMaxStepsDisabledBackup;
+                }
 
                 if (!checkTeleportMovementCollisionRuntimeParams.myHorizontalMovementCanceled && !checkTeleportMovementCollisionRuntimeParams.myVerticalMovementCanceled) {
                     movementToTeleportPosition = fixedTeleportPosition.vec3_sub(checkTeleportMovementCollisionRuntimeParams.myNewPosition, movementToTeleportPosition);
