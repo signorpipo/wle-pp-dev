@@ -94,8 +94,8 @@ export class PlayerLocomotionTeleportDetectionRuntimeParams {
 
 export class PlayerLocomotionTeleportDetectionState extends PlayerLocomotionTeleportState {
 
-    constructor(teleportParams, teleportRuntimeParams, locomotionRuntimeParams, movementCollisionCheckParams) {
-        super(teleportParams, teleportRuntimeParams, locomotionRuntimeParams, movementCollisionCheckParams);
+    constructor(teleportParams, teleportRuntimeParams, locomotionRuntimeParams) {
+        super(teleportParams, teleportRuntimeParams, locomotionRuntimeParams);
 
         this._myDetectionRuntimeParams = new PlayerLocomotionTeleportDetectionRuntimeParams();
 

@@ -5,7 +5,6 @@ import { MouseButtonID } from "../../../../../../input/cauldron/mouse.js";
 import { GamepadAxesID } from "../../../../../../input/gamepad/gamepad_buttons.js";
 import { quat_create, vec3_create } from "../../../../../../plugin/js/extensions/array/vec_create_extension.js";
 import { Globals } from "../../../../../../pp/globals.js";
-import { CollisionCheckParams } from "../../../../character_controller/collision/legacy/collision_check/collision_params.js";
 import { PlayerLocomotionMovement } from "../player_locomotion_movement.js";
 import { PlayerLocomotionTeleportDetectionParams, PlayerLocomotionTeleportDetectionState } from "./player_locomotion_teleport_detection_state.js";
 import { PlayerLocomotionTeleportDetectionVisualizerParams } from "./player_locomotion_teleport_detection_visualizer.js";
@@ -64,12 +63,10 @@ export class PlayerLocomotionTeleport extends PlayerLocomotionMovement {
         this._myTeleportParams = teleportParams;
         this._myTeleportRuntimeParams = new PlayerLocomotionTeleportRuntimeParams();
 
-        this._myMovementCollisionCheckParams = new CollisionCheckParams();
-
         this._myStickIdleCharge = true;
 
-        this._myDetectionState = new PlayerLocomotionTeleportDetectionState(this._myTeleportParams, this._myTeleportRuntimeParams, this._myLocomotionRuntimeParams, this._myMovementCollisionCheckParams);
-        this._myTeleportState = new PlayerLocomotionTeleportTeleportState(this._myTeleportParams, this._myTeleportRuntimeParams, this._myLocomotionRuntimeParams, this._myMovementCollisionCheckParams);
+        this._myDetectionState = new PlayerLocomotionTeleportDetectionState(this._myTeleportParams, this._myTeleportRuntimeParams, this._myLocomotionRuntimeParams);
+        this._myTeleportState = new PlayerLocomotionTeleportTeleportState(this._myTeleportParams, this._myTeleportRuntimeParams, this._myLocomotionRuntimeParams);
 
         this._myFSM = new FSM();
         //this._myFSM.setLogEnabled(true, "Locomotion Teleport");
@@ -194,11 +191,6 @@ export class PlayerLocomotionTeleport extends PlayerLocomotionMovement {
     }
 
     _prepareCollisionCheckParams() {
-        this._myMovementCollisionCheckParams.copy(this._myTeleportParams.myPlayerTransformManager.getMovementCollisionCheckParams());
-
-        // This is used for the perform teleport as movement, so it needs to be able to do as many steps needed based on teleport distance
-        this._myMovementCollisionCheckParams._myInternalSplitMovementMaxStepsDisabled = true;
-
         //this._myTeleportCollisionCheckParams.copy(this._myTeleportParams.myPlayerTransformManager.getTeleportCollisionCheckParams());
 
         // Increased so to let teleport on steep slopes from above (from below is fixed through detection myGroundAngleToIgnoreUpward)
