@@ -41,16 +41,18 @@ CollisionCheckVertical.prototype._verticalCheck = function () {
 
         outFixedMovement.vec3_copy(verticalMovement);
         if (collisionCheckParams.myVerticalMovementCheckEnabled) {
-            outFixedMovement = this._verticalMovementAdjustment(verticalMovement, isMovementDownward, originalMovementSign, feetPosition, height, up, forward, collisionCheckParams, collisionRuntimeParams, outFixedMovement);
+            const firstRaycastPerformed = this._verticalMovementAdjustment(verticalMovement, isMovementDownward, originalMovementSign, feetPosition, height, up, forward, collisionCheckParams, collisionRuntimeParams, outFixedMovement);
 
             if (!collisionRuntimeParams.myIsCollidingVertically && collisionCheckParams.myCheckVerticalBothDirection &&
                 (outFixedMovement.vec_equals(verticalMovement, 0.00001) || originalMovementSign == 0 || (movementSign != originalMovementSign))) {
                 newFeetPosition = feetPosition.vec3_add(outFixedMovement, newFeetPosition);
                 let isOppositeMovementDownward = !isMovementDownward;
-                additionalFixedMovement = this._verticalMovementAdjustment(zero, isOppositeMovementDownward, originalMovementSign, newFeetPosition, height, up, forward, collisionCheckParams, collisionRuntimeParams, additionalFixedMovement);
+                const secondRaycastPerformed = this._verticalMovementAdjustment(zero, isOppositeMovementDownward, originalMovementSign, newFeetPosition, height, up, forward, collisionCheckParams, collisionRuntimeParams, additionalFixedMovement);
 
-                outFixedMovement.vec3_add(additionalFixedMovement, outFixedMovement);
-                isMovementDownward = !isMovementDownward;
+                if (!additionalFixedMovement.vec3_isZero() || (secondRaycastPerformed && !firstRaycastPerformed)) {
+                    outFixedMovement.vec3_add(additionalFixedMovement, outFixedMovement);
+                    isMovementDownward = !isMovementDownward;
+                }
             }
         }
 
@@ -98,6 +100,8 @@ CollisionCheckVertical.prototype._verticalMovementAdjustment = function () {
 
         startOffset.vec3_zero();
         endOffset.vec3_zero();
+
+        let raycastPerformed = false;
 
         let popOutEnabled = false;
         let snapEnabled = false;
@@ -149,6 +153,7 @@ CollisionCheckVertical.prototype._verticalMovementAdjustment = function () {
                 direction.vec3_normalize(direction);
 
                 let raycastResult = this._raycastAndDebug(origin, direction, distance, true, false, collisionCheckParams, collisionRuntimeParams);
+                raycastPerformed = true;
 
                 if (raycastResult.myHits.length > 0) {
                     if (furtherDirectionPositionSet) {
@@ -225,7 +230,7 @@ CollisionCheckVertical.prototype._verticalMovementAdjustment = function () {
             outFixedMovement.vec3_zero();
         }
 
-        return outFixedMovement;
+        return raycastPerformed;
     };
 }();
 
