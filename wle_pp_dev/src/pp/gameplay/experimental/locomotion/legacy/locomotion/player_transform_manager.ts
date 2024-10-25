@@ -705,7 +705,7 @@ export class PlayerTransformManager {
 
         if (!horizontalDirection.vec3_isZero(0.00001)) {
             horizontalDirection.vec3_normalize(horizontalDirection);
-            rotationQuat.quat_setForward(horizontalDirection);
+            rotationQuat.quat_setUp(transformUp, horizontalDirection);
             transformQuat.quat2_setRotationQuat(rotationQuat);
         }
 
@@ -1282,7 +1282,7 @@ export class PlayerTransformManager {
 
             if (!horizontalDirection.vec3_isZero(0.00001)) {
                 horizontalDirection.vec3_normalize(horizontalDirection);
-                rotationQuat.quat_setForward(horizontalDirection);
+                rotationQuat.quat_setUp(transformUp, horizontalDirection);
                 transformQuat.quat2_setRotationQuat(rotationQuat);
             }
 
@@ -1324,7 +1324,7 @@ export class PlayerTransformManager {
 
             if (!horizontalDirection.vec3_isZero(0.00001)) {
                 horizontalDirection.vec3_normalize(horizontalDirection);
-                rotationQuat.quat_setForward(horizontalDirection);
+                rotationQuat.quat_setUp(transformUp, horizontalDirection);
                 transformQuat.quat2_setRotationQuat(rotationQuat);
             }
 
@@ -1615,7 +1615,7 @@ export class PlayerTransformManager {
 
             if (!horizontalDirection.vec3_isZero(0.00001)) {
                 horizontalDirection.vec3_normalize(horizontalDirection);
-                rotationQuat.quat_setForward(horizontalDirection);
+                rotationQuat.quat_setUp(transformUp, horizontalDirection);
                 transformQuat.quat2_setRotationQuat(rotationQuat);
             }
 
