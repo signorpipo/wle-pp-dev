@@ -12,10 +12,9 @@ export class InitEasyTuneVariablesComponent extends Component {
         this._myEasyTuneVariables = null;
 
         if (this._myInit) {
-            // Prevents double global from same engine
-            if (!Globals.hasEasyTuneVariables(this.engine)) {
-                this._myEasyTuneVariables = new EasyTuneVariables();
+            this._myEasyTuneVariables = new EasyTuneVariables();
 
+            if (!Globals.hasEasyTuneVariables(this.engine)) {
                 Globals.setEasyTuneVariables(this._myEasyTuneVariables, this.engine);
             }
         }
