@@ -138,19 +138,23 @@ function _initCursorComponentModPrototype() {
         // If in XR, set the cursor ray based on object transform
         // View Component not null is currently used as a way to specify this is cursor should only work for Non XR
         if (XRUtils.isSessionActive(this.engine) && this._viewComponent == null) {
-            // Since Google Cardboard tap is registered as arTouchDown without a gamepad, we need to check for gamepad presence 
-            if (this.arTouchDown && this._pp_isAR()) {
-                let axes = XRUtils.getSession(this.engine).inputSources[0].gamepad.axes;
-                // Screenspace Y is inverted 
-                this._direction.vec3_set(axes[0], -axes[1], -1.0);
-                this.updateDirection();
-            } else {
-                this.object.pp_getPosition(this._origin);
-                this.object.pp_getForward(this._direction);
-            }
+            if (Globals.getHandPose(this.handedness).getInputSourceType() != null) {
+                // Since Google Cardboard tap is registered as arTouchDown without a gamepad, we need to check for gamepad presence 
+                if (this.arTouchDown && this._pp_isAR()) {
+                    let axes = XRUtils.getSession(this.engine).inputSources[0].gamepad.axes;
+                    // Screenspace Y is inverted 
+                    this._direction.vec3_set(axes[0], -axes[1], -1.0);
+                    this.updateDirection();
+                } else {
+                    this.object.pp_getPosition(this._origin);
+                    this.object.pp_getForward(this._direction);
+                }
 
-            let hitObjectData = this._pp_rayCast();
-            this._pp_hoverBehaviour(hitObjectData[0], hitObjectData[1], hitObjectData[2], this._lastOriginalGamepadEvent);
+                let hitObjectData = this._pp_rayCast();
+                this._pp_hoverBehaviour(hitObjectData[0], hitObjectData[1], hitObjectData[2], this._lastOriginalGamepadEvent);
+            } else if (this.hoveringObject != null) {
+                this._pp_hoverBehaviour(null, null, null, this._lastOriginalGamepadEvent, true); // Trigger Unhover
+            }
         } else if (!XRUtils.isSessionActive(this.engine) && this._viewComponent != null) {
             if (this._lastPointerID != null) {
                 this._pp_updateMousePos(this._lastClientX, this._lastClientY, this._lastWidth, this._lastHeight);

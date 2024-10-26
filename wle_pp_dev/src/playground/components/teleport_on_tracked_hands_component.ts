@@ -17,14 +17,16 @@ export class TeleportOnTrackedHandsComponent extends Component {
         }
 
         if (XRUtils.isSessionActive() && Globals.getPlayerLocomotion()!.getPlayerHeadManager().isSynced() && this._myDelayFrameCountdown == 0) {
-            if (Globals.getLeftHandPose()!.getInputSourceType() == InputSourceType.TRACKED_HAND && Globals.getRightHandPose()!.getInputSourceType() == InputSourceType.TRACKED_HAND) {
-                if (!this._myUsingTrackedHands) {
-                    this._myUsingTrackedHands = true;
+            if (Globals.getLeftHandPose()!.getInputSourceType() != null && Globals.getRightHandPose()!.getInputSourceType() != null) {
+                if (Globals.getLeftHandPose()!.getInputSourceType() == InputSourceType.TRACKED_HAND && Globals.getRightHandPose()!.getInputSourceType() == InputSourceType.TRACKED_HAND) {
+                    if (!this._myUsingTrackedHands) {
+                        this._myUsingTrackedHands = true;
 
-                    Globals.getPlayerLocomotion()!.getPlayerTransformManager().forceTeleportAndReset(this._myTeleportTargetObject.pp_getPosition(), this._myTeleportTargetObject.pp_getRotationQuat());
+                        Globals.getPlayerLocomotion()!.getPlayerTransformManager().forceTeleportAndReset(this._myTeleportTargetObject.pp_getPosition(), this._myTeleportTargetObject.pp_getRotationQuat());
+                    }
+                } else if (Globals.getLeftHandPose()!.getInputSourceType() != InputSourceType.TRACKED_HAND && Globals.getRightHandPose()!.getInputSourceType() != InputSourceType.TRACKED_HAND) {
+                    this._myUsingTrackedHands = false;
                 }
-            } else if (Globals.getLeftHandPose()!.getInputSourceType() != InputSourceType.TRACKED_HAND && Globals.getRightHandPose()!.getInputSourceType() != InputSourceType.TRACKED_HAND) {
-                this._myUsingTrackedHands = false;
             }
         }
     }
