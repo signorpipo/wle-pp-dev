@@ -67,7 +67,7 @@ const RuntimeOptions = {
     loader: false,
     xrFramebufferScaleFactor: 1,
     canvas: 'canvas',
-};
+} as const;
 /* wle:auto-constants:end */
 
 const disableEngineLogs = true;
