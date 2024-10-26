@@ -7,10 +7,6 @@ export class CharacterCollisionSystemComponent extends Component {
 
     init() {
         this._myCharacterCollisionSystem = new CharacterCollisionSystem(this.engine);
-
-        if (!Globals.hasCharacterCollisionSystem(this.engine)) {
-            Globals.setCharacterCollisionSystem(this._myCharacterCollisionSystem, this.engine);
-        }
     }
 
     update(dt) {

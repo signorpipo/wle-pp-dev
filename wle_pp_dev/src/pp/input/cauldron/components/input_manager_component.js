@@ -16,30 +16,9 @@ export class InputManagerComponent extends Component {
     };
 
     init() {
-        this._myInputManager = new InputManager(this.engine);
-        this._myInputManager.setTrackedHandPosesEnabled(this._myEnableTrackedHandPoses);
-        this._myInputManager.getLeftHandPose().setSwitchToTrackedHandDelay(this._mySwitchToTrackedHandDelay);
-        this._myInputManager.getRightHandPose().setSwitchToTrackedHandDelay(this._mySwitchToTrackedHandDelay);
-        this._myInputManager.getLeftHandRayPose().setSwitchToTrackedHandDelay(this._mySwitchToTrackedHandDelay);
-        this._myInputManager.getRightHandRayPose().setSwitchToTrackedHandDelay(this._mySwitchToTrackedHandDelay);
-
-        if (!Globals.hasInputManager(this.engine)) {
-            Globals.setInputManager(this._myInputManager, this.engine);
-        }
+        this._myInputManager = null;
 
         this._myPoseForwardFixedGlobal = this._myPoseForwardFixed;
-
-        if (!Globals.hasPoseForwardFixed(this.engine)) {
-            Globals.setPoseForwardFixed(this._myPoseForwardFixedGlobal, this.engine);
-        }
-    }
-
-    start() {
-        this._myInputManager.start();
-
-        this._setupMousePrevent();
-
-        this._addGamepadCores();
     }
 
     update(dt) {
@@ -82,6 +61,21 @@ export class InputManagerComponent extends Component {
     }
 
     onActivate() {
+        if (this._myInputManager == null) {
+            this._myInputManager = new InputManager(this.engine);
+            this._myInputManager.setTrackedHandPosesEnabled(this._myEnableTrackedHandPoses);
+            this._myInputManager.getLeftHandPose().setSwitchToTrackedHandDelay(this._mySwitchToTrackedHandDelay);
+            this._myInputManager.getRightHandPose().setSwitchToTrackedHandDelay(this._mySwitchToTrackedHandDelay);
+            this._myInputManager.getLeftHandRayPose().setSwitchToTrackedHandDelay(this._mySwitchToTrackedHandDelay);
+            this._myInputManager.getRightHandRayPose().setSwitchToTrackedHandDelay(this._mySwitchToTrackedHandDelay);
+
+            this._myInputManager.start();
+
+            this._setupMousePrevent();
+
+            this._addGamepadCores();
+        }
+
         if (!Globals.hasInputManager(this.engine)) {
             this._myInputManager.setActive(true);
 
@@ -94,10 +88,12 @@ export class InputManagerComponent extends Component {
     }
 
     onDeactivate() {
-        this._myInputManager.setActive(false);
+        if (this._myInputManager != null) {
+            this._myInputManager.setActive(false);
 
-        if (Globals.getInputManager(this.engine) == this._myInputManager) {
-            Globals.removeInputManager(this.engine);
+            if (Globals.getInputManager(this.engine) == this._myInputManager) {
+                Globals.removeInputManager(this.engine);
+            }
         }
 
         if (Globals.isPoseForwardFixed(this.engine) == this._myPoseForwardFixedGlobal) {
@@ -106,6 +102,8 @@ export class InputManagerComponent extends Component {
     }
 
     onDestroy() {
-        this._myInputManager.destroy();
+        if (this._myInputManager != null) {
+            this._myInputManager.destroy();
+        }
     }
 }

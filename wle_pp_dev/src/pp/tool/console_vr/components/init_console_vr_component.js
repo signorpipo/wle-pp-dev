@@ -13,10 +13,6 @@ export class InitConsoleVRComponent extends Component {
 
         if (this._myInit) {
             this._myConsoleVR = new ConsoleVR(this.engine);
-
-            if (!Globals.hasConsoleVR(this.engine)) {
-                Globals.setConsoleVR(this._myConsoleVR, this.engine);
-            }
         }
     }
 

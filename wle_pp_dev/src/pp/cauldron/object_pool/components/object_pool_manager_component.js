@@ -7,10 +7,6 @@ export class ObjectPoolManagerComponent extends Component {
 
     init() {
         this._myObjectPoolManager = new ObjectPoolManager();
-
-        if (!Globals.hasObjectPoolManager(this.engine)) {
-            Globals.setObjectPoolManager(this._myObjectPoolManager, this.engine);
-        }
     }
 
     onActivate() {

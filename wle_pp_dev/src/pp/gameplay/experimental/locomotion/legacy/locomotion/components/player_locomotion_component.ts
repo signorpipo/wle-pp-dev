@@ -411,10 +411,6 @@ export class PlayerLocomotionComponent extends Component {
         params.myViewOcclusionLayerFlags.copy(this._getViewOcclusionLayersFlags());
 
         (this._myPlayerLocomotion as PlayerLocomotion) = new PlayerLocomotion(params);
-
-        if (!Globals.hasPlayerLocomotion(this.engine)) {
-            Globals.setPlayerLocomotion(this._myPlayerLocomotion, this.engine);
-        }
     }
 
     public override update(dt: number): void {
@@ -489,10 +485,8 @@ export class PlayerLocomotionComponent extends Component {
     }
 
     public override onActivate(): void {
-        if (this._myPlayerLocomotion != null && (!Globals.hasPlayerLocomotion(this.engine) || Globals.getPlayerLocomotion(this.engine) == this._myPlayerLocomotion)) {
-            if (!Globals.hasPlayerLocomotion(this.engine)) {
-                Globals.setPlayerLocomotion(this._myPlayerLocomotion, this.engine);
-            }
+        if (this._myPlayerLocomotion != null && !Globals.hasPlayerLocomotion(this.engine)) {
+            Globals.setPlayerLocomotion(this._myPlayerLocomotion, this.engine);
 
             this._myPlayerLocomotion.setActive(true);
             this._myActivateOnNextUpdate = true;

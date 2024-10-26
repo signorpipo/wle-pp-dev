@@ -11,10 +11,6 @@ export class AudioManagerComponent extends Component {
 
     init() {
         this._myAudioManager = new AudioManager(this._myPreloadAudio, this.engine);
-
-        if (!Globals.hasAudioManager(this.engine)) {
-            Globals.setAudioManager(this._myAudioManager, this.engine);
-        }
     }
 
     onActivate() {

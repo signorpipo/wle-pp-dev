@@ -55,10 +55,6 @@ export class GetDefaultResourcesComponent extends Component {
         if (this._myText != null) {
             this._myDefaultResources.myMaterials.myText = this._myText.clone();
         }
-
-        if (!Globals.hasDefaultResources(this.engine)) {
-            Globals.setDefaultResources(this._myDefaultResources, this.engine);
-        }
     }
 
     onActivate() {

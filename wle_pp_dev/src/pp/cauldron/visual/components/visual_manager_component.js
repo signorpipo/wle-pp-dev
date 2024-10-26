@@ -10,15 +10,7 @@ export class VisualManagerComponent extends Component {
     init() {
         this._myVisualManager = new VisualManager(this.engine);
 
-        if (!Globals.hasVisualManager(this.engine)) {
-            Globals.setVisualManager(this._myVisualManager, this.engine);
-        }
-
         this._myVisualResources = new VisualResources();
-
-        if (!Globals.hasVisualResources(this.engine)) {
-            Globals.setVisualResources(this._myVisualResources, this.engine);
-        }
     }
 
     start() {

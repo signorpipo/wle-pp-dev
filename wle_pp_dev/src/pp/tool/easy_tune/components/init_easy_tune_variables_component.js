@@ -13,10 +13,6 @@ export class InitEasyTuneVariablesComponent extends Component {
 
         if (this._myInit) {
             this._myEasyTuneVariables = new EasyTuneVariables();
-
-            if (!Globals.hasEasyTuneVariables(this.engine)) {
-                Globals.setEasyTuneVariables(this._myEasyTuneVariables, this.engine);
-            }
         }
     }
 

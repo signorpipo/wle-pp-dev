@@ -14,10 +14,6 @@ export class SaveManagerComponent extends Component {
 
         if (this._mySaveID.length > 0) {
             this._mySaveManager = new SaveManager(this._mySaveID, this._myAutoLoadSaves, this.engine);
-
-            if (!Globals.hasSaveManager(this.engine)) {
-                Globals.setSaveManager(this._mySaveManager, this.engine);
-            }
         }
     }
 

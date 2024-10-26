@@ -11,10 +11,6 @@ export class AnalyticsManagerComponent extends Component {
 
     init() {
         this._myAnalyticsManager = new AnalyticsManager();
-
-        if (!Globals.hasAnalyticsManager(this.engine)) {
-            Globals.setAnalyticsManager(this._myAnalyticsManager, this.engine);
-        }
     }
 
     update(dt) {

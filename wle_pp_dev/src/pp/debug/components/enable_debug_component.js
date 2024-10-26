@@ -9,10 +9,6 @@ export class EnableDebugComponent extends Component {
 
     init() {
         this._myDebugEnabled = this._myEnable;
-
-        if (!Globals.hasDebugEnabled(this.engine)) {
-            Globals.setDebugEnabled(this._myDebugEnabled, this.engine);
-        }
     }
 
     onActivate() {

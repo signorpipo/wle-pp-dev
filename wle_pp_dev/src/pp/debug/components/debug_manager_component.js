@@ -18,10 +18,6 @@ export class DebugManagerComponent extends Component {
 
         this._myDebugManager.start();
 
-        if (!Globals.hasDebugManager(this.engine)) {
-            Globals.setDebugManager(this._myDebugManager, this.engine);
-        }
-
         this._myInitDone = true;
     }
 
