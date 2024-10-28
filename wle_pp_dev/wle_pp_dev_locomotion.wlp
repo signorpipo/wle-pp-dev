@@ -39,6 +39,9 @@
                     "target-framerate": {
                         "framerate": 60.0
                     }
+                },
+                {
+                    "type": "switch-scene-test"
                 }
             ]
         },

@@ -1,4 +1,5 @@
 import { Component } from "@wonderlandengine/api";
+import { RaycastParams } from "wle-pp";
 import { Timer } from "../../pp/cauldron/cauldron/timer.js";
 import { PhysicsUtils } from "../../pp/cauldron/physics/physics_utils.js";
 import { Globals } from "../../pp/pp/globals.js";
@@ -18,7 +19,7 @@ export class RaycastTestComponent extends Component {
 
             let distance = 1000;
 
-            let raycastSetup = new raycastSetup();
+            let raycastSetup = new RaycastParams();
 
             raycastSetup.myOrigin.vec3_copy(this.object.pp_getPosition());
             raycastSetup.myDirection.vec3_copy(this.object.pp_getForward());

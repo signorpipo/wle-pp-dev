@@ -34,6 +34,9 @@
                 },
                 {
                     "type": "pp-show-xr-buttons"
+                },
+                {
+                    "type": "switch-scene-test"
                 }
             ]
         },
