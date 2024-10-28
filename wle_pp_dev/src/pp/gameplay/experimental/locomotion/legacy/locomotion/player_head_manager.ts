@@ -141,8 +141,14 @@ export class PlayerHeadManager {
             if (this._myActive) {
                 XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this), true, true, this._myParams.myEngine);
             } else {
-                XRUtils.getReferenceSpace(this._myParams.myEngine)?.removeEventListener?.("reset", this._myViewResetEventListener!);
-                XRUtils.getSession(this._myParams.myEngine)?.removeEventListener?.("visibilitychange", this._myVisibilityChangeEventListener!);
+                if (this._myViewResetEventListener != null) {
+                    XRUtils.getReferenceSpace(this._myParams.myEngine)?.removeEventListener?.("reset", this._myViewResetEventListener);
+                }
+
+                if (this._myVisibilityChangeEventListener != null) {
+                    XRUtils.getSession(this._myParams.myEngine)?.removeEventListener?.("visibilitychange", this._myVisibilityChangeEventListener);
+                }
+
                 XRUtils.unregisterSessionStartEndEventListeners(this, this._myParams.myEngine);
 
                 this._onXRSessionEnd();

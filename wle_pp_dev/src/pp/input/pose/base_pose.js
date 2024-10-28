@@ -75,7 +75,10 @@ export class BasePose {
                 this._myLinearVelocityEmulated = true;
                 this._myAngularVelocityEmulated = true;
 
-                XRUtils.getReferenceSpace(this._myEngine)?.removeEventListener?.("reset", this._myViewResetEventListener);
+                if (this._myViewResetEventListener != null) {
+                    XRUtils.getReferenceSpace(this._myEngine)?.removeEventListener?.("reset", this._myViewResetEventListener);
+                }
+
                 this._myViewResetEventListener = null;
 
                 XRUtils.unregisterSessionStartEndEventListeners(this, this._myEngine);
