@@ -130,6 +130,19 @@ export class PlayerLocomotionParams {
     public myViewOcclusionInsideWallsEnabled: boolean = true;
     public myViewOcclusionLayerFlags: Readonly<PhysicsLayerFlags> = new PhysicsLayerFlags();
 
+    /**
+     * To avoid occlusion issues when moving when touching a tilted ceiling (which is not commong anyway),  
+     * this would be better to be less or equal than the feet radius of the character (usually half of {@link myCharacterRadius})
+     * 
+     * If you have a high camera near value, you might need to increase this value, even though the view occlusion might become more aggressive
+     * 
+     * Increasing {@link myColliderExtraSafetyHeight} can help reducing the view occlusion
+     */
+    public myViewOcclusionHeadRadius: number = 0;
+    public myViewOcclusionHeadHeight: number = 0;
+
+    public myViewOcclusionMaxRealHeadDistance: number = 0;
+
     public mySyncNonVRHeightWithVROnExitSession: boolean = false;
     public mySyncNonVRVerticalAngleWithVROnExitSession: boolean = false;
 
@@ -147,6 +160,13 @@ export class PlayerLocomotionParams {
     public myColliderMaxWalkableGroundStepHeight: number = 0;
     public myColliderPreventFallingFromEdges: boolean = false;
     public myColliderMaxMovementSteps: number | null = null;
+
+    /**
+     * Helps staying a little further from the ceiling
+     * 
+     * If you need to increase {@link myViewOcclusionHeadRadius}, also increasing this can help preventing view occlusion happening when shouldn't
+     */
+    public myColliderExtraSafetyHeight: number = 0;
 
 
 
@@ -262,7 +282,11 @@ export class PlayerLocomotion {
                 params.myHeadCollisionObjectsToIgnore.pp_pushUnique(objectToIgnore, objectsEqualCallback);
             }
 
-            params.myHeadRadius = 0.2;
+            // To avoid obscure issues when moving when touching a tilted ceiling (which is not commong anyway)
+            // This would be better to be less or equal than the feet radius of the character
+            params.myHeadRadius = this._myParams.myViewOcclusionHeadRadius;
+            params.myHeadHeight = this._myParams.myViewOcclusionHeadHeight;
+            params.myExtraSafetyHeight = this._myParams.myColliderExtraSafetyHeight;
 
             if (!this._myParams.mySyncWithRealWorldPositionOnlyIfValid) {
                 params.mySyncEnabledFlagMap.set(PlayerTransformManagerSyncFlag.BODY_COLLIDING, false);
@@ -438,7 +462,7 @@ export class PlayerLocomotion {
                 params.myDetectionParams.myPlayerTransformManagerMustBeSyncedFlagMap.set(PlayerTransformManagerSyncFlag.HEAD_COLLIDING, false);
 
                 params.myDetectionParams.myPositionRealMaxDistance = 0.4;
-                params.myDetectionParams.myPositionHeadRealMaxDistance = 0.03;
+                params.myDetectionParams.myPositionHeadRealMaxDistance = this._myParams.myViewOcclusionMaxRealHeadDistance / 2;
 
                 params.myDetectionParams.myPositionHeadMustBeValid = true;
 
@@ -492,7 +516,7 @@ export class PlayerLocomotion {
                 params.myDistanceToStartObscureWhenFar = 0.75;
 
                 params.myRelativeDistanceToMaxObscureWhenBodyColliding = 0.5;
-                params.myRelativeDistanceToMaxObscureWhenHeadColliding = 0.05;
+                params.myRelativeDistanceToMaxObscureWhenHeadColliding = this._myParams.myViewOcclusionMaxRealHeadDistance;
                 params.myRelativeDistanceToMaxObscureWhenFloating = 0.5;
                 params.myRelativeDistanceToMaxObscureWhenFar = 0.5;
 

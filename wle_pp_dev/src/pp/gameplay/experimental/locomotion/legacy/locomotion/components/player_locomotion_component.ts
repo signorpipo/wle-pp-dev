@@ -199,6 +199,23 @@ export class PlayerLocomotionComponent extends Component {
     @property.string("")
     private readonly _myViewOcclusionLayerFlags!: string;
 
+    /**
+     * To avoid occlusion issues when moving when touching a tilted ceiling (which is not commong anyway),  
+     * this would be better to be less or equal than the feet radius of the character (usually half of {@link _myCharacterRadius})
+     * 
+     * If you have a high camera near value, you might need to increase this value, even though the view occlusion might become more aggressive
+     * 
+     * Increasing {@link _myColliderExtraSafetyHeight} can help reducing the view occlusion
+     */
+    @property.float(0.15)
+    private readonly _myViewOcclusionHeadRadius!: number;
+
+    @property.float(0.15)
+    private readonly _myViewOcclusionHeadHeight!: number;
+
+    @property.float(0.025)
+    private readonly _myViewOcclusionMaxRealHeadDistance!: number;
+
 
 
     @property.bool(false)
@@ -257,6 +274,14 @@ export class PlayerLocomotionComponent extends Component {
 
     @property.int(3)
     private readonly _myColliderMaxMovementSteps!: number;
+
+    /**
+     * Helps staying a little further from the ceiling
+     * 
+     * If you need to increase {@link _myViewOcclusionHeadRadius}, also increasing this can help preventing view occlusion happening when shouldn't
+     */
+    @property.float(0.025)
+    private readonly _myColliderExtraSafetyHeight!: number;
 
 
 
@@ -378,6 +403,9 @@ export class PlayerLocomotionComponent extends Component {
         params.mySnapRealPositionToGround = this._mySnapRealPositionToGround;
         params.myPreventRealFromColliding = this._myPreventRealFromColliding;
         params.myViewOcclusionInsideWallsEnabled = this._myViewOcclusionInsideWallsEnabled;
+        params.myViewOcclusionHeadRadius = this._myViewOcclusionHeadRadius;
+        params.myViewOcclusionHeadHeight = this._myViewOcclusionHeadHeight;
+        params.myViewOcclusionMaxRealHeadDistance = this._myViewOcclusionMaxRealHeadDistance;
 
         params.mySyncNonVRHeightWithVROnExitSession = this._mySyncNonVRHeightWithVROnExitSession;
         params.mySyncNonVRVerticalAngleWithVROnExitSession = this._mySyncNonVRVerticalAngleWithVROnExitSession;
@@ -394,6 +422,7 @@ export class PlayerLocomotionComponent extends Component {
         params.myColliderMaxWalkableGroundStepHeight = this._myColliderMaxWalkableGroundStepHeight;
         params.myColliderPreventFallingFromEdges = this._myColliderPreventFallingFromEdges;
         params.myColliderMaxMovementSteps = this._myColliderMaxMovementSteps > 0 ? this._myColliderMaxMovementSteps : null;
+        params.myColliderExtraSafetyHeight = this._myColliderExtraSafetyHeight;
 
         params.myDebugFlyShortcutEnabled = this._myDebugFlyShortcutEnabled;
         params.myDebugFlyMaxSpeedMultiplier = this._myDebugFlyMaxSpeedMultiplier;

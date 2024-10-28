@@ -86,7 +86,7 @@ export class PlayerTransformManagerParams {
     public myFloatingSplitCheckStepEqualLengthMinLength: number = 0;
 
 
-    public myExtraSafetyHeight: number = 0.1;
+    public myExtraSafetyHeight: number = 0;
 
     public myMaxDistanceFromRealToSyncEnabled: boolean = false;
 
@@ -121,6 +121,7 @@ export class PlayerTransformManagerParams {
 
 
     public myHeadRadius: number = 0;
+    public myHeadHeight: number = 0;
     public readonly myHeadCollisionBlockLayerFlags: PhysicsLayerFlags = new PhysicsLayerFlags();
     public myHeadCollisionObjectsToIgnore: Readonly<Object3D>[] = [];
     public myHeadCollisionBlockColliderType: RaycastBlockColliderType = RaycastBlockColliderType.BOTH;
@@ -1103,8 +1104,8 @@ export class PlayerTransformManager {
         params.myHorizontalPositionCheckVerticalIgnoreHitsInsideCollision = false;
         params.myHorizontalPositionCheckVerticalDirectionType = 0;
 
-        params.myHeight = params.myRadius; // On purpose the height "radius" is half, to avoid hitting before with head than body collision (through height)
-        params.myPositionOffsetLocal.vec3_set(0, -params.myRadius / 2, 0);
+        params.myHeight = this._myParams.myHeadHeight;
+        params.myPositionOffsetLocal.vec3_set(0, -params.myHeight / 2, 0);
 
         params.myCheckHeight = true;
         params.myCheckHeightVerticalMovement = true;
