@@ -5,8 +5,8 @@ export class SetActiveComponent extends Component {
     static TypeName = "pp-set-active";
     static Properties = {
         _myActive: Property.bool(true),
-        _mySetActiveOn: Property.enum(["Self", "Children", "Descendants", "Hierarchy"], "Hierarchy"),
-        _mySetActiveWhen: Property.enum(["Init", "Start", "First Update", "Enter XR", "Exit XR", "First Enter XR", "First Exit XR"], "Init")
+        _mySetActiveOn: Property.enum(["Self", "Children", "Descendants", "Hierarchy"], "Descendants"),
+        _mySetActiveWhen: Property.enum(["Init", "Start", "First Update", "Enter XR", "Exit XR", "First Enter XR", "First Exit XR"], "First Update")
     };
 
     init() {
