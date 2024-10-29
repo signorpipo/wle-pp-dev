@@ -315,7 +315,13 @@ export class PlayerLocomotion {
             params.myMaxDistanceFromRealToSyncEnabled = true;
             params.myMaxDistanceFromRealToSync = 0.5;
             params.myMaxDistanceFromHeadRealToSyncEnabled = true;
-            params.myMaxDistanceFromHeadRealToSync = 0.5;
+            params.myMaxDistanceFromHeadRealToSync = 0.75;
+            if (params.myMovementCollisionCheckParams.mySplitMovementEnabled &&
+                params.myMovementCollisionCheckParams.mySplitMovementMaxStepsEnabled &&
+                params.myMovementCollisionCheckParams.mySplitMovementMaxLengthEnabled) {
+                // A bit more of the max movement you can perform, so that the head always have space to move back to the real one
+                params.myMaxDistanceFromHeadRealToSync = Math.max(params.myMaxDistanceFromHeadRealToSync, 1.1 * (params.myMovementCollisionCheckParams.mySplitMovementMaxSteps * params.myMovementCollisionCheckParams.mySplitMovementMaxLength));
+            }
 
             params.myIsFloatingValidIfVerticalMovement = false;
             params.myIsFloatingValidIfVerticalMovementAndRealOnGround = false;
