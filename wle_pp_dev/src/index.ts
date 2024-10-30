@@ -11,6 +11,16 @@
  *     - `wle:auto-benchmark:start` and `wle:auto-benchmark:end`: Append the benchmarking code
  */
 
+const waitWindowLoad: Promise<void> = new Promise((resolve: () => void) => {
+    if (document.readyState == "complete") {
+        resolve();
+    } else {
+        window.addEventListener("load", resolve, { once: true });
+    }
+});
+
+await waitWindowLoad;
+
 /* wle:auto-imports:start */
 import {Cursor} from '@wonderlandengine/components';
 import {CursorTarget} from '@wonderlandengine/components';
@@ -154,16 +164,6 @@ engine.registerComponent(TrackedHandDrawAllJointsComponent);
 engine.registerComponent(VirtualGamepadComponent);
 engine.registerComponent(SwitchSceneTestComponent);
 /* wle:auto-register:end */
-
-const waitWindowLoad: Promise<void> = new Promise((resolve: () => void) => {
-    if (document.readyState == "complete") {
-        resolve();
-    } else {
-        window.addEventListener("load", resolve, { once: true });
-    }
-});
-
-await waitWindowLoad;
 
 const sceneLoadDelaySeconds = 0;
 if (sceneLoadDelaySeconds > 0) {
