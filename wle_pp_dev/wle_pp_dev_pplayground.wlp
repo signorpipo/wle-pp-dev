@@ -2255,7 +2255,8 @@
                     "type": "pp-set-active",
                     "pp-set-active": {
                         "_myActive": false,
-                        "_mySetActiveOn": "Descendants"
+                        "_mySetActiveOn": "Descendants",
+                        "_mySetActiveWhen": "First Update"
                     }
                 }
             ]
@@ -3583,7 +3584,8 @@
                 2,
                 4
             ],
-            "customIndexHtml": true
+            "customIndexHtml": true,
+            "type": "game"
         },
         "rendering": {
             "clearColor": [
