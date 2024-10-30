@@ -30,7 +30,6 @@ import {TargetHitCheckComponent} from './playground/components/target_hit_check_
 import {TeleportOnTrackedHandsComponent} from './playground/components/teleport_on_tracked_hands_component.js';
 import {ToggleHowToTextComponent} from './playground/components/toggle_how_to_text_component.js';
 import {WaveMovementComponent} from './playground/components/wave_movement_component.js';
-import {SetActiveComponent} from './pp/cauldron/cauldron/components/set_active_component.js';
 import {AdjustHierarchyPhysXScaleComponent} from './pp/index.js';
 import {ConsoleVRToolComponent} from './pp/index.js';
 import {CursorButtonComponent} from './pp/index.js';
@@ -44,6 +43,7 @@ import {PPGatewayComponent} from './pp/index.js';
 import {PlayerLocomotionComponent} from './pp/index.js';
 import {ResetLocalTransformComponent} from './pp/index.js';
 import {ScaleOnSpawnComponent} from './pp/index.js';
+import {SetActiveComponent} from './pp/index.js';
 import {SetHandLocalTransformComponent} from './pp/index.js';
 import {SetHeadLocalTransformComponent} from './pp/index.js';
 import {ShowXRButtonsComponent} from './pp/index.js';
@@ -130,7 +130,6 @@ engine.registerComponent(TargetHitCheckComponent);
 engine.registerComponent(TeleportOnTrackedHandsComponent);
 engine.registerComponent(ToggleHowToTextComponent);
 engine.registerComponent(WaveMovementComponent);
-engine.registerComponent(SetActiveComponent);
 engine.registerComponent(AdjustHierarchyPhysXScaleComponent);
 engine.registerComponent(ConsoleVRToolComponent);
 engine.registerComponent(CursorButtonComponent);
@@ -144,6 +143,7 @@ engine.registerComponent(PPGatewayComponent);
 engine.registerComponent(PlayerLocomotionComponent);
 engine.registerComponent(ResetLocalTransformComponent);
 engine.registerComponent(ScaleOnSpawnComponent);
+engine.registerComponent(SetActiveComponent);
 engine.registerComponent(SetHandLocalTransformComponent);
 engine.registerComponent(SetHeadLocalTransformComponent);
 engine.registerComponent(ShowXRButtonsComponent);
@@ -154,6 +154,16 @@ engine.registerComponent(TrackedHandDrawAllJointsComponent);
 engine.registerComponent(VirtualGamepadComponent);
 engine.registerComponent(SwitchSceneTestComponent);
 /* wle:auto-register:end */
+
+const waitWindowLoad: Promise<void> = new Promise((resolve: () => void) => {
+    if (document.readyState == "complete") {
+        resolve();
+    } else {
+        window.addEventListener("load", resolve, { once: true });
+    }
+});
+
+await waitWindowLoad;
 
 const sceneLoadDelaySeconds = 0;
 if (sceneLoadDelaySeconds > 0) {
