@@ -3,6 +3,11 @@
     "version": "1.0.0",
     "author": "Pipo",
     "description": "So many edge cases",
+    "homepage": "https://github.com/signorpipo/wle-pp-dev",
+    "repository": {
+        "type": "git",
+        "url": "git+<https://github.com/signorpipo/wle-pp-dev.git>"
+    },
     "license": "ISC",
     "type": "module",
     "dependencies": {
