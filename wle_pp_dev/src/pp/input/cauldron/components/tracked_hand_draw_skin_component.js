@@ -28,7 +28,7 @@ export class TrackedHandDrawSkinComponent extends Component {
         let skinJointIDs = this._myHandSkin.jointIds;
 
         for (let i = 0; i < skinJointIDs.length; i++) {
-            this._myJoints[i] = ObjectUtils.wrapObject(skinJointIDs[i]);
+            this._myJoints[i] = ObjectUtils.wrapObject(skinJointIDs[i], this.engine);
         }
     }
 }

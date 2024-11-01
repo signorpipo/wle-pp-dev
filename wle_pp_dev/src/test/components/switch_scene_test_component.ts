@@ -9,20 +9,20 @@ export class SwitchSceneTestComponent extends Component {
 
     public override start(): void {
         if (mainScene == null) {
-            mainScene = Globals.getScene();
+            mainScene = Globals.getScene(this.engine);
         }
 
         if (nextScene == null) {
-            Globals.getMainEngine()!.loadScene("wle-pp-dev-locomotion.bin").then((scene) => nextScene = scene);
+            this.engine.loadScene("wle-pp-dev-locomotion.bin").then((scene) => nextScene = scene);
         }
     }
 
     public override update(dt: number): void {
         if (Globals.getLeftGamepad(this.engine)!.getButtonInfo(GamepadButtonID.BOTTOM_BUTTON).isPressEnd(2)) {
-            if (mainScene == Globals.getScene()) {
-                Globals.getMainEngine()!.switchTo(nextScene!);
+            if (mainScene == Globals.getScene(this.engine)) {
+                this.engine.switchTo(nextScene!);
             } else {
-                Globals.getMainEngine()!.switchTo(mainScene!);
+                this.engine.switchTo(mainScene!);
             }
         }
     }
