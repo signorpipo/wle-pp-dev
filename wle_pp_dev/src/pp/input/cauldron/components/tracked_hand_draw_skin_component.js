@@ -8,7 +8,8 @@ export class TrackedHandDrawSkinComponent extends Component {
     static TypeName = "pp-tracked-hand-draw-skin";
     static Properties = {
         _myHandedness: Property.enum(["Left", "Right"], "Left"),
-        _myHandSkin: Property.skin(null)
+        _myHandSkin: Property.skin(null),
+        _myIsHandSkinForwardFixed: Property.bool(false) // Should become true when I can manage to create a tracked hand skin with the forward fixed
     };
 
     start() {
@@ -45,7 +46,11 @@ TrackedHandDrawSkinComponent.prototype.update = function () {
             let jointID = jointObject.pp_getName(); // Joint name must match the TrackedHandJointID enum value
             let jointPose = Globals.getTrackedHandPose(this._myHandednessType, this.engine).getJointPose(jointID);
 
-            jointObject.pp_setTransformLocalQuat(jointPose.getTransformQuat(transformQuat, null));
+            let jointTransformQuat = jointPose.getTransformQuat(transformQuat, null);
+            if (jointPose.isForwardFixed() != this._myIsHandSkinForwardFixed) {
+                jointTransformQuat.quat2_rotateAxis(180, jointTransformQuat.quat2_getUp(), jointTransformQuat);
+            }
+            jointObject.pp_setTransformLocalQuat(jointTransformQuat);
         }
     };
 }();
