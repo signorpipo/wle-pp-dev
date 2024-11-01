@@ -35,13 +35,13 @@
                     "type": "example-easy-tune-variables"
                 },
                 {
-                    "type": "target-framerate",
-                    "target-framerate": {
-                        "framerate": 60.0
-                    }
+                    "type": "switch-scene-test"
                 },
                 {
-                    "type": "switch-scene-test"
+                    "type": "load-audio"
+                },
+                {
+                    "type": "play-music"
                 }
             ]
         },
@@ -11516,7 +11516,8 @@
                 "src",
                 "src/pp/index.ts",
                 "src/cauldron/components",
-                "src/test/components"
+                "src/test/components",
+                "src/playground/components"
             ],
             "libraryPaths": [
                 "/js/lib/"
