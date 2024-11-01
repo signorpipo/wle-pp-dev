@@ -7,7 +7,7 @@ export class ShowMeshedLineComponent extends Component {
     static TypeName = "show-meshed-line";
 
     start() {
-        let visualParams = new VisualLineParams();
+        let visualParams = new VisualLineParams(this.engine);
         visualParams.myTransform = this.object.pp_getTransform();
         visualParams.myPosition = this.object.pp_getPosition();
         visualParams.myStart = this.object.pp_getPosition();
