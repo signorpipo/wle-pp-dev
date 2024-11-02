@@ -122,6 +122,7 @@ export class PlayerLocomotionParams {
     /** Valid means, for example, that the real player has not moved inside a wall by moving in the real space */
     public mySyncWithRealWorldPositionOnlyIfValid: boolean = true;
 
+    /** Valid means, for example, that the real player has not moved inside a wall by moving in the real space */
     public mySyncWithRealHeightOnlyIfValid: boolean = true;
 
     public mySnapRealPositionToGround: boolean = false;
@@ -150,14 +151,40 @@ export class PlayerLocomotionParams {
     public mySyncHeadWithRealAfterLocomotionUpdateIfNeeded: boolean = false;
 
 
+
     public myColliderAccuracy: number = CharacterColliderSetupSimplifiedCreationAccuracyLevel.VERY_LOW;
     public myColliderCheckOnlyFeet: boolean = false;
     public myColliderSlideAlongWall: boolean = false;
     public myColliderMaxWalkableGroundAngle: number = 0;
+
+    /**
+     * This is useful if you want the locomotion teleport feature to be able to go downhill
+     * on surfaces steeper than {@link myColliderMaxWalkableGroundAngle}
+     * 
+     * By default the locomotion teleport can't go up on surfaces steeper than {@link myColliderMaxWalkableGroundAngle} anyway,
+     * no matter, the value of {@link myColliderMaxTeleportableGroundAngle}
+     * 
+     * If you set this to a value bigger than {@link myColliderMaxWalkableGroundAngle} you will be able to teleport in any case on steeper surfaces,
+     * so be careful if you want that, even though usually it's safe, since teleport positions, aside from the locomotion teleport ones, are predefined and
+     * safe positions
+     * 
+     * The idea is that with the locomotion smooth you can always go downhill but might no be able to climb back up due to the surface beeing steep,
+     * this sort of replicates that for the locomotion, letting you teleport down on steep surfaces but not up
+     */
     public myColliderMaxTeleportableGroundAngle: number | null = null;
     public myColliderSnapOnGround: boolean = false;
     public myColliderMaxDistanceToSnapOnGround: number = 0;
     public myColliderMaxWalkableGroundStepHeight: number = 0;
+
+    /**
+     * Allowing walkable steps on ceiling might create issues with view occlusion for the player (especially with a high value)  
+     * since you can go more under some low ceiling making the occlusion head collide with it
+     * 
+     * Settings it to zero is safer, but means that the ceilings physx must be more flat, because it's easier that a small ceiling bump now blocks you
+     * 
+     * If you want this to be higher than 0, you might also want to increase {@link myColliderExtraHeight} by this value to avoid issue with view occlusion
+     * It will need you to be further from ceiling to be able to move under them tho (since it will be like wearing a hat as tall as {@link myColliderExtraHeight})
+     */
     public myColliderMaxWalkableCeilingStepHeight: number = 0;
     public myColliderPreventFallingFromEdges: boolean = false;
     public myColliderMaxMovementSteps: number | null = null;
