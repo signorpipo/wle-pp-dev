@@ -27,12 +27,13 @@ export class CharacterColliderSetupSimplifiedCreationParams {
 
         this.myShouldSlideAlongWall = false;
 
+
+
         this.myCollectGroundInfo = false;
         this.myShouldSnapOnGround = false;
         this.myMaxDistanceToSnapOnGround = 0;
         this.myMaxWalkableGroundAngle = 0;
         this.myMaxWalkableGroundStepHeight = 0;
-        this.myShouldNotFallFromEdges = false;
 
         /**
          * Normally, the ground params are used for the ceiling too, but this needs to be a different setting,  
@@ -42,6 +43,10 @@ export class CharacterColliderSetupSimplifiedCreationParams {
          * Settings it to zero is safer, but means that the ceilings physx must be more flat, because it's easier that a small ceiling bump now blocks you
          */
         this.myMaxWalkableCeilingStepHeight = 0;
+
+        this.myShouldNotFallFromEdges = false;
+
+
 
         this.myHorizontalCheckBlockLayerFlags = new PhysicsLayerFlags();
         this.myHorizontalCheckObjectsToIgnore = [];

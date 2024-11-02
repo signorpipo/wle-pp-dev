@@ -269,6 +269,18 @@ export class PlayerLocomotionComponent extends Component {
     @property.float(0.1)
     private readonly _myColliderMaxWalkableGroundStepHeight!: number;
 
+    /**
+     * Allowing walkable steps on ceiling might create issues with view occlusion for the player (especially with a high value)  
+     * since you can go more under some low ceiling making the occlusion head collide with it
+     * 
+     * Settings it to zero is safer, but means that the ceilings physx must be more flat, because it's easier that a small ceiling bump now blocks you
+     * 
+     * If you want this to be higher than 0, you might also want to increase {@link _myColliderExtraHeight} by this value to avoid issue with view occlusion
+     * It will need you to be further from ceiling to be able to move under them tho (since it will be like wearing a hat as tall as {@link _myColliderExtraHeight})
+     */
+    @property.float(0)
+    private readonly _myColliderMaxWalkableCeilingStepHeight!: number;
+
     @property.bool(false)
     private readonly _myColliderPreventFallingFromEdges!: boolean;
 
@@ -420,6 +432,7 @@ export class PlayerLocomotionComponent extends Component {
         params.myColliderSnapOnGround = this._myColliderSnapOnGround;
         params.myColliderMaxDistanceToSnapOnGround = this._myColliderMaxDistanceToSnapOnGround;
         params.myColliderMaxWalkableGroundStepHeight = this._myColliderMaxWalkableGroundStepHeight;
+        params.myColliderMaxWalkableCeilingStepHeight = this._myColliderMaxWalkableCeilingStepHeight;
         params.myColliderPreventFallingFromEdges = this._myColliderPreventFallingFromEdges;
         params.myColliderMaxMovementSteps = this._myColliderMaxMovementSteps > 0 ? this._myColliderMaxMovementSteps : null;
         params.myColliderExtraHeight = this._myColliderExtraHeight;

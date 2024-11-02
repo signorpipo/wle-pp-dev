@@ -158,6 +158,7 @@ export class PlayerLocomotionParams {
     public myColliderSnapOnGround: boolean = false;
     public myColliderMaxDistanceToSnapOnGround: number = 0;
     public myColliderMaxWalkableGroundStepHeight: number = 0;
+    public myColliderMaxWalkableCeilingStepHeight: number = 0;
     public myColliderPreventFallingFromEdges: boolean = false;
     public myColliderMaxMovementSteps: number | null = null;
 
@@ -760,6 +761,7 @@ export class PlayerLocomotion {
         simplifiedParams.myShouldSnapOnGround = this._myParams.myColliderSnapOnGround;
         simplifiedParams.myMaxDistanceToSnapOnGround = this._myParams.myColliderMaxDistanceToSnapOnGround;
         simplifiedParams.myMaxWalkableGroundStepHeight = this._myParams.myColliderMaxWalkableGroundStepHeight;
+        simplifiedParams.myMaxWalkableCeilingStepHeight = this._myParams.myColliderMaxWalkableCeilingStepHeight;
         simplifiedParams.myShouldNotFallFromEdges = this._myParams.myColliderPreventFallingFromEdges;
         simplifiedParams.myMaxMovementSteps = this._myParams.myColliderMaxMovementSteps;
 
