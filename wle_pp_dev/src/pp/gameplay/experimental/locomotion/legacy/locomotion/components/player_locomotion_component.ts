@@ -205,7 +205,7 @@ export class PlayerLocomotionComponent extends Component {
      * 
      * If you have a high camera near value, you might need to increase this value, even though the view occlusion might become more aggressive
      * 
-     * Increasing {@link _myColliderExtraSafetyHeight} can help reducing the view occlusion
+     * Increasing {@link _myColliderExtraHeight} can help reducing the view occlusion
      */
     @property.float(0.15)
     private readonly _myViewOcclusionHeadRadius!: number;
@@ -281,7 +281,7 @@ export class PlayerLocomotionComponent extends Component {
      * If you need to increase {@link _myViewOcclusionHeadRadius}, also increasing this can help preventing view occlusion happening when shouldn't
      */
     @property.float(0.025)
-    private readonly _myColliderExtraSafetyHeight!: number;
+    private readonly _myColliderExtraHeight!: number;
 
 
 
@@ -422,7 +422,7 @@ export class PlayerLocomotionComponent extends Component {
         params.myColliderMaxWalkableGroundStepHeight = this._myColliderMaxWalkableGroundStepHeight;
         params.myColliderPreventFallingFromEdges = this._myColliderPreventFallingFromEdges;
         params.myColliderMaxMovementSteps = this._myColliderMaxMovementSteps > 0 ? this._myColliderMaxMovementSteps : null;
-        params.myColliderExtraSafetyHeight = this._myColliderExtraSafetyHeight;
+        params.myColliderExtraHeight = this._myColliderExtraHeight;
 
         params.myDebugFlyShortcutEnabled = this._myDebugFlyShortcutEnabled;
         params.myDebugFlyMaxSpeedMultiplier = this._myDebugFlyMaxSpeedMultiplier;

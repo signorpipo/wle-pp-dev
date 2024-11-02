@@ -136,7 +136,7 @@ export class PlayerLocomotionParams {
      * 
      * If you have a high camera near value, you might need to increase this value, even though the view occlusion might become more aggressive
      * 
-     * Increasing {@link myColliderExtraSafetyHeight} can help reducing the view occlusion
+     * Increasing {@link myColliderExtraHeight} can help reducing the view occlusion
      */
     public myViewOcclusionHeadRadius: number = 0;
     public myViewOcclusionHeadHeight: number = 0;
@@ -166,7 +166,7 @@ export class PlayerLocomotionParams {
      * 
      * If you need to increase {@link myViewOcclusionHeadRadius}, also increasing this can help preventing view occlusion happening when shouldn't
      */
-    public myColliderExtraSafetyHeight: number = 0;
+    public myColliderExtraHeight: number = 0;
 
 
 
@@ -286,7 +286,7 @@ export class PlayerLocomotion {
             // This would be better to be less or equal than the feet radius of the character
             params.myHeadRadius = this._myParams.myViewOcclusionHeadRadius;
             params.myHeadHeight = this._myParams.myViewOcclusionHeadHeight;
-            params.myExtraSafetyHeight = this._myParams.myColliderExtraSafetyHeight;
+            params.myExtraHeight = this._myParams.myColliderExtraHeight;
 
             if (!this._myParams.mySyncWithRealWorldPositionOnlyIfValid) {
                 params.mySyncEnabledFlagMap.set(PlayerTransformManagerSyncFlag.BODY_COLLIDING, false);
