@@ -18,7 +18,7 @@ export class SwitchSceneTestComponent extends Component {
     }
 
     public override update(dt: number): void {
-        if (Globals.getLeftGamepad(this.engine)!.getButtonInfo(GamepadButtonID.BOTTOM_BUTTON).isPressEnd(2)) {
+        if (Globals.getRightGamepad(this.engine)!.getButtonInfo(GamepadButtonID.BOTTOM_BUTTON).isPressEnd(2)) {
             if (mainScene == Globals.getScene(this.engine)) {
                 this.engine.switchTo(nextScene!);
             } else {
