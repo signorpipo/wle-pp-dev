@@ -77,10 +77,10 @@ export class PlayerLocomotionComponent extends Component {
     @property.bool(false)
     private readonly _myStartFlying!: boolean;
 
-    @property.bool(true)
+    @property.bool(false)
     private readonly _myFlyWithButtonsEnabled!: boolean;
 
-    @property.bool(true)
+    @property.bool(false)
     private readonly _myFlyWithViewAngleEnabled!: boolean;
 
     @property.float(30)
