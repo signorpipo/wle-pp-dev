@@ -191,12 +191,12 @@ export class OverlapCursorComponent extends Component {
             if (!this._myLastTarget.isDestroyed && this._myLastTarget.active) {
                 this._myLastTarget.onClick.notify(this._myLastTarget.object, this._myFakeCursor);
 
-            if (this._myTripleClickTimer > 0 && this._myMultipleClickObject && this._myMultipleClickObject.pp_equals(this._myLastTarget.object)) {
-                this._myLastTarget.onTripleClick.notify(this._myLastTarget.object, this._myFakeCursor);
+                if (this._myTripleClickTimer > 0 && this._myMultipleClickObject && this._myMultipleClickObject.pp_equals(this._myLastTarget.object)) {
+                    this._myLastTarget.onTripleClick.notify(this._myLastTarget.object, this._myFakeCursor);
 
-                this._myTripleClickTimer = 0;
-            } else if (this._myDoubleClickTimer > 0 && this._myMultipleClickObject && this._myMultipleClickObject.pp_equals(this._myLastTarget.object)) {
-                this._myLastTarget.onDoubleClick.notify(this._myLastTarget.object, this._myFakeCursor);
+                    this._myTripleClickTimer = 0;
+                } else if (this._myDoubleClickTimer > 0 && this._myMultipleClickObject && this._myMultipleClickObject.pp_equals(this._myLastTarget.object)) {
+                    this._myLastTarget.onDoubleClick.notify(this._myLastTarget.object, this._myFakeCursor);
 
                     this._myTripleClickTimer = OverlapCursorComponent._myMultipleClickDelay;
                     this._myDoubleClickTimer = 0;
