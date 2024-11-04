@@ -20,26 +20,13 @@ export class EasyActiveComponent extends Component {
 
     private _myEasyObjectTuner: EasyActive | null = null;
 
-    public override init(): void {
-        this._myEasyObjectTuner = null;
-
-        if (Globals.isToolEnabled(this.engine)) {
-            this._myEasyObjectTuner = new EasyActive([this], this.object, this._myVariableName, this._mySetAsWidgetCurrentVariable, this._myUseTuneTarget, this.engine);
-        }
-    }
-
-    public override start(): void {
-        if (Globals.isToolEnabled(this.engine)) {
-            if (this._myEasyObjectTuner != null) {
-                this._myEasyObjectTuner.start();
-            }
-        }
-    }
-
     public override update(dt: number): void {
         if (Globals.isToolEnabled(this.engine)) {
             if (this._myEasyObjectTuner != null) {
                 this._myEasyObjectTuner.update(dt);
+            } else {
+                this._myEasyObjectTuner = new EasyActive([this], this.object, this._myVariableName, this._mySetAsWidgetCurrentVariable, this._myUseTuneTarget, this.engine);
+                this._myEasyObjectTuner.start();
             }
         }
     }
