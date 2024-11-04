@@ -1,5 +1,4 @@
-import { Component } from "@wonderlandengine/api";
-import { property } from "@wonderlandengine/api/decorators.js";
+import { Component, property } from "@wonderlandengine/api";
 import { GamepadButtonID } from "../../../input/gamepad/gamepad_buttons.js";
 import { Globals } from "../../../pp/globals.js";
 import { EasyTuneUtils } from "../easy_tune_utils.js";
