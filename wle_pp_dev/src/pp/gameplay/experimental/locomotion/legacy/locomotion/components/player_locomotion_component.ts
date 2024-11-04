@@ -351,7 +351,7 @@ export class PlayerLocomotionComponent extends Component {
 
 
 
-    public override start(): void {
+    private _start(): void {
         const params = new PlayerLocomotionParams(this.engine);
 
         params.myDefaultLocomotionType = this._myDefaultLocomotionType;
@@ -542,7 +542,11 @@ export class PlayerLocomotionComponent extends Component {
     }
 
     private _onActivate(): void {
-        if (this._myPlayerLocomotion != null && !Globals.hasPlayerLocomotion(this.engine)) {
+        if (this._myPlayerLocomotion == null) {
+            this._start();
+        }
+
+        if (!Globals.hasPlayerLocomotion(this.engine)) {
             this._myPlayerLocomotion.setActive(true);
             Globals.setPlayerLocomotion(this._myPlayerLocomotion, this.engine);
 
