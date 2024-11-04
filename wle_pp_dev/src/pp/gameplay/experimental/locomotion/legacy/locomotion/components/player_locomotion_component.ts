@@ -1,4 +1,5 @@
-import { Component, Material, Object3D, property } from "@wonderlandengine/api";
+import { Component, Material, Object3D } from "@wonderlandengine/api";
+import { property } from "@wonderlandengine/api/decorators.js";
 import { Timer } from "../../../../../../cauldron/cauldron/timer.js";
 import { PhysicsLayerFlags } from "../../../../../../cauldron/physics/physics_layer_flags.js";
 import { PhysicsUtils } from "../../../../../../cauldron/physics/physics_utils.js";

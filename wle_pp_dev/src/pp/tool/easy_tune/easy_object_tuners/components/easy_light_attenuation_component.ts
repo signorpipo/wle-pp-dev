@@ -1,4 +1,5 @@
-import { Component, Object3D, property } from "@wonderlandengine/api";
+import { Component, Object3D } from "@wonderlandengine/api";
+import { property } from "@wonderlandengine/api/decorators.js";
 import { ComponentUtils } from "../../../../cauldron/wl/utils/component_utils.js";
 import { Globals } from "../../../../pp/globals.js";
 import { EasyLightAttenuation } from "../easy_light_attenuation.js";

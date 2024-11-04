@@ -1,4 +1,5 @@
-import { CollisionComponent, Component, Object3D, PhysXComponent, property } from "@wonderlandengine/api";
+import { CollisionComponent, Component, Object3D, PhysXComponent } from "@wonderlandengine/api";
+import { property } from "@wonderlandengine/api/decorators.js";
 import { Cursor, CursorTarget } from "@wonderlandengine/components";
 import { PhysicsCollisionCollector } from "../../../cauldron/physics/physics_collision_collector.js";
 import { Vector3 } from "../../../cauldron/type_definitions/array_type_definitions.js";

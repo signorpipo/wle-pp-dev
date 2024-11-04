@@ -1,4 +1,5 @@
-import { Component, Object3D, property } from "@wonderlandengine/api";
+import { Component, Object3D } from "@wonderlandengine/api";
+import { property } from "@wonderlandengine/api/decorators.js";
 import { XRUtils } from "../../utils/xr_utils.js";
 
 export class ResetLocalTransformComponent extends Component {

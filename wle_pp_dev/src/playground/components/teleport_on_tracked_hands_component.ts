@@ -1,4 +1,5 @@
-import { Component, Object3D, property } from "@wonderlandengine/api";
+import { Component, Object3D } from "@wonderlandengine/api";
+import { property } from "@wonderlandengine/api/decorators.js";
 import { Globals, InputSourceType, XRUtils } from "wle-pp";
 
 export class TeleportOnTrackedHandsComponent extends Component {
