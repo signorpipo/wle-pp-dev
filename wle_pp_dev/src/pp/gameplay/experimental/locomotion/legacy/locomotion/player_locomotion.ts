@@ -617,6 +617,10 @@ export class PlayerLocomotion {
         this._myPlayerLocomotionTeleport.setActive(this._myActive);
     }
 
+    public isActive(): boolean {
+        return this._myActive;
+    }
+
     public isStarted(): boolean {
         return this._myStarted;
     }
