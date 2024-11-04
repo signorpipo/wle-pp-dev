@@ -1,7 +1,6 @@
 import { Component, Property } from "@wonderlandengine/api";
 import { Globals } from "../../../pp/globals.js";
 import { ConsoleVRWidget, ConsoleVRWidgetParams } from "../console_vr_widget.js";
-import { InitConsoleVRComponent } from "./init_console_vr_component.js";
 
 export class ConsoleVRToolComponent extends Component {
     static TypeName = "pp-console-vr-tool";
@@ -17,8 +16,6 @@ export class ConsoleVRToolComponent extends Component {
         this._myStarted = false;
 
         if (Globals.isToolEnabled(this.engine)) {
-            this.object.pp_addComponent(InitConsoleVRComponent);
-
             this._myWidget = new ConsoleVRWidget(this.engine);
 
             let params = new ConsoleVRWidgetParams(this.engine);

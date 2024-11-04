@@ -35,10 +35,13 @@
                     "type": "example-easy-tune-variables"
                 },
                 {
-                    "type": "target-framerate",
-                    "target-framerate": {
-                        "framerate": 60.0
-                    }
+                    "type": "switch-scene-test"
+                },
+                {
+                    "type": "load-audio"
+                },
+                {
+                    "type": "play-music"
                 }
             ]
         },
@@ -50,7 +53,8 @@
                     "type": "pp-player-locomotion",
                     "pp-player-locomotion": {
                         "_myPhysicsBlockLayerFlags": "0, 1, 1, 0, 0, 0, 0, 0",
-                        "_myMoveThroughCollisionShortcutEnabled": true
+                        "_myMoveThroughCollisionShortcutEnabled": true,
+                        "_myAlwaysSmoothForNonVR": false
                     }
                 }
             ]
@@ -320,7 +324,8 @@
                 {
                     "type": "pp-set-active",
                     "pp-set-active": {
-                        "_myActive": false
+                        "_myActive": false,
+                        "_mySetActiveWhen": "First Update"
                     }
                 },
                 {
@@ -340,7 +345,8 @@
                 {
                     "type": "pp-set-active",
                     "pp-set-active": {
-                        "_myActive": false
+                        "_myActive": false,
+                        "_mySetActiveWhen": "First Update"
                     },
                     "active": false
                 }
@@ -521,7 +527,8 @@
                 {
                     "type": "pp-set-active",
                     "pp-set-active": {
-                        "_myActive": false
+                        "_myActive": false,
+                        "_mySetActiveWhen": "First Update"
                     }
                 },
                 {
@@ -579,7 +586,8 @@
                 {
                     "type": "pp-set-active",
                     "pp-set-active": {
-                        "_myActive": false
+                        "_myActive": false,
+                        "_mySetActiveWhen": "First Update"
                     }
                 },
                 {
@@ -628,14 +636,7 @@
         },
         "afa026ad-d1bc-4de2-8c10-118fe1e2c3a0": {
             "name": "Playground",
-            "parent": "d628cad3-6566-4170-ba65-395cb3f59cf5",
-            "components": [
-                {
-                    "type": "pp-set-active",
-                    "pp-set-active": {},
-                    "active": false
-                }
-            ]
+            "parent": "d628cad3-6566-4170-ba65-395cb3f59cf5"
         },
         "cb9fcc68-a5f1-4d50-b4ee-8e5d3718a48b": {
             "name": "Floor",
@@ -2506,7 +2507,8 @@
                 {
                     "type": "pp-set-active",
                     "pp-set-active": {
-                        "_myActive": false
+                        "_myActive": false,
+                        "_mySetActiveWhen": "First Update"
                     }
                 },
                 {
@@ -2532,7 +2534,8 @@
                     "type": "pp-set-active",
                     "pp-set-active": {
                         "_mySetActiveOn": "Descendants",
-                        "_myActive": false
+                        "_myActive": false,
+                        "_mySetActiveWhen": "First Update"
                     }
                 },
                 {
@@ -9431,7 +9434,8 @@
                 {
                     "type": "pp-set-active",
                     "pp-set-active": {
-                        "_myActive": false
+                        "_myActive": false,
+                        "_mySetActiveWhen": "Start"
                     }
                 }
             ]
@@ -9549,7 +9553,8 @@
                 {
                     "type": "pp-set-active",
                     "pp-set-active": {
-                        "_myActive": false
+                        "_myActive": false,
+                        "_mySetActiveWhen": "Start"
                     }
                 }
             ]
@@ -9579,7 +9584,8 @@
                 {
                     "type": "pp-set-active",
                     "pp-set-active": {
-                        "_myActive": false
+                        "_myActive": false,
+                        "_mySetActiveWhen": "Start"
                     }
                 }
             ]
@@ -9598,7 +9604,8 @@
                 {
                     "type": "pp-set-active",
                     "pp-set-active": {
-                        "_myActive": false
+                        "_myActive": false,
+                        "_mySetActiveWhen": "Start"
                     }
                 }
             ]
@@ -11468,7 +11475,7 @@
             "version": [
                 1,
                 2,
-                3
+                4
             ]
         },
         "rendering": {
@@ -11509,7 +11516,8 @@
                 "src",
                 "src/pp/index.ts",
                 "src/cauldron/components",
-                "src/test/components"
+                "src/test/components",
+                "src/playground/components"
             ],
             "libraryPaths": [
                 "/js/lib/"

@@ -86,7 +86,10 @@ export class PlayerTransformManagerParams {
     public myFloatingSplitCheckStepEqualLengthMinLength: number = 0;
 
 
-    public myExtraSafetyHeight: number = 0.1;
+    /**
+     * Can be useful if using the exact height is giving you issues like too close too ceilings, or view occluded too easily
+     */
+    public myExtraHeight: number = 0;
 
     public myMaxDistanceFromRealToSyncEnabled: boolean = false;
 
@@ -121,6 +124,7 @@ export class PlayerTransformManagerParams {
 
 
     public myHeadRadius: number = 0;
+    public myHeadHeight: number = 0;
     public readonly myHeadCollisionBlockLayerFlags: PhysicsLayerFlags = new PhysicsLayerFlags();
     public myHeadCollisionObjectsToIgnore: Readonly<Object3D>[] = [];
     public myHeadCollisionBlockColliderType: RaycastBlockColliderType = RaycastBlockColliderType.BOTH;
@@ -705,7 +709,7 @@ export class PlayerTransformManager {
 
         if (!horizontalDirection.vec3_isZero(0.00001)) {
             horizontalDirection.vec3_normalize(horizontalDirection);
-            rotationQuat.quat_setForward(horizontalDirection);
+            rotationQuat.quat_setUp(transformUp, horizontalDirection);
             transformQuat.quat2_setRotationQuat(rotationQuat);
         }
 
@@ -1058,10 +1062,10 @@ export class PlayerTransformManager {
 
         const highestHeight = Math.max(validHeight, realHeight);
 
-        this._myParams.myMovementCollisionCheckParams.myHeight = (useHighestHeight ? highestHeight : validHeight) + this._myParams.myExtraSafetyHeight;
+        this._myParams.myMovementCollisionCheckParams.myHeight = (useHighestHeight ? highestHeight : validHeight) + this._myParams.myExtraHeight;
         this._myParams.myTeleportCollisionCheckParams!.myHeight = this._myParams.myMovementCollisionCheckParams.myHeight;
 
-        this._myRealMovementCollisionCheckParams.myHeight = Math.max(realHeight, this._myParams.myMinHeight ?? -Number.MAX_VALUE) + this._myParams.myExtraSafetyHeight;
+        this._myRealMovementCollisionCheckParams.myHeight = Math.max(realHeight, this._myParams.myMinHeight ?? -Number.MAX_VALUE) + this._myParams.myExtraHeight;
     }
 
     private _setupHeadCollisionCheckParams(): void {
@@ -1103,8 +1107,8 @@ export class PlayerTransformManager {
         params.myHorizontalPositionCheckVerticalIgnoreHitsInsideCollision = false;
         params.myHorizontalPositionCheckVerticalDirectionType = 0;
 
-        params.myHeight = params.myRadius; // On purpose the height "radius" is half, to avoid hitting before with head than body collision (through height)
-        params.myPositionOffsetLocal.vec3_set(0, -params.myRadius / 2, 0);
+        params.myHeight = this._myParams.myHeadHeight;
+        params.myPositionOffsetLocal.vec3_set(0, -params.myHeight / 2, 0);
 
         params.myCheckHeight = true;
         params.myCheckHeightVerticalMovement = true;
@@ -1282,7 +1286,7 @@ export class PlayerTransformManager {
 
             if (!horizontalDirection.vec3_isZero(0.00001)) {
                 horizontalDirection.vec3_normalize(horizontalDirection);
-                rotationQuat.quat_setForward(horizontalDirection);
+                rotationQuat.quat_setUp(transformUp, horizontalDirection);
                 transformQuat.quat2_setRotationQuat(rotationQuat);
             }
 
@@ -1324,7 +1328,7 @@ export class PlayerTransformManager {
 
             if (!horizontalDirection.vec3_isZero(0.00001)) {
                 horizontalDirection.vec3_normalize(horizontalDirection);
-                rotationQuat.quat_setForward(horizontalDirection);
+                rotationQuat.quat_setUp(transformUp, horizontalDirection);
                 transformQuat.quat2_setRotationQuat(rotationQuat);
             }
 
@@ -1615,7 +1619,7 @@ export class PlayerTransformManager {
 
             if (!horizontalDirection.vec3_isZero(0.00001)) {
                 horizontalDirection.vec3_normalize(horizontalDirection);
-                rotationQuat.quat_setForward(horizontalDirection);
+                rotationQuat.quat_setUp(transformUp, horizontalDirection);
                 transformQuat.quat2_setRotationQuat(rotationQuat);
             }
 
@@ -1623,7 +1627,7 @@ export class PlayerTransformManager {
             collisionRuntimeParams.copy(this._myCollisionRuntimeParams);
             const debugBackup = this._myParams.myMovementCollisionCheckParams.myDebugEnabled;
             const heightBackup = this._myParams.myMovementCollisionCheckParams.myHeight;
-            this._myParams.myMovementCollisionCheckParams.myHeight = newHeight + this._myParams.myExtraSafetyHeight;
+            this._myParams.myMovementCollisionCheckParams.myHeight = newHeight + this._myParams.myExtraHeight;
             this._myParams.myMovementCollisionCheckParams.myDebugEnabled = false;
             CollisionCheckBridge.getCollisionCheck(this._myParams.myEngine as any).positionCheck(true, transformQuat, this._myParams.myMovementCollisionCheckParams, collisionRuntimeParams);
             this._myParams.myMovementCollisionCheckParams.myDebugEnabled = debugBackup;

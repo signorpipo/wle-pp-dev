@@ -11,6 +11,16 @@
  *     - `wle:auto-benchmark:start` and `wle:auto-benchmark:end`: Append the benchmarking code
  */
 
+const waitWindowLoad: Promise<void> = new Promise((resolve: () => void) => {
+    if (document.readyState == "complete") {
+        resolve();
+    } else {
+        window.addEventListener("load", resolve, { once: true });
+    }
+});
+
+await waitWindowLoad;
+
 /* wle:auto-imports:start */
 import {Cursor} from '@wonderlandengine/components';
 import {CursorTarget} from '@wonderlandengine/components';
@@ -23,6 +33,7 @@ import {ParticlesSpawnerComponent} from './playground/components/particles_spawn
 import {PlayMusicComponent} from './playground/components/play_music_component.js';
 import {PlaygroundGatewayComponent} from './playground/components/playground_gateway_component.js';
 import {SetActiveOnMobileComponent} from './playground/components/set_active_on_mobile_component.js';
+import {SetActiveOnMobileComponent as SetActiveOnMobileComponent1} from './playground/components/set_active_on_tracked_hands_component.js';
 import {SFXOnCollisionComponent} from './playground/components/sfx_on_collision_component.js';
 import {SFXOnGrabThrowComponent} from './playground/components/sfx_on_grab_throw_component.js';
 import {TargetHitCheckComponent} from './playground/components/target_hit_check_component.js';
@@ -51,6 +62,7 @@ import {SwitchHandObjectComponent} from './pp/index.js';
 import {ToolCursorComponent} from './pp/index.js';
 import {TrackedHandDrawAllJointsComponent} from './pp/index.js';
 import {VirtualGamepadComponent} from './pp/index.js';
+import {SwitchSceneTestComponent} from './test/components/switch_scene_test_component.js';
 /* wle:auto-imports:end */
 
 import { loadRuntime, LoadRuntimeOptions, LogLevel } from '@wonderlandengine/api';
@@ -67,7 +79,7 @@ const RuntimeOptions = {
     loader: false,
     xrFramebufferScaleFactor: 1,
     canvas: 'canvas',
-};
+} as const;
 /* wle:auto-constants:end */
 
 const disableEngineLogs = true;
@@ -121,6 +133,7 @@ engine.registerComponent(ParticlesSpawnerComponent);
 engine.registerComponent(PlayMusicComponent);
 engine.registerComponent(PlaygroundGatewayComponent);
 engine.registerComponent(SetActiveOnMobileComponent);
+engine.registerComponent(SetActiveOnMobileComponent1);
 engine.registerComponent(SFXOnCollisionComponent);
 engine.registerComponent(SFXOnGrabThrowComponent);
 engine.registerComponent(TargetHitCheckComponent);
@@ -149,6 +162,7 @@ engine.registerComponent(SwitchHandObjectComponent);
 engine.registerComponent(ToolCursorComponent);
 engine.registerComponent(TrackedHandDrawAllJointsComponent);
 engine.registerComponent(VirtualGamepadComponent);
+engine.registerComponent(SwitchSceneTestComponent);
 /* wle:auto-register:end */
 
 const sceneLoadDelaySeconds = 0;

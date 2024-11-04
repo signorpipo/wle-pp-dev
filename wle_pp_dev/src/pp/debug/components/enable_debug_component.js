@@ -8,24 +8,17 @@ export class EnableDebugComponent extends Component {
     };
 
     init() {
-        this._myDebugEnabled = null;
-
-        // Prevents double global from same engine
-        if (!Globals.hasDebugEnabled(this.engine)) {
-            this._myDebugEnabled = this._myEnable;
-
-            Globals.setDebugEnabled(this._myDebugEnabled, this.engine);
-        }
+        this._myDebugEnabled = this._myEnable;
     }
 
     onActivate() {
-        if (this._myDebugEnabled != null && !Globals.hasDebugEnabled(this.engine)) {
+        if (!Globals.hasDebugEnabled(this.engine)) {
             Globals.setDebugEnabled(this._myDebugEnabled, this.engine);
         }
     }
 
     onDeactivate() {
-        if (this._myDebugEnabled != null && Globals.isDebugEnabled(this.engine) == this._myDebugEnabled) {
+        if (Globals.isDebugEnabled(this.engine) == this._myDebugEnabled) {
             Globals.removeDebugEnabled(this.engine);
         }
     }

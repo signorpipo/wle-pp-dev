@@ -1,6 +1,6 @@
 import { Component, Property } from "@wonderlandengine/api";
 import { Handedness } from "../../pp/input/cauldron/input_types.js";
-import { HandPose } from "../../pp/input/pose/hand_pose.js";
+import { HandPose, HandPoseParams } from "../../pp/input/pose/hand_pose.js";
 
 export class GamepadButtonDisplayComponent extends Component {
     static TypeName = "gamepad-button-display";
@@ -9,7 +9,7 @@ export class GamepadButtonDisplayComponent extends Component {
     };
 
     start() {
-        this._myHandPose = new HandPose(Handedness.LEFT);
+        this._myHandPose = new HandPose(Handedness.LEFT, new HandPoseParams(this.engine));
         this._myHandPose.start();
     }
 
