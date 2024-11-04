@@ -62,7 +62,6 @@ import {SwitchHandObjectComponent} from './pp/index.js';
 import {ToolCursorComponent} from './pp/index.js';
 import {TrackedHandDrawAllJointsComponent} from './pp/index.js';
 import {VirtualGamepadComponent} from './pp/index.js';
-import {SwitchSceneTestComponent} from './test/components/switch_scene_test_component.js';
 /* wle:auto-imports:end */
 
 import { loadRuntime, LoadRuntimeOptions, LogLevel } from '@wonderlandengine/api';
@@ -79,7 +78,7 @@ const RuntimeOptions = {
     loader: false,
     xrFramebufferScaleFactor: 1,
     canvas: 'canvas',
-} as const;
+};
 /* wle:auto-constants:end */
 
 const disableEngineLogs = true;
@@ -162,7 +161,6 @@ engine.registerComponent(SwitchHandObjectComponent);
 engine.registerComponent(ToolCursorComponent);
 engine.registerComponent(TrackedHandDrawAllJointsComponent);
 engine.registerComponent(VirtualGamepadComponent);
-engine.registerComponent(SwitchSceneTestComponent);
 /* wle:auto-register:end */
 
 const sceneLoadDelaySeconds = 0;

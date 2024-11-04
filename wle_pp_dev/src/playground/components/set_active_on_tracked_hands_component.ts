@@ -1,4 +1,5 @@
-import { Component, property } from "@wonderlandengine/api";
+import { Component } from "@wonderlandengine/api";
+import { property } from "@wonderlandengine/api/decorators.js";
 import { Globals, InputSourceType } from "wle-pp";
 
 export class SetActiveOnMobileComponent extends Component {
