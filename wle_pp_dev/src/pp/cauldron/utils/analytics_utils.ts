@@ -1,27 +1,27 @@
-let _myAnalyticsEnabled = false;
+let _myAnalyticsEnabled: boolean = false;
 
-let _mySendDataCallback = null;
+let _mySendDataCallback: ((...args: unknown[]) => void) | null = null;
 
-let _myEventsSentOnce = [];
+const _myEventsSentOnce: string[] = [];
 
-let _myDataLogEnabled = false;
-let _myEventsLogEnabled = false;
+let _myDataLogEnabled: boolean = false;
+let _myEventsLogEnabled: boolean = false;
 
-let _myErrorsLogEnabled = false;
+let _myErrorsLogEnabled: boolean = false;
 
-export function setAnalyticsEnabled(enabled) {
+export function setAnalyticsEnabled(enabled: boolean): void {
     _myAnalyticsEnabled = enabled;
 }
 
-export function isAnalyticsEnabled() {
+export function isAnalyticsEnabled(): boolean {
     return _myAnalyticsEnabled;
 }
 
-export function setSendDataCallback(callback) {
+export function setSendDataCallback(callback: ((...args: unknown[]) => void) | null): void {
     _mySendDataCallback = callback;
 }
 
-export function sendData(...args) {
+export function sendData(...args: unknown[]): void {
     try {
         if (_myAnalyticsEnabled) {
             if (_myDataLogEnabled) {
@@ -41,7 +41,7 @@ export function sendData(...args) {
     }
 }
 
-export function sendEvent(eventName, value = null, sendOnce = false) {
+export function sendEvent(eventName: string, params?: Record<string, unknown>, sendOnce: boolean = false): void {
     try {
         if (_myAnalyticsEnabled) {
             let sendEventAllowed = true;
@@ -52,16 +52,16 @@ export function sendEvent(eventName, value = null, sendOnce = false) {
 
             if (sendEventAllowed) {
                 if (_myEventsLogEnabled) {
-                    if (value != null) {
-                        console.log("Analytics Event: " + eventName + " - Value: " + value);
+                    if (params != null) {
+                        console.log("Analytics Event: " + eventName + " - Params:", params);
                     } else {
                         console.log("Analytics Event: " + eventName);
                     }
                 }
 
                 if (_mySendDataCallback != null) {
-                    if (value != null) {
-                        _mySendDataCallback("event", eventName, { "value": value });
+                    if (params != null) {
+                        _mySendDataCallback("event", eventName, params);
                     } else {
                         _mySendDataCallback("event", eventName);
                     }
@@ -81,57 +81,67 @@ export function sendEvent(eventName, value = null, sendOnce = false) {
     }
 }
 
-export function sendEventOnce(eventName, value = null) {
-    AnalyticsUtils.sendEvent(eventName, value, true);
+export function sendEventOnce(eventName: string, params?: Record<string, unknown>): void {
+    AnalyticsUtils.sendEvent(eventName, params, true);
 }
 
-export function clearEventSentOnceState(eventName) {
+export function sendEventWithValue(eventName: string, value: number, sendOnce: boolean = false): void {
+    AnalyticsUtils.sendEvent(eventName, { "value": value }, sendOnce);
+}
+
+export function sendEventOnceWithValue(eventName: string, value: number): void {
+    AnalyticsUtils.sendEventWithValue(eventName, value, true);
+}
+
+export function clearEventSentOnceState(eventName: string): void {
     _myEventsSentOnce.pp_removeEqual(eventName);
 }
 
-export function clearAllEventsSentOnceState() {
+export function clearAllEventsSentOnceState(): void {
     _myEventsSentOnce.pp_clear();
 }
 
-export function hasEventAlreadyBeenSent(eventName) {
+export function hasEventAlreadyBeenSent(eventName: string): boolean {
     return _myEventsSentOnce.pp_hasEqual(eventName);
 }
 
-export function getEventsAlreadyBeenSent() {
+export function getEventsAlreadyBeenSent(): string[] {
     return _myEventsSentOnce;
 }
 
-export function setDataLogEnabled(enabled) {
+export function setDataLogEnabled(enabled: boolean): void {
     _myDataLogEnabled = enabled;
 }
 
-export function isDataLogEnabled() {
+export function isDataLogEnabled(): boolean {
     return _myDataLogEnabled;
 }
 
-export function setEventsLogEnabled(enabled) {
+export function setEventsLogEnabled(enabled: boolean): void {
     _myEventsLogEnabled = enabled;
 }
 
-export function isEventsLogEnabled() {
+export function isEventsLogEnabled(): boolean {
     return _myEventsLogEnabled;
 }
 
-export function setErrorsLogEnabled(enabled) {
+export function setErrorsLogEnabled(enabled: boolean): void {
     _myErrorsLogEnabled = enabled;
 }
 
-export function isErrorsLogEnabled() {
+export function isErrorsLogEnabled(): boolean {
     return _myErrorsLogEnabled;
 }
 
-export let AnalyticsUtils = {
+export const AnalyticsUtils = {
     setAnalyticsEnabled,
     isAnalyticsEnabled,
     setSendDataCallback,
     sendData,
     sendEvent,
     sendEventOnce,
+    sendEventWithValue,
+    sendEventOnceWithValue,
     clearEventSentOnceState,
     clearAllEventsSentOnceState,
     hasEventAlreadyBeenSent,
@@ -142,4 +152,4 @@ export let AnalyticsUtils = {
     isEventsLogEnabled,
     setErrorsLogEnabled,
     isErrorsLogEnabled
-};
+} as const;
