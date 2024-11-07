@@ -7,6 +7,10 @@ import { BasePose } from "../../../../../../input/pose/base_pose.js";
 import { Globals } from "../../../../../../pp/globals.js";
 import { PlayerLocomotion, PlayerLocomotionParams } from "../player_locomotion.js";
 
+/**
+ * Tips  
+ *   - Be sure that your colliders has faces on both sides of the mesh, this helps the collision check which otherise might be able to move through walls
+ */
 export class PlayerLocomotionComponent extends Component {
     public static override TypeName = "pp-player-locomotion";
 
@@ -34,6 +38,10 @@ export class PlayerLocomotionComponent extends Component {
 
     @property.float(0.3)
     private readonly _myCharacterRadius!: number;
+
+    /** Set this to `-1` to auto compute the feet radius based on {@link _myCharacterRadius} */
+    @property.float(-1)
+    private readonly _myCharacterFeetRadius!: number;
 
 
 
@@ -367,6 +375,7 @@ export class PlayerLocomotionComponent extends Component {
         params.myMaxGravitySpeed = this._myMaxGravitySpeed;
 
         params.myCharacterRadius = this._myCharacterRadius;
+        params.myCharacterFeetRadius = this._myCharacterFeetRadius >= 0 ? this._myCharacterFeetRadius : null;
 
         params.mySpeedSlowDownPercentageOnWallSlid = this._mySpeedSlowDownPercentageOnWallSlid;
 
