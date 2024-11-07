@@ -360,7 +360,7 @@ CollisionCheckVertical.prototype._getVerticalCheckPositions = function () {
 
         let radiusStep = collisionCheckParams.myFeetRadius / collisionCheckParams.myGroundCircumferenceStepAmount;
         let sliceAngle = 360 / collisionCheckParams.myGroundCircumferenceSliceAmount;
-        let currentStepRotation = 0;
+        let currentStepRotation = -collisionCheckParams.myGroundCircumferenceRotationPerStep * (collisionCheckParams.myGroundCircumferenceStepAmount - 1);
         for (let i = 0; i < collisionCheckParams.myGroundCircumferenceStepAmount; i++) {
             let currentRadius = radiusStep * (i + 1);
 

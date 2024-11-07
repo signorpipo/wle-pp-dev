@@ -47,6 +47,10 @@ export class PlayerLocomotionParams {
     public myDefaultHeight: number = 0;
     public myMinHeight: number = 0;
     public myCharacterRadius: number = 0;
+
+    /** Set this to `null` to auto compute the feet radius based on {@link myCharacterRadius} */
+    public myCharacterFeetRadius: number | null = null;
+
     public myForeheadExtraHeight: number = 0;
 
 
@@ -230,6 +234,10 @@ export class PlayerLocomotionParams {
 // #TODO Add lerped snap on vertical over like half a second to avoid the "snap effect"
 // This could be done by detatching the actual vertical position of the player from the collision real one when a snap is detected above a certain threshold
 // with a timer, after which the vertical position is just copied, while during the detatching is lerped toward the collision vertical one
+/**
+ * Tips  
+ *   - Be sure that your colliders has faces on both sides of the mesh, this helps the collision check which otherise might be able to move through walls
+ */
 export class PlayerLocomotion {
 
     private readonly _myParams: PlayerLocomotionParams;
@@ -776,6 +784,7 @@ export class PlayerLocomotion {
 
         simplifiedParams.myHeight = this._myParams.myDefaultHeight;
         simplifiedParams.myRadius = this._myParams.myCharacterRadius;
+        simplifiedParams.myFeetRadius = this._myParams.myCharacterFeetRadius;
 
         simplifiedParams.myAccuracyLevel = this._myParams.myColliderAccuracy;
 

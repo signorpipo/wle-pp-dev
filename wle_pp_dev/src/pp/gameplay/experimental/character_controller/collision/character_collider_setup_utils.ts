@@ -1,68 +1,68 @@
+import { Object3D } from "@wonderlandengine/api";
 import { PhysicsLayerFlags } from "../../../../cauldron/physics/physics_layer_flags.js";
 import { CharacterColliderSetup, CharacterColliderSlideFlickerPreventionMode } from "./character_collider_setup.js";
 
-export let CharacterColliderSetupSimplifiedCreationAccuracyLevel = {
-    VERY_LOW: 0,
-    LOW: 1,
-    MEDIUM: 2,
-    HIGH: 3,
-    VERY_HIGH: 4
+export enum CharacterColliderSetupSimplifiedCreationAccuracyLevel {
+    VERY_LOW = 0,
+    LOW = 1,
+    MEDIUM = 2,
+    HIGH = 3,
+    VERY_HIGH = 4
 };
 
 export class CharacterColliderSetupSimplifiedCreationParams {
 
-    constructor() {
-        this.myHeight = 0;
-        this.myRadius = 0;
+    public myHeight: number = 0;
+    public myRadius: number = 0;
+    public myFeetRadius: number | null = null;
 
-        this.myAccuracyLevel = CharacterColliderSetupSimplifiedCreationAccuracyLevel.VERY_LOW;
+    public myAccuracyLevel: CharacterColliderSetupSimplifiedCreationAccuracyLevel = CharacterColliderSetupSimplifiedCreationAccuracyLevel.VERY_LOW;
 
-        this.myIsPlayer = false;
+    public myIsPlayer: boolean = false;
 
-        this.myCheckOnlyFeet = false;
+    public myCheckOnlyFeet: boolean = false;
 
-        this.myMaxMovementSteps = null;
+    public myMaxMovementSteps: number | null = null;
 
-        this.myCanFly = false;
+    public myCanFly: boolean = false;
 
-        this.myShouldSlideAlongWall = false;
-
-
-
-        this.myCollectGroundInfo = false;
-        this.myShouldSnapOnGround = false;
-        this.myMaxDistanceToSnapOnGround = 0;
-        this.myMaxWalkableGroundAngle = 0;
-        this.myMaxWalkableGroundStepHeight = 0;
-
-        /**
-         * Normally, the ground params are used for the ceiling too, but this needs to be a different setting,  
-         * since allowing walkable steps on ceiling might create issues with view occlusion for the player (especially with a high value)  
-         * since you can go more under some low ceiling making the occlusion head collide with it
-         * 
-         * Settings it to zero is safer, but means that the ceilings physx must be more flat, because it's easier that a small ceiling bump now blocks you
-         */
-        this.myMaxWalkableCeilingStepHeight = 0;
-
-        this.myShouldNotFallFromEdges = false;
+    public myShouldSlideAlongWall: boolean = false;
 
 
 
-        this.myHorizontalCheckBlockLayerFlags = new PhysicsLayerFlags();
-        this.myHorizontalCheckObjectsToIgnore = [];
+    public myCollectGroundInfo: boolean = false;
+    public myShouldSnapOnGround: boolean = false;
+    public myMaxDistanceToSnapOnGround: number = 0;
+    public myMaxWalkableGroundAngle: number = 0;
+    public myMaxWalkableGroundStepHeight: number = 0;
 
-        this.myVerticalCheckBlockLayerFlags = new PhysicsLayerFlags();
-        this.myVerticalCheckObjectsToIgnore = [];
+    /**
+     * Normally, the ground params are used for the ceiling too, but this needs to be a different setting,  
+     * since allowing walkable steps on ceiling might create issues with view occlusion for the player (especially with a high value)  
+     * since you can go more under some low ceiling making the occlusion head collide with it
+     * 
+     * Settings it to zero is safer, but means that the ceilings physx must be more flat, because it's easier that a small ceiling bump now blocks you
+     */
+    public myMaxWalkableCeilingStepHeight: number = 0;
 
-        this.myHorizontalCheckDebugEnabled = false;
-        this.myVerticalCheckDebugEnabled = false;
-    }
+    public myShouldNotFallFromEdges: boolean = false;
+
+
+
+    public myHorizontalCheckBlockLayerFlags: PhysicsLayerFlags = new PhysicsLayerFlags();
+    public myHorizontalCheckObjectsToIgnore: Object3D[] = [];
+
+    public myVerticalCheckBlockLayerFlags: PhysicsLayerFlags = new PhysicsLayerFlags();
+    public myVerticalCheckObjectsToIgnore: Object3D[] = [];
+
+    public myHorizontalCheckDebugEnabled: boolean = false;
+    public myVerticalCheckDebugEnabled: boolean = false;
 }
 
-export function createSimplified(simplifiedCreationParams, outCharacterColliderSetup = new CharacterColliderSetup()) {
+export function createSimplified(simplifiedCreationParams: Readonly<CharacterColliderSetupSimplifiedCreationParams>, outCharacterColliderSetup: CharacterColliderSetup = new CharacterColliderSetup()): CharacterColliderSetup {
     outCharacterColliderSetup.myHeight = simplifiedCreationParams.myHeight;
     outCharacterColliderSetup.myHorizontalCheckParams.myHorizontalCheckConeRadius = simplifiedCreationParams.myRadius;
-    outCharacterColliderSetup.myVerticalCheckParams.myVerticalCheckCircumferenceRadius = simplifiedCreationParams.myRadius / 2;
+    outCharacterColliderSetup.myVerticalCheckParams.myVerticalCheckCircumferenceRadius = simplifiedCreationParams.myFeetRadius ?? simplifiedCreationParams.myRadius / 2;
 
     outCharacterColliderSetup.myVerticalCheckParams.myVerticalCheckFixedForwardEnabled = true;
     outCharacterColliderSetup.myVerticalCheckParams.myVerticalCheckFixedForward.vec3_set(0, 0, 1);
@@ -247,7 +247,7 @@ export function createSimplified(simplifiedCreationParams, outCharacterColliderS
         outCharacterColliderSetup.mySplitMovementParams.mySplitMovementEnabled = true;
         outCharacterColliderSetup.mySplitMovementParams.mySplitMovementMaxSteps = simplifiedCreationParams.myMaxMovementSteps;
 
-        let safeRadius = simplifiedCreationParams.myRadius * 0.75;
+        const safeRadius = simplifiedCreationParams.myRadius * 0.75;
         outCharacterColliderSetup.mySplitMovementParams.mySplitMovementMaxStepLength = safeRadius;
         outCharacterColliderSetup.mySplitMovementParams.mySplitMovementMinStepLength = safeRadius;
     }
@@ -317,7 +317,7 @@ export function createSimplified(simplifiedCreationParams, outCharacterColliderS
     return outCharacterColliderSetup;
 }
 
-export function createTeleportColliderSetupFromMovementColliderSetup(movementColliderSetup, outTeleportColliderSetup = new CharacterColliderSetup()) {
+export function createTeleportColliderSetupFromMovementColliderSetup(movementColliderSetup: Readonly<CharacterColliderSetup>, outTeleportColliderSetup: CharacterColliderSetup = new CharacterColliderSetup()): CharacterColliderSetup {
     outTeleportColliderSetup.copy(movementColliderSetup);
 
     outTeleportColliderSetup.myHorizontalCheckParams.myHorizontalCheckConeHalfAngle = 180;
@@ -331,7 +331,7 @@ export function createTeleportColliderSetupFromMovementColliderSetup(movementCol
     return outTeleportColliderSetup;
 }
 
-export let CharacterColliderSetupUtils = {
+export const CharacterColliderSetupUtils = {
     createSimplified,
     createTeleportColliderSetupFromMovementColliderSetup
-};
+} as const;
