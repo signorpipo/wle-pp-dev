@@ -21,7 +21,9 @@ export function setSendDataCallback(callback: ((...args: unknown[]) => void) | n
     _mySendDataCallback = callback;
 }
 
-export function sendData(...args: unknown[]): void {
+export function sendData(...args: unknown[]): boolean {
+    let dataSent = false;
+
     try {
         if (_myAnalyticsEnabled) {
             if (_myDataLogEnabled) {
@@ -30,6 +32,8 @@ export function sendData(...args: unknown[]): void {
 
             if (_mySendDataCallback != null) {
                 _mySendDataCallback(...args);
+
+                dataSent = true;
             } else if (_myErrorsLogEnabled) {
                 console.error("You need to set the send data callback");
             }
@@ -38,59 +42,73 @@ export function sendData(...args: unknown[]): void {
         if (_myErrorsLogEnabled) {
             console.error(error);
         }
+
+        dataSent = false;
     }
+
+    return dataSent;
 }
 
-export function sendEvent(eventName: string, params?: Record<string, unknown>, sendOnce: boolean = false): void {
+export function sendEvent(eventName: string, params?: Record<string, unknown>): boolean {
+    let eventSent = false;
+
     try {
         if (_myAnalyticsEnabled) {
-            let sendEventAllowed = true;
-
-            if (sendOnce) {
-                sendEventAllowed = !AnalyticsUtils.hasEventAlreadyBeenSent(eventName);
+            if (_myEventsLogEnabled) {
+                if (params != null) {
+                    console.log("Analytics Event: " + eventName + " - Params:", params);
+                } else {
+                    console.log("Analytics Event: " + eventName);
+                }
             }
 
-            if (sendEventAllowed) {
-                if (_myEventsLogEnabled) {
-                    if (params != null) {
-                        console.log("Analytics Event: " + eventName + " - Params:", params);
-                    } else {
-                        console.log("Analytics Event: " + eventName);
-                    }
+            if (_mySendDataCallback != null) {
+                if (params != null) {
+                    _mySendDataCallback("event", eventName, params);
+                } else {
+                    _mySendDataCallback("event", eventName);
                 }
 
-                if (_mySendDataCallback != null) {
-                    if (params != null) {
-                        _mySendDataCallback("event", eventName, params);
-                    } else {
-                        _mySendDataCallback("event", eventName);
-                    }
-
-                    if (sendOnce) {
-                        _myEventsSentOnce.pp_pushUnique(eventName);
-                    }
-                } else if (_myErrorsLogEnabled) {
-                    console.error("You need to set the send data callback");
-                }
+                eventSent = true;
+            } else if (_myErrorsLogEnabled) {
+                console.error("Analytics Error: You need to set the send data callback");
+            } else {
+                console.warn("Analytics Error: You need to set the send data callback");
             }
         }
     } catch (error) {
         if (_myErrorsLogEnabled) {
             console.error(error);
         }
+
+        eventSent = false;
     }
+
+    return eventSent;
 }
 
-export function sendEventOnce(eventName: string, params?: Record<string, unknown>): void {
-    AnalyticsUtils.sendEvent(eventName, params, true);
+export function sendEventOnce(eventName: string, params?: Record<string, unknown>): boolean {
+    let eventSent = false;
+
+    if (_myAnalyticsEnabled) {
+        if (!AnalyticsUtils.hasEventAlreadyBeenSent(eventName)) {
+            eventSent = AnalyticsUtils.sendEvent(eventName, params);
+
+            if (eventSent) {
+                _myEventsSentOnce.pp_pushUnique(eventName);
+            }
+        }
+    }
+
+    return eventSent;
 }
 
-export function sendEventWithValue(eventName: string, value: number, sendOnce: boolean = false): void {
-    AnalyticsUtils.sendEvent(eventName, { "value": value }, sendOnce);
+export function sendEventWithValue(eventName: string, value: number): boolean {
+    return AnalyticsUtils.sendEvent(eventName, { "value": value });
 }
 
-export function sendEventOnceWithValue(eventName: string, value: number): void {
-    AnalyticsUtils.sendEventWithValue(eventName, value, true);
+export function sendEventOnceWithValue(eventName: string, value: number): boolean {
+    return AnalyticsUtils.sendEventOnce(eventName, { "value": value });
 }
 
 export function clearEventSentOnceState(eventName: string): void {
