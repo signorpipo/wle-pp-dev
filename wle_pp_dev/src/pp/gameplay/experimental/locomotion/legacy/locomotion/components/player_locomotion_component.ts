@@ -220,6 +220,9 @@ export class PlayerLocomotionComponent extends Component {
     @property.float(0.15)
     private readonly _myViewOcclusionHeadHeight!: number;
 
+    @property.float(0.1)
+    private readonly _myViewOcclusionFadeOutSeconds!: number;
+
     @property.float(0.025)
     private readonly _myViewOcclusionMaxRealHeadDistance!: number;
 
@@ -425,6 +428,7 @@ export class PlayerLocomotionComponent extends Component {
         params.myViewOcclusionInsideWallsEnabled = this._myViewOcclusionInsideWallsEnabled;
         params.myViewOcclusionHeadRadius = this._myViewOcclusionHeadRadius;
         params.myViewOcclusionHeadHeight = this._myViewOcclusionHeadHeight;
+        params.myViewOcclusionFadeOutSeconds = this._myViewOcclusionFadeOutSeconds;
         params.myViewOcclusionMaxRealHeadDistance = this._myViewOcclusionMaxRealHeadDistance;
 
         params.mySyncNonVRHeightWithVROnExitSession = this._mySyncNonVRHeightWithVROnExitSession;

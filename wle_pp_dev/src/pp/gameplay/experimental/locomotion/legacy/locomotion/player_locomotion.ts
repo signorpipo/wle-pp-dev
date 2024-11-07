@@ -146,6 +146,7 @@ export class PlayerLocomotionParams {
     public myViewOcclusionHeadRadius: number = 0;
     public myViewOcclusionHeadHeight: number = 0;
 
+    public myViewOcclusionFadeOutSeconds: number = 0;
     public myViewOcclusionMaxRealHeadDistance: number = 0;
 
     public mySyncNonVRHeightWithVROnExitSession: boolean = false;
@@ -544,7 +545,7 @@ export class PlayerLocomotion {
                 params.myObscureMaterial = null;
                 params.myObscureRadius = 0.5;
 
-                params.myObscureFadeOutSeconds = 0.1;
+                params.myObscureFadeOutSeconds = this._myParams.myViewOcclusionFadeOutSeconds;
                 params.myObscureFadeInSeconds = 0.25;
 
                 params.myObscureFadeEasingFunction = EasingFunction.linear;
