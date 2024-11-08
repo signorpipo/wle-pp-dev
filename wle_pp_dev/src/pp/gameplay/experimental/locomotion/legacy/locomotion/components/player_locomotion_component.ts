@@ -43,6 +43,9 @@ export class PlayerLocomotionComponent extends Component {
     @property.float(-1)
     private readonly _myCharacterFeetRadius!: number;
 
+    @property.float(0.1)
+    private readonly _myForeheadExtraHeight!: number;
+
 
 
     @property.float(2)
@@ -209,14 +212,19 @@ export class PlayerLocomotionComponent extends Component {
     /**
      * To avoid occlusion issues when moving when touching a tilted ceiling (which is not commong anyway),  
      * this would be better to be less or equal than the feet radius of the character (usually half of {@link _myCharacterRadius})
+     * Increasing {@link _myColliderExtraHeight} can help reducing the view occlusion
      * 
      * If you have a high camera near value, you might need to increase this value, even though the view occlusion might become more aggressive
-     * 
-     * Increasing {@link _myColliderExtraHeight} can help reducing the view occlusion
      */
     @property.float(0.15)
     private readonly _myViewOcclusionHeadRadius!: number;
 
+    /**
+     * Half of this value should be a bit lower than {@link _myForeheadExtraHeight} plus {@link _myColliderExtraHeight}, otherwise view occlusion might  
+     * trigger simply when moving under a low ceiling
+     * 
+     * If you have a high camera near value, you might need to increase this value, even though the view occlusion might become more aggressive
+     */
     @property.float(0.15)
     private readonly _myViewOcclusionHeadHeight!: number;
 
@@ -403,7 +411,7 @@ export class PlayerLocomotionComponent extends Component {
         params.myVRDirectionReferenceType = this._myVRDirectionReferenceType;
         params.myVRDirectionReferenceObject = this._myVRDirectionReferenceObject;
 
-        params.myForeheadExtraHeight = 0.1;
+        params.myForeheadExtraHeight = this._myForeheadExtraHeight;
 
         params.myTeleportType = this._myTeleportType;
         params.myTeleportMaxDistance = this._myTeleportMaxDistance;

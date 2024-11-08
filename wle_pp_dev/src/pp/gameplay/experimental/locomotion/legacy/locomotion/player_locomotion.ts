@@ -138,12 +138,18 @@ export class PlayerLocomotionParams {
     /**
      * To avoid occlusion issues when moving when touching a tilted ceiling (which is not commong anyway),  
      * this would be better to be less or equal than the feet radius of the character (usually half of {@link myCharacterRadius})
+     * Increasing {@link myColliderExtraHeight} can help reducing the view occlusion
      * 
      * If you have a high camera near value, you might need to increase this value, even though the view occlusion might become more aggressive
-     * 
-     * Increasing {@link myColliderExtraHeight} can help reducing the view occlusion
      */
     public myViewOcclusionHeadRadius: number = 0;
+
+    /**
+     * Half of this value should be a bit lower than {@link myForeheadExtraHeight} plus {@link myColliderExtraHeight}, otherwise view occlusion might  
+     * trigger simply when moving under a low ceiling
+     * 
+     * If you have a high camera near value, you might need to increase this value, even though the view occlusion might become more aggressive
+     */
     public myViewOcclusionHeadHeight: number = 0;
 
     public myViewOcclusionFadeOutSeconds: number = 0;
