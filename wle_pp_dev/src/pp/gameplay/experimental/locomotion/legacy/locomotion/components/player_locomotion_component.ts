@@ -490,6 +490,8 @@ export class PlayerLocomotionComponent extends Component {
             return;
         }
 
+        if (manualUpdate) return;
+
         if (this._myActivateOnNextPostPoseUpdate) {
             this._onActivate();
 
@@ -497,8 +499,6 @@ export class PlayerLocomotionComponent extends Component {
         }
 
         if (Globals.getPlayerLocomotion(this.engine) != this._myPlayerLocomotion) return;
-
-        if (manualUpdate) return;
 
         let startTime = 0;
         if (this._myPerformanceLogEnabled && Globals.isDebugEnabled(this.engine)) {
