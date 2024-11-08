@@ -164,7 +164,19 @@ export class PlayerLocomotionParams {
 
 
     public myColliderAccuracy: number = CharacterColliderSetupSimplifiedCreationAccuracyLevel.VERY_LOW;
+
+    /**
+     * If you enable this, you might also want to disable {@link myColliderCheckCeilings},  
+     * since it doesn't make much sense to check for ceilings when not checking the height
+     */
     public myColliderCheckOnlyFeet: boolean = false;
+
+    /**
+     * If you enable this, you might also want to disable {@link myColliderCheckOnlyFeet},  
+     * since it doesn't make much sense to check for ceilings without also checking the height
+     */
+    public myColliderCheckCeilings: boolean = false;
+
     public myColliderSlideAlongWall: boolean = false;
     public myColliderMaxWalkableGroundAngle: number = 0;
 
@@ -798,8 +810,7 @@ export class PlayerLocomotion {
         simplifiedParams.myIsPlayer = true;
 
         simplifiedParams.myCheckOnlyFeet = this._myParams.myColliderCheckOnlyFeet;
-
-        simplifiedParams.myCanFly = this._myParams.myFlyEnabled;
+        simplifiedParams.myCheckCeilings = this._myParams.myColliderCheckCeilings;
 
         simplifiedParams.myShouldSlideAlongWall = this._myParams.myColliderSlideAlongWall;
 

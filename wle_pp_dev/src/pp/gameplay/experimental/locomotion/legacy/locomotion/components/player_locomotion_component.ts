@@ -252,8 +252,19 @@ export class PlayerLocomotionComponent extends Component {
     @property.enum(["Very Low", "Low", "Medium", "High", "Very High"], "High")
     private readonly _myColliderAccuracy!: number;
 
+    /**
+     * If you enable this, you might also want to disable {@link _myColliderCheckCeilings},  
+     * since it doesn't make much sense to check for ceilings when not checking the height
+     */
     @property.bool(false)
     private readonly _myColliderCheckOnlyFeet!: boolean;
+
+    /**
+     * If you enable this, you might also want to disable {@link _myColliderCheckOnlyFeet},  
+     * since it doesn't make much sense to check for ceilings without also checking the height
+     */
+    @property.bool(true)
+    private readonly _myColliderCheckCeilings!: boolean;
 
     @property.bool(true)
     private readonly _myColliderSlideAlongWall!: boolean;
@@ -447,6 +458,7 @@ export class PlayerLocomotionComponent extends Component {
 
         params.myColliderAccuracy = this._myColliderAccuracy;
         params.myColliderCheckOnlyFeet = this._myColliderCheckOnlyFeet;
+        params.myColliderCheckCeilings = this._myColliderCheckCeilings;
         params.myColliderSlideAlongWall = this._myColliderSlideAlongWall;
         params.myColliderMaxWalkableGroundAngle = this._myColliderMaxWalkableGroundAngle;
         params.myColliderMaxTeleportableGroundAngle = this._myColliderMaxTeleportableGroundAngle < 0 ? null : this._myColliderMaxTeleportableGroundAngle;
