@@ -362,7 +362,8 @@ export class PlayerLocomotionComponent extends Component {
 
     private readonly _myPlayerLocomotion!: PlayerLocomotion;
 
-    private _myActivateOnNextUpdate: boolean = false;
+    private _myRegisterToPostPoseUpdateOnNextUpdate: boolean = false;
+    private _myActivateOnNextPostPoseUpdate: boolean = false;
 
     private readonly _myDebugPerformanceLogTimer: Timer = new Timer(0.5);
     private _myDebugPerformanceLogTotalTime: number = 0;
@@ -476,17 +477,24 @@ export class PlayerLocomotionComponent extends Component {
     }
 
     public override update(dt: number): void {
-        if (this._myActivateOnNextUpdate) {
-            this._onActivate();
+        if (this._myRegisterToPostPoseUpdateOnNextUpdate) {
+            Globals.getHeadPose(this.engine)!.unregisterPostPoseUpdatedEventEventListener(this);
+            Globals.getHeadPose(this.engine)!.registerPostPoseUpdatedEventEventListener(this, this.onPostPoseUpdatedEvent.bind(this));
 
-            this._myActivateOnNextUpdate = false;
+            this._myRegisterToPostPoseUpdateOnNextUpdate = false;
         }
     }
 
     public onPostPoseUpdatedEvent(dt: number, pose: Readonly<BasePose>, manualUpdate: boolean): void {
-        if (!this.active) {
+        if (!this.active || this._myRegisterToPostPoseUpdateOnNextUpdate) {
             Globals.getHeadPose(this.engine)?.unregisterPostPoseUpdatedEventEventListener(this);
             return;
+        }
+
+        if (this._myActivateOnNextPostPoseUpdate) {
+            this._onActivate();
+
+            this._myActivateOnNextPostPoseUpdate = false;
         }
 
         if (Globals.getPlayerLocomotion(this.engine) != this._myPlayerLocomotion) return;
@@ -547,14 +555,15 @@ export class PlayerLocomotionComponent extends Component {
     }
 
     public override onActivate(): void {
-        this._myActivateOnNextUpdate = true;
+        this._myRegisterToPostPoseUpdateOnNextUpdate = true;
+        this._myActivateOnNextPostPoseUpdate = true;
     }
 
     public override onDeactivate(): void {
+        Globals.getHeadPose(this.engine)?.unregisterPostPoseUpdatedEventEventListener(this);
+
         if (this._myPlayerLocomotion != null) {
             this._myPlayerLocomotion.setActive(false);
-
-            Globals.getHeadPose(this.engine)?.unregisterPostPoseUpdatedEventEventListener(this);
 
             if (Globals.getPlayerLocomotion(this.engine) == this._myPlayerLocomotion) {
                 Globals.removePlayerLocomotion(this.engine);
@@ -570,8 +579,6 @@ export class PlayerLocomotionComponent extends Component {
         if (!Globals.hasPlayerLocomotion(this.engine)) {
             this._myPlayerLocomotion.setActive(true);
             Globals.setPlayerLocomotion(this._myPlayerLocomotion, this.engine);
-
-            Globals.getHeadPose(this.engine)!.registerPostPoseUpdatedEventEventListener(this, this.onPostPoseUpdatedEvent.bind(this));
         }
     }
 
