@@ -478,8 +478,7 @@ export class PlayerLocomotionComponent extends Component {
 
     public override update(dt: number): void {
         if (this._myRegisterToPostPoseUpdateOnNextUpdate) {
-            Globals.getHeadPose(this.engine)!.unregisterPostPoseUpdatedEventEventListener(this);
-            Globals.getHeadPose(this.engine)!.registerPostPoseUpdatedEventEventListener(this, this.onPostPoseUpdatedEvent.bind(this));
+            Globals.getHeadPose(this.engine)!.registerPostPoseUpdatedEventListener(this, this.onPostPoseUpdatedEvent.bind(this));
 
             this._myRegisterToPostPoseUpdateOnNextUpdate = false;
         }
@@ -487,7 +486,7 @@ export class PlayerLocomotionComponent extends Component {
 
     public onPostPoseUpdatedEvent(dt: number, pose: Readonly<BasePose>, manualUpdate: boolean): void {
         if (!this.active || this._myRegisterToPostPoseUpdateOnNextUpdate) {
-            Globals.getHeadPose(this.engine)?.unregisterPostPoseUpdatedEventEventListener(this);
+            Globals.getHeadPose(this.engine)?.unregisterPostPoseUpdatedEventListener(this);
             return;
         }
 
@@ -560,7 +559,7 @@ export class PlayerLocomotionComponent extends Component {
     }
 
     public override onDeactivate(): void {
-        Globals.getHeadPose(this.engine)?.unregisterPostPoseUpdatedEventEventListener(this);
+        Globals.getHeadPose(this.engine)?.unregisterPostPoseUpdatedEventListener(this);
 
         if (this._myPlayerLocomotion != null) {
             this._myPlayerLocomotion.setActive(false);
