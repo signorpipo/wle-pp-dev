@@ -28,6 +28,8 @@ export class WaveMovementComponent extends Component {
         this._myRandomSigns = [Math.pp_randomPick(-1, 1), Math.pp_randomPick(-1, 1), Math.pp_randomPick(-1, 1)];
 
         Globals.getEasyTuneVariables(this.engine).add(new EasyTuneNumber("Wave Speed Multiplier", 1.00, null, true, 2, 5, undefined, undefined, undefined, this.engine));
+
+        this._myStarted = true;
     }
 
     update(dt) {
