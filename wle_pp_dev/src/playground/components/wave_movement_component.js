@@ -5,6 +5,10 @@ export class WaveMovementComponent extends Component {
     static TypeName = "wave-movement";
 
     start() {
+        this._myStarted = false;
+    }
+
+    _start() {
         this._myStartTimer = new Timer(0);
 
         this._myStartPosition = this.object.pp_getPosition();
@@ -27,6 +31,10 @@ export class WaveMovementComponent extends Component {
     }
 
     update(dt) {
+        if (!this._myStarted) {
+            this._start();
+        }
+
         if (this._myStartTimer.isRunning()) {
             this._myStartTimer.update(dt);
         } else {
