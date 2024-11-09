@@ -111,6 +111,11 @@ export function createSimplified(simplifiedCreationParams: Readonly<CharacterCol
     outCharacterColliderSetup.myGroundParams.myHorizontalMovementAdjustVerticalMovementOverSurfacePerceivedAngleDownhill = true;
     outCharacterColliderSetup.myGroundParams.myHorizontalMovementAdjustVerticalMovementOverSurfacePerceivedAngleUphill = true;
 
+    if (simplifiedCreationParams.myShouldNotFallFromEdges) {
+        outCharacterColliderSetup.myGroundParams.myMovementMustStayOnSurface = true;
+        outCharacterColliderSetup.myGroundParams.myMovementMustStayOnSurfaceAngleDownhill = Math.max(60, outCharacterColliderSetup.myGroundParams.mySurfaceAngleToIgnore);
+    }
+
 
     outCharacterColliderSetup.myHorizontalCheckParams.myHorizontalCheckHeadDistanceToIgnore = simplifiedCreationParams.myMaxWalkableCeilingStepHeight;
 
@@ -135,11 +140,6 @@ export function createSimplified(simplifiedCreationParams: Readonly<CharacterCol
         outCharacterColliderSetup.myCeilingParams.myCollectSurfaceCollisionHitInsideDistance = outCharacterColliderSetup.myGroundParams.myCollectSurfaceCollisionHitInsideDistance;
 
         outCharacterColliderSetup.myCeilingParams.myHorizontalMovementAdjustVerticalMovementOverSurfacePerceivedAngleUphill = outCharacterColliderSetup.myGroundParams.myHorizontalMovementAdjustVerticalMovementOverSurfacePerceivedAngleUphill;
-    }
-
-    if (simplifiedCreationParams.myShouldNotFallFromEdges) {
-        outCharacterColliderSetup.myGroundParams.myMovementMustStayOnSurface = true;
-        outCharacterColliderSetup.myGroundParams.myMovementMustStayOnSurfaceAngleDownhill = Math.max(60, outCharacterColliderSetup.myGroundParams.mySurfaceAngleToIgnore);
     }
 
 
@@ -235,6 +235,7 @@ export function createSimplified(simplifiedCreationParams: Readonly<CharacterCol
 
 
         outCharacterColliderSetup.myVerticalCheckParams.myVerticalMovementCheckPerformCheckOnBothSides = true;
+        outCharacterColliderSetup.myVerticalCheckParams.myVerticalPositionCheckPerformCheckOnBothSides = true;
 
         outCharacterColliderSetup.myVerticalCheckParams.myVerticalCheckCircumferenceSlices = 6;
         outCharacterColliderSetup.myVerticalCheckParams.myVerticalCheckCircumferenceRadialSteps = 2;
