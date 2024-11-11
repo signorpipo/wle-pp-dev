@@ -371,7 +371,7 @@ export class PlayerLocomotionComponent extends Component {
 
 
 
-    private readonly _myPlayerLocomotion!: PlayerLocomotion;
+    private readonly _myPlayerLocomotion: PlayerLocomotion | null = null;
 
     private _myRegisterToPostPoseUpdateOnNextUpdate: boolean = false;
     private _myActivateOnNextPostPoseUpdate: boolean = false;
@@ -504,13 +504,14 @@ export class PlayerLocomotionComponent extends Component {
 
         if (manualUpdate) return;
 
+        let setPlayerLocomotionOnGlobals = false;
         if (this._myActivateOnNextPostPoseUpdate) {
-            this._onActivate();
+            setPlayerLocomotionOnGlobals = this._onActivate();
 
             this._myActivateOnNextPostPoseUpdate = false;
         }
 
-        if (Globals.getPlayerLocomotion(this.engine) != this._myPlayerLocomotion) return;
+        if (!setPlayerLocomotionOnGlobals && Globals.hasPlayerLocomotion(this.engine) && Globals.getPlayerLocomotion(this.engine) != this._myPlayerLocomotion) return;
 
         let startTime = 0;
         if (this._myPerformanceLogEnabled && Globals.isDebugEnabled(this.engine)) {
@@ -527,11 +528,11 @@ export class PlayerLocomotionComponent extends Component {
             PhysicsUtils.resetRaycastCount(this.engine.physics!);
         }
 
-        if (!this._myPlayerLocomotion.isStarted()) {
-            this._myPlayerLocomotion.start();
+        if (!this._myPlayerLocomotion!.isStarted()) {
+            this._myPlayerLocomotion!.start();
         }
 
-        this._myPlayerLocomotion.update(dt);
+        this._myPlayerLocomotion!.update(dt);
 
         if (this._myPerformanceLogEnabled && Globals.isDebugEnabled(this.engine)) {
             const endTime = window.performance.now();
@@ -559,9 +560,17 @@ export class PlayerLocomotionComponent extends Component {
             console.log("Raycast count: " + PhysicsUtils.getRaycastCount(this.engine.physics!));
             PhysicsUtils.resetRaycastCount(this.engine.physics!);
         }
+
+        if (setPlayerLocomotionOnGlobals && !Globals.hasPlayerLocomotion(this.engine)) {
+            // This is done to only set the global when the locomotion is active and updated, so "ready"
+            Globals.setPlayerLocomotion(this._myPlayerLocomotion!, this.engine);
+        } else if (setPlayerLocomotionOnGlobals && Globals.getPlayerLocomotion(this.engine) != this._myPlayerLocomotion) {
+            // If someone in some way managed to set the globals, just deactivate this one, which was just being activated since the flag is true
+            this._myPlayerLocomotion!.setActive(false);
+        }
     }
 
-    public getPlayerLocomotion(): PlayerLocomotion {
+    public getPlayerLocomotion(): PlayerLocomotion | null {
         return this._myPlayerLocomotion;
     }
 
@@ -582,15 +591,19 @@ export class PlayerLocomotionComponent extends Component {
         }
     }
 
-    private _onActivate(): void {
+    private _onActivate(): boolean {
+        let setPlayerLocomotionOnGlobals = false;
+
         if (this._myPlayerLocomotion == null) {
             this._start();
         }
 
         if (!Globals.hasPlayerLocomotion(this.engine)) {
-            this._myPlayerLocomotion.setActive(true);
-            Globals.setPlayerLocomotion(this._myPlayerLocomotion, this.engine);
+            this._myPlayerLocomotion!.setActive(true);
+            setPlayerLocomotionOnGlobals = true;
         }
+
+        return setPlayerLocomotionOnGlobals;
     }
 
     private _getPhysicsBlockLayersFlags(): PhysicsLayerFlags {
