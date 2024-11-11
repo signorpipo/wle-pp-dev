@@ -1127,6 +1127,8 @@ export class PlayerTransformManager {
 
         params.myVerticalMovementCheckEnabled = true;
         params.myVerticalPositionCheckEnabled = true;
+        params.myCheckVerticalBothDirection = true;
+        params.myCheckVerticalPositionBothDirection = true;
 
         params.myGroundCircumferenceAddCenter = true;
         params.myGroundCircumferenceSliceAmount = 6;

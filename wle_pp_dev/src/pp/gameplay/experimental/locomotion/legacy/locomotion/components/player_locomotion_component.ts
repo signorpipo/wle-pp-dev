@@ -44,6 +44,9 @@ export class PlayerLocomotionComponent extends Component {
     @property.float(-1)
     private readonly _myCharacterFeetRadius!: number;
 
+    @property.float(0.1)
+    private readonly _myForeheadExtraHeight!: number;
+
 
 
     @property.float(2)
@@ -135,7 +138,7 @@ export class PlayerLocomotionComponent extends Component {
     @property.string("")
     private readonly _myTeleportFloorLayerFlags!: string;
 
-    @property.bool(true)
+    @property.bool(false)
     private readonly _myTeleportRotationOnUpEnabled!: boolean;
 
     @property.material()
@@ -210,16 +213,24 @@ export class PlayerLocomotionComponent extends Component {
     /**
      * To avoid occlusion issues when moving when touching a tilted ceiling (which is not commong anyway),  
      * this would be better to be less or equal than the feet radius of the character (usually half of {@link _myCharacterRadius})
+     * Increasing {@link _myColliderExtraHeight} can help reducing the view occlusion
      * 
      * If you have a high camera near value, you might need to increase this value, even though the view occlusion might become more aggressive
-     * 
-     * Increasing {@link _myColliderExtraHeight} can help reducing the view occlusion
      */
     @property.float(0.15)
     private readonly _myViewOcclusionHeadRadius!: number;
 
+    /**
+     * Half of this value should be a bit lower than {@link _myForeheadExtraHeight} plus {@link _myColliderExtraHeight}, otherwise view occlusion might  
+     * trigger simply when moving under a low ceiling
+     * 
+     * If you have a high camera near value, you might need to increase this value, even though the view occlusion might become more aggressive
+     */
     @property.float(0.15)
     private readonly _myViewOcclusionHeadHeight!: number;
+
+    @property.float(0.1)
+    private readonly _myViewOcclusionFadeOutSeconds!: number;
 
     @property.float(0.025)
     private readonly _myViewOcclusionMaxRealHeadDistance!: number;
@@ -242,8 +253,19 @@ export class PlayerLocomotionComponent extends Component {
     @property.enum(["Very Low", "Low", "Medium", "High", "Very High"], "High")
     private readonly _myColliderAccuracy!: number;
 
+    /**
+     * If you enable this, you might also want to disable {@link _myColliderCheckCeilings},  
+     * since it doesn't make much sense to check for ceilings when not checking the height
+     */
     @property.bool(false)
     private readonly _myColliderCheckOnlyFeet!: boolean;
+
+    /**
+     * If you enable this, you might also want to disable {@link _myColliderCheckOnlyFeet},  
+     * since it doesn't make much sense to check for ceilings without also checking the height
+     */
+    @property.bool(true)
+    private readonly _myColliderCheckCeilings!: boolean;
 
     @property.bool(true)
     private readonly _myColliderSlideAlongWall!: boolean;
@@ -352,7 +374,8 @@ export class PlayerLocomotionComponent extends Component {
 
     private readonly _myPlayerLocomotion!: PlayerLocomotion;
 
-    private _myActivateOnNextUpdate: boolean = false;
+    private _myRegisterToPostPoseUpdateOnNextUpdate: boolean = false;
+    private _myActivateOnNextPostPoseUpdate: boolean = false;
 
     private readonly _myDebugPerformanceLogTimer: Timer = new Timer(0.5);
     private _myDebugPerformanceLogTotalTime: number = 0;
@@ -401,7 +424,7 @@ export class PlayerLocomotionComponent extends Component {
         params.myVRDirectionReferenceType = this._myVRDirectionReferenceType;
         params.myVRDirectionReferenceObject = this._myVRDirectionReferenceObject;
 
-        params.myForeheadExtraHeight = 0.1;
+        params.myForeheadExtraHeight = this._myForeheadExtraHeight;
 
         params.myTeleportType = this._myTeleportType;
         params.myTeleportMaxDistance = this._myTeleportMaxDistance;
@@ -426,6 +449,7 @@ export class PlayerLocomotionComponent extends Component {
         params.myViewOcclusionInsideWallsEnabled = this._myViewOcclusionInsideWallsEnabled;
         params.myViewOcclusionHeadRadius = this._myViewOcclusionHeadRadius;
         params.myViewOcclusionHeadHeight = this._myViewOcclusionHeadHeight;
+        params.myViewOcclusionFadeOutSeconds = this._myViewOcclusionFadeOutSeconds;
         params.myViewOcclusionMaxRealHeadDistance = this._myViewOcclusionMaxRealHeadDistance;
 
         params.mySyncNonVRHeightWithVROnExitSession = this._mySyncNonVRHeightWithVROnExitSession;
@@ -435,6 +459,7 @@ export class PlayerLocomotionComponent extends Component {
 
         params.myColliderAccuracy = this._myColliderAccuracy;
         params.myColliderCheckOnlyFeet = this._myColliderCheckOnlyFeet;
+        params.myColliderCheckCeilings = this._myColliderCheckCeilings;
         params.myColliderSlideAlongWall = this._myColliderSlideAlongWall;
         params.myColliderMaxWalkableGroundAngle = this._myColliderMaxWalkableGroundAngle;
         params.myColliderMaxTeleportableGroundAngle = this._myColliderMaxTeleportableGroundAngle < 0 ? null : this._myColliderMaxTeleportableGroundAngle;
@@ -465,22 +490,28 @@ export class PlayerLocomotionComponent extends Component {
     }
 
     public override update(dt: number): void {
-        if (this._myActivateOnNextUpdate) {
-            this._onActivate();
+        if (this._myRegisterToPostPoseUpdateOnNextUpdate) {
+            Globals.getHeadPose(this.engine)!.registerPostPoseUpdatedEventListener(this, this.onPostPoseUpdatedEvent.bind(this));
 
-            this._myActivateOnNextUpdate = false;
+            this._myRegisterToPostPoseUpdateOnNextUpdate = false;
         }
     }
 
     public onPostPoseUpdatedEvent(dt: number, pose: Readonly<BasePose>, manualUpdate: boolean): void {
-        if (!this.active) {
-            Globals.getHeadPose(this.engine)?.unregisterPostPoseUpdatedEventEventListener(this);
+        if (!this.active || this._myRegisterToPostPoseUpdateOnNextUpdate) {
+            Globals.getHeadPose(this.engine)?.unregisterPostPoseUpdatedEventListener(this);
             return;
         }
 
-        if (Globals.getPlayerLocomotion(this.engine) != this._myPlayerLocomotion) return;
-
         if (manualUpdate) return;
+
+        if (this._myActivateOnNextPostPoseUpdate) {
+            this._onActivate();
+
+            this._myActivateOnNextPostPoseUpdate = false;
+        }
+
+        if (Globals.getPlayerLocomotion(this.engine) != this._myPlayerLocomotion) return;
 
         let startTime = 0;
         if (this._myPerformanceLogEnabled && Globals.isDebugEnabled(this.engine)) {
@@ -536,14 +567,15 @@ export class PlayerLocomotionComponent extends Component {
     }
 
     public override onActivate(): void {
-        this._myActivateOnNextUpdate = true;
+        this._myRegisterToPostPoseUpdateOnNextUpdate = true;
+        this._myActivateOnNextPostPoseUpdate = true;
     }
 
     public override onDeactivate(): void {
+        Globals.getHeadPose(this.engine)?.unregisterPostPoseUpdatedEventListener(this);
+
         if (this._myPlayerLocomotion != null) {
             this._myPlayerLocomotion.setActive(false);
-
-            Globals.getHeadPose(this.engine)?.unregisterPostPoseUpdatedEventEventListener(this);
 
             if (Globals.getPlayerLocomotion(this.engine) == this._myPlayerLocomotion) {
                 Globals.removePlayerLocomotion(this.engine);
@@ -559,8 +591,6 @@ export class PlayerLocomotionComponent extends Component {
         if (!Globals.hasPlayerLocomotion(this.engine)) {
             this._myPlayerLocomotion.setActive(true);
             Globals.setPlayerLocomotion(this._myPlayerLocomotion, this.engine);
-
-            Globals.getHeadPose(this.engine)!.registerPostPoseUpdatedEventEventListener(this, this.onPostPoseUpdatedEvent.bind(this));
         }
     }
 

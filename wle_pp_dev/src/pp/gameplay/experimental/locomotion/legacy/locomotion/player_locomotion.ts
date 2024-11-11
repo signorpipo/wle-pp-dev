@@ -138,14 +138,21 @@ export class PlayerLocomotionParams {
     /**
      * To avoid occlusion issues when moving when touching a tilted ceiling (which is not commong anyway),  
      * this would be better to be less or equal than the feet radius of the character (usually half of {@link myCharacterRadius})
+     * Increasing {@link myColliderExtraHeight} can help reducing the view occlusion
      * 
      * If you have a high camera near value, you might need to increase this value, even though the view occlusion might become more aggressive
-     * 
-     * Increasing {@link myColliderExtraHeight} can help reducing the view occlusion
      */
     public myViewOcclusionHeadRadius: number = 0;
+
+    /**
+     * Half of this value should be a bit lower than {@link myForeheadExtraHeight} plus {@link myColliderExtraHeight}, otherwise view occlusion might  
+     * trigger simply when moving under a low ceiling
+     * 
+     * If you have a high camera near value, you might need to increase this value, even though the view occlusion might become more aggressive
+     */
     public myViewOcclusionHeadHeight: number = 0;
 
+    public myViewOcclusionFadeOutSeconds: number = 0;
     public myViewOcclusionMaxRealHeadDistance: number = 0;
 
     public mySyncNonVRHeightWithVROnExitSession: boolean = false;
@@ -157,7 +164,19 @@ export class PlayerLocomotionParams {
 
 
     public myColliderAccuracy: number = CharacterColliderSetupSimplifiedCreationAccuracyLevel.VERY_LOW;
+
+    /**
+     * If you enable this, you might also want to disable {@link myColliderCheckCeilings},  
+     * since it doesn't make much sense to check for ceilings when not checking the height
+     */
     public myColliderCheckOnlyFeet: boolean = false;
+
+    /**
+     * If you enable this, you might also want to disable {@link myColliderCheckOnlyFeet},  
+     * since it doesn't make much sense to check for ceilings without also checking the height
+     */
+    public myColliderCheckCeilings: boolean = false;
+
     public myColliderSlideAlongWall: boolean = false;
     public myColliderMaxWalkableGroundAngle: number = 0;
 
@@ -544,7 +563,7 @@ export class PlayerLocomotion {
                 params.myObscureMaterial = null;
                 params.myObscureRadius = 0.5;
 
-                params.myObscureFadeOutSeconds = 0.1;
+                params.myObscureFadeOutSeconds = this._myParams.myViewOcclusionFadeOutSeconds;
                 params.myObscureFadeInSeconds = 0.25;
 
                 params.myObscureFadeEasingFunction = EasingFunction.linear;
@@ -791,8 +810,7 @@ export class PlayerLocomotion {
         simplifiedParams.myIsPlayer = true;
 
         simplifiedParams.myCheckOnlyFeet = this._myParams.myColliderCheckOnlyFeet;
-
-        simplifiedParams.myCanFly = this._myParams.myFlyEnabled;
+        simplifiedParams.myCheckCeilings = this._myParams.myColliderCheckCeilings;
 
         simplifiedParams.myShouldSlideAlongWall = this._myParams.myColliderSlideAlongWall;
 

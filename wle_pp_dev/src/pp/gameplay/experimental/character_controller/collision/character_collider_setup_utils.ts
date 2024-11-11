@@ -20,11 +20,19 @@ export class CharacterColliderSetupSimplifiedCreationParams {
 
     public myIsPlayer: boolean = false;
 
+    /**
+     * If you enable this, you might also want to disable {@link myCheckCeilings},  
+     * since it doesn't make much sense to check for ceilings when not checking the height
+     */
     public myCheckOnlyFeet: boolean = false;
 
-    public myMaxMovementSteps: number | null = null;
+    /**
+     * If you enable this, you might also want to disable {@link myCheckOnlyFeet},  
+     * since it doesn't make much sense to check for ceilings without also checking the height
+     */
+    public myCheckCeilings: boolean = false;
 
-    public myCanFly: boolean = false;
+    public myMaxMovementSteps: number | null = null;
 
     public myShouldSlideAlongWall: boolean = false;
 
@@ -67,26 +75,27 @@ export function createSimplified(simplifiedCreationParams: Readonly<CharacterCol
     outCharacterColliderSetup.myVerticalCheckParams.myVerticalCheckFixedForwardEnabled = true;
     outCharacterColliderSetup.myVerticalCheckParams.myVerticalCheckFixedForward.vec3_set(0, 0, 1);
 
-    if (!simplifiedCreationParams.myCheckOnlyFeet || simplifiedCreationParams.myCanFly) {
+    if (!simplifiedCreationParams.myCheckOnlyFeet) {
         outCharacterColliderSetup.myHorizontalCheckParams.myHorizontalHeightCheckEnabled = true;
         outCharacterColliderSetup.myVerticalCheckParams.myVerticalPositionCheckEnabled = true;
     }
 
     outCharacterColliderSetup.myWallSlideParams.myWallSlideEnabled = simplifiedCreationParams.myShouldSlideAlongWall;
 
+
+
     outCharacterColliderSetup.myHorizontalCheckParams.myHorizontalCheckFeetDistanceToIgnore = simplifiedCreationParams.myMaxWalkableGroundStepHeight;
 
-
-
+    outCharacterColliderSetup.myGroundParams.mySurfaceSnapEnabled = simplifiedCreationParams.myShouldSnapOnGround;
     outCharacterColliderSetup.myGroundParams.mySurfaceSnapMaxDistance = simplifiedCreationParams.myMaxDistanceToSnapOnGround;
+    outCharacterColliderSetup.myGroundParams.mySurfacePopOutEnabled = true;
     outCharacterColliderSetup.myGroundParams.mySurfacePopOutMaxDistance = simplifiedCreationParams.myMaxDistanceToSnapOnGround > 0 ?
         simplifiedCreationParams.myMaxDistanceToSnapOnGround : (simplifiedCreationParams.myRadius > 0.1) ? 0.1 : 0.01;
     outCharacterColliderSetup.myGroundParams.mySurfacePopOutMaxDistance = Math.max(outCharacterColliderSetup.myGroundParams.mySurfacePopOutMaxDistance, outCharacterColliderSetup.myHorizontalCheckParams.myHorizontalCheckFeetDistanceToIgnore);
+
     outCharacterColliderSetup.myGroundParams.myHorizontalMovementSurfaceAngleToIgnoreMaxHorizontalMovementLeft = simplifiedCreationParams.myRadius * 0.75;
 
     outCharacterColliderSetup.myGroundParams.myCollectSurfaceInfo = simplifiedCreationParams.myCollectGroundInfo || simplifiedCreationParams.myMaxWalkableGroundAngle > 0;
-    outCharacterColliderSetup.myGroundParams.mySurfaceSnapEnabled = simplifiedCreationParams.myShouldSnapOnGround;
-    outCharacterColliderSetup.myGroundParams.mySurfacePopOutEnabled = true;
     outCharacterColliderSetup.myGroundParams.mySurfaceAngleToIgnore = simplifiedCreationParams.myMaxWalkableGroundAngle;
 
     outCharacterColliderSetup.myGroundParams.myOnSurfaceMaxOutsideDistance = 0.001;
@@ -102,17 +111,23 @@ export function createSimplified(simplifiedCreationParams: Readonly<CharacterCol
     outCharacterColliderSetup.myGroundParams.myHorizontalMovementAdjustVerticalMovementOverSurfacePerceivedAngleDownhill = true;
     outCharacterColliderSetup.myGroundParams.myHorizontalMovementAdjustVerticalMovementOverSurfacePerceivedAngleUphill = true;
 
-    if (simplifiedCreationParams.myCanFly) {
-        outCharacterColliderSetup.myHorizontalCheckParams.myHorizontalCheckHeadDistanceToIgnore = simplifiedCreationParams.myMaxWalkableCeilingStepHeight;
+    if (simplifiedCreationParams.myShouldNotFallFromEdges) {
+        outCharacterColliderSetup.myGroundParams.myMovementMustStayOnSurface = true;
+        outCharacterColliderSetup.myGroundParams.myMovementMustStayOnSurfaceAngleDownhill = Math.max(60, outCharacterColliderSetup.myGroundParams.mySurfaceAngleToIgnore);
+    }
 
-        outCharacterColliderSetup.myCeilingParams.myCollectSurfaceInfo = outCharacterColliderSetup.myGroundParams.myCollectSurfaceInfo;
+
+    outCharacterColliderSetup.myHorizontalCheckParams.myHorizontalCheckHeadDistanceToIgnore = simplifiedCreationParams.myMaxWalkableCeilingStepHeight;
+
+    if (simplifiedCreationParams.myCheckCeilings) {
         outCharacterColliderSetup.myCeilingParams.mySurfacePopOutEnabled = outCharacterColliderSetup.myGroundParams.mySurfacePopOutEnabled;
-        outCharacterColliderSetup.myCeilingParams.mySurfaceAngleToIgnore = outCharacterColliderSetup.myGroundParams.mySurfaceAngleToIgnore;
-
-        outCharacterColliderSetup.myCeilingParams.mySurfaceSnapMaxDistance = outCharacterColliderSetup.myGroundParams.mySurfaceSnapMaxDistance;
         outCharacterColliderSetup.myCeilingParams.mySurfacePopOutMaxDistance = outCharacterColliderSetup.myGroundParams.mySurfacePopOutMaxDistance;
         outCharacterColliderSetup.myCeilingParams.mySurfacePopOutMaxDistance = Math.max(outCharacterColliderSetup.myCeilingParams.mySurfacePopOutMaxDistance, outCharacterColliderSetup.myHorizontalCheckParams.myHorizontalCheckHeadDistanceToIgnore);
+
         outCharacterColliderSetup.myCeilingParams.myHorizontalMovementSurfaceAngleToIgnoreMaxHorizontalMovementLeft = outCharacterColliderSetup.myGroundParams.myHorizontalMovementSurfaceAngleToIgnoreMaxHorizontalMovementLeft;
+
+        outCharacterColliderSetup.myCeilingParams.myCollectSurfaceInfo = outCharacterColliderSetup.myGroundParams.myCollectSurfaceInfo;
+        outCharacterColliderSetup.myCeilingParams.mySurfaceAngleToIgnore = outCharacterColliderSetup.myGroundParams.mySurfaceAngleToIgnore;
 
         outCharacterColliderSetup.myCeilingParams.myOnSurfaceMaxOutsideDistance = outCharacterColliderSetup.myGroundParams.myOnSurfaceMaxOutsideDistance;
         outCharacterColliderSetup.myCeilingParams.myOnSurfaceMaxInsideDistance = outCharacterColliderSetup.myGroundParams.myOnSurfaceMaxInsideDistance;
@@ -124,13 +139,7 @@ export function createSimplified(simplifiedCreationParams: Readonly<CharacterCol
         outCharacterColliderSetup.myCeilingParams.myCollectSurfaceCollisionHitOutsideDistance = outCharacterColliderSetup.myGroundParams.myCollectSurfaceCollisionHitOutsideDistance;
         outCharacterColliderSetup.myCeilingParams.myCollectSurfaceCollisionHitInsideDistance = outCharacterColliderSetup.myGroundParams.myCollectSurfaceCollisionHitInsideDistance;
 
-        outCharacterColliderSetup.myCeilingParams.myHorizontalMovementAdjustVerticalMovementOverSurfacePerceivedAngleDownhill = outCharacterColliderSetup.myGroundParams.myHorizontalMovementAdjustVerticalMovementOverSurfacePerceivedAngleDownhill;
         outCharacterColliderSetup.myCeilingParams.myHorizontalMovementAdjustVerticalMovementOverSurfacePerceivedAngleUphill = outCharacterColliderSetup.myGroundParams.myHorizontalMovementAdjustVerticalMovementOverSurfacePerceivedAngleUphill;
-    }
-
-    if (simplifiedCreationParams.myShouldNotFallFromEdges) {
-        outCharacterColliderSetup.myGroundParams.myMovementMustStayOnSurface = true;
-        outCharacterColliderSetup.myGroundParams.myMovementMustStayOnSurfaceAngleDownhill = Math.max(60, outCharacterColliderSetup.myGroundParams.mySurfaceAngleToIgnore);
     }
 
 
@@ -226,6 +235,7 @@ export function createSimplified(simplifiedCreationParams: Readonly<CharacterCol
 
 
         outCharacterColliderSetup.myVerticalCheckParams.myVerticalMovementCheckPerformCheckOnBothSides = true;
+        outCharacterColliderSetup.myVerticalCheckParams.myVerticalPositionCheckPerformCheckOnBothSides = true;
 
         outCharacterColliderSetup.myVerticalCheckParams.myVerticalCheckCircumferenceSlices = 6;
         outCharacterColliderSetup.myVerticalCheckParams.myVerticalCheckCircumferenceRadialSteps = 2;
@@ -285,7 +295,10 @@ export function createSimplified(simplifiedCreationParams: Readonly<CharacterCol
 
 
         outCharacterColliderSetup.myGroundParams.myBaseInsideCollisionCheckEnabled = true;
-        outCharacterColliderSetup.myCeilingParams.myBaseInsideCollisionCheckEnabled = true;
+
+        if (simplifiedCreationParams.myCheckCeilings) {
+            outCharacterColliderSetup.myCeilingParams.myBaseInsideCollisionCheckEnabled = true;
+        }
     }
 
     if (simplifiedCreationParams.myAccuracyLevel >= CharacterColliderSetupSimplifiedCreationAccuracyLevel.VERY_HIGH) {
@@ -311,7 +324,10 @@ export function createSimplified(simplifiedCreationParams: Readonly<CharacterCol
 
 
         outCharacterColliderSetup.myGroundParams.myRecollectSurfaceInfoOnSurfaceCheckFailed = true;
-        outCharacterColliderSetup.myCeilingParams.myRecollectSurfaceInfoOnSurfaceCheckFailed = outCharacterColliderSetup.myGroundParams.myRecollectSurfaceInfoOnSurfaceCheckFailed;
+
+        if (simplifiedCreationParams.myCheckCeilings) {
+            outCharacterColliderSetup.myCeilingParams.myRecollectSurfaceInfoOnSurfaceCheckFailed = outCharacterColliderSetup.myGroundParams.myRecollectSurfaceInfoOnSurfaceCheckFailed;
+        }
     }
 
     return outCharacterColliderSetup;
