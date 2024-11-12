@@ -10,9 +10,26 @@ export class HandPoseParams extends BasePoseParams {
     constructor(engine) {
         super(engine);
 
-        // This can be used to make it so that when you put down the gamepads and tracked hands would be picked,
-        // the gamepads will still being used (if they exists) for a bit more before switching to hands (if they are still the best option)
+        /**
+          * This can be used to make it so that when you put down the gamepads and tracked hands would be picked,  
+          * the gamepads will still being used (if they exists) for a bit more before switching to hands (if they are still the best option)
+         */
+        this.mySwitchToTrackedHandDelayEnabled = false;
+
         this.mySwitchToTrackedHandDelay = 0;
+
+        /**
+         * Sadly, it can happen that when the game switches to hand tracking and we want to use the gamepad, the gamepad is  
+         * not available in the tracked sources for a few frames
+         * 
+         * This "risky" fix keeps the gamepad previous references anyway for a few frames to give time to either appear or not in the tracked sources
+         * This reference might be not valid anymore, even if it seems to always be working
+         * 
+         * If disabled, even if tracked hands are available, it will treat it as no input source have been found
+         */
+        this.mySwitchToTrackedHandDelayNoInputSourceRiskyFixEnabled = false;
+
+
 
         this.myFixTrackedHandRotation = true;
     }
@@ -32,7 +49,9 @@ export class HandPose extends BasePose {
         this._myHandedness = handedness;
         this._myFixTrackedHandRotation = handPoseParams.myFixTrackedHandRotation;
 
+        this._mySwitchToTrackedHandDelayEnabled = handPoseParams.mySwitchToTrackedHandDelayEnabled;
         this._mySwitchToTrackedHandDelay = handPoseParams.mySwitchToTrackedHandDelay;
+        this._mySwitchToTrackedHandDelayNoInputSourceRiskyFixEnabled = handPoseParams.mySwitchToTrackedHandDelayNoInputSourceRiskyFixEnabled;
         this._mySwitchToTrackedHandTimer = new Timer(this._mySwitchToTrackedHandDelay, false);
         this._myDisableSwitchToTrackedHandDelaySessionChangeFrameCounter = 0;
         this._myDisableSwitchToTrackedHandDelaySessionChangeTimer = new Timer(1, false);
@@ -59,6 +78,18 @@ export class HandPose extends BasePose {
         return InputUtils.getInputSourceType(this._myInputSource);
     }
 
+    getInputSourceReal() {
+        return this._myRealInputSource;
+    }
+
+    getInputSourceTypeReal() {
+        if (this._myRealInputSource == null) {
+            return null;
+        }
+
+        return InputUtils.getInputSourceType(this._myRealInputSource);
+    }
+
     isFixTrackedHandRotation() {
         return this._myFixTrackedHandRotation;
     }
@@ -67,12 +98,28 @@ export class HandPose extends BasePose {
         this._myFixTrackedHandRotation = fixTrackedHandRotation;
     }
 
+    isSwitchToTrackedHandDelayEnabled() {
+        return this._mySwitchToTrackedHandDelayEnabled;
+    }
+
+    setSwitchToTrackedHandDelayEnabled(switchToTrackedHandDelayEnabled) {
+        this._mySwitchToTrackedHandDelayEnabled = switchToTrackedHandDelayEnabled;
+    }
+
     getSwitchToTrackedHandDelay() {
         return this._mySwitchToTrackedHandDelay;
     }
 
     setSwitchToTrackedHandDelay(switchToTrackedHandDelay) {
         this._mySwitchToTrackedHandDelay = switchToTrackedHandDelay;
+    }
+
+    isSwitchToTrackedHandDelayNoInputSourceRiskyFixEnabled() {
+        return this._mySwitchToTrackedHandDelayNoInputSourceRiskyFixEnabled;
+    }
+
+    setSwitchToTrackedHandDelayNoInputSourceRiskyFixEnabled(switchToTrackedHandDelayNoInputSourceRiskyFixEnabled) {
+        this._mySwitchToTrackedHandDelayNoInputSourceRiskyFixEnabled = switchToTrackedHandDelayNoInputSourceRiskyFixEnabled;
     }
 
     getRotationQuat(out = quat_create(), referenceObjectOverride = undefined) {
@@ -88,34 +135,36 @@ export class HandPose extends BasePose {
     }
 
     _preUpdate(dt) {
-        if (this._myGamepadWasUsedFrameCounter > 0) {
-            this._myGamepadWasUsedFrameCounter--;
-            if (this._myGamepadWasUsedFrameCounter == 0) {
-                this._myLastGamepadInputSource = null;
-            }
-        }
-
-        if (this._myInputSourceChangeDirty) {
-            this._myInputSourceChangeDirty = false;
-            this._myInputSourcesChangeEventListener();
-        }
-
-        if (this._mySwitchToTrackedHandTimer.isRunning()) {
-            this._mySwitchToTrackedHandTimer.update(dt);
-            if (this._mySwitchToTrackedHandTimer.isDone()) {
-                if (this._myInputSourcesChangeEventListener != null) {
-                    const switchToTrackedHandDelayBackup = this._mySwitchToTrackedHandDelay;
-                    this._mySwitchToTrackedHandDelay = 0;
-                    this._myInputSourcesChangeEventListener();
-                    this._mySwitchToTrackedHandDelay = switchToTrackedHandDelayBackup;
+        if (this._mySwitchToTrackedHandDelayEnabled) {
+            if (this._myGamepadWasUsedFrameCounter > 0) {
+                this._myGamepadWasUsedFrameCounter--;
+                if (this._myGamepadWasUsedFrameCounter == 0) {
+                    this._myLastGamepadInputSource = null;
                 }
             }
-        }
 
-        if (this._myDisableSwitchToTrackedHandDelaySessionChangeFrameCounter > 0) {
-            this._myDisableSwitchToTrackedHandDelaySessionChangeFrameCounter--;
-        } else {
-            this._myDisableSwitchToTrackedHandDelaySessionChangeTimer.update(dt);
+            if (this._myInputSourceChangeDirty) {
+                this._myInputSourceChangeDirty = false;
+                this._myInputSourcesChangeEventListener();
+            }
+
+            if (this._mySwitchToTrackedHandTimer.isRunning()) {
+                this._mySwitchToTrackedHandTimer.update(dt);
+                if (this._mySwitchToTrackedHandTimer.isDone()) {
+                    if (this._myInputSourcesChangeEventListener != null) {
+                        const switchToTrackedHandDelayEnabledBackup = this._mySwitchToTrackedHandDelayEnabled;
+                        this._mySwitchToTrackedHandDelayEnabled = false;
+                        this._myInputSourcesChangeEventListener();
+                        this._mySwitchToTrackedHandDelayEnabled = switchToTrackedHandDelayEnabledBackup;
+                    }
+                }
+            }
+
+            if (this._myDisableSwitchToTrackedHandDelaySessionChangeFrameCounter > 0) {
+                this._myDisableSwitchToTrackedHandDelaySessionChangeFrameCounter--;
+            } else {
+                this._myDisableSwitchToTrackedHandDelaySessionChangeTimer.update(dt);
+            }
         }
     }
 
@@ -141,16 +190,20 @@ export class HandPose extends BasePose {
     }
 
     _onXRSessionStartHook(manualCall, session) {
-        this._myDisableSwitchToTrackedHandDelaySessionChangeFrameCounter = 10;
-        this._myDisableSwitchToTrackedHandDelaySessionChangeTimer.start();
+        if (this._mySwitchToTrackedHandDelayEnabled) {
+            this._myDisableSwitchToTrackedHandDelaySessionChangeFrameCounter = 10;
+            this._myDisableSwitchToTrackedHandDelaySessionChangeTimer.start();
+        }
 
         this._myInputSourcesChangeEventListener = () => {
-            if (this._mySwitchToTrackedHandDelay > 0 && session.trackedSources != null &&
-                this._myDisableSwitchToTrackedHandDelaySessionChangeFrameCounter == 0 && !this._myDisableSwitchToTrackedHandDelaySessionChangeTimer.isRunning()) {
-                const currentInputSourceType = this._myRealInputSource != null ? InputUtils.getInputSourceType(this._myRealInputSource) : null;
-                if (currentInputSourceType == InputSourceType.GAMEPAD) {
-                    this._myGamepadWasUsedFrameCounter = 3;
-                    this._myLastGamepadInputSource = this._myRealInputSource;
+            if (this._mySwitchToTrackedHandDelayEnabled) {
+                if (this._mySwitchToTrackedHandDelay > 0 && session.trackedSources != null &&
+                    this._myDisableSwitchToTrackedHandDelaySessionChangeFrameCounter == 0 && !this._myDisableSwitchToTrackedHandDelaySessionChangeTimer.isRunning()) {
+                    const currentInputSourceType = this._myRealInputSource != null ? InputUtils.getInputSourceType(this._myRealInputSource) : null;
+                    if (currentInputSourceType == InputSourceType.GAMEPAD) {
+                        this._myGamepadWasUsedFrameCounter = 3;
+                        this._myLastGamepadInputSource = this._myRealInputSource;
+                    }
                 }
             }
 
@@ -158,11 +211,7 @@ export class HandPose extends BasePose {
             this._myInputSource = null;
             this._myTrackedHand = false;
 
-            let resetSwitchToTrackedHandTimer = true;
-
             if (session.inputSources != null) {
-                let extraSourcesCheckForGamepad = false;
-
                 for (const inputSource of session.inputSources) {
                     if (inputSource.handedness == this._myHandedness) {
                         this._myRealInputSource = inputSource;
@@ -172,15 +221,26 @@ export class HandPose extends BasePose {
                         break;
                     }
                 }
+            }
 
+            if (this._mySwitchToTrackedHandDelayEnabled) {
+                let resetSwitchToTrackedHandTimer = true;
+
+                let extraSourcesCheckForGamepad = false;
                 if (this._myGamepadWasUsedFrameCounter > 0 && (this._myInputSource == null || this._myTrackedHand)) {
                     extraSourcesCheckForGamepad = true;
                 }
 
                 if (extraSourcesCheckForGamepad) {
                     const inputSourcesToCheck = [];
-                    inputSourcesToCheck.push(...session.inputSources);
-                    inputSourcesToCheck.push(...session.trackedSources);
+
+                    if (session.inputSources != null) {
+                        inputSourcesToCheck.push(...session.inputSources);
+                    }
+
+                    if (session.trackedSources != null) {
+                        inputSourcesToCheck.push(...session.trackedSources);
+                    }
 
                     let gamepadFound = false;
                     for (const inputSourceToCheck of inputSourcesToCheck) {
@@ -207,14 +267,19 @@ export class HandPose extends BasePose {
                         // Sadly the gamepad might be added in the tracked source only at the end of this callback
                         this._myInputSourceChangeDirty = true;
 
-                        this._myInputSource = this._myLastGamepadInputSource;
-                        this._myTrackedHand = false;
+                        if (this._mySwitchToTrackedHandDelayNoInputSourceRiskyFixEnabled) {
+                            this._myInputSource = this._myLastGamepadInputSource;
+                            this._myTrackedHand = false;
+                        } else {
+                            this._myInputSource = null;
+                            this._myTrackedHand = false;
+                        }
                     }
                 }
-            }
 
-            if (resetSwitchToTrackedHandTimer) {
-                this._mySwitchToTrackedHandTimer.reset();
+                if (resetSwitchToTrackedHandTimer) {
+                    this._mySwitchToTrackedHandTimer.reset();
+                }
             }
         };
 
@@ -230,10 +295,10 @@ export class HandPose extends BasePose {
 
             this._mySwitchToTrackedHandTimer.reset();
 
-            this._myRealInputSource = null;
-
-            this._myDisableSwitchToTrackedHandDelaySessionChangeFrameCounter = 10;
-            this._myDisableSwitchToTrackedHandDelaySessionChangeTimer.start();
+            if (this._mySwitchToTrackedHandDelayEnabled) {
+                this._myDisableSwitchToTrackedHandDelaySessionChangeFrameCounter = 10;
+                this._myDisableSwitchToTrackedHandDelaySessionChangeTimer.start();
+            }
         };
 
         session.addEventListener("visibilitychange", this._myVisibilityChangeEventListener);

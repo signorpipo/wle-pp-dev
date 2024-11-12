@@ -212,8 +212,7 @@ export class PlayerLocomotionComponent extends Component {
 
     /**
      * To avoid occlusion issues when moving when touching a tilted ceiling (which is not commong anyway),  
-     * this would be better to be less or equal than the feet radius of the character (usually half of {@link _myCharacterRadius})
-     * Increasing {@link _myColliderExtraHeight} can help reducing the view occlusion
+     * this would be better to be less or equal than {@link _myCharacterFeetRadius}
      * 
      * If you have a high camera near value, you might need to increase this value, even though the view occlusion might become more aggressive
      */

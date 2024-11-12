@@ -36,12 +36,6 @@
                 },
                 {
                     "type": "switch-scene-test"
-                },
-                {
-                    "type": "load-audio"
-                },
-                {
-                    "type": "play-music"
                 }
             ]
         },

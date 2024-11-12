@@ -265,7 +265,7 @@ PlayerLocomotionSmooth.prototype.update = function () {
         } else if ((this._myParams.myMoveThroughCollisionShortcutEnabled && Globals.isDebugEnabled(this._myParams.myEngine) &&
             Globals.getGamepads(this._myParams.myEngine)[this._myParams.myHandedness].getButtonInfo(GamepadButtonID.THUMBSTICK).isPressed())
             || debugFlyEnabled) {
-            this._myParams.myPlayerTransformManager.move(headMovement, true, isManuallyMoving ? undefined : false);
+            this._myParams.myPlayerTransformManager.move(headMovement, true, isManuallyMoving ? true : false);
 
             if (isManuallyMoving) {
                 this._myParams.myPlayerTransformManager.resetReal();
@@ -284,7 +284,7 @@ PlayerLocomotionSmooth.prototype.update = function () {
                 this._myLocomotionRuntimeParams.myGravitySpeed = 0;
             }
 
-            this._myParams.myPlayerTransformManager.move(headMovement, false, isManuallyMoving ? undefined : false);
+            this._myParams.myPlayerTransformManager.move(headMovement, false, isManuallyMoving ? true : false);
 
             if (isManuallyMoving) {
                 this._myParams.myPlayerTransformManager.resetReal();

@@ -10,7 +10,7 @@ export class ParticlesSpawnerComponent extends Component {
     };
 
     start() {
-        this._myStartFrameCountdown = 2;
+        this._myStartFrameCountdown = 1;
     }
 
     _start() {
