@@ -16,6 +16,14 @@ export class PlayerLocomotionTeleportState {
 
     }
 
+    _teleport() {
+        this._teleportToPosition(this._myTeleportRuntimeParams.myTeleportPosition, this._myTeleportRuntimeParams.myTeleportForward);
+        this._myLocomotionRuntimeParams.myIsTeleporting = false;
+        this._myLocomotionRuntimeParams.myTeleportJustPerformed = true;
+
+        this._myTeleportParams.myPlayerTransformManager.resetReal();
+    }
+
     _checkTeleport(teleportPosition, teleportRotationQuat, collisionRuntimeParams, checkTeleportCollisionRuntimeParams = null) {
         // Implemented outside class definition
     }
