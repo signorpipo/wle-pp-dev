@@ -37,6 +37,8 @@ export class HandPoseParams extends BasePoseParams {
 
 export class HandPose extends BasePose {
 
+    static _mySwitchToTrackedHandDelayNoInputSourceKeepPreviousGamepadReferenceFrameAmount = 3;
+
     constructor(handedness, handPoseParams = new HandPoseParams()) {
         super(handPoseParams);
 
@@ -201,7 +203,7 @@ export class HandPose extends BasePose {
                     this._myDisableSwitchToTrackedHandDelaySessionChangeFrameCounter == 0 && !this._myDisableSwitchToTrackedHandDelaySessionChangeTimer.isRunning()) {
                     const currentInputSourceType = this._myRealInputSource != null ? InputUtils.getInputSourceType(this._myRealInputSource) : null;
                     if (currentInputSourceType == InputSourceType.GAMEPAD) {
-                        this._myGamepadWasUsedFrameCounter = 3;
+                        this._myGamepadWasUsedFrameCounter = HandPose._mySwitchToTrackedHandDelayNoInputSourceKeepPreviousGamepadReferenceFrameAmount;
                         this._myLastGamepadInputSource = this._myRealInputSource;
                     }
                 }
