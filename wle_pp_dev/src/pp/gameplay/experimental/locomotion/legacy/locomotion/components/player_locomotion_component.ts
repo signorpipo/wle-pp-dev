@@ -26,6 +26,9 @@ export class PlayerLocomotionComponent extends Component {
     @property.bool(true)
     private readonly _mySwitchLocomotionTypeShortcutEnabled!: boolean;
 
+    @property.bool(false)
+    private readonly _myStartIdle!: boolean;
+
     @property.string("0, 0, 0, 0, 0, 0, 0, 0")
     private readonly _myPhysicsBlockLayerFlags!: string;
 
@@ -387,6 +390,7 @@ export class PlayerLocomotionComponent extends Component {
         params.myDefaultLocomotionType = this._myDefaultLocomotionType;
         params.myAlwaysSmoothForNonVR = this._myAlwaysSmoothForNonVR;
         params.mySwitchLocomotionTypeShortcutEnabled = this._mySwitchLocomotionTypeShortcutEnabled;
+        params.myStartIdle = this._myStartIdle;
 
         params.myDefaultHeight = this._myDefaultHeight;
         params.myMinHeight = this._myMinHeight;

@@ -41,6 +41,9 @@ export class PlayerLocomotionParams {
     /** Double press main hand thumbstick (default: left) to switch */
     public mySwitchLocomotionTypeShortcutEnabled: boolean = true;
 
+    public myStartIdle: boolean = false;
+
+
     public myPhysicsBlockLayerFlags: Readonly<PhysicsLayerFlags> = new PhysicsLayerFlags();
 
 
@@ -604,6 +607,10 @@ export class PlayerLocomotion {
             this._myLocomotionMovementFSM.perform("startSmooth");
         } else {
             this._myLocomotionMovementFSM.perform("startTeleport");
+        }
+
+        if (this._myParams.myStartIdle) {
+            this.setIdle(true);
         }
 
         this._myStarted = true;
