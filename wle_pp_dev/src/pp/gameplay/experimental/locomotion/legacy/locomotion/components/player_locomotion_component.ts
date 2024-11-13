@@ -27,6 +27,9 @@ export class PlayerLocomotionComponent extends Component {
     @property.bool(true)
     private readonly _mySwitchLocomotionTypeShortcutEnabled!: boolean;
 
+    @property.bool(false)
+    private readonly _myStartIdle!: boolean;
+
     @property.string("0, 0, 0, 0, 0, 0, 0, 0")
     private readonly _myPhysicsBlockLayerFlags!: string;
 
@@ -212,11 +215,11 @@ export class PlayerLocomotionComponent extends Component {
 
     /**
      * To avoid occlusion issues when moving when touching a tilted ceiling (which is not commong anyway),  
-     * this would be better to be less or equal than {@link _myCharacterFeetRadius}
+     * this value should be a bit lower than {@link _myCharacterFeetRadius}
      * 
      * If you have a high camera near value, you might need to increase this value, even though the view occlusion might become more aggressive
      */
-    @property.float(0.15)
+    @property.float(0.145)
     private readonly _myViewOcclusionHeadRadius!: number;
 
     /**
@@ -388,6 +391,7 @@ export class PlayerLocomotionComponent extends Component {
         params.myDefaultLocomotionType = this._myDefaultLocomotionType;
         params.myAlwaysSmoothForNonVR = this._myAlwaysSmoothForNonVR;
         params.mySwitchLocomotionTypeShortcutEnabled = this._mySwitchLocomotionTypeShortcutEnabled;
+        params.myStartIdle = this._myStartIdle;
 
         params.myDefaultHeight = this._myDefaultHeight;
         params.myMinHeight = this._myMinHeight;
