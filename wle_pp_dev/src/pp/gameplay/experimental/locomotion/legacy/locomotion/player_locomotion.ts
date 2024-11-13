@@ -140,7 +140,7 @@ export class PlayerLocomotionParams {
 
     /**
      * To avoid occlusion issues when moving when touching a tilted ceiling (which is not commong anyway),  
-     * this would be better to be less or equal than {@link myCharacterFeetRadius}
+     * this value should be a bit lower than {@link myCharacterFeetRadius}
      * 
      * If you have a high camera near value, you might need to increase this value, even though the view occlusion might become more aggressive
      */
