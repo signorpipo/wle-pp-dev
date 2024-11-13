@@ -663,6 +663,62 @@ export class PlayerLocomotion {
         return canStop;
     }
 
+    public isIdle(): boolean {
+        return this._myIdle;
+    }
+
+    public setIdle(idle: boolean): void {
+        if (this._myIdle != idle) {
+            this._myIdle = idle;
+
+            if (idle) {
+                this._myLocomotionMovementFSM.perform("idle");
+            } else {
+                this._myLocomotionMovementFSM.perform("resume");
+            }
+        }
+    }
+
+    public getPlayerLocomotionSmooth(): PlayerLocomotionSmooth {
+        return this._myPlayerLocomotionSmooth;
+    }
+
+    public getPlayerLocomotionTeleport(): PlayerLocomotionTeleport {
+        return this._myPlayerLocomotionTeleport;
+    }
+
+    public getPlayerTransformManager(): PlayerTransformManager {
+        return this._myPlayerTransformManager;
+    }
+
+    public getPlayerLocomotionRotate(): PlayerLocomotionRotate {
+        return this._myPlayerLocomotionRotate;
+    }
+
+    public getPlayerHeadManager(): PlayerHeadManager {
+        return this._myPlayerHeadManager;
+    }
+
+    public getPlayerObscureManager(): PlayerObscureManager {
+        return this._myPlayerObscureManager;
+    }
+
+    public registerPreUpdateCallback(id: unknown, callback: (dt: number, playerLocomotion: PlayerLocomotion) => void): void {
+        this._myPreUpdateEmitter.add(callback, { id: id });
+    }
+
+    public unregisterPreUpdateCallback(id: unknown): void {
+        this._myPreUpdateEmitter.remove(id);
+    }
+
+    public registerPostUpdateCallback(id: unknown, callback: (dt: number, playerLocomotion: PlayerLocomotion) => void): void {
+        this._myPostUpdateEmitter.add(callback, { id: id });
+    }
+
+    public unregisterPostUpdateCallback(id: unknown): void {
+        this._myPostUpdateEmitter.remove(id);
+    }
+
     public update(dt: number): void {
         if (!this._myActive) return;
 
@@ -745,56 +801,6 @@ export class PlayerLocomotion {
         }
 
         this._myPostUpdateEmitter.notify(dt, this);
-    }
-
-    public setIdle(idle: boolean): void {
-        this._myIdle = idle;
-
-        if (idle) {
-            this._myLocomotionMovementFSM.perform("idle");
-        } else {
-            this._myLocomotionMovementFSM.perform("resume");
-        }
-    }
-
-    public getPlayerLocomotionSmooth(): PlayerLocomotionSmooth {
-        return this._myPlayerLocomotionSmooth;
-    }
-
-    public getPlayerLocomotionTeleport(): PlayerLocomotionTeleport {
-        return this._myPlayerLocomotionTeleport;
-    }
-
-    public getPlayerTransformManager(): PlayerTransformManager {
-        return this._myPlayerTransformManager;
-    }
-
-    public getPlayerLocomotionRotate(): PlayerLocomotionRotate {
-        return this._myPlayerLocomotionRotate;
-    }
-
-    public getPlayerHeadManager(): PlayerHeadManager {
-        return this._myPlayerHeadManager;
-    }
-
-    public getPlayerObscureManager(): PlayerObscureManager {
-        return this._myPlayerObscureManager;
-    }
-
-    public registerPreUpdateCallback(id: unknown, callback: (dt: number, playerLocomotion: PlayerLocomotion) => void): void {
-        this._myPreUpdateEmitter.add(callback, { id: id });
-    }
-
-    public unregisterPreUpdateCallback(id: unknown): void {
-        this._myPreUpdateEmitter.remove(id);
-    }
-
-    public registerPostUpdateCallback(id: unknown, callback: (dt: number, playerLocomotion: PlayerLocomotion) => void): void {
-        this._myPostUpdateEmitter.add(callback, { id: id });
-    }
-
-    public unregisterPostUpdateCallback(id: unknown): void {
-        this._myPostUpdateEmitter.remove(id);
     }
 
     private _setupCollisionCheckParamsMovement(): CollisionCheckParams {
