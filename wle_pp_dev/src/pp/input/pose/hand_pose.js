@@ -10,6 +10,8 @@ export class HandPoseParams extends BasePoseParams {
     constructor(engine) {
         super(engine);
 
+        this.myFixTrackedHandRotation = true;
+
         /**
           * This can be used to make it so that when you put down the gamepads and tracked hands would be picked,  
           * the gamepads will still being used (if they exists) for a bit more before switching to hands (if they are still the best option)
@@ -28,10 +30,6 @@ export class HandPoseParams extends BasePoseParams {
          * If disabled, even if tracked hands are available, it will treat it as no input source have been found
          */
         this.mySwitchToTrackedHandDelayNoInputSourceRiskyFixEnabled = false;
-
-
-
-        this.myFixTrackedHandRotation = true;
     }
 }
 
