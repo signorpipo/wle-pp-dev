@@ -40,14 +40,20 @@ export class HandPose extends BasePose {
     constructor(handedness, handPoseParams = new HandPoseParams()) {
         super(handPoseParams);
 
-        this._myInputSource = null;
-        this._myLastGamepadInputSource = null;
-        this._myRealInputSource = null;
-        this._myGamepadWasUsedFrameCounter = 0;
-        this._myInputSourceChangeDirty = false;
-
         this._myHandedness = handedness;
         this._myFixTrackedHandRotation = handPoseParams.myFixTrackedHandRotation;
+
+        this._myInputSource = null;
+        this._myRealInputSource = null;
+
+        this._myTrackedHand = false;
+
+        this._myInputSourcesChangeEventListener = null;
+        this._myVisibilityChangeEventListener = null;
+
+        this._myGamepadWasUsedFrameCounter = 0;
+        this._myLastGamepadInputSource = null;
+        this._myInputSourceChangeDirty = false;
 
         this._mySwitchToTrackedHandDelayEnabled = handPoseParams.mySwitchToTrackedHandDelayEnabled;
         this._mySwitchToTrackedHandDelay = handPoseParams.mySwitchToTrackedHandDelay;
@@ -55,11 +61,6 @@ export class HandPose extends BasePose {
         this._mySwitchToTrackedHandTimer = new Timer(this._mySwitchToTrackedHandDelay, false);
         this._myDisableSwitchToTrackedHandDelaySessionChangeFrameCounter = 0;
         this._myDisableSwitchToTrackedHandDelaySessionChangeTimer = new Timer(1, false);
-
-        this._myTrackedHand = false;
-
-        this._myInputSourcesChangeEventListener = null;
-        this._myVisibilityChangeEventListener = null;
     }
 
     getHandedness() {
@@ -156,6 +157,10 @@ export class HandPose extends BasePose {
                         this._mySwitchToTrackedHandDelayEnabled = false;
                         this._myInputSourcesChangeEventListener();
                         this._mySwitchToTrackedHandDelayEnabled = switchToTrackedHandDelayEnabledBackup;
+
+                        this._myGamepadWasUsedFrameCounter = 0;
+                        this._myLastGamepadInputSource = null;
+                        this._myInputSourceChangeDirty = false;
                     }
                 }
             }
@@ -172,19 +177,20 @@ export class HandPose extends BasePose {
         if (this.isActive() != active) {
             if (!active) {
                 this._myInputSource = null;
-                this._myLastGamepadInputSource = null;
                 this._myRealInputSource = null;
-                this._myGamepadWasUsedFrameCounter = 0;
-                this._myInputSourceChangeDirty = false;
-
-                this._mySwitchToTrackedHandTimer.reset();
-                this._myDisableSwitchToTrackedHandDelaySessionChangeFrameCounter = 0;
-                this._myDisableSwitchToTrackedHandDelaySessionChangeTimer.reset();
 
                 this._myTrackedHand = false;
 
                 XRUtils.getSession(this.getEngine())?.removeEventListener("inputsourceschange", this._myInputSourcesChangeEventListener);
                 XRUtils.getSession(this.getEngine())?.removeEventListener("visibilitychange", this._myVisibilityChangeEventListener);
+
+                this._myGamepadWasUsedFrameCounter = 0;
+                this._myLastGamepadInputSource = null;
+                this._myInputSourceChangeDirty = false;
+
+                this._mySwitchToTrackedHandTimer.reset();
+                this._myDisableSwitchToTrackedHandDelaySessionChangeFrameCounter = 0;
+                this._myDisableSwitchToTrackedHandDelaySessionChangeTimer.reset();
             }
         }
     }
@@ -197,12 +203,14 @@ export class HandPose extends BasePose {
 
         this._myInputSourcesChangeEventListener = () => {
             if (this._mySwitchToTrackedHandDelayEnabled) {
-                if (this._mySwitchToTrackedHandDelay > 0 && session.trackedSources != null &&
-                    this._myDisableSwitchToTrackedHandDelaySessionChangeFrameCounter == 0 && !this._myDisableSwitchToTrackedHandDelaySessionChangeTimer.isRunning()) {
-                    const currentInputSourceType = this._myRealInputSource != null ? InputUtils.getInputSourceType(this._myRealInputSource) : null;
-                    if (currentInputSourceType == InputSourceType.GAMEPAD) {
-                        this._myGamepadWasUsedFrameCounter = HandPose._mySwitchToTrackedHandDelayNoInputSourceKeepPreviousGamepadReferenceFrameAmount;
-                        this._myLastGamepadInputSource = this._myRealInputSource;
+                if (this.getInputSourceType() == InputSourceType.GAMEPAD &&
+                    this._mySwitchToTrackedHandDelay > 0 && session.trackedSources != null &&
+                    this._myDisableSwitchToTrackedHandDelaySessionChangeFrameCounter == 0 &&
+                    !this._myDisableSwitchToTrackedHandDelaySessionChangeTimer.isRunning()) {
+
+                    this._myGamepadWasUsedFrameCounter = HandPose._mySwitchToTrackedHandDelayNoInputSourceKeepPreviousGamepadReferenceFrameAmount;
+                    if (this._mySwitchToTrackedHandDelayNoInputSourceRiskyFixEnabled) {
+                        this._myLastGamepadInputSource = this._myInputSource;
                     }
                 }
             }
@@ -247,7 +255,6 @@ export class HandPose extends BasePose {
                         if (inputSourceToCheck.handedness == this._myHandedness) {
                             const inputSourceToCheckType = InputUtils.getInputSourceType(inputSourceToCheck);
                             if (inputSourceToCheckType == InputSourceType.GAMEPAD) {
-                                this._myRealInputSource = inputSourceToCheck;
                                 this._myInputSource = inputSourceToCheck;
                                 this._myTrackedHand = false;
 
@@ -290,7 +297,6 @@ export class HandPose extends BasePose {
         this._myVisibilityChangeEventListener = () => {
             this._myGamepadWasUsedFrameCounter = 0;
             this._myLastGamepadInputSource = null;
-
             this._myInputSourceChangeDirty = false;
 
             this._mySwitchToTrackedHandTimer.reset();
@@ -305,21 +311,21 @@ export class HandPose extends BasePose {
     }
 
     _onXRSessionEndHook() {
-        this._myGamepadWasUsedFrameCounter = 0;
-        this._myLastGamepadInputSource = null;
-
         this._myRealInputSource = null;
         this._myInputSource = null;
+
         this._myTrackedHand = false;
 
+        this._myInputSourcesChangeEventListener = null;
+        this._myVisibilityChangeEventListener = null;
+
+        this._myGamepadWasUsedFrameCounter = 0;
+        this._myLastGamepadInputSource = null;
         this._myInputSourceChangeDirty = false;
 
         this._mySwitchToTrackedHandTimer.reset();
         this._myDisableSwitchToTrackedHandDelaySessionChangeFrameCounter = 0;
         this._myDisableSwitchToTrackedHandDelaySessionChangeTimer.reset();
-
-        this._myInputSourcesChangeEventListener = null;
-        this._myVisibilityChangeEventListener = null;
     }
 }
 
