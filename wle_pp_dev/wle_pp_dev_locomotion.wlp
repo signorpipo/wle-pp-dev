@@ -10295,6 +10295,145 @@
                 0.2999503,
                 0.812422
             ]
+        },
+        "5055119f-a648-48a4-bfac-babed561359d": {
+            "link": {
+                "name": "Arc",
+                "file": "assets\\models\\arc.fbx"
+            },
+            "parent": "c480967a-0f15-4410-a164-5f878b11a3a3",
+            "translation": [
+                19.2046356,
+                1.1537656,
+                -0.6830344
+            ],
+            "rotation": [
+                0.4999998,
+                0.5000002,
+                -0.4999997,
+                0.5000001
+            ],
+            "scaling": [
+                0.9999996,
+                0.9999871,
+                0.999987
+            ],
+            "components": [
+                {
+                    "mesh": {
+                        "material": "17868ab8-b09d-4b68-bdb3-660fc6745d90"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "triangleMesh",
+                        "box": {
+                            "extents": [
+                                2.0,
+                                0.1,
+                                1.0
+                            ]
+                        },
+                        "kinematic": true,
+                        "triangleMesh": {
+                            "mesh": "562514fa-4a27-4783-a771-02e0e0b7c725"
+                        },
+                        "static": true
+                    }
+                }
+            ]
+        },
+        "30d0e768-b7a6-486a-8d39-f3f815862d22": {
+            "name": "Obstacle",
+            "parent": "c480967a-0f15-4410-a164-5f878b11a3a3",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "mesh": "p1",
+                        "material": "17868ab8-b09d-4b68-bdb3-660fc6745d90"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "box",
+                        "box": {
+                            "extents": [
+                                2.0,
+                                0.1,
+                                1.0
+                            ]
+                        },
+                        "kinematic": true
+                    }
+                }
+            ],
+            "translation": [
+                0.9009855,
+                -0.0961421,
+                -10.0000219
+            ],
+            "scaling": [
+                1.999999,
+                0.1,
+                1.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ]
+        },
+        "fcb8f1b7-1c8c-40d5-9a0b-9356d246280c": {
+            "link": {
+                "name": "Arc",
+                "file": "assets\\models\\arc.fbx"
+            },
+            "parent": "ec998e82-2ae6-4b60-aa97-1816a73e4764",
+            "translation": [
+                -3.2122516,
+                1.3897099,
+                -13.2288913
+            ],
+            "scaling": [
+                0.9999967,
+                0.9999839,
+                0.9999802
+            ],
+            "components": [
+                {
+                    "mesh": {
+                        "material": "17868ab8-b09d-4b68-bdb3-660fc6745d90"
+                    }
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "triangleMesh",
+                        "box": {
+                            "extents": [
+                                2.0,
+                                0.1,
+                                1.0
+                            ]
+                        },
+                        "kinematic": true,
+                        "triangleMesh": {
+                            "mesh": "562514fa-4a27-4783-a771-02e0e0b7c725"
+                        },
+                        "static": true
+                    }
+                }
+            ],
+            "rotation": [
+                0.5001167,
+                -0.4998778,
+                0.4998832,
+                0.5001221
+            ]
         }
     },
     "meshes": {
@@ -10440,6 +10579,12 @@
             "link": {
                 "name": "Mesh.001",
                 "file": "assets\\models\\tracked_hand_right.glb"
+            }
+        },
+        "562514fa-4a27-4783-a771-02e0e0b7c725": {
+            "link": {
+                "name": "mesh_0",
+                "file": "assets\\models\\arc.fbx"
             }
         }
     },
@@ -10796,6 +10941,12 @@
                 ]
             },
             "pipeline": "ef04fac9-8fbc-4e85-b3a3-dafac1d81beb"
+        },
+        "83b74364-fb25-4557-bf75-576a211b6a03": {
+            "link": {
+                "name": "Material",
+                "file": "assets\\models\\arc.fbx"
+            }
         }
     },
     "shaders": {
@@ -11564,6 +11715,11 @@
         "c70f86fc-6264-4000-99ab-38c2900a58d1": {
             "fileName": "assets/models/tracked_hand_right.glb",
             "importerName": ""
+        },
+        "60ea77a6-7897-4767-9cb5-ae2c2c3a1dd6": {
+            "fileName": "assets/models/arc.fbx",
+            "importerName": "",
+            "importPhysicalAsPhongMaterials": true
         }
     },
     "fonts": {
