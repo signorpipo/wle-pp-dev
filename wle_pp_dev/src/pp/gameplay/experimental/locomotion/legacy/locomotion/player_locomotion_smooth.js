@@ -246,13 +246,13 @@ PlayerLocomotionSmooth.prototype.update = function () {
         headMovement = headMovement.vec3_add(horizontalMovement, headMovement);
 
         if ((this._myParams.myFlyEnabled && this._myParams.myFlyWithButtonsEnabled) || debugFlyEnabled) {
-            if (Globals.getGamepads(this._myParams.myEngine)[this._myParams.myHandedness].getButtonInfo(GamepadButtonID.TOP_BUTTON).isPressed()) {
+            if (Globals.getGamepads(this._myParams.myEngine)[InputUtils.getOppositeHandedness(this._myParams.myHandedness)].getButtonInfo(GamepadButtonID.TOP_BUTTON).isPressed()) {
                 verticalMovement = playerUp.vec3_scale(maxSpeed * dt, verticalMovement);
                 headMovement = headMovement.vec3_add(verticalMovement, headMovement);
                 this._myLocomotionRuntimeParams.myIsFlying = true;
 
                 isManuallyMoving = true;
-            } else if (Globals.getGamepads(this._myParams.myEngine)[this._myParams.myHandedness].getButtonInfo(GamepadButtonID.BOTTOM_BUTTON).isPressed()) {
+            } else if (Globals.getGamepads(this._myParams.myEngine)[InputUtils.getOppositeHandedness(this._myParams.myHandedness)].getButtonInfo(GamepadButtonID.BOTTOM_BUTTON).isPressed()) {
                 verticalMovement = playerUp.vec3_scale(-maxSpeed * dt, verticalMovement);
                 headMovement = headMovement.vec3_add(verticalMovement, headMovement);
                 this._myLocomotionRuntimeParams.myIsFlying = true;
@@ -260,7 +260,7 @@ PlayerLocomotionSmooth.prototype.update = function () {
                 isManuallyMoving = true;
             }
 
-            if (Globals.getGamepads(this._myParams.myEngine)[this._myParams.myHandedness].getButtonInfo(GamepadButtonID.BOTTOM_BUTTON).isPressEnd(2)) {
+            if (Globals.getGamepads(this._myParams.myEngine)[InputUtils.getOppositeHandedness(this._myParams.myHandedness)].getButtonInfo(GamepadButtonID.BOTTOM_BUTTON).isPressEnd(2)) {
                 this._myLocomotionRuntimeParams.myIsFlying = false;
             }
         }
