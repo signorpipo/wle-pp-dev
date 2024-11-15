@@ -50,7 +50,8 @@ export class OverlapCursorComponent extends Component {
 
     public override init(): void {
         const fakeCursor = {
-            handedness: 3,
+            handedness: null,
+            handednessTyped: null,
             object: this.object,
             cursorPos: vec3_create()
         };

@@ -298,6 +298,9 @@ export class PlayerLocomotionComponent extends Component {
     @property.float(0.1)
     private readonly _myColliderMaxDistanceToSnapOnGround!: number;
 
+    @property.float(0.2)
+    private readonly _myColliderMaxDistanceToPopOutGround!: number;
+
     @property.float(0.1)
     private readonly _myColliderMaxWalkableGroundStepHeight!: number;
 
@@ -468,6 +471,7 @@ export class PlayerLocomotionComponent extends Component {
         params.myColliderMaxTeleportableGroundAngle = this._myColliderMaxTeleportableGroundAngle < 0 ? null : this._myColliderMaxTeleportableGroundAngle;
         params.myColliderSnapOnGround = this._myColliderSnapOnGround;
         params.myColliderMaxDistanceToSnapOnGround = this._myColliderMaxDistanceToSnapOnGround;
+        params.myColliderMaxDistanceToPopOutGround = this._myColliderMaxDistanceToPopOutGround;
         params.myColliderMaxWalkableGroundStepHeight = this._myColliderMaxWalkableGroundStepHeight;
         params.myColliderMaxWalkableCeilingStepHeight = this._myColliderMaxWalkableCeilingStepHeight;
         params.myColliderPreventFallingFromEdges = this._myColliderPreventFallingFromEdges;
