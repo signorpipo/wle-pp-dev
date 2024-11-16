@@ -2,7 +2,6 @@ import { InputComponent, ViewComponent } from "@wonderlandengine/api";
 import { Cursor, CursorTarget, HitTestLocation } from "@wonderlandengine/components";
 import { BrowserUtils } from "../../../../cauldron/utils/browser_utils.js";
 import { XRUtils } from "../../../../cauldron/utils/xr_utils.js";
-import { Handedness } from "../../../../input/cauldron/input_types.js";
 import { InputUtils } from "../../../../input/cauldron/input_utils.js";
 import { Globals } from "../../../../pp/globals.js";
 import { mat4_create, quat2_create, vec3_create } from "../../../js/extensions/array/vec_create_extension.js";
