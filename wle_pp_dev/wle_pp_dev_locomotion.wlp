@@ -48,7 +48,9 @@
                     "pp-player-locomotion": {
                         "_myPhysicsBlockLayerFlags": "0, 1, 1, 0, 0, 0, 0, 0",
                         "_myMoveThroughCollisionShortcutEnabled": true,
-                        "_myAlwaysSmoothForNonVR": false
+                        "_myAlwaysSmoothForNonVR": false,
+                        "_myFlyWithButtonsEnabled": true,
+                        "_myFlyEnabled": true
                     }
                 }
             ]
