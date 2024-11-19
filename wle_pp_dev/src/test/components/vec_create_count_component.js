@@ -10,7 +10,7 @@ export class VecCreateCountComponent extends Component {
     static TypeName = "vec-create-count";
 
     init() {
-        if (this.active) {
+        if (this.markedActive) {
             this._myDebugWithPP = true;
 
             this._myVec3CreateCall = 0;

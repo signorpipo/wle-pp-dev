@@ -2505,10 +2505,14 @@
                     "pp-set-active": {
                         "_myActive": false,
                         "_mySetActiveWhen": "First Update"
-                    }
+                    },
+                    "active": false
                 },
                 {
-                    "type": "pp-adjust-hierarchy-physx-scale"
+                    "type": "pp-adjust-hierarchy-physx-scale",
+                    "pp-adjust-hierarchy-physx-scale": {
+                        "_myWhen": "Init"
+                    }
                 }
             ],
             "translation": [
@@ -2532,7 +2536,8 @@
                         "_mySetActiveOn": "Descendants",
                         "_myActive": false,
                         "_mySetActiveWhen": "First Update"
-                    }
+                    },
+                    "active": false
                 },
                 {
                     "type": "character-spawner",
@@ -2541,7 +2546,7 @@
                         "_myShortPrototype": "6736ed93-7942-46f4-997d-8995176d656f",
                         "_myRoomSize": 10.0,
                         "_myRoomHeight": 5.0,
-                        "_myAmount": 25
+                        "_myAmount": 10
                     }
                 }
             ]
