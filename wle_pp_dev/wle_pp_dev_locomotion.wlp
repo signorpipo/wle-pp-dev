@@ -9351,7 +9351,8 @@
                         "outerAngle": 180.0,
                         "innerAngle": 100.0,
                         "shadowRange": 100.0,
-                        "intensity": 100.0
+                        "intensity": 180.0,
+                        "type": "point"
                     }
                 }
             ],
@@ -10282,7 +10283,8 @@
                         "outerAngle": 180.0,
                         "innerAngle": 100.0,
                         "shadowRange": 100.0,
-                        "intensity": 100.0
+                        "intensity": 180.0,
+                        "type": "point"
                     }
                 }
             ],
@@ -11502,7 +11504,7 @@
             },
             "features": {
                 "WITH_FOG": true,
-                "DEPRECATED_LIGHT_ATTENUATION": true
+                "DEPRECATED_LIGHT_ATTENUATION": false
             }
         },
         "07314ce6-8ce7-40aa-b03d-0b38ea15ecfd": {
@@ -11512,7 +11514,7 @@
             },
             "features": {
                 "ALPHA_MASKED": true,
-                "DEPRECATED_LIGHT_ATTENUATION": true
+                "DEPRECATED_LIGHT_ATTENUATION": false
             }
         },
         "8b5b959b-4b6b-4ffe-8989-c6e89a5a50c8": {
@@ -11521,7 +11523,7 @@
                 "file": "default"
             },
             "features": {
-                "DEPRECATED_LIGHT_ATTENUATION": true
+                "DEPRECATED_LIGHT_ATTENUATION": false
             }
         },
         "7c9a90e4-6a6a-4737-b698-62884b13f8f0": {
@@ -11573,7 +11575,7 @@
             },
             "features": {
                 "WITH_FOG": true,
-                "DEPRECATED_LIGHT_ATTENUATION": true
+                "DEPRECATED_LIGHT_ATTENUATION": false
             },
             "name": "Phong Opaque 2"
         },
@@ -11583,7 +11585,7 @@
                 "file": "default"
             },
             "features": {
-                "DEPRECATED_LIGHT_ATTENUATION": true
+                "DEPRECATED_LIGHT_ATTENUATION": false
             }
         },
         "e825b990-2eef-4a56-9c8f-f055afb7a44e": {
@@ -11592,7 +11594,7 @@
                 "file": "default"
             },
             "features": {
-                "DEPRECATED_LIGHT_ATTENUATION": true
+                "DEPRECATED_LIGHT_ATTENUATION": false
             }
         },
         "a1032e6f-8cb1-48d3-bd1c-ae95cad928c5": {
