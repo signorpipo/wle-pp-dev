@@ -43,7 +43,8 @@ export class PlayerLocomotionSmoothParams {
          * 
          * When this is enabled, when your head is inside a ceiling and you are on ground, the movement will not be performed
          */
-        this.myUseHighestColliderHeightWhenManuallyMoving = false;
+        this.myUseHighestColliderHeightWhenManuallyMovingHorizontally = false;
+        this.myUseHighestColliderHeightWhenManuallyMovingVertically = false;
 
         this.myAttemptMoveAgainWhenFailedDueToCeilingPopOut = true;
 
@@ -197,7 +198,8 @@ PlayerLocomotionSmooth.prototype.update = function () {
         axes[0] = Math.abs(axes[0]) > this._myParams.myMovementMinStickIntensityThreshold ? axes[0] : 0;
         axes[1] = Math.abs(axes[1]) > this._myParams.myMovementMinStickIntensityThreshold ? axes[1] : 0;
 
-        let isManuallyMoving = false;
+        let isManuallyMovingHorizontally = false;
+        let isManuallyMovingVertically = false;
         let maxSpeed = this._myParams.myMaxSpeed;
         if (debugFlyEnabled) {
             maxSpeed = maxSpeed * this._myParams.myDebugFlyMaxSpeedMultiplier;
@@ -240,7 +242,7 @@ PlayerLocomotionSmooth.prototype.update = function () {
 
                 horizontalMovement = direction.vec3_scale(this._myCurrentSpeed * dt, horizontalMovement);
 
-                isManuallyMoving = true;
+                isManuallyMovingHorizontally = true;
             }
         } else {
             if (this._myStickIdleTimer.isRunning()) {
@@ -259,13 +261,13 @@ PlayerLocomotionSmooth.prototype.update = function () {
                 headMovement = headMovement.vec3_add(verticalMovement, headMovement);
                 this._myLocomotionRuntimeParams.myIsFlying = true;
 
-                isManuallyMoving = true;
+                isManuallyMovingVertically = true;
             } else if (Globals.getGamepads(this._myParams.myEngine)[InputUtils.getOppositeHandedness(this._myParams.myHandedness)].getButtonInfo(GamepadButtonID.BOTTOM_BUTTON).isPressed()) {
                 verticalMovement = playerUp.vec3_scale(-maxSpeed * dt, verticalMovement);
                 headMovement = headMovement.vec3_add(verticalMovement, headMovement);
                 this._myLocomotionRuntimeParams.myIsFlying = true;
 
-                isManuallyMoving = true;
+                isManuallyMovingVertically = true;
             }
 
             if (Globals.getGamepads(this._myParams.myEngine)[InputUtils.getOppositeHandedness(this._myParams.myHandedness)].getButtonInfo(GamepadButtonID.BOTTOM_BUTTON).isPressEnd(2)) {
@@ -281,7 +283,7 @@ PlayerLocomotionSmooth.prototype.update = function () {
             || debugFlyEnabled) {
             this._myParams.myPlayerTransformManager.move(headMovement, true);
 
-            if (isManuallyMoving) {
+            if (isManuallyMovingHorizontally || isManuallyMovingVertically) {
                 this._myParams.myPlayerTransformManager.resetReal();
             }
         } else {
@@ -298,12 +300,15 @@ PlayerLocomotionSmooth.prototype.update = function () {
                 this._myLocomotionRuntimeParams.myGravitySpeed = 0;
             }
 
-            let useHighestHeight = this._myParams.myUseHighestColliderHeightWhenManuallyMoving && isManuallyMoving
-                && (this._myParams.myPlayerTransformManager.getCollisionRuntimeParams().myIsOnGround || this._myLocomotionRuntimeParams.myIsFlying);
+            let useHighestHeight = ((this._myParams.myUseHighestColliderHeightWhenManuallyMovingHorizontally && isManuallyMovingHorizontally) ||
+                (this._myParams.myUseHighestColliderHeightWhenManuallyMovingVertically && isManuallyMovingVertically)) &&
+                (!isManuallyMovingHorizontally || this._myParams.myUseHighestColliderHeightWhenManuallyMovingHorizontally) &&
+                (!isManuallyMovingVertically || this._myParams.myUseHighestColliderHeightWhenManuallyMovingVertically) &&
+                (this._myParams.myPlayerTransformManager.getCollisionRuntimeParams().myIsOnGround || this._myLocomotionRuntimeParams.myGravitySpeed == 0);
 
             this._myParams.myPlayerTransformManager.move(headMovement, false, useHighestHeight);
 
-            if (this._myParams.myAttemptMoveAgainWhenFailedDueToCeilingPopOut && isManuallyMoving && !horizontalMovement.vec3_isZero(0.000001)) {
+            if (this._myParams.myAttemptMoveAgainWhenFailedDueToCeilingPopOut && isManuallyMovingHorizontally && !horizontalMovement.vec3_isZero(0.000001)) {
                 const collisionRuntimeParams = this._myParams.myPlayerTransformManager.getCollisionRuntimeParams();
                 if (collisionRuntimeParams.myHorizontalMovementCanceled &&
                     !collisionRuntimeParams.myVerticalMovementCanceled &&
@@ -311,11 +316,11 @@ PlayerLocomotionSmooth.prototype.update = function () {
                 ) {
                     // The pop out means it was inside a ceiling, can happen due to moving the head up when close to the ceiling
                     // the pop fixes this but the horizontal movement is canceled before that, so we try it again
-                    this._myParams.myPlayerTransformManager.move(horizontalMovement, false, isManuallyMoving ? true : false);
+                    this._myParams.myPlayerTransformManager.move(horizontalMovement, false, useHighestHeight);
                 }
             }
 
-            if (isManuallyMoving) {
+            if (isManuallyMovingHorizontally || isManuallyMovingVertically) {
                 this._myParams.myPlayerTransformManager.resetReal();
 
                 collisionRuntimeParams.myFixedMovement.vec3_removeComponentAlongAxis(
