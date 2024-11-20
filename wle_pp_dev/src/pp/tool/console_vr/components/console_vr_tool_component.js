@@ -37,15 +37,15 @@ export class ConsoleVRToolComponent extends Component {
 
     update(dt) {
         if (Globals.isToolEnabled(this.engine) && (!Globals.hasConsoleVRWidget(this.engine) || Globals.getConsoleVRWidget(this.engine) == this._myWidget)) {
-            if (this._myStarted) {
-                if (!this._myEnableOnlyForVR || XRUtils.isSessionActive(this.engine)) {
-                    this._myWidget.setActive(true);
-                    this._myWidget.update(dt);
-                } else {
-                    this._myWidget.setActive(false);
-                }
-            } else {
+            if (!this._myStarted) {
                 this._start();
+            }
+
+            if (!this._myEnableOnlyForVR || XRUtils.isSessionActive(this.engine)) {
+                this._myWidget.setActive(true);
+                this._myWidget.update(dt);
+            } else {
+                this._myWidget.setActive(false);
             }
         } else if (this._myStarted) {
             this._myWidget.setActive(false);
