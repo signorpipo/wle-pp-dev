@@ -325,7 +325,7 @@ export class PlayerLocomotionComponent extends Component {
      * 
      * If you need to increase {@link _myViewOcclusionHeadRadius}, also increasing this can help preventing view occlusion happening when shouldn't
      */
-    @property.float(0.025)
+    @property.float(0)
     private readonly _myColliderExtraHeight!: number;
 
 
