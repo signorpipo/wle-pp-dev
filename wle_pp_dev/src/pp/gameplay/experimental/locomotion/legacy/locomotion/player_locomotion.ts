@@ -524,7 +524,7 @@ export class PlayerLocomotion {
                 params.myVRDirectionReferenceType = this._myParams.myVRDirectionReferenceType;
                 params.myVRDirectionReferenceObject = this._myParams.myVRDirectionReferenceObject;
 
-                params.myUseHighestColliderHeightWhenManuallyMovingHorizontally = false;
+                params.myUseHighestColliderHeightWhenManuallyMovingHorizontally = true;
                 params.myUseHighestColliderHeightWhenManuallyMovingVertically = false;
 
                 params.myAttemptMoveAgainWhenFailedDueToCeilingPopOut = true;
