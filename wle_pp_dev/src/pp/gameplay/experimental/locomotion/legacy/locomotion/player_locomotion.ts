@@ -524,6 +524,11 @@ export class PlayerLocomotion {
                 params.myVRDirectionReferenceType = this._myParams.myVRDirectionReferenceType;
                 params.myVRDirectionReferenceObject = this._myParams.myVRDirectionReferenceObject;
 
+                params.myUseHighestColliderHeightWhenManuallyMovingHorizontally = false;
+                params.myUseHighestColliderHeightWhenManuallyMovingVertically = false;
+
+                params.myAttemptMoveAgainWhenFailedDueToCeilingPopOut = true;
+
                 params.myDebugFlyMaxSpeedMultiplier = this._myParams.myDebugFlyMaxSpeedMultiplier;
                 params.myMoveThroughCollisionShortcutEnabled = this._myParams.myMoveThroughCollisionShortcutEnabled;
                 params.myMoveHeadShortcutEnabled = this._myParams.myMoveHeadShortcutEnabled;
