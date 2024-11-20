@@ -37,6 +37,14 @@ export class PlayerLocomotionSmoothParams {
 
         this.myHandedness = Handedness.LEFT;
 
+        /**
+         * If you have the head inside a ceiling, when you move the player will still move, and when you duck down again you will find   
+         * in another position, which might be confusing (even if it might be preferred to move so to, for example, go away from the lower ceiling zone)
+         * 
+         * When this is enabled, when your head is inside a ceiling and you are on ground, the movement will not be performed
+         */
+        this.myUseHighestColliderHeightWhenManuallyMoving = false;
+
         this.myAttemptMoveAgainWhenFailedDueToCeilingPopOut = true;
 
         this.myDebugFlyMaxSpeedMultiplier = 5;
@@ -271,7 +279,7 @@ PlayerLocomotionSmooth.prototype.update = function () {
         } else if ((this._myParams.myMoveThroughCollisionShortcutEnabled && Globals.isDebugEnabled(this._myParams.myEngine) &&
             Globals.getGamepads(this._myParams.myEngine)[this._myParams.myHandedness].getButtonInfo(GamepadButtonID.THUMBSTICK).isPressed())
             || debugFlyEnabled) {
-            this._myParams.myPlayerTransformManager.move(headMovement, true, isManuallyMoving ? true : false);
+            this._myParams.myPlayerTransformManager.move(headMovement, true);
 
             if (isManuallyMoving) {
                 this._myParams.myPlayerTransformManager.resetReal();
@@ -290,7 +298,11 @@ PlayerLocomotionSmooth.prototype.update = function () {
                 this._myLocomotionRuntimeParams.myGravitySpeed = 0;
             }
 
-            this._myParams.myPlayerTransformManager.move(headMovement, false, isManuallyMoving ? true : false);
+            let useHighestHeight = this._myParams.myUseHighestColliderHeightWhenManuallyMoving && isManuallyMoving
+                && (this._myParams.myPlayerTransformManager.getCollisionRuntimeParams().myIsOnGround || this._myLocomotionRuntimeParams.myIsFlying);
+
+            this._myParams.myPlayerTransformManager.move(headMovement, false, useHighestHeight);
+
             if (this._myParams.myAttemptMoveAgainWhenFailedDueToCeilingPopOut && isManuallyMoving && !horizontalMovement.vec3_isZero(0.000001)) {
                 const collisionRuntimeParams = this._myParams.myPlayerTransformManager.getCollisionRuntimeParams();
                 if (collisionRuntimeParams.myHorizontalMovementCanceled &&
