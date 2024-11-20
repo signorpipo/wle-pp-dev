@@ -80,7 +80,7 @@ export class PPGatewayComponent extends Component {
     }
 
     public override init(): void {
-        if (!this.markedActive) return;
+        if (!this.active) return;
 
         if (this._myClearConsoleOnInit) {
             this._myClearConsoleComponent = this.object.pp_addComponent(ClearConsoleComponent, false);

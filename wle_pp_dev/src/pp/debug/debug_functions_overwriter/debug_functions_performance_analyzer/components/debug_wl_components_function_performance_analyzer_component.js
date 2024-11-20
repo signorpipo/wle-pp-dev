@@ -29,7 +29,7 @@ export class DebugWLComponentsFunctionsPerformanceAnalyzerComponent extends Comp
     };
 
     init() {
-        if (!this.markedActive) return;
+        if (!this.active) return;
 
         this._myStartTimer = new Timer(this._myDelayStart);
         if (this._myDelayStart == 0) {

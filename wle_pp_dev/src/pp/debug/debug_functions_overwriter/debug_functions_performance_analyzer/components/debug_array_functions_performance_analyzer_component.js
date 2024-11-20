@@ -27,7 +27,7 @@ export class DebugArrayFunctionsPerformanceAnalyzerComponent extends Component {
     };
 
     init() {
-        if (!this.markedActive) return;
+        if (!this.active) return;
 
         let classesByPath = "Array, Uint8ClampedArray, Uint8Array, Uint16Array, Uint32Array, Int8Array, Int16Array, Int32Array, Float32Array, Float64Array";
         if (this._myIncludeOnlyMainArrayTypes) {

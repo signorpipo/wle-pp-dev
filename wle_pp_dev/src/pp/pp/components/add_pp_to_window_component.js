@@ -9,7 +9,7 @@ export class AddPPToWindowComponent extends Component {
 
     init() {
         this._myPP = null;
-        if (this.markedActive && this._myAdd) {
+        if (this.active && this._myAdd) {
             this._myPP = {};
             this._addProperties(PPAPI);
 

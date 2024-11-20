@@ -28,7 +28,7 @@ export class DebugPPArrayCreationPerformanceAnalyzerComponent extends Component 
     };
 
     init() {
-        if (!this.markedActive) return;
+        if (!this.active) return;
 
         this.object.pp_addComponent(DebugFunctionsPerformanceAnalyzerComponent, {
             _myObjectsByReference: [

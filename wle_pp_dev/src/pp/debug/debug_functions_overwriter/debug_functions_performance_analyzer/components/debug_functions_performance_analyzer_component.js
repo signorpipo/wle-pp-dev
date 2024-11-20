@@ -38,7 +38,7 @@ export class DebugFunctionsPerformanceAnalyzerComponent extends Component {
     };
 
     init() {
-        if (!this.markedActive) return;
+        if (!this.active) return;
 
         this._myActive = false;
 
