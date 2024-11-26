@@ -11,6 +11,7 @@ export class ConsoleVRToolComponent extends Component {
         _myEnableOnlyForVR: Property.bool(true),
         _myShowOnStart: Property.bool(false),
         _myShowVisibilityButton: Property.bool(false),
+        _myFilterByError: Property.bool(false),
         _myPulseOnNewMessage: Property.enum(["Never", "Always", "When Hidden"], "Never")
     };
 
@@ -22,6 +23,7 @@ export class ConsoleVRToolComponent extends Component {
         params.myOverrideBrowserConsoleFunctions = this._myOverrideBrowserConsoleFunctions;
         params.myShowOnStart = this._myShowOnStart;
         params.myShowVisibilityButton = this._myShowVisibilityButton;
+        params.myFilterByError = this._myFilterByError;
         params.myPulseOnNewMessage = this._myPulseOnNewMessage;
         params.myPlaneMaterial = Globals.getDefaultMaterials(this.engine).myFlatOpaque.clone();
         params.myTextMaterial = Globals.getDefaultMaterials(this.engine).myText.clone();
@@ -37,15 +39,15 @@ export class ConsoleVRToolComponent extends Component {
 
     update(dt) {
         if (Globals.isToolEnabled(this.engine) && (!Globals.hasConsoleVRWidget(this.engine) || Globals.getConsoleVRWidget(this.engine) == this._myWidget)) {
-            if (this._myStarted) {
-                if (!this._myEnableOnlyForVR || XRUtils.isSessionActive(this.engine)) {
-                    this._myWidget.setActive(true);
-                    this._myWidget.update(dt);
-                } else {
-                    this._myWidget.setActive(false);
-                }
-            } else {
+            if (!this._myStarted) {
                 this._start();
+            }
+
+            if (!this._myEnableOnlyForVR || XRUtils.isSessionActive(this.engine)) {
+                this._myWidget.setActive(true);
+                this._myWidget.update(dt);
+            } else {
+                this._myWidget.setActive(false);
             }
         } else if (this._myStarted) {
             this._myWidget.setActive(false);
