@@ -100,10 +100,13 @@ export class PlayerLocomotionTeleport extends PlayerLocomotionMovement {
     }
 
     start() {
+
     }
 
     stop() {
+        this._myIsUpdating = true;
         this._myFSM.perform("stop");
+        this._myIsUpdating = false;
     }
 
     cancelTeleport() {
