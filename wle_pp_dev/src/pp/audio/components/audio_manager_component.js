@@ -24,7 +24,7 @@ export class AudioManagerComponent extends Component {
     }
 
     onDeactivate() {
-        if (this._myAudioManage != null && Globals.getAudioManager(this.engine) == this._myAudioManager) {
+        if (this._myAudioManager != null && Globals.getAudioManager(this.engine) == this._myAudioManager) {
             Globals.removeAudioManager(this.engine);
         }
     }
