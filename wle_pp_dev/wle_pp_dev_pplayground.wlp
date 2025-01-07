@@ -301,7 +301,8 @@
                 {
                     "type": "pp-console-vr-tool",
                     "pp-console-vr-tool": {
-                        "_myHandedness": "Left"
+                        "_myHandedness": "Left",
+                        "_myEnableOnlyForVR": false
                     }
                 },
                 {
