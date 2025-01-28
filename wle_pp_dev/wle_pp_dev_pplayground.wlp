@@ -3184,7 +3184,8 @@
                     1.0,
                     0.0
                 ]
-            }
+            },
+            "pipeline": "313227a6-182e-4b31-9838-632a9291f4d2"
         },
         "6c7363ad-f7ee-465b-9031-541e40292fff": {
             "name": "Gold",
@@ -3208,7 +3209,8 @@
                     1.0,
                     0.3921568
                 ]
-            }
+            },
+            "pipeline": "313227a6-182e-4b31-9838-632a9291f4d2"
         },
         "90348bdc-8768-4244-9398-b89361708289": {
             "name": "Cyan",
@@ -3231,7 +3233,8 @@
                     1.0,
                     0.3921568
                 ]
-            }
+            },
+            "pipeline": "313227a6-182e-4b31-9838-632a9291f4d2"
         },
         "3699d0b5-ea21-4ec3-8d94-7f02ef40eec8": {
             "link": {
@@ -3557,6 +3560,18 @@
                 "name": "lib\\PhysicalBSDF.glsl",
                 "file": "default"
             }
+        },
+        "1e16efeb-f00b-4736-b952-352199ecbdc4": {
+            "link": {
+                "name": "AtmosphericSky.frag",
+                "file": "default"
+            }
+        },
+        "f7d5f6b4-2cac-4aff-85b4-756bca1e396f": {
+            "link": {
+                "name": "lib\\SkyProcedural.glsl",
+                "file": "default"
+            }
         }
     },
     "settings": {
@@ -3564,8 +3579,8 @@
             "name": "wle-pp-dev-pplayground",
             "version": [
                 1,
-                2,
-                4
+                3,
+                0
             ],
             "customIndexHtml": true,
             "type": "game"
@@ -3583,13 +3598,6 @@
         },
         "runtime": {
             "xrButtonColor": "white",
-            "webxr": {
-                "optionalFeatures": {
-                    "hand-tracking": true,
-                    "local-floor": true
-                },
-                "offerSession": false
-            },
             "viewObject": "8022bc4c-dcb9-461f-9f47-70f2c9ab943a",
             "pwa": {
                 "enable": true,
@@ -3599,22 +3607,36 @@
             }
         },
         "scripting": {
-            "sourcePaths": [
-                "src",
-                "src/pp/index.ts",
-                "src/playground/components",
-                "src/cauldron/components",
-                "src/test/components"
-            ],
-            "bundlingType": "esbuild",
+            "components": {
+                "sourcePaths": [
+                    "src",
+                    "src/pp/index.ts",
+                    "src/playground/components",
+                    "src/cauldron/components",
+                    "src/test/components"
+                ],
+                "bundling": "none"
+            },
+            "application": {
+                "output": "wle-pp-dev-pplayground-bundle.js",
+                "bundling": "esbuild",
+                "esbuildFlags": "--format=esm",
+                "entryPoint": "src/index.ts"
+            },
             "libraryPaths": [
                 "/js/lib/"
-            ],
-            "entryPoint": "src/index.ts"
+            ]
         },
-        "vr": {
+        "xr": {
             "leftEyeObject": "bfeccf36-046b-49b5-b355-da4ede4daf21",
-            "rightEyeObject": "665488c7-f768-473e-8fe7-8b4ccd5bc647"
+            "rightEyeObject": "665488c7-f768-473e-8fe7-8b4ccd5bc647",
+            "webxr": {
+                "optionalFeatures": {
+                    "hand-tracking": true,
+                    "local-floor": true
+                },
+                "offerSession": false
+            }
         },
         "editor": {
             "camera": {
@@ -3662,9 +3684,6 @@
             "link": {
                 "name": "Flat Opaque Textured",
                 "file": "default"
-            },
-            "features": {
-                "ALPHA_MASKED": true
             }
         },
         "db2e77f7-8680-4a52-b7a2-72840aca6440": {
@@ -3683,9 +3702,6 @@
             "link": {
                 "name": "Phong Opaque Textured",
                 "file": "default"
-            },
-            "features": {
-                "ALPHA_MASKED": true
             }
         },
         "34d9e3a1-e64c-4786-b7ef-581ce83aaf88": {
@@ -3704,6 +3720,9 @@
             "link": {
                 "name": "Physical Opaque",
                 "file": "default"
+            },
+            "features": {
+                "SEPARATE_OCCLUSION_TEXTURE": true
             }
         },
         "9104535f-2c03-4d28-8052-347735487f59": {
@@ -3712,7 +3731,7 @@
                 "file": "default"
             },
             "features": {
-                "ALPHA_MASKED": true
+                "SEPARATE_OCCLUSION_TEXTURE": true
             }
         },
         "5959fca9-9575-43d8-b76f-603dcaa66ebd": {
@@ -3758,6 +3777,12 @@
             "blendSrcAlpha": "one minus destination alpha",
             "blendDestRgb": "one minus source alpha",
             "blendDestAlpha": "one"
+        },
+        "99894a5c-7295-463c-a8ad-a8d23614a462": {
+            "link": {
+                "name": "AtmosphericSky",
+                "file": "default"
+            }
         }
     },
     "textures": {
