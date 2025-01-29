@@ -3583,7 +3583,8 @@
                 0
             ],
             "customIndexHtml": true,
-            "type": "game"
+            "type": "game",
+            "description": "Playground template project for the Wonderland Engine"
         },
         "rendering": {
             "clearColor": [
@@ -3592,9 +3593,11 @@
                 0.8705882,
                 1.0
             ],
-            "hdr": {
-                "exposure": 1.5
-            }
+            "bloom": {},
+            "textureStreaming": {},
+            "sky": {},
+            "environment": {},
+            "hdr": {}
         },
         "runtime": {
             "xrButtonColor": "white",
@@ -3615,13 +3618,13 @@
                     "src/cauldron/components",
                     "src/test/components"
                 ],
-                "bundling": "none"
+                "entryPoint": "src/index.ts",
+                "output": "wle-pp-dev-pplayground-bundle.js"
             },
             "application": {
-                "output": "wle-pp-dev-pplayground-bundle.js",
+                "output": "wle-pp-dev-pplayground-app.js",
                 "bundling": "esbuild",
-                "esbuildFlags": "--format=esm",
-                "entryPoint": "src/index.ts"
+                "entryPoint": "src/app.ts"
             },
             "libraryPaths": [
                 "/js/lib/"
@@ -3641,9 +3644,10 @@
         "editor": {
             "camera": {
                 "near": 0.0099999,
-                "far": 10000.0
+                "far": 1000.0
             },
-            "ids": "uuid"
+            "ids": "uuid",
+            "package": {}
         },
         "physx": {
             "enable": true,
@@ -3657,11 +3661,24 @@
                 "6": "Group 6",
                 "7": "Group 7"
             }
-        }
+        },
+        "localization": {}
     },
     "animations": {},
     "skins": {},
     "pipelines": {
+        "db2e77f7-8680-4a52-b7a2-72840aca6440": {
+            "link": {
+                "name": "MeshVisualizer",
+                "file": "default"
+            }
+        },
+        "e315536e-27b7-4d15-b229-0228a292799d": {
+            "link": {
+                "name": "TileFeedback",
+                "file": "default"
+            }
+        },
         "bdd1dff9-1f51-491a-9356-abff93fe5a19": {
             "link": {
                 "name": "Depth",
@@ -3686,12 +3703,6 @@
                 "file": "default"
             }
         },
-        "db2e77f7-8680-4a52-b7a2-72840aca6440": {
-            "link": {
-                "name": "MeshVisualizer",
-                "file": "default"
-            }
-        },
         "313227a6-182e-4b31-9838-632a9291f4d2": {
             "link": {
                 "name": "Phong Opaque",
@@ -3704,15 +3715,15 @@
                 "file": "default"
             }
         },
-        "34d9e3a1-e64c-4786-b7ef-581ce83aaf88": {
+        "89a3238c-ae6c-41f3-a9af-4fd4c6e1564b": {
             "link": {
-                "name": "Foliage",
+                "name": "Phong Normalmapped",
                 "file": "default"
             }
         },
-        "b8d672a6-da28-4516-bf27-c5a97c029987": {
+        "23d2e5ed-cb5d-4166-b156-400853518648": {
             "link": {
-                "name": "Particle",
+                "name": "Phong Lightmapped",
                 "file": "default"
             }
         },
@@ -3734,6 +3745,18 @@
                 "SEPARATE_OCCLUSION_TEXTURE": true
             }
         },
+        "34d9e3a1-e64c-4786-b7ef-581ce83aaf88": {
+            "link": {
+                "name": "Foliage",
+                "file": "default"
+            }
+        },
+        "b8d672a6-da28-4516-bf27-c5a97c029987": {
+            "link": {
+                "name": "Particle",
+                "file": "default"
+            }
+        },
         "5959fca9-9575-43d8-b76f-603dcaa66ebd": {
             "link": {
                 "name": "Text",
@@ -3744,23 +3767,17 @@
             "link": {
                 "name": "Sky",
                 "file": "default"
+            },
+            "features": {
+                "TEXTURED": true,
+                "ENVIRONMENT_PROBE": false,
+                "GRADIENT": true,
+                "GRADIENT_4_STOPS": true
             }
         },
-        "89a3238c-ae6c-41f3-a9af-4fd4c6e1564b": {
+        "99894a5c-7295-463c-a8ad-a8d23614a462": {
             "link": {
-                "name": "Phong Normalmapped",
-                "file": "default"
-            }
-        },
-        "23d2e5ed-cb5d-4166-b156-400853518648": {
-            "link": {
-                "name": "Phong Lightmapped",
-                "file": "default"
-            }
-        },
-        "e315536e-27b7-4d15-b229-0228a292799d": {
-            "link": {
-                "name": "TileFeedback",
+                "name": "AtmosphericSky",
                 "file": "default"
             }
         },
@@ -3777,12 +3794,6 @@
             "blendSrcAlpha": "one minus destination alpha",
             "blendDestRgb": "one minus source alpha",
             "blendDestAlpha": "one"
-        },
-        "99894a5c-7295-463c-a8ad-a8d23614a462": {
-            "link": {
-                "name": "AtmosphericSky",
-                "file": "default"
-            }
         }
     },
     "textures": {
