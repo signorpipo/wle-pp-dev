@@ -1,30 +1,30 @@
 {
     "objects": {
-        "3971a890-928b-4e1f-874a-07ad80876850": {
+        "ea2d149d-d18c-4968-afde-0b9c1f7ecd3f": {
             "name": "Scene",
             "components": [
                 {
                     "type": "pp-gateway",
                     "pp-gateway": {
-                        "_myScene": "3971a890-928b-4e1f-874a-07ad80876850",
-                        "_myPlayer": "29c695c1-a068-4b55-b97e-1d7e2d46c61b",
-                        "_myReferenceSpace": "f3b168e9-678a-400c-9efb-6d0fcf38dedc",
-                        "_myCameraNonXR": "f1b4be91-eb84-47ec-96ef-e4910f6328a7",
-                        "_myEyeLeft": "0b6d50ea-8721-46d6-91f7-df17811486ca",
-                        "_myEyeRight": "70f65931-2273-475b-bceb-6485d42ce15e",
-                        "_myHandLeft": "fddc40cc-b738-4cf9-b124-847955afcebb",
-                        "_myHandRight": "9f3dcb5a-326d-497f-ad8e-519765665bd5",
-                        "_myHead": "15ae7ef6-e5c4-4f09-b0bf-9e7bb83a38fc",
+                        "_myScene": "ea2d149d-d18c-4968-afde-0b9c1f7ecd3f",
+                        "_myPlayer": "98e84281-c0c7-4db3-8773-585cbf687aff",
+                        "_myReferenceSpace": "5503f8af-6bfc-4d97-b2cc-3e4d8fd44d09",
+                        "_myCameraNonXR": "8022bc4c-dcb9-461f-9f47-70f2c9ab943a",
+                        "_myEyeLeft": "bfeccf36-046b-49b5-b355-da4ede4daf21",
+                        "_myEyeRight": "665488c7-f768-473e-8fe7-8b4ccd5bc647",
+                        "_myHandLeft": "f0cbb5f3-92cc-4f20-941c-2e7a438f166c",
+                        "_myHandRight": "f51fe37d-3aea-4317-af6b-e76b64a41b54",
+                        "_myHead": "ff9bf13e-8f93-4f3e-8865-52f81cd5130b",
                         "_myPlane": "p0",
                         "_myCube": "p1",
                         "_mySphere": "p2",
                         "_myCone": "p3",
                         "_myCylinder": "p4",
                         "_myCircle": "p5",
-                        "_myFlatOpaque": "48430c0e-de51-45cd-a80a-51258930feaf",
-                        "_myFlatTransparentNoDepth": "2e34bd8e-b49a-46fc-bbf8-b234b2c87483",
-                        "_myPhongOpaque": "1118ba33-bf09-4499-875a-1c849ba11714",
-                        "_myText": "b142a837-a2c9-46cb-91c0-9e007e82684b"
+                        "_myFlatOpaque": "cffc8c8c-c158-4950-88b3-de627375c2ed",
+                        "_myFlatTransparentNoDepth": "f791ea4a-29da-46c4-80a2-09027d17fa30",
+                        "_myPhongOpaque": "e972069e-66ee-4d9c-959d-8a78d9ddb9f9",
+                        "_myText": "04b7f97e-2921-4f88-91f3-20e62ec5c355"
                     }
                 },
                 {
@@ -36,9 +36,9 @@
                 }
             ]
         },
-        "29c695c1-a068-4b55-b97e-1d7e2d46c61b": {
+        "98e84281-c0c7-4db3-8773-585cbf687aff": {
             "name": "Player",
-            "parent": "3971a890-928b-4e1f-874a-07ad80876850",
+            "parent": "ea2d149d-d18c-4968-afde-0b9c1f7ecd3f",
             "components": [
                 {
                     "type": "pp-player-locomotion",
@@ -50,9 +50,9 @@
                 }
             ]
         },
-        "f3b168e9-678a-400c-9efb-6d0fcf38dedc": {
+        "5503f8af-6bfc-4d97-b2cc-3e4d8fd44d09": {
             "name": "Reference Space",
-            "parent": "29c695c1-a068-4b55-b97e-1d7e2d46c61b",
+            "parent": "98e84281-c0c7-4db3-8773-585cbf687aff",
             "rotation": [
                 0.0,
                 1.0,
@@ -60,9 +60,9 @@
                 0.0
             ]
         },
-        "f1b4be91-eb84-47ec-96ef-e4910f6328a7": {
+        "8022bc4c-dcb9-461f-9f47-70f2c9ab943a": {
             "name": "Camera Non XR",
-            "parent": "869b4ba3-8d52-44d8-adef-a8979c17d48d",
+            "parent": "8be78c73-85be-4c1e-8f67-fd89305ab2ae",
             "components": [
                 {
                     "type": "view"
@@ -73,40 +73,40 @@
                 }
             ]
         },
-        "417a3c05-93de-4d1b-b3b9-d333246a4ba6": {
+        "be12c4ed-e083-4ba0-b305-1e17ca69fe19": {
             "name": "Eyes",
-            "parent": "869b4ba3-8d52-44d8-adef-a8979c17d48d"
+            "parent": "8be78c73-85be-4c1e-8f67-fd89305ab2ae"
         },
-        "cd442c0b-29b2-4216-baaf-b86ee41e7f80": {
+        "f72caa43-ac99-4b19-ab19-706fc24c1021": {
             "name": "Hands Left",
-            "parent": "b6cdda6a-9f32-4725-8df5-9ff004a0d23e",
+            "parent": "32423927-72cb-41bf-a0ab-7bba6e6eb1da",
             "components": [
                 {
                     "type": "pp-switch-hand-object",
                     "pp-switch-hand-object": {
-                        "_myGamepad": "a5323fe3-5cfd-476f-b272-bb7432d20ade",
-                        "_myTrackedHand": "d017a2c0-d886-4c94-94eb-0f0612edf5af"
+                        "_myGamepad": "21e6e4ba-b097-4abb-97b4-a7d82fb86986",
+                        "_myTrackedHand": "00bc279b-2a05-400e-8c6f-738f7627c931"
                     }
                 }
             ]
         },
-        "e6ee89f5-8261-43bd-a140-5fc3068841bc": {
+        "9b2e8503-98e1-4cb5-ba06-65357a460f21": {
             "name": "Hand Right",
-            "parent": "b6cdda6a-9f32-4725-8df5-9ff004a0d23e",
+            "parent": "32423927-72cb-41bf-a0ab-7bba6e6eb1da",
             "components": [
                 {
                     "type": "pp-switch-hand-object",
                     "pp-switch-hand-object": {
-                        "_myGamepad": "1c3c8ff4-1ae0-472b-954a-b83777146c9b",
-                        "_myTrackedHand": "31504feb-edaf-446e-9b21-5090d3d61270",
+                        "_myGamepad": "ead4fe79-25ef-49b0-8feb-c0487bc6378f",
+                        "_myTrackedHand": "836077c0-3e6f-447e-ba52-d9e52b9cd182",
                         "_myHandedness": "Right"
                     }
                 }
             ]
         },
-        "15ae7ef6-e5c4-4f09-b0bf-9e7bb83a38fc": {
+        "ff9bf13e-8f93-4f3e-8865-52f81cd5130b": {
             "name": "Head",
-            "parent": "10cb7471-6b08-44c9-a57a-a293694b0b33",
+            "parent": "6d6968ab-fff0-454a-9d65-cd26adc4b958",
             "components": [
                 {
                     "type": "pp-set-head-local-transform",
@@ -118,9 +118,9 @@
                 }
             ]
         },
-        "0b6d50ea-8721-46d6-91f7-df17811486ca": {
+        "bfeccf36-046b-49b5-b355-da4ede4daf21": {
             "name": "Eye Left",
-            "parent": "417a3c05-93de-4d1b-b3b9-d333246a4ba6",
+            "parent": "be12c4ed-e083-4ba0-b305-1e17ca69fe19",
             "components": [
                 {
                     "type": "view"
@@ -133,9 +133,9 @@
                 }
             ]
         },
-        "70f65931-2273-475b-bceb-6485d42ce15e": {
+        "665488c7-f768-473e-8fe7-8b4ccd5bc647": {
             "name": "Eye Right",
-            "parent": "417a3c05-93de-4d1b-b3b9-d333246a4ba6",
+            "parent": "be12c4ed-e083-4ba0-b305-1e17ca69fe19",
             "components": [
                 {
                     "type": "view"
@@ -148,9 +148,9 @@
                 }
             ]
         },
-        "1fea939f-629e-4f01-9fd7-88c54177717b": {
+        "26727e6b-7a15-4314-8a36-b7bf99ece0fa": {
             "name": "Lights",
-            "parent": "f2142687-67a0-4a17-a30f-e19f9b464e4b"
+            "parent": "526adb29-57d2-4b09-ac41-5efed44996a2"
         },
         "c2d3ede7-b536-4733-b2fd-59df14da13e2": {
             "link": {
@@ -255,15 +255,15 @@
         },
         "8629f551-055a-4b48-be26-da078fe80540": {
             "name": "Pivot",
-            "parent": "2cd3099f-d7d4-43bc-ab0d-dd83b309f582"
+            "parent": "cdac6dc4-9811-44ff-af5d-b1048e3055c0"
         },
         "f516e471-ac03-4fa2-8e46-13062d6a40f0": {
             "name": "Pivot",
-            "parent": "616b8090-ada1-4dc0-88ef-06d6d1ce7fbc"
+            "parent": "2ee7091e-c470-4e12-a1c2-bedcaf7d6083"
         },
-        "a5323fe3-5cfd-476f-b272-bb7432d20ade": {
+        "21e6e4ba-b097-4abb-97b4-a7d82fb86986": {
             "name": "Gamepad Left",
-            "parent": "cd442c0b-29b2-4216-baaf-b86ee41e7f80",
+            "parent": "f72caa43-ac99-4b19-ab19-706fc24c1021",
             "components": [
                 {
                     "type": "pp-gamepad-control-scheme",
@@ -304,9 +304,9 @@
                 0.0
             ]
         },
-        "616b8090-ada1-4dc0-88ef-06d6d1ce7fbc": {
+        "2ee7091e-c470-4e12-a1c2-bedcaf7d6083": {
             "name": "Mesh",
-            "parent": "1c3c8ff4-1ae0-472b-954a-b83777146c9b"
+            "parent": "ead4fe79-25ef-49b0-8feb-c0487bc6378f"
         },
         "e65d1a64-5dfb-4539-8ef3-3781a7b9f77b": {
             "name": "Test",
@@ -328,21 +328,21 @@
                 0.0
             ]
         },
-        "869b4ba3-8d52-44d8-adef-a8979c17d48d": {
+        "8be78c73-85be-4c1e-8f67-fd89305ab2ae": {
             "name": "Cameras",
-            "parent": "f3b168e9-678a-400c-9efb-6d0fcf38dedc"
+            "parent": "5503f8af-6bfc-4d97-b2cc-3e4d8fd44d09"
         },
-        "10cb7471-6b08-44c9-a57a-a293694b0b33": {
+        "6d6968ab-fff0-454a-9d65-cd26adc4b958": {
             "name": "Heads",
-            "parent": "f3b168e9-678a-400c-9efb-6d0fcf38dedc"
+            "parent": "5503f8af-6bfc-4d97-b2cc-3e4d8fd44d09"
         },
-        "b6cdda6a-9f32-4725-8df5-9ff004a0d23e": {
+        "32423927-72cb-41bf-a0ab-7bba6e6eb1da": {
             "name": "Hands",
-            "parent": "f3b168e9-678a-400c-9efb-6d0fcf38dedc"
+            "parent": "5503f8af-6bfc-4d97-b2cc-3e4d8fd44d09"
         },
-        "f2142687-67a0-4a17-a30f-e19f9b464e4b": {
+        "526adb29-57d2-4b09-ac41-5efed44996a2": {
             "name": "Playground",
-            "parent": "3971a890-928b-4e1f-874a-07ad80876850",
+            "parent": "ea2d149d-d18c-4968-afde-0b9c1f7ecd3f",
             "components": [
                 {
                     "type": "pp-set-active",
@@ -351,9 +351,9 @@
                 }
             ]
         },
-        "58dc5ab9-fcf6-44f3-878a-22aa5ea1c961": {
+        "f068fda9-1cee-4714-9a63-95aa8db22769": {
             "name": "Floor",
-            "parent": "f2142687-67a0-4a17-a30f-e19f9b464e4b",
+            "parent": "526adb29-57d2-4b09-ac41-5efed44996a2",
             "rotation": [
                 -0.7071068,
                 0.0,
@@ -363,7 +363,7 @@
         },
         "72f9e22b-4384-47fe-98c7-64ff2c952f36": {
             "name": "Mesh",
-            "parent": "58dc5ab9-fcf6-44f3-878a-22aa5ea1c961",
+            "parent": "f068fda9-1cee-4714-9a63-95aa8db22769",
             "components": [
                 {
                     "type": "mesh",
@@ -381,7 +381,7 @@
         },
         "0c2eb4aa-16e7-4331-8e33-aacb89c0d10c": {
             "name": "PhysX",
-            "parent": "58dc5ab9-fcf6-44f3-878a-22aa5ea1c961",
+            "parent": "f068fda9-1cee-4714-9a63-95aa8db22769",
             "components": [
                 {
                     "type": "physx",
@@ -411,7 +411,7 @@
         },
         "98f7942d-896b-4313-b389-f50711077fee": {
             "name": "Reference",
-            "parent": "58dc5ab9-fcf6-44f3-878a-22aa5ea1c961",
+            "parent": "f068fda9-1cee-4714-9a63-95aa8db22769",
             "components": [
                 {
                     "type": "mesh",
@@ -427,13 +427,13 @@
                 0.1
             ]
         },
-        "c5fb3b77-17cb-4b2a-a2f4-c65f9064294a": {
+        "62d70d96-7b4d-451c-a863-0b9947b0fdec": {
             "name": "Walls",
-            "parent": "f2142687-67a0-4a17-a30f-e19f9b464e4b"
+            "parent": "526adb29-57d2-4b09-ac41-5efed44996a2"
         },
         "bd5572fc-3277-4b92-bb66-e0f94149c900": {
             "name": "Wall 1",
-            "parent": "c5fb3b77-17cb-4b2a-a2f4-c65f9064294a"
+            "parent": "62d70d96-7b4d-451c-a863-0b9947b0fdec"
         },
         "f96fa6dc-edca-4caf-ae6c-fa62da654b51": {
             "name": "PhysX",
@@ -512,7 +512,7 @@
         },
         "0f7f25bc-7071-49d6-8d4f-6c48ab35d787": {
             "name": "Wall 2",
-            "parent": "c5fb3b77-17cb-4b2a-a2f4-c65f9064294a",
+            "parent": "62d70d96-7b4d-451c-a863-0b9947b0fdec",
             "rotation": [
                 0.0,
                 0.7071068,
@@ -597,7 +597,7 @@
         },
         "909eca52-d45f-4487-8008-ba44bb86347f": {
             "name": "Wall 3",
-            "parent": "c5fb3b77-17cb-4b2a-a2f4-c65f9064294a",
+            "parent": "62d70d96-7b4d-451c-a863-0b9947b0fdec",
             "rotation": [
                 0.0,
                 -0.7071068,
@@ -682,7 +682,7 @@
         },
         "60305a46-3a6e-452c-9b1a-01a3ef70f6d3": {
             "name": "Wall 4",
-            "parent": "c5fb3b77-17cb-4b2a-a2f4-c65f9064294a",
+            "parent": "62d70d96-7b4d-451c-a863-0b9947b0fdec",
             "rotation": [
                 0.0,
                 1.0,
@@ -767,7 +767,7 @@
         },
         "40145bc4-414d-4bd7-9405-01333a41ffe6": {
             "name": "Obstacles",
-            "parent": "f2142687-67a0-4a17-a30f-e19f9b464e4b"
+            "parent": "526adb29-57d2-4b09-ac41-5efed44996a2"
         },
         "8f25231d-8079-43bd-8378-529cd7dbc55a": {
             "name": "Obstacle 2",
@@ -1368,7 +1368,7 @@
         },
         "a509dd63-ac0a-4ce4-9ac4-b5533bf00c15": {
             "name": "Feet",
-            "parent": "29c695c1-a068-4b55-b97e-1d7e2d46c61b",
+            "parent": "98e84281-c0c7-4db3-8773-585cbf687aff",
             "components": [
                 {
                     "type": "mesh",
@@ -1995,7 +1995,7 @@
         },
         "b855554a-61a3-4b02-852d-7d0fb4d081e3": {
             "name": "HUD",
-            "parent": "29c695c1-a068-4b55-b97e-1d7e2d46c61b",
+            "parent": "98e84281-c0c7-4db3-8773-585cbf687aff",
             "rotation": [
                 0.0,
                 1.0,
@@ -2005,7 +2005,7 @@
         },
         "01f99cd7-468c-4e06-bfaa-de37f1c423f3": {
             "name": "Light",
-            "parent": "1fea939f-629e-4f01-9fd7-88c54177717b",
+            "parent": "26727e6b-7a15-4314-8a36-b7bf99ece0fa",
             "components": [
                 {
                     "type": "light",
@@ -2034,9 +2034,9 @@
                 0.8346984
             ]
         },
-        "d017a2c0-d886-4c94-94eb-0f0612edf5af": {
+        "00bc279b-2a05-400e-8c6f-738f7627c931": {
             "name": "Tracked Hand Left",
-            "parent": "cd442c0b-29b2-4216-baaf-b86ee41e7f80",
+            "parent": "f72caa43-ac99-4b19-ab19-706fc24c1021",
             "components": [
                 {
                     "type": "pp-tracked-hand-draw-all-joints",
@@ -2053,13 +2053,13 @@
                 }
             ]
         },
-        "2cd3099f-d7d4-43bc-ab0d-dd83b309f582": {
+        "cdac6dc4-9811-44ff-af5d-b1048e3055c0": {
             "name": "Mesh",
-            "parent": "a5323fe3-5cfd-476f-b272-bb7432d20ade"
+            "parent": "21e6e4ba-b097-4abb-97b4-a7d82fb86986"
         },
-        "e8cfab20-5c9b-4d37-8fc9-2ac753ae81a8": {
+        "8c2abb39-80a9-4b88-b74a-bba27a371acb": {
             "name": "Tool Hand Left",
-            "parent": "cd442c0b-29b2-4216-baaf-b86ee41e7f80",
+            "parent": "f72caa43-ac99-4b19-ab19-706fc24c1021",
             "components": [
                 {
                     "type": "pp-set-hand-local-transform",
@@ -2079,18 +2079,18 @@
                 }
             ]
         },
-        "fddc40cc-b738-4cf9-b124-847955afcebb": {
+        "f0cbb5f3-92cc-4f20-941c-2e7a438f166c": {
             "name": "Hand Left",
-            "parent": "cd442c0b-29b2-4216-baaf-b86ee41e7f80",
+            "parent": "f72caa43-ac99-4b19-ab19-706fc24c1021",
             "components": [
                 {
                     "type": "pp-set-hand-local-transform"
                 }
             ]
         },
-        "1c3c8ff4-1ae0-472b-954a-b83777146c9b": {
+        "ead4fe79-25ef-49b0-8feb-c0487bc6378f": {
             "name": "Gamepad Right",
-            "parent": "e6ee89f5-8261-43bd-a140-5fc3068841bc",
+            "parent": "9b2e8503-98e1-4cb5-ba06-65357a460f21",
             "components": [
                 {
                     "type": "pp-gamepad-control-scheme",
@@ -2133,9 +2133,9 @@
                 0.0
             ]
         },
-        "caec935f-3a39-4f07-bb37-d39100252480": {
+        "16decf90-6c33-450d-bd58-e1ba25943627": {
             "name": "Tool Hand Right",
-            "parent": "e6ee89f5-8261-43bd-a140-5fc3068841bc",
+            "parent": "9b2e8503-98e1-4cb5-ba06-65357a460f21",
             "components": [
                 {
                     "type": "pp-set-hand-local-transform",
@@ -2151,9 +2151,9 @@
                 }
             ]
         },
-        "31504feb-edaf-446e-9b21-5090d3d61270": {
+        "836077c0-3e6f-447e-ba52-d9e52b9cd182": {
             "name": "Tracked Hand Right",
-            "parent": "e6ee89f5-8261-43bd-a140-5fc3068841bc",
+            "parent": "9b2e8503-98e1-4cb5-ba06-65357a460f21",
             "components": [
                 {
                     "type": "pp-tracked-hand-draw-all-joints",
@@ -2171,9 +2171,9 @@
                 }
             ]
         },
-        "9f3dcb5a-326d-497f-ad8e-519765665bd5": {
+        "f51fe37d-3aea-4317-af6b-e76b64a41b54": {
             "name": "Hand Right",
-            "parent": "e6ee89f5-8261-43bd-a140-5fc3068841bc",
+            "parent": "9b2e8503-98e1-4cb5-ba06-65357a460f21",
             "components": [
                 {
                     "type": "pp-set-hand-local-transform",
@@ -2185,7 +2185,7 @@
         },
         "491be1a8-3b61-4c08-bdbc-da65b7b03634": {
             "name": "Skinned Tracked Hand Left",
-            "parent": "cd442c0b-29b2-4216-baaf-b86ee41e7f80",
+            "parent": "f72caa43-ac99-4b19-ab19-706fc24c1021",
             "components": [
                 {
                     "type": "pp-tracked-hand-draw-skin",
@@ -2203,7 +2203,7 @@
         },
         "37d454e6-09ec-41da-8cf9-9b38525179d7": {
             "name": "Skinned Tracked Hand Right",
-            "parent": "e6ee89f5-8261-43bd-a140-5fc3068841bc",
+            "parent": "9b2e8503-98e1-4cb5-ba06-65357a460f21",
             "components": [
                 {
                     "type": "pp-tracked-hand-draw-skin",
@@ -2685,7 +2685,7 @@
         },
         "7a147819-c428-45f0-a144-df8c539f5ebf": {
             "name": "Kit",
-            "parent": "3971a890-928b-4e1f-874a-07ad80876850",
+            "parent": "ea2d149d-d18c-4968-afde-0b9c1f7ecd3f",
             "translation": [
                 0.0,
                 -10.0,
@@ -2724,7 +2724,7 @@
                 "name": "Left_Select<Left_Quest_Controller",
                 "file": "assets\\models\\quest_controllers_credits_Jezza3D.fbx"
             },
-            "parent": "fddc40cc-b738-4cf9-b124-847955afcebb",
+            "parent": "f0cbb5f3-92cc-4f20-941c-2e7a438f166c",
             "name": "Teleport Parable Start Reference Object",
             "components": [
                 {
@@ -3422,7 +3422,7 @@
         },
         "7ac0cf73-b840-46fb-bf29-a28a9648f110": {
             "name": "Light",
-            "parent": "1fea939f-629e-4f01-9fd7-88c54177717b",
+            "parent": "26727e6b-7a15-4314-8a36-b7bf99ece0fa",
             "components": [
                 {
                     "type": "light",
@@ -3663,13 +3663,13 @@
                 "file": "default"
             }
         },
-        "e28dd61f-4def-41c0-88a3-39e31506653b": {
+        "df397a10-7ddc-487c-9eab-d761c66f17d2": {
             "link": {
                 "name": "TileFeedback.frag",
                 "file": "default"
             }
         },
-        "d4f74fe3-65bb-404d-8105-8db180a28b37": {
+        "9b31b513-9351-4934-88ae-d1511b2c09cf": {
             "link": {
                 "name": "Physical.frag",
                 "file": "default"
@@ -3867,7 +3867,7 @@
                 "file": "default"
             }
         },
-        "e9ecdf0f-8d2c-4115-ac6a-6b755a2920c7": {
+        "4c7e0fbf-da82-44ff-8e7b-ae64c2567363": {
             "link": {
                 "name": "Sky.frag",
                 "file": "default"
@@ -3879,13 +3879,13 @@
                 "file": "default"
             }
         },
-        "1d260f1f-338d-453b-8bdb-9986da316c65": {
+        "1cc81c3b-8371-4ab9-99d5-f17a28c49b72": {
             "link": {
                 "name": "Text.frag",
                 "file": "default"
             }
         },
-        "af7f0dd2-f1c9-4334-a725-1127860cdf59": {
+        "63ff9c14-e22f-4e22-a75a-a6cf54c044e2": {
             "link": {
                 "name": "Text.vert",
                 "file": "default"
@@ -3939,7 +3939,7 @@
                 "file": "default"
             }
         },
-        "737ec566-8ad3-4c42-a122-f0a03e6d4d46": {
+        "7d6fd1c1-8b22-4518-8016-61d945fc3417": {
             "link": {
                 "name": "Background.frag",
                 "file": "default"
@@ -3951,115 +3951,115 @@
                 "file": "default"
             }
         },
-        "d41bfcc4-338a-4ec6-9306-cc76864a33e7": {
+        "5441ff0d-85ec-4631-8af3-6730f46c2ce8": {
             "link": {
                 "name": "lib\\Color.glsl",
                 "file": "default"
             }
         },
-        "c9b2de41-c05d-4d83-bc9e-2e07130133ac": {
+        "db47625f-c472-4ba6-84f2-92ac04eaef74": {
             "link": {
                 "name": "lib\\Compatibility.frag",
                 "file": "default"
             }
         },
-        "1e0d0b35-6aa6-4c41-b53b-a4add7374776": {
+        "ae1111b8-6c76-403b-a966-49dc641bf6c6": {
             "link": {
                 "name": "lib\\CoordinateSystems.glsl",
                 "file": "default"
             }
         },
-        "8e7fb6f4-ba20-4d8f-ae71-d657de069df7": {
+        "93ae94dd-8359-46a9-997d-c85b1b308ad5": {
             "link": {
                 "name": "lib\\GI.frag",
                 "file": "default"
             }
         },
-        "916f40cb-2f39-4d79-abf2-45fc3905add2": {
+        "c0a6359a-3165-4ef5-85e2-2e1d3dd3ee33": {
             "link": {
                 "name": "lib\\Inputs.frag",
                 "file": "default"
             }
         },
-        "1459ab8f-bc91-4f6d-9a63-c0d6d5e189a4": {
+        "f285dce6-4581-44dc-9f0f-cb4bf4c8b830": {
             "link": {
                 "name": "lib\\Lights.frag",
                 "file": "default"
             }
         },
-        "cef060e3-b9c3-4855-8628-d69efd338af7": {
+        "869e83ac-1495-4ca6-b0d0-8240d622714d": {
             "link": {
                 "name": "lib\\Materials.frag",
                 "file": "default"
             }
         },
-        "b1829e94-b12f-4efa-aca4-1d22f2b038ac": {
+        "09bda2ec-5c3c-4e18-a411-0e11c7aa37a9": {
             "link": {
                 "name": "lib\\Math.glsl",
                 "file": "default"
             }
         },
-        "f5955467-ff89-49b1-a396-6953b277c178": {
+        "33337941-e2c3-4a09-b7c0-8bbd998a2f90": {
             "link": {
                 "name": "lib\\Packing.frag",
                 "file": "default"
             }
         },
-        "83a54426-d2e3-47d4-afaf-5204d090de2e": {
+        "5033911a-2cc7-4a73-907c-7c8927ad62f5": {
             "link": {
                 "name": "lib\\Quaternion.glsl",
                 "file": "default"
             }
         },
-        "0bc16ed3-90a6-44b3-bacb-1f6238e5672a": {
+        "8c10b2fc-528c-4970-a642-571a618e4c81": {
             "link": {
                 "name": "lib\\Slug.frag",
                 "file": "default"
             }
         },
-        "b2a7714c-fa72-48f8-aee9-2c94a88eb19d": {
+        "88f3d9f5-09cd-4bf0-8c7d-8f025ce7f7a7": {
             "link": {
                 "name": "lib\\Slug.vert",
                 "file": "default"
             }
         },
-        "6b9b8763-f43e-406c-b897-4476a193d254": {
+        "7886dc0b-f76a-4a10-a328-c3aa7b941472": {
             "link": {
                 "name": "lib\\Surface.frag",
                 "file": "default"
             }
         },
-        "18b3085d-c7cb-4473-bf2d-895b608b00e7": {
+        "aff338d8-4cb8-4e68-8e1c-9f4f4ebeb7e1": {
             "link": {
                 "name": "lib\\Textures.frag",
                 "file": "default"
             }
         },
-        "8b9ff570-3aae-4ed9-a1e0-5c07ce4ac6ef": {
+        "9224f9d4-a499-477c-94bc-ad56b88c0768": {
             "link": {
                 "name": "lib\\Uniforms.glsl",
                 "file": "default"
             }
         },
-        "072ad4fb-2b8c-4cb1-88bc-b0b2a76449c5": {
+        "9ded86d1-5b9c-44ad-8458-fbc625d841a4": {
             "link": {
                 "name": "lib\\MorphTargets.glsl",
                 "file": "default"
             }
         },
-        "c87af558-3128-476e-ad5f-7d396c9e34eb": {
+        "6ece0074-6003-4107-8484-30cd6eed4181": {
             "link": {
                 "name": "lib\\PhysicalBSDF.glsl",
                 "file": "default"
             }
         },
-        "b3d3f72e-f1cc-4816-b256-db165811f648": {
+        "1e16efeb-f00b-4736-b952-352199ecbdc4": {
             "link": {
                 "name": "AtmosphericSky.frag",
                 "file": "default"
             }
         },
-        "ef4bac54-b8a8-4006-ac77-a83c72576d0e": {
+        "f7d5f6b4-2cac-4aff-85b4-756bca1e396f": {
             "link": {
                 "name": "lib\\SkyProcedural.glsl",
                 "file": "default"
@@ -4073,7 +4073,7 @@
                 "file": "default"
             },
             "Text": {
-                "font": "57bce576-15a4-4513-b149-36989a11158f"
+                "font": "f5ed4fb0-a0a2-47f4-8b4d-a3e02ea4898e"
             }
         },
         "4246a55c-b37b-4bf2-921a-35004f39c3f5": {
@@ -4092,7 +4092,7 @@
             "name": "Tool Font",
             "pipeline": "5959fca9-9575-43d8-b76f-603dcaa66ebd",
             "Text": {
-                "font": "57bce576-15a4-4513-b149-36989a11158f"
+                "font": "f5ed4fb0-a0a2-47f4-8b4d-a3e02ea4898e"
             }
         },
         "9ce40067-76b0-47be-b6f9-f8329df554ec": {
@@ -4262,14 +4262,14 @@
                 ]
             },
             "Text": {
-                "font": "57bce576-15a4-4513-b149-36989a11158f"
+                "font": "f5ed4fb0-a0a2-47f4-8b4d-a3e02ea4898e"
             }
         },
-        "48430c0e-de51-45cd-a80a-51258930feaf": {
+        "cffc8c8c-c158-4950-88b3-de627375c2ed": {
             "name": "Flat Opaque",
             "pipeline": "6e3da297-ea04-4d73-a0c7-3889145038df"
         },
-        "1118ba33-bf09-4499-875a-1c849ba11714": {
+        "e972069e-66ee-4d9c-959d-8a78d9ddb9f9": {
             "name": "Phong Opaque",
             "pipeline": "313227a6-182e-4b31-9838-632a9291f4d2",
             "Phong": {
@@ -4287,7 +4287,7 @@
                 ]
             }
         },
-        "b142a837-a2c9-46cb-91c0-9e007e82684b": {
+        "04b7f97e-2921-4f88-91f3-20e62ec5c355": {
             "name": "Text",
             "pipeline": "5959fca9-9575-43d8-b76f-603dcaa66ebd",
             "Phong": {
@@ -4305,7 +4305,7 @@
                 ]
             },
             "Text": {
-                "font": "57bce576-15a4-4513-b149-36989a11158f"
+                "font": "f5ed4fb0-a0a2-47f4-8b4d-a3e02ea4898e"
             }
         },
         "4480bd42-1e8f-4907-a276-0ea6772fde45": {
@@ -4332,7 +4332,7 @@
                     0.8784313,
                     1.0
                 ],
-                "font": "57bce576-15a4-4513-b149-36989a11158f"
+                "font": "f5ed4fb0-a0a2-47f4-8b4d-a3e02ea4898e"
             }
         },
         "e5827441-a66c-4a1d-bb66-b1c5bd13deac": {
@@ -4363,7 +4363,7 @@
                 ]
             }
         },
-        "2e34bd8e-b49a-46fc-bbf8-b234b2c87483": {
+        "f791ea4a-29da-46c4-80a2-09027d17fa30": {
             "link": {
                 "name": "lambert2",
                 "file": "assets\\models\\tracked_hand_right.glb"
@@ -4608,7 +4608,7 @@
         }
     },
     "fonts": {
-        "57bce576-15a4-4513-b149-36989a11158f": {
+        "f5ed4fb0-a0a2-47f4-8b4d-a3e02ea4898e": {
             "link": {
                 "name": "DejaVuSans.ttf",
                 "file": "default"
@@ -4679,8 +4679,8 @@
             ]
         },
         "xr": {
-            "leftEyeObject": "0b6d50ea-8721-46d6-91f7-df17811486ca",
-            "rightEyeObject": "70f65931-2273-475b-bceb-6485d42ce15e",
+            "leftEyeObject": "bfeccf36-046b-49b5-b355-da4ede4daf21",
+            "rightEyeObject": "665488c7-f768-473e-8fe7-8b4ccd5bc647",
             "webxr": {
                 "optionalFeatures": {
                     "hand-tracking": true,
