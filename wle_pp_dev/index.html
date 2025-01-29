@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <script type="importmap">
@@ -27,16 +28,16 @@
 
     <link rel="icon" type="image/x-icon" href="favicon.ico">
 
+    <link rel="modulepreload" href="{{ settings.scripting.application.output }}" as="script">
+    {{ if settings.scripting.components.bundling != 'none' }}
+    {{ if settings.scripting.components.output != '' }}
+    <link rel="modulepreload" href="{{ settings.scripting.components.output }}" as="script">
+    {{ end }}
+    {{ end }}
+
     {{ if settings.runtime.pwa.enable }}
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="icon192.png">
-    
-    {{ if settings.scripting.components.bundling != 'none' }}
-    {{ if settings.scripting.components.output != '' }}
-    <link rel="modulepreload" href="{{ settings.scripting.components.output }}?t={{timestamp}}" as="script">
-    {{ end }}
-    {{ end }}
-    <link rel="modulepreload" href="{{ settings.scripting.application.output }}?t={{timestamp}}" as="script">
 
     <script>
         if (navigator.serviceWorker != null) {
