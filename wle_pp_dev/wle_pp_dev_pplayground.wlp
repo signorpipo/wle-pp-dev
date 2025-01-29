@@ -3582,34 +3582,16 @@
                 3,
                 0
             ],
-            "customIndexHtml": true,
+            "description": "Playground template project for the Wonderland Engine",
             "type": "game",
-            "description": "Playground template project for the Wonderland Engine"
-        },
-        "rendering": {
-            "clearColor": [
-                0.4235294,
-                1.0,
-                0.8705882,
-                1.0
-            ],
-            "bloom": {},
-            "textureStreaming": {},
-            "sky": {},
-            "environment": {},
-            "hdr": {}
-        },
-        "runtime": {
-            "xrButtonColor": "white",
-            "viewObject": "8022bc4c-dcb9-461f-9f47-70f2c9ab943a",
-            "pwa": {
-                "enable": true,
-                "customServiceWorker": true,
-                "customManifest": true,
-                "appIcon": "d1550dc2-2b9c-4c80-a575-22f58d3850d8"
-            }
+            "customIndexHtml": true
         },
         "scripting": {
+            "application": {
+                "output": "wle-pp-dev-pplayground-app.js",
+                "bundling": "esbuild",
+                "entryPoint": "src/app.ts"
+            },
             "components": {
                 "sourcePaths": [
                     "src",
@@ -3621,13 +3603,16 @@
                 "entryPoint": "src/index.ts",
                 "output": "wle-pp-dev-pplayground-bundle.js"
             },
-            "application": {
-                "output": "wle-pp-dev-pplayground-app.js",
-                "bundling": "esbuild",
-                "entryPoint": "src/app.ts"
-            },
             "libraryPaths": [
                 "/js/lib/"
+            ]
+        },
+        "rendering": {
+            "clearColor": [
+                0.4235294,
+                1.0,
+                0.8705882,
+                1.0
             ]
         },
         "xr": {
@@ -3646,8 +3631,17 @@
                 "near": 0.0099999,
                 "far": 1000.0
             },
-            "ids": "uuid",
-            "package": {}
+            "ids": "uuid"
+        },
+        "runtime": {
+            "xrButtonColor": "white",
+            "viewObject": "8022bc4c-dcb9-461f-9f47-70f2c9ab943a",
+            "pwa": {
+                "enable": true,
+                "customServiceWorker": true,
+                "customManifest": true,
+                "appIcon": "d1550dc2-2b9c-4c80-a575-22f58d3850d8"
+            }
         },
         "physx": {
             "enable": true,
@@ -3661,8 +3655,7 @@
                 "6": "Group 6",
                 "7": "Group 7"
             }
-        },
-        "localization": {}
+        }
     },
     "animations": {},
     "skins": {},
@@ -3814,20 +3807,6 @@
             "stream": false
         }
     },
-    "files": {
-        "69feadb3-3dce-463a-b4ca-2264f5b4ca6e": {
-            "fileName": "assets/models/pp/meta_quest_1_gamepads_credits_Jezza3D.fbx",
-            "importerName": "AssimpImporter"
-        },
-        "e1065340-f593-4feb-84a8-50e33152649e": {
-            "fileName": "assets/models/playground/wondermelon.fbx",
-            "importerName": "AssimpImporter"
-        },
-        "88ef22f2-9f2d-4c27-83b8-70f49921b282": {
-            "fileName": "assets/textures/pp/icon.png",
-            "importerName": ""
-        }
-    },
     "fonts": {
         "f5ed4fb0-a0a2-47f4-8b4d-a3e02ea4898e": {
             "link": {
@@ -3845,6 +3824,20 @@
             "outlineSize": 0.075
         }
     },
-    "languages": {},
-    "morphTargets": {}
+    "morphTargets": {},
+    "files": {
+        "69feadb3-3dce-463a-b4ca-2264f5b4ca6e": {
+            "fileName": "assets/models/pp/meta_quest_1_gamepads_credits_Jezza3D.fbx",
+            "importerName": "AssimpImporter"
+        },
+        "e1065340-f593-4feb-84a8-50e33152649e": {
+            "fileName": "assets/models/playground/wondermelon.fbx",
+            "importerName": "AssimpImporter"
+        },
+        "88ef22f2-9f2d-4c27-83b8-70f49921b282": {
+            "fileName": "assets/textures/pp/icon.png",
+            "importerName": ""
+        }
+    },
+    "languages": {}
 }
