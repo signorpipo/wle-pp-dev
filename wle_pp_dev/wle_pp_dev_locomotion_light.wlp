@@ -2018,7 +2018,7 @@
                         "outerAngle": 180.0,
                         "innerAngle": 100.0,
                         "shadowRange": 100.0,
-                        "intensity": 100.0
+                        "intensity": 180.0
                     }
                 }
             ],
@@ -3435,7 +3435,7 @@
                         "outerAngle": 180.0,
                         "innerAngle": 100.0,
                         "shadowRange": 100.0,
-                        "intensity": 100.0
+                        "intensity": 180.0
                     }
                 }
             ],
@@ -3626,11 +3626,11 @@
         },
         "4246a55c-b37b-4bf2-921a-35004f39c3f5": {
             "name": "Debug Flat",
-            "pipeline": "b7b75cde-c5c6-4e9c-9506-324e34d371b4"
+            "pipeline": "6e3da297-ea04-4d73-a0c7-3889145038df"
         },
         "e16be01f-adb0-4d25-9cff-171ccee5d44b": {
             "name": "Tool Flat",
-            "pipeline": "b7b75cde-c5c6-4e9c-9506-324e34d371b4"
+            "pipeline": "6e3da297-ea04-4d73-a0c7-3889145038df"
         },
         "40bf7fc1-d565-4321-b1d8-012412470a02": {
             "link": {
@@ -3638,7 +3638,7 @@
                 "file": "default"
             },
             "name": "Tool Font",
-            "pipeline": "18674708-968c-4449-8f25-9fc86917dc13",
+            "pipeline": "5959fca9-9575-43d8-b76f-603dcaa66ebd",
             "Text": {
                 "font": "57bce576-15a4-4513-b149-36989a11158f"
             }
@@ -3747,7 +3747,7 @@
                     0.2509804
                 ]
             },
-            "pipeline": "d2471b57-d6e1-4c4a-9eb4-aeb8de14e8da"
+            "pipeline": "313227a6-182e-4b31-9838-632a9291f4d2"
         },
         "7b3f44c4-8c1a-44cd-8fab-87977a996a20": {
             "name": "Wall",
@@ -3771,7 +3771,7 @@
                     1.0
                 ]
             },
-            "pipeline": "d2471b57-d6e1-4c4a-9eb4-aeb8de14e8da"
+            "pipeline": "313227a6-182e-4b31-9838-632a9291f4d2"
         },
         "86929f5f-e7e9-46b6-8db8-31f492caa62e": {
             "name": "Special",
@@ -3795,7 +3795,7 @@
                     1.0
                 ]
             },
-            "pipeline": "d2471b57-d6e1-4c4a-9eb4-aeb8de14e8da"
+            "pipeline": "313227a6-182e-4b31-9838-632a9291f4d2"
         },
         "8352b20e-5b72-4391-9163-ce6ef4ce2d40": {
             "link": {
@@ -3815,11 +3815,11 @@
         },
         "48430c0e-de51-45cd-a80a-51258930feaf": {
             "name": "Flat Opaque",
-            "pipeline": "b7b75cde-c5c6-4e9c-9506-324e34d371b4"
+            "pipeline": "6e3da297-ea04-4d73-a0c7-3889145038df"
         },
         "1118ba33-bf09-4499-875a-1c849ba11714": {
             "name": "Phong Opaque",
-            "pipeline": "d2471b57-d6e1-4c4a-9eb4-aeb8de14e8da",
+            "pipeline": "313227a6-182e-4b31-9838-632a9291f4d2",
             "Phong": {
                 "ambientColor": [
                     0.05,
@@ -3837,7 +3837,7 @@
         },
         "b142a837-a2c9-46cb-91c0-9e007e82684b": {
             "name": "Text",
-            "pipeline": "18674708-968c-4449-8f25-9fc86917dc13",
+            "pipeline": "5959fca9-9575-43d8-b76f-603dcaa66ebd",
             "Phong": {
                 "ambientColor": [
                     0.0,
@@ -3858,7 +3858,7 @@
         },
         "4480bd42-1e8f-4907-a276-0ea6772fde45": {
             "name": "Scheme Text",
-            "pipeline": "18674708-968c-4449-8f25-9fc86917dc13",
+            "pipeline": "5959fca9-9575-43d8-b76f-603dcaa66ebd",
             "Phong": {
                 "ambientColor": [
                     0.0,
@@ -3917,7 +3917,7 @@
                 "file": "assets\\models\\tracked_hand_right.glb"
             },
             "name": "Flat Transparent No Depth",
-            "pipeline": "5ec49786-6807-4f9c-b837-ee6d9b916080",
+            "pipeline": "cac99800-8c59-4748-8014-03df6ad16252",
             "Flat": {
                 "color": [
                     0.5019608,
@@ -3953,7 +3953,7 @@
                     1.0
                 ]
             },
-            "pipeline": "d2471b57-d6e1-4c4a-9eb4-aeb8de14e8da"
+            "pipeline": "313227a6-182e-4b31-9838-632a9291f4d2"
         }
     },
     "shaders": {
@@ -4478,165 +4478,133 @@
         }
     },
     "pipelines": {
-        "5321f5cb-5ff6-4791-870e-84239b04c3b8": {
-            "link": {
-                "name": "Depth",
-                "file": "default"
-            }
-        },
-        "7849c334-73bc-477d-b302-94ea2cc24a0c": {
-            "link": {
-                "name": "DistanceFieldVector",
-                "file": "default"
-            },
-            "sampleAlphaToCoverage": true
-        },
-        "b7b75cde-c5c6-4e9c-9506-324e34d371b4": {
-            "link": {
-                "name": "Flat Opaque",
-                "file": "default"
-            }
-        },
-        "e2d925f8-e6e3-44a4-a7d0-ca547d6223f3": {
-            "link": {
-                "name": "Flat Opaque Textured",
-                "file": "default"
-            },
-            "features": {
-                "ALPHA_MASKED": true
-            }
-        },
-        "6aab8e93-480c-4011-b7f3-71f5219020a7": {
+        "db2e77f7-8680-4a52-b7a2-72840aca6440": {
             "link": {
                 "name": "MeshVisualizer",
                 "file": "default"
             }
         },
-        "d2471b57-d6e1-4c4a-9eb4-aeb8de14e8da": {
-            "link": {
-                "name": "Phong Opaque",
-                "file": "default"
-            },
-            "features": {
-                "WITH_FOG": true,
-                "DEPRECATED_LIGHT_ATTENUATION": true
-            }
-        },
-        "ca812e98-bc42-4bf7-add8-9541e0df24d2": {
-            "link": {
-                "name": "Phong Opaque Textured",
-                "file": "default"
-            },
-            "features": {
-                "ALPHA_MASKED": true,
-                "DEPRECATED_LIGHT_ATTENUATION": true
-            }
-        },
-        "9c584698-b5da-4c42-a69e-a9b38d0f61b0": {
-            "link": {
-                "name": "Foliage",
-                "file": "default"
-            },
-            "features": {
-                "DEPRECATED_LIGHT_ATTENUATION": true
-            }
-        },
-        "ecfeddfa-eb19-4234-90db-3db70f8f4771": {
-            "link": {
-                "name": "Particle",
-                "file": "default"
-            }
-        },
-        "c2e6524d-a111-4a03-a227-7636694d2155": {
-            "link": {
-                "name": "Physical Opaque",
-                "file": "default"
-            }
-        },
-        "2b90e050-f66f-47f8-b785-ecf171b5ed23": {
-            "link": {
-                "name": "Physical Opaque Textured",
-                "file": "default"
-            },
-            "features": {
-                "ALPHA_MASKED": true
-            }
-        },
-        "63b34a7b-1a2f-4ff3-9ee7-6b766319d904": {
-            "link": {
-                "name": "Flat Opaque",
-                "file": "default"
-            },
-            "name": "Flat Opaque Front",
-            "depthTest": true,
-            "depthFunction": "always"
-        },
-        "18674708-968c-4449-8f25-9fc86917dc13": {
-            "link": {
-                "name": "Text",
-                "file": "default"
-            }
-        },
-        "4ab502a7-e4f9-4841-8f0b-b281e90e5669": {
-            "link": {
-                "name": "Sky",
-                "file": "default"
-            }
-        },
-        "669653ac-d813-46f9-99a6-fde8e845c058": {
-            "link": {
-                "name": "Phong Opaque",
-                "file": "default"
-            },
-            "features": {
-                "WITH_FOG": true,
-                "DEPRECATED_LIGHT_ATTENUATION": true
-            },
-            "name": "Phong Opaque 2"
-        },
-        "6117cbdb-f66a-4351-8248-e5b8ff511d3a": {
-            "link": {
-                "name": "Phong Normalmapped",
-                "file": "default"
-            },
-            "features": {
-                "DEPRECATED_LIGHT_ATTENUATION": true
-            }
-        },
-        "24332e14-07df-4003-bf0e-0944ae1f6095": {
-            "link": {
-                "name": "Phong Lightmapped",
-                "file": "default"
-            },
-            "features": {
-                "DEPRECATED_LIGHT_ATTENUATION": true
-            }
-        },
-        "993d3ee6-5f45-4e40-98ee-5f558d77df72": {
+        "e315536e-27b7-4d15-b229-0228a292799d": {
             "link": {
                 "name": "TileFeedback",
                 "file": "default"
             }
         },
-        "5ec49786-6807-4f9c-b837-ee6d9b916080": {
+        "bdd1dff9-1f51-491a-9356-abff93fe5a19": {
+            "link": {
+                "name": "Depth",
+                "file": "default"
+            }
+        },
+        "337ffefa-a1c3-42af-bba6-9b1c467819c2": {
+            "link": {
+                "name": "DistanceFieldVector",
+                "file": "default"
+            }
+        },
+        "6e3da297-ea04-4d73-a0c7-3889145038df": {
+            "link": {
+                "name": "Flat Opaque",
+                "file": "default"
+            }
+        },
+        "09918bfd-8188-4615-be85-7a100306f4f2": {
             "link": {
                 "name": "Flat Opaque Textured",
                 "file": "default"
+            }
+        },
+        "313227a6-182e-4b31-9838-632a9291f4d2": {
+            "link": {
+                "name": "Phong Opaque",
+                "file": "default"
+            }
+        },
+        "2762071d-3ed2-487d-9b98-0bf0a6e8f24c": {
+            "link": {
+                "name": "Phong Opaque Textured",
+                "file": "default"
+            }
+        },
+        "89a3238c-ae6c-41f3-a9af-4fd4c6e1564b": {
+            "link": {
+                "name": "Phong Normalmapped",
+                "file": "default"
+            }
+        },
+        "23d2e5ed-cb5d-4166-b156-400853518648": {
+            "link": {
+                "name": "Phong Lightmapped",
+                "file": "default"
+            }
+        },
+        "2d2fb7df-35f2-4ea3-a493-70fe1235b94f": {
+            "link": {
+                "name": "Physical Opaque",
+                "file": "default"
+            },
+            "features": {
+                "SEPARATE_OCCLUSION_TEXTURE": true
+            }
+        },
+        "9104535f-2c03-4d28-8052-347735487f59": {
+            "link": {
+                "name": "Physical Opaque Textured",
+                "file": "default"
+            },
+            "features": {
+                "SEPARATE_OCCLUSION_TEXTURE": true
+            }
+        },
+        "34d9e3a1-e64c-4786-b7ef-581ce83aaf88": {
+            "link": {
+                "name": "Foliage",
+                "file": "default"
+            }
+        },
+        "b8d672a6-da28-4516-bf27-c5a97c029987": {
+            "link": {
+                "name": "Particle",
+                "file": "default"
+            }
+        },
+        "5959fca9-9575-43d8-b76f-603dcaa66ebd": {
+            "link": {
+                "name": "Text",
+                "file": "default"
+            }
+        },
+        "6a25dc7c-d12d-45a0-8e15-ace3bd9637e6": {
+            "link": {
+                "name": "Sky",
+                "file": "default"
+            },
+            "features": {
+                "TEXTURED": true,
+                "ENVIRONMENT_PROBE": false,
+                "GRADIENT": true,
+                "GRADIENT_4_STOPS": true
+            }
+        },
+        "99894a5c-7295-463c-a8ad-a8d23614a462": {
+            "link": {
+                "name": "AtmosphericSky",
+                "file": "default"
+            }
+        },
+        "cac99800-8c59-4748-8014-03df6ad16252": {
+            "link": {
+                "name": "Flat Opaque",
+                "file": "default"
             },
             "name": "Flat Transparent No Depth",
-            "depthFunction": "always",
             "depthTest": false,
+            "depthFunction": "always",
             "blending": true,
             "blendSrcRgb": "source alpha",
             "blendSrcAlpha": "one minus destination alpha",
             "blendDestRgb": "one minus source alpha",
             "blendDestAlpha": "one"
-        },
-        "a9128d12-2c6d-4324-8d7d-02ec6c9ebd84": {
-            "link": {
-                "name": "AtmosphericSky",
-                "file": "default"
-            }
         }
     },
     "settings": {

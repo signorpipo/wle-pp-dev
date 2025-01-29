@@ -10617,11 +10617,11 @@
         },
         "20c9d5d7-8241-4c5d-ad8d-0fa650b841c2": {
             "name": "Debug Flat",
-            "pipeline": "e86e4fdc-5950-4cf7-97d4-86fceb8a5d63"
+            "pipeline": "6e3da297-ea04-4d73-a0c7-3889145038df"
         },
         "19e8f822-5975-492b-8106-055d908c6793": {
             "name": "Tool Flat",
-            "pipeline": "e86e4fdc-5950-4cf7-97d4-86fceb8a5d63"
+            "pipeline": "6e3da297-ea04-4d73-a0c7-3889145038df"
         },
         "a1f67b0d-494a-479b-b5f7-42023b5e4be9": {
             "link": {
@@ -10629,7 +10629,7 @@
                 "file": "default"
             },
             "name": "Tool Font",
-            "pipeline": "e7160bab-3739-4086-be37-9ecf73acc5e0",
+            "pipeline": "5959fca9-9575-43d8-b76f-603dcaa66ebd",
             "Text": {
                 "font": "11311a51-83ce-47a2-91bd-3432014f428c"
             }
@@ -10738,7 +10738,7 @@
                     0.2509804
                 ]
             },
-            "pipeline": "ef04fac9-8fbc-4e85-b3a3-dafac1d81beb"
+            "pipeline": "313227a6-182e-4b31-9838-632a9291f4d2"
         },
         "9bbe388a-a88f-490f-b19c-0339e8253d02": {
             "name": "Wall",
@@ -10762,7 +10762,7 @@
                     1.0
                 ]
             },
-            "pipeline": "ef04fac9-8fbc-4e85-b3a3-dafac1d81beb"
+            "pipeline": "313227a6-182e-4b31-9838-632a9291f4d2"
         },
         "5dfebea1-6cab-49e8-be3a-94a633f69edd": {
             "name": "Special",
@@ -10786,7 +10786,7 @@
                     1.0
                 ]
             },
-            "pipeline": "ef04fac9-8fbc-4e85-b3a3-dafac1d81beb"
+            "pipeline": "313227a6-182e-4b31-9838-632a9291f4d2"
         },
         "4fca793d-a04a-4fc1-b4d0-70bd65723c1f": {
             "link": {
@@ -10806,11 +10806,11 @@
         },
         "8aa02537-51f8-4756-8188-82558f1ca600": {
             "name": "Flat Opaque",
-            "pipeline": "e86e4fdc-5950-4cf7-97d4-86fceb8a5d63"
+            "pipeline": "6e3da297-ea04-4d73-a0c7-3889145038df"
         },
         "f6ac22d2-8f93-4151-bba0-39e28650b21a": {
             "name": "Phong Opaque",
-            "pipeline": "ef04fac9-8fbc-4e85-b3a3-dafac1d81beb",
+            "pipeline": "313227a6-182e-4b31-9838-632a9291f4d2",
             "Phong": {
                 "ambientColor": [
                     0.05,
@@ -10828,7 +10828,7 @@
         },
         "5f2309e4-5581-48cd-b09f-3d4359e50fbc": {
             "name": "Text",
-            "pipeline": "e7160bab-3739-4086-be37-9ecf73acc5e0",
+            "pipeline": "5959fca9-9575-43d8-b76f-603dcaa66ebd",
             "Phong": {
                 "ambientColor": [
                     0.0,
@@ -10849,7 +10849,7 @@
         },
         "cd68b363-60da-43f6-8927-8ada418493e5": {
             "name": "Scheme Text",
-            "pipeline": "e7160bab-3739-4086-be37-9ecf73acc5e0",
+            "pipeline": "5959fca9-9575-43d8-b76f-603dcaa66ebd",
             "Phong": {
                 "ambientColor": [
                     0.0,
@@ -10908,7 +10908,7 @@
                 "file": "assets\\models\\tracked_hand_right.glb"
             },
             "name": "Flat Transparent No Depth",
-            "pipeline": "887568cb-8b87-4b6c-887f-38857fe5c566",
+            "pipeline": "cac99800-8c59-4748-8014-03df6ad16252",
             "Flat": {
                 "color": [
                     0.5019608,
@@ -10944,7 +10944,7 @@
                     1.0
                 ]
             },
-            "pipeline": "ef04fac9-8fbc-4e85-b3a3-dafac1d81beb"
+            "pipeline": "313227a6-182e-4b31-9838-632a9291f4d2"
         },
         "83b74364-fb25-4557-bf75-576a211b6a03": {
             "link": {
@@ -11475,168 +11475,133 @@
         }
     },
     "pipelines": {
-        "245cfd18-a8a8-42a3-945a-19b53ac4eccd": {
-            "link": {
-                "name": "Depth",
-                "file": "default"
-            }
-        },
-        "d662a5bd-0b10-49e8-80a9-370e1cec5536": {
-            "link": {
-                "name": "DistanceFieldVector",
-                "file": "default"
-            },
-            "sampleAlphaToCoverage": true
-        },
-        "e86e4fdc-5950-4cf7-97d4-86fceb8a5d63": {
-            "link": {
-                "name": "Flat Opaque",
-                "file": "default"
-            }
-        },
-        "f48f58c2-2aba-4483-9699-a6a7381b5c8d": {
-            "link": {
-                "name": "Flat Opaque Textured",
-                "file": "default"
-            },
-            "features": {
-                "ALPHA_MASKED": true
-            }
-        },
-        "54b5dd6e-d54f-4373-8889-e4367c5388cc": {
+        "db2e77f7-8680-4a52-b7a2-72840aca6440": {
             "link": {
                 "name": "MeshVisualizer",
                 "file": "default"
             }
         },
-        "ef04fac9-8fbc-4e85-b3a3-dafac1d81beb": {
-            "link": {
-                "name": "Phong Opaque",
-                "file": "default"
-            },
-            "features": {
-                "WITH_FOG": true,
-                "DEPRECATED_LIGHT_ATTENUATION": false
-            }
-        },
-        "07314ce6-8ce7-40aa-b03d-0b38ea15ecfd": {
-            "link": {
-                "name": "Phong Opaque Textured",
-                "file": "default"
-            },
-            "features": {
-                "ALPHA_MASKED": true,
-                "DEPRECATED_LIGHT_ATTENUATION": false
-            }
-        },
-        "8b5b959b-4b6b-4ffe-8989-c6e89a5a50c8": {
-            "link": {
-                "name": "Foliage",
-                "file": "default"
-            },
-            "features": {
-                "DEPRECATED_LIGHT_ATTENUATION": false
-            }
-        },
-        "7c9a90e4-6a6a-4737-b698-62884b13f8f0": {
-            "link": {
-                "name": "Particle",
-                "file": "default"
-            }
-        },
-        "ff454cdb-a329-49d1-8d9f-a13619fe04a4": {
-            "link": {
-                "name": "Physical Opaque",
-                "file": "default"
-            }
-        },
-        "64e2b4dc-6389-40ea-b776-57cd77d9813e": {
-            "link": {
-                "name": "Physical Opaque Textured",
-                "file": "default"
-            },
-            "features": {
-                "ALPHA_MASKED": true
-            }
-        },
-        "53ce9ab7-0442-449c-a4f0-1edff5856d38": {
-            "link": {
-                "name": "Flat Opaque",
-                "file": "default"
-            },
-            "name": "Flat Opaque Front",
-            "depthTest": true,
-            "depthFunction": "always"
-        },
-        "e7160bab-3739-4086-be37-9ecf73acc5e0": {
-            "link": {
-                "name": "Text",
-                "file": "default"
-            }
-        },
-        "94ffb6c7-e404-4eeb-acfd-2e489e0b772a": {
-            "link": {
-                "name": "Sky",
-                "file": "default"
-            }
-        },
-        "f352ae87-0fea-493a-81bf-5b6e21569ef3": {
-            "link": {
-                "name": "Phong Opaque",
-                "file": "default"
-            },
-            "features": {
-                "WITH_FOG": true,
-                "DEPRECATED_LIGHT_ATTENUATION": false
-            },
-            "name": "Phong Opaque 2"
-        },
-        "e7e03563-52b7-4261-9f7c-20584ea6a07c": {
-            "link": {
-                "name": "Phong Normalmapped",
-                "file": "default"
-            },
-            "features": {
-                "DEPRECATED_LIGHT_ATTENUATION": false
-            }
-        },
-        "e825b990-2eef-4a56-9c8f-f055afb7a44e": {
-            "link": {
-                "name": "Phong Lightmapped",
-                "file": "default"
-            },
-            "features": {
-                "DEPRECATED_LIGHT_ATTENUATION": false
-            }
-        },
-        "a1032e6f-8cb1-48d3-bd1c-ae95cad928c5": {
+        "e315536e-27b7-4d15-b229-0228a292799d": {
             "link": {
                 "name": "TileFeedback",
                 "file": "default"
             }
         },
-        "887568cb-8b87-4b6c-887f-38857fe5c566": {
+        "bdd1dff9-1f51-491a-9356-abff93fe5a19": {
+            "link": {
+                "name": "Depth",
+                "file": "default"
+            }
+        },
+        "337ffefa-a1c3-42af-bba6-9b1c467819c2": {
+            "link": {
+                "name": "DistanceFieldVector",
+                "file": "default"
+            }
+        },
+        "6e3da297-ea04-4d73-a0c7-3889145038df": {
+            "link": {
+                "name": "Flat Opaque",
+                "file": "default"
+            }
+        },
+        "09918bfd-8188-4615-be85-7a100306f4f2": {
             "link": {
                 "name": "Flat Opaque Textured",
                 "file": "default"
-            },
-            "name": "Flat Transparent No Depth",
-            "depthFunction": "always",
-            "depthTest": false,
-            "blending": true,
-            "blendSrcRgb": "source alpha",
-            "blendSrcAlpha": "one minus destination alpha",
-            "blendDestRgb": "one minus source alpha",
-            "blendDestAlpha": "one",
-            "features": {
-                "TEXTURED": false
             }
         },
-        "9b51f816-12c6-4374-9938-f62d3ca0b9d6": {
+        "313227a6-182e-4b31-9838-632a9291f4d2": {
+            "link": {
+                "name": "Phong Opaque",
+                "file": "default"
+            }
+        },
+        "2762071d-3ed2-487d-9b98-0bf0a6e8f24c": {
+            "link": {
+                "name": "Phong Opaque Textured",
+                "file": "default"
+            }
+        },
+        "89a3238c-ae6c-41f3-a9af-4fd4c6e1564b": {
+            "link": {
+                "name": "Phong Normalmapped",
+                "file": "default"
+            }
+        },
+        "23d2e5ed-cb5d-4166-b156-400853518648": {
+            "link": {
+                "name": "Phong Lightmapped",
+                "file": "default"
+            }
+        },
+        "2d2fb7df-35f2-4ea3-a493-70fe1235b94f": {
+            "link": {
+                "name": "Physical Opaque",
+                "file": "default"
+            },
+            "features": {
+                "SEPARATE_OCCLUSION_TEXTURE": true
+            }
+        },
+        "9104535f-2c03-4d28-8052-347735487f59": {
+            "link": {
+                "name": "Physical Opaque Textured",
+                "file": "default"
+            },
+            "features": {
+                "SEPARATE_OCCLUSION_TEXTURE": true
+            }
+        },
+        "34d9e3a1-e64c-4786-b7ef-581ce83aaf88": {
+            "link": {
+                "name": "Foliage",
+                "file": "default"
+            }
+        },
+        "b8d672a6-da28-4516-bf27-c5a97c029987": {
+            "link": {
+                "name": "Particle",
+                "file": "default"
+            }
+        },
+        "5959fca9-9575-43d8-b76f-603dcaa66ebd": {
+            "link": {
+                "name": "Text",
+                "file": "default"
+            }
+        },
+        "6a25dc7c-d12d-45a0-8e15-ace3bd9637e6": {
+            "link": {
+                "name": "Sky",
+                "file": "default"
+            },
+            "features": {
+                "TEXTURED": true,
+                "ENVIRONMENT_PROBE": false,
+                "GRADIENT": true,
+                "GRADIENT_4_STOPS": true
+            }
+        },
+        "99894a5c-7295-463c-a8ad-a8d23614a462": {
             "link": {
                 "name": "AtmosphericSky",
                 "file": "default"
             }
+        },
+        "cac99800-8c59-4748-8014-03df6ad16252": {
+            "link": {
+                "name": "Flat Opaque",
+                "file": "default"
+            },
+            "name": "Flat Transparent No Depth",
+            "depthTest": false,
+            "depthFunction": "always",
+            "blending": true,
+            "blendSrcRgb": "source alpha",
+            "blendSrcAlpha": "one minus destination alpha",
+            "blendDestRgb": "one minus source alpha",
+            "blendDestAlpha": "one"
         }
     },
     "settings": {
