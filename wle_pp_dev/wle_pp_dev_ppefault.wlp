@@ -674,124 +674,21 @@
             }
         }
     },
-    "materials": {
-        "DefaultFontMaterial": {
+    "images": {
+        "d1550dc2-2b9c-4c80-a575-22f58d3850d8": {
             "link": {
-                "name": "DefaultFontMaterial",
-                "file": "default"
+                "name": "icon.png",
+                "file": "assets\\textures\\pp\\icon.png"
             },
-            "Text": {
-                "font": "f5ed4fb0-a0a2-47f4-8b4d-a3e02ea4898e"
-            }
-        },
-        "cffc8c8c-c158-4950-88b3-de627375c2ed": {
-            "name": "Flat Opaque",
-            "pipeline": "6e3da297-ea04-4d73-a0c7-3889145038df"
-        },
-        "e972069e-66ee-4d9c-959d-8a78d9ddb9f9": {
-            "name": "Phong Opaque",
-            "pipeline": "313227a6-182e-4b31-9838-632a9291f4d2",
-            "Phong": {
-                "ambientColor": [
-                    0.5,
-                    0.5,
-                    0.5,
-                    1.0
-                ]
-            }
-        },
-        "f791ea4a-29da-46c4-80a2-09027d17fa30": {
-            "name": "Flat Transparent No Depth",
-            "pipeline": "cac99800-8c59-4748-8014-03df6ad16252"
-        },
-        "04b7f97e-2921-4f88-91f3-20e62ec5c355": {
-            "name": "Text",
-            "pipeline": "5959fca9-9575-43d8-b76f-603dcaa66ebd",
-            "Text": {
-                "font": "f5ed4fb0-a0a2-47f4-8b4d-a3e02ea4898e"
-            }
-        },
-        "dfa19ab9-7e1c-45b6-b3c8-b0959fd9c50d": {
+            "compression": "none",
+            "stream": false
+        }
+    },
+    "textures": {
+        "0fdcef6b-36ae-44c7-b4ed-082696d8376f": {
             "link": {
-                "name": "Gamepad Body",
-                "file": "assets\\models\\pp\\meta_quest_1_gamepads_credits_Jezza3D.fbx"
-            },
-            "Phong": {
-                "specularColor": [
-                    1.0,
-                    1.0,
-                    1.0,
-                    0.5
-                ],
-                "shininess": 2,
-                "ambientColor": [
-                    0.5,
-                    0.5,
-                    0.5,
-                    1.0
-                ],
-                "diffuseColor": [
-                    0.0784313,
-                    0.0784313,
-                    0.0784313,
-                    1.0
-                ]
-            }
-        },
-        "8056c698-b1c4-4a6f-838f-f80fb4b37a9f": {
-            "link": {
-                "name": "Gamepad Button",
-                "file": "assets\\models\\pp\\meta_quest_1_gamepads_credits_Jezza3D.fbx"
-            },
-            "Phong": {
-                "shininess": 2,
-                "specularColor": [
-                    1.0,
-                    1.0,
-                    1.0,
-                    0.5
-                ],
-                "ambientColor": [
-                    0.5,
-                    0.5,
-                    0.5,
-                    1.0
-                ],
-                "diffuseColor": [
-                    0.9411764,
-                    0.9411764,
-                    0.9411764,
-                    1.0
-                ]
-            }
-        },
-        "f9c59c9d-4599-40d6-abdb-8caadc0bee21": {
-            "name": "Tracked Hand Joint",
-            "Phong": {
-                "ambientColor": [
-                    0.5,
-                    0.5,
-                    0.5,
-                    1.0
-                ],
-                "diffuseColor": [
-                    0.0784,
-                    0.0784,
-                    0.0784,
-                    1.0
-                ],
-                "specularColor": [
-                    1.0,
-                    1.0,
-                    1.0,
-                    0.5
-                ],
-                "fogColor": [
-                    1.0,
-                    1.0,
-                    1.0,
-                    0.0
-                ]
+                "name": "icon.png",
+                "file": "assets\\textures\\pp\\icon.png"
             }
         }
     },
@@ -1001,82 +898,124 @@
             }
         }
     },
-    "settings": {
-        "project": {
-            "name": "wle-pp-dev-ppefault",
-            "version": [
-                1,
-                3,
-                0
-            ],
-            "description": "Default template project for the Wonderland Engine",
-            "type": "game",
-            "customIndexHtml": true
-        },
-        "scripting": {
-            "application": {
-                "output": "wle-pp-dev-ppefault-app.js",
-                "bundling": "esbuild",
-                "entryPoint": "src/app.ts"
+    "materials": {
+        "DefaultFontMaterial": {
+            "link": {
+                "name": "DefaultFontMaterial",
+                "file": "default"
             },
-            "components": {
-                "sourcePaths": [
-                    "src",
-                    "src/pp/index.ts"
+            "Text": {
+                "font": "f5ed4fb0-a0a2-47f4-8b4d-a3e02ea4898e"
+            }
+        },
+        "cffc8c8c-c158-4950-88b3-de627375c2ed": {
+            "name": "Flat Opaque",
+            "pipeline": "6e3da297-ea04-4d73-a0c7-3889145038df"
+        },
+        "e972069e-66ee-4d9c-959d-8a78d9ddb9f9": {
+            "name": "Phong Opaque",
+            "pipeline": "313227a6-182e-4b31-9838-632a9291f4d2",
+            "Phong": {
+                "ambientColor": [
+                    0.5,
+                    0.5,
+                    0.5,
+                    1.0
+                ]
+            }
+        },
+        "f791ea4a-29da-46c4-80a2-09027d17fa30": {
+            "name": "Flat Transparent No Depth",
+            "pipeline": "cac99800-8c59-4748-8014-03df6ad16252"
+        },
+        "04b7f97e-2921-4f88-91f3-20e62ec5c355": {
+            "name": "Text",
+            "pipeline": "5959fca9-9575-43d8-b76f-603dcaa66ebd",
+            "Text": {
+                "font": "f5ed4fb0-a0a2-47f4-8b4d-a3e02ea4898e"
+            }
+        },
+        "dfa19ab9-7e1c-45b6-b3c8-b0959fd9c50d": {
+            "link": {
+                "name": "Gamepad Body",
+                "file": "assets\\models\\pp\\meta_quest_1_gamepads_credits_Jezza3D.fbx"
+            },
+            "Phong": {
+                "specularColor": [
+                    1.0,
+                    1.0,
+                    1.0,
+                    0.5
                 ],
-                "entryPoint": "src/index.ts",
-                "output": "wle-pp-dev-ppefault-bundle.js"
-            },
-            "libraryPaths": [
-                "/js/lib/"
-            ]
-        },
-        "rendering": {
-            "clearColor": [
-                0.9411764,
-                0.9411764,
-                0.9411764,
-                1.0
-            ]
-        },
-        "xr": {
-            "leftEyeObject": "bfeccf36-046b-49b5-b355-da4ede4daf21",
-            "rightEyeObject": "665488c7-f768-473e-8fe7-8b4ccd5bc647",
-            "webxr": {
-                "optionalFeatures": {
-                    "hand-tracking": true
-                },
-                "offerSession": false
+                "shininess": 2,
+                "ambientColor": [
+                    0.5,
+                    0.5,
+                    0.5,
+                    1.0
+                ],
+                "diffuseColor": [
+                    0.0784313,
+                    0.0784313,
+                    0.0784313,
+                    1.0
+                ]
             }
         },
-        "editor": {
-            "camera": {
-                "near": 0.0099999,
-                "far": 1000.0
+        "8056c698-b1c4-4a6f-838f-f80fb4b37a9f": {
+            "link": {
+                "name": "Gamepad Button",
+                "file": "assets\\models\\pp\\meta_quest_1_gamepads_credits_Jezza3D.fbx"
             },
-            "ids": "uuid"
-        },
-        "runtime": {
-            "xrButtonColor": "black",
-            "viewObject": "8022bc4c-dcb9-461f-9f47-70f2c9ab943a",
-            "pwa": {
-                "enable": true,
-                "customServiceWorker": true,
-                "customManifest": true,
-                "appIcon": "d1550dc2-2b9c-4c80-a575-22f58d3850d8"
+            "Phong": {
+                "shininess": 2,
+                "specularColor": [
+                    1.0,
+                    1.0,
+                    1.0,
+                    0.5
+                ],
+                "ambientColor": [
+                    0.5,
+                    0.5,
+                    0.5,
+                    1.0
+                ],
+                "diffuseColor": [
+                    0.9411764,
+                    0.9411764,
+                    0.9411764,
+                    1.0
+                ]
             }
         },
-        "physx": {
-            "enable": false,
-            "groupNames": {
-                "0": "Player",
-                "1": "Solid",
-                "2": "Interactable",
-                "3": "UI",
-                "4": "Group 4",
-                "5": "Group 5",
-                "6": "Group 6",
-                "7": "Group 7"
+        "f9c59c9d-4599-40d6-abdb-8caadc0bee21": {
+            "name": "Tracked Hand Joint",
+            "Phong": {
+                "ambientColor": [
+                    0.5,
+                    0.5,
+                    0.5,
+                    1.0
+                ],
+                "diffuseColor": [
+                    0.0784,
+                    0.0784,
+                    0.0784,
+                    1.0
+                ],
+                "specularColor": [
+                    1.0,
+                    1.0,
+                    1.0,
+                    0.5
+                ],
+                "fogColor": [
+                    1.0,
+                    1.0,
+                    1.0,
+                    0.0
+                ]
             }
         }
     },
@@ -1212,24 +1151,6 @@
             "blendDestAlpha": "one"
         }
     },
-    "textures": {
-        "0fdcef6b-36ae-44c7-b4ed-082696d8376f": {
-            "link": {
-                "name": "icon.png",
-                "file": "assets\\textures\\pp\\icon.png"
-            }
-        }
-    },
-    "images": {
-        "d1550dc2-2b9c-4c80-a575-22f58d3850d8": {
-            "link": {
-                "name": "icon.png",
-                "file": "assets\\textures\\pp\\icon.png"
-            },
-            "compression": "none",
-            "stream": false
-        }
-    },
     "fonts": {
         "f5ed4fb0-a0a2-47f4-8b4d-a3e02ea4898e": {
             "link": {
@@ -1258,5 +1179,84 @@
             "importerName": ""
         }
     },
-    "languages": {}
+    "languages": {},
+    "settings": {
+        "project": {
+            "name": "wle-pp-dev-ppefault",
+            "version": [
+                1,
+                3,
+                0
+            ],
+            "description": "Default template project for the Wonderland Engine",
+            "type": "game",
+            "customIndexHtml": true
+        },
+        "scripting": {
+            "application": {
+                "output": "wle-pp-dev-ppefault-app.js",
+                "bundling": "esbuild",
+                "entryPoint": "src/app.ts"
+            },
+            "components": {
+                "sourcePaths": [
+                    "src",
+                    "src/pp/index.ts"
+                ],
+                "entryPoint": "src/index.ts",
+                "output": "wle-pp-dev-ppefault-bundle.js"
+            },
+            "libraryPaths": [
+                "/js/lib/"
+            ]
+        },
+        "rendering": {
+            "clearColor": [
+                0.9411764,
+                0.9411764,
+                0.9411764,
+                1.0
+            ]
+        },
+        "xr": {
+            "leftEyeObject": "bfeccf36-046b-49b5-b355-da4ede4daf21",
+            "rightEyeObject": "665488c7-f768-473e-8fe7-8b4ccd5bc647",
+            "webxr": {
+                "optionalFeatures": {
+                    "hand-tracking": true
+                },
+                "offerSession": false
+            }
+        },
+        "editor": {
+            "camera": {
+                "near": 0.0099999,
+                "far": 1000.0
+            },
+            "ids": "uuid"
+        },
+        "runtime": {
+            "xrButtonColor": "black",
+            "viewObject": "8022bc4c-dcb9-461f-9f47-70f2c9ab943a",
+            "pwa": {
+                "enable": true,
+                "customServiceWorker": true,
+                "customManifest": true,
+                "appIcon": "d1550dc2-2b9c-4c80-a575-22f58d3850d8"
+            }
+        },
+        "physx": {
+            "enable": false,
+            "groupNames": {
+                "0": "Player",
+                "1": "Solid",
+                "2": "Interactable",
+                "3": "UI",
+                "4": "Group 4",
+                "5": "Group 5",
+                "6": "Group 6",
+                "7": "Group 7"
+            }
+        }
+    }
 }

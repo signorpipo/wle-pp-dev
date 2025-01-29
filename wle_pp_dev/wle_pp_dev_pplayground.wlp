@@ -3066,6 +3066,230 @@
             }
         }
     },
+    "images": {
+        "d1550dc2-2b9c-4c80-a575-22f58d3850d8": {
+            "link": {
+                "name": "icon.png",
+                "file": "assets\\textures\\pp\\icon.png"
+            },
+            "compression": "none",
+            "stream": false
+        }
+    },
+    "textures": {
+        "0fdcef6b-36ae-44c7-b4ed-082696d8376f": {
+            "link": {
+                "name": "icon.png",
+                "file": "assets\\textures\\pp\\icon.png"
+            }
+        }
+    },
+    "shaders": {
+        "6577e0ac-8bde-4f81-a94c-9aaf3ecb6300": {
+            "link": {
+                "name": "Depth.frag",
+                "file": "default"
+            }
+        },
+        "106c2490-e64d-411a-8546-71abee1b8fbb": {
+            "link": {
+                "name": "DistanceFieldVector.frag",
+                "file": "default"
+            }
+        },
+        "e6b2f7fc-6cf0-4329-979c-cf524886be59": {
+            "link": {
+                "name": "Dynamic.vert",
+                "file": "default"
+            }
+        },
+        "66488ae9-353e-4fcd-a04f-135fd53e42b1": {
+            "link": {
+                "name": "Flat.frag",
+                "file": "default"
+            }
+        },
+        "aaa7e919-e745-434d-a0ed-f768a48bceb7": {
+            "link": {
+                "name": "MeshVisualizer.frag",
+                "file": "default"
+            }
+        },
+        "26cf0b60-d37f-4a77-89e3-6d666685510b": {
+            "link": {
+                "name": "Skinning.vert",
+                "file": "default"
+            }
+        },
+        "98f31f7c-5675-4c2e-8c44-3df27cb437bc": {
+            "link": {
+                "name": "Phong.frag",
+                "file": "default"
+            }
+        },
+        "93b103cb-3252-4d97-9d57-f7e8fd53eea8": {
+            "link": {
+                "name": "Particle.frag",
+                "file": "default"
+            }
+        },
+        "9b31b513-9351-4934-88ae-d1511b2c09cf": {
+            "link": {
+                "name": "Physical.frag",
+                "file": "default"
+            }
+        },
+        "4c7e0fbf-da82-44ff-8e7b-ae64c2567363": {
+            "link": {
+                "name": "Sky.frag",
+                "file": "default"
+            }
+        },
+        "1cc81c3b-8371-4ab9-99d5-f17a28c49b72": {
+            "link": {
+                "name": "Text.frag",
+                "file": "default"
+            }
+        },
+        "63ff9c14-e22f-4e22-a75a-a6cf54c044e2": {
+            "link": {
+                "name": "Text.vert",
+                "file": "default"
+            }
+        },
+        "df397a10-7ddc-487c-9eab-d761c66f17d2": {
+            "link": {
+                "name": "TileFeedback.frag",
+                "file": "default"
+            }
+        },
+        "7d6fd1c1-8b22-4518-8016-61d945fc3417": {
+            "link": {
+                "name": "Background.frag",
+                "file": "default"
+            }
+        },
+        "df2c5ee9-d8fa-4548-bf58-93e47e270d21": {
+            "link": {
+                "name": "FullScreenTriangle.vert",
+                "file": "default"
+            }
+        },
+        "5441ff0d-85ec-4631-8af3-6730f46c2ce8": {
+            "link": {
+                "name": "lib\\Color.glsl",
+                "file": "default"
+            }
+        },
+        "db47625f-c472-4ba6-84f2-92ac04eaef74": {
+            "link": {
+                "name": "lib\\Compatibility.frag",
+                "file": "default"
+            }
+        },
+        "ae1111b8-6c76-403b-a966-49dc641bf6c6": {
+            "link": {
+                "name": "lib\\CoordinateSystems.glsl",
+                "file": "default"
+            }
+        },
+        "93ae94dd-8359-46a9-997d-c85b1b308ad5": {
+            "link": {
+                "name": "lib\\GI.frag",
+                "file": "default"
+            }
+        },
+        "c0a6359a-3165-4ef5-85e2-2e1d3dd3ee33": {
+            "link": {
+                "name": "lib\\Inputs.frag",
+                "file": "default"
+            }
+        },
+        "f285dce6-4581-44dc-9f0f-cb4bf4c8b830": {
+            "link": {
+                "name": "lib\\Lights.frag",
+                "file": "default"
+            }
+        },
+        "869e83ac-1495-4ca6-b0d0-8240d622714d": {
+            "link": {
+                "name": "lib\\Materials.frag",
+                "file": "default"
+            }
+        },
+        "09bda2ec-5c3c-4e18-a411-0e11c7aa37a9": {
+            "link": {
+                "name": "lib\\Math.glsl",
+                "file": "default"
+            }
+        },
+        "33337941-e2c3-4a09-b7c0-8bbd998a2f90": {
+            "link": {
+                "name": "lib\\Packing.frag",
+                "file": "default"
+            }
+        },
+        "5033911a-2cc7-4a73-907c-7c8927ad62f5": {
+            "link": {
+                "name": "lib\\Quaternion.glsl",
+                "file": "default"
+            }
+        },
+        "8c10b2fc-528c-4970-a642-571a618e4c81": {
+            "link": {
+                "name": "lib\\Slug.frag",
+                "file": "default"
+            }
+        },
+        "88f3d9f5-09cd-4bf0-8c7d-8f025ce7f7a7": {
+            "link": {
+                "name": "lib\\Slug.vert",
+                "file": "default"
+            }
+        },
+        "7886dc0b-f76a-4a10-a328-c3aa7b941472": {
+            "link": {
+                "name": "lib\\Surface.frag",
+                "file": "default"
+            }
+        },
+        "aff338d8-4cb8-4e68-8e1c-9f4f4ebeb7e1": {
+            "link": {
+                "name": "lib\\Textures.frag",
+                "file": "default"
+            }
+        },
+        "9224f9d4-a499-477c-94bc-ad56b88c0768": {
+            "link": {
+                "name": "lib\\Uniforms.glsl",
+                "file": "default"
+            }
+        },
+        "9ded86d1-5b9c-44ad-8458-fbc625d841a4": {
+            "link": {
+                "name": "lib\\MorphTargets.glsl",
+                "file": "default"
+            }
+        },
+        "6ece0074-6003-4107-8484-30cd6eed4181": {
+            "link": {
+                "name": "lib\\PhysicalBSDF.glsl",
+                "file": "default"
+            }
+        },
+        "1e16efeb-f00b-4736-b952-352199ecbdc4": {
+            "link": {
+                "name": "AtmosphericSky.frag",
+                "file": "default"
+            }
+        },
+        "f7d5f6b4-2cac-4aff-85b4-756bca1e396f": {
+            "link": {
+                "name": "lib\\SkyProcedural.glsl",
+                "file": "default"
+            }
+        }
+    },
     "materials": {
         "DefaultFontMaterial": {
             "link": {
@@ -3368,295 +3592,6 @@
             }
         }
     },
-    "shaders": {
-        "6577e0ac-8bde-4f81-a94c-9aaf3ecb6300": {
-            "link": {
-                "name": "Depth.frag",
-                "file": "default"
-            }
-        },
-        "106c2490-e64d-411a-8546-71abee1b8fbb": {
-            "link": {
-                "name": "DistanceFieldVector.frag",
-                "file": "default"
-            }
-        },
-        "e6b2f7fc-6cf0-4329-979c-cf524886be59": {
-            "link": {
-                "name": "Dynamic.vert",
-                "file": "default"
-            }
-        },
-        "66488ae9-353e-4fcd-a04f-135fd53e42b1": {
-            "link": {
-                "name": "Flat.frag",
-                "file": "default"
-            }
-        },
-        "aaa7e919-e745-434d-a0ed-f768a48bceb7": {
-            "link": {
-                "name": "MeshVisualizer.frag",
-                "file": "default"
-            }
-        },
-        "26cf0b60-d37f-4a77-89e3-6d666685510b": {
-            "link": {
-                "name": "Skinning.vert",
-                "file": "default"
-            }
-        },
-        "98f31f7c-5675-4c2e-8c44-3df27cb437bc": {
-            "link": {
-                "name": "Phong.frag",
-                "file": "default"
-            }
-        },
-        "93b103cb-3252-4d97-9d57-f7e8fd53eea8": {
-            "link": {
-                "name": "Particle.frag",
-                "file": "default"
-            }
-        },
-        "9b31b513-9351-4934-88ae-d1511b2c09cf": {
-            "link": {
-                "name": "Physical.frag",
-                "file": "default"
-            }
-        },
-        "4c7e0fbf-da82-44ff-8e7b-ae64c2567363": {
-            "link": {
-                "name": "Sky.frag",
-                "file": "default"
-            }
-        },
-        "1cc81c3b-8371-4ab9-99d5-f17a28c49b72": {
-            "link": {
-                "name": "Text.frag",
-                "file": "default"
-            }
-        },
-        "63ff9c14-e22f-4e22-a75a-a6cf54c044e2": {
-            "link": {
-                "name": "Text.vert",
-                "file": "default"
-            }
-        },
-        "df397a10-7ddc-487c-9eab-d761c66f17d2": {
-            "link": {
-                "name": "TileFeedback.frag",
-                "file": "default"
-            }
-        },
-        "7d6fd1c1-8b22-4518-8016-61d945fc3417": {
-            "link": {
-                "name": "Background.frag",
-                "file": "default"
-            }
-        },
-        "df2c5ee9-d8fa-4548-bf58-93e47e270d21": {
-            "link": {
-                "name": "FullScreenTriangle.vert",
-                "file": "default"
-            }
-        },
-        "5441ff0d-85ec-4631-8af3-6730f46c2ce8": {
-            "link": {
-                "name": "lib\\Color.glsl",
-                "file": "default"
-            }
-        },
-        "db47625f-c472-4ba6-84f2-92ac04eaef74": {
-            "link": {
-                "name": "lib\\Compatibility.frag",
-                "file": "default"
-            }
-        },
-        "ae1111b8-6c76-403b-a966-49dc641bf6c6": {
-            "link": {
-                "name": "lib\\CoordinateSystems.glsl",
-                "file": "default"
-            }
-        },
-        "93ae94dd-8359-46a9-997d-c85b1b308ad5": {
-            "link": {
-                "name": "lib\\GI.frag",
-                "file": "default"
-            }
-        },
-        "c0a6359a-3165-4ef5-85e2-2e1d3dd3ee33": {
-            "link": {
-                "name": "lib\\Inputs.frag",
-                "file": "default"
-            }
-        },
-        "f285dce6-4581-44dc-9f0f-cb4bf4c8b830": {
-            "link": {
-                "name": "lib\\Lights.frag",
-                "file": "default"
-            }
-        },
-        "869e83ac-1495-4ca6-b0d0-8240d622714d": {
-            "link": {
-                "name": "lib\\Materials.frag",
-                "file": "default"
-            }
-        },
-        "09bda2ec-5c3c-4e18-a411-0e11c7aa37a9": {
-            "link": {
-                "name": "lib\\Math.glsl",
-                "file": "default"
-            }
-        },
-        "33337941-e2c3-4a09-b7c0-8bbd998a2f90": {
-            "link": {
-                "name": "lib\\Packing.frag",
-                "file": "default"
-            }
-        },
-        "5033911a-2cc7-4a73-907c-7c8927ad62f5": {
-            "link": {
-                "name": "lib\\Quaternion.glsl",
-                "file": "default"
-            }
-        },
-        "8c10b2fc-528c-4970-a642-571a618e4c81": {
-            "link": {
-                "name": "lib\\Slug.frag",
-                "file": "default"
-            }
-        },
-        "88f3d9f5-09cd-4bf0-8c7d-8f025ce7f7a7": {
-            "link": {
-                "name": "lib\\Slug.vert",
-                "file": "default"
-            }
-        },
-        "7886dc0b-f76a-4a10-a328-c3aa7b941472": {
-            "link": {
-                "name": "lib\\Surface.frag",
-                "file": "default"
-            }
-        },
-        "aff338d8-4cb8-4e68-8e1c-9f4f4ebeb7e1": {
-            "link": {
-                "name": "lib\\Textures.frag",
-                "file": "default"
-            }
-        },
-        "9224f9d4-a499-477c-94bc-ad56b88c0768": {
-            "link": {
-                "name": "lib\\Uniforms.glsl",
-                "file": "default"
-            }
-        },
-        "9ded86d1-5b9c-44ad-8458-fbc625d841a4": {
-            "link": {
-                "name": "lib\\MorphTargets.glsl",
-                "file": "default"
-            }
-        },
-        "6ece0074-6003-4107-8484-30cd6eed4181": {
-            "link": {
-                "name": "lib\\PhysicalBSDF.glsl",
-                "file": "default"
-            }
-        },
-        "1e16efeb-f00b-4736-b952-352199ecbdc4": {
-            "link": {
-                "name": "AtmosphericSky.frag",
-                "file": "default"
-            }
-        },
-        "f7d5f6b4-2cac-4aff-85b4-756bca1e396f": {
-            "link": {
-                "name": "lib\\SkyProcedural.glsl",
-                "file": "default"
-            }
-        }
-    },
-    "settings": {
-        "project": {
-            "name": "wle-pp-dev-pplayground",
-            "version": [
-                1,
-                3,
-                0
-            ],
-            "description": "Playground template project for the Wonderland Engine",
-            "type": "game",
-            "customIndexHtml": true
-        },
-        "scripting": {
-            "application": {
-                "output": "wle-pp-dev-pplayground-app.js",
-                "bundling": "esbuild",
-                "entryPoint": "src/app.ts"
-            },
-            "components": {
-                "sourcePaths": [
-                    "src",
-                    "src/pp/index.ts",
-                    "src/playground/components",
-                    "src/cauldron/components",
-                    "src/test/components"
-                ],
-                "entryPoint": "src/index.ts",
-                "output": "wle-pp-dev-pplayground-bundle.js"
-            },
-            "libraryPaths": [
-                "/js/lib/"
-            ]
-        },
-        "rendering": {
-            "clearColor": [
-                0.4235294,
-                1.0,
-                0.8705882,
-                1.0
-            ]
-        },
-        "xr": {
-            "leftEyeObject": "bfeccf36-046b-49b5-b355-da4ede4daf21",
-            "rightEyeObject": "665488c7-f768-473e-8fe7-8b4ccd5bc647",
-            "webxr": {
-                "optionalFeatures": {
-                    "hand-tracking": true,
-                    "local-floor": true
-                },
-                "offerSession": false
-            }
-        },
-        "editor": {
-            "camera": {
-                "near": 0.0099999,
-                "far": 1000.0
-            },
-            "ids": "uuid"
-        },
-        "runtime": {
-            "xrButtonColor": "white",
-            "viewObject": "8022bc4c-dcb9-461f-9f47-70f2c9ab943a",
-            "pwa": {
-                "enable": true,
-                "customServiceWorker": true,
-                "customManifest": true,
-                "appIcon": "d1550dc2-2b9c-4c80-a575-22f58d3850d8"
-            }
-        },
-        "physx": {
-            "enable": true,
-            "groupNames": {
-                "0": "Player",
-                "1": "Solid",
-                "2": "Interactable",
-                "3": "UI",
-                "4": "Group 4",
-                "5": "Group 5",
-                "6": "Group 6",
-                "7": "Group 7"
-            }
-        }
-    },
     "animations": {},
     "skins": {},
     "pipelines": {
@@ -3789,24 +3724,6 @@
             "blendDestAlpha": "one"
         }
     },
-    "textures": {
-        "0fdcef6b-36ae-44c7-b4ed-082696d8376f": {
-            "link": {
-                "name": "icon.png",
-                "file": "assets\\textures\\pp\\icon.png"
-            }
-        }
-    },
-    "images": {
-        "d1550dc2-2b9c-4c80-a575-22f58d3850d8": {
-            "link": {
-                "name": "icon.png",
-                "file": "assets\\textures\\pp\\icon.png"
-            },
-            "compression": "none",
-            "stream": false
-        }
-    },
     "fonts": {
         "f5ed4fb0-a0a2-47f4-8b4d-a3e02ea4898e": {
             "link": {
@@ -3839,5 +3756,88 @@
             "importerName": ""
         }
     },
-    "languages": {}
+    "languages": {},
+    "settings": {
+        "project": {
+            "name": "wle-pp-dev-pplayground",
+            "version": [
+                1,
+                3,
+                0
+            ],
+            "description": "Playground template project for the Wonderland Engine",
+            "type": "game",
+            "customIndexHtml": true
+        },
+        "scripting": {
+            "application": {
+                "output": "wle-pp-dev-pplayground-app.js",
+                "bundling": "esbuild",
+                "entryPoint": "src/app.ts"
+            },
+            "components": {
+                "sourcePaths": [
+                    "src",
+                    "src/pp/index.ts",
+                    "src/playground/components",
+                    "src/cauldron/components",
+                    "src/test/components"
+                ],
+                "entryPoint": "src/index.ts",
+                "output": "wle-pp-dev-pplayground-bundle.js"
+            },
+            "libraryPaths": [
+                "/js/lib/"
+            ]
+        },
+        "rendering": {
+            "clearColor": [
+                0.4235294,
+                1.0,
+                0.8705882,
+                1.0
+            ]
+        },
+        "xr": {
+            "leftEyeObject": "bfeccf36-046b-49b5-b355-da4ede4daf21",
+            "rightEyeObject": "665488c7-f768-473e-8fe7-8b4ccd5bc647",
+            "webxr": {
+                "optionalFeatures": {
+                    "hand-tracking": true,
+                    "local-floor": true
+                },
+                "offerSession": false
+            }
+        },
+        "editor": {
+            "camera": {
+                "near": 0.0099999,
+                "far": 1000.0
+            },
+            "ids": "uuid"
+        },
+        "runtime": {
+            "xrButtonColor": "white",
+            "viewObject": "8022bc4c-dcb9-461f-9f47-70f2c9ab943a",
+            "pwa": {
+                "enable": true,
+                "customServiceWorker": true,
+                "customManifest": true,
+                "appIcon": "d1550dc2-2b9c-4c80-a575-22f58d3850d8"
+            }
+        },
+        "physx": {
+            "enable": true,
+            "groupNames": {
+                "0": "Player",
+                "1": "Solid",
+                "2": "Interactable",
+                "3": "UI",
+                "4": "Group 4",
+                "5": "Group 5",
+                "6": "Group 6",
+                "7": "Group 7"
+            }
+        }
+    }
 }

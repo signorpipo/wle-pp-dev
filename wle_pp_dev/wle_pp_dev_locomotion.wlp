@@ -10589,14 +10589,6 @@
             }
         }
     },
-    "textures": {
-        "t0": {
-            "link": {
-                "name": "DefaultTexture",
-                "file": "default"
-            }
-        }
-    },
     "images": {
         "f0": {
             "link": {
@@ -10605,351 +10597,11 @@
             }
         }
     },
-    "materials": {
-        "DefaultFontMaterial": {
+    "textures": {
+        "t0": {
             "link": {
-                "name": "DefaultFontMaterial",
+                "name": "DefaultTexture",
                 "file": "default"
-            },
-            "Text": {
-                "font": "11311a51-83ce-47a2-91bd-3432014f428c"
-            }
-        },
-        "20c9d5d7-8241-4c5d-ad8d-0fa650b841c2": {
-            "name": "Debug Flat",
-            "pipeline": "6e3da297-ea04-4d73-a0c7-3889145038df"
-        },
-        "19e8f822-5975-492b-8106-055d908c6793": {
-            "name": "Tool Flat",
-            "pipeline": "6e3da297-ea04-4d73-a0c7-3889145038df"
-        },
-        "a1f67b0d-494a-479b-b5f7-42023b5e4be9": {
-            "link": {
-                "name": "DefaultFontMaterial",
-                "file": "default"
-            },
-            "name": "Tool Font",
-            "pipeline": "5959fca9-9575-43d8-b76f-603dcaa66ebd",
-            "Text": {
-                "font": "11311a51-83ce-47a2-91bd-3432014f428c"
-            }
-        },
-        "17868ab8-b09d-4b68-bdb3-660fc6745d90": {
-            "link": {
-                "name": "Lambert_Body",
-                "file": "assets\\models\\quest_controllers_credits_Jezza3D.fbx"
-            },
-            "name": "Quest Controller Body",
-            "Phong": {
-                "diffuseColor": [
-                    0.599384,
-                    0.4133794,
-                    0.8784313,
-                    1.0
-                ],
-                "specularColor": [
-                    1.0,
-                    1.0,
-                    1.0,
-                    0.2509804
-                ],
-                "ambientColor": [
-                    0.5,
-                    0.5,
-                    0.5,
-                    1.0
-                ]
-            }
-        },
-        "8d747190-c992-4c2e-bdd2-91f29d998167": {
-            "link": {
-                "name": "Lambert_Button",
-                "file": "assets\\models\\quest_controllers_credits_Jezza3D.fbx"
-            },
-            "name": "Quest Controller Button",
-            "Phong": {
-                "diffuseColor": [
-                    1.0,
-                    0.6466426,
-                    0.1882352,
-                    1.0
-                ],
-                "specularColor": [
-                    1.0,
-                    1.0,
-                    1.0,
-                    0.5019608
-                ],
-                "ambientColor": [
-                    0.5,
-                    0.5,
-                    0.5,
-                    1.0
-                ]
-            }
-        },
-        "1a799878-c365-4b53-a679-6fb75f147017": {
-            "link": {
-                "name": "DefaultMaterial",
-                "file": "assets\\models\\suzanne.fbx"
-            },
-            "Phong": {
-                "ambientColor": [
-                    0.05,
-                    0.05,
-                    0.05,
-                    1.0
-                ]
-            }
-        },
-        "666a7c70-5cfd-4740-963f-1c2b24369479": {
-            "link": {
-                "name": "Material",
-                "file": "assets\\models\\cube.fbx"
-            },
-            "Phong": {
-                "ambientColor": [
-                    0.05,
-                    0.05,
-                    0.05,
-                    1.0
-                ]
-            }
-        },
-        "77c318c0-3038-46fa-8521-46830d36ff75": {
-            "name": "Floor",
-            "Phong": {
-                "ambientColor": [
-                    0.5,
-                    0.5,
-                    0.5,
-                    1.0
-                ],
-                "diffuseColor": [
-                    0.9411764,
-                    0.6262778,
-                    0.2177623,
-                    1.0
-                ],
-                "specularColor": [
-                    1.0,
-                    1.0,
-                    1.0,
-                    0.2509804
-                ]
-            },
-            "pipeline": "313227a6-182e-4b31-9838-632a9291f4d2"
-        },
-        "9bbe388a-a88f-490f-b19c-0339e8253d02": {
-            "name": "Wall",
-            "Phong": {
-                "ambientColor": [
-                    0.5,
-                    0.5,
-                    0.5,
-                    1.0
-                ],
-                "specularColor": [
-                    1.0,
-                    1.0,
-                    1.0,
-                    0.2509804
-                ],
-                "diffuseColor": [
-                    0.599384,
-                    0.4133794,
-                    0.8784313,
-                    1.0
-                ]
-            },
-            "pipeline": "313227a6-182e-4b31-9838-632a9291f4d2"
-        },
-        "5dfebea1-6cab-49e8-be3a-94a633f69edd": {
-            "name": "Special",
-            "Phong": {
-                "ambientColor": [
-                    0.5,
-                    0.5,
-                    0.5,
-                    1.0
-                ],
-                "specularColor": [
-                    1.0,
-                    1.0,
-                    1.0,
-                    0.2509804
-                ],
-                "diffuseColor": [
-                    0.8620177,
-                    0.4133794,
-                    0.8784313,
-                    1.0
-                ]
-            },
-            "pipeline": "313227a6-182e-4b31-9838-632a9291f4d2"
-        },
-        "4fca793d-a04a-4fc1-b4d0-70bd65723c1f": {
-            "link": {
-                "name": "DefaultFontMaterial",
-                "file": "default"
-            },
-            "name": "Debug Font",
-            "DistanceFieldVector": {
-                "outlineRange": [
-                    0.4,
-                    0.4
-                ]
-            },
-            "Text": {
-                "font": "11311a51-83ce-47a2-91bd-3432014f428c"
-            }
-        },
-        "8aa02537-51f8-4756-8188-82558f1ca600": {
-            "name": "Flat Opaque",
-            "pipeline": "6e3da297-ea04-4d73-a0c7-3889145038df"
-        },
-        "f6ac22d2-8f93-4151-bba0-39e28650b21a": {
-            "name": "Phong Opaque",
-            "pipeline": "313227a6-182e-4b31-9838-632a9291f4d2",
-            "Phong": {
-                "ambientColor": [
-                    0.05,
-                    0.05,
-                    0.05,
-                    1.0
-                ],
-                "diffuseColor": [
-                    0.0,
-                    0.0,
-                    0.0,
-                    1.0
-                ]
-            }
-        },
-        "5f2309e4-5581-48cd-b09f-3d4359e50fbc": {
-            "name": "Text",
-            "pipeline": "5959fca9-9575-43d8-b76f-603dcaa66ebd",
-            "Phong": {
-                "ambientColor": [
-                    0.0,
-                    0.0,
-                    0.0,
-                    1.0
-                ],
-                "diffuseColor": [
-                    0.0,
-                    0.0,
-                    0.0,
-                    1.0
-                ]
-            },
-            "Text": {
-                "font": "11311a51-83ce-47a2-91bd-3432014f428c"
-            }
-        },
-        "cd68b363-60da-43f6-8927-8ada418493e5": {
-            "name": "Scheme Text",
-            "pipeline": "5959fca9-9575-43d8-b76f-603dcaa66ebd",
-            "Phong": {
-                "ambientColor": [
-                    0.0,
-                    0.0,
-                    0.0,
-                    1.0
-                ],
-                "diffuseColor": [
-                    0.0,
-                    0.0,
-                    0.0,
-                    1.0
-                ]
-            },
-            "Text": {
-                "color": [
-                    0.599384,
-                    0.4133794,
-                    0.8784313,
-                    1.0
-                ],
-                "font": "11311a51-83ce-47a2-91bd-3432014f428c"
-            }
-        },
-        "58117f7e-8339-4ae5-8dd7-8dfd6594bf9c": {
-            "link": {
-                "name": "Default_Material",
-                "file": "assets\\models\\tracked_hand_left.glb"
-            },
-            "Phong": {
-                "ambientColor": [
-                    0.05,
-                    0.05,
-                    0.05,
-                    1.0
-                ]
-            }
-        },
-        "a76ff4bc-2568-4d32-8e60-c5279e928e88": {
-            "link": {
-                "name": "lambert2",
-                "file": "assets\\models\\tracked_hand_right.glb"
-            },
-            "Phong": {
-                "ambientColor": [
-                    0.05,
-                    0.05,
-                    0.05,
-                    1.0
-                ]
-            }
-        },
-        "b14b39e3-ac8a-44d5-95b2-007ba0be2539": {
-            "link": {
-                "name": "lambert2",
-                "file": "assets\\models\\tracked_hand_right.glb"
-            },
-            "name": "Flat Transparent No Depth",
-            "pipeline": "cac99800-8c59-4748-8014-03df6ad16252",
-            "Flat": {
-                "color": [
-                    0.5019608,
-                    0.5019608,
-                    0.5019608,
-                    1.0
-                ]
-            }
-        },
-        "29c34784-be27-402c-bba7-46de7d4b6d2f": {
-            "link": {
-                "name": "Lambert_Body",
-                "file": "assets\\models\\quest_controllers_credits_Jezza3D.fbx"
-            },
-            "name": "test",
-            "Phong": {
-                "diffuseColor": [
-                    0.599384,
-                    0.4133794,
-                    0.8784313,
-                    1.0
-                ],
-                "specularColor": [
-                    1.0,
-                    1.0,
-                    1.0,
-                    0.2509804
-                ],
-                "ambientColor": [
-                    0.5,
-                    0.5,
-                    0.5,
-                    1.0
-                ]
-            },
-            "pipeline": "313227a6-182e-4b31-9838-632a9291f4d2"
-        },
-        "83b74364-fb25-4557-bf75-576a211b6a03": {
-            "link": {
-                "name": "Material",
-                "file": "assets\\models\\arc.fbx"
             }
         }
     },
@@ -11405,6 +11057,354 @@
             }
         }
     },
+    "materials": {
+        "DefaultFontMaterial": {
+            "link": {
+                "name": "DefaultFontMaterial",
+                "file": "default"
+            },
+            "Text": {
+                "font": "11311a51-83ce-47a2-91bd-3432014f428c"
+            }
+        },
+        "20c9d5d7-8241-4c5d-ad8d-0fa650b841c2": {
+            "name": "Debug Flat",
+            "pipeline": "6e3da297-ea04-4d73-a0c7-3889145038df"
+        },
+        "19e8f822-5975-492b-8106-055d908c6793": {
+            "name": "Tool Flat",
+            "pipeline": "6e3da297-ea04-4d73-a0c7-3889145038df"
+        },
+        "a1f67b0d-494a-479b-b5f7-42023b5e4be9": {
+            "link": {
+                "name": "DefaultFontMaterial",
+                "file": "default"
+            },
+            "name": "Tool Font",
+            "pipeline": "5959fca9-9575-43d8-b76f-603dcaa66ebd",
+            "Text": {
+                "font": "11311a51-83ce-47a2-91bd-3432014f428c"
+            }
+        },
+        "17868ab8-b09d-4b68-bdb3-660fc6745d90": {
+            "link": {
+                "name": "Lambert_Body",
+                "file": "assets\\models\\quest_controllers_credits_Jezza3D.fbx"
+            },
+            "name": "Quest Controller Body",
+            "Phong": {
+                "diffuseColor": [
+                    0.599384,
+                    0.4133794,
+                    0.8784313,
+                    1.0
+                ],
+                "specularColor": [
+                    1.0,
+                    1.0,
+                    1.0,
+                    0.2509804
+                ],
+                "ambientColor": [
+                    0.5,
+                    0.5,
+                    0.5,
+                    1.0
+                ]
+            }
+        },
+        "8d747190-c992-4c2e-bdd2-91f29d998167": {
+            "link": {
+                "name": "Lambert_Button",
+                "file": "assets\\models\\quest_controllers_credits_Jezza3D.fbx"
+            },
+            "name": "Quest Controller Button",
+            "Phong": {
+                "diffuseColor": [
+                    1.0,
+                    0.6466426,
+                    0.1882352,
+                    1.0
+                ],
+                "specularColor": [
+                    1.0,
+                    1.0,
+                    1.0,
+                    0.5019608
+                ],
+                "ambientColor": [
+                    0.5,
+                    0.5,
+                    0.5,
+                    1.0
+                ]
+            }
+        },
+        "1a799878-c365-4b53-a679-6fb75f147017": {
+            "link": {
+                "name": "DefaultMaterial",
+                "file": "assets\\models\\suzanne.fbx"
+            },
+            "Phong": {
+                "ambientColor": [
+                    0.05,
+                    0.05,
+                    0.05,
+                    1.0
+                ]
+            }
+        },
+        "666a7c70-5cfd-4740-963f-1c2b24369479": {
+            "link": {
+                "name": "Material",
+                "file": "assets\\models\\cube.fbx"
+            },
+            "Phong": {
+                "ambientColor": [
+                    0.05,
+                    0.05,
+                    0.05,
+                    1.0
+                ]
+            }
+        },
+        "77c318c0-3038-46fa-8521-46830d36ff75": {
+            "name": "Floor",
+            "Phong": {
+                "ambientColor": [
+                    0.5,
+                    0.5,
+                    0.5,
+                    1.0
+                ],
+                "diffuseColor": [
+                    0.9411764,
+                    0.6262778,
+                    0.2177623,
+                    1.0
+                ],
+                "specularColor": [
+                    1.0,
+                    1.0,
+                    1.0,
+                    0.2509804
+                ]
+            },
+            "pipeline": "313227a6-182e-4b31-9838-632a9291f4d2"
+        },
+        "9bbe388a-a88f-490f-b19c-0339e8253d02": {
+            "name": "Wall",
+            "Phong": {
+                "ambientColor": [
+                    0.5,
+                    0.5,
+                    0.5,
+                    1.0
+                ],
+                "specularColor": [
+                    1.0,
+                    1.0,
+                    1.0,
+                    0.2509804
+                ],
+                "diffuseColor": [
+                    0.599384,
+                    0.4133794,
+                    0.8784313,
+                    1.0
+                ]
+            },
+            "pipeline": "313227a6-182e-4b31-9838-632a9291f4d2"
+        },
+        "5dfebea1-6cab-49e8-be3a-94a633f69edd": {
+            "name": "Special",
+            "Phong": {
+                "ambientColor": [
+                    0.5,
+                    0.5,
+                    0.5,
+                    1.0
+                ],
+                "specularColor": [
+                    1.0,
+                    1.0,
+                    1.0,
+                    0.2509804
+                ],
+                "diffuseColor": [
+                    0.8620177,
+                    0.4133794,
+                    0.8784313,
+                    1.0
+                ]
+            },
+            "pipeline": "313227a6-182e-4b31-9838-632a9291f4d2"
+        },
+        "4fca793d-a04a-4fc1-b4d0-70bd65723c1f": {
+            "link": {
+                "name": "DefaultFontMaterial",
+                "file": "default"
+            },
+            "name": "Debug Font",
+            "DistanceFieldVector": {
+                "outlineRange": [
+                    0.4,
+                    0.4
+                ]
+            },
+            "Text": {
+                "font": "11311a51-83ce-47a2-91bd-3432014f428c"
+            }
+        },
+        "8aa02537-51f8-4756-8188-82558f1ca600": {
+            "name": "Flat Opaque",
+            "pipeline": "6e3da297-ea04-4d73-a0c7-3889145038df"
+        },
+        "f6ac22d2-8f93-4151-bba0-39e28650b21a": {
+            "name": "Phong Opaque",
+            "pipeline": "313227a6-182e-4b31-9838-632a9291f4d2",
+            "Phong": {
+                "ambientColor": [
+                    0.05,
+                    0.05,
+                    0.05,
+                    1.0
+                ],
+                "diffuseColor": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ]
+            }
+        },
+        "5f2309e4-5581-48cd-b09f-3d4359e50fbc": {
+            "name": "Text",
+            "pipeline": "5959fca9-9575-43d8-b76f-603dcaa66ebd",
+            "Phong": {
+                "ambientColor": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "diffuseColor": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ]
+            },
+            "Text": {
+                "font": "11311a51-83ce-47a2-91bd-3432014f428c"
+            }
+        },
+        "cd68b363-60da-43f6-8927-8ada418493e5": {
+            "name": "Scheme Text",
+            "pipeline": "5959fca9-9575-43d8-b76f-603dcaa66ebd",
+            "Phong": {
+                "ambientColor": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "diffuseColor": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ]
+            },
+            "Text": {
+                "color": [
+                    0.599384,
+                    0.4133794,
+                    0.8784313,
+                    1.0
+                ],
+                "font": "11311a51-83ce-47a2-91bd-3432014f428c"
+            }
+        },
+        "58117f7e-8339-4ae5-8dd7-8dfd6594bf9c": {
+            "link": {
+                "name": "Default_Material",
+                "file": "assets\\models\\tracked_hand_left.glb"
+            },
+            "Phong": {
+                "ambientColor": [
+                    0.05,
+                    0.05,
+                    0.05,
+                    1.0
+                ]
+            }
+        },
+        "a76ff4bc-2568-4d32-8e60-c5279e928e88": {
+            "link": {
+                "name": "lambert2",
+                "file": "assets\\models\\tracked_hand_right.glb"
+            },
+            "Phong": {
+                "ambientColor": [
+                    0.05,
+                    0.05,
+                    0.05,
+                    1.0
+                ]
+            }
+        },
+        "b14b39e3-ac8a-44d5-95b2-007ba0be2539": {
+            "link": {
+                "name": "lambert2",
+                "file": "assets\\models\\tracked_hand_right.glb"
+            },
+            "name": "Flat Transparent No Depth",
+            "pipeline": "cac99800-8c59-4748-8014-03df6ad16252",
+            "Flat": {
+                "color": [
+                    0.5019608,
+                    0.5019608,
+                    0.5019608,
+                    1.0
+                ]
+            }
+        },
+        "29c34784-be27-402c-bba7-46de7d4b6d2f": {
+            "link": {
+                "name": "Lambert_Body",
+                "file": "assets\\models\\quest_controllers_credits_Jezza3D.fbx"
+            },
+            "name": "test",
+            "Phong": {
+                "diffuseColor": [
+                    0.599384,
+                    0.4133794,
+                    0.8784313,
+                    1.0
+                ],
+                "specularColor": [
+                    1.0,
+                    1.0,
+                    1.0,
+                    0.2509804
+                ],
+                "ambientColor": [
+                    0.5,
+                    0.5,
+                    0.5,
+                    1.0
+                ]
+            },
+            "pipeline": "313227a6-182e-4b31-9838-632a9291f4d2"
+        },
+        "83b74364-fb25-4557-bf75-576a211b6a03": {
+            "link": {
+                "name": "Material",
+                "file": "assets\\models\\arc.fbx"
+            }
+        }
+    },
     "animations": {},
     "skins": {
         "94f0ece9-7507-4744-ba35-24bf2a0b49bc": {
@@ -11604,6 +11604,43 @@
             "blendDestAlpha": "one"
         }
     },
+    "fonts": {
+        "11311a51-83ce-47a2-91bd-3432014f428c": {
+            "link": {
+                "name": "DejaVuSans.ttf",
+                "file": "default"
+            }
+        }
+    },
+    "morphTargets": {},
+    "files": {
+        "6501ed4f-e05a-49a4-842b-3e4ddac13eb7": {
+            "fileName": "assets/models/quest_controllers_credits_Jezza3D.fbx",
+            "importerName": "AssimpImporter"
+        },
+        "4d4d8e9c-2551-4507-a9dc-cbdce76f1d6d": {
+            "fileName": "assets/models/suzanne.fbx",
+            "importerName": "AssimpImporter"
+        },
+        "9db54fc5-0722-402c-8de2-6e1ef25ce4ae": {
+            "fileName": "assets/models/cube.fbx",
+            "importerName": "AssimpImporter"
+        },
+        "c43cd0dc-f318-4e7a-ab93-935716f0d9ab": {
+            "fileName": "assets/models/tracked_hand_left.glb",
+            "importerName": ""
+        },
+        "c70f86fc-6264-4000-99ab-38c2900a58d1": {
+            "fileName": "assets/models/tracked_hand_right.glb",
+            "importerName": ""
+        },
+        "60ea77a6-7897-4767-9cb5-ae2c2c3a1dd6": {
+            "fileName": "assets/models/arc.fbx",
+            "importerName": "",
+            "importPhysicalAsPhongMaterials": true
+        }
+    },
+    "languages": {},
     "settings": {
         "project": {
             "name": "wle-pp-dev-locomotion",
@@ -11677,42 +11714,5 @@
                 "7": "Group 7"
             }
         }
-    },
-    "files": {
-        "6501ed4f-e05a-49a4-842b-3e4ddac13eb7": {
-            "fileName": "assets/models/quest_controllers_credits_Jezza3D.fbx",
-            "importerName": "AssimpImporter"
-        },
-        "4d4d8e9c-2551-4507-a9dc-cbdce76f1d6d": {
-            "fileName": "assets/models/suzanne.fbx",
-            "importerName": "AssimpImporter"
-        },
-        "9db54fc5-0722-402c-8de2-6e1ef25ce4ae": {
-            "fileName": "assets/models/cube.fbx",
-            "importerName": "AssimpImporter"
-        },
-        "c43cd0dc-f318-4e7a-ab93-935716f0d9ab": {
-            "fileName": "assets/models/tracked_hand_left.glb",
-            "importerName": ""
-        },
-        "c70f86fc-6264-4000-99ab-38c2900a58d1": {
-            "fileName": "assets/models/tracked_hand_right.glb",
-            "importerName": ""
-        },
-        "60ea77a6-7897-4767-9cb5-ae2c2c3a1dd6": {
-            "fileName": "assets/models/arc.fbx",
-            "importerName": "",
-            "importPhysicalAsPhongMaterials": true
-        }
-    },
-    "fonts": {
-        "11311a51-83ce-47a2-91bd-3432014f428c": {
-            "link": {
-                "name": "DejaVuSans.ttf",
-                "file": "default"
-            }
-        }
-    },
-    "languages": {},
-    "morphTargets": {}
+    }
 }
