@@ -987,6 +987,18 @@
                 "name": "lib\\PhysicalBSDF.glsl",
                 "file": "default"
             }
+        },
+        "694a4452-d2e9-474b-9e85-c2c25e577f25": {
+            "link": {
+                "name": "AtmosphericSky.frag",
+                "file": "default"
+            }
+        },
+        "29b2b88b-8466-453a-aa58-ac40db448a08": {
+            "link": {
+                "name": "lib\\SkyProcedural.glsl",
+                "file": "default"
+            }
         }
     },
     "settings": {
@@ -994,11 +1006,30 @@
             "name": "wle-pp-dev-ppefault",
             "version": [
                 1,
-                2,
-                4
+                3,
+                0
             ],
-            "customIndexHtml": true,
-            "type": "game"
+            "description": "Default template project for the Wonderland Engine",
+            "type": "game",
+            "customIndexHtml": true
+        },
+        "scripting": {
+            "application": {
+                "output": "wle-pp-dev-ppefault-app.js",
+                "bundling": "esbuild",
+                "entryPoint": "src/app.ts"
+            },
+            "components": {
+                "sourcePaths": [
+                    "src",
+                    "src/pp/index.ts"
+                ],
+                "entryPoint": "src/index.ts",
+                "output": "wle-pp-dev-ppefault-bundle.js"
+            },
+            "libraryPaths": [
+                "/js/lib/"
+            ]
         },
         "rendering": {
             "clearColor": [
@@ -1006,19 +1037,27 @@
                 0.9411764,
                 0.9411764,
                 1.0
-            ],
-            "hdr": {
-                "exposure": 1.5
-            }
+            ]
         },
-        "runtime": {
-            "xrButtonColor": "black",
+        "xr": {
+            "leftEyeObject": "bfeccf36-046b-49b5-b355-da4ede4daf21",
+            "rightEyeObject": "665488c7-f768-473e-8fe7-8b4ccd5bc647",
             "webxr": {
                 "optionalFeatures": {
                     "hand-tracking": true
                 },
                 "offerSession": false
+            }
+        },
+        "editor": {
+            "camera": {
+                "near": 0.0099999,
+                "far": 1000.0
             },
+            "ids": "uuid"
+        },
+        "runtime": {
+            "xrButtonColor": "black",
             "viewObject": "8022bc4c-dcb9-461f-9f47-70f2c9ab943a",
             "pwa": {
                 "enable": true,
@@ -1027,35 +1066,13 @@
                 "appIcon": "d1550dc2-2b9c-4c80-a575-22f58d3850d8"
             }
         },
-        "scripting": {
-            "sourcePaths": [
-                "src",
-                "src/pp/index.ts"
-            ],
-            "bundlingType": "esbuild",
-            "libraryPaths": [
-                "/js/lib/"
-            ],
-            "entryPoint": "src/index.ts"
-        },
-        "vr": {
-            "leftEyeObject": "bfeccf36-046b-49b5-b355-da4ede4daf21",
-            "rightEyeObject": "665488c7-f768-473e-8fe7-8b4ccd5bc647"
-        },
-        "editor": {
-            "camera": {
-                "near": 0.0099999,
-                "far": 10000.0
-            },
-            "ids": "uuid"
-        },
         "physx": {
-            "enable": true,
+            "enable": false,
             "groupNames": {
                 "0": "Player",
                 "1": "Solid",
                 "2": "Interactable",
-                "3": "Group 3",
+                "3": "UI",
                 "4": "Group 4",
                 "5": "Group 5",
                 "6": "Group 6",
@@ -1066,6 +1083,18 @@
     "animations": {},
     "skins": {},
     "pipelines": {
+        "db2e77f7-8680-4a52-b7a2-72840aca6440": {
+            "link": {
+                "name": "MeshVisualizer",
+                "file": "default"
+            }
+        },
+        "e315536e-27b7-4d15-b229-0228a292799d": {
+            "link": {
+                "name": "TileFeedback",
+                "file": "default"
+            }
+        },
         "bdd1dff9-1f51-491a-9356-abff93fe5a19": {
             "link": {
                 "name": "Depth",
@@ -1088,15 +1117,6 @@
             "link": {
                 "name": "Flat Opaque Textured",
                 "file": "default"
-            },
-            "features": {
-                "ALPHA_MASKED": true
-            }
-        },
-        "db2e77f7-8680-4a52-b7a2-72840aca6440": {
-            "link": {
-                "name": "MeshVisualizer",
-                "file": "default"
             }
         },
         "313227a6-182e-4b31-9838-632a9291f4d2": {
@@ -1108,48 +1128,6 @@
         "2762071d-3ed2-487d-9b98-0bf0a6e8f24c": {
             "link": {
                 "name": "Phong Opaque Textured",
-                "file": "default"
-            },
-            "features": {
-                "ALPHA_MASKED": true
-            }
-        },
-        "34d9e3a1-e64c-4786-b7ef-581ce83aaf88": {
-            "link": {
-                "name": "Foliage",
-                "file": "default"
-            }
-        },
-        "b8d672a6-da28-4516-bf27-c5a97c029987": {
-            "link": {
-                "name": "Particle",
-                "file": "default"
-            }
-        },
-        "2d2fb7df-35f2-4ea3-a493-70fe1235b94f": {
-            "link": {
-                "name": "Physical Opaque",
-                "file": "default"
-            }
-        },
-        "9104535f-2c03-4d28-8052-347735487f59": {
-            "link": {
-                "name": "Physical Opaque Textured",
-                "file": "default"
-            },
-            "features": {
-                "ALPHA_MASKED": true
-            }
-        },
-        "5959fca9-9575-43d8-b76f-603dcaa66ebd": {
-            "link": {
-                "name": "Text",
-                "file": "default"
-            }
-        },
-        "6a25dc7c-d12d-45a0-8e15-ace3bd9637e6": {
-            "link": {
-                "name": "Sky",
                 "file": "default"
             }
         },
@@ -1165,9 +1143,57 @@
                 "file": "default"
             }
         },
-        "e315536e-27b7-4d15-b229-0228a292799d": {
+        "2d2fb7df-35f2-4ea3-a493-70fe1235b94f": {
             "link": {
-                "name": "TileFeedback",
+                "name": "Physical Opaque",
+                "file": "default"
+            },
+            "features": {
+                "SEPARATE_OCCLUSION_TEXTURE": true
+            }
+        },
+        "9104535f-2c03-4d28-8052-347735487f59": {
+            "link": {
+                "name": "Physical Opaque Textured",
+                "file": "default"
+            },
+            "features": {
+                "SEPARATE_OCCLUSION_TEXTURE": true
+            }
+        },
+        "34d9e3a1-e64c-4786-b7ef-581ce83aaf88": {
+            "link": {
+                "name": "Foliage",
+                "file": "default"
+            }
+        },
+        "b8d672a6-da28-4516-bf27-c5a97c029987": {
+            "link": {
+                "name": "Particle",
+                "file": "default"
+            }
+        },
+        "5959fca9-9575-43d8-b76f-603dcaa66ebd": {
+            "link": {
+                "name": "Text",
+                "file": "default"
+            }
+        },
+        "6a25dc7c-d12d-45a0-8e15-ace3bd9637e6": {
+            "link": {
+                "name": "Sky",
+                "file": "default"
+            },
+            "features": {
+                "TEXTURED": true,
+                "ENVIRONMENT_PROBE": false,
+                "GRADIENT": true,
+                "GRADIENT_4_STOPS": true
+            }
+        },
+        "99894a5c-7295-463c-a8ad-a8d23614a462": {
+            "link": {
+                "name": "AtmosphericSky",
                 "file": "default"
             }
         },
@@ -1204,6 +1230,24 @@
             "stream": false
         }
     },
+    "fonts": {
+        "f5ed4fb0-a0a2-47f4-8b4d-a3e02ea4898e": {
+            "link": {
+                "name": "DejaVuSans.ttf",
+                "file": "default"
+            }
+        },
+        "f1dfcad7-d12a-42a0-804d-7b69d6dd0569": {
+            "link": {
+                "name": "DejaVuSans.ttf",
+                "file": "default"
+            },
+            "name": "OutlineDejaVuSans.ttf",
+            "outline": true,
+            "outlineSize": 0.075
+        }
+    },
+    "morphTargets": {},
     "files": {
         "69feadb3-3dce-463a-b4ca-2264f5b4ca6e": {
             "fileName": "assets/models/pp/meta_quest_1_gamepads_credits_Jezza3D.fbx",
@@ -1214,14 +1258,5 @@
             "importerName": ""
         }
     },
-    "fonts": {
-        "f5ed4fb0-a0a2-47f4-8b4d-a3e02ea4898e": {
-            "link": {
-                "name": "DejaVuSans.ttf",
-                "file": "default"
-            }
-        }
-    },
-    "languages": {},
-    "morphTargets": {}
+    "languages": {}
 }
