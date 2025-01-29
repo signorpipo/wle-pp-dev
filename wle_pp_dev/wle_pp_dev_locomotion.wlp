@@ -10737,7 +10737,8 @@
                     1.0,
                     0.2509804
                 ]
-            }
+            },
+            "pipeline": "ef04fac9-8fbc-4e85-b3a3-dafac1d81beb"
         },
         "9bbe388a-a88f-490f-b19c-0339e8253d02": {
             "name": "Wall",
@@ -10760,7 +10761,8 @@
                     0.8784313,
                     1.0
                 ]
-            }
+            },
+            "pipeline": "ef04fac9-8fbc-4e85-b3a3-dafac1d81beb"
         },
         "5dfebea1-6cab-49e8-be3a-94a633f69edd": {
             "name": "Special",
@@ -10783,7 +10785,8 @@
                     0.8784313,
                     1.0
                 ]
-            }
+            },
+            "pipeline": "ef04fac9-8fbc-4e85-b3a3-dafac1d81beb"
         },
         "4fca793d-a04a-4fc1-b4d0-70bd65723c1f": {
             "link": {
@@ -11388,6 +11391,18 @@
                 "name": "lib\\PhysicalBSDF.glsl",
                 "file": "default"
             }
+        },
+        "ff28b1be-437d-49b2-8935-d70d28a5d98a": {
+            "link": {
+                "name": "AtmosphericSky.frag",
+                "file": "default"
+            }
+        },
+        "34f7777b-7ad2-4858-a623-482955d182e2": {
+            "link": {
+                "name": "lib\\SkyProcedural.glsl",
+                "file": "default"
+            }
         }
     },
     "animations": {},
@@ -11616,6 +11631,12 @@
             "features": {
                 "TEXTURED": false
             }
+        },
+        "9b51f816-12c6-4374-9938-f62d3ca0b9d6": {
+            "link": {
+                "name": "AtmosphericSky",
+                "file": "default"
+            }
         }
     },
     "settings": {
@@ -11623,8 +11644,30 @@
             "name": "wle-pp-dev-locomotion",
             "version": [
                 1,
-                2,
-                4
+                3,
+                0
+            ],
+            "type": "game"
+        },
+        "scripting": {
+            "application": {
+                "output": "wle-pp-dev-locomotion-app.js",
+                "bundling": "esbuild",
+                "entryPoint": "src/app.ts"
+            },
+            "components": {
+                "sourcePaths": [
+                    "src",
+                    "src/pp/index.ts",
+                    "src/playground/components",
+                    "src/cauldron/components",
+                    "src/test/components"
+                ],
+                "entryPoint": "src/index.ts",
+                "output": "wle-pp-dev-locomotion-bundle.js"
+            },
+            "libraryPaths": [
+                "/js/lib/"
             ]
         },
         "rendering": {
@@ -11633,69 +11676,40 @@
                 0.9215686,
                 0.9215686,
                 1.0
-            ],
-            "sky": {
-                "enabled": false,
-                "material": "17868ab8-b09d-4b68-bdb3-660fc6745d90"
-            },
-            "useMultiDraw": false,
-            "usePreZ": false,
-            "useFrustumCulling": false,
-            "hdr": {
-                "exposure": 1.5
-            }
+            ]
         },
-        "runtime": {
-            "xrButtonColor": "white",
+        "xr": {
+            "leftEyeObject": "a5f3a9f5-4ba2-43fe-9982-17d436de4c7c",
+            "rightEyeObject": "a52fb3e6-278e-447e-baf3-d1446739b322",
             "webxr": {
                 "optionalFeatures": {
                     "hand-tracking": true,
-                    "hit-test": false,
                     "local-floor": true
                 },
-                "requiredFeatures": {
-                    "local-floor": true,
-                    "hand-tracking": false
-                }
-            },
-            "visualizePhysX": false
-        },
-        "scripting": {
-            "sourcePaths": [
-                "src",
-                "src/pp/index.ts",
-                "src/cauldron/components",
-                "src/test/components",
-                "src/playground/components"
-            ],
-            "libraryPaths": [
-                "/js/lib/"
-            ],
-            "bundlingType": "esbuild",
-            "entryPoint": "src/index.ts"
-        },
-        "vr": {
-            "leftEyeObject": "a5f3a9f5-4ba2-43fe-9982-17d436de4c7c",
-            "rightEyeObject": "a52fb3e6-278e-447e-baf3-d1446739b322"
+                "offerSession": false
+            }
         },
         "editor": {
             "camera": {
                 "near": 0.0099999,
-                "far": 10000.0
+                "far": 1000.0
             },
             "ids": "uuid"
+        },
+        "runtime": {
+            "xrButtonColor": "black"
         },
         "physx": {
             "enable": true,
             "groupNames": {
-                "0": "player",
-                "1": "floor",
-                "2": "wall",
-                "3": "3",
-                "4": "4",
-                "5": "5",
-                "6": "6",
-                "7": "7"
+                "0": "Player",
+                "1": "Solid",
+                "2": "Interactable",
+                "3": "UI",
+                "4": "Group 4",
+                "5": "Group 5",
+                "6": "Group 6",
+                "7": "Group 7"
             }
         }
     },
