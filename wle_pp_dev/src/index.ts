@@ -8,6 +8,8 @@
  *     - `wle:auto-register:start` and `wle:auto-register:end`: The list of component to register
  */
 
+import { WonderlandEngine } from '@wonderlandengine/api';
+
 /* wle:auto-imports:start */
 import {Cursor} from '@wonderlandengine/components';
 import {CursorTarget} from '@wonderlandengine/components';
