@@ -1,6 +1,6 @@
 import { type NumberArray } from "@wonderlandengine/api";
 import { ArrayLike, DynamicArrayLike, Vector3 } from "../../pp/cauldron/type_definitions/array_type_definitions.js";
-import { first } from "../../pp/cauldron/utils/array/array_utils.js";
+import { ArrayUtils, first } from "../../pp/cauldron/utils/array/array_utils.js";
 
 function __test(): void {
     const numberArray = [0];
@@ -12,8 +12,15 @@ function __test(): void {
     const arrayLikeFromFloat32: ArrayLike<number> = new Float32Array(3);
     const vector3FromArray: Vector3 = [0];
     const vector3FromFloat32: Vector3 = new Float32Array(3);
+    const readonlyVector3FromFloat32: Readonly<Vector3> = new Float32Array(3);
     const numberArrayFromVector3: NumberArray = vector3FromFloat32;
     //const arrayFromVector3: number[] = vector3FromArray;
+
+    vector3FromFloat32.pp_clone();
+    readonlyVector3FromFloat32.pp_clone();
+
+    ArrayUtils.clone(vector3FromArray);
+    ArrayUtils.clone(readonlyVector3FromFloat32);
 
     arrayLikeFromArray.at(0);
     vector3FromArray.at(0);
