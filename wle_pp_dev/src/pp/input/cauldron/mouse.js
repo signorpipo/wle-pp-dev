@@ -205,7 +205,7 @@ export class Mouse {
     isButtonPressed(buttonID) {
         let pressed = false;
 
-        if (this._myButtonInfosIDs[buttonID] != null) {
+        if (this._myButtonInfos[buttonID] != null) {
             pressed = this._myButtonInfos[buttonID].myPressed;
         }
 
@@ -230,7 +230,7 @@ export class Mouse {
     isButtonPressStart(buttonID) {
         let pressStart = false;
 
-        if (this._myButtonInfosIDs[buttonID] != null) {
+        if (this._myButtonInfos[buttonID] != null) {
             pressStart = this._myButtonInfos[buttonID].myPressStart;
         }
 
@@ -240,7 +240,7 @@ export class Mouse {
     isButtonPressEnd(buttonID = null) {
         let pressEnd = false;
 
-        if (this._myButtonInfosIDs[buttonID] != null) {
+        if (this._myButtonInfos[buttonID] != null) {
             pressEnd = this._myButtonInfos[buttonID].myPressEnd;
         }
 
