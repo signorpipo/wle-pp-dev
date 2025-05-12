@@ -29,7 +29,6 @@ import {TargetHitCheckComponent} from './playground/components/target_hit_check_
 import {TeleportOnTrackedHandsComponent} from './playground/components/teleport_on_tracked_hands_component.js';
 import {ToggleHowToTextComponent} from './playground/components/toggle_how_to_text_component.js';
 import {WaveMovementComponent} from './playground/components/wave_movement_component.js';
-import {WLCursorTargetWrapperComponent} from './pp/cauldron/wl/components/wl_cursor_target_wrapper_component.js';
 import {AdjustHierarchyPhysXScaleComponent} from './pp/index.js';
 import {ConsoleVRToolComponent} from './pp/index.js';
 import {CursorButtonComponent} from './pp/index.js';
@@ -52,6 +51,7 @@ import {SwitchHandObjectComponent} from './pp/index.js';
 import {ToolCursorComponent} from './pp/index.js';
 import {TrackedHandDrawAllJointsComponent} from './pp/index.js';
 import {VirtualGamepadComponent} from './pp/index.js';
+import {WLCursorTargetWrapperComponent} from './pp/index.js';
 import {SwitchSceneTestComponent} from './test/components/switch_scene_test_component.js';
 /* wle:auto-imports:end */
 
@@ -75,7 +75,6 @@ engine.registerComponent(TargetHitCheckComponent);
 engine.registerComponent(TeleportOnTrackedHandsComponent);
 engine.registerComponent(ToggleHowToTextComponent);
 engine.registerComponent(WaveMovementComponent);
-engine.registerComponent(WLCursorTargetWrapperComponent);
 engine.registerComponent(AdjustHierarchyPhysXScaleComponent);
 engine.registerComponent(ConsoleVRToolComponent);
 engine.registerComponent(CursorButtonComponent);
@@ -98,6 +97,7 @@ engine.registerComponent(SwitchHandObjectComponent);
 engine.registerComponent(ToolCursorComponent);
 engine.registerComponent(TrackedHandDrawAllJointsComponent);
 engine.registerComponent(VirtualGamepadComponent);
+engine.registerComponent(WLCursorTargetWrapperComponent);
 engine.registerComponent(SwitchSceneTestComponent);
 /* wle:auto-register:end */
 }
