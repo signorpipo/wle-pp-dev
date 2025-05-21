@@ -23,11 +23,12 @@
         "typescript-eslint": "^8.32.0"
     },
     "optionalDependencies": {
+        "@playkostudios/wle-cleaner": "^0.9.0",
         "wle-aligner": "^0.3.1"
     },
     "scripts": {
         "build": "tsc --build --clean && tsc",
-        "clean-projects": "wle-cleaner \"./*.wlp\" -r -e dev/wle-tool-utils/editor-bundle-extras.js",
+        "clean-projects": "wle-cleaner \"./*.wlp\" -r -b cache/wle-pp-dev-pplayground/js/_editor_bundle.cjs -e dev/wle-tool-utils/editor-bundle-extras.js",
         "align-projects": "wle-aligner \"./wle_pp_dev_pplayground.wlp\" \"./*.wlp\" -r -c -e dev/wle-tool-utils/editor-bundle-extras.js"
     }
 }
