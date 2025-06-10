@@ -3770,7 +3770,7 @@
             "version": [
                 1,
                 4,
-                2
+                4
             ],
             "description": "Playground template project for the Wonderland Engine",
             "type": "game",
