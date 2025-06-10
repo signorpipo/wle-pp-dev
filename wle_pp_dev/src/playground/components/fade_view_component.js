@@ -34,7 +34,7 @@ export class FadeViewComponent extends Component {
         fadeVisualParams.myMaterial = this._myFadeMaterial;
         fadeVisualParams.myParent = this._myFadeParentObject;
         fadeVisualParams.myLocal = true;
-        fadeVisualParams.myTransform.mat4_setScale(vec3_create(0.1, 0.1, 0.1));
+        fadeVisualParams.myTransform.mat4_setScale(vec3_create(10));
         this._myFadeVisual = new VisualMesh(fadeVisualParams);
         this._myFadeVisual.setVisible(true);
 
