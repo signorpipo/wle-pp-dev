@@ -1,5 +1,5 @@
 import { Component, Property } from "@wonderlandengine/api";
-import { EasingFunction, Globals, Timer, VisualMesh, VisualMeshParams, vec3_create, vec4_create } from "wle-pp";
+import { EasingFunction, Globals, Timer, VisualMesh, VisualMeshParams, XRUtils, vec3_create, vec4_create } from "wle-pp";
 
 export class FadeViewComponent extends Component {
     static TypeName = "fade-view";
@@ -12,6 +12,8 @@ export class FadeViewComponent extends Component {
     start() {
         this._myFadeVisual = null;
         this._myFirstUpdate = true;
+
+        this._mySessionActive = null;
     }
 
     _start() {
@@ -34,12 +36,10 @@ export class FadeViewComponent extends Component {
         fadeVisualParams.myMaterial = this._myFadeMaterial;
         fadeVisualParams.myParent = this._myFadeParentObject;
         fadeVisualParams.myLocal = true;
-        fadeVisualParams.myTransform.mat4_setScale(vec3_create(10));
+        fadeVisualParams.myTransform.mat4_setScale(vec3_create(1));
         this._myFadeVisual = new VisualMesh(fadeVisualParams);
         this._myFadeVisual.setVisible(true);
 
-        this._myFadeParentObject.pp_setParent(Globals.getPlayerObjects(this.engine).myHead, false);
-        this._myFadeParentObject.pp_resetTransformLocal();
     }
 
     update(dt) {
@@ -61,6 +61,17 @@ export class FadeViewComponent extends Component {
             }
 
             this._myFadeMaterial.color = this._myColorVector;
+        }
+
+        // Instead of using myHead directly, this is done to avoid the first frames of delay where the head transform has not been updated yet
+        if (XRUtils.isSessionActive(this.engine) != this._mySessionActive) {
+            if (XRUtils.isSessionActive(this.engine)) {
+                this._mySessionActive = true;
+                this._myFadeParentObject.pp_setParent(Globals.getPlayerObjects(this.engine).myEyeLeft, false);
+            } else {
+                this._mySessionActive = false;
+                this._myFadeParentObject.pp_setParent(Globals.getPlayerObjects(this.engine).myCameraNonXR, false);
+            }
         }
     }
 
