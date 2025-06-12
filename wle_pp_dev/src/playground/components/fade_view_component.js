@@ -13,7 +13,7 @@ export class FadeViewComponent extends Component {
         this._myFadeVisual = null;
         this._myFirstUpdate = true;
 
-        this._mySessionActive = null;
+        this._myRegisterXREvents = false;
     }
 
     _start() {
@@ -40,12 +40,19 @@ export class FadeViewComponent extends Component {
         this._myFadeVisual = new VisualMesh(fadeVisualParams);
         this._myFadeVisual.setVisible(true);
 
+        this._myFadeParentObject.pp_setParent(Globals.getPlayerObjects(this.engine).myCameraNonXR, false);
+
     }
 
     update(dt) {
         if (this._myFirstUpdate) {
             this._start();
             this._myFirstUpdate = false;
+        }
+
+        if (this._myRegisterXREvents) {
+            XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this), true, false, this.engine);
+            this._myRegisterXREvents = false;
         }
 
         if (this._myStartTimer.isRunning()) {
@@ -62,29 +69,30 @@ export class FadeViewComponent extends Component {
 
             this._myFadeMaterial.color = this._myColorVector;
         }
+    }
 
-        // Instead of using myHead directly, this is done to avoid the first frames of delay where the head transform has not been updated yet
-        if (XRUtils.isSessionActive(this.engine) != this._mySessionActive) {
-            if (XRUtils.isSessionActive(this.engine)) {
-                this._mySessionActive = true;
-                this._myFadeParentObject.pp_setParent(Globals.getPlayerObjects(this.engine).myEyeLeft, false);
-            } else {
-                this._mySessionActive = false;
-                this._myFadeParentObject.pp_setParent(Globals.getPlayerObjects(this.engine).myCameraNonXR, false);
-            }
-        }
+    _onXRSessionStart() {
+        this._myFadeParentObject.pp_setParent(Globals.getPlayerObjects(this.engine).myEyeLeft, false);
+    }
+
+    _onXRSessionEnd() {
+        this._myFadeParentObject.pp_setParent(Globals.getPlayerObjects(this.engine).myCameraNonXR, false);
     }
 
     onActivate() {
         if (this._myFadeVisual != null) {
             this._myFadeVisual.setVisible(true);
         }
+
+        this._myRegisterXREvents = true;
     }
 
     onDeactivate() {
         if (this._myFadeVisual != null) {
             this._myFadeVisual.setVisible(false);
         }
+
+        XRUtils.unregisterSessionStartEndEventListeners(this, this.engine);
     }
 
     onDestroy() {
