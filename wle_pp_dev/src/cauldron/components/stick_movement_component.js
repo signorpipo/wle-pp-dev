@@ -284,7 +284,7 @@ export class StickMovementComponent extends Component {
     }
 
     _onActivate() {
-        XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this), false, false, this.engine);
+        XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this), true, false, this.engine);
     }
 
     _onXRSessionStart() {
