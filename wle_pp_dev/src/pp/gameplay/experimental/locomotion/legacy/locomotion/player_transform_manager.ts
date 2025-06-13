@@ -213,6 +213,7 @@ export class PlayerTransformManagerParams {
 
     public myAllowUpdateValidToRealWhenBlurred: boolean = false;
 
+    public myResetToValidOnActivate: boolean = false;
     public myResetToValidOnEnterSession: boolean = false;
     public myResetToValidOnExitSession: boolean = false;
     public myResetToValidOnSessionHiddenEnd: boolean = false;
@@ -309,19 +310,35 @@ export class PlayerTransformManager {
         this.resetToReal(true, true, true, true, false, true);
 
         this._myActive = false;
-        this.setActive(true);
+        this.setActive(true, false);
     }
 
     public getParams(): PlayerTransformManagerParams {
         return this._myParams;
     }
 
-    public setActive(active: boolean): void {
+    public setActive(active: boolean, resetToValidOnActivateOverride: boolean | null = null): void {
         if (this._myActive != active) {
             this._myActive = active;
 
             if (this._myActive) {
                 XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this), true, true, this._myParams.myEngine);
+
+                if ((this._myParams.myResetToValidOnActivate && resetToValidOnActivateOverride == null) || (resetToValidOnActivateOverride != null && resetToValidOnActivateOverride)) {
+                    if (XRUtils.isSessionActive(this._myParams.myEngine)) {
+                        this.resetReal(
+                            !this._myParams.myNeverResetRealPositionVR,
+                            !this._myParams.myNeverResetRealRotationVR,
+                            !this._myParams.myNeverResetRealHeightVR,
+                            true);
+                    } else {
+                        this.resetReal(
+                            !this._myParams.myNeverResetRealPositionNonVR,
+                            !this._myParams.myNeverResetRealRotationNonVR,
+                            !this._myParams.myNeverResetRealHeightNonVR,
+                            true);
+                    }
+                }
             } else {
                 if (this._myVisibilityChangeEventListener != null) {
                     XRUtils.getSession(this._myParams.myEngine)?.removeEventListener("visibilitychange", this._myVisibilityChangeEventListener);
