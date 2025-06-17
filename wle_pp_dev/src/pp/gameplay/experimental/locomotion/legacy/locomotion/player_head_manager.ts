@@ -514,13 +514,13 @@ export class PlayerHeadManager {
                 const newHeadUp = PlayerHeadManager._rotateHeadQuatSV.newHeadUp;
                 const newHeadRotation = PlayerHeadManager._rotateHeadQuatSV.newHeadRotation;
 
-                this._myCurrentHead.pp_getRotationQuat(newHeadRotation);
+                this._myCurrentHead.pp_getRotationLocalQuat(newHeadRotation);
 
                 if (Globals.isPoseForwardFixed(this._myParams.myEngine)) {
                     newHeadRotation.quat_rotateAxisRadians(Math.PI, newHeadRotation.quat_getUp(newHeadUp), newHeadRotation);
                 }
 
-                Globals.getPlayerObjects(this._myParams.myEngine)!.myCameraNonXR!.pp_setRotationQuat(newHeadRotation);
+                Globals.getPlayerObjects(this._myParams.myEngine)!.myCameraNonXR!.pp_setRotationLocalQuat(newHeadRotation);
             }
         }
     }
@@ -621,7 +621,7 @@ export class PlayerHeadManager {
 
             if (Globals.isPoseForwardFixed(this._myParams.myEngine)) {
                 const cameraNonXRUp = PlayerHeadManager._resetCameraNonXR.cameraNonXRUp;
-                this._myCurrentHead.pp_rotateAxisRadians(Math.PI, Globals.getPlayerObjects(this._myParams.myEngine)!.myCameraNonXR!.pp_getUp(cameraNonXRUp));
+                this._myCurrentHead.pp_rotateAxisLocalRadians(Math.PI, this._myCurrentHead.pp_getUpLocal(cameraNonXRUp));
             }
         }
 
