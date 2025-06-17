@@ -310,21 +310,21 @@ export class PlayerTransformManager {
         this.resetToReal(true, true, true, true, false, true);
 
         this._myActive = false;
-        this.setActive(true, false);
+        this.setActive(true);
     }
 
     public getParams(): PlayerTransformManagerParams {
         return this._myParams;
     }
 
-    public setActive(active: boolean, resetToValidOnActivateOverride: boolean | null = null): void {
+    public setActive(active: boolean): void {
         if (this._myActive != active) {
             this._myActive = active;
 
             if (this._myActive) {
                 XRUtils.registerSessionStartEndEventListeners(this, this._onXRSessionStart.bind(this), this._onXRSessionEnd.bind(this), true, true, this._myParams.myEngine);
 
-                if ((this._myParams.myResetToValidOnActivate && resetToValidOnActivateOverride == null) || (resetToValidOnActivateOverride != null && resetToValidOnActivateOverride)) {
+                if (this._myParams.myResetToValidOnActivate) {
                     if (XRUtils.isSessionActive(this._myParams.myEngine)) {
                         this.resetReal(
                             !this._myParams.myNeverResetRealPositionVR,

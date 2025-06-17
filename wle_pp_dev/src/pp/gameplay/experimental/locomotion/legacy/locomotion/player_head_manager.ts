@@ -509,14 +509,17 @@ export class PlayerHeadManager {
     public rotateHeadQuat(rotationQuat: Readonly<Quaternion>): void {
         if (this.canRotateHead()) {
             this._myCurrentHead.pp_rotateQuat(rotationQuat);
-            const newHeadRotation = PlayerHeadManager._rotateHeadQuatSV.newHeadRotation;
-            this._myCurrentHead.pp_getRotationQuat(newHeadRotation);
-
-            Globals.getPlayerObjects(this._myParams.myEngine)!.myHead!.pp_setRotationQuat(newHeadRotation);
 
             if (!this._mySessionActive) {
                 const newHeadUp = PlayerHeadManager._rotateHeadQuatSV.newHeadUp;
-                newHeadRotation.quat_rotateAxisRadians(Math.PI, newHeadRotation.quat_getUp(newHeadUp), newHeadRotation);
+                const newHeadRotation = PlayerHeadManager._rotateHeadQuatSV.newHeadRotation;
+
+                this._myCurrentHead.pp_getRotationQuat(newHeadRotation);
+
+                if (Globals.isPoseForwardFixed(this._myParams.myEngine)) {
+                    newHeadRotation.quat_rotateAxisRadians(Math.PI, newHeadRotation.quat_getUp(newHeadUp), newHeadRotation);
+                }
+
                 Globals.getPlayerObjects(this._myParams.myEngine)!.myCameraNonXR!.pp_setRotationQuat(newHeadRotation);
             }
         }
@@ -606,8 +609,22 @@ export class PlayerHeadManager {
         this.setRotationHeadQuat(headRotation);
     }
 
+    private static readonly _resetCameraNonXR =
+        {
+            cameraNonXRUp: vec3_create()
+        };
     public resetCameraNonXR(): void {
         Globals.getPlayerObjects(this._myParams.myEngine)!.myCameraNonXR!.pp_resetTransformLocal();
+
+        if (!this._mySessionActive) {
+            this._myCurrentHead.pp_resetTransformLocal();
+
+            if (Globals.isPoseForwardFixed(this._myParams.myEngine)) {
+                const cameraNonXRUp = PlayerHeadManager._resetCameraNonXR.cameraNonXRUp;
+                this._myCurrentHead.pp_rotateAxisRadians(Math.PI, Globals.getPlayerObjects(this._myParams.myEngine)!.myCameraNonXR!.pp_getUp(cameraNonXRUp));
+            }
+        }
+
         this._setCameraNonXRHeight(this._myHeightNonVR);
     }
 
@@ -795,6 +812,10 @@ export class PlayerHeadManager {
         cameraNonVRPositionLocalToPlayer.vec3_convertPositionToWorld(this.getPlayer().pp_getTransform(playerTranform), adjustedCameraNonVRPosition);
 
         Globals.getPlayerObjects(this._myParams.myEngine)!.myCameraNonXR!.pp_setPosition(adjustedCameraNonVRPosition);
+
+        if (!this._mySessionActive) {
+            this._myCurrentHead.pp_setPosition(adjustedCameraNonVRPosition);
+        }
     }
 
     private static readonly _getPositionEyesHeightSV =
@@ -1129,6 +1150,9 @@ export class PlayerHeadManager {
 
                 this.getPlayer().pp_setPosition(newPlayerPosition);
                 Globals.getPlayerObjects(this._myParams.myEngine)!.myCameraNonXR!.pp_resetPositionLocal();
+                if (!this._mySessionActive) {
+                    this._myCurrentHead.pp_resetPositionLocal();
+                }
 
                 if (this._myParams.myExitSessionResyncHeight) {
                     const resyncHeadHeight = this._getPositionEyesHeight(resyncHeadPosition);
