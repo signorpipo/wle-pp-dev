@@ -271,36 +271,8 @@
             "parent": "f72caa43-ac99-4b19-ab19-706fc24c1021",
             "components": [
                 {
-                    "type": "pp-gamepad-control-scheme",
-                    "pp-gamepad-control-scheme": {
-                        "_mySelect": "81e9034c-70ab-4e56-af86-61af9820c3ce",
-                        "_mySqueeze": "6671ba33-7769-483a-8ffd-d41794458d19",
-                        "_myThumbstick": "69c5c216-e0b5-464e-8aec-ec7e250a4f69",
-                        "_myBottomButton": "b88e5b2e-0418-481b-ade7-51007f1f92bb",
-                        "_myTopButton": "3bf99876-0240-42e4-963a-8ffe8f0da1ed",
-                        "_myLineMaterial": "67abc793-7be6-46f8-b425-daac725a1279",
-                        "_myThumbstickText": "Press Twice: Change Teleport/Smooth",
-                        "_myLineLengthMultiplier": 1.5,
-                        "_myTextMaterial": "4480bd42-1e8f-4907-a276-0ea6772fde45",
-                        "_myBottomButtonText": "Smooth: Fly Down",
-                        "_myTopButtonText": "Smooth: Fly Up",
-                        "_myShowOnStart": false
-                    }
-                },
-                {
                     "type": "pp-set-hand-local-transform",
                     "pp-set-hand-local-transform": {}
-                },
-                {
-                    "type": "pp-gamepad-mesh-animator",
-                    "pp-gamepad-mesh-animator": {
-                        "_mySelect": "81e9034c-70ab-4e56-af86-61af9820c3ce",
-                        "_mySqueeze": "6671ba33-7769-483a-8ffd-d41794458d19",
-                        "_myThumbstick": "69c5c216-e0b5-464e-8aec-ec7e250a4f69",
-                        "_myTopButton": "3bf99876-0240-42e4-963a-8ffe8f0da1ed",
-                        "_myBottomButton": "b88e5b2e-0418-481b-ade7-51007f1f92bb",
-                        "_myUsePressForSqueeze": true
-                    }
                 }
             ],
             "translation": [
@@ -311,7 +283,37 @@
         },
         "2ee7091e-c470-4e12-a1c2-bedcaf7d6083": {
             "name": "Mesh",
-            "parent": "ead4fe79-25ef-49b0-8feb-c0487bc6378f"
+            "parent": "ead4fe79-25ef-49b0-8feb-c0487bc6378f",
+            "components": [
+                {
+                    "type": "pp-gamepad-mesh-animator",
+                    "pp-gamepad-mesh-animator": {
+                        "_mySelect": "75a94c97-84bb-477a-aefa-8866207d0cb2",
+                        "_mySqueeze": "51afbff3-ddcc-44f2-a750-51d20a28b7f8",
+                        "_myThumbstick": "c387f377-b486-4ecc-a200-10a2640dfbb3",
+                        "_myTopButton": "545a2c2b-c449-40d3-a713-0e6bf720c81c",
+                        "_myBottomButton": "6ae6ee80-4cd8-45cb-98c1-db259502e17a",
+                        "_myUsePressForSqueeze": true,
+                        "_myHandedness": "Right"
+                    }
+                },
+                {
+                    "type": "pp-gamepad-control-scheme",
+                    "pp-gamepad-control-scheme": {
+                        "_mySelect": "75a94c97-84bb-477a-aefa-8866207d0cb2",
+                        "_mySqueeze": "51afbff3-ddcc-44f2-a750-51d20a28b7f8",
+                        "_myThumbstick": "c387f377-b486-4ecc-a200-10a2640dfbb3",
+                        "_myBottomButton": "6ae6ee80-4cd8-45cb-98c1-db259502e17a",
+                        "_myTopButton": "545a2c2b-c449-40d3-a713-0e6bf720c81c",
+                        "_myLineMaterial": "67abc793-7be6-46f8-b425-daac725a1279",
+                        "_myThumbstickText": "Snap Turn",
+                        "_myLineLengthMultiplier": 1.5,
+                        "_myTextMaterial": "4480bd42-1e8f-4907-a276-0ea6772fde45",
+                        "_myHandedness": "Right",
+                        "_myShowOnStart": false
+                    }
+                }
+            ]
         },
         "e65d1a64-5dfb-4539-8ef3-3781a7b9f77b": {
             "name": "Test",
@@ -9443,7 +9445,37 @@
         },
         "cdac6dc4-9811-44ff-af5d-b1048e3055c0": {
             "name": "Mesh",
-            "parent": "21e6e4ba-b097-4abb-97b4-a7d82fb86986"
+            "parent": "21e6e4ba-b097-4abb-97b4-a7d82fb86986",
+            "components": [
+                {
+                    "type": "pp-gamepad-mesh-animator",
+                    "pp-gamepad-mesh-animator": {
+                        "_mySelect": "81e9034c-70ab-4e56-af86-61af9820c3ce",
+                        "_mySqueeze": "6671ba33-7769-483a-8ffd-d41794458d19",
+                        "_myThumbstick": "69c5c216-e0b5-464e-8aec-ec7e250a4f69",
+                        "_myTopButton": "3bf99876-0240-42e4-963a-8ffe8f0da1ed",
+                        "_myBottomButton": "b88e5b2e-0418-481b-ade7-51007f1f92bb",
+                        "_myUsePressForSqueeze": true
+                    }
+                },
+                {
+                    "type": "pp-gamepad-control-scheme",
+                    "pp-gamepad-control-scheme": {
+                        "_mySelect": "81e9034c-70ab-4e56-af86-61af9820c3ce",
+                        "_mySqueeze": "6671ba33-7769-483a-8ffd-d41794458d19",
+                        "_myThumbstick": "69c5c216-e0b5-464e-8aec-ec7e250a4f69",
+                        "_myBottomButton": "b88e5b2e-0418-481b-ade7-51007f1f92bb",
+                        "_myTopButton": "3bf99876-0240-42e4-963a-8ffe8f0da1ed",
+                        "_myLineMaterial": "67abc793-7be6-46f8-b425-daac725a1279",
+                        "_myThumbstickText": "Press Twice: Change Teleport/Smooth",
+                        "_myLineLengthMultiplier": 1.5,
+                        "_myTextMaterial": "4480bd42-1e8f-4907-a276-0ea6772fde45",
+                        "_myBottomButtonText": "Smooth: Fly Down",
+                        "_myTopButtonText": "Smooth: Fly Up",
+                        "_myShowOnStart": false
+                    }
+                }
+            ]
         },
         "8c2abb39-80a9-4b88-b74a-bba27a371acb": {
             "name": "Tool Hand Left",
@@ -9481,36 +9513,8 @@
             "parent": "9b2e8503-98e1-4cb5-ba06-65357a460f21",
             "components": [
                 {
-                    "type": "pp-gamepad-control-scheme",
-                    "pp-gamepad-control-scheme": {
-                        "_mySelect": "75a94c97-84bb-477a-aefa-8866207d0cb2",
-                        "_mySqueeze": "51afbff3-ddcc-44f2-a750-51d20a28b7f8",
-                        "_myThumbstick": "c387f377-b486-4ecc-a200-10a2640dfbb3",
-                        "_myBottomButton": "6ae6ee80-4cd8-45cb-98c1-db259502e17a",
-                        "_myTopButton": "545a2c2b-c449-40d3-a713-0e6bf720c81c",
-                        "_myLineMaterial": "67abc793-7be6-46f8-b425-daac725a1279",
-                        "_myThumbstickText": "Snap Turn",
-                        "_myLineLengthMultiplier": 1.5,
-                        "_myTextMaterial": "4480bd42-1e8f-4907-a276-0ea6772fde45",
-                        "_myHandedness": "Right",
-                        "_myShowOnStart": false
-                    }
-                },
-                {
                     "type": "pp-set-hand-local-transform",
                     "pp-set-hand-local-transform": {
-                        "_myHandedness": "Right"
-                    }
-                },
-                {
-                    "type": "pp-gamepad-mesh-animator",
-                    "pp-gamepad-mesh-animator": {
-                        "_mySelect": "75a94c97-84bb-477a-aefa-8866207d0cb2",
-                        "_mySqueeze": "51afbff3-ddcc-44f2-a750-51d20a28b7f8",
-                        "_myThumbstick": "c387f377-b486-4ecc-a200-10a2640dfbb3",
-                        "_myTopButton": "545a2c2b-c449-40d3-a713-0e6bf720c81c",
-                        "_myBottomButton": "6ae6ee80-4cd8-45cb-98c1-db259502e17a",
-                        "_myUsePressForSqueeze": true,
                         "_myHandedness": "Right"
                     }
                 }
