@@ -747,6 +747,12 @@
                 {
                     "type": "pp-mute-everything",
                     "active": false
+                },
+                {
+                    "type": "teleport-on-tracked-hands",
+                    "teleport-on-tracked-hands": {
+                        "_myTeleportTargetObject": "fc705769-0aef-4b0b-9fe0-88197eceff56"
+                    }
                 }
             ]
         },
@@ -2835,14 +2841,7 @@
         "fc705769-0aef-4b0b-9fe0-88197eceff56": {
             "name": "Tracked Hands Teleport Target",
             "parent": "62bb96e5-dca3-4608-8f0c-c546219e5bdc",
-            "components": [
-                {
-                    "type": "teleport-on-tracked-hands",
-                    "teleport-on-tracked-hands": {
-                        "_myTeleportTargetObject": "fc705769-0aef-4b0b-9fe0-88197eceff56"
-                    }
-                }
-            ],
+            "components": [],
             "translation": [
                 0.0,
                 0.85,
