@@ -2686,11 +2686,6 @@
                 0.009961,
                 -0.0240263,
                 0.0500774
-            ],
-            "scaling": [
-                1.0,
-                1.0,
-                1.0
             ]
         },
         "8f116677-15c2-4d71-a7dc-90239c83ece8": {
@@ -2756,11 +2751,6 @@
                 0.0,
                 0.0,
                 0.9659258
-            ],
-            "scaling": [
-                1.0,
-                1.0,
-                1.0
             ]
         },
         "fb19b61a-e8c6-4c8c-b084-55caf6d216b7": {
@@ -2821,26 +2811,9 @@
                     "type": "pp-finger-cursor",
                     "pp-finger-cursor": {
                         "_myHandedness": "Right",
-                        "_myCollisionFlags": "0, 0, 0, 1, 0, 0, 0, 0",
-                        "_myDisableDefaultCursorOnTrackedHandDetected": false
+                        "_myCollisionFlags": "0, 0, 0, 1, 0, 0, 0, 0"
                     }
                 }
-            ],
-            "translation": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                1.0,
-                1.0,
-                1.0
             ]
         },
         "833e4681-737c-43da-bf86-c01c56017931": {
@@ -2850,27 +2823,9 @@
                 {
                     "type": "pp-finger-cursor",
                     "pp-finger-cursor": {
-                        "_myCollisionFlags": "0, 0, 0, 1, 0, 0, 0, 0",
-                        "_myDefaultCursorObject": 113,
-                        "_myDisableDefaultCursorOnTrackedHandDetected": false
+                        "_myCollisionFlags": "0, 0, 0, 1, 0, 0, 0, 0"
                     }
                 }
-            ],
-            "translation": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                1.0,
-                1.0,
-                1.0
             ]
         },
         "fc705769-0aef-4b0b-9fe0-88197eceff56": {
