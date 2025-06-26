@@ -2260,7 +2260,6 @@
                 {
                     "type": "pp-set-active",
                     "pp-set-active": {
-                        "_myActive": true,
                         "_mySetActiveOn": "Descendants",
                         "_mySetActiveWhen": "Enter XR"
                     }
