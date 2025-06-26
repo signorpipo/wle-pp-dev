@@ -2674,8 +2674,8 @@
             ]
         },
         "0ec54f31-8d6e-466c-ad61-6b5d8fe48472": {
-            "name": "Default Cursor",
-            "parent": "4470cf2d-650d-4c38-be1b-2434a74c4ff1",
+            "name": "Cursor",
+            "parent": "21e6e4ba-b097-4abb-97b4-a7d82fb86986",
             "rotation": [
                 0.258819,
                 0.0,
@@ -2685,7 +2685,12 @@
             "translation": [
                 0.009961,
                 -0.0240263,
-                0.050078
+                0.0500774
+            ],
+            "scaling": [
+                1.0,
+                1.0,
+                1.0
             ]
         },
         "8f116677-15c2-4d71-a7dc-90239c83ece8": {
@@ -2739,18 +2744,23 @@
             ]
         },
         "b99ae9d4-2bdb-45ff-8ec9-bd933e26ef99": {
-            "name": "Default Cursor",
-            "parent": "58ca914f-fc95-4265-8c31-4b3ca58859f4",
+            "name": "Cursor",
+            "parent": "ead4fe79-25ef-49b0-8feb-c0487bc6378f",
             "translation": [
                 -0.009961,
-                -0.0240255,
-                0.0500775
+                -0.0240254,
+                0.0500764
             ],
             "rotation": [
                 0.258819,
                 0.0,
                 0.0,
                 0.9659258
+            ],
+            "scaling": [
+                1.0,
+                1.0,
+                1.0
             ]
         },
         "fb19b61a-e8c6-4c8c-b084-55caf6d216b7": {
@@ -2804,39 +2814,64 @@
             ]
         },
         "af1d4177-40e8-454c-a24a-93da1f68a80b": {
-            "name": "Finger Cursor",
-            "parent": "58ca914f-fc95-4265-8c31-4b3ca58859f4",
+            "name": "Cursor",
+            "parent": "836077c0-3e6f-447e-ba52-d9e52b9cd182",
             "components": [
                 {
                     "type": "pp-finger-cursor",
                     "pp-finger-cursor": {
                         "_myHandedness": "Right",
-                        "_myDefaultCursorObject": "b99ae9d4-2bdb-45ff-8ec9-bd933e26ef99",
-                        "_myCollisionFlags": "0, 0, 0, 1, 0, 0, 0, 0"
+                        "_myCollisionFlags": "0, 0, 0, 1, 0, 0, 0, 0",
+                        "_myDisableDefaultCursorOnTrackedHandDetected": false
                     }
                 }
+            ],
+            "translation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "scaling": [
+                1.0,
+                1.0,
+                1.0
             ]
         },
-        "58ca914f-fc95-4265-8c31-4b3ca58859f4": {
-            "name": "Cursors",
-            "parent": "f51fe37d-3aea-4317-af6b-e76b64a41b54"
-        },
         "833e4681-737c-43da-bf86-c01c56017931": {
-            "name": "Finger Cursor",
-            "parent": "4470cf2d-650d-4c38-be1b-2434a74c4ff1",
+            "name": "Cursor",
+            "parent": "00bc279b-2a05-400e-8c6f-738f7627c931",
             "components": [
                 {
                     "type": "pp-finger-cursor",
                     "pp-finger-cursor": {
-                        "_myDefaultCursorObject": "0ec54f31-8d6e-466c-ad61-6b5d8fe48472",
-                        "_myCollisionFlags": "0, 0, 0, 1, 0, 0, 0, 0"
+                        "_myCollisionFlags": "0, 0, 0, 1, 0, 0, 0, 0",
+                        "_myDefaultCursorObject": 113,
+                        "_myDisableDefaultCursorOnTrackedHandDetected": false
                     }
                 }
+            ],
+            "translation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "scaling": [
+                1.0,
+                1.0,
+                1.0
             ]
-        },
-        "4470cf2d-650d-4c38-be1b-2434a74c4ff1": {
-            "name": "Cursors",
-            "parent": "f0cbb5f3-92cc-4f20-941c-2e7a438f166c"
         },
         "fc705769-0aef-4b0b-9fe0-88197eceff56": {
             "name": "Tracked Hands Teleport Target",
