@@ -1450,7 +1450,7 @@
         },
         "d299a8fa-0a3b-424f-9932-0bb22d4a1b8c": {
             "name": "Grabber",
-            "parent": "f0cbb5f3-92cc-4f20-941c-2e7a438f166c",
+            "parent": "21e6e4ba-b097-4abb-97b4-a7d82fb86986",
             "rotation": [
                 0.258819,
                 0.0,
@@ -1482,12 +1482,12 @@
             "translation": [
                 0.009961,
                 -0.0367996,
-                0.0715687
+                0.0715675
             ]
         },
         "afe97702-6055-4861-b4ce-9a75e0bac39a": {
             "name": "Grabber",
-            "parent": "f51fe37d-3aea-4317-af6b-e76b64a41b54",
+            "parent": "ead4fe79-25ef-49b0-8feb-c0487bc6378f",
             "rotation": [
                 0.258819,
                 0.0,
@@ -1519,8 +1519,8 @@
             ],
             "translation": [
                 -0.009961,
-                -0.0365258,
-                0.0717282
+                -0.0365256,
+                0.0717272
             ]
         },
         "77886081-ef34-42db-a661-373faee1eef3": {
@@ -2841,7 +2841,6 @@
         "fc705769-0aef-4b0b-9fe0-88197eceff56": {
             "name": "Tracked Hands Teleport Target",
             "parent": "62bb96e5-dca3-4608-8f0c-c546219e5bdc",
-            "components": [],
             "translation": [
                 0.0,
                 0.85,
@@ -2914,6 +2913,74 @@
                 0.0,
                 0.0,
                 0.0099995
+            ]
+        },
+        "ce6f3c8b-f05d-4851-9b33-0f4991aaade1": {
+            "name": "Grabber",
+            "parent": "00bc279b-2a05-400e-8c6f-738f7627c931",
+            "components": [
+                {
+                    "type": "physx",
+                    "physx": {
+                        "sphere": {
+                            "radius": 0.0299999
+                        },
+                        "gravity": false,
+                        "kinematic": true,
+                        "groups": 4,
+                        "block": 4,
+                        "trigger": true,
+                        "allowSimulation": false
+                    }
+                },
+                {
+                    "type": "pp-grabber-hand",
+                    "pp-grabber-hand": {
+                        "_myMaxNumberOfObjects": 9999,
+                        "_myGrabButton": "Select"
+                    }
+                },
+                {
+                    "type": "pp-set-tracked-hand-joint-local-transform",
+                    "pp-set-tracked-hand-joint-local-transform": {
+                        "_myJointID": "Index Phalanx Distal"
+                    }
+                }
+            ]
+        },
+        "330fab61-da11-468f-9f50-4139cabd51cb": {
+            "name": "Grabber",
+            "parent": "836077c0-3e6f-447e-ba52-d9e52b9cd182",
+            "components": [
+                {
+                    "type": "physx",
+                    "physx": {
+                        "sphere": {
+                            "radius": 0.0299999
+                        },
+                        "gravity": false,
+                        "kinematic": true,
+                        "groups": 4,
+                        "block": 4,
+                        "trigger": true,
+                        "allowSimulation": false
+                    }
+                },
+                {
+                    "type": "pp-grabber-hand",
+                    "pp-grabber-hand": {
+                        "_myMaxNumberOfObjects": 9999,
+                        "_myHandedness": "Right",
+                        "_myGrabButton": "Select"
+                    }
+                },
+                {
+                    "type": "pp-set-tracked-hand-joint-local-transform",
+                    "pp-set-tracked-hand-joint-local-transform": {
+                        "_myJointID": "Index Phalanx Distal",
+                        "_myHandedness": "Right"
+                    }
+                }
             ]
         }
     },
