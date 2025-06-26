@@ -1,6 +1,6 @@
 {
     "name": "wle-pp-dev",
-    "version": "0.8.2",
+    "version": "0.8.3",
     "author": "Pipo",
     "description": "So many edge cases",
     "homepage": "https://github.com/signorpipo/wle-pp-dev",
@@ -20,7 +20,7 @@
         "eslint": "^9.29.0",
         "globals": "^16.2.0",
         "typescript": "^5.8.3",
-        "typescript-eslint": "^8.34.1"
+        "typescript-eslint": "^8.35.0"
     },
     "optionalDependencies": {
         "@playkostudios/wle-cleaner": "^0.10.0",
