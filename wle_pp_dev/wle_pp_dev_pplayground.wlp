@@ -2244,8 +2244,9 @@
                 {
                     "type": "pp-set-active",
                     "pp-set-active": {
-                        "_mySetActiveWhen": "Enter XR",
-                        "_mySetActiveOn": "Descendants"
+                        "_mySetActiveWhen": "First Update",
+                        "_mySetActiveOn": "Descendants",
+                        "_myActive": false
                     }
                 },
                 {
@@ -2259,9 +2260,9 @@
                 {
                     "type": "pp-set-active",
                     "pp-set-active": {
-                        "_myActive": false,
+                        "_myActive": true,
                         "_mySetActiveOn": "Descendants",
-                        "_mySetActiveWhen": "First Update"
+                        "_mySetActiveWhen": "Enter XR"
                     }
                 }
             ]
