@@ -128,7 +128,7 @@ export class PlayerHeadManager {
 
         this._updateHeightOffset();
 
-        this._setCameraNonXRHeight(this._myHeightNonVR);
+        this._setCameraNonXRHeight(this._myHeightNonVR, XRUtils.isSessionActive(this._myParams.myEngine));
 
         this._myActive = false;
         this.setActive(true);
@@ -797,7 +797,7 @@ export class PlayerHeadManager {
             adjustedCameraNonVRPosition: vec3_create(),
             playerTranform: mat4_create()
         };
-    private _setCameraNonXRHeight(height: number): void {
+    private _setCameraNonXRHeight(height: number, ignoreHeadUpdate: boolean = false): void {
         const eyeHeight = height - this._myParams.myForeheadExtraHeight;
 
         const cameraNonVRPosition = PlayerHeadManager._setCameraNonXRHeightSV.cameraNonVRPosition;
@@ -813,7 +813,7 @@ export class PlayerHeadManager {
 
         Globals.getPlayerObjects(this._myParams.myEngine)!.myCameraNonXR!.pp_setPosition(adjustedCameraNonVRPosition);
 
-        if (!this._mySessionActive) {
+        if (!this._mySessionActive && !ignoreHeadUpdate) {
             this._myCurrentHead.pp_setPosition(adjustedCameraNonVRPosition);
         }
     }
