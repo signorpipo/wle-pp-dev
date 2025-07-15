@@ -35,7 +35,7 @@ export enum PlayerLocomotionType {
 
 export class PlayerLocomotionParams {
 
-    public myDefaultLocomotionType: number = PlayerLocomotionType.SMOOTH;
+    public myDefaultLocomotionType: PlayerLocomotionType = PlayerLocomotionType.SMOOTH;
     public myAlwaysSmoothForNonVR: boolean = false;
 
     /** Double press main hand thumbstick (default: left) to switch */
