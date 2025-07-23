@@ -1005,6 +1005,8 @@ export class PlayerLocomotion {
     public destroy(): void {
         this._myDestroyed = true;
 
+        this.setActive(false);
+
         this._myPlayerHeadManager.destroy();
         this._myPlayerLocomotionSmooth.destroy();
         this._myPlayerTransformManager.destroy();
