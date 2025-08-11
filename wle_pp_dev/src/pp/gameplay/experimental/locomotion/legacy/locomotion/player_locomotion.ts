@@ -826,7 +826,7 @@ export class PlayerLocomotion {
         if (this._myParams.myResetRealOnStart && this._myResetRealOnStartCounter > 0) {
             this._myResetRealOnStartCounter--;
 
-            this._myPlayerTransformManager.resetReal(true, true, undefined, undefined, undefined, true);
+            this._myPlayerTransformManager.resetReal();
             this._myPlayerTransformManager.update(dt);
         } else {
             this._myPlayerTransformManager.update(dt);
